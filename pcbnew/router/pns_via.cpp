@@ -30,24 +30,97 @@
 
 namespace PNS {
 
+int VIA::EffectiveLayer( int aLayer ) const
+{
+    switch( m_stackMode )
+    {
+    default:
+    case STACK_MODE::NORMAL:
+        return ALL_LAYERS;
+
+    case STACK_MODE::FRONT_INNER_BACK:
+        if( aLayer == m_layers.Start() || aLayer == m_layers.End() )
+            return aLayer;
+
+        if( m_layers.Start() + 1 < m_layers.End() )
+            return m_layers.Start() + 1;
+
+        return m_layers.Start();
+
+    case STACK_MODE::CUSTOM:
+        return m_layers.Overlaps( aLayer ) ? aLayer : m_layers.Start();
+    }
+}
+
+
+std::vector<int> VIA::UniqueShapeLayers() const
+{
+    switch( m_stackMode )
+    {
+    default:
+    case STACK_MODE::NORMAL:
+        return { ALL_LAYERS };
+
+    case STACK_MODE::FRONT_INNER_BACK:
+        return { 0, ALL_LAYERS, m_layers.End() };
+
+    case STACK_MODE::CUSTOM:
+        std::vector<int> ret;
+
+        for( int l = m_layers.Start(); l <= m_layers.End(); l++ )
+            ret.push_back( l );
+
+        return ret;
+    }
+}
+
+
+void VIA::SetStackMode( STACK_MODE aStackMode )
+{
+    m_stackMode = aStackMode;
+
+    wxASSERT_MSG( m_stackMode != STACK_MODE::FRONT_INNER_BACK || m_layers.Start() == 0,
+                  wxT( "Cannot use FRONT_INNER_BACK with blind/buried vias!" ) );
+
+    // In theory, it might be good to do some housekeeping on m_diameters and m_shapes here,
+    // but it's not yet clear if the stack mode needs to be changed after initial creation.
+}
+
+
+bool VIA::PadstackMatches( const VIA& aOther ) const
+{
+    std::vector<int> myLayers = UniqueShapeLayers();
+    std::vector<int> otherLayers = aOther.UniqueShapeLayers();
+
+    if( !std::equal( myLayers.begin(), myLayers.end(), otherLayers.begin() ) )
+        return false;
+
+    for( int i : myLayers )
+    {
+        if( Diameter( i ) != aOther.Diameter( i ) )
+            return false;
+    }
+
+    return true;
+}
+
+
 bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
 {
     int      clearance = aNode->GetClearance( this, aOther, false );
-    VECTOR2I elementForces[4], force;
-    size_t   nf = 0;
+    VECTOR2I elementForce;
 
-    aOther->Shape()->Collide( Shape(), clearance, &elementForces[nf++] );
-
-    for( size_t i = 0; i < nf; i++ )
+    for( int layer : RelevantShapeLayers( aOther ) )
     {
-        if( elementForces[i].SquaredEuclideanNorm() > force.SquaredEuclideanNorm() )
-            force = elementForces[i];
+        aOther->Shape( layer )->Collide( Shape( layer ), clearance, &elementForce );
+
+        if( elementForce.SquaredEuclideanNorm() > aForce.SquaredEuclideanNorm() )
+            aForce = elementForce;
     }
 
-    aForce = force;
-
-    return ( force != VECTOR2I( 0, 0 ) );
+    return ( aForce != VECTOR2I( 0, 0 ) );
 }
+
 
 bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
                         int aCollisionMask, int aMaxIterations )
@@ -86,7 +159,8 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
             break;
         }
 
-        const int threshold = Diameter() / 4; // another stupid heuristic.
+        // TODO(JE) padstacks -- what is the correct logic here?
+        const int threshold = Diameter( EffectiveLayer( 0 ) ) / 4; // another stupid heuristic.
         const int forceMag = force.EuclideanNorm();
 
         // We've been through a lot of iterations already and our pushout force is still too big?
@@ -143,7 +217,7 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
 const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
     int cl = ( aClearance + aWalkaroundThickness / 2 );
-    int width = m_diameter;
+    int width = Diameter( aLayer );
 
     if( m_hole && !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( this, aLayer ) )
         width = m_hole->Radius() * 2;
@@ -163,9 +237,13 @@ VIA* VIA::Clone() const
     v->SetNet( Net() );
     v->SetLayers( Layers() );
     v->m_pos = m_pos;
-    v->m_diameter = m_diameter;
+    v->m_stackMode = m_stackMode;
+    v->m_diameters = m_diameters;
     v->m_drill = m_drill;
-    v->m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+
+    for( const auto& [layer, shape] : m_shapes )
+        v->m_shapes[layer] = SHAPE_CIRCLE( m_pos, shape.GetRadius() );
+
     v->SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, m_layers ) );
     v->m_rank = m_rank;
     v->m_marker = m_marker;
@@ -182,8 +260,14 @@ OPT_BOX2I VIA::ChangedArea( const VIA* aOther ) const
 {
     if( aOther->Pos() != Pos() )
     {
-        BOX2I tmp = Shape()->BBox();
-        tmp.Merge( aOther->Shape()->BBox() );
+        BOX2I tmp;
+
+        for( int layer : UniqueShapeLayers() )
+            tmp.Merge( Shape( layer )->BBox() );
+
+        for( int layer : aOther->UniqueShapeLayers() )
+            tmp.Merge( aOther->Shape( layer )->BBox() );
+
         return tmp;
     }
 
@@ -206,7 +290,8 @@ const std::string VIA::Format( ) const
 {
     std::stringstream ss;
     ss << ITEM::Format() << " drill " << m_drill << " ";
-    ss << m_shape.Format( false );
+    // TODO(JE) padstacks
+    ss << Shape( 0 )->Format( false );
     return ss.str();
 }
 

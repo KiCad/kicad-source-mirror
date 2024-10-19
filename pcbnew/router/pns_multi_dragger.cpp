@@ -302,7 +302,7 @@ bool clipToOtherLine( NODE* aNode, const LINE& aRef, LINE& aClipped )
         //PNS_DBG( dbg, 3int, pclip, WHITE, 500000, wxT(""));
 
 
-        if( l.Collide( &aRef, aNode, &ctx ) )
+        if( l.Collide( &aRef, aNode, l.Layer(), &ctx ) )
         {
             didClip = true;
             curL -= step;

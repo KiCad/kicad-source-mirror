@@ -774,7 +774,7 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
             if( via.HasHole() )
             {
                 int holeClearance = GetRuleResolver()->Clearance( via.Hole(), nullptr );
-                int annularWidth = std::max( 0, via.Diameter() - via.Drill() ) / 2;
+                int annularWidth = std::max( 0, via.Diameter( l->Layer() ) - via.Drill() ) / 2;
                 int excessHoleClearance = holeClearance - annularWidth;
 
                 if( excessHoleClearance > clearance )

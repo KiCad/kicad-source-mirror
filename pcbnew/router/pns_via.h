@@ -22,6 +22,7 @@
 #ifndef __PNS_VIA_H
 #define __PNS_VIA_H
 
+#include <geometry/shape_index.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
 #include <math/box2.h>
@@ -47,7 +48,7 @@ struct VIA_HANDLE
         pos( aPos ),
         layers (aLayers),
         net (aNet ) {};
-    
+
     bool        valid = false;
     VECTOR2I    pos;
     PNS_LAYER_RANGE layers;
@@ -57,11 +58,30 @@ struct VIA_HANDLE
 class VIA : public LINKED_ITEM
 {
 public:
+    enum class STACK_MODE
+    {
+        // The via is the same size on every layer
+        NORMAL,
+
+        // The via can have three different sizes -- note that in this context, front means
+        // m_layers.Start() and back means m_layers.End(), which does not align with KiCad in the
+        // case of blind/buried vias.  Using this STACK_MODE only makes sense for vias that extend
+        // through the whole PCB
+        FRONT_INNER_BACK,
+
+        // The via can have a different size on each layer
+        CUSTOM
+    };
+
+    static constexpr int ALL_LAYERS = 0;
+    static constexpr int INNER_LAYERS = 1;
+
     VIA() :
         LINKED_ITEM( VIA_T ),
         m_hole( nullptr )
     {
-        m_diameter = 2;     // Dummy value
+        m_stackMode = STACK_MODE::NORMAL;
+        m_diameters[0] = 2; // Dummy value
         m_drill = 1;        // Dummy value
         m_viaType = VIATYPE::THROUGH;
         m_isFree = false;
@@ -77,9 +97,10 @@ public:
         SetNet( aNet );
         SetLayers( aLayers );
         m_pos = aPos;
-        m_diameter = aDiameter;
+        m_stackMode = STACK_MODE::NORMAL;
+        m_diameters[0] = aDiameter;
         m_drill = aDrill;
-        m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
+        m_shapes[0] = SHAPE_CIRCLE( aPos, aDiameter / 2 );
         SetHole( HOLE::MakeCircularHole( m_pos, aDrill / 2, PNS_LAYER_RANGE() ) );
         m_viaType = aViaType;
         m_isFree = false;
@@ -93,8 +114,12 @@ public:
         SetNet( aB.Net() );
         SetLayers( aB.Layers() );
         m_pos = aB.m_pos;
-        m_diameter = aB.m_diameter;
-        m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+        m_stackMode = aB.m_stackMode;
+        m_diameters = aB.m_diameters;
+
+        for( const auto& [layer, shape] : aB.m_shapes )
+            m_shapes[layer] = SHAPE_CIRCLE( m_pos, shape.GetRadius() );
+
         m_drill = aB.m_drill;
         SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, PNS_LAYER_RANGE() ) );
         m_marker = aB.m_marker;
@@ -115,8 +140,12 @@ public:
         SetNet( aB.Net() );
         SetLayers( aB.Layers() );
         m_pos = aB.m_pos;
-        m_diameter = aB.m_diameter;
-        m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+        m_stackMode = aB.m_stackMode;
+        m_diameters = aB.m_diameters;
+
+        for( const auto& [layer, shape] : aB.m_shapes )
+            m_shapes[layer] = SHAPE_CIRCLE( m_pos, shape.GetRadius() );
+
         m_drill = aB.m_drill;
         SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, PNS_LAYER_RANGE() ) );
         m_marker = aB.m_marker;
@@ -133,12 +162,24 @@ public:
         return aItem && VIA_T == aItem->Kind();
     }
 
+    STACK_MODE StackMode() const { return m_stackMode; }
+
+    void SetStackMode( STACK_MODE aStackMode );
+
+    int EffectiveLayer( int aLayer ) const;
+
+    std::vector<int> UniqueShapeLayers() const override;
+
+    bool HasUniqueShapeLayers() const override { return true; }
+
     const VECTOR2I& Pos() const { return m_pos; }
 
     void SetPos( const VECTOR2I& aPos )
     {
         m_pos = aPos;
-        m_shape.SetCenter( aPos );
+
+        for( auto& [layer, shape] : m_shapes )
+            shape.SetCenter( aPos );
 
         if( m_hole )
             m_hole->SetCenter( aPos );
@@ -147,13 +188,25 @@ public:
     VIATYPE ViaType() const { return m_viaType; }
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 
-    int Diameter() const { return m_diameter; }
-
-    void SetDiameter( int aDiameter )
+    int Diameter( int aLayer ) const
     {
-        m_diameter = aDiameter;
-        m_shape.SetRadius( m_diameter / 2 );
+        int layer = EffectiveLayer( aLayer );
+        wxCHECK( m_diameters.contains( layer ), m_diameters.begin()->second );
+        return m_diameters.at( layer );
     }
+
+    void SetDiameter( int aLayer, int aDiameter )
+    {
+        int layer = EffectiveLayer( aLayer );
+        m_diameters[layer] = aDiameter;
+
+        if( !m_shapes.contains( layer ) )
+            m_shapes[layer] = SHAPE_CIRCLE( m_pos, aDiameter / 2 );
+        else
+            m_shapes[layer].SetRadius( aDiameter / 2 );
+    }
+
+    bool PadstackMatches( const VIA& aOther ) const;
 
     int Drill() const { return m_drill; }
 
@@ -173,7 +226,12 @@ public:
 
     bool PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce );
 
-    const SHAPE* Shape() const override { return &m_shape; }
+    const SHAPE* Shape( int aLayer ) const override
+    {
+        int layer = EffectiveLayer( aLayer );
+        wxCHECK( m_shapes.contains( layer ), nullptr );
+        return &m_shapes.at( layer );
+    }
 
     VIA* Clone() const override;
 
@@ -212,10 +270,14 @@ public:
     virtual const std::string Format() const override;
 
 private:
-    int          m_diameter;
+    STACK_MODE   m_stackMode;
+
+    /// May contain 1..n diameters depending on m_stackMode
+    std::map<int, int> m_diameters;
+    std::map<int, SHAPE_CIRCLE> m_shapes;
+
     int          m_drill;
     VECTOR2I     m_pos;
-    SHAPE_CIRCLE m_shape;
     VIATYPE      m_viaType;
     bool         m_isFree;
     HOLE*        m_hole;

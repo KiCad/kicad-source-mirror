@@ -141,7 +141,8 @@ struct OPTIMIZER::CACHE_VISITOR
         if( !( m_mask & aOtherItem->Kind() ) )
             return true;
 
-        if( !aOtherItem->Collide( m_ourItem, m_node ) )
+        // TODO(JE) viastacks
+        if( !aOtherItem->Collide( m_ourItem, m_node, m_ourItem->Layer() ) )
             return true;
 
         m_collidingItem = aOtherItem;
@@ -789,7 +790,7 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::customBreakouts( int aWidth, const ITEM* aIt
                                                      bool aPermitDiagonal ) const
 {
     BREAKOUT_LIST breakouts;
-    const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aItem->Shape() );
+    const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aItem->Shape( -1 ) );
 
     BOX2I bbox = convex->BBox( 0 );
     VECTOR2I p0 = static_cast<const SOLID*>( aItem )->Pos();
@@ -896,12 +897,13 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::computeBreakouts( int aWidth, const ITEM* aI
     case ITEM::VIA_T:
     {
         const VIA* via = static_cast<const VIA*>( aItem );
-        return circleBreakouts( aWidth, via->Shape(), aPermitDiagonal );
+        // TODO(JE) padstacks -- computeBreakouts needs to have a layer argument
+        return circleBreakouts( aWidth, via->Shape( 0 ), aPermitDiagonal );
     }
 
     case ITEM::SOLID_T:
     {
-        const SHAPE* shape = aItem->Shape();
+        const SHAPE* shape = aItem->Shape( -1 );
 
         switch( shape->Type() )
         {
@@ -982,7 +984,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
     for( int p = 1; p <= p_end; p++ )
     {
         // If the line is contained inside the pad, don't optimize
-        if( solid && solid->Shape() && !solid->Shape()->Collide(
+        if( solid && solid->Shape( -1 ) && !solid->Shape( -1 )->Collide(
                 SEG( line.CPoint( 0 ), line.CPoint( p ) ), aLine->Width() / 2 ) )
         {
             continue;
@@ -1198,7 +1200,7 @@ bool verifyDpBypass( NODE* aNode, DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LI
     LINE refLine ( aRefIsP ? aPair->PLine() : aPair->NLine(), aNewRef );
     LINE coupledLine ( aRefIsP ? aPair->NLine() : aPair->PLine(), aNewCoupled );
 
-    if( refLine.Collide( &coupledLine, aNode ) )
+    if( refLine.Collide( &coupledLine, aNode, refLine.Layer() ) )
         return false;
 
     if( aNode->CheckColliding ( &refLine ) )

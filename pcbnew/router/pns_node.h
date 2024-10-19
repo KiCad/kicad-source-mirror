@@ -117,6 +117,7 @@ struct COLLISION_SEARCH_OPTIONS
     int m_kindMask = -1;
     bool m_useClearanceEpsilon = true;
     std::function<bool(const ITEM*)> m_filter = nullptr;
+    int m_layer = -1;
 };
 
 
@@ -182,6 +183,9 @@ public:
 
     void SetWorld( const NODE* aNode, const NODE* aOverride = nullptr );
 
+    void SetLayerContext( int aLayer ) { m_layerContext = aLayer; }
+    void ClearLayerContext() { m_layerContext = std::nullopt; }
+
     virtual bool operator()( ITEM* aCandidate ) = 0;
 
 protected:
@@ -192,6 +196,26 @@ protected:
 
     const NODE* m_node;             ///< node we are searching in (either root or a branch)
     const NODE* m_override;         ///< node that overrides root entries
+    std::optional<int> m_layerContext;
+};
+
+
+class LAYER_CONTEXT_SETTER
+{
+public:
+    LAYER_CONTEXT_SETTER( OBSTACLE_VISITOR& aVisitor, int aLayer ) :
+            m_visitor( aVisitor )
+    {
+        m_visitor.SetLayerContext( aLayer );
+    }
+
+    ~LAYER_CONTEXT_SETTER()
+    {
+        m_visitor.ClearLayerContext();
+    }
+
+private:
+    OBSTACLE_VISITOR& m_visitor;
 };
 
 /**

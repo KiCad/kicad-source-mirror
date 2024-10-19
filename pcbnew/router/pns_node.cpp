@@ -241,7 +241,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         if( visit( aCandidate ) )
             return true;
 
-        if( !aCandidate->Collide( m_item, m_node, m_ctx ) )
+        if( !aCandidate->Collide( m_item, m_node, m_layerContext.value_or( -1 ), m_ctx ) )
             return true;
 
         if( m_ctx->options.m_limitCount > 0 && m_ctx->obstacles.size() >= m_ctx->options.m_limitCount )
@@ -363,7 +363,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
         {
             const VIA& via = aLine->Via();
             int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
-                               + via.Diameter() / 2;
+                               + via.Diameter( aLine->Layer() ) / 2;
 
             obstacleHull = obstacle.m_item->Hull( viaClearance, 0, layer );
 
@@ -478,7 +478,8 @@ struct HIT_VISITOR : public OBSTACLE_VISITOR
 
         int cl = 0;
 
-        if( aItem->Shape()->Collide( &cp, cl ) )
+        // TODO(JE) padstacks -- this may not work
+        if( aItem->Shape( -1 )->Collide( &cp, cl ) )
             m_items.Add( aItem );
 
         return true;
@@ -1088,7 +1089,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
             if( li->Kind() == ITEM::ARC_T )
             {
                 const ARC*       arc = static_cast<const ARC*>( li );
-                const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape() );
+                const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape( -1 ) );
 
                 int      nSegs     = line.PointCount();
                 VECTOR2I last      = nSegs ? line.CPoint( -1 ) : VECTOR2I();

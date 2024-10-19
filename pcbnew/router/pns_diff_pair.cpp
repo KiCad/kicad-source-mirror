@@ -436,12 +436,13 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
 
     const int pvMask = ITEM::SOLID_T | ITEM::VIA_T;
 
-    if( aPair.PrimP()->OfKind( pvMask ) && aPair.PrimN()->OfKind(  pvMask ) )
+    if( aPair.PrimP()->OfKind( pvMask ) && aPair.PrimN()->OfKind( pvMask ) )
     {
         p0_p = aPair.AnchorP();
         p0_n = aPair.AnchorN();
 
-        shP = aPair.PrimP()->Shape();
+        // TODO(JE) padstacks
+        shP = aPair.PrimP()->Shape( -1 );
     }
     else if( aPair.PrimP()->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T )
              && aPair.PrimN()->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )

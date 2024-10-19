@@ -73,7 +73,7 @@ public:
             SetShape( aB.m_shape->Clone() );
 
         if( aB.m_hole )
-            SetHole( new PNS::HOLE( aB.m_hole->Shape()->Clone() ) );
+            SetHole( new PNS::HOLE( aB.m_hole->Shape( -1 )->Clone() ) );
 
         m_pos = aB.m_pos;
         m_padToDie = aB.m_padToDie;
@@ -89,7 +89,7 @@ public:
 
     ITEM* Clone() const override;
 
-    const SHAPE* Shape() const override { return m_shape; }
+    const SHAPE* Shape( int aLayer ) const override { return m_shape; }
 
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,

@@ -167,7 +167,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aL
             {
                 if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
                 {
-                    SEG::ecoord d = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
+                    SEG::ecoord d = ( item->Shape( aLayer )->Centre() - aWhere ).SquaredEuclideanNorm();
 
                     if( d < dist[2] )
                     {
@@ -203,7 +203,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aL
             else if( item->OfKind( ITEM::SOLID_T ) && item->IsFreePad() )
             {
                 // Allow free pads only when already inside pad
-                if( item->Shape()->Collide( aWhere ) )
+                if( item->Shape( -1 )->Collide( aWhere ) )
                 {
                     prioritized[0] = item;
                     dist[0] = 0;
@@ -500,7 +500,7 @@ const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, const VECTOR2I& aP )
         else if( aItem->Kind() == ITEM::ARC_T )
         {
             ARC* arc = static_cast<ARC*>( li );
-            return m_gridHelper->AlignToArc( aP, *static_cast<const SHAPE_ARC*>( arc->Shape() ) );
+            return m_gridHelper->AlignToArc( aP, *static_cast<const SHAPE_ARC*>( arc->Shape( -1 ) ) );
         }
 
         break;

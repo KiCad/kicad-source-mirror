@@ -2240,9 +2240,11 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     if( itemsToDrag.Count() >= 1 )
     {
+        int layer = m_iface->GetPNSLayerFromBoardLayer( m_originalActiveLayer );
+
         for( PNS::ITEM* pitem : itemsToDrag.Items() )
         {
-            if( pitem->Shape()->Collide( p0, 0 ) )
+            if( pitem->Shape( layer )->Collide( p0, 0 ) )
             {
                 p = snapToItem( pitem, p0 );
                 m_startItem = pitem;

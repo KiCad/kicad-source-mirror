@@ -832,10 +832,14 @@ void PADSTACK::ForEachUniqueLayer( const std::function<void( PCB_LAYER_ID )>& aM
         break;
 
     case MODE::CUSTOM:
-        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, MAX_CU_LAYERS ) )
+    {
+        int layerCount = m_parent ? m_parent->BoardCopperLayerCount() : MAX_CU_LAYERS;
+
+        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, layerCount ) )
             aMethod( layer );
 
         break;
+    }
     }
 }
 

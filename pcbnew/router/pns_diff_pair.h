@@ -413,8 +413,8 @@ public:
 
     void SetViaDiameter( int aDiameter )
     {
-        m_via_p.SetDiameter( aDiameter );
-        m_via_n.SetDiameter( aDiameter );
+        m_via_p.SetDiameter( VIA::ALL_LAYERS, aDiameter );
+        m_via_n.SetDiameter( VIA::ALL_LAYERS, aDiameter );
     }
 
     void SetViaDrill( int aDrill )

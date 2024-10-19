@@ -31,6 +31,7 @@
 #include <geometry/shape_index.h>
 
 #include "pns_item.h"
+#include "pns_node.h"
 
 namespace PNS {
 
@@ -122,7 +123,7 @@ private:
     int querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor ) const;
 
 private:
-    std::deque<ITEM_SHAPE_INDEX>         m_subIndices;
+    std::deque<std::unique_ptr<ITEM_SHAPE_INDEX>> m_subIndices;
     std::map<NET_HANDLE, NET_ITEMS_LIST> m_netMap;
     ITEM_SET                             m_allItems;
 };
@@ -134,7 +135,8 @@ int INDEX::querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistanc
     if( aIndex >= m_subIndices.size() )
         return 0;
 
-    return m_subIndices[aIndex].Query( aShape, aMinDistance, aVisitor);
+    LAYER_CONTEXT_SETTER layerContext( aVisitor, aIndex );
+    return m_subIndices[aIndex]->Query( aShape, aMinDistance, aVisitor);
 }
 
 template<class Visitor>
@@ -147,7 +149,7 @@ int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor ) const
     const PNS_LAYER_RANGE& layers = aItem->Layers();
 
     for( int i = layers.Start(); i <= layers.End(); ++i )
-        total += querySingle( i, aItem->Shape(), aMinDistance, aVisitor );
+        total += querySingle( i, aItem->Shape( i ), aMinDistance, aVisitor );
 
     return total;
 }

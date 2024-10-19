@@ -504,7 +504,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
     LINKED_ITEM* coupledItem = nullptr;
     SEG::ecoord  minDist_sq = std::numeric_limits<SEG::ecoord>::max();
     SEG::ecoord  minDistTarget_sq = std::numeric_limits<SEG::ecoord>::max();
-    VECTOR2I     targetPoint = aStart->Shape()->Centre();
+    VECTOR2I     targetPoint = aStart->Shape( -1 )->Centre();
 
     auto findNItem = [&]( ITEM* p_item )
     {
@@ -552,7 +552,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 
             if( dist_sq <= minDist_sq )
             {
-                SEG::ecoord distTarget_sq = n_item->Shape()->SquaredDistance( targetPoint );
+                SEG::ecoord distTarget_sq = n_item->Shape( -1 )->SquaredDistance( targetPoint );
                 if( distTarget_sq < minDistTarget_sq )
                 {
                     minDistTarget_sq = distTarget_sq;
@@ -634,7 +634,7 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
 
     pending.push_back( aStart );
 
-    BOX2I clusterBBox = aStart->Shape()->BBox();
+    BOX2I clusterBBox = aStart->Shape( aLayer )->BBox();
     int64_t initialArea = clusterBBox.GetArea();
 
     while( !pending.empty() )
@@ -665,7 +665,7 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
             }
             else
             {
-                clusterBBox.Merge( obs.m_item->Shape()->BBox() );
+                clusterBBox.Merge( obs.m_item->Shape( aLayer )->BBox() );
             }
 
             const int64_t currentArea = clusterBBox.GetArea();

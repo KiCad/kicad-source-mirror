@@ -155,6 +155,8 @@ public:
      *
      * @param aClearance defines how far from the body of the item the hull should be,
      * @param aWalkaroundThickness is the width of the line that walks around this hull.
+     * @param aLayer is the layer to build a hull for (the item may have different shapes on each
+     *               layer).  If aLayer is -1, the hull will be a merged hull from all layers.
      */
     virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                          int aLayer = -1 ) const
@@ -217,16 +219,31 @@ public:
      * @param aOther is the item to check collision against.
      * @return true, if a collision was found.
      */
-    bool Collide( const ITEM* aHead, const NODE* aNode,
+    bool Collide( const ITEM* aHead, const NODE* aNode, int aLayer,
                   COLLISION_SEARCH_CONTEXT* aCtx = nullptr ) const;
 
     /**
      * Return the geometrical shape of the item. Used for collision detection and spatial indexing.
+     * @param aLayer is the layer to query shape for (items may have different shapes on different layers)
      */
-    virtual const SHAPE* Shape() const
+    virtual const SHAPE* Shape( int aLayer ) const
     {
         return nullptr;
     }
+
+    /**
+     * Return a list of layers that have unique (potentially different) shapes
+     */
+    virtual std::vector<int> UniqueShapeLayers() const { return { -1 }; }
+
+    virtual bool HasUniqueShapeLayers() const { return false; }
+
+    /**
+     * Returns the set of layers on which either this or the other item can have a unique shape.
+     * Use this to loop over layers when hit-testing objects that can have different shapes on
+     * each layer (currently only VIA)
+     */
+    std::set<int> RelevantShapeLayers( const ITEM* aOther ) const;
 
     virtual void Mark( int aMarker ) const { m_marker = aMarker; }
     virtual void Unmark( int aMarker = -1 ) const { m_marker &= ~aMarker; }
@@ -279,7 +296,7 @@ public:
     virtual const NODE* OwningNode() const;
 
 private:
-    bool collideSimple( const ITEM* aHead, const NODE* aNode,
+    bool collideSimple( const ITEM* aHead, const NODE* aNode, int aLayer,
                         COLLISION_SEARCH_CONTEXT* aCtx ) const;
 
 protected:

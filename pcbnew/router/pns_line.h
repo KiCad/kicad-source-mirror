@@ -98,7 +98,8 @@ public:
         m_blockingObstacle( nullptr )
     {
         m_via = aVia;
-        m_width = aVia->Diameter();
+        // TODO(JE) Padstacks - does this matter?
+        m_width = aVia->Diameter( aVia->Layers().Start() );
         m_net = aVia->Net();
         m_layers = aVia->Layers();
         m_rank = aVia->Rank();
@@ -130,7 +131,7 @@ public:
     }
 
     ///< Return the shape of the line.
-    const SHAPE* Shape() const override { return &m_line; }
+    const SHAPE* Shape( int aLayer ) const override { return &m_line; }
 
     ///< Modifiable accessor to the underlying shape.
     SHAPE_LINE_CHAIN& Line() { return m_line; }
@@ -197,7 +198,15 @@ public:
     VIA& Via() { return *m_via; }
     const VIA& Via() const { return *m_via; }
 
-    void SetViaDiameter( int aDiameter ) { assert(m_via); m_via->SetDiameter( aDiameter ); }
+    void SetViaDiameter( int aDiameter )
+    {
+        wxCHECK( m_via, /* void */ );
+        wxCHECK2_MSG( m_via->StackMode() == VIA::STACK_MODE::NORMAL,
+                      m_via->SetStackMode( VIA::STACK_MODE::NORMAL ),
+                      wxS( "Warning: converting a complex viastack to normal in PNS_LINE" ) );
+
+        m_via->SetDiameter( VIA::ALL_LAYERS, aDiameter );
+    }
     void SetViaDrill( int aDrill ) { assert(m_via); m_via->SetDrill( aDrill ); }
 
     virtual void Mark( int aMarker ) const override;

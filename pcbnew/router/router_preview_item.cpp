@@ -58,10 +58,11 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IF
     }
     else if( aItem )
     {
-        m_shape = aItem->Shape()->Clone();
+        // TODO(JE) padstacks -- need to know the layer here
+        m_shape = aItem->Shape( -1 )->Clone();
 
         if( aItem->Hole() )
-            m_hole = aItem->Hole()->Shape()->Clone();
+            m_hole = aItem->Hole()->Shape( -1 )->Clone();
     }
 
     m_clearance = -1;
@@ -149,6 +150,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         break;
 
     case PNS::ITEM::VIA_T:
+    {
         m_originLayer = m_layer = LAYER_VIAS;
         m_type = PR_SHAPE;
         m_width = 0;
@@ -158,16 +160,30 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         delete m_shape;
         m_shape = nullptr;
 
-        if( aItem->Shape() )
-            m_shape = aItem->Shape()->Clone();
+        auto via = static_cast<const PNS::VIA*>( aItem );
+        int shapeLayer = -1;
+        int largestDiameter = 0;
+
+        for( int layer : via->UniqueShapeLayers() )
+        {
+            if( via->Diameter( layer ) > largestDiameter )
+            {
+                largestDiameter = via->Diameter( layer );
+                shapeLayer = layer;
+            }
+        }
+
+        if( aItem->Shape( shapeLayer ) )
+            m_shape = aItem->Shape( shapeLayer )->Clone();
 
         delete m_hole;
         m_hole = nullptr;
 
         if( aItem->Hole() )
-            m_hole = aItem->Hole()->Shape()->Clone();
+            m_hole = aItem->Hole()->Shape( -1 )->Clone();
 
         break;
+    }
 
     case PNS::ITEM::SOLID_T:
         m_type = PR_SHAPE;

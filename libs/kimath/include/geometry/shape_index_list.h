@@ -35,7 +35,7 @@
 template <class T>
 const SHAPE* defaultShapeFunctor( const T aItem )
 {
-    return aItem->Shape();
+    return aItem->Shape( -1 );
 }
 
 template <class T, const SHAPE* (ShapeFunctor) (const T) = defaultShapeFunctor<T> >

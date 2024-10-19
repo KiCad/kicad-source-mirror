@@ -257,8 +257,8 @@ bool SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLin
     HOLE*      viaHole = via.Hole();
     int        holeClearance = getClearance( viaHole, &aObstacleLine );
 
-    if( holeClearance + via.Drill() / 2 > clearance + via.Diameter() / 2 )
-        clearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
+    if( holeClearance + via.Drill() / 2 > clearance + via.Diameter( aObstacleLine.Layer() ) / 2 )
+        clearance = holeClearance + via.Drill() / 2 - via.Diameter( aObstacleLine.Layer() ) / 2;
 
     SHAPE_LINE_CHAIN hull = aCurLine.Via().Hull( clearance, obstacleLineWidth, aCurLine.Layer() );
     SHAPE_LINE_CHAIN path_cw;
@@ -283,7 +283,7 @@ bool SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLin
 
     aResultLine.SetShape( shortest );
 
-    if( aResultLine.Collide( &aCurLine, m_currentNode ) )
+    if( aResultLine.Collide( &aCurLine, m_currentNode, aResultLine.Layer() ) )
         return false;
 
     return true;
@@ -383,7 +383,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
             continue;
         }
 
-        bool colliding = l.Collide( &aCurLine, m_currentNode );
+        bool colliding = l.Collide( &aCurLine, m_currentNode, l.Layer() );
 
       #if 0
         if(( aCurLine.Marker() & MK_HEAD ) && !colliding )
@@ -392,7 +392,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
 
             for( ITEM* item : jtStart->LinkList() )
             {
-                if( item->Collide( &l, m_currentNode ) )
+                if( item->Collide( &l, m_currentNode, l.Layer() ) )
                     colliding = true;
             }
         }
@@ -494,11 +494,14 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                 int        viaClearance = getClearance( &via, &obstacleLine );
                 HOLE*      viaHole = via.Hole();
                 int        holeClearance = getClearance( viaHole, &obstacleLine );
+                int        layer = aObstacleLine.Layer();
 
-                if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
-                    viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
+                if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter( layer ) / 2 )
+                {
+                    viaClearance = holeClearance + via.Drill() / 2 - via.Diameter( layer ) / 2;
+                }
 
-                hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth ) );
+                hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth, layer ) );
             }
 
             if (shoveLineToHullSet( aCurLine, obstacleLine, aResultLine, hulls ) )
@@ -688,7 +691,8 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
             }
         }
 
-        if( via && via->Collide( aObstacle, m_currentNode ) )
+        // TODO(JE) viastacks -- can aObstacle be a via?
+        if( via && via->Collide( aObstacle, m_currentNode, aObstacle->Layer() ) )
             return onCollidingVia( aObstacle, via, aObstacleInfo, aObstacle->Rank() - 1 );
     }
 
@@ -757,7 +761,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
         {
             LINE lastLine = m_lineStack.front();
 
-            if( lastLine.Collide( &walkaroundLine, m_currentNode ) )
+            if( lastLine.Collide( &walkaroundLine, m_currentNode, lastLine.Layer() ) )
             {
                 LINE dummy( lastLine );
 
@@ -1076,10 +1080,12 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
     if( aCurrent->OfKind( ITEM::LINE_T ) )
     {
         VIA vtmp ( *aObstacleVia );
+        int layer = aCurrent->Layer();
 
-        if( aObstacleInfo.m_maxFanoutWidth > 0 && aObstacleInfo.m_maxFanoutWidth > aObstacleVia->Diameter() )
+        if( aObstacleInfo.m_maxFanoutWidth > 0
+            && aObstacleInfo.m_maxFanoutWidth > aObstacleVia->Diameter( layer ) )
         {
-            vtmp.SetDiameter( aObstacleInfo.m_maxFanoutWidth );
+            vtmp.SetDiameter( layer, aObstacleInfo.m_maxFanoutWidth );
         }
 
         LINE* currentLine = (LINE*) aCurrent;
@@ -1093,7 +1099,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
 
         PNS_DBG( Dbg(), AddItem, vtmp.Clone(), LIGHTRED, 100000, wxT( "orig-via" ) );
 
-        lineCollision = vtmp.Shape()->Collide( currentLine->Shape(),
+        lineCollision = vtmp.Shape( layer )->Collide( currentLine->Shape( -1 ),
                                                         clearance + currentLine->Width() / 2,
                                                         &mtvLine );
 
@@ -1102,14 +1108,24 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
         {
             const VIA& currentVia = currentLine->Via();
             int        viaClearance = getClearance( &currentVia, &vtmp );
+            VECTOR2I   layerMtv;
 
-            viaCollision = currentVia.Shape()->Collide( vtmp.Shape(), viaClearance, &mtvVia );
+            for( int viaLayer : currentVia.RelevantShapeLayers( &vtmp ) )
+            {
+                viaCollision |= currentVia.Shape( viaLayer )->Collide( vtmp.Shape( viaLayer ),
+                                                                       viaClearance,
+                                                                       &layerMtv );
+
+                if( layerMtv.SquaredEuclideanNorm() > mtvVia.SquaredEuclideanNorm() )
+                    mtvVia = layerMtv;
+            }
         }
     }
     else if( aCurrent->OfKind( ITEM::SOLID_T ) )
     {
         PNS_DBG( Dbg(), Message, wxT("collidee-is-solid" ) );
-        solidCollision = aCurrent->Shape()->Collide( aObstacleVia->Shape(), clearance,
+        // TODO(JE) if this case is real, handle via stacks
+        solidCollision = aCurrent->Shape( -1 )->Collide( aObstacleVia->Shape( -1 ), clearance,
                                                         &mtvSolid );
         //PNS_DBGN( Dbg(), EndGroup );
 
@@ -1148,18 +1164,29 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
         auto p0 = aCurrent.Via().Pos();
         auto p1 = aObstacleVia->Pos();
 
-        int dist = (p0 - p1).EuclideanNorm() - aCurrent.Via().Diameter() / 2 - aObstacleVia->Diameter() / 2;
+        int layer = aCurrent.Layer();
+        int dist = (p0 - p1).EuclideanNorm() - aCurrent.Via().Diameter( layer ) / 2
+                   - aObstacleVia->Diameter( layer ) / 2;
 
         int clearance = getClearance( &aCurrent.Via(), aObstacleVia );
 
-        SHAPE_LINE_CHAIN hull = aObstacleVia->Hull( clearance, aCurrent.Width(), aCurrent.Layer() );
+        SHAPE_LINE_CHAIN hull = aObstacleVia->Hull( clearance, aCurrent.Width(), layer );
 
         auto epInsideHull = hull.PointInside( p0 );
 
         PNS_DBG( Dbg(), AddShape, &hull, LIGHTYELLOW,   100000, wxT( "obstacle-via-hull" ) );
         PNS_DBG( Dbg(), Message, wxString::Format("via2via coll check dist %d cl %d delta %d pi %d\n", dist, clearance, dist - clearance, epInsideHull ? 1 : 0) );
 
-        if( aCurrent.Via().Collide( aObstacleVia, m_currentNode ) )
+        bool viaCollision = false;
+
+        for( int viaLayer : aCurrent.Via().RelevantShapeLayers( aObstacleVia ) )
+        {
+            viaCollision |=
+                    aCurrent.Via().Shape( viaLayer )->Collide( aObstacleVia->Shape( viaLayer ),
+                                                               clearance );
+        }
+
+        if( viaCollision )
         {
             return onCollidingVia( &aCurrent, aObstacleVia, aObstacleInfo, aCurrent.Rank() - 1 );
         }
@@ -1346,6 +1373,8 @@ void SHOVE::popLineStack( )
 
 bool SHOVE::fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs )
 {
+    int layer = aCurrent->Layer();
+
     // if the current obstacle is a via, consider also the lines connected to it
     // if their widths are larger or equal than the via diameter, the shove algorithm
     // will very likely fail in the subsequent iterations (as our base assumption is track
@@ -1376,11 +1405,11 @@ bool SHOVE::fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs )
 
         obs.m_maxFanoutWidth = 0;
 
-        if( maxw > 0 && maxw >= v->Diameter() )
+        if( maxw > 0 && maxw >= v->Diameter( layer ) )
         {
             obs.m_maxFanoutWidth = maxw + 1;
             PNS_DBG( Dbg(), Message,
-                     wxString::Format( "Fixup via: new-w %d via-w %d", maxw, v->Diameter() ) );
+                     wxString::Format( "Fixup via: new-w %d via-w %d", maxw, v->Diameter( layer ) ) );
 
             return true;
         }
@@ -1393,6 +1422,7 @@ bool SHOVE::fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs )
         return false;
 
     const SEGMENT* s = static_cast<const SEGMENT*>( obs.m_item );
+    int sl = s->Layer();
 
     const JOINT* ja = m_currentNode->FindJoint( s->Seg().A, s );
     const JOINT* jb = m_currentNode->FindJoint( s->Seg().B, s );
@@ -1405,14 +1435,14 @@ bool SHOVE::fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs )
 
         // via diameter is larger than the segment width - cool, the force propagation algo
         // will be able to deal with it, no need to intervene
-        if( !v || v->Diameter() > s->Width() )
+        if( !v || v->Diameter( sl ) > s->Width() )
             continue;
 
         VIA vtest( *v );
-        vtest.SetDiameter( s->Width() );
+        vtest.SetDiameter( sl, s->Width() );
 
         // enlarge the via to the width of the segment
-        if( vtest.Collide( aCurrent, m_currentNode ) )
+        if( vtest.Collide( aCurrent, m_currentNode, aCurrent->Layer() ) )
         {
             // if colliding, drop the segment in the shove iteration loop and force-propagate the via instead
             obs.m_item = v;
@@ -1475,7 +1505,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
          if( nearest )
          {
-            PNS_DBG( Dbg(), AddShape, nearest->m_item->Shape(), YELLOW, 10000,
+            PNS_DBG( Dbg(), AddShape, nearest->m_item->Shape( currentLine.Layer() ), YELLOW, 10000,
             wxString::Format( "nearest %p %s rank %d",
                                                         nearest->m_item,
                                                         nearest->m_item->KindStr(),
@@ -1521,7 +1551,10 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         {
             PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: reverse-collide-via" ), aIter ), 0 );
 
-            if( currentLine.EndsWithVia() && nearest->m_item->Collide( &currentLine.Via(), m_currentNode ) )
+            // TODO(JE) viastacks -- via-via collisions here?
+            if( currentLine.EndsWithVia()
+                && nearest->m_item->Collide( &currentLine.Via(), m_currentNode,
+                                             nearest->m_item->Layer() ) )
             {
                 PNS_DBG( Dbg(), AddItem, nearest->m_item, YELLOW, 100000, wxT("v2v nearesti" ) );
                 //PNS_DBG( Dbg(), AddItem, nearest->m_head,RED, 100000, wxString::Format("v2v nearesth force=%d,%d" ) );
@@ -1551,7 +1584,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
             popLineStack();
 
-            if( currentLine.EndsWithVia() && currentLine.Via().Collide( (SEGMENT*) ni, m_currentNode ) )
+            if( currentLine.EndsWithVia()
+                && currentLine.Via().Collide( (SEGMENT*) ni, m_currentNode, currentLine.Layer() ) )
             {
                 VIA_HANDLE vh;
                 vh.layers = currentLine.Via().Layers();

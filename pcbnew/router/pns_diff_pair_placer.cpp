@@ -118,12 +118,12 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
 
     if( m_placingVia )
     {
-        virtHead.SetDiameter( viaGap() + 2 * virtHead.Diameter() );
+        virtHead.SetDiameter( 0, viaGap() + 2 * virtHead.Diameter( 0 ) );
     }
     else
     {
         virtHead.SetLayer( m_currentLayer );
-        virtHead.SetDiameter( m_sizes.DiffPairGap() + 2 * m_sizes.DiffPairWidth() );
+        virtHead.SetDiameter( 0, m_sizes.DiffPairGap() + 2 * m_sizes.DiffPairWidth() );
     }
 
     bool solidsOnly = true;
@@ -160,7 +160,8 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
 
         int clearance = m_currentNode->GetClearance( obs->m_item, &m_currentTrace.PLine(), false );
 
-        if( obs->m_item->Shape()->Collide( virtHead.Shape(), clearance, &force ) )
+        // TODO(JE) padstacks - this won't work
+        if( obs->m_item->Shape( 0 )->Collide( virtHead.Shape( 0 ), clearance, &force ) )
         {
             collided = true;
             totalForce += force;

@@ -44,9 +44,9 @@
  * @return a SHAPE* object equivalent to object.
  */
 template <class T>
-static const SHAPE* shapeFunctor( T aItem )
+static const SHAPE* shapeFunctor( T aItem, int aLayer )
 {
-    return aItem->Shape();
+    return aItem->Shape( aLayer );
 }
 
 /**
@@ -59,9 +59,9 @@ static const SHAPE* shapeFunctor( T aItem )
  * @return a BOX2I object containing the bounding box of the T object.
  */
 template <class T>
-BOX2I boundingBox( T aObject )
+BOX2I boundingBox( T aObject, int aLayer )
 {
-    BOX2I bbox = shapeFunctor( aObject )->BBox();
+    BOX2I bbox = shapeFunctor( aObject, aLayer )->BBox();
 
     return bbox;
 }
@@ -89,13 +89,14 @@ void acceptVisitor( T aObject, V aVisitor )
  *
  * @param aObject is a generic T object.
  * @param aAnotherObject is a generic U object.
+ * @param aLayer is the layer to test
  * @param aMinDistance is the minimum collision distance.
  * @return true if object and anotherObject collide.
  */
 template <class T, class U>
-bool collide( T aObject, U aAnotherObject, int aMinDistance )
+bool collide( T aObject, U aAnotherObject, int aLayer, int aMinDistance )
 {
-    return shapeFunctor( aObject )->Collide( aAnotherObject, aMinDistance );
+    return shapeFunctor( aObject, aLayer )->Collide( aAnotherObject, aMinDistance );
 }
 
 template <class T, class V>
@@ -197,7 +198,7 @@ class SHAPE_INDEX
             }
         };
 
-        SHAPE_INDEX();
+        explicit SHAPE_INDEX( int aLayer );
 
         ~SHAPE_INDEX();
 
@@ -281,6 +282,7 @@ class SHAPE_INDEX
 
     private:
         RTree<T, int, 2, double>* m_tree;
+        int m_shapeLayer;
 };
 
 /*
@@ -288,9 +290,10 @@ class SHAPE_INDEX
  */
 
 template <class T>
-SHAPE_INDEX<T>::SHAPE_INDEX()
+SHAPE_INDEX<T>::SHAPE_INDEX( int aLayer )
 {
     this->m_tree = new RTree<T, int, 2, double>();
+    this->m_shapeLayer = aLayer;
 }
 
 template <class T>
@@ -311,7 +314,7 @@ void SHAPE_INDEX<T>::Add( T aShape, const BOX2I& aBbox )
 template <class T>
 void SHAPE_INDEX<T>::Add( T aShape )
 {
-    BOX2I box = boundingBox( aShape );
+    BOX2I box = boundingBox( aShape, this->m_shapeLayer );
     int min[2] = { box.GetX(), box.GetY() };
     int max[2] = { box.GetRight(), box.GetBottom() };
 
@@ -321,7 +324,7 @@ void SHAPE_INDEX<T>::Add( T aShape )
 template <class T>
 void SHAPE_INDEX<T>::Remove( T aShape )
 {
-    BOX2I box = boundingBox( aShape );
+    BOX2I box = boundingBox( aShape, this->m_shapeLayer );
     int min[2] = { box.GetX(), box.GetY() };
     int max[2] = { box.GetRight(), box.GetBottom() };
 
@@ -345,7 +348,7 @@ void SHAPE_INDEX<T>::Reindex()
     while( !iter.IsNull() )
     {
         T shape = *iter;
-        BOX2I box = boundingBox( shape );
+        BOX2I box = boundingBox( shape, this->m_shapeLayer );
         int min[2] = { box.GetX(), box.GetY() };
         int max[2] = { box.GetRight(), box.GetBottom() };
         newTree->Insert( min, max, shape );

@@ -31,10 +31,13 @@ void INDEX::Add( ITEM* aItem )
     assert( range.Start() != -1 && range.End() != -1 );
 
     if( m_subIndices.size() <= static_cast<size_t>( range.End() ) )
-        m_subIndices.resize( 2 * range.End() + 1 ); // +1 handles the 0 case
+    {
+        for( int i = 0; i <= range.End(); ++i )
+            m_subIndices.emplace_back( std::make_unique<ITEM_SHAPE_INDEX>( i ) );
+    }
 
     for( int i = range.Start(); i <= range.End(); ++i )
-        m_subIndices[i].Add( aItem );
+        m_subIndices[i]->Add( aItem );
 
     m_allItems.insert( aItem );
     NET_HANDLE net = aItem->Net();
@@ -53,7 +56,7 @@ void INDEX::Remove( ITEM* aItem )
         return;
 
     for( int i = range.Start(); i <= range.End(); ++i )
-        m_subIndices[i].Remove( aItem );
+        m_subIndices[i]->Remove( aItem );
 
     m_allItems.erase( aItem );
     NET_HANDLE net = aItem->Net();

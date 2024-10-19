@@ -825,7 +825,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead, LINE& aNe
     if( obs )
     {
         int              clearance = m_currentNode->GetClearance( obs->m_item, &m_head, false );
-        SHAPE_LINE_CHAIN hull = obs->m_item->Hull( clearance, m_head.Width() );
+        SHAPE_LINE_CHAIN hull = obs->m_item->Hull( clearance, m_head.Width(), m_head.Layer() );
         VECTOR2I         nearest;
 
         DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();

@@ -55,6 +55,7 @@ static bool shouldWeConsiderHoleCollisions( const ITEM* aItem, const ITEM* aHead
     {
         const ITEM* parentI = holeI->ParentPadVia();
         const ITEM* parentH = holeH->ParentPadVia();
+
         if( !parentH || !parentI )
             return true;
 
@@ -73,7 +74,7 @@ static bool shouldWeConsiderHoleCollisions( const ITEM* aItem, const ITEM* aHead
         // identical and belonging to the same net as non-colliding.
 
         if( parentViaI && parentViaH && parentViaI->Pos() == parentViaH->Pos()
-            && parentViaI->Diameter() == parentViaH->Diameter()
+            && parentViaI->PadstackMatches( *parentViaH )
             && parentViaI->Net() == parentViaH->Net()
             && parentViaI->Drill() == parentViaH->Drill() )
             return false;
@@ -90,17 +91,32 @@ static bool shouldWeConsiderHoleCollisions( const ITEM* aItem, const ITEM* aHead
 }
 
 
-bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
+std::set<int> ITEM::RelevantShapeLayers( const ITEM* aOther ) const
+{
+    std::vector<int> myLayers = UniqueShapeLayers();
+    std::vector<int> otherLayers = aOther->UniqueShapeLayers();
+
+    if( !HasUniqueShapeLayers() && !aOther->HasUniqueShapeLayers() )
+        return { -1 };
+
+    std::set<int> relevantLayers;
+
+    std::set_union( myLayers.begin(), myLayers.end(), otherLayers.begin(), otherLayers.end(),
+                    std::inserter( relevantLayers, relevantLayers.begin() ) );
+
+    return relevantLayers;
+}
+
+
+bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode, int aLayer,
                           COLLISION_SEARCH_CONTEXT* aCtx ) const
 {
     // Note: if 'this' is a pad or a via then its hole is a separate PNS::ITEM in the node's
     // index and we don't need to deal with holeI here.  The same is *not* true of the routing
     // "head", so we do need to handle holeH.
-
-    const SHAPE* shapeI = Shape();
     int          lineWidthI = 0;
 
-    const SHAPE* shapeH = aHead->Shape();
+    //const SHAPE* shapeH = aHead->Shape();
     const HOLE*  holeH = aHead->Hole();
     int          lineWidthH = 0;
     bool         collisionsFound = false;
@@ -118,19 +134,19 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     if( const auto line = dyn_cast<const LINE*>( this ) )
     {
         if( line->EndsWithVia() )
-            collisionsFound |= line->Via().collideSimple( aHead, aNode, aCtx );
+            collisionsFound |= line->Via().collideSimple( aHead, aNode, aLayer, aCtx );
     }
 
     if( const auto line = dyn_cast<const LINE*>( aHead ) )
     {
         if( line->EndsWithVia() )
-            collisionsFound |= line->Via().collideSimple( this, aNode, aCtx );
+            collisionsFound |= line->Via().collideSimple( this, aNode, aLayer, aCtx );
     }
 
     // And a special case for the "head" via's hole.
     if( holeH && shouldWeConsiderHoleCollisions( this, holeH ) )
     {
-        if( Net() != holeH->Net() && collideSimple( holeH, aNode, aCtx ) )
+        if( Net() != holeH->Net() && collideSimple( holeH, aNode, aLayer, aCtx ) )
             collisionsFound = true;
     }
 
@@ -205,6 +221,9 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
 
         bool checkNetTie = aNode->GetRuleResolver()->IsInNetTie( this );
 
+        const SHAPE* shapeI = Shape( aLayer );
+        const SHAPE* shapeH = aHead->Shape( aLayer );
+
         if( checkCastellation || checkNetTie )
         {
             // Slow method
@@ -270,9 +289,10 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
 }
 
 
-bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, COLLISION_SEARCH_CONTEXT *aCtx ) const
+bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, int aLayer,
+                    COLLISION_SEARCH_CONTEXT *aCtx ) const
 {
-    if( collideSimple( aOther, aNode, aCtx ) )
+    if( collideSimple( aOther, aNode, aLayer, aCtx ) )
         return true;
 
     return false;

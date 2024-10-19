@@ -45,8 +45,8 @@ ARC* ARC::Clone() const
 
 OPT_BOX2I ARC::ChangedArea( const ARC* aOther ) const
 {
-    BOX2I tmp = Shape()->BBox();
-    tmp.Merge( aOther->Shape()->BBox() );
+    BOX2I tmp = Shape( -1 )->BBox();
+    tmp.Merge( aOther->Shape( -1 )->BBox() );
     return tmp;
 }
 

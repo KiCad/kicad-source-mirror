@@ -212,7 +212,7 @@ bool WALKAROUND::singleStep()
         std::optional<LINE> shortest;
         std::optional<LINE> shortest_alt;
 
-        
+
         if( st_cw && st_ccw )
         {
             if( !cw_coll && !ccw_coll || ( cw_coll && ccw_coll) )
@@ -232,7 +232,7 @@ bool WALKAROUND::singleStep()
                 shortest = path_cw;
             else if( !ccw_coll )
                 shortest = path_ccw;
-            
+
         }
         else if( st_ccw )
             shortest = path_ccw;
@@ -245,7 +245,7 @@ bool WALKAROUND::singleStep()
         {
             for( auto& item : m_lastShortestCluster->m_items )
             {
-                if( shortest->Collide( item, m_world) )
+                if( shortest->Collide( item, m_world, shortest->Layer() ) )
                 {
                     anyColliding = true;
                     break;
@@ -357,7 +357,7 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         if( ln.PointCount() > 0 && ln.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
         {
             st = ST_ALMOST_DONE;
-        
+
         }
         PNS_DBG( Dbg(), Message, wxString::Format( "stat=%d", st ) );
 

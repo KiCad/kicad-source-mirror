@@ -952,7 +952,7 @@ static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhe
                 if( aBaseline.PointCount() > 0 )
                 {
                     SEG::ecoord dcBaseline;
-                    VECTOR2I    target = segm->Shape()->Centre();
+                    VECTOR2I    target = segm->Shape( -1 )->Centre();
 
                     if( aBaseline.SegmentCount() > 0 )
                         dcBaseline = aBaseline.SquaredDistance( target );

@@ -1129,7 +1129,7 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 {
     std::vector<std::unique_ptr<PNS::SOLID>> solids;
-    PNS_LAYER_RANGE layers( 0, aPad->BoardCopperLayerCount() );
+    PNS_LAYER_RANGE layers( 0, aPad->BoardCopperLayerCount() - 1 );
     LSEQ lmsk = aPad->GetLayerSet().CuStack();
 
     // ignore non-copper pads except for those with holes
@@ -1174,14 +1174,14 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
 
             if( aPad->Padstack().Mode() == PADSTACK::MODE::CUSTOM )
             {
-                solid->SetLayers( GetPNSLayerFromBoardLayer( aLayer ) );
+                solid->SetLayer( GetPNSLayerFromBoardLayer( aLayer ) );
             }
             else if( aPad->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK )
             {
                 if( aLayer == F_Cu || aLayer == B_Cu )
-                    solid->SetLayers( GetPNSLayerFromBoardLayer( aLayer ) );
+                    solid->SetLayer( GetPNSLayerFromBoardLayer( aLayer ) );
                 else
-                    solid->SetLayers( PNS_LAYER_RANGE( 1, aPad->BoardCopperLayerCount() - 1 ) );
+                    solid->SetLayers( PNS_LAYER_RANGE( 1, aPad->BoardCopperLayerCount() - 2 ) );
             }
             else
             {
@@ -1207,7 +1207,10 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
             solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
             if( aPad->GetDrillSize().x > 0 )
+            {
                 solid->SetHole( new PNS::HOLE( aPad->GetEffectiveHoleShape()->Clone() ) );
+                solid->Hole()->SetLayer( GetPNSLayerFromBoardLayer( aLayer ) );
+            }
 
             // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and
             // then perform layer-specific flashing tests internally.
@@ -1285,41 +1288,81 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
 }
 
 
-std::vector<std::unique_ptr<PNS::VIA>> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
+std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 {
-    std::vector<std::unique_ptr<PNS::VIA>> vias;
     PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
 
-    aVia->Padstack().ForEachUniqueLayer(
+    /*
+     * NOTE about PNS via padstacks:
+     *
+     * PNS::VIA has no knowledge about how many layers are in the board, and there is no fixed
+     * reference to the "back layer" in the PNS.  That means that there is no way for a VIA to know
+     * the difference between its bottom layer and the bottom layer of the overall board (i.e. if
+     * the via is a blind/buried via).  For this reason, PNS::VIA::STACK_MODE::FRONT_INNER_BACK
+     * cannot be used for blind/buried vias.  This mode will always assume that the via's top layer
+     * is the "front" layer and the via's bottom layer is the "back" layer, but from KiCad's point
+     * of view, at least at the moment, front/inner/back padstack mode is board-scoped, not
+     * via-scoped, so a buried via would only use the inner layer size even if its padstack mode is
+     * set to PADSTACK::MODE::FRONT_INNER_BACK and different sizes are defined for front or back.
+     * For this kind of via, the PNS VIA stack mode will be set to NORMAL because effectively it has
+     * the same size on every layer it exists on.
+     */
+
+    auto via = std::make_unique<PNS::VIA>( aVia->GetPosition(),
+                                   SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ),
+                                   0,
+                                   aVia->GetDrillValue(),
+                                   aVia->GetNet(),
+                                   aVia->GetViaType() );
+
+    auto syncDiameter =
         [&]( PCB_LAYER_ID aLayer )
         {
-            auto via = std::make_unique<PNS::VIA>( aVia->GetPosition(),
-                                           SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ),
-                                           aVia->GetWidth( aLayer ),
-                                           aVia->GetDrillValue(),
-                                           aVia->GetNet(),
-                                           aVia->GetViaType() );
+            via->SetDiameter( GetPNSLayerFromBoardLayer( aLayer ), aVia->GetWidth( aLayer ) );
+        };
 
-            via->SetParent( aVia );
+    switch( aVia->Padstack().Mode() )
+    {
+    case PADSTACK::MODE::NORMAL:
+        via->SetDiameter( 0, aVia->GetWidth( PADSTACK::ALL_LAYERS ) );
+        break;
 
-            if( aVia->IsLocked() )
-                via->Mark( PNS::MK_LOCKED );
+    case PADSTACK::MODE::FRONT_INNER_BACK:
+        if( aVia->GetViaType() == VIATYPE::BLIND_BURIED )
+        {
+            via->SetDiameter( 0, aVia->GetWidth( PADSTACK::INNER_LAYERS ) );
+        }
+        else
+        {
+            via->SetStackMode( PNS::VIA::STACK_MODE::FRONT_INNER_BACK );
+            aVia->Padstack().ForEachUniqueLayer( syncDiameter );
+        }
 
-            if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aVia->GetParentGroup() ) )
-            {
-                if( !generator->HasFlag( IN_EDIT ) )
-                    via->Mark( PNS::MK_LOCKED );
-            }
+        break;
 
-            via->SetIsFree( aVia->GetIsFree() );
-            via->SetHole( PNS::HOLE::MakeCircularHole( aVia->GetPosition(),
-                                                       aVia->GetDrillValue() / 2,
-                                                       SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ) ) );
-            vias.emplace_back( std::move( via ) );
-        } );
+    case PADSTACK::MODE::CUSTOM:
+        via->SetStackMode( PNS::VIA::STACK_MODE::CUSTOM );
+        aVia->Padstack().ForEachUniqueLayer( syncDiameter );
+    }
 
-    return vias;
+    via->SetParent( aVia );
+
+    if( aVia->IsLocked() )
+        via->Mark( PNS::MK_LOCKED );
+
+    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aVia->GetParentGroup() ) )
+    {
+        if( !generator->HasFlag( IN_EDIT ) )
+            via->Mark( PNS::MK_LOCKED );
+    }
+
+    via->SetIsFree( aVia->GetIsFree() );
+    via->SetHole( PNS::HOLE::MakeCircularHole( aVia->GetPosition(),
+                                               aVia->GetDrillValue() / 2,
+                                               SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ) ) );
+
+    return via;
 }
 
 
@@ -1432,7 +1475,7 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
 
             if( aItem->GetLayer() == Edge_Cuts || aItem->GetLayer() == Margin )
             {
-                solid->SetLayers( PNS_LAYER_RANGE( 0, m_board->GetCopperLayerCount() ) );
+                solid->SetLayers( PNS_LAYER_RANGE( 0, m_board->GetCopperLayerCount() - 1 ) );
                 solid->SetRoutable( false );
             }
             else
@@ -1707,9 +1750,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
         else if( type == PCB_VIA_T )
         {
-            std::vector<std::unique_ptr<PNS::VIA>> vias = syncVia( static_cast<PCB_VIA*>( t ) );
-
-            for( std::unique_ptr<PNS::VIA>& via : vias )
+            if( std::unique_ptr<PNS::VIA> via = syncVia( static_cast<PCB_VIA*>( t ) ) )
                 aWorld->Add( std::move( via ) );
         }
     }
@@ -1878,7 +1919,7 @@ void PNS_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
         {
             if( td->IsTeardropArea()
                 && td->GetBoundingBox().Intersects( aItem->Parent()->GetBoundingBox() )
-                && td->Outline()->Collide( aItem->Shape() ) )
+                && td->Outline()->Collide( aItem->Shape( td->GetLayer() ) ) )
             {
                 m_view->SetVisible( td, false );
                 m_view->Update( td, KIGFX::APPEARANCE );
@@ -1928,7 +1969,7 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
     {
         PNS::ARC*        arc = static_cast<PNS::ARC*>( aItem );
         PCB_ARC*         arc_board = static_cast<PCB_ARC*>( board_item );
-        const SHAPE_ARC* arc_shape = static_cast<const SHAPE_ARC*>( arc->Shape() );
+        const SHAPE_ARC* arc_shape = static_cast<const SHAPE_ARC*>( arc->Shape( -1 ) );
 
         m_commit->Modify( arc_board );
 
@@ -1961,7 +2002,7 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         m_commit->Modify( via_board );
 
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
-        via_board->SetWidth( PADSTACK::ALL_LAYERS, via->Diameter() );
+        via_board->SetWidth( PADSTACK::ALL_LAYERS, via->Diameter( 0 ) );
         via_board->SetDrill( via->Drill() );
         via_board->SetNet( static_cast<NETINFO_ITEM*>( via->Net() ) );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
@@ -2014,7 +2055,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
     case PNS::ITEM::ARC_T:
     {
         PNS::ARC* arc = static_cast<PNS::ARC*>( aItem );
-        PCB_ARC*  new_arc = new PCB_ARC( m_board, static_cast<const SHAPE_ARC*>( arc->Shape() ) );
+        PCB_ARC*  new_arc = new PCB_ARC( m_board, static_cast<const SHAPE_ARC*>( arc->Shape( -1 ) ) );
         new_arc->SetWidth( arc->Width() );
         new_arc->SetLayer( GetBoardLayerFromPNSLayer( arc->Layers().Start() ) );
         new_arc->SetNet( net );
@@ -2041,7 +2082,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         PCB_VIA*  via_board = new PCB_VIA( m_board );
         PNS::VIA* via = static_cast<PNS::VIA*>( aItem );
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
-        via_board->SetWidth( PADSTACK::ALL_LAYERS, via->Diameter() );
+        via_board->SetWidth( PADSTACK::ALL_LAYERS, via->Diameter( 0 ) );
         via_board->SetDrill( via->Drill() );
         via_board->SetNet( net );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
