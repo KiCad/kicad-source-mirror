@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-19 06:15+0000\n"
+"PO-Revision-Date: 2024-10-19 17:16+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -6895,14 +6895,14 @@ msgid "Error removing directory '%s': %s"
 msgstr "Wystąpił błąd podczas usuwania folderu '%s': %s"
 
 #: common/gestfich.cpp:382 common/gestfich.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Nie można utworzyć folderu '%s'"
+msgstr "Nie można otworzyć folderu źródłowego: '%s'"
 
 #: common/gestfich.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Nie można utworzyć folderu '%s'"
+msgstr "Nie można utworzyć folderu docelowego: '%s'"
 
 #: common/gestfich.cpp:414
 #, c-format
@@ -7448,33 +7448,28 @@ msgid "Loading file canceled by user."
 msgstr "Wczytywanie zostało anulowane przez użytkownika."
 
 #: common/jobs/job_export_pcb_3d.cpp:131
-#, fuzzy
 msgid "3D model export"
-msgstr "Nie eksportuj"
+msgstr "Eksport modelu 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:134
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Eksportuj model 3D"
+msgstr "PCB: Eksport modelu 3D"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Drill data export"
-msgstr "Nie eksportuj"
+msgstr "Eksport danych o wierceniach"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
 msgstr "PCB: Eksport danych o wierceniach"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
-#, fuzzy
 msgid "PCB DXF export"
-msgstr "Tekst PCB"
+msgstr "Eksport DXF PCB"
 
 #: common/jobs/job_export_pcb_dxf.cpp:61
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "Eksportuj DXF"
+msgstr "PCB: Eksport DXF"
 
 #: common/jobs/job_export_pcb_gerber.cpp:82
 msgid "Single gerber export"
@@ -7493,98 +7488,80 @@ msgid "IPC2581 export"
 msgstr "Eksport IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:85
-#, fuzzy
 msgid "PCB: Export IPC2581"
-msgstr "Eksportuj IPC-2581"
+msgstr "PCB: Eksport IPC-2581"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
-#, fuzzy
 msgid "PCB PDF export"
-msgstr "Tekst PCB"
+msgstr "Eksport PDF PCB"
 
 #: common/jobs/job_export_pcb_pdf.cpp:57
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "Eksportuj PDF"
+msgstr "PCB: Eksport PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Placement data export"
-msgstr "Rozmieszczenie"
+msgstr "Eksport danych o pozycjach elementów"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
-msgstr "PCB: Eksport danych o pozycjach"
+msgstr "PCB: Eksport danych o pozycjach elementów"
 
 #: common/jobs/job_export_pcb_svg.cpp:53
-#, fuzzy
 msgid "PCB SVG export"
-msgstr "Tekst PCB"
+msgstr "Eksport SVG PCB"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Eksportuj SVG"
+msgstr "PCB: Eksport SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
-#, fuzzy
 msgid "Schematic BOM export"
-msgstr "Tekst schematu"
+msgstr "Eksport raportu materiałowego schematu"
 
 #: common/jobs/job_export_sch_bom.cpp:89
-#, fuzzy
 msgid "Schematic: Export BOM"
-msgstr "Edytor Schematów"
+msgstr "Schemat: Eksport raportu materiałowego schematu"
 
 #: common/jobs/job_export_sch_netlist.cpp:61
-#, fuzzy
 msgid "Schematic Netlist Export"
-msgstr "Edytor Schematów"
+msgstr "Eksport listy sieci schematu"
 
 #: common/jobs/job_export_sch_netlist.cpp:65
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Eksportuj listę sieci"
+msgstr "Schemat: Eksport listy sieci"
 
 #: common/jobs/job_export_sch_plot.cpp:118
-#, fuzzy
 msgid "Schematic plot export"
-msgstr "Tekst schematu"
+msgstr "Eksport rysunku schematu"
 
 #: common/jobs/job_export_sch_plot.cpp:157
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Edytor Schematów"
+msgstr "Schemat: Eksport SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:159
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "Edytor Schematów"
+msgstr "Schemat: Eksport HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:161
-#, fuzzy
 msgid "Schematic: Export PS"
-msgstr "Edytor Schematów"
+msgstr "Schemat: Eksport PostScript"
 
 #: common/jobs/job_export_sch_plot.cpp:163
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Edytor Schematów"
+msgstr "Schemat: Eksport DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:165
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Edytor Schematów"
+msgstr "Schemat: Eksport PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "Tekst schematu"
+msgstr "Eksport PythonBOM schematu"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:39
-#, fuzzy
 msgid "Schematic: Export PythonBOM"
-msgstr "Edytor Schematów"
+msgstr "Schemat: Eksport PythonBOM"
 
 #: common/jobs/job_pcb_drc.cpp:58
 msgid "Perform PCB DRC"
@@ -7595,14 +7572,12 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: Przeprowadź kontrolę DRC"
 
 #: common/jobs/job_sch_erc.cpp:54
-#, fuzzy
 msgid "Perform Schematic ERC"
-msgstr "Użyj kolorów ze schematu"
+msgstr "Przeprowadź kontrolę ERC schematu"
 
 #: common/jobs/job_sch_erc.cpp:58
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Uaktualnij schemat na podstawie PCB"
+msgstr "Schemat: Przeprowadź kontrolę ERC"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -8505,14 +8480,12 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Kopiuje zaznaczone elementy i umieszcza je w schowku"
 
 #: common/tool/actions.cpp:235
-#, fuzzy
 msgid "Copy as Text"
-msgstr "Tekst płytki"
+msgstr "Skopiuj jako tekst"
 
 #: common/tool/actions.cpp:236
-#, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
-msgstr "Kopiuje zaznaczone elementy i umieszcza je w schowku"
+msgstr "Kopiuje zaznaczone elementy i umieszcza je w schowku w formie tekstu"
 
 #: common/tool/actions.cpp:246
 msgid "Paste item(s) from clipboard"
@@ -10049,9 +10022,8 @@ msgid "Hotkey file"
 msgstr "Plik z listą skrótów klawiszowych"
 
 #: common/wildcards_and_files_ext.cpp:555
-#, fuzzy
 msgid "KiCad jobset files"
-msgstr "Pliki projektów programu KiCad"
+msgstr "Pliki zestawu poleceń programu KiCad"
 
 #: cvpcb/auto_associate.cpp:108
 #, c-format
@@ -11874,9 +11846,8 @@ msgid "You must provide a netlist generator title"
 msgstr "Musisz podać nazwę generatora listy sieci"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:33
-#, fuzzy
 msgid "Output Path:"
-msgstr "Wyjście:"
+msgstr "Ścieżka wyjściowa:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:65
 msgid "Add Exporter..."
@@ -15561,9 +15532,8 @@ msgid "Show OP currents"
 msgstr "Pokaż prądy punktu pracy"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
-#, fuzzy
 msgid "Show pin alternate mode indicator icons"
-msgstr "Pokazuj znacznik <brak sieci>"
+msgstr "Pokazuj ikony z trybami alternatywnymi pinów"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:81
 msgid "Show page limi&ts"
@@ -16411,7 +16381,6 @@ msgid "Loading schematic\n"
 msgstr "Wczytywanie schematu\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:182
-#, fuzzy
 msgid "Failed to load schematic\n"
 msgstr "Nie można załadować pliku schematu\n"
 
@@ -21408,9 +21377,9 @@ msgid "Open symbol from library %s"
 msgstr "Otwórz symbol z biblioteki %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:901
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load symbol %s from library %s."
-msgstr "Dodanie symbolu %s do biblioteki '%s' nie powiodło się."
+msgstr "Załadowanie symbolu %s z biblioteki %s nie powiodło się."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:912
 msgid ""
@@ -21431,16 +21400,14 @@ msgstr ""
 "Symbol %s pochodzi innego symbolu. Grafiki symbolu nie będzie można edytować."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:957
-#, fuzzy
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr ""
-"Biblioteka \"%s\" jest tylko do odczytu i musi zostać zapisana jako inna "
-"biblioteka."
+"Biblioteka jest tylko do odczytu.  Zmiany nie mogą być zapisane w tej "
+"bibliotece."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:959
-#, fuzzy
 msgid "Create an editable copy"
-msgstr "Tworzy nowy folder"
+msgstr "Utwórz edytowalną kopię"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 #, c-format
@@ -21452,14 +21419,12 @@ msgid "Select type of item to save"
 msgstr "Wybierz typ elementu by zapisać"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:972
-#, fuzzy
 msgid "Copy symbol"
-msgstr "Kopiuj symbol"
+msgstr "Skopiuj symbol"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:973
-#, fuzzy
 msgid "Copy library"
-msgstr "bibliotek"
+msgstr "Skopiuj bibliotekę"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1082
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1133
@@ -21634,14 +21599,12 @@ msgstr ""
 "Czy nadpisać wszystkie, czy zmienić nazwy dla nowych symboli?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
-#, fuzzy
 msgid "Overwrite All"
-msgstr "Nadpisz"
+msgstr "Nadpisz wszsytkie"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
-#, fuzzy
 msgid "Rename All"
-msgstr "Zmień nazwę pliku"
+msgstr "Zmień nazwy wszystkich"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1121
 #, c-format
@@ -22093,9 +22056,8 @@ msgid "Show/hide design blocks library"
 msgstr "Foldery bibliotek bloków projektowych programu KiCad"
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Save Current Sheet as Design Block..."
-msgstr "Zapisz arkusz jako blok projektowy..."
+msgstr "Zapisz bieżący arkusz jako blok projektowy..."
 
 #: eeschema/tools/ee_actions.cpp:158
 msgid "Create a new design block from the current sheet"
@@ -22167,18 +22129,16 @@ msgid "Rename Symbol..."
 msgstr "Zmień nazwę symbolu..."
 
 #: eeschema/tools/ee_actions.cpp:230
-#, fuzzy
 msgid "Save the current symbol to a different library or name"
-msgstr "Zapisuje kopię bieżącego symbolu w innej bibliotece"
+msgstr "Zapisuje bieżący symbolu w innej bibliotece lub pod inną nazwą"
 
 #: eeschema/tools/ee_actions.cpp:236
 msgid "Save Copy As..."
 msgstr "Zapisz kopię jako..."
 
 #: eeschema/tools/ee_actions.cpp:237
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library or name"
-msgstr "Zapisuje kopię bieżącego symbolu w innej bibliotece"
+msgstr "Zapisuje kopię bieżącego symbolu w innej bibliotece lub pod inną nazwą"
 
 #: eeschema/tools/ee_actions.cpp:244
 msgid "Remove the selected symbol from its library"
@@ -22368,9 +22328,8 @@ msgid "Place Net Labels"
 msgstr "Umieść etykiety"
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Place Directive Labels"
-msgstr "Etykieta dyrektywy"
+msgstr "Umieść etykietę z dyrektywą"
 
 #: eeschema/tools/ee_actions.cpp:502
 msgid "Place Hierarchical Labels"
@@ -22700,9 +22659,8 @@ msgid "Highlight wires and pins of a net"
 msgstr "Podświetla elementy należące do wybranej sieci"
 
 #: eeschema/tools/ee_actions.cpp:944
-#, fuzzy
 msgid "Show/hide the net navigator"
-msgstr "Pokazuje/ukrywa inspektora listy sieci"
+msgstr "Pokaż/ukryj inspektora listy sieci"
 
 #: eeschema/tools/ee_actions.cpp:951
 msgid "Edit with Symbol Editor"
@@ -23051,9 +23009,8 @@ msgid "Show operating point current data from simulation"
 msgstr "Pokazuje dane o prądach w punkcie pracy pochodzące z symulacji"
 
 #: eeschema/tools/ee_actions.cpp:1237
-#, fuzzy
 msgid "Show Pin Alternate Icons"
-msgstr "Pokaż nazwy pinów"
+msgstr "Pokaż ikony alternatywnej reprezentacji pinów"
 
 #: eeschema/tools/ee_actions.cpp:1238
 msgid "Show indicator icons for pins with alternate modes"
@@ -23102,18 +23059,16 @@ msgstr ""
 "Uruchamia procedury diagnostyczne oraz próbuje tym samym naprawić schemat"
 
 #: eeschema/tools/ee_actions.cpp:1291
-#, fuzzy
 msgid "Previous Symbol Unit"
-msgstr "Składnik symbolu"
+msgstr "Poprzedni składnik symbolu"
 
 #: eeschema/tools/ee_actions.cpp:1292
 msgid "Open the previous unit of the symbol"
 msgstr "Otwórz poprzednią część składową symbolu"
 
 #: eeschema/tools/ee_actions.cpp:1298
-#, fuzzy
 msgid "Next Symbol Unit"
-msgstr "Składnik symbolu"
+msgstr "Następny składnik symbolu"
 
 #: eeschema/tools/ee_actions.cpp:1299
 msgid "Open the next unit of the symbol"
@@ -23196,9 +23151,8 @@ msgid "Hierarchy Navigator"
 msgstr "Nawigator hierarchii"
 
 #: eeschema/tools/ee_actions.cpp:1380
-#, fuzzy
 msgid "Show/hide the schematic sheet hierarchy navigator"
-msgstr "Wyświetla lub ukrywa okno z nawigatora w hierarchii arkuszy"
+msgstr "Pokaż/Ukryj okno nawigatora w hierarchii arkuszy"
 
 #: eeschema/tools/ee_actions.cpp:1392
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1274
@@ -25492,22 +25446,20 @@ msgid "Jobset"
 msgstr "Zestaw poleceń"
 
 #: kicad/cli/command_jobset_run.cpp:45
-#, fuzzy
 msgid "Runs a jobset file"
-msgstr "Zmień nazwę pliku"
+msgstr "Uruchom jako zestaw poleceń"
 
 #: kicad/cli/command_jobset_run.cpp:49
 msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
 msgstr ""
-"Zatrzymuje przetwarzanie dalszych zadań wykonywanych sekwencyjnie po "
-"pierwszej awarii zadania"
+"Zatrzymuje przetwarzanie dalszych poleceń wykonywanych sekwencyjnie po "
+"pierwszym niepowodzeniu polecenia"
 
 #: kicad/cli/command_jobset_run.cpp:53
-#, fuzzy
 msgid "Jobset file to be run"
-msgstr "Wybierz plik by go osadzić"
+msgstr "Plik zestawu poleceń do uruchomienia"
 
 #: kicad/cli/command_jobset_run.cpp:58
 msgid ""
@@ -26392,7 +26344,7 @@ msgstr "Folder"
 
 #: kicad/dialogs/panel_jobs.cpp:59
 msgid "Archive"
-msgstr ""
+msgstr "Archiwizuj"
 
 #: kicad/dialogs/panel_jobs.cpp:74
 #, c-format
@@ -26400,14 +26352,12 @@ msgid "%s Output Options"
 msgstr "%s opcji wyjściowych"
 
 #: kicad/dialogs/panel_jobs.cpp:112
-#, fuzzy
 msgid "Select output path"
-msgstr "Wybierz ścieżkę"
+msgstr "Wybierz ścieżkę docelową"
 
 #: kicad/dialogs/panel_jobs.cpp:193
-#, fuzzy
 msgid "Zip"
-msgstr "Zin"
+msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:254
 #, fuzzy
@@ -26415,9 +26365,8 @@ msgid "Running jobs"
 msgstr "Tryb dostrajania"
 
 #: kicad/dialogs/panel_jobs.cpp:308
-#, fuzzy
 msgid "No."
-msgstr "Nie"
+msgstr "Nr."
 
 #: kicad/dialogs/panel_jobs.cpp:309
 #, fuzzy
@@ -35974,7 +35923,7 @@ msgstr "Tryb rysowania:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "Górna/Wewnętrzne/Dolna"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
 #, fuzzy
@@ -37154,7 +37103,7 @@ msgstr "Przekształć w strefę z regułami"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:277
 msgid "Not found on board: "
-msgstr ""
+msgstr "Nie znaleziono na płytce: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:436
 msgid "No layers selected."
@@ -37748,13 +37697,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 msgid "Do not prompt for lock overrides for this session"
-msgstr ""
+msgstr "Nie pytaj o pomijanie blokad dla tej sesji"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
 msgstr ""
+"Jeśli zaznaczone, nie będzie wyświetlany żaden monit podczas próby edycji "
+"zablokowanych elementów.   To ustawienie jest resetowane po ponownym "
+"uruchomieniu programu KiCad."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
@@ -42441,7 +42393,7 @@ msgstr "Edycja footprintu z biblioteki tylko do odczytu '%s'."
 
 #: pcbnew/footprint_edit_frame.cpp:562
 msgid "Save as editable copy"
-msgstr ""
+msgstr "Zapisz jako edytowalną kopię"
 
 #: pcbnew/footprint_edit_frame.cpp:975
 #, c-format
@@ -43200,7 +43152,7 @@ msgstr "Zmieniam %s klasy komponentu na %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
 #, c-format
 msgid "Remove %s component class (currently %s)."
-msgstr ""
+msgstr "Usuń %s klas komponentów (obecnie %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:246
 #, c-format
@@ -43215,7 +43167,7 @@ msgstr "Zmieniono %s klas komponentu na %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, c-format
 msgid "Removed %s component class (was %s)."
-msgstr ""
+msgstr "Usunięto %s klas komponentów (było %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:268
 #, fuzzy, c-format
