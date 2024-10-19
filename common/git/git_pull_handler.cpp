@@ -43,7 +43,7 @@ bool GIT_PULL_HANDLER::PerformFetch()
 
     if( git_remote_lookup( &remote, m_repo, "origin" ) != 0 )
     {
-        AddErrorString( wxString::Format( _( "Could not lookup remote '%s'" ), "origin" ).ToStdString() );
+        AddErrorString( wxString::Format( _( "Could not lookup remote '%s'" ), "origin" ) );
         return false;
     }
 
@@ -57,7 +57,8 @@ bool GIT_PULL_HANDLER::PerformFetch()
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, nullptr, nullptr ) )
     {
         git_remote_free( remote );
-        AddErrorString( wxString::Format( _( "Could not connect to remote '%s'" ), "origin" ).ToStdString() );
+        AddErrorString( wxString::Format( _( "Could not connect to remote '%s': %s" ), "origin",
+                                          git_error_last()->message ) );
         return false;
     }
 
@@ -68,7 +69,8 @@ bool GIT_PULL_HANDLER::PerformFetch()
     if( git_remote_fetch( remote, nullptr, &fetchOptions, nullptr ) )
     {
         git_remote_free( remote );
-        AddErrorString( wxString::Format( _( "Could not fetch data from remote '%s'" ), "origin" ) );
+        AddErrorString( wxString::Format( _( "Could not fetch data from remote '%s': %s" ),
+                                          "origin", git_error_last()->message ) );
         return false;
     }
 

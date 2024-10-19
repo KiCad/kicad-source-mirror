@@ -1729,7 +1729,12 @@ void PROJECT_TREE_PANE::onGitPullProject( wxCommandEvent& aEvent )
                                                                          _( "Fetching Remote" ),
                                                                          1 ) );
 
-    handler.PerformPull();
+    if( handler.PerformPull() != PullResult::Success )
+    {
+        wxString errorMessage = handler.GetErrorString();
+
+        DisplayErrorMessage( m_parent, _( "Failed to pull project" ), errorMessage );
+    }
 }
 
 
