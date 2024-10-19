@@ -269,6 +269,11 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
                 if( getVersionedEnvVar( "KICAD*_FOOTPRINT_DIR", strResult ) )
                     expanded = true;
             }
+            else if( strVarName.Matches( "KICAD*_3RD_PARTY" ) )
+            {
+                if( getVersionedEnvVar( "KICAD*_3RD_PARTY", strResult ) )
+                    expanded = true;
+            }
             else
             {
                 // variable doesn't exist => don't change anything
