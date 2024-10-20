@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:32-0700\n"
-"PO-Revision-Date: 2024-10-18 02:15+0000\n"
+"PO-Revision-Date: 2024-10-20 09:40+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -9430,9 +9430,7 @@ msgstr "(Datei fehlt)"
 #: eeschema/dialogs/dialog_bom.cpp:294
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr ""
-"Das ausgewählte Bauteillisten-Generatorskript %s konnte nicht gefunden "
-"werden."
+msgstr "Das ausgewählte Stücklistengeneratorscript %s wurde nicht gefunden."
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -9452,7 +9450,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:346
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"Das Erstellen der Bauteilliste erfordert einen vollständig annotierten "
+"Das Erstellen einer Stückliste erfordert einen vollständig annotierten "
 "Schaltplan."
 
 #: eeschema/dialogs/dialog_bom.cpp:350
@@ -9487,12 +9485,12 @@ msgstr "Hilfe zur Erstellung der Stückliste (BoM)"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
-msgstr "BoM-Generatorskripte:"
+msgstr "Stücklistengeneratorscripte:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add a new BOM generator and its command line to the list"
 msgstr ""
-"Hinzufügen eines neuen BoM-Generators und dessen Kommandozeile zur Liste"
+"Neuen Stücklistengenerator und dessen Kommandozeile zur Liste hinzufügen"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
@@ -9523,8 +9521,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr ""
-"Liste der Skripte zur Bauteillistenerzeugung auf Standardwerte zurücksetzen"
+msgstr "Liste der Stücklistengeneratorscripte auf Standardwerte zurücksetzen"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
