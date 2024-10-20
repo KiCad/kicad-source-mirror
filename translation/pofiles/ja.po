@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-19 17:16+0000\n"
+"PO-Revision-Date: 2024-10-20 09:40+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -22168,9 +22168,8 @@ msgid "Place Net Labels"
 msgstr "ネット ラベルを配置"
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Place Directive Labels"
-msgstr "指示ラベル"
+msgstr "指示ラベルを配置"
 
 #: eeschema/tools/ee_actions.cpp:502
 msgid "Place Hierarchical Labels"
@@ -25280,7 +25279,7 @@ msgstr "ジョブセットファイルを実行"
 msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
-msgstr ""
+msgstr "ジョブを順次実行する際、最初のジョブが失敗すると処理を停止します"
 
 #: kicad/cli/command_jobset_run.cpp:53
 msgid "Jobset file to be run"
