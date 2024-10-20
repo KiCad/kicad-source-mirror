@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-09-12 17:35+0000\n"
+"PO-Revision-Date: 2024-10-21 04:25+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -2034,14 +2034,14 @@ msgid "Design block folder '%s' could not be created."
 msgstr "Designblocksmapp '%s' kunde inte skapas."
 
 #: common/design_block_io.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "Kretsschemafil '%s' kunde inte sparas som designblock på '%s'."
 
 #: common/design_block_io.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Metadatafilen '%s' för designblock kunde inte läsas."
+msgstr "Designblockets metadatafil '%s' kunde inte sparas."
 
 #: common/design_block_io.cpp:439
 #, c-format
@@ -2532,23 +2532,21 @@ msgid "Path"
 msgstr "Sökväg"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "Lägg till designblock"
+msgstr "designblock"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Fel vid skapande av bibliotekstabell '%s'.\n"
+"Fel vid skapande av designblocksbibliotekstabell '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "Välj en symbolbibliotekstabellfil."
+msgstr "Välj en designblocksbibliotekstabellfil."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2559,12 +2557,12 @@ msgid "File '%s' not found."
 msgstr "Filen '%s' hittades inte."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Fel vid inläsning av symbolbibliotekstabell '%s'.\n"
+"Fel vid inläsning av designblocksbibliotekstabell '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:111
@@ -2574,9 +2572,10 @@ msgid "Cannot create global library table '%s'."
 msgstr "Kan inte skapa global bibliotekstabell '%s'."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr "Det går inte att kopiera global symbolbibliotekstabell '%s' till '%s'."
+msgstr ""
+"Fel vid kopiering av global designblocksbibliotekstabell '%s' till '%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -2872,11 +2871,13 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Visa inte denna dialogruta förrän KiCad startar om. Du kan återaktivera "
+"denna dialog i Mönsterkortsredigerarens inställningar."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "Urvalet innehåller %d låsta objekt."
+msgstr "Urvalet innehåller %lu låsta objekt."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6862,24 +6863,24 @@ msgid "Error removing directory '%s': %s"
 msgstr "Fel vid borttagande av katalog '%s': %s"
 
 #: common/gestfich.cpp:382 common/gestfich.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Det gick inte att skapa katalogen '%s'"
+msgstr "Det gick inte att öppna katalogen: '%s'"
 
 #: common/gestfich.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Det gick inte att skapa katalogen '%s'"
+msgstr "Det gick inte att skapa målkatalogen: %s"
 
 #: common/gestfich.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Kunde inte ansluta till '%s' "
+msgstr "Kunde inte kopiera filen: %s till %s"
 
 #: common/gestfich.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Kunde inte läsa fil "
+msgstr "Kunde inte läsa fil: %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -7412,104 +7413,88 @@ msgid "Loading file canceled by user."
 msgstr "Filöppning avbruten av användare."
 
 #: common/jobs/job_export_pcb_3d.cpp:131
-#, fuzzy
 msgid "3D model export"
-msgstr "Exportera inte"
+msgstr "Export av 3D-modell"
 
 #: common/jobs/job_export_pcb_3d.cpp:134
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Exportera 3D-modell"
+msgstr "Mönsterkort: Exportera 3D-modell"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Drill data export"
-msgstr "Exportera inte"
+msgstr "Exportera borrdata"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr ""
+msgstr "Mönsterkort: Exportera borrdata"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
-#, fuzzy
 msgid "PCB DXF export"
-msgstr "Exportera"
+msgstr "Exportera mönsterkorts DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:61
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "Exportera DXF"
+msgstr "Mönsterkort: Exportera DXF"
 
 #: common/jobs/job_export_pcb_gerber.cpp:82
 msgid "Single gerber export"
-msgstr ""
+msgstr "Exportera enskild gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:45
 msgid "Multi gerber export"
-msgstr ""
+msgstr "Exportera flera gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "Mönsterkort: Exportera gerberfiler"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "IPC2581 export"
-msgstr "Exportera"
+msgstr "Exportera IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:85
-#, fuzzy
 msgid "PCB: Export IPC2581"
-msgstr "Exportera IPC-2581"
+msgstr "Mönsterkort: Exportera IPC2581"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
-#, fuzzy
 msgid "PCB PDF export"
-msgstr "Exportera"
+msgstr "Mönsterkort: Exportera PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:57
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "Exportera PDF"
+msgstr "Mönsterkort: Exportera PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Placement data export"
-msgstr "Placering"
+msgstr "Exportera placeringsdata"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "Mönsterkort: Exportera placeringsdata"
 
 #: common/jobs/job_export_pcb_svg.cpp:53
-#, fuzzy
 msgid "PCB SVG export"
-msgstr "Exportera"
+msgstr "Exportera mönsterkorts SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Exportera SVG"
+msgstr "Mönsterkort: Exportera SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
-#, fuzzy
 msgid "Schematic BOM export"
-msgstr "Schematisk text"
+msgstr "Export av kretsschemats materiallista"
 
 #: common/jobs/job_export_sch_bom.cpp:89
-#, fuzzy
 msgid "Schematic: Export BOM"
-msgstr "Kretsschemaredigerare"
+msgstr "Kretsschema: Exportera materiallista"
 
 #: common/jobs/job_export_sch_netlist.cpp:61
-#, fuzzy
 msgid "Schematic Netlist Export"
-msgstr "Kretsschemaredigerare"
+msgstr "Exportera kretsschemats nätlista"
 
 #: common/jobs/job_export_sch_netlist.cpp:65
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Exportera nätlista"
+msgstr "Kretsschema: Exportera nätlista"
 
 #: common/jobs/job_export_sch_plot.cpp:118
 #, fuzzy
@@ -16351,9 +16336,8 @@ msgid "Loading schematic\n"
 msgstr "Läser in kretsschema"
 
 #: eeschema/eeschema_jobs_handler.cpp:182
-#, fuzzy
 msgid "Failed to load schematic\n"
-msgstr "Det gick inte att läsa in kretsschemafilen\n"
+msgstr "Det gick inte att läsa in kretsschemat\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:362
 #: eeschema/eeschema_jobs_handler.cpp:476
@@ -17067,6 +17051,8 @@ msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
+"Detta kretsschema innehåller symboler som har ledande och/eller avslutande "
+"mellanslag i fältnamnen."
 
 #: eeschema/files-io.cpp:609
 msgid "Schematic is read only."
@@ -21300,14 +21286,14 @@ msgstr ""
 "kretsschemat."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:888
-#, fuzzy, c-format
+#, c-format
 msgid "Open symbol from library %s"
-msgstr "Uppdatera symboler från biblioteket"
+msgstr "Öppna symbol från biblioteket %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:901
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load symbol %s from library %s."
-msgstr "Det gick inte att lägga till symbolen '%s' till biblioteksfilen '%s'."
+msgstr "Det gick inte att läsa in symbolen %s från bibliotek %s."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:912
 msgid ""
@@ -21322,39 +21308,36 @@ msgid "Manage symbol libraries"
 msgstr "Hantera symbolbibliotek"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:928
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
-msgstr "Symbol %s är en härledd symbol.   Symbolgrafik kan inte redigeras."
+msgstr ""
+"Symbol %s är en härledd symbol. Symbolgrafik kommer inte att kunna redigeras."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:957
-#, fuzzy
 msgid "Library is read-only.  Changes cannot be saved to this library."
-msgstr "Spara det nuvarande aktiva biblioteket"
+msgstr ""
+"Biblioteket är skrivskyddat.  Ändringar kan inte sparas till detta bliotek."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:959
-#, fuzzy
 msgid "Create an editable copy"
-msgstr "Skapa en ny mapp"
+msgstr "Skapa en redigerbar kopia"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "Spara en kopia av den aktuella symbolen i ett annat bibliotek"
+msgstr "Spara en redigerbar kopia av symbolen eller hela biblioteket (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:969
-#, fuzzy
 msgid "Select type of item to save"
-msgstr "Välj lager att ta bort:"
+msgstr "Välj typ av objekt att spara"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:972
-#, fuzzy
 msgid "Copy symbol"
-msgstr "Gruppera symboler"
+msgstr "Kopiera symbol"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:973
-#, fuzzy
 msgid "Copy library"
-msgstr "Bibliotek"
+msgstr "Kopiera bibliotek"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1082
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1133
@@ -21485,50 +21468,56 @@ msgid "A library must be specified."
 msgstr "Ett bibliotek måste specificeras."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:979
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
-msgstr "Spara det nuvarande aktiva biblioteket"
+msgstr ""
+"Biblioteket '%s' är skrivskyddat. Välj ett annat bibliotek att spara symbol "
+"'%s' till."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
 msgstr ""
+"Symbol '%s' kan inte ersätta en annan symbol '%s' som den härstammar från"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1004
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr ""
+"Symbol '%s' kan inte ersätta en annan symbol '%s' som härstammar från den."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
-msgstr "Symbol '%s' finns redan i bibliotek '%s'."
+msgstr "Symbol '%s' finns redan i bibliotek '%s'. Vill du skriva över den?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "Symbolen %s finns redan i biblioteket %s"
+msgstr ""
+"Följande symboler i härledningskedjan för '%s' finns redan i bibliotek '%s':"
+"\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1039
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
+"\n"
+"Vill du skriva över alla av dem, eller ge nya namn till de nya symbolerna?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
-#, fuzzy
 msgid "Overwrite All"
-msgstr "Skriv över"
+msgstr "Skriv över alla"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
-#, fuzzy
 msgid "Rename All"
-msgstr "Döp om fil"
+msgstr "Döp om alla"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1121
 #, c-format
@@ -21972,14 +21961,12 @@ msgid "Select a complete connection"
 msgstr "Välj en fullständig anslutning"
 
 #: eeschema/tools/ee_actions.cpp:151
-#, fuzzy
 msgid "Show/hide design blocks library"
-msgstr "KiCad designblocksbiblioteks sökvägar"
+msgstr "Visa/göm designblocksbibliotek"
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Save Current Sheet as Design Block..."
-msgstr "Spara ark som designblock..."
+msgstr "Spara aktuellt ark som designblock..."
 
 #: eeschema/tools/ee_actions.cpp:158
 msgid "Create a new design block from the current sheet"
@@ -22007,9 +21994,8 @@ msgid "Properties..."
 msgstr "Egenskaper..."
 
 #: eeschema/tools/ee_actions.cpp:179
-#, fuzzy
 msgid "Edit properies of design block"
-msgstr "Ange ett namn för designblocket:"
+msgstr "Redigera egenskaper för designblock"
 
 #: eeschema/tools/ee_actions.cpp:189
 msgid "Save Library As..."
@@ -22052,18 +22038,19 @@ msgid "Rename Symbol..."
 msgstr "Byt namn på symbol..."
 
 #: eeschema/tools/ee_actions.cpp:230
-#, fuzzy
 msgid "Save the current symbol to a different library or name"
-msgstr "Spara en kopia av den aktuella symbolen i ett annat bibliotek"
+msgstr ""
+"Spara den aktuella symbolen i ett annat bibliotek eller med ett annat namn"
 
 #: eeschema/tools/ee_actions.cpp:236
 msgid "Save Copy As..."
 msgstr "Spara Kopia Som..."
 
 #: eeschema/tools/ee_actions.cpp:237
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library or name"
-msgstr "Spara en kopia av den aktuella symbolen i ett annat bibliotek"
+msgstr ""
+"Spara en kopia av den aktuella symbolen i ett annat bibliotek eller med ett "
+"annat namn"
 
 #: eeschema/tools/ee_actions.cpp:244
 msgid "Remove the selected symbol from its library"
