@@ -23,14 +23,21 @@
 
 #include "pin_layout_cache.h"
 
+#include <geometry/direction45.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <sch_symbol.h>
 #include <eeschema_settings.h>
 #include <schematic_settings.h>
 
+#include <geometry/shape_utils.h>
+
+
+namespace
+{
+
 // small margin in internal units between the pin text and the pin line
-#define PIN_TEXT_MARGIN 4
+const int PIN_TEXT_MARGIN = 4;
 
 struct EXTENTS_CACHE
 {
@@ -42,7 +49,7 @@ struct EXTENTS_CACHE
 /// Utility for getting the size of the 'external' pin decorators (as a radius)
 // i.e. the negation circle, the polarity 'slopes' and the nonlogic
 // marker
-static int externalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
+int externalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
 {
     if( aSettings && aSettings->m_PinSymbolSize )
         return aSettings->m_PinSymbolSize;
@@ -51,12 +58,59 @@ static int externalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_P
 }
 
 
-static int internalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
+int internalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
 {
     if( aSettings && aSettings->m_PinSymbolSize > 0 )
         return aSettings->m_PinSymbolSize;
 
     return aPin.GetNameTextSize() != 0 ? aPin.GetNameTextSize() / 2 : aPin.GetNumberTextSize() / 2;
+}
+
+} // namespace
+
+
+PIN_LAYOUT_CACHE::PIN_LAYOUT_CACHE( const SCH_PIN& aPin ) :
+        m_pin( aPin ), m_schSettings( nullptr ), m_dirtyFlags( DIRTY_FLAGS::ALL )
+{
+    // Resolve the schematic (can be null, e.g. in previews)
+    const SCHEMATIC* schematic = aPin.Schematic();
+
+    if( schematic )
+    {
+        m_schSettings = &schematic->Settings();
+    }
+}
+
+
+void PIN_LAYOUT_CACHE::MarkDirty( int aDirtyFlags )
+{
+    m_dirtyFlags |= aDirtyFlags;
+}
+
+
+void PIN_LAYOUT_CACHE::SetRenderParameters( int aNameThickness, int aNumberThickness,
+                                            bool aShowElectricalType, bool aShowAltIcons )
+{
+    if( aNameThickness != m_nameThickness )
+    {
+        MarkDirty( DIRTY_FLAGS::NAME );
+        m_nameThickness = aNameThickness;
+    }
+
+    if( aNumberThickness != m_numberThickness )
+    {
+        MarkDirty( DIRTY_FLAGS::NUMBER );
+        m_numberThickness = aNumberThickness;
+    }
+
+    if( aShowElectricalType != m_showElectricalType )
+    {
+        MarkDirty( DIRTY_FLAGS::ELEC_TYPE );
+        m_showElectricalType = aShowElectricalType;
+    }
+
+    // Not (yet?) cached
+    m_showAltIcons = aShowAltIcons;
 }
 
 
@@ -82,49 +136,43 @@ void PIN_LAYOUT_CACHE::recomputeExtentsCache( bool aDefinitelyDirty, KIFONT::FON
 }
 
 
-PIN_LAYOUT_CACHE::PIN_LAYOUT_CACHE( const SCH_PIN& aPin ) :
-        m_pin( aPin ), m_schSettings( nullptr ), m_dirtyFlags( DIRTY_FLAGS::ALL )
-{
-    // Resolve the schematic (can be null, e.g. in previews)
-    const SCHEMATIC* schematic = aPin.Schematic();
-
-    if( schematic )
-    {
-        m_schSettings = &schematic->Settings();
-    }
-}
-
-
-void PIN_LAYOUT_CACHE::MarkDirty( int aDirtyFlags )
-{
-    m_dirtyFlags |= aDirtyFlags;
-}
-
-
 void PIN_LAYOUT_CACHE::recomputeCaches()
 {
     EESCHEMA_SETTINGS*     cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     KIFONT::FONT*          font = KIFONT::FONT::GetFont( cfg->m_Appearance.default_font );
     const KIFONT::METRICS& metrics = m_pin.GetFontMetrics();
 
+    // Due to the fact a shadow text in position INSIDE or OUTSIDE is drawn left or right aligned,
+    // it needs an offset = shadowWidth/2 to be drawn at the same place as normal text
+    // texts drawn as GR_TEXT_H_ALIGN_CENTER do not need a specific offset.
+    // this offset is shadowWidth/2 but for some reason we need to slightly modify this offset
+    // for a better look (better alignment of shadow shape), for KiCad font only
+    if( !font->IsOutline() )
+        m_shadowOffsetAdjust = 1.2f; // Value chosen after tests
+    else
+        m_shadowOffsetAdjust = 1.0f;
+
     {
-        recomputeExtentsCache( isDirty( DIRTY_FLAGS::NUMBER ), font, m_pin.GetNumberTextSize(),
-                               m_pin.GetShownNumber(), metrics, m_numExtentsCache );
-        setClean( DIRTY_FLAGS::NUMBER );
+        const bool     dirty = isDirty( DIRTY_FLAGS::NUMBER );
+        const wxString number = m_pin.GetShownNumber();
+        recomputeExtentsCache( dirty, font, m_pin.GetNumberTextSize(), number, metrics,
+                               m_numExtentsCache );
     }
 
     {
-        recomputeExtentsCache( isDirty( DIRTY_FLAGS::NAME ), font, m_pin.GetNameTextSize(),
-                               m_pin.GetShownName(), metrics, m_nameExtentsCache );
-        setClean( DIRTY_FLAGS::NAME );
+        const bool     dirty = isDirty( DIRTY_FLAGS::NAME );
+        const wxString name = m_pin.GetShownName();
+        recomputeExtentsCache( dirty, font, m_pin.GetNameTextSize(), name, metrics,
+                               m_nameExtentsCache );
     }
 
     {
         double fontSize = std::max( m_pin.GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
         recomputeExtentsCache( isDirty( DIRTY_FLAGS::ELEC_TYPE ), font, fontSize,
                                m_pin.GetElectricalTypeName(), metrics, m_typeExtentsCache );
-        setClean( DIRTY_FLAGS::ELEC_TYPE );
     }
+
+    setClean( DIRTY_FLAGS::NUMBER | DIRTY_FLAGS::NAME | DIRTY_FLAGS::ELEC_TYPE );
 }
 
 
@@ -174,6 +222,40 @@ void PIN_LAYOUT_CACHE::transformBoxForPin( BOX2I& aBox ) const
 }
 
 
+void PIN_LAYOUT_CACHE::transformTextForPin( TEXT_INFO& aInfo ) const
+{
+    // Now, calculate boundary box corners position for the actual pin orientation
+    switch( m_pin.PinDrawOrient( DefaultTransform ) )
+    {
+    case PIN_ORIENTATION::PIN_LEFT:
+    {
+        aInfo.m_HAlign = GetFlippedAlignment( aInfo.m_HAlign );
+        aInfo.m_TextPosition.x = -aInfo.m_TextPosition.x;
+        break;
+    }
+    case PIN_ORIENTATION::PIN_UP:
+    {
+        aInfo.m_Angle = ANGLE_VERTICAL;
+        aInfo.m_TextPosition = { aInfo.m_TextPosition.y, -aInfo.m_TextPosition.x };
+        break;
+    }
+    case PIN_ORIENTATION::PIN_DOWN:
+    {
+        aInfo.m_Angle = ANGLE_VERTICAL;
+        aInfo.m_TextPosition = { aInfo.m_TextPosition.y, aInfo.m_TextPosition.x };
+        aInfo.m_HAlign = GetFlippedAlignment( aInfo.m_HAlign );
+        break;
+    }
+    default:
+    case PIN_ORIENTATION::PIN_RIGHT:
+        // Already in this form
+        break;
+    }
+
+    aInfo.m_TextPosition += m_pin.GetPosition();
+}
+
+
 BOX2I PIN_LAYOUT_CACHE::GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins,
                                            bool aIncludeNameAndNumber, bool aIncludeElectricalType )
 {
@@ -217,12 +299,12 @@ BOX2I PIN_LAYOUT_CACHE::GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins,
     recomputeCaches();
 
     const int pinLength = m_pin.GetLength();
-    BOX2I     bbox;
 
     // Creating and merging all the boxes is pretty quick, if cached we'd have
     // to track many variables here, which is possible, but unlikely to be worth it.
+    BOX2I bbox;
 
-    // Untranformed pin box
+    // Untransformed pin box
     {
         BOX2I pinBox = BOX2I::ByCorners( { 0, 0 }, { pinLength, 0 } );
         pinBox.Inflate( m_pin.GetPenWidth() / 2 );
@@ -240,11 +322,16 @@ BOX2I PIN_LAYOUT_CACHE::GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins,
         {
             bbox.Merge( *nameBox );
         }
+
+        if( OPT_BOX2I altIconBox = getUntransformedAltIconBox() )
+        {
+            bbox.Merge( *altIconBox );
+        }
     }
 
     if( includeNumber )
     {
-        if( OPT_BOX2I numBox = getUntransformedPinNumberBox( includeName ) )
+        if( OPT_BOX2I numBox = getUntransformedPinNumberBox() )
         {
             bbox.Merge( *numBox );
         }
@@ -252,7 +339,10 @@ BOX2I PIN_LAYOUT_CACHE::GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins,
 
     if( includeType )
     {
-        bbox.Merge( getUntransformedPinTypeBox() );
+        if( OPT_BOX2I typeBox = getUntransformedPinTypeBox() )
+        {
+            bbox.Merge( *typeBox );
+        }
     }
 
     transformBoxForPin( bbox );
@@ -282,6 +372,14 @@ CIRCLE PIN_LAYOUT_CACHE::GetDanglingIndicator() const
         m_pin.GetPosition(),
         TARGET_PIN_RADIUS,
     };
+}
+
+
+int PIN_LAYOUT_CACHE::getPinTextOffset() const
+{
+    const float offsetRatio =
+            m_schSettings ? m_schSettings->m_TextOffsetRatio : DEFAULT_TEXT_OFFSET_RATIO;
+    return schIUScale.MilsToIU( KiROUND( 24 * offsetRatio ) );
 }
 
 
@@ -317,20 +415,15 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNameBox() const
         // The pin name is always over the pin
         box = BOX2I::ByCenter( { pinLength / 2, 0 }, m_nameExtentsCache.m_Extents );
 
-        float offsetRatio =
-                m_schSettings ? m_schSettings->m_TextOffsetRatio : DEFAULT_TEXT_OFFSET_RATIO;
-
-        const int offset = schIUScale.MilsToIU( KiROUND( 24 * offsetRatio ) );
-
         // Bump it up
-        box->Move( { 0, -m_nameExtentsCache.m_Extents.y / 2 - offset } );
+        box->Move( { 0, -m_nameExtentsCache.m_Extents.y / 2 - getPinTextOffset() } );
     }
 
     return box;
 }
 
 
-OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox( bool aIncludeName ) const
+OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox() const
 {
     int pinNameOffset = 0;
     if( const SYMBOL* parentSymbol = m_pin.GetParentSymbol() )
@@ -344,13 +437,11 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox( bool aIncludeName ) co
     // The pin name is always over the pin
     OPT_BOX2I box = BOX2I::ByCenter( { pinLength / 2, 0 }, m_numExtentsCache.m_Extents );
 
-    float offsetRatio =
-            m_schSettings ? m_schSettings->m_TextOffsetRatio : DEFAULT_TEXT_OFFSET_RATIO;
-    const int offset = schIUScale.MilsToIU( KiROUND( 24 * offsetRatio ) );
-    int       textPos = -m_numExtentsCache.m_Extents.y / 2 - offset;
+    int textPos = -m_numExtentsCache.m_Extents.y / 2 - getPinTextOffset();
 
     // The number goes below, if there is a name outside
-    if( pinNameOffset == 0 && aIncludeName )
+    if( pinNameOffset == 0 && !m_pin.GetShownName().empty()
+        && m_pin.GetParentSymbol()->GetShowPinNames() )
         textPos *= -1;
 
     // Bump it up (or down)
@@ -360,8 +451,11 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox( bool aIncludeName ) co
 }
 
 
-BOX2I PIN_LAYOUT_CACHE::getUntransformedPinTypeBox() const
+OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinTypeBox() const
 {
+    if( !m_showElectricalType )
+        return std::nullopt;
+
     BOX2I box{
         { -m_typeExtentsCache.m_Extents.x, -m_typeExtentsCache.m_Extents.y / 2 },
         m_typeExtentsCache.m_Extents,
@@ -371,6 +465,30 @@ BOX2I PIN_LAYOUT_CACHE::getUntransformedPinTypeBox() const
     box.Move( { -schIUScale.MilsToIU( PIN_TEXT_MARGIN ) - TARGET_PIN_RADIUS, 0 } );
 
     return box;
+}
+
+
+OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedAltIconBox() const
+{
+    const OPT_BOX2I nameBox = getUntransformedPinNameBox();
+
+    if( !nameBox || m_pin.GetAlternates().empty() || !m_showAltIcons )
+        return std::nullopt;
+
+    const int iconSize = std::min( m_pin.GetNameTextSize(), schIUScale.mmToIU( 1.5 ) );
+
+    VECTOR2I c{ 0, ( nameBox->GetTop() + nameBox->GetBottom() ) / 2 };
+    if( m_pin.GetParentSymbol()->GetPinNameOffset() > 0 )
+    {
+        // name inside, so icon more inside
+        c.x = nameBox->GetRight() + iconSize * 0.75;
+    }
+    else
+    {
+        c.x = nameBox->GetLeft() - iconSize * 0.75;
+    }
+
+    return BOX2I::ByCenter( c, { iconSize, iconSize } );
 }
 
 
@@ -466,10 +584,137 @@ OPT_BOX2I PIN_LAYOUT_CACHE::GetPinNameBBox()
 OPT_BOX2I PIN_LAYOUT_CACHE::GetPinNumberBBox()
 {
     recomputeCaches();
-    OPT_BOX2I box = getUntransformedPinNumberBox( true );
+    OPT_BOX2I box = getUntransformedPinNumberBox();
 
     if( box )
         transformBoxForPin( *box );
 
     return box;
+}
+
+
+OPT_BOX2I PIN_LAYOUT_CACHE::GetAltIconBBox()
+{
+    OPT_BOX2I box = getUntransformedAltIconBox();
+
+    if( box )
+        transformBoxForPin( *box );
+
+    return box;
+}
+
+
+std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int aShadowWidth )
+{
+    recomputeCaches();
+    wxString name = m_pin.GetShownName();
+
+    // TODO - work out exactly what we need to do to cache this
+    // (or if it's worth the memory/complexity)
+    // But it's not hugely expensive to recompute, and that's what's always been
+    // done to now
+    //
+    // Becasue pins are very likely to share a lot of characteristics, a global
+    // cache might make more sense than a per-pin cache.
+
+    if( name.IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNames() )
+        return std::nullopt;
+
+    std::optional<TEXT_INFO> info = TEXT_INFO();
+    info->m_Text = std::move( name );
+    info->m_TextSize = m_pin.GetNameTextSize();
+    info->m_Thickness = m_nameThickness;
+    info->m_Angle = ANGLE_HORIZONTAL;
+
+    if( m_pin.GetParentSymbol()->GetPinNameOffset() > 0 )
+    {
+        // This means name inside the pin
+        VECTOR2I  pos = { m_pin.GetLength() + m_pin.GetParentSymbol()->GetPinNameOffset(), 0 };
+        const int thickOffset =
+                info->m_Thickness - KiROUND( aShadowWidth * m_shadowOffsetAdjust ) / 2;
+
+        info->m_TextPosition = pos + VECTOR2I{ thickOffset, 0 };
+        info->m_HAlign = GR_TEXT_H_ALIGN_LEFT;
+        info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
+    }
+    else
+    {
+        // The pin name is always over the pin
+        VECTOR2I pos = { m_pin.GetLength() / 2, -getPinTextOffset() - info->m_Thickness / 2 };
+
+        info->m_TextPosition = pos;
+        info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
+        info->m_VAlign = GR_TEXT_V_ALIGN_BOTTOM;
+    }
+
+    transformTextForPin( *info );
+    return info;
+}
+
+
+std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( int aShadowWidth )
+{
+    recomputeCaches();
+
+    wxString number = m_pin.GetShownNumber();
+    if( number.IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNumbers() )
+        return std::nullopt;
+
+    std::optional<TEXT_INFO> info;
+
+    info = TEXT_INFO();
+    info->m_Text = std::move( number );
+    info->m_TextSize = m_pin.GetNumberTextSize();
+    info->m_Thickness = m_numberThickness;
+    info->m_Angle = ANGLE_HORIZONTAL;
+    info->m_TextPosition = { m_pin.GetLength() / 2, 0 };
+    info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
+
+    // The pin number is above the pin if there's no name, or the name is inside
+    const bool numAbove =
+            m_pin.GetParentSymbol()->GetPinNameOffset() > 0
+            || ( m_pin.GetShownName().empty() || !m_pin.GetParentSymbol()->GetShowPinNames() );
+    if( numAbove )
+    {
+        info->m_TextPosition.y -= getPinTextOffset() + info->m_Thickness / 2;
+        info->m_VAlign = GR_TEXT_V_ALIGN_BOTTOM;
+    }
+    else
+    {
+        info->m_TextPosition.y += getPinTextOffset() + info->m_Thickness / 2;
+        info->m_VAlign = GR_TEXT_V_ALIGN_TOP;
+    }
+
+    transformTextForPin( *info );
+    return info;
+}
+
+std::optional<PIN_LAYOUT_CACHE::TEXT_INFO>
+PIN_LAYOUT_CACHE::GetPinElectricalTypeInfo( int aShadowWidth )
+{
+    recomputeCaches();
+
+    if( !m_showElectricalType )
+        return std::nullopt;
+
+    std::optional<TEXT_INFO> info = TEXT_INFO();
+    info->m_Text = m_pin.GetElectricalTypeName();
+    info->m_TextSize = std::max( m_pin.GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
+    info->m_Angle = ANGLE_HORIZONTAL;
+    info->m_Thickness = info->m_TextSize / 8;
+    info->m_TextPosition = { -getPinTextOffset() - info->m_Thickness / 2
+                                     + KiROUND( aShadowWidth * m_shadowOffsetAdjust ) / 2,
+                             0 };
+    info->m_HAlign = GR_TEXT_H_ALIGN_RIGHT;
+    info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
+
+    info->m_TextPosition.x -= TARGET_PIN_RADIUS;
+
+    if( m_pin.IsDangling() )
+    {
+        info->m_TextPosition.x -= TARGET_PIN_RADIUS / 2;
+    }
+
+    transformTextForPin( *info );
+    return info;
 }

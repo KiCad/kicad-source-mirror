@@ -66,6 +66,9 @@ public:
      */
     void MarkDirty( int aFlags );
 
+    void SetRenderParameters( int aNameThickness, int aNumberThickness, bool aShowElectricalType,
+                              bool aShowAltIcons );
+
     /**
      * Get the bounding box of the pin itself.
      */
@@ -83,10 +86,35 @@ public:
     OPT_BOX2I GetPinNumberBBox();
 
     /**
+     * Get the box of the alt mode icon, if there is one.
+     */
+    OPT_BOX2I GetAltIconBBox();
+
+    /**
      * Gets the dangling indicator geometry for this pin, if the
      * pin were to be dangling.
      */
     CIRCLE GetDanglingIndicator() const;
+
+    struct TEXT_INFO
+    {
+        wxString          m_Text;
+        int               m_TextSize;
+        int               m_Thickness;
+        VECTOR2I          m_TextPosition;
+        GR_TEXT_H_ALIGN_T m_HAlign;
+        GR_TEXT_V_ALIGN_T m_VAlign;
+        EDA_ANGLE         m_Angle;
+    };
+
+    /**
+     * Get the text info for the pin name.
+     *
+     * If the pin name is not visible, this will return an empty optional.
+     */
+    std::optional<TEXT_INFO> GetPinNameInfo( int aShadowWidth );
+    std::optional<TEXT_INFO> GetPinNumberInfo( int aShadowWidth );
+    std::optional<TEXT_INFO> GetPinElectricalTypeInfo( int aShadowWidth );
 
 private:
 
@@ -125,13 +153,26 @@ private:
     void transformBoxForPin( BOX2I& aBox ) const;
 
     /**
+     * Transform text info to suit a pin's
+     *
+     * @param the 'nominal' text info for a PIN_RIGHT pin, which will be adjusted
+     */
+    void transformTextForPin( TEXT_INFO& aTextInfo ) const;
+
+    /**
+     * Get the current pin text offset
+     */
+    int getPinTextOffset() const;
+
+    /**
      * Get the untransformd text box in the default orientation
      *
      * This will have to be offset and rotated.
      */
     OPT_BOX2I getUntransformedPinNameBox() const;
-    OPT_BOX2I getUntransformedPinNumberBox( bool aIncludeName ) const;
-    BOX2I     getUntransformedPinTypeBox() const;
+    OPT_BOX2I getUntransformedPinNumberBox() const;
+    OPT_BOX2I getUntransformedPinTypeBox() const;
+    OPT_BOX2I getUntransformedAltIconBox() const;
 
     ///< Pin type decoration if any
     OPT_BOX2I getUntransformedDecorationBox() const;
@@ -143,6 +184,13 @@ private:
     const SCHEMATIC_SETTINGS* m_schSettings;
 
     int m_dirtyFlags;
+
+    // Cached render parameters
+    float m_shadowOffsetAdjust = 1.0f;
+    int   m_nameThickness = 0;
+    int   m_numberThickness = 0;
+    bool  m_showElectricalType = false;
+    bool  m_showAltIcons = false;
 
     // Various cache members
     TEXT_EXTENTS_CACHE m_numExtentsCache;

@@ -869,328 +869,6 @@ static void drawAltPinModesIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, 
 };
 
 
-/**
- * Small helper class to figure out the layout of text and text-adjacent icons,
- * including text shadows and offsets.
- */
-class TEXT_AND_ICON_LAYOUT
-{
-public:
-
-    /**
-     * Create a new layout helper.
-     */
-    TEXT_AND_ICON_LAYOUT( KIGFX::GAL& aGal, const TEXT_ATTRIBUTES& aAttrs,
-                          const KIFONT::METRICS& aFontMetrics, const double aShadowWidth,
-                          const double aIconSize = 0 ) :
-            m_attrs( aAttrs ),
-            m_fontMetrics( aFontMetrics ),
-            m_iconSize( aIconSize ),
-            m_iconGap( aIconSize / 4.0 ),
-            m_shadowWidth( aShadowWidth ),
-            m_shadowOffset( 0.0 )
-    {
-        // Due to the fact a shadow text in position INSIDE or OUTSIDE is drawn left or right aligned,
-        // it needs an offset = shadowWidth/2 to be drawn at the same place as normal text
-        // texts drawn as GR_TEXT_H_ALIGN_CENTER do not need a specific offset.
-        // this offset is shadowWidth/2 but for some reason we need to slightly modify this offset
-        // for a better look (better alignment of shadow shape), for KiCad font only
-        if( !KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font )->IsOutline() )
-        {
-            const float adjust = 1.2f; // Value chosen after tests
-            m_shadowOffset = m_shadowWidth / 2.0f * adjust;
-        }
-    }
-
-    struct LOCATIONS
-    {
-        // Adjusted text pos to include shadow offsets
-        VECTOR2D              NormalPos;
-        VECTOR2D              ShadowPos;
-        std::vector<VECTOR2I> IconPos;
-    };
-
-    /**
-     * Get the layout of text and icons for a given text string at a position.
-     *
-     * It will return the position of the text and the icons, as well as the computed shadow
-     * text position.
-     */
-    LOCATIONS getTextLayout( const wxString& aText, const VECTOR2I& aPos,
-                             GR_TEXT_H_ALIGN_T aIconSide, std::size_t aNIcons, bool aDrawShadow )
-    {
-        LOCATIONS locs{
-            aPos,
-            aPos,
-            {},
-        };
-
-        BOX2I extents = GetTextExtents( aText, aPos, *m_attrs.m_Font, m_attrs, m_fontMetrics );
-
-        DIRECTION_45::Directions iconDir = DIRECTION_45::N;
-
-        if( m_attrs.m_Angle == ANGLE_HORIZONTAL )
-        {
-            if( aIconSide == GR_TEXT_H_ALIGN_LEFT )
-                iconDir = DIRECTION_45::W;
-            else
-                iconDir = DIRECTION_45::E;
-        }
-        else
-        {
-            if( aIconSide == GR_TEXT_H_ALIGN_LEFT )
-                iconDir = DIRECTION_45::S;
-            else
-                iconDir = DIRECTION_45::N;
-        }
-
-        int offset = m_iconSize / 2 + m_iconGap;
-        for( std::size_t i = 0; i < aNIcons; ++i )
-        {
-            locs.IconPos.push_back( KIGEOM::GetPoint( extents, iconDir, offset ) );
-            offset += m_iconGap + m_iconSize;
-        }
-
-        // Apply shadow offsets
-        if( m_attrs.m_Halign != GR_TEXT_H_ALIGN_CENTER )
-        {
-            if( m_attrs.m_Angle == ANGLE_HORIZONTAL )
-            {
-                locs.ShadowPos.x -=
-                        m_shadowOffset * ( m_attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT ? 1 : -1 );
-            }
-            else
-            {
-                locs.ShadowPos.y +=
-                        m_shadowOffset * ( m_attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT ? 1 : -1 );
-            }
-        }
-
-        return locs;
-    }
-
-private:
-    const TEXT_ATTRIBUTES& m_attrs;
-    const KIFONT::METRICS& m_fontMetrics;
-    double                 m_iconSize;
-    double                 m_iconGap;
-    double                 m_shadowWidth;
-    double                 m_shadowOffset;
-};
-
-
-/**
- * Helper class to gather logic relating to the positioning
- * of text in the four pin "slots":
- *
- *            above
- *  inside  |--------x   outside
- *            below
- */
-class PIN_TEXTS
-{
-public:
-    enum SLOT_ID
-    {
-        INSIDE = 0,
-        OUTSIDE,
-        ABOVE,
-        BELOW,
-    };
-
-    enum class SLOT_ROLE
-    {
-        NAME = 0,
-        NUMBER,
-        ELECTRICAL_TYPE,
-    };
-
-    // Information about the placement of a single text label for a pin
-    // This is independent of the actual text content.
-    struct TEXT_PLACEMENT
-    {
-        // Nominal text anchor position
-        VECTOR2D Pos;
-        // Text alignment relative to anchor
-        GR_TEXT_H_ALIGN_T HAlign;
-        GR_TEXT_V_ALIGN_T VAlign;
-        // H/V text?
-        EDA_ANGLE Angle;
-        // Is the icon on the left or right (in the text axis)?
-        GR_TEXT_H_ALIGN_T IconSide;
-    };
-
-    struct SLOT
-    {
-        SLOT() :
-            size( 0 ),
-            thickness( 0 ),
-            colour( COLOR4D::UNSPECIFIED ),
-            role( SLOT_ROLE::NAME )
-        {
-        }
-
-        bool ShouldDraw() const
-        {
-            return size > 0 && colour != COLOR4D::UNSPECIFIED && !text.IsEmpty();
-        }
-
-        int       size;
-        float     thickness;
-        COLOR4D   colour;
-        wxString  text;
-        SLOT_ROLE role;
-    };
-
-    PIN_TEXTS( const SCH_PIN& aPin, float aPenWidth, float aPinTextMargin ) :
-            m_pin( aPin ), m_offsets( { { 0, 0, 0, 0 } } ), m_penWidth( aPenWidth ),
-            m_pinTextMargin( aPinTextMargin )
-    {
-    }
-
-    // Const slot iterator
-    using const_iterator = std::array<SLOT, 4>::const_iterator;
-
-    const_iterator begin() const { return m_slots.begin(); }
-
-    const_iterator end() const { return m_slots.end(); }
-
-    SLOT&       GetSlot( SLOT_ID aSlot ) { return m_slots[aSlot]; }
-    const SLOT& GetSlot( SLOT_ID aSlot ) const { return m_slots[aSlot]; }
-
-    void ComputeOffsets()
-    {
-        float textOffset = m_pin.GetParentSymbol()->GetPinNameOffset();
-
-        m_offsets[INSIDE] = textOffset - m_slots[INSIDE].thickness / 2.0;
-        m_offsets[OUTSIDE] = m_pinTextMargin + TARGET_PIN_RADIUS - m_slots[OUTSIDE].thickness / 2.0;
-        m_offsets[ABOVE] = m_pinTextMargin + m_penWidth / 2.0 + m_slots[ABOVE].thickness / 2.0;
-        m_offsets[BELOW] = m_pinTextMargin + m_penWidth / 2.0 + m_slots[BELOW].thickness / 2.0;
-
-        if( m_pin.IsDangling() )
-            m_offsets[OUTSIDE] += TARGET_PIN_RADIUS / 2.0f;
-    }
-
-    bool SlotRendersAsBitmap( const SLOT& aSlot, KIGFX::GAL& aGal ) const
-    {
-        // Rendering text is expensive (particularly when using outline fonts).  At small effective
-        // sizes (ie: zoomed out) the visual differences between outline and/or stroke fonts and the
-        // bitmap font becomes immaterial, and there's often more to draw when zoomed out so the
-        // performance gain becomes more significant.
-        static const float BITMAP_FONT_SIZE_THRESHOLD = 3.5;
-
-        // Any text non bitmappable?
-        return aSlot.size * aGal.GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
-    }
-
-    /**
-     * Replace all slot colours with a new colour.
-     */
-    void SetColorOverride( const COLOR4D& aColor )
-    {
-        for( SLOT& slot : m_slots )
-        {
-            slot.colour = aColor;
-        }
-    }
-
-    TEXT_PLACEMENT GetTextPlacement( const PIN_TEXTS::SLOT& aSlot,
-                                     PIN_ORIENTATION        aPinOrientation ) const
-    {
-        // Work out which slot it is
-        SLOT_ID slotId = INSIDE;
-        for( int i = 0; i < 4; ++i )
-        {
-            if( &aSlot == &m_slots[i] )
-            {
-                slotId = static_cast<SLOT_ID>( i );
-                break;
-            }
-            // Should not pass a slot that isn't in the list
-            wxASSERT( i < 4 );
-        }
-
-        TEXT_PLACEMENT placement;
-        const float    len = m_pin.GetLength();
-
-        // For PIN_LEFT
-        switch( slotId )
-        {
-        case PIN_TEXTS::SLOT_ID::INSIDE:
-            placement = {
-                VECTOR2D( -m_offsets[INSIDE] - len, 0 ),
-                GR_TEXT_H_ALIGN_RIGHT,
-                GR_TEXT_V_ALIGN_CENTER,
-                ANGLE_HORIZONTAL,
-                GR_TEXT_H_ALIGN_LEFT,
-            };
-            break;
-        case PIN_TEXTS::SLOT_ID::OUTSIDE:
-            placement = {
-                VECTOR2D( m_offsets[OUTSIDE], 0 ),
-                GR_TEXT_H_ALIGN_LEFT,
-                GR_TEXT_V_ALIGN_CENTER,
-                ANGLE_HORIZONTAL,
-                GR_TEXT_H_ALIGN_RIGHT,
-            };
-            break;
-        case PIN_TEXTS::SLOT_ID::ABOVE:
-            placement = {
-                VECTOR2D( -len / 2.0, -m_offsets[ABOVE] ),
-                GR_TEXT_H_ALIGN_CENTER,
-                GR_TEXT_V_ALIGN_BOTTOM,
-                ANGLE_HORIZONTAL,
-                GR_TEXT_H_ALIGN_RIGHT,
-            };
-            break;
-        case PIN_TEXTS::SLOT_ID::BELOW:
-            placement = {
-                VECTOR2D( -len / 2.0, m_offsets[BELOW] ),
-                GR_TEXT_H_ALIGN_CENTER,
-                GR_TEXT_V_ALIGN_TOP,
-                ANGLE_HORIZONTAL,
-                GR_TEXT_H_ALIGN_RIGHT,
-            };
-            break;
-        }
-
-        switch( aPinOrientation )
-        {
-        case PIN_ORIENTATION::PIN_LEFT:
-            break;
-        case PIN_ORIENTATION::PIN_RIGHT:
-            placement.Pos = { -placement.Pos.x, placement.Pos.y };
-            placement.HAlign = GetFlippedAlignment( placement.HAlign );
-            placement.IconSide = GetFlippedAlignment( placement.IconSide );
-            break;
-        case PIN_ORIENTATION::PIN_UP:
-            placement.Pos = { placement.Pos.y, placement.Pos.x };
-            placement.Angle = ANGLE_VERTICAL;
-            placement.HAlign = GetFlippedAlignment( placement.HAlign );
-            placement.IconSide = GetFlippedAlignment( placement.IconSide );
-            break;
-        case PIN_ORIENTATION::PIN_DOWN:
-            placement.Pos = { placement.Pos.y, -placement.Pos.x };
-            placement.Angle = ANGLE_VERTICAL;
-            break;
-        case PIN_ORIENTATION::INHERIT:
-            wxFAIL_MSG( "Unknown pin orientation" );
-            break;
-        }
-
-        placement.Pos += m_pin.GetPosition();
-        return placement;
-    };
-
-private:
-    const SCH_PIN&      m_pin;
-    std::array<SLOT, 4> m_slots;
-    std::array<int, 4>  m_offsets;
-    const float         m_penWidth;
-    const float         m_pinTextMargin;
-};
-
-
 void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 {
     // Don't draw pins from a selection view-group.  Pins in a schematic must always be drawn
@@ -1417,80 +1095,11 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         return;
 
     // Draw the labels
-    const SYMBOL* symbol = aPin->GetParentSymbol();
-    float         penWidth = (float) m_schSettings.GetDefaultPenWidth();
     float         nameStrokeWidth = getLineWidth( aPin, false );
     float         numStrokeWidth = getLineWidth( aPin, false );
-    bool          showPinNames = symbol->GetShowPinNames();
-    bool          showPinNumbers = m_schSettings.m_ShowPinNumbers || symbol->GetShowPinNumbers();
 
     nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), true );
     numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), true );
-
-    float PIN_TEXT_MARGIN = schIUScale.MilsToIU( KiROUND( 24 * m_schSettings.m_TextOffsetRatio ) );
-
-    PIN_TEXTS pinTexts( *aPin, penWidth, PIN_TEXT_MARGIN );
-
-    const auto assignNameToSlot = [&]( PIN_TEXTS::SLOT_ID aSlot )
-    {
-        PIN_TEXTS::SLOT& slot = pinTexts.GetSlot( aSlot );
-        slot.size = aPin->GetNameTextSize();
-        slot.thickness = nameStrokeWidth;
-        slot.colour = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
-        slot.text = aPin->GetShownName();
-        slot.role = PIN_TEXTS::SLOT_ROLE::NAME;
-    };
-
-    const auto assignNumberToSlot = [&]( PIN_TEXTS::SLOT_ID aSlot )
-    {
-        PIN_TEXTS::SLOT& slot = pinTexts.GetSlot( aSlot );
-        slot.size = aPin->GetNumberTextSize();
-        slot.thickness = numStrokeWidth;
-        slot.colour = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
-        slot.text = aPin->GetShownNumber();
-        slot.role = PIN_TEXTS::SLOT_ROLE::NUMBER;
-    };
-
-    // TextOffset > 0 means pin NAMES on inside, pin NUMBERS above and nothing below
-    if( symbol->GetPinNameOffset() > 0 )
-    {
-        if( showPinNames )
-            assignNameToSlot( PIN_TEXTS::SLOT_ID::INSIDE );
-        if( showPinNumbers )
-            assignNumberToSlot( PIN_TEXTS::SLOT_ID::ABOVE );
-    }
-    // Otherwise if both are shown pin NAMES go above and pin NUMBERS go below
-    else if( showPinNames && showPinNumbers )
-    {
-        assignNameToSlot( PIN_TEXTS::SLOT_ID::ABOVE );
-        assignNumberToSlot( PIN_TEXTS::SLOT_ID::BELOW );
-    }
-    else if( showPinNames )
-    {
-        assignNameToSlot( PIN_TEXTS::SLOT_ID::ABOVE );
-    }
-    else if( showPinNumbers )
-    {
-        assignNumberToSlot( PIN_TEXTS::SLOT_ID::ABOVE );
-    }
-
-    if( m_schSettings.m_ShowPinsElectricalType )
-    {
-        PIN_TEXTS::SLOT& outside = pinTexts.GetSlot( PIN_TEXTS::SLOT_ID::OUTSIDE );
-        outside.size = std::max( aPin->GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
-        outside.thickness = float( outside.size ) / 8.0f;
-        outside.colour = getRenderColor( aPin, LAYER_PRIVATE_NOTES, drawingShadows, aDimmed );
-        outside.text = aPin->GetElectricalTypeName();
-        outside.role = PIN_TEXTS::SLOT_ROLE::ELECTRICAL_TYPE;
-    }
-
-    // Now we have set the slot content, we can compute things
-    pinTexts.ComputeOffsets();
-
-    if( !aPin->IsVisible() )
-    {
-        pinTexts.SetColorOverride( getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed ) );
-    }
 
     float shadowWidth = 0.0f;
 
@@ -1499,38 +1108,40 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         shadowWidth = getShadowWidth( aPin->IsBrightened() );
     }
 
-    // Draw one text slot, either "real" or the shadow
-    const auto drawText = [&]( const PIN_TEXTS::SLOT& slot )
+    PIN_LAYOUT_CACHE& cache = aPin->GetLayoutCache();
+    cache.SetRenderParameters( nameStrokeWidth, numStrokeWidth,
+                               m_schSettings.m_ShowPinsElectricalType,
+                               m_schSettings.m_ShowPinAltIcons );
+
+    const auto textRendersAsBitmap = [&]( KIGFX::GAL& aGal, int aTextSize )
     {
-        if( !slot.ShouldDraw() )
-            return;
+        // Rendering text is expensive (particularly when using outline fonts).  At small effective
+        // sizes (ie: zoomed out) the visual differences between outline and/or stroke fonts and the
+        // bitmap font becomes immaterial, and there's often more to draw when zoomed out so the
+        // performance gain becomes more significant.
+        static const float BITMAP_FONT_SIZE_THRESHOLD = 3.5;
 
-        const double iconSize = std::min( aPin->GetNameTextSize(), schIUScale.mmToIU( 1.5 ) );
-        const bool   renderTextAsBitmap = pinTexts.SlotRendersAsBitmap( slot, *m_gal );
+        // Any text non bitmappable?
+        return aTextSize * aGal.GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
+    };
 
-        const PIN_TEXTS::TEXT_PLACEMENT placement =
-                pinTexts.GetTextPlacement( slot, aPin->GetOrientation() );
+    const auto drawTextInfo =
+            [&]( const PIN_LAYOUT_CACHE::TEXT_INFO& aTextInfo, const COLOR4D& aColor )
+    {
+        // const double iconSize = std::min( aPin->GetNameTextSize(), schIUScale.mmToIU( 1.5 ) );
+        const bool renderTextAsBitmap = textRendersAsBitmap( *m_gal, aTextInfo.m_TextSize );
 
         // Which of these gets used depends on the font technology, so set both
-        m_gal->SetStrokeColor( slot.colour );
-        m_gal->SetFillColor( slot.colour );
+        m_gal->SetStrokeColor( aColor );
+        m_gal->SetFillColor( aColor );
 
         TEXT_ATTRIBUTES attrs;
         attrs.m_Font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
-        attrs.m_Size = VECTOR2I( slot.size, slot.size );
-        attrs.m_Halign = placement.HAlign;
-        attrs.m_Valign = placement.VAlign;
-        attrs.m_Angle = placement.Angle;
-        attrs.m_StrokeWidth = KiROUND( slot.thickness );
-
-        // This object (and a quite lot of other code here) could actually be
-        // re-used - probably many pins will use these exact parameters. But pin
-        // paints are already cached, so it's unlikely to be much help.
-        TEXT_AND_ICON_LAYOUT tiLayout( *m_gal, attrs, aPin->GetFontMetrics(), shadowWidth,
-                                       iconSize );
-
-        TEXT_AND_ICON_LAYOUT::LOCATIONS locs = tiLayout.getTextLayout(
-                slot.text, placement.Pos, placement.IconSide, 1, drawingShadows );
+        attrs.m_Size = VECTOR2I( aTextInfo.m_TextSize, aTextInfo.m_TextSize );
+        attrs.m_Halign = aTextInfo.m_HAlign;
+        attrs.m_Valign = aTextInfo.m_VAlign;
+        attrs.m_Angle = aTextInfo.m_Angle;
+        attrs.m_StrokeWidth = aTextInfo.m_Thickness;
 
         if( drawingShadows )
         {
@@ -1538,43 +1149,61 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
             if( !attrs.m_Font->IsOutline() )
             {
-                strokeText( *m_gal, slot.text, locs.ShadowPos, attrs, aPin->GetFontMetrics() );
+                strokeText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                            aPin->GetFontMetrics() );
             }
             else
             {
-                boxText( *m_gal, slot.text, locs.ShadowPos, attrs, aPin->GetFontMetrics() );
+                boxText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                         aPin->GetFontMetrics() );
             }
         }
         else if( nonCached( aPin ) && renderTextAsBitmap )
         {
-            bitmapText( *m_gal, slot.text, locs.NormalPos, attrs );
+            bitmapText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs );
             const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
         }
         else
         {
-            strokeText( *m_gal, slot.text, locs.NormalPos, attrs, aPin->GetFontMetrics() );
+            strokeText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                        aPin->GetFontMetrics() );
             const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
-        }
-
-        const bool hasAltIcon =
-                ( slot.role == PIN_TEXTS::SLOT_ROLE::NAME ) && !aPin->GetAlternates().empty()
-                && GetSettings()->m_ShowPinAltIcons && !renderTextAsBitmap;
-
-        if( hasAltIcon )
-        {
-            wxASSERT( locs.IconPos.size() >= 1 );
-
-            drawAltPinModesIcon( *m_gal, locs.IconPos[0], iconSize,
-                                 // Icon style doesn't work due to the tempPin having no alt
-                                 // but maybe it's better with just one style anyway.
-                                 true,
-                                 placement.Angle == ANGLE_VERTICAL, shadowWidth, slot.colour );
         }
     };
 
-    for( const PIN_TEXTS::SLOT& slot : pinTexts )
+    const auto getColorForLayer = [&]( int aDrawnLayer )
     {
-        drawText( slot );
+        if( !aPin->IsVisible() )
+            return getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
+
+        return getRenderColor( aPin, aDrawnLayer, drawingShadows, aDimmed );
+    };
+
+    // Request text layout infor and draw it
+
+    if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numInfo = cache.GetPinNumberInfo( shadowWidth ) )
+    {
+        drawTextInfo( *numInfo, getColorForLayer( LAYER_PINNUM ) );
+    }
+
+    if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> nameInfo = cache.GetPinNameInfo( shadowWidth ) )
+    {
+        drawTextInfo( *nameInfo, getColorForLayer( LAYER_PINNAM ) );
+
+        if( OPT_BOX2I altIconBox = cache.GetAltIconBBox() )
+        {
+            drawAltPinModesIcon( *m_gal, altIconBox->GetCenter(), altIconBox->GetWidth(),
+                                 // Icon style doesn't work due to the tempPin having no alt
+                                 // but maybe it's better with just one style anyway.
+                                 true, nameInfo->m_Angle == ANGLE_VERTICAL, shadowWidth,
+                                 getColorForLayer( LAYER_PINNAM ) );
+        }
+    }
+
+    if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> elecTypeInfo =
+                cache.GetPinElectricalTypeInfo( shadowWidth ) )
+    {
+        drawTextInfo( *elecTypeInfo, getColorForLayer( LAYER_PRIVATE_NOTES ) );
     }
 }
 
