@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-20 09:40+0000\n"
+"PO-Revision-Date: 2024-10-20 11:29+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -33949,7 +33949,7 @@ msgstr "クリアランス"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:269
 msgid "Leave values blank to use Board Setup values."
-msgstr "基板の設定値を使用するため、値を0に設定します。"
+msgstr "基板の設定値を使用するためには値を空白に設定します。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:279
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
@@ -34153,7 +34153,7 @@ msgstr "部品のタイプ:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:237
 msgid "Leave values blank to use netclass values."
-msgstr "ネットクラスの値を使用するため、値を0に設定します。"
+msgstr "ネットクラスの値を使用するためには値を空白に設定します。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:249
 msgid ""
@@ -36968,9 +36968,8 @@ msgid "Parent footprint description"
 msgstr "親のフットプリントの説明"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
-#, fuzzy
 msgid "Update thickness according to text size"
-msgstr "テキストサイズに応じて太さを更新する "
+msgstr "テキストサイズに応じて太さを更新する"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -37061,13 +37060,12 @@ msgid "Pre-defined sizes:"
 msgstr "定義済みのサイズ:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:202
-#, fuzzy
 msgid ""
 "This is the local clearance between the track and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"このパッドとハンダマスク間のローカル クリアランスです。\n"
-"0 とした場合、フットプリントのローカル値かグローバル値が使用されます。"
+"これは配線とハンダマスク間のローカル クリアランスです。\n"
+"基盤の設定で定義された値を使う場合は空白を指定します。"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:277
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -37352,9 +37350,8 @@ msgid "Top/bottom"
 msgstr "上/下"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:88
-#, fuzzy
 msgid "Board items flip"
-msgstr "移動中のアイテム"
+msgstr "基板のアイテムを反転"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:95
 msgid "Allow free pads"
@@ -37773,14 +37770,12 @@ msgstr ""
 "せます"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:20
-#, fuzzy
 msgid "Place items from sheet:"
-msgstr "シートとして配置"
+msgstr "シートからアイテムを配置:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:29
-#, fuzzy
 msgid "Place items matching component class:"
-msgstr "ネットクラスでフィルター:"
+msgstr "一致するコンポーネントクラスのアイテムを配置:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -38535,7 +38530,7 @@ msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:646
 msgid "Pcb_Edges"
-msgstr "基板外形"
+msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
@@ -38546,9 +38541,8 @@ msgid "Margin"
 msgstr "マージン"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
-#, fuzzy
 msgid "Board contour setback"
-msgstr "基板輪郭セットバック"
+msgstr "基板外形のセットバック"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:666
 msgid "Eco1"
@@ -40121,9 +40115,9 @@ msgid "Checking %s clearance: %s."
 msgstr "%s のクリアランスをチェックしています: %s."
 
 #: pcbnew/drc/drc_engine.cpp:912
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s creepage: %s."
-msgstr "%s のクリアランスをチェックしています: %s."
+msgstr "%s の沿面距離をチェックしています: %s."
 
 #: pcbnew/drc/drc_engine.cpp:917
 #, c-format
@@ -40374,9 +40368,8 @@ msgid "Clearance violation"
 msgstr "クリアランス違反"
 
 #: pcbnew/drc/drc_item.cpp:74
-#, fuzzy
 msgid "Creepage violation"
-msgstr "クリアランス違反"
+msgstr "沿面距離違反"
 
 #: pcbnew/drc/drc_item.cpp:78
 msgid "Tracks crossing"
@@ -40826,14 +40819,13 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "オーバーラップしたコートヤードをチェック..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:3055
-#, fuzzy
 msgid "Checking creepage..."
-msgstr "ヘッダーをチェック中..."
+msgstr "沿面距離をチェック中..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:3239
-#, fuzzy, c-format
+#, c-format
 msgid "(%s creepage %s; actual %s)"
-msgstr "(%s クリアランス %s; 現状 %s)"
+msgstr "(%s 沿面距離 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:611
 #, c-format
@@ -45353,9 +45345,9 @@ msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5606
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6539
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr "重複したネットクラス名 '%s'、ファイル '%s'、行 %d、オフセット %d."
+msgstr "不正なパッドスタックレイヤー '%s'、ファイル '%s'、行 %d、オフセット %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6175
 #, c-format
@@ -45413,9 +45405,8 @@ msgid "Creating Entities"
 msgstr "実体を生成する"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:108
-#, fuzzy
 msgid "Init Entity Data"
-msgstr "Git コミットデータ"
+msgstr "実体データを初期化"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:119
 msgid "Generating Entities Files"
@@ -45733,9 +45724,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "hasNetclass() へのネットクラス名の引数がありません"
 
 #: pcbnew/pcbexpr_functions.cpp:1223
-#, fuzzy
 msgid "Missing component class name argument to hasComponentClass()"
-msgstr "hasNetclass() へのネットクラス名の引数がありません"
+msgstr "hasComponentClass() へのコンポーネントクラス名の引数がありません"
 
 #: pcbnew/pcbnew.cpp:465
 msgid ""
@@ -46599,9 +46589,9 @@ msgid "Track Angle resolution for:"
 msgstr "配線の角度の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved angle constraints: min %s; max %s."
-msgstr "直径の制約: 最小 %s; 最大 %s."
+msgstr "角度の制約: 最小 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:461
 msgid "Connection Width"
@@ -47165,9 +47155,8 @@ msgid "Arc radius:"
 msgstr "円弧の半径:"
 
 #: pcbnew/tools/edit_tool.cpp:1247
-#, fuzzy
 msgid "Add slots in acute corners"
-msgstr "ゾーンの角を追加"
+msgstr "鋭角にスロットを追加"
 
 #: pcbnew/tools/edit_tool.cpp:1249
 msgid ""
@@ -47662,9 +47651,8 @@ msgid "Draw Orthogonal Dimensions"
 msgstr "直交寸法線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:272
-#, fuzzy
 msgid "Draw Leaders"
-msgstr "先頭を描く"
+msgstr "引出線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:285
 msgid "Draw Filled Zones"
@@ -47675,9 +47663,8 @@ msgid "Place Vias"
 msgstr "ビアを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:296
-#, fuzzy
 msgid "Place free-standing vias"
-msgstr "独立したビアを追加"
+msgstr "独立したビアを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Add a Zone Cutout"
@@ -48863,7 +48850,7 @@ msgstr "選択したアイテムをカーソルのあるアイテムの水平中
 
 #: pcbnew/tools/pcb_actions.cpp:1926
 msgid "Distribute Horizontally by Centers"
-msgstr "中央で水平に分割"
+msgstr "中央で水平方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1927
 #, fuzzy
@@ -48898,9 +48885,8 @@ msgstr ""
 "選択したアイテムを最も上のアイテムと最も下のアイテムの間に等間隔に配置します"
 
 #: pcbnew/tools/pcb_actions.cpp:1950
-#, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "中心で垂直方向に配置"
+msgstr "中央で垂直方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1951
 #, fuzzy
