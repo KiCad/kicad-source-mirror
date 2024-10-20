@@ -39,7 +39,9 @@
 static wxString s_oemColumn = wxEmptyString;
 
 DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
-        DIALOG_EXPORT_2581_BASE( aParent ), m_parent( aParent )
+        DIALOG_EXPORT_2581_BASE( aParent ),
+        m_parent( aParent ),
+        m_job( nullptr )
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 

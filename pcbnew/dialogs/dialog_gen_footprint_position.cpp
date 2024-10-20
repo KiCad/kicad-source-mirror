@@ -48,7 +48,8 @@
 
 DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aEditFrame ) :
         DIALOG_GEN_FOOTPRINT_POSITION_BASE( aEditFrame ),
-        m_editFrame( aEditFrame )
+        m_editFrame( aEditFrame ),
+        m_job( nullptr )
 {
     m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
     m_reporter = &m_messagesPanel->Reporter();
