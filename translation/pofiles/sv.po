@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:32-0700\n"
-"PO-Revision-Date: 2024-09-13 02:09+0000\n"
+"PO-Revision-Date: 2024-10-21 04:25+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -18955,9 +18955,8 @@ msgid "Errors during netlist generation."
 msgstr "Fel vid generering av nätlista."
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Fel vid generering av nätlista."
+msgstr "Varningar vid generering av nätlista."
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -41494,7 +41493,7 @@ msgstr ""
 "Fotavtryck %s innehåller streckkod på Altium-lagret %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4178
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, text %s"
 msgstr "Okänd justering av textruta %d, text %s"
 
@@ -42525,7 +42524,7 @@ msgid "Cannot interpret date code %d"
 msgstr "Kan inte tolka datumkod %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -42533,7 +42532,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "Objekt hittades på odefinierade lager (%s).\n"
-"Vill du rädda dem till %s-lagret?"
+"Vill du rädda dem till %s-lagret?\n"
+"\n"
+"Zoner kommer att behöva fyllas på nytt."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Undefined Layers Warning"
