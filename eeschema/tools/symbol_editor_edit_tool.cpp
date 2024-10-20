@@ -33,6 +33,7 @@
 #include <clipboard.h>
 #include <ee_actions.h>
 #include <increment.h>
+#include <pin_layout_cache.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
@@ -1104,6 +1105,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     if( !allSameType )
         return 0;
 
+    const VECTOR2I mousePosition = getViewControls()->GetMousePosition();
+
     SCH_COMMIT commit( m_frame );
 
     for( EDA_ITEM* item : selection )
@@ -1112,35 +1115,39 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         {
         case SCH_PIN_T:
         {
-            SCH_PIN& pin = static_cast<SCH_PIN&>( *item );
-
-            // This is is a bit annoying, as it severely limits the number of scroll
-            // actions. It would be better if we could figure out which field the user
-            // wanted to increment from the cursor position. Then we could use the
-            // index to choose, say, to increment different bits of the pin.
-            switch( incParam.Index )
+            // Primary increment: name or number of the pin
+            if( incParam.Index == 0 )
             {
-            case EE_ACTIONS::PIN_INCREMENT::NUMBER:
-            {
-                wxString nextNumber = pin.GetNumber();
-                IncrementString( nextNumber, incParam.Delta );
+                SCH_PIN&          pin = static_cast<SCH_PIN&>( *item );
+                PIN_LAYOUT_CACHE& layout = pin.GetLayoutCache();
 
-                commit.Modify( &pin );
-                pin.SetNumber( nextNumber );
-                break;
-            }
-            case EE_ACTIONS::PIN_INCREMENT::NAME:
-            {
-                wxString nextName = pin.GetName();
-                IncrementString( nextName, incParam.Delta );
+                bool      found = false;
+                OPT_BOX2I bbox = layout.GetPinNumberBBox();
 
-                commit.Modify( &pin );
-                pin.SetName( nextName );
-                break;
-            }
-            default:
-                // Only handle number and name for now
-                break;
+                if( bbox && bbox->Contains( mousePosition ) )
+                {
+                    wxString nextNumber = pin.GetNumber();
+                    IncrementString( nextNumber, incParam.Delta );
+
+                    commit.Modify( &pin );
+                    pin.SetNumber( nextNumber );
+                    found = true;
+                }
+
+                if( !found )
+                {
+                    bbox = layout.GetPinNameBBox();
+
+                    if( bbox && bbox->Contains( mousePosition ) )
+                    {
+                        wxString nextName = pin.GetName();
+                        IncrementString( nextName, incParam.Delta );
+
+                        commit.Modify( &pin );
+                        pin.SetName( nextName );
+                        found = true;
+                    }
+                }
             }
             break;
         }
