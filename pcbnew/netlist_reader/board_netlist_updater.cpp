@@ -139,8 +139,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
     if( aComponent->GetFPID().empty() )
     {
         msg.Printf( _( "Cannot add %s (no footprint assigned)." ),
-                    aComponent->GetReference(),
-                    aComponent->GetFPID().Format().wx_str() );
+                    aComponent->GetReference() );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
@@ -152,7 +151,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
     {
         msg.Printf( _( "Cannot add %s (footprint '%s' not found)." ),
                     aComponent->GetReference(),
-                    aComponent->GetFPID().Format().wx_str() );
+                    EscapeHTML( aComponent->GetFPID().Format().wx_str() ) );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
@@ -164,7 +163,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
     {
         msg.Printf( _( "Add %s (footprint '%s')." ),
                     aComponent->GetReference(),
-                    aComponent->GetFPID().Format().wx_str() );
+                    EscapeHTML( aComponent->GetFPID().Format().wx_str() ) );
 
         delete footprint;
         footprint = nullptr;
@@ -194,7 +193,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
 
         msg.Printf( _( "Added %s (footprint '%s')." ),
                     aComponent->GetReference(),
-                    aComponent->GetFPID().Format().wx_str() );
+                    EscapeHTML( aComponent->GetFPID().Format().wx_str() ) );
     }
 
     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -233,18 +232,22 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     {
         if( curClassName == wxEmptyString && newClassName != wxEmptyString )
         {
-            msg.Printf( _( "Change %s component class to %s." ), aFootprint->GetReference(),
-                        newClassName );
+            msg.Printf( _( "Change %s component class to '%s'." ),
+                        aFootprint->GetReference(),
+                        EscapeHTML( newClassName ) );
         }
         else if( curClassName != wxEmptyString && newClassName == wxEmptyString )
         {
-            msg.Printf( _( "Remove %s component class (currently %s)." ),
-                        aFootprint->GetReference(), curClassName );
+            msg.Printf( _( "Remove %s component class (currently '%s')." ),
+                        aFootprint->GetReference(),
+                        EscapeHTML( curClassName ) );
         }
         else
         {
-            msg.Printf( _( "Change %s component class from %s to %s." ), aFootprint->GetReference(),
-                        curClassName, newClassName );
+            msg.Printf( _( "Change %s component class from '%s' to '%s'." ),
+                        aFootprint->GetReference(),
+                        EscapeHTML( curClassName ),
+                        EscapeHTML( newClassName ) );
         }
     }
     else
@@ -255,18 +258,22 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
 
         if( curClassName == wxEmptyString && newClassName != wxEmptyString )
         {
-            msg.Printf( _( "Changed %s component class to %s." ), aFootprint->GetReference(),
-                        newClassName );
+            msg.Printf( _( "Changed %s component class to '%s'." ),
+                        aFootprint->GetReference(),
+                        EscapeHTML( newClassName ) );
         }
         else if( curClassName != wxEmptyString && newClassName == wxEmptyString )
         {
-            msg.Printf( _( "Removed %s component class (was %s)." ), aFootprint->GetReference(),
-                        curClassName );
+            msg.Printf( _( "Removed %s component class (was '%s')." ),
+                        aFootprint->GetReference(),
+                        EscapeHTML( curClassName ) );
         }
         else
         {
-            msg.Printf( _( "Changed %s component class from %s to %s." ),
-                        aFootprint->GetReference(), curClassName, newClassName );
+            msg.Printf( _( "Changed %s component class from '%s' to '%s'." ),
+                        aFootprint->GetReference(),
+                        EscapeHTML( curClassName ),
+                        EscapeHTML( newClassName ) );
         }
     }
 
@@ -282,8 +289,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
     if( aNewComponent->GetFPID().empty() )
     {
         msg.Printf( _( "Cannot update %s (no footprint assigned)." ),
-                    aNewComponent->GetReference(),
-                    aNewComponent->GetFPID().Format().wx_str() );
+                    aNewComponent->GetReference() );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
@@ -295,7 +301,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
     {
         msg.Printf( _( "Cannot update %s (footprint '%s' not found)." ),
                     aNewComponent->GetReference(),
-                    aNewComponent->GetFPID().Format().wx_str() );
+                    EscapeHTML( aNewComponent->GetFPID().Format().wx_str() ) );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
@@ -307,8 +313,8 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
         {
             msg.Printf( _( "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."),
                         aFootprint->GetReference(),
-                        aFootprint->GetFPID().Format().wx_str(),
-                        aNewComponent->GetFPID().Format().wx_str() );
+                        EscapeHTML( aFootprint->GetFPID().Format().wx_str() ),
+                        EscapeHTML( aNewComponent->GetFPID().Format().wx_str() ) );
             m_reporter->Report( msg, RPT_SEVERITY_WARNING );
             ++m_warningCount;
             delete newFootprint;
@@ -318,8 +324,8 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
         {
             msg.Printf( _( "Change %s footprint from '%s' to '%s'."),
                         aFootprint->GetReference(),
-                        aFootprint->GetFPID().Format().wx_str(),
-                        aNewComponent->GetFPID().Format().wx_str() );
+                        EscapeHTML( aFootprint->GetFPID().Format().wx_str() ),
+                        EscapeHTML( aNewComponent->GetFPID().Format().wx_str() ) );
             m_reporter->Report( msg, RPT_SEVERITY_ACTION );
             ++m_newFootprintsCount;
             delete newFootprint;
@@ -332,8 +338,8 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
         {
             msg.Printf( _( "Could not change %s footprint from '%s' to '%s' (footprint is locked)."),
                         aFootprint->GetReference(),
-                        aFootprint->GetFPID().Format().wx_str(),
-                        aNewComponent->GetFPID().Format().wx_str() );
+                        EscapeHTML( aFootprint->GetFPID().Format().wx_str() ),
+                        EscapeHTML( aNewComponent->GetFPID().Format().wx_str() ) );
             m_reporter->Report( msg, RPT_SEVERITY_WARNING );
             ++m_warningCount;
             delete newFootprint;
@@ -345,8 +351,8 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
 
             msg.Printf( _( "Changed %s footprint from '%s' to '%s'."),
                         aFootprint->GetReference(),
-                        aFootprint->GetFPID().Format().wx_str(),
-                        aNewComponent->GetFPID().Format().wx_str() );
+                        EscapeHTML( aFootprint->GetFPID().Format().wx_str() ),
+                        EscapeHTML( aNewComponent->GetFPID().Format().wx_str() ) );
             m_reporter->Report( msg, RPT_SEVERITY_ACTION );
             ++m_newFootprintsCount;
             return newFootprint;
@@ -400,15 +406,15 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         {
             msg.Printf( _( "Change %s value from %s to %s." ),
                         aPcbFootprint->GetReference(),
-                        aPcbFootprint->GetValue(),
-                        aNetlistComponent->GetValue() );
+                        EscapeHTML( aPcbFootprint->GetValue() ),
+                        EscapeHTML( aNetlistComponent->GetValue() ) );
         }
         else
         {
             msg.Printf( _( "Changed %s value from %s to %s." ),
                         aPcbFootprint->GetReference(),
-                        aPcbFootprint->GetValue(),
-                        aNetlistComponent->GetValue() );
+                        EscapeHTML( aPcbFootprint->GetValue() ),
+                        EscapeHTML( aNetlistComponent->GetValue() ) );
 
             changed = true;
             aPcbFootprint->SetValue( aNetlistComponent->GetValue() );
@@ -446,15 +452,15 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         {
             msg.Printf( _( "Update %s symbol association from %s to %s." ),
                         aPcbFootprint->GetReference(),
-                        aPcbFootprint->GetPath().AsString(),
-                        new_path.AsString() );
+                        EscapeHTML( aPcbFootprint->GetPath().AsString() ),
+                        EscapeHTML( new_path.AsString() ) );
         }
         else
         {
             msg.Printf( _( "Updated %s symbol association from %s to %s." ),
                         aPcbFootprint->GetReference(),
-                        aPcbFootprint->GetPath().AsString(),
-                        new_path.AsString() );
+                        EscapeHTML( aPcbFootprint->GetPath().AsString() ),
+                        EscapeHTML( new_path.AsString() ) );
 
             changed = true;
             aPcbFootprint->SetPath( new_path );
@@ -606,14 +612,14 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         {
             msg.Printf( _( "Update %s sheetname to '%s'." ),
                         aPcbFootprint->GetReference(),
-                        sheetname );
+                        EscapeHTML( sheetname ) );
         }
         else
         {
             aPcbFootprint->SetSheetname( sheetname );
             msg.Printf( _( "Updated %s sheetname to '%s'." ),
                         aPcbFootprint->GetReference(),
-                        sheetname );
+                        EscapeHTML( sheetname ) );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -625,14 +631,14 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         {
             msg.Printf( _( "Update %s sheetfile to '%s'." ),
                         aPcbFootprint->GetReference(),
-                        sheetfile );
+                        EscapeHTML( sheetfile ) );
         }
         else
         {
             aPcbFootprint->SetSheetfile( sheetfile );
             msg.Printf( _( "Updated %s sheetfile to '%s'." ),
                         aPcbFootprint->GetReference(),
-                        sheetfile );
+                        EscapeHTML( sheetfile ) );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -644,14 +650,14 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         {
             msg.Printf( _( "Update %s footprint filters to '%s'." ),
                         aPcbFootprint->GetReference(),
-                        fpFilters );
+                        EscapeHTML( fpFilters ) );
         }
         else
         {
             aPcbFootprint->SetFilters( fpFilters );
             msg.Printf( _( "Updated %s footprint filters to '%s'." ),
                         aPcbFootprint->GetReference(),
-                        fpFilters );
+                        EscapeHTML( fpFilters ) );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -813,13 +819,13 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                 {
                     msg.Printf( _( "Disconnect %s pin %s." ),
                                 aFootprint->GetReference(),
-                                pad->GetNumber() );
+                                EscapeHTML( pad->GetNumber() ) );
                 }
                 else
                 {
                     msg.Printf( _( "Disconnected %s pin %s." ),
                                 aFootprint->GetReference(),
-                                pad->GetNumber() );
+                                EscapeHTML( pad->GetNumber() ) );
                 }
 
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -829,8 +835,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                 // pad is connectable but has no net found in netlist
                 msg.Printf( _( "No net found for component %s pad %s (no pin %s in symbol)." ),
                             aFootprint->GetReference(),
-                            pad->GetNumber(),
-                            pad->GetNumber() );
+                            EscapeHTML( pad->GetNumber() ),
+                            EscapeHTML( pad->GetNumber() ) );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING);
                 ++m_warningCount;
             }
@@ -857,10 +863,14 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
 
             if( pad->IsNoConnectPad() )
             {
-                netName = wxString::Format( wxS( "%s" ), net.GetNetName() );
+                netName = wxString::Format( wxS( "%s" ),
+                                            EscapeHTML( net.GetNetName() ) );
 
                 for( int jj = 1; !padNetnames.insert( netName ).second; jj++ )
-                    netName = wxString::Format( wxS( "%s_%d" ), net.GetNetName(), jj );
+                {
+                    netName = wxString::Format( wxS( "%s_%d" ),
+                                                EscapeHTML( net.GetNetName() ), jj );
+                }
             }
 
             NETINFO_ITEM* netinfo = m_board->FindNet( netName );
@@ -890,7 +900,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                     }
 
                     m_addedNets[netName] = netinfo;
-                    msg.Printf( _( "Add net %s." ), UnescapeString( netName ) );
+                    msg.Printf( _( "Add net %s." ),
+                                EscapeHTML( UnescapeString( netName ) ) );
                     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
                 }
 
@@ -902,17 +913,17 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                     {
                         msg.Printf( _( "Reconnect %s pin %s from %s to %s."),
                                     aFootprint->GetReference(),
-                                    pad->GetNumber(),
-                                    UnescapeString( pad->GetNetname() ),
-                                    UnescapeString( netName ) );
+                                    EscapeHTML( pad->GetNumber() ),
+                                    EscapeHTML( UnescapeString( pad->GetNetname() ) ),
+                                    EscapeHTML( UnescapeString( netName ) ) );
                     }
                     else
                     {
                         msg.Printf( _( "Reconnected %s pin %s from %s to %s."),
                                     aFootprint->GetReference(),
-                                    pad->GetNumber(),
-                                    UnescapeString( pad->GetNetname() ),
-                                    UnescapeString( netName ) );
+                                    EscapeHTML( pad->GetNumber() ),
+                                    EscapeHTML( UnescapeString( pad->GetNetname() ) ),
+                                    EscapeHTML( UnescapeString( netName ) ) );
                     }
                 }
                 else
@@ -921,15 +932,15 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                     {
                         msg.Printf( _( "Connect %s pin %s to %s."),
                                     aFootprint->GetReference(),
-                                    pad->GetNumber(),
-                                    UnescapeString( netName ) );
+                                    EscapeHTML( pad->GetNumber() ),
+                                    EscapeHTML( UnescapeString( netName ) ) );
                     }
                     else
                     {
                         msg.Printf( _( "Connected %s pin %s to %s."),
                                     aFootprint->GetReference(),
-                                    pad->GetNumber(),
-                                    UnescapeString( netName ) );
+                                    EscapeHTML( pad->GetNumber() ),
+                                    EscapeHTML( UnescapeString( netName ) ) );
                     }
                 }
 
@@ -1008,8 +1019,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                     wxString originalNetname = via->GetNetname();
 
                     msg.Printf( _( "Reconnect via from %s to %s." ),
-                                UnescapeString( originalNetname ),
-                                UnescapeString( updatedNetname ) );
+                                EscapeHTML( UnescapeString( originalNetname ) ),
+                                EscapeHTML( UnescapeString( updatedNetname ) ) );
 
                     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
                 }
@@ -1028,8 +1039,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                         via->SetNet( netinfo );
 
                         msg.Printf( _( "Reconnected via from %s to %s." ),
-                                    UnescapeString( originalNetname ),
-                                    UnescapeString( updatedNetname ) );
+                                    EscapeHTML( UnescapeString( originalNetname ) ),
+                                    EscapeHTML( UnescapeString( updatedNetname ) ) );
 
                         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
                     }
@@ -1038,7 +1049,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             else
             {
                 msg.Printf( _( "Via connected to unknown net (%s)." ),
-                            UnescapeString( via->GetNetname() ) );
+                            EscapeHTML( UnescapeString( via->GetNetname() ) ) );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING );
                 ++m_warningCount;
             }
@@ -1084,14 +1095,14 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                     {
                         msg.Printf( _( "Reconnect copper zone '%s' from %s to %s." ),
                                     zone->GetZoneName(),
-                                    UnescapeString( originalNetname ),
-                                    UnescapeString( updatedNetname ) );
+                                    EscapeHTML( UnescapeString( originalNetname ) ),
+                                    EscapeHTML( UnescapeString( updatedNetname ) ) );
                     }
                     else
                     {
                         msg.Printf( _( "Reconnect copper zone from %s to %s." ),
-                                    UnescapeString( originalNetname ),
-                                    UnescapeString( updatedNetname ) );
+                                    EscapeHTML( UnescapeString( originalNetname ) ),
+                                    EscapeHTML( UnescapeString( updatedNetname ) ) );
                     }
 
                     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -1113,15 +1124,15 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                         if( !zone->GetZoneName().IsEmpty() )
                         {
                             msg.Printf( _( "Reconnected copper zone '%s' from %s to %s." ),
-                                        zone->GetZoneName(),
-                                        UnescapeString( originalNetname ),
-                                        UnescapeString( updatedNetname ) );
+                                        EscapeHTML( zone->GetZoneName() ),
+                                        EscapeHTML( UnescapeString( originalNetname ) ),
+                                        EscapeHTML( UnescapeString( updatedNetname ) ) );
                         }
                         else
                         {
                             msg.Printf( _( "Reconnected copper zone from %s to %s." ),
-                                        UnescapeString( originalNetname ),
-                                        UnescapeString( updatedNetname ) );
+                                        EscapeHTML( UnescapeString( originalNetname ) ),
+                                        EscapeHTML( UnescapeString( updatedNetname ) ) );
                         }
 
                         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -1133,7 +1144,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                 if( !zone->GetZoneName().IsEmpty() )
                 {
                     msg.Printf( _( "Copper zone '%s' has no pads connected." ),
-                                zone->GetZoneName() );
+                                EscapeHTML( zone->GetZoneName() ) );
                 }
                 else
                 {
@@ -1150,7 +1161,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                     }
 
                     msg.Printf( _( "Copper zone on layer %s at (%s, %s) has no pads connected." ),
-                                m_board->GetLayerName( layer ),
+                                EscapeHTML( m_board->GetLayerName( layer ) ),
                                 m_frame->MessageTextFromValue( pos.x ),
                                 m_frame->MessageTextFromValue( pos.y ) );
                 }
@@ -1193,7 +1204,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
                 msg.Printf( _( "Symbol %s has pins with no number.  These pins can not be matched "
                                "to pads in %s." ),
                             component->GetReference(),
-                            footprint->GetFPID().Format().wx_str() );
+                            EscapeHTML( footprint->GetFPID().Format().wx_str() ) );
                 m_reporter->Report( msg, RPT_SEVERITY_ERROR );
                 ++m_errorCount;
             }
@@ -1202,8 +1213,8 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
                 // not found: bad footprint, report error
                 msg.Printf( _( "%s pad %s not found in %s." ),
                             component->GetReference(),
-                            padNumber,
-                            footprint->GetFPID().Format().wx_str() );
+                            EscapeHTML( padNumber ),
+                            EscapeHTML( footprint->GetFPID().Format().wx_str() ) );
                 m_reporter->Report( msg, RPT_SEVERITY_ERROR );
                 ++m_errorCount;
             }
@@ -1254,7 +1265,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         msg.Printf( _( "Processing symbol '%s:%s'." ),
                     component->GetReference(),
-                    component->GetFPID().Format().wx_str() );
+                    EscapeHTML( component->GetFPID().Format().wx_str() ) );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
         int matchCount = 0;
@@ -1323,7 +1334,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         }
         else if( matchCount > 1 )
         {
-            msg.Printf( _( "Multiple footprints found for '%s'." ), component->GetReference() );
+            msg.Printf( _( "Multiple footprints found for %s." ),
+                        component->GetReference() );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
             m_errorCount++;
         }
@@ -1372,7 +1384,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         {
             if( m_isDryRun )
             {
-                msg.Printf( _( "Remove unused footprint %s." ), footprint->GetReference() );
+                msg.Printf( _( "Remove unused footprint %s." ),
+                            footprint->GetReference() );
             }
             else
             {
@@ -1380,7 +1393,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     m_commit.Stage( footprint, CHT_UNGROUP );
 
                 m_commit.Remove( footprint );
-                msg.Printf( _( "Removed unused footprint %s." ), footprint->GetReference() );
+                msg.Printf( _( "Removed unused footprint %s." ),
+                            footprint->GetReference() );
             }
 
             m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -1410,7 +1424,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         {
             if( !net->IsCurrent() )
             {
-                msg.Printf( _( "Removed unused net %s." ), net->GetNetname() );
+                msg.Printf( _( "Removed unused net %s." ),
+                            EscapeHTML( net->GetNetname() ) );
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
             }
         }

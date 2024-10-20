@@ -376,15 +376,16 @@ void BACK_ANNOTATE::applyChangelist()
         bool           oldExBOM = ref.GetSymbol()->GetExcludedFromBOM();
         bool           skip = ( ref.GetSymbol()->GetFlags() & SKIP_STRUCT ) > 0;
 
-        auto boolString = []( bool b ) -> wxString
-        {
-            return b ? _( "true" ) : _( "false" );
-        };
+        auto boolString =
+                []( bool b ) -> wxString
+                {
+                    return b ? _( "true" ) : _( "false" );
+                };
 
         if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip )
         {
             ++m_changesCount;
-            msg.Printf( _( "Change '%s' reference designator to '%s'." ),
+            msg.Printf( _( "Change %s reference designator to '%s'." ),
                         ref.GetRef(),
                         fpData.m_ref );
 
@@ -402,8 +403,8 @@ void BACK_ANNOTATE::applyChangelist()
             ++m_changesCount;
             msg.Printf( _( "Change %s footprint assignment from '%s' to '%s'." ),
                         ref.GetRef(),
-                        oldFootprint,
-                        fpData.m_footprint );
+                        EscapeHTML( oldFootprint ),
+                        EscapeHTML( fpData.m_footprint ) );
 
             if( !m_dryRun )
             {
@@ -419,8 +420,8 @@ void BACK_ANNOTATE::applyChangelist()
             ++m_changesCount;
             msg.Printf( _( "Change %s value from '%s' to '%s'." ),
                         ref.GetRef(),
-                        oldValue,
-                        fpData.m_value );
+                        EscapeHTML( oldValue ),
+                        EscapeHTML( fpData.m_value ) );
 
             if( !m_dryRun )
             {
@@ -434,8 +435,10 @@ void BACK_ANNOTATE::applyChangelist()
         if( m_processAttributes && oldDNP != fpData.m_DNP && !skip )
         {
             ++m_changesCount;
-            msg.Printf( _( "Change %s 'Do not populate' from '%s' to '%s'." ), ref.GetRef(),
-                        boolString( oldDNP ), boolString( fpData.m_DNP ) );
+            msg.Printf( _( "Change %s 'Do not populate' from '%s' to '%s'." ),
+                        ref.GetRef(),
+                        boolString( oldDNP ),
+                        boolString( fpData.m_DNP ) );
 
             if( !m_dryRun )
             {
@@ -450,7 +453,8 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s 'Exclude from bill of materials' from '%s' to '%s'." ),
-                        ref.GetRef(), boolString( oldExBOM ),
+                        ref.GetRef(),
+                        boolString( oldExBOM ),
                         boolString( fpData.m_excludeFromBOM ) );
 
             if( !m_dryRun )
@@ -474,7 +478,7 @@ void BACK_ANNOTATE::applyChangelist()
                 {
                     msg.Printf( _( "Cannot find %s pin '%s'." ),
                                 ref.GetRef(),
-                                pinNumber );
+                                EscapeHTML( pinNumber ) );
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
 
                     continue;
@@ -515,8 +519,10 @@ void BACK_ANNOTATE::applyChangelist()
                     && symField->GetShownText( &ref.GetSheetPath(), false ) != fpFieldValue )
                 {
                     m_changesCount++;
-                    msg.Printf( _( "Change field '%s' value to '%s'." ),
-                                symField->GetCanonicalName(), fpFieldValue );
+                    msg.Printf( _( "Change %s field '%s' value to '%s'." ),
+                                ref.GetRef(),
+                                EscapeHTML( symField->GetCanonicalName() ),
+                                EscapeHTML( fpFieldValue ) );
 
                     if( !m_dryRun )
                     {
@@ -531,7 +537,10 @@ void BACK_ANNOTATE::applyChangelist()
                 if( symField == nullptr )
                 {
                     m_changesCount++;
-                    msg.Printf( _( "Add field '%s' with value '%s'." ), fpFieldName, fpFieldValue );
+                    msg.Printf( _( "Add %s field '%s' with value '%s'." ),
+                                ref.GetRef(),
+                                EscapeHTML( fpFieldName ),
+                                EscapeHTML( fpFieldValue ) );
 
                     if( !m_dryRun )
                     {
@@ -560,7 +569,9 @@ void BACK_ANNOTATE::applyChangelist()
                 {
                     // Field not found in footprint field map, delete it
                     m_changesCount++;
-                    msg.Printf( _( "Delete field '%s.'" ), field.GetCanonicalName() );
+                    msg.Printf( _( "Delete %s field '%s.'" ),
+                                ref.GetRef(),
+                                EscapeHTML( field.GetCanonicalName() ) );
 
                     if( !m_dryRun )
                     {
@@ -703,9 +714,9 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
 
         msg.Printf( _( "Change %s pin %s net label from '%s' to '%s'." ),
                     aRef,
-                    aPin->GetShownNumber(),
-                    aOldName,
-                    aNewName );
+                    EscapeHTML( aPin->GetShownNumber() ),
+                    EscapeHTML( aOldName ),
+                    EscapeHTML( aNewName ) );
 
         if( !m_dryRun )
         {
@@ -724,8 +735,8 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
         if( schPin->IsGlobalPower() )
         {
             msg.Printf( _( "Net %s cannot be changed to %s because it is driven by a power pin." ),
-                        aOldName,
-                        aNewName );
+                        EscapeHTML( aOldName ),
+                        EscapeHTML( aNewName ) );
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
             break;
@@ -733,9 +744,9 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
 
         ++m_changesCount;
         msg.Printf( _( "Add label '%s' to %s pin %s net." ),
-                    aNewName,
+                    EscapeHTML( aNewName ),
                     aRef,
-                    aPin->GetShownNumber() );
+                    EscapeHTML( aPin->GetShownNumber() ) );
 
         if( !m_dryRun )
         {
