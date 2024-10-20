@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-13 19:15+0000\n"
+"PO-Revision-Date: 2024-10-21 04:25+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -22234,9 +22234,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
-msgstr "El símbol '%s' ja existeix a la biblioteca '%s'."
+msgstr "El símbol '%s' ja existeix a la biblioteca '%s'. Vols sobreescriure'l?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1032
 #, fuzzy, c-format
@@ -23900,9 +23900,8 @@ msgid "Next Symbol Unit"
 msgstr "&Editor de biblioteques"
 
 #: eeschema/tools/ee_actions.cpp:1299
-#, fuzzy
 msgid "Open the next unit of the symbol"
-msgstr "Vols eliminar les unitats extra del símbol?"
+msgstr "Obre la següent unitat del símbol"
 
 #: eeschema/tools/ee_actions.cpp:1306 pcbnew/tools/pcb_actions.cpp:1312
 #, fuzzy
@@ -37084,9 +37083,8 @@ msgid "Copy placement"
 msgstr "Tipus de posicionament"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
-#, fuzzy
 msgid "Copy routing"
-msgstr "Voleu avortar l'encaminament?"
+msgstr "Copia rutejat"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:86
 #, fuzzy
