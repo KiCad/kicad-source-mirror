@@ -183,8 +183,8 @@ void FOOTPRINT_EDITOR_CONTROL::tryToSaveFootprintInLibrary( FOOTPRINT&    aFootp
             // they didn't quite get what they wanted.
             m_frame->ShowInfoBarWarning(
                     wxString::Format(
-                            _( "The footprint could not be added to the selected library ('%s') "
-                               "because the library read-only." ),
+                            _( "The footprint could not be added to the selected library ('%s'). "
+                               "This library is read-only." ),
                             libraryName ),
                     false );
             // And the footprint will need to be saved manually
