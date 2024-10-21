@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:32-0700\n"
-"PO-Revision-Date: 2024-10-04 07:41+0000\n"
+"PO-Revision-Date: 2024-10-21 17:35+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2148,7 +2148,7 @@ msgstr "网络类:"
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
-msgstr "注: 可在 '原理图设置 > 工程' 中编辑完整的网络类分配。"
+msgstr "注: 可在 <原理图配置> 的 \"工程\" 选项中编辑完整的网络类分配。"
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
@@ -3201,7 +3201,7 @@ msgstr "消息文本"
 #: common/dialogs/dialog_print_generic_base.cpp:108
 #: eeschema/printing/dialog_print_using_printer_base.cpp:73
 msgid "Page Setup..."
-msgstr "页面设置..."
+msgstr "页面配置..."
 
 #: common/dialogs/dialog_text_entry_base.cpp:21
 #: common/dialogs/dialog_text_entry_base.cpp:33
@@ -4427,7 +4427,7 @@ msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
-"网络类在设置对话框外已被更改。\n"
+"网络类在配置对话框外已被更改。\n"
 "要重新加载吗?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:464
@@ -4606,7 +4606,7 @@ msgid ""
 "The violation severities have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
-"违规严重级别已在设置对话框外更改。\n"
+"违规严重级别已在配置对话框外更改。\n"
 "是否重新加载?"
 
 #: common/dialogs/panel_text_variables.cpp:105
@@ -4614,7 +4614,7 @@ msgid ""
 "The text variables have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
-"文本变量已在设置对话框外更改。\n"
+"文本变量已在配置对话框外更改。\n"
 "是否重新加载?"
 
 #: common/dialogs/panel_text_variables.cpp:159
@@ -7337,7 +7337,7 @@ msgstr "显示搜索面板"
 
 #: common/tool/actions.cpp:297
 msgid "Show/hide the search panel"
-msgstr "显示/隐藏搜索面板"
+msgstr "显示/隐藏 搜索面板"
 
 #: common/tool/actions.cpp:305 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:118
@@ -8528,7 +8528,7 @@ msgstr "报告文件"
 
 #: common/wildcards_and_files_ext.cpp:395
 msgid "Component placement files"
-msgstr "元件定位文件"
+msgstr "元件布置文件"
 
 #: common/wildcards_and_files_ext.cpp:401
 msgid "VRML and X3D files"
@@ -9894,7 +9894,7 @@ msgstr "将所有 '%s' 违规的违规严重级别修改为 '错误'"
 #: eeschema/dialogs/dialog_erc.cpp:627 eeschema/dialogs/dialog_erc.cpp:633
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "违规严重级别也可以在 '电路板设置' 选项中进行编辑"
+msgstr "违规严重级别也可以在 <原理图配置> 中进行编辑"
 
 #: eeschema/dialogs/dialog_erc.cpp:631 pcbnew/dialogs/dialog_drc.cpp:685
 #, c-format
@@ -9920,7 +9920,7 @@ msgstr "编辑违规严重级别......"
 
 #: eeschema/dialogs/dialog_erc.cpp:649 eeschema/dialogs/dialog_erc.cpp:655
 msgid "Open the Schematic Setup... dialog"
-msgstr "打开 '原理图设置' 对话框"
+msgstr "打开 <原理图配置> 对话框"
 
 #: eeschema/dialogs/dialog_erc.cpp:654
 msgid "Edit connection grid spacing..."
@@ -10170,7 +10170,7 @@ msgstr "图纸文件名只能在图纸属性对话框中修改。"
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr "图纸间位号可见性由 \"原理图设置 -> 通用 -> 格式\" 进行全局控制"
+msgstr "图纸间位号可见性由 \"原理图配置 -> 通用 -> 格式\" 进行全局控制"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:78
 #, c-format
@@ -10188,11 +10188,11 @@ msgstr "显示字段名称及其值"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
 msgid "Allow automatic placement"
-msgstr "允许自动放置"
+msgstr "允许自动布置"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:106
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "允许在原理图中自动放置该字段"
+msgstr "允许在原理图中自动布置该字段"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:119
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
@@ -12042,7 +12042,7 @@ msgstr "替换"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
-msgstr "原理图设置"
+msgstr "原理图配置"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:42
 msgid "Import Settings from Another Project..."
@@ -12658,7 +12658,7 @@ msgstr "右:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:889
 msgid "Plot Setup"
-msgstr "绘图设置"
+msgstr "绘图配置"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
 msgid "Simulation Analysis"
@@ -13846,7 +13846,7 @@ msgstr "Shift+Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:256
 msgid "Symbol Field Automatic Placement"
-msgstr "符号字段自动放置"
+msgstr "符号字段自动布置"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:266
 msgid "A&utomatically place symbol fields"
@@ -14986,7 +14986,7 @@ msgstr "垂直"
 #: eeschema/fields_grid_table.cpp:396 eeschema/lib_field.cpp:657
 #: eeschema/sch_field.cpp:1430
 msgid "Allow Autoplacement"
-msgstr "允许自动放置"
+msgstr "允许自动布置"
 
 #: eeschema/files-io.cpp:111
 #, c-format
@@ -15362,11 +15362,11 @@ msgstr "只导入矢量图。位图和字体将被忽略。"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:43
 msgid "Placement"
-msgstr "放置"
+msgstr "布置"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:48
 msgid "Interactive placement"
-msgstr "交互式放置"
+msgstr "交互式布置"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:55
 msgid "At"
@@ -15657,7 +15657,7 @@ msgstr "排除 '物料清单设置' 差异。"
 
 #: eeschema/lib_symbol.cpp:500
 msgid "Exclude from board settings differ."
-msgstr "排除 '电路板设置' 差异。"
+msgstr "排除电路板设置差异。"
 
 #: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:497
 #: eeschema/tools/sch_edit_tool.cpp:109
@@ -20577,11 +20577,11 @@ msgstr "填写原理图符号位号"
 
 #: eeschema/tools/ee_actions.cpp:994
 msgid "Schematic Setup..."
-msgstr "原理图设置..."
+msgstr "原理图配置..."
 
 #: eeschema/tools/ee_actions.cpp:995
 msgid "Edit schematic setup including annotation styles and electrical rules"
-msgstr "编辑原理图设置, 包括批注样式和电气规则"
+msgstr "编辑原理图配置, 包括批注样式和电气规则"
 
 #: eeschema/tools/ee_actions.cpp:1001
 msgid "Edit Sheet Page Number..."
@@ -20861,7 +20861,7 @@ msgstr "移动到下一编号图纸"
 
 #: eeschema/tools/ee_actions.cpp:1267
 msgid "Hierarchy Navigator"
-msgstr "显示层次导航"
+msgstr "层次导航"
 
 #: eeschema/tools/ee_actions.cpp:1268
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -21012,7 +21012,7 @@ msgstr "编辑分析选项卡..."
 
 #: eeschema/tools/ee_actions.cpp:1451
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr "编辑当前分析选项卡的 SPICE 命令和绘制设置"
+msgstr "编辑当前分析选项卡的 SPICE 命令和绘制配置"
 
 #: eeschema/tools/ee_actions.cpp:1458
 msgid "Run Simulation"
@@ -22055,7 +22055,7 @@ msgstr "Zip 文件"
 
 #: gerbview/files.cpp:105
 msgid "Job files"
-msgstr "工作文件"
+msgstr "Job 文件"
 
 #: gerbview/files.cpp:187
 msgid "Open Autodetected File(s)"
@@ -22277,7 +22277,7 @@ msgstr "清除最近的钻孔文件"
 #: gerbview/gerbview_frame.cpp:71 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
 msgid "Clear Recent Job Files"
-msgstr "清除最近的作业文件"
+msgstr "清除最近的 Job 文件"
 
 #: gerbview/gerbview_frame.cpp:88
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
@@ -22303,11 +22303,11 @@ msgstr "X2 属性"
 
 #: gerbview/job_file_reader.cpp:156
 msgid "This job file uses an outdated format. Please recreate it."
-msgstr "此作业文件使用过时的格式。请重新创建它。"
+msgstr "此 job 文件使用了过时的格式, 请重新创建。"
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
-msgstr "打开 Gerber 工作文件"
+msgstr "打开 Gerber Job 文件"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
@@ -22323,7 +22323,7 @@ msgstr "打开最近的钻孔文件"
 
 #: gerbview/menubar.cpp:118
 msgid "Open Recent Job File"
-msgstr "打开最近的作业文件"
+msgstr "打开最近的 Job 文件"
 
 #: gerbview/menubar.cpp:139
 msgid "Open Recent Zip File"
@@ -22430,7 +22430,7 @@ msgstr "在新层上打开 Excellon 钻孔文件。"
 
 #: gerbview/tools/gerbview_actions.cpp:62
 msgid "Open Gerber Job File..."
-msgstr "打开 Gerber 工作文件..."
+msgstr "打开 Gerber Job 文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
@@ -28702,7 +28702,7 @@ msgstr "按位置重新批注"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:56
 msgid "Board Setup"
-msgstr "电路板设置"
+msgstr "电路板配置"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:57
 msgid "Import Settings from Another Board..."
@@ -30060,11 +30060,11 @@ msgstr "运行检查 > 比较封装与库差异"
 
 #: pcbnew/dialogs/dialog_drc.cpp:680 pcbnew/dialogs/dialog_drc.cpp:687
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr "也可在 <电路板设置...> 选项中编辑违规严重级别"
+msgstr "也可在 <电路板配置> 选项中编辑违规严重级别"
 
 #: pcbnew/dialogs/dialog_drc.cpp:698
 msgid "Open the Board Setup... dialog"
-msgstr "打开\"电路板设置...\"对话框"
+msgstr "打开 <电路板配置> 对话框"
 
 #: pcbnew/dialogs/dialog_drc.cpp:938
 #, c-format
@@ -31347,7 +31347,7 @@ msgstr "追溯 Python 脚本错误"
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:441
 #, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "正面放置文件: '%s'。"
+msgstr "正面 (顶部) 布置文件: '%s'。"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:312
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:334
@@ -31361,7 +31361,7 @@ msgstr "元件数量: %d。"
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:488
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "背面 (底部) 放置文件: '%s'。"
+msgstr "背面 (底部) 布置文件: '%s'。"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:338
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:498
@@ -31377,12 +31377,12 @@ msgstr "文件已经成功创建。"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:367
 msgid "No footprint for automated placement."
-msgstr "没有封装被自动放置。"
+msgstr "没有封装被自动布置。"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:439
 #, c-format
 msgid "Placement file: '%s'."
-msgstr "放置文件: '%s'。"
+msgstr "布置文件: '%s'。"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:572
 #, c-format
@@ -31443,7 +31443,7 @@ msgstr "对底层的封装使用负 X 坐标"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
-msgstr "生成放置文件"
+msgstr "生成布置文件"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:41
 msgid "Export to GenCAD settings"
@@ -31664,7 +31664,7 @@ msgstr "位号:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
-msgstr "(指定多个项目, 并用空格隔开以进行连续放置)"
+msgstr "(指定多个项目, 并用空格隔开以进行连续布置)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
 msgid "Available footprints:"
@@ -31829,7 +31829,7 @@ msgstr "移除泪滴"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:123
 msgid "Edit default values in Board Setup"
-msgstr "在电路板设置中编辑默认值"
+msgstr "在 <电路板配置> 中编辑默认值"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:141
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:613
@@ -33036,8 +33036,8 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"这个此焊盘与阻焊间的局部间距。\n"
-"如果为 0, 则使用封装局部值或全局值。"
+"焊盘与阻焊间的局部间距。\n"
+"为 0 则使用封装局部值或全局值。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:977
 msgid ""
@@ -33263,11 +33263,11 @@ msgstr "大多数电路板制造商期望 0 并使用自己的阻焊层最小宽
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:179
 msgid "Board setup"
-msgstr "电路板设置"
+msgstr "电路板配置"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:180
 msgid "File > Board Setup..."
-msgstr "文件 > 板设置..."
+msgstr "文件 -> 电路板配置..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:193
 msgid "Gerber Options"
@@ -36681,39 +36681,39 @@ msgstr "正在收集铜项目..."
 
 #: pcbnew/drc/drc_engine.cpp:146
 msgid "board setup constraints"
-msgstr "电路板中的约束"
+msgstr "电路板配置约束"
 
 #: pcbnew/drc/drc_engine.cpp:172
 msgid "board setup constraints zone fill strategy"
-msgstr "电路板设置中的 \"域填充\" 约束"
+msgstr "<电路板配置> 中的 \"域填充\" 约束"
 
 #: pcbnew/drc/drc_engine.cpp:177
 msgid "board setup constraints silk"
-msgstr "电路板设置中的 \"丝印\" 约束"
+msgstr "<电路板配置> 中的 \"丝印\" 约束"
 
 #: pcbnew/drc/drc_engine.cpp:183
 msgid "board setup constraints silk text height"
-msgstr "电路板设置中的 \"丝印文本高度\" 约束"
+msgstr "<电路板配置> 中的 \"丝印文本高度\" 约束"
 
 #: pcbnew/drc/drc_engine.cpp:189
 msgid "board setup constraints silk text thickness"
-msgstr "电路板设置中的 \"丝印文本线宽\" 约束"
+msgstr "<电路板配置> 中的 \"丝印文本线宽\" 约束"
 
 #: pcbnew/drc/drc_engine.cpp:195
 msgid "board setup constraints hole"
-msgstr "电路板设置中 \"孔\" 约束"
+msgstr "<电路板配置> 中的 \"孔\" 约束"
 
 #: pcbnew/drc/drc_engine.cpp:200
 msgid "board setup constraints edge"
-msgstr "电路板设置中的 \"板边\" 约束"
+msgstr "<电路板配置> 中的 \"板边\" 约束"
 
 #: pcbnew/drc/drc_engine.cpp:205
 msgid "board setup constraints courtyard"
-msgstr "电路板设置中的 \"元件外框\" 约束"
+msgstr "<电路板配置> 中的 \"元件外框\" 约束"
 
 #: pcbnew/drc/drc_engine.cpp:212
 msgid "board setup micro-via constraints"
-msgstr "电路板设置中 \"微孔\" 约束"
+msgstr "<电路板配置> 中的 \"微孔\" 约束"
 
 #: pcbnew/drc/drc_engine.cpp:246 pcbnew/drc/drc_engine.cpp:325
 #, c-format
@@ -38044,7 +38044,7 @@ msgstr "在铜层上运行毛刺检测..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:56
 msgid "board setup solder mask min width"
-msgstr "电路板设置阻焊层最小宽度"
+msgstr "<电路板配置> 中的 \"阻焊层最小宽度\""
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:575
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:669
@@ -38774,7 +38774,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:898
 #: pcbnew/footprint_viewer_frame.cpp:752
 msgid "Previous footprint placement still in progress."
-msgstr "之前的封装放置仍在进行中。"
+msgstr "封装布置未完成。"
 
 #: pcbnew/footprint_libraries_utils.cpp:974
 msgid "Insert Footprint"
@@ -39055,7 +39055,7 @@ msgstr "放置在:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:98
 msgid "If not checked: use interactive placement."
-msgstr "如果未选中: 使用交互式放置。"
+msgstr "未选中: 使用交互式布置。"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:142
 msgid ""
@@ -40886,17 +40886,15 @@ msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
-msgstr ""
-"CADSTAR '%s' 区在 CADSTAR 中标记为放置区。KiCad 不支持放置区。只有该区中支持"
-"的元素被导入了。"
+msgstr "CADSTAR '%s' 区在 CADSTAR 中标记为布置区。KiCad "
+"不支持布置区。只有该区中支持的元素被导入了。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1724
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
-msgstr ""
-"CADSTAR 设计包含 '%s' 区, 但在 KiCad 中没有对应的等效项。不支持纯放置区。"
+msgstr "CADSTAR 设计包含 '%s' 区, 但在 KiCad 中没有对应的等效项。不支持纯布置区。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1751
 #, c-format
@@ -44459,11 +44457,11 @@ msgstr "在\"访达\"窗口中显示插件文件夹"
 
 #: pcbnew/tools/pcb_actions.cpp:997
 msgid "Board Setup..."
-msgstr "电路板设置..."
+msgstr "电路板配置..."
 
 #: pcbnew/tools/pcb_actions.cpp:998
 msgid "Edit board setup including layers, design rules and various defaults"
-msgstr "编辑电路板设置, 包括层、设计规则和各个默认值"
+msgstr "编辑电路板配置, 包括层、设计规则和各个默认值"
 
 #: pcbnew/tools/pcb_actions.cpp:1004
 msgid "Import Netlist..."
@@ -44507,11 +44505,11 @@ msgstr "生成 Excellon 钻孔文件"
 
 #: pcbnew/tools/pcb_actions.cpp:1039
 msgid "Component Placement (.pos, .gbr)..."
-msgstr "元件放置文件 (.pos, .gbr)..."
+msgstr "元件布置文件 (.pos, .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1040
 msgid "Generate component placement file(s) for pick and place"
-msgstr "生成用于贴装的元件放置文件 (坐标文件)"
+msgstr "生成用于贴装的元件布置文件 (坐标文件)"
 
 #: pcbnew/tools/pcb_actions.cpp:1046
 msgid "Footprint Report (.rpt)..."
@@ -44607,7 +44605,7 @@ msgstr "钻孔/放置文件原点"
 
 #: pcbnew/tools/pcb_actions.cpp:1144
 msgid "Place origin point for drill files and component placement files"
-msgstr "放置钻孔文件和元件放置文件的原点"
+msgstr "放置钻孔文件和元件布置文件的原点"
 
 #: pcbnew/tools/pcb_actions.cpp:1152
 msgid "Reset Drill Origin"
@@ -45289,7 +45287,7 @@ msgstr "放置选定的封装"
 
 #: pcbnew/tools/pcb_actions.cpp:2166
 msgid "Performs automatic placement of selected components"
-msgstr "执行选定元件的自动放置"
+msgstr "自动布置选定元件"
 
 #: pcbnew/tools/pcb_actions.cpp:2171
 msgid "Place Off-Board Footprints"
@@ -45297,7 +45295,7 @@ msgstr "放置板外封装"
 
 #: pcbnew/tools/pcb_actions.cpp:2172
 msgid "Performs automatic placement of components outside board area"
-msgstr "在板外区执行元件的自动放置"
+msgstr "自动布置板外元件"
 
 #: pcbnew/tools/pcb_actions.cpp:2182
 msgid "Route Single Track"
