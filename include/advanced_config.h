@@ -567,8 +567,17 @@ public:
      */
     bool m_EnableCacheFriendlyFracture;
 
-    ///@}
+    /**
+     * Minimum overlapping angle for which an arc is considered to be parallel
+     * to its paired arc.
+     *
+     * Setting name: "MinParallelAngle"
+     * Valid values: 0 to 45
+     * Default value: 0.001
+     */
+    double m_MinParallelAngle;
 
+///@}
 
 private:
     ADVANCED_CFG();
