@@ -59,7 +59,7 @@
 #include <locale_io.h>
 #include <wx/app.h>
 #include <wx/crt.h>
-
+#include <wx/image.h>
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = nullptr;
 static SETTINGS_MANAGER* s_SettingsManager = nullptr;
@@ -147,6 +147,7 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat )
     return LoadBoard( aFileName, aFormat, false );
 }
 
+
 BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive,
                   PROJECT* aProject )
 {
@@ -154,6 +155,12 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
     pro.SetExt( FILEEXT::ProjectFileExtension );
     pro.MakeAbsolute();
     wxString projectPath = pro.GetFullPath();
+
+    // Ensure image handlers are loaded, because a board can include bitmap images
+    // using various formats.
+    // By default only the BMP handler is available.
+    wxInitAllImageHandlers();
+
 
     // Ensure the "C" locale is temporary set, before reading any file
     // It also avoid wxWidget alerts about locale issues, later, when using Python 3
