@@ -708,6 +708,12 @@ public:
      */
     bool m_EnableODB;
 
+    /**
+     * Minimum overlapping angle for which an arc is considered to be parallel
+     * to its paired arc.
+     */
+    double m_MinParallelAngle;
+
 ///@}
 
 private:

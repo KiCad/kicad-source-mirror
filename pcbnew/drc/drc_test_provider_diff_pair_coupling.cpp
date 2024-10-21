@@ -18,6 +18,7 @@
  */
 
 
+#include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_track.h>
@@ -179,8 +180,8 @@ static bool commonParallelProjection( const PCB_ARC& p, const PCB_ARC& n, SHAPE_
             clip_total_angle = p_end_angle - n_start_angle;
     }
 
-    // One arc starts exactly where the other ends
-    if( clip_total_angle == ANGLE_0 )
+    // One arc starts approximately where the other ends
+    if( clip_total_angle <= EDA_ANGLE( ADVANCED_CFG::GetCfg().m_MinParallelAngle ) )
         return false;
 
     VECTOR2I n_start_pt = n_center + VECTOR2I( KiROUND( n_radius ), 0 );
