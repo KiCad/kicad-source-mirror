@@ -752,7 +752,7 @@ void PCB_EDIT_FRAME::ToggleSearch()
 
     wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
     searchPaneInfo.Show( m_show_search );
-
+    
     if( m_show_search )
     {
         searchPaneInfo.Direction( settings->m_AuiPanels.search_panel_dock_direction );
@@ -772,11 +772,12 @@ void PCB_EDIT_FRAME::ToggleSearch()
         m_searchPane->FocusSearch();
     }
     else
-    {
+    {  
         settings->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
         settings->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
         settings->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
         m_auimgr.Update();
+        GetCanvas()->SetFocus();
     }
 }
 
