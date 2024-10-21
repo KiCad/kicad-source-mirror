@@ -2911,62 +2911,81 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 
 void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
 {
-    bool isShadow = aLayer == LAYER_MARKER_SHADOWS;
+    switch( aLayer )
+    {
+    case LAYER_MARKER_SHADOWS:
+    case LAYER_DRC_ERROR:
+    case LAYER_DRC_WARNING:
+    {
+        bool isShadow = aLayer == LAYER_MARKER_SHADOWS;
 
-    // Don't paint invisible markers.
-    // It would be nice to do this through layer dependencies but we can't do an "or" there today
-    if( aMarker->GetBoard() && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
+        // Don't paint invisible markers.
+        // It would be nice to do this through layer dependencies but we can't do an "or" there today
+        if( aMarker->GetBoard()
+            && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
+            return;
+
+        const_cast<PCB_MARKER*>( aMarker )->SetZoom( 1.0 / sqrt( m_gal->GetZoomFactor() ) );
+
+        SHAPE_LINE_CHAIN polygon;
+        aMarker->ShapeToPolygon( polygon );
+
+        COLOR4D color = m_pcbSettings.GetColor( aMarker, isShadow ? LAYER_MARKER_SHADOWS
+                                                                  : aMarker->GetColorLayer() );
+
+        m_gal->Save();
+        m_gal->Translate( aMarker->GetPosition() );
+
+        if( isShadow )
+        {
+            m_gal->SetStrokeColor( color );
+            m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( aMarker->MarkerScale() );
+        }
+        else
+        {
+            m_gal->SetFillColor( color );
+            m_gal->SetIsFill( true );
+        }
+
+        m_gal->DrawPolygon( polygon );
+        m_gal->Restore();
         return;
-
-    const_cast<PCB_MARKER*>( aMarker )->SetZoom( 1.0 / sqrt( m_gal->GetZoomFactor() ) );
-
-    SHAPE_LINE_CHAIN polygon;
-    aMarker->ShapeToPolygon( polygon );
-
-    COLOR4D color = m_pcbSettings.GetColor( aMarker, isShadow ? LAYER_MARKER_SHADOWS
-                                                              : aMarker->GetColorLayer() );
-
-    m_gal->Save();
-    m_gal->Translate( aMarker->GetPosition() );
-
-    if( isShadow )
+    }
+    case LAYER_DRC_SHAPE1:
+    case LAYER_DRC_SHAPE2:
     {
-        m_gal->SetStrokeColor( color );
-        m_gal->SetIsStroke( true );
+        if( !aMarker->IsBrightened() )
+            return;
+
+        int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 ); // Allow 5 microns
         m_gal->SetLineWidth( aMarker->MarkerScale() );
-    }
-    else
-    {
-        m_gal->SetFillColor( color );
-        m_gal->SetIsFill( true );
-    }
 
-    m_gal->DrawPolygon( polygon );
-    m_gal->Restore();
-
-    if( isShadow || ( aMarker->GetShapes().size() <= 0 ) )
-        return; // Don't add shadow to shapes
-
-    // Show pat
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke( true );
-    m_gal->SetStrokeColor( color );
-    m_gal->SetLineWidth( aMarker->MarkerScale() );
-
-    for( auto& shape : aMarker->GetShapes() )
-    {
-        switch( shape.GetShape() )
+        for( auto& shape :
+             aLayer == LAYER_DRC_SHAPE1 ? aMarker->GetShapes1() : aMarker->GetShapes2() )
         {
-        case SHAPE_T::SEGMENT: m_gal->DrawSegment( shape.GetStart(), shape.GetEnd(), 0 ); break;
-        case SHAPE_T::ARC:
-        {
-            EDA_ANGLE startAngle, endAngle;
-            shape.CalcArcAngles( startAngle, endAngle );
-            m_gal->DrawArc( shape.GetCenter(), shape.GetRadius(), startAngle, shape.GetArcAngle() );
-            break;
+            m_gal->SetIsFill( shape.IsFilled() );
+            m_gal->SetIsStroke( aLayer == LAYER_DRC_SHAPE1 ? true : false );
+            m_gal->SetStrokeColor( shape.GetLineColor() );
+            m_gal->SetFillColor( shape.GetFillColor() );
+
+            switch( shape.GetShape() )
+            {
+            case SHAPE_T::SEGMENT:
+                m_gal->DrawSegment( shape.GetStart(), shape.GetEnd(), shape.GetWidth() );
+                break;
+            case SHAPE_T::ARC:
+            {
+                EDA_ANGLE startAngle, endAngle;
+                shape.CalcArcAngles( startAngle, endAngle );
+                m_gal->DrawArcSegment( shape.GetCenter(), shape.GetRadius(), startAngle,
+                                       shape.GetArcAngle(), shape.GetWidth(), arc_to_seg_error );
+                break;
+            }
+            default: break;
+            }
         }
-        default: break;
-        }
+    }
     }
 }
 

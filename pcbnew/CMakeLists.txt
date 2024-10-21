@@ -252,10 +252,12 @@ set( PCBNEW_GENERATORS_SRCS
 
 set( PCBNEW_DRC_SRCS
     drc/drc_interactive_courtyard_clearance.cpp
+    drc/drc_creepage_utils.cpp
     drc/drc_report.cpp
     drc/drc_test_provider.cpp
     drc/drc_test_provider_annular_width.cpp
     drc/drc_test_provider_disallow.cpp
+    drc/drc_test_provider_clearance_base.cpp
     drc/drc_test_provider_creepage.cpp
     drc/drc_test_provider_connectivity.cpp
     drc/drc_test_provider_connection_width.cpp

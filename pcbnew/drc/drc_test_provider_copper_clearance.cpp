@@ -41,6 +41,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
+#include <drc/drc_creepage_utils.h>
 #include <pcb_dimension.h>
 
 #include <future>
@@ -290,7 +291,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_C
                 drce->SetItems( item, other );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, pos, layer );
+                ReportAndShowPathCuToCu( drce, pos, layer, item, other, layer, actual );
                 has_error = true;
 
                 if( !m_drcEngine->GetReportAllTrackErrors() )
@@ -346,7 +347,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_C
                     drce->SetItems( a[ii], b[ii] );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, pos, layer );
+                    ReportAndShowPathCuToCu( drce, pos, layer, a[ii], b[ii], layer, actual );
                     return false;
                 }
             }
@@ -462,8 +463,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( aItem, aZone );
             drce->SetViolatingRule( constraint.GetParentRule() );
-
-            reportViolation( drce, pos, aLayer );
+            ReportAndShowPathCuToCu( drce, pos, aLayer, aItem, aZone, aLayer, actual );
         }
     }
 
@@ -501,8 +501,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( aItem, aZone );
                     drce->SetViolatingRule( constraint.GetParentRule() );
-
-                    reportViolation( drce, pos, aLayer );
+                    ReportAndShowPathCuToCu( drce, pos, aLayer, aItem, aZone, aLayer, actual );
                 }
             }
         }
@@ -586,8 +585,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testKnockoutTextAgainstZone( BOARD_ITEM
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( aText, aZone );
             drce->SetViolatingRule( constraint.GetParentRule() );
-
-            reportViolation( drce, pos, layer );
+            ReportAndShowPathCuToCu( drce, pos, layer, aText, aZone, layer, actual );
         }
     }
 }
@@ -884,8 +882,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( pad, other );
                     drce->SetViolatingRule( constraint.GetParentRule() );
-
-                    reportViolation( drce, pos, aLayer );
+                    ReportAndShowPathCuToCu( drce, pos, aLayer, pad, other, aLayer, actual );
                     testHoles = false;  // No need for multiple violations
                 }
             }
@@ -916,8 +913,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
-
-            reportViolation( drce, pos, aLayer );
+            ReportAndShowPathCuToCu( drce, pos, aLayer, pad, other, aLayer, actual );
             testHoles = false;  // No need for multiple violations
         }
     }
@@ -958,8 +954,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, otherVia );
             drce->SetViolatingRule( constraint.GetParentRule() );
-
-            reportViolation( drce, pos, aLayer );
+            ReportAndShowPathCuToCu( drce, pos, aLayer, pad, otherVia, aLayer, actual );
         }
     }
 }
@@ -1413,8 +1408,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     {
                         drce->SetItems( zoneA, zoneB );
                         drce->SetViolatingRule( constraint.GetParentRule() );
-
-                        reportViolation( drce, pt, layer );
+                        ReportAndShowPathCuToCu( drce, pt, layer, zoneA, zoneB, layer, actual );
                     }
                 }
 

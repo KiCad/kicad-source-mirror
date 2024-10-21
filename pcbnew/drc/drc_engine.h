@@ -37,6 +37,8 @@
 class BOARD_COMMIT;
 class BOARD_DESIGN_SETTINGS;
 class DRC_TEST_PROVIDER;
+class DRC_TEST_PROVIDER_CLEARANCE_BASE;
+class DRC_TEST_PROVIDER_CREEPAGE;
 class PCB_EDIT_FRAME;
 class DS_PROXY_VIEW_ITEM;
 class BOARD_ITEM;
@@ -82,6 +84,10 @@ typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
  */
 class DRC_ENGINE : public UNITS_PROVIDER
 {
+    // They need to change / restore the violation handler
+    friend class DRC_TEST_PROVIDER_CLEARANCE_BASE;
+    friend class DRC_TEST_PROVIDER_CREEPAGE;
+
 public:
     DRC_ENGINE( BOARD* aBoard = nullptr, BOARD_DESIGN_SETTINGS* aSettings = nullptr );
     virtual ~DRC_ENGINE();

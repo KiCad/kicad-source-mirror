@@ -28,6 +28,10 @@
 #define DRC_TEST_PROVIDER_CLEARANCE_BASE__H
 
 #include <drc/drc_test_provider.h>
+#include <settings/color_settings.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_item.h>
+#include <drc/drc_creepage_utils.h>
 
 class BOARD;
 
@@ -49,6 +53,16 @@ public:
 protected:
     BOARD* m_board;
     bool   m_boardOutlineValid;
+
+    void ReportAndShowPathCuToCu( std::shared_ptr<DRC_ITEM>& item, const VECTOR2I& aMarkerPos,
+                                  int aMarkerLayer, const BOARD_ITEM* aItem1,
+                                  const BOARD_ITEM* aItem2, PCB_LAYER_ID layer, int aDistance );
+
+    void ShowPathDRC( const std::vector<PCB_SHAPE>& aShapes, const VECTOR2I& aStart,
+                      const VECTOR2I& aEnd, int aLength );
+
+
+    DRC_VIOLATION_HANDLER m_violationHandlerBuffer;
 };
 
 

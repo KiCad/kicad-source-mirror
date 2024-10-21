@@ -74,6 +74,7 @@ const int GAL_LAYER_ORDER[] =
     LAYER_CONFLICTS_SHADOW,
 
     LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
+    LAYER_DRC_SHAPE1, LAYER_DRC_SHAPE2,
     LAYER_PAD_NETNAMES, LAYER_VIA_NETNAMES,
     Dwgs_User, ZONE_LAYER_FOR( Dwgs_User ),
     Cmts_User, ZONE_LAYER_FOR( Cmts_User ),
@@ -367,6 +368,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES,
                 LAYER_VIA_HOLEWALLS,
                 LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
+                LAYER_DRC_SHAPE1, LAYER_DRC_SHAPE2,
                 LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
                 LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR, LAYER_LOCKED_ITEM_SHADOW
         };
@@ -410,6 +412,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
             LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
             LAYER_RATSNEST,
             LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
+            LAYER_DRC_SHAPE1, LAYER_DRC_SHAPE2,
             LAYER_CONFLICTS_SHADOW
     };
 
@@ -518,6 +521,8 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_SELECT_OVERLAY, true );
     m_view->SetLayerVisible( LAYER_RATSNEST, true );
     m_view->SetLayerVisible( LAYER_MARKER_SHADOWS, true );
+    m_view->SetLayerVisible( LAYER_DRC_SHAPE1, true );
+    m_view->SetLayerVisible( LAYER_DRC_SHAPE2, true );
 }
 
 
@@ -729,6 +734,10 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_DRC_EXCLUSION );
     m_view->SetLayerTarget( LAYER_MARKER_SHADOWS, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_MARKER_SHADOWS );
+    m_view->SetLayerTarget( LAYER_DRC_SHAPE1, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_DRC_SHAPE1 );
+    m_view->SetLayerTarget( LAYER_DRC_SHAPE2, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_DRC_SHAPE2 );
 
     m_view->SetLayerTarget( LAYER_DRAWINGSHEET, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET ) ;

@@ -307,9 +307,11 @@ void PCB_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
         return;
     }
 
-    aCount = 2;
+    aCount = 4;
 
     aLayers[1] = LAYER_MARKER_SHADOWS;
+    aLayers[2] = LAYER_DRC_SHAPE1;
+    aLayers[3] = LAYER_DRC_SHAPE2;
 
     switch( GetSeverity() )
     {
@@ -350,7 +352,7 @@ const BOX2I PCB_MARKER::GetBoundingBox() const
 {
     BOX2I box = GetBoundingBoxMarker();
 
-    for( auto& s : m_shapes )
+    for( auto& s : m_shapes1 )
         box.Merge( s.GetBoundingBox() );
 
     return box;
