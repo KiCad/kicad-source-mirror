@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-20 11:29+0000\n"
+"PO-Revision-Date: 2024-10-21 21:10+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -25289,7 +25289,8 @@ msgstr "実行するジョブセットファイル"
 msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
-msgstr ""
+msgstr "ジョブセットファイルの出力を生成します。ジョブセットで定義されたすべての出力"
+"を生成する場合は空白のままにしてください"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -35466,7 +35467,7 @@ msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr ""
+msgstr "外側をグリッドの倍数に丸める(可能な場合)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
@@ -42051,7 +42052,7 @@ msgstr "基板の %s を編集します。 保存するとボードのみが更�
 #: pcbnew/footprint_edit_frame.cpp:557
 #, c-format
 msgid "Editing footprint from read-only library '%s'."
-msgstr "読み込み専用のライブラリ '%s' からフットプリントを編集します"
+msgstr "読み込み専用のライブラリ '%s' からフットプリントを編集します。"
 
 #: pcbnew/footprint_edit_frame.cpp:562
 msgid "Save as editable copy"
@@ -50367,9 +50368,8 @@ msgid "Restrictions"
 msgstr "制限"
 
 #: pcbnew/zone.cpp:608
-#, fuzzy
 msgid "Placement source"
-msgstr "配置タイプ"
+msgstr "配置元"
 
 #: pcbnew/zone.cpp:638
 #, c-format
