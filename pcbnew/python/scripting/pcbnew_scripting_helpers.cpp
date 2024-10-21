@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,7 +203,10 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
         // If empty, or not existing, the default drawing sheet is loaded.
         FILENAME_RESOLVER resolver;
         resolver.SetProject( project );
-        resolver.SetProgramBase( &Pgm() );
+
+        // a PGM_BASE* process can be nullptr when running from a python script
+        // So use PgmOrNull() instead of &Pgm() to initialize the resolver
+        resolver.SetProgramBase( PgmOrNull() );
 
         wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
                                               project->GetProjectPath(),
