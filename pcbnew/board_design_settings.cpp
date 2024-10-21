@@ -156,6 +156,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_MinResolvedSpokes   = DEFAULT_MINRESOLVEDSPOKES;
     m_MinSilkTextHeight   = pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE * 0.8 );
     m_MinSilkTextThickness= pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_WIDTH * 0.8 );
+    m_MinGrooveWidth      = pcbIUScale.mmToIU( DEFAULT_MINGROOVEWIDTH );
 
     for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
         m_DRCSeverities[ errorCode ] = RPT_SEVERITY_ERROR;
@@ -282,6 +283,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_silk_clearance",
             &m_SilkClearance, pcbIUScale.mmToIU( DEFAULT_SILKCLEARANCE ),
             pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 100.0 ), pcbIUScale.MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_groove_width",
+            &m_MinGrooveWidth, pcbIUScale.mmToIU( DEFAULT_MINGROOVEWIDTH ),
+            pcbIUScale.mmToIU( 0.00 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     // While the maximum *effective* value is 4, we've had users interpret this as the count on
     // all layers, and enter something like 10.  They'll figure it out soon enough *unless* we
@@ -934,6 +939,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_UseConnectedTrackWidth = aOther.m_UseConnectedTrackWidth;
     m_TempOverrideTrackWidth = aOther.m_TempOverrideTrackWidth;
     m_MinClearance           = aOther.m_MinClearance;
+    m_MinGrooveWidth         = aOther.m_MinGrooveWidth;
     m_MinConn                = aOther.m_MinConn;
     m_TrackMinWidth          = aOther.m_TrackMinWidth;
     m_ViasMinAnnularWidth    = aOther.m_ViasMinAnnularWidth;
@@ -1024,6 +1030,7 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_UseConnectedTrackWidth != aOther.m_UseConnectedTrackWidth ) return false;
     if( m_TempOverrideTrackWidth != aOther.m_TempOverrideTrackWidth ) return false;
     if( m_MinClearance           != aOther.m_MinClearance ) return false;
+    if( m_MinGrooveWidth         != aOther.m_MinGrooveWidth ) return false;
     if( m_MinConn                != aOther.m_MinConn ) return false;
     if( m_TrackMinWidth          != aOther.m_TrackMinWidth ) return false;
     if( m_ViasMinAnnularWidth    != aOther.m_ViasMinAnnularWidth ) return false;

@@ -344,6 +344,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
     const DRAWINGS drawings = m_board->Drawings();
     CreepageGraph  graph( *m_board );
+    graph.m_minGrooveWidth = m_board->GetDesignSettings().m_MinGrooveWidth;
     graph.m_boardOutline = &outline;
 
     this->CollectBoardEdges( graph.m_boardEdge );

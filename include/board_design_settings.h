@@ -94,6 +94,7 @@
 #define LEGACY_COPPEREDGECLEARANCE   -0.01    // A flag to indicate the legacy method (based
                                               // on edge cut line thicknesses) should be used.
 #define DEFAULT_SILKCLEARANCE         0.0
+#define DEFAULT_MINGROOVEWIDTH        0.0
 
 #define DEFAULT_MINRESOLVEDSPOKES     2       // Fewer resolved spokes indicates a starved thermal
 
@@ -687,7 +688,8 @@ public:
                                             // connected track
     bool       m_TempOverrideTrackWidth;    // use selected track width temporarily even when
                                             // using connected track width
-    int        m_MinClearance;              // overall min clearance
+    int        m_MinClearance;              // overall min 
+    int        m_MinGrooveWidth;            // Minimum groove width for creepage checks
     int        m_MinConn;                   // overall min connection width
     int        m_TrackMinWidth;             // overall min track width
     int        m_ViasMinAnnularWidth;       // overall minimum width of the via copper ring

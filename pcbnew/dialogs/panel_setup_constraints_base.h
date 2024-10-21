@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -68,6 +68,10 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_EdgeClearanceLabel;
 		wxTextCtrl* m_EdgeClearanceCtrl;
 		wxStaticText* m_EdgeClearanceUnits;
+		wxStaticBitmap* m_bitmapMinGrooveWidth;
+		wxStaticText* m_minGrooveWidthLabel;
+		wxTextCtrl* m_minGrooveWidthCtrl;
+		wxStaticText* m_minGrooveWidthUnits;
 		wxStaticLine* m_staticline3;
 		wxStaticLine* m_staticline4;
 		wxStaticLine* m_staticline5;

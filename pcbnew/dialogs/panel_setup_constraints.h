@@ -60,6 +60,7 @@ public:
     UNIT_BINDER             m_holeClearance;
     UNIT_BINDER             m_edgeClearance;
     UNIT_BINDER             m_silkClearance;
+    UNIT_BINDER             m_minGrooveWidth;
     UNIT_BINDER             m_minTextHeight;
     UNIT_BINDER             m_minTextThickness;
     UNIT_BINDER             m_maxError;

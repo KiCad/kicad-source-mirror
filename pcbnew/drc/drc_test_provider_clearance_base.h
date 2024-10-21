@@ -54,7 +54,7 @@ protected:
     BOARD* m_board;
     bool   m_boardOutlineValid;
 
-    void ReportAndShowPathCuToCu( std::shared_ptr<DRC_ITEM>& item, const VECTOR2I& aMarkerPos,
+    void ReportAndShowPathCuToCu( std::shared_ptr<DRC_ITEM>& aDrce, const VECTOR2I& aMarkerPos,
                                   int aMarkerLayer, const BOARD_ITEM* aItem1,
                                   const BOARD_ITEM* aItem2, PCB_LAYER_ID layer, int aDistance );
 

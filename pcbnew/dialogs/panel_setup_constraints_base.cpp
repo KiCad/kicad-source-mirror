@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -153,6 +153,22 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_EdgeClearanceUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_EdgeClearanceUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_EdgeClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_bitmapMinGrooveWidth = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_bitmapMinGrooveWidth, 0, wxALL, 5 );
+
+	m_minGrooveWidthLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum groove for creepage:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minGrooveWidthLabel->Wrap( -1 );
+	fgFeatureConstraints->Add( m_minGrooveWidthLabel, 0, wxALL, 5 );
+
+	m_minGrooveWidthCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_minGrooveWidthCtrl->SetToolTip( _("The minimum slot width from DRC creepage checks") );
+
+	fgFeatureConstraints->Add( m_minGrooveWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+
+	m_minGrooveWidthUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minGrooveWidthUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_minGrooveWidthUnits, 0, wxALL, 5 );
 
 	m_staticline3 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	fgFeatureConstraints->Add( m_staticline3, 0, wxTOP|wxEXPAND, 10 );

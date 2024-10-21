@@ -25,16 +25,15 @@
 #include <geometry/intersection.h>
 
 
-extern bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
-                                    const std::vector<BOARD_ITEM*>&       aBe,
-                                    const std::vector<const BOARD_ITEM*>& aDontTestAgainst );
 extern bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2I& center,
-                                  double radius, EDA_ANGLE startAngle, EDA_ANGLE endAngle );
+                                  double radius, EDA_ANGLE startAngle, EDA_ANGLE endAngle,
+                                  std::vector<VECTOR2I>* aIntersectPoints );
 
 
 //Check if line segments 'p1q1' and 'p2q2' intersect, excluding endpoint overlap
 
-bool segments_intersect( VECTOR2I p1, VECTOR2I q1, VECTOR2I p2, VECTOR2I q2 )
+bool segments_intersect( VECTOR2I p1, VECTOR2I q1, VECTOR2I p2, VECTOR2I q2,
+                         std::vector<VECTOR2I>* aIntersectPoints )
 {
     if( p1 == p2 || p1 == q2 || q1 == p2 || q1 == q2 )
         return false;
@@ -51,6 +50,13 @@ bool segments_intersect( VECTOR2I p1, VECTOR2I q1, VECTOR2I p2, VECTOR2I q2 )
     INTERSECTION_VISITOR visitor( geom2, intersectionPoints );
 
     std::visit( visitor, geom1 );
+
+    if( aIntersectPoints )
+    {
+        for( VECTOR2I& point : intersectionPoints )
+            aIntersectPoints->push_back( point );
+    }
+
 
     return intersectionPoints.size() > 0;
 }
@@ -332,7 +338,7 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
         for( path_connection pc : this->Paths( csp, aMaxWeight, aMaxSquaredWeight ) )
         {
             if( !segmentIntersectsArc( pc.a1, pc.a2, arcCenter, arcRadius, arcStartAngle,
-                                       arcEndAngle ) )
+                                       arcEndAngle, nullptr ) )
                 result.push_back( pc );
         }
     }
@@ -797,7 +803,7 @@ void BE_SHAPE_ARC::ConnectChildren( GraphNode* a1, GraphNode* a2, CreepageGraph&
 
     double weight = abs( m_radius * ( angle2 - angle1 ).AsRadians() );
 
-    if( aG.m_minGrooveWidth <= 0 )
+    if( true || aG.m_minGrooveWidth <= 0 )
     {
         if( ( weight > aG.GetTarget() ) )
             return;
@@ -824,7 +830,8 @@ void CreepageGraph::SetTarget( double aTarget )
 }
 
 bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2I& center,
-                           double radius, EDA_ANGLE startAngle, EDA_ANGLE endAngle )
+                           double radius, EDA_ANGLE startAngle, EDA_ANGLE endAngle,
+                           std::vector<VECTOR2I>* aIntersectPoints )
 {
     SEG segment( p1, p2 );
 
@@ -839,6 +846,12 @@ bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2
 
     INTERSECTION_VISITOR visitor( geom2, intersectionPoints );
     std::visit( visitor, geom1 );
+
+    if( aIntersectPoints )
+    {
+        for( VECTOR2I& point : intersectionPoints )
+            aIntersectPoints->push_back( point );
+    }
 
     return intersectionPoints.size() > 0;
 }
@@ -1054,12 +1067,12 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_ARC& aS2, d
 
         for( auto& pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius, beArcStartAngle,
-                                       beArcEndAngle ) )
+                                       beArcEndAngle, nullptr ) )
                 result.push_back( pc );
 
         for( auto& pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius, beArcStartAngle,
-                                       beArcEndAngle ) )
+                                       beArcEndAngle, nullptr ) )
                 result.push_back( pc );
     }
 
@@ -1095,12 +1108,12 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
 
         for( auto& pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius, beArcStartAngle,
-                                       beArcEndAngle ) )
+                                       beArcEndAngle, nullptr ) )
                 result.push_back( pc );
 
         for( auto& pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius, beArcStartAngle,
-                                       beArcEndAngle ) )
+                                       beArcEndAngle, nullptr ) )
                 result.push_back( pc );
     }
     return result;
@@ -1167,12 +1180,12 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
 
         for( auto& pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius, beArcStartAngle,
-                                       beArcEndAngle ) )
+                                       beArcEndAngle, nullptr ) )
                 result.push_back( pc );
 
         for( auto& pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius, beArcStartAngle,
-                                       beArcEndAngle ) )
+                                       beArcEndAngle, nullptr ) )
                 result.push_back( pc );
     }
 
@@ -1718,7 +1731,8 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const CU_SHAPE_ARC& aS2, doubl
 }
 
 
-bool segmentIntersectsCircle( VECTOR2I p1, VECTOR2I p2, VECTOR2I center, double radius )
+bool segmentIntersectsCircle( VECTOR2I p1, VECTOR2I p2, VECTOR2I center, double radius,
+                              std::vector<VECTOR2I>* aIntersectPoints )
 {
     SEG    segment( p1, p2 );
     CIRCLE circle( center, radius );
@@ -1730,13 +1744,26 @@ bool segmentIntersectsCircle( VECTOR2I p1, VECTOR2I p2, VECTOR2I center, double 
     INTERSECTION_VISITOR visitor( geom2, intersectionPoints );
     std::visit( visitor, geom1 );
 
+    if( aIntersectPoints )
+    {
+        for( VECTOR2I& point : intersectionPoints )
+        {
+            aIntersectPoints->push_back( point );
+        }
+    }
+
     return intersectionPoints.size() > 0;
 }
 
 bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
                              const std::vector<BOARD_ITEM*>&       aBe,
-                             const std::vector<const BOARD_ITEM*>& aDontTestAgainst )
+                             const std::vector<const BOARD_ITEM*>& aDontTestAgainst,
+                             int                                   aMinGrooveWidth )
 {
+    std::vector<VECTOR2I> intersectionPoints;
+    std::cout << "Path validation: " << ( (float) aMinGrooveWidth ) / 1e6 << std::endl;
+    bool TestGrooveWidth = aMinGrooveWidth > 0;
+
     for( BOARD_ITEM* be : aBe )
     {
         if( count( aDontTestAgainst.begin(), aDontTestAgainst.end(), be ) > 0 )
@@ -1749,10 +1776,14 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
         switch( d->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            if( segments_intersect( aP1, aP2, d->GetStart(), d->GetEnd() ) )
+        {
+            bool intersects =
+                    segments_intersect( aP1, aP2, d->GetStart(), d->GetEnd(), &intersectionPoints );
+
+            if( intersects && !TestGrooveWidth )
                 return false;
             break;
-
+        }
         case SHAPE_T::RECTANGLE:
         {
             VECTOR2I c1 = d->GetStart();
@@ -1760,9 +1791,13 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
             VECTOR2I c3 = d->GetEnd();
             VECTOR2I c4( d->GetEnd().x, d->GetStart().y );
 
-            if( segments_intersect( aP1, aP2, c1, c2 ) || segments_intersect( aP1, aP2, c2, c3 )
-                || segments_intersect( aP1, aP2, c3, c4 )
-                || segments_intersect( aP1, aP2, c4, c1 ) )
+            bool intersects = false;
+            intersects |= segments_intersect( aP1, aP2, c1, c2, &intersectionPoints );
+            intersects |= segments_intersect( aP1, aP2, c2, c3, &intersectionPoints );
+            intersects |= segments_intersect( aP1, aP2, c3, c4, &intersectionPoints );
+            intersects |= segments_intersect( aP1, aP2, c4, c1, &intersectionPoints );
+
+            if( intersects && !TestGrooveWidth )
             {
                 return false;
             }
@@ -1777,11 +1812,16 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
                 break;
             VECTOR2I prevPoint = points.back();
 
+            bool intersects = false;
+
             for( auto p : points )
             {
-                if( segments_intersect( aP1, aP2, prevPoint, p ) )
-                    return false;
+                intersects |= segments_intersect( aP1, aP2, prevPoint, p, &intersectionPoints );
                 prevPoint = p;
+            }
+            if( intersects && !TestGrooveWidth )
+            {
+                return false;
             }
             break;
         }
@@ -1790,7 +1830,10 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
             VECTOR2I center = d->GetCenter();
             double   radius = d->GetRadius();
 
-            if( segmentIntersectsCircle( aP1, aP2, center, radius ) )
+            bool intersects =
+                    segmentIntersectsCircle( aP1, aP2, center, radius, &intersectionPoints );
+
+            if( intersects && !TestGrooveWidth )
                 return false;
 
             break;
@@ -1805,7 +1848,10 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
             EDA_ANGLE A, B;
             d->CalcArcAngles( A, B );
 
-            if( segmentIntersectsArc( aP1, aP2, center, radius, A, B ) )
+            bool intersects =
+                    segmentIntersectsArc( aP1, aP2, center, radius, A, B, &intersectionPoints );
+
+            if( intersects && !TestGrooveWidth )
                 return false;
 
             break;
@@ -1813,6 +1859,51 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
 
 
         default: break;
+        }
+    }
+
+    if( intersectionPoints.size() <= 0 )
+        return true;
+
+    if( intersectionPoints.size() % 2 != 0 )
+        return false; // Should not happen if the start and end are both on the board
+
+    int minx = intersectionPoints[0].x;
+    int maxx = intersectionPoints[0].x;
+    int miny = intersectionPoints[0].y;
+    int maxy = intersectionPoints[0].y;
+
+    for( VECTOR2I v : intersectionPoints )
+    {
+        minx = v.x < minx ? v.x : minx;
+        maxx = v.x > maxx ? v.x : maxx;
+        miny = v.x < miny ? v.x : miny;
+        maxy = v.x > maxy ? v.x : maxy;
+    }
+    if( abs( maxx - minx ) > abs( maxy - miny ) )
+    {
+        std::sort( intersectionPoints.begin(), intersectionPoints.end(),
+                   []( VECTOR2I a, VECTOR2I b )
+                   {
+                       return a.x > b.x;
+                   } );
+    }
+    else
+    {
+        std::sort( intersectionPoints.begin(), intersectionPoints.end(),
+                   []( VECTOR2I a, VECTOR2I b )
+                   {
+                       return a.y > b.y;
+                   } );
+    }
+
+    int GVSquared = aMinGrooveWidth * aMinGrooveWidth;
+
+    for( size_t i = 0; i < intersectionPoints.size(); i += 2 )
+    {
+        if( intersectionPoints[i].Distance( intersectionPoints[i + 1] ) > aMinGrooveWidth )
+        {
+            return false;
         }
     }
     return true;
@@ -2225,7 +2316,7 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                 IgnoreForTest.push_back( gn2->m_parent->GetParent() );
 
                 if( !pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
-                                 { false, true } ) )
+                                 { false, true }, m_minGrooveWidth ) )
                     continue;
 
                 GraphNode* connect1;

@@ -47,9 +47,8 @@
 
 extern bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
                                     const std::vector<BOARD_ITEM*>&       aBe,
-                                    const std::vector<const BOARD_ITEM*>& aDontTestAgainst );
-bool        segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2I& center,
-                                  double radius, double startAngle, double endAngle );
+                                    const std::vector<const BOARD_ITEM*>& aDontTestAgainst,
+                                    int                                   aMinGrooveWidth );
 
 struct path_connection
 {
@@ -69,12 +68,12 @@ struct path_connection
     bool isValid( const BOARD& aBoard, PCB_LAYER_ID aLayer,
                   const std::vector<BOARD_ITEM*>&       aBoardEdges,
                   const std::vector<const BOARD_ITEM*>& aIgnoreForTest, SHAPE_POLY_SET* aOutline,
-                  const std::pair<bool, bool>& aTestLocalConcavity )
+                  const std::pair<bool, bool>& aTestLocalConcavity, int aMinGrooveWidth )
     {
         if( !aOutline )
             return true; // We keep the segment if there is a problem
 
-        if( !SegmentIntersectsBoard( a1, a2, aBoardEdges, aIgnoreForTest ) )
+        if( !SegmentIntersectsBoard( a1, a2, aBoardEdges, aIgnoreForTest, aMinGrooveWidth ) )
             return false;
 
         // The mid point should be inside the board.
