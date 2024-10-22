@@ -30,10 +30,13 @@ add_compile_definitions( BOOST_TEST_DYN_LINK PCBNEW DRC_PROTO TEST_APP_NO_MAIN)
 add_executable( drc_proto
     drc_proto_test.cpp
     drc_proto.cpp
+    ../../../pcbnew/drc/drc_creepage_utils.cpp
     ../../../pcbnew/drc/drc_rule.cpp
     ../../../pcbnew/drc/drc_rule_condition.cpp
     ../../../pcbnew/drc/drc_rule_parser.cpp
     ../../../pcbnew/drc/drc_test_provider.cpp
+    ../../../pcbnew/drc/drc_test_provider_clearance_base.cpp
+    ../../../pcbnew/drc/drc_test_provider_creepage.cpp
     ../../../pcbnew/drc/drc_test_provider_copper_clearance.cpp
     ../../../pcbnew/drc/drc_test_provider_hole_to_hole.cpp
     ../../../pcbnew/drc/drc_test_provider_edge_clearance.cpp
