@@ -104,8 +104,7 @@ KICOMMON_API wxString GetTextVars( const wxString& aSource );
 KICOMMON_API bool IsTextVar( const wxString& aSource );
 
 /**
- * Replace any environment and/or text variables in file-path uris (leaving network-path URIs
- * alone).
+ * Replace any environment and/or text variables in URIs
  */
 KICOMMON_API const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
 

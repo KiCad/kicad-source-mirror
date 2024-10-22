@@ -357,14 +357,7 @@ const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject )
 {
     wxString uri = ExpandTextVars( aUri, aProject );
 
-    // URL-like URI: return as is.
-    wxURL url( uri );
-
-    if( url.GetError() == wxURL_NOERR )
-        return uri;
-
-    // Otherwise, the path points to a local file. Resolve environment variables if any.
-    return ExpandEnvVarSubstitutions( aUri, aProject );
+    return ExpandEnvVarSubstitutions( uri, aProject );
 }
 
 
