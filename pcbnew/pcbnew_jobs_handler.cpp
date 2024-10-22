@@ -715,7 +715,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aPdfJob->OutputPathFullSpecified() )
+    if( aPdfJob->GetOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
