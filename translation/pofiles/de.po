@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-20 11:29+0000\n"
+"PO-Revision-Date: 2024-10-23 07:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.8.2-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7557,7 +7557,7 @@ msgstr "PCB: PDF exportieren"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
 msgid "Placement data export"
-msgstr "Platzierungsdatenexport"
+msgstr "Platzierungsdaten-Export"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
@@ -7573,51 +7573,43 @@ msgstr "PCB: SVG exportieren"
 
 #: common/jobs/job_export_sch_bom.cpp:86
 msgid "Schematic BOM export"
-msgstr "Schaltplanstücklistenexport"
+msgstr "Schaltplanstücklisten-Export"
 
 #: common/jobs/job_export_sch_bom.cpp:89
 msgid "Schematic: Export BOM"
 msgstr "Schaltplan: Stückliste exportieren"
 
 #: common/jobs/job_export_sch_netlist.cpp:61
-#, fuzzy
 msgid "Schematic Netlist Export"
-msgstr "Schaltplaneditor"
+msgstr "Schaltplannetzlisten-Export"
 
 #: common/jobs/job_export_sch_netlist.cpp:65
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Netzliste exportieren"
+msgstr "Schaltplan: Netzliste exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:118
-#, fuzzy
 msgid "Schematic plot export"
-msgstr "Schaltplan-Text"
+msgstr "Schaltplanplot-Export"
 
 #: common/jobs/job_export_sch_plot.cpp:157
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Schaltplaneditor"
+msgstr "Schaltplan: SVG exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:159
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "Schaltplaneditor"
+msgstr "Schaltplan: HPGL exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:161
-#, fuzzy
 msgid "Schematic: Export PS"
-msgstr "Schaltplaneditor"
+msgstr "Schaltplan: PS exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:163
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Schaltplaneditor"
+msgstr "Schaltplan: DXF exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:165
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Schaltplaneditor"
+msgstr "Schaltplan: PDF exportieren"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 msgid "Schematic PythonBOM export"
@@ -7636,14 +7628,12 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: DRC ausführen"
 
 #: common/jobs/job_sch_erc.cpp:54
-#, fuzzy
 msgid "Perform Schematic ERC"
-msgstr "Farbe aus Schaltplan nutzen"
+msgstr "Schaltplan-ERC ausführen"
 
 #: common/jobs/job_sch_erc.cpp:58
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Schaltplan aus Platine aktualisieren"
+msgstr "Schaltplan: ERC ausführen"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -8549,14 +8539,12 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Kopiert die ausgewählten Elemente in die Zwischenablage"
 
 #: common/tool/actions.cpp:235
-#, fuzzy
 msgid "Copy as Text"
-msgstr "Platinentext"
+msgstr "Als Text kopieren"
 
 #: common/tool/actions.cpp:236
-#, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
-msgstr "Kopiert die ausgewählten Elemente in die Zwischenablage"
+msgstr "Ausgewählte(s) Element(e) als Text in Zwischenablage kopieren"
 
 #: common/tool/actions.cpp:246
 msgid "Paste item(s) from clipboard"
@@ -10105,9 +10093,8 @@ msgid "Hotkey file"
 msgstr "Tastaturbefehl-Datei"
 
 #: common/wildcards_and_files_ext.cpp:555
-#, fuzzy
 msgid "KiCad jobset files"
-msgstr "KiCad Projektdateien"
+msgstr "KiCad Auftragssatzdateien"
 
 #: cvpcb/auto_associate.cpp:108
 #, c-format
@@ -11931,9 +11918,8 @@ msgid "You must provide a netlist generator title"
 msgstr "Sie müssen einen Netzlistengenerator-Titel angeben"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:33
-#, fuzzy
 msgid "Output Path:"
-msgstr "Ausgang:"
+msgstr "Ausgangspfad:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:65
 msgid "Add Exporter..."
@@ -15628,9 +15614,8 @@ msgid "Show OP currents"
 msgstr "OP-Ströme anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
-#, fuzzy
 msgid "Show pin alternate mode indicator icons"
-msgstr "Zeige Pads <no net> Indikator"
+msgstr "Alternativmodus-Indikatoricons für Pins anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:81
 msgid "Show page limi&ts"
@@ -16266,7 +16251,7 @@ msgstr "&Elektrischen Pintyp anzeigen"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:45
 msgid "Show pin &alternate mode indicator icons"
-msgstr "Alternativmodusindikator-Icons für &Pins anzeigen"
+msgstr "&Alternativmodus-Indikatoricons für Pins anzeigen"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:36
 msgid "&Default line width:"
@@ -16297,9 +16282,8 @@ msgid "&Pitch of repeated pins:"
 msgstr "&Abstand von wiederholten Pins:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:143
-#, fuzzy
 msgid "General editing"
-msgstr "Allgemeine Optionen"
+msgstr "Allgemeine Bearbeitung"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:150
 msgid "Keep pins attached when dragging edges"
@@ -16478,9 +16462,8 @@ msgid "Loading schematic\n"
 msgstr "Schaltplan wird geladen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:182
-#, fuzzy
 msgid "Failed to load schematic\n"
-msgstr "Konnte Schaltplandatei nicht laden\n"
+msgstr "Konnte Schaltplan nicht laden\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:362
 #: eeschema/eeschema_jobs_handler.cpp:476
@@ -34210,7 +34193,7 @@ msgstr "Suchen nach:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr "Zeilenumbruch"
+msgstr "Am Anfang fortsetzen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference &designators"
