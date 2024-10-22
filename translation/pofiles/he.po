@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-21 21:10+0000\n"
+"PO-Revision-Date: 2024-10-23 07:15+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.8.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -3291,13 +3291,13 @@ msgstr ""
 #: eeschema/printing/dialog_print_using_printer.cpp:126
 #: eeschema/printing/dialog_print_using_printer_base.h:61
 msgid "Print"
-msgstr ""
+msgstr "הדפס"
 
 #: common/dialogs/dialog_print_generic.cpp:96
 #: common/dialogs/dialog_print_generic.cpp:248
 #: eeschema/printing/dialog_print_using_printer.cpp:127
 msgid "Print Preview"
-msgstr ""
+msgstr "תצוגת הדפסה מקדימה"
 
 #: common/dialogs/dialog_print_generic.cpp:97 common/hotkey_store.cpp:59
 #: common/tool/action_menu.cpp:212 common/tool/action_menu.cpp:217
@@ -3336,11 +3336,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot.cpp:214 pcbnew/dialogs/dialog_plot.cpp:220
 #: pcbnew/dialogs/dialog_update_pcb.cpp:61
 msgid "Close"
-msgstr ""
+msgstr "סגור"
 
 #: common/dialogs/dialog_print_generic.cpp:155
 msgid "Warning: scale is not a number."
-msgstr ""
+msgstr "אזהרה: קנה המידה אינו מספר."
 
 #: common/dialogs/dialog_print_generic.cpp:163
 #, c-format
@@ -3348,6 +3348,8 @@ msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
+"אזהרה: קנה המידה מוגדר לערך גדול מאוד.\n"
+"הוא יוצמד ל-%f."
 
 #: common/dialogs/dialog_print_generic.cpp:171
 #, c-format
@@ -3355,24 +3357,26 @@ msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
+"אזהרה: קנה המידה מוגדר לערך קטן מאוד.\n"
+"הוא יוצמד ל-%f."
 
 #: common/dialogs/dialog_print_generic.cpp:243
 #: common/dialogs/dialog_print_generic.cpp:294
 msgid "Nothing to print"
-msgstr ""
+msgstr "אין מה להדפיס"
 
 #: common/dialogs/dialog_print_generic.cpp:285
 #: eeschema/printing/dialog_print_using_printer.cpp:307
 msgid "Previous print job not yet complete."
-msgstr ""
+msgstr "עבודת ההדפסה הקודמת עדיין לא הושלמה."
 
 #: common/dialogs/dialog_print_generic.cpp:310
 msgid "There was a problem printing."
-msgstr ""
+msgstr "הייתה בעיה בהדפסה."
 
 #: common/dialogs/dialog_print_generic.cpp:352
 msgid "An error occurred initializing the printer information."
-msgstr ""
+msgstr "אירעה שגיאה באתחול מידע המדפסת."
 
 #: common/dialogs/dialog_print_generic_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:74
@@ -3380,7 +3384,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot_base.cpp:376
 #: pcbnew/dialogs/dialog_plot_base.cpp:399
 msgid "Output mode:"
-msgstr ""
+msgstr "מצב פלט:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_text.cpp:1284
@@ -3401,49 +3405,49 @@ msgstr ""
 #: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:673
 #: pcbnew/pcb_textbox.cpp:725 pcbnew/tools/drawing_stackup_table_tool.cpp:271
 msgid "Color"
-msgstr ""
+msgstr "צבע"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 #: pcbnew/dialogs/dialog_plot_base.cpp:403
 msgid "Black and white"
-msgstr ""
+msgstr "שחור לבן"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/printing/dialog_print_using_printer_base.cpp:22
 msgid "Print drawing sheet"
-msgstr ""
+msgstr "הדפס גליון שרטוט"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
-msgstr ""
+msgstr "הדפס הפניות למסגרת."
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:123
 msgid "1:1"
-msgstr ""
+msgstr "1:1"
 
 #: common/dialogs/dialog_print_generic_base.cpp:64
 msgid "Fit to page"
-msgstr ""
+msgstr "התאם לגודל דף"
 
 #: common/dialogs/dialog_print_generic_base.cpp:73
 msgid "Custom:"
-msgstr ""
+msgstr "מותאם אישית:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr ""
+msgstr "הגדר את קנה המידה X להתאמת קנה מידה מדויק"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
-msgstr ""
+msgstr "טקסט מידע"
 
 #: common/dialogs/dialog_print_generic_base.cpp:108
 #: eeschema/printing/dialog_print_using_printer_base.cpp:73
 msgid "Page Setup..."
-msgstr ""
+msgstr "הגדרת עמוד ..."
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_text_entry_base.cpp:32
@@ -3454,19 +3458,19 @@ msgstr ""
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
 msgid "X label:"
-msgstr ""
+msgstr "תווית X:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
 msgid "Y label:"
-msgstr ""
+msgstr "תווית Y:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
 msgid "Title"
-msgstr ""
+msgstr "כותרת"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
 msgid "Move Point to Location"
-msgstr ""
+msgstr "העבר נקודה למיקום"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:226 common/widgets/lib_tree.cpp:294
@@ -3481,19 +3485,19 @@ msgstr ""
 #: pcbnew/widgets/net_inspector_panel.cpp:42
 #: pcbnew/widgets/net_inspector_panel.cpp:95
 msgid "Filter"
-msgstr ""
+msgstr "סנן"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
-msgstr ""
+msgstr "פריטים:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:32
 msgid "Available:"
-msgstr ""
+msgstr "זָמִין:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:39
 msgid "Enabled:"
-msgstr ""
+msgstr "מופעל:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:51
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
@@ -3516,7 +3520,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:64
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:136
 msgid "Move up"
-msgstr ""
+msgstr "לזוז למעלה"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:80
 #: common/dialogs/panel_design_block_lib_table_base.cpp:141
@@ -3529,7 +3533,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:69
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:141
 msgid "Move down"
-msgstr ""
+msgstr "לזוז למטה"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
@@ -3540,12 +3544,12 @@ msgstr ""
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
 msgid "Connection"
-msgstr ""
+msgstr "חיבור"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "בסיסי"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
@@ -3569,21 +3573,21 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
 msgid "User Name"
-msgstr ""
+msgstr "שם משתמש"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:454
 msgid "Password"
-msgstr ""
+msgstr "סיסמה"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
 msgid "Commit Changes"
-msgstr ""
+msgstr "בצע שינויים"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 #: common/dialogs/panel_embedded_files_base.cpp:37
 msgid "Filename"
-msgstr ""
+msgstr "שם קובץ"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3595,19 +3599,19 @@ msgstr ""
 #: pcbnew/pcb_text.cpp:335 pcbnew/pcb_textbox.cpp:386 pcbnew/pcb_track.cpp:1624
 #: pcbnew/zone.cpp:630
 msgid "Status"
-msgstr ""
+msgstr "סטטוס"
 
 #: common/dialogs/git/dialog_git_commit.cpp:99
 msgid "New"
-msgstr ""
+msgstr "חדש"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
 msgid "Modified"
-msgstr ""
+msgstr "שונה"
 
 #: common/dialogs/git/dialog_git_commit.cpp:111
 msgid "Deleted"
-msgstr ""
+msgstr "נמחק"
 
 #: common/dialogs/git/dialog_git_commit.cpp:124
 msgid "Commit Message:"
@@ -3615,7 +3619,7 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_commit.cpp:131
 msgid "Author:"
-msgstr ""
+msgstr "מחבר:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:152
 msgid "C&ommit"
@@ -3628,7 +3632,7 @@ msgstr ""
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:383
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "הכנס סיסמה למפתח SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:334
 msgid "Test connection"
@@ -3636,48 +3640,48 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_repository.cpp:338
 msgid "Connection successful"
-msgstr ""
+msgstr "חיבור בוצע בהצלחה"
 
 #: common/dialogs/git/dialog_git_repository.cpp:342
 #, c-format
 msgid "Could not connect to '%s' "
-msgstr ""
+msgstr "לא ניתן להתחבר אל '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:361
 #, c-format
 msgid "Could not open private key '%s'"
-msgstr ""
+msgstr "לא ניתן היה לפתוח את המפתח הפרטי '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:374
 msgid "Invalid SSH Key"
-msgstr ""
+msgstr "מפתח SSH לא חוקי"
 
 #: common/dialogs/git/dialog_git_repository.cpp:375
 msgid "The selected file is not a valid SSH private key"
-msgstr ""
+msgstr "הקובץ שנבחר אינו מפתח פרטי SSH חוקי"
 
 #: common/dialogs/git/dialog_git_repository.cpp:399
 #, c-format
 msgid "Could not open public key '%s'"
-msgstr ""
+msgstr "לא ניתן היה לפתוח את המפתח הציבורי '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:418
 #: common/dialogs/git/dialog_git_repository.cpp:425
 msgid "Missing information"
-msgstr ""
+msgstr "חסר מידע"
 
 #: common/dialogs/git/dialog_git_repository.cpp:419
 msgid "Please enter a name for the repository"
-msgstr ""
+msgstr "נא להזין שם למאגר"
 
 #: common/dialogs/git/dialog_git_repository.cpp:426
 msgid "Please enter a URL for the repository"
-msgstr ""
+msgstr "אנא הזן כתובת אתר עבור המאגר"
 
 #: common/dialogs/git/dialog_git_repository.cpp:448
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
 msgid "SSH Key Password"
-msgstr ""
+msgstr "סיסמת מפתח SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
 msgid "Location"
