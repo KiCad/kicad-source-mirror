@@ -102,8 +102,7 @@ wxString GetTextVars( const wxString& aSource );
 bool IsTextVar( const wxString& aSource );
 
 /**
- * Replace any environment and/or text variables in file-path uris (leaving network-path URIs
- * alone).
+ * Replace any environment and/or text variables in URIs
  */
 const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
 
