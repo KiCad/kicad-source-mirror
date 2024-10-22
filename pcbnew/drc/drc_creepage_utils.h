@@ -183,7 +183,8 @@ public:
     const BOARD_ITEM* GetParent() const { return m_parent; };
     void              SetParent( BOARD_ITEM* aParent ) { m_parent = aParent; };
 
-    virtual void ConnectChildren( GraphNode* a1, GraphNode* a2, CreepageGraph& aG ) const;
+    virtual void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+                                  CreepageGraph& aG ) const;
 
     std::vector<path_connection> ReversePaths( const std::vector<path_connection>& aV ) const
     {
@@ -449,7 +450,7 @@ public:
 
 
     CREEP_SHAPE*                  m_parent = nullptr;
-    std::vector<GraphConnection*> m_connections = {};
+    std::vector<std::shared_ptr<GraphConnection>> m_connections = {};
     VECTOR2I                      m_pos = VECTOR2I( 0, 0 );
     // Virtual nodes are connected with a 0 weight connection to equivalent net ( same net or netclass )
     bool m_virtual = false;
@@ -466,14 +467,14 @@ public:
 class GraphConnection
 {
 public:
-    GraphConnection( GraphNode* aN1, GraphNode* aN2, const path_connection& aPc ) :
-            n1( aN1 ), n2( aN2 )
+    GraphConnection( std::shared_ptr<GraphNode> aN1, std::shared_ptr<GraphNode> aN2,
+                     const path_connection& aPc ) : n1( aN1 ), n2( aN2 )
     {
         m_path = aPc;
     };
 
-    GraphNode*      n1 = nullptr;
-    GraphNode*      n2 = nullptr;
+    std::shared_ptr<GraphNode> n1 = nullptr;
+    std::shared_ptr<GraphNode> n2 = nullptr;
     path_connection m_path;
 
     std::vector<PCB_SHAPE> GetShapes();
@@ -517,7 +518,8 @@ public:
     };
 
 
-    void ConnectChildren( GraphNode* a1, GraphNode* a2, CreepageGraph& aG ) const override;
+    void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+                          CreepageGraph& aG ) const override;
 };
 
 /** @class BE_SHAPE_CIRCLE
@@ -556,9 +558,10 @@ public:
 
 
     int  GetRadius() const override { return m_radius; }
-    void ConnectChildren( GraphNode* a1, GraphNode* a2, CreepageGraph& aG ) const override;
-    void ShortenChildDueToGV( GraphNode* a1, GraphNode* a2, CreepageGraph& aG,
-                              double aNormalWeight ) const;
+    void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+                          CreepageGraph& aG ) const override;
+    void ShortenChildDueToGV( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+                              CreepageGraph& aG, double aNormalWeight ) const;
 
 
 protected:
@@ -583,7 +586,8 @@ public:
         m_radius = aRadius;
     }
 
-    void ConnectChildren( GraphNode* a1, GraphNode* a2, CreepageGraph& aG ) const override;
+    void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+                          CreepageGraph& aG ) const override;
 
 
     std::vector<path_connection> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
@@ -661,20 +665,6 @@ public:
     };
     ~CreepageGraph()
     {
-        for( GraphConnection* gc : m_connections )
-        {
-            if( gc )
-            {
-                delete gc;
-                gc = nullptr;
-            }
-        }
-        for( GraphNode* gn : m_nodes )
-            if( gn )
-            {
-                delete gn;
-                gn = nullptr;
-            }
         for( CREEP_SHAPE* cs : m_shapeCollection )
             if( cs )
             {
@@ -687,30 +677,36 @@ public:
     std::vector<BOARD_ITEM*> m_boardEdge;
     SHAPE_POLY_SET*          m_boardOutline;
 
-    std::vector<GraphNode*>       m_nodes;
-    std::vector<GraphConnection*> m_connections;
+    std::vector<std::shared_ptr<GraphNode>>       m_nodes;
+    std::vector<std::shared_ptr<GraphConnection>> m_connections;
 
 
     void TransformEdgeToCreepShapes();
     void TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aShapes );
     void RemoveDuplicatedShapes();
     // Add a node to the graph. If an equivalent node exists, returns the pointer of the existing node instead
-    GraphNode*       AddNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent = nullptr,
-                              VECTOR2I aPos = VECTOR2I() );
-    GraphNode*       AddNodeVirtual();
-    GraphConnection* AddConnection( GraphNode* aN1, GraphNode* aN2, const path_connection& aPc );
-    GraphConnection* AddConnection( GraphNode* aN1, GraphNode* aN2 );
-    GraphNode*       FindNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent, VECTOR2I aPos );
+    std::shared_ptr<GraphNode>       AddNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent = nullptr,
+                                              VECTOR2I aPos = VECTOR2I() );
+    std::shared_ptr<GraphNode>       AddNodeVirtual();
+    std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode> aN1,
+                                                    std::shared_ptr<GraphNode> aN2,
+                                                    const path_connection&     aPc );
+    std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode> aN1,
+                                                    std::shared_ptr<GraphNode> aN2 );
+    std::shared_ptr<GraphNode>       FindNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent,
+                                               VECTOR2I aPos );
 
-    void RemoveConnection( GraphConnection*, bool aDelete = false );
+    void RemoveConnection( std::shared_ptr<GraphConnection>, bool aDelete = false );
     void Trim( double aWeightLimit );
-    void Addshape( const SHAPE& aShape, GraphNode* aConnectTo = nullptr,
+    void Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode> aConnectTo = nullptr,
                    BOARD_ITEM* aParent = nullptr );
 
-    double Solve( GraphNode* aFrom, GraphNode* aTo, std::vector<GraphConnection*>& aResult );
+    double Solve( std::shared_ptr<GraphNode> aFrom, std::shared_ptr<GraphNode> aTo,
+                  std::vector<std::shared_ptr<GraphConnection>>& aResult );
 
     void GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool aGenerateBoardEdges = true );
-    GraphNode* AddNetElements( int aNetCode, PCB_LAYER_ID aLayer, int aMaxCreepage );
+    std::shared_ptr<GraphNode> AddNetElements( int aNetCode, PCB_LAYER_ID aLayer,
+                                               int aMaxCreepage );
 
     void   SetTarget( double aTarget );
     double GetTarget() { return m_creepageTarget; };

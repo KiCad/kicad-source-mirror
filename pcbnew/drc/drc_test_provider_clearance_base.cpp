@@ -106,8 +106,8 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
         const BOARD_ITEM* aItem1, const BOARD_ITEM* aItem2, PCB_LAYER_ID layer, int aDistance )
 {
     CreepageGraph graph( *m_board );
-    GraphNode*    NetA = graph.AddNodeVirtual();
-    GraphNode*    NetB = graph.AddNodeVirtual();
+    std::shared_ptr<GraphNode> NetA = graph.AddNodeVirtual();
+    std::shared_ptr<GraphNode> NetB = graph.AddNodeVirtual();
 
     // They need to be different or the algorithm won't compute the path.
     NetA->m_net = 1;
@@ -121,12 +121,12 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
     double           minValue = aDistance * 2;
     GraphConnection* minGc = nullptr;
 
-    for( GraphConnection* gc : graph.m_connections )
+    for( std::shared_ptr<GraphConnection> gc : graph.m_connections )
     {
         if( ( gc->m_path.weight < minValue ) && ( gc->m_path.weight > 0 ) )
         {
             minValue = gc->m_path.weight;
-            minGc = gc;
+            minGc = gc.get();
         }
     }
 

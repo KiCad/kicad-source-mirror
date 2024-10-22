@@ -93,12 +93,13 @@ bool DRC_TEST_PROVIDER_CREEPAGE::Run()
 }
 
 
-GraphNode* FindInGraphNodes( GraphNode* aNode, std::vector<GraphNode*>& aGraph )
+std::shared_ptr<GraphNode> FindInGraphNodes( std::shared_ptr<GraphNode>               aNode,
+                                             std::vector<std::shared_ptr<GraphNode>>& aGraph )
 {
     if( !aNode )
         return nullptr;
 
-    for( GraphNode* gn : aGraph )
+    for( std::shared_ptr<GraphNode> gn : aGraph )
     {
         if( aNode->m_pos == gn->m_pos )
         {
@@ -138,17 +139,17 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
     if ( netA->GetBoundingBox().Distance( netB->GetBoundingBox() ) > creepageValue )
         return 0;
 
-    GraphNode* NetA = aGraph.AddNetElements( aNetCodeA, aLayer, creepageValue );
-    GraphNode* NetB = aGraph.AddNetElements( aNetCodeB, aLayer, creepageValue );
+    std::shared_ptr<GraphNode> NetA = aGraph.AddNetElements( aNetCodeA, aLayer, creepageValue );
+    std::shared_ptr<GraphNode> NetB = aGraph.AddNetElements( aNetCodeB, aLayer, creepageValue );
 
 
     aGraph.GeneratePaths( creepageValue, aLayer );
 
-    std::vector<GraphNode*> nodes1 = aGraph.m_nodes;
-    std::vector<GraphNode*> nodes2 = aGraph.m_nodes;
+    std::vector<std::shared_ptr<GraphNode>> nodes1 = aGraph.m_nodes;
+    std::vector<std::shared_ptr<GraphNode>> nodes2 = aGraph.m_nodes;
 
     alg::for_all_pairs( aGraph.m_nodes.begin(), aGraph.m_nodes.end(),
-                        [&]( GraphNode* aN1, GraphNode* aN2 )
+                        [&]( std::shared_ptr<GraphNode> aN1, std::shared_ptr<GraphNode> aN2 )
                         {
                             if( aN1 == aN2 )
                                 return;
@@ -180,7 +181,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
                             aN1->m_parent->ConnectChildren( aN1, aN2, aGraph );
                         } );
 
-    std::vector<GraphConnection*> shortestPath;
+    std::vector<std::shared_ptr<GraphConnection>> shortestPath;
     shortestPath.clear();
     double distance = aGraph.Solve( NetA, NetB, shortestPath );
 
@@ -211,7 +212,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
 
 
         std::vector<PCB_SHAPE> path;
-        for( GraphConnection* gc : shortestPath )
+        for( std::shared_ptr<GraphConnection> gc : shortestPath )
         {
             if( !gc )
                 continue;
@@ -378,19 +379,11 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
                                     {
                                         // We need to remove the connection from its endpoints' lists.
                                         graph.RemoveConnection( graph.m_connections[i], false );
-                                        delete graph.m_connections[i];
-                                        graph.m_connections[i] = nullptr;
                                     }
-                                    graph.m_connections.resize( beConnectionsSize );
+                                    graph.m_connections.resize( beConnectionsSize, nullptr );
 
                                     vectorSize = graph.m_nodes.size();
-
-                                    for( size_t i = beNodeSize; i < vectorSize; i++ )
-                                    {
-                                        delete graph.m_nodes[i];
-                                        graph.m_nodes[i] = nullptr;
-                                    }
-                                    graph.m_nodes.resize( beNodeSize );
+                                    graph.m_nodes.resize( beNodeSize, nullptr );
                                 }
 
                                 prevTestChangedGraph = testCreepage( graph, aNet1, aNet2, layer );
