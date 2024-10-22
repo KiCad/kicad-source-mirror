@@ -568,7 +568,7 @@ void SCH_PIN::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyS
                        aSettings->m_ShowPinNames || part->GetShowPinNames(),
                        aDimmed );
 
-        if( aSettings->m_ShowPinElectricalTypes )
+        if( aSettings->m_ShowPinsElectricalType )
             printPinElectricalTypeName( aSettings, pos1, orient, aDimmed );
 
         if( aSettings->m_ShowConnectionPoints
