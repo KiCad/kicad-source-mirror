@@ -121,13 +121,15 @@ private:
    Also checks if debug is enabled at all prior to calling decorator methods, thus saving some
    time wasted otherwise for string formatting and copying the geometry. */
 
+#define PNS_SILENCE_DEBUG 0
+
 #define PNS_DBG( dbg, method, ... )                                                                \
-    if( dbg && dbg->IsDebugEnabled() )                                                             \
+    if( dbg && dbg->IsDebugEnabled() && (!PNS_SILENCE_DEBUG) )                                     \
         dbg->method( __VA_ARGS__, PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO( __FILE__, __FUNCTION__, \
                                                                            __LINE__ ) );
 
 #define PNS_DBGN( dbg, method )                                                                    \
-    if( dbg && dbg->IsDebugEnabled() )                                                             \
+    if( dbg && dbg->IsDebugEnabled() && (!PNS_SILENCE_DEBUG) )                                     \
         dbg->method( PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO( __FILE__, __FUNCTION__, __LINE__ ) );
 
 } // namespace PNS
