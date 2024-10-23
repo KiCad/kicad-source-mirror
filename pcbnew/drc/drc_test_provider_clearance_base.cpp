@@ -82,22 +82,18 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ShowPathDRC( const std::vector<PCB_SHAPE>
         shortestPathShapes1.push_back( s2 );
     }
 
-    m_violationHandlerBuffer = [aCommit, shortestPathShapes1,
-                                shortestPathShapes2]( const std::shared_ptr<DRC_ITEM>& aItem,
-                                                      VECTOR2I aPos, int aReportLayer )
+    m_GraphicsHandlerBuffer =
+            [aCommit, shortestPathShapes1, shortestPathShapes2]( PCB_MARKER* aMarker )
     {
-        PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aReportLayer );
-
-
-        if( !aCommit || !marker )
+        if( !aCommit || !aMarker )
             return;
 
-        marker->SetShapes1( std::move( shortestPathShapes1 ) );
-        marker->SetShapes2( std::move( shortestPathShapes2 ) );
-        aCommit->Add( marker );
+        aMarker->SetShapes1( std::move( shortestPathShapes1 ) );
+        aMarker->SetShapes2( std::move( shortestPathShapes2 ) );
+        aCommit->Add( aMarker );
     };
 
-    std::swap( m_violationHandlerBuffer, m_drcEngine->m_violationHandler );
+    std::swap( m_GraphicsHandlerBuffer, m_drcEngine->m_graphicsHandler );
 }
 
 
@@ -135,7 +131,8 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
         PATH_CONNECTION pc = minGc->m_path;
         ShowPathDRC( minGc->GetShapes(), pc.a1, pc.a2, aDistance );
         reportViolation( aDrce, aMarkerPos, aMarkerLayer );
-        std::swap( m_violationHandlerBuffer, m_drcEngine->m_violationHandler );
+        // After a ShowPathDRC() call, restore the handler
+        std::swap( m_GraphicsHandlerBuffer, m_drcEngine->m_graphicsHandler );
     }
     else
     {

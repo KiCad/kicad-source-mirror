@@ -72,6 +72,9 @@ typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
                             int aLayer )> DRC_VIOLATION_HANDLER;
 
 
+typedef std::function<void( PCB_MARKER* aMarker )> DRC_GRAPHICS_HANDLER;
+
+
 /**
  * Design Rule Checker object that performs all the DRC tests.
  *
@@ -122,6 +125,23 @@ public:
     void ClearViolationHandler()
     {
         m_violationHandler = DRC_VIOLATION_HANDLER();
+    }
+
+
+    /**
+     * Set an optional DRC graphics handler (receives a PCB_MARKER).
+     */
+    void SetGraphicsHandler( DRC_GRAPHICS_HANDLER aHandler )
+    {
+        m_graphicsHandler = std::move( aHandler );
+    }
+
+    void ClearGraphicsHandler() { m_graphicsHandler = DRC_GRAPHICS_HANDLER(); }
+
+    void GraphicsHandler( PCB_MARKER* aMarker )
+    {
+        if( m_graphicsHandler )
+            m_graphicsHandler( aMarker );
     }
 
     /**
@@ -252,6 +272,8 @@ protected:
     // constraint -> rule -> provider
     std::map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> m_constraintMap;
 
+
+    DRC_GRAPHICS_HANDLER       m_graphicsHandler;
     DRC_VIOLATION_HANDLER      m_violationHandler;
     REPORTER*                  m_reporter;
     PROGRESS_REPORTER*         m_progressReporter;

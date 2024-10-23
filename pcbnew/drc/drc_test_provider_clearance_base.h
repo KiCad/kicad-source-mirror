@@ -62,7 +62,7 @@ protected:
                       const VECTOR2I& aEnd, int aLength );
 
 
-    DRC_VIOLATION_HANDLER m_violationHandlerBuffer;
+    DRC_GRAPHICS_HANDLER m_GraphicsHandlerBuffer;
 };
 
 

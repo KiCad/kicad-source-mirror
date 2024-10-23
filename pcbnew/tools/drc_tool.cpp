@@ -175,6 +175,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
             {
                 PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aLayer );
+                m_drcEngine->GraphicsHandler( marker );
                 commit.Add( marker );
             } );
 

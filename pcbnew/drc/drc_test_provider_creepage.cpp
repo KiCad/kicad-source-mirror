@@ -227,7 +227,8 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
 
         this->ShowPathDRC( path, startPoint, endPoint, distance );
         reportViolation( drce, shortestPath[1]->m_path.a2, aLayer );
-        std::swap( m_violationHandlerBuffer, m_drcEngine->m_violationHandler );
+        // After a ShowPathDRC() call, restore the handler
+        std::swap( m_GraphicsHandlerBuffer, m_drcEngine->m_graphicsHandler );
     }
     shortestPath.clear();
 
