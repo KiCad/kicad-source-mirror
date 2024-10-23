@@ -609,22 +609,39 @@ if( WIN32 )
 endif()
 
 
-# Create a C++ compilable string initializer containing markdown text into a *.h file:
-add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
-    COMMAND ${CMAKE_COMMAND}
-        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
-        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
-        -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
-    DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
-    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
-       from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md"
+# Function to process a markdown (.md) file into a header (.h) file
+function(callMrkdn2C inFile outFile)
+    add_custom_command(
+        OUTPUT "${outFile}"
+        COMMAND ${CMAKE_COMMAND} -DinputFile="${inFile}" -DoutputFile="${outFile}" -P "${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake"
+        DEPENDS "${inFile}" "${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake"
+        COMMENT "Generating header: ${outFile}"
     )
+endfunction()
 
-set_source_files_properties( dialogs/panel_setup_rules.cpp
-    PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
-    )
+# Locate all .md files in the specified directory
+file(GLOB markdownFiles ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_*.md)
+
+# Create a custom target to generate all .h files
+add_custom_target(generate_headers ALL)
+
+# Loop over all .md files and convert them into .h files in the same directory as the .md files
+foreach(file ${markdownFiles})
+    # Extract the filename without extension and define output path in the same folder as the .md file
+    get_filename_component(filename "${file}" NAME_WE)
+    set(outputHeader "${CMAKE_CURRENT_SOURCE_DIR}/dialogs/${filename}.h")
+
+    # Call the custom function to process the file
+    callMrkdn2C("${file}" "${outputHeader}")
+
+    # Create a per-file custom target and add it as a dependency
+    add_custom_target(${filename}_gen DEPENDS "${outputHeader}")
+    add_dependencies(generate_headers ${filename}_gen)
+
+    # Mark the output header as a dependency of the source file
+    set_source_files_properties(dialogs/panel_setup_rules.cpp
+        PROPERTIES OBJECT_DEPENDS "${outputHeader}")
+endforeach()
 
 if( APPLE )
     # setup bundle
