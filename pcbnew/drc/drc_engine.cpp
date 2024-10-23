@@ -73,13 +73,14 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_reportAllTrackErrors( false ),
     m_testFootprints( false ),
     m_reporter( nullptr ),
-    m_progressReporter( nullptr ),
-    m_graphicsHandler( nullptr )
+    m_progressReporter( nullptr )
 {
     m_errorLimits.resize( DRCE_LAST + 1 );
 
     for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
         m_errorLimits[ ii ] = ERROR_LIMIT;
+
+    ClearGraphicsHandler();
 }
 
 
