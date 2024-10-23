@@ -235,16 +235,16 @@ enum GAL_LAYER_ID: int
     LAYER_PAD_HOLEWALLS      = GAL_LAYER_ID_START + 34,
     LAYER_VIA_HOLEWALLS      = GAL_LAYER_ID_START + 35,
     LAYER_DRC_WARNING        = GAL_LAYER_ID_START + 36, ///< layer for drc markers with SEVERITY_WARNING
-    LAYER_DRC_SHAPE1         = GAL_LAYER_ID_START + 37,  ///< Custom shape for DRC marker
-    LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 38,  ///< Custom shape for DRC marker 
-    LAYER_DRC_EXCLUSION      = GAL_LAYER_ID_START + 39, ///< layer for drc markers which have been individually excluded
-    LAYER_MARKER_SHADOWS     = GAL_LAYER_ID_START + 40, ///< shadows for drc markers
+    LAYER_DRC_EXCLUSION      = GAL_LAYER_ID_START + 37, ///< layer for drc markers which have been individually excluded
+    LAYER_MARKER_SHADOWS     = GAL_LAYER_ID_START + 38, ///< shadows for drc markers
 
-    LAYER_LOCKED_ITEM_SHADOW = GAL_LAYER_ID_START + 41, ///< shadow layer for locked items
+    LAYER_LOCKED_ITEM_SHADOW = GAL_LAYER_ID_START + 39, ///< shadow layer for locked items
 
-    LAYER_CONFLICTS_SHADOW   = GAL_LAYER_ID_START + 42, ///< shadow layer for items flagged conficting
-    LAYER_SHAPES             = GAL_LAYER_ID_START + 43, ///< Copper graphic shape opacity/visibility (color ignored)
+    LAYER_CONFLICTS_SHADOW   = GAL_LAYER_ID_START + 40, ///< shadow layer for items flagged conficting
+    LAYER_SHAPES             = GAL_LAYER_ID_START + 41, ///< Copper graphic shape opacity/visibility (color ignored)
 
+    LAYER_DRC_SHAPE1         = GAL_LAYER_ID_START + 42,  ///< Custom shape for DRC marker
+    LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Custom shape for DRC marker 
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 
