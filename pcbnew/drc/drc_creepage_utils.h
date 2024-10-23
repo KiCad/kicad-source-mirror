@@ -50,7 +50,7 @@ extern bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
                                     const std::vector<const BOARD_ITEM*>& aDontTestAgainst,
                                     int                                   aMinGrooveWidth );
 
-struct path_connection
+struct PATH_CONNECTION
 {
     VECTOR2D a1;
     VECTOR2D a2;
@@ -186,9 +186,9 @@ public:
     virtual void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
                                   CreepageGraph& aG ) const;
 
-    std::vector<path_connection> ReversePaths( const std::vector<path_connection>& aV ) const
+    std::vector<PATH_CONNECTION> ReversePaths( const std::vector<PATH_CONNECTION>& aV ) const
     {
-        std::vector<path_connection> r;
+        std::vector<PATH_CONNECTION> r;
         r.reserve( aV.size() );
 
         for( const auto& pc : aV )
@@ -200,50 +200,50 @@ public:
         return r;
     }
 
-    std::vector<path_connection> Paths( const CREEP_SHAPE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CREEP_SHAPE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const
     {
-        std::vector<path_connection> a;
+        std::vector<PATH_CONNECTION> a;
         return a;
     };
-    virtual std::vector<path_connection> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+    virtual std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
-        std::vector<path_connection> a;
+        std::vector<PATH_CONNECTION> a;
         return a;
     };
-    virtual std::vector<path_connection> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    virtual std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
-        std::vector<path_connection> a;
+        std::vector<PATH_CONNECTION> a;
         return a;
     };
-    virtual std::vector<path_connection> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+    virtual std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
-        std::vector<path_connection> a;
+        std::vector<PATH_CONNECTION> a;
         return a;
     };
-    virtual std::vector<path_connection> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
+    virtual std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
-        std::vector<path_connection> a;
+        std::vector<PATH_CONNECTION> a;
         return a;
     };
-    virtual std::vector<path_connection> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    virtual std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
-        std::vector<path_connection> a;
+        std::vector<PATH_CONNECTION> a;
         return a;
     };
-    virtual std::vector<path_connection> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+    virtual std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
-        std::vector<path_connection> a;
+        std::vector<PATH_CONNECTION> a;
         return a;
     };
 
-    //virtual std::vector<path_connection> GetPathsCuToBe( CREEP_SHAPE* aShape ) const{ std::vector<path_connection> a; return a;};
+    //virtual std::vector<PATH_CONNECTION> GetPathsCuToBe( CREEP_SHAPE* aShape ) const{ std::vector<PATH_CONNECTION> a; return a;};
     bool IsConductive() { return m_conductive; };
 
 
@@ -293,17 +293,17 @@ public:
     VECTOR2I GetEnd() const { return m_end; };
     double   GetWidth() const { return m_width; };
 
-    std::vector<path_connection> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
 
 
@@ -329,21 +329,21 @@ public:
     VECTOR2I GetPos() const { return m_pos; };
     int      GetRadius() const override { return m_radius; };
 
-    std::vector<path_connection> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
 
-    std::vector<path_connection> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
 
 private:
@@ -370,23 +370,23 @@ public:
         m_radius = aRadius;
     }
 
-    std::vector<path_connection> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
 
 
@@ -468,14 +468,14 @@ class GraphConnection
 {
 public:
     GraphConnection( std::shared_ptr<GraphNode> aN1, std::shared_ptr<GraphNode> aN2,
-                     const path_connection& aPc ) : n1( aN1 ), n2( aN2 )
+                     const PATH_CONNECTION& aPc ) : n1( aN1 ), n2( aN2 )
     {
         m_path = aPc;
     };
 
     std::shared_ptr<GraphNode> n1 = nullptr;
     std::shared_ptr<GraphNode> n2 = nullptr;
-    path_connection m_path;
+    PATH_CONNECTION            m_path;
 
     std::vector<PCB_SHAPE> GetShapes();
     bool                   forceStraightLigne = false;
@@ -495,23 +495,23 @@ public:
         m_type = CREEP_SHAPE::TYPE::POINT;
     }
 
-    std::vector<path_connection> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     }
-    std::vector<path_connection> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
@@ -536,21 +536,21 @@ public:
         m_type = CREEP_SHAPE::TYPE::CIRCLE;
     }
 
-    std::vector<path_connection> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
-    std::vector<path_connection> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
@@ -590,30 +590,30 @@ public:
                           CreepageGraph& aG ) const override;
 
 
-    std::vector<path_connection> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
 
-    std::vector<path_connection> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
-    std::vector<path_connection> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+    std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
@@ -690,7 +690,7 @@ public:
     std::shared_ptr<GraphNode>       AddNodeVirtual();
     std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode> aN1,
                                                     std::shared_ptr<GraphNode> aN2,
-                                                    const path_connection&     aPc );
+                                                    const PATH_CONNECTION&     aPc );
     std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode> aN1,
                                                     std::shared_ptr<GraphNode> aN2 );
     std::shared_ptr<GraphNode>       FindNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent,

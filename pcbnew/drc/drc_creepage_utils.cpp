@@ -117,17 +117,17 @@ bool areEquivalent( const CREEP_SHAPE* a, const CREEP_SHAPE* b )
 }
 
 
-std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> BE_SHAPE_POINT::Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                                     double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     double weight = ( this->GetPos() - aS2.GetPos() ).SquaredEuclideanNorm();
 
     if( weight > aMaxSquaredWeight )
         return result;
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.a1 = this->GetPos();
     pc.a2 = aS2.GetPos();
     pc.weight = sqrt( weight );
@@ -136,10 +136,10 @@ std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_POINT& aS2, d
     return result;
 }
 
-std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> BE_SHAPE_POINT::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                     double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     int                          radius = aS2.GetRadius();
     VECTOR2I                     pointPos = this->GetPos();
     VECTOR2I                     circleCenter = aS2.GetPos();
@@ -169,7 +169,7 @@ std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_CIRCLE& aS2, 
 
     VECTOR2D resultPoint;
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.a1 = pointPos;
     pc.weight = sqrt( weightSquared );
 
@@ -236,10 +236,10 @@ BE_SHAPE_ARC::IsThereATangentPassingThroughPoint( const BE_SHAPE_POINT aPoint ) 
     return result;
 }
 
-std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> BE_SHAPE_POINT::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                                     double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     VECTOR2I                     center = aS2.GetPos();
     double                       radius = aS2.GetRadius();
 
@@ -257,7 +257,7 @@ std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_ARC& aS2, dou
     if( behavesLikeCircle.first )
     {
         BE_SHAPE_CIRCLE              csc( center, radius );
-        std::vector<path_connection> paths = this->Paths( csc, aMaxWeight, aMaxSquaredWeight );
+        std::vector<PATH_CONNECTION> paths = this->Paths( csc, aMaxWeight, aMaxSquaredWeight );
 
         if( paths.size() > 1 ) // Point to circle creates either 0 or 2 connections
         {
@@ -268,7 +268,7 @@ std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_ARC& aS2, dou
     {
         BE_SHAPE_POINT csp1( aS2.GetStartPoint() );
 
-        for( path_connection pc : this->Paths( csp1, aMaxWeight, aMaxSquaredWeight ) )
+        for( PATH_CONNECTION pc : this->Paths( csp1, aMaxWeight, aMaxSquaredWeight ) )
         {
             result.push_back( pc );
         }
@@ -276,7 +276,7 @@ std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_ARC& aS2, dou
     if( behavesLikeCircle.second )
     {
         BE_SHAPE_CIRCLE              csc( center, radius );
-        std::vector<path_connection> paths = this->Paths( csc, aMaxWeight, aMaxSquaredWeight );
+        std::vector<PATH_CONNECTION> paths = this->Paths( csc, aMaxWeight, aMaxSquaredWeight );
 
         if( paths.size() > 1 ) // Point to circle creates either 0 or 2 connections
         {
@@ -287,7 +287,7 @@ std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_ARC& aS2, dou
     {
         BE_SHAPE_POINT csp1( aS2.GetEndPoint() );
 
-        for( path_connection pc : this->Paths( csp1, aMaxWeight, aMaxSquaredWeight ) )
+        for( PATH_CONNECTION pc : this->Paths( csp1, aMaxWeight, aMaxSquaredWeight ) )
         {
             result.push_back( pc );
         }
@@ -295,10 +295,10 @@ std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_ARC& aS2, dou
     return result;
 }
 
-std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                                      double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     VECTOR2I                     circleCenter = this->GetPos();
     double                       circleRadius = this->GetRadius();
     VECTOR2I                     arcCenter = aS2.GetPos();
@@ -319,7 +319,7 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
     BE_SHAPE_CIRCLE csc( arcCenter, arcRadius );
 
 
-    for( path_connection pc : this->Paths( csc, aMaxWeight, aMaxSquaredWeight ) )
+    for( PATH_CONNECTION pc : this->Paths( csc, aMaxWeight, aMaxSquaredWeight ) )
     {
         EDA_ANGLE pointAngle = aS2.AngleBetweenStartAndEnd( pc.a2 - arcCenter );
 
@@ -335,7 +335,7 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
 
     for( BE_SHAPE_POINT csp : { csp1, csp2 } )
     {
-        for( path_connection pc : this->Paths( csp, aMaxWeight, aMaxSquaredWeight ) )
+        for( PATH_CONNECTION pc : this->Paths( csp, aMaxWeight, aMaxSquaredWeight ) )
         {
             if( !segmentIntersectsArc( pc.a1, pc.a2, arcCenter, arcRadius, arcStartAngle,
                                        arcEndAngle, nullptr ) )
@@ -348,10 +348,10 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
 }
 
 
-std::vector<path_connection> BE_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> BE_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                                   double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     VECTOR2I                     circleCenter = this->GetPos();
     double                       circleRadius = this->GetRadius();
     VECTOR2I                     arcCenter = aS2.GetPos();
@@ -370,7 +370,7 @@ std::vector<path_connection> BE_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
     BE_SHAPE_CIRCLE csc( arcCenter, arcRadius );
 
 
-    for( path_connection pc : this->Paths( BE_SHAPE_CIRCLE( aS2.GetPos(), aS2.GetRadius() ),
+    for( PATH_CONNECTION pc : this->Paths( BE_SHAPE_CIRCLE( aS2.GetPos(), aS2.GetRadius() ),
                                            aMaxWeight, aMaxSquaredWeight ) )
     {
         EDA_ANGLE pointAngle = aS2.AngleBetweenStartAndEnd( pc.a2 - arcCenter );
@@ -379,7 +379,7 @@ std::vector<path_connection> BE_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
             result.push_back( pc );
     }
 
-    for( path_connection pc : BE_SHAPE_CIRCLE( this->GetPos(), this->GetRadius() )
+    for( PATH_CONNECTION pc : BE_SHAPE_CIRCLE( this->GetPos(), this->GetRadius() )
                                       .Paths( aS2, aMaxWeight, aMaxSquaredWeight ) )
     {
         EDA_ANGLE pointAngle = this->AngleBetweenStartAndEnd( pc.a2 - arcCenter );
@@ -392,10 +392,10 @@ std::vector<path_connection> BE_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
 }
 
 
-std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                      double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     VECTOR2I p1 = this->GetPos();
     VECTOR2I p2 = aS2.GetPos();
@@ -425,7 +425,7 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
         double ratio2 = sqrt( 1 - ratio1 * ratio1 );
 
 
-        path_connection pc;
+        PATH_CONNECTION pc;
         pc.weight = sqrt( weightSquared1 );
 
         pc.a1 = p1 + direction1 * R1 * ratio1 + direction2 * R1 * ratio2;
@@ -449,7 +449,7 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
         double ratio2 = sqrt( 1 - ratio1 * ratio1 );
 
 
-        path_connection pc;
+        PATH_CONNECTION pc;
         pc.weight = sqrt( weightSquared2 );
 
         pc.a1 = p1 + direction1 * R1 * ratio1 + direction2 * R1 * ratio2;
@@ -742,7 +742,7 @@ void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GraphNode> a1,
 
     std::shared_ptr<GraphNode> gnt = aG.AddNode( GraphNode::POINT, a1->m_parent, skipPoint );
 
-    path_connection pc;
+    PATH_CONNECTION pc;
 
     pc.a1 = maxAngle == angle2 ? a1->m_pos : a2->m_pos;
     pc.a2 = skipPoint;
@@ -779,7 +779,7 @@ void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GraphNode> a1, std::share
 
     if( aG.m_minGrooveWidth <= 0 )
     {
-        path_connection pc;
+        PATH_CONNECTION pc;
         pc.a1 = a1->m_pos;
         pc.a2 = a2->m_pos;
         pc.weight = weight;
@@ -813,7 +813,7 @@ void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_p
         if( ( weight > aG.GetTarget() ) )
             return;
 
-        path_connection pc;
+        PATH_CONNECTION pc;
         pc.a1 = a1->m_pos;
         pc.a2 = a2->m_pos;
         pc.weight = weight;
@@ -861,10 +861,10 @@ bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2
     return intersectionPoints.size() > 0;
 }
 
-std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                                       double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     VECTOR2I                     start = this->GetStart();
     VECTOR2I                     end = this->GetEnd();
     double                       halfWidth = this->GetWidth() / 2;
@@ -900,7 +900,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_POINT& aS2,
     if( weightSquared > aMaxSquaredWeight )
         return result;
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.a1 = newPoint;
     pc.a2 = pointPos;
     pc.weight = sqrt( weightSquared );
@@ -910,10 +910,10 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_POINT& aS2,
 }
 
 
-std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                       double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     VECTOR2I                     start = this->GetStart();
     VECTOR2I                     end = this->GetEnd();
     double                       halfWidth = this->GetWidth() / 2;
@@ -938,7 +938,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
     if( ( projectedPos1 < 0 && projectedPos2 < 0 ) )
     {
         CU_SHAPE_CIRCLE csc( start, halfWidth );
-        for( path_connection pc : csc.Paths( aS2, aMaxWeight, aMaxSquaredWeight ) )
+        for( PATH_CONNECTION pc : csc.Paths( aS2, aMaxWeight, aMaxSquaredWeight ) )
         {
             result.push_back( pc );
         }
@@ -946,7 +946,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
     else if( ( projectedPos1 > length && projectedPos2 > length ) )
     {
         CU_SHAPE_CIRCLE csc( end, halfWidth );
-        for( path_connection pc : csc.Paths( aS2, aMaxWeight, aMaxSquaredWeight ) )
+        for( PATH_CONNECTION pc : csc.Paths( aS2, aMaxWeight, aMaxSquaredWeight ) )
         {
             result.push_back( pc );
         }
@@ -964,7 +964,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
 
         if( weightSquared < aMaxSquaredWeight )
         {
-            path_connection pc;
+            PATH_CONNECTION pc;
             pc.a1 = PointOnTrack;
             pc.a2 = PointOnCircle;
             pc.weight = sqrt( weightSquared );
@@ -987,7 +987,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
              && ( ( projectedPos2 > length ) || projectedPos2 < 0 ) )
     {
         CU_SHAPE_CIRCLE              csc( end, halfWidth );
-        std::vector<path_connection> pcs = csc.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+        std::vector<PATH_CONNECTION> pcs = csc.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
 
         if( pcs.size() < 2 )
             return result;
@@ -1003,7 +1003,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
 
         if( weightSquared < aMaxSquaredWeight )
         {
-            path_connection pc;
+            PATH_CONNECTION pc;
             pc.a1 = PointOnTrack;
             pc.a2 = PointOnCircle;
             pc.weight = sqrt( weightSquared );
@@ -1015,7 +1015,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
              && ( ( projectedPos1 > length ) || projectedPos1 < 0 ) )
     {
         CU_SHAPE_CIRCLE              csc( start, halfWidth );
-        std::vector<path_connection> pcs = csc.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+        std::vector<PATH_CONNECTION> pcs = csc.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
 
         if( pcs.size() < 2 )
             return result;
@@ -1030,7 +1030,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
 
         if( weightSquared < aMaxSquaredWeight )
         {
-            path_connection pc;
+            PATH_CONNECTION pc;
             pc.a1 = PointOnTrack;
             pc.a2 = PointOnCircle;
             pc.weight = sqrt( weightSquared );
@@ -1043,10 +1043,10 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
 }
 
 
-std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                                       double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     BE_SHAPE_CIRCLE bsc( aS2.GetPos(), aS2.GetRadius() );
 
@@ -1085,10 +1085,10 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_ARC& aS2, d
 }
 
 
-std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                                      double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     VECTOR2I                     beArcPos = aS2.GetPos();
     int                          beArcRadius = aS2.GetRadius();
     EDA_ANGLE                    beArcStartAngle = aS2.GetStartAngle();
@@ -1124,10 +1124,10 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
     return result;
 }
 
-std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_ARC::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                   double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     CU_SHAPE_CIRCLE csc( this->GetPos(), this->GetRadius() + this->GetWidth() / 2 );
 
@@ -1157,10 +1157,10 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_CIRCLE& aS2, do
 }
 
 
-std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                                   double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     VECTOR2I                     beArcPos = aS2.GetPos();
     int                          beArcRadius = aS2.GetRadius();
     EDA_ANGLE                    beArcStartAngle = aS2.GetStartAngle();
@@ -1198,10 +1198,10 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
 }
 
 
-std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                                      double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     double   R = this->GetRadius();
     VECTOR2I center = this->GetPos();
@@ -1211,7 +1211,7 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_POINT& aS2, 
     if( weight > aMaxWeight )
         return result;
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.weight = weight;
     pc.a2 = point;
     pc.a1 = center + ( point - center ).Resize( R );
@@ -1221,10 +1221,10 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_POINT& aS2, 
 }
 
 
-std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                      double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     double   R1 = this->GetRadius();
     double   R2 = aS2.GetRadius();
@@ -1242,7 +1242,7 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_CIRCLE& aS2,
     if( weight > aMaxWeight || weight < 0 )
         return result;
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.weight = weight;
     pc.a1 = ( C2 - C1 ).Resize( R1 ) + C1;
     pc.a2 = ( C1 - C2 ).Resize( R2 ) + C2;
@@ -1251,10 +1251,10 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_CIRCLE& aS2,
 }
 
 
-std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                       double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     VECTOR2I s_start = this->GetStart();
     VECTOR2I s_end = this->GetEnd();
@@ -1281,7 +1281,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_CIRCLE& aS2
     double radius = aS2.GetRadius();
     double trackSide = ( s_end - s_start ).Cross( pointPos - s_start ) > 0 ? 1 : -1;
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.a1 = s_start + ( s_end - s_start ).Resize( projectedPos )
             + ( s_end - s_start ).Perpendicular().Resize( halfWidth ) * trackSide;
     pc.a2 = ( pc.a1 - pointPos ).Resize( radius ) + pointPos;
@@ -1296,10 +1296,10 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_CIRCLE& aS2
 }
 
 
-std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                                      double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     VECTOR2I circlePos = this->GetPos();
     VECTOR2I arcPos = aS2.GetPos();
@@ -1314,7 +1314,7 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_ARC& aS2, do
 
     if( ( circlePos - arcPos ).EuclideanNorm() > arcRadius + circleRadius )
     {
-        std::vector<path_connection> pcs = this->Paths( csc, aMaxWeight, aMaxSquaredWeight );
+        std::vector<PATH_CONNECTION> pcs = this->Paths( csc, aMaxWeight, aMaxSquaredWeight );
 
         if( pcs.size() == 1 )
         {
@@ -1331,19 +1331,19 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_ARC& aS2, do
     CU_SHAPE_CIRCLE csc1( startPoint, aS2.GetWidth() / 2 );
     CU_SHAPE_CIRCLE csc2( endPoint, aS2.GetWidth() / 2 );
 
-    path_connection* bestPath = nullptr;
+    PATH_CONNECTION* bestPath = nullptr;
 
 
-    std::vector<path_connection> pcs1 = this->Paths( csc1, aMaxWeight, aMaxSquaredWeight );
-    std::vector<path_connection> pcs2 = this->Paths( csc2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs1 = this->Paths( csc1, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs2 = this->Paths( csc2, aMaxWeight, aMaxSquaredWeight );
 
-    for( path_connection& pc : pcs1 )
+    for( PATH_CONNECTION& pc : pcs1 )
     {
         if( !bestPath || ( ( bestPath->weight > pc.weight ) && ( pc.weight > 0 ) ) )
             bestPath = &pc;
     }
 
-    for( path_connection& pc : pcs2 )
+    for( PATH_CONNECTION& pc : pcs2 )
     {
         if( !bestPath || ( ( bestPath->weight > pc.weight ) && ( pc.weight > 0 ) ) )
             bestPath = &pc;
@@ -1351,7 +1351,7 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_ARC& aS2, do
 
     // If the circle center is insde the arc ring
 
-    path_connection pc3;
+    PATH_CONNECTION pc3;
 
     if( ( circlePos - arcPos ).SquaredEuclideanNorm() < arcRadius * arcRadius )
     {
@@ -1380,10 +1380,10 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const CU_SHAPE_ARC& aS2, do
 }
 
 
-std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                                       double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     VECTOR2I s_start = this->GetStart();
     VECTOR2I s_end = this->GetEnd();
@@ -1396,7 +1396,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, d
 
     CU_SHAPE_CIRCLE csc( arcPos, arcRadius + halfWidth2 );
 
-    std::vector<path_connection> pcs;
+    std::vector<PATH_CONNECTION> pcs;
     pcs = this->Paths( csc, aMaxWeight, aMaxSquaredWeight );
 
     if( pcs.size() < 1 )
@@ -1418,12 +1418,12 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, d
 
     CU_SHAPE_CIRCLE  csc1( aS2.GetStartPoint(), halfWidth2 );
     CU_SHAPE_CIRCLE  csc2( aS2.GetEndPoint(), halfWidth2 );
-    path_connection* bestPath = nullptr;
+    PATH_CONNECTION* bestPath = nullptr;
 
 
-    std::vector<path_connection> pcs1 = this->Paths( csc1, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs1 = this->Paths( csc1, aMaxWeight, aMaxSquaredWeight );
 
-    for( path_connection& pc : pcs1 )
+    for( PATH_CONNECTION& pc : pcs1 )
     {
         if( !bestPath || ( bestPath->weight > pc.weight ) )
         {
@@ -1431,9 +1431,9 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, d
         }
     }
 
-    std::vector<path_connection> pcs2 = this->Paths( csc2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs2 = this->Paths( csc2, aMaxWeight, aMaxSquaredWeight );
 
-    for( path_connection& pc : pcs2 )
+    for( PATH_CONNECTION& pc : pcs2 )
     {
         if( !bestPath || ( bestPath->weight > pc.weight ) )
         {
@@ -1444,9 +1444,9 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, d
     CU_SHAPE_CIRCLE csc3( s_start, halfWidth1 );
     CU_SHAPE_CIRCLE csc4( s_end, halfWidth1 );
 
-    std::vector<path_connection> pcs3 = csc3.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs3 = csc3.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
 
-    for( path_connection& pc : pcs3 )
+    for( PATH_CONNECTION& pc : pcs3 )
     {
         if( !bestPath || ( bestPath->weight > pc.weight ) )
         {
@@ -1455,9 +1455,9 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, d
     }
 
 
-    std::vector<path_connection> pcs4 = csc4.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs4 = csc4.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
 
-    for( path_connection& pc : pcs4 )
+    for( PATH_CONNECTION& pc : pcs4 )
     {
         if( !bestPath || ( bestPath->weight > pc.weight ) )
         {
@@ -1493,11 +1493,11 @@ VECTOR2I closestPointOnSegment( const VECTOR2I& A, const VECTOR2I& B, const VECT
 }
 
 
-std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_SEGMENT& aS2,
+std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_SEGMENT& aS2,
                                                       double                  aMaxWeight,
                                                       double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     VECTOR2I A( this->GetStart() );
     VECTOR2I B( this->GetEnd() );
@@ -1546,7 +1546,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_SEGMENT& aS
     }
 
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.a1 = closest1 + ( closest2 - closest1 ).Resize( halfWidth1 );
     pc.a2 = closest2 + ( closest1 - closest2 ).Resize( halfWidth2 );
     pc.weight = sqrt( min_dist ) - halfWidth1 - halfWidth2;
@@ -1559,10 +1559,10 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_SEGMENT& aS
 }
 
 
-std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                      double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     double   R1 = this->GetRadius();
     double   R2 = aS2.GetRadius();
@@ -1584,7 +1584,7 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
         return result;
     }
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.weight = weight;
 
     double circleAngle = EDA_ANGLE( center2 - center1 ).AsRadians();
@@ -1615,10 +1615,10 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
 }
 
 
-std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_ARC::Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                                   double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
     VECTOR2I                     point = aS2.GetPos();
     VECTOR2I                     arcCenter = this->GetPos();
 
@@ -1641,7 +1641,7 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_POINT& aS2, dou
         }
         else
         {
-            path_connection pc;
+            PATH_CONNECTION pc;
             pc.weight = ( radius - width / 2 ) - ( point - arcCenter ).EuclideanNorm();
             pc.a1 = ( point - arcCenter ).Resize( radius - width / 2 ) + arcCenter;
             pc.a2 = point;
@@ -1669,10 +1669,10 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_POINT& aS2, dou
 }
 
 
-std::vector<path_connection> CU_SHAPE_ARC::Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
+std::vector<PATH_CONNECTION> CU_SHAPE_ARC::Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                                   double aMaxSquaredWeight ) const
 {
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     double R1 = this->GetRadius();
     double R2 = aS2.GetRadius();
@@ -1680,7 +1680,7 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const CU_SHAPE_ARC& aS2, doubl
     VECTOR2I C1 = this->GetPos();
     VECTOR2I C2 = aS2.GetPos();
 
-    path_connection bestPath;
+    PATH_CONNECTION bestPath;
     bestPath.weight = std::numeric_limits<double>::infinity();
     CU_SHAPE_CIRCLE csc1( C1, R1 + this->GetWidth() / 2 );
     CU_SHAPE_CIRCLE csc2( C2, R2 + aS2.GetWidth() / 2 );
@@ -1690,20 +1690,20 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const CU_SHAPE_ARC& aS2, doubl
     CU_SHAPE_CIRCLE csc5( aS2.GetStartPoint(), aS2.GetWidth() / 2 );
     CU_SHAPE_CIRCLE csc6( aS2.GetEndPoint(), aS2.GetWidth() / 2 );
 
-    std::vector<path_connection> pcs0 = csc1.Paths( csc2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs0 = csc1.Paths( csc2, aMaxWeight, aMaxSquaredWeight );
 
-    std::vector<path_connection> pcs1 = this->Paths( csc2, aMaxWeight, aMaxSquaredWeight );
-    std::vector<path_connection> pcs2 = csc1.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs1 = this->Paths( csc2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs2 = csc1.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
 
-    std::vector<path_connection> pcs3 = this->Paths( csc5, aMaxWeight, aMaxSquaredWeight );
-    std::vector<path_connection> pcs4 = this->Paths( csc6, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs3 = this->Paths( csc5, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs4 = this->Paths( csc6, aMaxWeight, aMaxSquaredWeight );
 
-    std::vector<path_connection> pcs5 = csc3.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
-    std::vector<path_connection> pcs6 = csc4.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs5 = csc3.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+    std::vector<PATH_CONNECTION> pcs6 = csc4.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
 
-    for( std::vector<path_connection> pcs : { pcs0, pcs1, pcs2 } )
+    for( std::vector<PATH_CONNECTION> pcs : { pcs0, pcs1, pcs2 } )
     {
-        for( path_connection& pc : pcs )
+        for( PATH_CONNECTION& pc : pcs )
         {
             EDA_ANGLE testAngle1 = this->AngleBetweenStartAndEnd( pc.a1 );
             EDA_ANGLE testAngle2 = aS2.AngleBetweenStartAndEnd( pc.a2 );
@@ -1716,9 +1716,9 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const CU_SHAPE_ARC& aS2, doubl
         }
     }
 
-    for( std::vector<path_connection> pcs : { pcs3, pcs4, pcs5, pcs6 } )
+    for( std::vector<PATH_CONNECTION> pcs : { pcs3, pcs4, pcs5, pcs6 } )
     {
-        for( path_connection& pc : pcs )
+        for( PATH_CONNECTION& pc : pcs )
         {
             if( bestPath.weight > pc.weight )
             {
@@ -1919,11 +1919,11 @@ bool CheckPathValidity( VECTOR2I aP1, VECTOR2I aP2, std::vector<BOARD_ITEM*> aBe
     return false;
 }
 
-std::vector<path_connection> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, double aMaxWeight )
+std::vector<PATH_CONNECTION> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, double aMaxWeight )
 {
     double                       maxWeight = aMaxWeight;
     double                       maxWeightSquared = maxWeight * maxWeight;
-    std::vector<path_connection> result;
+    std::vector<PATH_CONNECTION> result;
 
     CU_SHAPE_SEGMENT* cusegment1 = dynamic_cast<CU_SHAPE_SEGMENT*>( aS1 );
     CU_SHAPE_SEGMENT* cusegment2 = dynamic_cast<CU_SHAPE_SEGMENT*>( aS2 );
@@ -2315,7 +2315,7 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                 && ( gn2->m_parent->IsConductive() ) )
                 continue;
 
-            for( path_connection pc : GetPaths( gn1->m_parent, gn2->m_parent, aMaxWeight ) )
+            for( PATH_CONNECTION pc : GetPaths( gn1->m_parent, gn2->m_parent, aMaxWeight ) )
             {
                 std::vector<const BOARD_ITEM*> IgnoreForTest;
                 IgnoreForTest.push_back( gn1->m_parent->GetParent() );
@@ -2454,7 +2454,7 @@ std::shared_ptr<GraphNode> CreepageGraph::AddNodeVirtual()
 
 std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<GraphNode> aN1,
                                                                std::shared_ptr<GraphNode> aN2,
-                                                               const path_connection&     aPc )
+                                                               const PATH_CONNECTION&     aPc )
 {
     if( !aN1 || !aN2 )
         return nullptr;
@@ -2473,7 +2473,7 @@ std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<G
     if( !aN1 || !aN2 )
         return nullptr;
 
-    path_connection pc;
+    PATH_CONNECTION pc;
     pc.a1 = aN1->m_pos;
     pc.a2 = aN2->m_pos;
     pc.weight = 0;

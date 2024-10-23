@@ -132,7 +132,7 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
 
     if( minGc )
     {
-        path_connection pc = minGc->m_path;
+        PATH_CONNECTION pc = minGc->m_path;
         ShowPathDRC( minGc->GetShapes(), pc.a1, pc.a2, aDistance );
         reportViolation( aDrce, aMarkerPos, aMarkerLayer );
         std::swap( m_violationHandlerBuffer, m_drcEngine->m_violationHandler );
