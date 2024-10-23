@@ -33,6 +33,7 @@ class STD_BITMAP_BUTTON;
 #include <wx/textctrl.h>
 #include <wx/listbox.h>
 #include <wx/dialog.h>
+#include <wx/checkbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -131,6 +132,38 @@ class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
 		DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 495,369 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_JOB_OUTPUT_BASE();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_SPECIAL_EXECUTE_BASE
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_SPECIAL_EXECUTE_BASE : public DIALOG_SHIM
+{
+	private:
+
+	protected:
+		wxStaticText* m_staticText9;
+		wxPanel* m_panel9;
+		wxStaticText* m_textCommand;
+		wxTextCtrl* m_textCtrlCommand;
+		wxCheckBox* m_cbRecordOutput;
+		wxStaticText* m_textOutputPath;
+		wxTextCtrl* m_textCtrlOutputPath;
+		wxCheckBox* m_cbIgnoreExitCode;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1Save;
+		wxButton* m_sdbSizer1Cancel;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnRecordOutputClicked( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+
+		~DIALOG_SPECIAL_EXECUTE_BASE();
 
 };
 

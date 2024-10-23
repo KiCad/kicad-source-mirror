@@ -42,6 +42,9 @@
 
 #include <confirm.h>
 
+#include <jobs/job_special_execute.h>
+#include <dialogs/dialog_special_execute.h>
+
 
 struct JOB_TYPE_INFO
 {
@@ -408,13 +411,27 @@ void PANEL_JOBS::buildOutputList()
 
 void PANEL_JOBS::openJobOptionsForListItem( size_t aItemIndex )
 {
-    EnsurePcbSchFramesOpen();
-
     JOBSET_JOB& job = m_jobsFile->GetJobs()[aItemIndex];
 
     KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
 
-    m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job, m_frame );
+    if( iface < KIWAY::KIWAY_FACE_COUNT )
+    {
+        EnsurePcbSchFramesOpen();
+
+        m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job, m_frame );
+	}
+    else
+    {
+        // special jobs
+        if( job.m_job->GetType() == "special_execute" )
+        {
+            JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job );
+
+            DIALOG_SPECIAL_EXECUTE dialog( m_frame, specialJob );
+            dialog.ShowModal();
+        }
+    }
 }
 
 

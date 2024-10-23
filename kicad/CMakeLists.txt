@@ -17,6 +17,8 @@ include_directories(
     )
 
 set( KICAD_SRCS
+    dialogs/dialog_job_config_base.cpp
+    dialogs/dialog_special_execute.cpp
     dialogs/dialog_update_check_prompt_base.cpp
     dialogs/dialog_update_check_prompt.cpp
     dialogs/dialog_update_notice_base.cpp
@@ -25,7 +27,6 @@ set( KICAD_SRCS
     dialogs/dialog_template_selector.cpp
     dialogs/panel_kicad_launcher_base.cpp
     dialogs/panel_kicad_launcher.cpp
-    dialogs/dialog_job_config_base.cpp
     dialogs/panel_jobs_base.cpp
     dialogs/panel_jobs.cpp
     files-io.cpp

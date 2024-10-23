@@ -13,8 +13,8 @@
 
 PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : PANEL_NOTEBOOK_BASE( parent, id, pos, size, style, name )
 {
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
@@ -48,7 +48,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	bSizer3->Add( bSizer2, 0, wxEXPAND, 5 );
 
 
-	bSizer1->Add( bSizer3, 2, wxEXPAND, 5 );
+	bSizerMain->Add( bSizer3, 2, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -82,10 +82,10 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	bSizer4->Add( m_buttonRunAllOutputs, 0, wxALIGN_RIGHT|wxALL, 5 );
 
 
-	bSizer1->Add( bSizer4, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizer4, 1, wxEXPAND, 5 );
 
 
-	this->SetSizer( bSizer1 );
+	this->SetSizer( bSizerMain );
 	this->Layout();
 
 	// Connect Events
@@ -117,11 +117,11 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 {
 	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
 
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bitmapOutputType = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer11->Add( m_bitmapOutputType, 0, wxALL, 5 );
+	bSizerMain->Add( m_bitmapOutputType, 0, wxALL, 5 );
 
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
@@ -133,7 +133,7 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer12->Add( m_textOutputType, 0, wxALL, 5 );
 
 
-	bSizer11->Add( bSizer12, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizer12, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
@@ -145,12 +145,12 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer13->Add( m_buttonOutputOptions, 0, wxALL, 5 );
 
 
-	bSizer11->Add( bSizer13, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bSizer13, 0, wxEXPAND, 5 );
 
 
-	this->SetSizer( bSizer11 );
+	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizer11->Fit( this );
+	bSizerMain->Fit( this );
 
 	// Connect Events
 	m_buttonOutputRun->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputRunClick ), NULL, this );
@@ -169,14 +169,14 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
-	wxBoxSizer* bSizer15;
-	bSizer15 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("Options"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
 	m_staticText9->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizer15->Add( m_staticText9, 0, wxALL, 5 );
+	bSizerMain->Add( m_staticText9, 0, wxALL, 5 );
 
 	m_panel9 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer1;
@@ -224,7 +224,7 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	m_panel9->SetSizer( fgSizer1 );
 	m_panel9->Layout();
 	fgSizer1->Fit( m_panel9 );
-	bSizer15->Add( m_panel9, 1, wxEXPAND | wxALL, 5 );
+	bSizerMain->Add( m_panel9, 1, wxEXPAND | wxALL, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
@@ -233,10 +233,10 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizer15->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
 
 
-	this->SetSizer( bSizer15 );
+	this->SetSizer( bSizerMain );
 	this->Layout();
 
 	this->Centre( wxBOTH );
@@ -249,5 +249,87 @@ DIALOG_JOB_OUTPUT_BASE::~DIALOG_JOB_OUTPUT_BASE()
 {
 	// Disconnect Events
 	m_buttonOutputPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JOB_OUTPUT_BASE::onOutputPathBrowseClicked ), NULL, this );
+
+}
+
+DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
+
+	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("Options"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	m_staticText9->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	bSizerMain->Add( m_staticText9, 0, wxALL, 5 );
+
+	m_panel9 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_textCommand = new wxStaticText( m_panel9, wxID_ANY, wxT("Command"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCommand->Wrap( -1 );
+	fgSizer1->Add( m_textCommand, 0, wxALL, 5 );
+
+	m_textCtrlCommand = new wxTextCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlCommand->SetMinSize( wxSize( 350,-1 ) );
+
+	fgSizer1->Add( m_textCtrlCommand, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_cbRecordOutput = new wxCheckBox( m_panel9, wxID_ANY, wxT("Record Output"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_cbRecordOutput, 0, wxALL, 5 );
+
+	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, wxT("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputPath->Wrap( -1 );
+	fgSizer1->Add( m_textOutputPath, 0, wxALL, 5 );
+
+	m_textCtrlOutputPath = new wxTextCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
+
+	fgSizer1->Add( m_textCtrlOutputPath, 0, wxALL, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_cbIgnoreExitCode = new wxCheckBox( m_panel9, wxID_ANY, wxT("Ignore non-zero exit code"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_cbIgnoreExitCode, 1, wxALL, 5 );
+
+
+	m_panel9->SetSizer( fgSizer1 );
+	m_panel9->Layout();
+	fgSizer1->Fit( m_panel9 );
+	bSizerMain->Add( m_panel9, 1, wxEXPAND | wxALL, 5 );
+
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
+	m_sdbSizer1->AddButton( m_sdbSizer1Save );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+
+	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+
+
+	this->SetSizer( bSizerMain );
+	this->Layout();
+	bSizerMain->Fit( this );
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_cbRecordOutput->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SPECIAL_EXECUTE_BASE::OnRecordOutputClicked ), NULL, this );
+}
+
+DIALOG_SPECIAL_EXECUTE_BASE::~DIALOG_SPECIAL_EXECUTE_BASE()
+{
+	// Disconnect Events
+	m_cbRecordOutput->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SPECIAL_EXECUTE_BASE::OnRecordOutputClicked ), NULL, this );
 
 }

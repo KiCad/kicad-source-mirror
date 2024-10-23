@@ -18,26 +18,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <jobs/job_special_execute.h>
-#include <jobs/job_registry.h>
-#include <i18n_utility.h>
+#include <dialogs/panel_jobs_base.h>
 
-JOB_SPECIAL_EXECUTE::JOB_SPECIAL_EXECUTE( bool aIsCli ) :
-        JOB( "special_execute", false, aIsCli ),
-        m_command(),
-        m_ignoreExitcode( false ),
-        m_recordOutput( true )
+class JOB_SPECIAL_EXECUTE;
+
+class DIALOG_SPECIAL_EXECUTE: public DIALOG_SPECIAL_EXECUTE_BASE
 {
-    m_params.emplace_back( new JOB_PARAM<wxString>( "command", &m_command, m_command ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "command", &m_ignoreExitcode, m_ignoreExitcode ) );
-    m_params.emplace_back(
-            new JOB_PARAM<bool>( "record_output", &m_recordOutput, m_recordOutput ) );
-}
+public:
+    DIALOG_SPECIAL_EXECUTE( wxWindow* aParent, JOB_SPECIAL_EXECUTE* aJob );
 
-wxString JOB_SPECIAL_EXECUTE::GetDescription()
-{
-    return wxString( "Execute command: " ) + m_command;
-}
+    bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
 
-REGISTER_JOB( special_execute, _HKI( "Special: Execute Command" ), KIWAY::KIWAY_FACE_COUNT,
-              JOB_SPECIAL_EXECUTE );
+private:
+    JOB_SPECIAL_EXECUTE* m_job;
+
+    void OnRecordOutputClicked( wxCommandEvent& event ) override;
+};
