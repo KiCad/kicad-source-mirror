@@ -4,7 +4,7 @@
  * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,8 +134,10 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
+    wxCHECK( m_schematic, /* void */ );
+
     // Allocate the plotter and set the job level parameter
-    PDF_PLOTTER* plotter = new PDF_PLOTTER();
+    PDF_PLOTTER* plotter = new PDF_PLOTTER( &m_schematic->Prj() );
     plotter->SetRenderSettings( aRenderSettings );
     plotter->SetColorMode( !aPlotOpts.m_blackAndWhite );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );

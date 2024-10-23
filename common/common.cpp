@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014-2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -353,7 +353,7 @@ const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT
 }
 
 
-const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject )
+const wxString ResolveUriByEnvVars( const wxString& aUri, const PROJECT* aProject )
 {
     wxString uri = ExpandTextVars( aUri, aProject );
 

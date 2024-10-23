@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,8 @@
 #include <callback_gal.h>
 #include <math/util.h>      // for KiROUND
 
-PLOTTER::PLOTTER( )
+PLOTTER::PLOTTER( const PROJECT* aProject ) :
+    m_project( aProject )
 {
     m_plotScale = 1;
     m_currentPenWidth = -1;       // To-be-set marker

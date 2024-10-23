@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ public:
     static const int DO_NOT_SET_LINE_WIDTH = -2;    // Skip selection
     static const int USE_DEFAULT_LINE_WIDTH = -1;   // use the default pen
 
-    PLOTTER();
+    PLOTTER( const PROJECT* aProject = nullptr );
 
     virtual ~PLOTTER();
 
@@ -679,6 +679,8 @@ protected:      // variables used in most of plotters:
     wxArrayString    m_headerExtraLines;    // a set of string to print in header file
 
     RENDER_SETTINGS* m_renderSettings;
+
+    const PROJECT*   m_project;
 };
 
 
