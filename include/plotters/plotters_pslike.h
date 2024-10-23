@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,7 +35,8 @@
 class PSLIKE_PLOTTER : public PLOTTER
 {
 public:
-    PSLIKE_PLOTTER() :
+    PSLIKE_PLOTTER( const PROJECT* aProject = nullptr) :
+            PLOTTER( aProject ),
             plotScaleAdjX( 1 ),
             plotScaleAdjY( 1 ),
             m_textMode( PLOT_TEXT_MODE::PHANTOM )
@@ -143,7 +144,8 @@ protected:
 class PS_PLOTTER : public PSLIKE_PLOTTER
 {
 public:
-    PS_PLOTTER()
+    PS_PLOTTER( const PROJECT* aProject = nullptr ) :
+        PSLIKE_PLOTTER( aProject )
     {
         // The phantom plot in postscript is an hack and reportedly
         // crashes Adobe's own postscript interpreter!
@@ -238,7 +240,8 @@ protected:
 class PDF_PLOTTER : public PSLIKE_PLOTTER
 {
 public:
-    PDF_PLOTTER() :
+    PDF_PLOTTER( const PROJECT* aProject = nullptr ) :
+            PSLIKE_PLOTTER( aProject ),
             m_pageTreeHandle( 0 ),
             m_fontResDictHandle( 0 ),
             m_imgResDictHandle( 0 ),
@@ -518,7 +521,7 @@ protected:
 class SVG_PLOTTER : public PSLIKE_PLOTTER
 {
 public:
-    SVG_PLOTTER();
+    SVG_PLOTTER( const PROJECT* aProject = nullptr );
 
     static wxString GetDefaultFileExtension()
     {

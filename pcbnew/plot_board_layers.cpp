@@ -1146,6 +1146,8 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
                          const wxString& aLayerName, const wxString& aFullFileName,
                          const wxString& aSheetName, const wxString& aSheetPath )
 {
+    wxCHECK( aBoard && aPlotOpts, nullptr );
+
     // Create the plotter driver and set the few plotter specific options
     PLOTTER*    plotter = nullptr;
 
@@ -1168,7 +1170,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         break;
 
     case PLOT_FORMAT::PDF:
-        plotter = new PDF_PLOTTER();
+        plotter = new PDF_PLOTTER( aBoard->GetProject() );
         break;
 
     case PLOT_FORMAT::HPGL:

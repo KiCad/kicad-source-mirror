@@ -162,7 +162,8 @@ static wxString XmlEsc( const wxString& aStr, bool isAttribute = false )
 }
 
 
-SVG_PLOTTER::SVG_PLOTTER()
+SVG_PLOTTER::SVG_PLOTTER( const PROJECT* aProject ) :
+    PSLIKE_PLOTTER( aProject )
 {
     m_graphics_changed = true;
     SetTextMode( PLOT_TEXT_MODE::STROKE );

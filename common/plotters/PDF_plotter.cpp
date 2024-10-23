@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2012 Lorenzo Marcantonio, l.marcantonio@logossrl.com
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,8 @@
 #include <wx/datstrm.h>
 
 #include <advanced_config.h>
-#include <eda_text.h> // for IsGotoPageHref
+#include <common.h>               // ResolveUriByEnvVars
+#include <eda_text.h>             // for IsGotoPageHref
 #include <font/font.h>
 #include <core/ignore.h>
 #include <macros.h>
@@ -1332,6 +1333,9 @@ bool PDF_PLOTTER::EndPlot()
                 {
                     wxString href = property.substr( property.Find( "http:" ) );
 
+                    if( m_project )
+                        href = ResolveUriByEnvVars( href, m_project );
+
                     js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
                                             EscapeString( property, CTX_JS_STR ),
                                             EscapeString( href, CTX_JS_STR ) );
@@ -1339,6 +1343,20 @@ bool PDF_PLOTTER::EndPlot()
                 else if( property.Find( "https:" ) >= 0 )
                 {
                     wxString href = property.substr( property.Find( "https:" ) );
+
+                    if( m_project )
+                        href = ResolveUriByEnvVars( href, m_project );
+
+                    js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
+                                            EscapeString( property, CTX_JS_STR ),
+                                            EscapeString( href, CTX_JS_STR ) );
+                }
+                else if( property.Find( "file:" ) >= 0 )
+                {
+                    wxString href = property.substr( property.Find( "file:" ) );
+
+                    if( m_project )
+                        href = ResolveUriByEnvVars( href, m_project );
 
                     js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
                                             EscapeString( property, CTX_JS_STR ),
