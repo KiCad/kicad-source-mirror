@@ -480,6 +480,12 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
 
         break;
     }
+    case SCH_PIN_T:
+    {
+        SCH_PIN* pin = static_cast<SCH_PIN*>( aItem );
+        addAnchor( pin->GetPosition(), SNAPPABLE | ORIGIN, aItem );
+        break;
+    }
 
     default:
         break;

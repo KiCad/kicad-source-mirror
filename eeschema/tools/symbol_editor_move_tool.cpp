@@ -169,6 +169,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
+            GRID_HELPER_GRIDS snapLayer = grid.GetSelectionGrid( selection );
+
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
                 SCH_ITEM* lib_item = static_cast<SCH_ITEM*>( selection.Front() );
@@ -238,11 +240,10 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 }
                 else if( m_frame->GetMoveWarpsCursor() )
                 {
-                    VECTOR2I itemPos = selection.GetTopLeftItem()->GetPosition();
-                    m_anchorPos = VECTOR2I( itemPos.x, itemPos.y );
-
-                    getViewControls()->WarpMouseCursor( m_anchorPos, true, true );
-                    m_cursor = m_anchorPos;
+                    // User wants to warp the mouse
+                    m_cursor = grid.BestDragOrigin( m_cursor, snapLayer, selection );
+                    selection.SetReferencePoint( m_cursor );
+                    m_anchorPos = m_cursor;
                 }
                 else
                 {
@@ -260,8 +261,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
             //------------------------------------------------------------------------
             // Follow the mouse
             //
-            m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ),
-                                            grid.GetSelectionGrid( selection ), selection );
+            m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ), snapLayer,
+                                            selection );
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 
