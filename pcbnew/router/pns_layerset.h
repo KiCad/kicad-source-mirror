@@ -66,11 +66,15 @@ public:
 
     bool Overlaps( const PNS_LAYER_RANGE& aOther ) const
     {
+        if ( m_start < 0 || m_end < 0 || aOther.m_start < 0 || aOther.m_end < 0 )
+            return false;
         return m_end >= aOther.m_start && m_start <= aOther.m_end;
     }
 
     bool Overlaps( const int aLayer ) const
     {
+        if ( m_start < 0 || m_end < 0 || aLayer < 0 )
+            return false;
         return aLayer >= m_start && aLayer <= m_end;
     }
 
