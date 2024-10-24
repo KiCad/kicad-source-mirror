@@ -724,6 +724,8 @@ bool NODE::QueryEdgeExclusions( const VECTOR2I& aPos ) const
 
 void NODE::doRemove( ITEM* aItem )
 {
+    bool holeRemoved = false; // fixme: better logic, I don't like this
+
     // case 1: removing an item that is stored in the root node from any branch:
     // mark it as overridden, but do not remove
     if( aItem->BelongsTo( m_root ) && !isRoot() )
@@ -741,21 +743,26 @@ void NODE::doRemove( ITEM* aItem )
         m_index->Remove( aItem );
 
         if( aItem->HasHole() )
+        {
             m_index->Remove( aItem->Hole() );
+            holeRemoved = true;
+        }
     }
 
     // the item belongs to this particular branch: un-reference it
     if( aItem->BelongsTo( this ) )
     {
         aItem->SetOwner( nullptr );
-
         m_root->m_garbageItems.insert( aItem );
-
         HOLE *hole = aItem->Hole();
 
         if( hole )
         {
-            m_index->Remove( hole ); // hole is not directly owned by NODE but by the parent SOLID/VIA.
+            if( ! holeRemoved )
+            {
+                m_index->Remove( hole ); // hole is not directly owned by NODE but by the parent SOLID/VIA.
+            }
+
             hole->SetOwner( aItem );
         }
     }
