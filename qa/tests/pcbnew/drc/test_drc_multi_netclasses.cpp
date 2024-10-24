@@ -46,7 +46,7 @@ struct DRC_REGRESSION_TEST_FIXTURE
 
 BOOST_FIXTURE_TEST_CASE( DRCMultiNetclasses, DRC_REGRESSION_TEST_FIXTURE )
 {
-    // Check for minimum copper connection errors
+    // Check for multiple netclass assignment errors
 
     std::vector<std::pair<wxString, int>> tests =
     {
@@ -88,7 +88,7 @@ BOOST_FIXTURE_TEST_CASE( DRCMultiNetclasses, DRC_REGRESSION_TEST_FIXTURE )
         if( violations.size() == test.second )
         {
             BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-            BOOST_TEST_MESSAGE( wxString::Format( "DRC connection width: %s, passed", test.first ) );
+            BOOST_TEST_MESSAGE( wxString::Format( "DRC multi netclasses: %s, passed", test.first ) );
         }
         else
         {
@@ -103,7 +103,7 @@ BOOST_FIXTURE_TEST_CASE( DRCMultiNetclasses, DRC_REGRESSION_TEST_FIXTURE )
                                                      itemMap ) );
             }
 
-            BOOST_ERROR( wxString::Format( "DRC track width: %s, failed (violations found %d expected %d)",
+            BOOST_ERROR( wxString::Format( "DRC multi netclasses: %s, failed (violations found %d expected %d)",
                                             test.first, (int)violations.size(), test.second ) );
         }
     }
