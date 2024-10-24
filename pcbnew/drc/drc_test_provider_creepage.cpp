@@ -113,8 +113,8 @@ std::shared_ptr<GraphNode> FindInGraphNodes( std::shared_ptr<GraphNode>         
 int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCodeA, int aNetCodeB,
                                               PCB_LAYER_ID aLayer )
 {
-    ZONE bci1( m_board );
-    ZONE bci2( m_board );
+    PCB_TRACK bci1( m_board );
+    PCB_TRACK bci2( m_board );
     bci1.SetNetCode( aNetCodeA );
     bci2.SetNetCode( aNetCodeB );
     bci1.SetLayer( aLayer );
@@ -240,8 +240,8 @@ double DRC_TEST_PROVIDER_CREEPAGE::GetMaxConstraint( const std::vector<int>& aNe
     double         maxConstraint = 0;
     DRC_CONSTRAINT constraint;
 
-    ZONE bci1( m_board );
-    ZONE bci2( m_board );
+    PCB_TRACK bci1( m_board );
+    PCB_TRACK bci2( m_board );
 
 
     alg::for_all_pairs( aNetCodes.begin(), aNetCodes.end(),
