@@ -231,7 +231,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
                     obs.m_clearance = clearance;
                     obs.m_distFirst = 0;
                     obs.m_maxFanoutWidth = 0;
-                    aCtx->obstacles.insert( obs );
+                    aCtx->obstacles.push_back( obs );
                 }
                 else
                 {
@@ -256,7 +256,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
                     obs.m_clearance = clearance;
                     obs.m_distFirst = 0;
                     obs.m_maxFanoutWidth = 0;
-                    aCtx->obstacles.insert( obs );
+                    aCtx->obstacles.push_back( obs );
                 }
                 else
                 {
