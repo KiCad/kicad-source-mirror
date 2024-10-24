@@ -55,15 +55,34 @@ public:
         SH_TRY_WALK
     };
 
+    enum SHOVE_POLICY
+    {
+        SHP_DEFAULT = 0,
+        SHP_SHOVE = 0x1,
+        SHP_WALK_FORWARD = 0x2,
+        SHP_WALK_BACK = 0x4,
+        SHP_IGNORE = 0x8,
+        SHP_DONT_OPTIMIZE = 0x10
+    };
+
+    
+    void SetDefaultShovePolicy( int aPolicy );
+    
+    void SetShovePolicy( const LINKED_ITEM* aItem, int aPolicy );
+    void SetShovePolicy( const LINE* aLine, int aPolicy );
+
     SHOVE( NODE* aWorld, ROUTER* aRouter );
     ~SHOVE();
 
-    SHOVE_STATUS ShoveLines( const LINE& aCurrentHead );
-    SHOVE_STATUS ShoveMultiLines( const ITEM_SET& aHeadSet );
+    void ClearHeads();
+    void AddHeads( LINE* aHead,  int aPolicy = SHP_DEFAULT );
+    void AddHeads( VIA_HANDLE aHead, VECTOR2I aNewPos, int aPolicy = SHP_DEFAULT );
+
+    SHOVE_STATUS Run();
 
     SHOVE_STATUS ShoveDraggingVia( const VIA_HANDLE aOldVia, const VECTOR2I& aWhere,
                                    VIA_HANDLE& aNewVia );
-    SHOVE_STATUS ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
+    bool ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                                     LINE& aResultLine );
 
     void ForceClearance ( bool aEnabled, int aClearance )
@@ -76,9 +95,10 @@ public:
 
     NODE* CurrentNode();
 
-    const LINE NewHead() const;
-
-    void SetInitialLine( LINE& aInitial );
+    const std::optional<LINE> NewHead() const;
+    bool HeadsModified( int aIndex = -1 ) const;
+    const PNS::LINE GetModifiedHead( int aIndex ) const;
+    const VIA_HANDLE GetModifiedHeadVia( int aIndex ) const;
 
     bool AddLockedSpringbackNode( NODE* aNode );
     void UnlockSpringbackNode( NODE* aNode );
@@ -93,18 +113,53 @@ private:
     typedef std::pair<LINE, LINE> LINE_PAIR;
     typedef std::vector<LINE_PAIR> LINE_PAIR_VEC;
 
+    struct ROOT_LINE_ENTRY
+    {
+        ROOT_LINE_ENTRY( LINE* aLine = nullptr, int aPolicy = SHP_DEFAULT ) :
+            rootLine( aLine ),
+            policy( aPolicy ) {}
+
+        LINE *rootLine = nullptr;
+        VIA* oldVia = nullptr;
+        VIA* newVia = nullptr;
+        std::optional<LINE> newLine;
+        int policy = SHP_DEFAULT;
+        bool isHead = false;
+    };
+
+    struct HEAD_LINE_ENTRY
+    {
+        HEAD_LINE_ENTRY( LINE* aOrig, int aPolicy = SHP_DEFAULT ) :
+            origHead( aOrig ),
+            policy( aPolicy )
+        {};
+
+        HEAD_LINE_ENTRY( VIA_HANDLE aVia, int aPolicy = SHP_DEFAULT ) :
+            theVia( aVia ),
+            policy( aPolicy )
+        {};
+
+        bool geometryModified = false;
+        std::optional<VIA_HANDLE> prevVia;
+        std::optional<VIA_HANDLE> theVia;
+        VIA* draggedVia = nullptr; 
+        VECTOR2I viaNewPos;
+        LINE* origHead = nullptr;
+        std::optional<LINE> newHead;
+        int policy;
+    };
+
     struct SPRINGBACK_TAG
     {
         SPRINGBACK_TAG() :
             m_length( 0 ),
-            m_draggedVia(),
             m_node( nullptr ),
             m_seq( 0 ),
             m_locked( false )
         {}
 
         int64_t m_length;
-        VIA_HANDLE m_draggedVia;
+        std::vector<VIA_HANDLE> m_draggedVias;
         VECTOR2I m_p;
         NODE* m_node;
         OPT_BOX2I m_affectedArea;
@@ -112,25 +167,25 @@ private:
         bool m_locked;
     };
 
-    SHOVE_STATUS shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
+    bool shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                                      LINE& aResultLine, const HULL_SET& aHulls );
 
-    NODE* reduceSpringback( const ITEM_SET& aHeadSet, VIA_HANDLE& aDraggedVia );
+    NODE* reduceSpringback( const ITEM_SET& aHeadSet );
 
-    bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aDraggedVia );
+    bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea );
 
-    SHOVE_STATUS shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLine,
+    bool shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLine,
                                        LINE& aResultLine );
     bool checkShoveDirection( const LINE& aCurLine, const LINE& aObstacleLine,
                               const LINE& aShovedLine ) const;
 
     SHOVE_STATUS onCollidingArc( LINE& aCurrent, ARC* aObstacleArc );
-    SHOVE_STATUS onCollidingLine( LINE& aCurrent, LINE& aObstacle );
+    SHOVE_STATUS onCollidingLine( LINE& aCurrent, LINE& aObstacle, int aNextRank );
     SHOVE_STATUS onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacleSeg );
     SHOVE_STATUS onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OBSTACLE& aObstacleInfo );
-    SHOVE_STATUS onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OBSTACLE& aObstacleInfo );
-    SHOVE_STATUS onReverseCollidingVia( LINE& aCurrent, VIA* aObstacleVia );
-    SHOVE_STATUS pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank );
+    SHOVE_STATUS onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OBSTACLE& aObstacleInfo, int aNextRank );
+    SHOVE_STATUS onReverseCollidingVia( LINE& aCurrent, VIA* aObstacleVia, OBSTACLE& aObstacleInfo );
+    SHOVE_STATUS pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aNextRank );
 
     OPT_BOX2I totalAffectedArea() const;
 
@@ -142,42 +197,53 @@ private:
     bool pushLineStack( const LINE& aL, bool aKeepCurrentOnTop = false );
     void popLineStack();
 
-    LINE assembleLine( const LINKED_ITEM* aSeg, int* aIndex = nullptr );
+    LINE assembleLine( const LINKED_ITEM* aSeg, int* aIndex = nullptr, bool aPreCleanup = false );
 
     void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
     void replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea = true,
                       NODE *aNode = nullptr );
 
-    LINE* findRootLine( LINE *aLine );
+    ROOT_LINE_ENTRY* findRootLine( const LINE *aLine );
+    ROOT_LINE_ENTRY* findRootLine( const LINKED_ITEM *aItem );
+    ROOT_LINE_ENTRY* touchRootLine( const LINE* aLine );
+    ROOT_LINE_ENTRY* touchRootLine( const LINKED_ITEM *aItem );
+    void pruneRootLines( NODE *aRemovedNode );
 
-    OPT_BOX2I                   m_affectedArea;
-
+    
     SHOVE_STATUS shoveIteration( int aIter );
     SHOVE_STATUS shoveMainLoop();
 
     int getClearance( const ITEM* aA, const ITEM* aB ) const;
     bool fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs );
     void sanityCheck( LINE* aOld, LINE* aNew );
-
+    void reconstructHeads( bool aShoveFailed );
+    void removeHeads();
+    VIA* findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle );
+    bool preShoveCleanup( LINE* aOld, LINE* aNew );
+    const wxString formatPolicy( int aPolicy );
+    
     std::vector<SPRINGBACK_TAG> m_nodeStack;
     std::vector<LINE>           m_lineStack;
     std::vector<LINE>           m_optimizerQueue;
-    std::unordered_map<const LINKED_ITEM*, LINE*> m_rootLineHistory;
+    std::deque<HEAD_LINE_ENTRY> m_headLines;
+
+    std::unordered_map<LINKED_ITEM::UNIQ_ID, ROOT_LINE_ENTRY*> m_rootLineHistory;
 
     NODE*                       m_root;
     NODE*                       m_currentNode;
     const NODE*                 m_springbackDoNotTouchNode;
     int                         m_restrictSpringbackTagId;
-
-    OPT_LINE                    m_newHead;
-
     VIA*                        m_draggedVia;
-
     int                         m_iter;
+    bool m_headsModified;
     int m_forceClearance;
     bool m_multiLineMode;
 
     int m_optFlagDisableMask;
+
+    int m_defaultPolicy;
+    OPT_BOX2I                   m_affectedArea;
+
 };
 
 }
