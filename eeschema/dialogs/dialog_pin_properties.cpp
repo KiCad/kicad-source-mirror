@@ -123,7 +123,7 @@ public:
 };
 
 
-DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin ) :
+DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin, bool aFocusPinNumber ) :
     DIALOG_PIN_PROPERTIES_BASE( parent ),
     m_frame( parent ),
     m_pin( aPin ),
@@ -223,7 +223,8 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
     m_addAlternate->GetParent()->Layout();
 
     SetupStandardButtons();
-    SetInitialFocus( m_textPinName );
+
+    SetInitialFocus( aFocusPinNumber ? m_textPinNumber : m_textPinName );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

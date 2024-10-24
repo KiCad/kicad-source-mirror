@@ -47,7 +47,7 @@ public:
     bool PlacePin( SCH_PIN* aPin );
     void CreateImagePins( SCH_PIN* aPin );
 
-    bool EditPinProperties( SCH_PIN* aPin );
+    bool EditPinProperties( SCH_PIN* aPin, bool aFocusPinNumber );
     int PushPinProperties( const TOOL_EVENT& aEvent );
 
 private:

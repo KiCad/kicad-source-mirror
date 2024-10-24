@@ -53,7 +53,7 @@ class ALT_PIN_DATA_MODEL;
 class DIALOG_PIN_PROPERTIES : public DIALOG_PIN_PROPERTIES_BASE
 {
 public:
-    DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin );
+    DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin, bool aFocusPinNumber );
     ~DIALOG_PIN_PROPERTIES() override;
 
     bool TransferDataToWindow() override;

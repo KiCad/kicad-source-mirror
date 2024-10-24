@@ -117,10 +117,10 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
 }
 
 
-bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( SCH_PIN* aPin )
+bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( SCH_PIN* aPin, bool aFocusPinNumber )
 {
     SCH_PIN               original_pin( *aPin );
-    DIALOG_PIN_PROPERTIES dlg( m_frame, aPin );
+    DIALOG_PIN_PROPERTIES dlg( m_frame, aPin, aFocusPinNumber );
     SCH_COMMIT            commit( m_frame );
     LIB_SYMBOL*           parentSymbol = static_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() );
 
@@ -305,7 +305,7 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_SYMBO
     pin->SetUnit( g_LastPinCommonUnit ? 0 : m_frame->GetUnit() );
     pin->SetVisible( g_LastPinVisible );
 
-    if( !EditPinProperties( pin ) )
+    if( !EditPinProperties( pin, false ) )
     {
         delete pin;
         pin = nullptr;

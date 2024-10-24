@@ -578,11 +578,24 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         switch( item->Type() )
         {
         case SCH_PIN_T:
+        {
+            SCH_PIN& pin = static_cast<SCH_PIN&>( *item );
+
+            // Mouse, not cursor, as grid points may well not be under any text
+            const VECTOR2I&   mousePos = m_toolMgr->GetMousePosition();
+            PIN_LAYOUT_CACHE& layout = pin.GetLayoutCache();
+
+            bool mouseOverNumber = false;
+            if( OPT_BOX2I numberBox = layout.GetPinNumberBBox() )
+            {
+                mouseOverNumber = numberBox->Contains( mousePos );
+            }
+
             if( SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() )
-                pinTool->EditPinProperties( static_cast<SCH_PIN*>( item ) );
+                pinTool->EditPinProperties( &pin, mouseOverNumber );
 
             break;
-
+        }
         case SCH_SHAPE_T:
             editShapeProperties( static_cast<SCH_SHAPE*>( item ) );
             break;
