@@ -70,7 +70,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         m_boundingBoxCacheTimeStamp( 0 ),
         m_textExcludedBBoxCacheTimeStamp( 0 ),
         m_hullCacheTimeStamp( 0 ),
-        m_initial_comments( nullptr )
+        m_initial_comments( nullptr ),
+        m_componentClass( nullptr )
 {
     m_attributes   = 0;
     m_layer        = F_Cu;
@@ -137,6 +138,8 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_zoneConnection                 = aFootprint.m_zoneConnection;
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
     m_fileFormatVersionAtLoad        = aFootprint.m_fileFormatVersionAtLoad;
+
+    m_componentClass                 = aFootprint.m_componentClass;
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -708,6 +711,8 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
 
+    m_componentClass                 = aOther.m_componentClass;
+
     // Move the fields
     m_fields.clear();
 
@@ -799,6 +804,8 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_solderPasteMarginRatio         = aOther.m_solderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
+
+    m_componentClass                 = aOther.m_componentClass;
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -3781,6 +3788,17 @@ void FOOTPRINT::EmbedFonts()
 }
 
 
+wxString FOOTPRINT::GetComponentClassAsString() const
+{
+    if( m_componentClass )
+    {
+        return m_componentClass->GetFullName();
+    }
+
+    return wxEmptyString;
+}
+
+
 static struct FOOTPRINT_DESC
 {
     FOOTPRINT_DESC()
@@ -3845,6 +3863,13 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),
                     groupFields );
+
+        // Used only in DRC engine
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>(
+                                     _HKI( "Component Class" ), NO_SETTER( FOOTPRINT, wxString ),
+                                     &FOOTPRINT::GetComponentClassAsString ) )
+                .SetIsHiddenFromLibraryEditors()
+                .SetIsHiddenFromPropertiesManager();
 
         const wxString groupAttributes = _HKI( "Attributes" );
 

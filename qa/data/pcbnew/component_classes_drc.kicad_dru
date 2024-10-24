@@ -1,0 +1,25 @@
+(version 1)
+(rule Rule1
+	(condition "A.intersectsArea('AREA1') && A.Type == 'Footprint'")
+	(constraint assertion "A.Component_Class == 'CLASS1'")
+)
+
+(rule Rule2
+	(condition "A.intersectsArea('AREA3') && A.Type == 'Footprint'")
+	(constraint assertion "A.Component_Class != 'CLASS1'")
+)
+
+(rule Rule3
+	(condition "A.intersectsArea('AREA2') && A.Type == 'Footprint'")
+	(constraint assertion "A.Component_Class == 'CLASS2,CLASS3'")
+)
+
+(rule Rule4
+	(condition "A.intersectsArea('AREA4') && A.Type == 'Footprint'")
+	(constraint assertion "A.hasComponentClass('CLASS3')")
+)
+
+(rule Rule5
+	(condition "A.intersectsArea('AREA4') && A.Type == 'Footprint'")
+	(constraint assertion "A.hasComponentClass('CLASS4')")
+)

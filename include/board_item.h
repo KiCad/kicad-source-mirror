@@ -37,7 +37,6 @@
 class BOARD;
 class BOARD_DESIGN_SETTINGS;
 class BOARD_ITEM_CONTAINER;
-class COMPONENT_CLASS;
 class SHAPE_POLY_SET;
 class SHAPE_SEGMENT;
 class PCB_BASE_FRAME;
@@ -81,7 +80,7 @@ class BOARD_ITEM : public EDA_ITEM
 public:
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer = F_Cu ) :
             EDA_ITEM( aParent, idtype, false, true ), m_layer( aLayer ), m_isKnockout( false ),
-            m_isLocked( false ), m_group( nullptr ), m_componentClass( nullptr )
+            m_isLocked( false ), m_group( nullptr )
     {
     }
 
@@ -425,12 +424,6 @@ public:
         bool operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b ) const;
     };
 
-    void SetComponentClass( const COMPONENT_CLASS* aClass ) { m_componentClass = aClass; }
-
-    const COMPONENT_CLASS* GetComponentClass() const { return m_componentClass; }
-
-    wxString GetComponentClassAsString() const;
-
 protected:
     /**
      * Return a string (to be shown to the user) describing a layer mask.
@@ -446,8 +439,6 @@ protected:
     bool            m_isLocked;
 
     PCB_GROUP*      m_group;
-
-    const COMPONENT_CLASS* m_componentClass;
 };
 
 #ifndef SWIG

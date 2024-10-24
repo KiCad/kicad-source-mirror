@@ -26,6 +26,7 @@
 #include <memory>
 #include <mutex>
 #include <board.h>
+#include <footprint.h>
 #include <lset.h>
 #include <board_connected_item.h>
 #include <pcbexpr_evaluator.h>
@@ -169,13 +170,15 @@ class PCBEXPR_COMPONENT_CLASS_VALUE : public LIBEVAL::VALUE
 {
 public:
     PCBEXPR_COMPONENT_CLASS_VALUE( BOARD_ITEM* aItem ) :
-            LIBEVAL::VALUE( wxEmptyString ), m_item( aItem ){};
+            LIBEVAL::VALUE( wxEmptyString ), m_item( dynamic_cast<FOOTPRINT*>( aItem ) )
+    {};
 
     const wxString& AsString() const override
     {
-        const COMPONENT_CLASS* compClass = m_item->GetComponentClass();
+        if( !m_item )
+            return LIBEVAL::VALUE::AsString();
 
-        if( compClass )
+        if( const COMPONENT_CLASS* compClass = m_item->GetComponentClass() )
         {
             const_cast<PCBEXPR_COMPONENT_CLASS_VALUE*>( this )->Set( compClass->GetFullName() );
         }
@@ -188,6 +191,9 @@ public:
         if( const PCBEXPR_COMPONENT_CLASS_VALUE* bValue =
                     dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
         {
+            if( !m_item || !bValue->m_item )
+                return LIBEVAL::VALUE::EqualTo( aCtx, b );
+
             const COMPONENT_CLASS* aClass = m_item->GetComponentClass();
             const COMPONENT_CLASS* bClass = bValue->m_item->GetComponentClass();
 
@@ -206,6 +212,9 @@ public:
         if( const PCBEXPR_COMPONENT_CLASS_VALUE* bValue =
                     dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
         {
+            if( !m_item || !bValue->m_item )
+                return LIBEVAL::VALUE::EqualTo( aCtx, b );
+
             const COMPONENT_CLASS* aClass = m_item->GetComponentClass();
             const COMPONENT_CLASS* bClass = bValue->m_item->GetComponentClass();
 
@@ -220,7 +229,7 @@ public:
     }
 
 protected:
-    BOARD_ITEM* m_item;
+    FOOTPRINT* m_item;
 };
 
 

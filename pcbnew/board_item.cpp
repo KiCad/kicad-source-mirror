@@ -380,17 +380,6 @@ wxString BOARD_ITEM::GetParentAsString() const
 }
 
 
-wxString BOARD_ITEM::GetComponentClassAsString() const
-{
-    if( m_componentClass )
-    {
-        return m_componentClass->GetFullName();
-    }
-
-    return wxEmptyString;
-}
-
-
 static struct BOARD_ITEM_DESC
 {
     BOARD_ITEM_DESC()
@@ -430,13 +419,6 @@ static struct BOARD_ITEM_DESC
                         BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
                         return item && item->GetBoard() && !item->GetBoard()->IsFootprintHolder();
                     } );
-
-        // Used only in DRC engine
-        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, wxString>(
-                                     _HKI( "ComponentClass" ), NO_SETTER( BOARD_ITEM, wxString ),
-                                     &BOARD_ITEM::GetComponentClassAsString ) )
-                .SetIsHiddenFromLibraryEditors()
-                .SetIsHiddenFromPropertiesManager();
     }
 } _BOARD_ITEM_DESC;
 

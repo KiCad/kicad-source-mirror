@@ -1234,8 +1234,12 @@ static void hasComponentClassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg]() -> double
             {
-                BOARD_ITEM*            boardItem = static_cast<BOARD_ITEM*>( item );
-                const COMPONENT_CLASS* compClass = boardItem->GetComponentClass();
+                FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item );
+
+                if( !footprint )
+                    return 0.0;
+
+                const COMPONENT_CLASS* compClass = footprint->GetComponentClass();
 
                 if( compClass && compClass->ContainsClassName( arg->AsString() ) )
                     return 1.0;

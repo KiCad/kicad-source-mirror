@@ -32,6 +32,7 @@
 #include <board_item_container.h>
 #include <board_item.h>
 #include <collectors.h>
+#include <component_class_manager.h>
 #include <embedded_files.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lset.h>
@@ -993,6 +994,13 @@ public:
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
+    void SetComponentClass( const COMPONENT_CLASS* aClass ) { m_componentClass = aClass; }
+
+    const COMPONENT_CLASS* GetComponentClass() const { return m_componentClass; }
+
+    wxString GetComponentClassAsString() const;
+
+
     bool operator==( const BOARD_ITEM& aOther ) const override;
     bool operator==( const FOOTPRINT& aOther ) const;
 
@@ -1087,6 +1095,8 @@ private:
     mutable HASH_128   m_courtyard_cache_front_hash;
     mutable HASH_128   m_courtyard_cache_back_hash;
     mutable std::mutex m_courtyard_cache_mutex;
+
+    const COMPONENT_CLASS* m_componentClass;
 };
 
 #endif     // FOOTPRINT_H
