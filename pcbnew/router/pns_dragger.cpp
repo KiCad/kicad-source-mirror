@@ -120,8 +120,6 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
         m_forceMarkObstaclesMode = true;
     }
 
-    if( m_shove && !m_forceMarkObstaclesMode )
-        m_shove->SetInitialLine( m_draggedLine );
 
     auto distA = ( aP - aSeg->Seg().A ).EuclideanNorm();
     auto distB = ( aP - aSeg->Seg().B ).EuclideanNorm();
@@ -156,7 +154,6 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
 bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
 {
     m_draggedLine = m_world->AssembleLine( aArc, &m_draggedSegmentIndex );
-    m_shove->SetInitialLine( m_draggedLine );
     m_mode = DM_ARC;
 
     if ( m_world->CheckColliding( &m_draggedLine ) )
@@ -241,11 +238,14 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
     m_mouseTrailTracer.Clear();
     m_mouseTrailTracer.AddTrailPoint( aP );
 
+    m_preDragNode = m_world->Branch();
+
     if( m_currentMode == RM_Shove && !m_freeAngleMode )
     {
-        m_shove = std::make_unique<SHOVE>( m_world, Router() );
+        m_shove = std::make_unique<SHOVE>( m_preDragNode, Router() );
         m_shove->SetLogger( Logger() );
         m_shove->SetDebugDecorator( Dbg() );
+        m_shove->SetDefaultShovePolicy( SHOVE::SHP_SHOVE );
     }
 
     startItem->Unmark( MK_LOCKED );
@@ -634,28 +634,29 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
     case DM_SEGMENT:
     case DM_CORNER:
     {
+        bool ok = false;
         //TODO: Make threshold configurable
         int  thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 2 : 0;
-        LINE dragged( m_draggedLine );
-        dragged.SetSnapThreshhold( thresh );
+        LINE draggedPreShove( m_draggedLine );
+        draggedPreShove.SetSnapThreshhold( thresh );
 
         if( m_mode == DM_SEGMENT )
-            dragged.DragSegment( aP, m_draggedSegmentIndex );
+            draggedPreShove.DragSegment( aP, m_draggedSegmentIndex );
         else
-            dragged.DragCorner( aP, m_draggedSegmentIndex );
+            draggedPreShove.DragCorner( aP, m_draggedSegmentIndex );
 
-        PNS_DBG( Dbg(), AddShape, &dragged.CLine(), BLUE, 5000, wxT( "drag-shove-line" ) );
+        m_shove->ClearHeads();
+        m_shove->AddHeads( &draggedPreShove, SHOVE::SHP_SHOVE );
+        ok = m_shove->Run() == SHOVE::SH_OK;
 
-        SHOVE::SHOVE_STATUS st = m_shove->ShoveLines( dragged );
+        LINE draggedPostShove( draggedPreShove );
 
-        if( st == SHOVE::SH_OK )
+        if( ok )
         {
-            ok = true;
-        }
-        else if( st == SHOVE::SH_HEAD_MODIFIED )
-        {
-            dragged = m_shove->NewHead();
-            ok = true;
+            if( m_shove->HeadsModified() )
+            {
+                draggedPostShove = m_shove->GetModifiedHead( 0 );
+            }
         }
 
         m_lastNode = m_shove->CurrentNode()->Branch();
@@ -663,17 +664,18 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         if( ok )
         {
             VECTOR2D lockV;
-            dragged.ClearLinks();
-            dragged.Unmark();
-            optimizeAndUpdateDraggedLine( dragged, m_draggedLine, aP );
-            m_lastDragSolution = dragged;
+            draggedPostShove.ClearLinks();
+            draggedPostShove.Unmark();
+            optimizeAndUpdateDraggedLine( draggedPostShove, m_draggedLine, aP );
+            m_lastDragSolution = draggedPostShove;
         }
         else
         {
             m_lastDragSolution.ClearLinks();
             m_lastNode->Add( m_lastDragSolution );
         }
-
+ 
+        m_dragStatus = ok;
         break;
     }
 
@@ -684,29 +686,45 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         // corner count limiter intended to avoid excessive optimization produces mediocre results for via shoving.
         // this is a hack that disables it, before I figure out a more reliable solution
         m_shove->DisablePostShoveOptimizations( OPTIMIZER::LIMIT_CORNER_COUNT );
-        SHOVE::SHOVE_STATUS st = m_shove->ShoveDraggingVia( m_draggedVia, aP, newVia );
 
-        if( st == SHOVE::SH_OK || st == SHOVE::SH_HEAD_MODIFIED )
-            ok = true;
+        m_shove->ClearHeads();
+        m_shove->AddHeads( m_draggedVia, aP, SHOVE::SHP_SHOVE );
 
+        SHOVE::SHOVE_STATUS st = m_shove->Run(); //ShoveDraggingVia( m_draggedVia, aP, newVia );
+
+            PNS_DBG( Dbg(), Message, wxString::Format("head-mod %d",
+                m_shove->HeadsModified() ? 1:  0 ) );
+
+            if( m_shove->HeadsModified() )
+            {
+                newVia = m_shove->GetModifiedHeadVia( 0 );
+                
+                PNS_DBG( Dbg(), Message, wxString::Format("newvia %d %d %d %d",
+                        newVia.pos.x,
+                        newVia.pos.y,
+                        newVia.layers.Start(),
+                        newVia.layers.End()
+                    ) );
+
+                m_draggedVia = newVia;
+            }
+
+        
         m_lastNode = m_shove->CurrentNode()->Branch();
-
-        if( newVia.valid )
-            m_draggedVia = newVia;
 
         m_draggedItems.Clear();
 
          // If drag didn't work (i.e. dragged onto a collision) try walkaround instead
-        if( !ok )
-            ok = dragViaWalkaround( m_draggedVia, m_lastNode, aP );
+        if( st != SHOVE::SH_OK )
+            m_dragStatus = dragViaWalkaround( m_draggedVia, m_lastNode, aP );
+        else
+            m_dragStatus = true;
 
         break;
     }
     }
-
-    m_dragStatus = ok;
-
-    return ok;
+    
+    return m_dragStatus;
 }
 
 

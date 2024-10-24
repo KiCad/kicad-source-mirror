@@ -231,11 +231,11 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
 
         shove.ForceClearance( true, cur.Gap() - 2 * PNS_HULL_MARGIN );
 
-        SHOVE::SHOVE_STATUS sh1;
+        bool sh1;
 
         sh1 = shove.ShoveObstacleLine( postWalk, preShove, postShove );
 
-        if( sh1 != SHOVE::SH_OK )
+        if( !sh1 )
             return false;
 
         postWalk.Line().Simplify();
@@ -356,7 +356,7 @@ bool DIFF_PAIR_PLACER::rhShoveOnly( const VECTOR2I& aP )
     head.Add( &pLine );
     head.Add( &nLine );
 
-    SHOVE::SHOVE_STATUS status = m_shove->ShoveMultiLines( head );
+    SHOVE::SHOVE_STATUS status = m_shove->ShoveMultiLines( head ); // fixme
 
     m_currentNode = m_shove->CurrentNode();
 

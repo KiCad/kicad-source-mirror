@@ -148,6 +148,7 @@ private:
     VIA_HANDLE             m_draggedVia;
 
     NODE*                  m_lastNode;
+    NODE*                  m_preDragNode;
     int                    m_mode;
     LINE                   m_draggedLine;
     LINE                   m_lastDragSolution;

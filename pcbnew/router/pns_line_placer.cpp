@@ -937,7 +937,9 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
 
     }
 
-    SHOVE::SHOVE_STATUS status = m_shove->ShoveLines( newHead );
+    m_shove->ClearHeads();
+    m_shove->AddHeads( &newHead, SHOVE::SHP_SHOVE );
+    bool shoveOk = m_shove->Run() == SHOVE::SH_OK;
 
     m_currentNode = m_shove->CurrentNode();
 
@@ -965,10 +967,10 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
         effort |= OPTIMIZER::SMART_PADS;
     }
 
-    if( status == SHOVE::SH_OK  || status == SHOVE::SH_HEAD_MODIFIED )
+    if( shoveOk )
     {
-        if( status == SHOVE::SH_HEAD_MODIFIED )
-            newHead = m_shove->NewHead();
+        if( m_shove->HeadsModified() )
+            newHead = m_shove->GetModifiedHead( 0 );
 
         OPTIMIZER optimizer( m_currentNode );
 
