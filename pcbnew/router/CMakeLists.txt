@@ -43,6 +43,7 @@ set( PCBNEW_PNS_SRCS
     pns_utils.cpp
     pns_via.cpp
     pns_walkaround.cpp
+    pns_multi_dragger.cpp
     router_preview_item.cpp
     router_status_view_item.cpp
     router_tool.cpp
