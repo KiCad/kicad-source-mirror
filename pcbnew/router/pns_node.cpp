@@ -235,6 +235,9 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         if( m_item == aCandidate )
             return true;
 
+        if( m_ctx->options.m_filter && !m_ctx->options.m_filter( aCandidate ) )
+            return true;
+
         if( visit( aCandidate ) )
             return true;
 
@@ -329,9 +332,6 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
 
     for( const OBSTACLE& obstacle : obstacleList )
     {
-        if( aOpts.m_filter && !aOpts.m_filter( obstacle.m_item) )
-            continue;
-
         int clearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon )
                             + aLine->Width() / 2;
 
