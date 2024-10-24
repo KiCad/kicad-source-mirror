@@ -620,9 +620,9 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
     return true;
 }
 
-const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
+const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit )
 {
-    std::set<ITEM*> visited;
+    CLUSTER cluster;
     std::deque<ITEM*> pending;
 
     COLLISION_SEARCH_OPTIONS opts;
@@ -632,6 +632,9 @@ const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
 
     pending.push_back( aStart );
 
+    BOX2I clusterBBox = aStart->Shape()->BBox();
+    int64_t initialArea = clusterBBox.GetArea();
+
     while( !pending.empty() )
     {
         NODE::OBSTACLES obstacles;
@@ -639,27 +642,43 @@ const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
 
         pending.pop_front();
 
-        visited.insert( top );
+        cluster.m_items.insert( top );
 
         m_world->QueryColliding( top, obstacles, opts ); // only query touching objects
 
-        for( const OBSTACLE& obs : obstacles )
+        for( OBSTACLE& obs : obstacles )
         {
             bool trackOnTrack = ( obs.m_item->Net() != top->Net() ) &&  obs.m_item->OfKind( ITEM::SEGMENT_T ) && top->OfKind( ITEM::SEGMENT_T );
 
             if( trackOnTrack )
                 continue;
 
-            if( visited.find( obs.m_item ) == visited.end() &&
+            if( obs.m_item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) && obs.m_item->Layers().Overlaps( aLayer ) )
+            {
+                auto line = m_world->AssembleLine( static_cast<LINKED_ITEM*>(obs.m_item) );
+                clusterBBox.Merge( line.CLine().BBox() );
+            }
+            else
+            {
+                clusterBBox.Merge( obs.m_item->Shape()->BBox() );
+            }
+
+            const int64_t currentArea = clusterBBox.GetArea();
+            const double areaRatio = (double) currentArea / (double) ( initialArea + 1 );
+
+            if( aAreaExpansionLimit > 0.0 && areaRatio > aAreaExpansionLimit )
+                break;
+
+            if( cluster.m_items.find( obs.m_item ) == cluster.m_items.end() &&
                 obs.m_item->Layers().Overlaps( aLayer ) && !( obs.m_item->Marker() & MK_HEAD ) )
             {
-                visited.insert( obs.m_item );
+                cluster.m_items.insert( obs.m_item );
                 pending.push_back( obs.m_item );
             }
         }
     }
 
-    return visited;
+    return cluster;
 }
 
 }

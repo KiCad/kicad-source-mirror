@@ -39,6 +39,13 @@ class DIFF_PAIR;
 class TOPOLOGY
 {
 public:
+
+    struct CLUSTER
+    {
+        const ITEM* m_key;
+        std::set<ITEM*> m_items;
+    };
+
     typedef std::set<const JOINT*> JOINT_SET;
 
     TOPOLOGY( NODE* aNode ):
@@ -90,7 +97,7 @@ public:
 
     bool AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair );
 
-    const std::set<ITEM*> AssembleCluster( ITEM* aStart, int aLayer );
+    const CLUSTER AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit = 0.0 );
 
 private:
     const int DP_PARALLELITY_THRESHOLD = 5;
