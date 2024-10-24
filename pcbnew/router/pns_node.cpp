@@ -1024,10 +1024,13 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
 
         bool locked = aStopAtLockedJoints ? jt->IsLocked() : false;
 
-        if( locked || !jt->IsLineCorner( aFollowLockedSegments ) || aPos < 0 || aPos == aLimit )
+        if( locked || aPos < 0 || aPos == aLimit )
             break;
 
         aCurrent = jt->NextSegment( aCurrent, aFollowLockedSegments );
+
+        if( !aCurrent )
+            break;
 
         prevReversed = ( aCurrent && jt->Pos() == aCurrent->Anchor( aScanDirection ) );
     }
