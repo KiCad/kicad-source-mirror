@@ -49,9 +49,16 @@ LINE::LINE( const LINE& aOther )
 
     if( aOther.m_via )
     {
-        m_via = aOther.m_via->Clone();
-        m_via->SetOwner( this );
-        m_via->SetNet( m_net );
+        if( aOther.m_via->BelongsTo( &aOther ) )
+        {
+            m_via = aOther.m_via->Clone();
+            m_via->SetOwner( this );
+            m_via->SetNet( m_net );
+        }
+        else
+        {
+            m_via = aOther.m_via;
+        }
     }
 
     m_marker = aOther.m_marker;
@@ -81,9 +88,16 @@ LINE& LINE::operator=( const LINE& aOther )
 
     if( aOther.m_via )
     {
-        m_via = aOther.m_via->Clone();
-        m_via->SetOwner( this );
-        m_via->SetNet( m_net );
+        if( aOther.m_via->BelongsTo( &aOther ) )
+        {
+            m_via = aOther.m_via->Clone();
+            m_via->SetOwner( this );
+            m_via->SetNet( m_net );
+        }
+        else
+        {
+            m_via = aOther.m_via;
+        }
     }
 
     m_marker = aOther.m_marker;
@@ -1075,6 +1089,17 @@ void LINE::AppendVia( const VIA& aVia )
     m_via = aVia.Clone();
     m_via->SetOwner( this );
     m_via->SetNet( m_net );
+}
+
+
+void LINE::AppendVia( VIA* aVia )
+{
+    if( m_line.PointCount() > 1 && aVia->Pos() == m_line.CPoint( 0 ) )
+    {
+        Reverse();
+    }
+
+    m_via = aVia;
 }
 
 

@@ -93,15 +93,15 @@ public:
     /**
      * Construct a LINE for a lone VIA (ie a stitching via).
      */
-    LINE( const VIA& aVia ) :
+    LINE( VIA* aVia ) :
         LINK_HOLDER( LINE_T ),
         m_blockingObstacle( nullptr )
     {
-        m_via = aVia.Clone();
-        m_width = aVia.Diameter();
-        m_net = aVia.Net();
-        m_layers = aVia.Layers();
-        m_rank = aVia.Rank();
+        m_via = aVia;
+        m_width = aVia->Diameter();
+        m_net = aVia->Net();
+        m_layers = aVia->Layers();
+        m_rank = aVia->Rank();
         m_snapThreshhold = 0;
     }
 
@@ -191,6 +191,7 @@ public:
     int FindSegment( const SEGMENT* aSeg ) const;
 
     void AppendVia( const VIA& aVia );
+    void AppendVia( VIA* aVia );
     void RemoveVia();
 
     VIA& Via() { return *m_via; }
