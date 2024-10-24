@@ -232,23 +232,38 @@ public:
 
     ///< For trivial joints, return the segment adjacent to (aCurrent). For non-trival ones,
     ///< return NULL, indicating the end of line.
-    LINKED_ITEM* NextSegment( ITEM* aCurrent, bool aAllowLockedSegs = false ) const
+    LINKED_ITEM* NextSegment( LINKED_ITEM* aCurrent, bool aAllowLockedSegs = false ) const
     {
-        if( !IsLineCorner( aAllowLockedSegs ) )
-            return nullptr;
-
         const std::vector<ITEM*>& citems = m_linkedItems.CItems();
         const size_t              size = citems.size();
+
+        LINKED_ITEM* otherItem = nullptr;
 
         for( size_t i = 0; i < size; i++ )
         {
             ITEM* item = m_linkedItems[i];
 
-            if( item != aCurrent && item->Kind() != VIA_T )
-                return static_cast<LINKED_ITEM*>( item );
+            if( item != aCurrent )
+            {
+                if ( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+                {
+                    if ( item->Net() == aCurrent->Net() && item->Layers().Overlaps( aCurrent->Layers() ) )
+                    {
+                        if( otherItem )
+                            return nullptr;
+
+                        if( !item->IsLocked() || aAllowLockedSegs )
+                            otherItem = static_cast<LINKED_ITEM*>( item );
+                    }
+                }
+                else if ( item->OfKind( ITEM::SOLID_T | ITEM::VIA_T ) )
+                {
+                    return nullptr;
+                }
+            }
         }
 
-        return nullptr;
+        return otherItem;
     }
 
     VIA* Via() const
