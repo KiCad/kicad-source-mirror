@@ -275,7 +275,7 @@ bool CORNER_COUNT_LIMIT_CONSTRAINT::Check( int aVertex1, int aVertex2, const LIN
 {
     LINE newPath( *aOriginLine, aCurrentPath );
     newPath.Line().Replace( aVertex1, aVertex2, aReplacement );
-    newPath.Line().Simplify();
+    newPath.Line().Simplify2();
     int cc = newPath.CountCorners( m_angleMask );
 
     if( cc >= m_minCorners )
@@ -284,7 +284,7 @@ bool CORNER_COUNT_LIMIT_CONSTRAINT::Check( int aVertex1, int aVertex2, const LIN
     // fixme: something fishy with the max corneriness limit
     // (cc <= m_maxCorners)
 
-    return false;
+    return true;
 }
 
 
@@ -537,7 +537,7 @@ bool OPTIMIZER::mergeFull( LINE* aLine )
 
     int segs_pre = line.SegmentCount();
 
-    line.Simplify();
+    line.Simplify2();
 
     if( step < 0 )
         return false;
@@ -595,7 +595,7 @@ bool OPTIMIZER::mergeColinear( LINE* aLine )
 }
 
 
-bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
+bool OPTIMIZER::Optimize( const LINE* aLine, LINE* aResult, LINE* aRoot )
 {
     DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
@@ -606,15 +606,11 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
 
 
     if( !aResult )
-    {
-        aResult = aLine;
-    }
-    else
-    {
-        *aResult = *aLine;
-        aResult->ClearLinks();
-    }
+        return false;
 
+    *aResult = *aLine;
+    aResult->ClearLinks();
+    
     bool hasArcs = aLine->ArcCount();
     bool rv = false;
 
@@ -729,7 +725,7 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
             {
                 path[i] = aCurrentPath;
                 path[i].Replace( s1.Index(), s2.Index(), bypass );
-                path[i].Simplify();
+                path[i].Simplify2();
                 cost[i] = COST_ESTIMATOR::CornerCost( path[i] );
             }
         }
@@ -1013,7 +1009,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
                     std::get<0>( vp ) = p;
                     std::get<1>( vp ) = breakout.Length();
                     std::get<2>( vp ) = aEnd ? v.Reverse() : v;
-                    std::get<2>( vp ).Simplify();
+                    std::get<2>( vp ).Simplify2();
                     variants.push_back( vp );
                 }
             }
@@ -1084,13 +1080,13 @@ bool OPTIMIZER::runSmartPads( LINE* aLine )
         smartPadsSingle( aLine, endPad, true,
                          vtx < 0 ? line.PointCount() - 1 : line.PointCount() - 1 - vtx );
 
-    aLine->Line().Simplify();
+    aLine->Line().Simplify2();
 
     return true;
 }
 
 
-bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I& aV )
+bool OPTIMIZER::Optimize( const LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I& aV )
 {
     OPTIMIZER opt( aWorld );
 
@@ -1304,8 +1300,8 @@ bool OPTIMIZER::mergeDpStep( DIFF_PAIR* aPair, bool aTryP, int step )
 
                 if( deltaCoupled >= 0 )
                 {
-                    newRef.Simplify();
-                    newCoup.Simplify();
+                    newRef.Simplify2();
+                    newCoup.Simplify2();
 
                     aPair->SetShape( newRef, newCoup, !aTryP );
                     return true;
@@ -1313,8 +1309,8 @@ bool OPTIMIZER::mergeDpStep( DIFF_PAIR* aPair, bool aTryP, int step )
             }
             else if( deltaUni >= 0 && verifyDpBypass( m_world, aPair, aTryP, newRef, coupledPath ) )
             {
-                newRef.Simplify();
-                coupledPath.Simplify();
+                newRef.Simplify2();
+                coupledPath.Simplify2();
 
                 aPair->SetShape( newRef, coupledPath, !aTryP );
                 return true;
@@ -1510,7 +1506,7 @@ void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLin
 
     for( int step = 0; step < 3; step++ )
     {
-        current.Simplify();
+        current.Simplify2();
 
         for( int i = 0; i <= current.SegmentCount() - 3; i++ )
         {
