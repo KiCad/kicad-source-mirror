@@ -689,6 +689,8 @@ void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
+    wxGridUpdateLocker noUpdates( m_cur_grid );
+
     int curRow = m_cur_grid->GetGridCursorRow();
     int curCol = m_cur_grid->GetGridCursorCol();
 
