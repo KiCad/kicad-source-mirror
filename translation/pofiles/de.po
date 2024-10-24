@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-23 07:15+0000\n"
+"PO-Revision-Date: 2024-10-25 07:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -25613,6 +25613,8 @@ msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
 msgstr ""
+"Zu erzeugende Auftragssatzdatei, für alle Ausgaben, die im Auftragssatz "
+"definiert sind, frei lassen"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -26496,7 +26498,7 @@ msgstr "Verzeichnis"
 
 #: kicad/dialogs/panel_jobs.cpp:59
 msgid "Archive"
-msgstr ""
+msgstr "Archiv"
 
 #: kicad/dialogs/panel_jobs.cpp:74
 #, c-format
@@ -36118,7 +36120,7 @@ msgstr "Plotmodus:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "Vorderseite/innen/Unterseite"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
 #, fuzzy
@@ -37300,7 +37302,7 @@ msgstr "In Regelbereich konvertieren"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:277
 msgid "Not found on board: "
-msgstr ""
+msgstr "Nicht auf Platine gefunden: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:436
 msgid "No layers selected."
@@ -37895,12 +37897,17 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 msgid "Do not prompt for lock overrides for this session"
 msgstr ""
+"In dieser Sitzung nicht erneut fragen, ob Sperren außer Kraft gesetzt werden "
+"sollen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
 msgstr ""
+"Wenn diese Option aktiviert ist, wird keine Nachfrage bei Versuch gesperrte "
+"Elemente zu bearbeiten angezeigt.  Diese Einstellung wird beim Neustart von "
+"KiCad zurückgesetzt."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
@@ -42645,7 +42652,7 @@ msgstr "Bearbeite Footprint aus nur lesbarer Bibliothek \"%s\"."
 
 #: pcbnew/footprint_edit_frame.cpp:562
 msgid "Save as editable copy"
-msgstr ""
+msgstr "Als bearbeitbare Kopie speichern"
 
 #: pcbnew/footprint_edit_frame.cpp:975
 #, c-format
@@ -43417,7 +43424,7 @@ msgstr "Bauteilklasse %s zu %s ändern."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
 #, c-format
 msgid "Remove %s component class (currently %s)."
-msgstr ""
+msgstr "Bauteilklasse %s entfernen (aktuell %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:246
 #, c-format
@@ -43432,7 +43439,7 @@ msgstr "Bauteilklasse %s zu %s geändert."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, c-format
 msgid "Removed %s component class (was %s)."
-msgstr ""
+msgstr "Bauteilklasse %s entfernt (war %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:268
 #, fuzzy, c-format
