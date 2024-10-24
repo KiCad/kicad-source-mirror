@@ -52,6 +52,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <view/view_controls.h>
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <gal/painter.h>
@@ -64,7 +65,6 @@ using namespace std::placeholders;
 #include <tools/drc_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <drc/drc_interactive_courtyard_clearance.h>
-#include <view/view_controls.h>
 
 #include <project.h>
 #include <project/project_file.h>
@@ -604,7 +604,6 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     wxFileName fname_settings( fname_log );
     fname_settings.SetExt( "settings" );
-
 
     FILE* settings_f = wxFopen( fname_settings.GetAbsolutePath(), "wb" );
     std::string settingsStr = m_router->Settings().FormatAsString();
@@ -1372,6 +1371,7 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
         {
             updateEndItem( *evt );
             bool needLayerSwitch = m_router->IsPlacingVia();
+            bool forceFinish = evt->Modifier( MD_SHIFT );
             bool forceCommit = false;
 
             if( m_router->FixRoute( m_endSnapPoint, m_endItem, false, forceCommit ) )
@@ -2068,26 +2068,42 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
                                                    NeighboringSegmentFilter );
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
-
-    // Note: EDIT_TOOL::Drag temporarily handles items of type PCB_ARC_T on its own using
-    // DragArcTrack(), so PCB_ARC_T should never occur here.
-    if( item->IsType( GENERAL_COLLECTOR::DraggableItems ) )
+    if( selection.Size() == 1 )
     {
-        // Footprints cannot be dragged freely.
-        if( item->Type() == PCB_FOOTPRINT_T )
-            return !( aDragMode & PNS::DM_FREE_ANGLE );
-        else
-            return true;
+        const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
+
+        // Note: EDIT_TOOL::Drag temporarily handles items of type PCB_ARC_T on its own using
+        // DragArcTrack(), so PCB_ARC_T should never occur here.
+        if( item->IsType( GENERAL_COLLECTOR::DraggableItems ) )
+        {
+            // Footprints cannot be dragged freely.
+            if( item->IsType( { PCB_FOOTPRINT_T } ) )
+                return !( aDragMode & PNS::DM_FREE_ANGLE );
+            else
+                return true;
+        }
+    }
+    else // more than 1 item - let's check if these are all track segments
+    {
+        return selection.CountType( PCB_TRACE_T ) == selection.Size();
     }
 
     return false;
 }
 
 
+void ROUTER_TOOL::restoreSelection( const PCB_SELECTION& aOriginalSelection )
+{
+    EDA_ITEMS selItems;
+    std::copy( aOriginalSelection.Items().begin(), aOriginalSelection.Items().end(), std::back_inserter( selItems ) );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &selItems );
+}
+
+
 int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
-    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+    const PCB_SELECTION selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
 
     if( selection.Empty() )
     {
@@ -2098,10 +2114,14 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
+    // selection gets cleared in the next action, we need a copy of the selected items.
+    std::deque<EDA_ITEM*> selectedItems = selection.GetItems(); 
+
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
     if( item->Type() != PCB_TRACE_T
          && item->Type() != PCB_VIA_T
+         && item->Type() != PCB_ARC_T
          && item->Type() != PCB_FOOTPRINT_T )
     {
         return 0;
@@ -2113,11 +2133,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         footprints.insert( static_cast<FOOTPRINT*>( item ) );
 
     // We can drag multiple footprints, but not a grab-bag of items
-    if( selection.Size() > 1 )
+    if( selection.Size() > 1 && item->Type() == PCB_FOOTPRINT_T )
     {
-        if( item->Type() != PCB_FOOTPRINT_T )
-            return 0;
-
         for( int idx = 1; idx < selection.Size(); ++idx )
         {
             if( static_cast<BOARD_ITEM*>( selection.GetItem( idx ) )->Type() != PCB_FOOTPRINT_T )
@@ -2149,6 +2166,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     PNS::ITEM*    startItem = nullptr;
     PNS::ITEM_SET itemsToDrag;
+    FOOTPRINT*    footprint = nullptr;
 
     bool showCourtyardConflicts = frame()->GetPcbNewSettings()->m_ShowCourtyardCollisions;
 
@@ -2159,6 +2177,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*>            dynamicItems;
     std::unique_ptr<CONNECTIVITY_DATA>  dynamicData = nullptr;
     VECTOR2I                            lastOffset;
+    std::vector<PNS::ITEM*>             leaderSegments;
 
     if( !footprints.empty() )
     {
@@ -2167,30 +2186,30 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         for( FOOTPRINT* footprint : footprints )
         {
-            for( PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
+        {
+            PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
+
+            if( solid )
+                itemsToDrag.Add( solid );
+
+            if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
             {
-                PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
-
-                if( solid )
-                    itemsToDrag.Add( solid );
-
-                if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
-                {
-                    if( connectivityData->GetRatsnestForPad( pad ).size() > 0 )
-                        dynamicItems.push_back( pad );
-                }
+                if( connectivityData->GetRatsnestForPad( pad ).size() > 0 )
+                    dynamicItems.push_back( pad );
             }
+        }
 
-            for( ZONE* zone : footprint->Zones() )
-            {
-                std::vector<PNS::ITEM*> solids = m_router->GetWorld()->FindItemsByZone( zone );
+        for( ZONE* zone : footprint->Zones() )
+        {
+            std::vector<PNS::ITEM*> solids = m_router->GetWorld()->FindItemsByZone( zone );
 
-                for( PNS::ITEM* solid : solids )
-                    itemsToDrag.Add( solid );
-            }
+            for( PNS::ITEM* solid : solids )
+                itemsToDrag.Add( solid );
+        }
 
-            if( showCourtyardConflicts )
-                courtyardClearanceDRC.m_FpInMove.push_back( footprint );
+        if( showCourtyardConflicts )
+            courtyardClearanceDRC.m_FpInMove.push_back( footprint );
         }
 
         dynamicData = std::make_unique<CONNECTIVITY_DATA>( board()->GetConnectivity(),
@@ -2199,10 +2218,15 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     }
     else
     {
-        startItem = m_router->GetWorld()->FindItemByParent( item );
+        for ( const EDA_ITEM* bitem : selectedItems )
+        {
+            PNS::ITEM* pitem = m_router->GetWorld()->FindItemByParent( static_cast<const BOARD_ITEM*>( bitem ) );
 
-        if( startItem )
-            itemsToDrag.Add( startItem );
+            if( pitem->OfKind( PNS::ITEM::SEGMENT_T ) || pitem->OfKind( PNS::ITEM::VIA_T ) || pitem->OfKind( PNS::ITEM::ARC_T ) )
+            {
+                itemsToDrag.Add( pitem );
+            }
+        }
     }
 
     GAL*     gal = m_toolMgr->GetView()->GetGAL();
@@ -2212,13 +2236,24 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
-    if( startItem )
-    {
-        p = snapToItem( startItem, p0 );
-        m_startItem = startItem;
+    std::set<PNS::NET_HANDLE> highlightNetcodes;
 
-        if( m_startItem->Net() )
-            highlightNets( true, { m_startItem->Net() } );
+    if( itemsToDrag.Count() >= 1 )
+    {
+        for( PNS::ITEM* pitem : itemsToDrag.Items() )
+        {
+            if( pitem->Shape()->Collide( p0, 0 ) )
+            {
+                p = snapToItem( pitem, p0 );
+                m_startItem = pitem;
+                if( pitem->Net() )
+                    highlightNetcodes.insert( pitem->Net() );
+                printf("si %p, p=%d %d\n", m_startItem, p.x, p.y );
+            }
+        }
+
+        if( highlightNetcodes.size() )
+            highlightNets( true, highlightNetcodes );
     }
     else if( !footprints.empty() )
     {
@@ -2248,6 +2283,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     int dragMode = aEvent.Parameter<int> ();
 
+
+
     bool dragStarted = m_router->StartDragging( p, itemsToDrag, dragMode );
 
     if( !dragStarted )
@@ -2261,6 +2298,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
         courtyardClearanceDRC.ClearConflicts( getView() );
 
+        restoreSelection( selection );
         controls()->ForceCursorPosition( false );
         frame()->PopTool( aEvent );
         highlightNets( false );
@@ -2292,6 +2330,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     m_router->Move( p, nullptr );
 
     bool hasMouseMoved = false;
+    bool hasMultidragCancelled = false;
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -2301,6 +2340,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         {
             if( wasLocked )
                 item->SetLocked( true );
+
+            hasMultidragCancelled = true;
 
             break;
         }
@@ -2403,6 +2444,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
             updateEndItem( *evt );
             m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish, forceCommit );
+            leaderSegments = m_router->GetLastCommittedLeaderSegments();
+
             break;
         }
         else if( evt->IsUndoRedo() )
@@ -2458,17 +2501,32 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 view()->Hide( pad, false );
         }
 
+        view()->ClearPreview();
+        view()->ShowPreview( false );
+
         connectivityData->ClearLocalRatsnest();
     }
-
-    view()->ClearPreview();
-    view()->ShowPreview( false );
 
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
     courtyardClearanceDRC.ClearConflicts( getView() );
 
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
+
+
+    if( itemsToDrag.Size() && hasMultidragCancelled )
+    {
+        restoreSelection( selection );
+    }
+    else if( leaderSegments.size() )
+    {
+        std::vector<EDA_ITEM*> newItems;
+
+        for( auto lseg : leaderSegments )
+            newItems.push_back( lseg->Parent() );
+
+        m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &newItems );
+    }
 
     m_gridHelper->SetAuxAxes( false );
     controls()->SetAutoPan( false );
@@ -2519,8 +2577,7 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     {
         // If we're here from a hotkey, then get the current mouse position so we know
         // where to break the track.
-        m_startSnapPoint = snapToItem(
-                m_startItem, GetClampedCoords( controls()->GetCursorPosition(), COORDS_PADDING ) );
+        m_startSnapPoint = snapToItem( m_startItem, controls()->GetCursorPosition() );
     }
 
     if( m_startItem && m_startItem->IsLocked() )

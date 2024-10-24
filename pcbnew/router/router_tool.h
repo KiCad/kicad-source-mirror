@@ -73,6 +73,7 @@ private:
     void performRouting( VECTOR2D aStartPosition );
     void performDragging( int aMode = PNS::DM_ANY );
     void breakTrack();
+    void restoreSelection( const PCB_SELECTION& aOriginalSelection );
 
     void handleCommonEvents( TOOL_EVENT& evt );
     int handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia );
