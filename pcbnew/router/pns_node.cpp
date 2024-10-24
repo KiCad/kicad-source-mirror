@@ -819,12 +819,23 @@ void NODE::rebuildJoint( const JOINT* aJoint, const ITEM* aItem )
         }
     } while( split );
 
+    bool completelyErased = false;
+
+    if( !isRoot() && m_joints.find( tag ) == m_joints.end() )
+    {
+        JOINT jtDummy( tag.pos, PNS_LAYER_RANGE(-1), tag.net );
+
+        m_joints.insert( TagJointPair( tag, jtDummy ) );
+        completelyErased = true;
+    }
+
+
     // and re-link them, using the former via's link list
     for( ITEM* link : links )
     {
         if( link != aItem )
             linkJoint( tag.pos, link->Layers(), net, link );
-        else
+        else if( !completelyErased )
             unlinkJoint( tag.pos, link->Layers(), net, link );
     }
 }
