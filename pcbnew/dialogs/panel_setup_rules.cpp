@@ -237,7 +237,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                     || token == wxT( "via" )
                     || token == wxT( "zone" );
             };
-    
+
     auto isConstraintTypeToken =
             []( const wxString& token ) -> bool
             {
@@ -820,20 +820,61 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
         m_helpWindow->ShowModeless();
         return;
     }
+    std::vector<wxString> msg;
+    msg.clear();
 
-    wxString msg =
-#include "dialogs/panel_setup_rules_help_md.h"
-    ;
+    wxString t =
+#include "dialogs/panel_setup_rules_help_1clauses.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_2constraints.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_3items.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_4severity_names.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_5examples.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_6notes.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_7expression_functions.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_8more_examples.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_9documentation.h"
+            ;
+    msg.emplace_back( t );
+
+    wxString msg_txt = wxEmptyString;
+
+    for( wxString i : msg )
+        msg_txt << wxGetTranslation( i );
 
 #ifdef __WXMAC__
-    msg.Replace( wxT( "Ctrl+" ), wxT( "Cmd+" ) );
+    msg_txt.Replace( wxT( "Ctrl+" ), wxT( "Cmd+" ) );
 #endif
+    const wxString& msGg_txt = msg_txt;
 
     m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
     m_helpWindow->SetDialogSizeInDU( 420, 320 );
 
-    wxString html_txt;
-    ConvertMarkdown2Html( wxGetTranslation( msg ), html_txt );
+    wxString html_txt = wxEmptyString;
+    ConvertMarkdown2Html( msGg_txt, html_txt );
 
     html_txt.Replace( wxS( "<td" ), wxS( "<td valign=top" ) );
     m_helpWindow->AddHTML_Text( html_txt );
