@@ -2123,7 +2123,7 @@ double CreepageGraph::Solve(
     return pathWeight;
 }
 
-void CreepageGraph::Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode> aConnectTo,
+void CreepageGraph::Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode>& aConnectTo,
                               BOARD_ITEM* aParent )
 {
     CREEP_SHAPE* newshape = nullptr;

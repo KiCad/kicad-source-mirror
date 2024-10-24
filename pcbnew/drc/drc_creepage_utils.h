@@ -698,7 +698,7 @@ public:
 
     void RemoveConnection( std::shared_ptr<GraphConnection>, bool aDelete = false );
     void Trim( double aWeightLimit );
-    void Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode> aConnectTo = nullptr,
+    void Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode>& aConnectTo,
                    BOARD_ITEM* aParent = nullptr );
 
     double Solve( std::shared_ptr<GraphNode>& aFrom, std::shared_ptr<GraphNode>& aTo,
