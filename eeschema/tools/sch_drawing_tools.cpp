@@ -330,33 +330,27 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
                 SYMBOL_LIB*       cache = PROJECT_SCH::SchLibs( &m_frame->Prj() )->GetCacheLibrary();
 
-                auto compareByLibID =
-                        []( const LIB_SYMBOL* aFirst, const LIB_SYMBOL* aSecond ) -> bool
-                        {
-                            return aFirst->GetLibId().Format() < aSecond->GetLibId().Format();
-                        };
-
-                std::set<LIB_SYMBOL*, decltype( compareByLibID )> part_list( compareByLibID );
+                std::set<UTF8>             unique_libid;
+                std::vector<PICKED_SYMBOL> alreadyPlaced;
 
                 for( SCH_SHEET_PATH& sheet : hierarchy )
                 {
                     for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
                     {
                         SCH_SYMBOL* s = static_cast<SCH_SYMBOL*>( item );
+
+                        if( !unique_libid.insert( s->GetLibId().Format() ).second )
+                            continue;
+
                         LIB_SYMBOL* libSymbol = SchGetLibSymbol( s->GetLibId(), libs, cache );
 
                         if( libSymbol )
-                            part_list.insert( libSymbol );
+                        {
+                            PICKED_SYMBOL pickedSymbol;
+                            pickedSymbol.LibId = libSymbol->GetLibId();
+                            alreadyPlaced.push_back( pickedSymbol );
+                        }
                     }
-                }
-
-                std::vector<PICKED_SYMBOL> alreadyPlaced;
-
-                for( LIB_SYMBOL* libSymbol : part_list )
-                {
-                    PICKED_SYMBOL pickedSymbol;
-                    pickedSymbol.LibId = libSymbol->GetLibId();
-                    alreadyPlaced.push_back( pickedSymbol );
                 }
 
                 // Pick the symbol to be placed
