@@ -42,6 +42,7 @@
 #include "pns_router.h"
 #include "pns_shove.h"
 #include "pns_dragger.h"
+#include "pns_multi_dragger.h"
 #include "pns_component_dragger.h"
 #include "pns_topology.h"
 #include "pns_diff_pair_placer.h"
@@ -155,12 +156,15 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, int aSlopRadius )
 
 bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aItem, int aDragMode )
 {
+    m_leaderSegments.clear();
     return StartDragging( aP, ITEM_SET( aItem ), aDragMode );
 }
 
 
 bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragMode )
 {
+    m_leaderSegments.clear();
+
     if( aStartItems.Empty() )
         return false;
 
@@ -170,6 +174,13 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     {
         m_dragger = std::make_unique<COMPONENT_DRAGGER>( this );
         m_state = DRAG_COMPONENT;
+    }
+    // more than 1 track segment or arc to drag? launch the multisegment dragger
+    else if( aStartItems.Count( ITEM::SEGMENT_T | ITEM::ARC_T ) > 1 )
+    {
+        fprintf(stderr,"MultiDrag triggered\n");
+        m_dragger = std::make_unique<MULTI_DRAGGER>( this );
+        m_state = DRAG_SEGMENT;
     }
     else
     {
@@ -185,9 +196,14 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     if( m_logger )
         m_logger->Clear();
 
-    if( m_logger && aStartItems.Size() )
-        m_logger->Log( LOGGER::EVT_START_DRAG, aP, aStartItems[0] );
-
+    if( m_logger )
+    {
+        if( aStartItems.Size() == 1 )
+            m_logger->Log( LOGGER::EVT_START_DRAG, aP, aStartItems[0] );
+        else if( aStartItems.Size() > 1 )
+            m_logger->LogM( LOGGER::EVT_START_MULTIDRAG, aP, aStartItems.Items() ); // fixme default args
+    }
+    
     if( m_dragger->Start( aP, aStartItems ) )
     {
         return true;
@@ -435,7 +451,7 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
         if( m_logger )
         {
             m_logger->Clear();
-            m_logger->Log( LOGGER::EVT_START_ROUTE, aP, aStartItem, &m_sizes );
+            m_logger->Log( LOGGER::EVT_START_ROUTE, aP, aStartItem, &m_sizes, m_placer->CurrentLayer() );
         }
 
         return true;
@@ -882,6 +898,11 @@ bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish, bo
 
     return rv;
 }
+
+std::vector<PNS::ITEM*> ROUTER::GetLastCommittedLeaderSegments()
+{
+    return m_leaderSegments;
+};
 
 
 std::optional<VECTOR2I> ROUTER::UndoLastSegment()
