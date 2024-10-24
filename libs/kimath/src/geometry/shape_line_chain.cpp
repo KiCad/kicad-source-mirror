@@ -2713,6 +2713,108 @@ void SHAPE_LINE_CHAIN::Split( const VECTOR2I& aStart, const VECTOR2I& aEnd, SHAP
 }
 
 
+
+SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify2( bool aRemoveColinear )
+{
+    std::vector<VECTOR2I> pts_unique;
+    std::vector<std::pair<ssize_t, ssize_t>> shapes_unique;
+
+    // Always try to keep at least 2 points otherwise, we're not really a line
+    if( PointCount() < 3 )
+    {
+        return *this;
+    }
+    else if( PointCount() == 3 )
+    {
+        if( m_points[0] == m_points[1] )
+            Remove( 1 );
+
+        return *this;
+    }
+
+    int i = 0;
+    int np = PointCount();
+
+    // stage 1: eliminate duplicate vertices
+    while( i < np )
+    {
+        int j = i + 1;
+
+        // We can eliminate duplicate vertices as long as they are part of the same shape, OR if
+        // one of them is part of a shape and one is not.
+        while( j < np && m_points[i] == m_points[j] &&
+               ( m_shapes[i] == m_shapes[j] ||
+                 m_shapes[i] == SHAPES_ARE_PT ||
+                 m_shapes[j] == SHAPES_ARE_PT ) )
+        {
+            j++;
+        }
+
+        std::pair<ssize_t,ssize_t> shapeToKeep = m_shapes[i];
+
+        if( shapeToKeep == SHAPES_ARE_PT )
+            shapeToKeep = m_shapes[j - 1];
+
+        assert( shapeToKeep.first < static_cast<int>( m_arcs.size() ) );
+        assert( shapeToKeep.second < static_cast<int>( m_arcs.size() ) );
+
+        pts_unique.push_back( CPoint( i ) );
+        shapes_unique.push_back( shapeToKeep );
+
+        i = j;
+    }
+
+    m_points.clear();
+    m_shapes.clear();
+    np = pts_unique.size();
+
+    i = 0;
+
+    // stage 2: eliminate colinear segments
+    while( i < np - 2 )
+    {
+        const VECTOR2I p0 = pts_unique[i];
+        int n = i;
+
+        if( aRemoveColinear && shapes_unique[i] == SHAPES_ARE_PT
+            && shapes_unique[i + 1] == SHAPES_ARE_PT )
+        {
+            while( n < np - 2
+                    && ( SEG( p0, pts_unique[n + 2] ).LineDistance( pts_unique[n + 1] ) <= 1
+                      || SEG( p0, pts_unique[n + 2] ).Collinear( SEG( p0, pts_unique[n + 1] ) ) ) )
+                n++;
+        }
+
+        m_points.push_back( p0 );
+        m_shapes.push_back( shapes_unique[i] );
+
+        if( n > i )
+            i = n;
+
+        if( n == np - 2 )
+        {
+            m_points.push_back( pts_unique[np - 1] );
+            m_shapes.push_back( shapes_unique[np - 1] );
+            return *this;
+        }
+
+        i++;
+    }
+
+    if( np > 1 )
+    {
+        m_points.push_back( pts_unique[np - 2] );
+        m_shapes.push_back( shapes_unique[np - 2] );
+    }
+
+    m_points.push_back( pts_unique[np - 1] );
+    m_shapes.push_back( shapes_unique[np - 1] );
+
+    assert( m_points.size() == m_shapes.size() );
+
+    return *this;
+}
+
 bool SHAPE_LINE_CHAIN::OffsetLine( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
                                    SHAPE_LINE_CHAIN& aLeft, SHAPE_LINE_CHAIN& aRight,
                                    bool aSimplify ) const

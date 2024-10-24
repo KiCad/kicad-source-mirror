@@ -344,6 +344,10 @@ public:
      */
     void Simplify( int aMaxError = 0 );
 
+    // legacy function, used by the router. Please do not remove until I'll figure out
+    // the root cause of rounding errors - Tom
+    SHAPE_LINE_CHAIN& Simplify2( bool aRemoveColinear = true );
+
     /**
      * Return the number of points (vertices) in this line chain.
      *
