@@ -2215,7 +2215,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         {
             VECTOR2I textPos = aText->GetTextPos();
             VECTOR2I textWidth = VECTOR2I( aText->GetTextBox().GetWidth(), 0 );
-            RotatePoint( textWidth, textPos, aText->GetDrawRotation() );
+            RotatePoint( textWidth, VECTOR2I( 0, 0 ), aText->GetDrawRotation() );
 
             if( attrs.m_Mirrored )
                 textPos -= textWidth;
