@@ -474,6 +474,11 @@ public:
         add( aItem, aAllowRedundant );
     }
 
+    const std::unordered_set<ITEM*>& GetOverrides() const
+    {
+        return m_override;
+    }
+
 private:
     void add( ITEM* aItem, bool aAllowRedundant = false );
 
