@@ -90,7 +90,6 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ShowPathDRC( const std::vector<PCB_SHAPE>
 
         aMarker->SetShapes1( std::move( shortestPathShapes1 ) );
         aMarker->SetShapes2( std::move( shortestPathShapes2 ) );
-        aCommit->Add( aMarker );
     };
 
     std::swap( m_GraphicsHandlerBuffer, m_drcEngine->m_graphicsHandler );
