@@ -515,43 +515,26 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 
 bool DRAGGER::tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk )
 {
-    WALKAROUND walkaround( aNode, Router() );
+        WALKAROUND walkaround( aNode, Router() );
     bool       ok = false;
     walkaround.SetSolidsOnly( false );
     walkaround.SetDebugDecorator( Dbg() );
     walkaround.SetLogger( Logger() );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
+    walkaround.SetLengthLimit( true, 30.0 );
+    walkaround.SetAllowedPolicies( { WALKAROUND::WP_SHORTEST } );
 
     aWalk = aOrig;
 
     WALKAROUND::RESULT wr = walkaround.Route( aWalk );
 
-    if( wr.statusCcw == WALKAROUND::DONE && wr.statusCw == WALKAROUND::DONE )
+    if( wr.status[ WALKAROUND::WP_SHORTEST ] == WALKAROUND::ST_DONE )
     {
-        if( wr.lineCw.CLine().PointCount() > 1
-                && wr.lineCw.CLine().Length() < wr.lineCcw.CLine().Length() )
-        {
-            aWalk = wr.lineCw;
-            ok    = true;
-        }
-        else if( wr.lineCcw.CLine().PointCount() > 1 )
-        {
-            aWalk = wr.lineCcw;
-            ok    = true;
-        }
-    }
-    else if( wr.statusCw == WALKAROUND::DONE && wr.lineCw.CLine().PointCount() > 1 )
-    {
-        aWalk = wr.lineCw;
-        ok    = true;
-    }
-    else if( wr.statusCcw == WALKAROUND::DONE && wr.lineCcw.CLine().PointCount() > 1  )
-    {
-        aWalk = wr.lineCcw;
-        ok    = true;
+        aWalk = wr.lines[ WALKAROUND::WP_SHORTEST ];
+         return true;
     }
 
-    return ok;
+    return false;
 }
 
 
@@ -621,7 +604,6 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
 
 bool DRAGGER::dragShove( const VECTOR2I& aP )
 {
-    bool ok = false;
 
     if( m_lastNode )
     {

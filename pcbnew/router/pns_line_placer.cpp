@@ -563,6 +563,7 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
     walkaround.SetLogger( Logger() );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
     walkaround.SetItemMask( aCollisionMask );
+    walkaround.SetAllowedPolicies( { WALKAROUND::WP_CCW, WALKAROUND::WP_CW } );
 
     int round = 0;
 
@@ -597,46 +598,49 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
         optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS );
         optimizer.SetCollisionMask( aCollisionMask );
 
-        int len_cw = wr.statusCw != WALKAROUND::STUCK ? wr.lineCw.CLine().Length()
+        using WALKAROUND::WP_CW;
+        using WALKAROUND::WP_CCW;
+
+        int len_cw = wr.status[WP_CW] != WALKAROUND::ST_STUCK ? wr.lines[WP_CW].CLine().Length()
                                                       : std::numeric_limits<int>::max();
-        int len_ccw = wr.statusCcw != WALKAROUND::STUCK ? wr.lineCcw.CLine().Length()
+        int len_ccw = wr.status[WP_CCW] != WALKAROUND::ST_STUCK ? wr.lines[WP_CCW].CLine().Length()
                                                         : std::numeric_limits<int>::max();
 
-        if( wr.statusCw == WALKAROUND::DONE )
+        if( wr.status[ WP_CW ] == WALKAROUND::ST_DONE )
         {
-            PNS_DBG( Dbg(), AddItem, &wr.lineCw, BLUE, 20000, wxT( "wf-result-cw-preopt" ) );
+            PNS_DBG( Dbg(), AddItem, &wr.lines[WP_CW], BLUE, 20000, wxT( "wf-result-cw-preopt" ) );
             LINE tmpHead, tmpTail;
 
-            if( splitHeadTail( wr.lineCw, m_tail, tmpHead, tmpTail ) )
+            if( splitHeadTail( wr.lines[WP_CW], m_tail, tmpHead, tmpTail ) )
             {
                 optimizer.Optimize( &tmpHead );
-                wr.lineCw.SetShape( tmpTail.CLine () );
-                wr.lineCw.Line().Append( tmpHead.CLine( ) );
+                wr.lines[WP_CW].SetShape( tmpTail.CLine () );
+                wr.lines[WP_CW].Line().Append( tmpHead.CLine( ) );
             }
 
-            PNS_DBG( Dbg(), AddItem, &wr.lineCw, RED, 20000, wxT( "wf-result-cw-postopt" ) );
-            len_cw = wr.lineCw.CLine().Length();
-            bestLine = wr.lineCw;
+            PNS_DBG( Dbg(), AddItem, &wr.lines[WP_CW], RED, 20000, wxT( "wf-result-cw-postopt" ) );
+            len_cw = wr.lines[WP_CW].CLine().Length();
+            bestLine = wr.lines[WP_CW];
         }
 
-        if( wr.statusCcw == WALKAROUND::DONE )
+        if( wr.status[WP_CCW] == WALKAROUND::ST_DONE )
         {
-            PNS_DBG( Dbg(), AddItem, &wr.lineCcw, BLUE, 20000, wxT( "wf-result-ccw-preopt" ) );
+            PNS_DBG( Dbg(), AddItem, &wr.lines[WP_CCW], BLUE, 20000, wxT( "wf-result-ccw-preopt" ) );
 
             LINE tmpHead, tmpTail;
 
-            if( splitHeadTail( wr.lineCw, m_tail, tmpHead, tmpTail ) )
+            if( splitHeadTail( wr.lines[WP_CCW], m_tail, tmpHead, tmpTail ) )
             {
                 optimizer.Optimize( &tmpHead );
-                wr.lineCw.SetShape( tmpTail.CLine () );
-                wr.lineCw.Line().Append( tmpHead.CLine( ) );
+                wr.lines[WP_CCW].SetShape( tmpTail.CLine () );
+                wr.lines[WP_CCW].Line().Append( tmpHead.CLine( ) );
             }
 
-            PNS_DBG( Dbg(), AddItem, &wr.lineCcw, RED, 20000, wxT( "wf-result-ccw-postopt" ) );
-            len_ccw = wr.lineCcw.CLine().Length();
+            PNS_DBG( Dbg(), AddItem, &wr.lines[WP_CCW], RED, 20000, wxT( "wf-result-ccw-postopt" ) );
+            len_ccw = wr.lines[WP_CCW].CLine().Length();
 
             if( len_ccw < len_cw )
-                bestLine = wr.lineCcw;
+                bestLine = wr.lines[WP_CCW];
         }
 
         int bestLength = len_cw < len_ccw ? len_cw : len_ccw;
@@ -656,9 +660,10 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
 
         SHAPE_LINE_CHAIN l_cw, l_ccw;
 
-        if( wr.statusCw != WALKAROUND::STUCK )
+        
+        if( wr.status[WP_CW] != WALKAROUND::ST_STUCK )
         {
-            validCw = cursorDistMinimum( wr.lineCw.CLine(), aP, hugThresholdLength, l_cw );
+            validCw = cursorDistMinimum( wr.lines[WP_CW].CLine(), aP, hugThresholdLength, l_cw );
 
             if( validCw )
                 distCw = ( aP - l_cw.CPoint( -1 ) ).EuclideanNorm();
@@ -668,9 +673,9 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
                                                                                          : "colliding" ) );
         }
 
-        if( wr.statusCcw != WALKAROUND::STUCK )
+        if( wr.status[WP_CCW] != WALKAROUND::ST_STUCK )
         {
-            validCcw = cursorDistMinimum( wr.lineCcw.CLine(), aP, hugThresholdLength, l_ccw );
+            validCcw = cursorDistMinimum( wr.lines[WP_CCW].CLine(), aP, hugThresholdLength, l_ccw );
 
             if( validCcw )
                 distCcw = ( aP - l_ccw.CPoint( -1 ) ).EuclideanNorm();

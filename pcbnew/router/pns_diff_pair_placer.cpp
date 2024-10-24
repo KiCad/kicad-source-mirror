@@ -188,7 +188,7 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
                                     bool aPFirst, bool aWindCw, bool aSolidsOnly )
 {
     WALKAROUND walkaround( aNode, Router() );
-    WALKAROUND::WALKAROUND_STATUS wf1;
+    WALKAROUND::STATUS wf1;
 
     walkaround.SetSolidsOnly( aSolidsOnly );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
@@ -222,10 +222,11 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
                 continue;
         }
 
-        wf1 = walkaround.Route( preWalk, postWalk, false );
+        // fioxme
+        //wf1 = walkaround.Route( preWalk, postWalk, false );
 
-        if( wf1 != WALKAROUND::DONE )
-            return false;
+        //if( wf1 != WALKAROUND::DONE )
+          //  return false;
 
         LINE postShove( preShove );
 
@@ -356,7 +357,7 @@ bool DIFF_PAIR_PLACER::rhShoveOnly( const VECTOR2I& aP )
     head.Add( &pLine );
     head.Add( &nLine );
 
-    SHOVE::SHOVE_STATUS status = m_shove->ShoveMultiLines( head ); // fixme
+    SHOVE::SHOVE_STATUS status = SHOVE::SH_INCOMPLETE; //->ShoveMultiLines( head );
 
     m_currentNode = m_shove->CurrentNode();
 
