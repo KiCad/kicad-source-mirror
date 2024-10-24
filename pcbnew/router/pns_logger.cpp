@@ -44,12 +44,13 @@ void LOGGER::Clear()
 
 
 void LOGGER::LogM( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, std::vector<ITEM*> items,
-                  const SIZES_SETTINGS* sizes )
+                  const SIZES_SETTINGS* sizes, int aLayer )
 {
     LOGGER::EVENT_ENTRY ent;
 
     ent.type = evt;
     ent.p = pos;
+    ent.layer = aLayer;
 
     if( sizes )
     {
@@ -67,11 +68,11 @@ void LOGGER::LogM( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, std::vector<ITEM
 
 
 void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item,
-                  const SIZES_SETTINGS* sizes )
+                  const SIZES_SETTINGS* sizes, int aLayer )
 {
     std::vector<ITEM*> items;
     items.push_back( const_cast<ITEM*>( item ) );
-    LogM( evt, pos, items, sizes );
+    LogM( evt, pos, items, sizes, aLayer );
 }
 
 
@@ -101,7 +102,9 @@ wxString LOGGER::FormatLogFileAsString( int aMode,
 
 wxString LOGGER::FormatEvent( const LOGGER::EVENT_ENTRY& aEvent )
 {
-    wxString str = wxString::Format( "event %d %d %d %d ", aEvent.p.x, aEvent.p.y, aEvent.type, (int)aEvent.uuids.size() );
+    wxString str = wxString::Format( "event %d %d %d %d %d ", aEvent.p.x, aEvent.p.y, aEvent.type, aEvent.layer, (int)aEvent.uuids.size() );
+
+    printf("*** formatEvent l %d\n", aEvent.layer );
 
     for( int i = 0; i < aEvent.uuids.size(); i++ )
     {
@@ -137,9 +140,8 @@ LOGGER::EVENT_ENTRY LOGGER::ParseEvent( const wxString& aLine )
     evt.p.x = wxAtoi( tokens.GetNextToken() );
     evt.p.y = wxAtoi( tokens.GetNextToken() );
     evt.type = (PNS::LOGGER::EVENT_TYPE) wxAtoi( tokens.GetNextToken() );
+    evt.layer = wxAtoi( tokens.GetNextToken() );
     n_uuids = wxAtoi( tokens.GetNextToken() );
-
-    printf("Evt %d NUUIDS %d\n", evt.type, n_uuids );
 
     for( int i = 0; i < n_uuids; i++)
         evt.uuids.push_back( KIID( tokens.GetNextToken() ) );

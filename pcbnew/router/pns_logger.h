@@ -59,11 +59,12 @@ public:
         EVENT_TYPE type;
         std::vector<KIID> uuids;
         SIZES_SETTINGS sizes;
+        int layer;
 
         EVENT_ENTRY() {}
 
         EVENT_ENTRY( const EVENT_ENTRY& aE ) :
-                p( aE.p ), type( aE.type ), uuids( aE.uuids ), sizes( aE.sizes )
+                p( aE.p ), type( aE.type ), uuids( aE.uuids ), sizes( aE.sizes ), layer( aE.layer )
         {
         }
     };
@@ -74,10 +75,10 @@ public:
     void Clear();
 
     void LogM( EVENT_TYPE evt, const VECTOR2I& pos = VECTOR2I(), std::vector<ITEM*> items = {},
-              const SIZES_SETTINGS* sizes = nullptr);
+              const SIZES_SETTINGS* sizes = nullptr, int aLayer = 0 );
 
     void Log( EVENT_TYPE evt, const VECTOR2I& pos = VECTOR2I(), const ITEM* item = nullptr,
-              const SIZES_SETTINGS* sizes = nullptr );
+              const SIZES_SETTINGS* sizes = nullptr, int aLayer = 0 );
 
     const std::vector<EVENT_ENTRY>& GetEvents()
     {
