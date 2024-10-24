@@ -29,18 +29,18 @@
 #include "pns_router.h"
 #include "pns_logger.h"
 #include "pns_algo_base.h"
+#include "pns_topology.h"
 
 namespace PNS {
 
 class WALKAROUND : public ALGO_BASE
 {
-    static const int DefaultIterationLimit = 50;
-
+    static constexpr int MaxWalkPolicies = 3;
+    
 public:
     WALKAROUND( NODE* aWorld, ROUTER* aRouter ) :
         ALGO_BASE ( aRouter ),
-        m_world( aWorld ),
-        m_iterationLimit( DefaultIterationLimit )
+        m_world( aWorld )
     {
         m_forceWinding = false;
         m_itemMask = ITEM::ANY_T;
@@ -50,30 +50,39 @@ public:
         m_forceCw = false;
         m_forceLongerPath = false;
         m_lengthLimitOn = true;
+        m_useShortestPath = false;
+        m_lengthExpansionFactor = 10.0;
+        m_iterationLimit = Settings().WalkaroundIterationLimit();
     }
 
     ~WALKAROUND() {};
 
-    enum WALKAROUND_STATUS
+    enum STATUS
     {
-        IN_PROGRESS = 0,
-        ALMOST_DONE,
-        DONE,
-        STUCK
+        ST_IN_PROGRESS = 0,
+        ST_ALMOST_DONE,
+        ST_DONE,
+        ST_STUCK,
+        ST_NONE
+    };
+
+    enum WALK_POLICY
+    {
+        WP_CW = 0,
+        WP_CCW = 1,
+        WP_SHORTEST = 2
     };
 
     struct RESULT
     {
-        RESULT( WALKAROUND_STATUS aStatusCw = STUCK, WALKAROUND_STATUS aStatusCcw = STUCK, const LINE& aLineCw = LINE(), const LINE& aLineCcw = LINE() )
+        RESULT()
         {
-            statusCw = aStatusCw;
-            statusCcw = aStatusCcw;
-            lineCw = aLineCw;
-            lineCcw = aLineCcw;
+            for( int i = 0; i < MaxWalkPolicies; i++ )
+                status [i] = ST_NONE;
         }
 
-        WALKAROUND_STATUS statusCw, statusCcw;
-        LINE lineCw, lineCcw;
+        STATUS status[ MaxWalkPolicies ];
+        LINE lines[ MaxWalkPolicies ];
     };
 
     void SetWorld( NODE* aNode )
@@ -105,24 +114,31 @@ public:
         m_forceWinding = aEnabled;
     }
 
-    void RestrictToSet( bool aEnabled, const std::set<ITEM*>& aSet );
+    void SetPickShortestPath( bool aEnabled )
+    {
+        m_useShortestPath = aEnabled;
+    }
 
-    WALKAROUND_STATUS Route( const LINE& aInitialPath, LINE& aWalkPath,
+    void RestrictToCluster( bool aEnabled, const TOPOLOGY::CLUSTER& aCluster );
+
+    STATUS Route( const LINE& aInitialPath, LINE& aWalkPath,
             bool aOptimize = true );
 
     const RESULT Route( const LINE& aInitialPath );
 
-    void SetLengthLimit( bool aEnable )
+    void SetLengthLimit( bool aEnable, double aLengthExpansionFactor )
     {
         m_lengthLimitOn = aEnable;
+        m_lengthExpansionFactor = aLengthExpansionFactor;
     }
 
+    void SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies);
+    
 private:
     void start( const LINE& aInitialPath );
+    bool singleStep();
 
-    WALKAROUND_STATUS singleStep( LINE& aPath, bool aWindingDirection );
     NODE::OPT_OBSTACLE nearestObstacle( const LINE& aPath );
-
     NODE* m_world;
 
     int m_iteration;
@@ -131,11 +147,19 @@ private:
     bool m_forceWinding;
     bool m_forceCw;
     VECTOR2I m_cursorPos;
-    NODE::OPT_OBSTACLE m_currentObstacle[2];
-    std::set<ITEM*> m_restrictedSet;
+    VECTOR2I m_lastP;
+    std::set<const ITEM*> m_restrictedSet;
     std::vector<VECTOR2I> m_restrictedVertices;
     bool m_forceLongerPath;
     bool m_lengthLimitOn;
+    bool m_useShortestPath;
+    double m_lengthExpansionFactor;
+    bool m_enabledPolicies[ MaxWalkPolicies ];
+    NODE::OPT_OBSTACLE m_currentObstacle[ MaxWalkPolicies ];
+    TOPOLOGY::CLUSTER m_currentCluster[ MaxWalkPolicies ];
+    std::optional<TOPOLOGY::CLUSTER> m_lastShortestCluster;
+    RESULT m_currentResult;
+    double m_initialLength;
 };
 
 }

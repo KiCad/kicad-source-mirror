@@ -35,7 +35,12 @@ namespace PNS {
 void WALKAROUND::start( const LINE& aInitialPath )
 {
     m_iteration = 0;
-    m_iterationLimit = 50;
+    for( int pol = 0 ; pol < MaxWalkPolicies; pol++)
+    {
+        m_currentResult.status[ pol ] = ST_IN_PROGRESS;
+        m_currentResult.lines[ pol ] = aInitialPath;
+        m_currentResult.lines[ pol ].ClearLinks();
+    }
 }
 
 
@@ -44,28 +49,30 @@ NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
     COLLISION_SEARCH_OPTIONS opts;
 
     opts.m_kindMask = m_itemMask;
+
+    if( ! m_restrictedSet.empty() )
+    {
+        opts.m_filter = [ this ] ( const ITEM* item ) -> bool
+        {
+            if( m_restrictedSet.find( item ) != m_restrictedSet.end() )
+                return true;
+            return false;
+        };
+    }
+
     opts.m_useClearanceEpsilon = false;
-
-    NODE::OPT_OBSTACLE obs = m_world->NearestObstacle( &aPath, opts );
-
-    if( m_restrictedSet.empty() )
-        return obs;
-
-    else if( obs && m_restrictedSet.find ( obs->m_item ) != m_restrictedSet.end() )
-        return obs;
-
-    return NODE::OPT_OBSTACLE();
+    return m_world->NearestObstacle( &aPath, opts );
 }
 
 
-void WALKAROUND::RestrictToSet( bool aEnabled, const std::set<ITEM*>& aSet )
+void WALKAROUND::RestrictToCluster( bool aEnabled, const TOPOLOGY::CLUSTER& aCluster )
 {
     m_restrictedVertices.clear();
     m_restrictedSet.clear();
 
     if( aEnabled )
     {
-        for( ITEM* item : aSet )
+        for( ITEM* item : aCluster.m_items )
         {
             m_restrictedSet.insert( item );
 
@@ -74,291 +81,292 @@ void WALKAROUND::RestrictToSet( bool aEnabled, const std::set<ITEM*>& aSet )
         }
     }
 
-    for( ITEM* item : aSet )
+    for( ITEM* item : aCluster.m_items )
     {
         if( SOLID* solid = dyn_cast<SOLID*>( item ) )
             m_restrictedVertices.push_back( solid->Anchor( 0 ) );
     }
 }
 
-
-WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWindingDirection )
+static wxString policy2string ( WALKAROUND::WALK_POLICY policy )
 {
-    std::optional<OBSTACLE>& current_obs =
-        aWindingDirection ? m_currentObstacle[0] : m_currentObstacle[1];
+    switch(policy)
+    {
+        case WALKAROUND::WP_CCW: return wxT("ccw");
+        case WALKAROUND::WP_CW: return wxT("cw");
+        case WALKAROUND::WP_SHORTEST: return wxT("shortest");
+    }
+    return wxT("?");
+}
 
-    if( !current_obs )
-        return DONE;
+bool WALKAROUND::singleStep()
+{
+    TOPOLOGY topo( m_world );
+    TOPOLOGY::CLUSTER pendingClusters[MaxWalkPolicies];
 
-    VECTOR2I initialLast = aPath.CPoint( -1 );
+    for( int i = 0; i < MaxWalkPolicies; i++ )
+    {
+        if( !m_enabledPolicies[i] )
+            continue;
 
-    SHAPE_LINE_CHAIN path_walk;
+        auto& line = m_currentResult.lines[ i ];
+        auto& status = m_currentResult.status[ i ];
 
-    SHAPE_LINE_CHAIN hull = current_obs->m_item->Hull( current_obs->m_clearance, aPath.Width() );
+        PNS_DBG( Dbg(), AddItem, &line, WHITE, 10000, wxString::Format( "current (policy %d, stat %d)", i, status ) );
+
+        if( status != ST_IN_PROGRESS )
+            continue;
+
+        auto obstacle = nearestObstacle( line );
+
+        if( !obstacle )
+        {
+
+            m_currentResult.status[ i ] = ST_DONE;
+            PNS_DBG( Dbg(), Message,  wxString::Format( "no-more-colls pol %d st %d", i, status ) );
+
+            continue;
+        }
+
+        PNS_DBG( Dbg(), AddItem, obstacle->m_item, BLUE, 10000, wxString::Format( "col-item owner-depth %d", static_cast<const NODE*>( obstacle->m_item->Owner() )->Depth() ) );
+
+        pendingClusters[ i ] = topo.AssembleCluster( obstacle->m_item, line.Layer() );
+    }
 
     DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
 
-    if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
+    auto processCluster = [ & ] ( TOPOLOGY::CLUSTER& aCluster, LINE& aLine, bool aCw ) -> bool
     {
-        BOX2I bbox = hull.BBox();
-        hull.Clear();
-        hull.Append( bbox.GetLeft(),  bbox.GetTop()    );
-        hull.Append( bbox.GetRight(), bbox.GetTop()    );
-        hull.Append( bbox.GetRight(), bbox.GetBottom() );
-        hull.Append( bbox.GetLeft(),  bbox.GetBottom() );
+        PNS_DBG( Dbg(), BeginGroup, wxString::Format( "cluster-details [cw %d]", aCw?1:0 ), 1 );
+
+        for( auto& clItem : aCluster.m_items )
+        {
+            int clearance = m_world->GetClearance( clItem, &aLine, false );
+            SHAPE_LINE_CHAIN hull = clItem->Hull( clearance + 1000, aLine.Width() );
+
+            if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
+            {
+                BOX2I bbox = hull.BBox();
+                hull.Clear();
+                hull.Append( bbox.GetLeft(),  bbox.GetTop()    );
+                hull.Append( bbox.GetRight(), bbox.GetTop()    );
+                hull.Append( bbox.GetRight(), bbox.GetBottom() );
+                hull.Append( bbox.GetLeft(),  bbox.GetBottom() );
+            }
+
+            LINE tmp( aLine );
+
+            bool stat = aLine.Walkaround( hull, tmp.Line(), aCw );
+
+            if( !stat )
+                return false;
+
+            PNS_DBG( Dbg(), AddShape, &hull, YELLOW, 10000, wxT( "hull" ) );
+            PNS_DBG( Dbg(), AddItem, &tmp, RED, 10000, wxT( "walk" ) );
+
+            aLine.SetShape( tmp.CLine() );
+        }
+
+        PNS_DBGN( Dbg(), EndGroup );
+
+        return true;
+    };
+
+    if ( m_enabledPolicies[WP_CW] )
+    {
+        bool stat = processCluster( pendingClusters[ WP_CW ], m_currentResult.lines[ WP_CW ], true );
+        if( !stat )
+            m_currentResult.status[ WP_CW ] = ST_STUCK;
     }
 
-    bool s_cw = aPath.Walkaround( hull, path_walk, aWindingDirection );
-
-    PNS_DBG( Dbg(), BeginGroup, "hull/walk", 1 );
-    PNS_DBG( Dbg(), AddShape, &hull, RED, 0,
-             wxString::Format( "hull-%s-%d-cl %d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ),
-                               m_iteration, current_obs->m_clearance ) );
-    PNS_DBG( Dbg(), AddShape, &aPath.CLine(), GREEN, 0,
-             wxString::Format( "path-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ),
-                               m_iteration ) );
-    PNS_DBG( Dbg(), AddShape, &path_walk, BLUE, 0,
-             wxString::Format( "result-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ),
-                               m_iteration ) );
-    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "Stat cw %d" ), !!s_cw ) );
-    PNS_DBGN( Dbg(), EndGroup );
-
-    path_walk.Simplify();
-    aPath.SetShape( path_walk );
-
-    // If the end of the line is inside an obstacle, additional walkaround iterations are not
-    // going to help.  Exit now to prevent pegging the iteration limiter and causing lag.
-    if( current_obs && hull.PointInside( initialLast ) && !hull.PointOnEdge( initialLast ) )
+    if ( m_enabledPolicies[WP_CCW] )
     {
-        return ALMOST_DONE;
+        bool stat = processCluster( pendingClusters[ WP_CCW ], m_currentResult.lines[ WP_CCW ], false );
+        if( !stat )
+            m_currentResult.status[ WP_CCW ] = ST_STUCK;
     }
 
-    current_obs = nearestObstacle( LINE( aPath, path_walk ) );
+    if( m_enabledPolicies[WP_SHORTEST] )
+    {
+        LINE& line = m_currentResult.lines[WP_SHORTEST];
+        LINE  path_cw( line ), path_ccw( line );
 
-    return IN_PROGRESS;
+        auto st_cw = processCluster( pendingClusters[WP_SHORTEST], path_cw, true );
+        auto st_ccw = processCluster( pendingClusters[WP_SHORTEST], path_ccw, false );
+
+        bool cw_coll = st_cw ? m_world->CheckColliding( &path_cw ).has_value() : false;
+        bool ccw_coll = st_ccw ? m_world->CheckColliding( &path_ccw ).has_value() : false;
+
+        double lengthFactorCw = (double) path_cw.CLine().Length() / (double) m_initialLength;
+        double lengthFactorCcw = (double) path_ccw.CLine().Length() / (double) m_initialLength;
+
+        PNS_DBG( Dbg(), AddItem, &path_cw, RED, 10000, wxString::Format( "shortest-cw stat %d lf %.1f", st_cw?1:0, lengthFactorCw ) );
+        PNS_DBG( Dbg(), AddItem, &path_ccw, BLUE, 10000, wxString::Format( "shortest-ccw stat %d lf %.1f", st_ccw?1:0, lengthFactorCcw ) );
+
+
+        std::optional<LINE> shortest;
+        std::optional<LINE> shortest_alt;
+
+        
+        if( st_cw && st_ccw )
+        {
+            if( !cw_coll && !ccw_coll || ( cw_coll && ccw_coll) )
+            {
+                if( path_cw.CLine().Length() > path_ccw.CLine().Length() )
+                {
+                    shortest = path_ccw;
+                    shortest_alt = path_cw;
+                }
+                else
+                {
+                    shortest = path_cw;
+                    shortest_alt = path_ccw;
+                }
+            }
+            else if( !cw_coll )
+                shortest = path_cw;
+            else if( !ccw_coll )
+                shortest = path_ccw;
+            
+        }
+        else if( st_ccw )
+            shortest = path_ccw;
+        else if( st_cw )
+            shortest = path_cw;
+
+        bool anyColliding = false;
+
+        if( m_lastShortestCluster && shortest.has_value() )
+        {
+            for( auto& item : m_lastShortestCluster->m_items )
+            {
+                if( shortest->Collide( item, m_world) )
+                {
+                    anyColliding = true;
+                    break;
+                }
+            }
+
+            PNS_DBG( Dbg(), Message, wxString::Format("check-back cc %d items %d coll %d", (int) pendingClusters[ WP_SHORTEST ].m_items.size(), (int) m_lastShortestCluster->m_items.size(), anyColliding ? 1: 0 ) );
+        }
+
+        if ( anyColliding )
+        {
+            shortest = shortest_alt;
+        }
+
+        if( !shortest )
+        {
+            m_currentResult.status[WP_SHORTEST] = ST_STUCK;
+        }
+        else
+        {
+            m_currentResult.lines[WP_SHORTEST] = *shortest;
+        }
+
+        m_lastShortestCluster = pendingClusters[ WP_SHORTEST ];
+    }
+
+    return ST_IN_PROGRESS;
 }
 
 
 const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
 {
-    LINE path_cw( aInitialPath ), path_ccw( aInitialPath );
-    WALKAROUND_STATUS s_cw = IN_PROGRESS, s_ccw = IN_PROGRESS;
-    SHAPE_LINE_CHAIN best_path;
     RESULT result;
 
+    m_initialLength = aInitialPath.CLine().Length();
+
     // special case for via-in-the-middle-of-track placement
+
+#if 0
     if( aInitialPath.PointCount() <= 1 )
     {
         if( aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(),
                                                                    m_itemMask ) )
-            return RESULT( STUCK, STUCK );
+            {
+                // fixme restult
+            }
+            //return RESULT( STUCK, STUCK );
 
-        return RESULT( DONE, DONE, aInitialPath, aInitialPath );
+        return RESULT(); //( DONE, DONE, aInitialPath, aInitialPath );
     }
+#endif
 
     start( aInitialPath );
 
-    m_currentObstacle[0] = m_currentObstacle[1] = nearestObstacle( aInitialPath );
-
-    result.lineCw = aInitialPath;
-    result.lineCcw = aInitialPath;
-
-    if( m_forceWinding )
-    {
-        s_cw = m_forceCw ? IN_PROGRESS : STUCK;
-        s_ccw = m_forceCw ? STUCK : IN_PROGRESS;
-    }
-
-    // In some situations, there isn't a trivial path (or even a path at all).  Hitting the
-    // iteration limit causes lag, so we can exit out early if the walkaround path gets very long
-    // compared with the initial path.  If the length exceeds the initial length times this factor,
-    // fail out.
-    const int maxWalkDistFactor = 10;
-    long long lengthLimit       = aInitialPath.CLine().Length() * maxWalkDistFactor;
+    PNS_DBG( Dbg(), AddItem, &aInitialPath, WHITE, 10000, wxT( "initial-path" ) );
 
     while( m_iteration < m_iterationLimit )
     {
-        if( s_cw != STUCK && s_cw != ALMOST_DONE )
-            s_cw = singleStep( path_cw, true );
+        singleStep();
 
-        if( s_ccw != STUCK && s_ccw != ALMOST_DONE )
-            s_ccw = singleStep( path_ccw, false );
+        bool stillInProgress = false;
 
-        if( s_cw != IN_PROGRESS )
+        for( int pol = 0; pol < MaxWalkPolicies; pol++ )
         {
-            result.lineCw = path_cw;
-            result.statusCw = s_cw;
+            if (!m_enabledPolicies[pol])
+                continue;
+
+            auto& st = m_currentResult.status[pol];
+            auto& ln = m_currentResult.lines[pol];
+            double lengthFactor = (double) ln.CLine().Length() / (double) aInitialPath.CLine().Length();
+            // In some situations, there isn't a trivial path (or even a path at all).  Hitting the
+            // iteration limit causes lag, so we can exit out early if the walkaround path gets very long
+            // compared with the initial path.  If the length exceeds the initial length times this factor,
+            // fail out.
+            if( m_lengthLimitOn )
+            {
+                if( st != ST_DONE && lengthFactor > m_lengthExpansionFactor )
+                    st = ST_STUCK;
+            }
+
+            PNS_DBG( Dbg(), Message, wxString::Format( "check-wp iter %d st %d i %d lf %.1f", m_iteration, st, pol, lengthFactor ) );
+
+            if ( st == ST_IN_PROGRESS )
+                stillInProgress = true;
         }
 
-        if( s_ccw != IN_PROGRESS )
-        {
-            result.lineCcw = path_ccw;
-            result.statusCcw = s_ccw;
-        }
 
-        if( s_cw != IN_PROGRESS && s_ccw != IN_PROGRESS )
-            break;
-
-        double length = (double)aInitialPath.CLine().Length();
-        wxCHECK2( length != 0, length = 1.0 );
-        double lcw = path_cw.Line().Length() / length;
-
-        length = (double)aInitialPath.CLine().Length();
-        wxCHECK2( length != 0, length = 1.0 );
-        double lccw = path_ccw.Line().Length() / length;
-
-        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "lcw %.1f lccw %.1f" ), lcw, lccw ) );
-
-
-        // Safety valve
-        if( m_lengthLimitOn && path_cw.Line().Length() > lengthLimit && path_ccw.Line().Length() >
-            lengthLimit )
+        if( !stillInProgress )
             break;
 
         m_iteration++;
     }
 
-    if( s_cw == IN_PROGRESS )
+
+    for( int pol = 0; pol < MaxWalkPolicies; pol++ )
     {
-        result.lineCw = path_cw;
-        result.statusCw = ALMOST_DONE;
+        auto&       st = m_currentResult.status[pol];
+        const auto& ln = m_currentResult.lines[pol].CLine();
+
+        m_currentResult.lines[pol].ClearLinks();
+        if( st == ST_IN_PROGRESS )
+            st = ST_ALMOST_DONE;
+
+        if( ln.SegmentCount() < 1 || ln.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
+        {
+            st = ST_STUCK;
+        }
+
+        if( ln.PointCount() > 0 && ln.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
+        {
+            st = ST_ALMOST_DONE;
+        }
     }
 
-    if( s_ccw == IN_PROGRESS )
-    {
-        result.lineCcw = path_ccw;
-        result.statusCcw = ALMOST_DONE;
-    }
 
-    if( result.lineCw.SegmentCount() < 1 || result.lineCw.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
-    {
-        result.statusCw = STUCK;
-    }
-
-    if( result.lineCw.PointCount() > 0 && result.lineCw.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
-    {
-        result.statusCw = ALMOST_DONE;
-    }
-
-    if( result.lineCcw.SegmentCount() < 1 ||
-        result.lineCcw.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
-    {
-        result.statusCcw = STUCK;
-    }
-
-    if( result.lineCcw.PointCount() > 0 &&
-        result.lineCcw.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
-    {
-        result.statusCcw = ALMOST_DONE;
-    }
-
-    result.lineCw.ClearLinks();
-    result.lineCcw.ClearLinks();
-
-    return result;
+    return m_currentResult;
 }
 
-
-WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath, LINE& aWalkPath,
-                                                 bool aOptimize )
+void WALKAROUND::SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies)
 {
-    LINE path_cw( aInitialPath ), path_ccw( aInitialPath );
-    WALKAROUND_STATUS s_cw = IN_PROGRESS, s_ccw = IN_PROGRESS;
-    SHAPE_LINE_CHAIN best_path;
+    for( int i = 0; i < MaxWalkPolicies; i++ )
+        m_enabledPolicies[i] =  false;
 
-    // special case for via-in-the-middle-of-track placement
-    if( aInitialPath.PointCount() <= 1 )
-    {
-        if( aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(),
-                                                                   m_itemMask ) )
-            return STUCK;
-
-        aWalkPath = aInitialPath;
-        return DONE;
-    }
-
-    start( aInitialPath );
-
-    m_currentObstacle[0] = m_currentObstacle[1] = nearestObstacle( aInitialPath );
-
-    aWalkPath = aInitialPath;
-
-    if( m_forceWinding )
-    {
-        s_cw = m_forceCw ? IN_PROGRESS : STUCK;
-        s_ccw = m_forceCw ? STUCK : IN_PROGRESS;
-    }
-
-    while( m_iteration < m_iterationLimit )
-    {
-        if( path_cw.PointCount() == 0 )
-            s_cw = STUCK; // cw path is empty, can't continue
-
-        if( path_ccw.PointCount() == 0 )
-            s_ccw = STUCK; // ccw path is empty, can't continue
-
-        if( s_cw != STUCK )
-            s_cw = singleStep( path_cw, true );
-
-        if( s_ccw != STUCK )
-            s_ccw = singleStep( path_ccw, false );
-
-        if( ( s_cw == DONE && s_ccw == DONE ) || ( s_cw == STUCK && s_ccw == STUCK ) )
-        {
-            int len_cw  = path_cw.CLine().Length();
-            int len_ccw = path_ccw.CLine().Length();
-
-            if( m_forceLongerPath )
-                aWalkPath = ( len_cw > len_ccw ? path_cw : path_ccw );
-            else
-                aWalkPath = ( len_cw < len_ccw ? path_cw : path_ccw );
-
-            break;
-        }
-        else if( s_cw == DONE && !m_forceLongerPath )
-        {
-            aWalkPath = path_cw;
-            break;
-        }
-        else if( s_ccw == DONE && !m_forceLongerPath )
-        {
-            aWalkPath = path_ccw;
-            break;
-        }
-
-        m_iteration++;
-    }
-
-    if( m_iteration == m_iterationLimit )
-    {
-        int len_cw  = path_cw.CLine().Length();
-        int len_ccw = path_ccw.CLine().Length();
-
-        if( m_forceLongerPath )
-            aWalkPath = ( len_cw > len_ccw ? path_cw : path_ccw );
-        else
-            aWalkPath = ( len_cw < len_ccw ? path_cw : path_ccw );
-    }
-
-    aWalkPath.Line().Simplify();
-
-    if( aWalkPath.SegmentCount() < 1 )
-        return STUCK;
-
-    if( aWalkPath.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
-        return ALMOST_DONE;
-
-    if( aWalkPath.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
-        return STUCK;
-
-    WALKAROUND_STATUS st = s_ccw == DONE || s_cw == DONE ? DONE : STUCK;
-
-    if( st == DONE )
-    {
-        if( aOptimize )
-            OPTIMIZER::Optimize( &aWalkPath, OPTIMIZER::MERGE_OBTUSE, m_world );
-    }
-
-    return st;
+    for ( auto p : aPolicies )
+        m_enabledPolicies[p] = true;
 }
+
 }
+
