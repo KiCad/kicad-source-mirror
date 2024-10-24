@@ -326,4 +326,10 @@ const NODE* ITEM::OwningNode() const
         return static_cast<const NODE*>( Owner() );
 }
 
+LINKED_ITEM::UNIQ_ID LINKED_ITEM::genNextUid()
+{
+    static UNIQ_ID uidCount = 0; // fixme: make atomic
+    return uidCount++;
+}
+
 } // namespace PNS

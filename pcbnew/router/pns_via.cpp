@@ -159,6 +159,7 @@ VIA* VIA::Clone() const
 {
     VIA* v = new VIA();
 
+    v->m_uid = m_uid; // fixme: oop
     v->SetNet( Net() );
     v->SetLayers( Layers() );
     v->m_pos = m_pos;

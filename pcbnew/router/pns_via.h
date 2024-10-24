@@ -117,6 +117,7 @@ public:
         m_viaType = aB.m_viaType;
         m_isFree = aB.m_isFree;
         m_isVirtual = aB.m_isVirtual;
+        m_uid = aB.m_uid;
         return *this;
     }
 

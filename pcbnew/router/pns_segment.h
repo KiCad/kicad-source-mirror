@@ -59,6 +59,12 @@ public:
         m_rank = aParentLine.Rank();
     }
 
+    explicit SEGMENT( const LINKED_ITEM& aParent ) :
+        LINKED_ITEM( aParent )
+    {
+        assert( aParent.Kind() == SEGMENT_T );
+    }
+
     static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && SEGMENT_T == aItem->Kind();

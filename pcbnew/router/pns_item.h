@@ -108,7 +108,8 @@ public:
         VIA_T       =   32,
         DIFF_PAIR_T =   64,
         HOLE_T      =   128,
-        ANY_T       =   0xffff
+        ANY_T       =   0xffff,
+        LINKED_ITEM_MASK_T = SOLID_T | SEGMENT_T | ARC_T | VIA_T | HOLE_T
     };
 
     ITEM( PnsKind aKind )

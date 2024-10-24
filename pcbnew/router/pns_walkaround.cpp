@@ -44,12 +44,6 @@ NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
     COLLISION_SEARCH_OPTIONS opts;
 
     opts.m_kindMask = m_itemMask;
-
-    if( ! m_restrictedSet.empty() )
-        opts.m_restrictedSet = &m_restrictedSet;
-    else
-        opts.m_restrictedSet = nullptr;
-
     opts.m_useClearanceEpsilon = false;
 
     NODE::OPT_OBSTACLE obs = m_world->NearestObstacle( &aPath, opts );

@@ -138,7 +138,7 @@ int LINE::Marker() const
 
 SEGMENT* SEGMENT::Clone() const
 {
-    SEGMENT* s = new SEGMENT;
+    SEGMENT* s = new SEGMENT( *this );
 
     s->m_seg = m_seg;
     s->m_net = m_net;
