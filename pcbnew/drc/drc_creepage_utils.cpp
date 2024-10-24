@@ -492,7 +492,7 @@ void CreepageGraph::RemoveDuplicatedShapes()
 
     size_t i = 0;
 
-    for( i = 0; i < (int)m_shapeCollection.size() - 1; i++ )
+    for( i = 0; i < m_shapeCollection.size() - 1; i++ )
     {
         if( m_shapeCollection[i] == nullptr )
             continue;
@@ -701,19 +701,19 @@ std::vector<PCB_SHAPE> GraphConnection::GetShapes()
     return shapes;
 }
 
-void CREEP_SHAPE::ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode>,
-                                   CreepageGraph&             aG ) const
+void CREEP_SHAPE::ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>&,
+                                   CreepageGraph&              aG ) const
 {
 }
 
 
-void BE_SHAPE_POINT::ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode>,
-                                      CreepageGraph&             aG ) const
+void BE_SHAPE_POINT::ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>&,
+                                      CreepageGraph&              aG ) const
 {
 }
 
-void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GraphNode> a1,
-                                           std::shared_ptr<GraphNode> a2, CreepageGraph& aG,
+void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GraphNode>& a1,
+                                           std::shared_ptr<GraphNode>& a2, CreepageGraph& aG,
                                            double aNormalWeight ) const
 {
     EDA_ANGLE angle1 = EDA_ANGLE( a1->m_pos - m_pos );
@@ -760,8 +760,8 @@ void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GraphNode> a1,
     return;
 }
 
-void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
-                                       CreepageGraph& aG ) const
+void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GraphNode>& a1,
+                                       std::shared_ptr<GraphNode>& a2, CreepageGraph& aG ) const
 {
     if( !a1 || !a2 )
         return;
@@ -797,7 +797,7 @@ void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GraphNode> a1, std::share
 }
 
 
-void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
                                     CreepageGraph& aG ) const
 {
     if( !a1 || !a2 )
@@ -1905,7 +1905,7 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
 
     for( size_t i = 0; i < intersectionPoints.size(); i += 2 )
     {
-        if( intersectionPoints[i].Distance( intersectionPoints[i + 1] ) > aMinGrooveWidth )
+        if( intersectionPoints[i].SquaredDistance( intersectionPoints[i + 1] ) > GVSquared )
         {
             return false;
         }
@@ -2031,7 +2031,7 @@ std::vector<PATH_CONNECTION> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, doubl
 }
 
 double CreepageGraph::Solve(
-        std::shared_ptr<GraphNode> aFrom, std::shared_ptr<GraphNode> aTo,
+        std::shared_ptr<GraphNode>& aFrom, std::shared_ptr<GraphNode>& aTo,
         std::vector<std::shared_ptr<GraphConnection>>& aResult ) // Change to vector of pointers
 {
     if( !aFrom || !aTo )
@@ -2325,12 +2325,12 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                                  { false, true }, m_minGrooveWidth ) )
                     continue;
 
-                std::shared_ptr<GraphNode> connect1;
-                std::shared_ptr<GraphNode> connect2;
+                std::shared_ptr<GraphNode>* connect1 = nullptr;
+                std::shared_ptr<GraphNode>* connect2 = nullptr;
 
                 if( gn1->m_parent->GetType() == CREEP_SHAPE::TYPE::POINT )
                 {
-                    connect1 = gn1;
+                    connect1 = &gn1;
                 }
                 else
                 {
@@ -2345,12 +2345,12 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                         if( gc )
                             gc->m_path.m_show = false;
                     }
-                    connect1 = gnt;
+                    connect1 = &gnt;
                 }
 
                 if( gn2->m_parent->GetType() == CREEP_SHAPE::TYPE::POINT )
                 {
-                    connect2 = gn2;
+                    connect2 = &gn2;
                 }
                 else
                 {
@@ -2365,9 +2365,9 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                         if( gc )
                             gc->m_path.m_show = false;
                     }
-                    connect2 = gnt;
+                    connect2 = &gnt;
                 }
-                AddConnection( connect1, connect2, pc );
+                AddConnection( *connect1, *connect2, pc );
             }
         }
     }
@@ -2452,9 +2452,9 @@ std::shared_ptr<GraphNode> CreepageGraph::AddNodeVirtual()
 }
 
 
-std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<GraphNode> aN1,
-                                                               std::shared_ptr<GraphNode> aN2,
-                                                               const PATH_CONNECTION&     aPc )
+std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<GraphNode>& aN1,
+                                                               std::shared_ptr<GraphNode>& aN2,
+                                                               const PATH_CONNECTION&      aPc )
 {
     if( !aN1 || !aN2 )
         return nullptr;
@@ -2467,8 +2467,8 @@ std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<G
     return gc;
 }
 
-std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<GraphNode> aN1,
-                                                               std::shared_ptr<GraphNode> aN2 )
+std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<GraphNode>& aN1,
+                                                               std::shared_ptr<GraphNode>& aN2 )
 {
     if( !aN1 || !aN2 )
         return nullptr;

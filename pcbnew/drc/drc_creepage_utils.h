@@ -183,7 +183,7 @@ public:
     const BOARD_ITEM* GetParent() const { return m_parent; };
     void              SetParent( BOARD_ITEM* aParent ) { m_parent = aParent; };
 
-    virtual void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+    virtual void ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
                                   CreepageGraph& aG ) const;
 
     std::vector<PATH_CONNECTION> ReversePaths( const std::vector<PATH_CONNECTION>& aV ) const
@@ -467,7 +467,7 @@ public:
 class GraphConnection
 {
 public:
-    GraphConnection( std::shared_ptr<GraphNode> aN1, std::shared_ptr<GraphNode> aN2,
+    GraphConnection( std::shared_ptr<GraphNode>& aN1, std::shared_ptr<GraphNode>& aN2,
                      const PATH_CONNECTION& aPc ) : n1( aN1 ), n2( aN2 )
     {
         m_path = aPc;
@@ -518,7 +518,7 @@ public:
     };
 
 
-    void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+    void ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
                           CreepageGraph& aG ) const override;
 };
 
@@ -558,9 +558,9 @@ public:
 
 
     int  GetRadius() const override { return m_radius; }
-    void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+    void ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
                           CreepageGraph& aG ) const override;
-    void ShortenChildDueToGV( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+    void ShortenChildDueToGV( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
                               CreepageGraph& aG, double aNormalWeight ) const;
 
 
@@ -586,7 +586,7 @@ public:
         m_radius = aRadius;
     }
 
-    void ConnectChildren( std::shared_ptr<GraphNode> a1, std::shared_ptr<GraphNode> a2,
+    void ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
                           CreepageGraph& aG ) const override;
 
 
@@ -688,11 +688,11 @@ public:
     std::shared_ptr<GraphNode>       AddNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent = nullptr,
                                               VECTOR2I aPos = VECTOR2I() );
     std::shared_ptr<GraphNode>       AddNodeVirtual();
-    std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode> aN1,
-                                                    std::shared_ptr<GraphNode> aN2,
-                                                    const PATH_CONNECTION&     aPc );
-    std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode> aN1,
-                                                    std::shared_ptr<GraphNode> aN2 );
+    std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode>& aN1,
+                                                    std::shared_ptr<GraphNode>& aN2,
+                                                    const PATH_CONNECTION&      aPc );
+    std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode>& aN1,
+                                                    std::shared_ptr<GraphNode>& aN2 );
     std::shared_ptr<GraphNode>       FindNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent,
                                                VECTOR2I aPos );
 
@@ -701,7 +701,7 @@ public:
     void Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode> aConnectTo = nullptr,
                    BOARD_ITEM* aParent = nullptr );
 
-    double Solve( std::shared_ptr<GraphNode> aFrom, std::shared_ptr<GraphNode> aTo,
+    double Solve( std::shared_ptr<GraphNode>& aFrom, std::shared_ptr<GraphNode>& aTo,
                   std::vector<std::shared_ptr<GraphConnection>>& aResult );
 
     void GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool aGenerateBoardEdges = true );

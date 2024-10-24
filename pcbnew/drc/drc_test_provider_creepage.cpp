@@ -198,9 +198,6 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
             drce->SetItems( shortestPath[1]->n1->m_parent->GetParent(),
                             shortestPath[shortestPath.size() - 2]->n2->m_parent->GetParent() );
 
-        // m_commit is protected and cannot be sent to the lambda function
-        BOARD_COMMIT* aCommit = m_commit;
-
         std::vector<PCB_SHAPE> shortestPathShapes1, shortestPathShapes2;
 
         VECTOR2I startPoint = shortestPath[1]->m_path.a2;
