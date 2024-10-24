@@ -225,6 +225,8 @@ public:
     bool Unlink( ITEM* aItem )
     {
         m_linkedItems.Erase( aItem );
+        if( m_linkedItems.Size() == 0 )
+            m_layers = PNS_LAYER_RANGE( -1 );
         return m_linkedItems.Size() == 0;
     }
 
