@@ -41,6 +41,13 @@ class NODE;
 // in PNS::NODE. Sooner or later I'll have to fix it for good using smart pointers - twl
 struct VIA_HANDLE
 {
+    VIA_HANDLE() : valid( false ) {};
+    VIA_HANDLE( VECTOR2I aPos, PNS_LAYER_RANGE aLayers, NET_HANDLE aNet ) :
+        valid( true ),
+        pos( aPos ),
+        layers (aLayers),
+        net (aNet ) {};
+    
     bool        valid = false;
     VECTOR2I    pos;
     PNS_LAYER_RANGE layers;
