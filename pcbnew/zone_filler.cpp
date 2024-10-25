@@ -96,8 +96,8 @@ public:
     VERTEX* getPoint( VERTEX* aPt ) const
     {
         // z-order range for the current point ± limit bounding box
-        const int32_t     maxZ = zOrder( aPt->x + m_dist, aPt->y + m_dist );
-        const int32_t     minZ = zOrder( aPt->x - m_dist, aPt->y - m_dist );
+        const uint32_t     maxZ = zOrder( aPt->x + m_dist, aPt->y + m_dist );
+        const uint32_t     minZ = zOrder( aPt->x - m_dist, aPt->y - m_dist );
         const SEG::ecoord limit2 = SEG::Square( m_dist );
 
         // first look for points in increasing z-order

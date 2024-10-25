@@ -241,7 +241,7 @@ class VERTEX
     VERTEX* next = nullptr;
 
     // z-order curve value
-    int32_t z = 0;
+    uint32_t z = 0;
 
     // previous and next nodes in z-order
     VERTEX* prevZ = nullptr;
@@ -332,7 +332,7 @@ protected:
      * by the size of the bounding box to fit into a 32-bit Morton code
      * @return the Morton code for the point (aX, aY)
     */
-    int32_t zOrder( const double aX, const double aY ) const;
+    uint32_t zOrder( const double aX, const double aY ) const;
 
     /**
      * @return the area of the triangle defined by the three vertices

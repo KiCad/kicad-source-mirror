@@ -58,10 +58,13 @@ VERTEX* VERTEX_SET::createList( const SHAPE_LINE_CHAIN& points, VERTEX* aTail, v
  * http://www.graphics.stanford.edu/~seander/bithacks.html#InterleaveBMN
  *
  */
-int32_t VERTEX_SET::zOrder( const double aX, const double aY ) const
+uint32_t VERTEX_SET::zOrder( const double aX, const double aY ) const
 {
-    int32_t x = static_cast<int32_t>( 32767.0 * ( aX - m_bbox.GetX() ) / m_bbox.GetWidth() );
-    int32_t y = static_cast<int32_t>( 32767.0 * ( aY - m_bbox.GetY() ) / m_bbox.GetHeight() );
+    double limit_x = std::clamp( ( aX - m_bbox.GetX() ) / m_bbox.GetWidth(), 0.0, 1.0 );
+    double limit_y = std::clamp( ( aY - m_bbox.GetY() ) / m_bbox.GetHeight(), 0.0, 1.0 );
+
+    uint32_t x = static_cast<uint32_t>( limit_x * 32767.0 );
+    uint32_t y = static_cast<uint32_t>( limit_y * 32767.0 );
 
     x = ( x | ( x << 8 ) ) & 0x00FF00FF;
     x = ( x | ( x << 4 ) ) & 0x0F0F0F0F;
@@ -265,8 +268,8 @@ bool VERTEX::isEar( bool aMatchUserData ) const
     const double maxTY = std::max( a->y, std::max( b->y, c->y ) );
 
     // z-order range for the current triangle bounding box
-    const int32_t minZ = parent->zOrder( minTX, minTY );
-    const int32_t maxZ = parent->zOrder( maxTX, maxTY );
+    const uint32_t minZ = parent->zOrder( minTX, minTY );
+    const uint32_t maxZ = parent->zOrder( maxTX, maxTY );
 
     // first look for points inside the triangle in increasing z-order
     VERTEX* p = nextZ;

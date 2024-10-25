@@ -252,8 +252,8 @@ public:
             return nullptr;
 
         // z-order range for the current point ± limit bounding box
-        const int32_t     maxZ = zOrder( aPt->x + m_limit, aPt->y + m_limit );
-        const int32_t     minZ = zOrder( aPt->x - m_limit, aPt->y - m_limit );
+        const uint32_t    maxZ = zOrder( aPt->x + m_limit, aPt->y + m_limit );
+        const uint32_t    minZ = zOrder( aPt->x - m_limit, aPt->y - m_limit );
         const SEG::ecoord limit2 = SEG::Square( m_limit );
 
         // first look for points in increasing z-order
