@@ -44,6 +44,7 @@
 #include <trace_helpers.h>
 #include "panel_eeschema_color_settings.h"
 #include "wx/dcclient.h"
+#include "string_utils.h"
 
 DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
                                                   bool* aClearAnnotationNewItems,
@@ -286,7 +287,15 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     // but unedited data from existing files can be bad.)
     sheetFileName = EnsureFileExtension( sheetFileName, FILEEXT::KiCadSchematicFileExtension );
 
+    // Ensure sheetFileName is legal
+    if( !IsFullFileNameValid( sheetFileName ) )
+    {
+        DisplayError( this, _( "A sheet must have a valid file name." ) );
+        return false;
+    }
+
     wxFileName fn( sheetFileName );
+
     wxString newRelativeFilename = fn.GetFullPath();
 
     // Inside Eeschema, filenames are stored using unix notation

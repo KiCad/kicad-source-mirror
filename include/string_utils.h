@@ -232,6 +232,13 @@ KICOMMON_API int GetTrailingInt( const wxString& aStr );
 KICOMMON_API wxString GetIllegalFileNameWxChars();
 
 /**
+ * Checks if a full filename is valid, i.e. does not contains illegal chars
+ * path separators are allowed
+ * @return true if OK.
+ */
+KICOMMON_API bool IsFullFileNameValid( const wxString& aFullFilename );
+
+/**
  * Checks \a aName for illegal file name characters.
  *
  * The Windows (DOS) file system forbidden characters already include the forbidden file
@@ -392,7 +399,7 @@ KICOMMON_API std::string FormatDouble2Str( double aValue );
 
 /**
  * Convert an expected UTF8 encoded std::string to a wxString.
- * If fails, tray to convert using current locale
+ * If fails, try to convert using current locale
  * If still fails, return the initial string (can be already a converted string)
  */
 KICOMMON_API wxString From_UTF8( const std::string& aString );

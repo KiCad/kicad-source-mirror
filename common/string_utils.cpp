@@ -47,6 +47,34 @@
 static const char illegalFileNameChars[] = "\\/:\"<>|*?";
 
 
+// Checks if a full filename is valid, i.e. does not contains illegal chars
+bool IsFullFileNameValid( const wxString& aFullFilename )
+{
+
+    // Test for forbidden chars in aFullFilename.
+    // '\'and '/' are allowed here because aFullFilename can be a full path, and
+    // ':' is allowed on Windows as second char in string.
+    // So remove allowed separators from string to test
+    wxString filtered_fullpath = aFullFilename;
+
+#ifdef __WINDOWS__
+    // On MSW, the list returned by wxFileName::GetForbiddenChars() contains separators
+    // '\'and '/'
+    filtered_fullpath.Replace( "/", "_" );
+    filtered_fullpath.Replace( "\\", "_" );
+
+    // A disk identifier is allowed, and therefore remove its separator
+    if( filtered_fullpath.Length() > 1 && filtered_fullpath[1] == ':' )
+        filtered_fullpath[1] = ' ';
+#endif
+
+    if( wxString::npos != filtered_fullpath.find_first_of( wxFileName::GetForbiddenChars() ) )
+        return false;
+
+    return true;
+}
+
+
 wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
 {
     wxString newStr;
