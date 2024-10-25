@@ -2982,6 +2982,9 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
     const ACTIONS::INCREMENT incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
 
+    STRING_INCREMENTER incrementer;
+    incrementer.SetSkipIOSQXZ( true );
+
     BOARD_COMMIT commit( this );
 
     for( EDA_ITEM* item : selection )
@@ -2999,14 +3002,14 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
             if( !pad.CanHaveNumber() )
                 continue;
 
-            // Increment only handled for pad numbers
-            if( incParam.Index == PCB_ACTIONS::PAD_INCREMENT::NUMBER )
-            {
-                wxString padNumber = pad.GetNumber();
-                IncrementString( padNumber, incParam.Delta );
+            // Increment on the pad numbers
+            std::optional<wxString> newNumber =
+                    incrementer.Increment( pad.GetNumber(), incParam.Delta, incParam.Index );
 
+            if( newNumber )
+            {
                 commit.Modify( &pad );
-                pad.SetNumber( padNumber );
+                pad.SetNumber( *newNumber );
             }
             break;
         }
@@ -3014,11 +3017,14 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         {
             PCB_TEXT& text = static_cast<PCB_TEXT&>( *item );
 
-            wxString content = text.GetText();
-            IncrementString( content, incParam.Delta );
+            std::optional<wxString> newText =
+                    incrementer.Increment( text.GetText(), incParam.Delta, incParam.Index );
 
-            commit.Modify( &text );
-            text.SetText( content );
+            if( newText )
+            {
+                commit.Modify( &text );
+                text.SetText( *newText );
+            }
         }
         default:
         {

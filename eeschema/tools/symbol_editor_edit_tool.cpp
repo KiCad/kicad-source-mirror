@@ -1120,6 +1120,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
     const VECTOR2I mousePosition = getViewControls()->GetMousePosition();
 
+    STRING_INCREMENTER incrementer;
+    incrementer.SetSkipIOSQXZ( true );
+
     SCH_COMMIT commit( m_frame );
 
     for( EDA_ITEM* item : selection )
@@ -1128,51 +1131,53 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         {
         case SCH_PIN_T:
         {
-            // Primary increment: name or number of the pin
-            if( incParam.Index == 0 )
-            {
-                SCH_PIN&          pin = static_cast<SCH_PIN&>( *item );
-                PIN_LAYOUT_CACHE& layout = pin.GetLayoutCache();
+            SCH_PIN&          pin = static_cast<SCH_PIN&>( *item );
+            PIN_LAYOUT_CACHE& layout = pin.GetLayoutCache();
 
-                bool      found = false;
-                OPT_BOX2I bbox = layout.GetPinNumberBBox();
+            bool      found = false;
+            OPT_BOX2I bbox = layout.GetPinNumberBBox();
+
+            if( bbox && bbox->Contains( mousePosition ) )
+            {
+                std::optional<wxString> nextNumber =
+                        incrementer.Increment( pin.GetNumber(), incParam.Delta, incParam.Index );
+                if( nextNumber )
+                {
+                    commit.Modify( &pin );
+                    pin.SetNumber( *nextNumber );
+                }
+                found = true;
+            }
+
+            if( !found )
+            {
+                bbox = layout.GetPinNameBBox();
 
                 if( bbox && bbox->Contains( mousePosition ) )
                 {
-                    wxString nextNumber = pin.GetNumber();
-                    IncrementString( nextNumber, incParam.Delta );
-
-                    commit.Modify( &pin );
-                    pin.SetNumber( nextNumber );
-                    found = true;
-                }
-
-                if( !found )
-                {
-                    bbox = layout.GetPinNameBBox();
-
-                    if( bbox && bbox->Contains( mousePosition ) )
+                    std::optional<wxString> nextName =
+                            incrementer.Increment( pin.GetName(), incParam.Delta, incParam.Index );
+                    if( nextName )
                     {
-                        wxString nextName = pin.GetName();
-                        IncrementString( nextName, incParam.Delta );
-
                         commit.Modify( &pin );
-                        pin.SetName( nextName );
-                        found = true;
+                        pin.SetName( *nextName );
                     }
+                    found = true;
                 }
             }
             break;
         }
         case SCH_TEXT_T:
         {
-            SCH_TEXT& text = static_cast<SCH_TEXT&>( *item );
+            SCH_TEXT& label = static_cast<SCH_TEXT&>( *item );
 
-            wxString nextText = text.GetText();
-            IncrementString( nextText, incParam.Delta );
-
-            commit.Modify( &text );
-            text.SetText( nextText );
+            std::optional<wxString> newLabel =
+                    incrementer.Increment( label.GetText(), incParam.Delta, incParam.Index );
+            if( newLabel )
+            {
+                commit.Modify( &label, m_frame->GetScreen() );
+                label.SetText( *newLabel );
+            }
             break;
         }
         default:

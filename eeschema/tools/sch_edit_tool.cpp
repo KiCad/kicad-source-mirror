@@ -2984,6 +2984,11 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     if( !allSameType )
         return 0;
 
+    STRING_INCREMENTER incrementer;
+    // In schematics, it's probably less common to be operating
+    // on pin numbers which are uusally IOSQXZ-skippy.
+    incrementer.SetSkipIOSQXZ( false );
+
     SCH_COMMIT commit( m_frame );
 
     for( EDA_ITEM* item : selection )
@@ -2995,16 +3000,14 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         case SCH_HIER_LABEL_T:
         case SCH_TEXT_T:
         {
-            // Only support the first index for now
-            if( incParam.Index == 0 )
+            SCH_TEXT& label = static_cast<SCH_TEXT&>( *item );
+
+            std::optional<wxString> newLabel =
+                    incrementer.Increment( label.GetText(), incParam.Delta, incParam.Index );
+            if( newLabel )
             {
-                SCH_TEXT& label = static_cast<SCH_TEXT&>( *item );
-
-                wxString nextLabel = label.GetText();
-                IncrementString( nextLabel, incParam.Delta );
-
                 commit.Modify( &label, m_frame->GetScreen() );
-                label.SetText( nextLabel );
+                label.SetText( *newLabel );
             }
             break;
         }
