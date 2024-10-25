@@ -53,7 +53,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperConn, DRC_REGRESSION_TEST_FIXTURE )
         { "issue9870",              12  },
         { "connection_width_rules",  3  },
         { "issue12831",              0  },
-        { "issue14130",              1  }
+        { "issue14130",              0  }
     };
 
     for( const std::pair<wxString, int>& test : tests )

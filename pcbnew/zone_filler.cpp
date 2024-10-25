@@ -109,8 +109,7 @@ public:
             VECTOR2D diff( p->x - aPt->x, p->y - aPt->y );
             SEG::ecoord dist2 = diff.SquaredEuclideanNorm();
 
-            if( dist2 < limit2 && dist2 < min_dist
-                && p->isEar() )
+            if( dist2 > 0 && dist2 < limit2 && dist2 < min_dist && p->isEar( true ) )
             {
                 min_dist = dist2;
                 retval = p;

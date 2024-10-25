@@ -238,11 +238,20 @@ void VERTEX::updateOrder()
 }
 
 
-bool VERTEX::isEar() const
+bool VERTEX::isEar( bool aMatchUserData ) const
 {
     const VERTEX* a = prev;
     const VERTEX* b = this;
     const VERTEX* c = next;
+
+    if( aMatchUserData )
+    {
+        while( a->GetUserData() != m_userData )
+            a = a->prev;
+
+        while( c->GetUserData() != m_userData )
+            c = c->next;
+    }
 
     // If the area >=0, then the three points for a concave sequence
     // with b as the reflex point
@@ -264,7 +273,8 @@ bool VERTEX::isEar() const
 
     while( p && p->z <= maxZ )
     {
-        if( p != a && p != c
+        if( ( !aMatchUserData || p->GetUserData() == m_userData )
+                && p != a && p != c
                 && p->inTriangle( *a, *b, *c )
                 && parent->area( p->prev, p, p->next ) >= 0 )
             return false;
@@ -277,7 +287,8 @@ bool VERTEX::isEar() const
 
     while( p && p->z >= minZ )
     {
-        if( p != a && p != c
+        if( ( !aMatchUserData || p->GetUserData() == m_userData )
+                && p != a && p != c
                 && p->inTriangle( *a, *b, *c )
                 && parent->area( p->prev, p, p->next ) >= 0 )
             return false;
