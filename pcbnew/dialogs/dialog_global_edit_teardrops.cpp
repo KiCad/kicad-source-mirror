@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,7 +125,7 @@ protected:
     }
 
     void setSpecifiedParams( TEARDROP_PARAMETERS* targetParams );
-    void visitItem( BOARD_COMMIT* aCommit, BOARD_CONNECTED_ITEM* aItem );
+    void visitItem( BOARD_COMMIT* aCommit, BOARD_CONNECTED_ITEM* aItem,bool aSelectAlways );
     void processItem( BOARD_COMMIT* aCommit, BOARD_CONNECTED_ITEM* aItem );
 
     bool TransferDataToWindow() override;
@@ -388,7 +388,9 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::processItem( BOARD_COMMIT* aCommit, BOARD_CON
 }
 
 
-void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit, BOARD_CONNECTED_ITEM* aItem )
+void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit,
+                                              BOARD_CONNECTED_ITEM* aItem,
+                                              bool aSelectAlways )
 {
     if( m_selectedItemsFilter->GetValue() )
     {
@@ -403,6 +405,13 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit, BOARD_CONNE
                 return;
         }
     }
+
+    if( aSelectAlways )
+    {
+        processItem( aCommit, aItem );
+        return;
+    }
+
 
     if( m_netFilterOpt->GetValue() && m_netFilter->GetSelectedNetcode() >= 0 )
     {
@@ -465,12 +474,14 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
     bds.m_TeardropParamsList.m_TargetTrack2Track = m_trackToTrack->GetValue();
     bds.m_TeardropParamsList.m_UseRoundShapesOnly = m_roundPadsFilter->GetValue();
 
-    if( m_vias->GetValue() )
+    bool remove_all = m_removeAllTeardrops->GetValue();
+
+    if( m_vias->GetValue() || remove_all )
     {
         for( PCB_TRACK* track : m_brd->Tracks() )
         {
             if ( track->Type() == PCB_VIA_T )
-                visitItem( &commit, track );
+                visitItem( &commit, track, remove_all );
         }
     }
 
@@ -478,14 +489,20 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
     {
         for( PAD* pad : footprint->Pads() )
         {
+            if( remove_all )
+            {
+                visitItem( &commit, pad, true );
+                continue;
+            }
+
             if( m_pthPads->GetValue() && pad->GetAttribute() == PAD_ATTRIB::PTH )
             {
-                visitItem( &commit, pad );
+                visitItem( &commit, pad, false );
             }
             else if( m_smdPads->GetValue() && ( pad->GetAttribute() == PAD_ATTRIB::SMD
                                                 || pad->GetAttribute() == PAD_ATTRIB::CONN ) )
             {
-                visitItem( &commit, pad );
+                visitItem( &commit, pad, false );
             }
         }
     }
