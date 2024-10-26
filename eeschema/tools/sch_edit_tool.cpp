@@ -94,8 +94,9 @@ private:
 
         wxCHECK( symbol, /* void */ );
 
-        const int unit = symbol->GetUnit();
-        const int nUnits = symbol->GetLibSymbolRef()->GetUnitCount();
+        const int           unit = symbol->GetUnit();
+        const int           nUnits = symbol->GetLibSymbolRef()->GetUnitCount();
+        const std::set<int> missingUnits = GetUnplacedUnitsForSymbol( *symbol );
 
         for( int ii = 0; ii < nUnits; ii++ )
         {
@@ -105,6 +106,9 @@ private:
                 unit_text = symbol->GetLibSymbolRef()->GetUnitDisplayName( ii + 1 );
             else
                 unit_text.Printf( _( "Unit %s" ), symbol->SubReference( ii + 1, false ) );
+
+            if( missingUnits.count( ii + 1 ) == 0 )
+                unit_text += _( " (already placed)" );
 
             wxMenuItem* item = Append( ID_POPUP_SCH_SELECT_UNIT1 + ii, unit_text, wxEmptyString,
                                        wxITEM_CHECK );
@@ -117,8 +121,6 @@ private:
             if( ii >= ( ID_POPUP_SCH_SELECT_UNIT_END - ID_POPUP_SCH_SELECT_UNIT1) )
                 break;      // We have used all IDs for these submenus
         }
-
-        const std::set<int> missingUnits = GetUnplacedUnitsForSymbol( *symbol );
 
         {
             AppendSeparator();
