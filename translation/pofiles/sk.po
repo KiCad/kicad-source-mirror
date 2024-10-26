@@ -5,21 +5,22 @@
 # Milan Šalka <salka.milan@googlemail.com>, 2023.
 # Andrej Valek <andy@skyrain.eu>, 2024.
 # Marcel Hecko <marcel.hecko@moirelabs.com>, 2024.
+# David Chorváth <dadulo33@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-08-28 14:09+0000\n"
-"Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"PO-Revision-Date: 2024-10-27 09:00+0000\n"
+"Last-Translator: David Chorváth <dadulo33@gmail.com>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8.2-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -32,7 +33,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr "Všetky Súbory"
+msgstr "Všetky súbory"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:333
 msgid "Build board outline"
@@ -950,9 +951,8 @@ msgid "Configure Paths"
 msgstr "Konfigurovať cesty"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "Presunúť všetky púzdra"
+msgstr "Vložiť model"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -1109,12 +1109,10 @@ msgid "Anti-aliasing (slow)"
 msgstr "Antialiasing (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Použiť na výsledné vykreslenie Ambient Occlusion a Global Illumination "
-"odrazy (pomalé)"
+"Oklúzie okolitého priestoru obrazovky a odrazy globálneho osvetlenia (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -1991,21 +1989,19 @@ msgstr ""
 
 #: common/design_block_io.cpp:200 pcbnew/pcb_io/geda/pcb_io_geda.cpp:977
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3232
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
-"%s"
+msgstr "Nedostatočné oprávnenia ku odstráneniu zložky '%s'."
 
 #: common/design_block_io.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "Adresár knižnice \"%s\" obsahuje neočakávané podadresáre."
+msgstr "Adresár knižnice \"%s\" obsahuje neočakávané súbory."
 
 #: common/design_block_io.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "V ceste ku knižnici '%s' bol nájdený neočakávaný súbor '%s'."
+msgstr "Neočakávaný priečinok '%s' nájdený v ceste ku knižnici '%s'."
 
 #: common/design_block_io.cpp:244
 #, fuzzy, c-format
@@ -2022,9 +2018,9 @@ msgid "Design block does not have a valid library ID."
 msgstr ""
 
 #: common/design_block_io.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Schematický súbor '%s' už existuje."
+msgstr "Zdrojový súbor schémy '%s' neexistuje."
 
 #: common/design_block_io.cpp:374
 #, fuzzy, c-format
@@ -2123,7 +2119,7 @@ msgstr "Oficiálne repozitár knižníc KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Bug tracker"
-msgstr "Sledovač chýb"
+msgstr "Sledovanie chýb"
 
 #: common/dialog_about/AboutDialog_main.cpp:155
 msgid "Report or examine bugs - "
@@ -2131,7 +2127,7 @@ msgstr "Nahlásiť alebo skontroľovať chyby - "
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad users group and community"
-msgstr "Skupina a komunita používateľov KiCad-u"
+msgstr "KiCad používateľské skupiny a komunita"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
 msgid "KiCad forum - "
@@ -2139,7 +2135,7 @@ msgstr "KiCad fórum - "
 
 #: common/dialog_about/AboutDialog_main.cpp:180
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "Celá zostava EDA KiCad je dostupná pod"
+msgstr "Kompletný KiCad EDA Suite je dostupný pod"
 
 #: common/dialog_about/AboutDialog_main.cpp:182
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -2159,9 +2155,8 @@ msgid "Additional Contributions By"
 msgstr "Ďalšie príspevky od"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Dokumentácia"
+msgstr "Dokumentačný tím"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
@@ -2189,12 +2184,11 @@ msgstr "Symboly"
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:100
 msgid "Footprints"
-msgstr "puzdra"
+msgstr "Púzdra"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Ikona"
+msgstr "Ikony"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -2238,7 +2232,7 @@ msgstr "Prekladatelia"
 
 #: common/dialog_about/dialog_about.cpp:154
 msgid "Packagers"
-msgstr "Baliarne"
+msgstr "Tvorci balíčkov"
 
 #: common/dialog_about/dialog_about.cpp:157
 msgid "License"
@@ -2278,7 +2272,7 @@ msgstr "&Kopírovať informácie o verzii"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr "Skopírujte informácie o verzii KiCad-u do schránky"
+msgstr "Kopírovať informácie o verzii KiCad-u do schránky"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
@@ -2290,7 +2284,7 @@ msgstr "Nahlásiť problém s KiCad-om"
 
 #: common/dialog_about/dialog_about_base.cpp:68 common/tool/actions.cpp:1174
 msgid "Donate"
-msgstr "Finančne podporit"
+msgstr "Prispieť"
 
 #: common/dialog_about/dialog_about_base.cpp:69
 #: common/tool/common_control.cpp:327
@@ -2307,7 +2301,7 @@ msgstr "&Zrušiť"
 
 #: common/dialog_shim.cpp:755
 msgid "&Yes"
-msgstr "&Ano"
+msgstr "&Áno"
 
 #: common/dialog_shim.cpp:756
 msgid "&No"
@@ -3971,6 +3965,8 @@ msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Príkaz prieskumníka súborov.\n"
+"príklad:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
@@ -4022,13 +4018,12 @@ msgid "Text editor:"
 msgstr "Textový editor:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "&Názov súboru:"
+msgstr "Správca súborov:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
-msgstr "Systémový predvolený prehliadač PDF"
+msgstr "Predvolený prehliadač PDF"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
 msgid "Other:"
@@ -16221,9 +16216,8 @@ msgid ".1"
 msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#, fuzzy
 msgid "-1"
-msgstr "-"
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_1"
@@ -17540,13 +17534,12 @@ msgstr "Ukončovanie"
 
 #: eeschema/files-io.cpp:472 eeschema/files-io.cpp:492
 #: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:826
-#, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Tento súbor bol vytvorený v staršej verzii Pcbnew.\n"
-"Bude uložený v novom formáte, keď ho znova uložíte."
+"Tento súbor bol vytvorený v staršej verzii KiCad. Po uložení bude prevedený "
+"do nového formátu."
 
 #: eeschema/files-io.cpp:550
 msgid ""
@@ -22783,9 +22776,8 @@ msgid "Edit properies of design block"
 msgstr "Prosím, zadajte názov repozitára"
 
 #: eeschema/tools/ee_actions.cpp:189
-#, fuzzy
 msgid "Save Library As..."
-msgstr "Uložiť knižnicu '%s' ako..."
+msgstr "Uložiť knižnicu ako..."
 
 #: eeschema/tools/ee_actions.cpp:190
 #, fuzzy
@@ -38663,9 +38655,8 @@ msgid "Change Nets"
 msgstr "Zmeniť typ"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:567
-#, fuzzy
 msgid "Leave Nets Unchanged"
-msgstr "Nechajte nezmenené"
+msgstr "Nechať siete bez zmeny"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:590
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
@@ -41664,9 +41655,8 @@ msgid "Micro via hole size out of range"
 msgstr "Mikro prekov je mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:154
-#, fuzzy
 msgid "Courtyards overlap"
-msgstr "Prekrytie blízskeho okolia"
+msgstr "Prekrytie blízkeho okolia"
 
 #: pcbnew/drc/drc_item.cpp:158
 #, fuzzy
