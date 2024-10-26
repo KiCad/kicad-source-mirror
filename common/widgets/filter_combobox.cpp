@@ -26,6 +26,7 @@
 
 #include <wx/textctrl.h>
 #include <wx/listbox.h>
+#include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/valtext.h>
@@ -391,6 +392,8 @@ FILTER_COMBOBOX::FILTER_COMBOBOX( wxWindow *parent, wxWindowID id, const wxPoint
 {
     UseAltPopupWindow();
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( FILTER_COMBOBOX::onKeyDown ), nullptr, this );
+
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
 }
 
 
