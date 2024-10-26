@@ -158,3 +158,21 @@ std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym )
 
     return missingUnits;
 }
+
+
+std::optional<SCH_REFERENCE> FindSymbolByRefAndUnit( const SCHEMATIC& aSchematic,
+                                                     const wxString& aRef, int aUnit )
+{
+    SCH_REFERENCE_LIST refs;
+    aSchematic.Hierarchy().GetSymbols( refs );
+
+    for( const SCH_REFERENCE& ref : refs )
+    {
+        if( ref.GetRef() == aRef && ref.GetUnit() == aUnit )
+        {
+            return ref;
+        }
+    }
+
+    return std::nullopt;
+}

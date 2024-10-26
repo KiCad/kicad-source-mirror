@@ -30,8 +30,10 @@
 #include <core/kicad_algo.h>
 #include <symbol_library_common.h>
 #include <confirm.h>
+#include <ee_tool_utils.h>
 #include <eeschema_id.h>
 #include <general.h>
+#include <kidialog.h>
 #include <kiway.h>
 #include <symbol_viewer_frame.h>
 #include <symbol_tree_model_adapter.h>
@@ -98,20 +100,68 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
     if( !symbol )
         return;
 
-    int unitCount = symbol->GetUnitCount();
+    const int unitCount = symbol->GetUnitCount();
+    const int currentUnit = aSymbol->GetUnit();
 
-    if( unitCount <= 1 || aSymbol->GetUnit() == aUnit )
+    if( unitCount <= 1 || currentUnit == aUnit )
         return;
 
     if( aUnit > unitCount )
         aUnit = unitCount;
 
-    if( !aSymbol->GetEditFlags() )    // No command in progress: save in undo list
+    const SCH_SHEET_PATH&        sheetPath = GetCurrentSheet();
+    bool                         swapWithOther = false;
+    std::optional<SCH_REFERENCE> otherSymbolRef = FindSymbolByRefAndUnit(
+            *aSymbol->Schematic(), aSymbol->GetRef( &sheetPath, false ), aUnit );
+
+    if( otherSymbolRef )
+    {
+        const wxString targetUnitName = symbol->GetUnitDisplayName( aUnit );
+        const wxString currUnitName = symbol->GetUnitDisplayName( currentUnit );
+        wxString otherSheetName = otherSymbolRef->GetSheetPath().PathHumanReadable( true, true );
+        if( otherSheetName.IsEmpty() )
+            otherSheetName = _( "Root" );
+
+        const wxString msg =
+                wxString::Format( _( "Symbol unit '%s' is already placed (on sheet '%s')" ),
+                                  targetUnitName, otherSheetName );
+
+        KIDIALOG dlg( this, msg, _( "Unit Already Placed" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
+        dlg.SetYesNoLabels(
+                wxString::Format( _( "&Swap '%s' and '%s'" ), targetUnitName, currUnitName ),
+                wxString::Format( _( "&Duplicate '%s'" ), targetUnitName ) );
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+        int ret = dlg.ShowModal();
+
+        if( ret == wxID_CANCEL )
+            return;
+
+        if( ret == wxID_YES )
+            swapWithOther = true;
+    }
+
+    if( swapWithOther )
+    {
+        // We were reliably informed this would exist.
+        wxASSERT( otherSymbolRef );
+
+        SCH_SYMBOL* otherSymbol = otherSymbolRef->GetSymbol();
+
+        if( !otherSymbol->GetEditFlags() )
+            commit.Modify( otherSymbol, otherSymbolRef->GetSheetPath().LastScreen() );
+
+        // Give that symbol the unit we used to have
+        otherSymbol->SetUnitSelection( &otherSymbolRef->GetSheetPath(), currentUnit );
+        otherSymbol->SetUnit( currentUnit );
+    }
+
+    if( !aSymbol->GetEditFlags() ) // No command in progress: save in undo list
         commit.Modify( aSymbol, GetScreen() );
 
-    /* Update the unit number. */
-    aSymbol->SetUnitSelection( &GetCurrentSheet(), aUnit );
+    // Update the unit number.
     aSymbol->SetUnit( aUnit );
+    aSymbol->SetUnitSelection( &sheetPath, aUnit );
 
     if( !commit.Empty() )
     {
