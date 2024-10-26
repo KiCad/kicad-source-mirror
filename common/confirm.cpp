@@ -51,12 +51,12 @@ bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage )
                              wxYES_NO | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "Interleaved saves may produce very unexpected results." )
                                 + wxS( "\n" ) );
-    dlg.SetYesNoLabels( _( "Cancel" ), _( "Open Anyway" ) );
+    dlg.SetYesNoLabels( _( "&Cancel" ), _( "&Open Anyway" ) );
 #else
     wxMessageDialog dlg( aParent, aMessage, _( "File Open Warning" ),
                          wxYES_NO | wxICON_ERROR | wxCENTER );
     dlg.SetExtendedMessage( _( "Interleaved saves may produce very unexpected results." ) );
-    dlg.SetYesNoLabels( _( "Cancel" ), _( "Open Anyway" ) );
+    dlg.SetYesNoLabels( _( "&Cancel" ), _( "&Open Anyway" ) );
 #endif
 
     return dlg.ShowModal() == wxID_NO;
@@ -71,10 +71,10 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApp
                              wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." )
                                 + wxS( "\n" ) );
-    dlg.SetYesNoLabels( _( "Save" ), _( "Discard Changes" ) );
+    dlg.SetYesNoLabels( _( "&Save" ), _( "&Discard Changes" ) );
 
     if( aApplyToAll )
-        dlg.ShowCheckBox( _( "Apply to all" ), s_apply_to_all );
+        dlg.ShowCheckBox( _( "&Apply to all" ), s_apply_to_all );
 
     int ret = dlg.ShowModal();
 
@@ -108,7 +108,7 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage )
     wxMessageDialog dlg( parent, aMessage, _( "Save Changes?" ),
                          wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
-    dlg.SetYesNoLabels( _( "Save" ), _( "Discard Changes" ) );
+    dlg.SetYesNoLabels( _( "&Save" ), _( "&Discard Changes" ) );
 
     // Returns wxID_YES, wxID_NO, or wxID_CANCEL
     return dlg.ShowModal();
@@ -121,7 +121,7 @@ bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage )
     wxMessageDialog dlg( parent, aMessage, wxEmptyString,
                          wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "Your current changes will be permanently lost." ) );
-    dlg.SetOKCancelLabels( _( "Revert" ), _( "Cancel" ) );
+    dlg.SetOKCancelLabels( _( "&Revert" ), _( "&Cancel" ) );
 
     return dlg.ShowModal() == wxID_OK;
 }
@@ -147,14 +147,14 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
     wxRichMessageDialog dlg( aParent, aMessage, aWarning,
                              wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
 
-    dlg.SetOKCancelLabels( ( aOKLabel.IsEmpty() ) ? _( "OK" ) : aOKLabel,
-                           ( aCancelLabel.IsEmpty() ) ?  _( "Cancel" ) : aCancelLabel );
+    dlg.SetOKCancelLabels( ( aOKLabel.IsEmpty() ) ? _( "&OK" ) : aOKLabel,
+                           ( aCancelLabel.IsEmpty() ) ? _( "&Cancel" ) : aCancelLabel );
 
     if( !aDetailedMessage.IsEmpty() )
         dlg.SetExtendedMessage( aDetailedMessage );
 
     if( aApplyToAll )
-        dlg.ShowCheckBox( _( "Apply to all" ), true );
+        dlg.ShowCheckBox( _( "&Apply to all" ), true );
 
     int ret = dlg.ShowModal();
 
@@ -270,7 +270,7 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage )
                          wxOK | wxCANCEL | wxOK_DEFAULT | wxCENTRE | icon | wxSTAY_ON_TOP );
 #endif
 
-    dlg.SetOKCancelLabels( _( "Yes" ), _( "No" ) );
+    dlg.SetOKCancelLabels( _( "&Yes" ), _( "&No" ) );
 
     return dlg.ShowModal() == wxID_OK;
 }
