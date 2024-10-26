@@ -476,7 +476,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     SetupStandardButtons();
 
     m_frame->Bind( EDA_EVT_UNITS_CHANGED, &DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged, this );
-    m_netSelector->Bind( NET_SELECTED, &DIALOG_TRACK_VIA_PROPERTIES::onNetSelector, this );
+    m_netSelector->Bind( FILTERED_ITEM_SELECTED, &DIALOG_TRACK_VIA_PROPERTIES::onNetSelector, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __WIDGET_NET_SELECTOR_H
-#define __WIDGET_NET_SELECTOR_H
+#pragma once
 
-#include <wx/combo.h>
+#include <widgets/filter_combobox.h>
 
 
 class BOARD;
@@ -32,10 +31,7 @@ class NETINFO_LIST;
 class NET_SELECTOR_COMBOPOPUP;
 
 
-wxDECLARE_EVENT( NET_SELECTED, wxCommandEvent );
-
-
-class NET_SELECTOR : public wxComboCtrl
+class NET_SELECTOR : public FILTER_COMBOBOX
 {
 public:
     // Note: this list of arguments is here because it keeps us from having to customize
@@ -43,8 +39,6 @@ public:
     NET_SELECTOR( wxWindow *parent, wxWindowID id,
                   const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
                   long style = 0 );
-
-    ~NET_SELECTOR() override;
 
     void SetNetInfo( const NETINFO_LIST* aNetInfoList );
 
@@ -62,11 +56,8 @@ public:
     wxString GetSelectedNetname();
 
 protected:
-    void onKeyDown( wxKeyEvent& aEvt );
 
     NET_SELECTOR_COMBOPOPUP* m_netSelectorPopup;
     wxString                 m_indeterminateString;
 };
 
-
-#endif

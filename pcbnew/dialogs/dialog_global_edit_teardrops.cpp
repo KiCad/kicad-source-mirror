@@ -175,7 +175,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::DIALOG_GLOBAL_EDIT_TEARDROPS( PCB_EDIT_FRAME* aPar
 
     SetupStandardButtons();
 
-    m_netFilter->Connect( NET_SELECTED,
+    m_netFilter->Connect( FILTERED_ITEM_SELECTED,
                           wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS::OnNetFilterSelect ),
                           nullptr, this );
 
@@ -207,7 +207,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::~DIALOG_GLOBAL_EDIT_TEARDROPS()
     else
         g_action = ADD_TEARDROPS_DEFAULT;
 
-    m_netFilter->Disconnect( NET_SELECTED,
+    m_netFilter->Disconnect( FILTERED_ITEM_SELECTED,
                              wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS::OnNetFilterSelect ),
                              nullptr, this );
 }

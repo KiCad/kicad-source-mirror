@@ -149,7 +149,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
 
     SetupStandardButtons();
 
-    m_netFilter->Connect( NET_SELECTED,
+    m_netFilter->Connect( FILTERED_ITEM_SELECTED,
                           wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ),
                           nullptr, this );
 
@@ -176,7 +176,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
     g_viaSizeFilter = m_viaSizeFilter.GetIntValue();
     g_filterSelected = m_selectedItemsFilter->GetValue();
 
-    m_netFilter->Disconnect( NET_SELECTED,
+    m_netFilter->Disconnect( FILTERED_ITEM_SELECTED,
                              wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ),
                              nullptr, this );
 

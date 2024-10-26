@@ -60,7 +60,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
     setupOKButtonLabel();
 
-    m_netFilter->Connect( NET_SELECTED,
+    m_netFilter->Connect( FILTERED_ITEM_SELECTED,
                           wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS::OnNetFilterSelect ),
                           nullptr, this );
 

@@ -294,7 +294,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     SetupStandardButtons();
     m_initialized = true;
 
-    m_padNetSelector->Connect( NET_SELECTED,
+    m_padNetSelector->Connect( FILTERED_ITEM_SELECTED,
                                wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ),
                                nullptr, this );
 
@@ -319,7 +319,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
 DIALOG_PAD_PROPERTIES::~DIALOG_PAD_PROPERTIES()
 {
-    m_padNetSelector->Disconnect( NET_SELECTED,
+    m_padNetSelector->Disconnect( FILTERED_ITEM_SELECTED,
                                   wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ),
                                   nullptr, this );
 
