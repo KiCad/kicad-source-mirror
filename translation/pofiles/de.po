@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-25 07:15+0000\n"
+"PO-Revision-Date: 2024-10-27 09:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -8053,7 +8053,7 @@ msgstr "Sichtbar-Kennzeichnung entfernen"
 #: common/lib_table_grid_tricks.cpp:84
 #, c-format
 msgid "Library settings for %s..."
-msgstr "Bibliothekseinstellungen für %s ..."
+msgstr "Bibliothekseinstellungen für %s..."
 
 #: common/lib_tree_model.cpp:152
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -8939,7 +8939,7 @@ msgstr "Bibliotheksbaum zeigen"
 
 #: common/tool/actions.cpp:764
 msgid "Hide Library Tree"
-msgstr "Bibliotheksbaum verstecken"
+msgstr "Bibliotheksbaum ausblenden"
 
 #: common/tool/actions.cpp:770
 msgid "Focus Library Tree Search Field"
@@ -9715,7 +9715,7 @@ msgstr "%s muss kleiner als %s sein."
 
 #: common/widgets/widget_hotkey_list.cpp:103
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr "Neue Tastenkombination drücken, oder <Esc> drücken um abzubrechen ..."
+msgstr "Neue Tastenkombination drücken, oder <Esc> drücken um abzubrechen..."
 
 #: common/widgets/widget_hotkey_list.cpp:114
 msgid "Command:"
@@ -11676,7 +11676,7 @@ msgstr "Protokolldatei \"%s\" erstellt."
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
-msgstr "Tests laufen ..."
+msgstr "Tests laufen..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:67
 #: eeschema/dialogs/dialog_erc_base.cpp:116
@@ -16561,7 +16561,7 @@ msgstr "ERC-Bericht in %s gespeichert\n"
 
 #: eeschema/eeschema_settings.cpp:70 eeschema/tools/ee_actions.cpp:943
 msgid "Net Navigator"
-msgstr "Netz-Navigator"
+msgstr "Netznavigator"
 
 #: eeschema/eeschema_settings.cpp:114 eeschema/sch_edit_frame.cpp:2201
 #: pcbnew/footprint_edit_frame.cpp:248 pcbnew/footprint_edit_frame.cpp:935
@@ -16746,15 +16746,15 @@ msgstr "Zugewiesener Footprint (%s) passt nicht zum Footprintfilter (%s)."
 
 #: eeschema/erc/erc.cpp:1637
 msgid "Checking sheet names..."
-msgstr "Prüfe Blattnamen ..."
+msgstr "Prüfe Blattnamen..."
 
 #: eeschema/erc/erc.cpp:1645
 msgid "Checking bus conflicts..."
-msgstr "Prüfe Buskonflikte ..."
+msgstr "Prüfe Buskonflikte..."
 
 #: eeschema/erc/erc.cpp:1652
 msgid "Checking conflicts..."
-msgstr "Prüfe Konflikte ..."
+msgstr "Prüfe Konflikte..."
 
 #: eeschema/erc/erc.cpp:1666
 msgid "Checking units..."
@@ -21482,9 +21482,9 @@ msgid "Open symbol from library %s"
 msgstr "Symbol aus Bibliothek %s öffnen"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:901
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load symbol %s from library %s."
-msgstr "Konnte das Symbol \"%s\" nicht zur Bibliotheksdatei \"%s\" hinzufügen."
+msgstr "Konnte Symbol %s nicht aus Bibliothek %s laden."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:912
 msgid ""
@@ -21507,14 +21507,14 @@ msgstr ""
 "bearbeitbar sein."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:957
-#, fuzzy
 msgid "Library is read-only.  Changes cannot be saved to this library."
-msgstr "Bibliothek \"%s\" nicht in der Footprintbibliothekstabelle gefunden."
+msgstr ""
+"Bibliothek nur lesbar.  Änderungen in dieser Bibliothek können nicht "
+"gespeichert werden."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:959
-#, fuzzy
 msgid "Create an editable copy"
-msgstr "Ein neues Verzeichnis erstellen"
+msgstr "Bearbeitbare Kopie erstellen"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 #, c-format
@@ -21528,14 +21528,12 @@ msgid "Select type of item to save"
 msgstr "Zu speichernden Elementtyp wählen"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:972
-#, fuzzy
 msgid "Copy symbol"
-msgstr "Bauteil kopieren"
+msgstr "Symbol kopieren"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:973
-#, fuzzy
 msgid "Copy library"
-msgstr "Bibliothek"
+msgstr "Bibliothek kopieren"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1082
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1133
@@ -21716,14 +21714,12 @@ msgstr ""
 "Möchten Sie alle Symbole überschreiben oder die neuen umbenennen?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
-#, fuzzy
 msgid "Overwrite All"
-msgstr "Überschreiben"
+msgstr "Alle(s) überschreiben"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
-#, fuzzy
 msgid "Rename All"
-msgstr "Datei umbenennen"
+msgstr "Alle(s) umbenennen"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1121
 #, c-format
@@ -22169,14 +22165,12 @@ msgid "Select a complete connection"
 msgstr "Komplette Verbindung auswählen"
 
 #: eeschema/tools/ee_actions.cpp:151
-#, fuzzy
 msgid "Show/hide design blocks library"
-msgstr "KiCad Designblock-Bibliotheken Verzeichnisse"
+msgstr "Designblock-Bibliothek anzeigen/ausblenden"
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Save Current Sheet as Design Block..."
-msgstr "Schaltplanseite als Designblock speichern..."
+msgstr "Aktuelle Schaltplanseite als Designblock speichern..."
 
 #: eeschema/tools/ee_actions.cpp:158
 msgid "Create a new design block from the current sheet"
@@ -22248,18 +22242,18 @@ msgid "Rename Symbol..."
 msgstr "Symbol umbenennen..."
 
 #: eeschema/tools/ee_actions.cpp:230
-#, fuzzy
 msgid "Save the current symbol to a different library or name"
-msgstr "Kopie des aktuellen Symbols in einer anderen Bibliothek speichern"
+msgstr "Aktuelles Symbol in anderer Bibliothek/unter anderem Namen speichern"
 
 #: eeschema/tools/ee_actions.cpp:236
 msgid "Save Copy As..."
 msgstr "Kopie speichern als..."
 
 #: eeschema/tools/ee_actions.cpp:237
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library or name"
-msgstr "Kopie des aktuellen Symbols in einer anderen Bibliothek speichern"
+msgstr ""
+"Kopie des aktuellen Symbols in anderer Bibliothek/unter anderem Namen "
+"speichern"
 
 #: eeschema/tools/ee_actions.cpp:244
 msgid "Remove the selected symbol from its library"
@@ -22449,9 +22443,8 @@ msgid "Place Net Labels"
 msgstr "Netzbezeichner einfügen"
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Place Directive Labels"
-msgstr "Anweisungsbezeichner"
+msgstr "Anweisungsbezeichner einfügen"
 
 #: eeschema/tools/ee_actions.cpp:502
 msgid "Place Hierarchical Labels"
@@ -22782,9 +22775,8 @@ msgid "Highlight wires and pins of a net"
 msgstr "Hebt alle Verbindungen und Pins hervor, die zu einem Netz gehören"
 
 #: eeschema/tools/ee_actions.cpp:944
-#, fuzzy
 msgid "Show/hide the net navigator"
-msgstr "Netzinspektor anzeigen/verstecken"
+msgstr "Netznavigator anzeigen/ausblenden"
 
 #: eeschema/tools/ee_actions.cpp:951
 msgid "Edit with Symbol Editor"
@@ -23140,9 +23132,8 @@ msgid "Show operating point current data from simulation"
 msgstr "Stromwerte des Arbeitspunktes aus der SImulation anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:1237
-#, fuzzy
 msgid "Show Pin Alternate Icons"
-msgstr "Pinnamen anzeigen"
+msgstr "Alternative Pin-Icons anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:1238
 msgid "Show indicator icons for pins with alternate modes"
@@ -23191,18 +23182,16 @@ msgstr ""
 "reparieren"
 
 #: eeschema/tools/ee_actions.cpp:1291
-#, fuzzy
 msgid "Previous Symbol Unit"
-msgstr "Symboleinheit"
+msgstr "Vorherige Symboleinheit"
 
 #: eeschema/tools/ee_actions.cpp:1292
 msgid "Open the previous unit of the symbol"
 msgstr "Vorherige Einheit des Symbols öffnen"
 
 #: eeschema/tools/ee_actions.cpp:1298
-#, fuzzy
 msgid "Next Symbol Unit"
-msgstr "Symboleinheit"
+msgstr "Nächste Symboleinheit"
 
 #: eeschema/tools/ee_actions.cpp:1299
 msgid "Open the next unit of the symbol"
@@ -23285,9 +23274,8 @@ msgid "Hierarchy Navigator"
 msgstr "Hierarchienavigator"
 
 #: eeschema/tools/ee_actions.cpp:1380
-#, fuzzy
 msgid "Show/hide the schematic sheet hierarchy navigator"
-msgstr "Navigation für Schaltplan-Blatthierarchie ein-/ausblenden"
+msgstr "Schaltplanblatthierarchie-Navigation ein-/ausblenden"
 
 #: eeschema/tools/ee_actions.cpp:1392
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1274
@@ -25591,9 +25579,8 @@ msgid "Jobset"
 msgstr "Auftragssatz"
 
 #: kicad/cli/command_jobset_run.cpp:45
-#, fuzzy
 msgid "Runs a jobset file"
-msgstr "Datei umbenennen"
+msgstr "Auftragssatzdatei ausführen"
 
 #: kicad/cli/command_jobset_run.cpp:49
 msgid ""
@@ -25604,9 +25591,8 @@ msgstr ""
 "eines Fehlers"
 
 #: kicad/cli/command_jobset_run.cpp:53
-#, fuzzy
 msgid "Jobset file to be run"
-msgstr "Einzubettende Datei wählen"
+msgstr "Auszuführende Auftragssatzdatei"
 
 #: kicad/cli/command_jobset_run.cpp:58
 msgid ""
@@ -26506,49 +26492,40 @@ msgid "%s Output Options"
 msgstr "%s Ausgabeoptionen"
 
 #: kicad/dialogs/panel_jobs.cpp:112
-#, fuzzy
 msgid "Select output path"
-msgstr "Pfad auswählen"
+msgstr "Ausgangspfad auswählen"
 
 #: kicad/dialogs/panel_jobs.cpp:193
-#, fuzzy
 msgid "Zip"
-msgstr "Zin"
+msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:254
-#, fuzzy
 msgid "Running jobs"
-msgstr "Abstimmungsmodus"
+msgstr "Führe Aufträge aus"
 
 #: kicad/dialogs/panel_jobs.cpp:308
-#, fuzzy
 msgid "No."
-msgstr "Nein"
+msgstr "Nr."
 
 #: kicad/dialogs/panel_jobs.cpp:309
-#, fuzzy
 msgid "Job Description"
-msgstr "Beschreibung"
+msgstr "Auftragsbeschreibung"
 
 #: kicad/dialogs/panel_jobs.cpp:483 kicad/dialogs/panel_jobs.cpp:530
-#, fuzzy
 msgid "Job Types"
-msgstr "Gerber-Jobdateien"
+msgstr "Auftragstypen"
 
 #: kicad/dialogs/panel_jobs.cpp:494
-#, fuzzy
 msgid "Add New Job"
-msgstr "Neuen Leiterzug hinzufügen"
+msgstr "Auftrag hinzufügen"
 
 #: kicad/dialogs/panel_jobs.cpp:495
-#, fuzzy
 msgid "Select job type:"
-msgstr "Voreinstellung wählen:"
+msgstr "Auftragstyp wählen:"
 
 #: kicad/dialogs/panel_jobs.cpp:539
-#, fuzzy
 msgid "Add New Output"
-msgstr "Zonenaussparung hinzufügen"
+msgstr "Ausgabe hinzufügen"
 
 #: kicad/dialogs/panel_jobs.cpp:540
 msgid "Select output type:"
@@ -26682,14 +26659,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro-Projekt importieren"
 
 #: kicad/jobs_runner.cpp:128
-#, fuzzy
 msgid "Job successful"
-msgstr "Verbindung erfolgreich"
+msgstr "Auftrag erfolgreich"
 
 #: kicad/jobs_runner.cpp:135
-#, fuzzy
 msgid "Job failed"
-msgstr "Gerber-Jobdateien"
+msgstr "Auftrag fehlgeschlagen"
 
 #: kicad/kicad.cpp:314
 #, c-format
@@ -27481,9 +27456,8 @@ msgid "Edit in a Text Editor"
 msgstr "Mit Texteditor bearbeiten"
 
 #: kicad/project_tree_pane.cpp:903
-#, fuzzy
 msgid "Run Jobs"
-msgstr "%s ausführen"
+msgstr "Aufträge ausführen"
 
 #: kicad/project_tree_pane.cpp:911
 msgid "Rename File..."
@@ -27719,9 +27693,8 @@ msgid "Clone Project from Repository..."
 msgstr "Projekt von Repository klonen ..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "Projektdatei &speichern..."
+msgstr "Neue Auftragssatzdatei..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -27812,9 +27785,8 @@ msgid "No project files were found in the repository."
 msgstr "Es wurden keine Projektdateien in dem Repository gefunden."
 
 #: kicad/tools/kicad_manager_control.cpp:211
-#, fuzzy
 msgid "Create New Jobset"
-msgstr "Neues Projekt erstellen"
+msgstr "Auftragssatz erstellen"
 
 #: kicad/tools/kicad_manager_control.cpp:239
 msgid "System Templates"
@@ -30879,9 +30851,8 @@ msgid "no layers"
 msgstr "Keine Lagen"
 
 #: pcbnew/board_item.cpp:436
-#, fuzzy
 msgid "ComponentClass"
-msgstr "Bauteile"
+msgstr "Bauteilklasse"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:343
 #, c-format
@@ -36036,7 +36007,6 @@ msgstr "Oberseite"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:878
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:106
-#, fuzzy
 msgid "Inner Layers"
 msgstr "Innenlagen"
 
@@ -36114,18 +36084,16 @@ msgid "Net name:"
 msgstr "Netzname:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
-#, fuzzy
 msgid "Padstack mode:"
-msgstr "Plotmodus:"
+msgstr "Padstackmodus:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
 msgstr "Vorderseite/innen/Unterseite"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
-#, fuzzy
 msgid "Edit layer:"
-msgstr "Endlage:"
+msgstr "Lage bearbeiten:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:120
 msgid "Pad shape:"
@@ -37393,15 +37361,13 @@ msgstr "Bogenwinkel:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:256
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:184
-#, fuzzy
 msgid "Technical Layers:"
 msgstr "Technische Lagen:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
-#, fuzzy
 msgid "Solder mask"
-msgstr "Lötpaste"
+msgstr "Lötstoppmaske"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:269
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
@@ -37409,13 +37375,13 @@ msgid "Expansion:"
 msgstr "Erweiterung:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:274
-#, fuzzy
 msgid ""
 "This is the local clearance between the shape and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Dies ist der lokale Freiraum zwischen diesem Pad und der Lötstoppmaske.\n"
-"Wenn 0, wird der lokale Wert des Footprints oder der globale Wert verwendet."
+"Dies ist der lokale Freiraum zwischen der Form und der Lötstoppmaskenöffnung."
+"\n"
+"Frei lassen um den Wert der Platinenkonfiguration zu verwenden."
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -37586,13 +37552,13 @@ msgid "Pre-defined sizes:"
 msgstr "Vordefinierte Größen:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:202
-#, fuzzy
 msgid ""
 "This is the local clearance between the track and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Dies ist der lokale Freiraum zwischen diesem Pad und der Lötstoppmaske.\n"
-"Wenn 0, wird der lokale Wert des Footprints oder der globale Wert verwendet."
+"Dies ist der lokale Freiraum zwischen der Leiterbahn und der "
+"Lötstoppmaskenöffnung.\n"
+"Frei lassen um den Wert der Platinenkonfiguration zu verwenden."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:277
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -38316,9 +38282,8 @@ msgid "Place items from sheet:"
 msgstr "Elemente aus Zeichenblatt einfügen:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:29
-#, fuzzy
 msgid "Place items matching component class:"
-msgstr "Gefilterte Elemente nach Netzklasse:"
+msgstr "Mit Bauteilklasse übereinstimmende Elemente einfügen:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -40697,9 +40662,9 @@ msgid "Checking %s clearance: %s."
 msgstr "Prüfe %s Freiraum: %s."
 
 #: pcbnew/drc/drc_engine.cpp:912
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s creepage: %s."
-msgstr "Prüfe %s Freiraum: %s."
+msgstr "Prüfe %s Kriechstrecke: %s."
 
 #: pcbnew/drc/drc_engine.cpp:917
 #, c-format
@@ -40951,9 +40916,8 @@ msgid "Clearance violation"
 msgstr "Freiraum-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:74
-#, fuzzy
 msgid "Creepage violation"
-msgstr "Freiraum-Verstoß"
+msgstr "Kriechstrecken-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:78
 msgid "Tracks crossing"
@@ -41404,14 +41368,13 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Prüfe Footprints auf überlappende Abstandsflächen ..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:3055
-#, fuzzy
 msgid "Checking creepage..."
-msgstr "Prüfe Header ..."
+msgstr "Prüfe Kriechstrecke ..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:3239
-#, fuzzy, c-format
+#, c-format
 msgid "(%s creepage %s; actual %s)"
-msgstr "(%s Freiraum %s; tatsächlich %s)"
+msgstr "(%s Kriechstrecke %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:611
 #, c-format
@@ -41981,7 +41944,7 @@ msgstr "Erstelle Lötstoppmaske ..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:804
 msgid "Checking solder mask to silk clearance..."
-msgstr "Prüfe Lötstoppmaske-zu-Bestückungsdruck-Freiraum ..."
+msgstr "Prüfe Lötstoppmaske-zu-Bestückungsdruck-Freiraum..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:809
 msgid "Checking solder mask web integrity..."
@@ -42016,19 +41979,18 @@ msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s max. Dicke %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
-#, fuzzy
 msgid "Checking track angles..."
-msgstr "Leiterbahnen in Pads werden geprüft..."
+msgstr "Prüfe Leiterbahnwinkel ..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min angle %s; actual %s)"
-msgstr "(%s min. Loch %s; tatsächlich %s)"
+msgstr "(%s min. Winkel %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max angle %s; actual %s)"
-msgstr "(%s max. Loch %s; tatsächlich %s)"
+msgstr "(%s max. Winkel %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
@@ -42525,9 +42487,8 @@ msgid "Attributes:"
 msgstr "Attribute:"
 
 #: pcbnew/footprint.cpp:1594 pcbnew/zone.cpp:1639
-#, fuzzy
 msgid "Component Class"
-msgstr "Bauteile"
+msgstr "Bauteilklasse"
 
 #: pcbnew/footprint.cpp:1598
 #, c-format
@@ -43442,9 +43403,9 @@ msgid "Removed %s component class (was %s)."
 msgstr "Bauteilklasse %s entfernt (war %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class from %s to %s."
-msgstr "Wert %s von %s in %s geändert."
+msgstr "Bauteilklasse %s von %s in %s geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:284
 #, c-format
@@ -44916,8 +44877,8 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
-"Die CADSTAR-Lage \"%s\" wird als technische Schicht eingestuft. Alle "
-"Elemente auf dieser Lage wurden der KiCad-Lage \"%s\" zugeordnet."
+"Die CADSTAR-Lage \"%s\" wird als technische Lage eingestuft. Alle Elemente "
+"auf dieser Lage wurden der KiCad-Lage \"%s\" zugeordnet."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:349
@@ -45976,23 +45937,23 @@ msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5591
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6524
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid padstack layer in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Unzulässige Netz-ID in\n"
+"Unzulässiger Padstack in\n"
 "Datei: %s\n"
 "Zeile: %d\n"
 "Spalte: %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5606
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6539
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr "NETCLASS-Namensduplikat \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
+msgstr "Unzulässige Padstacklage \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6175
 #, c-format
@@ -46179,9 +46140,8 @@ msgid "Technical Layers"
 msgstr "Technische Lagen"
 
 #: pcbnew/pcb_shape.cpp:1153 pcbnew/pcb_track.cpp:2011
-#, fuzzy
 msgid "Soldermask"
-msgstr "Lötpaste"
+msgstr "Lötstoppmaske"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -46373,9 +46333,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Fehlendes Netzklassen-Argument für hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1223
-#, fuzzy
 msgid "Missing component class name argument to hasComponentClass()"
-msgstr "Fehlendes Netzklassen-Argument für hasNetclass()"
+msgstr "Fehlendes Bauteilklassenname-Argument für hasComponentClass()"
 
 #: pcbnew/pcbnew.cpp:465
 msgid ""
@@ -47260,19 +47219,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "Ermittelte Breitenbeschränkungen: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:446
-#, fuzzy
 msgid "Track Angle"
-msgstr "Leiterbahnlänge"
+msgstr "Leiterbahnwinkel"
 
 #: pcbnew/tools/board_inspection_tool.cpp:447
-#, fuzzy
 msgid "Track Angle resolution for:"
-msgstr "Ermittlung der Leiterbahnbreite für:"
+msgstr "Ermittlung des Leiterbahnwinkels für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved angle constraints: min %s; max %s."
-msgstr "Ermittelte Durchmesserbeschränkungen: min %s; max %s."
+msgstr "Ermittelte Winkelbeschränkungen: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:461
 msgid "Connection Width"
@@ -47964,9 +47921,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Footprint \"%s\" ist in Bibliothek \"%s\" bereits vorhanden."
 
 #: pcbnew/tools/footprint_editor_control.cpp:691
-#, fuzzy
 msgid "No datasheet found in the footprint."
-msgstr "Kein Datenblatt definiert."
+msgstr "Kein Datenblatt im Footprint definiert."
 
 #: pcbnew/tools/footprint_editor_control.cpp:853
 msgid "No footprint problems found."
@@ -50112,9 +50068,8 @@ msgstr ""
 "Diese Elemente konnten nicht eingefügt werden.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1059
-#, fuzzy
 msgid "Paste Text"
-msgstr "Text hinzufügen"
+msgstr "Text einfügen"
 
 #: pcbnew/tools/pcb_control.cpp:1216
 msgid "Invalid clipboard contents"
@@ -50220,14 +50175,12 @@ msgid "Remove Polygon Corner"
 msgstr "Ecke aus Polygon entfernen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2914
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "Ecke zu Zone hinzufügen"
+msgstr "Zonenecke brechen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2916
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "Ecke aus Polygon entfernen"
+msgstr "Polygonecke brechen"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1408
 msgid "Select/Expand Connection..."
@@ -51153,9 +51106,8 @@ msgid "Restrictions"
 msgstr "Beschränkungen"
 
 #: pcbnew/zone.cpp:608
-#, fuzzy
 msgid "Placement source"
-msgstr "Platzierung"
+msgstr "Platzierungsquelle"
 
 #: pcbnew/zone.cpp:638
 #, c-format
@@ -51231,43 +51183,36 @@ msgid "Keepout"
 msgstr "Sperrflächen"
 
 #: pcbnew/zone.cpp:1720
-#, fuzzy
 msgid "Keep Out Tracks"
 msgstr "Leiterbahnen fernhalten"
 
 #: pcbnew/zone.cpp:1726
-#, fuzzy
 msgid "Keep Out Vias"
 msgstr "Vias fernhalten"
 
 #: pcbnew/zone.cpp:1732
-#, fuzzy
 msgid "Keep Out Pads"
 msgstr "Pads fernhalten"
 
 #: pcbnew/zone.cpp:1738
-#, fuzzy
 msgid "Keep Out Copper Pours"
-msgstr "Zonenfüllungen aussparen"
+msgstr "Kupferfüllungen aussparen"
 
 #: pcbnew/zone.cpp:1744
-#, fuzzy
 msgid "Keep Out Footprints"
 msgstr "Footprints fernhalten"
 
 #: pcbnew/zone.cpp:1754
-#, fuzzy
 msgid "Enable"
-msgstr "Aktiviert"
+msgstr "Aktivieren"
 
 #: pcbnew/zone.cpp:1761
 msgid "Source Type"
 msgstr "Quellentyp"
 
 #: pcbnew/zone.cpp:1767
-#, fuzzy
 msgid "Source Name"
-msgstr "Quelle 2"
+msgstr "Quellename"
 
 #: pcbnew/zone.cpp:1799
 msgid "Cannot be less than zone minimum width"
