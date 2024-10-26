@@ -1097,7 +1097,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 {
     const ACTIONS::INCREMENT incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
-    EE_SELECTION&            selection = m_selectionTool->RequestSelection( { SCH_PIN_T } );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_PIN_T, SCH_TEXT_T } );
 
     if( selection.Empty() )
         return 0;

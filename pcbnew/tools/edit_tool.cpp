@@ -2969,8 +2969,15 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     {
         for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
         {
-            if( aCollector[i]->Type() != PCB_PAD_T )
+            switch( aCollector[i]->Type() )
+            {
+            case PCB_PAD_T:
+            case PCB_TEXT_T:
+                break;
+            default:
                 aCollector.Remove( i );
+                break;
+            }
         }
     };
 
