@@ -25,6 +25,7 @@
 #pragma once
 
 #include <deque>
+#include <memory>
 #include <mutex>
 #include <vector>
 
@@ -170,7 +171,8 @@ public:
      *                      (and it will replace any previous persistent batch).
      *                      If false, the batch is temporary and may be pushed out by other batches.
      */
-    void ProposeConstructionItems( CONSTRUCTION_ITEM_BATCH aBatch, bool aIsPersistent );
+    void ProposeConstructionItems( std::unique_ptr<CONSTRUCTION_ITEM_BATCH> aBatch,
+                                   bool                                     aIsPersistent );
 
     /**
      * Cancel outstanding proposals for new geometry.
@@ -191,7 +193,7 @@ public:
 private:
     struct PENDING_BATCH;
 
-    void acceptConstructionItems( PENDING_BATCH&& aAcceptedBatchHash );
+    void acceptConstructionItems( std::unique_ptr<PENDING_BATCH> aAcceptedBatchHash );
 
     CONSTRUCTION_VIEW_HANDLER& m_viewHandler;
 
@@ -206,7 +208,7 @@ private:
     // Set of all items for which construction geometry has been added
     std::set<EDA_ITEM*> m_involvedItems;
 
-    std::unique_ptr<ACTIVATION_HELPER<PENDING_BATCH>> m_activationHelper;
+    std::unique_ptr<ACTIVATION_HELPER<std::unique_ptr<PENDING_BATCH>>> m_activationHelper;
 
     // Protects the persistent and temporary construction batches
     mutable std::mutex m_batchesMutex;

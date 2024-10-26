@@ -184,7 +184,7 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
     // For all the elements that get drawn construction geometry,
     // add something suitable to the construction helper.
     // This can be nothing.
-    CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH constructionItemsBatch;
+    auto constructionItemsBatch = std::make_unique<CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH>();
 
     std::vector<VECTOR2I> referenceOnlyPoints;
 
@@ -273,7 +273,7 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
         // At this point, constructionDrawables can be empty, which is fine
         // (it means there's no additional construction geometry to draw, but
         // the item is still going to be proposed for activation)
-        constructionItemsBatch.emplace_back( CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM{
+        constructionItemsBatch->emplace_back( CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM{
                 CONSTRUCTION_MANAGER::SOURCE::FROM_ITEMS,
                 item,
                 std::move( constructionDrawables ),

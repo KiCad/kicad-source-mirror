@@ -178,9 +178,9 @@ CONSTRUCTION_MANAGER::CONSTRUCTION_MANAGER( CONSTRUCTION_VIEW_HANDLER& aHelper )
     const std::chrono::milliseconds acceptanceTimeout(
             ADVANCED_CFG::GetCfg().m_ExtensionSnapTimeoutMs );
 
-    m_activationHelper = std::make_unique<ACTIVATION_HELPER<PENDING_BATCH>>(
+    m_activationHelper = std::make_unique<ACTIVATION_HELPER<std::unique_ptr<PENDING_BATCH>>>(
             acceptanceTimeout,
-            [this]( PENDING_BATCH&& aAccepted )
+            [this]( std::unique_ptr<PENDING_BATCH>&& aAccepted )
             {
                 acceptConstructionItems( std::move( aAccepted ) );
             } );
@@ -209,24 +209,20 @@ HashConstructionBatchSources( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATC
 }
 
 
-void CONSTRUCTION_MANAGER::ProposeConstructionItems( CONSTRUCTION_ITEM_BATCH aBatch,
-                                                     bool                    aIsPersistent )
+void CONSTRUCTION_MANAGER::ProposeConstructionItems(
+        std::unique_ptr<CONSTRUCTION_ITEM_BATCH> aBatch, bool aIsPersistent )
 {
-    if( aBatch.empty() )
+    if( aBatch->empty() )
     {
         // There's no point in proposing an empty batch
         // It would just clear existing construction items for nothing new
         return;
     }
 
-    const std::size_t hash = HashConstructionBatchSources( aBatch, aIsPersistent );
+    const std::size_t hash = HashConstructionBatchSources( *aBatch, aIsPersistent );
 
     m_activationHelper->ProposeActivation(
-            PENDING_BATCH{
-                    std::move( aBatch ),
-                    aIsPersistent,
-            },
-            hash );
+            std::make_unique<PENDING_BATCH>( std::move( *aBatch ), aIsPersistent ), hash );
 }
 
 
@@ -236,7 +232,7 @@ void CONSTRUCTION_MANAGER::CancelProposal()
 }
 
 
-void CONSTRUCTION_MANAGER::acceptConstructionItems( PENDING_BATCH&& aAcceptedBatch )
+void CONSTRUCTION_MANAGER::acceptConstructionItems( std::unique_ptr<PENDING_BATCH> aAcceptedBatch )
 {
     const auto getInvolved = [&]( const CONSTRUCTION_ITEM_BATCH& aBatchToAdd )
     {
@@ -256,15 +252,15 @@ void CONSTRUCTION_MANAGER::acceptConstructionItems( PENDING_BATCH&& aAcceptedBat
     {
         std::lock_guard<std::mutex> lock( m_batchesMutex );
 
-        if( aAcceptedBatch.IsPersistent )
+        if( aAcceptedBatch->IsPersistent )
         {
             // We only keep one previous persistent batch for the moment
-            m_persistentConstructionBatch = std::move( aAcceptedBatch.Batch );
+            m_persistentConstructionBatch = std::move( aAcceptedBatch->Batch );
         }
         else
         {
             bool anyNewItems = false;
-            for( CONSTRUCTION_ITEM& item : aAcceptedBatch.Batch )
+            for( CONSTRUCTION_ITEM& item : aAcceptedBatch->Batch )
             {
                 if( m_involvedItems.count( item.Item ) == 0 )
                 {
@@ -288,7 +284,7 @@ void CONSTRUCTION_MANAGER::acceptConstructionItems( PENDING_BATCH&& aAcceptedBat
                 m_temporaryConstructionBatches.pop_front();
             }
 
-            m_temporaryConstructionBatches.emplace_back( std::move( aAcceptedBatch.Batch ) );
+            m_temporaryConstructionBatches.emplace_back( std::move( aAcceptedBatch->Batch ) );
         }
 
         m_involvedItems.clear();
@@ -308,6 +304,7 @@ void CONSTRUCTION_MANAGER::acceptConstructionItems( PENDING_BATCH&& aAcceptedBat
     }
 
     KIGFX::CONSTRUCTION_GEOM& geom = m_viewHandler.GetViewItem();
+    geom.ClearDrawables();
 
     const auto addDrawables =
             [&]( const std::vector<CONSTRUCTION_ITEM_BATCH>& aBatches, bool aIsPersistent )
