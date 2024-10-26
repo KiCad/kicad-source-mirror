@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,7 @@ class WX_INFOBAR;
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/combobox.h>
+#include <widgets/symbol_filter_combobox.h>
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
@@ -39,7 +39,6 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 	private:
 
 		// Private event handlers
-		void _wxFB_OnParentSymbolSelect( wxCommandEvent& event ){ OnParentSymbolSelect( event ); }
 		void _wxFB_onPowerCheckBox( wxCommandEvent& event ){ onPowerCheckBox( event ); }
 
 
@@ -48,7 +47,7 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textName;
 		wxStaticText* m_staticText5;
-		wxComboBox* m_comboInheritanceSelect;
+		SYMBOL_FILTER_COMBOBOX* m_comboInheritanceSelect;
 		wxStaticText* m_staticTextDes;
 		wxTextCtrl* m_textReference;
 		wxStaticText* m_staticTextUnits;
@@ -69,7 +68,6 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnParentSymbolSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPowerCheckBox( wxCommandEvent& event ) { event.Skip(); }
 
 

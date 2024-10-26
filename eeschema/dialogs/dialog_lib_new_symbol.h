@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __dialog_lib_new_symbol__
-#define __dialog_lib_new_symbol__
+#pragma once
 
 #include <widgets/unit_binder.h>
 #include <string_utils.h>
@@ -39,6 +38,8 @@ public:
                            const wxArrayString* aRootSymbolNames,
                            const wxString&  aInheritFromSymbolName,
                            std::function<bool( wxString newName )> aValidator );
+
+    ~DIALOG_LIB_NEW_SYMBOL();
 
     void SetName( const wxString& name ) override
     {
@@ -96,15 +97,14 @@ public:
 protected:
     bool TransferDataFromWindow() override;
 
-    virtual void OnParentSymbolSelect( wxCommandEvent& aEvent ) override;
     virtual void onPowerCheckBox( wxCommandEvent& aEvent ) override;
 
 private:
+    void onParentSymbolSelect( wxCommandEvent& aEvent );
+
     void syncControls( bool aIsDerivedPart );
 
 private:
     UNIT_BINDER                             m_pinTextPosition;
     std::function<bool( wxString newName )> m_validator;
 };
-
-#endif // __dialog_lib_new_symbol__

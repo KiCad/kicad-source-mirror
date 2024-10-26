@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,7 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DIALOG_LIB_NEW_SYMBOL_BASE, DIALOG_SHIM )
-	EVT_COMBOBOX( wxID_ANY, DIALOG_LIB_NEW_SYMBOL_BASE::_wxFB_OnParentSymbolSelect )
 	EVT_CHECKBOX( wxID_ANY, DIALOG_LIB_NEW_SYMBOL_BASE::_wxFB_onPowerCheckBox )
 END_EVENT_TABLE()
 
@@ -52,9 +51,7 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 	m_staticText5->Wrap( -1 );
 	fgSizer31->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_comboInheritanceSelect = new wxComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
-	m_comboInheritanceSelect->SetToolTip( _("Select symbol in the current library as parent symbol.\n\nThis was previously known as an alias.  Do not select\nan existing symbol to create a new root symbol.") );
-
+	m_comboInheritanceSelect = new SYMBOL_FILTER_COMBOBOX( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer31->Add( m_comboInheritanceSelect, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticTextDes = new wxStaticText( this, wxID_ANY, _("Default reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );

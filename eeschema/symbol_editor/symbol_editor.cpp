@@ -357,8 +357,6 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
 
     m_libMgr->GetSymbolNames( lib, symbolNames );
 
-    symbolNames.Sort();
-
     wxString _inheritSymbolName;
     wxString _infoMessage;
     wxString msg;

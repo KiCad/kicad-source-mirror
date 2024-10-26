@@ -22,11 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialog_lib_new_symbol.h"
+
 #include <default_values.h>
-#include <dialog_lib_new_symbol.h>
 #include <eda_draw_frame.h>
 #include <sch_validators.h>
 #include <template_fieldnames.h>
+
 
 DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxString& aMessage,
                                               const wxArrayString* aRootSymbolNames,
@@ -44,11 +46,11 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxS
         for( const wxString& name : *aRootSymbolNames )
             escapedNames.Add( UnescapeString( name ) );
 
-        m_comboInheritanceSelect->Append( escapedNames );
+        m_comboInheritanceSelect->SetSymbolList( escapedNames );
 
         if( !aInheritFromSymbolName.IsEmpty() )
         {
-            m_comboInheritanceSelect->SetStringSelection( aInheritFromSymbolName );
+            m_comboInheritanceSelect->SetSelectedSymbol( aInheritFromSymbolName );
             syncControls( !m_comboInheritanceSelect->GetValue().IsEmpty() );
         }
     }
@@ -64,6 +66,10 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxS
 
     m_pinTextPosition.SetValue( schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) );
 
+    m_comboInheritanceSelect->Connect(
+            FILTERED_ITEM_SELECTED,
+            wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ), nullptr, this );
+
     // initial focus should be on first editable field.
     m_textName->SetFocus();
 
@@ -74,13 +80,21 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxS
 }
 
 
+DIALOG_LIB_NEW_SYMBOL::~DIALOG_LIB_NEW_SYMBOL()
+{
+    m_comboInheritanceSelect->Disconnect(
+            FILTERED_ITEM_SELECTED,
+            wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ), nullptr, this );
+}
+
+
 bool DIALOG_LIB_NEW_SYMBOL::TransferDataFromWindow()
 {
     return m_validator( GetName() );
 }
 
 
-void DIALOG_LIB_NEW_SYMBOL::OnParentSymbolSelect( wxCommandEvent& aEvent )
+void DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect( wxCommandEvent& aEvent )
 {
     syncControls( !m_comboInheritanceSelect->GetValue().IsEmpty() );
 }
