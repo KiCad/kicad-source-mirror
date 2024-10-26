@@ -229,7 +229,7 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
     wxStaticText*        label = nullptr;
 
     page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "KiCad" ), NET_TYPE_PCBNEW, false );
-    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in legacy KiCad format" ) );
+    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in KiCad format" ) );
     page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
     m_PanelNetType[PANELPCBNEW] = page;
 
