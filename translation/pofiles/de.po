@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:32-0700\n"
-"PO-Revision-Date: 2024-10-20 11:29+0000\n"
+"PO-Revision-Date: 2024-10-27 09:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.8.2-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6989,7 +6989,7 @@ msgstr "Sichtbar-Kennzeichnung entfernen"
 #: common/lib_table_grid_tricks.cpp:84
 #, c-format
 msgid "Library settings for %s..."
-msgstr "Bibliothekseinstellungen für %s ..."
+msgstr "Bibliothekseinstellungen für %s..."
 
 #: common/lib_tree_model.cpp:149
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -8424,7 +8424,7 @@ msgstr "%s muss kleiner als %s sein."
 
 #: common/widgets/widget_hotkey_list.cpp:101
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr "Neue Tastenkombination drücken, oder <Esc> drücken um abzubrechen ..."
+msgstr "Neue Tastenkombination drücken, oder <Esc> drücken um abzubrechen..."
 
 #: common/widgets/widget_hotkey_list.cpp:112
 msgid "Command:"
@@ -10197,7 +10197,7 @@ msgstr "Protokolldatei \"%s\" erstellt."
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
-msgstr "Tests laufen ..."
+msgstr "Tests laufen..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:67
 #: eeschema/dialogs/dialog_erc_base.cpp:116
@@ -14977,7 +14977,7 @@ msgstr "ERC-Bericht in %s gespeichert\n"
 
 #: eeschema/eeschema_settings.cpp:70
 msgid "Net Navigator"
-msgstr "Netz-Navigator"
+msgstr "Netznavigator"
 
 #: eeschema/erc.cpp:73 eeschema/erc.cpp:90
 msgid "Input Pin"
@@ -15103,15 +15103,15 @@ msgstr "Symbol \"%s\" wurde in Bibliothek \"%s\" verändert"
 
 #: eeschema/erc.cpp:1144
 msgid "Checking sheet names..."
-msgstr "Prüfe Blattnamen ..."
+msgstr "Prüfe Blattnamen..."
 
 #: eeschema/erc.cpp:1152
 msgid "Checking bus conflicts..."
-msgstr "Prüfe Buskonflikte ..."
+msgstr "Prüfe Buskonflikte..."
 
 #: eeschema/erc.cpp:1159
 msgid "Checking conflicts..."
-msgstr "Prüfe Konflikte ..."
+msgstr "Prüfe Konflikte..."
 
 #: eeschema/erc.cpp:1173
 msgid "Checking units..."
@@ -39191,7 +39191,7 @@ msgstr "Erstelle Lötstoppmaske ..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:802
 msgid "Checking solder mask to silk clearance..."
-msgstr "Prüfe Lötstoppmaske-zu-Bestückungsdruck-Freiraum ..."
+msgstr "Prüfe Lötstoppmaske-zu-Bestückungsdruck-Freiraum..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:807
 msgid "Checking solder mask web integrity..."
@@ -41985,8 +41985,8 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
-"Die CADSTAR-Lage \"%s\" wird als technische Schicht eingestuft. Alle "
-"Elemente auf dieser Lage wurden der KiCad-Lage \"%s\" zugeordnet."
+"Die CADSTAR-Lage \"%s\" wird als technische Lage eingestuft. Alle Elemente "
+"auf dieser Lage wurden der KiCad-Lage \"%s\" zugeordnet."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:349
