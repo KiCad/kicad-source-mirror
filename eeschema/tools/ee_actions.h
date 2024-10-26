@@ -27,6 +27,7 @@
 #include <tool/tool_action.h>
 #include <tool/actions.h>
 
+class SCH_SYMBOL;
 class TOOL_EVENT;
 class TOOL_MANAGER;
 
@@ -76,6 +77,7 @@ public:
     // Schematic Tools
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeSymbol;
+    static TOOL_ACTION placeNextSymbolUnit;
     static TOOL_ACTION placePower;
     static TOOL_ACTION placeDesignBlock;
     static TOOL_ACTION drawWire;
@@ -311,4 +313,12 @@ public:
 
     // Drag and drop
     static TOOL_ACTION ddAppendFile;
+
+    struct PLACE_SYMBOL_PARAMS
+    {
+        ///< Provide a symbol to place
+        SCH_SYMBOL* m_Symbol = nullptr;
+        ///< If a symbol is provide, reannotate it?
+        bool m_Reannotate = true;
+    };
 };

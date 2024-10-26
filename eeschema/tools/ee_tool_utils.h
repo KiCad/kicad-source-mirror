@@ -23,9 +23,16 @@
 
 #pragma once
 
+#include <set>
+
 #include <sch_item.h>
 #include <tool/selection.h>
 
 wxString GetSchItemAsText( const SCH_ITEM& aItem );
 
 wxString GetSelectedItemsAsText( const SELECTION& aSel );
+
+/**
+ * Get a list of unplaced (i.e. not in schamtic) unit numbers for a symbol.
+ */
+std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym );

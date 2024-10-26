@@ -29,8 +29,9 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_drawing_tools.h>
-#include <ee_actions.h>
 #include <confirm.h>
+#include <ee_actions.h>
+#include <ee_tool_utils.h>
 #include <increment.h>
 #include <string_utils.h>
 #include <sch_bitmap.h>
@@ -65,6 +66,7 @@
 #include <wx/textdlg.h>
 #include <project/net_settings.h>
 
+
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
 public:
@@ -92,9 +94,10 @@ private:
 
         wxCHECK( symbol, /* void */ );
 
-        int  unit = symbol->GetUnit();
+        const int unit = symbol->GetUnit();
+        const int nUnits = symbol->GetLibSymbolRef()->GetUnitCount();
 
-        for( int ii = 0; ii < symbol->GetLibSymbolRef()->GetUnitCount(); ii++ )
+        for( int ii = 0; ii < nUnits; ii++ )
         {
             wxString unit_text;
 
@@ -113,6 +116,15 @@ private:
             // See eeschema_id to modify this value.
             if( ii >= ( ID_POPUP_SCH_SELECT_UNIT_END - ID_POPUP_SCH_SELECT_UNIT1) )
                 break;      // We have used all IDs for these submenus
+        }
+
+        const std::set<int> missingUnits = GetUnplacedUnitsForSymbol( *symbol );
+
+        {
+            AppendSeparator();
+
+            wxMenuItem* item = Add( EE_ACTIONS::placeNextSymbolUnit );
+            item->Enable( missingUnits.size() );
         }
     }
 };

@@ -423,6 +423,15 @@ TOOL_ACTION EE_ACTIONS::placeSymbol( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Place Symbols" ) )
         .Icon( BITMAPS::add_component )
         .Flags( AF_ACTIVATE )
+        .Parameter<EE_ACTIONS::PLACE_SYMBOL_PARAMS>( {} ) );
+
+TOOL_ACTION EE_ACTIONS::placeNextSymbolUnit( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeNextSymbolUnit" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Place Next Symbol Unit" ) )
+        .Tooltip( _( "Place the next unit of the current symbol that is missing from the schematic" ) )
+        .Flags( AF_ACTIVATE )
+        // The symbol to use as a reference for the next unit
         .Parameter<SCH_SYMBOL*>( nullptr ) );
 
 TOOL_ACTION EE_ACTIONS::placePower( TOOL_ACTION_ARGS()

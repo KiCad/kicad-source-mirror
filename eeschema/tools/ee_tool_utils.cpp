@@ -26,6 +26,8 @@
 #include <sch_text.h>
 #include <sch_field.h>
 #include <sch_pin.h>
+#include <sch_reference_list.h>
+#include <sch_symbol.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>
 #include <sch_textbox.h>
@@ -123,4 +125,36 @@ wxString GetSelectedItemsAsText( const SELECTION& aSel )
     }
 
     return wxJoin( itemTexts, '\n', '\0' );
+}
+
+
+std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym )
+{
+    SCHEMATIC const* schematic = aSym.Schematic();
+    const wxString   symRefDes = aSym.GetRef( &schematic->CurrentSheet(), false );
+
+    if( !schematic )
+        return {};
+
+    SCH_SHEET_LIST hierarchy = schematic->Hierarchy();
+
+    // Get a list of all references in the schematic
+    SCH_REFERENCE_LIST existingRefs;
+    hierarchy.GetSymbols( existingRefs );
+
+    std::set<int> missingUnits;
+    for( int unit = 1; unit <= aSym.GetUnitCount(); ++unit )
+    {
+        missingUnits.insert( unit );
+    }
+
+    for( const SCH_REFERENCE& ref : existingRefs )
+    {
+        if( symRefDes == ref.GetRef() )
+        {
+            missingUnits.erase( ref.GetUnit() );
+        }
+    }
+
+    return missingUnits;
 }

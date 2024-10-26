@@ -36,6 +36,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <design_block_lib_table.h>
 #include <ee_actions.h>
+#include <ee_tool_utils.h>
 #include <sch_edit_frame.h>
 #include <pgm_base.h>
 #include <design_block.h>
@@ -130,7 +131,15 @@ bool SCH_DRAWING_TOOLS::Init()
 
 int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
-    SCH_SYMBOL*                 symbol = aEvent.Parameter<SCH_SYMBOL*>();
+    const EE_ACTIONS::PLACE_SYMBOL_PARAMS& toolParams =
+            aEvent.Parameter<EE_ACTIONS::PLACE_SYMBOL_PARAMS>();
+
+    SCH_SYMBOL* symbol = toolParams.m_Symbol;
+    // If we get an parameterised symbol, we probably just want to place
+    // that and get out of the placmeent tool, rather than popping the
+    // chooser afterwards
+    bool placeOneOnly = symbol != nullptr;
+
     SYMBOL_LIBRARY_FILTER       filter;
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
     bool                        ignorePrimePosition = false;
@@ -253,7 +262,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     if( symbol )
     {
         addSymbol( symbol );
-        annotate();
+
+        if( toolParams.m_Reannotate )
+            annotate();
+
         getViewControls()->WarpMouseCursor( getViewControls()->GetMousePosition( false ) );
     }
     else if( aEvent.HasPosition() )
@@ -415,6 +427,12 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 commit.Push( _( "Place Symbol" ) );
 
+                if( placeOneOnly )
+                {
+                    m_frame->PopTool( aEvent );
+                    break;
+                }
+
                 SCH_SYMBOL* nextSymbol = nullptr;
 
                 if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
@@ -534,6 +552,59 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
+{
+    SCH_SYMBOL* symbol = aEvent.Parameter<SCH_SYMBOL*>();
+
+    // TODO: get from selection
+    if( !symbol )
+    {
+        static const std::vector<KICAD_T> symbolTypes = { SCH_SYMBOL_T };
+        EE_SELECTION& selection = m_selectionTool->RequestSelection( symbolTypes );
+
+        if( selection.Size() != 1 )
+        {
+            m_frame->ShowInfoBarMsg( _( "Select a single symbol to place the next unit." ) );
+            return 0;
+        }
+
+        wxCHECK( selection.Front()->Type() == SCH_SYMBOL_T, 0 );
+        symbol = static_cast<SCH_SYMBOL*>( selection.Front() );
+    }
+
+    if( !symbol )
+        return 0;
+
+    if( !symbol->IsMulti() )
+    {
+        m_frame->ShowInfoBarMsg( _( "This symbol has only one unit." ) );
+        return 0;
+    }
+
+    const std::set<int> missingUnits = GetUnplacedUnitsForSymbol( *symbol );
+
+    if( missingUnits.empty() )
+    {
+        m_frame->ShowInfoBarMsg( _( "All units of this symbol are already placed." ) );
+        return 0;
+    }
+
+    // Find the lowest unit number that is missing
+    const int nextMissing = *std::min_element( missingUnits.begin(), missingUnits.end() );
+
+    std::unique_ptr<SCH_SYMBOL> newSymbol = std::make_unique<SCH_SYMBOL>( *symbol );
+    const SCH_SHEET_PATH&       sheetPath = m_frame->GetCurrentSheet();
+
+    newSymbol->SetUnitProp( nextMissing );
+    newSymbol->SetRefProp( symbol->GetRef( &sheetPath, false ) );
+
+    // Post the new symbol - don't reannotate it - we set the reference ourselves
+    m_toolMgr->PostAction( EE_ACTIONS::placeSymbol,
+                           EE_ACTIONS::PLACE_SYMBOL_PARAMS{ newSymbol.release(), false } );
     return 0;
 }
 
@@ -3197,6 +3268,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     // clang-format off
     Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placeSymbol.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placePower.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceNextSymbolUnit, EE_ACTIONS::placeNextSymbolUnit.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeNoConnect.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeJunction.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeBusWireEntry.MakeEvent() );

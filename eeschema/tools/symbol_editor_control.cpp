@@ -779,7 +779,8 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
             symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
         schframe->Raise();
-        schframe->GetToolManager()->PostAction( EE_ACTIONS::placeSymbol, symbol );
+        schframe->GetToolManager()->PostAction( EE_ACTIONS::placeSymbol,
+                                                EE_ACTIONS::PLACE_SYMBOL_PARAMS{ symbol, true } );
     }
 
     return 0;
