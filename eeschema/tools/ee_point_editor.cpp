@@ -68,7 +68,7 @@ enum CIRCLE_POINTS
 
 enum RECTANGLE_POINTS
 {
-    RECT_TOPLEFT, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT
+    RECT_TOPLEFT, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT, RECT_CENTER
 };
 
 
@@ -148,6 +148,7 @@ public:
                 points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
                 points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
                 points->AddPoint( botRight );
+                points->AddPoint( shape->GetCenter() );
 
                 points->AddLine( points->Point( RECT_TOPLEFT ), points->Point( RECT_TOPRIGHT ) );
                 points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
@@ -801,6 +802,12 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
                 shape->SetPosition( topLeft );
                 shape->SetEnd( botRight );
             }
+            else if( isModified( m_editPoints->Point( RECT_CENTER ) ) )
+            {
+                VECTOR2I moveVec =
+                        m_editPoints->Point( RECT_CENTER ).GetPosition() - oldBox.GetCenter();
+                shape->Move( moveVec );
+            }
             else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
             {
                 oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::N );
@@ -1198,6 +1205,7 @@ void EE_POINT_EDITOR::updatePoints()
             m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
             m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
             m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
+            m_editPoints->Point( RECT_CENTER ).SetPosition( ( topLeft + botRight ) / 2 );
             break;
         }
 

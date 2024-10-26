@@ -69,7 +69,7 @@ enum SEG_POINTS
 
 enum RECT_POINTS
 {
-    RECT_TOP_LEFT, RECT_TOP_RIGHT, RECT_BOT_RIGHT, RECT_BOT_LEFT
+    RECT_TOP_LEFT, RECT_TOP_RIGHT, RECT_BOT_RIGHT, RECT_BOT_LEFT, RECT_CENTER,
 };
 
 
@@ -262,6 +262,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
             points->AddPoint( botRight );
             points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+            points->AddPoint( shape->GetCenter() );
 
             points->AddLine( points->Point( RECT_TOP_LEFT ), points->Point( RECT_TOP_RIGHT ) );
             points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
@@ -1499,6 +1500,12 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
                 setRight( botRight.x );
                 setBottom( botRight.y );
             }
+            else if( isModified( m_editPoints->Point( RECT_CENTER ) ) )
+            {
+                VECTOR2I moveVector = VECTOR2I( m_editPoints->Point( RECT_CENTER ).GetPosition() )
+                                      - shape->GetCenter();
+                shape->Move( moveVector );
+            }
             else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
             {
                 setTop( topLeft.y );
@@ -2154,6 +2161,7 @@ void PCB_POINT_EDITOR::updatePoints()
             m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( botRight.x, topLeft.y );
             m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( botRight );
             m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( topLeft.x, botRight.y );
+            m_editPoints->Point( RECT_CENTER ).SetPosition( shape->GetCenter() );
             break;
         }
 
