@@ -300,6 +300,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_MaximumThreads = 0;
 
+    m_MinimumMarkerSeparationDistance = 0.15;
+
     loadFromConfigFile();
 }
 

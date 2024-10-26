@@ -731,6 +731,15 @@ public:
      */
     int m_MaximumThreads;
 
+    /**
+     * When finding overlapped marker a minium distance (in mm) between two DRC markers required
+     * to mark it as overlapped
+     *
+     * Setting name: "MinimumMarkerSeparationDistance"
+     * Default value: 0.15
+     */
+    double m_MinimumMarkerSeparationDistance;
+
 ///@}
 
 private:
