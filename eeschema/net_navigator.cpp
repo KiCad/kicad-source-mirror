@@ -84,6 +84,11 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
             retv.Printf( _( "Symbol '%s' pin '%s'" ),
                          symbol->GetRef( &aSheetPath, true ),
                          UnescapeString( pin->GetNumber() ) );
+
+            if( wxString pinName = UnescapeString( pin->GetShownName() ); !pinName.IsEmpty() )
+            {
+                retv += wxString::Format( " (%s)", pinName );
+            }
         }
 
         break;
