@@ -146,12 +146,6 @@ private:
     // Activation timeout in milliseconds
     std::chrono::milliseconds m_timeout;
 
-    ///< Callback to call when the proposal is accepted
-    ACTIVATION_CALLBACK     m_callback;
-    std::condition_variable m_cv;
-    std::atomic<bool>       m_stop;
-    std::thread             m_thread;
-
     std::chrono::time_point<std::chrono::steady_clock> m_proposalDeadline;
 
     ///< The last proposal tag that was made
@@ -162,6 +156,13 @@ private:
 
     // The most recently-proposed item
     T m_lastProposal;
+
+    ///< Callback to call when the proposal is accepted
+    ACTIVATION_CALLBACK     m_callback;
+    std::condition_variable m_cv;
+    std::atomic<bool>       m_stop;
+    // The thread must be constructed last, as it starts running immediately
+    std::thread             m_thread;
 };
 
 
