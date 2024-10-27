@@ -62,6 +62,11 @@
     {
       "name": "ngspice",
       "version": "43"
+    },
+    {
+      "name": "vcpkg-get-python-packages",
+      "version": "2024-01-24",
+      "$comment": "forces python 3.11 compat"
     }
   ]
 }
