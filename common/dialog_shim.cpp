@@ -465,6 +465,19 @@ void DIALOG_SHIM::OnModify()
 }
 
 
+int DIALOG_SHIM::ShowModal()
+{
+    // Apple in its infinite wisdom will raise a disabled window before even passing
+    // us the event, so we have no way to stop it.  Instead, we must set an order on
+    // the windows so that the modal will be pushed in front of the disabled
+    // window when it is raised.
+    KIPLATFORM::UI::ReparentModal( this );
+
+    // Call the base class ShowModal() method
+    return wxDialog::ShowModal();
+}
+
+
 /*
     Quasi-Modal Mode Explained:
 
@@ -520,7 +533,7 @@ int DIALOG_SHIM::ShowQuasiModal()
     // us the event, so we have no way to stop it.  Instead, we must set an order on
     // the windows so that the quasi-modal will be pushed in front of the disabled
     // window when it is raised.
-    KIPLATFORM::UI::ReparentQuasiModal( this );
+    KIPLATFORM::UI::ReparentModal( this );
 
     Show( true );
 

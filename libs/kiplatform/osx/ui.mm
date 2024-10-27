@@ -76,12 +76,12 @@ bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 }
 
 
-void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
+void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
 {
     wxTopLevelWindow* parent =
             static_cast<wxTopLevelWindow*>( wxGetTopLevelParent( aWindow->GetParent() ) );
 
-    wxASSERT_MSG(parent, wxT( "QuasiModal windows require a parent.") );
+    wxASSERT_MSG(parent, wxT( "Modal windows require a parent.") );
 
     NSWindow* parentWindow = parent->GetWXWindow();
     NSWindow* theWindow    = aWindow->GetWXWindow();

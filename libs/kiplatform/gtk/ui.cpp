@@ -85,7 +85,7 @@ bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 }
 
 
-void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
+void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
 {
     // Not needed on this platform
 }

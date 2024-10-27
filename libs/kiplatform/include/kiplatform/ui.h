@@ -69,7 +69,7 @@ namespace KIPLATFORM
          *
          * @param aWindow is the window to reparent
          */
-        void ReparentQuasiModal( wxNonOwnedWindow* aWindow );
+        void ReparentModal( wxNonOwnedWindow* aWindow );
 
         /*
          * An ugly hack to fix an issue on OSX: cmd+c closes the dialog instead of copying the
