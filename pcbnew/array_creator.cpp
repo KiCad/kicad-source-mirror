@@ -82,9 +82,10 @@ void ARRAY_CREATOR::Invoke()
 
     EDA_ITEMS all_added_items;
 
+    int arraySize = array_opts->GetArraySize();
     // Iterate in reverse so the original items go last, and we can
     // use them for the positions of the clones.
-    for( int ptN = array_opts->GetArraySize() - 1; ptN >= 0; --ptN )
+    for( int ptN = arraySize - 1; ptN >= 0; --ptN )
     {
         PCB_SELECTION items_for_this_block;
         std::set<FOOTPRINT*> fpDeDupe;
@@ -125,7 +126,8 @@ void ARRAY_CREATOR::Invoke()
                 this_item = item;
 
                 commit.Modify( this_item );
-                TransformItem( *array_opts, ptN, *this_item );
+
+                TransformItem( *array_opts, arraySize - 1, *this_item );
             }
             else
             {
@@ -189,7 +191,8 @@ void ARRAY_CREATOR::Invoke()
                                 aItem->ClearSelected();
                             } );
 
-                    TransformItem( *array_opts, ptN, *this_item );
+                    // We're iterating backwards, so the first item is the last in the array
+                    TransformItem( *array_opts, arraySize - ptN - 1, *this_item );
 
                     // If a group is duplicated, add also created members to the board
                     if( this_item->Type() == PCB_GROUP_T )
