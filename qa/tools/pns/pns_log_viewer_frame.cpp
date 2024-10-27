@@ -365,7 +365,7 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
     m_logFile.reset( aLog );
 
     SetBoard( m_logFile->GetBoard() );
-
+    updateViewerIface();
     m_logPlayer->ReplayLog( m_logFile.get(), 0, 0, -1, true );
 
     auto dbgd = m_logPlayer->GetDebugDecorator();
@@ -388,13 +388,14 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
     drawLoggedItems( m_rewindIter );
     updateDumpPanel( m_rewindIter );
     updatePnsPreviewItems( m_rewindIter );
+    
 }
 
 
 void PNS_LOG_VIEWER_FRAME::SetBoard2( std::shared_ptr<BOARD> aBoard )
 {
     SetBoard( aBoard );
-
+    updateViewerIface();
     auto extents = m_board->GetBoundingBox();
 
     BOX2D bbd;

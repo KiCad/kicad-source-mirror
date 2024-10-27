@@ -245,6 +245,8 @@ void PNS_TEST_DEBUG_DECORATOR::Message( const wxString& msg, const SRC_LOCATION_
     ent->m_srcLoc = aSrcLoc;
     addEntry( ent );
 
+    printf("PNS: %s\n", msg.c_str().AsChar() );
+
 #ifdef VERBOSE
     static wxString lastMsg;
 

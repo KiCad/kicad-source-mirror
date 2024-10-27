@@ -22,7 +22,6 @@
 #include <wx/button.h>
 #include <wx/slider.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/treelist.h>
@@ -44,7 +43,8 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 
 	protected:
 		wxMenuBar* m_menubar1;
-		wxMenu* m_menu1;
+		wxMenu* m_menuFile;
+		wxMenu* m_menuView;
 		wxBoxSizer* m_mainSizer;
 		wxFlexGridSizer* m_topBarSizer;
 		wxStaticText* m_rewindText;
@@ -54,9 +54,6 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		wxTextCtrl* m_rewindPos;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_filterString;
-		wxCheckBox* m_chkShowRPItems;
-		wxCheckBox* m_chkThinLines;
-		wxCheckBox* m_showVertices;
 		wxStaticText* m_algoStatus;
 		wxStaticText* m_ideLabel;
 		wxChoice* m_ideChoice;
@@ -73,15 +70,15 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		virtual void onOpen( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSaveAs( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onShowRPIsChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onShowThinLinesChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onShowVerticesChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnRewindLeft( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRewindScroll( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onBtnRewindRight( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRewindCountText2( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRewindCountText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFilterText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onShowRPIsChecked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onShowThinLinesChecked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onShowVerticesChecked( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

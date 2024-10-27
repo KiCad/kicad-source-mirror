@@ -14,32 +14,52 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
 	m_menubar1 = new wxMenuBar( 0 );
-	m_menu1 = new wxMenu();
-	wxMenuItem* m_menuOpen;
-	m_menuOpen = new wxMenuItem( m_menu1, wxID_ANY, wxString( wxT("Open") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuOpen );
+	m_menuFile = new wxMenu();
+	wxMenuItem* m_menuOpenLogfile;
+	m_menuOpenLogfile = new wxMenuItem( m_menuFile, wxID_ANY, wxString( wxT("Open") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuOpenLogfile );
 
-	wxMenuItem* m_menuSaveAs;
-	m_menuSaveAs = new wxMenuItem( m_menu1, wxID_ANY, wxString( wxT("Save as...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuSaveAs );
+	wxMenuItem* m_menuOpenTestcase;
+	m_menuOpenTestcase = new wxMenuItem( m_menuFile, wxID_ANY, wxString( wxT("Open") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuOpenTestcase );
+
+	wxMenuItem* m_menuSaveTestcase;
+	m_menuSaveTestcase = new wxMenuItem( m_menuFile, wxID_ANY, wxString( wxT("Save Testcase") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuSaveTestcase );
 
 	wxMenuItem* m_menuExit;
-	m_menuExit = new wxMenuItem( m_menu1, wxID_ANY, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuExit );
+	m_menuExit = new wxMenuItem( m_menuFile, wxID_ANY, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuExit );
 
-	m_menubar1->Append( m_menu1, wxT("File") );
+	m_menubar1->Append( m_menuFile, wxT("File") );
+
+	m_menuView = new wxMenu();
+	wxMenuItem* m_menuShowRPIs;
+	m_menuShowRPIs = new wxMenuItem( m_menuView, wxID_ANY, wxString( wxT("Show PREVIEW_ITEMS") ) , wxEmptyString, wxITEM_CHECK );
+	m_menuView->Append( m_menuShowRPIs );
+	m_menuShowRPIs->Check( true );
+
+	wxMenuItem* m_menuOverrideLineWidth;
+	m_menuOverrideLineWidth = new wxMenuItem( m_menuView, wxID_ANY, wxString( wxT("Override line width") ) , wxEmptyString, wxITEM_CHECK );
+	m_menuView->Append( m_menuOverrideLineWidth );
+
+	wxMenuItem* m_menuShowVertexNumbers;
+	m_menuShowVertexNumbers = new wxMenuItem( m_menuView, wxID_ANY, wxString( wxT("Show Vertex Numbers") ) , wxEmptyString, wxITEM_CHECK );
+	m_menuView->Append( m_menuShowVertexNumbers );
+
+	m_menubar1->Append( m_menuView, wxT("View") );
 
 	this->SetMenuBar( m_menubar1 );
 
 	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_topBarSizer = new wxFlexGridSizer( 3, 10, 0, 0 );
+	m_topBarSizer = new wxFlexGridSizer( 3, 11, 0, 0 );
 	m_topBarSizer->SetFlexibleDirection( wxBOTH );
 	m_topBarSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_rewindText = new wxStaticText( this, wxID_ANY, wxT("Rewind: "), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rewindText->Wrap( -1 );
-	m_topBarSizer->Add( m_rewindText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_topBarSizer->Add( m_rewindText, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 
 	m_rewindLeft = new wxButton( this, wxID_ANY, wxT("<"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	m_rewindLeft->SetMaxSize( wxSize( 50,-1 ) );
@@ -59,7 +79,7 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	m_rewindPos = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 50,-1 ), wxTE_PROCESS_ENTER );
 	m_rewindPos->SetMaxSize( wxSize( 50,-1 ) );
 
-	m_topBarSizer->Add( m_rewindPos, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	m_topBarSizer->Add( m_rewindPos, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
@@ -67,15 +87,6 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 
 	m_filterString = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_topBarSizer->Add( m_filterString, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_chkShowRPItems = new wxCheckBox( this, wxID_ANY, wxT("Show RPIs"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_topBarSizer->Add( m_chkShowRPItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	m_chkThinLines = new wxCheckBox( this, wxID_ANY, wxT("Thin lines"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_topBarSizer->Add( m_chkThinLines, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	m_showVertices = new wxCheckBox( this, wxID_ANY, wxT("Show Vertices"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_topBarSizer->Add( m_showVertices, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_algoStatus = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_algoStatus->Wrap( -1 );
@@ -86,7 +97,7 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 
 	m_topBarSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_ideLabel = new wxStaticText( this, wxID_ANY, wxT("Select your IDE:"), wxPoint( -1,-1 ), wxDefaultSize, 0 );
+	m_ideLabel = new wxStaticText( this, wxID_ANY, wxT("IDE:"), wxPoint( -1,-1 ), wxDefaultSize, 0 );
 	m_ideLabel->Wrap( -1 );
 	m_ideLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
@@ -101,7 +112,7 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	m_topBarSizer->Add( m_ideChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	m_mainSizer->Add( m_topBarSizer, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( m_topBarSizer, 0, 0, 5 );
 
 	m_mainSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
 	m_mainSplitter->Connect( wxEVT_IDLE, wxIdleEventHandler( PNS_LOG_VIEWER_FRAME_BASE::m_mainSplitterOnIdle ), NULL, this );
@@ -136,7 +147,7 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelConsole->SetSizer( bSizer7 );
 	m_panelConsole->Layout();
 	bSizer7->Fit( m_panelConsole );
-	m_propsNotebook->AddPage( m_panelConsole, wxT("Console"), false );
+	m_propsNotebook->AddPage( m_panelConsole, wxT("Console"), true );
 
 	bSizer5->Add( m_propsNotebook, 1, wxEXPAND | wxALL, 5 );
 
@@ -155,9 +166,13 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onOpen ), this, m_menuOpen->GetId());
-	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onSaveAs ), this, m_menuSaveAs->GetId());
-	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onExit ), this, m_menuExit->GetId());
+	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onOpen ), this, m_menuOpenLogfile->GetId());
+	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onOpen ), this, m_menuOpenTestcase->GetId());
+	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onSaveAs ), this, m_menuSaveTestcase->GetId());
+	m_menuFile->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onExit ), this, m_menuExit->GetId());
+	m_menuView->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowRPIsChecked ), this, m_menuShowRPIs->GetId());
+	m_menuView->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowThinLinesChecked ), this, m_menuOverrideLineWidth->GetId());
+	m_menuView->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowVerticesChecked ), this, m_menuShowVertexNumbers->GetId());
 	m_rewindLeft->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onBtnRewindLeft ), NULL, this );
 	m_rewindSlider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindScroll ), NULL, this );
 	m_rewindSlider->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindScroll ), NULL, this );
@@ -172,9 +187,6 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	m_rewindPos->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindCountText2 ), NULL, this );
 	m_rewindPos->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindCountText ), NULL, this );
 	m_filterString->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onFilterText ), NULL, this );
-	m_chkShowRPItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowRPIsChecked ), NULL, this );
-	m_chkThinLines->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowThinLinesChecked ), NULL, this );
-	m_showVertices->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowVerticesChecked ), NULL, this );
 }
 
 PNS_LOG_VIEWER_FRAME_BASE::~PNS_LOG_VIEWER_FRAME_BASE()
@@ -194,8 +206,5 @@ PNS_LOG_VIEWER_FRAME_BASE::~PNS_LOG_VIEWER_FRAME_BASE()
 	m_rewindPos->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindCountText2 ), NULL, this );
 	m_rewindPos->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindCountText ), NULL, this );
 	m_filterString->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onFilterText ), NULL, this );
-	m_chkShowRPItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowRPIsChecked ), NULL, this );
-	m_chkThinLines->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowThinLinesChecked ), NULL, this );
-	m_showVertices->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowVerticesChecked ), NULL, this );
 
 }

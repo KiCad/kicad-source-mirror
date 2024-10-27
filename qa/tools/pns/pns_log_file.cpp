@@ -39,21 +39,38 @@
 
 #include <../../tests/common/console_log.h>
 
-BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS::LOGGER::EVENT_ENTRY& evt )
+std::vector<BOARD_CONNECTED_ITEM*> PNS_LOG_FILE::ItemsById( const PNS::LOGGER::EVENT_ENTRY& evt )
 {
-    BOARD_CONNECTED_ITEM* parent = nullptr;
+    std::vector<BOARD_CONNECTED_ITEM*> parents;
+
+    parents.resize( evt.uuids.size() );
+
+    printf("u %d p %d\n", evt.uuids.size(), parents.size() );
 
     for( BOARD_CONNECTED_ITEM* item : m_board->AllConnectedItems() )
     {
-        if( item->m_Uuid == evt.uuid )
+        for( int i = 0; i < evt.uuids.size(); i++ )
         {
-            parent = item;
-            break;
-        };
+            if( item->m_Uuid == evt.uuids[i] )
+            {
+                parents[i] = item;
+                break;
+            };
+        }
     }
 
-    return parent;
+    return parents;
 }
+
+BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS::LOGGER::EVENT_ENTRY& evt )
+{
+    auto parents = ItemsById( evt );
+    if ( parents.size() > 0 )
+        return parents[0];
+    
+    return nullptr;
+}
+
 
 static const wxString readLine( FILE* f )
 {

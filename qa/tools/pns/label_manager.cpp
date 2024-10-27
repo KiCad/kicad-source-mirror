@@ -166,8 +166,10 @@ void LABEL_MANAGER::recalculate()
 {
     int iterLimit = 5;
 
+    return;
     while( iterLimit > 0 )
     {
+
         bool collisionsFound = false;
 
         for( int i = 0; i < m_labels.size(); i++ )

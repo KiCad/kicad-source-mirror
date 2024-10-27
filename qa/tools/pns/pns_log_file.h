@@ -75,6 +75,7 @@ public:
     // Loads a P&S event log and the associated board file. These two always go together.
     bool Load( const wxFileName& logFileName, REPORTER* aRpt );
 
+    std::vector<BOARD_CONNECTED_ITEM*> ItemsById( const PNS::LOGGER::EVENT_ENTRY& evt );
     BOARD_CONNECTED_ITEM* ItemById( const PNS::LOGGER::EVENT_ENTRY& evt );
 
     std::vector<PNS::LOGGER::EVENT_ENTRY>& Events() { return m_events; }
