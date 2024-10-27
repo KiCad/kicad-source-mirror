@@ -223,7 +223,8 @@ void CONSTRUCTION_MANAGER::ProposeConstructionItems(
     const std::size_t hash = HashConstructionBatchSources( *aBatch, aIsPersistent );
 
     m_activationHelper->ProposeActivation(
-            std::make_unique<PENDING_BATCH>( std::move( *aBatch ), aIsPersistent ), hash );
+            std::make_unique<PENDING_BATCH>( PENDING_BATCH{ std::move( *aBatch ), aIsPersistent } ),
+            hash );
 }
 
 
