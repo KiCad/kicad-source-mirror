@@ -192,18 +192,6 @@ SHOVE::SHOVE( NODE* aWorld, ROUTER* aRouter ) :
 
 SHOVE::~SHOVE()
 {
-    std::unordered_set<LINE*> alreadyDeleted;
-
-    for( auto& it : m_rootLineHistory )
-    {
-        auto it2 = alreadyDeleted.find( it.second.line );
-
-        if( it2 == alreadyDeleted.end() )
-        {
-            alreadyDeleted.insert( it.second.line );
-            delete it.second.line;
-        }
-    }
 }
 
 
@@ -730,8 +718,10 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
 
     	WALKAROUND::RESULT status = walkaround.Route( aCurrent );
 
-        if( status.status[0] != WALKAROUND::ST_DONE )//fixme policies!
+        if( status.status[ WALKAROUND::WP_SHORTEST ] != WALKAROUND::ST_DONE )//fixme policies!
             continue;
+
+        walkaroundLine = status.lines[ WALKAROUND::WP_SHORTEST ];
 
         walkaroundLine.ClearLinks();
         walkaroundLine.Unmark();
@@ -1729,9 +1719,9 @@ VIA* SHOVE::findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle )
 
 
 
-SHOVE::ROOT_LINE_ENTRY* SHOVE::findRootLine( const LINE *aLine )
+SHOVE::ROOT_LINE_ENTRY* SHOVE::findRootLine( const LINE& aLine )
 {
-        for( const LINKED_ITEM* link : aLine->Links() )
+        for( const LINKED_ITEM* link : aLine.Links() )
         {
             if( const SEGMENT* seg = dyn_cast<const SEGMENT*>( link ) )
             {
@@ -1756,9 +1746,9 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::findRootLine( const LINKED_ITEM *aItem )
 }
 
 
-SHOVE::ROOT_LINE_ENTRY* SHOVE::touchRootLine( const LINE* aLine )
+SHOVE::ROOT_LINE_ENTRY* SHOVE::touchRootLine( const LINE& aLine )
 {
-    for( const LINKED_ITEM* link : aLine->Links() )
+    for( const LINKED_ITEM* link : aLine.Links() )
     {
         auto it = m_rootLineHistory.find( link->Uid() );
 
@@ -1770,10 +1760,10 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::touchRootLine( const LINE* aLine )
         }
     }
 
-    auto rootEntry = new ROOT_LINE_ENTRY( aLine->Clone() );
+    auto rootEntry = new ROOT_LINE_ENTRY( aLine.Clone() );
 
 
-    for( const LINKED_ITEM* link : aLine->Links() )
+    for( const LINKED_ITEM* link : aLine.Links() )
     {
         PNS_DBG( Dbg(), Message, wxString::Format( wxT( "touch [create] uid=%llu"), link->Uid() ) );
         m_rootLineHistory[link->Uid()] = rootEntry;
@@ -1895,7 +1885,7 @@ void SHOVE::runOptimizer( NODE* aNode )
         {
             LINE& lineToOpt = m_optimizerQueue[i];
             LINE* rootLine = nullptr;
-            auto rootEntry = findRootLine( &lineToOpt );
+            auto rootEntry = findRootLine( lineToOpt );
 
             if( rootEntry )
             {
@@ -2042,7 +2032,7 @@ void SHOVE::SetShovePolicy( const LINKED_ITEM* aItem, int aPolicy )
     rl->policy = aPolicy;
 }
 
-void SHOVE::SetShovePolicy( const LINE* aLine, int aPolicy )
+void SHOVE::SetShovePolicy( const LINE& aLine, int aPolicy )
 {
     auto rl = touchRootLine( aLine );
     rl->policy = aPolicy;
@@ -2055,7 +2045,7 @@ void SHOVE::ClearHeads()
 }
 
 
-void SHOVE::AddHeads( LINE* aHead,  int aPolicy )
+void SHOVE::AddHeads( const LINE& aHead,  int aPolicy )
 {
     m_headLines.push_back( SHOVE::HEAD_LINE_ENTRY( aHead, aPolicy ) );
 }
@@ -2131,7 +2121,7 @@ void SHOVE::reconstructHeads( bool aShoveFailed )
     {
         if( headEntry.origHead )
         {
-            auto rootEntry = findRootLine( headEntry.origHead );
+            auto rootEntry = findRootLine( *headEntry.origHead );
 
             PNS_DBG( Dbg(), Message, wxString::Format("orig LinkC=%d RE=%p", headEntry.origHead->LinkCount(), rootEntry ) );
 
@@ -2247,7 +2237,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
         }
         else
         {
-            headSet.Add( l.origHead );
+            headSet.Add( *l.origHead );
         }
     }
 
@@ -2304,13 +2294,13 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
             //nodeStats( Dbg(), m_currentNode, "add-head" );
 
-            auto headRoot = touchRootLine( headLineEntry.origHead );
+            auto headRoot = touchRootLine( *headLineEntry.origHead );
 
             PNS_DBG( Dbg(), Message,
                      wxString::Format( "touchRoot ohlc %d roots %d re=%p\n",
                                        headLineEntry.origHead->LinkCount(),
                                        (int) m_rootLineHistory.size(),
-                                       findRootLine( headLineEntry.origHead ) ) );
+                                       findRootLine( *headLineEntry.origHead ) ) );
 
             headRoot->isHead = true;
             headRoot->rootLine = new PNS::LINE( *headLineEntry.origHead );
@@ -2334,7 +2324,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             if( !head.EndsWithVia() )
                 m_currentNode->LockJoint( head.CPoint( -1 ), &head, true );
 
-            SetShovePolicy( &head, headLineEntry.policy );
+            SetShovePolicy( head, headLineEntry.policy );
 
             //head.Mark( MK_HEAD );
             head.SetRank( 100000 ); //- 100 * currentHeadId );

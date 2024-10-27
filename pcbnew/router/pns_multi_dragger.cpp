@@ -679,7 +679,7 @@ bool MULTI_DRAGGER::multidragShove( std::vector<MDRAG_LINE>& aCompletedLines )
     for( auto& l : aCompletedLines )
     {
         PNS_DBG( Dbg(), AddItem, &l.draggedLine, GREEN, 0, "dragged-line" );
-        m_shove->AddHeads( &l.draggedLine, SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_OPTIMIZE );
+        m_shove->AddHeads( l.draggedLine, SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_OPTIMIZE );
     }
 
     auto status = m_shove->Run();

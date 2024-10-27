@@ -943,7 +943,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
     }
 
     m_shove->ClearHeads();
-    m_shove->AddHeads( &newHead, SHOVE::SHP_SHOVE );
+    m_shove->AddHeads( newHead, SHOVE::SHP_SHOVE );
     bool shoveOk = m_shove->Run() == SHOVE::SH_OK;
 
     m_currentNode = m_shove->CurrentNode();

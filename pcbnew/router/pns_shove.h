@@ -69,13 +69,13 @@ public:
     void SetDefaultShovePolicy( int aPolicy );
     
     void SetShovePolicy( const LINKED_ITEM* aItem, int aPolicy );
-    void SetShovePolicy( const LINE* aLine, int aPolicy );
+    void SetShovePolicy( const LINE& aLine, int aPolicy );
 
     SHOVE( NODE* aWorld, ROUTER* aRouter );
     ~SHOVE();
 
     void ClearHeads();
-    void AddHeads( LINE* aHead,  int aPolicy = SHP_DEFAULT );
+    void AddHeads( const LINE& aHead,  int aPolicy = SHP_DEFAULT );
     void AddHeads( VIA_HANDLE aHead, VECTOR2I aNewPos, int aPolicy = SHP_DEFAULT );
 
     SHOVE_STATUS Run();
@@ -129,10 +129,12 @@ private:
 
     struct HEAD_LINE_ENTRY
     {
-        HEAD_LINE_ENTRY( LINE* aOrig, int aPolicy = SHP_DEFAULT ) :
+        HEAD_LINE_ENTRY( const LINE& aOrig, int aPolicy = SHP_DEFAULT ) :
             origHead( aOrig ),
             policy( aPolicy )
-        {};
+        {
+            origHead->ClearLinks();
+        };
 
         HEAD_LINE_ENTRY( VIA_HANDLE aVia, int aPolicy = SHP_DEFAULT ) :
             theVia( aVia ),
@@ -144,7 +146,7 @@ private:
         std::optional<VIA_HANDLE> theVia;
         VIA* draggedVia = nullptr; 
         VECTOR2I viaNewPos;
-        LINE* origHead = nullptr;
+        std::optional<LINE> origHead;
         std::optional<LINE> newHead;
         int policy;
     };
@@ -203,9 +205,9 @@ private:
     void replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea = true,
                       NODE *aNode = nullptr );
 
-    ROOT_LINE_ENTRY* findRootLine( const LINE *aLine );
+    ROOT_LINE_ENTRY* findRootLine( const LINE& aLine );
     ROOT_LINE_ENTRY* findRootLine( const LINKED_ITEM *aItem );
-    ROOT_LINE_ENTRY* touchRootLine( const LINE* aLine );
+    ROOT_LINE_ENTRY* touchRootLine( const LINE& aLine );
     ROOT_LINE_ENTRY* touchRootLine( const LINKED_ITEM *aItem );
     void pruneRootLines( NODE *aRemovedNode );
 

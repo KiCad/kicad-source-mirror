@@ -628,7 +628,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
             draggedPreShove.DragCorner( aP, m_draggedSegmentIndex );
 
         m_shove->ClearHeads();
-        m_shove->AddHeads( &draggedPreShove, SHOVE::SHP_SHOVE );
+        m_shove->AddHeads( draggedPreShove, SHOVE::SHP_SHOVE );
         ok = m_shove->Run() == SHOVE::SH_OK;
 
         LINE draggedPostShove( draggedPreShove );
