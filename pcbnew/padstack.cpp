@@ -25,6 +25,7 @@
 #include <api/api_pcb_utils.h>
 #include <api/board/board_types.pb.h>
 #include <layer_range.h>
+#include <macros.h>
 #include <magic_enum.hpp>
 #include <pad.h>
 #include <pcb_shape.h>
@@ -650,6 +651,46 @@ PCB_LAYER_ID PADSTACK::StartLayer() const
 PCB_LAYER_ID PADSTACK::EndLayer() const
 {
     return m_drill.end;
+}
+
+
+void PADSTACK::FlipLayers( int aCopperLayerCount )
+{
+    switch( m_mode )
+    {
+    case MODE::NORMAL:
+        // Same shape on all layers; nothing to do
+        break;
+
+    case MODE::CUSTOM:
+    {
+        if( aCopperLayerCount > 2 )
+        {
+            int innerCount = ( aCopperLayerCount - 2 );
+            int halfInnerLayerCount = innerCount / 2;
+            PCB_LAYER_ID lastInner
+                    = static_cast<PCB_LAYER_ID>( In1_Cu + ( innerCount - 1 ) * 2 );
+            PCB_LAYER_ID midpointInner
+                    = static_cast<PCB_LAYER_ID>( In1_Cu + ( halfInnerLayerCount - 1 ) * 2 );
+
+            for( PCB_LAYER_ID layer : LAYER_RANGE( In1_Cu, midpointInner, MAX_CU_LAYERS ) )
+            {
+                auto conjugate =
+                        magic_enum::enum_cast<PCB_LAYER_ID>( lastInner - ( layer - In1_Cu ) );
+                wxCHECK2_MSG( conjugate.has_value() && m_copperProps.contains( conjugate.value() ),
+                              continue, "Invalid inner layer conjugate!" );
+                std::swap( m_copperProps[layer], m_copperProps[conjugate.value()] );
+            }
+        }
+
+        KI_FALLTHROUGH;
+    }
+
+    case MODE::FRONT_INNER_BACK:
+        std::swap( m_copperProps[F_Cu], m_copperProps[B_Cu] );
+        std::swap( m_frontMaskProps, m_backMaskProps );
+        break;
+    }
 }
 
 

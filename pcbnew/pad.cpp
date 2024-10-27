@@ -932,11 +932,7 @@ void PAD::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         } );
 
     // flip pads layers
-    // PADS items are currently on all copper layers, or
-    // currently, only on Front or Back layers.
-    // So the copper layers count is not taken in account
-    LSET layerSet = m_padStack.LayerSet();
-    SetLayerSet( layerSet.Flip() );
+    m_padStack.FlipLayers( BoardCopperLayerCount() );
 
     // Flip the basic shapes, in custom pads
     FlipPrimitives( aFlipDirection );

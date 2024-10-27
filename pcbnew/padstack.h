@@ -269,6 +269,12 @@ public:
     LSET& LayerSet() { return m_layerSet; }
     void SetLayerSet( const LSET& aSet ) { m_layerSet = aSet; }
 
+    /**
+     * Flips the padstack layers in the case that the pad's parent footprint is flipped to the
+     * other side of the board.
+     */
+    void FlipLayers( int aCopperLayerCount );
+
     PCB_LAYER_ID StartLayer() const;
     PCB_LAYER_ID EndLayer() const;
 
