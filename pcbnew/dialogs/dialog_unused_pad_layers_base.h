@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_UNUSED_PAD_LAYERS_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,7 +39,7 @@ class DIALOG_UNUSED_PAD_LAYERS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbVias;
 		wxCheckBox* m_cbPads;
 		wxCheckBox* m_cbSelectedOnly;
-		wxCheckBox* m_cbPreservePads;
+		wxCheckBox* m_cbPreserveExternalLayers;
 		wxStaticBitmap* m_image;
 		wxStdDialogButtonSizer* m_StdButtons;
 		wxButton* m_StdButtonsOK;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
     // Set keep Through Hole pads on external layers ON by default.
     // Because such a pad does not allow soldering/unsoldering, disable this option
     // is probably not frequent
-    m_cbPreservePads->SetValue( true );
+    m_cbPreserveExternalLayers->SetValue( true );
 
     SetupStandardButtons( { { wxID_OK,     _( "Remove Unused Layers" ) },
                             { wxID_APPLY,  _( "Restore All Layers" )   },
@@ -61,7 +61,7 @@ DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
 
 void DIALOG_UNUSED_PAD_LAYERS::updateImage()
 {
-    if( m_cbPreservePads->IsChecked() )
+    if( m_cbPreserveExternalLayers->IsChecked() )
         m_image->SetBitmap( KiBitmapBundle( BITMAPS::pads_remove_unused_keep_bottom ) );
     else
         m_image->SetBitmap( KiBitmapBundle( BITMAPS::pads_remove_unused ) );
@@ -124,7 +124,9 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
                 if( viaHasPotentiallyUnusedLayers( via ) )
                 {
                     via->SetRemoveUnconnected( aRemoveLayers );
-                    via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
+
+                    if( aRemoveLayers )
+                        via->SetKeepStartEnd( m_cbPreserveExternalLayers->IsChecked() );
                 }
             }
 
@@ -137,7 +139,9 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
                     if( padHasPotentiallyUnusedLayers( pad ) )
                     {
                         pad->SetRemoveUnconnected( aRemoveLayers );
-                        pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+
+                        if( aRemoveLayers )
+                            pad->SetKeepTopBottom( m_cbPreserveExternalLayers->IsChecked() );
                     }
                 }
             }
@@ -149,7 +153,9 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
                 if( padHasPotentiallyUnusedLayers( pad ) )
                 {
                     pad->SetRemoveUnconnected( aRemoveLayers );
-                    pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+
+                    if( aRemoveLayers )
+                        pad->SetKeepTopBottom( m_cbPreserveExternalLayers->IsChecked() );
                 }
             }
         }
@@ -167,7 +173,9 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
                     if( padHasPotentiallyUnusedLayers( pad ) )
                     {
                         pad->SetRemoveUnconnected( aRemoveLayers );
-                        pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+
+                        if( aRemoveLayers )
+                            pad->SetKeepTopBottom( m_cbPreserveExternalLayers->IsChecked() );
                     }
                 }
             }
@@ -186,7 +194,9 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
                 {
                     m_commit.Modify( via );
                     via->SetRemoveUnconnected( aRemoveLayers );
-                    via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
+
+                    if( aRemoveLayers )
+                        via->SetKeepStartEnd( m_cbPreserveExternalLayers->IsChecked() );
                 }
             }
         }

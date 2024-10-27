@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,8 +33,8 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	m_cbSelectedOnly = new wxCheckBox( this, wxID_ANY, _("&Selected only"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_cbSelectedOnly, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
-	m_cbPreservePads = new wxCheckBox( this, wxID_ANY, _("Keep &outside layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_cbPreservePads, 0, wxEXPAND|wxLEFT, 5 );
+	m_cbPreserveExternalLayers = new wxCheckBox( this, wxID_ANY, _("Keep &outside layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_cbPreserveExternalLayers, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	bMargins->Add( bSizer4, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
@@ -78,7 +78,7 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	// Connect Events
 	m_cbVias->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
 	m_cbPads->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
-	m_cbPreservePads->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
+	m_cbPreserveExternalLayers->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
 	m_StdButtonsApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::onApply ), NULL, this );
 	m_StdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::onOK ), NULL, this );
 }
@@ -88,7 +88,7 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::~DIALOG_UNUSED_PAD_LAYERS_BASE()
 	// Disconnect Events
 	m_cbVias->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
 	m_cbPads->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
-	m_cbPreservePads->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
+	m_cbPreserveExternalLayers->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::syncImages ), NULL, this );
 	m_StdButtonsApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::onApply ), NULL, this );
 	m_StdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UNUSED_PAD_LAYERS_BASE::onOK ), NULL, this );
 
