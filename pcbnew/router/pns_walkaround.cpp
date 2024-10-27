@@ -158,11 +158,14 @@ bool WALKAROUND::singleStep()
 
             bool stat = aLine.Walkaround( hull, tmp.Line(), aCw );
 
-            if( !stat )
-                return false;
 
-            PNS_DBG( Dbg(), AddShape, &hull, YELLOW, 10000, wxT( "hull" ) );
             PNS_DBG( Dbg(), AddItem, &tmp, RED, 10000, wxT( "walk" ) );
+
+            if( !stat )
+            {
+                PNS_DBGN( Dbg(), EndGroup );
+                return false;
+            }
 
             aLine.SetShape( tmp.CLine() );
         }
@@ -318,7 +321,7 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
             if( m_lengthLimitOn )
             {
                 if( st != ST_DONE && lengthFactor > m_lengthExpansionFactor )
-                    st = ST_STUCK;
+                    st = ST_ALMOST_DONE;
             }
 
             PNS_DBG( Dbg(), Message, wxString::Format( "check-wp iter %d st %d i %d lf %.1f", m_iteration, st, pol, lengthFactor ) );
@@ -352,7 +355,10 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         if( ln.PointCount() > 0 && ln.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
         {
             st = ST_ALMOST_DONE;
+        
         }
+        PNS_DBG( Dbg(), Message, wxString::Format( "stat=%d", st ) );
+
     }
 
 
