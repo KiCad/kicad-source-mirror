@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-27 09:00+0000\n"
+"PO-Revision-Date: 2024-10-28 18:03+0000\n"
 "Last-Translator: David Chorváth <dadulo33@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
 "master-source/sk/>\n"
@@ -12624,9 +12624,8 @@ msgstr "Zobraziť"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:407
-#, fuzzy
 msgid "Show Name"
-msgstr "Zobraziť sieť"
+msgstr "Zobraziť názov"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
@@ -12634,7 +12633,7 @@ msgstr "Zobraziť sieť"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:408
 msgid "H Align"
-msgstr "H Zarovnať"
+msgstr "H Zarovnanie"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
@@ -12642,7 +12641,7 @@ msgstr "H Zarovnať"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
 #: eeschema/fields_grid_table.cpp:409
 msgid "V Align"
-msgstr "V Zarovnať"
+msgstr "V Zarovnanie"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:95
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
@@ -12682,7 +12681,7 @@ msgstr "Pozícia Y"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:90
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:63
 msgid "Add field"
-msgstr "Pridajte pole"
+msgstr "Pridať pole"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:139
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:110
@@ -12729,9 +12728,8 @@ msgstr "Pasívny"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:169
 #: eeschema/sch_label.cpp:2272
-#, fuzzy
 msgid "Dot"
-msgstr "Bodky"
+msgstr "Bodka"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:175
 #: eeschema/sch_label.cpp:2274
@@ -12749,7 +12747,7 @@ msgstr "Automaticky"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
 msgid "ALL"
-msgstr "VŠE"
+msgstr "VŠETKO"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46 eeschema/sch_item.cpp:68
 #: eeschema/symbol_editor/symbol_editor.cpp:1636
@@ -12804,9 +12802,8 @@ msgstr "Názov Veľkosť textu"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:132
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "DeMorgan Standard"
+msgstr "De-Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:839
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:110
@@ -12860,23 +12857,20 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:37
-#, fuzzy
 msgid "Pin count:"
-msgstr "Počet upozornení:"
+msgstr "Počet vývodov:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "Duplikáty:"
+msgstr "Duplicitné vývody:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:137
 msgid "Group by name"
 msgstr "Zoskupiť podľa názvu"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
-#, fuzzy
 msgid "Group Selected"
-msgstr "Výber mriežky"
+msgstr "Vybraná skupina"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
@@ -12902,7 +12896,7 @@ msgstr "Odvodiť od existujúceho symbolu:"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:244
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:209
 msgid "Combo!"
-msgstr "Combo!"
+msgstr "Kombinácia!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:56
 msgid ""
@@ -38650,9 +38644,8 @@ msgid "Changing the net will also update %lu connected pads to %s."
 msgstr "Zatvoriť editor puzdier"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:567
-#, fuzzy
 msgid "Change Nets"
-msgstr "Zmeniť typ"
+msgstr "Zmeniť siete"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:567
 msgid "Leave Nets Unchanged"
@@ -45414,14 +45407,12 @@ msgid "Loading zone fills..."
 msgstr "Zostavovanie zón..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2836
-#, fuzzy
 msgid "Loading arcs..."
-msgstr "Načítavam..."
+msgstr "Načítanie oblúkov..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3088
-#, fuzzy
 msgid "Loading pads..."
-msgstr "Načítavam..."
+msgstr "Načítávanie plošiek..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3248
 #, fuzzy, c-format
@@ -45568,9 +45559,8 @@ msgid ""
 msgstr "Nekovovaná podložka '%s' má otvor. Toto by sa nemalo stávať"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3896
-#, fuzzy
 msgid "Loading tracks..."
-msgstr "Načítavam..."
+msgstr "Načítavanie cestičiek..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4113
 #, fuzzy
@@ -45578,9 +45568,8 @@ msgid "Loading unicode strings..."
 msgstr "Načítavam..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4127
-#, fuzzy
 msgid "Loading text..."
-msgstr "Načítavam..."
+msgstr "Načítavanie textu..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
 #, fuzzy, c-format
@@ -45611,9 +45600,8 @@ msgid "Unknown textbox justification %d, aText %s"
 msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4550
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Načítavajú sa súbory Gerber..."
+msgstr "Načítavanie obdĺžnikov..."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:38
 msgid "Altium Circuit Maker PCB files"
@@ -45674,13 +45662,13 @@ msgstr ""
 "KiCadu. Tieto prvky neboli načítané."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
-"Dizajn CADSTAR obsahuje varianty, ktoré nemajú ekvivalent KiCadu. Načítala "
-"sa iba hlavná varianta ('%s')."
+"Dizajn CADSTAR obsahuje varianty, ktoré nemajú ekvivalent KiCad-u. Načítala "
+"sa iba varianta '%s'."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:164
 msgid ""
