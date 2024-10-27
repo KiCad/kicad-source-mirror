@@ -307,3 +307,20 @@ EASYEDAPRO::ParseJsonLinesWithSeparation( wxInputStream& aInput, const wxString&
 
     return lineBlocks;
 }
+
+
+std::map<wxString, wxString>
+EASYEDAPRO::AnyMapToStringMap( const std::map<wxString, nlohmann::json>& aInput )
+{
+    std::map<wxString, wxString> stringMap;
+
+    for( auto& [key, value] : aInput )
+    {
+        if( value.is_string() )
+            stringMap[key] = value.get<wxString>();
+        else if( value.is_number() )
+            stringMap[key] = wxString::FromCDouble( value.get<double>() );
+    }
+
+    return stringMap;
+}

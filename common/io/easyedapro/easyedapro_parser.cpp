@@ -29,6 +29,7 @@
 #include <json_common.h>
 #include <core/json_serializers.h>
 #include <string_utils.h>
+#include <io/easyedapro/easyedapro_import_utils.h>
 
 
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::SCH_ATTR& d )
@@ -273,7 +274,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_DEVICE& d )
         d.custom_tags = j.at( "custom_tags" );
 
     if( j.at( "attributes" ).is_object() )
-        d.attributes = j.at( "attributes" );
+        d.attributes = AnyMapToStringMap( j.at( "attributes" ) );
 }
 
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::BLOB& d )
