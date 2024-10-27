@@ -76,7 +76,7 @@ DIALOG_IMPORT_NETLIST::DIALOG_IMPORT_NETLIST( PCB_EDIT_FRAME* aParent,
 
     m_matchByTimestamp->SetSelection( m_matchByUUID ? 0 : 1 );
 
-    m_MessageWindow->SetLabel( _("Changes To Be Applied") );
+    m_MessageWindow->SetLabel( _("Changes to Be Applied") );
     m_MessageWindow->SetVisibleSeverities( cfg->m_NetlistDialog.report_filter );
     m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 

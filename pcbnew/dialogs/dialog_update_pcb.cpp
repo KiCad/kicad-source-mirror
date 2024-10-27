@@ -47,7 +47,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
     m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
 
-    m_messagePanel->SetLabel( _("Changes To Be Applied") );
+    m_messagePanel->SetLabel( _("Changes to Be Applied") );
     m_messagePanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
     m_messagePanel->SetLazyUpdate( true );
     m_netlist->SortByReference();

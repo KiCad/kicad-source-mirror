@@ -905,7 +905,7 @@ bool PANEL_SETUP_LAYERS::CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aIm
 
         wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
-        wxMessageDialog dlg( topLevelParent, msg, _( "Inner Layers To Be Deleted" ),
+        wxMessageDialog dlg( topLevelParent, msg, _( "Inner Layers to Be Deleted" ),
                              wxICON_WARNING | wxSTAY_ON_TOP | wxYES | wxNO | wxNO_DEFAULT );
 
         if( wxID_NO == dlg.ShowModal() )
