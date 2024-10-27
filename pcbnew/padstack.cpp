@@ -78,13 +78,16 @@ PADSTACK& PADSTACK::operator=( const PADSTACK &aOther )
     // enforced even through the properties panel and API?
 
     ForEachUniqueLayer(
-        [this]( PCB_LAYER_ID aLayer )
+        [&]( PCB_LAYER_ID aLayer )
         {
             PAD_SHAPE shape = Shape( aLayer );
 
             // Make sure leftover primitives don't stick around
-            if( shape != PAD_SHAPE::CUSTOM )
-                ClearPrimitives( aLayer );
+            ClearPrimitives( aLayer );
+
+            // For custom pad shape, duplicate primitives of the pad to copy
+            if( shape == PAD_SHAPE::CUSTOM )
+                ReplacePrimitives( aOther.Primitives( aLayer ), aLayer );
 
             // rounded rect pads with radius ratio = 0 are in fact rect pads.
             // So set the right shape (and perhaps issues with a radius = 0)
@@ -556,7 +559,7 @@ double PADSTACK::Similarity( const PADSTACK& aOther ) const
         {
             if( Shape( aLayer ) != aOther.Shape( aLayer ) )
                 similarity *= 0.9;
-        
+
             if( Size( aLayer ) != aOther.Size( aLayer ) )
                 similarity *= 0.9;
 
@@ -578,7 +581,7 @@ double PADSTACK::Similarity( const PADSTACK& aOther ) const
             if( AnchorShape( aLayer ) != aOther.AnchorShape( aLayer ) )
                 similarity *= 0.9;
         } );
-    
+
     if( Drill() != aOther.Drill() )
         similarity *= 0.9;
 
@@ -626,7 +629,7 @@ double PADSTACK::Similarity( const PADSTACK& aOther ) const
 
     if( LayerSet() != aOther.LayerSet() )
         similarity *= 0.9;
-    
+
     return similarity;
 }
 
