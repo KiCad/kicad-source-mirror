@@ -130,7 +130,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     // And a special case for the "head" via's hole.
     if( holeH && shouldWeConsiderHoleCollisions( this, holeH ) )
     {
-        if( collideSimple( holeH, aNode, aCtx ) )
+        if( Net() != holeH->Net() && collideSimple( holeH, aNode, aCtx ) )
             collisionsFound = true;
     }
 
