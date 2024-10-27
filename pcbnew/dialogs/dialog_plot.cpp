@@ -271,6 +271,7 @@ void DIALOG_PLOT::init_Dialog()
         m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
 
         m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+        m_openDirButton->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
 
         // m_PSWidthAdjust is stored in mm in user config
         m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * pcbIUScale.IU_PER_MM );
@@ -1384,6 +1385,28 @@ void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
         // Update DRC warnings on return to this dialog
         reInitDialog();
     }
+}
+
+
+void DIALOG_PLOT::onOpenOutputDirectory( wxCommandEvent& event )
+{
+    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
+    {
+        return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
+    };
+
+    wxString path = m_outputDirectoryName->GetValue();
+    path = ExpandTextVars( path, &textResolver );
+    path = ExpandEnvVarSubstitutions( path, &Prj() );
+    path = Prj().AbsolutePath( path );
+
+    if( !wxDirExists( path ) )
+    {
+        DisplayError( this, wxString::Format( _( "Directory '%s' does not exist." ), path ) );
+        return;
+    }
+
+    wxLaunchDefaultApplication( path );
 }
 
 

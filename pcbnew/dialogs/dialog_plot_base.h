@@ -58,6 +58,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
 		STD_BITMAP_BUTTON* m_browseButton;
+		STD_BITMAP_BUTTON* m_openDirButton;
 		wxBoxSizer* bmiddleSizer;
 		wxStaticBoxSizer* m_LayersSizer;
 		wxCheckListBox* m_layerCheckListBox;
@@ -142,6 +143,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChangeDXFPlotMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOpenOutputDirectory( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
 

@@ -84,6 +84,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::small_edit].emplace_back( BITMAPS::small_edit, wxT( "small_edit_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_folder].emplace_back( BITMAPS::small_folder, wxT( "small_folder_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_library].emplace_back( BITMAPS::small_library, wxT( "small_library_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::small_new_window].emplace_back( BITMAPS::small_new_window, wxT( "small_new_window_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_plus].emplace_back( BITMAPS::small_plus, wxT( "small_plus_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_refresh].emplace_back( BITMAPS::small_refresh, wxT( "small_refresh_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_sort_desc].emplace_back( BITMAPS::small_sort_desc, wxT( "small_sort_desc_16.png" ), 16, wxT( "light" ) );
@@ -166,6 +167,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::small_edit].emplace_back( BITMAPS::small_edit, wxT( "small_edit_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_folder].emplace_back( BITMAPS::small_folder, wxT( "small_folder_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_library].emplace_back( BITMAPS::small_library, wxT( "small_library_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::small_new_window].emplace_back( BITMAPS::small_new_window, wxT( "small_new_window_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_plus].emplace_back( BITMAPS::small_plus, wxT( "small_plus_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_refresh].emplace_back( BITMAPS::small_refresh, wxT( "small_refresh_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_sort_desc].emplace_back( BITMAPS::small_sort_desc, wxT( "small_sort_desc_dark_16.png" ), 16, wxT( "dark" ) );
@@ -248,6 +250,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::small_edit].emplace_back( BITMAPS::small_edit, wxT( "small_edit_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_folder].emplace_back( BITMAPS::small_folder, wxT( "small_folder_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_library].emplace_back( BITMAPS::small_library, wxT( "small_library_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::small_new_window].emplace_back( BITMAPS::small_new_window, wxT( "small_new_window_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_plus].emplace_back( BITMAPS::small_plus, wxT( "small_plus_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_refresh].emplace_back( BITMAPS::small_refresh, wxT( "small_refresh_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_sort_desc].emplace_back( BITMAPS::small_sort_desc, wxT( "small_sort_desc_32.png" ), 32, wxT( "light" ) );
@@ -330,6 +333,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::small_edit].emplace_back( BITMAPS::small_edit, wxT( "small_edit_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_folder].emplace_back( BITMAPS::small_folder, wxT( "small_folder_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_library].emplace_back( BITMAPS::small_library, wxT( "small_library_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::small_new_window].emplace_back( BITMAPS::small_new_window, wxT( "small_new_window_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_plus].emplace_back( BITMAPS::small_plus, wxT( "small_plus_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_refresh].emplace_back( BITMAPS::small_refresh, wxT( "small_refresh_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_sort_desc].emplace_back( BITMAPS::small_sort_desc, wxT( "small_sort_desc_dark_32.png" ), 32, wxT( "dark" ) );

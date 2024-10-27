@@ -566,6 +566,7 @@ enum class BITMAPS : unsigned int
     small_edit,
     small_folder,
     small_library,
+    small_new_window,
     small_plus,
     small_refresh,
     small_sort_desc,

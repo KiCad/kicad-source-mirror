@@ -59,6 +59,7 @@ private:
     void CreateDrillFile( wxCommandEvent& event ) override;
     void OnGerberX2Checked( wxCommandEvent& event ) override;
     void onRunDRC( wxCommandEvent& event ) override;
+    void onOpenOutputDirectory( wxCommandEvent& event ) override;
     void onBoardSetup( wxHyperlinkEvent& aEvent ) override;
 
     void onPlotAllListMoveUp( wxCommandEvent& aEvent );
