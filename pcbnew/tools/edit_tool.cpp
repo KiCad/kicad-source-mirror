@@ -3018,6 +3018,7 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                 commit.Modify( &pad );
                 pad.SetNumber( *newNumber );
             }
+
             break;
         }
         case PCB_TEXT_T:
@@ -3032,11 +3033,11 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                 commit.Modify( &text );
                 text.SetText( *newText );
             }
-        }
-        default:
-        {
+
             break;
         }
+        default:
+            break;
         }
     }
 
