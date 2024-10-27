@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-19 17:16+0000\n"
+"PO-Revision-Date: 2024-10-27 09:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.8.2-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -16201,9 +16201,8 @@ msgid "&Pitch of repeated pins:"
 msgstr "Rostaw powtarzanych pinów:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:143
-#, fuzzy
 msgid "General editing"
-msgstr "Opcje główne"
+msgstr "Edycje główne"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:150
 msgid "Keep pins attached when dragging edges"
@@ -22051,9 +22050,8 @@ msgid "Select a complete connection"
 msgstr "Usuwa pełne połączenie"
 
 #: eeschema/tools/ee_actions.cpp:151
-#, fuzzy
 msgid "Show/hide design blocks library"
-msgstr "Foldery bibliotek bloków projektowych programu KiCad"
+msgstr "Pokaż/Ukryj bibliotekę bloków projektowych"
 
 #: eeschema/tools/ee_actions.cpp:157
 msgid "Save Current Sheet as Design Block..."
@@ -26360,38 +26358,32 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:254
-#, fuzzy
 msgid "Running jobs"
-msgstr "Tryb dostrajania"
+msgstr "Uruchomione zadania"
 
 #: kicad/dialogs/panel_jobs.cpp:308
 msgid "No."
 msgstr "Nr."
 
 #: kicad/dialogs/panel_jobs.cpp:309
-#, fuzzy
 msgid "Job Description"
-msgstr "Opis"
+msgstr "Opis zadania"
 
 #: kicad/dialogs/panel_jobs.cpp:483 kicad/dialogs/panel_jobs.cpp:530
-#, fuzzy
 msgid "Job Types"
-msgstr "Pliki zadań"
+msgstr "Typy zadań"
 
 #: kicad/dialogs/panel_jobs.cpp:494
-#, fuzzy
 msgid "Add New Job"
-msgstr "Dodaj sieć"
+msgstr "Dodaj nowe zadanie"
 
 #: kicad/dialogs/panel_jobs.cpp:495
-#, fuzzy
 msgid "Select job type:"
-msgstr "Wybierz ustawienie:"
+msgstr "Wybierz typ zadania:"
 
 #: kicad/dialogs/panel_jobs.cpp:539
-#, fuzzy
 msgid "Add New Output"
-msgstr "Dodaj obszar odcięty"
+msgstr "Dodaj nowe wyjście"
 
 #: kicad/dialogs/panel_jobs.cpp:540
 msgid "Select output type:"
@@ -26520,14 +26512,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "Import projektów z programu EasyEDA Pro"
 
 #: kicad/jobs_runner.cpp:128
-#, fuzzy
 msgid "Job successful"
-msgstr "Pomyślnie połączono"
+msgstr "Zadanie ukończone pomyślne"
 
 #: kicad/jobs_runner.cpp:135
-#, fuzzy
 msgid "Job failed"
-msgstr "Pliki zadań"
+msgstr "Zadanie ukończone niepowodzeniem"
 
 #: kicad/kicad.cpp:314
 #, c-format
@@ -27317,9 +27307,8 @@ msgid "Edit in a Text Editor"
 msgstr "Edytuj w edytorze tekstu"
 
 #: kicad/project_tree_pane.cpp:903
-#, fuzzy
 msgid "Run Jobs"
-msgstr "Uruchom %s"
+msgstr "Uruchom zadania"
 
 #: kicad/project_tree_pane.cpp:911
 msgid "Rename File..."
@@ -27554,9 +27543,8 @@ msgid "Clone Project from Repository..."
 msgstr "Klonuj projekt z repozytorium..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "Otwórz plik zadań Gerber..."
+msgstr "Nowy zestaw zadań..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -27648,9 +27636,8 @@ msgid "No project files were found in the repository."
 msgstr "W repozytorium nie znaleziono żadnych plików projektu."
 
 #: kicad/tools/kicad_manager_control.cpp:211
-#, fuzzy
 msgid "Create New Jobset"
-msgstr "Utwórz nowy projekt"
+msgstr "Utwórz nowy zestaw zadań"
 
 #: kicad/tools/kicad_manager_control.cpp:239
 msgid "System Templates"
@@ -30699,9 +30686,8 @@ msgid "no layers"
 msgstr "brak warstw"
 
 #: pcbnew/board_item.cpp:436
-#, fuzzy
 msgid "ComponentClass"
-msgstr "Komponenty"
+msgstr "Klasa komponentów"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:343
 #, c-format
@@ -35839,7 +35825,6 @@ msgstr "strona górna"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:878
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:106
-#, fuzzy
 msgid "Inner Layers"
 msgstr "Warstwy wewnętrzne"
 
@@ -35917,18 +35902,16 @@ msgid "Net name:"
 msgstr "Nazwa sieci:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
-#, fuzzy
 msgid "Padstack mode:"
-msgstr "Tryb rysowania:"
+msgstr "Tryb stosu warstw:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
 msgstr "Górna/Wewnętrzne/Dolna"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
-#, fuzzy
 msgid "Edit layer:"
-msgstr "Końcowa warstwa:"
+msgstr "Edycja warstwy:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:120
 msgid "Pad shape:"
@@ -37195,15 +37178,13 @@ msgstr "Kąt łuku:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:256
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:184
-#, fuzzy
 msgid "Technical Layers:"
 msgstr "Warstwy techniczne:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
-#, fuzzy
 msgid "Solder mask"
-msgstr "Pasta lutownicza"
+msgstr "Soldermaska"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:269
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
@@ -37211,14 +37192,13 @@ msgid "Expansion:"
 msgstr "Rozszerzenie:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:274
-#, fuzzy
 msgid ""
 "This is the local clearance between the shape and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Jest to lokalna wartość prześwitu pomiędzy polem lutowniczym a soldermaską.\n"
-"Jeśli wartością jest 0, użyta będzie wartość lokalna z footprintu lub "
-"wartość globalna."
+"Jest to lokalna wartość prześwitu pomiędzy kształtem pola lutowniczego a "
+"otwarciem soldermaski.\n"
+"Pozostaw puste, aby użyta została wartość z Ustawień płytki."
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -37388,14 +37368,12 @@ msgid "Pre-defined sizes:"
 msgstr "Zdefiniowane rozmiary:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:202
-#, fuzzy
 msgid ""
 "This is the local clearance between the track and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Jest to lokalna wartość prześwitu pomiędzy polem lutowniczym a soldermaską.\n"
-"Jeśli wartością jest 0, użyta będzie wartość lokalna z footprintu lub "
-"wartość globalna."
+"Jest to lokalna wartość prześwitu pomiędzy ścieżką a otwarciem soldermaski.\n"
+"Pozostaw puste, aby użyta została wartość z Ustawień płytki."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:277
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
