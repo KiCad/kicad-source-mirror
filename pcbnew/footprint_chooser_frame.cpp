@@ -257,7 +257,7 @@ void FOOTPRINT_CHOOSER_FRAME::Show3DViewerFrame()
     EDA_3D_VIEWER_FRAME* draw3DFrame = CreateAndShow3D_Frame();
 
     // A stronger version of Raise() which promotes the window to its parent's level.
-    KIPLATFORM::UI::ReparentQuasiModal( draw3DFrame );
+    KIPLATFORM::UI::ReparentModal( draw3DFrame );
 
     // And load or update the current board (if needed)
     if( do_reload_board )

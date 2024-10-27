@@ -104,6 +104,8 @@ public:
         m_initialFocusTarget = aWindow;
     }
 
+    int ShowModal() override;
+
     int ShowQuasiModal();      // disable only the parent window, otherwise modal.
 
     void EndQuasiModal( int retCode );  // End quasi-modal mode
