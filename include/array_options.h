@@ -145,6 +145,7 @@ struct KICOMMON_API ARRAY_GRID_OPTIONS : public ARRAY_OPTIONS
 {
     ARRAY_GRID_OPTIONS()
             : ARRAY_OPTIONS( ARRAY_GRID ),
+              m_centred( false ),
               m_nx( 0 ),
               m_ny( 0 ),
               m_horizontalThenVertical( true ),
@@ -155,6 +156,8 @@ struct KICOMMON_API ARRAY_GRID_OPTIONS : public ARRAY_OPTIONS
     {
     }
 
+    // Are the grid positions relative to item (0, 0), or the grid center?
+    bool             m_centred;
     long             m_nx, m_ny;
     bool             m_horizontalThenVertical, m_reverseNumberingAlternate;
     VECTOR2I         m_delta;
@@ -169,6 +172,7 @@ struct KICOMMON_API ARRAY_GRID_OPTIONS : public ARRAY_OPTIONS
     wxString  GetItemNumber( int n ) const override;
 
 private:
+    VECTOR2I gtItemPosRelativeToItem0( int n ) const;
     VECTOR2I getGridCoords( int n ) const;
 };
 

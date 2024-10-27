@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -171,6 +171,18 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	bSizerGridLeft->Add( sbSizerStagger, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
+	wxStaticBoxSizer* sbGridPosition;
+	sbGridPosition = new wxStaticBoxSizer( new wxStaticBox( m_gridPanel, wxID_ANY, _("Grid Position") ), wxVERTICAL );
+
+	m_rbItemsRemainInPlace = new wxRadioButton( sbGridPosition->GetStaticBox(), wxID_ANY, _("Source items remain in place"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbGridPosition->Add( m_rbItemsRemainInPlace, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_rbCentreOnSource = new wxRadioButton( sbGridPosition->GetStaticBox(), wxID_ANY, _("Centre on source items"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbGridPosition->Add( m_rbCentreOnSource, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizerGridLeft->Add( sbGridPosition, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 10 );
+
 
 	bSizerGridArray->Add( bSizerGridLeft, 1, wxEXPAND, 5 );
 
@@ -275,7 +287,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_gridPanel->SetSizer( bSizerGridArray );
 	m_gridPanel->Layout();
 	bSizerGridArray->Fit( m_gridPanel );
-	m_gridTypeNotebook->AddPage( m_gridPanel, _("Grid Array"), false );
+	m_gridTypeNotebook->AddPage( m_gridPanel, _("Grid Array"), true );
 	m_circularPanel = new wxPanel( m_gridTypeNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
@@ -286,7 +298,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbSizerInfo;
 	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Reference Position") ), wxVERTICAL );
 
-	m_stInfoItems = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Position of the selected item (or  group) to duplicate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stInfoItems = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Position of the selected item (or group) to duplicate"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stInfoItems->Wrap( -1 );
 	sbSizerInfo->Add( m_stInfoItems, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -541,7 +553,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_circularPanel->SetSizer( bSizer4 );
 	m_circularPanel->Layout();
 	bSizer4->Fit( m_circularPanel );
-	m_gridTypeNotebook->AddPage( m_circularPanel, _("Circular Array"), true );
+	m_gridTypeNotebook->AddPage( m_circularPanel, _("Circular Array"), false );
 
 	bSizer7->Add( m_gridTypeNotebook, 1, wxALL|wxEXPAND, 10 );
 

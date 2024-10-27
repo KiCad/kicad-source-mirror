@@ -50,6 +50,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
             m_GridOffsetY( 0 ),
             m_GridStagger( 1 ),
             m_GridStaggerRows( true ),
+            m_GridPositionCentreOnItems( true ),
             m_GridNumberingAxis( 0 ),                // h then v
             m_GridNumReverseAlt( false ),
             m_GridNumStartSet( 1 ),                  // use specified start
@@ -76,24 +77,25 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
 
     bool      m_OptionsSet;
 
-    long      m_GridNx;
-    long      m_GridNy;
-    long      m_GridDx;
-    long      m_GridDy;
-    long      m_GridOffsetX;
-    long      m_GridOffsetY;
-    long      m_GridStagger;
-    bool      m_GridStaggerRows;
-    long      m_GridNumberingAxis;
-    bool      m_GridNumReverseAlt;
-    long      m_GridNumStartSet;
-    long      m_Grid2dArrayNumbering;
-    long      m_GridPrimaryAxisScheme;
-    long      m_GridSecondaryAxisScheme;
-    wxString  m_GridPrimaryNumOffset;
-    wxString  m_GridSecondaryNumOffset;
-    long      m_GridPrimaryAxisStep;
-    long      m_GridSecondaryAxisStep;
+    long     m_GridNx;
+    long     m_GridNy;
+    long     m_GridDx;
+    long     m_GridDy;
+    long     m_GridOffsetX;
+    long     m_GridOffsetY;
+    long     m_GridStagger;
+    bool     m_GridStaggerRows;
+    bool     m_GridPositionCentreOnItems;
+    long     m_GridNumberingAxis;
+    bool     m_GridNumReverseAlt;
+    long     m_GridNumStartSet;
+    long     m_Grid2dArrayNumbering;
+    long     m_GridPrimaryAxisScheme;
+    long     m_GridSecondaryAxisScheme;
+    wxString m_GridPrimaryNumOffset;
+    wxString m_GridSecondaryNumOffset;
+    long     m_GridPrimaryAxisStep;
+    long     m_GridSecondaryAxisStep;
 
     long      m_CircCentreX;
     long      m_CircCentreY;
@@ -201,6 +203,8 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     m_cfg_persister.Add( *m_entryStagger, s_arrayOptions.m_GridStagger );
 
     m_cfg_persister.Add( *m_staggerRows, s_arrayOptions.m_GridStaggerRows );
+
+    m_cfg_persister.Add( *m_rbCentreOnSource, s_arrayOptions.m_GridPositionCentreOnItems );
 
     m_cfg_persister.Add( *m_radioBoxGridNumberingAxis, s_arrayOptions.m_GridNumberingAxis );
     m_cfg_persister.Add( *m_checkBoxGridReverseNumbering, s_arrayOptions.m_GridNumReverseAlt );
@@ -390,6 +394,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
         newGrid->m_offset.x = m_hOffset.GetIntValue();
         newGrid->m_offset.y = m_vOffset.GetIntValue();
+
+        newGrid->m_centred = m_rbCentreOnSource->GetValue();
 
         ok &= validateLongEntry(*m_entryStagger, newGrid->m_stagger, _("stagger"), errors);
 

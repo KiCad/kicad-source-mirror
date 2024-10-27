@@ -44,6 +44,8 @@ static void TransformItem( const ARRAY_OPTIONS& aArrOpts, int aIndex, BOARD_ITEM
 {
     const ARRAY_OPTIONS::TRANSFORM transform = aArrOpts.GetTransform( aIndex, aItem.GetPosition() );
 
+    std::cout << "Offset for item " << aIndex << ": " << transform.m_offset << std::endl;
+
     aItem.Move( transform.m_offset );
     aItem.Rotate( aItem.GetPosition(), transform.m_rotation );
 }
@@ -80,8 +82,9 @@ void ARRAY_CREATOR::Invoke()
 
     EDA_ITEMS all_added_items;
 
-    // The first item in list is the original item. We do not modify it
-    for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
+    // Iterate in reverse so the original items go last, and we can
+    // use them for the positions of the clones.
+    for( int ptN = array_opts->GetArraySize() - 1; ptN >= 0; --ptN )
     {
         PCB_SELECTION items_for_this_block;
         std::set<FOOTPRINT*> fpDeDupe;

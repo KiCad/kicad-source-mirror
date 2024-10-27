@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,7 +36,7 @@ class TEXT_CTRL_EVAL;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define wxID_DIALOG_CREATE_ARRAY 1000
+#define wxID_DIALOG_CREATE_ARRAY 10000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_CREATE_ARRAY_BASE
@@ -68,6 +68,8 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_entryStagger;
 		wxRadioButton* m_staggerRows;
 		wxRadioButton* m_staggerCols;
+		wxRadioButton* m_rbItemsRemainInPlace;
+		wxRadioButton* m_rbCentreOnSource;
 		wxPanel* m_gridPadNumberingPanel;
 		wxBoxSizer* m_gridPadNumberingSizer;
 		wxRadioBox* m_radioBoxGridNumberingAxis;
