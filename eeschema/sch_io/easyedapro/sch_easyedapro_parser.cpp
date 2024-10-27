@@ -1148,8 +1148,8 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             if( !deviceAttr )
                 continue;
 
-            std::map<wxString, wxString> compAttrs =
-                    aProject.at( "devices" ).at( deviceAttr->value ).at( "attributes" );
+            std::map<wxString, wxString> compAttrs = EASYEDAPRO::AnyMapToStringMap(
+                    aProject.at( "devices" ).at( deviceAttr->value ).at( "attributes" ) );
 
             wxString symbolId;
 

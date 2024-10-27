@@ -63,6 +63,8 @@ std::vector<nlohmann::json> ParseJsonLines( wxInputStream& aInput, const wxStrin
 std::vector<std::vector<nlohmann::json>> ParseJsonLinesWithSeparation( wxInputStream&  aInput,
                                                                        const wxString& aSource );
 
+std::map<wxString, wxString> AnyMapToStringMap( const std::map<wxString, nlohmann::json>& aInput );
+
 } // namespace EASYEDAPRO
 
 
