@@ -2325,47 +2325,41 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                                  { false, true }, m_minGrooveWidth ) )
                     continue;
 
-                std::shared_ptr<GraphNode>* connect1 = nullptr;
-                std::shared_ptr<GraphNode>* connect2 = nullptr;
-                std::shared_ptr<GraphNode> gnt = nullptr;
+                std::shared_ptr<GraphNode>* connect1 = &gn1;
+                std::shared_ptr<GraphNode>* connect2 = &gn2;
+                std::shared_ptr<GraphNode> gnt1 = nullptr;
+                std::shared_ptr<GraphNode> gnt2 = nullptr;
 
-                if( gn1->m_parent->GetType() == CREEP_SHAPE::TYPE::POINT )
+                if ( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
                 {
-                    connect1 = &gn1;
-                }
-                else
-                {
-                    gnt = AddNode( GraphNode::POINT, gn1->m_parent, pc.a1 );
-                    gnt->m_connectDirectly = false;
+                    gnt1 = AddNode( GraphNode::POINT, gn1->m_parent, pc.a1 );
+                    gnt1->m_connectDirectly = false;
 
                     if( gn1->m_parent->IsConductive() )
                     {
-                        std::shared_ptr<GraphConnection> gc = AddConnection( gn1, gnt );
+                        std::shared_ptr<GraphConnection> gc = AddConnection( gn1, gnt1 );
 
                         if( gc )
                             gc->m_path.m_show = false;
                     }
-                    connect1 = &gnt;
+                    connect1 = &gnt1;
                 }
 
-                if( gn2->m_parent->GetType() == CREEP_SHAPE::TYPE::POINT )
+                if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
                 {
-                    connect2 = &gn2;
-                }
-                else
-                {
-                    gnt = AddNode( GraphNode::POINT, gn2->m_parent, pc.a2 );
-                    gnt->m_connectDirectly = false;
+                    gnt2 = AddNode( GraphNode::POINT, gn2->m_parent, pc.a2 );
+                    gnt2->m_connectDirectly = false;
 
                     if( gn2->m_parent->IsConductive() )
                     {
-                        std::shared_ptr<GraphConnection> gc = AddConnection( gn2, gnt );
+                        std::shared_ptr<GraphConnection> gc = AddConnection( gn2, gnt2 );
 
                         if( gc )
                             gc->m_path.m_show = false;
                     }
-                    connect2 = &gnt;
+                    connect2 = &gnt2;
                 }
+
                 AddConnection( *connect1, *connect2, pc );
             }
         }
@@ -2457,6 +2451,8 @@ std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<G
 {
     if( !aN1 || !aN2 )
         return nullptr;
+
+    assert((aN1 != aN2) && "Creepage: a connection connects a node to itself");
 
     std::shared_ptr<GraphConnection> gc = std::make_shared<GraphConnection>( aN1, aN2, aPc );
     m_connections.push_back( gc );
