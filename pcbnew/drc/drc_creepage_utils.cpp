@@ -2327,6 +2327,7 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
 
                 std::shared_ptr<GraphNode>* connect1 = nullptr;
                 std::shared_ptr<GraphNode>* connect2 = nullptr;
+                std::shared_ptr<GraphNode> gnt = nullptr;
 
                 if( gn1->m_parent->GetType() == CREEP_SHAPE::TYPE::POINT )
                 {
@@ -2334,8 +2335,7 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                 }
                 else
                 {
-                    std::shared_ptr<GraphNode> gnt =
-                            AddNode( GraphNode::POINT, gn1->m_parent, pc.a1 );
+                    gnt = AddNode( GraphNode::POINT, gn1->m_parent, pc.a1 );
                     gnt->m_connectDirectly = false;
 
                     if( gn1->m_parent->IsConductive() )
@@ -2354,8 +2354,7 @@ void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                 }
                 else
                 {
-                    std::shared_ptr<GraphNode> gnt =
-                            AddNode( GraphNode::POINT, gn2->m_parent, pc.a2 );
+                    gnt = AddNode( GraphNode::POINT, gn2->m_parent, pc.a2 );
                     gnt->m_connectDirectly = false;
 
                     if( gn2->m_parent->IsConductive() )
