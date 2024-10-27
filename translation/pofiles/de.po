@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:32-0700\n"
-"PO-Revision-Date: 2024-10-27 09:00+0000\n"
+"PO-Revision-Date: 2024-10-27 14:31+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -1393,7 +1393,7 @@ msgstr "Zeichnungsblattdatei erstellen"
 #: bitmap2component/bitmap2cmp_frame.cpp:568
 #, c-format
 msgid "File '%s' could not be created."
-msgstr "Konnte die Datei '%s' nicht erstellen."
+msgstr "Konnte die Datei \"%s\" nicht erstellen."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:482
 msgid "Create PostScript File"
@@ -1762,7 +1762,7 @@ msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
 "Auflösung der Umgebungsvariablen fehlgeschlagen: kein \"%c\" an Position %u "
-"in \"'%s\"."
+"in \"%s\"."
 
 #: common/common.cpp:378
 #, c-format
@@ -3025,7 +3025,7 @@ msgstr ""
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Ersetzt Referenzbezeichner mit '%s'."
+msgstr "Ersetzt Referenzbezeichner mit \"%s\"."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
@@ -4611,7 +4611,7 @@ msgstr "Die Standard-Netzklasse wird benötigt."
 #: common/dialogs/panel_setup_netclasses.cpp:742
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr "<b>Auf '%s' passende Netze:</b>"
+msgstr "<b>Auf \"%s\" passende Netze:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
 msgid "Netclasses:"
@@ -4884,7 +4884,7 @@ msgstr "Kommentar"
 #: common/drawing_sheet/ds_draw_item.cpp:236
 #, c-format
 msgid "Text '%s'"
-msgstr "Text '%s'"
+msgstr "Text \"%s\""
 
 #: common/drawing_sheet/ds_draw_item.cpp:427 eeschema/sch_shape.cpp:445
 #, c-format
@@ -4914,7 +4914,7 @@ msgstr "Erwarte %s"
 #: common/dsnlexer.cpp:336
 #, c-format
 msgid "Expecting '%s'"
-msgstr "Erwarte '%s'"
+msgstr "Erwarte \"%s\""
 
 #: common/dsnlexer.cpp:344
 #, c-format
@@ -4987,7 +4987,7 @@ msgstr "Wiederherstellen"
 #: common/eda_base_frame.cpp:1012
 #, c-format
 msgid "File '%s' was not found."
-msgstr "Datei '%s' wurde nicht gefunden."
+msgstr "Datei \"%s\" wurde nicht gefunden."
 
 #: common/eda_base_frame.cpp:1061
 msgid "Preferences"
@@ -5157,12 +5157,12 @@ msgstr "Dokumentationsdatei"
 #: common/eda_doc.cpp:126
 #, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Dokumentationsdatei '%s' nicht gefunden."
+msgstr "Dokumentationsdatei \"%s\" nicht gefunden."
 
 #: common/eda_doc.cpp:172
 #, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Unbekannter MIME-Typ für Dokumentationsdatei '%s'"
+msgstr "Unbekannter MIME-Typ für Dokumentationsdatei \"%s\""
 
 #: common/eda_draw_frame.cpp:157 common/tool/actions.cpp:715
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
@@ -5342,7 +5342,7 @@ msgstr "Knotenpunkt"
 
 #: common/eda_item.cpp:369
 msgid "No-Connect Flag"
-msgstr "'keine Verbindung'-Kennzeichnung"
+msgstr "\"keine Verbindung\"-Kennzeichnung"
 
 #: common/eda_item.cpp:370
 msgid "Wire Entry"
@@ -6493,7 +6493,7 @@ msgstr "Kann \"%s\" nicht in einen Double-Wert umwandeln."
 #: common/io/cadstar/cadstar_archive_parser.cpp:2469
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr "Kann Datei '%s' nicht öffnen"
+msgstr "Kann Datei \"%s\" nicht öffnen"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2491
 #: common/io/cadstar/cadstar_archive_parser.cpp:2823
@@ -6511,32 +6511,33 @@ msgstr "Die ausgewählte Datei ist ungültig oder möglicherweise beschädigt!"
 #: common/io/cadstar/cadstar_archive_parser.cpp:2676
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr "Unerwartete Anzahl von Punkten in '%s'. %d gefunden, aber %d erwartet."
+msgstr ""
+"Unerwartete Anzahl von Punkten in \"%s\". %d gefunden, aber %d erwartet."
 
 #: common/io/cadstar/cadstar_archive_parser.h:43
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr "Fehlender Knoten '%s' in '%s'"
+msgstr "Fehlender Knoten \"%s\" in \"%s\""
 
 #: common/io/cadstar/cadstar_archive_parser.h:46
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "Unbekannter Knoten '%s' in '%s'"
+msgstr "Unbekannter Knoten \"%s\" in \"%s\""
 
 #: common/io/cadstar/cadstar_archive_parser.h:49
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr "Fehlender Parameter '%s' in '%s'"
+msgstr "Fehlender Parameter \"%s\" in \"%s\""
 
 #: common/io/cadstar/cadstar_archive_parser.h:52
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr "Unbekannter Parameter '%s' in '%s'"
+msgstr "Unbekannter Parameter \"%s\" in \"%s\""
 
 #: common/io/cadstar/cadstar_archive_parser.h:55
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "Kann '%s' in '%s' nicht parsen"
+msgstr "Kann \"%s\" in \"%s\" nicht parsen"
 
 #: common/io/eagle/eagle_parser.cpp:249
 #, c-format
@@ -6551,19 +6552,19 @@ msgstr "Ungültiger Bogen mit Radius %f und Winkel %f"
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "Konnte keine Nummer parsen aus '%s'"
+msgstr "Konnte keine Nummer aus \"%s\" parsen"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:171
 #: common/io/easyedapro/easyedapro_import_utils.cpp:226
 #, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "JSON-Fehler beim Lesen von '%s': %s"
+msgstr "JSON-Fehler beim Lesen von \"%s\": %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:175
 #: common/io/easyedapro/easyedapro_import_utils.cpp:230
 #, c-format
 msgid "Error reading '%s': %s"
-msgstr "Fehler beim Lesen von '%s': %s"
+msgstr "Fehler beim Lesen von \"%s\": %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:194
 #, c-format
@@ -6583,7 +6584,7 @@ msgstr "Kann ZIP-Archiv \"%s\" nicht lesen"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Kann JSON-Zeile %d in '%s' nicht lesen: %s"
+msgstr "Kann JSON-Zeile %d in \"%s\" nicht lesen: %s"
 
 #: common/kiway.cpp:243
 #, c-format
@@ -6761,7 +6762,7 @@ msgstr "Schaltplanpins"
 
 #: common/layer_id.cpp:137
 msgid "No-connect symbols"
-msgstr "'Keine-Verbindung'-Markierungen"
+msgstr "\"Keine Verbindung\"-Markierungen"
 
 #: common/layer_id.cpp:138
 msgid "DNP markers"
@@ -7009,7 +7010,7 @@ msgstr "Element"
 #: common/libeval_compiler/libeval_compiler.cpp:585
 #, c-format
 msgid "Unrecognized character '%c'"
-msgstr "Nicht erkanntes Zeichen '%c'"
+msgstr "Nicht erkanntes Zeichen \"%c\""
 
 #: common/libeval_compiler/libeval_compiler.cpp:846
 msgid "Unknown parent of function parameters"
@@ -7025,38 +7026,38 @@ msgstr "Unbekanntes Elternelement von Eigenschaft"
 #: common/libeval_compiler/libeval_compiler.cpp:1065
 #, c-format
 msgid "Unrecognized item '%s'"
-msgstr "Nicht erkanntes Element '%s'"
+msgstr "Nicht erkanntes Element \"%s\""
 
 #: common/libeval_compiler/libeval_compiler.cpp:894
 #: common/libeval_compiler/libeval_compiler.cpp:997
 #, c-format
 msgid "Unrecognized property '%s'"
-msgstr "Nicht erkannte Eigenschaft '%s'"
+msgstr "Nicht erkannte Eigenschaft \"%s\""
 
 #: common/libeval_compiler/libeval_compiler.cpp:931
 #, c-format
 msgid "Unrecognized function '%s'"
-msgstr "Nicht erkannte Funktion '%s'"
+msgstr "Nicht erkannte Funktion \"%s\""
 
 #: common/libeval_compiler/libeval_compiler.cpp:1024
 #, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Unerwartete Einheiten für '%s'"
+msgstr "Unerwartete Einheiten für \"%s\""
 
 #: common/libeval_compiler/libeval_compiler.cpp:1036
 #, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr "Fehlende Einheiten für '%s'| (%s)"
+msgstr "Fehlende Einheiten für \"%s\"| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1156
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr "Typkonflikt zwischen '%s' und %lf"
+msgstr "Typkonflikt zwischen \"%s\" und %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1162
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr "Typkonflikt zwischen %lf und '%s'"
+msgstr "Typkonflikt zwischen %lf und \"%s\""
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
@@ -8042,8 +8043,8 @@ msgid ""
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Die Hilfedatei '%s' oder\n"
-"'%s' konnte nicht gefunden werden.\n"
+"Die Hilfedatei \"%s\" oder\n"
+"\"%s\" konnte nicht gefunden werden.\n"
 "Möchten Sie auf die KiCad-Online-Hilfe zugreifen?"
 
 #: common/tool/common_control.cpp:239 common/tool/common_control.cpp:259
@@ -8056,7 +8057,7 @@ msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Die Hilfedatei '%s' konnte nicht gefunden werden.\n"
+"Die Hilfedatei \"%s\" konnte nicht gefunden werden.\n"
 "Möchten Sie auf die KiCad-Online-Hilfe zugreifen?"
 
 #: common/tool/common_control.cpp:294
@@ -9787,22 +9788,22 @@ msgstr "*** neues Symbol hat zu wenige Einheiten ***"
 #: eeschema/dialogs/dialog_change_symbols.cpp:813
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "Aktualisiere Symbol %s von '%s' nach '%s'"
+msgstr "Aktualisiere Symbol %s von \"%s\" nach \"%s\""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:820
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "Aktualisiere Symbole %s von '%s' nach '%s'"
+msgstr "Aktualisiere Symbole %s von \"%s\" nach \"%s\""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:830
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Ändere Symbol %s von '%s' auf '%s'"
+msgstr "Ändere Symbol %s von \"%s\" auf \"%s\""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:837
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Ändere Symbole %s von '%s' auf '%s'"
+msgstr "Ändere Symbole %s von \"%s\" auf \"%s\""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:28
 msgid "Update all symbols in schematic"
@@ -10130,7 +10131,7 @@ msgstr "Er wird von der %s Liste ausgeschlossen"
 #: eeschema/dialogs/dialog_erc.cpp:625 pcbnew/dialogs/dialog_drc.cpp:678
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "Ändern des Schweregrads auf Fehler für alle '%s' Verstöße"
+msgstr "Ändern des Schweregrads auf Fehler für alle \"%s\" Verstöße"
 
 #: eeschema/dialogs/dialog_erc.cpp:627 eeschema/dialogs/dialog_erc.cpp:633
 msgid ""
@@ -10142,7 +10143,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:631 pcbnew/dialogs/dialog_drc.cpp:685
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "Ändern des Schweregrads auf Warnung für alle '%s' Verstöße"
+msgstr "Ändern des Schweregrads auf Warnung für alle \"%s\" Verstöße"
 
 #: eeschema/dialogs/dialog_erc.cpp:636 pcbnew/dialogs/dialog_drc.cpp:691
 #, c-format
@@ -10774,7 +10775,7 @@ msgstr "Wähle Sie bitte eine Symbolbibliotheks-Tabellendatei."
 #: pcbnew/footprint_libraries_utils.cpp:141
 #, c-format
 msgid "File '%s' not found."
-msgstr "Datei '%s' nicht gefunden."
+msgstr "Datei \"%s\" nicht gefunden."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:97
 #, c-format
@@ -10788,7 +10789,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:109
 #, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "Globale Bibliothekstabelle '%s' kann nicht erstellt werden."
+msgstr "Globale Bibliothekstabelle \"%s\" kann nicht erstellt werden."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:117
 #, c-format
@@ -11434,7 +11435,7 @@ msgstr "Symboleigenschaften bearbeiten"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:467
 #, c-format
 msgid "The name '%s' is already in use."
-msgstr "Der Name '%s' wird bereits verwendet."
+msgstr "Der Name \"%s\" wird bereits verwendet."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
 #: eeschema/dialogs/dialog_sheet_properties.cpp:770
@@ -12452,7 +12453,7 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"Um einzelne Elementfarben anzuzeigen, deaktivieren Sie '%s'\n"
+"Um einzelne Elementfarben anzuzeigen, deaktivieren Sie \"%s\"\n"
 "in Einstellungen > Schaltplaneditor > Farben."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
@@ -13344,7 +13345,7 @@ msgstr "Konnte Stückliste-Ausgabe \"%s\" nicht schreiben."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1301
 #, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "Stückliste wurde in '%s' geschrieben"
+msgstr "Stückliste wurde in \"%s\" geschrieben"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1609
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2010
@@ -14604,7 +14605,7 @@ msgstr "Tabelle nicht aktualisieren"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:461
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "Unzulässiges Zeichen '%c' im Aliasnamen \"%s\""
+msgstr "Unzulässiges Zeichen \"%c\" im Aliasnamen \"%s\""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:474
 #: eeschema/dialogs/panel_sym_lib_table.cpp:526
@@ -14618,7 +14619,7 @@ msgstr "Bibliothek-Aliasnamen-Fehler"
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
-"Mehrere Bibliotheken können nicht denselben Aliasnamen ('%s') verwenden."
+"Es können nicht mehrere Bibliotheken denselben Aliasnamen (\"%s\") verwenden."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:562 eeschema/symbol_library.cpp:576
 #, c-format
@@ -14683,7 +14684,7 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"'%s' im aktuellen KiCad-Format (*.kicad_sym) speichern und veralteten "
+"\"%s\" im aktuellen KiCad-Format (*.kicad_sym) speichern und veralteten "
 "Eintrag in der Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:874
@@ -14699,7 +14700,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step.cpp:436
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "Die Datei '%s' existiert bereits. Möchten Sie diese überschreiben?"
+msgstr "Die Datei \"%s\" existiert bereits. Möchten Sie diese überschreiben?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:908
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:874
@@ -14848,9 +14849,10 @@ msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
-"Beim Laden der globalen Symbol-Bibliothekstabelle ist ein Fehler "
-"aufgetreten.\n"
-"Bitte die globale Symbol-Bibliothekstabelle im Menü 'Einstellungen' anpassen."
+"Beim Laden der globalen Symbol-Bibliothekstabelle ist ein Fehler aufgetreten."
+"\n"
+"Bitte die globale Symbol-Bibliothekstabelle im Menü \"Einstellungen\" "
+"anpassen."
 
 #: eeschema/eeschema.cpp:514
 #, c-format
@@ -14914,7 +14916,7 @@ msgstr "Kann Ziel \"%s\" nicht öffnen"
 #: eeschema/eeschema_jobs_handler.cpp:568
 #, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "BOM-Formatvorlage '%s' nicht gefunden"
+msgstr "BOM-Formatvorlage \"%s\" nicht gefunden"
 
 #: eeschema/eeschema_jobs_handler.cpp:727
 #, c-format
@@ -15094,7 +15096,7 @@ msgstr ""
 #: eeschema/erc.cpp:985
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Symbol \"%s\" nicht in Bibliothek \"'%s\" gefunden"
+msgstr "Symbol \"%s\" nicht in Bibliothek \"%s\" gefunden"
 
 #: eeschema/erc.cpp:1001
 #, c-format
@@ -15139,7 +15141,7 @@ msgstr "Prüfe SPICE-Modelle ..."
 
 #: eeschema/erc.cpp:1235
 msgid "Checking no connect pins for connections..."
-msgstr "Prüfe verbundene 'Keine-Verbindung'-Pins ..."
+msgstr "Prüfe verbundene \"keine Verbindung\"-Pins ..."
 
 #: eeschema/erc.cpp:1243
 msgid "Checking for library symbol issues..."
@@ -15193,11 +15195,11 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:79
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "Ein Pin mit einer 'keine Verbindung'-Kennzeichnung ist verbunden"
+msgstr "Ein Pin mit einer \"keine Verbindung\"-Kennzeichnung ist verbunden"
 
 #: eeschema/erc_item.cpp:83
 msgid "Unconnected \"no connection\" flag"
-msgstr "Unverbundene 'keine Verbindung'-Kennzeichnung"
+msgstr "Unverbundene \"keine Verbindung\"-Kennzeichnung"
 
 #: eeschema/erc_item.cpp:87
 msgid "Label not connected to anything"
@@ -16095,7 +16097,7 @@ msgstr "Ein unerwarteter Ausnahmefehler ist aufgetreten."
 #, c-format
 msgid "Symbol %s not found in any library or cache."
 msgstr ""
-"Symbol '%s' konnte in keiner Bibliothek oder dem Cache gefunden werden."
+"Symbol \"%s\" konnte in keiner Bibliothek oder dem Cache gefunden werden."
 
 #: eeschema/libarch.cpp:117
 #, c-format
@@ -16202,7 +16204,7 @@ msgstr "Symbol \"%s\" Pin \"%s\""
 #: eeschema/net_navigator.cpp:97
 #, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "Schaltplanblatt '%s' Pin '%s'"
+msgstr "Schaltplanblatt \"%s\" Pin \"%s\""
 
 #: eeschema/net_navigator.cpp:106
 #, c-format
@@ -16212,12 +16214,12 @@ msgstr "Bezeichner \"%s\" bei %s, %s"
 #: eeschema/net_navigator.cpp:116
 #, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "Globaler Bezeichner '%s' bei (%s, %s)"
+msgstr "Globaler Bezeichner \"%s\" bei (%s, %s)"
 
 #: eeschema/net_navigator.cpp:126
 #, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Hierarchischer Bezeichner '%s' bei (%s, %s)"
+msgstr "Hierarchischer Bezeichner \"%s\" bei (%s, %s)"
 
 #: eeschema/net_navigator.cpp:136
 #, c-format
@@ -16241,7 +16243,7 @@ msgstr "Kann den Footprint-Text-Typ %d nicht verarbeiten"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
 msgid "Failed to create directory 'devices' ."
-msgstr "Verzeichnis 'devices' konnte nicht erstellt werden."
+msgstr "Verzeichnis \"devices\" konnte nicht erstellt werden."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:419
 #, c-format
@@ -16659,7 +16661,7 @@ msgstr ""
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3256
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:378
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "Power Port mit unbekanntem Stil als 'Bar' importiert."
+msgstr "Power Port mit unbekanntem Stil als \"Bar\" importiert."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3309
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1013
@@ -16696,7 +16698,7 @@ msgstr "Fehler beim Lesen des Bildes %s."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3723
 #, c-format
 msgid "File not found %s."
-msgstr "Datei \"%s\" nicht gefunden."
+msgstr "Datei %s nicht gefunden."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4480
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -16739,7 +16741,7 @@ msgid ""
 "master variant ('%s') was loaded."
 msgstr ""
 "Das CADSTAR-Design enthält Varianten, die kein KiCad-Äquivalent haben. Es "
-"wurde nur die Master-Variante ('%s') geladen."
+"wurde nur die Master-Variante (\"%s\") geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:396
 msgid ""
@@ -16818,9 +16820,9 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
-"Die Teiledefinition '%s' verweist auf das Symbol '%s' (alternativ '%s'), das "
-"in der Symbolbibliothek nicht gefunden werden konnte. Das Teil wurde nicht "
-"in die KiCad-Bibliothek geladen."
+"Die Teiledefinition \"%s\" verweist auf das Symbol \"%s\" (alternativ \"%s\")"
+", das in der Symbolbibliothek nicht gefunden werden konnte. Das Teil wurde "
+"nicht in die KiCad-Bibliothek geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:707
 #, c-format
@@ -16828,8 +16830,8 @@ msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
-"Teiledefinition '%s' hat eine unvollständige Definition (keine Symbol-"
-"Definitionen sind damit verknüpft). Das Teil wurde nicht in die KiCad-"
+"Teiledefinition \"%s\" hat eine unvollständige Definition (es sind keine "
+"Symboldefinitionen damit verknüpft). Das Teil wurde nicht in die KiCad-"
 "Bibliothek geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:739
@@ -16838,7 +16840,7 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
-"Das Symbol '%s' verweist auf den Teil '%s', der in der Bibliothek nicht "
+"Das Symbol \"%s\" verweist auf den Teil \"%s\", der in der Bibliothek nicht "
 "gefunden werden konnte. Das Symbol wurde nicht geladen"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:847
@@ -16847,7 +16849,7 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
-"Die Symbol-ID '%s' verweist auf das Bibliothekssymbol '%s', das in der "
+"Die Symbol-ID \"%s\" verweist auf das Bibliothekssymbol \"%s\", das in der "
 "Bibliothek nicht gefunden wurde. Haben Sie alle Elemente des Designs "
 "exportiert?"
 
@@ -16857,7 +16859,7 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
-"Die Symbol-ID '%s' ist eine Signalreferenz oder ein globales Signal, hat "
+"Die Symbol-ID \"%s\" ist eine Signalreferenz oder ein globales Signal, hat "
 "jedoch zu viele Pins. Die erwartete Anzahl von Pins beträgt 1, aber %d "
 "wurden gefunden."
 
@@ -16887,8 +16889,8 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
-"Dokumentationssymbol '%s' bezieht sich auf die Symboldefinitions-ID '%s', "
-"die in der Bibliothek nicht vorhanden ist. Das Symbol wurde nicht geladen."
+"Dokumentationssymbol \"%s\" bezieht sich auf die Symboldefinitions-ID \"%s\""
+", die in der Bibliothek nicht vorhanden ist. Das Symbol wurde nicht geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1597
 msgid "Text Variables could not be set as there is no project attached."
@@ -16902,8 +16904,8 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
-"Das Symbol '%s' ist im ursprünglichen CADSTAR-Design in einem Winkel von "
-"%.1f° gedreht, KiCad unterstützt jedoch nur Drehwinkel-Vielfache von 90°. "
+"Das Symbol \"%s\" ist im ursprünglichen CADSTAR-Design in einem Winkel von %."
+"1f° gedreht, KiCad unterstützt jedoch nur Vielfache von 90° als Drehwinkel. "
 "Die Verbindungen müssen manuell korrigiert werden."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2151
@@ -16953,7 +16955,7 @@ msgid ""
 msgstr ""
 "Pfad zum CADSTAR-Schemaarchiv (*.csa), das zu dieser CADSTAR-"
 "Bauteilbibliothek gehört. Sofern kein Pfad angegeben ist, wird angenommen, "
-"dass 'symbol.csa' im gleichen Verzeichnis existiert."
+"dass \"symbol.csa\" im gleichen Verzeichnis existiert."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
 msgid ""
@@ -16964,13 +16966,13 @@ msgstr ""
 "Name der Footprint-Bibliothek, die zu den in dieser Bibliothek verwendeten "
 "Symbolen gehört. Sie sollten in der Footprint-Bibliothekstabelle einen "
 "separaten Eintrag für die CADSTAR-PCB-Archivdatei (*.cpa). Sofern keine "
-"angegeben ist, wird 'cadstarpcblib' angenommen."
+"angegeben ist, wird \"cadstarpcblib\" angenommen."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
 #, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr ""
-"Die zur Bibliothek '%s' passende .csa Datei kann nicht gefunden werden."
+"Die zur Bibliothek \"%s\" passende .csa Datei kann nicht gefunden werden."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
@@ -17160,7 +17162,7 @@ msgstr "\"%s\" scheint keine Eeschema-Datei zu sein."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:403
 msgid "Missing 'EELAYER END'"
-msgstr "'EELAYER END' fehlt"
+msgstr "\"EELAYER END\" fehlt"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:451
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:723
@@ -17188,7 +17190,7 @@ msgstr "Unerwartetes Dateiende"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1080
 msgid "expected 'Italics' or '~'"
-msgstr "'Italics' oder '~' erwartet"
+msgstr "\"Italics\" oder \"~\" erwartet"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1356
 msgid "symbol field text attributes must be 3 characters wide"
@@ -17426,7 +17428,7 @@ msgstr "CELL oder BLOCK erwartet"
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:545
 #, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "Symbol '%s.asy' nicht gefunden"
+msgstr "Symbol \"%s.asy\" nicht gefunden"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -17546,7 +17548,7 @@ msgstr "Hierarchische Bezeichner"
 #: eeschema/sch_label.cpp:1500
 #, c-format
 msgid "Label '%s'"
-msgstr "Bezeichner '%s'"
+msgstr "Bezeichner \"%s\""
 
 #: eeschema/sch_label.cpp:1769
 #, c-format
@@ -17556,12 +17558,12 @@ msgstr "Anweisungsbezeichner [%s %s]"
 #: eeschema/sch_label.cpp:1979
 #, c-format
 msgid "Global Label '%s'"
-msgstr "Globaler Bezeichner '%s'"
+msgstr "Globaler Bezeichner \"%s\""
 
 #: eeschema/sch_label.cpp:2113
 #, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "Hierarchischer Bezeichner '%s'"
+msgstr "Hierarchischer Bezeichner \"%s\""
 
 #: eeschema/sch_label.cpp:2225
 msgid "Pin length"
@@ -17638,7 +17640,7 @@ msgstr "ERC-Marker"
 
 #: eeschema/sch_no_connect.h:100 eeschema/tools/sch_edit_tool.cpp:204
 msgid "No Connect"
-msgstr "Keine-Verbindung"
+msgstr "Keine Verbindung"
 
 #: eeschema/sch_plotter.cpp:213 pcbnew/pcbnew_jobs_handler.cpp:525
 #, c-format
@@ -17740,7 +17742,7 @@ msgstr ""
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr ""
-"Für das Schaltplansymbol '%s %s' konnte kein Bibliothekssymbol gefunden "
+"Für das Schaltplansymbol \"%s %s\" konnte kein Bibliothekssymbol gefunden "
 "werden."
 
 #: eeschema/sch_shape.cpp:437
@@ -18191,11 +18193,11 @@ msgstr ""
 
 #: eeschema/sch_validators.cpp:59
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr "Signalname enthält '{' oder '}', aber ist kein gültiger Busname"
+msgstr "Signalname enthält \"{\" oder \"}\", aber ist kein gültiger Busname"
 
 #: eeschema/sch_validators.cpp:64
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr "Signalname enthält '[' oder ']', aber ist kein gültiger Busname."
+msgstr "Signalname enthält \"[\" oder \"]\", aber ist kein gültiger Busname."
 
 #: eeschema/sheet.cpp:71
 #, c-format
@@ -18970,9 +18972,7 @@ msgstr "Ungültige IBIS-Datei \"%s\""
 #: eeschema/sim/sim_model.cpp:414
 #, c-format
 msgid "No simulation model definition found for symbol '%s'."
-msgstr ""
-"Für das Symbol '%s' wurde keine Definition eines Simulationsmodelles "
-"gefunden."
+msgstr "Für das Symbol \"%s\" wurde keine Simulationsmodelldefinition gefunden."
 
 #: eeschema/sim/sim_model.cpp:421
 msgid "No simulation model definition found."
@@ -18984,13 +18984,13 @@ msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
 msgstr ""
-"Fehler beim Lesen des Simulationsmodells vom Symbol '%s':\n"
+"Fehler beim Lesen des Simulationsmodells vom Symbol \"%s\":\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:795
 #, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Unbekannter Pin '%s' im Simulationsmodell"
+msgstr "Unbekannter Pin \"%s\" im Simulationsmodell"
 
 #: eeschema/sim/sim_model_kibis.cpp:87
 #, c-format
@@ -19153,9 +19153,8 @@ msgid "Errors during netlist generation."
 msgstr "Bei der Netzlistenerzeugung sind Fehler aufgetreten."
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Bei der Netzlistenerzeugung sind Fehler aufgetreten."
+msgstr "Bei der Netzlistenerzeugung sind Warnungen aufgetreten."
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -19857,7 +19856,7 @@ msgstr "Gegenwärtig ist kein Schaltplan geöffnet."
 #: eeschema/tools/symbol_editor_control.cpp:310
 #, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "Symbolbibliothek '%s' ist nicht beschreibbar."
+msgstr "Symbolbibliothek \"%s\" ist nicht beschreibbar."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:129
 #: eeschema/symbol_editor/symbol_editor.cpp:523
@@ -19964,7 +19963,7 @@ msgstr "\"%s\" auf letzte gespeicherte Version zurücksetzen?"
 #: eeschema/symbol_editor/symbol_editor.cpp:1036
 #, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "Symbol %s nicht in Bibliothek '%s' gefunden."
+msgstr "Symbol %s nicht in Bibliothek \"%s\" gefunden."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1065
 msgid "No library specified."
@@ -20205,7 +20204,7 @@ msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 msgstr ""
-"Footprint '%s' ist auf der Leiterplatte nicht vorhanden. Entsprechende "
+"Footprint \"%s\" ist auf der Leiterplatte nicht vorhanden. Entsprechende "
 "Symbole im Schaltplan müssen manuell gelöscht werden (falls gewünscht)."
 
 #: eeschema/tools/backannotate.cpp:353
@@ -20227,7 +20226,7 @@ msgstr "falsch"
 #: eeschema/tools/backannotate.cpp:387
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "Ändere '%s' Referenzbezeichner in '%s'."
+msgstr "Ändere \"%s\" Referenzbezeichner in \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:403
 #, c-format
@@ -20237,22 +20236,22 @@ msgstr "Ändere %s Footprint-Zuordnung von \"%s\" in \"%s\"."
 #: eeschema/tools/backannotate.cpp:420
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "Ändere Wert %s von '%s' in '%s'."
+msgstr "Ändere Wert %s von \"%s\" in \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:437
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "Ändere %s 'Nicht bestücken' von '%s' zu '%s'."
+msgstr "Ändere %s \"Nicht bestücken\" von \"%s\" zu \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:452
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "Ändere %s 'Von Stückliste ausschließen' von '%s' zu '%s'."
+msgstr "Ändere %s \"Von Stückliste ausschließen\" von \"%s\" zu \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:475
 #, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "Kann %s Pin '%s' nicht finden."
+msgstr "Kann %s Pin \"%s\" nicht finden."
 
 #: eeschema/tools/backannotate.cpp:518
 #, c-format
@@ -20614,7 +20613,7 @@ msgstr "Spannungssymbole hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:434 eeschema/tools/sch_drawing_tools.cpp:966
 msgid "Add No Connect Flag"
-msgstr "'keine Verbindung'-Kennzeichnung hinzufügen"
+msgstr "\"keine Verbindung\"-Kennzeichnung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:435
 msgid "Draw no-connection flags"
@@ -22003,7 +22002,7 @@ msgstr "<ESC> drücken, um den Verschiebevorgang abzubrechen."
 #: eeschema/tools/sch_navigate_tool.cpp:81
 #, c-format
 msgid "Page '%s' not found."
-msgstr "Seite '%s' nicht gefunden."
+msgstr "Seite \"%s\" nicht gefunden."
 
 #: eeschema/tools/simulator_control.cpp:100
 msgid "Open Simulation Workbook"
@@ -22987,7 +22986,7 @@ msgstr "Ungültige Gerber-Datei: Fehlender G74- oder G75-Bogenbefehl"
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
 msgstr ""
-"RS274X: Ungültiges GERBER Formatierungskommando '%c' in Zeile %d: \"%s\""
+"RS274X: Ungültiges GERBER Formatierungskommando \"%c\" in Zeile %d: \"%s\""
 
 #: gerbview/rs274x.cpp:232
 #, c-format
@@ -23243,7 +23242,7 @@ msgstr "DCodes"
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
 #, c-format
 msgid "Source file '%s' not found."
-msgstr "Quelldatei '%s' nicht gefunden."
+msgstr "Quelldatei \"%s\" nicht gefunden."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
 #, c-format
@@ -23457,7 +23456,7 @@ msgid ""
 msgstr ""
 "Überschreibt oder fügt Projektvariablen hinzu. Kann mehrfach verwendet "
 "werden, um mehrere Variablen zu deklarieren.\n"
-"Im Format '--define-var key=value' oder '-D key=value' verwenden"
+"Im Format \"--define-var key=value\" oder \"-D key=value\" verwenden"
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -23594,7 +23593,7 @@ msgstr "3D-Modelle für Bauteile mit unbestimmtem Footprinttyp ausschließen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:91
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "3D-Modelle von Bauteilen mit Attribut 'Nicht bestücken' ausschließen"
+msgstr "3D-Modelle von Bauteilen mit Attribut \"Nicht bestücken\" ausschließen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:95
 msgid ""
@@ -24294,8 +24293,8 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
-"Datei '%s' kann nicht kopiert werden\n"
-"nach '%s'\n"
+"Datei \"%s\" kann nicht\n"
+"nach \"%s\" kopiert werden\n"
 "Das Projekt kann nicht importiert werden."
 
 #: kicad/import_project.cpp:74
@@ -24923,7 +24922,7 @@ msgstr "Kann Download-Verzeichnis nicht erstellen!"
 #: kicad/pcm/pcm_task_manager.cpp:132
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Paket-URL wird heruntergeladen: '%s'"
+msgstr "Paket-URL wird heruntergeladen: \"%s\""
 
 #: kicad/pcm/pcm_task_manager.cpp:146
 #, c-format
@@ -29115,7 +29114,8 @@ msgid ""
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Bei Front Footprints, die mit '%s' beginnen, wird das Präfix entfernt."
+"Bei vorderseitigen Footprints, die mit \"%s\" beginnen, wird das Präfix "
+"entfernt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:365
 #, c-format
@@ -29124,7 +29124,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Auf den vorderseitigen Footprints wird '%s' als Präfix eingefügt."
+"Bei vorderseitigen Footprints wird \"%s\" als Präfix eingefügt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:375
 #, c-format
@@ -29133,7 +29133,8 @@ msgid ""
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Bei rückseitigen Footprints, die mit '%s' beginnen, wird das Präfix entfernt."
+"Bei rückseitigen Footprints, die mit \"%s\" beginnen, wird das Präfix "
+"entfernt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:381
 #, c-format
@@ -29142,7 +29143,7 @@ msgid ""
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Auf den rückseitigen Footprints wird '%s' als Präfix eingefügt."
+"Bei rückseitigen Footprints wird \"%s\" als Präfix eingefügt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:389
 #, c-format
@@ -31497,7 +31498,7 @@ msgstr "Konnte die Plotdateien nicht im Ordner \"%s\" anlegen."
 #: pcbnew/dialogs/dialog_export_svg.cpp:355
 #, c-format
 msgid "Exported '%s'."
-msgstr "'%s' exportiert."
+msgstr "\"%s\" exportiert."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:64
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:509
@@ -33260,7 +33261,7 @@ msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
-"Alle erforderlichen Lagen (mit '*' markiert) müssen zugeordnet werden. "
+"Alle erforderlichen Lagen (mit \"*\" markiert) müssen zugeordnet werden. "
 "Klicken Sie auf \"Lagen automatisch zuordnen\", um die verbleibenden Lagen "
 "automatisch anzupassen"
 
@@ -33448,12 +33449,12 @@ msgstr "Der Netzname darf nicht leer sein."
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2226
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "Netz '%s' wird verwendet.  Trotzdem löschen?"
+msgstr "Netz \"%s\" wird verwendet.  Trotzdem löschen?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2267
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr "Alle Netze in Gruppe '%s' löschen?"
+msgstr "Alle Netze in Gruppe \"%s\" löschen?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2291
 msgid "Report file"
@@ -35165,7 +35166,7 @@ msgstr "Benutzerdefinierte Regeln überschreiben"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
-msgstr "(von 'Regelname')"
+msgstr "(von \"Regelname\")"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:49
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
@@ -35491,7 +35492,7 @@ msgstr "Ordner mit %s Dateien"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:582
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Unzulässiges Zeichen '%c' im Aliasnamen \"%s\"."
+msgstr "Unzulässiges Zeichen \"%c\" im Aliasnamen \"%s\"."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:827
 msgid ""
@@ -36325,7 +36326,7 @@ msgid ""
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
 "Kupferlagentyp für Freerouter und andere externe Router.\n"
-"Spannungs-/Stromlagen werden aus Freerouter's Lagenmenüs entfernt."
+"Spannungs-/Stromlagen werden aus Freerouters Lagenmenüs entfernt."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:147
 msgid "In1"
@@ -38393,7 +38394,7 @@ msgstr "FEHLER im Ausdruck."
 #: pcbnew/drc/drc_rule_parser.cpp:573
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "FEHLER: <a href='%d:%d'> %s </a> %s"
+msgstr "FEHLER: <a href=\"%d:%d\"> %s </a> %s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:68 pcbnew/drc/drc_rule_parser.cpp:580
 #, c-format
@@ -38410,7 +38411,7 @@ msgstr ""
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:477
 msgid "Missing '('."
-msgstr "Fehlendes '('."
+msgstr "Fehlendes \"(\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:123
 msgid "Missing version statement."
@@ -38431,7 +38432,7 @@ msgstr "Nicht erkanntes Element \"%s\". | Versionsnummer erwartet."
 #: pcbnew/drc/drc_rule_parser.cpp:636
 #, c-format
 msgid "Unrecognized item '%s'."
-msgstr "Nicht erkanntes Element '%s'."
+msgstr "Nicht erkanntes Element \"%s\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:167 pcbnew/drc/drc_rule_parser.cpp:249
 #: pcbnew/drc/drc_rule_parser.cpp:545
@@ -38444,7 +38445,7 @@ msgstr "Unvollständige Aussage."
 #: pcbnew/drc/drc_rule_parser.cpp:665
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr "Nicht erkanntes Element '%s'. | Erwartet %s."
+msgstr "Nicht erkanntes Element \"%s\". | Erwartet %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:193
 msgid "Missing rule name."
@@ -38458,14 +38459,14 @@ msgstr "Fehlender Bedingungsausdruck."
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
 msgstr ""
-"Nicht erkanntes Element '%s'. | Erwartete Ausdruck in Anführungszeichen."
+"Nicht erkanntes Element \"%s\". | Erwartete Ausdruck in Anführungszeichen."
 
 #: pcbnew/drc/drc_rule_parser.cpp:261 pcbnew/drc/drc_rule_parser.cpp:372
 #: pcbnew/drc/drc_rule_parser.cpp:385 pcbnew/drc/drc_rule_parser.cpp:404
 #: pcbnew/drc/drc_rule_parser.cpp:415 pcbnew/drc/drc_rule_parser.cpp:441
 #: pcbnew/drc/drc_rule_parser.cpp:558 pcbnew/drc/drc_rule_parser.cpp:673
 msgid "Missing ')'."
-msgstr "Fehlendes ')'."
+msgstr "Fehlendes \")\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:292
 #, c-format
@@ -38504,7 +38505,7 @@ msgstr "Fehlender Lagenname oder -typ."
 #: pcbnew/drc/drc_rule_parser.cpp:629
 #, c-format
 msgid "Unrecognized layer '%s'."
-msgstr "Nicht erkannte Lage '%s'."
+msgstr "Nicht erkannte Lage \"%s\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:653
 msgid "Missing severity name."
@@ -39501,7 +39502,7 @@ msgstr "Die aktuelle Platine wurde geändert. Änderungen speichern?"
 #: pcbnew/files.cpp:568
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "Leiterplatte '%s' existiert nicht. Soll diese erstellt werden?"
+msgstr "Leiterplatte \"%s\" existiert nicht. Soll diese erstellt werden?"
 
 #: pcbnew/files.cpp:577
 msgid "Creating PCB"
@@ -39542,7 +39543,7 @@ msgstr "Unzureichende Berechtigungen zum Schreiben der Datei \"%s\"."
 #: pcbnew/files.cpp:1009 pcbnew/files.cpp:1161
 #, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr "Fehler beim Speichern von benutzerdefinierter Regeldatei '%s'."
+msgstr "Fehler beim Speichern von benutzerdefinierter Regeldatei \"%s\"."
 
 #: pcbnew/files.cpp:1035 pcbnew/files.cpp:1137
 #, c-format
@@ -39550,7 +39551,7 @@ msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Speichern von Platinendatei '%s'.\n"
+"Fehler beim Speichern von Platinendatei \"%s\".\n"
 "%s"
 
 #: pcbnew/files.cpp:1055
@@ -39668,12 +39669,12 @@ msgstr "Footprint %s"
 #: pcbnew/footprint.cpp:2807
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "(„Durchsteckmontage“ erwartet; tatsächlich '%s')"
+msgstr "(\"Durchsteckmontage\" erwartet; tatsächlich \"%s\")"
 
 #: pcbnew/footprint.cpp:2810
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(„SMD“ erwartet; tatsächlich '%s')"
+msgstr "(\"SMD\" erwartet; tatsächlich \"%s\")"
 
 #: pcbnew/footprint.cpp:3008
 #, c-format
@@ -39854,7 +39855,7 @@ msgstr "Keine Footprintdatei."
 #: pcbnew/footprint_libraries_utils.cpp:184
 #, c-format
 msgid "Unable to load footprint '%s' from '%s'"
-msgstr "Footprint '%s' kann nicht von '%s' geladen werden"
+msgstr "Footprint \"%s\" kann nicht aus \"%s\" geladen werden"
 
 #: pcbnew/footprint_libraries_utils.cpp:240
 msgid "Export Footprint"
@@ -39886,7 +39887,7 @@ msgstr "Bibliothek \"%s\" ist schreibgeschützt."
 #: pcbnew/footprint_libraries_utils.cpp:550
 #, c-format
 msgid "Delete footprint '%s' from library '%s'?"
-msgstr "Footprint '%s' aus Bibliothek '%s' löschen?"
+msgstr "Footprint \"%s\" aus Bibliothek \"%s\" löschen?"
 
 #: pcbnew/footprint_libraries_utils.cpp:567
 #, c-format
@@ -41462,7 +41463,7 @@ msgstr "Unbekannter Datensatz-Bezeichner: \"%s\"."
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:225
 #, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
-msgstr "Unbekannter 'Extended Primitive Information'-Typ: \"%s\"."
+msgstr "Unbekannter \"Extended Primitive Information\"-Typ: \"%s\"."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:865
 #, c-format
@@ -41500,7 +41501,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:548
 #, c-format
 msgid "File not found: '%s' for directory '%s'."
-msgstr "Datei nicht gefunden: '%s' für Ordner '%s'."
+msgstr "Datei nicht gefunden: \"%s\" für Ordner \"%s\"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:699
 #, c-format
@@ -41881,9 +41882,9 @@ msgstr ""
 "unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4178
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr "Unbekannte Textboxausrichtung %d, aText %s"
+msgstr "Unbekannte Textboxausrichtung %d, Text %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4334
 msgid "Loading rectangles..."
@@ -41957,7 +41958,7 @@ msgid ""
 "variant '%s' was loaded."
 msgstr ""
 "Das CADSTAR-Design enthält Varianten, die kein KiCad-Äquivalent haben. Es "
-"wurde nur die Variante '%s' geladen."
+"wurde nur die Variante \"%s\" geladen."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:164
 msgid ""
@@ -41976,8 +41977,8 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
-"Die CADSTAR-Lage '%s' hat kein KiCad-Äquivalent. Alle Elemente auf dieser "
-"Lage wurden stattdessen der KiCad-Lage '%s' zugeordnet."
+"Die CADSTAR-Lage \"%s\" hat kein KiCad-Äquivalent. Alle Elemente darauf "
+"wurden der KiCad-Lage \"%s\" zugeordnet."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:253
 #, c-format
@@ -41986,7 +41987,7 @@ msgid ""
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
 "Die CADSTAR-Lage \"%s\" wird als technische Lage eingestuft. Alle Elemente "
-"auf dieser Lage wurden der KiCad-Lage \"%s\" zugeordnet."
+"darauf wurden der KiCad-Lage \"%s\" zugeordnet."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:349
@@ -41995,13 +41996,13 @@ msgid ""
 "The CADSTAR construction layer '%s' is on the outer surface of the board. It "
 "has been ignored."
 msgstr ""
-"Die CADSTAR-Konstruktionslage '%s' befindet sich auf der äusseren Oberfläche "
-"der Platine. Sie wurde ignoriert."
+"Die CADSTAR-Konstruktionslage \"%s\" befindet sich auf der äußeren "
+"Oberfläche der Platine. Sie wurde ignoriert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr "Unerwartete Lage '%s' im Lagenstapel."
+msgstr "Unerwartete Lage \"%s\" im Lagenaufbau."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:745
 #, c-format
@@ -42036,8 +42037,8 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Der CADSTAR-Bereich \"%s\" in der Bibliothekskomponente '%s' hat kein KiCad-"
-"Äquivalent. Der Bereich ist weder ein Sperrbereich für Leiterbahnen noch für "
+"Der CADSTAR-Bereich \"%s\" in der Bibliothekskomponente \"%s\" hat kein "
+"KiCad-Äquivalent. Er ist weder ein Sperrbereich für Leiterbahnen noch für "
 "Vias. Der Bereich wurde nicht importiert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1083
@@ -42047,7 +42048,7 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
-"Die CADSTAR-Paddefinition '%s' ist ein komplexer Padstack, der in KiCad "
+"Die CADSTAR-Paddefinition \"%s\" ist ein komplexer Padstack, der in KiCad "
 "nicht unterstützt wird. Bitte überprüfen Sie die importierten Pads, da sie "
 "möglicherweise manuell korrigiert werden müssen."
 
@@ -42057,13 +42058,13 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
-"Die CADSTAR-Pad-Definition '%s' hat die Lochform außerhalb der Pad-Form. Das "
-"Loch wurde in die Mitte des Pads verschoben."
+"Die CADSTAR-Pad-Definition \"%s\" hat die Lochform außerhalb der Pad-Form. "
+"Das Loch wurde in die Mitte des Pads verschoben."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1331
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr "Die CADSTAR-Paddefinition '%s' hat Importfehler: %s"
+msgstr "Die CADSTAR-Paddefinition \"%s\" hat Importfehler: %s"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1351
 #, c-format
@@ -42099,9 +42100,9 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"Die Bemaßungs-ID %s hat in CADSTAR den Stil 'Extern'. Externe Bemaßungsstile "
-"werden in KiCad noch nicht unterstützt. Das Bemaßungsobjekt wurde "
-"stattdessen mit einem internen Bemaßungstil importiert."
+"Die Bemaßungs-ID %s hat in CADSTAR den Stil \"Extern\". Externe "
+"Bemaßungsstile werden in KiCad noch nicht unterstützt. Das Bemaßungsobjekt "
+"wurde stattdessen mit einem internen Bemaßungsstil importiert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1540
 #, c-format
@@ -42124,7 +42125,7 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
-"Der CADSTAR-Bereich '%s' ist in CADSTAR als Platzierungsbereich markiert. "
+"Der CADSTAR-Bereich \"%s\" ist in CADSTAR als Platzierungsbereich markiert. "
 "Platzierungsbereiche werden in KiCad nicht unterstützt. Es wurden nur die "
 "unterstützten Elemente für den Bereich importiert."
 
@@ -42134,7 +42135,7 @@ msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
-"Der CADSTAR-Bereich '%s' hat kein KiCad-Äquivalent. Reine "
+"Der CADSTAR-Bereich \"%s\" hat kein KiCad-Äquivalent. Reine "
 "Platzierungsbereiche werden nicht unterstützt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1751
@@ -42149,7 +42150,7 @@ msgstr ""
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
 "Dokumentationssymbol in der Bibliothek konnte nicht gefunden werden (Symdef "
-"ID: '%s')"
+"ID: \"%s\")"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1944
 #, c-format
@@ -42157,9 +42158,9 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"In der CADSTAR-Vorlage '%s' ist die Einstellung 'In keinen Routing-Bereichen "
-"zulassen' aktiviert. Diese Einstellung hat kein KiCad-Äquivalent und wurde "
-"daher ignoriert."
+"In der CADSTAR-Vorlage \"%s\" ist die Einstellung \"In keinen Routing-"
+"Bereichen zulassen\" aktiviert. Diese Einstellung hat kein KiCad-Äquivalent "
+"und wurde daher ignoriert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1952
 #, c-format
@@ -42167,7 +42168,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"In der CADSTAR-Vorlage '%s' ist die Einstellung 'Box Isolated Pins' "
+"In der CADSTAR-Vorlage \"%s\" ist die Einstellung \"Box Isolated Pins\" "
 "aktiviert. Diese Einstellung hat kein KiCad-Äquivalent und wurde daher "
 "ignoriert."
 
@@ -42177,7 +42178,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"Für die CADSTAR-Vorlage '%s' ist die Einstellung 'Automatic Repour' "
+"Für die CADSTAR-Vorlage \"%s\" ist die Einstellung \"Automatic Repour\" "
 "aktiviert. Diese Einstellung hat kein KiCad-Äquivalent und wurde daher "
 "ignoriert."
 
@@ -42188,9 +42189,9 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"Die CADSTAR-Vorlage '%s' hat einen Wert ungleich Null, der für die "
-"Einstellung 'Faserbandbreite' definiert ist. Dafür gibt es kein KiCad-"
-"Äquivalent, daher wurde diese Einstellung ignoriert."
+"Die CADSTAR-Vorlage \"%s\" hat für die Einstellung \"Splitterbreite\" einen "
+"Wert ungleich Null definiert. Dafür gibt es kein KiCad-Äquivalent, daher "
+"wurde diese Einstellung ignoriert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1981
 #, c-format
@@ -42213,9 +42214,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"Die CADSTAR-Vorlage '%s' verfügt über unterschiedliche Einstellungen für die "
-"thermische Entlastung von Pads und Vias. KiCad unterstützt nur eine einzige "
-"Einstellung für beide. Die Einstellung für Pads wurde angewandt."
+"Die CADSTAR-Vorlage \"%s\" verfügt über unterschiedliche Einstellungen für "
+"thermische Entlastungen von Pads und Vias. KiCad unterstützt nur eine "
+"einzige Einstellung für beide. Die Einstellung für Pads wurde angewandt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2049
 #, c-format
@@ -42270,8 +42271,8 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
-"Das Netz \"%s\" verweist auf den nicht vorhandenen Pad-Index '%d' im Bauteil "
-"\"%s\". Dies wurde ignoriert."
+"Das Netz \"%s\" verweist auf den nicht vorhandenen Pad-Index \"%d\" im "
+"Bauteil \"%s\". Dies wurde ignoriert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2474
 msgid "Text Variables could not be set as there is no project loaded."
@@ -42293,9 +42294,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
-"Der CADSTAR Via-Code '%s' hat eine andere Form als Kreis. KiCad unterstützt "
-"nur kreisförmige Vias, daher wurde dieser Via-Typ in ein kreisförmiges Via "
-"mit %.2f mm Durchmesser geändert."
+"Der CADSTAR Via-Code \"%s\" hat eine andere Form als Kreis. KiCad "
+"unterstützt nur kreisförmige Vias, daher wurde dieser Via-Typ in ein "
+"kreisförmiges Via mit %.2f mm Durchmesser geändert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2800
 #, c-format
@@ -42303,8 +42304,8 @@ msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
-"Die Form für '%s' ist in CADSTAR gegittert gefüllt, wofür es in KiCad keine "
-"Entsprechung gibt. Es wird stattdessen eine volle Füllung verwendet."
+"Die Form für \"%s\" ist in CADSTAR gegittert gefüllt, wofür es in KiCad "
+"keine Entsprechung gibt. Es wird stattdessen eine volle Füllung verwendet."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3614
 #, c-format
@@ -42313,9 +42314,9 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
-"Für den CADSTAR-Gittercode '%s' sind %d Gitter definiert. KiCad unterstützt "
-"nur zwei Gitterarten (Kreuzgitter) im Abstand von 90°. Das importierte "
-"Gitter ist ein Kreuzgitter."
+"Für den CADSTAR-Gittercode \"%s\" sind %d Gitter definiert. KiCad "
+"unterstützt nur zwei Gitterarten (Kreuzgitter) im Abstand von 90°. Das "
+"importierte Gitter ist ein Kreuzgitter."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3624
 #, c-format
@@ -42324,7 +42325,7 @@ msgid ""
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"Der CADSTAR-Gittercode '%s' hat für jedes Gitter unterschiedliche "
+"Der CADSTAR-Gittercode \"%s\" hat für jedes Gitter unterschiedliche "
 "Linienbreiten. KiCad unterstützt nur eine Breite für Gitter. Das importierte "
 "Gitter verwendet die in der ersten Gitterdefinition festgelegte Breite, d.h. "
 "%.2f mm."
@@ -42336,7 +42337,7 @@ msgid ""
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
-"Der CADSTAR-Gittercode '%s' hat verschiedene Schrittgrößen für die Zellen. "
+"Der CADSTAR-Gittercode \"%s\" hat verschiedene Schrittgrößen für die Zellen. "
 "KiCad unterstützt nur eine Schrittgröße für Gitter. Das importierte Gitter "
 "verwendet die in der ersten Gitterdefinition festgelegte Schrittgröße, d.h. "
 "%.2f mm."
@@ -42349,9 +42350,9 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
-"Die Gitter im CADSTAR-Gittercode '%s' weisen eine Winkeldifferenz von %.1f° "
-"auf. KiCad unterstützt nur Gitter im Abstand von 90°. Das importierte Gitter "
-"hat zwei Gitter im Abstand von 90°, die %.1f° von der Horizontalen "
+"Die Gitter im CADSTAR-Gittercode \"%s\" weisen eine Winkeldifferenz von %.1f°"
+" auf. KiCad unterstützt nur Gitter im Abstand von 90°. Das importierte "
+"Gitter hat zwei Gitter im Abstand von 90°, die %.1f° von der Horizontalen "
 "ausgerichtet sind."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3719
@@ -42370,10 +42371,10 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"Das CADSTAR-Design enthält Netze mit einer zugewiesenen 'Netzklasse'. KiCad "
-"hat kein Äquivalent zur CADSTAR-Netzklasse, daher wurden diese Elemente "
-"nicht importiert. Hinweis: KiCads Version von 'Net Class' ist näher an "
-"CADSTARs 'Net Route Code' (der für alle Netze importiert wurde)."
+"Das CADSTAR-Design enthält Netze mit einer zugewiesenen \"Netzklasse\". "
+"KiCad hat kein Äquivalent zur CADSTAR-Netzklasse, daher wurden diese "
+"Elemente nicht importiert. Hinweis: KiCads Version von \"Net Class\" ist "
+"näher an CADSTARs \"Net Route Code\" (der für alle Netze importiert wurde)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4014
 msgid ""
@@ -42484,7 +42485,7 @@ msgstr "Konnte in \"%s\" keine gültige Platine finden"
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:273
 #, c-format
 msgid "Error loading board '%s': %s"
-msgstr "Fehler beim Einlesen der Platine '%s': %s"
+msgstr "Fehler beim Einlesen der Platine \"%s\": %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:298
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:400
@@ -42510,7 +42511,7 @@ msgstr ""
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:469
 #, c-format
 msgid "Cannot load footprint '%s' from '%s'"
-msgstr "Footprint \"%s\" kann nicht von \"%s\" geladen werden"
+msgstr "Footprint \"%s\" kann nicht aus \"%s\" geladen werden"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:451
 #, c-format
@@ -42759,7 +42760,7 @@ msgstr "Konnte Datei nicht im Puffer speichern"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr "Die Datei '%s' hat eine nicht erkannte Version: %d."
+msgstr "Die Datei \"%s\" hat eine nicht erkannte Version: %d."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:796
 #, c-format
@@ -42769,12 +42770,12 @@ msgstr "Unbekannter Schaltplantyp \"%s\" in Zeile: %d."
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1362
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "Fehlendes '$EndMODULE' für MODULE \"%s\"."
+msgstr "Fehlendes \"$EndMODULE\" für MODULE \"%s\"."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1412
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr "Unbekannte Padform '%c=0x%02x' in Zeile: %d von Footprint: \"%s\"."
+msgstr "Unbekannte Padform \"%c=0x%02x\" in Zeile: %d von Footprint: \"%s\"."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1601
 #, c-format
@@ -42835,12 +42836,12 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3032
 #, c-format
 msgid "File '%s' is empty."
-msgstr "Die Datei '%s' ist leer."
+msgstr "Die Datei \"%s\" ist leer."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3035
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "Die Datei '%s' ist keine im veralteten Format vorliegende Bibliothek."
+msgstr "Die Datei \"%s\" ist keine Bibliothek im veralteten Format."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.h:76
 msgid "Legacy footprint library files"
@@ -42943,15 +42944,17 @@ msgid "Cannot interpret date code %d"
 msgstr "Die Datumsangaben sind nicht korrekt %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
 "\n"
 "Zones will need to be refilled."
 msgstr ""
-"Elemente auf einer nicht definierten Lage gefunden (%s).\n"
-"Möchten Sie diese auf die Lage %s retten?"
+"Elemente auf einer undefinierten Lage gefunden (%s).\n"
+"Möchten Sie diese auf die Lage %s retten?\n"
+"\n"
+"Zonen müssen danach erneut gefüllt werden."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Undefined Layers Warning"
@@ -43342,7 +43345,7 @@ msgstr "Fehlendes Lagenname-Argument für %s."
 #: pcbnew/pcbexpr_functions.cpp:128
 #, c-format
 msgid "Unrecognized layer '%s'"
-msgstr "Unbekannte Lage '%s'"
+msgstr "Unbekannte Lage \"%s\""
 
 #: pcbnew/pcbexpr_functions.cpp:250
 #, c-format
@@ -43398,8 +43401,8 @@ msgid ""
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
 "Fehler beim Versuch, die globale Footprint-Bibliothekstabelle zu laden.\n"
-"Bitte die globale Bibliothekstabelle für Footprints im Menü 'Einstellungen' "
-"anpassen."
+"Bitte die globale Bibliothekstabelle für Footprints im Menü \"Einstellungen\""
+" anpassen."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:108 pcbnew/pcbnew_jobs_handler.cpp:233
 #: pcbnew/pcbnew_jobs_handler.cpp:260 pcbnew/pcbnew_jobs_handler.cpp:339
@@ -43637,7 +43640,7 @@ msgstr "Das Routing kann nicht in einer mechanischen Bohrung gestartet werden."
 #: pcbnew/router/pns_router.cpp:256
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr "Regelbereich '%s' verbietet Leiterbahnen."
+msgstr "Regelbereich \"%s\" verbietet Leiterbahnen."
 
 #: pcbnew/router/pns_router.cpp:261
 msgid "Rule area disallows tracks."
@@ -44002,7 +44005,7 @@ msgstr "Der Sitzungsdatei fehlt der Abschnitt \"library_out\""
 #: pcbnew/specctra_import_export/specctra_import.cpp:392
 #, c-format
 msgid "Reference '%s' not found."
-msgstr "Referenz '%s' wurde nicht gefunden."
+msgstr "Referenz \"%s\" wurde nicht gefunden."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:521
 #, c-format
@@ -44131,7 +44134,7 @@ msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:1161
 msgid "Place a footprint"
-msgstr "Footprint platzieren"
+msgstr "Footprint hinzufügen"
 
 #: pcbnew/tools/board_editor_control.cpp:1276 pcbnew/tools/pcb_actions.cpp:1174
 msgid "Lock"
@@ -44335,7 +44338,7 @@ msgstr "Ermittlung des physischen Loch-Freiraums für:"
 #: pcbnew/tools/board_inspection_tool.cpp:469
 #: pcbnew/tools/board_inspection_tool.cpp:1206
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "Keine 'physical_hole_clearance' Einschränkung definiert."
+msgstr "Keine \"physical_hole_clearance\" Einschränkung definiert."
 
 #: pcbnew/tools/board_inspection_tool.cpp:480
 msgid "Hole to Hole"
@@ -44368,7 +44371,7 @@ msgstr "Ermittlung des physischen Freiraums für:"
 #: pcbnew/tools/board_inspection_tool.cpp:572
 #: pcbnew/tools/board_inspection_tool.cpp:1140
 msgid "No 'physical_clearance' constraints defined."
-msgstr "Keine 'physical_clearance' Einschränkung definiert."
+msgstr "Keine \"physical_clearance\" Einschränkung definiert."
 
 #: pcbnew/tools/board_inspection_tool.cpp:583
 #: pcbnew/tools/board_inspection_tool.cpp:1397
@@ -44486,7 +44489,7 @@ msgstr "Ermittlung der max. ungekoppelten Länge des Diff-Paars für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:919
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "Keine 'diff_pair_uncoupled' Einschränkung definiert."
+msgstr "Keine \"diff_pair_uncoupled\" Einschränkung definiert."
 
 #: pcbnew/tools/board_inspection_tool.cpp:950
 #, c-format
