@@ -2241,12 +2241,17 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         git_oid oid;
 
-#if( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR == 8 && LIBGIT2_VER_REVISION < 2 )
+#if ( ( LIBGIT2_VER_MAJOR == 1                                                                     \
+        && ( ( LIBGIT2_VER_MINOR == 8                                                              \
+               && ( LIBGIT2_VER_REVISION < 2 || LIBGIT2_VER_REVISION >= 3 ) )                      \
+             || ( LIBGIT2_VER_MINOR > 8 ) ) )                                                      \
+      || LIBGIT2_VER_MAJOR > 1 )
         // For libgit2 versions 1.8.0, 1.8.1.
-        // This change was reverted for 1.8.2+
+        // This change was reverted for 1.8.2
+        // This change was re-reverted for 1.8.3+
         git_commit* const parents[1] = { parent };
 #else
-        // For libgit2 versions older than 1.8.0
+        // For libgit2 versions older than 1.8.0, or equal to 1.8.2
         const git_commit* parents[1] = { parent };
 #endif
 
