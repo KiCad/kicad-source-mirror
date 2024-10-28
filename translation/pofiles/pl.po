@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-27 09:00+0000\n"
+"PO-Revision-Date: 2024-10-28 18:03+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -24968,7 +24968,7 @@ msgstr "Podświetl elementy z tym atrybutem apertuty"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
-msgstr "DCode:"
+msgstr "D-Kod:"
 
 #: gerbview/toolbars_gerber.cpp:292
 msgid "<No selection>"
@@ -30969,7 +30969,7 @@ msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
-msgstr "HAL SnPb"
+msgstr "HAL ołowiowy"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:41
 msgid "HAL lead-free"
@@ -38086,9 +38086,8 @@ msgid "Place items from sheet:"
 msgstr "Umieść elementy z arkusza:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:29
-#, fuzzy
 msgid "Place items matching component class:"
-msgstr "Filtrowane na podstawie klas sieci:"
+msgstr "Umieść elementy pasujące do filtra klasy komponentu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -39167,7 +39166,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -39674,169 +39672,228 @@ msgstr ""
 "\n"
 "### Typy ograniczeń\n"
 "\n"
-"| Typ ograniczenia          | Typ "
-"argumentu                                                                                                          "
-"| "
-"Opis                                                                                                                                                                                                                                                                                                                                                                                                                                                                          "
+"| Typ ograniczenia          | Typ argumentu                                  "
+"                                                                        | Opi"
+"s                                                                            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                          |\n"
+"|---------------------------|------------------------------------------------"
+"------------------------------------------------------------------------|----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"--------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza szerokość okręgów przelotek.<br>                                    "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"|                                                                            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                     \n"
+"| `assertion`               | \"&lt;expression>\"                            "
+"                                                                          | "
+"Sprawdza podane wyrażenie warunkowe.<br>                                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
 "|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| Sprawdza szerokość okręgów przelotek."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                     "
-"|                                                                                                                                                                                                                                                                                                                                        \n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                      "
-"| Sprawdza podane wyrażenie warunkowe."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| Określa **elektryczny** odstęp pomiędzy elementami miedzi różnych sieci. "
-"(Zobacz `physical_clearance` jeśli chcesz określić odstęp pomiędzy obiektami "
+"| `clearance`               | min                                            "
+"                                                                        | "
+"Określa **elektryczny** odstęp pomiędzy elementami miedzi różnych sieci. ("
+"Zobacz `physical_clearance` jeśli chcesz określić odstęp pomiędzy obiektami "
 "niezależnie od sieci.)<br><br>Aby umożliwić miedzianym obiektom nakładanie "
 "się (kolidowanie), utwórz ograniczenie `clearance` z wartością `min` "
-"mniejszą od zera (na przykład , `-1`)."
-"<br>                                                                                                                              "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy polami zajętości footprintów i generuje błąd, "
-"jeśli dowolne dwa z nich są bliżej niż odległość `min`. Jeśli obrys nie ma "
-"oznaczonego tego kształtu nie zostaną wygenerowane żadne błędy."
-"<br>                                                                                                                                                                                                                                                         "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| Sprawdza odstęp między ścieżkami pary różnicowej. Para różnicowa to "
-"odcinki równoległe do siebie. Odstęp między parami różnicowymi nie jest "
-"testowany na niesprzężonych częściach pary różnicowej (na przykład na "
-"rozgałęzieniu komponentu)."
-"<br>                                                                                                                                                                                                                              "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| Sprawdza odległość, z jaką jest poprowadzona ścieżka pary różnicowej bez "
+"mniejszą od zera (na przykład , `-1`).<br>                                   "
+"                                                                             "
+"              |\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy polami zajętości footprintów i generuje błąd, jeśli "
+"dowolne dwa z nich są bliżej niż odległość `min`. Jeśli obrys nie ma "
+"oznaczonego tego kształtu nie zostaną wygenerowane żadne błędy.<br>          "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"        |\n"
+"<!-- | `creepage`                | min                                       "
+"                                                                             "
+"| Określa **elektryczne** przenikanie pomiędzy elementami miedzi o różnych "
+"klasach sieci.<br> -->                                                       "
+"                                              \n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp między ścieżkami pary różnicowej. Para różnicowa to odcinki "
+"równoległe do siebie. Odstęp między parami różnicowymi nie jest testowany na "
+"niesprzężonych częściach pary różnicowej (na przykład na rozgałęzieniu "
+"komponentu).<br>                                                             "
+"                                                                             "
+"                                                                             "
+"       |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                        | "
+"Sprawdza odległość, z jaką jest poprowadzona ścieżka pary różnicowej bez "
 "odłączenia od ścieżki przeciwnej polaryzacji w parze (na przykład, gdy para "
 "rozchodzi się od komponentu lub zostaje rozłączona, aby ominąć inny obiekt, "
-"np. przelotkę)."
-"<br>                                                                                                                                                                                                                          "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Określa jeden lub więcej typów obiektów, które stają się zabronione, "
-"oddzielając je spacjami. Na przykład `(constraint disallow track)` lub "
-"`(constraint disallow track via pad)`. Jeśli obiekt podanego typu pasuje do "
+"np. przelotkę).<br>                                                          "
+"                                                                             "
+"                                                                             "
+"      |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Określa jeden lub więcej typów obiektów, które stają się zabronione, "
+"oddzielając je spacjami. Na przykład `(constraint disallow track)` lub `("
+"constraint disallow track via pad)`. Jeśli obiekt podanego typu pasuje do "
 "warunku reguły, zostanie utworzony błąd DRC.<br><br>To ograniczenie jest "
 "zasadniczo takie samo jak obszar odcięty, ale można go wykorzystać do "
-"utworzenia bardziej szczegółowych ograniczeń."
-"<br>                                                      |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Sprawdza odstęp między obiektami a krawędzią płytki.<br><br>Można to "
-"również traktować jako `tolerancję frezowania`, ponieważ krawędź płytki "
-"będzie zawierać wszystkie elementy graficzne na warstwie `Edge.Cuts` oraz "
-"wszelkie otwory *owalne*. (Zobacz `physical_hole_clearance`, aby zapoznać "
-"się z tolerancją "
-"wiercenia.)<br>                                                                                                                                             "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| Sprawdza całkowitą długość trasy dla sieci spełniających warunek reguły i "
+"utworzenia bardziej szczegółowych "
+"ograniczeń.<br>                                                      |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp między obiektami a krawędzią płytki.<br><br>Można to również "
+"traktować jako `tolerancję frezowania`, ponieważ krawędź płytki będzie "
+"zawierać wszystkie elementy graficzne na warstwie `Edge.Cuts` oraz wszelkie "
+"otwory *owalne*. (Zobacz `physical_hole_clearance`, aby zapoznać się z "
+"tolerancją wiercenia.)<br>                                                   "
+"                                                                             "
+"             |\n"
+"| `length`                  | min/max                                        "
+"                                                                        | "
+"Sprawdza całkowitą długość trasy dla sieci spełniających warunek reguły i "
 "generuje błąd dla każdej sieci, która jest poniżej wartości `min` (jeśli "
-"została określona) lub powyżej wartości `max` (jeśli została określona) "
-"ograniczenia."
-"<br>                                                                                                                                                                                                                                  "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| Sprawdza wielkość (średnicę) otworu wierconego w polu lutowniczym, lub "
+"została określona) lub powyżej wartości `max` (jeśli została określona) ogran"
+"iczenia.<br>                                                                 "
+"                                                                             "
+"                                                                             "
+"       |\n"
+"| `hole`                    | min/max                                        "
+"                                                                        | "
+"Sprawdza wielkość (średnicę) otworu wierconego w polu lutowniczym, lub "
 "przelotce. W przypadku otworów owalnych mniejsza (poboczna) średnica "
-"zostanie przetestowana w stosunku do wartości `min` (jeśli została "
-"określona), a większa (główna) średnica zostanie przetestowana w odniesieniu "
-"do wartości `max` (jeśli została określona)."
-"<br>                                                                                                                                  "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
+"zostanie przetestowana w stosunku do wartości `min` (jeśli została określona)"
+", a większa (główna) średnica zostanie przetestowana w odniesieniu do "
+"wartości `max` (jeśli została określona).<br>                                "
+"                                                                             "
+"                     |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
 "przelotce a miedzianymi elementami innej sieci. Odstęp mierzy się od "
-"średnicy otworu, a nie od jego środka."
-"<br>                                                                                                                                                                                                                                                                                           "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy mechanicznie wywierconymi otworami w polach "
+"średnicy otworu, a nie od jego środka.<br>                                   "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                 |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy mechanicznie wywierconymi otworami w polach "
 "lutowniczych i przelotkach. Odstęp mierzy się pomiędzy średnicami otworów, a "
 "nie pomiędzy ich środkami.<br><br>Ograniczenie służy wyłącznie do ochrony "
 "wierteł. Nie sprawdza się odstępu między **wywierconymi laserowo** "
 "(mikroprzelotkami) a innymi otworami nie wierconymi mechanicznie, ani "
 "odstępem pomiędzy **frezowanymi** (owalnymi) otworami i innymi otworami nie "
 "wierconymi mechanicznie.<br> |  \n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy dwoma obiektami na danej warstwie (w tym "
-"warstwami nie będącymi sygnałowymi).<br><br>Chociaż można tym wykonywać "
-"kontrolę bardziej ogólnego przeznaczenia niż `clearance`, jest ona znacznie "
-"wolniejsza. Jeśli to możliwe, użyj `clearance`."
-"<br>                                                                                                                                                                                                     "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
+"| `physical_clearance`      | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy dwoma obiektami na danej warstwie (w tym warstwami "
+"nie będącymi sygnałowymi).<br><br>Chociaż można tym wykonywać kontrolę "
+"bardziej ogólnego przeznaczenia niż `clearance`, jest ona znacznie "
+"wolniejsza. Jeśli to możliwe, użyj `clearance`.<br>                          "
+"                                                                             "
+"                                                                             "
+"                 |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
 "przelotce a innym obiektem, niezależnie od przynależnośći do sieci. odstęp "
 "mierzy się od średnicy otworu, a nie od jego środka.<br><br>Można to również "
 "traktować jako `tolerancję wiercenia`, ponieważ obejmuje tylko **okrągłe** "
-"otwory (zobacz `edge_clearance` dla tolerancja frezowania)."
-"<br>                                                                                                        "
-"| \n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Sprawdza odstęp pomiędzy obiektami na warstwach sitodruku a innymi "
-"obiektami."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                             "
+"otwory (zobacz `edge_clearance` dla tolerancja frezowania).<br>              "
+"                                                                             "
+"             | \n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy obiektami na warstwach sitodruku a innymi obiektami."
+"<br>                                                                         "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
 "|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| Sprawdza całkowite nachylenie sieci spełniających warunek reguły, czyli "
+"| `skew`                    | max                                            "
+"                                                                        | "
+"Sprawdza całkowite nachylenie sieci spełniających warunek reguły, czyli "
 "różnicę między długością każdej sieci a średnią wszystkich długości każdej "
 "sieci spełniającej warunek reguły. Jeśli wartość bezwzględna różnicy między "
 "tą średnią a długością dowolnej sieci przekracza wartość ograniczenia `max`, "
-"zostanie wygenerowany błąd."
-"<br>                                                                                                                                   "
+"zostanie wygenerowany błąd.<br>                                              "
+"                                                                             "
+"        |\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                        | "
+"Określa szerokość szczeliny pomiędzy polem lutowniczym a strefą z "
+"połączeniem termicznym.<br>                                                  "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"           |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                        | "
+"Określa szerokość ramion łączących pole lutownicze ze strefą z połączeniem te"
+"rmicznym.<br>                                                                "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
 "|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| Określa szerokość szczeliny pomiędzy polem lutowniczym a strefą z "
-"połączeniem termicznym."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                 "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| Określa szerokość ramion łączących pole lutownicze ze strefą z połączeniem "
-"termicznym."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                    "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| Sprawdza szerokość segmentów ścieżek i łuków. Błąd zostanie wygenerowany "
-"dla każdego segmentu, którego szerokość jest mniejsza niż wartość `min` "
-"(jeśli została określona) lub większa niż wartość `max` (jeśli została "
-"określona)."
-"<br>                                                                                                                                                                                                                                       "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| Zlicza przelotki w każdej sieci spełniającej warunek reguły. Jeśli liczba "
-"ta przekroczy wartość ograniczenia `max` w dowolnej dopasowanej sieci, dla "
-"tej sieci zostanie wygenerowany błąd."
-"<br>                                                                                                                                                                                                                                                                                "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Określa typ połączenia, które ma zostać wykonane pomiędzy strefą a polem "
-"lutowniczym."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                     "
+"| `track_width`             | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza szerokość segmentów ścieżek i łuków. Błąd zostanie wygenerowany dla "
+"każdego segmentu, którego szerokość jest mniejsza niż wartość `min` (jeśli "
+"została określona) lub większa niż wartość `max` (jeśli została określona).<b"
+"r>                                                                           "
+"                                                                             "
+"                                                                             "
+"  |\n"
+"| `track_angle`             | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza kąt łamania pomiędzy dwoma połączonymi segmentami ścieżki.  Błąd "
+"zostanie wygenerowany dla każdego segmentu, którego kąt łamiani jest "
+"mniejszy niż wartość `min` (jeśli została określona) lub większy niż wartość "
+"`max` (jeśli została określona).<br>                                         "
+"                                                                             "
+"                                                                             "
+"           |\n"
+"| `via_count`               | max                                            "
+"                                                                        | "
+"Zlicza przelotki w każdej sieci spełniającej warunek reguły. Jeśli liczba ta "
+"przekroczy wartość ograniczenia `max` w dowolnej dopasowanej sieci, dla tej "
+"sieci zostanie wygenerowany błąd.<br>                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+" |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                        | "
+"Określa typ połączenia, które ma zostać wykonane pomiędzy strefą a polem luto"
+"wniczym.<br>                                                                 "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
 "|\n"
 "\n"
 "\n"
@@ -39948,8 +40005,8 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<nazwa_sieci>')\n"
 "Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
-"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład `inDiffPair('/"
-"CLK')`\n"
+"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład "
+"`inDiffPair('/CLK')`\n"
 "odnosi się do sieci zarówno `/CLK_P` jak i `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -39986,8 +40043,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer "
-"\"nazwa_warstwy\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br>\n"
 "\n"
 "    A.hasNetclass('<nazwa_klasy_sieci>')\n"
@@ -40126,15 +40183,15 @@ msgstr ""
 "-przed- laserowym \n"
 "    # tworzeniem mikroprzelotek.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
 "### Dokumentacja\n"
 "\n"
-"Pełna dokumentację można znaleźć pod adresem [https://docs.kicad.org]"
-"(https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"W celu uzyskania pełnej dokumentacji odwiedź [https://docs.kicad."
+"org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
 "html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
@@ -40424,9 +40481,9 @@ msgid "Checking %s clearance: %s."
 msgstr "Sprawdzanie %s prześwit: %s."
 
 #: pcbnew/drc/drc_engine.cpp:912
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s creepage: %s."
-msgstr "Sprawdzanie %s prześwit: %s."
+msgstr "Sprawdzanie %s przenikanie: %s."
 
 #: pcbnew/drc/drc_engine.cpp:917
 #, c-format
@@ -40678,9 +40735,8 @@ msgid "Clearance violation"
 msgstr "Naruszenie prześwitu"
 
 #: pcbnew/drc/drc_item.cpp:74
-#, fuzzy
 msgid "Creepage violation"
-msgstr "Naruszenie prześwitu"
+msgstr "Naruszenie przenikania"
 
 #: pcbnew/drc/drc_item.cpp:78
 msgid "Tracks crossing"
@@ -41128,14 +41184,13 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Sprawdzanie footprintów pod względem nakładania się pól zajętości..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:3055
-#, fuzzy
 msgid "Checking creepage..."
-msgstr "Sprawdzam nagłówek..."
+msgstr "Sprawdzam przenikanie..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:3239
-#, fuzzy, c-format
+#, c-format
 msgid "(%s creepage %s; actual %s)"
-msgstr "(%s prześwit %s; obecnie %s)"
+msgstr "(%s przenikanie %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:611
 #, c-format
@@ -41740,19 +41795,18 @@ msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s maks. grubość %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
-#, fuzzy
 msgid "Checking track angles..."
-msgstr "Sprawdzenie ścieżek czy nie znajdują się na polach..."
+msgstr "Sprawdzenie przełamywania ścieżek..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min angle %s; actual %s)"
-msgstr "(%s otwór minimum %s; obecnie %s)"
+msgstr "(%s przełamanie minimum %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max angle %s; actual %s)"
-msgstr "(%s otwór maksymalny %s; obecnie %s)"
+msgstr "(%s przełamanie maksymalnie %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
@@ -42246,9 +42300,8 @@ msgid "Attributes:"
 msgstr "Atrybuty:"
 
 #: pcbnew/footprint.cpp:1594 pcbnew/zone.cpp:1639
-#, fuzzy
 msgid "Component Class"
-msgstr "Komponenty"
+msgstr "Klasy komponentów"
 
 #: pcbnew/footprint.cpp:1598
 #, c-format
@@ -43148,9 +43201,9 @@ msgid "Removed %s component class (was %s)."
 msgstr "Usunięto %s klas komponentów (było %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class from %s to %s."
-msgstr "Zmieniono wartość %s z %s na %s."
+msgstr "Zmieniono %s klas komponentów z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:284
 #, c-format
@@ -45675,24 +45728,24 @@ msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5591
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6524
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid padstack layer in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Nieprawidłowy ID sieci w\n"
+"Nieprawidłowa warstwa w stosie w\n"
 "plik: %s\n"
 "linia: %d\n"
 "przesunięcie: %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5606
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6539
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr ""
-"Zduplikowana nazwa NETCLASS '%s' w pliku '%s' w linii %d, przesunięcie %d."
+"Nieprawidłowa warstwa stosu '%s' w pliku '%s' w linii %d, przesunięcie %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6175
 #, c-format
@@ -45879,9 +45932,8 @@ msgid "Technical Layers"
 msgstr "Warstwy techniczne"
 
 #: pcbnew/pcb_shape.cpp:1153 pcbnew/pcb_track.cpp:2011
-#, fuzzy
 msgid "Soldermask"
-msgstr "Pasta lutownicza"
+msgstr "Soldermaska"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -46069,9 +46121,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "Brak argumentu z nazwą klasy sieci dla hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1223
-#, fuzzy
 msgid "Missing component class name argument to hasComponentClass()"
-msgstr "Brak argumentu z nazwą klasy sieci dla hasNetclass()"
+msgstr "Brak argumentu z nazwą klasy komponentu dla hasComponentNetclass()"
 
 #: pcbnew/pcbnew.cpp:465
 msgid ""
@@ -46946,19 +46997,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "Przeanalizowano ograniczenia szerokości: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:446
-#, fuzzy
 msgid "Track Angle"
-msgstr "Długość ścieżki"
+msgstr "Przełamania ścieżki"
 
 #: pcbnew/tools/board_inspection_tool.cpp:447
-#, fuzzy
 msgid "Track Angle resolution for:"
-msgstr "Analiza szerokości ścieżki dla:"
+msgstr "Analiza przełamania ścieżki dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved angle constraints: min %s; max %s."
-msgstr "Przeanalizowano ograniczenia rozmiaru: min %s; maks %s."
+msgstr "Przeanalizowano ograniczenia przełamania: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:461
 msgid "Connection Width"
@@ -47649,9 +47698,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Footprint '%s' istnieje już w bibliotece '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:691
-#, fuzzy
 msgid "No datasheet found in the footprint."
-msgstr "Nie zdefiniowano pola z dokumentacją."
+msgstr "Nie znaleziono dokumentacji dla footprintu."
 
 #: pcbnew/tools/footprint_editor_control.cpp:853
 msgid "No footprint problems found."
@@ -49777,9 +49825,8 @@ msgstr ""
 "Nie udało się wkleić tych elementów.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1059
-#, fuzzy
 msgid "Paste Text"
-msgstr "Umieść tekst"
+msgstr "Wklej tekst"
 
 #: pcbnew/tools/pcb_control.cpp:1216
 msgid "Invalid clipboard contents"
@@ -49885,14 +49932,12 @@ msgid "Remove Polygon Corner"
 msgstr "Usuń narożnik linii łamanej"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2914
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "Dodaj narożnik strefy"
+msgstr "Umieść narożnik strefy"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2916
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "Usuń narożnik linii łamanej"
+msgstr "Umieść narożnik linii łamanej"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1408
 msgid "Select/Expand Connection..."
@@ -50819,9 +50864,8 @@ msgid "Restrictions"
 msgstr "Ograniczenia"
 
 #: pcbnew/zone.cpp:608
-#, fuzzy
 msgid "Placement source"
-msgstr "Rozmieszczenie"
+msgstr "Źródło rozmieszczenia"
 
 #: pcbnew/zone.cpp:638
 #, c-format
@@ -50897,43 +50941,36 @@ msgid "Keepout"
 msgstr "Wyklucz"
 
 #: pcbnew/zone.cpp:1720
-#, fuzzy
 msgid "Keep Out Tracks"
 msgstr "Wyklucz ścieżki"
 
 #: pcbnew/zone.cpp:1726
-#, fuzzy
 msgid "Keep Out Vias"
 msgstr "Wyklucz przelotki"
 
 #: pcbnew/zone.cpp:1732
-#, fuzzy
 msgid "Keep Out Pads"
-msgstr "Trzymaj się z dala od pól lutowniczych"
+msgstr "Wyklucz pola lutownicze"
 
 #: pcbnew/zone.cpp:1738
-#, fuzzy
 msgid "Keep Out Copper Pours"
-msgstr "Unikaj stref wypełnień"
+msgstr "Wyklucz strefy wypełnień"
 
 #: pcbnew/zone.cpp:1744
-#, fuzzy
 msgid "Keep Out Footprints"
-msgstr "Nie umieszczaj footprintów"
+msgstr "Wyklucz footprinty"
 
 #: pcbnew/zone.cpp:1754
-#, fuzzy
 msgid "Enable"
-msgstr "Włączone"
+msgstr "Włącz"
 
 #: pcbnew/zone.cpp:1761
 msgid "Source Type"
 msgstr "Typ źródła"
 
 #: pcbnew/zone.cpp:1767
-#, fuzzy
 msgid "Source Name"
-msgstr "Źródło 2"
+msgstr "Nazwa źródła"
 
 #: pcbnew/zone.cpp:1799
 msgid "Cannot be less than zone minimum width"
