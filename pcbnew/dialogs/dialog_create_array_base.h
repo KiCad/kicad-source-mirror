@@ -30,8 +30,8 @@ class TEXT_CTRL_EVAL;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/notebook.h>
 #include <wx/button.h>
+#include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -87,33 +87,20 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_entryGridPriNumberingStep;
 		wxTextCtrl* m_entryGridSecNumberingStep;
 		wxPanel* m_circularPanel;
-		wxStaticText* m_stInfoItems;
-		wxStaticText* m_stRefPosXTxt;
-		wxTextCtrl* m_tcRefPosX;
-		wxStaticText* m_stRefPosXUnit;
-		wxStaticText* m_stRefPosYTxt;
-		wxTextCtrl* m_tcRefPosY;
-		wxStaticText* m_stRefPosYUnit;
-		wxRadioButton* m_radioBtnSetByPos;
 		wxStaticText* m_labelCentreX;
 		wxTextCtrl* m_entryCentreX;
 		wxStaticText* m_unitLabelCentreX;
 		wxStaticText* m_labelCentreY;
 		wxTextCtrl* m_entryCentreY;
 		wxStaticText* m_unitLabelCentreY;
-		wxRadioButton* m_radioBtnSetByRadius;
-		wxStaticText* m_labelCircRadius;
-		wxTextCtrl* m_tcValueCircRadius;
-		wxStaticText* m_unitLabelCircRadius;
-		wxStaticText* m_labelCircCenterAngle;
-		wxTextCtrl* m_tcValueCircCenterAngle;
-		wxStaticText* m_unitLabelCircCenterAngle;
+		wxButton* m_btnSelectCenterPoint;
+		wxButton* m_btnSelectCenterItem;
+		wxCheckBox* m_checkBoxFullCircle;
 		wxStaticText* m_labelCircAngle;
 		wxTextCtrl* m_entryCircAngle;
 		wxStaticText* m_unitLabelCircAngle;
 		wxStaticText* m_labelCircCount;
 		TEXT_CTRL_EVAL* m_entryCircCount;
-		wxStaticText* m_labelCircRotate;
 		wxCheckBox* m_entryRotateItemsCb;
 		wxPanel* m_circularPadNumberingPanel;
 		wxStaticBoxSizer* m_circPadNumberingSizer;
@@ -134,9 +121,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnParameterChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonPosition( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonRadius( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRadiusChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSelectCenterButton( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

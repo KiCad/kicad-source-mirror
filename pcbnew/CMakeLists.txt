@@ -319,7 +319,6 @@ set( PCBNEW_CLASS_SRCS
     autorouter/autoplace_tool.cpp
 
     action_plugin.cpp
-    array_creator.cpp
     array_pad_number_provider.cpp
     build_BOM_from_board.cpp
     cleanup_item.cpp
@@ -372,6 +371,7 @@ set( PCBNEW_CLASS_SRCS
 
     ratsnest/ratsnest.cpp
 
+    tools/array_tool.cpp
     tools/board_editor_control.cpp
     tools/board_inspection_tool.cpp
     tools/board_reannotate_tool.cpp

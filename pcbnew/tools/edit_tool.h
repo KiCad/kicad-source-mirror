@@ -171,11 +171,6 @@ public:
     int MoveExact( const TOOL_EVENT& aEvent );
 
     /**
-     * Create an array of the selected items, invoking the array editor dialog to set the options.
-     */
-    int CreateArray( const TOOL_EVENT& aEvent );
-
-    /**
      * Increment some aspect of the selected items.q
      */
     int Increment( const TOOL_EVENT& aEvent );

@@ -23,13 +23,16 @@
 
 #include "dialogs/dialog_create_array.h"
 
-#include <base_units.h>
-#include <widgets/text_ctrl_eval.h>
-#include <footprint.h>
-#include <pcb_edit_frame.h>
 #include <wx/msgdlg.h>
 
-#include <boost/algorithm/string/join.hpp>
+#include <base_units.h>
+#include <footprint.h>
+#include <pcb_edit_frame.h>
+#include <tools/pcb_actions.h>
+#include <tools/pcb_picker_tool.h>
+#include <tool/tool_manager.h>
+#include <widgets/text_ctrl_eval.h>
+
 
 /**
  * Struct containing the last-entered values for the dialog.
@@ -63,6 +66,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
             m_GridSecondaryAxisStep( 1 ),
             m_CircCentreX( 0 ),
             m_CircCentreY( 0 ),
+            m_CircAngle( ANGLE_90 ),
             m_CircCount( 4 ),
             m_CircNumStartSet( 1 ),                  // use specified start
             m_GridCircNumScheme( 0 ),
@@ -101,6 +105,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long      m_CircCentreY;
     EDA_ANGLE m_CircAngle;
     long      m_CircCount;
+    bool      m_CircFullCircle;
     long      m_CircNumStartSet;
     long      m_GridCircNumScheme;
     wxString  m_CircNumberingOffset;
@@ -146,23 +151,19 @@ static const std::vector<NUMBERING_LIST_DATA> numberingTypeData {
     },
 };
 
-DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
+DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME*                 aParent,
                                           std::unique_ptr<ARRAY_OPTIONS>& aSettings,
                                           bool aIsFootprintEditor, const VECTOR2I& aOrigPos ) :
         DIALOG_CREATE_ARRAY_BASE( aParent ),
+        m_frame( aParent ),
         m_settings( aSettings ),
-        m_originalItemPosition( aOrigPos ),
-        m_isFootprintEditor( aIsFootprintEditor ),
+        m_originalItemPosition( aOrigPos ), m_isFootprintEditor( aIsFootprintEditor ),
         m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx ),
         m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
         m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
         m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY ),
-        m_refPosX( aParent, m_stRefPosXTxt, m_tcRefPosX, m_stRefPosXUnit ),
-        m_refPosY( aParent, m_stRefPosYTxt, m_tcRefPosY, m_stRefPosYUnit ),
         m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
         m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
-        m_circRadius( aParent, m_labelCircRadius, m_tcValueCircRadius, m_unitLabelCircRadius ),
-        m_circCenterAngle( aParent, m_labelCircCenterAngle, m_tcValueCircCenterAngle, m_unitLabelCircCenterAngle ),
         m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
         m_cfg_persister( pcbIUScale, s_arrayOptions.m_OptionsSet )
 {
@@ -189,7 +190,6 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     m_choiceSecAxisNumbering->SetSelection( 0 );
     m_choiceCircNumbering->SetSelection( 0 );
 
-    m_circCenterAngle.SetUnits( EDA_UNITS::DEGREES );
     m_circAngle.SetUnits( EDA_UNITS::DEGREES );
 
     // bind grid options to persister
@@ -222,6 +222,8 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     // bind circular options to persister
     m_cfg_persister.Add( m_hCentre, s_arrayOptions.m_CircCentreX );
     m_cfg_persister.Add( m_vCentre, s_arrayOptions.m_CircCentreY );
+
+    m_cfg_persister.Add( *m_checkBoxFullCircle, s_arrayOptions.m_CircFullCircle );
     m_cfg_persister.Add( m_circAngle, s_arrayOptions.m_CircAngle );
     m_cfg_persister.Add( *m_entryCircCount, s_arrayOptions.m_CircCount );
     m_cfg_persister.Add( *m_entryRotateItemsCb, s_arrayOptions.m_CircRotatationStep );
@@ -240,7 +242,6 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
 
     // Run the callbacks once to process the dialog contents
     setControlEnablement();
-    setCircularArrayEnablement();
     calculateCircularArrayProperties();
 
     SetupStandardButtons();
@@ -249,57 +250,74 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
 }
 
 
-void DIALOG_CREATE_ARRAY::OnButtonPosition( wxCommandEvent& event )
+DIALOG_CREATE_ARRAY::~DIALOG_CREATE_ARRAY()
 {
-    setCircularArrayEnablement();
-}
-
-
-void DIALOG_CREATE_ARRAY::OnButtonRadius( wxCommandEvent& event )
-{
-    setCircularArrayEnablement();
-}
-
-
-void DIALOG_CREATE_ARRAY::setCircularArrayEnablement()
-{
-    if( m_radioBtnSetByRadius->GetValue() )
-    {
-        m_entryCentreX->Disable();
-        m_entryCentreY->Disable();
-        m_tcValueCircRadius->Enable();
-        m_tcValueCircCenterAngle->Enable();
-    }
-    else
-    {
-        m_entryCentreX->Enable();
-        m_entryCentreY->Enable();
-        m_tcValueCircRadius->Disable();
-        m_tcValueCircCenterAngle->Disable();
-    }
 }
 
 
 void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 {
-    setCircularArrayEnablement();
-
-    if( m_radioBtnSetByPos->GetValue() )
+    if( m_checkBoxFullCircle->GetValue() && m_entryCircAngle == event.GetEventObject() )
     {
-        setControlEnablement();
-        calculateCircularArrayProperties();
+        return;
     }
+
+    setControlEnablement();
+    calculateCircularArrayProperties();
 }
 
-void DIALOG_CREATE_ARRAY::OnRadiusChanged( wxCommandEvent& event )
-{
-    setCircularArrayEnablement();
 
-    if( m_radioBtnSetByRadius->GetValue() )
+void DIALOG_CREATE_ARRAY::OnSelectCenterButton( wxCommandEvent& event )
+{
+    event.Skip();
+
+    PCB_PICKER_TOOL* pickerTool = m_frame->GetToolManager()->GetTool<PCB_PICKER_TOOL>();
+    wxCHECK( pickerTool, /* void */ );
+
+    if( event.GetEventObject() == m_btnSelectCenterItem )
     {
-        setControlEnablement();
-        calculateCircularArrayProperties();
+        m_frame->GetToolManager()->RunAction(
+                PCB_ACTIONS::selectItemInteractively,
+                PCB_PICKER_TOOL::INTERACTIVE_PARAMS{ this, _( "Select center item..." ) } );
     }
+    else if( event.GetEventObject() == m_btnSelectCenterPoint )
+    {
+        m_frame->GetToolManager()->RunAction(
+                PCB_ACTIONS::selectPointInteractively,
+                PCB_PICKER_TOOL::INTERACTIVE_PARAMS{ this, _( "Select center point..." ) } );
+    }
+    else
+    {
+        wxFAIL_MSG( "Unknown event source" );
+    }
+
+    // Hide, but do not close, the dialog
+    Hide();
+}
+
+
+// Implement the RECEIVER interface for the callback from the TOOL
+void DIALOG_CREATE_ARRAY::UpdatePickedItem( const EDA_ITEM* aItem )
+{
+    if( aItem )
+    {
+        m_hCentre.SetValue( aItem->GetPosition().x );
+        m_vCentre.SetValue( aItem->GetPosition().y );
+    }
+
+    Show( true );
+}
+
+
+void DIALOG_CREATE_ARRAY::UpdatePickedPoint( const std::optional<VECTOR2I>& aPoint )
+{
+    if( aPoint )
+    {
+        m_hCentre.SetValue( aPoint->x );
+        m_vCentre.SetValue( aPoint->y );
+    }
+
+    Show( true );
 }
 
 
@@ -375,6 +393,7 @@ static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& 
 
 bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 {
+    std::cout << "DIALOG_CREATE_ARRAY::TransferDataFromWindow()" << std::endl;
     std::unique_ptr<ARRAY_OPTIONS> newSettings;
 
     wxArrayString   errors;
@@ -480,6 +499,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
             newSettings = std::move( newCirc );
     }
 
+    bool ret = false;
+
     // If we got good settings, send them out and finish
     if( newSettings )
     {
@@ -491,7 +512,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         // persist the control state for next time
         m_cfg_persister.ReadConfigFromControls();
 
-        return true;
+        ret = true;
     }
     else
     {
@@ -500,16 +521,29 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         if( errors.IsEmpty() )
             errorStr = _("Bad parameters");
         else
-            errorStr = boost::algorithm::join( errors, wxT( "\n" ) );
+            errorStr = wxJoin( errors, '\n' );
 
         wxMessageBox( errorStr );
-        return false;
+        ret = false;
     }
+
+    // This dialog is not modal, so close it now
+    Close();
+    return ret;
 }
 
 
 void DIALOG_CREATE_ARRAY::setControlEnablement()
 {
+    if( m_checkBoxFullCircle->GetValue() )
+    {
+        m_entryCircAngle->Disable();
+    }
+    else
+    {
+        m_entryCircAngle->Enable();
+    }
+
     if( m_isFootprintEditor )
     {
         m_footprintReannotatePanel->Show( false );
@@ -573,29 +607,14 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
 
 void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
 {
-    if( m_radioBtnSetByPos->GetValue() )
+    // In full circle mode, the division angle is computed from the number of points
+    if( m_checkBoxFullCircle->GetValue() )
     {
-        VECTOR2I centre( m_hCentre.GetIntValue(), m_vCentre.GetIntValue() );
-
-        // Find the radius, etc of the circle
-        centre -= m_originalItemPosition;
-        EDA_ANGLE angle( centre );
-
-        m_circRadius.SetValue( int( centre.EuclideanNorm() ) );
-        m_circCenterAngle.SetAngleValue( angle.Round( 4 ) );
-
-        m_refPosX.SetValue( m_originalItemPosition.x );
-        m_refPosY.SetValue( m_originalItemPosition.y );
-    }
-    else
-    {
-        m_refPosX.SetValue( m_originalItemPosition.x );
-        m_refPosY.SetValue( m_originalItemPosition.y );
-
-        double radius = m_circRadius.GetIntValue();
-        EDA_ANGLE angle = m_circCenterAngle.GetAngleValue();
-
-        m_hCentre.SetValue( m_originalItemPosition.x + radius * angle.Cos() );
-        m_vCentre.SetValue( m_originalItemPosition.y + radius * angle.Sin() );
+        long nPts;
+        if( m_entryCircCount->GetValue().ToLong( &nPts ) )
+        {
+            EDA_ANGLE division = EDA_ANGLE( 360, DEGREES_T ) / nPts;
+            m_circAngle.SetAngleValue( division );
+        }
     }
 }

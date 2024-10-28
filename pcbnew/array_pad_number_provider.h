@@ -27,6 +27,7 @@
 
 #include <array_options.h>
 #include <footprint.h>
+#include <board_commit.h>
 
 /**
  * Simple class that sequentially provides numbers from an #ARRAY_OPTIONS object, making sure

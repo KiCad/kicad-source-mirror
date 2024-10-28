@@ -512,15 +512,6 @@ TOOL_ACTION PCB_ACTIONS::pointEditorMoveMidpoint( TOOL_ACTION_ARGS()
         .Tooltip( _( "Move the active midpoint to an exact location" ) )
         .Icon( BITMAPS::move_exactly ) );
 
-TOOL_ACTION PCB_ACTIONS::createArray( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveEdit.createArray" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_CTRL + 'T' )
-        .LegacyHotkeyName( "Create Array" )
-        .FriendlyName( _( "Create Array..." ) )
-        .Icon( BITMAPS::array )
-        .Flags( AF_ACTIVATE ) );
-
 TOOL_ACTION PCB_ACTIONS::rotateCw( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.rotateCw" )
         .Scope( AS_GLOBAL )
@@ -680,6 +671,16 @@ TOOL_ACTION PCB_ACTIONS::properties( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Properties..." ) )
         .Icon( BITMAPS::edit ) );
 
+// ARRAY
+//
+TOOL_ACTION PCB_ACTIONS::createArray( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Array.createArray" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'T' )
+        .LegacyHotkeyName( "Create Array" )
+        .FriendlyName( _( "Create Array..." ) )
+        .Icon( BITMAPS::array )
+        .Flags( AF_ACTIVATE ) );
 
 // FOOTPRINT_EDITOR_CONTROL
 //

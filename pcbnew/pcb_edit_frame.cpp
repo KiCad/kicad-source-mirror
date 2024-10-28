@@ -67,6 +67,7 @@
 #include <tool/properties_tool.h>
 #include <tool/selection.h>
 #include <tool/zoom_tool.h>
+#include <tools/array_tool.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_picker_tool.h>
@@ -730,6 +731,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new MICROWAVE_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
+    m_toolManager->RegisterTool( new ARRAY_TOOL );
     m_toolManager->RegisterTool( new ZONE_FILLER_TOOL );
     m_toolManager->RegisterTool( new AUTOPLACE_TOOL );
     m_toolManager->RegisterTool( new DRC_TOOL );
@@ -1056,6 +1058,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLeader );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drillOrigin );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::gridSetOrigin );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::createArray );
 
     CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateLine );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateGap );

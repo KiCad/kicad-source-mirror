@@ -287,7 +287,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_gridPanel->SetSizer( bSizerGridArray );
 	m_gridPanel->Layout();
 	bSizerGridArray->Fit( m_gridPanel );
-	m_gridTypeNotebook->AddPage( m_gridPanel, _("Grid Array"), true );
+	m_gridTypeNotebook->AddPage( m_gridPanel, _("Grid Array"), false );
 	m_circularPanel = new wxPanel( m_gridTypeNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
@@ -296,52 +296,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	bSizerCircLeft = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerInfo;
-	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Reference Position") ), wxVERTICAL );
-
-	m_stInfoItems = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Position of the selected item (or group) to duplicate"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stInfoItems->Wrap( -1 );
-	sbSizerInfo->Add( m_stInfoItems, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 3, 5, 5 );
-	fgSizer4->AddGrowableCol( 1 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_stRefPosXTxt = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Ref point pos X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stRefPosXTxt->Wrap( -1 );
-	fgSizer4->Add( m_stRefPosXTxt, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_tcRefPosX = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer4->Add( m_tcRefPosX, 0, wxEXPAND, 5 );
-
-	m_stRefPosXUnit = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stRefPosXUnit->Wrap( -1 );
-	fgSizer4->Add( m_stRefPosXUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-	m_stRefPosYTxt = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Ref point pos Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stRefPosYTxt->Wrap( -1 );
-	fgSizer4->Add( m_stRefPosYTxt, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_tcRefPosY = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer4->Add( m_tcRefPosY, 0, wxEXPAND, 5 );
-
-	m_stRefPosYUnit = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stRefPosYUnit->Wrap( -1 );
-	fgSizer4->Add( m_stRefPosYUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-
-	sbSizerInfo->Add( fgSizer4, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-
-	bSizerCircLeft->Add( sbSizerInfo, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
-
-	wxStaticBoxSizer* sbSizerCircParams;
-	sbSizerCircParams = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Array Settings") ), wxVERTICAL );
-
-	m_radioBtnSetByPos = new wxRadioButton( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Set center by position"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_radioBtnSetByPos->SetValue( true );
-	sbSizerCircParams->Add( m_radioBtnSetByPos, 0, wxALL, 5 );
+	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Center position") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerArrayPrms;
 	fgSizerArrayPrms = new wxFlexGridSizer( 0, 3, 5, 5 );
@@ -349,97 +304,55 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	fgSizerArrayPrms->SetFlexibleDirection( wxBOTH );
 	fgSizerArrayPrms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_labelCentreX = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Center pos X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCentreX = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Center pos X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCentreX->Wrap( -1 );
 	fgSizerArrayPrms->Add( m_labelCentreX, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_entryCentreX = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerArrayPrms->Add( m_entryCentreX, 0, wxEXPAND, 5 );
+	m_entryCentreX = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerArrayPrms->Add( m_entryCentreX, 0, wxEXPAND|wxTOP, 5 );
 
-	m_unitLabelCentreX = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabelCentreX = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabelCentreX->Wrap( -1 );
 	fgSizerArrayPrms->Add( m_unitLabelCentreX, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_labelCentreY = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Center pos Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCentreY = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Center pos Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCentreY->Wrap( -1 );
 	fgSizerArrayPrms->Add( m_labelCentreY, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_entryCentreY = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryCentreY = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerArrayPrms->Add( m_entryCentreY, 0, wxEXPAND, 5 );
 
-	m_unitLabelCentreY = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabelCentreY = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabelCentreY->Wrap( -1 );
 	fgSizerArrayPrms->Add( m_unitLabelCentreY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerCircParams->Add( fgSizerArrayPrms, 0, wxEXPAND|wxLEFT, 25 );
+	fgSizerArrayPrms->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	sbSizerCircParams->Add( 0, 15, 1, wxEXPAND, 5 );
+	sbSizerInfo->Add( fgSizerArrayPrms, 0, wxEXPAND|wxLEFT, 25 );
 
-	m_radioBtnSetByRadius = new wxRadioButton( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Set center by radius"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerCircParams->Add( m_radioBtnSetByRadius, 0, wxALL, 5 );
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizerRadius;
-	bSizerRadius = new wxBoxSizer( wxVERTICAL );
+	m_btnSelectCenterPoint = new wxButton( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Select Point..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_btnSelectCenterPoint, 1, wxALL, 5 );
 
-	m_labelCircRadius = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Radius of circular array:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelCircRadius->Wrap( -1 );
-	bSizerRadius->Add( m_labelCircRadius, 0, wxTOP|wxRIGHT, 5 );
-
-	wxBoxSizer* bSizerRadiusValue;
-	bSizerRadiusValue = new wxBoxSizer( wxHORIZONTAL );
-
-	m_tcValueCircRadius = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_tcValueCircRadius->SetToolTip( _("Distance between Ref point and Center pos.") );
-
-	bSizerRadiusValue->Add( m_tcValueCircRadius, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
-
-	m_unitLabelCircRadius = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_unitLabelCircRadius->Wrap( -1 );
-	bSizerRadiusValue->Add( m_unitLabelCircRadius, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_btnSelectCenterItem = new wxButton( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Select Item..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_btnSelectCenterItem, 1, wxALL, 5 );
 
 
-	bSizerRadius->Add( bSizerRadiusValue, 0, wxEXPAND, 5 );
-
-	m_labelCircCenterAngle = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Angle from center to reference position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelCircCenterAngle->Wrap( -1 );
-	bSizerRadius->Add( m_labelCircCenterAngle, 0, wxTOP|wxRIGHT, 5 );
-
-	wxBoxSizer* bSizerRadiusValue1;
-	bSizerRadiusValue1 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_tcValueCircCenterAngle = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_tcValueCircCenterAngle->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_tcValueCircCenterAngle->SetMaxLength( 8 );
-	}
-	#else
-	m_tcValueCircCenterAngle->SetMaxLength( 8 );
-	#endif
-	m_tcValueCircCenterAngle->SetToolTip( _("Angle between Ref point and Center pos.") );
-
-	bSizerRadiusValue1->Add( m_tcValueCircCenterAngle, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
-
-	m_unitLabelCircCenterAngle = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_unitLabelCircCenterAngle->Wrap( -1 );
-	bSizerRadiusValue1->Add( m_unitLabelCircCenterAngle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	sbSizerInfo->Add( bSizer12, 1, wxEXPAND, 5 );
 
 
-	bSizerRadius->Add( bSizerRadiusValue1, 0, wxEXPAND, 5 );
-
-
-	sbSizerCircParams->Add( bSizerRadius, 0, wxEXPAND|wxLEFT, 25 );
-
-
-	sbSizerCircParams->Add( 0, 5, 0, 0, 5 );
-
-
-	bSizerCircLeft->Add( sbSizerCircParams, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizerCircLeft->Add( sbSizerInfo, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxStaticBoxSizer* sbSizerDupPrms;
 	sbSizerDupPrms = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Duplication Settings") ), wxVERTICAL );
+
+	m_checkBoxFullCircle = new wxCheckBox( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Full circle"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxFullCircle->SetValue(true);
+	sbSizerDupPrms->Add( m_checkBoxFullCircle, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizerDupPrms;
 	fgSizerDupPrms = new wxFlexGridSizer( 0, 3, 5, 5 );
@@ -447,11 +360,11 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	fgSizerDupPrms->SetFlexibleDirection( wxBOTH );
 	fgSizerDupPrms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_labelCircAngle = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Angle between new items:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircAngle = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Angle between items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircAngle->Wrap( -1 );
 	fgSizerDupPrms->Add( m_labelCircAngle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_entryCircAngle = new wxTextCtrl( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryCircAngle = new wxTextCtrl( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("90"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryCircAngle->SetToolTip( _("Positive angles represent an anti-clockwise rotation. An angle of 0 will produce a full circle divided evenly into \"Count\" portions.") );
 
 	fgSizerDupPrms->Add( m_entryCircAngle, 0, wxEXPAND, 5 );
@@ -470,20 +383,13 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	fgSizerDupPrms->Add( m_entryCircCount, 0, wxEXPAND, 5 );
 
 
-	fgSizerDupPrms->Add( 0, 0, 0, wxEXPAND, 5 );
+	sbSizerDupPrms->Add( fgSizerDupPrms, 0, wxBOTTOM|wxEXPAND, 5 );
 
-	m_labelCircRotate = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Rotate items:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelCircRotate->Wrap( -1 );
-	fgSizerDupPrms->Add( m_labelCircRotate, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_entryRotateItemsCb = new wxCheckBox( sbSizerDupPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryRotateItemsCb = new wxCheckBox( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Rotate items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryRotateItemsCb->SetValue(true);
 	m_entryRotateItemsCb->SetToolTip( _("Rotate the item as well as move it - multi-selections will be rotated together") );
 
-	fgSizerDupPrms->Add( m_entryRotateItemsCb, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
-
-
-	sbSizerDupPrms->Add( fgSizerDupPrms, 0, wxBOTTOM|wxEXPAND, 5 );
+	sbSizerDupPrms->Add( m_entryRotateItemsCb, 0, wxALL, 5 );
 
 
 	bSizerCircLeft->Add( sbSizerDupPrms, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
@@ -553,7 +459,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_circularPanel->SetSizer( bSizer4 );
 	m_circularPanel->Layout();
 	bSizer4->Fit( m_circularPanel );
-	m_gridTypeNotebook->AddPage( m_circularPanel, _("Circular Array"), false );
+	m_gridTypeNotebook->AddPage( m_circularPanel, _("Circular Array"), true );
 
 	bSizer7->Add( m_gridTypeNotebook, 1, wxALL|wxEXPAND, 10 );
 
@@ -610,12 +516,11 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_entryStagger->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbGridStartNumberingOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_radioBoxGridNumberingScheme->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
-	m_radioBtnSetByPos->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnButtonPosition ), NULL, this );
 	m_entryCentreX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCentreY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
-	m_radioBtnSetByRadius->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnButtonRadius ), NULL, this );
-	m_tcValueCircRadius->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnRadiusChanged ), NULL, this );
-	m_tcValueCircCenterAngle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnRadiusChanged ), NULL, this );
+	m_btnSelectCenterPoint->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnSelectCenterButton ), NULL, this );
+	m_btnSelectCenterItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnSelectCenterButton ), NULL, this );
+	m_checkBoxFullCircle->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircAngle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircCount->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbCircStartNumberingOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
@@ -634,12 +539,11 @@ DIALOG_CREATE_ARRAY_BASE::~DIALOG_CREATE_ARRAY_BASE()
 	m_entryStagger->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbGridStartNumberingOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_radioBoxGridNumberingScheme->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
-	m_radioBtnSetByPos->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnButtonPosition ), NULL, this );
 	m_entryCentreX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCentreY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
-	m_radioBtnSetByRadius->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnButtonRadius ), NULL, this );
-	m_tcValueCircRadius->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnRadiusChanged ), NULL, this );
-	m_tcValueCircCenterAngle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnRadiusChanged ), NULL, this );
+	m_btnSelectCenterPoint->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnSelectCenterButton ), NULL, this );
+	m_btnSelectCenterItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnSelectCenterButton ), NULL, this );
+	m_checkBoxFullCircle->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircAngle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircCount->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbCircStartNumberingOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );

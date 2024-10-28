@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Created on: 11 Mar 2016, author John Beard
- * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,16 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "array_creator.h"
+#include "tools/array_tool.h"
 
+#include <array_options.h>
 #include <array_pad_number_provider.h>
-#include <board_commit.h>
-#include <pcb_group.h>
-#include <pad.h>
 #include <dialogs/dialog_create_array.h>
-#include <tool/tool_manager.h>
+#include <pad.h>
+#include <pcb_group.h>
 #include <tools/board_reannotate_tool.h>
 #include <tools/pcb_selection_tool.h>
+
 
 /**
  * Transform a #BOARD_ITEM from the given #ARRAY_OPTIONS and an index into the array.
@@ -44,58 +43,110 @@ static void TransformItem( const ARRAY_OPTIONS& aArrOpts, int aIndex, BOARD_ITEM
 {
     const ARRAY_OPTIONS::TRANSFORM transform = aArrOpts.GetTransform( aIndex, aItem.GetPosition() );
 
-    std::cout << "Offset for item " << aIndex << ": " << transform.m_offset << std::endl;
-
     aItem.Move( transform.m_offset );
     aItem.Rotate( aItem.GetPosition(), transform.m_rotation );
 }
 
 
-void ARRAY_CREATOR::Invoke()
+ARRAY_TOOL::ARRAY_TOOL() : PCB_TOOL_BASE( "pcbnew.Array" )
 {
-    // bail out if no items
-    if( m_selection.Size() == 0 )
-        return;
+}
 
-    FOOTPRINT* const fp = m_isFootprintEditor ? m_parent.GetBoard()->GetFirstFootprint() : nullptr;
+
+ARRAY_TOOL::~ARRAY_TOOL()
+{
+}
+
+
+void ARRAY_TOOL::Reset( RESET_REASON aReason )
+{
+}
+
+
+bool ARRAY_TOOL::Init()
+{
+    return true;
+}
+
+
+int ARRAY_TOOL::CreateArray( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    // Be sure that there is at least one item that we can modify
+    const PCB_SELECTION& selection = selectionTool->RequestSelection(
+            []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+            } );
+
+    if( selection.Empty() )
+        return 0;
+
+    m_selection = std::make_unique<PCB_SELECTION>( selection );
+
+    // we have a selection to work on now, so start the tool process
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     const bool enableArrayNumbering = m_isFootprintEditor;
     VECTOR2I   origin;
 
-    if( m_selection.Size() == 1 )
-        origin = m_selection.Items()[0]->GetPosition();
+    if( m_selection->Size() == 1 )
+        origin = m_selection->Items()[0]->GetPosition();
     else
-        origin = m_selection.GetCenter();
+        origin = m_selection->GetCenter();
 
-    std::unique_ptr<ARRAY_OPTIONS> array_opts;
+    m_array_opts.reset();
+    m_dialog = new DIALOG_CREATE_ARRAY( editFrame, m_array_opts, enableArrayNumbering, origin );
 
-    DIALOG_CREATE_ARRAY dialog( &m_parent, array_opts, enableArrayNumbering, origin );
+    m_dialog->Bind( wxEVT_CLOSE_WINDOW, &ARRAY_TOOL::onDialogClosed, this );
 
-    int ret = dialog.ShowModal();
+    // Show the dialog, but it's not modal - the user might ask to select a point, in which case
+    // we'll exit and do to that.
+    m_dialog->Show( true );
 
-    if( ret != wxID_OK || array_opts == nullptr )
+    return 0;
+}
+
+void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
+{
+    // Now that the dialog has served it's purpose, we can get rid of it
+    m_dialog->Destroy();
+
+    // This means the dialog failed somehow
+    if( m_array_opts == nullptr )
         return;
 
-    BOARD_COMMIT commit( &m_parent );
+    wxCHECK( m_selection, /* void */ );
 
-    ARRAY_PAD_NUMBER_PROVIDER pad_number_provider( fp, *array_opts );
+    PCB_SELECTION& selection = *m_selection;
+
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+
+    BOARD_COMMIT commit( editFrame );
+
+    FOOTPRINT* const fp =
+            m_isFootprintEditor ? editFrame->GetBoard()->GetFirstFootprint() : nullptr;
+
+    ARRAY_PAD_NUMBER_PROVIDER pad_number_provider( fp, *m_array_opts );
 
     EDA_ITEMS all_added_items;
 
-    int arraySize = array_opts->GetArraySize();
+    int arraySize = m_array_opts->GetArraySize();
     // Iterate in reverse so the original items go last, and we can
     // use them for the positions of the clones.
     for( int ptN = arraySize - 1; ptN >= 0; --ptN )
     {
-        PCB_SELECTION items_for_this_block;
+        PCB_SELECTION        items_for_this_block;
         std::set<FOOTPRINT*> fpDeDupe;
 
-        for ( int i = 0; i < m_selection.Size(); ++i )
+        for( int i = 0; i < m_selection->Size(); ++i )
         {
-            if( !m_selection[i]->IsBOARD_ITEM() )
+            if( !selection[i]->IsBOARD_ITEM() )
                 continue;
 
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection[ i ] );
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection[i] );
 
             FOOTPRINT* parentFootprint = item->GetParentFootprint();
 
@@ -127,7 +178,7 @@ void ARRAY_CREATOR::Invoke()
 
                 commit.Modify( this_item );
 
-                TransformItem( *array_opts, arraySize - 1, *this_item );
+                TransformItem( *m_array_opts, arraySize - 1, *this_item );
             }
             else
             {
@@ -162,9 +213,7 @@ void ARRAY_CREATOR::Invoke()
                     case PCB_DIM_ORTHOGONAL_T:
                     case PCB_DIM_LEADER_T:
                     case PCB_TARGET_T:
-                    case PCB_ZONE_T:
-                        this_item = item->Duplicate();
-                        break;
+                    case PCB_ZONE_T: this_item = item->Duplicate(); break;
 
                     case PCB_GROUP_T:
                         this_item = static_cast<PCB_GROUP*>( item )->DeepDuplicate();
@@ -192,7 +241,7 @@ void ARRAY_CREATOR::Invoke()
                             } );
 
                     // We're iterating backwards, so the first item is the last in the array
-                    TransformItem( *array_opts, arraySize - ptN - 1, *this_item );
+                    TransformItem( *m_array_opts, arraySize - ptN - 1, *this_item );
 
                     // If a group is duplicated, add also created members to the board
                     if( this_item->Type() == PCB_GROUP_T )
@@ -211,7 +260,7 @@ void ARRAY_CREATOR::Invoke()
             // attempt to renumber items if the array parameters define
             // a complete numbering scheme to number by (as opposed to
             // implicit numbering by incrementing the items during creation
-            if( this_item && array_opts->ShouldNumberItems() )
+            if( this_item && m_array_opts->ShouldNumberItems() )
             {
                 // Renumber non-aperture pads.
                 if( this_item->Type() == PCB_PAD_T )
@@ -227,7 +276,7 @@ void ARRAY_CREATOR::Invoke()
             }
         }
 
-        if( !m_isFootprintEditor && array_opts->ShouldReannotateFootprints() )
+        if( !m_isFootprintEditor && m_array_opts->ShouldReannotateFootprints() )
         {
             m_toolMgr->GetTool<BOARD_REANNOTATE_TOOL>()->ReannotateDuplicates( items_for_this_block,
                                                                                all_added_items );
@@ -241,4 +290,14 @@ void ARRAY_CREATOR::Invoke()
     m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &all_added_items );
 
     commit.Push( _( "Create Array" ) );
+
+    m_selection.reset();
+}
+
+
+void ARRAY_TOOL::setTransitions()
+{
+    // clang-format off
+    Go( &ARRAY_TOOL::CreateArray,   PCB_ACTIONS::createArray.MakeEvent() );
+    // clang-format on
 }

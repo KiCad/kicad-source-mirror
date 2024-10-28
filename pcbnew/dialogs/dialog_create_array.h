@@ -22,22 +22,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_CREATE_ARRAY__H_
-#define DIALOG_CREATE_ARRAY__H_
+#pragma once
 
 // Include the wxFormBuider header base:
 #include <dialog_create_array_base.h>
 
+#include <memory>
+
 #include <array_options.h>
 #include <board_item.h>
 #include <pcb_base_frame.h>
-
+#include <tools/pcb_picker_tool.h>
 #include <widgets/unit_binder.h>
 #include <widgets/widget_save_restore.h>
 
-#include <memory>
 
-class DIALOG_CREATE_ARRAY : public DIALOG_CREATE_ARRAY_BASE
+class DIALOG_CREATE_ARRAY : public DIALOG_CREATE_ARRAY_BASE, public PCB_PICKER_TOOL::RECEIVER
 {
 public:
     /**
@@ -50,21 +50,26 @@ public:
      */
     DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, std::unique_ptr<ARRAY_OPTIONS>& aOptions,
                          bool enableNumbering, const VECTOR2I& aOrigPos );
+    ~DIALOG_CREATE_ARRAY();
+
+    // Implement the RECEIVER interface for the callback from the TOOL
+    void UpdatePickedItem( const EDA_ITEM* aItem ) override;
+    void UpdatePickedPoint( const std::optional<VECTOR2I>& aPoint ) override;
 
 private:
     // Event callbacks
-    void OnButtonPosition( wxCommandEvent& event ) override;
-    void OnButtonRadius( wxCommandEvent& event ) override;
-
     void OnParameterChanged( wxCommandEvent& event ) override;
-    void OnRadiusChanged( wxCommandEvent& event ) override;
+
+    // Center select buttons
+    void OnSelectCenterButton( wxCommandEvent& event ) override;
 
     // Internal callback handlers
     void setControlEnablement();
-    void setCircularArrayEnablement();
     void calculateCircularArrayProperties();
 
     bool TransferDataFromWindow() override;
+
+    PCB_BASE_FRAME* m_frame;
 
     /**
      * The settings to re-seat on dialog OK.
@@ -81,13 +86,8 @@ private:
 
     UNIT_BINDER m_hSpacing, m_vSpacing;
     UNIT_BINDER m_hOffset, m_vOffset;
-    UNIT_BINDER m_refPosX, m_refPosY;
     UNIT_BINDER m_hCentre, m_vCentre;
-    UNIT_BINDER m_circRadius;
-    UNIT_BINDER m_circCenterAngle;
     UNIT_BINDER m_circAngle;
 
     WIDGET_SAVE_RESTORE m_cfg_persister;
 };
-
-#endif // DIALOG_CREATE_ARRAY__H_

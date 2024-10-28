@@ -43,7 +43,6 @@
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <kiway.h>
-#include <array_creator.h>
 #include <status_popup.h>
 #include <tool/selection_conditions.h>
 #include <tool/tool_manager.h>
@@ -2934,34 +2933,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
-{
-    if( isRouterActive() )
-    {
-        wxBell();
-        return 0;
-    }
-
-    // Be sure that there is at least one item that we can modify
-    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-            {
-                sTool->FilterCollectorForMarkers( aCollector );
-                sTool->FilterCollectorForHierarchy( aCollector, true );
-            } );
-
-    if( selection.Empty() )
-        return 0;
-
-    // we have a selection to work on now, so start the tool process
-    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-    ARRAY_CREATOR   array_creator( *editFrame, m_isFootprintEditor, selection, m_toolMgr );
-    array_creator.Invoke();
-
-    return 0;
-}
-
-
 int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 {
     const auto incrementableFilter =
@@ -3440,7 +3411,6 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Move,                  PCB_ACTIONS::moveWithReference.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,             ACTIONS::duplicate.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,             PCB_ACTIONS::duplicateIncrement.MakeEvent() );
-    Go( &EDIT_TOOL::CreateArray,           PCB_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,                PCB_ACTIONS::mirrorH.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,                PCB_ACTIONS::mirrorV.MakeEvent() );
     Go( &EDIT_TOOL::Swap,                  PCB_ACTIONS::swap.MakeEvent() );
