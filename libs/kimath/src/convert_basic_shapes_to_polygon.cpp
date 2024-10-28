@@ -42,12 +42,8 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer, const VECTOR2I& aCente
     int     numSegs = GetArcToSegmentCount( aRadius, aError, FULL_CIRCLE );
     numSegs = std::max( aMinSegCount, numSegs );
 
-    // The shape will be built with a even number of segs. Reason: the horizontal
-    // diameter begins and ends to points on the actual circle, or circle
-    // expanded by aError if aErrorLoc == ERROR_OUTSIDE.
-    // This is used by Arc to Polygon shape convert.
-    if( numSegs & 1 )
-        numSegs++;
+    // Round up to 8 to make segment approximations align properly at 45-degrees
+    numSegs = ( numSegs + 7 ) / 8 * 8;
 
     EDA_ANGLE delta = ANGLE_360 / numSegs;
     int       radius = aRadius;
@@ -61,7 +57,7 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer, const VECTOR2I& aCente
         radius += GetCircleToPolyCorrection( actual_delta_radius );
     }
 
-    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
+    for( EDA_ANGLE angle = delta / 2; angle < ANGLE_360; angle += delta )
     {
         corner_position.x = radius;
         corner_position.y = 0;
@@ -81,12 +77,8 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aCenter,
     int      numSegs = GetArcToSegmentCount( aRadius, aError, FULL_CIRCLE );
     numSegs = std::max( aMinSegCount, numSegs );
 
-    // The shape will be built with a even number of segs. Reason: the horizontal
-    // diameter begins and ends to points on the actual circle, or circle
-    // expanded by aError if aErrorLoc == ERROR_OUTSIDE.
-    // This is used by Arc to Polygon shape convert.
-    if( numSegs & 1 )
-        numSegs++;
+    // Round up to 8 to make segment approximations align properly at 45-degrees
+    numSegs = ( numSegs + 7 ) / 8 * 8;
 
     EDA_ANGLE delta = ANGLE_360 / numSegs;
     int       radius = aRadius;
@@ -102,7 +94,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aCenter,
 
     aBuffer.NewOutline();
 
-    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
+    for( EDA_ANGLE angle = delta / 2; angle < ANGLE_360; angle += delta )
     {
         corner_position.x = radius;
         corner_position.y = 0;
@@ -114,6 +106,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aCenter,
     // Finish circle
     corner_position.x = radius;
     corner_position.y = 0;
+    RotatePoint( corner_position, delta / 2 );
     corner_position += aCenter;
     aBuffer.Append( corner_position.x, corner_position.y );
 }
