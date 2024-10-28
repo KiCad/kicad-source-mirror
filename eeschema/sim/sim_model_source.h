@@ -53,6 +53,8 @@ public:
     std::string ModelLine( const SPICE_ITEM& aItem ) const override;
     std::string ItemLine( const SPICE_ITEM& aItem ) const override;
 
+    std::string TunerCommand( const SPICE_ITEM& aItem, double aValue ) const override;
+
 private:
     std::string getParamValueString( const std::string& aParamName,
                                      const std::string& aDefaultValue ) const;
@@ -75,6 +77,8 @@ public:
     bool HasPrimaryValue() const override { return GetType() == TYPE::V || GetType() == TYPE::I; }
 
     std::vector<std::string> GetPinNames() const override;
+
+    const PARAM* GetTunerParam() const override;
 
 protected:
     void doSetParamValue( int aParamIndex, const std::string& aValue ) override;
