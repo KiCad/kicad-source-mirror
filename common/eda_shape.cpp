@@ -2070,9 +2070,17 @@ static struct EDA_SHAPE_DESC
                     shapeProps )
                 .SetAvailableFunc( fillAvailable );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Fill Color" ),
-                    &EDA_SHAPE::SetFillColor, &EDA_SHAPE::GetFillColor ),
-                    shapeProps )
+        auto fillColor = new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Fill Color" ),
+                        &EDA_SHAPE::SetFillColor, &EDA_SHAPE::GetFillColor );
+        fillColor->SetWriteableFunc(
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( EDA_SHAPE* edaShape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                        return edaShape->GetFillMode() == FILL_T::FILLED_WITH_COLOR;
+
+                    return true;
+                } );
+        propMgr.AddProperty( fillColor, shapeProps )
                 .SetAvailableFunc( fillAvailable )
                 .SetIsHiddenFromRulesEditor();
     }
