@@ -931,12 +931,14 @@ void PAD::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
             }
         } );
 
-    // Flip pads layers
-    LSET layerSet = m_padStack.LayerSet();
-    SetLayerSet( layerSet.Flip() );
-
     // Flip padstack geometry
-    m_padStack.FlipLayers( BoardCopperLayerCount() );
+    int copperLayerCount = BoardCopperLayerCount();
+
+    m_padStack.FlipLayers( copperLayerCount );
+
+    // Flip pads layers after padstack geometry
+    LSET layerSet = m_padStack.LayerSet();
+    SetLayerSet( layerSet.Flip( copperLayerCount ) );
 
     // Flip the basic shapes, in custom pads
     FlipPrimitives( aFlipDirection );
