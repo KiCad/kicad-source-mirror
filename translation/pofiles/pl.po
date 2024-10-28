@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:32-0700\n"
-"PO-Revision-Date: 2024-09-13 02:09+0000\n"
+"PO-Revision-Date: 2024-10-28 18:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8.2-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -19050,9 +19050,8 @@ msgid "Errors during netlist generation."
 msgstr "Podczas tworzenia listy sieci wykryto błędy."
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Podczas tworzenia listy sieci wykryto błędy."
+msgstr "Podczas tworzenia listy sieci wystąpiły ostrzeżenia."
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -22893,7 +22892,7 @@ msgstr "Podświetl elementy z tym atrybutem apertuty"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
-msgstr "DCode:"
+msgstr "D-Kod:"
 
 #: gerbview/toolbars_gerber.cpp:292
 msgid "<No selection>"
@@ -28643,7 +28642,7 @@ msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
-msgstr "HAL SnPb"
+msgstr "HAL ołowiowy"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:41
 msgid "HAL lead-free"
@@ -41666,9 +41665,9 @@ msgstr ""
 "wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4178
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr "Nieznane wyrównanie tekstu %d, tekst %s"
+msgstr "Nieznane wyrównanie w bloku tekstu %d, tekst %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4334
 msgid "Loading rectangles..."
@@ -42727,7 +42726,7 @@ msgid "Cannot interpret date code %d"
 msgstr "Nie można zinterpretować kodu daty %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -42735,7 +42734,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "Znaleziono elementy na niezdefiniowanych warstwach (%s).\n"
-"Czy chcesz je odzyskać i przenieść na warstwę %s?"
+"Czy chcesz je odzyskać i przenieść na warstwę %s?\n"
+"\n"
+"Strefy będą wymagać ponownego wypełnienia."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Undefined Layers Warning"
