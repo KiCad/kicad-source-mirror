@@ -35,7 +35,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <string_utils.h>
 #include <project_sch.h>
-
+#include <refdes_utils.h>
 #include <dialog_sim_model.h>
 
 #include <dialog_lib_symbol_properties.h>
@@ -238,8 +238,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
         return false;
 
     // Alias symbol reference can be empty because it inherits from the parent symbol.
-    if( m_libEntry->IsRoot() &&
-        !SCH_SYMBOL::IsReferenceStringValid( m_fields->at( REFERENCE_FIELD ).GetText() ) )
+    if( m_libEntry->IsRoot()
+            && UTIL::GetRefDesPrefix( m_fields->at( REFERENCE_FIELD ).GetText() ).IsEmpty() )
     {
         if( m_NoteBook->GetSelection() != 0 )
             m_NoteBook->SetSelection( 0 );

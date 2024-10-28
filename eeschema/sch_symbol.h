@@ -556,10 +556,7 @@ public:
     {
         return GetRef( &Schematic()->CurrentSheet() );
     }
-    void SetRefProp( const wxString aRef )
-    {
-        SetRef( &Schematic()->CurrentSheet(), aRef );
-    }
+    void SetRefProp( const wxString& aRef );
     wxString GetValueProp() const
     {
         return GetValueFieldText( false, &Schematic()->CurrentSheet(), false );
@@ -676,16 +673,6 @@ public:
     void PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
-
-    /**
-     * Test for an acceptable reference string.
-     *
-     * An acceptable reference string must support unannotation i.e starts by letter
-     *
-     * @param aReferenceString is the reference string to validate
-     * @return true if reference string is valid.
-     */
-    static bool IsReferenceStringValid( const wxString& aReferenceString );
 
     /**
      * Return the reference for the given sheet path.

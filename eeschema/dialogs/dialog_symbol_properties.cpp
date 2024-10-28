@@ -634,17 +634,6 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
     if( !m_fieldsGrid->CommitPendingChanges() || !m_fieldsGrid->Validate() )
         return false;
 
-    if( !SCH_SYMBOL::IsReferenceStringValid( m_fields->at( REFERENCE_FIELD ).GetText() ) )
-    {
-        DisplayErrorMessage( this, _( "References must start with a letter." ) );
-
-        wxCommandEvent *evt = new wxCommandEvent( SYMBOL_DELAY_FOCUS );
-        evt->SetClientData( new VECTOR2I( REFERENCE_FIELD, FDC_VALUE ) );
-        QueueEvent( evt );
-
-        return false;
-    }
-
     // Check for missing field names.
     for( size_t i = MANDATORY_FIELDS;  i < m_fields->size(); ++i )
     {

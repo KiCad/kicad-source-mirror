@@ -38,6 +38,8 @@
 #include <wx/textentry.h>
 #include <wx/log.h>
 #include <wx/combo.h>
+#include <wx/msgdlg.h>
+#include <refdes_utils.h>
 
 
 FOOTPRINT_NAME_VALIDATOR::FOOTPRINT_NAME_VALIDATOR( wxString* aValue ) :
@@ -355,18 +357,24 @@ bool FIELD_VALIDATOR::Validate( wxWindow* aParent )
         return false;
 
     wxString val( text->GetValue() );
+
+    return DoValidate( val, aParent );
+}
+
+bool FIELD_VALIDATOR::DoValidate( const wxString& aValue, wxWindow* aParent )
+{
     wxString msg;
 
-    if( HasFlag( wxFILTER_EMPTY ) && val.empty() )
+    if( HasFlag( wxFILTER_EMPTY ) && aValue.empty() )
         msg.Printf( _( "The value of the field cannot be empty." ) );
 
-    if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
+    if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( aValue ) )
     {
         wxArrayString badCharsFound;
 
         for( const wxUniCharRef& excludeChar : GetCharExcludes() )
         {
-            if( val.Find( excludeChar ) != wxNOT_FOUND )
+            if( aValue.Find( excludeChar ) != wxNOT_FOUND )
             {
                 if( excludeChar == '\r' )
                     badCharsFound.Add( _( "carriage return" ) );
@@ -434,14 +442,19 @@ bool FIELD_VALIDATOR::Validate( wxWindow* aParent )
             break;
         };
     }
-    else if( m_fieldId == REFERENCE_FIELD && val.Contains( wxT( "${" ) ) )
+    else if( m_fieldId == REFERENCE_FIELD && aValue.Contains( wxT( "${" ) ) )
     {
         msg.Printf( _( "The reference designator cannot contain text variable references" ) );
+    }
+    else if( m_fieldId == REFERENCE_FIELD && UTIL::GetRefDesPrefix( aValue ).IsEmpty() )
+    {
+        msg.Printf( _( "References must start with a letter." ) );
     }
 
     if( !msg.empty() )
     {
-        m_validatorWindow->SetFocus();
+        if( m_validatorWindow )
+            m_validatorWindow->SetFocus();
 
         wxMessageBox( msg, _( "Field Validation Error" ), wxOK | wxICON_EXCLAMATION, aParent );
 
