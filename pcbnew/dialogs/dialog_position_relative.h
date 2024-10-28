@@ -30,17 +30,19 @@
 
 #include <tool/tool_manager.h>
 #include <widgets/unit_binder.h>
-#include "tools/position_relative_tool.h"
+#include <tools/pcb_picker_tool.h>
 
-class DIALOG_POSITION_RELATIVE : public DIALOG_POSITION_RELATIVE_BASE
+class DIALOG_POSITION_RELATIVE : public DIALOG_POSITION_RELATIVE_BASE,
+                                 public PCB_PICKER_TOOL::RECEIVER
 {
 public:
     // Constructor and destructor
     DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent );
     ~DIALOG_POSITION_RELATIVE() { };
 
-    void UpdateAnchor( EDA_ITEM* aItem );
-    void UpdateAnchor( std::optional<VECTOR2I> aPoint );
+    // Implement the RECEIVER interface for the callback from the TOOL
+    void UpdatePickedItem( const EDA_ITEM* aItem ) override;
+    void UpdatePickedPoint( const std::optional<VECTOR2I>& aPoint ) override;
 
 private:
     /**
@@ -77,7 +79,7 @@ private:
     void updateDialogControls( bool aPolar );
 
     // Update controls and labels after changing anchor type
-    void updateAnchorInfo( BOARD_ITEM* aItem );
+    void updateAnchorInfo( const BOARD_ITEM* aItem );
 
     // Get the current anchor position.
     VECTOR2I getAnchorPos();

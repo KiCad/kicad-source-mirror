@@ -324,9 +324,9 @@ public:
     /// Activation of the position relative tool
     static TOOL_ACTION positionRelative;
 
-    /// Selection of anchor item for position relative tool
-    static TOOL_ACTION selectPositionRelativeItem;
-    static TOOL_ACTION selectPositionRelativePoint;
+    /// Selection of reference points/items
+    static TOOL_ACTION selectItemInteractively;
+    static TOOL_ACTION selectPointInteractively;
 
     // Display modes
     static TOOL_ACTION showRatsnest;

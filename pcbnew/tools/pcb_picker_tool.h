@@ -37,6 +37,27 @@
 class PCB_PICKER_TOOL : public PCB_TOOL_BASE, public PICKER_TOOL_BASE
 {
 public:
+    /**
+     * Interface class for something that receives picked points
+     * or items from this tool. Examples could be a dialog that's
+     * asking the user to pick a point.
+     */
+    class RECEIVER
+    {
+    public:
+        virtual void UpdatePickedPoint( const std::optional<VECTOR2I>& aPoint ) = 0;
+        virtual void UpdatePickedItem( const EDA_ITEM* aItem ) = 0;
+
+    protected:
+        ~RECEIVER() = default;
+    };
+
+    struct INTERACTIVE_PARAMS
+    {
+        RECEIVER* m_Receiver = nullptr;
+        wxString  m_Prompt;
+    };
+
     PCB_PICKER_TOOL();
     virtual ~PCB_PICKER_TOOL() = default;
 
@@ -50,6 +71,9 @@ public:
      * Set the tool's snap layer set.
      */
     inline void SetLayerSet( LSET aLayerSet ) { m_layerMask = aLayerSet; }
+
+    int SelectPointInteractively( const TOOL_EVENT& aEvent );
+    int SelectItemInteractively( const TOOL_EVENT& aEvent );
 
 protected:
     ///< @copydoc TOOL_INTERACTIVE::setTransitions();

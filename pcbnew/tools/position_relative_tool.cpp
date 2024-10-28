@@ -25,14 +25,12 @@
 #include <memory>
 using namespace std::placeholders;
 
-#include <kiplatform/ui.h>
 #include <tools/position_relative_tool.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_picker_tool.h>
 #include <dialogs/dialog_position_relative.h>
-#include <status_popup.h>
 #include <board_commit.h>
 #include <confirm.h>
 #include <collectors.h>
@@ -44,8 +42,7 @@ using namespace std::placeholders;
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
     PCB_TOOL_BASE( "pcbnew.PositionRelative" ),
     m_dialog( nullptr ),
-    m_selectionTool( nullptr ),
-    m_anchor_item( nullptr )
+    m_selectionTool( nullptr )
 {
 }
 
@@ -158,153 +155,7 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
 }
 
 
-int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent  )
-{
-    PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
-    STATUS_TEXT_POPUP statusPopup( frame() );
-    bool              done = false;
-
-    Activate();
-
-    statusPopup.SetText( _( "Click on reference item..." ) );
-
-    picker->SetClickHandler(
-        [&]( const VECTOR2D& aPoint ) -> bool
-        {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-            const PCB_SELECTION& sel = m_selectionTool->RequestSelection(
-                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
-                        PCB_SELECTION_TOOL* sTool )
-                    {
-                    } );
-
-            if( sel.Empty() )
-                return true;    // still looking for an item
-
-            m_anchor_item = sel.Front();
-            statusPopup.Hide();
-
-            if( m_dialog )
-                m_dialog->UpdateAnchor( sel.Front() );
-
-            return false;       // got our item; don't need any more
-        } );
-
-    picker->SetMotionHandler(
-        [&] ( const VECTOR2D& aPos )
-        {
-            statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
-        } );
-
-    picker->SetCancelHandler(
-        [&]()
-        {
-            statusPopup.Hide();
-
-            if( m_dialog )
-                m_dialog->UpdateAnchor( m_anchor_item );
-        } );
-
-    picker->SetFinalizeHandler(
-        [&]( const int& aFinalState )
-        {
-            done = true;
-        } );
-
-    statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
-    statusPopup.Popup();
-    canvas()->SetStatusPopup( statusPopup.GetPanel() );
-
-    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
-
-    while( !done )
-    {
-        // Pass events unless we receive a null event, then we must shut down
-        if( TOOL_EVENT* evt = Wait() )
-            evt->SetPassEvent();
-        else
-            break;
-    }
-
-    canvas()->SetStatusPopup( nullptr );
-
-    return 0;
-}
-
-
-int POSITION_RELATIVE_TOOL::SelectPositionRelativePoint( const TOOL_EVENT& aEvent )
-{
-    PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
-    STATUS_TEXT_POPUP statusPopup( frame() );
-    bool              done = false;
-
-    PCB_GRID_HELPER grid_helper( m_toolMgr, frame()->GetMagneticItemsSettings() );
-
-    Activate();
-
-    statusPopup.SetText( _( "Click on reference point..." ) );
-
-    picker->SetClickHandler(
-        [&]( const VECTOR2D& aPoint ) -> bool
-        {
-            std::optional<VECTOR2I> snapped = grid_helper.GetSnappedPoint();
-
-            statusPopup.Hide();
-
-            if( m_dialog )
-                m_dialog->UpdateAnchor( snapped ? *snapped : VECTOR2I( aPoint ) );
-
-            return false;       // got our item; don't need any more
-        } );
-
-    picker->SetMotionHandler(
-        [&] ( const VECTOR2D& aPos )
-        {
-            grid_helper.SetSnap( !( picker->CurrentModifiers() & MD_SHIFT ) );
-            statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
-        } );
-
-    picker->SetCancelHandler(
-        [&]()
-        {
-            statusPopup.Hide();
-
-            if( m_dialog )
-                m_dialog->UpdateAnchor( std::nullopt );
-        } );
-
-    picker->SetFinalizeHandler(
-        [&]( const int& aFinalState )
-        {
-            done = true;
-        } );
-
-    statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
-    statusPopup.Popup();
-    canvas()->SetStatusPopup( statusPopup.GetPanel() );
-
-    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
-
-    while( !done )
-    {
-        // Pass events unless we receive a null event, then we must shut down
-        if( TOOL_EVENT* evt = Wait() )
-            evt->SetPassEvent();
-        else
-            break;
-    }
-
-    canvas()->SetStatusPopup( nullptr );
-
-    return 0;
-}
-
-
 void POSITION_RELATIVE_TOOL::setTransitions()
 {
     Go( &POSITION_RELATIVE_TOOL::PositionRelative, PCB_ACTIONS::positionRelative.MakeEvent() );
-    Go( &POSITION_RELATIVE_TOOL::SelectPositionRelativeItem,
-        PCB_ACTIONS::selectPositionRelativeItem.MakeEvent() );
-    Go( &POSITION_RELATIVE_TOOL::SelectPositionRelativePoint,
-        PCB_ACTIONS::selectPositionRelativePoint.MakeEvent() );
 }

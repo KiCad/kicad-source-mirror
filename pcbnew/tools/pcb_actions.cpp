@@ -32,6 +32,7 @@
 #include <microwave/microwave_tool.h>
 #include <pcb_reference_image.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_picker_tool.h>
 #include <tools/pcb_selection_tool.h>
 #include <router/pns_router.h>
 #include <router/pns_routing_settings.h>
@@ -2018,13 +2019,18 @@ TOOL_ACTION PCB_ACTIONS::positionRelative( TOOL_ACTION_ARGS()
         .Tooltip( _( "Positions the selected item(s) by an exact amount relative to another" ) )
         .Icon( BITMAPS::move_relative ) );
 
-TOOL_ACTION PCB_ACTIONS::selectPositionRelativeItem( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.PositionRelative.selectpositionRelativeItem" )
-        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION PCB_ACTIONS::selectPositionRelativePoint( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.PositionRelative.selectPositionRelativePoint" )
-        .Scope( AS_GLOBAL ) );
+// PCIKER_TOOL
+//
+TOOL_ACTION PCB_ACTIONS::selectItemInteractively( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Picker.selectItemInteractively" )
+        .Scope( AS_GLOBAL )
+        .Parameter<PCB_PICKER_TOOL::INTERACTIVE_PARAMS>( {} ) );
+
+TOOL_ACTION PCB_ACTIONS::selectPointInteractively( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Picker.selectPointInteractively" )
+        .Scope( AS_GLOBAL )
+        .Parameter<PCB_PICKER_TOOL::INTERACTIVE_PARAMS>( {} ));
 
 
 // PCB_SELECTION_TOOL

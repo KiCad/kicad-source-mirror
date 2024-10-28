@@ -26,14 +26,13 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
-#include "pcb_selection_tool.h"
-#include "dialogs/dialog_position_relative.h"
-#include "dialogs/dialog_position_relative_base.h"
+#include <tools/pcb_selection_tool.h>
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
 class PCB_SELECTION_TOOL;
 class DIALOG_POSITION_RELATIVE;
+
 
 /**
  * The interactive edit tool.
@@ -58,18 +57,6 @@ public:
     int PositionRelative( const TOOL_EVENT& aEvent );
 
     /**
-     * Invoke the picker tool to select the item to which the previous selection will be placed
-     * relative to.
-     */
-    int SelectPositionRelativeItem( const TOOL_EVENT& aEvent  );
-
-    /**
-     * Invoke the picker tool to select the point to which the previous selection will be placed
-     * relative to.
-     */
-    int SelectPositionRelativePoint( const TOOL_EVENT& aEvent  );
-
-    /**
      * Return the position of the selected item(s)
      */
     VECTOR2I GetSelectionAnchorPosition() const { return m_selectionAnchor; }
@@ -91,8 +78,6 @@ private:
     VECTOR2I                      m_selectionAnchor;
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
-
-    EDA_ITEM*                     m_anchor_item;
 };
 
 #endif
