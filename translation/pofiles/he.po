@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-23 07:15+0000\n"
+"PO-Revision-Date: 2024-10-28 18:03+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -3698,27 +3698,27 @@ msgstr ""
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #: eeschema/widgets/search_handlers.cpp:438
 msgid "Local"
-msgstr ""
+msgstr "מקומי"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
 msgid "SSH Private Key"
-msgstr ""
+msgstr "מפתח SSH פרטי"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "Select SSH private key file"
-msgstr ""
+msgstr "בחר קובץ מפתח פרטי SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
 msgid "Username"
-msgstr ""
+msgstr "שם משתמש"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 msgid "Git Repository"
-msgstr ""
+msgstr "מאגר GIT"
 
 #: common/dialogs/git/dialog_git_switch.cpp:40
 msgid "Git Branch Switch"
@@ -3726,11 +3726,11 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_switch.cpp:48
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "בחר או הזן שם ענף:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Branch"
-msgstr ""
+msgstr "ענף"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
 msgid "Last Commit"
