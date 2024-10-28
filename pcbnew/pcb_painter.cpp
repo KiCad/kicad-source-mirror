@@ -437,15 +437,19 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
         if( !isActive )
         {
+            // Graphics on Edge_Cuts layers are not dimmed or hidden because they are
+            // in fact on all layers
             if( m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN
                 || IsNetnameLayer( aLayer )
                 || hide )
             {
-                color = COLOR4D::CLEAR;
+                if( originalLayer != Edge_Cuts )
+                    color = COLOR4D::CLEAR;
             }
             else
             {
-                color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
+                if( originalLayer != Edge_Cuts )
+                    color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
 
                 // Reference images can't have their color mixed so just reduce the opacity a bit
                 // so they show through less
