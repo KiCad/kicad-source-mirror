@@ -437,18 +437,27 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
         if( !isActive )
         {
-            // Graphics on Edge_Cuts layers are not dimmed or hidden because they are
-            // in fact on all layers
+            // Graphics on Edge_Cuts layer are not fully dimmed or hidden because they are
+            // useful when working on another layer
+            // We could use a dim factor = m_hiContrastFactor, but to have a sufficient
+            // contrast whenever m_hiContrastFactor value, we clamp the factor to 0.3f
+            // (arbitray choice after tests)
+            float dim_factor_Edge_Cuts = std::max( m_hiContrastFactor, 0.3f );
+
             if( m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN
                 || IsNetnameLayer( aLayer )
                 || hide )
             {
-                if( originalLayer != Edge_Cuts )
+                if( originalLayer == Edge_Cuts )
+                    color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], dim_factor_Edge_Cuts );
+                else
                     color = COLOR4D::CLEAR;
             }
             else
             {
-                if( originalLayer != Edge_Cuts )
+                if( originalLayer == Edge_Cuts )
+                    color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], dim_factor_Edge_Cuts );
+                else
                     color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
 
                 // Reference images can't have their color mixed so just reduce the opacity a bit
