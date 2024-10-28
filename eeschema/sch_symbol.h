@@ -542,10 +542,7 @@ public:
     {
         return GetRef( &Schematic()->CurrentSheet() );
     }
-    void SetRefProp( const wxString& aRef )
-    {
-        SetRef( &Schematic()->CurrentSheet(), aRef );
-    }
+    void SetRefProp( const wxString& aRef );
     wxString GetValueProp() const
     {
         return GetValue( false, &Schematic()->CurrentSheet(), false );
@@ -680,16 +677,6 @@ public:
     std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
 
     void SwapData( SCH_ITEM* aItem ) override;
-
-    /**
-     * Test for an acceptable reference string.
-     *
-     * An acceptable reference string must support unannotation i.e starts by letter
-     *
-     * @param aReferenceString is the reference string to validate
-     * @return true if reference string is valid.
-     */
-    static bool IsReferenceStringValid( const wxString& aReferenceString );
 
     /**
      * Set the reference for the given sheet path for this symbol.

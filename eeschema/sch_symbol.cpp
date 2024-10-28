@@ -43,6 +43,7 @@
 #include <sch_rule_area.h>
 
 #include <utility>
+#include <validators.h>
 
 
 std::unordered_map<TRANSFORM, int> SCH_SYMBOL::s_transformToOrientationCache;
@@ -766,9 +767,12 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
 }
 
 
-bool SCH_SYMBOL::IsReferenceStringValid( const wxString& aReferenceString )
+void SCH_SYMBOL::SetRefProp( const wxString& aRef )
 {
-    return !UTIL::GetRefDesPrefix( aReferenceString ).IsEmpty();
+    FIELD_VALIDATOR validator( REFERENCE_FIELD );
+
+    if( validator.DoValidate( aRef, nullptr ) )
+        SetRef( &Schematic()->CurrentSheet(), aRef );
 }
 
 

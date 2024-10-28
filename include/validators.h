@@ -235,6 +235,8 @@ public:
      */
     virtual bool Validate( wxWindow* aParent ) override;
 
+    bool DoValidate( const wxString& aValue, wxWindow* aParent );
+
 private:
     int m_fieldId;
 };
