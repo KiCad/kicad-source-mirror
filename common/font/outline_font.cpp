@@ -484,6 +484,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
             for( SHAPE_LINE_CHAIN& hole : holes )
             {
+                bool added_hole = false;
+
                 if( hole.PointCount() )
                 {
                     for( int ii = 0; ii < glyph->OutlineCount(); ++ii )
@@ -491,9 +493,15 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                         if( glyph->Outline( ii ).PointInside( hole.GetPoint( 0 ) ) )
                         {
                             glyph->AddHole( std::move( hole ), ii );
+                            added_hole = true;
                             break;
                         }
                     }
+
+                    // Some lovely TTF fonts decided that winding didn't matter for outlines that
+                    // don't have holes, so holes that don't fit in any outline are added as outlines
+                    if( !added_hole )
+                        glyph->AddOutline( std::move( hole ) );
                 }
             }
 
