@@ -229,7 +229,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
 
         if( fail_min )
         {
-            if( constraint.GetParentRule() && constraint.GetParentRule()->m_Implicit )
+            if( constraint.m_ImplicitMin )
                 constraintName = _( "board setup constraints" );
 
             msg = formatMsg( _( "(%s min hole %s; actual %s)" ),
