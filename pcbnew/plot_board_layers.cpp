@@ -547,7 +547,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 // anchor will be added to the pad shape when plotting the pad. So now the
                 // polygonal shape is built, we can clamp the anchor size
                 if( mask_clearance < 0 )  // we expect margin.x = margin.y for custom pads
-                    dummy.SetSize( padPlotsSize );
+                    dummy.SetSize( VECTOR2I( std::max( 0, padPlotsSize.x ),
+                                             std::max( 0, padPlotsSize.y ) ) );
 
                 itemplotter.PlotPad( &dummy, color, padPlotMode );
                 break;
