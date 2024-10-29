@@ -42,6 +42,626 @@
 #include <tools/drawing_tool.h>
 
 
+struct BOUND_CONTROL
+{
+    std::unique_ptr<UNIT_BINDER> m_Binder;
+    wxTextCtrl*                  m_Ctrl;
+};
+
+
+/**
+ * A class that operates over a list of BOUND_CONTROLs
+ * and keeps them in sync with a PCB_SHAPE. Exactly how that is done
+ * depends on the kind of shape.
+ *
+ * Inherit from this class and implement the relvant update functions
+ * and listen for changes on the right controls for each mode
+ * (e.g. edit line segment by endpoints).
+ */
+class GEOM_SYNCER : public wxEvtHandler
+{
+public:
+    GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
+            m_shape( aShape ), m_boundCtrls( aBoundCtrls )
+    {
+    }
+
+    void BindCtrls( size_t aFrom, size_t aTo, std::function<void()> aCb )
+    {
+        wxCHECK( aFrom < m_boundCtrls.size(), /* void */ );
+        wxCHECK( aTo < m_boundCtrls.size(), /* void */ );
+
+        for( size_t i = aFrom; i <= aTo; ++i )
+        {
+            m_boundCtrls[i].m_Ctrl->Bind( wxEVT_TEXT,
+                                          [aCb]( wxCommandEvent& aEvent )
+                                          {
+                                              aCb();
+                                          } );
+        }
+    }
+
+    void SetShape( PCB_SHAPE& aShape )
+    {
+        m_shape = aShape;
+        updateAll();
+    }
+
+    virtual bool Validate( wxArrayString& aErrs ) const { return true; }
+
+protected:
+    virtual void updateAll() = 0;
+
+    wxTextCtrl* GetCtrl( size_t aIndex ) const
+    {
+        wxCHECK( aIndex < m_boundCtrls.size(), nullptr );
+        return m_boundCtrls[aIndex].m_Ctrl;
+    }
+
+    int GetIntValue( size_t aIndex ) const
+    {
+        wxCHECK( aIndex < m_boundCtrls.size(), 0.0 );
+        return static_cast<int>( m_boundCtrls[aIndex].m_Binder->GetValue() );
+    }
+
+    EDA_ANGLE GetAngleValue( size_t aIndex ) const
+    {
+        wxCHECK( aIndex < m_boundCtrls.size(), EDA_ANGLE() );
+        return m_boundCtrls[aIndex].m_Binder->GetAngleValue();
+    }
+
+    void ChangeValue( size_t aIndex, int aValue )
+    {
+        wxCHECK( aIndex < m_boundCtrls.size(), /* void */ );
+        m_boundCtrls[aIndex].m_Binder->ChangeValue( aValue );
+    }
+
+    void ChangeAngleValue( size_t aIndex, const EDA_ANGLE& aValue )
+    {
+        wxCHECK( aIndex < m_boundCtrls.size(), /* void */ );
+        m_boundCtrls[aIndex].m_Binder->ChangeAngleValue( aValue );
+    }
+
+    PCB_SHAPE& GetShape() { return m_shape; }
+
+    const PCB_SHAPE& GetShape() const { return m_shape; }
+
+private:
+    PCB_SHAPE&                  m_shape;
+    std::vector<BOUND_CONTROL>& m_boundCtrls;
+};
+
+
+/**
+ * Class that keeps a rectangle's various fields all up to date.
+ */
+class RECTANGLE_GEOM_SYNCER : public GEOM_SYNCER
+{
+public:
+    enum CTRL_IDX
+    {
+        START_X = 0,
+        START_Y,
+        END_X,
+        END_Y,
+        CORNER_X,
+        CORNER_Y,
+        CORNER_W,
+        CORNER_H,
+        CENTER_X,
+        CENTER_Y,
+        CENTER_W,
+        CENTER_H,
+
+        NUM_CTRLS,
+    };
+
+    RECTANGLE_GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
+            GEOM_SYNCER( aShape, aBoundCtrls )
+    {
+        wxASSERT( aBoundCtrls.size() == NUM_CTRLS );
+        wxASSERT( GetShape().GetShape() == SHAPE_T::RECTANGLE );
+
+        BindCtrls( START_X, END_Y,
+                   [this]()
+                   {
+                       OnCornersChange();
+                   } );
+
+        BindCtrls( CORNER_X, CORNER_H,
+                   [this]()
+                   {
+                       OnCornerSizeChange();
+                   } );
+
+        BindCtrls( CENTER_X, CENTER_H,
+                   [this]()
+                   {
+                       OnCenterSizeChange();
+                   } );
+    }
+
+    bool Validate( wxArrayString& aErrs ) const override
+    {
+        const VECTOR2I p0{ GetIntValue( START_X ), GetIntValue( START_Y ) };
+        const VECTOR2I p1{ GetIntValue( END_X ), GetIntValue( END_Y ) };
+
+        if( p0 == p1 )
+        {
+            aErrs.push_back( _( "Rectangle cannot be zero-sized." ) );
+            return false;
+        }
+
+        return true;
+    }
+
+    void updateAll() override
+    {
+        updateCorners();
+        updateCornerSize();
+        updateCenterSize();
+    }
+
+    void OnCornersChange()
+    {
+        const VECTOR2I p0{ GetIntValue( START_X ), GetIntValue( START_Y ) };
+        const VECTOR2I p1{ GetIntValue( END_X ), GetIntValue( END_Y ) };
+
+        GetShape().SetStart( p0 );
+        GetShape().SetEnd( p1 );
+
+        updateCenterSize();
+        updateCornerSize();
+    }
+
+    void updateCorners()
+    {
+        const VECTOR2I p0 = GetShape().GetStart();
+        const VECTOR2I p1 = GetShape().GetEnd();
+
+        ChangeValue( START_X, p0.x );
+        ChangeValue( START_Y, p0.y );
+        ChangeValue( END_X, p1.x );
+        ChangeValue( END_Y, p1.y );
+    }
+
+    void OnCornerSizeChange()
+    {
+        const VECTOR2I p0{ GetIntValue( CORNER_X ), GetIntValue( CORNER_Y ) };
+        const VECTOR2I size{ GetIntValue( CORNER_W ), GetIntValue( CORNER_H ) };
+
+        GetShape().SetStart( p0 );
+        GetShape().SetEnd( p0 + size );
+
+        updateCorners();
+        updateCenterSize();
+    }
+
+    void updateCornerSize()
+    {
+        const VECTOR2I p0 = GetShape().GetStart();
+
+        ChangeValue( CORNER_X, p0.x );
+        ChangeValue( CORNER_Y, p0.y );
+        ChangeValue( CORNER_W, GetShape().GetRectangleWidth() );
+        ChangeValue( CORNER_H, GetShape().GetRectangleHeight() );
+    }
+
+    void OnCenterSizeChange()
+    {
+        const VECTOR2I center = { GetIntValue( CENTER_X ), GetIntValue( CENTER_Y ) };
+        const VECTOR2I size = { GetIntValue( CENTER_W ), GetIntValue( CENTER_H ) };
+
+        GetShape().SetStart( center - size / 2 );
+        GetShape().SetEnd( center + size / 2 );
+
+        updateCorners();
+        updateCornerSize();
+    }
+
+    void updateCenterSize()
+    {
+        const VECTOR2I c = GetShape().GetCenter();
+
+        ChangeValue( CENTER_X, c.x );
+        ChangeValue( CENTER_Y, c.y );
+        ChangeValue( CENTER_W, GetShape().GetRectangleWidth() );
+        ChangeValue( CENTER_H, GetShape().GetRectangleHeight() );
+    }
+};
+
+
+class LINE_GEOM_SYNCER : public GEOM_SYNCER
+{
+public:
+    enum CTRL_IDX
+    {
+        START_X = 0,
+        START_Y,
+        END_X,
+        END_Y,
+        POLAR_START_X,
+        POLAR_START_Y,
+        LENGTH,
+        ANGLE,
+
+        NUM_CTRLS,
+    };
+
+    LINE_GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
+            GEOM_SYNCER( aShape, aBoundCtrls )
+    {
+        wxASSERT( aBoundCtrls.size() == NUM_CTRLS );
+        wxASSERT( GetShape().GetShape() == SHAPE_T::SEGMENT );
+
+        BindCtrls( START_X, END_Y,
+                   [this]()
+                   {
+                       OnEndsChange();
+                   } );
+
+        BindCtrls( POLAR_START_X, ANGLE,
+                   [this]()
+                   {
+                       OnPolarChange();
+                   } );
+    }
+
+    void updateAll() override
+    {
+        updateEnds();
+        updatePolar();
+    }
+
+    void OnEndsChange()
+    {
+        const VECTOR2I p0{ GetIntValue( START_X ), GetIntValue( START_Y ) };
+        const VECTOR2I p1{ GetIntValue( END_X ), GetIntValue( END_Y ) };
+
+        GetShape().SetStart( p0 );
+        GetShape().SetEnd( p1 );
+
+        updatePolar();
+    }
+
+    void updateEnds()
+    {
+        const VECTOR2I p0 = GetShape().GetStart();
+        const VECTOR2I p1 = GetShape().GetEnd();
+
+        ChangeValue( START_X, p0.x );
+        ChangeValue( START_Y, p0.y );
+        ChangeValue( END_X, p1.x );
+        ChangeValue( END_Y, p1.y );
+    }
+
+    void OnPolarChange()
+    {
+        const VECTOR2I  p0{ GetIntValue( POLAR_START_X ), GetIntValue( POLAR_START_Y ) };
+        const int       length = GetIntValue( LENGTH );
+        const EDA_ANGLE angle = GetAngleValue( ANGLE );
+
+        VECTOR2I polar = GetRotated( VECTOR2I{ length, 0 }, angle );
+
+        GetShape().SetStart( p0 );
+        GetShape().SetEnd( polar );
+
+        updateEnds();
+    }
+
+    void updatePolar()
+    {
+        const VECTOR2I p0 = GetShape().GetStart();
+        const VECTOR2I p1 = GetShape().GetEnd();
+
+        ChangeValue( POLAR_START_X, p0.x );
+        ChangeValue( POLAR_START_Y, p0.y );
+        ChangeValue( LENGTH, p0.Distance( p1 ) );
+        ChangeAngleValue( ANGLE, -EDA_ANGLE( p1 - p0 ) );
+    }
+};
+
+
+class ARC_GEOM_SYNCER : public GEOM_SYNCER
+{
+public:
+    enum CTRL_IDX
+    {
+        //CSA
+        CSA_CENTER_X = 0,
+        CSA_CENTER_Y,
+        CSA_START_X,
+        CSA_START_Y,
+        CSA_ANGLE,
+
+        SME_START_X,
+        SME_START_Y,
+        SME_MID_X,
+        SME_MID_Y,
+        SME_END_X,
+        SME_END_Y,
+
+        NUM_CTRLS
+    };
+
+    ARC_GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
+            GEOM_SYNCER( aShape, aBoundCtrls )
+    {
+        wxASSERT( aBoundCtrls.size() == NUM_CTRLS );
+        wxASSERT( GetShape().GetShape() == SHAPE_T::ARC );
+
+        BindCtrls( CSA_CENTER_X, CSA_ANGLE,
+                   [this]()
+                   {
+                       OnCSAChange();
+                   } );
+
+        BindCtrls( SME_START_X, SME_END_Y,
+                   [this]()
+                   {
+                       OnSMEChange();
+                   } );
+    }
+
+    bool Validate( wxArrayString& aErrs ) const override
+    {
+        const EDA_ANGLE angle = GetAngleValue( CSA_ANGLE );
+
+        if( angle == 0 )
+        {
+            aErrs.push_back( _( "Arc angle must be greater than 0" ) );
+            return false;
+        }
+
+        const VECTOR2I start{ GetIntValue( SME_START_X ), GetIntValue( SME_START_Y ) };
+        const VECTOR2I mid{ GetIntValue( SME_MID_X ), GetIntValue( SME_MID_Y ) };
+        const VECTOR2I end{ GetIntValue( SME_END_X ), GetIntValue( SME_END_Y ) };
+
+        if( start == mid || mid == end || start == end )
+        {
+            aErrs.push_back( _( "Arc must have 3 distinct points" ) );
+            return false;
+        }
+        else
+        {
+            const VECTOR2D center = CalcArcCenter( start, end, angle );
+
+            double radius = ( center - start ).EuclideanNorm();
+            double max_offset =
+                    std::max( std::abs( center.x ) + radius, std::abs( center.y ) + radius );
+
+            if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0 )
+                || center == start || center == end )
+            {
+                aErrs.push_back( wxString::Format( _( "Invalid Arc with radius %f and angle %f." ),
+                                                   radius, angle.AsDegrees() ) );
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    void updateAll() override
+    {
+        updateCSA();
+        updateSME();
+    }
+
+    void OnCSAChange()
+    {
+        const VECTOR2I center{ GetIntValue( CSA_CENTER_X ), GetIntValue( CSA_CENTER_Y ) };
+        const VECTOR2I start{ GetIntValue( CSA_START_X ), GetIntValue( CSA_START_Y ) };
+        const int      angle = GetIntValue( CSA_ANGLE );
+
+        GetShape().SetCenter( center );
+        GetShape().SetStart( start );
+        GetShape().SetArcAngleAndEnd( angle );
+
+        updateSME();
+    }
+
+    void updateCSA()
+    {
+        const VECTOR2I center = GetShape().GetCenter();
+        const VECTOR2I start = GetShape().GetStart();
+
+        ChangeValue( CSA_CENTER_X, center.x );
+        ChangeValue( CSA_CENTER_Y, center.y );
+        ChangeValue( CSA_START_X, start.x );
+        ChangeValue( CSA_START_Y, start.y );
+        ChangeAngleValue( CSA_ANGLE, GetShape().GetArcAngle() );
+    }
+
+    void OnSMEChange()
+    {
+        const VECTOR2I p0{ GetIntValue( SME_START_X ), GetIntValue( SME_START_Y ) };
+        const VECTOR2I p1{ GetIntValue( SME_MID_X ), GetIntValue( SME_MID_Y ) };
+        const VECTOR2I p2{ GetIntValue( SME_END_X ), GetIntValue( SME_END_Y ) };
+
+        GetShape().SetArcGeometry( p0, p1, p2 );
+
+        updateCSA();
+    }
+
+    void updateSME()
+    {
+        const VECTOR2I p0 = GetShape().GetStart();
+        const VECTOR2I p1 = GetShape().GetArcMid();
+        const VECTOR2I p2 = GetShape().GetEnd();
+
+        ChangeValue( SME_START_X, p0.x );
+        ChangeValue( SME_START_Y, p0.y );
+        ChangeValue( SME_MID_X, p1.x );
+        ChangeValue( SME_MID_Y, p1.y );
+        ChangeValue( SME_END_X, p2.x );
+        ChangeValue( SME_END_Y, p2.y );
+    }
+};
+
+
+class CIRCLE_GEOM_SYNCER : public GEOM_SYNCER
+{
+public:
+    enum CTRL_IDX
+    {
+        CENTER_X = 0,
+        CENTER_Y,
+        RADIUS,
+        CENTER_PT_X,
+        CENTER_PT_Y,
+        PT_PT_X,
+        PT_PT_Y,
+
+        NUM_CTRLS,
+    };
+
+    CIRCLE_GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
+            GEOM_SYNCER( aShape, aBoundCtrls )
+    {
+        wxASSERT( aBoundCtrls.size() == NUM_CTRLS );
+        wxASSERT( GetShape().GetShape() == SHAPE_T::CIRCLE );
+
+        BindCtrls( CENTER_X, RADIUS,
+                   [this]()
+                   {
+                       OnCenterRadiusChange();
+                   } );
+
+        BindCtrls( CENTER_PT_X, PT_PT_Y,
+                   [this]()
+                   {
+                       OnCenterPointChange();
+                   } );
+    }
+
+    void updateAll() override
+    {
+        updateCenterRadius();
+        updateCenterPoint();
+    }
+
+    bool Validate( wxArrayString& aErrs ) const override
+    {
+        if( GetIntValue( RADIUS ) <= 0 )
+        {
+            aErrs.push_back( _( "Radius must be greater than 0" ) );
+            return false;
+        }
+
+        return true;
+    }
+
+    void OnCenterRadiusChange()
+    {
+        const VECTOR2I center{ GetIntValue( CENTER_X ), GetIntValue( CENTER_Y ) };
+        const int      radius = GetIntValue( RADIUS );
+
+        GetShape().SetCenter( center );
+        GetShape().SetRadius( radius );
+
+        updateCenterPoint();
+    }
+
+    void updateCenterRadius()
+    {
+        const VECTOR2I center = GetShape().GetCenter();
+
+        ChangeValue( CENTER_X, center.x );
+        ChangeValue( CENTER_Y, center.y );
+        ChangeValue( RADIUS, GetShape().GetRadius() );
+    }
+
+    void OnCenterPointChange()
+    {
+        const VECTOR2I center{ GetIntValue( CENTER_PT_X ), GetIntValue( CENTER_PT_Y ) };
+        const VECTOR2I pt{ GetIntValue( PT_PT_X ), GetIntValue( PT_PT_Y ) };
+
+        GetShape().SetCenter( center );
+        GetShape().SetEnd( pt );
+
+        updateCenterRadius();
+    }
+
+    void updateCenterPoint()
+    {
+        const VECTOR2I center = GetShape().GetCenter();
+        const VECTOR2I pt = GetShape().GetEnd();
+
+        ChangeValue( CENTER_PT_X, center.x );
+        ChangeValue( CENTER_PT_Y, center.y );
+        ChangeValue( PT_PT_X, pt.x );
+        ChangeValue( PT_PT_Y, pt.y );
+    }
+};
+
+
+class BEZIER_GEOM_SYNCER : public GEOM_SYNCER
+{
+public:
+    enum CTRL_IDX
+    {
+        START_X = 0,
+        START_Y,
+        END_X,
+        END_Y,
+        CTRL1_X,
+        CTRL1_Y,
+        CTRL2_X,
+        CTRL2_Y,
+
+        NUM_CTRLS,
+    };
+
+    BEZIER_GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
+            GEOM_SYNCER( aShape, aBoundCtrls )
+    {
+        wxASSERT( aBoundCtrls.size() == NUM_CTRLS );
+        wxASSERT( GetShape().GetShape() == SHAPE_T::BEZIER );
+
+        BindCtrls( START_X, CTRL2_Y,
+                   [this]()
+                   {
+                       OnBezierChange();
+                   } );
+    }
+
+    void updateAll() override
+    {
+        updateBezier();
+    }
+
+    void OnBezierChange()
+    {
+        const VECTOR2I p0{ GetIntValue( START_X ), GetIntValue( START_Y ) };
+        const VECTOR2I p1{ GetIntValue( END_X ), GetIntValue( END_Y ) };
+        const VECTOR2I c1{ GetIntValue( CTRL1_X ), GetIntValue( CTRL1_Y ) };
+        const VECTOR2I c2{ GetIntValue( CTRL2_X ), GetIntValue( CTRL2_Y ) };
+
+        GetShape().SetStart( p0 );
+        GetShape().SetEnd( p1 );
+        GetShape().SetBezierC1( c1 );
+        GetShape().SetBezierC2( c2 );
+    }
+
+    void updateBezier()
+    {
+        const VECTOR2I p0 = GetShape().GetStart();
+        const VECTOR2I p1 = GetShape().GetEnd();
+        const VECTOR2I c1 = GetShape().GetBezierC1();
+        const VECTOR2I c2 = GetShape().GetBezierC2();
+
+        ChangeValue( START_X, p0.x );
+        ChangeValue( START_Y, p0.y );
+        ChangeValue( END_X, p1.x );
+        ChangeValue( END_Y, p1.y );
+        ChangeValue( CTRL1_X, c1.x );
+        ChangeValue( CTRL1_Y, c1.y );
+        ChangeValue( CTRL2_X, c2.x );
+        ChangeValue( CTRL2_Y, c2.y );
+    }
+};
+
 class DIALOG_SHAPE_PROPERTIES : public DIALOG_SHAPE_PROPERTIES_BASE
 {
 public:
@@ -84,44 +704,128 @@ private:
     }
 
 private:
+    // This must match the order of the tabs in the notebook
+    enum class SHAPE_PROPS_TAB_INDEX
+    {
+        RECT_CORNERS = 0,
+        RECT_CORNER_SIZE,
+        RECT_CENTER_SIZE,
+        LINE_ENDS,
+        LINE_POLAR,
+        ARC_C_S_A,
+        ARC_S_M_E,
+        CIRCLE_RADIUS,
+        CIRCLE_POINT,
+        BEZIER,
+
+        // Total tabs available (not all will be shown)
+        NUM_TABS,
+    };
+
     PCB_BASE_EDIT_FRAME*  m_parent;
     PCB_SHAPE*            m_item;
 
-    UNIT_BINDER           m_startX, m_startY;
-    UNIT_BINDER           m_endX, m_endY;
     UNIT_BINDER           m_thickness;
-    UNIT_BINDER           m_segmentLength;
-    UNIT_BINDER           m_segmentAngle;
-    UNIT_BINDER           m_angle;
-    UNIT_BINDER           m_rectangleHeight;
-    UNIT_BINDER           m_rectangleWidth;
-    UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
-    UNIT_BINDER           m_bezierCtrl2X, m_bezierCtrl2Y;
     UNIT_BINDER           m_solderMaskMargin;
 
-    bool                  m_flipStartEnd;
+    std::vector<BOUND_CONTROL>   m_boundCtrls;
+    std::unique_ptr<GEOM_SYNCER> m_geomSync;
+    PCB_SHAPE                    m_workingCopy;
 };
+
+
+static void AddXYPointToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, int row, int col,
+                               const wxString aName, bool aRelative,
+                               std::vector<BOUND_CONTROL>& aBoundCtrls )
+{
+    //    Name
+    // X [Ctrl] mm
+    // Y [Ctrl] mm
+    wxWindow* parent = aSizer.GetContainingWindow();
+
+    wxStaticText* titleLabel = new wxStaticText( parent, wxID_ANY, aName );
+    aSizer.Add( titleLabel, wxGBPosition( row, col ), wxGBSpan( 1, 3 ),
+                wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND );
+    row++;
+
+    for( size_t coord = 0; coord < 2; ++coord )
+    {
+        wxStaticText* label =
+                new wxStaticText( parent, wxID_ANY, coord == 0 ? _( "X" ) : _( "Y" ) );
+        aSizer.Add( label, wxGBPosition( row, col ), wxDefaultSpan,
+                    wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+        wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, "" );
+        aSizer.Add( ctrl, wxGBPosition( row, col + 1 ), wxDefaultSpan,
+                    wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
+
+        wxStaticText* units = new wxStaticText( parent, wxID_ANY, _( "mm" ) );
+        aSizer.Add( units, wxGBPosition( row, col + 2 ), wxDefaultSpan,
+                    wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
+
+        auto binder = std::make_unique<UNIT_BINDER>( &aFrame, label, ctrl, units );
+
+        if( aRelative )
+            binder->SetCoordType( coord == 0 ? ORIGIN_TRANSFORMS::REL_X_COORD
+                                             : ORIGIN_TRANSFORMS::REL_Y_COORD );
+        else
+            binder->SetCoordType( coord == 0 ? ORIGIN_TRANSFORMS::ABS_X_COORD
+                                             : ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
+        aBoundCtrls.push_back( BOUND_CONTROL{ std::move( binder ), ctrl } );
+        row++;
+    }
+
+    if( !aSizer.IsColGrowable( col + 1 ) )
+        aSizer.AddGrowableCol( col + 1 );
+}
+
+
+void AddFieldToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, int row, int col,
+                      const wxString aName, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType,
+                      bool aIsAngle, std::vector<BOUND_CONTROL>& aBoundCtrls )
+{
+    // Name [Ctrl] mm
+    wxWindow* parent = aSizer.GetContainingWindow();
+
+    wxStaticText* label = new wxStaticText( parent, wxID_ANY, aName );
+    aSizer.Add( label, wxGBPosition( row, col ), wxDefaultSpan,
+                wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY );
+    aSizer.Add( ctrl, wxGBPosition( row, col + 1 ), wxDefaultSpan,
+                wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
+
+    wxStaticText* units = new wxStaticText( parent, wxID_ANY, _( "mm" ) );
+    aSizer.Add( units, wxGBPosition( row, col + 2 ), wxDefaultSpan,
+                wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
+
+    auto binder = std::make_unique<UNIT_BINDER>( &aFrame, label, ctrl, units );
+    binder->SetCoordType( aCoordType );
+
+    if( aIsAngle )
+    {
+        binder->SetPrecision( 4 );
+        binder->SetUnits( EDA_UNITS::DEGREES );
+    }
+
+    aBoundCtrls.push_back( BOUND_CONTROL{ std::move( binder ), ctrl } );
+
+    if( !aSizer.IsColGrowable( col + 1 ) )
+        aSizer.AddGrowableCol( col + 1 );
+}
+
+
+static std::map<SHAPE_T, int> s_lastTabForShape;
+
 
 DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_SHAPE* aShape ):
     DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
     m_parent( aParent ),
     m_item( aShape ),
-    m_startX( aParent, m_startXLabel, m_startXCtrl, m_startXUnits ),
-    m_startY( aParent, m_startYLabel, m_startYCtrl, m_startYUnits ),
-    m_endX( aParent, m_endXLabel, m_endXCtrl, m_endXUnits ),
-    m_endY( aParent, m_endYLabel, m_endYCtrl, m_endYUnits ),
     m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
-    m_segmentLength( aParent, m_segmentLengthLabel, m_segmentLengthCtrl, m_segmentLengthUnits ),
-    m_segmentAngle( aParent, m_segmentAngleLabel, m_segmentAngleCtrl, m_segmentAngleUnits ),
-    m_angle( aParent, m_angleLabel, m_angleCtrl, m_angleUnits ),
-    m_rectangleHeight( aParent, m_rectangleHeightLabel, m_rectangleHeightCtrl, m_rectangleHeightUnits ),
-    m_rectangleWidth( aParent, m_rectangleWidthLabel, m_rectangleWidthCtrl, m_rectangleWidthUnits ),
-    m_bezierCtrl1X( aParent, m_BezierPointC1XLabel, m_BezierC1X_Ctrl, m_BezierPointC1XUnit ),
-    m_bezierCtrl1Y( aParent, m_BezierPointC1YLabel, m_BezierC1Y_Ctrl, m_BezierPointC1YUnit ),
-    m_bezierCtrl2X( aParent, m_BezierPointC2XLabel, m_BezierC2X_Ctrl, m_BezierPointC2XUnit ),
-    m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
     m_solderMaskMargin( aParent, m_solderMaskMarginLabel, m_solderMaskMarginCtrl, m_solderMaskMarginUnit ),
-    m_flipStartEnd( false )
+    m_workingCopy( *m_item )
 {
     SetTitle( wxString::Format( GetTitle(), m_item->GetFriendlyName() ) );
     m_hash_key = TO_UTF8( GetTitle() );
@@ -129,20 +833,126 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     wxFont infoFont = KIUI::GetInfoFont( this );
     m_techLayersLabel->SetFont( infoFont );
 
-    // Configure display origin transforms
-    m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
-    m_startY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
-    m_endX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
-    m_endY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
-    m_bezierCtrl1X.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
-    m_bezierCtrl1Y.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
-    m_bezierCtrl2X.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
-    m_bezierCtrl2Y.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    for( size_t i = 0; i < m_notebookShapeDefs->GetPageCount(); ++i )
+        m_notebookShapeDefs->GetPage( i )->Hide();
 
-    m_segmentAngle.SetUnits( EDA_UNITS::DEGREES );
-    m_segmentAngle.SetPrecision( 4 );
+    const auto showPage = [&]( SHAPE_PROPS_TAB_INDEX aIndex )
+    {
+        m_notebookShapeDefs->GetPage( static_cast<size_t>( aIndex ) )->Show();
+    };
 
-    m_angle.SetUnits( EDA_UNITS::DEGREES );
+    wxASSERT( m_notebookShapeDefs->GetPageCount()
+              == static_cast<int>( SHAPE_PROPS_TAB_INDEX::NUM_TABS ) );
+
+    switch( m_item->GetShape() )
+    {
+    case SHAPE_T::RECTANGLE:
+        // For all these functions, it's very important that the fields are added in the same order
+        // as the CTRL_IDX enums in the GEOM_SYNCER classes.
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCorners, 0, 0, _( "Start Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCorners, 0, 3, _( "End Point" ), false, m_boundCtrls );
+
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCornerSize, 0, 0, _( "Start Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCornerSize, 0, 3, _( "Size" ), true, m_boundCtrls );
+
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCenterSize, 0, 0, _( "Center" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCenterSize, 0, 3, _( "Size" ), true, m_boundCtrls );
+
+        m_geomSync = std::make_unique<RECTANGLE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
+
+        showPage( SHAPE_PROPS_TAB_INDEX::RECT_CORNERS );
+        showPage( SHAPE_PROPS_TAB_INDEX::RECT_CORNER_SIZE );
+        showPage( SHAPE_PROPS_TAB_INDEX::RECT_CENTER_SIZE );
+
+        m_notebookShapeDefs->SetSelection(
+                static_cast<int>( SHAPE_PROPS_TAB_INDEX::RECT_CORNERS ) );
+        break;
+    case SHAPE_T::SEGMENT:
+
+        AddXYPointToSizer( *aParent, *m_gbsLineByEnds, 0, 0, _( "Start Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsLineByEnds, 0, 3, _( "End Point" ), false, m_boundCtrls);
+
+        AddXYPointToSizer( *aParent, *m_gbsLineByLengthAngle, 0, 0, _( "Start Point" ), false, m_boundCtrls);
+        AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 1, 3, _( "Length" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false, m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 2, 3, _( "Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true, m_boundCtrls );
+
+        m_geomSync = std::make_unique<LINE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
+
+        showPage( SHAPE_PROPS_TAB_INDEX::LINE_ENDS );
+        showPage( SHAPE_PROPS_TAB_INDEX::LINE_POLAR );
+
+        m_notebookShapeDefs->SetSelection( static_cast<int>( SHAPE_PROPS_TAB_INDEX::LINE_ENDS ) );
+        break;
+    case SHAPE_T::ARC:
+        AddXYPointToSizer( *aParent, *m_gbsArcByCSA, 0, 0, _( "Center" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsArcByCSA, 0, 3, _( "Start Point" ), false, m_boundCtrls);
+        AddFieldToSizer( *aParent, *m_gbsArcByCSA, 3, 0, _( "Start Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true, m_boundCtrls );
+
+        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 0, _( "Start Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 3, _( "Mid Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 3, 0, _( "End Point" ), false, m_boundCtrls);
+
+        m_geomSync = std::make_unique<ARC_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
+
+        showPage( SHAPE_PROPS_TAB_INDEX::ARC_C_S_A );
+        showPage( SHAPE_PROPS_TAB_INDEX::ARC_S_M_E );
+
+        m_notebookShapeDefs->SetSelection( static_cast<int>( SHAPE_PROPS_TAB_INDEX::ARC_C_S_A ) );
+        break;
+
+    case SHAPE_T::CIRCLE:
+        AddXYPointToSizer( *aParent, *m_gbsCircleCenterRadius, 0, 0, _( "Center" ), false, m_boundCtrls);
+        AddFieldToSizer( *aParent, *m_gbsCircleCenterRadius, 3, 0, _( "Radius" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false, m_boundCtrls );
+
+        AddXYPointToSizer( *aParent, *m_gbsCircleCenterPoint, 0, 0, _( "Center" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsCircleCenterPoint, 0, 3, _( "Point on Circle" ), false, m_boundCtrls);
+
+        m_geomSync = std::make_unique<CIRCLE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
+
+        showPage( SHAPE_PROPS_TAB_INDEX::CIRCLE_RADIUS );
+        showPage( SHAPE_PROPS_TAB_INDEX::CIRCLE_POINT );
+
+        m_notebookShapeDefs->SetSelection(
+                static_cast<int>( SHAPE_PROPS_TAB_INDEX::CIRCLE_RADIUS ) );
+        break;
+
+    case SHAPE_T::BEZIER:
+        AddXYPointToSizer( *aParent, *m_gbsBezier, 0, 0, _( "Start Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsBezier, 0, 3, _( "End Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsBezier, 3, 0, _( "Control Point 1" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsBezier, 3, 3, _( "Control Point 2" ), false, m_boundCtrls);
+
+        m_geomSync = std::make_unique<BEZIER_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
+
+        showPage( SHAPE_PROPS_TAB_INDEX::BEZIER );
+
+        m_notebookShapeDefs->SetSelection( static_cast<int>( SHAPE_PROPS_TAB_INDEX::BEZIER ) );
+        break;
+
+    case SHAPE_T::POLY:
+        m_notebookShapeDefs->Hide();
+        // Nothing to do here...yet
+        break;
+
+    case SHAPE_T::UNDEFINED:
+        wxFAIL_MSG( "Undefined shape" );
+        break;
+    }
+
+    // Used the last saved tab if any
+    if( s_lastTabForShape.count( m_item->GetShape() ) > 0 )
+        m_notebookShapeDefs->SetSelection( s_lastTabForShape[m_item->GetShape()] );
+
+    // Find the first control in the shown tab
+    wxWindow* tabPanel = m_notebookShapeDefs->GetCurrentPage();
+    for( size_t i = 0; i < m_boundCtrls.size(); ++i )
+    {
+        if( m_boundCtrls[i].m_Ctrl->IsDescendant( tabPanel ) )
+        {
+            m_boundCtrls[i].m_Ctrl->SetFocus();
+            break;
+        }
+    }
 
     // Do not allow locking items in the footprint editor
     m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
@@ -191,50 +1001,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         }
     }
 
-    if( m_item->GetShape() == SHAPE_T::POLY )
-    {
-        m_sizerStartEnd->Show( false );
-        SetInitialFocus( m_filledCtrl ); // Or Esc key won't work
-    }
-    else
-    {
-        SetInitialFocus( m_startXCtrl );
-    }
-
-    // Only a Bezeier curve has control points. So do not show these parameters for other shapes
-    if( m_item->GetShape() != SHAPE_T::BEZIER )
-        m_sizerBezier->Show( false );
-
-    // Only a segment has this format
-    if( m_item->GetShape() != SHAPE_T::SEGMENT )
-    {
-        m_segmentLength.Show( false );
-        m_segmentAngle.Show( false );
-    }
-
-    if( m_item->GetShape() != SHAPE_T::RECTANGLE )
-    {
-        m_rectangleHeight.Show( false );
-        m_rectangleWidth.Show( false );
-    }
-
-    // Only an arc has a angle parameter. So do not show this parameter for other shapes
-    if( m_item->GetShape() != SHAPE_T::ARC )
-        m_angle.Show( false );
-
     if( m_item->GetShape() == SHAPE_T::ARC || m_item->GetShape() == SHAPE_T::SEGMENT )
         m_filledCtrl->Show( false );
-
-    // Change texts for circles:
-    if( m_item->GetShape() == SHAPE_T::CIRCLE )
-    {
-        m_startPointLabel->SetLabel( _( "Center Point" ) );
-        m_endPointLabel->SetLabel( _( "Radius" ) );
-
-        m_endXLabel->Show( false );
-        m_endX.SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
-        m_endY.Show( false );
-    }
 
     SetupStandardButtons();
 
@@ -306,59 +1074,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     if( !m_item )
         return false;
 
-    if( m_item->GetShape() == SHAPE_T::ARC )
-        m_angle.SetAngleValue( m_item->GetArcAngle() );
-
-    if( m_item->GetShape() == SHAPE_T::RECTANGLE )
-    {
-        m_rectangleHeight.SetValue( m_item->GetRectangleHeight() );
-        m_rectangleWidth.SetValue( m_item->GetRectangleWidth() );
-    }
-
-    if( m_item->GetShape() == SHAPE_T::SEGMENT )
-    {
-        if( m_item->GetStart().x == m_item->GetEnd().x )
-            m_flipStartEnd = m_item->GetStart().y > m_item->GetEnd().y;
-        else
-            m_flipStartEnd = m_item->GetStart().x > m_item->GetEnd().x;
-
-        m_segmentLength.SetValue( KiROUND( m_item->GetLength() ) );
-        m_segmentAngle.SetAngleValue( m_item->GetSegmentAngle() );
-    }
-
-    if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
-    {
-        m_startX.SetValue( m_item->GetEnd().x );
-        m_startY.SetValue( m_item->GetEnd().y );
-    }
-    else
-    {
-        m_startX.SetValue( m_item->GetStart().x );
-        m_startY.SetValue( m_item->GetStart().y );
-    }
-
-    if( m_item->GetShape() == SHAPE_T::CIRCLE )
-    {
-        m_endX.SetValue( m_item->GetRadius() );
-    }
-    else if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
-    {
-        m_endX.SetValue( m_item->GetStart().x );
-        m_endY.SetValue( m_item->GetStart().y );
-    }
-    else
-    {
-        m_endX.SetValue( m_item->GetEnd().x );
-        m_endY.SetValue( m_item->GetEnd().y );
-    }
-
-    if( m_item->GetShape() == SHAPE_T::BEZIER )
-    {
-        m_bezierCtrl1X.SetValue( m_item->GetBezierC1().x );
-        m_bezierCtrl1Y.SetValue( m_item->GetBezierC1().y );
-        m_bezierCtrl2X.SetValue( m_item->GetBezierC2().x );
-        m_bezierCtrl2Y.SetValue( m_item->GetBezierC2().y );
-    }
+    m_geomSync->SetShape( *m_item );
 
     m_filledCtrl->SetValue( m_item->IsFilled() );
     m_locked->SetValue( m_item->IsLocked() );
@@ -398,13 +1114,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( !m_item )
         return true;
 
-    int       layer = m_LayerSelectionCtrl->GetLayerSelection();
-    VECTOR2I  begin_point = m_item->GetStart();
-    VECTOR2I  end_point = m_item->GetEnd();
-    int       segment_length = 0;
-    EDA_ANGLE segment_angle = EDA_ANGLE( 0, RADIANS_T );
-    int       rectangle_height = 0;
-    int       rectangle_width = 0;
+    int layer = m_LayerSelectionCtrl->GetLayerSelection();
 
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
@@ -416,131 +1126,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( !pushCommit )
         m_item->SetFlags( IN_EDIT );
 
-    if( m_item->GetShape() == SHAPE_T::SEGMENT )
-    {
-        segment_length = KiROUND( m_item->GetLength() );
-        segment_angle = m_item->GetSegmentAngle().Round( 3 );
-    }
-
-    if( m_item->GetShape() == SHAPE_T::RECTANGLE )
-    {
-        rectangle_height = m_item->GetRectangleHeight();
-        rectangle_width = m_item->GetRectangleWidth();
-    }
-
-    if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
-    {
-        m_item->SetEndX( m_startX.GetIntValue() );
-        m_item->SetEndY( m_startY.GetIntValue() );
-    }
-    else
-    {
-        m_item->SetStartX( m_startX.GetIntValue() );
-        m_item->SetStartY( m_startY.GetIntValue() );
-    }
-
-    if( m_item->GetShape() == SHAPE_T::CIRCLE )
-    {
-        m_item->SetRadius( m_endX.GetIntValue() );
-    }
-    else if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
-    {
-        m_item->SetStartX( m_endX.GetIntValue() );
-        m_item->SetStartY( m_endY.GetIntValue() );
-    }
-    else
-    {
-        m_item->SetEndX( m_endX.GetIntValue() );
-        m_item->SetEndY( m_endY.GetIntValue() );
-    }
-
-    if( m_item->GetShape() == SHAPE_T::SEGMENT )
-    {
-        bool      change_begin = ( begin_point != m_item->GetStart() );
-        bool      change_end = ( end_point != m_item->GetEnd() );
-        bool      change_length = ( segment_length != m_segmentLength.GetValue() );
-        EDA_ANGLE difference = std::abs( segment_angle - m_segmentAngle.GetAngleValue() );
-        bool      change_angle = ( difference >= EDA_ANGLE( 0.00049, DEGREES_T ) );
-
-        if( !( change_begin && change_end ) )
-        {
-            segment_length = m_segmentLength.GetIntValue();
-            segment_angle = m_segmentAngle.GetAngleValue().Round( 3 );
-
-            if( change_length || change_angle )
-            {
-                if( change_end )
-                {
-                    m_item->SetStartX( m_item->GetEndX()
-                                       - KiROUND( segment_length * segment_angle.Cos() ) );
-                    m_item->SetStartY( m_item->GetEndY()
-                                       + KiROUND( segment_length * segment_angle.Sin() ) );
-                }
-                else
-                {
-                    m_item->SetEndX( m_item->GetStartX()
-                                     + KiROUND( segment_length * segment_angle.Cos() ) );
-                    m_item->SetEndY( m_item->GetStartY()
-                                     - KiROUND( segment_length * segment_angle.Sin() ) );
-                }
-            }
-        }
-
-        if( change_length )
-            m_item->SetLength( m_segmentLength.GetIntValue() );
-        else
-            m_item->SetLength( m_item->GetLength() );
-
-        if( change_angle )
-            m_item->SetSegmentAngle( m_segmentAngle.GetAngleValue().Round( 3 ) );
-        else
-            m_item->SetSegmentAngle( m_item->GetSegmentAngle().Round( 3 ) );
-    }
-
-    if( m_item->GetShape() == SHAPE_T::RECTANGLE )
-    {
-        bool change_begin = ( begin_point != m_item->GetStart() );
-        bool change_end = ( end_point != m_item->GetEnd() );
-        bool change_height = ( rectangle_height != m_rectangleHeight.GetValue() );
-        bool change_width = ( rectangle_width != m_rectangleWidth.GetValue() );
-
-        if( !( change_begin && change_end ) )
-        {
-           rectangle_height = m_rectangleHeight.GetIntValue();
-           rectangle_width = m_rectangleWidth.GetIntValue();
-
-           if( change_height || change_width )
-           {
-               if( change_end )
-               {
-                   m_item->SetStartX( m_item->GetEndX() - rectangle_width );
-                   m_item->SetStartY( m_item->GetEndY() - rectangle_height );
-               }
-               else
-               {
-                   m_item->SetEndX( m_item->GetStartX() + rectangle_width );
-                   m_item->SetEndY( m_item->GetStartY() + rectangle_height );
-               }
-           }
-        }
-
-        m_item->SetRectangle( m_rectangleHeight.GetValue(), m_rectangleWidth.GetValue() );
-    }
-
-
-     // For Bezier curve: Set the two control points
-    if( m_item->GetShape() == SHAPE_T::BEZIER )
-    {
-        m_item->SetBezierC1( VECTOR2I( m_bezierCtrl1X.GetIntValue(), m_bezierCtrl1Y.GetIntValue() ) );
-        m_item->SetBezierC2( VECTOR2I( m_bezierCtrl2X.GetIntValue(), m_bezierCtrl2Y.GetIntValue() ) );
-    }
-
-    if( m_item->GetShape() == SHAPE_T::ARC )
-    {
-        VECTOR2D c = CalcArcCenter( m_item->GetStart(), m_item->GetEnd(), m_angle.GetAngleValue() );
-
-        m_item->SetCenter( c );
-    }
+    *m_item = m_workingCopy;
 
     bool wasLocked = m_item->IsLocked();
 
@@ -580,6 +1166,9 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( pushCommit )
         commit.Push( _( "Edit Shape Properties" ) );
 
+    // Save the tab
+    s_lastTabForShape[m_item->GetShape()] = m_notebookShapeDefs->GetSelection();
+
     // Notify clients which treat locked and unlocked items differently (ie: POINT_EDITOR)
     if( wasLocked != m_item->IsLocked() )
         m_parent->GetToolManager()->PostEvent( EVENTS::SelectedEvent );
@@ -595,57 +1184,24 @@ bool DIALOG_SHAPE_PROPERTIES::Validate()
     if( !DIALOG_SHAPE_PROPERTIES_BASE::Validate() )
         return false;
 
+    if( m_geomSync )
+        m_geomSync->Validate( errors );
+
     // Type specific checks.
     switch( m_item->GetShape() )
     {
     case SHAPE_T::ARC:
-        // Check angle of arc.
-        if( m_angle.GetAngleValue() == ANGLE_0 )
-            errors.Add( _( "Arc angle cannot be zero." ) );
-
-        if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
-        {
-            errors.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f." ),
-                                          0.0, m_angle.GetDoubleValue() ) );
-        }
-        else
-        {
-            VECTOR2D start( m_startX.GetIntValue(), m_startY.GetIntValue() );
-            VECTOR2D end( m_endX.GetIntValue(), m_endY.GetIntValue() );
-            VECTOR2D center = CalcArcCenter( start, end, m_angle.GetAngleValue() );
-
-            double radius = ( center - start ).EuclideanNorm();
-            double max_offset = std::max( std::abs( center.x ) + radius,
-                                          std::abs( center.y ) + radius );
-
-            if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0 )
-                    || center == start || center == end )
-            {
-                errors.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f." ),
-                                              radius, m_angle.GetDoubleValue() ) );
-            }
-        }
-
         if( m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero." ) );
-
         break;
 
     case SHAPE_T::CIRCLE:
-        // Check radius.
-        if( m_endX.GetValue() <= 0 )
-            errors.Add( _( "Radius must be greater than zero." ) );
-
         if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled circle." ) );
 
         break;
 
     case SHAPE_T::RECTANGLE:
-        // Check for null rect.
-        if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
-            errors.Add( _( "Rectangle cannot be empty." ) );
-
         if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled rectangle." ) );
 

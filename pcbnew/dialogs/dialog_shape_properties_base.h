@@ -13,16 +13,21 @@
 class PCB_LAYER_BOX_SELECTOR;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
 #include <wx/gdicmn.h>
+#include <wx/gbsizer.h>
+#include <wx/sizer.h>
+#include <wx/panel.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
-#include <wx/gbsizer.h>
-#include <wx/sizer.h>
+#include <wx/string.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/notebook.h>
 #include <wx/checkbox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/bmpcbox.h>
 #include <widgets/net_selector.h>
 #include <wx/button.h>
@@ -38,52 +43,28 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxNotebook* m_notebookShapeDefs;
+		wxPanel* m_rectangleByCorners;
+		wxGridBagSizer* m_gbsRectangleByCorners;
+		wxPanel* m_rectangleByCornerSize;
+		wxGridBagSizer* m_gbsRectangleByCornerSize;
+		wxPanel* m_rectangleByCenterSize;
+		wxGridBagSizer* m_gbsRectangleByCenterSize;
+		wxPanel* m_lineByEnds;
+		wxGridBagSizer* m_gbsLineByEnds;
+		wxPanel* m_lineByLengthAngle;
+		wxGridBagSizer* m_gbsLineByLengthAngle;
+		wxPanel* m_arcByCSA;
+		wxGridBagSizer* m_gbsArcByCSA;
+		wxPanel* m_arcBySME;
+		wxGridBagSizer* m_gbsArcBySME;
+		wxPanel* m_circle;
+		wxGridBagSizer* m_gbsCircleCenterRadius;
+		wxPanel* m_circleCenterPoint;
+		wxGridBagSizer* m_gbsCircleCenterPoint;
+		wxPanel* m_bezier;
+		wxGridBagSizer* m_gbsBezier;
 		wxBoxSizer* m_upperSizer;
-		wxGridBagSizer* m_sizerStartEnd;
-		wxStaticText* m_startPointLabel;
-		wxStaticText* m_startXLabel;
-		wxTextCtrl* m_startXCtrl;
-		wxStaticText* m_startXUnits;
-		wxStaticText* m_startYLabel;
-		wxTextCtrl* m_startYCtrl;
-		wxStaticText* m_startYUnits;
-		wxStaticText* m_endPointLabel;
-		wxStaticText* m_endXLabel;
-		wxTextCtrl* m_endXCtrl;
-		wxStaticText* m_endXUnits;
-		wxStaticText* m_endYLabel;
-		wxTextCtrl* m_endYCtrl;
-		wxStaticText* m_endYUnits;
-		wxGridBagSizer* m_sizerBezier;
-		wxStaticText* m_bezierCtrlPt1Label;
-		wxStaticText* m_BezierPointC1XLabel;
-		wxTextCtrl* m_BezierC1X_Ctrl;
-		wxStaticText* m_BezierPointC1XUnit;
-		wxStaticText* m_BezierPointC1YLabel;
-		wxTextCtrl* m_BezierC1Y_Ctrl;
-		wxStaticText* m_BezierPointC1YUnit;
-		wxStaticText* m_bezierCtrlPt2Label;
-		wxStaticText* m_BezierPointC2XLabel;
-		wxTextCtrl* m_BezierC2X_Ctrl;
-		wxStaticText* m_BezierPointC2XUnit;
-		wxStaticText* m_BezierPointC2YLabel;
-		wxTextCtrl* m_BezierC2Y_Ctrl;
-		wxStaticText* m_BezierPointC2YUnit;
-		wxStaticText* m_segmentLengthLabel;
-		wxTextCtrl* m_segmentLengthCtrl;
-		wxStaticText* m_segmentLengthUnits;
-		wxStaticText* m_segmentAngleLabel;
-		wxTextCtrl* m_segmentAngleCtrl;
-		wxStaticText* m_segmentAngleUnits;
-		wxStaticText* m_rectangleHeightLabel;
-		wxTextCtrl* m_rectangleHeightCtrl;
-		wxStaticText* m_rectangleHeightUnits;
-		wxStaticText* m_rectangleWidthLabel;
-		wxTextCtrl* m_rectangleWidthCtrl;
-		wxStaticText* m_rectangleWidthUnits;
-		wxStaticText* m_angleLabel;
-		wxTextCtrl* m_angleCtrl;
-		wxStaticText* m_angleUnits;
 		wxCheckBox* m_locked;
 		wxCheckBox* m_filledCtrl;
 		wxStaticText* m_thicknessLabel;

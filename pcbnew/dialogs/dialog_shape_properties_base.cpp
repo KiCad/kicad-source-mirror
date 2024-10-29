@@ -18,199 +18,171 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
+	m_notebookShapeDefs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_rectangleByCorners = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer18;
+	bSizer18 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsRectangleByCorners = new wxGridBagSizer( 0, 0 );
+	m_gbsRectangleByCorners->SetFlexibleDirection( wxBOTH );
+	m_gbsRectangleByCorners->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer18->Add( m_gbsRectangleByCorners, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_rectangleByCorners->SetSizer( bSizer18 );
+	m_rectangleByCorners->Layout();
+	bSizer18->Fit( m_rectangleByCorners );
+	m_notebookShapeDefs->AddPage( m_rectangleByCorners, _("By Corners"), false );
+	m_rectangleByCornerSize = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer19;
+	bSizer19 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsRectangleByCornerSize = new wxGridBagSizer( 0, 0 );
+	m_gbsRectangleByCornerSize->SetFlexibleDirection( wxBOTH );
+	m_gbsRectangleByCornerSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer19->Add( m_gbsRectangleByCornerSize, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_rectangleByCornerSize->SetSizer( bSizer19 );
+	m_rectangleByCornerSize->Layout();
+	bSizer19->Fit( m_rectangleByCornerSize );
+	m_notebookShapeDefs->AddPage( m_rectangleByCornerSize, _("By Corner and Size"), false );
+	m_rectangleByCenterSize = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer20;
+	bSizer20 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsRectangleByCenterSize = new wxGridBagSizer( 0, 0 );
+	m_gbsRectangleByCenterSize->SetFlexibleDirection( wxBOTH );
+	m_gbsRectangleByCenterSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer20->Add( m_gbsRectangleByCenterSize, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_rectangleByCenterSize->SetSizer( bSizer20 );
+	m_rectangleByCenterSize->Layout();
+	bSizer20->Fit( m_rectangleByCenterSize );
+	m_notebookShapeDefs->AddPage( m_rectangleByCenterSize, _("By Center and Size"), true );
+	m_lineByEnds = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsLineByEnds = new wxGridBagSizer( 0, 0 );
+	m_gbsLineByEnds->SetFlexibleDirection( wxBOTH );
+	m_gbsLineByEnds->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer6->Add( m_gbsLineByEnds, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_lineByEnds->SetSizer( bSizer6 );
+	m_lineByEnds->Layout();
+	bSizer6->Fit( m_lineByEnds );
+	m_notebookShapeDefs->AddPage( m_lineByEnds, _("By Endpoints"), false );
+	m_lineByLengthAngle = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsLineByLengthAngle = new wxGridBagSizer( 0, 0 );
+	m_gbsLineByLengthAngle->SetFlexibleDirection( wxBOTH );
+	m_gbsLineByLengthAngle->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer7->Add( m_gbsLineByLengthAngle, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_lineByLengthAngle->SetSizer( bSizer7 );
+	m_lineByLengthAngle->Layout();
+	bSizer7->Fit( m_lineByLengthAngle );
+	m_notebookShapeDefs->AddPage( m_lineByLengthAngle, _("By Length and Angle"), false );
+	m_arcByCSA = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsArcByCSA = new wxGridBagSizer( 0, 0 );
+	m_gbsArcByCSA->SetFlexibleDirection( wxBOTH );
+	m_gbsArcByCSA->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer8->Add( m_gbsArcByCSA, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_arcByCSA->SetSizer( bSizer8 );
+	m_arcByCSA->Layout();
+	bSizer8->Fit( m_arcByCSA );
+	m_notebookShapeDefs->AddPage( m_arcByCSA, _("By Center/Start/Angle"), false );
+	m_arcBySME = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsArcBySME = new wxGridBagSizer( 0, 0 );
+	m_gbsArcBySME->SetFlexibleDirection( wxBOTH );
+	m_gbsArcBySME->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer9->Add( m_gbsArcBySME, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_arcBySME->SetSizer( bSizer9 );
+	m_arcBySME->Layout();
+	bSizer9->Fit( m_arcBySME );
+	m_notebookShapeDefs->AddPage( m_arcBySME, _("By Start/Mid/End"), false );
+	m_circle = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsCircleCenterRadius = new wxGridBagSizer( 0, 0 );
+	m_gbsCircleCenterRadius->SetFlexibleDirection( wxBOTH );
+	m_gbsCircleCenterRadius->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer10->Add( m_gbsCircleCenterRadius, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_circle->SetSizer( bSizer10 );
+	m_circle->Layout();
+	bSizer10->Fit( m_circle );
+	m_notebookShapeDefs->AddPage( m_circle, _("By Center/Radius"), false );
+	m_circleCenterPoint = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsCircleCenterPoint = new wxGridBagSizer( 0, 0 );
+	m_gbsCircleCenterPoint->SetFlexibleDirection( wxBOTH );
+	m_gbsCircleCenterPoint->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer11->Add( m_gbsCircleCenterPoint, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_circleCenterPoint->SetSizer( bSizer11 );
+	m_circleCenterPoint->Layout();
+	bSizer11->Fit( m_circleCenterPoint );
+	m_notebookShapeDefs->AddPage( m_circleCenterPoint, _("By Center/Point"), false );
+	m_bezier = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsBezier = new wxGridBagSizer( 0, 0 );
+	m_gbsBezier->SetFlexibleDirection( wxBOTH );
+	m_gbsBezier->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer4->Add( m_gbsBezier, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_bezier->SetSizer( bSizer4 );
+	m_bezier->Layout();
+	bSizer4->Fit( m_bezier );
+	m_notebookShapeDefs->AddPage( m_bezier, _("Bezier Control Points"), false );
+
+	bMainSizer->Add( m_notebookShapeDefs, 0, wxEXPAND | wxALL, 5 );
+
 	m_upperSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_sizerStartEnd = new wxGridBagSizer( 3, 3 );
-	m_sizerStartEnd->SetFlexibleDirection( wxBOTH );
-	m_sizerStartEnd->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	m_sizerStartEnd->SetEmptyCellSize( wxSize( 5,5 ) );
-
-	m_startPointLabel = new wxStaticText( this, wxID_ANY, _("Start Point"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_startPointLabel->Wrap( -1 );
-	m_sizerStartEnd->Add( m_startPointLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_startXLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_startXLabel->Wrap( -1 );
-	m_sizerStartEnd->Add( m_startXLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_startXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerStartEnd->Add( m_startXCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_startXUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_startXUnits->Wrap( -1 );
-	m_sizerStartEnd->Add( m_startXUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
-
-	m_startYLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_startYLabel->Wrap( -1 );
-	m_sizerStartEnd->Add( m_startYLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_startYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerStartEnd->Add( m_startYCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_startYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_startYUnits->Wrap( -1 );
-	m_sizerStartEnd->Add( m_startYUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
-
-	m_endPointLabel = new wxStaticText( this, wxID_ANY, _("End Point"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_endPointLabel->Wrap( -1 );
-	m_sizerStartEnd->Add( m_endPointLabel, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_endXLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_endXLabel->Wrap( -1 );
-	m_sizerStartEnd->Add( m_endXLabel, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_endXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerStartEnd->Add( m_endXCtrl, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_endXUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_endXUnits->Wrap( -1 );
-	m_sizerStartEnd->Add( m_endXUnits, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_endYLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_endYLabel->Wrap( -1 );
-	m_sizerStartEnd->Add( m_endYLabel, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_endYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerStartEnd->Add( m_endYCtrl, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_endYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_endYUnits->Wrap( -1 );
-	m_sizerStartEnd->Add( m_endYUnits, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	m_upperSizer->Add( m_sizerStartEnd, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
-
-	m_sizerBezier = new wxGridBagSizer( 3, 3 );
-	m_sizerBezier->SetFlexibleDirection( wxBOTH );
-	m_sizerBezier->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	m_sizerBezier->SetEmptyCellSize( wxSize( 5,5 ) );
-
-	m_bezierCtrlPt1Label = new wxStaticText( this, wxID_ANY, _("Bezier Control Point"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_bezierCtrlPt1Label->Wrap( -1 );
-	m_sizerBezier->Add( m_bezierCtrlPt1Label, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
-
-	m_BezierPointC1XLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BezierPointC1XLabel->Wrap( -1 );
-	m_sizerBezier->Add( m_BezierPointC1XLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_BezierC1X_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerBezier->Add( m_BezierC1X_Ctrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_BezierPointC1XUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BezierPointC1XUnit->Wrap( -1 );
-	m_sizerBezier->Add( m_BezierPointC1XUnit, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 20 );
-
-	m_BezierPointC1YLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BezierPointC1YLabel->Wrap( -1 );
-	m_sizerBezier->Add( m_BezierPointC1YLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_BezierC1Y_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerBezier->Add( m_BezierC1Y_Ctrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_BezierPointC1YUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BezierPointC1YUnit->Wrap( -1 );
-	m_sizerBezier->Add( m_BezierPointC1YUnit, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 20 );
-
-	m_bezierCtrlPt2Label = new wxStaticText( this, wxID_ANY, _("Bezier Control Point"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_bezierCtrlPt2Label->Wrap( -1 );
-	m_sizerBezier->Add( m_bezierCtrlPt2Label, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
-
-	m_BezierPointC2XLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BezierPointC2XLabel->Wrap( -1 );
-	m_sizerBezier->Add( m_BezierPointC2XLabel, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_BezierC2X_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerBezier->Add( m_BezierC2X_Ctrl, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_BezierPointC2XUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BezierPointC2XUnit->Wrap( -1 );
-	m_sizerBezier->Add( m_BezierPointC2XUnit, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_BezierPointC2YLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BezierPointC2YLabel->Wrap( -1 );
-	m_sizerBezier->Add( m_BezierPointC2YLabel, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_BezierC2Y_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerBezier->Add( m_BezierC2Y_Ctrl, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_BezierPointC2YUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BezierPointC2YUnit->Wrap( -1 );
-	m_sizerBezier->Add( m_BezierPointC2YUnit, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	m_upperSizer->Add( m_sizerBezier, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	wxBoxSizer* bMiddleSizer;
-	bMiddleSizer = new wxBoxSizer( wxVERTICAL );
-
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 5 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_segmentLengthLabel = new wxStaticText( this, wxID_ANY, _("Length:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentLengthLabel->Wrap( -1 );
-	fgSizer1->Add( m_segmentLengthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_segmentLengthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentLengthCtrl->SetMinSize( wxSize( 140,-1 ) );
-
-	fgSizer1->Add( m_segmentLengthCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_segmentLengthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentLengthUnits->Wrap( -1 );
-	fgSizer1->Add( m_segmentLengthUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	m_segmentAngleLabel = new wxStaticText( this, wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentAngleLabel->Wrap( -1 );
-	fgSizer1->Add( m_segmentAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_segmentAngleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_segmentAngleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_segmentAngleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentAngleUnits->Wrap( -1 );
-	fgSizer1->Add( m_segmentAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	m_rectangleHeightLabel = new wxStaticText( this, wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rectangleHeightLabel->Wrap( -1 );
-	fgSizer1->Add( m_rectangleHeightLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_rectangleHeightCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_rectangleHeightCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_rectangleHeightUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rectangleHeightUnits->Wrap( -1 );
-	fgSizer1->Add( m_rectangleHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	m_rectangleWidthLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rectangleWidthLabel->Wrap( -1 );
-	fgSizer1->Add( m_rectangleWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_rectangleWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_rectangleWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_rectangleWidthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rectangleWidthUnits->Wrap( -1 );
-	fgSizer1->Add( m_rectangleWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	m_angleLabel = new wxStaticText( this, wxID_ANY, _("Arc angle:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_angleLabel->Wrap( -1 );
-	fgSizer1->Add( m_angleLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_angleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_angleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_angleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_angleUnits->Wrap( -1 );
-	fgSizer1->Add( m_angleUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-
-	bMiddleSizer->Add( fgSizer1, 0, wxTOP, 5 );
-
-
-	m_upperSizer->Add( bMiddleSizer, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizer2;
 	gbSizer2 = new wxGridBagSizer( 5, 5 );
