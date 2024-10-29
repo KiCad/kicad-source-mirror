@@ -132,10 +132,11 @@ static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACT
     };
 
     // clang-format off
-    menu->AddItem( PCB_ACTIONS::moveExact,         SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu->AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu->AddItem( PCB_ACTIONS::copyWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu->AddItem( PCB_ACTIONS::positionRelative,  SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::moveExact,                      SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::moveWithReference,              SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::copyWithReference,              SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::positionRelative,               SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::positionRelativeInteractively,  SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
     // clang-format on
     return menu;
 };

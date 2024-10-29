@@ -343,9 +343,12 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     gal->SetIsStroke( true );
     gal->SetIsFill( false );
-
     gal->SetTextMirrored( false );
-    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
+
+    if( m_color )
+        gal->SetStrokeColor( *m_color );
+    else
+        gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
 
     if( drawingDropShadows )
         gal->SetStrokeColor( GetShadowColor( gal->GetStrokeColor() ) );
@@ -366,11 +369,33 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     const double minorTickLen = 5.0 / gal->GetWorldScale();
     const double majorTickLen = minorTickLen * majorTickLengthFactor;
 
-    drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_iuScale, m_userUnits, drawingDropShadows );
+    if( m_showTicks )
+    {
+        drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_iuScale, m_userUnits,
+                            drawingDropShadows );
 
-    drawBacksideTicks( aView, origin, rulerVec, majorTickLen, 2, drawingDropShadows );
+        drawBacksideTicks( aView, origin, rulerVec, majorTickLen, 2, drawingDropShadows );
+    }
 
-    // draw the back of the origin "crosshair"
-    gal->DrawLine( origin, origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
+    if( m_showOriginArrowHead )
+    {
+        const EDA_ANGLE arrowAngle{ 30.0 };
+        VECTOR2D        arrowHead = rulerVec;
+        RotatePoint( arrowHead, arrowAngle );
+        arrowHead = arrowHead.Resize( -majorTickLen );
+
+        gal->DrawLine( origin, origin - arrowHead );
+
+        arrowHead = rulerVec;
+        RotatePoint( arrowHead, -arrowAngle );
+        arrowHead = arrowHead.Resize( -majorTickLen );
+
+        gal->DrawLine( origin, origin - arrowHead );
+    }
+    else
+    {
+        // draw the back of the origin "crosshair"
+        gal->DrawLine( origin, origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
+    }
     gal->PopDepth();
 }

@@ -2020,6 +2020,12 @@ TOOL_ACTION PCB_ACTIONS::positionRelative( TOOL_ACTION_ARGS()
         .Tooltip( _( "Positions the selected item(s) by an exact amount relative to another" ) )
         .Icon( BITMAPS::move_relative ) );
 
+TOOL_ACTION PCB_ACTIONS::positionRelativeInteractively( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PositionRelative.positionRelativeInteractively" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Position Interactively..." ) )
+        .Tooltip( _( "Positions the selected item(s) by an exact amount relative to another, interactively" ) )
+        .Icon( BITMAPS::move_relative ) );
 
 // PCIKER_TOOL
 //

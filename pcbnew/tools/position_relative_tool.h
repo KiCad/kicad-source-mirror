@@ -57,6 +57,12 @@ public:
     int PositionRelative( const TOOL_EVENT& aEvent );
 
     /**
+     * Draw a line connecting two points and allow the user to enter what it should be.
+     * The move the items to match that.
+     */
+    int PositionRelativeInteractively( const TOOL_EVENT& aEvent );
+
+    /**
      * Return the position of the selected item(s)
      */
     VECTOR2I GetSelectionAnchorPosition() const { return m_selectionAnchor; }

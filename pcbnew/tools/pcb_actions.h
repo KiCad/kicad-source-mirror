@@ -321,8 +321,8 @@ public:
     static TOOL_ACTION distributeVerticallyGaps;
 
     // Position Relative Tool
-    /// Activation of the position relative tool
     static TOOL_ACTION positionRelative;
+    static TOOL_ACTION positionRelativeInteractively;
 
     /// Selection of reference points/items
     static TOOL_ACTION selectItemInteractively;

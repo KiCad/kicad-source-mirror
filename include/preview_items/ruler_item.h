@@ -24,7 +24,10 @@
 #ifndef PREVIEW_ITEMS_RULER_ITEM_H
 #define PREVIEW_ITEMS_RULER_ITEM_H
 
+#include <optional>
+
 #include <eda_item.h>
+#include <gal/color4d.h>
 #include <preview_items/two_point_geom_manager.h>
 
 namespace KIGFX
@@ -53,6 +56,11 @@ public:
     ///< @copydoc EDA_ITEM::ViewDraw();
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
+    void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
+
+    void SetShowTicks( bool aShow ) { m_showTicks = aShow; }
+
+    void SetShowOriginArrowHead( bool aShow ) { m_showOriginArrowHead = aShow; }
 
 #if defined(DEBUG)
     void Show( int x, std::ostream& st ) const override
@@ -88,6 +96,9 @@ private:
     const EDA_IU_SCALE&               m_iuScale;
     bool                              m_flipX;
     bool                              m_flipY;
+    std::optional<COLOR4D>            m_color;
+    bool                              m_showTicks = true;
+    bool                              m_showOriginArrowHead = false;
 };
 
 } // PREVIEW
