@@ -131,7 +131,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 
                     if( fail_min )
                     {
-                        if( constraint.GetParentRule() && constraint.GetParentRule()->m_Implicit )
+                        if( constraint.m_ImplicitMin )
                             constraintName = _( "board setup constraints" );
 
                         msg = formatMsg( _( "(%s min width %s; actual %s)" ),

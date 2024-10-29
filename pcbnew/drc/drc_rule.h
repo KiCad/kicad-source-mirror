@@ -120,7 +120,7 @@ public:
 
 class DRC_CONSTRAINT
 {
-    public:
+public:
     DRC_CONSTRAINT( DRC_CONSTRAINT_T aType = NULL_CONSTRAINT,
                     const wxString& aName = wxEmptyString ) :
             m_Type( aType ),
@@ -128,6 +128,7 @@ class DRC_CONSTRAINT
             m_DisallowFlags( 0 ),
             m_ZoneConnection( ZONE_CONNECTION::INHERITED ),
             m_Test( nullptr ),
+            m_ImplicitMin( false ),
             m_name( aName ),
             m_parentRule( nullptr )
     {
@@ -173,6 +174,7 @@ public:
     int                 m_DisallowFlags;
     ZONE_CONNECTION     m_ZoneConnection;
     DRC_RULE_CONDITION* m_Test;
+    bool                m_ImplicitMin;
 
 private:
     wxString            m_name;          // For just-in-time constraints

@@ -718,7 +718,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             [&]( const DRC_ENGINE_CONSTRAINT* c )
             {
                 if( c->constraint.m_Value.HasMin() )
+                {
+                    if( c->parentRule && c->parentRule->m_Implicit )
+                        constraint.m_ImplicitMin = true;
+
                     constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
+                }
 
                 if( c->constraint.m_Value.HasOpt() )
                     constraint.m_Value.SetOpt( c->constraint.m_Value.Opt() );
