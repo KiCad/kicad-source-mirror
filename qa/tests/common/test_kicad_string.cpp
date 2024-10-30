@@ -149,11 +149,10 @@ BOOST_AUTO_TEST_CASE( HTMLEscape )
 {
     using CASE = std::pair<wxString, wxString>;
 
-    // conceptually a little quirky because doubles do have all those pesky additional values
     const std::vector<CASE> cases = {
-        { "I will display € €", "I will display &#8364; &#x20AC;" },
-        { "&lt;", "&amp;lt;" },
-        { "Don't Ω", "Don&apos;t Ω" },
+        { wxS( "I will display € €" ), wxS( "I will display &#8364; &#x20AC;" ) },
+        { wxS( "&lt;" ), wxS( "&amp;lt;" ) },
+        { wxS( "Don't Ω" ), wxS( "Don&apos;t Ω" ) },
     };
 
     for( const auto& c : cases )
@@ -164,8 +163,8 @@ BOOST_AUTO_TEST_CASE( HTMLEscape )
 
         wxString unescapedTest = UnescapeHTML( c.second );
 
-        BOOST_CHECK( original == unescaped );
-        BOOST_CHECK( original == unescapedTest );
+        BOOST_CHECK_EQUAL( original.utf8_string(), unescaped.utf8_string() );
+        BOOST_CHECK_EQUAL( original.utf8_string(), unescapedTest.utf8_string() );
     }
 }
 
