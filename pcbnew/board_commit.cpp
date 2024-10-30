@@ -682,9 +682,11 @@ void BOARD_COMMIT::Revert()
             view->Add( boardItem );
             connectivity->Add( boardItem );
 
+            // Note: parent can be nullptr, because ent.m_parent is not
+            // initialized for every ent.m_item, only for some.
             BOARD_ITEM* parent = board->GetItem( ent.m_parent );
 
-            if( parent->Type() == PCB_FOOTPRINT_T )
+            if( parent && parent->Type() == PCB_FOOTPRINT_T )
             {
                 static_cast<FOOTPRINT*>( parent )->Add( boardItem, ADD_MODE::INSERT );
             }
