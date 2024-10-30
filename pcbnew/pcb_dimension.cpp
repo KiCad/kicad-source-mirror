@@ -44,6 +44,89 @@
 static const EDA_ANGLE s_arrowAngle( 27.5, DEGREES_T );
 
 
+/**
+ * Find the intersection between a given segment and polygon outline.
+ *
+ * @param aPoly is the polygon to collide.
+ * @param aSeg is the segment to collide.
+ * @param aStart if true will start from aSeg.A, otherwise aSeg.B.
+ * @return a point on aSeg that collides with aPoly closest to the start, if one exists.
+ */
+static OPT_VECTOR2I segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg,
+                                         bool aStart = true )
+{
+    VECTOR2I start( aStart ? aSeg.A : aSeg.B );
+    VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
+
+    if( aPoly.Contains( start ) )
+        return std::nullopt;
+
+    for( SHAPE_POLY_SET::CONST_SEGMENT_ITERATOR seg = aPoly.CIterateSegments(); seg; ++seg )
+    {
+        if( OPT_VECTOR2I intersection = ( *seg ).Intersect( aSeg ) )
+        {
+            if( ( *intersection - start ).SquaredEuclideanNorm()
+                < ( endpoint - start ).SquaredEuclideanNorm() )
+                endpoint = *intersection;
+        }
+    }
+
+    if( start == endpoint )
+        return std::nullopt;
+
+    return OPT_VECTOR2I( endpoint );
+}
+
+
+static OPT_VECTOR2I segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart = true )
+{
+    VECTOR2I start( aStart ? aSeg.A : aSeg.B );
+    VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
+
+    if( aCircle.Contains( start ) )
+        return std::nullopt;
+
+    std::vector<VECTOR2I> intersections = aCircle.Intersect( aSeg );
+
+    for( VECTOR2I& intersection : aCircle.Intersect( aSeg ) )
+    {
+        if( ( intersection - start ).SquaredEuclideanNorm()
+            < ( endpoint - start ).SquaredEuclideanNorm() )
+            endpoint = intersection;
+    }
+
+    if( start == endpoint )
+        return std::nullopt;
+
+    return OPT_VECTOR2I( endpoint );
+}
+
+
+/**
+ * Knockout a polygon from a segment. This function will add 0, 1 or 2 segments to the
+ * vector, depending on how the polygon intersects the segment.
+ */
+static void CollectKnockedOutSegments( const SHAPE_POLY_SET& aPoly, const SEG& aSeg,
+                                       std::vector<std::shared_ptr<SHAPE>>& aSegmentsAfterKnockout )
+{
+    // Now we can draw 0, 1, or 2 crossbar lines depending on how the polygon collides
+    const bool containsA = aPoly.Contains( aSeg.A );
+    const bool containsB = aPoly.Contains( aSeg.B );
+
+    const OPT_VECTOR2I endpointA = segPolyIntersection( aPoly, aSeg );
+    const OPT_VECTOR2I endpointB = segPolyIntersection( aPoly, aSeg, false );
+
+    if( endpointA )
+        aSegmentsAfterKnockout.emplace_back( new SHAPE_SEGMENT( aSeg.A, *endpointA ) );
+
+    if( endpointB )
+        aSegmentsAfterKnockout.emplace_back( new SHAPE_SEGMENT( *endpointB, aSeg.B ) );
+
+    if( !containsA && !containsB && !endpointA && !endpointB )
+        aSegmentsAfterKnockout.emplace_back( new SHAPE_SEGMENT( aSeg ) );
+}
+
+
 PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         PCB_TEXT( aParent, aType ),
         m_overrideTextEnabled( false ),
@@ -574,56 +657,6 @@ const BOX2I PCB_DIMENSION_BASE::ViewBBox() const
 }
 
 
-OPT_VECTOR2I PCB_DIMENSION_BASE::segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg,
-                                                      bool aStart )
-{
-    VECTOR2I start( aStart ? aSeg.A : aSeg.B );
-    VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
-
-    if( aPoly.Contains( start ) )
-        return std::nullopt;
-
-    for( SHAPE_POLY_SET::CONST_SEGMENT_ITERATOR seg = aPoly.CIterateSegments(); seg; ++seg )
-    {
-        if( OPT_VECTOR2I intersection = ( *seg ).Intersect( aSeg ) )
-        {
-            if( ( *intersection - start ).SquaredEuclideanNorm() <
-                ( endpoint - start ).SquaredEuclideanNorm() )
-                endpoint = *intersection;
-        }
-    }
-
-    if( start == endpoint )
-        return std::nullopt;
-
-    return OPT_VECTOR2I( endpoint );
-}
-
-
-OPT_VECTOR2I PCB_DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart )
-{
-    VECTOR2I start( aStart ? aSeg.A : aSeg.B );
-    VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
-
-    if( aCircle.Contains( start ) )
-        return std::nullopt;
-
-    std::vector<VECTOR2I> intersections = aCircle.Intersect( aSeg );
-
-    for( VECTOR2I& intersection : aCircle.Intersect( aSeg ) )
-    {
-        if( ( intersection - start ).SquaredEuclideanNorm() <
-            ( endpoint - start ).SquaredEuclideanNorm() )
-            endpoint = intersection;
-    }
-
-    if( start == endpoint )
-        return std::nullopt;
-
-    return OPT_VECTOR2I( endpoint );
-}
-
-
 void PCB_DIMENSION_BASE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                                                   int aClearance, int aError, ERROR_LOC aErrorLoc,
                                                   bool aIgnoreLineWidth ) const
@@ -761,21 +794,7 @@ void PCB_DIM_ALIGNED::updateGeometry()
     // The ideal crossbar, if the text doesn't collide
     SEG crossbar( m_crossBarStart, m_crossBarEnd );
 
-    // Now we can draw 0, 1, or 2 crossbar lines depending on how the polygon collides
-    bool containsA = polyBox.Contains( crossbar.A );
-    bool containsB = polyBox.Contains( crossbar.B );
-
-    OPT_VECTOR2I endpointA = segPolyIntersection( polyBox, crossbar );
-    OPT_VECTOR2I endpointB = segPolyIntersection( polyBox, crossbar, false );
-
-    if( endpointA )
-        m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar.A, *endpointA ) );
-
-    if( endpointB )
-        m_shapes.emplace_back( new SHAPE_SEGMENT( *endpointB, crossbar.B ) );
-
-    if( !containsA && !containsB && !endpointA && !endpointB )
-        m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar ) );
+    CollectKnockedOutSegments( polyBox, crossbar, m_shapes );
 
     // Add arrows
     VECTOR2I arrowEndPos( m_arrowLength, 0 );
@@ -788,7 +807,6 @@ void PCB_DIM_ALIGNED::updateGeometry()
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndPos ) );
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndNeg ) );
 }
-
 
 void PCB_DIM_ALIGNED::updateText()
 {
@@ -956,21 +974,7 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
     // The ideal crossbar, if the text doesn't collide
     SEG crossbar( m_crossBarStart, m_crossBarEnd );
 
-    // Now we can draw 0, 1, or 2 crossbar lines depending on how the polygon collides
-    bool containsA = polyBox.Contains( crossbar.A );
-    bool containsB = polyBox.Contains( crossbar.B );
-
-    OPT_VECTOR2I endpointA = segPolyIntersection( polyBox, crossbar );
-    OPT_VECTOR2I endpointB = segPolyIntersection( polyBox, crossbar, false );
-
-    if( endpointA )
-        m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar.A, *endpointA ) );
-
-    if( endpointB )
-        m_shapes.emplace_back( new SHAPE_SEGMENT( *endpointB, crossbar.B ) );
-
-    if( !containsA && !containsB && !endpointA && !endpointB )
-        m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar ) );
+    CollectKnockedOutSegments( polyBox, crossbar, m_shapes );
 
     // Add arrows
     EDA_ANGLE crossBarAngle( m_crossBarEnd - m_crossBarStart );
@@ -1328,16 +1332,8 @@ void PCB_DIM_RADIAL::updateGeometry()
     SEG arrowSeg( m_end, m_end + radial );
     SEG textSeg( arrowSeg.B, GetTextPos() );
 
-    OPT_VECTOR2I arrowSegEnd = segPolyIntersection( polyBox, arrowSeg );
-    OPT_VECTOR2I textSegEnd = segPolyIntersection( polyBox, textSeg );
-
-    if( arrowSegEnd )
-        arrowSeg.B = *arrowSegEnd;
-
-    if( textSegEnd )
-        textSeg.B = *textSegEnd;
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( arrowSeg ) );
+    CollectKnockedOutSegments( polyBox, arrowSeg, m_shapes );
+    CollectKnockedOutSegments( polyBox, textSeg, m_shapes );
 
     // Add arrows
     VECTOR2I arrowEndPos( m_arrowLength, 0 );
@@ -1347,8 +1343,6 @@ void PCB_DIM_RADIAL::updateGeometry()
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEndPos ) );
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEndNeg ) );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( textSeg ) );
 }
 
 

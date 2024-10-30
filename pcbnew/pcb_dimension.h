@@ -313,18 +313,6 @@ protected:
     template<typename ShapeType>
     void addShape( const ShapeType& aShape );
 
-    /**
-     * Find the intersection between a given segment and polygon outline.
-     *
-     * @param aPoly is the polygon to collide.
-     * @param aSeg is the segment to collide.
-     * @param aStart if true will start from aSeg.A, otherwise aSeg.B.
-     * @return a point on aSeg that collides with aPoly closest to the start, if one exists.
-     */
-    static OPT_VECTOR2I segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg,
-                                             bool aStart = true );
-    static OPT_VECTOR2I segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart = true );
-
     // Value format
     bool              m_overrideTextEnabled;   ///< Manually specify the displayed measurement value
     wxString          m_valueString;     ///< Displayed value when m_overrideValue = true
