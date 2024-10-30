@@ -240,6 +240,9 @@ public:
     /// Switch posture when drawing arc
     static TOOL_ACTION arcPosture;
 
+    /// Switch between dimension arrow directions
+    static TOOL_ACTION changeDimensionArrows;
+
     /// Snapping controls
     static TOOL_ACTION magneticSnapActiveLayer;
     static TOOL_ACTION magneticSnapAllLayers;

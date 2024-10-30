@@ -244,6 +244,12 @@ bool DRAWING_TOOL::Init()
                 return m_mode == MODE::TUNING;
             };
 
+    auto dimensionToolActive =
+            [this]( const SELECTION& aSel )
+            {
+                return m_mode == MODE::DIMENSION;
+            };
+
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
@@ -254,14 +260,15 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddSeparator(                              haveHighlight, 2 );
 
     // tool-specific actions
-    ctxMenu.AddItem( PCB_ACTIONS::closeOutline,        canCloseOutline, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint,     canUndoPoint, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::arcPosture,          arcToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,     tuningToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,     tuningToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::amplIncrease,        tuningToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::amplDecrease,        tuningToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::lengthTunerSettings, tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::closeOutline,          canCloseOutline, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint,       canUndoPoint, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::arcPosture,            arcToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,       tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,       tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::amplIncrease,          tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::amplDecrease,          tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::lengthTunerSettings,   tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::changeDimensionArrows, dimensionToolActive, 200 );
 
     ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, !tuningToolActive, 250 );
     ctxMenu.AddSeparator( 500 );
@@ -1722,7 +1729,26 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 wxBell();
             }
         }
-        else if( dimension && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+        else if( dimension && evt->IsAction( &PCB_ACTIONS::changeDimensionArrows ) )
+        {
+            switch( dimension->Type() )
+            {
+            case PCB_DIM_ALIGNED_T:
+            case PCB_DIM_ORTHOGONAL_T:
+            case PCB_DIM_RADIAL_T:
+                if( dimension->GetArrowDirection() == DIM_ARROW_DIRECTION::INWARD )
+                    dimension->SetArrowDirection( DIM_ARROW_DIRECTION::OUTWARD );
+                else
+                    dimension->SetArrowDirection( DIM_ARROW_DIRECTION::INWARD );
+                break;
+            default:
+                // Other dimension types don't have arrows that can swap
+                wxBell();
+            }
+
+            m_view->Update( &preview );
+        }
+        else if( dimension && ( ZONE_FILLER_TOOL::IsZoneFillAction( evt )
                                || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();

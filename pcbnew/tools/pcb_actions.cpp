@@ -371,6 +371,12 @@ TOOL_ACTION PCB_ACTIONS::arcPosture( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Switch Track Posture" )
         .FriendlyName( _( "Switch Arc Posture" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::changeDimensionArrows( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.changeDimensionArrows" )
+        .Scope( AS_CONTEXT )
+        .FriendlyName( "Switch Dimension Arrows" )
+        .Tooltip( "Switch between inward and outward dimension arrows" ) );
+
 
 TOOL_ACTION PCB_ACTIONS::magneticSnapActiveLayer( TOOL_ACTION_ARGS()
         .Name( "common.Control.magneticSnapActiveLayer" )
