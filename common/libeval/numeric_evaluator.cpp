@@ -273,7 +273,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                     }
 
                     ch = m_token.input[ ++m_token.pos ];
-                } while( isdigit( ch ) || isDecimalSeparator( ch ) );
+                } while( isdigit( (unsigned char) ch ) || isDecimalSeparator( ch ) );
 
                 m_token.token[ idx ] = 0;
             };
@@ -373,7 +373,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     {
         /* End of input */
     }
-    else if( isdigit( ch ) || isDecimalSeparator( ch ) )
+    else if( isdigit( (unsigned char) ch ) || isDecimalSeparator( ch ) )
     {
         // VALUE
         extractNumber( &siScaler );
