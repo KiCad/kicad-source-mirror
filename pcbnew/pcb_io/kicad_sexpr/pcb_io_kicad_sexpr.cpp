@@ -944,8 +944,11 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DIMENSION_BASE* aDimension, int aNest
                           m_out->Quotew( aDimension->GetOverrideText() ).c_str() );
         }
 
-        if( aDimension->GetSuppressZeroes() )
-            m_out->Print( 0, " suppress_zeroes" );
+
+        if( bool suppressZeroes = aDimension->GetSuppressZeroes() )
+        {
+            KICAD_FORMAT::FormatBool( m_out, 0, "suppress_zeroes", suppressZeroes );
+        }
 
         m_out->Print( 0, ")\n" );
     }

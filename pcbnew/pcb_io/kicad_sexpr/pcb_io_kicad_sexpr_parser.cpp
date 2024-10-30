@@ -4085,10 +4085,11 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                     break;
 
                 case T_suppress_zeroes:
-                    dim->SetSuppressZeroes( true );
+                    dim->SetSuppressZeroes( parseMaybeAbsentBool( true ) );
                     break;
 
                 default:
+                    std::cerr << "Unknown format token: " << GetTokenString( token ) << std::endl;
                     Expecting( "prefix, suffix, units, units_format, precision, override_value, "
                                "suppress_zeroes" );
                 }
