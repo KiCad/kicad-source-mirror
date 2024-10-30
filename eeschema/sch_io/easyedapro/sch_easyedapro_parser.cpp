@@ -1190,39 +1190,60 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             {
                 auto nameAttr = get_opt( attributes, "Name" );
 
+                wxString netName;
+
+                if( nameAttr && !nameAttr->value.IsEmpty() )
+                    netName = nameAttr->value;
+                else
+                    netName = compAttrs.at( "Name" );
+
+                std::unique_ptr<SCH_GLOBALLABEL> label = std::make_unique<SCH_GLOBALLABEL>(
+                        ScalePos( component->position ), netName );
+
+                std::vector<SCH_PIN*> pins = schSym->GetPins( &aSchematic->CurrentSheet() );
+
+                if( pins.size() > 0 )
+                {
+                    switch( pins[0]->GetType() )
+                    {
+                    case ELECTRICAL_PINTYPE::PT_INPUT:
+                        label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+                        break;
+                    case ELECTRICAL_PINTYPE::PT_OUTPUT:
+                        label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
+                        break;
+                    case ELECTRICAL_PINTYPE::PT_BIDI:
+                        label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+                        break;
+                    default: break;
+                    }
+                }
+
+                BOX2I bbox = schSym->GetBodyAndPinsBoundingBox();
+                bbox.Offset( -schSym->GetPosition() );
+                VECTOR2I bboxCenter = bbox.GetCenter();
+
+                SPIN_STYLE spin = SPIN_STYLE::LEFT;
+
+                if( std::abs( bboxCenter.x ) >= std::abs( bboxCenter.y ) )
+                {
+                    if( bboxCenter.x >= 0 )
+                        spin = SPIN_STYLE::RIGHT;
+                    else
+                        spin = SPIN_STYLE::LEFT;
+                }
+                else
+                {
+                    if( bboxCenter.y >= 0 )
+                        spin = SPIN_STYLE::BOTTOM;
+                    else
+                        spin = SPIN_STYLE::UP;
+                }
+
+                label->SetSpinStyle( spin );
+
                 if( nameAttr )
                 {
-                    std::unique_ptr<SCH_GLOBALLABEL> label = std::make_unique<SCH_GLOBALLABEL>(
-                            ScalePos( component->position ), nameAttr->value );
-
-                    SPIN_STYLE spin = SPIN_STYLE::LEFT;
-
-                    if( esymInfo.symbolAttr )
-                    {
-                        wxString symStr = esymInfo.symbolAttr->value;
-
-                        if( symStr == wxS( "Netport-IN" ) )
-                        {
-                            spin = SPIN_STYLE::LEFT;
-                            label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
-                        }
-                        if( symStr == wxS( "Netport-OUT" ) )
-                        {
-                            spin = SPIN_STYLE::RIGHT;
-                            label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
-                        }
-                        if( symStr == wxS( "Netport-BI" ) )
-                        {
-                            spin = SPIN_STYLE::RIGHT;
-                            label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
-                        }
-                    }
-
-                    for( double i = component->rotation; i > 0; i -= 90 )
-                        spin = spin.RotateCCW();
-
-                    label->SetSpinStyle( spin );
-
                     nlohmann::json style = fontStyles[nameAttr->fontStyle];
 
                     if( !style.is_null() && style.at( 5 ).is_number() )
@@ -1230,9 +1251,9 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                         double size = style.at( 5 ).get<double>() * 0.5;
                         label->SetTextSize( VECTOR2I( ScaleSize( size ), ScaleSize( size ) ) );
                     }
-
-                    createdItems.push_back( std::move( label ) );
                 }
+
+                createdItems.push_back( std::move( label ) );
 
                 continue;
             }
@@ -1264,6 +1285,12 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                 auto nameAttr = get_opt( attributes, "Name" );
                 auto valueAttr = get_opt( attributes, "Value" );
+
+                if( valueAttr && valueAttr->value.empty() )
+                    valueAttr->value = get_def( compAttrs, "Value", wxString() );
+
+                if( nameAttr && nameAttr->value.empty() )
+                    nameAttr->value = get_def( compAttrs, "Name", wxString() );
 
                 std::optional<EASYEDAPRO::SCH_ATTR> targetValueAttr;
 
