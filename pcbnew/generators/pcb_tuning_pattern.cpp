@@ -554,9 +554,9 @@ protected:
     wxString              m_lastNetName;
     wxString              m_tuningInfo;
 
-    bool                  m_updateSideFromEnd;
-
     PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
+
+    bool                  m_updateSideFromEnd;
 };
 
 
