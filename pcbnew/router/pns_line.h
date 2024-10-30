@@ -191,7 +191,7 @@ public:
     int FindSegment( const SEGMENT* aSeg ) const;
 
     void AppendVia( const VIA& aVia );
-    void AppendVia( VIA* aVia );
+    void LinkVia( VIA* aVia );
     void RemoveVia();
 
     VIA& Via() { return *m_via; }
@@ -249,7 +249,6 @@ private:
     int              m_snapThreshhold;      ///< Width to smooth out jagged segments.
 
     VIA*             m_via;
-
     ITEM*            m_blockingObstacle;    ///< For mark obstacle mode.
 };
 

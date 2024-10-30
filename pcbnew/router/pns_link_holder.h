@@ -39,7 +39,19 @@ public:
     ///< Add a reference to an item registered in a #NODE that is a part of this line.
     void Link( LINKED_ITEM* aLink )
     {
+#ifdef DEBUG
+        assert ( !alg::contains( m_links, aLink ) );
+#endif
         m_links.push_back( aLink );
+    }
+
+    void Unlink( const LINKED_ITEM* aLink )
+    {
+#ifdef DEBUG
+        assert ( alg::contains( m_links, aLink ) );
+#endif
+
+        alg::delete_matching( m_links, aLink );
     }
 
     ///< Return the list of links from the owning node that constitute this

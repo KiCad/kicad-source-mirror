@@ -975,6 +975,8 @@ void NODE::Remove( LINE& aLine )
             Remove( static_cast<SEGMENT*>( li ) );
         else if( li->OfKind( ITEM::ARC_T ) )
             Remove( static_cast<ARC*>( li ) );
+        else if( li->OfKind( ITEM::VIA_T ) )
+            Remove( static_cast<VIA*>( li ) );
     }
 
     aLine.SetOwner( nullptr );

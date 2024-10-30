@@ -846,7 +846,7 @@ NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet )
                 if (spTag.m_draggedVias[i].valid)
                 {
                     m_headLines[i].prevVia = m_headLines[i].theVia = spTag.m_draggedVias[i];
-
+                    m_headLines[i].geometryModified = true;
                     PNS_DBG( Dbg(), Message,
                              wxString::Format( "restore-springback-via depth=%d %d %d %d %d ", 
                                                spTag.m_node->Depth(),
@@ -985,7 +985,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
             lp.second = lp.first;
             lp.second.ClearLinks();
             lp.second.DragCorner( p0_pushed, lp.second.CLine().Find( p0 ) );
-            lp.second.AppendVia( pushedVia.get() );
+            lp.second.AppendVia( *pushedVia );
             lp.second.Line().Simplify2();
             draggedLines.push_back( lp );
         }
@@ -1161,7 +1161,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
             LINKED_ITEM* li = static_cast<LINKED_ITEM*>( item );
             LINE head = assembleLine( li );
 
-            head.AppendVia( aObstacleVia );
+            head.AppendVia( *aObstacleVia );
 
             bool shoveOK = ShoveObstacleLine( head, cur, shoved );
 
@@ -1196,7 +1196,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
         LINE head( aCurrent );
         head.Line().Clear();
-        head.AppendVia( aObstacleVia );
+        head.AppendVia( *aObstacleVia );
         head.ClearLinks();
 
         bool shoveOK = ShoveObstacleLine( head, aCurrent, shoved );
@@ -1723,13 +1723,10 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::findRootLine( const LINE& aLine )
 {
         for( const LINKED_ITEM* link : aLine.Links() )
         {
-            if( const SEGMENT* seg = dyn_cast<const SEGMENT*>( link ) )
-            {
-                auto it = m_rootLineHistory.find( seg->Uid() );
+                auto it = m_rootLineHistory.find( link->Uid() );
 
                 if( it != m_rootLineHistory.end() )
                     return it->second;
-            }
         }
 
         return nullptr;
@@ -1754,7 +1751,7 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::touchRootLine( const LINE& aLine )
 
         if( it != m_rootLineHistory.end() )
         {
-            PNS_DBG( Dbg(), Message, wxString::Format( wxT( "touch [found] uid=%llu"), link->Uid() ) );
+            PNS_DBG( Dbg(), Message, wxString::Format( wxT( "touch [found] uid=%llu type=%s"), link->Uid(), link->KindStr() ) );
 
             return it->second;
         }
@@ -1765,7 +1762,7 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::touchRootLine( const LINE& aLine )
 
     for( const LINKED_ITEM* link : aLine.Links() )
     {
-        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "touch [create] uid=%llu"), link->Uid() ) );
+        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "touch [create] uid=%llu type=%s"), link->Uid(), link->KindStr() ) );
         m_rootLineHistory[link->Uid()] = rootEntry;
     }
 
@@ -2094,17 +2091,14 @@ void SHOVE::removeHeads()
         }
         else if( headEntry.origHead )
         {
-            //nodeStats( Dbg(), m_currentNode, "pre-remove-old" );
-            m_currentNode->Remove( *headEntry.origHead );
-            //nodeStats( Dbg(), m_currentNode, "post-remove-old" );
-
-            /*
             wxString msg = wxString::Format(
                     "remove orighead [net %-20s]: sc %d lc %d\n",
                     iface->GetNetName( headEntry.origHead->Net() ).c_str().AsChar(),
                     headEntry.origHead->SegmentCount(), headEntry.origHead->LinkCount() );
             PNS_DBG( Dbg(), Message, msg );
-            */
+
+            m_currentNode->Remove( *headEntry.origHead );
+            
         }
     }
 }
@@ -2294,7 +2288,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
             //nodeStats( Dbg(), m_currentNode, "add-head" );
 
-            auto headRoot = touchRootLine( *headLineEntry.origHead );
+
 
             PNS_DBG( Dbg(), Message,
                      wxString::Format( "touchRoot ohlc %d roots %d re=%p\n",
@@ -2302,10 +2296,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
                                        (int) m_rootLineHistory.size(),
                                        findRootLine( *headLineEntry.origHead ) ) );
 
-            headRoot->isHead = true;
-            headRoot->rootLine = new PNS::LINE( *headLineEntry.origHead );
-            headRoot->policy = headLineEntry.policy;
-
+       
             LINE head( *headLineEntry.origHead );
 
             // empty head? nothing to shove...
@@ -2313,11 +2304,6 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
                 return SH_INCOMPLETE;
 
             currentHeadId++;
-
-            PNS_DBG( Dbg(), Message,
-                     wxString::Format( "headLC %d, rlLC %d oolc %d\n", head.LinkCount(),
-                                       headRoot->rootLine->LinkCount(),
-                                       headLineEntry.origHead->LinkCount() ) );
 
             m_currentNode->LockJoint( head.CPoint( 0 ), &head, true );
 
@@ -2331,10 +2317,23 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
             if( head.EndsWithVia() )
             {
-                std::unique_ptr<VIA> headVia = Clone( head.Via() );
+                auto headVia = Clone( head.Via() );
                 headVia->SetRank( 100000 ); // - 100 * currentHeadId );
+                headLineEntry.origHead->LinkVia( headVia.get() );
                 m_currentNode->Add( std::move( headVia ) );
             }
+
+            auto headRoot = touchRootLine( *headLineEntry.origHead );
+            headRoot->isHead = true;
+            headRoot->rootLine = new PNS::LINE( *headLineEntry.origHead );
+            headRoot->policy = headLineEntry.policy;
+
+
+            PNS_DBG( Dbg(), Message,
+                     wxString::Format( "headLC %d, rlLC %d oolc %d eov %d\n", head.LinkCount(),
+                                       headRoot->rootLine->LinkCount(),
+                                       headLineEntry.origHead->LinkCount(),
+                                       head.EndsWithVia()?1:0 ) );
 
             //auto rootEntry = findRootLine( &head );
 

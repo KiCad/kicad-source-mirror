@@ -1092,7 +1092,7 @@ void LINE::AppendVia( const VIA& aVia )
 }
 
 
-void LINE::AppendVia( VIA* aVia )
+void LINE::LinkVia( VIA* aVia )
 {
     if( m_line.PointCount() > 1 && aVia->Pos() == m_line.CPoint( 0 ) )
     {
@@ -1100,6 +1100,7 @@ void LINE::AppendVia( VIA* aVia )
     }
 
     m_via = aVia;
+    Link( aVia );
 }
 
 
@@ -1305,6 +1306,7 @@ bool LINE::HasLockedSegments() const
 
 void LINE::Clear()
 {
+    ClearLinks();
     RemoveVia();
     m_line.Clear();
 }
@@ -1312,8 +1314,13 @@ void LINE::Clear()
 
 void LINE::RemoveVia()
 {
-    if( m_via && m_via->BelongsTo( this ) )
-        delete m_via;
+    if( m_via )
+    {
+        if( ContainsLink( m_via ) )
+            Unlink( m_via );
+        if( m_via->BelongsTo( this ) )
+            delete m_via;
+    }
 
     m_via = nullptr;
 }

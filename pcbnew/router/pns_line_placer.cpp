@@ -1797,6 +1797,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
         return;
 
     std::set<LINKED_ITEM *> toErase;
+    aLatest.ClearLinks();
     aNode->Add( aLatest, true );
 
     for( int s = 0; s < aLatest.LinkCount(); s++ )
