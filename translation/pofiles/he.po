@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-28 18:03+0000\n"
+"PO-Revision-Date: 2024-10-31 07:00+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -2853,23 +2853,23 @@ msgstr ""
 #: common/dialogs/dialog_migrate_settings_base.cpp:23
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "ברוכים הבאים ל-KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:67
 msgid "Import settings from a previous version (none found)"
-msgstr ""
+msgstr "ייבוא הגדרות מגרסה קודמת (לא נמצאו)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:138
 msgid "Select Settings Path"
-msgstr ""
+msgstr "בחר נתיב הגדרות"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "כיצד תרצה להגדיר את KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
 msgid "Import settings from a previous version at:"
-msgstr ""
+msgstr "ייבוא הגדרות מגרסה קודמת ב:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -3033,7 +3033,7 @@ msgstr "טקסט דמה"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:181
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:221
 msgid "Orientation:"
-msgstr ""
+msgstr "אוריאנטציה:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:60
 msgid "Custom paper size:"
@@ -3126,8 +3126,9 @@ msgid "Issue Date:"
 msgstr "תאריך הנפקה:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
+#, fuzzy
 msgid "<<<"
-msgstr ""
+msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:240
 msgid "Revision:"
@@ -3182,7 +3183,7 @@ msgstr "הערה 9:"
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
-msgstr ""
+msgstr "מוצא את הרפרנס הזמין הבא עבור כל המייצגים שכבר קיימים בעיצוב."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
@@ -3271,7 +3272,7 @@ msgstr ""
 #: pcbnew/pcb_fields_grid_table.cpp:171 pcbnew/plot_board_layers.cpp:107
 #: pcbnew/widgets/search_handlers.cpp:103
 msgid "Value"
-msgstr ""
+msgstr "ערך"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:78
 msgid "Option Choices"
@@ -3279,7 +3280,7 @@ msgstr ""
 
 #: common/dialogs/dialog_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
-msgstr ""
+msgstr "אפשרויות הנתמכות על ידי הפלאגין הנוכחי"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
@@ -3502,7 +3503,7 @@ msgstr "מופעל:"
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:51
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:54
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:64
@@ -15755,7 +15756,7 @@ msgstr "סכימת KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:182
 msgid "Failed to load schematic\n"
-msgstr "סכימת KiCad\n"
+msgstr "טעינת הסכימה נכשלה\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:362
 #: eeschema/eeschema_jobs_handler.cpp:476
@@ -26201,9 +26202,8 @@ msgid "Clone Project from Repository..."
 msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "תיקיית פרויקט חדש"
+msgstr "תיקיית פרויקט חדש..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -47691,11 +47691,11 @@ msgstr ""
 
 #: pcbnew/zone.cpp:735
 msgid "Copper Zone"
-msgstr ""
+msgstr "אזור נחושת"
 
 #: pcbnew/zone.cpp:737
 msgid "Non-copper Zone"
-msgstr ""
+msgstr "אזור ללא נחושת"
 
 #: pcbnew/zone.cpp:872
 #, c-format
@@ -47764,7 +47764,7 @@ msgstr "תצורת רכיב KiCad"
 
 #: pcbnew/zone.cpp:1754
 msgid "Enable"
-msgstr ""
+msgstr "אפשר"
 
 #: pcbnew/zone.cpp:1761
 msgid "Source Type"
