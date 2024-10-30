@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 KiCad Developers, see AUTHORS.TXT for contributors.
@@ -138,6 +138,34 @@ BOOST_AUTO_TEST_CASE( Double2Str )
         // Test both of these functions that work the same but the innards are different
         BOOST_CHECK_EQUAL( FormatDouble2Str( c.first ), c.second );
         BOOST_CHECK_EQUAL( UIDouble2Str( c.first ), c.second );
+    }
+}
+
+
+/**
+ * Test #EscapeHTML and #UnescapeHTML methods.
+ */
+BOOST_AUTO_TEST_CASE( HTMLEscape )
+{
+    using CASE = std::pair<wxString, wxString>;
+
+    // conceptually a little quirky because doubles do have all those pesky additional values
+    const std::vector<CASE> cases = {
+        { "I will display € €", "I will display &#8364; &#x20AC;" },
+        { "&lt;", "&amp;lt;" },
+        { "Don't Ω", "Don&apos;t Ω" },
+    };
+
+    for( const auto& c : cases )
+    {
+        wxString original( c.first );
+        wxString escaped = EscapeHTML( original );
+        wxString unescaped = UnescapeHTML( escaped );
+
+        wxString unescapedTest = UnescapeHTML( c.second );
+
+        BOOST_CHECK( original == unescaped );
+        BOOST_CHECK( original == unescapedTest );
     }
 }
 

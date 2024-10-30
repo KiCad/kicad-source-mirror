@@ -28,6 +28,8 @@
 
 #include <clocale>
 #include <cmath>
+#include <map>
+#include <core/map_helpers.h>
 #include <fmt/core.h>
 #include <macros.h>
 #include <richio.h>                        // StrPrintf
@@ -540,22 +542,32 @@ wxString UnescapeHTML( const wxString& aString )
 {
     wxString converted = aString;
 
-    converted.Replace( wxS( "&quot;" ), wxS( "\"" ) );
-    converted.Replace( wxS( "&apos;" ), wxS( "'" ) );
-    converted.Replace( wxS( "&amp;" ), wxS( "&" ) );
-    converted.Replace( wxS( "&lt;" ), wxS( "<" ) );
-    converted.Replace( wxS( "&gt;" ), wxS( ">" ) );
+    // clang-format off
+    static const std::map<wxString, wxString> c_replacements = {
+        { wxS( "quot" ), wxS( "\"" ) },
+        { wxS( "apos" ), wxS( "'" ) },
+        { wxS( "amp" ), wxS( "&" ) },
+        { wxS( "lt" ), wxS( "<" ) },
+        { wxS( "gt" ), wxS( ">" ) }
+    };
+    // clang-format on
 
-    // Yes, &amp;#123; is going to give unexpected results.
+    // Construct regex
+    wxString regexStr = "&(#(\\d*)|#x([a-zA-Z0-9]{4})";
 
-    wxString result;
+    for( auto& [key, value] : c_replacements )
+        regexStr << '|' << key;
 
-    wxRegEx regex( "&#(\\d*);" );
+    regexStr << ");";
 
+    wxRegEx regex( regexStr );
+
+    // Process matches
     size_t start = 0;
     size_t len = 0;
 
-    wxString str = aString;
+    wxString result;
+    wxString str = converted;
 
     while( regex.Matches( str ) )
     {
@@ -564,12 +576,26 @@ wxString UnescapeHTML( const wxString& aString )
 
         result << str.Left( start );
 
-        unsigned long codeVal = 0;
-        wxString      code = regex.GetMatch( str, 1 );
-        code.ToCULong( &codeVal );
+        wxString code = regex.GetMatch( str, 1 );
+        wxString codeDec = regex.GetMatch( str, 2 );
+        wxString codeHex = regex.GetMatch( str, 3 );
 
-        if( codeVal != 0 )
-            result << wxUniChar( codeVal );
+        if( !codeDec.IsEmpty() || !codeHex.IsEmpty() )
+        {
+            unsigned long codeVal = 0;
+
+            if( !codeDec.IsEmpty() )
+                codeDec.ToCULong( &codeVal );
+            else if( !codeHex.IsEmpty() )
+                codeHex.ToCULong( &codeVal, 16 );
+
+            if( codeVal != 0 )
+                result << wxUniChar( codeVal );
+        }
+        else if( auto val = get_opt( c_replacements, code ) )
+        {
+            result << *val;
+        }
 
         str = str.Mid( start + len );
     }
