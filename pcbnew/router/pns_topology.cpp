@@ -104,6 +104,8 @@ bool TOPOLOGY::NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoi
         return false;
 
     std::unique_ptr<NODE> tmpNode( m_world->Branch() );
+
+    track.ClearLinks();
     tmpNode->Add( track );
 
     const JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
@@ -620,7 +622,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
     return true;
 }
 
-const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit )
+const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit, NET_HANDLE aExcludedNet )
 {
     CLUSTER cluster;
     std::deque<ITEM*> pending;
@@ -651,6 +653,9 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
             bool trackOnTrack = ( obs.m_item->Net() != top->Net() ) &&  obs.m_item->OfKind( ITEM::SEGMENT_T ) && top->OfKind( ITEM::SEGMENT_T );
 
             if( trackOnTrack )
+                continue;
+
+            if( aExcludedNet && obs.m_item->Net() == aExcludedNet )
                 continue;
 
             if( obs.m_item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) && obs.m_item->Layers().Overlaps( aLayer ) )

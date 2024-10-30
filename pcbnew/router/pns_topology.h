@@ -97,7 +97,7 @@ public:
 
     bool AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair );
 
-    const CLUSTER AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit = 0.0 );
+    const CLUSTER AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit = 0.0, NET_HANDLE aExcludedNet = nullptr );
 
 private:
     const int DP_PARALLELITY_THRESHOLD = 5;

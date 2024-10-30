@@ -128,9 +128,10 @@ bool WALKAROUND::singleStep()
             continue;
         }
 
-        PNS_DBG( Dbg(), AddItem, obstacle->m_item, BLUE, 10000, wxString::Format( "col-item owner-depth %d", static_cast<const NODE*>( obstacle->m_item->Owner() )->Depth() ) );
 
-        pendingClusters[ i ] = topo.AssembleCluster( obstacle->m_item, line.Layer() );
+        pendingClusters[ i ] = topo.AssembleCluster( obstacle->m_item, line.Layer(), 0.0, line.Net() );
+        PNS_DBG( Dbg(), AddItem, obstacle->m_item, BLUE, 10000, wxString::Format( "col-item owner-depth %d cl-items=%d", static_cast<const NODE*>( obstacle->m_item->Owner() )->Depth(), (int) pendingClusters[i].m_items.size() ) );
+
     }
 
     DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
@@ -158,8 +159,9 @@ bool WALKAROUND::singleStep()
 
             bool stat = aLine.Walkaround( hull, tmp.Line(), aCw );
 
-
-            PNS_DBG( Dbg(), AddItem, &tmp, RED, 10000, wxT( "walk" ) );
+            PNS_DBG( Dbg(), AddShape, &hull, YELLOW, 10000, wxString::Format( "hull stat %d", stat?1:0 ) );
+            PNS_DBG( Dbg(), AddItem, &tmp, RED, 10000, wxString::Format( "walk stat %d", stat?1:0 ) );
+            PNS_DBG( Dbg(), AddItem, clItem, WHITE, 10000, wxString::Format( "item stat %d", stat?1:0 ) );
 
             if( !stat )
             {
