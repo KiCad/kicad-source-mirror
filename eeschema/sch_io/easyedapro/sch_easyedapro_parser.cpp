@@ -1160,7 +1160,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             schSym->SetFootprintFieldText( newLibSymbol.GetFootprintField().GetText() );
 
             for( double i = component->rotation; i > 0; i -= 90 )
-                schSym->Rotate( VECTOR2I(), false );
+                schSym->Rotate( VECTOR2I(), true );
 
             if( component->mirror )
                 schSym->MirrorHorizontally( 0 );
