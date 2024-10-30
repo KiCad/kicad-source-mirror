@@ -66,7 +66,7 @@ public:
         m_viaType = VIATYPE::THROUGH;
         m_isFree = false;
         m_isVirtual = false;
-        SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2 ) );
+        SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, PNS_LAYER_RANGE() ) );
     }
 
     VIA( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, int aDiameter, int aDrill,
@@ -80,7 +80,7 @@ public:
         m_diameter = aDiameter;
         m_drill = aDrill;
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
-        SetHole( HOLE::MakeCircularHole( m_pos, aDrill / 2 ) );
+        SetHole( HOLE::MakeCircularHole( m_pos, aDrill / 2, PNS_LAYER_RANGE() ) );
         m_viaType = aViaType;
         m_isFree = false;
         m_isVirtual = false;
@@ -96,7 +96,7 @@ public:
         m_diameter = aB.m_diameter;
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
         m_drill = aB.m_drill;
-        SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2 ) );
+        SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, PNS_LAYER_RANGE() ) );
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
         m_viaType = aB.m_viaType;
@@ -118,7 +118,7 @@ public:
         m_diameter = aB.m_diameter;
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
         m_drill = aB.m_drill;
-        SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2 ) );
+        SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, PNS_LAYER_RANGE() ) );
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
         m_viaType = aB.m_viaType;

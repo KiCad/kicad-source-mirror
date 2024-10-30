@@ -128,12 +128,11 @@ void HOLE::Move( const VECTOR2I& delta )
 }
 
 
-HOLE* HOLE::MakeCircularHole( const VECTOR2I& pos, int radius )
+HOLE* HOLE::MakeCircularHole( const VECTOR2I& pos, int radius, PNS_LAYER_RANGE aLayers )
 {
     SHAPE_CIRCLE* circle = new SHAPE_CIRCLE( pos, radius );
     HOLE*         hole = new HOLE( circle );
-
-    hole->SetLayers( PNS_LAYER_RANGE( F_Cu, B_Cu ) );
+    hole->SetLayers( aLayers );
     return hole;
 }
 

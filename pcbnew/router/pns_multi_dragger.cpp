@@ -1034,7 +1034,7 @@ const ITEM_SET MULTI_DRAGGER::Traces()
 int MULTI_DRAGGER::CurrentLayer() const
 {
     // fixme: should we care?
-    return F_Cu;
+    return 0;
 }
 
 

@@ -1308,7 +1308,8 @@ std::vector<std::unique_ptr<PNS::VIA>> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* a
 
             via->SetIsFree( aVia->GetIsFree() );
             via->SetHole( PNS::HOLE::MakeCircularHole( aVia->GetPosition(),
-                                                       aVia->GetDrillValue() / 2 ) );
+                                                       aVia->GetDrillValue() / 2,
+                                                       SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ) ) );
             vias.emplace_back( std::move( via ) );
         } );
 

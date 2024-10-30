@@ -72,8 +72,16 @@ void LINE_PLACER::setWorld( NODE* aWorld )
 
 const VIA LINE_PLACER::makeVia( const VECTOR2I& aP )
 {
-    const PNS_LAYER_RANGE layers( m_sizes.ViaType() == VIATYPE::THROUGH ? F_Cu : m_sizes.GetLayerTop(),
-                              m_sizes.ViaType() == VIATYPE::THROUGH ? B_Cu : m_sizes.GetLayerBottom() );
+    // fixme: should belong to KICAD_IFACE
+    auto iface = Router()->GetInterface();
+    
+    int start = m_sizes.ViaType() == VIATYPE::THROUGH ?iface->GetPNSLayerFromBoardLayer( F_Cu ) : m_sizes.GetLayerTop();
+    int end = m_sizes.ViaType() == VIATYPE::THROUGH ? iface->GetPNSLayerFromBoardLayer( B_Cu ) : m_sizes.GetLayerBottom();
+
+    const PNS_LAYER_RANGE layers( 
+        start ,
+        end 
+    );
 
     return VIA( aP, layers, m_sizes.ViaDiameter(), m_sizes.ViaDrill(), nullptr, m_sizes.ViaType() );
 }

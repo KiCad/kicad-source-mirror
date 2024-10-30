@@ -87,7 +87,7 @@ public:
 
     void Move( const VECTOR2I& delta );
 
-    static HOLE* MakeCircularHole( const VECTOR2I& pos, int radius );
+    static HOLE* MakeCircularHole( const VECTOR2I& pos, int radius, PNS_LAYER_RANGE aLayers );
 
 
 private:
