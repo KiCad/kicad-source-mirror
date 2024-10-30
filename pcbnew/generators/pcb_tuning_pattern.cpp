@@ -434,6 +434,9 @@ public:
             m_settings.m_minAmplitude = m_settings.m_maxAmplitude;
     }
 
+    // Update the initial side one time at EditStart based on m_end.
+    void UpdateSideFromEnd() { m_updateSideFromEnd = true; }
+
     PNS::MEANDER_SIDE GetInitialSide() const { return m_settings.m_initialSide; }
     void              SetInitialSide( PNS::MEANDER_SIDE aValue ) { m_settings.m_initialSide = aValue; }
 
@@ -551,6 +554,8 @@ protected:
     wxString              m_lastNetName;
     wxString              m_tuningInfo;
 
+    bool                  m_updateSideFromEnd;
+
     PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
 };
 
@@ -657,7 +662,8 @@ PCB_TUNING_PATTERN::PCB_TUNING_PATTERN( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer
         m_trackWidth( 0 ),
         m_diffPairGap( 0 ),
         m_tuningMode( aMode ),
-        m_tuningStatus( PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED )
+        m_tuningStatus( PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED ),
+        m_updateSideFromEnd(false)
 {
     m_generatorType = GENERATOR_TYPE;
     m_name = DISPLAY_NAME;
@@ -780,6 +786,36 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
 
     if( !baselineValid() )
         initBaseLines( router, layer, aBoard );
+
+    if( m_updateSideFromEnd )
+    {
+        VECTOR2I centerlineOffsetEnd;
+
+        if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled
+            && m_baseLineCoupled->SegmentCount() > 0 )
+        {
+            centerlineOffsetEnd =
+                    ( m_baseLineCoupled->CPoint( -1 ) - m_baseLine->CPoint( -1 ) ) / 2;
+        }
+
+        SEG baseEnd = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( -1 )
+                                                                   : SEG( m_origin, m_end );
+
+        baseEnd.A += centerlineOffsetEnd;
+        baseEnd.B += centerlineOffsetEnd;
+
+        if( baseEnd.A != baseEnd.B )
+        {
+            int side = baseEnd.Side( m_end );
+
+            if( side < 0 )
+                m_settings.m_initialSide = PNS::MEANDER_SIDE_LEFT;
+            else
+                m_settings.m_initialSide = PNS::MEANDER_SIDE_RIGHT;
+        }
+
+        m_updateSideFromEnd = false;
+    }
 
     if( !m_settings.m_overrideCustomRules )
     {
@@ -2372,6 +2408,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 // First click already made; we're in preview-tuning-pattern mode
 
                 m_tuningPattern->SetEnd( cursorPos );
+                m_tuningPattern->UpdateSideFromEnd();
+
                 updateTuningPattern();
             }
         }
