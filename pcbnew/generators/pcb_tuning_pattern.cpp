@@ -517,6 +517,8 @@ protected:
     wxString              m_tuningInfo;
 
     PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
+
+    bool                  m_updateSideFromEnd;
 };
 
 
