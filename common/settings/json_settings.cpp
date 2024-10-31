@@ -886,7 +886,7 @@ void JSON_SETTINGS::ReleaseNestedSettings( NESTED_SETTINGS* aSettings )
     if( it != m_nested_settings.end() )
     {
         wxLogTrace( traceSettings, wxT( "Flush and release %s" ), ( *it )->GetFilename() );
-        ( *it )->SaveToFile();
+        m_modified |= ( *it )->SaveToFile();
         m_nested_settings.erase( it );
     }
 
