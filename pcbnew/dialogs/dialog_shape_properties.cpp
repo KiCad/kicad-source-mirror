@@ -465,11 +465,11 @@ public:
             const VECTOR2D center = CalcArcCenter( start, end, angle );
 
             double radius = ( center - start ).EuclideanNorm();
-            double max_offset =
-                    std::max( std::abs( center.x ) + radius, std::abs( center.y ) + radius );
+            double max_offset = std::max( std::abs( center.x ), std::abs( center.y ) ) + radius;
+            VECTOR2I center_i = VECTOR2I( center.x, center.y );
 
             if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0 )
-                || center == start || center == end )
+                || center_i == start || center_i == end )
             {
                 aErrs.push_back( wxString::Format( _( "Invalid Arc with radius %f and angle %f." ),
                                                    radius, angle.AsDegrees() ) );
