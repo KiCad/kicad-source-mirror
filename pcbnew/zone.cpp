@@ -1215,27 +1215,26 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         keepExternalFillets = bds.m_ZoneKeepExternalFillets;
     }
 
-    auto smooth = [&]( SHAPE_POLY_SET& aPoly )
-                  {
-                      if( !smooth_requested )
-                          return;
+    auto smooth =
+            [&]( SHAPE_POLY_SET& aPoly )
+            {
+                if( !smooth_requested )
+                    return;
 
-                      switch( m_cornerSmoothingType )
-                      {
-                      case ZONE_SETTINGS::SMOOTHING_CHAMFER:
-                          aPoly = aPoly.Chamfer( (int) m_cornerRadius );
-                          break;
+                switch( m_cornerSmoothingType )
+                {
+                case ZONE_SETTINGS::SMOOTHING_CHAMFER:
+                    aPoly = aPoly.Chamfer( (int) m_cornerRadius );
+                    break;
 
-                      case ZONE_SETTINGS::SMOOTHING_FILLET:
-                      {
-                          aPoly = aPoly.Fillet( (int) m_cornerRadius, maxError );
-                          break;
-                      }
+                case ZONE_SETTINGS::SMOOTHING_FILLET:
+                    aPoly = aPoly.Fillet( (int) m_cornerRadius, maxError );
+                    break;
 
-                      default:
-                          break;
-                      }
-                  };
+                default:
+                    break;
+                }
+            };
 
     SHAPE_POLY_SET* maxExtents = &flattened;
     SHAPE_POLY_SET  withFillets;

@@ -1598,7 +1598,9 @@ void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance
         // insertion points.
         std::stable_sort( vertices.begin(), vertices.end(),
                   []( const std::pair<int, VECTOR2I>& a, const std::pair<int, VECTOR2I>& b )
-                  { return a.first > b.first; } );
+                  {
+                      return a.first > b.first;
+                  } );
 
         for( const auto& [vertex, pt] : vertices )
             line.Insert( vertex + 1, pt );  // +1 here because we want to insert after the existing point
@@ -1618,16 +1620,11 @@ void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance
     }
 
 
-/**
- * 1 - Creates the main zone outline using a correction to shrink the resulting area by
- *     m_ZoneMinThickness / 2.  The result is areas with a margin of m_ZoneMinThickness / 2
- *     so that when drawing outline with segments having a thickness of m_ZoneMinThickness the
- *     outlines will match exactly the initial outlines
- * 2 - Knocks out thermal reliefs around thermally-connected pads
- * 3 - Builds a set of thermal spoke for the whole zone
- * 4 - Knocks out unconnected copper items, deleting any affected spokes
- * 5 - Removes unconnected copper islands, deleting any affected spokes
- * 6 - Adds in the remaining spokes
+/*
+ * Note that aSmoothedOutline is larger than the zone where it intersects with other, same-net
+ * zones.  This is to prevent the re-inflation post min-width trimming from createing divots
+ * between adjacent zones.  The final aMaxExtents trimming will remove these areas from the final
+ * fill.
  */
 bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
                                   const SHAPE_POLY_SET& aSmoothedOutline,
@@ -1802,7 +1799,6 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-
     /* -------------------------------------------------------------------------------------
      * Process the hatch pattern (note that we do this while deflated)
      */
@@ -1814,9 +1810,9 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     }
     else
     {
-
-        /* -------------------------------------------------------------------------------------
-         * Connect nearby polygons
+        /* ---------------------------------------------------------------------------------
+         * Connect nearby polygons with zero-width lines in order to ensure correct
+         * re-inflation.
          */
         aFillPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
         connect_nearby_polys( aFillPolys, aZone->GetMinThickness() );
@@ -2074,16 +2070,12 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                         double dx = direction.x;
                         double dy = direction.y;
 
-                        // Shortcircuit the axis cases because they will be degenerate in the
+                        // Short-circuit the axis cases because they will be degenerate in the
                         // intersection test
                         if( direction.x == 0 )
-                        {
-                            return VECTOR2I(0, dy * half_size.y );
-                        }
+                            return VECTOR2I( 0, dy * half_size.y );
                         else if( direction.y == 0 )
-                        {
-                            return VECTOR2I(dx * half_size.x, 0);
-                        }
+                            return VECTOR2I( dx * half_size.x, 0 );
 
                         // We are going to intersect with one side or the other.  Whichever
                         // we hit first is the fraction of the spoke length we keep
@@ -2181,8 +2173,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
             BOX2I spokesBox = dummy_pad.GetBoundingBox();
 
-            //Add the half width of the zone mininum width to the inflate amount to account for the fact that
-            //the deflation procedure will shrink the results by half the half the zone min width
+            // Add the half width of the zone mininum width to the inflate amount to account for
+            // the fact that the deflation procedure will shrink the results by half the half the
+            // zone min width
             spokesBox.Inflate( thermalReliefGap + epsilon + zone_half_width );
 
             // This is a touchy case because the bounding box for circles overshoots the mark
