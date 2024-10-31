@@ -274,8 +274,6 @@ BOX2I PIN_LAYOUT_CACHE::GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins,
         return r;
     }
 
-    VECTOR2I begin;
-    VECTOR2I end;
     bool     includeName = aIncludeNameAndNumber && !m_pin.GetShownName().IsEmpty();
     bool     includeNumber = aIncludeNameAndNumber && !m_pin.GetShownNumber().IsEmpty();
     bool     includeType = aIncludeElectricalType;
