@@ -81,12 +81,19 @@ void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
     wxTopLevelWindow* parent =
             static_cast<wxTopLevelWindow*>( wxGetTopLevelParent( aWindow->GetParent() ) );
 
-    wxASSERT_MSG(parent, wxT( "Modal windows require a parent.") );
+    // Quietly return if no parent is found
+    if( !parent )
+    {
+        return;
+    }
 
     NSWindow* parentWindow = parent->GetWXWindow();
     NSWindow* theWindow    = aWindow->GetWXWindow();
 
-    [parentWindow addChildWindow:theWindow ordered:NSWindowAbove];
+    if( parentWindow && theWindow )
+    {
+        [parentWindow addChildWindow:theWindow ordered:NSWindowAbove];
+    }
 }
 
 
