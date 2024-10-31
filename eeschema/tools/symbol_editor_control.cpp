@@ -208,6 +208,38 @@ int SYMBOL_EDITOR_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::EditLibrarySymbol( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    const LIB_SYMBOL*  symbol = editFrame->GetCurSymbol();
+
+    if( !symbol || !editFrame->IsSymbolFromSchematic() )
+    {
+        wxBell();
+        return 0;
+    }
+
+    const LIB_ID& libId = symbol->GetLibId();
+
+    if( editFrame->LoadSymbol( libId, editFrame->GetUnit(), editFrame->GetBodyStyle() ) )
+    {
+        if( !editFrame->IsLibraryTreeShown() )
+            editFrame->ToggleLibraryTree();
+    }
+    else
+    {
+        const wxString libName = libId.GetLibNickname();
+        const wxString symbolName = libId.GetLibItemName();
+
+        DisplayError( editFrame,
+                      wxString::Format( _( "Failed to load symbol %s from "
+                                           "library %s." ),
+                                        UnescapeString( symbolName ), UnescapeString( libName ) ) );
+    }
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
 {
     if( !m_isSymbolEditor )
@@ -813,6 +845,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::deriveFromExistingSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::importSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::EditSymbol,            EE_ACTIONS::editSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::EditLibrarySymbol,     EE_ACTIONS::editLibSymbolWithLibEdit.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::DdAddLibrary,          ACTIONS::ddAddLibrary.MakeEvent() );
 

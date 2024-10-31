@@ -47,6 +47,7 @@ public:
     int AddLibrary( const TOOL_EVENT& aEvent );
     int AddSymbol( const TOOL_EVENT& aEvent );
     int EditSymbol( const TOOL_EVENT& aEvent );
+    int EditLibrarySymbol( const TOOL_EVENT& aEvent );
 
     int Save( const TOOL_EVENT& aEvt );
     int Revert( const TOOL_EVENT& aEvent );

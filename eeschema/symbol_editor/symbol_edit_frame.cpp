@@ -470,13 +470,21 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return getTargetSymbol() != nullptr;
             };
 
-    mgr->SetConditions( ACTIONS::saveAll,             ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( ACTIONS::save,                ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::saveLibraryAs,    ENABLE( libSelectedCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveSymbolAs,     ENABLE( saveSymbolAsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveSymbolCopyAs, ENABLE( saveSymbolAsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::newSymbol,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::importSymbol,     ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    const auto isSymbolFromSchematicCond =
+            [this]( const SELECTION& )
+            {
+                return IsSymbolFromSchematic();
+            };
+
+    // clang-format off
+    mgr->SetConditions( ACTIONS::saveAll,                       ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( ACTIONS::save,                          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::saveLibraryAs,              ENABLE( libSelectedCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveSymbolAs,               ENABLE( saveSymbolAsCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveSymbolCopyAs,           ENABLE( saveSymbolAsCondition ) );
+    mgr->SetConditions( EE_ACTIONS::newSymbol,                  ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::importSymbol,               ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::editLibSymbolWithLibEdit,   ENABLE( isSymbolFromSchematicCond ) );
 
     mgr->SetConditions( ACTIONS::undo,                ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
@@ -508,6 +516,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    // clang-format on
 
     auto pinTypeCond =
             [this]( const SELECTION& )
@@ -891,18 +900,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                 [this, symbolName, libName]( wxHyperlinkEvent& aEvent )
                 {
-                    if( LoadSymbol( m_symbol->GetLibId(), GetUnit(), GetBodyStyle() ) )
-                    {
-                        if( !IsLibraryTreeShown() )
-                            ToggleLibraryTree();
-                    }
-                    else
-                    {
-                        DisplayError( this, wxString::Format( _( "Failed to load symbol %s from "
-                                                                 "library %s." ),
-                                                              symbolName,
-                                                              libName ) );
-                    }
+                    GetToolManager()->RunAction( EE_ACTIONS::editLibSymbolWithLibEdit );
                 } ) );
 
         infobar.AddButton( button );

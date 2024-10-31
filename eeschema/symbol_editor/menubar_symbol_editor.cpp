@@ -49,6 +49,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     fileMenu->Add( ACTIONS::addLibrary );
     fileMenu->Add( EE_ACTIONS::saveLibraryAs );
     fileMenu->Add( EE_ACTIONS::newSymbol );
+    fileMenu->Add( EE_ACTIONS::editLibSymbolWithLibEdit );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::save );
