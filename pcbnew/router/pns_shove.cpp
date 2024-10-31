@@ -788,9 +788,13 @@ void SHOVE::pruneRootLines( NODE *aRemovedNode )
 {
     PNS_DBG( Dbg(), Message, wxString::Format("prune called" ) );
 
+    NODE *parent = aRemovedNode->GetParent();
+
     for( const auto item : aRemovedNode->GetOverrides() )
     {
-        
+        //if( parent && parent->GetOverrides().find( item ) != parent->GetOverrides().end() )
+          //  continue;
+            
             if( item->OfKind( ITEM::LINKED_ITEM_MASK_T ) )
             {
                 auto litem = static_cast<const LINKED_ITEM*>( item );

@@ -1057,6 +1057,12 @@ public:
         }
     }
 
+    virtual void Message( const wxString& msg,
+                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
+                          {
+                                printf("PNS: %s\n", msg.c_str().AsChar() );
+                          }
+
 private:
     double nextDepth()
     {

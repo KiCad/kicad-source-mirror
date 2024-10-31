@@ -192,6 +192,7 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
 
     walkaround.SetSolidsOnly( aSolidsOnly );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
+    walkaround.SetAllowedPolicies( { WALKAROUND::WP_SHORTEST } );
 
     SHOVE shove( aNode, Router() );
     LINE walkP, walkN;
@@ -222,11 +223,12 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
                 continue;
         }
 
-        // fioxme
-        //wf1 = walkaround.Route( preWalk, postWalk, false );
+        auto wf1 = walkaround.Route( preWalk );
 
-        //if( wf1 != WALKAROUND::DONE )
-          //  return false;
+        if( wf1.status[ WALKAROUND::WP_SHORTEST ] != WALKAROUND::ST_DONE )
+            return false;
+
+        postWalk = wf1.lines[ WALKAROUND::WP_SHORTEST ];
 
         LINE postShove( preShove );
 

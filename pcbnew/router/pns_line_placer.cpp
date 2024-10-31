@@ -614,10 +614,14 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
         int len_ccw = wr.status[WP_CCW] != WALKAROUND::ST_STUCK ? wr.lines[WP_CCW].CLine().Length()
                                                         : std::numeric_limits<int>::max();
 
+
         if( wr.status[ WP_CW ] == WALKAROUND::ST_DONE )
         {
             PNS_DBG( Dbg(), AddItem, &wr.lines[WP_CW], BLUE, 20000, wxT( "wf-result-cw-preopt" ) );
             LINE tmpHead, tmpTail;
+
+
+            OPTIMIZER::Optimize( &wr.lines[WP_CW], OPTIMIZER::MERGE_SEGMENTS, m_currentNode );
 
             if( splitHeadTail( wr.lines[WP_CW], m_tail, tmpHead, tmpTail ) )
             {
@@ -636,6 +640,8 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
             PNS_DBG( Dbg(), AddItem, &wr.lines[WP_CCW], BLUE, 20000, wxT( "wf-result-ccw-preopt" ) );
 
             LINE tmpHead, tmpTail;
+
+            OPTIMIZER::Optimize( &wr.lines[WP_CCW], OPTIMIZER::MERGE_SEGMENTS, m_currentNode );
 
             if( splitHeadTail( wr.lines[WP_CCW], m_tail, tmpHead, tmpTail ) )
             {

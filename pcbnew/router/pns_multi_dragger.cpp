@@ -620,7 +620,6 @@ bool MULTI_DRAGGER::multidragMarkObstacles( std::vector<MDRAG_LINE>& aCompletedL
 
     for( auto& l : aCompletedLines )
     {
-        if( l.dragOK )
         {
             m_lastNode->Remove( l.originalLine );
             m_lastNode->Add( l.draggedLine );
