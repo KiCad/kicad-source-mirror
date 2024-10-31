@@ -1251,7 +1251,6 @@ PCB_DIM_RADIAL::PCB_DIM_RADIAL( BOARD_ITEM* aParent ) :
     m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
     m_overrideTextEnabled = false;
     m_keepTextAligned     = true;
-    m_isDiameter          = false;
     m_prefix              = "R ";
     m_leaderLength        = m_arrowLength * 3;
 }
@@ -1327,10 +1326,7 @@ void PCB_DIM_RADIAL::updateGeometry()
 
     VECTOR2I radius( m_end - m_start );
 
-    if( m_isDiameter )
-        m_measuredValue = KiROUND( radius.EuclideanNorm() * 2 );
-    else
-        m_measuredValue = KiROUND( radius.EuclideanNorm() );
+    m_measuredValue = KiROUND( radius.EuclideanNorm() );
 
     updateText();
 

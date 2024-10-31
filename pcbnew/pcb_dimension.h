@@ -608,7 +608,6 @@ protected:
     void updateGeometry() override;
 
 private:
-    bool m_isDiameter;
     int  m_leaderLength;
 };
 
