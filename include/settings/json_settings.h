@@ -109,7 +109,7 @@ public:
     /**
      * Stores the current parameters into the JSON document represented by this object
      * Note: this doesn't do any writing to disk; that's handled by SETTINGS_MANAGER
-     * @return true if any part of the JSON document was updated
+     * @return true if any part of the JSON document has been updated since the last save to disk
      */
     virtual bool Store();
 
@@ -326,6 +326,9 @@ protected:
 
     /// Whether or not the backing store file should be written
     bool m_writeFile;
+
+    /// True if the JSON data store has been written to since the last file write
+    bool m_modified;
 
     /// Whether or not to delete legacy file after migration
     bool m_deleteLegacyAfterMigration;

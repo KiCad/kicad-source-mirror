@@ -73,6 +73,7 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
         m_createIfMissing( aCreateIfMissing ),
         m_createIfDefault( aCreateIfDefault ),
         m_writeFile( aWriteFile ),
+        m_modified( false ),
         m_deleteLegacyAfterMigration( true ),
         m_resetParamsIfMissing( true ),
         m_schemaVersion( aSchemaVersion ),
@@ -351,6 +352,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     wxLogTrace( traceSettings, wxT( "Loaded <%s> with schema %d" ), GetFullFilename(),
                 m_schemaVersion );
 
+    m_modified = false;
+
     // If we migrated, clean up the legacy file (with no extension)
     if( m_writeFile && ( legacy_migrated || migrated ) )
     {
@@ -371,15 +374,13 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
 bool JSON_SETTINGS::Store()
 {
-    bool modified = false;
-
     for( PARAM_BASE* param : m_params )
     {
-        modified |= !param->MatchesFile( *this );
+        m_modified |= !param->MatchesFile( *this );
         param->Store( this );
     }
 
-    return modified;
+    return m_modified;
 }
 
 
@@ -501,6 +502,9 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         wxLogTrace( traceSettings, wxT( "Error: could not save %s." ) );
         success = false;
     }
+
+    if( success )
+        m_modified = false;
 
     return success;
 }
