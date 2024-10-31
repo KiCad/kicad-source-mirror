@@ -280,10 +280,16 @@ public:
         START_Y,
         END_X,
         END_Y,
+
         POLAR_START_X,
         POLAR_START_Y,
         LENGTH,
         ANGLE,
+
+        MID_X,
+        MID_Y,
+        MID_END_X,
+        MID_END_Y,
 
         NUM_CTRLS,
     };
@@ -305,12 +311,19 @@ public:
                    {
                        OnPolarChange();
                    } );
+
+        BindCtrls( MID_X, MID_END_Y,
+                   [this]()
+                   {
+                       OnMidEndpointChange();
+                   } );
     }
 
     void updateAll() override
     {
         updateEnds();
         updatePolar();
+        updateMidEndpoint();
     }
 
     void OnEndsChange()
@@ -322,6 +335,7 @@ public:
         GetShape().SetEnd( p1 );
 
         updatePolar();
+        updateMidEndpoint();
     }
 
     void updateEnds()
@@ -347,6 +361,7 @@ public:
         GetShape().SetEnd( polar );
 
         updateEnds();
+        updateMidEndpoint();
     }
 
     void updatePolar()
@@ -358,6 +373,29 @@ public:
         ChangeValue( POLAR_START_Y, p0.y );
         ChangeValue( LENGTH, p0.Distance( p1 ) );
         ChangeAngleValue( ANGLE, -EDA_ANGLE( p1 - p0 ) );
+    }
+
+    void OnMidEndpointChange()
+    {
+        const VECTOR2I mid{ GetIntValue( MID_X ), GetIntValue( MID_Y ) };
+        const VECTOR2I end{ GetIntValue( MID_END_X ), GetIntValue( MID_END_Y ) };
+
+        GetShape().SetStart( mid - ( end - mid ) );
+        GetShape().SetEnd( mid + ( end - mid ) );
+
+        updateEnds();
+        updatePolar();
+    }
+
+    void updateMidEndpoint()
+    {
+        const VECTOR2I c = GetShape().GetCenter();
+        const VECTOR2I e = GetShape().GetStart();
+
+        ChangeValue( MID_X, c.x );
+        ChangeValue( MID_Y, c.y );
+        ChangeValue( MID_END_X, e.x );
+        ChangeValue( MID_END_Y, e.y );
     }
 };
 
@@ -712,6 +750,7 @@ private:
         RECT_CENTER_SIZE,
         LINE_ENDS,
         LINE_POLAR,
+        LINE_MID_END,
         ARC_C_S_A,
         ARC_S_M_E,
         CIRCLE_RADIUS,
@@ -876,10 +915,14 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 1, 3, _( "Length" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false, m_boundCtrls );
         AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 2, 3, _( "Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true, m_boundCtrls );
 
+        AddXYPointToSizer( *aParent, *m_gbsLineByMidEnd, 0, 0, _( "Midpoint" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsLineByMidEnd, 0, 3, _( "Endpoint" ), false, m_boundCtrls );
+
         m_geomSync = std::make_unique<LINE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
         showPage( SHAPE_PROPS_TAB_INDEX::LINE_ENDS );
         showPage( SHAPE_PROPS_TAB_INDEX::LINE_POLAR );
+        showPage( SHAPE_PROPS_TAB_INDEX::LINE_MID_END );
 
         m_notebookShapeDefs->SetSelection( static_cast<int>( SHAPE_PROPS_TAB_INDEX::LINE_ENDS ) );
         break;

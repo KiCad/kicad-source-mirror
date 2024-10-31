@@ -54,6 +54,8 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxGridBagSizer* m_gbsLineByEnds;
 		wxPanel* m_lineByLengthAngle;
 		wxGridBagSizer* m_gbsLineByLengthAngle;
+		wxPanel* m_lineByMidEnd;
+		wxGridBagSizer* m_gbsLineByMidEnd;
 		wxPanel* m_arcByCSA;
 		wxGridBagSizer* m_gbsArcByCSA;
 		wxPanel* m_arcBySME;

@@ -99,6 +99,22 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_lineByLengthAngle->Layout();
 	bSizer7->Fit( m_lineByLengthAngle );
 	m_notebookShapeDefs->AddPage( m_lineByLengthAngle, _("By Length and Angle"), false );
+	m_lineByMidEnd = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer71;
+	bSizer71 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsLineByMidEnd = new wxGridBagSizer( 0, 0 );
+	m_gbsLineByMidEnd->SetFlexibleDirection( wxBOTH );
+	m_gbsLineByMidEnd->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer71->Add( m_gbsLineByMidEnd, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_lineByMidEnd->SetSizer( bSizer71 );
+	m_lineByMidEnd->Layout();
+	bSizer71->Fit( m_lineByMidEnd );
+	m_notebookShapeDefs->AddPage( m_lineByMidEnd, _("By Midpoint/Endpoint"), false );
 	m_arcByCSA = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
