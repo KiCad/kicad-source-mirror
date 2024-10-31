@@ -733,6 +733,25 @@ int FOOTPRINT_EDITOR_CONTROL::EditFootprint( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::EditLibraryFootprint( const TOOL_EVENT& aEvent )
+{
+    FOOTPRINT* footprint = m_frame->GetBoard()->GetFirstFootprint();
+
+    if( !footprint || !m_frame->IsCurrentFPFromBoard() )
+    {
+        wxBell();
+        return 0;
+    }
+
+    m_frame->LoadFootprintFromLibrary( footprint->GetFPID() );
+
+    if( !m_frame->IsLibraryTreeShown() )
+        m_frame->ToggleLibraryTree();
+
+    return 0;
+}
+
+
 int FOOTPRINT_EDITOR_CONTROL::ToggleLayersManager( const TOOL_EVENT& aEvent )
 {
     m_frame->ToggleLayersManager();
@@ -884,6 +903,7 @@ int FOOTPRINT_EDITOR_CONTROL::RepairFootprint( const TOOL_EVENT& aEvent )
 
 void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 {
+    // clang-format off
     Go( &FOOTPRINT_EDITOR_CONTROL::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CreateFootprint,      PCB_ACTIONS::createFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Save,                 ACTIONS::save.MakeEvent() );
@@ -894,6 +914,7 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::DeleteFootprint,      PCB_ACTIONS::deleteFootprint.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::EditFootprint,        PCB_ACTIONS::editFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::EditLibraryFootprint, PCB_ACTIONS::editLibFpInFpEditor.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CutCopyFootprint,     PCB_ACTIONS::cutFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CutCopyFootprint,     PCB_ACTIONS::copyFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::PasteFootprint,       PCB_ACTIONS::pasteFootprint.MakeEvent() );
@@ -915,4 +936,5 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleLayersManager,  PCB_ACTIONS::showLayersManager.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleProperties,     PCB_ACTIONS::showProperties.MakeEvent() );
+    // clang-format on
 }

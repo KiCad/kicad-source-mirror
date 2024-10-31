@@ -51,6 +51,7 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     fileMenu->Add( ACTIONS::addLibrary );
     fileMenu->Add( PCB_ACTIONS::newFootprint );
     fileMenu->Add( PCB_ACTIONS::createFootprint );
+    fileMenu->Add( PCB_ACTIONS::editLibFpInFpEditor );
 
     fileMenu->AppendSeparator();
 

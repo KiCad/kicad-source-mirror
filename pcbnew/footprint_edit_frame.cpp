@@ -538,13 +538,25 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 
     if( IsCurrentFPFromBoard() )
     {
-        wxString msg;
-        msg.Printf( _( "Editing %s from board.  Saving will update the board only." ),
-                    aFootprint->GetReference() );
+        const wxString msg =
+                wxString::Format( _( "Editing %s from board.  Saving will update the board only." ),
+                                  aFootprint->GetReference() );
+        const wxString openLibLink =
+                wxString::Format( _( "Open in library '%s'" ), UnescapeString( libName ) );
+
+        const auto openLibraryCopy = [this, aFootprint]( wxHyperlinkEvent& aEvent )
+        {
+            GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
+        };
 
         if( WX_INFOBAR* infobar = GetInfoBar() )
         {
+            wxHyperlinkCtrl* button =
+                    new wxHyperlinkCtrl( infobar, wxID_ANY, openLibLink, wxEmptyString );
+            button->Bind( wxEVT_COMMAND_HYPERLINK, openLibraryCopy );
+
             infobar->RemoveAllButtons();
+            infobar->AddButton( button );
             infobar->AddCloseButton();
             infobar->ShowMessage( msg, wxICON_INFORMATION );
         }
@@ -1199,9 +1211,17 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return !GetTargetFPID().GetLibItemName().empty();
             };
 
+    const auto footprintFromBoardCond =
+            [this]( const SELECTION& )
+            {
+                return IsCurrentFPFromBoard();
+            };
+
+    // clang-format off
     mgr->SetConditions( ACTIONS::saveAs,                 ENABLE( footprintTargettedCond ) );
     mgr->SetConditions( ACTIONS::revert,                 ENABLE( cond.ContentModified() ) );
     mgr->SetConditions( ACTIONS::save,                   ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( PCB_ACTIONS::editLibFpInFpEditor,ENABLE( footprintFromBoardCond ) );
 
     mgr->SetConditions( ACTIONS::undo,                   ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                   ENABLE( cond.RedoAvailable() ) );
@@ -1235,6 +1255,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::zoomTool,               CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,          CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    // clang-format on
 
     auto constrainedDrawingModeCond =
             [this]( const SELECTION& )

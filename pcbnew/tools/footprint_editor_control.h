@@ -55,6 +55,7 @@ public:
     int Revert( const TOOL_EVENT& aEvent );
 
     int EditFootprint( const TOOL_EVENT& aEvent );
+    int EditLibraryFootprint( const TOOL_EVENT& aEvent );
     int CutCopyFootprint( const TOOL_EVENT& aEvent );
     int PasteFootprint( const TOOL_EVENT& aEvent );
     int DuplicateFootprint( const TOOL_EVENT& aEvent );
