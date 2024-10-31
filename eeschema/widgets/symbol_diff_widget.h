@@ -24,6 +24,7 @@
 
 
 class LIB_SYMBOL;
+class wxBitmapButton;
 class wxSlider;
 
 
@@ -46,12 +47,19 @@ public:
      */
     void DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSymbol, int aUnit, int aConvert );
 
-private:
-    void onSlider( wxScrollEvent& aEvent );
+    /**
+     * Toggle between full-A and full-B display.
+     */
+    void ToggleAB();
 
 private:
-    LIB_SYMBOL* m_libraryItem;
-    wxSlider*   m_slider;
+    void onSlider( wxScrollEvent& aEvent );
+    void onCharHook( wxKeyEvent& aEvent );
+
+private:
+    LIB_SYMBOL*     m_libraryItem;
+    wxSlider*       m_slider;
+    wxBitmapButton* m_toggleButton;
 };
 
 

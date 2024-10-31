@@ -24,6 +24,7 @@
 
 
 class FOOTPRINT;
+class wxBitmapButton;
 class wxSlider;
 
 
@@ -44,13 +45,20 @@ public:
      */
     void DisplayDiff( FOOTPRINT* aBoardFootprint, std::shared_ptr<FOOTPRINT>& aLibFootprint );
 
+    /**
+     * Toggle between full-A and full-B display.
+     */
+    void ToggleAB();
+
 private:
     void onSlider( wxScrollEvent& aEvent );
+    void onCharHook( wxKeyEvent& aEvent );
 
 private:
     std::shared_ptr<FOOTPRINT> m_boardItemCopy;
     std::shared_ptr<FOOTPRINT> m_libraryItem;
     wxSlider*                  m_slider;
+    wxBitmapButton*            m_toggleButton;
 };
 
 

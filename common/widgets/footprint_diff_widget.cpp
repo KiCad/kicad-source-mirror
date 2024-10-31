@@ -17,13 +17,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <widgets/footprint_diff_widget.h>
-#include <pcb_painter.h>
-#include <footprint.h>
-#include <settings/settings_manager.h>
+#include "widgets/footprint_diff_widget.h"
+
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/slider.h>
+#include <wx/bmpbuttn.h>
+
+#include <bitmaps.h>
+#include <footprint.h>
+#include <hotkeys_basic.h>
+#include <pcb_painter.h>
+#include <settings/settings_manager.h>
 
 
 FOOTPRINT_DIFF_WIDGET::FOOTPRINT_DIFF_WIDGET( wxWindow* aParent, KIWAY& aKiway ) :
@@ -41,6 +46,13 @@ FOOTPRINT_DIFF_WIDGET::FOOTPRINT_DIFF_WIDGET( wxWindow* aParent, KIWAY& aKiway )
     bottomSizer->Add( m_slider, 1, wxLEFT | wxRIGHT | wxALIGN_BOTTOM, 30 );
     bottomSizer->Add( libLabel, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxALIGN_CENTRE_VERTICAL, 6 );
 
+    m_toggleButton = new wxBitmapButton( this, wxID_ANY, KiBitmapBundle( BITMAPS::swap ) );
+    wxString toggleTooltip = _( "Toggle between A and B display" );
+    toggleTooltip = AddHotkeyName( toggleTooltip, '/', HOTKEY_ACTION_TYPE::IS_COMMENT );
+    m_toggleButton->SetToolTip( toggleTooltip );
+
+    bottomSizer->Add( m_toggleButton, 0, wxLEFT | wxRIGHT | wxALIGN_CENTRE_VERTICAL, 6 );
+
     m_outerSizer->Add( bottomSizer, 0, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, 10 );
 
     Layout();
@@ -54,6 +66,15 @@ FOOTPRINT_DIFF_WIDGET::FOOTPRINT_DIFF_WIDGET( wxWindow* aParent, KIWAY& aKiway )
    	m_slider->Bind( wxEVT_SCROLL_THUMBTRACK, &FOOTPRINT_DIFF_WIDGET::onSlider, this );
    	m_slider->Bind( wxEVT_SCROLL_THUMBRELEASE, &FOOTPRINT_DIFF_WIDGET::onSlider, this );
    	m_slider->Bind( wxEVT_SCROLL_CHANGED, &FOOTPRINT_DIFF_WIDGET::onSlider, this );
+
+    // Bind keys
+    Bind( wxEVT_CHAR_HOOK, &FOOTPRINT_DIFF_WIDGET::onCharHook, this );
+
+    m_toggleButton->Bind( wxEVT_BUTTON,
+            [&]( wxCommandEvent& aEvent )
+            {
+                ToggleAB();
+            } );
 }
 
 
@@ -82,6 +103,20 @@ void FOOTPRINT_DIFF_WIDGET::DisplayDiff( FOOTPRINT* aBoardFootprint,
     m_libraryItem = aLibFootprint;
 
     DisplayFootprints( m_boardItemCopy, m_libraryItem );
+
+    wxScrollEvent dummy;
+    onSlider( dummy );
+}
+
+
+void FOOTPRINT_DIFF_WIDGET::ToggleAB()
+{
+    const int val = m_slider->GetValue();
+
+    if( val == 0 )
+        m_slider->SetValue( 100 );
+    else
+        m_slider->SetValue( 0 );
 
     wxScrollEvent dummy;
     onSlider( dummy );
@@ -130,4 +165,17 @@ void FOOTPRINT_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
 
     RefreshAll();
     aEvent.Skip();
+}
+
+
+void FOOTPRINT_DIFF_WIDGET::onCharHook( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == '/' )
+    {
+        ToggleAB();
+    }
+    else
+    {
+        aEvent.Skip();
+    }
 }
