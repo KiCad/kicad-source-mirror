@@ -1117,7 +1117,9 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     if( !m_item )
         return false;
 
-    m_geomSync->SetShape( *m_item );
+    // Not al shapes have a syncer (e.g. polygons)
+    if( m_geomSync )
+        m_geomSync->SetShape( *m_item );
 
     m_filledCtrl->SetValue( m_item->IsFilled() );
     m_locked->SetValue( m_item->IsLocked() );
