@@ -23,11 +23,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "tool/tool_dispatcher.h"
+
+#include <bit>
+#include <optional>
+
+#include <wx/log.h>
+#include <wx/stc/stc.h>
+#include <wx/settings.h>
+
 #include <core/ignore.h>
 #include <macros.h>
 #include <trace_helpers.h>
 #include <tool/tool_manager.h>
-#include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
 #include <tool/action_manager.h>
 #include <tool/action_menu.h>
@@ -35,12 +43,10 @@
 #include <view/wx_view_controls.h>
 #include <eda_draw_frame.h>
 #include <core/kicad_algo.h>
-#include <optional>
-#include <wx/log.h>
-#include <wx/stc/stc.h>
-#include <wx/settings.h>
+
 #include <kiplatform/app.h>
 #include <kiplatform/ui.h>
+
 
 ///< Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
@@ -498,12 +504,22 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             }
         }
 
-        // We only get wheel events that aren't consumed by the view controls
-        // (probably, mods has 2 or more bits set)
+        // We only handle wheel events that aren't for the view control.
+        // Events with zero or one modifier are reserved for view control.
+        // When using WX_VIEW_CONTROLS, these will already be handled, but
+        // we still shouldn't consume such events if we get them (e.g. for
+        // when WX_VIEW_CONTROLS is not in use, like in the 3D viewer)
         if( !evt && me->GetWheelRotation() != 0 )
         {
-            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_WHEEL, mods );
-            evt->SetParameter<int>( me->GetWheelRotation() );
+            const unsigned modBits =
+                    static_cast<unsigned>( mods ) & ( MD_CTRL | MD_ALT | MD_SHIFT );
+            const bool shouldHandle = std::popcount( modBits ) > 1;
+
+            if( shouldHandle )
+            {
+                evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_WHEEL, mods );
+                evt->SetParameter<int>( me->GetWheelRotation() );
+            }
         }
     }
     else if( type == wxEVT_CHAR_HOOK || type == wxEVT_CHAR )
