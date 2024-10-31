@@ -1308,12 +1308,21 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     if( aBoardOutline )
         aSmoothedPoly.BooleanIntersection( *aBoardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
+    SHAPE_POLY_SET withSameNetIntersectingZones = aSmoothedPoly.CloneDropTriangulation();
+
     smooth( aSmoothedPoly );
 
     if( aSmoothedPolyWithApron )
     {
+        // The same-net intersecting-zone code above makes sure the corner-smoothing algorithm
+        // doesn't produce divots.  But the min-thickness algorithm applied in fillCopperZone()
+        // is *also* going to perform a deflate/inflate cycle, again leading to divots.  So we
+        // pre-inflate the contour by the min-thickness within the same-net-intersecting-zones
+        // envelope.
         SHAPE_POLY_SET poly = maxExtents->CloneDropTriangulation();
         poly.Inflate( m_ZoneMinThickness, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
+        poly.BooleanIntersection( withSameNetIntersectingZones, SHAPE_POLY_SET::PM_FAST );
+
         *aSmoothedPolyWithApron = aSmoothedPoly;
         aSmoothedPolyWithApron->BooleanIntersection( poly, SHAPE_POLY_SET::PM_FAST );
     }
