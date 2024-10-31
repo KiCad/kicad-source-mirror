@@ -915,8 +915,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 1, 3, _( "Length" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false, m_boundCtrls );
         AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 2, 3, _( "Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true, m_boundCtrls );
 
-        AddXYPointToSizer( *aParent, *m_gbsLineByMidEnd, 0, 0, _( "Midpoint" ), false, m_boundCtrls );
-        AddXYPointToSizer( *aParent, *m_gbsLineByMidEnd, 0, 3, _( "Endpoint" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsLineByMidEnd, 0, 0, _( "Mid Point" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsLineByMidEnd, 0, 3, _( "End Point" ), false, m_boundCtrls );
 
         m_geomSync = std::make_unique<LINE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
