@@ -244,13 +244,6 @@ public:
     wxString SelectLibrary( const wxString& aNicknameExisting );
 
     /**
-     * @return a reference to the footprint found by its reference on the current board. The
-     *         reference is entered by the user from a dialog (by awxTextCtlr, or a list of
-     *         available references)
-     */
-    FOOTPRINT* GetFootprintFromBoardByReference();
-
-    /**
      * Must be called after a change in order to set the "modify" flag and update other data
      * structures and GUI elements.
      */

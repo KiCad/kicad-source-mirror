@@ -31,7 +31,6 @@ using namespace std::placeholders;
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
 #include <dialog_footprint_chooser.h>
-#include <dialog_get_footprint_by_name.h>
 #include <eda_list_dialog.h>
 #include <footprint_edit_frame.h>
 #include <footprint_tree_pane.h>
@@ -391,40 +390,6 @@ static FOOTPRINT* s_FootprintInitialCopy = nullptr;    // Copy of footprint for 
 
 static PICKED_ITEMS_LIST s_PickedList;              // A pick-list to save initial footprint
                                                     //   and dragged tracks
-
-
-FOOTPRINT* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
-{
-    wxString        footprintName;
-    wxArrayString   fplist;
-
-    // Build list of available fp references, to display them in dialog
-    for( FOOTPRINT* fp : GetBoard()->Footprints() )
-        fplist.Add( fp->GetReference() + wxT( "    ( " ) + fp->GetValue() + wxT( " )" ) );
-
-    fplist.Sort();
-
-    DIALOG_GET_FOOTPRINT_BY_NAME dlg( this, fplist );
-
-    if( dlg.ShowModal() != wxID_OK )    //Aborted by user
-        return nullptr;
-
-    footprintName = dlg.GetValue();
-    footprintName.Trim( true );
-    footprintName.Trim( false );
-
-    if( !footprintName.IsEmpty() )
-    {
-        for( FOOTPRINT* fp : GetBoard()->Footprints() )
-        {
-            if( fp->GetReference().CmpNoCase( footprintName ) == 0 )
-                return fp;
-        }
-    }
-
-    return nullptr;
-}
-
 
 void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest )
 {

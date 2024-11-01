@@ -65,6 +65,7 @@ using namespace std::placeholders;
 #include "kicad_clipboard.h"
 #include <wx/hyperlink.h>
 #include <router/router_tool.h>
+#include <dialog_get_footprint_by_name.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_tablecell_properties.h>
@@ -412,15 +413,54 @@ bool EDIT_TOOL::Init()
 }
 
 
+/**
+ * @return a reference to the footprint found by its reference on the current board. The
+ *         reference is entered by the user from a dialog (by awxTextCtlr, or a list of
+ *         available references)
+ */
+static FOOTPRINT* GetFootprintFromBoardByReference( PCB_BASE_FRAME& aFrame )
+{
+    wxString          footprintName;
+    wxArrayString     fplist;
+    const FOOTPRINTS& footprints = aFrame.GetBoard()->Footprints();
+
+    // Build list of available fp references, to display them in dialog
+    for( FOOTPRINT* fp : footprints )
+        fplist.Add( fp->GetReference() + wxT( "    ( " ) + fp->GetValue() + wxT( " )" ) );
+
+    fplist.Sort();
+
+    DIALOG_GET_FOOTPRINT_BY_NAME dlg( &aFrame, fplist );
+
+    if( dlg.ShowModal() != wxID_OK ) //Aborted by user
+        return nullptr;
+
+    footprintName = dlg.GetValue();
+    footprintName.Trim( true );
+    footprintName.Trim( false );
+
+    if( !footprintName.IsEmpty() )
+    {
+        for( FOOTPRINT* fp : footprints )
+        {
+            if( fp->GetReference().CmpNoCase( footprintName ) == 0 )
+                return fp;
+        }
+    }
+
+    return nullptr;
+}
+
+
 int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
 {
     // GetAndPlace makes sense only in board editor, although it is also called
     // in fpeditor, that shares the same EDIT_TOOL list
-    if( !getEditFrame<PCB_BASE_FRAME>()->IsType( FRAME_PCB_EDITOR ) )
+    if( IsFootprintEditor() )
         return 0;
 
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    FOOTPRINT*          fp = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
+    FOOTPRINT*          fp = GetFootprintFromBoardByReference( *frame() );
 
     if( fp )
     {

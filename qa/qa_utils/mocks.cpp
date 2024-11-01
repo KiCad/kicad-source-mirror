@@ -111,12 +111,6 @@ DIALOG_FIND_BASE::~DIALOG_FIND_BASE()
 }
 
 
-FOOTPRINT* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
-{
-    return nullptr;
-}
-
-
 DIALOG_FILTER_SELECTION_BASE::DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wxWindowID id,
                                                             const wxString& title,
                                                             const wxPoint& pos, const wxSize& size,
