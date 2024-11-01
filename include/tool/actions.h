@@ -133,11 +133,13 @@ public:
     static TOOL_ACTION zoomCenter;
     static TOOL_ACTION zoomFitScreen;
     static TOOL_ACTION zoomFitObjects; // Zooms to bbox of items on screen (except page border)
+    static TOOL_ACTION zoomFitSelection;
     static TOOL_ACTION zoomPreset;
     static TOOL_ACTION zoomTool;
     static TOOL_ACTION zoomUndo;
     static TOOL_ACTION zoomRedo;
     static TOOL_ACTION centerContents;
+    static TOOL_ACTION centerSelection;
     static TOOL_ACTION toggleCursor;
     static TOOL_ACTION toggleCursorStyle;
     static TOOL_ACTION highContrastMode;

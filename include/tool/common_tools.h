@@ -53,9 +53,11 @@ public:
     int ZoomCenter( const TOOL_EVENT& aEvent );
     int ZoomFitScreen( const TOOL_EVENT& aEvent );
     int ZoomFitObjects( const TOOL_EVENT& aEvent );
+    int ZoomFitSelection( const TOOL_EVENT& aEvent );
     int ZoomPreset( const TOOL_EVENT& aEvent );
 
     int CenterContents( const TOOL_EVENT& aEvent );
+    int CenterSelection( const TOOL_EVENT& aEvent );
 
     int PanControl( const TOOL_EVENT& aEvent );
 
@@ -98,8 +100,15 @@ private:
      */
     enum ZOOM_FIT_TYPE_T
     {
-        ZOOM_FIT_ALL,     ///< Zoom to fall all items in view INCLUDING page and border
-        ZOOM_FIT_OBJECTS, ///< Zoom to fit all items in view EXCLUDING page and border
+        ZOOM_FIT_ALL,       ///< Zoom to fall all items in view INCLUDING page and border
+        ZOOM_FIT_OBJECTS,   ///< Zoom to fit all items in view EXCLUDING page and border
+        ZOOM_FIT_SELECTION, ///< Zoom to fit selected items in view
+    };
+
+    enum class CENTER_TYPE
+    {
+        CENTER_CONTENTS,
+        CENTER_SELECTION,
     };
 
     ///< Sets up handlers for various events.
@@ -114,6 +123,8 @@ private:
     int doZoomToPreset( int idx, bool aCenterOnCursor );
 
     int doZoomFit( ZOOM_FIT_TYPE_T aFitType );
+
+    int doCenter( CENTER_TYPE aCenterType );
 
     std::vector<VECTOR2I> m_grids;  ///< Grids from #APP_SETTINGS converted to internal units
                                     ///< and with the user grid appended.

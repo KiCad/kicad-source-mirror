@@ -304,6 +304,12 @@ int COMMON_TOOLS::ZoomFitObjects( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::ZoomFitSelection( const TOOL_EVENT& aEvent )
+{
+    return doZoomFit( ZOOM_FIT_SELECTION );
+}
+
+
 int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
 {
     KIGFX::VIEW*        view   = getView();
@@ -333,6 +339,16 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
             bBox = m_frame->GetDocumentExtents( false );
         else
             aFitType = ZOOM_FIT_ALL; // Just do a "Zoom to Fit" for unsupported editors
+    }
+
+    if( aFitType == ZOOM_FIT_SELECTION )
+    {
+        SELECTION& selection = m_frame->GetCurrentSelection();
+
+        if( selection.Empty() )
+            return 0;
+
+        bBox = selection.GetBoundingBox();
     }
 
     // If the screen is empty then use the default view bbox
@@ -384,13 +400,40 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
 }
 
 
+int COMMON_TOOLS::CenterSelection( const TOOL_EVENT& aEvent )
+{
+    return doCenter( CENTER_TYPE::CENTER_SELECTION );
+}
+
 int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
 {
-    EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
-    BOX2I bBox = getModel<EDA_ITEM>()->ViewBBox();
+    return doCenter( CENTER_TYPE::CENTER_CONTENTS );
+}
 
-    if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
-        bBox = canvas->GetDefaultViewBBox();
+
+int COMMON_TOOLS::doCenter( CENTER_TYPE aCenterType )
+{
+    EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
+
+    BOX2I bBox;
+
+    if( aCenterType == CENTER_TYPE::CENTER_SELECTION )
+    {
+        SELECTION& selection = m_frame->GetCurrentSelection();
+
+        // No selection: do nothing
+        if( selection.Empty() )
+            return 0;
+
+        bBox = selection.GetBoundingBox().Centre();
+    }
+    else
+    {
+        bBox = getModel<EDA_ITEM>()->ViewBBox();
+
+        if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
+            bBox = canvas->GetDefaultViewBBox();
+    }
 
     getView()->SetCenter( bBox.Centre() );
 
@@ -725,8 +768,10 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ZoomCenter,          ACTIONS::zoomCenter.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomFitScreen,       ACTIONS::zoomFitScreen.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomFitObjects,      ACTIONS::zoomFitObjects.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomFitSelection,    ACTIONS::zoomFitSelection.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomPreset,          ACTIONS::zoomPreset.MakeEvent() );
     Go( &COMMON_TOOLS::CenterContents,      ACTIONS::centerContents.MakeEvent() );
+    Go( &COMMON_TOOLS::CenterSelection,     ACTIONS::centerSelection.MakeEvent() );
 
     // Grid control
     Go( &COMMON_TOOLS::GridNext,            ACTIONS::gridNext.MakeEvent() );

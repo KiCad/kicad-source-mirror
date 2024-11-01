@@ -582,6 +582,11 @@ TOOL_ACTION ACTIONS::zoomFitObjects( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Zoom to Objects" ) )
         .Icon( BITMAPS::zoom_fit_to_objects ) );
 
+TOOL_ACTION ACTIONS::zoomFitSelection( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomFitSelection" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Zoom to Selected Objects" ) ) );
+
 TOOL_ACTION ACTIONS::zoomIn( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomIn" )
         .Scope( AS_GLOBAL )
@@ -685,6 +690,11 @@ TOOL_ACTION ACTIONS::zoomPreset( TOOL_ACTION_ARGS()
 TOOL_ACTION ACTIONS::centerContents( TOOL_ACTION_ARGS()
         .Name( "common.Control.centerContents" )
         .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::centerSelection( TOOL_ACTION_ARGS()
+        .Name( "common.Control.centerSelection" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Pan to Center Selected Objects" ) ) );
 
 // Cursor control
 TOOL_ACTION ACTIONS::cursorUp( TOOL_ACTION_ARGS()
