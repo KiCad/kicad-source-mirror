@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-16 15:32-0700\n"
+"POT-Creation-Date: 2024-11-01 16:27-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5041,6 +5041,9 @@ msgstr "The field cannot contain %s character(s)."
 msgid "The reference designator cannot contain text variable references"
 msgstr "The reference designator cannot contain text variable references"
 
+msgid "References must start with a letter."
+msgstr "References must start with a letter."
+
 msgid "Field Validation Error"
 msgstr "Field Validation Error"
 
@@ -6627,9 +6630,6 @@ msgstr "Browse Generators..."
 msgid "Script Generator Properties"
 msgstr "Script Generator Properties"
 
-msgid "Illegal reference designator value!"
-msgstr "Illegal reference designator value!"
-
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "Sheet filename can only be modified in Sheet Properties dialog."
 
@@ -7132,9 +7132,6 @@ msgstr "Common to all body &styles (De Morgan)"
 #, c-format
 msgid "%s Properties"
 msgstr "%s Properties"
-
-msgid "References must start with a letter."
-msgstr "References must start with a letter."
 
 msgid "Fields must have a name."
 msgstr "Fields must have a name."
@@ -26871,12 +26868,12 @@ msgid "Checking micro-via holes..."
 msgstr "Checking micro-via holes..."
 
 #, c-format
-msgid "(%s min width %s; actual %s)"
-msgstr "(%s min width %s; actual %s)"
+msgid "(%s min hole %s; actual %s)"
+msgstr "(%s min hole %s; actual %s)"
 
 #, c-format
-msgid "(%s max width %s; actual %s)"
-msgstr "(%s max width %s; actual %s)"
+msgid "(%s max hole %s; actual %s)"
+msgstr "(%s max hole %s; actual %s)"
 
 msgid "Checking hole to hole clearances..."
 msgstr "Checking hole to hole clearances..."
@@ -27303,6 +27300,14 @@ msgstr "(%s max thickness %s; actual %s)"
 
 msgid "Checking track widths..."
 msgstr "Checking track widths..."
+
+#, c-format
+msgid "(%s min width %s; actual %s)"
+msgstr "(%s min width %s; actual %s)"
+
+#, c-format
+msgid "(%s max width %s; actual %s)"
+msgstr "(%s max width %s; actual %s)"
 
 msgid "Checking via diameters..."
 msgstr "Checking via diameters..."
@@ -34035,6 +34040,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Illegal reference designator value!"
+#~ msgstr "Illegal reference designator value!"
 
 #~ msgid ""
 #~ "Errors during netlist generation.\n"

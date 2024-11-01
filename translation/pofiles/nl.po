@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-16 15:32-0700\n"
+"POT-Creation-Date: 2024-11-01 16:27-0700\n"
 "PO-Revision-Date: 2024-08-28 06:09+0000\n"
 "Last-Translator: CJ van der Hoeven <KeesEnJoa@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
@@ -1738,32 +1738,32 @@ msgstr ""
 "Uitbreiding omgevingsvariabelen mislukt: '%c' ontbreekt op positie %u in "
 "'%s'."
 
-#: common/common.cpp:378
+#: common/common.cpp:371
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Kan pad '%s' niet absoluut maken ten opzichte van '%s'."
 
-#: common/common.cpp:397
+#: common/common.cpp:390
 #, c-format
 msgid "Output directory '%s' created."
 msgstr "Uitvoermap \"%s\" aangemaakt."
 
-#: common/common.cpp:406
+#: common/common.cpp:399
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Kan uitvoermap '%s' niet aanmaken."
 
-#: common/common.cpp:697
+#: common/common.cpp:690
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 "Dit besturingssysteem wordt niet ondersteund door KiCad en zijn "
 "afhankelijkheden."
 
-#: common/common.cpp:699
+#: common/common.cpp:692
 msgid "Unsupported Operating System"
 msgstr "Niet Ondersteund Besturingssysteem"
 
-#: common/common.cpp:702
+#: common/common.cpp:695
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -1889,7 +1889,7 @@ msgstr "Bevestiging"
 #: eeschema/sch_field.cpp:935 eeschema/sch_pin.cpp:261
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
-#: pcbnew/pcb_text.cpp:235 pcbnew/pcb_text.cpp:239 pcbnew/pcb_textbox.cpp:374
+#: pcbnew/pcb_text.cpp:236 pcbnew/pcb_text.cpp:240 pcbnew/pcb_textbox.cpp:374
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:457
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:488
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:496
@@ -1900,7 +1900,7 @@ msgstr "Ja"
 #: common/confirm.cpp:383 eeschema/lib_field.cpp:548 eeschema/lib_pin.cpp:1196
 #: eeschema/sch_field.cpp:935 eeschema/sch_pin.cpp:261
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
-#: pcbnew/pcb_text.cpp:235 pcbnew/pcb_text.cpp:239 pcbnew/pcb_textbox.cpp:374
+#: pcbnew/pcb_text.cpp:236 pcbnew/pcb_text.cpp:240 pcbnew/pcb_textbox.cpp:374
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:457
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:488
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:496
@@ -1914,7 +1914,7 @@ msgstr "Nee"
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2013 eeschema/symbol_editor/symbol_editor.cpp:579
+#: eeschema/sch_symbol.cpp:2017 eeschema/symbol_editor/symbol_editor.cpp:579
 #: eeschema/symbol_editor/symbol_editor.cpp:1295
 #: eeschema/symbol_viewer_frame.cpp:460 include/lib_table_grid.h:196
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
@@ -2318,8 +2318,8 @@ msgstr "Omgevingsvariabelen"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:372
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:382 eeschema/lib_pin.cpp:1191
-#: eeschema/sch_pin.cpp:256 eeschema/sch_symbol.cpp:1975
-#: eeschema/sch_symbol.cpp:2025 eeschema/symbol_editor/symbol_editor.cpp:1265
+#: eeschema/sch_pin.cpp:256 eeschema/sch_symbol.cpp:1979
+#: eeschema/sch_symbol.cpp:2029 eeschema/symbol_editor/symbol_editor.cpp:1265
 #: eeschema/symbol_viewer_frame.cpp:458
 #: eeschema/widgets/search_handlers.cpp:301
 #: eeschema/widgets/tuner_slider_base.cpp:27
@@ -2597,7 +2597,7 @@ msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1251 eeschema/sch_plotter.cpp:1009
+#: eeschema/sch_edit_frame.cpp:1252 eeschema/sch_plotter.cpp:1009
 #: eeschema/widgets/symbol_diff_widget.cpp:38
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
@@ -3049,8 +3049,8 @@ msgstr "Optie"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:373
-#: eeschema/fields_grid_table.cpp:383 eeschema/sch_symbol.cpp:1972
-#: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
+#: eeschema/fields_grid_table.cpp:383 eeschema/sch_symbol.cpp:1976
+#: eeschema/sch_symbol.cpp:2026 eeschema/sch_symbol.cpp:2828
 #: eeschema/sim/simulator_frame_ui.cpp:616
 #: eeschema/sim/simulator_frame_ui.cpp:2613
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
@@ -3191,7 +3191,7 @@ msgstr "Uitvoermodus:"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
 #: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_field.cpp:231
-#: pcbnew/pcb_text.cpp:564 pcbnew/pcb_textbox.cpp:688
+#: pcbnew/pcb_text.cpp:565 pcbnew/pcb_textbox.cpp:688
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Color"
 msgstr "Kleur"
@@ -3378,7 +3378,7 @@ msgstr "Bestandsnaam"
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1057
 #: pcbnew/pcb_dimension.cpp:459 pcbnew/pcb_group.cpp:389
-#: pcbnew/pcb_shape.cpp:505 pcbnew/pcb_text.cpp:232 pcbnew/pcb_textbox.cpp:371
+#: pcbnew/pcb_shape.cpp:505 pcbnew/pcb_text.cpp:233 pcbnew/pcb_textbox.cpp:371
 #: pcbnew/pcb_track.cpp:1178 pcbnew/zone.cpp:606
 msgid "Status"
 msgstr "Status"
@@ -4649,8 +4649,8 @@ msgstr "Lijnstijl"
 #: eeschema/sch_field.cpp:937 eeschema/sch_label.cpp:1269
 #: eeschema/sch_line.cpp:1088 eeschema/sch_text.cpp:409
 #: eeschema/sch_textbox.cpp:450 include/stroke_params.h:73
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2495 pcbnew/pcb_dimension.cpp:428
-#: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:377
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2497 pcbnew/pcb_dimension.cpp:428
+#: pcbnew/pcb_text.cpp:244 pcbnew/pcb_textbox.cpp:377
 #: pcbnew/pcb_textbox.cpp:664
 msgid "Default"
 msgstr "Standaard"
@@ -4760,7 +4760,7 @@ msgstr "Tekenblad '%s' is niet volledig gelezen."
 #: pcbnew/pcb_dimension.cpp:1474 pcbnew/pcb_dimension.cpp:1533
 #: pcbnew/pcb_dimension.cpp:1569 pcbnew/pcb_dimension.cpp:1610
 #: pcbnew/pcb_dimension.cpp:1655 pcbnew/pcb_dimension.cpp:1692
-#: pcbnew/pcb_field.cpp:226 pcbnew/pcb_text.cpp:224 pcbnew/pcb_text.cpp:379
+#: pcbnew/pcb_field.cpp:226 pcbnew/pcb_text.cpp:225 pcbnew/pcb_text.cpp:380
 #: pcbnew/widgets/panel_selection_filter.cpp:187
 #: pcbnew/widgets/panel_selection_filter_base.cpp:33
 #: pcbnew/widgets/search_handlers.cpp:203
@@ -5008,7 +5008,7 @@ msgstr "Kleuren"
 
 #: common/eda_base_frame.cpp:1139 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:561 eeschema/menubar.cpp:143
-#: eeschema/sch_edit_frame.cpp:1658 kicad/tools/kicad_manager_actions.cpp:104
+#: eeschema/sch_edit_frame.cpp:1659 kicad/tools/kicad_manager_actions.cpp:104
 msgid "Schematic Editor"
 msgstr "Schema-editor"
 
@@ -5217,11 +5217,11 @@ msgstr "Eigenschappen"
 msgid "Screen"
 msgstr "Beeldscherm"
 
-#: common/eda_item.cpp:344 eeschema/sch_symbol.cpp:2010
+#: common/eda_item.cpp:344 eeschema/sch_symbol.cpp:2014
 #: eeschema/widgets/search_handlers.cpp:132 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:289 pcbnew/pad.cpp:1038
-#: pcbnew/pcb_shape.cpp:499 pcbnew/pcb_text.cpp:220
+#: pcbnew/pcb_shape.cpp:499 pcbnew/pcb_text.cpp:221
 #: pcbnew/plot_board_layers.cpp:109
 msgid "Footprint"
 msgstr "Footprint"
@@ -5443,12 +5443,12 @@ msgid "Shape"
 msgstr "Vorm"
 
 #: common/eda_shape.cpp:734 common/eda_shape.cpp:741 common/eda_shape.cpp:2003
-#: pcbnew/dialogs/dialog_shape_properties.cpp:205 pcbnew/pcb_track.cpp:1076
+#: pcbnew/dialogs/dialog_shape_properties.cpp:212 pcbnew/pcb_track.cpp:1076
 msgid "Radius"
 msgstr "Straal"
 
 #: common/eda_shape.cpp:739 common/eda_shape.cpp:769 common/eda_shape.cpp:2035
-#: pcbnew/pcb_text.cpp:241 pcbnew/pcb_textbox.cpp:375
+#: pcbnew/pcb_text.cpp:242 pcbnew/pcb_textbox.cpp:375
 msgid "Angle"
 msgstr "Hoek"
 
@@ -5475,9 +5475,9 @@ msgstr "Punten"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 #: pcbnew/fp_text_grid_table.cpp:140
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2066 pcbnew/pad.cpp:1089
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2068 pcbnew/pad.cpp:1089
 #: pcbnew/pcb_reference_image.cpp:259 pcbnew/pcb_target.cpp:156
-#: pcbnew/pcb_target.cpp:240 pcbnew/pcb_text.cpp:245 pcbnew/pcb_track.cpp:1071
+#: pcbnew/pcb_target.cpp:240 pcbnew/pcb_text.cpp:246 pcbnew/pcb_track.cpp:1071
 #: pcbnew/pcb_track.cpp:1492 pcbnew/pcb_track.cpp:1522
 msgid "Width"
 msgstr "Breedte"
@@ -5492,7 +5492,7 @@ msgstr "Breedte"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/fp_text_grid_table.cpp:141 pcbnew/pad.cpp:1090
 #: pcbnew/pcb_dimension.cpp:833 pcbnew/pcb_reference_image.cpp:260
-#: pcbnew/pcb_text.cpp:246
+#: pcbnew/pcb_text.cpp:247
 msgid "Height"
 msgstr "Hoogte"
 
@@ -5522,12 +5522,12 @@ msgstr "Middelpunt X"
 msgid "Center Y"
 msgstr "Middelpunt Y"
 
-#: common/eda_shape.cpp:2009 pcbnew/generators/pcb_tuning_pattern.cpp:2507
+#: common/eda_shape.cpp:2009 pcbnew/generators/pcb_tuning_pattern.cpp:2509
 #: pcbnew/pcb_textbox.cpp:682 pcbnew/pcb_track.cpp:1502
 msgid "End X"
 msgstr "Eind X"
 
-#: common/eda_shape.cpp:2015 pcbnew/generators/pcb_tuning_pattern.cpp:2513
+#: common/eda_shape.cpp:2015 pcbnew/generators/pcb_tuning_pattern.cpp:2515
 #: pcbnew/pcb_textbox.cpp:683 pcbnew/pcb_track.cpp:1505
 msgid "End Y"
 msgstr "Eind Y"
@@ -5609,7 +5609,7 @@ msgstr "Vet Italic"
 #: eeschema/fields_grid_table.cpp:767 eeschema/lib_field.cpp:558
 #: eeschema/lib_pin.cpp:1657 eeschema/lib_text.cpp:425
 #: eeschema/pin_type.cpp:113 eeschema/sch_field.cpp:945
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2493
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2495
 msgid "Left"
 msgstr "Links"
 
@@ -5633,7 +5633,7 @@ msgstr "Centreren"
 #: eeschema/fields_grid_table.cpp:771 eeschema/lib_field.cpp:560
 #: eeschema/lib_pin.cpp:1656 eeschema/lib_text.cpp:427
 #: eeschema/pin_type.cpp:112 eeschema/sch_field.cpp:947
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2494
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2496
 msgid "Right"
 msgstr "Rechts"
 
@@ -5664,7 +5664,7 @@ msgstr "Onderkant"
 #: eeschema/lib_pin.cpp:1201 eeschema/lib_pin.cpp:1687
 #: eeschema/lib_text.cpp:536 eeschema/lib_textbox.cpp:567
 #: eeschema/sch_field.cpp:1443 eeschema/sch_pin.cpp:265
-#: eeschema/sch_symbol.cpp:2781 eeschema/sch_text.cpp:504
+#: eeschema/sch_symbol.cpp:2785 eeschema/sch_text.cpp:504
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
@@ -5677,8 +5677,8 @@ msgstr "Oriëntatie"
 #: eeschema/lib_field.cpp:670 eeschema/lib_textbox.cpp:565
 #: eeschema/sch_field.cpp:1441 eeschema/sch_text.cpp:501
 #: eeschema/sch_textbox.cpp:524 pcbnew/dialogs/dialog_text_properties.cpp:154
-#: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:568
-#: pcbnew/pcb_text.cpp:572
+#: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:569
+#: pcbnew/pcb_text.cpp:573
 msgid "Text Properties"
 msgstr "Teksteigenschappen"
 
@@ -5692,7 +5692,7 @@ msgstr "Teksteigenschappen"
 #: eeschema/sch_field.cpp:937 eeschema/sch_label.cpp:1269
 #: eeschema/sch_text.cpp:409 eeschema/sch_textbox.cpp:450
 #: eeschema/widgets/sch_properties_panel.cpp:229 pcbnew/pcb_dimension.cpp:428
-#: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:377
+#: pcbnew/pcb_text.cpp:244 pcbnew/pcb_textbox.cpp:377
 #: pcbnew/widgets/pcb_properties_panel.cpp:286
 msgid "Font"
 msgstr "Lettertype"
@@ -5704,7 +5704,7 @@ msgstr "Lettertype"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
-#: pcbnew/fp_text_grid_table.cpp:142 pcbnew/pcb_text.cpp:244
+#: pcbnew/fp_text_grid_table.cpp:142 pcbnew/pcb_text.cpp:245
 msgid "Thickness"
 msgstr "Dikte"
 
@@ -5734,7 +5734,7 @@ msgstr "Gespiegeld"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94 pcbnew/pcb_dimension.cpp:1530
 #: pcbnew/pcb_dimension.cpp:1566 pcbnew/pcb_dimension.cpp:1607
 #: pcbnew/pcb_dimension.cpp:1652 pcbnew/pcb_dimension.cpp:1689
-#: pcbnew/pcb_text.cpp:584 pcbnew/pcb_textbox.cpp:687
+#: pcbnew/pcb_text.cpp:585 pcbnew/pcb_textbox.cpp:687
 msgid "Visible"
 msgstr "Zichtbaar"
 
@@ -5754,7 +5754,7 @@ msgstr "Verticale uitlijning"
 #: pcbnew/pcb_dimension.cpp:1539 pcbnew/pcb_dimension.cpp:1575
 #: pcbnew/pcb_dimension.cpp:1616 pcbnew/pcb_dimension.cpp:1661
 #: pcbnew/pcb_dimension.cpp:1698 pcbnew/pcb_field.cpp:230
-#: pcbnew/pcb_text.cpp:590
+#: pcbnew/pcb_text.cpp:591
 msgid "Hyperlink"
 msgstr "Hyperlink"
 
@@ -6229,7 +6229,7 @@ msgstr "Geselecteerde cellen naar klembord kopiëren"
 #: common/grid_tricks.cpp:358 common/tool/actions.cpp:222
 #: eeschema/tools/sch_editor_control.cpp:2171
 #: eeschema/tools/symbol_editor_edit_tool.cpp:861
-#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/pcb_control.cpp:1033
+#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/pcb_control.cpp:1043
 msgid "Paste"
 msgstr "Plakken"
 
@@ -6582,8 +6582,8 @@ msgstr "Fout bij laden van editor."
 msgid "Unable to switch language to %s"
 msgstr "Kan taal niet wijzigen naar %s"
 
-#: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:960
-#: pcbnew/drc/drc_engine.cpp:961 pcbnew/drc/drc_engine.cpp:962
+#: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:965
+#: pcbnew/drc/drc_engine.cpp:966 pcbnew/drc/drc_engine.cpp:967
 #: pcbnew/tools/board_inspection_tool.cpp:250
 #: pcbnew/tools/board_inspection_tool.cpp:259
 #: pcbnew/tools/board_inspection_tool.cpp:268
@@ -6625,11 +6625,11 @@ msgstr "Globale labels"
 msgid "Hierarchical labels"
 msgstr "Hiërarchische labels"
 
-#: common/layer_id.cpp:118 eeschema/sch_symbol.cpp:2796
+#: common/layer_id.cpp:118 eeschema/sch_symbol.cpp:2800
 msgid "Pin numbers"
 msgstr "Pinnummers"
 
-#: common/layer_id.cpp:119 eeschema/sch_symbol.cpp:2801
+#: common/layer_id.cpp:119 eeschema/sch_symbol.cpp:2805
 msgid "Pin names"
 msgstr "Pinnamen"
 
@@ -6940,7 +6940,7 @@ msgstr "Bibliotheekinstellingen voor %s..."
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:608 eeschema/lib_item.cpp:78
 #: eeschema/lib_item.cpp:222 eeschema/sch_pin.cpp:245
-#: eeschema/sch_symbol.cpp:2815 eeschema/symbol_editor/symbol_editor.cpp:1278
+#: eeschema/sch_symbol.cpp:2819 eeschema/symbol_editor/symbol_editor.cpp:1278
 msgid "Unit"
 msgstr "Eenheid"
 
@@ -7194,8 +7194,8 @@ msgstr "Gegroepeerd op naam"
 #: common/settings/bom_settings.cpp:119 common/settings/bom_settings.cpp:137
 #: common/settings/bom_settings.cpp:156
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:262 eeschema/sch_symbol.cpp:1968
-#: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2821
+#: eeschema/dialogs/dialog_sim_model_base.cpp:262 eeschema/sch_symbol.cpp:1972
+#: eeschema/sch_symbol.cpp:2024 eeschema/sch_symbol.cpp:2825
 #: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3488
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
@@ -7209,7 +7209,7 @@ msgstr "Gegroepeerd op waarde en footprint"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:175
-#: eeschema/sch_symbol.cpp:2837 eeschema/tools/sch_edit_tool.cpp:478
+#: eeschema/sch_symbol.cpp:2841 eeschema/tools/sch_edit_tool.cpp:478
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 #: pcbnew/footprint.cpp:3505
@@ -7402,7 +7402,7 @@ msgstr "Aangepast plakken..."
 msgid "Paste item(s) from clipboard with annotation options"
 msgstr "Item(s) van klembord plakken met aantekeningsopties"
 
-#: common/tool/actions.cpp:254 eeschema/tools/symbol_editor_edit_tool.cpp:911
+#: common/tool/actions.cpp:254 eeschema/tools/symbol_editor_edit_tool.cpp:942
 #: pcbnew/tools/edit_tool.cpp:2628
 msgid "Duplicate"
 msgstr "Dupliceren"
@@ -8029,92 +8029,97 @@ msgstr "S&electie uitbreiden\tE"
 msgid "Zoom: %.2f"
 msgstr "Zoomen: %.2f"
 
-#: common/validators.cpp:222
+#: common/validators.cpp:224
 #, c-format
 msgid "Incorrect value: %s"
 msgstr "Onjuiste waarde: %s"
 
-#: common/validators.cpp:280
+#: common/validators.cpp:282
 msgid "Invalid signal name"
 msgstr "Ongeldige signaalnaam"
 
-#: common/validators.cpp:291
+#: common/validators.cpp:293
 msgid "Signal names cannot contain CR or LF characters"
 msgstr "Signaalnamen mogen geen CR- of LF-tekens bevatten"
 
-#: common/validators.cpp:294
+#: common/validators.cpp:296
 msgid "Signal names cannot contain spaces"
 msgstr "Signaalnamen mogen geen spaties bevatten"
 
-#: common/validators.cpp:361
+#: common/validators.cpp:369
 msgid "The value of the field cannot be empty."
 msgstr "De waarde van het veld mag niet leeg zijn."
 
-#: common/validators.cpp:372
+#: common/validators.cpp:380
 msgid "carriage return"
 msgstr "carriage return"
 
-#: common/validators.cpp:374
+#: common/validators.cpp:382
 msgid "line feed"
 msgstr "line feed"
 
-#: common/validators.cpp:376
+#: common/validators.cpp:384
 msgid "tab"
 msgstr "tab"
 
-#: common/validators.cpp:378
+#: common/validators.cpp:386
 msgid "space"
 msgstr "spatie"
 
-#: common/validators.cpp:392
+#: common/validators.cpp:400
 msgid " or "
 msgstr " of "
 
-#: common/validators.cpp:397
+#: common/validators.cpp:405
 msgid ", or "
 msgstr ", of "
 
-#: common/validators.cpp:409
+#: common/validators.cpp:417
 #, c-format
 msgid "The reference designator cannot contain %s character(s)."
 msgstr "De referentie-aanduiding mag geen %s-teken(s) bevatten."
 
-#: common/validators.cpp:413
+#: common/validators.cpp:421
 #, c-format
 msgid "The value field cannot contain %s character(s)."
 msgstr "Het waardeveld mag geen %s-teken(s) bevatten."
 
-#: common/validators.cpp:417
+#: common/validators.cpp:425
 #, c-format
 msgid "The footprint field cannot contain %s character(s)."
 msgstr "Het footprintveld mag geen %s-teken(s) bevatten."
 
-#: common/validators.cpp:421
+#: common/validators.cpp:429
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
 msgstr "Het datasheetveld mag geen %s-teken(s) bevatten."
 
-#: common/validators.cpp:425
+#: common/validators.cpp:433
 #, c-format
 msgid "The sheet name cannot contain %s character(s)."
 msgstr "De bladnaam mag niet %s-teken(s) bevatten."
 
-#: common/validators.cpp:429
+#: common/validators.cpp:437
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
 msgstr "De bestandsnaam van het blad mag geen %s-teken(s) bevatten."
 
-#: common/validators.cpp:433
+#: common/validators.cpp:441
 #, c-format
 msgid "The field cannot contain %s character(s)."
 msgstr "Het veld mag geen %s-teken(s) bevatten."
 
-#: common/validators.cpp:439
+#: common/validators.cpp:447
 msgid "The reference designator cannot contain text variable references"
 msgstr ""
 "De referentie-aanduiding mag geen verwijzingen naar tekstvariabelen bevatten"
 
-#: common/validators.cpp:446
+#: common/validators.cpp:451
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:247
+msgid "References must start with a letter."
+msgstr "Referenties moeten beginnen met een letter."
+
+#: common/validators.cpp:459
 msgid "Field Validation Error"
 msgstr "Veldvalidatiefout"
 
@@ -8126,14 +8131,14 @@ msgstr "Spiegelen op Y-as wordt nog niet ondersteund"
 msgid "<not found>"
 msgstr "<niet gevonden>"
 
-#: common/widgets/footprint_diff_widget.cpp:36 eeschema/sch_symbol.cpp:1943
+#: common/widgets/footprint_diff_widget.cpp:36 eeschema/sch_symbol.cpp:1947
 #: pcbnew/dialogs/dialog_board_statistics.cpp:680
 msgid "Board"
 msgstr "Bord"
 
 #: common/widgets/footprint_diff_widget.cpp:37 cvpcb/cvpcb_mainframe.cpp:811
-#: eeschema/sch_base_frame.cpp:569 eeschema/sch_symbol.cpp:1996
-#: eeschema/sch_symbol.cpp:2000 eeschema/sch_symbol.cpp:2035
+#: eeschema/sch_base_frame.cpp:569 eeschema/sch_symbol.cpp:2000
+#: eeschema/sch_symbol.cpp:2004 eeschema/sch_symbol.cpp:2039
 #: eeschema/widgets/symbol_diff_widget.cpp:39 pcbnew/footprint.cpp:1277
 msgid "Library"
 msgstr "Bibliotheek"
@@ -8809,8 +8814,8 @@ msgid "'%s' is not a valid footprint."
 msgstr "'%s' is geen geldige footprint."
 
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:2015 eeschema/sch_symbol.cpp:2573
-#: eeschema/sch_symbol.cpp:2833 eeschema/symbol_editor/symbol_editor.cpp:1296
+#: eeschema/sch_symbol.cpp:2019 eeschema/sch_symbol.cpp:2577
+#: eeschema/sch_symbol.cpp:2837 eeschema/symbol_editor/symbol_editor.cpp:1296
 #: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3501
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
@@ -9930,7 +9935,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2583 eeschema/widgets/search_handlers.cpp:128
+#: eeschema/sch_symbol.cpp:2587 eeschema/widgets/search_handlers.cpp:128
 msgid "Symbols"
 msgstr "Symbolen"
 
@@ -10327,16 +10332,12 @@ msgstr "Generators bladeren..."
 msgid "Script Generator Properties"
 msgstr "Eigenschappen van scriptgenerator"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:361
-msgid "Illegal reference designator value!"
-msgstr "Ongeldige referentie-aanduidingswaarde!"
-
-#: eeschema/dialogs/dialog_field_properties.cpp:540
+#: eeschema/dialogs/dialog_field_properties.cpp:529
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr ""
 "Bladbestandsnaam kan alleen gewijzigd worden in het bladeigenschappenscherm."
 
-#: eeschema/dialogs/dialog_field_properties.cpp:617
+#: eeschema/dialogs/dialog_field_properties.cpp:606
 #: eeschema/dialogs/dialog_label_properties.cpp:480
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
@@ -10797,8 +10798,8 @@ msgstr "Label mag niet leeg zijn."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:526
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:368
-#: eeschema/dialogs/dialog_sheet_properties.cpp:386
-#: eeschema/dialogs/dialog_symbol_properties.cpp:754 include/project.h:42
+#: eeschema/dialogs/dialog_sheet_properties.cpp:395
+#: eeschema/dialogs/dialog_symbol_properties.cpp:743 include/project.h:42
 msgid "untitled"
 msgstr "naamloos"
 
@@ -10841,7 +10842,7 @@ msgstr "Hulpscherm syntaxis weergeven"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2819
+#: eeschema/sch_symbol.cpp:2823
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
 #: pcbnew/footprint.cpp:3486
@@ -11240,7 +11241,7 @@ msgstr "Nieuw symbool"
 
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:64
 #: eeschema/dialogs/dialog_shape_properties.cpp:60
-#: eeschema/dialogs/dialog_sheet_properties.cpp:83
+#: eeschema/dialogs/dialog_sheet_properties.cpp:84
 #: eeschema/dialogs/dialog_text_properties.cpp:72
 msgid "Note: individual item colors overridden in Preferences."
 msgstr "Opmerking: individuele itemkleuren aangepast in de voorkeuren."
@@ -11303,14 +11304,9 @@ msgstr "Gedeeld door alle lichaams&stijlen (De Morgan)"
 msgid "%s Properties"
 msgstr "%s-eigenschappen"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:247
-#: eeschema/dialogs/dialog_symbol_properties.cpp:639
-msgid "References must start with a letter."
-msgstr "Referenties moeten beginnen met een letter."
-
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:267
-#: eeschema/dialogs/dialog_sheet_properties.cpp:218
-#: eeschema/dialogs/dialog_symbol_properties.cpp:656
+#: eeschema/dialogs/dialog_sheet_properties.cpp:219
+#: eeschema/dialogs/dialog_symbol_properties.cpp:645
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:373
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:407
 msgid "Fields must have a name."
@@ -11342,7 +11338,7 @@ msgstr "Symboolnaam '%s' al in gebruik in bibliotheek '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:342
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:347
-#: eeschema/dialogs/dialog_symbol_properties.cpp:860
+#: eeschema/dialogs/dialog_symbol_properties.cpp:849
 msgid "Edit Symbol Properties"
 msgstr "Symbooleigenschappen bewerken"
 
@@ -11352,8 +11348,8 @@ msgid "The name '%s' is already in use."
 msgstr "De naam '%s' is al in gebruik."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#: eeschema/dialogs/dialog_sheet_properties.cpp:770
-#: eeschema/dialogs/dialog_symbol_properties.cpp:962
+#: eeschema/dialogs/dialog_sheet_properties.cpp:779
+#: eeschema/dialogs/dialog_symbol_properties.cpp:951
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:637
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:666
 #, c-format
@@ -12314,19 +12310,20 @@ msgstr "Bladpin bewerken"
 msgid "Sheet Pin Properties"
 msgstr "Bladpineigenschappen"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:281
+#: eeschema/dialogs/dialog_sheet_properties.cpp:282
+#: eeschema/dialogs/dialog_sheet_properties.cpp:293
 msgid "A sheet must have a valid file name."
 msgstr "Een blad moet een geldige bestandsnaam hebben."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:320
+#: eeschema/dialogs/dialog_sheet_properties.cpp:329
 msgid "Use relative path for sheet file?"
 msgstr "Relatief pad gebruiken voor bladbestand?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:321
+#: eeschema/dialogs/dialog_sheet_properties.cpp:330
 msgid "Sheet File Path"
 msgstr "Bladbestandspad"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:324
+#: eeschema/dialogs/dialog_sheet_properties.cpp:333
 msgid ""
 "Using relative hierarchical sheet file name paths improves schematic "
 "portability across systems and platforms.  Using absolute paths can result "
@@ -12336,23 +12333,23 @@ msgstr ""
 "overdraagbaarheid van het schema tussen systemen en platforms. Het gebruik "
 "van absolute bestandsnamen kan portabiliteitsproblemen opleveren."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:328
+#: eeschema/dialogs/dialog_sheet_properties.cpp:337
 msgid "Use Relative Path"
 msgstr "Gebruik relatief pad"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:329
+#: eeschema/dialogs/dialog_sheet_properties.cpp:338
 msgid "Use Absolute Path"
 msgstr "Gebruik absoluut pad"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:367
+#: eeschema/dialogs/dialog_sheet_properties.cpp:376
 msgid "Untitled Sheet"
 msgstr "Naamloos blad"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:404
+#: eeschema/dialogs/dialog_sheet_properties.cpp:413
 msgid "Note: item colors are overridden in the current color theme."
 msgstr "Opmerking: itemkleuren zijn aangepast in het huidige kleurenthema."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:406
+#: eeschema/dialogs/dialog_sheet_properties.cpp:415
 #, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
@@ -12361,11 +12358,11 @@ msgstr ""
 "Om de individuele itemkleuren te zien, vink '%s' uit\n"
 "in Voorkeuren > Schema-editor > Kleuren."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:430
+#: eeschema/dialogs/dialog_sheet_properties.cpp:439
 msgid "Edit Sheet Properties"
 msgstr "Bladeigenschappen bewerken"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:472
+#: eeschema/dialogs/dialog_sheet_properties.cpp:481
 #, c-format
 msgid ""
 "Cannot normalize new sheet schematic file path:\n"
@@ -12378,47 +12375,47 @@ msgstr ""
 "naar bovenliggend schemabestandspad:\n"
 "'%s'."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:514
+#: eeschema/dialogs/dialog_sheet_properties.cpp:523
 #: kicad/tools/kicad_manager_control.cpp:651
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' bestaat al."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:517
+#: eeschema/dialogs/dialog_sheet_properties.cpp:526
 #, c-format
 msgid "Link '%s' to this file?"
 msgstr "'%s' naar dit bestand linken?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:556
+#: eeschema/dialogs/dialog_sheet_properties.cpp:565
 #, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
 msgstr "'%s'-link wijzigen van '%s' naar '%s'?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:561
-#: eeschema/dialogs/dialog_sheet_properties.cpp:578
+#: eeschema/dialogs/dialog_sheet_properties.cpp:570
+#: eeschema/dialogs/dialog_sheet_properties.cpp:587
 msgid "This action cannot be undone."
 msgstr "Deze actie kan niet ongedaan gemaakt worden."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:573
+#: eeschema/dialogs/dialog_sheet_properties.cpp:582
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
 msgstr "Nieuw bestand '%s' maken met inhoud van '%s'?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:605
+#: eeschema/dialogs/dialog_sheet_properties.cpp:614
 #, c-format
 msgid "Error occurred saving schematic file '%s'."
 msgstr "Er is een fout opgetreden bij het opslaan van schema-bestand '%s'."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:609
+#: eeschema/dialogs/dialog_sheet_properties.cpp:618
 #, c-format
 msgid "Failed to save schematic '%s'"
 msgstr "Kan schema '%s' niet opslaan"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:704
+#: eeschema/dialogs/dialog_sheet_properties.cpp:713
 msgid "A sheet must have a name."
 msgstr "Een blad moet een naam hebben."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:712
+#: eeschema/dialogs/dialog_sheet_properties.cpp:721
 msgid "A sheet must have a file specified."
 msgstr "Een blad moet een gespecificeerd bestand hebben."
 
@@ -12997,8 +12994,8 @@ msgstr "Parameter"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2022 pcbnew/pcb_marker.cpp:194
-#: pcbnew/pcb_shape.cpp:502 pcbnew/pcb_text.cpp:229 pcbnew/pcb_track.cpp:1065
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2024 pcbnew/pcb_marker.cpp:194
+#: pcbnew/pcb_shape.cpp:502 pcbnew/pcb_text.cpp:230 pcbnew/pcb_track.cpp:1065
 #: pcbnew/pcb_track.cpp:1132 pcbnew/tools/drawing_stackup_table_tool.cpp:250
 #: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:564
 msgid "Type"
@@ -13171,7 +13168,7 @@ msgid "Field must have a name."
 msgstr "Veld moet een naam hebben."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:669
-#: eeschema/dialogs/dialog_symbol_properties.cpp:889
+#: eeschema/dialogs/dialog_symbol_properties.cpp:878
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "Veldnaam '%s' wordt al gebruikt."
@@ -14755,7 +14752,7 @@ msgstr ""
 "het nieuwe hoofdbladbestand."
 
 #: eeschema/eeschema_config.cpp:74 pcbnew/pcbnew_config.cpp:55
-#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:188
+#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:196
 msgid "Error loading drawing sheet."
 msgstr "Fout bij laden van tekenblad."
 
@@ -15572,7 +15569,7 @@ msgstr "Het volgende auto-save bestand(en) kan niet worden verwijderd!\n"
 msgid "Manual removal will be required for the file(s) above."
 msgstr "U moet bovenstaande bestand(en) handmatig verwijderen."
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1992
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1996
 msgid "Derived from"
 msgstr "Afgeleid van"
 
@@ -15797,14 +15794,14 @@ msgid "Pin Name"
 msgstr "Pinnaam"
 
 #: eeschema/lib_pin.cpp:1681 eeschema/lib_shape.cpp:583
-#: eeschema/sch_shape.cpp:554 eeschema/sch_symbol.cpp:2773
+#: eeschema/sch_shape.cpp:554 eeschema/sch_symbol.cpp:2777
 #: pcbnew/board_item.cpp:334 pcbnew/pcb_group.cpp:488 pcbnew/pcb_shape.cpp:715
 #: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1594 pcbnew/zone.cpp:1606
 msgid "Position X"
 msgstr "Positie X"
 
 #: eeschema/lib_pin.cpp:1684 eeschema/lib_shape.cpp:585
-#: eeschema/sch_shape.cpp:556 eeschema/sch_symbol.cpp:2776
+#: eeschema/sch_shape.cpp:556 eeschema/sch_symbol.cpp:2780
 #: pcbnew/board_item.cpp:337 pcbnew/pcb_group.cpp:489 pcbnew/pcb_shape.cpp:717
 #: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1600 pcbnew/zone.cpp:1607
 msgid "Position Y"
@@ -15930,7 +15927,7 @@ msgstr "Weglaten van stuklijst-instelling verschilt."
 msgid "Exclude from board settings differ."
 msgstr "Weglaten van bord-instelling verschilt."
 
-#: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:497
+#: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:498
 #: eeschema/tools/sch_edit_tool.cpp:109
 #, c-format
 msgid "Unit %s"
@@ -16338,8 +16335,8 @@ msgstr "Type busverbinding"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:320
 #: eeschema/sch_label.cpp:1299 eeschema/sch_line.cpp:992
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2061 pcbnew/pad.cpp:1053
-#: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1677
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1053
+#: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1687
 #: pcbnew/zone.cpp:594
 msgid "Resolved Netclass"
 msgstr "Toegewezen netklasse"
@@ -16358,7 +16355,7 @@ msgstr "Bus Alias %s Leden"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad schema-editor"
 
-#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1964
+#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1965
 msgid "Schematic Hierarchy"
 msgstr "Schemahiërarchie"
 
@@ -16366,7 +16363,7 @@ msgstr "Schemahiërarchie"
 msgid "New schematic file is unsaved"
 msgstr "Nieuw schemabestand is niet opgeslagen"
 
-#: eeschema/sch_edit_frame.cpp:953
+#: eeschema/sch_edit_frame.cpp:954
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:603
 #: eeschema/symbol_editor/symbol_editor.cpp:1199
 #: pagelayout_editor/pl_editor_frame.cpp:398
@@ -16376,7 +16373,7 @@ msgstr "Nieuw schemabestand is niet opgeslagen"
 msgid "Save changes to '%s' before closing?"
 msgstr "Wijzigingen aan '%s' opslaan voor het afsluiten?"
 
-#: eeschema/sch_edit_frame.cpp:1106
+#: eeschema/sch_edit_frame.cpp:1107
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -16386,56 +16383,56 @@ msgstr ""
 "geopend. Om PCB’s van schema’s te maken of bij te werken moet u de KiCad-"
 "projectbeheerder starten en een project aanmaken."
 
-#: eeschema/sch_edit_frame.cpp:1272
+#: eeschema/sch_edit_frame.cpp:1273
 msgid "New Schematic"
 msgstr "Nieuw schema"
 
-#: eeschema/sch_edit_frame.cpp:1284
+#: eeschema/sch_edit_frame.cpp:1285
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Schema-bestand '%s' bestaat al."
 
-#: eeschema/sch_edit_frame.cpp:1309
+#: eeschema/sch_edit_frame.cpp:1310
 msgid "Open Schematic"
 msgstr "Schema openen"
 
-#: eeschema/sch_edit_frame.cpp:1378
+#: eeschema/sch_edit_frame.cpp:1379
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Het toewijzen van footprints vereist een volledig geannoteerd schema."
 
-#: eeschema/sch_edit_frame.cpp:1405
+#: eeschema/sch_edit_frame.cpp:1406
 msgid "Could not open CvPcb"
 msgstr "Kan CvPcb niet openen"
 
-#: eeschema/sch_edit_frame.cpp:1648 eeschema/sim/simulator_frame.cpp:331
+#: eeschema/sch_edit_frame.cpp:1649 eeschema/sim/simulator_frame.cpp:331
 #: kicad/kicad_manager_frame.cpp:840 pcbnew/footprint_edit_frame.cpp:974
 #: pcbnew/pcb_edit_frame.cpp:1661
 msgid "[Read Only]"
 msgstr "[Alleen lezen]"
 
-#: eeschema/sch_edit_frame.cpp:1651 eeschema/sim/simulator_frame.cpp:334
+#: eeschema/sch_edit_frame.cpp:1652 eeschema/sim/simulator_frame.cpp:334
 #: pcbnew/footprint_edit_frame.cpp:983 pcbnew/pcb_edit_frame.cpp:1664
 msgid "[Unsaved]"
 msgstr "[Niet opgeslagen]"
 
-#: eeschema/sch_edit_frame.cpp:1655
+#: eeschema/sch_edit_frame.cpp:1656
 msgid "[no schematic loaded]"
 msgstr "[geen schema geladen]"
 
-#: eeschema/sch_edit_frame.cpp:1876
+#: eeschema/sch_edit_frame.cpp:1877
 msgid "Schematic Cleanup"
 msgstr "Schema-opschoning"
 
-#: eeschema/sch_edit_frame.cpp:1989
+#: eeschema/sch_edit_frame.cpp:1990
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Gemarkeerd net: %s"
 
-#: eeschema/sch_edit_frame.cpp:2166
+#: eeschema/sch_edit_frame.cpp:2167
 msgid "Save Symbol to Schematic"
 msgstr "Symbool opslaan in schema"
 
-#: eeschema/sch_edit_frame.cpp:2271 eeschema/tools/ee_actions.cpp:60
+#: eeschema/sch_edit_frame.cpp:2272 eeschema/tools/ee_actions.cpp:60
 msgid "Compare Symbol with Library"
 msgstr "Symbolen vergelijken met bibliotheek"
 
@@ -16537,7 +16534,7 @@ msgstr "Voedingspoort met onbekende stijl is geïmporteerd als balk-type."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3309
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1013
-#: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:693
+#: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:719
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Voedingssymbool maakt een globaal label met naam '%s'"
@@ -17326,13 +17323,13 @@ msgstr "Onbekende SCH_FILE_T-waarde: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
 #: pcbnew/footprint.cpp:3477 pcbnew/footprint.cpp:3480
 #: pcbnew/fp_text_grid_table.cpp:144
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1061
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2065 pcbnew/pad.cpp:1061
 #: pcbnew/pad.cpp:2370 pcbnew/pcb_dimension.cpp:461
 #: pcbnew/pcb_dimension.cpp:1209 pcbnew/pcb_group.cpp:490
 #: pcbnew/pcb_marker.cpp:361 pcbnew/pcb_reference_image.cpp:261
 #: pcbnew/pcb_reference_image.cpp:346 pcbnew/pcb_shape.cpp:509
 #: pcbnew/pcb_shape.cpp:699 pcbnew/pcb_shape.cpp:701 pcbnew/pcb_target.cpp:153
-#: pcbnew/pcb_text.cpp:237 pcbnew/pcb_textbox.cpp:373 pcbnew/pcb_track.cpp:1069
+#: pcbnew/pcb_text.cpp:238 pcbnew/pcb_textbox.cpp:373 pcbnew/pcb_track.cpp:1069
 #: pcbnew/pcb_track.cpp:1136 pcbnew/pcb_track.cpp:1520
 #: pcbnew/pcb_track.cpp:1527 pcbnew/tools/board_inspection_tool.cpp:236
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:214
@@ -17359,7 +17356,7 @@ msgstr "Laag"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
 #: pcbnew/footprint.cpp:1310 pcbnew/pad.cpp:1057 pcbnew/pcb_dimension.cpp:459
 #: pcbnew/pcb_group.cpp:389 pcbnew/pcb_marker.cpp:364 pcbnew/pcb_shape.cpp:505
-#: pcbnew/pcb_text.cpp:232 pcbnew/pcb_textbox.cpp:371 pcbnew/pcb_track.cpp:1178
+#: pcbnew/pcb_text.cpp:233 pcbnew/pcb_textbox.cpp:371 pcbnew/pcb_track.cpp:1178
 #: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:606
 msgid "Locked"
 msgstr "Vergrendeld"
@@ -17392,9 +17389,9 @@ msgstr "Uitlijning"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:984
 #: pcbnew/generators/pcb_tuning_pattern.cpp:463
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2057 pcbnew/pad.cpp:1051
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2059 pcbnew/pad.cpp:1051
 #: pcbnew/pad.cpp:2398 pcbnew/pcb_shape.cpp:732 pcbnew/pcb_track.cpp:1158
-#: pcbnew/tools/pcb_control.cpp:1674
+#: pcbnew/tools/pcb_control.cpp:1684
 #: pcbnew/widgets/pcb_properties_panel.cpp:274
 #: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:592
 #: pcbnew/zone.cpp:1645
@@ -17663,101 +17660,101 @@ msgstr "(Verwijderd item)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hiërarchische bladpin %s"
 
-#: eeschema/sch_symbol.cpp:1496
+#: eeschema/sch_symbol.cpp:1500
 msgid "Excluded from BOM"
 msgstr "Weggelaten van stuklijst"
 
-#: eeschema/sch_symbol.cpp:1502
+#: eeschema/sch_symbol.cpp:1506
 msgid "Excluded from board"
 msgstr "Weggelaten van bord"
 
-#: eeschema/sch_symbol.cpp:1508
+#: eeschema/sch_symbol.cpp:1512
 msgid "Excluded from simulation"
 msgstr "Weggelaten uit simulatie"
 
-#: eeschema/sch_symbol.cpp:1514 eeschema/sch_symbol.cpp:1946
+#: eeschema/sch_symbol.cpp:1518 eeschema/sch_symbol.cpp:1950
 #: eeschema/widgets/search_handlers.cpp:139 pcbnew/footprint.cpp:1325
 msgid "DNP"
 msgstr "DNP"
 
-#: eeschema/sch_symbol.cpp:1937 eeschema/sch_text.cpp:407
+#: eeschema/sch_symbol.cpp:1941 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
 msgid "Simulation"
 msgstr "Simulatie"
 
-#: eeschema/sch_symbol.cpp:1940
+#: eeschema/sch_symbol.cpp:1944
 msgid "BOM"
 msgstr "Stuklijst (BOM)"
 
-#: eeschema/sch_symbol.cpp:1952 eeschema/sch_text.cpp:407
+#: eeschema/sch_symbol.cpp:1956 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
 msgid "Exclude from"
 msgstr "Weglaten van"
 
-#: eeschema/sch_symbol.cpp:1963
+#: eeschema/sch_symbol.cpp:1967
 msgid "Power symbol"
 msgstr "Voedingssymbool"
 
-#: eeschema/sch_symbol.cpp:1980
+#: eeschema/sch_symbol.cpp:1984
 msgid "flags"
 msgstr "vlaggen"
 
-#: eeschema/sch_symbol.cpp:1985
+#: eeschema/sch_symbol.cpp:1989
 msgid "Missing parent"
 msgstr "Ontbrekende ouder"
 
-#: eeschema/sch_symbol.cpp:2000
+#: eeschema/sch_symbol.cpp:2004
 msgid "Undefined!!!"
 msgstr "Ongedefinieerd !!!"
 
-#: eeschema/sch_symbol.cpp:2008
+#: eeschema/sch_symbol.cpp:2012
 msgid "<Unknown>"
 msgstr "<Onbekend>"
 
-#: eeschema/sch_symbol.cpp:2031
+#: eeschema/sch_symbol.cpp:2035
 msgid "No library defined!"
 msgstr "Geen bibliotheek gedefinieerd!"
 
-#: eeschema/sch_symbol.cpp:2033
+#: eeschema/sch_symbol.cpp:2037
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbool niet gevonden in %s!"
 
-#: eeschema/sch_symbol.cpp:2269
+#: eeschema/sch_symbol.cpp:2273
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbool %s [%s]"
 
-#: eeschema/sch_symbol.cpp:2783
+#: eeschema/sch_symbol.cpp:2787
 msgid "Mirror X"
 msgstr "X spiegelen"
 
-#: eeschema/sch_symbol.cpp:2785
+#: eeschema/sch_symbol.cpp:2789
 msgid "Mirror Y"
 msgstr "Y spiegelen"
 
-#: eeschema/sch_symbol.cpp:2827 pcbnew/footprint.cpp:3495
+#: eeschema/sch_symbol.cpp:2831 pcbnew/footprint.cpp:3495
 msgid "Library Link"
 msgstr "Bibliotheeklink"
 
-#: eeschema/sch_symbol.cpp:2830 pcbnew/footprint.cpp:3498
+#: eeschema/sch_symbol.cpp:2834 pcbnew/footprint.cpp:3498
 #: pcbnew/plot_board_layers.cpp:129
 msgid "Library Description"
 msgstr "Bibliotheekbeschrijving"
 
-#: eeschema/sch_symbol.cpp:2839
+#: eeschema/sch_symbol.cpp:2843
 msgid "Exclude From Board"
 msgstr "Weglaten van bord"
 
-#: eeschema/sch_symbol.cpp:2842
+#: eeschema/sch_symbol.cpp:2846
 msgid "Exclude From Simulation"
 msgstr "Weglaten uit simulatie"
 
-#: eeschema/sch_symbol.cpp:2845 pcbnew/footprint.cpp:3512
+#: eeschema/sch_symbol.cpp:2849 pcbnew/footprint.cpp:3512
 msgid "Exclude From Bill of Materials"
 msgstr "Weglaten van stuklijst"
 
-#: eeschema/sch_symbol.cpp:2848 pcbnew/footprint.cpp:3515
+#: eeschema/sch_symbol.cpp:2852 pcbnew/footprint.cpp:3515
 msgid "Do not Populate"
 msgstr "Niet plaatsen"
 
@@ -18808,7 +18805,7 @@ msgstr "Fout bij laden simulatiemodel: geen '%s'-veld"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:694
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1395
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1397
 msgid "unknown"
 msgstr "onbekend"
 
@@ -21664,7 +21661,7 @@ msgid "Rotate"
 msgstr "Roteren"
 
 #: eeschema/tools/sch_edit_tool.cpp:1102 gerbview/gerber_draw_item.cpp:731
-#: pcbnew/pcb_text.cpp:239 pcbnew/pcb_textbox.cpp:374
+#: pcbnew/pcb_text.cpp:240 pcbnew/pcb_textbox.cpp:374
 #: pcbnew/tools/edit_tool.cpp:2013
 msgid "Mirror"
 msgstr "Spiegel"
@@ -25154,7 +25151,7 @@ msgstr "Kan commit niet ophalen: %s"
 msgid "Failed to create author signature: %s"
 msgstr "Maken van signatuur auteur mislukt: %s"
 
-#: kicad/project_tree_pane.cpp:2256
+#: kicad/project_tree_pane.cpp:2261
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Aanmaken van commit mislukt: '%s'"
@@ -25466,35 +25463,35 @@ msgstr "Fout bij het afdrukken van het tekenblad."
 msgid "Printing"
 msgstr "Printen"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:643
+#: pagelayout_editor/dialogs/properties_frame.cpp:646
 msgid "Predefined Keywords"
 msgstr "Vooraf gedefiniëerde tekstvariabelen"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:646
+#: pagelayout_editor/dialogs/properties_frame.cpp:649
 msgid "Texts can include keywords."
 msgstr "Teksten kunnen tekstvariabelen bevatten."
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:647
+#: pagelayout_editor/dialogs/properties_frame.cpp:650
 msgid "Keyword notation is ${keyword}"
 msgstr "Tekstvariabelenotatie is ${naam}"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:648
+#: pagelayout_editor/dialogs/properties_frame.cpp:651
 msgid "Each keyword is replaced by its value"
 msgstr "Elke tekstvariabele wordt vervangen door de corresponderende waarde"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:649
+#: pagelayout_editor/dialogs/properties_frame.cpp:652
 msgid "These build-in keywords are always available:"
 msgstr "De volgende vaste tekstvariabelen zijn altijd beschikbaar:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:653
+#: pagelayout_editor/dialogs/properties_frame.cpp:656
 msgid "(sheet number)"
 msgstr "(bladnummer)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:654
+#: pagelayout_editor/dialogs/properties_frame.cpp:657
 msgid "(sheet count)"
 msgstr "(aantal bladen)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:660
+#: pagelayout_editor/dialogs/properties_frame.cpp:663
 msgid "(paper size)"
 msgstr "(papierafmeting)"
 
@@ -28246,7 +28243,7 @@ msgstr "Via’s"
 msgid "Track Segments"
 msgstr "Spoorsegmenten"
 
-#: pcbnew/board.cpp:1475 pcbnew/generators/pcb_tuning_pattern.cpp:2051
+#: pcbnew/board.cpp:1475 pcbnew/generators/pcb_tuning_pattern.cpp:2053
 #: pcbnew/pcb_draw_panel_gal.cpp:559
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2365
@@ -29382,7 +29379,7 @@ msgstr ""
 "Het bijbehorende projectbestand %s kan niet worden geladen"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:295 pcbnew/files.cpp:578
-#: pcbnew/tools/pcb_control.cpp:1312
+#: pcbnew/tools/pcb_control.cpp:1322
 msgid "Loading PCB"
 msgstr "PCB wordt geladen"
 
@@ -31618,8 +31615,8 @@ msgstr "Tekstitems"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:54
-#: pcbnew/fp_text_grid_table.cpp:146 pcbnew/pcb_text.cpp:570
-#: pcbnew/pcb_text.cpp:587
+#: pcbnew/fp_text_grid_table.cpp:146 pcbnew/pcb_text.cpp:571
+#: pcbnew/pcb_text.cpp:588
 msgid "Keep Upright"
 msgstr "Rechtop houden"
 
@@ -32857,7 +32854,7 @@ msgid "Set Track and Via Properties"
 msgstr "Spoor- en viaeigenschappen instellen"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
-#: pcbnew/drc/drc_engine.cpp:1428
+#: pcbnew/drc/drc_engine.cpp:1433
 msgid "footprint"
 msgstr "footprint"
 
@@ -34624,54 +34621,54 @@ msgstr "DRC-fout geven als een footprintafbakening dit gebied overlapt"
 msgid "Rule Area Properties"
 msgstr "Regelgebied-eigenschappen"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:204
+#: pcbnew/dialogs/dialog_shape_properties.cpp:211
 msgid "Center Point"
 msgstr "Middelpunt"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:523
+#: pcbnew/dialogs/dialog_shape_properties.cpp:529
 msgid "Modify drawing properties"
 msgstr "Tekeningeigenschappen wijzigen"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:546
+#: pcbnew/dialogs/dialog_shape_properties.cpp:552
 msgid "Arc angle cannot be zero."
 msgstr "Booghoek mag niet nul zijn."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:550
-#: pcbnew/dialogs/dialog_shape_properties.cpp:566
+#: pcbnew/dialogs/dialog_shape_properties.cpp:556
+#: pcbnew/dialogs/dialog_shape_properties.cpp:572
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f."
 msgstr "Ongeldige boog met straal %f en hoek %f."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:572
-#: pcbnew/dialogs/dialog_shape_properties.cpp:604
+#: pcbnew/dialogs/dialog_shape_properties.cpp:578
+#: pcbnew/dialogs/dialog_shape_properties.cpp:610
 msgid "Line width must be greater than zero."
 msgstr "Lijnbreedte moet groter zijn dan nul."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:579
+#: pcbnew/dialogs/dialog_shape_properties.cpp:585
 msgid "Radius must be greater than zero."
 msgstr "Radius moet groter zijn dan nul."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:582
+#: pcbnew/dialogs/dialog_shape_properties.cpp:588
 msgid "Line width must be greater than zero for an unfilled circle."
 msgstr "Lijnbreedte van een ongevulde cirkel moet groter zijn dan nul."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:589
+#: pcbnew/dialogs/dialog_shape_properties.cpp:595
 msgid "Rectangle cannot be empty."
 msgstr "Rechthoek mag niet leeg zijn."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:592
+#: pcbnew/dialogs/dialog_shape_properties.cpp:598
 msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr "Lijnbreedte van een ongevulde rechthoek moet groter zijn dan nul."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:598
+#: pcbnew/dialogs/dialog_shape_properties.cpp:604
 msgid "Line width must be greater than zero for an unfilled polygon."
 msgstr "Lijnbreedte van een ongevulde polygoon moet groter zijn dan nul."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:610
+#: pcbnew/dialogs/dialog_shape_properties.cpp:616
 msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "Lijnbreedte van een ongevulde curve moet groter zijn dan nul."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:621
+#: pcbnew/dialogs/dialog_shape_properties.cpp:627
 msgid "Error List"
 msgstr "Foutenlijst"
 
@@ -34757,7 +34754,7 @@ msgstr "Teksteigenschappen wijzigen"
 #: pcbnew/fp_text_grid_table.cpp:149 pcbnew/pcb_dimension.cpp:1542
 #: pcbnew/pcb_dimension.cpp:1578 pcbnew/pcb_dimension.cpp:1619
 #: pcbnew/pcb_dimension.cpp:1664 pcbnew/pcb_dimension.cpp:1701
-#: pcbnew/pcb_text.cpp:566
+#: pcbnew/pcb_text.cpp:567
 msgid "Knockout"
 msgstr "Negatief"
 
@@ -34913,14 +34910,14 @@ msgid "Target skew: "
 msgstr "Doelscheeftrekking: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:105
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2123
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2145 pcbnew/pad.cpp:1134
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2125
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2147 pcbnew/pad.cpp:1134
 #: pcbnew/pcb_track.cpp:1107 pcbnew/pcb_track.cpp:1115
 #: pcbnew/pcb_track.cpp:1145 pcbnew/pcb_track.cpp:1151
 #: pcbnew/router/router_tool.cpp:2727 pcbnew/router/router_tool.cpp:2732
 #: pcbnew/router/router_tool.cpp:2737 pcbnew/router/router_tool.cpp:2748
 #: pcbnew/router/router_tool.cpp:2756 pcbnew/router/router_tool.cpp:2761
-#: pcbnew/tools/pcb_control.cpp:1506 pcbnew/tools/pcb_control.cpp:1516
+#: pcbnew/tools/pcb_control.cpp:1516 pcbnew/tools/pcb_control.cpp:1526
 #: pcbnew/zone.cpp:661
 #, c-format
 msgid "(from %s)"
@@ -34987,7 +34984,7 @@ msgstr "Radius (r):"
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:262
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2596
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2598
 msgid "Single-sided"
 msgstr "Enkelzijdig"
 
@@ -37554,7 +37551,10 @@ msgstr "Standaardeigenschappen voor scheeftrekkingen van differenteel paren:"
 msgid "Gathering copper items..."
 msgstr "Koperitems verzamelen..."
 
-#: pcbnew/drc/drc_engine.cpp:146
+#: pcbnew/drc/drc_engine.cpp:146 pcbnew/drc/drc_test_provider_hole_size.cpp:160
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:233
+#: pcbnew/drc/drc_test_provider_track_width.cpp:135
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:120
 msgid "board setup constraints"
 msgstr "beperkingen bordinstellingen"
 
@@ -37625,274 +37625,274 @@ msgstr "Zoneverbindingstype bepaald: %s."
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Pad is geen doorsteekpad; verbinding zal zijn: %s."
 
-#: pcbnew/drc/drc_engine.cpp:759 pcbnew/drc/drc_engine.cpp:769
+#: pcbnew/drc/drc_engine.cpp:764 pcbnew/drc/drc_engine.cpp:774
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "Lokale aanpassing op %s; vrije afstand: %s."
 
-#: pcbnew/drc/drc_engine.cpp:784 pcbnew/drc/drc_engine.cpp:1392
-#: pcbnew/drc/drc_engine.cpp:1408
+#: pcbnew/drc/drc_engine.cpp:789 pcbnew/drc/drc_engine.cpp:1397
+#: pcbnew/drc/drc_engine.cpp:1413
 msgid "board minimum"
 msgstr "bordminimum"
 
-#: pcbnew/drc/drc_engine.cpp:787 pcbnew/drc/drc_engine.cpp:1386
-#: pcbnew/drc/drc_engine.cpp:1402
+#: pcbnew/drc/drc_engine.cpp:792 pcbnew/drc/drc_engine.cpp:1391
+#: pcbnew/drc/drc_engine.cpp:1407
 #, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Bordminimum vrije afstand: %s."
 
-#: pcbnew/drc/drc_engine.cpp:796
+#: pcbnew/drc/drc_engine.cpp:801
 msgid "board minimum hole"
 msgstr "bordminimum voor gat"
 
-#: pcbnew/drc/drc_engine.cpp:799
+#: pcbnew/drc/drc_engine.cpp:804
 #, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "Bordminimum vrije afstand voor gaten: %s."
 
-#: pcbnew/drc/drc_engine.cpp:818
+#: pcbnew/drc/drc_engine.cpp:823
 #, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr "Lokale aanpassing op %s; zoneverbinding: %s."
 
-#: pcbnew/drc/drc_engine.cpp:835
+#: pcbnew/drc/drc_engine.cpp:840
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr "Lokale aanpassing op %s; thermische ontlastingsruimte: %s."
 
-#: pcbnew/drc/drc_engine.cpp:852
+#: pcbnew/drc/drc_engine.cpp:857
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Lokale aanpassing op %s; thermische spaakbreedte: %s."
 
-#: pcbnew/drc/drc_engine.cpp:861
+#: pcbnew/drc/drc_engine.cpp:866
 #, c-format
 msgid "%s min thickness: %s."
 msgstr "%s minimale dikte: %s."
 
-#: pcbnew/drc/drc_engine.cpp:875
+#: pcbnew/drc/drc_engine.cpp:880
 #, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "Controle aanname \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:881 pcbnew/drc/drc_engine.cpp:1512
+#: pcbnew/drc/drc_engine.cpp:886 pcbnew/drc/drc_engine.cpp:1517
 msgid "Assertion passed."
 msgstr "Aanname geslaagd."
 
-#: pcbnew/drc/drc_engine.cpp:885 pcbnew/drc/drc_engine.cpp:1516
+#: pcbnew/drc/drc_engine.cpp:890 pcbnew/drc/drc_engine.cpp:1521
 msgid "--> Assertion failed. <--"
 msgstr "--> Aanname mislukt. <--"
 
-#: pcbnew/drc/drc_engine.cpp:905
+#: pcbnew/drc/drc_engine.cpp:910
 #, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Controle %s vrije afstand: %s."
 
-#: pcbnew/drc/drc_engine.cpp:911
+#: pcbnew/drc/drc_engine.cpp:916
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "Controle %s max ongekoppelde lengte: %s."
 
-#: pcbnew/drc/drc_engine.cpp:917
+#: pcbnew/drc/drc_engine.cpp:922
 #, c-format
 msgid "Checking %s max skew: %s."
 msgstr "Controle %s max scheeftrekking: %s."
 
-#: pcbnew/drc/drc_engine.cpp:923
+#: pcbnew/drc/drc_engine.cpp:928
 #, c-format
 msgid "Checking %s gap: %s."
 msgstr "Controle %s opening: %s."
 
-#: pcbnew/drc/drc_engine.cpp:929
+#: pcbnew/drc/drc_engine.cpp:934
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "Controle %s thermische spaakbreedte: %s."
 
-#: pcbnew/drc/drc_engine.cpp:935
+#: pcbnew/drc/drc_engine.cpp:940
 #, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "Controle %s min aantal spaken: %s."
 
-#: pcbnew/drc/drc_engine.cpp:942
+#: pcbnew/drc/drc_engine.cpp:947
 #, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "Controle %s zoneverbinding: %s."
 
-#: pcbnew/drc/drc_engine.cpp:974
+#: pcbnew/drc/drc_engine.cpp:979
 #, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "Controle %s spoorbreedte: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:980
+#: pcbnew/drc/drc_engine.cpp:985
 #, c-format
 msgid "Checking %s track width: min %s."
 msgstr "Controle %s spoorbreedte: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:988
+#: pcbnew/drc/drc_engine.cpp:993
 #, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "Controle %s annulusbreedte: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:996
+#: pcbnew/drc/drc_engine.cpp:1001
 #, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "Controle %s viadiameter: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:1002
+#: pcbnew/drc/drc_engine.cpp:1007
 #, c-format
 msgid "Checking %s via diameter: min %s."
 msgstr "Controle %s viadiameter: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1011
+#: pcbnew/drc/drc_engine.cpp:1016
 #, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "Controle %s gatgrootte: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:1017
+#: pcbnew/drc/drc_engine.cpp:1022
 #, c-format
 msgid "Checking %s hole size: min %s."
 msgstr "Controle %s gatgrootte: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1027
+#: pcbnew/drc/drc_engine.cpp:1032
 #, c-format
 msgid "Checking %s: min %s."
 msgstr "Controle %s: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1035
+#: pcbnew/drc/drc_engine.cpp:1040
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "Controle %s differentieel paar tussenruimte: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:1041
+#: pcbnew/drc/drc_engine.cpp:1046
 #, c-format
 msgid "Checking %s clearance: min %s."
 msgstr "Controle %s vrije afstand: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1049
+#: pcbnew/drc/drc_engine.cpp:1054
 #, c-format
 msgid "Checking %s hole to hole: min %s."
 msgstr "Controle %s gat-naar-gat: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1055 pcbnew/drc/drc_engine.cpp:1081
-#: pcbnew/drc/drc_engine.cpp:1525
+#: pcbnew/drc/drc_engine.cpp:1060 pcbnew/drc/drc_engine.cpp:1086
+#: pcbnew/drc/drc_engine.cpp:1530
 #, c-format
 msgid "Checking %s."
 msgstr "Controle %s."
 
-#: pcbnew/drc/drc_engine.cpp:1070
+#: pcbnew/drc/drc_engine.cpp:1075
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Controle %s: min %s; opt %s; max %s."
 
-#: pcbnew/drc/drc_engine.cpp:1091
+#: pcbnew/drc/drc_engine.cpp:1096
 msgid "Netclass clearances apply only between copper items."
 msgstr ""
 "Vrije afstanden van de netklasse worden alleen gebruikt tussen koperen items."
 
-#: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
+#: pcbnew/drc/drc_engine.cpp:1100 pcbnew/drc/drc_engine.cpp:1105
 #, c-format
 msgid "%s contains no copper.  Rule ignored."
 msgstr "%s bevat geen koper. Regel genegeerd."
 
-#: pcbnew/drc/drc_engine.cpp:1156
+#: pcbnew/drc/drc_engine.cpp:1161
 msgid "Keepout constraint not met."
 msgstr "Niet voldaan aan weergebiedbeperking."
 
-#: pcbnew/drc/drc_engine.cpp:1158
+#: pcbnew/drc/drc_engine.cpp:1163
 msgid "Disallow constraint not met."
 msgstr "Niet voldaan aan verbodbeperking."
 
-#: pcbnew/drc/drc_engine.cpp:1180
+#: pcbnew/drc/drc_engine.cpp:1185
 msgid "Keepout layer(s) not matched."
 msgstr "Weerlaag(en) komt niet overeen."
 
-#: pcbnew/drc/drc_engine.cpp:1184 pcbnew/drc/drc_engine.cpp:1205
-#: pcbnew/drc/drc_engine.cpp:1529
+#: pcbnew/drc/drc_engine.cpp:1189 pcbnew/drc/drc_engine.cpp:1210
+#: pcbnew/drc/drc_engine.cpp:1534
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "Regellaag '%s' komt niet overeen; regel genegeerd."
 
-#: pcbnew/drc/drc_engine.cpp:1189 pcbnew/drc/drc_engine.cpp:1210
+#: pcbnew/drc/drc_engine.cpp:1194 pcbnew/drc/drc_engine.cpp:1215
 msgid "Rule layer not matched; rule ignored."
 msgstr "Regellaag komt niet overeen; regel genegeerd."
 
-#: pcbnew/drc/drc_engine.cpp:1201
+#: pcbnew/drc/drc_engine.cpp:1206
 msgid "Constraint layer not matched."
 msgstr "Beperkingslaag komt niet overeen."
 
-#: pcbnew/drc/drc_engine.cpp:1221
+#: pcbnew/drc/drc_engine.cpp:1226
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr "%s is geen boorgat; regel genegeerd."
 
-#: pcbnew/drc/drc_engine.cpp:1231
+#: pcbnew/drc/drc_engine.cpp:1236
 msgid "Unconditional constraint applied."
 msgstr "Onvoorwaardelijke beperking toegepast."
 
-#: pcbnew/drc/drc_engine.cpp:1235 pcbnew/drc/drc_engine.cpp:1535
+#: pcbnew/drc/drc_engine.cpp:1240 pcbnew/drc/drc_engine.cpp:1540
 msgid "Unconditional rule applied."
 msgstr "Onvoorwaardelijke regel toegepast."
 
-#: pcbnew/drc/drc_engine.cpp:1240
+#: pcbnew/drc/drc_engine.cpp:1245
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Onvoorwaardelijke regel toegepast; overschrijft eerdere beperkingen."
 
-#: pcbnew/drc/drc_engine.cpp:1254 pcbnew/drc/drc_engine.cpp:1540
+#: pcbnew/drc/drc_engine.cpp:1259 pcbnew/drc/drc_engine.cpp:1545
 #, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Controle regelvoorwaarde \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:1264
+#: pcbnew/drc/drc_engine.cpp:1269
 msgid "Constraint applied."
 msgstr "Beperking toegepast."
 
-#: pcbnew/drc/drc_engine.cpp:1268 pcbnew/drc/drc_engine.cpp:1546
+#: pcbnew/drc/drc_engine.cpp:1273 pcbnew/drc/drc_engine.cpp:1551
 msgid "Rule applied."
 msgstr "Regel toegepast."
 
-#: pcbnew/drc/drc_engine.cpp:1273
+#: pcbnew/drc/drc_engine.cpp:1278
 msgid "Rule applied; overrides previous constraints."
 msgstr "Regel toegepast; overschrijft eerdere beperkingen."
 
-#: pcbnew/drc/drc_engine.cpp:1281
+#: pcbnew/drc/drc_engine.cpp:1286
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Lidmaatschap niet voldaan; beperking genegeerd."
 
-#: pcbnew/drc/drc_engine.cpp:1282 pcbnew/drc/drc_engine.cpp:1551
+#: pcbnew/drc/drc_engine.cpp:1287 pcbnew/drc/drc_engine.cpp:1556
 msgid "Condition not satisfied; rule ignored."
 msgstr "Aan voorwaarde niet voldaan; regel genegeerd."
 
-#: pcbnew/drc/drc_engine.cpp:1342 pcbnew/drc/drc_engine.cpp:1364
+#: pcbnew/drc/drc_engine.cpp:1347 pcbnew/drc/drc_engine.cpp:1369
 #, c-format
 msgid "Local clearance on %s: %s."
 msgstr "Lokale vrije afstand op %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1423
+#: pcbnew/drc/drc_engine.cpp:1428
 #, c-format
 msgid "%s zone connection: %s."
 msgstr "%s zoneverbinding: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1439
+#: pcbnew/drc/drc_engine.cpp:1444
 #, c-format
 msgid "%s pad connection: %s."
 msgstr "%s padverbinding: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1444 pcbnew/drc/drc_engine.cpp:1461
-#: pcbnew/drc/drc_engine.cpp:1478 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
+#: pcbnew/drc/drc_engine.cpp:1449 pcbnew/drc/drc_engine.cpp:1466
+#: pcbnew/drc/drc_engine.cpp:1483 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
 msgid "zone"
 msgstr "zone"
 
-#: pcbnew/drc/drc_engine.cpp:1456
+#: pcbnew/drc/drc_engine.cpp:1461
 #, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "%s thermische ontlastingsruimte: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1473
+#: pcbnew/drc/drc_engine.cpp:1478
 #, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "%s thermische spaakbreedte: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1506
+#: pcbnew/drc/drc_engine.cpp:1511
 #, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "Controle regelaanname \"%s\"."
@@ -38134,7 +38134,7 @@ msgstr "Regel: %s"
 msgid "Local override"
 msgstr "Lokale aanpassing"
 
-#: pcbnew/drc/drc_rule.h:156
+#: pcbnew/drc/drc_rule.h:157
 #, c-format
 msgid "rule '%s'"
 msgstr "regel '%s'"
@@ -38280,7 +38280,7 @@ msgstr "(%s maximale annulusbreedte %s; werkelijk %s)"
 msgid "Checking nets for minimum connection width..."
 msgstr "Controle netten op minimale verbindingsbreedte..."
 
-#: pcbnew/drc/drc_test_provider_connection_width.cpp:768
+#: pcbnew/drc/drc_test_provider_connection_width.cpp:774
 #, c-format
 msgid "(%s minimum connection width %s; actual %s)"
 msgstr "(%s minimale verbindingsbreedte %s; werkelijk %s)"
@@ -38367,17 +38367,17 @@ msgstr "Footprintafbakeningen verzamelen..."
 msgid "Checking footprints for overlapping courtyards..."
 msgstr "Controle footprints op overlappende afbakeningen..."
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:611
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:612
 #, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
 msgstr "(%s maximale ontkoppelde lengte %s; werkelijk %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:679
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:680
 #, c-format
 msgid "(%s minimum gap %s; actual %s)"
 msgstr "(%s minimumopening %s; werkelijk %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:686
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:687
 #, c-format
 msgid "(%s maximum gap %s; actual %s)"
 msgstr "(%s maximumopening %s; werkelijk %s)"
@@ -38406,19 +38406,17 @@ msgstr "Controle viagaten..."
 msgid "Checking micro-via holes..."
 msgstr "Controle microviagaten..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:158
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:227
-#: pcbnew/drc/drc_test_provider_track_width.cpp:133
-#, c-format
-msgid "(%s min width %s; actual %s)"
-msgstr "(%s min breedte %s; werkelijk %s)"
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:162
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:235
+#, fuzzy, c-format
+msgid "(%s min hole %s; actual %s)"
+msgstr "(%s min %s; werkelijk %s)"
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:165
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:234
-#: pcbnew/drc/drc_test_provider_track_width.cpp:140
-#, c-format
-msgid "(%s max width %s; actual %s)"
-msgstr "(%s max breedte %s; werkelijk %s)"
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:169
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:242
+#, fuzzy, c-format
+msgid "(%s max hole %s; actual %s)"
+msgstr "(%s max hoogte %s; werkelijk %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -38924,25 +38922,25 @@ msgstr "Splinterdetectie uitvoeren op koperlagen..."
 msgid "board setup solder mask min width"
 msgstr "bordinstellingen soldeermasker minimumbreedte"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:575
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:669
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:571
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:665
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr "Opening soldeermasker voor overbrugt items met verschillende netten"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:577
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:671
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:573
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:667
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr "Opening soldeermasker achter overbrugt items met verschillende netten"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:794
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:790
 msgid "Building solder mask..."
 msgstr "Soldeermasker bouwen..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:802
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:798
 msgid "Checking solder mask to silk clearance..."
 msgstr "Controle vrije afstand tussen soldeermasker en silkscreen..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:807
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:803
 msgid "Checking solder mask web integrity..."
 msgstr "Controle brugintegriteit soldeermasker..."
 
@@ -38978,16 +38976,26 @@ msgstr "(%s max dikte %s; werkelijk %s)"
 msgid "Checking track widths..."
 msgstr "Controle spoorbreedtes..."
 
+#: pcbnew/drc/drc_test_provider_track_width.cpp:137
+#, c-format
+msgid "(%s min width %s; actual %s)"
+msgstr "(%s min breedte %s; werkelijk %s)"
+
+#: pcbnew/drc/drc_test_provider_track_width.cpp:144
+#, c-format
+msgid "(%s max width %s; actual %s)"
+msgstr "(%s max breedte %s; werkelijk %s)"
+
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:74
 msgid "Checking via diameters..."
 msgstr "Controle viadiameters..."
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:118
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:122
 #, c-format
 msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s min diameter %s; werkelijk %s)"
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:125
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:129
 #, c-format
 msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s max diameter %s; werkelijk %s)"
@@ -39766,7 +39774,7 @@ msgstr "Fout bij het laden van footprint %s uit bibliotheek '%s'."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:255
 #: pcbnew/generators/pcb_tuning_pattern.cpp:260
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2152
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2154
 msgid "Tuning Pattern"
 msgstr "Afstempatroon"
 
@@ -39778,139 +39786,139 @@ msgstr "Afstempatronen"
 msgid "Tuning"
 msgstr "Afstemming"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1392
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1394
 msgid "too long"
 msgstr "te lang"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1393
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1395
 msgid "too short"
 msgstr "te kort"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1394
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1396
 msgid "tuned"
 msgstr "afgestemd"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1474
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1476
 msgid "Edit Tuning Pattern"
 msgstr "Afstempatroon bewerken"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1998
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2000
 msgid "current skew"
 msgstr "huidige scheeftrekking"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2000
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2002
 msgid "current length"
 msgstr "huidige lengte"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2086
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2088
 msgid "Routed Lengths"
 msgstr "Gerouteerde lengten"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2092 pcbnew/pcb_track.cpp:1090
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2094 pcbnew/pcb_track.cpp:1090
 msgid "Routed Length"
 msgstr "Gerouteerde lengte"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2098 pcbnew/pad.cpp:2480
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2100 pcbnew/pad.cpp:2480
 #: pcbnew/pcb_track.cpp:1095
 msgid "Pad To Die Length"
 msgstr "Pad naar chip-lengte"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2101 pcbnew/pcb_track.cpp:1098
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2103 pcbnew/pcb_track.cpp:1098
 msgid "Full Length"
 msgstr "Volledige lengte"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2113
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2115
 #, c-format
 msgid "Target Skew: %s"
 msgstr "Doelscheeftrekking: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2114
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2136
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2116
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2138
 msgid "(from tuning pattern properties)"
 msgstr "(uit afstempatrooneigenschappen)"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2122
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2124
 #, c-format
 msgid "Skew Constraints: %s"
 msgstr "Scheeftrekkingsbeperkingen: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2135
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137
 #, c-format
 msgid "Target Length: %s"
 msgstr "Doellengte: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2144
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2146
 #, c-format
 msgid "Length Constraints: %s"
 msgstr "Lengtebeperkingen: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2344
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2346
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr "Kan segmenten niet afstemmen binnen andere afstempatronen."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2378
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2380
 msgid "Tune"
 msgstr "Afstemmen"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2404
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2420
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2446
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2406
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2422
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2448
 msgid "Select a track to tune first."
 msgstr "Selecteer eerst een spoor om af te stemmen."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2488
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2490
 msgid "Single track"
 msgstr "Enkel spoor"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2489
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2491
 msgid "Differential pair"
 msgstr "Differentiëel paar"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2490
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2492
 msgid "Diff pair skew"
 msgstr "Differentieel paar scheeftrekking"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2504
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2506
 msgid "Pattern Properties"
 msgstr "Patrooneigenschappen"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2519
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2521
 msgid "Tuning Mode"
 msgstr "Afstemmodus"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2525
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2527
 msgid "Min Amplitude"
 msgstr "Min amplitude"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2532
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2534
 msgid "Max Amplitude"
 msgstr "Max amplitude"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2539
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2541
 msgid "Initial Side"
 msgstr "Initiële kant"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2545
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2547
 msgid "Min Spacing"
 msgstr "Min afstand"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2551
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2553
 msgid "Corner Radius %"
 msgstr "Hoekradius %"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2573
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2575
 msgid "Target Length"
 msgstr "Doellengte"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2582
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2584
 msgid "Target Skew"
 msgstr "Doelscheeftrekking"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2590
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2592
 msgid "Override Custom Rules"
 msgstr "Aangepaste regels overschrijven"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2602
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2604
 msgid "Rounded"
 msgstr "Afgerond"
 
@@ -42907,20 +42915,20 @@ msgstr "Padprimitieven"
 msgid "PCB Target"
 msgstr "PCB Target"
 
-#: pcbnew/pcb_text.cpp:226
+#: pcbnew/pcb_text.cpp:227
 msgid "PCB Text"
 msgstr "PCB Tekst"
 
-#: pcbnew/pcb_text.cpp:235
+#: pcbnew/pcb_text.cpp:236
 msgid "Display"
 msgstr "Weergave"
 
-#: pcbnew/pcb_text.cpp:387
+#: pcbnew/pcb_text.cpp:388
 #, c-format
 msgid "Footprint Text '%s' of %s"
 msgstr "Footprinttekst '%s' van %s"
 
-#: pcbnew/pcb_text.cpp:391
+#: pcbnew/pcb_text.cpp:392
 #, c-format
 msgid "PCB Text '%s' on %s"
 msgstr "PCB-tekst '%s' op %s"
@@ -43600,7 +43608,7 @@ msgstr "Spoorbreedte: %s"
 msgid "Diff Pair Gap: %s"
 msgstr "Differentieel paar tussenruimte: %s"
 
-#: pcbnew/router/router_tool.cpp:2746 pcbnew/tools/pcb_control.cpp:1515
+#: pcbnew/router/router_tool.cpp:2746 pcbnew/tools/pcb_control.cpp:1525
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "DP max ongekoppelde lengte: %s"
@@ -46641,11 +46649,11 @@ msgstr ""
 "in het huidige PCB.\n"
 "Deze items konden niet geplakt worden.\n"
 
-#: pcbnew/tools/pcb_control.cpp:1026
+#: pcbnew/tools/pcb_control.cpp:1036
 msgid "Invalid clipboard contents"
 msgstr "Ongeldige klembordinhoud"
 
-#: pcbnew/tools/pcb_control.cpp:1320
+#: pcbnew/tools/pcb_control.cpp:1330
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -46654,53 +46662,53 @@ msgstr ""
 "Fout bij laden van bord.\n"
 "%s"
 
-#: pcbnew/tools/pcb_control.cpp:1355
+#: pcbnew/tools/pcb_control.cpp:1365
 msgid "Append Board"
 msgstr "Bord toevoegen"
 
-#: pcbnew/tools/pcb_control.cpp:1416
+#: pcbnew/tools/pcb_control.cpp:1426
 msgid "Active Layer"
 msgstr "Actieve laag"
 
-#: pcbnew/tools/pcb_control.cpp:1417 pcbnew/widgets/appearance_controls.cpp:374
+#: pcbnew/tools/pcb_control.cpp:1427 pcbnew/widgets/appearance_controls.cpp:374
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "Alle lagen"
 
-#: pcbnew/tools/pcb_control.cpp:1429
+#: pcbnew/tools/pcb_control.cpp:1439
 msgid "Object Snapping"
 msgstr "Objectuitlijning"
 
-#: pcbnew/tools/pcb_control.cpp:1505
+#: pcbnew/tools/pcb_control.cpp:1515
 #, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "DP-tussenruimtebeperkingen: %s"
 
-#: pcbnew/tools/pcb_control.cpp:1546
+#: pcbnew/tools/pcb_control.cpp:1556
 msgid "Resolved clearance"
 msgstr "Bepaalde vrije afstand"
 
-#: pcbnew/tools/pcb_control.cpp:1556
+#: pcbnew/tools/pcb_control.cpp:1566
 msgid "Actual clearance"
 msgstr "Werkelijke vrije afstand"
 
-#: pcbnew/tools/pcb_control.cpp:1599
+#: pcbnew/tools/pcb_control.cpp:1609
 msgid "Resolved hole clearance"
 msgstr "Bepaalde vrije afstand gat"
 
-#: pcbnew/tools/pcb_control.cpp:1604
+#: pcbnew/tools/pcb_control.cpp:1614
 msgid "Actual hole clearance"
 msgstr "Werkelijke vrije afstand gat"
 
-#: pcbnew/tools/pcb_control.cpp:1637
+#: pcbnew/tools/pcb_control.cpp:1647
 msgid "Resolved edge clearance"
 msgstr "Bepaalde vrije afstand rand"
 
-#: pcbnew/tools/pcb_control.cpp:1642
+#: pcbnew/tools/pcb_control.cpp:1652
 msgid "Resolved margin clearance"
 msgstr "Bepaalde vrije afstand marge"
 
-#: pcbnew/tools/pcb_control.cpp:1653
+#: pcbnew/tools/pcb_control.cpp:1663
 msgid "Selected Items"
 msgstr "Geselecteerde items"
 
@@ -47844,6 +47852,9 @@ msgstr "KiCad-schemasymbool"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad tekenblad"
+
+#~ msgid "Illegal reference designator value!"
+#~ msgstr "Ongeldige referentie-aanduidingswaarde!"
 
 #~ msgid ""
 #~ "Errors during netlist generation.\n"

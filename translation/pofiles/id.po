@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-16 15:32-0700\n"
+"POT-Creation-Date: 2024-11-01 16:27-0700\n"
 "PO-Revision-Date: 2022-12-17 19:13+0000\n"
 "Last-Translator: Neko Nekowazarashi <kodra@nekoweb.my.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
@@ -1793,30 +1793,30 @@ msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
 
-#: common/common.cpp:378
+#: common/common.cpp:371
 #, fuzzy, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Tidak dapat membuat direktori keluaran '%s'."
 
-#: common/common.cpp:397
+#: common/common.cpp:390
 #, c-format
 msgid "Output directory '%s' created."
 msgstr "Direktori keluaran '%s' dibuat."
 
-#: common/common.cpp:406
+#: common/common.cpp:399
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Tidak dapat membuat direktori keluaran '%s'."
 
-#: common/common.cpp:697
+#: common/common.cpp:690
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 
-#: common/common.cpp:699
+#: common/common.cpp:692
 msgid "Unsupported Operating System"
 msgstr ""
 
-#: common/common.cpp:702
+#: common/common.cpp:695
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -1942,7 +1942,7 @@ msgstr "Konfirmasi"
 #: eeschema/sch_field.cpp:935 eeschema/sch_pin.cpp:261
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
-#: pcbnew/pcb_text.cpp:235 pcbnew/pcb_text.cpp:239 pcbnew/pcb_textbox.cpp:374
+#: pcbnew/pcb_text.cpp:236 pcbnew/pcb_text.cpp:240 pcbnew/pcb_textbox.cpp:374
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:457
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:488
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:496
@@ -1953,7 +1953,7 @@ msgstr "Ya"
 #: common/confirm.cpp:383 eeschema/lib_field.cpp:548 eeschema/lib_pin.cpp:1196
 #: eeschema/sch_field.cpp:935 eeschema/sch_pin.cpp:261
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
-#: pcbnew/pcb_text.cpp:235 pcbnew/pcb_text.cpp:239 pcbnew/pcb_textbox.cpp:374
+#: pcbnew/pcb_text.cpp:236 pcbnew/pcb_text.cpp:240 pcbnew/pcb_textbox.cpp:374
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:457
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:488
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:496
@@ -1967,7 +1967,7 @@ msgstr "Tidak"
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2013 eeschema/symbol_editor/symbol_editor.cpp:579
+#: eeschema/sch_symbol.cpp:2017 eeschema/symbol_editor/symbol_editor.cpp:579
 #: eeschema/symbol_editor/symbol_editor.cpp:1295
 #: eeschema/symbol_viewer_frame.cpp:460 include/lib_table_grid.h:196
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
@@ -2365,8 +2365,8 @@ msgstr "Warna Lingkungan"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:372
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:382 eeschema/lib_pin.cpp:1191
-#: eeschema/sch_pin.cpp:256 eeschema/sch_symbol.cpp:1975
-#: eeschema/sch_symbol.cpp:2025 eeschema/symbol_editor/symbol_editor.cpp:1265
+#: eeschema/sch_pin.cpp:256 eeschema/sch_symbol.cpp:1979
+#: eeschema/sch_symbol.cpp:2029 eeschema/symbol_editor/symbol_editor.cpp:1265
 #: eeschema/symbol_viewer_frame.cpp:458
 #: eeschema/widgets/search_handlers.cpp:301
 #: eeschema/widgets/tuner_slider_base.cpp:27
@@ -2644,7 +2644,7 @@ msgid "PCB"
 msgstr ""
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1251 eeschema/sch_plotter.cpp:1009
+#: eeschema/sch_edit_frame.cpp:1252 eeschema/sch_plotter.cpp:1009
 #: eeschema/widgets/symbol_diff_widget.cpp:38
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 #, fuzzy
@@ -3102,8 +3102,8 @@ msgstr "Opsi"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:373
-#: eeschema/fields_grid_table.cpp:383 eeschema/sch_symbol.cpp:1972
-#: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
+#: eeschema/fields_grid_table.cpp:383 eeschema/sch_symbol.cpp:1976
+#: eeschema/sch_symbol.cpp:2026 eeschema/sch_symbol.cpp:2828
 #: eeschema/sim/simulator_frame_ui.cpp:616
 #: eeschema/sim/simulator_frame_ui.cpp:2613
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
@@ -3243,7 +3243,7 @@ msgstr "Mode keluaran:"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
 #: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_field.cpp:231
-#: pcbnew/pcb_text.cpp:564 pcbnew/pcb_textbox.cpp:688
+#: pcbnew/pcb_text.cpp:565 pcbnew/pcb_textbox.cpp:688
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Color"
 msgstr "Warna"
@@ -3449,7 +3449,7 @@ msgstr "Nama berkas:"
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1057
 #: pcbnew/pcb_dimension.cpp:459 pcbnew/pcb_group.cpp:389
-#: pcbnew/pcb_shape.cpp:505 pcbnew/pcb_text.cpp:232 pcbnew/pcb_textbox.cpp:371
+#: pcbnew/pcb_shape.cpp:505 pcbnew/pcb_text.cpp:233 pcbnew/pcb_textbox.cpp:371
 #: pcbnew/pcb_track.cpp:1178 pcbnew/zone.cpp:606
 msgid "Status"
 msgstr "Status"
@@ -4757,8 +4757,8 @@ msgstr "Ukuran sudut:"
 #: eeschema/sch_field.cpp:937 eeschema/sch_label.cpp:1269
 #: eeschema/sch_line.cpp:1088 eeschema/sch_text.cpp:409
 #: eeschema/sch_textbox.cpp:450 include/stroke_params.h:73
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2495 pcbnew/pcb_dimension.cpp:428
-#: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:377
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2497 pcbnew/pcb_dimension.cpp:428
+#: pcbnew/pcb_text.cpp:244 pcbnew/pcb_textbox.cpp:377
 #: pcbnew/pcb_textbox.cpp:664
 #, fuzzy
 msgid "Default"
@@ -4873,7 +4873,7 @@ msgstr "Berkas \"%s\" tidak sepenuhnya terbaca"
 #: pcbnew/pcb_dimension.cpp:1474 pcbnew/pcb_dimension.cpp:1533
 #: pcbnew/pcb_dimension.cpp:1569 pcbnew/pcb_dimension.cpp:1610
 #: pcbnew/pcb_dimension.cpp:1655 pcbnew/pcb_dimension.cpp:1692
-#: pcbnew/pcb_field.cpp:226 pcbnew/pcb_text.cpp:224 pcbnew/pcb_text.cpp:379
+#: pcbnew/pcb_field.cpp:226 pcbnew/pcb_text.cpp:225 pcbnew/pcb_text.cpp:380
 #: pcbnew/widgets/panel_selection_filter.cpp:187
 #: pcbnew/widgets/panel_selection_filter_base.cpp:33
 #: pcbnew/widgets/search_handlers.cpp:203
@@ -5137,7 +5137,7 @@ msgstr "Warna"
 
 #: common/eda_base_frame.cpp:1139 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:561 eeschema/menubar.cpp:143
-#: eeschema/sch_edit_frame.cpp:1658 kicad/tools/kicad_manager_actions.cpp:104
+#: eeschema/sch_edit_frame.cpp:1659 kicad/tools/kicad_manager_actions.cpp:104
 msgid "Schematic Editor"
 msgstr "Penyunting Skematik"
 
@@ -5358,11 +5358,11 @@ msgstr "Properti"
 msgid "Screen"
 msgstr "Layar"
 
-#: common/eda_item.cpp:344 eeschema/sch_symbol.cpp:2010
+#: common/eda_item.cpp:344 eeschema/sch_symbol.cpp:2014
 #: eeschema/widgets/search_handlers.cpp:132 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:289 pcbnew/pad.cpp:1038
-#: pcbnew/pcb_shape.cpp:499 pcbnew/pcb_text.cpp:220
+#: pcbnew/pcb_shape.cpp:499 pcbnew/pcb_text.cpp:221
 #: pcbnew/plot_board_layers.cpp:109
 msgid "Footprint"
 msgstr "Jejak Kaki"
@@ -5605,12 +5605,12 @@ msgid "Shape"
 msgstr "Bentuk"
 
 #: common/eda_shape.cpp:734 common/eda_shape.cpp:741 common/eda_shape.cpp:2003
-#: pcbnew/dialogs/dialog_shape_properties.cpp:205 pcbnew/pcb_track.cpp:1076
+#: pcbnew/dialogs/dialog_shape_properties.cpp:212 pcbnew/pcb_track.cpp:1076
 msgid "Radius"
 msgstr "Radius"
 
 #: common/eda_shape.cpp:739 common/eda_shape.cpp:769 common/eda_shape.cpp:2035
-#: pcbnew/pcb_text.cpp:241 pcbnew/pcb_textbox.cpp:375
+#: pcbnew/pcb_text.cpp:242 pcbnew/pcb_textbox.cpp:375
 msgid "Angle"
 msgstr "Sudut"
 
@@ -5637,9 +5637,9 @@ msgstr "Poin"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 #: pcbnew/fp_text_grid_table.cpp:140
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2066 pcbnew/pad.cpp:1089
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2068 pcbnew/pad.cpp:1089
 #: pcbnew/pcb_reference_image.cpp:259 pcbnew/pcb_target.cpp:156
-#: pcbnew/pcb_target.cpp:240 pcbnew/pcb_text.cpp:245 pcbnew/pcb_track.cpp:1071
+#: pcbnew/pcb_target.cpp:240 pcbnew/pcb_text.cpp:246 pcbnew/pcb_track.cpp:1071
 #: pcbnew/pcb_track.cpp:1492 pcbnew/pcb_track.cpp:1522
 msgid "Width"
 msgstr "Lebar"
@@ -5654,7 +5654,7 @@ msgstr "Lebar"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/fp_text_grid_table.cpp:141 pcbnew/pad.cpp:1090
 #: pcbnew/pcb_dimension.cpp:833 pcbnew/pcb_reference_image.cpp:260
-#: pcbnew/pcb_text.cpp:246
+#: pcbnew/pcb_text.cpp:247
 msgid "Height"
 msgstr "Tinggi"
 
@@ -5689,12 +5689,12 @@ msgstr "Tengah"
 msgid "Center Y"
 msgstr "Tengah"
 
-#: common/eda_shape.cpp:2009 pcbnew/generators/pcb_tuning_pattern.cpp:2507
+#: common/eda_shape.cpp:2009 pcbnew/generators/pcb_tuning_pattern.cpp:2509
 #: pcbnew/pcb_textbox.cpp:682 pcbnew/pcb_track.cpp:1502
 msgid "End X"
 msgstr ""
 
-#: common/eda_shape.cpp:2015 pcbnew/generators/pcb_tuning_pattern.cpp:2513
+#: common/eda_shape.cpp:2015 pcbnew/generators/pcb_tuning_pattern.cpp:2515
 #: pcbnew/pcb_textbox.cpp:683 pcbnew/pcb_track.cpp:1505
 msgid "End Y"
 msgstr ""
@@ -5778,7 +5778,7 @@ msgstr "Bold+Italic"
 #: eeschema/fields_grid_table.cpp:767 eeschema/lib_field.cpp:558
 #: eeschema/lib_pin.cpp:1657 eeschema/lib_text.cpp:425
 #: eeschema/pin_type.cpp:113 eeschema/sch_field.cpp:945
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2493
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2495
 msgid "Left"
 msgstr "Kiri"
 
@@ -5802,7 +5802,7 @@ msgstr "Tengah"
 #: eeschema/fields_grid_table.cpp:771 eeschema/lib_field.cpp:560
 #: eeschema/lib_pin.cpp:1656 eeschema/lib_text.cpp:427
 #: eeschema/pin_type.cpp:112 eeschema/sch_field.cpp:947
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2494
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2496
 msgid "Right"
 msgstr "Kanan"
 
@@ -5833,7 +5833,7 @@ msgstr "Bawah"
 #: eeschema/lib_pin.cpp:1201 eeschema/lib_pin.cpp:1687
 #: eeschema/lib_text.cpp:536 eeschema/lib_textbox.cpp:567
 #: eeschema/sch_field.cpp:1443 eeschema/sch_pin.cpp:265
-#: eeschema/sch_symbol.cpp:2781 eeschema/sch_text.cpp:504
+#: eeschema/sch_symbol.cpp:2785 eeschema/sch_text.cpp:504
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
@@ -5847,8 +5847,8 @@ msgstr "Orientasi:"
 #: eeschema/lib_field.cpp:670 eeschema/lib_textbox.cpp:565
 #: eeschema/sch_field.cpp:1441 eeschema/sch_text.cpp:501
 #: eeschema/sch_textbox.cpp:524 pcbnew/dialogs/dialog_text_properties.cpp:154
-#: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:568
-#: pcbnew/pcb_text.cpp:572
+#: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:569
+#: pcbnew/pcb_text.cpp:573
 msgid "Text Properties"
 msgstr "Properti Teks"
 
@@ -5862,7 +5862,7 @@ msgstr "Properti Teks"
 #: eeschema/sch_field.cpp:937 eeschema/sch_label.cpp:1269
 #: eeschema/sch_text.cpp:409 eeschema/sch_textbox.cpp:450
 #: eeschema/widgets/sch_properties_panel.cpp:229 pcbnew/pcb_dimension.cpp:428
-#: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:377
+#: pcbnew/pcb_text.cpp:244 pcbnew/pcb_textbox.cpp:377
 #: pcbnew/widgets/pcb_properties_panel.cpp:286
 msgid "Font"
 msgstr ""
@@ -5874,7 +5874,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
-#: pcbnew/fp_text_grid_table.cpp:142 pcbnew/pcb_text.cpp:244
+#: pcbnew/fp_text_grid_table.cpp:142 pcbnew/pcb_text.cpp:245
 msgid "Thickness"
 msgstr "Ketebalan"
 
@@ -5904,7 +5904,7 @@ msgstr "Dicerminkan"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94 pcbnew/pcb_dimension.cpp:1530
 #: pcbnew/pcb_dimension.cpp:1566 pcbnew/pcb_dimension.cpp:1607
 #: pcbnew/pcb_dimension.cpp:1652 pcbnew/pcb_dimension.cpp:1689
-#: pcbnew/pcb_text.cpp:584 pcbnew/pcb_textbox.cpp:687
+#: pcbnew/pcb_text.cpp:585 pcbnew/pcb_textbox.cpp:687
 msgid "Visible"
 msgstr ""
 
@@ -5926,7 +5926,7 @@ msgstr "Berkas pemeriksaan aturan elektrikal (ERC)"
 #: pcbnew/pcb_dimension.cpp:1539 pcbnew/pcb_dimension.cpp:1575
 #: pcbnew/pcb_dimension.cpp:1616 pcbnew/pcb_dimension.cpp:1661
 #: pcbnew/pcb_dimension.cpp:1698 pcbnew/pcb_field.cpp:230
-#: pcbnew/pcb_text.cpp:590
+#: pcbnew/pcb_text.cpp:591
 msgid "Hyperlink"
 msgstr ""
 
@@ -6434,7 +6434,7 @@ msgstr "Salin gambar 3D ke papan klip"
 #: common/grid_tricks.cpp:358 common/tool/actions.cpp:222
 #: eeschema/tools/sch_editor_control.cpp:2171
 #: eeschema/tools/symbol_editor_edit_tool.cpp:861
-#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/pcb_control.cpp:1033
+#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/pcb_control.cpp:1043
 msgid "Paste"
 msgstr "Tempel"
 
@@ -6794,8 +6794,8 @@ msgstr "Impor berkas gambar 2D"
 msgid "Unable to switch language to %s"
 msgstr "Tak dapat menulis \"%s\""
 
-#: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:960
-#: pcbnew/drc/drc_engine.cpp:961 pcbnew/drc/drc_engine.cpp:962
+#: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:965
+#: pcbnew/drc/drc_engine.cpp:966 pcbnew/drc/drc_engine.cpp:967
 #: pcbnew/tools/board_inspection_tool.cpp:250
 #: pcbnew/tools/board_inspection_tool.cpp:259
 #: pcbnew/tools/board_inspection_tool.cpp:268
@@ -6842,12 +6842,12 @@ msgstr "Label global"
 msgid "Hierarchical labels"
 msgstr "Label Hirarkis"
 
-#: common/layer_id.cpp:118 eeschema/sch_symbol.cpp:2796
+#: common/layer_id.cpp:118 eeschema/sch_symbol.cpp:2800
 #, fuzzy
 msgid "Pin numbers"
 msgstr "Nomor Pin"
 
-#: common/layer_id.cpp:119 eeschema/sch_symbol.cpp:2801
+#: common/layer_id.cpp:119 eeschema/sch_symbol.cpp:2805
 #, fuzzy
 msgid "Pin names"
 msgstr "Nama net"
@@ -7201,7 +7201,7 @@ msgstr "Pustaka"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:608 eeschema/lib_item.cpp:78
 #: eeschema/lib_item.cpp:222 eeschema/sch_pin.cpp:245
-#: eeschema/sch_symbol.cpp:2815 eeschema/symbol_editor/symbol_editor.cpp:1278
+#: eeschema/sch_symbol.cpp:2819 eeschema/symbol_editor/symbol_editor.cpp:1278
 #, fuzzy
 msgid "Unit"
 msgstr "Unit:"
@@ -7458,8 +7458,8 @@ msgstr "Kelompokkan Berdasar"
 #: common/settings/bom_settings.cpp:119 common/settings/bom_settings.cpp:137
 #: common/settings/bom_settings.cpp:156
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:262 eeschema/sch_symbol.cpp:1968
-#: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2821
+#: eeschema/dialogs/dialog_sim_model_base.cpp:262 eeschema/sch_symbol.cpp:1972
+#: eeschema/sch_symbol.cpp:2024 eeschema/sch_symbol.cpp:2825
 #: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3488
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
@@ -7474,7 +7474,7 @@ msgstr "Simpan Berkas Asosiasi Footprint"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:175
-#: eeschema/sch_symbol.cpp:2837 eeschema/tools/sch_edit_tool.cpp:478
+#: eeschema/sch_symbol.cpp:2841 eeschema/tools/sch_edit_tool.cpp:478
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 #: pcbnew/footprint.cpp:3505
@@ -7690,7 +7690,7 @@ msgstr ""
 msgid "Paste item(s) from clipboard with annotation options"
 msgstr "Buang item dari pilihan."
 
-#: common/tool/actions.cpp:254 eeschema/tools/symbol_editor_edit_tool.cpp:911
+#: common/tool/actions.cpp:254 eeschema/tools/symbol_editor_edit_tool.cpp:942
 #: pcbnew/tools/edit_tool.cpp:2628
 #, fuzzy
 msgid "Duplicate"
@@ -8379,95 +8379,100 @@ msgstr ""
 msgid "Zoom: %.2f"
 msgstr "Zoom %.2f"
 
-#: common/validators.cpp:222
+#: common/validators.cpp:224
 #, c-format
 msgid "Incorrect value: %s"
 msgstr ""
 
-#: common/validators.cpp:280
+#: common/validators.cpp:282
 #, fuzzy
 msgid "Invalid signal name"
 msgstr "Nama berkas tidak valid: %s"
 
-#: common/validators.cpp:291
+#: common/validators.cpp:293
 #, fuzzy
 msgid "Signal names cannot contain CR or LF characters"
 msgstr "Nama berkas lembar kerja tidak boleh berisi karakter %s."
 
-#: common/validators.cpp:294
+#: common/validators.cpp:296
 #, fuzzy
 msgid "Signal names cannot contain spaces"
 msgstr "Tidak ada simbol yang dipilih"
 
-#: common/validators.cpp:361
+#: common/validators.cpp:369
 #, fuzzy
 msgid "The value of the field cannot be empty."
 msgstr "Tidak ada simbol yang dipilih"
 
-#: common/validators.cpp:372
+#: common/validators.cpp:380
 msgid "carriage return"
 msgstr ""
 
-#: common/validators.cpp:374
+#: common/validators.cpp:382
 msgid "line feed"
 msgstr ""
 
-#: common/validators.cpp:376
+#: common/validators.cpp:384
 msgid "tab"
 msgstr ""
 
-#: common/validators.cpp:378
+#: common/validators.cpp:386
 msgid "space"
 msgstr "spasi"
 
-#: common/validators.cpp:392
+#: common/validators.cpp:400
 msgid " or "
 msgstr " atau "
 
-#: common/validators.cpp:397
+#: common/validators.cpp:405
 msgid ", or "
 msgstr ", atau "
 
-#: common/validators.cpp:409
+#: common/validators.cpp:417
 #, fuzzy, c-format
 msgid "The reference designator cannot contain %s character(s)."
 msgstr "Nama berkas lembar kerja tidak boleh berisi karakter %s."
 
-#: common/validators.cpp:413
+#: common/validators.cpp:421
 #, fuzzy, c-format
 msgid "The value field cannot contain %s character(s)."
 msgstr "Nama berkas lembar kerja tidak boleh berisi karakter %s."
 
-#: common/validators.cpp:417
+#: common/validators.cpp:425
 #, fuzzy, c-format
 msgid "The footprint field cannot contain %s character(s)."
 msgstr "Nama berkas lembar kerja tidak boleh berisi karakter %s."
 
-#: common/validators.cpp:421
+#: common/validators.cpp:429
 #, fuzzy, c-format
 msgid "The datasheet field cannot contain %s character(s)."
 msgstr "Nama berkas lembar kerja tidak boleh berisi karakter %s."
 
-#: common/validators.cpp:425
+#: common/validators.cpp:433
 #, fuzzy, c-format
 msgid "The sheet name cannot contain %s character(s)."
 msgstr "Nama berkas lembar kerja tidak boleh berisi karakter %s."
 
-#: common/validators.cpp:429
+#: common/validators.cpp:437
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
 msgstr "Nama berkas lembar kerja tidak boleh berisi karakter %s."
 
-#: common/validators.cpp:433
+#: common/validators.cpp:441
 #, fuzzy, c-format
 msgid "The field cannot contain %s character(s)."
 msgstr "Nama berkas lembar kerja tidak boleh berisi karakter %s."
 
-#: common/validators.cpp:439
+#: common/validators.cpp:447
 msgid "The reference designator cannot contain text variable references"
 msgstr ""
 
-#: common/validators.cpp:446
+#: common/validators.cpp:451
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:247
+msgid "References must start with a letter."
+msgstr ""
+
+#: common/validators.cpp:459
 msgid "Field Validation Error"
 msgstr "Galat Validasi Bidang"
 
@@ -8480,14 +8485,14 @@ msgstr ""
 msgid "<not found>"
 msgstr "Berkas '%s' tidak ditemukan."
 
-#: common/widgets/footprint_diff_widget.cpp:36 eeschema/sch_symbol.cpp:1943
+#: common/widgets/footprint_diff_widget.cpp:36 eeschema/sch_symbol.cpp:1947
 #: pcbnew/dialogs/dialog_board_statistics.cpp:680
 msgid "Board"
 msgstr "Papan"
 
 #: common/widgets/footprint_diff_widget.cpp:37 cvpcb/cvpcb_mainframe.cpp:811
-#: eeschema/sch_base_frame.cpp:569 eeschema/sch_symbol.cpp:1996
-#: eeschema/sch_symbol.cpp:2000 eeschema/sch_symbol.cpp:2035
+#: eeschema/sch_base_frame.cpp:569 eeschema/sch_symbol.cpp:2000
+#: eeschema/sch_symbol.cpp:2004 eeschema/sch_symbol.cpp:2039
 #: eeschema/widgets/symbol_diff_widget.cpp:39 pcbnew/footprint.cpp:1277
 #, fuzzy
 msgid "Library"
@@ -9199,8 +9204,8 @@ msgid "'%s' is not a valid footprint."
 msgstr "'%s' bukan footprint yang valid."
 
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:2015 eeschema/sch_symbol.cpp:2573
-#: eeschema/sch_symbol.cpp:2833 eeschema/symbol_editor/symbol_editor.cpp:1296
+#: eeschema/sch_symbol.cpp:2019 eeschema/sch_symbol.cpp:2577
+#: eeschema/sch_symbol.cpp:2837 eeschema/symbol_editor/symbol_editor.cpp:1296
 #: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3501
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 #, fuzzy
@@ -10289,7 +10294,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2583 eeschema/widgets/search_handlers.cpp:128
+#: eeschema/sch_symbol.cpp:2587 eeschema/widgets/search_handlers.cpp:128
 msgid "Symbols"
 msgstr "Simbol"
 
@@ -10703,16 +10708,11 @@ msgstr "Ramban..."
 msgid "Script Generator Properties"
 msgstr "Properti Teks"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:361
-#, fuzzy
-msgid "Illegal reference designator value!"
-msgstr "Tetapkan footprint ke simbol yang dipilih"
-
-#: eeschema/dialogs/dialog_field_properties.cpp:540
+#: eeschema/dialogs/dialog_field_properties.cpp:529
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr ""
 
-#: eeschema/dialogs/dialog_field_properties.cpp:617
+#: eeschema/dialogs/dialog_field_properties.cpp:606
 #: eeschema/dialogs/dialog_label_properties.cpp:480
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
@@ -11225,8 +11225,8 @@ msgstr "Nama berkas footprint \"%s\" tidak valid."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:526
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:368
-#: eeschema/dialogs/dialog_sheet_properties.cpp:386
-#: eeschema/dialogs/dialog_symbol_properties.cpp:754 include/project.h:42
+#: eeschema/dialogs/dialog_sheet_properties.cpp:395
+#: eeschema/dialogs/dialog_symbol_properties.cpp:743 include/project.h:42
 msgid "untitled"
 msgstr "tak berjudul"
 
@@ -11271,7 +11271,7 @@ msgstr "Bantuan sintaks"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2819
+#: eeschema/sch_symbol.cpp:2823
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
 #: pcbnew/footprint.cpp:3486
@@ -11695,7 +11695,7 @@ msgstr "Simbol Baru"
 
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:64
 #: eeschema/dialogs/dialog_shape_properties.cpp:60
-#: eeschema/dialogs/dialog_sheet_properties.cpp:83
+#: eeschema/dialogs/dialog_sheet_properties.cpp:84
 #: eeschema/dialogs/dialog_text_properties.cpp:72
 msgid "Note: individual item colors overridden in Preferences."
 msgstr ""
@@ -11763,14 +11763,9 @@ msgstr "Hapus unit ekstra dari simbol?"
 msgid "%s Properties"
 msgstr "Properti"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:247
-#: eeschema/dialogs/dialog_symbol_properties.cpp:639
-msgid "References must start with a letter."
-msgstr ""
-
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:267
-#: eeschema/dialogs/dialog_sheet_properties.cpp:218
-#: eeschema/dialogs/dialog_symbol_properties.cpp:656
+#: eeschema/dialogs/dialog_sheet_properties.cpp:219
+#: eeschema/dialogs/dialog_symbol_properties.cpp:645
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:373
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:407
 msgid "Fields must have a name."
@@ -11805,7 +11800,7 @@ msgstr "Simbol '%s' sudah ada di dalam pustaka '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:342
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:347
-#: eeschema/dialogs/dialog_symbol_properties.cpp:860
+#: eeschema/dialogs/dialog_symbol_properties.cpp:849
 #, fuzzy
 msgid "Edit Symbol Properties"
 msgstr "Properti Simbol"
@@ -11816,8 +11811,8 @@ msgid "The name '%s' is already in use."
 msgstr "Berkas %s sudah ada."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#: eeschema/dialogs/dialog_sheet_properties.cpp:770
-#: eeschema/dialogs/dialog_symbol_properties.cpp:962
+#: eeschema/dialogs/dialog_sheet_properties.cpp:779
+#: eeschema/dialogs/dialog_symbol_properties.cpp:951
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:637
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:666
 #, c-format
@@ -12811,60 +12806,61 @@ msgstr "Berkas lembar kerja"
 msgid "Sheet Pin Properties"
 msgstr "Properti Teks"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:281
+#: eeschema/dialogs/dialog_sheet_properties.cpp:282
+#: eeschema/dialogs/dialog_sheet_properties.cpp:293
 msgid "A sheet must have a valid file name."
 msgstr "Sebuah lembar kerja harus memiliki sebuah nama berkas yang valid."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:320
+#: eeschema/dialogs/dialog_sheet_properties.cpp:329
 #, fuzzy
 msgid "Use relative path for sheet file?"
 msgstr ""
 "Gunakan path relatif ke berkas-berkas model pada berkas VRML papan sirkuit"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:321
+#: eeschema/dialogs/dialog_sheet_properties.cpp:330
 #, fuzzy
 msgid "Sheet File Path"
 msgstr "Berkas lembar kerja"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:324
+#: eeschema/dialogs/dialog_sheet_properties.cpp:333
 msgid ""
 "Using relative hierarchical sheet file name paths improves schematic "
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:328
+#: eeschema/dialogs/dialog_sheet_properties.cpp:337
 #, fuzzy
 msgid "Use Relative Path"
 msgstr "Relatif"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:329
+#: eeschema/dialogs/dialog_sheet_properties.cpp:338
 #, fuzzy
 msgid "Use Absolute Path"
 msgstr "Absolut"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:367
+#: eeschema/dialogs/dialog_sheet_properties.cpp:376
 #, fuzzy
 msgid "Untitled Sheet"
 msgstr "tak berjudul"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:404
+#: eeschema/dialogs/dialog_sheet_properties.cpp:413
 msgid "Note: item colors are overridden in the current color theme."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:406
+#: eeschema/dialogs/dialog_sheet_properties.cpp:415
 #, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:430
+#: eeschema/dialogs/dialog_sheet_properties.cpp:439
 #, fuzzy
 msgid "Edit Sheet Properties"
 msgstr "Properti Teks"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:472
+#: eeschema/dialogs/dialog_sheet_properties.cpp:481
 #, c-format
 msgid ""
 "Cannot normalize new sheet schematic file path:\n"
@@ -12873,49 +12869,49 @@ msgid ""
 "'%s'."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:514
+#: eeschema/dialogs/dialog_sheet_properties.cpp:523
 #: kicad/tools/kicad_manager_control.cpp:651
 #, fuzzy, c-format
 msgid "'%s' already exists."
 msgstr "Berkas %s sudah ada."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:517
+#: eeschema/dialogs/dialog_sheet_properties.cpp:526
 #, fuzzy, c-format
 msgid "Link '%s' to this file?"
 msgstr "Tautkan \"%s\" ke berkas ini?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:556
+#: eeschema/dialogs/dialog_sheet_properties.cpp:565
 #, fuzzy, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
 msgstr "Ubah simbol %s dari '%s' ke '%s'"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:561
-#: eeschema/dialogs/dialog_sheet_properties.cpp:578
+#: eeschema/dialogs/dialog_sheet_properties.cpp:570
+#: eeschema/dialogs/dialog_sheet_properties.cpp:587
 #, fuzzy
 msgid "This action cannot be undone."
 msgstr "Berkas Zip \"%s\" tidak dapat dibuka"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:573
+#: eeschema/dialogs/dialog_sheet_properties.cpp:582
 #, fuzzy, c-format
 msgid "Create new file '%s' with contents of '%s'?"
 msgstr "Buat berkas baru \"%s\" dengan isi \"%s\"?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:605
+#: eeschema/dialogs/dialog_sheet_properties.cpp:614
 #, fuzzy, c-format
 msgid "Error occurred saving schematic file '%s'."
 msgstr "Terjadi kesalahan saat menyimpan berkas skematik \"%s\"."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:609
+#: eeschema/dialogs/dialog_sheet_properties.cpp:618
 #, fuzzy, c-format
 msgid "Failed to save schematic '%s'"
 msgstr "Gagal menyimpan berkas pustaka simbol '%s'."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:704
+#: eeschema/dialogs/dialog_sheet_properties.cpp:713
 #, fuzzy
 msgid "A sheet must have a name."
 msgstr "Sebuah lembar kerja harus memiliki sebuah nama berkas yang valid."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:712
+#: eeschema/dialogs/dialog_sheet_properties.cpp:721
 msgid "A sheet must have a file specified."
 msgstr "Sebuah lembar kerja harus memiliki sebuah berkas yang ditentukan."
 
@@ -13552,8 +13548,8 @@ msgstr "meter"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2022 pcbnew/pcb_marker.cpp:194
-#: pcbnew/pcb_shape.cpp:502 pcbnew/pcb_text.cpp:229 pcbnew/pcb_track.cpp:1065
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2024 pcbnew/pcb_marker.cpp:194
+#: pcbnew/pcb_shape.cpp:502 pcbnew/pcb_text.cpp:230 pcbnew/pcb_track.cpp:1065
 #: pcbnew/pcb_track.cpp:1132 pcbnew/tools/drawing_stackup_table_tool.cpp:250
 #: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:564
 msgid "Type"
@@ -13748,7 +13744,7 @@ msgid "Field must have a name."
 msgstr "Bidang harus memiliki nama."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:669
-#: eeschema/dialogs/dialog_symbol_properties.cpp:889
+#: eeschema/dialogs/dialog_symbol_properties.cpp:878
 #, fuzzy, c-format
 msgid "Field name '%s' already in use."
 msgstr "Berkas %s sudah ada."
@@ -15405,7 +15401,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/eeschema_config.cpp:74 pcbnew/pcbnew_config.cpp:55
-#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:188
+#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:196
 #, fuzzy
 msgid "Error loading drawing sheet."
 msgstr "Impor berkas gambar 2D"
@@ -16250,7 +16246,7 @@ msgstr "Berkas simpan otomatis \"%s\" tidak dapat dihapus!"
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1992
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1996
 msgid "Derived from"
 msgstr ""
 
@@ -16500,7 +16496,7 @@ msgid "Pin Name"
 msgstr "Nomor Pin"
 
 #: eeschema/lib_pin.cpp:1681 eeschema/lib_shape.cpp:583
-#: eeschema/sch_shape.cpp:554 eeschema/sch_symbol.cpp:2773
+#: eeschema/sch_shape.cpp:554 eeschema/sch_symbol.cpp:2777
 #: pcbnew/board_item.cpp:334 pcbnew/pcb_group.cpp:488 pcbnew/pcb_shape.cpp:715
 #: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1594 pcbnew/zone.cpp:1606
 #, fuzzy
@@ -16508,7 +16504,7 @@ msgid "Position X"
 msgstr "Posisi X:"
 
 #: eeschema/lib_pin.cpp:1684 eeschema/lib_shape.cpp:585
-#: eeschema/sch_shape.cpp:556 eeschema/sch_symbol.cpp:2776
+#: eeschema/sch_shape.cpp:556 eeschema/sch_symbol.cpp:2780
 #: pcbnew/board_item.cpp:337 pcbnew/pcb_group.cpp:489 pcbnew/pcb_shape.cpp:717
 #: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1600 pcbnew/zone.cpp:1607
 #, fuzzy
@@ -16651,7 +16647,7 @@ msgstr "Kecualikan Penanda"
 msgid "Exclude from board settings differ."
 msgstr "Kecualikan Penanda"
 
-#: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:497
+#: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:498
 #: eeschema/tools/sch_edit_tool.cpp:109
 #, fuzzy, c-format
 msgid "Unit %s"
@@ -17098,8 +17094,8 @@ msgstr ""
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:320
 #: eeschema/sch_label.cpp:1299 eeschema/sch_line.cpp:992
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2061 pcbnew/pad.cpp:1053
-#: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1677
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1053
+#: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1687
 #: pcbnew/zone.cpp:594
 #, fuzzy
 msgid "Resolved Netclass"
@@ -17121,7 +17117,7 @@ msgstr ""
 msgid "KiCad Schematic Editor"
 msgstr "Berkas Skematik"
 
-#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1964
+#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1965
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Berkas Skematik"
@@ -17130,7 +17126,7 @@ msgstr "Berkas Skematik"
 msgid "New schematic file is unsaved"
 msgstr "Berkas skematik baru belum disimpan"
 
-#: eeschema/sch_edit_frame.cpp:953
+#: eeschema/sch_edit_frame.cpp:954
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:603
 #: eeschema/symbol_editor/symbol_editor.cpp:1199
 #: pagelayout_editor/pl_editor_frame.cpp:398
@@ -17140,70 +17136,70 @@ msgstr "Berkas skematik baru belum disimpan"
 msgid "Save changes to '%s' before closing?"
 msgstr "Simpan perubahan"
 
-#: eeschema/sch_edit_frame.cpp:1106
+#: eeschema/sch_edit_frame.cpp:1107
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1272
+#: eeschema/sch_edit_frame.cpp:1273
 #, fuzzy
 msgid "New Schematic"
 msgstr "Perbarui Skematik"
 
-#: eeschema/sch_edit_frame.cpp:1284
+#: eeschema/sch_edit_frame.cpp:1285
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Berkas skematik \"%s\" sudah ada."
 
-#: eeschema/sch_edit_frame.cpp:1309
+#: eeschema/sch_edit_frame.cpp:1310
 #, fuzzy
 msgid "Open Schematic"
 msgstr "Perbarui Skematik"
 
-#: eeschema/sch_edit_frame.cpp:1378
+#: eeschema/sch_edit_frame.cpp:1379
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1405
+#: eeschema/sch_edit_frame.cpp:1406
 #, fuzzy
 msgid "Could not open CvPcb"
 msgstr "Tak bisa membuka berkas arsip."
 
-#: eeschema/sch_edit_frame.cpp:1648 eeschema/sim/simulator_frame.cpp:331
+#: eeschema/sch_edit_frame.cpp:1649 eeschema/sim/simulator_frame.cpp:331
 #: kicad/kicad_manager_frame.cpp:840 pcbnew/footprint_edit_frame.cpp:974
 #: pcbnew/pcb_edit_frame.cpp:1661
 #, fuzzy
 msgid "[Read Only]"
 msgstr "[Pustaka Hanya Baca]"
 
-#: eeschema/sch_edit_frame.cpp:1651 eeschema/sim/simulator_frame.cpp:334
+#: eeschema/sch_edit_frame.cpp:1652 eeschema/sim/simulator_frame.cpp:334
 #: pcbnew/footprint_edit_frame.cpp:983 pcbnew/pcb_edit_frame.cpp:1664
 msgid "[Unsaved]"
 msgstr "[Tak disimpan]"
 
-#: eeschema/sch_edit_frame.cpp:1655
+#: eeschema/sch_edit_frame.cpp:1656
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Berkas Skematik"
 
-#: eeschema/sch_edit_frame.cpp:1876
+#: eeschema/sch_edit_frame.cpp:1877
 #, fuzzy
 msgid "Schematic Cleanup"
 msgstr "Teks Skematik"
 
-#: eeschema/sch_edit_frame.cpp:1989
+#: eeschema/sch_edit_frame.cpp:1990
 #, fuzzy, c-format
 msgid "Highlighted net: %s"
 msgstr "Sorot %s"
 
-#: eeschema/sch_edit_frame.cpp:2166
+#: eeschema/sch_edit_frame.cpp:2167
 #, fuzzy
 msgid "Save Symbol to Schematic"
 msgstr "Tambahkan Simbol ke Skematik"
 
-#: eeschema/sch_edit_frame.cpp:2271 eeschema/tools/ee_actions.cpp:60
+#: eeschema/sch_edit_frame.cpp:2272 eeschema/tools/ee_actions.cpp:60
 #, fuzzy
 msgid "Compare Symbol with Library"
 msgstr "Perbarui Simbol dari Pustaka..."
@@ -17306,7 +17302,7 @@ msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3309
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1013
-#: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:693
+#: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:719
 #, fuzzy, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Tidak dapat membuat berkas \"%s\".\n"
@@ -18063,13 +18059,13 @@ msgstr "Nilai SCH_FILE_T tidak diketahui: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
 #: pcbnew/footprint.cpp:3477 pcbnew/footprint.cpp:3480
 #: pcbnew/fp_text_grid_table.cpp:144
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1061
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2065 pcbnew/pad.cpp:1061
 #: pcbnew/pad.cpp:2370 pcbnew/pcb_dimension.cpp:461
 #: pcbnew/pcb_dimension.cpp:1209 pcbnew/pcb_group.cpp:490
 #: pcbnew/pcb_marker.cpp:361 pcbnew/pcb_reference_image.cpp:261
 #: pcbnew/pcb_reference_image.cpp:346 pcbnew/pcb_shape.cpp:509
 #: pcbnew/pcb_shape.cpp:699 pcbnew/pcb_shape.cpp:701 pcbnew/pcb_target.cpp:153
-#: pcbnew/pcb_text.cpp:237 pcbnew/pcb_textbox.cpp:373 pcbnew/pcb_track.cpp:1069
+#: pcbnew/pcb_text.cpp:238 pcbnew/pcb_textbox.cpp:373 pcbnew/pcb_track.cpp:1069
 #: pcbnew/pcb_track.cpp:1136 pcbnew/pcb_track.cpp:1520
 #: pcbnew/pcb_track.cpp:1527 pcbnew/tools/board_inspection_tool.cpp:236
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:214
@@ -18097,7 +18093,7 @@ msgstr "Tidak ada layer"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
 #: pcbnew/footprint.cpp:1310 pcbnew/pad.cpp:1057 pcbnew/pcb_dimension.cpp:459
 #: pcbnew/pcb_group.cpp:389 pcbnew/pcb_marker.cpp:364 pcbnew/pcb_shape.cpp:505
-#: pcbnew/pcb_text.cpp:232 pcbnew/pcb_textbox.cpp:371 pcbnew/pcb_track.cpp:1178
+#: pcbnew/pcb_text.cpp:233 pcbnew/pcb_textbox.cpp:371 pcbnew/pcb_track.cpp:1178
 #: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:606
 #, fuzzy
 msgid "Locked"
@@ -18134,9 +18130,9 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:984
 #: pcbnew/generators/pcb_tuning_pattern.cpp:463
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2057 pcbnew/pad.cpp:1051
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2059 pcbnew/pad.cpp:1051
 #: pcbnew/pad.cpp:2398 pcbnew/pcb_shape.cpp:732 pcbnew/pcb_track.cpp:1158
-#: pcbnew/tools/pcb_control.cpp:1674
+#: pcbnew/tools/pcb_control.cpp:1684
 #: pcbnew/widgets/pcb_properties_panel.cpp:274
 #: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:592
 #: pcbnew/zone.cpp:1645
@@ -18420,119 +18416,119 @@ msgstr "Item yang Dipilih"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Label Hirarkis"
 
-#: eeschema/sch_symbol.cpp:1496
+#: eeschema/sch_symbol.cpp:1500
 #, fuzzy
 msgid "Excluded from BOM"
 msgstr "Kecualikan Penanda"
 
-#: eeschema/sch_symbol.cpp:1502
+#: eeschema/sch_symbol.cpp:1506
 #, fuzzy
 msgid "Excluded from board"
 msgstr "Kecualikan Penanda"
 
-#: eeschema/sch_symbol.cpp:1508
+#: eeschema/sch_symbol.cpp:1512
 #, fuzzy
 msgid "Excluded from simulation"
 msgstr "Kecualikan dari berkas posisi"
 
-#: eeschema/sch_symbol.cpp:1514 eeschema/sch_symbol.cpp:1946
+#: eeschema/sch_symbol.cpp:1518 eeschema/sch_symbol.cpp:1950
 #: eeschema/widgets/search_handlers.cpp:139 pcbnew/footprint.cpp:1325
 #, fuzzy
 msgid "DNP"
 msgstr "DPI"
 
-#: eeschema/sch_symbol.cpp:1937 eeschema/sch_text.cpp:407
+#: eeschema/sch_symbol.cpp:1941 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
 #, fuzzy
 msgid "Simulation"
 msgstr "Simulasi"
 
-#: eeschema/sch_symbol.cpp:1940
+#: eeschema/sch_symbol.cpp:1944
 msgid "BOM"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:1952 eeschema/sch_text.cpp:407
+#: eeschema/sch_symbol.cpp:1956 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
 #, fuzzy
 msgid "Exclude from"
 msgstr "Kecualikan Penanda"
 
-#: eeschema/sch_symbol.cpp:1963
+#: eeschema/sch_symbol.cpp:1967
 #, fuzzy
 msgid "Power symbol"
 msgstr "Tambahkan sebuah simbol"
 
-#: eeschema/sch_symbol.cpp:1980
+#: eeschema/sch_symbol.cpp:1984
 msgid "flags"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:1985
+#: eeschema/sch_symbol.cpp:1989
 #, fuzzy
 msgid "Missing parent"
 msgstr "Jalur telah ada:"
 
-#: eeschema/sch_symbol.cpp:2000
+#: eeschema/sch_symbol.cpp:2004
 #, fuzzy
 msgid "Undefined!!!"
 msgstr "Tidak ditentukan!"
 
-#: eeschema/sch_symbol.cpp:2008
+#: eeschema/sch_symbol.cpp:2012
 #, fuzzy
 msgid "<Unknown>"
 msgstr "Tidak diketahui"
 
-#: eeschema/sch_symbol.cpp:2031
+#: eeschema/sch_symbol.cpp:2035
 #, fuzzy
 msgid "No library defined!"
 msgstr "Tidak ada pustaka yang ditentukan."
 
-#: eeschema/sch_symbol.cpp:2033
+#: eeschema/sch_symbol.cpp:2037
 #, fuzzy, c-format
 msgid "Symbol not found in %s!"
 msgstr "Simbol tidak ditemukan."
 
-#: eeschema/sch_symbol.cpp:2269
+#: eeschema/sch_symbol.cpp:2273
 #, fuzzy, c-format
 msgid "Symbol %s [%s]"
 msgstr "Simbol oleh"
 
-#: eeschema/sch_symbol.cpp:2783
+#: eeschema/sch_symbol.cpp:2787
 #, fuzzy
 msgid "Mirror X"
 msgstr "Cermin"
 
-#: eeschema/sch_symbol.cpp:2785
+#: eeschema/sch_symbol.cpp:2789
 #, fuzzy
 msgid "Mirror Y"
 msgstr "Cermin"
 
-#: eeschema/sch_symbol.cpp:2827 pcbnew/footprint.cpp:3495
+#: eeschema/sch_symbol.cpp:2831 pcbnew/footprint.cpp:3495
 #, fuzzy
 msgid "Library Link"
 msgstr "Pustaka"
 
-#: eeschema/sch_symbol.cpp:2830 pcbnew/footprint.cpp:3498
+#: eeschema/sch_symbol.cpp:2834 pcbnew/footprint.cpp:3498
 #: pcbnew/plot_board_layers.cpp:129
 #, fuzzy
 msgid "Library Description"
 msgstr "Deskripsi"
 
-#: eeschema/sch_symbol.cpp:2839
+#: eeschema/sch_symbol.cpp:2843
 #, fuzzy
 msgid "Exclude From Board"
 msgstr "Kecualikan Penanda"
 
-#: eeschema/sch_symbol.cpp:2842
+#: eeschema/sch_symbol.cpp:2846
 #, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Kecualikan dari berkas posisi"
 
-#: eeschema/sch_symbol.cpp:2845 pcbnew/footprint.cpp:3512
+#: eeschema/sch_symbol.cpp:2849 pcbnew/footprint.cpp:3512
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Kecualikan Penanda"
 
-#: eeschema/sch_symbol.cpp:2848 pcbnew/footprint.cpp:3515
+#: eeschema/sch_symbol.cpp:2852 pcbnew/footprint.cpp:3515
 #, fuzzy
 msgid "Do not Populate"
 msgstr "Jangan ekspor"
@@ -19484,7 +19480,7 @@ msgstr "Terjadi kesalahan saat memuat skematik '%s'."
 #: pcbnew/dialogs/dialog_board_statistics.cpp:694
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1395
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1397
 msgid "unknown"
 msgstr "tidak diketahui"
 
@@ -22529,7 +22525,7 @@ msgid "Rotate"
 msgstr "Rotasi"
 
 #: eeschema/tools/sch_edit_tool.cpp:1102 gerbview/gerber_draw_item.cpp:731
-#: pcbnew/pcb_text.cpp:239 pcbnew/pcb_textbox.cpp:374
+#: pcbnew/pcb_text.cpp:240 pcbnew/pcb_textbox.cpp:374
 #: pcbnew/tools/edit_tool.cpp:2013
 #, fuzzy
 msgid "Mirror"
@@ -26214,7 +26210,7 @@ msgstr "Gagal menyimpan berkas pustaka simbol '%s'."
 msgid "Failed to create author signature: %s"
 msgstr "Gagal membuat berkas sementara \"%s\""
 
-#: kicad/project_tree_pane.cpp:2256
+#: kicad/project_tree_pane.cpp:2261
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "Gagal membuat berkas \"%s\""
@@ -26547,37 +26543,37 @@ msgstr "Terjadi kesalahan saat mencoba memuat berkas pustaka simbol \"%s\""
 msgid "Printing"
 msgstr "Mencetak"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:643
+#: pagelayout_editor/dialogs/properties_frame.cpp:646
 msgid "Predefined Keywords"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:646
+#: pagelayout_editor/dialogs/properties_frame.cpp:649
 msgid "Texts can include keywords."
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:647
+#: pagelayout_editor/dialogs/properties_frame.cpp:650
 msgid "Keyword notation is ${keyword}"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:648
+#: pagelayout_editor/dialogs/properties_frame.cpp:651
 msgid "Each keyword is replaced by its value"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:649
+#: pagelayout_editor/dialogs/properties_frame.cpp:652
 msgid "These build-in keywords are always available:"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:653
+#: pagelayout_editor/dialogs/properties_frame.cpp:656
 #, fuzzy
 msgid "(sheet number)"
 msgstr "Jumlah pengulangan:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:654
+#: pagelayout_editor/dialogs/properties_frame.cpp:657
 #, fuzzy
 msgid "(sheet count)"
 msgstr "Jumlah pengulangan:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:660
+#: pagelayout_editor/dialogs/properties_frame.cpp:663
 #, fuzzy
 msgid "(paper size)"
 msgstr "Ukuran kertas kustom:"
@@ -29294,7 +29290,7 @@ msgstr ""
 msgid "Track Segments"
 msgstr ""
 
-#: pcbnew/board.cpp:1475 pcbnew/generators/pcb_tuning_pattern.cpp:2051
+#: pcbnew/board.cpp:1475 pcbnew/generators/pcb_tuning_pattern.cpp:2053
 #: pcbnew/pcb_draw_panel_gal.cpp:559
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2365
@@ -30449,7 +30445,7 @@ msgstr ""
 "Berkas proyek terkait %s tidak dapat dimuat"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:295 pcbnew/files.cpp:578
-#: pcbnew/tools/pcb_control.cpp:1312
+#: pcbnew/tools/pcb_control.cpp:1322
 #, fuzzy
 msgid "Loading PCB"
 msgstr "Memuat %s"
@@ -32827,8 +32823,8 @@ msgstr "Berkas teks"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:54
-#: pcbnew/fp_text_grid_table.cpp:146 pcbnew/pcb_text.cpp:570
-#: pcbnew/pcb_text.cpp:587
+#: pcbnew/fp_text_grid_table.cpp:146 pcbnew/pcb_text.cpp:571
+#: pcbnew/pcb_text.cpp:588
 #, fuzzy
 msgid "Keep Upright"
 msgstr "Atas kanan"
@@ -34104,7 +34100,7 @@ msgid "Set Track and Via Properties"
 msgstr "Pilih Trek dan Vias di %s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
-#: pcbnew/drc/drc_engine.cpp:1428
+#: pcbnew/drc/drc_engine.cpp:1433
 #, fuzzy
 msgid "footprint"
 msgstr "Jejak Kaki"
@@ -35912,58 +35908,58 @@ msgstr ""
 msgid "Rule Area Properties"
 msgstr "Properti Teks"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:204
+#: pcbnew/dialogs/dialog_shape_properties.cpp:211
 #, fuzzy
 msgid "Center Point"
 msgstr "Tengah"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:523
+#: pcbnew/dialogs/dialog_shape_properties.cpp:529
 #, fuzzy
 msgid "Modify drawing properties"
 msgstr "Properti Teks Footprint"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:546
+#: pcbnew/dialogs/dialog_shape_properties.cpp:552
 #, fuzzy
 msgid "Arc angle cannot be zero."
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:550
-#: pcbnew/dialogs/dialog_shape_properties.cpp:566
+#: pcbnew/dialogs/dialog_shape_properties.cpp:556
+#: pcbnew/dialogs/dialog_shape_properties.cpp:572
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:572
-#: pcbnew/dialogs/dialog_shape_properties.cpp:604
+#: pcbnew/dialogs/dialog_shape_properties.cpp:578
+#: pcbnew/dialogs/dialog_shape_properties.cpp:610
 msgid "Line width must be greater than zero."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:579
+#: pcbnew/dialogs/dialog_shape_properties.cpp:585
 msgid "Radius must be greater than zero."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:582
+#: pcbnew/dialogs/dialog_shape_properties.cpp:588
 msgid "Line width must be greater than zero for an unfilled circle."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:589
+#: pcbnew/dialogs/dialog_shape_properties.cpp:595
 #, fuzzy
 msgid "Rectangle cannot be empty."
 msgstr "Tidak ada simbol yang dipilih"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:592
+#: pcbnew/dialogs/dialog_shape_properties.cpp:598
 msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:598
+#: pcbnew/dialogs/dialog_shape_properties.cpp:604
 msgid "Line width must be greater than zero for an unfilled polygon."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:610
+#: pcbnew/dialogs/dialog_shape_properties.cpp:616
 msgid "Line width must be greater than zero for an unfilled curve."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:621
+#: pcbnew/dialogs/dialog_shape_properties.cpp:627
 #, fuzzy
 msgid "Error List"
 msgstr "Galat"
@@ -36064,7 +36060,7 @@ msgstr "Properti Teks"
 #: pcbnew/fp_text_grid_table.cpp:149 pcbnew/pcb_dimension.cpp:1542
 #: pcbnew/pcb_dimension.cpp:1578 pcbnew/pcb_dimension.cpp:1619
 #: pcbnew/pcb_dimension.cpp:1664 pcbnew/pcb_dimension.cpp:1701
-#: pcbnew/pcb_text.cpp:566
+#: pcbnew/pcb_text.cpp:567
 msgid "Knockout"
 msgstr ""
 
@@ -36237,14 +36233,14 @@ msgid "Target skew: "
 msgstr "Berkas pemeriksaan aturan elektrikal (ERC)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:105
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2123
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2145 pcbnew/pad.cpp:1134
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2125
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2147 pcbnew/pad.cpp:1134
 #: pcbnew/pcb_track.cpp:1107 pcbnew/pcb_track.cpp:1115
 #: pcbnew/pcb_track.cpp:1145 pcbnew/pcb_track.cpp:1151
 #: pcbnew/router/router_tool.cpp:2727 pcbnew/router/router_tool.cpp:2732
 #: pcbnew/router/router_tool.cpp:2737 pcbnew/router/router_tool.cpp:2748
 #: pcbnew/router/router_tool.cpp:2756 pcbnew/router/router_tool.cpp:2761
-#: pcbnew/tools/pcb_control.cpp:1506 pcbnew/tools/pcb_control.cpp:1516
+#: pcbnew/tools/pcb_control.cpp:1516 pcbnew/tools/pcb_control.cpp:1526
 #: pcbnew/zone.cpp:661
 #, fuzzy, c-format
 msgid "(from %s)"
@@ -36316,7 +36312,7 @@ msgstr "Radius:"
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:262
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2596
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2598
 msgid "Single-sided"
 msgstr ""
 
@@ -38432,7 +38428,10 @@ msgstr "Sunting grafik dan teks lembar kerja"
 msgid "Gathering copper items..."
 msgstr "Item lainnya"
 
-#: pcbnew/drc/drc_engine.cpp:146
+#: pcbnew/drc/drc_engine.cpp:146 pcbnew/drc/drc_test_provider_hole_size.cpp:160
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:233
+#: pcbnew/drc/drc_test_provider_track_width.cpp:135
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:120
 #, fuzzy
 msgid "board setup constraints"
 msgstr "Memperbarui Pustaka Footprint"
@@ -38513,278 +38512,278 @@ msgstr "Buat lapisan"
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:759 pcbnew/drc/drc_engine.cpp:769
+#: pcbnew/drc/drc_engine.cpp:764 pcbnew/drc/drc_engine.cpp:774
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:784 pcbnew/drc/drc_engine.cpp:1392
-#: pcbnew/drc/drc_engine.cpp:1408
+#: pcbnew/drc/drc_engine.cpp:789 pcbnew/drc/drc_engine.cpp:1397
+#: pcbnew/drc/drc_engine.cpp:1413
 #, fuzzy
 msgid "board minimum"
 msgstr "Tampilkan lapisan solder mask"
 
-#: pcbnew/drc/drc_engine.cpp:787 pcbnew/drc/drc_engine.cpp:1386
-#: pcbnew/drc/drc_engine.cpp:1402
+#: pcbnew/drc/drc_engine.cpp:792 pcbnew/drc/drc_engine.cpp:1391
+#: pcbnew/drc/drc_engine.cpp:1407
 #, fuzzy, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Tampilkan lapisan solder mask"
 
-#: pcbnew/drc/drc_engine.cpp:796
+#: pcbnew/drc/drc_engine.cpp:801
 #, fuzzy
 msgid "board minimum hole"
 msgstr "Tampilkan lapisan solder mask"
 
-#: pcbnew/drc/drc_engine.cpp:799
+#: pcbnew/drc/drc_engine.cpp:804
 #, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:818
+#: pcbnew/drc/drc_engine.cpp:823
 #, fuzzy, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/drc/drc_engine.cpp:835
+#: pcbnew/drc/drc_engine.cpp:840
 #, fuzzy, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr "Item lainnya"
 
-#: pcbnew/drc/drc_engine.cpp:852
+#: pcbnew/drc/drc_engine.cpp:857
 #, fuzzy, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Memeriksa permasalahan simbol pustaka..."
 
-#: pcbnew/drc/drc_engine.cpp:861
+#: pcbnew/drc/drc_engine.cpp:866
 #, fuzzy, c-format
 msgid "%s min thickness: %s."
 msgstr "Ketebalan garis:"
 
-#: pcbnew/drc/drc_engine.cpp:875
+#: pcbnew/drc/drc_engine.cpp:880
 #, fuzzy, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "Memeriksa permasalahan simbol pustaka..."
 
-#: pcbnew/drc/drc_engine.cpp:881 pcbnew/drc/drc_engine.cpp:1512
+#: pcbnew/drc/drc_engine.cpp:886 pcbnew/drc/drc_engine.cpp:1517
 #, fuzzy
 msgid "Assertion passed."
 msgstr "Aksi"
 
-#: pcbnew/drc/drc_engine.cpp:885 pcbnew/drc/drc_engine.cpp:1516
+#: pcbnew/drc/drc_engine.cpp:890 pcbnew/drc/drc_engine.cpp:1521
 msgid "--> Assertion failed. <--"
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:905
+#: pcbnew/drc/drc_engine.cpp:910
 #, fuzzy, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:911
+#: pcbnew/drc/drc_engine.cpp:916
 #, fuzzy, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "Buat lapisan"
 
-#: pcbnew/drc/drc_engine.cpp:917
+#: pcbnew/drc/drc_engine.cpp:922
 #, fuzzy, c-format
 msgid "Checking %s max skew: %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:923
+#: pcbnew/drc/drc_engine.cpp:928
 #, fuzzy, c-format
 msgid "Checking %s gap: %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:929
+#: pcbnew/drc/drc_engine.cpp:934
 #, fuzzy, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "Memeriksa permasalahan simbol pustaka..."
 
-#: pcbnew/drc/drc_engine.cpp:935
+#: pcbnew/drc/drc_engine.cpp:940
 #, fuzzy, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:942
+#: pcbnew/drc/drc_engine.cpp:947
 #, fuzzy, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/drc/drc_engine.cpp:974
+#: pcbnew/drc/drc_engine.cpp:979
 #, fuzzy, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:980
+#: pcbnew/drc/drc_engine.cpp:985
 #, fuzzy, c-format
 msgid "Checking %s track width: min %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:988
+#: pcbnew/drc/drc_engine.cpp:993
 #, fuzzy, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:996
+#: pcbnew/drc/drc_engine.cpp:1001
 #, fuzzy, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1002
+#: pcbnew/drc/drc_engine.cpp:1007
 #, fuzzy, c-format
 msgid "Checking %s via diameter: min %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1011
+#: pcbnew/drc/drc_engine.cpp:1016
 #, fuzzy, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1017
+#: pcbnew/drc/drc_engine.cpp:1022
 #, fuzzy, c-format
 msgid "Checking %s hole size: min %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1027
+#: pcbnew/drc/drc_engine.cpp:1032
 #, fuzzy, c-format
 msgid "Checking %s: min %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1035
+#: pcbnew/drc/drc_engine.cpp:1040
 #, fuzzy, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1041
+#: pcbnew/drc/drc_engine.cpp:1046
 #, fuzzy, c-format
 msgid "Checking %s clearance: min %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1049
+#: pcbnew/drc/drc_engine.cpp:1054
 #, fuzzy, c-format
 msgid "Checking %s hole to hole: min %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1055 pcbnew/drc/drc_engine.cpp:1081
-#: pcbnew/drc/drc_engine.cpp:1525
+#: pcbnew/drc/drc_engine.cpp:1060 pcbnew/drc/drc_engine.cpp:1086
+#: pcbnew/drc/drc_engine.cpp:1530
 #, fuzzy, c-format
 msgid "Checking %s."
 msgstr "Item lainnya"
 
-#: pcbnew/drc/drc_engine.cpp:1070
+#: pcbnew/drc/drc_engine.cpp:1075
 #, fuzzy, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:1091
+#: pcbnew/drc/drc_engine.cpp:1096
 msgid "Netclass clearances apply only between copper items."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
+#: pcbnew/drc/drc_engine.cpp:1100 pcbnew/drc/drc_engine.cpp:1105
 #, c-format
 msgid "%s contains no copper.  Rule ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1156
+#: pcbnew/drc/drc_engine.cpp:1161
 msgid "Keepout constraint not met."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1158
+#: pcbnew/drc/drc_engine.cpp:1163
 msgid "Disallow constraint not met."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1180
+#: pcbnew/drc/drc_engine.cpp:1185
 #, fuzzy
 msgid "Keepout layer(s) not matched."
 msgstr "Buat lapisan"
 
-#: pcbnew/drc/drc_engine.cpp:1184 pcbnew/drc/drc_engine.cpp:1205
-#: pcbnew/drc/drc_engine.cpp:1529
+#: pcbnew/drc/drc_engine.cpp:1189 pcbnew/drc/drc_engine.cpp:1210
+#: pcbnew/drc/drc_engine.cpp:1534
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1189 pcbnew/drc/drc_engine.cpp:1210
+#: pcbnew/drc/drc_engine.cpp:1194 pcbnew/drc/drc_engine.cpp:1215
 msgid "Rule layer not matched; rule ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1201
+#: pcbnew/drc/drc_engine.cpp:1206
 #, fuzzy
 msgid "Constraint layer not matched."
 msgstr "Buat lapisan"
 
-#: pcbnew/drc/drc_engine.cpp:1221
+#: pcbnew/drc/drc_engine.cpp:1226
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1231
+#: pcbnew/drc/drc_engine.cpp:1236
 msgid "Unconditional constraint applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1235 pcbnew/drc/drc_engine.cpp:1535
+#: pcbnew/drc/drc_engine.cpp:1240 pcbnew/drc/drc_engine.cpp:1540
 msgid "Unconditional rule applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1240
+#: pcbnew/drc/drc_engine.cpp:1245
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1254 pcbnew/drc/drc_engine.cpp:1540
+#: pcbnew/drc/drc_engine.cpp:1259 pcbnew/drc/drc_engine.cpp:1545
 #, fuzzy, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/drc/drc_engine.cpp:1264
+#: pcbnew/drc/drc_engine.cpp:1269
 msgid "Constraint applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1268 pcbnew/drc/drc_engine.cpp:1546
+#: pcbnew/drc/drc_engine.cpp:1273 pcbnew/drc/drc_engine.cpp:1551
 msgid "Rule applied."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1273
+#: pcbnew/drc/drc_engine.cpp:1278
 msgid "Rule applied; overrides previous constraints."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1281
+#: pcbnew/drc/drc_engine.cpp:1286
 msgid "Membership not satisfied; constraint ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1282 pcbnew/drc/drc_engine.cpp:1551
+#: pcbnew/drc/drc_engine.cpp:1287 pcbnew/drc/drc_engine.cpp:1556
 msgid "Condition not satisfied; rule ignored."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:1342 pcbnew/drc/drc_engine.cpp:1364
+#: pcbnew/drc/drc_engine.cpp:1347 pcbnew/drc/drc_engine.cpp:1369
 #, fuzzy, c-format
 msgid "Local clearance on %s: %s."
 msgstr "Buat lapisan"
 
-#: pcbnew/drc/drc_engine.cpp:1423
+#: pcbnew/drc/drc_engine.cpp:1428
 #, fuzzy, c-format
 msgid "%s zone connection: %s."
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/drc/drc_engine.cpp:1439
+#: pcbnew/drc/drc_engine.cpp:1444
 #, fuzzy, c-format
 msgid "%s pad connection: %s."
 msgstr "Zona %s pada %s"
 
-#: pcbnew/drc/drc_engine.cpp:1444 pcbnew/drc/drc_engine.cpp:1461
-#: pcbnew/drc/drc_engine.cpp:1478 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
+#: pcbnew/drc/drc_engine.cpp:1449 pcbnew/drc/drc_engine.cpp:1466
+#: pcbnew/drc/drc_engine.cpp:1483 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
 msgid "zone"
 msgstr "zona"
 
-#: pcbnew/drc/drc_engine.cpp:1456
+#: pcbnew/drc/drc_engine.cpp:1461
 #, fuzzy, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "Item lainnya"
 
-#: pcbnew/drc/drc_engine.cpp:1473
+#: pcbnew/drc/drc_engine.cpp:1478
 #, fuzzy, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "Memeriksa permasalahan simbol pustaka..."
 
-#: pcbnew/drc/drc_engine.cpp:1506
+#: pcbnew/drc/drc_engine.cpp:1511
 #, fuzzy, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "Memeriksa permasalahan simbol pustaka..."
@@ -39065,7 +39064,7 @@ msgstr "Kaidah"
 msgid "Local override"
 msgstr "Sunting Berkas Lokal..."
 
-#: pcbnew/drc/drc_rule.h:156
+#: pcbnew/drc/drc_rule.h:157
 #, fuzzy, c-format
 msgid "rule '%s'"
 msgstr "Tutup %s"
@@ -39222,7 +39221,7 @@ msgstr "Nama berkas footprint \"%s\" tidak valid."
 msgid "Checking nets for minimum connection width..."
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/drc/drc_test_provider_connection_width.cpp:768
+#: pcbnew/drc/drc_test_provider_connection_width.cpp:774
 #, fuzzy, c-format
 msgid "(%s minimum connection width %s; actual %s)"
 msgstr "Nama berkas footprint \"%s\" tidak valid."
@@ -39320,17 +39319,17 @@ msgstr "Memperbarui Pustaka Footprint"
 msgid "Checking footprints for overlapping courtyards..."
 msgstr "Memperbarui Pustaka Footprint"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:611
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:612
 #, fuzzy, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
 msgstr "Buat lapisan"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:679
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:680
 #, fuzzy, c-format
 msgid "(%s minimum gap %s; actual %s)"
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:686
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:687
 #, fuzzy, c-format
 msgid "(%s maximum gap %s; actual %s)"
 msgstr "Buat lapisan"
@@ -39365,19 +39364,17 @@ msgstr "Memeriksa permasalahan simbol pustaka..."
 msgid "Checking micro-via holes..."
 msgstr "Memeriksa permasalahan simbol pustaka..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:158
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:227
-#: pcbnew/drc/drc_test_provider_track_width.cpp:133
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:162
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:235
 #, fuzzy, c-format
-msgid "(%s min width %s; actual %s)"
+msgid "(%s min hole %s; actual %s)"
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:165
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:234
-#: pcbnew/drc/drc_test_provider_track_width.cpp:140
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:169
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:242
 #, fuzzy, c-format
-msgid "(%s max width %s; actual %s)"
-msgstr "Nama berkas footprint \"%s\" tidak valid."
+msgid "(%s max hole %s; actual %s)"
+msgstr "Buat lapisan"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 #, fuzzy
@@ -39912,26 +39909,26 @@ msgstr ""
 msgid "board setup solder mask min width"
 msgstr "Tampilkan lapisan solder mask"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:575
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:669
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:571
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:665
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:577
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:671
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:573
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:667
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:794
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:790
 msgid "Building solder mask..."
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:802
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:798
 #, fuzzy
 msgid "Checking solder mask to silk clearance..."
 msgstr "Memeriksa permasalahan simbol pustaka..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:807
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:803
 #, fuzzy
 msgid "Checking solder mask web integrity..."
 msgstr "Memeriksa permasalahan simbol pustaka..."
@@ -39970,17 +39967,27 @@ msgstr "Buat lapisan"
 msgid "Checking track widths..."
 msgstr "Memeriksa permasalahan simbol pustaka..."
 
+#: pcbnew/drc/drc_test_provider_track_width.cpp:137
+#, fuzzy, c-format
+msgid "(%s min width %s; actual %s)"
+msgstr "Nama berkas footprint \"%s\" tidak valid."
+
+#: pcbnew/drc/drc_test_provider_track_width.cpp:144
+#, fuzzy, c-format
+msgid "(%s max width %s; actual %s)"
+msgstr "Nama berkas footprint \"%s\" tidak valid."
+
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:74
 #, fuzzy
 msgid "Checking via diameters..."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:118
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:122
 #, fuzzy, c-format
 msgid "(%s min diameter %s; actual %s)"
 msgstr "Nama berkas footprint \"%s\" tidak valid."
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:125
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:129
 #, fuzzy, c-format
 msgid "(%s max diameter %s; actual %s)"
 msgstr "Buat lapisan"
@@ -40814,7 +40821,7 @@ msgstr ""
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:255
 #: pcbnew/generators/pcb_tuning_pattern.cpp:260
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2152
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2154
 msgid "Tuning Pattern"
 msgstr ""
 
@@ -40827,163 +40834,163 @@ msgstr ""
 msgid "Tuning"
 msgstr "Awas"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1392
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1394
 #, fuzzy
 msgid "too long"
 msgstr "Terlalu panjang: "
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1393
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1395
 #, fuzzy
 msgid "too short"
 msgstr "Terlalu pendek: "
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1394
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1396
 msgid "tuned"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1474
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1476
 #, fuzzy
 msgid "Edit Tuning Pattern"
 msgstr "Sunting di Penyunting Teks"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1998
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2000
 #, fuzzy
 msgid "current skew"
 msgstr "Komentar:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2000
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2002
 #, fuzzy
 msgid "current length"
 msgstr "Berkas pemeriksaan aturan elektrikal (ERC)"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2086
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2088
 #, fuzzy
 msgid "Routed Lengths"
 msgstr "Total Panjang"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2092 pcbnew/pcb_track.cpp:1090
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2094 pcbnew/pcb_track.cpp:1090
 #, fuzzy
 msgid "Routed Length"
 msgstr "Total Panjang"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2098 pcbnew/pad.cpp:2480
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2100 pcbnew/pad.cpp:2480
 #: pcbnew/pcb_track.cpp:1095
 #, fuzzy
 msgid "Pad To Die Length"
 msgstr "Total Panjang"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2101 pcbnew/pcb_track.cpp:1098
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2103 pcbnew/pcb_track.cpp:1098
 #, fuzzy
 msgid "Full Length"
 msgstr "Panjang"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2113
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2115
 #, fuzzy, c-format
 msgid "Target Skew: %s"
 msgstr "Berkas pemeriksaan aturan elektrikal (ERC)"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2114
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2136
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2116
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2138
 msgid "(from tuning pattern properties)"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2122
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2124
 #, fuzzy, c-format
 msgid "Skew Constraints: %s"
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2135
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137
 #, fuzzy, c-format
 msgid "Target Length: %s"
 msgstr "Berkas pemeriksaan aturan elektrikal (ERC)"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2144
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2146
 #, fuzzy, c-format
 msgid "Length Constraints: %s"
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2344
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2346
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2378
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2380
 #, fuzzy
 msgid "Tune"
 msgstr "Tutup %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2404
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2420
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2446
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2406
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2422
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2448
 #, fuzzy
 msgid "Select a track to tune first."
 msgstr "Pilih Trek dan Vias di %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2488
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2490
 #, fuzzy
 msgid "Single track"
 msgstr "Memuat..."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2489
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2491
 #, fuzzy
 msgid "Differential pair"
 msgstr "Dimensi"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2490
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2492
 #, fuzzy
 msgid "Diff pair skew"
 msgstr "Dimensi"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2504
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2506
 #, fuzzy
 msgid "Pattern Properties"
 msgstr "Properti Teks"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2519
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2521
 #, fuzzy
 msgid "Tuning Mode"
 msgstr "Posisi X:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2525
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2527
 #, fuzzy
 msgid "Min Amplitude"
 msgstr "Lebar maksimum:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2532
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2534
 #, fuzzy
 msgid "Max Amplitude"
 msgstr "Lebar maksimum:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2539
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2541
 #, fuzzy
 msgid "Initial Side"
 msgstr "Nomor Pin"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2545
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2547
 #, fuzzy
 msgid "Min Spacing"
 msgstr "Pusat horizontal:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2551
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2553
 #, fuzzy
 msgid "Corner Radius %"
 msgstr "Radius sudut:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2573
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2575
 #, fuzzy
 msgid "Target Length"
 msgstr "Berkas pemeriksaan aturan elektrikal (ERC)"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2582
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2584
 #, fuzzy
 msgid "Target Skew"
 msgstr "Terbesar"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2590
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2592
 #, fuzzy
 msgid "Override Custom Rules"
 msgstr "Timpa"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2602
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2604
 #, fuzzy
 msgid "Rounded"
 msgstr "Tidak ditentukan!"
@@ -43920,22 +43927,22 @@ msgstr "Tambahkan Primitif"
 msgid "PCB Target"
 msgstr ""
 
-#: pcbnew/pcb_text.cpp:226
+#: pcbnew/pcb_text.cpp:227
 #, fuzzy
 msgid "PCB Text"
 msgstr "Teks"
 
-#: pcbnew/pcb_text.cpp:235
+#: pcbnew/pcb_text.cpp:236
 #, fuzzy
 msgid "Display"
 msgstr "Opsi Tampilan"
 
-#: pcbnew/pcb_text.cpp:387
+#: pcbnew/pcb_text.cpp:388
 #, fuzzy, c-format
 msgid "Footprint Text '%s' of %s"
 msgstr "Footprint diekspor ke berkas \"%s\""
 
-#: pcbnew/pcb_text.cpp:391
+#: pcbnew/pcb_text.cpp:392
 #, fuzzy, c-format
 msgid "PCB Text '%s' on %s"
 msgstr "Teks '%s'"
@@ -44648,7 +44655,7 @@ msgstr "Lebar maksimum:"
 msgid "Diff Pair Gap: %s"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2746 pcbnew/tools/pcb_control.cpp:1515
+#: pcbnew/router/router_tool.cpp:2746 pcbnew/tools/pcb_control.cpp:1525
 #, fuzzy, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "Buat lapisan"
@@ -47993,11 +48000,11 @@ msgid ""
 "These items could not be pasted.\n"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1026
+#: pcbnew/tools/pcb_control.cpp:1036
 msgid "Invalid clipboard contents"
 msgstr "Konten papan klip tidak valid"
 
-#: pcbnew/tools/pcb_control.cpp:1320
+#: pcbnew/tools/pcb_control.cpp:1330
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -48006,61 +48013,61 @@ msgstr ""
 "Error saat memuat board.\n"
 "%s"
 
-#: pcbnew/tools/pcb_control.cpp:1355
+#: pcbnew/tools/pcb_control.cpp:1365
 #, fuzzy
 msgid "Append Board"
 msgstr "Buka Berkas Papan Sirkuit"
 
-#: pcbnew/tools/pcb_control.cpp:1416
+#: pcbnew/tools/pcb_control.cpp:1426
 #, fuzzy
 msgid "Active Layer"
 msgstr "Buat lapisan"
 
-#: pcbnew/tools/pcb_control.cpp:1417 pcbnew/widgets/appearance_controls.cpp:374
+#: pcbnew/tools/pcb_control.cpp:1427 pcbnew/widgets/appearance_controls.cpp:374
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "Semua Layer"
 
-#: pcbnew/tools/pcb_control.cpp:1429
+#: pcbnew/tools/pcb_control.cpp:1439
 msgid "Object Snapping"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1505
+#: pcbnew/tools/pcb_control.cpp:1515
 #, fuzzy, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: pcbnew/tools/pcb_control.cpp:1546
+#: pcbnew/tools/pcb_control.cpp:1556
 #, fuzzy
 msgid "Resolved clearance"
 msgstr "Tampilkan semua Netclasses"
 
-#: pcbnew/tools/pcb_control.cpp:1556
+#: pcbnew/tools/pcb_control.cpp:1566
 #, fuzzy
 msgid "Actual clearance"
 msgstr "Buat trek dan via"
 
-#: pcbnew/tools/pcb_control.cpp:1599
+#: pcbnew/tools/pcb_control.cpp:1609
 #, fuzzy
 msgid "Resolved hole clearance"
 msgstr "Buat lapisan"
 
-#: pcbnew/tools/pcb_control.cpp:1604
+#: pcbnew/tools/pcb_control.cpp:1614
 #, fuzzy
 msgid "Actual hole clearance"
 msgstr "Buat lapisan"
 
-#: pcbnew/tools/pcb_control.cpp:1637
+#: pcbnew/tools/pcb_control.cpp:1647
 #, fuzzy
 msgid "Resolved edge clearance"
 msgstr "Tampilkan semua Netclasses"
 
-#: pcbnew/tools/pcb_control.cpp:1642
+#: pcbnew/tools/pcb_control.cpp:1652
 #, fuzzy
 msgid "Resolved margin clearance"
 msgstr "Tampilkan semua Netclasses"
 
-#: pcbnew/tools/pcb_control.cpp:1653
+#: pcbnew/tools/pcb_control.cpp:1663
 msgid "Selected Items"
 msgstr "Item yang Dipilih"
 
@@ -49308,6 +49315,10 @@ msgstr "Simbol Skematik"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Buka Penyunting Teks"
+
+#, fuzzy
+#~ msgid "Illegal reference designator value!"
+#~ msgstr "Tetapkan footprint ke simbol yang dipilih"
 
 #, fuzzy
 #~ msgid ""
