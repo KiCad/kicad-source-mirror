@@ -157,8 +157,8 @@ private:
     bool multidragMarkObstacles ( std::vector<MDRAG_LINE>& aCompletedLines );
     bool multidragShove ( std::vector<MDRAG_LINE>& aCompletedLines );
     bool multidragWalkaround ( std::vector<MDRAG_LINE>& aCompletedLines );
-    int findNewLeaderSegment( const LINE& aDraggedRaw, int leaderIndex, const LINE& aPostDrag ) const;
-    int findNewLeaderSegment2( const MDRAG_LINE& aLine ) const;
+    void restoreLeaderSegments( std::vector<MDRAG_LINE>& aCompletedLines );
+    int findNewLeaderSegment( const MDRAG_LINE& aLine ) const;
     bool tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk, const LINE& aLeader );
 
 

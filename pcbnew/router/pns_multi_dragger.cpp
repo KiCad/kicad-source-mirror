@@ -81,19 +81,8 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
         }
     }
 
-    //fprintf( stderr, "mdraGL: %d\n", (int) m_mdragLines.size() );
-
     int n = 0;
 
-  //  bool foundCorner = false;
-//    bool foundMidSegment = false;
-
-    // now, look for the primary line, e.g. the one aP lies on. This trivial
-    // example only supports dragging corners, not bodies of the tracks (yet).
-//    MDRAG_LINE* nearestLine = nullptr;
-  //  int         nearestCornerDist = std::numeric_limits<int>::max();
-//    int         nearestMidSegDist = std::numeric_limits<int>::max();
-    //VECTOR2I    nearestCorner;
     bool anyStrictCornersFound = false;
     bool anyStrictMidSegsFound = false;
 
@@ -109,12 +98,8 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
         l.cornerDistance = std::min( distFirst, distLast );
 
-      //  printf("[%d %d]\n", distFirst, distLast );
-
         if( aPrimitives.FindVertex( origLast ) )
         {
-        //    printf("distlast %d thr %d\n", distLast, thr );
-
             l.cornerIsLast = true;
             l.leaderSegIndex = l.originalLine.SegmentCount() - 1;
             l.cornerDistance = distLast;
@@ -129,8 +114,6 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
         if( aPrimitives.FindVertex( origFirst ) )
         {
-          //  printf("distfirst %d thr %d\n", distFirst, thr );
-
             l.cornerIsLast = false;
             l.leaderSegIndex = 0;
             l.cornerDistance = distFirst;
@@ -176,22 +159,6 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
             anyStrictCornersFound |= l.isCorner;
             anyStrictMidSegsFound |= !l.isCorner;
         }
-    }
-
-    auto iface = ROUTER::GetInstance()->GetInterface();
-
-    printf("Drag Start [any-c %d any-m %d]:\n", anyStrictCornersFound?1:0, anyStrictMidSegsFound?1:0 );
-
-    for( auto& l : m_mdragLines )
-    {
-        printf(" - net %-30s: isCorner %d isStrict %d c-Dist %-10d l-dist %-10d leadIndex %-2d CisLast %d\n", 
-            iface->GetNetName( l.draggedLine.Net() ).c_str().AsChar(), 
-            l.isCorner?1:0,
-            l.isStrict?1:0,
-            l.cornerDistance,
-            l.leaderSegDistance,
-            l.leaderSegIndex,
-            l.cornerIsLast?1:0 );
     }
 
     if( anyStrictCornersFound )
@@ -338,20 +305,17 @@ bool clipToOtherLine( NODE* aNode, const LINE& aRef, LINE& aClipped )
 
         if( l.Collide( &aRef, aNode, &ctx ) )
         {
-            //printf("step %d curL %d collide\n", step, curL );
             didClip = true;
             curL -= step;
             step /= 2;
         } else {
             tightest = sl_tmp;
-            //printf("step %d curL %d non-collide\n", step, curL );
             if ( didClip )
             {
                 curL += step;
                 step /= 2;
-            }
-            else
-            break;
+            } else
+                break;
         }
     }
 
@@ -420,7 +384,7 @@ bool MULTI_DRAGGER::tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk, const 
     return false;
 }
 
-int MULTI_DRAGGER::findNewLeaderSegment2( const MULTI_DRAGGER::MDRAG_LINE& aLine ) const
+int MULTI_DRAGGER::findNewLeaderSegment( const MULTI_DRAGGER::MDRAG_LINE& aLine ) const
 {
     const SEG origLeader = aLine.preDragLine.CSegment( aLine.leaderSegIndex );
     const DIRECTION_45 origLeaderDir( origLeader );
@@ -442,51 +406,31 @@ int MULTI_DRAGGER::findNewLeaderSegment2( const MULTI_DRAGGER::MDRAG_LINE& aLine
     return -1;
 }
 
-
-int MULTI_DRAGGER::findNewLeaderSegment( const LINE& aDraggedRaw, int leaderIndex, const LINE& aPostDrag ) const
+void MULTI_DRAGGER::restoreLeaderSegments( std::vector<MDRAG_LINE>& aCompletedLines )
 {
-    if (leaderIndex < 0)
-        return -1;
-    auto origLeader = aDraggedRaw.CSegment( leaderIndex );
+     m_leaderSegments.clear();
 
-    int bestMatchDist = std::numeric_limits<int>::max();
-    int newLeaderIdx = -1;
-    int n = 0;
-
-    for( auto item : aPostDrag.Links() )
+    for( auto& l : aCompletedLines )
     {
-        if( auto seg = dyn_cast<SEGMENT*>( item ) )
+        if( l.dragOK )
         {
-            DIRECTION_45 origDir( origLeader );
-            DIRECTION_45 newDir( seg->Seg() );
-
-            if( ! ( origDir.Angle(newDir) & (DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_HALF_FULL ) ) )
-                continue;
-
-
-            VECTOR2I va, vb;
-            SEG::ecoord distSq;
-
-            if( seg->Seg().NearestPoints( origLeader, va, vb, distSq ) )
+            if( m_dragMode == DM_CORNER )
             {
-                int dist = std::sqrt( distSq );
-                if( dist < bestMatchDist )
+                m_leaderSegments.push_back(
+                        static_cast<PNS::ITEM*>( l.draggedLine.GetLink( -1 ) ) );
+            }
+            else
+            {
+                int newLeaderIdx = findNewLeaderSegment( l );
+                if( newLeaderIdx >= 0 )
                 {
-                    bestMatchDist = dist;
-                    newLeaderIdx = n;
+                    m_leaderSegments.push_back(
+                        static_cast<PNS::ITEM*>( l.draggedLine.GetLink( newLeaderIdx ) ) );
                 }
             }
-
-
-            
-
         }
-        n++;
     }
-
-    return newLeaderIdx;
 }
-
 
 bool MULTI_DRAGGER::multidragWalkaround( std::vector<MDRAG_LINE>& aCompletedLines )
 {
@@ -575,6 +519,8 @@ bool MULTI_DRAGGER::multidragWalkaround( std::vector<MDRAG_LINE>& aCompletedLine
         return true;
     }
 
+    restoreLeaderSegments( aCompletedLines );
+
     return false;
 }
 
@@ -593,7 +539,7 @@ bool MULTI_DRAGGER::multidragMarkObstacles( std::vector<MDRAG_LINE>& aCompletedL
     // of an efficient undo buffer. We don't change the PCB directly, but a branch of it
     // created below. We can then commit its state (applying the modifications to the host board
     // by calling ROUTING::CommitRouting(m_lastNode) or simply discard it.
-    m_lastNode = m_world->Branch(); 
+    m_lastNode = m_world->Branch();
 
 
     int nclipped = 0;
@@ -604,36 +550,15 @@ bool MULTI_DRAGGER::multidragMarkObstacles( std::vector<MDRAG_LINE>& aCompletedL
             auto l1l = aCompletedLines[l1].draggedLine;
             auto l2l = aCompletedLines[l2].draggedLine;
 
-            printf( "chk-clip %d %d\n", l1, l2 );
-
-                    if( clipToOtherLine( m_lastNode, l1l, l2l ) )
-                    {
-                        aCompletedLines[l2].draggedLine = l2l;
-                        nclipped++;
-                    }
-        }
-    }
-
-    //printf( "lines %d, clipped %d\n", (int) completed.size(), nclipped );
-
-    m_leaderSegments.clear();
-
-    for( auto& l : aCompletedLines )
-    {
-        {
-            m_lastNode->Remove( l.originalLine );
-            m_lastNode->Add( l.draggedLine );
-            m_draggedItems.Add( l.draggedLine );
-            if( m_dragMode == DM_CORNER )
+            if( clipToOtherLine( m_lastNode, l1l, l2l ) )
             {
-                m_leaderSegments.push_back(
-                        static_cast<PNS::ITEM*>( l.draggedLine.GetLink( -1 ) ) );
-            }
-            else
-            {
+                aCompletedLines[l2].draggedLine = l2l;
+                nclipped++;
             }
         }
     }
+
+    restoreLeaderSegments( aCompletedLines );
 
     return true;
 }
@@ -703,28 +628,8 @@ bool MULTI_DRAGGER::multidragShove( std::vector<MDRAG_LINE>& aCompletedLines )
         return false;
     }
 
-    m_leaderSegments.clear();
+    restoreLeaderSegments( aCompletedLines );
 
-    for( auto& l : aCompletedLines )
-    {
-        if( l.dragOK )
-        {
-            if( m_dragMode == DM_CORNER )
-            {
-                m_leaderSegments.push_back(
-                        static_cast<PNS::ITEM*>( l.draggedLine.GetLink( -1 ) ) );
-            }
-            else
-            {
-                int newLeaderIdx = findNewLeaderSegment2( l );
-                if( newLeaderIdx >= 0 )
-                {
-                    m_leaderSegments.push_back(
-                        static_cast<PNS::ITEM*>( l.draggedLine.GetLink( newLeaderIdx ) ) );
-                }
-            }
-        }
-    }
     return true;
 }
 
@@ -746,14 +651,11 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
     {
         MDRAG_LINE* primaryLine = nullptr;
 
-        printf("tryPosture: %d\n", aVariant );
-
         for( auto &l : m_mdragLines )
         {
             l.dragOK = false;
             l.preDragLine = l.originalLine;
                 //PNS_DBG( Dbg(), AddItem, &l.originalLine, GREEN, 300000, "par" );
-        
             if( l.isPrimaryLine )
             {
 
@@ -848,7 +750,6 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                 // reject nulls
                 if( l.preDragLine.SegmentCount() >= 1 )
                 {
-                    //printf("processL sc %d anchor %d\n", l.preDragLine.SegmentCount(), l.cornerIndex );
 
                     //PNS_DBG( Dbg(), AddPoint, l.preDragLine.CPoint( l.cornerIndex ), YELLOW, 600000, wxT("mdrag-sec"));
 
@@ -863,9 +764,6 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                         DIRECTION_45 parallelDir( l.preDragLine.CSegment( -1 ) );
 
                         auto leadAngle = primaryDir.Angle( parallelDir );
-                        fprintf( stderr, "prim-dir %s par-dir %s lead-angle %d\n",
-                                primaryDir.Format().c_str(), parallelDir.Format().c_str(),
-                                (int) leadAngle );
 
                         if( leadAngle == DIRECTION_45::ANG_OBTUSE
                             || leadAngle == DIRECTION_45::ANG_STRAIGHT )
@@ -890,17 +788,14 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                             //PNS_DBG( Dbg(), AddPoint, projected, LIGHTYELLOW, 600000,
                             //       wxT( "l-end" ) );
 
-                            if(!l.isPrimaryLine)
+                            if( !l.isPrimaryLine )
                             {
-                            l.draggedLine = parallelDragged;
-                            completed.push_back( l );
-                            m_draggedItems.Add( parallelDragged );
-
+                                l.draggedLine = parallelDragged;
+                                completed.push_back( l );
+                                m_draggedItems.Add( parallelDragged );
                             }
 
-                                                        l.dragOK = true;
-
-                            // replace the line with the post-drag version
+                            l.dragOK = true;
                         }
                     }
                     else if ( m_dragMode == DM_SEGMENT )
