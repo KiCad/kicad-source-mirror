@@ -399,7 +399,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 
         commit.Push( _( "Repeat layout" ) );
 
-        if( m_areas.m_groupItems )
+        if( m_areas.m_options.m_groupItems )
         {
             // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
             BOARD_COMMIT grpCommit( GetManager(), true );
@@ -790,7 +790,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
     // fixme: handle corner cases where the items belonging to a Rule Area already
     // belong to other groups.
 
-    if( m_areas.m_groupItems )
+    if( m_areas.m_options.m_groupItems )
     {
         // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
         BOARD_COMMIT grpCommit( GetManager(), true );

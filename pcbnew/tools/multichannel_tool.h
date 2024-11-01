@@ -93,7 +93,6 @@ struct RA_SHEET
 struct RULE_AREAS_DATA
 {
     bool                  m_replaceExisting;
-    bool                  m_groupItems;
     RULE_AREA*            m_refRA;
     REPEAT_LAYOUT_OPTIONS m_options;
 

@@ -58,7 +58,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 
     m_sheetsGrid->SetMaxSize( wxSize( -1, 800 ) );
     m_sheetsGrid->Fit();
-    m_cbGroupItems->SetValue( raData->m_groupItems );
+    m_cbGroupItems->SetValue( raData->m_options.m_groupItems );
     m_cbReplaceExisting->SetValue( raData->m_replaceExisting );
 
     Layout();
@@ -78,7 +78,7 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
     }
 
     raData->m_replaceExisting = m_cbReplaceExisting->GetValue();
-    raData->m_groupItems = m_cbGroupItems->GetValue();
+    raData->m_options.m_groupItems = m_cbGroupItems->GetValue();
 
     return true;
 }
