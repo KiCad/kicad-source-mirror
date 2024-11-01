@@ -490,6 +490,32 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
 
             ksymbol->AddDrawItem( shape.release() );
         }
+        else if( type == wxS( "BEZIER" ) )
+        {
+            std::vector<double> points = line.at( 2 );
+            wxString            styleStr = line.at( 3 );
+
+            std::unique_ptr<LIB_SHAPE> shape =
+                    std::make_unique<LIB_SHAPE>( ksymbol, SHAPE_T::BEZIER );
+
+            for( size_t i = 1; i < points.size(); i += 2 )
+            {
+                VECTOR2I pt = ScalePosSym( VECTOR2D( points[i - 1], points[i] ) );
+
+                switch( i )
+                {
+                case 1: shape->SetStart( pt ); break;
+                case 3: shape->SetBezierC1( pt ); break;
+                case 5: shape->SetBezierC2( pt ); break;
+                case 7: shape->SetEnd( pt ); break;
+                }
+            }
+
+            shape->SetUnit( currentUnit );
+            ApplyLineStyle( lineStyles, shape, styleStr );
+
+            ksymbol->AddDrawItem( shape.release() );
+        }
         else if( type == wxS( "POLY" ) )
         {
             std::vector<double> points = line.at( 2 );
