@@ -52,11 +52,34 @@ wxString DIALOG_GET_FOOTPRINT_BY_NAME::GetValue() const
 }
 
 
+static wxString GetFootprintName( const wxString& aOptionCtrlString )
+{
+    return aOptionCtrlString.BeforeFirst( ' ' );
+}
+
+
 void DIALOG_GET_FOOTPRINT_BY_NAME::OnSelectFootprint( wxCommandEvent& aEvent )
 {
-    if( m_choiceFpList->GetSelection() >= 0 )
+    const int selection = m_choiceFpList->GetSelection();
+    if( selection >= 0 )
     {
-        m_SearchTextCtrl->SetValue(
-                m_choiceFpList->GetString( m_choiceFpList->GetSelection() ).BeforeFirst( ' ' ) );
+        m_SearchTextCtrl->SetValue( GetFootprintName( m_choiceFpList->GetString( selection ) ) );
     }
+}
+
+
+void DIALOG_GET_FOOTPRINT_BY_NAME::OnSearchInputChanged( wxCommandEvent& event )
+{
+    // Find the matching footprint in the list if there is one
+    const wxString entry = m_SearchTextCtrl->GetValue().Trim( true ).Trim( false );
+
+    for( unsigned ii = 0; ii < m_choiceFpList->GetCount(); ++ii )
+    {
+        if( GetFootprintName( m_choiceFpList->GetString( ii ) ).IsSameAs( entry, false ) )
+        {
+            m_choiceFpList->SetSelection( ii );
+            return;
+        }
+    }
+    m_choiceFpList->SetSelection( -1 );
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,6 +69,7 @@ DIALOG_GET_FOOTPRINT_BY_NAME_BASE::DIALOG_GET_FOOTPRINT_BY_NAME_BASE( wxWindow* 
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GET_FOOTPRINT_BY_NAME_BASE::onClose ) );
+	m_SearchTextCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BY_NAME_BASE::OnSearchInputChanged ), NULL, this );
 	m_choiceFpList->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BY_NAME_BASE::OnSelectFootprint ), NULL, this );
 }
 
@@ -76,6 +77,7 @@ DIALOG_GET_FOOTPRINT_BY_NAME_BASE::~DIALOG_GET_FOOTPRINT_BY_NAME_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GET_FOOTPRINT_BY_NAME_BASE::onClose ) );
+	m_SearchTextCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BY_NAME_BASE::OnSearchInputChanged ), NULL, this );
 	m_choiceFpList->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BY_NAME_BASE::OnSelectFootprint ), NULL, this );
 
 }

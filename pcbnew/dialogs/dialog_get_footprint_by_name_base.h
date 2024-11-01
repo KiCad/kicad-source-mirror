@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,7 +26,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GET_FOOTPRINT_BY_NAME_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,6 +45,7 @@ class DIALOG_GET_FOOTPRINT_BY_NAME_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnSearchInputChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
 
 

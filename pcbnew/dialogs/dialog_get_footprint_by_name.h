@@ -44,4 +44,6 @@ public:
 private:
     // Called when selecting an item from the item list
     void OnSelectFootprint( wxCommandEvent& aEvent ) override;
+
+    void OnSearchInputChanged( wxCommandEvent& event ) override;
 };
