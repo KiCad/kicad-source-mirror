@@ -93,6 +93,14 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
         }
     }
 
+    if( aOld.EndsWithVia() )
+    {
+        for( auto lnk : aOld.Links() )
+            if( lnk->OfKind( ITEM::VIA_T ) )
+                aOld.Unlink( lnk );
+    }
+
+
     bool  foundPredecessor = false;
     ROOT_LINE_ENTRY *rootEntry = nullptr;
 
@@ -788,13 +796,11 @@ void SHOVE::pruneRootLines( NODE *aRemovedNode )
 {
     PNS_DBG( Dbg(), Message, wxString::Format("prune called" ) );
 
-    NODE *parent = aRemovedNode->GetParent();
+    NODE::ITEM_VECTOR added, removed;
+    aRemovedNode->GetUpdatedItems( removed, added );
 
-    for( const auto item : aRemovedNode->GetOverrides() )
+    for( const auto item : added )
     {
-        //if( parent && parent->GetOverrides().find( item ) != parent->GetOverrides().end() )
-          //  continue;
-            
             if( item->OfKind( ITEM::LINKED_ITEM_MASK_T ) )
             {
                 auto litem = static_cast<const LINKED_ITEM*>( item );
@@ -1001,6 +1007,8 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     PNS_DBG( Dbg(), AddPoint, aVia->Pos(), LIGHTGREEN, 100000, "via-pre" );
     PNS_DBG( Dbg(), AddPoint, pushedVia->Pos(), LIGHTRED, 100000, "via-post" );
 
+    VIA v2( *pushedVia );
+
     replaceItems( aVia, std::move( pushedVia ) );
 
     int n = 0;
@@ -1013,6 +1021,9 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
 
         if( lp.second.SegmentCount() )
         {
+            lp.second.ClearLinks();
+            lp.second.AppendVia( v2 );
+            
             replaceLine( lp.first, lp.second );
 
             unwindLineStack( &lp.second );
@@ -1484,10 +1495,13 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     ITEM* ni = nearest->m_item;
 
     UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
-    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "NI: %s (%s)" ),
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "NI: %s (%s) %p %d" ),
+                                               
                                                ni->Format(),
                                                ni->Parent() ? ni->Parent()->GetItemDescription( &up, false )
-                                                            : wxString( wxT( "null" ) ) ) );
+                                                            : wxString( wxT( "null" ) ),
+                                               ni,
+                                               ni->OwningNode()->Depth() ) );
 
     unwindLineStack( ni );
 
@@ -1533,7 +1547,13 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
             if( currentLine.EndsWithVia() && currentLine.Via().Collide( (SEGMENT*) ni, m_currentNode ) )
             {
-                st = onCollidingVia( &revLine, &currentLine.Via(), *nearest, revLine.Rank() + 1 );
+                VIA_HANDLE vh;
+                vh.layers = currentLine.Via().Layers();
+                vh.net =  currentLine.Via().Net();
+                vh.pos =  currentLine.Via().Pos();
+                vh.valid = true;
+                auto rvia = findViaByHandle( m_currentNode, vh );
+                st = onCollidingVia( &revLine, rvia, *nearest, revLine.Rank() + 1 );
             }
             else 
                 st = onCollidingLine( revLine, currentLine, revLine.Rank() + 1 );
@@ -2096,9 +2116,10 @@ void SHOVE::removeHeads()
         else if( headEntry.origHead )
         {
             wxString msg = wxString::Format(
-                    "remove orighead [net %-20s]: sc %d lc %d\n",
+                    "remove orighead [net %-20s]: sc %d lc %d node %p depth %d\n",
                     iface->GetNetName( headEntry.origHead->Net() ).c_str().AsChar(),
-                    headEntry.origHead->SegmentCount(), headEntry.origHead->LinkCount() );
+                    headEntry.origHead->SegmentCount(), headEntry.origHead->LinkCount(),
+                    headEntry.origHead->OwningNode(), m_currentNode->Depth() );
             PNS_DBG( Dbg(), Message, msg );
 
             m_currentNode->Remove( *headEntry.origHead );
@@ -2135,6 +2156,7 @@ void SHOVE::reconstructHeads( bool aShoveFailed )
                         "head %d/%d [net %-20s]: root %p, lc-root %d, lc-new %d\n", i, (int) m_headLines.size(),
                         iface->GetNetName( rootEntry->rootLine->Net() ).c_str().AsChar(), rootEntry->rootLine, rootEntry->rootLine->LinkCount(), headEntry.newHead->LinkCount() );
                 PNS_DBG( Dbg(), AddItem, rootEntry->rootLine, CYAN, 0, msg );
+                PNS_DBG( Dbg(), Message, msg );
 
             }
             else
@@ -2274,7 +2296,10 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             VIA* viaToDrag = findViaByHandle( m_currentNode, *headLineEntry.theVia );
 
             if( !viaToDrag )
-                return SH_INCOMPLETE;
+            {
+                st = SH_INCOMPLETE;
+                break;
+            }
 
             auto viaRoot = touchRootLine( viaToDrag );
             viaRoot->oldVia = viaToDrag;
@@ -2283,11 +2308,12 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             st = pushOrShoveVia( viaToDrag, ( headLineEntry.viaNewPos - viaToDrag->Pos() ), 0 );
 
             if( st != SH_OK )
-                return st;
+                break;
         }
         else
         {
             // Create a new NODE to store this version of the world
+            assert( headLineEntry.origHead->LinkCount() == 0 );
             m_currentNode->Add( *headLineEntry.origHead );
 
             //nodeStats( Dbg(), m_currentNode, "add-head" );
@@ -2305,7 +2331,10 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
             // empty head? nothing to shove...
             if( !head.SegmentCount() && !head.EndsWithVia() )
-                return SH_INCOMPLETE;
+            {
+                st = SH_INCOMPLETE;
+                break;
+            }
 
             currentHeadId++;
 
@@ -2353,11 +2382,8 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
             if( !pushLineStack( head ) )
             {
-                pruneRootLines( m_currentNode );
-                delete m_currentNode;
-                m_currentNode = parent;
-
-                return SH_INCOMPLETE;
+                st = SH_INCOMPLETE;
+                break;
             }
         }
 
