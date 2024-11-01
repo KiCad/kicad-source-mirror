@@ -2452,7 +2452,7 @@ std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<G
     if( !aN1 || !aN2 )
         return nullptr;
 
-    assert((aN1 != aN2) && "Creepage: a connection connects a node to itself");
+    wxASSERT_MSG( ( aN1 != aN2 ), "Creepage: a connection connects a node to itself" );
 
     std::shared_ptr<GraphConnection> gc = std::make_shared<GraphConnection>( aN1, aN2, aPc );
     m_connections.push_back( gc );

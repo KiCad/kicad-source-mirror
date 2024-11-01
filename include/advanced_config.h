@@ -125,12 +125,12 @@ public:
     double m_ExtraClearance;
 
     /**
-     * Enable the DRC creepage check
+     * Enable the minimum slot width check for creepage
      *
-     * Setting name: "EnableCreepageDRC"
+     * Setting name: "EnableCreepageSlot"
      * Default value: false
      */
-    bool m_EnableCreepageDRC;
+    bool m_EnableCreepageSlot;
 
     /**
      * Epsilon for DRC tests.

@@ -77,7 +77,7 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
     ctrlSize.x = KIUI::GetTextSize( wxT( "XXX" ), m_minResolvedSpokeCountCtrl ).x;
     m_minResolvedSpokeCountCtrl->SetSize( ctrlSize );
 
-     if( !ADVANCED_CFG::GetCfg().m_EnableCreepageDRC )
+    if( !ADVANCED_CFG::GetCfg().m_EnableCreepageSlot )
     {
         m_minGrooveWidthCtrl->Show( false );
         m_minGrooveWidthUnits->Show( false );

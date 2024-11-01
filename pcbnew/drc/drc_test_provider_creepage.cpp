@@ -73,11 +73,6 @@ private:
 
 bool DRC_TEST_PROVIDER_CREEPAGE::Run()
 {
-    if( !ADVANCED_CFG::GetCfg().m_EnableCreepageDRC )
-    {
-        return true;
-    }
-
     m_board = m_drcEngine->GetBoard();
 
     //int errorMax = m_board->GetDesignSettings().m_MaxError;
@@ -343,7 +338,17 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
     const DRAWINGS drawings = m_board->Drawings();
     CreepageGraph  graph( *m_board );
-    graph.m_minGrooveWidth = m_board->GetDesignSettings().m_MinGrooveWidth;
+
+
+    if( ADVANCED_CFG::GetCfg().m_EnableCreepageSlot )
+    {
+        graph.m_minGrooveWidth = m_board->GetDesignSettings().m_MinGrooveWidth;
+    }
+    else
+    {
+        graph.m_minGrooveWidth = 0;
+    }
+
     graph.m_boardOutline = &outline;
 
     this->CollectBoardEdges( graph.m_boardEdge );
