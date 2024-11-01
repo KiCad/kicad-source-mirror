@@ -693,7 +693,14 @@ void GRID_TRICKS::paste_clipboard()
 
             wxTheClipboard->GetData( data );
 
-            paste_text( data.GetText() );
+            wxString text = data.GetText();
+
+#ifdef __WXMAC__
+            // Some editors use windows linefeeds (\r\n), which wx re-writes to \n\n
+            text.Replace( "\n\n", "\n" );
+#endif
+
+            paste_text( text );
         }
 
         wxTheClipboard->Close();
