@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,8 @@ wxString PCB_TEXT::GetShownText( bool aAllowExtraText, int aDepth ) const
                     return true;
                 }
 
-                if( board->ResolveTextVar( token, aDepth + 1 ) )
+                // board can be null in some cases when saving a footprint in FP editor
+                if( board && board->ResolveTextVar( token, aDepth + 1 ) )
                     return true;
 
                 return false;
