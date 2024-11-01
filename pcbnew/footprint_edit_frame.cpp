@@ -542,7 +542,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
                 wxString::Format( _( "Editing %s from board.  Saving will update the board only." ),
                                   aFootprint->GetReference() );
         const wxString openLibLink =
-                wxString::Format( _( "Open in library '%s'" ), UnescapeString( libName ) );
+                wxString::Format( _( "Open in library %s" ), UnescapeString( libName ) );
 
         const auto openLibraryCopy = [this, aFootprint]( wxHyperlinkEvent& aEvent )
         {
@@ -566,7 +566,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     else if( !libName.empty()
              && !PROJECT_PCB::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable( libName ) )
     {
-        wxString msg = wxString::Format( _( "Editing footprint from read-only library '%s'." ),
+        wxString msg = wxString::Format( _( "Editing footprint from read-only library %s." ),
                                          UnescapeString( libName ) );
 
         if( WX_INFOBAR* infobar = GetInfoBar() )
