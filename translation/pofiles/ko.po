@@ -33,16 +33,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-09-14 01:09+0000\n"
+"PO-Revision-Date: 2024-11-01 23:26+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8.2-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -2868,11 +2868,13 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"KiCad가 다시 시작될 때까지 이 대화 상자를 다시 표시하지 마십시오. 이 대화 "
+"상자는 Pcbnew 환경설정에서 다시 활성화할 수 있습니다."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "선택 항목에 %d개의 잠긴 항목이 있음."
+msgstr "선택 항목에 %lu 잠긴 항목이 있음."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6824,14 +6826,14 @@ msgid "Could not create destination directory: %s"
 msgstr "디렉토리 '%s'를 만들 수 없음"
 
 #: common/gestfich.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "'%s'에 연결할 수 없음 "
+msgstr "파일을 복사할 수 없음: %s에서 %s로"
 
 #: common/gestfich.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "파일을 읽을 수 없음 "
+msgstr "파일을 읽을 수 없음: %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -7381,7 +7383,7 @@ msgstr "내보내지 않기"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr ""
+msgstr "PCB: 드릴 데이터 내보내기"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #, fuzzy
@@ -7405,7 +7407,7 @@ msgstr "모듈 리포트 (&M)"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB: 거버 내보내기"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #, fuzzy
@@ -7434,7 +7436,7 @@ msgstr "배치"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "PCB: 위치 데이터 내보내기"
 
 #: common/jobs/job_export_pcb_svg.cpp:53
 #, fuzzy
@@ -7508,11 +7510,11 @@ msgstr "회로도 편집기"
 
 #: common/jobs/job_pcb_drc.cpp:58
 msgid "Perform PCB DRC"
-msgstr ""
+msgstr "PCB DRC 실행"
 
 #: common/jobs/job_pcb_drc.cpp:62
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "PCB: DRC 실행"
 
 #: common/jobs/job_sch_erc.cpp:54
 #, fuzzy
@@ -16016,7 +16018,7 @@ msgstr "핀과 전기 유형을 표시 (&e)"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:45
 msgid "Show pin &alternate mode indicator icons"
-msgstr ""
+msgstr "핀 대체 모드 표시 아이콘 보기(&a)"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:36
 msgid "&Default line width:"
@@ -16053,7 +16055,7 @@ msgstr "일반 설정"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:150
 msgid "Keep pins attached when dragging edges"
-msgstr ""
+msgstr "가장자리를 드래그할 때 핀을 부착된 상태로 유지"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
 #, c-format
@@ -16164,9 +16166,9 @@ msgid "Global field name templates:"
 msgstr "전역 필드 이름 템플릿:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "항목 뒤에 공백이 있습니다."
+msgstr "필드 이름 “%s”에 후행 공백 또는 선행 공백이 포함되어 있습니다."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:213
 msgid ""
@@ -16174,6 +16176,9 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"이로 인해 필드 이름이 중복된 것처럼 보이지만 실제로는 공백 문자만 다른 "
+"고유한 이름이 될 수 있습니다.  공백 문자를 제거해도 기존 심볼 필드 이름에는 "
+"영향을 미치지 않습니다."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:219
 #, fuzzy
@@ -16218,9 +16223,8 @@ msgstr "'%s' 파일은 새 루트 시트 파일로 덮어쓰므로 복사할 수
 
 #: eeschema/eeschema_jobs_handler.cpp:168
 #: eeschema/eeschema_jobs_handler.cpp:176
-#, fuzzy
 msgid "Loading schematic\n"
-msgstr "회로도 불러오는 중"
+msgstr "회로도 로딩\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:182
 #, fuzzy
@@ -16924,7 +16928,7 @@ msgstr ""
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr ""
+msgstr "이 회로도에는 선행 또는 후행 공백 필드 이름이 있는 심볼이 포함되어 있습니다."
 
 #: eeschema/files-io.cpp:609
 msgid "Schematic is read only."
@@ -17376,7 +17380,7 @@ msgstr "심볼을 새 라이브러리로.."
 
 #: eeschema/menubar.cpp:198 pcbnew/menubar_pcb_editor.cpp:236
 msgid "Panels"
-msgstr ""
+msgstr "패널"
 
 #: eeschema/menubar.cpp:367
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:177
@@ -21131,9 +21135,9 @@ msgid ""
 msgstr "회로도에서 %s 심볼을 편집합니다.  저장하면 회로도만을 업데이트합니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:888
-#, fuzzy, c-format
+#, c-format
 msgid "Open symbol from library %s"
-msgstr "심볼 라이브러리 업데이트"
+msgstr "라이브러리 %s에서 심볼 열기"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:901
 #, fuzzy, c-format
@@ -21153,14 +21157,14 @@ msgid "Manage symbol libraries"
 msgstr "심볼 라이브러리 관리"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:928
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
-msgstr "실볼 %s는 파생된 기호입니다.  심볼 그래픽은 편집할 수 없습니다."
+msgstr "실볼 %s는 파생된 기호입니다. 심볼 그래픽은 편집할 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:957
-#, fuzzy
 msgid "Library is read-only.  Changes cannot be saved to this library."
-msgstr "하나의 라이브러리 파일에 풋프린트 압축 또는 추가"
+msgstr "라이브러리는 읽기 전용입니다.  이 라이브러리에는 변경 사항을 저장할 수 "
+"없습니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:959
 #, fuzzy
@@ -21168,14 +21172,13 @@ msgid "Create an editable copy"
 msgstr "새 디렉토리 만들기"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "현재 심볼의 복사본을 다른 라이브러리에 저장함"
+msgstr "심볼 또는 전체 라이브러리(%s)의 편집 가능한 복사본을 만들시겠습니까?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:969
-#, fuzzy
 msgid "Select type of item to save"
-msgstr "제거할 레이어 선택:"
+msgstr "저장할 항목 유형 선택"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:972
 #, fuzzy
@@ -21315,40 +21318,43 @@ msgid "A library must be specified."
 msgstr "라이브러리를 지정해야 합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:979
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
-msgstr "하나의 라이브러리 파일에 풋프린트 압축 또는 추가"
+msgstr "라이브러리 '%s'는 읽기 전용입니다. '%s' 심볼을 저장할 다른 라이브러리를 "
+"선택하세요."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
-msgstr ""
+msgstr "심볼 '%s'는 이 심볼의 하위에 있는 다른 심볼 '%s'를 대체할 수 없음"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1004
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
-msgstr ""
+msgstr "심볼 '%s'는 이 심볼의 자손인 다른 심볼 '%s'를 대체할 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
-msgstr "심볼 '%s'은(는) 이미 라이브러리 '%s'에 존재합니다."
+msgstr "심볼 '%s'가 라이브러리 '%s'에 이미 있습니다.이 심볼을 덮어쓰시겠습니까?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "심볼 '%s'은(는) 이미 라이브러리 '%s'에 존재합니다"
+msgstr "'%s'의 계승 체인에 있는 다음 심볼이 라이브러리 '%s'에 이미 존재합니다:\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1039
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
+"\n"
+"모든 심볼을 덮어쓰거나 새 심볼의 이름을 바꾸시겠습니까?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
 #, fuzzy
@@ -21835,9 +21841,8 @@ msgid "Properties..."
 msgstr "속성..."
 
 #: eeschema/tools/ee_actions.cpp:179
-#, fuzzy
 msgid "Edit properies of design block"
-msgstr "디자인 블록의 이름 입력:"
+msgstr "디자인 블록의 속성 편집"
 
 #: eeschema/tools/ee_actions.cpp:189
 msgid "Save Library As..."
@@ -22100,9 +22105,8 @@ msgid "Copy sheet into project and draw on current sheet"
 msgstr "프로젝트에 시트를 복사하고 현재 시트에 그리기"
 
 #: eeschema/tools/ee_actions.cpp:528
-#, fuzzy
 msgid "Draw Sheet from Design Block"
-msgstr "디자인 블록으로 시트 저장..."
+msgstr "디자인 블록에서 시트 그리기"
 
 #: eeschema/tools/ee_actions.cpp:529
 #, fuzzy
@@ -22758,7 +22762,7 @@ msgstr "핀 이름 표시"
 
 #: eeschema/tools/ee_actions.cpp:1238
 msgid "Show indicator icons for pins with alternate modes"
-msgstr ""
+msgstr "대체 모드가 있는 핀의 표시 아이콘 보기"
 
 #: eeschema/tools/ee_actions.cpp:1243 eeschema/tools/ee_actions.cpp:1252
 #: eeschema/tools/ee_actions.cpp:1261 eeschema/tools/ee_actions.cpp:1271
@@ -22805,9 +22809,8 @@ msgid "Previous Symbol Unit"
 msgstr "심볼 단위"
 
 #: eeschema/tools/ee_actions.cpp:1292
-#, fuzzy
 msgid "Open the previous unit of the symbol"
-msgstr "심볼의 모든 유닛을 순차적으로 배치합니다."
+msgstr "심볼의 이전 유닛 열기"
 
 #: eeschema/tools/ee_actions.cpp:1298
 #, fuzzy
@@ -22815,9 +22818,8 @@ msgid "Next Symbol Unit"
 msgstr "심볼 단위"
 
 #: eeschema/tools/ee_actions.cpp:1299
-#, fuzzy
 msgid "Open the next unit of the symbol"
-msgstr "심볼에서 추가 유닛을 삭제 하겠습니까?"
+msgstr "심볼의 다음 유닛 열기"
 
 #: eeschema/tools/ee_actions.cpp:1306 pcbnew/tools/pcb_actions.cpp:1312
 msgid "Scripting Console"
@@ -25171,7 +25173,7 @@ msgstr "버전 관리에 관계없이 풋프린트 라이브러리를 강제로 
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr ""
+msgstr "작업 세트"
 
 #: kicad/cli/command_jobset_run.cpp:45
 #, fuzzy
@@ -25182,7 +25184,7 @@ msgstr "파일 이름 바꾸기"
 msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
-msgstr ""
+msgstr "작업의 첫 번째 실패 시 순차적으로 실행되는 작업 처리를 중지함"
 
 #: kicad/cli/command_jobset_run.cpp:53
 #, fuzzy
@@ -25193,7 +25195,7 @@ msgstr "포함할 파일을 선택하세요"
 msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
-msgstr ""
+msgstr "생성할 작업 세트 파일 출력, 작업 세트에 정의된 모든 출력은 비워둠"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -26028,9 +26030,8 @@ msgid "Update Available"
 msgstr "사용 가능한 업데이트"
 
 #: kicad/dialogs/panel_jobs.cpp:57
-#, fuzzy
 msgid "Folder"
-msgstr "폴더:"
+msgstr "폴더"
 
 #: kicad/dialogs/panel_jobs.cpp:59
 #, fuzzy
@@ -26038,9 +26039,9 @@ msgid "Archive"
 msgstr "압축 풀기 (&U)"
 
 #: kicad/dialogs/panel_jobs.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s Output Options"
-msgstr "Postscript 옵션"
+msgstr "%s 출력 옵션"
 
 #: kicad/dialogs/panel_jobs.cpp:112
 #, fuzzy
@@ -26088,9 +26089,8 @@ msgid "Add New Output"
 msgstr "영역 컷아웃 추가"
 
 #: kicad/dialogs/panel_jobs.cpp:540
-#, fuzzy
 msgid "Select output type:"
-msgstr "출력 경로 지정"
+msgstr "출력 유형 선택:"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:145
 msgid "Edit the project schematic"
@@ -27239,9 +27239,8 @@ msgid "Clone Project from Repository..."
 msgstr "저장소에서 프로젝트 복제..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "프로젝트 파일 저장 (&P)"
+msgstr "새 작업 세트 파일..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -35331,9 +35330,8 @@ msgid "Non Copper Zone Properties"
 msgstr "구리가 아닌 영역 속성"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
-#, fuzzy
 msgid "Outset:"
-msgstr "외부"
+msgstr "시작:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -35343,15 +35341,15 @@ msgstr ".1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr ""
+msgstr "그리드 배수로 반올림(가능한 경우)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "이는 직사각형 시작에만 가능합니다."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
-msgstr ""
+msgstr "둥근 모서리(가능한 경우)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
 #, fuzzy
@@ -35360,12 +35358,11 @@ msgstr "그리드 크기:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr ""
+msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
-#, fuzzy
 msgid "Copy item layers"
-msgstr "구리 레이어:"
+msgstr "항목 레이어 복사"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:70
 #, fuzzy
@@ -35377,7 +35374,7 @@ msgstr "첫 번째 개체의 선 너비 복사"
 msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
-msgstr ""
+msgstr "패드와 같은 항목에는 이 기능을 사용할 수 없으며 여전히 아래 값을 사용합니다."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
 #, fuzzy
@@ -35504,7 +35501,7 @@ msgstr "플롯 모드:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "상면/내면/하면"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
 #, fuzzy
@@ -36649,9 +36646,8 @@ msgid "Convert to Rule Area"
 msgstr "규칙 영역으로 변환"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:277
-#, fuzzy
 msgid "Not found on board: "
-msgstr "PCB 에지가 없습니다. 보드 크기를 알 수 없습니다."
+msgstr "보드에서 찾을 수 없음: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:436
 msgid "No layers selected."
@@ -36753,9 +36749,8 @@ msgstr "솔더 페이스트"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:269
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
-#, fuzzy
 msgid "Expansion:"
-msgstr "제외"
+msgstr "확장:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:274
 #, fuzzy
@@ -36841,9 +36836,8 @@ msgid "Parent footprint description"
 msgstr "상위 풋프린트 설명"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
-#, fuzzy
 msgid "Update thickness according to text size"
-msgstr "텍스트 크기에 따라 두께 업데이트 "
+msgstr "텍스트 크기에 따라 두께 업데이트"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -37237,13 +37231,14 @@ msgstr "체크할 경우, 패드를 나머지 풋프린트와 관련하여 움�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 msgid "Do not prompt for lock overrides for this session"
-msgstr ""
+msgstr "이 세션에 대한 잠금 덮어쓰기 메시지를 표시하지 않음"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
-msgstr ""
+msgstr "이 옵션을 선택하면 잠긴 항목을 편집하려고 할 때 메시지가 표시되지 않습니다.  "
+"이 설정은 KiCad를 재시작하면 초기화됩니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
@@ -37284,9 +37279,8 @@ msgid "When routing tracks"
 msgstr "배선 생성 시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
-#, fuzzy
 msgid "Snap to tracks and vias:"
-msgstr "배선 및 비아 생성"
+msgstr "트랙과 비아에 맞춤:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:321
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
@@ -37638,9 +37632,8 @@ msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr "풋프린트 부품자리가 해당 영역과 겹칠 때 DRC 오류를 발생시킵니다"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:20
-#, fuzzy
 msgid "Place items from sheet:"
-msgstr "시트로 배치"
+msgstr "시트에 항목을 배치:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:29
 #, fuzzy
@@ -40224,9 +40217,8 @@ msgid "Track width"
 msgstr "배선 두께"
 
 #: pcbnew/drc/drc_item.cpp:126
-#, fuzzy
 msgid "Track angle"
-msgstr "호각:"
+msgstr "트랙 각도"
 
 #: pcbnew/drc/drc_item.cpp:130
 msgid "Annular width"
@@ -41679,9 +41671,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory '%s'."
-msgstr "'장치' 디렉토리를 만들지 못함."
+msgstr "디렉터리 '%s'를 만들지 못했습니다."
 
 #: pcbnew/footprint.cpp:1201
 msgid "Other"
@@ -41853,14 +41845,13 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "%s을(를) 기판에서 수정 중입니다.  저장하면 기판만을 업데이트합니다."
 
 #: pcbnew/footprint_edit_frame.cpp:557
-#, fuzzy, c-format
+#, c-format
 msgid "Editing footprint from read-only library '%s'."
-msgstr ""
-"풋프린트 %s을(를) '%s' 라이브러리에서 불러오는 중에 오류가 발생하였습니다."
+msgstr "읽기 전용 라이브러리 '%s'에서 풋프린트를 편집하고 있습니다."
 
 #: pcbnew/footprint_edit_frame.cpp:562
 msgid "Save as editable copy"
-msgstr ""
+msgstr "편집 가능한 복사본으로 저장"
 
 #: pcbnew/footprint_edit_frame.cpp:975
 #, c-format
@@ -42608,29 +42599,29 @@ msgid "Added %s (footprint '%s')."
 msgstr "%s이(가) 추가되었습니다 (풋프린트 '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class to %s."
-msgstr "값 %s을(를) %s에서 %s(으)로 변경합니다."
+msgstr "%s 컴포넌트 클래스를 %s로 변경합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s component class (currently %s)."
-msgstr "현재 라이브러리의 컴포넌트 삭제"
+msgstr "%s 컴포넌트 클래스(현재 %s)를 제거합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class from %s to %s."
-msgstr "%s 핀 %s 네트 라벨을 '%s'에서 '%s'(으)로 변경합니다."
+msgstr "%s 컴포넌트 클래스를 %s에서 %s로 변경합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class to %s."
-msgstr "값 %s을(를) %s에서 %s(으)로 변경하였습니다."
+msgstr "%s 컴포넌트 클래스를 %s로 변경했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, c-format
 msgid "Removed %s component class (was %s)."
-msgstr ""
+msgstr "%s 컴포넌트 클래스를 제거함(이전에는 %s였음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:268
 #, fuzzy, c-format
@@ -45175,9 +45166,8 @@ msgstr ""
 "영역 채우기는 최선의 노력으로 변환됩니다."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:685
-#, fuzzy
 msgid "Failed to add component data"
-msgstr "이미지 데이터 읽기에 실패함."
+msgstr "컴포넌트 데이터 추가 실패"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
 #, fuzzy
@@ -45310,9 +45300,8 @@ msgid "Pad Primitives"
 msgstr "패드 기본값"
 
 #: pcbnew/pcb_shape.cpp:1142 pcbnew/pcb_track.cpp:2000
-#, fuzzy
 msgid "Technical Layers"
-msgstr "기술 레이어:"
+msgstr "기술적 계층"
 
 #: pcbnew/pcb_shape.cpp:1153 pcbnew/pcb_track.cpp:2011
 #, fuzzy
@@ -45520,9 +45509,8 @@ msgid "Loading board\n"
 msgstr "보드 로드 중\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:279
-#, fuzzy
 msgid "Failed to load board\n"
-msgstr "단어를 읽지 못했습니다."
+msgstr "보드 로드 실패\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:358
 #, c-format
@@ -45560,9 +45548,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "'%s'로 플롯 실패.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:970
-#, fuzzy
 msgid "Successfully created genCAD file\n"
-msgstr "성공적으로 svg 파일을 생성함"
+msgstr "성공적으로 genCAD 파일을 생성함\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1092
 msgid "Failed to create output directory\n"
@@ -46930,9 +46917,8 @@ msgid "Some of the track segments could not be filleted."
 msgstr "일부 배선 세그먼트를 모깍기 할 수 없습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1242
-#, fuzzy
 msgid "Arc radius:"
-msgstr "호, 반지름 %s"
+msgstr "원호 반경:"
 
 #: pcbnew/tools/edit_tool.cpp:1247
 #, fuzzy
@@ -46940,10 +46926,9 @@ msgid "Add slots in acute corners"
 msgstr "영역 모서리 추가"
 
 #: pcbnew/tools/edit_tool.cpp:1249
-#, fuzzy
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
-msgstr "일부 도그본 모서리가 너무 좁아서 지정된 반경의 커터에 맞지 않습니다."
+msgstr "지정된 반경의 커터에 접근할 수 있도록 예각 모서리에 슬롯을 추가함"
 
 #: pcbnew/tools/edit_tool.cpp:1253
 #, fuzzy
@@ -47143,11 +47128,11 @@ msgstr "일부 도그본 모서리가 너무 좁아서 지정된 반경의 커�
 
 #: pcbnew/tools/item_modification_routine.cpp:290
 msgid " Consider enabling the 'Add Slots' option."
-msgstr ""
+msgstr " '슬롯 추가' 옵션을 활성화하는 것이 좋습니다."
 
 #: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Slots were added."
-msgstr ""
+msgstr " 슬롯이 추가됨."
 
 #: pcbnew/tools/item_modification_routine.cpp:383
 #: pcbnew/tools/pcb_actions.cpp:639
@@ -47199,9 +47184,8 @@ msgid "Some of the polygons could not be intersected."
 msgstr "일부 다각형은 교차할 수 없습니다."
 
 #: pcbnew/tools/item_modification_routine.cpp:666
-#, fuzzy
 msgid "Outset items."
-msgstr "기타 항목"
+msgstr "시작 항목."
 
 #: pcbnew/tools/item_modification_routine.cpp:673
 #, fuzzy
@@ -48043,9 +48027,8 @@ msgid "Generate an IPC-2581 file"
 msgstr "IPC-2581 파일 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:1050
-#, fuzzy
 msgid "ODB++ Output File..."
-msgstr "BOM 출력 파일"
+msgstr "ODB++ 출력 파일..."
 
 #: pcbnew/tools/pcb_actions.cpp:1051
 #, fuzzy
@@ -48691,14 +48674,12 @@ msgid "Remove corner"
 msgstr "코너 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:1979
-#, fuzzy
 msgid "Chamfer Corner"
-msgstr "모따기 모서리:"
+msgstr "모서리 모따기"
 
 #: pcbnew/tools/pcb_actions.cpp:1980
-#, fuzzy
 msgid "Chamfer corner"
-msgstr "모따기 모서리:"
+msgstr "모서리 모따기"
 
 #: pcbnew/tools/pcb_actions.cpp:1986
 msgid "Keep Arc Center, Adjust Radius"
@@ -49215,7 +49196,7 @@ msgstr "세그먼트 분리"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2737
 msgid "Split Arc"
-msgstr ""
+msgstr "호 분할"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2814
 msgid "Remove Zone Corner"
