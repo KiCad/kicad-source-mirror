@@ -134,6 +134,14 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
+    if( sheetList.empty() )
+    {
+        if( aReporter )
+            aReporter->Report( _( "No sheets to plot." ), RPT_SEVERITY_ERROR );
+
+        return;
+    }
+
     wxCHECK( m_schematic, /* void */ );
 
     // Allocate the plotter and set the job level parameter

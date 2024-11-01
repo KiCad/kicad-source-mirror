@@ -1110,7 +1110,9 @@ int PDF_PLOTTER::emitOutline()
 
 bool PDF_PLOTTER::EndPlot()
 {
-    wxASSERT( m_outputFile );
+    // We can end up here if there was nothing to plot
+    if( !m_outputFile )
+        return false;
 
     // Close the current page (often the only one)
     ClosePage();
