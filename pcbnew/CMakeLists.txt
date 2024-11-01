@@ -88,6 +88,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_gendrill_base.cpp
     dialogs/dialog_generators.cpp
     dialogs/dialog_generators_base.cpp
+    dialogs/dialog_get_footprint_by_name.cpp
     dialogs/dialog_get_footprint_by_name_base.cpp
     dialogs/dialog_global_deletion.cpp
     dialogs/dialog_global_deletion_base.cpp

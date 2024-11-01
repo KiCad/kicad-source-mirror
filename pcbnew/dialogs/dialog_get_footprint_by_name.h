@@ -22,12 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_get_footprint_by_name.h
- */
+#pragma once
 
-#ifndef DIALOG_GET_FOOTPRINT_BY_NAME_H
-#define DIALOG_GET_FOOTPRINT_BY_NAME_H
 
 #include <dialog_get_footprint_by_name_base.h>
 #include <pcb_base_frame.h>
@@ -37,41 +33,15 @@
  * One can enter any reference or select it in the list of fp references
  * Get a footprint ref from user and return a pointer to the corresponding footprint
  */
-class DIALOG_GET_FOOTPRINT_BY_NAME: public DIALOG_GET_FOOTPRINT_BY_NAME_BASE
+class DIALOG_GET_FOOTPRINT_BY_NAME : public DIALOG_GET_FOOTPRINT_BY_NAME_BASE
 {
 public:
-    DIALOG_GET_FOOTPRINT_BY_NAME( PCB_BASE_FRAME* aParent, wxArrayString& aFpList ) :
-        DIALOG_GET_FOOTPRINT_BY_NAME_BASE( aParent )
-    {
-        m_choiceFpList->Append( aFpList );
-
-        m_multipleHint->SetFont( KIUI::GetInfoFont( this ).Italic() );
-
-        // Hide help string until someone implements successive placement (#2227)
-        m_multipleHint->Show( false );
-
-        SetInitialFocus( m_SearchTextCtrl );
-
-        SetupStandardButtons();
-
-        // Dialog should not shrink beyond it's minimal size.
-        GetSizer()->SetSizeHints( this );
-    }
+    DIALOG_GET_FOOTPRINT_BY_NAME( PCB_BASE_FRAME* aParent, wxArrayString& aFpList );
 
     // returns the selected text (fp reference)
-    const wxString GetValue() const
-    {
-        return m_SearchTextCtrl->GetValue();
-    }
+    wxString GetValue() const;
 
 private:
     // Called when selecting an item from the item list
-	void OnSelectFootprint( wxCommandEvent& aEvent ) override
-    {
-        if( m_choiceFpList->GetSelection() >= 0 )
-            m_SearchTextCtrl->SetValue(
-                m_choiceFpList->GetString( m_choiceFpList->GetSelection() ).BeforeFirst( ' ' ) );
-    }
+    void OnSelectFootprint( wxCommandEvent& aEvent ) override;
 };
-
-#endif  // #ifndef DIALOG_GET_FOOTPRINT_BY_NAME_H
