@@ -58,6 +58,11 @@ public:
     wxString m_lastUpdateCheckTime;
     wxString m_lastReceivedUpdate;
 
+    // Last position of the template window
+    wxPoint m_TemplateWindowPos;
+    // Last size of the template window
+    wxSize m_TemplateWindowSize;
+
 protected:
     virtual std::string getLegacyFrameName() const override { return "KicadFrame"; }
 };

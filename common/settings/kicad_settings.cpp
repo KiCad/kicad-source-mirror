@@ -20,6 +20,7 @@
 
 #include "settings/kicad_settings.h"
 #include <nlohmann/json.hpp>
+#include <settings/aui_settings.h>
 #include <settings/parameters.h>
 
 
@@ -54,6 +55,11 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "system.check_for_kicad_updates", &m_KiCadUpdateCheck,
                                             true ) );
+
+    m_params.emplace_back( new PARAM<wxPoint>( "template.window.pos", &m_TemplateWindowPos,
+                                               wxDefaultPosition ) );
+
+    m_params.emplace_back( new PARAM<wxSize>( "template.window.size", &m_TemplateWindowSize, wxDefaultSize ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "pcm.repositories",

@@ -225,7 +225,9 @@ int KICAD_MANAGER_CONTROL::NewJobsetFile( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 {
-    DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( m_frame );
+    KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
+    DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( m_frame, settings->m_TemplateWindowPos,
+                                                                settings->m_TemplateWindowSize );
 
     wxFileName  templatePath;
 
@@ -251,6 +253,9 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     // Show the project template selector dialog
     if( ps->ShowModal() != wxID_OK )
         return -1;
+
+    settings->m_TemplateWindowPos = ps->GetPosition();
+    settings->m_TemplateWindowSize = ps->GetSize();
 
     if( !ps->GetSelectedTemplate() )
     {

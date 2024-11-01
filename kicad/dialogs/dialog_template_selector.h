@@ -90,7 +90,7 @@ protected:
 class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
 public:
-    DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent );
+    DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize );
 
     /**
      * Add a new page with \a aTitle, populated with templates from \a aPath
