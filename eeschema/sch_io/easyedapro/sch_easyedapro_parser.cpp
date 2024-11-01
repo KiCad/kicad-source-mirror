@@ -1439,7 +1439,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
             if( netAttr )
             {
-                if( !netAttr->valVisible )
+                if( !netAttr->valVisible || netAttr->value.IsEmpty() )
                     continue;
 
                 VECTOR2I    kpos = ScalePos( *netAttr->position );
