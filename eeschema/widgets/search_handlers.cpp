@@ -124,6 +124,8 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
                                               return r.sheetPath == selectedHits.front().sheetPath;
                                           } );
 
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+
     if( allHitsOnSamePage && !selectedHits.empty() )
     {
         if( m_frame->GetCurrentSheet() != *selectedHits.front().sheetPath )
@@ -134,6 +136,18 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
         if( selectedItems.size() )
             m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &selectedItems );
+
+        switch( settings.selection_zoom )
+        {
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN:
+            m_frame->GetToolManager()->RunAction( ACTIONS::centerSelection );
+            break;
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM:
+            m_frame->GetToolManager()->RunAction( ACTIONS::zoomFitSelection );
+            break;
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE:
+            break;
+        }
 
         m_frame->GetCanvas()->Refresh( false );
     }

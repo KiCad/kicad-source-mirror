@@ -39,6 +39,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_ColorPicker(),
         m_LibTree(),
         m_Printing(),
+        m_SearchPane(),
         m_System(),
         m_Window(),
         m_appSettingsSchemaVersion( aSchemaVersion )
@@ -132,6 +133,10 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
 
     m_params.emplace_back( new PARAM_LIST<int>( "printing.layers",
             &m_Printing.layers, {} ) );
+
+    m_params.emplace_back( new PARAM<int>( "search_pane.selection_zoom",
+            reinterpret_cast<int*>( &m_SearchPane.selection_zoom ),
+            static_cast<int>( SEARCH_PANE::SELECTION_ZOOM::PAN ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "system.first_run_shown",
             &m_System.first_run_shown, false ) ); //@todo RFB remove? - not used

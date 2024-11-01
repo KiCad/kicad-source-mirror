@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,18 +10,22 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include <wx/bmpbuttn.h>
 #include <wx/string.h>
-#include <wx/srchctrl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/notebook.h>
+#include <wx/button.h>
+#include <wx/srchctrl.h>
 #include <wx/sizer.h>
+#include <wx/notebook.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class SEARCH_PANE_BASE
@@ -32,6 +36,7 @@ class SEARCH_PANE_BASE : public wxPanel
 
 	protected:
 		wxBoxSizer* m_sizerOuter;
+		wxBitmapButton* m_menuButton;
 		wxSearchCtrl* m_searchCtrl1;
 		wxNotebook* m_notebook;
 
@@ -44,7 +49,7 @@ class SEARCH_PANE_BASE : public wxPanel
 
 	public:
 
-		SEARCH_PANE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		SEARCH_PANE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 284,110 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~SEARCH_PANE_BASE();
 

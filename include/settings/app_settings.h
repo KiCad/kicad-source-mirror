@@ -104,6 +104,18 @@ public:
         int match_mode;
     };
 
+    struct SEARCH_PANE
+    {
+        enum class SELECTION_ZOOM
+        {
+            NONE,
+            PAN,
+            ZOOM,
+        };
+
+        SELECTION_ZOOM selection_zoom;
+    };
+
     struct GRAPHICS
     {
         int   canvas_type;
@@ -167,12 +179,15 @@ public:
 
     PRINTING m_Printing;
 
+    SEARCH_PANE m_SearchPane;
+
     SYSTEM m_System;
 
     WINDOW_SETTINGS m_Window;
 
     /// Active color theme name
     wxString m_ColorTheme;
+
 
     ///! Local schema version for common app settings
     int m_appSettingsSchemaVersion;

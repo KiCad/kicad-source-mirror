@@ -25,6 +25,7 @@
 #include <pcb_textbox.h>
 #include <pcb_text.h>
 #include <pcb_dimension.h>
+#include <pcbnew_settings.h>
 #include <ratsnest/ratsnest_data.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
@@ -79,6 +80,7 @@ void PCB_SEARCH_HANDLER::Sort( int aCol, bool aAscending, std::vector<long>* aSe
 
 void PCB_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
     std::vector<EDA_ITEM*> selectedItems;
 
     for( long row : aItemRows )
@@ -90,7 +92,21 @@ void PCB_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     if( selectedItems.size() )
+    {
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selectedItems );
+
+        switch( settings.selection_zoom )
+        {
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN:
+            m_frame->GetToolManager()->RunAction( ACTIONS::centerSelection );
+            break;
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM:
+            m_frame->GetToolManager()->RunAction( ACTIONS::zoomFitSelection );
+            break;
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE:
+            break;
+        }
+    }
 
     m_frame->GetCanvas()->Refresh( false );
 }

@@ -20,10 +20,14 @@
 #ifndef SEARCH_PANE_H
 #define SEARCH_PANE_H
 
-#include <widgets/search_pane_base.h>
+#include <memory>
 #include <vector>
+
+#include <widgets/search_pane_base.h>
 #include <wx/listbase.h>
 
+
+class ACTION_MENU;
 class EDA_DRAW_FRAME;
 class SEARCH_PANE_TAB;
 
@@ -53,6 +57,13 @@ protected:
     std::vector<std::tuple<wxString, int, wxListColumnFormat>> m_columns;
 };
 
+
+struct SEARCH_SETTINGS
+{
+    bool m_ZoomToSelection = false;
+};
+
+
 class SEARCH_PANE : public SEARCH_PANE_BASE
 {
 public:
@@ -76,6 +87,7 @@ private:
     std::vector<SEARCH_PANE_TAB*> m_tabs;
     wxString                      m_lastQuery;
     EDA_DRAW_FRAME*               m_frame;
+    ACTION_MENU*                  m_menu;
 };
 
 #endif
