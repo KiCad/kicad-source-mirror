@@ -2728,30 +2728,27 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
                       aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
 
         // Multichannel settings
-        if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
+        m_out->Print( aNestLevel + 1, "(placement" );
+        m_out->Print( aNestLevel + 2, "(enabled " );
+
+        if( aZone->GetRuleAreaPlacementEnabled() )
+            m_out->Print( aNestLevel + 2, "yes)" );
+        else
+            m_out->Print( aNestLevel + 2, "no)" );
+
+        switch( aZone->GetRuleAreaPlacementSourceType() )
         {
-            m_out->Print( aNestLevel + 1, "(placement" );
-            m_out->Print( aNestLevel + 2, "(enabled " );
-
-            if( aZone->GetRuleAreaPlacementEnabled() )
-                m_out->Print( aNestLevel + 2, "yes)" );
-            else
-                m_out->Print( aNestLevel + 2, "no)" );
-
-            switch( aZone->GetRuleAreaPlacementSourceType() )
-            {
-            case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
-                m_out->Print( aNestLevel + 2, "(sheetname %s)",
-                              m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
-                break;
-            case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
-                m_out->Print( aNestLevel + 2, "(component_class %s)",
-                              m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
-                break;
-            }
-
-            m_out->Print( aNestLevel + 1, ")" );
+        case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
+            m_out->Print( aNestLevel + 2, "(sheetname %s)",
+                          m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
+            break;
+        case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
+            m_out->Print( aNestLevel + 2, "(component_class %s)",
+                          m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
+            break;
         }
+
+        m_out->Print( aNestLevel + 1, ")" );
     }
 
     m_out->Print( aNestLevel + 1, "(fill" );

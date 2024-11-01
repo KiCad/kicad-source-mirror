@@ -1755,29 +1755,27 @@ static struct ZONE_DESC
                              groupKeepout )
                 .SetAvailableFunc( isRuleArea );
 
-        if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
-        {
-            const wxString groupPlacement = _HKI( "Placement" );
 
-            propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Enable" ),
-                                                           &ZONE::SetRuleAreaPlacementEnabled,
-                                                           &ZONE::GetRuleAreaPlacementEnabled ),
-                                 groupPlacement )
-                    .SetAvailableFunc( isRuleArea );
+        const wxString groupPlacement = _HKI( "Placement" );
 
-            propMgr.AddProperty( new PROPERTY_ENUM<ZONE, RULE_AREA_PLACEMENT_SOURCE_TYPE>(
-                                         _HKI( "Source Type" ),
-                                         &ZONE::SetRuleAreaPlacementSourceType,
-                                         &ZONE::GetRuleAreaPlacementSourceType ),
-                                 groupPlacement )
-                    .SetAvailableFunc( isRuleArea );
+        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Enable" ),
+                                                       &ZONE::SetRuleAreaPlacementEnabled,
+                                                       &ZONE::GetRuleAreaPlacementEnabled ),
+                             groupPlacement )
+                .SetAvailableFunc( isRuleArea );
 
-            propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Source Name" ),
-                                                               &ZONE::SetRuleAreaPlacementSource,
-                                                               &ZONE::GetRuleAreaPlacementSource ),
-                                 groupPlacement )
-                    .SetAvailableFunc( isRuleArea );
-        }
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, RULE_AREA_PLACEMENT_SOURCE_TYPE>(
+                                     _HKI( "Source Type" ), &ZONE::SetRuleAreaPlacementSourceType,
+                                     &ZONE::GetRuleAreaPlacementSourceType ),
+                             groupPlacement )
+                .SetAvailableFunc( isRuleArea );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Source Name" ),
+                                                           &ZONE::SetRuleAreaPlacementSource,
+                                                           &ZONE::GetRuleAreaPlacementSource ),
+                             groupPlacement )
+                .SetAvailableFunc( isRuleArea );
+
 
         const wxString groupFill = _HKI( "Fill Style" );
 
