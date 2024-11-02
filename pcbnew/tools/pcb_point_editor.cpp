@@ -69,7 +69,13 @@ enum SEG_POINTS
 
 enum RECT_POINTS
 {
-    RECT_TOP_LEFT, RECT_TOP_RIGHT, RECT_BOT_RIGHT, RECT_BOT_LEFT, RECT_CENTER,
+    RECT_TOP_LEFT,
+    RECT_TOP_RIGHT,
+    RECT_BOT_RIGHT,
+    RECT_BOT_LEFT,
+    RECT_CENTER,
+
+    RECT_MAX_POINTS, // Must be last
 };
 
 
@@ -120,6 +126,14 @@ enum DIMENSION_POINTS
     DIM_CROSSBARSTART,
     DIM_CROSSBAREND,
     DIM_KNEE = DIM_CROSSBARSTART
+};
+
+
+///< Text boxes have different point counts depending on their orientation.
+enum TEXTBOX_POINT_COUNT
+{
+    WHEN_RECTANGLE = RECT_MAX_POINTS,
+    WHEN_POLYGON = 0,
 };
 
 
@@ -2099,7 +2113,11 @@ void PCB_POINT_EDITOR::updatePoints()
     case PCB_TEXTBOX_T:
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
-        int              target = shape->GetShape() == SHAPE_T::RECTANGLE ? 4 : 0;
+
+        // When textboxes are rotated, they act as polygons, not rectangles
+        const int target = shape->GetShape() == SHAPE_T::RECTANGLE
+                                   ? TEXTBOX_POINT_COUNT::WHEN_RECTANGLE
+                                   : TEXTBOX_POINT_COUNT::WHEN_POLYGON;
 
         // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
         if( int( m_editPoints->PointsSize() ) != target )
@@ -2123,6 +2141,8 @@ void PCB_POINT_EDITOR::updatePoints()
             m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shape->GetBotRight() );
             m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( shape->GetTopLeft().x,
                                                               shape->GetBotRight().y );
+
+            m_editPoints->Point( RECT_CENTER ).SetPosition( shape->GetCenter() );
         }
         else if( shape->GetShape() == SHAPE_T::POLY )
         {
