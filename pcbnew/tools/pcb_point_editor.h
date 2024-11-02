@@ -36,6 +36,7 @@
 
 
 class PCB_SELECTION_TOOL;
+class POINT_EDIT_BEHAVIOR;
 class SHAPE_POLY_SET;
 
 /**
@@ -184,6 +185,10 @@ private:
     EDIT_POINT                                   m_altConstrainer;
 
     bool                          m_inPointEditorTool; // Re-entrancy guard
+
+    // This handles the edit process for a specific tpye of item (not
+    // just C++ type, because PCB_SHAPE is one type that has many subtypes)
+    std::unique_ptr<POINT_EDIT_BEHAVIOR> m_editorBehavior;
 
     static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool
 };

@@ -136,6 +136,50 @@ enum TEXTBOX_POINT_COUNT
     WHEN_POLYGON = 0,
 };
 
+class SEGMENT_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    SEGMENT_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aSegment ) : m_segment( aSegment )
+    {
+        wxASSERT( m_segment.GetShape() == SHAPE_T::SEGMENT );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_segment.GetStart() );
+        aPoints.AddPoint( m_segment.GetEnd() );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, 2 );
+
+        aPoints.Point( SEG_START ) = m_segment.GetStart();
+        aPoints.Point( SEG_END ) = m_segment.GetEnd();
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, 2 );
+
+        if( isModified( aEditedPoint, aPoints.Point( SEG_START ) ) )
+            m_segment.SetStart( aPoints.Point( SEG_START ).GetPosition() );
+
+        else if( isModified( aEditedPoint, aPoints.Point( SEG_END ) ) )
+            m_segment.SetEnd( aPoints.Point( SEG_END ).GetPosition() );
+    }
+
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                         EDIT_POINTS&      aPoints ) const override
+    {
+        // Select the other end of line
+        return aPoints.Next( aEditedPoint )->GetPosition();
+    }
+
+private:
+    PCB_SHAPE& m_segment;
+};
+
 
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
@@ -215,6 +259,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     if( !aItem )
         return points;
 
+    m_editorBehavior = nullptr;
+
     if( aItem->Type() == PCB_TEXTBOX_T )
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
@@ -249,15 +295,13 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_TEXTBOX_T:
     case PCB_SHAPE_T:
     {
-        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
 
         switch( shape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            points->AddPoint( shape->GetStart() );
-            points->AddPoint( shape->GetEnd() );
+            m_editorBehavior = std::make_unique<SEGMENT_POINT_EDIT_BEHAVIOR>( *shape );
             break;
-
         case SHAPE_T::RECTANGLE:
         {
             VECTOR2I topLeft = shape->GetTopLeft();
@@ -483,6 +527,9 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         break;
     }
 
+    if( m_editorBehavior )
+        m_editorBehavior->MakePoints( *points );
+
     return points;
 }
 
@@ -558,6 +605,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     // Use the original object as a construction item
     std::unique_ptr<BOARD_ITEM> clone;
 
+    m_editorBehavior.reset();
+    // Will also make the edit behavior if supported
     m_editPoints = makePoints( item );
 
     if( !m_editPoints )
@@ -1378,6 +1427,11 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
     if( !item )
         return;
 
+    if( m_editorBehavior )
+    {
+        m_editorBehavior->UpdateItem( *m_editedPoint, *m_editPoints );
+    }
+
     switch( item->Type() )
     {
     case PCB_REFERENCE_IMAGE_T:
@@ -1467,11 +1521,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         switch( shape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            if( isModified( m_editPoints->Point( SEG_START ) ) )
-                shape->SetStart( m_editPoints->Point( SEG_START ).GetPosition() );
-            else if( isModified( m_editPoints->Point( SEG_END ) ) )
-                shape->SetEnd( m_editPoints->Point( SEG_END ).GetPosition() );
-
             break;
 
         case SHAPE_T::RECTANGLE:
@@ -2090,6 +2139,14 @@ void PCB_POINT_EDITOR::updatePoints()
     if( !item )
         return;
 
+    if( m_editorBehavior )
+    {
+        // If we have an editor behavior, let it handle the update
+        m_editorBehavior->UpdatePoints( *m_editPoints );
+        getView()->Update( m_editPoints.get() );
+        return;
+    }
+
     switch( item->Type() )
     {
     case PCB_REFERENCE_IMAGE_T:
@@ -2159,8 +2216,6 @@ void PCB_POINT_EDITOR::updatePoints()
         switch( shape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            m_editPoints->Point( SEG_START ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( SEG_END ).SetPosition( shape->GetEnd() );
             break;
 
         case SHAPE_T::RECTANGLE:
@@ -2470,6 +2525,15 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
 
 EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
 {
+    // If there's a behaviour and it provides a constrainer, use that
+    if( m_editorBehavior )
+    {
+        const OPT_VECTOR2I constrainer =
+                m_editorBehavior->Get45DegreeConstrainer( *m_editedPoint, *m_editPoints );
+        if( constrainer )
+            return EDIT_POINT( *constrainer );
+    }
+
     EDA_ITEM* item = m_editPoints->GetParent();
 
     switch( item->Type() )
@@ -2477,9 +2541,6 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     case PCB_SHAPE_T:
         switch( static_cast<const PCB_SHAPE*>( item )->GetShape() )
         {
-        case SHAPE_T::SEGMENT:
-            return *( m_editPoints->Next( *m_editedPoint ) );     // select the other end of line
-
         case SHAPE_T::ARC:
         case SHAPE_T::CIRCLE:
             return m_editPoints->Point( CIRC_CENTER );
