@@ -104,8 +104,6 @@ wxString LOGGER::FormatEvent( const LOGGER::EVENT_ENTRY& aEvent )
 {
     wxString str = wxString::Format( "event %d %d %d %d %d ", aEvent.p.x, aEvent.p.y, aEvent.type, aEvent.layer, (int)aEvent.uuids.size() );
 
-    printf("*** formatEvent l %d\n", aEvent.layer );
-
     for( int i = 0; i < aEvent.uuids.size(); i++ )
     {
         str.Append( aEvent.uuids[i].AsString() );

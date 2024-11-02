@@ -2248,7 +2248,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 m_startItem = pitem;
                 if( pitem->Net() )
                     highlightNetcodes.insert( pitem->Net() );
-                printf("si %p, p=%d %d\n", m_startItem, p.x, p.y );
             }
         }
 

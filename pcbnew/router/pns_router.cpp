@@ -178,7 +178,6 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     // more than 1 track segment or arc to drag? launch the multisegment dragger
     else if( aStartItems.Count( ITEM::SEGMENT_T | ITEM::ARC_T ) > 1 )
     {
-        fprintf(stderr,"MultiDrag triggered\n");
         m_dragger = std::make_unique<MULTI_DRAGGER>( this );
         m_state = DRAG_SEGMENT;
     }
