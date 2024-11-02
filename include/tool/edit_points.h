@@ -373,6 +373,16 @@ public:
     }
 
     /**
+     * Clear all stored EDIT_POINTs and EDIT_LINEs.
+     */
+    void Clear()
+    {
+        m_points.clear();
+        m_lines.clear();
+        m_contours.clear();
+    }
+
+    /**
      * Add an EDIT_POINT.
      *
      * @param aPoint is the new point.

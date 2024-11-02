@@ -886,6 +886,95 @@ private:
 };
 
 
+/**
+ * Construct the points for the given polygon outline into the
+ * EDIT_POINTS container.
+ */
+static void buildForPolyOutline( EDIT_POINTS& aPoints, const SHAPE_POLY_SET& aOutline )
+{
+    const int cornersCount = aOutline.TotalVertices();
+
+    for( auto iterator = aOutline.CIterateWithHoles(); iterator; iterator++ )
+    {
+        aPoints.AddPoint( *iterator );
+
+        if( iterator.IsEndContour() )
+            aPoints.AddBreak();
+    }
+
+    // Lines have to be added after creating edit points, as they use EDIT_POINT references
+    for( int i = 0; i < cornersCount - 1; ++i )
+    {
+        if( aPoints.IsContourEnd( i ) )
+            aPoints.AddLine( aPoints.Point( i ), aPoints.Point( aPoints.GetContourStartIdx( i ) ) );
+        else
+            aPoints.AddLine( aPoints.Point( i ), aPoints.Point( i + 1 ) );
+
+        aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+    }
+
+    // The last missing line, connecting the last and the first polygon point
+    aPoints.AddLine( aPoints.Point( cornersCount - 1 ),
+                     aPoints.Point( aPoints.GetContourStartIdx( cornersCount - 1 ) ) );
+
+    aPoints.Line( aPoints.LinesSize() - 1 )
+            .SetConstraint( new EC_PERPLINE( aPoints.Line( aPoints.LinesSize() - 1 ) ) );
+}
+
+
+class POLYGON_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    POLYGON_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aPolygon ) : m_polygon( aPolygon )
+    {
+        wxASSERT( m_polygon.GetShape() == SHAPE_T::POLY );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        buildForPolyOutline( aPoints, m_polygon.GetPolyShape() );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        // No size check here, as we can and will rebuild if that fails
+
+        std::vector<VECTOR2I> points;
+        m_polygon.DupPolyPointsList( points );
+
+        if( aPoints.PointsSize() != points.size() )
+        {
+            aPoints.Clear();
+            MakePoints( aPoints );
+        }
+        else
+        {
+            for( unsigned i = 0; i < points.size(); i++ )
+                aPoints.Point( i ).SetPosition( points[i] );
+        }
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, (unsigned) m_polygon.GetPolyShape().TotalVertices() );
+
+        SHAPE_POLY_SET& outline = m_polygon.GetPolyShape();
+
+        for( int i = 0; i < outline.TotalVertices(); ++i )
+            outline.SetVertex( i, aPoints.Point( i ).GetPosition() );
+
+        for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
+        {
+            if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
+                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+        }
+    }
+
+private:
+    PCB_SHAPE& m_polygon;
+};
+
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( nullptr ),
@@ -921,39 +1010,6 @@ bool PCB_POINT_EDITOR::Init()
     menu.AddItem( PCB_ACTIONS::pointEditorChamferCorner, PCB_POINT_EDITOR::addCornerCondition );
 
     return true;
-}
-
-
-void PCB_POINT_EDITOR::buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points,
-                                            const SHAPE_POLY_SET* aOutline )
-{
-    int cornersCount = aOutline->TotalVertices();
-
-    for( auto iterator = aOutline->CIterateWithHoles(); iterator; iterator++ )
-    {
-        points->AddPoint( *iterator );
-
-        if( iterator.IsEndContour() )
-            points->AddBreak();
-    }
-
-    // Lines have to be added after creating edit points, as they use EDIT_POINT references
-    for( int i = 0; i < cornersCount - 1; ++i )
-    {
-        if( points->IsContourEnd( i ) )
-            points->AddLine( points->Point( i ), points->Point( points->GetContourStartIdx( i ) ) );
-        else
-            points->AddLine( points->Point( i ), points->Point( i + 1 ) );
-
-        points->Line( i ).SetConstraint( new EC_PERPLINE( points->Line( i ) ) );
-    }
-
-    // The last missing line, connecting the last and the first polygon point
-    points->AddLine( points->Point( cornersCount - 1 ),
-                     points->Point( points->GetContourStartIdx( cornersCount - 1 ) ) );
-
-    points->Line( points->LinesSize() - 1 )
-            .SetConstraint( new EC_PERPLINE( points->Line( points->LinesSize() - 1 ) ) );
 }
 
 
@@ -1020,7 +1076,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::POLY:
-            buildForPolyOutline( points, &shape->GetPolyShape() );
+            m_editorBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
             break;
 
         case SHAPE_T::BEZIER:
@@ -1096,7 +1152,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_ZONE_T:
     {
         const ZONE* zone = static_cast<const ZONE*>( aItem );
-        buildForPolyOutline( points, zone->Outline() );
+        buildForPolyOutline( *points, *zone->Outline() );
         break;
     }
 
@@ -1783,24 +1839,8 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         case SHAPE_T::SEGMENT:
         case SHAPE_T::RECTANGLE:
         case SHAPE_T::ARC:
-            break;
-
         case SHAPE_T::POLY:
-        {
-            SHAPE_POLY_SET& outline = shape->GetPolyShape();
-
-            for( int i = 0; i < outline.TotalVertices(); ++i )
-                outline.SetVertex( i, m_editPoints->Point( i ).GetPosition() );
-
-            for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
-            {
-                if( !isModified( m_editPoints->Line( i ) ) )
-                    m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
-            }
-
             break;
-        }
-
         case SHAPE_T::BEZIER:
             if( isModified( m_editPoints->Point( BEZIER_START ) ) )
                 shape->SetStart( m_editPoints->Point( BEZIER_START ).GetPosition() );
@@ -2348,31 +2388,8 @@ void PCB_POINT_EDITOR::updatePoints()
         case SHAPE_T::RECTANGLE:
         case SHAPE_T::ARC:
         case SHAPE_T::CIRCLE:
-            break;
-
         case SHAPE_T::POLY:
-        {
-            std::vector<VECTOR2I> points;
-            shape->DupPolyPointsList( points );
-
-            if( m_editPoints->PointsSize() != (unsigned) points.size() )
-            {
-                getView()->Remove( m_editPoints.get() );
-                m_editedPoint = nullptr;
-
-                m_editPoints = makePoints( item );
-
-                if( m_editPoints )
-                    getView()->Add( m_editPoints.get() );
-            }
-            else
-            {
-                for( unsigned i = 0; i < points.size(); i++ )
-                    m_editPoints->Point( i ).SetPosition( points[i] );
-            }
-
             break;
-        }
 
         case SHAPE_T::BEZIER:
             m_editPoints->Point( BEZIER_START ).SetPosition( shape->GetStart() );

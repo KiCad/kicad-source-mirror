@@ -71,8 +71,6 @@ private:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    void buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points, const SHAPE_POLY_SET* aOutline );
-
     std::shared_ptr<EDIT_POINTS> makePoints( EDA_ITEM* aItem );
 
     ///< Update item's points with edit points.
