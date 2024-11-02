@@ -65,9 +65,9 @@ public:
         SHP_DONT_OPTIMIZE = 0x10
     };
 
-    
+
     void SetDefaultShovePolicy( int aPolicy );
-    
+
     void SetShovePolicy( const LINKED_ITEM* aItem, int aPolicy );
     void SetShovePolicy( const LINE& aLine, int aPolicy );
 
@@ -95,7 +95,6 @@ public:
 
     NODE* CurrentNode();
 
-    const std::optional<LINE> NewHead() const;
     bool HeadsModified( int aIndex = -1 ) const;
     const PNS::LINE GetModifiedHead( int aIndex ) const;
     const VIA_HANDLE GetModifiedHeadVia( int aIndex ) const;
@@ -144,7 +143,7 @@ private:
         bool geometryModified = false;
         std::optional<VIA_HANDLE> prevVia;
         std::optional<VIA_HANDLE> theVia;
-        VIA* draggedVia = nullptr; 
+        VIA* draggedVia = nullptr;
         VECTOR2I viaNewPos;
         std::optional<LINE> origHead;
         std::optional<LINE> newHead;
@@ -211,7 +210,7 @@ private:
     ROOT_LINE_ENTRY* touchRootLine( const LINKED_ITEM *aItem );
     void pruneRootLines( NODE *aRemovedNode );
 
-    
+
     SHOVE_STATUS shoveIteration( int aIter );
     SHOVE_STATUS shoveMainLoop();
 
@@ -223,7 +222,7 @@ private:
     VIA* findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle );
     bool preShoveCleanup( LINE* aOld, LINE* aNew );
     const wxString formatPolicy( int aPolicy );
-    
+
     std::vector<SPRINGBACK_TAG> m_nodeStack;
     std::vector<LINE>           m_lineStack;
     std::vector<LINE>           m_optimizerQueue;

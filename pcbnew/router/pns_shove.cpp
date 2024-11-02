@@ -1943,13 +1943,6 @@ NODE* SHOVE::CurrentNode()
 }
 
 
-const std::optional<LINE> SHOVE::NewHead() const
-{
-    assert(false);
-}
-
-
-
 bool SHOVE::AddLockedSpringbackNode( NODE* aNode )
 {
     SPRINGBACK_TAG sp;
