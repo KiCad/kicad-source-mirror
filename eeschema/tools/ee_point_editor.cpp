@@ -951,6 +951,55 @@ private:
 };
 
 
+class POLYGON_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    POLYGON_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aPoly ) : m_poly( aPoly ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        for( const VECTOR2I& pt : m_poly.GetPolyShape().Outline( 0 ).CPoints() )
+            aPoints.AddPoint( pt );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        if( aPoints.PointsSize() != (unsigned) m_poly.GetPointCount() )
+        {
+            aPoints.Clear();
+            MakePoints( aPoints );
+        }
+        else
+        {
+            int ii = 0;
+
+            for( const VECTOR2I& pt : m_poly.GetPolyShape().Outline( 0 ).CPoints() )
+            {
+                aPoints.Point( ii++ ).SetPosition( pt );
+            }
+        }
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        m_poly.GetPolyShape().RemoveAllContours();
+        m_poly.GetPolyShape().NewOutline();
+
+        for( unsigned i = 0; i < aPoints.PointsSize(); ++i )
+        {
+            VECTOR2I pt = aPoints.Point( i ).GetPosition();
+            m_poly.GetPolyShape().Append( pt.x, pt.y, -1, -1, true );
+        }
+
+        aUpdatedItems.push_back( &m_poly );
+    }
+
+private:
+    SCH_SHAPE& m_poly;
+};
+
+
 class EDIT_POINTS_FACTORY
 {
 public:
@@ -986,9 +1035,7 @@ public:
             }
 
             case SHAPE_T::POLY:
-                for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                    points->AddPoint( pt );
-
+                editBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
                 break;
 
             case SHAPE_T::BEZIER:
@@ -1004,10 +1051,8 @@ public:
         case SCH_RULE_AREA_T:
         {
             SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
-
-            for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                points->AddPoint( pt );
-
+            // Implemented directly as a polygon
+            editBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
             break;
         }
 
@@ -1309,15 +1354,6 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
             break;
 
         case SHAPE_T::POLY:
-            shape->GetPolyShape().RemoveAllContours();
-            shape->GetPolyShape().NewOutline();
-
-            for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
-            {
-                VECTOR2I pt = m_editPoints->Point( i ).GetPosition();
-                shape->GetPolyShape().Append( pt.x, pt.y, -1, -1, true );
-            }
-
             break;
 
         case SHAPE_T::RECTANGLE:
@@ -1380,47 +1416,11 @@ void EE_POINT_EDITOR::updatePoints()
         {
         case SHAPE_T::ARC:
         case SHAPE_T::CIRCLE:
-            break;
-
         case SHAPE_T::POLY:
-        {
-            if( (int) m_editPoints->PointsSize() != shape->GetPointCount() )
-            {
-                getView()->Remove( m_editPoints.get() );
-                m_editedPoint = nullptr;
-                // m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame );
-                getView()->Add( m_editPoints.get() );
-            }
-            else
-            {
-                int ii = 0;
-
-                for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                    m_editPoints->Point( ii++ ).SetPosition( pt );
-            }
-
             break;
-        }
 
         case SHAPE_T::RECTANGLE:
-        {
-            // point editor works only with rectangles having width and height > 0
-            // Some symbols can have rectangles with width or height < 0
-            // So normalize the size:
-            BOX2I dummy;
-            dummy.SetOrigin( shape->GetPosition() );
-            dummy.SetEnd( shape->GetEnd() );
-            dummy.Normalize();
-            VECTOR2I topLeft = dummy.GetPosition();
-            VECTOR2I botRight = dummy.GetEnd();
-
-            m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
-            m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
-            m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
-            m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-            m_editPoints->Point( RECT_CENTER ).SetPosition( ( topLeft + botRight ) / 2 );
             break;
-        }
 
         case SHAPE_T::BEZIER:
             break;
