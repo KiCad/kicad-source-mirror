@@ -544,7 +544,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
         const wxString openLibLink =
                 wxString::Format( _( "Open in library %s" ), UnescapeString( libName ) );
 
-        const auto openLibraryCopy = [this, aFootprint]( wxHyperlinkEvent& aEvent )
+        const auto openLibraryCopy = [this]( wxHyperlinkEvent& aEvent )
         {
             GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
         };

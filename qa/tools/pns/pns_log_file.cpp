@@ -45,7 +45,7 @@ std::vector<BOARD_CONNECTED_ITEM*> PNS_LOG_FILE::ItemsById( const PNS::LOGGER::E
 
     parents.resize( evt.uuids.size() );
 
-    printf("u %d p %d\n", evt.uuids.size(), parents.size() );
+    printf("u %zu p %zu\n", evt.uuids.size(), parents.size() );
 
     for( BOARD_CONNECTED_ITEM* item : m_board->AllConnectedItems() )
     {

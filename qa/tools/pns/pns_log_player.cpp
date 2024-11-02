@@ -110,7 +110,7 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         auto  items = aLog->ItemsById( evt );
         PNS::ITEM_SET ritems;
 
-        printf("items: %d\n", items.size() );
+        printf("items: %zu\n", items.size() );
         ITEM* ritem = nullptr;
 
         if( items.size() && items[0] )
