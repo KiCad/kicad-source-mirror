@@ -97,12 +97,6 @@ enum TABLECELL_POINTS
 };
 
 
-enum CIRCLE_POINTS
-{
-    CIRC_CENTER, CIRC_END
-};
-
-
 enum BEZIER_POINTS
 {
     BEZIER_START,
@@ -835,6 +829,63 @@ private:
 };
 
 
+class CIRCLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+    enum CIRCLE_POINTS
+    {
+        CIRC_CENTER,
+        CIRC_END,
+    };
+
+public:
+    CIRCLE_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aCircle ) : m_circle( aCircle )
+    {
+        wxASSERT( m_circle.GetShape() == SHAPE_T::CIRCLE );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_circle.GetCenter() );
+        aPoints.AddPoint( m_circle.GetEnd() );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, 2 );
+
+        aPoints.Point( CIRC_CENTER ).SetPosition( m_circle.GetCenter() );
+        aPoints.Point( CIRC_END ).SetPosition( m_circle.GetEnd() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, 2 );
+
+        const VECTOR2I& center = aPoints.Point( CIRC_CENTER ).GetPosition();
+        const VECTOR2I& end = aPoints.Point( CIRC_END ).GetPosition();
+
+        if( isModified( aEditedPoint, aPoints.Point( CIRC_CENTER ) ) )
+        {
+            VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - m_circle.GetCenter();
+            m_circle.Move( moveVector );
+        }
+        else
+        {
+            m_circle.SetEnd( VECTOR2I( end.x, end.y ) );
+        }
+    }
+
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                         EDIT_POINTS&      aPoints ) const override
+    {
+        return aPoints.Point( CIRC_CENTER ).GetPosition();
+    }
+
+private:
+    PCB_SHAPE& m_circle;
+};
+
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( nullptr ),
@@ -965,8 +1016,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::CIRCLE:
-            points->AddPoint( shape->GetCenter() );
-            points->AddPoint( shape->GetEnd() );
+            m_editorBehavior = std::make_unique<CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
             break;
 
         case SHAPE_T::POLY:
@@ -1735,24 +1785,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         case SHAPE_T::ARC:
             break;
 
-        case SHAPE_T::CIRCLE:
-        {
-            const VECTOR2I& center = m_editPoints->Point( CIRC_CENTER ).GetPosition();
-            const VECTOR2I& end = m_editPoints->Point( CIRC_END ).GetPosition();
-
-            if( isModified( m_editPoints->Point( CIRC_CENTER ) ) )
-            {
-                VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - shape->GetCenter();
-                shape->Move( moveVector );
-            }
-            else
-            {
-                shape->SetEnd( VECTOR2I( end.x, end.y ) );
-            }
-
-            break;
-        }
-
         case SHAPE_T::POLY:
         {
             SHAPE_POLY_SET& outline = shape->GetPolyShape();
@@ -2315,11 +2347,7 @@ void PCB_POINT_EDITOR::updatePoints()
         case SHAPE_T::SEGMENT:
         case SHAPE_T::RECTANGLE:
         case SHAPE_T::ARC:
-            break;
-
         case SHAPE_T::CIRCLE:
-            m_editPoints->Point( CIRC_CENTER ).SetPosition( shape->GetCenter() );
-            m_editPoints->Point( CIRC_END ).SetPosition( shape->GetEnd() );
             break;
 
         case SHAPE_T::POLY:
@@ -2608,18 +2636,6 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
 
     switch( item->Type() )
     {
-    case PCB_SHAPE_T:
-        switch( static_cast<const PCB_SHAPE*>( item )->GetShape() )
-        {
-        case SHAPE_T::CIRCLE:
-            return m_editPoints->Point( CIRC_CENTER );
-
-        default:        // suppress warnings
-            break;
-        }
-
-        break;
-
     case PCB_DIM_ALIGNED_T:
     {
         // Constraint for crossbar
