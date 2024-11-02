@@ -635,6 +635,8 @@ bool ROUTER::moveDragging( const VECTOR2I& aP, ITEM* aEndItem )
     bool ret = m_dragger->Drag( aP );
     ITEM_SET dragged = m_dragger->Traces();
 
+    m_leaderSegments = m_dragger->GetLastCommittedLeaderSegments();
+
     updateView( m_dragger->CurrentNode(), dragged, true );
     return ret;
 }

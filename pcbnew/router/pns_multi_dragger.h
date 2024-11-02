@@ -159,7 +159,7 @@ private:
     bool multidragWalkaround ( std::vector<MDRAG_LINE>& aCompletedLines );
     void restoreLeaderSegments( std::vector<MDRAG_LINE>& aCompletedLines );
     int findNewLeaderSegment( const MDRAG_LINE& aLine ) const;
-    bool tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk, const LINE& aLeader );
+    bool tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk );
 
 
     int                     m_mode;
