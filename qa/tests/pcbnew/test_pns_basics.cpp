@@ -342,6 +342,9 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
 
     std::unique_ptr<PNS::NODE> world ( new PNS::NODE );
 
+    v1->SetNet( (PNS::NET_HANDLE) 1 );
+    v2->SetNet( (PNS::NET_HANDLE) 2 );
+
     world->SetMaxClearance( 10000000 );
     world->SetRuleResolver( &m_ruleResolver );
 
