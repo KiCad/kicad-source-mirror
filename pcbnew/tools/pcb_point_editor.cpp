@@ -162,10 +162,16 @@ public:
         wxASSERT( m_rectangle.GetShape() == SHAPE_T::RECTANGLE );
     }
 
-    void MakePoints( EDIT_POINTS& aPoints ) override
+    /**
+     * Standard rectangle points construction utility
+     * (other shapes may use this as well)
+     */
+    static void MakePoints( const PCB_SHAPE& aRectangle, EDIT_POINTS& aPoints )
     {
-        VECTOR2I topLeft = m_rectangle.GetTopLeft();
-        VECTOR2I botRight = m_rectangle.GetBotRight();
+        wxCHECK( aRectangle.GetShape() == SHAPE_T::RECTANGLE, /* void */ );
+
+        VECTOR2I topLeft = aRectangle.GetTopLeft();
+        VECTOR2I botRight = aRectangle.GetBotRight();
 
         aPoints.SetSwapX( topLeft.x > botRight.x );
         aPoints.SetSwapY( topLeft.y > botRight.y );
@@ -180,7 +186,7 @@ public:
         aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
         aPoints.AddPoint( botRight );
         aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-        aPoints.AddPoint( m_rectangle.GetCenter() );
+        aPoints.AddPoint( aRectangle.GetCenter() );
 
         aPoints.AddLine( aPoints.Point( RECT_TOP_LEFT ), aPoints.Point( RECT_TOP_RIGHT ) );
         aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );
@@ -192,52 +198,32 @@ public:
         aPoints.Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_LEFT ) ) );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    static void UpdateItem( PCB_SHAPE& aRectangle, const EDIT_POINT& aEditedPoint,
+                            EDIT_POINTS& aPoints )
     {
-        CHECK_POINT_COUNT( aPoints, RECT_MAX_POINTS );
-
-        VECTOR2I topLeft = m_rectangle.GetTopLeft();
-        VECTOR2I botRight = m_rectangle.GetBotRight();
-
-        aPoints.SetSwapX( topLeft.x > botRight.x );
-        aPoints.SetSwapY( topLeft.y > botRight.y );
-
-        if( aPoints.SwapX() )
-            std::swap( topLeft.x, botRight.x );
-
-        if( aPoints.SwapY() )
-            std::swap( topLeft.y, botRight.y );
-
-        aPoints.Point( RECT_TOP_LEFT ).SetPosition( topLeft );
-        aPoints.Point( RECT_TOP_RIGHT ).SetPosition( botRight.x, topLeft.y );
-        aPoints.Point( RECT_BOT_RIGHT ).SetPosition( botRight );
-        aPoints.Point( RECT_BOT_LEFT ).SetPosition( topLeft.x, botRight.y );
-        aPoints.Point( RECT_CENTER ).SetPosition( m_rectangle.GetCenter() );
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
-    {
-        CHECK_POINT_COUNT( aPoints, RECT_MAX_POINTS );
+        // You can have more points if your item wants to have more points
+        // (this class assumes the rect points come first, but that can be changed)
+        CHECK_POINT_COUNT_GE( aPoints, RECT_MAX_POINTS );
 
         auto setLeft =
                 [&]( int left )
                 {
-                    aPoints.SwapX() ? m_rectangle.SetRight( left ) : m_rectangle.SetLeft( left );
+                    aPoints.SwapX() ? aRectangle.SetRight( left ) : aRectangle.SetLeft( left );
                 };
         auto setRight =
                 [&]( int right )
                 {
-                    aPoints.SwapX() ? m_rectangle.SetLeft( right ) : m_rectangle.SetRight( right );
+                    aPoints.SwapX() ? aRectangle.SetLeft( right ) : aRectangle.SetRight( right );
                 };
         auto setTop =
                 [&]( int top )
                 {
-                    aPoints.SwapY() ? m_rectangle.SetBottom( top ) : m_rectangle.SetTop( top );
+                    aPoints.SwapY() ? aRectangle.SetBottom( top ) : aRectangle.SetTop( top );
                 };
         auto setBottom =
                 [&]( int bottom )
                 {
-                    aPoints.SwapY() ? m_rectangle.SetTop( bottom ) : m_rectangle.SetBottom( bottom );
+                    aPoints.SwapY() ? aRectangle.SetTop( bottom ) : aRectangle.SetBottom( bottom );
                 };
 
         VECTOR2I topLeft = aPoints.Point( RECT_TOP_LEFT ).GetPosition();
@@ -252,16 +238,16 @@ public:
             || isModified( aEditedPoint, aPoints.Point( RECT_BOT_RIGHT ) )
             || isModified( aEditedPoint, aPoints.Point( RECT_BOT_LEFT ) ) )
         {
-            setLeft( topLeft.x );
             setTop( topLeft.y );
+            setLeft( topLeft.x );
             setRight( botRight.x );
             setBottom( botRight.y );
         }
         else if( isModified( aEditedPoint, aPoints.Point( RECT_CENTER ) ) )
         {
-            VECTOR2I moveVector = VECTOR2I( aPoints.Point( RECT_CENTER ).GetPosition() )
-                                  - m_rectangle.GetCenter();
-            m_rectangle.Move( moveVector );
+            const VECTOR2I moveVector =
+                    aPoints.Point( RECT_CENTER ).GetPosition() - aRectangle.GetCenter();
+            aRectangle.Move( moveVector );
         }
         else if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
         {
@@ -287,6 +273,45 @@ public:
                 aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
             }
         }
+    }
+
+    static void UpdatePoints( PCB_SHAPE& aRectangle, EDIT_POINTS& aPoints )
+    {
+        wxCHECK( aPoints.PointsSize() >= RECT_MAX_POINTS, /* void */ );
+
+        VECTOR2I topLeft = aRectangle.GetTopLeft();
+        VECTOR2I botRight = aRectangle.GetBotRight();
+
+        aPoints.SetSwapX( topLeft.x > botRight.x );
+        aPoints.SetSwapY( topLeft.y > botRight.y );
+
+        if( aPoints.SwapX() )
+            std::swap( topLeft.x, botRight.x );
+
+        if( aPoints.SwapY() )
+            std::swap( topLeft.y, botRight.y );
+
+        aPoints.Point( RECT_TOP_LEFT ).SetPosition( topLeft );
+        aPoints.Point( RECT_TOP_RIGHT ).SetPosition( botRight.x, topLeft.y );
+        aPoints.Point( RECT_BOT_RIGHT ).SetPosition( botRight );
+        aPoints.Point( RECT_BOT_LEFT ).SetPosition( topLeft.x, botRight.y );
+        aPoints.Point( RECT_CENTER ).SetPosition( aRectangle.GetCenter() );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        // Just call the static helper
+        MakePoints( m_rectangle, aPoints );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        UpdatePoints( m_rectangle, aPoints );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        UpdateItem( m_rectangle, aEditedPoint, aPoints );
     }
 
     /**
@@ -2057,6 +2082,65 @@ private:
 };
 
 
+/**
+ * A textbox is edited as a rectnagle when it is orthogonally aligned
+ */
+class TEXTBOX_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    TEXTBOX_POINT_EDIT_BEHAVIOR( PCB_TEXTBOX& aTextbox ) : m_textbox( aTextbox ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        if( m_textbox.GetShape() == SHAPE_T::RECTANGLE )
+        {
+            RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( m_textbox, aPoints );
+        }
+        else
+        {
+            // Rotated textboxes are implemented as polygons and these
+            // aren't currently editable.
+        }
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        // When textboxes are rotated, they act as polygons, not rectangles
+        const unsigned target = m_textbox.GetShape() == SHAPE_T::RECTANGLE
+                                        ? TEXTBOX_POINT_COUNT::WHEN_RECTANGLE
+                                        : TEXTBOX_POINT_COUNT::WHEN_POLYGON;
+
+        // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
+        if( aPoints.PointsSize() != target )
+        {
+            aPoints.Clear();
+            MakePoints( aPoints );
+            return;
+        }
+
+        if( m_textbox.GetShape() == SHAPE_T::RECTANGLE )
+        {
+            // Dispatch to the rectangle behavior
+            RECTANGLE_POINT_EDIT_BEHAVIOR::UpdatePoints( m_textbox, aPoints );
+        }
+        else if( m_textbox.GetShape() == SHAPE_T::POLY )
+        {
+            // Not currently editable while rotated.
+        }
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        if( m_textbox.GetShape() == SHAPE_T::RECTANGLE )
+        {
+            RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem( m_textbox, aEditedPoint, aPoints );
+        }
+    }
+
+private:
+    PCB_TEXTBOX& m_textbox;
+};
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
         PCB_TOOL_BASE( "pcbnew.PointEditor" ), m_selectionTool( nullptr ), m_editedPoint( nullptr ),
         m_hoveredPoint( nullptr ), m_original( VECTOR2I( 0, 0 ) ),
@@ -2098,19 +2182,9 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     if( !aItem )
         return points;
 
+    // Reset the behaviour and we'll make a new one
     m_editorBehavior = nullptr;
 
-    if( aItem->Type() == PCB_TEXTBOX_T )
-    {
-        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
-
-        // We can't currently handle TEXTBOXes that have been turned into SHAPE_T::POLYs due
-        // to non-cardinal rotations
-        if( shape->GetShape() != SHAPE_T::RECTANGLE )
-            return points;
-    }
-
-    // Generate list of edit points basing on the item type
     switch( aItem->Type() )
     {
     case PCB_REFERENCE_IMAGE_T:
@@ -2120,6 +2194,11 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         break;
     }
     case PCB_TEXTBOX_T:
+    {
+        PCB_TEXTBOX& textbox = static_cast<PCB_TEXTBOX&>( *aItem );
+        m_editorBehavior = std::make_unique<TEXTBOX_POINT_EDIT_BEHAVIOR>( textbox );
+        break;
+    }
     case PCB_SHAPE_T:
     {
         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
@@ -2679,57 +2758,6 @@ void PCB_POINT_EDITOR::updatePoints()
         getView()->Update( m_editPoints.get() );
         return;
     }
-
-    switch( item->Type() )
-    {
-    case PCB_REFERENCE_IMAGE_T:
-        break;
-    case PCB_TEXTBOX_T:
-    {
-        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
-
-        // When textboxes are rotated, they act as polygons, not rectangles
-        const int target = shape->GetShape() == SHAPE_T::RECTANGLE
-                                   ? TEXTBOX_POINT_COUNT::WHEN_RECTANGLE
-                                   : TEXTBOX_POINT_COUNT::WHEN_POLYGON;
-
-        // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
-        if( int( m_editPoints->PointsSize() ) != target )
-        {
-            getView()->Remove( m_editPoints.get() );
-            m_editedPoint = nullptr;
-
-            m_editPoints = makePoints( item );
-
-            if( m_editPoints )
-                getView()->Add( m_editPoints.get() );
-
-            break;
-        }
-
-        if( shape->GetShape() == SHAPE_T::RECTANGLE )
-        {
-            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetTopLeft() );
-            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetBotRight().x,
-                                                               shape->GetTopLeft().y );
-            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shape->GetBotRight() );
-            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( shape->GetTopLeft().x,
-                                                              shape->GetBotRight().y );
-
-            m_editPoints->Point( RECT_CENTER ).SetPosition( shape->GetCenter() );
-        }
-        else if( shape->GetShape() == SHAPE_T::POLY )
-        {
-            // Not currently editable while rotated.
-        }
-
-        break;
-    }
-    default:
-        break;
-    }
-
-    getView()->Update( m_editPoints.get() );
 }
 
 
