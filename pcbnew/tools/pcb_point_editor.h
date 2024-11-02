@@ -126,40 +126,6 @@ private:
     int chamferCorner( const TOOL_EVENT& aEvent );
     int modifiedSelection( const TOOL_EVENT& aEvent );
 
-    /**
-     * Move an end point of the arc, while keeping the tangent at the other endpoint.
-     */
-    void editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
-                                     const VECTOR2I& aStart, const VECTOR2I& aMid,
-                                     const VECTOR2I& aEnd, const VECTOR2I& aCursor ) const;
-
-    /**
-     * Move an end point of the arc around the circumference.
-     */
-    void editArcEndpointKeepCenter( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
-                                    const VECTOR2I& aStart, const VECTOR2I& aMid,
-                                    const VECTOR2I& aEnd, const VECTOR2I& aCursor ) const;
-
-    /**
-     * Move the arc center but keep endpoint locations.
-     */
-    void editArcCenterKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
-                                     const VECTOR2I& aStart, const VECTOR2I& aMid,
-                                     const VECTOR2I& aEnd ) const;
-
-    /**
-     * Move the mid point of the arc, while keeping the two endpoints.
-     */
-    void editArcMidKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                                  const VECTOR2I& aCursor ) const;
-
-    /**
-     * Move the mid point of the arc, while keeping the angle.
-     */
-    void editArcMidKeepCenter( PCB_SHAPE* aArc, const VECTOR2I& aCenter, const VECTOR2I& aStart,
-                               const VECTOR2I& aMid, const VECTOR2I& aEnd,
-                               const VECTOR2I& aCursor ) const;
-
     ///< Change the edit method for arcs.
     int changeArcEditMode( const TOOL_EVENT& aEvent );
 
