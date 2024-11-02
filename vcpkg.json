@@ -12,6 +12,7 @@
     "boost-optional",
     "boost-property-tree",
     "boost-ptr-container",
+    "boost-random",
     "boost-range",
     "boost-test",
     "boost-uuid",
@@ -53,7 +54,7 @@
     },
     {
       "name": "wxwidgets",
-      "version": "3.2.6"
+      "version": "3.2.6#1"
     },
     {
       "name": "wxpython",
