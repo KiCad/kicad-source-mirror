@@ -114,16 +114,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-07-16 14:09+0000\n"
-"Last-Translator: boromyr <davideromeo.g@gmail.com>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"PO-Revision-Date: 2024-11-03 08:00+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8.2\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -2098,7 +2098,7 @@ msgstr "Il file '%s' non può essere creato."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Il blocco di progettazione non ha un ID libreria valido."
 
 #: common/design_block_io.cpp:360
 #, fuzzy, c-format
@@ -2925,6 +2925,8 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Non mostrare più questa finestra di dialogo fino al riavvio di KiCad. Si può "
+"riattivare questa finestra di dialogo nelle preferenze di Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, fuzzy, c-format
@@ -3332,6 +3334,8 @@ msgstr "Assegnamento alternativo"
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Rimuovere le informazioni di collegamento da tutti gli elementi connessi "
+"prima di incollare"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -4039,19 +4043,23 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Predefinito 'explorer.exe /n,/select,%F' per questo sistema operativo."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Comando di esplorazione fine.\n"
+"esempio:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"Comando di esplorazione file con suffisso '%s' obbligatorio dopo l'ultimo "
+"carattere inserito."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -4154,11 +4162,11 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:174
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Usa colori di riga alternati nelle tabelle"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 msgid "When enabled, use a different color for every other table row"
-msgstr ""
+msgstr "Se abilitata, usa un colore diverso per ogni altra riga della tabella"
 
 #: common/dialogs/panel_common_settings_base.cpp:185
 msgid "Icon theme:"
@@ -4853,7 +4861,7 @@ msgstr "Libreria di simboli '%s' non scrivibile."
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "Riprova"
 
 #: common/dialogs/panel_embedded_files.cpp:297
 #, fuzzy, c-format
@@ -44660,7 +44668,7 @@ msgstr "Strati meccanici"
 
 #: pcbnew/pad.cpp:2474
 msgid "Oblong"
-msgstr ""
+msgstr "Oblunga"
 
 #: pcbnew/pad.cpp:2492
 #, fuzzy
