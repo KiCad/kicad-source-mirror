@@ -2670,15 +2670,19 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
 
 void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 {
+    wxCHECK( m_editPoints, /* void */ );
     EDA_ITEM* item = m_editPoints->GetParent();
 
-    if( !item )
+    if( !item || !m_editorBehavior )
         return;
 
     if( m_editorBehavior )
     {
+        wxCHECK( m_editedPoint, /* void */ );
         m_editorBehavior->UpdateItem( *m_editedPoint, *m_editPoints );
     }
+
+    // Perform any post-edit actions that the item may require
 
     switch( item->Type() )
     {
@@ -2751,13 +2755,11 @@ void PCB_POINT_EDITOR::updatePoints()
     if( !item )
         return;
 
-    if( m_editorBehavior )
-    {
-        // If we have an editor behavior, let it handle the update
-        m_editorBehavior->UpdatePoints( *m_editPoints );
-        getView()->Update( m_editPoints.get() );
+    if( !m_editorBehavior )
         return;
-    }
+
+    m_editorBehavior->UpdatePoints( *m_editPoints );
+    getView()->Update( m_editPoints.get() );
 }
 
 
