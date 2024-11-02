@@ -914,43 +914,92 @@ public:
         buildForPolyOutline( aPoints, m_polygon.GetPolyShape() );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    /**
+     * Update the edit points with the current polygon outline.
+     *
+     * If the point sizes differ, the points are rebuilt entirely (in-place)
+     */
+    static void UpdatePointsFromOutline( const SHAPE_POLY_SET& aOutline, EDIT_POINTS& aPoints )
     {
-        // No size check here, as we can and will rebuild if that fails
-
-        std::vector<VECTOR2I> points;
-        m_polygon.DupPolyPointsList( points );
-
-        if( aPoints.PointsSize() != points.size() )
+        if( aPoints.PointsSize() != (unsigned) aOutline.TotalVertices() )
         {
             aPoints.Clear();
-            MakePoints( aPoints );
+            buildForPolyOutline( aPoints, aOutline );
         }
         else
         {
-            for( unsigned i = 0; i < points.size(); i++ )
-                aPoints.Point( i ).SetPosition( points[i] );
+            for( int i = 0; i < aOutline.TotalVertices(); ++i )
+            {
+                aPoints.Point( i ).SetPosition( aOutline.CVertex( i ) );
+            }
         }
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    static void UpdateOutlineFromPoints( SHAPE_POLY_SET& aOutline, const EDIT_POINT& aEditedPoint,
+                                         EDIT_POINTS& aPoints )
     {
-        CHECK_POINT_COUNT( aPoints, (unsigned) m_polygon.GetPolyShape().TotalVertices() );
+        CHECK_POINT_COUNT_GE( aPoints, (unsigned) aOutline.TotalVertices() );
 
-        SHAPE_POLY_SET& outline = m_polygon.GetPolyShape();
-
-        for( int i = 0; i < outline.TotalVertices(); ++i )
-            outline.SetVertex( i, aPoints.Point( i ).GetPosition() );
+        for( int i = 0; i < aOutline.TotalVertices(); ++i )
+        {
+            aOutline.SetVertex( i, aPoints.Point( i ).GetPosition() );
+        }
 
         for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
         {
             if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
+            {
                 aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+            }
         }
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        // No size check here, as we can and will rebuild if that fails
+        UpdatePointsFromOutline( m_polygon.GetPolyShape(), aPoints );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        UpdateOutlineFromPoints( m_polygon.GetPolyShape(), aEditedPoint, aPoints );
     }
 
 private:
     PCB_SHAPE& m_polygon;
+};
+
+
+class ZONE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    ZONE_POINT_EDIT_BEHAVIOR( ZONE& aZone ) : m_zone( aZone ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        buildForPolyOutline( aPoints, *m_zone.Outline() );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        // No size check here, as we can and will rebuild if that fails;
+        POLYGON_POINT_EDIT_BEHAVIOR::UpdatePointsFromOutline( *m_zone.Outline(), aPoints );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        SHAPE_POLY_SET& outline = *m_zone.Outline();
+        CHECK_POINT_COUNT( aPoints, (unsigned) outline.TotalVertices() );
+
+        m_zone.UnFill();
+
+        POLYGON_POINT_EDIT_BEHAVIOR::UpdateOutlineFromPoints( outline, aEditedPoint, aPoints );
+
+        m_zone.HatchBorder();
+    }
+
+private:
+    ZONE& m_zone;
 };
 
 
@@ -1375,8 +1424,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
     case PCB_ZONE_T:
     {
-        const ZONE* zone = static_cast<const ZONE*>( aItem );
-        buildForPolyOutline( *points, *zone->Outline() );
+        ZONE& zone = static_cast<ZONE&>( *aItem );
+        m_editorBehavior = std::make_unique<ZONE_POINT_EDIT_BEHAVIOR>( zone );
         break;
     }
 
@@ -2110,31 +2159,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 
         break;
     }
-
-    case PCB_ZONE_T:
-    {
-        ZONE* zone = static_cast<ZONE*>( item );
-        zone->UnFill();
-        SHAPE_POLY_SET& outline = *zone->Outline();
-
-        for( int i = 0; i < outline.TotalVertices(); ++i )
-        {
-            if( outline.CVertex( i ) != m_editPoints->Point( i ).GetPosition() )
-                zone->SetNeedRefill( true );
-
-            outline.SetVertex( i, m_editPoints->Point( i ).GetPosition() );
-        }
-
-        for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
-        {
-            if( !isModified( m_editPoints->Line( i ) ) )
-                m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
-        }
-
-        zone->HatchBorder();
-        break;
-    }
-
     case PCB_GENERATOR_T:
     {
         GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
@@ -2531,30 +2555,6 @@ void PCB_POINT_EDITOR::updatePoints()
         }
     }
         break;
-
-    case PCB_ZONE_T:
-    {
-        ZONE*                 zone = static_cast<ZONE*>( item );
-        const SHAPE_POLY_SET* outline = zone->Outline();
-
-        if( m_editPoints->PointsSize() != (unsigned) outline->TotalVertices() )
-        {
-            getView()->Remove( m_editPoints.get() );
-            m_editedPoint = nullptr;
-
-            m_editPoints = makePoints( item );
-
-            if( m_editPoints )
-                getView()->Add( m_editPoints.get() );
-        }
-        else
-        {
-            for( int i = 0; i < outline->TotalVertices(); ++i )
-                m_editPoints->Point( i ).SetPosition( outline->CVertex( i ) );
-        }
-
-        break;
-    }
 
     case PCB_GENERATOR_T:
     {
