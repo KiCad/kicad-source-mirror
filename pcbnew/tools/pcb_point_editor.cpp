@@ -1269,6 +1269,226 @@ private:
 };
 
 
+class PAD_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    PAD_POINT_EDIT_BEHAVIOR( PAD& aPad ) : m_pad( aPad ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        // TODO(JE) padstacks
+        VECTOR2I shapePos = m_pad.ShapePos( PADSTACK::ALL_LAYERS );
+        VECTOR2I halfSize( m_pad.GetSize( PADSTACK::ALL_LAYERS ).x / 2,
+                           m_pad.GetSize( PADSTACK::ALL_LAYERS ).y / 2 );
+
+        if( m_pad.IsLocked() )
+            return;
+
+        switch( m_pad.GetShape( PADSTACK::ALL_LAYERS ) )
+        {
+        case PAD_SHAPE::CIRCLE:
+            aPoints.AddPoint( VECTOR2I( shapePos.x + halfSize.x, shapePos.y ) );
+            break;
+
+        case PAD_SHAPE::OVAL:
+        case PAD_SHAPE::TRAPEZOID:
+        case PAD_SHAPE::RECTANGLE:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::CHAMFERED_RECT:
+        {
+            if( !m_pad.GetOrientation().IsCardinal() )
+                break;
+
+            if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
+                std::swap( halfSize.x, halfSize.y );
+
+            // It's important to fill these according to the RECT indices
+            aPoints.AddPoint( shapePos - halfSize );
+            aPoints.AddPoint( VECTOR2I( shapePos.x + halfSize.x, shapePos.y - halfSize.y ) );
+            aPoints.AddPoint( shapePos + halfSize );
+            aPoints.AddPoint( VECTOR2I( shapePos.x - halfSize.x, shapePos.y + halfSize.y ) );
+        }
+        break;
+
+        default: // suppress warnings
+            break;
+        }
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        // TODO(JE) padstacks
+        bool     locked = m_pad.GetParent() && m_pad.IsLocked();
+        VECTOR2I shapePos = m_pad.ShapePos( PADSTACK::ALL_LAYERS );
+        VECTOR2I halfSize( m_pad.GetSize( PADSTACK::ALL_LAYERS ).x / 2,
+                           m_pad.GetSize( PADSTACK::ALL_LAYERS ).y / 2 );
+
+        switch( m_pad.GetShape( PADSTACK::ALL_LAYERS ) )
+        {
+        case PAD_SHAPE::CIRCLE:
+        {
+            int target = locked ? 0 : 1;
+
+            // Careful; pad shape is mutable...
+            if( int( aPoints.PointsSize() ) != target )
+            {
+                aPoints.Clear();
+                MakePoints( aPoints );
+            }
+            else if( target == 1 )
+            {
+                shapePos.x += halfSize.x;
+                aPoints.Point( 0 ).SetPosition( shapePos );
+            }
+        }
+        break;
+
+        case PAD_SHAPE::OVAL:
+        case PAD_SHAPE::TRAPEZOID:
+        case PAD_SHAPE::RECTANGLE:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::CHAMFERED_RECT:
+        {
+            // Careful; pad shape and orientation are mutable...
+            int target = locked || !m_pad.GetOrientation().IsCardinal() ? 0 : 4;
+
+            if( int( aPoints.PointsSize() ) != target )
+            {
+                aPoints.Clear();
+                MakePoints( aPoints );
+            }
+            else if( target == 4 )
+            {
+                if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
+                    std::swap( halfSize.x, halfSize.y );
+
+                aPoints.Point( RECT_TOP_LEFT ).SetPosition( shapePos - halfSize );
+                aPoints.Point( RECT_TOP_RIGHT )
+                        .SetPosition(
+                                VECTOR2I( shapePos.x + halfSize.x, shapePos.y - halfSize.y ) );
+                aPoints.Point( RECT_BOT_RIGHT ).SetPosition( shapePos + halfSize );
+                aPoints.Point( RECT_BOT_LEFT )
+                        .SetPosition(
+                                VECTOR2I( shapePos.x - halfSize.x, shapePos.y + halfSize.y ) );
+            }
+
+            break;
+        }
+
+        default: // suppress warnings
+            break;
+        }
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        // TODO(JE) padstacks
+        switch( m_pad.GetShape( PADSTACK::ALL_LAYERS ) )
+        {
+        case PAD_SHAPE::CIRCLE:
+        {
+            VECTOR2I end = aPoints.Point( 0 ).GetPosition();
+            int      diameter = 2 * ( end - m_pad.GetPosition() ).EuclideanNorm();
+
+            m_pad.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( diameter, diameter ) );
+            break;
+        }
+
+        case PAD_SHAPE::OVAL:
+        case PAD_SHAPE::TRAPEZOID:
+        case PAD_SHAPE::RECTANGLE:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::CHAMFERED_RECT:
+        {
+            VECTOR2I topLeft = aPoints.Point( RECT_TOP_LEFT ).GetPosition();
+            VECTOR2I topRight = aPoints.Point( RECT_TOP_RIGHT ).GetPosition();
+            VECTOR2I botLeft = aPoints.Point( RECT_BOT_LEFT ).GetPosition();
+            VECTOR2I botRight = aPoints.Point( RECT_BOT_RIGHT ).GetPosition();
+            VECTOR2I holeCenter = m_pad.GetPosition();
+            VECTOR2I holeSize = m_pad.GetDrillSize();
+
+            RECTANGLE_POINT_EDIT_BEHAVIOR::PinEditedCorner( aEditedPoint, aPoints, topLeft,
+                                                            topRight, botLeft, botRight, holeCenter,
+                                                            holeSize );
+
+            if( ( m_pad.GetOffset( PADSTACK::ALL_LAYERS ).x
+                  || m_pad.GetOffset( PADSTACK::ALL_LAYERS ).y )
+                || ( m_pad.GetDrillSize().x && m_pad.GetDrillSize().y ) )
+            {
+                // Keep hole pinned at the current location; adjust the pad around the hole
+
+                VECTOR2I center = m_pad.GetPosition();
+                int      dist[4];
+
+                if( isModified( aEditedPoint, aPoints.Point( RECT_TOP_LEFT ) )
+                    || isModified( aEditedPoint, aPoints.Point( RECT_BOT_RIGHT ) ) )
+                {
+                    dist[0] = center.x - topLeft.x;
+                    dist[1] = center.y - topLeft.y;
+                    dist[2] = botRight.x - center.x;
+                    dist[3] = botRight.y - center.y;
+                }
+                else
+                {
+                    dist[0] = center.x - botLeft.x;
+                    dist[1] = center.y - topRight.y;
+                    dist[2] = topRight.x - center.x;
+                    dist[3] = botLeft.y - center.y;
+                }
+
+                VECTOR2I padSize( dist[0] + dist[2], dist[1] + dist[3] );
+                VECTOR2I deltaOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
+
+                if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
+                    std::swap( padSize.x, padSize.y );
+
+                RotatePoint( deltaOffset, -m_pad.GetOrientation() );
+
+                m_pad.SetSize( PADSTACK::ALL_LAYERS, padSize );
+                m_pad.SetOffset( PADSTACK::ALL_LAYERS, -deltaOffset );
+            }
+            else
+            {
+                // Keep pad position at the center of the pad shape
+
+                int left, top, right, bottom;
+
+                if( isModified( aEditedPoint, aPoints.Point( RECT_TOP_LEFT ) )
+                    || isModified( aEditedPoint, aPoints.Point( RECT_BOT_RIGHT ) ) )
+                {
+                    left = topLeft.x;
+                    top = topLeft.y;
+                    right = botRight.x;
+                    bottom = botRight.y;
+                }
+                else
+                {
+                    left = botLeft.x;
+                    top = topRight.y;
+                    right = topRight.x;
+                    bottom = botLeft.y;
+                }
+
+                VECTOR2I padSize( abs( right - left ), abs( bottom - top ) );
+
+                if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
+                    std::swap( padSize.x, padSize.y );
+
+                m_pad.SetSize( PADSTACK::ALL_LAYERS, padSize );
+                m_pad.SetPosition( VECTOR2I( ( left + right ) / 2, ( top + bottom ) / 2 ) );
+            }
+            break;
+        }
+        default: // suppress warnings
+            break;
+        }
+    }
+
+private:
+    PAD& m_pad;
+};
+
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( nullptr ),
@@ -1381,44 +1601,12 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
     case PCB_PAD_T:
     {
-        const PAD* pad = static_cast<const PAD*>( aItem );
-        // TODO(JE) padstacks
-        VECTOR2I   shapePos = pad->ShapePos( PADSTACK::ALL_LAYERS );
-        VECTOR2I   halfSize( pad->GetSize( PADSTACK::ALL_LAYERS ).x / 2,
-                             pad->GetSize( PADSTACK::ALL_LAYERS ).y / 2 );
-
-        if( !m_isFootprintEditor || pad->IsLocked() )
-            break;
-
-        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
+        // Pad edit only for the footprint editor
+        if( m_isFootprintEditor )
         {
-        case PAD_SHAPE::CIRCLE:
-            points->AddPoint( VECTOR2I( shapePos.x + halfSize.x, shapePos.y ) );
-            break;
-
-        case PAD_SHAPE::OVAL:
-        case PAD_SHAPE::TRAPEZOID:
-        case PAD_SHAPE::RECTANGLE:
-        case PAD_SHAPE::ROUNDRECT:
-        case PAD_SHAPE::CHAMFERED_RECT:
-        {
-            if( !pad->GetOrientation().IsCardinal() )
-                break;
-
-            if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
-                std::swap( halfSize.x, halfSize.y );
-
-            points->AddPoint( shapePos - halfSize );
-            points->AddPoint( VECTOR2I( shapePos.x + halfSize.x, shapePos.y - halfSize.y ) );
-            points->AddPoint( shapePos + halfSize );
-            points->AddPoint( VECTOR2I( shapePos.x - halfSize.x, shapePos.y + halfSize.y ) );
+            PAD& pad = static_cast<PAD&>( *aItem );
+            m_editorBehavior = std::make_unique<PAD_POINT_EDIT_BEHAVIOR>( pad );
         }
-            break;
-
-        default:        // suppress warnings
-            break;
-        }
-
         break;
     }
 
@@ -2051,114 +2239,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         getView()->Update( &table );
         break;
     }
-
-    case PCB_PAD_T:
-    {
-        PAD* pad = static_cast<PAD*>( item );
-
-        // TODO(JE) padstacks
-        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
-        {
-        case PAD_SHAPE::CIRCLE:
-        {
-            VECTOR2I end = m_editPoints->Point( 0 ).GetPosition();
-            int      diameter = 2 * ( end - pad->GetPosition() ).EuclideanNorm();
-
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( diameter, diameter ) );
-            break;
-        }
-
-        case PAD_SHAPE::OVAL:
-        case PAD_SHAPE::TRAPEZOID:
-        case PAD_SHAPE::RECTANGLE:
-        case PAD_SHAPE::ROUNDRECT:
-        case PAD_SHAPE::CHAMFERED_RECT:
-        {
-            VECTOR2I topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
-            VECTOR2I topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
-            VECTOR2I botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
-            VECTOR2I botRight = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition();
-            VECTOR2I holeCenter = pad->GetPosition();
-            VECTOR2I holeSize = pad->GetDrillSize();
-
-            RECTANGLE_POINT_EDIT_BEHAVIOR::PinEditedCorner( *m_editedPoint, *m_editPoints, topLeft,
-                                                            topRight, botLeft, botRight, holeCenter,
-                                                            holeSize );
-
-            if( ( pad->GetOffset( PADSTACK::ALL_LAYERS ).x || pad->GetOffset( PADSTACK::ALL_LAYERS ).y )
-                    || ( pad->GetDrillSize().x && pad->GetDrillSize().y ) )
-            {
-                // Keep hole pinned at the current location; adjust the pad around the hole
-
-                VECTOR2I center = pad->GetPosition();
-                int      dist[4];
-
-                if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
-                        || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
-                {
-                    dist[0] = center.x - topLeft.x;
-                    dist[1] = center.y - topLeft.y;
-                    dist[2] = botRight.x - center.x;
-                    dist[3] = botRight.y - center.y;
-                }
-                else
-                {
-                    dist[0] = center.x - botLeft.x;
-                    dist[1] = center.y - topRight.y;
-                    dist[2] = topRight.x - center.x;
-                    dist[3] = botLeft.y - center.y;
-                }
-
-                VECTOR2I padSize( dist[0] + dist[2], dist[1] + dist[3] );
-                VECTOR2I deltaOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
-
-                if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
-                    std::swap( padSize.x, padSize.y );
-
-                RotatePoint( deltaOffset, -pad->GetOrientation() );
-
-                pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
-                pad->SetOffset( PADSTACK::ALL_LAYERS, -deltaOffset );
-            }
-            else
-            {
-                // Keep pad position at the center of the pad shape
-
-                int left, top, right, bottom;
-
-                if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
-                        || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
-                {
-                    left = topLeft.x;
-                    top = topLeft.y;
-                    right = botRight.x;
-                    bottom = botRight.y;
-                }
-                else
-                {
-                    left = botLeft.x;
-                    top = topRight.y;
-                    right = topRight.x;
-                    bottom = botLeft.y;
-                }
-
-                VECTOR2I padSize( abs( right - left ), abs( bottom - top ) );
-
-                if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
-                    std::swap( padSize.x, padSize.y );
-
-                pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
-                pad->SetPosition( VECTOR2I( ( left + right ) / 2, ( top + bottom ) / 2 ) );
-            }
-            break;
-        }
-
-        default:        // suppress warnings
-            break;
-        }
-
-        break;
-    }
     case PCB_GENERATOR_T:
     {
         GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
@@ -2480,82 +2560,6 @@ void PCB_POINT_EDITOR::updatePoints()
 
         break;
     }
-    case PCB_PAD_T:
-    {
-        // TODO(JE) padstacks
-        const PAD* pad = static_cast<const PAD*>( item );
-        bool       locked = pad->GetParent() && pad->IsLocked();
-        VECTOR2I   shapePos = pad->ShapePos( PADSTACK::ALL_LAYERS );
-        VECTOR2I   halfSize( pad->GetSize( PADSTACK::ALL_LAYERS ).x / 2, pad->GetSize( PADSTACK::ALL_LAYERS ).y / 2 );
-
-        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
-        {
-        case PAD_SHAPE::CIRCLE:
-        {
-            int target = locked ? 0 : 1;
-
-            // Careful; pad shape is mutable...
-            if( int( m_editPoints->PointsSize() ) != target )
-            {
-                getView()->Remove( m_editPoints.get() );
-                m_editedPoint = nullptr;
-
-                m_editPoints = makePoints( item );
-
-                if( m_editPoints )
-                    getView()->Add( m_editPoints.get() );
-            }
-            else if( target == 1 )
-            {
-                shapePos.x += halfSize.x;
-                m_editPoints->Point( 0 ).SetPosition( shapePos );
-            }
-        }
-            break;
-
-        case PAD_SHAPE::OVAL:
-        case PAD_SHAPE::TRAPEZOID:
-        case PAD_SHAPE::RECTANGLE:
-        case PAD_SHAPE::ROUNDRECT:
-        case PAD_SHAPE::CHAMFERED_RECT:
-        {
-            // Careful; pad shape and orientation are mutable...
-            int target = locked || !pad->GetOrientation().IsCardinal() ? 0 : 4;
-
-            if( int( m_editPoints->PointsSize() ) != target )
-            {
-                getView()->Remove( m_editPoints.get() );
-                m_editedPoint = nullptr;
-
-                m_editPoints = makePoints( item );
-
-                if( m_editPoints )
-                    getView()->Add( m_editPoints.get() );
-            }
-            else if( target == 4 )
-            {
-                if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
-                    std::swap( halfSize.x, halfSize.y );
-
-                m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shapePos - halfSize );
-                m_editPoints->Point( RECT_TOP_RIGHT )
-                        .SetPosition(
-                                VECTOR2I( shapePos.x + halfSize.x, shapePos.y - halfSize.y ) );
-                m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shapePos + halfSize );
-                m_editPoints->Point( RECT_BOT_LEFT )
-                        .SetPosition(
-                                VECTOR2I( shapePos.x - halfSize.x, shapePos.y + halfSize.y ) );
-            }
-
-            break;
-        }
-
-        default:        // suppress warnings
-            break;
-        }
-    }
-        break;
-
     case PCB_GENERATOR_T:
     {
         PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
