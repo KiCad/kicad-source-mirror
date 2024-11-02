@@ -1,8 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -823,43 +822,39 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
 
                         if( ang == DIRECTION_45::ANG_HALF_FULL || DIRECTION_45::ANG_STRAIGHT )
                         {
-
-                            
-
-                            int dist = lastPreDrag.LineDistance( l.preDragLine.CPoint( l.leaderSegIndex ), true );
+                            int dist = lastPreDrag.LineDistance(
+                                    l.preDragLine.CPoint( l.leaderSegIndex ), true );
                             auto projected = aP + perp.Resize( dist );
 
-                            SEG sperp( aP, aP + perp.Resize( 10000000 ) );
-                            VECTOR2I startProj = sperp.LineProject( m_dragStartPoint  );
+                            SEG      sperp( aP, aP + perp.Resize( 10000000 ) );
+                            VECTOR2I startProj = sperp.LineProject( m_dragStartPoint );
 
-                            SHAPE_LINE_CHAIN ll(
-                            { sperp.A, sperp.B } );
+                            SHAPE_LINE_CHAIN ll( { sperp.A, sperp.B } );
 
 
-    //                        PNS_DBG( Dbg(), AddPoint, m_dragStartPoint, LIGHTRED, 400000, "par" );
-                          
                             PNS_DBG( Dbg(), AddShape, &ll, LIGHTBLUE, 100000, "par" );
-                            SHAPE_LINE_CHAIN ll2(
-                            { sdrag.A, sdrag.B } );
+                            SHAPE_LINE_CHAIN ll2( { sdrag.A, sdrag.B } );
                             PNS_DBG( Dbg(), AddShape, &ll2, LIGHTBLUE, 100000, "sdrag" );
                             VECTOR2I v = projected - startProj;
                             l.dragDist = v.EuclideanNorm() * sign( v.Dot( perp ) );
                             l.dragOK = true;
 
-                            if(!l.isPrimaryLine)
+                            if( !l.isPrimaryLine )
                             {
-                            l.draggedLine = l.preDragLine;
-                            l.draggedLine.ClearLinks();
-                            l.draggedLine.SetSnapThreshhold( snapThreshold );
-                            l.draggedLine.DragSegment( projected, l.leaderSegIndex, false );
-                            //l.dragAnchor = projected;
-                            completed.push_back( l );
-                            PNS_DBG( Dbg(), AddItem, &l.draggedLine, LIGHTBLUE, 100000, "dragged" );
+                                l.draggedLine = l.preDragLine;
+                                l.draggedLine.ClearLinks();
+                                l.draggedLine.SetSnapThreshhold( snapThreshold );
+                                l.draggedLine.DragSegment( projected, l.leaderSegIndex, false );
+                                completed.push_back( l );
+                                PNS_DBG( Dbg(), AddItem, &l.draggedLine, LIGHTBLUE, 100000,
+                                         "dragged" );
                             }
-                            
 
-                            PNS_DBG( Dbg(), AddPoint, startProj, LIGHTBLUE, 400000, wxT("startProj") );
-                            PNS_DBG( Dbg(), AddPoint, projected, LIGHTRED, 400000, wxString::Format("pro dd=%d", l.dragDist ) );
+
+                            PNS_DBG( Dbg(), AddPoint, startProj, LIGHTBLUE, 400000,
+                                     wxT( "startProj" ) );
+                            PNS_DBG( Dbg(), AddPoint, projected, LIGHTRED, 400000,
+                                     wxString::Format( "pro dd=%d", l.dragDist ) );
                         }
                     }
                 }

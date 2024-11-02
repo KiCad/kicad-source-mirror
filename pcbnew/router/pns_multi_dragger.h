@@ -1,7 +1,6 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
  * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
