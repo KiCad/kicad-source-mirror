@@ -74,7 +74,7 @@ private:
     std::shared_ptr<EDIT_POINTS> makePoints( EDA_ITEM* aItem );
 
     ///< Update item's points with edit points.
-    void updateItem( BOARD_COMMIT* aCommit );
+    void updateItem( BOARD_COMMIT& aCommit );
 
     ///< Update edit points with item's points.
     void updatePoints();

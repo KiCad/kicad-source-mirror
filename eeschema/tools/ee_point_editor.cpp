@@ -104,10 +104,101 @@ enum BEZIER_POINTS
 };
 
 
+class LINE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    LINE_POINT_EDIT_BEHAVIOR( SCH_LINE& aLine, SCH_SCREEN& aScreen ) :
+            m_line( aLine ), m_screen( aScreen )
+    {
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        std::pair<EDA_ITEM*, int> connectedStart = { nullptr, STARTPOINT };
+        std::pair<EDA_ITEM*, int> connectedEnd = { nullptr, STARTPOINT };
+
+        for( SCH_ITEM* test : m_screen.Items().OfType( SCH_LINE_T ) )
+        {
+            if( test->GetLayer() != LAYER_NOTES )
+                continue;
+
+            if( test == &m_line )
+                continue;
+
+            SCH_LINE* testLine = static_cast<SCH_LINE*>( test );
+
+            if( testLine->GetStartPoint() == m_line.GetStartPoint() )
+            {
+                connectedStart = { testLine, STARTPOINT };
+            }
+            else if( testLine->GetEndPoint() == m_line.GetStartPoint() )
+            {
+                connectedStart = { testLine, ENDPOINT };
+            }
+            else if( testLine->GetStartPoint() == m_line.GetEndPoint() )
+            {
+                connectedEnd = { testLine, STARTPOINT };
+            }
+            else if( testLine->GetEndPoint() == m_line.GetEndPoint() )
+            {
+                connectedEnd = { testLine, ENDPOINT };
+            }
+        }
+
+        aPoints.AddPoint( m_line.GetStartPoint(), connectedStart );
+        aPoints.AddPoint( m_line.GetEndPoint(), connectedEnd );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.Point( LINE_START ).SetPosition( m_line.GetStartPoint() );
+        aPoints.Point( LINE_END ).SetPosition( m_line.GetEndPoint() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoints, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        m_line.SetStartPoint( aPoints.Point( LINE_START ).GetPosition() );
+        m_line.SetEndPoint( aPoints.Point( LINE_END ).GetPosition() );
+
+        std::pair<EDA_ITEM*, int> connected = aPoints.Point( LINE_START ).GetConnected();
+
+        if( connected.first )
+        {
+            aCommit.Modify( connected.first, &m_screen );
+            aUpdatedItems.push_back( connected.first );
+
+            if( connected.second == STARTPOINT )
+                static_cast<SCH_LINE*>( connected.first )->SetStartPoint( m_line.GetStartPoint() );
+            else if( connected.second == ENDPOINT )
+                static_cast<SCH_LINE*>( connected.first )->SetEndPoint( m_line.GetStartPoint() );
+        }
+
+        connected = aPoints.Point( LINE_END ).GetConnected();
+
+        if( connected.first )
+        {
+            aCommit.Modify( connected.first, &m_screen );
+            aUpdatedItems.push_back( connected.first );
+
+            if( connected.second == STARTPOINT )
+                static_cast<SCH_LINE*>( connected.first )->SetStartPoint( m_line.GetEndPoint() );
+            else if( connected.second == ENDPOINT )
+                static_cast<SCH_LINE*>( connected.first )->SetEndPoint( m_line.GetEndPoint() );
+        }
+    }
+
+private:
+    SCH_LINE&   m_line;
+    SCH_SCREEN& m_screen;
+};
+
+
 class EDIT_POINTS_FACTORY
 {
 public:
-    static std::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem, SCH_BASE_FRAME* frame )
+    static std::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem, SCH_BASE_FRAME* frame,
+                                              std::unique_ptr<POINT_EDIT_BEHAVIOR>& editBehavior )
     {
         std::shared_ptr<EDIT_POINTS> points = std::make_shared<EDIT_POINTS>( aItem );
 
@@ -272,46 +363,16 @@ public:
 
         case SCH_LINE_T:
         {
-            SCH_LINE* line = (SCH_LINE*) aItem;
-            std::pair<EDA_ITEM*, int> connectedStart = { nullptr, STARTPOINT };
-            std::pair<EDA_ITEM*, int> connectedEnd = { nullptr, STARTPOINT };
-
-            for( SCH_ITEM* test : frame->GetScreen()->Items().OfType( SCH_LINE_T ) )
-            {
-                if( test->GetLayer() != LAYER_NOTES )
-                    continue;
-
-                if( test == aItem )
-                    continue;
-
-                SCH_LINE* testLine = static_cast<SCH_LINE*>( test );
-
-                if( testLine->GetStartPoint() == line->GetStartPoint() )
-                {
-                    connectedStart = { testLine, STARTPOINT };
-                }
-                else if( testLine->GetEndPoint() == line->GetStartPoint() )
-                {
-                    connectedStart = { testLine, ENDPOINT };
-                }
-                else if( testLine->GetStartPoint() == line->GetEndPoint() )
-                {
-                    connectedEnd = { testLine, STARTPOINT };
-                }
-                else if( testLine->GetEndPoint() == line->GetEndPoint() )
-                {
-                    connectedEnd = { testLine, ENDPOINT };
-                }
-            }
-
-            points->AddPoint( line->GetStartPoint(), connectedStart );
-            points->AddPoint( line->GetEndPoint(), connectedEnd );
+            SCH_LINE& line = static_cast<SCH_LINE&>( *aItem );
+            editBehavior = std::make_unique<LINE_POINT_EDIT_BEHAVIOR>( line, *frame->GetScreen() );
             break;
         }
+        default: points.reset(); break;
+        }
 
-        default:
-            points.reset();
-            break;
+        if( editBehavior )
+        {
+            editBehavior->MakePoints( *points );
         }
 
         return points;
@@ -427,7 +488,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     controls->ShowCursor( true );
 
-    m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame );
+    m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame, m_editBehavior );
     view->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
@@ -461,19 +522,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             {
                 commit.Modify( m_editPoints->GetParent(), m_frame->GetScreen() );
 
-                if( m_editPoints->GetParent()->Type() == SCH_LINE_T )
-                {
-                    std::pair<EDA_ITEM*, int> connected = m_editPoints->Point( LINE_START ).GetConnected();
-
-                    if( connected.first )
-                        commit.Modify( connected.first, m_frame->GetScreen() );
-
-                    connected = m_editPoints->Point( LINE_END ).GetConnected();
-
-                    if( connected.first )
-                        commit.Modify( connected.first, m_frame->GetScreen() );
-                }
-                else if( m_editPoints->GetParent()->Type() == SCH_TABLECELL_T )
+                if( m_editPoints->GetParent()->Type() == SCH_TABLECELL_T )
                 {
                     SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( m_editPoints->GetParent() );
                     SCH_TABLE*     table = static_cast<SCH_TABLE*>( cell->GetParent() );
@@ -728,6 +777,19 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
 
     if( !item )
         return;
+
+    std::vector<EDA_ITEM*> updateditems = { item };
+    if( m_editBehavior )
+    {
+        m_editBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updateditems );
+
+        for( EDA_ITEM* updatedItem : updateditems )
+        {
+            updateItem( updatedItem, true );
+        }
+
+        return;
+    }
 
     switch( item->Type() )
     {
@@ -1095,46 +1157,14 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
 
         break;
     }
-
-    case SCH_LINE_T:
-    {
-        SCH_LINE* line = (SCH_LINE*) item;
-
-        line->SetStartPoint( m_editPoints->Point( LINE_START ).GetPosition() );
-        line->SetEndPoint( m_editPoints->Point( LINE_END ).GetPosition() );
-
-        std::pair<EDA_ITEM*, int> connected = m_editPoints->Point( LINE_START ).GetConnected();
-
-        if( connected.first )
-        {
-            if( connected.second == STARTPOINT )
-                static_cast<SCH_LINE*>( connected.first )->SetStartPoint( line->GetStartPoint() );
-            else if( connected.second == ENDPOINT )
-                static_cast<SCH_LINE*>( connected.first )->SetEndPoint( line->GetStartPoint() );
-
-            updateItem( connected.first, true );
-        }
-
-        connected = m_editPoints->Point( LINE_END ).GetConnected();
-
-        if( connected.first )
-        {
-            if( connected.second == STARTPOINT )
-                static_cast<SCH_LINE*>( connected.first )->SetStartPoint( line->GetEndPoint() );
-            else if( connected.second == ENDPOINT )
-                static_cast<SCH_LINE*>( connected.first )->SetEndPoint( line->GetEndPoint() );
-
-            updateItem( connected.first, true );
-        }
-
-        break;
-    }
-
     default:
         break;
     }
 
-    updateItem( item, true );
+    for( EDA_ITEM* updatedItem : updateditems )
+    {
+        updateItem( updatedItem, true );
+    }
     m_frame->SetMsgPanel( item );
 }
 
@@ -1148,6 +1178,12 @@ void EE_POINT_EDITOR::updatePoints()
 
     if( !item )
         return;
+
+    if( m_editBehavior )
+    {
+        m_editBehavior->UpdatePoints( *m_editPoints );
+        return;
+    }
 
     switch( item->Type() )
     {
@@ -1175,7 +1211,7 @@ void EE_POINT_EDITOR::updatePoints()
             {
                 getView()->Remove( m_editPoints.get() );
                 m_editedPoint = nullptr;
-                m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame );
+                // m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame );
                 getView()->Add( m_editPoints.get() );
             }
             else
@@ -1282,15 +1318,6 @@ void EE_POINT_EDITOR::updatePoints()
         m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
         m_editPoints->Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
         m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-        break;
-    }
-
-    case SCH_LINE_T:
-    {
-        SCH_LINE* line = (SCH_LINE*) item;
-
-        m_editPoints->Point( LINE_START ).SetPosition( line->GetStartPoint() );
-        m_editPoints->Point( LINE_END ).SetPosition( line->GetEndPoint() );
         break;
     }
 

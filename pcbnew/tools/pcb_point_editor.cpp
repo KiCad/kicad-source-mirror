@@ -131,7 +131,8 @@ public:
         aPoints.Point( SEG_END ) = m_segment.GetEnd();
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, 2 );
 
@@ -309,7 +310,8 @@ public:
         UpdatePoints( m_rectangle, aPoints );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         UpdateItem( m_rectangle, aEditedPoint, aPoints );
     }
@@ -473,7 +475,8 @@ public:
         aPoints.Point( ARC_CENTER ).SetPosition( m_arc.GetCenter() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, 4 );
 
@@ -866,7 +869,8 @@ public:
         aPoints.Point( CIRC_END ).SetPosition( m_circle.GetEnd() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, 2 );
 
@@ -990,7 +994,8 @@ public:
         UpdatePointsFromOutline( m_polygon.GetPolyShape(), aPoints );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         UpdateOutlineFromPoints( m_polygon.GetPolyShape(), aEditedPoint, aPoints );
     }
@@ -1016,7 +1021,8 @@ public:
         POLYGON_POINT_EDIT_BEHAVIOR::UpdatePointsFromOutline( *m_zone.Outline(), aPoints );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         SHAPE_POLY_SET& outline = *m_zone.Outline();
         CHECK_POINT_COUNT( aPoints, (unsigned) outline.TotalVertices() );
@@ -1072,7 +1078,8 @@ public:
         aPoints.Point( BEZIER_END ).SetPosition( m_bezier.GetEnd() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, BEZIER_MAX_POINTS );
 
@@ -1148,7 +1155,8 @@ public:
                 .SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, REFIMG_MAX_POINTS );
 
@@ -1262,11 +1270,15 @@ public:
                 .SetPosition( m_cell.GetEndX() - m_cell.GetRectangleWidth() / 2, m_cell.GetEndY() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, TABLECELL_MAX_POINTS );
 
         PCB_TABLE& table = static_cast<PCB_TABLE&>( *m_cell.GetParent() );
+
+        aCommit.Modify( &table );
+        aUpdatedItems.push_back( &table );
 
         if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
         {
@@ -1410,7 +1422,8 @@ public:
         }
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         // TODO(JE) padstacks
         switch( m_pad.GetShape( PADSTACK::ALL_LAYERS ) )
@@ -1539,7 +1552,8 @@ public:
         m_generator.UpdateEditPoints( aPoints );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         m_generator.UpdateFromEditPoints( aPoints );
     }
@@ -1709,7 +1723,8 @@ public:
         aPoints.Point( DIM_CROSSBAREND ).SetPosition( m_dimension.GetCrossbarEnd() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, DIM_ALIGNED_MAX );
 
@@ -1900,7 +1915,8 @@ public:
         aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, DIM_CENTER_MAX );
 
@@ -1962,7 +1978,8 @@ public:
         aPoints.Point( DIM_KNEE ).SetPosition( m_dimension.GetKnee() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, DIM_RADIAL_MAX );
 
@@ -2053,7 +2070,8 @@ public:
         aPoints.Point( DIM_TEXT ).SetPosition( m_dimension.GetTextPos() );
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         CHECK_POINT_COUNT( aPoints, DIM_LEADER_MAX );
 
@@ -2129,7 +2147,8 @@ public:
         }
     }
 
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         if( m_textbox.GetShape() == SHAPE_T::RECTANGLE )
         {
@@ -2439,17 +2458,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                     m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genStartEdit, &commit,
                                                      static_cast<PCB_GENERATOR*>( item ) );
                 }
-                else if( item->Type() == PCB_TABLECELL_T )
-                {
-                    PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( item );
-                    PCB_TABLE*     table = static_cast<PCB_TABLE*>( cell->GetParent() );
-
-                    commit.Modify( table );
-                }
-                else
-                {
-                    commit.Modify( item );
-                }
 
                 getViewControls()->ForceCursorPosition( false );
                 m_original = *m_editedPoint;    // Save the original position
@@ -2533,7 +2541,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                                                                  { item } ) );
             }
 
-            updateItem( &commit );
+            updateItem( commit );
             getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
             updatePoints();
         }
@@ -2660,7 +2668,7 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
     {
         pt = editFrame->GetOriginTransforms().FromDisplayAbs( dlg.GetValue() );
         m_editedPoint->SetPosition( pt );
-        updateItem( &commit );
+        updateItem( commit );
         commit.Push( msg );
     }
 
@@ -2668,18 +2676,22 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
+void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
 {
     wxCHECK( m_editPoints, /* void */ );
     EDA_ITEM* item = m_editPoints->GetParent();
 
-    if( !item || !m_editorBehavior )
+    if( !item )
         return;
+
+    // item is always updated
+    std::vector<EDA_ITEM*> updatedItems = { item };
+    aCommit.Modify( item );
 
     if( m_editorBehavior )
     {
         wxCHECK( m_editedPoint, /* void */ );
-        m_editorBehavior->UpdateItem( *m_editedPoint, *m_editPoints );
+        m_editorBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updatedItems );
     }
 
     // Perform any post-edit actions that the item may require
@@ -2706,20 +2718,12 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 
         break;
     }
-
-    case PCB_TABLECELL_T:
-    {
-        PCB_TABLECELL& cell = static_cast<PCB_TABLECELL&>( *item );
-        PCB_TABLE&     table = static_cast<PCB_TABLE&>( *cell.GetParent() );
-        getView()->Update( &table );
-        break;
-    }
     case PCB_GENERATOR_T:
     {
         GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
         PCB_GENERATOR*  generatorItem = static_cast<PCB_GENERATOR*>( item );
 
-        m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genUpdateEdit, aCommit, generatorItem );
+        m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genUpdateEdit, &aCommit, generatorItem );
 
         // Note: POINT_EDITOR::m_preview holds only the canvas-draw status "popup"; the meanders
         // themselves (ROUTER_PREVIEW_ITEMs) are owned by the router.
@@ -2739,7 +2743,11 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         break;
     }
 
-    getView()->Update( item );
+    // Update the item and any affected items
+    for( EDA_ITEM* updatedItem : updatedItems )
+    {
+        getView()->Update( updatedItem );
+    }
 
     frame()->SetMsgPanel( item );
 }

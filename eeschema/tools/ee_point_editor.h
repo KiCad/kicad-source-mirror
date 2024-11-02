@@ -115,6 +115,9 @@ private:
 
     ///< Currently available edit points.
     std::shared_ptr<EDIT_POINTS> m_editPoints;
+
+    ///< Current item-specific edit behavior.
+    std::unique_ptr<POINT_EDIT_BEHAVIOR> m_editBehavior;
 };
 
 #endif  // EE_POINT_EDITOR_H

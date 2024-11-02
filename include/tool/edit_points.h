@@ -614,6 +614,10 @@ public:
     /**
      * Update the list of the edit points for the item.
      *
+     * Be very careful not to overrun the list of points -
+     * this class knows how bug there are because it made them
+     * in the first place.
+     *
      * If item has changed such that that number of points needs to
      * change, this method has to handle that (probably by clearing
      * the list and refilling it).
@@ -625,11 +629,21 @@ public:
     /**
      * Update the item with the new positions of the edit points.
      *
+     * This method should all commit and add to the update list anything that
+     * is NOT the parent item of the EDIT_POINTs. For example, connected lines,
+     * parent tables, etc. The item itself is already handled (most behaviors
+     * don't need more than that).
+     *
      * @param aEditedPoint The point that was dragged.
      *                     You can use this to check by address which point to update.
      * @param aPoints The new positions of the edit points.
+     * @param aCommit The commit object to use to modify the item.
+     * @param aUpdatedItems The list of items that were updated by the edit (not only the
+     *                     item that was being edited, but also any other items that were
+     *                     affected, e.g. by being conneted to the edited item).
      */
-    virtual void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) = 0;
+    virtual void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                             std::vector<EDA_ITEM*>& aUpdatedItems ) = 0;
 
     /**
      * Get the 45-degree constrainer for the item, when the given point is moved.
