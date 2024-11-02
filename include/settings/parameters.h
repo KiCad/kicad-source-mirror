@@ -77,6 +77,8 @@ public:
      */
     bool ClearUnknownKeys() const { return m_clearUnknownKeys; }
 
+    void SetClearUnknownKeys( bool aSet = true ) { m_clearUnknownKeys = aSet; }
+
 protected:
     std::string m_path;               ///< Address of the param in the json files
     bool        m_readOnly;           ///< Indicates param pointer should never be overwritten
