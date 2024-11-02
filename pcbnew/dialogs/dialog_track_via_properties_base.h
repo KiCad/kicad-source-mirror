@@ -92,6 +92,11 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_predefinedViaSizesLabel;
 		wxChoice* m_predefinedViaSizesCtrl;
 		wxStaticText* m_predefinedViaSizesUnits;
+		wxBoxSizer* m_sbPadstackSettings;
+		wxStaticText* m_stPadstackMode;
+		wxChoice* m_cbPadstackMode;
+		wxStaticText* m_stEditLayer;
+		wxChoice* m_cbEditLayer;
 		wxStaticText* m_ViaDiameterLabel;
 		wxTextCtrl* m_ViaDiameterCtrl;
 		wxStaticText* m_ViaDiameterUnit;
@@ -144,6 +149,8 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onWidthEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTrackEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPadstackModeChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onEditLayerChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFrontTentingChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTentingLinkToggle( wxCommandEvent& event ) { event.Skip(); }

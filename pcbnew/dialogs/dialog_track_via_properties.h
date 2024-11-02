@@ -31,6 +31,7 @@
 class PCB_SELECTION;
 class PCB_BASE_FRAME;
 class PAD;
+class PADSTACK;
 
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE
 {
@@ -51,6 +52,8 @@ private:
     void onTentingLinkToggle( wxCommandEvent& event ) override;
     void onFrontTentingChanged( wxCommandEvent& event ) override;
     void onTrackEdit( wxCommandEvent& aEvent ) override;
+    void onPadstackModeChanged( wxCommandEvent& aEvent ) override;
+    void onEditLayerChanged( wxCommandEvent& aEvent ) override;
 
     void onUnitsChanged( wxCommandEvent& aEvent );
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
@@ -58,6 +61,7 @@ private:
     bool confirmPadChange( const std::vector<PAD*>& connectedPads );
 
     int getLayerDepth();
+    void afterPadstackModeChanged();
 
 private:
     PCB_BASE_FRAME*      m_frame;
@@ -79,4 +83,11 @@ private:
 
     bool                 m_tracks;     // True if dialog displays any track properties.
     bool                 m_vias;       // True if dialog displays any via properties.
+
+    /// Temporary padstack of the edited via(s)
+    std::unique_ptr<PADSTACK> m_viaStack;
+
+    /// The currently-shown copper layer of the edited via(s)
+    PCB_LAYER_ID m_editLayer;
+    std::map<int, PCB_LAYER_ID> m_editLayerCtrlMap;
 };

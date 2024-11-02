@@ -772,9 +772,7 @@ void PADSTACK::SetMode( MODE aMode )
     if( m_mode == aMode )
         return;
 
-    m_mode = aMode;
-
-    switch( m_mode )
+    switch( aMode )
     {
     case MODE::NORMAL:
         std::erase_if( m_copperProps,
@@ -786,16 +784,30 @@ void PADSTACK::SetMode( MODE aMode )
         break;
 
     case MODE::FRONT_INNER_BACK:
-        m_copperProps[INNER_LAYERS] = m_copperProps[ALL_LAYERS];
-        m_copperProps[B_Cu] = m_copperProps[ALL_LAYERS];
+        // When coming from normal, these layers may be missing or have junk values
+        if( m_mode == MODE::NORMAL )
+        {
+            m_copperProps[INNER_LAYERS] = m_copperProps[ALL_LAYERS];
+            m_copperProps[B_Cu] = m_copperProps[ALL_LAYERS];
+        }
+
         break;
 
     case MODE::CUSTOM:
-        for( PCB_LAYER_ID layer : LAYER_RANGE( In1_Cu, B_Cu, MAX_CU_LAYERS ) )
-            m_copperProps[layer] = m_copperProps[ALL_LAYERS];
+    {
+        PCB_LAYER_ID innerLayerTemplate = ( m_mode == MODE::NORMAL ) ? ALL_LAYERS : INNER_LAYERS;
+
+        for( PCB_LAYER_ID layer : LAYER_RANGE( In1_Cu, In30_Cu, MAX_CU_LAYERS ) )
+            m_copperProps[layer] = m_copperProps[innerLayerTemplate];
+
+        if( m_mode == MODE::NORMAL )
+            m_copperProps[B_Cu] = m_copperProps[ALL_LAYERS];
 
         break;
     }
+    }
+
+    m_mode = aMode;
 
     // Changing mode invalidates cached shapes
     // TODO(JE) clean this up -- maybe PADSTACK should own shape caches

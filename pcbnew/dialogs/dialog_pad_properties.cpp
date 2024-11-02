@@ -855,6 +855,8 @@ void DIALOG_PAD_PROPERTIES::initPadstackLayerValues()
 
 void DIALOG_PAD_PROPERTIES::afterPadstackModeChanged()
 {
+    // NOTE: synchronize changes here with DIALOG_TRACK_VIA_PROPERTIES::afterPadstackModeChanged
+
     wxCHECK_MSG( m_board, /* void */, "Expected valid board in afterPadstackModeChanged" );
     m_cbEditLayer->Clear();
 

@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <core/kicad_algo.h>
 #include <dialogs/dialog_track_via_properties.h>
 #include <pcb_layer_box_selector.h>
@@ -57,7 +58,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_teardropWidthPercent( aParent, m_stWidthPercentLabel, m_tcWidthPercent, nullptr ),
         m_teardropMaxWidth( aParent, m_stMaxWidthLabel, m_tcMaxWidth, m_stMaxWidthUnits ),
         m_tracks( false ),
-        m_vias( false )
+        m_vias( false ),
+        m_editLayer( PADSTACK::ALL_LAYERS )
 {
     m_useCalculatedSize = true;
 
@@ -229,8 +231,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 {
                     m_viaX.SetValue( v->GetPosition().x );
                     m_viaY.SetValue( v->GetPosition().y );
-                    // TODO(JE) padstacks
-                    m_viaDiameter.SetValue( v->GetWidth( PADSTACK::ALL_LAYERS ) );
+                    m_viaStack = std::make_unique<PADSTACK>( v->Padstack() );
+                    m_viaDiameter.SetValue( v->GetWidth( m_editLayer ) );
                     m_viaDrill.SetValue( v->GetDrillValue() );
                     m_vias = true;
                     viaType = v->GetViaType();
@@ -267,7 +269,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     if( m_viaY.GetValue() != v->GetPosition().y )
                         m_viaY.SetValue( INDETERMINATE_STATE );
 
-                    if( m_viaDiameter.GetValue() != v->GetWidth( PADSTACK::ALL_LAYERS ) )
+                    if( m_viaDiameter.GetValue() != v->GetWidth( m_editLayer ) )
                         m_viaDiameter.SetValue( INDETERMINATE_STATE );
 
                     if( m_viaDrill.GetValue() != v->GetDrillValue() )
@@ -426,6 +428,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         m_annularRingsLabel->Show( getLayerDepth() > 1 );
         m_annularRingsCtrl->Show( getLayerDepth() > 1 );
+
+        m_sbPadstackSettings->Show( ADVANCED_CFG::GetCfg().m_EnableViaStacks );
+        afterPadstackModeChanged();
     }
     else
     {
@@ -577,6 +582,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
     if( m_vias )
     {
+        // TODO: This needs to move into the via class, not the dialog
+
         if( !m_viaDiameter.Validate( GEOMETRY_MIN_SIZE, INT_MAX )
             || !m_viaDrill.Validate( GEOMETRY_MIN_SIZE, INT_MAX ) )
         {
@@ -598,6 +605,12 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         {
             DisplayError( GetParent(), _( "Via start layer and end layer cannot be the same" ) );
             return false;
+        }
+
+        if( !m_viaDiameter.IsIndeterminate() )
+        {
+            int diameter = m_viaDiameter.GetValue();
+            m_viaStack->SetSize( { diameter, diameter }, m_editLayer );
         }
     }
 
@@ -741,7 +754,12 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 v->SanitizeLayers();
 
                 if( !m_viaDiameter.IsIndeterminate() )
-                    v->SetWidth( PADSTACK::ALL_LAYERS, m_viaDiameter.GetIntValue() );
+                {
+                    if( ADVANCED_CFG::GetCfg().m_EnableViaStacks )
+                        v->SetPadstack( *m_viaStack );
+                    else
+                        v->SetWidth( PADSTACK::ALL_LAYERS, m_viaDiameter.GetIntValue() );
+                }
 
                 if( !m_viaDrill.IsIndeterminate() )
                     v->SetDrill( m_viaDrill.GetIntValue() );
@@ -897,6 +915,140 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaSelect( wxCommandEvent& aEvent )
 
     m_viaDiameter.ChangeValue( viaDimension->m_Diameter );
     m_viaDrill.ChangeValue( viaDimension->m_Drill );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onPadstackModeChanged( wxCommandEvent& aEvent )
+{
+    wxCHECK_MSG( m_viaStack, /* void */, "Expected valid via stack in onPadstackModeChanged" );
+
+    switch( m_cbPadstackMode->GetSelection() )
+    {
+    default:
+    case 0: m_viaStack->SetMode( PADSTACK::MODE::NORMAL );           break;
+    case 1: m_viaStack->SetMode( PADSTACK::MODE::FRONT_INNER_BACK ); break;
+    case 2: m_viaStack->SetMode( PADSTACK::MODE::CUSTOM );           break;
+    }
+
+    afterPadstackModeChanged();
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onEditLayerChanged( wxCommandEvent& aEvent )
+{
+    wxCHECK_MSG( m_viaStack, /* void */, "Expected valid via stack in onEditLayerChanged" );
+
+    // Save data from the previous layer
+    if( !m_viaDiameter.IsIndeterminate() )
+    {
+        int diameter = m_viaDiameter.GetValue();
+        m_viaStack->SetSize( { diameter, diameter }, m_editLayer );
+    }
+
+    switch( m_viaStack->Mode() )
+    {
+    default:
+    case PADSTACK::MODE::NORMAL:
+        m_editLayer = PADSTACK::ALL_LAYERS;
+        break;
+
+    case PADSTACK::MODE::FRONT_INNER_BACK:
+        switch( m_cbEditLayer->GetSelection() )
+        {
+    default:
+    case 0: m_editLayer = F_Cu;                   break;
+    case 1: m_editLayer = PADSTACK::INNER_LAYERS; break;
+    case 2: m_editLayer = B_Cu;                   break;
+        }
+        break;
+
+    case PADSTACK::MODE::CUSTOM:
+    {
+        int layer = m_cbEditLayer->GetSelection();
+
+        if( layer < 0 )
+            layer = 0;
+
+        if( m_editLayerCtrlMap.contains( layer ) )
+            m_editLayer = m_editLayerCtrlMap.at( layer );
+        else
+            m_editLayer = F_Cu;
+    }
+    }
+
+    // Load controls with the current layer
+    m_viaDiameter.SetValue( m_viaStack->Size( m_editLayer ).x );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::afterPadstackModeChanged()
+{
+    // NOTE: synchronize changes here with DIALOG_PAD_PROPERTIES::afterPadstackModeChanged
+
+    wxCHECK_MSG( m_viaStack, /* void */, "Expected valid via stack in afterPadstackModeChanged" );
+    m_cbEditLayer->Clear();
+
+    BOARD* board = m_frame->GetBoard();
+
+    switch( m_viaStack->Mode() )
+    {
+    case PADSTACK::MODE::NORMAL:
+        m_cbPadstackMode->SetSelection( 0 );
+        m_cbEditLayer->Append( _( "All layers" ) );
+        m_cbEditLayer->Disable();
+        m_editLayer = PADSTACK::ALL_LAYERS;
+        m_editLayerCtrlMap = { { 0, PADSTACK::ALL_LAYERS } };
+        break;
+
+    case PADSTACK::MODE::FRONT_INNER_BACK:
+    {
+        m_cbPadstackMode->SetSelection( 1 );
+        m_cbEditLayer->Enable();
+
+        std::vector choices = {
+            board->GetLayerName( F_Cu ),
+            _( "Inner Layers" ),
+            board->GetLayerName( B_Cu )
+        };
+
+        m_cbEditLayer->Append( choices );
+
+        m_editLayerCtrlMap = {
+            { 0, F_Cu },
+            { 1, PADSTACK::INNER_LAYERS },
+            { 2, B_Cu }
+        };
+
+        if( m_editLayer != F_Cu && m_editLayer != B_Cu )
+            m_editLayer = PADSTACK::INNER_LAYERS;
+
+        break;
+    }
+
+    case PADSTACK::MODE::CUSTOM:
+    {
+        m_cbPadstackMode->SetSelection( 2 );
+        m_cbEditLayer->Enable();
+        LSET layers = LSET::AllCuMask() & board->GetEnabledLayers();
+
+        for( PCB_LAYER_ID layer : layers.UIOrder() )
+        {
+            int idx = m_cbEditLayer->Append( board->GetLayerName( layer ) );
+            m_editLayerCtrlMap[idx] = layer;
+        }
+
+        break;
+    }
+    }
+
+    for( const auto& [idx, layer] : m_editLayerCtrlMap )
+    {
+        if( layer == m_editLayer )
+        {
+            m_cbEditLayer->SetSelection( idx );
+            break;
+        }
+    }
 }
 
 
