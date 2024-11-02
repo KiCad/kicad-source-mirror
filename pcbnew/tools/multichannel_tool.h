@@ -52,7 +52,7 @@ struct REPEAT_LAYOUT_OPTIONS
     bool                    m_includeLockedItems = true;
     bool                    m_keepOldRouting = false;
     bool                    m_copyOnlyMatchingRAShapes = false;
-    REPEAT_LAYOUT_EDGE_MODE m_edgeMode;
+    REPEAT_LAYOUT_EDGE_MODE m_edgeMode = REPEAT_LAYOUT_EDGE_MODE::INSIDE;
 };
 
 
@@ -60,21 +60,21 @@ struct RULE_AREA;
 
 struct RULE_AREA_COMPAT_DATA
 {
-    RULE_AREA*                                     m_refArea;
-    bool                                           m_isOk;
-    bool                                           m_doCopy;
-    wxString                                       m_errorMsg;
+    RULE_AREA*                m_refArea = nullptr;
+    bool                      m_isOk = false;
+    bool                      m_doCopy = false;
+    wxString                  m_errorMsg;
     TMATCH::COMPONENT_MATCHES m_matchingComponents;
 };
 
 struct RULE_AREA
 {
     ZONE*                            m_oldArea = nullptr;
-    ZONE*                            m_area;
+    ZONE*                            m_area = nullptr;
     std::set<FOOTPRINT*>             m_raFootprints;
     std::set<FOOTPRINT*>             m_sheetComponents;
-    bool                             m_existsAlready;
-    bool                             m_generateEnabled;
+    bool                             m_existsAlready = false;
+    bool                             m_generateEnabled = false;
     wxString                         m_sheetPath;
     wxString                         m_sheetName;
     wxString                         m_ruleName;
@@ -84,7 +84,7 @@ struct RULE_AREA
 
 struct RA_SHEET
 {
-    bool     m_generateEnabled;
+    bool     m_generateEnabled = false;
     wxString m_sheetPath;
     wxString m_sheetName;
 };
@@ -92,8 +92,8 @@ struct RA_SHEET
 
 struct RULE_AREAS_DATA
 {
-    bool                  m_replaceExisting;
-    RULE_AREA*            m_refRA;
+    bool                  m_replaceExisting = false;
+    RULE_AREA*            m_refRA = nullptr;
     REPEAT_LAYOUT_OPTIONS m_options;
 
     std::vector<RULE_AREA>                                m_areas;
