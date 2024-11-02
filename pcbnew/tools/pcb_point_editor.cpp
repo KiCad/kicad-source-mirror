@@ -97,15 +97,6 @@ enum TABLECELL_POINTS
 };
 
 
-enum BEZIER_POINTS
-{
-    BEZIER_START,
-    BEZIER_CTRL_PT1,
-    BEZIER_CTRL_PT2,
-    BEZIER_END
-};
-
-
 enum DIMENSION_POINTS
 {
     DIM_START,
@@ -975,6 +966,74 @@ private:
 };
 
 
+class BEZIER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+    enum BEZIER_POINTS
+    {
+        BEZIER_START,
+        BEZIER_CTRL_PT1,
+        BEZIER_CTRL_PT2,
+        BEZIER_END,
+
+        BEZIER_MAX_POINTS
+    };
+
+public:
+    BEZIER_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aBezier ) : m_bezier( aBezier )
+    {
+        wxASSERT( m_bezier.GetShape() == SHAPE_T::BEZIER );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_bezier.GetStart() );
+        aPoints.AddPoint( m_bezier.GetBezierC1() );
+        aPoints.AddPoint( m_bezier.GetBezierC2() );
+        aPoints.AddPoint( m_bezier.GetEnd() );
+
+        aPoints.AddIndicatorLine( aPoints.Point( BEZIER_START ), aPoints.Point( BEZIER_CTRL_PT1 ) );
+        aPoints.AddIndicatorLine( aPoints.Point( BEZIER_CTRL_PT2 ), aPoints.Point( BEZIER_END ) );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, BEZIER_MAX_POINTS );
+
+        aPoints.Point( BEZIER_START ).SetPosition( m_bezier.GetStart() );
+        aPoints.Point( BEZIER_CTRL_PT1 ).SetPosition( m_bezier.GetBezierC1() );
+        aPoints.Point( BEZIER_CTRL_PT2 ).SetPosition( m_bezier.GetBezierC2() );
+        aPoints.Point( BEZIER_END ).SetPosition( m_bezier.GetEnd() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, BEZIER_MAX_POINTS );
+
+        if( isModified( aEditedPoint, aPoints.Point( BEZIER_START ) ) )
+        {
+            m_bezier.SetStart( aPoints.Point( BEZIER_START ).GetPosition() );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( BEZIER_CTRL_PT1 ) ) )
+        {
+            m_bezier.SetBezierC1( aPoints.Point( BEZIER_CTRL_PT1 ).GetPosition() );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( BEZIER_CTRL_PT2 ) ) )
+        {
+            m_bezier.SetBezierC2( aPoints.Point( BEZIER_CTRL_PT2 ).GetPosition() );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( BEZIER_END ) ) )
+        {
+            m_bezier.SetEnd( aPoints.Point( BEZIER_END ).GetPosition() );
+        }
+
+        m_bezier.RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+    }
+
+private:
+    PCB_SHAPE& m_bezier;
+};
+
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( nullptr ),
@@ -1080,15 +1139,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::BEZIER:
-            points->AddPoint( shape->GetStart() );
-            points->AddPoint( shape->GetBezierC1() );
-            points->AddPoint( shape->GetBezierC2() );
-            points->AddPoint( shape->GetEnd() );
-
-            points->AddIndicatorLine( points->Point( BEZIER_START ),
-                                      points->Point( BEZIER_CTRL_PT1 ) );
-            points->AddIndicatorLine( points->Point( BEZIER_CTRL_PT2 ),
-                                      points->Point( BEZIER_END ) );
+            m_editorBehavior = std::make_unique<BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
             break;
 
         default:        // suppress warnings
@@ -1834,30 +1885,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
     {
         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-        switch( shape->GetShape() )
-        {
-        case SHAPE_T::SEGMENT:
-        case SHAPE_T::RECTANGLE:
-        case SHAPE_T::ARC:
-        case SHAPE_T::POLY:
-            break;
-        case SHAPE_T::BEZIER:
-            if( isModified( m_editPoints->Point( BEZIER_START ) ) )
-                shape->SetStart( m_editPoints->Point( BEZIER_START ).GetPosition() );
-            else if( isModified( m_editPoints->Point( BEZIER_CTRL_PT1 ) ) )
-                shape->SetBezierC1( m_editPoints->Point( BEZIER_CTRL_PT1 ).GetPosition() );
-            else if( isModified( m_editPoints->Point( BEZIER_CTRL_PT2 ) ) )
-                shape->SetBezierC2( m_editPoints->Point( BEZIER_CTRL_PT2 ).GetPosition() );
-            else if( isModified( m_editPoints->Point( BEZIER_END ) ) )
-                shape->SetEnd( m_editPoints->Point( BEZIER_END ).GetPosition() );
-
-            shape->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
-            break;
-
-        default:        // suppress warnings
-            break;
-        }
-
         if( shape->IsProxyItem() )
         {
             for( PAD* pad : shape->GetParentFootprint()->Pads() )
@@ -2373,33 +2400,6 @@ void PCB_POINT_EDITOR::updatePoints()
         else if( shape->GetShape() == SHAPE_T::POLY )
         {
             // Not currently editable while rotated.
-        }
-
-        break;
-    }
-
-    case PCB_SHAPE_T:
-    {
-        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
-
-        switch( shape->GetShape() )
-        {
-        case SHAPE_T::SEGMENT:
-        case SHAPE_T::RECTANGLE:
-        case SHAPE_T::ARC:
-        case SHAPE_T::CIRCLE:
-        case SHAPE_T::POLY:
-            break;
-
-        case SHAPE_T::BEZIER:
-            m_editPoints->Point( BEZIER_START ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( BEZIER_CTRL_PT1 ).SetPosition( shape->GetBezierC1() );
-            m_editPoints->Point( BEZIER_CTRL_PT2 ).SetPosition( shape->GetBezierC2() );
-            m_editPoints->Point( BEZIER_END ).SetPosition( shape->GetEnd() );
-            break;
-
-        default:        // suppress warnings
-            break;
         }
 
         break;
