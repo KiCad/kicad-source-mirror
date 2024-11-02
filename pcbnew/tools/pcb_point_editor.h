@@ -104,10 +104,6 @@ private:
         return m_editedPoint == &aPoint;
     }
 
-    void pinEditedCorner( VECTOR2I& aTopLeft, VECTOR2I& aTopRight, VECTOR2I& aBotLeft,
-                          VECTOR2I& aBotRight, const VECTOR2I& aHole = { 0, 0 },
-                          const VECTOR2I& aHoleSize = { 0, 0 } ) const;
-
     ///< Set up an alternative constraint (typically enabled upon a modifier key being pressed).
     void setAltConstraint( bool aEnabled );
 
