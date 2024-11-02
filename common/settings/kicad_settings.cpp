@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020, 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <wx/aui/framemanager.h>    // ensure class wxAuiPaneInfo is defined for other includes
 
 #include "settings/kicad_settings.h"
 #include <nlohmann/json.hpp>
