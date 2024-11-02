@@ -500,6 +500,457 @@ private:
 };
 
 
+class RECTANGLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    RECTANGLE_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aRect, EDA_DRAW_FRAME& aFrame ) :
+            m_rect( aRect ), m_frame( aFrame )
+    {
+    }
+
+    static void MakePoints( SCH_SHAPE& aRect, EDIT_POINTS& aPoints )
+    {
+        VECTOR2I topLeft = aRect.GetPosition();
+        VECTOR2I botRight = aRect.GetEnd();
+
+        aPoints.AddPoint( topLeft );
+        aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+        aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+        aPoints.AddPoint( botRight );
+        aPoints.AddPoint( aRect.GetCenter() );
+
+        aPoints.AddLine( aPoints.Point( RECT_TOPLEFT ), aPoints.Point( RECT_TOPRIGHT ) );
+        aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );
+        aPoints.AddLine( aPoints.Point( RECT_TOPRIGHT ), aPoints.Point( RECT_BOTRIGHT ) );
+        aPoints.Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_RIGHT ) ) );
+        aPoints.AddLine( aPoints.Point( RECT_BOTRIGHT ), aPoints.Point( RECT_BOTLEFT ) );
+        aPoints.Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_BOT ) ) );
+        aPoints.AddLine( aPoints.Point( RECT_BOTLEFT ), aPoints.Point( RECT_TOPLEFT ) );
+        aPoints.Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_LEFT ) ) );
+    }
+
+    static void UpdatePoints( SCH_SHAPE& aRect, EDIT_POINTS& aPoints )
+    {
+        VECTOR2I topLeft = aRect.GetPosition();
+        VECTOR2I botRight = aRect.GetEnd();
+
+        aPoints.Point( RECT_TOPLEFT ).SetPosition( topLeft );
+        aPoints.Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
+        aPoints.Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
+        aPoints.Point( RECT_BOTRIGHT ).SetPosition( botRight );
+        aPoints.Point( RECT_CENTER ).SetPosition( aRect.GetCenter() );
+    }
+
+    /**
+     * Update the coordinates of 4 corners of a rectangle, according to constraints
+     * and the moved corner
+     * @param minWidth is the minimal width constraint
+     * @param minHeight is the minimal height constraint
+     * @param topLeft is the RECT_TOPLEFT to constraint
+     * @param topRight is the RECT_TOPRIGHT to constraint
+     * @param botLeft is the RECT_BOTLEFT to constraint
+     * @param botRight is the RECT_BOTRIGHT to constraint
+     */
+    static void PinEditedCorner( const EDIT_POINT& aEditedPoint, const EDIT_POINTS& aPoints,
+                                 int minWidth, int minHeight, VECTOR2I& topLeft, VECTOR2I& topRight,
+                                 VECTOR2I& botLeft, VECTOR2I& botRight )
+    {
+        if( isModified( aEditedPoint, aPoints.Point( RECT_TOPLEFT ) ) )
+        {
+            // pin edited point within opposite corner
+            topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
+            topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
+
+            // push edited point edges to adjacent corners
+            topRight.y = topLeft.y;
+            botLeft.x = topLeft.x;
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( RECT_TOPRIGHT ) ) )
+        {
+            // pin edited point within opposite corner
+            topRight.x = std::max( topRight.x, botLeft.x + minWidth );
+            topRight.y = std::min( topRight.y, botLeft.y - minHeight );
+
+            // push edited point edges to adjacent corners
+            topLeft.y = topRight.y;
+            botRight.x = topRight.x;
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( RECT_BOTLEFT ) ) )
+        {
+            // pin edited point within opposite corner
+            botLeft.x = std::min( botLeft.x, topRight.x - minWidth );
+            botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
+
+            // push edited point edges to adjacent corners
+            botRight.y = botLeft.y;
+            topLeft.x = botLeft.x;
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( RECT_BOTRIGHT ) ) )
+        {
+            // pin edited point within opposite corner
+            botRight.x = std::max( botRight.x, topLeft.x + minWidth );
+            botRight.y = std::max( botRight.y, topLeft.y + minHeight );
+
+            // push edited point edges to adjacent corners
+            botLeft.y = botRight.y;
+            topRight.x = botRight.x;
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
+        {
+            topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_LEFT ) ) )
+        {
+            topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_BOT ) ) )
+        {
+            botRight.y = std::max( botRight.y, topLeft.y + minHeight );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_RIGHT ) ) )
+        {
+            botRight.x = std::max( botRight.x, topLeft.x + minWidth );
+        }
+    }
+
+    static void UpdateItem( SCH_SHAPE& aRect, const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints )
+    {
+        VECTOR2I topLeft = aPoints.Point( RECT_TOPLEFT ).GetPosition();
+        VECTOR2I topRight = aPoints.Point( RECT_TOPRIGHT ).GetPosition();
+        VECTOR2I botLeft = aPoints.Point( RECT_BOTLEFT ).GetPosition();
+        VECTOR2I botRight = aPoints.Point( RECT_BOTRIGHT ).GetPosition();
+
+        PinEditedCorner( aEditedPoint, aPoints, schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ),
+                         topLeft, topRight, botLeft, botRight );
+
+        if( isModified( aEditedPoint, aPoints.Point( RECT_TOPLEFT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_TOPRIGHT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_BOTRIGHT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_BOTLEFT ) ) )
+        {
+            aRect.SetPosition( topLeft );
+            aRect.SetEnd( botRight );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
+        {
+            aRect.SetStartY( topLeft.y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_LEFT ) ) )
+        {
+            aRect.SetStartX( topLeft.x );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_BOT ) ) )
+        {
+            aRect.SetEndY( botRight.y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_RIGHT ) ) )
+        {
+            aRect.SetEndX( botRight.x );
+        }
+
+        for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
+        {
+            if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
+            {
+                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+            }
+        }
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        m_rect.Normalize();
+        MakePoints( m_rect, aPoints );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        m_rect.Normalize();
+        UpdatePoints( m_rect, aPoints );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        VECTOR2I topLeft = aPoints.Point( RECT_TOPLEFT ).GetPosition();
+        VECTOR2I topRight = aPoints.Point( RECT_TOPRIGHT ).GetPosition();
+        VECTOR2I botLeft = aPoints.Point( RECT_BOTLEFT ).GetPosition();
+        VECTOR2I botRight = aPoints.Point( RECT_BOTRIGHT ).GetPosition();
+
+        PinEditedCorner( aEditedPoint, aPoints, schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ),
+                         topLeft, topRight, botLeft, botRight );
+
+        const BOX2I           oldBox = BOX2I::ByCorners( m_rect.GetStart(), m_rect.GetEnd() );
+        std::vector<SEG>      oldSegs;
+        std::vector<VECTOR2I> moveVecs;
+
+        if( isModified( aEditedPoint, aPoints.Point( RECT_TOPLEFT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_TOPRIGHT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_BOTRIGHT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_BOTLEFT ) ) )
+        {
+            // Corner drags don't update pins. Not only is it an escape hatch to avoid
+            // moving pins, it also avoids tricky problems when the pins "fall off"
+            // the ends of one of the two segments and get either left behind or
+            // "swept up" into the corner.
+            m_rect.SetPosition( topLeft );
+            m_rect.SetEnd( botRight );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( RECT_CENTER ) ) )
+        {
+            VECTOR2I moveVec = aPoints.Point( RECT_CENTER ).GetPosition() - oldBox.GetCenter();
+            m_rect.Move( moveVec );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
+        {
+            oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::N );
+            moveVecs.emplace_back( 0, topLeft.y - oldBox.GetTop() );
+            m_rect.SetStartY( topLeft.y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_LEFT ) ) )
+        {
+            oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::W );
+            moveVecs.emplace_back( topLeft.x - oldBox.GetLeft(), 0 );
+            m_rect.SetStartX( topLeft.x );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_BOT ) ) )
+        {
+            oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::S );
+            moveVecs.emplace_back( 0, botRight.y - oldBox.GetBottom() );
+            m_rect.SetEndY( botRight.y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_RIGHT ) ) )
+        {
+            oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::E );
+            moveVecs.emplace_back( botRight.x - oldBox.GetRight(), 0 );
+            m_rect.SetEndX( botRight.x );
+        }
+
+        dragPinsOnEdge( oldSegs, moveVecs, m_rect.GetUnit(), aCommit, aUpdatedItems );
+
+        for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
+        {
+            if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
+            {
+                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+            }
+        }
+    }
+
+private:
+    void dragPinsOnEdge( const std::vector<SEG>& aOldEdges, const std::vector<VECTOR2I>& aMoveVecs,
+                         int aEdgeUnit, COMMIT& aCommit,
+                         std::vector<EDA_ITEM*>& aUpdatedItems ) const
+    {
+        wxCHECK( aOldEdges.size() == aMoveVecs.size(), /* void */ );
+
+        // This only make sense in the symbol editor
+        if( !m_frame.IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+            return;
+
+        SYMBOL_EDIT_FRAME& editor = static_cast<SYMBOL_EDIT_FRAME&>( m_frame );
+
+        // And only if the setting is enabled
+        if( !editor.GetSettings()->m_dragPinsAlongWithEdges )
+            return;
+
+        // Adjuting pins on a different unit to a unit-limited shape
+        // seems suspect.
+        wxCHECK( aEdgeUnit == 0 || aEdgeUnit == editor.GetUnit(), /* void */ );
+
+        /*
+        * Get a list of pins on a line segment
+        */
+        const auto getPinsOnSeg = []( LIB_SYMBOL& aSymbol, int aUnit, const SEG& aSeg,
+                                      bool aIncludeEnds ) -> std::vector<SCH_PIN*>
+        {
+            // const BOX2I     segBox = BOX2I::ByCorners( aSeg.A, aSeg.B ).GetInflated( 1 );
+            // const EE_RTREE& rtree = m_frame->GetScreen()->Items().Overlapping( SCH_PIN_T, segBox );
+
+            std::vector<SCH_PIN*> pins;
+
+            for( SCH_PIN* pin : aSymbol.GetPins( aUnit ) )
+            {
+                // Figure out if the pin "connects" to the line
+                const VECTOR2I pinRootPos = pin->GetPinRoot();
+
+                if( aSeg.Contains( pinRootPos ) )
+                {
+                    if( aIncludeEnds || ( pinRootPos != aSeg.A && pinRootPos != aSeg.B ) )
+                    {
+                        pins.push_back( pin );
+                    }
+                }
+            }
+
+            return pins;
+        };
+
+        LIB_SYMBOL* const symbol = editor.GetCurSymbol();
+
+        for( std::size_t i = 0; i < aOldEdges.size(); ++i )
+        {
+            if( aMoveVecs[i] == VECTOR2I( 0, 0 ) || !symbol )
+                continue;
+
+            const std::vector<SCH_PIN*> pins =
+                    getPinsOnSeg( *symbol, aEdgeUnit, aOldEdges[i], false );
+
+            for( SCH_PIN* pin : pins )
+            {
+                aCommit.Modify( pin );
+                aUpdatedItems.push_back( pin );
+
+                // Move the pin
+                pin->Move( aMoveVecs[i] );
+            }
+        }
+    }
+
+    SCH_SHAPE&      m_rect;
+    EDA_DRAW_FRAME& m_frame;
+};
+
+
+class TEXTBOX_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    TEXTBOX_POINT_EDIT_BEHAVIOR( SCH_TEXTBOX& aTextbox ) : m_textbox( aTextbox ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        m_textbox.Normalize();
+        RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( m_textbox, aPoints );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        // point editor works only with rectangles having width and height > 0
+        // Some symbols can have rectangles with width or height < 0
+        // So normalize the size:
+        m_textbox.Normalize();
+        RECTANGLE_POINT_EDIT_BEHAVIOR::UpdatePoints( m_textbox, aPoints );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem( m_textbox, aEditedPoint, aPoints );
+        m_textbox.ClearRenderCache();
+    }
+
+private:
+    SCH_TEXTBOX& m_textbox;
+};
+
+
+class SHEET_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    SHEET_POINT_EDIT_BEHAVIOR( SCH_SHEET& aSheet ) : m_sheet( aSheet ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        VECTOR2I topLeft = m_sheet.GetPosition();
+        VECTOR2I botRight = m_sheet.GetPosition() + m_sheet.GetSize();
+
+        aPoints.AddPoint( topLeft );
+        aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+        aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+        aPoints.AddPoint( botRight );
+
+        aPoints.AddLine( aPoints.Point( RECT_TOPLEFT ), aPoints.Point( RECT_TOPRIGHT ) );
+        aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );
+        aPoints.AddLine( aPoints.Point( RECT_TOPRIGHT ), aPoints.Point( RECT_BOTRIGHT ) );
+        aPoints.Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_RIGHT ) ) );
+        aPoints.AddLine( aPoints.Point( RECT_BOTRIGHT ), aPoints.Point( RECT_BOTLEFT ) );
+        aPoints.Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_BOT ) ) );
+        aPoints.AddLine( aPoints.Point( RECT_BOTLEFT ), aPoints.Point( RECT_TOPLEFT ) );
+        aPoints.Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_LEFT ) ) );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        VECTOR2I topLeft = m_sheet.GetPosition();
+        VECTOR2I botRight = m_sheet.GetPosition() + m_sheet.GetSize();
+
+        aPoints.Point( RECT_TOPLEFT ).SetPosition( topLeft );
+        aPoints.Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
+        aPoints.Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
+        aPoints.Point( RECT_BOTRIGHT ).SetPosition( botRight );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        VECTOR2I topLeft = aPoints.Point( RECT_TOPLEFT ).GetPosition();
+        VECTOR2I topRight = aPoints.Point( RECT_TOPRIGHT ).GetPosition();
+        VECTOR2I botLeft = aPoints.Point( RECT_BOTLEFT ).GetPosition();
+        VECTOR2I botRight = aPoints.Point( RECT_BOTRIGHT ).GetPosition();
+        VECTOR2I sheetNewPos = m_sheet.GetPosition();
+        VECTOR2I sheetNewSize = m_sheet.GetSize();
+
+        bool editedTopRight = isModified( aEditedPoint, aPoints.Point( RECT_TOPRIGHT ) );
+        bool editedBotLeft = isModified( aEditedPoint, aPoints.Point( RECT_BOTLEFT ) );
+        bool editedBotRight = isModified( aEditedPoint, aPoints.Point( RECT_BOTRIGHT ) );
+
+        if( isModified( aEditedPoint, aPoints.Line( RECT_RIGHT ) ) )
+            editedTopRight = true;
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_BOT ) ) )
+            editedBotLeft = true;
+
+        RECTANGLE_POINT_EDIT_BEHAVIOR::PinEditedCorner(
+                aEditedPoint, aPoints, m_sheet.GetMinWidth( editedTopRight || editedBotRight ),
+                m_sheet.GetMinHeight( editedBotLeft || editedBotRight ), topLeft, topRight, botLeft,
+                botRight );
+
+        if( isModified( aEditedPoint, aPoints.Point( RECT_TOPLEFT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_TOPRIGHT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_BOTRIGHT ) )
+            || isModified( aEditedPoint, aPoints.Point( RECT_BOTLEFT ) ) )
+        {
+            sheetNewPos = topLeft;
+            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, botRight.y - topLeft.y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
+        {
+            sheetNewPos = VECTOR2I( m_sheet.GetPosition().x, topLeft.y );
+            sheetNewSize = VECTOR2I( m_sheet.GetSize().x, botRight.y - topLeft.y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_LEFT ) ) )
+        {
+            sheetNewPos = VECTOR2I( topLeft.x, m_sheet.GetPosition().y );
+            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, m_sheet.GetSize().y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_BOT ) ) )
+        {
+            sheetNewSize = VECTOR2I( m_sheet.GetSize().x, botRight.y - topLeft.y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Line( RECT_RIGHT ) ) )
+        {
+            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, m_sheet.GetSize().y );
+        }
+
+        for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
+        {
+            if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
+            {
+                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+            }
+        }
+
+        if( m_sheet.GetPosition() != sheetNewPos )
+            m_sheet.SetPositionIgnoringPins( sheetNewPos );
+
+        if( m_sheet.GetSize() != sheetNewSize )
+            m_sheet.Resize( sheetNewSize );
+    }
+
+private:
+    SCH_SHEET& m_sheet;
+};
+
+
 class EDIT_POINTS_FACTORY
 {
 public:
@@ -530,26 +981,7 @@ public:
 
             case SHAPE_T::RECTANGLE:
             {
-                shape->Normalize();
-
-                VECTOR2I topLeft = shape->GetPosition();
-                VECTOR2I botRight = shape->GetEnd();
-
-                points->AddPoint( topLeft );
-                points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
-                points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-                points->AddPoint( botRight );
-                points->AddPoint( shape->GetCenter() );
-
-                points->AddLine( points->Point( RECT_TOPLEFT ), points->Point( RECT_TOPRIGHT ) );
-                points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
-                points->AddLine( points->Point( RECT_TOPRIGHT ), points->Point( RECT_BOTRIGHT ) );
-                points->Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_RIGHT ) ) );
-                points->AddLine( points->Point( RECT_BOTRIGHT ), points->Point( RECT_BOTLEFT ) );
-                points->Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_BOT ) ) );
-                points->AddLine( points->Point( RECT_BOTLEFT ), points->Point( RECT_TOPLEFT ) );
-                points->Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_LEFT ) ) );
-
+                editBehavior = std::make_unique<RECTANGLE_POINT_EDIT_BEHAVIOR>( *shape, *frame );
                 break;
             }
 
@@ -582,26 +1014,7 @@ public:
         case SCH_TEXTBOX_T:
         {
             SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( aItem );
-
-            textbox->Normalize();
-
-            VECTOR2I topLeft = textbox->GetPosition();
-            VECTOR2I botRight = textbox->GetEnd();
-
-            points->AddPoint( topLeft );
-            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
-            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-            points->AddPoint( botRight );
-
-            points->AddLine( points->Point( RECT_TOPLEFT ), points->Point( RECT_TOPRIGHT ) );
-            points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
-            points->AddLine( points->Point( RECT_TOPRIGHT ), points->Point( RECT_BOTRIGHT ) );
-            points->Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_RIGHT ) ) );
-            points->AddLine( points->Point( RECT_BOTRIGHT ), points->Point( RECT_BOTLEFT ) );
-            points->Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_BOT ) ) );
-            points->AddLine( points->Point( RECT_BOTLEFT ), points->Point( RECT_TOPLEFT ) );
-            points->Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_LEFT ) ) );
-
+            editBehavior = std::make_unique<TEXTBOX_POINT_EDIT_BEHAVIOR>( *textbox );
             break;
         }
 
@@ -614,24 +1027,8 @@ public:
 
         case SCH_SHEET_T:
         {
-            SCH_SHEET* sheet = (SCH_SHEET*) aItem;
-            VECTOR2I   topLeft = sheet->GetPosition();
-            VECTOR2I   botRight = sheet->GetPosition() + sheet->GetSize();
-
-            points->AddPoint( topLeft );
-            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
-            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-            points->AddPoint( botRight );
-
-            points->AddLine( points->Point( RECT_TOPLEFT ), points->Point( RECT_TOPRIGHT ) );
-            points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
-            points->AddLine( points->Point( RECT_TOPRIGHT ), points->Point( RECT_BOTRIGHT ) );
-            points->Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_RIGHT ) ) );
-            points->AddLine( points->Point( RECT_BOTRIGHT ), points->Point( RECT_BOTLEFT ) );
-            points->Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_BOT ) ) );
-            points->AddLine( points->Point( RECT_BOTLEFT ), points->Point( RECT_TOPLEFT ) );
-            points->Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_LEFT ) ) );
-
+            SCH_SHEET& sheet = static_cast<SCH_SHEET&>( *aItem );
+            editBehavior = std::make_unique<SHEET_POINT_EDIT_BEHAVIOR>( sheet );
             break;
         }
 
@@ -877,171 +1274,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-/**
- * Update the coordinates of 4 corners of a rectangle, according to constraints
- * and the moved corner
- * @param minWidth is the minimal width constraint
- * @param minHeight is the minimal height constraint
- * @param topLeft is the RECT_TOPLEFT to constraint
- * @param topRight is the RECT_TOPRIGHT to constraint
- * @param botLeft is the RECT_BOTLEFT to constraint
- * @param botRight is the RECT_BOTRIGHT to constraint
- */
-void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& topLeft,
-                                       VECTOR2I& topRight, VECTOR2I& botLeft, VECTOR2I& botRight,
-                                       EE_GRID_HELPER* aGrid ) const
-{
-    if( isModified( m_editPoints->Point(  RECT_TOPLEFT ) ) )
-    {
-        // pin edited point within opposite corner
-        topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
-        topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
-
-        if( aGrid->GetSnap() )
-            topLeft = aGrid->AlignGrid( topLeft, GRID_HELPER_GRIDS::GRID_GRAPHICS );
-
-        // push edited point edges to adjacent corners
-        topRight.y = topLeft.y;
-        botLeft.x = topLeft.x;
-    }
-    else if( isModified( m_editPoints->Point( RECT_TOPRIGHT ) ) )
-    {
-        // pin edited point within opposite corner
-        topRight.x = std::max( topRight.x, botLeft.x + minWidth );
-        topRight.y = std::min( topRight.y, botLeft.y - minHeight );
-
-        if( aGrid->GetSnap() )
-            topRight = aGrid->AlignGrid( topRight, GRID_HELPER_GRIDS::GRID_GRAPHICS );
-
-        // push edited point edges to adjacent corners
-        topLeft.y = topRight.y;
-        botRight.x = topRight.x;
-    }
-    else if( isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
-    {
-        // pin edited point within opposite corner
-        botLeft.x = std::min( botLeft.x, topRight.x - minWidth );
-        botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
-
-        if( aGrid->GetSnap() )
-            botLeft = aGrid->AlignGrid( botLeft, GRID_HELPER_GRIDS::GRID_GRAPHICS );
-
-        // push edited point edges to adjacent corners
-        botRight.y = botLeft.y;
-        topLeft.x = botLeft.x;
-    }
-    else if( isModified( m_editPoints->Point( RECT_BOTRIGHT ) ) )
-    {
-        // pin edited point within opposite corner
-        botRight.x = std::max( botRight.x, topLeft.x + minWidth );
-        botRight.y = std::max( botRight.y, topLeft.y + minHeight );
-
-        if( aGrid->GetSnap() )
-            botRight = aGrid->AlignGrid( botRight, GRID_HELPER_GRIDS::GRID_GRAPHICS );
-
-        // push edited point edges to adjacent corners
-        botLeft.y = botRight.y;
-        topRight.x = botRight.x;
-    }
-    else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
-    {
-        topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
-
-        if( aGrid->GetSnap() )
-            topLeft = aGrid->AlignGrid( topLeft, GRID_HELPER_GRIDS::GRID_GRAPHICS );
-    }
-    else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
-    {
-        topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
-
-        if( aGrid->GetSnap() )
-            topLeft = aGrid->AlignGrid( topLeft, GRID_HELPER_GRIDS::GRID_GRAPHICS );
-    }
-    else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
-    {
-        botRight.y = std::max( botRight.y, topLeft.y + minHeight );
-
-        if( aGrid->GetSnap() )
-            botRight = aGrid->AlignGrid( botRight, GRID_HELPER_GRIDS::GRID_GRAPHICS );
-    }
-    else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
-    {
-        botRight.x = std::max( botRight.x, topLeft.x + minWidth );
-
-        if( aGrid->GetSnap() )
-            botRight = aGrid->AlignGrid( botRight, GRID_HELPER_GRIDS::GRID_GRAPHICS );
-    }
-}
-
-
-void EE_POINT_EDITOR::dragPinsOnEdge( const std::vector<SEG>&      aOldEdges,
-                                      const std::vector<VECTOR2I>& aMoveVecs, int aEdgeUnit,
-                                      SCH_COMMIT& aCommit ) const
-{
-    wxCHECK( aOldEdges.size() == aMoveVecs.size(), /* void */ );
-
-    // This only make sense in the symbol editor
-    if( !m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
-        return;
-
-    SYMBOL_EDIT_FRAME& editor = static_cast<SYMBOL_EDIT_FRAME&>( *m_frame );
-
-    // And only if the setting is enabled
-    if( !editor.GetSettings()->m_dragPinsAlongWithEdges )
-        return;
-
-    // Adjuting pins on a different unit to a unit-limited shape
-    // seems suspect.
-    wxCHECK( aEdgeUnit == 0 || aEdgeUnit == editor.GetUnit(), /* void */ );
-
-    /*
-     * Get a list of pins on a line segment
-     */
-    const auto getPinsOnSeg = []( LIB_SYMBOL& aSymbol, int aUnit, const SEG& aSeg,
-                                  bool aIncludeEnds ) -> std::vector<SCH_PIN*>
-    {
-        // const BOX2I     segBox = BOX2I::ByCorners( aSeg.A, aSeg.B ).GetInflated( 1 );
-        // const EE_RTREE& rtree = m_frame->GetScreen()->Items().Overlapping( SCH_PIN_T, segBox );
-
-        std::vector<SCH_PIN*> pins;
-
-        for( SCH_PIN* pin : aSymbol.GetPins( aUnit ) )
-        {
-            // Figure out if the pin "connects" to the line
-            const VECTOR2I pinRootPos = pin->GetPinRoot();
-
-            if( aSeg.Contains( pinRootPos ) )
-            {
-                if( aIncludeEnds || ( pinRootPos != aSeg.A && pinRootPos != aSeg.B ) )
-                {
-                    pins.push_back( pin );
-                }
-            }
-        }
-
-        return pins;
-    };
-
-    LIB_SYMBOL* const symbol = editor.GetCurSymbol();
-
-    for( std::size_t i = 0; i < aOldEdges.size(); ++i )
-    {
-        if( aMoveVecs[i] == VECTOR2I( 0, 0 ) || !symbol )
-            continue;
-
-        const std::vector<SCH_PIN*> pins = getPinsOnSeg( *symbol, aEdgeUnit, aOldEdges[i], false );
-
-        for( SCH_PIN* pin : pins )
-        {
-            // Move the pin
-            aCommit.Modify( pin, m_frame->GetScreen() );
-            pin->Move( aMoveVecs[i] );
-
-            updateItem( pin, true );
-        }
-    }
-}
-
 
 void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) const
 {
@@ -1050,12 +1282,12 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
     if( !item )
         return;
 
-    std::vector<EDA_ITEM*> updateditems = { item };
+    std::vector<EDA_ITEM*> updatedItems = { item };
     if( m_editBehavior )
     {
-        m_editBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updateditems );
+        m_editBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updatedItems );
 
-        for( EDA_ITEM* updatedItem : updateditems )
+        for( EDA_ITEM* updatedItem : updatedItems )
         {
             updateItem( updatedItem, true );
         }
@@ -1089,78 +1321,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
             break;
 
         case SHAPE_T::RECTANGLE:
-        {
-            EE_GRID_HELPER gridHelper( m_toolMgr );
-            VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-            VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-            VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-            VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
-
-            gridHelper.SetSnap( aSnapToGrid );
-
-            pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
-                             botLeft, botRight, &gridHelper );
-
-            const BOX2I           oldBox = BOX2I::ByCorners( shape->GetStart(), shape->GetEnd() );
-            std::vector<SEG>      oldSegs;
-            std::vector<VECTOR2I> moveVecs;
-
-            if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
-                    || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
-                    || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
-                    || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
-            {
-                // Corner drags don't update pins. Not only is it an escape hatch to avoid
-                // moving pins, it also avoids tricky problems when the pins "fall off"
-                // the ends of one of the two segments and get either left behind or
-                // "swept up" into the corner.
-                shape->SetPosition( topLeft );
-                shape->SetEnd( botRight );
-            }
-            else if( isModified( m_editPoints->Point( RECT_CENTER ) ) )
-            {
-                VECTOR2I moveVec =
-                        m_editPoints->Point( RECT_CENTER ).GetPosition() - oldBox.GetCenter();
-                shape->Move( moveVec );
-            }
-            else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
-            {
-                oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::N );
-                moveVecs.emplace_back( 0, topLeft.y - oldBox.GetTop() );
-                shape->SetStartY( topLeft.y );
-            }
-            else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
-            {
-                oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::W );
-                moveVecs.emplace_back( topLeft.x - oldBox.GetLeft(), 0 );
-                shape->SetStartX( topLeft.x );
-            }
-            else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
-            {
-                oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::S );
-                moveVecs.emplace_back( 0, botRight.y - oldBox.GetBottom() );
-                shape->SetEndY( botRight.y );
-            }
-            else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
-            {
-                oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::E );
-                moveVecs.emplace_back( botRight.x - oldBox.GetRight(), 0 );
-                shape->SetEndX( botRight.x );
-            }
-
-            dragPinsOnEdge( oldSegs, moveVecs, shape->GetUnit(), aCommit );
-
-            for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
-            {
-                if( !isModified( m_editPoints->Line( i ) ) )
-                {
-                    m_editPoints->Line( i ).SetConstraint(
-                            new EC_PERPLINE( m_editPoints->Line( i ) ) );
-                }
-            }
-
             break;
-        }
 
         case SHAPE_T::BEZIER:
             break;
@@ -1173,136 +1334,18 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
     }
 
     case SCH_TEXTBOX_T:
-    {
-        SCH_TEXTBOX*   textbox = static_cast<SCH_TEXTBOX*>( item );
-        EE_GRID_HELPER gridHelper( m_toolMgr );
-        VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-        VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-        VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-        VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
-
-        gridHelper.SetSnap( aSnapToGrid );
-
-        pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
-                         botLeft, botRight, &gridHelper );
-
-        if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
-                || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
-                || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
-                || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
-        {
-            textbox->SetPosition( topLeft );
-            textbox->SetEnd( botRight );
-        }
-        else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
-        {
-            textbox->SetStartY( topLeft.y );
-        }
-        else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
-        {
-            textbox->SetStartX( topLeft.x );
-        }
-        else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
-        {
-            textbox->SetEndY( botRight.y );
-        }
-        else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
-        {
-            textbox->SetEndX( botRight.x );
-        }
-
-        for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
-        {
-            if( !isModified( m_editPoints->Line( i ) ) )
-            {
-                m_editPoints->Line( i ).SetConstraint(
-                        new EC_PERPLINE( m_editPoints->Line( i ) ) );
-            }
-        }
-
-        textbox->ClearRenderCache();
         break;
-    }
-
     case SCH_TABLECELL_T:
         break;
     case SCH_BITMAP_T:
         break;
     case SCH_SHEET_T:
-    {
-        SCH_SHEET*     sheet = (SCH_SHEET*) item;
-        EE_GRID_HELPER gridHelper( m_toolMgr );
-        VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-        VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-        VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-        VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
-        VECTOR2I       sheetNewPos = sheet->GetPosition();
-        VECTOR2I       sheetNewSize = sheet->GetSize();
-
-        gridHelper.SetSnap( aSnapToGrid );
-
-        int edited = getEditedPointIndex();
-
-        if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
-            edited = RECT_TOPRIGHT;
-        else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
-            edited = RECT_BOTLEFT;
-
-        gridHelper.SetSnap( aSnapToGrid );
-
-        pinEditedCorner( sheet->GetMinWidth( edited == RECT_TOPRIGHT || edited == RECT_BOTRIGHT ),
-                         sheet->GetMinHeight( edited == RECT_BOTLEFT || edited == RECT_BOTRIGHT ),
-                         topLeft, topRight, botLeft, botRight, &gridHelper );
-
-        if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
-                || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
-                || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
-                || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
-        {
-            sheetNewPos = topLeft;
-            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, botRight.y - topLeft.y );
-        }
-        else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
-        {
-            sheetNewPos = VECTOR2I( sheet->GetPosition().x, topLeft.y );
-            sheetNewSize = VECTOR2I( sheet->GetSize().x, botRight.y - topLeft.y );
-        }
-        else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
-        {
-            sheetNewPos = VECTOR2I( topLeft.x, sheet->GetPosition().y );
-            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, sheet->GetSize().y );
-        }
-        else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
-        {
-            sheetNewSize = VECTOR2I( sheet->GetSize().x, botRight.y - topLeft.y );
-        }
-        else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
-        {
-            sheetNewSize = VECTOR2I( botRight.x - topLeft.x, sheet->GetSize().y );
-        }
-
-        for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
-        {
-            if( !isModified( m_editPoints->Line( i ) ) )
-            {
-                m_editPoints->Line( i ).SetConstraint(
-                        new EC_PERPLINE( m_editPoints->Line( i ) ) );
-            }
-        }
-
-        if( sheet->GetPosition() != sheetNewPos )
-            sheet->SetPositionIgnoringPins( sheetNewPos );
-
-        if( sheet->GetSize() != sheetNewSize )
-            sheet->Resize( sheetNewSize );
-
         break;
-    }
     default:
         break;
     }
 
-    for( EDA_ITEM* updatedItem : updateditems )
+    for( EDA_ITEM* updatedItem : updatedItems )
     {
         updateItem( updatedItem, true );
     }
@@ -1390,43 +1433,14 @@ void EE_POINT_EDITOR::updatePoints()
     }
 
     case SCH_TEXTBOX_T:
-    {
-        SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( item );
-
-        // point editor works only with rectangles having width and height > 0
-        // Some symbols can have rectangles with width or height < 0
-        // So normalize the size:
-        BOX2I dummy;
-        dummy.SetOrigin( textbox->GetPosition() );
-        dummy.SetEnd( textbox->GetEnd() );
-        dummy.Normalize();
-        VECTOR2I topLeft = dummy.GetPosition();
-        VECTOR2I botRight = dummy.GetEnd();
-
-        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
-        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
-        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
-        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-        break;
-    }
-
-    case SCH_TABLECELL_T:
+           break;
+      case SCH_TABLECELL_T:
         break;
     case SCH_BITMAP_T:
         break;
 
     case SCH_SHEET_T:
-    {
-        SCH_SHEET* sheet = (SCH_SHEET*) item;
-        VECTOR2I   topLeft = sheet->GetPosition();
-        VECTOR2I   botRight = sheet->GetPosition() + sheet->GetSize();
-
-        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
-        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
-        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
-        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
         break;
-    }
 
     default:
         break;
