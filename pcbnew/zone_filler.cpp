@@ -89,7 +89,8 @@ public:
         for( int i = 0; i < aPolys.OutlineCount(); i++ )
             tail = createList( aPolys.Outline( i ), tail, (void*)( intptr_t )( i ) );
 
-        tail->updateList();
+        if( tail )
+            tail->updateList();
         m_dist = aDist;
     }
 
@@ -137,6 +138,9 @@ public:
 
     void FindResults()
     {
+        if( m_vertices.empty() )
+            return;
+
         VERTEX* p = m_vertices.front().next;
         std::set<VERTEX*> visited;
 
