@@ -92,7 +92,12 @@ enum DIMENSION_POINTS
     DIM_TEXT,
     DIM_CROSSBARSTART,
     DIM_CROSSBAREND,
-    DIM_KNEE = DIM_CROSSBARSTART
+    DIM_KNEE = DIM_CROSSBARSTART,
+
+    DIM_ALIGNED_MAX = DIM_CROSSBAREND + 1,
+    DIM_CENTER_MAX = DIM_END + 1,
+    DIM_RADIAL_MAX = DIM_KNEE + 1,
+    DIM_LEADER_MAX = DIM_TEXT + 1,
 };
 
 
@@ -1519,15 +1524,544 @@ private:
 };
 
 
+/**
+ * Class to help update the text position of a dimension when the crossbar changes.
+ *
+ * Choosing the right way to update the text position requires some care, and
+ * needs to hold some state from the original dimension position so the text can be placed
+ * in a similar position relative to the new crossbar. This class handles that state
+ * and the logic to find the new text position.
+ */
+class DIM_ALIGNED_TEXT_UPDATER
+{
+public:
+    DIM_ALIGNED_TEXT_UPDATER( PCB_DIM_ALIGNED& aDimension ) :
+            m_dimension( aDimension ), m_originalTextPos( aDimension.GetTextPos() ),
+            m_oldCrossBar( SEG{ aDimension.GetCrossbarStart(), aDimension.GetCrossbarEnd() } )
+    {
+    }
+
+    void UpdateTextAfterChange()
+    {
+        const SEG newCrossBar{ m_dimension.GetCrossbarStart(), m_dimension.GetCrossbarEnd() };
+
+        if( newCrossBar == m_oldCrossBar )
+        {
+            // Crossbar didn't change, text doesn't need to change
+            return;
+        }
+
+        const VECTOR2I newTextPos = getDimensionNewTextPosition();
+        m_dimension.SetTextPos( newTextPos );
+
+        const GR_TEXT_H_ALIGN_T oldJustify = m_dimension.GetHorizJustify();
+
+        // We may need to update the justification if we go past vertical.
+        if( oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT
+            || oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_RIGHT )
+        {
+            const VECTOR2I oldProject = m_oldCrossBar.LineProject( m_originalTextPos );
+            const VECTOR2I newProject = newCrossBar.LineProject( newTextPos );
+
+            const VECTOR2I oldProjectedOffset =
+                    oldProject - m_oldCrossBar.NearestPoint( oldProject );
+            const VECTOR2I newProjectedOffset = newProject - newCrossBar.NearestPoint( newProject );
+
+            const bool textWasLeftOf = oldProjectedOffset.x < 0
+                                       || ( oldProjectedOffset.x == 0 && oldProjectedOffset.y > 0 );
+            const bool textIsLeftOf = newProjectedOffset.x < 0
+                                      || ( newProjectedOffset.x == 0 && newProjectedOffset.y > 0 );
+
+            if( textWasLeftOf != textIsLeftOf )
+            {
+                // Flip whatever the user had set
+                m_dimension.SetHorizJustify(
+                        ( oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT )
+                                ? GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_RIGHT
+                                : GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT );
+            }
+        }
+
+        // Update the dimension (again) to ensure the text knockouts are correct
+        m_dimension.Update();
+    }
+
+private:
+    VECTOR2I getDimensionNewTextPosition()
+    {
+        const SEG newCrossBar{ m_dimension.GetCrossbarStart(), m_dimension.GetCrossbarEnd() };
+
+        const EDA_ANGLE oldAngle = EDA_ANGLE( m_oldCrossBar.B - m_oldCrossBar.A );
+        const EDA_ANGLE newAngle = EDA_ANGLE( newCrossBar.B - newCrossBar.A );
+        const EDA_ANGLE rotation = oldAngle - newAngle;
+
+        // There are two modes - when the text is between the crossbar points, and when it's not.
+        if( !KIGEOM::PointProjectsOntoSegment( m_originalTextPos, m_oldCrossBar ) )
+        {
+            const VECTOR2I cbNearestEndToText =
+                    KIGEOM::GetNearestEndpoint( m_oldCrossBar, m_originalTextPos );
+            const VECTOR2I rotTextOffsetFromCbCenter =
+                    GetRotated( m_originalTextPos - m_oldCrossBar.Center(), rotation );
+            const VECTOR2I rotTextOffsetFromCbEnd =
+                    GetRotated( m_originalTextPos - cbNearestEndToText, rotation );
+
+            // Which of the two crossbar points is now in the right direction? They could be swapped over now.
+            // If zero-length, doesn't matter, they're the same thing
+            const bool startIsInOffsetDirection =
+                    KIGEOM::PointIsInDirection( m_dimension.GetCrossbarStart(),
+                                                rotTextOffsetFromCbCenter, newCrossBar.Center() );
+
+            const VECTOR2I& newCbRefPt = startIsInOffsetDirection ? m_dimension.GetCrossbarStart()
+                                                                  : m_dimension.GetCrossbarEnd();
+
+            // Apply the new offset to the correct crossbar point
+            return newCbRefPt + rotTextOffsetFromCbEnd;
+        }
+
+        // If the text was between the crossbar points, it should stay there, but we need to find a
+        // good place for it. Keep it the same distance from the crossbar line, but rotated as needed.
+
+        const VECTOR2I origTextPointProjected = m_oldCrossBar.NearestPoint( m_originalTextPos );
+        const double   oldRatio =
+                KIGEOM::GetLengthRatioFromStart( origTextPointProjected, m_oldCrossBar );
+
+        // Perpendicular from the crossbar line to the text position
+        // We need to keep this length constant
+        const VECTOR2I rotCbNormalToText =
+                GetRotated( m_originalTextPos - origTextPointProjected, rotation );
+
+        const VECTOR2I newProjected = newCrossBar.A + ( newCrossBar.B - newCrossBar.A ) * oldRatio;
+        return newProjected + rotCbNormalToText;
+    }
+
+    PCB_DIM_ALIGNED& m_dimension;
+    const VECTOR2I   m_originalTextPos;
+    const SEG        m_oldCrossBar;
+};
+
+
+/**
+ * This covers both aligned and the orthogonal sub-type
+ */
+class ALIGNED_DIMENSION_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    ALIGNED_DIMENSION_POINT_EDIT_BEHAVIOR( PCB_DIM_ALIGNED& aDimension ) : m_dimension( aDimension )
+    {
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_dimension.GetStart() );
+        aPoints.AddPoint( m_dimension.GetEnd() );
+        aPoints.AddPoint( m_dimension.GetTextPos() );
+        aPoints.AddPoint( m_dimension.GetCrossbarStart() );
+        aPoints.AddPoint( m_dimension.GetCrossbarEnd() );
+
+        aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
+        aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
+
+        if( m_dimension.Type() == PCB_DIM_ALIGNED_T )
+        {
+            // Dimension height setting - edit points should move only along the feature lines
+            aPoints.Point( DIM_CROSSBARSTART )
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
+                                                 aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND )
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
+                                                 aPoints.Point( DIM_END ) ) );
+        }
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, DIM_ALIGNED_MAX );
+
+        aPoints.Point( DIM_START ).SetPosition( m_dimension.GetStart() );
+        aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
+        aPoints.Point( DIM_TEXT ).SetPosition( m_dimension.GetTextPos() );
+        aPoints.Point( DIM_CROSSBARSTART ).SetPosition( m_dimension.GetCrossbarStart() );
+        aPoints.Point( DIM_CROSSBAREND ).SetPosition( m_dimension.GetCrossbarEnd() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, DIM_ALIGNED_MAX );
+
+        if( m_dimension.Type() == PCB_DIM_ALIGNED_T )
+            updateAlignedDimension( aEditedPoint, aPoints );
+        else
+            updateOrthogonalDimension( aEditedPoint, aPoints );
+    }
+
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                         EDIT_POINTS&      aPoints ) const override
+    {
+        // Constraint for crossbar
+        if( isModified( aEditedPoint, aPoints.Point( DIM_START ) ) )
+            return aPoints.Point( DIM_END ).GetPosition();
+
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
+            return aPoints.Point( DIM_START ).GetPosition();
+
+        // No constraint
+        return aEditedPoint.GetPosition();
+    }
+
+private:
+    /**
+     * Update non-orthogonal dimension points
+     */
+    void updateAlignedDimension( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints )
+    {
+        DIM_ALIGNED_TEXT_UPDATER textPositionUpdater( m_dimension );
+
+        // Check which point is currently modified and updated dimension's points respectively
+        if( isModified( aEditedPoint, aPoints.Point( DIM_CROSSBARSTART ) ) )
+        {
+            VECTOR2D featureLine( aEditedPoint.GetPosition() - m_dimension.GetStart() );
+            VECTOR2D crossBar( m_dimension.GetEnd() - m_dimension.GetStart() );
+
+            if( featureLine.Cross( crossBar ) > 0 )
+                m_dimension.SetHeight( -featureLine.EuclideanNorm() );
+            else
+                m_dimension.SetHeight( featureLine.EuclideanNorm() );
+
+            m_dimension.Update();
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_CROSSBAREND ) ) )
+        {
+            VECTOR2D featureLine( aEditedPoint.GetPosition() - m_dimension.GetEnd() );
+            VECTOR2D crossBar( m_dimension.GetEnd() - m_dimension.GetStart() );
+
+            if( featureLine.Cross( crossBar ) > 0 )
+                m_dimension.SetHeight( -featureLine.EuclideanNorm() );
+            else
+                m_dimension.SetHeight( featureLine.EuclideanNorm() );
+
+            m_dimension.Update();
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_START ) ) )
+        {
+            m_dimension.SetStart( aEditedPoint.GetPosition() );
+            m_dimension.Update();
+
+            aPoints.Point( DIM_CROSSBARSTART )
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
+                                                 aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND )
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
+                                                 aPoints.Point( DIM_END ) ) );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
+        {
+            m_dimension.SetEnd( aEditedPoint.GetPosition() );
+            m_dimension.Update();
+
+            aPoints.Point( DIM_CROSSBARSTART )
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
+                                                 aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND )
+                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
+                                                 aPoints.Point( DIM_END ) ) );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
+        {
+            // Force manual mode if we weren't already in it
+            m_dimension.SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
+            m_dimension.SetTextPos( aEditedPoint.GetPosition() );
+            m_dimension.Update();
+        }
+
+        textPositionUpdater.UpdateTextAfterChange();
+    }
+
+    /**
+     * Update orthogonal dimension points
+     */
+    void updateOrthogonalDimension( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints )
+    {
+        DIM_ALIGNED_TEXT_UPDATER textPositionUpdater( m_dimension );
+        PCB_DIM_ORTHOGONAL&      orthDimension = static_cast<PCB_DIM_ORTHOGONAL&>( m_dimension );
+
+        if( isModified( aEditedPoint, aPoints.Point( DIM_CROSSBARSTART ) )
+            || isModified( aEditedPoint, aPoints.Point( DIM_CROSSBAREND ) ) )
+        {
+            BOX2I bounds( m_dimension.GetStart(), m_dimension.GetEnd() - m_dimension.GetStart() );
+
+            const VECTOR2I& cursorPos = aEditedPoint.GetPosition();
+
+            // Find vector from nearest dimension point to edit position
+            VECTOR2I directionA( cursorPos - m_dimension.GetStart() );
+            VECTOR2I directionB( cursorPos - m_dimension.GetEnd() );
+            VECTOR2I direction = ( directionA < directionB ) ? directionA : directionB;
+
+            bool     vert;
+            VECTOR2D featureLine( cursorPos - m_dimension.GetStart() );
+
+            // Only change the orientation when we move outside the bounds
+            if( !bounds.Contains( cursorPos ) )
+            {
+                // If the dimension is horizontal or vertical, set correct orientation
+                // otherwise, test if we're left/right of the bounding box or above/below it
+                if( bounds.GetWidth() == 0 )
+                    vert = true;
+                else if( bounds.GetHeight() == 0 )
+                    vert = false;
+                else if( cursorPos.x > bounds.GetLeft() && cursorPos.x < bounds.GetRight() )
+                    vert = false;
+                else if( cursorPos.y > bounds.GetTop() && cursorPos.y < bounds.GetBottom() )
+                    vert = true;
+                else
+                    vert = std::abs( direction.y ) < std::abs( direction.x );
+
+                orthDimension.SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
+                                                   : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
+            }
+            else
+            {
+                vert = orthDimension.GetOrientation() == PCB_DIM_ORTHOGONAL::DIR::VERTICAL;
+            }
+
+            m_dimension.SetHeight( vert ? featureLine.x : featureLine.y );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_START ) ) )
+        {
+            m_dimension.SetStart( aEditedPoint.GetPosition() );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
+        {
+            m_dimension.SetEnd( aEditedPoint.GetPosition() );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
+        {
+            // Force manual mode if we weren't already in it
+            m_dimension.SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
+            m_dimension.SetTextPos( VECTOR2I( aEditedPoint.GetPosition() ) );
+        }
+
+        m_dimension.Update();
+
+        // After recompute, find the new text position
+        textPositionUpdater.UpdateTextAfterChange();
+    }
+
+    PCB_DIM_ALIGNED& m_dimension;
+};
+
+
+class DIM_CENTER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    DIM_CENTER_POINT_EDIT_BEHAVIOR( PCB_DIM_CENTER& aDimension ) : m_dimension( aDimension ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_dimension.GetStart() );
+        aPoints.AddPoint( m_dimension.GetEnd() );
+
+        aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
+
+        aPoints.Point( DIM_END ).SetConstraint(
+                new EC_45DEGREE( aPoints.Point( DIM_END ), aPoints.Point( DIM_START ) ) );
+        aPoints.Point( DIM_END ).SetSnapConstraint( IGNORE_SNAPS );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, DIM_CENTER_MAX );
+
+        aPoints.Point( DIM_START ).SetPosition( m_dimension.GetStart() );
+        aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, DIM_CENTER_MAX );
+
+        if( isModified( aEditedPoint, aPoints.Point( DIM_START ) ) )
+            m_dimension.SetStart( aEditedPoint.GetPosition() );
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
+            m_dimension.SetEnd( aEditedPoint.GetPosition() );
+
+        m_dimension.Update();
+    }
+
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                         EDIT_POINTS&      aPoints ) const override
+    {
+        if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
+            return aPoints.Point( DIM_START ).GetPosition();
+
+        return std::nullopt;
+    }
+
+private:
+    PCB_DIM_CENTER& m_dimension;
+};
+
+
+class DIM_RADIAL_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    DIM_RADIAL_POINT_EDIT_BEHAVIOR( PCB_DIM_RADIAL& aDimension ) : m_dimension( aDimension ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_dimension.GetStart() );
+        aPoints.AddPoint( m_dimension.GetEnd() );
+        aPoints.AddPoint( m_dimension.GetTextPos() );
+        aPoints.AddPoint( m_dimension.GetKnee() );
+
+        aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
+        aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
+
+        aPoints.Point( DIM_KNEE )
+                .SetConstraint(
+                        new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+        aPoints.Point( DIM_KNEE ).SetSnapConstraint( IGNORE_SNAPS );
+
+        aPoints.Point( DIM_TEXT )
+                .SetConstraint(
+                        new EC_45DEGREE( aPoints.Point( DIM_TEXT ), aPoints.Point( DIM_KNEE ) ) );
+        aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, DIM_RADIAL_MAX );
+
+        aPoints.Point( DIM_START ).SetPosition( m_dimension.GetStart() );
+        aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
+        aPoints.Point( DIM_TEXT ).SetPosition( m_dimension.GetTextPos() );
+        aPoints.Point( DIM_KNEE ).SetPosition( m_dimension.GetKnee() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, DIM_RADIAL_MAX );
+
+        if( isModified( aEditedPoint, aPoints.Point( DIM_START ) ) )
+        {
+            m_dimension.SetStart( aEditedPoint.GetPosition() );
+            m_dimension.Update();
+
+            aPoints.Point( DIM_KNEE )
+                    .SetConstraint(
+                            new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
+        {
+            VECTOR2I oldKnee = m_dimension.GetKnee();
+
+            m_dimension.SetEnd( aEditedPoint.GetPosition() );
+            m_dimension.Update();
+
+            VECTOR2I kneeDelta = m_dimension.GetKnee() - oldKnee;
+            m_dimension.SetTextPos( m_dimension.GetTextPos() + kneeDelta );
+            m_dimension.Update();
+
+            aPoints.Point( DIM_KNEE )
+                    .SetConstraint(
+                            new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_KNEE ) ) )
+        {
+            VECTOR2I oldKnee = m_dimension.GetKnee();
+            VECTOR2I arrowVec = aPoints.Point( DIM_KNEE ).GetPosition()
+                                - aPoints.Point( DIM_END ).GetPosition();
+
+            m_dimension.SetLeaderLength( arrowVec.EuclideanNorm() );
+            m_dimension.Update();
+
+            VECTOR2I kneeDelta = m_dimension.GetKnee() - oldKnee;
+            m_dimension.SetTextPos( m_dimension.GetTextPos() + kneeDelta );
+            m_dimension.Update();
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
+        {
+            m_dimension.SetTextPos( aEditedPoint.GetPosition() );
+            m_dimension.Update();
+        }
+    }
+
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                         EDIT_POINTS&      aPoints ) const override
+    {
+        if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
+            return aPoints.Point( DIM_KNEE ).GetPosition();
+
+        return std::nullopt;
+    }
+
+private:
+    PCB_DIM_RADIAL& m_dimension;
+};
+
+
+class DIM_LEADER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    DIM_LEADER_POINT_EDIT_BEHAVIOR( PCB_DIM_LEADER& aDimension ) : m_dimension( aDimension ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_dimension.GetStart() );
+        aPoints.AddPoint( m_dimension.GetEnd() );
+        aPoints.AddPoint( m_dimension.GetTextPos() );
+
+        aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
+        aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
+
+        aPoints.Point( DIM_TEXT )
+                .SetConstraint(
+                        new EC_45DEGREE( aPoints.Point( DIM_TEXT ), aPoints.Point( DIM_END ) ) );
+        aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, DIM_LEADER_MAX );
+
+        aPoints.Point( DIM_START ).SetPosition( m_dimension.GetStart() );
+        aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
+        aPoints.Point( DIM_TEXT ).SetPosition( m_dimension.GetTextPos() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, DIM_LEADER_MAX );
+
+        if( isModified( aEditedPoint, aPoints.Point( DIM_START ) ) )
+        {
+            m_dimension.SetStart( aEditedPoint.GetPosition() );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
+        {
+            const VECTOR2I newPoint( aEditedPoint.GetPosition() );
+            const VECTOR2I delta = newPoint - m_dimension.GetEnd();
+
+            m_dimension.SetEnd( newPoint );
+            m_dimension.SetTextPos( m_dimension.GetTextPos() + delta );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
+        {
+            m_dimension.SetTextPos( aEditedPoint.GetPosition() );
+        }
+
+        m_dimension.Update();
+    }
+
+private:
+    PCB_DIM_LEADER& m_dimension;
+};
+
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
-    PCB_TOOL_BASE( "pcbnew.PointEditor" ),
-    m_selectionTool( nullptr ),
-    m_editedPoint( nullptr ),
-    m_hoveredPoint( nullptr ),
-    m_original( VECTOR2I( 0, 0 ) ),
-    m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
-    m_altConstrainer( VECTOR2I( 0, 0 ) ),
-    m_inPointEditorTool( false )
+        PCB_TOOL_BASE( "pcbnew.PointEditor" ), m_selectionTool( nullptr ), m_editedPoint( nullptr ),
+        m_hoveredPoint( nullptr ), m_original( VECTOR2I( 0, 0 ) ),
+        m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
+        m_altConstrainer( VECTOR2I( 0, 0 ) ), m_inPointEditorTool( false )
 {
 }
 
@@ -1657,85 +2191,29 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
     {
-        const PCB_DIM_ALIGNED* dimension = static_cast<const PCB_DIM_ALIGNED*>( aItem );
-
-        points->AddPoint( dimension->GetStart() );
-        points->AddPoint( dimension->GetEnd() );
-        points->AddPoint( dimension->GetTextPos() );
-        points->AddPoint( dimension->GetCrossbarStart() );
-        points->AddPoint( dimension->GetCrossbarEnd() );
-
-        points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
-        points->Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
-
-        if( aItem->Type() == PCB_DIM_ALIGNED_T )
-        {
-            // Dimension height setting - edit points should move only along the feature lines
-            points->Point( DIM_CROSSBARSTART )
-                    .SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARSTART ),
-                                                 points->Point( DIM_START ) ) );
-            points->Point( DIM_CROSSBAREND )
-                    .SetConstraint( new EC_LINE( points->Point( DIM_CROSSBAREND ),
-                                                 points->Point( DIM_END ) ) );
-        }
-
+        PCB_DIM_ALIGNED& dimension = static_cast<PCB_DIM_ALIGNED&>( *aItem );
+        m_editorBehavior = std::make_unique<ALIGNED_DIMENSION_POINT_EDIT_BEHAVIOR>( dimension );
         break;
     }
 
     case PCB_DIM_CENTER_T:
     {
-        const PCB_DIM_CENTER* dimension = static_cast<const PCB_DIM_CENTER*>( aItem );
-
-        points->AddPoint( dimension->GetStart() );
-        points->AddPoint( dimension->GetEnd() );
-
-        points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
-
-        points->Point( DIM_END ).SetConstraint( new EC_45DEGREE( points->Point( DIM_END ),
-                                                                 points->Point( DIM_START ) ) );
-        points->Point( DIM_END ).SetSnapConstraint( IGNORE_SNAPS );
-
+        PCB_DIM_CENTER& dimension = static_cast<PCB_DIM_CENTER&>( *aItem );
+        m_editorBehavior = std::make_unique<DIM_CENTER_POINT_EDIT_BEHAVIOR>( dimension );
         break;
     }
 
     case PCB_DIM_RADIAL_T:
     {
-        const PCB_DIM_RADIAL* dimension = static_cast<const PCB_DIM_RADIAL*>( aItem );
-
-        points->AddPoint( dimension->GetStart() );
-        points->AddPoint( dimension->GetEnd() );
-        points->AddPoint( dimension->GetTextPos() );
-        points->AddPoint( dimension->GetKnee() );
-
-        points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
-        points->Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
-
-        points->Point( DIM_KNEE ).SetConstraint( new EC_LINE( points->Point( DIM_START ),
-                                                              points->Point( DIM_END ) ) );
-        points->Point( DIM_KNEE ).SetSnapConstraint( IGNORE_SNAPS );
-
-        points->Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( points->Point( DIM_TEXT ),
-                                                                  points->Point( DIM_KNEE ) ) );
-        points->Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
-
+        PCB_DIM_RADIAL& dimension = static_cast<PCB_DIM_RADIAL&>( *aItem );
+        m_editorBehavior = std::make_unique<DIM_RADIAL_POINT_EDIT_BEHAVIOR>( dimension );
         break;
     }
 
     case PCB_DIM_LEADER_T:
     {
-        const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( aItem );
-
-        points->AddPoint( dimension->GetStart() );
-        points->AddPoint( dimension->GetEnd() );
-        points->AddPoint( dimension->GetTextPos() );
-
-        points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
-        points->Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
-
-        points->Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( points->Point( DIM_TEXT ),
-                                                                  points->Point( DIM_END ) ) );
-        points->Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
-
+        PCB_DIM_LEADER& dimension = static_cast<PCB_DIM_LEADER&>( *aItem );
+        m_editorBehavior = std::make_unique<DIM_LEADER_POINT_EDIT_BEHAVIOR>( dimension );
         break;
     }
 
@@ -2111,122 +2589,6 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
 }
 
 
-/**
- * Class to help update the text position of a dimension when the crossbar changes.
- *
- * Choosing the right way to update the text position requires some care, and
- * needs to hold some state from the original dimension position so the text can be placed
- * in a similar position relative to the new crossbar. This class handles that state
- * and the logic to find the new text position.
- */
-class DIM_ALIGNED_TEXT_UPDATER
-{
-public:
-    DIM_ALIGNED_TEXT_UPDATER( PCB_DIM_ALIGNED& aDimension ) :
-            m_dimension( aDimension ), m_originalTextPos( aDimension.GetTextPos() ),
-            m_oldCrossBar( SEG{ aDimension.GetCrossbarStart(), aDimension.GetCrossbarEnd() } )
-    {
-    }
-
-    void UpdateTextAfterChange()
-    {
-        const SEG newCrossBar{ m_dimension.GetCrossbarStart(), m_dimension.GetCrossbarEnd() };
-
-        if( newCrossBar == m_oldCrossBar )
-        {
-            // Crossbar didn't change, text doesn't need to change
-            return;
-        }
-
-        const VECTOR2I newTextPos = getDimensionNewTextPosition();
-        m_dimension.SetTextPos( newTextPos );
-
-        const GR_TEXT_H_ALIGN_T oldJustify = m_dimension.GetHorizJustify();
-
-        // We may need to update the justification if we go past vertical.
-        if( oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT
-            || oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_RIGHT )
-        {
-            const VECTOR2I oldProject = m_oldCrossBar.LineProject( m_originalTextPos );
-            const VECTOR2I newProject = newCrossBar.LineProject( newTextPos );
-
-            const VECTOR2I oldProjectedOffset =
-                    oldProject - m_oldCrossBar.NearestPoint( oldProject );
-            const VECTOR2I newProjectedOffset = newProject - newCrossBar.NearestPoint( newProject );
-
-            const bool textWasLeftOf = oldProjectedOffset.x < 0
-                                       || ( oldProjectedOffset.x == 0 && oldProjectedOffset.y > 0 );
-            const bool textIsLeftOf = newProjectedOffset.x < 0
-                                      || ( newProjectedOffset.x == 0 && newProjectedOffset.y > 0 );
-
-            if( textWasLeftOf != textIsLeftOf )
-            {
-                // Flip whatever the user had set
-                m_dimension.SetHorizJustify(
-                        ( oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT )
-                                ? GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_RIGHT
-                                : GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT );
-            }
-        }
-
-        // Update the dimension (again) to ensure the text knockouts are correct
-        m_dimension.Update();
-    }
-
-private:
-    VECTOR2I getDimensionNewTextPosition()
-    {
-        const SEG newCrossBar{ m_dimension.GetCrossbarStart(), m_dimension.GetCrossbarEnd() };
-
-        const EDA_ANGLE oldAngle = EDA_ANGLE( m_oldCrossBar.B - m_oldCrossBar.A );
-        const EDA_ANGLE newAngle = EDA_ANGLE( newCrossBar.B - newCrossBar.A );
-        const EDA_ANGLE rotation = oldAngle - newAngle;
-
-        // There are two modes - when the text is between the crossbar points, and when it's not.
-        if( !KIGEOM::PointProjectsOntoSegment( m_originalTextPos, m_oldCrossBar ) )
-        {
-            const VECTOR2I cbNearestEndToText =
-                    KIGEOM::GetNearestEndpoint( m_oldCrossBar, m_originalTextPos );
-            const VECTOR2I rotTextOffsetFromCbCenter =
-                    GetRotated( m_originalTextPos - m_oldCrossBar.Center(), rotation );
-            const VECTOR2I rotTextOffsetFromCbEnd =
-                    GetRotated( m_originalTextPos - cbNearestEndToText, rotation );
-
-            // Which of the two crossbar points is now in the right direction? They could be swapped over now.
-            // If zero-length, doesn't matter, they're the same thing
-            const bool startIsInOffsetDirection =
-                    KIGEOM::PointIsInDirection( m_dimension.GetCrossbarStart(),
-                                                rotTextOffsetFromCbCenter, newCrossBar.Center() );
-
-            const VECTOR2I& newCbRefPt = startIsInOffsetDirection ? m_dimension.GetCrossbarStart()
-                                                                  : m_dimension.GetCrossbarEnd();
-
-            // Apply the new offset to the correct crossbar point
-            return newCbRefPt + rotTextOffsetFromCbEnd;
-        }
-
-        // If the text was between the crossbar points, it should stay there, but we need to find a
-        // good place for it. Keep it the same distance from the crossbar line, but rotated as needed.
-
-        const VECTOR2I origTextPointProjected = m_oldCrossBar.NearestPoint( m_originalTextPos );
-        const double   oldRatio =
-                KIGEOM::GetLengthRatioFromStart( origTextPointProjected, m_oldCrossBar );
-
-        // Perpendicular from the crossbar line to the text position
-        // We need to keep this length constant
-        const VECTOR2I rotCbNormalToText =
-                GetRotated( m_originalTextPos - origTextPointProjected, rotation );
-
-        const VECTOR2I newProjected = newCrossBar.A + ( newCrossBar.B - newCrossBar.A ) * oldRatio;
-        return newProjected + rotCbNormalToText;
-    }
-
-    PCB_DIM_ALIGNED& m_dimension;
-    const VECTOR2I   m_originalTextPos;
-    const SEG        m_oldCrossBar;
-};
-
-
 void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 {
     EDA_ITEM* item = m_editPoints->GetParent();
@@ -2290,232 +2652,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         getView()->Update( &m_preview );
         break;
     }
-
-    case PCB_DIM_ALIGNED_T:
-    {
-        PCB_DIM_ALIGNED* dimension = static_cast<PCB_DIM_ALIGNED*>( item );
-
-        DIM_ALIGNED_TEXT_UPDATER textPositionUpdater( *dimension );
-
-        // Check which point is currently modified and updated dimension's points respectively
-        if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) )
-        {
-            VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetStart() );
-            VECTOR2D crossBar( dimension->GetEnd() - dimension->GetStart() );
-
-            if( featureLine.Cross( crossBar ) > 0 )
-                dimension->SetHeight( -featureLine.EuclideanNorm() );
-            else
-                dimension->SetHeight( featureLine.EuclideanNorm() );
-
-            dimension->Update();
-        }
-        else if( isModified( m_editPoints->Point( DIM_CROSSBAREND ) ) )
-        {
-            VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetEnd() );
-            VECTOR2D crossBar( dimension->GetEnd() - dimension->GetStart() );
-
-            if( featureLine.Cross( crossBar ) > 0 )
-                dimension->SetHeight( -featureLine.EuclideanNorm() );
-            else
-                dimension->SetHeight( featureLine.EuclideanNorm() );
-
-            dimension->Update();
-        }
-        else if( isModified( m_editPoints->Point( DIM_START ) ) )
-        {
-            dimension->SetStart( m_editedPoint->GetPosition() );
-            dimension->Update();
-
-            m_editPoints->Point( DIM_CROSSBARSTART ).
-                    SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
-                                                m_editPoints->Point( DIM_START ) ) );
-            m_editPoints->Point( DIM_CROSSBAREND ).
-                    SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
-                                                m_editPoints->Point( DIM_END ) ) );
-        }
-        else if( isModified( m_editPoints->Point( DIM_END ) ) )
-        {
-            dimension->SetEnd( m_editedPoint->GetPosition() );
-            dimension->Update();
-
-            m_editPoints->Point( DIM_CROSSBARSTART ).
-                    SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
-                                                m_editPoints->Point( DIM_START ) ) );
-            m_editPoints->Point( DIM_CROSSBAREND ).
-                    SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
-                                                m_editPoints->Point( DIM_END ) ) );
-        }
-        else if( isModified( m_editPoints->Point(DIM_TEXT ) ) )
-        {
-            // Force manual mode if we weren't already in it
-            dimension->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
-            dimension->SetTextPos( m_editedPoint->GetPosition() );
-            dimension->Update();
-        }
-
-        textPositionUpdater.UpdateTextAfterChange();
-        break;
-    }
-
-    case PCB_DIM_ORTHOGONAL_T:
-    {
-        PCB_DIM_ORTHOGONAL* dimension = static_cast<PCB_DIM_ORTHOGONAL*>( item );
-
-        DIM_ALIGNED_TEXT_UPDATER textPositionUpdater( *dimension );
-
-        if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) ||
-            isModified( m_editPoints->Point( DIM_CROSSBAREND ) ) )
-        {
-            BOX2I bounds( dimension->GetStart(), dimension->GetEnd() - dimension->GetStart() );
-
-            const VECTOR2I& cursorPos = m_editedPoint->GetPosition();
-
-            // Find vector from nearest dimension point to edit position
-            VECTOR2I directionA( cursorPos - dimension->GetStart() );
-            VECTOR2I directionB( cursorPos - dimension->GetEnd() );
-            VECTOR2I direction = ( directionA < directionB ) ? directionA : directionB;
-
-            bool     vert;
-            VECTOR2D featureLine( cursorPos - dimension->GetStart() );
-
-            // Only change the orientation when we move outside the bounds
-            if( !bounds.Contains( cursorPos ) )
-            {
-                // If the dimension is horizontal or vertical, set correct orientation
-                // otherwise, test if we're left/right of the bounding box or above/below it
-                if( bounds.GetWidth() == 0 )
-                    vert = true;
-                else if( bounds.GetHeight() == 0 )
-                    vert = false;
-                else if( cursorPos.x > bounds.GetLeft() && cursorPos.x < bounds.GetRight() )
-                    vert = false;
-                else if( cursorPos.y > bounds.GetTop() && cursorPos.y < bounds.GetBottom() )
-                    vert = true;
-                else
-                    vert = std::abs( direction.y ) < std::abs( direction.x );
-
-                dimension->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
-                                                : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
-            }
-            else
-            {
-                vert = dimension->GetOrientation() == PCB_DIM_ORTHOGONAL::DIR::VERTICAL;
-            }
-
-            dimension->SetHeight( vert ? featureLine.x : featureLine.y );
-        }
-        else if( isModified( m_editPoints->Point( DIM_START ) ) )
-        {
-            dimension->SetStart( m_editedPoint->GetPosition() );
-        }
-        else if( isModified( m_editPoints->Point( DIM_END ) ) )
-        {
-            dimension->SetEnd( m_editedPoint->GetPosition() );
-        }
-        else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
-        {
-            // Force manual mode if we weren't already in it
-            dimension->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
-            dimension->SetTextPos( VECTOR2I( m_editedPoint->GetPosition() ) );
-        }
-
-        dimension->Update();
-
-        // After recompute, find the new text position
-        textPositionUpdater.UpdateTextAfterChange();
-
-        break;
-    }
-
-    case PCB_DIM_CENTER_T:
-    {
-        PCB_DIM_CENTER* dimension = static_cast<PCB_DIM_CENTER*>( item );
-
-        if( isModified( m_editPoints->Point( DIM_START ) ) )
-            dimension->SetStart( m_editedPoint->GetPosition() );
-        else if( isModified( m_editPoints->Point( DIM_END ) ) )
-            dimension->SetEnd( m_editedPoint->GetPosition() );
-
-        dimension->Update();
-
-        break;
-    }
-
-    case PCB_DIM_RADIAL_T:
-    {
-        PCB_DIM_RADIAL* dimension = static_cast<PCB_DIM_RADIAL*>( item );
-
-        if( isModified( m_editPoints->Point( DIM_START ) ) )
-        {
-            dimension->SetStart( m_editedPoint->GetPosition() );
-            dimension->Update();
-
-            m_editPoints->Point( DIM_KNEE ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_START ),
-                                                                        m_editPoints->Point( DIM_END ) ) );
-        }
-        else if( isModified( m_editPoints->Point( DIM_END ) ) )
-        {
-            VECTOR2I oldKnee = dimension->GetKnee();
-
-            dimension->SetEnd( m_editedPoint->GetPosition() );
-            dimension->Update();
-
-            VECTOR2I kneeDelta = dimension->GetKnee() - oldKnee;
-            dimension->SetTextPos( dimension->GetTextPos() + kneeDelta );
-            dimension->Update();
-
-            m_editPoints->Point( DIM_KNEE ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_START ),
-                                                                        m_editPoints->Point( DIM_END ) ) );
-        }
-        else if( isModified( m_editPoints->Point( DIM_KNEE ) ) )
-        {
-            VECTOR2I oldKnee = dimension->GetKnee();
-            VECTOR2I arrowVec = m_editPoints->Point( DIM_KNEE ).GetPosition()
-                                - m_editPoints->Point( DIM_END ).GetPosition();
-
-            dimension->SetLeaderLength( arrowVec.EuclideanNorm() );
-            dimension->Update();
-
-            VECTOR2I kneeDelta = dimension->GetKnee() - oldKnee;
-            dimension->SetTextPos( dimension->GetTextPos() + kneeDelta );
-            dimension->Update();
-        }
-        else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
-        {
-            dimension->SetTextPos( m_editedPoint->GetPosition() );
-            dimension->Update();
-        }
-
-        break;
-    }
-
-    case PCB_DIM_LEADER_T:
-    {
-        PCB_DIM_LEADER* dimension = static_cast<PCB_DIM_LEADER*>( item );
-
-        if( isModified( m_editPoints->Point( DIM_START ) ) )
-        {
-            dimension->SetStart( (VECTOR2I) m_editedPoint->GetPosition() );
-        }
-        else if( isModified( m_editPoints->Point( DIM_END ) ) )
-        {
-            VECTOR2I newPoint( m_editedPoint->GetPosition() );
-            VECTOR2I delta = newPoint - dimension->GetEnd();
-
-            dimension->SetEnd( newPoint );
-            dimension->SetTextPos( dimension->GetTextPos() + delta );
-        }
-        else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
-        {
-            dimension->SetTextPos( (VECTOR2I) m_editedPoint->GetPosition() );
-        }
-
-        dimension->Update();
-
-        break;
-    }
-
     default:
         break;
     }
@@ -2589,49 +2725,6 @@ void PCB_POINT_EDITOR::updatePoints()
 
         break;
     }
-    case PCB_DIM_ALIGNED_T:
-    case PCB_DIM_ORTHOGONAL_T:
-    {
-        const PCB_DIM_ALIGNED* dimension = static_cast<const PCB_DIM_ALIGNED*>( item );
-
-        m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
-        m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
-        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->GetTextPos() );
-        m_editPoints->Point( DIM_CROSSBARSTART ).SetPosition( dimension->GetCrossbarStart() );
-        m_editPoints->Point( DIM_CROSSBAREND ).SetPosition( dimension->GetCrossbarEnd() );
-        break;
-    }
-
-    case PCB_DIM_CENTER_T:
-    {
-        const PCB_DIM_CENTER* dimension = static_cast<const PCB_DIM_CENTER*>( item );
-
-        m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
-        m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
-        break;
-    }
-
-    case PCB_DIM_RADIAL_T:
-    {
-        const PCB_DIM_RADIAL* dimension = static_cast<const PCB_DIM_RADIAL*>( item );
-
-        m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
-        m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
-        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->GetTextPos() );
-        m_editPoints->Point( DIM_KNEE ).SetPosition( dimension->GetKnee() );
-        break;
-    }
-
-    case PCB_DIM_LEADER_T:
-    {
-        const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( item );
-
-        m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
-        m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
-        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->GetTextPos() );
-        break;
-    }
-
     default:
         break;
     }
@@ -2713,45 +2806,6 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
                 m_editorBehavior->Get45DegreeConstrainer( *m_editedPoint, *m_editPoints );
         if( constrainer )
             return EDIT_POINT( *constrainer );
-    }
-
-    EDA_ITEM* item = m_editPoints->GetParent();
-
-    switch( item->Type() )
-    {
-    case PCB_DIM_ALIGNED_T:
-    {
-        // Constraint for crossbar
-        if( isModified( m_editPoints->Point( DIM_START ) ) )
-            return m_editPoints->Point( DIM_END );
-
-        else if( isModified( m_editPoints->Point( DIM_END ) ) )
-            return m_editPoints->Point( DIM_START );
-
-        else
-            return EDIT_POINT( m_editedPoint->GetPosition() );      // no constraint
-
-        break;
-    }
-
-    case PCB_DIM_CENTER_T:
-    {
-        if( isModified( m_editPoints->Point( DIM_END ) ) )
-            return m_editPoints->Point( DIM_START );
-
-        break;
-    }
-
-    case PCB_DIM_RADIAL_T:
-    {
-        if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
-            return m_editPoints->Point( DIM_KNEE );
-
-        break;
-    }
-
-    default:
-        break;
     }
 
     // In any other case we may align item to its original position
