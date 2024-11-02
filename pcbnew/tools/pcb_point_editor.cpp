@@ -85,12 +85,6 @@ enum RECT_LINES
 };
 
 
-enum TABLECELL_POINTS
-{
-    COL_WIDTH, ROW_HEIGHT
-};
-
-
 enum DIMENSION_POINTS
 {
     DIM_START,
@@ -1159,6 +1153,73 @@ private:
 };
 
 
+class TABLECELL_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+    enum TABLECELL_POINTS
+    {
+        COL_WIDTH,
+        ROW_HEIGHT,
+
+        TABLECELL_MAX_POINTS,
+    };
+
+public:
+    TABLECELL_POINT_EDIT_BEHAVIOR( PCB_TABLECELL& aCell ) : m_cell( aCell ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
+        aPoints.AddPoint( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, TABLECELL_MAX_POINTS );
+
+        aPoints.Point( COL_WIDTH )
+                .SetPosition( m_cell.GetEndX(),
+                              m_cell.GetEndY() - m_cell.GetRectangleHeight() / 2 );
+        aPoints.Point( ROW_HEIGHT )
+                .SetPosition( m_cell.GetEndX() - m_cell.GetRectangleWidth() / 2, m_cell.GetEndY() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        CHECK_POINT_COUNT( aPoints, TABLECELL_MAX_POINTS );
+
+        PCB_TABLE& table = static_cast<PCB_TABLE&>( *m_cell.GetParent() );
+
+        if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
+        {
+            m_cell.SetEnd( VECTOR2I( aPoints.Point( 0 ).GetX(), m_cell.GetEndY() ) );
+
+            int colWidth = m_cell.GetRectangleWidth();
+
+            for( int ii = 0; ii < m_cell.GetColSpan() - 1; ++ii )
+                colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
+
+            table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
+            table.Normalize();
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
+        {
+            m_cell.SetEnd( VECTOR2I( m_cell.GetEndX(), aPoints.Point( 1 ).GetY() ) );
+
+            int rowHeight = m_cell.GetRectangleHeight();
+
+            for( int ii = 0; ii < m_cell.GetRowSpan() - 1; ++ii )
+                rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
+
+            table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
+            table.Normalize();
+        }
+    }
+
+private:
+    PCB_TABLECELL& m_cell;
+};
+
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( nullptr ),
@@ -1265,8 +1326,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_TABLECELL_T:
     {
         PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( aItem );
-        points->AddPoint( cell->GetEnd() - VECTOR2I( 0, cell->GetRectangleHeight() / 2 ) );
-        points->AddPoint( cell->GetEnd() - VECTOR2I( cell->GetRectangleWidth() / 2, 0 ) );
+        m_editorBehavior = std::make_unique<TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
         break;
     }
 
@@ -1937,35 +1997,9 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 
     case PCB_TABLECELL_T:
     {
-        PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( item );
-        PCB_TABLE*     table = static_cast<PCB_TABLE*>( cell->GetParent() );
-
-        if( isModified( m_editPoints->Point( COL_WIDTH ) ) )
-        {
-            cell->SetEnd( VECTOR2I( m_editPoints->Point( 0 ).GetX(), cell->GetEndY() ) );
-
-            int colWidth = cell->GetRectangleWidth();
-
-            for( int ii = 0; ii < cell->GetColSpan() - 1; ++ii )
-                colWidth -= table->GetColWidth( cell->GetColumn() + ii );
-
-            table->SetColWidth( cell->GetColumn() + cell->GetColSpan() - 1, colWidth );
-            table->Normalize();
-        }
-        else if( isModified( m_editPoints->Point( ROW_HEIGHT ) ) )
-        {
-            cell->SetEnd( VECTOR2I( cell->GetEndX(), m_editPoints->Point( 1 ).GetY() ) );
-
-            int rowHeight = cell->GetRectangleHeight();
-
-            for( int ii = 0; ii < cell->GetRowSpan() - 1; ++ii )
-                rowHeight -= table->GetRowHeight( cell->GetRow() + ii );
-
-            table->SetRowHeight( cell->GetRow() + cell->GetRowSpan() - 1, rowHeight );
-            table->Normalize();
-        }
-
-        getView()->Update( table );
+        PCB_TABLECELL& cell = static_cast<PCB_TABLECELL&>( *item );
+        PCB_TABLE&     table = static_cast<PCB_TABLE&>( *cell.GetParent() );
+        getView()->Update( &table );
         break;
     }
 
@@ -2422,18 +2456,6 @@ void PCB_POINT_EDITOR::updatePoints()
 
         break;
     }
-
-    case PCB_TABLECELL_T:
-    {
-        PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( item );
-
-        m_editPoints->Point( 0 ).SetPosition( cell->GetEndX(),
-                                              cell->GetEndY() - cell->GetRectangleHeight() / 2 );
-        m_editPoints->Point( 1 ).SetPosition( cell->GetEndX() - cell->GetRectangleWidth() / 2,
-                                              cell->GetEndY() );
-        break;
-    }
-
     case PCB_PAD_T:
     {
         // TODO(JE) padstacks
