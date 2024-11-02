@@ -1252,15 +1252,12 @@ const JOINT* NODE::FindJoint( const VECTOR2I& aPos, int aLayer, NET_HANDLE aNet 
         f = m_root->m_joints.find( tag );    // m_root->FindJoint(aPos, aLayer, aNet);
     }
 
-    if( f == end )
-        return nullptr;
-
     while( f != end )
     {
-        if( f->second.Layers().Overlaps( aLayer ) )
+        if( f->second.Pos() == aPos && f->second.Net() == aNet && f->second.Layers().Overlaps( aLayer ) )
             return &f->second;
 
-        ++f;
+        f++;
     }
 
     return nullptr;
