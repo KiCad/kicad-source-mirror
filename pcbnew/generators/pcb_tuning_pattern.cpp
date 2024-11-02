@@ -293,12 +293,11 @@ public:
 
     void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
 
-    bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const override;
+    bool MakeEditPoints( EDIT_POINTS& points ) const override;
 
-    bool UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
-                               BOARD_COMMIT* aCommit ) override;
+    bool UpdateFromEditPoints( EDIT_POINTS& aEditPoints ) override;
 
-    bool UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) override;
+    bool UpdateEditPoints( EDIT_POINTS& aEditPoints ) override;
 
     void Move( const VECTOR2I& aMoveVector ) override
     {
@@ -1579,7 +1578,7 @@ void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD
 }
 
 
-bool PCB_TUNING_PATTERN::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const
+bool PCB_TUNING_PATTERN::MakeEditPoints( EDIT_POINTS& aPoints ) const
 {
     VECTOR2I centerlineOffset;
     VECTOR2I centerlineOffsetEnd;
@@ -1590,8 +1589,8 @@ bool PCB_TUNING_PATTERN::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) c
         centerlineOffsetEnd = ( m_baseLineCoupled->CPoint( -1 ) - m_end ) / 2;
     }
 
-    points->AddPoint( m_origin + centerlineOffset );
-    points->AddPoint( m_end + centerlineOffsetEnd );
+    aPoints.AddPoint( m_origin + centerlineOffset );
+    aPoints.AddPoint( m_end + centerlineOffsetEnd );
 
     SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
                                                             : SEG( m_origin, m_end );
@@ -1609,21 +1608,20 @@ bool PCB_TUNING_PATTERN::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) c
 
     VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( amplitude );
 
-    points->AddPoint( base.A + widthHandleOffset );
-    points->Point( 2 ).SetGridConstraint( IGNORE_GRID );
+    aPoints.AddPoint( base.A + widthHandleOffset );
+    aPoints.Point( 2 ).SetGridConstraint( IGNORE_GRID );
 
     VECTOR2I spacingHandleOffset =
             widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_settings.m_spacing * 1.5 ) );
 
-    points->AddPoint( base.A + spacingHandleOffset );
-    points->Point( 3 ).SetGridConstraint( IGNORE_GRID );
+    aPoints.AddPoint( base.A + spacingHandleOffset );
+    aPoints.Point( 3 ).SetGridConstraint( IGNORE_GRID );
 
     return true;
 }
 
 
-bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
-                                               BOARD_COMMIT* aCommit )
+bool PCB_TUNING_PATTERN::UpdateFromEditPoints( EDIT_POINTS& aEditPoints )
 {
     VECTOR2I centerlineOffset;
     VECTOR2I centerlineOffsetEnd;
@@ -1640,12 +1638,12 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
     base.A += centerlineOffset;
     base.B += centerlineOffset;
 
-    m_origin = aEditPoints->Point( 0 ).GetPosition() - centerlineOffset;
-    m_end = aEditPoints->Point( 1 ).GetPosition() - centerlineOffsetEnd;
+    m_origin = aEditPoints.Point( 0 ).GetPosition() - centerlineOffset;
+    m_end = aEditPoints.Point( 1 ).GetPosition() - centerlineOffsetEnd;
 
-    if( aEditPoints->Point( 2 ).IsActive() )
+    if( aEditPoints.Point( 2 ).IsActive() )
     {
-        VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
+        VECTOR2I wHandle = aEditPoints.Point( 2 ).GetPosition();
 
         int value = base.LineDistance( wHandle );
 
@@ -1664,10 +1662,10 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
             m_settings.m_initialSide = PNS::MEANDER_SIDE_RIGHT;
     }
 
-    if( aEditPoints->Point( 3 ).IsActive() )
+    if( aEditPoints.Point( 3 ).IsActive() )
     {
-        VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
-        VECTOR2I sHandle = aEditPoints->Point( 3 ).GetPosition();
+        VECTOR2I wHandle = aEditPoints.Point( 2 ).GetPosition();
+        VECTOR2I sHandle = aEditPoints.Point( 3 ).GetPosition();
 
         int value = KiROUND( SEG( base.A, wHandle ).LineDistance( sHandle ) / 1.5 );
 
@@ -1678,7 +1676,7 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
 }
 
 
-bool PCB_TUNING_PATTERN::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints )
+bool PCB_TUNING_PATTERN::UpdateEditPoints( EDIT_POINTS& aEditPoints )
 {
     VECTOR2I centerlineOffset;
     VECTOR2I centerlineOffsetEnd;
@@ -1705,15 +1703,15 @@ bool PCB_TUNING_PATTERN::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoi
 
     VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( amplitude );
 
-    aEditPoints->Point( 0 ).SetPosition( m_origin + centerlineOffset );
-    aEditPoints->Point( 1 ).SetPosition( m_end + centerlineOffsetEnd );
+    aEditPoints.Point( 0 ).SetPosition( m_origin + centerlineOffset );
+    aEditPoints.Point( 1 ).SetPosition( m_end + centerlineOffsetEnd );
 
-    aEditPoints->Point( 2 ).SetPosition( base.A + widthHandleOffset );
+    aEditPoints.Point( 2 ).SetPosition( base.A + widthHandleOffset );
 
     VECTOR2I spacingHandleOffset =
             widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_settings.m_spacing * 1.5 ) );
 
-    aEditPoints->Point( 3 ).SetPosition( base.A + spacingHandleOffset );
+    aEditPoints.Point( 3 ).SetPosition( base.A + spacingHandleOffset );
 
     return true;
 }

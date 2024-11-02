@@ -1489,6 +1489,36 @@ private:
 };
 
 
+/**
+ * Point editor behavior for the PCB_GENERATOR class.
+ *
+ * This just delegates to the PCB_GENERATOR's own methods.
+ */
+class GENERATOR_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    GENERATOR_POINT_EDIT_BEHAVIOR( PCB_GENERATOR& aGenerator ) : m_generator( aGenerator ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        m_generator.MakeEditPoints( aPoints );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        m_generator.UpdateEditPoints( aPoints );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) override
+    {
+        m_generator.UpdateFromEditPoints( aPoints );
+    }
+
+private:
+    PCB_GENERATOR& m_generator;
+};
+
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( nullptr ),
@@ -1619,8 +1649,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
     case PCB_GENERATOR_T:
     {
-        const PCB_GENERATOR* generator = static_cast<const PCB_GENERATOR*>( aItem );
-        generator->MakeEditPoints( points );
+        PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( aItem );
+        m_editorBehavior = std::make_unique<GENERATOR_POINT_EDIT_BEHAVIOR>( *generator );
         break;
     }
 
@@ -2244,7 +2274,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
         PCB_GENERATOR*  generatorItem = static_cast<PCB_GENERATOR*>( item );
 
-        generatorItem->UpdateFromEditPoints( m_editPoints, aCommit );
         m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genUpdateEdit, aCommit, generatorItem );
 
         // Note: POINT_EDITOR::m_preview holds only the canvas-draw status "popup"; the meanders
@@ -2560,13 +2589,6 @@ void PCB_POINT_EDITOR::updatePoints()
 
         break;
     }
-    case PCB_GENERATOR_T:
-    {
-        PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
-        generator->UpdateEditPoints( m_editPoints );
-        break;
-    }
-
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
     {

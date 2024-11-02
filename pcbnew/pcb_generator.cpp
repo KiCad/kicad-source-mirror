@@ -95,20 +95,19 @@ std::vector<EDA_ITEM*> PCB_GENERATOR::GetPreviewItems( GENERATOR_TOOL* aTool,
 }
 
 
-bool PCB_GENERATOR::MakeEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) const
+bool PCB_GENERATOR::MakeEditPoints( EDIT_POINTS& aEditPoints ) const
 {
     return true;
 }
 
 
-bool PCB_GENERATOR::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
-                                          BOARD_COMMIT* aCommit )
+bool PCB_GENERATOR::UpdateFromEditPoints( EDIT_POINTS& aEditPoints )
 {
     return true;
 }
 
 
-bool PCB_GENERATOR::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints )
+bool PCB_GENERATOR::UpdateEditPoints( EDIT_POINTS& aEditPoints )
 {
     return true;
 }

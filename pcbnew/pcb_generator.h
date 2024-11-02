@@ -70,12 +70,11 @@ public:
                                                     PCB_BASE_EDIT_FRAME* aFrame,
                                                     bool aStatusItemsOnly = false );
 
-    virtual bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) const;
+    virtual bool MakeEditPoints( EDIT_POINTS& aEditPoints ) const;
 
-    virtual bool UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
-                                       BOARD_COMMIT* aCommit );
+    virtual bool UpdateFromEditPoints( EDIT_POINTS& aEditPoints );
 
-    virtual bool UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints );
+    virtual bool UpdateEditPoints( EDIT_POINTS& aEditPoints );
 
     const BOX2I GetBoundingBox() const override;
 
