@@ -648,7 +648,7 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
 
         m_world->QueryColliding( top, obstacles, opts ); // only query touching objects
 
-        for( OBSTACLE& obs : obstacles )
+        for( const OBSTACLE& obs : obstacles )
         {
             bool trackOnTrack = ( obs.m_item->Net() != top->Net() ) &&  obs.m_item->OfKind( ITEM::SEGMENT_T ) && top->OfKind( ITEM::SEGMENT_T );
 

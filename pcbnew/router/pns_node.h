@@ -122,13 +122,13 @@ struct COLLISION_SEARCH_OPTIONS
 
 struct COLLISION_SEARCH_CONTEXT
 {
-    COLLISION_SEARCH_CONTEXT( std::vector<OBSTACLE>& aObs, const COLLISION_SEARCH_OPTIONS aOpts = COLLISION_SEARCH_OPTIONS() ) :
+    COLLISION_SEARCH_CONTEXT( std::set<OBSTACLE>& aObs, const COLLISION_SEARCH_OPTIONS aOpts = COLLISION_SEARCH_OPTIONS() ) :
         obstacles( aObs ),
         options( aOpts )
     {
     }
 
-    std::vector<OBSTACLE>& obstacles;
+    std::set<OBSTACLE>& obstacles;
     const COLLISION_SEARCH_OPTIONS options;
 };
 
@@ -216,7 +216,7 @@ public:
 
     typedef std::optional<OBSTACLE>         OPT_OBSTACLE;
     typedef std::vector<ITEM*>    ITEM_VECTOR;
-    typedef std::vector<OBSTACLE>    OBSTACLES;
+    typedef std::set<OBSTACLE>    OBSTACLES;
 
     NODE();
     ~NODE();
