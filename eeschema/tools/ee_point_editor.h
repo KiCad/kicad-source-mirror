@@ -107,6 +107,8 @@ private:
     int modifiedSelection( const TOOL_EVENT& aEvent );
 
 private:
+    void makePointsAndBehavior( EDA_ITEM* aItem );
+
     ///< Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;
 

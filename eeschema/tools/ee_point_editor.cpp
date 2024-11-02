@@ -1000,109 +1000,95 @@ private:
 };
 
 
-class EDIT_POINTS_FACTORY
+void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
 {
-public:
-    static std::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem, SCH_BASE_FRAME* frame,
-                                              std::unique_ptr<POINT_EDIT_BEHAVIOR>& editBehavior )
+    m_editBehavior = nullptr;
+    m_editPoints = std::make_shared<EDIT_POINTS>( aItem );
+
+    if( !aItem )
+        return;
+
+    // Generate list of edit points based on the item type
+    switch( aItem->Type() )
     {
-        std::shared_ptr<EDIT_POINTS> points = std::make_shared<EDIT_POINTS>( aItem );
+    case SCH_SHAPE_T:
+    {
+        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
 
-        if( !aItem )
-            return points;
-
-        // Generate list of edit points based on the item type
-        switch( aItem->Type() )
+        switch( shape->GetShape() )
         {
-        case SCH_SHAPE_T:
-        {
-            SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
-
-            switch( shape->GetShape() )
-            {
-            case SHAPE_T::ARC:
-                editBehavior = std::make_unique<ARC_POINT_EDIT_BEHAVIOR>( *shape );
-                break;
-
-            case SHAPE_T::CIRCLE:
-                editBehavior = std::make_unique<CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
-                break;
-
-            case SHAPE_T::RECTANGLE:
-            {
-                editBehavior = std::make_unique<RECTANGLE_POINT_EDIT_BEHAVIOR>( *shape, *frame );
-                break;
-            }
-
-            case SHAPE_T::POLY:
-                editBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
-                break;
-
-            case SHAPE_T::BEZIER:
-                editBehavior = std::make_unique<BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
-                break;
-            default:
-                UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
-            }
-
+        case SHAPE_T::ARC:
+            m_editBehavior = std::make_unique<ARC_POINT_EDIT_BEHAVIOR>( *shape );
             break;
-        }
-
-        case SCH_RULE_AREA_T:
-        {
-            SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
-            // Implemented directly as a polygon
-            editBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
+        case SHAPE_T::CIRCLE:
+            m_editBehavior = std::make_unique<CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
             break;
-        }
-
-        case SCH_TEXTBOX_T:
-        {
-            SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( aItem );
-            editBehavior = std::make_unique<TEXTBOX_POINT_EDIT_BEHAVIOR>( *textbox );
+        case SHAPE_T::RECTANGLE:
+            m_editBehavior = std::make_unique<RECTANGLE_POINT_EDIT_BEHAVIOR>( *shape, *m_frame );
             break;
-        }
-
-        case SCH_TABLECELL_T:
-        {
-            SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( aItem );
-            editBehavior = std::make_unique<TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
+        case SHAPE_T::POLY:
+            m_editBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
             break;
-        }
-
-        case SCH_SHEET_T:
-        {
-            SCH_SHEET& sheet = static_cast<SCH_SHEET&>( *aItem );
-            editBehavior = std::make_unique<SHEET_POINT_EDIT_BEHAVIOR>( sheet );
+        case SHAPE_T::BEZIER:
+            m_editBehavior = std::make_unique<BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
             break;
+        default:
+            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }
 
-        case SCH_BITMAP_T:
-        {
-            SCH_BITMAP& bitmap = static_cast<SCH_BITMAP&>( *aItem );
-            editBehavior = std::make_unique<BITMAP_POINT_EDIT_BEHAVIOR>( bitmap );
-            break;
-        }
-        case SCH_LINE_T:
-        {
-            SCH_LINE& line = static_cast<SCH_LINE&>( *aItem );
-            editBehavior = std::make_unique<LINE_POINT_EDIT_BEHAVIOR>( line, *frame->GetScreen() );
-            break;
-        }
-        default: points.reset(); break;
-        }
-
-        if( editBehavior )
-        {
-            editBehavior->MakePoints( *points );
-        }
-
-        return points;
+        break;
+    }
+    case SCH_RULE_AREA_T:
+    {
+        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
+        // Implemented directly as a polygon
+        m_editBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
+        break;
+    }
+    case SCH_TEXTBOX_T:
+    {
+        SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( aItem );
+        m_editBehavior = std::make_unique<TEXTBOX_POINT_EDIT_BEHAVIOR>( *textbox );
+        break;
+    }
+    case SCH_TABLECELL_T:
+    {
+        SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( aItem );
+        m_editBehavior = std::make_unique<TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
+        break;
+    }
+    case SCH_SHEET_T:
+    {
+        SCH_SHEET& sheet = static_cast<SCH_SHEET&>( *aItem );
+        m_editBehavior = std::make_unique<SHEET_POINT_EDIT_BEHAVIOR>( sheet );
+        break;
+    }
+    case SCH_BITMAP_T:
+    {
+        SCH_BITMAP& bitmap = static_cast<SCH_BITMAP&>( *aItem );
+        m_editBehavior = std::make_unique<BITMAP_POINT_EDIT_BEHAVIOR>( bitmap );
+        break;
+    }
+    case SCH_LINE_T:
+    {
+        SCH_LINE& line = static_cast<SCH_LINE&>( *aItem );
+        m_editBehavior = std::make_unique<LINE_POINT_EDIT_BEHAVIOR>( line, *m_frame->GetScreen() );
+        break;
+    }
+    default:
+    {
+        m_editPoints.reset();
+        break;
+    }
     }
 
-private:
-    EDIT_POINTS_FACTORY() {};
-};
+    // If we got a behavior, generate the points
+    if( m_editBehavior )
+    {
+        wxCHECK( m_editPoints, /* void */ );
+        m_editBehavior->MakePoints( *m_editPoints );
+    }
+}
 
 
 EE_POINT_EDITOR::EE_POINT_EDITOR() :
@@ -1210,8 +1196,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     controls->ShowCursor( true );
 
-    m_editBehavior = nullptr;
-    m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame, m_editBehavior );
+    makePointsAndBehavior( item );
     view->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
@@ -1327,59 +1312,11 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
     if( !item )
         return;
 
-    std::vector<EDA_ITEM*> updatedItems = { item };
-    if( m_editBehavior )
-    {
-        m_editBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updatedItems );
-
-        for( EDA_ITEM* updatedItem : updatedItems )
-        {
-            updateItem( updatedItem, true );
-        }
-
+    if( !m_editBehavior )
         return;
-    }
 
-    switch( item->Type() )
-    {
-    case SCH_RULE_AREA_T:
-    case SCH_SHAPE_T:
-    {
-        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
-
-        switch( shape->GetShape() )
-        {
-        case SHAPE_T::ARC:
-        case SHAPE_T::CIRCLE:
-            break;
-
-        case SHAPE_T::POLY:
-            break;
-
-        case SHAPE_T::RECTANGLE:
-            break;
-
-        case SHAPE_T::BEZIER:
-            break;
-
-        default:
-            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
-        }
-
-        break;
-    }
-
-    case SCH_TEXTBOX_T:
-        break;
-    case SCH_TABLECELL_T:
-        break;
-    case SCH_BITMAP_T:
-        break;
-    case SCH_SHEET_T:
-        break;
-    default:
-        break;
-    }
+    std::vector<EDA_ITEM*> updatedItems;
+    m_editBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updatedItems );
 
     for( EDA_ITEM* updatedItem : updatedItems )
     {
@@ -1391,61 +1328,10 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
 
 void EE_POINT_EDITOR::updatePoints()
 {
-    if( !m_editPoints )
+    if( !m_editPoints || !m_editBehavior )
         return;
 
-    EDA_ITEM* item = m_editPoints->GetParent();
-
-    if( !item )
-        return;
-
-    if( m_editBehavior )
-    {
-        m_editBehavior->UpdatePoints( *m_editPoints );
-        return;
-    }
-
-    switch( item->Type() )
-    {
-    case SCH_RULE_AREA_T:
-    case SCH_SHAPE_T:
-    {
-        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
-
-        switch( shape->GetShape() )
-        {
-        case SHAPE_T::ARC:
-        case SHAPE_T::CIRCLE:
-        case SHAPE_T::POLY:
-            break;
-
-        case SHAPE_T::RECTANGLE:
-            break;
-
-        case SHAPE_T::BEZIER:
-            break;
-
-        default:
-            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
-        }
-
-        break;
-    }
-
-    case SCH_TEXTBOX_T:
-           break;
-      case SCH_TABLECELL_T:
-        break;
-    case SCH_BITMAP_T:
-        break;
-
-    case SCH_SHEET_T:
-        break;
-
-    default:
-        break;
-    }
-
+    m_editBehavior->UpdatePoints( *m_editPoints );
     getView()->Update( m_editPoints.get() );
 }
 
