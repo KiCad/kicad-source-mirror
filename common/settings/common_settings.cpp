@@ -116,7 +116,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "auto_backup.min_interval",
             &m_Backup.min_interval, 300 ) );
 
-    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "environment.vars",
+    auto envVarsParam = m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "environment.vars",
             [&]() -> nlohmann::json
             {
                 nlohmann::json ret = {};
@@ -212,6 +212,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                 }
             },
             {} ) );
+    envVarsParam->SetClearUnknownKeys();
 
     m_params.emplace_back( new PARAM<bool>( "input.focus_follow_sch_pcb",
             &m_Input.focus_follow_sch_pcb, false ) );

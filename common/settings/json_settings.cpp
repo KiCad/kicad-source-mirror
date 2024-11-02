@@ -470,10 +470,12 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
     for( PARAM_BASE* param : m_params )
     {
-        if( PARAM_WXSTRING_MAP* stringMap = dynamic_cast<PARAM_WXSTRING_MAP*>( param ) )
+        if( param->ClearUnknownKeys() )
         {
-            if( stringMap->ClearUnknownKeys() )
-                toSave[ stringMap->GetJsonPath() ] = nlohmann::json( {} );
+            nlohmann::json_pointer p
+                    = JSON_SETTINGS_INTERNALS::PointerFromString( param->GetJsonPath() );
+
+            toSave[p] = nlohmann::json( {} );
         }
     }
 
