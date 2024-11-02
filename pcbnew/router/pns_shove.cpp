@@ -466,7 +466,7 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                                                    m_router->GetInterface()->GetNetCode( obstacleLine.Net() ),
                                                    clearance ) );*/
 
-        for( int attempt = 0; attempt < 2; attempt++ ) 
+        for( int attempt = 0; attempt < 2; attempt++ )
         {
             HULL_SET hulls;
 
@@ -506,7 +506,7 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
             {
                 if( obsVia )
                     aResultLine.AppendVia( *obsVia );
-                
+
                 return true;
             }
 
@@ -716,7 +716,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
     bool success = false;
 
     PNS_DBG( Dbg(), AddItem, &aCurrent, RED, 10000, wxT( "current-line" ) );
-    
+
     for( int attempt = 0; attempt < 2; attempt++ )
     {
         if( attempt == 1 || Settings().JumpOverObstacles() )
@@ -782,7 +782,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
     replaceLine( aCurrent, walkaroundLine );
     walkaroundLine.SetRank( nextRank );
 
-    
+
     popLineStack();
 
     if( !pushLineStack( walkaroundLine ) )
@@ -858,7 +858,7 @@ NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet )
                     m_headLines[i].prevVia = m_headLines[i].theVia = spTag.m_draggedVias[i];
                     m_headLines[i].geometryModified = true;
                     PNS_DBG( Dbg(), Message,
-                             wxString::Format( "restore-springback-via depth=%d %d %d %d %d ", 
+                             wxString::Format( "restore-springback-via depth=%d %d %d %d %d ",
                                                spTag.m_node->Depth(),
                                                (int) m_nodeStack.size(),
                                                m_headLines[i].theVia->pos.x,
@@ -1023,7 +1023,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         {
             lp.second.ClearLinks();
             lp.second.AppendVia( v2 );
-            
+
             replaceLine( lp.first, lp.second );
 
             unwindLineStack( &lp.second );
@@ -1143,7 +1143,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
         auto p1 = aObstacleVia->Pos();
 
         int dist = (p0 - p1).EuclideanNorm() - aCurrent.Via().Diameter() / 2 - aObstacleVia->Diameter() / 2;
-        
+
         int clearance = getClearance( &aCurrent.Via(), aObstacleVia );
 
         SHAPE_LINE_CHAIN hull = aObstacleVia->Hull( clearance, aCurrent.Width(), aCurrent.Layer() );
@@ -1432,8 +1432,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         Dbg()->SetIteration( aIter );
 
     PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(),
-             wxString::Format( wxT( "current sc=%d net=%s evia=%d" ), 
-             currentLine.SegmentCount(), 
+             wxString::Format( wxT( "current sc=%d net=%s evia=%d" ),
+             currentLine.SegmentCount(),
              iface->GetNetName( currentLine.Net() ),
              currentLine.EndsWithVia() ? 1 : 0 ) );
 
@@ -1496,7 +1496,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
     UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "NI: %s (%s) %p %d" ),
-                                               
+
                                                ni->Format(),
                                                ni->Parent() ? ni->Parent()->GetItemDescription( &up, false )
                                                             : wxString( wxT( "null" ) ),
@@ -1555,7 +1555,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
                 auto rvia = findViaByHandle( m_currentNode, vh );
                 st = onCollidingVia( &revLine, rvia, *nearest, revLine.Rank() + 1 );
             }
-            else 
+            else
                 st = onCollidingLine( revLine, currentLine, revLine.Rank() + 1 );
 
 
@@ -2123,7 +2123,7 @@ void SHOVE::removeHeads()
             PNS_DBG( Dbg(), Message, msg );
 
             m_currentNode->Remove( *headEntry.origHead );
-            
+
         }
     }
 }
@@ -2178,7 +2178,7 @@ void SHOVE::reconstructHeads( bool aShoveFailed )
                 headEntry.theVia = VIA_HANDLE( rootEntry->newVia->Pos(), rootEntry->newVia->Layers(), rootEntry->newVia->Net() );
                 auto chk = findViaByHandle ( m_currentNode, *headEntry.theVia );
                 wxString msg = wxString::Format( "[modif] via orig %p chk %p\n", headEntry.draggedVia, chk );
-                
+
                 PNS_DBG( Dbg(), Message, msg );
                 assert( chk != nullptr );
             }
@@ -2192,7 +2192,7 @@ void SHOVE::reconstructHeads( bool aShoveFailed )
 
             }
 
-         
+
         }
 
         m_headsModified |= headEntry.geometryModified;
@@ -2243,7 +2243,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
     m_optimizerQueue.clear();
 
     ITEM_SET headSet;
-    
+
     PNS_DBG( Dbg(), Message, wxString::Format("shove run (heads: %d, currentNode=%p, depth=%d)", (int) m_headLines.size(), m_currentNode, m_currentNode->Depth() ) );
 
     for( auto& l : m_headLines )
@@ -2326,7 +2326,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
                                        (int) m_rootLineHistory.size(),
                                        findRootLine( *headLineEntry.origHead ) ) );
 
-       
+
             LINE head( *headLineEntry.origHead );
 
             // empty head? nothing to shove...
@@ -2375,7 +2375,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
                                        currentHeadId, totalHeads, head.LinkCount(),
                                        iface->GetNetName( head.Net() ), headRoot->newLine ? 1 : 0,
                                        headRoot ? formatPolicy( headRoot->policy )
-                                                : wxT( "default[ne]" ) ) );
+                                                : wxString( wxT( "default[ne]" ) ) ) );
 
 
             //        nodeStats( Dbg(), m_currentNode, "pre-push-stack" );
@@ -2421,7 +2421,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
         {
             if( headEntry.prevVia )
             {
-              
+
                  PNS_DBG( Dbg(), Message,
                  wxString::Format( "Fail-restore via mod [%d, %d] orig [%d, %d]",
                     headEntry.theVia->pos.x,
