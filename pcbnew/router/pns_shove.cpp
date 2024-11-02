@@ -327,11 +327,10 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                                                            clockwise? 1 : 0) );
 
                 PNS_DBGN( Dbg(), EndGroup );
-                return SH_INCOMPLETE;
+                return false;
             }
 
             path.Simplify2();
-
             l.SetShape( path );
         }
 
