@@ -2123,7 +2123,7 @@ void SHOVE::removeHeads()
 
 void SHOVE::reconstructHeads( bool aShoveFailed )
 {
-    int  i;
+    int  i = 0;
     auto iface = Router()->GetInterface();
 
     PNS_DBG( Dbg(), Message, wxString::Format("reconstructing %zu heads", m_headLines.size() ) );
