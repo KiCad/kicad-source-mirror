@@ -194,6 +194,312 @@ private:
 };
 
 
+class ARC_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    ARC_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aArc ) :
+            m_arc( aArc )
+    {
+        wxASSERT( m_arc.GetShape() == SHAPE_T::ARC );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_arc.GetStart() );
+        aPoints.AddPoint( m_arc.GetEnd() );
+        aPoints.AddPoint( m_arc.GetPosition() );
+
+        aPoints.AddIndicatorLine( aPoints.Point( ARC_CENTER ), aPoints.Point( ARC_START ) );
+        aPoints.AddIndicatorLine( aPoints.Point( ARC_CENTER ), aPoints.Point( ARC_END ) );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.Point( ARC_START ).SetPosition( m_arc.GetStart() );
+        aPoints.Point( ARC_END ).SetPosition( m_arc.GetEnd() );
+        aPoints.Point( ARC_CENTER ).SetPosition( m_arc.GetPosition() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        if( isModified( aEditedPoint, aPoints.Point( ARC_START ) ) )
+
+        {
+            m_arc.SetEditState( 2 );
+            m_arc.CalcEdit( aPoints.Point( ARC_START ).GetPosition() );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( ARC_END ) ) )
+        {
+            m_arc.SetEditState( 3 );
+            m_arc.CalcEdit( aPoints.Point( ARC_END ).GetPosition() );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( ARC_CENTER ) ) )
+        {
+            m_arc.SetEditState( 4 );
+            m_arc.CalcEdit( aPoints.Point( ARC_CENTER ).GetPosition() );
+        }
+
+        aUpdatedItems.push_back( &m_arc );
+    }
+private:
+    SCH_SHAPE& m_arc;
+};
+
+
+class CIRCLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    CIRCLE_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aCircle ) :
+            m_circle( aCircle )
+    {
+        wxASSERT( m_circle.GetShape() == SHAPE_T::CIRCLE );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_circle.GetPosition() );
+        aPoints.AddPoint( m_circle.GetEnd() );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.Point( CIRC_CENTER ).SetPosition( m_circle.GetPosition() );
+        aPoints.Point( CIRC_END ).SetPosition( m_circle.GetEnd() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        m_circle.SetPosition( aPoints.Point( CIRC_CENTER ).GetPosition() );
+        m_circle.SetEnd( aPoints.Point( CIRC_END ).GetPosition() );
+
+        aUpdatedItems.push_back( &m_circle );
+    }
+private:
+    SCH_SHAPE& m_circle;
+};
+
+
+class BEZIER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    BEZIER_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aBezier ) :
+            m_bezier( aBezier )
+    {
+        wxASSERT( m_bezier.GetShape() == SHAPE_T::BEZIER );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_bezier.GetStart() );
+        aPoints.AddPoint( m_bezier.GetBezierC1() );
+        aPoints.AddPoint( m_bezier.GetBezierC2() );
+        aPoints.AddPoint( m_bezier.GetEnd() );
+
+        aPoints.AddIndicatorLine( aPoints.Point( BEZIER_START ), aPoints.Point( BEZIER_CTRL_PT1 ) );
+        aPoints.AddIndicatorLine( aPoints.Point( BEZIER_END ), aPoints.Point( BEZIER_CTRL_PT2 ) );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.Point( BEZIER_START ).SetPosition( m_bezier.GetStart() );
+        aPoints.Point( BEZIER_CTRL_PT1 ).SetPosition( m_bezier.GetBezierC1() );
+        aPoints.Point( BEZIER_CTRL_PT2 ).SetPosition( m_bezier.GetBezierC2() );
+        aPoints.Point( BEZIER_END ).SetPosition( m_bezier.GetEnd() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        m_bezier.SetStart( aPoints.Point( BEZIER_START ).GetPosition() );
+        m_bezier.SetBezierC1( aPoints.Point( BEZIER_CTRL_PT1 ).GetPosition() );
+        m_bezier.SetBezierC2( aPoints.Point( BEZIER_CTRL_PT2 ).GetPosition() );
+        m_bezier.SetEnd( aPoints.Point( BEZIER_END ).GetPosition() );
+
+        m_bezier.RebuildBezierToSegmentsPointsList( m_bezier.GetWidth() / 2 );
+
+        aUpdatedItems.push_back( &m_bezier );
+    }
+private:
+    SCH_SHAPE& m_bezier;
+};
+
+
+class BITMAP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    BITMAP_POINT_EDIT_BEHAVIOR( SCH_BITMAP& aBitmap ) : m_bitmap( aBitmap ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        const REFERENCE_IMAGE& refImage = m_bitmap.GetReferenceImage();
+        const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
+        const VECTOR2I         botRight = refImage.GetPosition() + refImage.GetSize() / 2;
+
+        aPoints.AddPoint( topLeft );
+        aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+        aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+        aPoints.AddPoint( botRight );
+
+        aPoints.AddPoint( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        const REFERENCE_IMAGE& refImage = m_bitmap.GetReferenceImage();
+        const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
+        const VECTOR2I         botRight = refImage.GetPosition() + refImage.GetSize() / 2;
+
+        aPoints.Point( RECT_TOPLEFT ).SetPosition( topLeft );
+        aPoints.Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
+        aPoints.Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
+        aPoints.Point( RECT_BOTRIGHT ).SetPosition( botRight );
+
+        aPoints.Point( REFIMG_ORIGIN )
+                .SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        REFERENCE_IMAGE& refImg = m_bitmap.GetReferenceImage();
+        const VECTOR2I   topLeft = aPoints.Point( RECT_TOPLEFT ).GetPosition();
+        const VECTOR2I   topRight = aPoints.Point( RECT_TOPRIGHT ).GetPosition();
+        const VECTOR2I   botLeft = aPoints.Point( RECT_BOTLEFT ).GetPosition();
+        const VECTOR2I   botRight = aPoints.Point( RECT_BOTRIGHT ).GetPosition();
+        const VECTOR2I   xfrmOrigin = aPoints.Point( REFIMG_ORIGIN ).GetPosition();
+
+        if( isModified( aEditedPoint, aPoints.Point( REFIMG_ORIGIN ) ) )
+        {
+            // Moving the transform origin
+            // As the other points didn't move, we can get the image extent from them
+            const VECTOR2I newOffset = xfrmOrigin - ( topLeft + botRight ) / 2;
+            refImg.SetTransformOriginOffset( newOffset );
+        }
+        else
+        {
+            const VECTOR2I oldOrigin = refImg.GetPosition() + refImg.GetTransformOriginOffset();
+            const VECTOR2I oldSize = refImg.GetSize();
+            const VECTOR2I pos = refImg.GetPosition();
+
+            OPT_VECTOR2I newCorner;
+            VECTOR2I     oldCorner = pos;
+
+            if( isModified( aEditedPoint, aPoints.Point( RECT_TOPLEFT ) ) )
+            {
+                newCorner = topLeft;
+                oldCorner -= oldSize / 2;
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( RECT_TOPRIGHT ) ) )
+            {
+                newCorner = topRight;
+                oldCorner -= VECTOR2I( -oldSize.x, oldSize.y ) / 2;
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( RECT_BOTLEFT ) ) )
+            {
+                newCorner = botLeft;
+                oldCorner -= VECTOR2I( oldSize.x, -oldSize.y ) / 2;
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( RECT_BOTRIGHT ) ) )
+            {
+                newCorner = botRight;
+                oldCorner += oldSize / 2;
+            }
+
+            if( newCorner )
+            {
+                // Turn in the respective vectors from the origin
+                *newCorner -= xfrmOrigin;
+                oldCorner -= oldOrigin;
+
+                // If we tried to cross the origin, clamp it to stop it
+                if( sign( newCorner->x ) != sign( oldCorner.x )
+                    || sign( newCorner->y ) != sign( oldCorner.y ) )
+                {
+                    *newCorner = VECTOR2I( 0, 0 );
+                }
+
+                const double newLength = newCorner->EuclideanNorm();
+                const double oldLength = oldCorner.EuclideanNorm();
+
+                double ratio = oldLength > 0 ? ( newLength / oldLength ) : 1.0;
+
+                // Clamp the scaling to a minimum of 50 mils
+                VECTOR2I newSize = oldSize * ratio;
+                double newWidth = std::max( newSize.x, EDA_UNIT_UTILS::Mils2IU( schIUScale, 50 ) );
+                double newHeight = std::max( newSize.y, EDA_UNIT_UTILS::Mils2IU( schIUScale, 50 ) );
+                ratio = std::min( newWidth / oldSize.x, newHeight / oldSize.y );
+
+                // Also handles the origin offset
+                refImg.SetImageScale( refImg.GetImageScale() * ratio );
+            }
+        }
+        aUpdatedItems.push_back( &m_bitmap );
+    }
+
+private:
+    SCH_BITMAP& m_bitmap;
+};
+
+
+class TABLECELL_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    TABLECELL_POINT_EDIT_BEHAVIOR( SCH_TABLECELL& aCell ) : m_cell( aCell ) {}
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.AddPoint( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
+        aPoints.AddPoint( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        aPoints.Point( COL_WIDTH )
+                .SetPosition( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
+        aPoints.Point( ROW_HEIGHT )
+                .SetPosition( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        SCH_TABLE& table = static_cast<SCH_TABLE&>( *m_cell.GetParent() );
+        aCommit.Modify( &table );
+        aUpdatedItems.push_back( &table );
+
+        if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
+        {
+            m_cell.SetEnd( VECTOR2I( aPoints.Point( 0 ).GetX(), m_cell.GetEndY() ) );
+
+            int colWidth = m_cell.GetRectangleWidth();
+
+            for( int ii = 0; ii < m_cell.GetColSpan() - 1; ++ii )
+                colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
+
+            table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
+        {
+            m_cell.SetEnd( VECTOR2I( m_cell.GetEndX(), aPoints.Point( 1 ).GetY() ) );
+
+            int rowHeight = m_cell.GetRectangleHeight();
+
+            for( int ii = 0; ii < m_cell.GetRowSpan() - 1; ++ii )
+                rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
+
+            table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
+        }
+
+        table.Normalize();
+    }
+
+private:
+    SCH_TABLECELL& m_cell;
+};
+
+
 class EDIT_POINTS_FACTORY
 {
 public:
@@ -215,17 +521,11 @@ public:
             switch( shape->GetShape() )
             {
             case SHAPE_T::ARC:
-                points->AddPoint( shape->GetStart() );
-                points->AddPoint( shape->GetEnd() );
-                points->AddPoint( shape->GetPosition() );
-
-                points->AddIndicatorLine( points->Point( ARC_CENTER ), points->Point( ARC_START ) );
-                points->AddIndicatorLine( points->Point( ARC_CENTER ), points->Point( ARC_END ) );
+                editBehavior = std::make_unique<ARC_POINT_EDIT_BEHAVIOR>( *shape );
                 break;
 
             case SHAPE_T::CIRCLE:
-                points->AddPoint( shape->GetPosition() );
-                points->AddPoint( shape->GetEnd() );
+                editBehavior = std::make_unique<CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
                 break;
 
             case SHAPE_T::RECTANGLE:
@@ -260,17 +560,8 @@ public:
                 break;
 
             case SHAPE_T::BEZIER:
-                points->AddPoint( shape->GetStart() );
-                points->AddPoint( shape->GetBezierC1() );
-                points->AddPoint( shape->GetBezierC2() );
-                points->AddPoint( shape->GetEnd() );
-
-                points->AddIndicatorLine( points->Point( BEZIER_START ),
-                                          points->Point( BEZIER_CTRL_PT1 ) );
-                points->AddIndicatorLine( points->Point( BEZIER_END ),
-                                          points->Point( BEZIER_CTRL_PT2 ) );
+                editBehavior = std::make_unique<BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
                 break;
-
             default:
                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
             }
@@ -317,8 +608,7 @@ public:
         case SCH_TABLECELL_T:
         {
             SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( aItem );
-            points->AddPoint( cell->GetEnd() - VECTOR2I( 0, cell->GetRectangleHeight() / 2 ) );
-            points->AddPoint( cell->GetEnd() - VECTOR2I( cell->GetRectangleWidth() / 2, 0 ) );
+            editBehavior = std::make_unique<TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
             break;
         }
 
@@ -347,20 +637,10 @@ public:
 
         case SCH_BITMAP_T:
         {
-            const SCH_BITMAP&      bitmap = static_cast<const SCH_BITMAP&>( *aItem );
-            const REFERENCE_IMAGE& refImage = bitmap.GetReferenceImage();
-            const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
-            const VECTOR2I         botRight = refImage.GetPosition() + refImage.GetSize() / 2;
-
-            points->AddPoint( topLeft );
-            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
-            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-            points->AddPoint( botRight );
-
-            points->AddPoint( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
+            SCH_BITMAP& bitmap = static_cast<SCH_BITMAP&>( *aItem );
+            editBehavior = std::make_unique<BITMAP_POINT_EDIT_BEHAVIOR>( bitmap );
             break;
         }
-
         case SCH_LINE_T:
         {
             SCH_LINE& line = static_cast<SCH_LINE&>( *aItem );
@@ -488,6 +768,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     controls->ShowCursor( true );
 
+    m_editBehavior = nullptr;
     m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame, m_editBehavior );
     view->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
@@ -521,15 +802,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             if( !inDrag )
             {
                 commit.Modify( m_editPoints->GetParent(), m_frame->GetScreen() );
-
-                if( m_editPoints->GetParent()->Type() == SCH_TABLECELL_T )
-                {
-                    SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( m_editPoints->GetParent() );
-                    SCH_TABLE*     table = static_cast<SCH_TABLE*>( cell->GetParent() );
-
-                    commit.Modify( table, m_frame->GetScreen() );
-                }
-
                 inDrag = true;
             }
 
@@ -801,26 +1073,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            if( getEditedPointIndex() == ARC_START )
-            {
-                shape->SetEditState( 2 );
-                shape->CalcEdit( m_editPoints->Point( ARC_START ).GetPosition() );
-            }
-            else if( getEditedPointIndex() == ARC_END )
-            {
-                shape->SetEditState( 3 );
-                shape->CalcEdit( m_editPoints->Point( ARC_END ).GetPosition() );
-            }
-            else if( getEditedPointIndex() == ARC_CENTER )
-            {
-                shape->SetEditState( 4 );
-                shape->CalcEdit( m_editPoints->Point( ARC_CENTER ).GetPosition() );
-            }
-            break;
-
         case SHAPE_T::CIRCLE:
-            shape->SetPosition( m_editPoints->Point( CIRC_CENTER ).GetPosition() );
-            shape->SetEnd( m_editPoints->Point( CIRC_END ).GetPosition() );
             break;
 
         case SHAPE_T::POLY:
@@ -910,12 +1163,6 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
         }
 
         case SHAPE_T::BEZIER:
-            shape->SetStart( m_editPoints->Point( BEZIER_START ).GetPosition() );
-            shape->SetBezierC1( m_editPoints->Point( BEZIER_CTRL_PT1 ).GetPosition() );
-            shape->SetBezierC2( m_editPoints->Point( BEZIER_CTRL_PT2 ).GetPosition() );
-            shape->SetEnd( m_editPoints->Point( BEZIER_END ).GetPosition() );
-
-            shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() / 2 );
             break;
 
         default:
@@ -978,115 +1225,9 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
     }
 
     case SCH_TABLECELL_T:
-    {
-        SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( item );
-        SCH_TABLE*     table = static_cast<SCH_TABLE*>( cell->GetParent() );
-
-        if( isModified( m_editPoints->Point( COL_WIDTH ) ) )
-        {
-            cell->SetEnd( VECTOR2I( m_editPoints->Point( 0 ).GetX(), cell->GetEndY() ) );
-
-            int colWidth = cell->GetRectangleWidth();
-
-            for( int ii = 0; ii < cell->GetColSpan() - 1; ++ii )
-                colWidth -= table->GetColWidth( cell->GetColumn() + ii );
-
-            table->SetColWidth( cell->GetColumn() + cell->GetColSpan() - 1, colWidth );
-            table->Normalize();
-        }
-        else if( isModified( m_editPoints->Point( ROW_HEIGHT ) ) )
-        {
-            cell->SetEnd( VECTOR2I( cell->GetEndX(), m_editPoints->Point( 1 ).GetY() ) );
-
-            int rowHeight = cell->GetRectangleHeight();
-
-            for( int ii = 0; ii < cell->GetRowSpan() - 1; ++ii )
-                rowHeight -= table->GetRowHeight( cell->GetRow() + ii );
-
-            table->SetRowHeight( cell->GetRow() + cell->GetRowSpan() - 1, rowHeight );
-            table->Normalize();
-        }
-
         break;
-    }
-
     case SCH_BITMAP_T:
-    {
-        SCH_BITMAP&      bitmap = static_cast<SCH_BITMAP&>( *item );
-        REFERENCE_IMAGE& refImg = bitmap.GetReferenceImage();
-        const VECTOR2I   topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-        const VECTOR2I   topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-        const VECTOR2I   botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-        const VECTOR2I   botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
-        const VECTOR2I   xfrmOrigin = m_editPoints->Point( REFIMG_ORIGIN ).GetPosition();
-
-        if( isModified( m_editPoints->Point( REFIMG_ORIGIN ) ) )
-        {
-            // Moving the transform origin
-            // As the other points didn't move, we can get the image extent from them
-            const VECTOR2I newOffset = xfrmOrigin - ( topLeft + botRight ) / 2;
-            refImg.SetTransformOriginOffset( newOffset );
-        }
-        else
-        {
-            const VECTOR2I oldOrigin = refImg.GetPosition() + refImg.GetTransformOriginOffset();
-            const VECTOR2I oldSize = refImg.GetSize();
-            const VECTOR2I pos = refImg.GetPosition();
-
-            OPT_VECTOR2I newCorner;
-            VECTOR2I     oldCorner = pos;
-
-            if( isModified( m_editPoints->Point( RECT_TOPLEFT ) ) )
-            {
-                newCorner = topLeft;
-                oldCorner -= oldSize / 2;
-            }
-            else if( isModified( m_editPoints->Point( RECT_TOPRIGHT ) ) )
-            {
-                newCorner = topRight;
-                oldCorner -= VECTOR2I( -oldSize.x, oldSize.y ) / 2;
-            }
-            else if( isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
-            {
-                newCorner = botLeft;
-                oldCorner -= VECTOR2I( oldSize.x, -oldSize.y ) / 2;
-            }
-            else if( isModified( m_editPoints->Point( RECT_BOTRIGHT ) ) )
-            {
-                newCorner = botRight;
-                oldCorner += oldSize / 2;
-            }
-
-            if( newCorner )
-            {
-                // Turn in the respective vectors from the origin
-                *newCorner -= xfrmOrigin;
-                oldCorner -= oldOrigin;
-
-                // If we tried to cross the origin, clamp it to stop it
-                if( sign( newCorner->x ) != sign( oldCorner.x )
-                    || sign( newCorner->y ) != sign( oldCorner.y ) )
-                {
-                    *newCorner = VECTOR2I( 0, 0 );
-                }
-
-                const double newLength = newCorner->EuclideanNorm();
-                const double oldLength = oldCorner.EuclideanNorm();
-
-                double ratio = oldLength > 0 ? ( newLength / oldLength ) : 1.0;
-
-                // Clamp the scaling to a minimum of 50 mils
-                VECTOR2I newSize = oldSize * ratio;
-                double newWidth = std::max( newSize.x, EDA_UNIT_UTILS::Mils2IU( schIUScale, 50 ) );
-                double newHeight = std::max( newSize.y, EDA_UNIT_UTILS::Mils2IU( schIUScale, 50 ) );
-                ratio = std::min( newWidth / oldSize.x, newHeight / oldSize.y );
-
-                // Also handles the origin offset
-                refImg.SetImageScale( refImg.GetImageScale() * ratio );
-            }
-        }
         break;
-    }
     case SCH_SHEET_T:
     {
         SCH_SHEET*     sheet = (SCH_SHEET*) item;
@@ -1195,14 +1336,7 @@ void EE_POINT_EDITOR::updatePoints()
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            m_editPoints->Point( ARC_START ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( ARC_END ).SetPosition( shape->GetEnd() );
-            m_editPoints->Point( ARC_CENTER ).SetPosition( shape->GetPosition() );
-            break;
-
         case SHAPE_T::CIRCLE:
-            m_editPoints->Point( CIRC_CENTER ).SetPosition( shape->GetPosition() );
-            m_editPoints->Point( CIRC_END ).SetPosition( shape->GetEnd() );
             break;
 
         case SHAPE_T::POLY:
@@ -1246,10 +1380,6 @@ void EE_POINT_EDITOR::updatePoints()
         }
 
         case SHAPE_T::BEZIER:
-            m_editPoints->Point( BEZIER_START ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( BEZIER_CTRL_PT1 ).SetPosition( shape->GetBezierC1() );
-            m_editPoints->Point( BEZIER_CTRL_PT2 ).SetPosition( shape->GetBezierC2() );
-            m_editPoints->Point( BEZIER_END ).SetPosition( shape->GetEnd() );
             break;
 
         default:
@@ -1281,32 +1411,9 @@ void EE_POINT_EDITOR::updatePoints()
     }
 
     case SCH_TABLECELL_T:
-    {
-        SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( item );
-
-        m_editPoints->Point( 0 ).SetPosition( cell->GetEndX(),
-                                              cell->GetEndY() - cell->GetRectangleHeight() / 2 );
-        m_editPoints->Point( 1 ).SetPosition( cell->GetEndX() - cell->GetRectangleWidth() / 2,
-                                              cell->GetEndY() );
         break;
-    }
-
     case SCH_BITMAP_T:
-    {
-        const SCH_BITMAP&      bitmap = static_cast<SCH_BITMAP&>( *item );
-        const REFERENCE_IMAGE& refImage = bitmap.GetReferenceImage();
-        const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
-        const VECTOR2I         botRight = refImage.GetPosition() + refImage.GetSize() / 2;
-
-        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
-        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
-        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
-        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-
-        m_editPoints->Point( REFIMG_ORIGIN )
-                .SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
         break;
-    }
 
     case SCH_SHEET_T:
     {
