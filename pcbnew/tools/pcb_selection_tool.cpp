@@ -516,8 +516,9 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( doDrag )
                 {
-                    bool haveTrack = m_selection.GetSize() == 1
-                                         && dynamic_cast<PCB_TRACK*>( m_selection.GetItem( 0 ) );
+                    bool haveTrack = m_selection.GetSize() >= 1 && ( m_selection.CountType( PCB_TRACE_T ) ||
+                      m_selection.CountType( PCB_ARC_T ) ||
+                      m_selection.CountType( PCB_VIA_T ) );
 
                     if( haveTrack && trackDragAction == TRACK_DRAG_ACTION::DRAG )
                         m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree );
