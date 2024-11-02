@@ -651,12 +651,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
             optimizeAndUpdateDraggedLine( draggedPostShove, m_draggedLine, aP );
             m_lastDragSolution = draggedPostShove;
         }
-        else
-        {
-            m_lastDragSolution.ClearLinks();
-            m_lastNode->Add( m_lastDragSolution );
-        }
- 
+
         m_dragStatus = ok;
         break;
     }
@@ -780,9 +775,12 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
     {
         if( m_lastNode )
         {
+            NODE* parent = m_lastNode->GetParent()->Branch();
             delete m_lastNode;
+            m_lastNode = parent;
             m_draggedItems.Clear();
-            m_lastNode = nullptr;
+            m_lastDragSolution.ClearLinks();
+            m_lastNode->Add( m_lastDragSolution );
         }
     }
 
