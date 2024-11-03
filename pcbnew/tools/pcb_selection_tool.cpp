@@ -3088,7 +3088,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
 void PCB_SELECTION_TOOL::select( EDA_ITEM* aItem )
 {
-    if( aItem->IsSelected() )
+    if( !aItem || aItem->IsSelected() )
         return;
 
     if( aItem->Type() == PCB_PAD_T )
