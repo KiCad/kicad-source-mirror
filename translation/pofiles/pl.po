@@ -17,17 +17,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-10-28 18:03+0000\n"
+"PO-Revision-Date: 2024-11-04 09:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8.2-dev\n"
+"X-Generator: Weblate 5.8.2\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1819,7 +1819,6 @@ msgid "&Cancel"
 msgstr "Anuluj"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
-#, fuzzy
 msgid "&Open Anyway"
 msgstr "Otwórz mimo to"
 
@@ -1838,7 +1837,6 @@ msgid "&Save"
 msgstr "Zapisz"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
-#, fuzzy
 msgid "&Discard Changes"
 msgstr "Porzuć zmiany"
 
@@ -6884,14 +6882,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Nie można wyszukać zdalnego '%s'"
 
 #: common/git/git_pull_handler.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Nie można połączyć się zdalnie z '%s'"
+msgstr "Nie można połączyć się zdalnie z '%s': %s"
 
 #: common/git/git_pull_handler.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Nie można pobrać danych ze zdalnego '%s'"
+msgstr "Nie można pobrać danych ze zdalnego '%s': %s"
 
 #: common/git/git_pull_handler.cpp:94
 msgid "Could not read 'FETCH_HEAD'"
@@ -6956,9 +6954,9 @@ msgid "Could not connect to remote: %s"
 msgstr "Nie można połączyć się zdalnie z '%s'"
 
 #: common/git/git_push_handler.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Nie można wypchnąć zdalnie"
+msgstr "Nie można wypchnąć zdalnie: %s"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
@@ -17775,9 +17773,9 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "Błąd: Zdublowane nazwy arkuszy. Kontunować?"
 
 #: eeschema/picksymbol.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol unit '%s' is already placed (on sheet '%s')"
-msgstr "Schemat '%s' jest już otwarty przez '%s' na '%s'."
+msgstr "Część symbolu '%s' jest już umieszczony (na arkuszu '%s')"
 
 #: eeschema/picksymbol.cpp:129
 #, fuzzy
@@ -17790,9 +17788,9 @@ msgid "&Swap '%s' and '%s'"
 msgstr "Arkusz '%s' pin '%s'"
 
 #: eeschema/picksymbol.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "&Duplicate '%s'"
-msgstr "Powiel"
+msgstr "Powiel '%s'"
 
 #: eeschema/picksymbol.cpp:171
 msgid "Change Unit"
@@ -19306,9 +19304,8 @@ msgid "Pin Name"
 msgstr "Nazwa pinu"
 
 #: eeschema/sch_plotter.cpp:140
-#, fuzzy
 msgid "No sheets to plot."
-msgstr "Importuj arkusz do projektu"
+msgstr "Brak arkuszy by narysować."
 
 #: eeschema/sch_plotter.cpp:238 pcbnew/pcbnew_jobs_handler.cpp:898
 #, c-format
@@ -22068,19 +22065,19 @@ msgid "Cannot find %s pin '%s'."
 msgstr "Nie można odnaleźć %s pin '%s'."
 
 #: eeschema/tools/backannotate.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "Zmieniam pole '%s' wartość na '%s'."
+msgstr "Zmieniam pole %s o wartości '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:540
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s field '%s' with value '%s'."
-msgstr "Dodaj pole '%s' z wartością '%s'."
+msgstr "Dodaj pole %s '%s' z wartością '%s'."
 
 #: eeschema/tools/backannotate.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s field '%s.'"
-msgstr "Usuń pole '%s.'"
+msgstr "Usuń pole %s '%s.'"
 
 #: eeschema/tools/backannotate.cpp:715
 #, c-format
@@ -23553,9 +23550,8 @@ msgid "Select a single symbol to place the next unit."
 msgstr "Wybierz narożnik by dodać za nim nowy narożnik."
 
 #: eeschema/tools/sch_drawing_tools.cpp:584
-#, fuzzy
 msgid "This symbol has only one unit."
-msgstr "*** nowy symbol posiada za mało części składowych ***"
+msgstr "Ten symbol posiada tylko jedną część składową."
 
 #: eeschema/tools/sch_drawing_tools.cpp:592
 msgid "All units of this symbol are already placed."
@@ -23686,9 +23682,8 @@ msgid "Symbol Unit"
 msgstr "Składnik symbolu"
 
 #: eeschema/tools/sch_edit_tool.cpp:111
-#, fuzzy
 msgid " (already placed)"
-msgstr "Obecnie umieszczone"
+msgstr " (obecnie umieszczone)"
 
 #: eeschema/tools/sch_edit_tool.cpp:179
 msgid "Pin Function"
@@ -36571,9 +36566,9 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "Ostrzeżenie: Skala została ustawiona na bardzo dużą wartość"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1405
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist."
-msgstr "Folder '%s' nie istnieje"
+msgstr "Folder '%s' nie istnieje."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:24
 msgid "Plot format:"
@@ -37316,9 +37311,8 @@ msgid "Reset this value to zero."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:72
-#, fuzzy
 msgid "Reset this value to the original value."
-msgstr "Ustaw pola zgodnie z wartościami z biblioteki"
+msgstr "Ustaw to pole do wartości domyślnej."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 #, fuzzy
@@ -37336,9 +37330,8 @@ msgid "Rectangle cannot be zero-sized."
 msgstr "Kąt łuku nie może być zerowy."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:450
-#, fuzzy
 msgid "Arc angle must be greater than 0"
-msgstr "Dystans pomiędzy ścieżkami musi być większy niż zero."
+msgstr "Kąt łuku musi być większy niż zero"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
@@ -37350,9 +37343,8 @@ msgid "Invalid Arc with radius %f and angle %f."
 msgstr "Nieprawidłowy łuk o promieniu %f i kącie %f."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:586
-#, fuzzy
 msgid "Radius must be greater than 0"
-msgstr "Promień musi być większy niż zero."
+msgstr "Promień musi być większy niż zero"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:793
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
@@ -38493,9 +38485,8 @@ msgid "Minimum groove for creepage:"
 msgstr "Minimalny prześwit"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
-#, fuzzy
 msgid "The minimum slot width from DRC creepage checks"
-msgstr "Minimalna szerokość połączonych elementów na warstwach miedzi."
+msgstr "Minimalna szerokość szczeliny z kontroli DRC dotyczącej prześwitu"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Holes"
