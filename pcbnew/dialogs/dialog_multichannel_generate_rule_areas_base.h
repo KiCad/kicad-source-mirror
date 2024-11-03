@@ -11,12 +11,12 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "dialog_shim.h"
+#include <wx/gdicmn.h>
+#include <wx/notebook.h>
+#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-#include <wx/font.h>
-#include <wx/grid.h>
-#include <wx/gdicmn.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
@@ -33,7 +33,7 @@ class DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_GeneralBoxSizer;
 
 	protected:
-		wxGrid* m_sheetsGrid;
+		wxNotebook* m_sourceNotebook;
 		wxCheckBox* m_cbReplaceExisting;
 		wxCheckBox* m_cbGroupItems;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;

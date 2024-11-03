@@ -85,7 +85,7 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
         //RULE_AREAS_DATA* raData = m_parentTool->GetData();
 
-        mtTool->QuerySheets();
+        mtTool->QuerySheetsAndComponentClasses();
 
         auto ruleData = mtTool->GetData();
 

@@ -22,35 +22,9 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE::DIALOG_MULTICHANNEL_GENERATE_RULE_
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_sheetsGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_sourceNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-	// Grid
-	m_sheetsGrid->CreateGrid( 1, 3 );
-	m_sheetsGrid->EnableEditing( false );
-	m_sheetsGrid->EnableGridLines( true );
-	m_sheetsGrid->EnableDragGridSize( false );
-	m_sheetsGrid->SetMargins( 0, 0 );
-
-	// Columns
-	m_sheetsGrid->SetColSize( 0, 100 );
-	m_sheetsGrid->SetColSize( 1, 300 );
-	m_sheetsGrid->SetColSize( 2, 100 );
-	m_sheetsGrid->AutoSizeColumns();
-	m_sheetsGrid->EnableDragColMove( true );
-	m_sheetsGrid->EnableDragColSize( true );
-	m_sheetsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_sheetsGrid->AutoSizeRows();
-	m_sheetsGrid->EnableDragRowSize( true );
-	m_sheetsGrid->SetRowLabelSize( wxGRID_AUTOSIZE );
-	m_sheetsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_sheetsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	fgSizer3->Add( m_sheetsGrid, 1, wxALL|wxEXPAND, 5 );
+	fgSizer3->Add( m_sourceNotebook, 1, wxEXPAND | wxALL, 5 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );

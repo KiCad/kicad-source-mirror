@@ -35,6 +35,7 @@
 #include <pad.h>
 #include <footprint.h>
 #include <reporter.h>
+#include <zone_settings.h>
 
 enum class REPEAT_LAYOUT_EDGE_MODE
 {
@@ -69,15 +70,17 @@ struct RULE_AREA_COMPAT_DATA
 
 struct RULE_AREA
 {
+    RULE_AREA_PLACEMENT_SOURCE_TYPE  m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
     ZONE*                            m_oldArea = nullptr;
     ZONE*                            m_area = nullptr;
     std::set<FOOTPRINT*>             m_raFootprints;
-    std::set<FOOTPRINT*>             m_sheetComponents;
+    std::set<FOOTPRINT*>             m_components;
     bool                             m_existsAlready = false;
     bool                             m_generateEnabled = false;
     wxString                         m_sheetPath;
     wxString                         m_sheetName;
     wxString                         m_ruleName;
+    wxString                         m_componentClass;
     VECTOR2I                         m_center;
 };
 
@@ -110,7 +113,7 @@ public:
     RULE_AREAS_DATA* GetData() { return &m_areas; }
     int AutogenerateRuleAreas( const TOOL_EVENT& aEvent );
     int RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone );
-    void QuerySheets();
+    void             QuerySheetsAndComponentClasses();
     void FindExistingRuleAreas();
     int CheckRACompatibility( ZONE *aRefZone );
 
@@ -121,7 +124,9 @@ private:
     wxString stripComponentIndex( wxString aRef ) const;
     bool     identifyComponentsInRuleArea( ZONE* aRuleArea, std::set<FOOTPRINT*>& aComponents );
     const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
-    std::set<FOOTPRINT*>   queryComponentsInSheet( wxString aSheetName );
+    std::set<FOOTPRINT*>   queryComponentsInSheet( wxString aSheetName ) const;
+    std::set<FOOTPRINT*>
+               queryComponentsInComponentClass( const wxString& aComponentClassName ) const;
     RULE_AREA* findRAByName( const wxString& aName );
     bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                           RULE_AREA_COMPAT_DATA& aMatches );

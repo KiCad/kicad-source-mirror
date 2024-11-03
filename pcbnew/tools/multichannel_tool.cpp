@@ -39,6 +39,7 @@
 #include <connectivity/topo_match.h>
 #include <optional>
 #include <algorithm>
+#include <pcbnew_scripting_helpers.h>
 #include <random>
 #include <core/profile.h>
 #include <wx/log.h>
@@ -127,7 +128,7 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
 }
 
 
-std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInSheet( wxString aSheetName )
+std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInSheet( wxString aSheetName ) const
 {
     std::set<FOOTPRINT*> rv;
     if( aSheetName.EndsWith( wxT( "/" ) ) )
@@ -143,6 +144,21 @@ std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInSheet( wxString aSheetN
         {
             rv.insert( fp );
         }
+    }
+
+    return rv;
+}
+
+
+std::set<FOOTPRINT*>
+MULTICHANNEL_TOOL::queryComponentsInComponentClass( const wxString& aComponentClassName ) const
+{
+    std::set<FOOTPRINT*> rv;
+
+    for( auto& fp : board()->Footprints() )
+    {
+        if( fp->GetComponentClass()->ContainsClassName( aComponentClassName ) )
+            rv.insert( fp );
     }
 
     return rv;
@@ -192,30 +208,51 @@ const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& 
 }
 
 
-void MULTICHANNEL_TOOL::QuerySheets()
+void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
 {
     using PathAndName = std::pair<wxString, wxString>;
     std::set<PathAndName> uniqueSheets;
+    std::set<wxString>    uniqueComponentClasses;
 
     m_areas.m_areas.clear();
 
-    for( FOOTPRINT* fp : board()->Footprints() )
+    for( const FOOTPRINT* fp : board()->Footprints() )
     {
         uniqueSheets.insert( PathAndName( fp->GetSheetname(), fp->GetSheetfile() ) );
+
+        const COMPONENT_CLASS* compClass = fp->GetComponentClass();
+
+        for( const COMPONENT_CLASS* singleClass : compClass->GetConstituentClasses() )
+            uniqueComponentClasses.insert( singleClass->GetName() );
     }
 
     for( const PathAndName& sheet : uniqueSheets )
     {
         RULE_AREA ent;
 
+        ent.m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
         ent.m_generateEnabled = false;
         ent.m_sheetPath = sheet.first;
         ent.m_sheetName = sheet.second;
-        ent.m_sheetComponents = queryComponentsInSheet( ent.m_sheetPath );
+        ent.m_components = queryComponentsInSheet( ent.m_sheetPath );
         m_areas.m_areas.push_back( ent );
 
         wxLogTrace( traceMultichannelTool, wxT("found sheet '%s' @ '%s' s %d\n"),
             ent.m_sheetName, ent.m_sheetPath, (int)m_areas.m_areas.size() );
+    }
+
+    for( const wxString& compClass : uniqueComponentClasses )
+    {
+        RULE_AREA ent;
+
+        ent.m_sourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+        ent.m_generateEnabled = false;
+        ent.m_componentClass = compClass;
+        ent.m_components = queryComponentsInComponentClass( ent.m_componentClass );
+        m_areas.m_areas.push_back( ent );
+
+        wxLogTrace( traceMultichannelTool, wxT( "found component class '%s' s %d\n" ),
+                    ent.m_componentClass, static_cast<int>( m_areas.m_areas.size() ) );
     }
 }
 
@@ -694,13 +731,14 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 {
     if( Pgm().IsGUI() )
     {
-        QuerySheets();
+        QuerySheetsAndComponentClasses();
 
         if( m_areas.m_areas.size() <= 1 )
         {
             frame()->ShowInfoBarError( _( "Cannot auto-generate any placement areas because the "
-                                        "schematic has only one or no hierarchical sheet(s)." ),
-                                    true );
+                                          "schematic has only one or no hierarchical sheet(s) or "
+                                          "component classes." ),
+                                       true );
             return 0;
         }
 
@@ -727,11 +765,23 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
         for( auto& ra : m_areas.m_areas )
         {
-            if( components == ra.m_sheetComponents )
+            if( components == ra.m_components )
             {
-                wxLogTrace( traceMultichannelTool,
-                        wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" ),
-                        ra.m_sheetPath, zone->GetZoneName() );
+                if( zone->GetRuleAreaPlacementSourceType()
+                    == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+                {
+                    wxLogTrace(
+                            traceMultichannelTool,
+                            wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" ),
+                            ra.m_sheetPath, zone->GetZoneName() );
+                }
+                else
+                {
+                    wxLogTrace( traceMultichannelTool,
+                                wxT( "Placement rule area for component class '%s' already exists "
+                                     "as '%s'\n" ),
+                                ra.m_componentClass, zone->GetZoneName() );
+                }
 
                 ra.m_oldArea = zone;
                 ra.m_existsAlready = true;
@@ -751,16 +801,23 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         if( ra.m_existsAlready && !m_areas.m_replaceExisting )
             continue;
 
-        auto raOutline = buildRAOutline( ra.m_sheetComponents, 100000 );
+        auto raOutline = buildRAOutline( ra.m_components, 100000 );
 
         std::unique_ptr<ZONE> newZone( new ZONE( board() ) );
 
-        newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_sheetPath ) );
+        if( ra.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+        {
+            newZone->SetZoneName(
+                    wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_sheetPath ) );
+        }
+        else
+        {
+            newZone->SetZoneName(
+                    wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_componentClass ) );
+        }
 
-        wxLogTrace( traceMultichannelTool,
-            wxT( "Generated rule area '%s' (%d components)\n" ),
-                                              newZone->GetZoneName(),
-                                              (int) ra.m_sheetComponents.size() );
+        wxLogTrace( traceMultichannelTool, wxT( "Generated rule area '%s' (%d components)\n" ),
+                    newZone->GetZoneName(), (int) ra.m_components.size() );
 
         newZone->SetIsRuleArea( true );
         newZone->SetLayerSet( LSET::AllCuMask() );
@@ -770,8 +827,19 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         newZone->SetDoNotAllowTracks( false );
         newZone->SetDoNotAllowPads( false );
         newZone->SetDoNotAllowFootprints( false );
-        newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
-        newZone->SetRuleAreaPlacementSource( ra.m_sheetPath );
+
+        if( ra.m_sourceType == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+        {
+            newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+            newZone->SetRuleAreaPlacementSource( ra.m_sheetPath );
+        }
+        else
+        {
+            newZone->SetRuleAreaPlacementSourceType(
+                    RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+            newZone->SetRuleAreaPlacementSource( ra.m_componentClass );
+        }
+
         newZone->AddPolygon( raOutline );
         newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
 
@@ -804,7 +872,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
             std::unordered_set<BOARD_ITEM*> toPrune;
 
-            std::copy( ra.m_sheetComponents.begin(), ra.m_sheetComponents.end(),
+            std::copy( ra.m_components.begin(), ra.m_components.end(),
                        std::inserter( toPrune, toPrune.begin() ) );
 
             if( ra.m_existsAlready )
@@ -817,7 +885,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             grpCommit.Add( grp );
             grpCommit.Stage( ra.m_area, CHT_GROUP );
 
-            for( auto fp : ra.m_sheetComponents )
+            for( auto fp : ra.m_components )
             {
                 grpCommit.Stage( fp, CHT_GROUP );
             }

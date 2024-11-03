@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <widgets/unit_binder.h>
+#include <wx/grid.h>
 
 #include <dialogs/dialog_multichannel_generate_rule_areas_base.h>
 
@@ -46,6 +47,9 @@ public:
 
 private:
     MULTICHANNEL_TOOL* m_parentTool;
+
+    wxGrid* m_sheetGrid;
+    wxGrid* m_componentClassGrid;
 };
 
 #endif
