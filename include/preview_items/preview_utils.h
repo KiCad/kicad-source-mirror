@@ -78,7 +78,7 @@ COLOR4D GetShadowColor( const COLOR4D& aColor );
  * @param aStrings list of strings to draw, top to bottom.
  */
 void DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& aCursorPos,
-                           const VECTOR2D& aTextQuadrant, const std::vector<wxString>& aStrings,
+                           const VECTOR2D& aTextQuadrant, const wxArrayString& aStrings,
                            bool aDrawingDropShadows );
 
 } // PREVIEW

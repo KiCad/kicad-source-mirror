@@ -79,7 +79,7 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetStartRadiusEnd(),
                                             dimFirstLine );
 
-    std::vector<wxString> cursorStrings;
+    wxArrayString cursorStrings;
 
     if( m_constructMan.GetStep() == ARC_GEOM_MANAGER::SET_START )
     {

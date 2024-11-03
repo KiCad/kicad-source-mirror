@@ -21,19 +21,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pgm_base.h>
-#include <settings/settings_manager.h>
-#include <pcbnew_settings.h>
-#include <footprint_editor_settings.h>
+#include "tools/pcb_viewer_tools.h"
+
+#include <wx/clipbrd.h>
+
 #include <3d_viewer/eda_3d_viewer_frame.h>
+#include <footprint_editor_settings.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <kiplatform/ui.h>
 #include <pcb_base_frame.h>
+#include <pcbnew_settings.h>
 #include <preview_items/ruler_item.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <tool/actions.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcb_viewer_tools.h>
 
 
 bool PCB_VIEWER_TOOLS::Init()
@@ -53,6 +56,9 @@ bool PCB_VIEWER_TOOLS::Init()
 
     ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, activeToolCondition, 2 );
     ctxMenu.AddSeparator(                              activeToolCondition, 2 );
+
+    ctxMenu.AddItem( ACTIONS::copy,     activeToolCondition, 3 );
+    ctxMenu.AddSeparator(               activeToolCondition, 3 );
 
     frame()->AddStandardSubMenus( *m_menu.get() );
 
@@ -356,6 +362,20 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             canvas()->Refresh();
             evt->SetPassEvent();
         }
+        else if( evt->IsAction( &ACTIONS::copy ) )
+        {
+            if( originSet )
+            {
+                wxArrayString cursorStrings = ruler.GetDimensionStrings();
+                wxString      text = wxJoin( cursorStrings, '\n' );
+
+                if( wxTheClipboard->Open() )
+                {
+                    wxTheClipboard->SetData( new wxTextDataObject( text ) );
+                    wxTheClipboard->Close();
+                }
+            }
+        }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu->ShowContextMenu();
@@ -379,6 +399,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 
 void PCB_VIEWER_TOOLS::setTransitions()
 {
+    // clang-format off
     Go( &PCB_VIEWER_TOOLS::Show3DViewer,      ACTIONS::show3DViewer.MakeEvent() );
 
     // Display modes
@@ -388,4 +409,5 @@ void PCB_VIEWER_TOOLS::setTransitions()
     Go( &PCB_VIEWER_TOOLS::TextOutlines,      PCB_ACTIONS::textOutlines.MakeEvent() );
 
     Go( &PCB_VIEWER_TOOLS::MeasureTool,       ACTIONS::measureTool.MakeEvent() );
+    // clang-format on
 }

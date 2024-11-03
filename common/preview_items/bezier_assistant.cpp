@@ -89,7 +89,7 @@ void BEZIER_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
                                     dashSize, dashSize / 2, false );
     }
 
-    std::vector<wxString> cursorStrings;
+    wxArrayString cursorStrings;
 
     if( step >= BEZIER_GEOM_MANAGER::BEZIER_STEPS::SET_END )
     {

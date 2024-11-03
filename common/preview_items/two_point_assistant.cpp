@@ -79,7 +79,7 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     gal.ResetTextAttributes();
 
-    std::vector<wxString> cursorStrings;
+    wxArrayString cursorStrings;
 
     if( m_shape == GEOM_SHAPE::SEGMENT )
     {

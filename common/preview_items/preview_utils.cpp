@@ -117,7 +117,7 @@ KIGFX::COLOR4D KIGFX::PREVIEW::GetShadowColor( const KIGFX::COLOR4D& aColor )
 
 void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& aCursorPos,
                                            const VECTOR2D& aTextQuadrant,
-                                           const std::vector<wxString>& aStrings,
+                                           const wxArrayString& aStrings,
                                            bool aDrawingDropShadows )
 {
     KIGFX::GAL*      gal = aView->GetGAL();

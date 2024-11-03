@@ -27,8 +27,9 @@
 #include <board.h>
 #include <tool/tool_interactive.h>
 #include <pcbnew_settings.h>
+#include <pcb_base_frame.h>
+#include <pcb_view.h>
 
-class PCB_BASE_FRAME;
 
 /**
  * Tool useful for viewing footprints.

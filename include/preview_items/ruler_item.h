@@ -62,6 +62,11 @@ public:
 
     void SetShowOriginArrowHead( bool aShow ) { m_showOriginArrowHead = aShow; }
 
+    /**
+     * Get the strings for the dimensions of the ruler
+     */
+    wxArrayString GetDimensionStrings() const;
+
 #if defined(DEBUG)
     void Show( int x, std::ostream& st ) const override
     {

@@ -52,35 +52,6 @@ static int getShadowLayer( KIGFX::GAL* aGal )
 }
 
 
-static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
-                               const VECTOR2D& aRulerVec, const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                               bool aDrawingDropShadows, bool aFlipX, bool aFlipY )
-{
-    // draw the cursor labels
-    std::vector<wxString> cursorStrings;
-
-    VECTOR2D temp = aRulerVec;
-
-    if( aFlipX )
-        temp.x = -temp.x;
-
-    if( aFlipY )
-        temp.y = -temp.y;
-
-    cursorStrings.push_back( DimensionLabel( "x", temp.x, aIuScale, aUnits ) );
-    cursorStrings.push_back( DimensionLabel( "y", temp.y, aIuScale, aUnits ) );
-
-    cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aIuScale, aUnits ) );
-
-    EDA_ANGLE angle = -EDA_ANGLE( aRulerVec );
-    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(), aIuScale,
-                                             EDA_UNITS::DEGREES ) );
-
-    temp = aRulerVec;
-    DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings, aDrawingDropShadows );
-}
-
-
 static double getTickLineWidth( const TEXT_DIMS& textDims, bool aDrawingDropShadows )
 {
     double width = textDims.StrokeWidth * 0.8;
@@ -362,8 +333,8 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     VECTOR2D rulerVec( end - origin );
 
-    drawCursorStrings( aView, end, rulerVec, m_iuScale, m_userUnits, drawingDropShadows, m_flipX,
-                       m_flipY );
+    wxArrayString cursorStrings = GetDimensionStrings();
+    DrawTextNextToCursor( aView, end, -rulerVec, cursorStrings, drawingDropShadows );
 
     // basic tick size
     const double minorTickLen = 5.0 / gal->GetWorldScale();
@@ -398,4 +369,30 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         gal->DrawLine( origin, origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
     }
     gal->PopDepth();
+}
+
+
+wxArrayString RULER_ITEM::GetDimensionStrings() const
+{
+    const VECTOR2D rulerVec = m_geomMgr.GetEnd() - m_geomMgr.GetOrigin();
+    VECTOR2D       temp = rulerVec;
+
+    if( m_flipX )
+        temp.x = -temp.x;
+
+    if( m_flipY )
+        temp.y = -temp.y;
+
+    wxArrayString cursorStrings;
+
+    cursorStrings.push_back( DimensionLabel( "x", temp.x, m_iuScale, m_userUnits ) );
+    cursorStrings.push_back( DimensionLabel( "y", temp.y, m_iuScale, m_userUnits ) );
+
+    cursorStrings.push_back(
+            DimensionLabel( "r", rulerVec.EuclideanNorm(), m_iuScale, m_userUnits ) );
+
+    EDA_ANGLE angle = -EDA_ANGLE( rulerVec );
+    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(),
+                                             m_iuScale, EDA_UNITS::DEGREES ) );
+    return cursorStrings;
 }
