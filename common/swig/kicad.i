@@ -157,6 +157,9 @@ typedef long time_t;
 // Shapes/geometry
 %include shape.i
 
+// std::optional type mappings
+%include optional.i
+
 // ignore warning relative to operator = and operator ++:
 #pragma SWIG nowarn=362,383
 
