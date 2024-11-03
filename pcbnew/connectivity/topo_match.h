@@ -68,7 +68,7 @@ private:
     std::optional<VECTOR2I> m_raOffset;
     wxString          m_reference;
     wxString          m_prefix;
-    FOOTPRINT*        m_parentFootprint;
+    FOOTPRINT*        m_parentFootprint = nullptr;
     std::vector<PIN*> m_pins;
 };
 
@@ -77,7 +77,7 @@ class PIN
     friend class CONNECTION_GRAPH;
 
 public:
-    PIN() : m_parent( nullptr ) {}
+    PIN() : m_netcode( 0 ), m_parent( nullptr ) {}
     ~PIN() {}
 
     void SetParent( COMPONENT* parent ) { m_parent = parent; }
@@ -121,6 +121,7 @@ public:
     {
         m_ref = nullptr;
         m_currentMatch = -1;
+        m_nloops = 0;
         m_refIndex = 0;
     }
 
