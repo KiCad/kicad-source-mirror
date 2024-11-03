@@ -121,6 +121,9 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
                                            bool aDrawingDropShadows )
 {
     KIGFX::GAL*      gal = aView->GetGAL();
+
+    GAL_SCOPED_ATTRS settings( *gal );
+
     KIFONT::FONT*    font = KIFONT::FONT::GetFont();
 
     // constant text size on screen

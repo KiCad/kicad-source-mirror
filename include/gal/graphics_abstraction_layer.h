@@ -287,6 +287,16 @@ public:
     }
 
     /**
+     * Get the fill status.
+     *
+     * @return true if fill is enabled, false otherwise.
+     */
+    inline bool GetIsFill() const
+    {
+        return m_isFillEnabled;
+    }
+
+    /**
      * Enable/disable stroked outlines.
      *
      * @param aIsStrokeEnabled is true, if the outline of an object should be stroked.
@@ -294,6 +304,16 @@ public:
     virtual void SetIsStroke( bool aIsStrokeEnabled )
     {
         m_isStrokeEnabled = aIsStrokeEnabled;
+    }
+
+    /**
+     * Get the stroke status.
+     *
+     * @return true if stroke is enabled, false otherwise.
+     */
+    inline bool GetIsStroke() const
+    {
+        return m_isStrokeEnabled;
     }
 
     /**
@@ -1144,6 +1164,81 @@ public:
     {
         m_gal->EndDrawing();
     }
+};
+
+
+/**
+ * Attribute save/restore for GAL attributes.
+ */
+class GAL_SCOPED_ATTRS
+{
+public:
+    enum FLAGS
+    {
+        STROKE_WIDTH = 1,
+        STROKE_COLOR = 2,
+        IS_STROKE = 4,
+        FILL_COLOR = 8,
+        IS_FILL = 16,
+
+        // It is not clear to me that GAL needs to save text attributes.
+        // Only BitmapText uses it, and maybe that should be passed in
+        // explicitly (like for Draw) - every caller of BitmapText sets
+        // the text attributes anyway.
+        // TEXT_ATTRS = 32,
+
+        STROKE = STROKE_WIDTH | STROKE_COLOR | IS_STROKE,
+        FILL = FILL_COLOR | IS_FILL,
+
+        ///< Convenience flag for setting both stroke and fill
+        ALL = STROKE | FILL,
+    };
+
+    /**
+     * Instantiates a GAL_SCOPED_ATTRS object, saving the current attributes of the GAL.
+     *
+     * By default, all stroke and fill attributes are saved, which is usually what you want.
+     */
+    GAL_SCOPED_ATTRS( KIGFX::GAL& aGal, int aFlags = FLAGS::ALL )
+        : m_gal( aGal ), m_flags( aFlags )
+    {
+        // Save what we need to restore later.
+        // These are all so cheap to copy, it's likely not worth if'ing
+        m_strokeWidth = aGal.GetLineWidth();
+        m_strokeColor = aGal.GetStrokeColor();
+        m_isStroke = aGal.GetIsStroke();
+        m_fillColor = aGal.GetFillColor();
+        m_isFill = aGal.GetIsFill();
+    }
+
+    ~GAL_SCOPED_ATTRS()
+    {
+        // Restore the attributes that were saved
+        // based on the flags that were set.
+
+        if( m_flags & STROKE_WIDTH )
+            m_gal.SetLineWidth( m_strokeWidth );
+        if( m_flags & STROKE_COLOR )
+            m_gal.SetStrokeColor( m_strokeColor );
+        if( m_flags & IS_STROKE )
+            m_gal.SetIsStroke( m_isStroke );
+
+        if( m_flags & FILL_COLOR )
+            m_gal.SetFillColor( m_fillColor );
+        if( m_flags & IS_FILL )
+            m_gal.SetIsFill( m_isFill );
+    }
+
+private:
+    GAL& m_gal;
+    int  m_flags;
+
+    COLOR4D m_strokeColor;
+    double  m_strokeWidth;
+    bool    m_isStroke;
+
+    COLOR4D m_fillColor;
+    bool    m_isFill;
 };
 
 

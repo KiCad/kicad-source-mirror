@@ -72,6 +72,8 @@ COLOR4D GetShadowColor( const COLOR4D& aColor );
 /**
  * Draw strings next to the cursor.
  *
+ * The GAL attribute context will be restored to its original state after this function is called.
+ *
  * @param aGal the GAL to draw on.
  * @param aCursorPos the position of the cursor to draw next to.
  * @param aTextQuadrant a vector pointing to the quadrant to draw the text in.
@@ -81,7 +83,7 @@ void DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& aCursorPos,
                            const VECTOR2D& aTextQuadrant, const wxArrayString& aStrings,
                            bool aDrawingDropShadows );
 
-} // PREVIEW
-} // KIGFX
+} // namespace PREVIEW
+} // namespace KIGFX
 
 #endif  // PREVIEW_PREVIEW_UTILS__H_
