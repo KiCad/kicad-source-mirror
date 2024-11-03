@@ -30,6 +30,7 @@
 #include <tool/selection.h>
 
 class EE_SELECTION_TOOL;
+class POINT_EDIT_BEHAVIOR;
 class SCH_BASE_FRAME;
 class SCH_COMMIT;
 

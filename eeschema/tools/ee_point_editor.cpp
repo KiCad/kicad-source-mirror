@@ -22,10 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "ee_point_editor.h"
+
 #include <functional>
 using namespace std::placeholders;
 
-#include "ee_point_editor.h"
 #include <ee_grid_helper.h>
 #include <tool/tool_manager.h>
 #include <sch_commit.h>
@@ -33,6 +34,7 @@ using namespace std::placeholders;
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/seg.h>
 #include <geometry/shape_utils.h>
+#include <tool/point_editor_behavior.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 #include <sch_edit_frame.h>
@@ -951,55 +953,6 @@ private:
 };
 
 
-class POLYGON_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
-{
-public:
-    POLYGON_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aPoly ) : m_poly( aPoly ) {}
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
-    {
-        for( const VECTOR2I& pt : m_poly.GetPolyShape().Outline( 0 ).CPoints() )
-            aPoints.AddPoint( pt );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        if( aPoints.PointsSize() != (unsigned) m_poly.GetPointCount() )
-        {
-            aPoints.Clear();
-            MakePoints( aPoints );
-        }
-        else
-        {
-            int ii = 0;
-
-            for( const VECTOR2I& pt : m_poly.GetPolyShape().Outline( 0 ).CPoints() )
-            {
-                aPoints.Point( ii++ ).SetPosition( pt );
-            }
-        }
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
-                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
-    {
-        m_poly.GetPolyShape().RemoveAllContours();
-        m_poly.GetPolyShape().NewOutline();
-
-        for( unsigned i = 0; i < aPoints.PointsSize(); ++i )
-        {
-            VECTOR2I pt = aPoints.Point( i ).GetPosition();
-            m_poly.GetPolyShape().Append( pt.x, pt.y, -1, -1, true );
-        }
-
-        aUpdatedItems.push_back( &m_poly );
-    }
-
-private:
-    SCH_SHAPE& m_poly;
-};
-
-
 void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
 {
     m_editBehavior = nullptr;
@@ -1027,7 +980,7 @@ void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
             m_editBehavior = std::make_unique<RECTANGLE_POINT_EDIT_BEHAVIOR>( *shape, *m_frame );
             break;
         case SHAPE_T::POLY:
-            m_editBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
+            m_editBehavior = std::make_unique<EDA_POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
             break;
         case SHAPE_T::BEZIER:
             m_editBehavior = std::make_unique<BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
@@ -1042,7 +995,7 @@ void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
     {
         SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
         // Implemented directly as a polygon
-        m_editBehavior = std::make_unique<POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
+        m_editBehavior = std::make_unique<EDA_POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
         break;
     }
     case SCH_TEXTBOX_T:
