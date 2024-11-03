@@ -722,7 +722,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddLayer( wxCommandEvent& event )
 
     PCB_LAYER_ID nextLayer = User_1;
 
-    while( alg::contains( *m_privateLayers, nextLayer ) && nextLayer < User_9 )
+    while( alg::contains( *m_privateLayers, nextLayer ) && nextLayer < User_45 )
         nextLayer = ToLAYER_ID( nextLayer + 1 );
 
     m_privateLayers->push_back( nextLayer );

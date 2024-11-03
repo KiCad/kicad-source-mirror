@@ -230,13 +230,13 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
     case ALTIUM_LAYER::MECHANICAL_7:      return User_7;
     case ALTIUM_LAYER::MECHANICAL_8:      return User_8;
     case ALTIUM_LAYER::MECHANICAL_9:      return User_9;
-    case ALTIUM_LAYER::MECHANICAL_10:     return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_11:     return Eco2_User; //Eco1 is used for unknown elements
+    case ALTIUM_LAYER::MECHANICAL_10:     return User_10;
+    case ALTIUM_LAYER::MECHANICAL_11:     return User_11; //Eco1 is used for unknown elements
     case ALTIUM_LAYER::MECHANICAL_12:     return F_Fab;
     case ALTIUM_LAYER::MECHANICAL_13:     return B_Fab; // Don't use courtyard layers for other purposes
-    case ALTIUM_LAYER::MECHANICAL_14:     return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::MECHANICAL_15:     return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::MECHANICAL_16:     return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::MECHANICAL_14:     return User_12;
+    case ALTIUM_LAYER::MECHANICAL_15:     return User_13;
+    case ALTIUM_LAYER::MECHANICAL_16:     return User_14;
 
     case ALTIUM_LAYER::DRILL_DRAWING:     return Dwgs_User;
     case ALTIUM_LAYER::MULTI_LAYER:       return UNDEFINED_LAYER;

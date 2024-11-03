@@ -33,6 +33,7 @@
 #include <board.h>
 #include <collectors.h>
 #include <footprint.h>
+#include <layer_ids.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <panel_setup_layers.h>
@@ -42,95 +43,9 @@
 #include <wx/msgdlg.h>
 #include <eda_list_dialog.h>
 
+#include <list>
+#include <set>
 
-// some define to choose how copper layers widgets are shown
-
-// if defined, display only active copper layers
-// if not displays always 1=the full set (32 copper layers)
-#define HIDE_INACTIVE_LAYERS
-
-
-static LSEQ dlg_layers()
-{
-    // Layers that are put out into the dialog UI, coordinate with wxformbuilder and
-    // getCTLs( int aLayerNumber )
-    static const PCB_LAYER_ID layers[] = {
-        F_CrtYd,
-        F_Fab,
-        F_Adhes,
-        F_Paste,
-        F_SilkS,
-        F_Mask,
-        F_Cu,
-
-        In1_Cu,
-        In2_Cu,
-        In3_Cu,
-        In4_Cu,
-        In5_Cu,
-        In6_Cu,
-        In7_Cu,
-        In8_Cu,
-        In9_Cu,
-        In10_Cu,
-        In11_Cu,
-        In12_Cu,
-        In13_Cu,
-        In14_Cu,
-        In15_Cu,
-
-        In16_Cu,
-        In17_Cu,
-        In18_Cu,
-        In19_Cu,
-        In20_Cu,
-        In21_Cu,
-        In22_Cu,
-        In23_Cu,
-        In24_Cu,
-        In25_Cu,
-        In26_Cu,
-        In27_Cu,
-        In28_Cu,
-        In29_Cu,
-        In30_Cu,
-
-        B_Cu,
-        B_Mask,
-        B_SilkS,
-        B_Paste,
-        B_Adhes,
-        B_Fab,
-        B_CrtYd,
-
-        Edge_Cuts,
-        Margin,
-        Eco2_User,
-        Eco1_User,
-        Cmts_User,
-        Dwgs_User,
-
-        User_1,
-        User_2,
-        User_3,
-        User_4,
-        User_5,
-        User_6,
-        User_7,
-        User_8,
-        User_9,
-    };
-
-    return LSEQ( layers, layers + arrayDim( layers ) );
-}
-
-
-// returns a mask of existing layers in dialog list
-static LSET AllExistingLayersInDlgMask()
-{
-    static const LSET saved( dlg_layers() );
-    return saved;
-}
 
 
 PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
@@ -143,102 +58,452 @@ PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( wxWindow* aParentWindow, PCB_EDIT_FRAME*
 }
 
 
-PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( int aLayerNumber )
+void PANEL_SETUP_LAYERS::initialize_front_tech_layers()
 {
-#define RETURN_COPPER( x )    return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##Choice )
-#define RETURN_AUX( x )       return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##StaticText )
-#define RETURN_MANDATORY( x ) return PANEL_SETUP_LAYERS_CTLs( x##Name, nullptr, x##StaticText )
-#define RETURN_USER( x )      return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##Type )
+    m_CrtYdFrontCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                           wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_CrtYdFrontCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT
+                                | wxRESERVE_SPACE_EVEN_IF_HIDDEN,
+                        5 );
 
-    switch( aLayerNumber )
+    m_CrtYdFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( F_CrtYd ),
+                                       wxDefaultPosition, wxDefaultSize, 0 );
+    m_CrtYdFrontName->SetMinSize( wxSize( 160, -1 ) );
+
+    m_LayersSizer->Add( m_CrtYdFrontName, 0, wxRIGHT | wxEXPAND, 5 );
+
+    m_CrtYdFrontStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Off-board, testing" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_CrtYdFrontStaticText->Wrap( -1 );
+    m_CrtYdFrontStaticText->SetMinSize( wxSize( 150, -1 ) );
+
+    m_LayersSizer->Add( m_CrtYdFrontStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_FabFrontCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                         wxDefaultPosition, wxDefaultSize, 0 );
+    m_FabFrontCheckBox->SetToolTip(
+            _( "If you want a fabrication layer for the front side of the board" ) );
+
+    m_LayersSizer->Add( m_FabFrontCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_FabFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( F_Fab ),
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_FabFrontName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_FabFrontStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Off-board, manufacturing" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_FabFrontStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_FabFrontStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_AdhesFrontCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                           wxDefaultPosition, wxDefaultSize, 0 );
+    m_AdhesFrontCheckBox->SetToolTip(
+            _( "If you want an adhesive template for the front side of the board" ) );
+
+    m_LayersSizer->Add( m_AdhesFrontCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_AdhesFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( F_Adhes ),
+                                       wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_AdhesFrontName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_AdhesFrontStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "On-board, non-copper" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_AdhesFrontStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_AdhesFrontStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_SoldPFrontCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                           wxDefaultPosition, wxDefaultSize, 0 );
+    m_SoldPFrontCheckBox->SetToolTip(
+            _( "If you want a solder paste layer for front side of the board" ) );
+
+    m_LayersSizer->Add( m_SoldPFrontCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_SoldPFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( F_Paste ),
+                                       wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_SoldPFrontName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_SoldPFrontStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "On-board, non-copper" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_SoldPFrontStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_SoldPFrontStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_SilkSFrontCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                           wxDefaultPosition, wxDefaultSize, 0 );
+    m_SilkSFrontCheckBox->SetToolTip(
+            _( "If you want a silk screen layer for the front side of the board" ) );
+
+    m_LayersSizer->Add( m_SilkSFrontCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_SilkSFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( F_SilkS ),
+                                       wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_SilkSFrontName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_SilkSFrontStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "On-board, non-copper" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_SilkSFrontStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_SilkSFrontStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_MaskFrontCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0 );
+    m_MaskFrontCheckBox->SetToolTip(
+            _( "If you want a solder mask layer for the front of the board" ) );
+
+    m_LayersSizer->Add( m_MaskFrontCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_MaskFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( F_Mask ),
+                                      wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_MaskFrontName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_MaskFrontStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "On-board, non-copper" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_MaskFrontStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_MaskFrontStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_CrtYdFrontCheckBox->SetValue( true);
+    m_CrtYdFrontCheckBox->Hide();
+}
+
+
+void PANEL_SETUP_LAYERS::initialize_back_tech_layers()
+{
+    m_MaskBackCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                         wxDefaultPosition, wxDefaultSize, 0 );
+    m_MaskBackCheckBox->SetToolTip(
+            _( "If you want a solder mask layer for the back side of the board" ) );
+
+    m_LayersSizer->Add( m_MaskBackCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_MaskBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( B_Mask ),
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_MaskBackName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_MaskBackStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "On-board, non-copper" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_MaskBackStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_MaskBackStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_SilkSBackCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0 );
+    m_SilkSBackCheckBox->SetToolTip(
+            _( "If you want a silk screen layer for the back side of the board" ) );
+
+    m_LayersSizer->Add( m_SilkSBackCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_SilkSBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( B_SilkS ),
+                                      wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_SilkSBackName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_SilkSBackStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "On-board, non-copper" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_SilkSBackStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_SilkSBackStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_SoldPBackCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0 );
+    m_SoldPBackCheckBox->SetToolTip(
+            _( "If you want a solder paste layer for the back side of the board" ) );
+
+    m_LayersSizer->Add( m_SoldPBackCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_SoldPBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( B_Paste ),
+                                      wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_SoldPBackName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_SoldPBackStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "On-board, non-copper" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_SoldPBackStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_SoldPBackStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_AdhesBackCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0 );
+    m_AdhesBackCheckBox->SetToolTip(
+            _( "If you want an adhesive layer for the back side of the board" ) );
+
+    m_LayersSizer->Add( m_AdhesBackCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_AdhesBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( B_Adhes ),
+                                      wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_AdhesBackName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_AdhesBackStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "On-board, non-copper" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_AdhesBackStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_AdhesBackStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_FabBackCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                        wxDefaultPosition, wxDefaultSize, 0 );
+    m_FabBackCheckBox->SetToolTip(
+            _( "If you want a fabrication layer for the back side of the board" ) );
+
+    m_LayersSizer->Add( m_FabBackCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_FabBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( B_Fab ),
+                                    wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_FabBackName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_FabBackStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Off-board, manufacturing" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_FabBackStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_FabBackStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+
+    m_CrtYdBackCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_CrtYdBackCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT
+                                | wxRESERVE_SPACE_EVEN_IF_HIDDEN,
+                        5 );
+
+    m_CrtYdBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( B_CrtYd ),
+                                      wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_CrtYdBackName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_CrtYdBackStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Off-board, testing" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_CrtYdBackStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_CrtYdBackStaticText, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
+
+
+    m_PCBEdgesCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_PCBEdgesCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT
+                                | wxRESERVE_SPACE_EVEN_IF_HIDDEN,
+                        5 );
+
+    m_PCBEdgesName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( Edge_Cuts ),
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_PCBEdgesName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_PCBEdgesStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Board contour" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_PCBEdgesStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_PCBEdgesStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_MarginCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                       wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_MarginCheckBox, 0,
+                        wxLEFT | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL
+                                | wxRESERVE_SPACE_EVEN_IF_HIDDEN,
+                        5 );
+
+    m_MarginName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( Margin ),
+                                   wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_MarginName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_MarginStaticText =
+            new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Board contour setback" ),
+                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_MarginStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_MarginStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_Eco1CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_Eco1CheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_Eco1Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( Eco1_User ),
+                                 wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_Eco1Name, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_Eco1StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Auxiliary" ),
+                                         wxDefaultPosition, wxDefaultSize, 0 );
+    m_Eco1StaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_Eco1StaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_Eco2CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_Eco2CheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_Eco2Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( Eco2_User ),
+                                 wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_Eco2Name, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_Eco2StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Auxiliary" ),
+                                         wxDefaultPosition, wxDefaultSize, 0 );
+    m_Eco2StaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_Eco2StaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_CommentsCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                         wxDefaultPosition, wxDefaultSize, 0 );
+    m_CommentsCheckBox->SetToolTip( _( "If you want a separate layer for comments or notes" ) );
+
+    m_LayersSizer->Add( m_CommentsCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_CommentsName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( Cmts_User ),
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_CommentsName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_CommentsStaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Auxiliary" ),
+                                             wxDefaultPosition, wxDefaultSize, 0 );
+    m_CommentsStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_CommentsStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+
+    m_DrawingsCheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString,
+                                         wxDefaultPosition, wxDefaultSize, 0 );
+    m_DrawingsCheckBox->SetToolTip( _( "If you want a layer for documentation drawings" ) );
+
+    m_LayersSizer->Add( m_DrawingsCheckBox, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    m_DrawingsName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( Dwgs_User ),
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+    m_LayersSizer->Add( m_DrawingsName, 0, wxEXPAND | wxRIGHT, 5 );
+
+    m_DrawingsStaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _( "Auxiliary" ),
+                                             wxDefaultPosition, wxDefaultSize, 0 );
+    m_DrawingsStaticText->Wrap( -1 );
+    m_LayersSizer->Add( m_DrawingsStaticText, 0,
+                        wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxLEFT | wxRIGHT, 5 );
+
+    // These layers are always enabled, so hide the checkboxes
+    m_CrtYdBackCheckBox->SetValue( true);
+    m_CrtYdBackCheckBox->Hide();
+    m_PCBEdgesCheckBox->SetValue( true);
+    m_PCBEdgesCheckBox->Hide();
+    m_MarginCheckBox->SetValue( true);
+    m_MarginCheckBox->Hide();
+
+}
+
+
+void PANEL_SETUP_LAYERS::initialize_layers_controls()
+{
+    Freeze();
+    m_layersControls.clear();
+    m_LayersSizer->Clear( true );
+    initialize_front_tech_layers();
+    m_layersControls[F_CrtYd] = PANEL_SETUP_LAYERS_CTLs( m_CrtYdFrontName, m_CrtYdFrontCheckBox, m_CrtYdFrontStaticText );
+    m_layersControls[F_Fab] = PANEL_SETUP_LAYERS_CTLs( m_FabFrontName, m_FabFrontCheckBox, m_FabFrontStaticText );
+    m_layersControls[F_Adhes] = PANEL_SETUP_LAYERS_CTLs( m_AdhesFrontName, m_AdhesFrontCheckBox, m_AdhesFrontStaticText );
+    m_layersControls[F_Paste] = PANEL_SETUP_LAYERS_CTLs( m_SoldPFrontName, m_SoldPFrontCheckBox, m_SoldPFrontStaticText );
+    m_layersControls[F_SilkS] = PANEL_SETUP_LAYERS_CTLs( m_SilkSFrontName, m_SilkSFrontCheckBox, m_SilkSFrontStaticText );
+    m_layersControls[F_Mask] = PANEL_SETUP_LAYERS_CTLs( m_MaskFrontName, m_MaskFrontCheckBox, m_MaskFrontStaticText );
+
+
+    LSET layers = m_enabledLayers;
+
+    for( auto it = layers.copper_layers_begin(); it != layers.copper_layers_end(); ++it )
     {
-    case F_CrtYd:      RETURN_MANDATORY( m_CrtYdFront );
-    case F_Fab:        RETURN_AUX( m_FabFront );
-    case F_Adhes:      RETURN_AUX( m_AdhesFront );
-    case F_Paste:      RETURN_AUX( m_SoldPFront );
-    case F_SilkS:      RETURN_AUX( m_SilkSFront );
-    case F_Mask:       RETURN_AUX( m_MaskFront );
-    case F_Cu:         RETURN_COPPER( m_Front );
+        wxCheckBox* cb = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+        cb->SetToolTip( _( "Use the Physical Stackup page to change the number of copper layers." ) );
+        cb->Disable();
 
-    case In1_Cu:       RETURN_COPPER( m_In1 );
-    case In2_Cu:       RETURN_COPPER( m_In2 );
-    case In3_Cu:       RETURN_COPPER( m_In3 );
-    case In4_Cu:       RETURN_COPPER( m_In4 );
-    case In5_Cu:       RETURN_COPPER( m_In5 );
-    case In6_Cu:       RETURN_COPPER( m_In6 );
-    case In7_Cu:       RETURN_COPPER( m_In7 );
-    case In8_Cu:       RETURN_COPPER( m_In8 );
-    case In9_Cu:       RETURN_COPPER( m_In9 );
-    case In10_Cu:      RETURN_COPPER( m_In10 );
-    case In11_Cu:      RETURN_COPPER( m_In11 );
-    case In12_Cu:      RETURN_COPPER( m_In12 );
-    case In13_Cu:      RETURN_COPPER( m_In13 );
-    case In14_Cu:      RETURN_COPPER( m_In14 );
-    case In15_Cu:      RETURN_COPPER( m_In15 );
+        m_LayersSizer->Add( cb, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-    case In16_Cu:      RETURN_COPPER( m_In16 );
-    case In17_Cu:      RETURN_COPPER( m_In17 );
-    case In18_Cu:      RETURN_COPPER( m_In18 );
-    case In19_Cu:      RETURN_COPPER( m_In19 );
-    case In20_Cu:      RETURN_COPPER( m_In20 );
-    case In21_Cu:      RETURN_COPPER( m_In21 );
-    case In22_Cu:      RETURN_COPPER( m_In22 );
-    case In23_Cu:      RETURN_COPPER( m_In23 );
-    case In24_Cu:      RETURN_COPPER( m_In24 );
-    case In25_Cu:      RETURN_COPPER( m_In25 );
-    case In26_Cu:      RETURN_COPPER( m_In26 );
-    case In27_Cu:      RETURN_COPPER( m_In27 );
-    case In28_Cu:      RETURN_COPPER( m_In28 );
-    case In29_Cu:      RETURN_COPPER( m_In29 );
-    case In30_Cu:      RETURN_COPPER( m_In30 );
+        wxTextCtrl* txt = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( *it ), wxDefaultPosition, wxDefaultSize, 0 );
+        txt->SetToolTip( _("Layer Name") );
 
-    case B_Cu:         RETURN_COPPER( m_Back );
-    case B_Mask:       RETURN_AUX( m_MaskBack );
-    case B_SilkS:      RETURN_AUX( m_SilkSBack );
-    case B_Paste:      RETURN_AUX( m_SoldPBack );
-    case B_Adhes:      RETURN_AUX( m_AdhesBack );
-    case B_Fab:        RETURN_AUX( m_FabBack );
-    case B_CrtYd:      RETURN_MANDATORY( m_CrtYdBack );
+        m_LayersSizer->Add( txt, 0, wxEXPAND|wxRIGHT, 5 );
 
-    case Edge_Cuts:    RETURN_MANDATORY( m_PCBEdges );
-    case Margin:       RETURN_AUX( m_Margin );
-    case Eco2_User:    RETURN_AUX( m_Eco2 );
-    case Eco1_User:    RETURN_AUX( m_Eco1 );
-    case Cmts_User:    RETURN_AUX( m_Comments );
-    case Dwgs_User:    RETURN_AUX( m_Drawings );
+        wxArrayString choices;
+        choices.Add( _( "signal" ) );
+        choices.Add( _( "power plane" ) );
+        choices.Add( _( "mixed" ) );
+        choices.Add( _( "jumper" ) );
+        wxChoice* choice = new wxChoice( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices, 0 );
+        choice->SetSelection( 0 );
+        choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\n"
+                              "Power plane layers are removed from Freerouter's layer menus.") );
 
-    case User_1:       RETURN_USER( m_User1 );
-    case User_2:       RETURN_USER( m_User2 );
-    case User_3:       RETURN_USER( m_User3 );
-    case User_4:       RETURN_USER( m_User4 );
-    case User_5:       RETURN_USER( m_User5 );
-    case User_6:       RETURN_USER( m_User6 );
-    case User_7:       RETURN_USER( m_User7 );
-    case User_8:       RETURN_USER( m_User8 );
-    case User_9:       RETURN_USER( m_User9 );
-
-    default:
-        wxASSERT_MSG( 0, wxT( "bad layer id" ) );
-        return PANEL_SETUP_LAYERS_CTLs( nullptr,  nullptr, nullptr );
+        m_LayersSizer->Add( choice, 0, wxRIGHT|wxEXPAND, 5 );
+        m_layersControls[*it] = PANEL_SETUP_LAYERS_CTLs( txt, cb, choice );
     }
+
+    initialize_back_tech_layers();
+    m_layersControls[B_Mask] = PANEL_SETUP_LAYERS_CTLs( m_MaskBackName, m_MaskBackCheckBox, m_MaskBackStaticText );
+    m_layersControls[B_SilkS] = PANEL_SETUP_LAYERS_CTLs( m_SilkSBackName, m_SilkSBackCheckBox, m_SilkSBackStaticText );
+    m_layersControls[B_Paste] = PANEL_SETUP_LAYERS_CTLs( m_SoldPBackName, m_SoldPBackCheckBox, m_SoldPBackStaticText );
+    m_layersControls[B_Adhes] = PANEL_SETUP_LAYERS_CTLs( m_AdhesBackName, m_AdhesBackCheckBox, m_AdhesBackStaticText );
+    m_layersControls[B_Fab] = PANEL_SETUP_LAYERS_CTLs( m_FabBackName, m_FabBackCheckBox, m_FabBackStaticText );
+    m_layersControls[B_CrtYd] = PANEL_SETUP_LAYERS_CTLs( m_CrtYdBackName, m_CrtYdBackCheckBox, m_CrtYdBackStaticText );
+    m_layersControls[Edge_Cuts] = PANEL_SETUP_LAYERS_CTLs( m_PCBEdgesName, m_PCBEdgesCheckBox, m_PCBEdgesStaticText );
+    m_layersControls[Margin] = PANEL_SETUP_LAYERS_CTLs( m_MarginName, m_MarginCheckBox, m_MarginStaticText );
+    m_layersControls[Eco1_User] = PANEL_SETUP_LAYERS_CTLs( m_Eco1Name, m_Eco1CheckBox, m_Eco1StaticText );
+    m_layersControls[Eco2_User] = PANEL_SETUP_LAYERS_CTLs( m_Eco2Name, m_Eco2CheckBox, m_Eco2StaticText );
+    m_layersControls[Cmts_User] = PANEL_SETUP_LAYERS_CTLs( m_CommentsName, m_CommentsCheckBox, m_CommentsStaticText );
+    m_layersControls[Dwgs_User] = PANEL_SETUP_LAYERS_CTLs( m_DrawingsName, m_DrawingsCheckBox, m_DrawingsStaticText );
+
+    layers &= LSET::UserDefinedLayers();
+
+    for( auto it = layers.non_copper_layers_begin(); it != layers.non_copper_layers_end(); ++it )
+    {
+        append_user_layer( *it );
+    }
+
+    Thaw();
+    m_LayersListPanel->Layout();
 }
 
 
-wxControl* PANEL_SETUP_LAYERS::getName( int aLayer )
+void PANEL_SETUP_LAYERS::append_user_layer( PCB_LAYER_ID aLayer )
 {
-    return getCTLs( aLayer ).name;
+    wxCheckBox* cb = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                     wxDefaultSize, 0 );
+    m_LayersSizer->Add( cb, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+    wxTextCtrl* txt = new wxTextCtrl( m_LayersListPanel, wxID_ANY, LayerName( aLayer ),
+                                      wxDefaultPosition, wxDefaultSize, 0 );
+    txt->SetToolTip( _( "Layer Name" ) );
+    m_LayersSizer->Add( txt, 0, wxEXPAND | wxRIGHT, 5 );
+
+    wxArrayString choices;
+    choices.Add( _( "Auxiliary" ) );
+    choices.Add( _( "Off-board, front" ) );
+    choices.Add( _( "Off-board, back" ) );
+
+    wxChoice* choice = new wxChoice( m_LayersListPanel, wxID_ANY, wxDefaultPosition,
+                                     wxDefaultSize, choices, 0 );
+    choice->SetSelection( 0 );
+    choice->SetToolTip(
+            _( "Auxiliary layers do not flip with board side, while back and front layers do." ) );
+
+    m_LayersSizer->Add( choice, 0, wxEXPAND | wxRIGHT, 5 );
+    m_layersControls[aLayer] = PANEL_SETUP_LAYERS_CTLs( txt, cb, choice );
 }
 
 
-wxCheckBox* PANEL_SETUP_LAYERS::getCheckBox( int aLayer )
+wxTextCtrl* PANEL_SETUP_LAYERS::getName( PCB_LAYER_ID aLayer )
 {
-    return getCTLs( aLayer ).checkbox;
+    return m_layersControls[aLayer].name;
 }
 
 
-wxChoice* PANEL_SETUP_LAYERS::getChoice( int aLayer )
+wxCheckBox* PANEL_SETUP_LAYERS::getCheckBox( PCB_LAYER_ID aLayer )
 {
-    return (wxChoice*) getCTLs( aLayer ).choice;
+    return m_layersControls[aLayer].checkbox;
+}
+
+
+wxChoice* PANEL_SETUP_LAYERS::getChoice( PCB_LAYER_ID aLayer )
+{
+    return dynamic_cast<wxChoice*>( m_layersControls[aLayer].choice );
 }
 
 
@@ -249,7 +514,7 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
     // Rescue may be enabled, but should not be shown in this dialog
     m_enabledLayers.reset( Rescue );
 
-    m_enabledLayers &= AllExistingLayersInDlgMask();
+    initialize_layers_controls();
 
     setCopperLayerCheckBoxes( m_pcb->GetCopperLayerCount() );
 
@@ -257,7 +522,6 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
     showSelectedLayerCheckBoxes( m_enabledLayers );
 
     showLayerTypes();
-    setMandatoryLayerCheckBoxes();
     setUserDefinedLayerCheckBoxes();
 
     m_initialized = true;
@@ -268,53 +532,41 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
 
 void PANEL_SETUP_LAYERS::SyncCopperLayers( int aNumCopperLayers )
 {
+
+    for( size_t ii = 0; ii < m_enabledLayers.size(); ii++ )
+    {
+        if( IsCopperLayer( int( ii ) ) )
+            m_enabledLayers.reset( ii );
+    }
+
+    m_enabledLayers |= LSET::AllCuMask( aNumCopperLayers );
+
+    initialize_layers_controls();
     setCopperLayerCheckBoxes( aNumCopperLayers );
-}
 
+    showBoardLayerNames();
+    showSelectedLayerCheckBoxes( m_enabledLayers );
 
-void PANEL_SETUP_LAYERS::setMandatoryLayerCheckBoxes()
-{
-    for( int layer : { F_CrtYd, B_CrtYd, Edge_Cuts, Margin } )
-        setLayerCheckBox( layer, true );
+    showLayerTypes();
+    setUserDefinedLayerCheckBoxes();
 }
 
 
 void PANEL_SETUP_LAYERS::setUserDefinedLayerCheckBoxes()
 {
-    for( PCB_LAYER_ID layer : LSET::UserDefinedLayers().Seq() )
-    {
-        bool         state = m_pcb->IsLayerEnabled( layer );
+    LSET layers = m_enabledLayers & LSET::UserDefinedLayers();
 
-#ifdef HIDE_INACTIVE_LAYERS
-        // This code hides inactive copper layers, or redisplays hidden layers which are now needed.
-        PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( layer );
-
-        // All user-defined layers should have a checkbox
-        wxASSERT( ctl.checkbox );
-
-        ctl.name->Show( state );
-        ctl.checkbox->Show( state );
-        ctl.choice->Show( state );
-#endif
-
-        setLayerCheckBox( layer, state );
-    }
-
-#ifdef HIDE_INACTIVE_LAYERS
-    // Send an size event to force sizers to be updated,
-    // because the number of copper layers can have changed.
-    wxSizeEvent evt_size( m_LayersListPanel->GetSize() );
-    m_LayersListPanel->GetEventHandler()->ProcessEvent( evt_size );
-#endif
+    for( PCB_LAYER_ID layer : layers )
+        setLayerCheckBox( layer, m_pcb->IsLayerEnabled( layer ) );
 }
 
 
 void PANEL_SETUP_LAYERS::showBoardLayerNames()
 {
-    // Set all the board's layer names into the dialog by calling BOARD::GetLayerName(),
+    // Set all the board's layer names into the dialog by calling BOARD::LayerName(),
     // which will call BOARD::GetStandardLayerName() for non-coppers.
 
-    for( PCB_LAYER_ID layer : dlg_layers() )
+    for( PCB_LAYER_ID layer : m_enabledLayers )
     {
         wxControl*   ctl = getName( layer );
 
@@ -333,36 +585,42 @@ void PANEL_SETUP_LAYERS::showBoardLayerNames()
 
 void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( LSET enabledLayers )
 {
-    // The check boxes
-    for( PCB_LAYER_ID layer : dlg_layers() )
-        setLayerCheckBox( layer, enabledLayers[layer] );
+    for( auto& [layer,ctl] : m_layersControls )
+        setLayerCheckBox( layer, enabledLayers.test( layer ) );
 }
 
 
 void PANEL_SETUP_LAYERS::showLayerTypes()
 {
-    for( PCB_LAYER_ID cu_layer : LSET::AllCuMask().Seq() )
+    LSET layers = m_enabledLayers & LSET::AllCuMask( m_pcb->GetCopperLayerCount() );
+
+    for( PCB_LAYER_ID cu_layer : m_enabledLayers.CuStack() )
     {
         wxChoice* ctl = getChoice( cu_layer );
 
-        switch( m_pcb->GetLayerType( cu_layer ) )
+        switch ( m_pcb->GetLayerType( cu_layer ) )
         {
-        default:
-        case LT_SIGNAL: ctl->SetSelection( 0 ); break;
-        case LT_POWER: ctl->SetSelection( 1 ); break;
-        case LT_MIXED: ctl->SetSelection( 2 ); break;
-        case LT_JUMPER: ctl->SetSelection( 3 ); break;
+            case LT_SIGNAL: ctl->SetSelection( 0 ); break;
+            case LT_POWER:  ctl->SetSelection( 1 ); break;
+            case LT_MIXED:  ctl->SetSelection( 2 ); break;
+            case LT_JUMPER: ctl->SetSelection( 3 ); break;
+            default:        ctl->SetSelection( 0 );
         }
+
     }
 
-    for( int ii = User_1; ii <= User_9; ++ii )
+    layers = m_enabledLayers & LSET::UserDefinedLayers();
+
+    for( PCB_LAYER_ID layer : layers )
     {
-        switch( m_pcb->GetLayerType( ToLAYER_ID( ii ) ) )
+        wxChoice* ctl = getChoice( layer );
+
+        switch( m_pcb->GetLayerType( layer ) )
         {
-        case LT_AUX:   getChoice( ii )->SetSelection( 0 ); break;
-        case LT_FRONT: getChoice( ii )->SetSelection( 1 ); break;
-        case LT_BACK:  getChoice( ii )->SetSelection( 2 ); break;
-        default:       getChoice( ii )->SetSelection( 0 ); break;
+        case LT_AUX:   ctl->SetSelection( 0 ); break;
+        case LT_FRONT: ctl->SetSelection( 1 ); break;
+        case LT_BACK:  ctl->SetSelection( 2 ); break;
+        default:       ctl->SetSelection( 0 ); break;
         }
     }
 }
@@ -372,11 +630,11 @@ LSET PANEL_SETUP_LAYERS::GetUILayerMask()
 {
     LSET layerMaskResult;
 
-    for( PCB_LAYER_ID layer : dlg_layers() )
+    for( auto& [layer, _] : m_layersControls )
     {
         wxCheckBox*  ctl = getCheckBox( layer );
 
-        if( !ctl || ctl->GetValue() )
+        if( ctl && ctl->IsChecked() )
             layerMaskResult.set( layer );
     }
 
@@ -384,9 +642,9 @@ LSET PANEL_SETUP_LAYERS::GetUILayerMask()
 }
 
 
-void PANEL_SETUP_LAYERS::setLayerCheckBox( int aLayer, bool isChecked )
+void PANEL_SETUP_LAYERS::setLayerCheckBox( PCB_LAYER_ID aLayer, bool isChecked )
 {
-    PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( aLayer );
+    PANEL_SETUP_LAYERS_CTLs& ctl = m_layersControls[aLayer];
 
     if( !ctl.checkbox )
         return;
@@ -399,69 +657,31 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
 {
     if( copperCount > 0 )
     {
-        setLayerCheckBox( F_Cu, true );
-        --copperCount;
+        wxCheckBox* fcu = getCheckBox( F_Cu );
+        fcu->SetValue( true );
+        fcu->Hide();
     }
 
     if( copperCount > 0 )
     {
-        setLayerCheckBox( B_Cu, true );
-        --copperCount;
+        wxCheckBox* bcu = getCheckBox( B_Cu );
+        bcu->SetValue( true );
+        bcu->Hide();
     }
 
-    for( PCB_LAYER_ID layer : LSET::InternalCuMask().Seq() )
+    LSET layers = m_enabledLayers & LSET::AllCuMask( copperCount );
+    layers.reset( F_Cu );
+    layers.reset( B_Cu );
+
+    for( PCB_LAYER_ID layer : layers )
     {
-        bool     state = copperCount > 0;
+        wxCheckBox* cb = getCheckBox( layer );
 
-#ifdef HIDE_INACTIVE_LAYERS
-        // This code hides inactive copper layers, or redisplays hidden layers which are now needed.
-        PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( layer );
-
-        // Inner layers should have a checkbox
-        wxASSERT( ctl.checkbox );
-
-        ctl.name->Show( state );
-        ctl.checkbox->Show( state );
-        ctl.choice->Show( state );
-#endif
-
-        setLayerCheckBox( layer, state );
-        --copperCount;
+        cb->SetValue( true );
+        cb->Show();
+        cb->Disable();
     }
 
-#ifdef HIDE_INACTIVE_LAYERS
-    // Send an size event to force sizers to be updated,
-    // because the number of copper layers can have changed.
-    wxSizeEvent evt_size( m_LayersListPanel->GetSize() );
-    m_LayersListPanel->GetEventHandler()->ProcessEvent( evt_size );
-#endif
-}
-
-
-void PANEL_SETUP_LAYERS::OnCheckBox( wxCommandEvent& event )
-{
-    m_enabledLayers = GetUILayerMask();
-}
-
-
-void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
-{
-    wxObject* source = event.GetEventObject();
-
-    for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
-    {
-        wxCheckBox* copper = getCheckBox( layer );
-
-        if( source == copper )
-        {
-            DisplayError( wxGetTopLevelParent( this ),
-                          _( "Use the Physical Stackup page to change the number of "
-                             "copper layers." ) );
-
-            copper->SetValue( true );
-            return;
-        }
-    }
 }
 
 
@@ -622,63 +842,62 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         modified = true;
     }
 
-    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+    for( PCB_LAYER_ID layer : m_enabledLayers )
     {
-        if( m_enabledLayers[layer] )
-        {
-            const wxString& newLayerName = GetLayerName( layer );
+        wxString newLayerName = getName( layer )->GetValue();
 
-            if( m_pcb->GetLayerName( layer ) != newLayerName )
+        if( m_pcb->GetLayerName( layer ) != newLayerName )
+        {
+            m_pcb->SetLayerName( layer, newLayerName );
+            modified = true;
+        }
+
+        if( IsCopperLayer( layer ) )
+        {
+            LAYER_T t;
+
+            switch( getChoice( layer )->GetCurrentSelection() )
             {
-                m_pcb->SetLayerName( layer, newLayerName );
+            case 0:  t = LT_SIGNAL;    break;
+            case 1:  t = LT_POWER;     break;
+            case 2:  t = LT_MIXED;     break;
+            case 3:  t = LT_JUMPER;    break;
+            default: t = LT_UNDEFINED; break;
+            }
+
+            if( m_pcb->GetLayerType( layer ) != t )
+            {
+                m_pcb->SetLayerType( layer, t );
                 modified = true;
             }
+        }
+        else if( layer >= User_1 && !IsCopperLayer( layer ) )
+        {
+            LAYER_T t;
 
-            if( IsCopperLayer( layer ) )
+            switch( getChoice( layer )->GetCurrentSelection() )
             {
-                LAYER_T t;
-
-                switch( getChoice( layer )->GetCurrentSelection() )
-                {
-                case 0:  t = LT_SIGNAL;    break;
-                case 1:  t = LT_POWER;     break;
-                case 2:  t = LT_MIXED;     break;
-                case 3:  t = LT_JUMPER;    break;
-                default: t = LT_UNDEFINED; break;
-                }
-
-                if( m_pcb->GetLayerType( layer ) != t )
-                {
-                    m_pcb->SetLayerType( layer, t );
-                    modified = true;
-                }
+            case 0:  t = LT_AUX;       break;
+            case 1:  t = LT_FRONT;     break;
+            case 2:  t = LT_BACK;      break;
+            default: t = LT_UNDEFINED; break;
             }
-            else if( layer >= User_1 && layer <= User_9 )
+
+            if( m_pcb->GetLayerType( layer ) != t )
             {
-                LAYER_T t;
-
-                switch( getChoice( layer )->GetCurrentSelection() )
-                {
-                case 0:  t = LT_AUX;       break;
-                case 1:  t = LT_FRONT;     break;
-                case 2:  t = LT_BACK;      break;
-                default: t = LT_UNDEFINED; break;
-                }
-
-                if( m_pcb->GetLayerType( layer ) != t )
-                {
-                    m_pcb->SetLayerType( layer, t );
-                    modified = true;
-                }
+                m_pcb->SetLayerType( layer, t );
+                modified = true;
             }
         }
     }
 
-    for( PCB_LAYER_ID layer : LSET::UserDefinedLayers().Seq() )
-    {
-        const wxString& newLayerName = GetLayerName( layer );
+    LSET layers = m_enabledLayers & LSET::UserDefinedLayers();
 
-        if( m_enabledLayers[ layer ] && m_pcb->GetLayerName( layer ) != newLayerName )
+    for( PCB_LAYER_ID layer : layers )
+    {
+        wxString newLayerName = getName( layer )->GetValue();
+
+        if( m_pcb->GetLayerName( layer ) != newLayerName )
         {
             m_pcb->SetLayerName( layer, newLayerName );
             modified = true;
@@ -697,29 +916,6 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 }
 
 
-wxString PANEL_SETUP_LAYERS::GetLayerName( int aLayer )
-{
-    wxControl* control = getName( aLayer );
-
-    if( auto textCtl = dynamic_cast<wxTextCtrl*>( control ) )
-        return textCtl->GetValue().Trim();
-    else
-        return control->GetLabel();
-}
-
-
-static bool hasOneOf( const wxString& str, const wxString& chars )
-{
-    for( unsigned i=0; i<chars.Len();  ++i )
-    {
-        if( str.Find( chars[i] ) != wxNOT_FOUND )
-            return true;
-    }
-
-    return false;
-}
-
-
 bool PANEL_SETUP_LAYERS::testLayerNames()
 {
     std::vector<wxString>    names;
@@ -732,9 +928,8 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
         if( !m_enabledLayers[layer] )
             continue;
 
-        wxString name = GetLayerName( layer );
-
         ctl = (wxTextCtrl*) getName( layer );
+        wxString name = ctl->GetValue();
 
         // Check name for legality:
         // 1) Cannot be blank.
@@ -753,7 +948,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
             return false;
         }
 
-        if( hasOneOf( name, badchars ) )
+        if( name.find_first_of( badchars ) != wxString::npos )
         {
             wxString msg = wxString::Format(_( "%s are forbidden in layer names." ), badchars );
             PAGED_DIALOG::GetDialog( this )->SetError( msg, this, ctl );
@@ -796,9 +991,9 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
     PCB_LAYER_COLLECTOR collector;
     LSEQ newLayerSeq = newLayers.Seq();
 
-    for( PCB_LAYER_ID layer_id : curLayers.Seq() )
+    for( PCB_LAYER_ID layer_id : curLayers )
     {
-        if( !alg::contains( newLayerSeq, layer_id ) )
+        if( !newLayers[layer_id] )
         {
             collector.SetLayerId( layer_id );
             collector.Collect( m_pcb, GENERAL_COLLECTOR::BoardLevelItems );
@@ -916,7 +1111,7 @@ bool PANEL_SETUP_LAYERS::CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aIm
         wxMessageDialog dlg( topLevelParent, msg, _( "Inner Layers to Be Deleted" ),
                              wxICON_WARNING | wxSTAY_ON_TOP | wxYES | wxNO | wxNO_DEFAULT );
 
-        if( wxID_NO == dlg.ShowModal() )
+        if( wxID_ANY == dlg.ShowModal() )
             okToDeleteCopperLayers = false;
     }
 
@@ -957,7 +1152,7 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
     dlg.SetListLabel( _( "Select layer to add:" ) );
     dlg.HideFilter();
 
-    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetTextSelection().IsEmpty() )
+    if( dlg.ShowModal() == wxID_ANY || dlg.GetTextSelection().IsEmpty() )
         return;
 
     PCB_LAYER_ID layer = UNDEFINED_LAYER;
@@ -971,13 +1166,12 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
         }
     }
 
-    wxCHECK( layer >= User_1 && layer <= User_9, /* void */ );
+    wxCHECK( layer >= User_1, /* void */ );
 
-    LSET newLayer( { layer } );
+    m_enabledLayers.set( layer );
+    append_user_layer( layer );
 
-    m_enabledLayers |= newLayer;
-
-    PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( layer );
+    PANEL_SETUP_LAYERS_CTLs& ctl = m_layersControls[layer];
 
     // All user-defined layers should have a checkbox
     wxASSERT( ctl.checkbox );

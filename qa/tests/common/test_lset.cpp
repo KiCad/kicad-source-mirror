@@ -104,12 +104,15 @@ BOOST_AUTO_TEST_CASE(LSETFormatting)
     LSET set({F_Cu, In1_Cu, In2_Cu});
 
     std::string hexString = set.FmtHex();
-    std::string expectedHexString = "00000000_00000051"; // depends on bit ordering
+    std::string expectedHexString = "00000000_00000000_00000000_00000051"; // depends on bit ordering
 
     BOOST_CHECK_EQUAL(hexString, expectedHexString);
 
     std::string binString = set.FmtBin();
-    std::string expectedBinString = "0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0101_0001"; // depends on bit ordering
+    std::string expectedBinString = "0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|"
+                                    "0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0101_0001"; // depends on bit ordering
+
+    BOOST_CHECK_EQUAL(binString, expectedBinString);
 }
 // Test ExtractLayer and Flip
 BOOST_AUTO_TEST_CASE(LSETManipulations)

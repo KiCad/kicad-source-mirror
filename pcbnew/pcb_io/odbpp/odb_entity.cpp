@@ -220,6 +220,42 @@ void ODB_MATRIX_ENTITY::AddMatrixLayerField( MATRIX_LAYER& aMLayer, PCB_LAYER_ID
     case User_7:
     case User_8:
     case User_9:
+    case User_10:
+    case User_11:
+    case User_12:
+    case User_13:
+    case User_14:
+    case User_15:
+    case User_16:
+    case User_17:
+    case User_18:
+    case User_19:
+    case User_20:
+    case User_21:
+    case User_22:
+    case User_23:
+    case User_24:
+    case User_25:
+    case User_26:
+    case User_27:
+    case User_28:
+    case User_29:
+    case User_30:
+    case User_31:
+    case User_32:
+    case User_33:
+    case User_34:
+    case User_35:
+    case User_36:
+    case User_37:
+    case User_38:
+    case User_39:
+    case User_40:
+    case User_41:
+    case User_42:
+    case User_43:
+    case User_44:
+    case User_45:
         aMLayer.m_context = ODB_CONTEXT::MISC;
         aMLayer.m_type = ODB_TYPE::DOCUMENT;
         break;

@@ -609,8 +609,8 @@ void PANEL_SETUP_BOARD_STACKUP::updateCopperLayerCount()
 
     wxASSERT( copperCount >= 2 );
 
-    m_enabledLayers |= LSET::ExternalCuMask();
-    m_enabledLayers &= ~LSET::InternalCuMask();
+    m_enabledLayers.ClearCopperLayers();
+    m_enabledLayers |= F_Cu | B_Cu;
 
     // F_Cu and B_Cu are already enabled. Enable internal cu layers
     int internal_cu_count = copperCount - 2;

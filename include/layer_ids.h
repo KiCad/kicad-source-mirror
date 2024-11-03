@@ -130,9 +130,45 @@ enum PCB_LAYER_ID: int
     User_7 = 51,
     User_8 = 53,
     User_9 = 55,
+    User_10 = 57,
+    User_11 = 59,
+    User_12 = 61,
+    User_13 = 63,
+    User_14 = 65,
+    User_15 = 67,
+    User_16 = 69,
+    User_17 = 71,
+    User_18 = 73,
+    User_19 = 75,
+    User_20 = 77,
+    User_21 = 79,
+    User_22 = 81,
+    User_23 = 83,
+    User_24 = 85,
+    User_25 = 87,
+    User_26 = 89,
+    User_27 = 91,
+    User_28 = 93,
+    User_29 = 95,
+    User_30 = 97,
+    User_31 = 99,
+    User_32 = 101,
+    User_33 = 103,
+    User_34 = 105,
+    User_35 = 107,
+    User_36 = 109,
+    User_37 = 111,
+    User_38 = 113,
+    User_39 = 115,
+    User_40 = 117,
+    User_41 = 119,
+    User_42 = 121,
+    User_43 = 123,
+    User_44 = 125,
+    User_45 = 127,
 
 
-    PCB_LAYER_ID_COUNT = 64
+    PCB_LAYER_ID_COUNT = 128
 };
 
 constexpr PCB_LAYER_ID PCBNEW_LAYER_ID_START = F_Cu;
@@ -661,7 +697,8 @@ inline bool IsSolderMaskLayer( int aLayer )
  */
 inline bool IsUserLayer( PCB_LAYER_ID aLayerId )
 {
-    return aLayerId >= Dwgs_User && aLayerId <= Eco2_User;
+    return aLayerId == Dwgs_User || aLayerId == Cmts_User || aLayerId == Eco1_User
+           || aLayerId == Eco2_User || ( aLayerId >= User_1 && !IsCopperLayer( aLayerId ) );
 }
 
 

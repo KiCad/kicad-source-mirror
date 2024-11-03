@@ -224,7 +224,9 @@ wxString LSET::Name( PCB_LAYER_ID aLayerId )
 
     default:
 
-        if( static_cast<int>( aLayerId ) & 1 )
+        if( aLayerId < 0 )
+            txt = wxT( "UNDEFINED" );
+        else if( static_cast<int>( aLayerId ) & 1 )
         {
             int offset = ( aLayerId - Rescue ) / 2;
             txt = wxString::Format( wxT( "User.%d" ), offset );
@@ -572,7 +574,11 @@ LSET LSET::AllCuMask( int aCuLayerCount )
 
 LSET LSET::AllNonCuMask()
 {
-    static const LSET saved = LSET().set() & ~AllCuMask();
+    LSET saved = LSET().set();
+
+    for( auto it = saved.copper_layers_begin(); it != saved.copper_layers_end(); ++it )
+        saved.reset( *it );
+
     return saved;
 }
 
@@ -651,7 +657,12 @@ LSET LSET::PhysicalLayersMask()
 LSET LSET::UserDefinedLayers()
 {
     static const LSET saved(
-            { User_1, User_2, User_3, User_4, User_5, User_6, User_7, User_8, User_9 } );
+            { User_1,  User_2,  User_3,  User_4,  User_5,  User_6,  User_7,  User_8,  User_9,
+              User_10, User_11, User_12, User_13, User_14, User_15, User_16, User_17, User_18,
+              User_19, User_20, User_21, User_22, User_23, User_24, User_25, User_26, User_27,
+              User_28, User_29, User_30, User_31, User_32, User_33, User_34, User_35, User_36,
+              User_37, User_38, User_39, User_40, User_41, User_42, User_43, User_44, User_45 } );
+
 
     return saved;
 }
@@ -881,5 +892,22 @@ LSET::non_copper_layers_iterator LSET::non_copper_layers_end() const
     return non_copper_layers_iterator( *this, size() );
 }
 
+
+LSET& LSET::ClearCopperLayers()
+{
+    for( size_t ii = 0; ii < size(); ii += 2 )
+        reset( ii );
+
+    return *this;
+}
+
+
+LSET& LSET::ClearNonCopperLayers()
+{
+    for( size_t ii = 1; ii < size(); ii += 2 )
+        reset( ii );
+
+    return *this;
+}
 
 #endif

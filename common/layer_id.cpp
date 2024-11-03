@@ -37,36 +37,6 @@ wxString LayerName( int aLayer )
 
     // Copper
     case PCB_LAYER_ID::F_Cu:              return wxT( "F.Cu" );
-    case PCB_LAYER_ID::In1_Cu:            return wxT( "In1.Cu" );
-    case PCB_LAYER_ID::In2_Cu:            return wxT( "In2.Cu" );
-    case PCB_LAYER_ID::In3_Cu:            return wxT( "In3.Cu" );
-    case PCB_LAYER_ID::In4_Cu:            return wxT( "In4.Cu" );
-    case PCB_LAYER_ID::In5_Cu:            return wxT( "In5.Cu" );
-    case PCB_LAYER_ID::In6_Cu:            return wxT( "In6.Cu" );
-    case PCB_LAYER_ID::In7_Cu:            return wxT( "In7.Cu" );
-    case PCB_LAYER_ID::In8_Cu:            return wxT( "In8.Cu" );
-    case PCB_LAYER_ID::In9_Cu:            return wxT( "In9.Cu" );
-    case PCB_LAYER_ID::In10_Cu:           return wxT( "In10.Cu" );
-    case PCB_LAYER_ID::In11_Cu:           return wxT( "In11.Cu" );
-    case PCB_LAYER_ID::In12_Cu:           return wxT( "In12.Cu" );
-    case PCB_LAYER_ID::In13_Cu:           return wxT( "In13.Cu" );
-    case PCB_LAYER_ID::In14_Cu:           return wxT( "In14.Cu" );
-    case PCB_LAYER_ID::In15_Cu:           return wxT( "In15.Cu" );
-    case PCB_LAYER_ID::In16_Cu:           return wxT( "In16.Cu" );
-    case PCB_LAYER_ID::In17_Cu:           return wxT( "In17.Cu" );
-    case PCB_LAYER_ID::In18_Cu:           return wxT( "In18.Cu" );
-    case PCB_LAYER_ID::In19_Cu:           return wxT( "In19.Cu" );
-    case PCB_LAYER_ID::In20_Cu:           return wxT( "In20.Cu" );
-    case PCB_LAYER_ID::In21_Cu:           return wxT( "In21.Cu" );
-    case PCB_LAYER_ID::In22_Cu:           return wxT( "In22.Cu" );
-    case PCB_LAYER_ID::In23_Cu:           return wxT( "In23.Cu" );
-    case PCB_LAYER_ID::In24_Cu:           return wxT( "In24.Cu" );
-    case PCB_LAYER_ID::In25_Cu:           return wxT( "In25.Cu" );
-    case PCB_LAYER_ID::In26_Cu:           return wxT( "In26.Cu" );
-    case PCB_LAYER_ID::In27_Cu:           return wxT( "In27.Cu" );
-    case PCB_LAYER_ID::In28_Cu:           return wxT( "In28.Cu" );
-    case PCB_LAYER_ID::In29_Cu:           return wxT( "In29.Cu" );
-    case PCB_LAYER_ID::In30_Cu:           return wxT( "In30.Cu" );
     case PCB_LAYER_ID::B_Cu:              return wxT( "B.Cu" );
 
     // Technicals
@@ -92,21 +62,6 @@ wxString LayerName( int aLayer )
     case PCB_LAYER_ID::B_CrtYd:           return wxT( "B.Courtyard" );
     case PCB_LAYER_ID::F_Fab:             return wxT( "F.Fab" );
     case PCB_LAYER_ID::B_Fab:             return wxT( "B.Fab" );
-
-    // User definable layers.
-    case PCB_LAYER_ID::User_1:            return wxT( "User.1" );
-    case PCB_LAYER_ID::User_2:            return wxT( "User.2" );
-    case PCB_LAYER_ID::User_3:            return wxT( "User.3" );
-    case PCB_LAYER_ID::User_4:            return wxT( "User.4" );
-    case PCB_LAYER_ID::User_5:            return wxT( "User.5" );
-    case PCB_LAYER_ID::User_6:            return wxT( "User.6" );
-    case PCB_LAYER_ID::User_7:            return wxT( "User.7" );
-    case PCB_LAYER_ID::User_8:            return wxT( "User.8" );
-    case PCB_LAYER_ID::User_9:            return wxT( "User.9" );
-    case 57:            return wxT( "User.10" );
-    case 59:            return wxT( "User.11" );
-    case 61:            return wxT( "User.12" );
-    case 63:            return wxT( "User.13" );
 
     // Rescue
     case PCB_LAYER_ID::Rescue:            return _( "Rescue" );
@@ -202,7 +157,11 @@ wxString LayerName( int aLayer )
     case LAYER_VIA_NETNAMES:            return _( "Via net names" );
 
     default:
-        wxCHECK_MSG( false, wxEmptyString, wxString::Format( "Unknown layer ID %d", aLayer ) );
+        // Catch the general board layers that have numerically increasing names
+        if( aLayer > 0 && aLayer < PCB_LAYER_ID_COUNT && aLayer & 1 )
+            return wxString::Format( wxT( "User.%d" ), ( aLayer - PCB_LAYER_ID::User_1 ) / 2 + 1 );
+
+        return wxString::Format( wxT( "In%d.Cu" ), ( aLayer - PCB_LAYER_ID::In1_Cu ) / 2 + 1 );
     }
 }
 

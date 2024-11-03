@@ -42,7 +42,7 @@ enum RENDER_TARGET
 };
 
 // Used in view.h to initialize VIEW_MAX_LAYERS and graphic_abstraction_layer.cpp
-#define MAX_LAYERS_FOR_VIEW 1024
+#define MAX_LAYERS_FOR_VIEW 2048
 } // namespace KIGFX
 
 #endif /* DEFINITIONS_H_ */

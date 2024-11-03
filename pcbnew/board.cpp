@@ -102,7 +102,7 @@ BOARD::BOARD() :
 
         if( IsCopperLayer( layer ) )
             m_layers[layer].m_type = LT_SIGNAL;
-        else if( layer >= User_1 && layer <= User_9 )
+        else if( layer >= User_1 && layer & 1 )
             m_layers[layer].m_type = LT_AUX;
         else
             m_layers[layer].m_type = LT_UNDEFINED;
@@ -661,7 +661,7 @@ LAYER_T BOARD::GetLayerType( PCB_LAYER_ID aLayer ) const
             return it->second.m_type;
     }
 
-    if( aLayer >= User_1 && aLayer <= User_9 )
+    if( aLayer >= User_1 && !IsCopperLayer( aLayer ) )
         return LT_AUX;
     else if( IsCopperLayer( aLayer ) )
         return LT_SIGNAL;
@@ -714,29 +714,29 @@ LAYER_T LAYER::ParseType( const char* aType )
 
 void BOARD::recalcOpposites()
 {
-    for( int layer = F_Cu; layer < User_9; ++layer )
+    for( int layer = F_Cu; layer < PCB_LAYER_ID_COUNT; ++layer )
         m_layers[layer].m_opposite = ::FlipLayer( ToLAYER_ID( layer ), GetCopperLayerCount() );
 
     // Match up similary-named front/back user layers
-    for( int layer = User_1; layer <= User_9; ++layer )
+    for( int layer = User_1; layer <= PCB_LAYER_ID_COUNT; layer += 2 )
     {
         if( m_layers[layer].m_opposite != layer )   // already paired
             continue;
 
-        if( m_layers[layer].m_type != LT_FRONT )
+        if( m_layers[layer].m_type != LT_FRONT && m_layers[layer].m_type != LT_BACK )
             continue;
 
         wxString principalName = m_layers[layer].m_userName.AfterFirst( '.' );
 
-        for( int ii = User_1; ii <= User_9; ++ii )
+        for( int ii = layer + 2; ii <= PCB_LAYER_ID_COUNT; ii += 2 )
         {
-            if( ii == layer )                      // can't pair with self
-                continue;
-
             if( m_layers[ii].m_opposite != ii )    // already paired
                 continue;
 
-            if( m_layers[ii].m_type != LT_BACK )
+            if( m_layers[ii].m_type != LT_FRONT && m_layers[ii].m_type != LT_BACK )
+                continue;
+
+            if( m_layers[layer].m_type == m_layers[ii].m_type )
                 continue;
 
             wxString candidate = m_layers[ii].m_userName.AfterFirst( '.' );
@@ -751,9 +751,9 @@ void BOARD::recalcOpposites()
     }
 
     // Match up non-custom-named consecutive front/back user layer pairs
-    for( int layer = User_1; layer < User_9; ++layer )
+    for( int layer = User_1; layer < PCB_LAYER_ID_COUNT - 2; layer += 2 )
     {
-        int next = layer + 1;
+        int next = layer + 2;
 
         // ignore already-matched layers
         if( m_layers[layer].m_opposite != layer || m_layers[next].m_opposite != next )

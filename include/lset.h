@@ -284,6 +284,16 @@ public:
      */
     static int LayerCount( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd, int aCopperLayerCount );
 
+    /**
+     * Clear the copper layers in this set.
+     */
+    LSET& ClearCopperLayers();
+
+    /**
+     * Clear the non-copper layers in this set.
+     */
+    LSET& ClearNonCopperLayers();
+
 #ifndef SWIG
     // Custom iterator to iterate over all set bits
     class KICOMMON_API all_set_layers_iterator : public BASE_SET::set_bits_iterator

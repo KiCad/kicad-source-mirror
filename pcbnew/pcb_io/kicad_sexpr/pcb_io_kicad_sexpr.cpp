@@ -667,7 +667,7 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard ) const
         m_out->Print( "(%d %s %s %s)",
                       layer,
                       m_out->Quotew( LSET::Name( layer ) ).c_str(),
-                      layer >= User_1 && layer <= User_9
+                      layer >= User_1 && IsCopperLayer( layer )
                             ? LAYER::ShowType( aBoard->GetLayerType( layer ) )
                             : "user",
                       m_board->GetLayerName( layer ) == LSET::Name( layer )

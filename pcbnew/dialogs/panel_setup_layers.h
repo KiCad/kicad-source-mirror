@@ -40,14 +40,15 @@ class PANEL_SETUP_BOARD_STACKUP;
  */
 struct PANEL_SETUP_LAYERS_CTLs
 {
-    PANEL_SETUP_LAYERS_CTLs( wxControl* aName, wxCheckBox* aCheckBox, wxControl* aChoiceOrDesc )
+    PANEL_SETUP_LAYERS_CTLs() : name( nullptr ), checkbox( nullptr ), choice( nullptr ) {}
+    PANEL_SETUP_LAYERS_CTLs( wxTextCtrl* aName, wxCheckBox* aCheckBox, wxControl* aChoiceOrDesc )
     {
         name     = aName;
         checkbox = aCheckBox;
         choice   = aChoiceOrDesc;
     }
 
-    wxControl*      name;
+    wxTextCtrl*      name;
     wxCheckBox*     checkbox;
     wxControl*      choice;
 };
@@ -76,9 +77,6 @@ public:
     ///< @return the selected layer mask within the UI checkboxes
     LSET GetUILayerMask();
 
-    ///< @return the layer name within the UI wxTextCtrl
-    wxString GetLayerName( int layer );
-
     /**
      * Called when switching to this tab to make sure that any changes to the copper layer count
      * made on the physical stackup page are reflected here
@@ -94,17 +92,14 @@ public:
     bool IsInitialized() const { return m_initialized; }
 
 private:
-    void setLayerCheckBox( int layer, bool isChecked );
+    void setLayerCheckBox( PCB_LAYER_ID layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
-    void setMandatoryLayerCheckBoxes();
     void setUserDefinedLayerCheckBoxes();
 
     void showBoardLayerNames();
     void showSelectedLayerCheckBoxes( LSET enableLayerMask );
     void showLayerTypes();
 
-    void OnCheckBox( wxCommandEvent& event ) override;
-    void DenyChangeCheckBox( wxCommandEvent& event ) override;
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     virtual void addUserDefinedLayer( wxCommandEvent& aEvent ) override;
@@ -122,10 +117,15 @@ private:
      */
     LSEQ getNonRemovableLayers();
 
-    PANEL_SETUP_LAYERS_CTLs getCTLs( int aLayerNumber );
-    wxControl* getName( int aLayer );
-    wxCheckBox* getCheckBox( int aLayer );
-    wxChoice* getChoice( int aLayer );
+    wxTextCtrl* getName( PCB_LAYER_ID aLayer );
+    wxCheckBox* getCheckBox( PCB_LAYER_ID aLayer );
+    wxChoice* getChoice( PCB_LAYER_ID aLayer );
+
+    void initialize_front_tech_layers();
+    void initialize_layers_controls();
+    void initialize_back_tech_layers();
+
+    void append_user_layer( PCB_LAYER_ID aLayer );
 
 private:
     PCB_EDIT_FRAME*            m_frame;
@@ -133,6 +133,81 @@ private:
     BOARD*                     m_pcb;
     LSET                       m_enabledLayers;
     bool                       m_initialized;
+
+    std::map<PCB_LAYER_ID, PANEL_SETUP_LAYERS_CTLs> m_layersControls;
+
+
+    wxCheckBox*   m_CrtYdFrontCheckBox;
+    wxTextCtrl*   m_CrtYdFrontName;
+    wxStaticText* m_CrtYdFrontStaticText;
+
+    wxCheckBox*   m_FabFrontCheckBox;
+    wxTextCtrl*   m_FabFrontName;
+    wxStaticText* m_FabFrontStaticText;
+
+    wxCheckBox*   m_AdhesFrontCheckBox;
+    wxTextCtrl*   m_AdhesFrontName;
+    wxStaticText* m_AdhesFrontStaticText;
+
+    wxCheckBox*   m_SoldPFrontCheckBox;
+    wxTextCtrl*   m_SoldPFrontName;
+    wxStaticText* m_SoldPFrontStaticText;
+
+    wxCheckBox*   m_SilkSFrontCheckBox;
+    wxTextCtrl*   m_SilkSFrontName;
+    wxStaticText* m_SilkSFrontStaticText;
+
+    wxCheckBox*   m_MaskFrontCheckBox;
+    wxTextCtrl*   m_MaskFrontName;
+    wxStaticText* m_MaskFrontStaticText;
+
+    wxCheckBox*   m_MaskBackCheckBox;
+    wxTextCtrl*   m_MaskBackName;
+    wxStaticText* m_MaskBackStaticText;
+
+    wxCheckBox*   m_SilkSBackCheckBox;
+    wxTextCtrl*   m_SilkSBackName;
+    wxStaticText* m_SilkSBackStaticText;
+
+    wxCheckBox*   m_SoldPBackCheckBox;
+    wxTextCtrl*   m_SoldPBackName;
+    wxStaticText* m_SoldPBackStaticText;
+
+    wxCheckBox*   m_AdhesBackCheckBox;
+    wxTextCtrl*   m_AdhesBackName;
+    wxStaticText* m_AdhesBackStaticText;
+
+    wxCheckBox*   m_FabBackCheckBox;
+    wxTextCtrl*   m_FabBackName;
+    wxStaticText* m_FabBackStaticText;
+
+    wxCheckBox*   m_CrtYdBackCheckBox;
+    wxTextCtrl*   m_CrtYdBackName;
+    wxStaticText* m_CrtYdBackStaticText;
+
+    wxCheckBox*   m_PCBEdgesCheckBox;
+    wxTextCtrl*   m_PCBEdgesName;
+    wxStaticText* m_PCBEdgesStaticText;
+
+    wxCheckBox*   m_MarginCheckBox;
+    wxTextCtrl*   m_MarginName;
+    wxStaticText* m_MarginStaticText;
+
+    wxCheckBox*   m_Eco1CheckBox;
+    wxTextCtrl*   m_Eco1Name;
+    wxStaticText* m_Eco1StaticText;
+
+    wxCheckBox*   m_Eco2CheckBox;
+    wxTextCtrl*   m_Eco2Name;
+    wxStaticText* m_Eco2StaticText;
+
+    wxCheckBox*   m_CommentsCheckBox;
+    wxTextCtrl*   m_CommentsName;
+    wxStaticText* m_CommentsStaticText;
+
+    wxCheckBox*   m_DrawingsCheckBox;
+    wxTextCtrl*   m_DrawingsName;
+    wxStaticText* m_DrawingsStaticText;
 };
 
 

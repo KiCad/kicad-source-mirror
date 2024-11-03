@@ -110,6 +110,12 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     for( int i = 0, id = GERBVIEW_LAYER_ID_START;
          id < GERBER_DRAWLAYERS_COUNT + GERBVIEW_LAYER_ID_START; ++i, ++id )
     {
+        if( !s_defaultTheme.count( id ) )
+        {
+            wxLogTrace( "colors", "Missing default color for gerbview layer %d", id );
+            continue;
+        }
+
         m_params.emplace_back( new COLOR_MAP_PARAM( "gerbview.layers." + std::to_string( i ), id,
                                                     s_defaultTheme.at( id ), &m_colors ) );
     }
@@ -196,6 +202,42 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "board.user_7",        User_7    );
     CLR( "board.user_8",        User_8    );
     CLR( "board.user_9",        User_9    );
+    CLR( "board.user_10",       User_10   );
+    CLR( "board.user_11",       User_11   );
+    CLR( "board.user_12",       User_12   );
+    CLR( "board.user_13",       User_13   );
+    CLR( "board.user_14",       User_14   );
+    CLR( "board.user_15",       User_15   );
+    CLR( "board.user_16",       User_16   );
+    CLR( "board.user_17",       User_17   );
+    CLR( "board.user_18",       User_18   );
+    CLR( "board.user_19",       User_19   );
+    CLR( "board.user_20",       User_20   );
+    CLR( "board.user_21",       User_21   );
+    CLR( "board.user_22",       User_22   );
+    CLR( "board.user_23",       User_23   );
+    CLR( "board.user_24",       User_24   );
+    CLR( "board.user_25",       User_25   );
+    CLR( "board.user_26",       User_26   );
+    CLR( "board.user_27",       User_27   );
+    CLR( "board.user_28",       User_28   );
+    CLR( "board.user_29",       User_29   );
+    CLR( "board.user_30",       User_30   );
+    CLR( "board.user_31",       User_31   );
+    CLR( "board.user_32",       User_32   );
+    CLR( "board.user_33",       User_33   );
+    CLR( "board.user_34",       User_34   );
+    CLR( "board.user_35",       User_35   );
+    CLR( "board.user_36",       User_36   );
+    CLR( "board.user_37",       User_37   );
+    CLR( "board.user_38",       User_38   );
+    CLR( "board.user_39",       User_39   );
+    CLR( "board.user_40",       User_40   );
+    CLR( "board.user_41",       User_41   );
+    CLR( "board.user_42",       User_42   );
+    CLR( "board.user_43",       User_43   );
+    CLR( "board.user_44",       User_44   );
+    CLR( "board.user_45",       User_45   );
 
     // Colors for 3D viewer, which are used as defaults unless overridden by the board
     CLR( "3d_viewer.background_bottom", LAYER_3D_BACKGROUND_BOTTOM );
@@ -369,8 +411,10 @@ COLOR4D COLOR_SETTINGS::GetDefaultColor( int aLayer )
 
         if( p )
             m_defaultColors[aLayer] = p->GetDefault();
+        else if( IsCopperLayer( aLayer ) )
+            m_defaultColors[aLayer] = s_copperColors[aLayer % s_copperColors.size()];
         else
-            m_defaultColors[aLayer] = COLOR4D::UNSPECIFIED;
+            m_defaultColors[aLayer] = s_userColors[aLayer % s_userColors.size()];
     }
 
     return m_defaultColors.at( aLayer );
