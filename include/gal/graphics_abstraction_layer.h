@@ -379,7 +379,10 @@ public:
     /**
      * Set the depth of the layer (position on the z-axis)
      *
-     * @param aLayerDepth the layer depth for the objects.
+     * If you do this, you should consider using a GAL_SCOPED_ATTR to ensure
+     * the depth is reset to the original value.
+     *
+     * @param aLayerDepth the layer depth for the objects. Smaller is closer to the viewer.
      */
     virtual void SetLayerDepth( double aLayerDepth )
     {
@@ -387,6 +390,18 @@ public:
         wxCHECK_MSG( aLayerDepth >= m_depthRange.x, /*void*/, wxT( "SetLayerDepth: above maximum" ) );
 
         m_layerDepth = aLayerDepth;
+    }
+
+    /**
+     * Change the current depth to deeper, so it is possible to draw objects right beneath
+     * other.
+     *
+     * If you do this, you should consider using a GAL_SCOPED_ATTR to ensure the depth
+     * is reset to the original value.
+     */
+    inline void AdvanceDepth()
+    {
+        SetLayerDepth( m_layerDepth - 0.1 );
     }
 
     // ----
@@ -945,32 +960,6 @@ public:
      */
     virtual void DrawCursor( const VECTOR2D& aCursorPosition ) {};
 
-    /**
-     * Change the current depth to deeper, so it is possible to draw objects right beneath
-     * other.
-     */
-    inline void AdvanceDepth()
-    {
-        m_layerDepth -= 0.1;
-    }
-
-    /**
-     * Store current drawing depth on the depth stack.
-     */
-    inline void PushDepth()
-    {
-        m_depthStack.push( m_layerDepth );
-    }
-
-    /**
-     * Restore previously stored drawing depth for the depth stack.
-     */
-    inline void PopDepth()
-    {
-        m_layerDepth = m_depthStack.top();
-        m_depthStack.pop();
-    }
-
     virtual void EnableDepthTest( bool aEnabled = false ) {};
 
     /**
@@ -1057,7 +1046,6 @@ protected:
     GAL_DISPLAY_OPTIONS& m_options;
     UTIL::LINK           m_observerLink;
 
-    std::stack<double>   m_depthStack;         ///< Stored depth values
     VECTOR2I             m_screenSize;         ///< Screen size in screen (wx logical) coordinates
     VECTOR2I             m_bitmapSize;         ///< Bitmap size, in physical pixels
 
@@ -1110,7 +1098,15 @@ protected:
     KICURSOR             m_currentNativeCursor; ///< Current cursor
 
 private:
+
+    inline double getLayerDepth() const
+    {
+        return m_layerDepth;
+    }
+
     TEXT_ATTRIBUTES      m_attributes;
+
+    friend class GAL_SCOPED_ATTRS;
 };
 
 
@@ -1180,26 +1176,28 @@ public:
         IS_STROKE = 4,
         FILL_COLOR = 8,
         IS_FILL = 16,
+        LAYER_DEPTH = 32,
 
         // It is not clear to me that GAL needs to save text attributes.
         // Only BitmapText uses it, and maybe that should be passed in
         // explicitly (like for Draw) - every caller of BitmapText sets
         // the text attributes anyway.
-        // TEXT_ATTRS = 32,
+        // TEXT_ATTRS = 64,
 
+        // Convenience flags
         STROKE = STROKE_WIDTH | STROKE_COLOR | IS_STROKE,
         FILL = FILL_COLOR | IS_FILL,
+        STROKE_FILL = STROKE | FILL,
 
-        ///< Convenience flag for setting both stroke and fill
-        ALL = STROKE | FILL,
+        ALL = STROKE | FILL | LAYER_DEPTH,
     };
 
     /**
      * Instantiates a GAL_SCOPED_ATTRS object, saving the current attributes of the GAL.
      *
-     * By default, all stroke and fill attributes are saved, which is usually what you want.
+     * Specify the flags to save/restore in aFlags.
      */
-    GAL_SCOPED_ATTRS( KIGFX::GAL& aGal, int aFlags = FLAGS::ALL )
+    GAL_SCOPED_ATTRS( KIGFX::GAL& aGal, int aFlags )
         : m_gal( aGal ), m_flags( aFlags )
     {
         // Save what we need to restore later.
@@ -1209,6 +1207,7 @@ public:
         m_isStroke = aGal.GetIsStroke();
         m_fillColor = aGal.GetFillColor();
         m_isFill = aGal.GetIsFill();
+        m_layerDepth = aGal.getLayerDepth();
     }
 
     ~GAL_SCOPED_ATTRS()
@@ -1227,6 +1226,9 @@ public:
             m_gal.SetFillColor( m_fillColor );
         if( m_flags & IS_FILL )
             m_gal.SetIsFill( m_isFill );
+
+        if( m_flags & LAYER_DEPTH )
+            m_gal.SetLayerDepth( m_layerDepth );
     }
 
 private:
@@ -1239,6 +1241,8 @@ private:
 
     COLOR4D m_fillColor;
     bool    m_isFill;
+
+    double m_layerDepth;
 };
 
 

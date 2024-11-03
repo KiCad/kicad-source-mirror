@@ -298,14 +298,13 @@ const BOX2I VIEW_OVERLAY::ViewBBox() const
 
 void VIEW_OVERLAY::ViewDraw( int aLayer, VIEW* aView ) const
 {
-    auto gal = aView->GetGAL();
-    gal->PushDepth();
-    gal->SetLayerDepth( gal->GetMinDepth() );
+    GAL& gal = *aView->GetGAL();
+
+    GAL_SCOPED_ATTRS scopedAttrs( gal, GAL_SCOPED_ATTRS::LAYER_DEPTH );
+    gal.SetLayerDepth( gal.GetMinDepth() );
 
     for( const VIEW_OVERLAY::COMMAND* cmd : m_commands )
         cmd->Execute( aView );
-
-    gal->PopDepth();
 }
 
 

@@ -1417,9 +1417,7 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet,
 
     if( aStrokeTriangulation )
     {
-        COLOR4D oldStrokeColor = m_strokeColor;
-        double  oldLayerDepth = m_layerDepth;
-
+        GAL_SCOPED_ATTRS( *this, GAL_SCOPED_ATTRS::STROKE_COLOR | GAL_SCOPED_ATTRS::LAYER_DEPTH );
         SetLayerDepth( m_layerDepth - 1 );
 
         for( unsigned int j = 0; j < aPolySet.TriangulatedPolyCount(); ++j )
@@ -1435,9 +1433,6 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet,
                 DrawLine( c, a );
             }
         }
-
-        SetStrokeColor( oldStrokeColor );
-        SetLayerDepth( oldLayerDepth );
     }
 }
 

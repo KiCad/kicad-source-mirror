@@ -278,11 +278,11 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         highlightColor = drawColor.Brightened( 0.5 ).WithAlpha( 0.8 );
     }
 
+    KIGFX::GAL_SCOPED_ATTRS scopedAttrs( *gal, KIGFX::GAL_SCOPED_ATTRS::ALL );
     gal->SetFillColor( drawColor );
     gal->SetStrokeColor( borderColor );
     gal->SetIsFill( true );
     gal->SetIsStroke( true );
-    gal->PushDepth();
     gal->SetLayerDepth( gal->GetMinDepth() );
 
     double size       = aView->ToWorld( EDIT_POINT::POINT_SIZE ) / 2.0;
@@ -328,6 +328,4 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             gal->DrawLine( line.GetOrigin().GetPosition(), line.GetEnd().GetPosition() );
         }
     }
-
-    gal->PopDepth();
 }

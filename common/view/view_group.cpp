@@ -145,7 +145,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
     // Now draw the layers in sorted order
 
-    gal->PushDepth();
+    GAL_SCOPED_ATTRS scopedAttrs( *gal, GAL_SCOPED_ATTRS::LAYER_DEPTH );
 
     for( int i = 0; i < layers_count; i++ )
     {
@@ -188,8 +188,6 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
             }
         }
     }
-
-    gal->PopDepth();
 }
 
 

@@ -2283,7 +2283,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         VECTOR2I pt1 = bbox.GetOrigin();
         VECTOR2I pt2 = bbox.GetEnd();
 
-        m_gal->PushDepth();
+        GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL );
         m_gal->AdvanceDepth();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
@@ -2293,7 +2293,6 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
         std::swap( pt1.x, pt2.x );
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
-        m_gal->PopDepth();
     }
 }
 
@@ -2758,8 +2757,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         VECTOR2I pt1 = bbox.GetOrigin();
         VECTOR2I pt2 = bbox.GetEnd();
 
-        m_gal->PushDepth();
-        m_gal->AdvanceDepth();
+        GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL );
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
         m_gal->SetStrokeColor( m_schSettings.GetLayerColor( layer ) );
@@ -2768,7 +2766,6 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
         std::swap( pt1.x, pt2.x );
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
-        m_gal->PopDepth();
     }
 }
 

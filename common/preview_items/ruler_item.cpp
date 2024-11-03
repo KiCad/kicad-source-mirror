@@ -306,7 +306,7 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     RENDER_SETTINGS* rs = aView->GetPainter()->GetSettings();
     bool             drawingDropShadows = ( aLayer == getShadowLayer( gal ) );
 
-    gal->PushDepth();
+    GAL_SCOPED_ATTRS scopedAttrs( *gal, GAL_SCOPED_ATTRS::ALL );
     gal->SetLayerDepth( gal->GetMinDepth() );
 
     VECTOR2D origin = m_geomMgr.GetOrigin();
@@ -368,7 +368,6 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         // draw the back of the origin "crosshair"
         gal->DrawLine( origin, origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
     }
-    gal->PopDepth();
 }
 
 
