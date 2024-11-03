@@ -42,7 +42,7 @@ public:
 
     struct CLUSTER
     {
-        const ITEM* m_key;
+        const ITEM* m_key = nullptr;
         std::set<ITEM*> m_items;
     };
 

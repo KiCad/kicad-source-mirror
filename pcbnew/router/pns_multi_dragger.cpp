@@ -820,7 +820,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                         DIRECTION_45 curDir( sdrag );
                         auto ang = refDir.Angle( curDir );
 
-                        if( ang == DIRECTION_45::ANG_HALF_FULL || DIRECTION_45::ANG_STRAIGHT )
+                        if( ang & ( DIRECTION_45::ANG_HALF_FULL | DIRECTION_45::ANG_STRAIGHT ) )
                         {
                             int dist = lastPreDrag.LineDistance(
                                     l.preDragLine.CPoint( l.leaderSegIndex ), true );

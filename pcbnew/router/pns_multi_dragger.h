@@ -127,14 +127,14 @@ private:
     struct MDRAG_LINE
     {
 
-        ITEM* leaderItem;
+        ITEM* leaderItem = nullptr;
         std::vector<PNS::ITEM*> originalLeaders;
 
 
-        bool isStrict;
-        bool isMidSeg;
-        bool isCorner;
-        bool isDraggable;
+        bool isStrict = false;
+        bool isMidSeg = false;
+        bool isCorner = false;
+        bool isDraggable = false;
 
         int leaderSegIndex = -1;
         bool cornerIsLast = false;
