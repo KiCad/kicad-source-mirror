@@ -264,8 +264,8 @@ option( KICAD_GAL_PROFILE
     OFF )
 
 option( KICAD_IPC_API
-    "Enable experimental IPC API"
-    OFF )
+    "Enable IPC API"
+    ON )
 
 option( KICAD_IDF_TOOLS
     "Build additional idf tools"
