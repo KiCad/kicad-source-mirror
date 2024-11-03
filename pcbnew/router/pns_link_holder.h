@@ -39,18 +39,15 @@ public:
     ///< Add a reference to an item registered in a #NODE that is a part of this line.
     void Link( LINKED_ITEM* aLink )
     {
-#ifdef DEBUG
-        assert ( !alg::contains( m_links, aLink ) );
-#endif
+        wxCHECK_MSG( !alg::contains( m_links, aLink ), /* void */,
+                     "Trying to link an item that is already linked" );
         m_links.push_back( aLink );
     }
 
     void Unlink( const LINKED_ITEM* aLink )
     {
-#ifdef DEBUG
-        assert ( alg::contains( m_links, aLink ) );
-#endif
-
+        wxCHECK_MSG( alg::contains( m_links, aLink ), /* void */,
+                     "Trying to unlink an item that is not linked" );
         alg::delete_matching( m_links, aLink );
     }
 
