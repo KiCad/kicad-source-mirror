@@ -346,14 +346,14 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
             continue;
         }
 
-        auto& match = current.m_matches[current.m_currentMatch];
-
         if( current.m_currentMatch >= 0 && current.m_currentMatch >= current.m_matches.size() )
         {
             wxLogTrace( traceTopoMatch, wxT("stk: No more matches, going up [level=%d]\n"), (int) stack.size() );
             stack.pop_back();
             continue;
         }
+
+        auto& match = current.m_matches[current.m_currentMatch];
 
 
 
