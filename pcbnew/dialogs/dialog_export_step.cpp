@@ -190,6 +190,53 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         tmpStr << m_userOriginY;
         m_STEP_Yorg->SetValue( tmpStr );
     }
+    else
+    {
+        if( m_job->m_3dparams.m_UseDrillOrigin )
+            m_rbDrillAndPlotOrigin->SetValue( true );
+        else if( m_job->m_3dparams.m_UseGridOrigin )
+            m_rbGridOrigin->SetValue( true );
+        else if( m_job->m_3dparams.m_Origin.x == 0.0 && m_job->m_3dparams.m_Origin.y == 0.0 )
+            m_rbBoardCenterOrigin->SetValue( true );
+        else
+            m_rbUserDefinedOrigin->SetValue( true );
+
+        m_userOriginX = m_job->m_3dparams.m_Origin.x;
+        m_userOriginY = m_job->m_3dparams.m_Origin.y;
+
+        m_noUnspecified = m_job->m_3dparams.m_IncludeUnspecified;
+        m_noDNP = m_job->m_3dparams.m_IncludeDNP;
+
+        m_txtNetFilter->SetValue( m_job->m_3dparams.m_NetFilter );
+        m_cbOptimizeStep->SetValue( m_job->m_3dparams.m_OptimizeStep );
+        m_cbExportBody->SetValue( m_job->m_3dparams.m_ExportBoardBody );
+        m_cbExportComponents->SetValue( m_job->m_3dparams.m_ExportComponents );
+        m_cbExportTracks->SetValue( m_job->m_3dparams.m_ExportTracksVias );
+        m_cbExportPads->SetValue( m_job->m_3dparams.m_ExportPads );
+        m_cbExportZones->SetValue( m_job->m_3dparams.m_ExportZones );
+        m_cbExportInnerCopper->SetValue( m_job->m_3dparams.m_ExportInnerCopper );
+        m_cbExportSilkscreen->SetValue( m_job->m_3dparams.m_ExportSilkscreen );
+        m_cbExportSoldermask->SetValue( m_job->m_3dparams.m_ExportSoldermask );
+        m_cbFuseShapes->SetValue( m_job->m_3dparams.m_FuseShapes );
+        m_cbRemoveUnspecified->SetValue( !m_job->m_3dparams.m_IncludeUnspecified );
+        m_cbRemoveDNP->SetValue( !m_job->m_3dparams.m_IncludeDNP );
+        m_cbSubstModels->SetValue( m_job->m_3dparams.m_SubstModels );
+        m_cbOverwriteFile->SetValue( m_job->m_3dparams.m_Overwrite );
+
+        m_txtComponentFilter->SetValue( m_job->m_3dparams.m_ComponentFilter );
+
+        wxCommandEvent dummy;
+        DIALOG_EXPORT_STEP::onCbExportComponents( dummy );
+
+        m_STEP_OrgUnitChoice->SetSelection( m_originUnits );
+
+        wxString tmpStr;
+        tmpStr << m_userOriginX;
+        m_STEP_Xorg->SetValue( tmpStr );
+        tmpStr = wxEmptyString;
+        tmpStr << m_userOriginY;
+        m_STEP_Yorg->SetValue( tmpStr );
+    }
 
     wxString bad_scales;
     size_t   bad_count = 0;
@@ -386,7 +433,7 @@ void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
                       + _( "BREP (OCCT) files" )
                       + AddFileExtListToFilter( { FILEEXT::BrepFileExtension } )  + "|"
                       + _( "PLY files" )
-                      + AddFileExtListToFilter( { FILEEXT::PlyFileExtension} ) + "|" 
+                      + AddFileExtListToFilter( { FILEEXT::PlyFileExtension} ) + "|"
                       + _( "STL files" )
                       + AddFileExtListToFilter( { FILEEXT::StlFileExtension} );
     // clang-format on
@@ -734,42 +781,43 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
         switch( GetOriginOption() )
         {
-        case STEP_ORIGIN_0:
-            break;
-        case STEP_ORIGIN_PLOT_AXIS:
-            m_job->m_3dparams.m_UseDrillOrigin = true;
-            break;
-        case STEP_ORIGIN_GRID_AXIS:
-            m_job->m_3dparams.m_UseGridOrigin = true;
-            break;
-        case STEP_ORIGIN_USER:
-        {
-            double xOrg = GetXOrg();
-            double yOrg = GetYOrg();
-
-            if( GetOrgUnitsChoice() == 1 )
+            case STEP_ORIGIN_0:
+                break;
+            case STEP_ORIGIN_PLOT_AXIS:
+                m_job->m_3dparams.m_UseDrillOrigin = true;
+                break;
+            case STEP_ORIGIN_GRID_AXIS:
+                m_job->m_3dparams.m_UseGridOrigin = true;
+                break;
+            case STEP_ORIGIN_USER:
             {
-                // selected reference unit is in inches, and STEP units are mm
-                xOrg *= 25.4;
-                yOrg *= 25.4;
+                double xOrg = GetXOrg();
+                double yOrg = GetYOrg();
+
+                if( GetOrgUnitsChoice() == 1 )
+                {
+                    // selected reference unit is in inches, and STEP units are mm
+                    xOrg *= 25.4;
+                    yOrg *= 25.4;
+                }
+
+                m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
+                break;
             }
 
-            m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
-            break;
+            case STEP_ORIGIN_BOARD_CENTER:
+            {
+                BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true );
+                double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
+                double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
+                LOCALE_IO dummy;
+
+                m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
+                break;
+            }
         }
 
-        case STEP_ORIGIN_BOARD_CENTER:
-        {
-            BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true );
-            double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
-            double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
-            LOCALE_IO dummy;
-
-            m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
-            break;
-        }
-        }
-
+        Close();
     }
 }
 
