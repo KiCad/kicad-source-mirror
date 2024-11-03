@@ -62,12 +62,6 @@ using namespace std::placeholders;
 const unsigned int PCB_POINT_EDITOR::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
 // Few constants to avoid using bare numbers for point indices
-enum SEG_POINTS
-{
-    SEG_START, SEG_END
-};
-
-
 enum RECT_POINTS
 {
     RECT_TOP_LEFT,
@@ -107,52 +101,6 @@ enum TEXTBOX_POINT_COUNT
 {
     WHEN_RECTANGLE = RECT_MAX_POINTS,
     WHEN_POLYGON = 0,
-};
-
-
-class SEGMENT_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
-{
-public:
-    SEGMENT_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aSegment ) : m_segment( aSegment )
-    {
-        wxASSERT( m_segment.GetShape() == SHAPE_T::SEGMENT );
-    }
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.AddPoint( m_segment.GetStart() );
-        aPoints.AddPoint( m_segment.GetEnd() );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        CHECK_POINT_COUNT( aPoints, 2 );
-
-        aPoints.Point( SEG_START ) = m_segment.GetStart();
-        aPoints.Point( SEG_END ) = m_segment.GetEnd();
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
-                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
-    {
-        CHECK_POINT_COUNT( aPoints, 2 );
-
-        if( isModified( aEditedPoint, aPoints.Point( SEG_START ) ) )
-            m_segment.SetStart( aPoints.Point( SEG_START ).GetPosition() );
-
-        else if( isModified( aEditedPoint, aPoints.Point( SEG_END ) ) )
-            m_segment.SetEnd( aPoints.Point( SEG_END ).GetPosition() );
-    }
-
-    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
-                                         EDIT_POINTS&      aPoints ) const override
-    {
-        // Select the other end of line
-        return aPoints.Next( aEditedPoint )->GetPosition();
-    }
-
-private:
-    PCB_SHAPE& m_segment;
 };
 
 
@@ -842,64 +790,6 @@ private:
 };
 
 
-class CIRCLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
-{
-    enum CIRCLE_POINTS
-    {
-        CIRC_CENTER,
-        CIRC_END,
-    };
-
-public:
-    CIRCLE_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aCircle ) : m_circle( aCircle )
-    {
-        wxASSERT( m_circle.GetShape() == SHAPE_T::CIRCLE );
-    }
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.AddPoint( m_circle.GetCenter() );
-        aPoints.AddPoint( m_circle.GetEnd() );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        CHECK_POINT_COUNT( aPoints, 2 );
-
-        aPoints.Point( CIRC_CENTER ).SetPosition( m_circle.GetCenter() );
-        aPoints.Point( CIRC_END ).SetPosition( m_circle.GetEnd() );
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
-                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
-    {
-        CHECK_POINT_COUNT( aPoints, 2 );
-
-        const VECTOR2I& center = aPoints.Point( CIRC_CENTER ).GetPosition();
-        const VECTOR2I& end = aPoints.Point( CIRC_END ).GetPosition();
-
-        if( isModified( aEditedPoint, aPoints.Point( CIRC_CENTER ) ) )
-        {
-            VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - m_circle.GetCenter();
-            m_circle.Move( moveVector );
-        }
-        else
-        {
-            m_circle.SetEnd( VECTOR2I( end.x, end.y ) );
-        }
-    }
-
-    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
-                                         EDIT_POINTS&      aPoints ) const override
-    {
-        return aPoints.Point( CIRC_CENTER ).GetPosition();
-    }
-
-private:
-    PCB_SHAPE& m_circle;
-};
-
-
 class ZONE_POINT_EDIT_BEHAVIOR : public POLYGON_POINT_EDIT_BEHAVIOR
 {
 public:
@@ -921,75 +811,6 @@ public:
 
 private:
     ZONE& m_zone;
-};
-
-
-class BEZIER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
-{
-    enum BEZIER_POINTS
-    {
-        BEZIER_START,
-        BEZIER_CTRL_PT1,
-        BEZIER_CTRL_PT2,
-        BEZIER_END,
-
-        BEZIER_MAX_POINTS
-    };
-
-public:
-    BEZIER_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aBezier ) : m_bezier( aBezier )
-    {
-        wxASSERT( m_bezier.GetShape() == SHAPE_T::BEZIER );
-    }
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.AddPoint( m_bezier.GetStart() );
-        aPoints.AddPoint( m_bezier.GetBezierC1() );
-        aPoints.AddPoint( m_bezier.GetBezierC2() );
-        aPoints.AddPoint( m_bezier.GetEnd() );
-
-        aPoints.AddIndicatorLine( aPoints.Point( BEZIER_START ), aPoints.Point( BEZIER_CTRL_PT1 ) );
-        aPoints.AddIndicatorLine( aPoints.Point( BEZIER_CTRL_PT2 ), aPoints.Point( BEZIER_END ) );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        CHECK_POINT_COUNT( aPoints, BEZIER_MAX_POINTS );
-
-        aPoints.Point( BEZIER_START ).SetPosition( m_bezier.GetStart() );
-        aPoints.Point( BEZIER_CTRL_PT1 ).SetPosition( m_bezier.GetBezierC1() );
-        aPoints.Point( BEZIER_CTRL_PT2 ).SetPosition( m_bezier.GetBezierC2() );
-        aPoints.Point( BEZIER_END ).SetPosition( m_bezier.GetEnd() );
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
-                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
-    {
-        CHECK_POINT_COUNT( aPoints, BEZIER_MAX_POINTS );
-
-        if( isModified( aEditedPoint, aPoints.Point( BEZIER_START ) ) )
-        {
-            m_bezier.SetStart( aPoints.Point( BEZIER_START ).GetPosition() );
-        }
-        else if( isModified( aEditedPoint, aPoints.Point( BEZIER_CTRL_PT1 ) ) )
-        {
-            m_bezier.SetBezierC1( aPoints.Point( BEZIER_CTRL_PT1 ).GetPosition() );
-        }
-        else if( isModified( aEditedPoint, aPoints.Point( BEZIER_CTRL_PT2 ) ) )
-        {
-            m_bezier.SetBezierC2( aPoints.Point( BEZIER_CTRL_PT2 ).GetPosition() );
-        }
-        else if( isModified( aEditedPoint, aPoints.Point( BEZIER_END ) ) )
-        {
-            m_bezier.SetEnd( aPoints.Point( BEZIER_END ).GetPosition() );
-        }
-
-        m_bezier.RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
-    }
-
-private:
-    PCB_SHAPE& m_bezier;
 };
 
 
@@ -1125,34 +946,12 @@ private:
 };
 
 
-class TABLECELL_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+class PCB_TABLECELL_POINT_EDIT_BEHAVIOR : public EDA_TABLECELL_POINT_EDIT_BEHAVIOR
 {
-    enum TABLECELL_POINTS
-    {
-        COL_WIDTH,
-        ROW_HEIGHT,
-
-        TABLECELL_MAX_POINTS,
-    };
-
 public:
-    TABLECELL_POINT_EDIT_BEHAVIOR( PCB_TABLECELL& aCell ) : m_cell( aCell ) {}
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
+    PCB_TABLECELL_POINT_EDIT_BEHAVIOR( PCB_TABLECELL& aCell ) :
+            EDA_TABLECELL_POINT_EDIT_BEHAVIOR( aCell ), m_cell( aCell )
     {
-        aPoints.AddPoint( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
-        aPoints.AddPoint( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        CHECK_POINT_COUNT( aPoints, TABLECELL_MAX_POINTS );
-
-        aPoints.Point( COL_WIDTH )
-                .SetPosition( m_cell.GetEndX(),
-                              m_cell.GetEndY() - m_cell.GetRectangleHeight() / 2 );
-        aPoints.Point( ROW_HEIGHT )
-                .SetPosition( m_cell.GetEndX() - m_cell.GetRectangleWidth() / 2, m_cell.GetEndY() );
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -1161,7 +960,6 @@ public:
         CHECK_POINT_COUNT( aPoints, TABLECELL_MAX_POINTS );
 
         PCB_TABLE& table = static_cast<PCB_TABLE&>( *m_cell.GetParent() );
-
         aCommit.Modify( &table );
         aUpdatedItems.push_back( &table );
 
@@ -1175,7 +973,6 @@ public:
                 colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
 
             table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
-            table.Normalize();
         }
         else if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
         {
@@ -1187,8 +984,9 @@ public:
                 rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
 
             table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
-            table.Normalize();
         }
+
+        table.Normalize();
     }
 
 private:
@@ -2110,7 +1908,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         switch( shape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            m_editorBehavior = std::make_unique<SEGMENT_POINT_EDIT_BEHAVIOR>( *shape );
+            m_editorBehavior = std::make_unique<EDA_SEGMENT_POINT_EDIT_BEHAVIOR>( *shape );
             break;
         case SHAPE_T::RECTANGLE:
             m_editorBehavior = std::make_unique<RECTANGLE_POINT_EDIT_BEHAVIOR>( *shape );
@@ -2121,7 +1919,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::CIRCLE:
-            m_editorBehavior = std::make_unique<CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
+            m_editorBehavior = std::make_unique<EDA_CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
             break;
 
         case SHAPE_T::POLY:
@@ -2129,7 +1927,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::BEZIER:
-            m_editorBehavior = std::make_unique<BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
+            m_editorBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
             break;
 
         default:        // suppress warnings
@@ -2142,7 +1940,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_TABLECELL_T:
     {
         PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( aItem );
-        m_editorBehavior = std::make_unique<TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
+        m_editorBehavior = std::make_unique<PCB_TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
         break;
     }
 

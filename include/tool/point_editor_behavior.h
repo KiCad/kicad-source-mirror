@@ -183,3 +183,142 @@ public:
         wxASSERT( aPolygon.GetShape() == SHAPE_T::POLY );
     }
 };
+
+
+/**
+ * "Standard" segment editing behavior for EDA_SHAPE segments.
+ */
+class EDA_SEGMENT_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    EDA_SEGMENT_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aSegment ) : m_segment( aSegment )
+    {
+        wxASSERT( aSegment.GetShape() == SHAPE_T::SEGMENT );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override;
+
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                         EDIT_POINTS&      aPoints ) const override;
+
+protected:
+    enum SEGMENT_POINTS
+    {
+        SEGMENT_START,
+        SEGMENT_END,
+
+        SEGMENT_MAX_POINTS,
+    };
+
+private:
+    EDA_SHAPE& m_segment;
+};
+
+
+/**
+ * "Standard" circle editing behavior for EDA_SHAPE circles.
+ */
+class EDA_CIRCLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    EDA_CIRCLE_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aCircle ) : m_circle( aCircle )
+    {
+        wxASSERT( aCircle.GetShape() == SHAPE_T::CIRCLE );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override;
+
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                         EDIT_POINTS&      aPoints ) const override;
+
+protected:
+    enum CIRCLE_POINTS
+    {
+        CIRC_CENTER,
+        CIRC_END,
+
+        CIRC_MAX_POINTS,
+    };
+
+private:
+    EDA_SHAPE& m_circle;
+};
+
+
+/**
+ * "Standard" bezier editing behavior for EDA_SHAPE beziers.
+ */
+class EDA_BEZIER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    EDA_BEZIER_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aBezier ) : m_bezier( aBezier )
+    {
+        wxASSERT( aBezier.GetShape() == SHAPE_T::BEZIER );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override;
+
+protected:
+    enum BEZIER_POINTS
+    {
+        BEZIER_START,
+        BEZIER_CTRL_PT1,
+        BEZIER_CTRL_PT2,
+        BEZIER_END,
+
+        BEZIER_MAX_POINTS
+    };
+
+private:
+    EDA_SHAPE& m_bezier;
+};
+
+
+/**
+ * "Standard" table-cell editing behavior.
+ *
+ * This works over the EDA_SHAPE basis of a SCH/PCB_TABLECELL.
+ * The cells and tables themselves aren't (yet) polymorphic, so the implmentation
+ * has to provide UpdateItem() to handle the actual update.
+ */
+class EDA_TABLECELL_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    EDA_TABLECELL_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aCell ) : m_cell( aCell )
+    {
+        // While PCB_TEXTBOXES are not always RECTANGLEs, they are when they
+        // are TABLECELLs.
+        wxASSERT( aCell.GetShape() == SHAPE_T::RECTANGLE );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override;
+
+protected:
+    enum TABLECELL_POINTS
+    {
+        COL_WIDTH,
+        ROW_HEIGHT,
+
+        TABLECELL_MAX_POINTS,
+    };
+
+private:
+    EDA_SHAPE& m_cell;
+};

@@ -62,12 +62,6 @@ enum ARC_POINTS
 };
 
 
-enum CIRCLE_POINTS
-{
-    CIRC_CENTER, CIRC_END
-};
-
-
 enum RECTANGLE_POINTS
 {
     RECT_TOPLEFT, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT, RECT_CENTER
@@ -94,15 +88,6 @@ enum TABLECELL_POINTS
 enum LINE_POINTS
 {
     LINE_START, LINE_END
-};
-
-
-enum BEZIER_POINTS
-{
-    BEZIER_START,
-    BEZIER_CTRL_PT1,
-    BEZIER_CTRL_PT2,
-    BEZIER_END
 };
 
 
@@ -249,85 +234,6 @@ private:
 };
 
 
-class CIRCLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
-{
-public:
-    CIRCLE_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aCircle ) :
-            m_circle( aCircle )
-    {
-        wxASSERT( m_circle.GetShape() == SHAPE_T::CIRCLE );
-    }
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.AddPoint( m_circle.GetPosition() );
-        aPoints.AddPoint( m_circle.GetEnd() );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.Point( CIRC_CENTER ).SetPosition( m_circle.GetPosition() );
-        aPoints.Point( CIRC_END ).SetPosition( m_circle.GetEnd() );
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
-                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
-    {
-        m_circle.SetPosition( aPoints.Point( CIRC_CENTER ).GetPosition() );
-        m_circle.SetEnd( aPoints.Point( CIRC_END ).GetPosition() );
-
-        aUpdatedItems.push_back( &m_circle );
-    }
-private:
-    SCH_SHAPE& m_circle;
-};
-
-
-class BEZIER_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
-{
-public:
-    BEZIER_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aBezier ) :
-            m_bezier( aBezier )
-    {
-        wxASSERT( m_bezier.GetShape() == SHAPE_T::BEZIER );
-    }
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.AddPoint( m_bezier.GetStart() );
-        aPoints.AddPoint( m_bezier.GetBezierC1() );
-        aPoints.AddPoint( m_bezier.GetBezierC2() );
-        aPoints.AddPoint( m_bezier.GetEnd() );
-
-        aPoints.AddIndicatorLine( aPoints.Point( BEZIER_START ), aPoints.Point( BEZIER_CTRL_PT1 ) );
-        aPoints.AddIndicatorLine( aPoints.Point( BEZIER_END ), aPoints.Point( BEZIER_CTRL_PT2 ) );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.Point( BEZIER_START ).SetPosition( m_bezier.GetStart() );
-        aPoints.Point( BEZIER_CTRL_PT1 ).SetPosition( m_bezier.GetBezierC1() );
-        aPoints.Point( BEZIER_CTRL_PT2 ).SetPosition( m_bezier.GetBezierC2() );
-        aPoints.Point( BEZIER_END ).SetPosition( m_bezier.GetEnd() );
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
-                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
-    {
-        m_bezier.SetStart( aPoints.Point( BEZIER_START ).GetPosition() );
-        m_bezier.SetBezierC1( aPoints.Point( BEZIER_CTRL_PT1 ).GetPosition() );
-        m_bezier.SetBezierC2( aPoints.Point( BEZIER_CTRL_PT2 ).GetPosition() );
-        m_bezier.SetEnd( aPoints.Point( BEZIER_END ).GetPosition() );
-
-        m_bezier.RebuildBezierToSegmentsPointsList( m_bezier.GetWidth() / 2 );
-
-        aUpdatedItems.push_back( &m_bezier );
-    }
-private:
-    SCH_SHAPE& m_bezier;
-};
-
-
 class BITMAP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
@@ -445,23 +351,12 @@ private:
 };
 
 
-class TABLECELL_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+class SCH_TABLECELL_POINT_EDIT_BEHAVIOR : public EDA_TABLECELL_POINT_EDIT_BEHAVIOR
 {
 public:
-    TABLECELL_POINT_EDIT_BEHAVIOR( SCH_TABLECELL& aCell ) : m_cell( aCell ) {}
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
+    SCH_TABLECELL_POINT_EDIT_BEHAVIOR( SCH_TABLECELL& aCell ) :
+            EDA_TABLECELL_POINT_EDIT_BEHAVIOR( aCell ), m_cell( aCell )
     {
-        aPoints.AddPoint( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
-        aPoints.AddPoint( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
-    }
-
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        aPoints.Point( COL_WIDTH )
-                .SetPosition( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
-        aPoints.Point( ROW_HEIGHT )
-                .SetPosition( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -974,7 +869,7 @@ void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
             m_editBehavior = std::make_unique<ARC_POINT_EDIT_BEHAVIOR>( *shape );
             break;
         case SHAPE_T::CIRCLE:
-            m_editBehavior = std::make_unique<CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
+            m_editBehavior = std::make_unique<EDA_CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
             break;
         case SHAPE_T::RECTANGLE:
             m_editBehavior = std::make_unique<RECTANGLE_POINT_EDIT_BEHAVIOR>( *shape, *m_frame );
@@ -983,7 +878,7 @@ void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
             m_editBehavior = std::make_unique<EDA_POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
             break;
         case SHAPE_T::BEZIER:
-            m_editBehavior = std::make_unique<BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
+            m_editBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>( *shape );
             break;
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
@@ -1007,7 +902,7 @@ void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
     case SCH_TABLECELL_T:
     {
         SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( aItem );
-        m_editBehavior = std::make_unique<TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
+        m_editBehavior = std::make_unique<SCH_TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
         break;
     }
     case SCH_SHEET_T:
