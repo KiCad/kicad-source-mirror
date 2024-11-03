@@ -348,20 +348,20 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         drawBacksideTicks( aView, origin, rulerVec, majorTickLen, 2, drawingDropShadows );
     }
 
-    if( m_showOriginArrowHead )
+    if( m_showEndArrowHead )
     {
         const EDA_ANGLE arrowAngle{ 30.0 };
         VECTOR2D        arrowHead = rulerVec;
         RotatePoint( arrowHead, arrowAngle );
-        arrowHead = arrowHead.Resize( -majorTickLen );
+        arrowHead = arrowHead.Resize( majorTickLen );
 
-        gal->DrawLine( origin, origin - arrowHead );
+        gal->DrawLine( end, end - arrowHead );
 
         arrowHead = rulerVec;
         RotatePoint( arrowHead, -arrowAngle );
-        arrowHead = arrowHead.Resize( -majorTickLen );
+        arrowHead = arrowHead.Resize( majorTickLen );
 
-        gal->DrawLine( origin, origin - arrowHead );
+        gal->DrawLine( end, end - arrowHead );
     }
     else
     {

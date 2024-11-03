@@ -170,7 +170,7 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
     // Some colour to make it obviously not just a ruler
     ruler.SetColor( view.GetPainter()->GetSettings()->GetLayerColor( LAYER_ANCHOR ) );
     ruler.SetShowTicks( false );
-    ruler.SetShowOriginArrowHead( true );
+    ruler.SetShowEndArrowHead( true );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
@@ -292,18 +292,17 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
         // second click or mouse up after drag ends
         else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
         {
-            // The reverse vector, as (I think) it's clearer if the arrow points to
-            // the thing that's going to move, and it's more natural to start drawing
-            // at the item you just selected (which is the one that will move)
-            const VECTOR2I    origVector = twoPtMgr.GetOrigin() - twoPtMgr.GetEnd();
+            // This is the forward vector from the ruler item
+            const VECTOR2I    origVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
             VECTOR2I          offsetVector = origVector;
+            // Start with the value of that vector in the dialog (will match the rule HUD)
             DIALOG_SET_OFFSET dlg( *frame(), offsetVector, false );
 
             int ret = dlg.ShowModal();
 
             if( ret == wxID_OK )
             {
-                const VECTOR2I move = offsetVector - origVector;
+                const VECTOR2I move = origVector - offsetVector;
 
                 applyVector( move );
 

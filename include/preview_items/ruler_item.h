@@ -60,7 +60,7 @@ public:
 
     void SetShowTicks( bool aShow ) { m_showTicks = aShow; }
 
-    void SetShowOriginArrowHead( bool aShow ) { m_showOriginArrowHead = aShow; }
+    void SetShowEndArrowHead( bool aShow ) { m_showEndArrowHead = aShow; }
 
     /**
      * Get the strings for the dimensions of the ruler
@@ -103,7 +103,7 @@ private:
     bool                              m_flipY;
     std::optional<COLOR4D>            m_color;
     bool                              m_showTicks = true;
-    bool                              m_showOriginArrowHead = false;
+    bool                              m_showEndArrowHead = false;
 };
 
 } // PREVIEW
