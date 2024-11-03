@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-10-21 21:10+0000\n"
+"PO-Revision-Date: 2024-11-04 09:00+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.8.2\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -1816,9 +1816,8 @@ msgid "&Cancel"
 msgstr "&Avbryt"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
-#, fuzzy
 msgid "&Open Anyway"
-msgstr "Öppna ändå"
+msgstr "&Öppna ändå"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
@@ -1833,23 +1832,20 @@ msgid "&Save"
 msgstr "&Spara"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
-#, fuzzy
 msgid "&Discard Changes"
-msgstr "Ignorera ändringar"
+msgstr "&Ignorera ändringar"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
-#, fuzzy
 msgid "&Apply to all"
-msgstr "Tillämpa på alla"
+msgstr "&Tillämpa på alla"
 
 #: common/confirm.cpp:123
 msgid "Your current changes will be permanently lost."
 msgstr "Dina nuvarande ändringar kommer att förloras permanent."
 
 #: common/confirm.cpp:124
-#, fuzzy
 msgid "&Revert"
-msgstr "Aldrig"
+msgstr "&Återställ"
 
 #: common/confirm.cpp:150 common/dialog_about/dialog_about_base.cpp:94
 #: common/dialog_shim.cpp:764
@@ -6852,14 +6848,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Lyckades inte slå upp fjärrförvar '%s'"
 
 #: common/git/git_pull_handler.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Kunde inte ansluta till fjärrförvar '%s'"
+msgstr "Kunde inte ansluta till fjärrförvar '%s': %s"
 
 #: common/git/git_pull_handler.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Kunde inte hämta data från fjärrförvar '%s'"
+msgstr "Kunde inte hämta data från fjärrförvar '%s': %s"
 
 #: common/git/git_pull_handler.cpp:94
 msgid "Could not read 'FETCH_HEAD'"
@@ -6919,14 +6915,14 @@ msgid "Could not lookup remote"
 msgstr "Kunde inte slå upp fjärrförvar"
 
 #: common/git/git_push_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "Kunde inte ansluta till fjärrförvar '%s'"
+msgstr "Kunde inte ansluta till fjärrförvar: %s"
 
 #: common/git/git_push_handler.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Kunde inte skicka till fjärrförvar"
+msgstr "Kunde inte skicka till fjärrförvar: %s"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
@@ -7502,7 +7498,7 @@ msgstr "Kretsschema: Utför elektrisk regelkontroll"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Special: Kör kommando"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -7856,12 +7852,12 @@ msgstr "DRC-fel"
 #: common/layer_id.cpp:186
 #, fuzzy
 msgid "DRC shape 1"
-msgstr "Rektangulära former:"
+msgstr "Designregelkontroll form 1"
 
 #: common/layer_id.cpp:187
 #, fuzzy
 msgid "DRC shape 2"
-msgstr "Rektangulära former:"
+msgstr "Designregelkontroll form 2"
 
 #: common/layer_id.cpp:188
 msgid "DRC exclusions"
@@ -8529,48 +8525,41 @@ msgid "Increment"
 msgstr "Ökningssteg:"
 
 #: common/tool/actions.cpp:342
-#, fuzzy
 msgid "Increment the selected item(s)"
-msgstr "Radera valda objekt"
+msgstr "Räkna upp valt(valda) objekt"
 
 #: common/tool/actions.cpp:347
 #, fuzzy
 msgid "Increment Primary"
-msgstr "Ökningssteg:"
+msgstr "Räkna upp primärfält"
 
 #: common/tool/actions.cpp:348
-#, fuzzy
 msgid "Increment the primary field of the selected item(s)"
-msgstr "Skapar grafiska linjer från urvalet"
+msgstr "Räkna upp det valda objektets/objektens primära fält"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Decrement Primary"
-msgstr "Ökningssteg:"
+msgstr "Räkna ner primärfält"
 
 #: common/tool/actions.cpp:355
-#, fuzzy
 msgid "Decrement the primary field of the selected item(s)"
-msgstr "Duplicerar valda objekt"
+msgstr "Räkna ner det valda objektets/objektens primära fält"
 
 #: common/tool/actions.cpp:361
-#, fuzzy
 msgid "Increment Secondary"
-msgstr "Ökningssteg:"
+msgstr "Räkna upp sekundärfält"
 
 #: common/tool/actions.cpp:362
-#, fuzzy
 msgid "Increment the secondary field of the selected item(s)"
-msgstr "Skapar grafiska linjer från urvalet"
+msgstr "Räkna upp det valda objektets/objektens sekundära fält"
 
 #: common/tool/actions.cpp:368
 msgid "Decrement Secondary"
-msgstr ""
+msgstr "Räkna ner sekundärfält"
 
 #: common/tool/actions.cpp:369
-#, fuzzy
 msgid "Decrement the secondary field of the selected item(s)"
-msgstr "Skapar grafiska linjer från urvalet"
+msgstr "Räkna ner det valda objektets/objektens sekundära fält"
 
 #: common/tool/actions.cpp:375
 msgid "Select Column(s)"
@@ -8743,9 +8732,8 @@ msgid "Zoom to Objects"
 msgstr "Zooma till objekt"
 
 #: common/tool/actions.cpp:588
-#, fuzzy
 msgid "Zoom to Selected Objects"
-msgstr "Zooma till objekt"
+msgstr "Zooma till valda objekt"
 
 #: common/tool/actions.cpp:599
 msgid "Zoom In at Cursor"
@@ -8826,9 +8814,8 @@ msgid "Return zoom to level prior to last zoom undo"
 msgstr "Återställ zoomning till nivån innan senaste zoomning ångrades"
 
 #: common/tool/actions.cpp:697
-#, fuzzy
 msgid "Pan to Center Selected Objects"
-msgstr "Radera valda nät"
+msgstr "Panorera för att centrera valda objekt"
 
 #: common/tool/actions.cpp:704
 msgid "Cursor Up"
@@ -9455,7 +9442,7 @@ msgstr "Bibliotek"
 #: eeschema/widgets/symbol_diff_widget.cpp:53
 #, fuzzy
 msgid "Toggle between A and B display"
-msgstr "Växla visning av mönsterkortets basmaterial"
+msgstr "Växla mellan visning A och B"
 
 #: common/widgets/footprint_preview_widget.cpp:115
 msgid "Footprint not found."
@@ -9667,16 +9654,15 @@ msgstr "Grundläggande egenskaper"
 
 #: common/widgets/search_pane.cpp:40
 msgid "Toggle zooming to selections in the search pane"
-msgstr ""
+msgstr "Växla zoomning till val i sökfältet"
 
 #: common/widgets/search_pane.cpp:42
-#, fuzzy
 msgid "Pan to Selection"
-msgstr "Lägg till i urval"
+msgstr "Panorera till valda"
 
 #: common/widgets/search_pane.cpp:42
 msgid "Toggle panning to selections in the search pane"
-msgstr ""
+msgstr "Växla panorering till valda i sökfältet"
 
 #: common/widgets/unit_binder.cpp:358
 #, c-format
@@ -11722,9 +11708,8 @@ msgid "Electrical Rules Checker"
 msgstr "Kontrollera elektriska regler (ERC)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:232
-#, fuzzy
 msgid "Export netlist in KiCad format"
-msgstr "Exportera nätlista i CadStar-format"
+msgstr "Exportera nätlista i KiCad-format"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:237
 msgid "Export netlist in OrcadPCB2 format"
@@ -13480,7 +13465,7 @@ msgstr "Skapa popuprutor för egenskaper"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 msgid "Generate clickable links for hierarchical elements"
-msgstr ""
+msgstr "Generera klickbara länkar för hierarkiska element"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
@@ -15344,7 +15329,6 @@ msgstr "Gör detta textobjekt till en klickbar hyperlänk"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:79
 #: pcbnew/dialogs/dialog_update_pcb.cpp:50
-#, fuzzy
 msgid "Changes to Be Applied"
 msgstr "Ändringar att verkställa"
 
