@@ -4750,33 +4750,22 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             {
                 // Fields other than reference and value weren't historically
                 // stored in fp_texts so we don't need to handle them here
-                bool text_must_be_deleted = false;
-
                 switch( field->GetId() )
                 {
                 case REFERENCE_FIELD:
                     footprint->Reference() = PCB_FIELD( *text, REFERENCE_FIELD );
                     const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
-                    text_must_be_deleted = true;
+                    // We don't want to leave a dangling pointer in the map
+                    removeReplaceEntryInFontTextMap( text, &footprint->Reference() );
+                    delete text;
                     break;
 
                 case VALUE_FIELD:
                     footprint->Value() = PCB_FIELD( *text, VALUE_FIELD );
                     const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
-                    text_must_be_deleted = true;
-                    break;
-                }
-
-                if( text_must_be_deleted )
-                {
-                    // We don't want to leave a dangling pointer in the map
-                    if( auto it = m_fontTextMap.find( text ); it != m_fontTextMap.end() )
-                    {
-                        // TODO: try to keep the font specified in m_fontTextMap
-                        m_fontTextMap.erase( it );
-                    }
-
+                    removeReplaceEntryInFontTextMap( text, &footprint->Value() );
                     delete text;
+                    break;
                 }
             }
             else
@@ -7394,6 +7383,21 @@ PCB_TARGET* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TARGET()
     return target.release();
 }
 
+void PCB_IO_KICAD_SEXPR_PARSER::removeReplaceEntryInFontTextMap( EDA_TEXT* aEntry,
+                                                                 EDA_TEXT* aReplacer )
+{
+    if( auto it = m_fontTextMap.find( aEntry ); it != m_fontTextMap.end() )
+    {
+        // Replace it by aReplacer if not nullptr
+        if( aReplacer )
+        {
+            m_fontTextMap[aReplacer] = it->second;
+        }
+
+        // Remove old entry from m_fontTextMap.
+        m_fontTextMap.erase( it );
+    }
+}
 
 KIID PCB_IO_KICAD_SEXPR_PARSER::CurStrToKIID()
 {

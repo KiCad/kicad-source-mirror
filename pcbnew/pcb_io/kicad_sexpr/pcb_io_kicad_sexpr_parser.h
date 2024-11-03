@@ -393,6 +393,12 @@ private:
      */
     void resolveGroups( BOARD_ITEM* aParent );
 
+    /**
+     * Remove an entry from m_fontTextMap.
+     * Replace it by aReplacer if not nullptr
+     */
+    void removeReplaceEntryInFontTextMap( EDA_TEXT* aEntry, EDA_TEXT* aReplacer );
+
     ///< The type of progress bar timeout
     using TIMEOUT = std::chrono::milliseconds;
 
