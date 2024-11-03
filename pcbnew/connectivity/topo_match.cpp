@@ -355,8 +355,6 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
 
         auto& match = current.m_matches[current.m_currentMatch];
 
-
-
         wxLogTrace( traceTopoMatch, wxT("stk: candidate '%s', match list : ( "),
                                 current.m_matches[current.m_currentMatch]->m_reference,
                                 current.m_refIndex );
