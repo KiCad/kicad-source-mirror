@@ -1688,7 +1688,7 @@ int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, PNS_LAYE
 
 ITEM *NODE::FindItemByParent( const BOARD_ITEM* aParent )
 {
-    if( aParent->IsConnected() )
+    if( aParent && aParent->IsConnected() )
     {
         const BOARD_CONNECTED_ITEM* cItem = static_cast<const BOARD_CONNECTED_ITEM*>( aParent );
         INDEX::NET_ITEMS_LIST*      l_cur = m_index->GetItemsForNet( cItem->GetNet() );

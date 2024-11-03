@@ -118,8 +118,11 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
 
         int routingLayer = ritem ? ritem->Layers().Start() : evt.layer;
 
-        for( auto item : items )
-            ritems.Add( m_router->GetWorld()->FindItemByParent( item ) );
+        for( BOARD_CONNECTED_ITEM* item : items )
+        {
+            if( ITEM* routerItem = m_router->GetWorld()->FindItemByParent( item ) )
+                ritems.Add( routerItem );
+        }
 
         eventIdx++;
 
