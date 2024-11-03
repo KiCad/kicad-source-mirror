@@ -21,16 +21,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-10-13 19:15+0000\n"
+"PO-Revision-Date: 2024-11-04 09:00+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -774,14 +774,12 @@ msgid "Use board stackup colors"
 msgstr "Použít barvy ze struktury vrstev"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
-#, fuzzy
 msgid "Use board editor copper colors"
-msgstr "Použít barvy ze struktury vrstev"
+msgstr "Použít barvy mědi editoru desky"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
-#, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
-msgstr "Pro nepokovenou měď použijte barvu holé mědi (pomalé)"
+msgstr "Použít barvy mědi editoru desky (pouze openGL)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
 #, c-format
@@ -1812,9 +1810,8 @@ msgid "&Cancel"
 msgstr "Z&rušit"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
-#, fuzzy
 msgid "&Open Anyway"
-msgstr "Přesto otevřít"
+msgstr "Přesto &otevřít"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
@@ -1829,14 +1826,12 @@ msgid "&Save"
 msgstr "&Uložit"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
-#, fuzzy
 msgid "&Discard Changes"
-msgstr "Zrušit změny"
+msgstr "&Zrušit změny"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
-#, fuzzy
 msgid "&Apply to all"
-msgstr "Použít pro vše"
+msgstr "&Použít pro vše"
 
 #: common/confirm.cpp:123
 msgid "Your current changes will be permanently lost."
@@ -2796,9 +2791,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "Výběr obsahuje %d uzamčených položek."
+msgstr "Výběr obsahuje %lu uzamčených položek."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6803,24 +6798,24 @@ msgid "Error removing directory '%s': %s"
 msgstr "Chyba při odstraňování složky '%s': %s"
 
 #: common/gestfich.cpp:382 common/gestfich.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Nelze vytvořit adresář '%s'"
+msgstr "Nelze otevřít zdrojový adresář: %s"
 
 #: common/gestfich.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Nelze vytvořit adresář '%s'"
+msgstr "Nelze vytvořit cílový adresář: %s"
 
 #: common/gestfich.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Nemohu se připojit k '%s' "
+msgstr "Nelze zkopírovat: %s do %s"
 
 #: common/gestfich.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Nepodařilo se přečíst soubor "
+msgstr "Nelze přečíst soubor: %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -6838,14 +6833,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Nelze vyhledat vzdálené '%s'"
 
 #: common/git/git_pull_handler.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Nelze se připojit ke vzdálenému '%s'"
+msgstr "Nelze se připojit ke vzdálenému '%s': %s"
 
 #: common/git/git_pull_handler.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Nelze obnovit data ze vzdáleného úložiště '%s'"
+msgstr "Nelze stáhnout data ze vzdáleného '%s': %s"
 
 #: common/git/git_pull_handler.cpp:94
 msgid "Could not read 'FETCH_HEAD'"
@@ -6905,14 +6900,14 @@ msgid "Could not lookup remote"
 msgstr "Nelze vyhledat vzdálený vklad"
 
 #: common/git/git_push_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "Nelze se připojit ke vzdálenému '%s'"
+msgstr "Nelze se připojit ke vzdálenému: %s"
 
 #: common/git/git_push_handler.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Nelze odeslat na vzdálený repozitář"
+msgstr "Nelze odeslat na vzdálený: %s"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
@@ -7353,33 +7348,28 @@ msgid "Loading file canceled by user."
 msgstr "Otevírání souboru zrušeno uživatelem."
 
 #: common/jobs/job_export_pcb_3d.cpp:131
-#, fuzzy
 msgid "3D model export"
-msgstr "Neexportovat"
+msgstr "Export 3D modelu"
 
 #: common/jobs/job_export_pcb_3d.cpp:134
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Exportovat modul:"
+msgstr "DPS: Exportovat 3D model"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Drill data export"
-msgstr "Zpráva o vrtání"
+msgstr "Export dat vrtání"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr ""
+msgstr "DPS: Export dat vrtání"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
-#, fuzzy
 msgid "PCB DXF export"
-msgstr "Export STEP"
+msgstr "DPS DXF export"
 
 #: common/jobs/job_export_pcb_dxf.cpp:61
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "Export DXF"
+msgstr "DPS: Export DXF"
 
 #: common/jobs/job_export_pcb_gerber.cpp:82
 #, fuzzy
@@ -7393,46 +7383,39 @@ msgstr "Hlášení modulu"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "DPS: Export souborů Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "IPC2581 export"
-msgstr "Export STEP"
+msgstr "IPC2581 export"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:85
-#, fuzzy
 msgid "PCB: Export IPC2581"
-msgstr "Export IPC-2581"
+msgstr "DPS: Export IPC2581"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
-#, fuzzy
 msgid "PCB PDF export"
-msgstr "Export STEP"
+msgstr "DPS PDF export"
 
 #: common/jobs/job_export_pcb_pdf.cpp:57
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "Export PDF"
+msgstr "DPS: Export PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Placement data export"
-msgstr "Přidat port napájení"
+msgstr "Export dat umístění"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
 msgstr ""
 
 #: common/jobs/job_export_pcb_svg.cpp:53
-#, fuzzy
 msgid "PCB SVG export"
-msgstr "Export STEP"
+msgstr "DPS SVG export"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Export SVG"
+msgstr "DPS: Export SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
 #, fuzzy
@@ -33628,7 +33611,7 @@ msgstr "Všechny soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:382
 msgid "BREP (OCCT) files"
-msgstr ""
+msgstr "Soubory BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:390
 #, fuzzy
@@ -33670,11 +33653,11 @@ msgstr "Binární soubory glTF"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 #, fuzzy
@@ -42216,7 +42199,7 @@ msgstr "Chyba při načítání pouzdra %s z knihovny '%s'."
 
 #: pcbnew/footprint_edit_frame.cpp:574
 msgid "Save as editable copy"
-msgstr ""
+msgstr "Uložit jako upravitelnou kopii"
 
 #: pcbnew/footprint_edit_frame.cpp:987
 #, c-format
