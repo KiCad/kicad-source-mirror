@@ -278,7 +278,7 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         highlightColor = drawColor.Brightened( 0.5 ).WithAlpha( 0.8 );
     }
 
-    KIGFX::GAL_SCOPED_ATTRS scopedAttrs( *gal, KIGFX::GAL_SCOPED_ATTRS::ALL );
+    KIGFX::GAL_SCOPED_ATTRS scopedAttrs( *gal, KIGFX::GAL_SCOPED_ATTRS::ALL_ATTRS );
     gal->SetFillColor( drawColor );
     gal->SetStrokeColor( borderColor );
     gal->SetIsFill( true );

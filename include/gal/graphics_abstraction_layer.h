@@ -1189,7 +1189,7 @@ public:
         FILL = FILL_COLOR | IS_FILL,
         STROKE_FILL = STROKE | FILL,
 
-        ALL = STROKE | FILL | LAYER_DEPTH,
+        ALL_ATTRS = STROKE | FILL | LAYER_DEPTH,
     };
 
     /**

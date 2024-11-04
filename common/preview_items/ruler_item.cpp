@@ -306,7 +306,7 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     RENDER_SETTINGS* rs = aView->GetPainter()->GetSettings();
     bool             drawingDropShadows = ( aLayer == getShadowLayer( gal ) );
 
-    GAL_SCOPED_ATTRS scopedAttrs( *gal, GAL_SCOPED_ATTRS::ALL );
+    GAL_SCOPED_ATTRS scopedAttrs( *gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
     gal->SetLayerDepth( gal->GetMinDepth() );
 
     VECTOR2D origin = m_geomMgr.GetOrigin();

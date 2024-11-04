@@ -2283,7 +2283,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         VECTOR2I pt1 = bbox.GetOrigin();
         VECTOR2I pt2 = bbox.GetEnd();
 
-        GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL );
+        GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
         m_gal->AdvanceDepth();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
@@ -2757,7 +2757,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         VECTOR2I pt1 = bbox.GetOrigin();
         VECTOR2I pt2 = bbox.GetEnd();
 
-        GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL );
+        GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
         m_gal->SetStrokeColor( m_schSettings.GetLayerColor( layer ) );
