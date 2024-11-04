@@ -216,16 +216,31 @@ bool AREA_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine
                              const SHAPE_LINE_CHAIN& aCurrentPath,
                              const SHAPE_LINE_CHAIN& aReplacement )
 {
-    const VECTOR2I& p1 = aOriginLine->CPoint( aVertex1 );
-    const VECTOR2I& p2 = aOriginLine->CPoint( aVertex2 );
+    const VECTOR2I& p1 = aCurrentPath.CPoint( aVertex1 );
+    const VECTOR2I& p2 = aCurrentPath.CPoint( aVertex2 );
 
     bool p1_in = m_allowedArea.Contains( p1 );
     bool p2_in = m_allowedArea.Contains( p2 );
 
-    if( m_allowedAreaStrict ) // strict restriction? both points must be inside the restricted area
-        return p1_in && p2_in;
-    else // loose restriction
-        return p1_in || p2_in;
+    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+
+    if( p1_in && p2_in )
+        return true;
+
+    if( aVertex1 < aCurrentPath.PointCount() - 1 && !p1_in && p2_in
+        && m_allowedArea.Contains( aCurrentPath.CPoint( aVertex1 + 1 ) ) )
+        return aReplacement.CSegment( 0 ).Angle( aCurrentPath.CSegment( aVertex1 ) ).IsHorizontal();
+
+    if( p1_in && !p2_in && m_allowedArea.Contains( aCurrentPath.CPoint( aVertex2 - 1 ) ) )
+        return aReplacement.CSegment( -1 )
+                .Angle( aCurrentPath.CSegment( aVertex2 - 1 ) )
+                .IsHorizontal();
+
+    PNS_DBG( dbg, AddShape, m_allowedArea, YELLOW, 10000, wxT( "drag-affected-area" ) );
+    PNS_DBG( dbg, AddPoint, p1, YELLOW, 1000000, wxT( "drag-p1" ) );
+    PNS_DBG( dbg, AddPoint, p2, YELLOW, 1000000, wxT( "drag-p2" ) );
+
+    return false;
 }
 
 

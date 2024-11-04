@@ -151,6 +151,7 @@ public:
     {
         m_restrictArea = aArea;
         m_restrictAreaIsStrict = aStrict;
+        m_effortLevel |= OPTIMIZER::RESTRICT_AREA;
     }
 
 private:

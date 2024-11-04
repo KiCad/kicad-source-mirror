@@ -469,47 +469,53 @@ bool DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
 
 void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, const VECTOR2I& aP )
 {
+    LINE draggedPostOpt, origLine( aOrig );
+
     aDragged.ClearLinks();
     aDragged.Unmark();
 
-    OPTIMIZER optimizer( m_lastNode );
-
-    int effort = OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY | OPTIMIZER::RESTRICT_AREA;
-
-    if( Settings().SmoothDraggedSegments() )
-        effort |= OPTIMIZER::MERGE_COLINEAR;
-
-    optimizer.SetEffortLevel( effort );
-
-    OPT_BOX2I affectedArea = aDragged.ChangedArea( &aOrig );
-    VECTOR2I anchor( aP );
-
-    if( aDragged.CLine().Find( aP ) < 0 )
-        anchor = aDragged.CLine().NearestPoint( aP );
-
-    optimizer.SetPreserveVertex( anchor );
-
-    // People almost never want KiCad to reroute tracks in areas they can't even see, so restrict
-    // the area to what is visible even if we are optimizing the "entire" track.
     if( Settings().GetOptimizeEntireDraggedTrack() )
-        affectedArea = VisibleViewArea();
-    else if( !affectedArea )
-        affectedArea = BOX2I( aP ); // No valid area yet? set to minimum to disable optimization
+    {
+        OPTIMIZER optimizer( m_lastNode );
 
-    PNS_DBG( Dbg(), AddPoint, anchor, YELLOW, 100000, wxT( "drag-anchor" ) );
-    PNS_DBG( Dbg(), AddShape, *affectedArea, RED, 0, wxT( "drag-affected-area" ) );
+        int effort =
+                OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY | OPTIMIZER::RESTRICT_AREA;
 
-    optimizer.SetRestrictArea( *affectedArea );
-    optimizer.Optimize( &aDragged );
+        if( Settings().SmoothDraggedSegments() )
+            effort |= OPTIMIZER::MERGE_COLINEAR;
 
-    OPT_BOX2I optArea = aDragged.ChangedArea( &aOrig );
+        optimizer.SetEffortLevel( effort );
 
-    if( optArea )
-        PNS_DBG( Dbg(), AddShape, *optArea, BLUE, 0, wxT( "drag-opt-area" ) );
+        OPT_BOX2I affectedArea = aDragged.ChangedArea( &aOrig );
+        VECTOR2I  anchor( aP );
 
-    m_lastNode->Add( aDragged );
+        if( aDragged.CLine().Find( aP ) < 0 )
+            anchor = aDragged.CLine().NearestPoint( aP );
+
+        optimizer.SetPreserveVertex( anchor );
+
+        if( !affectedArea )
+            affectedArea = BOX2I( aP ); // No valid area yet? set to minimum to disable optimization
+
+        PNS_DBG( Dbg(), AddPoint, anchor, YELLOW, 100000, wxT( "drag-anchor" ) );
+        PNS_DBG( Dbg(), AddShape, *affectedArea, RED, 0, wxT( "drag-affected-area" ) );
+
+        optimizer.SetRestrictArea( *affectedArea );
+
+        PNS_DBG( Dbg(), AddItem, aDragged.Clone(), RED, 0, wxT( "drag-preopt" ) );
+        aDragged.Line().Split( anchor );
+
+        optimizer.Optimize( &aDragged, &draggedPostOpt, &origLine );
+        PNS_DBG( Dbg(), AddItem, aDragged.Clone(), GREEN, 0, wxT( "drag-postopt" ) );
+    }
+    else
+    {
+        draggedPostOpt = aDragged;
+    }
+
+    m_lastNode->Add( draggedPostOpt );
     m_draggedItems.Clear();
-    m_draggedItems.Add( aDragged );
+    m_draggedItems.Add( draggedPostOpt );
 }
 
 
