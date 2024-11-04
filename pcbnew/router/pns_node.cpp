@@ -1706,6 +1706,7 @@ ITEM *NODE::FindItemByParent( const BOARD_ITEM* aParent )
     return nullptr;
 }
 
+
 std::vector<ITEM*> NODE::FindItemsByZone( const ZONE* aParent )
 {
     std::vector<ITEM*> ret;
@@ -1718,4 +1719,26 @@ std::vector<ITEM*> NODE::FindItemsByZone( const ZONE* aParent )
 
     return ret;
 }
+
+
+VIA* NODE::FindViaByHandle ( const VIA_HANDLE& handle ) const
+{
+    const JOINT* jt = FindJoint( handle.pos, handle.layers.Start(), handle.net );
+
+    if( !jt )
+        return nullptr;
+
+    for( ITEM* item : jt->LinkList() )
+    {
+        if( item->OfKind( ITEM::VIA_T ) )
+        {
+            if( item->Net() == handle.net && item->Layers().Overlaps(handle.layers) )
+                return static_cast<VIA*>( item );
+        }
+    }
+
+    return nullptr;
 }
+
+}
+

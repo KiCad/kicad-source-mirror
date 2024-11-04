@@ -479,6 +479,8 @@ public:
         return m_override;
     }
 
+    VIA* FindViaByHandle ( const VIA_HANDLE& handle ) const;
+
 private:
     void add( ITEM* aItem, bool aAllowRedundant = false );
 

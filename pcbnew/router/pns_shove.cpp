@@ -1551,8 +1551,11 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
                 vh.net =  currentLine.Via().Net();
                 vh.pos =  currentLine.Via().Pos();
                 vh.valid = true;
-                auto rvia = findViaByHandle( m_currentNode, vh );
-                st = onCollidingVia( &revLine, rvia, *nearest, revLine.Rank() + 1 );
+                auto rvia = m_currentNode->FindViaByHandle( vh );
+                if ( !rvia )
+                    st = SH_INCOMPLETE;
+                else
+                    st = onCollidingVia( &revLine, rvia, *nearest, revLine.Rank() + 1 );
             }
             else
                 st = onCollidingLine( revLine, currentLine, revLine.Rank() + 1 );
@@ -1716,30 +1719,6 @@ OPT_BOX2I SHOVE::totalAffectedArea() const
 
     return area;
 }
-
-
-
-
-
-VIA* SHOVE::findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle )
-{
-    const JOINT* jt = aNode->FindJoint( handle.pos, handle.layers.Start(), handle.net );
-
-    if( !jt )
-        return nullptr;
-
-    for( ITEM* item : jt->LinkList() )
-    {
-        if( item->OfKind( ITEM::VIA_T ) )
-        {
-            if( item->Net() == handle.net && item->Layers().Overlaps(handle.layers) )
-                return static_cast<VIA*>( item );
-        }
-    }
-
-    return nullptr;
-}
-
 
 
 SHOVE::ROOT_LINE_ENTRY* SHOVE::findRootLine( const LINE& aLine )
@@ -2097,13 +2076,12 @@ void SHOVE::removeHeads()
             m_currentNode->Remove( *headEntry.newHead );
             //nodeStats( Dbg(), m_currentNode, "post-remove-new" );
 
-            /*
+
             wxString msg = wxString::Format(
                     "remove newhead [net %-20s]: sc %d lc %d\n",
                     iface->GetNetName( headEntry.newHead->Net() ).c_str().AsChar(),
                     headEntry.newHead->SegmentCount(), n_lc );
             PNS_DBG( Dbg(), Message, msg );
-            */
         }
         else if( headEntry.origHead )
         {
@@ -2168,7 +2146,7 @@ void SHOVE::reconstructHeads( bool aShoveFailed )
             {
                 headEntry.geometryModified = true;
                 headEntry.theVia = VIA_HANDLE( rootEntry->newVia->Pos(), rootEntry->newVia->Layers(), rootEntry->newVia->Net() );
-                auto chk = findViaByHandle ( m_currentNode, *headEntry.theVia );
+                auto chk = m_currentNode->FindViaByHandle( *headEntry.theVia );
                 wxString msg = wxString::Format( "[modif] via orig %p chk %p\n", headEntry.draggedVia, chk );
 
                 PNS_DBG( Dbg(), Message, msg );
@@ -2177,7 +2155,7 @@ void SHOVE::reconstructHeads( bool aShoveFailed )
             else
             {
                 headEntry.theVia = VIA_HANDLE( rootEntry->oldVia->Pos(), rootEntry->oldVia->Layers(), rootEntry->oldVia->Net() );
-                auto chk = findViaByHandle ( m_currentNode, *headEntry.theVia );
+                auto chk = m_currentNode->FindViaByHandle( *headEntry.theVia );
                 wxString msg = wxString::Format( "[unmodif] via orig %p chk %p\n", headEntry.draggedVia, chk );
                 PNS_DBG( Dbg(), Message, msg );
                 assert( chk != nullptr );
@@ -2243,7 +2221,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
         if( l.theVia )
         {
             PNS_DBG( Dbg(), Message, wxString::Format("process head-via [%d %d] node=%p", l.theVia->pos.x, l.theVia->pos.y, m_currentNode ) );
-            auto realVia = findViaByHandle( m_currentNode, *l.theVia );
+            auto realVia = m_currentNode->FindViaByHandle( *l.theVia );
             assert( realVia != nullptr );
             headSet.Add( realVia );
         }
@@ -2285,7 +2263,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
         if( headLineEntry.theVia )
         {
-            VIA* viaToDrag = findViaByHandle( m_currentNode, *headLineEntry.theVia );
+            VIA* viaToDrag = m_currentNode->FindViaByHandle( *headLineEntry.theVia );
 
             if( !viaToDrag )
             {

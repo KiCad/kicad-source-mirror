@@ -219,7 +219,6 @@ private:
     void sanityCheck( LINE* aOld, LINE* aNew );
     void reconstructHeads( bool aShoveFailed );
     void removeHeads();
-    VIA* findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle );
     bool preShoveCleanup( LINE* aOld, LINE* aNew );
     const wxString formatPolicy( int aPolicy );
 
