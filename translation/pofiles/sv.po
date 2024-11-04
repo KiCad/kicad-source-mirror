@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-04 09:00+0000\n"
+"PO-Revision-Date: 2024-11-04 18:24+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -23447,7 +23447,7 @@ msgstr "*** ny symbol har för få enheter ***"
 
 #: eeschema/tools/sch_drawing_tools.cpp:592
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "Alla enheter tillhörande denna symbol är redan utplacerade."
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
 msgid "Add design block"
@@ -26187,7 +26187,7 @@ msgstr "Skapa inte popuprutor för egenskaper i PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:86
 msgid "Do not generate clickable links for hierarchical elements in PDF"
-msgstr ""
+msgstr "Generera inte klickbara länkar för hierarkiska element i PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:91
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
@@ -32984,12 +32984,12 @@ msgstr "0,00000 / 0,00 / 0,0000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
 #: pcbnew/pcb_dimension.cpp:1453
 msgid "Inward"
-msgstr ""
+msgstr "Inåt"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
 #: pcbnew/pcb_dimension.cpp:1454
 msgid "Outward"
-msgstr ""
+msgstr "Utåt"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:188
 msgid ""
@@ -32998,6 +32998,10 @@ msgid ""
 "Inward:    >-----<\n"
 "Outward: <----->"
 msgstr ""
+"Välj riktning för måttsättningspil\n"
+"Automatisk: Avgörs baserat på textposition.\n"
+"Inåt:    >-----<\n"
+"Utåt: <----->"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:199
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:155
@@ -34051,7 +34055,7 @@ msgstr "Sök efter:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "Fortsätt från &början"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference &designators"
@@ -35021,7 +35025,7 @@ msgstr "Ta bort kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:115
 msgid "Remove teardrops according to filtering options"
-msgstr ""
+msgstr "Ta bort kragförstärkningar baserat på filterkriterier"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:119
 #, fuzzy
@@ -35030,7 +35034,7 @@ msgstr "Ta bort kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Remove all teadrops, regardless filtering options"
-msgstr ""
+msgstr "Ta bort alla kragförstärkningar, oavsett filterkriterier"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -35811,7 +35815,7 @@ msgstr "Avrunda utåt till rutnätsmultipler (om möjligt)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "Detta är endast möjligt för rektangulära konturlinjer."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
@@ -37168,11 +37172,11 @@ msgstr "Ett unikt namn för detta regelområde för användning i designregler"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:62
 msgid "Reset this value to zero."
-msgstr ""
+msgstr "Återställ detta värde till noll."
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:72
 msgid "Reset this value to the original value."
-msgstr ""
+msgstr "Återställ detta värde till sitt ursprungliga värde."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 #, fuzzy
@@ -37196,7 +37200,7 @@ msgstr "Isolationsavståndet mellan ledarna måste vara större än 0."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
-msgstr ""
+msgstr "Båge måste vara bestämd med tre distinkta punkter"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:474
 #, c-format
@@ -37302,7 +37306,7 @@ msgstr "Hörnstorlek:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr ""
+msgstr "Med centrum och storlek"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 #, fuzzy
@@ -37316,15 +37320,15 @@ msgstr "Längdjustering"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
 msgid "By Midpoint/Endpoint"
-msgstr ""
+msgstr "Med mittpunkt / slutpunkt"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
-msgstr ""
+msgstr "Med centrum / början / vinkel"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:149
 msgid "By Start/Mid/End"
-msgstr ""
+msgstr "Med början / mittpunkt / slut"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
 #, fuzzy
@@ -47753,6 +47757,8 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
+"Fotavtrycket kunde inte läggas till det valda biblioteket ('%s'). Detta "
+"bibliotek är skrivskyddat."
 
 #: pcbnew/tools/footprint_editor_control.cpp:405
 msgid "_copy"
