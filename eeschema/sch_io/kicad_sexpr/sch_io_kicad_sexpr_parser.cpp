@@ -3515,6 +3515,13 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
                 field->SetId( field->GetId() + 1 );
 
             fields.emplace_back( *field );
+
+            // Remove field from m_fontTextMap (it is a temporary field.)
+            // Copy also font data (if field is in list) to the new field
+            // We don't know the final field (fields.back() is also temporary)
+            // so we just copy font info
+            removeEntryInFontTextMap( field, &fields.back(), false );
+
             delete field;
             break;
 
@@ -4703,4 +4710,31 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
     NeedRIGHT();
 
     aScreen->AddBusAlias( busAlias );
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::removeEntryInFontTextMap( EDA_TEXT* aEntry,
+                                                          EDA_TEXT* aCandidate,
+                                                          bool aReplaceInList )
+{
+    if( auto it = m_fontTextMap.find( aEntry ); it != m_fontTextMap.end() )
+    {
+        // Copy font from aEntry to aCandidate if not nullptr
+        if( aCandidate )
+        {
+            if( aReplaceInList )
+            {
+                m_fontTextMap[aCandidate] = it->second;
+            }
+            else
+            {
+                aCandidate->SetFont( KIFONT::FONT::GetFont( std::get<0>( it->second ),
+                                                            std::get<1>( it->second ),
+                                                            std::get<2>( it->second ) ) );
+            }
+        }
+
+        // Remove old entry from m_fontTextMap.
+        m_fontTextMap.erase( it );
+    }
 }

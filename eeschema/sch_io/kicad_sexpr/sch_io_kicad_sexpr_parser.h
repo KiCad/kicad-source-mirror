@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -231,6 +231,13 @@ private:
     SCH_TABLECELL* parseSchTableCell();
     SCH_TABLE* parseSchTable();
     void parseBusAlias( SCH_SCREEN* aScreen );
+
+    /**
+     * Remove aEntry from m_fontTextMap.
+     * If aCandidate is not null, set the aCandidate font from the font of aEntry
+     * if aReplaceInList is true, aCandidate will replace aEntry in m_fontTextMap
+     */
+    void removeEntryInFontTextMap( EDA_TEXT* aEntry, EDA_TEXT* aCandidate, bool aReplaceInList );
 
 private:
     int      m_requiredVersion;   ///< Set to the symbol library file version required.
