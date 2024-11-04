@@ -994,7 +994,6 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
             lp.second = lp.first;
             lp.second.ClearLinks();
             lp.second.DragCorner( p0_pushed, lp.second.CLine().Find( p0 ) );
-            lp.second.AppendVia( *pushedVia );
             lp.second.Line().Simplify2();
             draggedLines.push_back( lp );
         }
@@ -1006,9 +1005,18 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     PNS_DBG( Dbg(), AddPoint, aVia->Pos(), LIGHTGREEN, 100000, "via-pre" );
     PNS_DBG( Dbg(), AddPoint, pushedVia->Pos(), LIGHTRED, 100000, "via-post" );
 
-    VIA v2( *pushedVia );
+    VIA *v2 = pushedVia.get();
 
+    unwindLineStack( aVia );
     replaceItems( aVia, std::move( pushedVia ) );
+
+    if( draggedLines.empty() ) // stitching via? make sure the router won't forget about it
+    {
+        LINE tmpLine;
+        tmpLine.LinkVia( v2 );
+        if( !pushLineStack( tmpLine ) )
+            return SH_INCOMPLETE;
+    }
 
     int n = 0;
     for( LINE_PAIR lp : draggedLines )
@@ -1021,10 +1029,9 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         if( lp.second.SegmentCount() )
         {
             lp.second.ClearLinks();
-            lp.second.AppendVia( v2 );
-
             replaceLine( lp.first, lp.second );
 
+            lp.second.LinkVia( v2 );
             unwindLineStack( &lp.second );
 
             lp.second.SetRank( aNewRank );
@@ -1289,7 +1296,7 @@ void SHOVE::unwindLineStack( const ITEM* aItem )
 
 bool SHOVE::pushLineStack( const LINE& aL, bool aKeepCurrentOnTop )
 {
-    if( !aL.IsLinkedChecked() && aL.SegmentCount() != 0 )
+    if( !aL.IsLinked() && aL.SegmentCount() != 0 )
     {
         PNS_DBG( Dbg(), AddItem, &aL, BLUE, 10000, wxT( "push line stack failed" ) );
 
