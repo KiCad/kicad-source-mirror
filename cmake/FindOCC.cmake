@@ -87,6 +87,7 @@ set( OCC_LIBS_POST_78
     TKDESTEP
     TKDESTL
     TKDEVRML
+    TKDEPLY
 )
 
 set(OCC_TYPE "OpenCASCADE Standard Edition")

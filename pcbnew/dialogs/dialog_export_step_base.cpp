@@ -24,7 +24,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_txtFormat->Wrap( -1 );
 	bSizerTop->Add( m_txtFormat, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	wxString m_choiceFormatChoices[] = { _("STEP"), _("GLB (Binary glTF)"), _("XAO"), _("BREP (OCCT)") };
+	wxString m_choiceFormatChoices[] = { _("STEP"), _("GLB (Binary glTF)"), _("XAO"), _("BREP (OCCT)"), _("PLY (ASCII)"), _("STL") };
 	int m_choiceFormatNChoices = sizeof( m_choiceFormatChoices ) / sizeof( wxString );
 	m_choiceFormat = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceFormatNChoices, m_choiceFormatChoices, 0 );
 	m_choiceFormat->SetSelection( 0 );

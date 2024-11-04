@@ -56,14 +56,18 @@
 static const std::vector<wxString> c_formatCommand = { FILEEXT::StepFileExtension,
                                                        FILEEXT::GltfBinaryFileExtension,
                                                        FILEEXT::XaoFileExtension,
-                                                       FILEEXT::BrepFileExtension };
+                                                       FILEEXT::BrepFileExtension,
+                                                       FILEEXT::PlyFileExtension,
+                                                       FILEEXT::StlFileExtension};
 
 // Maps file extensions to m_choiceFormat selection
 static const std::map<wxString, int> c_formatExtToChoice = { { FILEEXT::StepFileExtension, 0 },
                                                              { FILEEXT::StepFileAbrvExtension, 0 },
                                                              { FILEEXT::GltfBinaryFileExtension, 1 },
                                                              { FILEEXT::XaoFileExtension, 2 },
-                                                             { FILEEXT::BrepFileExtension, 3 } };
+                                                             { FILEEXT::BrepFileExtension, 3 },
+                                                             { FILEEXT::PlyFileExtension, 4 },
+                                                             { FILEEXT::StlFileExtension, 5 }};
 
 
 
@@ -380,7 +384,11 @@ void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
                       + _( "XAO files" )
                       + AddFileExtListToFilter( { FILEEXT::XaoFileExtension} ) + "|"
                       + _( "BREP (OCCT) files" )
-                      + AddFileExtListToFilter( { FILEEXT::BrepFileExtension } );
+                      + AddFileExtListToFilter( { FILEEXT::BrepFileExtension } )  + "|"
+                      + _( "PLY files" )
+                      + AddFileExtListToFilter( { FILEEXT::PlyFileExtension} ) + "|" 
+                      + _( "STL files" )
+                      + AddFileExtListToFilter( { FILEEXT::StlFileExtension} );
     // clang-format on
 
     // Build the absolute path of current output directory to preselect it in the file browser.

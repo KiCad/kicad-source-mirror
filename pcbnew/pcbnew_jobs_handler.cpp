@@ -315,6 +315,10 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::GLB: fn.SetExt( FILEEXT::GltfBinaryFileExtension );
             break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PLY: fn.SetExt( FILEEXT::PlyFileExtension );
+            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STL: fn.SetExt( FILEEXT::StlFileExtension );
+            break;
         default:
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
@@ -382,6 +386,12 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::GLB:
             params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
+            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PLY:
+            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PLY;
+            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STL:
+            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL;
             break;
         default:
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here

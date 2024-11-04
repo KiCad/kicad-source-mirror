@@ -30,6 +30,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::FORMAT,
                                       { JOB_EXPORT_PCB_3D::FORMAT::GLB, "step" },
                                       { JOB_EXPORT_PCB_3D::FORMAT::VRML, "vrml" },
                                       { JOB_EXPORT_PCB_3D::FORMAT::XAO, "xao" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::PLY, "ply" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::STL, "stl" },
                               } )
 
 
@@ -49,6 +51,8 @@ wxString EXPORTER_STEP_PARAMS::GetDefaultExportExtension() const
     case EXPORTER_STEP_PARAMS::FORMAT::BREP: return wxS( "brep" );
     case EXPORTER_STEP_PARAMS::FORMAT::XAO:  return wxS( "xao" );
     case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "glb" );
+    case EXPORTER_STEP_PARAMS::FORMAT::PLY:  return wxS( "ply" );
+    case EXPORTER_STEP_PARAMS::FORMAT::STL:  return wxS( "stl" );
     default:                                 return wxEmptyString; // shouldn't happen
     }
 }
@@ -63,6 +67,8 @@ wxString EXPORTER_STEP_PARAMS::GetFormatName() const
     case EXPORTER_STEP_PARAMS::FORMAT::BREP: return wxS( "BREP" );
     case EXPORTER_STEP_PARAMS::FORMAT::XAO:  return wxS( "XAO" );
     case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "Binary GLTF" );
+    case EXPORTER_STEP_PARAMS::FORMAT::PLY:  return wxS( "PLY" );
+    case EXPORTER_STEP_PARAMS::FORMAT::STL:  return wxS( "STL" );
     default:                                 return wxEmptyString; // shouldn't happen
     }
 }

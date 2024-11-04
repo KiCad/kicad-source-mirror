@@ -115,9 +115,11 @@
 #include <GC_MakeCircle.hxx>
 
 #include <RWGltf_CafWriter.hxx>
+#include <StlAPI_Writer.hxx>
 
 #if OCC_VERSION_HEX >= 0x070700
 #include <VrmlAPI_CafReader.hxx>
+#include <RWPly_CafWriter.hxx>
 #endif
 
 #include <macros.h>
@@ -2894,6 +2896,34 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
 }
 
 
+bool STEP_PCB_MODEL::performMeshing( Handle( XCAFDoc_ShapeTool ) & aShapeTool )
+{
+    TDF_LabelSequence freeShapes;
+    aShapeTool->GetFreeShapes( freeShapes );
+
+    ReportMessage( wxT( "Meshing model\n" ) );
+
+    // GLTF is a mesh format, we have to trigger opencascade to mesh the shapes we composited into the asesmbly
+    // To mesh models, lets just grab the free shape root and execute on them
+    for( Standard_Integer i = 1; i <= freeShapes.Length(); ++i )
+    {
+        TDF_Label    label = freeShapes.Value( i );
+        TopoDS_Shape shape;
+        aShapeTool->GetShape( label, shape );
+
+        // These deflection values basically affect the accuracy of the mesh generated, a tighter
+        // deflection will result in larger meshes
+        // We could make this a tunable parameter, but for now fix it
+        const Standard_Real      linearDeflection = 0.14;
+        const Standard_Real      angularDeflection = DEG2RAD( 30.0 );
+        BRepMesh_IncrementalMesh mesh( shape, linearDeflection, Standard_False, angularDeflection,
+                                       Standard_True );
+    }
+
+    return true;
+}
+
+
 bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
@@ -2906,27 +2936,7 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 
     m_outFmt = OUTPUT_FORMAT::FMT_OUT_GLTF;
 
-    TDF_LabelSequence freeShapes;
-    m_assy->GetFreeShapes( freeShapes );
-
-    ReportMessage( wxT( "Meshing model\n" ) );
-
-    // GLTF is a mesh format, we have to trigger opencascade to mesh the shapes we composited into the asesmbly
-    // To mesh models, lets just grab the free shape root and execute on them
-    for( Standard_Integer i = 1; i <= freeShapes.Length(); ++i )
-    {
-        TDF_Label    label = freeShapes.Value( i );
-        TopoDS_Shape shape;
-        m_assy->GetShape( label, shape );
-
-        // These deflection values basically affect the accuracy of the mesh generated, a tighter
-        // deflection will result in larger meshes
-        // We could make this a tunable parameter, but for now fix it
-        const Standard_Real      linearDeflection = 0.14;
-        const Standard_Real      angularDeflection = DEG2RAD( 30.0 );
-        BRepMesh_IncrementalMesh mesh( shape, linearDeflection, Standard_False, angularDeflection,
-                                       Standard_True );
-    }
+    performMeshing( m_assy );
 
     wxFileName fn( aFileName );
 
@@ -2971,6 +2981,126 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
         {
             ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
                                              tmpGltfname, fn.GetFullName() ) );
+            success = false;
+        }
+    }
+
+    wxSetWorkingDirectory( currCWD );
+
+    return success;
+}
+
+
+bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
+{
+#if OCC_VERSION_HEX < 0x070700
+#warning "PLY export is not supported before OCCT 7.7.0"
+
+    ReportMessage( wxT( "PLY export is not supported before OCCT 7.7.0\n" ) );
+    return false;
+#else
+
+    if( !isBoardOutlineValid() )
+    {
+        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
+                                              "'%s'.\n" ),
+                                         aFileName ) );
+        return false;
+    }
+
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_PLY;
+
+    performMeshing( m_assy );
+
+    wxFileName fn( aFileName );
+
+    const char*     tmpFname = "$tempfile$.ply";
+    RWPly_CafWriter cafWriter( tmpFname );
+
+    cafWriter.SetFaceId( true ); // TODO: configurable SetPartId/SetFaceId
+    cafWriter.ChangeCoordinateSystemConverter().SetInputLengthUnit( 0.001 );
+    cafWriter.ChangeCoordinateSystemConverter().SetInputCoordinateSystem(
+            RWMesh_CoordinateSystem_Zup );
+
+    TColStd_IndexedDataMapOfStringString metadata;
+
+    metadata.Add( TCollection_AsciiString( "pcb_name" ),
+                  TCollection_ExtendedString( fn.GetName().wc_str() ) );
+    metadata.Add( TCollection_AsciiString( "source_pcb_file" ),
+                  TCollection_ExtendedString( fn.GetFullName().wc_str() ) );
+    metadata.Add( TCollection_AsciiString( "generator" ),
+                  TCollection_AsciiString(
+                          wxString::Format( wxS( "KiCad %s" ), GetSemanticVersion() ).ToAscii() ) );
+    metadata.Add( TCollection_AsciiString( "generated_at" ),
+                  TCollection_AsciiString( GetISO8601CurrentDateTime().ToAscii() ) );
+
+    bool success = true;
+
+    // Creates a temporary file with a ascii7 name, because writer does not know unicode filenames.
+    wxString currCWD = wxGetCwd();
+    wxString workCWD = fn.GetPath();
+
+    if( !workCWD.IsEmpty() )
+        wxSetWorkingDirectory( workCWD );
+
+    success = cafWriter.Perform( m_doc, metadata, Message_ProgressRange() );
+
+    if( success )
+    {
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tmpFname );
+
+        if( !wxRenameFile( tmpFname, fn.GetFullName(), true ) )
+        {
+            ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
+                                             tmpFname, fn.GetFullName() ) );
+            success = false;
+        }
+    }
+
+    wxSetWorkingDirectory( currCWD );
+
+    return success;
+#endif
+}
+
+
+bool STEP_PCB_MODEL::WriteSTL( const wxString& aFileName )
+{
+    if( !isBoardOutlineValid() )
+    {
+        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
+                                              "'%s'.\n" ),
+                                         aFileName ) );
+        return false;
+    }
+
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_STL;
+
+    performMeshing( m_assy );
+
+    wxFileName fn( aFileName );
+
+    const char* tmpFname = "$tempfile$.stl";
+
+    // Creates a temporary file with a ascii7 name, because writer does not know unicode filenames.
+    wxString currCWD = wxGetCwd();
+    wxString workCWD = fn.GetPath();
+
+    if( !workCWD.IsEmpty() )
+        wxSetWorkingDirectory( workCWD );
+
+    bool success = StlAPI_Writer().Write( getOneShape( m_assy ), tmpFname );
+
+    if( success )
+    {
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tmpFname );
+
+        if( !wxRenameFile( tmpFname, fn.GetFullName(), true ) )
+        {
+            ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
+                                             tmpFname, fn.GetFullName() ) );
             success = false;
         }
     }

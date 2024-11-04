@@ -62,7 +62,9 @@ public:
         STEP,
         BREP,
         XAO,
-        GLB
+        GLB,
+        PLY,
+        STL
     };
 
     wxString m_NetFilter;
@@ -109,7 +111,9 @@ public:
         BREP,
         XAO,
         GLB,
-        VRML
+        VRML,
+        PLY,
+        STL
     };
 
     enum class VRML_UNITS

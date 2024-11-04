@@ -82,7 +82,9 @@ enum class OUTPUT_FORMAT
     FMT_OUT_IGES,
     FMT_OUT_BREP,
     FMT_OUT_XAO,
-    FMT_OUT_GLTF
+    FMT_OUT_GLTF,
+    FMT_OUT_PLY,
+    FMT_OUT_STL
 };
 
 class STEP_PCB_MODEL
@@ -192,6 +194,12 @@ public:
      */
     bool WriteGLTF( const wxString& aFileName );
 
+    // write the assembly in PLY format (mesh)
+    bool WritePLY( const wxString& aFileName );
+
+    // write the assembly in STL format (mesh)
+    bool WriteSTL( const wxString& aFileName );
+
 private:
     /**
      * @return true if the board(s) outline is valid. False otherwise
@@ -225,6 +233,8 @@ private:
     bool readIGES( Handle( TDocStd_Document ) & aDoc, const char* aFname );
     bool readSTEP( Handle( TDocStd_Document ) & aDoc, const char* aFname );
     bool readVRML( Handle( TDocStd_Document ) & aDoc, const char* aFname );
+
+    bool performMeshing( Handle( XCAFDoc_ShapeTool ) & aShapeTool );
 
     TDF_Label transferModel( Handle( TDocStd_Document )& source, Handle( TDocStd_Document ) & dest,
                              VECTOR3D aScale );

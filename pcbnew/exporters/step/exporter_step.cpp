@@ -537,6 +537,14 @@ void EXPORTER_STEP::initOutputVariant()
             m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_GLTF );
             break;
 
+        case EXPORTER_STEP_PARAMS::FORMAT::PLY:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_PLY );
+            break;
+
+        case EXPORTER_STEP_PARAMS::FORMAT::STL:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STL );
+            break;
+
         default:
             m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_UNKNOWN );
             break;
@@ -723,6 +731,10 @@ bool EXPORTER_STEP::Export()
             success = m_pcbModel->WriteXAO( m_outputFile );
         else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::GLB )
             success = m_pcbModel->WriteGLTF( m_outputFile );
+        else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::PLY )
+            success = m_pcbModel->WritePLY( m_outputFile );
+        else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::STL )
+            success = m_pcbModel->WriteSTL( m_outputFile );
 
         if( !success )
         {

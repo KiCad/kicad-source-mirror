@@ -203,6 +203,8 @@ const std::string FILEEXT::StepFileAbrvExtension( "stp" );
 const std::string FILEEXT::GltfBinaryFileExtension( "glb" );
 const std::string FILEEXT::BrepFileExtension( "brep" );
 const std::string FILEEXT::XaoFileExtension( "xao" );
+const std::string FILEEXT::PlyFileExtension( "ply" );
+const std::string FILEEXT::StlFileExtension( "stl" );
 
 const wxString FILEEXT::GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
 
