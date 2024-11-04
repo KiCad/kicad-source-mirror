@@ -62,6 +62,7 @@ PADSTACK::PADSTACK( const PADSTACK& aOther )
 
 PADSTACK& PADSTACK::operator=( const PADSTACK &aOther )
 {
+    m_parent                = aOther.m_parent;
     m_mode                  = aOther.m_mode;
     m_layerSet              = aOther.m_layerSet;
     m_customName            = aOther.m_customName;
