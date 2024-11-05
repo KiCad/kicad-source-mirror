@@ -478,6 +478,7 @@ void DIALOG_EXPORT_STEP::OnFmtChoiceOptionChanged()
         path = path.Mid( 0, dotIdx ) << '.' << newExt;
 
     m_outputFileName->SetValue( path );
+    m_editFrame->SetLastPath( LAST_PATH_STEP, path );
 }
 
 
