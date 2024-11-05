@@ -494,7 +494,7 @@ public:
     /**
      * Enable jobsets
      *
-     * Setting name: "EnableJobs"
+     * Setting name: "EnableJobset"
      * Valid values: 0 or 1
      * Default value: 0
      */
