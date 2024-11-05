@@ -86,7 +86,7 @@ struct PLUGIN_ACTION
     wxString identifier;
     wxString name;
     wxString description;
-    bool show_button;
+    bool show_button = false;
     wxString entrypoint;
     std::set<PLUGIN_ACTION_SCOPE> scopes;
     std::vector<wxString> args;
