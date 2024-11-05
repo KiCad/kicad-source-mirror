@@ -1340,7 +1340,7 @@ bool PDF_PLOTTER::EndPlot()
                         href = ResolveUriByEnvVars( href, m_project );
 
                     js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
-                                            EscapeString( property, CTX_JS_STR ),
+                                            EscapeString( href, CTX_JS_STR ),
                                             EscapeString( href, CTX_JS_STR ) );
                 }
                 else if( property.Find( "https:" ) >= 0 )
@@ -1351,7 +1351,7 @@ bool PDF_PLOTTER::EndPlot()
                         href = ResolveUriByEnvVars( href, m_project );
 
                     js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
-                                            EscapeString( property, CTX_JS_STR ),
+                                            EscapeString( href, CTX_JS_STR ),
                                             EscapeString( href, CTX_JS_STR ) );
                 }
                 else if( property.Find( "file:" ) >= 0 )
@@ -1361,8 +1361,10 @@ bool PDF_PLOTTER::EndPlot()
                     if( m_project )
                         href = ResolveUriByEnvVars( href, m_project );
 
+                    href = NormalizeFileUri( href );
+
                     js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
-                                            EscapeString( property, CTX_JS_STR ),
+                                            EscapeString( href, CTX_JS_STR ),
                                             EscapeString( href, CTX_JS_STR ) );
                 }
                 else
@@ -1388,13 +1390,22 @@ bool PDF_PLOTTER::EndPlot()
                     }
                 }
             }
-            else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" ) )
+            else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" )
+                   || url.StartsWith( "file:" ) )
             {
-                wxString menuText = wxString::Format( _( "Open %s" ), url );
+                wxString href = url;
+
+                if( m_project )
+                    href = ResolveUriByEnvVars( url, m_project );
+
+                if( url.StartsWith( "file:" ) )
+                    href = NormalizeFileUri( href );
+
+                wxString menuText = wxString::Format( _( "Open %s" ), href );
 
                 js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
-                                        EscapeString( menuText, CTX_JS_STR ),
-                                        EscapeString( url, CTX_JS_STR ) );
+                                        EscapeString( href, CTX_JS_STR ),
+                                        EscapeString( href, CTX_JS_STR ) );
             }
         }
 
@@ -1434,6 +1445,7 @@ function ShM(aEntries) {
     var cChoice = app.popUpMenuEx.apply(app, aParams);
     if (cChoice != null && cChoice.substring(0, 1) == '#') this.pageNum = parseInt(cChoice.slice(1));
     else if (cChoice != null && cChoice.substring(0, 4) == 'http') app.launchURL(cChoice);
+    else if (cChoice != null && cChoice.substring(0, 4) == 'file') app.openDoc(cChoice.substring(7));
 }
 )JS";
 

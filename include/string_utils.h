@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021, 2024 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -404,5 +404,22 @@ KICOMMON_API std::string FormatDouble2Str( double aValue );
  */
 KICOMMON_API wxString From_UTF8( const std::string& aString );
 KICOMMON_API wxString  From_UTF8( const char* cstring );
+
+/**
+ * Normalize file path \a aFileUri to URI convention.
+ *
+ * Unfortunately none of the wxWidgets objects results in acceptable file URIs which breaks
+ * PDF plotting URI links.  This is an attempt to normalize Windows local file paths to a
+ * URI that PDF readers that can run JavaScript can handle.
+ *
+ * @note This does not expand environment or user variables.  Variable expansion should be
+ *       performed before calling.  If \a aFileUri does not begin with 'file://', \a aFileUri
+ *       returned unchanged.
+ *
+ * @param aFileUri is the string to be normalized.
+ * @return the normalized string.
+ */
+KICOMMON_API wxString NormalizeFileUri( const wxString& aFileUri );
+
 
 #endif  // STRING_UTILS_H
