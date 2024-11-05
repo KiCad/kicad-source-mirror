@@ -627,18 +627,23 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         int via_margin = 0;
         double width_adj = 0;
 
+        // TODO(JE) padstacks - separate top/bottom margin
         if( onSolderMaskLayer )
             via_margin = via->GetSolderMaskExpansion();
 
         if( ( aLayerMask & LSET::AllCuMask() ).any() )
             width_adj = itemplotter.getFineWidthAdj();
 
-        // TODO(JE) padstacks
-        int diameter = via->GetWidth( PADSTACK::ALL_LAYERS ) + 2 * via_margin + width_adj;
-
         /// Vias not connected to copper are optionally not drawn
         if( onCopperLayer && !via->FlashLayer( aLayerMask ) )
             continue;
+
+        int diameter = 0;
+
+        for( PCB_LAYER_ID layer : LSET( aLayerMask & LSET::AllCuMask() ).Seq() )
+            diameter = std::max( diameter, via->GetWidth( layer ) );
+
+        diameter += 2 * via_margin + width_adj;
 
         // Don't draw a null size item :
         if( diameter <= 0 )
