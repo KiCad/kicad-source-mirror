@@ -637,7 +637,8 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
                                                                    aLine.Net() ) ) )
             {
                 // another line could be referencing this segment too :(
-                aLine.Link( rseg );
+                if( !aLine.ContainsLink( rseg ) )
+                    aLine.Link( rseg );
             }
             else
             {
