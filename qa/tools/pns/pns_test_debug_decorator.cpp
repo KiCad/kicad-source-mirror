@@ -206,7 +206,8 @@ void PNS_TEST_DEBUG_DECORATOR::AddItem( const PNS::ITEM* aItem, const KIGFX::COL
                                         int aOverrideWidth, const wxString& aName,
                                         const SRC_LOCATION_INFO& aSrcLoc )
 {
-    SHAPE*           sh = aItem->Shape()->Clone();
+    // TODO(JE) padstacks
+    SHAPE*           sh = aItem->Shape( -1 )->Clone();
     PNS_DEBUG_SHAPE* ent = new PNS_DEBUG_SHAPE();
 
     ent->m_shapes.push_back( sh );

@@ -183,7 +183,7 @@ std::unique_ptr<PNS::VIA> PNS_LOG_FILE::parsePnsViaFromString( wxStringTokenizer
                 SHAPE_CIRCLE* sc = static_cast<SHAPE_CIRCLE*>( sh.get() );
 
                 via->SetPos( sc->GetCenter() );
-                via->SetDiameter( 2 * sc->GetRadius() );
+                via->SetDiameter( PNS::VIA::ALL_LAYERS, 2 * sc->GetRadius() );
             }
             else if( cmd == wxS( "drill" ) )
             {
@@ -224,7 +224,8 @@ bool comparePnsItems( const PNS::ITEM* a , const PNS::ITEM* b )
         const PNS::VIA* va = static_cast<const PNS::VIA*>(a);
         const PNS::VIA* vb = static_cast<const PNS::VIA*>(b);
 
-        if( va->Diameter() != vb->Diameter() )
+        // TODO(JE) padstacks
+        if( va->Diameter( PNS::VIA::ALL_LAYERS ) != vb->Diameter( PNS::VIA::ALL_LAYERS ) )
             return false;
 
         if( va->Drill() != vb->Drill() )
