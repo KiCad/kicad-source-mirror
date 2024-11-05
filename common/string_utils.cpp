@@ -34,7 +34,9 @@
 #include <macros.h>
 #include <richio.h>                        // StrPrintf
 #include <string_utils.h>
+#include <wx_filename.h>
 #include <fmt/chrono.h>
+#include <wx/log.h>
 #include <wx/regex.h>
 #include "locale_io.h"
 
@@ -1453,4 +1455,30 @@ wxString From_UTF8( const std::string& aString )
     }
 
    return line;
+}
+
+
+wxString NormalizeFileUri( const wxString& aFileUri )
+{
+    wxString uriPathAndFileName;
+
+    wxCHECK( aFileUri.StartsWith( wxS( "file://" ), &uriPathAndFileName ), aFileUri );
+
+    wxString tmp;
+    wxString retv = wxS( "file://" );
+    wxFileName fn = uriPathAndFileName;
+
+    tmp = fn.GetPathWithSep( wxPATH_UNIX );
+    tmp.Replace( wxS( "\\" ), wxS( "/" ) );
+    tmp.Replace( wxS( ":" ), wxS( "" ) );
+
+    if( !tmp.IsEmpty() && tmp[0] != '/' )
+        tmp = wxS( "/" ) + tmp;
+
+    retv += tmp;
+    retv += fn.GetFullName();
+
+    wxLogDebug( wxS( "Normalize file: '%s'." ), retv );
+
+    return retv;
 }
