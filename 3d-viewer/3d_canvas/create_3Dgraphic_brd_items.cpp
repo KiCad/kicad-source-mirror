@@ -273,18 +273,23 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
 }
 
 
-void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
+void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK*   aTrack,
+                                           CONTAINER_2D_BASE* aDstContainer, PCB_LAYER_ID aLayer,
                                            int aMargin )
 {
     SFVEC2F start3DU = TO_SFVEC2F( aTrack->GetStart() );
     SFVEC2F end3DU = TO_SFVEC2F( aTrack->GetEnd() );
-    float   width3DU = TO_3DU( aTrack->GetWidth() + aMargin * 2 );
 
     switch( aTrack->Type() )
     {
     case PCB_VIA_T:
+    {
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( aTrack );
+        float          width3DU = TO_3DU( via->GetWidth( aLayer ) + aMargin * 2 );
+
         addFILLED_CIRCLE_2D( aDstContainer, start3DU, width3DU / 2.0, *aTrack );
         break;
+    }
 
     case PCB_ARC_T:
     {
@@ -299,7 +304,7 @@ void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D
             track.SetWidth( arc->GetWidth() );
             track.SetLayer( arc->GetLayer() );
 
-            createTrackWithMargin( &track, aDstContainer, aMargin );
+            createTrackWithMargin( &track, aDstContainer, aLayer, aMargin );
             return;
         }
 
@@ -333,6 +338,7 @@ void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D
 
     case PCB_TRACE_T:    // Track is a usual straight segment
     {
+        float width3DU = TO_3DU( aTrack->GetWidth() + aMargin * 2 );
         addROUND_SEGMENT_2D( aDstContainer, start3DU, end3DU, width3DU, *aTrack );
         break;
     }

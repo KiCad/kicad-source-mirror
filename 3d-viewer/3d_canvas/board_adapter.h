@@ -369,7 +369,7 @@ private:
 
     // Helper functions to create the board
     void createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
-                                int aMargin = 0 );
+                                PCB_LAYER_ID aLayer, int aMargin = 0 );
 
     void createPadWithMargin( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayer, const VECTOR2I& aMargin ) const;

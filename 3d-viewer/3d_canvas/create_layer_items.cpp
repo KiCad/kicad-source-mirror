@@ -206,9 +206,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         else
         {
             m_trackCount++;
+            m_averageTrackWidth += static_cast<float>( track->GetWidth() * m_biuTo3Dunits );
         }
-
-        m_averageTrackWidth += static_cast<float>( track->GetWidth() * m_biuTo3Dunits );
     }
 
     if( m_trackCount )
@@ -280,7 +279,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // Add object item to layer container
-            createTrackWithMargin( track, layerContainer );
+            createTrackWithMargin( track, layerContainer, layer );
         }
     }
 
@@ -888,7 +887,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                         continue;
 
                     int maskExpansion = track->GetSolderMaskExpansion();
-                    createTrackWithMargin( track, layerContainer, maskExpansion );
+                    createTrackWithMargin( track, layerContainer, layer, maskExpansion );
                 }
             }
 
