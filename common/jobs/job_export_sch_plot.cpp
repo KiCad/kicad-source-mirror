@@ -63,8 +63,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( SCH_PLOT_FORMAT,
                                       { SCH_PLOT_FORMAT::DXF, "dxf" },
                               } )
 
-JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aIsCli ) :
-        JOB( "plot", false, aIsCli ),
+JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT() :
+        JOB( "plot", false ),
         m_plotFormat( SCH_PLOT_FORMAT::PDF ),
         m_filename(),
         m_drawingSheet(),
@@ -122,36 +122,36 @@ wxString JOB_EXPORT_SCH_PLOT::GetDescription()
 }
 
 
-JOB_EXPORT_SCH_PLOT_PDF::JOB_EXPORT_SCH_PLOT_PDF( bool aIsCli ) :
-		JOB_EXPORT_SCH_PLOT( aIsCli )
+JOB_EXPORT_SCH_PLOT_PDF::JOB_EXPORT_SCH_PLOT_PDF() :
+		JOB_EXPORT_SCH_PLOT()
 {
     m_plotFormat = SCH_PLOT_FORMAT::PDF;
 }
 
 
-JOB_EXPORT_SCH_PLOT_DXF ::JOB_EXPORT_SCH_PLOT_DXF ( bool aIsCli ) :
-		JOB_EXPORT_SCH_PLOT( aIsCli )
+JOB_EXPORT_SCH_PLOT_DXF ::JOB_EXPORT_SCH_PLOT_DXF () :
+		JOB_EXPORT_SCH_PLOT()
 {
 	m_plotFormat = SCH_PLOT_FORMAT::DXF;
 }
 
 
-JOB_EXPORT_SCH_PLOT_SVG::JOB_EXPORT_SCH_PLOT_SVG( bool aIsCli ) :
-		JOB_EXPORT_SCH_PLOT( aIsCli )
+JOB_EXPORT_SCH_PLOT_SVG::JOB_EXPORT_SCH_PLOT_SVG() :
+		JOB_EXPORT_SCH_PLOT()
 {
 	m_plotFormat = SCH_PLOT_FORMAT::SVG;
 }
 
 
-JOB_EXPORT_SCH_PLOT_PS::JOB_EXPORT_SCH_PLOT_PS( bool aIsCli ) :
-		JOB_EXPORT_SCH_PLOT( aIsCli )
+JOB_EXPORT_SCH_PLOT_PS::JOB_EXPORT_SCH_PLOT_PS() :
+		JOB_EXPORT_SCH_PLOT()
 {
 	m_plotFormat = SCH_PLOT_FORMAT::POST;
 }
 
 
-JOB_EXPORT_SCH_PLOT_HPGL::JOB_EXPORT_SCH_PLOT_HPGL( bool aIsCli ) :
-		JOB_EXPORT_SCH_PLOT( aIsCli )
+JOB_EXPORT_SCH_PLOT_HPGL::JOB_EXPORT_SCH_PLOT_HPGL() :
+		JOB_EXPORT_SCH_PLOT()
 {
 	m_plotFormat = SCH_PLOT_FORMAT::HPGL;
 }

@@ -30,7 +30,7 @@
 class KICOMMON_API JOB_PCB_DRC : public JOB
 {
 public:
-    JOB_PCB_DRC( bool aIsCli );
+    JOB_PCB_DRC();
     wxString GetDescription() override;
 
     wxString m_filename;

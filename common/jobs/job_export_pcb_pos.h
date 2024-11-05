@@ -29,7 +29,7 @@
 class KICOMMON_API JOB_EXPORT_PCB_POS : public JOB
 {
 public:
-    JOB_EXPORT_PCB_POS( bool aIsCli );
+    JOB_EXPORT_PCB_POS();
     wxString GetDescription() override;
 
     void SetDefaultOutputPath( const wxString& aReferenceName );

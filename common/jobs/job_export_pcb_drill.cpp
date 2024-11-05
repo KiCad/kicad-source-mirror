@@ -57,8 +57,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::MAP_FORMAT,
                                       { JOB_EXPORT_PCB_DRILL::MAP_FORMAT::SVG, "svg" },
                               } )
 
-JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL( bool aIsCli ) :
-    JOB( "drill", true, aIsCli ),
+JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL() :
+    JOB( "drill", true ),
     m_filename(),
     m_excellonMirrorY( false ),
     m_excellonMinimalHeader( false ),

@@ -21,8 +21,8 @@
 #include <jobs/job_export_pcb_gencad.h>
 
 
-JOB_EXPORT_PCB_GENCAD::JOB_EXPORT_PCB_GENCAD( bool aIsCli ) :
-    JOB( "gencad", false, aIsCli ),
+JOB_EXPORT_PCB_GENCAD::JOB_EXPORT_PCB_GENCAD() :
+    JOB( "gencad", false ),
     m_flipBottomPads( false ),
     m_useIndividualShapes( false ),
     m_storeOriginCoords( false ),

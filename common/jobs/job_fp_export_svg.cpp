@@ -21,8 +21,8 @@
 #include <jobs/job_fp_export_svg.h>
 
 
-JOB_FP_EXPORT_SVG::JOB_FP_EXPORT_SVG( bool aIsCli ) :
-    JOB( "fpsvg", true, aIsCli ),
+JOB_FP_EXPORT_SVG::JOB_FP_EXPORT_SVG() :
+    JOB( "fpsvg", true ),
     m_libraryPath(),
     m_footprint(),
     m_blackAndWhite( false ),

@@ -30,7 +30,7 @@
 class KICOMMON_API JOB_FP_EXPORT_SVG : public JOB
 {
 public:
-    JOB_FP_EXPORT_SVG( bool aIsCli );
+    JOB_FP_EXPORT_SVG();
 
     wxString m_libraryPath;
     wxString m_footprint;

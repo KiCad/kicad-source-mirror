@@ -23,8 +23,8 @@
 #include <i18n_utility.h>
 
 
-JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM( bool aIsCli ) :
-    JOB( "bom", false, aIsCli ),
+JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
+    JOB( "bom", false),
     m_filename(),
 
     m_fieldDelimiter(),

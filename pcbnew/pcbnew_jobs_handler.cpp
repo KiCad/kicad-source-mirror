@@ -621,13 +621,10 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aJob->IsCli() )
-    {
-        if( EXPORT_SVG::Plot( brd, svgPlotOptions ) )
-            m_reporter->Report( _( "Successfully created svg file" ) + wxS( "\n" ), RPT_SEVERITY_INFO );
-        else
-            m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
-    }
+    if( EXPORT_SVG::Plot( brd, svgPlotOptions ) )
+        m_reporter->Report( _( "Successfully created svg file" ) + wxS( "\n" ), RPT_SEVERITY_INFO );
+    else
+        m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -970,14 +967,12 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
         wxString msg;
         msg.Printf( _( "Failed to create file '%s'.\n" ), aGencadJob->GetFullOutputPath() );
 
-        if( aJob->IsCli() )
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-    if( aJob->IsCli() )
-        m_reporter->Report( _( "Successfully created genCAD file\n" ), RPT_SEVERITY_INFO );
+    m_reporter->Report( _( "Successfully created genCAD file\n" ), RPT_SEVERITY_INFO );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -1325,9 +1320,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
 
-
-        if( aJob->IsCli() )
-            m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
+        m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
 
         PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
         FP_CACHE           fpLib( &pcb_io, upgradeJob->m_libraryPath );
@@ -1398,8 +1391,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
     if( svgJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    if( aJob->IsCli() )
-        m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
+    m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
 
     PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
     FP_CACHE   fpLib( &pcb_io, svgJob->m_libraryPath );

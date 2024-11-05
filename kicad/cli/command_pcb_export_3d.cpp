@@ -201,7 +201,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 
 int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_EXPORT_PCB_3D> step( new JOB_EXPORT_PCB_3D( true ) );
+    std::unique_ptr<JOB_EXPORT_PCB_3D> step( new JOB_EXPORT_PCB_3D() );
     EXPORTER_STEP_PARAMS& params = step->m_3dparams;
 
     if( m_format != JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN

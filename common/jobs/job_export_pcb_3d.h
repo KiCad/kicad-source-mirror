@@ -101,7 +101,7 @@ public:
 class KICOMMON_API JOB_EXPORT_PCB_3D : public JOB
 {
 public:
-    JOB_EXPORT_PCB_3D( bool aIsCli );
+    JOB_EXPORT_PCB_3D();
     wxString GetDescription() override;
 
     enum class FORMAT

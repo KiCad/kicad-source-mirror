@@ -35,8 +35,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_DRC::OUTPUT_FORMAT,
                                       { JOB_PCB_DRC::OUTPUT_FORMAT::JSON, "json" },
                               } )
 
-JOB_PCB_DRC::JOB_PCB_DRC( bool aIsCli ) :
-    JOB( "drc", false, aIsCli ),
+JOB_PCB_DRC::JOB_PCB_DRC() :
+    JOB( "drc", false ),
     m_filename(),
     m_reportAllTrackErrors( false ),
     m_units( JOB_PCB_DRC::UNITS::MILLIMETERS ),

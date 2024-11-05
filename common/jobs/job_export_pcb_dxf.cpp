@@ -28,8 +28,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DXF::DXF_UNITS,
                                       { JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS, "mm" },
                               } )
 
-JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF( bool aIsCli ) :
-    JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF, "dxf", false, aIsCli ),
+JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
+    JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF, "dxf", false ),
     m_plotGraphicItemsUsingContours( true ),
     m_useDrillOrigin( false ),
     m_dxfUnits( DXF_UNITS::INCHES )

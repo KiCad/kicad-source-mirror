@@ -65,7 +65,7 @@ int CLI::PCB_EXPORT_GERBERS_COMMAND::doPerform( KIWAY& aKiway )
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 
-    std::unique_ptr<JOB_EXPORT_PCB_GERBERS> gerberJob( new JOB_EXPORT_PCB_GERBERS( true ) );
+    std::unique_ptr<JOB_EXPORT_PCB_GERBERS> gerberJob( new JOB_EXPORT_PCB_GERBERS() );
 
     exitCode = populateJob( gerberJob.get() );
 

@@ -107,7 +107,7 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 
-    std::unique_ptr<JOB_EXPORT_PCB_IPC2581> ipc2581Job( new JOB_EXPORT_PCB_IPC2581( true ) );
+    std::unique_ptr<JOB_EXPORT_PCB_IPC2581> ipc2581Job( new JOB_EXPORT_PCB_IPC2581() );
 
     ipc2581Job->m_filename = m_argInput;
     ipc2581Job->SetOutputPath( m_argOutput );

@@ -28,7 +28,7 @@
 class KICOMMON_API JOB_FP_UPGRADE : public JOB
 {
 public:
-    JOB_FP_UPGRADE( bool aIsCli );
+    JOB_FP_UPGRADE();
 
     wxString m_libraryPath;
     wxString m_outputLibraryPath;

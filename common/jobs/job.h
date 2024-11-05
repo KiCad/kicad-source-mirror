@@ -78,12 +78,11 @@ struct KICOMMON_API JOB_OUTPUT
 class KICOMMON_API JOB
 {
 public:
-    JOB( const std::string& aType, bool aOutputIsDirectory, bool aIsCli );
+    JOB( const std::string& aType, bool aOutputIsDirectory );
 
     virtual ~JOB();
 
     const std::string& GetType() const { return m_type; };
-    bool IsCli() const { return m_isCli; };
 
     const std::map<wxString, wxString>& GetVarOverrides() const { return m_varOverrides; }
 
@@ -125,7 +124,6 @@ public:
 
 protected:
     std::string m_type;
-    bool m_isCli;
     std::map<wxString, wxString> m_varOverrides;
 
     wxString m_tempOutputDirectory;

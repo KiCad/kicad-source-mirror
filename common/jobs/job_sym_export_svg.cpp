@@ -21,8 +21,8 @@
 #include <jobs/job_sym_export_svg.h>
 
 
-JOB_SYM_EXPORT_SVG::JOB_SYM_EXPORT_SVG( bool aIsCli ) :
-    JOB( "symsvg", true, aIsCli ),
+JOB_SYM_EXPORT_SVG::JOB_SYM_EXPORT_SVG() :
+    JOB( "symsvg", true),
     m_libraryPath(),
     m_symbol(),
     m_blackAndWhite( false ),

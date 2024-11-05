@@ -44,7 +44,7 @@ CLI::FP_UPGRADE_COMMAND::FP_UPGRADE_COMMAND() : PCB_EXPORT_BASE_COMMAND( "upgrad
 
 int CLI::FP_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_FP_UPGRADE> fpJob = std::make_unique<JOB_FP_UPGRADE>( true );
+    std::unique_ptr<JOB_FP_UPGRADE> fpJob = std::make_unique<JOB_FP_UPGRADE>();
 
     fpJob->m_libraryPath = m_argInput;
     fpJob->m_outputLibraryPath = m_argOutput;

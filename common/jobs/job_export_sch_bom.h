@@ -29,7 +29,7 @@
 class KICOMMON_API JOB_EXPORT_SCH_BOM : public JOB
 {
 public:
-    JOB_EXPORT_SCH_BOM( bool aIsCli );
+    JOB_EXPORT_SCH_BOM();
     wxString GetDescription() override;
 
     // Basic options

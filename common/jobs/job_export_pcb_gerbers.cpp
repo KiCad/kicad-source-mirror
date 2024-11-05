@@ -23,8 +23,8 @@
 #include <jobs/job_registry.h>
 #include <i18n_utility.h>
 
-JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS( bool aIsCli ) :
-        JOB_EXPORT_PCB_GERBER( "gerbers", aIsCli ),
+JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
+        JOB_EXPORT_PCB_GERBER( "gerbers" ),
         m_layersIncludeOnAll(),
         m_layersIncludeOnAllSet( false ),
         m_useBoardPlotParams( false )

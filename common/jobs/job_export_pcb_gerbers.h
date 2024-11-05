@@ -31,7 +31,7 @@
 class KICOMMON_API JOB_EXPORT_PCB_GERBERS : public JOB_EXPORT_PCB_GERBER
 {
 public:
-    JOB_EXPORT_PCB_GERBERS( bool aIsCli );
+    JOB_EXPORT_PCB_GERBERS();
     wxString GetDescription() override;
 
     LSET m_layersIncludeOnAll;

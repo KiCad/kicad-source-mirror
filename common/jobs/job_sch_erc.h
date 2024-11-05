@@ -30,7 +30,7 @@
 class KICOMMON_API JOB_SCH_ERC : public JOB
 {
 public:
-    JOB_SCH_ERC( bool aIsCli );
+    JOB_SCH_ERC();
     wxString GetDescription() override;
 
     wxString m_filename;

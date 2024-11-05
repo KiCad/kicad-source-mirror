@@ -21,9 +21,8 @@
 #include <jobs/job.h>
 #include <wx/filename.h>
 
-JOB::JOB( const std::string& aType, bool aOutputIsDirectory, bool aIsCli ) :
+JOB::JOB( const std::string& aType, bool aOutputIsDirectory ) :
         m_type( aType ),
-        m_isCli( aIsCli ),
         m_varOverrides(),
         m_tempOutputDirectory(),
         m_outputPath(),

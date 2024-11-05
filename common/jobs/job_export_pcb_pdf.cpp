@@ -23,8 +23,8 @@
 #include <i18n_utility.h>
 
 
-JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF( bool aIsCli ) :
-        JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF, "pdf", false, aIsCli )
+JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
+        JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF, "pdf", false )
 {
     m_plotDrawingSheet = false;
 

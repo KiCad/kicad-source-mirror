@@ -31,7 +31,7 @@
 class KICOMMON_API JOB_EXPORT_PCB_SVG : public JOB_EXPORT_PCB_PLOT
 {
 public:
-    JOB_EXPORT_PCB_SVG( bool aIsCli );
+    JOB_EXPORT_PCB_SVG();
     wxString GetDescription() override;
 
     int m_pageSizeMode;

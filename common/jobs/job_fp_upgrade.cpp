@@ -21,8 +21,8 @@
 #include <jobs/job_fp_upgrade.h>
 
 
-JOB_FP_UPGRADE::JOB_FP_UPGRADE( bool aIsCli ) :
-        JOB( "fpupgrade", true, aIsCli ),
+JOB_FP_UPGRADE::JOB_FP_UPGRADE() :
+        JOB( "fpupgrade", true ),
         m_libraryPath(),
         m_force( false )
 {

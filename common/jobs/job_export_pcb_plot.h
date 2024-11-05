@@ -40,7 +40,7 @@ public:
         SVG
     };
 
-    JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string& aType, bool aOutputIsDirectory, bool aIsCli );
+    JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string& aType, bool aOutputIsDirectory );
 
     PLOT_FORMAT m_plotFormat;
 

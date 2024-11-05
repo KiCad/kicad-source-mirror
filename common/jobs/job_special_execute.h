@@ -27,7 +27,7 @@
 class KICOMMON_API JOB_SPECIAL_EXECUTE : public JOB
 {
 public:
-    JOB_SPECIAL_EXECUTE( bool aIsCli );
+    JOB_SPECIAL_EXECUTE();
 
     wxString GetDescription() override;
 

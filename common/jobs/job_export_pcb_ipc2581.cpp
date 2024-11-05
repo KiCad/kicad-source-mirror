@@ -35,8 +35,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION,
                                       { JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C, "C" },
                               } )
 
-JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581( bool aIsCli ) :
-    JOB( "ipc2581", false, aIsCli ),
+JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
+    JOB( "ipc2581", false ),
     m_filename(),
     m_drawingSheet(),
     m_units( IPC2581_UNITS::MILLIMETERS ),

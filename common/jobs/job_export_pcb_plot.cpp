@@ -3,9 +3,8 @@
 #include <jobs/job_export_pcb_plot.h>
 
 JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string& aType,
-                                          bool aOutputIsDirectory,
-                                          bool aIsCli )
-	: JOB( aType, aOutputIsDirectory, aIsCli ),
+                                          bool aOutputIsDirectory )
+	: JOB( aType, aOutputIsDirectory ),
     m_plotFormat( aFormat ),
 	m_filename(),
 	m_colorTheme(),

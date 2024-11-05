@@ -43,8 +43,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_POS::UNITS,
                                       { JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS, "mm" },
                               } )
 
-JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS( bool aIsCli ) :
-    JOB( "pos", false, aIsCli ),
+JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
+    JOB( "pos", false ),
     m_filename(),
     m_useDrillPlaceFileOrigin( true ),
     m_smdOnly( false ),

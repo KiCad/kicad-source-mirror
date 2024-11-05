@@ -46,7 +46,7 @@ CLI::SCH_EXPORT_NETLIST_COMMAND::SCH_EXPORT_NETLIST_COMMAND() : COMMAND( "netlis
 int CLI::SCH_EXPORT_NETLIST_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_SCH_NETLIST> netJob =
-            std::make_unique<JOB_EXPORT_SCH_NETLIST>( true );
+            std::make_unique<JOB_EXPORT_SCH_NETLIST>();
 
     netJob->m_filename = m_argInput;
     netJob->SetOutputPath( m_argOutput );

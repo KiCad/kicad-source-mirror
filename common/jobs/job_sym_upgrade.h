@@ -28,7 +28,7 @@
 class KICOMMON_API JOB_SYM_UPGRADE : public JOB
 {
 public:
-    JOB_SYM_UPGRADE( bool aIsCli );
+    JOB_SYM_UPGRADE();
 
     wxString m_libraryPath;
     wxString m_outputLibraryPath;

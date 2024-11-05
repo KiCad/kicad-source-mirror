@@ -35,8 +35,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_SCH_ERC::OUTPUT_FORMAT,
                                       { JOB_SCH_ERC::OUTPUT_FORMAT::JSON, "json" },
                               } )
 
-JOB_SCH_ERC::JOB_SCH_ERC( bool aIsCli ) :
-    JOB( "erc", false, aIsCli ),
+JOB_SCH_ERC::JOB_SCH_ERC() :
+    JOB( "erc", false ),
     m_filename(),
     m_units( JOB_SCH_ERC::UNITS::MILLIMETERS ),
     m_severity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),

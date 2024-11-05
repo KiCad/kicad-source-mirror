@@ -31,7 +31,7 @@
 class KICOMMON_API JOB_PCB_RENDER : public JOB
 {
 public:
-    JOB_PCB_RENDER( bool aIsCli );
+    JOB_PCB_RENDER();
 
     wxString m_filename;
     wxString m_outputFile;

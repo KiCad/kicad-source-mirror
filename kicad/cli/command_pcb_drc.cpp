@@ -93,7 +93,7 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 
 int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_PCB_DRC> drcJob( new JOB_PCB_DRC( true ) );
+    std::unique_ptr<JOB_PCB_DRC> drcJob( new JOB_PCB_DRC() );
 
     drcJob->m_outputFile = m_argOutput;
     drcJob->m_filename = m_argInput;

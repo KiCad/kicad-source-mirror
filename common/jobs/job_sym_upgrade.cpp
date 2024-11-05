@@ -21,8 +21,8 @@
 #include <jobs/job_sym_upgrade.h>
 
 
-JOB_SYM_UPGRADE::JOB_SYM_UPGRADE( bool aIsCli ) :
-    JOB( "symupgrade", false, aIsCli ),
+JOB_SYM_UPGRADE::JOB_SYM_UPGRADE() :
+    JOB( "symupgrade", false ),
     m_libraryPath(),
     m_outputLibraryPath(),
     m_force( false )

@@ -23,8 +23,8 @@
 #include <i18n_utility.h>
 
 
-JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG( bool aIsCli ) :
-    JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG, "svg", false, aIsCli ),
+JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
+    JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG, "svg", false ),
     m_pageSizeMode( 0 )
 {
     m_plotDrawingSheet = true;

@@ -143,7 +143,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob =
-            std::make_unique<JOB_EXPORT_SCH_PLOT>( true );
+            std::make_unique<JOB_EXPORT_SCH_PLOT>();
     plotJob->m_filename = filename;
     plotJob->m_plotFormat = m_plotFormat;
     plotJob->m_plotPages = pages;

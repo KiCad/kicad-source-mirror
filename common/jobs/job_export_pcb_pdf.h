@@ -31,7 +31,7 @@
 class KICOMMON_API JOB_EXPORT_PCB_PDF : public JOB_EXPORT_PCB_PLOT
 {
 public:
-    JOB_EXPORT_PCB_PDF( bool aIsCli );
+    JOB_EXPORT_PCB_PDF();
     wxString GetDescription() override;
 };
 

@@ -22,7 +22,7 @@
 #include <jobs/job_pcb_render.h>
 
 
-JOB_PCB_RENDER::JOB_PCB_RENDER( bool aIsCli ) :
-        JOB( "render", false, aIsCli ), m_filename()
+JOB_PCB_RENDER::JOB_PCB_RENDER() :
+        JOB( "render", false ), m_filename()
 {
 }

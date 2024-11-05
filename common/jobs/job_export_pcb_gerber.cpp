@@ -23,8 +23,8 @@
 #include <i18n_utility.h>
 
 
-JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType, bool aIsCli ) :
-    JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER, aType, false, aIsCli ),
+JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType ) :
+    JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER, aType, false ),
     m_subtractSolderMaskFromSilk( false ),
     m_includeNetlistAttributes( true ),
     m_useX2Format( true ),
@@ -71,8 +71,8 @@ JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType, bool aIs
 }
 
 
-JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( bool aIsCli ) :
-    JOB_EXPORT_PCB_GERBER( "gerber", aIsCli )
+JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER() :
+    JOB_EXPORT_PCB_GERBER( "gerber" )
 {
 }
 

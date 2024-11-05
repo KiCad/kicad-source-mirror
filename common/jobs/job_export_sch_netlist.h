@@ -28,7 +28,7 @@
 class KICOMMON_API JOB_EXPORT_SCH_NETLIST : public JOB
 {
 public:
-    JOB_EXPORT_SCH_NETLIST( bool aIsCli );
+    JOB_EXPORT_SCH_NETLIST();
     wxString GetDescription() override;
 
     wxString m_filename;

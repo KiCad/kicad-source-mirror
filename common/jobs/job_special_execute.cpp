@@ -22,8 +22,8 @@
 #include <jobs/job_registry.h>
 #include <i18n_utility.h>
 
-JOB_SPECIAL_EXECUTE::JOB_SPECIAL_EXECUTE( bool aIsCli ) :
-        JOB( "special_execute", false, aIsCli ),
+JOB_SPECIAL_EXECUTE::JOB_SPECIAL_EXECUTE() :
+        JOB( "special_execute", false ),
         m_command(),
         m_ignoreExitcode( false ),
         m_recordOutput( true )

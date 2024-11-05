@@ -130,7 +130,7 @@ std::vector<wxString> CLI::SCH_EXPORT_BOM_COMMAND::convertStringList( const wxSt
 
 int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_EXPORT_SCH_BOM> bomJob = std::make_unique<JOB_EXPORT_SCH_BOM>( true );
+    std::unique_ptr<JOB_EXPORT_SCH_BOM> bomJob = std::make_unique<JOB_EXPORT_SCH_BOM>();
 
     // Basic options
     bomJob->m_filename = m_argInput;

@@ -23,8 +23,8 @@
 #include <i18n_utility.h>
 
 
-JOB_EXPORT_SCH_PYTHONBOM::JOB_EXPORT_SCH_PYTHONBOM( bool aIsCli ) :
-        JOB( "pythonbom", false, aIsCli ),
+JOB_EXPORT_SCH_PYTHONBOM::JOB_EXPORT_SCH_PYTHONBOM() :
+        JOB( "pythonbom", false ),
         m_filename()
 {
 }

@@ -35,8 +35,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_SCH_NETLIST::FORMAT,
                                       { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL, "spicemodel" },
                               } )
 
-JOB_EXPORT_SCH_NETLIST::JOB_EXPORT_SCH_NETLIST( bool aIsCli ) :
-    JOB( "netlist", false, aIsCli ),
+JOB_EXPORT_SCH_NETLIST::JOB_EXPORT_SCH_NETLIST() :
+    JOB( "netlist", false ),
     m_filename(),
     format( FORMAT::KICADSEXPR ),
     m_spiceSaveAllVoltages( false ),

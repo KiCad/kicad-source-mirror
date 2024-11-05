@@ -64,7 +64,7 @@ private:
 #define REGISTER_JOB( job_name, title, face, T ) bool job_name##_entry = JOB_REGISTRY::Add( #job_name, \
                                                             { face, []()                               \
                                                             {                                          \
-                                                                return new T( true );                  \
+                                                                return new T();                        \
                                                             },                                         \
                                                             title } )
 // newline required to appease warning for REGISTER_JOB macro

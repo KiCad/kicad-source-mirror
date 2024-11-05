@@ -83,7 +83,7 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
 
 int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_SCH_ERC> ercJob( new JOB_SCH_ERC( true ) );
+    std::unique_ptr<JOB_SCH_ERC> ercJob( new JOB_SCH_ERC() );
 
     ercJob->m_outputFile = m_argOutput;
     ercJob->m_filename = m_argInput;

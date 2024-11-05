@@ -48,7 +48,7 @@ CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : COMMAND( "upgrade" )
 
 int CLI::SYM_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_SYM_UPGRADE> symJob = std::make_unique<JOB_SYM_UPGRADE>( true );
+    std::unique_ptr<JOB_SYM_UPGRADE> symJob = std::make_unique<JOB_SYM_UPGRADE>();
 
     symJob->m_libraryPath = m_argInput;
     symJob->m_outputLibraryPath = m_argOutput;

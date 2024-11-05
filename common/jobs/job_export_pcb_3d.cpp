@@ -74,8 +74,8 @@ wxString EXPORTER_STEP_PARAMS::GetFormatName() const
 }
 
 
-JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D( bool aIsCli ) :
-    JOB( "3d", false, aIsCli ),
+JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
+    JOB( "3d", false ),
     m_hasUserOrigin( false ),
     m_filename(),
     m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
