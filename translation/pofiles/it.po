@@ -114,7 +114,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-03 08:00+0000\n"
+"PO-Revision-Date: 2024-11-06 17:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -538,7 +538,6 @@ msgid "Home View"
 msgstr "Vista origine"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
-#, fuzzy
 msgid "Redraw at the home position and zoom"
 msgstr "Ridisegna alla posizione origine e zooma"
 
@@ -883,7 +882,6 @@ msgstr "Colore fine gradiente sfondo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:228
-#, fuzzy
 msgid "Use board stackup colors"
 msgstr "Usa colori stackup scheda"
 
@@ -4880,7 +4878,7 @@ msgstr "Riferimenti inter-foglio"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Aggiungi file incorporato"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
 #, fuzzy
@@ -4894,11 +4892,11 @@ msgstr "Esporta"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "Incorpora caratteri"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Memorizza una copia di tutti i caratteri usati"
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
@@ -5303,17 +5301,21 @@ msgstr "Percorso esistente:"
 
 #: common/dialogs/panel_plugin_settings.cpp:111
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "Questa installazione di KiCad non ha il supporto alle API abilitato."
 
 #: common/dialogs/panel_plugin_settings.cpp:120
 msgid "KiCad API is not enabled; external Python plugins will not be available"
 msgstr ""
+"Supporto alle API KiCad non abilitato; i plugin Python esterni non saranno "
+"disponibili"
 
 #: common/dialogs/panel_plugin_settings.cpp:131
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Non è stato scelto alcun interprete Python valido; i plugin Python esterni "
+"non saranno disponibili"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
 #, fuzzy, c-format
@@ -5322,7 +5324,7 @@ msgstr "File non trovato %s."
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Non è un interprete Python 3 valido"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
 #, fuzzy
@@ -11897,7 +11899,7 @@ msgstr "Mappa conflitti pin"
 #: pcbnew/dialogs/dialog_board_setup.cpp:205 pcbnew/dialogs/dialog_drc.cpp:933
 #: pcbnew/dialogs/dialog_drc.cpp:975
 msgid "Violation Severity"
-msgstr "Importanza violazione"
+msgstr "Importanza violazioni"
 
 #: eeschema/dialogs/dialog_erc.cpp:856
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
@@ -21178,9 +21180,8 @@ msgid "Errors during netlist generation."
 msgstr "Errori nella generazione della netlist."
 
 #: eeschema/sim/simulator_frame.cpp:375 eeschema/tools/simulator_control.cpp:89
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Errori nella generazione della netlist."
+msgstr "Avvertimenti nella generazione della netlist."
 
 #: eeschema/sim/simulator_frame.cpp:385
 msgid "Simulator requires a fully annotated schematic."
@@ -24377,9 +24378,8 @@ msgid "Place Pin Anyway"
 msgstr "Piazza comunque il pin"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:448
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "Pin foglio"
+msgstr "Ripeti pin"
 
 #: eeschema/widgets/design_block_pane.cpp:41
 #, fuzzy
@@ -31728,24 +31728,24 @@ msgid "(multiple board outlines not supported)"
 msgstr "(bordi scheda multipli non supportati)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:647
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(Il rettangolo ha dimensione nulla o molto piccola: %d nm)"
+msgstr "(rettangolo di dimensione nulla o molto piccola: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:665
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(Il cerchio ha raggio nullo o molto piccolo: %d nm)"
+msgstr "(cerchio di raggio nullo o molto piccolo: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(Il segmento ha una lunghezza nulla o molto piccola: %d nm)"
+msgstr "(segmento di lunghezza nulla o molto piccola: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(L'arco ha dimensione nulla o molto piccola: %d nm)"
+msgstr "(arco di dimensione nulla o molto piccola: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:196
 #: pcbnew/dialogs/dialog_drc.cpp:271 pcbnew/pcb_edit_frame.cpp:2529
@@ -33851,9 +33851,8 @@ msgstr ""
 "libreria e vuole propagarli indietro sul C.S. ."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:310
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Cambia impronte"
+msgstr "Cambia impronta"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
 #, c-format
@@ -41959,15 +41958,15 @@ msgstr "Controllo fori micro-via..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s min %s; reale %s)"
+msgstr "(%s foro min %s; effettivo %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s alt. max %s; effettivo %s)"
+msgstr "(%s foro max %s; effettivo %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -44490,36 +44489,30 @@ msgid "(PTH pad has no copper layers)"
 msgstr "(piazzola PTH senza strati rame)"
 
 #: pcbnew/pad.cpp:2143
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr ""
-"Attenzione: i fori metallizzati dovrebbero avere una piazzola in rame almeno "
-"su uno strato."
+"(i fori metallizzati normalmente hanno una piazzola in rame almeno su uno "
+"strato)"
 
 #: pcbnew/pad.cpp:2151
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "Attenzione: la proprietà allineatore non ha senso con piazzole NPTH."
+msgstr "(la proprietà di allineamento non ha senso su piazzole NPTH)"
 
 #: pcbnew/pad.cpp:2155
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "Attenzione: la proprietà testpoint non ha senso con piazzole NPTH."
+msgstr "(la proprietà testpoint non ha senso su piazzole NPTH)"
 
 #: pcbnew/pad.cpp:2158
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "Attenzione: la proprietà dissipatore non ha senso per piazzole NPTH."
+msgstr "(la proprietà dissipazione non ha senso per piazzole NPTH)"
 
 #: pcbnew/pad.cpp:2161
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "Attenzione: la proprietà dentellata è per piazzole PTH."
+msgstr "(la proprietà dentellata è per piazzole PTH)"
 
 #: pcbnew/pad.cpp:2164
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "Attenzione: la proprietà BGA è per piazzole SMD."
+msgstr "(la proprietà BGA è per piazzole SMD)"
 
 #: pcbnew/pad.cpp:2167
 #, fuzzy
@@ -44527,11 +44520,10 @@ msgid "('mechanical' property is for PTH pads)"
 msgstr "Attenzione: la proprietà dentellata è per piazzole PTH."
 
 #: pcbnew/pad.cpp:2183
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
-"Attenzione: le piazzole del connettore normalmente non hanno pastasalda. "
-"Usare piazzole SMD."
+"(Le piazzole del connettore normalmente non hanno pastasalda; usare piazzole "
+"SMD)"
 
 #: pcbnew/pad.cpp:2191
 #, fuzzy
@@ -44539,24 +44531,22 @@ msgid "(SMD pad has a hole)"
 msgstr "Errore: la piazzola SMD ha un foro."
 
 #: pcbnew/pad.cpp:2197
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "Se si desidera uno strato di pasta salda per il fronte scheda"
+msgstr "(la piazzola SMD ha rame su entrambi i lati della scheda)"
 
 #: pcbnew/pad.cpp:2203 pcbnew/pad.cpp:2216
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
-msgstr "(gli strati rame e maschera della piazzola SMD non corrispondono)"
+msgstr ""
+"(la piazzola SMD ha strati rame e maschera su lati diversi della scheda)"
 
 #: pcbnew/pad.cpp:2208 pcbnew/pad.cpp:2221
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
-msgstr "Se si desidera uno strato di pasta salda per il fronte scheda"
+msgstr ""
+"(la piazzola SMD ha strati rame e pastasalda su lati diversi della scheda)"
 
 #: pcbnew/pad.cpp:2227
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "Attenzione: la piazzola SMD non ha strati esterni."
+msgstr "(la piazzola SMD non ha strati esterni)"
 
 #: pcbnew/pad.cpp:2247
 #, fuzzy
@@ -44569,70 +44559,60 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "La dimensione del foro del via deve essere minore del diametro del via"
 
 #: pcbnew/pad.cpp:2282
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(foro piazzola PTH senza rame)"
+msgstr "(foro piazzola PTH non lascia rame)"
 
 #: pcbnew/pad.cpp:2290
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(foro piazzola PTH senza rame)"
+msgstr "(foro piazzola PTH non del tutto nel rame)"
 
 #: pcbnew/pad.cpp:2297
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "Attenzione: foro piazzola fuori dalla sagoma."
+msgstr "(foro piazzola fuori dalla sagoma)"
 
 #: pcbnew/pad.cpp:2302
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "Attenzione: i valori di distanza locale negativa non avranno effetto."
+msgstr "(valori di distanza locale negativi non hanno effetto)"
 
 #: pcbnew/pad.cpp:2321
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Attenzione: le distanze negative della maschera di saldatura più grandi di "
-"alcune primitive di forma. I risultati potrebbero essere sorprendenti."
+"(distanza negativa dalla maschera di saldatura più grande di alcune "
+"primitive di forma; i risultati potrebbero sorprendere)"
 
 #: pcbnew/pad.cpp:2331
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Attenzione: distanza maschera di saldatura negativa più grande della "
-"piazzola. Non verrà generata nessuna maschera di saldatura."
+"(distanza maschera di saldatura negativa più grande della piazzola; non "
+"verrà generata nessuna maschera di saldatura)"
 
 #: pcbnew/pad.cpp:2350
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"Attenzione: margine pastasalda negativo più grande della piazzola. Non verrà "
-"generata nessuna maschera di pastasalda."
+"(margine pastasalda negativo più grande della piazzola; non verrà generata "
+"nessuna maschera di pastasalda)"
 
 #: pcbnew/pad.cpp:2357
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(raggio angolo negativo non consentito)"
 
 #: pcbnew/pad.cpp:2359
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "Attenzione: la dimensione angolo renderà la piazzola circolare."
+msgstr "(la dimensione angolo renderà la piazzola circolare)"
 
 #: pcbnew/pad.cpp:2364
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "Scaricamento troppo grande."
+msgstr "(angolo smusso negativo non consentito)"
 
 #: pcbnew/pad.cpp:2366
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "Scaricamento troppo grande."
+msgstr "(angolo smusso troppo grande)"
 
 #: pcbnew/pad.cpp:2375
 #, fuzzy
@@ -44640,10 +44620,9 @@ msgid "(trapezoid delta is too large)"
 msgstr "Errore: il delta del trapeziode è troppo grande."
 
 #: pcbnew/pad.cpp:2385
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr ""
-"Errore: la forma piazzola personalizzata deve risolvere un singolo poligono."
+"(la forma piazzola personalizzata deve risolversi in un singolo poligono)"
 
 #: pcbnew/pad.cpp:2450
 msgid "Edge connector"
@@ -44700,9 +44679,8 @@ msgid "Corner Radius Ratio"
 msgstr "Rapporto raggio vertice"
 
 #: pcbnew/pad.cpp:2604
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Forma foro:"
+msgstr "Forma foro"
 
 #: pcbnew/pad.cpp:2608
 msgid "Hole Size X"
@@ -46394,7 +46372,7 @@ msgid "Cannot interpret date code %d"
 msgstr "Impossibile interpretare il codice data %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -46402,7 +46380,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "Elementi trovati su strati non definiti (%s).\n"
-"Recuperarli nello strato %s ?"
+"Recuperarli nello strato %s ?\n"
+"\n"
+"Le zone dovranno essere nuovamente riempite"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1151
 msgid "Undefined Layers Warning"
