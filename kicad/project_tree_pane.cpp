@@ -2310,17 +2310,29 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         git_oid oid;
 
-#if ( ( LIBGIT2_VER_MAJOR == 1                                                                     \
-        && ( ( LIBGIT2_VER_MINOR == 8                                                              \
-               && ( LIBGIT2_VER_REVISION < 2 || LIBGIT2_VER_REVISION >= 3 ) )                      \
-             || ( LIBGIT2_VER_MINOR > 8 ) ) )                                                      \
-      || LIBGIT2_VER_MAJOR > 1 )
-        // For libgit2 versions 1.8.0, 1.8.1.
-        // This change was reverted for 1.8.2
-        // This change was re-reverted for 1.8.3+
+#if( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR == 8                                              \
+     && ( LIBGIT2_VER_REVISION < 2 || LIBGIT2_VER_REVISION == 3 ) )
+        /*
+         * For libgit2 versions 1.8.0, 1.8.1.               (cf19ddc52)
+         * This change was reverted for 1.8.2               (49d3fadfc, main branch)
+         * The revert for 1.8.2 was not included for 1.8.3  (which is on the maint/v1.8 branch, not main)
+         * This change was also reverted for 1.8.4          (94ba816f6, also maint/v1.8 branch)
+         *
+         * As of 1.8.4, the history is like this:
+         *
+         *  * 3f4182d15 (tag: v1.8.4, maint/v1.8)
+         *  * 94ba816f6 Revert "commit: fix const declaration"      [puts const back]
+         *  * 3353f78e8 (tag: v1.8.3)
+         *  | * 4ce872a0f (tag: v1.8.2-rc1, tag: v1.8.2)
+         *  | * 49d3fadfc Revert "commit: fix const declaration"    [puts const back]
+         *  |/
+         *  * 36f7e21ad (tag: v1.8.1)
+         *  * d74d49148 (tag: v1.8.0)
+         *  * cf19ddc52 commit: fix const declaration               [removes const]
+         */
         git_commit* const parents[1] = { parent };
 #else
-        // For libgit2 versions older than 1.8.0, or equal to 1.8.2
+        // For libgit2 versions older than 1.8.0, or equal to 1.8.2, or 1.8.4+
         const git_commit* parents[1] = { parent };
 #endif
 
