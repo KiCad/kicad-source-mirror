@@ -119,14 +119,15 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
                 rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
                 rk.x_location = pad->GetPosition().x - origin.x;
                 rk.y_location = origin.y - pad->GetPosition().y;
-                // TODO(JE) padstacks
-                rk.x_size = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
+
+                PCB_LAYER_ID accessLayer = footprint->IsFlipped() ? B_Cu : F_Cu;
+                rk.x_size = pad->GetSize( accessLayer ).x;
 
                 // Rule: round pads have y = 0
-                if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+                if( pad->GetShape( accessLayer ) == PAD_SHAPE::CIRCLE )
                     rk.y_size = 0;
                 else
-                    rk.y_size = pad->GetSize( PADSTACK::ALL_LAYERS ).y;
+                    rk.y_size = pad->GetSize( accessLayer ).y;
 
                 rk.rotation = - pad->GetOrientation().AsDegrees();
 
@@ -204,11 +205,20 @@ static void build_via_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             rk.access = via_access_code( aPcb, top_layer, bottom_layer );
             rk.x_location = via->GetPosition().x - origin.x;
             rk.y_location = origin.y - via->GetPosition().y;
-            // TODO(JE) padstacks
-            rk.x_size = via->GetWidth( PADSTACK::ALL_LAYERS );
+
+            // The record has a single size for vias, so take the smaller of the front and back
+            if( via->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+                rk.x_size = std::min( via->GetWidth( F_Cu ), via->GetWidth( B_Cu ) );
+            else
+                rk.x_size = via->GetWidth( PADSTACK::ALL_LAYERS );
+
             rk.y_size = 0; // Round so height = 0
             rk.rotation = 0;
-            rk.soldermask = 3; // XXX always tented?
+
+            if( via->IsTented( F_Mask ) )
+                rk.soldermask |= 1;
+            if( via->IsTented( B_Mask ) )
+                rk.soldermask |= 2;
 
             aRecords.push_back( rk );
         }
