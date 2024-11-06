@@ -251,7 +251,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_CompactSave               = false;
     m_UpdateUIEventInterval     = 0;
     m_ShowRepairSchematic       = false;
-    m_EnableDesignBlocks        = false;
+    m_EnableDesignBlocks        = true;
     m_EnableGenerators          = false;
     m_EnableGit                 = false;
     m_EnableJobset              = false;
