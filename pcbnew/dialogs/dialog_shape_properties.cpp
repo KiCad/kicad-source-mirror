@@ -742,25 +742,6 @@ private:
     }
 
 private:
-    // This must match the order of the tabs in the notebook
-    enum class SHAPE_PROPS_TAB_INDEX
-    {
-        RECT_CORNERS = 0,
-        RECT_CORNER_SIZE,
-        RECT_CENTER_SIZE,
-        LINE_ENDS,
-        LINE_POLAR,
-        LINE_MID_END,
-        ARC_C_S_A,
-        ARC_S_M_E,
-        CIRCLE_RADIUS,
-        CIRCLE_POINT,
-        BEZIER,
-
-        // Total tabs available (not all will be shown)
-        NUM_TABS,
-    };
-
     PCB_BASE_EDIT_FRAME*  m_parent;
     PCB_SHAPE*            m_item;
 
@@ -875,16 +856,19 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     for( size_t i = 0; i < m_notebookShapeDefs->GetPageCount(); ++i )
         m_notebookShapeDefs->GetPage( i )->Hide();
 
-    const auto showPage = [&]( SHAPE_PROPS_TAB_INDEX aIndex )
+    const auto showPage = [&]( wxSizer& aMainSizer, bool aSelect = false )
     {
-        wxWindow* page = m_notebookShapeDefs->GetPage( static_cast<size_t>( aIndex ) );
+        // Get the parent of the sizer, which is the panel
+        wxWindow* page = aMainSizer.GetContainingWindow();
         wxCHECK( page, /* void */ );
         page->Layout();
         page->Show();
-    };
 
-    wxASSERT( m_notebookShapeDefs->GetPageCount()
-              == static_cast<int>( SHAPE_PROPS_TAB_INDEX::NUM_TABS ) );
+        if( aSelect )
+        {
+            m_notebookShapeDefs->SetSelection( m_notebookShapeDefs->FindPage( page ) );
+        }
+    };
 
     switch( m_item->GetShape() )
     {
@@ -902,13 +886,11 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         m_geomSync = std::make_unique<RECTANGLE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
-        showPage( SHAPE_PROPS_TAB_INDEX::RECT_CORNERS );
-        showPage( SHAPE_PROPS_TAB_INDEX::RECT_CORNER_SIZE );
-        showPage( SHAPE_PROPS_TAB_INDEX::RECT_CENTER_SIZE );
-
-        m_notebookShapeDefs->SetSelection(
-                static_cast<int>( SHAPE_PROPS_TAB_INDEX::RECT_CORNERS ) );
+        showPage( *m_gbsRectangleByCorners, true );
+        showPage( *m_gbsRectangleByCornerSize );
+        showPage( *m_gbsRectangleByCenterSize );
         break;
+
     case SHAPE_T::SEGMENT:
 
         AddXYPointToSizer( *aParent, *m_gbsLineByEnds, 0, 0, _( "Start Point" ), false, m_boundCtrls);
@@ -923,12 +905,11 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         m_geomSync = std::make_unique<LINE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
-        showPage( SHAPE_PROPS_TAB_INDEX::LINE_ENDS );
-        showPage( SHAPE_PROPS_TAB_INDEX::LINE_POLAR );
-        showPage( SHAPE_PROPS_TAB_INDEX::LINE_MID_END );
-
-        m_notebookShapeDefs->SetSelection( static_cast<int>( SHAPE_PROPS_TAB_INDEX::LINE_ENDS ) );
+        showPage( *m_gbsLineByEnds, true );
+        showPage( *m_gbsLineByLengthAngle );
+        showPage( *m_gbsLineByMidEnd );
         break;
+
     case SHAPE_T::ARC:
         AddXYPointToSizer( *aParent, *m_gbsArcByCSA, 0, 0, _( "Center" ), false, m_boundCtrls);
         AddXYPointToSizer( *aParent, *m_gbsArcByCSA, 0, 3, _( "Start Point" ), false, m_boundCtrls);
@@ -940,10 +921,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         m_geomSync = std::make_unique<ARC_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
-        showPage( SHAPE_PROPS_TAB_INDEX::ARC_C_S_A );
-        showPage( SHAPE_PROPS_TAB_INDEX::ARC_S_M_E );
-
-        m_notebookShapeDefs->SetSelection( static_cast<int>( SHAPE_PROPS_TAB_INDEX::ARC_C_S_A ) );
+        showPage( *m_gbsArcByCSA, true );
+        showPage( *m_gbsArcBySME );
         break;
 
     case SHAPE_T::CIRCLE:
@@ -955,11 +934,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         m_geomSync = std::make_unique<CIRCLE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
-        showPage( SHAPE_PROPS_TAB_INDEX::CIRCLE_RADIUS );
-        showPage( SHAPE_PROPS_TAB_INDEX::CIRCLE_POINT );
-
-        m_notebookShapeDefs->SetSelection(
-                static_cast<int>( SHAPE_PROPS_TAB_INDEX::CIRCLE_RADIUS ) );
+        showPage( *m_gbsCircleCenterRadius, true );
+        showPage( *m_gbsCircleCenterPoint );
         break;
 
     case SHAPE_T::BEZIER:
@@ -970,9 +946,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         m_geomSync = std::make_unique<BEZIER_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
-        showPage( SHAPE_PROPS_TAB_INDEX::BEZIER );
-
-        m_notebookShapeDefs->SetSelection( static_cast<int>( SHAPE_PROPS_TAB_INDEX::BEZIER ) );
+        showPage( *m_gbsBezier, TRUE );
         break;
 
     case SHAPE_T::POLY:
