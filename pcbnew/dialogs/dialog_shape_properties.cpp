@@ -877,7 +877,10 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
     const auto showPage = [&]( SHAPE_PROPS_TAB_INDEX aIndex )
     {
-        m_notebookShapeDefs->GetPage( static_cast<size_t>( aIndex ) )->Show();
+        wxWindow* page = m_notebookShapeDefs->GetPage( static_cast<size_t>( aIndex ) );
+        wxCHECK( page, /* void */ );
+        page->Layout();
+        page->Show();
     };
 
     wxASSERT( m_notebookShapeDefs->GetPageCount()
