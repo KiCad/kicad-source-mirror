@@ -598,14 +598,15 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
 bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
                                           bool* aIsUndoable, bool* aClearAnnotationNewItems,
-                                          bool* aUpdateHierarchyNavigator )
+                                          bool* aUpdateHierarchyNavigator,
+                                          wxString* aSourceSheetFilename )
 {
     if( aSheet == nullptr || aHierarchy == nullptr )
         return false;
 
     // Get the new texts
     DIALOG_SHEET_PROPERTIES dlg( this, aSheet, aIsUndoable, aClearAnnotationNewItems,
-                                 aUpdateHierarchyNavigator );
+                                 aUpdateHierarchyNavigator, aSourceSheetFilename );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;

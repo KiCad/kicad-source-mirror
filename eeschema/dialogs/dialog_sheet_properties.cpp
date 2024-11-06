@@ -51,12 +51,14 @@
 
 DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
                                                   bool* aIsUndoable, bool* aClearAnnotationNewItems,
-                                                  bool* aUpdateHierarchyNavigator ) :
+                                                  bool* aUpdateHierarchyNavigator,
+                                                  wxString* aSourceSheetFilename ) :
     DIALOG_SHEET_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_isUndoable( aIsUndoable ),
     m_clearAnnotationNewItems( aClearAnnotationNewItems ),
     m_updateHierarchyNavigator( aUpdateHierarchyNavigator ),
+    m_sourceSheetFilename( aSourceSheetFilename ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
     m_dummySheet( *aSheet ),
     m_dummySheetNameField( VECTOR2I( -1, -1 ), SHEETNAME, &m_dummySheet )
@@ -507,6 +509,21 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
                              + wxString::Format( _( "Link '%s' to this file?" ),
                                                  newAbsoluteFilename ) ) )
             {
+                return false;
+            }
+        }
+        // If we are drawing a sheet from a design block/sheet import, we need to copy the sheet to the current directory.
+        else if( m_sourceSheetFilename )
+        {
+            loadFromFile = true;
+
+            if( !wxCopyFile( *m_sourceSheetFilename, newAbsoluteFilename, false ) )
+            {
+                msg.Printf( _( "Failed to copy schematic file '%s' to destination '%s'." ),
+                            currentScreenFileName.GetFullPath(), newAbsoluteFilename );
+
+                DisplayError( m_frame, msg );
+
                 return false;
             }
         }

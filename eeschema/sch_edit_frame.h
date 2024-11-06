@@ -578,10 +578,12 @@ public:
      * of a already existing sheet.
      * @param aUpdateHierarchyNavigator is an optional flag to indicate the sheet changes require
      *                                  the hierarchy navigator panel to be updated.
+     * @param aSourceSheetFilename is an optional filename to copy the new sheet from
      */
     bool EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
                               bool* aIsUndoable = nullptr, bool* aClearAnnotationNewItems = nullptr,
-                              bool* aUpdateHierarchyNavigator = nullptr );
+                              bool* aUpdateHierarchyNavigator = nullptr,
+                              wxString* aSourceSheetFilename = nullptr );
 
     void InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename );
 

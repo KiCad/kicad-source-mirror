@@ -38,7 +38,8 @@ class DIALOG_SHEET_PROPERTIES : public DIALOG_SHEET_PROPERTIES_BASE
 {
 public:
     DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet, bool* aIsUndoable,
-                             bool* aClearAnnotationNewItems, bool* aUpdateHierarchyNavigator );
+                             bool* aClearAnnotationNewItems, bool* aUpdateHierarchyNavigator,
+                             wxString* aSourceSheetFilename );
 
     ~DIALOG_SHEET_PROPERTIES() override;
 
@@ -68,6 +69,7 @@ private:
     bool*              m_isUndoable;
     bool*              m_clearAnnotationNewItems;
     bool*              m_updateHierarchyNavigator;
+    wxString*          m_sourceSheetFilename;
 
     wxSize             m_size;
     int                m_delayedFocusRow;

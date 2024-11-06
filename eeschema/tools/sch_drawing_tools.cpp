@@ -2966,8 +2966,11 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             }
             else if( isDrawSheetFromDesignBlock )
             {
+                wxFileName fn( filename );
+
                 sheet->GetFields()[SHEETNAME].SetText( designBlock->GetLibId().GetLibItemName() );
-                sheet->GetFields()[SHEETFILENAME].SetText( designBlock->GetSchematicFile() );
+                sheet->GetFields()[SHEETFILENAME].SetText( fn.GetName() + wxT( "." )
+                                                           + FILEEXT::KiCadSchematicFileExtension );
 
                 std::vector<SCH_FIELD>& sheetFields = sheet->GetFields();
 
@@ -3016,7 +3019,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             getViewControls()->CaptureCursor( false );
 
             if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),
-                                              &m_frame->GetCurrentSheet() ) )
+                                              &m_frame->GetCurrentSheet(), nullptr, nullptr,
+                                              nullptr, &filename ) )
             {
                 m_view->ClearPreview();
 
