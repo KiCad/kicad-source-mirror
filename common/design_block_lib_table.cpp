@@ -24,7 +24,6 @@
 
 #include <kiface_base.h>
 #include <env_vars.h>
-#include <design_block_info.h>
 #include <lib_id.h>
 #include <lib_table_lexer.h>
 #include <paths.h>
@@ -33,6 +32,8 @@
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
+#include <wildcards_and_files_ext.h>
+#include <design_block_info.h>
 #include <design_block_lib_table.h>
 #include <design_block.h>
 
@@ -536,9 +537,10 @@ public:
     {
         wxFileName dir = wxFileName::DirName( dirPath );
 
-        // consider a directory to be a lib if it's name ends with .pretty and
+        // consider a directory to be a lib if it's name ends with the design block lib dir extension
         // it is under $KICADn_3RD_PARTY/design_blocks/<pkgid>/ i.e. has nested level of at least +3
-        if( dirPath.EndsWith( wxS( ".pretty" ) ) && dir.GetDirCount() >= m_prefix_dir_count + 3 )
+        if( dirPath.EndsWith( wxS( "." ) + FILEEXT::KiCadDesignBlockLibPathExtension )
+            && dir.GetDirCount() >= m_prefix_dir_count + 3 )
         {
             wxString versionedPath = wxString::Format(
                     wxS( "${%s}" ), ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
