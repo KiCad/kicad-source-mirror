@@ -77,7 +77,7 @@ void SHOVE::replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew )
 }
 
 
-void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NODE* aNode )
+SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NODE* aNode )
 {
     if( aIncludeInChangedArea )
     {
@@ -92,6 +92,9 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
                                             : *changed_area;
         }
     }
+
+    int old_sc = aOld.SegmentCount();
+    int old_lc = aOld.LinkCount();
 
     if( aOld.EndsWithVia() )
     {
@@ -151,7 +154,7 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
 
     rootEntry->newLine = aNew;
 
-    //assert( rootEntry->newLine->LinkCount() == old_lc)
+    return rootEntry;
 }
 
 
@@ -1033,12 +1036,16 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         if( lp.second.SegmentCount() )
         {
             lp.second.ClearLinks();
-            replaceLine( lp.first, lp.second );
+            ROOT_LINE_ENTRY* rootEntry = replaceLine( lp.first, lp.second );
 
             lp.second.LinkVia( v2 );
             unwindLineStack( &lp.second );
 
             lp.second.SetRank( aNewRank );
+
+            if( rootEntry )
+                rootEntry->newLine = lp.second; // fixme: it's inelegant
+
 
             PNS_DBG( Dbg(), Message, wxString::Format("PushViaF %p %d eov %d\n", &lp.second, lp.second.SegmentCount(), lp.second.EndsWithVia()?1:0 ) );
 
@@ -2364,6 +2371,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
                 auto headVia = Clone( head.Via() );
                 headVia->SetRank( 100000 ); // - 100 * currentHeadId );
                 headLineEntry.origHead->LinkVia( headVia.get() );
+                head.LinkVia( headVia.get() );
                 m_currentNode->Add( std::move( headVia ) );
             }
 
@@ -2406,17 +2414,15 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             break;
     };
 
-
+   PNS_DBG( Dbg(), Message,
+                 wxString::Format( "Shove status : %s after %d iterations, heads: %d",
+                                   ( ( st == SH_OK || st == SH_HEAD_MODIFIED ) ? "OK" : "FAILURE" ),
+                                   m_iter, (int) m_headLines.size() ) );
     if( st == SH_OK )
     {
         //nodeStats( Dbg(), m_currentNode, "pre-opt" );
 
         runOptimizer( m_currentNode );
-
-        PNS_DBG( Dbg(), Message,
-                 wxString::Format( "Shove status : %s after %d iterations, heads: %d",
-                                   ( ( st == SH_OK || st == SH_HEAD_MODIFIED ) ? "OK" : "FAILURE" ),
-                                   m_iter, (int) m_headLines.size() ) );
 
         reconstructHeads( false );
         removeHeads();

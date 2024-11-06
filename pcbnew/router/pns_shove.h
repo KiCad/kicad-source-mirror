@@ -201,7 +201,8 @@ private:
     LINE assembleLine( const LINKED_ITEM* aSeg, int* aIndex = nullptr, bool aPreCleanup = false );
 
     void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
-    void replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea = true,
+    ROOT_LINE_ENTRY* replaceLine( LINE& aOld, LINE& aNew, 
+                    bool aIncludeInChangedArea = true,
                       NODE *aNode = nullptr );
 
     ROOT_LINE_ENTRY* findRootLine( const LINE& aLine );
