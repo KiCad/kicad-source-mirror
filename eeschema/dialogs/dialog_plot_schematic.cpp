@@ -40,6 +40,7 @@
 #include <settings/settings_manager.h>
 #include <drawing_sheet/ds_painter.h>
 #include <wx_filename.h>
+#include <pgm_base.h>
 
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
@@ -89,6 +90,10 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
     {
         m_browseButton->Hide();
         m_MessagesBox->Hide();
+
+        m_sdbSizer1Apply->Hide();
+        m_openFileAfterPlot->Hide();
+
         SetupStandardButtons( { { wxID_OK, _( "Save" ) },
                                 { wxID_CANCEL, _( "Close" ) } } );
     }
@@ -109,9 +114,10 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     {
         if( cfg )
         {
-            for( COLOR_SETTINGS* settings : m_editFrame->GetSettingsManager()->GetColorSettingsList() )
+            for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
             {
-                int idx = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+                int idx =
+                        m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
                 if( settings->GetFilename() == cfg->m_PlotPanel.color_theme )
                     m_colorTheme->SetSelection( idx );
@@ -177,6 +183,17 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     }
     else if( m_job )
     {
+        for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+        {
+            int idx = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+
+            if( settings->GetName() == m_job->m_theme )
+                m_colorTheme->SetSelection( idx );
+        }
+
+        if( m_colorTheme->GetSelection() == wxNOT_FOUND )
+            m_colorTheme->SetSelection( 0 );
+
         m_plotFormatOpt->SetSelection( static_cast<int>( m_job->m_plotFormat ) );
         m_plotBackgroundColor->SetValue( m_job->m_useBackgroundColor );
         m_penWidth.SetValue( m_job->m_HPGLPenSize );
@@ -188,6 +205,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         m_ModeColorOption->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
         m_plotOriginOpt->SetSelection( static_cast<int>( m_job->m_HPGLPlotOrigin ) );
         m_pageSizeSelect = static_cast<int>( m_job->m_pageSizeSelect );
+        setModeColor( !m_job->m_blackAndWhite );
 
         // Set the plot format
         switch( m_job->m_plotFormat )
@@ -416,7 +434,33 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotCurrent( wxCommandEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
 {
-    plotSchematic( true );
+    if (!m_job)
+    {
+        plotSchematic( true );
+    }
+    else
+    {
+        m_job->m_blackAndWhite = !getModeColor();
+        m_job->m_useBackgroundColor = m_plotBackgroundColor->GetValue();
+        m_job->m_HPGLPenSize = m_penWidth.GetValue();
+      //  m_job->m_HPGLPaperSizeSelect = m_HPGLPaperSizeSelect;
+        m_job->m_pageSizeSelect = static_cast<JOB_PAGE_SIZE>( m_pageSizeSelect );
+        m_job->m_PDFPropertyPopups = m_plotPDFPropertyPopups->GetValue();
+        m_job->m_PDFHierarchicalLinks = m_plotPDFHierarchicalLinks->GetValue();
+        m_job->m_PDFMetadata = m_plotPDFMetadata->GetValue();
+        m_job->m_plotDrawingSheet = m_plotDrawingSheet->GetValue();
+        m_job->m_plotAll = true;
+        m_job->m_filename = m_outputDirectoryName->GetValue();
+
+        m_job->m_HPGLPlotOrigin =
+                static_cast<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>( m_plotOriginOpt->GetSelection() );
+
+        COLOR_SETTINGS* colors = getColorSettings();
+        m_job->m_theme = colors->GetName();
+
+
+        Close();
+    }
 }
 
 
