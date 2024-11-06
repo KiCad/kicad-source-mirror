@@ -119,13 +119,13 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
 
         m_radioBoxUnits->SetSelection( static_cast<int>( m_job->m_units ) );
-        m_radioBoxFilesCount->SetSelection( 0 );
         m_rbFormat->SetSelection( static_cast<int>( m_job->m_format ) );
         m_cbIncludeBoardEdge->SetValue( m_job->m_gerberBoardEdge );
 		m_useDrillPlaceOrigin->SetValue( m_job->m_useDrillPlaceFileOrigin );
         m_onlySMD->SetValue( m_job->m_smdOnly );
         m_negateXcb->SetValue( m_job->m_negateBottomX );
         m_excludeTH->SetValue( m_job->m_excludeFootprintsWithTh );
+        m_excludeDNP->SetValue( m_job->m_excludeDNP );
 
         m_messagesPanel->Hide();
     }
