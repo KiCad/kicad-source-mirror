@@ -76,7 +76,6 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT : public JOB
 {
 public:
     JOB_EXPORT_SCH_PLOT();
-    wxString GetDescription() override;
 
     SCH_PLOT_FORMAT       m_plotFormat;
     wxString              m_filename;
@@ -107,6 +106,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_PDF : public JOB_EXPORT_SCH_PLOT
 {
 public:
     JOB_EXPORT_SCH_PLOT_PDF();
+    wxString GetDescription() override;
 };
 
 
@@ -114,6 +114,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_DXF : public JOB_EXPORT_SCH_PLOT
 {
 public:
     JOB_EXPORT_SCH_PLOT_DXF();
+    wxString GetDescription() override;
 };
 
 
@@ -121,6 +122,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_SVG : public JOB_EXPORT_SCH_PLOT
 {
 public:
     JOB_EXPORT_SCH_PLOT_SVG();
+    wxString GetDescription() override;
 };
 
 
@@ -128,6 +130,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_PS : public JOB_EXPORT_SCH_PLOT
 {
 public:
     JOB_EXPORT_SCH_PLOT_PS();
+    wxString GetDescription() override;
 };
 
 
@@ -135,6 +138,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_HPGL : public JOB_EXPORT_SCH_PLOT
 {
 public:
     JOB_EXPORT_SCH_PLOT_HPGL();
+    wxString GetDescription() override;
 };
 
 #endif
