@@ -583,10 +583,12 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
     struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
     {
-        PAD_PLACER( PAD_TOOL* aPadTool )
+        PAD_PLACER( PAD_TOOL* aPadTool, PCB_BASE_EDIT_FRAME* aFrame ) :
+            m_padTool( aPadTool ),
+            m_frame( aFrame ),
+            m_gridHelper( aPadTool->GetManager(), aFrame->GetMagneticItemsSettings() )
         {
             neednewPadNumber = true;    // Use a new pad number when creatin a pad by default
-            m_padTool = aPadTool;
         }
 
         virtual ~PAD_PLACER()
@@ -668,10 +670,43 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
             return false;
         }
 
-        PAD_TOOL* m_padTool;
+        void SnapItem( BOARD_ITEM *aItem ) override
+        {
+            m_gridHelper.SetSnap( !( m_modifiers & MD_SHIFT ) );
+            m_gridHelper.SetUseGrid( !( m_modifiers & MD_CTRL ) );
+
+            if( !m_gridHelper.GetSnap() )
+                return;
+
+            MAGNETIC_SETTINGS*       settings = m_frame->GetMagneticItemsSettings();
+            PAD*                     pad = static_cast<PAD*>( aItem );
+            VECTOR2I                 position = m_padTool->getViewControls()->GetMousePosition();
+            KIGFX::VIEW_CONTROLS*    viewControls = m_padTool->getViewControls();
+            std::vector<BOARD_ITEM*> ignored_items( 1, pad );
+
+            if( settings->pads == MAGNETIC_OPTIONS::NO_EFFECT )
+            {
+                PADS& pads = m_board->GetFirstFootprint()->Pads();
+                ignored_items.insert( ignored_items.end(), pads.begin(), pads.end() );
+            }
+
+            if( !settings->graphics )
+            {
+                DRAWINGS& graphics = m_board->GetFirstFootprint()->GraphicalItems();
+                ignored_items.insert( ignored_items.end(), graphics.begin(), graphics.end() );
+            }
+
+            VECTOR2I cursorPos = m_gridHelper.BestSnapAnchor( position, LSET::AllLayersMask(), GRID_CURRENT, ignored_items );
+            viewControls->ForceCursorPosition( true, cursorPos );
+            aItem->SetPosition( cursorPos );
+        }
+
+        PAD_TOOL*            m_padTool;
+        PCB_BASE_EDIT_FRAME* m_frame;
+        PCB_GRID_HELPER      m_gridHelper;
     };
 
-    PAD_PLACER placer( this );
+    PAD_PLACER placer( this, frame() );
 
     doInteractiveItemPlacement( aEvent, &placer, _( "Place pad" ),
                                 IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
