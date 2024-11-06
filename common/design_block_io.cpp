@@ -282,22 +282,20 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
                                                 const wxString& aDesignBlockName, bool aKeepUUID,
                                                 const std::map<std::string, UTF8>* aProperties )
 {
-    DESIGN_BLOCK* newDB = new DESIGN_BLOCK();
     wxString      dbPath = aLibraryPath + wxFileName::GetPathSeparator() +
                            aDesignBlockName + wxT( "." ) + FILEEXT::KiCadDesignBlockPathExtension + wxFileName::GetPathSeparator();
     wxString      dbSchPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
     wxString      dbMetadataPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::JsonFileExtension;
 
+    if( !wxFileExists( dbSchPath ) )
+        return nullptr;
+
+    DESIGN_BLOCK* newDB = new DESIGN_BLOCK();
+
     // Library name needs to be empty for when we fill it in with the correct library nickname
     // one layer above
     newDB->SetLibId( LIB_ID( wxEmptyString, aDesignBlockName ) );
-    newDB->SetSchematicFile(
-            // Library path
-            aLibraryPath + wxFileName::GetPathSeparator() +
-            // Design block name (project folder)
-            aDesignBlockName + +wxT( "." ) + FILEEXT::KiCadDesignBlockPathExtension + wxT( "/" ) +
-            // Schematic file
-            aDesignBlockName + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension );
+    newDB->SetSchematicFile( dbSchPath );
 
     // Parse the JSON file if it exists
     if( wxFileExists( dbMetadataPath ) )
@@ -337,8 +335,6 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
                     _( "Design block metadata file '%s' could not be read." ), dbMetadataPath ) );
         }
     }
-    else
-        return nullptr;
 
 
     return newDB;
