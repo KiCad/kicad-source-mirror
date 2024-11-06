@@ -463,43 +463,33 @@ bool IFACE::loadGlobalLibTable()
 
 bool IFACE::loadGlobalDesignBlockLibTable()
 {
-    wxFileName fn = DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName();
-
-    if( !fn.FileExists() )
+    try
     {
-        if( !( m_start_flags & KFCTL_CLI ) )
+        wxFileName fn = DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName();
+
+        if( !fn.FileExists() )
         {
-            // Ensure the splash screen does not hide the dialog:
-            Pgm().HideSplash();
-
-            DIALOG_GLOBAL_DESIGN_BLOCK_LIB_TABLE_CONFIG dbDialog( nullptr );
-
-            if( dbDialog.ShowModal() != wxID_OK )
-                return false;
+            DESIGN_BLOCK_LIB_TABLE emptyTable;
+            emptyTable.Save( fn.GetFullPath() );
         }
+
+        // The global table is not related to a specific project.  All projects
+        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
+        // of avoiding anything project specific is not violated here.
+        if( !DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable(
+                    DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() ) )
+            return false;
     }
-    else
+    catch( const IO_ERROR& ioe )
     {
-        try
-        {
-            // The global table is not related to a specific project.  All projects
-            // will use the same global table.  So the KIFACE::OnKifaceStart() contract
-            // of avoiding anything project specific is not violated here.
-            if( !DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable(
-                        DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() ) )
-                return false;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            // if we are here, a incorrect global design block library table was found.
-            // Incorrect global design block library table is not a fatal error:
-            // the user just has to edit the (partially) loaded table.
-            wxString msg = _(
-                    "An error occurred attempting to load the global design block library table.\n"
-                    "Please edit this global design block library table in Preferences menu." );
+        // if we are here, a incorrect global design block library table was found.
+        // Incorrect global design block library table is not a fatal error:
+        // the user just has to edit the (partially) loaded table.
+        wxString msg =
+                _( "An error occurred attempting to load the global design block library table.\n"
+                   "Please edit this global design block library table in Preferences menu." );
 
-            DisplayErrorMessage( nullptr, msg, ioe.What() );
-        }
+        DisplayErrorMessage( nullptr, msg, ioe.What() );
     }
 
     return true;
