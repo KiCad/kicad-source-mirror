@@ -1686,8 +1686,6 @@ bool SHAPE_LINE_CHAIN_BASE::PointInside( const VECTOR2I& aPt, int aAccuracy,
     if( !IsClosed() || GetPointCount() < 3 )
         return false;
 
-    bool inside = false;
-
     /*
      * To check for interior points, we draw a line in the positive x direction from
      * the point.  If it intersects an even number of segments, the point is outside the
@@ -1699,21 +1697,22 @@ bool SHAPE_LINE_CHAIN_BASE::PointInside( const VECTOR2I& aPt, int aAccuracy,
      * Note: we open-code CPoint() here so that we don't end up calculating the size of the
      * vector number-of-points times.  This has a non-trivial impact on zone fill times.
      */
-    int pointCount = GetPointCount();
+    int  pointCount = GetPointCount();
+    bool inside = false;
 
     for( int i = 0; i < pointCount; )
     {
-        const auto p1 = GetPoint( i++ );
-        const auto p2 = GetPoint( i == pointCount ? 0 : i );
-        const auto diff = p2 - p1;
+        const VECTOR2I p1 = GetPoint( i++ );
+        const VECTOR2I p2 = GetPoint( i == pointCount ? 0 : i );
+        const VECTOR2I diff = p2 - p1;
 
-        if( diff.y != 0 )
-        {
-            const int d = rescale( diff.x, ( aPt.y - p1.y ), diff.y );
+        if( diff.y == 0 )
+            continue;
 
-            if( ( ( p1.y > aPt.y ) != ( p2.y > aPt.y ) ) && ( aPt.x - p1.x < d ) )
-                inside = !inside;
-        }
+        const int d = rescale( diff.x, ( aPt.y - p1.y ), diff.y );
+
+        if( ( ( p1.y >= aPt.y ) != ( p2.y >= aPt.y ) ) && ( aPt.x - p1.x < d ) )
+            inside = !inside;
     }
 
     // If accuracy is <= 1 (nm) then we skip the accuracy test for performance.  Otherwise
