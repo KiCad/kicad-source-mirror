@@ -114,7 +114,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-06 17:00+0000\n"
+"PO-Revision-Date: 2024-11-08 00:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -5336,24 +5336,28 @@ msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"Quando l'API KiCad è abilitata, i plugin e gli altri software in esecuzione "
+"su questo computer possono connettersi a KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "Abilita l'API KiCad"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"Abilita l'API KiCad.  In questo modo si consentirà al software di terze "
+"parti in esecuzione sul proprio computer di accedere a KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Interprete Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Percorso per l'interprete Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 #, fuzzy
@@ -5362,7 +5366,7 @@ msgstr "Elimina l'ultimo punto aggiunto all'elemento corrente"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
 #, fuzzy
@@ -5373,10 +5377,12 @@ msgstr "Annota automaticamente"
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Nessun interprete Python selezionato; i plugin Python esterni non saranno "
+"disponibili"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Stato dell'interprete Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
 #, fuzzy
@@ -5699,7 +5705,7 @@ msgstr "Foglio di disegno '%s' non letto completamente."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Memoria esaurita."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:352
@@ -7421,12 +7427,13 @@ msgstr "Immagini DXF non attualmente supportate."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "La grafica importata è troppo grande. La scala massima è %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Import scostamento regolato su (%f, %f) per rientrare nei limiti numerici"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:121
 #, c-format
@@ -7558,7 +7565,7 @@ msgstr "Non esportare"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr ""
+msgstr "C.S.: esporta dati forature"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #, fuzzy
@@ -7572,19 +7579,19 @@ msgstr "Esporta DXF"
 
 #: common/jobs/job_export_pcb_gerber.cpp:82
 msgid "Single gerber export"
-msgstr ""
+msgstr "Esportazione gerber singolo"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:45
 msgid "Multi gerber export"
-msgstr ""
+msgstr "Esportazione gerber multipli"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "C.S.: Esporta i gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 msgid "IPC2581 export"
-msgstr ""
+msgstr "Esporta IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:85
 #, fuzzy
@@ -7608,7 +7615,7 @@ msgstr "Piazzamento"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "C.S.: esporta dati posizionali"
 
 #: common/jobs/job_export_pcb_svg.cpp:53
 #, fuzzy
@@ -7682,11 +7689,11 @@ msgstr "Editor schemi"
 
 #: common/jobs/job_pcb_drc.cpp:58
 msgid "Perform PCB DRC"
-msgstr ""
+msgstr "Esegui DRC C.S."
 
 #: common/jobs/job_pcb_drc.cpp:62
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "C.S.: esegui DRC"
 
 #: common/jobs/job_sch_erc.cpp:54
 #, fuzzy
@@ -7700,7 +7707,7 @@ msgstr "Aggiorna lo schema dal C.S."
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Speciale: esegui comando"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -8707,7 +8714,7 @@ msgstr "Allineamento X"
 
 #: common/tool/actions.cpp:307
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "Giustifica a sinistra campi ed elementi di testo"
 
 #: common/tool/actions.cpp:313 eeschema/tools/sch_edit_tool.cpp:2801
 #: pcbnew/tools/edit_tool.cpp:2285
@@ -8717,7 +8724,7 @@ msgstr "Allineamento X"
 
 #: common/tool/actions.cpp:314
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "Giustifica al centro campi ed elementi di testo"
 
 #: common/tool/actions.cpp:320 eeschema/tools/sch_edit_tool.cpp:2803
 #: pcbnew/tools/edit_tool.cpp:2287
@@ -8727,7 +8734,7 @@ msgstr "Allineamento X"
 
 #: common/tool/actions.cpp:321
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "Giustifica a destra campi ed elementi di testo"
 
 #: common/tool/actions.cpp:327
 #, fuzzy
@@ -8783,7 +8790,7 @@ msgstr "Crea linee grafiche dalla selezione"
 
 #: common/tool/actions.cpp:368
 msgid "Decrement Secondary"
-msgstr ""
+msgstr "Decremento secondario"
 
 #: common/tool/actions.cpp:369
 #, fuzzy
@@ -8797,7 +8804,7 @@ msgstr "Seleziona colonne"
 
 #: common/tool/actions.cpp:376
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Seleziona le colonne complete contenenti le celle selezionate correnti"
 
 #: common/tool/actions.cpp:382
 #, fuzzy
@@ -8806,7 +8813,7 @@ msgstr "Seleziona elementi"
 
 #: common/tool/actions.cpp:383
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Seleziona le righe complete contenenti le celle selezionate correnti"
 
 #: common/tool/actions.cpp:389
 #, fuzzy
@@ -8835,7 +8842,7 @@ msgstr "Aggiungi potenza"
 
 #: common/tool/actions.cpp:404
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "Inserisci una nuova riga della tabella sotto le celle selezionate"
 
 #: common/tool/actions.cpp:410 include/tool/edit_table_tool_base.h:264
 #, fuzzy
@@ -8844,7 +8851,7 @@ msgstr "Aggiungi angolo"
 
 #: common/tool/actions.cpp:411
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "Inserisci una nuova colonna della tabella prima delle celle selezionate"
 
 #: common/tool/actions.cpp:417 include/tool/edit_table_tool_base.h:315
 #, fuzzy
@@ -8873,7 +8880,7 @@ msgstr "Seleziona colonne"
 
 #: common/tool/actions.cpp:432
 msgid "Delete columns containing the currently selected cell(s)"
-msgstr ""
+msgstr "Elimina le colonne contenenti le celle attualmente selezionate"
 
 #: common/tool/actions.cpp:438 include/tool/edit_table_tool_base.h:537
 #, fuzzy
@@ -8887,11 +8894,11 @@ msgstr "Fonde i poligono selezionati in un unico poligono"
 
 #: common/tool/actions.cpp:445 include/tool/edit_table_tool_base.h:578
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Separa le celle"
 
 #: common/tool/actions.cpp:446
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Trasforma le celle unite della tabella in celle separate."
 
 #: common/tool/actions.cpp:453 eeschema/dialogs/dialog_table_properties.cpp:387
 #: pcbnew/dialogs/dialog_table_properties.cpp:371
@@ -9914,7 +9921,7 @@ msgstr "Proprietà di base"
 
 #: common/widgets/search_pane.cpp:40
 msgid "Toggle zooming to selections in the search pane"
-msgstr ""
+msgstr "Attiva/disattiva lo zoom sulle selezioni nel pannello cerca"
 
 #: common/widgets/search_pane.cpp:42
 #, fuzzy
@@ -9923,7 +9930,7 @@ msgstr "Aggiungi alla selezione"
 
 #: common/widgets/search_pane.cpp:42
 msgid "Toggle panning to selections in the search pane"
-msgstr ""
+msgstr "Attiva/disattiva la panoramica delle selezioni nel pannello cerca"
 
 #: common/widgets/unit_binder.cpp:358
 #, c-format
@@ -10182,7 +10189,7 @@ msgstr "Percorsi di file di libreria impronte Kicad"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "KiCad design block path"
-msgstr ""
+msgstr "Percorso del blocco di progettazione KiCad"
 
 #: common/wildcards_and_files_ext.cpp:353
 #, fuzzy
@@ -10796,7 +10803,7 @@ msgstr "annotazione completa."
 
 #: eeschema/api/api_handler_sch.cpp:256 pcbnew/api/api_handler_pcb.cpp:342
 msgid "Added items via API"
-msgstr ""
+msgstr "Elementi aggiunti tramite API"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
 #, fuzzy
@@ -10955,7 +10962,7 @@ msgstr "Selezionare il file tabella librerie simboli."
 
 #: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:394
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "I blocchi di progettazione con fogli nidificati non sono supportati."
 
 #: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:427
 #, fuzzy
@@ -10966,7 +10973,7 @@ msgstr ""
 
 #: eeschema/design_block_utils.cpp:378
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Selezionare alcuni elementi da salvare come blocco di progettazione."
 
 #: eeschema/design_block_utils.cpp:464
 #, fuzzy
