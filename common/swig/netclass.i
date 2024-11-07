@@ -23,6 +23,20 @@
  */
 
 %shared_ptr(NETCLASS)
+
+%ignore NETCLASS::SetClearance(std::optional<int>);
+%ignore NETCLASS::SetTrackWidth(std::optional<int>);
+%ignore NETCLASS::SetViaDiameter(std::optional<int>);
+%ignore NETCLASS::SetViaDrill(std::optional<int>);
+%ignore NETCLASS::SetuViaDiameter(std::optional<int>);
+%ignore NETCLASS::SetuViaDrill(std::optional<int>);
+%ignore NETCLASS::SetDiffPairWidth(std::optional<int>);
+%ignore NETCLASS::SetDiffPairGap(std::optional<int>);
+%ignore NETCLASS::SetDiffPairViaGap(std::optional<int>);
+%ignore NETCLASS::SetWireWidth(std::optional<int>);
+%ignore NETCLASS::SetBusWidth(std::optional<int>);
+%ignore NETCLASS::SetLineStyle(std::optional<int>);
+
 %include netclass.h
 
 %{
