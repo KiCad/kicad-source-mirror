@@ -26,6 +26,7 @@
 #include <schematic.h>
 #include <dialogs/panel_setup_buses.h>
 #include "grid_tricks.h"
+#include <wx/clipbrd.h>
 
 PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_BUSES_BASE( aWindow ),
@@ -147,6 +148,9 @@ bool PANEL_SETUP_BUSES::TransferDataFromWindow()
     for( int ii = 0; ii < m_aliasesGrid->GetNumberRows(); ++ii )
         m_aliases[ii]->SetName( m_aliasesGrid->GetCellValue( ii, 0 ) );
 
+    // Associate the respective members with the last alias that is active.
+    updateAliasMembers( m_lastAlias );
+
     SCH_SCREENS screens( m_frame->Schematic().Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
@@ -168,6 +172,12 @@ void PANEL_SETUP_BUSES::OnAddAlias( wxCommandEvent& aEvent )
     m_aliases.push_back( std::make_shared<BUS_ALIAS>( m_frame->GetScreen() ) );
 
     int row = m_aliasesGrid->GetNumberRows();
+
+    // Associate the respective members with the previous alias. This ensures that the association starts
+    // correctly when adding more than one row
+    if( row > 0 )
+        updateAliasMembers( row - 1 );
+
     m_aliasesGrid->AppendRows();
 
     m_aliasesGrid->MakeCellVisible( row, 0 );
@@ -216,8 +226,35 @@ void PANEL_SETUP_BUSES::OnAddMember( wxCommandEvent& aEvent )
     m_membersGrid->MakeCellVisible( row, 0 );
     m_membersGrid->SetGridCursor( row, 0 );
 
-    m_membersGrid->EnableCellEditControl( true );
-    m_membersGrid->ShowCellEditControl();
+    /*
+     * Check if the clipboard contains text data.
+     *
+     * - If `clipboardHasText` is true, select the specified row in the members grid to allow our custom
+     *   conext menu to paste the clipbaord .
+     * - Otherwise, enable and display the cell edit control, allowing the user to manually edit the cell.
+     */
+    bool clipboardHasText = false;
+
+    if( wxTheClipboard->Open() )
+    {
+        if( wxTheClipboard->IsSupported( wxDF_TEXT )
+            || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
+        {
+            clipboardHasText = true;
+        }
+
+        wxTheClipboard->Close();
+    }
+
+    if( clipboardHasText )
+    {
+        m_membersGrid->SelectRow( row );
+    }
+    else
+    {
+        m_membersGrid->EnableCellEditControl( true );
+        m_membersGrid->ShowCellEditControl();
+    }
 }
 
 
@@ -459,3 +496,23 @@ void PANEL_SETUP_BUSES::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
+void PANEL_SETUP_BUSES::updateAliasMembers( int aAliasIndex )
+{
+    if( !m_aliases.empty() && m_membersGrid->GetNumberRows() > 0 && aAliasIndex >= 0
+        && aAliasIndex < m_aliases.size() )
+    {
+        const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[aAliasIndex];
+
+        alias->Members().clear();
+
+        for( int ii = 0; ii < m_membersGrid->GetNumberRows(); ++ii )
+        {
+            wxString memberValue = m_membersGrid->GetCellValue( ii, 0 );
+
+            if( !memberValue.empty() )
+            {
+                alias->Members().push_back( memberValue );
+            }
+        }
+    }
+}
