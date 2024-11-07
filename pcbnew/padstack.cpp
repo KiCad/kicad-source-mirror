@@ -146,6 +146,53 @@ bool PADSTACK::operator==( const PADSTACK& aOther ) const
 }
 
 
+bool PADSTACK::unpackCopperLayer( const kiapi::board::types::PadStackLayer& aProto )
+{
+    using namespace kiapi::board::types;
+    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID, BoardLayer>( aProto.layer() );
+
+    if( m_mode == MODE::NORMAL && layer != ALL_LAYERS )
+        return false;
+
+    if( m_mode == MODE::FRONT_INNER_BACK && layer != F_Cu && layer != INNER_LAYERS && layer != B_Cu )
+        return false;
+
+    SetSize( kiapi::common::UnpackVector2( aProto.size() ), layer );
+    SetShape( FromProtoEnum<PAD_SHAPE>( aProto.shape() ), layer );
+    SetAnchorShape( FromProtoEnum<PAD_SHAPE>( aProto.custom_anchor_shape() ), layer );
+
+    SHAPE_PROPS& props = CopperLayer( layer ).shape;
+    props.chamfered_rect_ratio = aProto.chamfer_ratio();
+    props.round_rect_radius_ratio = aProto.corner_rounding_ratio();
+
+    if( aProto.chamfered_corners().top_left() )
+        props.chamfered_rect_positions |= RECT_CHAMFER_TOP_LEFT;
+
+    if( aProto.chamfered_corners().top_right() )
+        props.chamfered_rect_positions |= RECT_CHAMFER_TOP_RIGHT;
+
+    if( aProto.chamfered_corners().bottom_left() )
+        props.chamfered_rect_positions |= RECT_CHAMFER_BOTTOM_LEFT;
+
+    if( aProto.chamfered_corners().bottom_right() )
+        props.chamfered_rect_positions |= RECT_CHAMFER_BOTTOM_RIGHT;
+
+    ClearPrimitives( layer );
+    google::protobuf::Any a;
+
+    for( const GraphicShape& shapeProto : aProto.custom_shapes() )
+    {
+        a.PackFrom( shapeProto );
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_parent );
+
+        if( shape->Deserialize( a ) )
+            AddPrimitive( shape.release(), layer );
+    }
+
+    return true;
+}
+
+
 bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
 {
     using namespace kiapi::board::types;
@@ -155,75 +202,39 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
         return false;
 
     m_mode = FromProtoEnum<MODE>( padstack.type() );
-
-    // TODO
-    m_layerSet.reset();
-
+    SetLayerSet( kiapi::board::UnpackLayerSet( padstack.layers() ) );
     m_orientation = EDA_ANGLE( padstack.angle().value_degrees(), DEGREES_T );
 
-    Drill().size = kiapi::common::UnpackVector2( padstack.drill_diameter() );
-    Drill().start = FromProtoEnum<PCB_LAYER_ID>( padstack.start_layer() );
-    Drill().end = FromProtoEnum<PCB_LAYER_ID>( padstack.end_layer() );
+    Drill().size = kiapi::common::UnpackVector2( padstack.drill().diameter() );
+    Drill().start = FromProtoEnum<PCB_LAYER_ID>( padstack.drill().start_layer() );
+    Drill().end = FromProtoEnum<PCB_LAYER_ID>( padstack.drill().end_layer() );
 
-    // We don't yet support complex padstacks
-    // TODO(JE) Rework for full padstacks
-    if( padstack.layers_size() == 1 )
+    for( const PadStackLayer& layer : padstack.copper_layers() )
     {
-        const PadStackLayer& layer = padstack.layers( 0 );
-        SetSize( kiapi::common::UnpackVector2( layer.size() ), ALL_LAYERS );
-        SetLayerSet( kiapi::board::UnpackLayerSet( layer.layers() ) );
-        SetShape( FromProtoEnum<PAD_SHAPE>( layer.shape() ), F_Cu );
-        SetAnchorShape( FromProtoEnum<PAD_SHAPE>( layer.custom_anchor_shape() ), F_Cu );
+        if( !unpackCopperLayer( layer ) )
+            return false;
+    }
 
-        SHAPE_PROPS& props = CopperLayer( ALL_LAYERS ).shape;
-        props.chamfered_rect_ratio = layer.chamfer_ratio();
-        props.round_rect_radius_ratio = layer.corner_rounding_ratio();
+    if( padstack.has_zone_settings() )
+    {
+        CopperLayer( ALL_LAYERS ).zone_connection =
+                FromProtoEnum<ZONE_CONNECTION>( padstack.zone_settings().zone_connection() );
 
-        if( layer.chamfered_corners().top_left() )
-            props.chamfered_rect_positions |= RECT_CHAMFER_TOP_LEFT;
-
-        if( layer.chamfered_corners().top_right() )
-            props.chamfered_rect_positions |= RECT_CHAMFER_TOP_RIGHT;
-
-        if( layer.chamfered_corners().bottom_left() )
-            props.chamfered_rect_positions |= RECT_CHAMFER_BOTTOM_LEFT;
-
-        if( layer.chamfered_corners().bottom_right() )
-            props.chamfered_rect_positions |= RECT_CHAMFER_BOTTOM_RIGHT;
-
-        ClearPrimitives( F_Cu );
-        google::protobuf::Any a;
-
-        for( const GraphicShape& shapeProto : layer.custom_shapes() )
+        if( padstack.zone_settings().has_thermal_spokes() )
         {
-            a.PackFrom( shapeProto );
-            std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_parent );
+            const ThermalSpokeSettings& thermals = padstack.zone_settings().thermal_spokes();
 
-            if( shape->Deserialize( a ) )
-                AddPrimitive( shape.release(), F_Cu );
+            CopperLayer( ALL_LAYERS ).thermal_gap = thermals.gap();
+            CopperLayer( ALL_LAYERS ).thermal_spoke_width = thermals.width();
+            SetThermalSpokeAngle( thermals.angle().value_degrees(), F_Cu );
         }
-
-        if( layer.has_zone_settings() )
-        {
-            CopperLayer( ALL_LAYERS ).zone_connection =
-                    FromProtoEnum<ZONE_CONNECTION>( layer.zone_settings().zone_connection() );
-
-            if( layer.zone_settings().has_thermal_spokes() )
-            {
-                const ThermalSpokeSettings& thermals = layer.zone_settings().thermal_spokes();
-
-                CopperLayer( ALL_LAYERS ).thermal_gap = thermals.gap();
-                CopperLayer( ALL_LAYERS ).thermal_spoke_width = thermals.width();
-                SetThermalSpokeAngle( thermals.angle().value_degrees(), F_Cu );
-            }
-        }
-        else
-        {
-            CopperLayer( ALL_LAYERS ).zone_connection = ZONE_CONNECTION::INHERITED;
-            CopperLayer( ALL_LAYERS ).thermal_gap = 0;
-            CopperLayer( ALL_LAYERS ).thermal_spoke_width = 0;
-            CopperLayer( ALL_LAYERS ).thermal_spoke_angle = DefaultThermalSpokeAngleForShape( F_Cu );
-        }
+    }
+    else
+    {
+        CopperLayer( ALL_LAYERS ).zone_connection = ZONE_CONNECTION::INHERITED;
+        CopperLayer( ALL_LAYERS ).thermal_gap = 0;
+        CopperLayer( ALL_LAYERS ).thermal_spoke_width = 0;
+        CopperLayer( ALL_LAYERS ).thermal_spoke_angle = DefaultThermalSpokeAngleForShape( F_Cu );
     }
 
     SetUnconnectedLayerMode(
@@ -352,43 +363,60 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
 }
 
 
-void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
+void PADSTACK::packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadStack& aProto ) const
 {
     using namespace kiapi::board::types;
-    PadStack padstack;
 
-    padstack.set_type( ToProtoEnum<MODE, PadStackType>( m_mode ) );
-    padstack.set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( StartLayer() ) );
-    padstack.set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( EndLayer() ) );
-    kiapi::common::PackVector2( *padstack.mutable_drill_diameter(), Drill().size );
-    padstack.mutable_angle()->set_value_degrees( m_orientation.AsDegrees() );
+    PadStackLayer* stackLayer = aProto.add_copper_layers();
 
-    // TODO(JE) Rework for full padstacks
-    PadStackLayer* stackLayer = padstack.add_layers();
-    kiapi::board::PackLayerSet( *stackLayer->mutable_layers(), LayerSet() );
-    kiapi::common::PackVector2( *stackLayer->mutable_size(), Size( PADSTACK::ALL_LAYERS ) );
-    stackLayer->set_shape( ToProtoEnum<PAD_SHAPE, PadStackShape>( Shape( ALL_LAYERS ) ) );
-    stackLayer->set_custom_anchor_shape( ToProtoEnum<PAD_SHAPE, PadStackShape>( AnchorShape( ALL_LAYERS ) ) );
-    stackLayer->set_chamfer_ratio( CopperLayer( ALL_LAYERS ).shape.chamfered_rect_ratio );
-    stackLayer->set_corner_rounding_ratio( CopperLayer( ALL_LAYERS ).shape.round_rect_radius_ratio );
+    stackLayer->set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( aLayer ) );
+    kiapi::common::PackVector2( *stackLayer->mutable_size(), Size( aLayer ) );
+
+    stackLayer->set_shape( ToProtoEnum<PAD_SHAPE, PadStackShape>( Shape( aLayer ) ) );
+
+    stackLayer->set_custom_anchor_shape(
+            ToProtoEnum<PAD_SHAPE, PadStackShape>( AnchorShape( aLayer ) ) );
+
+    stackLayer->set_chamfer_ratio( CopperLayer( aLayer ).shape.chamfered_rect_ratio );
+    stackLayer->set_corner_rounding_ratio( CopperLayer( aLayer ).shape.round_rect_radius_ratio );
 
     google::protobuf::Any a;
 
-    // TODO(JE) Rework for full padstacks
-    for( const std::shared_ptr<PCB_SHAPE>& shape : Primitives( ALL_LAYERS ) )
+    for( const std::shared_ptr<PCB_SHAPE>& shape : Primitives( aLayer ) )
     {
         shape->Serialize( a );
         GraphicShape* s = stackLayer->add_custom_shapes();
         a.UnpackTo( s );
     }
 
-    const int& corners = CopperLayer( ALL_LAYERS ).shape.chamfered_rect_positions;
+    const int& corners = CopperLayer( aLayer ).shape.chamfered_rect_positions;
     stackLayer->mutable_chamfered_corners()->set_top_left( corners & RECT_CHAMFER_TOP_LEFT );
     stackLayer->mutable_chamfered_corners()->set_top_right( corners & RECT_CHAMFER_TOP_RIGHT );
     stackLayer->mutable_chamfered_corners()->set_bottom_left( corners & RECT_CHAMFER_BOTTOM_LEFT );
     stackLayer->mutable_chamfered_corners()->set_bottom_right( corners & RECT_CHAMFER_BOTTOM_RIGHT );
+}
 
-    ZoneConnectionSettings* zoneSettings = stackLayer->mutable_zone_settings();
+
+void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
+{
+    using namespace kiapi::board::types;
+    PadStack padstack;
+
+    padstack.set_type( ToProtoEnum<MODE, PadStackType>( m_mode ) );
+    kiapi::board::PackLayerSet( *padstack.mutable_layers(), m_layerSet );
+    padstack.mutable_angle()->set_value_degrees( m_orientation.AsDegrees() );
+
+    DrillProperties* drill = padstack.mutable_drill();
+    drill->set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( StartLayer() ) );
+    drill->set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( EndLayer() ) );
+    kiapi::common::PackVector2( *drill->mutable_diameter(), Drill().size );
+
+    ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer )
+                        {
+                            packCopperLayer( aLayer, padstack );
+                        } );
+
+    ZoneConnectionSettings* zoneSettings = padstack.mutable_zone_settings();
     ThermalSpokeSettings* thermalSettings = zoneSettings->mutable_thermal_spokes();
 
     if( CopperLayer( ALL_LAYERS ).zone_connection.has_value() )

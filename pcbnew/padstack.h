@@ -36,6 +36,12 @@
 class BOARD_ITEM;
 class PCB_SHAPE;
 
+namespace kiapi::board::types
+{
+    class PadStack;
+    class PadStackLayer;
+}
+
 
 /**
  * The set of pad shapes, used with PAD::{Set,Get}Shape()
@@ -428,6 +434,10 @@ public:
     void ClearPrimitives( PCB_LAYER_ID aLayer );
 
 private:
+    void packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadStack& aProto ) const;
+
+    bool unpackCopperLayer( const kiapi::board::types::PadStackLayer& aProto );
+
     ///! The BOARD_ITEM this PADSTACK belongs to; will be used as the parent for owned shapes
     BOARD_ITEM* m_parent;
 

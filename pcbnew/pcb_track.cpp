@@ -475,8 +475,6 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
     padstack.Serialize( padStackWrapper );
     padStackWrapper.UnpackTo( via.mutable_pad_stack() );
 
-
-
     via.set_type( ToProtoEnum<VIATYPE, kiapi::board::types::ViaType>( GetViaType() ) );
     via.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
@@ -497,7 +495,6 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     const_cast<KIID&>( m_Uuid ) = KIID( via.id().value() );
     SetStart( VECTOR2I( via.position().x_nm(), via.position().y_nm() ) );
     SetEnd( GetStart() );
-    SetDrill( via.pad_stack().drill_diameter().x_nm() );
 
     google::protobuf::Any padStackWrapper;
     padStackWrapper.PackFrom( via.pad_stack() );

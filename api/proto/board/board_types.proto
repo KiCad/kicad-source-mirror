@@ -194,6 +194,7 @@ enum ZoneConnectionStyle
   ZCS_PTH_THERMAL = 5;  // Thermal reliefs for plated through holes, solid for SMD pads
 }
 
+// Controls for how copper zones connect to a pad
 message ZoneConnectionSettings
 {
   ZoneConnectionStyle zone_connection = 1;
@@ -219,8 +220,8 @@ message SolderPasteOverrides
 // The defintion of a padstack on a single layer
 message PadStackLayer
 {
-  // The board layers of this padstack entry
-  repeated BoardLayer layers = 1;
+  // The board layer of this padstack entry.  For Front/Inner/Back padstacks, In1_Cu is used to represent inner layers.
+  BoardLayer layer = 1;
 
   // The shape of the pad on this layer
   PadStackShape shape = 2;
@@ -243,6 +244,7 @@ message PadStackLayer
   // If shape == PSS_CUSTOM, defines the shape of the anchor (only PSS_CIRCLE and PSS_RECTANGLE supported at present)
   PadStackShape custom_anchor_shape = 8;
 
+  // Reserved for future use -- at the moment, zone connection settings are not per-layer
   ZoneConnectionSettings zone_settings = 9;
 }
 
@@ -267,8 +269,25 @@ message PadStackOuterLayer
 {
   SolderMaskMode solder_mask_mode = 1;
   SolderPasteMode solder_paste_mode = 2;
+
+  // NOTE: At present, KiCad does not support different solder mask expansion settings for the top and bottom layers
   SolderMaskOverrides solder_mask_settings = 3;
+
+  // NOTE: At present, KiCad does not support different solder paste expansion settings for the top and bottom layers
   SolderPasteOverrides solder_paste_settings = 4;
+}
+
+message DrillProperties
+{
+  // Lowest (closest to F_Cu) layer this drill exists on.
+  BoardLayer start_layer = 1;
+
+  // Highest (closest to B_Cu) layer this drill exists on.
+  BoardLayer end_layer   = 2;
+
+  // The diameter, in x and y, of the pad's drilled hole, if this pad has a hole.
+  // x and y will be the same value if the hole is round.
+  kiapi.common.types.Vector2 diameter = 3;
 }
 
 // A pad stack definition for a multilayer pad or via.
@@ -277,29 +296,28 @@ message PadStack
   // What type of pad stack this represents.
   PadStackType type = 1;
 
-  // Lowest (closest to F_Cu) layer this stack exists on.  Ignored if type == PST_THROUGH.
-  BoardLayer start_layer = 2;
+  // The set of board layers this padstack has a definition for
+  repeated BoardLayer layers = 2;
 
-  // Highest (closest to B_Cu) layer this stack exists on.  Ignored if type == PST_THROUGH.
-  BoardLayer end_layer   = 3;
+  // Properties of the drilled hole in this padstack, if it has one
+  DrillProperties drill = 3;
 
   // How to treat pad shapes on unconnected layers.
   UnconnectedLayerRemoval unconnected_layer_removal = 4;
 
-  // The diameter, in x and y, of the pad's drilled hole, if this pad has a hole.
-  // x and y will be the same value if the hole is round.
-  kiapi.common.types.Vector2 drill_diameter = 5;
-
-  repeated PadStackLayer layers = 6;
+  repeated PadStackLayer copper_layers = 5;
 
   // The overall rotation of this padstack (affects all layers)
-  kiapi.common.types.Angle angle = 7;
+  kiapi.common.types.Angle angle = 6;
 
   // Solder mask and paste settings for the front
-  PadStackOuterLayer front_outer_layers = 8;
+  PadStackOuterLayer front_outer_layers = 7;
 
   // Solder mask and paste settings for the back
-  PadStackOuterLayer back_outer_layers = 9;
+  PadStackOuterLayer back_outer_layers = 8;
+
+  // Controls for how copper zones connect to the padstack
+  ZoneConnectionSettings zone_settings = 9;
 }
 
 enum ViaType
