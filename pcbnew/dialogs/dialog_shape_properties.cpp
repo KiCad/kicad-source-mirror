@@ -863,7 +863,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         wxWindow* page = aMainSizer.GetContainingWindow();
         wxCHECK( page, /* void */ );
         page->Layout();
-        page->Show();
 
         const int pageIdx = m_notebookShapeDefs->FindPage( page );
         shownPages.insert( pageIdx );
