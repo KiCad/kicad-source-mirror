@@ -128,8 +128,8 @@ public:
 
     void DeleteTrackToTrackTeardrops( BOARD_COMMIT& aCommit );
 
-    static int GetWidth( BOARD_ITEM* aItem );
-    static bool IsRound( BOARD_ITEM* aItem );
+    static int GetWidth( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
+    static bool IsRound( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
 private:
     /**
@@ -144,7 +144,8 @@ private:
      * use m_m_heightRatio
      */
     void computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aParams,
-                                     std::vector<VECTOR2I>& aPoly, int aTrackHalfWidth,
+                                     std::vector<VECTOR2I>& aPoly, PCB_LAYER_ID aLayer,
+                                     int aTrackHalfWidth,
                                      const VECTOR2D& aTrackDir, BOARD_ITEM* aOther,
                                      const VECTOR2I& aOtherPos, std::vector<VECTOR2I>& aPts ) const;
 

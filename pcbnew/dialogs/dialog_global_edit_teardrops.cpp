@@ -371,7 +371,8 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::processItem( BOARD_COMMIT* aCommit, BOARD_CON
     }
     else if( m_addTeardrops->GetValue() )
     {
-        if( TEARDROP_MANAGER::IsRound( aItem ) )
+        // NOTE: This ignores possible padstack shape variation.
+        if( TEARDROP_MANAGER::IsRound( aItem, PADSTACK::ALL_LAYERS ) )
             *targetParams = *brdSettings.GetTeadropParamsList()->GetParameters( TARGET_ROUND );
         else
             *targetParams = *brdSettings.GetTeadropParamsList()->GetParameters( TARGET_RECT );
@@ -436,7 +437,8 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit,
 
     if( m_roundPadsFilter->GetValue() )
     {
-        if( !TEARDROP_MANAGER::IsRound( aItem ) )
+        // TODO(JE) padstacks -- teardrops needs to support per-layer pad handling
+        if( !TEARDROP_MANAGER::IsRound( aItem, PADSTACK::ALL_LAYERS ) )
             return;
     }
 

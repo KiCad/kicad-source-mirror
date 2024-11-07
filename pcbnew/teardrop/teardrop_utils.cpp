@@ -62,19 +62,17 @@ void TRACK_BUFFER::AddTrack( PCB_TRACK* aTrack, int aLayer, int aNetcode )
 }
 
 
-int TEARDROP_MANAGER::GetWidth( BOARD_ITEM* aItem )
+int TEARDROP_MANAGER::GetWidth( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 {
     if( aItem->Type() == PCB_VIA_T )
     {
-        // TODO(JE) padstacks
         PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
-        return via->GetWidth( PADSTACK::ALL_LAYERS );
+        return via->GetWidth( aLayer );
     }
     else if( aItem->Type() == PCB_PAD_T )
     {
-        // TODO(JE) padstacks
         PAD* pad = static_cast<PAD*>( aItem );
-        return std::min( pad->GetSize( PADSTACK::ALL_LAYERS ).x, pad->GetSize( PADSTACK::ALL_LAYERS ).y );
+        return std::min( pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
     }
     else if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
     {
@@ -86,17 +84,16 @@ int TEARDROP_MANAGER::GetWidth( BOARD_ITEM* aItem )
 }
 
 
-bool TEARDROP_MANAGER::IsRound( BOARD_ITEM* aItem )
+bool TEARDROP_MANAGER::IsRound( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 {
     if( aItem->Type() == PCB_PAD_T )
     {
         PAD* pad = static_cast<PAD*>( aItem );
 
-        // TODO(JE) padstacks
-        return pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE
-               || ( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::OVAL
-                    && pad->GetSize( PADSTACK::ALL_LAYERS ).x
-                               == pad->GetSize( PADSTACK::ALL_LAYERS ).y );
+        return pad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE
+               || ( pad->GetShape( aLayer ) == PAD_SHAPE::OVAL
+                    && pad->GetSize( aLayer ).x
+                               == pad->GetSize( aLayer ).y );
     }
 
     return true;
@@ -215,6 +212,7 @@ static VECTOR2D NormalizeVector( const VECTOR2I& aVector )
  */
 void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aParams,
                                                    std::vector<VECTOR2I>& aPoly,
+                                                   PCB_LAYER_ID aLayer,
                                                    int aTrackHalfWidth, const VECTOR2D& aTrackDir,
                                                    BOARD_ITEM* aOther, const VECTOR2I& aOtherPos,
                                                    std::vector<VECTOR2I>& pts ) const
@@ -224,7 +222,7 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
     // C and E are points on the aViaPad ( pts[2] and  pts[4] )
     // D is the aViaPad centre ( pts[3] )
     double Vpercent = aParams.m_BestWidthRatio;
-    int td_height = KiROUND( GetWidth( aOther ) * Vpercent );
+    int td_height = KiROUND( GetWidth( aOther, aLayer ) * Vpercent );
 
     // First, calculate a aVpercent equivalent to the td_height clamped by aTdMaxHeight
     // We cannot use the initial aVpercent because it gives bad shape with points
@@ -232,7 +230,7 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
     if( aParams.m_TdMaxWidth > 0 && aParams.m_TdMaxWidth < td_height )
          Vpercent *= (double) aParams.m_TdMaxWidth / td_height;
 
-    int radius = GetWidth( aOther ) / 2;
+    int radius = GetWidth( aOther, aLayer ) / 2;
 
     // Don't divide by zero.  No good can come of that.
     wxCHECK2( radius != 0, radius = 1 );
@@ -330,7 +328,7 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
     // For rectangular (and similar) shapes, the preferred_width is calculated from the min
     // dim of the rectangle
 
-    int preferred_width = KiROUND( GetWidth( aItem ) * aParams.m_BestWidthRatio );
+    int preferred_width = KiROUND( GetWidth( aItem, aLayer ) * aParams.m_BestWidthRatio );
 
     // force_clip = true to force the pad/via/track polygon to be clipped to follow
     // constraints
@@ -343,18 +341,19 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
     // clip the polygon to the max size (preferred_width or m_TdMaxWidth) by a rectangle
     // centered on the axis of the expected teardrop shape.
     // (only reduce the size of polygonal shape does not give good anchor points)
-    if( IsRound( aItem ) )
+    if( IsRound( aItem, aLayer ) )
     {
-        TransformCircleToPolygon( c_buffer, aPos, GetWidth( aItem ) / 2, ARC_LOW_DEF,
+        TransformCircleToPolygon( c_buffer, aPos, GetWidth( aItem, aLayer ) / 2, ARC_LOW_DEF,
                                   ERROR_INSIDE, 16 );
     }
     else    // Only PADS can have a not round shape
     {
+        wxCHECK_MSG( aItem->Type() == PCB_PAD_T, false, wxT( "Expected non-round item to be PAD" ) );
         PAD* pad = static_cast<PAD*>( aItem );
 
         force_clip = true;
 
-        preferred_width = KiROUND( GetWidth( pad ) * aParams.m_BestWidthRatio );
+        preferred_width = KiROUND( GetWidth( pad, aLayer ) * aParams.m_BestWidthRatio );
         pad->TransformShapeToPolygon( c_buffer, aLayer, 0, ARC_LOW_DEF, ERROR_INSIDE );
     }
 
@@ -506,10 +505,11 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
     bool found = true;
     VECTOR2I start = aTrack->GetStart();    // one reference point on the track, inside teardrop
     VECTOR2I end = aTrack->GetEnd();        // the second reference point on the track, outside teardrop
-    int radius = GetWidth( aOther ) / 2;
+    PCB_LAYER_ID layer = aTrack->GetLayer();
+    int radius = GetWidth( aOther, layer ) / 2;
 
     // Requested length of the teardrop:
-    int targetLength = KiROUND( GetWidth( aOther ) * aParams.m_BestLengthRatio );
+    int targetLength = KiROUND( GetWidth( aOther, layer ) * aParams.m_BestLengthRatio );
 
     if( aParams.m_TdMaxLen > 0 )
         targetLength = std::min( aParams.m_TdMaxLen, targetLength );
@@ -528,12 +528,13 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
 
     SHAPE_POLY_SET shapebuffer;
 
-    if( IsRound( aOther ) )
+    if( IsRound( aOther, layer ) )
     {
         TransformCircleToPolygon( shapebuffer, aOtherPos, radius, ARC_LOW_DEF, ERROR_INSIDE, 16 );
     }
     else
     {
+        wxCHECK_MSG( aOther->Type() == PCB_PAD_T, false, wxT( "Expected non-round item to be PAD" ) );
         static_cast<PAD*>( aOther )->TransformShapeToPolygon( shapebuffer, aTrack->GetLayer(), 0,
                                                               ARC_LOW_DEF, ERROR_INSIDE );
     }
@@ -708,9 +709,11 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     VECTOR2I pointA = start + VECTOR2I( vecT.x * track_stub_len - vecT.y * track_halfwidth,
                                         vecT.y * track_stub_len + vecT.x * track_halfwidth );
 
+    PCB_LAYER_ID layer = aTrack->GetLayer();
+
     // To build a polygonal valid shape pointA and point B must be outside the pad
     // It can be inside with some pad shapes having very different X and X sizes
-    if( !IsRound( aOther ) )
+    if( !IsRound( aOther, layer ) )
     {
         PAD* pad = static_cast<PAD*>( aOther );
 
@@ -740,13 +743,13 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     }
 
     // See if we can use curved teardrop shape
-    if( IsRound( aOther ) )
+    if( IsRound( aOther, layer ) )
     {
-        computeCurvedForRoundShape( aParams, aCorners, track_halfwidth, vecT, aOther, aOtherPos, pts );
+        computeCurvedForRoundShape( aParams, aCorners, layer, track_halfwidth, vecT, aOther, aOtherPos, pts );
     }
     else
     {
-        int td_width = KiROUND( GetWidth( aOther ) * aParams.m_BestWidthRatio );
+        int td_width = KiROUND( GetWidth( aOther, layer ) * aParams.m_BestWidthRatio );
 
         if( aParams.m_TdMaxWidth > 0 && aParams.m_TdMaxWidth < td_width )
             td_width = aParams.m_TdMaxWidth;
