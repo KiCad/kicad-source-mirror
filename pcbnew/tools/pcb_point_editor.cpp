@@ -997,19 +997,21 @@ private:
 class PAD_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    PAD_POINT_EDIT_BEHAVIOR( PAD& aPad ) : m_pad( aPad ) {}
+    PAD_POINT_EDIT_BEHAVIOR( PAD& aPad, PCB_LAYER_ID aLayer ) :
+            m_pad( aPad ),
+            m_layer( aLayer )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
-        // TODO(JE) padstacks
-        VECTOR2I shapePos = m_pad.ShapePos( PADSTACK::ALL_LAYERS );
-        VECTOR2I halfSize( m_pad.GetSize( PADSTACK::ALL_LAYERS ).x / 2,
-                           m_pad.GetSize( PADSTACK::ALL_LAYERS ).y / 2 );
+        VECTOR2I shapePos = m_pad.ShapePos( m_layer );
+        VECTOR2I halfSize( m_pad.GetSize( m_layer ).x / 2,
+                           m_pad.GetSize( m_layer ).y / 2 );
 
         if( m_pad.IsLocked() )
             return;
 
-        switch( m_pad.GetShape( PADSTACK::ALL_LAYERS ) )
+        switch( m_pad.GetShape( m_layer ) )
         {
         case PAD_SHAPE::CIRCLE:
             aPoints.AddPoint( VECTOR2I( shapePos.x + halfSize.x, shapePos.y ) );
@@ -1042,13 +1044,12 @@ public:
 
     void UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        // TODO(JE) padstacks
         bool     locked = m_pad.GetParent() && m_pad.IsLocked();
-        VECTOR2I shapePos = m_pad.ShapePos( PADSTACK::ALL_LAYERS );
-        VECTOR2I halfSize( m_pad.GetSize( PADSTACK::ALL_LAYERS ).x / 2,
-                           m_pad.GetSize( PADSTACK::ALL_LAYERS ).y / 2 );
+        VECTOR2I shapePos = m_pad.ShapePos( m_layer );
+        VECTOR2I halfSize( m_pad.GetSize( m_layer ).x / 2,
+                           m_pad.GetSize( m_layer ).y / 2 );
 
-        switch( m_pad.GetShape( PADSTACK::ALL_LAYERS ) )
+        switch( m_pad.GetShape( m_layer ) )
         {
         case PAD_SHAPE::CIRCLE:
         {
@@ -1108,15 +1109,14 @@ public:
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
-        // TODO(JE) padstacks
-        switch( m_pad.GetShape( PADSTACK::ALL_LAYERS ) )
+        switch( m_pad.GetShape( m_layer ) )
         {
         case PAD_SHAPE::CIRCLE:
         {
             VECTOR2I end = aPoints.Point( 0 ).GetPosition();
             int      diameter = 2 * ( end - m_pad.GetPosition() ).EuclideanNorm();
 
-            m_pad.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( diameter, diameter ) );
+            m_pad.SetSize( m_layer, VECTOR2I( diameter, diameter ) );
             break;
         }
 
@@ -1137,8 +1137,8 @@ public:
                                                             topRight, botLeft, botRight, holeCenter,
                                                             holeSize );
 
-            if( ( m_pad.GetOffset( PADSTACK::ALL_LAYERS ).x
-                  || m_pad.GetOffset( PADSTACK::ALL_LAYERS ).y )
+            if( ( m_pad.GetOffset( m_layer ).x
+                  || m_pad.GetOffset( m_layer ).y )
                 || ( m_pad.GetDrillSize().x && m_pad.GetDrillSize().y ) )
             {
                 // Keep hole pinned at the current location; adjust the pad around the hole
@@ -1170,8 +1170,8 @@ public:
 
                 RotatePoint( deltaOffset, -m_pad.GetOrientation() );
 
-                m_pad.SetSize( PADSTACK::ALL_LAYERS, padSize );
-                m_pad.SetOffset( PADSTACK::ALL_LAYERS, -deltaOffset );
+                m_pad.SetSize( m_layer, padSize );
+                m_pad.SetOffset( m_layer, -deltaOffset );
             }
             else
             {
@@ -1200,7 +1200,7 @@ public:
                 if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
                     std::swap( padSize.x, padSize.y );
 
-                m_pad.SetSize( PADSTACK::ALL_LAYERS, padSize );
+                m_pad.SetSize( m_layer, padSize );
                 m_pad.SetPosition( VECTOR2I( ( left + right ) / 2, ( top + bottom ) / 2 ) );
             }
             break;
@@ -1212,6 +1212,7 @@ public:
 
 private:
     PAD& m_pad;
+    PCB_LAYER_ID m_layer;
 };
 
 
@@ -1844,7 +1845,9 @@ private:
 };
 
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
-        PCB_TOOL_BASE( "pcbnew.PointEditor" ), m_selectionTool( nullptr ), m_editedPoint( nullptr ),
+        PCB_TOOL_BASE( "pcbnew.PointEditor" ),
+        m_frame( nullptr ),
+        m_selectionTool( nullptr ), m_editedPoint( nullptr ),
         m_hoveredPoint( nullptr ), m_original( VECTOR2I( 0, 0 ) ),
         m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
         m_altConstrainer( VECTOR2I( 0, 0 ) ), m_inPointEditorTool( false )
@@ -1854,6 +1857,7 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
 
 void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
+    m_frame = getEditFrame<PCB_BASE_FRAME>();
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
@@ -1950,7 +1954,13 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         if( m_isFootprintEditor )
         {
             PAD& pad = static_cast<PAD&>( *aItem );
-            m_editorBehavior = std::make_unique<PAD_POINT_EDIT_BEHAVIOR>( pad );
+            PCB_LAYER_ID activeLayer = m_frame ? m_frame->GetActiveLayer() : PADSTACK::ALL_LAYERS;
+
+            // Point editor only handles copper shape changes
+            if( !IsCopperLayer( activeLayer ) )
+                activeLayer = IsFrontLayer( activeLayer ) ? F_Cu : B_Cu;
+
+            m_editorBehavior = std::make_unique<PAD_POINT_EDIT_BEHAVIOR>( pad, activeLayer );
         }
         break;
     }
@@ -2294,6 +2304,16 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             // tool stack
             if( evt->IsActivate() && !evt->IsMoveTool() )
                 break;
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
+        {
+            // Re-create the points for items which can have different behavior on different layers
+            if( item->Type() == PCB_PAD_T && m_isFootprintEditor )
+            {
+                getView()->Remove( m_editPoints.get() );
+                m_editPoints = makePoints( item );
+                getView()->Add( m_editPoints.get() );
+            }
         }
         else if( evt->Action() == TA_UNDO_REDO_POST )
         {

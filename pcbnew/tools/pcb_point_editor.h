@@ -128,6 +128,7 @@ private:
     int changeArcEditMode( const TOOL_EVENT& aEvent );
 
 private:
+    PCB_BASE_FRAME*               m_frame;
     PCB_SELECTION_TOOL*           m_selectionTool;
     std::shared_ptr<EDIT_POINTS>  m_editPoints;
 
