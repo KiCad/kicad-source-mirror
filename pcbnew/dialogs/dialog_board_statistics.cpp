@@ -204,6 +204,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 {
     BOARD* board = m_parentFrame->GetBoard();
     m_drillTypes.clear();
+    m_gridDrills->ClearRows();
 
     // Get footprints and pads count
     for( FOOTPRINT* footprint : board->Footprints() )
