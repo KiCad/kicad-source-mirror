@@ -813,6 +813,14 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
                 wxGridEvent evt( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, row, col );
                 m_grid->GetEventHandler()->ProcessEvent( evt );
             }
+            // Allow paste to any cell that can accept a boolean value
+            else if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_BOOL ) )
+            {
+                tbl->SetValueAsBool( row, col, cellTxt == wxT( "1" ) );
+
+                wxGridEvent evt( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, row, col );
+                m_grid->GetEventHandler()->ProcessEvent( evt );
+            }
         }
     }
 }
