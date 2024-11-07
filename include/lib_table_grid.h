@@ -81,21 +81,22 @@ public:
         return wxEmptyString;
     }
 
-    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override 
+    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override
     {
         if( aRow < (int) size() )
         {
-            LIB_TABLE_ROW* r = at( (size_t) aRow );
-
             switch( aCol )
             {
             case COL_ENABLED:
-            case COL_VISIBLE: 
+            case COL_VISIBLE:
                 return aTypeName == wxGRID_VALUE_BOOL;
-            default: 
+
+            default:
                 return aTypeName == wxGRID_VALUE_STRING;
             }
         }
+
+        return false;
     }
 
     bool GetValueAsBool( int aRow, int aCol ) override

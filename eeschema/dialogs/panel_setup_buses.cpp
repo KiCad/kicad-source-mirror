@@ -233,13 +233,13 @@ void PANEL_SETUP_BUSES::OnAddMember( wxCommandEvent& aEvent )
     m_membersGrid->SetGridCursor( row, 0 );
 
     /*
-     * Check if the clipboard contains text data. 
-     * 
-     * - If `clipboardHasText` is true, select the specified row in the members grid to allow our custom 
+     * Check if the clipboard contains text data.
+     *
+     * - If `clipboardHasText` is true, select the specified row in the members grid to allow our custom
      *   conext menu to paste the clipbaord .
      * - Otherwise, enable and display the cell edit control, allowing the user to manually edit the cell.
      */
-    bool clipboardHasText = false;   
+    bool clipboardHasText = false;
 
     if( wxTheClipboard->Open() )
     {
@@ -515,7 +515,7 @@ void PANEL_SETUP_BUSES::ImportSettingsFrom( const SCHEMATIC& aOtherSchematic )
 void PANEL_SETUP_BUSES::updateAliasMembers( int aAliasIndex )
 {
     if( !m_aliases.empty() && m_membersGrid->GetNumberRows() > 0 && aAliasIndex >= 0
-        && aAliasIndex < m_aliases.size() )
+        && aAliasIndex < (int)m_aliases.size() )
     {
         const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[aAliasIndex];
 
