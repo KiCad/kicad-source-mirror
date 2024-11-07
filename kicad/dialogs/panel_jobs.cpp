@@ -323,6 +323,8 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
 
     rebuildJobList();
     buildOutputList();
+
+    m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() );
 }
 
 
@@ -350,6 +352,8 @@ void PANEL_JOBS::RemoveOutput( JOBSET_OUTPUT* aOutput )
     }
 
     m_jobsFile->RemoveOutput( aOutput );
+
+    m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() );
 }
 
 
@@ -569,6 +573,7 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
 
                 Freeze();
                 addJobOutputPanel( &output );
+                m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() );
                 Thaw();
             }
         }
@@ -669,4 +674,33 @@ void PANEL_JOBS::OnJobButtonDown( wxCommandEvent& aEvent )
     rebuildJobList();
 
     m_jobList->SetItemState( item + 1, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+}
+
+void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
+{
+    // sanity
+    if( m_jobsFile->GetOutputs().empty() )
+	{
+		DisplayError( this, _( "No outputs defined" ) );
+		return;
+	}
+
+	CallAfter(
+			[this]()
+			{
+				PROJECT&      project = m_frame->Kiway().Prj();
+				EnsurePcbSchFramesOpen();
+
+				wxFileName fn = project.GetProjectFullName();
+				wxSetWorkingDirectory( fn.GetPath() );
+
+                JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile.get() );
+
+				WX_PROGRESS_REPORTER* progressReporter =
+						new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );
+
+				jobRunner.RunJobsAllOutputs();
+
+				delete progressReporter;
+			} );
 }
