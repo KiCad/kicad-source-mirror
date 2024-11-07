@@ -357,6 +357,9 @@ protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
 private:
+    // Silence GCC warning about overriding the base class method
+    bool operator==( const PCB_TRACK& aOther ) const override;
+
     VECTOR2I m_Mid; ///< Arc mid point, halfway between start and end
 };
 
@@ -657,6 +660,9 @@ protected:
     wxString layerMaskDescribe() const override;
 
 private:
+    // Silence GCC warning about hiding the PCB_TRACK base method
+    bool operator==( const PCB_TRACK& aOther ) const override;
+
     VIATYPE      m_viaType;                  ///< through, blind/buried or micro
 
     PADSTACK     m_padStack;

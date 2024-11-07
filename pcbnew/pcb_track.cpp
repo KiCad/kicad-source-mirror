@@ -227,6 +227,17 @@ bool PCB_ARC::operator==( const BOARD_ITEM& aBoardItem ) const
 }
 
 
+bool PCB_ARC::operator==( const PCB_TRACK& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_ARC& other = static_cast<const PCB_ARC&>( aOther );
+
+    return *this == other;
+}
+
+
 bool PCB_ARC::operator==( const PCB_ARC& aOther ) const
 {
     return m_Start == aOther.m_Start
@@ -279,6 +290,17 @@ bool PCB_VIA::operator==( const BOARD_ITEM& aBoardItem ) const
         return false;
 
     const PCB_VIA& other = static_cast<const PCB_VIA&>( aBoardItem );
+
+    return *this == other;
+}
+
+
+bool PCB_VIA::operator==( const PCB_TRACK& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_VIA& other = static_cast<const PCB_VIA&>( aOther );
 
     return *this == other;
 }
