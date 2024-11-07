@@ -36,7 +36,7 @@ static SET_OFFSET_OPTIONS s_savedOptions;
 
 DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset,
                                       bool aClearToZero ) :
-        DIALOG_SET_OFFSET_BASE( &aParent ), m_frame( aParent ), m_clearToZero( aClearToZero ),
+        DIALOG_SET_OFFSET_BASE( &aParent ), m_clearToZero( aClearToZero ),
         m_originalOffset( aOffset ), m_updatedOffset( aOffset ),
         m_xOffset( &aParent, m_xLabel, m_xEntry, m_xUnit ),
         m_yOffset( &aParent, m_yLabel, m_yEntry, m_yUnit )

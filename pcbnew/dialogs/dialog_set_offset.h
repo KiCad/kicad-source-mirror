@@ -48,8 +48,6 @@ public:
 private:
     void updateDialogControls( bool aPolar );
 
-    PCB_BASE_FRAME& m_frame;
-
     bool m_clearToZero;
 
     const VECTOR2I m_originalOffset;
