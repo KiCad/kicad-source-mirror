@@ -58,6 +58,7 @@ private:
     void onSizeGrid( wxSizeEvent& event ) override;
     void adjustPathSubsGridColumns( int aWidth );
     void onConvertLegacyLibraries( wxCommandEvent& event ) override;
+    void onGridCellLeftClickHandler( wxGridEvent& event );
 
     bool TransferDataFromWindow() override;
 

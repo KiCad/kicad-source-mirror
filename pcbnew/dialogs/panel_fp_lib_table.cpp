@@ -410,7 +410,9 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
                     aGrid->SelectRow( 0 );
             };
 
+
     setupGrid( m_global_grid );
+    m_global_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler, this );
 
     populateEnvironReadOnlyTable();
 
@@ -513,12 +515,13 @@ PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
     m_global_grid->PopEventHandler( true );
+    m_global_grid->Unbind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler, this );
 
     if( m_project_grid )
     {
         m_project_grid->PopEventHandler( true );
         m_project_grid->Unbind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler, this );
-    }       
+    }
 
     m_path_subs_grid->PopEventHandler( true );
 }
@@ -1173,21 +1176,25 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
 
 void PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler( wxGridEvent& event )
 {
-    int row = event.GetRow();
-    int col = event.GetCol();
+    // Get the grid object that triggered the event
+    wxGrid* grid = dynamic_cast<wxGrid*>( event.GetEventObject() );
 
-    if( m_project_grid )
+    // If the event object is a wxGrid, proceed with the handling
+    if( grid )
     {
+        int row = event.GetRow();
+        int col = event.GetCol();
+
         // Get the cell renderer for the clicked cell
-        wxGridCellRenderer* renderer = m_project_grid->GetCellRenderer( row, col );
+        wxGridCellRenderer* renderer = grid->GetCellRenderer( row, col );
 
         // Check if the renderer is a wxGridCellBoolRenderer using dynamic_cast
         if( dynamic_cast<wxGridCellBoolRenderer*>( renderer ) )
         {
             // Set the grid cursor to the clicked boolean cell
-            m_project_grid->SetGridCursor( row, col );
+            grid->SetGridCursor( row, col );
         }
-    }    
+    }
 
     // Allow the default behavior to continue (toggle the bool)
     event.Skip();
