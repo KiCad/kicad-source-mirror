@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-04 09:00+0000\n"
+"PO-Revision-Date: 2024-11-08 00:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -17858,9 +17858,9 @@ msgid "Unit Already Placed"
 msgstr "Einheit bereits eingefügt"
 
 #: eeschema/picksymbol.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "&Swap '%s' and '%s'"
-msgstr "Schaltplanblatt \"%s\" Pin \"%s\""
+msgstr "Tau&sche \"%s\" und \"%s\""
 
 #: eeschema/picksymbol.cpp:132
 #, c-format
@@ -22132,9 +22132,9 @@ msgid "false"
 msgstr "falsch"
 
 #: eeschema/tools/backannotate.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s reference designator to '%s'."
-msgstr "Ändere \"%s\" Referenzbezeichner in \"%s\"."
+msgstr "Referenzbezeichner \"%s\" in \"%s\" ändern."
 
 #: eeschema/tools/backannotate.cpp:404
 #, c-format
@@ -22496,15 +22496,14 @@ msgid "Place Symbols"
 msgstr "Symbole einfügen"
 
 #: eeschema/tools/ee_actions.cpp:431
-#, fuzzy
 msgid "Place Next Symbol Unit"
-msgstr "Nächste Symboleinheit"
+msgstr "Nächste Symboleinheit einfügen"
 
 #: eeschema/tools/ee_actions.cpp:432
-#, fuzzy
 msgid ""
 "Place the next unit of the current symbol that is missing from the schematic"
-msgstr "Aktuelles Symbol zum Schaltplan hinzufügen"
+msgstr ""
+"Nächste Einheit des aktuellen Symbols, die im Schaltplan fehlt, einfügen"
 
 #: eeschema/tools/ee_actions.cpp:442
 msgid "Place Power Symbols"
@@ -23656,9 +23655,8 @@ msgid "Place Symbol"
 msgstr "Symbol einfügen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:571
-#, fuzzy
 msgid "Select a single symbol to place the next unit."
-msgstr "Wählen Sie eine Ecke bevor Sie eine neue Ecke hinzufügen."
+msgstr "Ein einzelnes Symbol wählen um die nächste Einheit einzufügen."
 
 #: eeschema/tools/sch_drawing_tools.cpp:584
 msgid "This symbol has only one unit."
@@ -27711,9 +27709,8 @@ msgid "Fetching Remote"
 msgstr "Remote abrufen"
 
 #: kicad/project_tree_pane.cpp:1736
-#, fuzzy
 msgid "Failed to pull project"
-msgstr "Konnte Projekt nicht übertragen (push)"
+msgstr "Konnte Projekt nicht übertragen (pull)"
 
 #: kicad/project_tree_pane.cpp:1763
 msgid "Failed to push project"
@@ -32745,14 +32742,12 @@ msgid "Alphabet, full 26 characters"
 msgstr "Alphabet, alle 26 Buchstaben"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:281
-#, fuzzy
 msgid "Select center item..."
-msgstr "Elemente auswählen..."
+msgstr "Mittelelement auswählen..."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:287
-#, fuzzy
 msgid "Select center point..."
-msgstr "Punkt auswählen..."
+msgstr "Mittelpunkt auswählen..."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:341
 #, c-format
@@ -32870,18 +32865,16 @@ msgid "Columns"
 msgstr "Spalten"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:175
-#, fuzzy
 msgid "Grid Position"
-msgstr "Endposition"
+msgstr "Rasterposition"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
 msgstr "Quellelemente bleiben bestehen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
-#, fuzzy
 msgid "Centre on source items"
-msgstr "Ansicht auf kreuzreferenzierte Elemente zentrieren"
+msgstr "Ansicht auf Quellelemente zentrieren"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 msgid "Horizontal, then vertical"
@@ -32974,14 +32967,12 @@ msgid "Duplication Settings"
 msgstr "Duplizierungseinstellungen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:353
-#, fuzzy
 msgid "Full circle"
-msgstr "Kreis"
+msgstr "Vollkreis"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:363
-#, fuzzy
 msgid "Angle between items:"
-msgstr "Winkel zwischen neuen Elementen:"
+msgstr "Winkel zwischen Elementen:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:367
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:143
@@ -33189,9 +33180,8 @@ msgid "Choose how many digits of precision to display"
 msgstr "Wählen Sie aus, wie viele Stellen genau angezeigt werden sollen"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "Arrow Direction:"
-msgstr "Richtung:"
+msgstr "Pfeilrichtung:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:357
@@ -35313,9 +35303,8 @@ msgid "Remove teardrops according to filtering options"
 msgstr "Teardrops gemäß der Filteroptionen entfernen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:119
-#, fuzzy
 msgid "Remove all teardrops"
-msgstr "Teardrops entfernen"
+msgstr "Alle Teardrops entfernen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Remove all teadrops, regardless filtering options"
@@ -36754,9 +36743,8 @@ msgid "Gerber"
 msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:50
-#, fuzzy
 msgid "Open output directory"
-msgstr "Ausgabeverzeichnis"
+msgstr "Ausgabeverzeichnis öffnen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:59
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:277
@@ -37279,14 +37267,12 @@ msgid "Reset to the current Y offset from the reference position."
 msgstr "Auf den aktuellen Y-Versatz von der Referenzposition zurücksetzen."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:221
-#, fuzzy
 msgid "Select reference item..."
-msgstr "Bezugselement anklicken ..."
+msgstr "Bezugselement wählen..."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:235
-#, fuzzy
 msgid "Select reference point..."
-msgstr "Bezugspunkt für Verschieben auswählen ..."
+msgstr "Bezugspunkt wählen..."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:246
 msgid "Reference location: grid origin"
@@ -37491,14 +37477,12 @@ msgid "Set a new value for this offset:"
 msgstr "Neuen Wert für diesen Versatz setzen:"
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:63
-#, fuzzy
 msgid "Set Offset"
-msgstr "X-Versatz"
+msgstr "Versatz einstellen"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:191
-#, fuzzy
 msgid "Rectangle cannot be zero-sized."
-msgstr "Der Bogenwinkel darf nicht Null sein."
+msgstr "Rechteck muss größer Null sein."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:450
 msgid "Arc angle must be greater than 0"
@@ -37546,26 +37530,22 @@ msgstr "Endpunkt"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:918
 #: pcbnew/dialogs/dialog_shape_properties.cpp:935
-#, fuzzy
 msgid "Mid Point"
-msgstr "Endpunkt"
+msgstr "Mittelpunkt"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:932
 msgid "Start Angle"
 msgstr "Anfangswinkel"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:951
-#, fuzzy
 msgid "Point on Circle"
-msgstr "Ring/Kreis"
+msgstr "Kreispunkt"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:965
-#, fuzzy
 msgid "Control Point 1"
 msgstr "Kontrollpunkt 1"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:966
-#, fuzzy
 msgid "Control Point 2"
 msgstr "Kontrollpunkt 2"
 
@@ -37599,9 +37579,8 @@ msgid "Error List"
 msgstr "Fehlerliste"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:37
-#, fuzzy
 msgid "By Corners"
-msgstr "Ecke hinzufügen"
+msgstr "Anhand der Ecken"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:53
 msgid "By Corner and Size"
@@ -37612,14 +37591,12 @@ msgid "By Center and Size"
 msgstr "Anhand von Mittel und Größe"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
-#, fuzzy
 msgid "By Endpoints"
-msgstr "Endpunkt"
+msgstr "Anhand der Endpunkte"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:101
-#, fuzzy
 msgid "By Length and Angle"
-msgstr "Längenabstimmung"
+msgstr "Anhand von Länge und Winkel"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
 msgid "By Midpoint/Endpoint"
@@ -37634,19 +37611,16 @@ msgid "By Start/Mid/End"
 msgstr "Anhand von Anfang/Mitte/Ende"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
-#, fuzzy
 msgid "By Center/Radius"
-msgstr "Eckradius %"
+msgstr "Anhand des Mittelpunkts/Radius"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
-#, fuzzy
 msgid "By Center/Point"
-msgstr "Mittelpunkt"
+msgstr "Anhand des Mittelpunkts"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:197
-#, fuzzy
 msgid "Bezier Control Points"
-msgstr "Bézier-Stützstelle"
+msgstr "Bézier-Stützstellen"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:244
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:184
@@ -38899,9 +38873,8 @@ msgstr ""
 "Platine löschen?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:908
-#, fuzzy
 msgid "Inner Layers to Be Deleted"
-msgstr "Innere Lagen, die gelöscht werden sollen"
+msgstr "Zu löschende Innenlagen"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:943
 msgid "All user-defined layers have already been added."
@@ -41286,9 +41259,8 @@ msgid "Track angle"
 msgstr "Leiterbahnwinkel"
 
 #: pcbnew/drc/drc_item.cpp:130
-#, fuzzy
 msgid "Track segment length"
-msgstr "Leiterbahnsegmente"
+msgstr "Leiterbahnsegmentlänge"
 
 #: pcbnew/drc/drc_item.cpp:134
 msgid "Annular width"
@@ -42314,9 +42286,8 @@ msgid "(%s max angle %s; actual %s)"
 msgstr "(%s max. Winkel %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:75
-#, fuzzy
 msgid "Checking track segment lengths..."
-msgstr "Prüfe Leiterbahnwinkel ..."
+msgstr "Prüfe Leiterbahnsegmentlänge..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
@@ -42933,14 +42904,14 @@ msgstr ""
 "aktualisiert."
 
 #: pcbnew/footprint_edit_frame.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Open in library %s"
-msgstr "Symbol aus Bibliothek %s öffnen"
+msgstr "In Bibliothek %s öffnen"
 
 #: pcbnew/footprint_edit_frame.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr "Bearbeite Footprint aus nur lesbarer Bibliothek \"%s\"."
+msgstr "Footprint aus nur-lesbarer Bibliothek \"%s\" bearbeiten."
 
 #: pcbnew/footprint_edit_frame.cpp:574
 msgid "Save as editable copy"
@@ -43709,34 +43680,34 @@ msgid "Added %s (footprint '%s')."
 msgstr "%s hinzugefügt (Footprint \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class to '%s'."
-msgstr "Bauteilklasse %s zu %s ändern."
+msgstr "Bauteilklasse %s in \"%s\" ändern."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr "Bauteilklasse %s entfernen (aktuell %s)."
+msgstr "Bauteilklasse %s entfernen (aktuell \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class from '%s' to '%s'."
-msgstr "Ändere %s Bauteilklasse von %s nach %s."
+msgstr "Ändere %s Bauteilklasse von \"%s\" nach \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class to '%s'."
-msgstr "Bauteilklasse %s zu %s geändert."
+msgstr "Bauteilklasse %s zu \"%s\" geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s component class (was '%s')."
-msgstr "Bauteilklasse %s entfernt (war %s)."
+msgstr "Bauteilklasse %s entfernt (war \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class from '%s' to '%s'."
-msgstr "Bauteilklasse %s von %s in %s geändert."
+msgstr "Bauteilklasse %s von \"%s\" in \"%s\" geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
@@ -43996,9 +43967,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Verarbeite Symbol \"%s:%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1337
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for %s."
-msgstr "Mehrere Footprints für \"%s\" gefunden."
+msgstr "Mehrere Footprints für %s gefunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1369
 #, c-format
@@ -47567,19 +47538,17 @@ msgid "Resolved angle constraints: min %s; max %s."
 msgstr "Ermittelte Winkelbeschränkungen: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:462
-#, fuzzy
 msgid "Track Segment Length"
-msgstr "Segmentlänge"
+msgstr "Leiterbahnsegmentlänge"
 
 #: pcbnew/tools/board_inspection_tool.cpp:463
-#, fuzzy
 msgid "Track segment length resolution for:"
-msgstr "Ermittlung des Leiterbahnwinkels für:"
+msgstr "Ermittlung der Leiterbahnsegmentlänge für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved segment length constraints: min %s; max %s."
-msgstr "Ermittelte Winkelbeschränkungen: min %s; max %s."
+msgstr "Ermittelte Segmentlängenbeschränkung: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 msgid "Connection Width"
@@ -50017,18 +49986,16 @@ msgstr ""
 "Element positionieren"
 
 #: pcbnew/tools/pcb_actions.cpp:2032
-#, fuzzy
 msgid "Position Interactively..."
-msgstr "Relativ zu Bezugspunkt positionieren..."
+msgstr "Interaktiv positionieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:2033
-#, fuzzy
 msgid ""
 "Positions the selected item(s) by an exact amount relative to another, "
 "interactively"
 msgstr ""
-"Ausgewählte Elemente um einen exakten Betrag relativ zu einem anderen "
-"Element positionieren"
+"Ausgewählte Elemente interaktiv um einen exakten Betrag relativ zu einem "
+"anderen Element positionieren"
 
 #: pcbnew/tools/pcb_actions.cpp:2095
 msgid "Select/Expand Connection"
@@ -50572,19 +50539,16 @@ msgid "Align to Center"
 msgstr "Mittig ausrichten"
 
 #: pcbnew/tools/position_relative_tool.cpp:215
-#, fuzzy
 msgid "Set Relative Position Interactively"
-msgstr "Positionsinkrement bei Wiederholung"
+msgstr "Relativposition interaktiv bestimmen"
 
 #: pcbnew/tools/position_relative_tool.cpp:230
-#, fuzzy
 msgid "Select the reference point on the item to move."
-msgstr "Bezugspunkt für Verschieben auswählen ..."
+msgstr "Bezugspunkt am zu verschiebenen Element wählen."
 
 #: pcbnew/tools/position_relative_tool.cpp:235
-#, fuzzy
 msgid "Select the point to define the new offset from."
-msgstr "Wählen Sie eine Ecke bevor Sie eine neue Ecke hinzufügen."
+msgstr "Punkt, von dem aus der neue Versatz definiert wird, wählen."
 
 #: pcbnew/tools/position_relative_tool.cpp:419
 msgid "Position Relative"
