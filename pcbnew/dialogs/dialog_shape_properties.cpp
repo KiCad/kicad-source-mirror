@@ -853,8 +853,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     wxFont infoFont = KIUI::GetInfoFont( this );
     m_techLayersLabel->SetFont( infoFont );
 
-    for( size_t i = 0; i < m_notebookShapeDefs->GetPageCount(); ++i )
-        m_notebookShapeDefs->GetPage( i )->Hide();
+    // All the pages exist in the WxFB template, but we'll scrap the ones we don't
+    // use. Constructing on-demand would work fine too.
+    std::set<int> shownPages;
 
     const auto showPage = [&]( wxSizer& aMainSizer, bool aSelect = false )
     {
@@ -864,10 +865,11 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         page->Layout();
         page->Show();
 
+        const int pageIdx = m_notebookShapeDefs->FindPage( page );
+        shownPages.insert( pageIdx );
+
         if( aSelect )
-        {
-            m_notebookShapeDefs->SetSelection( m_notebookShapeDefs->FindPage( page ) );
-        }
+            m_notebookShapeDefs->SetSelection( pageIdx );
     };
 
     switch( m_item->GetShape() )
@@ -959,9 +961,18 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         break;
     }
 
+    // Remove any tabs not used (Hide() doesn't work on Windows)
+    for( int i = m_notebookShapeDefs->GetPageCount() - 1; i >= 0; --i )
+    {
+        if( shownPages.count( i ) == 0 )
+            m_notebookShapeDefs->RemovePage( i );
+    }
+
     // Used the last saved tab if any
     if( s_lastTabForShape.count( m_item->GetShape() ) > 0 )
+    {
         m_notebookShapeDefs->SetSelection( s_lastTabForShape[m_item->GetShape()] );
+    }
 
     // Find the first control in the shown tab
     wxWindow* tabPanel = m_notebookShapeDefs->GetCurrentPage();
