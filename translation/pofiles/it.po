@@ -114,7 +114,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-08 00:00+0000\n"
+"PO-Revision-Date: 2024-11-09 13:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -10995,6 +10995,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Eliminare la libreria di blocchi di progettazione '%s' dal disco? Questo "
+"eliminerà tutti i blocchi di progettazione all'interno della libreria."
 
 #: eeschema/design_block_utils.cpp:493
 #, fuzzy, c-format
@@ -12089,13 +12091,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_export_netlist.cpp:343
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Salva tutti i dati dell'evento digitale"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:344
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Se non impostata, scrivere una direttiva per impedire il salvataggio dei "
+"dati degli eventi digitali (esave none)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:350
 msgid "Run external simulator command:"
@@ -12113,7 +12117,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:374
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "Esporta netlist come modello SPICE .subckt"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:419
 msgid "Netlist command:"
@@ -12159,7 +12163,7 @@ msgstr "Questo pluging esiste già."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:828
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "Numero massimo di plugin già aggiunti alla finestra."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:859
 msgid "You must provide a netlist generator command string"
@@ -12196,7 +12200,7 @@ msgstr "Sfoglia generatori..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:114
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "Aggiungi esportatore di netlist basato su script"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:237
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -13787,17 +13791,18 @@ msgstr "Genera finestre a scomparsa proprietà"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 msgid "Generate clickable links for hierarchical elements"
-msgstr ""
+msgstr "Genera collegamenti cliccabili per elementi gerarchici"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "Genera metadati dalle variabili AUTHOR e SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:172
 #: pcbnew/dialogs/dialog_plot_base.cpp:421
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
 msgstr ""
+"Genera proprietà del documento PDF dalle variabili di testo AUTHOR e SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:179
 msgid "Other options"
@@ -14005,7 +14010,7 @@ msgstr "Distingui maiuscole"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "Solo &parole intere"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
@@ -14914,6 +14919,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Impossibile da analizzare:\n"
+"\n"
+"%s\n"
+"Uso del modello SPICE generico."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -16492,7 +16501,7 @@ msgstr "Maiusc"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
-msgstr ""
+msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
 #, fuzzy
@@ -16501,7 +16510,7 @@ msgstr "Conteggio orizzontale:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "Qualsiasi:"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -16517,7 +16526,7 @@ msgstr "Mostra tipo &elettrico del pin"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:45
 msgid "Show pin &alternate mode indicator icons"
-msgstr ""
+msgstr "Mostra icone indicatori di modalità &alternativa pin"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:36
 msgid "&Default line width:"
@@ -16554,7 +16563,7 @@ msgstr "Opzioni generali"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:150
 msgid "Keep pins attached when dragging edges"
-msgstr ""
+msgstr "Pin attaccati quando si trascinano i bordi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
 #, c-format
@@ -16592,6 +16601,8 @@ msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
+"Questa azione reimposterà la tabella della libreria globale sul disco e non "
+"potrà essere annullata."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:922
 msgid ""
@@ -16666,7 +16677,7 @@ msgstr "Modelli nomi campi globali:"
 #: eeschema/dialogs/panel_template_fieldnames.cpp:207
 #, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr ""
+msgstr "Il nome del campo \"%s\" contiene spazi iniziali e/o finali."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:213
 msgid ""
@@ -16674,6 +16685,10 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"Ciò potrebbe dare origine a nomi di campo apparentemente duplicati, ma in "
+"realtà sono nomi univoci che differiscono solo per i caratteri di spazio "
+"vuoto. La rimozione dei caratteri di spazio vuoto non avrà alcun effetto sui "
+"nomi di campo simbolo esistenti."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:219
 #, fuzzy
@@ -16796,6 +16811,8 @@ msgstr ""
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"È necessario specificare il percorso di uscita per convertire librerie "
+"tradizionali e non KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1007
 msgid "Saving symbol library in updated format\n"
@@ -16931,7 +16948,7 @@ msgstr "Netclass %s non definita"
 #: eeschema/erc/erc.cpp:745
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
-msgstr ""
+msgstr "L'etichetta collega più di un filo a %d, %d"
 
 #: eeschema/erc/erc.cpp:800
 #, fuzzy, c-format
@@ -17126,11 +17143,11 @@ msgstr "Mancata corrispondenza tra etichette gerarchiche e piedini dei fogli"
 
 #: eeschema/erc/erc_item.cpp:92
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "Quattro punti di collegamento uniti insieme"
 
 #: eeschema/erc/erc_item.cpp:96
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "L'etichetta collega più di un filo"
 
 #: eeschema/erc/erc_item.cpp:100
 msgid "A pin with a \"no connection\" flag is connected"
@@ -17172,7 +17189,7 @@ msgstr "Etichetta globale non connessa da nessun'altra parte nello schema"
 
 #: eeschema/erc/erc_item.cpp:132
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "Le etichette locali e globali hanno lo stesso nome"
 
 #: eeschema/erc/erc_item.cpp:136
 msgid "Different footprint assigned in another unit of the symbol"
@@ -17349,6 +17366,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' non è un file di schema KiCad.\n"
+"Usare File -> Importa per i file schema non KiCad."
 
 #: eeschema/files-io.cpp:287
 msgid ""
@@ -17452,6 +17471,8 @@ msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
+"Questo schema contiene simboli che hanno nomi di campi con spazi vuoti "
+"iniziali e/o finali."
 
 #: eeschema/files-io.cpp:609
 msgid "Schematic is read only."
@@ -17906,7 +17927,7 @@ msgstr "Simboli a nuova libreria..."
 
 #: eeschema/menubar.cpp:198 pcbnew/menubar_pcb_editor.cpp:236
 msgid "Panels"
-msgstr ""
+msgstr "Pannelli"
 
 #: eeschema/menubar.cpp:367
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:178
@@ -18040,6 +18061,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
+"Errore nell'analisi del modello '%s', numero errato di nodi '?' in "
+"Sim.NodesFormat rispetto alle connessioni"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:577
 #, c-format
@@ -18934,6 +18957,8 @@ msgid ""
 "No module instance '%s' found in schematic file:\n"
 "%s"
 msgstr ""
+"Nessuna istanza del modulo '%s' trovata nel file schema:\n"
+"%s"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1719
 #, c-format
@@ -19854,7 +19879,7 @@ msgstr "Collegamento libreria"
 #: eeschema/sch_table.cpp:400 pcbnew/pcb_table.cpp:360
 #, c-format
 msgid "%d Column Table"
-msgstr ""
+msgstr "Tabella colonne %d"
 
 #: eeschema/sch_table.cpp:545 pcbnew/pcb_table.cpp:396
 #, fuzzy, c-format
@@ -19883,7 +19908,7 @@ msgstr "Elimina generatore"
 
 #: eeschema/sch_table.cpp:638 pcbnew/pcb_table.cpp:602
 msgid "Cell Separators"
-msgstr ""
+msgstr "Separatori di cella"
 
 #: eeschema/sch_table.cpp:642 pcbnew/pcb_table.cpp:606
 #, fuzzy
@@ -19903,7 +19928,7 @@ msgstr "Cancella colore"
 #: eeschema/sch_tablecell.cpp:52 pcbnew/pcb_tablecell.cpp:52
 #, c-format
 msgid "Table Cell %s"
-msgstr ""
+msgstr "Cella tabella %s"
 
 #: eeschema/sch_tablecell.cpp:121 pcbnew/pcb_tablecell.cpp:111
 #, fuzzy
@@ -21784,6 +21809,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:955
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr ""
+"La libreria è di sola lettura.  Le modifiche non possono essere salvate in "
+"questa libreria."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:957
 #, fuzzy
@@ -21951,12 +21978,15 @@ msgstr "La libreria \"%s\" non è nella tabella librerie impronte."
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
 msgstr ""
+"Il simbolo '%s' non può sostituire un altro simbolo '%s' da cui discende"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1002
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr ""
+"Il simbolo '%s' non può sostituire un altro simbolo '%s' che ne è "
+"discendente."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1015
 #, fuzzy, c-format
@@ -21975,6 +22005,8 @@ msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
+"\n"
+"Sovrascriverli tutti o rinominare i nuovi simboli?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1041
 #, fuzzy
@@ -22176,6 +22208,8 @@ msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
 msgstr ""
+"Le modifiche apportate in questa finestra verranno applicate immediatamente, "
+"usare Annulla in ogni documento coinvolto per annullarle"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
 #: eeschema/tools/ee_actions.cpp:553 eeschema/tools/ee_actions.cpp:561
@@ -22226,6 +22260,7 @@ msgstr "Mancata corrispondenza tra etichette gerarchiche e piedini dei fogli"
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
 msgstr ""
+"Associazione(i) di pin di interruzione foglio e di etichette gerarchiche"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Display previous symbol"
@@ -22455,7 +22490,7 @@ msgstr "Crea un file PNG dalla vista corrente"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Salva selezione come blocco di progettazione..."
 
 #: eeschema/tools/ee_actions.cpp:164
 #, fuzzy
@@ -22724,11 +22759,11 @@ msgstr "Simbolo di potenza"
 
 #: eeschema/tools/ee_actions.cpp:451
 msgid "Place Design Block"
-msgstr ""
+msgstr "Piazza blocco di progettazione"
 
 #: eeschema/tools/ee_actions.cpp:452
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Aggiungi il blocco di progettazione selezionato al foglio corrente"
 
 #: eeschema/tools/ee_actions.cpp:463
 #, fuzzy
@@ -22772,7 +22807,7 @@ msgstr "File foglio di disegno"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "Copia il foglio nel progetto e disegna sul foglio corrente"
 
 #: eeschema/tools/ee_actions.cpp:536
 #, fuzzy
