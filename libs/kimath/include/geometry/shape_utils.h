@@ -76,6 +76,11 @@ OPT_VECTOR2I GetSharedEndpoint( const SEG& aSegA, const SEG& aSegB );
 std::array<SEG, 4> BoxToSegs( const BOX2I& aBox );
 
 /**
+ * Add the 4 corners of a BOX2I to a vector.
+ */
+void CollectBoxCorners( const BOX2I& aBox, std::vector<VECTOR2I>& aCorners );
+
+/**
  * Get the segments of a box that are in the given direction.
  *
  * N,E,S,W are the sides of the box.
@@ -141,5 +146,20 @@ VECTOR2I GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir, int a
  * - Optionally the center
  */
 std::vector<TYPED_POINT2I> GetCircleKeyPoints( const CIRCLE& aCircle, bool aIncludeCenter );
+
+
+/*
+ * Take a polygon and 'rectify' it, so that all sides are H/V.
+ *
+ * The entire original polygon is contained within the new one.
+ * The new polygon will pass though each original corner,
+ * but it can have additional corners, or corners can be simplified away.
+ *
+ * E.g.:
+ *     ____           _______
+ *    /    \___    -> |     |___
+ *    |________\      |_________|
+ */
+SHAPE_LINE_CHAIN RectifyPolygon( const SHAPE_LINE_CHAIN& aPoly );
 
 } // namespace KIGEOM

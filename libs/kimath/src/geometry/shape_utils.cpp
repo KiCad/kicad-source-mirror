@@ -80,6 +80,15 @@ std::array<SEG, 4> KIGEOM::BoxToSegs( const BOX2I& aBox )
 }
 
 
+void KIGEOM::CollectBoxCorners( const BOX2I& aBox, std::vector<VECTOR2I>& aCorners )
+{
+    aCorners.push_back( { aBox.GetLeft(), aBox.GetTop() } );
+    aCorners.push_back( { aBox.GetRight(), aBox.GetTop() } );
+    aCorners.push_back( { aBox.GetRight(), aBox.GetBottom() } );
+    aCorners.push_back( { aBox.GetLeft(), aBox.GetBottom() } );
+}
+
+
 std::vector<SEG> KIGEOM::GetSegsInDirection( const BOX2I& aBox, DIRECTION_45::Directions aDir )
 {
     // clang-format off
@@ -332,4 +341,38 @@ std::vector<TYPED_POINT2I> KIGEOM::GetCircleKeyPoints( const CIRCLE& aCircle, bo
     }
 
     return pts;
+}
+
+
+SHAPE_LINE_CHAIN KIGEOM::RectifyPolygon( const SHAPE_LINE_CHAIN& aPoly )
+{
+    SHAPE_LINE_CHAIN raOutline;
+
+    const auto handleSegment = [&]( const SEG& aSeg )
+    {
+        const VECTOR2I p0( aSeg.A.x, aSeg.B.y );
+        const VECTOR2I p1( aSeg.B.x, aSeg.A.y );
+
+        raOutline.Append( aSeg.A );
+        if( !aPoly.PointInside( p0 ) )
+            raOutline.Append( p0 );
+        else
+            raOutline.Append( p1 );
+    };
+
+    for( int i = 0; i < aPoly.SegmentCount(); i++ )
+    {
+        handleSegment( aPoly.CSegment( i ) );
+    }
+
+    // Manually handle the last segment if not closed
+    if( !aPoly.IsClosed() )
+    {
+        handleSegment( SEG( aPoly.CPoint( -1 ), aPoly.CPoint( 0 ) ) );
+    }
+
+    raOutline.SetClosed( true );
+    raOutline.Simplify();
+
+    return raOutline;
 }

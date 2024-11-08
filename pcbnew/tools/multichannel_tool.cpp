@@ -34,6 +34,7 @@
 
 #include <zone.h>
 #include <geometry/convex_hull.h>
+#include <geometry/shape_utils.h>
 #include <pcb_group.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/topo_match.h>
@@ -168,43 +169,22 @@ MULTICHANNEL_TOOL::queryComponentsInComponentClass( const wxString& aComponentCl
 const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& aFootprints,
                                                           int                   aMargin )
 {
-    std::vector<VECTOR2I> bbCorners, hullVertices;
+    std::vector<VECTOR2I> bbCorners;
+    bbCorners.reserve( aFootprints.size() * 4 );
 
     for( auto fp : aFootprints )
     {
-        auto bb = fp->GetBoundingBox( false );
-        bb.Inflate( aMargin );
-
-        bbCorners.push_back( VECTOR2I( bb.GetX(), bb.GetY() ) );
-        bbCorners.push_back( VECTOR2I( bb.GetX() + bb.GetWidth(), bb.GetY() ) );
-        bbCorners.push_back( VECTOR2I( bb.GetX() + bb.GetWidth(), bb.GetY() + bb.GetHeight() ) );
-        bbCorners.push_back( VECTOR2I( bb.GetX(), bb.GetY() + bb.GetHeight() ) );
+        const BOX2I bb = fp->GetBoundingBox( false ).GetInflated( aMargin );
+        KIGEOM::CollectBoxCorners( bb, bbCorners );
     }
 
+    std::vector<VECTOR2I> hullVertices;
     BuildConvexHull( hullVertices, bbCorners );
 
     SHAPE_LINE_CHAIN hull( hullVertices );
-    SHAPE_LINE_CHAIN raOutline;
 
-    // make the newly computed convex hull use only 90 degree segments
-    hull.SetClosed( true );
-    for( int i = 0; i < hull.SegmentCount(); i++ )
-    {
-        const auto&    seg = hull.CSegment( i );
-        const VECTOR2I p0( seg.A.x, seg.B.y );
-        const VECTOR2I p1( seg.B.x, seg.A.y );
-
-        raOutline.Append( seg.A );
-        if( !hull.PointInside( p0 ) )
-            raOutline.Append( p0 );
-        else
-            raOutline.Append( p1 );
-    }
-
-    raOutline.SetClosed( true );
-    raOutline.Simplify();
-
-    return raOutline;
+    // Make the newly computed convex hull use only 90 degree segments
+    return KIGEOM::RectifyPolygon( hull );
 }
 
 
