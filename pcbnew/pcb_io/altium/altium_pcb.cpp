@@ -3829,8 +3829,6 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
         std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
         via->SetPosition( elem.position );
-        // TODO(JE) padstacks
-        via->SetWidth( PADSTACK::ALL_LAYERS, elem.diameter );
         via->SetDrill( elem.holesize );
         via->SetNetCode( GetNetCode( elem.net ) );
         via->SetLocked( elem.is_locked );
@@ -3844,14 +3842,16 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
         {
             via->SetViaType( VIATYPE::THROUGH );
         }
-        else if( ( !start_layer_outside ) && ( !end_layer_outside ) )
+        else if( ( !start_layer_outside ) || ( !end_layer_outside ) )
         {
             via->SetViaType( VIATYPE::BLIND_BURIED );
         }
-        else
-        {
-            via->SetViaType( VIATYPE::MICROVIA ); // TODO: always a microvia?
-        }
+
+        // TODO: Altium has a specific flag for microvias, independent of start/end layer
+#if 0
+        if( something )
+            via->SetViaType( VIATYPE::MICROVIA );
+#endif
 
         PCB_LAYER_ID start_klayer = GetKicadLayer( elem.layer_start );
         PCB_LAYER_ID end_klayer   = GetKicadLayer( elem.layer_end );
@@ -3873,6 +3873,37 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
 
         // we need VIATYPE set!
         via->SetLayerPair( start_klayer, end_klayer );
+
+        switch( elem.viamode )
+        {
+        default:
+        case ALTIUM_PAD_MODE::SIMPLE:
+            via->SetWidth( PADSTACK::ALL_LAYERS, elem.diameter );
+            break;
+
+        case ALTIUM_PAD_MODE::TOP_MIDDLE_BOTTOM:
+            via->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
+            via->SetWidth( F_Cu, elem.diameter_by_layer[0] );
+            via->SetWidth( PADSTACK::INNER_LAYERS, elem.diameter_by_layer[1] );
+            via->SetWidth( B_Cu, elem.diameter_by_layer[31] );
+            break;
+
+        case ALTIUM_PAD_MODE::FULL_STACK:
+        {
+            via->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
+
+            for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, MAX_CU_LAYERS ) )
+            {
+                int altiumLayer = CopperLayerToOrdinal( layer );
+                wxCHECK2_MSG( altiumLayer < 32, break,
+                              "Altium importer expects 32 or fewer copper layers" );
+
+                via->SetWidth( layer, elem.diameter_by_layer[altiumLayer] );
+            }
+
+            break;
+        }
+        }
 
         if( elem.soldermask_expansion_manual )
         {
