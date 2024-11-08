@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-03 11:00+0000\n"
+"PO-Revision-Date: 2024-11-09 13:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -38659,9 +38659,9 @@ msgstr "Prüfe Mikro-Via-Löcher ..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s min %s; tatsächlich %s)"
+msgstr "(%s min Loch %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
