@@ -195,7 +195,7 @@ const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& 
         const VECTOR2I p1( seg.B.x, seg.A.y );
 
         raOutline.Append( seg.A );
-        if( hull.PointInside( p0 ) )
+        if( !hull.PointInside( p0 ) )
             raOutline.Append( p0 );
         else
             raOutline.Append( p1 );
