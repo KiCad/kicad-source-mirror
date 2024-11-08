@@ -48,7 +48,7 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
         std::string groupName = "none";
 
         std::optional<TOOL_ACTION_GROUP> group = action->GetActionGroup();
-        
+
         if( group.has_value() )
         {
             groupID   = group.value().GetGroupID();
@@ -152,18 +152,20 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     // If no luck, try without Shift, to handle keys that require it
     // e.g. to get ? you need to press Shift+/ without US keyboard layout
     // Hardcoding ? as Shift+/ is a bad idea, as on another layout you may need to press a
-    // different combination
-    if( it == m_actionHotKeys.end() )
+    // different combination.
+    // This doesn't apply for letters, as we already handled case normalisation.
+    if( it == m_actionHotKeys.end() && !std::isalpha( key ) )
     {
         wxLogTrace( kicadTraceToolStack,
                     wxS( "ACTION_MANAGER::RunHotKey No actions found, searching with key: %s" ),
                     KeyNameFromKeyCode( key | ( mod & ~MD_SHIFT ) ) );
 
         it = m_actionHotKeys.find( key | ( mod & ~MD_SHIFT ) );
-
-        if( it == m_actionHotKeys.end() )
-            return false; // no appropriate action found for the hotkey
     }
+
+    // Still no luck, we're done without a match
+    if( it == m_actionHotKeys.end() )
+        return false; // no appropriate action found for the hotkey
 
     const std::list<TOOL_ACTION*>& actions = it->second;
 
