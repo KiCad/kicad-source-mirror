@@ -56,13 +56,17 @@ PADSTACK::PADSTACK( BOARD_ITEM* aParent ) :
 
 PADSTACK::PADSTACK( const PADSTACK& aOther )
 {
+    m_parent = aOther.m_parent;
     *this = aOther;
 }
 
 
 PADSTACK& PADSTACK::operator=( const PADSTACK &aOther )
 {
-    m_parent                = aOther.m_parent;
+    // NOTE: m_parent is not copied from operator=, because this operator is commonly used to
+    // update the padstack properties, and such an update must not change the parent PAD to point to
+    // the parent of some different padstack.
+
     m_mode                  = aOther.m_mode;
     m_layerSet              = aOther.m_layerSet;
     m_customName            = aOther.m_customName;
