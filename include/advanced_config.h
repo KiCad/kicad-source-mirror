@@ -705,11 +705,6 @@ public:
      */
     double m_MinParallelAngle;
 
-    /**
-     * Enables the user-visible editing features for via stacks
-     */
-    bool m_EnableViaStacks;
-
 ///@}
 
 private:

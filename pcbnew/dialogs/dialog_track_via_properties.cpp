@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <advanced_config.h>
 #include <core/kicad_algo.h>
 #include <dialogs/dialog_track_via_properties.h>
 #include <pcb_layer_box_selector.h>
@@ -429,7 +428,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_annularRingsLabel->Show( getLayerDepth() > 1 );
         m_annularRingsCtrl->Show( getLayerDepth() > 1 );
 
-        m_sbPadstackSettings->Show( ADVANCED_CFG::GetCfg().m_EnableViaStacks );
         afterPadstackModeChanged();
     }
     else
@@ -754,12 +752,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 v->SanitizeLayers();
 
                 if( !m_viaDiameter.IsIndeterminate() )
-                {
-                    if( ADVANCED_CFG::GetCfg().m_EnableViaStacks )
-                        v->SetPadstack( *m_viaStack );
-                    else
-                        v->SetWidth( PADSTACK::ALL_LAYERS, m_viaDiameter.GetIntValue() );
-                }
+                    v->SetPadstack( *m_viaStack );
 
                 if( !m_viaDrill.IsIndeterminate() )
                     v->SetDrill( m_viaDrill.GetIntValue() );
