@@ -415,16 +415,8 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
 
 void DIALOG_PAD_PROPERTIES::OnPadstackModeChanged( wxCommandEvent& aEvent )
 {
-    switch( m_cbPadstackMode->GetSelection() )
-    {
-    default:
-    case 0: m_previewPad->Padstack().SetMode( PADSTACK::MODE::NORMAL );           break;
-    case 1: m_previewPad->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK ); break;
-    case 2: m_previewPad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );           break;
-    }
-
-    afterPadstackModeChanged();
     transferDataToPad( m_previewPad );
+    afterPadstackModeChanged();
     redraw();
 }
 
@@ -1580,6 +1572,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     if( !transferDataToPad( m_masterPad ) )
         return false;
+
+    m_padPreviewGAL->StopDrawing();
 
     PAD_TOOL* padTool = m_parent->GetToolManager()->GetTool<PAD_TOOL>();
     padTool->SetLastPadNumber( m_masterPad->GetNumber() );

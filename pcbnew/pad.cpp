@@ -1599,7 +1599,7 @@ EDA_ITEM* PAD::Clone() const
     {
         for( std::shared_ptr<PCB_SHAPE>& primitive : cloned->m_padStack.Primitives( aLayer ) )
         {
-            primitive->SetParent(cloned);
+            primitive->SetParent( cloned );
         }
     } );
 
