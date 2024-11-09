@@ -114,7 +114,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-09 13:00+0000\n"
+"PO-Revision-Date: 2024-11-10 15:12+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -23473,6 +23473,7 @@ msgstr "Escluso dalla simulazione"
 #: eeschema/tools/ee_actions.cpp:1228
 msgid "Draw 'X's over items which have been excluded from simulation"
 msgstr ""
+"Disegna delle \"X\" sugli elementi che sono stati esclusi dalla simulazione"
 
 #: eeschema/tools/ee_actions.cpp:1233
 msgid "Show OP Voltages"
@@ -23497,7 +23498,7 @@ msgstr "Mostra nomi pin"
 
 #: eeschema/tools/ee_actions.cpp:1246
 msgid "Show indicator icons for pins with alternate modes"
-msgstr ""
+msgstr "Mostra icone indicatrici per i pin con modalità alternative"
 
 #: eeschema/tools/ee_actions.cpp:1251 eeschema/tools/ee_actions.cpp:1260
 #: eeschema/tools/ee_actions.cpp:1269 eeschema/tools/ee_actions.cpp:1279
@@ -23693,7 +23694,7 @@ msgstr "Trascina"
 
 #: eeschema/tools/ee_actions.cpp:1472
 msgid "Move items while keeping their connections"
-msgstr ""
+msgstr "Sposta gli elementi mantenendo le loro connessioni"
 
 #: eeschema/tools/ee_actions.cpp:1479 eeschema/tools/sch_move_tool.cpp:1827
 #, fuzzy
@@ -23714,7 +23715,7 @@ msgstr "Nuova scheda analisi..."
 
 #: eeschema/tools/ee_actions.cpp:1503
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Crea una nuova scheda contenente un'analisi di simulazione"
 
 #: eeschema/tools/ee_actions.cpp:1511
 msgid "Open Workbook..."
@@ -23722,7 +23723,7 @@ msgstr "Apri libretto di lavoro..."
 
 #: eeschema/tools/ee_actions.cpp:1512
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Aprire un set salvato di schede e impostazioni di analisi"
 
 #: eeschema/tools/ee_actions.cpp:1520
 msgid "Save Workbook"
@@ -23789,6 +23790,8 @@ msgstr "Modifica scheda analisi..."
 #: eeschema/tools/ee_actions.cpp:1579
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
+"Modifica il comando SPICE della scheda di analisi corrente e imposta il "
+"grafico"
 
 #: eeschema/tools/ee_actions.cpp:1586
 msgid "Run Simulation"
@@ -23935,7 +23938,7 @@ msgstr "Incolla simbolo"
 
 #: eeschema/tools/sch_drawing_tools.cpp:571
 msgid "Select a single symbol to place the next unit."
-msgstr ""
+msgstr "Seleziona un singolo simbolo per posizionare l'unità successiva."
 
 #: eeschema/tools/sch_drawing_tools.cpp:584
 #, fuzzy
@@ -23944,7 +23947,7 @@ msgstr "*** il nuovo simbolo ha troppo poche unità ***"
 
 #: eeschema/tools/sch_drawing_tools.cpp:592
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "Tutte le unità di questo simbolo già piazzate."
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
 #, fuzzy
@@ -24327,6 +24330,7 @@ msgstr "Nessuna libreria simboli selezionata."
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr ""
+"Argomento '%F' di Esplora file mancante/non valido nelle impostazioni comuni."
 
 #: eeschema/tools/symbol_editor_control.cpp:370
 #: pcbnew/tools/footprint_editor_control.cpp:665
@@ -24381,7 +24385,7 @@ msgstr "Mostra i campi nascosti"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:471
 msgid "Use the Symbol Properties dialog to remove fields."
-msgstr ""
+msgstr "Usare la finestra Proprietà del simbolo per rimuovere i campi."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:779
 #, fuzzy
@@ -24440,13 +24444,15 @@ msgstr "Mantieni simbolo selezionato per clic successivi."
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Posizionare il blocco di progettazione come un nuovo foglio."
 
 #: eeschema/widgets/design_block_pane.cpp:71
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
+"Mantieni i riferimenti nello schema sorgente. Oppure, cancella e riannota in "
+"base alle impostazioni."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -24915,6 +24921,8 @@ msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
 msgstr ""
+"Visualizza gli elementi disegnati utilizzando aperture standard o macro, in "
+"modalità contorni"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -24931,7 +24939,7 @@ msgstr "Mostra poligoni in modalità contorno"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
 msgid "Forced Opacity Display Mode"
-msgstr ""
+msgstr "Forzata modalità di visualizzazione opacità"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
 #, fuzzy
@@ -24940,7 +24948,7 @@ msgstr "Opacità:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "Opacità in modalità di visualizzazione opacità forzata"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -25495,7 +25503,7 @@ msgstr "RS274X: Comando KNOCKOUT ignorato da Gerbview"
 
 #: gerbview/rs274x.cpp:680
 msgid "IPNEG Gerber command is deprecated since 2012. Skip it"
-msgstr ""
+msgstr "Il comando Gerber IPNEG è deprecato dal 2012. Ignoralo"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
@@ -25995,7 +26003,7 @@ msgstr ""
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr ""
+msgstr "Insieme di lavori"
 
 #: kicad/cli/command_jobset_run.cpp:45
 #, fuzzy
@@ -26007,6 +26015,8 @@ msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
 msgstr ""
+"Dato che vengono eseguiti in sequenza, interrompe l'elaborazione dei lavori "
+"al primo errore di un lavoro"
 
 #: kicad/cli/command_jobset_run.cpp:53
 #, fuzzy
@@ -26018,6 +26028,8 @@ msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
 msgstr ""
+"File del risultato dell'insieme dei lavori da generare, lasciare vuoto per "
+"tutti i risultati definiti nell'insieme dei lavori"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -26144,6 +26156,8 @@ msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
 msgstr ""
+"Includere solo modelli 3D dei componenti che corrispondono a questo elenco "
+"di riferimenti (separati da virgole, i caratteri jolly sono supportati)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:131
 #: pcbnew/dialogs/dialog_export_step_base.cpp:91
@@ -26175,10 +26189,11 @@ msgstr "Esporta le grafiche della serigrafia."
 #: kicad/cli/command_pcb_export_3d.cpp:151
 msgid "Export soldermask layers as a set of flat faces"
 msgstr ""
+"Esporta gli strati della maschera di saldatura come insieme di facce piatte"
 
 #: kicad/cli/command_pcb_export_3d.cpp:155
 msgid "Fuse overlapping geometry together"
-msgstr ""
+msgstr "Fondi insieme le geometrie sovrapposte"
 
 #: kicad/cli/command_pcb_export_3d.cpp:161
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26187,6 +26202,8 @@ msgstr "Distanza minima tra punti necessaria a considerarli come separati"
 #: kicad/cli/command_pcb_export_3d.cpp:167
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
+"Includi solo gli elementi in rame appartenenti alle reti che corrispondono a "
+"questo carattere jolly"
 
 #: kicad/cli/command_pcb_export_3d.cpp:173
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -26551,7 +26568,7 @@ msgstr "Nessun foglio di disegno"
 
 #: kicad/cli/command_pcb_render.cpp:167
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr ""
+msgstr "Converte il C.S. nella vista 3D in immagine PNG o JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:173
 #, fuzzy
@@ -26573,6 +26590,8 @@ msgid ""
 "Image background. Options: transparent, opaque. Default: transparent for "
 "PNG, opaque for JPEG"
 msgstr ""
+"Sondo immagine. Opzioni: trasparente, opaco. Predefinito: trasparente per "
+"PNG, opaco per JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:198
 #, fuzzy, c-format
@@ -26582,7 +26601,7 @@ msgstr "Opzioni di disegno"
 #: kicad/cli/command_pcb_render.cpp:204
 #, c-format
 msgid "Color preset. Options: %s, %s, %s, ..."
-msgstr ""
+msgstr "Preimpostazione colore. Opzioni: %s, %s, %s, ..."
 
 #: kicad/cli/command_pcb_render.cpp:210
 msgid ""
