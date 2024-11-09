@@ -143,7 +143,7 @@ bool WALKAROUND::singleStep()
         for( auto& clItem : aCluster.m_items )
         {
             int clearance = m_world->GetClearance( clItem, &aLine, false );
-            SHAPE_LINE_CHAIN hull = clItem->Hull( clearance + 1000, aLine.Width() );
+            SHAPE_LINE_CHAIN hull = clItem->Hull( clearance + 1000, aLine.Width(), aLine.Layer() );
 
             if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
             {

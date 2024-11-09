@@ -99,6 +99,10 @@ std::set<int> ITEM::RelevantShapeLayers( const ITEM* aOther ) const
     if( !HasUniqueShapeLayers() && !aOther->HasUniqueShapeLayers() )
         return { -1 };
 
+    // TODO(JE) at this point we should also mask off the layers of each item.
+    // In the case that one item is a via and the other is a track, we don't want to test
+    // more than once even if the via has multiple unique layers
+
     std::set<int> relevantLayers;
 
     std::set_union( myLayers.begin(), myLayers.end(), otherLayers.begin(), otherLayers.end(),

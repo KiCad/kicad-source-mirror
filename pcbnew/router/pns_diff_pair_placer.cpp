@@ -159,11 +159,20 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
             break;
 
         int clearance = m_currentNode->GetClearance( obs->m_item, &m_currentTrace.PLine(), false );
+        VECTOR2I layerForce;
+        collided = false;
 
-        // TODO(JE) padstacks - this won't work
-        if( obs->m_item->Shape( 0 )->Collide( virtHead.Shape( 0 ), clearance, &force ) )
+        for( int viaLayer : virtHead.RelevantShapeLayers( obs->m_item ) )
         {
-            collided = true;
+            collided |= obs->m_item->Shape( viaLayer )->Collide( virtHead.Shape( viaLayer ),
+                                                                 clearance, &layerForce );
+
+            if( layerForce.SquaredEuclideanNorm() > force.SquaredEuclideanNorm() )
+                force = layerForce;
+        }
+
+        if( collided )
+        {
             totalForce += force;
             virtHead.SetPos( virtHead.Pos() + force );
         }

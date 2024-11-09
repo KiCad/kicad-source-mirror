@@ -62,7 +62,7 @@ std::vector<int> VIA::UniqueShapeLayers() const
         return { ALL_LAYERS };
 
     case STACK_MODE::FRONT_INNER_BACK:
-        return { 0, ALL_LAYERS, m_layers.End() };
+        return { ALL_LAYERS, INNER_LAYERS, m_layers.End() };
 
     case STACK_MODE::CUSTOM:
         std::vector<int> ret;
