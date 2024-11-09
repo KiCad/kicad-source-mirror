@@ -124,6 +124,8 @@ public:
         std::vector<const SHAPE*> subshapes;
         std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aRefLayer );
 
+        wxCHECK2_MSG( shape, return, wxT( "Item does not have a valid shape for this layer" ) );
+
         if( shape->HasIndexableSubshapes() )
             shape->GetIndexableSubshapes( subshapes );
         else
@@ -258,6 +260,8 @@ public:
 
                     if( filtered )
                         return true;
+
+                    wxCHECK( aItem->shape, false );
 
                     if( refShape->Collide( aItem->shape, aClearance ) )
                     {

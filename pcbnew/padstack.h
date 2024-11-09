@@ -334,6 +334,8 @@ public:
      */
     void ForEachUniqueLayer( const std::function<void( PCB_LAYER_ID )>& aMethod ) const;
 
+    std::vector<PCB_LAYER_ID> UniqueLayers() const;
+
     /**
      * Determines which geometry layer should be used for the given input layer.
      * For example, for MODE::NORMAL, this will always be F_Cu, and for MODE::FRONT_INNER_BACK,

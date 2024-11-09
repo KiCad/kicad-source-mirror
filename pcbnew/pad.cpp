@@ -533,6 +533,9 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
 
     aLayer = Padstack().EffectiveLayerFor( aLayer );
 
+    wxASSERT_MSG( m_effectiveShapes.contains( aLayer ) && m_effectiveShapes.at( aLayer ),
+                  wxT( "Null shape in PAD::GetEffectiveShape!" ) );
+
     return m_effectiveShapes[aLayer];
 }
 
@@ -1619,6 +1622,10 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[aCount++] = LAYER_NON_PLATEDHOLES;
 
     LSET cuLayers = ( m_padStack.LayerSet() & LSET::AllCuMask() );
+
+    // Don't spend cycles rendering layers that aren't visible
+    if( const BOARD* board = GetBoard() )
+        cuLayers &= board->GetEnabledLayers();
 
     if( cuLayers.count() > 1 )
     {

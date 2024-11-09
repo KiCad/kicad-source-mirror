@@ -41,7 +41,6 @@
 
     Todo:
     - check pad holes too.
-    - pad stack support (different IAR/OAR values depending on layer)
 */
 
 /**
@@ -193,7 +192,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
     int maxError = m_drcEngine->GetBoard()->GetDesignSettings().m_MaxError;
 
     auto calcEffort =
-            []( BOARD_ITEM* item )
+            []( BOARD_ITEM* item ) -> size_t
             {
                 switch( item->Type() )
                 {
@@ -202,34 +201,42 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
                 case PCB_PAD_T:
                 {
-                    // TODO(JE) padstacks
                     PAD* pad = static_cast<PAD*>( item );
 
                     if( !pad->HasHole() || pad->GetAttribute() != PAD_ATTRIB::PTH )
                         return 0;
 
-                    if( pad->GetOffset( PADSTACK::ALL_LAYERS ) == VECTOR2I( 0, 0 ) )
-                    {
-                        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
+                    size_t effort = 0;
+
+                    pad->Padstack().ForEachUniqueLayer(
+                        [&pad, &effort]( PCB_LAYER_ID aLayer )
                         {
-                        case PAD_SHAPE::CHAMFERED_RECT:
-                            if( pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ) > 0.30 )
-                                break;
+                            if( pad->GetOffset( aLayer ) == VECTOR2I( 0, 0 ) )
+                            {
+                                switch( pad->GetShape( aLayer ) )
+                                {
+                                case PAD_SHAPE::CHAMFERED_RECT:
+                                    if( pad->GetChamferRectRatio( aLayer ) > 0.30 )
+                                        break;
 
-                            KI_FALLTHROUGH;
+                                    KI_FALLTHROUGH;
 
-                        case PAD_SHAPE::CIRCLE:
-                        case PAD_SHAPE::OVAL:
-                        case PAD_SHAPE::RECTANGLE:
-                        case PAD_SHAPE::ROUNDRECT:
-                            return 1;
+                                case PAD_SHAPE::CIRCLE:
+                                case PAD_SHAPE::OVAL:
+                                case PAD_SHAPE::RECTANGLE:
+                                case PAD_SHAPE::ROUNDRECT:
+                                    effort += 1;
+                                    break;
 
-                        default:
-                            break;
-                        }
-                    }
+                                default:
+                                    break;
+                                }
+                            }
 
-                    return 5;
+                            effort += 5;
+                        } );
+
+                    return effort;
                 }
 
                 default:
@@ -243,11 +250,11 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
                     return false;
 
-                // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
                 auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, item, nullptr,
                                                           UNDEFINED_LAYER );
 
-                int  annularWidth = 0;
+                int  minAnnularWidth = INT_MAX;
+                int  maxAnnularWidth = 0;
                 int  v_min = 0;
                 int  v_max = 0;
                 bool fail_min = false;
@@ -259,8 +266,15 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 case PCB_VIA_T:
                 {
                     PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                    // TODO(JE) padstacks
-                    annularWidth = ( via->GetWidth( PADSTACK::ALL_LAYERS ) - via->GetDrillValue() ) / 2;
+                    int drill = via->GetDrillValue();
+
+                    via->Padstack().ForEachUniqueLayer(
+                        [&]( PCB_LAYER_ID aLayer )
+                        {
+                            int layerWidth = ( via->GetWidth( aLayer ) - drill ) / 2;
+                            minAnnularWidth = std::min( minAnnularWidth, layerWidth );
+                            maxAnnularWidth = std::max( maxAnnularWidth, layerWidth );
+                        } );
                     break;
                 }
 
@@ -279,124 +293,142 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     if( fp )
                         sameNumPads = fp->GetPads( pad->GetNumber(), pad );
 
-                    if( pad->GetOffset( PADSTACK::ALL_LAYERS ) == VECTOR2I( 0, 0 ) )
-                    {
-                        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
+                    pad->Padstack().ForEachUniqueLayer(
+                        [&]( PCB_LAYER_ID aLayer )
                         {
-                        case PAD_SHAPE::CIRCLE:
-                            annularWidth = ( pad->GetSizeX() - pad->GetDrillSizeX() ) / 2;
+                            int annularWidth = 0;
 
-                            // If there are more pads with the same number.  Check to see if the
-                            // pad is embedded inside another pad with the same number below.
-                            if( sameNumPads.empty() )
-                                handled = true;
-
-                            break;
-
-                        case PAD_SHAPE::CHAMFERED_RECT:
-                            if( pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ) > 0.30 )
-                                break;
-
-                            KI_FALLTHROUGH;
-
-                        case PAD_SHAPE::OVAL:
-                        case PAD_SHAPE::RECTANGLE:
-                        case PAD_SHAPE::ROUNDRECT:
-                            annularWidth = std::min( pad->GetSizeX() - pad->GetDrillSizeX(),
-                                                     pad->GetSizeY() - pad->GetDrillSizeY() ) / 2;
-
-                            // If there are more pads with the same number.  Check to see if the
-                            // pad is embedded inside another pad with the same number below.
-                            if( sameNumPads.empty() )
-                                handled = true;
-
-                            break;
-
-                        default:
-                            break;
-                        }
-                    }
-
-                    if( !handled )
-                    {
-                        // Slow (but general purpose) method.
-                        SEG::ecoord dist_sq;
-                        SHAPE_POLY_SET padOutline;
-                        std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
-
-                        // TODO(JE) padstacks
-                        pad->TransformShapeToPolygon( padOutline, PADSTACK::ALL_LAYERS, 0, maxError,
-                                                      ERROR_INSIDE );
-
-                        if( sameNumPads.empty() )
-                        {
-                            if( !padOutline.Collide( pad->GetPosition() ) )
+                            if( pad->GetOffset( aLayer ) == VECTOR2I( 0, 0 ) )
                             {
-                                // Hole outside pad
-                                annularWidth = 0;
-                            }
-                            else
-                            {
-                                // Disable is-inside test in SquaredDistance
-                                padOutline.Outline( 0 ).SetClosed( false );
+                                VECTOR2I padSize = pad->GetSize( aLayer );
 
-                                dist_sq = padOutline.SquaredDistanceToSeg( slot->GetSeg() );
-                                annularWidth = sqrt( dist_sq ) - slot->GetWidth() / 2;
-                            }
-                        }
-                        else if( constraint.Value().HasMin()
-                               && ( annularWidth < constraint.Value().Min() ) )
-                        {
-                            SHAPE_POLY_SET otherPadOutline;
-                            SHAPE_POLY_SET slotPolygon;
-
-                            slot->TransformToPolygon( slotPolygon, 0, ERROR_INSIDE );
-
-                            for( const PAD* sameNumPad : sameNumPads )
-                            {
-                                // Construct the full pad with outline and hole.
-                                sameNumPad->TransformShapeToPolygon( otherPadOutline,
-                                                                     PADSTACK::ALL_LAYERS, 0, maxError,
-                                                                     ERROR_OUTSIDE );
-
-                                sameNumPad->TransformHoleToPolygon( otherPadOutline, 0, maxError,
-                                                                    ERROR_INSIDE );
-
-
-                                // If the pad hole under test intersects with another pad outline,
-                                // the annular width calculated above is used.
-                                bool intersects = false;
-
-                                for( int i = 0; i < otherPadOutline.OutlineCount() && !intersects; i++ )
+                                switch( pad->GetShape( aLayer ) )
                                 {
-                                    intersects |= slotPolygon.COutline( 0 ).Intersects( otherPadOutline.COutline( i ) );
-                                    if( intersects )
-                                        continue;
+                                case PAD_SHAPE::CIRCLE:
+                                    annularWidth = ( padSize.x - pad->GetDrillSizeX() ) / 2;
 
-                                    for( int j = 0; j < otherPadOutline.HoleCount( i ) && !intersects; j++ )
+                                    // If there are more pads with the same number.  Check to see if the
+                                    // pad is embedded inside another pad with the same number below.
+                                    if( sameNumPads.empty() )
+                                        handled = true;
+
+                                    break;
+
+                                case PAD_SHAPE::CHAMFERED_RECT:
+                                    if( pad->GetChamferRectRatio( aLayer ) > 0.30 )
+                                        break;
+
+                                    KI_FALLTHROUGH;
+
+                                case PAD_SHAPE::OVAL:
+                                case PAD_SHAPE::RECTANGLE:
+                                case PAD_SHAPE::ROUNDRECT:
+                                    annularWidth = std::min( padSize.x - pad->GetDrillSizeX(),
+                                                             padSize.y - pad->GetDrillSizeY() ) / 2;
+
+                                    // If there are more pads with the same number.  Check to see if the
+                                    // pad is embedded inside another pad with the same number below.
+                                    if( sameNumPads.empty() )
+                                        handled = true;
+
+                                    break;
+
+                                default:
+                                    break;
+                                }
+                            }
+
+                            if( !handled )
+                            {
+                                // Slow (but general purpose) method.
+                                SEG::ecoord dist_sq;
+                                SHAPE_POLY_SET padOutline;
+                                std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
+
+                                pad->TransformShapeToPolygon( padOutline, aLayer, 0, maxError,
+                                                              ERROR_INSIDE );
+
+                                if( sameNumPads.empty() )
+                                {
+                                    if( !padOutline.Collide( pad->GetPosition() ) )
                                     {
-                                        intersects |= slotPolygon.COutline( 0 ).Intersects( otherPadOutline.CHole( i, j ) );
-                                        if( intersects )
-                                            continue;
+                                        // Hole outside pad
+                                        annularWidth = 0;
+                                    }
+                                    else
+                                    {
+                                        // Disable is-inside test in SquaredDistance
+                                        padOutline.Outline( 0 ).SetClosed( false );
+
+                                        dist_sq = padOutline.SquaredDistanceToSeg( slot->GetSeg() );
+                                        annularWidth = sqrt( dist_sq ) - slot->GetWidth() / 2;
                                     }
                                 }
-
-                                if( intersects )
-                                    continue;
-
-                                // Determine the effective annular width if the pad hole under
-                                // test lies withing the boundary of another pad outline.
-                                int effectiveWidth = std::numeric_limits<int>::max();
-
-                                if( collide( otherPadOutline, slotPolygon.Outline( 0 ),
-                                             effectiveWidth, &effectiveWidth ) )
+                                else if( constraint.Value().HasMin()
+                                       && ( minAnnularWidth < constraint.Value().Min() ) )
                                 {
-                                    if( effectiveWidth > annularWidth )
-                                        annularWidth = effectiveWidth;
+                                    SHAPE_POLY_SET otherPadOutline;
+                                    SHAPE_POLY_SET slotPolygon;
+
+                                    slot->TransformToPolygon( slotPolygon, 0, ERROR_INSIDE );
+
+                                    for( const PAD* sameNumPad : sameNumPads )
+                                    {
+                                        // Construct the full pad with outline and hole.
+                                        sameNumPad->TransformShapeToPolygon(
+                                                otherPadOutline, PADSTACK::ALL_LAYERS, 0, maxError,
+                                                ERROR_OUTSIDE );
+
+                                        sameNumPad->TransformHoleToPolygon(
+                                                otherPadOutline, 0, maxError, ERROR_INSIDE );
+
+
+                                        // If the pad hole under test intersects with another pad outline,
+                                        // the annular width calculated above is used.
+                                        bool intersects = false;
+
+                                        for( int i = 0;
+                                             i < otherPadOutline.OutlineCount() && !intersects;
+                                             i++ )
+                                        {
+                                            intersects |= slotPolygon.COutline( 0 ).Intersects(
+                                                    otherPadOutline.COutline( i ) );
+
+                                            if( intersects )
+                                                break;
+
+                                            for( int j = 0;
+                                                 j < otherPadOutline.HoleCount( i ) && !intersects;
+                                                 j++ )
+                                            {
+                                                intersects |= slotPolygon.COutline( 0 ).Intersects(
+                                                        otherPadOutline.CHole( i, j ) );
+
+                                                if( intersects )
+                                                    break;
+                                            }
+                                        }
+
+                                        if( intersects )
+                                            continue;
+
+                                        // Determine the effective annular width if the pad hole under
+                                        // test lies withing the boundary of another pad outline.
+                                        int effectiveWidth = std::numeric_limits<int>::max();
+
+                                        if( collide( otherPadOutline, slotPolygon.Outline( 0 ),
+                                                     effectiveWidth, &effectiveWidth ) )
+                                        {
+                                            if( effectiveWidth > annularWidth )
+                                                annularWidth = effectiveWidth;
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
+
+                            maxAnnularWidth = std::max( maxAnnularWidth, annularWidth );
+                            minAnnularWidth = std::min( minAnnularWidth, annularWidth );
+                        } );
 
                     break;
                 }
@@ -411,13 +443,13 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 if( constraint.Value().HasMin() )
                 {
                     v_min = constraint.Value().Min();
-                    fail_min = annularWidth < v_min;
+                    fail_min = minAnnularWidth < v_min;
                 }
 
                 if( constraint.Value().HasMax() )
                 {
                     v_max = constraint.Value().Max();
-                    fail_max = annularWidth > v_max;
+                    fail_max = maxAnnularWidth > v_max;
                 }
 
                 if( fail_min || fail_max )
@@ -430,7 +462,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         msg = formatMsg( _( "(%s min annular width %s; actual %s)" ),
                                          constraint.GetName(),
                                          v_min,
-                                         annularWidth );
+                                         minAnnularWidth );
                     }
 
                     if( fail_max )
@@ -438,7 +470,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         msg = formatMsg( _( "(%s max annular width %s; actual %s)" ),
                                          constraint.GetName(),
                                          v_max,
-                                         annularWidth );
+                                         maxAnnularWidth );
                     }
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );

@@ -872,6 +872,31 @@ void PADSTACK::ForEachUniqueLayer( const std::function<void( PCB_LAYER_ID )>& aM
 }
 
 
+std::vector<PCB_LAYER_ID> PADSTACK::UniqueLayers() const
+{
+    switch( Mode() )
+    {
+    default:
+    case MODE::NORMAL:
+        return { F_Cu };
+
+    case MODE::FRONT_INNER_BACK:
+        return { F_Cu, INNER_LAYERS, B_Cu };
+
+    case MODE::CUSTOM:
+    {
+        std::vector<PCB_LAYER_ID> layers;
+        int layerCount = m_parent ? m_parent->BoardCopperLayerCount() : MAX_CU_LAYERS;
+
+        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, layerCount ) )
+            layers.push_back( layer );
+
+        return layers;
+    }
+    }
+}
+
+
 PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
 {
     switch( static_cast<int>( aLayer ) )
@@ -911,7 +936,24 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
                       wxString::Format( wxT( "Unhandled layer %d in PADSTACK::EffectiveLayerFor" ),
                                         aLayer ) );
 
-        return Mode() == MODE::CUSTOM ? aLayer : INNER_LAYERS;
+        if( Mode() == MODE::FRONT_INNER_BACK )
+           return INNER_LAYERS;
+
+        // Custom padstack: Clamp to parent board's stackup if present
+        if( m_parent )
+        {
+            LSET boardCopper = m_parent->BoardLayerSet() & LSET::AllCuMask();
+
+            if( boardCopper.Contains( aLayer ) )
+                return aLayer;
+
+            // We're asked for an inner copper layer not present in the board.  There is no right
+            // answer here, so fall back on the front shape
+            return ALL_LAYERS;
+        }
+
+        // No parent, just pass through
+        return aLayer;
     }
 
     case MODE::NORMAL:
