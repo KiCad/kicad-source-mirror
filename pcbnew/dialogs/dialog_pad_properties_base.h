@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -41,6 +41,9 @@ class TEXT_CTRL_EVAL;
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define wxID_DIALOG_EDIT_PAD 1000
+#define wxID_PADNUMCTRL 1001
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PAD_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,12 +52,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		enum
-		{
-			wxID_DIALOG_EDIT_PAD = 1000,
-			wxID_PADNUMCTRL,
-		};
-
 		wxBoxSizer* m_MainSizer;
 		wxNotebook* m_notebook;
 		wxPanel* m_panelGeneral;
@@ -233,7 +230,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_pasteMarginCtrl;
 		wxStaticText* m_pasteMarginUnits;
 		wxStaticText* m_pasteMarginRatioLabel;
-		TEXT_CTRL_EVAL* m_pasteMarginRatioCtrl;
+		wxTextCtrl* m_pasteMarginRatioCtrl;
 		wxStaticText* m_pasteMarginRatioUnits;
 		wxSimplebook* m_nonCopperWarningBook;
 		wxStaticText* m_nonCopperNote;

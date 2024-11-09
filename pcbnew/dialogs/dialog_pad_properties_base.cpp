@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -1016,7 +1016,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	fgClearancesGridSizer->Add( m_pasteMarginRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_pasteMarginRatioCtrl = new TEXT_CTRL_EVAL( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginRatioCtrl = new wxTextCtrl( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgClearancesGridSizer->Add( m_pasteMarginRatioCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_pasteMarginRatioUnits = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );

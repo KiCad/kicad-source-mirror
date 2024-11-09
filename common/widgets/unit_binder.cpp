@@ -282,8 +282,9 @@ void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
     if( m_allowEval && textEntry )
     {
         wxString value = textEntry->GetValue();
+        bool     success = m_eval.Process( value );
 
-        if( !value.IsEmpty() && m_eval.Process( value ) )
+        if( success && !value.IsEmpty() )
         {
             textEntry->GetSelection( &m_selStart, &m_selEnd );
 

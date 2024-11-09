@@ -11,7 +11,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
-class TEXT_CTRL_EVAL;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -92,7 +91,7 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_SolderPasteMarginCtrl;
 		wxStaticText* m_SolderPasteMarginUnits;
 		wxStaticText* m_PasteMarginRatioLabel;
-		TEXT_CTRL_EVAL* m_PasteMarginRatioCtrl;
+		wxTextCtrl* m_PasteMarginRatioCtrl;
 		wxStaticText* m_PasteMarginRatioUnits;
 		wxStaticText* m_staticTextInfoCopper;
 		wxStaticText* m_staticTextInfoPaste;
@@ -119,7 +118,7 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void ChangeFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditLibraryFootprint( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
