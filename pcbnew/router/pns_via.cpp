@@ -216,6 +216,9 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
 
 const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
+    wxASSERT_MSG( aLayer >= 0 || m_stackMode == STACK_MODE::NORMAL,
+                  wxT( "Warning: VIA::Hull called with invalid layer but viastack is complex" ) );
+
     int cl = ( aClearance + aWalkaroundThickness / 2 );
     int width = Diameter( aLayer );
 
