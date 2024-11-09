@@ -345,6 +345,13 @@ public:
      */
     PCB_LAYER_ID EffectiveLayerFor( PCB_LAYER_ID aLayer ) const;
 
+    /**
+     * Returns the set of layers that must be considered if checking one padstack against another.
+     * For example, two normal padstacks will just return a set with ALL_LAYERS, but if one of them
+     * is FRONT_INNER_BACK, there are three layers to check.
+     */
+    LSET RelevantShapeLayers( const PADSTACK& aOther ) const;
+
     // The following section has convenience getters for the padstack properties on a given layer.
 
     PAD_SHAPE Shape( PCB_LAYER_ID aLayer ) const;

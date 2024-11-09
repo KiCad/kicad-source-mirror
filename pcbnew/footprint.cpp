@@ -3142,12 +3142,15 @@ void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const P
                 if( pad->GetBoundingBox().Intersects( other->GetBoundingBox() ) )
                 {
                     VECTOR2I pos;
-                    // TODO(JE) padstacks - need to check complex against complex
-                    SHAPE*   padShape = pad->GetEffectiveShape( PADSTACK::ALL_LAYERS ).get();
-                    SHAPE*   otherShape = other->GetEffectiveShape( PADSTACK::ALL_LAYERS ).get();
 
-                    if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
-                        aErrorHandler( pad, other, DRCE_SHORTING_ITEMS, pos );
+                    for( PCB_LAYER_ID l : pad->Padstack().RelevantShapeLayers( other->Padstack() ) )
+                    {
+                        SHAPE*   padShape = pad->GetEffectiveShape( l ).get();
+                        SHAPE*   otherShape = other->GetEffectiveShape( l ).get();
+
+                        if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
+                            aErrorHandler( pad, other, DRCE_SHORTING_ITEMS, pos );
+                    }
                 }
             }
         }

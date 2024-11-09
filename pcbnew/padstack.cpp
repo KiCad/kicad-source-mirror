@@ -922,6 +922,26 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
 }
 
 
+LSET PADSTACK::RelevantShapeLayers( const PADSTACK& aOther ) const
+{
+    LSET ret;
+
+#ifdef DEBUG
+    if( m_parent && aOther.m_parent
+        && ( m_mode == MODE::CUSTOM || aOther.m_mode == MODE::CUSTOM ) )
+    {
+        wxASSERT_MSG( m_parent->BoardCopperLayerCount() == aOther.m_parent->BoardCopperLayerCount(),
+                      wxT( "Expected both padstacks to have the same board copper layer count" ) );
+    }
+#endif
+
+    ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer ) { ret.set( aLayer ); } );
+    aOther.ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer ) { ret.set( aLayer ); } );
+
+    return ret;
+}
+
+
 PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer )
 {
     PCB_LAYER_ID layer = EffectiveLayerFor( aLayer );
