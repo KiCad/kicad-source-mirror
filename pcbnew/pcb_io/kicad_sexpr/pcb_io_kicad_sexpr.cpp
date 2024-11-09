@@ -2049,7 +2049,9 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
         }
         else
         {
-            for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, board->GetCopperLayerCount() ) )
+            int layerCount = board ? board->GetCopperLayerCount() : MAX_CU_LAYERS;
+
+            for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, layerCount ) )
             {
                 if( layer == F_Cu )
                     continue;
