@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-09 13:00+0000\n"
+"PO-Revision-Date: 2024-11-10 17:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
@@ -21493,7 +21493,7 @@ msgstr "Nuova scheda analisi..."
 
 #: eeschema/tools/ee_actions.cpp:1387
 msgid "Create a new tab containing a simulation analysis"
-msgstr "Crea una nuova scheda con un'analisi di simulazione"
+msgstr "Crea una nuova scheda contenente un'analisi di simulazione"
 
 #: eeschema/tools/ee_actions.cpp:1395
 msgid "Open Workbook..."
@@ -21501,7 +21501,7 @@ msgstr "Apri libretto di lavoro..."
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr "Apri un insieme salvato di impostazioni e schede di analisi"
+msgstr "Aprire un set salvato di schede e impostazioni di analisi"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
@@ -21558,8 +21558,8 @@ msgstr "Modifica scheda analisi..."
 #: eeschema/tools/ee_actions.cpp:1451
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
-"Modifica il comando SPICE della scheda di analisi corrente e l'impostazione "
-"del grafico"
+"Modifica il comando SPICE della scheda di analisi corrente e imposta il "
+"grafico"
 
 #: eeschema/tools/ee_actions.cpp:1458
 msgid "Run Simulation"
