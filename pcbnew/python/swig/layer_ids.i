@@ -37,6 +37,10 @@
 %ignore GAL_SET::set(int, bool);
 %ignore GAL_SET::set(int);
 
+// Disable warning 476 (Initialization using std::initializer_list).
+// (SWIG doc say it is mainly a info message)
+#pragma SWIG nowarn=476
+
 %{
 #include <layer_ids.h>
 #include <lseq.h>
