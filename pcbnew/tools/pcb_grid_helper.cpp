@@ -1339,7 +1339,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 pad->Padstack().ForEachUniqueLayer(
                         [&]( PCB_LAYER_ID aLayer )
                         {
-                            if( activeLayers.count( aLayer ) )
+                            if( !isHighContrast || activeLayers.count( aLayer ) )
                                 handlePadShape( pad, aLayer );
                         } );
             }
@@ -1381,7 +1381,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 pad->Padstack().ForEachUniqueLayer(
                         [&]( PCB_LAYER_ID aLayer )
                         {
-                            if( activeLayers.count( aLayer ) )
+                            if( !isHighContrast || activeLayers.count( aLayer ) )
                                 handlePadShape( pad, aLayer );
                         } );
             }
