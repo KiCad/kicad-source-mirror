@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-10 15:12+0000\n"
+"PO-Revision-Date: 2024-11-11 16:00+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -7395,100 +7395,87 @@ msgstr "Vie poraustietoraportti"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr ""
+msgstr "PCB: Poratietojen vienti"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 msgid "PCB DXF export"
 msgstr "PCB DXF vienti"
 
 #: common/jobs/job_export_pcb_dxf.cpp:61
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "Vie DXF"
+msgstr "PCB: Vie DXF"
 
 #: common/jobs/job_export_pcb_gerber.cpp:82
 msgid "Single gerber export"
-msgstr ""
+msgstr "Yksittäisen gerberin vienti"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:45
-#, fuzzy
 msgid "Multi gerber export"
-msgstr "Osaraportti"
+msgstr "Monen gerberin vienti"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB: Vie Gerberit"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 msgid "IPC2581 export"
 msgstr "IPC2581 vienti"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:85
-#, fuzzy
 msgid "PCB: Export IPC2581"
-msgstr "Vie IPC-2581"
+msgstr "PCB: Vie IPC2581"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
 msgid "PCB PDF export"
 msgstr "PCB PDF vienti"
 
 #: common/jobs/job_export_pcb_pdf.cpp:57
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "Vie PDF"
+msgstr "PCB: Vie PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Placement data export"
-msgstr "Lisää teholähde"
+msgstr "Sijoittelutietojen vienti"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "PCB: Vie sijaintitiedot"
 
 #: common/jobs/job_export_pcb_svg.cpp:53
 msgid "PCB SVG export"
 msgstr "PCB SVG vienti"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Vie SVG"
+msgstr "PCB: Vie SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
-#, fuzzy
 msgid "Schematic BOM export"
-msgstr "Kaaviollinen teksti"
+msgstr "Kykentäkaavion BOM-vienti"
 
 #: common/jobs/job_export_sch_bom.cpp:89
-#, fuzzy
 msgid "Schematic: Export BOM"
-msgstr "Kytkentäkaavioeditori"
+msgstr "Kytkentäkaavio: Vie BOM"
 
 #: common/jobs/job_export_sch_netlist.cpp:61
-#, fuzzy
 msgid "Schematic Netlist Export"
-msgstr "Kytkentäkaavioeditori"
+msgstr "Kytkentäkaavion verkkolistan vienti"
 
 #: common/jobs/job_export_sch_netlist.cpp:65
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Vie Netlist"
+msgstr "Kytkentäkaavio: Vie verkkolista"
 
 #: common/jobs/job_export_sch_plot.cpp:121
-#, fuzzy
 msgid "Schematic plot export"
-msgstr "Kaaviollinen teksti"
+msgstr "kytkentäkaaviopiirroksen vienti"
 
 #: common/jobs/job_export_sch_plot.cpp:160
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Kytkentäkaavioeditori"
+msgstr "Kytkentäkaavio: Vie SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:162
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "Kytkentäkaavioeditori"
+msgstr "Kytkentäkaavio: Vie HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:164
 msgid "Schematic: Export PS"
@@ -35754,9 +35741,8 @@ msgid "Non Copper Zone Properties"
 msgstr "Ei Kupari Vyöhykkeen Ominaisuudet"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
-#, fuzzy
 msgid "Outset:"
-msgstr "Ulkopuolella"
+msgstr "Aloitus:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -47529,7 +47515,7 @@ msgstr "Luo johtimia valituista graafisista viivoista"
 #: pcbnew/tools/pcb_actions.cpp:96
 #, fuzzy
 msgid "Create Outsets from Selection"
-msgstr "Luo Valinnasta"
+msgstr "Luo lähtökohtia valinnasta"
 
 #: pcbnew/tools/pcb_actions.cpp:97
 #, fuzzy
@@ -48242,9 +48228,8 @@ msgid "ODB++ Output File..."
 msgstr "ODB++ Tulostustiedosto..."
 
 #: pcbnew/tools/pcb_actions.cpp:1059
-#, fuzzy
 msgid "Generate ODB++ output files"
-msgstr "Korvaa tulostustiedosto"
+msgstr "Luo ODB++ tulostustiedostoja"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "IPC-D-356 Netlist File..."
@@ -48935,16 +48920,16 @@ msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr "Sijoittaa valitut kohteet tarkalla määrällä suhteessa toiseen"
 
 #: pcbnew/tools/pcb_actions.cpp:2032
-#, fuzzy
 msgid "Position Interactively..."
-msgstr "Asema suhteessa ..."
+msgstr "Sijainti vuorovaikutteisesti..."
 
 #: pcbnew/tools/pcb_actions.cpp:2033
-#, fuzzy
 msgid ""
 "Positions the selected item(s) by an exact amount relative to another, "
 "interactively"
-msgstr "Sijoittaa valitut kohteet tarkalla määrällä suhteessa toiseen"
+msgstr ""
+"Sijoittaa valitut kohteet tarkalla määrällä suhteessa toiseen "
+"interaktiivisesti"
 
 #: pcbnew/tools/pcb_actions.cpp:2095
 msgid "Select/Expand Connection"
@@ -49089,12 +49074,10 @@ msgstr ""
 "ulkopuolelle"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
-#, fuzzy
 msgid "Generate Placement Rule Areas"
-msgstr "Luo sijoittelutiedostot"
+msgstr "Luo sijoittelusääntöalueita"
 
 #: pcbnew/tools/pcb_actions.cpp:2236
-#, fuzzy
 msgid "Repeat Layout"
 msgstr "Toista asettelu"
 
@@ -49352,9 +49335,8 @@ msgstr ""
 "Näitä kohteita ei voitu liittää.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1069
-#, fuzzy
 msgid "Paste Text"
-msgstr "Sijoita Teksti"
+msgstr "Liitä teksti"
 
 #: pcbnew/tools/pcb_control.cpp:1226
 msgid "Invalid clipboard contents"
@@ -49448,9 +49430,8 @@ msgid "Split Segment"
 msgstr "Halkaise Segmentti"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2745
-#, fuzzy
 msgid "Split Arc"
-msgstr "Poista kaari"
+msgstr "Puolita kaari"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2822
 msgid "Remove Zone Corner"
@@ -49461,14 +49442,12 @@ msgid "Remove Polygon Corner"
 msgstr "Poista monikulmion kulma"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2922
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "Lisää Alueen Kulma"
+msgstr "Katkaise alueen kulma"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2924
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "Poista monikulmion kulma"
+msgstr "Katkaise monikulmion kulma"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1429
 msgid "Select/Expand Connection..."
@@ -49487,19 +49466,16 @@ msgid "Align to Center"
 msgstr "Kohdista Keskikohtaan"
 
 #: pcbnew/tools/position_relative_tool.cpp:215
-#, fuzzy
 msgid "Set Relative Position Interactively"
-msgstr "Toista Sijainnin Lisäys"
+msgstr "Aseta suhteellinen sijainti interaktiivisesti"
 
 #: pcbnew/tools/position_relative_tool.cpp:230
-#, fuzzy
 msgid "Select the reference point on the item to move."
-msgstr "Valitse siirron vertailupiste ..."
+msgstr "Valitse siirrettävän kohteen vertailupiste."
 
 #: pcbnew/tools/position_relative_tool.cpp:235
-#, fuzzy
 msgid "Select the point to define the new offset from."
-msgstr "Valitse kulma, jonka jälkeen uusi kulma lisätään."
+msgstr "Valitse piste, josta uusi siirtymä määritetään."
 
 #: pcbnew/tools/position_relative_tool.cpp:419
 msgid "Position Relative"
@@ -50401,9 +50377,8 @@ msgid "Restrictions"
 msgstr "Rajoitukset"
 
 #: pcbnew/zone.cpp:608
-#, fuzzy
 msgid "Placement source"
-msgstr "Sijoittaminen"
+msgstr "Sijoittelun lähde"
 
 #: pcbnew/zone.cpp:638
 #, c-format
@@ -50481,7 +50456,7 @@ msgstr "Suljeulos"
 #: pcbnew/zone.cpp:1728
 #, fuzzy
 msgid "Keep Out Tracks"
-msgstr "Pidä johtimet poissa"
+msgstr "Pidä johdinliuskat poissa"
 
 #: pcbnew/zone.cpp:1734
 #, fuzzy
@@ -50504,18 +50479,16 @@ msgid "Keep Out Footprints"
 msgstr "Pidä jalanjäljet poissa"
 
 #: pcbnew/zone.cpp:1762
-#, fuzzy
 msgid "Enable"
-msgstr "Käytössä"
+msgstr "Ota käyttöön"
 
 #: pcbnew/zone.cpp:1769
 msgid "Source Type"
 msgstr "Lähteen Tyyppi"
 
 #: pcbnew/zone.cpp:1775
-#, fuzzy
 msgid "Source Name"
-msgstr "Lähde 2"
+msgstr "Lähteen nimi"
 
 #: pcbnew/zone.cpp:1807
 msgid "Cannot be less than zone minimum width"
