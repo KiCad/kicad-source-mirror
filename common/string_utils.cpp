@@ -1467,11 +1467,9 @@ wxString NormalizeFileUri( const wxString& aFileUri )
 
     wxCHECK( aFileUri.StartsWith( wxS( "file://" ), &uriPathAndFileName ), aFileUri );
 
-    wxString tmp;
+    wxString tmp = uriPathAndFileName;
     wxString retv = wxS( "file://" );
-    wxFileName fn = uriPathAndFileName;
 
-    tmp = fn.GetPathWithSep( wxPATH_UNIX );
     tmp.Replace( wxS( "\\" ), wxS( "/" ) );
     tmp.Replace( wxS( ":" ), wxS( "" ) );
 
@@ -1479,9 +1477,6 @@ wxString NormalizeFileUri( const wxString& aFileUri )
         tmp = wxS( "/" ) + tmp;
 
     retv += tmp;
-    retv += fn.GetFullName();
-
-    wxLogDebug( wxS( "Normalize file: '%s'." ), retv );
 
     return retv;
 }
