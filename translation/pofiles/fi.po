@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-09-18 16:40+0000\n"
+"PO-Revision-Date: 2024-11-10 17:00+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8.2\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -21237,7 +21237,7 @@ msgstr "Siirry seuraavalle sivulle numeron mukaan"
 
 #: eeschema/tools/ee_actions.cpp:1267
 msgid "Hierarchy Navigator"
-msgstr "Hierarkia Navigaattori"
+msgstr "Hierarkia-navigaattori"
 
 #: eeschema/tools/ee_actions.cpp:1268
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -37842,15 +37842,15 @@ msgstr "Tarkistetaan mikroläpivientien reiät..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s minimi %s; todellinen %s)"
+msgstr "(%s minimi reikä %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s enimmäiskorkeus %s; todellinen %s)"
+msgstr "(%s maksimi reikä %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
