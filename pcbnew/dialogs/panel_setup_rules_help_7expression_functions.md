@@ -3,17 +3,28 @@
 All function parameters support simple wildcards (`*` and `?`).
 <br><br>
 
-    A.intersectsCourtyard('<footprint_refdes>')
+    A.intersectsCourtyard('<footprint_identifier>')
 True if any part of `A` lies within the given footprint's principal courtyard.
 <br><br>
 
-    A.intersectsFrontCourtyard('<footprint_refdes>')
+    A.intersectsFrontCourtyard('<footprint_identifier>')
 True if any part of `A` lies within the given footprint's front courtyard.
 <br><br>
 
-    A.intersectsBackCourtyard('<footprint_refdes>')
+    A.intersectsBackCourtyard('<footprint_identifier>')
 True if any part of `A` lies within the given footprint's back courtyard.
 <br><br>
+
+The `footprint_identifier` listed above can be one of the following:
+
+1. A reference designator, possibly containing wildcards `*` and `?`
+2. A footprint library identifier such as `LibName:FootprintName`. In this case,
+   the library identifier must contain the `:` character to separate the library
+   name from the footprint name, and either name may contain wildcards.
+3. A component class, in the form `${Class:ClassName}`.  The keyword `Class` is not
+   case-sensitive, but component class names are case-sensitive.
+
+<br>
 
     A.intersectsArea('<zone_name>')
 True if any part of `A` lies within the given zone's outline.
@@ -50,11 +61,9 @@ True if `A` is a member of the given group. The name can contain wildcards.
 Includes nested membership.
 <br><br>
 
-    A.memberOfFootprint('<footprint_reference>|<footprint_id>')
-True if `A` is a member of a footprint matching the given reference designator or footprint
-ID.  The parameter can contain wildcards.
-
-NB: If matching against a footprint ID is desired, the parameter must contain a ':'.
+    A.memberOfFootprint('<footprint_identifier>')
+True if `A` is a member of a given footprint (for example, a pad or graphic shape defined
+inside that footprint).  The various ways of specifying `footprint_identifier` are described above.
 <br><br>
 
     A.memberOfSheet('<sheet_path>')

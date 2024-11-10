@@ -228,7 +228,22 @@ static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTE
     }
     else for( FOOTPRINT* fp : aBoard->Footprints() )
     {
-        if( fp->GetReference().Matches( aArg ) )
+        // NOTE: This code may want to be somewhat more generalized, but for now it's implemented
+        // here to support functions like insersectsCourtyard where we want multiple ways to search
+        // for the footprints in question.
+        // If support for text variable replacement is added, it should happen before any other
+        // logic here, so that people can use text variables to contain references or LIBIDs.
+        // (see: https://gitlab.com/kicad/code/kicad/-/issues/11231)
+
+        // First check if we have a known directive
+        if( aArg.Upper().StartsWith( wxT( "${CLASS:" ) ) && aArg.EndsWith( '}' ) )
+        {
+            wxString name = aArg.Mid( 8, aArg.Length() - 9 );
+
+            if( fp->GetComponentClass()->ContainsClassName( name ) && aFunc( fp ) )
+                return true;
+        }
+        else if( fp->GetReference().Matches( aArg ) )
         {
             if( aFunc( fp ) )
                 return true;
