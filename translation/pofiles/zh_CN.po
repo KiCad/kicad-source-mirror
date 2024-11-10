@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-10-21 17:35+0000\n"
+"PO-Revision-Date: 2024-11-10 17:00+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.8.2\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2111,11 +2111,11 @@ msgstr "是 (&Y)"
 
 #: common/dialog_shim.cpp:749
 msgid "&No"
-msgstr "否(&N)"
+msgstr "否 (&N)"
 
 #: common/dialog_shim.cpp:750
 msgid "&Apply"
-msgstr "应用(&A)"
+msgstr "应用 (&A)"
 
 #: common/dialog_shim.cpp:751
 msgid "&Save"
@@ -2249,15 +2249,15 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"下次启动KiCad时, 任何已经定义好的路径都会被遵守, \n"
-"而在路径配置对话框中定义的任何设置都会被忽略。\n"
-"如果你不打算使用这种行为, 请重命名任何冲突的条目\n"
-"或从你的系统中移除外部环境变量。"
+"下次启动KiCad时, 会优先使用所有环境变量中已定义的路径变量, 而忽略在 KiCad "
+"的路径配置对话框中所做的设置。\n"
+"如果不希望发生这种情况, 可以选择重命名那些有冲突的条目, "
+"抑或是从系统中删除相关的环境变量。"
 
 #: common/dialogs/dialog_configure_paths.cpp:299
 #, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "名称 %s 是保留的, 不能使用。"
+msgstr "名称 %s 是保留字, 不能使用。"
 
 #: common/dialogs/dialog_configure_paths.cpp:403
 msgid ""
@@ -2267,18 +2267,17 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"为每个环境变量输入名称和路径, 灰色的条目是在系统或用户层级外部定义的名称。在"
-"系统或用户层面上定义的环境变量优先于本表中定义的环境变量, 这种情况下本表中的"
-"数值会被忽略。"
+"为每个环境变量输入名称和值, 灰色条目表示在系统或用户级别外部定义的名称。"
+"在系统或用户级别定义的环境变量优先于在此表中定义的变量, "
+"也就这意味此表中的值将被忽略。"
 
 #: common/dialogs/dialog_configure_paths.cpp:409
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
-msgstr ""
-"为了确保环境变量名称在所有平台上都有效, 名称字段只接受大写字母, 数字和下划线"
-"字符。"
+msgstr "为确保环境变量名称在所有平台上都有效, 名称字段只能使用大写字母, "
+"数字和下划线。"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
@@ -2341,8 +2340,8 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"首次运行 KiCad 时使用了新的%s库表来访问库。\n"
-"为了使 KiCad 能够保存%s库信息以供下次访问, 您必须配置全局%s库表。\n"
+"KiCad 第一次使用新的 %s 库表来访问库文件。\n"
+"为了使 KiCad 能够保存 %s 库信息以供下次访问, 您需要配置全局 %s 库表。\n"
 "请从以下选项中选择一个, 如果您不确定要选择哪个选项, 请使用默认选项。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
@@ -3983,15 +3982,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允许 KiCad 匿名地向开发人员报告崩溃和特殊事件数据, 以帮助更有效地识别用户群体"
-"中的关键 bug, 并帮助绘制功能画像来指导改进。\n"
+"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据，"
+"以便更有效地识别用户群中的关键错误, 并帮助分析功能以指导改进工作。\n"
 "\n"
-"要链接来自相同 KiCad 安装的自动报告, 将生成一个完全随机的唯一标识符, 它仅用于"
-"崩溃报告的目的。没有个人身份信息(PII), 包括IP地址被存储或连接到该标识符。\n"
-"您可以在任何时候通过提供的按钮重置此 id。\n"
+"为了将来自同一 KiCad 安装的自动报告关联起来, "
+"系统会生成一个完全随机的唯一标识符, 仅用于崩溃报告的目的。"
+"不会存储或连接任何个人可识别信息 (PII), 包括IP地址。\n"
+"您可以随时通过提供的按钮重置该标识符。\n"
 "\n"
-"如果您选择自愿参与, 那么发生崩溃或事件时, KiCad 将自动处理发送上述报告。\n"
-"您的设计文件(如原理图或PCB) 在此过程中绝对不会被共享。"
+"如果您选择自愿参与, 那么发生崩溃或特殊事件时, KiCad "
+"会自动处理并发送这些报告。\n"
+"\n"
+"在此过程中, 您的设计文件 (如原理图或PCB) 绝对不会被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -6394,7 +6396,7 @@ msgstr "无效的大小 %lld: 过大"
 #: common/io/eagle/eagle_parser.cpp:410
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
-msgstr "半径为 %f 且角度为 %f 的无效弧线"
+msgstr "半径为 %f 且度数为 %f 的无效弧线"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -11017,7 +11019,7 @@ msgstr "单元之间可以互换"
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
-msgstr "除引脚编号不同之外, 所有的符号单元都相同时, 请勾选此选项。"
+msgstr "当所有的符号单元除引脚编号外都相同时, 请勾选此选项。"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 msgid "Create symbol with alternate body style (De Morgan)"
@@ -11112,7 +11114,7 @@ msgstr "只显示在符号编辑器中"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:151
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 msgid "Common to all &units in symbol"
-msgstr "作用于符号的所有单元(&U)"
+msgstr "作用于符号的所有单元 (&U)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:157
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
@@ -11211,7 +11213,7 @@ msgid ""
 msgstr ""
 "选择符号的派生源或设置为 <无> 使此符号作为根符号。\n"
 "\n"
-"所有的符号要么是从另一个符号中派生出来的, 要么就是作为根符号独立存在。"
+"所有的符号要么是派生自其他符号, 要么就是作为根符号独立存在。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
 msgid "Number of units:"
@@ -11256,10 +11258,10 @@ msgid ""
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"勾选此选项, 会使该符号出现在 \"添加电源符号\" 窗口中, 作为一个电源符号使"
-"用。\n"
+"勾选此选项后, 相关的符号将会出现在 \"添加电源符号\" 窗口中, "
+"作为一个电源符号使用。\n"
 "电源符号的数值文本会被锁定, 以防其在原理图中被不慎编辑。\n"
-"电源符号不会在 BOM 中出现, 也不能对电源符号分配封装。"
+"同时, 该符号也不会在 BOM 中出现, 也不能为其分配封装。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
@@ -11339,14 +11341,12 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"可以在封装筛选规则列表中, 为符号预先分配一个可选封装列表。在绘制原理图添加符"
-"号时,\n"
-"会根据符号的封装筛选规则, 在所有封装库中搜索并显示与其规则匹配的封装, 你可以"
-"从中\n"
-"选择一个合适的封装。\n"
-"筛选字段可以包含通配符, 如 sm*, 可以匹配所有以 sm 开头的封装名称, 意味着该符"
-"号\n"
-"默认可选所有以 sm 开头的封装。"
+"可以在封装筛选规则列表中, "
+"为符号预先分配一个可选封装列表。在绘制原理图添加符号时,\n"
+"会根据符号的封装筛选规则, 在所有封装库中搜索并显示与其规则匹配的封装, "
+"你可以从中选择一个合适的封装。\n"
+"筛选字段可以包含通配符, 如 sm*, 可以匹配所有以 sm 开头的封装名称, "
+"意味着该符号默认可选所有名称以 sm 开头的封装。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:316
 msgid "Add footprint filter"
@@ -11519,11 +11519,11 @@ msgstr "引脚编号: 1-4 个 ASCII 字母 + 数字或纯数字"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
 msgid "&X position:"
-msgstr "X 坐标 (&X):"
+msgstr "&X 坐标:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:69
 msgid "&Y position:"
-msgstr "Y 坐标 (&Y):"
+msgstr "&Y 坐标:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:76
 msgid "&Pin length:"
@@ -11876,7 +11876,7 @@ msgstr ""
 "停止显示此工具?\n"
 "不会做任何变更。\n"
 "\n"
-"可以通过 \"偏好设置\" 对话框更改此设置, \n"
+"可以通过 <偏好设置> 对话框更改此设置, \n"
 "也可以通过 \"工具\" 菜单手动激活该工具。"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
@@ -12026,7 +12026,7 @@ msgstr "仅在当前图纸中搜索 (&S)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 msgid "Search the current selection &only"
-msgstr "仅在当前选区中搜索"
+msgstr "仅在当前选区中搜索 (&O)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
@@ -13592,6 +13592,7 @@ msgid ""
 "sure you want to use these colors?"
 msgstr ""
 "部分项目的颜色与背景色相同, 在屏幕上将不可见。\n"
+"\n"
 "确定要使用这些颜色吗?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:208
@@ -13868,7 +13869,7 @@ msgstr "水平间距 (&H):"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:307
 msgid "&Vertical pitch:"
-msgstr "垂直间距 (&P):"
+msgstr "垂直间距 (&V):"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:318
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:130
@@ -14216,7 +14217,7 @@ msgstr "默认引脚名称文本高度 (&A):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
 msgid "Show pin &electrical type"
-msgstr "显示引脚电气类型 (&S)"
+msgstr "显示引脚电气类型 (&E)"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:119
 msgid "&Pitch of repeated pins:"
@@ -15778,7 +15779,7 @@ msgstr "工具 (&T)"
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:240
 #: pcbnew/menubar_pcb_editor.cpp:466
 msgid "P&references"
-msgstr "设置 (&P)"
+msgstr "设置 (&R)"
 
 #: eeschema/net_navigator.cpp:56
 #, c-format
@@ -23756,7 +23757,7 @@ msgstr "导入 (嘉立创 EDA) 专业版原理图和电路板"
 
 #: kicad/menubar.cpp:133
 msgid "&Archive Project..."
-msgstr "压缩工程(&A)..."
+msgstr "打包工程 (&A)..."
 
 #: kicad/menubar.cpp:134
 msgid "Archive all needed project files into zip archive"
@@ -23764,7 +23765,7 @@ msgstr "把当前工程压缩成 Zip 文件"
 
 #: kicad/menubar.cpp:138
 msgid "&Unarchive Project..."
-msgstr "解压工程(&U)..."
+msgstr "解包工程 (&U)..."
 
 #: kicad/menubar.cpp:139 kicad/menubar.cpp:265
 msgid "Unarchive project files from zip archive"
@@ -25023,11 +25024,11 @@ msgstr "个数:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:406
 msgid "Step text:"
-msgstr "步骤文本:"
+msgstr "增量文本:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:411
 msgid "Number of characters or digits to step text by for each repeat."
-msgstr "每次复刻时要按其步进文本的字符数或位数。"
+msgstr "每次复刻时, 文本字符或数字的增量。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:418
 msgid "Step X:"
@@ -25767,12 +25768,11 @@ msgid ""
 msgstr ""
 "OVC I: 不与市电直接连接的设备 (如: 由充电器供电的笔记本电脑和手机)\n"
 "\n"
-"OVC II: 需要依靠固定安装设施供电的耗能设备 (如:家用电器, 便携式工具, 家庭负"
-"载)。\n"
-"如果有可靠性和可用性要求, 则适用于 OVC III\n"
+"OVC II: 需要依靠固定安装设施供电的耗能设备 (如:家用电器, 便携式工具, "
+"家庭负载)。如果有可靠性和可用性要求, 则适用于 OVC III\n"
 "\n"
-"OVC III: 采用固定安装方式的具有可靠性和可用性要求设备 (例如:电气开关, 工业用"
-"设备)。\n"
+"OVC III: 采用固定安装方式的具有可靠性和可用性要求设备 (例如:电气开关, "
+"工业用设备)。\n"
 "\n"
 "OVC IV: 安装于供电进线处的设备 (如:电表, 一次过流保护装置)"
 
@@ -27020,13 +27020,14 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"该表显示了各种金属和合金之间的电化学电位差异。正数表示行为阳极, 列为阴极。"
-"<br>\n"
-" 电偶腐蚀会在特定条件下影响接触的不同金属。<br>\n"
-" 电化学对的阳极被氧化并被腐蚀掉, 而阴极则被溶解的金属镀在上面, 但仍受到保护。"
-"<br>\n"
-" EN 50310 暗示电压差低于 300mV。已知的做法在主要金属或合金对之间使用第三接触"
-"金属 (即化学金表面光洁度)。<br>\n"
+"该表显示了各种金属和合金之间的电化学电位差异。正数表示行为阳极, "
+"列为阴极。<br>\n"
+"电偶腐蚀会在特定条件下影响接触的不同金属。<br>\n"
+"电化学对的阳极被氧化并被腐蚀掉, 而阴极则被溶解的金属镀在上面, "
+"但仍受到保护。<br>\n"
+"EN 50310 暗示电压差低于 300mV。"
+"已知的做法在主要金属或合金对之间使用第三接触金属 (即化学金表面光洁度)。<br>\n"
+"重新填充表格后, 所选单元格将显示为系统默认的选区着色。\n"
 
 #: pcb_calculator/iec60664_help.h:2
 msgid ""
@@ -27049,9 +27050,8 @@ msgstr ""
 "但是, 本计算器不涵盖以下情况:\n"
 "\n"
 "- 对于高于30kHz的频率, 介电性能会降低。IEC60664-4 涵盖了这些情况\n"
-"- 为了防止污染, 使用浸渍处理或进行灌封时, 如果满足了 IEC60664-3 规定的所有条"
-"件,可以适当减小电气间隙和爬电距离。\n"
-"一般不将焊盘视为浸渍。\n"
+"- 为了防止污染, 使用浸渍处理或进行灌封时, 如果满足了 IEC60664-3 "
+"规定的所有条件,可以适当减小电气间隙和爬电距离。一般不将焊盘视为浸渍。\n"
 "- 通过液体、压缩空气或除空气以外的气体的绝缘不在 IEC60664 的范围内"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
@@ -27160,30 +27160,19 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"E 系列是在 IEC (国际电工委员会) 60063 中定义的。\n"
+"- 此计算器可以找到标准 E 系列 (范围在 10Ω 到 1MΩ 之间) "
+"的组合以创建任意值的电阻。\n"
+"- 您可以输入所需的电阻值, 范围从 0.0025 到 4000 kΩ。\n"
+"- 提供的解决方案最多使用4个元件。\n"
 "\n"
-"可用值在对数刻度上近似等距。\n"
+"请求的电阻值总是会被排除在解决方案集之外。<br>\n"
+"您还可以选择排除最多两个额外的值, 以应对元件可用性问题。\n"
 "\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"解决方案以以下格式给出:\n"
 "\n"
-"- 这个计算器可以查找标准 E 系列 (在 10 Ω 和 1 MΩ 之间) 的组合以创建任意的数"
-"值。\n"
-"- 您可以输入0.0025 到 4000 kΩ之间所需的电阻。\n"
-"- 给出了最多使用 4 个元件的解决方案。\n"
-"\n"
-"所要求的值总是被排除在解决方案集之外。<br>\n"
-"如果出现元件可用性问题, 最多可以排除两个额外的值。\n"
-"\n"
-"解决方案依照下列格式提供: \n"
-"\n"
-"\tR1 + R2 +...+ Rn\t串联电阻\n"
-"\tR1 | R2 |...| Rn\t并联电阻\n"
-"\tR1 + (R2 | R3)...\t以上任意组合\n"
+"\tR1 + R2 + ... + Rn: 串联电阻\n"
+"\tR1 | R2 | ... | Rn: 并联电阻\n"
+"\tR1 + (R2 | R3)...: 任何上述组合\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -29031,7 +29020,7 @@ msgstr "删除连接到不同网络的走线 (&T)"
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
-msgstr "移除连接了不同网络 (短路) 的走线"
+msgstr "移除连接了不同网络 (短路) 的走线段"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:30
 msgid "&Delete redundant vias"
@@ -29047,7 +29036,7 @@ msgstr "删除仅在一个层上有连接的过孔"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:38
 msgid "&Merge co-linear tracks"
-msgstr "合并重叠的走线(&M)"
+msgstr "合并重叠的走线 (&M)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:39
 msgid "merge aligned track segments, and remove null segments"
@@ -31263,8 +31252,7 @@ msgid ""
 msgstr ""
 "这是该封装的焊盘与阻焊之间的局部间距。\n"
 "如果为 0 时, 使用全局设置值。\n"
-"在焊盘属性的局部间距和设置 选项卡中, \n"
-"可以覆盖此值。"
+"可以在焊盘属性的局部间距和设置 选项卡中覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
 msgid ""
@@ -33012,13 +33000,13 @@ msgstr "设置值为 0, 使用父级封装或网络类值。"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:935
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
-msgstr "正间距意味着区域比焊盘大（通常用于阻焊间距）。"
+msgstr "正间距意味着区域比焊盘大 (通常用于阻焊间距)。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:939
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr "正间距意味着区域比焊盘小（通常用于锡膏间距）。"
+msgstr "正间距意味着区域比焊盘小 (通常用于锡膏间距)。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:951
 msgid ""
@@ -33875,7 +33863,7 @@ msgstr "弧线角不能为 0。"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:572
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "半径为 %f 且角度为 %f 的无效弧线。"
+msgstr "半径为 %f 且度数为 %f 的无效弧线。"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:578
 #: pcbnew/dialogs/dialog_shape_properties.cpp:610
@@ -34282,7 +34270,7 @@ msgstr "将操作约束为水平方向, 垂直方向或斜 45 度方向"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:35
 msgid "Step for &rotate commands:"
-msgstr "旋转命令的步进量 (&R):"
+msgstr "旋转命令增量 (&R):"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:40
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
@@ -35567,7 +35555,7 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr "正间距意味着区域比焊盘大（通常用于阻焊间距）。"
+msgstr "正间距意味着区域比焊盘大 (通常用于阻焊间距)。"
 
 # 绿油桥宽：
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
@@ -35614,7 +35602,7 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr "正间距意味着区域比焊盘小（通常用于锡膏间距）。"
+msgstr "正间距意味着区域比焊盘小 (通常用于锡膏间距)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:120
 msgid ""
@@ -36743,7 +36731,7 @@ msgstr "keepout 区 '%s'"
 #: pcbnew/drc/drc_engine.cpp:624
 #, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "解析完成的域连接类型: %s。"
+msgstr "已解析的域连接类型: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:642
 #, c-format
@@ -37532,15 +37520,15 @@ msgstr "正在检查微孔孔洞..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s 最小 %s; 实际 %s)"
+msgstr "(%s 最小孔径 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s 最大高度 %s; 实际 %s)"
+msgstr "(%s 最大孔径 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -39146,7 +39134,7 @@ msgstr "对比度模式 (&C)"
 
 #: pcbnew/menubar_footprint_editor.cpp:206
 msgid "&Load Footprint from PCB..."
-msgstr "从 PCB 中加载封装(&L)..."
+msgstr "从 PCB 中加载封装 (&L)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:207
 msgid "Load a footprint from the current board into the editor"
@@ -39303,7 +39291,7 @@ msgstr "创建微波封装"
 
 #: pcbnew/microwave/microwave_footprint.cpp:94
 msgid "Angle in degrees:"
-msgstr "角度(deg):"
+msgstr "角度 (deg):"
 
 #: pcbnew/microwave/microwave_footprint.cpp:106
 msgid "Incorrect number, abort"
@@ -42525,7 +42513,7 @@ msgstr "仍然拖动"
 #: pcbnew/router/router_tool.cpp:1952 pcbnew/router/router_tool.cpp:2435
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr "(无论如何都提交 %s）"
+msgstr "(无论如何都提交 %s)"
 
 #: pcbnew/router/router_tool.cpp:1956 pcbnew/router/router_tool.cpp:2439
 msgid "Track violates DRC."
@@ -42861,7 +42849,7 @@ msgstr "差分对未耦合长度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:926
 #, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "解析完成的最大未耦合长度: %s。"
+msgstr "已解析的最大未耦合长度: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:332
 #: pcbnew/tools/board_inspection_tool.cpp:1339
@@ -42871,7 +42859,7 @@ msgstr "文本高度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:340
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "解析完成的高度约束: 最小 %s; 最大 %s。"
+msgstr "已解析的高度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:347
 #: pcbnew/tools/board_inspection_tool.cpp:1355
@@ -42881,7 +42869,7 @@ msgstr "文本线宽解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:355
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "解析完成的线宽约束: 最小 %s; 最大 %s。"
+msgstr "已解析的线宽约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:362
 #: pcbnew/tools/board_inspection_tool.cpp:1262
@@ -42891,7 +42879,7 @@ msgstr "走线宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:370
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "解析完成的宽度约束: 最小 %s; 最大 %s。"
+msgstr "已解析的宽度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:376
 msgid "Connection Width"
@@ -42904,7 +42892,7 @@ msgstr "连接宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:385
 #, c-format
 msgid "Resolved min connection width: %s."
-msgstr "解析完成的最小连接宽度约束: %s。"
+msgstr "已解析的最小连接宽度约束: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1280
@@ -42919,7 +42907,7 @@ msgstr "过孔直径解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:399
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "解析完成的直径约束: 最小 %s; 最大 %s。"
+msgstr "已解析的直径约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:405
 msgid "Via Annulus"
@@ -42933,7 +42921,7 @@ msgstr "过孔孔环宽度解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:414
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "解析完成的孔环宽度约束: 最小 %s; 最大 %s。"
+msgstr "已解析的孔环宽度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:421
 #: pcbnew/tools/board_inspection_tool.cpp:1318
@@ -42948,7 +42936,7 @@ msgstr "孔直径解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:430
 #, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
-msgstr "解析完成的高度约束: 最小 %s; 最大 %s。"
+msgstr "已解析的高度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 msgid "Hole Clearance"
@@ -42982,7 +42970,7 @@ msgstr "项目属于同一网络。间距为 0。"
 #: pcbnew/tools/board_inspection_tool.cpp:1211
 #, c-format
 msgid "Resolved min clearance: %s."
-msgstr "解析完成的间距: %s。"
+msgstr "已解析的间距: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:460
 #: pcbnew/tools/board_inspection_tool.cpp:1194
@@ -43067,7 +43055,7 @@ msgstr "缓释热焊盘 (花焊盘) 间隙解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:746
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "解析完成的缓释热焊盘 (花焊盘) 间隙: %s。"
+msgstr "已解析的缓释热焊盘 (花焊盘) 间隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
 msgid "Thermal-relief spoke width resolution for:"
@@ -43076,7 +43064,7 @@ msgstr "缓释热焊盘 (花焊盘) 间距宽度:"
 #: pcbnew/tools/board_inspection_tool.cpp:760
 #, c-format
 msgid "Resolved spoke width: %s."
-msgstr "解析完成的缓释热焊盘 (花焊盘) 引线宽度: %s。"
+msgstr "已解析的缓释热焊盘 (花焊盘) 引线宽度: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Thermal-relief min spoke count resolution for:"
@@ -43085,7 +43073,7 @@ msgstr "缓释热焊盘 (花焊盘) 最小引线宽度间距:"
 #: pcbnew/tools/board_inspection_tool.cpp:774
 #, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "解析完成的最小缓释热焊盘 (花焊盘) 引线数量: %d。"
+msgstr "已解析的最小缓释热焊盘 (花焊盘) 引线数量: %d。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:783
 #: pcbnew/tools/board_inspection_tool.cpp:831
@@ -43131,7 +43119,7 @@ msgstr "差分对间隙解析:"
 #: pcbnew/tools/board_inspection_tool.cpp:905
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "解析完成的间隙约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析的间隙约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:913
 msgid "Diff-pair max uncoupled length resolution for:"
@@ -43165,12 +43153,12 @@ msgstr "为约束解析报告选一个对象。"
 #: pcbnew/tools/board_inspection_tool.cpp:1270
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "解析完成的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1290
 #, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "解析完成的直径约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析的直径约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1297
 msgid "Via Annular Width"
@@ -43179,22 +43167,22 @@ msgstr "过孔孔环宽度"
 #: pcbnew/tools/board_inspection_tool.cpp:1307
 #, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "解析完成的孔环宽度约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析的孔环宽度约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1328
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "解析完成的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1347
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "解析完成的间距约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析的间距约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
-msgstr "解析完成的线宽约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "已解析的线宽约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1371
 msgid "Keepouts"
@@ -43443,7 +43431,7 @@ msgstr "编辑走线宽度/过孔尺寸"
 
 #: pcbnew/tools/edit_tool.cpp:980
 msgid "At least two straight track segments must be selected."
-msgstr "必须至少选择两条直线走线。"
+msgstr "必须至少选择两条直线走线段。"
 
 #: pcbnew/tools/edit_tool.cpp:984 pcbnew/tools/edit_tool.cpp:1149
 #: pcbnew/tools/pcb_actions.cpp:600
@@ -43464,11 +43452,11 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1156
 msgid "Unable to fillet the selected track segments."
-msgstr "无法对选定走线进行圆角处理。"
+msgstr "无法对选定走线段进行圆角处理。"
 
 #: pcbnew/tools/edit_tool.cpp:1158
 msgid "Some of the track segments could not be filleted."
-msgstr "某些走线无法进行圆角处理。"
+msgstr "某些走线段无法进行圆角处理。"
 
 #: pcbnew/tools/edit_tool.cpp:1176
 #: pcbnew/tools/item_modification_routine.cpp:66
@@ -45171,7 +45159,7 @@ msgstr "切换弧线编辑模式为保持端点, 或保持另一点的方向"
 
 #: pcbnew/tools/pcb_actions.cpp:1989
 msgid "Position Relative To..."
-msgstr "位置相对于..."
+msgstr "参考式定位..."
 
 #: pcbnew/tools/pcb_actions.cpp:1990
 msgid "Positions the selected item(s) by an exact amount relative to another"
@@ -45451,7 +45439,7 @@ msgstr "按顺序尝试自动布线所选焊盘。"
 #: pcbnew/tools/pcb_actions.cpp:2348
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
-msgstr "将走线在光标位置分割为两个连接的线段。"
+msgstr "将走线在光标位置分割为两条相连的走线段。"
 
 #: pcbnew/tools/pcb_actions.cpp:2356
 msgid "Drag 45 Degree Mode"
