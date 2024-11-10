@@ -26,6 +26,7 @@
 #include <settings/json_settings.h>
 #include <settings/parameters.h>
 #include <ctime>
+#include <memory>
 
 struct KICOMMON_API JOBSET_JOB
 {
@@ -35,7 +36,7 @@ struct KICOMMON_API JOBSET_JOB
 
     wxString m_id;
     wxString m_type;
-    JOB*     m_job;
+    std::shared_ptr<JOB>    m_job;
 
     bool operator==( const JOBSET_JOB& rhs ) const;
 };

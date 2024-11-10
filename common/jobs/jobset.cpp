@@ -57,7 +57,7 @@ KICOMMON_API void from_json( const nlohmann::json& j, JOBSET_JOB& f )
 
     nlohmann::json settings_obj = j.at( "settings" );
 
-    f.m_job = JOB_REGISTRY::CreateInstance<JOB>( f.m_type );
+    f.m_job.reset( JOB_REGISTRY::CreateInstance<JOB>( f.m_type ) );
 
     if( f.m_job != nullptr )
     {

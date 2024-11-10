@@ -423,14 +423,14 @@ void PANEL_JOBS::openJobOptionsForListItem( size_t aItemIndex )
     {
         EnsurePcbSchFramesOpen();
 
-        m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job, m_frame );
+        m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job.get(), m_frame );
 	}
     else
     {
         // special jobs
         if( job.m_job->GetType() == "special_execute" )
         {
-            JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job );
+            JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job.get() );
 
             DIALOG_SPECIAL_EXECUTE dialog( m_frame, specialJob );
             dialog.ShowModal();

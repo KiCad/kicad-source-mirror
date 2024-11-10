@@ -58,7 +58,7 @@ bool JOBS_RUNNER::RunJobsAllOutputs( bool aBail )
 
 int JOBS_RUNNER::runSpecialExecute( JOBSET_JOB* aJob )
 {
-    JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( aJob->m_job );
+    JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( aJob->m_job.get() );
 
     // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
     wxProcess process;
@@ -158,14 +158,14 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         int result = 0;
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
-            result = m_kiway->ProcessJob( iface, job.m_job );
+            result = m_kiway->ProcessJob( iface, job.m_job.get() );
         }
         else
         {
             // special jobs
             if( job.m_job->GetType() == "special_execute" )
 			{
-				JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job );
+				JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job.get() );
                 // static cast requried because wx used `long` which is 64-bit on linux but 32-bit on windows
                 result = static_cast<int>( wxExecute( specialJob->m_command ) );
 			}
