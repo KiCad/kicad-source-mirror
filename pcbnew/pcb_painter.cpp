@@ -1707,9 +1707,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         }
     }
 
-    if( pcbconfig() && pcbconfig()->m_Display.m_PadClearance
-            && ( aLayer == LAYER_PADS_SMD_FR || aLayer == LAYER_PADS_SMD_BK || aLayer == LAYER_PADS_TH )
-            && !m_pcbSettings.m_isPrinting )
+    if( ( ( pcbconfig() && pcbconfig()->m_Display.m_PadClearance ) || !pcbconfig() )
+        && !m_pcbSettings.m_isPrinting )
     {
         /*
          * Showing the clearance area is not obvious as the clearance extends from the pad on
@@ -1719,7 +1718,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
          */
         PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
 
-        if( IsCopperLayer( activeLayer ) && board->GetVisibleLayers().test( activeLayer ) )
+        if( activeLayer == aLayer && IsCopperLayer( activeLayer )
+            && board->GetVisibleLayers().test( activeLayer ) )
         {
             if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
                 color = m_pcbSettings.GetLayerColor( LAYER_NON_PLATEDHOLES );
