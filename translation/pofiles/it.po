@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-10 17:00+0000\n"
+"PO-Revision-Date: 2024-11-12 07:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
@@ -24108,7 +24108,7 @@ msgid ""
 "notes will be displayed for newer versions."
 msgstr ""
 "Ignora l'avviso di aggiornamento per la nuova versione annunciata. Ulteriori "
-"note di aggiornamento verranno visualizzate per le prossime versioni."
+"note di aggiornamento saranno visualizzate per le versioni più recenti."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -24119,12 +24119,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
-"Chiudi questa nota di aggiornamento. La nota di aggiornamento verrà mostrata "
-"di nuovo quando si riavvierà KiCad."
+"Chiudi questa notifica di aggiornamento. La notifica di aggiornamento verrà "
+"mostrata di nuovo quando si riavvierà KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr "Avvia un browser Web per la pagina degli annunci di rilascio."
+msgstr "Avvia un browser Web e va alla pagina degli annunci della versione."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -39949,7 +39949,7 @@ msgstr "Vincoli lunghezza: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2346
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
-"Impossibile regolare i segmenti all'interno di altri modelli di regolazione."
+"Impossibile accordare i segmenti all'interno di altri modelli di accordo."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2380
 msgid "Tune"
