@@ -114,7 +114,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-10 15:12+0000\n"
+"PO-Revision-Date: 2024-11-11 16:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -26608,10 +26608,12 @@ msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "preset"
 msgstr ""
+"Abilita lo sfondo, le ombre e la post-elaborazione, anche se disabilitati "
+"nelle preimpostazioni della qualità"
 
 #: kicad/cli/command_pcb_render.cpp:215
 msgid "Use perspective projection instead of orthogonal"
-msgstr ""
+msgstr "Usa la proiezione prospettica anziché quella ortogonale"
 
 #: kicad/cli/command_pcb_render.cpp:221
 #, fuzzy
@@ -26620,17 +26622,21 @@ msgstr "Opzioni fotocamera"
 
 #: kicad/cli/command_pcb_render.cpp:226
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
-msgstr ""
+msgstr "Telecamera panoramica, formato 'X,Y,Z' ad esempio: '3,0,0'"
 
 #: kicad/cli/command_pcb_render.cpp:231
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
+"Imposta il punto di rotazione rispetto al centro della scheda in centimetri, "
+"formato 'X,Y,Z' ad esempio: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:238
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr ""
+"Ruota la scheda, formato 'X,Y,Z' ad esempio: '-45,0,45' per la vista "
+"isometrica"
 
 #: kicad/cli/command_pcb_render.cpp:262
 #, fuzzy
@@ -26741,11 +26747,11 @@ msgstr "Non generare finestre per le proprietà nei PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:86
 msgid "Do not generate clickable links for hierarchical elements in PDF"
-msgstr ""
+msgstr "Non generare collegamenti ipertestuali per elementi gerarchici in PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:91
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
-msgstr ""
+msgstr "Non generare metadati PDF dalle variabili AUTHOR e SUBJECT"
 
 #: kicad/cli/command_sch_export_plot.cpp:100
 msgid "Avoid setting a background color (regardless of theme)"
@@ -26881,6 +26887,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Ignora l'avviso di aggiornamento per la nuova versione annunciata. Ulteriori "
+"note di aggiornamento saranno visualizzate per le versioni più recenti."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 #, fuzzy
@@ -26892,6 +26900,8 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Chiudi questa notifica di aggiornamento. La notifica di aggiornamento verrà "
+"mostrata di nuovo quando si riavvierà KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
 #, fuzzy
@@ -26900,7 +26910,7 @@ msgstr "Visualizza dettagli"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Avvia un browser Web e va alla pagina degli annunci della versione."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 #, fuzzy
@@ -26909,7 +26919,7 @@ msgstr "Apri pagina scaricamento"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Va alla pagina dei download appropriata alla piattaforma."
 
 #: kicad/dialogs/dialog_update_notice_base.h:55
 msgid "Update Available"
@@ -26922,7 +26932,7 @@ msgstr "Cartella:"
 
 #: kicad/dialogs/panel_jobs.cpp:62
 msgid "Archive"
-msgstr ""
+msgstr "Archivio"
 
 #: kicad/dialogs/panel_jobs.cpp:77
 #, fuzzy, c-format
@@ -26936,7 +26946,7 @@ msgstr "Seleziona percorso"
 
 #: kicad/dialogs/panel_jobs.cpp:196
 msgid "Zip"
-msgstr ""
+msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:257
 #, fuzzy
@@ -29909,7 +29919,7 @@ msgstr "Vref impostata a 0!"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:413
 msgid "Vref must VrefMin < VrefTyp < VrefMax"
-msgstr ""
+msgstr "Vref deve essere VrefMin < VrefTyp < VrefMax"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:419
 msgid "Incorrect value for R1 R2"
@@ -29917,7 +29927,7 @@ msgstr "Valore errato per R1 o R2"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:434
 msgid "Iadj must IadjTyp < IadjMax"
-msgstr ""
+msgstr "Iadj deve essere IadjTyp < IadjMax"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:60
@@ -30000,7 +30010,7 @@ msgstr "R1:"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:178
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:203
 msgid "kΩ"
-msgstr ""
+msgstr "kΩ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:186
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:130
@@ -30509,7 +30519,7 @@ msgstr "Errore file dati."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr ""
+msgstr "Vref (min/med/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
@@ -30517,7 +30527,7 @@ msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
 msgid "Iadj (typ/max):"
-msgstr ""
+msgstr "Iadj (med/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -33207,7 +33217,7 @@ msgstr "Posizione finale"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
-msgstr ""
+msgstr "Gli elementi origine rimangono al loro posto"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 #, fuzzy
@@ -33584,12 +33594,12 @@ msgstr "0.00000 / 0.00 / 0.0000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
 #: pcbnew/pcb_dimension.cpp:1453
 msgid "Inward"
-msgstr ""
+msgstr "Verso l'interno"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
 #: pcbnew/pcb_dimension.cpp:1454
 msgid "Outward"
-msgstr ""
+msgstr "Verso l'esterno"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:188
 msgid ""
@@ -33598,6 +33608,10 @@ msgid ""
 "Inward:    >-----<\n"
 "Outward: <----->"
 msgstr ""
+"Scegliere la direzione della freccia delle dimensioni\n"
+"Automatico: determinato in base alla posizione del testo.\n"
+"Verso l'interno: >-----<\n"
+"Verso l'esterno: <----->"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:199
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:155
@@ -34203,7 +34217,7 @@ msgstr "Tutti i file"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:382
 msgid "BREP (OCCT) files"
-msgstr ""
+msgstr "File BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:390
 #, fuzzy
@@ -34244,11 +34258,11 @@ msgstr "Esporta GLB (binario GLTF)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -34293,6 +34307,8 @@ msgid ""
 "A list of comma-selected reference designators to export (wildcards are "
 "supported)"
 msgstr ""
+"Un elenco di riferimento separati da virgole da esportare (sono supportati i "
+"caratteri jolly)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:92
 #, fuzzy
@@ -34351,6 +34367,8 @@ msgstr "Testo con caratteri jolly opzionali"
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
 msgstr ""
+"Verranno esportati solo gli elementi in rame appartenenti ai collegamenti "
+"che corrispondono a questo filtro."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Board outline chaining tolerance:"
@@ -34669,7 +34687,7 @@ msgstr "Cerca:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "A ca&po"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 #, fuzzy
@@ -35658,7 +35676,7 @@ msgstr "Rimuovi teardrop"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:115
 msgid "Remove teardrops according to filtering options"
-msgstr ""
+msgstr "Rimuovi teardrops in base alle opzioni di filtro"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:119
 #, fuzzy
@@ -35667,7 +35685,7 @@ msgstr "Rimuovi teardrop"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Remove all teadrops, regardless filtering options"
-msgstr ""
+msgstr "Rimuovi tutte le teardrops, indipendentemente dalle opzioni di filtro"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -36387,7 +36405,7 @@ msgstr "Sposta elemento"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:58
 msgid "Replace existing placement rule areas"
-msgstr ""
+msgstr "Sostituisci le aree delle regole di posizionamento esistenti"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:61
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
@@ -36429,11 +36447,11 @@ msgstr "Includi impronte b&loccate"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:89
 msgid "Include components outside the target area"
-msgstr ""
+msgstr "Includi componenti al di fuori dell'area di destinazione"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
-msgstr ""
+msgstr "Ripeti la disposizione multicanale"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:149
 msgid "Convert to Non Copper Zone"
@@ -36465,14 +36483,16 @@ msgstr ".1"
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
 msgstr ""
+"Arrotondare verso l'esterno per ottenere multipli della griglia (se "
+"possibile)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "Possibile solo per le estremità rettangolari."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
-msgstr ""
+msgstr "Angoli arrotondati (se possibile)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
 #, fuzzy
@@ -36481,7 +36501,7 @@ msgstr "Griglie:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr ""
+msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
 #, fuzzy
@@ -36499,6 +36519,8 @@ msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
 msgstr ""
+"Impossibile per elementi come le piazzole, che continueranno a usare il "
+"valore riportato di seguito."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
 #, fuzzy
@@ -36626,7 +36648,7 @@ msgstr "Modalità di tracciatura:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "Anteriore/Interno/Inferiore"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
 #, fuzzy
@@ -37830,7 +37852,7 @@ msgstr "Converti in area regole"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:277
 msgid "Not found on board: "
-msgstr ""
+msgstr "Non trovato sulla scheda: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:436
 msgid "No layers selected."
@@ -37852,11 +37874,11 @@ msgstr "Un nome univoco per questa area regole per l'uso in DRC"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:62
 msgid "Reset this value to zero."
-msgstr ""
+msgstr "Reimposta questo valore a zero."
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:72
 msgid "Reset this value to the original value."
-msgstr ""
+msgstr "Reimposta al valore originale."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 #, fuzzy
@@ -37880,7 +37902,7 @@ msgstr "Lo spazio piste deve essere maggiore di 0."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
-msgstr ""
+msgstr "L'arco deve avere 3 punti distinti"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:474
 #, c-format
@@ -37933,7 +37955,7 @@ msgstr "Strato iniziale:"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:951
 msgid "Point on Circle"
-msgstr ""
+msgstr "Punto sul cerchio"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:965
 #, fuzzy
@@ -37987,7 +38009,7 @@ msgstr "Dimensione vertice:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr ""
+msgstr "Per centro e dimensione"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 #, fuzzy
@@ -38001,15 +38023,15 @@ msgstr "Regolazione lunghezza"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
 msgid "By Midpoint/Endpoint"
-msgstr ""
+msgstr "Per punto medio/punto finale"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
-msgstr ""
+msgstr "Per centro/inizio/angolo"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:149
 msgid "By Start/Mid/End"
-msgstr ""
+msgstr "Per inizio/metà/fine"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
 #, fuzzy
@@ -38127,7 +38149,7 @@ msgstr "Descrizione impronta genitore"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
 msgid "Update thickness according to text size"
-msgstr ""
+msgstr "Aggiorna lo spessore in base alla dimensione del testo"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -38135,6 +38157,10 @@ msgid ""
 "Normal text: thickness is size/8\n"
 "Bold text: thickness is size/5"
 msgstr ""
+"Imposta lo spessore del testo migliore in base alla larghezza e all'altezza "
+"del testo\n"
+"Testo normale: lo spessore è dimensione/8\n"
+"Testo in grassetto: lo spessore è dimensione/5"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:382
 #, fuzzy
@@ -38291,11 +38317,11 @@ msgstr "Non connesso"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
 msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr ""
+msgstr "Se coprire (con maschera di saldatura) questo via sul fronte"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:384
 msgid "Link front and back tenting settings"
-msgstr ""
+msgstr "Impostazioni di collegamento del tenting fronte e retro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:391
 #, fuzzy
@@ -38304,7 +38330,7 @@ msgstr "Prefisso retro:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:399
 msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr ""
+msgstr "Se coprire (con maschera di saldatura) questo via sul retro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:449
 msgid "Add teardrops on via's track connections"
@@ -38534,13 +38560,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 msgid "Do not prompt for lock overrides for this session"
-msgstr ""
+msgstr "Non chiedere se sovrascrivere i bloccati per questa sessione"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
 msgstr ""
+"Se selezionata, non verrà mostrato alcuna richiesta quando si tenterà di "
+"modificare elementi bloccati.  Questa impostazione viene reimpostata al "
+"riavvio di KiCad."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
@@ -39818,6 +39847,8 @@ msgstr "Fuori scheda, di prova"
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
 msgstr ""
+"Gli strati ausiliari non si capovolgono insieme alla scheda, mentre lo fanno "
+"gli strati fronte e retro."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:724
 msgid "User2"
@@ -39922,6 +39953,10 @@ msgid ""
 "max distance between a solder mask opening and a copper item having a "
 "different net than the parent solder mask opening to create a DRC error"
 msgstr ""
+"Per i test DRC:\n"
+"distanza massima tra un'apertura della maschera di saldatura e un elemento "
+"in rame con un collegamento diverso dall'apertura della maschera di "
+"saldatura genitore per creare un errore DRC"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -39935,6 +39970,10 @@ msgid ""
 "Disable DRC error type solder mask aperture bridge between pads of the same "
 "footprint (useful for net ties)"
 msgstr ""
+"Per i test DRC:\n"
+"Disabilita il tipo errore DRC di ponte di apertura della maschera di "
+"saldatura tra piazzole della stessa impronta (utile per le connessioni tra "
+"collegamenti)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:111
 #, fuzzy
@@ -41807,7 +41846,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "Parola chiave 'layer' già presente."
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:378
 #: pcbnew/drc/drc_rule_parser.cpp:391 pcbnew/drc/drc_rule_parser.cpp:410
@@ -41836,7 +41875,7 @@ msgstr "Espressione di asserzione mancante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:492
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
+msgstr "Opzione within_diff_pairs non valida per il tipo di vincolo."
 
 #: pcbnew/drc/drc_rule_parser.cpp:510
 msgid "Missing min value."
@@ -42789,7 +42828,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:645
 msgid "** Got problems while fusing shapes **\n"
-msgstr ""
+msgstr "** Problemi durante la fusione delle forme **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:649
 #: pcbnew/exporters/step/step_pcb_model.cpp:1933
@@ -42805,12 +42844,12 @@ msgstr "Avvisi"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:674
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
-msgstr ""
+msgstr "** ShapeUpgrade_UnifySameDomain ha prodotto una forma nulla **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1622
 #, c-format
 msgid "Wire not done (contour points %d): OCC error %d\n"
-msgstr ""
+msgstr "Filo non eseguito (punti di contorno %d): errore OCC %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1626
 #: pcbnew/exporters/step/step_pcb_model.cpp:1639
@@ -42823,10 +42862,12 @@ msgid ""
 "\n"
 "Wire self-interference check failed\n"
 msgstr ""
+"\n"
+"Controllo autointerferenza filo fallito\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1659
 msgid "Using non-simplified polygon.\n"
-msgstr ""
+msgstr "Utilizzo di poligoni non semplificati.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1724
 #, fuzzy
@@ -42835,7 +42876,7 @@ msgstr "Fallita creazione del branch."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1735
 msgid "** Face skipped **\n"
-msgstr ""
+msgstr "** Faccia saltata **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1902
 #, c-format
@@ -42853,6 +42894,8 @@ msgid ""
 "\n"
 "** Got problems while cutting %s number %d **\n"
 msgstr ""
+"\n"
+"** Problemi durante il taglio %s numero %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1955
 msgid "shapes"
@@ -43233,7 +43276,7 @@ msgstr "Errore nel caricamento dell'impronta %s dalla libreria '%s'."
 
 #: pcbnew/footprint_edit_frame.cpp:574
 msgid "Save as editable copy"
-msgstr ""
+msgstr "Salva come copia modificabile"
 
 #: pcbnew/footprint_edit_frame.cpp:987
 #, c-format
@@ -43537,6 +43580,7 @@ msgstr "Vincoli lunghezza: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2424
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
+"Impossibile accordare i segmenti all'interno di altri modelli di accordo."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2458
 msgid "Tune"
@@ -43789,7 +43833,7 @@ msgstr "Esporta rappresentazione IDF 3D scheda"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / GLB / BREP / XAO..."
-msgstr ""
+msgstr "STEP / GLB / BREP / XAO..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 #, fuzzy
@@ -43862,7 +43906,7 @@ msgstr "Autopiazzamento impronte"
 
 #: pcbnew/menubar_pcb_editor.cpp:446
 msgid "Multi-Channel"
-msgstr ""
+msgstr "Multi-canale"
 
 #: pcbnew/menubar_pcb_editor.cpp:455
 msgid "External Plugins"
