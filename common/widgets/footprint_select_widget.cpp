@@ -57,29 +57,21 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWind
 
 void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
 {
-    try
+    m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
+    wxCHECK_MSG( m_fp_list, /* void */, "Failed to get the footprint list from the KiWay" );
+
+    if( m_fp_list->GetCount() == 0 )
     {
-        m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
+        // If the fp-info-cache is empty (or, more likely, hasn't been created in a new
+        // project yet), load footprints the hard way.
+        FP_LIB_TABLE*        fpTable = aProject.PcbFootprintLibs( aKiway );
+        WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Loading Footprint Libraries" ), 3 );
+        FOOTPRINT_LIST_IMPL& fpList = static_cast<FOOTPRINT_LIST_IMPL&>( *m_fp_list );
 
-        if( m_fp_list->GetCount() == 0 )
-        {
-            // If the fp-info-cache is empty (or, more likely, hasn't been created in a new
-            // project yet), load footprints the hard way.
-            FP_LIB_TABLE*         fpTable = aProject.PcbFootprintLibs( aKiway );
-            WX_PROGRESS_REPORTER* progressReporter =
-                    new WX_PROGRESS_REPORTER( m_frame, _( "Loading Footprint Libraries" ), 3 );
-            static_cast<FOOTPRINT_LIST_IMPL*>( m_fp_list )
-                    ->ReadFootprintFiles( fpTable, nullptr, progressReporter );
-
-            delete progressReporter;
-        }
-
-        m_fp_filter.SetList( *m_fp_list );
+        fpList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
     }
-    catch( ... )
-    {
-        // no footprint libraries available
-    }
+
+    m_fp_filter.SetList( *m_fp_list );
 
     if( m_update )
         UpdateList();

@@ -150,7 +150,6 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
             m_queue_in.push( nickname );
     }
 
-
     loadLibs();
 
     if( !m_cancelled )

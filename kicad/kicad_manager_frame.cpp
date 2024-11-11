@@ -729,7 +729,6 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
     }
     catch( ... )
     {
-
     }
 }
 

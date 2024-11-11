@@ -88,6 +88,7 @@ bool WX_PROGRESS_REPORTER::updateUI()
         m_messageChanged = false;
     }
 
+    // Returns false when cancelled (if it's a cancellable dialog)
     bool diag = wxProgressDialog::Update( cur, message );
 
     return diag;
