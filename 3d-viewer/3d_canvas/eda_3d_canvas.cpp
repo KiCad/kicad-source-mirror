@@ -830,6 +830,11 @@ void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent& event )
     SetFocus();
     stop_editingTimeOut_Timer();
 
+    // Ensure m_camera.m_lastPosition (current mouse position) is up to date for
+    // future drag events (can be not the case when left clicking after
+    // opening a context menu)
+    OnMouseMoveCamera( event );
+
     if( !event.Dragging() && ( m_3d_render_raytracing != nullptr ) )
     {
         RAY mouseRay = getRayAtCurrentMousePosition();
