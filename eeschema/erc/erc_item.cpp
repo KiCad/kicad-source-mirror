@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ ERC_ITEM ERC_ITEM::labelDangling( ERCE_LABEL_NOT_CONNECTED,
         _( "Label not connected to anything" ),
         wxT( "label_dangling" ) );
 
-ERC_ITEM ERC_ITEM::globalLabelDangling( ERCE_GLOBLABEL,
+ERC_ITEM ERC_ITEM::globalLabelDangling( ERCE_GLOBLABEL_DANGLING,
         _( "Global label not connected anywhere else in the schematic" ),
         wxT( "global_label_dangling" ) );
 
@@ -241,6 +241,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::noConnectConnected,
             ERC_ITEM::noConnectDangling,
             ERC_ITEM::globalLabelDangling,
+            ERC_ITEM::labelDangling,
             ERC_ITEM::singleGlobalLabel,
             ERC_ITEM::sameLocalGlobalLabel,
             ERC_ITEM::wireDangling,
@@ -327,7 +328,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_BUS_ENTRY_CONFLICT:      return std::make_shared<ERC_ITEM>( netNotBusMember );
     case ERCE_BUS_TO_BUS_CONFLICT:     return std::make_shared<ERC_ITEM>( busToBusConflict );
     case ERCE_BUS_TO_NET_CONFLICT:     return std::make_shared<ERC_ITEM>( busToNetConflict );
-    case ERCE_GLOBLABEL:               return std::make_shared<ERC_ITEM>( globalLabelDangling );
+    case ERCE_GLOBLABEL_DANGLING:      return std::make_shared<ERC_ITEM>( globalLabelDangling );
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
     case ERCE_UNDEFINED_NETCLASS:      return std::make_shared<ERC_ITEM>( undefinedNetclass );
     case ERCE_SIMULATION_MODEL:        return std::make_shared<ERC_ITEM>( simulationModelIssues );

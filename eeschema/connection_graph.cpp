@@ -3210,7 +3210,7 @@ int CONNECTION_GRAPH::RunERC()
         }
 
         if( settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
-                || settings.IsTestEnabled( ERCE_GLOBLABEL ) )
+                || settings.IsTestEnabled( ERCE_GLOBLABEL_DANGLING ) )
         {
             if( !ercCheckLabels( subgraph ) )
                 error_count++;
@@ -3910,7 +3910,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
             // connected to other valid things by way of another label on the same sheet.
             if( text->IsDangling() )
             {
-                reportError( text, ERCE_LABEL_NOT_CONNECTED );
+                reportError( text, item->Type() == SCH_GLOBAL_LABEL_T ?
+                                    ERCE_GLOBLABEL_DANGLING :
+                                    ERCE_LABEL_NOT_CONNECTED );
                 return false;
             }
 
@@ -3966,7 +3968,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         switch( type )
         {
         case SCH_GLOBAL_LABEL_T:
-            if( !settings.IsTestEnabled( ERCE_GLOBLABEL ) )
+            if( !settings.IsTestEnabled( ERCE_GLOBLABEL_DANGLING ) )
                 continue;
 
             break;
@@ -3999,14 +4001,14 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
             if( allPins == 1 && !has_nc )
             {
-                reportError( text, type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL
+                reportError( text, type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL_DANGLING
                                                               : ERCE_LABEL_NOT_CONNECTED );
                 ok = false;
             }
 
             if( allPins == 0 )
             {
-                reportError( text, type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL
+                reportError( text, type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL_DANGLING
                                                               : ERCE_LABEL_NOT_CONNECTED );
                 ok = false;
             }

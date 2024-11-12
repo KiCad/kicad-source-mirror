@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018-2020 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -69,7 +69,7 @@ enum ERCE_T
                                   ///<   one net.
     ERCE_BUS_TO_NET_CONFLICT,     ///< A bus wire is graphically connected to a net port/pin
                                   ///<   (or vice versa).
-    ERCE_GLOBLABEL,               ///< A global label is unique.
+    ERCE_GLOBLABEL_DANGLING,      ///< A global label is dangling.
     ERCE_UNRESOLVED_VARIABLE,     ///< A text variable could not be resolved.
     ERCE_UNDEFINED_NETCLASS,      ///< A netclass was referenced but not defined.
     ERCE_SIMULATION_MODEL,        ///< An error was found in the simulation model.

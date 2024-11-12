@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 CERN
+ * Copyright (C) 2024 CERN
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -101,7 +101,7 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_ERCSeverities[ERCE_SIMILAR_LABEL_AND_POWER] = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_SINGLE_GLOBAL_LABEL]     = RPT_SEVERITY_IGNORE;
     m_ERCSeverities[ERCE_SAME_LOCAL_GLOBAL_LABEL] = RPT_SEVERITY_WARNING;
-    m_ERCSeverities[ERCE_GLOBLABEL]               = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_GLOBLABEL_DANGLING]      = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_DRIVER_CONFLICT]         = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_BUS_ENTRY_CONFLICT]      = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES]       = RPT_SEVERITY_WARNING;
