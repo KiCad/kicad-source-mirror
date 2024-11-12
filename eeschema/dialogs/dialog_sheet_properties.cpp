@@ -513,7 +513,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             }
         }
         // If we are drawing a sheet from a design block/sheet import, we need to copy the sheet to the current directory.
-        else if( m_sourceSheetFilename )
+        else if( m_sourceSheetFilename && !m_sourceSheetFilename->IsEmpty() )
         {
             loadFromFile = true;
 
