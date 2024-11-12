@@ -108,7 +108,7 @@ BOOST_FIXTURE_TEST_CASE( ERCSingleGlobalLabels, ERC_REGRESSION_TEST_FIXTURE )
         settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
 
         // Configure the rules under test
-        settings.m_ERCSeverities[ERCE_GLOBLABEL] = RPT_SEVERITY_IGNORE;
+        settings.m_ERCSeverities[ERCE_GLOBLABEL_DANGLING] = RPT_SEVERITY_IGNORE;
         settings.m_ERCSeverities[ERCE_SINGLE_GLOBAL_LABEL] = RPT_SEVERITY_ERROR;
 
         SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
