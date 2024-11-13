@@ -298,10 +298,6 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
             return true;
     }
 
-    // TOOD(JE) padstacks
-    TEST( a->GetShape( PADSTACK::ALL_LAYERS ), b->GetShape( PADSTACK::ALL_LAYERS ),
-          wxString::Format( _( "%s pad shape type differs." ), PAD_DESC( a ) ) );
-
     TEST( a->GetAttribute(), b->GetAttribute(),
           wxString::Format( _( "%s pad type differs." ), PAD_DESC( a ) ) );
     TEST( a->GetProperty(), b->GetProperty(),
@@ -312,25 +308,44 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
             b->GetFPRelativeOrientation().Normalize().AsDegrees(),
             wxString::Format( _( "%s orientation differs." ), PAD_DESC( a ) ) );
 
-    TEST( a->GetSize( PADSTACK::ALL_LAYERS ), b->GetSize( PADSTACK::ALL_LAYERS ),
-          wxString::Format( _( "%s size differs." ), PAD_DESC( a ) ) );
-    TEST( a->GetDelta( PADSTACK::ALL_LAYERS ), b->GetDelta( PADSTACK::ALL_LAYERS ),
-          wxString::Format( _( "%s trapezoid delta differs." ), PAD_DESC( a ) ) );
+    std::vector<PCB_LAYER_ID> layers = a->Padstack().UniqueLayers();
+    const BOARD* board = a->GetBoard();
+    wxString layerName;
 
-    TEST_D( a->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS ),
-            b->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS ),
-            wxString::Format( _( "%s rounded corners differ." ), PAD_DESC( a ) ) );
+    for( PCB_LAYER_ID layer : layers )
+    {
+        layerName = board ? board->GetLayerName( layer ) : LayerName( layer );
 
-    TEST_D( a->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
-            b->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
-            wxString::Format( _( "%s chamfered corner sizes differ." ), PAD_DESC( a ) ) );
+        TEST( a->GetShape( layer ), b->GetShape( layer ),
+                  wxString::Format( _( "%s pad shape type differs on layer %s." ), PAD_DESC( a ),
+                                    layerName ) );
 
-    TEST( a->GetChamferPositions( PADSTACK::ALL_LAYERS ),
-          b->GetChamferPositions( PADSTACK::ALL_LAYERS ),
-          wxString::Format( _( "%s chamfered corners differ." ), PAD_DESC( a ) ) );
+        TEST( a->GetSize( layer ), b->GetSize( layer ),
+              wxString::Format( _( "%s size differs on layer %s." ), PAD_DESC( a ), layerName ) );
 
-    TEST_PT( a->GetOffset( PADSTACK::ALL_LAYERS ), b->GetOffset( PADSTACK::ALL_LAYERS ),
-             wxString::Format( _( "%s shape offset from hole differs." ), PAD_DESC( a ) ) );
+        TEST( a->GetDelta( layer ), b->GetDelta( layer ),
+              wxString::Format( _( "%s trapezoid delta differs on layer %s." ), PAD_DESC( a ),
+                                layerName ) );
+
+        TEST_D( a->GetRoundRectRadiusRatio( layer ),
+                b->GetRoundRectRadiusRatio( layer ),
+                wxString::Format( _( "%s rounded corners differ on layer %s." ), PAD_DESC( a ),
+                                  layerName ) );
+
+        TEST_D( a->GetChamferRectRatio( layer ),
+                b->GetChamferRectRatio( layer ),
+                wxString::Format( _( "%s chamfered corner sizes differ on layer %s." ),
+                                  PAD_DESC( a ), layerName ) );
+
+        TEST( a->GetChamferPositions( layer ),
+              b->GetChamferPositions( layer ),
+              wxString::Format( _( "%s chamfered corners differ on layer %s." ), PAD_DESC( a ),
+                                layerName ) );
+
+        TEST_PT( a->GetOffset( layer ), b->GetOffset( layer ),
+                 wxString::Format( _( "%s shape offset from hole differs on layer %s." ),
+                                   PAD_DESC( a ), layerName ) );
+    }
 
     TEST( a->GetDrillShape(), b->GetDrillShape(),
           wxString::Format( _( "%s drill shape differs." ), PAD_DESC( a ) ) );
@@ -351,31 +366,43 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
         diff = true;
 
     bool primitivesDiffer = false;
+    PCB_LAYER_ID firstDifferingLayer = UNDEFINED_LAYER;
 
-    if( a->GetPrimitives( PADSTACK::ALL_LAYERS ).size() !=
-        b->GetPrimitives( PADSTACK::ALL_LAYERS ).size() )
-    {
-        primitivesDiffer = true;
-    }
-    else
-    {
-        for( size_t ii = 0; ii < a->GetPrimitives( PADSTACK::ALL_LAYERS ).size(); ++ii )
+    a->Padstack().ForEachUniqueLayer(
+        [&]( PCB_LAYER_ID aLayer )
         {
-            if( primitiveNeedsUpdate( a->GetPrimitives( PADSTACK::ALL_LAYERS )[ii],
-                                      b->GetPrimitives( PADSTACK::ALL_LAYERS )[ii] ) )
+            if( a->GetPrimitives( aLayer ).size() !=
+                b->GetPrimitives( aLayer ).size() )
             {
                 primitivesDiffer = true;
-                break;
             }
-        }
-    }
+            else
+            {
+                for( size_t ii = 0; ii < a->GetPrimitives( aLayer ).size(); ++ii )
+                {
+                    if( primitiveNeedsUpdate( a->GetPrimitives( aLayer )[ii],
+                                              b->GetPrimitives( aLayer )[ii] ) )
+                    {
+                        primitivesDiffer = true;
+                        break;
+                    }
+                }
+            }
+
+            if( primitivesDiffer && firstDifferingLayer == UNDEFINED_LAYER )
+                firstDifferingLayer = aLayer;
+        } );
+
 
     if( primitivesDiffer )
     {
         diff = true;
+        layerName = board ? board->GetLayerName( firstDifferingLayer )
+                          : LayerName( firstDifferingLayer );
 
         if( aReporter )
-            aReporter->Report( wxString::Format( _( "%s shape primitives differ." ), PAD_DESC( a ) ) );
+            aReporter->Report( wxString::Format( _( "%s shape primitives differ on layer %s." ),
+                                                 PAD_DESC( a ), layerName ) );
         else
             return true;
     }
