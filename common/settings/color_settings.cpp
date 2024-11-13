@@ -126,13 +126,9 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "board.grid",                     LAYER_GRID               );
     CLR( "board.grid_axes",                LAYER_GRID_AXES          );
     CLR( "board.pad_plated_hole",          LAYER_PAD_PLATEDHOLES    );
-    CLR( "board.pad_through_hole",         LAYER_PADS_TH            );
     CLR( "board.plated_hole",              LAYER_NON_PLATEDHOLES    );
     CLR( "board.ratsnest",                 LAYER_RATSNEST           );
-    CLR( "board.via_blind_buried",         LAYER_VIA_BBLIND         );
     CLR( "board.via_hole",                 LAYER_VIA_HOLES          );
-    CLR( "board.via_micro",                LAYER_VIA_MICROVIA       );
-    CLR( "board.via_through",              LAYER_VIA_THROUGH        );
     CLR( "board.worksheet",                LAYER_DRAWINGSHEET       );
     CLR( "board.page_limits",              LAYER_PAGE_LIMITS        );
     CLR( "board.track_net_names",          NETNAMES_LAYER_ID_START  );

@@ -1684,24 +1684,12 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     // Handle Render tab switches
-    if( ( GetAttribute() == PAD_ATTRIB::PTH || GetAttribute() == PAD_ATTRIB::NPTH )
-         && !aView->IsLayerVisible( LAYER_PADS_TH ) )
-    {
-        return HIDE;
-    }
-
     const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( aLayer );
 
     if( !IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
         return HIDE;
 
     if( IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-        return HIDE;
-
-    if( IsFrontLayer( pcbLayer ) && !aView->IsLayerVisible( LAYER_PADS_SMD_FR ) )
-        return HIDE;
-
-    if( IsBackLayer( pcbLayer ) && !aView->IsLayerVisible( LAYER_PADS_SMD_BK ) )
         return HIDE;
 
     LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();

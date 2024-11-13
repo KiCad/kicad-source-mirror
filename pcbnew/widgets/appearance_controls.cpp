@@ -335,7 +335,6 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR(),
     RR( _HKI( "Footprints Front" ),   LAYER_FOOTPRINTS_FR,      _HKI( "Show footprints that are on board's front" ) ),
     RR( _HKI( "Footprints Back" ),    LAYER_FOOTPRINTS_BK,      _HKI( "Show footprints that are on board's back" ) ),
-    RR( _HKI( "Through-hole Pads" ),  LAYER_PADS_TH,            _HKI( "Show through-hole pads" ) ),
     RR( _HKI( "Values" ),             LAYER_FP_VALUES,          _HKI( "Show footprint values" ) ),
     RR( _HKI( "References" ),         LAYER_FP_REFERENCES,      _HKI( "Show footprint references" ) ),
     RR( _HKI( "Footprint Text" ),     LAYER_FP_TEXT,            _HKI( "Show all footprint text" ) ),
@@ -360,7 +359,6 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_PADS,
             LAYER_ZONES,
             LAYER_SHAPES,
-            LAYER_PADS_TH,
             LAYER_FP_VALUES,
             LAYER_FP_REFERENCES,
             LAYER_FP_TEXT,
@@ -3032,11 +3030,6 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
 
     if( IsCopperLayer( layer ) )
         view->UpdateLayerColor( ZONE_LAYER_FOR( layer ) );
-
-    if( layer == F_Cu )
-        view->UpdateLayerColor( LAYER_PADS_SMD_FR );
-    else if( layer == B_Cu )
-        view->UpdateLayerColor( LAYER_PADS_SMD_BK );
 
     // Update the bitmap of the layer box
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )

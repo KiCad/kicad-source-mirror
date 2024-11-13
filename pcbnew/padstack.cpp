@@ -914,7 +914,7 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
         // For these, just give the front copper geometry, it doesn't matter.
     case LAYER_PAD_NETNAMES:
     case LAYER_VIA_NETNAMES:
-    case LAYER_PADS_TH:
+    case LAYER_PADS:
     case LAYER_PAD_PLATEDHOLES:
     case LAYER_VIA_HOLES:
     case LAYER_PAD_HOLEWALLS:

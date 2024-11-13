@@ -848,8 +848,6 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_VIA_THROUGH,
         // LAYER_HIDDEN_TEXT,    // DEPCREATED SINCE 9.0. Invisible text hidden by default
         LAYER_ANCHOR,
-        LAYER_PADS_SMD_FR,
-        LAYER_PADS_SMD_BK,
         LAYER_RATSNEST,
         LAYER_GRID,
         LAYER_GRID_AXES,
@@ -859,7 +857,6 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_FP_VALUES,
         LAYER_FP_REFERENCES,
         LAYER_TRACKS,
-        LAYER_PADS_TH,
         LAYER_PAD_PLATEDHOLES,
         LAYER_NON_PLATEDHOLES,
         LAYER_PAD_HOLEWALLS,

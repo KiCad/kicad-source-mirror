@@ -152,10 +152,6 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     m_layerColors[LAYER_PAD_PLATEDHOLES] = aSettings->GetColor( LAYER_PCB_BACKGROUND );
     m_layerColors[LAYER_VIA_NETNAMES]    = aSettings->GetColor( LAYER_VIA_NETNAMES );
     m_layerColors[LAYER_PAD_NETNAMES]    = aSettings->GetColor( LAYER_PAD_NETNAMES );
-    m_layerColors[LAYER_PADS_SMD_FR]     = aSettings->GetColor( F_Cu );
-    m_layerColors[LAYER_PADS_SMD_BK]     = aSettings->GetColor( B_Cu );
-    m_layerColors[LAYER_PAD_FR_NETNAMES] = aSettings->GetColor( LAYER_PAD_NETNAMES );
-    m_layerColors[LAYER_PAD_BK_NETNAMES] = aSettings->GetColor( LAYER_PAD_NETNAMES );
 
     // Netnames for copper layers
     const COLOR4D lightLabel = aSettings->GetColor( NETNAMES_LAYER_ID_START );
@@ -218,10 +214,12 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         int            holeLayer = aLayer;
         int            annularRingLayer = UNDEFINED_LAYER;
 
+        // TODO(JE) padstacks -- this won't work, we don't know what the annular ring layer is
+        // Inserting F_Cu here for now.
         if( pad && pad->GetAttribute() == PAD_ATTRIB::PTH )
-            annularRingLayer = LAYER_PADS_TH;
+            annularRingLayer = F_Cu;
         else if( via )
-            annularRingLayer = LAYER_VIA_THROUGH;
+            annularRingLayer = F_Cu;
 
         if( annularRingLayer != UNDEFINED_LAYER
                 && m_layerColors[ holeLayer ] == m_layerColors[ annularRingLayer ] )
@@ -237,11 +235,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
             aLayer = aLayer - LAYER_ZONE_START;
     }
 
-    // Hole walls should pull from the copper layer
-    if( aLayer == LAYER_PAD_HOLEWALLS )
-        aLayer = LAYER_PADS_TH;
-    else if( aLayer == LAYER_VIA_HOLEWALLS )
-        aLayer = LAYER_VIA_THROUGH;
+    // Hole walls should pull from the via hole layer since it does not vary with active copper
+    // layer.  For simplicity of configuration, pad hole walls can use the via color.
+    else if( aLayer == LAYER_VIA_HOLEWALLS || aLayer == LAYER_PAD_HOLEWALLS )
+        aLayer = LAYER_VIA_HOLES;
 
     // Show via mask layers if appropriate
     if( aLayer == LAYER_VIA_THROUGH && !m_isPrinting )
@@ -345,9 +342,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
         switch( originalLayer )
         {
-        case LAYER_PADS_SMD_FR:
-        case LAYER_PADS_SMD_BK:
-        case LAYER_PADS_TH:
+        // TODO(JE) not sure if this is needed
+        case LAYER_PADS:
         {
             const PAD* pad = static_cast<const PAD*>( aItem );
 

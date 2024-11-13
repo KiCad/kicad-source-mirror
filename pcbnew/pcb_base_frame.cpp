@@ -748,9 +748,7 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
     guide.SetIgnoreFPTextOnFront( !m_pcb->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFootprintsOnBack( !m_pcb->IsElementVisible( LAYER_FOOTPRINTS_BK ) );
     guide.SetIgnoreFootprintsOnFront( !m_pcb->IsElementVisible( LAYER_FOOTPRINTS_FR ) );
-    guide.SetIgnorePadsOnBack( ! m_pcb->IsElementVisible( LAYER_PADS_SMD_BK ) );
-    guide.SetIgnorePadsOnFront( ! m_pcb->IsElementVisible( LAYER_PADS_SMD_FR ) );
-    guide.SetIgnoreThroughHolePads( ! m_pcb->IsElementVisible( LAYER_PADS_TH ) );
+    guide.SetIgnoreThroughHolePads( ! m_pcb->IsElementVisible( LAYER_PADS ) );
     guide.SetIgnoreFPValues( !m_pcb->IsElementVisible( LAYER_FP_VALUES ) );
     guide.SetIgnoreFPReferences( !m_pcb->IsElementVisible( LAYER_FP_REFERENCES ) );
     guide.SetIgnoreThroughVias( ! m_pcb->IsElementVisible( LAYER_VIAS ) );

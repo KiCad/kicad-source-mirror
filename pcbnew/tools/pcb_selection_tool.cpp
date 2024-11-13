@@ -779,9 +779,9 @@ const GENERAL_COLLECTORS_GUIDE PCB_SELECTION_TOOL::getCollectorsGuide() const
     guide.SetIgnoreFPTextOnFront( !board()->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFootprintsOnBack( !board()->IsElementVisible( LAYER_FOOTPRINTS_BK ) );
     guide.SetIgnoreFootprintsOnFront( !board()->IsElementVisible( LAYER_FOOTPRINTS_FR ) );
-    guide.SetIgnorePadsOnBack( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_SMD_BK ) );
-    guide.SetIgnorePadsOnFront( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_SMD_FR ) );
-    guide.SetIgnoreThroughHolePads( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_TH ) );
+    guide.SetIgnorePadsOnBack( padsDisabled );
+    guide.SetIgnorePadsOnFront( padsDisabled );
+    guide.SetIgnoreThroughHolePads( padsDisabled );
     guide.SetIgnoreFPValues( !board()->IsElementVisible( LAYER_FP_VALUES ) );
     guide.SetIgnoreFPReferences( !board()->IsElementVisible( LAYER_FP_REFERENCES ) );
     guide.SetIgnoreThroughVias( ! board()->IsElementVisible( LAYER_VIAS ) );
@@ -3049,10 +3049,6 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            // Check render mode (from the Items tab) first
-            if( !board()->IsElementVisible( LAYER_PADS_TH ) )
-                return false;
-
             // A pad's hole is visible on every layer the pad is visible on plus many layers the
             // pad is not visible on -- so we only need to check for any visible hole layers.
             if( !( visibleLayers() & LSET::PhysicalLayersMask() ).any() )
@@ -3060,12 +3056,6 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         }
         else
         {
-            // Check render mode (from the Items tab) first
-            if( pad->IsOnLayer( F_Cu ) && !board()->IsElementVisible( LAYER_PADS_SMD_FR ) )
-                return false;
-            else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PADS_SMD_BK ) )
-                return false;
-
             if( !( pad->GetLayerSet() & visibleLayers() ).any() )
                 return false;
         }

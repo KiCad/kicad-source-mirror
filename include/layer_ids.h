@@ -201,8 +201,8 @@ enum GAL_LAYER_ID: int
 //  LAYER_MOD_TEXT_BK deprecated                  +  6,
 //  LAYER_HIDDEN_TEXT        = GAL_LAYER_ID_START +  7, ///< DEPRECATED, UNUSED SINCE 9.0. text marked as invisible
     LAYER_ANCHOR             = GAL_LAYER_ID_START +  8, ///< anchor of items having an anchor point (texts, footprints)
-    LAYER_PADS_SMD_FR        = GAL_LAYER_ID_START +  9, ///< smd pads, front layer
-    LAYER_PADS_SMD_BK        = GAL_LAYER_ID_START + 10, ///< smd pads, back layer
+//  LAYER_PADS_SMD_FR        = GAL_LAYER_ID_START +  9, ///< Deprecated since 9.0
+//  LAYER_PADS_SMD_BK        = GAL_LAYER_ID_START + 10, ///< Deprecated since 9.0
     LAYER_RATSNEST           = GAL_LAYER_ID_START + 11,
     LAYER_GRID               = GAL_LAYER_ID_START + 12,
     LAYER_GRID_AXES          = GAL_LAYER_ID_START + 13,
@@ -212,7 +212,7 @@ enum GAL_LAYER_ID: int
     LAYER_FP_VALUES          = GAL_LAYER_ID_START + 17, ///< show footprints values (when texts are visible)
     LAYER_FP_REFERENCES      = GAL_LAYER_ID_START + 18, ///< show footprints references (when texts are visible)
     LAYER_TRACKS             = GAL_LAYER_ID_START + 19,
-    LAYER_PADS_TH            = GAL_LAYER_ID_START + 20, ///< multilayer pads, usually with holes
+//  LAYER_PADS_TH            = GAL_LAYER_ID_START + 20, ///< Deprecated since 9.0
     LAYER_PAD_PLATEDHOLES    = GAL_LAYER_ID_START + 21, ///< to draw pad holes (plated)
     LAYER_VIA_HOLES          = GAL_LAYER_ID_START + 22, ///< to draw via holes (pad holes do not use this layer)
     LAYER_DRC_ERROR          = GAL_LAYER_ID_START + 23, ///< layer for drc markers with SEVERITY_ERROR
@@ -697,12 +697,6 @@ inline int GetNetnameLayer( int aLayer )
 {
     if( IsCopperLayer( aLayer ) )
         return NETNAMES_LAYER_INDEX( aLayer );
-    else if( aLayer == LAYER_PADS_TH )
-        return LAYER_PAD_NETNAMES;
-    else if( aLayer == LAYER_PADS_SMD_FR )
-        return LAYER_PAD_FR_NETNAMES;
-    else if( aLayer == LAYER_PADS_SMD_BK )
-        return LAYER_PAD_BK_NETNAMES;
     else if( IsViaPadLayer( aLayer ) )
         return LAYER_VIA_NETNAMES;
 

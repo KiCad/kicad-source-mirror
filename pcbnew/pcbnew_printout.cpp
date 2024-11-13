@@ -171,9 +171,6 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_FP_REFERENCES );
         setVisibility( LAYER_FP_TEXT );
         setVisibility( LAYER_PADS );
-        setVisibility( LAYER_PADS_SMD_FR );
-        setVisibility( LAYER_PADS_SMD_BK );
-        setVisibility( LAYER_PADS_TH );
 
         setVisibility( LAYER_TRACKS );
         setVisibility( LAYER_VIAS );
@@ -194,18 +191,8 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     }
     else
     {
-        // Draw layers that must be not visible on printing are set to an invisible layer
-        // LAYER_PADS_SMD_FR, LAYER_PADS_SMD_BK and LAYER_PADS_TH must be enabled to print pads on
-        // technical layers, but not the pad on copper layer(s) if they are not enabled
-
-        if( !aLayerSet.test( F_Cu ) )
-            renderSettings->SetLayerColor( LAYER_PADS_SMD_FR, invisible_color );
-
-        if( !aLayerSet.test( B_Cu ) )
-            renderSettings->SetLayerColor( LAYER_PADS_SMD_BK, invisible_color );
-
         // Enable items on copper layers, but do not draw holes
-        for( GAL_LAYER_ID layer : { LAYER_PADS_TH, LAYER_VIA_THROUGH, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND } )
+        for( GAL_LAYER_ID layer : { LAYER_VIA_THROUGH, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND } )
         {
             if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
                 aView.SetLayerVisible( layer, true );
@@ -222,7 +209,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
                     LAYER_FOOTPRINTS_FR, LAYER_FOOTPRINTS_BK,
                     LAYER_TRACKS, LAYER_VIAS,
                     LAYER_ZONES, LAYER_SHAPES,
-                    LAYER_PADS, LAYER_PADS_SMD_FR, LAYER_PADS_SMD_BK, LAYER_PADS_TH
+                    LAYER_PADS
                 };
 
         for( int layer : alwaysEnabled )
