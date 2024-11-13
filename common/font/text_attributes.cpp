@@ -35,7 +35,8 @@ TEXT_ATTRIBUTES::TEXT_ATTRIBUTES( KIFONT::FONT* aFont ) :
     m_Visible( true ),
     m_Mirrored( false ),
     m_Multiline( true ),
-    m_KeepUpright( false )
+    m_KeepUpright( false ),
+    m_StoredStrokeWidth( 0 )
 {
 }
 

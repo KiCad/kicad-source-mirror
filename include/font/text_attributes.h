@@ -145,6 +145,7 @@ public:
 
     // If true, keep rotation angle between -90...90 degrees for readability
     bool              m_KeepUpright;
+    int               m_StoredStrokeWidth;
 };
 
 
