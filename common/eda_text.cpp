@@ -251,9 +251,24 @@ void EDA_TEXT::SetBold( bool aBold )
             const int size = std::min( m_attributes.m_Size.x, m_attributes.m_Size.y );
 
             if( aBold )
+            {
+                m_attributes.m_StoredStrokeWidth = m_attributes.m_StrokeWidth;
                 m_attributes.m_StrokeWidth = GetPenSizeForBold( size );
+            }
             else
-                m_attributes.m_StrokeWidth = GetPenSizeForNormal( size );
+            {
+                // Restore the original stroke width from `m_StoredStrokeWidth` if it was previously stored,
+                // resetting the width after unbolding.
+                if( m_attributes.m_StoredStrokeWidth )
+                    m_attributes.m_StrokeWidth = m_attributes.m_StoredStrokeWidth;
+                else
+                {
+                    m_attributes.m_StrokeWidth = GetPenSizeForNormal( size );
+                    // Sets `m_StrokeWidth` to the normal pen size and stores it in `m_StoredStrokeWidth`
+                    // as the default, but only if the bold option was applied before this feature was implemented.
+                    m_attributes.m_StoredStrokeWidth = m_attributes.m_StrokeWidth;
+                }
+            }
         }
         else
         {
