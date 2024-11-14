@@ -23,6 +23,7 @@
 #include <pgm_base.h>
 #include <board.h>
 #include <layer_ids.h>
+#include <layer_range.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <panel_pcbnew_color_settings.h>
 #include <math/vector2wx.h>
@@ -760,8 +761,13 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
                } );
 
     // Don't sort aBoard layers by name
-    for( int i = PCBNEW_LAYER_ID_START; i <= User_9; ++i )
-        m_validLayers.insert( m_validLayers.begin() + i, i );
+    size_t i = 0;
+
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, MAX_CU_LAYERS ) )
+        m_validLayers.insert( m_validLayers.begin() + i++, layer );
+
+    for( PCB_LAYER_ID layer : LSET::AllNonCuMask().TechAndUserUIOrder() )
+        m_validLayers.insert( m_validLayers.begin() + i++, layer );
 
     for( int layer : m_validLayers )
     {
