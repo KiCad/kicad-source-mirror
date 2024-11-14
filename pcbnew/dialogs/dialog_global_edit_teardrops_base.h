@@ -92,6 +92,7 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_curvePointsCtrl;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class

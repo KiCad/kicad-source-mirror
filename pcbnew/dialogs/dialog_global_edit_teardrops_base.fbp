@@ -3273,7 +3273,7 @@
           <property name="flag">wxEXPAND|wxALL</property>
           <property name="proportion">0</property>
           <object class="wxStdDialogButtonSizer" expanded="true">
-            <property name="Apply">0</property>
+            <property name="Apply">1</property>
             <property name="Cancel">1</property>
             <property name="ContextHelp">0</property>
             <property name="Help">0</property>

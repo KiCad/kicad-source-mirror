@@ -173,7 +173,8 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::DIALOG_GLOBAL_EDIT_TEARDROPS( PCB_EDIT_FRAME* aPar
 
     buildFilterLists();
 
-    SetupStandardButtons();
+    SetupStandardButtons( { { wxID_OK, _( "Apply and Close" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     m_netFilter->Connect( FILTERED_ITEM_SELECTED,
                           wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS::OnNetFilterSelect ),
@@ -589,6 +590,7 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
     }
 #endif
 
+    m_parent->Refresh();
     return true;
 }
 
