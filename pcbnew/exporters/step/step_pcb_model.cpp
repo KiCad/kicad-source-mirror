@@ -104,6 +104,8 @@
 
 #include <BRepBndLib.hxx>
 #include <Bnd_BoundSortBox.hxx>
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
 
 #include <Geom_Curve.hxx>
 #include <Geom_TrimmedCurve.hxx>
@@ -2300,6 +2302,7 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
     const TopoDS_Shape shape = getOneShape( s_assy );
 
     std::map<wxString, std::vector<int>> groups[4];
+    std::map<wxString, double>           groupAreas;
     TopExp_Explorer                      exp;
     int                                  faceIndex = 0;
 
@@ -2332,6 +2335,12 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
             {
                 // Push as a face group
                 groups[2][padKey].push_back( faceIndex );
+
+                GProp_GProps system;
+                BRepGProp::SurfaceProperties( subShape, system );
+
+                double surfaceArea = system.Mass() / 1e6; // Convert to meters^2
+                groupAreas[padKey] = surfaceArea;
             }
         }
 
@@ -2398,6 +2407,12 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
     file << "  <groups count=\""
          << groups[0].size() + groups[1].size() + groups[2].size() + groups[3].size() << "\">"
          << std::endl;
+
+    int groupNumber = 1;
+
+    ReportMessage( "Pad definitions:\n" );
+    ReportMessage( "Number\tName\tArea (m^2)\n" );
+
     for( int dim = 0; dim <= 3; dim++ )
     {
         std::string label = c_dimLabel[dim];
@@ -2425,8 +2440,15 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
                 file << "      <element index=\"" << index << "\"/>" << std::endl;
             }
             file << "    </group>" << std::endl;
+
+            ReportMessage( wxString::Format( "%d\t%s\t%g\n", groupNumber, name, groupAreas[name] ) );
+
+            groupNumber++;
         }
     }
+
+    ReportMessage( "\n" );
+
     file << "  </groups>" << std::endl;
     file << "  <fields count=\"0\"/>" << std::endl;
     file << "</XAO>" << std::endl;
