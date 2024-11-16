@@ -57,9 +57,9 @@ const GENERAL_COLLECTORS_GUIDE PCB_TEST_SELECTION_TOOL::getCollectorsGuide() con
     guide.SetIgnoreFPTextOnFront( !board()->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFootprintsOnBack( !board()->IsElementVisible( LAYER_FOOTPRINTS_BK ) );
     guide.SetIgnoreFootprintsOnFront( !board()->IsElementVisible( LAYER_FOOTPRINTS_FR ) );
-    guide.SetIgnorePadsOnBack( padsDisabled || !board()->IsElementVisible( LAYER_PADS_SMD_BK ) );
-    guide.SetIgnorePadsOnFront( padsDisabled || !board()->IsElementVisible( LAYER_PADS_SMD_FR ) );
-    guide.SetIgnoreThroughHolePads( padsDisabled || !board()->IsElementVisible( LAYER_PADS_TH ) );
+    guide.SetIgnorePadsOnBack( padsDisabled );
+    guide.SetIgnorePadsOnFront( padsDisabled );
+    guide.SetIgnoreThroughHolePads( padsDisabled );
     guide.SetIgnoreFPValues( !board()->IsElementVisible( LAYER_FP_VALUES ) );
     guide.SetIgnoreFPReferences( !board()->IsElementVisible( LAYER_FP_REFERENCES ) );
     guide.SetIgnoreThroughVias( !board()->IsElementVisible( LAYER_VIAS ) );
