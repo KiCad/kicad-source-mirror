@@ -70,6 +70,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		virtual void OnMoveDownClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRepourCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateDisplayedZonesClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOk( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

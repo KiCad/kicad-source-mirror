@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Ethan Chien <liangtie.qian@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ protected:
     void OnViewZonesOverviewOnLeftUp( wxMouseEvent& aEvent ) override;
 	void onDialogResize( wxSizeEvent& event ) override;
 
-    void OnOk( wxCommandEvent& aEvt );
+    void OnOk( wxCommandEvent& aEvt ) override;
 
 #if wxUSE_DRAG_AND_DROP
     void OnBeginDrag( wxDataViewEvent& aEvent );

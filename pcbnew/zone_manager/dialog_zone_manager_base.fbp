@@ -688,6 +688,7 @@
                 <property name="minimum_size"></property>
                 <property name="name">m_sdbSizer</property>
                 <property name="permission">protected</property>
+                <event name="OnOKButtonClick">OnOk</event>
               </object>
             </object>
           </object>

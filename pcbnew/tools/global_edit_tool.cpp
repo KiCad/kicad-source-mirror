@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,6 +241,11 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
 
     if( dialogResult == wxID_CANCEL )
         return 0;
+
+    // Ensure all zones are deselected before make any change in view, to avoid
+    // dangling pointers in EDIT_POINT
+    PCB_SELECTION_TOOL* selTool = editFrame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    selTool->ClearSelection();
 
     wxBusyCursor dummy;
 
