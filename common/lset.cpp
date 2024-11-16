@@ -614,11 +614,11 @@ LSET& LSET::Flip( int aCopperLayersCount )
         LSET internalMask = oldMask & InternalCuMask();
         int  innerLayerCount = aCopperLayersCount - 2;
 
-        for( int ii = 0; ii < innerLayerCount; ii++ )
+        for( int ii = 1; ii <= innerLayerCount; ii++ )
         {
-            if( internalMask.test( ( innerLayerCount - ii ) * 2 + In1_Cu ) )
+            if( internalMask.test( ( innerLayerCount - ii ) * 2 + B_Cu ) )
             {
-                set( ii * 2 + In1_Cu );
+                set( ii * 2 + B_Cu );
             }
         }
     }
