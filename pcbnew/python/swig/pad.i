@@ -34,6 +34,18 @@ const int PAD_DRILL_SHAPE_OBLONG = (const int)PAD_DRILL_SHAPE::OBLONG;
     VECTOR2I GetOffset() { return $self->GetOffset( F_Cu ); }
     void SetOffset( VECTOR2I aOffset ) { $self->SetOffset( F_Cu, aOffset ); }
 
+    double GetRoundRectCornerRadius() { return $self->GetRoundRectCornerRadius( F_Cu ); }
+    void SetRoundRectCornerRadius( double aRadius ) { $self->SetRoundRectCornerRadius( F_Cu, aRadius ); }
+
+    double GetRoundRectRadiusRatio() { return $self->GetRoundRectRadiusRatio( F_Cu ); }
+    void SetRoundRectRadiusRatio( double aRatio ) { $self->SetRoundRectRadiusRatio( F_Cu, aRatio ); }
+
+    double GetChamferRectRatio() { return $self->GetChamferRectRatio( F_Cu ); }
+    void SetChamferRectRatio( double aRatio ) { $self->SetChamferRectRatio( F_Cu, aRatio ); }
+
+    int GetChamferPositions() { return $self->GetChamferPositions( F_Cu ); }
+    void SetChamferPositions( int aPositions ) { $self->SetChamferPositions( F_Cu, aPositions ); }
+
     %pythoncode
     %{
 

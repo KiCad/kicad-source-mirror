@@ -97,8 +97,13 @@
       """ Sets footprint fields map. """
       for k, v in fields.items():
         self.SetField(k, v)
-
     %}
+
+    // Compatibility shim
+    const BOX2I GetBoundingBox( bool aIncludeText, bool includeHiddenText ) const
+    {
+        return ( $self )->GetBoundingBox( aIncludeText );
+    }
 }
 
 
