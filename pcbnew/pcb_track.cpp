@@ -1427,7 +1427,7 @@ void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 
     aLayers[0] = LAYER_VIA_HOLES;
     aLayers[1] = LAYER_VIA_HOLEWALLS;
-    aLayers[2] = LAYER_VIA_NETNAMES;
+    aLayers[2] = LAYER_PAD_NETNAMES;    // To avoid layer ordering issues
     aCount = 3;
 
     LAYER_RANGE layers( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS );

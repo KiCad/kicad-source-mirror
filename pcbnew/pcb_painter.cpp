@@ -150,7 +150,6 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 
     // Colors for layers that aren't theme-able
     m_layerColors[LAYER_PAD_PLATEDHOLES] = aSettings->GetColor( LAYER_PCB_BACKGROUND );
-    m_layerColors[LAYER_VIA_NETNAMES]    = aSettings->GetColor( LAYER_VIA_NETNAMES );
     m_layerColors[LAYER_PAD_NETNAMES]    = aSettings->GetColor( LAYER_PAD_NETNAMES );
 
     // Netnames for copper layers

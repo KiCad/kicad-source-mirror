@@ -165,7 +165,6 @@ enum NETNAMES_LAYER_ID: int
     LAYER_PAD_FR_NETNAMES,
     LAYER_PAD_BK_NETNAMES,
     LAYER_PAD_NETNAMES,
-    LAYER_VIA_NETNAMES,
 
     NETNAMES_LAYER_ID_END
 };
@@ -695,10 +694,8 @@ KICOMMON_API PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCou
  */
 inline int GetNetnameLayer( int aLayer )
 {
-    if( IsCopperLayer( aLayer ) )
+    if( IsCopperLayer( aLayer ) || IsViaPadLayer( aLayer ) )
         return NETNAMES_LAYER_INDEX( aLayer );
-    else if( IsViaPadLayer( aLayer ) )
-        return LAYER_VIA_NETNAMES;
 
     // Fallback
     return Cmts_User;
