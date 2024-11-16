@@ -354,6 +354,11 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                     SHAPE_LINE_CHAIN arcChain;
                     arcChain.Append( sarc, aErrorMax );
 
+                    // if this arc is after another object, pop off the first point
+                    // the previous point from the last object should be already close enough as part of chaining
+                    if( prevGraphic != nullptr )
+                        arcChain.Remove( 0 );
+
                     if( !aAllowUseArcsInPolygons )
                         arcChain.ClearArcs();
 
