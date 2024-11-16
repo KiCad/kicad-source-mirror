@@ -1085,6 +1085,9 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
             radius -= m_holePlatingThickness / 2.0;
         }
 
+        // Underpaint the hole so that there aren't artifacts at its edge
+        m_gal->SetIsFill( true );
+
         m_gal->DrawCircle( center, radius );
     }
     else if( aLayer == LAYER_VIA_HOLES )
@@ -1096,8 +1099,6 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         if( isBlindBuried && !m_pcbSettings.IsPrinting() )
         {
-            radius += m_holePlatingThickness / 2.0;
-
             m_gal->SetIsStroke( false );
             m_gal->SetIsFill( true );
 
