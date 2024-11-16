@@ -31,7 +31,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int projectFileSchemaVersion = 1;
+const int projectFileSchemaVersion = 2;
 
 
 PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
@@ -140,6 +140,28 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
     m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.dist",
             &m_IP2581Bom.dist, wxEmptyString ) );
+
+    registerMigration( 1, 2, std::bind( &PROJECT_FILE::migrateSchema1To2, this ) );
+}
+
+
+/**
+ * Schema version 2: Bump for KiCad 9 layer numbering changes
+ * Migrate layer presets to use new enum values for copper layers
+ */
+bool PROJECT_FILE::migrateSchema1To2()
+{
+    auto p( "/board/layer_presets"_json_pointer );
+
+    if( !m_internals->contains( p ) || !m_internals->at( p ).is_array() )
+        return true;
+
+    nlohmann::json& presets = m_internals->at( p );
+
+    for( nlohmann::json& entry : presets )
+        PARAM_LAYER_PRESET::MigrateToV9Layers( entry );
+
+    return true;
 }
 
 

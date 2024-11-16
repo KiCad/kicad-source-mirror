@@ -35,7 +35,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int fpEditSchemaVersion = 2;
+const int fpEditSchemaVersion = 3;
 
 
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
@@ -333,6 +333,8 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                            // This is actually a migration for APP_SETTINGS_BASE::m_LibTree
                            return migrateLibTreeWidth();
                        } );
+
+    registerMigration( 2, 3, std::bind( &FOOTPRINT_EDITOR_SETTINGS::migrateSchema2To3, this ) );
 }
 
 
@@ -484,6 +486,26 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
             return true;
         }
     }
+
+    return true;
+}
+
+
+/**
+ * Schema version 2: Bump for KiCad 9 layer numbering changes
+ * Migrate layer presets to use new enum values for copper layers
+ */
+bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema2To3()
+{
+    auto p( "/pcb_display/layer_presets"_json_pointer );
+
+    if( !m_internals->contains( p ) || !m_internals->at( p ).is_array() )
+        return true;
+
+    nlohmann::json& presets = m_internals->at( p );
+
+    for( nlohmann::json& entry : presets )
+        PARAM_LAYER_PRESET::MigrateToV9Layers( entry );
 
     return true;
 }

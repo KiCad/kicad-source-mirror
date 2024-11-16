@@ -97,6 +97,8 @@ protected:
 private:
 
     bool migrateSchema0to1();
+
+    bool migrateSchema2To3();
 };
 
 

@@ -749,6 +749,12 @@ inline size_t CopperLayerToOrdinal( PCB_LAYER_ID aLayer )
 }
 
 
+/**
+ * Retrieves a layer ID from an integer converted from a legacy (pre-V9) enum value
+ */
+KICOMMON_API PCB_LAYER_ID BoardLayerFromLegacyId( int aLegacyId );
+
+
 KICOMMON_API PCB_LAYER_ID ToLAYER_ID( int aLayer );
 
 #endif // LAYER_IDS_H

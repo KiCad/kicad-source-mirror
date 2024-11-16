@@ -18,6 +18,7 @@
  */
 
 #include <layer_ids.h>
+#include <magic_enum.hpp>
 #include <wx/translation.h>
 
 /**
@@ -250,5 +251,55 @@ PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount )
 
         // No change for the other layers
         return aLayerId;
+    }
+}
+
+
+PCB_LAYER_ID BoardLayerFromLegacyId( int aLegacyId )
+{
+    switch( aLegacyId )
+    {
+    case 0:  return F_Cu;
+    case 31: return B_Cu;
+
+    default:
+        if( aLegacyId < 0 )
+            return magic_enum::enum_cast<PCB_LAYER_ID>( aLegacyId ).value_or( UNDEFINED_LAYER );
+
+        if( aLegacyId < 31 )
+            return static_cast<PCB_LAYER_ID>( In1_Cu + ( aLegacyId - 1 ) * 2 );
+
+        switch( aLegacyId )
+        {
+        case 32: return B_Adhes;
+        case 33: return F_Adhes;
+        case 34: return B_Paste;
+        case 35: return F_Paste;
+        case 36: return B_SilkS;
+        case 37: return F_SilkS;
+        case 38: return B_Mask;
+        case 39: return F_Mask;
+        case 40: return Dwgs_User;
+        case 41: return Cmts_User;
+        case 42: return Eco1_User;
+        case 43: return Eco2_User;
+        case 44: return Edge_Cuts;
+        case 45: return Margin;
+        case 46: return B_CrtYd;
+        case 47: return F_CrtYd;
+        case 48: return B_Fab;
+        case 49: return F_Fab;
+        case 50: return User_1;
+        case 51: return User_2;
+        case 52: return User_3;
+        case 53: return User_4;
+        case 54: return User_5;
+        case 55: return User_6;
+        case 56: return User_7;
+        case 57: return User_8;
+        case 58: return User_9;
+        case 59: return Rescue;
+        default: return UNDEFINED_LAYER;
+        }
     }
 }

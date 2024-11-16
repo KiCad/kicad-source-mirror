@@ -186,6 +186,8 @@ public:
     struct IP2581_BOM             m_IP2581Bom;      /// IPC-2581 BOM settings
 
 private:
+    bool migrateSchema1To2();
+
     /// An list of schematic sheets in this project
     std::vector<FILE_INFO_PAIR> m_sheets;
 

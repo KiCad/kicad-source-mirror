@@ -190,6 +190,8 @@ class KICOMMON_API PARAM_LAYER_PRESET : public PARAM_LAMBDA<nlohmann::json>
 public:
     PARAM_LAYER_PRESET( const std::string& aPath, std::vector<LAYER_PRESET>* aPresetList );
 
+    static void MigrateToV9Layers( nlohmann::json& aJson );
+
 private:
     nlohmann::json presetsToJson();
 

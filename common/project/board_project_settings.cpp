@@ -132,6 +132,23 @@ void PARAM_LAYER_PRESET::jsonToPresets( const nlohmann::json& aJson )
 }
 
 
+void PARAM_LAYER_PRESET::MigrateToV9Layers( nlohmann::json& aJson )
+{
+    if( !aJson.is_object() || !aJson.contains( "layers" ) )
+        return;
+
+    std::vector<int> newLayers;
+
+    for( const nlohmann::json& layer : aJson.at( "layers" ) )
+    {
+        wxCHECK2( layer.is_number_integer(), continue );
+        newLayers.emplace_back( BoardLayerFromLegacyId( layer.get<int>() ) );
+    }
+
+    aJson["layers"] = newLayers;
+}
+
+
 PARAM_VIEWPORT::PARAM_VIEWPORT( const std::string& aPath, std::vector<VIEWPORT>* aViewportList ) :
         PARAM_LAMBDA<nlohmann::json>( aPath,
                                       std::bind( &PARAM_VIEWPORT::viewportsToJson, this ),
