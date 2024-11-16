@@ -1924,7 +1924,18 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         if( keepout->GetDoNotAllowCopperPour() && keepout->IsOnLayer( aLayer ) )
         {
             if( keepout->GetBoundingBox().Intersects( zone_boundingbox ) )
-                aFillPolys.BooleanSubtract( *keepout->Outline(), SHAPE_POLY_SET::PM_FAST );
+            {
+                if( keepout->Outline()->ArcCount() == 0 )
+                {
+                    aFillPolys.BooleanSubtract( *keepout->Outline(), SHAPE_POLY_SET::PM_FAST );
+                }
+                else
+                {
+                    SHAPE_POLY_SET keepoutOutline( *keepout->Outline() );
+                    keepoutOutline.ClearArcs();
+                    aFillPolys.BooleanSubtract( keepoutOutline, SHAPE_POLY_SET::PM_FAST );
+                }
+            }
         }
     }
 
