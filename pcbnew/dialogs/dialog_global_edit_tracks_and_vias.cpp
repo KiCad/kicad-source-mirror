@@ -153,7 +153,8 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     else
         m_setToDesignRuleValues->SetValue( true );
 
-    SetupStandardButtons();
+    SetupStandardButtons( { { wxID_OK, _( "Apply and Close" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     m_netFilter->Connect( FILTERED_ITEM_SELECTED,
                           wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ),
