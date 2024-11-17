@@ -21,7 +21,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bLayersListSizer;
 	bLayersListSizer = new wxBoxSizer( wxVERTICAL );
 
-	bLayersListSizer->SetMinSize( wxSize( 150,-1 ) );
+	bLayersListSizer->SetMinSize( wxSize( 240,560 ) );
 	m_staticTextLayerSelection = new wxStaticText( this, wxID_ANY, _("Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLayerSelection->Wrap( -1 );
 	bLayersListSizer->Add( m_staticTextLayerSelection, 0, wxALL, 4 );
@@ -30,10 +30,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bLayersListSizer->Add( m_layers, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bUpperSizer->Add( bLayersListSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-
-	bUpperSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bUpperSizer->Add( bLayersListSizer, 4, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -101,7 +98,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bSizerRight->Add( 0, 0, 0, wxEXPAND, 5 );
 
 
-	bUpperSizer->Add( bSizerRight, 1, wxEXPAND|wxALL, 5 );
+	bUpperSizer->Add( bSizerRight, 7, wxEXPAND|wxALL, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
@@ -118,6 +115,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 

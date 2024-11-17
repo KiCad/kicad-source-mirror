@@ -62,7 +62,7 @@ class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Rule Area Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 570,603 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN );
+		DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Rule Area Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN );
 
 		~DIALOG_RULE_AREA_PROPERTIES_BASE();
 
