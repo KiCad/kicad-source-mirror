@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-04 09:00+0000\n"
+"PO-Revision-Date: 2024-11-18 11:09+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -1811,7 +1811,7 @@ msgstr "Z&rušit"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
 msgid "&Open Anyway"
-msgstr "Přesto &otevřít"
+msgstr "&Přesto otevřít"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
@@ -2791,9 +2791,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, c-format
+#, c-format, fuzzy
 msgid "The selection contains %lu locked items."
-msgstr "Výběr obsahuje %lu uzamčených položek."
+msgstr "Výběr obsahuje %d uzamčených položek."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6798,24 +6798,24 @@ msgid "Error removing directory '%s': %s"
 msgstr "Chyba při odstraňování složky '%s': %s"
 
 #: common/gestfich.cpp:382 common/gestfich.cpp:432
-#, c-format
+#, c-format, fuzzy
 msgid "Could not open source directory: %s"
-msgstr "Nelze otevřít zdrojový adresář: %s"
+msgstr "Nelze vytvořit adresář '%s'"
 
 #: common/gestfich.cpp:389
-#, c-format
+#, c-format, fuzzy
 msgid "Could not create destination directory: %s"
-msgstr "Nelze vytvořit cílový adresář: %s"
+msgstr "Nelze vytvořit adresář '%s'"
 
 #: common/gestfich.cpp:414
-#, c-format
+#, c-format, fuzzy
 msgid "Could not copy file: %s to %s"
-msgstr "Nelze zkopírovat: %s do %s"
+msgstr "Nemohu se připojit k '%s'"
 
 #: common/gestfich.cpp:461
-#, c-format
+#, c-format, fuzzy
 msgid "Could not read file: %s"
-msgstr "Nelze přečíst soubor: %s"
+msgstr "Nepodařilo se přečíst soubor"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -6833,14 +6833,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Nelze vyhledat vzdálené '%s'"
 
 #: common/git/git_pull_handler.cpp:60
-#, c-format
+#, c-format, fuzzy
 msgid "Could not connect to remote '%s': %s"
-msgstr "Nelze se připojit ke vzdálenému '%s': %s"
+msgstr "Nelze se připojit ke vzdálenému '%s'"
 
 #: common/git/git_pull_handler.cpp:72
-#, c-format
+#, c-format, fuzzy
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Nelze stáhnout data ze vzdáleného '%s': %s"
+msgstr "Nelze obnovit data ze vzdáleného úložiště '%s'"
 
 #: common/git/git_pull_handler.cpp:94
 msgid "Could not read 'FETCH_HEAD'"
@@ -6900,14 +6900,14 @@ msgid "Could not lookup remote"
 msgstr "Nelze vyhledat vzdálený vklad"
 
 #: common/git/git_push_handler.cpp:59
-#, c-format
+#, c-format, fuzzy
 msgid "Could not connect to remote: %s"
-msgstr "Nelze se připojit ke vzdálenému: %s"
+msgstr "Nelze se připojit ke vzdálenému '%s'"
 
 #: common/git/git_push_handler.cpp:71
-#, c-format
+#, c-format, fuzzy
 msgid "Could not push to remote: %s"
-msgstr "Nelze odeslat na vzdálený: %s"
+msgstr "Nelze odeslat na vzdálený repozitář"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
@@ -7353,7 +7353,7 @@ msgstr "Export 3D modelu"
 
 #: common/jobs/job_export_pcb_3d.cpp:134
 msgid "PCB: Export 3D Model"
-msgstr "DPS: Exportovat 3D model"
+msgstr "DPS: Export 3D modelu"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
 msgid "Drill data export"
@@ -7361,11 +7361,11 @@ msgstr "Export dat vrtání"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr "DPS: Export dat vrtání"
+msgstr "DPS: Exportovat data vrtání"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 msgid "PCB DXF export"
-msgstr "DPS DXF export"
+msgstr "Export PCB DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:61
 msgid "PCB: Export DXF"
@@ -7387,7 +7387,7 @@ msgstr "DPS: Export souborů Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 msgid "IPC2581 export"
-msgstr "IPC2581 export"
+msgstr "Export IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:85
 msgid "PCB: Export IPC2581"
@@ -7395,7 +7395,7 @@ msgstr "DPS: Export IPC2581"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
 msgid "PCB PDF export"
-msgstr "DPS PDF export"
+msgstr "Export DPS do PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:57
 msgid "PCB: Export PDF"
@@ -7411,7 +7411,7 @@ msgstr ""
 
 #: common/jobs/job_export_pcb_svg.cpp:53
 msgid "PCB SVG export"
-msgstr "DPS SVG export"
+msgstr "Export PCB do SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
 msgid "PCB: Export SVG"
@@ -9930,7 +9930,7 @@ msgstr "Knihovny pouzder KiCadu cesty"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "KiCad design block path"
-msgstr ""
+msgstr "Cesta k projektovým blokům KiCadu"
 
 #: common/wildcards_and_files_ext.cpp:353
 #, fuzzy
@@ -11867,9 +11867,8 @@ msgid "You must provide a netlist generator title"
 msgstr "Musíte poskytnout název generátoru netlistu"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:33
-#, fuzzy
 msgid "Output Path:"
-msgstr "Výstupní formát:"
+msgstr "Výstupní cesta:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:65
 msgid "Add Exporter..."
@@ -12305,9 +12304,8 @@ msgid "Increment by:"
 msgstr "Krok přírůstku:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
-#, fuzzy
 msgid "All sheets"
-msgstr "Přidat list"
+msgstr "Všechny listy"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
 #, fuzzy
@@ -16383,14 +16381,12 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:168
 #: eeschema/eeschema_jobs_handler.cpp:176
-#, fuzzy
 msgid "Loading schematic\n"
-msgstr "Načítání schématu"
+msgstr "Načítání schématu\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:182
-#, fuzzy
 msgid "Failed to load schematic\n"
-msgstr "Nelze načíst soubor schématu\n"
+msgstr "Soubor schématu nelze načíst\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:363
 #: eeschema/eeschema_jobs_handler.cpp:477
@@ -31425,6 +31421,9 @@ msgid ""
 "    Change Array\n"
 "***********************\n"
 msgstr ""
+"\n"
+"    Změna pole\n"
+"***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:551
 msgid " will be ignored"
@@ -33611,7 +33610,7 @@ msgstr "Všechny soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:382
 msgid "BREP (OCCT) files"
-msgstr "Soubory BREP (OCCT)"
+msgstr "BREP (OCCT) soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:390
 #, fuzzy
@@ -41798,7 +41797,7 @@ msgstr "Nepodařilo se vytvořit větev."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1735
 msgid "** Face skipped **\n"
-msgstr ""
+msgstr "** Plocha vynechána **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1902
 #, fuzzy, c-format
@@ -42843,7 +42842,7 @@ msgstr "Automatické umístění pouzdra"
 
 #: pcbnew/menubar_pcb_editor.cpp:446
 msgid "Multi-Channel"
-msgstr ""
+msgstr "Multikanálový"
 
 #: pcbnew/menubar_pcb_editor.cpp:455
 msgid "External Plugins"
