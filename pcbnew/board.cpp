@@ -417,6 +417,8 @@ void BOARD::GetContextualTextVars( wxArrayString* aVars ) const
     add( wxT( "FILENAME" ) );
     add( wxT( "FILEPATH" ) );
     add( wxT( "PROJECTNAME" ) );
+    add( wxT( "DRC_ERROR <message_text>" ) );
+    add( wxT( "DRC_WARNING <message_text>" ) );
 
     GetTitleBlock().GetContextualTextVars( aVars );
 

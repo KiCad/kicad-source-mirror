@@ -217,7 +217,22 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         }
         else if( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
         {
+            int start = m_te->AutoCompPosStart();
+
             m_te->AutoCompComplete();
+
+            int finish = m_te->GetCurrentPos();
+
+            if( finish > start )
+            {
+                // Select the last substitution token (if any) in the autocompleted text
+
+                int selStart = m_te->FindText( finish, start, "<" );
+                int selEnd = m_te->FindText( finish, start, ">" );
+
+                if( selStart > start && selEnd <= finish && selEnd > selStart )
+                    m_te->SetSelection( selStart, selEnd + 1 );
+            }
         }
         else
         {
@@ -610,7 +625,8 @@ void SCINTILLA_TRICKS::DoAutocomplete( const wxString& aPartial, const wxArraySt
                                 return first.CmpNoCase( second );
                             });
 
-        m_te->AutoCompShow( aPartial.size(), wxJoin( matchedTokens, m_te->AutoCompGetSeparator() ) );
+        m_te->AutoCompSetSeparator( '\t' );
+        m_te->AutoCompShow( aPartial.size(), wxJoin( matchedTokens, '\t' ) );
     }
 }
 

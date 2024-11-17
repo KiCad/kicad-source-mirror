@@ -244,6 +244,8 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
     add( wxT( "EXCLUDE_FROM_BOARD" ) );
     add( wxT( "EXCLUDE_FROM_SIM" ) );
     add( wxT( "DNP" ) );
+    add( wxT( "ERC_ERROR <message_text>" ) );
+    add( wxT( "ERC_WARNING <message_text>" ) );
 
     m_screen->GetTitleBlock().GetContextualTextVars( aVars );
 }
