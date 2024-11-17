@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2016 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ static int          g_trackWidthFilter = 0;
 static bool         g_filterByViaSize = false;
 static int          g_viaSizeFilter = 0;
 static bool         g_filterSelected = false;
+static bool         g_setToSpecifiedValues = true;
 
 
 class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS : public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
@@ -147,6 +148,11 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_annularRingsLabel->Show( m_brd->GetCopperLayerCount() > 2 );
     m_annularRingsCtrl->Show( m_brd->GetCopperLayerCount() > 2 );
 
+    if( g_setToSpecifiedValues == true )
+        m_setToSpecifiedValues->SetValue( true );
+    else
+        m_setToDesignRuleValues->SetValue( true );
+
     SetupStandardButtons();
 
     m_netFilter->Connect( FILTERED_ITEM_SELECTED,
@@ -175,6 +181,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
     g_filterByViaSize = m_filterByViaSize->GetValue();
     g_viaSizeFilter = m_viaSizeFilter.GetIntValue();
     g_filterSelected = m_selectedItemsFilter->GetValue();
+    g_setToSpecifiedValues = m_setToSpecifiedValues->GetValue();
 
     m_netFilter->Disconnect( FILTERED_ITEM_SELECTED,
                              wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ),
@@ -492,4 +499,3 @@ int GLOBAL_EDIT_TOOL::EditTracksAndVias( const TOOL_EVENT& aEvent )
     dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
     return 0;
 }
-

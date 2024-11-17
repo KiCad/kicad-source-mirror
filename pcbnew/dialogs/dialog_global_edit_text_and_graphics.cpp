@@ -80,6 +80,7 @@ static wxString   g_referenceFilter;
 static bool       g_filterByFootprint;
 static wxString   g_footprintFilter;
 static bool       g_filterSelected = false;
+static bool       g_setToSpecifiedValues = true;
 
 
 class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
@@ -162,6 +163,11 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
     m_grid->SetCellHighlightPenWidth( 0 );
     m_grid->SetDefaultCellFont( KIUI::GetInfoFont( this ) );
 
+    if( g_setToSpecifiedValues == true )
+        m_setToSpecifiedValues->SetValue( true );
+    else
+        m_setToLayerDefaults->SetValue( true );
+
     SetupStandardButtons();
 
     finishDialogSettings();
@@ -195,6 +201,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
     }
 
     g_filterSelected = m_selectedItemsFilter->GetValue();
+    g_setToSpecifiedValues = m_setToSpecifiedValues->GetValue();
 }
 
 
