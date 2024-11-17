@@ -570,6 +570,9 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
     {
         applySettings( cfg );
 
+        if( !GetBoard()->GetProject() )
+            GetBoard()->SetProject( &Prj() );
+
         m_boardAdapter.SetBoard( GetBoard() );
 
         // When opening the 3D viewer, we use the OpenGL mode, never the ray tracing engine
