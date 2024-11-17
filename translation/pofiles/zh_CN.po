@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-11-10 15:12+0000\n"
+"PO-Revision-Date: 2024-11-18 11:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -47,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2771,7 +2771,8 @@ msgstr "从选择中移除锁定的项目, 并只对未锁定项目(如果有的
 msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
-msgstr ""
+msgstr "在 KiCad 重新启动之前, 不再显示此对话框。可以在 PCB "
+"编辑器的偏好设置中重新启用此对话框。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -7354,7 +7355,7 @@ msgstr "原理图: 导出网表"
 
 #: common/jobs/job_export_sch_plot.cpp:121
 msgid "Schematic plot export"
-msgstr ""
+msgstr "导出原理图"
 
 #: common/jobs/job_export_sch_plot.cpp:160
 msgid "Schematic: Export SVG"
@@ -7402,7 +7403,7 @@ msgstr "原理图: 执行 ERC"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "特殊: 执行命令"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -15939,7 +15940,7 @@ msgstr "复刻引脚的间距 (&P):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:143
 msgid "General editing"
-msgstr ""
+msgstr "通用编辑"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:150
 msgid "Keep pins attached when dragging edges"
@@ -17242,7 +17243,7 @@ msgstr "符号到新库..."
 
 #: eeschema/menubar.cpp:198 pcbnew/menubar_pcb_editor.cpp:236
 msgid "Panels"
-msgstr ""
+msgstr "面板"
 
 #: eeschema/menubar.cpp:367
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:178
@@ -22989,7 +22990,7 @@ msgstr "该符号只有一个符号单元。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:592
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "该符号的所有单元均已放置。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
 msgid "Add design block"
@@ -35093,7 +35094,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
 msgid "Layer default"
-msgstr ""
+msgstr "默认层"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 msgid "Delete source items after outset"
@@ -35211,7 +35212,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "顶部/内部/底部"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
 msgid "Edit layer:"
@@ -36368,19 +36369,19 @@ msgstr "此规则区的唯一名称, 用于 DRC 规则"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:62
 msgid "Reset this value to zero."
-msgstr ""
+msgstr "将此值重置为零。"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:72
 msgid "Reset this value to the original value."
-msgstr ""
+msgstr "将此值重置为初始值。"
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 msgid "Set a new value for this offset:"
-msgstr ""
+msgstr "为该偏移量设置新值:"
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:63
 msgid "Set Offset"
-msgstr ""
+msgstr "设置偏移量"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:191
 msgid "Rectangle cannot be zero-sized."
@@ -36482,15 +36483,15 @@ msgstr "错误列表"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:37
 msgid "By Corners"
-msgstr ""
+msgstr "根据边角"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:53
 msgid "By Corner and Size"
-msgstr ""
+msgstr "根据边角和大小"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr ""
+msgstr "根据中心和大小"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 msgid "By Endpoints"
@@ -36498,7 +36499,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:101
 msgid "By Length and Angle"
-msgstr ""
+msgstr "根据长度和角度"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
 msgid "By Midpoint/Endpoint"
@@ -36514,7 +36515,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
 msgid "By Center/Radius"
-msgstr ""
+msgstr "根据中心/半径"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
 msgid "By Center/Point"
@@ -37004,13 +37005,14 @@ msgstr "如果选中该选项, 焊盘可相对于封装的其他部分进行移�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 msgid "Do not prompt for lock overrides for this session"
-msgstr ""
+msgstr "在此会话中不再提示锁定状态"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
-msgstr ""
+msgstr "如果选中此选项, 尝试编辑锁定的项目时将不会显示提示。 重启 KiCad 后, "
+"将重置此选项。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
@@ -37051,7 +37053,7 @@ msgstr "在布线时"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
 msgid "Snap to tracks and vias:"
-msgstr ""
+msgstr "捕获到走线和过孔:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:321
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
@@ -37407,7 +37409,7 @@ msgstr "从图纸放置项目:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:29
 msgid "Place items matching component class:"
-msgstr ""
+msgstr "放置与元件类相匹配的项目:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -41456,7 +41458,7 @@ msgstr "特性:"
 
 #: pcbnew/footprint.cpp:1601 pcbnew/footprint.cpp:3869 pcbnew/zone.cpp:1647
 msgid "Component Class"
-msgstr ""
+msgstr "元件类"
 
 #: pcbnew/footprint.cpp:1605
 #, c-format
@@ -41575,7 +41577,7 @@ msgstr "正在从电路板编辑 %s。保存只会更新电路板。"
 #: pcbnew/footprint_edit_frame.cpp:545
 #, c-format
 msgid "Open in library %s"
-msgstr ""
+msgstr "在库 %s 中打开"
 
 #: pcbnew/footprint_edit_frame.cpp:569
 #, c-format
@@ -41584,7 +41586,7 @@ msgstr "从只读库编辑封装 %s。"
 
 #: pcbnew/footprint_edit_frame.cpp:574
 msgid "Save as editable copy"
-msgstr ""
+msgstr "保存为可编辑副本"
 
 #: pcbnew/footprint_edit_frame.cpp:987
 #, c-format
@@ -48830,7 +48832,7 @@ msgstr "分割线段"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2745
 msgid "Split Arc"
-msgstr ""
+msgstr "切分弧线"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2822
 msgid "Remove Zone Corner"
@@ -48842,11 +48844,11 @@ msgstr "移除多边形转角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2922
 msgid "Break Zone Corner"
-msgstr ""
+msgstr "打破域边角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2924
 msgid "Break Polygon Corner"
-msgstr ""
+msgstr "打破多边形边角"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1429
 msgid "Select/Expand Connection..."
