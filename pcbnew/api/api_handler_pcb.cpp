@@ -417,6 +417,24 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( GetItems& aMsg
             break;
         }
 
+        case PCB_SHAPE_T:
+        {
+            handledAnything = true;
+            bool inserted = false;
+
+            for( BOARD_ITEM* item : board->Drawings() )
+            {
+                if( item->Type() == PCB_SHAPE_T )
+                {
+                    items.emplace_back( item );
+                    inserted = true;
+                }
+            }
+
+            if( inserted )
+                typesInserted.insert( PCB_SHAPE_T );
+        }
+
         default:
             break;
         }
