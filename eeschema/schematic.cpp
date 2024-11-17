@@ -453,7 +453,7 @@ std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetNamesMap() const
 {
     std::map<int, wxString> namesMap;
 
-    for( const SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
+    for( const SCH_SHEET_PATH& sheet : GetSheets() )
     {
         if( sheet.size() == 1 )
             namesMap[sheet.GetVirtualPageNumber()] = _( "<root sheet>" );
@@ -469,7 +469,7 @@ std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetPagesMap() const
 {
     std::map<int, wxString> pagesMap;
 
-    for( const SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
+    for( const SCH_SHEET_PATH& sheet : GetSheets() )
         pagesMap[sheet.GetVirtualPageNumber()] = sheet.GetPageNumber();
 
     return pagesMap;
