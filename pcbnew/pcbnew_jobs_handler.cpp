@@ -1035,7 +1035,10 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     wxString     sheetName;
     wxString     sheetPath;
 
-    if( aGerberJob->m_printMaskLayer.size() == 1 )
+    // The first layer will be treated as the layer name for the gerber header,
+    // the other layers will be treated equivalent to the "Plot on All Layers" option
+    // in the GUI
+    if( aGerberJob->m_printMaskLayer.size() >= 1 )
     {
         layer = aGerberJob->m_printMaskLayer.front();
         layerName = brd->GetLayerName( layer );
