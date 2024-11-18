@@ -284,6 +284,14 @@ message PadStackOuterLayer
   SolderPasteOverrides solder_paste_settings = 4;
 }
 
+enum DrillShape
+{
+  DS_UNKNOWN = 0;
+  DS_CIRCLE = 1;
+  DS_OBLONG = 2;
+  DS_UNDEFINED = 3;
+}
+
 message DrillProperties
 {
   // Lowest (closest to F_Cu) layer this drill exists on.
@@ -295,6 +303,8 @@ message DrillProperties
   // The diameter, in x and y, of the pad's drilled hole, if this pad has a hole.
   // x and y will be the same value if the hole is round.
   kiapi.common.types.Vector2 diameter = 3;
+
+  DrillShape shape = 4;
 }
 
 // A pad stack definition for a multilayer pad or via.

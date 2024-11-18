@@ -171,6 +171,11 @@ BOOST_AUTO_TEST_CASE( PadStackType )
     testEnums<PADSTACK::MODE, kiapi::board::types::PadStackType>();
 }
 
+BOOST_AUTO_TEST_CASE( DrillShape )
+{
+    testEnums<PAD_DRILL_SHAPE, kiapi::board::types::DrillShape>();
+}
+
 BOOST_AUTO_TEST_CASE( UnconnectedLayerRemoval )
 {
     testEnums<PADSTACK::UNCONNECTED_LAYER_MODE, kiapi::board::types::UnconnectedLayerRemoval>();

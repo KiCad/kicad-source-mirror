@@ -63,6 +63,34 @@ PAD_ATTRIB FromProtoEnum( types::PadType aValue )
 }
 
 template<>
+types::DrillShape ToProtoEnum( PAD_DRILL_SHAPE aValue )
+{
+    switch( aValue )
+    {
+    case PAD_DRILL_SHAPE::CIRCLE:    return types::DrillShape::DS_CIRCLE;
+    case PAD_DRILL_SHAPE::OBLONG:    return types::DrillShape::DS_OBLONG;
+    case PAD_DRILL_SHAPE::UNDEFINED: return types::DrillShape::DS_UNDEFINED;
+    default:
+        wxCHECK_MSG( false, types::DrillShape::DS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PAD_DRILL_SHAPE>");
+    }
+}
+
+template<>
+PAD_DRILL_SHAPE FromProtoEnum( types::DrillShape aValue )
+{
+    switch( aValue )
+    {
+    case types::DrillShape::DS_CIRCLE:      return PAD_DRILL_SHAPE::CIRCLE;
+    case types::DrillShape::DS_OBLONG:      return PAD_DRILL_SHAPE::OBLONG;
+    case types::DrillShape::DS_UNDEFINED:   return PAD_DRILL_SHAPE::UNDEFINED;
+    default:
+        wxCHECK_MSG( false, PAD_DRILL_SHAPE::UNDEFINED,
+                     "Unhandled case in FromProtoEnum<types::DrillShape>" );
+    }
+}
+
+template<>
 types::PadStackShape ToProtoEnum( PAD_SHAPE aValue )
 {
     switch( aValue )
