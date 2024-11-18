@@ -108,7 +108,7 @@
     (rule high-current
         (constraint track_width (min 1.0mm))
         (constraint connection_width (min 0.8mm))
-        (condition "A.NetClass == 'Power'"))
+        (condition "A.hasNetclass('Power')"))
 
 
     # Separate drill bit and milling cutter size constraints

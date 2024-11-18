@@ -848,15 +848,19 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
             ;
     msg.emplace_back( t );
     t =
-#include "dialogs/panel_setup_rules_help_7expression_functions.h"
+#include "dialogs/panel_setup_rules_help_7properties.h"
             ;
     msg.emplace_back( t );
     t =
-#include "dialogs/panel_setup_rules_help_8more_examples.h"
+#include "dialogs/panel_setup_rules_help_8expression_functions.h"
             ;
     msg.emplace_back( t );
     t =
-#include "dialogs/panel_setup_rules_help_9documentation.h"
+#include "dialogs/panel_setup_rules_help_9more_examples.h"
+            ;
+    msg.emplace_back( t );
+    t =
+#include "dialogs/panel_setup_rules_help_10documentation.h"
             ;
     msg.emplace_back( t );
 
