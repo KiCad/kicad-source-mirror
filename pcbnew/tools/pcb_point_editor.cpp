@@ -2418,7 +2418,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         graphicItem->SetEnd( VECTOR2I( nearestPoint.x, nearestPoint.y ) );
 
         // and add another one starting from the break point
-        PCB_SHAPE* newSegment = new PCB_SHAPE( *graphicItem );
+        PCB_SHAPE* newSegment = static_cast<PCB_SHAPE*>( graphicItem->Duplicate() );
 
         newSegment->ClearSelected();
         newSegment->SetStart( VECTOR2I( nearestPoint.x, nearestPoint.y ) );
