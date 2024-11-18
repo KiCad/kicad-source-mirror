@@ -163,6 +163,7 @@ bool PADSTACK::unpackCopperLayer( const kiapi::board::types::PadStackLayer& aPro
 
     SetSize( kiapi::common::UnpackVector2( aProto.size() ), layer );
     SetShape( FromProtoEnum<PAD_SHAPE>( aProto.shape() ), layer );
+    Offset( layer ) = kiapi::common::UnpackVector2( aProto.offset() );
     SetAnchorShape( FromProtoEnum<PAD_SHAPE>( aProto.custom_anchor_shape() ), layer );
 
     SHAPE_PROPS& props = CopperLayer( layer ).shape;
@@ -378,6 +379,7 @@ void PADSTACK::packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadSta
 
     stackLayer->set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( aLayer ) );
     kiapi::common::PackVector2( *stackLayer->mutable_size(), Size( aLayer ) );
+    kiapi::common::PackVector2( *stackLayer->mutable_offset(), Offset( aLayer ) );
 
     stackLayer->set_shape( ToProtoEnum<PAD_SHAPE, PadStackShape>( Shape( aLayer ) ) );
 

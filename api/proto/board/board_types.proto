@@ -250,6 +250,9 @@ message PadStackLayer
   // The difference in side length between the short and long pads in a trapezoid.  Only one of x or y may be nonzero.
   // Only used for PSS_TRAPEZOID
   kiapi.common.types.Vector2 trapezoid_delta = 10;
+
+  // The offset of the center of this shape from the center of the pad (which is defined as the hole center)
+  kiapi.common.types.Vector2 offset = 11;
 }
 
 enum SolderMaskMode
