@@ -246,6 +246,10 @@ message PadStackLayer
 
   // Reserved for future use -- at the moment, zone connection settings are not per-layer
   ZoneConnectionSettings zone_settings = 9;
+
+  // The difference in side length between the short and long pads in a trapezoid.  Only one of x or y may be nonzero.
+  // Only used for PSS_TRAPEZOID
+  kiapi.common.types.Vector2 trapezoid_delta = 10;
 }
 
 enum SolderMaskMode

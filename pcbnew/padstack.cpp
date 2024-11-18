@@ -169,6 +169,9 @@ bool PADSTACK::unpackCopperLayer( const kiapi::board::types::PadStackLayer& aPro
     props.chamfered_rect_ratio = aProto.chamfer_ratio();
     props.round_rect_radius_ratio = aProto.corner_rounding_ratio();
 
+    if( Shape( layer ) == PAD_SHAPE::TRAPEZOID && aProto.has_trapezoid_delta() )
+        TrapezoidDeltaSize( layer ) = kiapi::common::UnpackVector2( aProto.trapezoid_delta() );
+
     if( aProto.chamfered_corners().top_left() )
         props.chamfered_rect_positions |= RECT_CHAMFER_TOP_LEFT;
 
@@ -383,6 +386,12 @@ void PADSTACK::packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadSta
 
     stackLayer->set_chamfer_ratio( CopperLayer( aLayer ).shape.chamfered_rect_ratio );
     stackLayer->set_corner_rounding_ratio( CopperLayer( aLayer ).shape.round_rect_radius_ratio );
+
+    if( Shape( aLayer ) == PAD_SHAPE::TRAPEZOID )
+    {
+        kiapi::common::PackVector2( *stackLayer->mutable_trapezoid_delta(),
+                                    TrapezoidDeltaSize( aLayer ) );
+    }
 
     google::protobuf::Any a;
 

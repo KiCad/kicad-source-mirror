@@ -433,6 +433,8 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( GetItems& aMsg
 
             if( inserted )
                 typesInserted.insert( PCB_SHAPE_T );
+
+            break;
         }
 
         default:
