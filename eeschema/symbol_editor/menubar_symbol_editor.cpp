@@ -116,8 +116,14 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
+    ACTION_MENU* showHidePanels = new ACTION_MENU( false, selTool );
+    showHidePanels->SetTitle( _( "Panels" ) );
+    showHidePanels->Add( ACTIONS::showProperties,  ACTION_MENU::CHECK );
+    showHidePanels->Add( ACTIONS::showLibraryTree, ACTION_MENU::CHECK );
+    viewMenu->Add( showHidePanels );
+    viewMenu->AppendSeparator();
+
     viewMenu->Add( ACTIONS::showSymbolBrowser );
-    viewMenu->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );
@@ -127,7 +133,6 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( ACTIONS::showLibraryTree,     ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::showHiddenPins,   ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::showHiddenFields, ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::togglePinAltIcons,ACTION_MENU::CHECK );

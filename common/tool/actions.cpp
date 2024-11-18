@@ -801,7 +801,7 @@ TOOL_ACTION ACTIONS::unpinLibrary( TOOL_ACTION_ARGS()
 TOOL_ACTION ACTIONS::showLibraryTree( TOOL_ACTION_ARGS()
         .Name( "common.Control.showLibraryTree" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Library Tree" ) )
+        .FriendlyName( _( "Library Tree" ) )
         .Icon( BITMAPS::search_tree ) );
 
 TOOL_ACTION ACTIONS::hideLibraryTree( TOOL_ACTION_ARGS()

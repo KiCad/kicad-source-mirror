@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
 *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,6 +120,14 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
+    ACTION_MENU* showHidePanels = new ACTION_MENU( false, selTool );
+    showHidePanels->SetTitle( _( "Panels" ) );
+    showHidePanels->Add( ACTIONS::showProperties,        ACTION_MENU::CHECK );
+    showHidePanels->Add( ACTIONS::showLibraryTree,       ACTION_MENU::CHECK );
+    showHidePanels->Add( PCB_ACTIONS::showLayersManager, ACTION_MENU::CHECK );
+    viewMenu->Add( showHidePanels );
+    viewMenu->AppendSeparator();
+
     viewMenu->Add( ACTIONS::showFootprintBrowser );
     viewMenu->Add( ACTIONS::show3DViewer );
 
@@ -152,11 +160,6 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( contrastModeSubMenu );
 
     viewMenu->Add( PCB_ACTIONS::flipBoard,                  ACTION_MENU::CHECK );
-
-    viewMenu->AppendSeparator();
-    viewMenu->Add( ACTIONS::showProperties,                 ACTION_MENU::CHECK );
-    viewMenu->Add( ACTIONS::showLibraryTree,                ACTION_MENU::CHECK );
-    viewMenu->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
 
 
     //-- Place menu -------------------------------------------------------
