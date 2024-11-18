@@ -2089,7 +2089,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
 
     // Use the original object as a construction item
-    std::unique_ptr<BOARD_ITEM> clone;
+    std::vector<std::unique_ptr<BOARD_ITEM>> clones;
 
     m_editorBehavior.reset();
     // Will also make the edit behavior if supported
@@ -2173,10 +2173,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 // When we start dragging, create a clone of the item to use as the original
                 // reference geometry (e.g. for intersections and extensions)
-                std::unique_ptr<BOARD_ITEM> oldClone = std::move( clone );
-                clone.reset( static_cast<BOARD_ITEM*>( item->Clone() ) );
-                grid.AddConstructionItems( { clone.get() }, false, true );
-                // Now old clone can be safely deleted
+                BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
+                clone->SetParent( nullptr );
+                clone->SetParentGroup( nullptr );
+                clones.emplace_back( clone );
+                grid.AddConstructionItems( { clone }, false, true );
             }
 
             // Keep point inside of limits with some padding
@@ -2757,13 +2758,13 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
             graphicItem->SetEnd( nearestPoint );
 
             // and add another one starting from the break point
-            auto newSegment = std::make_unique<PCB_SHAPE>( *graphicItem );
+            PCB_SHAPE* newSegment = static_cast<PCB_SHAPE*>( graphicItem->Duplicate() );
 
             newSegment->ClearSelected();
             newSegment->SetStart( nearestPoint );
             newSegment->SetEnd( VECTOR2I( seg.B.x, seg.B.y ) );
 
-            commit.Add( newSegment.release() );
+            commit.Add( newSegment );
             commit.Push( _( "Split Segment" ) );
             break;
         }
@@ -2779,13 +2780,13 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
             graphicItem->SetEnd( nearestPoint );
 
             // and add another one starting from the break point
-            auto newArc = std::make_unique<PCB_SHAPE>( *graphicItem );
+            PCB_SHAPE* newArc = static_cast<PCB_SHAPE*>( graphicItem->Duplicate() );
 
             newArc->ClearSelected();
             newArc->SetEnd( arc.GetP1() );
             newArc->SetStart( nearestPoint );
 
-            commit.Add( newArc.release() );
+            commit.Add( newArc );
             commit.Push( _( "Split Arc" ) );
             break;
         }
