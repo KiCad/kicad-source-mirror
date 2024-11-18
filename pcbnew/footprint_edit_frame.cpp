@@ -178,9 +178,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     initLibraryTree();
     m_treePane = new FOOTPRINT_TREE_PANE( this );
 
-    // restore the last footprint from the project, if any, after the library has been init'ed
-    restoreLastFootprint();
-
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -264,8 +261,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_acceptedExts.emplace( FILEEXT::KiCadFootprintFileExtension, &PCB_ACTIONS::ddImportFootprint );
     DragAcceptFiles( true );
 
-    ActivateGalCanvas();
-
     FinishAUIInitialization();
 
     // Apply saved visibility stuff at the end
@@ -284,6 +279,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
         m_appearancePanel->SetTabIndex( cfg->m_AuiPanels.appearance_panel_tab );
     }
+
+    // restore the last footprint from the project, if any, after the library has been init'ed
+    // N.B. This needs to happen after the AUI manager has been initialized so that we can
+    // properly call the WX_INFOBAR without crashing on some systems.
+    restoreLastFootprint();
+
+    // This displays the last footprint loaded, if any, so it must be done after restoreLastFootprint()
+    ActivateGalCanvas();
 
     GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
     UpdateTitle();
