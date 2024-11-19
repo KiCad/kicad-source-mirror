@@ -341,7 +341,7 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
         return;
 
     // Update the item information
-    item->SetShortHelp( aAction.GetTooltip() );
+    item->SetShortHelp( aAction.GetButtonTooltip() );
     item->SetBitmap( KiBitmapBundle( aAction.GetIcon() ) );
     item->SetDisabledBitmap( KiDisabledBitmapBundle( aAction.GetIcon() ) );
 
