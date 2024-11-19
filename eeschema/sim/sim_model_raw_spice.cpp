@@ -118,16 +118,7 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemParams() const
 
 std::string SPICE_GENERATOR_RAW_SPICE::Preview( const SPICE_ITEM& aItem ) const
 {
-    SPICE_ITEM item = aItem;
-    item.refName = "";
-
-    for( int i = 0; i < m_model.GetPinCount(); ++i )
-    {
-        item.pinNumbers.push_back( fmt::format( "{}", i + 1 ) );
-        item.pinNetNames.push_back( fmt::format( "{}", i + 1 ) );
-    }
-
-    return ItemLine( item );
+    return ItemParams();
 }
 
 
