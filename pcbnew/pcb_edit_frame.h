@@ -56,6 +56,7 @@ class FP_LIB_TABLE;
 class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
 class TOOL_ACTION;
+class DIALOG_BOARD_SETUP;
 
 #ifdef KICAD_IPC_API
 class KICAD_API_SERVER;
@@ -874,6 +875,7 @@ private:
     DIALOG_BOOK_REPORTER* m_inspectClearanceDlg;
     DIALOG_BOOK_REPORTER* m_inspectConstraintsDlg;
     DIALOG_BOOK_REPORTER* m_footprintDiffDlg;
+    DIALOG_BOARD_SETUP*   m_boardSetupDlg;
 
     const std::map<std::string, UTF8>* m_importProperties; // Properties used for non-KiCad import.
 

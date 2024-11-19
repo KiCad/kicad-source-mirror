@@ -1285,11 +1285,20 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
 
 void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 {
-    std::unique_lock<std::mutex> dialogLock( DIALOG_BOARD_SETUP::g_Mutex, std::try_to_lock );
+    static std::mutex dialogMutex; // Local static mutex
 
-    // One DIALOG_BOARD_SETUP dialog at a time.
+    std::unique_lock<std::mutex> dialogLock( dialogMutex, std::try_to_lock );
+
+    // One dialog at a time.
     if( !dialogLock.owns_lock() )
+    {
+        if( m_boardSetupDlg && m_boardSetupDlg->IsShown() )
+        {
+            m_boardSetupDlg->Raise(); // Brings the existing dialog to the front
+        }
+
         return;
+    }
 
     // Make sure everything's up-to-date
     GetBoard()->BuildListOfNets();
@@ -1298,6 +1307,9 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 
     if( !aInitialPage.IsEmpty() )
         dlg.SetInitialPage( aInitialPage, wxEmptyString );
+        
+    // Assign dlg to the m_boardSetupDlg pointer to track its status.
+    m_boardSetupDlg = &dlg;
 
     // QuasiModal required for Scintilla auto-complete
     if( dlg.ShowQuasiModal() == wxID_OK )
@@ -1370,6 +1382,9 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
     }
 
     GetCanvas()->SetFocus();
+
+    // Reset m_boardSetupDlg after the dialog is closed
+    m_boardSetupDlg = nullptr;
 }
 
 

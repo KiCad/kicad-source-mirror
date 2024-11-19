@@ -103,6 +103,21 @@ void SCH_EDIT_FRAME::LoadDrawingSheet()
 
 void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 {
+    static std::mutex dialogMutex; // Local static mutex
+
+    std::unique_lock<std::mutex> dialogLock( dialogMutex, std::try_to_lock );
+
+    // One dialog at a time.
+    if( !dialogLock.owns_lock() )
+    {
+        if( m_schematicSetupDialog && m_schematicSetupDialog->IsShown() )
+        {
+            m_schematicSetupDialog->Raise(); // Brings the existing dialog to the front
+        }
+
+        return;
+    }
+
     SCH_SCREENS screens( Schematic().Root() );
     std::vector<std::shared_ptr<BUS_ALIAS>> oldAliases;
 
@@ -116,6 +131,9 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
     if( !aInitialPage.IsEmpty() )
         dlg.SetInitialPage( aInitialPage, wxEmptyString );
+    
+    // Assign dlg to the m_schematicSetupDialog pointer to track its status.
+    m_schematicSetupDialog = &dlg;
 
     // TODO: is QuasiModal required here?
     if( dlg.ShowQuasiModal() == wxID_OK )
@@ -154,6 +172,9 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         RefreshOperatingPointDisplay();
         GetCanvas()->Refresh();
     }
+
+    // Reset m_schematicSetupDialog after the dialog is closed
+    m_schematicSetupDialog = nullptr;
 }
 
 

@@ -65,6 +65,7 @@ class DIALOG_SCH_FIND;
 class RESCUER;
 class HIERARCHY_PANE;
 class API_HANDLER_SCH;
+class DIALOG_SCHEMATIC_SETUP;
 
 
 /// Schematic search type used by the socket link with Pcbnew
@@ -1097,6 +1098,7 @@ private:
     DIALOG_BOOK_REPORTER*   m_diffSymbolDialog;
     HIERARCHY_PANE*         m_hierarchy;
     DIALOG_SYMBOL_FIELDS_TABLE* m_symbolFieldsTableDialog;
+    DIALOG_SCHEMATIC_SETUP*     m_schematicSetupDialog;
 
 
     wxTreeCtrl*             m_netNavigator;

@@ -48,9 +48,6 @@
 #include "dialog_board_setup.h"
 
 
-std::mutex DIALOG_BOARD_SETUP::g_Mutex;
-
-
 #define RESOLVE_PAGE( T, pageIndex ) static_cast<T*>( m_treebook->ResolvePage( pageIndex ) )
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
