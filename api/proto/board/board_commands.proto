@@ -130,6 +130,31 @@ message GetTextExtents
   kiapi.board.types.Text text = 1;
 }
 
+// Computes the polygon representation of a pad, merging any custom shapes together.
+// This representation will approximate curves as a series of segments.
+message GetPadShapeAsPolygon
+{
+  // The board to process
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  // A list of one or more pads to process
+  repeated kiapi.common.types.KIID pads = 2;
+
+  // The layer to process
+  kiapi.board.types.BoardLayer layer = 3;
+}
+
+// Returned from GetPadShapeAsPolygon.  The pads and polygons repeated fields will have the same length
+// and can be treated as a list of tuples.
+message PadShapeAsPolygonResponse
+{
+  // The pads that were processed
+  repeated kiapi.common.types.KIID pads = 1;
+
+  // The polygon representation of each pad
+  repeated kiapi.common.types.PolygonWithHoles polygons = 2;
+}
+
 //// Interactive commands ////
 // These commands begin an interactive operation in the editor.
 // They return a response immediately, but the editor will become busy

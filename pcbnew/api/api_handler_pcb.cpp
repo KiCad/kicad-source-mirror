@@ -63,8 +63,10 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
     registerHandler<GetBoardStackup, BoardStackupResponse>( &API_HANDLER_PCB::handleGetStackup );
     registerHandler<GetGraphicsDefaults, GraphicsDefaultsResponse>(
             &API_HANDLER_PCB::handleGetGraphicsDefaults );
-    registerHandler<GetTextExtents, commands::BoundingBoxResponse>(
+    registerHandler<GetTextExtents, BoundingBoxResponse>(
             &API_HANDLER_PCB::handleGetTextExtents );
+    registerHandler<GetPadShapeAsPolygon, PadShapeAsPolygonResponse>(
+            &API_HANDLER_PCB::handleGetPadShapeAsPolygon );
 
     registerHandler<InteractiveMoveItems, Empty>( &API_HANDLER_PCB::handleInteractiveMoveItems );
     registerHandler<GetNets, NetsResponse>( &API_HANDLER_PCB::handleGetNets );
@@ -598,6 +600,41 @@ HANDLER_RESULT<commands::BoundingBoxResponse> API_HANDLER_PCB::handleGetTextExte
     response.mutable_position()->set_y_nm( bbox.GetPosition().y );
     response.mutable_size()->set_x_nm( bbox.GetSize().x );
     response.mutable_size()->set_y_nm( bbox.GetSize().y );
+
+    return response;
+}
+
+
+HANDLER_RESULT<PadShapeAsPolygonResponse> API_HANDLER_PCB::handleGetPadShapeAsPolygon(
+        GetPadShapeAsPolygon& aMsg,
+        const HANDLER_CONTEXT& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    SHAPE_POLY_SET poly;
+    PadShapeAsPolygonResponse response;
+    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( aMsg.layer() );
+
+    for( const types::KIID& padRequest : aMsg.pads() )
+    {
+        KIID id( padRequest.value() );
+        std::optional<BOARD_ITEM*> optPad = getItemById( id );
+
+        if( !optPad || ( *optPad )->Type() != PCB_PAD_T )
+            continue;
+
+        response.add_pads()->set_value( padRequest.value() );
+
+        PAD* pad = static_cast<PAD*>( *optPad );
+        pad->TransformShapeToPolygon( poly, pad->Padstack().EffectiveLayerFor( layer ), 0,
+                                      ARC_HIGH_DEF, ERROR_INSIDE );
+
+        types::PolygonWithHoles* polyMsg = response.mutable_polygons()->Add();
+        PackPolyLine( *polyMsg->mutable_outline(), poly.COutline( 0 ) );
+    }
 
     return response;
 }
