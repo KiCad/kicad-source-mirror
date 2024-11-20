@@ -1880,6 +1880,11 @@ const TOOL_ACTION* allowedActions[] = { &ACTIONS::panUp,          &ACTIONS::panD
 
 bool EE_SELECTION_TOOL::selectMultiple()
 {
+    // Block selection not allowed in symbol viewer frame: no actual code to handle
+    // a selection, so return to avoid to draw a selection rectangle, and to avoid crashes.
+    if( m_frame->IsType( FRAME_T::FRAME_SCH_VIEWER ) )
+        return false;
+
     bool cancelled = false;     // Was the tool canceled while it was running?
     m_multiple = true;          // Multiple selection mode is active
     KIGFX::VIEW* view = getView();
