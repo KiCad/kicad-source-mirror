@@ -261,17 +261,29 @@ message DeleteItemsResponse
   repeated ItemDeletionResult deleted_items = 3;
 }
 
-message GetItemBoundingBox
+enum BoundingBoxMode
+{
+  BBM_UNKNOWN = 0;
+  BBM_ITEM_ONLY = 1;
+  BBM_ITEM_AND_CHILD_TEXT = 2;
+}
+
+message GetBoundingBox
 {
   kiapi.common.types.ItemHeader header = 1;
 
-  kiapi.common.types.KIID id = 2;
+  repeated kiapi.common.types.KIID items = 2;
+
+  // Some item types can have independently-movable text as children (e.g. footprints)
+  // This mode controls whether or not these are included in the box
+  BoundingBoxMode mode = 3;
 }
 
-message BoundingBoxResponse
+message GetBoundingBoxResponse
 {
-  kiapi.common.types.Vector2 position = 1;
-  kiapi.common.types.Vector2 size = 2;
+  repeated kiapi.common.types.KIID items = 1;
+
+  repeated kiapi.common.types.Box2 boxes = 2;
 }
 
 // Tests if a certain point falls within tolerance of an item's geometry

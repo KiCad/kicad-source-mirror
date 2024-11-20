@@ -123,7 +123,7 @@ message RefillZones
  * Utilities
  */
 
-// returns kiapi.common.commands.BoundingBoxResponse
+// returns kiapi.common.types.Box2
 message GetTextExtents
 {
   // A temporary text item to calculate the bounding box for

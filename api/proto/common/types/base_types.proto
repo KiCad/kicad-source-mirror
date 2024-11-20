@@ -191,6 +191,12 @@ message Vector3
   int64 z_nm = 3;
 }
 
+message Box2
+{
+  kiapi.common.types.Vector2 position = 1;
+  kiapi.common.types.Vector2 size = 2;
+}
+
 // Describes a quantity of distance (size, length, etc).  All coordinates are in nanometers.
 message Distance
 {

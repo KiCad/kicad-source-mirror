@@ -66,15 +66,29 @@ types::LibraryIdentifier LibIdToProto( const LIB_ID& aId )
 }
 
 
-void PackVector2( kiapi::common::types::Vector2& aOutput, const VECTOR2I aInput )
+void PackVector2( types::Vector2& aOutput, const VECTOR2I& aInput )
 {
     aOutput.set_x_nm( aInput.x );
     aOutput.set_y_nm( aInput.y );
 }
 
+
 VECTOR2I UnpackVector2( const types::Vector2& aInput )
 {
     return VECTOR2I( aInput.x_nm(), aInput.y_nm() );
+}
+
+
+void PackBox2( types::Box2& aOutput, const BOX2I& aInput )
+{
+    PackVector2( *aOutput.mutable_position(), aInput.GetOrigin() );
+    PackVector2( *aOutput.mutable_size(), aInput.GetSize() );
+}
+
+
+BOX2I UnpackBox2( const types::Box2& aInput )
+{
+    return BOX2I( UnpackVector2( aInput.position() ), UnpackVector2( aInput.size() ) );
 }
 
 

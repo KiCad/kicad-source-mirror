@@ -72,7 +72,10 @@ private:
     HANDLER_RESULT<GraphicsDefaultsResponse> handleGetGraphicsDefaults( GetGraphicsDefaults& aMsg,
             const HANDLER_CONTEXT& aCtx );
 
-    HANDLER_RESULT<commands::BoundingBoxResponse> handleGetTextExtents( GetTextExtents& aMsg,
+    HANDLER_RESULT<commands::GetBoundingBoxResponse> handleGetBoundingBox( commands::GetBoundingBox& aMsg,
+            const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<types::Box2> handleGetTextExtents( GetTextExtents& aMsg,
             const HANDLER_CONTEXT& aCtx );
 
     HANDLER_RESULT<PadShapeAsPolygonResponse> handleGetPadShapeAsPolygon( GetPadShapeAsPolygon& aMsg,

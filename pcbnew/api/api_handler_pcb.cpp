@@ -63,7 +63,9 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
     registerHandler<GetBoardStackup, BoardStackupResponse>( &API_HANDLER_PCB::handleGetStackup );
     registerHandler<GetGraphicsDefaults, GraphicsDefaultsResponse>(
             &API_HANDLER_PCB::handleGetGraphicsDefaults );
-    registerHandler<GetTextExtents, BoundingBoxResponse>(
+    registerHandler<GetBoundingBox, GetBoundingBoxResponse>(
+            &API_HANDLER_PCB::handleGetBoundingBox );
+    registerHandler<GetTextExtents, types::Box2>(
             &API_HANDLER_PCB::handleGetTextExtents );
     registerHandler<GetPadShapeAsPolygon, PadShapeAsPolygonResponse>(
             &API_HANDLER_PCB::handleGetPadShapeAsPolygon );
@@ -571,7 +573,48 @@ HANDLER_RESULT<GraphicsDefaultsResponse> API_HANDLER_PCB::handleGetGraphicsDefau
 }
 
 
-HANDLER_RESULT<commands::BoundingBoxResponse> API_HANDLER_PCB::handleGetTextExtents(
+HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_PCB::handleGetBoundingBox( GetBoundingBox& aMsg,
+        const HANDLER_CONTEXT& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aMsg.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    GetBoundingBoxResponse response;
+    bool includeText = aMsg.mode() == BoundingBoxMode::BBM_ITEM_AND_CHILD_TEXT;
+
+    for( const types::KIID& idMsg : aMsg.items() )
+    {
+        KIID id( idMsg.value() );
+        std::optional<BOARD_ITEM*> optItem = getItemById( id );
+
+        if( !optItem )
+            continue;
+
+        BOARD_ITEM* item = *optItem;
+        BOX2I bbox;
+
+        if( item->Type() == PCB_FOOTPRINT_T )
+            bbox = static_cast<FOOTPRINT*>( item )->GetBoundingBox( includeText );
+        else
+            bbox = item->GetBoundingBox();
+
+        response.add_items()->set_value( idMsg.value() );
+        PackBox2( *response.add_boxes(), bbox );
+    }
+
+    return response;
+}
+
+
+HANDLER_RESULT<types::Box2> API_HANDLER_PCB::handleGetTextExtents(
         GetTextExtents& aMsg,
         const HANDLER_CONTEXT& aCtx )
 {
@@ -588,7 +631,7 @@ HANDLER_RESULT<commands::BoundingBoxResponse> API_HANDLER_PCB::handleGetTextExte
         return tl::unexpected( e );
     }
 
-    commands::BoundingBoxResponse response;
+    types::Box2 response;
 
     BOX2I bbox = text.GetTextBox();
     EDA_ANGLE angle = text.GetTextAngle();

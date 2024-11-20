@@ -42,9 +42,13 @@ LIB_ID LibIdFromProto( const types::LibraryIdentifier& aId );
 
 types::LibraryIdentifier LibIdToProto( const LIB_ID& aId );
 
-void PackVector2( kiapi::common::types::Vector2& aOutput, const VECTOR2I aInput );
+void PackVector2( types::Vector2& aOutput, const VECTOR2I& aInput );
 
 VECTOR2I UnpackVector2( const types::Vector2& aInput );
+
+void PackBox2( types::Box2& aOutput, const BOX2I& aInput );
+
+BOX2I UnpackBox2( const types::Box2& aInput );
 
 void PackPolyLine( kiapi::common::types::PolyLine& aOutput, const SHAPE_LINE_CHAIN& aSlc );
 
