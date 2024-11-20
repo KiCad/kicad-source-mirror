@@ -146,6 +146,7 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
     pad.mutable_net()->mutable_code()->set_value( GetNetCode() );
     pad.mutable_net()->set_name( GetNetname() );
+    pad.set_number( GetNumber().ToUTF8() );
     pad.set_type( ToProtoEnum<PAD_ATTRIB, PadType>( GetAttribute() ) );
 
     google::protobuf::Any padStackMsg;
@@ -171,6 +172,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     SetNetCode( pad.net().code().value() );
     SetLocked( pad.locked() == kiapi::common::types::LockedState::LS_LOCKED );
     SetAttribute( FromProtoEnum<PAD_ATTRIB>( pad.type() ) );
+    SetNumber( wxString::FromUTF8( pad.number() ) );
 
     google::protobuf::Any padStackWrapper;
     padStackWrapper.PackFrom( pad.pad_stack() );
