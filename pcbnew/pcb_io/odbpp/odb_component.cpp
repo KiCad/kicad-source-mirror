@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/regex.h>
+
 #include "odb_component.h"
 #include "odb_util.h"
 #include "hash_eda.h"
@@ -46,9 +48,22 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
     }
 
     comp.m_comp_name = aFp->GetReference().ToAscii();
-    comp.m_part_name =
-            wxString::Format( "%s_%s_%s", aFp->GetFPID().GetFullLibraryName(),
-                              aFp->GetFPID().GetLibItemName().wx_str(), aFp->GetValue() );
+    comp.m_part_name = wxString::Format( "%s_%s", aFp->GetFPID().GetFullLibraryName(),
+                                         aFp->GetFPID().GetLibItemName().wx_str() );
+
+    // ODB++ cannot handle spaces in these fields
+    comp.m_comp_name.Trim().Trim( false );
+    comp.m_part_name.Trim().Trim( false );
+
+    if( comp.m_comp_name.IsEmpty() )
+    {
+        // The spec requires a component name; some ODB++ parsers can't handle it being empty
+        comp.m_comp_name = wxString::Format( "UNNAMED%zu", m_compList.size() );
+    }
+
+    wxRegEx spaces( "\\s" );
+    spaces.Replace( &comp.m_comp_name, "_" );
+    spaces.Replace( &comp.m_part_name, "_" );
 
     return comp;
 }
