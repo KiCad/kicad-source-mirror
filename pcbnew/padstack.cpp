@@ -58,6 +58,13 @@ PADSTACK::PADSTACK( const PADSTACK& aOther )
 {
     m_parent = aOther.m_parent;
     *this = aOther;
+
+    ForEachUniqueLayer(
+        [&]( PCB_LAYER_ID aLayer )
+        {
+            for( std::shared_ptr<PCB_SHAPE>& shape : CopperLayer( aLayer ).custom_shapes )
+                shape->SetParent( m_parent );
+        } );
 }
 
 
@@ -1280,6 +1287,7 @@ const std::vector<std::shared_ptr<PCB_SHAPE>>& PADSTACK::Primitives( PCB_LAYER_I
 
 void PADSTACK::AddPrimitive( PCB_SHAPE* aShape, PCB_LAYER_ID aLayer )
 {
+    aShape->SetParent( m_parent );
     CopperLayer( aLayer ).custom_shapes.emplace_back( aShape );
 }
 
