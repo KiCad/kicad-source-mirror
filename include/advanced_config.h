@@ -695,11 +695,6 @@ public:
     bool m_EnableSnapAnchorsDebug;
 
     /**
-     * When true, enable output to odb++
-     */
-    bool m_EnableODB;
-
-    /**
      * Minimum overlapping angle for which an arc is considered to be parallel
      * to its paired arc.
      */

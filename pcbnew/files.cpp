@@ -1561,7 +1561,6 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
     catch( const std::exception& e )
     {
         wxLogError( "Exception in ODB++ generation: %s", e.what() );
-        GetScreen()->SetContentModified( false );
         return;
     }
 
@@ -1609,6 +1608,4 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
 
         tempFile.Rmdir( wxPATH_RMDIR_RECURSIVE );
     }
-
-    GetScreen()->SetContentModified( false );
 }
