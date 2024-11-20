@@ -3217,6 +3217,11 @@ int CONNECTION_GRAPH::RunERC()
         }
     }
 
+    if( settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED ) )
+    {
+        error_count += ercCheckDirectiveLabels();
+    }
+
     // Hierarchical sheet checking is done at the schematic level
     if( settings.IsTestEnabled( ERCE_HIERACHICAL_LABEL )
             || settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
@@ -4066,6 +4071,34 @@ int CONNECTION_GRAPH::ercCheckSingleGlobalLabel()
     }
 
     return errors;
+}
+
+
+int CONNECTION_GRAPH::ercCheckDirectiveLabels()
+{
+    int error_count = 0;
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_DIRECTIVE_LABEL_T ) )
+        {
+            SCH_LABEL* label = static_cast<SCH_LABEL*>( item );
+
+            if( label->IsDangling() )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LABEL_NOT_CONNECTED );
+                SCH_TEXT*                 text = static_cast<SCH_TEXT*>( item );
+                ercItem->SetSheetSpecificPath( sheet );
+                ercItem->SetItems( text );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                sheet.LastScreen()->Append( marker );
+                error_count++;
+            }
+        }
+    }
+
+    return error_count;
 }
 
 

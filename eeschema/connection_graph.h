@@ -719,6 +719,13 @@ private:
     bool ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
+     * Check directive labels should be connected to something.
+     *
+     * @return                the number of errors found.
+     */
+    int ercCheckDirectiveLabels();
+
+    /**
      * Check that a hierarchical sheet has at least one matching label inside the sheet for each
      * port on the parent sheet object.
      *
