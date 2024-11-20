@@ -50,7 +50,7 @@ public:
 
     virtual ~ODB_ENTITY_BASE() = default;
     virtual void        GenerateFiles( ODB_TREE_WRITER& writer ) {}
-    virtual bool        CreateDirectiryTree( ODB_TREE_WRITER& writer );
+    virtual bool        CreateDirectoryTree( ODB_TREE_WRITER& writer );
     virtual std::string GetEntityName() = 0;
     virtual void        InitEntityData() {}
 
@@ -151,7 +151,7 @@ public:
     bool AddProfile();
     bool AddStepHeader();
 
-    virtual bool CreateDirectiryTree( ODB_TREE_WRITER& writer ) override;
+    virtual bool CreateDirectoryTree( ODB_TREE_WRITER& writer ) override;
 
     virtual void InitEntityData() override;
     void         GenerateLayerFiles( ODB_TREE_WRITER& writer );

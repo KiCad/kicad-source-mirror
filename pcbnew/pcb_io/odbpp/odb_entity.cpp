@@ -59,7 +59,7 @@
 #include "pcb_io_odbpp.h"
 
 
-bool ODB_ENTITY_BASE::CreateDirectiryTree( ODB_TREE_WRITER& writer )
+bool ODB_ENTITY_BASE::CreateDirectoryTree( ODB_TREE_WRITER& writer )
 {
     try
     {
@@ -857,7 +857,7 @@ void ODB_STEP_ENTITY::GenerateNetlistsFiles( ODB_TREE_WRITER& writer )
 }
 
 
-bool ODB_STEP_ENTITY::CreateDirectiryTree( ODB_TREE_WRITER& writer )
+bool ODB_STEP_ENTITY::CreateDirectoryTree( ODB_TREE_WRITER& writer )
 {
     try
     {

@@ -63,9 +63,9 @@ bool PCB_IO_ODBPP::GenerateFiles( ODB_TREE_WRITER& writer )
 {
     for( const auto entity : m_entities )
     {
-        if( !entity->CreateDirectiryTree( writer ) )
+        if( !entity->CreateDirectoryTree( writer ) )
         {
-            throw std::runtime_error( "Failed in create directiry tree process" );
+            throw std::runtime_error( "Failed in create directory tree process" );
             return false;
         }
 

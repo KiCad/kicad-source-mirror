@@ -1445,6 +1445,27 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
 
     wxFileName tempFile( pcbFileName.GetFullPath(), "" );
     tempFile.AppendDir( "odb" );
+    wxDir testDir( tempFile.GetFullPath() );
+
+    if( testDir.IsOpened() && ( testDir.HasFiles() || testDir.HasSubDirs() ) )
+    {
+        wxString msg = wxString::Format( _( "Output directory '%s' already exists and is not empty. "
+                                            "Do you want to overwrite it?" ),
+                                         tempFile.GetFullPath() );
+
+        KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        errorDlg.SetOKLabel( _( "Overwrite" ) );
+
+        if( errorDlg.ShowModal() != wxID_OK )
+            return;
+
+        if( !tempFile.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
+        {
+            msg.Printf( _( "Cannot remove existing output directory '%s'." ),
+                        pcbFileName.GetFullPath() );
+            return;
+        }
+    }
 
     wxString                    upperTxt;
     wxString                    lowerTxt;
