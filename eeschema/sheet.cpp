@@ -282,6 +282,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     }
 
     SCH_SHEET_LIST loadedSheets( tmpSheet.get() );
+    Schematic().RefreshHierarchy();
     SCH_SHEET_LIST schematicSheets = Schematic().Hierarchy();
 
     // Make sure any new sheet changes do not cause any recursion issues.
