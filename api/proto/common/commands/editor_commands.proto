@@ -309,3 +309,9 @@ message HitTestResponse
 {
   HitTestResult result = 1;
 }
+
+// returns common.types.TitleBlockInfo
+message GetTitleBlockInfo
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}

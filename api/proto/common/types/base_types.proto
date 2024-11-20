@@ -338,3 +338,24 @@ message GraphicAttributes
   StrokeAttributes stroke = 1;
   GraphicFillAttributes fill = 2;
 }
+
+// The text strings that can be set in a drawing sheet for the title block
+message TitleBlockInfo
+{
+  string title = 1;
+  string date = 2;
+  string revision = 3;
+  string company = 4;
+
+  // Note: not a repeated string; there can be gaps and the UI limits the count to 9
+
+  string comment1 = 5;
+  string comment2 = 6;
+  string comment3 = 7;
+  string comment4 = 8;
+  string comment5 = 9;
+  string comment6 = 10;
+  string comment7 = 11;
+  string comment8 = 12;
+  string comment9 = 13;
+}

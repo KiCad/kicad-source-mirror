@@ -81,6 +81,9 @@ private:
     HANDLER_RESULT<PadShapeAsPolygonResponse> handleGetPadShapeAsPolygon( GetPadShapeAsPolygon& aMsg,
             const HANDLER_CONTEXT& aCtx );
 
+    HANDLER_RESULT<types::TitleBlockInfo> handleGetTitleBlockInfo( commands::GetTitleBlockInfo& aMsg,
+            const HANDLER_CONTEXT& aCtx );
+
     HANDLER_RESULT<Empty> handleInteractiveMoveItems( InteractiveMoveItems& aMsg,
                                                       const HANDLER_CONTEXT& aCtx );
 
