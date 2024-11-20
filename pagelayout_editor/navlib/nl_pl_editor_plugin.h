@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 3Dconnexion
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 3Dconnexion
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,44 +19,51 @@
  */
 
 /**
- * @file  nl_3d_viewer_plugin.h
- * @brief Declaration of the NL_3D_VIEWER_PLUGIN class
+ * @file  nl_gerbview_plugin.h
+ * @brief Declaration of the NL_PL_EDITOR_PLUGIN class
  */
 
-#ifndef NL_3D_VIEWER_PLUGIN_H_
-#define NL_3D_VIEWER_PLUGIN_H_
+#ifndef NL_GERBVIEW_PLUGIN_H_
+#define NL_GERBVIEW_PLUGIN_H_
 
 #include <memory>
 
 // Forward declarations.
-class EDA_3D_CANVAS;
-class NL_3D_VIEWER_PLUGIN_IMPL;
+class EDA_DRAW_PANEL_GAL;
+class NL_PL_EDITOR_PLUGIN_IMPL;
 
 /**
  * The class that implements the public interface to the SpaceMouse plug-in.
  */
-class NL_3D_VIEWER_PLUGIN
+class NL_PL_EDITOR_PLUGIN
 {
 public:
     /**
-     * Initializes a new instance of the NL_3D_VIEWER_PLUGIN.
+     * Initializes a new instance of the NL_PL_EDITOR_PLUGIN.
+     */
+    NL_PL_EDITOR_PLUGIN();
+
+    virtual ~NL_PL_EDITOR_PLUGIN();
+
+
+    /**
+     * Sets the viewport controlled by the SpaceMouse.
      *
      *  @param aViewport is the viewport to be navigated.
      */
-    NL_3D_VIEWER_PLUGIN( EDA_3D_CANVAS* aViewport );
+    void SetCanvas( EDA_DRAW_PANEL_GAL* aViewport );
 
-    virtual ~NL_3D_VIEWER_PLUGIN();
 
     /**
      * Set the connection to the 3Dconnexion driver to the focus state so that
-     * 3DMouse data is routed here.
+     * 3DMouse data is routed to this connexion.
      *
-     * @param aFocus is true to set the connection active.
+     * @param aFocus is true to set the connexion active.
      */
-    void SetFocus( bool aFocus = true );
+    void SetFocus( bool aFocus );
 
 private:
-    std::unique_ptr<NL_3D_VIEWER_PLUGIN_IMPL> m_impl;
+    std::unique_ptr<NL_PL_EDITOR_PLUGIN_IMPL> m_impl;
 };
 
-#endif // NL_3D_VIEWER_PLUGIN_H_
+#endif // NL_GERBVIEW_PLUGIN_H_

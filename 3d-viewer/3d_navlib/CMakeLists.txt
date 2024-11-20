@@ -1,6 +1,8 @@
     add_library(3d-viewer_navlib STATIC
 	    "nl_3d_viewer_plugin.cpp"
 	    "nl_3d_viewer_plugin_impl.cpp"
+        "nl_footprint_properties_plugin.cpp"
+        "nl_footprint_properties_plugin_impl.cpp"
     )
 
     # 3d-viewer_navlib depends on make_lexer outputs in common

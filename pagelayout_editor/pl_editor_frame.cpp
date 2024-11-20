@@ -61,6 +61,9 @@
 #include <wx/filedlg.h>
 #include <wx/print.h>
 #include <wx/treebook.h>
+#include <wx/log.h>
+
+#include <navlib/nl_pl_editor_plugin.h>
 
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
@@ -81,14 +84,11 @@ END_EVENT_TABLE()
 
 
 PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-        EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
-                        wxDefaultPosition, wxDefaultSize,
-                        KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME, drawSheetIUScale ),
-        m_propertiesPagelayout( nullptr ),
-        m_propertiesFrameWidth( 200 ),
-        m_originSelectBox( nullptr ),
-        m_originSelectChoice( 0 ),
-        m_pageSelectBox( nullptr ),
+        EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ), wxDefaultPosition,
+                        wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME,
+                        drawSheetIUScale ),
+        m_propertiesPagelayout( nullptr ), m_propertiesFrameWidth( 200 ),
+        m_originSelectBox( nullptr ), m_originSelectChoice( 0 ), m_pageSelectBox( nullptr ),
         m_mruImagePath( wxEmptyString )
 {
     m_maximizeByDefault = true;
@@ -228,6 +228,17 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                    // Ensure the controls on the toolbars all are correctly sized
                     UpdateToolbarControlSizes();
                } );
+
+    try
+    {
+        if( !m_spaceMouse )
+            m_spaceMouse = std::make_unique<NL_PL_EDITOR_PLUGIN>();
+        m_spaceMouse->SetCanvas( GetCanvas() );
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
+    }
 }
 
 
@@ -977,3 +988,20 @@ void PL_EDITOR_FRAME::UpdateMsgPanelInfo()
     SetMsgPanel( msgItems );
 }
 #endif
+
+void PL_EDITOR_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
+{
+    EDA_DRAW_FRAME::handleActivateEvent(aEvent);
+
+    if( m_spaceMouse )
+        m_spaceMouse->SetFocus( aEvent.GetActive() );
+}
+
+
+void PL_EDITOR_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
+{
+    EDA_DRAW_FRAME::handleIconizeEvent(aEvent);
+
+    if( m_spaceMouse )
+        m_spaceMouse->SetFocus( false );
+}

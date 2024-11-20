@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2024 3Dconnexion
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,53 +19,64 @@
  */
 
 /**
- * @file  nl_3d_viewer_plugin_impl.h
- * @brief Declaration of the NL_3D_VIEWER_PLUGIN_IMPL class
+ * @file  nl_gerbview_plugin_impl.h
+ * @brief Declaration of the NL_GERBVIEW_PLUGIN_IMPL class
  */
 
-#ifndef NL_3D_VIEWER_PLUGIN_IMPL_H_
-#define NL_3D_VIEWER_PLUGIN_IMPL_H_
+#ifndef NL_GERBVIEW_PLUGIN_IMPL_H_
+#define NL_GERBVIEW_PLUGIN_IMPL_H_
+
+#if _WIN32
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0603
+#endif
+#endif
 
 // TDxWare SDK.
 #include <SpaceMouse/CNavigation3D.hpp>
 
-// KiCAD
-#include <include/plugins/3dapi/xv3d_types.h>
-
 // wx
 #include <wx/chartype.h>
 
-// glm
-#include <glm/glm.hpp>
+// KiCAD
+#include <math/vector2d.h>
+
+// stdlib
+#include <string>
 
 // Forward declarations.
-class EDA_3D_CANVAS;
-class TRACK_BALL;
-
-// temporary store for the categories
-typedef std::map<std::string, TDx::CCommandTreeNode*> CATEGORY_STORE;
-
-CATEGORY_STORE::iterator add_category( std::string aCategoryPath, CATEGORY_STORE& aCategoryStore );
+class EDA_DRAW_PANEL_GAL;
+namespace KIGFX
+{
+class VIEW;
+}
 
 // Convenience typedef.
 typedef TDx::SpaceMouse::Navigation3D::CNavigation3D NAV_3D;
 
 /**
  * The class that implements the accessors and mutators required for
- * 3D navigation in an EDA_3D_CANVAS using a SpaceMouse.
+ * 3D navigation in an PCB_DRAW_PANEL_GAL using a SpaceMouse.
  */
-class NL_3D_VIEWER_PLUGIN_IMPL : public NAV_3D
+class NL_GERBVIEW_PLUGIN_IMPL : public NAV_3D
 {
 public:
     /**
-     * Initializes a new instance of the NL_3DVIEWER_PLUGIN.
-     *
-     *  @param aCanvas is the viewport to be navigated.
-     *  @param aProfileHint tells the 3DConnexion UI which profile to use.
+     * Initializes a new instance of the NL_GERBVIEW_PLUGIN_IMPL.
      */
-    NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas, const std::string& aProfileHint );
+    NL_GERBVIEW_PLUGIN_IMPL();
 
-    virtual ~NL_3D_VIEWER_PLUGIN_IMPL();
+
+    virtual ~NL_GERBVIEW_PLUGIN_IMPL();
+
+
+    /**
+     * Sets the viewport controlled by the SpaceMouse.
+     *
+     *  @param aViewport is the viewport to be navigated.
+     */
+    void SetCanvas( EDA_DRAW_PANEL_GAL* aViewport );
+
 
     /**
      * Set the connection to the 3Dconnexion driver to the focus state so that
@@ -73,23 +84,13 @@ public:
      *
      * @param aFocus is true to set the connection active.
      */
-    void SetFocus( bool aFocus = true );
-
-    /**
-     * Get the m_canvas pointer.
-     */
-    EDA_3D_CANVAS* GetCanvas() const;
-
-    /**
-     * Connect plugin implementation to the driver.
-     */
-    void Connect();
+    void SetFocus( bool aFocus );
 
 private:
     /**
       * Export the invocable actions and images to the 3Dconnexion UI.
       */
-    virtual void exportCommandsAndImages();
+    void exportCommandsAndImages();
 
     long GetCameraMatrix( navlib::matrix_t& aMatrix ) const override;
     long GetPointerPosition( navlib::point_t& aPosition ) const override;
@@ -127,27 +128,20 @@ private:
     long GetCoordinateSystem( navlib::matrix_t& aMatrix ) const override;
     long GetIsViewRotatable( navlib::bool_t& isRotatable ) const override;
 
-
 private:
-    EDA_3D_CANVAS* m_canvas;
-    TRACK_BALL*    m_camera;
-    bool           m_capIsMoving;
-    double         m_newWidth;
-    SFVEC3F        m_rayOrigin;
-    SFVEC3F        m_rayDirection;
-
-    // The cached CAMERA affine matrix. This is used to determine if the camera has been
-    // moved. The camera matrix is the world to camera affine.
-    mutable glm::mat4 m_cameraMatrix;
-
+    EDA_DRAW_PANEL_GAL* m_viewport2D = nullptr;
+    KIGFX::VIEW*        m_view = nullptr;
+    bool                m_isMoving = false;
+    mutable double      m_viewportWidth = 0.0;
+    mutable VECTOR2D    m_viewPosition;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.
      *  The debug output can be turned on by setting the WXTRACE environment variable to
-     *  "KI_TRACE_NL_3DVIEWER_PLUGIN".  See the wxWidgets documentation on wxLogTrace for
+     *  "KI_TRACE_NL_GERBVIEW_PLUGIN".  See the wxWidgets documentation on wxLogTrace for
      *  more information.
      */
     static const wxChar* m_logTrace;
 };
 
-#endif // NL_3D_VIEWER_PLUGIN_IMPL_H_
+#endif // NL_GERBVIEW_PLUGIN_IMPL

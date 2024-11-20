@@ -30,6 +30,8 @@
 #include <page_info.h>
 #include <gbr_display_options.h>
 
+#include <memory>
+
 #define NO_AVAILABLE_LAYERS UNDEFINED_LAYER
 
 class DCODE_SELECTION_BOX;
@@ -42,6 +44,7 @@ class GERBVIEW_SETTINGS;
 class REPORTER;
 class SELECTION;
 class wxStaticText;
+class NL_GERBVIEW_PLUGIN;
 
 
 /**
@@ -477,6 +480,9 @@ protected:
     void setupUIConditions() override;
     void doReCreateMenuBar() override;
 
+    void handleActivateEvent( wxActivateEvent& aEvent ) override;
+    void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
+
 private:
     void updateComponentListSelectBox();
     void updateNetnameListSelectBox();
@@ -556,6 +562,8 @@ private:
                                             // relative to the m_SelAperAttributesBox
     wxStaticText*       m_dcodeText;        // a message on the auxiliary toolbar,
                                             // relative to the m_DCodeSelector
+
+    std::unique_ptr<NL_GERBVIEW_PLUGIN> m_spaceMouse;
 };
 
 #endif /* WX_GERBER_STRUCT_H */

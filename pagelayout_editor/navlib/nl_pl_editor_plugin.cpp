@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 3Dconnexion
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 3Dconnexion
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,28 +18,35 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "nl_3d_viewer_plugin.h"
-#include "nl_3d_viewer_plugin_impl.h"
+#include "nl_pl_editor_plugin.h"
+#include "nl_pl_editor_plugin_impl.h"
+
 #include <advanced_config.h>
 #include <kiplatform/drivers.h>
 
 
-NL_3D_VIEWER_PLUGIN::NL_3D_VIEWER_PLUGIN( EDA_3D_CANVAS* aViewport )
+NL_PL_EDITOR_PLUGIN::NL_PL_EDITOR_PLUGIN()
 {
     if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver
         && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion() )
     {
-        m_impl = std::make_unique<NL_3D_VIEWER_PLUGIN_IMPL>( aViewport, "KiCAD 3D" );
-        m_impl->Connect();
+        m_impl = std::make_unique<NL_PL_EDITOR_PLUGIN_IMPL>();
     }
 }
 
 
-NL_3D_VIEWER_PLUGIN::~NL_3D_VIEWER_PLUGIN() = default;
+NL_PL_EDITOR_PLUGIN::~NL_PL_EDITOR_PLUGIN() = default;
 
 
-void NL_3D_VIEWER_PLUGIN::SetFocus( bool focus )
+void NL_PL_EDITOR_PLUGIN::SetFocus( bool focus )
 {
     if( m_impl )
         m_impl->SetFocus( focus );
+}
+
+
+void NL_PL_EDITOR_PLUGIN::SetCanvas( EDA_DRAW_PANEL_GAL* aViewport )
+{
+    if( m_impl )
+        m_impl->SetCanvas( aViewport );
 }

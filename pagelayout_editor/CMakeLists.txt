@@ -129,6 +129,13 @@ target_link_options( pl_editor_kiface PRIVATE
 # if building pl_editor, then also build pl_editor_kiface if out of date.
 add_dependencies( pl_editor pl_editor_kiface )
 
+message( STATUS "Including 3Dconnexion SpaceMouse navigation support in pagelayout editor" )
+add_subdirectory( navlib )
+
+target_link_libraries( pl_editor_kiface pl_editor_navlib)
+
+add_dependencies( pl_editor_kiface pl_editor_navlib)
+
 # these 2 binaries are a matched set, keep them together:
 if( APPLE )
     set_target_properties( pl_editor PROPERTIES

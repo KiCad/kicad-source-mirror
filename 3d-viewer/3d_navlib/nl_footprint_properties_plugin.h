@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 3Dconnexion
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 3Dconnexion
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,33 +19,33 @@
  */
 
 /**
- * @file  nl_3d_viewer_plugin.h
- * @brief Declaration of the NL_3D_VIEWER_PLUGIN class
+ * @file  nl_footprint_properties_plugin.h
+ * @brief declaration of the nl_footprint_properties_plugin class
  */
 
-#ifndef NL_3D_VIEWER_PLUGIN_H_
-#define NL_3D_VIEWER_PLUGIN_H_
+#ifndef NL_FOOTPRINT_PROPERTIES_PLUGIN_H_
+#define NL_FOOTPRINT_PROPERTIES_PLUGIN_H_
 
 #include <memory>
 
 // Forward declarations.
 class EDA_3D_CANVAS;
-class NL_3D_VIEWER_PLUGIN_IMPL;
+class NL_FOOTPRINT_PROPERTIES_PLUGIN_IMPL;
 
 /**
  * The class that implements the public interface to the SpaceMouse plug-in.
  */
-class NL_3D_VIEWER_PLUGIN
+class NL_FOOTPRINT_PROPERTIES_PLUGIN
 {
 public:
     /**
-     * Initializes a new instance of the NL_3D_VIEWER_PLUGIN.
+     * Initializes a new instance of the NL_FOOTPRINT_PROPERTIES_PLUGIN.
      *
      *  @param aViewport is the viewport to be navigated.
      */
-    NL_3D_VIEWER_PLUGIN( EDA_3D_CANVAS* aViewport );
+    NL_FOOTPRINT_PROPERTIES_PLUGIN( EDA_3D_CANVAS* aViewport );
 
-    virtual ~NL_3D_VIEWER_PLUGIN();
+    virtual ~NL_FOOTPRINT_PROPERTIES_PLUGIN();
 
     /**
      * Set the connection to the 3Dconnexion driver to the focus state so that
@@ -56,7 +56,7 @@ public:
     void SetFocus( bool aFocus = true );
 
 private:
-    std::unique_ptr<NL_3D_VIEWER_PLUGIN_IMPL> m_impl;
+    std::unique_ptr<NL_FOOTPRINT_PROPERTIES_PLUGIN_IMPL> m_impl;
 };
 
-#endif // NL_3D_VIEWER_PLUGIN_H_
+#endif // NL_FOOTPRINT_PROPERTIES_PLUGIN_H_

@@ -57,19 +57,21 @@
 #include <dialog_draw_layers_settings.h>
 #include <zoom_defines.h>
 
+#include <navlib/nl_gerbview_plugin.h>
+#include <wx/log.h>
 
-GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
-        : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
+GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+        EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
                         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME,
                         gerbIUScale ),
-          m_TextInfo( nullptr ),
-          m_zipFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_ZIP_FILE1,
-                            ID_GERBVIEW_ZIP_FILE_LIST_CLEAR, _( "Clear Recent Zip Files" ) ),
-          m_drillFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_DRILL_FILE1,
-                              ID_GERBVIEW_DRILL_FILE_LIST_CLEAR, _( "Clear Recent Drill Files" ) ),
-          m_jobFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_JOB_FILE1,
-                            ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) ),
-          m_activeLayer( 0 )
+        m_TextInfo( nullptr ),
+        m_zipFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_ZIP_FILE1,
+                          ID_GERBVIEW_ZIP_FILE_LIST_CLEAR, _( "Clear Recent Zip Files" ) ),
+        m_drillFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_DRILL_FILE1,
+                            ID_GERBVIEW_DRILL_FILE_LIST_CLEAR, _( "Clear Recent Drill Files" ) ),
+        m_jobFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_JOB_FILE1,
+                          ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) ),
+        m_activeLayer( 0 )
 {
     m_maximizeByDefault = true;
     m_gerberLayout = nullptr;
@@ -1069,6 +1071,18 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
 
     ReCreateOptToolbar();
     ReCreateMenuBar();
+
+    try
+    {
+        if( !m_spaceMouse )
+            m_spaceMouse = std::make_unique<NL_GERBVIEW_PLUGIN>();
+
+        m_spaceMouse->SetCanvas( galCanvas );
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
+    }
 }
 
 
@@ -1235,4 +1249,20 @@ void GERBVIEW_FRAME::ToggleLayerManager()
     // show/hide auxiliary Vertical layers and visibility manager toolbar
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.Update();
+}
+
+void GERBVIEW_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
+{
+    EDA_DRAW_FRAME::handleActivateEvent(aEvent);
+
+    if( m_spaceMouse )
+        m_spaceMouse->SetFocus( aEvent.GetActive() );
+}
+
+void GERBVIEW_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
+{
+    EDA_DRAW_FRAME::handleIconizeEvent(aEvent);
+
+    if( m_spaceMouse )
+        m_spaceMouse->SetFocus( false );
 }
