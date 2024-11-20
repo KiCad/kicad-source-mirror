@@ -160,6 +160,12 @@ void PCB_IO_ODBPP::SaveBoard( const wxString& aFileName, BOARD* aBoard,
             m_scale = 25.4 / PCB_IU_PER_MM;
             m_symbolScale = 25.4 / PL_IU_PER_MM;
         }
+        else
+        {
+            m_unitsStr = "MM";
+            m_scale = 1.0 / PCB_IU_PER_MM;
+            m_symbolScale = 1.0 / PL_IU_PER_MM;
+        }
     }
 
     if( auto it = aProperties->find( "sigfig" ); it != aProperties->end() )
