@@ -150,7 +150,7 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 
     // Colors for layers that aren't theme-able
     m_layerColors[LAYER_PAD_PLATEDHOLES] = aSettings->GetColor( LAYER_PCB_BACKGROUND );
-    m_layerColors[LAYER_PAD_NETNAMES]    = aSettings->GetColor( LAYER_PAD_NETNAMES );
+    m_layerColors[LAYER_PAD_NETNAMES]    = aSettings->GetColor( NETNAMES_LAYER_ID_START );
 
     // Netnames for copper layers
     const COLOR4D lightLabel = aSettings->GetColor( NETNAMES_LAYER_ID_START );
@@ -203,6 +203,12 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     // Marker shadows
     if( aLayer == LAYER_MARKER_SHADOWS )
         return m_backgroundColor.WithAlpha( 0.6 );
+
+    // SMD pads use the copper netname layer
+    if( aLayer == LAYER_PAD_FR_NETNAMES )
+        aLayer = GetNetnameLayer( F_Cu );
+    else if( aLayer == LAYER_PAD_BK_NETNAMES )
+        aLayer = GetNetnameLayer( B_Cu );
 
     if( IsHoleLayer( aLayer ) && m_isPrinting )
     {
