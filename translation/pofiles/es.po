@@ -18,15 +18,15 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-01 16:27-0700\n"
-"PO-Revision-Date: 2024-04-02 11:49+0000\n"
-"Last-Translator: Ulices <hasecilu@tuta.io>\n"
+"PO-Revision-Date: 2024-11-21 05:00+0000\n"
+"Last-Translator: Pablo Bianchi <pablobianchi@duck.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v8/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -799,6 +799,8 @@ msgstr "Doble clic izquierdo o botón central para cambiar el color"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:479
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Desmarcar 'Usar colores de apilamiento de placa' para permitir la edición de "
+"colores."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:529
 #: pcbnew/widgets/appearance_controls.cpp:2176
@@ -2142,25 +2144,24 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Redes actualmente coincidentes:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Patrón"
+msgstr "Patrón:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Clases de red"
+msgstr "Clases de red:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Nota: las asignaciones completas de clase de red se pueden editar en "
+"Configuración del esquema > Proyecto."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Asignaciones de clases de red:"
+msgstr "Asignaciones de clases de red"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2480,9 +2481,8 @@ msgid "Name:"
 msgstr "Nombre:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(opcional, 0 por defecto)"
+msgstr "(opcional)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2568,9 +2568,8 @@ msgid "unit"
 msgstr "unidad"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Enlace:"
+msgstr "Enlazado"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -4066,7 +4065,7 @@ msgstr "Reiniciar identificador único"
 #: common/dialogs/panel_grid_settings.cpp:54
 #, fuzzy
 msgid "Footprints/pads:"
-msgstr "Huellas:"
+msgstr "Huellas/islas"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -5500,9 +5499,8 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1974 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Propiedades de la página"
+msgstr "Propiedades de la forma"
 
 #: common/eda_shape.cpp:1980 pcbnew/pcb_textbox.cpp:680
 #: pcbnew/pcb_track.cpp:1495
@@ -6268,19 +6266,16 @@ msgid "Select all cells"
 msgstr "Seleccionar todas las celdas"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Actualización completa"
+msgstr "Aceptar autocompletar"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Actualización completa"
+msgstr "Cancelar autocompletar"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Alternar bloqueo"
+msgstr "Alternar casilla de verificación"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -6912,10 +6907,8 @@ msgid "Courtyard collision shadow"
 msgstr "Sombra de colisión de patio"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr ""
-"Se ha encontrado un carácter ilegal en el nombre de la biblioteca lógica"
+msgstr "Carácter ilegal encontrado en el apodo de la biblioteca"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -9840,7 +9833,7 @@ msgstr "Actualizar/restablecer los atributos de los símbolos"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
 #, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Definido como símbolo de alimentación"
+msgstr "Restablecer símbolos de potencia personalizados"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10839,7 +10832,7 @@ msgstr "sin título"
 #: eeschema/dialogs/dialog_label_properties.cpp:590
 #, fuzzy
 msgid "Edit Label Properties"
-msgstr "Propiedades de la etiqueta"
+msgstr "Editar propiedades de la etiqueta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -12403,9 +12396,8 @@ msgstr ""
 "en Preferencias > Editor de esquemas > Colores."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:439
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Propiedades de la página"
+msgstr "Editar propiedades de la página"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:481
 #, c-format
@@ -13714,9 +13706,8 @@ msgstr ""
 "una hoja en este esquema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:528
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Propiedades del texto"
+msgstr "Editar propiedades del texto"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -14894,6 +14885,8 @@ msgstr "La ruta de salida no debe estar en conflicto con la ruta existente\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Se debe especificar la ruta de salida para convertir bibliotecas antiguas y "
+"no de KiCad.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
@@ -15331,6 +15324,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' no es un archivo esquemático de KiCad.\n"
+"Utilice Archivo -> Importar para archivos esquemáticos que no sean de KiCad."
 
 #: eeschema/files-io.cpp:275
 msgid "Root"
@@ -15445,9 +15440,8 @@ msgid "Insert Schematic"
 msgstr "Insertar esquema"
 
 #: eeschema/files-io.cpp:669
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Imp&ortar contenido de hoja de esquema"
+msgstr "Importar contenido de hoja de esquema..."
 
 #: eeschema/files-io.cpp:681
 msgid ""
@@ -16225,9 +16219,8 @@ msgstr ""
 "biblioteca '%s'."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1726
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Estilo del cuerpo"
+msgstr "Cambiar estilo de cuerpo"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
@@ -19091,18 +19084,12 @@ msgid "Spice Simulator"
 msgstr "Simulador Spice"
 
 #: eeschema/sim/simulator_frame.cpp:360 eeschema/tools/simulator_control.cpp:75
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Han habido errores al generar la lista de redes.\n"
-"\n"
+msgstr "Errores durante la generación de lista de redes."
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr ""
-"Han habido errores al generar la lista de redes.\n"
-"\n"
+msgstr "Ha habido errores al generar la lista de redes."
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -19129,9 +19116,9 @@ msgid "Another simulation is already running."
 msgstr "Ya hay otra simulación ejecutándose."
 
 #: eeschema/sim/simulator_frame.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "No se ha podido abrir el archivo %s"
+msgstr "No se puede cargar o analizar el archivo %s"
 
 #: eeschema/sim/simulator_frame.cpp:625
 msgid "Save changes to workbook?"
@@ -19182,9 +19169,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Realizar análisis de Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Fase de la señal:"
+msgstr "Copiar nombre de la señal"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -19512,9 +19498,9 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Un símbolo de potencia debería tener solo una unidad</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>Un símbolo de potencia debería tener solo un pin</b><br><br>"
+msgstr ""
+"<b>Un símbolo de alimentación no debe tener variantes de DeMorgan</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -20386,9 +20372,8 @@ msgid "Add Symbol to Schematic"
 msgstr "Añadir símbolo en el esquema"
 
 #: eeschema/tools/ee_actions.cpp:258
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "Guardar el símbolo activo en la librería"
+msgstr "Agregar el símbolo actual al esquema"
 
 #: eeschema/tools/ee_actions.cpp:264
 msgid "Show Pin Electrical Types"
@@ -21477,7 +21462,6 @@ msgid "Drags the selected item(s)"
 msgstr "Arrastra el/los elemento/s seleccionado/s"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1794
-#, fuzzy
 msgid "Align Items to Grid"
 msgstr "Alinear elementos a la cuadrícula"
 
@@ -21495,7 +21479,7 @@ msgstr "Nueva pestaña de análisis..."
 
 #: eeschema/tools/ee_actions.cpp:1387
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Crear una nueva pestaña que contenga un análisis de simulación"
 
 #: eeschema/tools/ee_actions.cpp:1395
 msgid "Open Workbook..."
@@ -21503,7 +21487,7 @@ msgstr "Abrir libro de trabajo..."
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Abrir un conjunto guardado de pestañas de análisis y ajustes"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
