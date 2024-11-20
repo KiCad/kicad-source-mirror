@@ -1443,27 +1443,70 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
         }
     }
 
+    wxFileName zipFileName( pcbFileName.GetFullPath(),
+                            wxString::Format( wxS( "%s-odb.zip" ), Prj().GetProjectName() ) );
+
     wxFileName tempFile( pcbFileName.GetFullPath(), "" );
     tempFile.AppendDir( "odb" );
-    wxDir testDir( tempFile.GetFullPath() );
 
-    if( testDir.IsOpened() && ( testDir.HasFiles() || testDir.HasSubDirs() ) )
+    if( dlg.GetCompress() )
     {
-        wxString msg = wxString::Format( _( "Output directory '%s' already exists and is not empty. "
-                                            "Do you want to overwrite it?" ),
-                                         tempFile.GetFullPath() );
-
-        KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        errorDlg.SetOKLabel( _( "Overwrite" ) );
-
-        if( errorDlg.ShowModal() != wxID_OK )
-            return;
-
-        if( !tempFile.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
+        if( zipFileName.Exists() )
         {
-            msg.Printf( _( "Cannot remove existing output directory '%s'." ),
-                        pcbFileName.GetFullPath() );
+            wxString msg = wxString::Format( _( "Output files '%s' already exists. "
+                                                "Do you want to overwrite it?" ),
+                                             zipFileName.GetFullPath() );
+
+            KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            errorDlg.SetOKLabel( _( "Overwrite" ) );
+
+            if( errorDlg.ShowModal() != wxID_OK )
+                return;
+
+            if( !wxRemoveFile( zipFileName.GetFullPath() ) )
+            {
+                msg.Printf( _( "Cannot remove existing output file '%s'." ),
+                            zipFileName.GetFullPath() );
+                DisplayErrorMessage( this, msg );
+                return;
+            }
+        }
+
+        tempFile.AssignDir( wxFileName::GetTempDir() );
+        tempFile.AppendDir( "kicad" );
+        tempFile.AppendDir( "odb" );
+
+        if( !wxFileName::Mkdir( tempFile.GetFullPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            wxString msg;
+            msg.Printf( _( "Cannot create temporary output directory." ) );
+            DisplayErrorMessage( this, msg );
             return;
+        }
+    }
+    else
+    {
+        wxDir testDir( tempFile.GetFullPath() );
+
+        if( testDir.IsOpened() && ( testDir.HasFiles() || testDir.HasSubDirs() ) )
+        {
+            wxString msg = wxString::Format( _( "Output directory '%s' already exists and is not empty. "
+                                                "Do you want to overwrite it?" ),
+                                             tempFile.GetFullPath() );
+
+            KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            errorDlg.SetOKLabel( _( "Overwrite" ) );
+
+            if( errorDlg.ShowModal() != wxID_OK )
+                return;
+
+            if( !tempFile.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
+            {
+                msg.Printf( _( "Cannot remove existing output directory '%s'." ),
+                            pcbFileName.GetFullPath() );
+                DisplayErrorMessage( this, msg );
+                return;
+            }
         }
     }
 
@@ -1481,7 +1524,7 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
         {
             IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::ODBPP ) );
             pi->SetProgressReporter( &reporter );
-            pi->SaveBoard( pcbFileName.GetFullPath(), GetBoard(), &props );
+            pi->SaveBoard( tempFile.GetFullPath(), GetBoard(), &props );
             return true;
         }
         catch( const IO_ERROR& ioe )
@@ -1524,8 +1567,6 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
 
     if( dlg.GetCompress() )
     {
-        wxFileName zipFileName( pcbFileName.GetFullPath(), "odb.zip" );
-
         wxFFileOutputStream fnout( zipFileName.GetFullPath() );
         wxZipOutputStream   zipStream( fnout );
 
@@ -1536,6 +1577,7 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
             wxString fileName;
 
             bool cont = dir.GetFirst( &fileName, wxEmptyString, wxDIR_DEFAULT );
+
             while( cont )
             {
                 wxFileName fileInZip( dirPath, fileName );
@@ -1564,6 +1606,8 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
 
         zipStream.Close();
         fnout.Close();
+
+        tempFile.Rmdir( wxPATH_RMDIR_RECURSIVE );
     }
 
     GetScreen()->SetContentModified( false );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ DIALOG_EXPORT_ODBPP_BASE::DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID
 
 	bSizerTop = new wxBoxSizer( wxHORIZONTAL );
 
-	m_lblBrdFile = new wxStaticText( this, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblBrdFile = new wxStaticText( this, wxID_ANY, _("Folder:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblBrdFile->Wrap( -1 );
 	bSizerTop->Add( m_lblBrdFile, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -64,7 +64,7 @@ DIALOG_EXPORT_ODBPP_BASE::DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID
 
 	fgSizer->Add( m_lblPrecision, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_precision = new wxSpinCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 130,30 ), wxSP_ARROW_KEYS, 2, 16, 3 );
+	m_precision = new wxSpinCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 130,30 ), wxSP_ARROW_KEYS, 2, 16, 7 );
 	m_precision->SetToolTip( _("The number of values following the decimal separator") );
 
 	fgSizer->Add( m_precision, 0, wxALIGN_RIGHT|wxALL, 5 );
