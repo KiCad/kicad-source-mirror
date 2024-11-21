@@ -400,13 +400,18 @@ public:
      */
     inline void SetLayerVisible( int aLayer, bool aVisible = true )
     {
-        wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );
+        auto it = m_layers.find( aLayer );
 
-        if( m_layers[aLayer].visible != aVisible )
+        if( it == m_layers.end() )
+            return;
+
+        VIEW_LAYER& layer = it->second;
+
+        if( layer.visible != aVisible )
         {
             // Target has to be redrawn after changing its visibility
-            MarkTargetDirty( m_layers[aLayer].target );
-            m_layers[aLayer].visible = aVisible;
+            MarkTargetDirty( layer.target );
+            layer.visible = aVisible;
         }
     }
 
@@ -417,10 +422,12 @@ public:
      */
     inline bool IsLayerVisible( int aLayer ) const
     {
-        wxCHECK( aLayer >= 0, false);
-        wxCHECK( aLayer < (int) m_layers.size(), false );
+        auto it = m_layers.find( aLayer );
 
-        return m_layers.at( aLayer ).visible;
+        if( it == m_layers.end() )
+            return false;
+
+        return it->second.visible;
     }
 
     /**
@@ -431,13 +438,18 @@ public:
      */
     inline void SetLayerDiff( int aLayer, bool aDiff = true )
     {
-        wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );
+        auto it = m_layers.find( aLayer );
 
-        if( m_layers[aLayer].diffLayer != aDiff )
+        if( it == m_layers.end() )
+            return;
+
+        VIEW_LAYER& layer = it->second;
+
+        if( layer.diffLayer != aDiff )
         {
             // Target has to be redrawn after changing its layers' diff status
-            MarkTargetDirty( m_layers[aLayer].target );
-            m_layers[aLayer].diffLayer = aDiff;
+            MarkTargetDirty( layer.target );
+            layer.diffLayer = aDiff;
         }
     }
 
@@ -449,13 +461,18 @@ public:
      */
     inline void SetLayerHasNegatives( int aLayer, bool aNegatives = true )
     {
-        wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );
+        auto it = m_layers.find( aLayer );
 
-        if( m_layers[aLayer].hasNegatives != aNegatives )
+        if( it == m_layers.end() )
+            return;
+
+        VIEW_LAYER& layer = it->second;
+
+        if( layer.hasNegatives != aNegatives )
         {
             // Target has to be redrawn after changing a layers' negatives
-            MarkTargetDirty( m_layers[aLayer].target );
-            m_layers[aLayer].hasNegatives = aNegatives;
+            MarkTargetDirty( layer.target );
+            layer.hasNegatives = aNegatives;
         }
     }
 
@@ -464,8 +481,12 @@ public:
      */
     inline void SetLayerDisplayOnly( int aLayer, bool aDisplayOnly = true )
     {
-        wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );
-        m_layers[aLayer].displayOnly = aDisplayOnly;
+        auto it = m_layers.find( aLayer );
+
+        if( it == m_layers.end() )
+            return;
+
+        it->second.displayOnly = aDisplayOnly;
     }
 
     /**
@@ -476,8 +497,12 @@ public:
      */
     inline void SetLayerTarget( int aLayer, RENDER_TARGET aTarget )
     {
-        wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );
-        m_layers[aLayer].target = aTarget;
+        auto it = m_layers.find( aLayer );
+
+        if( it == m_layers.end() )
+            return;
+
+        it->second.target = aTarget;
     }
 
     /**
@@ -630,16 +655,12 @@ public:
     /// Return true if the layer is cached.
     inline bool IsCached( int aLayer ) const
     {
-        wxCHECK( aLayer < (int) m_layers.size(), false );
+        auto it = m_layers.find( aLayer );
 
-        try
-        {
-            return m_layers.at( aLayer ).target == TARGET_CACHED;
-        }
-        catch( const std::out_of_range& )
-        {
+        if( it == m_layers.end() )
             return false;
-        }
+
+        return it->second.target == TARGET_CACHED;
     }
 
     /**
@@ -749,6 +770,11 @@ protected:
         RENDER_TARGET           target;          ///< Where the layer should be rendered.
         std::set<int>           requiredLayers;  ///< Layers that have to be enabled to show
                                                  ///< the layer.
+
+        bool operator< ( const VIEW_LAYER& aOther ) const
+        {
+            return id < aOther.id;
+        }
     };
 
 
@@ -845,7 +871,7 @@ protected:
     bool                               m_enableOrderModifier;
 
     ///< The set of possible displayed layers and its properties.
-    std::vector<VIEW_LAYER>            m_layers;
+    std::map<int, VIEW_LAYER>          m_layers;
 
     ///< Sorted list of pointers to members of m_layers.
     std::vector<VIEW_LAYER*>           m_orderedLayers;

@@ -265,23 +265,23 @@ VIEW::VIEW( bool aIsDynamic ) :
     // Redraw everything at the beginning
     MarkDirty();
 
-    m_layers.reserve( VIEW_MAX_LAYERS );
-
     // View uses layers to display EDA_ITEMs (item may be displayed on several layers, for example
     // pad may be shown on pad, pad hole and solder paste layers). There are usual copper layers
     // (eg. F.Cu, B.Cu, internal and so on) and layers for displaying objects such as texts,
     // silkscreen, pads, vias, etc.
     for( int ii = 0; ii < VIEW_MAX_LAYERS; ++ii )
     {
-        m_layers.emplace_back();
-        m_layers[ii].items          = std::make_shared<VIEW_RTREE>();
-        m_layers[ii].id             = ii;
-        m_layers[ii].renderingOrder = ii;
-        m_layers[ii].visible        = true;
-        m_layers[ii].displayOnly    = false;
-        m_layers[ii].diffLayer      = false;
-        m_layers[ii].hasNegatives   = false;
-        m_layers[ii].target         = TARGET_CACHED;
+        auto [it, _] = m_layers.emplace( ii, VIEW_LAYER() );
+        VIEW_LAYER& l = it->second;
+
+        l.items          = std::make_shared<VIEW_RTREE>();
+        l.id             = ii;
+        l.renderingOrder = ii;
+        l.visible        = true;
+        l.displayOnly    = false;
+        l.diffLayer      = false;
+        l.hasNegatives   = false;
+        l.target         = TARGET_CACHED;
     }
 
     sortLayers();
@@ -675,16 +675,12 @@ void VIEW::SortLayers( std::vector<int> aLayers ) const
 
 void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 {
-    std::vector<VIEW_LAYER> new_map;
-    new_map.reserve( m_layers.size() );
+    std::map<int,VIEW_LAYER> new_map;
 
-    for( const VIEW_LAYER& layer : m_layers )
-        new_map.push_back( layer );
-
-    for( auto& pair : aReorderMap )
+    for( auto& [_, layer] : m_layers )
     {
-        new_map[pair.second] = m_layers[pair.first];
-        new_map[pair.second].id = pair.second;
+        auto [it,__] = new_map.emplace( aReorderMap[layer.id], layer );
+        it->second.id = aReorderMap[layer.id];
     }
 
     // Transfer reordered data (using the copy assignment operator ):
@@ -1065,7 +1061,8 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
     std::vector<int> layers = aItem->ViewGetLayers();
 
     // Sorting is needed for drawing order dependent GALs (like Cairo)
-    SortLayers( layers );
+    if( !m_gal || !m_gal->IsOpenGlEngine())
+        SortLayers( layers );
 
     for( int layer : layers )
     {
@@ -1122,7 +1119,7 @@ void VIEW::Clear()
     r.SetMaximum();
     m_allItems->clear();
 
-    for( VIEW_LAYER& layer : m_layers )
+    for( auto& [_, layer] : m_layers )
         layer.items->RemoveAll();
 
     m_nextDrawPriority = 0;
@@ -1206,7 +1203,7 @@ void VIEW::clearGroupCache()
     r.SetMaximum();
     CLEAR_LAYER_CACHE_VISITOR visitor( this );
 
-    for( VIEW_LAYER& layer : m_layers )
+    for( auto& [_, layer] : m_layers )
         layer.items->Query( r, visitor );
 }
 
@@ -1256,7 +1253,7 @@ void VIEW::sortLayers()
 
     m_orderedLayers.resize( m_layers.size() );
 
-    for( VIEW_LAYER& layer : m_layers )
+    for( auto& [layer_id, layer] : m_layers )
         m_orderedLayers[n++] = &layer;
 
     sort( m_orderedLayers.begin(), m_orderedLayers.end(), compareRenderingOrder );
@@ -1268,8 +1265,7 @@ void VIEW::sortLayers()
 void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 {
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
-    wxCHECK( (unsigned) aLayer < m_layers.size(), /*void*/ );
-    wxCHECK( IsCached( aLayer ), /*void*/ );
+    wxCHECK( IsCached( aLayer ), /*void*/ ); // This will check if the layer exists
 
     if( !viewData )
         return;
@@ -1287,13 +1283,20 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 {
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
-    wxCHECK( (unsigned) aLayer < m_layers.size(), /*void*/ );
-    wxCHECK( IsCached( aLayer ), /*void*/ );
 
     if( !viewData )
         return;
 
-    VIEW_LAYER& l = m_layers.at( aLayer );
+    auto it = m_layers.find( aLayer );
+
+    if( it == m_layers.end() )
+        return;
+
+    VIEW_LAYER& l = it->second;
+
+    // Save the extra map lookup in IsCached by open coding here
+    if( l.target != TARGET_CACHED )
+        return;
 
     m_gal->SetTarget( l.target );
     m_gal->SetLayerDepth( l.renderingOrder );
@@ -1326,7 +1329,12 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
 
     for( int layer : layers )
     {
-        VIEW_LAYER& l = m_layers[layer];
+        auto it = m_layers.find( layer );
+
+        if( it == m_layers.end() )
+            continue;
+
+        VIEW_LAYER& l = it->second;
         l.items->Remove( aItem, old_bbox );
         l.items->Insert( aItem, new_bbox );
         MarkTargetDirty( l.target );
@@ -1346,7 +1354,12 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
 
     for( int layer : aItem->m_viewPrivData->m_layers )
     {
-        VIEW_LAYER& l = m_layers[layer];
+        auto it = m_layers.find( layer );
+
+        if( it == m_layers.end() )
+            continue;
+
+        VIEW_LAYER& l = it->second;
         l.items->Remove( aItem, old_bbox );
         MarkTargetDirty( l.target );
 
@@ -1372,7 +1385,12 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
 
     for( int layer : layers )
     {
-        VIEW_LAYER& l = m_layers[layer];
+        auto it = m_layers.find( layer );
+
+        if( it == m_layers.end() )
+            continue;
+
+        VIEW_LAYER& l = it->second;
         l.items->Insert( aItem, new_bbox );
         MarkTargetDirty( l.target );
     }
@@ -1381,14 +1399,21 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
 
 bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
 {
-    wxCHECK( (unsigned) aLayerId < m_layers.size(), false );
+    auto it = m_layers.find( aLayerId );
 
-    std::set<int>::const_iterator it, it_end;
+    if( it == m_layers.end() )
+        return false;
 
-    for( int layer : m_layers.at( aLayerId ).requiredLayers )
+    for( int layer : it->second.requiredLayers )
     {
         // That is enough if just one layer is not enabled
-        if( !m_layers.at( layer ).visible || !areRequiredLayersEnabled( layer ) )
+
+        auto it2 = m_layers.find( layer );
+
+        if( it2 == m_layers.end() || !it2->second.visible )
+            return false;
+
+        if( !areRequiredLayersEnabled( layer ) )
             return false;
     }
 
@@ -1402,7 +1427,7 @@ void VIEW::RecacheAllItems()
 
     r.SetMaximum();
 
-    for( const VIEW_LAYER& l : m_layers )
+    for( const auto& [_, l] : m_layers )
     {
         if( IsCached( l.id ) )
         {
@@ -1457,7 +1482,7 @@ void VIEW::UpdateItems()
         auto allItems = *m_allItems;
 
         // kill all Rtrees
-        for( VIEW_LAYER& layer : m_layers )
+        for( auto& [_, layer] : m_layers )
             layer.items->RemoveAll();
 
         // and re-insert items from scratch
