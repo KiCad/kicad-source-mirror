@@ -1566,6 +1566,7 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
 
     if( dlg.GetCompress() )
     {
+        reporter.AdvancePhase( _( "Compressing output" ) );
         wxFFileOutputStream fnout( zipFileName.GetFullPath() );
         wxZipOutputStream   zipStream( fnout );
 

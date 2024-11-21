@@ -97,7 +97,7 @@ bool PCB_IO_ODBPP::ExportODB( const wxString& aFileName )
         {
             m_progressReporter->SetNumPhases( 3 );
             m_progressReporter->BeginPhase( 0 );
-            m_progressReporter->Report( _( "Creating Entities" ) );
+            m_progressReporter->Report( _( "Creating ODB++ Structure" ) );
         }
 
         CreateEntity();
@@ -105,7 +105,6 @@ bool PCB_IO_ODBPP::ExportODB( const wxString& aFileName )
         if( m_progressReporter )
         {
             m_progressReporter->SetCurrentProgress( 1.0 );
-            m_progressReporter->AdvancePhase( _( "Init Entity Data" ) );
         }
 
         for( auto const& entity : m_entities )
@@ -116,7 +115,7 @@ bool PCB_IO_ODBPP::ExportODB( const wxString& aFileName )
         if( m_progressReporter )
         {
             m_progressReporter->SetCurrentProgress( 1.0 );
-            m_progressReporter->AdvancePhase( _( "Generating Entities Files" ) );
+            m_progressReporter->AdvancePhase( _( "Exporting board to ODB++" ) );
         }
 
         if( !GenerateFiles( *writer ) )
