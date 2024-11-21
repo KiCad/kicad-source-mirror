@@ -124,6 +124,8 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
     std::vector<BOARD_STACKUP_ITEM*> layers = stackup.GetList();
     std::set<PCB_LAYER_ID>           added_layers;
 
+    AddCOMPMatrixLayer( F_Cu );
+
     for( int i = 0; i < stackup.GetCount(); i++ )
     {
         BOARD_STACKUP_ITEM* stackup_item = layers.at( i );
@@ -182,7 +184,7 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
 
     AddDrillMatrixLayer();
 
-    AddCOMPMatrixLayer();
+    AddCOMPMatrixLayer( B_Cu );
 }
 
 
@@ -328,20 +330,22 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
 }
 
 
-void ODB_MATRIX_ENTITY::AddCOMPMatrixLayer()
+void ODB_MATRIX_ENTITY::AddCOMPMatrixLayer( PCB_LAYER_ID aCompSide )
 {
     MATRIX_LAYER matrix( m_row++, "COMP_+_TOP" );
     matrix.m_type = ODB_TYPE::COMPONENT;
     matrix.m_context = ODB_CONTEXT::BOARD;
 
-    m_matrixLayers.push_back( matrix );
-    m_plugin->GetLayerNameList().emplace_back(
-            std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
+    if( aCompSide == F_Cu )
+    {
+        m_matrixLayers.push_back( matrix );
+        m_plugin->GetLayerNameList().emplace_back(
+                std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
+    }
 
-    if( m_hasBotComp )
+    if( aCompSide == B_Cu && m_hasBotComp )
     {
         matrix.m_layerName = ODB::GenLegalEntityName( "COMP_+_BOT" );
-        matrix.m_rowNumber = m_row++;
         m_matrixLayers.push_back( matrix );
         m_plugin->GetLayerNameList().emplace_back(
                 std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
@@ -362,7 +366,7 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
         twriter.WriteEquationLine( "NAME", step_name );
     }
 
-    for( const auto& layer : m_matrixLayers )
+    for( const MATRIX_LAYER& layer : m_matrixLayers )
     {
         const auto array_proxy = twriter.MakeArrayProxy( "LAYER" );
         twriter.WriteEquationLine( "ROW", layer.m_rowNumber );
@@ -381,23 +385,22 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
         if( layer.m_diType.has_value() )
         {
             twriter.write_line_enum( "DIELECTRIC_TYPE", layer.m_diType.value() );
+            // twriter.WriteEquationLine( "DIELECTRIC_NAME", wxEmptyString );
+
+            // Can be used with DIELECTRIC_TYPE=CORE
+            // twriter.WriteEquationLine( "CU_TOP", wxEmptyString );
+            // twriter.WriteEquationLine( "CU_BOTTOM", wxEmptyString );
         }
 
-        twriter.WriteEquationLine( "DIELECTRIC_NAME", wxEmptyString );
-        twriter.WriteEquationLine( "CU_TOP", wxEmptyString );
-        twriter.WriteEquationLine( "CU_BOTTOM", wxEmptyString );
-        twriter.WriteEquationLine( "REF", wxEmptyString );
+        // Only applies to: soldermask, silkscreen, solderpaste and specifies the relevant cu layer
+        // twriter.WriteEquationLine( "REF", wxEmptyString );
 
         if( layer.m_span.has_value() )
         {
             twriter.WriteEquationLine( "START_NAME", layer.m_span->first.Upper() );
             twriter.WriteEquationLine( "END_NAME", layer.m_span->second.Upper() );
         }
-        else
-        {
-            twriter.WriteEquationLine( "START_NAME", wxEmptyString );
-            twriter.WriteEquationLine( "END_NAME", wxEmptyString );
-        }
+
         twriter.WriteEquationLine( "COLOR", "0" );
     }
 }
