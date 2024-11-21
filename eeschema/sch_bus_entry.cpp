@@ -151,13 +151,12 @@ void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 }
 
 
-void SCH_BUS_ENTRY_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_BUS_ENTRY_BASE::ViewGetLayers() const
 {
-    aCount     = 4;
-    aLayers[0] = LAYER_DANGLING;
-    aLayers[1] = Type() == SCH_BUS_BUS_ENTRY_T ? LAYER_BUS : LAYER_WIRE;
-    aLayers[2] = LAYER_NET_COLOR_HIGHLIGHT;
-    aLayers[3] = LAYER_SELECTION_SHADOWS;
+    if( Type() == SCH_BUS_BUS_ENTRY_T )
+        return { LAYER_BUS, LAYER_NET_COLOR_HIGHLIGHT, LAYER_SELECTION_SHADOWS };
+
+    return { LAYER_WIRE, LAYER_NET_COLOR_HIGHLIGHT, LAYER_SELECTION_SHADOWS };
 }
 
 

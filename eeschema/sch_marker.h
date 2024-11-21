@@ -56,7 +56,7 @@ public:
     wxString SerializeToString() const;
     static SCH_MARKER* DeserializeFromString( const SCH_SHEET_LIST& aSheetList, const wxString& data );
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     SCH_LAYER_ID GetColorLayer() const;
 

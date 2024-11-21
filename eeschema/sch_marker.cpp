@@ -270,9 +270,9 @@ void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_MARKER::ViewGetLayers() const
 {
-    wxCHECK_RET( Schematic(), "No SCHEMATIC set for SCH_MARKER!" );
+    wxCHECK2_MSG( Schematic(), return {}, "No SCHEMATIC set for SCH_MARKER!" );
 
     // Don't display sheet-specific markers when SCH_SHEET_PATHs do not match
     std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( GetRCItem() );
@@ -280,27 +280,27 @@ void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
     if( ercItem->IsSheetSpecific()
         && ( ercItem->GetSpecificSheetPath() != Schematic()->CurrentSheet() ) )
     {
-        aCount = 0;
-        return;
+        return {};
     }
 
-    aCount = 2;
+    std::vector<int> layers( 2 );
 
     if( IsExcluded() )
     {
-        aLayers[0] = LAYER_ERC_EXCLUSION;
+        layers[0] = LAYER_ERC_EXCLUSION;
     }
     else
     {
         switch( Schematic()->ErcSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
         {
         default:
-        case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_ERC_ERR;  break;
-        case SEVERITY::RPT_SEVERITY_WARNING: aLayers[0] = LAYER_ERC_WARN; break;
+        case SEVERITY::RPT_SEVERITY_ERROR:   layers[0] = LAYER_ERC_ERR;  break;
+        case SEVERITY::RPT_SEVERITY_WARNING: layers[0] = LAYER_ERC_WARN; break;
         }
     }
 
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    layers[1] = LAYER_SELECTION_SHADOWS;
+    return layers;
 }
 
 

@@ -106,7 +106,7 @@ public:
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
 #if defined(DEBUG)
     /// @copydoc EDA_ITEM::Show()

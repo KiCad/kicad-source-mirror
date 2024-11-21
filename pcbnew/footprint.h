@@ -889,7 +889,7 @@ public:
     void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction,
                            int aDepth = 0 ) const override;
 
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    virtual std::vector<int> ViewGetLayers() const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 

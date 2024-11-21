@@ -109,7 +109,7 @@ public:
 
     const BOX2I GetBoundingBox() const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     SEVERITY GetSeverity() const override;
 

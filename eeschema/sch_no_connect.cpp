@@ -79,11 +79,9 @@ const BOX2I SCH_NO_CONNECT::GetBoundingBox() const
 }
 
 
-void SCH_NO_CONNECT::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_NO_CONNECT::ViewGetLayers() const
 {
-    aCount = 2;
-    aLayers[0] = LAYER_NOCONNECT;
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    return { LAYER_NOCONNECT, LAYER_SELECTION_SHADOWS };
 }
 
 

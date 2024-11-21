@@ -72,11 +72,9 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
 }
 
 
-void SCH_JUNCTION::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_JUNCTION::ViewGetLayers() const
 {
-    aCount     = 2;
-    aLayers[0] = m_layer;
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    return { m_layer, LAYER_SELECTION_SHADOWS };
 }
 
 

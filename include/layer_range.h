@@ -151,6 +151,14 @@ public:
     {
         return Contains( m_start, m_stop, aTest_layer );
     }
+
+    size_t size() const
+    {
+        if( m_start == B_Cu )
+            return m_layer_count;
+        else
+            return ( m_stop - m_start ) / 2 + 1;
+    }
 };
 
 #endif // LAYER_RANGE_H

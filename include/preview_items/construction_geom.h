@@ -54,7 +54,7 @@ public:
 
     void ViewDraw( int aLayer, VIEW* aView ) const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
     void SetPersistentColor( const COLOR4D& aColor ) { m_persistentColor = aColor; }

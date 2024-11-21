@@ -205,11 +205,9 @@ void SCH_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 }
 
 
-void SCH_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_BITMAP::ViewGetLayers() const
 {
-    aCount = 2;
-    aLayers[0] = LAYER_DRAW_BITMAPS;
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    return { LAYER_DRAW_BITMAPS, LAYER_SELECTION_SHADOWS };
 }
 
 

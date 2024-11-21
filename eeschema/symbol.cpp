@@ -24,29 +24,25 @@
 #include <symbol.h>
 
 
-void SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SYMBOL::ViewGetLayers() const
 {
-    aCount = 0;
-
-    // Pins are drawn by their parent symbol, so the parent must draw to LAYER_DANGLING
+    // Pins and op point currents are drawn by their parent symbol,
+    // so the parent must draw to LAYER_DANGLING and LAYER_OP_CURRENTS
     if( Type() == SCH_SYMBOL_T )
-        aLayers[aCount++] = LAYER_DANGLING;
+        return { LAYER_DANGLING,          LAYER_OP_CURRENTS,      LAYER_DEVICE,
+                 LAYER_REFERENCEPART,     LAYER_VALUEPART,        LAYER_FIELDS,
+                 LAYER_DEVICE_BACKGROUND, LAYER_NOTES_BACKGROUND, LAYER_SELECTION_SHADOWS };
 
-    // Same for operating point currents
-    if( Type() == SCH_SYMBOL_T )
-        aLayers[aCount++] = LAYER_OP_CURRENTS;
-
-    aLayers[aCount++] = LAYER_DEVICE;
-    aLayers[aCount++] = LAYER_REFERENCEPART;
-    aLayers[aCount++] = LAYER_VALUEPART;
-    aLayers[aCount++] = LAYER_FIELDS;
-
+    // Library symbols must include LAYER_PRIVATE_NOTES
     if( Type() == LIB_SYMBOL_T )
-        aLayers[aCount++] = LAYER_PRIVATE_NOTES;
+        return { LAYER_DEVICE,           LAYER_REFERENCEPART,    LAYER_VALUEPART,
+                 LAYER_FIELDS,           LAYER_PRIVATE_NOTES,    LAYER_DEVICE_BACKGROUND,
+                 LAYER_NOTES_BACKGROUND, LAYER_SELECTION_SHADOWS };
 
-    aLayers[aCount++] = LAYER_DEVICE_BACKGROUND;
-    aLayers[aCount++] = LAYER_NOTES_BACKGROUND;
-    aLayers[aCount++] = LAYER_SELECTION_SHADOWS;
+    // This should never happen but if it does, return a reasonable default
+    return { LAYER_DEVICE,           LAYER_REFERENCEPART,     LAYER_VALUEPART,
+             LAYER_FIELDS,           LAYER_DEVICE_BACKGROUND, LAYER_NOTES_BACKGROUND,
+             LAYER_SELECTION_SHADOWS };
 }
 
 

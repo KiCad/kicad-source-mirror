@@ -34,7 +34,7 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
 private:
     BOX2I m_box;

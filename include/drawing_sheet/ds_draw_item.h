@@ -63,7 +63,7 @@ public:
     DS_DATA_ITEM* GetPeer() const { return m_peer; }
     int GetIndexInPeer() const { return m_index; }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     virtual void SetEnd( const VECTOR2I& aPos ) { /* not all types will need this */ }
 

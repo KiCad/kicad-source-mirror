@@ -195,7 +195,7 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 

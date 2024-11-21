@@ -963,12 +963,13 @@ void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-void GERBER_DRAW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> GERBER_DRAW_ITEM::ViewGetLayers() const
 {
-    aCount = 2;
+    std::vector<int> layers( 2 );
+    layers[0] = GERBER_DRAW_LAYER( GetLayer() );
+    layers[1] = GERBER_DCODE_LAYER( layers[0] );
 
-    aLayers[0] = GERBER_DRAW_LAYER( GetLayer() );
-    aLayers[1] = GERBER_DCODE_LAYER( aLayers[0] );
+    return layers;
 }
 
 

@@ -329,19 +329,22 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
 }
 
 
-void ZONE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> ZONE::ViewGetLayers() const
 {
-    aCount = 0;
+    std::vector<int> layers;
+    layers.reserve( 2 * m_layerSet.count() + 1 );
 
     m_layerSet.RunOnLayers(
             [&]( PCB_LAYER_ID layer )
             {
-                aLayers[ aCount++ ] = layer;
-                aLayers[ aCount++ ] = layer + static_cast<int>( LAYER_ZONE_START );
+                layers.push_back( layer );
+                layers.push_back( layer + static_cast<int>( LAYER_ZONE_START ) );
             } );
 
     if( IsConflicting() )
-        aLayers[ aCount++ ] = LAYER_CONFLICTS_SHADOW;
+        layers.push_back( LAYER_CONFLICTS_SHADOW );
+
+    return layers;
 }
 
 

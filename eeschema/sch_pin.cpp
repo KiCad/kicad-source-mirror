@@ -1712,15 +1712,10 @@ const BOX2I SCH_PIN::ViewBBox() const
 }
 
 
-void SCH_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_PIN::ViewGetLayers() const
 {
-    aCount     = 6;
-    aLayers[0] = LAYER_DANGLING;
-    aLayers[1] = LAYER_DEVICE;
-    aLayers[2] = LAYER_SELECTION_SHADOWS;
-    aLayers[3] = LAYER_OP_CURRENTS;
-    aLayers[4] = LAYER_PINNAM;
-    aLayers[5] = LAYER_PINNUM;
+    return { LAYER_DANGLING,    LAYER_DEVICE, LAYER_SELECTION_SHADOWS,
+             LAYER_OP_CURRENTS, LAYER_PINNAM, LAYER_PINNUM };
 }
 
 

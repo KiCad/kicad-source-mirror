@@ -439,7 +439,7 @@ public:
 
     virtual const BOX2I ViewBBox() const override;
 
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    virtual std::vector<int> ViewGetLayers() const override;
 
     virtual EMBEDDED_FILES* GetEmbeddedFiles() { return nullptr; }
 

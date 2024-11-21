@@ -407,12 +407,9 @@ BITMAPS SCH_TABLE::GetMenuImage() const
 }
 
 
-void SCH_TABLE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_TABLE::ViewGetLayers() const
 {
-    aCount     = 3;
-    aLayers[0] = LAYER_NOTES;
-    aLayers[1] = LAYER_NOTES_BACKGROUND;
-    aLayers[2] = LAYER_SELECTION_SHADOWS;
+    return { LAYER_NOTES, LAYER_NOTES_BACKGROUND, LAYER_SELECTION_SHADOWS };
 }
 
 

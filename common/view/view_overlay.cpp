@@ -308,10 +308,9 @@ void VIEW_OVERLAY::ViewDraw( int aLayer, VIEW* aView ) const
 }
 
 
-void VIEW_OVERLAY::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> VIEW_OVERLAY::ViewGetLayers() const
 {
-    aLayers[0] = LAYER_GP_OVERLAY;
-    aCount = 1;
+    return { LAYER_GP_OVERLAY };
 }
 
 

@@ -154,7 +154,7 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     ///< @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;

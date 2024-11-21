@@ -199,13 +199,10 @@ SYMBOL* SCH_ITEM::GetParentSymbol()
 }
 
 
-void SCH_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_ITEM::ViewGetLayers() const
 {
     // Basic fallback
-    aCount      = 3;
-    aLayers[0]  = LAYER_DEVICE;
-    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
-    aLayers[2]  = LAYER_SELECTION_SHADOWS;
+    return { LAYER_DEVICE, LAYER_DEVICE_BACKGROUND, LAYER_SELECTION_SHADOWS };
 }
 
 

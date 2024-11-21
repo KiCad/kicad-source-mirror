@@ -85,13 +85,8 @@ public:
      */
     virtual void ViewDraw( int aLayer, VIEW* aView ) const override;
 
-    /**
-     * Return all the layers used by the stored items.
-     *
-     * @param aLayers[] is the output layer index array.
-     * @param aCount is the number of layer indices in aLayers[].
-     */
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    ///@copydoc VIEW_ITEM::ViewGetLayers
+    std::vector<int> ViewGetLayers() const override;
 
     /**
      * Set layer used to draw the group.

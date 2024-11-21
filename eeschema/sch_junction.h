@@ -65,7 +65,7 @@ public:
         }
     }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     const BOX2I GetBoundingBox() const override;
 

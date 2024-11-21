@@ -726,16 +726,9 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
     auto childOnLayer =
             []( const SCH_ITEM& item, int layer )
             {
-                int layers[512], layers_count;
-                item.ViewGetLayers( layers, layers_count );
+                std::vector<int> layers = item.ViewGetLayers();
 
-                for( int ii = 0; ii < layers_count; ++ii )
-                {
-                    if( layers[ii] == layer )
-                        return true;
-                }
-
-                return false;
+                return std::find( layers.begin(), layers.end(), layer ) != layers.end();
             };
 
     for( const SCH_ITEM& item : drawnSymbol->GetDrawItems() )
@@ -2312,19 +2305,9 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 
     // Must check layer as fields are sometimes drawn by their parent rather than directly
     // from the view.
-    int  layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
-    int  layers_count;
-    bool foundLayer = false;
+    std::vector<int> layers = aField->ViewGetLayers();
 
-    aField->ViewGetLayers( layers, layers_count );
-
-    for( int i = 0; i < layers_count; ++i )
-    {
-        if( layers[i] == aLayer )
-            foundLayer = true;
-    }
-
-    if( !foundLayer )
+    if( std::find( layers.begin(), layers.end(), aLayer ) == layers.end() )
         return;
 
     aLayer = aField->GetLayer();

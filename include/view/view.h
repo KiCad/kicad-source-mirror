@@ -502,9 +502,8 @@ public:
      * the top).
      *
      * @param aLayers stores id of layers to be sorted.
-     * @param aCount stores the number of layers.
      */
-    void SortLayers( int aLayers[], int& aCount ) const;
+    void SortLayers( std::vector<int> aLayers ) const;
 
     /**
      * Remap the data between layer ids without invalidating that data.

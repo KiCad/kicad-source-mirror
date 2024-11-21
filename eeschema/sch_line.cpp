@@ -188,14 +188,10 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-void SCH_LINE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_LINE::ViewGetLayers() const
 {
-    aCount     = 5;
-    aLayers[0] = LAYER_DANGLING;
-    aLayers[1] = m_layer;
-    aLayers[2] = LAYER_SELECTION_SHADOWS;
-    aLayers[3] = LAYER_NET_COLOR_HIGHLIGHT;
-    aLayers[4] = LAYER_OP_VOLTAGES;
+    return { LAYER_DANGLING, m_layer, LAYER_SELECTION_SHADOWS, LAYER_NET_COLOR_HIGHLIGHT,
+             LAYER_OP_VOLTAGES };
 }
 
 

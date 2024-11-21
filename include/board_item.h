@@ -398,7 +398,7 @@ public:
      */
     wxString GetLayerName() const;
 
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    virtual std::vector<int> ViewGetLayers() const override;
 
     /**
      * Convert the item shape to a closed polygon. Circles and arcs are approximated by segments.

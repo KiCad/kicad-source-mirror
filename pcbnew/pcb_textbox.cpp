@@ -316,13 +316,12 @@ double PCB_TEXTBOX::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-void PCB_TEXTBOX::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> PCB_TEXTBOX::ViewGetLayers() const
 {
-    aLayers[0] = GetLayer();
-    aCount = 1;
-
     if( IsLocked() )
-        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+        return { GetLayer(), LAYER_LOCKED_ITEM_SHADOW };
+
+    return { GetLayer() };
 }
 
 

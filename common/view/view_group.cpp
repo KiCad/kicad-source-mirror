@@ -122,35 +122,32 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
         if( aView->IsHiddenOnOverlay( item ) )
             continue;
 
-        int item_layers[VIEW::VIEW_MAX_LAYERS], item_layers_count;
-        item->ViewGetLayers( item_layers, item_layers_count );
+        std::vector<int> layers = item->ViewGetLayers();
 
-        for( int i = 0; i < item_layers_count; i++ )
+        for( auto layer : layers )
         {
-            wxCHECK2_MSG( item_layers[i] <= LAYER_ID_COUNT, continue, wxT( "Invalid item layer" ) );
-            layer_item_map[ item_layers[i] ].push_back( item );
+            wxCHECK2_MSG( layer <= LAYER_ID_COUNT, continue, wxT( "Invalid item layer" ) );
+            layer_item_map[ layer ].push_back( item );
         }
     }
 
-    int layers[VIEW::VIEW_MAX_LAYERS] = { 0 };
-    int layers_count = 0;
-
-    for( const std::pair<const int, std::vector<VIEW_ITEM*>>& entry : layer_item_map )
-        layers[ layers_count++ ] = entry.first;
-
-    if( layers_count == 0 )
+    if( layer_item_map.empty() )
         return;
 
-    aView->SortLayers( layers, layers_count );
+    std::vector<int> layers;
+    layers.reserve( layer_item_map.size() );
+
+    for( const std::pair<const int, std::vector<VIEW_ITEM*>>& entry : layer_item_map )
+        layers.push_back( entry.first );
+
+    aView->SortLayers( layers );
 
     // Now draw the layers in sorted order
 
     GAL_SCOPED_ATTRS scopedAttrs( *gal, GAL_SCOPED_ATTRS::LAYER_DEPTH );
 
-    for( int i = 0; i < layers_count; i++ )
+    for( int layer : layers )
     {
-        int  layer = layers[i];
-
         if( IsZoneFillLayer( layer ) )
             layer = layer - LAYER_ZONE_START;
 
@@ -173,26 +170,25 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
         {
             gal->AdvanceDepth();
 
-            for( VIEW_ITEM* item : layer_item_map[ layers[i] ] )
+            for( VIEW_ITEM* item : layer_item_map[ layer ] )
             {
                 // Ignore LOD scale for selected items, but don't ignore things explicitly
                 // hidden.
                 if( item->ViewGetLOD( layer, aView ) == HIDE )
                     continue;
 
-                if( !painter->Draw( item, layers[i] ) )
-                    item->ViewDraw( layers[i], aView ); // Alternative drawing method
+                if( !painter->Draw( item, layer ) )
+                    item->ViewDraw( layer, aView ); // Alternative drawing method
             }
         }
     }
 }
 
 
-void VIEW_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> VIEW_GROUP::ViewGetLayers() const
 {
     // Everything is displayed on a single layer
-    aLayers[0] = m_layer;
-    aCount = 1;
+    return { m_layer };
 }
 
 

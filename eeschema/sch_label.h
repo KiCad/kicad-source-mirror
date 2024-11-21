@@ -324,7 +324,7 @@ public:
     bool IsDangling() const override { return m_isDangling; }
     void SetIsDangling( bool aIsDangling ) { m_isDangling = aIsDangling; }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -545,7 +545,7 @@ public:
 
     bool IsConnectable() const override { return true; }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 

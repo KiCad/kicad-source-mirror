@@ -59,10 +59,9 @@ public:
 
     void ViewDraw( int aLayer, VIEW* aView ) const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override
+    std::vector<int> ViewGetLayers() const override
     {
-        aLayers[0] = LAYER_GP_OVERLAY;
-        aCount = 1;
+        return { LAYER_GP_OVERLAY };
     }
 
 #if defined(DEBUG)

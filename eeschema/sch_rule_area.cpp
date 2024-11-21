@@ -57,12 +57,9 @@ EDA_ITEM* SCH_RULE_AREA::Clone() const
 }
 
 
-void SCH_RULE_AREA::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_RULE_AREA::ViewGetLayers() const
 {
-    aCount = 3;
-    aLayers[0] = LAYER_RULE_AREAS;
-    aLayers[1] = LAYER_NOTES_BACKGROUND;
-    aLayers[2] = LAYER_SELECTION_SHADOWS;
+    return { LAYER_RULE_AREAS, LAYER_NOTES_BACKGROUND, LAYER_SELECTION_SHADOWS };
 }
 
 

@@ -219,7 +219,7 @@ public:
 
     virtual EDA_ITEM* Clone() const override;
 
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    virtual std::vector<int> ViewGetLayers() const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
@@ -503,7 +503,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 

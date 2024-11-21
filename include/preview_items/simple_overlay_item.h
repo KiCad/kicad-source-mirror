@@ -61,7 +61,7 @@ public:
      * Set the overlay layer only. You can override this if
      * you have more layers to draw on.
      */
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     /**
      * Draw the preview - this is done by calling the two functions:

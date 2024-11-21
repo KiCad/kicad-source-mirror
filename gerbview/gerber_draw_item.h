@@ -208,7 +208,7 @@ public:
 #endif
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    virtual std::vector<int> ViewGetLayers() const override;
 
     /// @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;

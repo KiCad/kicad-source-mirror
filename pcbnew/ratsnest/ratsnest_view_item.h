@@ -52,7 +52,7 @@ public:
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     bool HitTest( const VECTOR2I& aPoint, int aAccuracy = 0 ) const override
     {

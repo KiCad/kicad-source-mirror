@@ -329,10 +329,9 @@ bool PCB_GROUP::IsOnLayer( PCB_LAYER_ID aLayer ) const
 }
 
 
-void PCB_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> PCB_GROUP::ViewGetLayers() const
 {
-    aCount = 1;
-    aLayers[0] = LAYER_ANCHOR;
+    return { LAYER_ANCHOR };
 }
 
 

@@ -286,9 +286,8 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-void RATSNEST_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> RATSNEST_VIEW_ITEM::ViewGetLayers() const
 {
-    aCount = 1;
-    aLayers[0] = LAYER_RATSNEST;
+    return { LAYER_RATSNEST };
 }
 

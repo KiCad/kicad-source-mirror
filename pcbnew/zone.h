@@ -185,7 +185,7 @@ public:
 
     virtual bool IsOnLayer( PCB_LAYER_ID ) const override;
 
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    virtual std::vector<int> ViewGetLayers() const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 

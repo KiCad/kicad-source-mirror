@@ -48,12 +48,10 @@ void SIMPLE_OVERLAY_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-void SIMPLE_OVERLAY_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SIMPLE_OVERLAY_ITEM::ViewGetLayers() const
 {
-    static const int SelectionLayer = LAYER_GP_OVERLAY;
-
-    aLayers[0] = SelectionLayer;
-    aCount = 1;
+    std::vector<int> aLayers{ LAYER_GP_OVERLAY };
+    return aLayers;
 }
 
 

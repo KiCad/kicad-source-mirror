@@ -2098,10 +2098,12 @@ void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
 }
 
 
-void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> FOOTPRINT::ViewGetLayers() const
 {
-    aCount = 2;
-    aLayers[0] = LAYER_ANCHOR;
+    std::vector<int> layers;
+
+    layers.reserve( 6 );
+    layers.push_back( LAYER_ANCHOR );
 
     switch( m_layer )
     {
@@ -2111,19 +2113,19 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
         KI_FALLTHROUGH;
 
     case F_Cu:
-        aLayers[1] = LAYER_FOOTPRINTS_FR;
+        layers.push_back( LAYER_FOOTPRINTS_FR );
         break;
 
     case B_Cu:
-        aLayers[1] = LAYER_FOOTPRINTS_BK;
+        layers.push_back( LAYER_FOOTPRINTS_BK );
         break;
     }
 
     if( IsLocked() )
-        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+        layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
 
     if( IsConflicting() )
-        aLayers[ aCount++ ] = LAYER_CONFLICTS_SHADOW;
+        layers.push_back( LAYER_CONFLICTS_SHADOW );
 
     // If there are no pads, and only drawings on a silkscreen layer, then report the silkscreen
     // layer as well so that the component can be edited with the silkscreen layer
@@ -2142,11 +2144,13 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
     if( ( f_silk || b_silk ) && !non_silk && m_pads.empty() )
     {
         if( f_silk )
-            aLayers[ aCount++ ] = F_SilkS;
+            layers.push_back( F_SilkS );
 
         if( b_silk )
-            aLayers[ aCount++ ] = B_SilkS;
+            layers.push_back( B_SilkS );
     }
+
+    return layers;
 }
 
 

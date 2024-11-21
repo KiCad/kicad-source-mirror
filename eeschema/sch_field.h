@@ -181,7 +181,7 @@ public:
             m_lastResolvedColor = aField->m_lastResolvedColor;
     }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     SCH_LAYER_ID GetDefaultLayer() const;
 

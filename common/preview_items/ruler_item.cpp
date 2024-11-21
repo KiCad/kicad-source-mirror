@@ -292,11 +292,10 @@ const BOX2I RULER_ITEM::ViewBBox() const
 }
 
 
-void RULER_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> RULER_ITEM::ViewGetLayers() const
 {
-    aLayers[0] = LAYER_SELECT_OVERLAY;
-    aLayers[1] = LAYER_GP_OVERLAY;
-    aCount = 2;
+    std::vector<int> layers{ LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY };
+    return layers;
 }
 
 

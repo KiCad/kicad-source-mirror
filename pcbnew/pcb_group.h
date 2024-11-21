@@ -172,7 +172,7 @@ public:
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;

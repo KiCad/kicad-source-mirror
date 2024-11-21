@@ -108,10 +108,9 @@ public:
 
     virtual void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override
+    virtual std::vector<int> ViewGetLayers() const override
     {
-        aLayers[0] = m_layer;
-        aCount = 1;
+        return { m_layer };
     }
 
     void drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX::GAL* aGal ) const;

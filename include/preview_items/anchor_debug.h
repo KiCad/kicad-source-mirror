@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <map>
 #include <span>
+#include <vector>
 
 #include <origin_viewitem.h>
 
@@ -47,7 +48,7 @@ public:
 
     ANCHOR_DEBUG* Clone() const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     const BOX2I ViewBBox() const override;
 

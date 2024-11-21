@@ -557,19 +557,22 @@ BITMAPS SCH_SHAPE::GetMenuImage() const
 }
 
 
-void SCH_SHAPE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_SHAPE::ViewGetLayers() const
 {
-    aCount     = 3;
-    aLayers[0] = IsPrivate() ? LAYER_PRIVATE_NOTES : m_layer;
+    std::vector<int> layers( 3 );
+
+    layers[0] = IsPrivate() ? LAYER_PRIVATE_NOTES : m_layer;
 
     if( m_layer == LAYER_PRIVATE_NOTES )
-        aLayers[1] = LAYER_NOTES_BACKGROUND;
+        layers[1] = LAYER_NOTES_BACKGROUND;
     else if( m_layer == LAYER_DEVICE )
-        aLayers[1] = LAYER_DEVICE_BACKGROUND;
+        layers[1] = LAYER_DEVICE_BACKGROUND;
     else
-        aLayers[1] = LAYER_NOTES_BACKGROUND;
+        layers[1] = LAYER_NOTES_BACKGROUND;
 
-    aLayers[2] = LAYER_SELECTION_SHADOWS;
+    layers[2] = LAYER_SELECTION_SHADOWS;
+
+    return layers;
 }
 
 

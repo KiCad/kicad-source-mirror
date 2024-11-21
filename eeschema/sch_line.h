@@ -200,7 +200,7 @@ public:
                || ( style_a == LINE_STYLE::SOLID   && style_b == LINE_STYLE::DEFAULT );
     }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 

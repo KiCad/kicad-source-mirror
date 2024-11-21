@@ -157,8 +157,8 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
     }
 }
 
-void CONSTRUCTION_GEOM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> CONSTRUCTION_GEOM::ViewGetLayers() const
 {
-    aLayers[0] = LAYER_GP_OVERLAY;
-    aCount = 1;
+    std::vector<int> layers{ LAYER_GP_OVERLAY };
+    return layers;
 }

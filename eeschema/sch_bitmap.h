@@ -72,7 +72,7 @@ public:
     void SwapData( SCH_ITEM* aItem ) override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    virtual std::vector<int> ViewGetLayers() const override;
 
     void Move( const VECTOR2I& aMoveVector ) override;
 

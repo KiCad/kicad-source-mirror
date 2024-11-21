@@ -899,14 +899,10 @@ std::vector<VECTOR2I> SCH_LABEL_BASE::GetConnectionPoints() const
 }
 
 
-void SCH_LABEL_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_LABEL_BASE::ViewGetLayers() const
 {
-    aCount     = 5;
-    aLayers[0] = LAYER_DANGLING;
-    aLayers[1] = LAYER_DEVICE;
-    aLayers[2] = LAYER_NETCLASS_REFS;
-    aLayers[3] = LAYER_FIELDS;
-    aLayers[4] = LAYER_SELECTION_SHADOWS;
+    return { LAYER_DANGLING, LAYER_DEVICE, LAYER_NETCLASS_REFS, LAYER_FIELDS,
+             LAYER_SELECTION_SHADOWS };
 }
 
 
@@ -1920,15 +1916,10 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
 }
 
 
-void SCH_GLOBALLABEL::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_GLOBALLABEL::ViewGetLayers() const
 {
-    aCount     = 6;
-    aLayers[0] = LAYER_DANGLING;
-    aLayers[1] = LAYER_DEVICE;
-    aLayers[2] = LAYER_INTERSHEET_REFS;
-    aLayers[3] = LAYER_NETCLASS_REFS;
-    aLayers[4] = LAYER_FIELDS;
-    aLayers[5] = LAYER_SELECTION_SHADOWS;
+    return { LAYER_GLOBLABEL,     LAYER_DEVICE, LAYER_INTERSHEET_REFS,
+             LAYER_NETCLASS_REFS, LAYER_FIELDS, LAYER_SELECTION_SHADOWS };
 }
 
 

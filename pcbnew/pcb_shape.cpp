@@ -760,30 +760,30 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-void PCB_SHAPE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> PCB_SHAPE::ViewGetLayers() const
 {
-    aLayers[0] = GetLayer();
+    std::vector<int> layers;
+    layers.reserve( 4 );
+
+    layers.push_back( GetLayer() );
 
     if( IsOnCopperLayer() )
     {
-        aLayers[1] = GetNetnameLayer( aLayers[0] );
-        aCount = 2;
+        layers.push_back( GetNetnameLayer( GetLayer() ) );
 
         if( m_hasSolderMask )
         {
             if( m_layer == F_Cu )
-                aLayers[ aCount++ ] = F_Mask;
+                layers.push_back( F_Mask );
             else if( m_layer == B_Cu )
-                aLayers[ aCount++ ] = B_Mask;
+                layers.push_back( B_Mask );
         }
-    }
-    else
-    {
-        aCount = 1;
     }
 
     if( IsLocked() )
-        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+        layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
+
+    return layers;
 }
 
 

@@ -196,14 +196,13 @@ wxString BOARD_ITEM::layerMaskDescribe() const
 }
 
 
-void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> BOARD_ITEM::ViewGetLayers() const
 {
     // Basic fallback
-    aCount = 1;
-    aLayers[0] = m_layer;
-
     if( IsLocked() )
-        aLayers[aCount++] = LAYER_LOCKED_ITEM_SHADOW;
+        return { m_layer, LAYER_LOCKED_ITEM_SHADOW };
+
+    return { m_layer };
 }
 
 

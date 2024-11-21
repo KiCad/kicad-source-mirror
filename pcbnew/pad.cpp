@@ -1609,19 +1609,20 @@ EDA_ITEM* PAD::Clone() const
 }
 
 
-void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> PAD::ViewGetLayers() const
 {
-    aCount = 0;
+    std::vector<int> layers;
+    layers.reserve( 64 );
 
     // These 2 types of pads contain a hole
     if( m_attribute == PAD_ATTRIB::PTH )
     {
-        aLayers[aCount++] = LAYER_PAD_PLATEDHOLES;
-        aLayers[aCount++] = LAYER_PAD_HOLEWALLS;
+        layers.push_back( LAYER_PAD_PLATEDHOLES );
+        layers.push_back( LAYER_PAD_HOLEWALLS );
     }
 
     if( m_attribute == PAD_ATTRIB::NPTH )
-        aLayers[aCount++] = LAYER_NON_PLATEDHOLES;
+        layers.push_back( LAYER_NON_PLATEDHOLES );
 
     LSET cuLayers = ( m_padStack.LayerSet() & LSET::AllCuMask() );
 
@@ -1633,31 +1634,31 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     {
         // Multi layer pad
         for( PCB_LAYER_ID layer : cuLayers.Seq() )
-            aLayers[aCount++] = layer;
+            layers.push_back( layer );
 
-        aLayers[aCount++] = LAYER_PAD_NETNAMES;
+        layers.push_back( LAYER_PAD_NETNAMES );
     }
     else if( IsOnLayer( F_Cu ) )
     {
-        aLayers[aCount++] = F_Cu;
+        layers.push_back( F_Cu );
 
         // Is this a PTH pad that has only front copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
         if( m_attribute == PAD_ATTRIB::PTH )
-            aLayers[aCount++] = LAYER_PAD_NETNAMES;
+            layers.push_back( LAYER_PAD_NETNAMES );
         else
-            aLayers[aCount++] = LAYER_PAD_FR_NETNAMES;
+            layers.push_back( LAYER_PAD_FR_NETNAMES );
     }
     else if( IsOnLayer( B_Cu ) )
     {
-        aLayers[aCount++] = B_Cu;
+        layers.push_back( B_Cu );
 
         // Is this a PTH pad that has only back copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
         if( m_attribute == PAD_ATTRIB::PTH )
-            aLayers[aCount++] = LAYER_PAD_NETNAMES;
+            layers.push_back( LAYER_PAD_NETNAMES );
         else
-            aLayers[aCount++] = LAYER_PAD_BK_NETNAMES;
+            layers.push_back( LAYER_PAD_BK_NETNAMES );
     }
 
     // Check non-copper layers. This list should include all the layers that the
@@ -1668,8 +1669,10 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     for( PCB_LAYER_ID each_layer : layers_mech )
     {
         if( IsOnLayer( each_layer ) )
-            aLayers[aCount++] = each_layer;
+            layers.push_back( each_layer );
     }
+
+    return layers;
 }
 
 

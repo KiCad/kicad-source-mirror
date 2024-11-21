@@ -299,27 +299,24 @@ SEVERITY PCB_MARKER::GetSeverity() const
 }
 
 
-void PCB_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> PCB_MARKER::ViewGetLayers() const
 {
     if( GetMarkerType() == MARKER_RATSNEST )
     {
-        aCount = 0;
-        return;
+        return {};
     }
 
-    aCount = 4;
-
-    aLayers[1] = LAYER_MARKER_SHADOWS;
-    aLayers[2] = LAYER_DRC_SHAPE1;
-    aLayers[3] = LAYER_DRC_SHAPE2;
+    std::vector<int> layers{ 0, LAYER_MARKER_SHADOWS, LAYER_DRC_SHAPE1, LAYER_DRC_SHAPE2 };
 
     switch( GetSeverity() )
     {
     default:
-    case SEVERITY::RPT_SEVERITY_ERROR:     aLayers[0] = LAYER_DRC_ERROR;     break;
-    case SEVERITY::RPT_SEVERITY_WARNING:   aLayers[0] = LAYER_DRC_WARNING;   break;
-    case SEVERITY::RPT_SEVERITY_EXCLUSION: aLayers[0] = LAYER_DRC_EXCLUSION; break;
+    case SEVERITY::RPT_SEVERITY_ERROR:     layers[0] = LAYER_DRC_ERROR;     break;
+    case SEVERITY::RPT_SEVERITY_WARNING:   layers[0] = LAYER_DRC_WARNING;   break;
+    case SEVERITY::RPT_SEVERITY_EXCLUSION: layers[0] = LAYER_DRC_EXCLUSION; break;
     }
+
+    return layers;
 }
 
 

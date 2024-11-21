@@ -51,10 +51,9 @@ const BOX2I ANCHOR_DEBUG::ViewBBox() const
     return bbox;
 }
 
-void ANCHOR_DEBUG::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> ANCHOR_DEBUG::ViewGetLayers() const
 {
-    aLayers[0] = LAYER_GP_OVERLAY;
-    aCount = 1;
+    return { LAYER_GP_OVERLAY };
 }
 
 void ANCHOR_DEBUG::ClearAnchors()

@@ -38,9 +38,7 @@ const BOX2I BOARD_EDGES_BOUNDING_ITEM::ViewBBox() const
 }
 
 
-void BOARD_EDGES_BOUNDING_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> BOARD_EDGES_BOUNDING_ITEM::ViewGetLayers() const
 {
-    // Basic fallback
-    aCount = 1;
-    aLayers[0] = Edge_Cuts;
+    return { Edge_Cuts };
 }

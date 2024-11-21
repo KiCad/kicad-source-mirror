@@ -284,7 +284,7 @@ public:
     /**
      * Return the layers the item is drawn on (which may be more than its "home" layer)
      */
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item

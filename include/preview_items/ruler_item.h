@@ -51,7 +51,7 @@ public:
     const BOX2I ViewBBox() const override;
 
     ///< @copydoc EDA_ITEM::ViewGetLayers()
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     ///< @copydoc EDA_ITEM::ViewDraw();
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;

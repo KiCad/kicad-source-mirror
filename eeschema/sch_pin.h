@@ -169,7 +169,7 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
     const BOX2I GetBoundingBox() const override

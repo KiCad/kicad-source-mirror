@@ -280,11 +280,11 @@ const BOX2I EDA_ITEM::ViewBBox() const
 }
 
 
-void EDA_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> EDA_ITEM::ViewGetLayers() const
 {
     // Basic fallback
-    aCount      = 1;
-    aLayers[0]  = 0;
+    std::vector<int> layers{ 1 };
+    return layers;
 }
 
 

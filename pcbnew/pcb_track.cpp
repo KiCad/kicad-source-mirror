@@ -1318,23 +1318,25 @@ void PCB_VIA::GetOutermostConnectedLayers( PCB_LAYER_ID* aTopmost,
 }
 
 
-void PCB_TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> PCB_TRACK::ViewGetLayers() const
 {
     // Show the track and its netname on different layers
-    aLayers[0] = GetLayer();
-    aLayers[1] = GetNetnameLayer( aLayers[0] );
-    aCount = 2;
+    std::vector<int> layers { GetLayer(), GetNetnameLayer( GetLayer() ) };
+
+    layers.reserve( 5 );
 
     if( m_hasSolderMask )
     {
         if( m_layer == F_Cu )
-            aLayers[ aCount++ ] = F_Mask;
+            layers.push_back( F_Mask );
         else if( m_layer == B_Cu )
-            aLayers[ aCount++ ] = B_Mask;
+            layers.push_back( B_Mask );
     }
 
     if( IsLocked() )
-        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+        layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
+
+    return layers;
 }
 
 
@@ -1412,8 +1414,12 @@ const BOX2I PCB_TRACK::ViewBBox() const
 }
 
 
-void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> PCB_VIA::ViewGetLayers() const
 {
+    LAYER_RANGE layers( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS );
+    std::vector<int> ret_layers{ LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS, LAYER_PAD_NETNAMES };
+    ret_layers.reserve( MAX_CU_LAYERS + 6 );
+
     // TODO(JE) Rendering order issue
 #if 0
     // Blind/buried vias (and microvias) use a different net name layer
@@ -1425,26 +1431,21 @@ void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
             || ( m_viaType == VIATYPE::MICROVIA && ( layerTop != F_Cu || layerBottom != B_Cu ) );
 #endif
 
-    aLayers[0] = LAYER_VIA_HOLES;
-    aLayers[1] = LAYER_VIA_HOLEWALLS;
-    aLayers[2] = LAYER_PAD_NETNAMES;    // To avoid layer ordering issues
-    aCount = 3;
-
-    LAYER_RANGE layers( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS );
-
     for( PCB_LAYER_ID layer : layers )
-        aLayers[aCount++] = layer;
+        ret_layers.push_back( layer );
 
     if( IsLocked() )
-        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+        ret_layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
 
     // Vias can also be on a solder mask layer. They are on these layers or not,
     // depending on the plot and solder mask options
     if( IsOnLayer( F_Mask ) )
-        aLayers[ aCount++ ] = F_Mask;
+        ret_layers.push_back( F_Mask );
 
     if( IsOnLayer( B_Mask ) )
-        aLayers[ aCount++ ] = B_Mask;
+        ret_layers.push_back( B_Mask );
+
+    return ret_layers;
 }
 
 

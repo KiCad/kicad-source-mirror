@@ -69,24 +69,24 @@ const KIFONT::METRICS& DS_DRAW_ITEM_BASE::GetFontMetrics() const
 }
 
 
-void DS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> DS_DRAW_ITEM_BASE::ViewGetLayers() const
 {
-    aCount = 1;
+    std::vector<int> layers( 1 );
 
-    DS_DATA_ITEM* dataItem = GetPeer();
-
-    if( !dataItem )     // No peer: this item is like a DS_DRAW_ITEM_PAGE
+    if( m_peer == nullptr )
     {
-        aLayers[0] = LAYER_DRAWINGSHEET;
-        return;
+        layers[0] = LAYER_DRAWINGSHEET;
+        return layers;
     }
 
-    if( dataItem->GetPage1Option() == FIRST_PAGE_ONLY )
-        aLayers[0] = LAYER_DRAWINGSHEET_PAGE1;
-    else if( dataItem->GetPage1Option() == SUBSEQUENT_PAGES )
-        aLayers[0] = LAYER_DRAWINGSHEET_PAGEn;
+    if( m_peer->GetPage1Option() == FIRST_PAGE_ONLY )
+        layers[0] = LAYER_DRAWINGSHEET_PAGE1;
+    else if( m_peer->GetPage1Option() == SUBSEQUENT_PAGES )
+        layers[0] = LAYER_DRAWINGSHEET_PAGEn;
     else
-        aLayers[0] = LAYER_DRAWINGSHEET;
+        layers[0] = LAYER_DRAWINGSHEET;
+
+    return layers;
 }
 
 

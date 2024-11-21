@@ -55,7 +55,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     bool IsFilledForHitTesting() const override
     {

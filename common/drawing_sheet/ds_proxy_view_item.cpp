@@ -147,10 +147,10 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 }
 
 
-void DS_PROXY_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> DS_PROXY_VIEW_ITEM::ViewGetLayers() const
 {
-    aCount = 1;
-    aLayers[0] = LAYER_DRAWINGSHEET;
+    std::vector<int> layer{ LAYER_DRAWINGSHEET };
+    return layer;
 }
 
 

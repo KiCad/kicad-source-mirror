@@ -153,7 +153,7 @@ public:
     bool GetDNP() const { return m_DNP; }
     void SetDNP( bool aDNP ) { m_DNP = aDNP; }
 
- void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
 protected:
     int           m_pinNameOffset;         ///< The offset in mils to draw the pin name.  Set to

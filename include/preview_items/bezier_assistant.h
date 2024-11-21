@@ -42,11 +42,10 @@ namespace PREVIEW
 
         const BOX2I ViewBBox() const override;
 
-        void ViewGetLayers( int aLayers[], int& aCount ) const override
+        std::vector<int> ViewGetLayers() const override
         {
-            aLayers[0] = LAYER_SELECT_OVERLAY; // Assistant graphics
-            aLayers[1] = LAYER_GP_OVERLAY;     // Drop shadows
-            aCount = 2;
+            return { LAYER_SELECT_OVERLAY,      // Assistant graphics
+                     LAYER_GP_OVERLAY };        // Drop shadows
         }
 
         /**

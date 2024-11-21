@@ -551,10 +551,9 @@ public:
     virtual void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
     ///< @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override
+    virtual std::vector<int> ViewGetLayers() const override
     {
-        aCount = 1;
-        aLayers[0] = LAYER_GP_OVERLAY ;
+        return { LAYER_GP_OVERLAY };
     }
 
 #if defined(DEBUG)

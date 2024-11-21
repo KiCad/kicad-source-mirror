@@ -501,11 +501,12 @@ void SCH_TEXT::CalcEdit( const VECTOR2I& aPosition )
 }
 
 
-void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_TEXT::ViewGetLayers() const
 {
-    aCount = 2;
-    aLayers[0] = IsPrivate() ? LAYER_PRIVATE_NOTES : m_layer;
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    if( IsPrivate() )
+        return { LAYER_PRIVATE_NOTES, LAYER_SELECTION_SHADOWS };
+
+    return { m_layer, LAYER_SELECTION_SHADOWS };
 }
 
 

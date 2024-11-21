@@ -219,10 +219,9 @@ void PCB_REFERENCE_IMAGE::GetMsgPanelInfo( EDA_DRAW_FRAME*              aFrame,
 }
 
 
-void PCB_REFERENCE_IMAGE::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> PCB_REFERENCE_IMAGE::ViewGetLayers() const
 {
-    aCount = 1;
-    aLayers[0] = BITMAP_LAYER_FOR( m_layer );
+    return { BITMAP_LAYER_FOR( m_layer ) };
 }
 
 

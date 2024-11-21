@@ -395,7 +395,7 @@ public:
 
     bool operator <( const SCH_ITEM& aItem ) const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     VECTOR2I GetPosition() const override { return m_pos; }
     void     SetPosition( const VECTOR2I& aPosition ) override;

@@ -706,18 +706,11 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool /* aManual */ )
 }
 
 
-void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_SHEET::ViewGetLayers() const
 {
-    aCount     = 8;
-    aLayers[0] = LAYER_DANGLING;     // Sheet pins are drawn by their parent sheet, so the
-                                     //   parent needs to draw to LAYER_DANGLING
-    aLayers[1] = LAYER_HIERLABEL;
-    aLayers[2] = LAYER_SHEETNAME;
-    aLayers[3] = LAYER_SHEETFILENAME;
-    aLayers[4] = LAYER_SHEETFIELDS;
-    aLayers[5] = LAYER_SHEET;
-    aLayers[6] = LAYER_SHEET_BACKGROUND;
-    aLayers[7] = LAYER_SELECTION_SHADOWS;
+    // Sheet pins are drawn by their parent sheet, so the parent needs to draw to LAYER_DANGLING
+    return { LAYER_DANGLING,    LAYER_HIERLABEL, LAYER_SHEETNAME,        LAYER_SHEETFILENAME,
+             LAYER_SHEETFIELDS, LAYER_SHEET,     LAYER_SHEET_BACKGROUND, LAYER_SELECTION_SHADOWS };
 }
 
 

@@ -870,7 +870,7 @@ public:
     void BuildEffectiveShapes() const;
     void BuildEffectivePolygon( ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    virtual std::vector<int> ViewGetLayers() const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 

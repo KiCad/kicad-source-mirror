@@ -125,11 +125,8 @@ public:
      * For instance, a #PAD spans zero or more copper layers and a few technical layers.
      * ViewDraw() or PAINTER::Draw() is repeatedly called for each of the layers returned
      * by ViewGetLayers(), depending on the rendering order.
-     *
-     * @param aLayers[] is the output layer index array.
-     * @param aCount is the number of layer indices in aLayers[].
      */
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const = 0;
+    virtual std::vector<int> ViewGetLayers() const = 0;
 
     /**
      * Return the level of detail (LOD) of the item.

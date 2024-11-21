@@ -129,11 +129,9 @@ public:
         return tmp;
     }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override
+    std::vector<int> ViewGetLayers() const override
     {
-        aLayers[0] = LAYER_UI_START;
-        aLayers[1] = LAYER_UI_START + 1;
-        aCount = 2;
+        return { LAYER_UI_START, LAYER_UI_START + 1 };
     }
 
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override
@@ -356,11 +354,9 @@ public:
         return getOutline().BBox();
     }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override
+    std::vector<int> ViewGetLayers() const override
     {
-        aCount = 0;
-        aLayers[aCount++] = LAYER_ANCHOR;
-        aLayers[aCount++] = GetLayer();
+        return { LAYER_ANCHOR, GetLayer() };
     }
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override

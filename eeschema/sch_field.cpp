@@ -555,11 +555,9 @@ COLOR4D SCH_FIELD::GetFieldColor() const
 }
 
 
-void SCH_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
+std::vector<int> SCH_FIELD::ViewGetLayers() const
 {
-    aCount = 2;
-    aLayers[0] = GetDefaultLayer();
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    return { GetDefaultLayer(), LAYER_SELECTION_SHADOWS };
 }
 
 

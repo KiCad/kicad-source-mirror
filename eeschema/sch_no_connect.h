@@ -63,7 +63,7 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 

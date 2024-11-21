@@ -132,7 +132,7 @@ public:
 
     bool IsReplaceable() const override { return true; }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    std::vector<int> ViewGetLayers() const override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
