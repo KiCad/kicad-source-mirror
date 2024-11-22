@@ -97,7 +97,7 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
 
     m_padStack.SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
 
-    // Until vias support custom padstack; their layer set should always be cleared
+    // Padstack layerset is not used for vias right now
     m_padStack.LayerSet().reset();
 
     // For now, vias are always circles
@@ -471,20 +471,13 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
 
     PADSTACK padstack = Padstack();
 
-    // TODO(JE) Should this be done here or should the padstack layerset be kept up to date?
-    // It's not really used elsewhere at the moment
-    for( PCB_LAYER_ID layer : LAYER_RANGE( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS ) )
-        padstack.LayerSet().set( layer );
-
-    if( !IsTented( F_Mask ) && Padstack().Drill().start == F_Cu  )
-        padstack.LayerSet().set( F_Mask );
-
-    if( !IsTented( B_Mask ) && Padstack().Drill().end == B_Cu )
-        padstack.LayerSet().set( B_Mask );
-
     google::protobuf::Any padStackWrapper;
     padstack.Serialize( padStackWrapper );
     padStackWrapper.UnpackTo( via.mutable_pad_stack() );
+
+    // PADSTACK::m_layerSet is not used by vias
+    via.mutable_pad_stack()->clear_layers();
+    kiapi::board::PackLayerSet( *via.mutable_pad_stack()->mutable_layers(), GetLayerSet() );
 
     via.set_type( ToProtoEnum<VIATYPE, kiapi::board::types::ViaType>( GetViaType() ) );
     via.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
@@ -513,8 +506,9 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     if( !m_padStack.Deserialize( padStackWrapper ) )
         return false;
 
-    // We don't yet support complex padstacks for vias
-    SetWidth( PADSTACK::ALL_LAYERS, m_padStack.Size( PADSTACK::ALL_LAYERS ).x );
+    // PADSTACK::m_layerSet is not used by vias
+    m_padStack.LayerSet().reset();
+
     SetViaType( FromProtoEnum<VIATYPE>( via.type() ) );
     SetNetCode( via.net().code().value() );
     SetLocked( via.locked() == kiapi::common::types::LockedState::LS_LOCKED );
