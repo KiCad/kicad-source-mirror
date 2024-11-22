@@ -27,17 +27,6 @@
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
-/// Swap the variables if a condition is met.
-#define SWAP( varA, condition, varB )   \
-    assert( typeid( varA ).hash_code() == typeid( varB ).hash_code() ); \
-    \
-    if( varA condition varB )           \
-    {                                   \
-        decltype( varA ) tmp = varA;    \
-        varA = varB;                    \
-        varB = tmp;                     \
-    }
-
 namespace KIGFX
 {
 /**

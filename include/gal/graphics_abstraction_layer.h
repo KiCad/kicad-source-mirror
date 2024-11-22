@@ -1043,6 +1043,20 @@ protected:
      */
     virtual bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions );
 
+    /**
+     * Ensure that the first element is smaller than the second
+     */
+    template <typename T>
+    void normalize( T &a, T &b )
+    {
+        if( a > b )
+        {
+            T tmp = a;
+            a = b;
+            b = tmp;
+        }
+    }
+
     GAL_DISPLAY_OPTIONS& m_options;
     UTIL::LINK           m_observerLink;
 

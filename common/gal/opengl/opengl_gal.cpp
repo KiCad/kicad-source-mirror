@@ -970,7 +970,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
     double endAngle = startAngle + aAngle.AsRadians();
 
     // Normalize arc angles
-    SWAP( startAngle, >, endAngle );
+    normalize( startAngle, endAngle );
 
     const double alphaIncrement = calcAngleStep( aRadius );
 
@@ -1058,7 +1058,7 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
     double endAngle = startAngle + aAngle.AsRadians();
 
     // Swap the angles, if start angle is greater than end angle
-    SWAP( startAngle, >, endAngle );
+    normalize( startAngle, endAngle );
 
     // Calculate the seg count to approximate the arc with aMaxError or less
     int segCount360 = GetArcToSegmentCount( aRadius, aMaxError, FULL_CIRCLE );
@@ -1786,9 +1786,9 @@ void OPENGL_GAL::DrawGrid()
     int gridStartY = KiROUND( ( worldStartPoint.y - m_gridOrigin.y ) / gridScreenSize.y );
     int gridEndY = KiROUND( ( worldEndPoint.y - m_gridOrigin.y ) / gridScreenSize.y );
 
-    // Ensure start coordinate > end coordinate
-    SWAP( gridStartX, >, gridEndX );
-    SWAP( gridStartY, >, gridEndY );
+    // Ensure start coordinate < end coordinate
+    normalize( gridStartX, gridEndX );
+    normalize( gridStartY, gridEndY );
 
     // Ensure the grid fills the screen
     --gridStartX;

@@ -157,7 +157,7 @@ void CAIRO_GAL_BASE::arc_angles_xform_and_normalize( double& aStartAngle, double
     }
 
     // Normalize arc angles
-    SWAP( startAngle, >, endAngle );
+    normalize( startAngle, endAngle );
 
     // now rotate arc according to the rotation transform matrix
     // Remark:
@@ -1778,9 +1778,9 @@ void CAIRO_GAL_BASE::DrawGrid()
     int gridStartY = KiROUND( ( worldStartPoint.y - m_gridOrigin.y ) / gridScreenSize.y );
     int gridEndY = KiROUND( ( worldEndPoint.y - m_gridOrigin.y ) / gridScreenSize.y );
 
-    // Ensure start coordinate > end coordinate
-    SWAP( gridStartX, >, gridEndX );
-    SWAP( gridStartY, >, gridEndY );
+    // Ensure start coordinate < end coordinate
+    normalize( gridStartX, gridEndX );
+    normalize( gridStartY, gridEndY );
 
     // Ensure the grid fills the screen
     --gridStartX;
