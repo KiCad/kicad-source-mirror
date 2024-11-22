@@ -44,6 +44,12 @@
 #include <i18n_utility.h>
 #include <mutex>
 
+#include <google/protobuf/any.pb.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/api_pcb_utils.h>
+#include <api/board/board_types.pb.h>
+
 
 ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         BOARD_CONNECTED_ITEM( aParent, PCB_ZONE_T ),
@@ -201,6 +207,52 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
 EDA_ITEM* ZONE::Clone() const
 {
     return new ZONE( *this );
+}
+
+
+void ZONE::Serialize( google::protobuf::Any &aContainer ) const
+{
+    kiapi::board::types::Zone zone;
+
+    zone.mutable_id()->set_value( m_Uuid.AsStdString() );
+    zone.set_filled( IsFilled() );
+    kiapi::board::PackLayerSet( *zone.mutable_layers(), GetLayerSet() );
+
+    if( m_isRuleArea )
+        zone.set_type( kiapi::board::types::ZT_RULE_AREA );
+    else if( m_teardropType != TEARDROP_TYPE::TD_NONE )
+        zone.set_type( kiapi::board::types::ZT_TEARDROP );
+    else if( IsOnCopperLayer() )
+        zone.set_type( kiapi::board::types::ZT_COPPER );
+    else
+        zone.set_type( kiapi::board::types::ZT_GRAPHICAL );
+
+    // TODO(JE) need to pack m_teardropType to enable round-tripping
+
+    zone.set_name( m_zoneName.ToUTF8() );
+
+    aContainer.PackFrom( zone );
+}
+
+
+bool ZONE::Deserialize( const google::protobuf::Any &aContainer )
+{
+    kiapi::board::types::Zone zone;
+
+    if( !aContainer.UnpackTo( &zone ) )
+        return false;
+
+    const_cast<KIID&>( m_Uuid ) = KIID( zone.id().value() );
+    SetLayerSet( kiapi::board::UnpackLayerSet( zone.layers() ) );
+
+    if( zone.filled() )
+    {
+        // TODO(JE) check what else has to happen here
+        SetIsFilled( true );
+        SetNeedRefill( false );
+    }
+
+    return true;
 }
 
 

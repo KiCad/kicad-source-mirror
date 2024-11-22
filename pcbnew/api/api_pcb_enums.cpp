@@ -26,6 +26,7 @@
 #include <padstack.h>
 #include <pcb_track.h>
 #include <zones.h>
+#include <zone_settings.h>
 
 using namespace kiapi::board;
 
@@ -269,5 +270,137 @@ PADSTACK::UNCONNECTED_LAYER_MODE FromProtoEnum( types::UnconnectedLayerRemoval a
     default:
         wxCHECK_MSG( false, PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL,
                      "Unhandled case in FromProtoEnum<types::UnconnectedLayerRemoval>");
+    }
+}
+
+
+template<>
+types::IslandRemovalMode ToProtoEnum( ISLAND_REMOVAL_MODE aValue )
+{
+    switch( aValue )
+    {
+    case ISLAND_REMOVAL_MODE::ALWAYS:   return types::IslandRemovalMode::IRM_ALWAYS;
+    case ISLAND_REMOVAL_MODE::NEVER:    return types::IslandRemovalMode::IRM_NEVER;
+    case ISLAND_REMOVAL_MODE::AREA:     return types::IslandRemovalMode::IRM_AREA;
+
+    default:
+        wxCHECK_MSG( false, types::IslandRemovalMode::IRM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<ISLAND_REMOVAL_MODE>");
+    }
+}
+
+
+template<>
+ISLAND_REMOVAL_MODE FromProtoEnum( types::IslandRemovalMode aValue )
+{
+    switch( aValue )
+    {
+    case types::IslandRemovalMode::IRM_ALWAYS:  return ISLAND_REMOVAL_MODE::ALWAYS;
+    case types::IslandRemovalMode::IRM_NEVER:   return ISLAND_REMOVAL_MODE::NEVER;
+    case types::IslandRemovalMode::IRM_AREA:    return ISLAND_REMOVAL_MODE::AREA;
+
+    default:
+        wxCHECK_MSG( false, ISLAND_REMOVAL_MODE::ALWAYS,
+                     "Unhandled case in FromProtoEnum<types::IslandRemovalMode>" );
+    }
+}
+
+
+template<>
+types::ZoneFillMode ToProtoEnum( ZONE_FILL_MODE aValue )
+{
+    switch( aValue )
+    {
+    case ZONE_FILL_MODE::POLYGONS:      return types::ZoneFillMode::ZFM_SOLID;
+    case ZONE_FILL_MODE::HATCH_PATTERN: return types::ZoneFillMode::ZFM_HATCHED;
+
+    default:
+        wxCHECK_MSG( false, types::ZoneFillMode::ZFM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<ZONE_FILL_MODE>");
+    }
+}
+
+
+template<>
+ZONE_FILL_MODE FromProtoEnum( types::ZoneFillMode aValue )
+{
+    switch( aValue )
+    {
+    case types::ZoneFillMode::ZFM_SOLID:    return ZONE_FILL_MODE::POLYGONS;
+    case types::ZoneFillMode::ZFM_HATCHED:  return ZONE_FILL_MODE::HATCH_PATTERN;
+
+    default:
+        wxCHECK_MSG( false, ZONE_FILL_MODE::POLYGONS,
+                     "Unhandled case in FromProtoEnum<types::ZoneFillMode>" );
+    }
+}
+
+
+template<>
+types::ZoneBorderStyle ToProtoEnum( ZONE_BORDER_DISPLAY_STYLE aValue )
+{
+    switch( aValue )
+    {
+    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:         return types::ZoneBorderStyle::ZBS_SOLID;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL:    return types::ZoneBorderStyle::ZBS_DIAGONAL_FULL;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE:    return types::ZoneBorderStyle::ZBS_DIAGONAL_EDGE;
+    case ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER: return types::ZoneBorderStyle::ZBS_INVISIBLE;
+
+    default:
+        wxCHECK_MSG( false, types::ZoneBorderStyle::ZBS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<ZONE_BORDER_DISPLAY_STYLE>");
+    }
+}
+
+
+template<>
+ZONE_BORDER_DISPLAY_STYLE FromProtoEnum( types::ZoneBorderStyle aValue )
+{
+    switch( aValue )
+    {
+    case types::ZoneBorderStyle::ZBS_SOLID:         return ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
+    case types::ZoneBorderStyle::ZBS_DIAGONAL_FULL: return ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL;
+    case types::ZoneBorderStyle::ZBS_DIAGONAL_EDGE: return ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
+    case types::ZoneBorderStyle::ZBS_INVISIBLE:     return ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER;
+
+    default:
+        wxCHECK_MSG( false, ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                     "Unhandled case in FromProtoEnum<types::ZoneHatchBorderMode>" );
+    }
+}
+
+
+template<>
+types::PlacementRuleSourceType ToProtoEnum( RULE_AREA_PLACEMENT_SOURCE_TYPE aValue )
+{
+    switch( aValue )
+    {
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
+        return types::PlacementRuleSourceType::PRST_SHEET_NAME;
+
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
+        return types::PlacementRuleSourceType::PRST_COMPONENT_CLASS;
+
+    default:
+        wxCHECK_MSG( false, types::PlacementRuleSourceType::PRST_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<RULE_AREA_PLACEMENT_SOURCE_TYPE>");
+    }
+}
+
+
+template<>
+RULE_AREA_PLACEMENT_SOURCE_TYPE FromProtoEnum( types::PlacementRuleSourceType aValue )
+{
+    switch( aValue )
+    {
+    case types::PlacementRuleSourceType::PRST_SHEET_NAME:
+        return RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
+
+    case types::PlacementRuleSourceType::PRST_COMPONENT_CLASS:
+        return RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+
+    default:
+        wxCHECK_MSG( false, RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME,
+                     "Unhandled case in FromProtoEnum<types::PlacementRuleSourceType>" );
     }
 }

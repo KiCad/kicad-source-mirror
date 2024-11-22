@@ -483,10 +483,134 @@ message Pad
   kiapi.common.types.Distance copper_clearance_override = 8;
 }
 
-// Copper zone, non-copper zone, or rule area
+enum ZoneType
+{
+  ZT_UNKNOWN = 0;
+  ZT_COPPER = 1;
+  ZT_GRAPHICAL = 2;
+  ZT_RULE_AREA = 3;
+  ZT_TEARDROP = 4;
+}
+
+enum IslandRemovalMode
+{
+  IRM_UNKNOWN = 0;
+  IRM_ALWAYS = 1;
+  IRM_NEVER = 2;
+  IRM_AREA = 3;
+}
+
+enum ZoneFillMode
+{
+  ZFM_UNKNOWN = 0;
+  ZFM_SOLID = 1;
+  ZFM_HATCHED = 2;
+}
+
+enum ZoneHatchSmoothing
+{
+  ZHS_UNKNOWN = 0;
+  ZHS_NONE = 1;
+  ZHS_FILLET = 2;
+  ZHS_ARC_LOW_DEF = 3;
+  ZHS_ARC_HIGH_DEF = 4;
+}
+
+enum ZoneHatchFillBorderMode
+{
+  ZHFBM_UNKNOWN = 0;
+  ZHFBM_USE_MIN_ZONE_THICKNESS = 1;
+  ZHFMB_USE_HATCH_THICKNESS = 2;
+}
+
+message HatchFillSettings
+{
+  kiapi.common.types.Distance thickness = 1;
+  kiapi.common.types.Distance gap = 2;
+  kiapi.common.types.Angle orientation = 3;
+  double hatch_smoothing_ratio = 4;
+  double hatch_hole_min_area_ratio = 5;
+  ZoneHatchFillBorderMode border_mode = 6;
+}
+
+message CopperZoneSettings
+{
+  ZoneConnectionSettings connection = 1;
+
+  kiapi.common.types.Distance clearance = 2;
+
+  kiapi.common.types.Distance min_thickness = 3;
+
+  IslandRemovalMode island_mode = 4;
+
+  uint64 min_island_area = 5;
+
+  ThermalSpokeSettings thermal_spokes = 6;
+
+  ZoneFillMode fill_mode = 7;
+
+  HatchFillSettings hatch_settings = 8;
+
+  Net net = 9;
+}
+
+enum PlacementRuleSourceType
+{
+  PRST_UNKNOWN = 0;
+  PRST_SHEET_NAME = 1;
+  PRST_COMPONENT_CLASS = 2;
+}
+
+message RuleAreaSettings
+{
+  bool keepout_copper = 1;
+  bool keepout_vias = 2;
+  bool keepout_tracks = 3;
+  bool keepout_pads = 4;
+  bool keepout_footprints = 5;
+
+  bool placement_enabled = 6;
+  PlacementRuleSourceType placement_source_type = 7;
+  string placement_source = 8;
+}
+
+enum ZoneBorderStyle
+{
+  ZBS_UNKNOWN = 0;
+  ZBS_SOLID = 1;
+  ZBS_DIAGONAL_FULL = 2;
+  ZBS_DIAGONAL_EDGE = 3;
+  ZBS_INVISIBLE = 4;
+}
+
+message ZoneBorderSettings
+{
+  ZoneBorderStyle style = 1;
+  kiapi.common.types.Distance pitch = 2;
+}
+
 message Zone
 {
-  // TODO
+  kiapi.common.types.KIID id = 1;
+
+  ZoneType type = 2;
+
+  repeated BoardLayer layers = 3;
+
+  kiapi.common.types.PolygonWithHoles outline = 4;
+
+  string name = 5;
+
+  oneof settings {
+    CopperZoneSettings copper_settings = 6;
+    RuleAreaSettings rule_area_settings = 7;
+  }
+
+  uint32 priority = 8;
+
+  bool filled = 9;
+
+  repeated kiapi.common.types.PolySet filled_shape = 10;
 }
 
 message Dimension

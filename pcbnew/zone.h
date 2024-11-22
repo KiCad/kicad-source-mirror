@@ -84,6 +84,9 @@ public:
         return aItem && aItem->Type() == PCB_ZONE_T;
     }
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     /**
      * Not all ZONEs are *really* BOARD_CONNECTED_ITEMs....
      */

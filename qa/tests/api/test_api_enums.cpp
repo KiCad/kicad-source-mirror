@@ -36,6 +36,7 @@
 #include <padstack.h>
 #include <pcb_track.h>
 #include <zones.h>
+#include <zone_settings.h>
 
 using namespace kiapi::common;
 
@@ -187,5 +188,24 @@ BOOST_AUTO_TEST_CASE( ViaType )
     testEnums<VIATYPE, kiapi::board::types::ViaType>( true );
 }
 
+BOOST_AUTO_TEST_CASE( IslandRemovalMode )
+{
+    testEnums<ISLAND_REMOVAL_MODE, kiapi::board::types::IslandRemovalMode>();
+}
+
+BOOST_AUTO_TEST_CASE( ZoneFillMode )
+{
+    testEnums<ZONE_FILL_MODE, kiapi::board::types::ZoneFillMode>();
+}
+
+BOOST_AUTO_TEST_CASE( ZoneBorderStyle )
+{
+    testEnums<ZONE_BORDER_DISPLAY_STYLE, kiapi::board::types::ZoneBorderStyle>();
+}
+
+BOOST_AUTO_TEST_CASE( PlacementRuleSourceType )
+{
+    testEnums<RULE_AREA_PLACEMENT_SOURCE_TYPE, kiapi::board::types::PlacementRuleSourceType>();
+}
 
 BOOST_AUTO_TEST_SUITE_END()
