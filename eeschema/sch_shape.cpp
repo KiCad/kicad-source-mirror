@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -393,7 +393,7 @@ void SCH_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
             EDA_ANGLE arc_angle =  ( t1 - t2 ).Normalize180();
             bool transformed2 = ( arc_angle > ANGLE_0 ) && ( arc_angle < ANGLE_180 );
 
-            if( transformed  == transformed2 )
+            if( transformed  != transformed2 )
                 std::swap( start, end );
         }
     }

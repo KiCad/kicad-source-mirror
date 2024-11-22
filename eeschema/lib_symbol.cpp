@@ -601,7 +601,19 @@ void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
             if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
                 aForceNoFill = true;
 
+            // Ensure the color of shape is from LAYER_DEVICE if not specified.
+            COLOR4D init_color = shape.GetStroke().GetColor();
+            STROKE_PARAMS prms = shape.GetStroke();
+
+            if( init_color == COLOR4D::UNSPECIFIED )
+            {
+                COLOR4D color = aSettings->GetLayerColor( LAYER_DEVICE );
+                prms.SetColor( color );
+                shape.SetStroke( prms );
+            }
             shape.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
+            prms.SetColor( init_color );
+            shape.SetStroke( prms );
         }
         else
         {
