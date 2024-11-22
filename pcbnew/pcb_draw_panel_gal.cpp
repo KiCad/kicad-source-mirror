@@ -222,7 +222,7 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
                                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
         EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType )
 {
-    m_view = new KIGFX::PCB_VIEW( true );
+    m_view = new KIGFX::PCB_VIEW();
     m_view->SetGAL( m_gal );
 
     FRAME_T frameType = FRAME_FOOTPRINT_PREVIEW;

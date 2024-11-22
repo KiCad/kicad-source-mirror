@@ -80,7 +80,7 @@ class SCH_VIEW : public KIGFX::VIEW
 public:
     // Note: aFrame is used to know the sheet path name when drawing the drawing sheet.
     // It can be null.
-    SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame );
+    SCH_VIEW( SCH_BASE_FRAME* aFrame );
     ~SCH_VIEW();
 
     void Cleanup();

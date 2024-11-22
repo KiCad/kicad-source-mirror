@@ -44,7 +44,7 @@ GERBVIEW_DRAW_PANEL_GAL::GERBVIEW_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWin
                                                   GAL_TYPE aGalType ) :
 EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType )
 {
-    m_view = new KIGFX::VIEW( true );
+    m_view = new KIGFX::VIEW();
     m_view->SetGAL( m_gal );
     GetGAL()->SetWorldUnitLength( 1.0/gerbIUScale.IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
 

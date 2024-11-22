@@ -45,8 +45,8 @@
 namespace KIGFX {
 
 
-SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
-    VIEW( aIsDynamic )
+SCH_VIEW::SCH_VIEW( SCH_BASE_FRAME* aFrame ) :
+    VIEW()
 {
     m_frame = aFrame;
 

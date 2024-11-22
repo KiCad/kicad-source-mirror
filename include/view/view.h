@@ -71,11 +71,7 @@ public:
 
     typedef std::pair<VIEW_ITEM*, int> LAYER_ITEM_PAIR;
 
-    /**
-     * @param aIsDynamic decides whether we are creating a static or a dynamic VIEW.
-     */
-    VIEW( bool aIsDynamic = true );
-
+    VIEW();
     virtual ~VIEW();
 
     /**
@@ -605,15 +601,6 @@ public:
     void RecacheAllItems();
 
     /**
-     * Tell if the VIEW is dynamic (ie. can be changed, for example displaying PCBs in a window)
-     * or static (that cannot be modified, eg. displaying image/PDF).
-     */
-    bool IsDynamic() const
-    {
-        return m_dynamic;
-    }
-
-    /**
      * Return true if any of the VIEW layers needs to be refreshened.
      *
      * @return True in case if any of layers is marked as dirty.
@@ -898,10 +885,6 @@ protected:
 
     ///< Interface to #PAINTER that is used to draw items.
     GAL* m_gal;
-
-    ///< Dynamic VIEW (eg. display PCB in window) allows changes once it is built,
-    ///< static (eg. image/PDF) - does not.
-    bool m_dynamic;
 
     ///< Flag to mark targets as dirty so they have to be redrawn on the next refresh event.
     bool m_dirtyTargets[TARGETS_NUMBER];

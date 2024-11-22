@@ -36,7 +36,7 @@ namespace KIGFX {
 class PCB_VIEW : public VIEW
 {
 public:
-    PCB_VIEW( bool aIsDynamic = true );
+    PCB_VIEW();
     virtual ~PCB_VIEW();
 
     /// @copydoc VIEW::Add()

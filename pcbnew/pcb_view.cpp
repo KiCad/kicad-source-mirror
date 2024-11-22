@@ -33,8 +33,8 @@ using namespace std::placeholders;
 #include <footprint.h>
 
 namespace KIGFX {
-PCB_VIEW::PCB_VIEW( bool aIsDynamic ) :
-    VIEW( aIsDynamic )
+PCB_VIEW::PCB_VIEW() :
+    VIEW()
 {
     // Set m_boundary to define the max area size. The default value is acceptable for Pcbnew
     // and Gerbview.
