@@ -28,16 +28,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-11-09 13:00+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2024-11-23 02:00+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7338,7 +7338,7 @@ msgstr "DXF-Bilder werden derzeit nicht unterstützt."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr "Importierte Graphik ist zu groß. Das Maximum ist %f"
+msgstr "Die importierte Grafik ist zu groß. Maximaler Maßstab ist %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
@@ -7545,29 +7545,24 @@ msgid "Schematic: Export Netlist"
 msgstr "Schaltplan: Netzliste exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:128
-#, fuzzy
 msgid "Schematic PDF Plot"
-msgstr "Schaltplandaten"
+msgstr ""
 
 #: common/jobs/job_export_sch_plot.cpp:141
-#, fuzzy
 msgid "Schematic DXF Plot"
-msgstr "Schaltplandaten"
+msgstr ""
 
 #: common/jobs/job_export_sch_plot.cpp:154
-#, fuzzy
 msgid "Schematic SVG Plot"
-msgstr "Schaltplan einrichten"
+msgstr ""
 
 #: common/jobs/job_export_sch_plot.cpp:167
-#, fuzzy
 msgid "Schematic PS Plot"
-msgstr "Schaltplan einrichten"
+msgstr ""
 
 #: common/jobs/job_export_sch_plot.cpp:180
-#, fuzzy
 msgid "Schematic HPGL Plot"
-msgstr "Schaltplanparität"
+msgstr ""
 
 #: common/jobs/job_export_sch_plot.cpp:184
 msgid "Schematic: Export SVG"
@@ -8975,9 +8970,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Die Bibliothek in der Liste nicht mehr oben halten"
 
 #: common/tool/actions.cpp:804
-#, fuzzy
 msgid "Library Tree"
-msgstr "Bibliotheksbaum zeigen"
+msgstr "Bibliotheksbaum"
 
 #: common/tool/actions.cpp:810
 msgid "Hide Library Tree"
@@ -14068,9 +14062,9 @@ msgid "Link '%s' to this file?"
 msgstr "\"%s\" mit dieser Datei verknüpfen?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "Kann '%s' in '%s' nicht parsen"
+msgstr "Das Kopieren der Schaltplandatei ‚%s‘ zum Ziel ‚%s‘ ist fehlgeschlagen."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:564
 #, c-format
@@ -25815,10 +25809,10 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "Export-Werkzeuge (Gerber-, Bohr-, Positionsdateien, etc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:77
-#, fuzzy
 msgid ""
 "Output file format, options: step, brep, xao, glb (binary glTF), ply, stl"
-msgstr "Ausgabedateiformat, Optionen: step, brep, xao, glb (binäres glTF)"
+msgstr ""
+"Ausgabedateiformat, Optionen: step, brep, xao, glb (binäres glTF), ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:81
 msgid "Overwrite output file"
@@ -26678,9 +26672,8 @@ msgid "Select output type:"
 msgstr "Ausgabetyp wählen:"
 
 #: kicad/dialogs/panel_jobs.cpp:684
-#, fuzzy
 msgid "No outputs defined"
-msgstr "<Nicht definiert>"
+msgstr "Keine Ausgaben definiert"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:145
 msgid "Edit the project schematic"
@@ -26847,14 +26840,12 @@ msgid "Export VRML"
 msgstr "VRML exportieren"
 
 #: kicad/kicad_cli.cpp:123
-#, fuzzy
 msgid "Export PLY"
-msgstr "HPGL exportieren"
+msgstr "PLY exportieren"
 
 #: kicad/kicad_cli.cpp:124
-#, fuzzy
 msgid "Export STL"
-msgstr "STEP exportieren"
+msgstr "STL exportieren"
 
 #: kicad/kicad_cli.cpp:139
 msgid "Export DXF"
@@ -33900,14 +33891,12 @@ msgid "BREP (OCCT) files"
 msgstr "BREP (OCCT)-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
-#, fuzzy
 msgid "PLY files"
-msgstr "HTML-Dateien"
+msgstr "PLY-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:437
-#, fuzzy
 msgid "STL files"
-msgstr "HTML-Dateien"
+msgstr "STL-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:445
 msgid "3D Model Output File"
@@ -33951,13 +33940,12 @@ msgid "BREP (OCCT)"
 msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "PLY (ASCII)"
-msgstr "ASCII"
+msgstr "PLY (ASCII)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
-msgstr ""
+msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -35327,9 +35315,8 @@ msgstr "Teardrops mit eingestellten Werten hinzufügen:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:176
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:171
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:156
-#, fuzzy
 msgid "Apply and Close"
-msgstr "Änderungen anwenden"
+msgstr "Anwenden und schließen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:540
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:544
@@ -36096,7 +36083,7 @@ msgstr "Schaltplanblatt"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
 #, fuzzy
 msgid "Component Classes"
-msgstr "Bauteilklasse"
+msgstr "Bauteilklassen"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:32
 msgid "Replace existing placement rule areas"
@@ -37899,7 +37886,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 #, fuzzy
 msgid "Front/Inner/Back"
-msgstr "Vorderseite/innen/Unterseite"
+msgstr "Vorderseite/Innenseite/Rückseite"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -41938,39 +41925,39 @@ msgid "%s orientation differs."
 msgstr "Orientierung von %s ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s Padform-Typ weicht ab."
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs on layer %s."
-msgstr "%s Größe weicht ab."
+msgstr "Größe %s unterscheidet sich auf Ebene %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s Trapez-Delta weicht ab."
+msgstr "Trapez-Delta %s unterscheidet sich auf Ebene %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "%s abgerundete Kanten weichen ab."
+msgstr "Abgerundete Kanten %s unterscheiden sich auf Ebene %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "%s angefaste Kantengrößen weichen ab."
+msgstr "Größe der angefasten Kanten %s unterscheidet sich auf Ebene %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "%s angefaste Kanten weichen ab."
+msgstr "Angefaste Kanten %s unterscheiden sich auf Ebene %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "%s Form-Offset von Loch weicht ab."
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:351
 #, c-format
@@ -41983,9 +41970,9 @@ msgid "%s drill size differs."
 msgstr "%s Bohrgröße weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "%s Formprimitiven weichen ab."
+msgstr "Formprimitiven %s unterscheiden sich auf Ebene %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 #, c-format
@@ -42844,33 +42831,33 @@ msgstr ""
 "Konnte temporäre Datei \"%s\" nicht umbenennen."
 
 #: pcbnew/files.cpp:1456
-#, fuzzy, c-format
+#, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
-msgstr "Die Datei \"%s\" existiert bereits. Möchten Sie diese überschreiben?"
+msgstr ""
+"Die Ausgabedatei ‚%s‘ existiert bereits. Möchten Sie diese überschreiben?"
 
 #: pcbnew/files.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "Kann temporäre Ausgabedatei nicht entfernen"
+msgstr "Vorhandene Ausgabedatei ‚%s‘ kann nicht entfernt werden."
 
 #: pcbnew/files.cpp:1482
-#, fuzzy
 msgid "Cannot create temporary output directory."
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr "Temporäres Ausgabeverzeichnis kann nicht erstellt werden."
 
 #: pcbnew/files.cpp:1493
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
 msgstr ""
-"Symbol \"%s\" existiert bereits in Bibliothek \"%s\". Soll es überschrieben "
-"werden?"
+"Das Ausgabeverzeichnis ‚%s‘ existiert bereits und ist nicht leer. Möchten "
+"Sie es überschreiben?"
 
 #: pcbnew/files.cpp:1505
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output directory '%s'."
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr "Vorhandenes Ausgabeverzeichnis ‚%s‘ kann nicht entfernt werden."
 
 #: pcbnew/files.cpp:1519
 msgid "Generating ODB++ output files"
@@ -43637,14 +43624,12 @@ msgid "Export IDF 3D board representation"
 msgstr "Eine IDF 3D-Platinendarstellung exportieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP / GLB / BREP / XAO / PLY / STL..."
-msgstr "STEP / GLB / BREP / XAO …"
+msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
-#, fuzzy
 msgid "Export STEP / GLB / BREP / XAO / PLY / STL 3D board representation"
-msgstr "Exportiere STEP / GLB / BREP / XAO 3D-Platinendaten"
+msgstr "STEP / GLB / BREP / XAO / PLY exportieren / STL 3D-Platinendaten"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
@@ -46477,14 +46462,12 @@ msgid "Failed to add component data"
 msgstr "Konnte Bauteildaten nicht hinzufügen"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating ODB++ Structure"
-msgstr "Erzeuge ODB++-Ausgabedatei"
+msgstr "ODB++-Struktur erstellen"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:118
-#, fuzzy
 msgid "Exporting board to ODB++"
-msgstr "Platinenkörper exportieren"
+msgstr "Platine nach ODB++ exportieren"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
 msgid "ODB++ Production File"
