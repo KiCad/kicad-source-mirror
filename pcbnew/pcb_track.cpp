@@ -471,6 +471,17 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
 
     PADSTACK padstack = Padstack();
 
+    // TODO(JE) Should this be done here or should the padstack layerset be kept up to date?
+    // It's not really used elsewhere at the moment
+    for( PCB_LAYER_ID layer : LAYER_RANGE( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS ) )
+        padstack.LayerSet().set( layer );
+
+    if( !IsTented( F_Mask ) && Padstack().Drill().start == F_Cu  )
+        padstack.LayerSet().set( F_Mask );
+
+    if( !IsTented( B_Mask ) && Padstack().Drill().end == B_Cu )
+        padstack.LayerSet().set( B_Mask );
+
     google::protobuf::Any padStackWrapper;
     padstack.Serialize( padStackWrapper );
     padStackWrapper.UnpackTo( via.mutable_pad_stack() );
