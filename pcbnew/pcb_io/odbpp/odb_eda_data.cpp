@@ -18,6 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <build_version.h>
+#include <wx/regex.h>
+
 #include "odb_eda_data.h"
 #include "hash_eda.h"
 #include "netinfo.h"
@@ -55,9 +58,15 @@ void EDA_DATA::AddNET( const NETINFO_ITEM* aNet )
 {
     if( nets_map.end() == nets_map.find( aNet->GetNetCode() ) )
     {
+        wxString netName = aNet->GetNetname();
+        netName.Trim().Trim( false );
+
+        wxRegEx spaces( "\\s" );
+        spaces.Replace( &netName, "_" );
+
         auto& net = nets_map.emplace( std::piecewise_construct,
                                       std::forward_as_tuple( aNet->GetNetCode() ),
-                                      std::forward_as_tuple( nets.size(), aNet->GetNetname() ) )
+                                      std::forward_as_tuple( nets.size(), netName ) )
                             .first->second;
 
         nets.push_back( &net );
@@ -370,7 +379,7 @@ void EDA_DATA::PACKAGE::Write( std::ostream& ost ) const
 {
     ost << "PKG " << m_name << " " << ODB::Data2String( m_pitch ) << " "
         << ODB::Data2String( m_xmin ) << " " << ODB::Data2String( m_ymin ) << " "
-        << ODB::Data2String( m_xmax ) << " " << ODB::Data2String( m_ymax ) << std::endl;
+        << ODB::Data2String( m_xmax ) << " " << ODB::Data2String( m_ymax ) << ";" << std::endl;
 
     for( const auto& outline : m_pkgOutlines )
     {
@@ -387,6 +396,7 @@ void EDA_DATA::PACKAGE::Write( std::ostream& ost ) const
 void EDA_DATA::Write( std::ostream& ost ) const
 {
     ost << "# " << wxDateTime::Now().FormatISOCombined() << std::endl;
+    ost << "HDR KiCad EDA " << TO_UTF8( GetBuildVersion() ) << std::endl;
     ost << "UNITS=" << PCB_IO_ODBPP::m_unitsStr << std::endl;
     ost << "LYR";
 
