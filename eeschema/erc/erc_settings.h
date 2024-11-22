@@ -111,6 +111,13 @@ enum class PIN_ERROR
     UNCONNECTED
 };
 
+/// The sorting metric used for erc resolution of multi-pin errors.
+enum class ERC_PIN_SORTING_METRIC
+{
+    SM_HEURISTICS,
+    SM_VIOLATION_COUNT
+};
+
 /// Types of drive on a net (used for legacy ERC)
 #define NPI    4  // Net with Pin isolated, this pin has type Not Connected and must be left N.C.
 #define DRV    3  // Net driven by a signal (a pin output for instance)
@@ -151,6 +158,24 @@ public:
     void SetSeverity( int aErrorCode, SEVERITY aSeverity );
 
     void ResetPinMap();
+
+    /**
+     * Get the weight for an electrical pin type.
+     * Used for sorting of pins in pin-to-pin erc resolution.
+     * @param aPinType the pin type to check
+     * @returns the weight for sorting
+     */
+    int GetPinTypeWeight( ELECTRICAL_PINTYPE aPinType ) const
+    {
+        wxASSERT( static_cast<int>( aPinType ) < ELECTRICAL_PINTYPES_TOTAL );
+        return m_PinTypeWeights.at( aPinType );
+    }
+
+    /**
+     * Get the type of sorting metric the ERC checker should
+     * use to resolve multi-pin errors.
+     */
+    ERC_PIN_SORTING_METRIC GetERCSortingMetric() const { return m_ERCSortingMetric; }
 
     PIN_ERROR GetPinMapValue( int aFirstType, int aSecondType ) const
     {
@@ -195,6 +220,19 @@ public:
 private:
 
     static PIN_ERROR m_defaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+
+    /**
+     * Weights for electrical pins used in ERC
+     * to decide which pin gets the marker
+     * in case of a multi-pin erc pin-to-pin error.
+     */
+    std::map<ELECTRICAL_PINTYPE, int> m_PinTypeWeights;
+
+    /**
+     * The type of sorting used by the ERC checker
+     * to resolve multi-pin errors.
+     */
+    ERC_PIN_SORTING_METRIC m_ERCSortingMetric;
 };
 
 

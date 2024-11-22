@@ -32,28 +32,24 @@
 
 struct ERC_REGRESSION_TEST_FIXTURE
 {
-    ERC_REGRESSION_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
-    { }
+    ERC_REGRESSION_TEST_FIXTURE() : m_settingsManager( true /* headless */ ) {}
 
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
 
 
-BOOST_FIXTURE_TEST_CASE( ERCStackingPins, ERC_REGRESSION_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( ERCMultiplePinToPin, ERC_REGRESSION_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
 
-    // Check for Errors when stacking pins
-
-    std::vector<std::pair<wxString, int>> tests = { { "issue6588", 3 } };
+    std::vector<std::pair<wxString, int>> tests = { { "erc_multiple_pin_to_pin", 2 } };
 
     for( const std::pair<wxString, int>& test : tests )
     {
         KI_TEST::LoadSchematic( m_settingsManager, test.first, m_schematic );
 
-        ERC_SETTINGS& settings = m_schematic->ErcSettings();
+        ERC_SETTINGS&                settings = m_schematic->ErcSettings();
         SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
 
         // Skip the "Modified symbol" warning
@@ -74,9 +70,9 @@ BOOST_FIXTURE_TEST_CASE( ERCStackingPins, ERC_REGRESSION_TEST_FIXTURE )
 
         ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MILLIMETRES );
 
-        BOOST_CHECK_MESSAGE( errors.GetCount() == test.second, "Expected " << test.second << " errors in " << test.first.ToStdString()
+        BOOST_CHECK_MESSAGE( errors.GetCount() == test.second,
+                             "Expected " << test.second << " errors in " << test.first.ToStdString()
                                          << " but got " << errors.GetCount() << "\n"
                                          << reportWriter.GetTextReport() );
-
     }
 }

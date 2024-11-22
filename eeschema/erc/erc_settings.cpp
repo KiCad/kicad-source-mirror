@@ -232,6 +232,22 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 }
             },
             {} ) );
+
+    // Pin weights used for sorting. Take care, sorting is descending!
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_NIC,           11 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_UNSPECIFIED,   10 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_PASSIVE,       9 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR, 8 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_OPENEMITTER,   7 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_INPUT,         6 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_TRISTATE,      5 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_BIDI,          4 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_OUTPUT,        3 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_POWER_IN,      2 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_POWER_OUT,     1 );
+    m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_NC,            0 );
+
+    m_ERCSortingMetric = ERC_PIN_SORTING_METRIC::SM_HEURISTICS;
 }
 
 

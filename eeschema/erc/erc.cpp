@@ -51,6 +51,7 @@
 #include <symbol_lib_table.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+#include <vector>
 #include <wx/ffile.h>
 #include <sim/sim_lib_mgr.h>
 #include <progress_reporter.h>
@@ -888,6 +889,7 @@ int ERC_TESTER::TestPinToPin()
 
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
     {
+        using iterator_t = std::vector<ERC_SCH_PIN_CONTEXT>::iterator;
         std::vector<ERC_SCH_PIN_CONTEXT>           pins;
         std::unordered_map<EDA_ITEM*, SCH_SCREEN*> pinToScreenMap;
         bool has_noconnect = false;
@@ -940,6 +942,9 @@ int ERC_TESTER::TestPinToPin()
             }
         }
 
+        std::vector<std::tuple<iterator_t, iterator_t, PIN_ERROR>> pin_mismatches;
+        std::map<iterator_t, int>                                  pin_mismatch_counts;
+
         for( auto refIt = pins.begin(); refIt != pins.end(); ++refIt )
         {
             ERC_SCH_PIN_CONTEXT& refPin = *refIt;
@@ -986,22 +991,109 @@ int ERC_TESTER::TestPinToPin()
 
                 if( erc != PIN_ERROR::OK && m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) )
                 {
-                    std::shared_ptr<ERC_ITEM> ercItem =
-                            ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING :
-                                                                          ERCE_PIN_TO_PIN_ERROR );
-                    ercItem->SetItems( refPin.Pin(), testPin.Pin() );
-                    ercItem->SetSheetSpecificPath( refPin.Sheet() );
-                    ercItem->SetItemsSheetPaths( refPin.Sheet(), testPin.Sheet() );
+                    pin_mismatches.emplace_back(
+                            std::tuple<iterator_t, iterator_t, PIN_ERROR>{ refIt, testIt, erc } );
 
-                    ercItem->SetErrorMessage(
-                            wxString::Format( _( "Pins of type %s and %s are connected" ),
-                                              ElectricalPinTypeGetText( refType ),
-                                              ElectricalPinTypeGetText( testType ) ) );
+                    if( m_settings.GetERCSortingMetric() == ERC_PIN_SORTING_METRIC::SM_HEURISTICS )
+                    {
+                        pin_mismatch_counts[refIt] =
+                                m_settings.GetPinTypeWeight( ( *refIt ).Pin()->GetType() );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, refPin.Pin()->GetPosition() );
-                    pinToScreenMap[refPin.Pin()]->Append( marker );
-                    errors++;
+                        pin_mismatch_counts[testIt] =
+                                m_settings.GetPinTypeWeight( ( *testIt ).Pin()->GetType() );
+                    }
+                    else
+                    {
+                        if( !pin_mismatch_counts.contains( testIt ) )
+                            pin_mismatch_counts.emplace( testIt, 1 );
+                        else
+                            pin_mismatch_counts[testIt]++;
+
+                        if( !pin_mismatch_counts.contains( refIt ) )
+                            pin_mismatch_counts.emplace( refIt, 1 );
+                        else
+                            pin_mismatch_counts[refIt]++;
+                    }
                 }
+            }
+        }
+
+        std::multimap<size_t, iterator_t, std::greater<size_t>> pins_dsc;
+
+        std::transform( pin_mismatch_counts.begin(), pin_mismatch_counts.end(),
+                        std::inserter( pins_dsc, pins_dsc.begin() ),
+                        []( const auto& p )
+                        {
+                            return std::pair<size_t, iterator_t>( p.second, p.first );
+                        } );
+
+        for( const auto& [amount, pinIt] : pins_dsc )
+        {
+            if( pin_mismatches.empty() )
+                break;
+
+            SCH_PIN* pin = ( *pinIt ).Pin();
+            VECTOR2I position = pin->GetPosition();
+
+            iterator_t nearest_pin = pins.end();
+            double     smallest_distance = std::numeric_limits<double>::infinity();
+            PIN_ERROR  erc;
+
+            std::erase_if(
+                    pin_mismatches,
+                    [&]( const auto& tuple )
+                    {
+                        iterator_t other;
+
+                        if( pinIt == std::get<0>( tuple ) )
+                            other = std::get<1>( tuple );
+                        else if( pinIt == std::get<1>( tuple ) )
+                            other = std::get<0>( tuple );
+                        else
+                            return false;
+
+                        if( ( *pinIt ).Sheet().Cmp( ( *other ).Sheet() ) != 0 )
+                        {
+                            if( std::isinf( smallest_distance ) )
+                            {
+                                nearest_pin = other;
+                                erc = std::get<2>( tuple );
+                            }
+                        }
+                        else
+                        {
+                            double distance = position.Distance( ( *other ).Pin()->GetPosition() );
+
+                            if( std::isinf( smallest_distance ) || distance < smallest_distance )
+                            {
+                                smallest_distance = distance;
+                                nearest_pin = other;
+                                erc = std::get<2>( tuple );
+                            }
+                        }
+
+                        return true;
+                    } );
+
+            if( nearest_pin != pins.end() )
+            {
+                SCH_PIN* other_pin = ( *nearest_pin ).Pin();
+
+                std::shared_ptr<ERC_ITEM> ercItem =
+                        ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING
+                                                                    : ERCE_PIN_TO_PIN_ERROR );
+                ercItem->SetItems( pin, other_pin );
+                ercItem->SetSheetSpecificPath( ( *pinIt ).Sheet() );
+                ercItem->SetItemsSheetPaths( ( *pinIt ).Sheet(), ( *nearest_pin ).Sheet() );
+
+                ercItem->SetErrorMessage(
+                        wxString::Format( _( "Pins of type %s and %s are connected" ),
+                                          ElectricalPinTypeGetText( pin->GetType() ),
+                                          ElectricalPinTypeGetText( other_pin->GetType() ) ) );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
+                pinToScreenMap[pin]->Append( marker );
+                errors++;
             }
         }
 
