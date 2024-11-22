@@ -284,7 +284,7 @@ VIEW::VIEW( bool aIsDynamic ) :
         l.target         = TARGET_CACHED;
     }
 
-    sortLayers();
+    sortOrderedLayers();
 
     m_preview.reset( new KIGFX::VIEW_GROUP() );
     Add( m_preview.get() );
@@ -322,9 +322,6 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
 
     for( int layer : layers )
     {
-        wxCHECK2_MSG( layer >= 0 && static_cast<unsigned>( layer ) < m_layers.size(),
-                      continue, wxS( "Invalid layer" ) );
-
         VIEW_LAYER& l = m_layers[layer];
         l.items->Insert( aItem, bbox );
         MarkTargetDirty( l.target );
@@ -653,7 +650,7 @@ void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder )
 {
     m_layers[aLayer].renderingOrder = aRenderingOrder;
 
-    sortLayers();
+    sortOrderedLayers();
 }
 
 
@@ -889,7 +886,7 @@ void VIEW::ClearTopLayers()
 
 void VIEW::UpdateAllLayersOrder()
 {
-    sortLayers();
+    sortOrderedLayers();
 
     if( m_gal->IsVisible() )
     {
@@ -1066,7 +1063,12 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
 
     for( int layer : layers )
     {
-        m_gal->SetLayerDepth( m_layers.at( layer ).renderingOrder );
+        auto it = m_layers.find( layer );
+
+        if( it == m_layers.end() )
+            continue;
+
+        m_gal->SetLayerDepth( it->second.renderingOrder );
         draw( aItem, layer, aImmediate );
     }
 }
@@ -1247,7 +1249,7 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 }
 
 
-void VIEW::sortLayers()
+void VIEW::sortOrderedLayers()
 {
     int n = 0;
 
@@ -1499,9 +1501,11 @@ void VIEW::UpdateItems()
 
             for( int layer : layers )
             {
-                wxCHECK2_MSG( layer >= 0 && static_cast<unsigned>( layer ) < m_layers.size(),
-                        continue, wxS( "Invalid layer" ) );
-                VIEW_LAYER& l = m_layers[layer];
+                auto it = m_layers.find( layer );
+
+                wxCHECK2_MSG( it != m_layers.end(), continue, wxS( "Invalid layer" ) );
+
+                VIEW_LAYER& l = it->second;
                 l.items->Insert( item, bbox );
                 MarkTargetDirty( l.target );
             }
@@ -1575,7 +1579,7 @@ std::unique_ptr<VIEW> VIEW::DataReference() const
     std::unique_ptr<VIEW> ret = std::make_unique<VIEW>();
     ret->m_allItems = m_allItems;
     ret->m_layers = m_layers;
-    ret->sortLayers();
+    ret->sortOrderedLayers();
     return ret;
 }
 

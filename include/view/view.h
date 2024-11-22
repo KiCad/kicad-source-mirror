@@ -822,7 +822,7 @@ protected:
     void draw( VIEW_GROUP* aGroup, bool aImmediate = false );
 
     ///< Sort m_orderedLayers when layer rendering order has changed
-    void sortLayers();
+    void sortOrderedLayers();
 
     ///< Clear cached GAL group numbers (*ONLY* numbers stored in VIEW_ITEMs, not group objects
     ///< used by GAL)
