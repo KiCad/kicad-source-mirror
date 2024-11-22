@@ -63,7 +63,7 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat );
  *
  * Hidden from SWIG as aSetActive should not be used by python, but cli also leverages this function
  */
-BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive, PROJECT* aProject = nullptr );
+BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive );
 #endif
 
 // Default LoadBoard() to load .kicad_pcb files:.
@@ -75,7 +75,7 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
  *
  * Hidden from SWIG as aSetActive should not be used by python, but cli also leverages this function
  */
-BOARD* LoadBoard( const wxString& aFileName, bool aSetActive, PROJECT* aProject = nullptr );
+BOARD* LoadBoard( const wxString& aFileName, bool aSetActive );
 #endif
 
 /**

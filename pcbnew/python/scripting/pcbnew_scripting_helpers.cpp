@@ -87,15 +87,15 @@ void ScriptingOnDestructPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 }
 
 
-BOARD* LoadBoard( const wxString& aFileName, bool aSetActive, PROJECT* aProject )
+BOARD* LoadBoard( const wxString& aFileName, bool aSetActive )
 {
     if( aFileName.EndsWith( FILEEXT::KiCadPcbFileExtension ) )
-        return LoadBoard( aFileName, PCB_IO_MGR::KICAD_SEXP, aSetActive, aProject );
+        return LoadBoard( aFileName, PCB_IO_MGR::KICAD_SEXP, aSetActive );
     else if( aFileName.EndsWith( FILEEXT::LegacyPcbFileExtension ) )
-        return LoadBoard( aFileName, PCB_IO_MGR::LEGACY, aSetActive, aProject );
+        return LoadBoard( aFileName, PCB_IO_MGR::LEGACY, aSetActive );
 
     // as fall back for any other kind use the legacy format
-    return LoadBoard( aFileName, PCB_IO_MGR::LEGACY, aSetActive, aProject );
+    return LoadBoard( aFileName, PCB_IO_MGR::LEGACY, aSetActive );
 }
 
 
@@ -148,8 +148,7 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat )
 }
 
 
-BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive,
-                  PROJECT* aProject )
+BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive )
 {
     wxFileName pro = aFileName;
     pro.SetExt( FILEEXT::ProjectFileExtension );
@@ -166,12 +165,7 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
     // It also avoid wxWidget alerts about locale issues, later, when using Python 3
     LOCALE_IO dummy;
 
-    PROJECT* project = aProject;
-
-    if( !project )
-    {
-        GetSettingsManager()->GetProject( projectPath );
-    }
+    PROJECT* project = GetSettingsManager()->GetProject( projectPath );
 
     if( !project )
     {

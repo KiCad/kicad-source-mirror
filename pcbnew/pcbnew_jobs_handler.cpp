@@ -249,12 +249,11 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
     if( !Pgm().IsGUI() &&
         Pgm().GetSettingsManager().IsProjectOpen() )
     {
-        PROJECT& project = Pgm().GetSettingsManager().Prj();
-
         wxString pcbPath = aPath;
+
         if( pcbPath.IsEmpty() )
         {
-            wxFileName path = project.GetProjectFullName();
+            wxFileName path = Pgm().GetSettingsManager().Prj().GetProjectFullName();
             path.SetExt( FILEEXT::KiCadPcbFileExtension );
             path.MakeAbsolute();
             pcbPath = path.GetFullPath();
@@ -263,7 +262,7 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
         if( !m_cliBoard )
         {
             m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
-            m_cliBoard = LoadBoard( pcbPath, true, &project );
+            m_cliBoard = LoadBoard( pcbPath, true );
         }
 
         brd = m_cliBoard;
@@ -271,7 +270,7 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
     else
     {
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
-        brd = LoadBoard( aPath, true, &Pgm().GetSettingsManager().Prj() );
+        brd = LoadBoard( aPath, true );
     }
 
     if ( !brd )
