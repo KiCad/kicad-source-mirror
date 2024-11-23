@@ -2189,10 +2189,20 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     Activate();
 
     BOARD*                       board = m_frame->GetBoard();
-    std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
+    BOARD_DESIGN_SETTINGS&       bds = board->GetDesignSettings();
+    std::shared_ptr<DRC_ENGINE>& drcEngine = bds.m_DRCEngine;
     GENERATOR_TOOL*              generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
     PNS::ROUTER*                 router = generatorTool->Router();
-    LENGTH_TUNING_MODE           mode = fromPNSMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
+    PNS::ROUTER_MODE             routerMode = aEvent.Parameter<PNS::ROUTER_MODE>();
+    LENGTH_TUNING_MODE           mode = fromPNSMode( routerMode );
+    PNS::MEANDER_SETTINGS        meanderSettings;
+
+    switch( mode )
+    {
+    case LENGTH_TUNING_MODE::SINGLE: meanderSettings = bds.m_SingleTrackMeanderSettings; break;
+    case DIFF_PAIR: meanderSettings = bds.m_DiffPairMeanderSettings; break;
+    case DIFF_PAIR_SKEW: meanderSettings = bds.m_SkewMeanderSettings; break;
+    }
 
     KIGFX::VIEW_CONTROLS*    controls = getViewControls();
     PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -2213,6 +2223,20 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 controls->ShowCursor( true );
             };
 
+    auto applyCommonSettings = [&]( PCB_TUNING_PATTERN* aPattern )
+    {
+        auto origTargetLength = aPattern->GetSettings().m_targetLength;
+        auto origTargetSkew = aPattern->GetSettings().m_targetSkew;
+
+        aPattern->GetSettings() = meanderSettings;
+
+        if( meanderSettings.m_targetLength.IsNull() )
+            aPattern->GetSettings().m_targetLength = origTargetLength;
+
+        if( meanderSettings.m_targetSkew.IsNull() )
+            aPattern->GetSettings().m_targetSkew = origTargetSkew;
+    };
+
     auto updateHoverStatus =
             [&]()
             {
@@ -2228,6 +2252,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 if( dummyPattern )
                 {
+                    applyCommonSettings( dummyPattern.get() );
+
                     dummyPattern->EditStart( generatorTool, m_board, nullptr );
                     dummyPattern->Update( generatorTool, m_board, nullptr );
 
@@ -2366,6 +2392,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
                                                                      m_pickerItem, mode );
 
+                    applyCommonSettings( m_tuningPattern );
+
                     int      dummyDist;
                     int      dummyClearance = std::numeric_limits<int>::max() / 2;
                     VECTOR2I closestPt;
@@ -2391,10 +2419,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 m_tuningPattern->Update( generatorTool, m_board, &commit );
                 m_tuningPattern->EditPush( generatorTool, m_board, &commit, _( "Tune" ) );
 
-                for( BOARD_ITEM* item : m_tuningPattern->GetItems() )
-                    item->SetSelected();
-
-                break;
+                m_tuningPattern = nullptr;
+                m_pickerItem = nullptr;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -2411,6 +2437,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 placer->SpacingStep( evt->IsAction( &PCB_ACTIONS::spacingIncrease ) ? 1 : -1 );
                 m_tuningPattern->SetSpacing( placer->MeanderSettings().m_spacing );
+                meanderSettings.m_spacing = placer->MeanderSettings().m_spacing;
+
                 updateTuningPattern();
             }
             else
@@ -2427,6 +2455,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 placer->AmplitudeStep( evt->IsAction( &PCB_ACTIONS::amplIncrease ) ? 1 : -1 );
                 m_tuningPattern->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
+                meanderSettings.m_maxAmplitude = placer->MeanderSettings().m_maxAmplitude;
+
                 updateTuningPattern();
             }
             else
@@ -2435,12 +2465,12 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             }
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties )
-                || evt->IsAction( &PCB_ACTIONS::lengthTunerSettings ) )
+                 || evt->IsAction( &PCB_ACTIONS::lengthTunerSettings ) )
         {
+            DRC_CONSTRAINT constraint;
+
             if( m_tuningPattern )
             {
-                DRC_CONSTRAINT constraint;
-
                 if( !m_tuningPattern->GetItems().empty() )
                 {
                     BOARD_ITEM* startItem = *m_tuningPattern->GetItems().begin();
@@ -2448,16 +2478,17 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr,
                                                        startItem->GetLayer() );
                 }
-
-                DIALOG_TUNING_PATTERN_PROPERTIES dlg( m_frame, m_tuningPattern->GetSettings(),
-                                                      m_tuningPattern->GetPNSMode(), constraint );
-
-                if( dlg.ShowModal() == wxID_OK )
-                    updateTuningPattern();
             }
-            else
+
+            DIALOG_TUNING_PATTERN_PROPERTIES dlg( m_frame, meanderSettings, routerMode,
+                                                  constraint );
+
+            if( dlg.ShowModal() == wxID_OK )
             {
-                m_frame->ShowInfoBarWarning( _( "Select a track to tune first." ) );
+                if( m_tuningPattern )
+                    applyCommonSettings( m_tuningPattern );
+
+                updateTuningPattern();
             }
         }
         // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
