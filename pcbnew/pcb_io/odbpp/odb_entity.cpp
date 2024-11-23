@@ -80,11 +80,10 @@ ODB_MISC_ENTITY::ODB_MISC_ENTITY()
                { wxS( ODB_UNITS ), PCB_IO_ODBPP::m_unitsStr },
                { wxS( "ODB_VERSION_MAJOR" ), wxS( "8" ) },
                { wxS( "ODB_VERSION_MINOR" ), wxS( "1" ) },
-               { wxS( "ODB_SOURCE" ), wxS( "KiCad EDA" + GetMajorMinorPatchVersion() ) },
+               { wxS( "ODB_SOURCE" ), wxS( "KiCad EDA" ) },
                { wxS( "CREATION_DATE" ), wxDateTime::Now().FormatISOCombined() },
                { wxS( "SAVE_DATE" ), wxDateTime::Now().FormatISOCombined() },
-               { wxS( "SAVE_APP" ), wxS( "Pcbnew" ) },
-               { wxS( "SAVE_USER" ), wxS( "" ) } };
+               { wxS( "SAVE_APP" ), wxString::Format( wxS( "KiCad EDA %s" ), GetBuildVersion() ) } };
 }
 
 
