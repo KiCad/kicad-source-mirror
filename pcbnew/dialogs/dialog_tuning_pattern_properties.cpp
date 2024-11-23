@@ -24,10 +24,6 @@
 #include <drc/drc_engine.h>
 
 
-long long int g_lastTargetLength = PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED;
-int           g_lastTargetSkew = 0;
-
-
 DIALOG_TUNING_PATTERN_PROPERTIES::DIALOG_TUNING_PATTERN_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame,
                                                                     PNS::MEANDER_SETTINGS& aSettings,
                                                                     PNS::ROUTER_MODE aMeanderType,
@@ -81,17 +77,11 @@ bool DIALOG_TUNING_PATTERN_PROPERTIES::TransferDataToWindow()
         m_targetLength.SetValue( m_settings.m_targetSkew.Opt() );
 
         if( m_targetLength.GetValue() == PNS::MEANDER_SETTINGS::SKEW_UNCONSTRAINED )
-            m_targetLength.SetValue( g_lastTargetSkew );
-
-        if( m_targetLength.GetValue() == PNS::MEANDER_SETTINGS::SKEW_UNCONSTRAINED )
-            m_targetLengthCtrl->SetValue( wxEmptyString );
+            m_targetLength.SetValue( wxEmptyString );
     }
     else
     {
         m_targetLength.SetValue( m_settings.m_targetLength.Opt() );
-
-        if( m_targetLength.GetValue() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
-            m_targetLength.SetValue( g_lastTargetLength );
 
         if( m_targetLength.GetValue() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
             m_targetLength.SetValue( wxEmptyString );
@@ -121,25 +111,29 @@ bool DIALOG_TUNING_PATTERN_PROPERTIES::TransferDataFromWindow()
 {
     if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
     {
-        if( m_targetLengthCtrl->GetValue().IsEmpty() )
-            g_lastTargetSkew = PNS::MEANDER_SETTINGS::SKEW_UNCONSTRAINED;
-        else
-            g_lastTargetSkew = m_targetLength.GetIntValue();
+        int lastTargetSkew = 0;
 
-        if( g_lastTargetSkew != m_constraint.GetValue().Opt() )
-            m_settings.SetTargetSkew( g_lastTargetSkew );
+        if( m_targetLengthCtrl->GetValue().IsEmpty() )
+            lastTargetSkew = PNS::MEANDER_SETTINGS::SKEW_UNCONSTRAINED;
+        else
+            lastTargetSkew = m_targetLength.GetIntValue();
+
+        if( lastTargetSkew != m_constraint.GetValue().Opt() )
+            m_settings.SetTargetSkew( lastTargetSkew );
         else
             m_settings.m_targetSkew = m_constraint.GetValue();
     }
     else
     {
-        if( m_targetLengthCtrl->GetValue().IsEmpty() )
-            g_lastTargetLength = PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED;
-        else
-            g_lastTargetLength = m_targetLength.GetIntValue();
+        long long int lastTargetLength = PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED;
 
-        if( g_lastTargetLength != m_constraint.GetValue().Opt() )
-            m_settings.SetTargetLength( g_lastTargetLength );
+        if( m_targetLengthCtrl->GetValue().IsEmpty() )
+            lastTargetLength = PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED;
+        else
+            lastTargetLength = m_targetLength.GetIntValue();
+
+        if( lastTargetLength != m_constraint.GetValue().Opt() )
+            m_settings.SetTargetLength( lastTargetLength );
         else
             m_settings.SetTargetLength( m_constraint.GetValue() );
     }
