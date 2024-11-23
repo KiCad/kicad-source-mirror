@@ -1740,6 +1740,9 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
         }
     }
 
+    std::set<EDA_ITEM*> toDeselect;
+    std::set<EDA_ITEM*> toSelect;
+
     // Promote generated members to their PCB_GENERATOR parents
     for( EDA_ITEM* item : m_selection )
     {
@@ -1751,12 +1754,18 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
         if( parent && parent->Type() == PCB_GENERATOR_T )
         {
-            unselect( item );
+            toDeselect.insert( item );
 
             if( !parent->IsSelected() )
-                select( parent );
+                toSelect.insert( parent );
         }
     }
+
+    for( EDA_ITEM* item : toDeselect )
+        unselect( item );
+
+    for( EDA_ITEM* item : toSelect )
+        select( item );
 
     for( BOARD_CONNECTED_ITEM* item : cleanupItems )
         item->ClearFlags( SKIP_STRUCT );
