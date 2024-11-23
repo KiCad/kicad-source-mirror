@@ -1328,14 +1328,14 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     wxMenuItem* filterByNetName = new wxMenuItem( &menu, ID_FILTER_BY_NET_NAME,
                                                   _( "Filter by Net Name" ),
                                                   wxEmptyString, wxITEM_CHECK );
-    filterByNetName->Check( cfg.filter_by_net_name );
     menu.Append( filterByNetName );
+    filterByNetName->Check( cfg.filter_by_net_name );
 
     wxMenuItem* filterByNetclass = new wxMenuItem( &menu, ID_FILTER_BY_NETCLASS,
                                                    _( "Filter by Netclass" ),
                                                    wxEmptyString, wxITEM_CHECK );
-    filterByNetclass->Check( cfg.filter_by_netclass );
     menu.Append( filterByNetclass );
+    filterByNetclass->Check( cfg.filter_by_netclass );
 
     menu.AppendSeparator();
 
@@ -1349,8 +1349,8 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     wxMenuItem* groupNetclass = new wxMenuItem( &menu, ID_GROUP_BY_NETCLASS,
                                                 _( "Group by Netclass" ),
                                                 wxEmptyString, wxITEM_CHECK );
-    groupNetclass->Check( m_group_by_netclass );
     menu.Append( groupNetclass );
+    groupNetclass->Check( m_group_by_netclass );
 
     menu.AppendSeparator();
 
@@ -1377,14 +1377,14 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     wxMenuItem* showZeroNetPads = new wxMenuItem( &menu, ID_SHOW_ZERO_NET_PADS,
                                                   _( "Show Zero Pad Nets" ),
                                                   wxEmptyString, wxITEM_CHECK );
-    showZeroNetPads->Check( m_show_zero_pad_nets );
     menu.Append( showZeroNetPads );
+    showZeroNetPads->Check( m_show_zero_pad_nets );
 
     wxMenuItem* showUnconnectedNets = new wxMenuItem( &menu, ID_SHOW_UNCONNECTED_NETS,
                                                       _( "Show Unconnected Nets" ),
                                                       wxEmptyString, wxITEM_CHECK );
-    showUnconnectedNets->Check( m_show_unconnected_nets );
     menu.Append( showUnconnectedNets );
+    showUnconnectedNets->Check( m_show_unconnected_nets );
 
     menu.AppendSeparator();
 
