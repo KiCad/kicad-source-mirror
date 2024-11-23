@@ -492,6 +492,15 @@ enum ZoneType
   ZT_TEARDROP = 4;
 }
 
+enum TeardropType
+{
+  TDT_UNKNOWN = 0;
+  TDT_NONE = 1;
+  TDT_UNSPECIFIED = 2;
+  TDT_VIA_PAD = 3;
+  TDT_TRACK_END = 4;
+}
+
 enum IslandRemovalMode
 {
   IRM_UNKNOWN = 0;
@@ -520,7 +529,7 @@ enum ZoneHatchFillBorderMode
 {
   ZHFBM_UNKNOWN = 0;
   ZHFBM_USE_MIN_ZONE_THICKNESS = 1;
-  ZHFMB_USE_HATCH_THICKNESS = 2;
+  ZHFBM_USE_HATCH_THICKNESS = 2;
 }
 
 message HatchFillSettings
@@ -531,6 +540,11 @@ message HatchFillSettings
   double hatch_smoothing_ratio = 4;
   double hatch_hole_min_area_ratio = 5;
   ZoneHatchFillBorderMode border_mode = 6;
+}
+
+message TeardropSettings
+{
+  TeardropType type = 1;
 }
 
 message CopperZoneSettings
@@ -545,13 +559,13 @@ message CopperZoneSettings
 
   uint64 min_island_area = 5;
 
-  ThermalSpokeSettings thermal_spokes = 6;
+  ZoneFillMode fill_mode = 6;
 
-  ZoneFillMode fill_mode = 7;
+  HatchFillSettings hatch_settings = 7;
 
-  HatchFillSettings hatch_settings = 8;
+  Net net = 8;
 
-  Net net = 9;
+  TeardropSettings teardrop = 9;
 }
 
 enum PlacementRuleSourceType
@@ -589,6 +603,14 @@ message ZoneBorderSettings
   kiapi.common.types.Distance pitch = 2;
 }
 
+// The set of filled polygons of a zone on a single board layer
+message ZoneFilledPolygons
+{
+  BoardLayer layer = 1;
+
+  kiapi.common.types.PolySet shapes = 2;
+}
+
 message Zone
 {
   kiapi.common.types.KIID id = 1;
@@ -597,7 +619,7 @@ message Zone
 
   repeated BoardLayer layers = 3;
 
-  kiapi.common.types.PolygonWithHoles outline = 4;
+  kiapi.common.types.PolySet outline = 4;
 
   string name = 5;
 
@@ -610,7 +632,9 @@ message Zone
 
   bool filled = 9;
 
-  repeated kiapi.common.types.PolySet filled_shape = 10;
+  repeated ZoneFilledPolygons filled_polygons = 10;
+
+  ZoneBorderSettings border = 11;
 }
 
 message Dimension

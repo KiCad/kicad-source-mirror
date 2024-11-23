@@ -28,6 +28,8 @@
 #include <zones.h>
 #include <zone_settings.h>
 
+// Adding something new here?  Add it to test_api_enums.cpp!
+
 using namespace kiapi::board;
 
 template<>
@@ -404,3 +406,39 @@ RULE_AREA_PLACEMENT_SOURCE_TYPE FromProtoEnum( types::PlacementRuleSourceType aV
                      "Unhandled case in FromProtoEnum<types::PlacementRuleSourceType>" );
     }
 }
+
+
+template<>
+types::TeardropType ToProtoEnum( TEARDROP_TYPE aValue )
+{
+    switch( aValue )
+    {
+    case TEARDROP_TYPE::TD_NONE:        return types::TeardropType::TDT_NONE;
+    case TEARDROP_TYPE::TD_UNSPECIFIED: return types::TeardropType::TDT_UNSPECIFIED;
+    case TEARDROP_TYPE::TD_VIAPAD:      return types::TeardropType::TDT_VIA_PAD;
+    case TEARDROP_TYPE::TD_TRACKEND:    return types::TeardropType::TDT_TRACK_END;
+
+    default:
+        wxCHECK_MSG( false, types::TeardropType::TDT_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<TEARDROP_TYPE>");
+    }
+}
+
+
+template<>
+TEARDROP_TYPE FromProtoEnum( types::TeardropType aValue )
+{
+    switch( aValue )
+    {
+    case types::TeardropType::TDT_NONE:         return TEARDROP_TYPE::TD_NONE;
+    case types::TeardropType::TDT_UNSPECIFIED:  return TEARDROP_TYPE::TD_UNSPECIFIED;
+    case types::TeardropType::TDT_VIA_PAD:      return TEARDROP_TYPE::TD_VIAPAD;
+    case types::TeardropType::TDT_TRACK_END:    return TEARDROP_TYPE::TD_TRACKEND;
+
+    default:
+        wxCHECK_MSG( false, TEARDROP_TYPE::TD_NONE,
+                     "Unhandled case in FromProtoEnum<types::ZoneHatchBorderMode>" );
+    }
+}
+
+// Adding something new here?  Add it to test_api_enums.cpp!

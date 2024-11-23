@@ -54,6 +54,10 @@ void PackPolyLine( kiapi::common::types::PolyLine& aOutput, const SHAPE_LINE_CHA
 
 SHAPE_LINE_CHAIN UnpackPolyLine( const kiapi::common::types::PolyLine& aInput );
 
+void PackPolySet( kiapi::common::types::PolySet& aOutput, const SHAPE_POLY_SET& aInput );
+
+SHAPE_POLY_SET UnpackPolySet( const kiapi::common::types::PolySet& aInput );
+
 } // namespace kiapi::common
 
 #endif //KICAD_API_UTILS_H

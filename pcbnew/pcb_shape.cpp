@@ -140,27 +140,7 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 
     case SHAPE_T::POLY:
     {
-        kiapi::common::types::PolySet* polyset = msg.mutable_polygon();
-
-        for( int idx = 0; idx < GetPolyShape().OutlineCount(); ++idx )
-        {
-            const SHAPE_POLY_SET::POLYGON& poly = GetPolyShape().Polygon( idx );
-
-            if( poly.empty() )
-                continue;
-
-            kiapi::common::types::PolygonWithHoles* polyMsg = polyset->mutable_polygons()->Add();
-            kiapi::common::PackPolyLine( *polyMsg->mutable_outline(), poly.front() );
-
-            if( poly.size() > 1 )
-            {
-                for( size_t hole = 1; hole < poly.size(); ++hole )
-                {
-                    kiapi::common::types::PolyLine* pl = polyMsg->mutable_holes()->Add();
-                    kiapi::common::PackPolyLine( *pl, poly[hole] );
-                }
-            }
-        }
+        kiapi::common::PackPolySet( *msg.mutable_polygon(), GetPolyShape() );
         break;
     }
 
@@ -250,23 +230,7 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
     else if( msg.has_polygon() )
     {
         SetShape( SHAPE_T::POLY );
-        const auto& polyMsg = msg.polygon().polygons();
-
-        SHAPE_POLY_SET sps;
-
-        for( const kiapi::common::types::PolygonWithHoles& polygonWithHoles : polyMsg )
-        {
-            SHAPE_POLY_SET::POLYGON polygon;
-
-            polygon.emplace_back( kiapi::common::UnpackPolyLine( polygonWithHoles.outline() ) );
-
-            for( const kiapi::common::types::PolyLine& holeMsg : polygonWithHoles.holes() )
-                polygon.emplace_back( kiapi::common::UnpackPolyLine( holeMsg ) );
-
-            sps.AddPolygon( polygon );
-        }
-
-        SetPolyShape( sps );
+        SetPolyShape( kiapi::common::UnpackPolySet( msg.polygon() ) );
     }
     else if( msg.has_bezier() )
     {
