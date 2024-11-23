@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20240225)
+	(version 20241030)
 	(generator "pcbnew")
 	(generator_version "8.99")
 	(general
@@ -9,41 +9,42 @@
 	(paper "A4")
 	(layers
 		(0 "F.Cu" signal)
-		(31 "B.Cu" signal)
-		(32 "B.Adhes" user "B.Adhesive")
-		(33 "F.Adhes" user "F.Adhesive")
-		(34 "B.Paste" user)
-		(35 "F.Paste" user)
-		(36 "B.SilkS" user "B.Silkscreen")
-		(37 "F.SilkS" user "F.Silkscreen")
-		(38 "B.Mask" user)
-		(39 "F.Mask" user)
-		(40 "Dwgs.User" user "User.Drawings")
-		(41 "Cmts.User" user "User.Comments")
-		(42 "Eco1.User" user "User.Eco1")
-		(43 "Eco2.User" user "User.Eco2")
-		(44 "Edge.Cuts" user)
-		(45 "Margin" user)
-		(46 "B.CrtYd" user "B.Courtyard")
-		(47 "F.CrtYd" user "F.Courtyard")
-		(48 "B.Fab" user)
-		(49 "F.Fab" user)
-		(50 "User.1" user)
-		(51 "User.2" user)
-		(52 "User.3" user)
-		(53 "User.4" user)
-		(54 "User.5" user)
-		(55 "User.6" user)
-		(56 "User.7" user)
-		(57 "User.8" user)
-		(58 "User.9" user)
+		(2 "B.Cu" signal)
+		(9 "F.Adhes" user)
+		(11 "B.Adhes" user)
+		(13 "F.Paste" user)
+		(15 "B.Paste" user)
+		(5 "F.SilkS" user)
+		(7 "B.SilkS" user)
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(17 "Dwgs.User" user)
+		(19 "Cmts.User" user)
+		(21 "Eco1.User" user)
+		(23 "Eco2.User" user)
+		(25 "Edge.Cuts" user)
+		(27 "Margin" user)
+		(31 "F.CrtYd" user)
+		(29 "B.CrtYd" user)
+		(35 "F.Fab" user)
+		(33 "B.Fab" user)
+		(39 "User.1" signal)
+		(41 "User.2" signal)
+		(43 "User.3" signal)
+		(45 "User.4" signal)
+		(47 "User.5" signal)
+		(49 "User.6" signal)
+		(51 "User.7" signal)
+		(53 "User.8" signal)
+		(55 "User.9" signal)
 	)
 	(setup
 		(pad_to_mask_clearance 0)
 		(allow_soldermask_bridges_in_footprints no)
+		(tenting front back)
 		(pcbplotparams
-			(layerselection 0x00010fc_ffffffff)
-			(plot_on_all_layers_selection 0x0000000_00000000)
+			(layerselection 0x000010fc_ffffffff)
+			(plot_on_all_layers_selection 0x00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
 			(usegerberattributes yes)
@@ -53,7 +54,6 @@
 			(dashed_line_gap_ratio 3.000000)
 			(svgprecision 4)
 			(plotframeref no)
-			(viasonmask no)
 			(mode 1)
 			(useauxorigin no)
 			(hpglpennumber 1)
@@ -67,11 +67,12 @@
 			(dxfusepcbnewfont yes)
 			(psnegative no)
 			(psa4output no)
-			(plotreference yes)
-			(plotvalue yes)
-			(plotfptext yes)
 			(plotinvisibletext no)
 			(sketchpadsonfab no)
+			(plotpadnumbers no)
+			(hidednponfab no)
+			(sketchdnponfab yes)
+			(crossoutdnponfab yes)
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
@@ -120,6 +121,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -132,6 +134,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -144,6 +147,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -284,6 +288,7 @@
 			)
 			(uuid "b38f2485-6695-4057-bc99-fba8492caea0")
 		)
+		(embedded_fonts no)
 		(model "discret/diode.wrl"
 			(offset
 				(xyz 0 0 0)
@@ -333,6 +338,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -345,6 +351,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -357,6 +364,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -428,6 +436,7 @@
 			(remove_unused_layers no)
 			(uuid "d615d510-9f7d-4da4-907d-b271da602bbf")
 		)
+		(embedded_fonts no)
 		(model "device/bornier_2.wrl"
 			(offset
 				(xyz 0 0 0)
@@ -637,6 +646,109 @@
 		(layer "B.Cu")
 		(net 1)
 		(uuid "fabfab7b-4ea2-487a-a340-e24bbc4c982e")
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(locked yes)
+		(layers "F&B.Cu")
+		(uuid "0f5227b8-34f3-4302-949f-9de38b16fecf")
+		(name "MyKeepout")
+		(hatch full 0.65)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks allowed)
+			(vias not_allowed)
+			(pads not_allowed)
+			(copperpour allowed)
+			(footprints allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy 81 107.15) (xy 88.35 111.05) (xy 93 100.4) (xy 82.85 91.75) (xy 76.1 98.9)
+			)
+		)
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layers "F&B.Cu")
+		(uuid "9c3e186b-0f1d-48ef-8724-baad4fa44742")
+		(hatch edge 1)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks allowed)
+			(vias allowed)
+			(pads allowed)
+			(copperpour not_allowed)
+			(footprints not_allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy 71 106.5) (xy 63.7 111.45) (xy 53.05 106.8) (xy 56.95 99.45) (xy 65.2 94.55)
+			)
+		)
+		(polygon
+			(pts
+				(xy 62.45 100.8) (xy 62.6 102.35) (xy 65.4 103.05) (xy 65.75 101.35) (xy 64.05 100.15)
+			)
+		)
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layers "F&B.Cu")
+		(uuid "f52cce18-23b9-4645-b87a-21d0716548c2")
+		(hatch none 0.65)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks allowed)
+			(vias allowed)
+			(pads allowed)
+			(copperpour not_allowed)
+			(footprints not_allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy 67.85 85.1) (xy 63.95 92.45) (xy 74.6 97.1) (xy 83.25 86.95) (xy 76.1 80.2)
+			)
+		)
 	)
 	(zone
 		(net 0)
@@ -3875,4 +3987,5 @@
 			)
 		)
 	)
+	(embedded_fonts no)
 )

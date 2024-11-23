@@ -635,6 +635,8 @@ message Zone
   repeated ZoneFilledPolygons filled_polygons = 10;
 
   ZoneBorderSettings border = 11;
+
+  kiapi.common.types.LockedState locked = 12;
 }
 
 message Dimension

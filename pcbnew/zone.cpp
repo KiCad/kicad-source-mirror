@@ -216,7 +216,6 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
     types::Zone zone;
 
     zone.mutable_id()->set_value( m_Uuid.AsStdString() );
-    zone.set_filled( IsFilled() );
     PackLayerSet( *zone.mutable_layers(), GetLayerSet() );
 
     if( m_isRuleArea )
@@ -312,12 +311,76 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
 
     const_cast<KIID&>( m_Uuid ) = KIID( zone.id().value() );
     SetLayerSet( UnpackLayerSet( zone.layers() ) );
+    SetAssignedPriority( zone.priority() );
+    SetZoneName( wxString::FromUTF8( zone.name() ) );
+
+    if( zone.type() == types::ZoneType::ZT_RULE_AREA )
+        m_isRuleArea = true;
+
+    if( !m_Poly )
+        SetOutline( new SHAPE_POLY_SET );
+
+    *m_Poly = kiapi::common::UnpackPolySet( zone.outline() );
+
+    if( m_isRuleArea )
+    {
+        const types::RuleAreaSettings& ra = zone.rule_area_settings();
+        m_doNotAllowCopperPour = ra.keepout_copper();
+        m_doNotAllowFootprints = ra.keepout_footprints();
+        m_doNotAllowPads = ra.keepout_pads();
+        m_doNotAllowTracks = ra.keepout_tracks();
+        m_doNotAllowVias = ra.keepout_vias();
+
+        m_ruleAreaPlacementEnabled = ra.placement_enabled();
+        m_ruleAreaPlacementSource = wxString::FromUTF8( ra.placement_source() );
+        m_ruleAreaPlacementSourceType =
+                FromProtoEnum<RULE_AREA_PLACEMENT_SOURCE_TYPE>( ra.placement_source_type() );
+    }
+    else
+    {
+        const types::CopperZoneSettings& cu = zone.copper_settings();
+        m_PadConnection = FromProtoEnum<ZONE_CONNECTION>( cu.connection().zone_connection() );
+        m_thermalReliefSpokeWidth = cu.connection().thermal_spokes().width();
+        m_thermalReliefGap = cu.connection().thermal_spokes().gap();
+        m_ZoneClearance = cu.clearance().value_nm();
+        m_ZoneMinThickness = cu.min_thickness().value_nm();
+        m_islandRemovalMode = FromProtoEnum<ISLAND_REMOVAL_MODE>( cu.island_mode() );
+        m_minIslandArea = cu.min_island_area();
+        m_fillMode = FromProtoEnum<ZONE_FILL_MODE>( cu.fill_mode() );
+
+        m_hatchThickness = cu.hatch_settings().thickness().value_nm();
+        m_hatchGap = cu.hatch_settings().gap().value_nm();
+        m_hatchOrientation =
+                EDA_ANGLE( cu.hatch_settings().orientation().value_degrees(), DEGREES_T );
+        m_hatchSmoothingValue = cu.hatch_settings().hatch_smoothing_ratio();
+        m_hatchHoleMinArea = cu.hatch_settings().hatch_hole_min_area_ratio();
+
+        switch( cu.hatch_settings().border_mode() )
+        {
+        default:
+        case types::ZHFBM_USE_MIN_ZONE_THICKNESS: m_hatchBorderAlgorithm = 0; break;
+        case types::ZHFBM_USE_HATCH_THICKNESS:    m_hatchBorderAlgorithm = 1; break;
+        }
+
+        SetNetCode( cu.net().code().value() );
+        m_teardropType = FromProtoEnum<TEARDROP_TYPE>( cu.teardrop().type() );
+    }
+
+    m_borderStyle = FromProtoEnum<ZONE_BORDER_DISPLAY_STYLE>( zone.border().style() );
+    m_borderHatchPitch = zone.border().pitch().value_nm();
 
     if( zone.filled() )
     {
         // TODO(JE) check what else has to happen here
         SetIsFilled( true );
         SetNeedRefill( false );
+
+        for( const types::ZoneFilledPolygons& fillLayer : zone.filled_polygons() )
+        {
+            PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID>( fillLayer.layer() );
+            SHAPE_POLY_SET shape = kiapi::common::UnpackPolySet( fillLayer.shapes() );
+            m_FilledPolysList[layer] = std::make_shared<SHAPE_POLY_SET>( shape );
+        }
     }
 
     return true;

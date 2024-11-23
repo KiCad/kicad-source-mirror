@@ -48,7 +48,7 @@
         "silk_text_thickness": 0.1,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.5
+          "min_clearance": 0.0
         }
       },
       "diff_pair_dimensions": [],
@@ -63,16 +63,20 @@
         "copper_edge_clearance": "error",
         "copper_sliver": "warning",
         "courtyards_overlap": "error",
+        "creepage": "error",
         "diff_pair_gap_out_of_range": "error",
         "diff_pair_uncoupled_length_too_long": "error",
         "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
         "footprint": "error",
+        "footprint_filters_mismatch": "ignore",
         "footprint_symbol_mismatch": "warning",
         "footprint_type_mismatch": "ignore",
         "hole_clearance": "error",
         "hole_near_hole": "error",
+        "hole_to_hole": "warning",
+        "holes_co_located": "warning",
         "invalid_outline": "error",
         "isolated_copper": "warning",
         "item_on_disabled_layer": "error",
@@ -99,7 +103,9 @@
         "text_thickness": "warning",
         "through_hole_pad_without_hole": "error",
         "too_many_vias": "error",
+        "track_angle": "error",
         "track_dangling": "warning",
+        "track_segment_length": "error",
         "track_width": "error",
         "tracks_crossing": "error",
         "unconnected_items": "error",
@@ -112,6 +118,7 @@
         "min_clearance": 0.0,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.5,
+        "min_groove_width": 0.0,
         "min_hole_clearance": 0.25,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.2,
@@ -129,10 +136,11 @@
       },
       "teardrop_options": [
         {
-          "td_onpadsmd": true,
+          "td_onpthpad": true,
           "td_onroundshapesonly": false,
+          "td_onsmdpad": true,
           "td_ontrackend": false,
-          "td_onviapad": true
+          "td_onvia": true
         }
       ],
       "teardrop_parameters": [
@@ -207,6 +215,7 @@
       "mfg": "",
       "mpn": ""
     },
+    "layer_pairs": [],
     "layer_presets": [],
     "viewports": []
   },
@@ -220,7 +229,7 @@
   },
   "meta": {
     "filename": "api_kitchen_sink.kicad_pro",
-    "version": 1
+    "version": 2
   },
   "net_settings": {
     "classes": [
@@ -235,6 +244,7 @@
         "microvia_drill": 0.1,
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
         "via_diameter": 0.6,
@@ -243,7 +253,7 @@
       }
     ],
     "meta": {
-      "version": 3
+      "version": 4
     },
     "net_colors": null,
     "netclass_assignments": null,

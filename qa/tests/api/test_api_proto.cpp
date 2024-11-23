@@ -113,9 +113,14 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
     for( FOOTPRINT* footprint : m_board->Footprints() )
         testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint );
 
-    // Not yet
-//    for( ZONE* zone : m_board->Zones() )
-//        testProtoFromKiCadObject<kiapi::board::types::Zone>( zone );
+    for( ZONE* zone : m_board->Zones() )
+        testProtoFromKiCadObject<kiapi::board::types::Zone>( zone );
+
+    // TODO(JE) Shapes
+
+    // TODO(JE) Text
+
+    // TODO(JE) Dimensions
 }
 
 
