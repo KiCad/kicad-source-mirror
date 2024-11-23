@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-11-04 18:24+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2024-11-23 02:00+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6365,12 +6365,12 @@ msgstr "DXFのイメージは現在サポートされていません。"
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "インポートした画像が大きすぎます。最大スケールは%fです"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr ""
+msgstr "数値制限内に収まるようにインポートオフセットを ( %f , %f ) に調整しました"
 
 #: common/io/altium/altium_binary_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -14657,9 +14657,9 @@ msgid "Untitled Field"
 msgstr "名称未設定フィールド"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "エントリーは後続に空白文字を含んでいます。"
+msgstr "フィールド名 \"%s\" は末尾と先頭(またはどちらか)に空白文字を含んでいます。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -14667,16 +14667,17 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"結果としてフィールド名が重複しているように見えても、実際には空白文字だけが異"
+"なったユニークな名前であることがあります。 "
+"空白文字を削除しても、既存のシンボルフィールド名には何の影響もありません。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
-#, fuzzy
 msgid "Remove White Space"
-msgstr "3Dシェイプを削除"
+msgstr "空白文字を削除"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
-#, fuzzy
 msgid "Keep White Space"
-msgstr "パッドの配置を禁止"
+msgstr "空白文字を保持する"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
@@ -15331,7 +15332,8 @@ msgstr ""
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr ""
+msgstr "この回路図にはフィールド名の末尾と先頭(またはどちらか)が空白になっているシン"
+"ボルがあります。"
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
