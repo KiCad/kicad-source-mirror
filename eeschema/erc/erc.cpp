@@ -1027,8 +1027,10 @@ int ERC_TESTER::TestPinToPin()
                             return std::pair<size_t, iterator_t>( p.second, p.first );
                         } );
 
-        for( const auto& [amount, pinIt] : pins_dsc )
+        for( const auto& [amount, pinItBind] : pins_dsc )
         {
+            auto& pinIt = pinItBind;
+
             if( pin_mismatches.empty() )
                 break;
 
