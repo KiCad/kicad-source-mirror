@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-11-23 02:00+0000\n"
+"PO-Revision-Date: 2024-11-24 03:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -9632,7 +9632,7 @@ msgstr "基本プロパティ"
 
 #: common/widgets/search_pane.cpp:40
 msgid "Toggle zooming to selections in the search pane"
-msgstr ""
+msgstr "検索ペインでの選択箇所にズームを切り替える"
 
 #: common/widgets/search_pane.cpp:42
 msgid "Pan to Selection"
@@ -9640,7 +9640,7 @@ msgstr "選択箇所にパン"
 
 #: common/widgets/search_pane.cpp:42
 msgid "Toggle panning to selections in the search pane"
-msgstr ""
+msgstr "検索ペインでの選択箇所にパンを切り替える"
 
 #: common/widgets/unit_binder.cpp:359
 #, c-format
@@ -13438,7 +13438,7 @@ msgstr "プロパティのポップアップを生成"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 msgid "Generate clickable links for hierarchical elements"
-msgstr ""
+msgstr "階層のクリック可能なリンクを生成"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
@@ -13899,9 +13899,9 @@ msgid "Link '%s' to this file?"
 msgstr "このファイルへ '%s' をリンクしますか？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "パラメータ '%s' を '%s' に設定できませんでした(モデル '%s')"
+msgstr "回路図ファイル '%s' を '%s' コピーできません."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:564
 #, c-format
@@ -15302,7 +15302,6 @@ msgstr "このテキスト アイテムをクリック可能なハイパーリ�
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:79
 #: pcbnew/dialogs/dialog_update_pcb.cpp:50
-#, fuzzy
 msgid "Changes to Be Applied"
 msgstr "適用された変更"
 
@@ -23384,7 +23383,7 @@ msgstr "このシンボルにはユニットが1つしかありません。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:592
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "このシンボルのユニットはすべて配置済です。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
 msgid "Add design block"
@@ -26109,7 +26108,7 @@ msgstr "PDFでプロパティのポップアップを生成しない"
 
 #: kicad/cli/command_sch_export_plot.cpp:86
 msgid "Do not generate clickable links for hierarchical elements in PDF"
-msgstr ""
+msgstr "階層のクリック可能なリンクをPDFに生成しない"
 
 #: kicad/cli/command_sch_export_plot.cpp:91
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
@@ -32857,12 +32856,12 @@ msgstr "0.00000 / 0.00 / 0.0000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
 #: pcbnew/pcb_dimension.cpp:1453
 msgid "Inward"
-msgstr ""
+msgstr "外矢印"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
 #: pcbnew/pcb_dimension.cpp:1454
 msgid "Outward"
-msgstr ""
+msgstr "内矢印"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:188
 msgid ""
@@ -32871,6 +32870,10 @@ msgid ""
 "Inward:    >-----<\n"
 "Outward: <----->"
 msgstr ""
+"寸法線の両端の矢印の種類を選びます\n"
+"自動:テキストの位置で自動で決定します。\n"
+"外矢印:    >-----<\n"
+"内矢印: <----->"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:199
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:155
@@ -34915,7 +34918,7 @@ msgstr "すべてのティアドロップを削除"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Remove all teadrops, regardless filtering options"
-msgstr ""
+msgstr "フィルターオプションにかかわらず、すべてのティアドロップを削除"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -35851,7 +35854,7 @@ msgstr "パッドスタックモード:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "表面/内面/裏面"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:289
@@ -37071,7 +37074,7 @@ msgstr "円弧の角度は０より大きくなければなりません"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
-msgstr ""
+msgstr "円弧は３個のポイントが必要です"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:474
 #, c-format
@@ -37165,18 +37168,16 @@ msgid "Error List"
 msgstr "エラー リスト"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:37
-#, fuzzy
 msgid "By Corners"
-msgstr "角を追加"
+msgstr "コーナー"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:53
-#, fuzzy
 msgid "By Corner and Size"
-msgstr "コーナー サイズ:"
+msgstr "コーナーとサイズ"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr ""
+msgstr "中心とサイズ"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 #, fuzzy
@@ -37184,31 +37185,28 @@ msgid "By Endpoints"
 msgstr "終点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:101
-#, fuzzy
 msgid "By Length and Angle"
-msgstr "長さの調整"
+msgstr "長さと角度"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
 msgid "By Midpoint/Endpoint"
-msgstr ""
+msgstr "中間点/終点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
-msgstr ""
+msgstr "中心/始点/角度"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:149
 msgid "By Start/Mid/End"
-msgstr ""
+msgstr "始点/中点/終点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
-#, fuzzy
 msgid "By Center/Radius"
-msgstr "コーナー半径 %"
+msgstr "中心/半径"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
-#, fuzzy
 msgid "By Center/Point"
-msgstr "中心"
+msgstr "中心/ポイント"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:197
 msgid "Bezier Control Points"
@@ -37410,7 +37408,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 msgid "Front/Inner/Back"
-msgstr ""
+msgstr "表面/内面/裏面"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -37709,13 +37707,16 @@ msgstr "チェックすると、パッドをフットプリントから移動す
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 msgid "Do not prompt for lock overrides for this session"
-msgstr ""
+msgstr "ロックの無視を確認するポップアッププロンプトを表示しない"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
 msgstr ""
+"チェックすると、ロックされた項目を編集しようとしたときにロックの無視を確認す"
+"るポップアッププロンプトは表示しません。この設定は再起動するとリセットされま"
+"す。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
@@ -38209,9 +38210,8 @@ msgstr ""
 "最小値であり、カスタム ルールや他の設定によって減少させることはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:160
-#, fuzzy
 msgid "Minimum groove for creepage:"
-msgstr "最小導体クリアランス"
+msgstr "最小導体クリアランス:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 #, fuzzy
@@ -39196,6 +39196,11 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://docs.kicad."
 "org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### ドキュメント\n"
+"\n"
+"完全なドキュメントについては、[https://docs.kicad.org](https://docs.kicad."
+"org/GetMajorMinorVersion/ja/pcbnew/pcbnew.html#custom_design_rules) "
+"を参照してください。"
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -41391,39 +41396,39 @@ msgid "%s orientation differs."
 msgstr "%s は向きが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s はパッドの形状が異なります。"
+msgstr "%s はパッドの形状がレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs on layer %s."
-msgstr "%s はサイズが異なります。"
+msgstr "%s はサイズがレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s は台形のデルタが異なります。"
+msgstr "%s は台形のデルタがレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "%s は丸めた角が異なります。"
+msgstr "%s は丸めた角がレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "%s は面取りした角のサイズが異なります。"
+msgstr "%s は面取りした角のサイズがレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "%s は面取りした角が異なります。"
+msgstr "%s は面取りした角がレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "%s は穴からのオフセットが異なります。"
+msgstr "%s は穴からのオフセットがレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:351
 #, c-format
@@ -41436,9 +41441,9 @@ msgid "%s drill size differs."
 msgstr "%s はドリルサイズが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "%s の形状プリミティブは異なります。"
+msgstr "%s の形状プリミティブはレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 #, c-format
@@ -42296,9 +42301,9 @@ msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr "ファイル '%s' はすでに存在します。このファイルを上書きしますか？"
 
 #: pcbnew/files.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "出力の一時ファイルを削除できません"
+msgstr "出力の一時ファイル%sを削除できません。"
 
 #: pcbnew/files.cpp:1482
 #, fuzzy
@@ -42306,11 +42311,11 @@ msgid "Cannot create temporary output directory."
 msgstr "出力ディレクトリ '%s' を作成できませんでした。"
 
 #: pcbnew/files.cpp:1493
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。上書きしますか？"
+msgstr "出力先ディレクトリ '%s'はすでに存在し、空では有りません。上書きしますか？"
 
 #: pcbnew/files.cpp:1505
 #, fuzzy, c-format
