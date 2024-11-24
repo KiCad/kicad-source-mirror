@@ -237,7 +237,7 @@ public:
     /**
      * Slide the zoom steps over for debugging things "up close".
      *
-     * Setting name: "EnableRouterDump"
+     * Setting name: "HyperZoom"
      * Valid values: 0 or 1
      * Default value: 0
      */
@@ -422,7 +422,7 @@ public:
      *
      * This is used for calculating the bevel's height.
      *
-     * Setting name: "V3DRT_BevelHeight_um"
+     * Setting name: "V3DRT_BevelExtentFactor"
      * Valid values: 0 to 100
      * Default value: 1/16
      */
@@ -621,6 +621,9 @@ public:
 
     /**
      * Log IPC API requests and responses
+     *
+     * Setting name: "EnableAPILogging"
+     * Default value: false
      */
     bool m_EnableAPILogging;
 
@@ -697,6 +700,9 @@ public:
     /**
      * Minimum overlapping angle for which an arc is considered to be parallel
      * to its paired arc.
+     *
+     * Setting name: "MinParallelAngle"
+     * Default value: 0.001
      */
     double m_MinParallelAngle;
 
