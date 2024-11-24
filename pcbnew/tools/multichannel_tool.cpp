@@ -630,7 +630,7 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
     if( aRA->m_area->GetZoneName().IsEmpty() )
     {
         restoreBlankName = true;
-         aRA->m_area->SetZoneName( aRA->m_area->m_Uuid.AsString() );
+        aRA->m_area->SetZoneName( aRA->m_area->m_Uuid.AsString() );
     }
 
     wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ),
@@ -657,6 +657,9 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
         for( PCB_TRACK* track : board()->Tracks() )
             testAndAdd( track );
     }
+
+    if( restoreBlankName )
+        aRA->m_area->SetZoneName( wxEmptyString );
 
     return count;
 }
