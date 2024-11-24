@@ -1595,7 +1595,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     }
     else if( token->IsSameAs( wxT( "SHORT_REFERENCE" ) ) )
     {
-        GetRef( aPath, false );
+        *token = GetRef( aPath, false );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_LIBRARY" ) ) )
