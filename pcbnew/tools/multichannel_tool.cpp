@@ -628,10 +628,19 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             targetFP->SetOrientation( refFP->GetOrientation() );
             VECTOR2I targetPos = refFP->GetPosition() + disp;
             targetFP->SetPosition( targetPos );
-            targetFP->Reference().SetTextAngle( refFP->Reference().GetTextAngle() );
-            targetFP->Reference().SetPosition( refFP->Reference().GetPosition() + disp );
-            targetFP->Value().SetTextAngle( refFP->Value().GetTextAngle() );
-            targetFP->Value().SetPosition( refFP->Value().GetPosition() + disp );
+
+            for( PCB_FIELD* refField : refFP->Fields() )
+            {
+                if( !refField->IsVisible() )
+                    continue;
+
+                PCB_FIELD* targetField = targetFP->GetFieldById( refField->GetId() );
+                wxCHECK2( targetField, continue );
+
+                targetField->SetAttributes( refField->GetAttributes() );
+                targetField->SetPosition( refField->GetPosition() + disp );
+                targetField->SetIsKnockout( refField->IsKnockout() );
+            }
 
             aAffectedItems.insert( targetFP );
             aGroupableItems.insert( targetFP );
