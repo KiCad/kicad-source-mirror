@@ -78,6 +78,9 @@ void FABMASTER::checkpoint()
 
 double FABMASTER::readDouble( const std::string& aStr ) const
 {
+    // This is bad, but at least don't return uninitialized data
+    wxCHECK_MSG( !aStr.empty(), 0.0, "Empty string passed to readDouble" );
+
     std::istringstream istr( aStr );
     istr.imbue( std::locale::classic() );
 
@@ -89,6 +92,9 @@ double FABMASTER::readDouble( const std::string& aStr ) const
 
 int FABMASTER::readInt( const std::string& aStr ) const
 {
+    // This is bad, but at least don't return uninitialized data
+    wxCHECK_MSG( !aStr.empty(), 0, "Empty string passed to readInt" );
+
     std::istringstream istr( aStr );
     istr.imbue( std::locale::classic() );
 
@@ -100,7 +106,6 @@ int FABMASTER::readInt( const std::string& aStr ) const
 
 bool FABMASTER::Read( const std::string& aFile )
 {
-
     std::ifstream ifs( aFile, std::ios::in | std::ios::binary );
 
     if( !ifs.is_open() )
