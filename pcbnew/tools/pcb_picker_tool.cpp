@@ -302,7 +302,7 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
     INTERACTIVE_PARAMS params = aEvent.Parameter<INTERACTIVE_PARAMS>();
     STATUS_TEXT_POPUP  statusPopup( frame() );
     bool               done = false;
-    EDA_ITEM*          anchor_item;
+    EDA_ITEM*          anchor_item = nullptr;
 
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
@@ -331,6 +331,9 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
 
                 anchor_item = sel.Front();
 
+                if( params.m_ItemFilter && !params.m_ItemFilter( anchor_item ) )
+                    return true;
+
                 sendItem( sel.Front() );
                 return false; // got our item; don't need any more
             } );
@@ -344,7 +347,8 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
     SetCancelHandler(
             [&]()
             {
-                sendItem( anchor_item );
+                if( anchor_item && ( !params.m_ItemFilter || params.m_ItemFilter( anchor_item ) ) )
+                    sendItem( anchor_item );
             } );
 
     SetFinalizeHandler(

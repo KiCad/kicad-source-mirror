@@ -56,6 +56,7 @@ public:
     {
         RECEIVER* m_Receiver = nullptr;
         wxString  m_Prompt;
+        std::function<bool(EDA_ITEM*)> m_ItemFilter = nullptr;
     };
 
     PCB_PICKER_TOOL();

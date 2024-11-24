@@ -30,6 +30,7 @@
 #include <unordered_set>
 
 #include <tools/pcb_tool_base.h>
+#include <tools/pcb_picker_tool.h>
 #include <connectivity/topo_match.h>
 
 #include <pad.h>
@@ -105,11 +106,14 @@ struct RULE_AREAS_DATA
 };
 
 
-class MULTICHANNEL_TOOL : public PCB_TOOL_BASE
+class MULTICHANNEL_TOOL : public PCB_TOOL_BASE, public PCB_PICKER_TOOL::RECEIVER
 {
 public:
     MULTICHANNEL_TOOL();
     ~MULTICHANNEL_TOOL();
+
+    void UpdatePickedPoint( const std::optional<VECTOR2I>& aPoint ) override {};
+    void UpdatePickedItem( const EDA_ITEM* aItem ) override;
 
     RULE_AREAS_DATA* GetData() { return &m_areas; }
     int AutogenerateRuleAreas( const TOOL_EVENT& aEvent );

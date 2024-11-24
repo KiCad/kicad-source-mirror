@@ -41,6 +41,8 @@
 #include <optional>
 #include <algorithm>
 #include <pcbnew_scripting_helpers.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_picker_tool.h>
 #include <random>
 #include <core/profile.h>
 #include <wx/log.h>
@@ -363,13 +365,19 @@ RULE_AREA* MULTICHANNEL_TOOL::findRAByName( const wxString& aName )
 }
 
 
+void MULTICHANNEL_TOOL::UpdatePickedItem( const EDA_ITEM* aItem )
+{
+    m_toolMgr->RunAction( PCB_ACTIONS::repeatLayout );
+}
+
+
 int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 {
     std::vector<ZONE*> refRAs;
 
     auto isSelectedItemAnRA = []( EDA_ITEM* aItem ) -> ZONE*
         {
-            if( aItem->Type() != PCB_ZONE_T )
+            if( !aItem || aItem->Type() != PCB_ZONE_T )
                 return nullptr;
 
             ZONE* zone = static_cast<ZONE*>( aItem );
@@ -405,8 +413,16 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 
     if( refRAs.size() != 1 )
     {
-        frame()->ShowInfoBarError( _( "Please select a single reference Rule Area to copy from." ),
-                                       true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItemInteractively,
+                              PCB_PICKER_TOOL::INTERACTIVE_PARAMS {
+                                  this,
+                                  _( "Select a reference Rule Area to copy from..." ),
+                                  [&]( EDA_ITEM* aItem )
+                                  {
+                                      return isSelectedItemAnRA( aItem ) != nullptr;
+                                  }
+                              } );
+
         return 0;
     }
 
