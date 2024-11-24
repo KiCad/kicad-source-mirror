@@ -779,14 +779,17 @@ bool FABMASTER::assignLayers()
     }
 
     std::sort( layer_order.begin(), layer_order.end(), FABMASTER_LAYER::BY_ID() );
-    int layernum = 0;
 
-    for( auto layer : layer_order )
-        layer->layerid = layernum++;
-
-    /// Back copper has a special id number, so assign that to the last copper layer
-    /// in the stackup
-    layer_order.back()->layerid = B_Cu;
+    for( size_t layeri = 0; layeri < layer_order.size(); ++layeri )
+    {
+        FABMASTER_LAYER* layer = layer_order[layeri];
+        if( layeri == 0 )
+            layer->layerid = F_Cu;
+        else if( layeri == layer_order.size() - 1 )
+            layer->layerid = B_Cu;
+        else
+            layer->layerid = layeri * 2 + 2;
+    }
 
     for( auto& new_pair : extra_layers )
     {
