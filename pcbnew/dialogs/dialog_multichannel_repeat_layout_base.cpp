@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -74,11 +74,16 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
 
-	m_cbCopyPlacement = new wxCheckBox( this, wxID_ANY, _("Copy placement"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopyPlacement = new wxCheckBox( this, wxID_ANY, _("Copy footprint placement"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbCopyPlacement, 0, wxALL, 5 );
 
 	m_cbCopyRouting = new wxCheckBox( this, wxID_ANY, _("Copy routing"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbCopyRouting, 0, wxALL, 5 );
+
+	m_cbCopyOtherItems = new wxCheckBox( this, wxID_ANY, _("Copy other items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopyOtherItems->SetToolTip( _("Copy text, shapes, zones, and other items inside the source rule area") );
+
+	bSizer13->Add( m_cbCopyOtherItems, 0, wxALL, 5 );
 
 	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group components with their placement rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbGroupItems, 0, wxALL, 5 );

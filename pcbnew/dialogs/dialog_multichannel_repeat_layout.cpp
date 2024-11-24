@@ -88,6 +88,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     m_cbCopyPlacement->SetValue( data->m_options.m_copyPlacement );
     m_cbCopyRouting->SetValue( data->m_options.m_copyRouting );
     m_cbGroupItems->SetValue( data->m_options.m_groupItems );
+    m_cbCopyOtherItems->SetValue( data->m_options.m_copyOtherItems );
     m_cbIncludeLockedComponents->SetValue( data->m_options.m_includeLockedItems );
     m_cbIncludeOffRAComponents->SetValue( data->m_options.m_moveOffRAComponents );
 
@@ -111,6 +112,7 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
 
     data->m_options.m_copyPlacement = m_cbCopyPlacement->GetValue();
     data->m_options.m_copyRouting = m_cbCopyRouting->GetValue();
+    data->m_options.m_copyOtherItems = m_cbCopyOtherItems->GetValue();
     data->m_options.m_groupItems = m_cbGroupItems->GetValue();
     data->m_options.m_includeLockedItems = m_cbIncludeLockedComponents->GetValue();
     data->m_options.m_moveOffRAComponents = m_cbIncludeOffRAComponents->GetValue();

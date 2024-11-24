@@ -129,6 +129,91 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
 }
 
 
+bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOARD_ITEM*>& aItems )
+{
+    std::vector<BOARD_ITEM*> result;
+
+    PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
+    PCBEXPR_UCODE    ucode;
+    PCBEXPR_CONTEXT  ctx, preflightCtx;
+
+    auto reportError = [&]( const wxString& aMessage, int aOffset )
+    {
+        wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s"), aMessage );
+    };
+
+    ctx.SetErrorCallback( reportError );
+    preflightCtx.SetErrorCallback( reportError );
+    compiler.SetErrorCallback( reportError );
+
+    bool restoreBlankName = false;
+
+    if( aRuleArea->GetZoneName().IsEmpty() )
+    {
+        restoreBlankName = true;
+        aRuleArea->SetZoneName( aRuleArea->m_Uuid.AsString() );
+    }
+
+    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRuleArea->GetZoneName() );
+
+    if( !compiler.Compile( ruleText, &ucode, &preflightCtx ) )
+    {
+        if( restoreBlankName )
+            aRuleArea->SetZoneName( wxEmptyString );
+
+        return false;
+    }
+
+    auto testAndAdd =
+        [&]( BOARD_ITEM* aItem )
+        {
+            ctx.SetItems( aItem, aItem );
+            auto val = ucode.Run( &ctx );
+
+            if( val->AsDouble() != 0.0 )
+                aItems.insert( aItem );
+        };
+
+    for( ZONE* zone : board()->Zones() )
+    {
+        if( zone == aRuleArea )
+            continue;
+
+        testAndAdd( zone );
+    }
+
+    for( BOARD_ITEM* drawing : board()->Drawings() )
+        testAndAdd( drawing );
+
+    for( PCB_GROUP* group : board()->Groups() )
+    {
+        // A group is cloned in its entirety if *all* children are contained
+        bool addGroup = true;
+
+        group->RunOnDescendants(
+                [&]( BOARD_ITEM* aItem )
+                {
+                    if( aItem->IsType( { PCB_ZONE_T, PCB_SHAPE_T, PCB_DIMENSION_T } ) )
+                    {
+                        ctx.SetItems( aItem, aItem );
+                        auto val = ucode.Run( &ctx );
+
+                        if( val->AsDouble() == 0.0 )
+                            addGroup = false;
+                    }
+                } );
+
+        if( addGroup )
+            aItems.insert( group );
+    }
+
+    if( restoreBlankName )
+        aRuleArea->SetZoneName( wxEmptyString );
+
+    return true;
+}
+
+
 std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInSheet( wxString aSheetName ) const
 {
     std::set<FOOTPRINT*> rv;
@@ -583,14 +668,65 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
         {
             if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
+
             if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
 
             BOARD_ITEM* copied = static_cast<BOARD_ITEM*>( item->Clone() );
 
             copied->Move( disp );
+            copied->SetParentGroup( nullptr );
             aGroupableItems.insert( copied );
             aCommit->Add( copied );
+        }
+    }
+
+    if( aOpts.m_copyOtherItems )
+    {
+        std::set<BOARD_ITEM*> sourceItems;
+
+        findOtherItemsInRuleArea( aRefArea->m_area, sourceItems );
+
+        for( BOARD_ITEM* item : sourceItems )
+        {
+            if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                continue;
+
+            if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                continue;
+
+            // Groups that are fully-contained within the area are added themselves; copy their
+            // items as part of DeepClone rather than explicitly
+            if( item->GetParentGroup() && sourceItems.contains( item->GetParentGroup() )  )
+                continue;
+
+            BOARD_ITEM* copied;
+
+            if( item->Type() == PCB_GROUP_T )
+            {
+                copied = static_cast<PCB_GROUP*>( item )->DeepClone();
+            }
+            else
+            {
+                copied = static_cast<BOARD_ITEM*>( item->Clone() );
+            }
+
+            copied->ClearFlags();
+            copied->SetParentGroup( nullptr );
+            copied->Move( disp );
+            aGroupableItems.insert( copied );
+            aCommit->Add( copied );
+
+            getView()->Query( copied->GetBoundingBox(),
+                [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
+                {
+                    BOARD_ITEM* existingItem = static_cast<BOARD_ITEM*>( viewItem );
+
+                    if( existingItem && existingItem->Similarity( *copied ) == 1.0 )
+                        aCommit->Remove( existingItem );
+
+                    return true;
+                } );
         }
     }
 

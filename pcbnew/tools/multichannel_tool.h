@@ -48,6 +48,7 @@ struct REPEAT_LAYOUT_OPTIONS
 {
     bool                    m_copyRouting = true;
     bool                    m_copyPlacement = true;
+    bool                    m_copyOtherItems = true;
     bool                    m_groupItems = false;
     bool                    m_moveOffRAComponents = true;
     bool                    m_includeLockedItems = true;
@@ -123,6 +124,7 @@ private:
 
     wxString stripComponentIndex( const wxString& aRef ) const;
     bool     identifyComponentsInRuleArea( ZONE* aRuleArea, std::set<FOOTPRINT*>& aComponents );
+    bool     findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOARD_ITEM*>& aItems );
     const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
     std::set<FOOTPRINT*>   queryComponentsInSheet( wxString aSheetName ) const;
     std::set<FOOTPRINT*>

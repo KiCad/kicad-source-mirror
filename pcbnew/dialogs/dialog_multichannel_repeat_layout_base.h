@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,7 +25,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,6 +40,7 @@ class DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE : public DIALOG_SHIM
 		wxStaticText* m_refRAName;
 		wxCheckBox* m_cbCopyPlacement;
 		wxCheckBox* m_cbCopyRouting;
+		wxCheckBox* m_cbCopyOtherItems;
 		wxCheckBox* m_cbGroupItems;
 		wxCheckBox* m_cbIncludeLockedComponents;
 		wxCheckBox* m_cbIncludeOffRAComponents;
