@@ -487,6 +487,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 {
     int totalCopied = 0;
 
+    BOARD_COMMIT commit( GetManager(), true );
+
     for( auto& targetArea : m_areas.m_compatMap )
     {
         if( !targetArea.second.m_doCopy )
@@ -498,8 +500,6 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 
         if( !targetArea.second.m_isOk )
             continue;
-
-        BOARD_COMMIT commit( GetManager(), true );
 
         std::unordered_set<BOARD_ITEM*> affectedItems;
         std::unordered_set<BOARD_ITEM*> groupableItems;
@@ -514,6 +514,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
                     targetArea.first->m_area->GetZoneName() );
 
             commit.Revert();
+
             if( Pgm().IsGUI() )
             {
                 frame()->ShowInfoBarError( errMsg, true );
@@ -522,29 +523,24 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
             return -1;
         }
 
-        commit.Push( _( "Repeat layout" ) );
-
         if( m_areas.m_options.m_groupItems )
         {
-            // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
-            BOARD_COMMIT grpCommit( GetManager(), true );
-
-            pruneExistingGroups( grpCommit, affectedItems );
+            pruneExistingGroups( commit, affectedItems );
 
             PCB_GROUP* grp = new PCB_GROUP( board() );
 
-            grpCommit.Add( grp );
+            commit.Add( grp );
 
             for( BOARD_ITEM* item : groupableItems )
             {
-                grpCommit.Stage( item, CHT_GROUP );
+                commit.Stage( item, CHT_GROUP );
             }
-
-            grpCommit.Push( _( "Group components with their placement rule areas" ) );
         }
 
         totalCopied++;
     }
+
+    commit.Push( _( "Repeat layout" ) );
 
     if( Pgm().IsGUI() )
     {
