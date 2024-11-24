@@ -559,6 +559,11 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             [this, simFrame]( const VECTOR2D& aPosition )
             {
                 EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+
+                // We do not really want to keep an item selected in schematic,
+                // so clear the current selection
+                selTool->ClearSelection();
+
                 EDA_ITEM*          item = selTool->GetNode( aPosition );
                 SCH_SHEET_PATH&    sheet = m_frame->GetCurrentSheet();
 
@@ -688,6 +693,10 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 }
 
                 // Wake the selection tool after exiting to ensure the cursor gets updated
+                // and deselect previous selection from simulator to avoid any issue
+                // ( avoid crash in some cases when the SimProbe tool is deselected )
+                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                selectionTool->ClearSelection();
                 m_toolMgr->PostAction( EE_ACTIONS::selectionActivate );
             } );
 
