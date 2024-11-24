@@ -443,6 +443,17 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( GetItems& aMsg
             break;
         }
 
+        case PCB_ZONE_T:
+        {
+            handledAnything = true;
+
+            std::copy( board->Zones().begin(), board->Zones().end(),
+                       std::back_inserter( items ) );
+
+            typesInserted.insert( PCB_ZONE_T );
+            break;
+        }
+
         default:
             break;
         }
