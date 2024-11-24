@@ -37,6 +37,9 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <macros.h>
 #include <core/ignore.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/board/board_types.pb.h>
 
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* aParent, KICAD_T aType ) :
@@ -58,6 +61,106 @@ PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* aParent, KICAD_T aType ) :
 
 PCB_TEXTBOX::~PCB_TEXTBOX()
 {
+}
+
+
+void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common::types;
+    using namespace kiapi::board;
+    types::TextBox boardText;
+    boardText.set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( GetLayer() ) );
+
+    TextBox& text = *boardText.mutable_textbox();
+
+    text.mutable_id()->set_value( m_Uuid.AsStdString() );
+    kiapi::common::PackVector2( *text.mutable_top_left(), GetPosition() );
+    kiapi::common::PackVector2( *text.mutable_bottom_right(), GetEnd() );
+    text.set_text( GetText().ToStdString() );
+    //text.set_hyperlink( GetHyperlink().ToStdString() );
+    text.set_locked( IsLocked() ? LockedState::LS_LOCKED : LockedState::LS_UNLOCKED );
+
+    TextAttributes* attrs = text.mutable_attributes();
+
+    if( GetFont() )
+        attrs->set_font_name( GetFont()->GetName().ToStdString() );
+
+    attrs->set_horizontal_alignment(
+            ToProtoEnum<GR_TEXT_H_ALIGN_T, HorizontalAlignment>( GetHorizJustify() ) );
+
+    attrs->set_vertical_alignment(
+            ToProtoEnum<GR_TEXT_V_ALIGN_T, VerticalAlignment>( GetVertJustify() ) );
+
+    attrs->mutable_angle()->set_value_degrees( GetTextAngleDegrees() );
+    attrs->set_line_spacing( GetLineSpacing() );
+    attrs->mutable_stroke_width()->set_value_nm( GetTextThickness() );
+    attrs->set_italic( IsItalic() );
+    attrs->set_bold( IsBold() );
+    attrs->set_underlined( GetAttributes().m_Underlined );
+    attrs->set_visible( IsVisible() );
+    attrs->set_mirrored( IsMirrored() );
+    attrs->set_multiline( IsMultilineAllowed() );
+    attrs->set_keep_upright( IsKeepUpright() );
+    attrs->mutable_size()->set_x_nm( GetTextSize().x );
+    attrs->mutable_size()->set_y_nm( GetTextSize().y );
+
+    aContainer.PackFrom( boardText );
+}
+
+
+bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::board;
+    types::TextBox textWrapper;
+
+    if( !aContainer.UnpackTo( &textWrapper ) )
+        return false;
+
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( textWrapper.layer() ) );
+
+    const kiapi::common::types::TextBox& text = textWrapper.textbox();
+
+    const_cast<KIID&>( m_Uuid ) = KIID( text.id().value() );
+    SetPosition( kiapi::common::UnpackVector2( text.top_left() ) );
+    SetEnd( kiapi::common::UnpackVector2( text.bottom_right() ) );
+    SetLocked( text.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    SetText( wxString( text.text().c_str(), wxConvUTF8 ) );
+    //SetHyperlink( wxString::FromUTF8( text.hyperlink() );
+
+    if( text.has_attributes() )
+    {
+        TEXT_ATTRIBUTES attrs = GetAttributes();
+
+        attrs.m_Bold = text.attributes().bold();
+        attrs.m_Italic = text.attributes().italic();
+        attrs.m_Underlined = text.attributes().underlined();
+        attrs.m_Visible = text.attributes().visible();
+        attrs.m_Mirrored = text.attributes().mirrored();
+        attrs.m_Multiline = text.attributes().multiline();
+        attrs.m_KeepUpright = text.attributes().keep_upright();
+        attrs.m_Size = VECTOR2I( text.attributes().size().x_nm(), text.attributes().size().y_nm() );
+
+        if( !text.attributes().font_name().empty() )
+        {
+            attrs.m_Font = KIFONT::FONT::GetFont(
+                    wxString( text.attributes().font_name().c_str(), wxConvUTF8 ), attrs.m_Bold,
+                    attrs.m_Italic );
+        }
+
+        attrs.m_Angle = EDA_ANGLE( text.attributes().angle().value_degrees(), DEGREES_T );
+        attrs.m_LineSpacing = text.attributes().line_spacing();
+        attrs.m_StrokeWidth = text.attributes().stroke_width().value_nm();
+        attrs.m_Halign =
+                FromProtoEnum<GR_TEXT_H_ALIGN_T, kiapi::common::types::HorizontalAlignment>(
+                        text.attributes().horizontal_alignment() );
+
+        attrs.m_Valign = FromProtoEnum<GR_TEXT_V_ALIGN_T, kiapi::common::types::VerticalAlignment>(
+                text.attributes().vertical_alignment() );
+
+        SetAttributes( attrs );
+    }
+
+    return true;
 }
 
 

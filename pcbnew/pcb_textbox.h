@@ -62,6 +62,9 @@ public:
         return false;
     }
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     wxString GetFriendlyName() const override { return _( "Text Box" ); }
 
     VECTOR2I GetTopLeft() const override;

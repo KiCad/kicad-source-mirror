@@ -424,13 +424,15 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( GetItems& aMsg
         }
 
         case PCB_SHAPE_T:
+        case PCB_TEXT_T:
+        case PCB_TEXTBOX_T:
         {
             handledAnything = true;
             bool inserted = false;
 
             for( BOARD_ITEM* item : board->Drawings() )
             {
-                if( item->Type() == PCB_SHAPE_T )
+                if( item->Type() == type )
                 {
                     items.emplace_back( item );
                     inserted = true;
