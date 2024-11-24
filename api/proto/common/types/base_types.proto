@@ -191,6 +191,13 @@ message Vector3
   int64 z_nm = 3;
 }
 
+message Vector3D
+{
+  double x_nm = 1;
+  double y_nm = 2;
+  double z_nm = 3;
+}
+
 message Box2
 {
   kiapi.common.types.Vector2 position = 1;

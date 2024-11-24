@@ -706,6 +706,24 @@ message FootprintDesignRuleOverrides
   ZoneConnectionStyle zone_connection = 4;
 }
 
+message Footprint3DModel
+{
+  string filename = 1;
+
+  // Scaling factor along each axis
+  kiapi.common.types.Vector3D scale = 2;
+
+  // Rotation around each axis, in degrees
+  kiapi.common.types.Vector3D rotation = 3;
+
+  // Offset from footprint center
+  kiapi.common.types.Vector3D offset = 4;
+
+  bool visible = 5;
+
+  double opacity = 6;
+}
+
 // A footprint definition (i.e. what would be in a library)
 message Footprint
 {

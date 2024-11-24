@@ -270,13 +270,14 @@ FOOTPRINT::~FOOTPRINT()
 
 void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 {
-    kiapi::board::types::FootprintInstance footprint;
+    using namespace kiapi::board;
+    types::FootprintInstance footprint;
 
     footprint.mutable_id()->set_value( m_Uuid.AsStdString() );
     footprint.mutable_position()->set_x_nm( GetPosition().x );
     footprint.mutable_position()->set_y_nm( GetPosition().y );
     footprint.mutable_orientation()->set_value_degrees( GetOrientationDegrees() );
-    footprint.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
+    footprint.set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( GetLayer() ) );
     footprint.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                      : kiapi::common::types::LockedState::LS_UNLOCKED );
 
@@ -290,7 +291,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     GetField( DESCRIPTION_FIELD )->Serialize( buf );
     buf.UnpackTo( footprint.mutable_description_field() );
 
-    kiapi::board::types::FootprintAttributes* attrs = footprint.mutable_attributes();
+    types::FootprintAttributes* attrs = footprint.mutable_attributes();
 
     attrs->set_not_in_schematic( IsBoardOnly() );
     attrs->set_exclude_from_position_files( IsExcludedFromPosFiles() );
@@ -298,7 +299,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_exempt_from_courtyard_requirement( AllowMissingCourtyard() );
     attrs->set_do_not_populate( IsDNP() );
 
-    kiapi::board::types::Footprint* def = footprint.mutable_definition();
+    types::Footprint* def = footprint.mutable_definition();
 
     def->mutable_id()->CopyFrom( kiapi::common::LibIdToProto( GetFPID() ) );
     // anchor?
@@ -307,7 +308,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
     // TODO: serialize library mandatory fields
 
-    kiapi::board::types::FootprintDesignRuleOverrides* overrides = def->mutable_overrides();
+    types::FootprintDesignRuleOverrides* overrides = def->mutable_overrides();
 
     if( GetLocalClearance().has_value() )
         overrides->mutable_copper_clearance()->set_value_nm( *GetLocalClearance() );
@@ -322,12 +323,11 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         overrides->mutable_solder_paste()->mutable_solder_paste_margin_ratio()->set_value( *GetLocalSolderPasteMarginRatio() );
 
     overrides->set_zone_connection(
-            ToProtoEnum<ZONE_CONNECTION,
-                        kiapi::board::types::ZoneConnectionStyle>( GetLocalZoneConnection() ) );
+            ToProtoEnum<ZONE_CONNECTION, types::ZoneConnectionStyle>( GetLocalZoneConnection() ) );
 
     for( const wxString& group : GetNetTiePadGroups() )
     {
-        kiapi::board::types::NetTieDefinition* netTie = def->add_net_ties();
+        types::NetTieDefinition* netTie = def->add_net_ties();
         wxStringTokenizer tokenizer( group, " " );
 
         while( tokenizer.HasMoreTokens() )
@@ -335,10 +335,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     }
 
     for( PCB_LAYER_ID layer : GetPrivateLayers().Seq() )
-    {
-        def->add_private_layers(
-                ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( layer ) );
-    }
+        def->add_private_layers( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
 
     for( const PCB_FIELD* item : Fields() )
     {
@@ -367,7 +364,18 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         item->Serialize( *itemMsg );
     }
 
-    // TODO: 3D models
+    for( const FP_3DMODEL& model : Models() )
+    {
+        google::protobuf::Any* itemMsg = def->add_items();
+        types::Footprint3DModel modelMsg;
+        modelMsg.set_filename( model.m_Filename.ToUTF8() );
+        kiapi::common::PackVector3D( *modelMsg.mutable_scale(), model.m_Scale );
+        kiapi::common::PackVector3D( *modelMsg.mutable_rotation(), model.m_Rotation );
+        kiapi::common::PackVector3D( *modelMsg.mutable_offset(), model.m_Offset );
+        modelMsg.set_visible( model.m_Show );
+        modelMsg.set_opacity( model.m_Opacity );
+        itemMsg->PackFrom( modelMsg );
+    }
 
     aContainer.PackFrom( footprint );
 }
@@ -375,7 +383,8 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
 bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 {
-    kiapi::board::types::FootprintInstance footprint;
+    using namespace kiapi::board;
+    types::FootprintInstance footprint;
 
     if( !aContainer.UnpackTo( &footprint ) )
         return false;
@@ -383,11 +392,11 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     const_cast<KIID&>( m_Uuid ) = KIID( footprint.id().value() );
     SetPosition( VECTOR2I( footprint.position().x_nm(), footprint.position().y_nm() ) );
     SetOrientationDegrees( footprint.orientation().value_degrees() );
-    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( footprint.layer() ) );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( footprint.layer() ) );
     SetLocked( footprint.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
     google::protobuf::Any buf;
-    kiapi::board::types::Field mandatoryField;
+    types::Field mandatoryField;
 
     if( footprint.has_reference_field() )
     {
@@ -433,7 +442,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     SetLibDescription( footprint.definition().attributes().description() );
     SetKeywords( footprint.definition().attributes().keywords() );
 
-    const kiapi::board::types::FootprintDesignRuleOverrides& overrides = footprint.overrides();
+    const types::FootprintDesignRuleOverrides& overrides = footprint.overrides();
 
     if( overrides.has_copper_clearance() )
         SetLocalClearance( overrides.copper_clearance().value_nm() );
@@ -447,7 +456,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
     if( overrides.has_solder_paste() )
     {
-        const kiapi::board::types::SolderPasteOverrides& pasteSettings = overrides.solder_paste();
+        const types::SolderPasteOverrides& pasteSettings = overrides.solder_paste();
 
         if( pasteSettings.has_solder_paste_margin() )
             SetLocalSolderPasteMargin( pasteSettings.solder_paste_margin().value_nm() );
@@ -462,7 +471,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
     SetLocalZoneConnection( FromProtoEnum<ZONE_CONNECTION>( overrides.zone_connection() ) );
 
-    for( const kiapi::board::types::NetTieDefinition& netTieMsg : footprint.definition().net_ties() )
+    for( const types::NetTieDefinition& netTieMsg : footprint.definition().net_ties() )
     {
         wxString group;
 
@@ -477,8 +486,8 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
     for( int layerMsg : footprint.definition().private_layers() )
     {
-        auto layer = static_cast<kiapi::board::types::BoardLayer>( layerMsg );
-        privateLayers.set( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( layer ) );
+        auto layer = static_cast<types::BoardLayer>( layerMsg );
+        privateLayers.set( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
     }
 
     SetPrivateLayers( privateLayers );
@@ -501,15 +510,38 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
         std::optional<KICAD_T> type = kiapi::common::TypeNameFromAny( itemMsg );
 
         if( !type )
-            continue;
+        {
+            // Bit of a hack here, but eventually 3D models should be promoted to a first-class
+            // object, at which point they can get their own serialization
+            if( itemMsg.type_url() == "type.googleapis.com/kiapi.board.types.Footprint3DModel" )
+            {
+                types::Footprint3DModel modelMsg;
+
+                if( !itemMsg.UnpackTo( &modelMsg ) )
+                    continue;
+
+                FP_3DMODEL model;
+
+                model.m_Filename = wxString::FromUTF8( modelMsg.filename() );
+                model.m_Show = modelMsg.visible();
+                model.m_Opacity = modelMsg.opacity();
+                model.m_Scale = kiapi::common::UnpackVector3D( modelMsg.scale() );
+                model.m_Rotation = kiapi::common::UnpackVector3D( modelMsg.rotation() );
+                model.m_Offset = kiapi::common::UnpackVector3D( modelMsg.offset() );
+
+                Models().push_back( model );
+            }
+            else
+            {
+                continue;
+            }
+        }
 
         std::unique_ptr<BOARD_ITEM> item = CreateItemForType( *type, this );
 
         if( item && item->Deserialize( itemMsg ) )
             Add( item.release(), ADD_MODE::APPEND );
     }
-
-    // TODO: 3D models
 
     return true;
 }

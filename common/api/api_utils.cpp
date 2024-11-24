@@ -80,6 +80,20 @@ VECTOR2I UnpackVector2( const types::Vector2& aInput )
 }
 
 
+void PackVector3D( types::Vector3D& aOutput, const VECTOR3D& aInput )
+{
+    aOutput.set_x_nm( aInput.x );
+    aOutput.set_y_nm( aInput.y );
+    aOutput.set_z_nm( aInput.z );
+}
+
+
+VECTOR3D UnpackVector3D( const types::Vector3D& aInput )
+{
+    return VECTOR3D( aInput.x_nm(), aInput.y_nm(), aInput.z_nm() );
+}
+
+
 void PackBox2( types::Box2& aOutput, const BOX2I& aInput )
 {
     PackVector2( *aOutput.mutable_position(), aInput.GetOrigin() );

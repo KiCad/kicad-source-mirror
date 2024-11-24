@@ -30,6 +30,7 @@
 #include <layer_ids.h>
 #include <geometry/shape_line_chain.h>
 #include <math/vector2d.h>
+#include <math/vector3.h>
 
 class SHAPE_LINE_CHAIN;
 
@@ -45,6 +46,10 @@ types::LibraryIdentifier LibIdToProto( const LIB_ID& aId );
 void PackVector2( types::Vector2& aOutput, const VECTOR2I& aInput );
 
 VECTOR2I UnpackVector2( const types::Vector2& aInput );
+
+void PackVector3D( types::Vector3D& aOutput, const VECTOR3D& aInput );
+
+VECTOR3D UnpackVector3D( const types::Vector3D& aInput );
 
 void PackBox2( types::Box2& aOutput, const BOX2I& aInput );
 
