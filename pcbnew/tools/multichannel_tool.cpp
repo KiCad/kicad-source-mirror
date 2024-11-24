@@ -41,6 +41,7 @@
 #include <optional>
 #include <algorithm>
 #include <pcbnew_scripting_helpers.h>
+#include <pcb_track.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_picker_tool.h>
 #include <random>
@@ -610,6 +611,55 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
             aOutput.insert( item );
             count++;
         }
+    }
+
+    // The user also will consider tracks and vias that are inside the source area but
+    // not connected to any of the source pads to count as "routing" (e.g. stitching vias)
+
+    PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
+    PCBEXPR_UCODE    ucode;
+    PCBEXPR_CONTEXT  ctx, preflightCtx;
+
+    auto reportError = [&]( const wxString& aMessage, int aOffset )
+    {
+        wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s"), aMessage );
+    };
+
+    ctx.SetErrorCallback( reportError );
+    preflightCtx.SetErrorCallback( reportError );
+    compiler.SetErrorCallback( reportError );
+
+    bool restoreBlankName = false;
+
+    if( aRA->m_area->GetZoneName().IsEmpty() )
+    {
+        restoreBlankName = true;
+         aRA->m_area->SetZoneName( aRA->m_area->m_Uuid.AsString() );
+    }
+
+    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ),
+                                          aRA->m_area->GetZoneName() );
+
+    auto testAndAdd =
+        [&]( BOARD_ITEM* aItem )
+        {
+            if( aOutput.contains( aItem ) )
+                return;
+
+            ctx.SetItems( aItem, aItem );
+            auto val = ucode.Run( &ctx );
+
+            if( val->AsDouble() != 0.0 )
+            {
+                aOutput.insert( aItem );
+                count++;
+            }
+        };
+
+    if( compiler.Compile( ruleText, &ucode, &preflightCtx ) )
+    {
+        for( PCB_TRACK* track : board()->Tracks() )
+            testAndAdd( track );
     }
 
     return count;
