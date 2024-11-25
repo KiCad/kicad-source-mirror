@@ -1175,6 +1175,12 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
         {
             const_cast<KIID&>( item->m_Uuid ) = KIID();
 
+            item->RunOnDescendants(
+                    []( BOARD_ITEM* aChild )
+                    {
+                        const_cast<KIID&>( aChild->m_Uuid ) = KIID();
+                    } );
+
             // Even though BOARD_COMMIT::Push() will add any new items to the group, we're
             // going to run PCB_ACTIONS::move first, and the move tool will throw out any
             // items that aren't in the entered group.
