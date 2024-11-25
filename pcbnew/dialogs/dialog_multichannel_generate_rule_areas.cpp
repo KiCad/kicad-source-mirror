@@ -24,6 +24,7 @@
 
 #include <dialogs/dialog_multichannel_generate_rule_areas.h>
 #include <widgets/wx_grid.h>
+#include <grid_tricks.h>
 #include <pcb_edit_frame.h>
 
 #include <tools/multichannel_tool.h>
@@ -36,6 +37,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 {
     // Generate the sheet source grid
     m_sheetGrid = new WX_GRID( m_sourceNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+    m_sheetGrid->PushEventHandler( new GRID_TRICKS( static_cast<WX_GRID*>( m_sheetGrid ) ) );
     m_sheetGrid->CreateGrid( 0, 3 );
     m_sheetGrid->EnableEditing( false );
     m_sheetGrid->EnableGridLines( true );
@@ -152,6 +154,12 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 }
 
 
+DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::~DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS()
+{
+    m_sheetGrid->PopEventHandler( true );
+}
+
+
 bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
 {
     RULE_AREAS_DATA* raData = m_parentTool->GetData();
@@ -190,3 +198,4 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataToWindow()
     // grid cells from within this method.
     return true;
 }
+

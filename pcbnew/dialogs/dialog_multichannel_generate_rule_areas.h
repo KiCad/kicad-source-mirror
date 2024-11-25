@@ -40,7 +40,7 @@ public:
     DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS( 
         PCB_BASE_FRAME* aFrame,
         MULTICHANNEL_TOOL* aParentTool );
-    ~DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS() { };
+    ~DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS();
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
