@@ -78,6 +78,8 @@ wxString GenLegalNetName( const wxString& aStr );
 
 wxString GenLegalEntityName( const wxString& aStr );
 
+void RemoveWhitespace( wxString& aStr );
+
 wxString Double2String( double aVal );
 
 std::string Double2String( double aVal, int32_t aDigits );

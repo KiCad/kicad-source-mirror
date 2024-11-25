@@ -52,18 +52,14 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
                                          aFp->GetFPID().GetLibItemName().wx_str() );
 
     // ODB++ cannot handle spaces in these fields
-    comp.m_comp_name.Trim().Trim( false );
-    comp.m_part_name.Trim().Trim( false );
+    ODB::RemoveWhitespace( comp.m_comp_name );
+    ODB::RemoveWhitespace( comp.m_part_name );
 
     if( comp.m_comp_name.IsEmpty() )
     {
         // The spec requires a component name; some ODB++ parsers can't handle it being empty
         comp.m_comp_name = wxString::Format( "UNNAMED%zu", m_compList.size() );
     }
-
-    wxRegEx spaces( "\\s" );
-    spaces.Replace( &comp.m_comp_name, "_" );
-    spaces.Replace( &comp.m_part_name, "_" );
 
     return comp;
 }

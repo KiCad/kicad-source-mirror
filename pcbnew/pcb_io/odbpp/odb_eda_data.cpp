@@ -19,7 +19,6 @@
  */
 
 #include <build_version.h>
-#include <wx/regex.h>
 
 #include "odb_eda_data.h"
 #include "hash_eda.h"
@@ -59,10 +58,7 @@ void EDA_DATA::AddNET( const NETINFO_ITEM* aNet )
     if( nets_map.end() == nets_map.find( aNet->GetNetCode() ) )
     {
         wxString netName = aNet->GetNetname();
-        netName.Trim().Trim( false );
-
-        wxRegEx spaces( "\\s" );
-        spaces.Replace( &netName, "_" );
+        ODB::RemoveWhitespace( netName );
 
         auto& net = nets_map.emplace( std::piecewise_construct,
                                       std::forward_as_tuple( aNet->GetNetCode() ),
@@ -211,6 +207,7 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
     size_t   hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
     size_t   pkg_index = packages_map.size();
     wxString fp_name = fp->GetFPID().GetLibItemName().wx_str();
+    ODB::RemoveWhitespace( fp_name );
 
     auto [iter, success] = packages_map.emplace( hash, PACKAGE( pkg_index, fp_name ) );
 
@@ -285,6 +282,9 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
 void EDA_DATA::PACKAGE::AddPin( const PAD* aPad, size_t aPinNum )
 {
     wxString name = aPad->GetNumber();
+
+    // ODB is unhappy with whitespace in most places
+    ODB::RemoveWhitespace( name );
 
     // Pins are required to have names, so if our pad doesn't have a name, we need to
     // generate one that is unique

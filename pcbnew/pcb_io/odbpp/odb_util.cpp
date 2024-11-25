@@ -24,6 +24,7 @@
 #include "odb_util.h"
 #include <wx/chartype.h>
 #include <wx/dir.h>
+#include <wx/regex.h>
 #include "idf_helpers.h"
 #include "odb_defines.h"
 #include "pcb_io_odbpp.h"
@@ -112,6 +113,14 @@ wxString GenLegalEntityName( const wxString& aStr )
     }
 
     return out;
+}
+
+
+void RemoveWhitespace( wxString& aStr )
+{
+    aStr.Trim().Trim( false );
+    wxRegEx spaces( "\\s" );
+    spaces.Replace( &aStr, "_" );
 }
 
 
