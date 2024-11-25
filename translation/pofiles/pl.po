@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-11-03 11:00+0000\n"
+"PO-Revision-Date: 2024-11-25 19:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -6402,7 +6402,7 @@ msgstr "Obrazy DXF nie są aktualnie nieobsługiwane."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "Importowana grafika jest zbyt duża. Maksymalna skala to %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
@@ -14758,9 +14758,9 @@ msgid "Untitled Field"
 msgstr "Pola bez nazwy"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "Wpis zawiera końcowe spacje."
+msgstr "Nazwa pola \"%s\" zawiera niedozwolone początkowe, bądź końcowe spacje."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -15444,6 +15444,8 @@ msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
+"Schemat zawiera symbole, których nazwy pól rozpoczynają się lub kończą "
+"spacją."
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
@@ -38506,9 +38508,9 @@ msgstr "Sprawdzenie otworów w mikroprzelotkach..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s minimum %s; obecnie %s)"
+msgstr "(%s otwór minimum %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
