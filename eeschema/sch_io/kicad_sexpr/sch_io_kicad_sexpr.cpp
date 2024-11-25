@@ -384,7 +384,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
     m_out->Print( 0, "(kicad_sch (version %d) (generator \"eeschema\") (generator_version \"%s\")\n\n",
                   SEXPR_SCHEMATIC_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
-    KICAD_FORMAT::FormatUuid( m_out, screen->m_uuid );
+    KICAD_FORMAT::FormatUuid( m_out, 0, screen->m_uuid, '\n' );
 
     screen->GetPageSettings().Format( m_out, 1, 0 );
     m_out->Print( 0, "\n" );
@@ -763,7 +763,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
     m_out->Print( 0, "\n" );
 
-    KICAD_FORMAT::FormatUuid( m_out, aSymbol->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, aNestLevel + 1, aSymbol->m_Uuid, '\n' );
 
     m_nextFreeFieldId = MANDATORY_FIELDS;
 
@@ -819,16 +819,15 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
     {
         if( pin->GetAlt().IsEmpty() )
         {
-            m_out->Print( aNestLevel + 1, "(pin %s ", m_out->Quotew( pin->GetNumber() ).c_str() );
-            KICAD_FORMAT::FormatUuid( m_out, pin->m_Uuid );
-            m_out->Print( aNestLevel + 1, ")\n" );
+            m_out->Print( aNestLevel + 1, "(pin %s", m_out->Quotew( pin->GetNumber() ).c_str() );
+            KICAD_FORMAT::FormatUuid( m_out, 0, pin->m_Uuid );
+            m_out->Print( 0, ")\n" );
         }
         else
         {
-            m_out->Print( aNestLevel + 1, "(pin %s ", m_out->Quotew( pin->GetNumber() ).c_str() );
-            KICAD_FORMAT::FormatUuid( m_out, pin->m_Uuid );
-            m_out->Print( aNestLevel + 1, " (alternate %s))\n",
-                          m_out->Quotew( pin->GetAlt() ).c_str() );
+            m_out->Print( aNestLevel + 1, "(pin %s", m_out->Quotew( pin->GetNumber() ).c_str() );
+            KICAD_FORMAT::FormatUuid( m_out, 0, pin->m_Uuid );
+            m_out->Print( 0, " (alternate %s))\n", m_out->Quotew( pin->GetAlt() ).c_str() );
         }
     }
 
@@ -994,9 +993,7 @@ void SCH_IO_KICAD_SEXPR::saveBitmap( const SCH_BITMAP& aBitmap, int aNestLevel )
     if( scale != 1.0 )
         m_out->Print( 0, " (scale %g)", scale );
 
-    m_out->Print( 0, "\n" );
-
-    KICAD_FORMAT::FormatUuid( m_out, aBitmap.m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aBitmap.m_Uuid, '\n' );
 
     m_out->Print( aNestLevel + 1, "(data" );
 
@@ -1059,7 +1056,7 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
                   KiROUND( aSheet->GetBackgroundColor().b * 255.0 ),
                   aSheet->GetBackgroundColor().a );
 
-    KICAD_FORMAT::FormatUuid( m_out, aSheet->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, aNestLevel + 1, aSheet->m_Uuid, '\n' );
 
     m_nextFreeFieldId = SHEET_MANDATORY_FIELDS;
 
@@ -1070,7 +1067,7 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {
-        m_out->Print( aNestLevel + 1, "(pin %s %s (at %s %s %s)\n",
+        m_out->Print( aNestLevel + 1, "(pin %s %s (at %s %s %s)",
                       EscapedUTF8( pin->GetText() ).c_str(),
                       getSheetPinShapeToken( pin->GetShape() ),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
@@ -1079,9 +1076,9 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
                                                            pin->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( getSheetPinAngle( pin->GetSide() ) ).c_str() );
 
-        pin->Format( m_out, aNestLevel + 1, 0 );
+        KICAD_FORMAT::FormatUuid( m_out, 0, pin->m_Uuid, '\n' );
 
-        KICAD_FORMAT::FormatUuid( m_out, pin->m_Uuid );
+        pin->Format( m_out, aNestLevel + 2, 0 );
 
         m_out->Print( aNestLevel + 1, ")\n" );  // Closes pin token.
     }
@@ -1179,9 +1176,8 @@ void SCH_IO_KICAD_SEXPR::saveJunction( SCH_JUNCTION* aJunction, int aNestLevel )
                   KiROUND( aJunction->GetColor().b * 255.0 ),
                   FormatDouble2Str( aJunction->GetColor().a ).c_str() );
 
-    KICAD_FORMAT::FormatUuid( m_out, aJunction->m_Uuid );
-
-    m_out->Print( aNestLevel, ")\n" );
+    KICAD_FORMAT::FormatUuid( m_out, aNestLevel + 1, aJunction->m_Uuid );
+    m_out->Print( 0, ")\n" );
 }
 
 
@@ -1194,8 +1190,8 @@ void SCH_IO_KICAD_SEXPR::saveNoConnect( SCH_NO_CONNECT* aNoConnect, int aNestLev
                                                        aNoConnect->GetPosition().x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                        aNoConnect->GetPosition().y ).c_str() );
-    KICAD_FORMAT::FormatUuid( m_out, aNoConnect->m_Uuid );
-    m_out->Print( aNestLevel, ")\n" );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aNoConnect->m_Uuid );
+    m_out->Print( 0, ")\n" );
 }
 
 
@@ -1227,9 +1223,8 @@ void SCH_IO_KICAD_SEXPR::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestL
 
         m_out->Print( 0, "\n" );
 
-        KICAD_FORMAT::FormatUuid( m_out, aBusEntry->m_Uuid );
-
-        m_out->Print( aNestLevel, ")\n" );
+        KICAD_FORMAT::FormatUuid( m_out, aNestLevel + 1, aBusEntry->m_Uuid );
+        m_out->Print( 0, ")\n" );
     }
 }
 
@@ -1312,9 +1307,8 @@ void SCH_IO_KICAD_SEXPR::saveLine( SCH_LINE* aLine, int aNestLevel )
     line_stroke.Format( m_out, schIUScale, aNestLevel + 1 );
     m_out->Print( 0, "\n" );
 
-    KICAD_FORMAT::FormatUuid( m_out, aLine->m_Uuid );
-
-    m_out->Print( aNestLevel, ")\n" );
+    KICAD_FORMAT::FormatUuid( m_out, aNestLevel + 1, aLine->m_Uuid );
+    m_out->Print( 0, ")\n" );
 }
 
 
@@ -1389,9 +1383,9 @@ void SCH_IO_KICAD_SEXPR::saveText( SCH_TEXT* aText, int aNestLevel )
         m_out->Print( 0, " (fields_autoplaced yes)" );
 
     m_out->Print( 0, "\n" );
-    aText->EDA_TEXT::Format( m_out, aNestLevel, 0 );
+    aText->EDA_TEXT::Format( m_out, aNestLevel + 1, 0 );
 
-    KICAD_FORMAT::FormatUuid( m_out, aText->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, aNestLevel + 1, aText->m_Uuid );
 
     if( label )
     {
@@ -1399,7 +1393,7 @@ void SCH_IO_KICAD_SEXPR::saveText( SCH_TEXT* aText, int aNestLevel )
             saveField( &field, aNestLevel + 1 );
     }
 
-    m_out->Print( aNestLevel, ")\n" );   // Closes text token.
+    m_out->Print( 0, ")\n" );   // Closes text token.
 }
 
 
@@ -1443,9 +1437,9 @@ void SCH_IO_KICAD_SEXPR::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
     aTextBox->EDA_TEXT::Format( m_out, aNestLevel, 0 );
 
     if( aTextBox->m_Uuid != niluuid )
-        KICAD_FORMAT::FormatUuid( m_out, aTextBox->m_Uuid );
+        KICAD_FORMAT::FormatUuid( m_out, aNestLevel + 1, aTextBox->m_Uuid );
 
-    m_out->Print( aNestLevel, ")\n" );
+    m_out->Print( 0, ")\n" );
 }
 
 

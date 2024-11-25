@@ -604,22 +604,22 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard, int aNestLevel ) cons
     }
 
     KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "allow_soldermask_bridges_in_footprints",
-                              dsnSettings.m_AllowSoldermaskBridgesInFPs );
+                              dsnSettings.m_AllowSoldermaskBridgesInFPs, '\n' );
 
-    m_out->Print( 0, " (tenting " );
+    m_out->Print( aNestLevel + 1, "(tenting" );
 
     if( dsnSettings.m_TentViasFront || dsnSettings.m_TentViasBack )
     {
         if( dsnSettings.m_TentViasFront )
-            m_out->Print( 0, "front " );
+            m_out->Print( 0, " front" );
         if( dsnSettings.m_TentViasBack )
-            m_out->Print( 0, "back " );
+            m_out->Print( 0, " back" );
 
-        m_out->Print( 0, ")" );
+        m_out->Print( 0, ")\n" );
     }
     else
     {
-        m_out->Print( 0, " none)" );
+        m_out->Print( 0, " none)\n" );
     }
 
     VECTOR2I origin = dsnSettings.GetAuxOrigin();
@@ -657,7 +657,7 @@ void PCB_IO_KICAD_SEXPR::formatGeneral( const BOARD* aBoard, int aNestLevel ) co
                   formatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
 
     KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "legacy_teardrops",
-                              aBoard->LegacyTeardrops() );
+                              aBoard->LegacyTeardrops(), '\n' );
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -787,11 +787,9 @@ void PCB_IO_KICAD_SEXPR::formatTeardropParameters( const TEARDROP_PARAMETERS& td
                   tdParams.m_CurveSegCount,
                   FormatDouble2Str( tdParams.m_WidthtoSizeFilterRatio ).c_str() );
 
-    KICAD_FORMAT::FormatBool( m_out, aNestLevel, "enabled", tdParams.m_Enabled );
-    KICAD_FORMAT::FormatBool( m_out, aNestLevel, "allow_two_segments",
-                              tdParams.m_AllowUseTwoTracks );
-    KICAD_FORMAT::FormatBool( m_out, aNestLevel, "prefer_zone_connections",
-                              !tdParams.m_TdOnPadsInZones );
+    KICAD_FORMAT::FormatBool( m_out, 0, "enabled", tdParams.m_Enabled );
+    KICAD_FORMAT::FormatBool( m_out, 0, "allow_two_segments", tdParams.m_AllowUseTwoTracks );
+    KICAD_FORMAT::FormatBool( m_out, 0, "prefer_zone_connections", !tdParams.m_TdOnPadsInZones );
     m_out->Print( aNestLevel, ")" );
 }
 
@@ -899,11 +897,11 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DIMENSION_BASE* aDimension, int aNest
         wxFAIL_MSG( wxT( "Cannot format unknown dimension type!" ) );
 
     if( aDimension->IsLocked() )
-        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "locked", aDimension->IsLocked() );
+        KICAD_FORMAT::FormatBool( m_out, 0, "locked", aDimension->IsLocked() );
 
     formatLayer( aDimension->GetLayer() );
 
-    KICAD_FORMAT::FormatUuid( m_out, aDimension->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aDimension->m_Uuid, '\n' );
 
     m_out->Print( aNestLevel+1, "(pts (xy %s %s) (xy %s %s))\n",
                   formatInternalUnits( aDimension->GetStart().x ).c_str(),
@@ -1065,9 +1063,6 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         return;
     };
 
-    if( aShape->IsLocked() )
-        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "locked", aShape->IsLocked() );
-
     aShape->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
 
     // The filled flag represents if a solid fill is present on circles, rectangles and polygons
@@ -1077,6 +1072,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape, int aNestLevel ) const
     {
         m_out->Print( 0, aShape->IsFilled() ? " (fill solid)" : " (fill none)" );
     }
+
+    if( aShape->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, 0, "locked", aShape->IsLocked() );
 
     if( aShape->GetLayerSet().count() > 1 )
         formatLayers( aShape->GetLayerSet() );
@@ -1094,7 +1092,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape, int aNestLevel ) const
     if( aShape->GetNetCode() > 0 )
         m_out->Print( 0, " (net %d)", m_mapping->Translate( aShape->GetNetCode() ) );
 
-    KICAD_FORMAT::FormatUuid( m_out, aShape->m_Uuid, 0 );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aShape->m_Uuid );
 
     m_out->Print( 0, ")\n" );
 }
@@ -1122,6 +1120,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLe
     if( const bool locked = aBitmap->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, 0, "locked", locked );
 
+    m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel + 1, "(data" );
 
     wxString out = wxBase64Encode( refImage.GetImage().GetImageDataBuffer() );
@@ -1142,9 +1141,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLe
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel + 1, ")\n" );  // Closes data token.
 
-    KICAD_FORMAT::FormatUuid( m_out, aBitmap->m_Uuid, 0 );
-
-    m_out->Print( aNestLevel, ")\n" );      // Closes image token.
+    KICAD_FORMAT::FormatUuid( m_out, aNestLevel + 1, aBitmap->m_Uuid );
+    m_out->Print( 0, ")\n" );      // Closes image token.
 }
 
 
@@ -1160,8 +1158,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TARGET* aTarget, int aNestLevel ) con
 
     formatLayer( aTarget->GetLayer() );
 
-    KICAD_FORMAT::FormatUuid( m_out, aTarget->m_Uuid, 0 );
-
+    KICAD_FORMAT::FormatUuid( m_out, 0, aTarget->m_Uuid );
     m_out->Print( 0, ")\n" );
 }
 
@@ -1197,21 +1194,17 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, int aNestLevel ) c
                       SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     if( const bool locked = aFootprint->IsLocked() )
-    {
-        KICAD_FORMAT::FormatBool( m_out, 0, "locked", locked );
-    }
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "locked", locked, '\n' );
 
     if( const bool placed = aFootprint->IsPlaced() )
-    {
-        KICAD_FORMAT::FormatBool( m_out, 0, "placed", placed );
-    }
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "placed", placed, '\n' );
 
+    m_out->Print( aNestLevel + 1, "" );
     formatLayer( aFootprint->GetLayer() );
-
     m_out->Print( 0, "\n" );
 
     if( !( m_ctl & CTL_OMIT_UUIDS ) )
-        KICAD_FORMAT::FormatUuid( m_out, aFootprint->m_Uuid );
+        KICAD_FORMAT::FormatUuid( m_out, aNestLevel+1, aFootprint->m_Uuid, '\n' );
 
     if( !( m_ctl & CTL_OMIT_AT ) )
     {
@@ -1421,7 +1414,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, int aNestLevel ) c
                           m_out->Quotew( bs3D->m_Filename ).c_str() );
 
             if( !bs3D->m_Show )
-                KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "hide", !bs3D->m_Show );
+                KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "hide", !bs3D->m_Show, '\n' );
 
             if( bs3D->m_Opacity != 1.0 )
                 m_out->Print( aNestLevel+2, "(opacity %0.4f)", bs3D->m_Opacity );
@@ -1952,7 +1945,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
 
     formatTenting( aPad->Padstack() );
 
-    m_out->Print( 0, "\n" );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aPad->m_Uuid );
 
     // TODO: Refactor so that we call formatPadLayer( ALL_LAYERS ) above instead of redundant code
     auto formatPadLayer =
@@ -2035,20 +2028,22 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
 
     if( aPad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
     {
-        std::string mode =
-                aPad->Padstack().Mode() == PADSTACK::MODE::CUSTOM ? "custom" : "front_inner_back";
-        m_out->Print( 0, "(padstack (mode %s)", mode.c_str() );
+        m_out->Print( 0, "\n" );
 
         if( aPad->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK )
         {
-            m_out->Print( 0, "(layer \"Inner\"" );
+            m_out->Print( aNestLevel+1, "(padstack (mode front_inner_back)" );
+
+            m_out->Print( 0, " (layer \"Inner\"" );
             formatPadLayer( PADSTACK::INNER_LAYERS );
-            m_out->Print( 0, ")(layer \"B.Cu\"" );
+            m_out->Print( 0, ") (layer \"B.Cu\"" );
             formatPadLayer( B_Cu );
             m_out->Print( 0, ")" );
         }
         else
         {
+            m_out->Print( aNestLevel+1, "(padstack (mode custom)" );
+
             int layerCount = board ? board->GetCopperLayerCount() : MAX_CU_LAYERS;
 
             for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, layerCount ) )
@@ -2056,7 +2051,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
                 if( layer == F_Cu )
                     continue;
 
-                m_out->Print( 0, "(layer %s", m_out->Quotew( LSET::Name( layer ) ).c_str() );
+                m_out->Print( 0, " (layer %s", m_out->Quotew( LSET::Name( layer ) ).c_str() );
                 formatPadLayer( layer );
                 m_out->Print( 0, ")" );
             }
@@ -2065,8 +2060,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, ")" );
     }
 
-    KICAD_FORMAT::FormatUuid( m_out, aPad->m_Uuid );
-    m_out->Print( aNestLevel, ")\n" );
+    m_out->Print( 0, ")\n" );
 }
 
 
@@ -2146,7 +2140,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText, int aNestLevel ) const
     if( parentFP && !aText->IsVisible() )
         KICAD_FORMAT::FormatBool( m_out, 0, "hide", !aText->IsVisible() );
 
-    KICAD_FORMAT::FormatUuid( m_out, aText->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aText->m_Uuid );
 
     int ctl_flags = m_ctl | CTL_OMIT_HIDE;
 
@@ -2154,6 +2148,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText, int aNestLevel ) const
     // so ensure they are never written in kicad_pcb file
     ctl_flags |= CTL_OMIT_COLOR | CTL_OMIT_HYPERLINK;
 
+    m_out->Print( 0, "\n" );
     aText->EDA_TEXT::Format( m_out, aNestLevel, ctl_flags );
 
     if( aText->GetFont() && aText->GetFont()->IsOutline() )
@@ -2175,7 +2170,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) c
                   m_out->Quotew( aTextBox->GetText() ).c_str() );
 
     if( aTextBox->IsLocked() )
-        KICAD_FORMAT::FormatBool( m_out, aNestLevel, "locked", aTextBox->IsLocked() );
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel, "locked", aTextBox->IsLocked(), '\n' );
 
     if( aTextBox->GetShape() == SHAPE_T::RECTANGLE )
     {
@@ -2216,16 +2211,16 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) c
         m_out->Print( aNestLevel + 1, "(angle %s)", EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
 
     formatLayer( aTextBox->GetLayer() );
-    m_out->Print( 0, "\n" );
 
-    KICAD_FORMAT::FormatUuid( m_out, aTextBox->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aTextBox->m_Uuid );
 
     // PCB_TEXTBOXes are never hidden, so always omit "hide" attribute
+    m_out->Print( 0, "\n" );
     aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
 
     if( aTextBox->Type() != PCB_TABLECELL_T )
     {
-        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "border", aTextBox->IsBorderEnabled() );
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "border", aTextBox->IsBorderEnabled(), '\n' );
 
         aTextBox->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
     }
@@ -2318,11 +2313,12 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup, int aNestLevel ) const
 
     m_out->Print( aNestLevel, "(group %s\n", m_out->Quotew( aGroup->GetName() ).c_str() );
 
-    KICAD_FORMAT::FormatUuid( m_out, aGroup->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aGroup->m_Uuid );
 
     if( aGroup->IsLocked() )
-        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "locked", aGroup->IsLocked() );
+        KICAD_FORMAT::FormatBool( m_out, 0, "locked", aGroup->IsLocked() );
 
+    m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel + 1, "(members\n" );
 
     wxArrayString memberIds;
@@ -2342,11 +2338,11 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup, int aNestLevel ) const
 
 void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATOR* aGenerator, int aNestLevel ) const
 {
-    m_out->Print( aNestLevel, "(generated\n" );
+    m_out->Print( aNestLevel, "(generated" );
 
-    KICAD_FORMAT::FormatUuid( m_out, aGenerator->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aGenerator->m_Uuid );
 
-    m_out->Print( aNestLevel + 1, "(type %s) (name %s)\n",
+    m_out->Print( 0, "(type %s) (name %s)\n",
                   TO_UTF8( aGenerator->GetGeneratorType() ),
                   m_out->Quotew( aGenerator->GetName() ).c_str() );
 
@@ -2604,8 +2600,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
     m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
 
-    KICAD_FORMAT::FormatUuid( m_out, aTrack->m_Uuid );
-
+    KICAD_FORMAT::FormatUuid( m_out, 0, aTrack->m_Uuid );
     m_out->Print( 0, ")\n" );
 }
 
@@ -2641,7 +2636,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
         formatLayer( aZone->GetFirstLayer() );
     }
 
-    KICAD_FORMAT::FormatUuid( m_out, aZone->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, 0, aZone->m_Uuid );
 
     if( !aZone->GetZoneName().empty() )
         m_out->Print( 0, " (name %s)", m_out->Quotew( aZone->GetZoneName() ).c_str() );

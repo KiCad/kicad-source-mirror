@@ -185,19 +185,19 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_plotOnAllLayersSelection.FmtHex().c_str() );
 
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "disableapertmacros",
-                              m_gerberDisableApertMacros );
+                              m_gerberDisableApertMacros, '\n' );
 
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "usegerberextensions",
-                              m_useGerberProtelExtensions );
+                              m_useGerberProtelExtensions, '\n' );
 
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "usegerberattributes",
-                              GetUseGerberX2format() );
+                              GetUseGerberX2format(), '\n' );
 
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "usegerberadvancedattributes",
-                              GetIncludeGerberNetlistInfo() );
+                              GetIncludeGerberNetlistInfo(), '\n' );
 
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "creategerberjobfile",
-                              GetCreateGerberJobFile() );
+                              GetCreateGerberJobFile(), '\n' );
 
     // save this option only if it is not the default value,
     // to avoid incompatibility with older Pcbnew version
@@ -210,9 +210,9 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     // SVG options
     aFormatter->Print( aNestLevel+1, "(svgprecision %d)\n", m_svgPrecision );
 
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotframeref", m_plotDrawingSheet );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotframeref", m_plotDrawingSheet, '\n' );
     aFormatter->Print( aNestLevel+1, "(mode %d)\n", GetPlotMode() == SKETCH ? 2 : 1 );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "useauxorigin", m_useAuxOrigin );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "useauxorigin", m_useAuxOrigin, '\n' );
 
     // HPGL options
     aFormatter->Print( aNestLevel+1, "(hpglpennumber %d)\n", m_HPGLPenNum );
@@ -222,36 +222,36 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     // PDF options
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1,
                               getTokenName( T_pdf_front_fp_property_popups ),
-                              m_PDFFrontFPPropertyPopups );
+                              m_PDFFrontFPPropertyPopups, '\n' );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1,
                               getTokenName( T_pdf_back_fp_property_popups ),
-                              m_PDFBackFPPropertyPopups );
+                              m_PDFBackFPPropertyPopups, '\n' );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1,
                               getTokenName( T_pdf_metadata ),
-                              m_PDFMetadata );
+                              m_PDFMetadata, '\n' );
 
     // DXF options
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, getTokenName( T_dxfpolygonmode ),
-                              m_DXFPolygonMode );
+                              m_DXFPolygonMode, '\n' );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, getTokenName( T_dxfimperialunits ),
-                              m_DXFUnits == DXF_UNITS::INCHES );
+                              m_DXFUnits == DXF_UNITS::INCHES, '\n' );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, getTokenName( T_dxfusepcbnewfont ),
-                              m_textMode != PLOT_TEXT_MODE::NATIVE );
+                              m_textMode != PLOT_TEXT_MODE::NATIVE, '\n' );
 
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, getTokenName( T_psnegative ),
-                              m_negative );
+                              m_negative, '\n' );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, getTokenName( T_psa4output ),
-                              m_A4Output );
+                              m_A4Output, '\n' );
 
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotinvisibletext", m_plotInvisibleText );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "sketchpadsonfab", m_sketchPadsOnFabLayers );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotpadnumbers", m_plotPadNumbers );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "hidednponfab", m_hideDNPFPsOnFabLayers );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "sketchdnponfab", m_sketchDNPFPsOnFabLayers );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "crossoutdnponfab", m_crossoutDNPFPsOnFabLayers );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "subtractmaskfromsilk", m_subtractMaskFromSilk );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotinvisibletext", m_plotInvisibleText, '\n' );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "sketchpadsonfab", m_sketchPadsOnFabLayers, '\n' );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotpadnumbers", m_plotPadNumbers, '\n' );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "hidednponfab", m_hideDNPFPsOnFabLayers, '\n' );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "sketchdnponfab", m_sketchDNPFPsOnFabLayers, '\n' );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "crossoutdnponfab", m_crossoutDNPFPsOnFabLayers, '\n' );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "subtractmaskfromsilk", m_subtractMaskFromSilk, '\n' );
     aFormatter->Print( aNestLevel+1, "(outputformat %d)\n", static_cast<int>( m_format ) );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "mirror", m_mirror );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "mirror", m_mirror, '\n' );
     aFormatter->Print( aNestLevel+1, "(drillshape %d)\n", (int)m_drillMarks );
     aFormatter->Print( aNestLevel+1, "(scaleselection %d)\n", m_scaleSelection );
     aFormatter->Print( aNestLevel+1, "(outputdirectory \"%s\")",

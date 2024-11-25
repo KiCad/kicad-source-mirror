@@ -29,17 +29,25 @@ namespace KICAD_FORMAT {
 void FormatBool( OUTPUTFORMATTER* aOut, int aNestLevel, const wxString& aKey, bool aValue,
                  char aSuffix )
 {
-    aOut->Print( aNestLevel, "(%ls %s)%c", aKey.wc_str(), aValue ? "yes" : "no", aSuffix );
+    if( aNestLevel )
+        aOut->Print( aNestLevel, "(%ls %s)", aKey.wc_str(), aValue ? "yes" : "no" );
+    else
+        aOut->Print( 0, " (%ls %s)", aKey.wc_str(), aValue ? "yes" : "no" );
+
+    if( aSuffix )
+        aOut->Print( 0, "%c", aSuffix );
 }
 
 
-void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid, char aSuffix )
+void FormatUuid( OUTPUTFORMATTER* aOut, int aNestLevel, const KIID& aUuid, char aSuffix )
 {
-    if( aSuffix )
-        aOut->Print( 0, "(uuid \"%s\")%c", TO_UTF8( aUuid.AsString() ), aSuffix );
+    if( aNestLevel )
+        aOut->Print( aNestLevel, "(uuid \"%s\")", TO_UTF8( aUuid.AsString() ) );
     else
-        aOut->Print( 0, "(uuid \"%s\")", TO_UTF8( aUuid.AsString() ) );
+        aOut->Print( 0, " (uuid \"%s\")", TO_UTF8( aUuid.AsString() ) );
 
+    if( aSuffix )
+        aOut->Print( 0, "%c", aSuffix );
 }
 
 /*

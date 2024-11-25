@@ -37,9 +37,10 @@ namespace KICAD_FORMAT {
  * @param aSuffix is the character to format after the end of the boolean (after the close paren)
  */
 KICOMMON_API void FormatBool( OUTPUTFORMATTER* aOut, int aNestLevel, const wxString& aKey,
-                              bool aValue, char aSuffix = '\n' );
+                              bool aValue, char aSuffix = 0 );
 
-KICOMMON_API void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid, char aSuffix = '\n' );
+KICOMMON_API void FormatUuid( OUTPUTFORMATTER* aOut, int aNestLevel, const KIID& aUuid,
+                              char aSuffix = 0 );
 
 KICOMMON_API void Prettify( std::string& aSource, char aQuoteChar = '"' );
 
