@@ -1622,9 +1622,19 @@ size_t FABMASTER::processFootprints( size_t aRow )
             continue;
         }
 
+        const wxString& refdes = row[refdes_col];
+
+        if( row[symx_col].empty() || row[symy_col].empty() || row[symrotate_col].empty() )
+        {
+            wxLogError( _( "Missing X, Y, or rotation data in row %zu for refdes %s. "
+                           "This may be an unplaced component." ),
+                        rownum, refdes );
+            continue;
+        }
+
         auto cmp = std::make_unique<COMPONENT>();
 
-        cmp->refdes = row[refdes_col];
+        cmp->refdes = refdes;
         cmp->cclass = parseCompClass( row[compclass_col] );
         cmp->pn = row[comppartnum_col];
         cmp->height = row[compheight_col];
