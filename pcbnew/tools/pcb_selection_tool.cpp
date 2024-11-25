@@ -516,13 +516,12 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( doDrag )
                 {
-                    bool haveTrack = m_selection.GetSize() >= 1 && ( m_selection.CountType( PCB_TRACE_T ) ||
-                      m_selection.CountType( PCB_ARC_T ) ||
-                      m_selection.CountType( PCB_VIA_T ) );
+                    bool isTracks = m_selection.GetSize() > 0
+                            && m_selection.OnlyContains( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } );
 
-                    if( haveTrack && trackDragAction == TRACK_DRAG_ACTION::DRAG )
+                    if( isTracks && trackDragAction == TRACK_DRAG_ACTION::DRAG )
                         m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree );
-                    else if( haveTrack && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
+                    else if( isTracks && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
                         m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle );
                     else
                         m_toolMgr->RunAction( PCB_ACTIONS::move );
