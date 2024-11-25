@@ -2865,10 +2865,16 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
 
             zone_outline->Append( src->end_x, src->end_y, 0, hole_idx );
         }
-        else if( seg->shape == GR_SHAPE_ARC )
+        else if( seg->shape == GR_SHAPE_ARC || seg->shape == GR_SHAPE_CIRCLE )
         {
+            /* Even if it says "circle", it's actually an arc, it's just closed */
             const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
             zone_outline->Hole( 0, hole_idx ).Append( src->result );
+        }
+        else
+        {
+            wxASSERT_MSG( false,
+                          wxString::Format( "Invalid shape type %d in zone outline", seg->shape ) );
         }
     }
 
