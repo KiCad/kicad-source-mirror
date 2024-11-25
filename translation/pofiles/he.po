@@ -4,17 +4,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-10-31 07:00+0000\n"
+"PO-Revision-Date: 2024-11-26 08:01+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/master-"
-"source/he/>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
+"master-source/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 5.8.2-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -7255,53 +7255,44 @@ msgid "Schematic: Export Netlist"
 msgstr ""
 
 #: common/jobs/job_export_sch_plot.cpp:128
-#, fuzzy
 msgid "Schematic PDF Plot"
-msgstr "סכימה"
+msgstr "הדפסת סכימה ל PDF"
 
 #: common/jobs/job_export_sch_plot.cpp:141
-#, fuzzy
 msgid "Schematic DXF Plot"
-msgstr "סכימה"
+msgstr "הדפסת סכימה ל DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:154
-#, fuzzy
 msgid "Schematic SVG Plot"
-msgstr "סכימה"
+msgstr "הדפסת סכימה ל SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:167
-#, fuzzy
 msgid "Schematic PS Plot"
-msgstr "סכימה"
+msgstr "הדפסת סכימהל PS"
 
 #: common/jobs/job_export_sch_plot.cpp:180
-#, fuzzy
 msgid "Schematic HPGL Plot"
-msgstr "סכימה"
+msgstr "הדפסת סכימה ל HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:184
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "כלי שרטוט סכימתי"
+msgstr "שרטוט סכימתי: יצוא ל SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:186
 msgid "Schematic: Export HPGL"
-msgstr ""
+msgstr "שרטוט סכימתי: יצוא ל HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:188
-#, fuzzy
 msgid "Schematic: Export PS"
-msgstr "סכימה"
+msgstr "שרטוט סכימתי: יצוא ל PS"
 
 #: common/jobs/job_export_sch_plot.cpp:190
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "כלי שרטוט סכימתי"
+msgstr "שרטוט סכימתי: יצוא ל DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:192
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "כלי שרטוט סכימתי"
+msgstr "שרטוט סכימתי: יצוא ל PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 msgid "Schematic PythonBOM export"
