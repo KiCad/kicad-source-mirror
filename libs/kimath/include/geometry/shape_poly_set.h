@@ -49,6 +49,7 @@
 #include <math/vector2d.h>              // for VECTOR2I
 #include <md5_hash.h>
 
+class CIRCLE;
 
 /**
  * Represent a set of closed polygons. Polygons may be nonconvex, self-intersecting

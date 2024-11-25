@@ -44,6 +44,7 @@
 
 #include <clipper.hpp>                       // for Clipper, PolyNode, Clipp...
 #include <clipper2/clipper.h>
+#include <geometry/circle.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/polygon_triangulation.h>
 #include <geometry/seg.h>                    // for SEG, OPT_VECTOR2I

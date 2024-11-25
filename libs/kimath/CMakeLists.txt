@@ -29,6 +29,7 @@ set( KIMATH_SRCS
     src/geometry/shape_rect.cpp
     src/geometry/shape_compound.cpp
     src/geometry/shape_segment.cpp
+    src/geometry/shape_utils.cpp
 
 
     src/math/vector2.cpp
