@@ -46,6 +46,7 @@ class HALF_LINE;
 class LINE;
 class SEG;
 class SHAPE_RECT;
+class SHAPE_POLY_SET;
 struct TYPED_POINT2I;
 
 namespace KIGEOM
@@ -161,5 +162,20 @@ std::vector<TYPED_POINT2I> GetCircleKeyPoints( const CIRCLE& aCircle, bool aIncl
  *    |________\      |_________|
  */
 SHAPE_LINE_CHAIN RectifyPolygon( const SHAPE_LINE_CHAIN& aPoly );
+
+
+/**
+ * Adds a hole to a polygon if it is valid (i.e. it has 3 or more points
+ * and a non-zero area.)
+ *
+ * This is important if you are reading in a polygon from a file and
+ * aren't sure if it will end up being valid. Leaving invalid holes in
+ * a SHAP_POLY_SET will violate the invariant that holes are non-null.
+ *
+ * @param aOutline is the outline to add the hole to.
+ * @param aHole is the hole to add.
+ * @return true if the hole was added, false if it was not.
+ */
+bool AddHoleIfValid( SHAPE_POLY_SET& aOutline, SHAPE_LINE_CHAIN&& aHole );
 
 } // namespace KIGEOM

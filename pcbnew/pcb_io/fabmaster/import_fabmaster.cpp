@@ -50,9 +50,11 @@
 #include <zone.h>
 #include <common.h>
 #include <geometry/shape_arc.h>
+#include <geometry/shape_utils.h>
 #include <string_utils.h>
 #include <progress_reporter.h>
 #include <math/util.h>
+
 #include <wx/filename.h>
 
 
@@ -2790,8 +2792,6 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     if( aLine->segment.size() < 3 )
         return false;
 
-    int last_subseq = 0;
-    int hole_idx = -1;
     SHAPE_POLY_SET* zone_outline = nullptr;
     ZONE* zone = nullptr;
 
@@ -2841,7 +2841,29 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
 
     zone_outline->NewOutline();
 
+    std::unique_ptr<SHAPE_LINE_CHAIN> pending_hole = nullptr;
+    SHAPE_LINE_CHAIN*                 active_chain = &zone_outline->Outline( 0 );
 
+    const auto add_hole_if_valid = [&]()
+    {
+        if( pending_hole )
+        {
+            pending_hole->SetClosed( true );
+
+            // If we get junk holes, assert, but don't add them to the zone, as that
+            // will cause crashes later.
+            if( !KIGEOM::AddHoleIfValid( *zone_outline, std::move( *pending_hole ) ) )
+            {
+                wxLogMessage( _( "Invalid hole with %d points in zone on layer %s with net %s" ),
+                              pending_hole->PointCount(), zone->GetLayerName(),
+                              zone->GetNetname() );
+            }
+
+            pending_hole.reset();
+        }
+    };
+
+    int last_subseq = 0;
     for( const auto& seg : aLine->segment )
     {
         if( seg->subseq > 0 && seg->subseq != last_subseq )
@@ -2851,32 +2873,51 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
             if( aLine->lclass == "BOUNDARY" )
                 break;
 
-            hole_idx = zone_outline->AddHole( SHAPE_LINE_CHAIN{} );
-            last_subseq = seg->subseq;
+            add_hole_if_valid();
+            pending_hole = std::make_unique<SHAPE_LINE_CHAIN>();
+            active_chain = pending_hole.get();
             last_subseq = seg->subseq;
         }
 
         if( seg->shape == GR_SHAPE_LINE )
         {
             const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
+            const VECTOR2I      start( src->start_x, src->start_y );
+            const VECTOR2I      end( src->end_x, src->end_y );
 
-            if( zone_outline->VertexCount( 0, hole_idx ) == 0 )
-                zone_outline->Append( src->start_x, src->start_y, 0, hole_idx );
+            if( active_chain->PointCount() == 0 )
+            {
+                active_chain->Append( start );
+            }
+            else
+            {
+                const VECTOR2I& last = active_chain->CPoint( -1 );
 
-            zone_outline->Append( src->end_x, src->end_y, 0, hole_idx );
+                // Not if this can ever happen, or what do if it does (add both points?).
+                if( last != start )
+                {
+                    wxLogError( _( "Outline seems discontinuous: last point was %s, "
+                                   "start point of next segment is %s" ),
+                                last.Format(), start.Format() );
+                }
+            }
+
+            active_chain->Append( end );
         }
         else if( seg->shape == GR_SHAPE_ARC || seg->shape == GR_SHAPE_CIRCLE )
         {
             /* Even if it says "circle", it's actually an arc, it's just closed */
             const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
-            zone_outline->Hole( 0, hole_idx ).Append( src->result );
+            active_chain->Append( src->result );
         }
         else
         {
-            wxASSERT_MSG( false,
-                          wxString::Format( "Invalid shape type %d in zone outline", seg->shape ) );
+            wxLogError( _( "Invalid shape type %d in zone outline" ), seg->shape );
         }
     }
+
+    // Finalise the last hole, if any
+    add_hole_if_valid();
 
     if( zone_outline->Outline( 0 ).PointCount() >= 3 )
     {

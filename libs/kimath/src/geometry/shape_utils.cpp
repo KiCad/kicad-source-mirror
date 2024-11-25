@@ -28,6 +28,7 @@
 #include <geometry/half_line.h>
 #include <geometry/line.h>
 #include <geometry/point_types.h>
+#include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 
 
@@ -375,4 +376,16 @@ SHAPE_LINE_CHAIN KIGEOM::RectifyPolygon( const SHAPE_LINE_CHAIN& aPoly )
     raOutline.Simplify();
 
     return raOutline;
+}
+
+
+bool KIGEOM::AddHoleIfValid( SHAPE_POLY_SET& aOutline, SHAPE_LINE_CHAIN&& aHole )
+{
+    if( aHole.PointCount() < 3 || aHole.Area() == 0 )
+    {
+        return false;
+    }
+
+    aOutline.AddHole( std::move( aHole ) );
+    return true;
 }
