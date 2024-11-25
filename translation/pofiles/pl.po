@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-11-25 07:00+0000\n"
+"PO-Revision-Date: 2024-11-26 08:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -37485,19 +37485,16 @@ msgid "By Start/Mid/End"
 msgstr "Za pomocą pkt. początkowego/środkowego/końcowego"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
-#, fuzzy
 msgid "By Center/Radius"
-msgstr "Procent promienia narożnika"
+msgstr "Za pomocą punktu centralnego/promienia"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
-#, fuzzy
 msgid "By Center/Point"
-msgstr "Punkt centralny"
+msgstr "Za pomocą punktu centralnego/punktu"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:197
-#, fuzzy
 msgid "Bezier Control Points"
-msgstr "Punkt kontrolny Beziera"
+msgstr "Punkty kontrolne Beziera"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:244
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:184
@@ -37695,7 +37692,6 @@ msgstr ""
 "Pozostaw puste, aby użyta została wartość z Ustawień płytki."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
-#, fuzzy
 msgid "Front/Inner/Back"
 msgstr "Górna/Wewnętrzne/Dolna"
 
@@ -38739,9 +38735,8 @@ msgstr ""
 "płytki?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:908
-#, fuzzy
 msgid "Inner Layers to Be Deleted"
-msgstr "Wewnętrzne warstwy będą usunięte"
+msgstr "Wewnętrzne warstwy, które zostaną usunięte"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:943
 msgid "All user-defined layers have already been added."
@@ -41262,9 +41257,8 @@ msgid "Track angle"
 msgstr "Kąt ścieżki"
 
 #: pcbnew/drc/drc_item.cpp:130
-#, fuzzy
 msgid "Track segment length"
-msgstr "Segmentów ścieżek"
+msgstr "Długość segmentu ścieżki"
 
 #: pcbnew/drc/drc_item.cpp:134
 msgid "Annular width"
@@ -42287,9 +42281,8 @@ msgid "(%s max angle %s; actual %s)"
 msgstr "(%s przełamanie maksymalnie %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:75
-#, fuzzy
 msgid "Checking track segment lengths..."
-msgstr "Sprawdzenie przełamywania ścieżek..."
+msgstr "Sprawdzenie długości segmentów ścieżek..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
@@ -42715,9 +42708,9 @@ msgstr ""
 "Nie można zmienić nazwy pliku tymczasowego '%s'."
 
 #: pcbnew/files.cpp:1456
-#, fuzzy, c-format
+#, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
-msgstr "Plik '%s' już istnieje. Czy chcesz go zastąpić?"
+msgstr "Pliki wyjściowe '%s' już istnieją. Czy chcesz je zastąpić?"
 
 #: pcbnew/files.cpp:1468
 #, c-format
@@ -42725,9 +42718,8 @@ msgid "Cannot remove existing output file '%s'."
 msgstr "Nie można usunąć istniejącego pliku wyjściowego '%s'."
 
 #: pcbnew/files.cpp:1482
-#, fuzzy
 msgid "Cannot create temporary output directory."
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć folderu tymczasowego."
 
 #: pcbnew/files.cpp:1493
 #, c-format
@@ -42738,9 +42730,9 @@ msgstr ""
 "Folder wyjściowy '%s' już istnieje i nie jest pusty. Czy chcesz go nadpisać?"
 
 #: pcbnew/files.cpp:1505
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output directory '%s'."
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można usunąć istniejącego folderu wyjściowego '%s'."
 
 #: pcbnew/files.cpp:1519
 msgid "Generating ODB++ output files"
@@ -42761,7 +42753,6 @@ msgid "Failed to create directory '%s'."
 msgstr "Nie można utworzyć folderu '%s'."
 
 #: pcbnew/files.cpp:1569
-#, fuzzy
 msgid "Compressing output"
 msgstr "Kompresuj dane"
 
@@ -42934,14 +42925,14 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Edycja %s z płytki.  Zapis spowoduje wyłącznie zapisanie płytki."
 
 #: pcbnew/footprint_edit_frame.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Open in library %s"
-msgstr "Otwórz symbol z biblioteki %s"
+msgstr "Otwórz w bibliotece %s"
 
 #: pcbnew/footprint_edit_frame.cpp:573
-#, fuzzy, c-format
+#, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr "Edycja footprintu z biblioteki tylko do odczytu '%s'."
+msgstr "Edycja footprintu z biblioteki tylko do odczytu %s."
 
 #: pcbnew/footprint_edit_frame.cpp:578
 msgid "Save as editable copy"
@@ -43496,14 +43487,13 @@ msgid "Export IDF 3D board representation"
 msgstr "Eksportuje obraz płytki w formacie IDF 3D"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP / GLB / BREP / XAO / PLY / STL..."
-msgstr "STEP / GLB / BREP / XAO..."
+msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
-#, fuzzy
 msgid "Export STEP / GLB / BREP / XAO / PLY / STL 3D board representation"
-msgstr "Eksportuje obraz 3D płytki w formacie STEP / GLB / BREP / XAO"
+msgstr ""
+"Eksportuje obraz 3D płytki w formacie STEP / GLB / BREP / XAO / PLY / STL 3D"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
@@ -43699,34 +43689,34 @@ msgid "Added %s (footprint '%s')."
 msgstr "Dodano %s (footprint '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class to '%s'."
-msgstr "Zmieniam %s klasy komponentu na %s."
+msgstr "Zmieniam %s klasy komponentu na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr "Usuń %s klas komponentów (obecnie %s)."
+msgstr "Usuwam %s klas komponentów (obecnie '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class from '%s' to '%s'."
-msgstr "Zmieniam %s klasy komponentu z %s na %s."
+msgstr "Zmieniam %s klasy komponentu z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class to '%s'."
-msgstr "Zmieniono %s klas komponentu na %s."
+msgstr "Zmieniono %s klas komponentu na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s component class (was '%s')."
-msgstr "Usunięto %s klas komponentów (było %s)."
+msgstr "Usunięto %s klas komponentów (było '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class from '%s' to '%s'."
-msgstr "Zmieniono %s klas komponentów z %s na %s."
+msgstr "Zmieniono %s klas komponentów z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
@@ -43988,9 +43978,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Przetwarzam symbol '%s:%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1337
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for %s."
-msgstr "Znaleziono kilka footprintów dla '%s'."
+msgstr "Znaleziono kilka footprintów dla %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1369
 #, c-format
@@ -46326,14 +46316,12 @@ msgid "Failed to add component data"
 msgstr "Wystąpił błąd przy dodawaniu danych komponentu"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating ODB++ Structure"
-msgstr "Tworzenie plików ODB++"
+msgstr "Tworzenie struktury plików ODB++"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:118
-#, fuzzy
 msgid "Exporting board to ODB++"
-msgstr "Eksportuj ciało płytki"
+msgstr "Eksportowanie płytki do formatu ODB++"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
 msgid "ODB++ Production File"
@@ -47535,19 +47523,17 @@ msgid "Resolved angle constraints: min %s; max %s."
 msgstr "Przeanalizowano ograniczenia przełamania: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:462
-#, fuzzy
 msgid "Track Segment Length"
-msgstr "Długość segmentu"
+msgstr "Długość segmentu ścieżki"
 
 #: pcbnew/tools/board_inspection_tool.cpp:463
-#, fuzzy
 msgid "Track segment length resolution for:"
-msgstr "Analiza przełamania ścieżki dla:"
+msgstr "Analiza długości segmentów ścieżek dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved segment length constraints: min %s; max %s."
-msgstr "Przeanalizowano ograniczenia przełamania: min %s; maks %s."
+msgstr "Przeanalizowano ograniczenia długości segmentów: min. %s; maks. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 msgid "Connection Width"
@@ -48446,13 +48432,13 @@ msgid "Topology mismatch"
 msgstr "Niezgodność topologii"
 
 #: pcbnew/tools/multichannel_tool.cpp:718
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
 msgstr ""
 "Nie można automatycznie wygenerować stref rozmieszczania, ponieważ schemat "
-"zawiera tylko jeden arkusz hierarchiczny lub nie zawiera go wcale."
+"zawiera tylko jeden arkusz hierarchiczny bądź nie zawiera go wcale, lub nie "
+"zawiera klas komponentów."
 
 #: pcbnew/tools/multichannel_tool.cpp:836
 msgid "Auto-generate placement rule areas"
@@ -49967,18 +49953,16 @@ msgstr ""
 "odległość"
 
 #: pcbnew/tools/pcb_actions.cpp:2032
-#, fuzzy
 msgid "Position Interactively..."
-msgstr "Pozycja względem..."
+msgstr "Pozycjonowanie interaktywne..."
 
 #: pcbnew/tools/pcb_actions.cpp:2033
-#, fuzzy
 msgid ""
 "Positions the selected item(s) by an exact amount relative to another, "
 "interactively"
 msgstr ""
 "Ustawia pozycję wybranych elementów stosunku do siebie o dokładnie wybraną "
-"odległość"
+"odległość w trybie interaktywnym"
 
 #: pcbnew/tools/pcb_actions.cpp:2095
 msgid "Select/Expand Connection"
@@ -50508,19 +50492,16 @@ msgid "Align to Center"
 msgstr "Wyrównaj do środka"
 
 #: pcbnew/tools/position_relative_tool.cpp:215
-#, fuzzy
 msgid "Set Relative Position Interactively"
-msgstr "Zmiana pozycji przy powtarzaniu"
+msgstr "Interaktywne ustalanie pozycji względnej"
 
 #: pcbnew/tools/position_relative_tool.cpp:230
-#, fuzzy
 msgid "Select the reference point on the item to move."
-msgstr "Wybierz punkt odniesienia dla przesunięcia..."
+msgstr "Wybierz punkt odniesienia w obrębie elementu, który przesunąć."
 
 #: pcbnew/tools/position_relative_tool.cpp:235
-#, fuzzy
 msgid "Select the point to define the new offset from."
-msgstr "Wybierz narożnik by dodać za nim nowy narożnik."
+msgstr "Wybierz punkt, od którego zdefiniować nowe przesunięcie."
 
 #: pcbnew/tools/position_relative_tool.cpp:418
 msgid "Position Relative"
