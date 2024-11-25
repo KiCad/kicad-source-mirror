@@ -1970,7 +1970,7 @@ void SYMBOL_EDIT_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aU
 
 void SYMBOL_EDIT_FRAME::updateSelectionFilterVisbility()
 {
-    wxAuiPaneInfo& treePane = m_auimgr.GetPane( "SymbolTree" );
+    wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
     wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
     wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
 
