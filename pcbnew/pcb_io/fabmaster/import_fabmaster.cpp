@@ -2803,6 +2803,103 @@ SHAPE_POLY_SET FABMASTER::loadShapePolySet( const graphic_element& aElement )
 }
 
 
+/*
+ * The format doesn't seem to distinguish between open and closed polygons.
+ * So the best we can really do is to try to detect an open polyline by looking
+ * for a closed subsequence 0.
+ *
+ * For example three lines like this will be open:
+ *
+ *  +----
+ *  |
+ *  +----
+ *
+ * But four lines will be closed:
+ *
+ *  +----+
+ *  |    |
+ *  +----+
+ *
+ * This means that "closed" zones (which can have fill patterns in Allegro)
+ * and "a bunch of lines, which happen to be closed) are not distinguishable,
+ * but that just seems to be information thrown away on export to FABMASTER.
+ */
+bool FABMASTER::traceIsOpen( const FABMASTER::TRACE& aLine )
+{
+    if( aLine.segment.size() == 0 )
+        return true;
+
+    // First and last item in the first subsequence
+    const GRAPHIC_ITEM* first = nullptr;
+    const GRAPHIC_ITEM* last = nullptr;
+    int                 first_subseq = -1;
+    bool                have_multiple_subseqs = false;
+
+    for( const std::unique_ptr<GRAPHIC_ITEM>& gr_item : aLine.segment )
+    {
+        if( first == nullptr )
+        {
+            first = gr_item.get();
+            first_subseq = gr_item->subseq;
+        }
+        else if( gr_item->subseq == first_subseq )
+        {
+            last = gr_item.get();
+        }
+        else
+        {
+            have_multiple_subseqs = true;
+            break;
+        }
+    }
+
+    // Should have at least one item
+    wxCHECK( first, true );
+
+    // First subsequence was only one item
+    if( !last )
+    {
+        // It can still be a closed polygon if the outer border is a circle
+        // and there are inner shapes.
+        if( first->shape == GR_SHAPE_CIRCLE && have_multiple_subseqs )
+            return false;
+
+        return true;
+    }
+
+    const VECTOR2I start{ first->start_x, first->start_y };
+
+    // It's not always possible to find an end
+    OPT_VECTOR2I end;
+
+    switch( last->shape )
+    {
+    case GR_SHAPE_LINE:
+    {
+        const GRAPHIC_LINE& line = static_cast<const GRAPHIC_LINE&>( *last );
+        end = VECTOR2I{ line.end_x, line.end_y };
+        break;
+    }
+    case GR_SHAPE_ARC:
+    {
+        const GRAPHIC_ARC& arc = static_cast<const GRAPHIC_ARC&>( *last );
+        end = VECTOR2I{ arc.end_x, arc.end_y };
+        break;
+    }
+    default:
+        // These shapes don't have "ends" that make sense for a polyline
+        break;
+    }
+
+    // This looks like a closed polygon
+    if( end.has_value() && start == end )
+        return false;
+
+    // Open polyline
+    return true;
+}
+
+
 bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine)
 {
     if( aLine->segment.empty() )
@@ -2817,7 +2914,9 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
     STROKE_PARAMS defaultStroke( aBoard->GetDesignSettings().GetLineThickness( layer ) );
 
-    if( aLine->segment.size() < 3 )
+    const bool is_open = traceIsOpen( *aLine );
+
+    if( is_open )
     {
         for( const auto& seg : aLine->segment )
         {
@@ -2874,36 +2973,38 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             aBoard->Add( new_shape, ADD_MODE::APPEND );
         }
     }
-
-    SHAPE_POLY_SET poly_outline = loadShapePolySet( aLine->segment );
-
-    poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
-
-    if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
-        return false;
-
-    PCB_SHAPE* new_poly = new PCB_SHAPE( aBoard );
-
-    new_poly->SetShape( SHAPE_T::POLY );
-    new_poly->SetLayer( layer );
-
-    // Polygons on the silk layer are filled but other layers are not/fill doesn't make sense
-    if( layer == F_SilkS || layer == B_SilkS )
-    {
-        new_poly->SetFilled( true );
-        new_poly->SetStroke( STROKE_PARAMS( 0 ) );
-    }
     else
     {
-        new_poly->SetStroke( STROKE_PARAMS( ( *( aLine->segment.begin() ) )->width,
-                                            LINE_STYLE::SOLID ) );
+        SHAPE_POLY_SET poly_outline = loadShapePolySet( aLine->segment );
 
-        if( new_poly->GetWidth() == 0 )
-            new_poly->SetStroke( defaultStroke );
+        poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+        if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
+            return false;
+
+        PCB_SHAPE* new_poly = new PCB_SHAPE( aBoard );
+
+        new_poly->SetShape( SHAPE_T::POLY );
+        new_poly->SetLayer( layer );
+
+        // Polygons on the silk layer are filled but other layers are not/fill doesn't make sense
+        if( layer == F_SilkS || layer == B_SilkS )
+        {
+            new_poly->SetFilled( true );
+            new_poly->SetStroke( STROKE_PARAMS( 0 ) );
+        }
+        else
+        {
+            new_poly->SetStroke(
+                    STROKE_PARAMS( ( *( aLine->segment.begin() ) )->width, LINE_STYLE::SOLID ) );
+
+            if( new_poly->GetWidth() == 0 )
+                new_poly->SetStroke( defaultStroke );
+        }
+
+        new_poly->SetPolyShape( poly_outline );
+        aBoard->Add( new_poly, ADD_MODE::APPEND );
     }
-
-    new_poly->SetPolyShape( poly_outline );
-    aBoard->Add( new_poly, ADD_MODE::APPEND );
 
     return true;
 

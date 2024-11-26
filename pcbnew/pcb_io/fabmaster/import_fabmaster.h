@@ -586,6 +586,8 @@ private:
 
     SHAPE_POLY_SET loadShapePolySet( const graphic_element& aLine);
 
+    static bool traceIsOpen( const FABMASTER::TRACE& aLine );
+
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
     unsigned            m_doneCount;
     unsigned            m_lastProgressCount;
