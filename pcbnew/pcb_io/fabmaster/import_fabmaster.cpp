@@ -1200,6 +1200,11 @@ FABMASTER::GRAPHIC_ARC* FABMASTER::processCircle( const GRAPHIC_DATA& aData, dou
 FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processRectangle( const FABMASTER::GRAPHIC_DATA& aData,
                                                            double aScale )
 {
+    /*
+     * Examples:
+     *  S!ROUTE KEEPOUT!BOTTOM!RECTANGLE!259!10076 1!-90.00!-1000.00!-60.00!-990.00!1!!!!!!
+     */
+
     GRAPHIC_RECTANGLE* new_rect = new GRAPHIC_RECTANGLE;
 
     new_rect->shape   = GR_SHAPE_RECTANGLE;
@@ -1211,6 +1216,34 @@ FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processRectangle( const FABMASTER::GRAP
     new_rect->width   = 0;
 
     return new_rect;
+}
+
+
+FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processFigRectangle( const FABMASTER::GRAPHIC_DATA& aData,
+                                                              double aScale )
+{
+    /*
+     * Examples:
+     *  S!MANUFACTURING!NCLEGEND-1-10!FIG_RECTANGLE!6!8318 1!4891.50!1201.00!35.43!26.57!0!!!!!!
+     */
+
+    auto new_rect = std::make_unique<GRAPHIC_RECTANGLE>();
+
+    const int center_x = KiROUND( readDouble( aData.graphic_data1 ) * aScale );
+    const int center_y = -KiROUND( readDouble( aData.graphic_data2 ) * aScale );
+
+    const int size_x = KiROUND( readDouble( aData.graphic_data3 ) * aScale );
+    const int size_y = KiROUND( readDouble( aData.graphic_data4 ) * aScale );
+
+    new_rect->shape = GR_SHAPE_RECTANGLE;
+    new_rect->start_x = center_x - size_x / 2;
+    new_rect->start_y = center_y + size_y / 2;
+    new_rect->end_x = center_x + size_x / 2;
+    new_rect->end_y = center_y - size_y / 2;
+    new_rect->fill = aData.graphic_data5 == "1";
+    new_rect->width = 0;
+
+    return new_rect.release();
 }
 
 
@@ -1272,6 +1305,8 @@ FABMASTER::GRAPHIC_ITEM* FABMASTER::processGraphic( const GRAPHIC_DATA& aData, d
         retval = processCircle( aData, aScale );
     else if( aData.graphic_dataname == "RECTANGLE" )
         retval = processRectangle( aData, aScale );
+    else if( aData.graphic_dataname == "FIG_RECTANGLE" )
+        retval = processFigRectangle( aData, aScale );
     else if( aData.graphic_dataname == "TEXT" )
         retval = processText( aData, aScale );
 
@@ -2853,6 +2888,16 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
                 new_shape->SetShape( SHAPE_T::CIRCLE );
                 new_shape->SetCenter( VECTOR2I( src.center_x, src.center_y ) );
                 new_shape->SetRadius( src.radius );
+            }
+            else if( seg->shape == GR_SHAPE_RECTANGLE )
+            {
+                const GRAPHIC_RECTANGLE& src = static_cast<const GRAPHIC_RECTANGLE&>( *seg );
+
+                new_shape->SetShape( SHAPE_T::RECTANGLE );
+                new_shape->SetStart( VECTOR2I( src.start_x, src.start_y ) );
+                new_shape->SetEnd( VECTOR2I( src.end_x, src.end_y ) );
+
+                new_shape->SetFilled( src.fill );
             }
             else
             {
