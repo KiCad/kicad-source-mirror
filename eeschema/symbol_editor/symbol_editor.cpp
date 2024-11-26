@@ -52,6 +52,7 @@
 #include "symbol_saveas_type.h"
 
 #include <widgets/symbol_filedlg_save_as.h>
+#include <io/kicad/kicad_io_utils.h>
 
 
 void SYMBOL_EDIT_FRAME::UpdateTitle()
@@ -1213,6 +1214,9 @@ void SYMBOL_EDIT_FRAME::CopySymbolToClipboard()
         SCH_IO_KICAD_SEXPR::FormatLibSymbol( tmp.get(), formatter );
     }
 
+    std::string prettyData = formatter.GetString();
+    KICAD_FORMAT::Prettify( prettyData );
+
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
     auto clipboard = wxTheClipboard;
@@ -1221,7 +1225,7 @@ void SYMBOL_EDIT_FRAME::CopySymbolToClipboard()
     if( !clipboardLock || !clipboard->IsOpened() )
         return;
 
-    auto data = new wxTextDataObject( wxString( formatter.GetString().c_str(), wxConvUTF8 ) );
+    auto data = new wxTextDataObject( wxString( prettyData.c_str(), wxConvUTF8 ) );
     clipboard->SetData( data );
 
     clipboard->Flush();

@@ -49,6 +49,7 @@
 #include <sch_textbox.h>
 #include <wx/textdlg.h>     // for wxTextEntryDialog
 #include <math/util.h>      // for KiROUND
+#include <io/kicad/kicad_io_utils.h>
 
 SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
         EE_TOOL_BASE( "eeschema.SymbolEditTool" ),
@@ -919,7 +920,10 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
     for( SCH_ITEM& item : symbol->GetDrawItems() )
         item.ClearFlags( STRUCT_DELETED );
 
-    if( SaveClipboard( formatter.GetString() ) )
+    std::string prettyData = formatter.GetString();
+    KICAD_FORMAT::Prettify( prettyData );
+
+    if( SaveClipboard( prettyData ) )
         return 0;
     else
         return -1;

@@ -41,6 +41,7 @@
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <kicad_clipboard.h>
 #include <kidialog.h>
+#include <io/kicad/kicad_io_utils.h>
 
 CLIPBOARD_IO::CLIPBOARD_IO():
         PCB_IO_KICAD_SEXPR(CTL_FOR_CLIPBOARD ),
@@ -397,6 +398,9 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         m_formatter.Print( 0, "\n)" );
     }
 
+    std::string prettyData = m_formatter.GetString();
+    KICAD_FORMAT::Prettify( prettyData );
+
     // These are placed at the end to minimize the open time of the clipboard
     wxLogNull         doNotLog; // disable logging of failed clipboard actions
     auto clipboard = wxTheClipboard;
@@ -405,12 +409,11 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
     if( !clipboardLock || !clipboard->IsOpened() )
         return;
 
-    clipboard->SetData( new wxTextDataObject( wxString( m_formatter.GetString().c_str(),
-                                                        wxConvUTF8 ) ) );
+    clipboard->SetData( new wxTextDataObject( wxString( prettyData.c_str(), wxConvUTF8 ) ) );
 
     clipboard->Flush();
 
-    #ifndef __WXOSX__
+#ifndef __WXOSX__
     // This section exists to return the clipboard data, ensuring it has fully
     // been processed by the system clipboard.  This appears to be needed for
     // extremely large clipboard copies on asynchronous linux clipboard managers
@@ -424,7 +427,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         clipboard->GetData( data );
         ignore_unused( data.GetText() );
     }
-    #endif
+#endif
 }
 
 
@@ -475,7 +478,9 @@ void CLIPBOARD_IO::SaveBoard( const wxString& aFileName, BOARD* aBoard,
 
     m_out = &formatter;
 
-    m_out->Print( 0, "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n", SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
+    m_out->Print( 0, "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n",
+                  SEXPR_BOARD_FILE_VERSION,
+                  GetMajorMinorVersion().c_str().AsChar() );
 
     Format( aBoard, 1 );
 

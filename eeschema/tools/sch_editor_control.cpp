@@ -77,6 +77,7 @@
 #include <wx/log.h>
 #include <wx/treectrl.h>
 #include <wx/msgdlg.h>
+#include <io/kicad/kicad_io_utils.h>
 #include "sch_edit_table_tool.h"
 
 #ifdef KICAD_IPC_API
@@ -1341,16 +1342,19 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
 
     plugin.Format( &selection, &selPath, schematic, &formatter, true );
 
+    std::string prettyData = formatter.GetString();
+    KICAD_FORMAT::Prettify( prettyData );
+
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     if( aUseDuplicateClipboard )
     {
-        m_duplicateClipboard = formatter.GetString();
+        m_duplicateClipboard = prettyData;
         return true;
     }
 
-    return SaveClipboard( formatter.GetString() );
+    return SaveClipboard( prettyData );
 }
 
 
