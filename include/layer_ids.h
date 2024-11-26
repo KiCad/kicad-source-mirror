@@ -243,7 +243,7 @@ enum GAL_LAYER_ID: int
     LAYER_SHAPES             = GAL_LAYER_ID_START + 41, ///< Copper graphic shape opacity/visibility (color ignored)
 
     LAYER_DRC_SHAPE1         = GAL_LAYER_ID_START + 42,  ///< Custom shape for DRC marker
-    LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Custom shape for DRC marker 
+    LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Custom shape for DRC marker
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 
@@ -530,7 +530,7 @@ inline bool IsPcbLayer( int aLayer )
  */
 inline bool IsCopperLayer( int aLayerId )
 {
-    return !( aLayerId & 1 ) && aLayerId <= PCB_LAYER_ID_COUNT;
+    return !( aLayerId & 1 ) && aLayerId <= PCB_LAYER_ID_COUNT && aLayerId >= 0;
 }
 
 /**

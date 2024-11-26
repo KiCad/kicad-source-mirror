@@ -43,5 +43,15 @@ BOOST_AUTO_TEST_CASE( LseqTestLayers )
 }
 
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_CASE( CopperLayers )
+{
+    BOOST_TEST( IsCopperLayer( PCB_LAYER_ID::F_Cu ) );
+    BOOST_TEST( IsCopperLayer( PCB_LAYER_ID::B_Cu ) );
+    BOOST_TEST( IsCopperLayer( PCB_LAYER_ID::In1_Cu ) );
+    BOOST_TEST( !IsCopperLayer( PCB_LAYER_ID::UNSELECTED_LAYER ) );
+    BOOST_TEST( !IsCopperLayer( PCB_LAYER_ID::UNDEFINED_LAYER ) );
+    BOOST_TEST( !IsCopperLayer( PCB_LAYER_ID::F_SilkS ) );
+}
 
+
+BOOST_AUTO_TEST_SUITE_END()
