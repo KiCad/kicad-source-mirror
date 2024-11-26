@@ -1090,7 +1090,65 @@ FABMASTER::GRAPHIC_ARC* FABMASTER::processArc( const FABMASTER::GRAPHIC_DATA& aD
     return new_arc;
 }
 
-FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processRectangle( const FABMASTER::GRAPHIC_DATA& aData, double aScale )
+
+FABMASTER::GRAPHIC_ARC* FABMASTER::processCircle( const GRAPHIC_DATA& aData, double aScale )
+{
+    /*
+     * Example:
+     *  S!DRAWING FORMAT!ASSY!CIRCLE!2!251744 1!-2488.00!1100.00!240.00!240.00!0!!!!!!
+     *
+     * Although this is a circle, we treat it as an 360 degree arc.
+     * This is because files can contain circles in both forms and the arc form
+     * is more convenient for directly adding to SHAPE_POLY_SET when needed.
+     *
+     * It will be identified as a circle based on the 'shape' field, and turned
+     * back into a circle when needed (or used as an arc if it is part of a polygon).
+     */
+
+    std::unique_ptr<GRAPHIC_ARC> new_circle = std::make_unique<GRAPHIC_ARC>();
+
+    new_circle->shape = GR_SHAPE_CIRCLE;
+
+    const VECTOR2I center{
+        KiROUND( readDouble( aData.graphic_data1 ) * aScale ),
+        -KiROUND( readDouble( aData.graphic_data2 ) * aScale ),
+    };
+    const VECTOR2I size{ KiROUND( readDouble( aData.graphic_data3 ) * aScale ),
+                         KiROUND( readDouble( aData.graphic_data4 ) * aScale ) };
+
+    if( size.x != size.y )
+    {
+        wxLogError( _( "Circle with unequal x and y radii (x=%d, y=%d)" ), size.x, size.y );
+        return nullptr;
+    }
+
+    new_circle->width = KiROUND( readDouble( aData.graphic_data5 ) * aScale );
+
+    new_circle->radius = size.x / 2;
+
+    // Fake up a 360 degree arc
+    const VECTOR2I start = center - VECTOR2I{ new_circle->radius, 0 };
+    const VECTOR2I mid = center + VECTOR2I{ new_circle->radius, 0 };
+
+    new_circle->start_x = start.x;
+    new_circle->start_y = start.y;
+
+    new_circle->end_x = start.x;
+    new_circle->end_y = start.y;
+
+    new_circle->center_x = center.x;
+    new_circle->center_y = center.y;
+
+    new_circle->clockwise = true;
+
+    new_circle->result = SHAPE_ARC{ start, mid, start, 0 };
+
+    return new_circle.release();
+}
+
+
+FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processRectangle( const FABMASTER::GRAPHIC_DATA& aData,
+                                                           double                         aScale )
 {
     GRAPHIC_RECTANGLE* new_rect = new GRAPHIC_RECTANGLE;
 
@@ -1158,6 +1216,8 @@ FABMASTER::GRAPHIC_ITEM* FABMASTER::processGraphic( const GRAPHIC_DATA& aData, d
         retval = processLine( aData, aScale );
     else if( aData.graphic_dataname == "ARC" )
         retval = processArc( aData, aScale );
+    else if( aData.graphic_dataname == "CIRCLE" )
+        retval = processCircle( aData, aScale );
     else if( aData.graphic_dataname == "RECTANGLE" )
         retval = processRectangle( aData, aScale );
     else if( aData.graphic_dataname == "TEXT" )
@@ -2654,7 +2714,7 @@ SHAPE_POLY_SET FABMASTER::loadShapePolySet( const graphic_element& aElement )
 
             poly_outline.Append( src->end_x, src->end_y, 0, hole_idx );
         }
-        else if( seg->shape == GR_SHAPE_ARC )
+        else if( seg->shape == GR_SHAPE_ARC || seg->shape == GR_SHAPE_CIRCLE )
         {
             const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
             SHAPE_LINE_CHAIN&  chain = poly_outline.Hole( 0, hole_idx );
@@ -2674,7 +2734,7 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
     PCB_LAYER_ID layer = Cmts_User;
 
-    auto new_layer = getLayer( aLine->layer );
+    const PCB_LAYER_ID new_layer = getLayer( aLine->layer );
 
     if( IsPcbLayer( new_layer ) )
         layer = new_layer;
@@ -2710,6 +2770,19 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
                 new_shape->SetShape( SHAPE_T::ARC );
                 new_shape->SetArcGeometry( src->result.GetP0(), src->result.GetArcMid(),
                                           src->result.GetP1() );
+            }
+            else if( seg->shape == GR_SHAPE_CIRCLE )
+            {
+                const GRAPHIC_ARC& src = static_cast<const GRAPHIC_ARC&>( *seg );
+
+                new_shape->SetShape( SHAPE_T::CIRCLE );
+                new_shape->SetCenter( VECTOR2I( src.center_x, src.center_y ) );
+                new_shape->SetRadius( src.radius );
+            }
+            else
+            {
+                wxLogError( _( "Unhandled shape type %d in polygon on layer %s, tag %d" ),
+                            seg->shape, aLine->layer, aLine->id );
             }
 
             aBoard->Add( new_shape, ADD_MODE::APPEND );

@@ -191,7 +191,7 @@ private:
         GR_SHAPE_TEXT,
         GR_SHAPE_RECTANGLE,
         GR_SHAPE_ARC,
-        GR_SHAPE_CIRCLE             ///! Not actually in Fabmaster but we use for 360° arcs
+        GR_SHAPE_CIRCLE             ///! Actually 360° arcs (for both arcs where start==end and real circles)
     };
 
     enum GRAPHIC_TYPE
@@ -541,9 +541,11 @@ private:
      * @return Pointer to newly allocated graphical item or nullptr on failure
      */
     GRAPHIC_ITEM* processGraphic( const GRAPHIC_DATA& aData, double aScale );
-    GRAPHIC_ARC*  processArc( const GRAPHIC_DATA& aData, double aScale );
-    GRAPHIC_LINE* processLine( const GRAPHIC_DATA& aData, double aScale );
-    GRAPHIC_TEXT* processText( const GRAPHIC_DATA& aData, double aScale );
+
+    GRAPHIC_ARC*       processArc( const GRAPHIC_DATA& aData, double aScale );
+    GRAPHIC_ARC*       processCircle( const GRAPHIC_DATA& aData, double aScale );
+    GRAPHIC_LINE*      processLine( const GRAPHIC_DATA& aData, double aScale );
+    GRAPHIC_TEXT*      processText( const GRAPHIC_DATA& aData, double aScale );
     GRAPHIC_RECTANGLE* processRectangle( const GRAPHIC_DATA& aData, double aScale );
 
     PCB_LAYER_ID getLayer( const std::string& aLayerName );
