@@ -33,7 +33,7 @@ std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any& aMessage )
         { "type.googleapis.com/kiapi.board.types.Via", PCB_VIA_T },
         { "type.googleapis.com/kiapi.board.types.Text", PCB_TEXT_T },
         { "type.googleapis.com/kiapi.board.types.TextBox", PCB_TEXTBOX_T },
-        { "type.googleapis.com/kiapi.board.types.GraphicShape", PCB_SHAPE_T },
+        { "type.googleapis.com/kiapi.board.types.BoardGraphicShape", PCB_SHAPE_T },
         { "type.googleapis.com/kiapi.board.types.Pad", PCB_PAD_T },
         { "type.googleapis.com/kiapi.board.types.Zone", PCB_ZONE_T },
         { "type.googleapis.com/kiapi.board.types.Dimension", PCB_DIMENSION_T },

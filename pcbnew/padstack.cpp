@@ -195,7 +195,7 @@ bool PADSTACK::unpackCopperLayer( const kiapi::board::types::PadStackLayer& aPro
     ClearPrimitives( layer );
     google::protobuf::Any a;
 
-    for( const GraphicShape& shapeProto : aProto.custom_shapes() )
+    for( const BoardGraphicShape& shapeProto : aProto.custom_shapes() )
     {
         a.PackFrom( shapeProto );
         std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_parent );
@@ -407,7 +407,7 @@ void PADSTACK::packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadSta
     for( const std::shared_ptr<PCB_SHAPE>& shape : Primitives( aLayer ) )
     {
         shape->Serialize( a );
-        GraphicShape* s = stackLayer->add_custom_shapes();
+        BoardGraphicShape* s = stackLayer->add_custom_shapes();
         a.UnpackTo( s );
     }
 

@@ -71,86 +71,90 @@ PCB_SHAPE::~PCB_SHAPE()
 
 void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 {
-    kiapi::board::types::GraphicShape msg;
+    using namespace kiapi::common;
+    using namespace kiapi::board::types;
+    BoardGraphicShape msg;
 
-    msg.mutable_id()->set_value( m_Uuid.AsStdString() );
     msg.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
-    msg.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
-                               : kiapi::common::types::LockedState::LS_UNLOCKED );
     msg.mutable_net()->mutable_code()->set_value( GetNetCode() );
     msg.mutable_net()->set_name( GetNetname() );
 
-    kiapi::common::types::StrokeAttributes* stroke
-            = msg.mutable_attributes()->mutable_stroke();
-    kiapi::common::types::GraphicFillAttributes* fill = msg.mutable_attributes()->mutable_fill();
+    types::GraphicShape* shape = msg.mutable_shape();
+
+    shape->mutable_id()->set_value( m_Uuid.AsStdString() );
+    shape->set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
+                               : kiapi::common::types::LockedState::LS_UNLOCKED );
+
+    types::StrokeAttributes* stroke = shape->mutable_attributes()->mutable_stroke();
+    types::GraphicFillAttributes* fill = shape->mutable_attributes()->mutable_fill();
 
     stroke->mutable_width()->set_value_nm( GetWidth() );
 
     switch( GetLineStyle() )
     {
-    case LINE_STYLE::DEFAULT:    stroke->set_style( kiapi::common::types::SLS_DEFAULT ); break;
-    case LINE_STYLE::SOLID:      stroke->set_style( kiapi::common::types::SLS_SOLID ); break;
-    case LINE_STYLE::DASH:       stroke->set_style( kiapi::common::types::SLS_DASH ); break;
-    case LINE_STYLE::DOT:        stroke->set_style( kiapi::common::types::SLS_DOT ); break;
-    case LINE_STYLE::DASHDOT:    stroke->set_style( kiapi::common::types::SLS_DASHDOT ); break;
-    case LINE_STYLE::DASHDOTDOT: stroke->set_style( kiapi::common::types::SLS_DASHDOTDOT ); break;
+    case LINE_STYLE::DEFAULT:    stroke->set_style( types::SLS_DEFAULT ); break;
+    case LINE_STYLE::SOLID:      stroke->set_style( types::SLS_SOLID ); break;
+    case LINE_STYLE::DASH:       stroke->set_style( types::SLS_DASH ); break;
+    case LINE_STYLE::DOT:        stroke->set_style( types::SLS_DOT ); break;
+    case LINE_STYLE::DASHDOT:    stroke->set_style( types::SLS_DASHDOT ); break;
+    case LINE_STYLE::DASHDOTDOT: stroke->set_style( types::SLS_DASHDOTDOT ); break;
     default: break;
     }
 
     switch( GetFillMode() )
     {
-    case FILL_T::FILLED_SHAPE: fill->set_fill_type( kiapi::common::types::GFT_FILLED ); break;
-    default:                   fill->set_fill_type( kiapi::common::types::GFT_UNFILLED ); break;
+    case FILL_T::FILLED_SHAPE: fill->set_fill_type( types::GFT_FILLED ); break;
+    default:                   fill->set_fill_type( types::GFT_UNFILLED ); break;
     }
 
     switch( GetShape() )
     {
     case SHAPE_T::SEGMENT:
     {
-        kiapi::board::types::GraphicSegmentAttributes* segment = msg.mutable_segment();
-        kiapi::common::PackVector2( *segment->mutable_start(), GetStart() );
-        kiapi::common::PackVector2( *segment->mutable_end(), GetEnd() );
+        types::GraphicSegmentAttributes* segment = shape->mutable_segment();
+        PackVector2( *segment->mutable_start(), GetStart() );
+        PackVector2( *segment->mutable_end(), GetEnd() );
         break;
     }
 
     case SHAPE_T::RECTANGLE:
     {
-        kiapi::board::types::GraphicRectangleAttributes* rectangle = msg.mutable_rectangle();
-        kiapi::common::PackVector2( *rectangle->mutable_top_left(), GetStart() );
-        kiapi::common::PackVector2( *rectangle->mutable_bottom_right(), GetEnd() );
+        types::GraphicRectangleAttributes* rectangle = shape->mutable_rectangle();
+        PackVector2( *rectangle->mutable_top_left(), GetStart() );
+        PackVector2( *rectangle->mutable_bottom_right(), GetEnd() );
         break;
     }
 
     case SHAPE_T::ARC:
     {
-        kiapi::board::types::GraphicArcAttributes* arc = msg.mutable_arc();
-        kiapi::common::PackVector2( *arc->mutable_start(), GetStart() );
-        kiapi::common::PackVector2( *arc->mutable_mid(), GetArcMid() );
-        kiapi::common::PackVector2( *arc->mutable_end(), GetEnd() );
+        types::GraphicArcAttributes* arc = shape->mutable_arc();
+        PackVector2( *arc->mutable_start(), GetStart() );
+        PackVector2( *arc->mutable_mid(), GetArcMid() );
+        PackVector2( *arc->mutable_end(), GetEnd() );
         break;
     }
 
     case SHAPE_T::CIRCLE:
     {
-        kiapi::board::types::GraphicCircleAttributes* circle = msg.mutable_circle();
-        kiapi::common::PackVector2( *circle->mutable_center(), GetStart() );
-        kiapi::common::PackVector2( *circle->mutable_radius_point(), GetEnd() );
+        types::GraphicCircleAttributes* circle = shape->mutable_circle();
+        PackVector2( *circle->mutable_center(), GetStart() );
+        PackVector2( *circle->mutable_radius_point(), GetEnd() );
         break;
     }
 
     case SHAPE_T::POLY:
     {
-        kiapi::common::PackPolySet( *msg.mutable_polygon(), GetPolyShape() );
+        PackPolySet( *shape->mutable_polygon(), GetPolyShape() );
         break;
     }
 
     case SHAPE_T::BEZIER:
     {
-        kiapi::board::types::GraphicBezierAttributes* bezier = msg.mutable_bezier();
-        kiapi::common::PackVector2( *bezier->mutable_start(), GetStart() );
-        kiapi::common::PackVector2( *bezier->mutable_control1(), GetBezierC1() );
-        kiapi::common::PackVector2( *bezier->mutable_control2(), GetBezierC2() );
-        kiapi::common::PackVector2( *bezier->mutable_end(), GetEnd() );
+        types::GraphicBezierAttributes* bezier = shape->mutable_bezier();
+        PackVector2( *bezier->mutable_start(), GetStart() );
+        PackVector2( *bezier->mutable_control1(), GetBezierC1() );
+        PackVector2( *bezier->mutable_control2(), GetBezierC2() );
+        PackVector2( *bezier->mutable_end(), GetEnd() );
         break;
     }
 
@@ -166,7 +170,10 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 
 bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
 {
-    kiapi::board::types::GraphicShape msg;
+    using namespace kiapi::common;
+    using namespace kiapi::board::types;
+
+    BoardGraphicShape msg;
 
     if( !aContainer.UnpackTo( &msg ) )
         return false;
@@ -183,62 +190,64 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
     m_proxyItem = false;
     m_endsSwapped = false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( msg.id().value() );
-    SetLocked( msg.locked() == kiapi::common::types::LS_LOCKED );
-    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( msg.layer() ) );
+    const types::GraphicShape& shape = msg.shape();
+
+    const_cast<KIID&>( m_Uuid ) = KIID( shape.id().value() );
+    SetLocked( shape.locked() == types::LS_LOCKED );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, BoardLayer>( msg.layer() ) );
     SetNetCode( msg.net().code().value() );
 
-    SetFilled( msg.attributes().fill().fill_type() == kiapi::common::types::GFT_FILLED );
-    SetWidth( msg.attributes().stroke().width().value_nm() );
+    SetFilled( shape.attributes().fill().fill_type() == types::GFT_FILLED );
+    SetWidth( shape.attributes().stroke().width().value_nm() );
 
-    switch( msg.attributes().stroke().style() )
+    switch( shape.attributes().stroke().style() )
     {
-    case kiapi::common::types::SLS_DEFAULT:    SetLineStyle( LINE_STYLE::DEFAULT );    break;
-    case kiapi::common::types::SLS_SOLID:      SetLineStyle( LINE_STYLE::SOLID );      break;
-    case kiapi::common::types::SLS_DASH:       SetLineStyle( LINE_STYLE::DASH );       break;
-    case kiapi::common::types::SLS_DOT:        SetLineStyle( LINE_STYLE::DOT );        break;
-    case kiapi::common::types::SLS_DASHDOT:    SetLineStyle( LINE_STYLE::DASHDOT );    break;
-    case kiapi::common::types::SLS_DASHDOTDOT: SetLineStyle( LINE_STYLE::DASHDOTDOT ); break;
+    case types::SLS_DEFAULT:    SetLineStyle( LINE_STYLE::DEFAULT );    break;
+    case types::SLS_SOLID:      SetLineStyle( LINE_STYLE::SOLID );      break;
+    case types::SLS_DASH:       SetLineStyle( LINE_STYLE::DASH );       break;
+    case types::SLS_DOT:        SetLineStyle( LINE_STYLE::DOT );        break;
+    case types::SLS_DASHDOT:    SetLineStyle( LINE_STYLE::DASHDOT );    break;
+    case types::SLS_DASHDOTDOT: SetLineStyle( LINE_STYLE::DASHDOTDOT ); break;
     default: break;
     }
 
-    if( msg.has_segment() )
+    if( shape.has_segment() )
     {
         SetShape( SHAPE_T::SEGMENT );
-        SetStart( kiapi::common::UnpackVector2( msg.segment().start() ) );
-        SetEnd( kiapi::common::UnpackVector2( msg.segment().end() ) );
+        SetStart( UnpackVector2( shape.segment().start() ) );
+        SetEnd( UnpackVector2( shape.segment().end() ) );
     }
-    else if( msg.has_rectangle() )
+    else if( shape.has_rectangle() )
     {
         SetShape( SHAPE_T::RECTANGLE );
-        SetStart( kiapi::common::UnpackVector2( msg.rectangle().top_left() ) );
-        SetEnd( kiapi::common::UnpackVector2( msg.rectangle().bottom_right() ) );
+        SetStart( UnpackVector2( shape.rectangle().top_left() ) );
+        SetEnd( UnpackVector2( shape.rectangle().bottom_right() ) );
     }
-    else if( msg.has_arc() )
+    else if( shape.has_arc() )
     {
         SetShape( SHAPE_T::ARC );
-        SetArcGeometry( kiapi::common::UnpackVector2( msg.arc().start() ),
-                        kiapi::common::UnpackVector2( msg.arc().mid() ),
-                        kiapi::common::UnpackVector2( msg.arc().end() ) );
+        SetArcGeometry( UnpackVector2( shape.arc().start() ),
+                        UnpackVector2( shape.arc().mid() ),
+                        UnpackVector2( shape.arc().end() ) );
     }
-    else if( msg.has_circle() )
+    else if( shape.has_circle() )
     {
         SetShape( SHAPE_T::CIRCLE );
-        SetStart( kiapi::common::UnpackVector2( msg.circle().center() ) );
-        SetEnd( kiapi::common::UnpackVector2( msg.circle().radius_point() ) );
+        SetStart( UnpackVector2( shape.circle().center() ) );
+        SetEnd( UnpackVector2( shape.circle().radius_point() ) );
     }
-    else if( msg.has_polygon() )
+    else if( shape.has_polygon() )
     {
         SetShape( SHAPE_T::POLY );
-        SetPolyShape( kiapi::common::UnpackPolySet( msg.polygon() ) );
+        SetPolyShape( UnpackPolySet( shape.polygon() ) );
     }
-    else if( msg.has_bezier() )
+    else if( shape.has_bezier() )
     {
         SetShape( SHAPE_T::BEZIER );
-        SetStart( kiapi::common::UnpackVector2( msg.bezier().start() ) );
-        SetBezierC1( kiapi::common::UnpackVector2( msg.bezier().control1() ) );
-        SetBezierC2( kiapi::common::UnpackVector2( msg.bezier().control2() ) );
-        SetEnd( kiapi::common::UnpackVector2( msg.bezier().end() ) );
+        SetStart( UnpackVector2( shape.bezier().start() ) );
+        SetBezierC1( UnpackVector2( shape.bezier().control1() ) );
+        SetBezierC2( UnpackVector2( shape.bezier().control2() ) );
+        SetEnd( UnpackVector2( shape.bezier().end() ) );
         RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
     }
 

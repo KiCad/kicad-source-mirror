@@ -239,7 +239,7 @@ message PadStackLayer
 
   ChamferedRectCorners chamfered_corners = 6;
 
-  repeated GraphicShape custom_shapes = 7;
+  repeated BoardGraphicShape custom_shapes = 7;
 
   // If shape == PSS_CUSTOM, defines the shape of the anchor (only PSS_CIRCLE and PSS_RECTANGLE supported at present)
   PadStackShape custom_anchor_shape = 8;
@@ -371,58 +371,11 @@ message Via
   ViaType type = 6;
 }
 
-message GraphicSegmentAttributes
+message BoardGraphicShape
 {
-  kiapi.common.types.Vector2  start = 1;
-  kiapi.common.types.Vector2  end   = 2;
-}
-
-message GraphicRectangleAttributes
-{
-  kiapi.common.types.Vector2  top_left     = 1;
-  kiapi.common.types.Vector2  bottom_right = 2;
-}
-
-message GraphicArcAttributes
-{
-  kiapi.common.types.Vector2  start = 1;
-  kiapi.common.types.Vector2  mid   = 2;
-  kiapi.common.types.Vector2  end   = 3;
-}
-
-message GraphicCircleAttributes
-{
-  kiapi.common.types.Vector2  center = 1;
-
-  // A point on the radius of the circle.  This is stored instead of just a radius so that the point
-  // by which the user can adjust the circle radius is persisted.
-  kiapi.common.types.Vector2  radius_point = 2;
-}
-
-message GraphicBezierAttributes
-{
-  kiapi.common.types.Vector2  start    = 1;
-  kiapi.common.types.Vector2  control1 = 2;
-  kiapi.common.types.Vector2  control2 = 3;
-  kiapi.common.types.Vector2  end      = 4;
-}
-
-message GraphicShape
-{
-  kiapi.common.types.KIID              id         = 1;
-  kiapi.common.types.LockedState       locked     = 2;
-  BoardLayer                           layer      = 3;
-  Net                                  net        = 4;
-  kiapi.common.types.GraphicAttributes attributes = 5;
-
-  oneof geometry {
-    GraphicSegmentAttributes     segment    = 6;
-    GraphicRectangleAttributes   rectangle  = 7;
-    GraphicArcAttributes         arc        = 8;
-    GraphicCircleAttributes      circle     = 9;
-    kiapi.common.types.PolySet   polygon    = 10;
-    GraphicBezierAttributes      bezier     = 11;
-  }
+  kiapi.common.types.GraphicShape shape = 1;
+  BoardLayer layer = 2;
+  Net net = 3;
 }
 
 // A board-specific text object, existing on a board layer
