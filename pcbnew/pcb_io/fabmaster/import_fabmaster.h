@@ -547,6 +547,7 @@ private:
     GRAPHIC_LINE*      processLine( const GRAPHIC_DATA& aData, double aScale );
     GRAPHIC_TEXT*      processText( const GRAPHIC_DATA& aData, double aScale );
     GRAPHIC_RECTANGLE* processRectangle( const GRAPHIC_DATA& aData, double aScale );
+    GRAPHIC_RECTANGLE* processFigRectangle( const GRAPHIC_DATA& aData, double aScale );
 
     PCB_LAYER_ID getLayer( const std::string& aLayerName );
     bool assignLayers();
