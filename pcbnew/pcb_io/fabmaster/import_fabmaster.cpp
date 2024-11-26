@@ -1631,6 +1631,20 @@ size_t FABMASTER::processTraces( size_t aRow )
             auto& ref   = *result.first;
             ref->segment.emplace( std::move( gr_item ) );
         }
+        else if( new_trace->lclass == "DEVICE TYPE" || new_trace->lclass == "COMPONENT VALUE"
+                 || new_trace->lclass == "TOLERANCE" )
+        {
+            // TODO: This seems like a value field, but it's not immediately clear how to map it
+            // to the right footprint.
+            // So these spam the board with huge amount of overlapping text.
+
+            // Examples:
+            //   S!DEVICE TYPE!SILKSCREEN_BOTTOM!TEXT!260!255815 1!2725.00!1675.00!270.000!YES!LEFT!45 0 60.00 48.00 0.000 0.00 0.00 0.00!CAP_0.1UF_X5R_6.3V_20% 0201 _40!!!!
+            //   S!DEVICE TYPE!ASSEMBLY_BOTTOM!TEXT!260!255816 1!2725.00!1675.00!270.000!YES!LEFT!45 0 60.00 48.00 0.000 0.00 0.00 0.00!CAP_0.1UF_X5R_6.3V_20% 0201 _40!!!!
+            //   S!COMPONENT VALUE!SILKSCREEN_BOTTOM!TEXT!260!18949 1!361.665!1478.087!270.000!YES!LEFT!31 0 30.000 20.000 0.000 6.000 31.000 6.000!0.01uF!!!!
+
+            // For now, just don't do anything with them.
+        }
         else if( gr_item->width == 0 )
         {
             auto result = zones.emplace( std::move( new_trace ) );
@@ -1644,7 +1658,6 @@ size_t FABMASTER::processTraces( size_t aRow )
                             seq,
                             rownum );
             }
-
         }
         else
         {
