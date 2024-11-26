@@ -44,6 +44,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <padstack.h>
+#include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
@@ -1247,8 +1248,147 @@ FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processFigRectangle( const FABMASTER::G
 }
 
 
+FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processSquare( const FABMASTER::GRAPHIC_DATA& aData,
+                                                        double                         aScale )
+{
+    /*
+     * Example:
+     *   S!DRAWING FORMAT!ASSY!SQUARE!5!250496 1!4813.08!2700.00!320.00!320.00!0!!!!!!
+     */
+
+    // This appears to be identical to a FIG_RECTANGLE
+    return processFigRectangle( aData, aScale );
+}
+
+
+FABMASTER::GRAPHIC_OBLONG* FABMASTER::processOblong( const FABMASTER::GRAPHIC_DATA& aData,
+                                                     double                         aScale )
+{
+    /*
+     * Examples:
+     *  S!DRAWING FORMAT!ASSY!OBLONG_X!11!250497 1!4449.08!2546.40!240.00!64.00!0!!!!!!
+     *  S!DRAWING FORMAT!ASSY!OBLONG_Y!12!251256 1!15548.68!1900.00!280.00!720.00!0!!!!!!
+     */
+    auto new_oblong = std::make_unique<GRAPHIC_OBLONG>();
+
+    new_oblong->shape = GR_SHAPE_OBLONG;
+    new_oblong->oblong_x = aData.graphic_dataname == "OBLONG_X";
+    new_oblong->start_x = KiROUND( readDouble( aData.graphic_data1 ) * aScale );
+    new_oblong->start_y = -KiROUND( readDouble( aData.graphic_data2 ) * aScale );
+    new_oblong->size_x = KiROUND( readDouble( aData.graphic_data3 ) * aScale );
+    new_oblong->size_y = KiROUND( readDouble( aData.graphic_data4 ) * aScale );
+
+    // Unclear if this is fill or width
+    new_oblong->width = KiROUND( readDouble( aData.graphic_data5 ) * aScale );
+
+    return new_oblong.release();
+}
+
+
+FABMASTER::GRAPHIC_POLYGON* FABMASTER::processPolygon( const FABMASTER::GRAPHIC_DATA& aData,
+                                                       double                         aScale )
+{
+    /*
+     * Examples:
+     *  S!MANUFACTURING!NCLEGEND-1-6!TRIANGLE_1!18!252565 1!-965.00!5406.00!125.00!125.00!0!!!!!!
+     *  S!MANUFACTURING!NCLEGEND-1-6!DIAMOND!7!252566 1!-965.00!5656.00!63.00!63.00!0!!!!!!
+     *  S!MANUFACTURING!NCLEGEND-1-6!OCTAGON!3!252567 1!-965.00!5906.00!40.00!40.00!0!!!!!!
+     *  S!MANUFACTURING!NCLEGEND-1-6!HEXAGON_Y!16!252568 1!-965.00!6156.00!35.00!35.00!0!!!!!!
+     *  S!MANUFACTURING!NCLEGEND-1-6!HEXAGON_X!15!252569 1!-965.00!6406.00!12.00!12.00!0!!!!!!
+     */
+
+    const VECTOR2D c{
+        readDouble( aData.graphic_data1 ) * aScale,
+        -readDouble( aData.graphic_data2 ) * aScale,
+    };
+
+    const VECTOR2D s{
+        readDouble( aData.graphic_data3 ) * aScale,
+        readDouble( aData.graphic_data4 ) * aScale,
+    };
+
+    if( s.x != s.y )
+    {
+        wxLogError( _( "Expected x and y to be the same, got x = %f and y = %f " ), s.x, s.y );
+    }
+
+    auto new_poly = std::make_unique<GRAPHIC_POLYGON>();
+    new_poly->shape = GR_SHAPE_POLYGON;
+    new_poly->width = KiROUND( readDouble( aData.graphic_data5 ) * aScale );
+
+    int       radius = s.x / 2;
+    bool      across_corners = true;
+    EDA_ANGLE pt0_angle = ANGLE_90; // /Pointing up
+    int       n_pts = 0;
+
+    if( aData.graphic_dataname == "TRIANGLE_1" )
+    {
+        // Upright equilateral triangle (pointing upwards, horizontal base)
+        // The size appears to be (?) the size of the circumscribing circle,
+        // rather than the width of the base.
+        n_pts = 3;
+    }
+    else if( aData.graphic_dataname == "DIAMOND" )
+    {
+        // Square diamond (can it be non-square?)
+        // Size is point-to-point width/height
+        n_pts = 4;
+    }
+    else if( aData.graphic_dataname == "HEXAGON_X" )
+    {
+        // Hexagon with horizontal top/bottom
+        // Size is the overall width (across corners)
+        n_pts = 6;
+        pt0_angle = ANGLE_0;
+    }
+    else if( aData.graphic_dataname == "HEXAGON_Y" )
+    {
+        // Hexagon with vertical left/right sides
+        // Size is the height (i.e. across corners)
+        n_pts = 6;
+    }
+    else if( aData.graphic_dataname == "OCTAGON" )
+    {
+        // Octagon with horizontal/vertical sides
+        // Size is the overall width (across flats)
+        across_corners = false;
+        pt0_angle = FULL_CIRCLE / 16;
+        n_pts = 8;
+    }
+    else
+    {
+        wxCHECK_MSG( false, nullptr,
+                     wxString::Format( "Unhandled polygon type: %s", aData.graphic_dataname ) );
+    }
+
+    new_poly->m_pts =
+            KIGEOM::MakeRegularPolygonPoints( c, n_pts, radius, across_corners, pt0_angle );
+    return new_poly.release();
+}
+
+
+FABMASTER::GRAPHIC_CROSS* FABMASTER::processCross( const FABMASTER::GRAPHIC_DATA& aData,
+                                                   double                         aScale )
+{
+    /*
+     * Examples:
+     *  S!MANUFACTURING!NCLEGEND-1-6!CROSS!4!252571 1!-965.00!6906.00!6.00!6.00!0!!!!!!
+     */
+    auto new_cross = std::make_unique<GRAPHIC_CROSS>();
+
+    new_cross->shape = GR_SHAPE_CROSS;
+    new_cross->start_x = KiROUND( readDouble( aData.graphic_data1 ) * aScale );
+    new_cross->start_y = -KiROUND( readDouble( aData.graphic_data2 ) * aScale );
+    new_cross->size_x = KiROUND( readDouble( aData.graphic_data3 ) * aScale );
+    new_cross->size_y = KiROUND( readDouble( aData.graphic_data4 ) * aScale );
+    new_cross->width = KiROUND( readDouble( aData.graphic_data5 ) * aScale );
+
+    return new_cross.release();
+}
+
+
 FABMASTER::GRAPHIC_TEXT* FABMASTER::processText( const FABMASTER::GRAPHIC_DATA& aData,
-                                                 double aScale )
+                                                 double                         aScale )
 {
     GRAPHIC_TEXT* new_text = new GRAPHIC_TEXT;
 
@@ -1307,6 +1447,16 @@ FABMASTER::GRAPHIC_ITEM* FABMASTER::processGraphic( const GRAPHIC_DATA& aData, d
         retval = processRectangle( aData, aScale );
     else if( aData.graphic_dataname == "FIG_RECTANGLE" )
         retval = processFigRectangle( aData, aScale );
+    else if( aData.graphic_dataname == "SQUARE" )
+        retval = processSquare( aData, aScale );
+    else if( aData.graphic_dataname == "OBLONG_X" || aData.graphic_dataname == "OBLONG_Y" )
+        retval = processOblong( aData, aScale );
+    else if( aData.graphic_dataname == "TRIANGLE_1" || aData.graphic_dataname == "DIAMOND"
+             || aData.graphic_dataname == "HEXAGON_X" || aData.graphic_dataname == "HEXAGON_Y"
+             || aData.graphic_dataname == "OCTAGON" )
+        retval = processPolygon( aData, aScale );
+    else if( aData.graphic_dataname == "CROSS" )
+        retval = processCross( aData, aScale );
     else if( aData.graphic_dataname == "TEXT" )
         retval = processText( aData, aScale );
 
@@ -2947,14 +3097,25 @@ bool FABMASTER::traceIsOpen( const FABMASTER::TRACE& aLine )
 }
 
 
-std::unique_ptr<BOARD_ITEM> FABMASTER::createBoardItem( BOARD& aBoard, PCB_LAYER_ID aLayer,
-                                                        FABMASTER::GRAPHIC_ITEM& aGraphic )
+std::vector<std::unique_ptr<BOARD_ITEM>>
+FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAPHIC_ITEM& aGraphic )
 {
-    std::unique_ptr<BOARD_ITEM> new_item;
+    std::vector<std::unique_ptr<BOARD_ITEM>> new_items;
 
-    const STROKE_PARAMS defaultStroke( aBoard.GetDesignSettings().GetLineThickness( aLayer ) );
+    const BOARD_DESIGN_SETTINGS& boardSettings = aBoard.GetDesignSettings();
+    const STROKE_PARAMS          defaultStroke( boardSettings.GetLineThickness( aLayer ) );
 
-    if( aGraphic.shape == GR_SHAPE_TEXT )
+    const auto setShapeParameters = [&]( PCB_SHAPE& aShape )
+    {
+        aShape.SetStroke( STROKE_PARAMS( aGraphic.width, LINE_STYLE::SOLID ) );
+
+        if( aShape.GetWidth() == 0 )
+            aShape.SetStroke( defaultStroke );
+    };
+
+    switch( aGraphic.shape )
+    {
+    case GR_SHAPE_TEXT:
     {
         const GRAPHIC_TEXT& src = static_cast<const GRAPHIC_TEXT&>( aGraphic );
 
@@ -2969,16 +3130,36 @@ std::unique_ptr<BOARD_ITEM> FABMASTER::createBoardItem( BOARD& aBoard, PCB_LAYER
         new_text->SetTextWidth( src.width );
         new_text->SetHorizJustify( src.orient );
 
-        new_item = std::move( new_text );
+        new_items.emplace_back( std::move( new_text ) );
+        break;
     }
-    else
+    case GR_SHAPE_CROSS:
     {
+        const GRAPHIC_CROSS& src = static_cast<const GRAPHIC_CROSS&>( aGraphic );
+
+        const VECTOR2I c{ src.start_x, src.start_y };
+        const VECTOR2I s{ src.size_x, src.size_y };
+
+        const std::vector<SEG> segs = KIGEOM::MakeCrossSegments( c, s, ANGLE_0 );
+
+        for( const SEG& seg : segs )
+        {
+            auto line = std::make_unique<PCB_SHAPE>( &aBoard );
+            line->SetShape( SHAPE_T::SEGMENT );
+            line->SetStart( seg.A );
+            line->SetEnd( seg.B );
+
+            setShapeParameters( *line );
+            new_items.emplace_back( std::move( line ) );
+        }
+        break;
+    }
+    default:
+    {
+        // Simple single shape
         auto new_shape = std::make_unique<PCB_SHAPE>( &aBoard );
 
-        new_shape->SetStroke( STROKE_PARAMS( aGraphic.width, LINE_STYLE::SOLID ) );
-
-        if( new_shape->GetWidth() == 0 )
-            new_shape->SetStroke( defaultStroke );
+        setShapeParameters( *new_shape );
 
         switch( aGraphic.shape )
         {
@@ -3021,6 +3202,42 @@ std::unique_ptr<BOARD_ITEM> FABMASTER::createBoardItem( BOARD& aBoard, PCB_LAYER
             new_shape->SetFilled( src.fill );
             break;
         }
+        case GR_SHAPE_POLYGON:
+        {
+            const GRAPHIC_POLYGON& src = static_cast<const GRAPHIC_POLYGON&>( aGraphic );
+            new_shape->SetShape( SHAPE_T::POLY );
+            new_shape->SetPolyPoints( src.m_pts );
+            break;
+        }
+        case GR_SHAPE_OBLONG:
+        {
+            // Create as a polygon, but we could also make a group of two lines and two arcs
+            const GRAPHIC_OBLONG& src = static_cast<const GRAPHIC_OBLONG&>( aGraphic );
+
+            const VECTOR2I c{ src.start_x, src.start_y };
+            VECTOR2I       s = c;
+            int            w = 0;
+
+            if( src.oblong_x )
+            {
+                w = src.size_y;
+                s -= VECTOR2I{ ( src.size_x - w ) / 2, 0 };
+            }
+            else
+            {
+                w = src.size_x;
+                s -= VECTOR2I{ 0, ( src.size_y - w ) / 2 };
+            }
+
+            SHAPE_SEGMENT seg( s, c - ( s - c ), w );
+
+            SHAPE_POLY_SET poly;
+            seg.TransformToPolygon( poly, boardSettings.m_MaxError, ERROR_LOC::ERROR_INSIDE );
+
+            new_shape->SetShape( SHAPE_T::POLY );
+            new_shape->SetPolyShape( poly );
+            break;
+        }
         default:
         {
             wxLogError( _( "Unhandled shape type %d in polygon on layer %s, seq %d %d" ),
@@ -3028,15 +3245,27 @@ std::unique_ptr<BOARD_ITEM> FABMASTER::createBoardItem( BOARD& aBoard, PCB_LAYER
         }
         }
 
-        new_item = std::move( new_shape );
+        new_items.emplace_back( std::move( new_shape ) );
+    }
     }
 
-    if( new_item )
+    for( std::unique_ptr<BOARD_ITEM>& new_item : new_items )
     {
         new_item->SetLayer( aLayer );
     }
 
-    return new_item;
+    // If there's more than one, group them
+    if( new_items.size() > 1 )
+    {
+        auto new_group = std::make_unique<PCB_GROUP>( &aBoard );
+        for( std::unique_ptr<BOARD_ITEM>& new_item : new_items )
+        {
+            new_group->AddItem( new_item.get() );
+        }
+        new_items.emplace_back( std::move( new_group ) );
+    }
+
+    return new_items;
 }
 
 
@@ -3058,8 +3287,10 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
     {
         for( const auto& seg : aLine->segment )
         {
-            std::unique_ptr<BOARD_ITEM> new_item = createBoardItem( *aBoard, layer, *seg );
-            aBoard->Add( new_item.release(), ADD_MODE::APPEND );
+            for( std::unique_ptr<BOARD_ITEM>& new_item : createBoardItems( *aBoard, layer, *seg ) )
+            {
+                aBoard->Add( new_item.release(), ADD_MODE::APPEND );
+            }
         }
     }
     else
@@ -3261,8 +3492,10 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
     for( auto& seg : aLine->segment )
     {
-        std::unique_ptr<BOARD_ITEM> new_item = createBoardItem( *aBoard, layer, *seg );
-        aBoard->Add( new_item.release(), ADD_MODE::APPEND );
+        for( std::unique_ptr<BOARD_ITEM>& new_item : createBoardItems( *aBoard, layer, *seg ) )
+        {
+            aBoard->Add( new_item.release(), ADD_MODE::APPEND );
+        }
     }
 
     return true;
@@ -3313,8 +3546,10 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
         for( auto& seg : *geom.elements )
         {
-            std::unique_ptr<BOARD_ITEM> new_item = createBoardItem( *aBoard, layer, *seg );
-            aBoard->Add( new_item.release(), ADD_MODE::APPEND );
+            for( std::unique_ptr<BOARD_ITEM>& new_item : createBoardItems( *aBoard, layer, *seg ) )
+            {
+                aBoard->Add( new_item.release(), ADD_MODE::APPEND );
+            }
         }
     }
 

@@ -389,3 +389,49 @@ bool KIGEOM::AddHoleIfValid( SHAPE_POLY_SET& aOutline, SHAPE_LINE_CHAIN&& aHole 
     aOutline.AddHole( std::move( aHole ) );
     return true;
 }
+
+
+std::vector<VECTOR2I> KIGEOM::MakeRegularPolygonPoints( const VECTOR2I& aCenter, size_t aN,
+                                                        const VECTOR2I& aPt0 )
+{
+    VECTOR2D              pt0FromC = aPt0 - aCenter;
+    std::vector<VECTOR2I> pts;
+
+    for( size_t i = 0; i < aN; i++ )
+    {
+        VECTOR2D pt = GetRotated( pt0FromC, ( FULL_CIRCLE / double( aN ) ) * i );
+        pts.push_back( KiROUND( pt + aCenter ) );
+    }
+
+    return pts;
+}
+
+
+std::vector<VECTOR2I> KIGEOM::MakeRegularPolygonPoints( const VECTOR2I& aCenter, size_t aN,
+                                                        int aRadius, bool aAcrossCorners,
+                                                        EDA_ANGLE aAngle )
+{
+    if( !aAcrossCorners )
+    {
+        // if across flats, increase the radius
+        aRadius = aRadius / ( FULL_CIRCLE / ( aN * 2 ) ).Cos();
+    }
+
+    const VECTOR2I pt0 = aCenter + GetRotated( VECTOR2I{ aRadius, 0 }, aAngle );
+    return KIGEOM::MakeRegularPolygonPoints( aCenter, aN, pt0 );
+}
+
+
+std::vector<SEG> KIGEOM::MakeCrossSegments( const VECTOR2I& aCenter, const VECTOR2I& aSize,
+                                            EDA_ANGLE aAngle )
+{
+    std::vector<SEG> segs;
+
+    VECTOR2I pt0 = aCenter - GetRotated( VECTOR2I{ aSize.x / 2, 0 }, aAngle );
+    segs.emplace_back( pt0, aCenter - ( pt0 - aCenter ) );
+
+    pt0 = aCenter - GetRotated( VECTOR2I{ 0, aSize.y / 2 }, aAngle );
+    segs.emplace_back( pt0, aCenter - ( pt0 - aCenter ) );
+
+    return segs;
+}

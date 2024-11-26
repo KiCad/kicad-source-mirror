@@ -178,4 +178,35 @@ SHAPE_LINE_CHAIN RectifyPolygon( const SHAPE_LINE_CHAIN& aPoly );
  */
 bool AddHoleIfValid( SHAPE_POLY_SET& aOutline, SHAPE_LINE_CHAIN&& aHole );
 
+
+/**
+ * Get the corners of a regular polygon from the centre, one point
+ * and the number of sides.
+ */
+std::vector<VECTOR2I> MakeRegularPolygonPoints( const VECTOR2I& aCenter, size_t aN,
+                                                const VECTOR2I& aPt0 );
+
+/**
+ * Make a regular polygon of the given size across the corners.
+ *
+ * @param aCenter the center of the polygon
+ * @param aN polygon side count (e.g. 6 = hexagon)
+ * @param aRadius the distance from the centre to a corner/flat
+ * @param aAcrossCorners true if the radius is to the corners, false to the side midpoints
+ * @param aAngle is the angle from the centre to one point. 0 is the point is to the right,
+ *               and CCW from there.
+ */
+std::vector<VECTOR2I> MakeRegularPolygonPoints( const VECTOR2I& aCenter, size_t aN, int aRadius,
+                                                bool aAcrossCorners, EDA_ANGLE aAngle );
+
+/**
+ * Create the two segments for a cross
+ *
+ * @param aCenter is the center of the cross
+ * @param aSize is the size of the cross (can be x != y)
+ * @param aAngle is the angle of the cross (postive = rotate cross CCW)
+ */
+std::vector<SEG> MakeCrossSegments( const VECTOR2I& aCenter, const VECTOR2I& aSize,
+                                    EDA_ANGLE aAngle );
+
 } // namespace KIGEOM
