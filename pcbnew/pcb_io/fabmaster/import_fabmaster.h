@@ -192,7 +192,10 @@ private:
         GR_SHAPE_TEXT,
         GR_SHAPE_RECTANGLE,
         GR_SHAPE_ARC,
-        GR_SHAPE_CIRCLE             ///! Actually 360° arcs (for both arcs where start==end and real circles)
+        GR_SHAPE_CIRCLE, ///!< Actually 360° arcs (for both arcs where start==end and real circles)
+        GR_SHAPE_OBLONG, ///!< X/Y oblongs
+        GR_SHAPE_CROSS,
+        GR_SHAPE_POLYGON, ///!< Hexagon, triangle
     };
 
     enum GRAPHIC_TYPE
@@ -260,6 +263,28 @@ private:
         int end_x;           ///<! GRAPHIC_DATA_3
         int end_y;           ///<! GRAPHIC_DATA_4
         bool fill;           ///<! GRAPHIC_DATA_5
+    };
+
+    struct GRAPHIC_OBLONG : public GRAPHIC_ITEM
+    {
+        bool oblong_x; ///<! OBLONG_X (as opposed to OBLONG_Y)
+        int  size_x;   ///<! GRAPHIC_DATA_3
+        int  size_y;   ///<! GRAPHIC_DATA_4
+        // width is GRAPHIC_DATA5 (or is it fill?)
+    };
+
+    struct GRAPHIC_CROSS : public GRAPHIC_ITEM
+    {
+        bool oblong_x; ///<! OBLONG_X (as opposed to OBLONG_Y)
+        int  size_x;   ///<! GRAPHIC_DATA_3
+        int  size_y;   ///<! GRAPHIC_DATA_4
+        // width is GRAPHIC_DATA5
+    };
+
+    // Handles hexagons, triangles, octagons
+    struct GRAPHIC_POLYGON : public GRAPHIC_ITEM
+    {
+        std::vector<VECTOR2I> m_pts;
     };
 
     struct GRAPHIC_TEXT : public GRAPHIC_ITEM
@@ -549,6 +574,10 @@ private:
     GRAPHIC_TEXT*      processText( const GRAPHIC_DATA& aData, double aScale );
     GRAPHIC_RECTANGLE* processRectangle( const GRAPHIC_DATA& aData, double aScale );
     GRAPHIC_RECTANGLE* processFigRectangle( const GRAPHIC_DATA& aData, double aScale );
+    GRAPHIC_RECTANGLE* processSquare( const GRAPHIC_DATA& aData, double aScale );
+    GRAPHIC_OBLONG*    processOblong( const GRAPHIC_DATA& aData, double aScale );
+    GRAPHIC_CROSS*     processCross( const GRAPHIC_DATA& aData, double aScale );
+    GRAPHIC_POLYGON*   processPolygon( const GRAPHIC_DATA& aData, double aScale );
 
     PCB_LAYER_ID getLayer( const std::string& aLayerName );
     bool assignLayers();
@@ -590,10 +619,10 @@ private:
     static bool traceIsOpen( const FABMASTER::TRACE& aLine );
 
     /**
-     * Convert one Fabmaster graphic item to a PCB item
+     * Convert one Fabmaster graphic item to one or more PCB items
      */
-    static std::unique_ptr<BOARD_ITEM> createBoardItem( BOARD& aBoard, PCB_LAYER_ID aLayer,
-                                                        FABMASTER::GRAPHIC_ITEM& aGraphic );
+    static std::vector<std::unique_ptr<BOARD_ITEM>>
+    createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAPHIC_ITEM& aGraphic );
 
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
     unsigned            m_doneCount;
