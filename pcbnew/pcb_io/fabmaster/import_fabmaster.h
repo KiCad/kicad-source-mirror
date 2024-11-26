@@ -44,6 +44,7 @@
 
 enum PCB_LAYER_ID : int;
 class BOARD;
+class BOARD_ITEM;
 class PROGRESS_REPORTER;
 
 class FABMASTER
@@ -587,6 +588,12 @@ private:
     SHAPE_POLY_SET loadShapePolySet( const graphic_element& aLine);
 
     static bool traceIsOpen( const FABMASTER::TRACE& aLine );
+
+    /**
+     * Convert one Fabmaster graphic item to a PCB item
+     */
+    static std::unique_ptr<BOARD_ITEM> createBoardItem( BOARD& aBoard, PCB_LAYER_ID aLayer,
+                                                        FABMASTER::GRAPHIC_ITEM& aGraphic );
 
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
     unsigned            m_doneCount;
