@@ -58,6 +58,14 @@
 #include <wx/filename.h>
 
 
+/**
+ * Flag to enable #FABMASTER plugin debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceFabmaster[] = wxT( "KICAD_FABMASTER" );
+
+
 void FABMASTER::checkpoint()
 {
     const unsigned PROGRESS_DELTA = 250;
@@ -729,6 +737,8 @@ bool FABMASTER::assignLayers()
 
     std::vector<FABMASTER_LAYER*> layer_order;
 
+    int next_user_layer = User_1;
+
     for( auto& el : layers )
     {
         FABMASTER_LAYER& layer = el.second;
@@ -762,9 +772,32 @@ bool FABMASTER::assignLayers()
                 layer.layerid = F_Paste;
         }
         else if( layer.name.find( "NCLEGEND" ) != std::string::npos )
+        {
             layer.layerid = Dwgs_User;
+        }
         else
-            layer.disable = true;
+        {
+            // Try to gather as many other layers into user layers as possible
+
+            // Skip ones that seem like a waste of good layers
+            if( layer.name.find( "AUTOSILK" ) == std::string::npos )
+            {
+                if( next_user_layer <= User_9 )
+                {
+                    // Assign the mapping
+                    layer.layerid = next_user_layer;
+                    next_user_layer += 2;
+                }
+                else
+                {
+                    // Out of additional layers
+                    // For now, drop it, but maybr we could gather onto some other layer.
+                    // Or implement a proper layer remapper.
+                    layer.disable = true;
+                    wxLogWarning( _( "No user layer to put layer %s" ), layer.name );
+                }
+            }
+        }
     }
 
     std::sort( layer_order.begin(), layer_order.end(), FABMASTER_LAYER::BY_ID() );
@@ -792,6 +825,12 @@ bool FABMASTER::assignLayers()
             result.first->second.layerid = new_pair.second;
             result.first->second.disable = false;
         }
+    }
+
+    for( const auto& [layer_name, fabmaster_layer] : layers )
+    {
+        wxLogTrace( traceFabmaster, wxT( "Layer %s -> KiCad layer %d" ), layer_name,
+                    fabmaster_layer.layerid );
     }
 
     return true;
