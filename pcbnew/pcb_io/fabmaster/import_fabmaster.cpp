@@ -2900,7 +2900,100 @@ bool FABMASTER::traceIsOpen( const FABMASTER::TRACE& aLine )
 }
 
 
-bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine)
+std::unique_ptr<BOARD_ITEM> FABMASTER::createBoardItem( BOARD& aBoard, PCB_LAYER_ID aLayer,
+                                                        FABMASTER::GRAPHIC_ITEM& aGraphic )
+{
+    std::unique_ptr<BOARD_ITEM> new_item;
+
+    const STROKE_PARAMS defaultStroke( aBoard.GetDesignSettings().GetLineThickness( aLayer ) );
+
+    if( aGraphic.shape == GR_SHAPE_TEXT )
+    {
+        const GRAPHIC_TEXT& src = static_cast<const GRAPHIC_TEXT&>( aGraphic );
+
+        auto new_text = std::make_unique<PCB_TEXT>( &aBoard );
+
+        new_text->SetLayer( aLayer );
+        new_text->SetTextPos( VECTOR2I( src.start_x, src.start_y - src.height / 2 ) );
+        new_text->SetText( src.text );
+        new_text->SetItalic( src.ital );
+        new_text->SetTextThickness( src.thickness );
+        new_text->SetTextHeight( src.height );
+        new_text->SetTextWidth( src.width );
+        new_text->SetHorizJustify( src.orient );
+
+        new_item = std::move( new_text );
+    }
+    else
+    {
+        auto new_shape = std::make_unique<PCB_SHAPE>( &aBoard );
+
+        new_shape->SetStroke( STROKE_PARAMS( aGraphic.width, LINE_STYLE::SOLID ) );
+
+        if( new_shape->GetWidth() == 0 )
+            new_shape->SetStroke( defaultStroke );
+
+        switch( aGraphic.shape )
+        {
+        case GR_SHAPE_LINE:
+        {
+            const GRAPHIC_LINE& src = static_cast<const GRAPHIC_LINE&>( aGraphic );
+
+            new_shape->SetShape( SHAPE_T::SEGMENT );
+            new_shape->SetStart( VECTOR2I( src.start_x, src.start_y ) );
+            new_shape->SetEnd( VECTOR2I( src.end_x, src.end_y ) );
+
+            break;
+        }
+        case GR_SHAPE_ARC:
+        {
+            const GRAPHIC_ARC& src = static_cast<const GRAPHIC_ARC&>( aGraphic );
+
+            new_shape->SetShape( SHAPE_T::ARC );
+            new_shape->SetArcGeometry( src.result.GetP0(), src.result.GetArcMid(),
+                                       src.result.GetP1() );
+            break;
+        }
+        case GR_SHAPE_CIRCLE:
+        {
+            const GRAPHIC_ARC& src = static_cast<const GRAPHIC_ARC&>( aGraphic );
+
+            new_shape->SetShape( SHAPE_T::CIRCLE );
+            new_shape->SetCenter( VECTOR2I( src.center_x, src.center_y ) );
+            new_shape->SetRadius( src.radius );
+            break;
+        }
+        case GR_SHAPE_RECTANGLE:
+        {
+            const GRAPHIC_RECTANGLE& src = static_cast<const GRAPHIC_RECTANGLE&>( aGraphic );
+
+            new_shape->SetShape( SHAPE_T::RECTANGLE );
+            new_shape->SetStart( VECTOR2I( src.start_x, src.start_y ) );
+            new_shape->SetEnd( VECTOR2I( src.end_x, src.end_y ) );
+
+            new_shape->SetFilled( src.fill );
+            break;
+        }
+        default:
+        {
+            wxLogError( _( "Unhandled shape type %d in polygon on layer %s, seq %d %d" ),
+                        aGraphic.shape, aGraphic.layer, aGraphic.seq, aGraphic.subseq );
+        }
+        }
+
+        new_item = std::move( new_shape );
+    }
+
+    if( new_item )
+    {
+        new_item->SetLayer( aLayer );
+    }
+
+    return new_item;
+}
+
+
+bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine )
 {
     if( aLine->segment.empty() )
         return false;
@@ -2912,69 +3005,20 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
     if( IsPcbLayer( new_layer ) )
         layer = new_layer;
 
-    STROKE_PARAMS defaultStroke( aBoard->GetDesignSettings().GetLineThickness( layer ) );
-
     const bool is_open = traceIsOpen( *aLine );
 
     if( is_open )
     {
         for( const auto& seg : aLine->segment )
         {
-            PCB_SHAPE* new_shape = new PCB_SHAPE( aBoard );
-
-            new_shape->SetLayer( layer );
-
-            new_shape->SetStroke(
-                    STROKE_PARAMS( ( *( aLine->segment.begin() ) )->width, LINE_STYLE::SOLID ) );
-
-            if( new_shape->GetWidth() == 0 )
-                new_shape->SetStroke( defaultStroke );
-
-            if( seg->shape == GR_SHAPE_LINE )
-            {
-                const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
-
-                new_shape->SetShape( SHAPE_T::SEGMENT );
-                new_shape->SetStart( VECTOR2I( src->start_x, src->start_y ) );
-                new_shape->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-            }
-            else if( seg->shape == GR_SHAPE_ARC )
-            {
-                const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
-
-                new_shape->SetShape( SHAPE_T::ARC );
-                new_shape->SetArcGeometry( src->result.GetP0(), src->result.GetArcMid(),
-                                          src->result.GetP1() );
-            }
-            else if( seg->shape == GR_SHAPE_CIRCLE )
-            {
-                const GRAPHIC_ARC& src = static_cast<const GRAPHIC_ARC&>( *seg );
-
-                new_shape->SetShape( SHAPE_T::CIRCLE );
-                new_shape->SetCenter( VECTOR2I( src.center_x, src.center_y ) );
-                new_shape->SetRadius( src.radius );
-            }
-            else if( seg->shape == GR_SHAPE_RECTANGLE )
-            {
-                const GRAPHIC_RECTANGLE& src = static_cast<const GRAPHIC_RECTANGLE&>( *seg );
-
-                new_shape->SetShape( SHAPE_T::RECTANGLE );
-                new_shape->SetStart( VECTOR2I( src.start_x, src.start_y ) );
-                new_shape->SetEnd( VECTOR2I( src.end_x, src.end_y ) );
-
-                new_shape->SetFilled( src.fill );
-            }
-            else
-            {
-                wxLogError( _( "Unhandled shape type %d in polygon on layer %s, tag %d" ),
-                            seg->shape, aLine->layer, aLine->id );
-            }
-
-            aBoard->Add( new_shape, ADD_MODE::APPEND );
+            std::unique_ptr<BOARD_ITEM> new_item = createBoardItem( *aBoard, layer, *seg );
+            aBoard->Add( new_item.release(), ADD_MODE::APPEND );
         }
     }
     else
     {
+        STROKE_PARAMS defaultStroke( aBoard->GetDesignSettings().GetLineThickness( layer ) );
+
         SHAPE_POLY_SET poly_outline = loadShapePolySet( aLine->segment );
 
         poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
@@ -3007,11 +3051,10 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
     }
 
     return true;
-
 }
 
 
-bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine)
+bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine )
 {
     if( aLine->segment.size() < 3 )
         return false;
@@ -3157,7 +3200,7 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
 }
 
 
-bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine)
+bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine )
 {
     PCB_LAYER_ID layer;
 
@@ -3168,97 +3211,10 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
     else
         layer = Cmts_User;
 
-    STROKE_PARAMS defaultStroke( aBoard->GetDesignSettings().GetLineThickness( layer ) );
-
     for( auto& seg : aLine->segment )
     {
-        switch( seg->shape )
-        {
-
-        case GR_SHAPE_LINE:
-        {
-            const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
-
-            PCB_SHAPE*     line = new PCB_SHAPE( aBoard, SHAPE_T::SEGMENT );
-            line->SetLayer( layer );
-            line->SetStart( VECTOR2I( src->start_x, src->start_y ) );
-            line->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-            line->SetStroke( STROKE_PARAMS( src->width, LINE_STYLE::SOLID ) );
-
-            if( line->GetWidth() == 0 )
-                line->SetStroke( defaultStroke );
-
-            aBoard->Add( line, ADD_MODE::APPEND );
-            break;
-        }
-        case GR_SHAPE_CIRCLE:
-        {
-            const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
-
-            PCB_SHAPE* circle = new PCB_SHAPE( aBoard, SHAPE_T::CIRCLE );
-
-            circle->SetLayer( layer );
-            circle->SetCenter( VECTOR2I( lsrc->center_x, lsrc->center_y ) );
-            circle->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
-            circle->SetWidth( lsrc->width );
-
-            if( lsrc->width == 0 )
-                circle->SetWidth( aBoard->GetDesignSettings().GetLineThickness( circle->GetLayer() ) );
-
-            aBoard->Add( circle, ADD_MODE::APPEND );
-            break;
-        }
-        case GR_SHAPE_ARC:
-        {
-            const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
-
-            PCB_SHAPE* arc = new PCB_SHAPE( aBoard, SHAPE_T::ARC );
-            arc->SetLayer( layer );
-            arc->SetArcGeometry( src->result.GetP0(),
-                                 src->result.GetArcMid(),
-                                 src->result.GetP1() );
-            arc->SetStroke( STROKE_PARAMS( src->width, LINE_STYLE::SOLID ) );
-
-            if( arc->GetWidth() == 0 )
-                arc->SetStroke( defaultStroke );
-
-            aBoard->Add( arc, ADD_MODE::APPEND );
-            break;
-        }
-        case GR_SHAPE_RECTANGLE:
-        {
-            const GRAPHIC_RECTANGLE *src =
-                    static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
-
-            PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECTANGLE );
-            rect->SetLayer( layer );
-            rect->SetStart( VECTOR2I( src->start_x, src->start_y ) );
-            rect->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-            rect->SetStroke( defaultStroke );
-
-            aBoard->Add( rect, ADD_MODE::APPEND );
-            break;
-        }
-        case GR_SHAPE_TEXT:
-        {
-            const GRAPHIC_TEXT *src = static_cast<const GRAPHIC_TEXT*>( seg.get() );
-
-            PCB_TEXT* txt = new PCB_TEXT( aBoard );
-            txt->SetLayer( layer );
-            txt->SetTextPos( VECTOR2I( src->start_x, src->start_y - src->height / 2 ) );
-            txt->SetText( src->text );
-            txt->SetItalic( src->ital );
-            txt->SetTextThickness( src->thickness );
-            txt->SetTextHeight( src->height );
-            txt->SetTextWidth( src->width );
-            txt->SetHorizJustify( src->orient );
-
-            aBoard->Add( txt, ADD_MODE::APPEND );
-            break;
-        }
-        default:
-            return false;
-        }
+        std::unique_ptr<BOARD_ITEM> new_item = createBoardItem( *aBoard, layer, *seg );
+        aBoard->Add( new_item.release(), ADD_MODE::APPEND );
     }
 
     return true;
@@ -3309,84 +3265,8 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
         for( auto& seg : *geom.elements )
         {
-            switch( seg->shape )
-            {
-
-            case GR_SHAPE_LINE:
-            {
-                const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
-
-                PCB_SHAPE*     line = new PCB_SHAPE( aBoard, SHAPE_T::SEGMENT );
-                line->SetLayer( layer );
-                line->SetStart( VECTOR2I( src->start_x, src->start_y ) );
-                line->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-                line->SetStroke( STROKE_PARAMS( src->width, LINE_STYLE::SOLID ) );
-
-                aBoard->Add( line, ADD_MODE::APPEND );
-                break;
-            }
-            case GR_SHAPE_CIRCLE:
-            {
-                const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
-
-                PCB_SHAPE* circle = new PCB_SHAPE( aBoard, SHAPE_T::CIRCLE );
-
-                circle->SetLayer( layer );
-                circle->SetCenter( VECTOR2I( src->center_x, src->center_y ) );
-                circle->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-                circle->SetWidth( src->width );
-
-                aBoard->Add( circle, ADD_MODE::APPEND );
-                break;
-            }
-            case GR_SHAPE_ARC:
-            {
-                const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
-
-                PCB_SHAPE* arc = new PCB_SHAPE( aBoard, SHAPE_T::ARC );
-                arc->SetLayer( layer );
-                arc->SetArcGeometry( src->result.GetP0(),
-                                     src->result.GetArcMid(),
-                                     src->result.GetP1() );
-                arc->SetStroke( STROKE_PARAMS( src->width, LINE_STYLE::SOLID ) );
-
-                aBoard->Add( arc, ADD_MODE::APPEND );
-                break;
-            }
-            case GR_SHAPE_RECTANGLE:
-            {
-                const GRAPHIC_RECTANGLE *src =
-                        static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
-
-                PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECTANGLE );
-                rect->SetLayer( layer );
-                rect->SetStart( VECTOR2I( src->start_x, src->start_y ) );
-                rect->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-                rect->SetStroke( STROKE_PARAMS( 0 ) );
-                rect->SetFilled( true );
-                aBoard->Add( rect, ADD_MODE::APPEND );
-                break;
-            }
-            case GR_SHAPE_TEXT:
-            {
-                const GRAPHIC_TEXT *src =
-                        static_cast<const GRAPHIC_TEXT*>( seg.get() );
-
-                PCB_TEXT* txt = new PCB_TEXT( aBoard );
-                txt->SetLayer( layer );
-                txt->SetTextPos( VECTOR2I( src->start_x, src->start_y - src->height / 2 ) );
-                txt->SetText( src->text );
-                txt->SetItalic( src->ital );
-                txt->SetTextThickness( src->thickness );
-                txt->SetTextHeight( src->height );
-                txt->SetTextWidth( src->width );
-                txt->SetHorizJustify( src->orient );
-                aBoard->Add( txt, ADD_MODE::APPEND );
-                break;
-            }
-            default:
-                return false;
-            }
+            std::unique_ptr<BOARD_ITEM> new_item = createBoardItem( *aBoard, layer, *seg );
+            aBoard->Add( new_item.release(), ADD_MODE::APPEND );
         }
     }
 
@@ -3458,6 +3338,8 @@ bool FABMASTER::LoadBoard( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter )
             loadEtch( aBoard, track);
         else if( track->layer == "OUTLINE" || track->layer == "DIMENSION" )
             loadOutline( aBoard, track );
+        else
+            loadPolygon( aBoard, track );
     }
 
     orderZones( aBoard );
