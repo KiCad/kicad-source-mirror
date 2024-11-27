@@ -283,10 +283,8 @@ public:
      * Write the stackup info on board file
      * @param aFormatter is the OUTPUTFORMATTER used to create the file
      * @param aBoard is the board
-     * @param aNestLevel is the index to nest level to indent the lines in file
      */
-    void FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
-                             const BOARD* aBoard, int aNestLevel ) const;
+    void FormatBoardStackup( OUTPUTFORMATTER* aFormatter, const BOARD* aBoard ) const;
 
     /**
      * Calculate the distance (height) between the two given copper layers.

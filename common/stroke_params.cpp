@@ -276,20 +276,19 @@ void STROKE_PARAMS::GetMsgPanelInfo( UNITS_PROVIDER* aUnitsProvider,
 }
 
 
-void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, const EDA_IU_SCALE& aIuScale,
-                            int aNestLevel ) const
+void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, const EDA_IU_SCALE& aIuScale ) const
 {
     wxASSERT( aFormatter != nullptr );
 
     if( GetColor() == KIGFX::COLOR4D::UNSPECIFIED )
     {
-        aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s))",
+        aFormatter->Print( "(stroke (width %s) (type %s))",
                            EDA_UNIT_UTILS::FormatInternalUnits( aIuScale, GetWidth() ).c_str(),
                            TO_UTF8( GetLineStyleToken( GetLineStyle() ) ) );
     }
     else
     {
-        aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
+        aFormatter->Print( "(stroke (width %s) (type %s) (color %d %d %d %s))",
                            EDA_UNIT_UTILS::FormatInternalUnits( aIuScale, GetWidth() ).c_str(),
                            TO_UTF8( GetLineStyleToken( GetLineStyle() ) ),
                            KiROUND( GetColor().r * 255.0 ),
@@ -322,12 +321,12 @@ void STROKE_PARAMS_PARSER::ParseStroke( STROKE_PARAMS& aStroke )
 
             switch( token )
             {
-            case T_dash: aStroke.SetLineStyle( LINE_STYLE::DASH );       break;
-            case T_dot: aStroke.SetLineStyle( LINE_STYLE::DOT );        break;
-            case T_dash_dot: aStroke.SetLineStyle( LINE_STYLE::DASHDOT );    break;
+            case T_dash:         aStroke.SetLineStyle( LINE_STYLE::DASH );       break;
+            case T_dot:          aStroke.SetLineStyle( LINE_STYLE::DOT );        break;
+            case T_dash_dot:     aStroke.SetLineStyle( LINE_STYLE::DASHDOT );    break;
             case T_dash_dot_dot: aStroke.SetLineStyle( LINE_STYLE::DASHDOTDOT ); break;
-            case T_solid: aStroke.SetLineStyle( LINE_STYLE::SOLID );      break;
-            case T_default: aStroke.SetLineStyle( LINE_STYLE::DEFAULT );    break;
+            case T_solid:        aStroke.SetLineStyle( LINE_STYLE::SOLID );      break;
+            case T_default:      aStroke.SetLineStyle( LINE_STYLE::DEFAULT );    break;
             default:
                 Expecting( "solid, dash, dash_dot, dash_dot_dot, dot or default" );
             }

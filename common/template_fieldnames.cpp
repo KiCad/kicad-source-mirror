@@ -27,7 +27,6 @@
 #include <mutex>
 
 #include <template_fieldnames_lexer.h>
-#include <pgm_base.h>
 #include <string_utils.h>
 
 using namespace TFIELD_T;
@@ -80,17 +79,17 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
 }
 
 
-void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const
+void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out ) const
 {
-    out->Print( nestLevel, "(field (name %s)",  out->Quotew( m_Name ).c_str() );
+    out->Print( "(field (name %s)",  out->Quotew( m_Name ).c_str() );
 
     if( m_Visible )
-        out->Print( 0, " visible" );
+        out->Print( " visible" );
 
     if( m_URL )
-        out->Print( 0, " url" );
+        out->Print( " url" );
 
-    out->Print( 0, ")\n" );
+    out->Print( ")" );
 }
 
 
@@ -139,21 +138,21 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in )
 }
 
 
-void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel, bool aGlobal ) const
+void TEMPLATES::Format( OUTPUTFORMATTER* out, bool aGlobal ) const
 {
     // We'll keep this general, and include the \n, even though the only known
     // use at this time will not want the newlines or the indentation.
-    out->Print( nestLevel, "(templatefields" );
+    out->Print( "(templatefields" );
 
     const TEMPLATE_FIELDNAMES& source = aGlobal ? m_globals : m_project;
 
     for( const TEMPLATE_FIELDNAME& temp : source )
     {
         if( !temp.m_Name.IsEmpty() )
-            temp.Format( out, nestLevel+1 );
+            temp.Format( out );
     }
 
-    out->Print( 0, ")\n" );
+    out->Print( ")" );
 }
 
 

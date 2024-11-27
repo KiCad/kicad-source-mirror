@@ -22,7 +22,6 @@
 
 #include <wx/base64.h>
 #include <wx/debug.h>
-#include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/mstream.h>
@@ -146,45 +145,34 @@ void EMBEDDED_FILES::ClearEmbeddedFonts()
 
 
 // Write the collection of files to a disk file in the specified format
-void EMBEDDED_FILES::WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, int aNestLevel,
-                                         bool aWriteData ) const
+void EMBEDDED_FILES::WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, bool aWriteData ) const
 {
     ssize_t MIME_BASE64_LENGTH = 76;
-    aOut.Print( aNestLevel, "(embedded_files\n" );
+    aOut.Print( "(embedded_files " );
 
     for( const auto& [name, entry] : m_files )
     {
         const EMBEDDED_FILE& file = *entry;
 
-        aOut.Print( aNestLevel + 1, "(file\n" );
-        aOut.Print( aNestLevel + 2, "(name \"%s\")\n", file.name.c_str().AsChar() );
+        aOut.Print( "(file " );
+        aOut.Print( "(name %s)", aOut.Quotew( file.name ).c_str() );
 
         const char* type = nullptr;
 
         switch( file.type )
         {
-        case EMBEDDED_FILE::FILE_TYPE::DATASHEET:
-            type = "datasheet";
-            break;
-        case EMBEDDED_FILE::FILE_TYPE::FONT:
-            type = "font";
-            break;
-        case EMBEDDED_FILE::FILE_TYPE::MODEL:
-            type = "model";
-            break;
-        case EMBEDDED_FILE::FILE_TYPE::WORKSHEET:
-            type = "worksheet";
-            break;
-        default:
-            type = "other";
-            break;
+        case EMBEDDED_FILE::FILE_TYPE::DATASHEET: type = "datasheet"; break;
+        case EMBEDDED_FILE::FILE_TYPE::FONT:      type = "font";      break;
+        case EMBEDDED_FILE::FILE_TYPE::MODEL:     type = "model";     break;
+        case EMBEDDED_FILE::FILE_TYPE::WORKSHEET: type = "worksheet"; break;
+        default:                                  type = "other";     break;
         }
 
-        aOut.Print( aNestLevel + 2, "(type %s)\n", type );
+        aOut.Print( "(type %s)", type );
 
         if( aWriteData )
         {
-            aOut.Print( 2, "(data\n" );
+            aOut.Print( "(data" );
 
             size_t first = 0;
 
@@ -195,18 +183,18 @@ void EMBEDDED_FILES::WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, int aNestLevel,
 
                 std::string_view view( file.compressedEncodedData.data() + first, length );
 
-                aOut.Print( aNestLevel + 3, "%1s%.*s%s\n", first ? "" : "|", length, view.data(),
+                aOut.Print( "\n%1s%.*s%s\n", first ? "" : "|", length, view.data(),
                             remaining == length ? "|" : "" );
                 first += MIME_BASE64_LENGTH;
             }
-            aOut.Print( aNestLevel + 2, ")\n" ); // Close data
+            aOut.Print( ")" ); // Close data
         }
 
-        aOut.Print( aNestLevel + 2, "(checksum \"%s\")\n", file.data_hash.c_str() );
-        aOut.Print( aNestLevel + 1, ")\n" ); // Close file
+        aOut.Print( "(checksum %s)", aOut.Quotew( file.data_hash ).c_str() );
+        aOut.Print( ")" ); // Close file
     }
 
-    aOut.Print( aNestLevel, ")\n" ); // Close embedded_files
+    aOut.Print( ")" ); // Close embedded_files
 }
 
 // Compress and Base64 encode data

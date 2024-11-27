@@ -1343,7 +1343,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
     plugin.Format( &selection, &selPath, schematic, &formatter, true );
 
     std::string prettyData = formatter.GetString();
-    KICAD_FORMAT::Prettify( prettyData );
+    KICAD_FORMAT::Prettify( prettyData, true );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );

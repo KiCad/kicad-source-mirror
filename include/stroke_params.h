@@ -102,7 +102,7 @@ public:
                 || m_color != aOther.m_color;
     }
 
-    void Format( OUTPUTFORMATTER* out, const EDA_IU_SCALE& aIuScale, int nestLevel ) const;
+    void Format( OUTPUTFORMATTER* out, const EDA_IU_SCALE& aIuScale ) const;
 
     void GetMsgPanelInfo( UNITS_PROVIDER* aUnitsProvider, std::vector<MSG_PANEL_ITEM>& aList,
                           bool aIncludeStyle = true, bool aIncludeWidth = true );

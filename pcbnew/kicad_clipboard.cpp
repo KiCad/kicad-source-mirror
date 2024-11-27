@@ -263,7 +263,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         for( PCB_TABLE* table : promotedTables )
             deleteUnselectedCells( table );
 
-        Format( &partialFootprint, 0 );
+        Format( &partialFootprint );
 
         partialFootprint.SetParent( nullptr );
     }
@@ -273,15 +273,12 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         // This means we also need layers and nets
         LOCALE_IO io;
 
-        m_formatter.Print( 0, "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n",
-                           SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
-
-        m_formatter.Print( 0, "\n" );
+        m_formatter.Print( "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version %s)",
+                           SEXPR_BOARD_FILE_VERSION,
+                           m_formatter.Quotew( GetMajorMinorVersion() ).c_str() );
 
         formatBoardLayers( m_board );
         formatNetInformation( m_board );
-
-        m_formatter.Print( 0, "\n" );
 
         for( EDA_ITEM* item : aSelected )
         {
@@ -378,7 +375,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                         deleteUnselectedCells( table );
                 }
 
-                Format( copy, 1 );
+                Format( copy );
 
                 if( copy->Type() == PCB_GROUP_T || copy->Type() == PCB_GENERATOR_T )
                 {
@@ -386,7 +383,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                             [&]( BOARD_ITEM* descendant )
                             {
                                 descendant->SetLocked( false );
-                                Format( descendant, 1 );
+                                Format( descendant );
                             } );
                 }
 
@@ -395,11 +392,11 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             }
         }
 
-        m_formatter.Print( 0, "\n)" );
+        m_formatter.Print( ")" );
     }
 
     std::string prettyData = m_formatter.GetString();
-    KICAD_FORMAT::Prettify( prettyData );
+    KICAD_FORMAT::Prettify( prettyData, true );
 
     // These are placed at the end to minimize the open time of the clipboard
     wxLogNull         doNotLog; // disable logging of failed clipboard actions
@@ -478,13 +475,13 @@ void CLIPBOARD_IO::SaveBoard( const wxString& aFileName, BOARD* aBoard,
 
     m_out = &formatter;
 
-    m_out->Print( 0, "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n",
+    m_out->Print( "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version %s)",
                   SEXPR_BOARD_FILE_VERSION,
-                  GetMajorMinorVersion().c_str().AsChar() );
+                  m_out->Quotew( GetMajorMinorVersion() ).c_str() );
 
-    Format( aBoard, 1 );
+    Format( aBoard );
 
-    m_out->Print( 0, ")\n" );
+    m_out->Print( ")" );
 
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 

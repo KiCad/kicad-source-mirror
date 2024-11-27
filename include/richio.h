@@ -355,8 +355,10 @@ protected:
     // so increase the STRING-INDEX and FIRST-TO_CHECK by one.
     // See http://docs.freebsd.org/info/gcc/gcc.info.Function_Attributes.html
     // Then to get format checking during the compile, compile with -Wall or -Wformat
-#define PRINTF_FUNC __attribute__( ( format( printf, 3, 4 ) ) )
+#define PRINTF_FUNC_N __attribute__( ( format( printf, 3, 4 ) ) )
+#define PRINTF_FUNC __attribute__( ( format( printf, 2, 3 ) ) )
 #else
+#define PRINTF_FUNC_N     // nothing
 #define PRINTF_FUNC       // nothing
 #endif
 
@@ -376,7 +378,18 @@ public:
      * @return int - the number of characters output.
      * @throw IO_ERROR, if there is a problem outputting, such as a full disk.
      */
-    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... );
+    int PRINTF_FUNC_N Print( int nestLevel, const char* fmt, ... );
+
+    /**
+     * Format and write text to the output stream.
+     *
+     * @param fmt A printf() style format string.
+     * @param ... a variable list of parameters that will get blended into
+     *  the output under control of the format string.
+     * @return int - the number of characters output.
+     * @throw IO_ERROR, if there is a problem outputting, such as a full disk.
+     */
+    int PRINTF_FUNC Print( const char* fmt, ... );
 
     /**
      * Perform quote character need determination.

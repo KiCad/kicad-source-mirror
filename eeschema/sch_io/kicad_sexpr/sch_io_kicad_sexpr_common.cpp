@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <advanced_config.h>
 #include <base_units.h>
 #include <macros.h>
 #include <schematic_lexer.h>
@@ -31,8 +30,7 @@ using namespace TSCHEMATIC_T;
 static const char* emptyString = "";
 
 
-void formatFill( OUTPUTFORMATTER* aFormatter, int aNestLevel, FILL_T aFillMode,
-                 const COLOR4D& aFillColor )
+void formatFill( OUTPUTFORMATTER* aFormatter, FILL_T aFillMode, const COLOR4D& aFillColor )
 {
     const char* fillType;
 
@@ -47,7 +45,7 @@ void formatFill( OUTPUTFORMATTER* aFormatter, int aNestLevel, FILL_T aFillMode,
 
     if( aFillMode == FILL_T::FILLED_WITH_COLOR )
     {
-        aFormatter->Print( aNestLevel, "(fill (type %s) (color %d %d %d %s))",
+        aFormatter->Print( "(fill (type %s) (color %d %d %d %s))",
                            fillType,
                            KiROUND( aFillColor.r * 255.0 ),
                            KiROUND( aFillColor.g * 255.0 ),
@@ -56,7 +54,7 @@ void formatFill( OUTPUTFORMATTER* aFormatter, int aNestLevel, FILL_T aFillMode,
     }
     else
     {
-        aFormatter->Print( aNestLevel, "(fill (type %s))",
+        aFormatter->Print( "(fill (type %s))",
                            fillType );
     }
 }
@@ -221,140 +219,105 @@ std::string formatIU( const VECTOR2I& aPt, bool aInvertY )
 }
 
 
-void formatArc( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aArc,
-                bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
+void formatArc( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aArc, bool aIsPrivate,
+                const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
+                bool aInvertY, const KIID& aUuid )
 {
-    aFormatter->Print( aNestLevel, "(arc%s (start %s) (mid %s) (end %s)\n",
-                       aIsPrivate ? " private" : "",
+    aFormatter->Print( "(arc %s (start %s) (mid %s) (end %s)",
+                       aIsPrivate ? "private" : "",
                        formatIU( aArc->GetStart(), aInvertY ).c_str(),
                        formatIU( aArc->GetArcMid(), aInvertY ).c_str(),
                        formatIU( aArc->GetEnd(), aInvertY ).c_str() );
 
-    aStroke.Format( aFormatter, schIUScale, aNestLevel + 1 );
-    aFormatter->Print( 0, "\n" );
-    formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
-    aFormatter->Print( 0, "\n" );
+    aStroke.Format( aFormatter, schIUScale );
+    formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( ")" );
 }
 
 
-void formatCircle( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aCircle,
-                   bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                   const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
+void formatCircle( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aCircle, bool aIsPrivate,
+                   const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
+                   bool aInvertY, const KIID& aUuid )
 {
-    aFormatter->Print( aNestLevel, "(circle%s (center %s) (radius %s)\n",
-                       aIsPrivate ? " private" : "",
+    aFormatter->Print( "(circle %s (center %s) (radius %s)",
+                       aIsPrivate ? "private" : "",
                        formatIU( aCircle->GetStart(), aInvertY ).c_str(),
                        formatIU( aCircle->GetRadius() ).c_str() );
 
-    aStroke.Format( aFormatter, schIUScale, aNestLevel + 1 );
-    aFormatter->Print( 0, "\n" );
-    formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
-    aFormatter->Print( 0, "\n" );
+    aStroke.Format( aFormatter, schIUScale );
+    formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( ")" );
 }
 
 
-void formatRect( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aRect,
-                 bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                 const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
+void formatRect( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aRect, bool aIsPrivate,
+                 const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
+                 bool aInvertY, const KIID& aUuid )
 {
-    aFormatter->Print( aNestLevel, "(rectangle%s (start %s) (end %s)\n",
-                       aIsPrivate ? " private" : "",
+    aFormatter->Print( "(rectangle %s (start %s) (end %s)",
+                       aIsPrivate ? "private" : "",
                        formatIU( aRect->GetStart(), aInvertY ).c_str(),
                        formatIU( aRect->GetEnd(), aInvertY ).c_str() );
-    aStroke.Format( aFormatter, schIUScale, aNestLevel + 1 );
-    aFormatter->Print( 0, "\n" );
-    formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
-    aFormatter->Print( 0, "\n" );
+    aStroke.Format( aFormatter, schIUScale );
+    formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( ")" );
 }
 
 
-void formatBezier( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aBezier,
-                   bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                   const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
+void formatBezier( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aBezier, bool aIsPrivate,
+                   const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
+                   bool aInvertY, const KIID& aUuid )
 {
-    aFormatter->Print( aNestLevel, "(bezier%s (pts ",
-                       aIsPrivate ? " private" : "" );
+    aFormatter->Print( "(bezier %s (pts ",
+                       aIsPrivate ? "private" : "" );
 
     for( const VECTOR2I& pt : { aBezier->GetStart(), aBezier->GetBezierC1(),
                                 aBezier->GetBezierC2(), aBezier->GetEnd() } )
     {
-        aFormatter->Print( 0, " (xy %s)",
-                           formatIU( pt, aInvertY ).c_str() );
+        aFormatter->Print( "(xy %s)", formatIU( pt, aInvertY ).c_str() );
     }
 
-    aFormatter->Print( 0, ")\n" );  // Closes pts token on same line.
+    aFormatter->Print( ")" );  // Closes pts token
 
-    aStroke.Format( aFormatter, schIUScale, aNestLevel + 1 );
-    aFormatter->Print( 0, "\n" );
-    formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
-    aFormatter->Print( 0, "\n" );
+    aStroke.Format( aFormatter, schIUScale );
+    formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( ")" );
 }
 
 
-void formatPoly( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aPolyLine,
-                 bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                 const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
+void formatPoly( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aPolyLine, bool aIsPrivate,
+                 const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
+                 bool aInvertY, const KIID& aUuid )
 {
-    int newLine = 0;
-    int lineCount = 1;
-    aFormatter->Print( aNestLevel, "(polyline%s\n", aIsPrivate ? " private" : "" );
-    aFormatter->Print( aNestLevel + 1, "(pts" );
+    aFormatter->Print( "(polyline %s (pts ",
+                       aIsPrivate ? "private" : "" );
 
     for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
-    {
-        if( newLine == 4 || !ADVANCED_CFG::GetCfg().m_CompactSave )
-        {
-            aFormatter->Print( 0, "\n" );
-            aFormatter->Print( aNestLevel + 2, "(xy %s)", formatIU( pt, aInvertY ).c_str() );
-            newLine = 0;
-            lineCount += 1;
-        }
-        else
-        {
-            aFormatter->Print( 0, " (xy %s)", formatIU( pt, aInvertY ).c_str() );
-        }
+        aFormatter->Print( "(xy %s)", formatIU( pt, aInvertY ).c_str() );
 
-        newLine += 1;
-    }
+    aFormatter->Print( ")" );  // Closes pts token
 
-    if( lineCount == 1 )
-    {
-        aFormatter->Print( 0, ")\n" );  // Closes pts token on same line.
-    }
-    else
-    {
-        aFormatter->Print( 0, "\n" );
-        aFormatter->Print( aNestLevel + 1, ")\n" );  // Closes pts token with multiple lines.
-    }
-
-    aStroke.Format( aFormatter, schIUScale, aNestLevel + 1 );
-    aFormatter->Print( 0, "\n" );
-    formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
-    aFormatter->Print( 0, "\n" );
+    aStroke.Format( aFormatter, schIUScale );
+    formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( ")" );
 }

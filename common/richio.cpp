@@ -30,9 +30,9 @@
 #include <core/ignore.h>
 #include <richio.h>
 #include <errno.h>
+#include <advanced_config.h>
 #include <io/kicad/kicad_io_utils.h>
 
-#include <wx/file.h>
 #include <wx/translation.h>
 
 
@@ -484,6 +484,23 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... )
 }
 
 
+int OUTPUTFORMATTER::Print( const char* fmt, ... )
+{
+    va_list     args;
+
+    va_start( args, fmt );
+
+    int result = 0;
+
+    // no error checking needed, an exception indicates an error.
+    result = vprint( fmt, args );
+
+    va_end( args );
+
+    return result;
+}
+
+
 std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee ) const
 {
     std::string ret;
@@ -611,7 +628,7 @@ bool PRETTIFIED_FILE_OUTPUTFORMATTER::Finish()
     if( !m_fp )
         return false;
 
-    KICAD_FORMAT::Prettify( m_buf );
+    KICAD_FORMAT::Prettify( m_buf, ADVANCED_CFG::GetCfg().m_CompactSave );
 
     if( fwrite( m_buf.c_str(), m_buf.length(), 1, m_fp ) != 1 )
         THROW_IO_ERROR( strerror( errno ) );

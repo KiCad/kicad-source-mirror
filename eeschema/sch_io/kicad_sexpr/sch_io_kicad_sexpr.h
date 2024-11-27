@@ -142,22 +142,22 @@ private:
     void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
     void saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic,
-                     const SCH_SHEET_LIST& aSheetList, int aNestLevel,
-                     bool aForClipboard, const SCH_SHEET_PATH* aRelativePath = nullptr );
-    void saveField( SCH_FIELD* aField, int aNestLevel );
-    void saveBitmap( const SCH_BITMAP& aBitmap, int aNestLevel );
-    void saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSheetList, int aNestLevel );
-    void saveJunction( SCH_JUNCTION* aJunction, int aNestLevel );
-    void saveNoConnect( SCH_NO_CONNECT* aNoConnect, int aNestLevel );
-    void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLevel );
-    void saveLine( SCH_LINE* aLine, int aNestLevel );
-    void saveShape( SCH_SHAPE* aShape, int aNestLevel );
-    void saveRuleArea( SCH_RULE_AREA* aRuleArea, int aNestLevel );
-    void saveText( SCH_TEXT* aText, int aNestLevel );
-    void saveTextBox( SCH_TEXTBOX* aText, int aNestLevel );
-    void saveTable( SCH_TABLE* aTable, int aNestLevel );
-    void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNestLevel );
-    void saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets, int aNestLevel );
+                     const SCH_SHEET_LIST& aSheetList, bool aForClipboard,
+                     const SCH_SHEET_PATH* aRelativePath = nullptr );
+    void saveField( SCH_FIELD* aField );
+    void saveBitmap( const SCH_BITMAP& aBitmap );
+    void saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSheetList );
+    void saveJunction( SCH_JUNCTION* aJunction );
+    void saveNoConnect( SCH_NO_CONNECT* aNoConnect );
+    void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry );
+    void saveLine( SCH_LINE* aLine );
+    void saveShape( SCH_SHAPE* aShape );
+    void saveRuleArea( SCH_RULE_AREA* aRuleArea );
+    void saveText( SCH_TEXT* aText );
+    void saveTextBox( SCH_TEXTBOX* aText );
+    void saveTable( SCH_TABLE* aTable );
+    void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
+    void saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets );
 
     void cacheLib( const wxString& aLibraryFileName, const std::map<std::string, UTF8>* aProperties );
     bool isBuffering( const std::map<std::string, UTF8>* aProperties );

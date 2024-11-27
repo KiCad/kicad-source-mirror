@@ -51,7 +51,7 @@ public:
 
     void DeleteSymbol( const wxString& aName ) override;
 
-    static void SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0,
+    static void SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                             const wxString& aLibName = wxEmptyString, bool aIncludeData = true );
 
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
@@ -62,16 +62,14 @@ private:
 
     int m_fileFormatVersionAtLoad;
 
-    static void saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
-                                    int aNestLevel );
-    static void saveField( SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter, int aNestLevel );
-    static void savePin( SCH_PIN* aPin, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
-    static void saveText( SCH_TEXT* aText, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
-    static void saveTextBox( SCH_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter,
-                             int aNestLevel = 0 );
+    static void saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFORMATTER& aFormatter );
+    static void saveField( SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter );
+    static void savePin( SCH_PIN* aPin, OUTPUTFORMATTER& aFormatter );
+    static void saveText( SCH_TEXT* aText, OUTPUTFORMATTER& aFormatter );
+    static void saveTextBox( SCH_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter );
 
     static void saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                     int& aNextFreeFieldId, int aNestLevel );
+                                     int& aNextFreeFieldId );
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_LIB_CACHE_H_

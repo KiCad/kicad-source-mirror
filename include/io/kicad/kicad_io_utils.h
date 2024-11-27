@@ -31,18 +31,14 @@ namespace KICAD_FORMAT {
  * Writes a boolean to the formatter, in the style (aKey [yes|no])
  *
  * @param aOut is the output formatter to write to
- * @param aNestLevel is passed to the output formatter to control indentation
  * @param aKey is the name of the boolean flag
  * @param aValue is the value to write
- * @param aSuffix is the character to format after the end of the boolean (after the close paren)
  */
-KICOMMON_API void FormatBool( OUTPUTFORMATTER* aOut, int aNestLevel, const wxString& aKey,
-                              bool aValue, char aSuffix = 0 );
+KICOMMON_API void FormatBool( OUTPUTFORMATTER* aOut, const wxString& aKey, bool aValue );
 
-KICOMMON_API void FormatUuid( OUTPUTFORMATTER* aOut, int aNestLevel, const KIID& aUuid,
-                              char aSuffix = 0 );
+KICOMMON_API void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid );
 
-KICOMMON_API void Prettify( std::string& aSource, char aQuoteChar = '"' );
+KICOMMON_API void Prettify( std::string& aSource, bool aCompactSave );
 
 } // namespace KICAD_FORMAT
 

@@ -366,10 +366,9 @@ public:
      * Output \a aItem to \a aFormatter in s-expression format.
      *
      * @param aItem A pointer the an #BOARD_ITEM object to format.
-     * @param aNestLevel The indentation nest level.
      * @throw IO_ERROR on write error.
      */
-    void Format( const BOARD_ITEM* aItem, int aNestLevel = 0 ) const;
+    void Format( const BOARD_ITEM* aItem ) const;
 
     std::string GetStringOutput( bool doClear )
     {
@@ -394,61 +393,61 @@ protected:
     void init( const std::map<std::string, UTF8>* aProperties );
 
     /// formats the board setup information
-    void formatSetup( const BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatSetup( const BOARD* aBoard ) const;
 
     /// formats the General section of the file
-    void formatGeneral( const BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatGeneral( const BOARD* aBoard ) const;
 
     /// formats the board layer information
-    void formatBoardLayers( const BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatBoardLayers( const BOARD* aBoard ) const;
 
     /// formats the Nets and Netclasses
-    void formatNetInformation( const BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatNetInformation( const BOARD* aBoard ) const;
 
     /// formats the Nets and Netclasses
-    void formatProperties( const BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatProperties( const BOARD* aBoard ) const;
 
     /// writes everything that comes before the board_items, like settings and layers etc
-    void formatHeader( const BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatHeader( const BOARD* aBoard ) const;
 
-    void formatTeardropParameters( const TEARDROP_PARAMETERS& tdParams, int aNestLevel = 0 ) const;
+    void formatTeardropParameters( const TEARDROP_PARAMETERS& tdParams ) const;
 
 private:
-    void format( const BOARD* aBoard, int aNestLevel = 0 ) const;
+    void format( const BOARD* aBoard ) const;
 
-    void format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
+    void format( const PCB_DIMENSION_BASE* aDimension ) const;
 
-    void format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLevel = 0 ) const;
+    void format( const PCB_REFERENCE_IMAGE* aBitmap ) const;
 
-    void format( const PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
+    void format( const PCB_GROUP* aGroup ) const;
 
-    void format( const PCB_SHAPE* aSegment, int aNestLevel = 0 ) const;
+    void format( const PCB_SHAPE* aSegment ) const;
 
-    void format( const PCB_TARGET* aTarget, int aNestLevel = 0 ) const;
+    void format( const PCB_TARGET* aTarget ) const;
 
-    void format( const FOOTPRINT* aFootprint, int aNestLevel = 0 ) const;
+    void format( const FOOTPRINT* aFootprint ) const;
 
-    void format( const PAD* aPad, int aNestLevel = 0 ) const;
+    void format( const PAD* aPad ) const;
 
-    void format( const PCB_TEXT* aText, int aNestLevel = 0 ) const;
-    void format( const PCB_TEXTBOX* aTextBox, int aNestLevel = 0 ) const;
+    void format( const PCB_TEXT* aText ) const;
+    void format( const PCB_TEXTBOX* aTextBox ) const;
 
-    void format( const PCB_TABLE* aTable, int aNestLevel = 0 ) const;
+    void format( const PCB_TABLE* aTable ) const;
 
-    void format( const PCB_GENERATOR* aGenerator, int aNestLevel = 0 ) const;
+    void format( const PCB_GENERATOR* aGenerator ) const;
 
-    void format( const PCB_TRACK* aTrack, int aNestLevel = 0 ) const;
+    void format( const PCB_TRACK* aTrack ) const;
 
-    void format( const ZONE* aZone, int aNestLevel = 0 ) const;
+    void format( const ZONE* aZone ) const;
 
-    void formatPolyPts( const SHAPE_LINE_CHAIN& outline, int aNestLevel, bool aCompact,
+    void formatPolyPts( const SHAPE_LINE_CHAIN& outline,
                         const FOOTPRINT* aParentFP = nullptr ) const;
 
-    void formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) const;
+    void formatRenderCache( const EDA_TEXT* aText ) const;
 
     void formatLayer( PCB_LAYER_ID aLayer, bool aIsKnockout = false ) const;
 
-    void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const;
+    void formatLayers( LSET aLayerMask ) const;
 
     void formatTenting( const PADSTACK& aPadstack ) const;
 

@@ -921,7 +921,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
         item.ClearFlags( STRUCT_DELETED );
 
     std::string prettyData = formatter.GetString();
-    KICAD_FORMAT::Prettify( prettyData );
+    KICAD_FORMAT::Prettify( prettyData, true );
 
     if( SaveClipboard( prettyData ) )
         return 0;

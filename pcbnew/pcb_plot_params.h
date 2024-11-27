@@ -41,7 +41,7 @@ public:
     void        SetSkipPlotNPTH_Pads( bool aSkip ) { m_skipNPTH_Pads = aSkip; }
     bool        GetSkipPlotNPTH_Pads() const { return m_skipNPTH_Pads; }
 
-    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl=0 ) const;
+    void        Format( OUTPUTFORMATTER* aFormatter ) const;
     void        Parse( PCB_PLOT_PARAMS_PARSER* aParser );
 
     /**

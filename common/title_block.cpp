@@ -27,7 +27,7 @@
 #include <title_block.h>
 #include <core/kicad_algo.h>
 
-void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter ) const
 {
     // Don't write the title block information if there is nothing to write.
     bool isempty = true;
@@ -42,32 +42,31 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
 
     if( !isempty  )
     {
-        aFormatter->Print( aNestLevel, "(title_block\n" );
+        aFormatter->Print( "(title_block" );
 
         if( !GetTitle().IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(title %s)\n",
-                               aFormatter->Quotew( GetTitle() ).c_str() );
+            aFormatter->Print( "(title %s)", aFormatter->Quotew( GetTitle() ).c_str() );
 
         if( !GetDate().IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(date %s)\n",
-                               aFormatter->Quotew( GetDate() ).c_str() );
+            aFormatter->Print( "(date %s)", aFormatter->Quotew( GetDate() ).c_str() );
 
         if( !GetRevision().IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(rev %s)\n",
-                               aFormatter->Quotew( GetRevision() ).c_str() );
+            aFormatter->Print( "(rev %s)", aFormatter->Quotew( GetRevision() ).c_str() );
 
         if( !GetCompany().IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(company %s)\n",
-                               aFormatter->Quotew( GetCompany() ).c_str() );
+            aFormatter->Print( "(company %s)", aFormatter->Quotew( GetCompany() ).c_str() );
 
         for( int ii = 0; ii < 9; ii++ )
         {
             if( !GetComment(ii).IsEmpty() )
-                aFormatter->Print( aNestLevel+1, "(comment %d %s)\n", ii+1,
-                                  aFormatter->Quotew( GetComment(ii) ).c_str() );
+            {
+                aFormatter->Print( "(comment %d %s)",
+                                   ii+1,
+                                   aFormatter->Quotew( GetComment(ii) ).c_str() );
+            }
         }
 
-        aFormatter->Print( aNestLevel, ")\n\n" );
+        aFormatter->Print( ")" );
     }
 }
 

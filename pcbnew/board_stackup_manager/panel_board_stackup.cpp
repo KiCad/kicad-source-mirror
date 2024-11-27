@@ -1296,7 +1296,7 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
     // FormatBoardStackup() (using FormatInternalUnits()) expects a "C" locale
     // to execute some tests. So switch to the suitable locale
     LOCALE_IO dummy;
-    brd_stackup.FormatBoardStackup( &old_stackup, m_board, 0 );
+    brd_stackup.FormatBoardStackup( &old_stackup, m_board );
 
     // copy enabled items to the new board stackup
     brd_stackup.RemoveAll();
@@ -1308,7 +1308,7 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
     }
 
     STRING_FORMATTER new_stackup;
-    brd_stackup.FormatBoardStackup( &new_stackup, m_board, 0 );
+    brd_stackup.FormatBoardStackup( &new_stackup, m_board );
 
     bool modified = old_stackup.GetString() != new_stackup.GetString();
     int thickness = brd_stackup.BuildBoardThicknessFromStackup();

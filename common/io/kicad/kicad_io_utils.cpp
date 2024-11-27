@@ -26,28 +26,15 @@
 
 namespace KICAD_FORMAT {
 
-void FormatBool( OUTPUTFORMATTER* aOut, int aNestLevel, const wxString& aKey, bool aValue,
-                 char aSuffix )
+void FormatBool( OUTPUTFORMATTER* aOut, const wxString& aKey, bool aValue )
 {
-    if( aNestLevel )
-        aOut->Print( aNestLevel, "(%ls %s)", aKey.wc_str(), aValue ? "yes" : "no" );
-    else
-        aOut->Print( 0, " (%ls %s)", aKey.wc_str(), aValue ? "yes" : "no" );
-
-    if( aSuffix )
-        aOut->Print( 0, "%c", aSuffix );
+    aOut->Print( "(%ls %s)", aKey.wc_str(), aValue ? "yes" : "no" );
 }
 
 
-void FormatUuid( OUTPUTFORMATTER* aOut, int aNestLevel, const KIID& aUuid, char aSuffix )
+void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid )
 {
-    if( aNestLevel )
-        aOut->Print( aNestLevel, "(uuid \"%s\")", TO_UTF8( aUuid.AsString() ) );
-    else
-        aOut->Print( 0, " (uuid \"%s\")", TO_UTF8( aUuid.AsString() ) );
-
-    if( aSuffix )
-        aOut->Print( 0, "%c", aSuffix );
+    aOut->Print( "(uuid %s)", aOut->Quotew( aUuid.AsString() ).c_str() );
 }
 
 /*
@@ -70,9 +57,10 @@ void FormatUuid( OUTPUTFORMATTER* aOut, int aNestLevel, const KIID& aUuid, char 
  *  )
  * )
  */
-void Prettify( std::string& aSource, char aQuoteChar )
+void Prettify( std::string& aSource, bool aCompactSave )
 {
     // Configuration
+    const char quoteChar = '"';
     const char indentChar = '\t';
     const int  indentSize = 1;
 
@@ -97,6 +85,8 @@ void Prettify( std::string& aSource, char aQuoteChar )
     bool hasInsertedSpace = false;
     bool inMultiLineList = false;
     bool inXY = false;
+    bool inShortForm = false;
+    int  shortFormDepth = 0;
     int  column = 0;
     int  backslashCount = 0;    // Count of successive backslash read since any other char
 
@@ -136,6 +126,19 @@ void Prettify( std::string& aSource, char aQuoteChar )
                 return true;
             };
 
+    auto isShortForm =
+            [&]( std::string::iterator aIt )
+            {
+                seek = aIt;
+                std::string token;
+
+                while( ++seek != aSource.end() && isalpha( *seek ) )
+                    token += *seek;
+
+                return token == "font" || token == "stroke" || token == "fill"
+                        || token == "offset" || token == "rotate" || token == "scale";
+            };
+
     while( cursor != aSource.end() )
     {
         char next = nextNonWhitespace( cursor );
@@ -150,10 +153,14 @@ void Prettify( std::string& aSource, char aQuoteChar )
             {
                 if( inXY || column < consecutiveTokenWrapThreshold )
                 {
-                    // Note that we only insert spaces here, no matter what kind of whitespace is in
-                    // the input.  Newlines will be inserted as needed by the logic below.
+                    // Note that we only insert spaces here, no matter what kind of whitespace is
+                    // in the input.  Newlines will be inserted as needed by the logic below.
                     formatted.push_back( ' ' );
                     column++;
+                }
+                else if( inShortForm )
+                {
+                    formatted.push_back( ' ' );
                 }
                 else
                 {
@@ -173,8 +180,9 @@ void Prettify( std::string& aSource, char aQuoteChar )
             if( *cursor == '(' && !inQuote )
             {
                 bool currentIsXY = isXY( cursor );
+                bool currentIsShortForm = aCompactSave && isShortForm( cursor );
 
-                if( listDepth == 0 )
+                if( formatted.empty() )
                 {
                     formatted.push_back( '(' );
                     column++;
@@ -184,7 +192,11 @@ void Prettify( std::string& aSource, char aQuoteChar )
                     // List-of-points special case
                     formatted += " (";
                     column += 2;
-                    inXY = true;
+                }
+                else if( inShortForm )
+                {
+                    formatted += " (";
+                    column += 2;
                 }
                 else
                 {
@@ -194,6 +206,13 @@ void Prettify( std::string& aSource, char aQuoteChar )
                 }
 
                 inXY = currentIsXY;
+
+                if( currentIsShortForm )
+                {
+                    inShortForm = true;
+                    shortFormDepth = listDepth;
+                }
+
                 listDepth++;
             }
             else if( *cursor == ')' && !inQuote )
@@ -201,7 +220,12 @@ void Prettify( std::string& aSource, char aQuoteChar )
                 if( listDepth > 0 )
                     listDepth--;
 
-                if( lastNonWhitespace == ')' || inMultiLineList )
+                if( inShortForm )
+                {
+                    formatted.push_back( ')' );
+                    column++;
+                }
+                else if( lastNonWhitespace == ')' || inMultiLineList )
                 {
                     formatted += fmt::format( "\n{})",
                                               std::string( listDepth * indentSize, indentChar ) );
@@ -213,6 +237,12 @@ void Prettify( std::string& aSource, char aQuoteChar )
                     formatted.push_back( ')' );
                     column++;
                 }
+
+                if( shortFormDepth == listDepth )
+                {
+                    inShortForm = false;
+                    shortFormDepth = 0;
+                }
             }
             else
             {
@@ -221,7 +251,7 @@ void Prettify( std::string& aSource, char aQuoteChar )
                 // therefore a '\' is attached to a '"' if a odd number of '\' is detected
                 if( *cursor == '\\' )
                     backslashCount++;
-                else if( *cursor == aQuoteChar && ( backslashCount & 1 ) == 0 )
+                else if( *cursor == quoteChar && ( backslashCount & 1 ) == 0 )
                     inQuote = !inQuote;
 
                 if( *cursor != '\\' )

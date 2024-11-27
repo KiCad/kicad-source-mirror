@@ -350,11 +350,10 @@ public:
      * Output the object to \a aFormatter in s-expression form.
      *
      * @param aFormatter The #OUTPUTFORMATTER object to write to.
-     * @param aNestLevel The indentation next level.
      * @param aControlBits The control bit definition for object specific formatting.
      * @throw IO_ERROR on write error.
      */
-    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
+    virtual void Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const;
 
     virtual EDA_ANGLE GetDrawRotation() const               { return GetTextAngle(); }
     virtual VECTOR2I GetDrawPos() const                     { return GetTextPos(); }

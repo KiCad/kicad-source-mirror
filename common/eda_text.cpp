@@ -53,12 +53,12 @@
 #include <wx/debug.h>           // for wxASSERT
 #include <wx/string.h>
 #include <wx/url.h>             // for wxURL
+#include <io/kicad/kicad_io_utils.h>
 #include "font/kicad_font_name.h"
 #include "font/fontconfig.h"
 #include "pgm_base.h"
 
 class OUTPUTFORMATTER;
-class wxFindReplaceData;
 
 
 GR_TEXT_H_ALIGN_T EDA_TEXT::MapHorizJustify( int aHorizJustify )
@@ -948,75 +948,75 @@ bool EDA_TEXT::IsDefaultFormatting() const
 }
 
 
-void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const
 {
-    aFormatter->Print( aNestLevel + 1, "(effects" );
+    aFormatter->Print( "(effects" );
 
-    aFormatter->Print( 0, " (font" );
+    aFormatter->Print( "(font" );
 
     if( GetFont() && !GetFont()->GetName().IsEmpty() )
-        aFormatter->Print( 0, " (face \"%s\")", GetFont()->NameAsToken() );
+        aFormatter->Print( "(face %s)", aFormatter->Quotew( GetFont()->NameAsToken() ).c_str() );
 
     // Text size
-    aFormatter->Print( 0, " (size %s %s)",
+    aFormatter->Print( "(size %s %s)",
                        EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextHeight() ).c_str(),
                        EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextWidth() ).c_str() );
 
     if( GetLineSpacing() != 1.0 )
     {
-        aFormatter->Print( 0, " (line_spacing %s)",
+        aFormatter->Print( "(line_spacing %s)",
                            FormatDouble2Str( GetLineSpacing() ).c_str() );
     }
 
     if( GetTextThickness() )
     {
-        aFormatter->Print( 0, " (thickness %s)",
+        aFormatter->Print( "(thickness %s)",
                 EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextThickness() ).c_str() );
     }
 
     if( IsBold() )
-        aFormatter->Print( 0, " (bold yes)" );
+        KICAD_FORMAT::FormatBool( aFormatter, "bold", true );
 
     if( IsItalic() )
-        aFormatter->Print( 0, " (italic yes)" );
+        KICAD_FORMAT::FormatBool( aFormatter, "italic", true );
 
     if( !( aControlBits & CTL_OMIT_COLOR ) && GetTextColor() != COLOR4D::UNSPECIFIED )
     {
-        aFormatter->Print( 0, " (color %d %d %d %s)",
+        aFormatter->Print( "(color %d %d %d %s)",
                            KiROUND( GetTextColor().r * 255.0 ),
                            KiROUND( GetTextColor().g * 255.0 ),
                            KiROUND( GetTextColor().b * 255.0 ),
                            FormatDouble2Str( GetTextColor().a ).c_str() );
     }
 
-    aFormatter->Print( 0, ")"); // (font
+    aFormatter->Print( ")"); // (font
 
     if( IsMirrored() || GetHorizJustify() != GR_TEXT_H_ALIGN_CENTER
                      || GetVertJustify() != GR_TEXT_V_ALIGN_CENTER )
     {
-        aFormatter->Print( 0, " (justify");
+        aFormatter->Print( "(justify");
 
         if( GetHorizJustify() != GR_TEXT_H_ALIGN_CENTER )
-            aFormatter->Print( 0, GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT ? " left" : " right" );
+            aFormatter->Print( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT ? " left" : " right" );
 
         if( GetVertJustify() != GR_TEXT_V_ALIGN_CENTER )
-            aFormatter->Print( 0, GetVertJustify() == GR_TEXT_V_ALIGN_TOP ? " top" : " bottom" );
+            aFormatter->Print( GetVertJustify() == GR_TEXT_V_ALIGN_TOP ? " top" : " bottom" );
 
         if( IsMirrored() )
-            aFormatter->Print( 0, " mirror" );
+            aFormatter->Print( " mirror" );
 
-        aFormatter->Print( 0, ")" ); // (justify
+        aFormatter->Print( ")" ); // (justify
     }
 
     if( !( aControlBits & CTL_OMIT_HIDE ) && !IsVisible() )
-        aFormatter->Print( 0, " (hide yes)" );
+        KICAD_FORMAT::FormatBool( aFormatter, "hide", true );
 
     if( !( aControlBits & CTL_OMIT_HYPERLINK ) && HasHyperlink() )
     {
-        aFormatter->Print( 0, " (href %s)", aFormatter->Quotew( GetHyperlink() ).c_str() );
+        aFormatter->Print( "(href %s)", aFormatter->Quotew( GetHyperlink() ).c_str() );
     }
 
-    aFormatter->Print( 0, ")\n" ); // (effects
+    aFormatter->Print( ")" ); // (effects
 }
 
 

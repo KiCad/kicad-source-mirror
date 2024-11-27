@@ -199,11 +199,9 @@ public:
      * Output the page class to \a aFormatter in s-expression form.
      *
      * @param aFormatter The #OUTPUTFORMATTER object to write to.
-     * @param aNestLevel The indentation next level.
-     * @param aControlBits The control bit definition for object specific formatting.
      * @throw IO_ERROR on write error.
      */
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
+    void Format( OUTPUTFORMATTER* aFormatter ) const;
 
 protected:
     // only the class implementation(s) may use this constructor

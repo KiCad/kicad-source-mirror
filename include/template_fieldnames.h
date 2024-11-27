@@ -84,7 +84,7 @@ struct TEMPLATE_FIELDNAME
     /**
      * Serialize this object out as text into the given #OUTPUTFORMATTER.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const ;
+    void Format( OUTPUTFORMATTER* out ) const ;
 
     /**
      * Fill this object from information in the input stream \a aSpec, which is a
@@ -139,7 +139,7 @@ public:
     /**
      * Serialize this object out as text into the given #OUTPUTFORMATTER.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel, bool aGlobal ) const ;
+    void Format( OUTPUTFORMATTER* out, bool aGlobal ) const ;
 
     /**
      * Insert or append a wanted symbol field name into the field names template.

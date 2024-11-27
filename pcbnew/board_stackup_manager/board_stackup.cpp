@@ -26,6 +26,7 @@
 #include <board_design_settings.h>
 #include <board.h>
 #include <i18n_utility.h>       // For _HKI definition
+#include <io/kicad/kicad_io_utils.h>
 #include "stackup_predefined_prms.h"
 #include <richio.h>
 #include <google/protobuf/any.pb.h>
@@ -721,16 +722,14 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
 }
 
 
-void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
-                                        const BOARD* aBoard, int aNestLevel ) const
+void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter, const BOARD* aBoard ) const
 {
     // Board stackup is the ordered list from top to bottom of
     // physical layers and substrate used to build the board.
     if( m_list.empty() )
         return;
 
-    aFormatter->Print( aNestLevel, "(stackup\n" );
-    int nest_level = aNestLevel+1;
+    aFormatter->Print( "(stackup" );
 
     // Note:
     // Unspecified parameters are not stored in file.
@@ -743,73 +742,71 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
         else
             layer_name = LSET::Name( item->GetBrdLayerId() );
 
-        aFormatter->Print( nest_level, "(layer %s (type %s)",
+        aFormatter->Print( "(layer %s (type %s)",
                            aFormatter->Quotew( layer_name ).c_str(),
                            aFormatter->Quotew( item->GetTypeName() ).c_str() );
 
-        // Output other parameters ( in sub layer list there is at least one item)
+        // Output other parameters (in sub layer list there is at least one item)
         for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
         {
             if( idx )    // not for the main (first) layer.
-            {
-                aFormatter->Print( 0, "\n" );
-                aFormatter->Print( nest_level+1, "addsublayer" );
-            }
+                aFormatter->Print( " addsublayer" );
 
             if( item->IsColorEditable() && IsPrmSpecified( item->GetColor( idx ) ) )
             {
-                aFormatter->Print( 0, " (color %s)",
+                aFormatter->Print( "(color %s)",
                                    aFormatter->Quotew( item->GetColor( idx ) ).c_str() );
             }
 
             if( item->IsThicknessEditable() )
             {
+                aFormatter->Print( "(thickness %s",
+                                   EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, item->GetThickness( idx ) ).c_str() );
+
                 if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked( idx ) )
-                    aFormatter->Print( 0, " (thickness %s locked)",
-                                       EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, item->GetThickness( idx ) ).c_str() );
-                else
-                    aFormatter->Print( 0, " (thickness %s)",
-                                       EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, item->GetThickness( idx ) ).c_str() );
+                    aFormatter->Print( " locked" );
+
+                aFormatter->Print( ")" );
             }
 
             if( item->HasMaterialValue( idx ) )
-                aFormatter->Print( 0, " (material %s)",
+            {
+                aFormatter->Print( "(material %s)",
                                    aFormatter->Quotew( item->GetMaterial( idx ) ).c_str() );
+            }
 
             if( item->HasEpsilonRValue() && item->HasMaterialValue( idx ) )
-                aFormatter->Print( 0, " (epsilon_r %g)", item->GetEpsilonR( idx ) );
+                aFormatter->Print( "(epsilon_r %g)", item->GetEpsilonR( idx ) );
 
             if( item->HasLossTangentValue() && item->HasMaterialValue( idx ) )
-                aFormatter->Print( 0, " (loss_tangent %s)",
+            {
+                aFormatter->Print( "(loss_tangent %s)",
                                    FormatDouble2Str( item->GetLossTangent( idx ) ).c_str() );
+            }
         }
 
-        aFormatter->Print( 0, ")\n" );
+        aFormatter->Print( ")" );
     }
 
     // Other infos about board, related to layers and other fabrication specifications
     if( IsPrmSpecified( m_FinishType ) )
-    {
-        aFormatter->Print( nest_level, "(copper_finish %s)\n",
-                           aFormatter->Quotew( m_FinishType ).c_str() );
-    }
+        aFormatter->Print( "(copper_finish %s)", aFormatter->Quotew( m_FinishType ).c_str() );
 
-    aFormatter->Print( nest_level, "(dielectric_constraints %s)\n",
-                       m_HasDielectricConstrains ? "yes" : "no" );
+    KICAD_FORMAT::FormatBool( aFormatter, "dielectric_constraints", m_HasDielectricConstrains );
 
     if( m_EdgeConnectorConstraints > 0 )
     {
-        aFormatter->Print( nest_level, "(edge_connector %s)\n",
+        aFormatter->Print( "(edge_connector %s)",
                            m_EdgeConnectorConstraints > 1 ? "bevelled": "yes" );
     }
 
     if( m_CastellatedPads )
-        aFormatter->Print( nest_level, "(castellated_pads yes)\n" );
+        KICAD_FORMAT::FormatBool( aFormatter, "castellated_pads", true );
 
     if( m_EdgePlating )
-        aFormatter->Print( nest_level, "(edge_plating yes)\n" );
+        KICAD_FORMAT::FormatBool( aFormatter, "edge_plating", true );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( ")" );
 }
 
 

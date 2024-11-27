@@ -121,11 +121,11 @@ public:
     /**
      * Output formatter for the embedded files.
      * @param aOut is the output formatter.
-     * @param aNestLevel is the current indentation level.
-     * @param aWriteData is true if the actual data should be written.  This is false when writing an element
-     *                   that is already embedded in a file that itself has embedded files (boards, schematics, etc.)
+     * @param aWriteData is true if the actual data should be written.  This is false when writing
+     *                   an element that is already embedded in a file that itself has embedded
+     *                   files (boards, schematics, etc.)
     */
-    void WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, int aNestLevel, bool aWriteData ) const;
+    void WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, bool aWriteData ) const;
 
     /**
      * Returns the link for an embedded file.

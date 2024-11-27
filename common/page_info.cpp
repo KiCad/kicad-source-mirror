@@ -22,8 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#include <common.h>
 #include <page_info.h>
 #include <macros.h>
 #include <eda_units.h>
@@ -272,19 +270,21 @@ void PAGE_INFO::SetHeightMils( double aHeightInMils )
 }
 
 
-void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter ) const
 {
-    aFormatter->Print( aNestLevel, "(paper %s", aFormatter->Quotew( GetType() ).c_str() );
+    aFormatter->Print( "(paper %s", aFormatter->Quotew( GetType() ).c_str() );
 
     // The page dimensions are only required for user defined page sizes.
     // Internally, the page size is in mils
     if( GetType() == PAGE_INFO::Custom )
-        aFormatter->Print( 0, " %g %g",
+    {
+        aFormatter->Print( " %g %g",
                            GetWidthMils() * 25.4 / 1000.0,
                            GetHeightMils() * 25.4 / 1000.0 );
+    }
 
     if( !IsCustom() && IsPortrait() )
-        aFormatter->Print( 0, " portrait" );
+        aFormatter->Print( " portrait" );
 
-    aFormatter->Print( 0, ")\n" );
+    aFormatter->Print( ")" );
 }

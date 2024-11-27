@@ -235,10 +235,9 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
         {
             // Save global fieldname templates
             STRING_FORMATTER sf;
-            m_templateMgr->Format( &sf, 0, true );
+            m_templateMgr->Format( &sf, true );
 
             wxString record = From_UTF8( sf.GetString().c_str() );
-            record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
             record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 
             cfg->m_Drawing.field_names = record.ToStdString();
