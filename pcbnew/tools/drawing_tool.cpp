@@ -214,7 +214,9 @@ bool DRAWING_TOOL::Init()
                 return (   m_mode == MODE::ARC
                         || m_mode == MODE::ZONE
                         || m_mode == MODE::KEEPOUT
-                        || m_mode == MODE::GRAPHIC_POLYGON );
+                        || m_mode == MODE::GRAPHIC_POLYGON
+                        || m_mode == MODE::BEZIER
+                        || m_mode == MODE::LINE );
             };
 
     // functor for tools that can automatically close the outline
