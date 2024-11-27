@@ -585,6 +585,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_paneNetDisplayOptions->Expand();
 
     loadDefaultLayerPresets();
+    rebuildLayerPresetsWidget();
     rebuildObjects();
     OnBoardChanged();
 
@@ -1441,7 +1442,6 @@ void APPEARANCE_CONTROLS::SetUserLayerPresets( std::vector<LAYER_PRESET>& aPrese
 void APPEARANCE_CONTROLS::loadDefaultLayerPresets()
 {
     m_layerPresets.clear();
-    m_presetMRU.clear();
 
     // Load the read-only defaults
     for( const LAYER_PRESET& preset :
@@ -1450,8 +1450,6 @@ void APPEARANCE_CONTROLS::loadDefaultLayerPresets()
     {
         m_layerPresets[preset.name]          = preset;
         m_layerPresets[preset.name].readOnly = true;
-
-        m_presetMRU.Add( preset.name );
     }
 }
 
@@ -2520,6 +2518,7 @@ void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
                                                   KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
 
     m_cbLayerPresets->Clear();
+    m_presetMRU.clear();
 
     // Build the layers preset list.
     // By default, the presetAllLayers will be selected
@@ -2528,8 +2527,10 @@ void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
 
     for( std::pair<const wxString, LAYER_PRESET>& pair : m_layerPresets )
     {
-        m_cbLayerPresets->Append( wxGetTranslation( pair.first ),
+        const wxString translatedName = wxGetTranslation( pair.first );
+        m_cbLayerPresets->Append( wxGetTranslation( translatedName ),
                                   static_cast<void*>( &pair.second ) );
+        m_presetMRU.push_back( translatedName );
 
         if( pair.first == presetAllLayers.name )
             default_idx = idx;
@@ -2767,8 +2768,10 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
     if( !m_currentPreset->name.IsEmpty() )
     {
-        m_presetMRU.Remove( m_currentPreset->name );
-        m_presetMRU.Insert( m_currentPreset->name, 0 );
+        const wxString translatedName = wxGetTranslation( m_currentPreset->name );
+
+        m_presetMRU.Remove( translatedName );
+        m_presetMRU.Insert( translatedName, 0 );
     }
 
     passOnFocus();
