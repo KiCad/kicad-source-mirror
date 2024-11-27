@@ -2284,6 +2284,47 @@ bool FABMASTER::loadZones( BOARD* aBoard )
 }
 
 
+void FABMASTER::setupText( const FABMASTER::GRAPHIC_TEXT& aGText, PCB_LAYER_ID aLayer,
+                           PCB_TEXT& aText, const BOARD& aBoard, const OPT_VECTOR2I& aMirrorPoint )
+{
+    aText.SetHorizJustify( aGText.orient );
+
+    aText.SetKeepUpright( false );
+
+    EDA_ANGLE angle = EDA_ANGLE( aGText.rotation );
+    angle.Normalize180();
+
+    if( aMirrorPoint.has_value() )
+    {
+        aText.SetLayer( FlipLayer( aLayer ) );
+        aText.SetTextPos( VECTOR2I(
+                aGText.start_x, 2 * aMirrorPoint->y - ( aGText.start_y - aGText.height / 2 ) ) );
+        aText.SetMirrored( !aGText.mirror );
+
+        aText.SetTextAngle( -angle + ANGLE_180 );
+    }
+    else
+    {
+        aText.SetLayer( aLayer );
+        aText.SetTextPos( VECTOR2I( aGText.start_x, aGText.start_y - aGText.height / 2 ) );
+        aText.SetMirrored( aGText.mirror );
+
+        aText.SetTextAngle( angle );
+    }
+
+    if( std::abs( angle ) >= ANGLE_90 )
+    {
+        aText.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+    }
+
+    aText.SetText( aGText.text );
+    aText.SetItalic( aGText.ital );
+    aText.SetTextThickness( aGText.thickness );
+    aText.SetTextHeight( aGText.height );
+    aText.SetTextWidth( aGText.width );
+}
+
+
 bool FABMASTER::loadFootprints( BOARD* aBoard )
 {
     const NETNAMES_MAP& netinfo = aBoard->GetNetInfo().NetsByName();
@@ -2339,10 +2380,10 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
             for( auto& ref : refdes )
             {
-                const GRAPHIC_TEXT *lsrc =
-                        static_cast<const GRAPHIC_TEXT*>( ( *( ref->segment.begin() ) ).get() );
+                const GRAPHIC_TEXT& lsrc =
+                        static_cast<const GRAPHIC_TEXT&>( **ref->segment.begin() );
 
-                if( lsrc->text == src->refdes )
+                if( lsrc.text == src->refdes )
                 {
                     PCB_TEXT*    txt = nullptr;
                     PCB_LAYER_ID layer = getLayer( ref->layer );
@@ -2363,23 +2404,14 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         txt = new PCB_TEXT( fp );
                     }
 
+                    OPT_VECTOR2I flip_point = std::nullopt;
                     if( src->mirror )
-                    {
-                        txt->SetLayer( FlipLayer( layer ) );
-                        txt->SetTextPos( VECTOR2I( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
-                    }
-                    else
-                    {
-                        txt->SetLayer( layer );
-                        txt->SetTextPos( VECTOR2I( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
-                    }
+                        flip_point = VECTOR2I( src->x, src->y );
 
-                    txt->SetText( lsrc->text );
-                    txt->SetItalic( lsrc->ital );
-                    txt->SetTextThickness( lsrc->thickness );
-                    txt->SetTextHeight( lsrc->height );
-                    txt->SetTextWidth( lsrc->width );
-                    txt->SetHorizJustify( lsrc->orient );
+                    const EDA_ANGLE fp_angle = EDA_ANGLE( lsrc.rotation ).Normalized();
+                    txt->SetTextAngle( fp_angle );
+
+                    setupText( lsrc, layer, *txt, *aBoard, flip_point );
 
                     if( txt != &fp->Reference() )
                         fp->Add( txt, ADD_MODE::APPEND );
@@ -2535,35 +2567,22 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     }
                     case GR_SHAPE_TEXT:
                     {
-                        const GRAPHIC_TEXT *lsrc =
-                                static_cast<const GRAPHIC_TEXT*>( seg.get() );
+                        const GRAPHIC_TEXT& lsrc = static_cast<const GRAPHIC_TEXT&>( *seg );
 
-                        PCB_TEXT* txt = new PCB_TEXT( fp );
+                        std::unique_ptr<PCB_TEXT> txt = std::make_unique<PCB_TEXT>( fp );
 
+                        OPT_VECTOR2I flip_point;
                         if( src->mirror )
-                        {
-                            txt->SetLayer( FlipLayer( layer ) );
-                            txt->SetTextPos( VECTOR2I( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
-                        }
-                        else
-                        {
-                            txt->SetLayer( layer );
-                            txt->SetTextPos( VECTOR2I( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
-                        }
+                            flip_point = VECTOR2I( src->x, src->y );
 
-                        txt->SetText( lsrc->text );
-                        txt->SetItalic( lsrc->ital );
-                        txt->SetTextThickness( lsrc->thickness );
-                        txt->SetTextHeight( lsrc->height );
-                        txt->SetTextWidth( lsrc->width );
-                        txt->SetHorizJustify( lsrc->orient );
+                        setupText( lsrc, layer, *txt, *aBoard, flip_point );
 
                         // FABMASTER doesn't have visibility flags but layers that are not silk should be hidden
                         // by default to prevent clutter.
                         if( txt->GetLayer() != F_SilkS && txt->GetLayer() != B_SilkS )
                             txt->SetVisible( false );
 
-                        fp->Add( txt, ADD_MODE::APPEND );
+                        fp->Add( txt.release(), ADD_MODE::APPEND );
                         break;
                     }
                     default:
@@ -2887,7 +2906,9 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
 
         if( IsCopperLayer( layer ) )
         {
-            if( seg->shape == GR_SHAPE_LINE )
+            switch( seg->shape )
+            {
+            case GR_SHAPE_LINE:
             {
                 const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
 
@@ -2902,8 +2923,9 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
                     trk->SetNet( net_it->second );
 
                 aBoard->Add( trk, ADD_MODE::APPEND );
+                break;
             }
-            else if( seg->shape == GR_SHAPE_ARC )
+            case GR_SHAPE_ARC:
             {
                 const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
 
@@ -2915,47 +2937,18 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
                     trk->SetNet( net_it->second );
 
                 aBoard->Add( trk, ADD_MODE::APPEND );
+                break;
             }
-            else if( seg->shape == GR_SHAPE_CIRCLE )
+            default:
             {
-                const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
-
-                PCB_SHAPE* circle = new PCB_SHAPE( aBoard, SHAPE_T::CIRCLE );
-                circle->SetLayer( layer );
-                circle->SetCenter( VECTOR2I( src->center_x, src->center_y ) );
-                circle->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-                circle->SetWidth( src->width );
-
-                aBoard->Add( circle, ADD_MODE::APPEND );
+                // Defer to the generic graphics factory
+                for( std::unique_ptr<BOARD_ITEM>& new_item :
+                     createBoardItems( *aBoard, layer, *seg ) )
+                {
+                    aBoard->Add( new_item.release(), ADD_MODE::APPEND );
+                }
+                break;
             }
-            else if( seg->shape == GR_SHAPE_RECTANGLE )
-            {
-                const GRAPHIC_RECTANGLE *src =
-                        static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
-
-                PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECTANGLE );
-                rect->SetLayer( layer );
-                rect->SetStart( VECTOR2I( src->start_x, src->start_y ) );
-                rect->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-                rect->SetStroke( STROKE_PARAMS( 0 ) );
-                rect->SetFilled( true );
-                aBoard->Add( rect, ADD_MODE::APPEND );
-            }
-            else if( seg->shape == GR_SHAPE_TEXT )
-            {
-                const GRAPHIC_TEXT *src =
-                        static_cast<const GRAPHIC_TEXT*>( seg.get() );
-
-                PCB_TEXT* txt = new PCB_TEXT( aBoard );
-                txt->SetLayer( layer );
-                txt->SetTextPos( VECTOR2I( src->start_x, src->start_y - src->height / 2 ) );
-                txt->SetText( src->text );
-                txt->SetItalic( src->ital );
-                txt->SetTextThickness( src->thickness );
-                txt->SetTextHeight( src->height );
-                txt->SetTextWidth( src->width );
-                txt->SetHorizJustify( src->orient );
-                aBoard->Add( txt, ADD_MODE::APPEND );
             }
         }
         else
@@ -3125,14 +3118,12 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
 
         auto new_text = std::make_unique<PCB_TEXT>( &aBoard );
 
-        new_text->SetLayer( aLayer );
-        new_text->SetTextPos( VECTOR2I( src.start_x, src.start_y - src.height / 2 ) );
-        new_text->SetText( src.text );
-        new_text->SetItalic( src.ital );
-        new_text->SetTextThickness( src.thickness );
-        new_text->SetTextHeight( src.height );
-        new_text->SetTextWidth( src.width );
-        new_text->SetHorizJustify( src.orient );
+        if( IsBackLayer( aLayer ) )
+        {
+            new_text->SetMirrored( true );
+        }
+
+        setupText( src, aLayer, *new_text, aBoard, std::nullopt );
 
         new_items.emplace_back( std::move( new_text ) );
         break;
