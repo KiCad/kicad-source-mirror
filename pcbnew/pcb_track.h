@@ -121,6 +121,12 @@ public:
     void SetStart( const VECTOR2I& aStart ) { m_Start = aStart; }
     const VECTOR2I& GetStart() const        { return m_Start; }
 
+    void SetStartX( int aX )                { m_Start.x = aX; }
+    void SetStartY( int aY )                { m_Start.y = aY; }
+
+    int GetStartX() const                   { return m_Start.x; }
+    int GetStartY() const                   { return m_Start.y; }
+
     void SetEndX( int aX )                  { m_End.x = aX; }
     void SetEndY( int aY )                  { m_End.y = aY; }
 
