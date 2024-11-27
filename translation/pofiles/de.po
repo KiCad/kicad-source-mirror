@@ -23,13 +23,14 @@
 # tct123 <tct1234@protonmail.com>, 2024.
 # Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
 # Frank Sonnenberg <frasoberg@web.de>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-11-26 08:01+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-11-28 15:00+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -23228,7 +23229,7 @@ msgstr "Spannungswerte des Arbeitspunktes aus der Simulation anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:1239
 msgid "Show OP Currents"
-msgstr "OP-Spannungen anzeigen"
+msgstr "OP-Ströme anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:1240
 msgid "Show operating point current data from simulation"
