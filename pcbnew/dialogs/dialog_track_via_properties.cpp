@@ -146,26 +146,26 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                 if( !m_tracks )     // first track in the list
                 {
-                    m_trackStartX.SetValue( t->GetStart().x );
-                    m_trackStartY.SetValue( t->GetStart().y );
-                    m_trackEndX.SetValue( t->GetEnd().x );
-                    m_trackEndY.SetValue( t->GetEnd().y );
+                    m_trackStartX.SetValue( t->GetStartX() );
+                    m_trackStartY.SetValue( t->GetStartY() );
+                    m_trackEndX.SetValue( t->GetEndX() );
+                    m_trackEndY.SetValue( t->GetEndY() );
                     m_trackWidth.SetValue( t->GetWidth() );
                     track_selection_layer = t->GetLayer();
                     m_tracks = true;
                 }
                 else        // check if values are the same for every selected track
                 {
-                    if( m_trackStartX.GetValue() != t->GetStart().x )
+                    if( m_trackStartX.GetValue() != t->GetStartX() )
                         m_trackStartX.SetValue( INDETERMINATE_STATE );
 
-                    if( m_trackStartY.GetValue() != t->GetStart().y )
+                    if( m_trackStartY.GetValue() != t->GetStartY() )
                         m_trackStartY.SetValue( INDETERMINATE_STATE );
 
-                    if( m_trackEndX.GetValue() != t->GetEnd().x )
+                    if( m_trackEndX.GetValue() != t->GetEndX() )
                         m_trackEndX.SetValue( INDETERMINATE_STATE );
 
-                    if( m_trackEndY.GetValue() != t->GetEnd().y )
+                    if( m_trackEndY.GetValue() != t->GetEndY() )
                         m_trackEndY.SetValue( INDETERMINATE_STATE );
 
                     if( m_trackWidth.GetValue() != t->GetWidth() )
@@ -583,16 +583,16 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 PCB_TRACK* t = static_cast<PCB_TRACK*>( item );
 
                 if( !m_trackStartX.IsIndeterminate() )
-                    t->SetStart( VECTOR2I( m_trackStartX.GetIntValue(), t->GetStart().y ) );
+                    t->SetStartX( m_trackStartX.GetIntValue() );
 
                 if( !m_trackStartY.IsIndeterminate() )
-                    t->SetStart( VECTOR2I( t->GetStart().x, m_trackStartY.GetIntValue() ) );
+                    t->SetStartY( m_trackStartY.GetIntValue() );
 
                 if( !m_trackEndX.IsIndeterminate() )
-                    t->SetEnd( VECTOR2I( m_trackEndX.GetIntValue(), t->GetEnd().y ) );
+                    t->SetEndX( m_trackEndX.GetIntValue() );
 
                 if( !m_trackEndY.IsIndeterminate() )
-                    t->SetEnd( VECTOR2I( t->GetEnd().x, m_trackEndY.GetIntValue() ) );
+                    t->SetEndY( m_trackEndY.GetIntValue() );
 
                 if( !m_trackWidth.IsIndeterminate() )
                     t->SetWidth( m_trackWidth.GetIntValue() );
