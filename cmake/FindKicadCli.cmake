@@ -23,19 +23,19 @@ endif()
 #   KICAD_CLI_UPGRADE_SYMS(FILE TARGET [FORCE])
 #
 # Arguments:
-#   FILE    - The symbol library file to upgrade
+#   FILES   - The symbol library file to upgrade
 #   TARGET  - The CMake target to add the upgrade command to
 #   FORCE   - Optional argument to force the upgrade
 #
-function(KICAD_CLI_UPGRADE_SYMS FILE TARGET)
+function(KICAD_CLI_UPGRADE_SYMS)
     if (NOT KICAD_CLI)
         message(FATAL_ERROR "Cannot run upgrade target (kicad-cli not found)")
     endif()
 
     # Parse the optional FORCE argument
     set(options FORCE)
-    set(oneValueArgs)
-    set(multiValueArgs)
+    set(oneValueArgs TARGET)
+    set(multiValueArgs FILES)
     cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     # Check if FORCE was provided
@@ -45,11 +45,19 @@ function(KICAD_CLI_UPGRADE_SYMS FILE TARGET)
         set(FORCE_ARG "")
     endif()
 
-    add_custom_command(
-        TARGET ${TARGET}
-        COMMAND ${KICAD_CLI} sym upgrade ${FORCE_ARG} ${FILE}
-        DEPENDS ${FILE}
-        COMMENT
-            "Upgrading symbol lib format: ${FILE}"
-    )
+    # Validate required arguments
+    if(NOT ARGS_TARGET)
+        message(FATAL_ERROR "KICAD_CLI_UPGRADE_SYMS requires a TARGET argument")
+    endif()
+
+    foreach(FILE ${ARGS_FILES})
+        add_custom_command(
+            TARGET ${ARGS_TARGET}
+            PRE_BUILD
+            COMMAND ${KICAD_CLI} sym upgrade ${FORCE_ARG} ${FILE}
+            COMMENT
+                "Upgrading symbol lib format: ${FILE}"
+        )
+    endforeach()
+
 endfunction()

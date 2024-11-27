@@ -23,6 +23,9 @@ set(NEWSTROKE_SOURCE_FILES
     katakana.kicad_sym
 )
 
+# Make the files absolute (in-place)
+list(TRANSFORM NEWSTROKE_SOURCE_FILES PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/)
+
 
 add_custom_command(
     OUTPUT
@@ -53,11 +56,9 @@ else()
         COMMENT "Running format update on all newstroke .kicad_sym files"
     )
 
-    foreach(NEWSTROKE_SOURCE_FILE ${NEWSTROKE_SOURCE_FILES})
-        KICAD_CLI_UPGRADE_SYMS(
-            ${CMAKE_CURRENT_SOURCE_DIR}/${NEWSTROKE_SOURCE_FILE}
-            newstroke_upgrade_syms
-        )
-    endforeach()
+    KICAD_CLI_UPGRADE_SYMS(
+        TARGET newstroke_upgrade_syms
+        FILES ${NEWSTROKE_SOURCE_FILES}
+    )
 endif()
 
