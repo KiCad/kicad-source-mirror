@@ -45,6 +45,7 @@
 enum PCB_LAYER_ID : int;
 class BOARD;
 class BOARD_ITEM;
+class PCB_TEXT;
 class PROGRESS_REPORTER;
 
 class FABMASTER
@@ -617,6 +618,12 @@ private:
     SHAPE_POLY_SET loadShapePolySet( const graphic_element& aLine);
 
     static bool traceIsOpen( const FABMASTER::TRACE& aLine );
+
+    /**
+     * Set parameters for graphic text
+     */
+    static void setupText( const FABMASTER::GRAPHIC_TEXT& aGraphicText, PCB_LAYER_ID aLayer,
+                           PCB_TEXT& aText, const BOARD& aBoard, const OPT_VECTOR2I& aMirrorPoint );
 
     /**
      * Convert one Fabmaster graphic item to one or more PCB items
