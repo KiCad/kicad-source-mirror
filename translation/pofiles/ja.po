@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-11-25 07:00+0000\n"
+"PO-Revision-Date: 2024-11-28 15:00+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -23372,9 +23372,8 @@ msgid "Place Symbol"
 msgstr "シンボルを配置"
 
 #: eeschema/tools/sch_drawing_tools.cpp:571
-#, fuzzy
 msgid "Select a single symbol to place the next unit."
-msgstr "新しい角を追加する前に角を選択する。"
+msgstr "次のユニットを配置するためにシンボルを選択してください。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:584
 msgid "This symbol has only one unit."
@@ -26332,9 +26331,8 @@ msgid "Select output type:"
 msgstr "出力タイプを選択:"
 
 #: kicad/dialogs/panel_jobs.cpp:684
-#, fuzzy
 msgid "No outputs defined"
-msgstr "<未定義>"
+msgstr "出力が定義されていません"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:145
 msgid "Edit the project schematic"
@@ -37053,9 +37051,8 @@ msgid "Set Offset"
 msgstr "オフセットをセット"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:191
-#, fuzzy
 msgid "Rectangle cannot be zero-sized."
-msgstr "円弧の角度は0にできません。"
+msgstr "矩形のサイズは0にできません。"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:450
 msgid "Arc angle must be greater than 0"
@@ -37167,7 +37164,6 @@ msgid "By Center and Size"
 msgstr "中心とサイズ"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
-#, fuzzy
 msgid "By Endpoints"
 msgstr "終点"
 
