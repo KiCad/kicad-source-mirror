@@ -45,9 +45,6 @@
 #include <api/board/board_types.pb.h>
 
 
-using namespace kiapi::common;
-
-
 PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent, KICAD_T idtype ) :
         BOARD_ITEM( parent, idtype ),
         EDA_TEXT( pcbIUScale )
@@ -86,44 +83,24 @@ PCB_TEXT::~PCB_TEXT()
 
 void PCB_TEXT::Serialize( google::protobuf::Any &aContainer ) const
 {
-    kiapi::board::types::Text boardText;
+    using namespace kiapi::common;
+    kiapi::board::types::BoardText boardText;
+
+    boardText.mutable_id()->set_value( m_Uuid.AsStdString() );
     boardText.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
+    boardText.set_knockout( IsKnockout() );
 
-    kiapi::common::types::Text& text = *boardText.mutable_text();
+    google::protobuf::Any any;
+    EDA_TEXT::Serialize( any );
+    any.UnpackTo( boardText.mutable_text() );
 
-    text.mutable_id()->set_value( m_Uuid.AsStdString() );
-    text.mutable_position()->set_x_nm( GetPosition().x );
-    text.mutable_position()->set_y_nm( GetPosition().y );
-    text.set_text( GetText().ToStdString() );
-    text.set_hyperlink( GetHyperlink().ToStdString() );
-    text.set_locked( IsLocked() ? types::LockedState::LS_LOCKED
-                                : types::LockedState::LS_UNLOCKED );
+    // Some of the common Text message fields are not stored in EDA_TEXT
+    types::Text* text = boardText.mutable_text();
 
-    kiapi::common::types::TextAttributes* attrs = text.mutable_attributes();
+    PackVector2( *text->mutable_position(), GetPosition() );
 
-    if( GetFont() )
-        attrs->set_font_name( GetFont()->GetName().ToStdString() );
-
-    attrs->set_horizontal_alignment(
-            ToProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>( GetHorizJustify() ) );
-
-    attrs->set_vertical_alignment(
-            ToProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>( GetVertJustify() ) );
-
-    attrs->mutable_angle()->set_value_degrees( GetTextAngleDegrees() );
-    attrs->set_line_spacing( GetLineSpacing() );
-    attrs->mutable_stroke_width()->set_value_nm( GetTextThickness() );
-    attrs->set_italic( IsItalic() );
-    attrs->set_bold( IsBold() );
-    attrs->set_underlined( GetAttributes().m_Underlined );
-    attrs->set_visible( IsVisible() );
-    attrs->set_mirrored( IsMirrored() );
-    attrs->set_multiline( IsMultilineAllowed() );
-    attrs->set_keep_upright( IsKeepUpright() );
-    attrs->mutable_size()->set_x_nm( GetTextSize().x );
-    attrs->mutable_size()->set_y_nm( GetTextSize().y );
-
-    text.set_knockout( IsKnockout() );
+    text->set_locked( IsLocked() ? types::LockedState::LS_LOCKED
+                                 : types::LockedState::LS_UNLOCKED );
 
     aContainer.PackFrom( boardText );
 }
@@ -131,53 +108,24 @@ void PCB_TEXT::Serialize( google::protobuf::Any &aContainer ) const
 
 bool PCB_TEXT::Deserialize( const google::protobuf::Any &aContainer )
 {
-    kiapi::board::types::Text textWrapper;
+    using namespace kiapi::common;
+    kiapi::board::types::BoardText boardText;
 
-    if( !aContainer.UnpackTo( &textWrapper ) )
+    if( !aContainer.UnpackTo( &boardText ) )
         return false;
 
-    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( textWrapper.layer() ) );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( boardText.layer() ) );
+    const_cast<KIID&>( m_Uuid ) = KIID( boardText.id().value() );
+    SetIsKnockout( boardText.knockout() );
 
-    const kiapi::common::types::Text& text = textWrapper.text();
+    google::protobuf::Any any;
+    any.PackFrom( boardText.text() );
+    EDA_TEXT::Deserialize( any );
 
-    const_cast<KIID&>( m_Uuid ) = KIID( text.id().value() );
-    SetPosition( VECTOR2I( text.position().x_nm(), text.position().y_nm() ) );
-    SetLocked( text.locked() == kiapi::common::types::LockedState::LS_LOCKED );
-    SetText( wxString( text.text().c_str(), wxConvUTF8 ) );
-    SetHyperlink( wxString( text.hyperlink().c_str(), wxConvUTF8 ) );
-    SetIsKnockout( text.knockout() );
+    const types::Text& text = boardText.text();
 
-    if( text.has_attributes() )
-    {
-        TEXT_ATTRIBUTES attrs = GetAttributes();
-
-        attrs.m_Bold = text.attributes().bold();
-        attrs.m_Italic = text.attributes().italic();
-        attrs.m_Underlined = text.attributes().underlined();
-        attrs.m_Visible = text.attributes().visible();
-        attrs.m_Mirrored = text.attributes().mirrored();
-        attrs.m_Multiline = text.attributes().multiline();
-        attrs.m_KeepUpright = text.attributes().keep_upright();
-        attrs.m_Size = VECTOR2I( text.attributes().size().x_nm(), text.attributes().size().y_nm() );
-
-        if( !text.attributes().font_name().empty() )
-        {
-            attrs.m_Font = KIFONT::FONT::GetFont(
-                    wxString( text.attributes().font_name().c_str(), wxConvUTF8 ), attrs.m_Bold,
-                    attrs.m_Italic );
-        }
-
-        attrs.m_Angle = EDA_ANGLE( text.attributes().angle().value_degrees(), DEGREES_T );
-        attrs.m_LineSpacing = text.attributes().line_spacing();
-        attrs.m_StrokeWidth = text.attributes().stroke_width().value_nm();
-        attrs.m_Halign = FromProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>(
-                text.attributes().horizontal_alignment() );
-
-        attrs.m_Valign = FromProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>(
-                text.attributes().vertical_alignment() );
-
-        SetAttributes( attrs );
-    }
+    SetPosition( UnpackVector2( text.position() ) );
+    SetLocked( text.locked() == types::LockedState::LS_LOCKED );
 
     return true;
 }

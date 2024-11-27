@@ -22,6 +22,9 @@
 
 #include <api/api_handler_common.h>
 #include <build_version.h>
+#include <eda_shape.h>
+#include <eda_text.h>
+#include <geometry/shape_compound.h>
 #include <google/protobuf/empty.pb.h>
 #include <pgm_base.h>
 #include <project/net_settings.h>
@@ -40,6 +43,9 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
     registerHandler<commands::GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
     registerHandler<GetNetClasses, NetClassesResponse>( &API_HANDLER_COMMON::handleGetNetClasses );
     registerHandler<Ping, Empty>( &API_HANDLER_COMMON::handlePing );
+    registerHandler<GetTextExtents, types::Box2>( &API_HANDLER_COMMON::handleGetTextExtents );
+    registerHandler<GetTextAsShapes, GetTextAsShapesResponse>(
+            &API_HANDLER_COMMON::handleGetTextAsShapes );
 }
 
 
@@ -79,4 +85,72 @@ HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses( GetN
 HANDLER_RESULT<Empty> API_HANDLER_COMMON::handlePing( Ping& aMsg, const HANDLER_CONTEXT& aCtx )
 {
     return Empty();
+}
+
+
+HANDLER_RESULT<types::Box2> API_HANDLER_COMMON::handleGetTextExtents( GetTextExtents& aMsg,
+                                                                      const HANDLER_CONTEXT& aCtx )
+{
+    EDA_TEXT text( pcbIUScale );
+    google::protobuf::Any any;
+    any.PackFrom( aMsg.text() );
+
+    if( !text.Deserialize( any ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "Could not decode text in GetTextExtents message" );
+        return tl::unexpected( e );
+    }
+
+    types::Box2 response;
+
+    BOX2I bbox = text.GetTextBox();
+    EDA_ANGLE angle = text.GetTextAngle();
+
+    if( !angle.IsZero() )
+        bbox = bbox.GetBoundingBoxRotated( text.GetTextPos(), text.GetTextAngle() );
+
+    response.mutable_position()->set_x_nm( bbox.GetPosition().x );
+    response.mutable_position()->set_y_nm( bbox.GetPosition().y );
+    response.mutable_size()->set_x_nm( bbox.GetSize().x );
+    response.mutable_size()->set_y_nm( bbox.GetSize().y );
+
+    return response;
+}
+
+
+HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShapes(
+        GetTextAsShapes& aMsg, const HANDLER_CONTEXT& aCtx )
+{
+    GetTextAsShapesResponse reply;
+
+    for( const Text& textMsg : aMsg.text() )
+    {
+        EDA_TEXT text( pcbIUScale );
+        google::protobuf::Any any;
+        any.PackFrom( textMsg );
+
+        if( !text.Deserialize( any ) )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "Could not decode text in GetTextAsShapes message" );
+            return tl::unexpected( e );
+        }
+
+        std::shared_ptr<SHAPE_COMPOUND> shapes = text.GetEffectiveTextShape( false );
+
+        TextWithShapes* entry = reply.add_text_with_shapes();
+        entry->mutable_text()->CopyFrom( textMsg );
+
+        for( SHAPE* subshape : shapes->Shapes() )
+        {
+            EDA_SHAPE proxy( *subshape );
+            proxy.Serialize( any );
+            any.UnpackTo( entry->mutable_shapes() );
+        }
+    }
+
+    return reply;
 }

@@ -57,6 +57,7 @@ set( KICOMMON_SRCS
     newstroke_font.cpp
     font/fontconfig.cpp
     font/version_info.cpp
+
     # Gal
     gal/color4d.cpp
     # Jobs
@@ -189,13 +190,14 @@ set( KICOMMON_SRCS
     io/kicad/kicad_io_utils.cpp    # needed by richio
     io/io_base.cpp
     io/io_utils.cpp
+
+    api/serializable.cpp
     )
 
 if( KICAD_IPC_API )
     set( KICOMMON_SRCS
         ${KICOMMON_SRCS}
         api/api_handler.cpp
-        api/api_handler_common.cpp
         api/api_plugin.cpp
         api/api_plugin_manager.cpp
         api/api_server.cpp
@@ -670,6 +672,7 @@ set( COMMON_SRCS
 if( KICAD_IPC_API )
     set( COMMON_SRCS
         ${COMMON_SRCS}
+        api/api_handler_common.cpp
         api/api_handler_editor.cpp
     )
 endif()

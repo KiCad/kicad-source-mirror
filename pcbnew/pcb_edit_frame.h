@@ -61,6 +61,7 @@ class DIALOG_BOARD_SETUP;
 #ifdef KICAD_IPC_API
 class KICAD_API_SERVER;
 class API_HANDLER_PCB;
+class API_HANDLER_COMMON;
 #endif
 
 enum LAST_PATH_TYPE : unsigned int;
@@ -888,6 +889,7 @@ private:
 
 #ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_PCB> m_apiHandler;
+    std::unique_ptr<API_HANDLER_COMMON> m_apiHandlerCommon;
 #endif
 };
 

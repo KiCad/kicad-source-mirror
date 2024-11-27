@@ -30,13 +30,18 @@
 #include <bezier_curves.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <eda_draw_frame.h>
+#include <geometry/shape_arc.h>
+#include <geometry/shape_circle.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
-#include <geometry/shape_circle.h>
+#include <geometry/shape_rect.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_item.h>
 #include <plotters/plotter.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/common/types/base_types.pb.h>
 
 
 EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
@@ -56,6 +61,252 @@ EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
 
 EDA_SHAPE::~EDA_SHAPE()
 {
+}
+
+
+EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
+        m_endsSwapped( false ),
+        m_stroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_fill(),
+        m_rectangleHeight( 0 ),
+        m_rectangleWidth( 0 ),
+        m_segmentLength( 0 ),
+        m_editState( 0 ),
+        m_proxyItem( false )
+{
+    switch( aShape.Type() )
+    {
+    case SH_RECT:
+    {
+        auto rect = static_cast<const SHAPE_RECT&>( aShape );
+        m_shape = SHAPE_T::RECTANGLE;
+        SetStart( rect.GetPosition() );
+        SetEnd( rect.GetPosition() + rect.GetSize() );
+        break;
+    }
+
+    case SH_SEGMENT:
+    {
+        auto seg = static_cast<const SHAPE_SEGMENT&>( aShape );
+        m_shape = SHAPE_T::SEGMENT;
+        SetStart( seg.GetSeg().A );
+        SetEnd( seg.GetSeg().B );
+        SetWidth( seg.GetWidth() );
+        break;
+    }
+
+    case SH_LINE_CHAIN:
+    {
+        auto line = static_cast<const SHAPE_LINE_CHAIN&>( aShape );
+        m_shape = SHAPE_T::POLY;
+        m_poly = SHAPE_POLY_SET();
+        m_poly.AddOutline( line );
+        SetWidth( line.Width() );
+        break;
+    }
+
+    case SH_CIRCLE:
+    {
+        auto circle = static_cast<const SHAPE_CIRCLE&>( aShape );
+        m_shape = SHAPE_T::CIRCLE;
+        SetStart( circle.GetCenter() );
+        SetEnd( circle.GetCenter() + circle.GetRadius() );
+        break;
+    }
+
+    case SH_ARC:
+    {
+        auto arc = static_cast<const SHAPE_ARC&>( aShape );
+        m_shape = SHAPE_T::ARC;
+        SetArcGeometry( arc.GetP0(), arc.GetArcMid(), arc.GetP1() );
+        SetWidth( arc.GetWidth() );
+        break;
+    }
+
+    case SH_SIMPLE:
+    {
+        auto poly = static_cast<const SHAPE_SIMPLE&>( aShape );
+        m_shape = SHAPE_T::POLY;
+        poly.TransformToPolygon( m_poly, 0, ERROR_INSIDE );
+        break;
+    }
+
+    // currently unhandled
+    case SH_POLY_SET:
+    case SH_COMPOUND:
+    case SH_NULL:
+    case SH_POLY_SET_TRIANGLE:
+    default:
+        m_shape = SHAPE_T::UNDEFINED;
+        break;
+    }
+}
+
+
+void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common;
+    types::GraphicShape shape;
+
+    types::StrokeAttributes* stroke = shape.mutable_attributes()->mutable_stroke();
+    types::GraphicFillAttributes* fill = shape.mutable_attributes()->mutable_fill();
+
+    stroke->mutable_width()->set_value_nm( GetWidth() );
+
+    switch( GetLineStyle() )
+    {
+    case LINE_STYLE::DEFAULT:    stroke->set_style( types::SLS_DEFAULT ); break;
+    case LINE_STYLE::SOLID:      stroke->set_style( types::SLS_SOLID ); break;
+    case LINE_STYLE::DASH:       stroke->set_style( types::SLS_DASH ); break;
+    case LINE_STYLE::DOT:        stroke->set_style( types::SLS_DOT ); break;
+    case LINE_STYLE::DASHDOT:    stroke->set_style( types::SLS_DASHDOT ); break;
+    case LINE_STYLE::DASHDOTDOT: stroke->set_style( types::SLS_DASHDOTDOT ); break;
+    default: break;
+    }
+
+    switch( GetFillMode() )
+    {
+    case FILL_T::FILLED_SHAPE: fill->set_fill_type( types::GFT_FILLED ); break;
+    default:                   fill->set_fill_type( types::GFT_UNFILLED ); break;
+    }
+
+    switch( GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+    {
+        types::GraphicSegmentAttributes* segment = shape.mutable_segment();
+        PackVector2( *segment->mutable_start(), GetStart() );
+        PackVector2( *segment->mutable_end(), GetEnd() );
+        break;
+    }
+
+    case SHAPE_T::RECTANGLE:
+    {
+        types::GraphicRectangleAttributes* rectangle = shape.mutable_rectangle();
+        PackVector2( *rectangle->mutable_top_left(), GetStart() );
+        PackVector2( *rectangle->mutable_bottom_right(), GetEnd() );
+        break;
+    }
+
+    case SHAPE_T::ARC:
+    {
+        types::GraphicArcAttributes* arc = shape.mutable_arc();
+        PackVector2( *arc->mutable_start(), GetStart() );
+        PackVector2( *arc->mutable_mid(), GetArcMid() );
+        PackVector2( *arc->mutable_end(), GetEnd() );
+        break;
+    }
+
+    case SHAPE_T::CIRCLE:
+    {
+        types::GraphicCircleAttributes* circle = shape.mutable_circle();
+        PackVector2( *circle->mutable_center(), GetStart() );
+        PackVector2( *circle->mutable_radius_point(), GetEnd() );
+        break;
+    }
+
+    case SHAPE_T::POLY:
+    {
+        PackPolySet( *shape.mutable_polygon(), GetPolyShape() );
+        break;
+    }
+
+    case SHAPE_T::BEZIER:
+    {
+        types::GraphicBezierAttributes* bezier = shape.mutable_bezier();
+        PackVector2( *bezier->mutable_start(), GetStart() );
+        PackVector2( *bezier->mutable_control1(), GetBezierC1() );
+        PackVector2( *bezier->mutable_control2(), GetBezierC2() );
+        PackVector2( *bezier->mutable_end(), GetEnd() );
+        break;
+    }
+
+    default:
+        wxASSERT_MSG( false, "Unhandled shape in PCB_SHAPE::Serialize" );
+    }
+
+    // TODO m_hasSolderMask and m_solderMaskMargin
+
+    aContainer.PackFrom( shape );
+}
+
+
+bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::common;
+
+    types::GraphicShape shape;
+
+    if( !aContainer.UnpackTo( &shape ) )
+        return false;
+
+    // Initialize everything to a known state that doesn't get touched by every
+    // codepath below, to make sure the equality operator is consistent
+    m_start = {};
+    m_end = {};
+    m_arcCenter = {};
+    m_arcMidData = {};
+    m_bezierC1 = {};
+    m_bezierC2 = {};
+    m_editState = 0;
+    m_proxyItem = false;
+    m_endsSwapped = false;
+
+    SetFilled( shape.attributes().fill().fill_type() == types::GFT_FILLED );
+    SetWidth( shape.attributes().stroke().width().value_nm() );
+
+    switch( shape.attributes().stroke().style() )
+    {
+    case types::SLS_DEFAULT:    SetLineStyle( LINE_STYLE::DEFAULT );    break;
+    case types::SLS_SOLID:      SetLineStyle( LINE_STYLE::SOLID );      break;
+    case types::SLS_DASH:       SetLineStyle( LINE_STYLE::DASH );       break;
+    case types::SLS_DOT:        SetLineStyle( LINE_STYLE::DOT );        break;
+    case types::SLS_DASHDOT:    SetLineStyle( LINE_STYLE::DASHDOT );    break;
+    case types::SLS_DASHDOTDOT: SetLineStyle( LINE_STYLE::DASHDOTDOT ); break;
+    default: break;
+    }
+
+    if( shape.has_segment() )
+    {
+        SetShape( SHAPE_T::SEGMENT );
+        SetStart( UnpackVector2( shape.segment().start() ) );
+        SetEnd( UnpackVector2( shape.segment().end() ) );
+    }
+    else if( shape.has_rectangle() )
+    {
+        SetShape( SHAPE_T::RECTANGLE );
+        SetStart( UnpackVector2( shape.rectangle().top_left() ) );
+        SetEnd( UnpackVector2( shape.rectangle().bottom_right() ) );
+    }
+    else if( shape.has_arc() )
+    {
+        SetShape( SHAPE_T::ARC );
+        SetArcGeometry( UnpackVector2( shape.arc().start() ),
+                        UnpackVector2( shape.arc().mid() ),
+                        UnpackVector2( shape.arc().end() ) );
+    }
+    else if( shape.has_circle() )
+    {
+        SetShape( SHAPE_T::CIRCLE );
+        SetStart( UnpackVector2( shape.circle().center() ) );
+        SetEnd( UnpackVector2( shape.circle().radius_point() ) );
+    }
+    else if( shape.has_polygon() )
+    {
+        SetShape( SHAPE_T::POLY );
+        SetPolyShape( UnpackPolySet( shape.polygon() ) );
+    }
+    else if( shape.has_bezier() )
+    {
+        SetShape( SHAPE_T::BEZIER );
+        SetStart( UnpackVector2( shape.bezier().start() ) );
+        SetBezierC1( UnpackVector2( shape.bezier().control1() ) );
+        SetBezierC2( UnpackVector2( shape.bezier().control2() ) );
+        SetEnd( UnpackVector2( shape.bezier().end() ) );
+        RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+    }
+
+    return true;
 }
 
 

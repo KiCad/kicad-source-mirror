@@ -299,18 +299,17 @@ message TextAttributes
 
 message Text
 {
-  kiapi.common.types.KIID           id         = 1;
+  // Reserved for future use; base text objects don't have IDs right now
+  // kiapi.common.types.KIID           id         = 1;
   kiapi.common.types.Vector2        position   = 2;
   kiapi.common.types.TextAttributes attributes = 3;
   kiapi.common.types.LockedState    locked     = 4;
   string                            text       = 5;
   string                            hyperlink  = 6;
-  bool                              knockout   = 7;
 }
 
 message TextBox
 {
-  kiapi.common.types.KIID           id           = 1;
   kiapi.common.types.Vector2        top_left     = 2;
   kiapi.common.types.Vector2        bottom_right = 3;
   kiapi.common.types.TextAttributes attributes   = 4;
@@ -384,8 +383,9 @@ message GraphicBezierAttributes
 
 message GraphicShape
 {
-  KIID              id         = 1;
-  LockedState       locked     = 2;
+  // Reserved for future use; base EDA_SHAPE doesn't have an ID or locked state right now
+  // KIID              id         = 1;
+  // LockedState       locked     = 2;
   GraphicAttributes attributes = 3;
 
   oneof geometry {

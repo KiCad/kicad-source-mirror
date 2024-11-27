@@ -120,6 +120,7 @@
 #ifdef KICAD_IPC_API
 #include <api/api_server.h>
 #include <api/api_handler_pcb.h>
+#include <api/api_handler_common.h>
 #endif
 
 #include <action_plugin.h>
@@ -468,6 +469,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 #ifdef KICAD_IPC_API
     m_apiHandler = std::make_unique<API_HANDLER_PCB>( this );
     Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
+
+    if( Kiface().IsSingle() )
+    {
+        m_apiHandlerCommon = std::make_unique<API_HANDLER_COMMON>();
+        Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
+    }
 #endif
 
     GetCanvas()->SwitchBackend( m_canvasType );

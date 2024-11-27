@@ -27,14 +27,15 @@
 #include <api/common/commands/base_commands.pb.h>
 #include <api/common/commands/project_commands.pb.h>
 
-using namespace kiapi;
 using namespace kiapi::common;
 using google::protobuf::Empty;
 
-class KICOMMON_API API_HANDLER_COMMON : public API_HANDLER
+class API_HANDLER_COMMON : public API_HANDLER
 {
 public:
     API_HANDLER_COMMON();
+
+    ~API_HANDLER_COMMON() override {}
 
 private:
     HANDLER_RESULT<commands::GetVersionResponse> handleGetVersion( commands::GetVersion& aMsg,
@@ -44,6 +45,12 @@ private:
                                                                       const HANDLER_CONTEXT& aCtx );
 
     HANDLER_RESULT<Empty> handlePing( commands::Ping& aMsg, const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<types::Box2> handleGetTextExtents( commands::GetTextExtents& aMsg,
+            const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<commands::GetTextAsShapesResponse>
+    handleGetTextAsShapes( commands::GetTextAsShapes& aMsg, const HANDLER_CONTEXT& aCtx );
 };
 
 #endif //KICAD_API_HANDLER_COMMON_H

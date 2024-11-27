@@ -18,15 +18,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fmt/format.h>
 #include <wx/app.h>
 #include <wx/datetime.h>
 #include <wx/event.h>
 #include <wx/stdpaths.h>
 
 #include <advanced_config.h>
+#include <api/api_handler.h>
 #include <api/api_plugin_manager.h> // traceApi
 #include <api/api_server.h>
-#include <api/api_handler_common.h>
 #include <kiid.h>
 #include <kinng.h>
 #include <paths.h>
@@ -50,9 +51,6 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
         m_token( KIID().AsStdString() ),
         m_readyToReply( false )
 {
-    m_commonHandler = std::make_unique<API_HANDLER_COMMON>();
-    RegisterHandler( m_commonHandler.get() );
-
     if( !Pgm().GetCommonSettings()->m_Api.enable_server )
     {
         wxLogTrace( traceApi, "Server: disabled by user preferences." );

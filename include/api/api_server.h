@@ -31,7 +31,6 @@
 #include <kicommon.h>
 
 class API_HANDLER;
-class API_HANDLER_COMMON;
 class KINNG_REQUEST_SERVER;
 class wxEvtHandler;
 
@@ -98,8 +97,6 @@ private:
     std::string m_token;
 
     bool m_readyToReply;
-
-    std::unique_ptr<API_HANDLER_COMMON> m_commonHandler;
 
     static wxString s_logFileName;
 

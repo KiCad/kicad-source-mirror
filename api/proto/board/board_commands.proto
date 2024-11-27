@@ -123,13 +123,6 @@ message RefillZones
  * Utilities
  */
 
-// returns kiapi.common.types.Box2
-message GetTextExtents
-{
-  // A temporary text item to calculate the bounding box for
-  kiapi.board.types.Text text = 1;
-}
-
 // Computes the polygon representation of a pad, merging any custom shapes together.
 // This representation will approximate curves as a series of segments.
 message GetPadShapeAsPolygon

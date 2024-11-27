@@ -68,12 +68,12 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common::types;
     using namespace kiapi::board;
-    types::TextBox boardText;
+    types::BoardTextBox boardText;
     boardText.set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( GetLayer() ) );
+    boardText.mutable_id()->set_value( m_Uuid.AsStdString() );
 
     TextBox& text = *boardText.mutable_textbox();
 
-    text.mutable_id()->set_value( m_Uuid.AsStdString() );
     kiapi::common::PackVector2( *text.mutable_top_left(), GetPosition() );
     kiapi::common::PackVector2( *text.mutable_bottom_right(), GetEnd() );
     text.set_text( GetText().ToStdString() );
@@ -101,8 +101,7 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_mirrored( IsMirrored() );
     attrs->set_multiline( IsMultilineAllowed() );
     attrs->set_keep_upright( IsKeepUpright() );
-    attrs->mutable_size()->set_x_nm( GetTextSize().x );
-    attrs->mutable_size()->set_y_nm( GetTextSize().y );
+    kiapi::common::PackVector2( *attrs->mutable_size(), GetTextSize() );
 
     aContainer.PackFrom( boardText );
 }
@@ -111,16 +110,16 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
 bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any &aContainer )
 {
     using namespace kiapi::board;
-    types::TextBox textWrapper;
+    types::BoardTextBox boardText;
 
-    if( !aContainer.UnpackTo( &textWrapper ) )
+    if( !aContainer.UnpackTo( &boardText ) )
         return false;
 
-    SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( textWrapper.layer() ) );
+    const_cast<KIID&>( m_Uuid ) = KIID( boardText.id().value() );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( boardText.layer() ) );
 
-    const kiapi::common::types::TextBox& text = textWrapper.textbox();
+    const kiapi::common::types::TextBox& text = boardText.textbox();
 
-    const_cast<KIID&>( m_Uuid ) = KIID( text.id().value() );
     SetPosition( kiapi::common::UnpackVector2( text.top_left() ) );
     SetEnd( kiapi::common::UnpackVector2( text.bottom_right() ) );
     SetLocked( text.locked() == kiapi::common::types::LockedState::LS_LOCKED );
@@ -138,7 +137,7 @@ bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any &aContainer )
         attrs.m_Mirrored = text.attributes().mirrored();
         attrs.m_Multiline = text.attributes().multiline();
         attrs.m_KeepUpright = text.attributes().keep_upright();
-        attrs.m_Size = VECTOR2I( text.attributes().size().x_nm(), text.attributes().size().y_nm() );
+        attrs.m_Size = kiapi::common::UnpackVector2( text.attributes().size() );
 
         if( !text.attributes().font_name().empty() )
         {

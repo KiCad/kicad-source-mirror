@@ -36,3 +36,30 @@ message GetVersionResponse
 message Ping
 {
 }
+
+// returns kiapi.common.types.Box2
+message GetTextExtents
+{
+  // A temporary text item to calculate the bounding box for
+  kiapi.common.types.Text text = 1;
+}
+
+// Render the given text object(s) as shapes.  Depending on whether the text is using
+// the KiCad stroke font or a custom font, the response will be a compound shape containing
+// a set of polygons or a set of segments.
+message GetTextAsShapes
+{
+  repeated kiapi.common.types.Text text = 1;
+}
+
+message TextWithShapes
+{
+  kiapi.common.types.Text text = 1;
+
+  kiapi.common.types.CompoundShape shapes = 2;
+}
+
+message GetTextAsShapesResponse
+{
+  repeated TextWithShapes text_with_shapes = 1;
+}

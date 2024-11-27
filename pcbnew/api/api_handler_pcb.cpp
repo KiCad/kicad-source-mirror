@@ -65,8 +65,6 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
             &API_HANDLER_PCB::handleGetGraphicsDefaults );
     registerHandler<GetBoundingBox, GetBoundingBoxResponse>(
             &API_HANDLER_PCB::handleGetBoundingBox );
-    registerHandler<GetTextExtents, types::Box2>(
-            &API_HANDLER_PCB::handleGetTextExtents );
     registerHandler<GetPadShapeAsPolygon, PadShapeAsPolygonResponse>(
             &API_HANDLER_PCB::handleGetPadShapeAsPolygon );
     registerHandler<GetTitleBlockInfo, types::TitleBlockInfo>(
@@ -624,40 +622,6 @@ HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_PCB::handleGetBoundingBox( Ge
         response.add_items()->set_value( idMsg.value() );
         PackBox2( *response.add_boxes(), bbox );
     }
-
-    return response;
-}
-
-
-HANDLER_RESULT<types::Box2> API_HANDLER_PCB::handleGetTextExtents(
-        GetTextExtents& aMsg,
-        const HANDLER_CONTEXT& aCtx )
-{
-    PCB_TEXT text( frame()->GetBoard() );
-
-    google::protobuf::Any any;
-    any.PackFrom( aMsg.text() );
-
-    if( !text.Deserialize( any ) )
-    {
-        ApiResponseStatus e;
-        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( "Could not decode text in GetTextExtents message" );
-        return tl::unexpected( e );
-    }
-
-    types::Box2 response;
-
-    BOX2I bbox = text.GetTextBox();
-    EDA_ANGLE angle = text.GetTextAngle();
-
-    if( !angle.IsZero() )
-        bbox = bbox.GetBoundingBoxRotated( text.GetTextPos(), text.GetTextAngle() );
-
-    response.mutable_position()->set_x_nm( bbox.GetPosition().x );
-    response.mutable_position()->set_y_nm( bbox.GetPosition().y );
-    response.mutable_size()->set_x_nm( bbox.GetSize().x );
-    response.mutable_size()->set_y_nm( bbox.GetSize().y );
 
     return response;
 }

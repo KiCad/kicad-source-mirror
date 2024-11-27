@@ -75,92 +75,15 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
     using namespace kiapi::board::types;
     BoardGraphicShape msg;
 
-    msg.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
+    msg.set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( GetLayer() ) );
     msg.mutable_net()->mutable_code()->set_value( GetNetCode() );
     msg.mutable_net()->set_name( GetNetname() );
+    msg.mutable_id()->set_value( m_Uuid.AsStdString() );
+    msg.set_locked( IsLocked() ? types::LockedState::LS_LOCKED : types::LockedState::LS_UNLOCKED );
 
-    types::GraphicShape* shape = msg.mutable_shape();
-
-    shape->mutable_id()->set_value( m_Uuid.AsStdString() );
-    shape->set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
-                               : kiapi::common::types::LockedState::LS_UNLOCKED );
-
-    types::StrokeAttributes* stroke = shape->mutable_attributes()->mutable_stroke();
-    types::GraphicFillAttributes* fill = shape->mutable_attributes()->mutable_fill();
-
-    stroke->mutable_width()->set_value_nm( GetWidth() );
-
-    switch( GetLineStyle() )
-    {
-    case LINE_STYLE::DEFAULT:    stroke->set_style( types::SLS_DEFAULT ); break;
-    case LINE_STYLE::SOLID:      stroke->set_style( types::SLS_SOLID ); break;
-    case LINE_STYLE::DASH:       stroke->set_style( types::SLS_DASH ); break;
-    case LINE_STYLE::DOT:        stroke->set_style( types::SLS_DOT ); break;
-    case LINE_STYLE::DASHDOT:    stroke->set_style( types::SLS_DASHDOT ); break;
-    case LINE_STYLE::DASHDOTDOT: stroke->set_style( types::SLS_DASHDOTDOT ); break;
-    default: break;
-    }
-
-    switch( GetFillMode() )
-    {
-    case FILL_T::FILLED_SHAPE: fill->set_fill_type( types::GFT_FILLED ); break;
-    default:                   fill->set_fill_type( types::GFT_UNFILLED ); break;
-    }
-
-    switch( GetShape() )
-    {
-    case SHAPE_T::SEGMENT:
-    {
-        types::GraphicSegmentAttributes* segment = shape->mutable_segment();
-        PackVector2( *segment->mutable_start(), GetStart() );
-        PackVector2( *segment->mutable_end(), GetEnd() );
-        break;
-    }
-
-    case SHAPE_T::RECTANGLE:
-    {
-        types::GraphicRectangleAttributes* rectangle = shape->mutable_rectangle();
-        PackVector2( *rectangle->mutable_top_left(), GetStart() );
-        PackVector2( *rectangle->mutable_bottom_right(), GetEnd() );
-        break;
-    }
-
-    case SHAPE_T::ARC:
-    {
-        types::GraphicArcAttributes* arc = shape->mutable_arc();
-        PackVector2( *arc->mutable_start(), GetStart() );
-        PackVector2( *arc->mutable_mid(), GetArcMid() );
-        PackVector2( *arc->mutable_end(), GetEnd() );
-        break;
-    }
-
-    case SHAPE_T::CIRCLE:
-    {
-        types::GraphicCircleAttributes* circle = shape->mutable_circle();
-        PackVector2( *circle->mutable_center(), GetStart() );
-        PackVector2( *circle->mutable_radius_point(), GetEnd() );
-        break;
-    }
-
-    case SHAPE_T::POLY:
-    {
-        PackPolySet( *shape->mutable_polygon(), GetPolyShape() );
-        break;
-    }
-
-    case SHAPE_T::BEZIER:
-    {
-        types::GraphicBezierAttributes* bezier = shape->mutable_bezier();
-        PackVector2( *bezier->mutable_start(), GetStart() );
-        PackVector2( *bezier->mutable_control1(), GetBezierC1() );
-        PackVector2( *bezier->mutable_control2(), GetBezierC2() );
-        PackVector2( *bezier->mutable_end(), GetEnd() );
-        break;
-    }
-
-    default:
-        wxASSERT_MSG( false, "Unhandled shape in PCB_SHAPE::Serialize" );
-    }
+    google::protobuf::Any any;
+    EDA_SHAPE::Serialize( any );
+    any.UnpackTo( msg.mutable_shape() );
 
     // TODO m_hasSolderMask and m_solderMaskMargin
 
@@ -190,66 +113,14 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
     m_proxyItem = false;
     m_endsSwapped = false;
 
-    const types::GraphicShape& shape = msg.shape();
-
-    const_cast<KIID&>( m_Uuid ) = KIID( shape.id().value() );
-    SetLocked( shape.locked() == types::LS_LOCKED );
+    const_cast<KIID&>( m_Uuid ) = KIID( msg.id().value() );
+    SetLocked( msg.locked() == types::LS_LOCKED );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, BoardLayer>( msg.layer() ) );
     SetNetCode( msg.net().code().value() );
 
-    SetFilled( shape.attributes().fill().fill_type() == types::GFT_FILLED );
-    SetWidth( shape.attributes().stroke().width().value_nm() );
-
-    switch( shape.attributes().stroke().style() )
-    {
-    case types::SLS_DEFAULT:    SetLineStyle( LINE_STYLE::DEFAULT );    break;
-    case types::SLS_SOLID:      SetLineStyle( LINE_STYLE::SOLID );      break;
-    case types::SLS_DASH:       SetLineStyle( LINE_STYLE::DASH );       break;
-    case types::SLS_DOT:        SetLineStyle( LINE_STYLE::DOT );        break;
-    case types::SLS_DASHDOT:    SetLineStyle( LINE_STYLE::DASHDOT );    break;
-    case types::SLS_DASHDOTDOT: SetLineStyle( LINE_STYLE::DASHDOTDOT ); break;
-    default: break;
-    }
-
-    if( shape.has_segment() )
-    {
-        SetShape( SHAPE_T::SEGMENT );
-        SetStart( UnpackVector2( shape.segment().start() ) );
-        SetEnd( UnpackVector2( shape.segment().end() ) );
-    }
-    else if( shape.has_rectangle() )
-    {
-        SetShape( SHAPE_T::RECTANGLE );
-        SetStart( UnpackVector2( shape.rectangle().top_left() ) );
-        SetEnd( UnpackVector2( shape.rectangle().bottom_right() ) );
-    }
-    else if( shape.has_arc() )
-    {
-        SetShape( SHAPE_T::ARC );
-        SetArcGeometry( UnpackVector2( shape.arc().start() ),
-                        UnpackVector2( shape.arc().mid() ),
-                        UnpackVector2( shape.arc().end() ) );
-    }
-    else if( shape.has_circle() )
-    {
-        SetShape( SHAPE_T::CIRCLE );
-        SetStart( UnpackVector2( shape.circle().center() ) );
-        SetEnd( UnpackVector2( shape.circle().radius_point() ) );
-    }
-    else if( shape.has_polygon() )
-    {
-        SetShape( SHAPE_T::POLY );
-        SetPolyShape( UnpackPolySet( shape.polygon() ) );
-    }
-    else if( shape.has_bezier() )
-    {
-        SetShape( SHAPE_T::BEZIER );
-        SetStart( UnpackVector2( shape.bezier().start() ) );
-        SetBezierC1( UnpackVector2( shape.bezier().control1() ) );
-        SetBezierC2( UnpackVector2( shape.bezier().control2() ) );
-        SetEnd( UnpackVector2( shape.bezier().end() ) );
-        RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
-    }
+    google::protobuf::Any any;
+    any.PackFrom( msg.shape() );
+    EDA_SHAPE::Deserialize( any );
 
     // TODO m_hasSolderMask and m_solderMaskMargin
 

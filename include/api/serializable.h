@@ -22,6 +22,7 @@
 #define KICAD_SERIALIZABLE_H
 
 #include <wx/debug.h>
+#include <kicommon.h>
 
 namespace google {
     namespace protobuf {
@@ -32,29 +33,24 @@ namespace google {
 /**
  * Interface for objects that can be serialized to Protobuf messages
  */
-class SERIALIZABLE
+class KICOMMON_API SERIALIZABLE
 {
 public:
+    virtual ~SERIALIZABLE() = default;
+
     /**
      * Serializes this object to the given Any message.
      * The Any message's concrete type will be specific to the object in question.
      * @param aContainer will be filled with a message describing this object
      */
-    virtual void Serialize( google::protobuf::Any &aContainer ) const
-    {
-        wxASSERT_MSG( false, wxS( "Serialize called on an object that doesn't implement it!" ) );
-    }
+    virtual void Serialize( google::protobuf::Any &aContainer ) const;
 
     /**
      * Deserializes the given protobuf message into this object.
      * @param aContainer is an Any which should have a concrete type matching this object
      * @return true if unpacking and deserialization succeeded
      */
-    virtual bool Deserialize( const google::protobuf::Any &aContainer )
-    {
-        wxASSERT_MSG( false, wxS( "Deserialize called on an object that doesn't implement it!" ) );
-        return false;
-    }
+    virtual bool Deserialize( const google::protobuf::Any &aContainer );
 };
 
 #endif //KICAD_SERIALIZABLE_H

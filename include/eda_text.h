@@ -32,6 +32,7 @@
 #include <eda_search_data.h>
 #include <font/glyph.h>
 #include <font/text_attributes.h>
+#include <api/serializable.h>
 
 
 class OUTPUTFORMATTER;
@@ -75,7 +76,7 @@ using KIGFX::COLOR4D;
  * function names (accessors) that to not collide with function names likely to be seen
  * in the combined derived classes.
  */
-class EDA_TEXT
+class EDA_TEXT : public SERIALIZABLE
 {
 public:
     EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText = wxEmptyString );
@@ -85,6 +86,9 @@ public:
     virtual ~EDA_TEXT();
 
     EDA_TEXT& operator=( const EDA_TEXT& aItem );
+
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
     /**
      * Return the string associated with the text object.
