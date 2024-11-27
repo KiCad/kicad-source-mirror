@@ -240,6 +240,21 @@ public:
     void UpdateStatusBar() const;
 
 private:
+    enum class DRAW_ONE_RESULT
+    {
+        // The drawing was accepted "normally"
+        // E.g. for a poly-line, you might then begin a chained next segment
+        ACCEPTED,
+        // The drawing was cancelled with no shape accepted.
+        CANCELLED,
+        // The drawing was reset - no shape was accepted this time,
+        // but the tool remains active.
+        RESET,
+        // A shape was accepted, but the tool should reset for the
+        // next one (e.g. no chaining)
+        ACCEPTED_AND_RESET,
+    };
+
     /**
      * Start drawing a selected shape (i.e. PCB_SHAPE).
      *
@@ -282,7 +297,8 @@ private:
     std::unique_ptr<PCB_SHAPE> drawOneBezier( const TOOL_EVENT&   aTool,
                                               const OPT_VECTOR2I& aStartingPoint,
                                               const OPT_VECTOR2I& aStartingControl1Point,
-                                              bool&               aCancelled );
+                                              DRAW_ONE_RESULT&    aResult );
+
 
     /**
      * Draw a polygon, that is added as a zone or a keepout area.

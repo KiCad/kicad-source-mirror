@@ -573,11 +573,15 @@ int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = aEvent.Position();
 
-    bool cancelled = false;
-    while( !cancelled )
+    DRAW_ONE_RESULT result = DRAW_ONE_RESULT::ACCEPTED;
+    while( result != DRAW_ONE_RESULT::CANCELLED )
     {
         std::unique_ptr<PCB_SHAPE> bezier =
-                drawOneBezier( aEvent, startingPoint, startingC1, cancelled );
+                drawOneBezier( aEvent, startingPoint, startingC1, result );
+
+        // Anyting other than accepted means no chaining
+        startingPoint = std::nullopt;
+        startingC1 = std::nullopt;
 
         // If a bezier was created, add it and go again
         if( bezier )
@@ -586,18 +590,21 @@ int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
             commit.Add( bezier.release() );
             commit.Push( _( "Draw Bezier" ) );
 
-            startingPoint = bezierRef.GetEnd();
+            // Don't chain if reset (or accepted and reset)
+            if( result == DRAW_ONE_RESULT::ACCEPTED )
+            {
+                startingPoint = bezierRef.GetEnd();
 
-            // Mirror the control point across the starting point to get
-            // a tangent control point
-            startingC1 = *startingPoint - ( bezierRef.GetBezierC2() - *startingPoint );
-        }
-        else
-        {
-            // If the bezier was cancelled, we're done
-            // But if it was just reset, start again with a free starting point
-            startingPoint = std::nullopt;
-            startingC1 = std::nullopt;
+                // If the last bezier has a zero C2 control arm, allow the user to
+                // define a new C1 control arm for the next one.
+                if( bezierRef.GetEnd() != bezierRef.GetBezierC2() )
+                {
+                    // Mirror the control point across the end point to get
+                    // a tangent control point
+                    startingC1 =
+                            bezierRef.GetEnd() - ( bezierRef.GetBezierC2() - bezierRef.GetEnd() );
+                }
+            }
         }
     }
 
@@ -2848,7 +2855,7 @@ static void updateBezierFromConstructionMgr( const KIGFX::PREVIEW::BEZIER_GEOM_M
 std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aTool,
                                                         const OPT_VECTOR2I& aStartingPoint,
                                                         const OPT_VECTOR2I& aStartingControl1Point,
-                                                        bool&               aCancelled )
+                                                        DRAW_ONE_RESULT&    aResult )
 {
     std::unique_ptr<PCB_SHAPE> bezier = std::make_unique<PCB_SHAPE>( m_frame->GetModel() );
     bezier->SetShape( SHAPE_T::BEZIER );
@@ -2898,7 +2905,8 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
     {
         return bezierManager.GetStep() > KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_START;
     };
-    aCancelled = false;
+
+    aResult = DRAW_ONE_RESULT::ACCEPTED;
     bool priming = false;
 
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
@@ -2907,6 +2915,7 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
     if( aStartingPoint )
     {
         priming = true;
+
         if( aStartingControl1Point )
         {
             bezierManager.AddPoint( *aStartingPoint, true );
@@ -2946,13 +2955,13 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
                 // We've handled the cancel event.  Don't cancel other tools
                 evt->SetPassEvent( false );
                 m_frame->PopTool( aTool );
-                aCancelled = true;
+                aResult = DRAW_ONE_RESULT::CANCELLED;
             }
             else
             {
                 // We're not cancelling, but we're also not returning a finished bezier
                 // So we'll be called again.
-                aCancelled = false;
+                aResult = DRAW_ONE_RESULT::RESET;
             }
 
             break;
@@ -2967,18 +2976,18 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
             {
                 resetProgress();
                 // leave ourselves on the stack so we come back after the move
-                aCancelled = true;
+                aResult = DRAW_ONE_RESULT::CANCELLED;
                 break;
             }
             else
             {
                 resetProgress();
                 m_frame->PopTool( aTool );
-                aCancelled = true;
+                aResult = DRAW_ONE_RESULT::CANCELLED;
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             if( !started() )
             {
@@ -3006,9 +3015,28 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
             else
                 priming = false;
 
+            const bool doubleClick = evt->IsDblClick( BUT_LEFT );
+
+            if( doubleClick )
+            {
+                // Use the current point for all remaining points
+                while( bezierManager.GetStep() < KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
+                {
+                    bezierManager.AddPoint( cursorPos, true );
+                }
+            }
+
             if( bezierManager.GetStep() == KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
             {
                 preview.Add( bezier.get() );
+            }
+
+            // Return to the caller for a reset
+            if( doubleClick )
+            {
+                // Don't chain to this one
+                aResult = DRAW_ONE_RESULT::ACCEPTED_AND_RESET;
+                break;
             }
         }
         else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
