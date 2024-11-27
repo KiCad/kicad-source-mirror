@@ -2330,6 +2330,11 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             fp->Value().SetLayer( F_Fab );
             fp->Value().SetVisible( false );
 
+            // Set refdes invisible until we find the text for it
+            // (otherwise we'll plonk a default-sized ref-des on the silkscreen layer
+            // which wasn't there in the imported file)
+            fp->Reference().SetVisible( false );
+
             for( auto& ref : refdes )
             {
                 const GRAPHIC_TEXT *lsrc =
@@ -2347,9 +2352,14 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     }
 
                     if( layer == F_SilkS || layer == B_SilkS )
+                    {
                         txt = &( fp->Reference() );
+                        txt->SetVisible( true );
+                    }
                     else
+                    {
                         txt = new PCB_TEXT( fp );
+                    }
 
                     if( src->mirror )
                     {
