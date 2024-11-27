@@ -571,19 +571,32 @@ int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = aEvent.Position();
 
-    while( std::unique_ptr<PCB_SHAPE> bezier = drawOneBezier( aEvent, startingPoint, startingC1 ) )
+    bool cancelled = false;
+    while( !cancelled )
     {
-        PCB_SHAPE& bezierRef = *bezier;
-        commit.Add( bezier.release() );
-        commit.Push( _( "Draw Bezier" ) );
+        std::unique_ptr<PCB_SHAPE> bezier =
+                drawOneBezier( aEvent, startingPoint, startingC1, cancelled );
 
-        startingPoint = bezierRef.GetEnd();
+        // If a bezier was created, add it and go again
+        if( bezier )
+        {
+            PCB_SHAPE& bezierRef = *bezier;
+            commit.Add( bezier.release() );
+            commit.Push( _( "Draw Bezier" ) );
 
-        // Mirror the control point across the starting point to get
-        // a tangent control point
-        startingC1 = *startingPoint - ( bezierRef.GetBezierC2() - *startingPoint );
+            startingPoint = bezierRef.GetEnd();
 
-        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, &bezierRef );
+            // Mirror the control point across the starting point to get
+            // a tangent control point
+            startingC1 = *startingPoint - ( bezierRef.GetBezierC2() - *startingPoint );
+        }
+        else
+        {
+            // If the bezier was cancelled, we're done
+            // But if it was just reset, start again with a free starting point
+            startingPoint = std::nullopt;
+            startingC1 = std::nullopt;
+        }
     }
 
     return 0;
@@ -2832,7 +2845,8 @@ static void updateBezierFromConstructionMgr( const KIGFX::PREVIEW::BEZIER_GEOM_M
 
 std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aTool,
                                                         const OPT_VECTOR2I& aStartingPoint,
-                                                        const OPT_VECTOR2I& aStartingControl1Point )
+                                                        const OPT_VECTOR2I& aStartingControl1Point,
+                                                        bool&               aCancelled )
 {
     std::unique_ptr<PCB_SHAPE> bezier = std::make_unique<PCB_SHAPE>( m_frame->GetModel() );
     bezier->SetShape( SHAPE_T::BEZIER );
@@ -2862,12 +2876,12 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
     m_view->Add( &bezierAsst );
     PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
-    auto setCursor = [&]()
+    const auto setCursor = [&]()
     {
         m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
     };
 
-    auto cleanup = [&]()
+    const auto resetProgress = [&]()
     {
         preview.Clear();
         bezier.reset();
@@ -2878,15 +2892,11 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
     // Set initial cursor
     setCursor();
 
-    // We need to know when the bezier manager has started actually adding points
-    // but which point it started with depends on whether we were passed a starting point
-    KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::BEZIER_STEPS startedAfterStep =
-            KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_START;
     const auto started = [&]()
     {
-        return bezierManager.GetStep() > startedAfterStep;
+        return bezierManager.GetStep() > KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_START;
     };
-    bool cancelled = false;
+    aCancelled = false;
     bool priming = false;
 
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
@@ -2900,12 +2910,11 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
             bezierManager.AddPoint( *aStartingPoint, true );
             bezierManager.AddPoint( *aStartingControl1Point, true );
             m_toolMgr->PrimeTool( *aStartingControl1Point );
-            startedAfterStep = KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END;
         }
         else
         {
+            bezierManager.AddPoint( *aStartingPoint, true );
             m_toolMgr->PrimeTool( *aStartingPoint );
-            startedAfterStep = KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_CONTROL1;
         }
     }
 
@@ -2928,14 +2937,20 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
 
         if( evt->IsCancelInteractive() || ( started() && evt->IsAction( &ACTIONS::undo ) ) )
         {
-            cleanup();
+            resetProgress();
 
             if( !started() )
             {
                 // We've handled the cancel event.  Don't cancel other tools
                 evt->SetPassEvent( false );
                 m_frame->PopTool( aTool );
-                cancelled = true;
+                aCancelled = true;
+            }
+            else
+            {
+                // We're not cancelling, but we're also not returning a finished bezier
+                // So we'll be called again.
+                aCancelled = false;
             }
 
             break;
@@ -2948,16 +2963,16 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
             }
             else if( evt->IsMoveTool() )
             {
-                cleanup();
+                resetProgress();
                 // leave ourselves on the stack so we come back after the move
-                cancelled = true;
+                aCancelled = true;
                 break;
             }
             else
             {
-                cleanup();
+                resetProgress();
                 m_frame->PopTool( aTool );
-                cancelled = true;
+                aCancelled = true;
                 break;
             }
         }
@@ -3132,9 +3147,6 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
     m_controls->ForceCursorPosition( false );
-
-    if( cancelled )
-        return nullptr;
 
     return bezier;
 };

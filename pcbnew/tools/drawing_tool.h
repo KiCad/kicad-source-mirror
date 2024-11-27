@@ -274,13 +274,15 @@ private:
      *                      previous curve).
      * @param aStartingControl1Point is the previous control point of the curve (which can
      *                               be used to create a smooth transition between two curves).
+     * @param aCancelled is set to true if the tool was canceled before the curve was finished.
      *
      * @return A new PCB_SHAPE object representing the bezier curve, or nullptr if
-     *         the tool was canceled.
+     *         the tool was cancelled or reset.
      */
     std::unique_ptr<PCB_SHAPE> drawOneBezier( const TOOL_EVENT&   aTool,
                                               const OPT_VECTOR2I& aStartingPoint,
-                                              const OPT_VECTOR2I& aStartingControl1Point );
+                                              const OPT_VECTOR2I& aStartingControl1Point,
+                                              bool&               aCancelled );
 
     /**
      * Draw a polygon, that is added as a zone or a keepout area.
