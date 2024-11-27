@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -175,6 +175,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     gal->SetLookAtPoint( drawingAreaBBox.Centre() );
     gal->SetZoomFactor( m_settings.m_scale );
     gal->SetClearColor( dstSettings->GetBackgroundColor() );
+    gal->ResizeScreen( pageSizePx.GetWidth(),pageSizePx.GetHeight() );
     gal->ClearScreen();
 
     if( m_gerbviewPrint )

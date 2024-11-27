@@ -384,6 +384,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
         gal->SetLookAtPoint( drawingAreaBBox.Centre() );
         gal->SetZoomFactor( print_scale );
         gal->SetClearColor( dstSettings->GetBackgroundColor() );
+        gal->ResizeScreen( pageSizePx.GetWidth(),pageSizePx.GetHeight() );
         gal->ClearScreen();
 
         // Needed to use the same order for printing as for screen redraw
