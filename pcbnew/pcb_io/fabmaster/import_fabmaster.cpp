@@ -749,8 +749,10 @@ bool FABMASTER::assignLayers()
         {
             layer_order.push_back( &layer );
         }
-        else if( layer.name.find( "SILK" ) != std::string::npos &&
-                 layer.name.find( "AUTOSILK" ) == std::string::npos ) // Skip the autosilk layer
+        else if( ( layer.name.find( "SILK" ) != std::string::npos
+                   && layer.name.find( "AUTOSILK" )
+                              == std::string::npos ) // Skip the autosilk layer
+                 || layer.name.find( "DISPLAY" ) != std::string::npos )
         {
             if( layer.name.find( "B" ) != std::string::npos )
                 layer.layerid = B_SilkS;
