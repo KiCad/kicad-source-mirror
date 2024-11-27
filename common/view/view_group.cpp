@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -148,10 +148,14 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
     for( int layer : layers )
     {
-        if( IsZoneFillLayer( layer ) )
-            layer = layer - LAYER_ZONE_START;
-
         bool draw = aView->IsLayerVisible( layer );
+
+        if( IsZoneFillLayer( layer ) )
+        {
+            // The visibility of solid areas must follow the visiblility of the zone layer
+            int zone_main_layer = layer - LAYER_ZONE_START;
+            draw = aView->IsLayerVisible( zone_main_layer );
+        }
 
         if( isSelection )
         {
@@ -161,6 +165,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
             case LAYER_PAD_HOLEWALLS:
                 draw = true;
                 break;
+
             default:
                 break;
             }
