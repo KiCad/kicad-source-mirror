@@ -740,8 +740,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             marker->SetExcluded( true, dlg.GetValue() );
 
             wxString serialized = marker->SerializeToString();
-            m_frame->GetDesignSettings().m_DrcExclusions.insert( serialized );
-            m_frame->GetDesignSettings().m_DrcExclusionComments[ serialized ] = dlg.GetValue();
+            bds().m_DrcExclusions.insert( serialized );
+            bds().m_DrcExclusionComments[serialized] = dlg.GetValue();
 
             // Update view
             static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
@@ -756,8 +756,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             marker->SetExcluded( false );
 
             wxString serialized = marker->SerializeToString();
-            m_frame->GetDesignSettings().m_DrcExclusions.erase( serialized );
-            m_frame->GetDesignSettings().m_DrcExclusionComments.erase( serialized );
+            bds().m_DrcExclusions.erase( serialized );
+            bds().m_DrcExclusionComments.erase( serialized );
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             {
@@ -796,8 +796,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             marker->SetExcluded( true, comment );
 
             wxString serialized = marker->SerializeToString();
-            m_frame->GetDesignSettings().m_DrcExclusions.insert( serialized );
-            m_frame->GetDesignSettings().m_DrcExclusionComments[ serialized ] = comment;
+            bds().m_DrcExclusions.insert( serialized );
+            bds().m_DrcExclusionComments[serialized] = comment;
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             {
@@ -830,8 +830,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
                 marker->SetExcluded( false );
 
                 wxString serialized = marker->SerializeToString();
-                m_frame->GetDesignSettings().m_DrcExclusions.erase( serialized );
-                m_frame->GetDesignSettings().m_DrcExclusionComments.erase( serialized );
+                bds().m_DrcExclusions.erase( serialized );
+                bds().m_DrcExclusionComments.erase( serialized );
             }
         }
 
@@ -850,7 +850,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
                 marker->SetExcluded( true );
 
                 wxString serialized = marker->SerializeToString();
-                m_frame->GetDesignSettings().m_DrcExclusions.insert( serialized );
+                bds().m_DrcExclusions.insert( serialized );
             }
         }
 
@@ -1156,7 +1156,7 @@ void DIALOG_DRC::ExcludeMarker()
     if( marker && marker->GetSeverity() != RPT_SEVERITY_EXCLUSION )
     {
         marker->SetExcluded( true );
-        m_frame->GetDesignSettings().m_DrcExclusions.insert( marker->SerializeToString() );
+        bds().m_DrcExclusions.insert( marker->SerializeToString() );
         m_frame->GetCanvas()->GetView()->Update( marker );
 
         // Update view
@@ -1249,7 +1249,6 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::updateDisplayedCounts()
 {
-    BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
     DRC_TOOL*              drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
     DRC_ENGINE*            drcEngine = drcTool->GetDRCEngine().get();
 
@@ -1297,18 +1296,20 @@ void DIALOG_DRC::updateDisplayedCounts()
 
     for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
     {
+        const SEVERITY severity = bds().GetSeverity( ii );
+
         if( drcEngine->IsErrorLimitExceeded( ii ) )
         {
-            if( bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
+            if( severity == RPT_SEVERITY_ERROR )
                 errorsOverflowed = true;
-            else if( bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
+            else if( severity == RPT_SEVERITY_WARNING )
                 warningsOverflowed = true;
 
             if( ii == DRCE_UNCONNECTED_ITEMS )
             {
-                if( showWarnings && bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
+                if( showWarnings && severity == RPT_SEVERITY_WARNING )
                     unconnectedOverflowed = true;
-                else if( showErrors && bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
+                else if( showErrors && severity == RPT_SEVERITY_ERROR )
                     unconnectedOverflowed = true;
             }
             else if(    ii == DRCE_MISSING_FOOTPRINT
@@ -1318,16 +1319,16 @@ void DIALOG_DRC::updateDisplayedCounts()
                      || ii == DRCE_SCHEMATIC_PARITY
                      || ii == DRCE_FOOTPRINT_FILTERS )
             {
-                if( showWarnings && bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
+                if( showWarnings && severity == RPT_SEVERITY_WARNING )
                     footprintsOverflowed = true;
-                else if( showErrors && bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
+                else if( showErrors && severity == RPT_SEVERITY_ERROR )
                     footprintsOverflowed = true;
             }
             else
             {
-                if( showWarnings && bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
+                if( showWarnings && severity == RPT_SEVERITY_WARNING )
                     markersOverflowed = true;
-                else if( showErrors && bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
+                else if( showErrors && severity == RPT_SEVERITY_ERROR )
                     markersOverflowed = true;
             }
         }
