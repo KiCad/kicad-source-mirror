@@ -387,6 +387,7 @@ message BoardText
   kiapi.common.types.Text text = 2;
   BoardLayer layer = 3;
   bool knockout = 4;
+  kiapi.common.types.LockedState locked = 5;
 }
 
 // A board-specific textbox, existing on a board layer
@@ -395,6 +396,7 @@ message BoardTextBox
   kiapi.common.types.KIID id = 1;
   kiapi.common.types.TextBox textbox = 2;
   BoardLayer layer = 3;
+  kiapi.common.types.LockedState locked = 4;
 }
 
 // NOTE: There has been some discussion about what to do with pad attributes and properties.

@@ -89,6 +89,8 @@ void PCB_TEXT::Serialize( google::protobuf::Any &aContainer ) const
     boardText.mutable_id()->set_value( m_Uuid.AsStdString() );
     boardText.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
     boardText.set_knockout( IsKnockout() );
+    boardText.set_locked( IsLocked() ? types::LockedState::LS_LOCKED
+                                     : types::LockedState::LS_UNLOCKED );
 
     google::protobuf::Any any;
     EDA_TEXT::Serialize( any );
@@ -98,9 +100,6 @@ void PCB_TEXT::Serialize( google::protobuf::Any &aContainer ) const
     types::Text* text = boardText.mutable_text();
 
     PackVector2( *text->mutable_position(), GetPosition() );
-
-    text->set_locked( IsLocked() ? types::LockedState::LS_LOCKED
-                                 : types::LockedState::LS_UNLOCKED );
 
     aContainer.PackFrom( boardText );
 }
@@ -117,6 +116,7 @@ bool PCB_TEXT::Deserialize( const google::protobuf::Any &aContainer )
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( boardText.layer() ) );
     const_cast<KIID&>( m_Uuid ) = KIID( boardText.id().value() );
     SetIsKnockout( boardText.knockout() );
+    SetLocked( boardText.locked() == types::LockedState::LS_LOCKED );
 
     google::protobuf::Any any;
     any.PackFrom( boardText.text() );
@@ -125,7 +125,6 @@ bool PCB_TEXT::Deserialize( const google::protobuf::Any &aContainer )
     const types::Text& text = boardText.text();
 
     SetPosition( UnpackVector2( text.position() ) );
-    SetLocked( text.locked() == types::LockedState::LS_LOCKED );
 
     return true;
 }

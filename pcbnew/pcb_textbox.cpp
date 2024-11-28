@@ -71,6 +71,7 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
     types::BoardTextBox boardText;
     boardText.set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( GetLayer() ) );
     boardText.mutable_id()->set_value( m_Uuid.AsStdString() );
+    boardText.set_locked( IsLocked() ? LockedState::LS_LOCKED : LockedState::LS_UNLOCKED );
 
     TextBox& text = *boardText.mutable_textbox();
 
@@ -78,7 +79,6 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
     kiapi::common::PackVector2( *text.mutable_bottom_right(), GetEnd() );
     text.set_text( GetText().ToStdString() );
     //text.set_hyperlink( GetHyperlink().ToStdString() );
-    text.set_locked( IsLocked() ? LockedState::LS_LOCKED : LockedState::LS_UNLOCKED );
 
     TextAttributes* attrs = text.mutable_attributes();
 
@@ -117,12 +117,12 @@ bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any &aContainer )
 
     const_cast<KIID&>( m_Uuid ) = KIID( boardText.id().value() );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( boardText.layer() ) );
+    SetLocked( boardText.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
     const kiapi::common::types::TextBox& text = boardText.textbox();
 
     SetPosition( kiapi::common::UnpackVector2( text.top_left() ) );
     SetEnd( kiapi::common::UnpackVector2( text.bottom_right() ) );
-    SetLocked( text.locked() == kiapi::common::types::LockedState::LS_LOCKED );
     SetText( wxString( text.text().c_str(), wxConvUTF8 ) );
     //SetHyperlink( wxString::FromUTF8( text.hyperlink() );
 

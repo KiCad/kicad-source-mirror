@@ -303,7 +303,10 @@ message Text
   // kiapi.common.types.KIID           id         = 1;
   kiapi.common.types.Vector2        position   = 2;
   kiapi.common.types.TextAttributes attributes = 3;
-  kiapi.common.types.LockedState    locked     = 4;
+
+  // Reserved for future use; base objects don't support locking right nos
+  //kiapi.common.types.LockedState    locked     = 4;
+
   string                            text       = 5;
   string                            hyperlink  = 6;
 }
@@ -313,7 +316,10 @@ message TextBox
   kiapi.common.types.Vector2        top_left     = 2;
   kiapi.common.types.Vector2        bottom_right = 3;
   kiapi.common.types.TextAttributes attributes   = 4;
-  kiapi.common.types.LockedState    locked       = 5;
+
+  // Reserved for future use; base objects don't support locking right nos
+  //kiapi.common.types.LockedState    locked       = 5;
+
   string                            text         = 6;
 }
 
