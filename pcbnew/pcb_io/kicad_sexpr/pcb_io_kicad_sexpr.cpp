@@ -927,7 +927,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DIMENSION_BASE* aDimension ) const
                   formatInternalUnits( aDimension->GetExtensionOffset() ).c_str() );
 
     if( aDimension->GetKeepTextAligned() )
-        m_out->Print( " keep_text_aligned" );
+        KICAD_FORMAT::FormatBool( m_out, "keep_text_aligned", true );
 
     m_out->Print( ")" );
 

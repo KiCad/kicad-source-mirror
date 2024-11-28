@@ -4160,7 +4160,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                     break;
 
                 case T_keep_text_aligned:
-                    dim->SetKeepTextAligned( true );
+                    dim->SetKeepTextAligned( parseMaybeAbsentBool( true ) );
                     break;
 
                 case T_text_frame:
