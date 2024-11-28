@@ -708,6 +708,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         if( marker )
         {
             marker->SetExcluded( false );
+            m_frame->GetDesignSettings().m_DrcExclusions.erase( marker->Serialize() );
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             {
@@ -734,6 +735,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         if( marker )
         {
             marker->SetExcluded( true );
+            m_frame->GetDesignSettings().m_DrcExclusions.insert( marker->Serialize() );
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             {
@@ -764,7 +766,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             DRC_ITEM* candidateDrcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
 
             if( candidateDrcItem->GetViolatingRule() == drcItem->GetViolatingRule() )
+            {
                 marker->SetExcluded( false );
+                m_frame->GetDesignSettings().m_DrcExclusions.erase( marker->Serialize() );
+            }
         }
 
         // Rebuild model and view
@@ -780,7 +785,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             DRC_ITEM* candidateDrcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
 
             if( candidateDrcItem->GetViolatingRule() == drcItem->GetViolatingRule() )
+            {
                 marker->SetExcluded( true );
+                m_frame->GetDesignSettings().m_DrcExclusions.insert( marker->Serialize() );
+            }
         }
 
         // Rebuild model and view
@@ -1057,6 +1065,7 @@ void DIALOG_DRC::ExcludeMarker()
     if( marker && marker->GetSeverity() != RPT_SEVERITY_EXCLUSION )
     {
         marker->SetExcluded( true );
+        m_frame->GetDesignSettings().m_DrcExclusions.insert( marker->Serialize() );
         m_frame->GetCanvas()->GetView()->Update( marker );
 
         // Update view
