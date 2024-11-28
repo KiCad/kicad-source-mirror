@@ -38,6 +38,7 @@ using namespace std::placeholders;
 #include <confirm.h>
 #include <tool/tool_manager.h>
 #include <tool/point_editor_behavior.h>
+#include <tool/selection_conditions.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_point_editor.h>
@@ -1864,6 +1865,50 @@ void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
 }
 
 
+/**
+ * Condition to check if a point editor can add a corner to the given item.
+ */
+static bool canAddCorner( const EDA_ITEM& aItem )
+{
+    const auto type = aItem.Type();
+
+    if( type == PCB_ZONE_T )
+        return true;
+
+    if( type == PCB_SHAPE_T )
+    {
+        const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
+        const SHAPE_T    shapeType = shape.GetShape();
+        return shapeType == SHAPE_T::SEGMENT || shapeType == SHAPE_T::POLY
+               || shapeType == SHAPE_T::ARC;
+    }
+
+    return false;
+}
+
+/**
+ * Condition to check if a point editor can add a chamfer to a corner
+ * of the given item
+ */
+static bool canChamferCorner( const EDA_ITEM& aItem )
+{
+    const auto type = aItem.Type();
+
+    // Works only for zones and polygons
+    if( type == PCB_ZONE_T )
+        return true;
+
+    if( type == PCB_SHAPE_T )
+    {
+        const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
+        const SHAPE_T    shapeType = shape.GetShape();
+        return shapeType == SHAPE_T::POLY;
+    }
+
+    return false;
+}
+
+
 bool PCB_POINT_EDITOR::Init()
 {
     // Find the selection tool, so they can cooperate
@@ -1871,11 +1916,32 @@ bool PCB_POINT_EDITOR::Init()
 
     wxASSERT_MSG( m_selectionTool, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
 
+    const auto addCornerCondition = [&]( const SELECTION& aSelection ) -> bool
+    {
+        const EDA_ITEM* item = aSelection.Front();
+        return ( item != nullptr ) && canAddCorner( *item );
+    };
+
+    const auto addChamferCondition = [&]( const SELECTION& aSelection ) -> bool
+    {
+        const EDA_ITEM* item = aSelection.Front();
+        return ( item != nullptr ) && canChamferCorner( *item );
+    };
+
+    const auto removeCornerCondition = [&]( const SELECTION& aSelection ) -> bool
+    {
+        return PCB_POINT_EDITOR::removeCornerCondition( aSelection );
+    };
+
+    using S_C = SELECTION_CONDITIONS;
+
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
-    menu.AddItem( PCB_ACTIONS::pointEditorAddCorner, PCB_POINT_EDITOR::addCornerCondition );
-    menu.AddItem( PCB_ACTIONS::pointEditorRemoveCorner,
-                  std::bind( &PCB_POINT_EDITOR::removeCornerCondition, this, _1 ) );
-    menu.AddItem( PCB_ACTIONS::pointEditorChamferCorner, PCB_POINT_EDITOR::addCornerCondition );
+
+    // clang-format off
+    menu.AddItem( PCB_ACTIONS::pointEditorAddCorner,        S_C::Count( 1 ) && addCornerCondition );
+    menu.AddItem( PCB_ACTIONS::pointEditorRemoveCorner,     S_C::Count( 1 ) && removeCornerCondition );
+    menu.AddItem( PCB_ACTIONS::pointEditorChamferCorner,    S_C::Count( 1 ) && addChamferCondition );
+    // clang-format on
 
     return true;
 }
@@ -2552,37 +2618,6 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
 
     // In any other case we may align item to its original position
     return m_original;
-}
-
-
-bool PCB_POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
-{
-    const auto type = aItem.Type();
-
-    // Works only for zones and line segments
-    if( type == PCB_ZONE_T )
-        return true;
-
-    if( type == PCB_SHAPE_T )
-    {
-        const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
-        const SHAPE_T    shapeType = shape.GetShape();
-        return shapeType == SHAPE_T::SEGMENT || shapeType == SHAPE_T::POLY
-               || shapeType == SHAPE_T::ARC;
-    }
-
-    return false;
-}
-
-
-bool PCB_POINT_EDITOR::addCornerCondition( const SELECTION& aSelection )
-{
-    if( aSelection.Size() != 1 )
-        return false;
-
-    const EDA_ITEM* item = aSelection.Front();
-
-    return ( item != nullptr ) && canAddCorner( *item );
 }
 
 

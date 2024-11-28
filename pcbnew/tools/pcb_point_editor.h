@@ -108,12 +108,6 @@ private:
     ///< Return a point that should be used as a constrainer for 45 degrees mode.
     EDIT_POINT get45DegConstrainer() const;
 
-    ///< Condition to display "Create corner" context menu entry.
-    static bool addCornerCondition( const SELECTION& aSelection );
-
-    ///< Determine if the tool can currently add a corner to the given item
-    static bool canAddCorner( const EDA_ITEM& aItem );
-
     ///< Condition to display "Remove corner" context menu entry.
     bool removeCornerCondition( const SELECTION& aSelection );
 
