@@ -353,7 +353,13 @@ public:
                 [&]( ITEM_WITH_SHAPE* aItem ) -> bool
                 {
                     const SHAPE* shape = aItem->shape;
-                    wxASSERT( dynamic_cast<const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI*>( shape ) );
+
+                    // There are certain degenerate cases that result in empty zone fills, which
+                    // will be represented in the rtree with only a root (and no triangles).
+                    // https://gitlab.com/kicad/code/kicad/-/issues/18600
+                    if( shape->Type() != SH_POLY_SET_TRIANGLE )
+                        return true;
+
                     auto tri = static_cast<const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI*>( shape );
 
                     const SHAPE_LINE_CHAIN& outline = poly->Outline( 0 );
