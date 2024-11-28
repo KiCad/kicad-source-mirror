@@ -27,6 +27,7 @@
 #include <geometry/shape_compound.h>
 #include <google/protobuf/empty.pb.h>
 #include <pgm_base.h>
+#include <api/api_utils.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
@@ -160,6 +161,37 @@ HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShape
             proxy.Serialize( any );
             GraphicShape* shapeMsg = entry->mutable_shapes()->add_shapes();
             any.UnpackTo( shapeMsg );
+        }
+
+        if( textMsg.has_textbox() )
+        {
+            GraphicShape* border = entry->mutable_shapes()->add_shapes();
+            int width = textMsg.textbox().attributes().stroke_width().value_nm();
+            border->mutable_attributes()->mutable_stroke()->mutable_width()->set_value_nm( width );
+            VECTOR2I tl = UnpackVector2( textMsg.textbox().top_left() );
+            VECTOR2I br = UnpackVector2( textMsg.textbox().bottom_right() );
+
+            // top
+            PackVector2( *border->mutable_segment()->mutable_start(), tl );
+            PackVector2( *border->mutable_segment()->mutable_end(), VECTOR2I( br.x, tl.y ) );
+
+            // right
+            border = entry->mutable_shapes()->add_shapes();
+            border->mutable_attributes()->mutable_stroke()->mutable_width()->set_value_nm( width );
+            PackVector2( *border->mutable_segment()->mutable_start(), VECTOR2I( br.x, tl.y ) );
+            PackVector2( *border->mutable_segment()->mutable_end(), br );
+
+            // bottom
+            border = entry->mutable_shapes()->add_shapes();
+            border->mutable_attributes()->mutable_stroke()->mutable_width()->set_value_nm( width );
+            PackVector2( *border->mutable_segment()->mutable_start(), br );
+            PackVector2( *border->mutable_segment()->mutable_end(), VECTOR2I( tl.x, br.y ) );
+
+            // left
+            border = entry->mutable_shapes()->add_shapes();
+            border->mutable_attributes()->mutable_stroke()->mutable_width()->set_value_nm( width );
+            PackVector2( *border->mutable_segment()->mutable_start(), VECTOR2I( tl.x, br.y ) );
+            PackVector2( *border->mutable_segment()->mutable_end(), tl );
         }
     }
 
