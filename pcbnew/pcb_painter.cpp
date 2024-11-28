@@ -302,10 +302,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         auto ii = m_netColors.find( netCode );
 
         if( ii != m_netColors.end() )
-        {
-            std::cout << "Found net color: " << ii->second.ToHexString() << std::endl;
             netColor = ii->second;
-        }
 
         if( netColor == COLOR4D::UNSPECIFIED )
         {
@@ -852,7 +849,6 @@ void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLO
     {
         VECTOR2I textPosition = start + segV * ( (double) ii / divisions );
 
-        std::cout << "net " << aNetName << " col: " << aColor.ToHexString() << std::endl;
         if( viewport.Contains( textPosition ) )
             m_gal->BitmapText( aNetName, textPosition, textOrientation );
     }
