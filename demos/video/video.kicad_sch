@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20241004)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "8.99")
 	(uuid "f54f2c44-70ae-46db-88a1-bf696c289e90")
 	(paper "A3")
 	(title_block
@@ -14,7 +14,9 @@
 	(lib_symbols
 		(symbol "video_schlib:BNC"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -121,10 +123,13 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "video_schlib:DB9"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -179,160 +184,9 @@
 				)
 			)
 			(symbol "DB9_0_1"
-				(circle
-					(center -1.778 -10.16)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center -1.778 -5.08)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center -1.778 0)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center -1.778 5.08)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center -1.778 10.16)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 				(polyline
 					(pts
-						(xy -3.81 -11.684) (xy -3.81 11.684)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 -11.6586) (xy -3.556 -11.938)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 -10.16) (xy -2.54 -10.16)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 -7.62) (xy 0.508 -7.62)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 -5.08) (xy -2.54 -5.08)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 -2.54) (xy 0.508 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 0) (xy -2.54 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 2.54) (xy 0.508 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 5.08) (xy -2.54 5.08)
+						(xy -3.81 10.16) (xy -2.54 10.16)
 					)
 					(stroke
 						(width 0)
@@ -356,7 +210,7 @@
 				)
 				(polyline
 					(pts
-						(xy -3.81 10.16) (xy -2.54 10.16)
+						(xy -3.81 5.08) (xy -2.54 5.08)
 					)
 					(stroke
 						(width 0)
@@ -368,7 +222,103 @@
 				)
 				(polyline
 					(pts
-						(xy -3.556 -11.938) (xy -2.794 -12.446)
+						(xy -3.81 2.54) (xy 0.508 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 0) (xy -2.54 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -2.54) (xy 0.508 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -5.08) (xy -2.54 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -7.62) (xy 0.508 -7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -10.16) (xy -2.54 -10.16)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -11.6586) (xy -3.556 -11.938)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -11.684) (xy -3.81 11.684)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.556 11.938) (xy -2.54 12.446)
 					)
 					(stroke
 						(width 0.2032)
@@ -392,7 +342,7 @@
 				)
 				(polyline
 					(pts
-						(xy -3.556 11.938) (xy -2.54 12.446)
+						(xy -3.556 -11.938) (xy -2.794 -12.446)
 					)
 					(stroke
 						(width 0.2032)
@@ -420,6 +370,105 @@
 					)
 					(stroke
 						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.778 10.16)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.778 5.08)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.778 0)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.778 -5.08)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.778 -10.16)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.27 7.62)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.27 2.54)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.27 -2.54)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.27 -7.62)
+					(radius 0.762)
+					(stroke
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -464,7 +513,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.81 -9.906) (xy 3.556 -10.3886)
+						(xy 3.81 9.398) (xy 3.81 -9.906)
 					)
 					(stroke
 						(width 0.2032)
@@ -476,7 +525,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.81 9.398) (xy 3.81 -9.906)
+						(xy 3.81 -9.906) (xy 3.556 -10.3886)
 					)
 					(stroke
 						(width 0.2032)
@@ -486,63 +535,19 @@
 						(type none)
 					)
 				)
-				(circle
-					(center 1.27 -7.62)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 1.27 -2.54)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 1.27 2.54)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 1.27 7.62)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 			)
 			(symbol "DB9_1_1"
 				(pin passive line
-					(at -11.43 -10.16 0)
+					(at -11.43 10.16 0)
 					(length 7.62)
-					(name "1"
+					(name "5"
 						(effects
 							(font
 								(size 1.524 1.524)
 							)
 						)
 					)
-					(number "1"
+					(number "5"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -551,34 +556,16 @@
 					)
 				)
 				(pin passive line
-					(at -11.43 -5.08 0)
+					(at -11.43 7.62 0)
 					(length 7.62)
-					(name "2"
+					(name "P9"
 						(effects
 							(font
 								(size 1.524 1.524)
 							)
 						)
 					)
-					(number "2"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -11.43 0 0)
-					(length 7.62)
-					(name "3"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-					(number "3"
+					(number "9"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -605,16 +592,16 @@
 					)
 				)
 				(pin passive line
-					(at -11.43 10.16 0)
+					(at -11.43 2.54 0)
 					(length 7.62)
-					(name "5"
+					(name "P8"
 						(effects
 							(font
 								(size 1.524 1.524)
 							)
 						)
 					)
-					(number "5"
+					(number "8"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -623,16 +610,16 @@
 					)
 				)
 				(pin passive line
-					(at -11.43 -7.62 0)
+					(at -11.43 0 0)
 					(length 7.62)
-					(name "P6"
+					(name "3"
 						(effects
 							(font
 								(size 1.524 1.524)
 							)
 						)
 					)
-					(number "6"
+					(number "3"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -659,16 +646,16 @@
 					)
 				)
 				(pin passive line
-					(at -11.43 2.54 0)
+					(at -11.43 -5.08 0)
 					(length 7.62)
-					(name "P8"
+					(name "2"
 						(effects
 							(font
 								(size 1.524 1.524)
 							)
 						)
 					)
-					(number "8"
+					(number "2"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -677,16 +664,34 @@
 					)
 				)
 				(pin passive line
-					(at -11.43 7.62 0)
+					(at -11.43 -7.62 0)
 					(length 7.62)
-					(name "P9"
+					(name "P6"
 						(effects
 							(font
 								(size 1.524 1.524)
 							)
 						)
 					)
-					(number "9"
+					(number "6"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -11.43 -10.16 0)
+					(length 7.62)
+					(name "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "1"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -695,6 +700,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "video_schlib:GND"
 			(power)
@@ -764,7 +770,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -781,6 +788,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 	)
 	(junction
@@ -5083,6 +5091,10 @@
 	(sheet
 		(at 285.75 106.68)
 		(size 41.91 49.53)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0)
 			(type solid)
@@ -5111,173 +5123,173 @@
 		)
 		(pin "X_DIN" input
 			(at 285.75 109.22 180)
+			(uuid "702c4077-af80-4ec6-85b3-370296183075")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "702c4077-af80-4ec6-85b3-370296183075")
 		)
 		(pin "X_CLK" input
 			(at 285.75 111.76 180)
+			(uuid "3aa91dbc-b994-412c-9f56-765b14551ca0")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "3aa91dbc-b994-412c-9f56-765b14551ca0")
 		)
 		(pin "CLKCDA" input
 			(at 285.75 124.46 180)
+			(uuid "e1af7cc5-9be6-4ac1-9038-07a9e03725e5")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "e1af7cc5-9be6-4ac1-9038-07a9e03725e5")
 		)
 		(pin "CLKCAD" input
 			(at 285.75 127 180)
+			(uuid "c6100cc0-f464-4fcf-9a5a-b6e5c5503559")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "c6100cc0-f464-4fcf-9a5a-b6e5c5503559")
 		)
 		(pin "X_DONE" output
 			(at 285.75 114.3 180)
+			(uuid "a71c135d-6fc4-4987-962b-a53f4e55c3e7")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "a71c135d-6fc4-4987-962b-a53f4e55c3e7")
 		)
 		(pin "X_PROG-" input
 			(at 285.75 116.84 180)
+			(uuid "34ad2777-db6d-4809-bcf0-1176bcbbf0f6")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "34ad2777-db6d-4809-bcf0-1176bcbbf0f6")
 		)
 		(pin "TVB[0..7]" bidirectional
 			(at 327.66 116.84 0)
+			(uuid "33fa9fb3-b227-46d0-b331-648283c53273")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "33fa9fb3-b227-46d0-b331-648283c53273")
 		)
 		(pin "TVG[0..7]" bidirectional
 			(at 327.66 114.3 0)
+			(uuid "9b9deaaa-87e6-40ad-a985-f0be721ae3fd")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "9b9deaaa-87e6-40ad-a985-f0be721ae3fd")
 		)
 		(pin "TVR[0..7]" bidirectional
 			(at 327.66 111.76 0)
+			(uuid "7c56c0a7-46ad-4e93-9bd5-782dd74ef757")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "7c56c0a7-46ad-4e93-9bd5-782dd74ef757")
 		)
 		(pin "VRAM[0..31]" bidirectional
 			(at 327.66 124.46 0)
+			(uuid "099989c5-3779-4846-b97b-cc250fe5d9cf")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "099989c5-3779-4846-b97b-cc250fe5d9cf")
 		)
 		(pin "DPC[0..31]" bidirectional
 			(at 285.75 132.08 180)
+			(uuid "9fadb329-0153-44e2-a587-211c6eef0a98")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "9fadb329-0153-44e2-a587-211c6eef0a98")
 		)
 		(pin "ACCES_RAM-" input
 			(at 285.75 135.89 180)
+			(uuid "6911b2e5-7974-4644-ae7f-047dbe64fc01")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "6911b2e5-7974-4644-ae7f-047dbe64fc01")
 		)
 		(pin "DATA_WR" input
 			(at 285.75 138.43 180)
+			(uuid "5fa1d8c9-da7c-496e-8ab1-7a8208178b52")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "5fa1d8c9-da7c-496e-8ab1-7a8208178b52")
 		)
 		(pin "ACQ_ON" input
 			(at 285.75 143.51 180)
+			(uuid "939be1e7-296e-4bba-ba90-f0ccd27ba8c1")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "939be1e7-296e-4bba-ba90-f0ccd27ba8c1")
 		)
 		(pin "CSYNC-OUT" input
 			(at 285.75 147.32 180)
+			(uuid "aedcc552-c838-423c-a8ec-9fb2c0a1abf1")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "aedcc552-c838-423c-a8ec-9fb2c0a1abf1")
 		)
 		(pin "BLANK-" input
 			(at 285.75 151.13 180)
+			(uuid "5275574d-419b-4538-a3f8-26400f48f499")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "5275574d-419b-4538-a3f8-26400f48f499")
 		)
 		(pin "CLAMP" input
 			(at 285.75 153.67 180)
+			(uuid "f9155aba-a1e5-4a54-add7-8c2e753d6883")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "f9155aba-a1e5-4a54-add7-8c2e753d6883")
 		)
 		(instances
 			(project "video"
@@ -5290,6 +5302,10 @@
 	(sheet
 		(at 337.82 44.45)
 		(size 34.29 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0)
 			(type solid)
@@ -5318,73 +5334,73 @@
 		)
 		(pin "BLUE" input
 			(at 337.82 48.26 180)
+			(uuid "b4d48869-af16-4489-bb93-452db30730b3")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "b4d48869-af16-4489-bb93-452db30730b3")
 		)
 		(pin "GREEN" input
 			(at 337.82 50.8 180)
+			(uuid "116cd4e8-0f80-4897-ba90-1b6affea1e14")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "116cd4e8-0f80-4897-ba90-1b6affea1e14")
 		)
 		(pin "RED" input
 			(at 337.82 53.34 180)
+			(uuid "b7d549f0-cd7b-4226-88c1-45aed03ecf53")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "b7d549f0-cd7b-4226-88c1-45aed03ecf53")
 		)
 		(pin "CVBSOUT" output
 			(at 372.11 68.58 0)
+			(uuid "640eda47-813c-4750-b57d-12617b6b14e8")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "640eda47-813c-4750-b57d-12617b6b14e8")
 		)
 		(pin "YOUT" output
 			(at 372.11 58.42 0)
+			(uuid "b4502b7e-b6d8-407e-8144-9ac2d7823752")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "b4502b7e-b6d8-407e-8144-9ac2d7823752")
 		)
 		(pin "COUT" output
 			(at 372.11 48.26 0)
+			(uuid "2abd26c4-a4dd-4357-91e3-e7d60951c42b")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "2abd26c4-a4dd-4357-91e3-e7d60951c42b")
 		)
 		(pin "CSYNC-OUT" input
 			(at 337.82 62.23 180)
+			(uuid "bf7caaa0-3034-4b45-82e1-d6d579ca7e05")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "bf7caaa0-3034-4b45-82e1-d6d579ca7e05")
 		)
 		(instances
 			(project "video"
@@ -5397,6 +5413,10 @@
 	(sheet
 		(at 175.26 106.68)
 		(size 48.26 39.37)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0)
 			(type solid)
@@ -5425,143 +5445,143 @@
 		)
 		(pin "F_PALIN" output
 			(at 223.52 127 0)
+			(uuid "bf00e85a-ccd5-4d79-9772-db1311c64d75")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "bf00e85a-ccd5-4d79-9772-db1311c64d75")
 		)
 		(pin "TVR[0..7]" bidirectional
 			(at 223.52 111.76 0)
+			(uuid "ad9b096b-5076-499d-bf6d-66ed1b5a0209")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "ad9b096b-5076-499d-bf6d-66ed1b5a0209")
 		)
 		(pin "PC_D[0..7]" bidirectional
 			(at 175.26 110.49 180)
+			(uuid "452dbc5a-3d44-42b1-9f5c-929e7e4f8137")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "452dbc5a-3d44-42b1-9f5c-929e7e4f8137")
 		)
 		(pin "PC_A[0..1]" input
 			(at 175.26 113.03 180)
+			(uuid "e722b090-14f0-498d-a16b-45a645d492e4")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "e722b090-14f0-498d-a16b-45a645d492e4")
 		)
 		(pin "RESET-" input
 			(at 175.26 115.57 180)
+			(uuid "b569113c-ded7-4a6c-884f-e36862dd5eac")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "b569113c-ded7-4a6c-884f-e36862dd5eac")
 		)
 		(pin "GREEN_IN" input
 			(at 175.26 118.11 180)
+			(uuid "753acd63-628d-4b09-964b-0647e428de0b")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "753acd63-628d-4b09-964b-0647e428de0b")
 		)
 		(pin "RED_IN" input
 			(at 175.26 120.65 180)
+			(uuid "8656d5c0-b1ac-4877-bce3-b74de550ad8e")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "8656d5c0-b1ac-4877-bce3-b74de550ad8e")
 		)
 		(pin "OE_PAL-" input
 			(at 175.26 142.24 180)
+			(uuid "c05cd7a1-782f-457d-ac89-03e9bcd95b02")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "c05cd7a1-782f-457d-ac89-03e9bcd95b02")
 		)
 		(pin "HD_PAL-" output
 			(at 223.52 129.54 0)
+			(uuid "66ff0c2e-332d-4f59-8488-cec0157d81cf")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "66ff0c2e-332d-4f59-8488-cec0157d81cf")
 		)
 		(pin "VD_PAL-" output
 			(at 223.52 132.08 0)
+			(uuid "a50deff3-d7cd-4b2b-aecf-6276a142f0ca")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "a50deff3-d7cd-4b2b-aecf-6276a142f0ca")
 		)
 		(pin "TVB[0..7]" bidirectional
 			(at 223.52 116.84 0)
+			(uuid "b6d0587a-8883-4036-bf35-70323f6228ab")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "b6d0587a-8883-4036-bf35-70323f6228ab")
 		)
 		(pin "TVG[0..7]" bidirectional
 			(at 223.52 114.3 0)
+			(uuid "8daaedab-ee12-4c14-b62b-49916d0899be")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "8daaedab-ee12-4c14-b62b-49916d0899be")
 		)
 		(pin "BT812_WR-" input
 			(at 175.26 128.27 180)
+			(uuid "4512e8e8-9e26-43d9-b162-0dd3e7031e39")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "4512e8e8-9e26-43d9-b162-0dd3e7031e39")
 		)
 		(pin "BT812_RD-" input
 			(at 175.26 125.73 180)
+			(uuid "ee205f93-2685-4fb4-8ec9-7ac759402551")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "ee205f93-2685-4fb4-8ec9-7ac759402551")
 		)
 		(instances
 			(project "video"
@@ -5574,6 +5594,10 @@
 	(sheet
 		(at 50.8 127)
 		(size 45.72 118.11)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0)
 			(type solid)
@@ -5602,613 +5626,613 @@
 		)
 		(pin "CSYNC-OUT" output
 			(at 96.52 137.16 0)
+			(uuid "955a720d-f739-4f0f-a531-f8c2e2051cca")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "955a720d-f739-4f0f-a531-f8c2e2051cca")
 		)
 		(pin "DQ[0..15]" bidirectional
 			(at 50.8 134.62 180)
+			(uuid "d90504ee-fe48-4279-b5f3-eb21db2246ac")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "d90504ee-fe48-4279-b5f3-eb21db2246ac")
 		)
 		(pin "ADR[2..6]" output
 			(at 50.8 137.16 180)
+			(uuid "abc95307-02aa-4804-ae4c-7adcc93fe909")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "abc95307-02aa-4804-ae4c-7adcc93fe909")
 		)
 		(pin "CADCLK" output
 			(at 96.52 132.08 0)
+			(uuid "d449f464-13bd-4236-884e-30c052e30cb7")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "d449f464-13bd-4236-884e-30c052e30cb7")
 		)
 		(pin "CDACLK" output
 			(at 96.52 134.62 0)
+			(uuid "0fe9b508-e5eb-4d30-a196-86b832188822")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "0fe9b508-e5eb-4d30-a196-86b832188822")
 		)
 		(pin "CLAMP" output
 			(at 96.52 142.24 0)
+			(uuid "883b1242-de9a-4460-88b1-99723cfe2edb")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "883b1242-de9a-4460-88b1-99723cfe2edb")
 		)
 		(pin "CSYNCIN-" input
 			(at 50.8 156.21 180)
+			(uuid "3fd64f94-b230-41e6-a0a8-9188e077c34b")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "3fd64f94-b230-41e6-a0a8-9188e077c34b")
 		)
 		(pin "MXA[0..10]" output
 			(at 96.52 152.4 0)
+			(uuid "9ba9b67a-7855-4165-ac32-880d59e6f534")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "9ba9b67a-7855-4165-ac32-880d59e6f534")
 		)
 		(pin "RAS7-" output
 			(at 96.52 172.72 0)
+			(uuid "0c655e10-8f52-4a64-9e31-d9932aa8c280")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "0c655e10-8f52-4a64-9e31-d9932aa8c280")
 		)
 		(pin "RAS6-" output
 			(at 96.52 170.18 0)
+			(uuid "43ce1f01-7141-41f0-9565-0019bdc2c7cf")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "43ce1f01-7141-41f0-9565-0019bdc2c7cf")
 		)
 		(pin "RAS5-" output
 			(at 96.52 167.64 0)
+			(uuid "bca00a67-575a-4bc5-9c19-bffb1b869687")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "bca00a67-575a-4bc5-9c19-bffb1b869687")
 		)
 		(pin "RAS4-" output
 			(at 96.52 165.1 0)
+			(uuid "218eb6fe-6531-43ab-a9d5-53010019c28f")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "218eb6fe-6531-43ab-a9d5-53010019c28f")
 		)
 		(pin "RAS3-" output
 			(at 96.52 162.56 0)
+			(uuid "20e864e3-5205-45e3-971f-5c2a16c5f8ab")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "20e864e3-5205-45e3-971f-5c2a16c5f8ab")
 		)
 		(pin "RAS2-" output
 			(at 96.52 160.02 0)
+			(uuid "778ef8de-ad1e-4f4b-8b74-aba514dc9712")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "778ef8de-ad1e-4f4b-8b74-aba514dc9712")
 		)
 		(pin "RAS1-" output
 			(at 96.52 157.48 0)
+			(uuid "0cfcd723-39b5-437e-ac81-7adf86828253")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "0cfcd723-39b5-437e-ac81-7adf86828253")
 		)
 		(pin "RAS0-" output
 			(at 96.52 154.94 0)
+			(uuid "350d1dcb-4574-4166-a982-71ecb2f6ed61")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "350d1dcb-4574-4166-a982-71ecb2f6ed61")
 		)
 		(pin "CAS2-" output
 			(at 96.52 184.15 0)
+			(uuid "26b57f76-bf74-492c-beb4-7bea88a45458")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "26b57f76-bf74-492c-beb4-7bea88a45458")
 		)
 		(pin "CAS1-" output
 			(at 96.52 181.61 0)
+			(uuid "775db2a3-da75-47d3-adc5-fd861cbcfbfa")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "775db2a3-da75-47d3-adc5-fd861cbcfbfa")
 		)
 		(pin "CAS0-" output
 			(at 96.52 179.07 0)
+			(uuid "a904037c-b9cf-4313-8727-65006a6f37ac")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "a904037c-b9cf-4313-8727-65006a6f37ac")
 		)
 		(pin "RD-" input
 			(at 50.8 144.78 180)
+			(uuid "aff0cac7-7985-4c66-8f5d-4add3a803ac2")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "aff0cac7-7985-4c66-8f5d-4add3a803ac2")
 		)
 		(pin "WR-" input
 			(at 50.8 142.24 180)
+			(uuid "e4faf49a-8bac-4476-b602-b9c363c1fdb4")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "e4faf49a-8bac-4476-b602-b9c363c1fdb4")
 		)
 		(pin "CAS3-" output
 			(at 96.52 186.69 0)
+			(uuid "5394c2d6-ab2a-4951-903a-0cd935e776a0")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "5394c2d6-ab2a-4951-903a-0cd935e776a0")
 		)
 		(pin "RDCDA-" output
 			(at 96.52 191.77 0)
+			(uuid "fce589c7-fc64-47c1-aeeb-97d066579eb6")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "fce589c7-fc64-47c1-aeeb-97d066579eb6")
 		)
 		(pin "WRCDA-" output
 			(at 96.52 194.31 0)
+			(uuid "6d17493a-378c-41c1-b111-bab7a67b5afb")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "6d17493a-378c-41c1-b111-bab7a67b5afb")
 		)
 		(pin "RDCAD-" output
 			(at 96.52 196.85 0)
+			(uuid "cbf73d83-8ecc-4908-91ec-7febb8296ae6")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "cbf73d83-8ecc-4908-91ec-7febb8296ae6")
 		)
 		(pin "WRCAD-" output
 			(at 96.52 199.39 0)
+			(uuid "2c89a63e-da60-41f1-9bf8-20ab4226b4c2")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "2c89a63e-da60-41f1-9bf8-20ab4226b4c2")
 		)
 		(pin "WRAM-" output
 			(at 96.52 176.53 0)
+			(uuid "86bbdf00-f014-4801-9f82-3772612b33bd")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "86bbdf00-f014-4801-9f82-3772612b33bd")
 		)
 		(pin "BLANK-" output
 			(at 96.52 144.78 0)
+			(uuid "0fc497de-6e7d-4dda-8978-2bbadd30ad8a")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "0fc497de-6e7d-4dda-8978-2bbadd30ad8a")
 		)
 		(pin "PTATN-" input
 			(at 50.8 160.02 180)
+			(uuid "715bb046-7cb4-490e-b926-8de79bc99329")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "715bb046-7cb4-490e-b926-8de79bc99329")
 		)
 		(pin "PTRDY-" output
 			(at 50.8 162.56 180)
+			(uuid "3adba241-a5f4-4971-858b-6ffc8f33d93c")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "3adba241-a5f4-4971-858b-6ffc8f33d93c")
 		)
 		(pin "PTNUM1" input
 			(at 50.8 166.37 180)
+			(uuid "34d6b771-9131-4c00-8344-8176b10a1b84")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "34d6b771-9131-4c00-8344-8176b10a1b84")
 		)
 		(pin "PTBE-[0..3]" input
 			(at 50.8 168.91 180)
+			(uuid "60b2ec0d-6d5c-43f2-8bf9-5c7c51e28c49")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "60b2ec0d-6d5c-43f2-8bf9-5c7c51e28c49")
 		)
 		(pin "PTADR-" output
 			(at 50.8 171.45 180)
+			(uuid "ca8a83c1-2f21-438e-8b8a-753bb350bd8e")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "ca8a83c1-2f21-438e-8b8a-753bb350bd8e")
 		)
 		(pin "PTWR" input
 			(at 50.8 173.99 180)
+			(uuid "f58702fa-81fb-4895-9120-22312b0ab4e4")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "f58702fa-81fb-4895-9120-22312b0ab4e4")
 		)
 		(pin "PTBURST-" input
 			(at 50.8 176.53 180)
+			(uuid "d9b6a4ec-8f7b-4bdd-9438-c995f3f232fa")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "d9b6a4ec-8f7b-4bdd-9438-c995f3f232fa")
 		)
 		(pin "SELECT-" output
 			(at 50.8 179.07 180)
+			(uuid "aaf13d60-0c40-4d8c-b6c7-79ef1ca73a3d")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "aaf13d60-0c40-4d8c-b6c7-79ef1ca73a3d")
 		)
 		(pin "BPCLK" input
 			(at 50.8 181.61 180)
+			(uuid "90baf01a-ad79-455b-ba1e-0fd82b56f32e")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "90baf01a-ad79-455b-ba1e-0fd82b56f32e")
 		)
 		(pin "SYSRST-" input
 			(at 50.8 184.15 180)
+			(uuid "ab0ffe78-e80e-41e1-b12b-2edffaf0c7ac")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "ab0ffe78-e80e-41e1-b12b-2edffaf0c7ac")
 		)
 		(pin "PTNUM0" input
 			(at 50.8 186.69 180)
+			(uuid "3bfab821-a245-43e3-8e38-f6c50778c0d9")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "3bfab821-a245-43e3-8e38-f6c50778c0d9")
 		)
 		(pin "BE-[0..3]" output
 			(at 50.8 189.23 180)
+			(uuid "3ac4579b-87b8-487d-a697-2bf01c593233")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "3ac4579b-87b8-487d-a697-2bf01c593233")
 		)
 		(pin "WRFULL" output
 			(at 50.8 194.31 180)
+			(uuid "564ce325-ddd4-42d9-9a18-f8616860ce70")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "564ce325-ddd4-42d9-9a18-f8616860ce70")
 		)
 		(pin "RDEMPTY" output
 			(at 50.8 196.85 180)
+			(uuid "affcbc81-37cc-478b-9742-9628cae055ef")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "affcbc81-37cc-478b-9742-9628cae055ef")
 		)
 		(pin "RDFIFO-" output
 			(at 50.8 152.4 180)
+			(uuid "b2c7d3b9-20ec-436e-9776-e582fbade1e8")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "b2c7d3b9-20ec-436e-9776-e582fbade1e8")
 		)
 		(pin "WRFIFO-" output
 			(at 50.8 149.86 180)
+			(uuid "4e7b5c48-f2a6-4df4-a7f5-a79948505fbb")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "4e7b5c48-f2a6-4df4-a7f5-a79948505fbb")
 		)
 		(pin "BT812_WR-" output
 			(at 96.52 204.47 0)
+			(uuid "15e93a87-0ff4-4db4-945a-9263869bae9e")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "15e93a87-0ff4-4db4-945a-9263869bae9e")
 		)
 		(pin "BT812_RD-" output
 			(at 96.52 201.93 0)
+			(uuid "e35c1630-6e9b-4a8b-bcff-94fdba66c1cd")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "e35c1630-6e9b-4a8b-bcff-94fdba66c1cd")
 		)
 		(pin "VD_PAL-" input
 			(at 50.8 201.93 180)
+			(uuid "8f9036c0-f392-4fa7-bb69-bb9d631061f9")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "8f9036c0-f392-4fa7-bb69-bb9d631061f9")
 		)
 		(pin "HD_PAL-" input
 			(at 50.8 204.47 180)
+			(uuid "a31cbd80-9714-48bb-b6fb-46220b9e8169")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "a31cbd80-9714-48bb-b6fb-46220b9e8169")
 		)
 		(pin "F_PALIN" input
 			(at 50.8 207.01 180)
+			(uuid "0f044a49-933f-4979-bb02-8eafda1c3063")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "0f044a49-933f-4979-bb02-8eafda1c3063")
 		)
 		(pin "X_DOUT" output
 			(at 96.52 215.9 0)
+			(uuid "750c422f-33e5-4d18-8bfc-9212456568de")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "750c422f-33e5-4d18-8bfc-9212456568de")
 		)
 		(pin "X_CLK" output
 			(at 96.52 218.44 0)
+			(uuid "e1b0e399-9d2b-45cf-a2e2-7bb76394b006")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "e1b0e399-9d2b-45cf-a2e2-7bb76394b006")
 		)
 		(pin "X_DONE" output
 			(at 96.52 220.98 0)
+			(uuid "d1935168-c696-4708-9a62-548089fb6b3c")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "d1935168-c696-4708-9a62-548089fb6b3c")
 		)
 		(pin "X_PROG-" output
 			(at 96.52 223.52 0)
+			(uuid "32a51c27-f5c9-4941-8e89-0ccd58714cf2")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "32a51c27-f5c9-4941-8e89-0ccd58714cf2")
 		)
 		(pin "WRITE_RAM" output
 			(at 96.52 228.6 0)
+			(uuid "9f18fde0-e272-4322-8e64-99d672309db2")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "9f18fde0-e272-4322-8e64-99d672309db2")
 		)
 		(pin "ACCES_RAM-" output
 			(at 96.52 231.14 0)
+			(uuid "98bba9d1-8b59-4cd6-abb0-d4d374a8fe6c")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "98bba9d1-8b59-4cd6-abb0-d4d374a8fe6c")
 		)
 		(pin "TVI[0..1]" output
 			(at 96.52 149.86 0)
+			(uuid "44c96ac0-78da-4ce7-8dc3-0b5d4c81773e")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "44c96ac0-78da-4ce7-8dc3-0b5d4c81773e")
 		)
 		(pin "PCA[0..2]" output
 			(at 96.52 236.22 0)
+			(uuid "fd959379-d239-4ea9-a101-53601158b212")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "fd959379-d239-4ea9-a101-53601158b212")
 		)
 		(pin "X_IRQ" bidirectional
 			(at 50.8 210.82 180)
+			(uuid "7b185bdf-0c61-473a-9fbb-3157dad96808")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "7b185bdf-0c61-473a-9fbb-3157dad96808")
 		)
 		(pin "IRQ-" input
 			(at 50.8 213.36 180)
+			(uuid "57dbeed1-9c21-4c96-8064-4ad06c6390af")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "57dbeed1-9c21-4c96-8064-4ad06c6390af")
 		)
 		(pin "IRQ_SLR" bidirectional
 			(at 50.8 215.9 180)
+			(uuid "9798e87e-fd0b-4819-b1e2-555cfaede7bf")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "9798e87e-fd0b-4819-b1e2-555cfaede7bf")
 		)
 		(pin "ACQ_ON" output
 			(at 96.52 210.82 0)
+			(uuid "a92d668f-81f1-4876-8369-f9494ee05ca9")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "a92d668f-81f1-4876-8369-f9494ee05ca9")
 		)
 		(instances
 			(project "video"
@@ -6221,6 +6245,10 @@
 	(sheet
 		(at 176.53 163.83)
 		(size 46.99 43.18)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0)
 			(type solid)
@@ -6249,153 +6277,153 @@
 		)
 		(pin "TVRAM[0..31]" tri_state
 			(at 223.52 167.64 0)
+			(uuid "055c07a6-7abb-4abd-b539-aeed5c4598ad")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "055c07a6-7abb-4abd-b539-aeed5c4598ad")
 		)
 		(pin "WRAM-" input
 			(at 176.53 166.37 180)
+			(uuid "e96337fc-f7d4-4d6c-83df-80d991749385")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "e96337fc-f7d4-4d6c-83df-80d991749385")
 		)
 		(pin "CAS3-" input
 			(at 176.53 177.8 180)
+			(uuid "c0fe766b-b3ba-4cab-9f8b-10f2e1b28e76")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "c0fe766b-b3ba-4cab-9f8b-10f2e1b28e76")
 		)
 		(pin "RAS7-" input
 			(at 176.53 200.66 180)
+			(uuid "e1bac9fd-5031-4e8f-b5cf-6459a8a40059")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "e1bac9fd-5031-4e8f-b5cf-6459a8a40059")
 		)
 		(pin "RAS6-" input
 			(at 176.53 198.12 180)
+			(uuid "e417e04c-73cd-4163-9468-ab8295c5b589")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "e417e04c-73cd-4163-9468-ab8295c5b589")
 		)
 		(pin "RAS5-" input
 			(at 176.53 195.58 180)
+			(uuid "33122c34-73ed-4e03-9fae-afad3b3da8ba")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "33122c34-73ed-4e03-9fae-afad3b3da8ba")
 		)
 		(pin "RAS4-" input
 			(at 176.53 193.04 180)
+			(uuid "44759983-edd5-4f68-aba7-2e3403da1b32")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "44759983-edd5-4f68-aba7-2e3403da1b32")
 		)
 		(pin "RAS3-" input
 			(at 176.53 190.5 180)
+			(uuid "77f40044-0206-420c-a624-3c4171741d7c")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "77f40044-0206-420c-a624-3c4171741d7c")
 		)
 		(pin "RAS2-" input
 			(at 176.53 187.96 180)
+			(uuid "714172e1-c21a-4c26-90e3-4190e5b756bd")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "714172e1-c21a-4c26-90e3-4190e5b756bd")
 		)
 		(pin "RAS1-" input
 			(at 176.53 185.42 180)
+			(uuid "8da1b1e4-fc0c-4298-8d78-86637dd3c87c")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "8da1b1e4-fc0c-4298-8d78-86637dd3c87c")
 		)
 		(pin "RAS0-" input
 			(at 176.53 182.88 180)
+			(uuid "750e9d90-fa0d-469e-a20d-66edf9eea152")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "750e9d90-fa0d-469e-a20d-66edf9eea152")
 		)
 		(pin "CAS2-" input
 			(at 176.53 175.26 180)
+			(uuid "fd8c1da3-cb7a-44d1-9c3d-7d3435087abf")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "fd8c1da3-cb7a-44d1-9c3d-7d3435087abf")
 		)
 		(pin "CAS1-" input
 			(at 176.53 172.72 180)
+			(uuid "78f2a128-09b6-48d1-b476-cd9f31423e91")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "78f2a128-09b6-48d1-b476-cd9f31423e91")
 		)
 		(pin "CAS0-" input
 			(at 176.53 170.18 180)
+			(uuid "f2eff85c-4a54-4ce5-8111-3c038a37ef5d")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "f2eff85c-4a54-4ce5-8111-3c038a37ef5d")
 		)
 		(pin "MXA[0..10]" input
 			(at 176.53 204.47 180)
+			(uuid "ca268211-7a89-47cc-8593-dd599e5dee60")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "ca268211-7a89-47cc-8593-dd599e5dee60")
 		)
 		(instances
 			(project "video"
@@ -6408,6 +6436,10 @@
 	(sheet
 		(at 49.53 40.64)
 		(size 46.99 60.96)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0)
 			(type solid)
@@ -6436,233 +6468,233 @@
 		)
 		(pin "WR-" input
 			(at 49.53 49.53 180)
+			(uuid "f0c3c00d-7e0d-425e-a52d-d34533d0f5ac")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "f0c3c00d-7e0d-425e-a52d-d34533d0f5ac")
 		)
 		(pin "RD-" input
 			(at 49.53 52.07 180)
+			(uuid "cbac9590-8deb-436e-a446-34b37a229d70")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "cbac9590-8deb-436e-a446-34b37a229d70")
 		)
 		(pin "DQ[0..31]" bidirectional
 			(at 96.52 45.72 0)
+			(uuid "aff34b38-3a34-4bea-bd6e-1ff14bd18df3")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "aff34b38-3a34-4bea-bd6e-1ff14bd18df3")
 		)
 		(pin "ADR[2..6]" input
 			(at 49.53 55.88 180)
+			(uuid "d154ed07-53f8-4d2c-81c5-51b2a014a4ba")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "d154ed07-53f8-4d2c-81c5-51b2a014a4ba")
 		)
 		(pin "BE-[0..3]" input
 			(at 49.53 45.72 180)
+			(uuid "abb3e307-28a3-4a1f-a828-cba980ff6204")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "abb3e307-28a3-4a1f-a828-cba980ff6204")
 		)
 		(pin "IRQ_SRL" bidirectional
 			(at 96.52 49.53 0)
+			(uuid "cbb71d55-2692-42f9-8483-7ec0ee6936e5")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "cbb71d55-2692-42f9-8483-7ec0ee6936e5")
 		)
 		(pin "X_IRQ" bidirectional
 			(at 96.52 52.07 0)
+			(uuid "54cb76a0-2b9e-4fe2-a210-79431a902d48")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "54cb76a0-2b9e-4fe2-a210-79431a902d48")
 		)
 		(pin "PTNUM0" output
 			(at 96.52 59.69 0)
+			(uuid "43cd075f-6a56-4866-b0ee-408709ded1fc")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "43cd075f-6a56-4866-b0ee-408709ded1fc")
 		)
 		(pin "PTNUM1" output
 			(at 96.52 62.23 0)
+			(uuid "9d5f0772-9693-42cc-abd9-9e9c00590893")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "9d5f0772-9693-42cc-abd9-9e9c00590893")
 		)
 		(pin "PTATN-" output
 			(at 96.52 64.77 0)
+			(uuid "447d84dd-c05a-4caa-a09c-3acbab06f4ae")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "447d84dd-c05a-4caa-a09c-3acbab06f4ae")
 		)
 		(pin "PTRDY-" input
 			(at 49.53 60.96 180)
+			(uuid "0cac154e-8ee8-4b5e-bccf-fd943dd4e64d")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "0cac154e-8ee8-4b5e-bccf-fd943dd4e64d")
 		)
 		(pin "PTBE-[0..3]" output
 			(at 96.52 69.85 0)
+			(uuid "7dabf765-ca2d-42eb-8a92-aaaf357f7108")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "7dabf765-ca2d-42eb-8a92-aaaf357f7108")
 		)
 		(pin "PTWR" output
 			(at 96.52 77.47 0)
+			(uuid "52849c73-6b41-4d82-9b97-5dd2fd14dec3")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "52849c73-6b41-4d82-9b97-5dd2fd14dec3")
 		)
 		(pin "PTBURST-" output
 			(at 96.52 74.93 0)
+			(uuid "706d9cbc-d7a0-4bff-8a8b-41a00c448027")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "706d9cbc-d7a0-4bff-8a8b-41a00c448027")
 		)
 		(pin "SELECT-" input
 			(at 49.53 63.5 180)
+			(uuid "546fe6c0-4619-479e-92b6-9b4d6a9b2f84")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "546fe6c0-4619-479e-92b6-9b4d6a9b2f84")
 		)
 		(pin "BPCLK" output
 			(at 96.52 80.01 0)
+			(uuid "c79cadf3-a29d-4f74-acfb-4759ef858c9d")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "c79cadf3-a29d-4f74-acfb-4759ef858c9d")
 		)
 		(pin "SYSRST-" output
 			(at 96.52 91.44 0)
+			(uuid "31214c16-5b52-4c22-a83d-590db3768c7d")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "31214c16-5b52-4c22-a83d-590db3768c7d")
 		)
 		(pin "WRFULL" output
 			(at 96.52 85.09 0)
+			(uuid "1d7b7ffe-9f2f-4e6b-ada6-92703d4f3739")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "1d7b7ffe-9f2f-4e6b-ada6-92703d4f3739")
 		)
 		(pin "RDEMPTY" output
 			(at 96.52 87.63 0)
+			(uuid "d91d7a52-a68b-493a-9286-f05e8acd70d7")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "d91d7a52-a68b-493a-9286-f05e8acd70d7")
 		)
 		(pin "WRFIFO-" input
 			(at 49.53 67.31 180)
+			(uuid "22b5def0-bd8d-4daa-a1c9-320b36f4168f")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "22b5def0-bd8d-4daa-a1c9-320b36f4168f")
 		)
 		(pin "RDFIFO-" input
 			(at 49.53 69.85 180)
+			(uuid "4a2acd28-4dd1-4ff6-a107-006832aa4911")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "4a2acd28-4dd1-4ff6-a107-006832aa4911")
 		)
 		(pin "IRQ-" output
 			(at 96.52 54.61 0)
+			(uuid "b819c541-8070-4b9d-88f5-14e645b2f298")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "b819c541-8070-4b9d-88f5-14e645b2f298")
 		)
 		(pin "PTADR-" output
 			(at 96.52 67.31 0)
+			(uuid "40df14f4-9d05-483f-b8cd-ca01edcc82f3")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "40df14f4-9d05-483f-b8cd-ca01edcc82f3")
 		)
 		(instances
 			(project "video"
@@ -6675,6 +6707,10 @@
 	(sheet
 		(at 173.99 41.91)
 		(size 50.8 54.61)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0)
 			(type solid)
@@ -6703,233 +6739,233 @@
 		)
 		(pin "DPC[0..7]" bidirectional
 			(at 173.99 48.26 180)
+			(uuid "7f3027f6-8153-407a-b60c-e2eacbcafa50")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "7f3027f6-8153-407a-b60c-e2eacbcafa50")
 		)
 		(pin "TVR[0..7]" output
 			(at 224.79 48.26 0)
+			(uuid "dd0d5378-1b3a-4efd-9e37-c48f3978fe94")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "dd0d5378-1b3a-4efd-9e37-c48f3978fe94")
 		)
 		(pin "BLANK-" input
 			(at 173.99 82.55 180)
+			(uuid "fe476818-2e72-4c3a-ba85-b7eeda6983fd")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "fe476818-2e72-4c3a-ba85-b7eeda6983fd")
 		)
 		(pin "TVG[0..7]" output
 			(at 224.79 50.8 0)
+			(uuid "7036e1de-c636-4167-8607-e2ca7b3c2caa")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "7036e1de-c636-4167-8607-e2ca7b3c2caa")
 		)
 		(pin "TVB[0..7]" output
 			(at 224.79 53.34 0)
+			(uuid "d3fc6494-b8c9-4312-bd26-d84ce87e7888")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "d3fc6494-b8c9-4312-bd26-d84ce87e7888")
 		)
 		(pin "WRCAD-" input
 			(at 173.99 50.8 180)
+			(uuid "2dc7c72c-3bfe-45c3-8af9-11563d5cdcfe")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "2dc7c72c-3bfe-45c3-8af9-11563d5cdcfe")
 		)
 		(pin "RDCAD-" input
 			(at 173.99 53.34 180)
+			(uuid "4165f05b-8f71-4218-b5c7-022d0917fe12")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "4165f05b-8f71-4218-b5c7-022d0917fe12")
 		)
 		(pin "WRCDA-" input
 			(at 173.99 55.88 180)
+			(uuid "3a7d2d73-f6e5-41a3-a196-0bc2ab83b9e2")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "3a7d2d73-f6e5-41a3-a196-0bc2ab83b9e2")
 		)
 		(pin "RDCDA-" input
 			(at 173.99 58.42 180)
+			(uuid "4ec94dde-9e94-45e8-be76-bad875248fdb")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "4ec94dde-9e94-45e8-be76-bad875248fdb")
 		)
 		(pin "CSYNCIN-" output
 			(at 224.79 60.96 0)
+			(uuid "7122ccab-658b-49d6-81f8-6053d1be31d1")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "7122ccab-658b-49d6-81f8-6053d1be31d1")
 		)
 		(pin "CSYNCOUT-" input
 			(at 173.99 87.63 180)
+			(uuid "cf27ab26-1e11-4d2b-b45f-0944f5f1a10f")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "cf27ab26-1e11-4d2b-b45f-0944f5f1a10f")
 		)
 		(pin "CLKCAD" input
 			(at 173.99 66.04 180)
+			(uuid "f0213cae-0adf-47f6-818f-1c6321ada1d2")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "f0213cae-0adf-47f6-818f-1c6321ada1d2")
 		)
 		(pin "CLKCDA" input
 			(at 173.99 68.58 180)
+			(uuid "6bc985e2-604b-40d1-828a-5a25d1221fa4")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "6bc985e2-604b-40d1-828a-5a25d1221fa4")
 		)
 		(pin "TVI[0..1]" output
 			(at 224.79 55.88 0)
+			(uuid "c0050a28-faa0-4d3d-9588-78c1dea581fd")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "c0050a28-faa0-4d3d-9588-78c1dea581fd")
 		)
 		(pin "CLAMP" input
 			(at 173.99 85.09 180)
+			(uuid "9b3d255e-6f3c-49bb-938e-406436e579d3")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "9b3d255e-6f3c-49bb-938e-406436e579d3")
 		)
 		(pin "BLUE_IN" input
 			(at 173.99 78.74 180)
+			(uuid "184b5c69-6b4e-4a18-8ea8-d81e1e81b96a")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "184b5c69-6b4e-4a18-8ea8-d81e1e81b96a")
 		)
 		(pin "GREEN_IN" input
 			(at 173.99 76.2 180)
+			(uuid "c58351d1-ccd8-4fd3-8aa1-b3fa2f5a9977")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "c58351d1-ccd8-4fd3-8aa1-b3fa2f5a9977")
 		)
 		(pin "RED_IN" input
 			(at 173.99 73.66 180)
+			(uuid "cebc6cdc-320b-4643-aa6b-b40921cf4b6b")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "cebc6cdc-320b-4643-aa6b-b40921cf4b6b")
 		)
 		(pin "RED" output
 			(at 224.79 69.85 0)
+			(uuid "4e194e02-0a78-4006-b8c7-eb2bf863104c")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "4e194e02-0a78-4006-b8c7-eb2bf863104c")
 		)
 		(pin "GREEN" output
 			(at 224.79 72.39 0)
+			(uuid "6ed799ec-7f04-4716-ab06-da6231802a3a")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "6ed799ec-7f04-4716-ab06-da6231802a3a")
 		)
 		(pin "BLUE" output
 			(at 224.79 74.93 0)
+			(uuid "f256160e-8a04-4da3-b64e-d0249b870025")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "f256160e-8a04-4da3-b64e-d0249b870025")
 		)
 		(pin "PCA[0..2]" input
 			(at 173.99 45.72 180)
+			(uuid "dffc48ef-2444-45ef-b341-57cfc50c4cad")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify left)
 			)
-			(uuid "dffc48ef-2444-45ef-b341-57cfc50c4cad")
 		)
 		(pin "OE_PAL-" output
 			(at 224.79 81.28 0)
+			(uuid "12f7c272-cc70-4289-ab00-a8083626d567")
 			(effects
 				(font
 					(size 1.524 1.524)
 				)
 				(justify right)
 			)
-			(uuid "12f7c272-cc70-4289-ab00-a8083626d567")
 		)
 		(instances
 			(project "video"
@@ -6944,4 +6980,5 @@
 			(page "1")
 		)
 	)
+	(embedded_fonts no)
 )
