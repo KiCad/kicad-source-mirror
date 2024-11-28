@@ -34,34 +34,43 @@
 
 class SHAPE_LINE_CHAIN;
 
+/**
+ * Flag to enable debug output related to the IPC API and its plugin system
+ *
+ * Use "KICAD_API" to enable.
+ *
+ * @ingroup trace_env_vars
+ */
+extern const KICOMMON_API wxChar* const traceApi;
+
 namespace kiapi::common
 {
 
-std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any& aMessage );
+KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any& aMessage );
 
-LIB_ID LibIdFromProto( const types::LibraryIdentifier& aId );
+KICOMMON_API LIB_ID LibIdFromProto( const types::LibraryIdentifier& aId );
 
-types::LibraryIdentifier LibIdToProto( const LIB_ID& aId );
+KICOMMON_API types::LibraryIdentifier LibIdToProto( const LIB_ID& aId );
 
-void PackVector2( types::Vector2& aOutput, const VECTOR2I& aInput );
+KICOMMON_API void PackVector2( types::Vector2& aOutput, const VECTOR2I& aInput );
 
-VECTOR2I UnpackVector2( const types::Vector2& aInput );
+KICOMMON_API VECTOR2I UnpackVector2( const types::Vector2& aInput );
 
-void PackVector3D( types::Vector3D& aOutput, const VECTOR3D& aInput );
+KICOMMON_API void PackVector3D( types::Vector3D& aOutput, const VECTOR3D& aInput );
 
-VECTOR3D UnpackVector3D( const types::Vector3D& aInput );
+KICOMMON_API VECTOR3D UnpackVector3D( const types::Vector3D& aInput );
 
-void PackBox2( types::Box2& aOutput, const BOX2I& aInput );
+KICOMMON_API void PackBox2( types::Box2& aOutput, const BOX2I& aInput );
 
-BOX2I UnpackBox2( const types::Box2& aInput );
+KICOMMON_API BOX2I UnpackBox2( const types::Box2& aInput );
 
-void PackPolyLine( kiapi::common::types::PolyLine& aOutput, const SHAPE_LINE_CHAIN& aSlc );
+KICOMMON_API void PackPolyLine( types::PolyLine& aOutput, const SHAPE_LINE_CHAIN& aSlc );
 
-SHAPE_LINE_CHAIN UnpackPolyLine( const kiapi::common::types::PolyLine& aInput );
+KICOMMON_API SHAPE_LINE_CHAIN UnpackPolyLine( const types::PolyLine& aInput );
 
-void PackPolySet( kiapi::common::types::PolySet& aOutput, const SHAPE_POLY_SET& aInput );
+KICOMMON_API void PackPolySet( types::PolySet& aOutput, const SHAPE_POLY_SET& aInput );
 
-SHAPE_POLY_SET UnpackPolySet( const kiapi::common::types::PolySet& aInput );
+KICOMMON_API SHAPE_POLY_SET UnpackPolySet( const types::PolySet& aInput );
 
 } // namespace kiapi::common
 

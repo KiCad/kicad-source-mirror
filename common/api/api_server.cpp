@@ -26,7 +26,7 @@
 
 #include <advanced_config.h>
 #include <api/api_handler.h>
-#include <api/api_plugin_manager.h> // traceApi
+#include <api/api_utils.h> // traceApi
 #include <api/api_server.h>
 #include <kiid.h>
 #include <kinng.h>

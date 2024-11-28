@@ -106,6 +106,7 @@
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
+#include <api/api_utils.h>
 #endif
 
 

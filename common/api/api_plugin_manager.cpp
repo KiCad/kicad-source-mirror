@@ -25,13 +25,12 @@
 
 #include <api/api_plugin_manager.h>
 #include <api/api_server.h>
+#include <api/api_utils.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <python_manager.h>
 #include <settings/settings_manager.h>
 #include <settings/common_settings.h>
-
-const wxChar* const traceApi = wxT( "KICAD_API" );
 
 
 wxDEFINE_EVENT( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxCommandEvent );

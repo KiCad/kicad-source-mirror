@@ -121,6 +121,7 @@
 #include <api/api_server.h>
 #include <api/api_handler_pcb.h>
 #include <api/api_handler_common.h>
+#include <api/api_utils.h>
 #endif
 
 #include <action_plugin.h>

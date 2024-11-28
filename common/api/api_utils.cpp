@@ -21,11 +21,15 @@
 #include <magic_enum.hpp>
 #include <api/api_utils.h>
 #include <geometry/shape_poly_set.h>
+#include <wx/log.h>
+
+const wxChar* const traceApi = wxT( "KICAD_API" );
+
 
 namespace kiapi::common
 {
 
-std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any& aMessage )
+KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any& aMessage )
 {
     static const std::map<std::string, KICAD_T> s_types = {
         { "type.googleapis.com/kiapi.board.types.Track", PCB_TRACE_T },
@@ -48,17 +52,20 @@ std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any& aMessage )
     if( it != s_types.end() )
         return it->second;
 
+    wxLogTrace( traceApi, wxString::Format( wxS( "Any message type %s is not known" ),
+                                            aMessage.type_url() ) );
+
     return std::nullopt;
 }
 
 
-LIB_ID LibIdFromProto( const types::LibraryIdentifier& aId )
+KICOMMON_API LIB_ID LibIdFromProto( const types::LibraryIdentifier& aId )
 {
     return LIB_ID( aId.library_nickname(), aId.entry_name() );
 }
 
 
-types::LibraryIdentifier LibIdToProto( const LIB_ID& aId )
+KICOMMON_API types::LibraryIdentifier LibIdToProto( const LIB_ID& aId )
 {
     types::LibraryIdentifier msg;
     msg.set_library_nickname( aId.GetLibNickname() );
@@ -67,20 +74,20 @@ types::LibraryIdentifier LibIdToProto( const LIB_ID& aId )
 }
 
 
-void PackVector2( types::Vector2& aOutput, const VECTOR2I& aInput )
+KICOMMON_API void PackVector2( types::Vector2& aOutput, const VECTOR2I& aInput )
 {
     aOutput.set_x_nm( aInput.x );
     aOutput.set_y_nm( aInput.y );
 }
 
 
-VECTOR2I UnpackVector2( const types::Vector2& aInput )
+KICOMMON_API VECTOR2I UnpackVector2( const types::Vector2& aInput )
 {
     return VECTOR2I( aInput.x_nm(), aInput.y_nm() );
 }
 
 
-void PackVector3D( types::Vector3D& aOutput, const VECTOR3D& aInput )
+KICOMMON_API void PackVector3D( types::Vector3D& aOutput, const VECTOR3D& aInput )
 {
     aOutput.set_x_nm( aInput.x );
     aOutput.set_y_nm( aInput.y );
@@ -88,33 +95,33 @@ void PackVector3D( types::Vector3D& aOutput, const VECTOR3D& aInput )
 }
 
 
-VECTOR3D UnpackVector3D( const types::Vector3D& aInput )
+KICOMMON_API VECTOR3D UnpackVector3D( const types::Vector3D& aInput )
 {
     return VECTOR3D( aInput.x_nm(), aInput.y_nm(), aInput.z_nm() );
 }
 
 
-void PackBox2( types::Box2& aOutput, const BOX2I& aInput )
+KICOMMON_API void PackBox2( types::Box2& aOutput, const BOX2I& aInput )
 {
     PackVector2( *aOutput.mutable_position(), aInput.GetOrigin() );
     PackVector2( *aOutput.mutable_size(), aInput.GetSize() );
 }
 
 
-BOX2I UnpackBox2( const types::Box2& aInput )
+KICOMMON_API BOX2I UnpackBox2( const types::Box2& aInput )
 {
     return BOX2I( UnpackVector2( aInput.position() ), UnpackVector2( aInput.size() ) );
 }
 
 
-void PackPolyLine( kiapi::common::types::PolyLine& aOutput, const SHAPE_LINE_CHAIN& aSlc )
+KICOMMON_API void PackPolyLine( types::PolyLine& aOutput, const SHAPE_LINE_CHAIN& aSlc )
 {
     for( int vertex = 0; vertex < aSlc.PointCount(); vertex = aSlc.NextShape( vertex ) )
     {
         if( vertex < 0 )
             break;
 
-        kiapi::common::types::PolyLineNode* node = aOutput.mutable_nodes()->Add();
+        types::PolyLineNode* node = aOutput.mutable_nodes()->Add();
 
         if( aSlc.IsPtOnArc( vertex ) )
         {
@@ -137,11 +144,11 @@ void PackPolyLine( kiapi::common::types::PolyLine& aOutput, const SHAPE_LINE_CHA
 }
 
 
-SHAPE_LINE_CHAIN UnpackPolyLine( const kiapi::common::types::PolyLine& aInput )
+KICOMMON_API SHAPE_LINE_CHAIN UnpackPolyLine( const types::PolyLine& aInput )
 {
     SHAPE_LINE_CHAIN slc;
 
-    for( const kiapi::common::types::PolyLineNode& node : aInput.nodes() )
+    for( const types::PolyLineNode& node : aInput.nodes() )
     {
         if( node.has_point() )
         {
@@ -162,7 +169,7 @@ SHAPE_LINE_CHAIN UnpackPolyLine( const kiapi::common::types::PolyLine& aInput )
 }
 
 
-void PackPolySet( types::PolySet& aOutput, const SHAPE_POLY_SET& aInput )
+KICOMMON_API void PackPolySet( types::PolySet& aOutput, const SHAPE_POLY_SET& aInput )
 {
     for( int idx = 0; idx < aInput.OutlineCount(); ++idx )
     {
@@ -186,7 +193,7 @@ void PackPolySet( types::PolySet& aOutput, const SHAPE_POLY_SET& aInput )
 }
 
 
-SHAPE_POLY_SET UnpackPolySet( const types::PolySet& aInput )
+KICOMMON_API SHAPE_POLY_SET UnpackPolySet( const types::PolySet& aInput )
 {
     SHAPE_POLY_SET sps;
 

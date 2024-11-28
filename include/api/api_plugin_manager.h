@@ -27,15 +27,6 @@
 #include <api/api_plugin.h>
 #include <kicommon.h>
 
-/**
- * Flag to enable debug output related to the API plugin system
- *
- * Use "KICAD_API" to enable.
- *
- * @ingroup trace_env_vars
- */
-extern const KICOMMON_API wxChar* const traceApi;
-
 /// Internal event used for handling async tasks
 wxDECLARE_EVENT( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxCommandEvent );
 

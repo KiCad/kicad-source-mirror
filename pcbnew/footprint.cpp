@@ -63,6 +63,7 @@
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/api_pcb_utils.h>
+#include <wx/log.h>
 
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
@@ -533,6 +534,9 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
             }
             else
             {
+                wxLogTrace( traceApi, wxString::Format( wxS( "Attempting to unpack unknown type %s "
+                                                             "from footprint message, skipping" ),
+                                                        itemMsg.type_url() ) );
                 continue;
             }
         }
