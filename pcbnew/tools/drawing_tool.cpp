@@ -2937,6 +2937,10 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
 
         setCursor();
 
+        // Init the new item attributes
+        // (non-geometric, those are handled by the manager)
+        bezier->SetShape( SHAPE_T::BEZIER );
+        bezier->SetStroke( m_stroke );
         bezier->SetLayer( m_layer );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
@@ -2995,11 +2999,6 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
 
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
-
-                // Init the new item attributes
-                // (non-geometric, those are handled by the manager)
-                bezier->SetShape( SHAPE_T::BEZIER );
-                bezier->SetStroke( m_stroke );
 
                 if( !m_view->IsLayerVisible( m_layer ) )
                 {
