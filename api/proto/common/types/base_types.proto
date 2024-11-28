@@ -404,22 +404,10 @@ message GraphicShape
   }
 }
 
-message CompoundShapeEntry
-{
-  oneof geometry {
-    GraphicSegmentAttributes     segment    = 1;
-    GraphicRectangleAttributes   rectangle  = 2;
-    GraphicArcAttributes         arc        = 3;
-    GraphicCircleAttributes      circle     = 4;
-    PolySet                      polygon    = 5;
-    GraphicBezierAttributes      bezier     = 6;
-  }
-}
-
 // A SHAPE_COMPOUND in KiCad
 message CompoundShape
 {
-  repeated CompoundShapeEntry shapes = 1;
+  repeated GraphicShape shapes = 1;
 }
 
 // The text strings that can be set in a drawing sheet for the title block

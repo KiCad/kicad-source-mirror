@@ -125,11 +125,21 @@ HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShape
 {
     GetTextAsShapesResponse reply;
 
-    for( const Text& textMsg : aMsg.text() )
+    for( const TextOrTextBox& textMsg : aMsg.text() )
     {
+        Text dummyText;
+        const Text* textPtr = &textMsg.text();
+
+        if( textMsg.has_textbox() )
+        {
+            dummyText.set_text( textMsg.textbox().text() );
+            dummyText.mutable_attributes()->CopyFrom( textMsg.textbox().attributes() );
+            textPtr = &dummyText;
+        }
+
         EDA_TEXT text( pcbIUScale );
         google::protobuf::Any any;
-        any.PackFrom( textMsg );
+        any.PackFrom( *textPtr );
 
         if( !text.Deserialize( any ) )
         {
@@ -148,7 +158,8 @@ HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShape
         {
             EDA_SHAPE proxy( *subshape );
             proxy.Serialize( any );
-            any.UnpackTo( entry->mutable_shapes() );
+            GraphicShape* shapeMsg = entry->mutable_shapes()->add_shapes();
+            any.UnpackTo( shapeMsg );
         }
     }
 
