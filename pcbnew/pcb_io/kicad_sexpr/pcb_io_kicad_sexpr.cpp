@@ -1014,7 +1014,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
         || ( aShape->GetShape() == SHAPE_T::RECTANGLE )
         || ( aShape->GetShape() == SHAPE_T::CIRCLE ) )
     {
-        m_out->Print( aShape->IsFilled() ? "(fill solid)" : "(fill none)" );
+        KICAD_FORMAT::FormatBool( m_out, "fill", aShape->IsFilled() );
     }
 
     if( aShape->IsLocked() )

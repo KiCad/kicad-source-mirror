@@ -34,6 +34,7 @@ set( QA_PCBNEW_SRCS
     test_array_pad_name_provider.cpp
     test_board_item.cpp
     test_generator_load_save.cpp
+    test_graphics_load_save.cpp
     test_graphics_import_mgr.cpp
     test_group_load_save.cpp
     test_footprint_load_save.cpp
