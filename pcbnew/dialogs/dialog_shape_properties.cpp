@@ -355,10 +355,10 @@ public:
         const int       length = GetIntValue( LENGTH );
         const EDA_ANGLE angle = GetAngleValue( ANGLE );
 
-        VECTOR2I polar = GetRotated( VECTOR2I{ length, 0 }, angle );
+        const VECTOR2I polar = GetRotated( VECTOR2I{ length, 0 }, angle );
 
         GetShape().SetStart( p0 );
-        GetShape().SetEnd( polar );
+        GetShape().SetEnd( p0 + polar );
 
         updateEnds();
         updateStartMidpoint();
