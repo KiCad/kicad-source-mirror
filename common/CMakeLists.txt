@@ -192,6 +192,7 @@ set( KICOMMON_SRCS
     io/io_utils.cpp
 
     api/serializable.cpp
+    api/api_utils.cpp
     )
 
 if( KICAD_IPC_API )
@@ -201,7 +202,6 @@ if( KICAD_IPC_API )
         api/api_plugin.cpp
         api/api_plugin_manager.cpp
         api/api_server.cpp
-        api/api_utils.cpp
 
         ../scripting/python_manager.cpp
     )
