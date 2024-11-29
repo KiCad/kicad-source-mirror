@@ -2461,16 +2461,23 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     }
                     case GR_SHAPE_CIRCLE:
                     {
-                        const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
+                        const GRAPHIC_ARC& lsrc = static_cast<const GRAPHIC_ARC&>( *seg );
 
                         PCB_SHAPE* circle = new PCB_SHAPE( fp, SHAPE_T::CIRCLE );
 
                         circle->SetLayer( layer );
-                        circle->SetCenter( VECTOR2I( lsrc->center_x, lsrc->center_y ) );
-                        circle->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
-                        circle->SetWidth( lsrc->width );
+                        circle->SetCenter( VECTOR2I( lsrc.center_x, lsrc.center_y ) );
+                        circle->SetEnd( VECTOR2I( lsrc.end_x, lsrc.end_y ) );
+                        circle->SetWidth( lsrc.width );
 
-                        if( lsrc->width == 0 )
+                        if( IsBackLayer( layer ) )
+                        {
+                            // Circles seem to have a flip around the FP origin that lines don't have
+                            const VECTOR2I fp_orig = fp->GetPosition();
+                            circle->Mirror( fp_orig, FLIP_DIRECTION::TOP_BOTTOM );
+                        }
+
+                        if( lsrc.width == 0 )
                             circle->SetWidth( ds.GetLineThickness( circle->GetLayer() ) );
 
                         if( src->mirror )
@@ -2483,12 +2490,22 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     {
                         const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
 
-                        PCB_SHAPE* arc = new PCB_SHAPE( fp, SHAPE_T::ARC );
+                        std::unique_ptr<PCB_SHAPE> arc =
+                                std::make_unique<PCB_SHAPE>( fp, SHAPE_T::ARC );
+
+                        SHAPE_ARC sarc = lsrc->result;
+
+                        if( IsBackLayer( layer ) )
+                        {
+                            // Arcs seem to have a vertical flip around the FP origin that lines don't have
+                            // and are also flipped around their center (this is a best guess at the transformation)
+                            const VECTOR2I fp_orig = fp->GetPosition();
+                            sarc.Mirror( fp_orig, FLIP_DIRECTION::TOP_BOTTOM );
+                            sarc.Mirror( sarc.GetCenter(), FLIP_DIRECTION::TOP_BOTTOM );
+                        }
 
                         arc->SetLayer( layer );
-                        arc->SetArcGeometry( lsrc->result.GetP0(),
-                                             lsrc->result.GetArcMid(),
-                                             lsrc->result.GetP1() );
+                        arc->SetArcGeometry( sarc.GetP0(), sarc.GetArcMid(), sarc.GetP1() );
                         arc->SetStroke( STROKE_PARAMS( lsrc->width, LINE_STYLE::SOLID ) );
 
                         if( lsrc->width == 0 )
@@ -2497,7 +2514,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         if( src->mirror )
                             arc->Flip( arc->GetCenter(), FLIP_DIRECTION::TOP_BOTTOM );
 
-                        fp->Add( arc, ADD_MODE::APPEND );
+                        fp->Add( arc.release(), ADD_MODE::APPEND );
                         break;
                     }
                     case GR_SHAPE_RECTANGLE:
