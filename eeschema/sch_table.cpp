@@ -236,6 +236,14 @@ void SCH_TABLE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 }
 
 
+void SCH_TABLE::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                                 const VECTOR2I& aOffset, bool aDimmed )
+{
+    for( SCH_TABLECELL* cell : m_cells )
+        cell->PrintBackground( aSettings, aUnit, aBodyStyle, aOffset, aDimmed );
+}
+
+
 void SCH_TABLE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
