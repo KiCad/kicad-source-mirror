@@ -1313,9 +1313,10 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
     COLOR4D          color = settings->GetLayerColor( layer );
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+    COLOR4D          labelColor = GetLabelColor();
 
-    if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
-        color = GetTextColor();
+    if( aPlotter->GetColorMode() && labelColor != COLOR4D::UNSPECIFIED )
+        color = labelColor;
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
@@ -1412,9 +1413,10 @@ void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aO
     bool            blackAndWhiteMode = GetGRForceBlackPenState();
     int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
     VECTOR2I        text_offset = aOffset + GetSchematicTextOffset( aSettings );
+    COLOR4D          labelColor = GetLabelColor();
 
-    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
-        color = GetTextColor();
+    if( !blackAndWhiteMode && labelColor != COLOR4D::UNSPECIFIED )
+        color = labelColor;
 
     EDA_TEXT::Print( aSettings, text_offset, color );
 
