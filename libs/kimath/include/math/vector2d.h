@@ -556,7 +556,7 @@ constexpr typename VECTOR2<T>::extended_type VECTOR2<T>::Dot( const VECTOR2<T>& 
 template <class T>
 double VECTOR2<T>::Distance( const VECTOR2<extended_type>& aVector ) const
 {
-    VECTOR2<double> diff( aVector.x - x, aVector.y - y );
+    VECTOR2<double> diff( static_cast<double>( aVector.x - x ), static_cast<double>( aVector.y - y ) );
     return diff.EuclideanNorm();
 }
 
