@@ -47,6 +47,8 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
     registerHandler<GetTextExtents, types::Box2>( &API_HANDLER_COMMON::handleGetTextExtents );
     registerHandler<GetTextAsShapes, GetTextAsShapesResponse>(
             &API_HANDLER_COMMON::handleGetTextAsShapes );
+    registerHandler<ExpandTextVariables, ExpandTextVariablesResponse>(
+            &API_HANDLER_COMMON::handleExpandTextVariables );
 }
 
 
@@ -193,6 +195,30 @@ HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShape
             PackVector2( *border->mutable_segment()->mutable_start(), VECTOR2I( tl.x, br.y ) );
             PackVector2( *border->mutable_segment()->mutable_end(), tl );
         }
+    }
+
+    return reply;
+}
+
+
+HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_COMMON::handleExpandTextVariables(
+    ExpandTextVariables& aMsg, const HANDLER_CONTEXT& aCtx )
+{
+    if( !aMsg.has_document() || aMsg.document().type() != DocumentType::DOCTYPE_PROJECT )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        // No error message, this is a flag that the server should try a different handler
+        return tl::unexpected( e );
+    }
+
+    ExpandTextVariablesResponse reply;
+    PROJECT& project = Pgm().GetSettingsManager().Prj();
+
+    for( const std::string& textMsg : aMsg.text() )
+    {
+        wxString result = ExpandTextVars( wxString::FromUTF8( textMsg ), &project );
+        reply.add_text( result.ToUTF8() );
     }
 
     return reply;

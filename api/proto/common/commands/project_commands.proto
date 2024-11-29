@@ -21,6 +21,7 @@ syntax = "proto3";
 
 package kiapi.common.commands;
 
+import "common/types/base_types.proto";
 import "common/types/project_settings.proto";
 
 
@@ -31,4 +32,18 @@ message GetNetClasses
 message NetClassesResponse
 {
   repeated kiapi.common.project.NetClass net_classes = 1;
+}
+
+
+message ExpandTextVariables
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  repeated string text = 2;
+}
+
+
+message ExpandTextVariablesResponse
+{
+  repeated string text = 1;
 }

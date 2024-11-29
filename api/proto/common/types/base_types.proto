@@ -89,6 +89,7 @@ enum DocumentType
   DOCTYPE_PCB           = 3;
   DOCTYPE_FOOTPRINT     = 4;
   DOCTYPE_DRAWING_SHEET = 5;
+  DOCTYPE_PROJECT       = 6;
 }
 
 /**

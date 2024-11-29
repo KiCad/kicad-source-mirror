@@ -69,6 +69,8 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
             &API_HANDLER_PCB::handleGetPadShapeAsPolygon );
     registerHandler<GetTitleBlockInfo, types::TitleBlockInfo>(
             &API_HANDLER_PCB::handleGetTitleBlockInfo );
+    registerHandler<ExpandTextVariables, ExpandTextVariablesResponse>(
+            &API_HANDLER_PCB::handleExpandTextVariables );
 
     registerHandler<InteractiveMoveItems, Empty>( &API_HANDLER_PCB::handleInteractiveMoveItems );
     registerHandler<GetNets, NetsResponse>( &API_HANDLER_PCB::handleGetNets );
@@ -691,6 +693,34 @@ HANDLER_RESULT<types::TitleBlockInfo> API_HANDLER_PCB::handleGetTitleBlockInfo(
     response.set_comment9( block.GetComment( 8 ).ToUTF8() );
 
     return response;
+}
+
+
+HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_PCB::handleExpandTextVariables(
+    ExpandTextVariables& aMsg, const HANDLER_CONTEXT& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    ExpandTextVariablesResponse reply;
+    BOARD* board = frame()->GetBoard();
+
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
+                return board->ResolveTextVar( token, 0 );
+            };
+
+    for( const std::string& textMsg : aMsg.text() )
+    {
+        wxString text = ExpandTextVars( wxString::FromUTF8( textMsg ), &textResolver );
+        reply.add_text( text.ToUTF8() );
+    }
+
+    return reply;
 }
 
 

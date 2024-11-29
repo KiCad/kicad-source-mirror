@@ -51,6 +51,9 @@ private:
 
     HANDLER_RESULT<commands::GetTextAsShapesResponse>
     handleGetTextAsShapes( commands::GetTextAsShapes& aMsg, const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<commands::ExpandTextVariablesResponse>
+    handleExpandTextVariables( commands::ExpandTextVariables& aMsg, const HANDLER_CONTEXT& aCtx );
 };
 
 #endif //KICAD_API_HANDLER_COMMON_H

@@ -27,6 +27,7 @@
 #include <api/board/board_commands.pb.h>
 #include <api/board/board_types.pb.h>
 #include <api/common/commands/editor_commands.pb.h>
+#include <api/common/commands/project_commands.pb.h>
 #include <kiid.h>
 #include <properties/property_mgr.h>
 
@@ -80,6 +81,9 @@ private:
 
     HANDLER_RESULT<types::TitleBlockInfo> handleGetTitleBlockInfo( commands::GetTitleBlockInfo& aMsg,
             const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<commands::ExpandTextVariablesResponse>
+    handleExpandTextVariables( commands::ExpandTextVariables& aMsg, const HANDLER_CONTEXT& aCtx );
 
     HANDLER_RESULT<Empty> handleInteractiveMoveItems( InteractiveMoveItems& aMsg,
                                                       const HANDLER_CONTEXT& aCtx );
