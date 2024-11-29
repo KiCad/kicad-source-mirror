@@ -286,10 +286,10 @@ public:
         LENGTH,
         ANGLE,
 
+        MID_START_X,
+        MID_START_Y,
         MID_X,
         MID_Y,
-        MID_END_X,
-        MID_END_Y,
 
         NUM_CTRLS,
     };
@@ -312,10 +312,10 @@ public:
                        OnPolarChange();
                    } );
 
-        BindCtrls( MID_X, MID_END_Y,
+        BindCtrls( MID_START_X, MID_Y,
                    [this]()
                    {
-                       OnMidEndpointChange();
+                       OnStartMidpointChange();
                    } );
     }
 
@@ -323,7 +323,7 @@ public:
     {
         updateEnds();
         updatePolar();
-        updateMidEndpoint();
+        updateStartMidpoint();
     }
 
     void OnEndsChange()
@@ -335,7 +335,7 @@ public:
         GetShape().SetEnd( p1 );
 
         updatePolar();
-        updateMidEndpoint();
+        updateStartMidpoint();
     }
 
     void updateEnds()
@@ -361,7 +361,7 @@ public:
         GetShape().SetEnd( polar );
 
         updateEnds();
-        updateMidEndpoint();
+        updateStartMidpoint();
     }
 
     void updatePolar()
@@ -375,27 +375,27 @@ public:
         ChangeAngleValue( ANGLE, -EDA_ANGLE( p1 - p0 ) );
     }
 
-    void OnMidEndpointChange()
+    void OnStartMidpointChange()
     {
+        const VECTOR2I start{ GetIntValue( MID_START_X ), GetIntValue( MID_START_Y ) };
         const VECTOR2I mid{ GetIntValue( MID_X ), GetIntValue( MID_Y ) };
-        const VECTOR2I end{ GetIntValue( MID_END_X ), GetIntValue( MID_END_Y ) };
 
-        GetShape().SetStart( mid - ( end - mid ) );
-        GetShape().SetEnd( mid + ( end - mid ) );
+        GetShape().SetStart( start );
+        GetShape().SetEnd( mid - ( start - mid ) );
 
         updateEnds();
         updatePolar();
     }
 
-    void updateMidEndpoint()
+    void updateStartMidpoint()
     {
+        const VECTOR2I s = GetShape().GetStart();
         const VECTOR2I c = GetShape().GetCenter();
-        const VECTOR2I e = GetShape().GetStart();
 
         ChangeValue( MID_X, c.x );
         ChangeValue( MID_Y, c.y );
-        ChangeValue( MID_END_X, e.x );
-        ChangeValue( MID_END_Y, e.y );
+        ChangeValue( MID_START_X, s.x );
+        ChangeValue( MID_START_Y, s.y );
     }
 };
 
@@ -901,14 +901,14 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 1, 3, _( "Length" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false, m_boundCtrls );
         AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 2, 3, _( "Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true, m_boundCtrls );
 
-        AddXYPointToSizer( *aParent, *m_gbsLineByMidEnd, 0, 0, _( "Mid Point" ), false, m_boundCtrls );
-        AddXYPointToSizer( *aParent, *m_gbsLineByMidEnd, 0, 3, _( "End Point" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsLineByStartMid, 0, 0, _( "Start Point" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsLineByStartMid, 0, 3, _( "Mid Point" ), false, m_boundCtrls );
 
         m_geomSync = std::make_unique<LINE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
         showPage( *m_gbsLineByEnds, true );
         showPage( *m_gbsLineByLengthAngle );
-        showPage( *m_gbsLineByMidEnd );
+        showPage( *m_gbsLineByStartMid );
         break;
 
     case SHAPE_T::ARC:

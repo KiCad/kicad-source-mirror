@@ -529,7 +529,7 @@
             </object>
             <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
-              <property name="label">By Midpoint/Endpoint</property>
+              <property name="label">By Start/Midpoint</property>
               <property name="select">0</property>
               <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -567,7 +567,7 @@
                 <property name="minimize_button">0</property>
                 <property name="minimum_size"></property>
                 <property name="moveable">1</property>
-                <property name="name">m_lineByMidEnd</property>
+                <property name="name">m_lineByStartMid</property>
                 <property name="pane_border">1</property>
                 <property name="pane_position"></property>
                 <property name="pane_size"></property>
@@ -599,7 +599,7 @@
                       <property name="growablerows"></property>
                       <property name="hgap">0</property>
                       <property name="minimum_size"></property>
-                      <property name="name">m_gbsLineByMidEnd</property>
+                      <property name="name">m_gbsLineByStartMid</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
                       <property name="vgap">0</property>
