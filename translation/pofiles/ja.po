@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-11-28 15:00+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2024-12-01 14:00+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -38197,9 +38197,8 @@ msgid "Minimum groove for creepage:"
 msgstr "最小導体クリアランス:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
-#, fuzzy
 msgid "The minimum slot width from DRC creepage checks"
-msgstr "導体アイテムの接続部分の幅の最小幅を設定します。"
+msgstr "導体アイテムの接続部分の幅の最小幅を設定します"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Holes"
