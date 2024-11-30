@@ -2492,47 +2492,31 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
 
         if( aTable->StrokeColumns() )
         {
-            int x = pos.x;
-
             for( int col = 0; col < aTable->GetColCount() - 1; ++col )
             {
-                int y = pos.y;
-
                 for( int row = 0; row < aTable->GetRowCount(); ++row )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
-                    int            rowHeight = aTable->GetRowHeight( row );
+                    VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                        strokeLine( VECTOR2I( x, y ), VECTOR2I( x, y + rowHeight ) );
-
-                    y += rowHeight;
+                        strokeLine( topRight, cell->GetEnd() );
                 }
-
-                x += aTable->GetColWidth( col );
             }
         }
 
         if( aTable->StrokeRows() )
         {
-            int y = pos.y;
-
             for( int row = 0; row < aTable->GetRowCount() - 1; ++row )
             {
-                int x = pos.x;
-
                 for( int col = 0; col < aTable->GetColCount(); ++col )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
-                    int            colWidth = aTable->GetColWidth( col );
+                    VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                        strokeLine( VECTOR2I( x, y ), VECTOR2I( x + colWidth, y ) );
-
-                    x += colWidth;
+                        strokeLine( botLeft, cell->GetEnd() );
                 }
-
-                y += aTable->GetRowHeight( row );
             }
         }
     }
