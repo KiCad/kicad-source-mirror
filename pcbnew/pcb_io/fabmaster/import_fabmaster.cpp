@@ -2460,7 +2460,16 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         }
 
                         if( lsrc.width == 0 )
-                            circle->SetWidth( ds.GetLineThickness( circle->GetLayer() ) );
+                        {
+                            // It seems that 0-width circles on DISPLAY_T/B layers are filled
+                            // (but not, say, SILKSCREEN_T/B).
+                            // There is an oblique reference to something like this here:
+                            // https://github.com/plusea/EAGLE/blob/master/ulp/fabmaster.ulp
+                            if( lsrc.layer == "DISPLAY_TOP" || lsrc.layer == "DISPLAY_BOTTOM" )
+                                circle->SetFilled( true );
+                            else
+                                circle->SetWidth( ds.GetLineThickness( circle->GetLayer() ) );
+                        }
 
                         if( src->mirror )
                             circle->Flip( circle->GetCenter(), false );
