@@ -511,6 +511,9 @@ set( SWIG_OPTS -python -c++ -nothreads -fastdispatch -fvirtual )
 
 set( SWIG_OPTS ${SWIG_OPTS} -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
+# Avoid "nothing known about base class" warning output
+set( SWIG_OPTS ${SWIG_OPTS} -w401 -w402 )
+
 if( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/doxygen-xml )
     set( SWIG_OPTS ${SWIG_OPTS} -DENABLE_DOCSTRINGS_FROM_DOXYGEN )
     set( SWIG_OPTS ${SWIG_OPTS} -I${CMAKE_CURRENT_BINARY_DIR}/docstrings )
