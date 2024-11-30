@@ -599,9 +599,89 @@ message Zone
   kiapi.common.types.LockedState locked = 12;
 }
 
+// An aligned dimension is drawn parallel to the line segment between the start and end points
+message AlignedDimensionAttributes
+{
+  kiapi.common.types.Vector2 start = 1;
+  kiapi.common.types.Vector2 end = 2;
+
+  // Perpendicular distance from dimension endpoints to crossbar
+  kiapi.common.types.Distance height = 3;
+
+  // Length of extension lines past the crossbar
+  kiapi.common.types.Distance extension_height = 4;
+}
+
+// An orthogonal dimension is drawn parallel to the X or Y axis of the coordinate system
+message OrthogonalDimensionAttributes
+{
+  kiapi.common.types.Vector2 start = 1;
+  kiapi.common.types.Vector2 end = 2;
+
+  // Perpendicular distance from dimension endpoints to crossbar
+  kiapi.common.types.Distance height = 3;
+
+  // Length of extension lines past the crossbar
+  kiapi.common.types.Distance extension_height = 4;
+
+  // Which axis the dimension is parallel to
+  kiapi.common.types.AxisAlignment alignment = 5;
+}
+
+message RadialDimensionAttributes
+{
+  // The center of the dimensioned circle or arc
+  kiapi.common.types.Vector2 center = 1;
+
+  // A point on the radius of the circle or arc
+  kiapi.common.types.Vector2 radius_point = 2;
+
+  // The distance from radius_point to draw the first segment of the leader line.
+  // The second segment is drawn from the end of the first segment to the text position.
+  kiapi.common.types.Distance leader_length = 3;
+}
+
+// The style of the optional frame applied to dimension text
+enum DimensionTextBorderStyle
+{
+  DTBS_UNKNOWN = 0;
+  DTBS_NONE = 1;
+  DTBS_RECTANGLE = 2;
+  DTBS_CIRCLE = 3;
+  DTBS_ROUNDRECT = 4;
+}
+
+message LeaderDimensionAttributes
+{
+  kiapi.common.types.Vector2 start = 1;
+  kiapi.common.types.Vector2 end = 2;
+  DimensionTextBorderStyle border_style = 3;
+}
+
+message CenterDimensionAttributes
+{
+  kiapi.common.types.Vector2 center = 1;
+
+  // A point on the end of one of the four radial spokes drawn from the center point
+  kiapi.common.types.Vector2 end = 2;
+}
+
+// A dimension in KiCad is a special type of text object.
+// To know the visual appearance of the dimension as rendered by KiCad, use GetTextAsShapes
 message Dimension
 {
-  // TODO
+  kiapi.common.types.KIID id = 1;
+  kiapi.common.types.LockedState locked = 2;
+  BoardLayer layer = 3;
+  kiapi.common.types.Text text = 4;
+
+  oneof dimension_style {
+    AlignedDimensionAttributes aligned = 5;
+    OrthogonalDimensionAttributes orthogonal = 6;
+    RadialDimensionAttributes radial = 7;
+    LeaderDimensionAttributes leader = 8;
+    CenterDimensionAttributes center = 9;
+  }
 }
 
 message ReferenceImage
@@ -626,12 +706,6 @@ message Field
   BoardText text = 3;
 }
 
-message Model3D
-{
-  // TODO
-}
-
-
 enum FootprintMountingStyle
 {
   FMS_UNKNOWN = 0;
@@ -639,7 +713,6 @@ enum FootprintMountingStyle
   FMS_SMD = 2;
   FMS_UNSPECIFIED = 3;
 }
-
 
 message FootprintAttributes
 {

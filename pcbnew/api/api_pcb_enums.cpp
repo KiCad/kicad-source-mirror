@@ -24,6 +24,7 @@
 #include <wx/wx.h>
 
 #include <padstack.h>
+#include <pcb_dimension.h>
 #include <pcb_track.h>
 #include <zones.h>
 #include <zone_settings.h>
@@ -440,5 +441,40 @@ TEARDROP_TYPE FromProtoEnum( types::TeardropType aValue )
                      "Unhandled case in FromProtoEnum<types::ZoneHatchBorderMode>" );
     }
 }
+
+
+template<>
+types::DimensionTextBorderStyle ToProtoEnum( DIM_TEXT_BORDER aValue )
+{
+    switch( aValue )
+    {
+    case DIM_TEXT_BORDER::NONE:         return types::DimensionTextBorderStyle::DTBS_NONE;
+    case DIM_TEXT_BORDER::RECTANGLE:    return types::DimensionTextBorderStyle::DTBS_RECTANGLE;
+    case DIM_TEXT_BORDER::CIRCLE:       return types::DimensionTextBorderStyle::DTBS_CIRCLE;
+    case DIM_TEXT_BORDER::ROUNDRECT:    return types::DimensionTextBorderStyle::DTBS_ROUNDRECT;
+
+    default:
+        wxCHECK_MSG( false, types::DimensionTextBorderStyle::DTBS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<DIM_TEXT_BORDER>");
+    }
+}
+
+
+template<>
+DIM_TEXT_BORDER FromProtoEnum( types::DimensionTextBorderStyle aValue )
+{
+    switch( aValue )
+    {
+    case types::DimensionTextBorderStyle::DTBS_NONE:        return DIM_TEXT_BORDER::NONE;
+    case types::DimensionTextBorderStyle::DTBS_RECTANGLE:   return DIM_TEXT_BORDER::RECTANGLE;
+    case types::DimensionTextBorderStyle::DTBS_CIRCLE:      return DIM_TEXT_BORDER::CIRCLE;
+    case types::DimensionTextBorderStyle::DTBS_ROUNDRECT:   return DIM_TEXT_BORDER::ROUNDRECT;
+
+    default:
+        wxCHECK_MSG( false,  DIM_TEXT_BORDER::NONE,
+                     "Unhandled case in FromProtoEnum<types::DimensionTextBorderStyle>" );
+    }
+}
+
 
 // Adding something new here?  Add it to test_api_enums.cpp!

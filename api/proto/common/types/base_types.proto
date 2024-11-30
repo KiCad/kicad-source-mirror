@@ -431,3 +431,10 @@ message TitleBlockInfo
   string comment8 = 12;
   string comment9 = 13;
 }
+
+enum AxisAlignment
+{
+  AA_UNKNOWN = 0;
+  AA_X_AXIS = 1;
+  AA_Y_AXIS = 2;
+}

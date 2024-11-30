@@ -29,6 +29,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pcb_dimension.h>
 #include <pcb_track.h>
 #include <zone.h>
 
@@ -46,8 +47,8 @@ struct PROTO_TEST_FIXTURE
 };
 
 
-template<typename ProtoClass, typename KiCadClass>
-void testProtoFromKiCadObject( KiCadClass* aInput )
+template<typename ProtoClass, typename KiCadClass, typename ParentClass>
+void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent )
 {
     BOOST_TEST_CONTEXT( aInput->GetFriendlyName() << ": " << aInput->m_Uuid.AsStdString() )
     {
@@ -61,6 +62,8 @@ void testProtoFromKiCadObject( KiCadClass* aInput )
                                "Any message did not unpack into the requested type" );
 
         KiCadClass output( *static_cast<KiCadClass*>( aInput->Clone() ) );
+        // Not yet
+        //KiCadClass output( aParent );
 
         bool deserializeResult = false;
         BOOST_REQUIRE_NO_THROW( deserializeResult = output.Deserialize( any ) );
@@ -94,15 +97,15 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
         switch( track->Type() )
         {
         case PCB_TRACE_T:
-            testProtoFromKiCadObject<kiapi::board::types::Track>( track );
+            testProtoFromKiCadObject<kiapi::board::types::Track>( track, m_board.get() );
             break;
 
         case PCB_ARC_T:
-            testProtoFromKiCadObject<kiapi::board::types::Arc>( track );
+            testProtoFromKiCadObject<kiapi::board::types::Arc>( track, m_board.get() );
             break;
 
         case PCB_VIA_T:
-            testProtoFromKiCadObject<kiapi::board::types::Via>( track );
+            testProtoFromKiCadObject<kiapi::board::types::Via>( track, m_board.get() );
             break;
 
         default:
@@ -111,16 +114,46 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint );
+        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get() );
 
     for( ZONE* zone : m_board->Zones() )
-        testProtoFromKiCadObject<kiapi::board::types::Zone>( zone );
+        testProtoFromKiCadObject<kiapi::board::types::Zone>( zone, m_board.get() );
 
-    // TODO(JE) Shapes
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_DIM_ALIGNED_T:
+            testProtoFromKiCadObject<kiapi::board::types::Dimension>(
+                    static_cast<PCB_DIM_ALIGNED*>( item ), m_board.get() );
+            break;
 
-    // TODO(JE) Text
+        case PCB_DIM_ORTHOGONAL_T:
+            testProtoFromKiCadObject<kiapi::board::types::Dimension>(
+                    static_cast<PCB_DIM_ORTHOGONAL*>( item ), m_board.get() );
+            break;
 
-    // TODO(JE) Dimensions
+        case PCB_DIM_CENTER_T:
+            testProtoFromKiCadObject<kiapi::board::types::Dimension>(
+                    static_cast<PCB_DIM_CENTER*>( item ), m_board.get() );
+            break;
+
+        case PCB_DIM_LEADER_T:
+            testProtoFromKiCadObject<kiapi::board::types::Dimension>(
+                    static_cast<PCB_DIM_LEADER*>( item ), m_board.get() );
+            break;
+
+        case PCB_DIM_RADIAL_T:
+            testProtoFromKiCadObject<kiapi::board::types::Dimension>(
+                    static_cast<PCB_DIM_RADIAL*>( item ), m_board.get() );
+            break;
+
+        default: break;
+        }
+        // TODO(JE) Shapes
+
+        // TODO(JE) Text
+    }
 }
 
 
@@ -133,7 +166,8 @@ BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
         switch( track->Type() )
         {
         case PCB_VIA_T:
-            testProtoFromKiCadObject<kiapi::board::types::Via>( static_cast<PCB_VIA*>( track ) );
+            testProtoFromKiCadObject<kiapi::board::types::Via>( static_cast<PCB_VIA*>( track ),
+                                                                m_board.get() );
             break;
 
         default:
@@ -142,7 +176,7 @@ BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint );
+        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

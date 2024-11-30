@@ -34,6 +34,7 @@
 
 // Board-specific
 #include <padstack.h>
+#include <pcb_dimension.h>
 #include <pcb_track.h>
 #include <zones.h>
 #include <zone_settings.h>
@@ -211,6 +212,11 @@ BOOST_AUTO_TEST_CASE( PlacementRuleSourceType )
 BOOST_AUTO_TEST_CASE( TeardropType )
 {
     testEnums<TEARDROP_TYPE, kiapi::board::types::TeardropType>();
+}
+
+BOOST_AUTO_TEST_CASE( DimensionTextBorderStyle )
+{
+    testEnums<DIM_TEXT_BORDER, kiapi::board::types::DimensionTextBorderStyle>();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

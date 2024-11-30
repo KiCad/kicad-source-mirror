@@ -39,6 +39,9 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/board/board_types.pb.h>
 
 static const int INWARD_ARROW_LENGTH_TO_HEAD_RATIO = 2;
 
@@ -247,6 +250,50 @@ double PCB_DIMENSION_BASE::Similarity( const BOARD_ITEM& aOther ) const
     similarity *= EDA_TEXT::Similarity( other );
 
     return similarity;
+}
+
+
+void PCB_DIMENSION_BASE::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common;
+    kiapi::board::types::Dimension dimension;
+
+    dimension.mutable_id()->set_value( m_Uuid.AsStdString() );
+    dimension.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
+    dimension.set_locked( IsLocked() ? types::LockedState::LS_LOCKED
+                                     : types::LockedState::LS_UNLOCKED );
+
+    google::protobuf::Any any;
+    EDA_TEXT::Serialize( any );
+    any.UnpackTo( dimension.mutable_text() );
+
+    types::Text* text = dimension.mutable_text();
+    PackVector2( *text->mutable_position(), GetPosition() );
+
+    aContainer.PackFrom( dimension );
+}
+
+
+bool PCB_DIMENSION_BASE::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::common;
+    kiapi::board::types::Dimension dimension;
+
+    if( !aContainer.UnpackTo( &dimension ) )
+        return false;
+
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( dimension.layer() ) );
+    const_cast<KIID&>( m_Uuid ) = KIID( dimension.id().value() );
+    SetLocked( dimension.locked() == types::LockedState::LS_LOCKED );
+
+    google::protobuf::Any any;
+    any.PackFrom( dimension.text() );
+    EDA_TEXT::Deserialize( any );
+
+    const types::Text& text = dimension.text();
+    SetPosition( UnpackVector2( text.position() ) );
+
+    return true;
 }
 
 

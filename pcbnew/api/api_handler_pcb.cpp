@@ -274,6 +274,22 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
             continue;
         }
 
+        if( type == PCB_DIMENSION_T )
+        {
+            board::types::Dimension dimension;
+            anyItem.UnpackTo( &dimension );
+
+            switch( dimension.dimension_style_case() )
+            {
+            case board::types::Dimension::kAligned:    type = PCB_DIM_ALIGNED_T;    break;
+            case board::types::Dimension::kOrthogonal: type = PCB_DIM_ORTHOGONAL_T; break;
+            case board::types::Dimension::kRadial:     type = PCB_DIM_RADIAL_T;     break;
+            case board::types::Dimension::kLeader:     type = PCB_DIM_LEADER_T;     break;
+            case board::types::Dimension::kCenter:     type = PCB_DIM_CENTER_T;     break;
+            case board::types::Dimension::DIMENSION_STYLE_NOT_SET: break;
+            }
+        }
+
         HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> creationResult =
                 createItemForType( *type, container );
 

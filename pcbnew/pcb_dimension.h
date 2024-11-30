@@ -120,6 +120,9 @@ class PCB_DIMENSION_BASE : public PCB_TEXT
 public:
     PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType = PCB_DIMENSION_T );
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     /**
      * The dimension's origin is the first feature point for the dimension.  Every dimension has
      * one or more feature points, so every dimension has at least an origin.
