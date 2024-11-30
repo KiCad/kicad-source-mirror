@@ -41,7 +41,7 @@ EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aI
         m_ctrlKey( aCtrlKey )
 {
     m_listBox->InsertItems( aItems, 0 );
-    m_listBox->SetSelection( std::min( 1, (int) m_listBox->GetCount() - 1 ) );
+    m_listBox->SetSelection( std::min( 0, (int) m_listBox->GetCount() - 1 ) );
 
     int width = 0;
     int height = 0;
