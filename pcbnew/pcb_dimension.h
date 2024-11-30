@@ -416,6 +416,9 @@ public:
 
     ~PCB_DIM_ALIGNED() = default;
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && aItem->Type() == PCB_DIM_ALIGNED_T;
@@ -514,6 +517,9 @@ public:
 
     ~PCB_DIM_ORTHOGONAL() = default;
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && aItem->Type() == PCB_DIM_ORTHOGONAL_T;
@@ -578,6 +584,9 @@ class PCB_DIM_RADIAL : public PCB_DIMENSION_BASE
 public:
     PCB_DIM_RADIAL( BOARD_ITEM* aParent );
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && aItem->Type() == PCB_DIM_RADIAL_T;
@@ -633,6 +642,9 @@ class PCB_DIM_LEADER : public PCB_DIMENSION_BASE
 public:
     PCB_DIM_LEADER( BOARD_ITEM* aParent );
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && aItem->Type() == PCB_DIM_LEADER_T;
@@ -679,6 +691,9 @@ class PCB_DIM_CENTER : public PCB_DIMENSION_BASE
 {
 public:
     PCB_DIM_CENTER( BOARD_ITEM* aParent );
+
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {

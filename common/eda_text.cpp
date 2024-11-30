@@ -189,6 +189,7 @@ void EDA_TEXT::Serialize( google::protobuf::Any &aContainer ) const
 
     text.set_text( GetText().ToStdString() );
     text.set_hyperlink( GetHyperlink().ToStdString() );
+    PackVector2( *text.mutable_position(), GetTextPos() );
 
     types::TextAttributes* attrs = text.mutable_attributes();
 
@@ -211,8 +212,7 @@ void EDA_TEXT::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_mirrored( IsMirrored() );
     attrs->set_multiline( IsMultilineAllowed() );
     attrs->set_keep_upright( IsKeepUpright() );
-    attrs->mutable_size()->set_x_nm( GetTextSize().x );
-    attrs->mutable_size()->set_y_nm( GetTextSize().y );
+    PackVector2( *attrs->mutable_size(), GetTextSize() );
 
     aContainer.PackFrom( text );
 }
@@ -228,6 +228,7 @@ bool EDA_TEXT::Deserialize( const google::protobuf::Any &aContainer )
 
     SetText( wxString( text.text().c_str(), wxConvUTF8 ) );
     SetHyperlink( wxString( text.hyperlink().c_str(), wxConvUTF8 ) );
+    SetTextPos( UnpackVector2( text.position() ) );
 
     if( text.has_attributes() )
     {
@@ -240,7 +241,7 @@ bool EDA_TEXT::Deserialize( const google::protobuf::Any &aContainer )
         attrs.m_Mirrored = text.attributes().mirrored();
         attrs.m_Multiline = text.attributes().multiline();
         attrs.m_KeepUpright = text.attributes().keep_upright();
-        attrs.m_Size = VECTOR2I( text.attributes().size().x_nm(), text.attributes().size().y_nm() );
+        attrs.m_Size = UnpackVector2( text.attributes().size() );
 
         if( !text.attributes().font_name().empty() )
         {

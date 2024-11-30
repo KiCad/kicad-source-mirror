@@ -256,10 +256,11 @@ double PCB_DIMENSION_BASE::Similarity( const BOARD_ITEM& aOther ) const
 void PCB_DIMENSION_BASE::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common;
-    kiapi::board::types::Dimension dimension;
+    using namespace kiapi::board::types;
+    Dimension dimension;
 
     dimension.mutable_id()->set_value( m_Uuid.AsStdString() );
-    dimension.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
+    dimension.set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( GetLayer() ) );
     dimension.set_locked( IsLocked() ? types::LockedState::LS_LOCKED
                                      : types::LockedState::LS_UNLOCKED );
 
@@ -268,7 +269,27 @@ void PCB_DIMENSION_BASE::Serialize( google::protobuf::Any &aContainer ) const
     any.UnpackTo( dimension.mutable_text() );
 
     types::Text* text = dimension.mutable_text();
-    PackVector2( *text->mutable_position(), GetPosition() );
+    text->set_text( GetValueText() );
+
+    dimension.set_override_text_enabled( m_overrideTextEnabled );
+    dimension.set_override_text( m_valueString.ToUTF8() );
+    dimension.set_prefix( m_prefix.ToUTF8() );
+    dimension.set_suffix( m_suffix.ToUTF8() );
+
+    dimension.set_unit( ToProtoEnum<DIM_UNITS_MODE, DimensionUnit>( GetUnitsMode() ) );
+    dimension.set_unit_format(
+            ToProtoEnum<DIM_UNITS_FORMAT, DimensionUnitFormat>( m_unitsFormat ) );
+    dimension.set_arrow_direction(
+            ToProtoEnum<DIM_ARROW_DIRECTION, DimensionArrowDirection>( m_arrowDirection ) );
+    dimension.set_precision( ToProtoEnum<DIM_PRECISION, DimensionPrecision>( m_precision ) );
+    dimension.set_suppress_trailing_zeroes( m_suppressZeroes );
+
+    dimension.mutable_line_thickness()->set_value_nm( m_lineThickness );
+    dimension.mutable_arrow_length()->set_value_nm( m_arrowLength );
+    dimension.mutable_extension_offset()->set_value_nm( m_extensionOffset );
+    dimension.set_text_position(
+            ToProtoEnum<DIM_TEXT_POSITION, DimensionTextPosition>( m_textPosition ) );
+    dimension.set_keep_text_aligned( m_keepTextAligned );
 
     aContainer.PackFrom( dimension );
 }
@@ -290,8 +311,24 @@ bool PCB_DIMENSION_BASE::Deserialize( const google::protobuf::Any &aContainer )
     any.PackFrom( dimension.text() );
     EDA_TEXT::Deserialize( any );
 
-    const types::Text& text = dimension.text();
-    SetPosition( UnpackVector2( text.position() ) );
+    SetOverrideTextEnabled( dimension.override_text_enabled() );
+    SetOverrideText( wxString::FromUTF8( dimension.override_text() ) );
+    SetPrefix( wxString::FromUTF8( dimension.prefix() ) );
+    SetSuffix( wxString::FromUTF8( dimension.suffix() ) );
+
+    SetUnitsMode( FromProtoEnum<DIM_UNITS_MODE>( dimension.unit() ) );
+    SetUnitsFormat( FromProtoEnum<DIM_UNITS_FORMAT>( dimension.unit_format() ) );
+    SetArrowDirection( FromProtoEnum<DIM_ARROW_DIRECTION>( dimension.arrow_direction() ) );
+    SetPrecision( FromProtoEnum<DIM_PRECISION>( dimension.precision() ) );
+    SetSuppressZeroes( dimension.suppress_trailing_zeroes() );
+
+    SetLineThickness( dimension.line_thickness().value_nm() );
+    SetArrowLength( dimension.arrow_length().value_nm() );
+    SetExtensionOffset( dimension.extension_offset().value_nm() );
+    SetTextPositionMode( FromProtoEnum<DIM_TEXT_POSITION>( dimension.text_position() ) );
+    SetKeepTextAligned( dimension.keep_text_aligned() );
+
+    Update();
 
     return true;
 }
@@ -771,6 +808,47 @@ EDA_ITEM* PCB_DIM_ALIGNED::Clone() const
 }
 
 
+void PCB_DIM_ALIGNED::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common;
+    kiapi::board::types::Dimension dimension;
+
+    PCB_DIMENSION_BASE::Serialize( aContainer );
+    aContainer.UnpackTo( &dimension );
+
+    PackVector2( *dimension.mutable_aligned()->mutable_start(), m_start );
+    PackVector2( *dimension.mutable_aligned()->mutable_end(), m_end );
+    dimension.mutable_aligned()->mutable_height()->set_value_nm( m_height );
+    dimension.mutable_aligned()->mutable_extension_height()->set_value_nm( m_extensionHeight );
+
+    aContainer.PackFrom( dimension );
+}
+
+
+bool PCB_DIM_ALIGNED::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::common;
+
+    if( !PCB_DIMENSION_BASE::Deserialize( aContainer ) )
+        return false;
+
+    kiapi::board::types::Dimension dimension;
+    aContainer.UnpackTo( &dimension );
+
+    if( !dimension.has_aligned() )
+        return false;
+
+    SetStart( UnpackVector2( dimension.aligned().start() ) );
+    SetEnd( UnpackVector2( dimension.aligned().end() ) );
+    SetHeight( dimension.aligned().height().value_nm());
+    SetExtensionHeight( dimension.aligned().extension_height().value_nm() );
+
+    Update();
+
+    return true;
+}
+
+
 void PCB_DIM_ALIGNED::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == Type() );
@@ -947,6 +1025,53 @@ PCB_DIM_ORTHOGONAL::PCB_DIM_ORTHOGONAL( BOARD_ITEM* aParent ) :
 EDA_ITEM* PCB_DIM_ORTHOGONAL::Clone() const
 {
     return new PCB_DIM_ORTHOGONAL( *this );
+}
+
+
+void PCB_DIM_ORTHOGONAL::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common;
+    kiapi::board::types::Dimension dimension;
+
+    PCB_DIMENSION_BASE::Serialize( aContainer );
+    aContainer.UnpackTo( &dimension );
+
+    PackVector2( *dimension.mutable_orthogonal()->mutable_start(), m_start );
+    PackVector2( *dimension.mutable_orthogonal()->mutable_end(), m_end );
+    dimension.mutable_orthogonal()->mutable_height()->set_value_nm( m_height );
+    dimension.mutable_orthogonal()->mutable_extension_height()->set_value_nm( m_extensionHeight );
+
+    dimension.mutable_orthogonal()->set_alignment( m_orientation == DIR::VERTICAL
+                                                           ? types::AxisAlignment::AA_Y_AXIS
+                                                           : types::AxisAlignment::AA_X_AXIS );
+    aContainer.PackFrom( dimension );
+}
+
+
+bool PCB_DIM_ORTHOGONAL::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::common;
+
+    if( !PCB_DIMENSION_BASE::Deserialize( aContainer ) )
+        return false;
+
+    kiapi::board::types::Dimension dimension;
+    aContainer.UnpackTo( &dimension );
+
+    if( !dimension.has_orthogonal() )
+        return false;
+
+    SetStart( UnpackVector2( dimension.orthogonal().start() ) );
+    SetEnd( UnpackVector2( dimension.orthogonal().end() ) );
+    SetHeight( dimension.orthogonal().height().value_nm());
+    SetExtensionHeight( dimension.orthogonal().extension_height().value_nm() );
+    SetOrientation( dimension.orthogonal().alignment() == types::AxisAlignment::AA_Y_AXIS
+                            ? DIR::VERTICAL
+                            : DIR::HORIZONTAL );
+
+    Update();
+
+    return true;
 }
 
 
@@ -1162,6 +1287,47 @@ PCB_DIM_LEADER::PCB_DIM_LEADER( BOARD_ITEM* aParent ) :
 }
 
 
+void PCB_DIM_LEADER::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common;
+    kiapi::board::types::Dimension dimension;
+
+    PCB_DIMENSION_BASE::Serialize( aContainer );
+    aContainer.UnpackTo( &dimension );
+
+    PackVector2( *dimension.mutable_leader()->mutable_start(), m_start );
+    PackVector2( *dimension.mutable_leader()->mutable_end(), m_end );
+    dimension.mutable_leader()->set_border_style(
+            ToProtoEnum<DIM_TEXT_BORDER, kiapi::board::types::DimensionTextBorderStyle>(
+                    m_textBorder ) );
+
+    aContainer.PackFrom( dimension );
+}
+
+
+bool PCB_DIM_LEADER::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::common;
+
+    if( !PCB_DIMENSION_BASE::Deserialize( aContainer ) )
+        return false;
+
+    kiapi::board::types::Dimension dimension;
+    aContainer.UnpackTo( &dimension );
+
+    if( !dimension.has_leader() )
+        return false;
+
+    SetStart( UnpackVector2( dimension.leader().start() ) );
+    SetEnd( UnpackVector2( dimension.leader().end() ) );
+    SetTextBorder( FromProtoEnum<DIM_TEXT_BORDER>( dimension.leader().border_style() ) );
+
+    Update();
+
+    return true;
+}
+
+
 EDA_ITEM* PCB_DIM_LEADER::Clone() const
 {
     return new PCB_DIM_LEADER( *this );
@@ -1303,6 +1469,45 @@ PCB_DIM_RADIAL::PCB_DIM_RADIAL( BOARD_ITEM* aParent ) :
 }
 
 
+void PCB_DIM_RADIAL::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common;
+    kiapi::board::types::Dimension dimension;
+
+    PCB_DIMENSION_BASE::Serialize( aContainer );
+    aContainer.UnpackTo( &dimension );
+
+    PackVector2( *dimension.mutable_radial()->mutable_center(), m_start );
+    PackVector2( *dimension.mutable_radial()->mutable_radius_point(), m_end );
+    dimension.mutable_radial()->mutable_leader_length()->set_value_nm( m_leaderLength );
+
+    aContainer.PackFrom( dimension );
+}
+
+
+bool PCB_DIM_RADIAL::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::common;
+
+    if( !PCB_DIMENSION_BASE::Deserialize( aContainer ) )
+        return false;
+
+    kiapi::board::types::Dimension dimension;
+    aContainer.UnpackTo( &dimension );
+
+    if( !dimension.has_radial() )
+        return false;
+
+    SetStart( UnpackVector2( dimension.radial().center() ) );
+    SetEnd( UnpackVector2( dimension.radial().radius_point() ) );
+    SetLeaderLength( dimension.radial().leader_length().value_nm() );
+
+    Update();
+
+    return true;
+}
+
+
 EDA_ITEM* PCB_DIM_RADIAL::Clone() const
 {
     return new PCB_DIM_RADIAL( *this );
@@ -1410,6 +1615,43 @@ PCB_DIM_CENTER::PCB_DIM_CENTER( BOARD_ITEM* aParent ) :
 }
 
 
+void PCB_DIM_CENTER::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common;
+    kiapi::board::types::Dimension dimension;
+
+    PCB_DIMENSION_BASE::Serialize( aContainer );
+    aContainer.UnpackTo( &dimension );
+
+    PackVector2( *dimension.mutable_center()->mutable_center(), m_start );
+    PackVector2( *dimension.mutable_center()->mutable_end(), m_end );
+
+    aContainer.PackFrom( dimension );
+}
+
+
+bool PCB_DIM_CENTER::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::common;
+
+    if( !PCB_DIMENSION_BASE::Deserialize( aContainer ) )
+        return false;
+
+    kiapi::board::types::Dimension dimension;
+    aContainer.UnpackTo( &dimension );
+
+    if( !dimension.has_center() )
+        return false;
+
+    SetStart( UnpackVector2( dimension.center().center() ) );
+    SetEnd( UnpackVector2( dimension.center().end() ) );
+
+    Update();
+
+    return true;
+}
+
+
 EDA_ITEM* PCB_DIM_CENTER::Clone() const
 {
     return new PCB_DIM_CENTER( *this );
@@ -1466,6 +1708,8 @@ void PCB_DIM_CENTER::updateGeometry()
     RotatePoint( arm, -ANGLE_90 );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( center - arm, center + arm ) );
+
+    updateText();
 }
 
 

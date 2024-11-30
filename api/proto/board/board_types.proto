@@ -666,6 +666,53 @@ message CenterDimensionAttributes
   kiapi.common.types.Vector2 end = 2;
 }
 
+enum DimensionUnitFormat
+{
+  DUF_UNKNOWN = 0;
+  DUF_NO_SUFFIX = 1;
+  DUF_BARE_SUFFIX = 2;
+  DUF_PAREN_SUFFIX = 3;
+}
+
+enum DimensionArrowDirection
+{
+  DAD_UNKNOWN = 0;
+  DAD_INWARD = 1;
+  DAD_OUTWARD = 2;
+}
+
+enum DimensionPrecision
+{
+  DP_UNKNOWN = 0;
+  DP_FIXED_0 = 1;       // No digits after decimal point
+  DP_FIXED_1 = 2;       // 1 digit after decimal point
+  DP_FIXED_2 = 3;       // 2 digits after decimal point
+  DP_FIXED_3 = 4;       // 3 digits after decimal point
+  DP_FIXED_4 = 5;       // 4 digits after decimal point
+  DP_FIXED_5 = 6;       // 5 digits after decimal point
+  DP_SCALED_IN_2 = 7;   // Precision depends on unit selection; 2 digits for inches, 0 for mils, 1 for mm
+  DP_SCALED_IN_3 = 8;   // Precision depends on unit selection; 3 digits for inches, 0 for mils, 2 for mm
+  DP_SCALED_IN_4 = 9;   // Precision depends on unit selection; 4 digits for inches, 1 for mils, 3 for mm
+  DP_SCALED_IN_5 = 10;  // Precision depends on unit selection; 5 digits for inches, 2 for mils, 4 for mm
+}
+
+enum DimensionTextPosition
+{
+  DTP_UNKNOWN = 0;
+  DTP_OUTSIDE = 1;
+  DTP_INLINE = 2;
+  DTP_MANUAL = 3;
+}
+
+enum DimensionUnit
+{
+  DU_UNKNOWN = 0;
+  DU_INCHES = 1;
+  DU_MILS = 2;
+  DU_MILLIMETERS = 3;
+  DU_AUTOMATIC = 4;
+}
+
 // A dimension in KiCad is a special type of text object.
 // To know the visual appearance of the dimension as rendered by KiCad, use GetTextAsShapes
 message Dimension
@@ -682,6 +729,22 @@ message Dimension
     LeaderDimensionAttributes leader = 8;
     CenterDimensionAttributes center = 9;
   }
+
+  bool override_text_enabled = 10;
+  string override_text = 11;
+  string prefix = 12;
+  string suffix = 13;
+  DimensionUnit unit = 14;
+  DimensionUnitFormat unit_format = 15;
+  DimensionArrowDirection arrow_direction = 16;
+  DimensionPrecision precision = 17;
+  bool suppress_trailing_zeroes = 18;
+
+  kiapi.common.types.Distance line_thickness = 19;
+  kiapi.common.types.Distance arrow_length = 20;
+  kiapi.common.types.Distance extension_offset = 21;
+  DimensionTextPosition text_position = 22;
+  bool keep_text_aligned = 23;
 }
 
 message ReferenceImage

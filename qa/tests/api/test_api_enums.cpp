@@ -219,4 +219,29 @@ BOOST_AUTO_TEST_CASE( DimensionTextBorderStyle )
     testEnums<DIM_TEXT_BORDER, kiapi::board::types::DimensionTextBorderStyle>();
 }
 
+BOOST_AUTO_TEST_CASE( DimensionUnitFormat )
+{
+    testEnums<DIM_UNITS_FORMAT, kiapi::board::types::DimensionUnitFormat>();
+}
+
+BOOST_AUTO_TEST_CASE( DimensionArrowDirection )
+{
+    testEnums<DIM_ARROW_DIRECTION, kiapi::board::types::DimensionArrowDirection>();
+}
+
+BOOST_AUTO_TEST_CASE( DimensionPrecision )
+{
+    testEnums<DIM_PRECISION, kiapi::board::types::DimensionPrecision>();
+}
+
+BOOST_AUTO_TEST_CASE( DimensionTextPosition )
+{
+    testEnums<DIM_TEXT_POSITION, kiapi::board::types::DimensionTextPosition>();
+}
+
+BOOST_AUTO_TEST_CASE( DimensionUnit )
+{
+    testEnums<DIM_UNITS_MODE, kiapi::board::types::DimensionUnit>();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

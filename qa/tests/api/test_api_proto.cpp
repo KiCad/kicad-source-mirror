@@ -48,7 +48,7 @@ struct PROTO_TEST_FIXTURE
 
 
 template<typename ProtoClass, typename KiCadClass, typename ParentClass>
-void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent )
+void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent, bool aStrict = true )
 {
     BOOST_TEST_CONTEXT( aInput->GetFriendlyName() << ": " << aInput->m_Uuid.AsStdString() )
     {
@@ -61,17 +61,20 @@ void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent )
         BOOST_REQUIRE_MESSAGE( any.UnpackTo( &proto ),
                                "Any message did not unpack into the requested type" );
 
-        KiCadClass output( *static_cast<KiCadClass*>( aInput->Clone() ) );
-        // Not yet
-        //KiCadClass output( aParent );
+        std::unique_ptr<KiCadClass> output;
+
+        if( aStrict )
+            output = std::make_unique<KiCadClass>( aParent );
+        else
+            output = std::make_unique<KiCadClass>( *static_cast<KiCadClass*>( aInput->Clone() ) );
 
         bool deserializeResult = false;
-        BOOST_REQUIRE_NO_THROW( deserializeResult = output.Deserialize( any ) );
+        BOOST_REQUIRE_NO_THROW( deserializeResult = output->Deserialize( any ) );
         BOOST_REQUIRE_MESSAGE( deserializeResult, "Deserialize failed" );
 
         // This round-trip checks that we can create an equivalent protobuf
         google::protobuf::Any outputAny;
-        BOOST_REQUIRE_NO_THROW( output.Serialize( outputAny ) );
+        BOOST_REQUIRE_NO_THROW( output->Serialize( outputAny ) );
         BOOST_TEST_MESSAGE( "Output: " << outputAny.Utf8DebugString() );
 
         if( !( outputAny.SerializeAsString() == any.SerializeAsString() ) )
@@ -80,7 +83,7 @@ void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent )
         }
 
         // This round-trip checks that we can create an equivalent KiCad object
-        if( !( output == *aInput ) )
+        if( !( *output == *aInput ) )
         {
             BOOST_TEST_FAIL( "Round-tripped object does not match" );
         }
@@ -105,7 +108,10 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
             break;
 
         case PCB_VIA_T:
-            testProtoFromKiCadObject<kiapi::board::types::Via>( track, m_board.get() );
+            // Vias are not strict-checked at the moment because m_zoneLayerOverrides is not
+            // currently exposed to the API
+            // TODO(JE) enable strict when fixed
+            testProtoFromKiCadObject<kiapi::board::types::Via>( track, m_board.get(), false );
             break;
 
         default:
@@ -114,7 +120,12 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get() );
+    {
+        // Footprints not strict-checked at the moment because Footprint field is not in the proto
+        // TODO(JE) enable strict when fixed
+        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get(),
+                                                                          false );
+    }
 
     for( ZONE* zone : m_board->Zones() )
         testProtoFromKiCadObject<kiapi::board::types::Zone>( zone, m_board.get() );
@@ -166,8 +177,11 @@ BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
         switch( track->Type() )
         {
         case PCB_VIA_T:
+            // Vias are not strict-checked at the moment because m_zoneLayerOverrides is not
+            // currently exposed to the API
+            // TODO(JE) enable strict when fixed
             testProtoFromKiCadObject<kiapi::board::types::Via>( static_cast<PCB_VIA*>( track ),
-                                                                m_board.get() );
+                                                                m_board.get(), false );
             break;
 
         default:
@@ -176,7 +190,12 @@ BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get() );
+    {
+        // Footprints not strict-checked at the moment because Footprint field is not in the proto
+        // TODO(JE) enable strict when fixed
+        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get(),
+                                                                          false );
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

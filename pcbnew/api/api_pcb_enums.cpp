@@ -477,4 +477,178 @@ DIM_TEXT_BORDER FromProtoEnum( types::DimensionTextBorderStyle aValue )
 }
 
 
+template<>
+types::DimensionUnitFormat ToProtoEnum( DIM_UNITS_FORMAT aValue )
+{
+    switch( aValue )
+    {
+    case DIM_UNITS_FORMAT::NO_SUFFIX:       return types::DimensionUnitFormat::DUF_NO_SUFFIX;
+    case DIM_UNITS_FORMAT::BARE_SUFFIX:     return types::DimensionUnitFormat::DUF_BARE_SUFFIX;
+    case DIM_UNITS_FORMAT::PAREN_SUFFIX:    return types::DimensionUnitFormat::DUF_PAREN_SUFFIX;
+
+    default:
+        wxCHECK_MSG( false, types::DimensionUnitFormat::DUF_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<DIM_UNITS_FORMAT>");
+    }
+}
+
+
+template<>
+DIM_UNITS_FORMAT FromProtoEnum( types::DimensionUnitFormat aValue )
+{
+    switch( aValue )
+    {
+    case types::DimensionUnitFormat::DUF_NO_SUFFIX:     return DIM_UNITS_FORMAT::NO_SUFFIX;
+    case types::DimensionUnitFormat::DUF_BARE_SUFFIX:   return DIM_UNITS_FORMAT::BARE_SUFFIX;
+    case types::DimensionUnitFormat::DUF_PAREN_SUFFIX:  return DIM_UNITS_FORMAT::PAREN_SUFFIX;
+
+    default:
+        wxCHECK_MSG( false,  DIM_UNITS_FORMAT::NO_SUFFIX,
+                     "Unhandled case in FromProtoEnum<types::DimensionUnitFormat>" );
+    }
+}
+
+
+template<>
+types::DimensionArrowDirection ToProtoEnum( DIM_ARROW_DIRECTION aValue )
+{
+    switch( aValue )
+    {
+    case DIM_ARROW_DIRECTION::INWARD:   return types::DimensionArrowDirection::DAD_INWARD;
+    case DIM_ARROW_DIRECTION::OUTWARD:  return types::DimensionArrowDirection::DAD_OUTWARD;
+
+    default:
+        wxCHECK_MSG( false, types::DimensionArrowDirection::DAD_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<DIM_ARROW_DIRECTION>");
+    }
+}
+
+
+template<>
+DIM_ARROW_DIRECTION FromProtoEnum( types::DimensionArrowDirection aValue )
+{
+    switch( aValue )
+    {
+    case types::DimensionArrowDirection::DAD_INWARD:    return DIM_ARROW_DIRECTION::INWARD;
+    case types::DimensionArrowDirection::DAD_OUTWARD:   return DIM_ARROW_DIRECTION::OUTWARD;
+
+    default:
+        wxCHECK_MSG( false,  DIM_ARROW_DIRECTION::OUTWARD,
+                     "Unhandled case in FromProtoEnum<types::DimensionArrowDirection>" );
+    }
+}
+
+
+template<>
+types::DimensionPrecision ToProtoEnum( DIM_PRECISION aValue )
+{
+    switch( aValue )
+    {
+    case DIM_PRECISION::X:          return types::DimensionPrecision::DP_FIXED_0;
+    case DIM_PRECISION::X_X:        return types::DimensionPrecision::DP_FIXED_1;
+    case DIM_PRECISION::X_XX:       return types::DimensionPrecision::DP_FIXED_2;
+    case DIM_PRECISION::X_XXX:      return types::DimensionPrecision::DP_FIXED_3;
+    case DIM_PRECISION::X_XXXX:     return types::DimensionPrecision::DP_FIXED_4;
+    case DIM_PRECISION::X_XXXXX:    return types::DimensionPrecision::DP_FIXED_5;
+    case DIM_PRECISION::V_VV:       return types::DimensionPrecision::DP_SCALED_IN_2;
+    case DIM_PRECISION::V_VVV:      return types::DimensionPrecision::DP_SCALED_IN_3;
+    case DIM_PRECISION::V_VVVV:     return types::DimensionPrecision::DP_SCALED_IN_4;
+    case DIM_PRECISION::V_VVVVV:    return types::DimensionPrecision::DP_SCALED_IN_5;
+
+    default:
+        wxCHECK_MSG( false, types::DimensionPrecision::DP_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<DIM_PRECISION>");
+    }
+}
+
+
+template<>
+DIM_PRECISION FromProtoEnum( types::DimensionPrecision aValue )
+{
+    switch( aValue )
+    {
+    case types::DimensionPrecision::DP_FIXED_0:     return DIM_PRECISION::X;
+    case types::DimensionPrecision::DP_FIXED_1:     return DIM_PRECISION::X_X;
+    case types::DimensionPrecision::DP_FIXED_2:     return DIM_PRECISION::X_XX;
+    case types::DimensionPrecision::DP_FIXED_3:     return DIM_PRECISION::X_XXX;
+    case types::DimensionPrecision::DP_FIXED_4:     return DIM_PRECISION::X_XXXX;
+    case types::DimensionPrecision::DP_FIXED_5:     return DIM_PRECISION::X_XXXXX;
+    case types::DimensionPrecision::DP_SCALED_IN_2: return DIM_PRECISION::V_VV;
+    case types::DimensionPrecision::DP_SCALED_IN_3: return DIM_PRECISION::V_VVV;
+    case types::DimensionPrecision::DP_SCALED_IN_4: return DIM_PRECISION::V_VVVV;
+    case types::DimensionPrecision::DP_SCALED_IN_5: return DIM_PRECISION::V_VVVVV;
+
+    default:
+        wxCHECK_MSG( false,  DIM_PRECISION::V_VV,
+                     "Unhandled case in FromProtoEnum<types::DimensionPrecision>" );
+    }
+}
+
+
+template<>
+types::DimensionTextPosition ToProtoEnum( DIM_TEXT_POSITION aValue )
+{
+    switch( aValue )
+    {
+    case DIM_TEXT_POSITION::OUTSIDE:    return types::DimensionTextPosition::DTP_OUTSIDE;
+    case DIM_TEXT_POSITION::INLINE:     return types::DimensionTextPosition::DTP_INLINE;
+    case DIM_TEXT_POSITION::MANUAL:     return types::DimensionTextPosition::DTP_MANUAL;
+
+    default:
+        wxCHECK_MSG( false, types::DimensionTextPosition::DTP_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<DIM_TEXT_POSITION>");
+    }
+}
+
+
+template<>
+DIM_TEXT_POSITION FromProtoEnum( types::DimensionTextPosition aValue )
+{
+    switch( aValue )
+    {
+    case types::DimensionTextPosition::DTP_OUTSIDE: return DIM_TEXT_POSITION::OUTSIDE;
+    case types::DimensionTextPosition::DTP_INLINE:  return DIM_TEXT_POSITION::INLINE;
+    case types::DimensionTextPosition::DTP_MANUAL:  return DIM_TEXT_POSITION::MANUAL;
+
+    default:
+        wxCHECK_MSG( false,  DIM_TEXT_POSITION::OUTSIDE,
+                     "Unhandled case in FromProtoEnum<types::DimensionTextPosition>" );
+    }
+}
+
+
+template<>
+types::DimensionUnit ToProtoEnum( DIM_UNITS_MODE aValue )
+{
+    switch( aValue )
+    {
+    case DIM_UNITS_MODE::INCHES:        return types::DimensionUnit::DU_INCHES;
+    case DIM_UNITS_MODE::MILS:          return types::DimensionUnit::DU_MILS;
+    case DIM_UNITS_MODE::MILLIMETRES:   return types::DimensionUnit::DU_MILLIMETERS;
+    case DIM_UNITS_MODE::AUTOMATIC:     return types::DimensionUnit::DU_AUTOMATIC;
+
+    default:
+        wxCHECK_MSG( false, types::DimensionUnit::DU_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<DIM_UNITS_MODE>");
+    }
+}
+
+
+template<>
+DIM_UNITS_MODE FromProtoEnum( types::DimensionUnit aValue )
+{
+    switch( aValue )
+    {
+    case types::DimensionUnit::DU_INCHES:       return DIM_UNITS_MODE::INCHES;
+    case types::DimensionUnit::DU_MILS:         return DIM_UNITS_MODE::MILS;
+    case types::DimensionUnit::DU_MILLIMETERS:  return DIM_UNITS_MODE::MILLIMETRES;
+    case types::DimensionUnit::DU_AUTOMATIC:    return DIM_UNITS_MODE::AUTOMATIC;
+
+    default:
+        wxCHECK_MSG( false,  DIM_UNITS_MODE::AUTOMATIC,
+                     "Unhandled case in FromProtoEnum<types::DimensionUnit>" );
+    }
+}
+
+
 // Adding something new here?  Add it to test_api_enums.cpp!
