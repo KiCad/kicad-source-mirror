@@ -67,10 +67,10 @@ PROJECT_CONTEXT loadKicadProject( const wxString& filename, std::optional<wxStri
     wxFileName schName ( filename );
     wxFileName ruleFileName ( filename );
 
-    pro.SetExt( ProjectFileExtension );
-    brdName.SetExt( KiCadPcbFileExtension );
-    schName.SetExt( KiCadSchematicFileExtension );
-    ruleFileName.SetExt( DesignRulesFileExtension );
+    pro.SetExt( FILEEXT::ProjectFileExtension );
+    brdName.SetExt( FILEEXT::KiCadPcbFileExtension );
+    schName.SetExt( FILEEXT::KiCadSchematicFileExtension );
+    ruleFileName.SetExt( FILEEXT::DesignRulesFileExtension );
 
     brdName.MakeAbsolute();
     schName.MakeAbsolute();

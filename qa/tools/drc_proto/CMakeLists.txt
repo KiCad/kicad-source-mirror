@@ -38,6 +38,7 @@ add_executable( drc_proto
     ../../../pcbnew/drc/drc_test_provider_clearance_base.cpp
     ../../../pcbnew/drc/drc_test_provider_creepage.cpp
     ../../../pcbnew/drc/drc_test_provider_copper_clearance.cpp
+    ../../../pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
     ../../../pcbnew/drc/drc_test_provider_hole_to_hole.cpp
     ../../../pcbnew/drc/drc_test_provider_edge_clearance.cpp
     ../../../pcbnew/drc/drc_test_provider_hole_size.cpp
