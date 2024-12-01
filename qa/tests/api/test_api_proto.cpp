@@ -120,12 +120,7 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        // Footprints not strict-checked at the moment because Footprint field is not in the proto
-        // TODO(JE) enable strict when fixed
-        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get(),
-                                                                          false );
-    }
+        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get() );
 
     for( ZONE* zone : m_board->Zones() )
         testProtoFromKiCadObject<kiapi::board::types::Zone>( zone, m_board.get() );
@@ -190,12 +185,7 @@ BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        // Footprints not strict-checked at the moment because Footprint field is not in the proto
-        // TODO(JE) enable strict when fixed
-        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get(),
-                                                                          false );
-    }
+        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
