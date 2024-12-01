@@ -42,7 +42,6 @@
 #include <utility> // for swap, move
 #include <vector>
 
-#include <clipper.hpp>                       // for Clipper, PolyNode, Clipp...
 #include <clipper2/clipper.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/polygon_triangulation.h>
@@ -63,6 +62,15 @@
 
 #include <wx/log.h>
 
+// ADVANCED_CFG::GetCfg() cannot be used on msys2/mingw builds (link failure)
+// So we use the ADVANCED_CFG default values
+#if defined( __MINGW32__ )
+    #define TRIANGULATESIMPLIFICATIONLEVEL 50
+    #define ENABLECACHEFRIENDLYFRACTURE true
+#else
+    #define TRIANGULATESIMPLIFICATIONLEVEL ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel
+    #define ENABLECACHEFRIENDLYFRACTURE ADVANCED_CFG::GetCfg().m_EnableCacheFriendlyFracture
+#endif
 
 SHAPE_POLY_SET::SHAPE_POLY_SET() :
     SHAPE( SH_POLY_SET )
@@ -964,77 +972,53 @@ void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SE
 
 void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Union, b );
-    else
-        booleanOp( ClipperLib::ctUnion, b, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Union, b );
 }
 
 
 void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Difference, b );
-    else
-        booleanOp( ClipperLib::ctDifference, b, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Difference, b );
 }
 
 
 void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Intersection, b );
-    else
-        booleanOp( ClipperLib::ctIntersection, b, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Intersection, b );
 }
 
 
 void SHAPE_POLY_SET::BooleanXor( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Xor, b );
-    else
-        booleanOp( ClipperLib::ctXor, b, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Xor, b );
 }
 
 
 void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                  POLYGON_MODE aFastMode )
 {
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Union, a, b );
-    else
-        booleanOp( ClipperLib::ctUnion, a, b, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Union, a, b );
 }
 
 
 void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                       POLYGON_MODE aFastMode )
 {
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Difference, a, b );
-    else
-        booleanOp( ClipperLib::ctDifference, a, b, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Difference, a, b );
 }
 
 
 void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                           POLYGON_MODE aFastMode )
 {
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Intersection, a, b );
-    else
-        booleanOp( ClipperLib::ctIntersection, a, b, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Intersection, a, b );
 }
 
 
 void SHAPE_POLY_SET::BooleanXor( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                           POLYGON_MODE aFastMode )
 {
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Xor, a, b );
-    else
-        booleanOp( ClipperLib::ctXor, a, b, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Xor, a, b );
 }
 
 
@@ -1344,10 +1328,7 @@ void SHAPE_POLY_SET::Inflate( int aAmount, CORNER_STRATEGY aCornerStrategy, int 
 {
     int segCount = GetArcToSegmentCount( std::abs( aAmount ), aMaxError, FULL_CIRCLE );
 
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        inflate2( aAmount, segCount, aCornerStrategy, aSimplify );
-    else
-        inflate1( aAmount, segCount, aCornerStrategy );
+    inflate2( aAmount, segCount, aCornerStrategy, aSimplify );
 }
 
 
@@ -1899,7 +1880,7 @@ static void fractureSingleSlow( SHAPE_POLY_SET::POLYGON& paths )
 
 void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 {
-    if( ADVANCED_CFG::GetCfg().m_EnableCacheFriendlyFracture )
+    if( ENABLECACHEFRIENDLYFRACTURE )
         return fractureSingleCacheFriendly( paths );
     fractureSingleSlow( paths );
 }
@@ -2109,10 +2090,7 @@ void SHAPE_POLY_SET::Simplify( POLYGON_MODE aFastMode )
 {
     SHAPE_POLY_SET empty;
 
-    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        booleanOp( Clipper2Lib::ClipType::Union, empty );
-    else
-        booleanOp( ClipperLib::ctUnion, empty, aFastMode );
+    booleanOp( Clipper2Lib::ClipType::Union, empty );
 }
 
 
@@ -3296,14 +3274,9 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
                         }
                         else if( pass == 2 )
                         {
-                            polySet.SimplifyOutlines(
-                                    ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
+                            polySet.SimplifyOutlines( TRIANGULATESIMPLIFICATIONLEVEL );
                         }
                         // In Clipper2, there is only one type of simplification
-                        else if( pass == 3 && !ADVANCED_CFG::GetCfg().m_UseClipper2 )
-                        {
-                            polySet.Fracture( PM_STRICTLY_SIMPLE );
-                        }
                         else
                         {
                             break;

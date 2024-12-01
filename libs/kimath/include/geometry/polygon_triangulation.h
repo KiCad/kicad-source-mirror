@@ -60,12 +60,23 @@
 
 #include <wx/log.h>
 
+// ADVANCED_CFG::GetCfg() cannot be used on msys2/mingw builds (link failure)
+// So we use the ADVANCED_CFG default values
+#if defined( __MINGW32__ )
+    #define TRIANGULATESIMPLIFICATIONLEVEL 50
+    #define TRIANGULATEMINIMUMAREA 1000
+#else
+    #define TRIANGULATESIMPLIFICATIONLEVEL ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel
+    #define TRIANGULATEMINIMUMAREA ADVANCED_CFG::GetCfg().m_TriangulateMinimumArea
+#endif
+
 #define TRIANGULATE_TRACE "triangulate"
+
 class POLYGON_TRIANGULATION : public VERTEX_SET
 {
 public:
     POLYGON_TRIANGULATION( SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult ) :
-        VERTEX_SET( ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel ),
+        VERTEX_SET( TRIANGULATESIMPLIFICATIONLEVEL ),
         m_vertices_original_size( 0 ), m_result( aResult )
     {};
 
@@ -181,7 +192,7 @@ private:
         VERTEX* retval = aStart;
         int     count = 0;
 
-        double sq_dist = ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel;
+        double sq_dist = TRIANGULATESIMPLIFICATIONLEVEL;
         sq_dist *= sq_dist;
 
         do
@@ -427,7 +438,7 @@ private:
          * At this point, our polygon should be fully tessellated.
          */
         if( aPoint->prev != aPoint->next )
-            return std::abs( aPoint->area() ) > ADVANCED_CFG::GetCfg().m_TriangulateMinimumArea;
+            return std::abs( aPoint->area() ) > TRIANGULATEMINIMUMAREA;
 
         return true;
     }
@@ -439,7 +450,7 @@ private:
 
     bool isTooSmall( const VERTEX* aPoint ) const
     {
-        double min_area = ADVANCED_CFG::GetCfg().m_TriangulateMinimumArea;
+        double min_area = TRIANGULATEMINIMUMAREA;
         double prev_sq_len = ( aPoint->prev->x - aPoint->x ) * ( aPoint->prev->x - aPoint->x ) +
                              ( aPoint->prev->y - aPoint->y ) * ( aPoint->prev->y - aPoint->y );
         double next_sq_len = ( aPoint->next->x - aPoint->x ) * ( aPoint->next->x - aPoint->x ) +
