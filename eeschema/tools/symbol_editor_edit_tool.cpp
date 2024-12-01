@@ -818,8 +818,16 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     {
         // If it's not a symbol then paste as text
         newPart = new LIB_SYMBOL( "dummy_part" );
+
+        wxString pasteText( clipboardData );
+
+        // Limit of 5000 is totally arbitrary.  Without a limit, pasting a bitmap image from
+        // eeschema makes KiCad appear to hang.
+        if( pasteText.Length() > 5000 )
+            pasteText = pasteText.Left( 5000 ) + wxT( "..." );
+
         LIB_TEXT* newText = new LIB_TEXT( newPart );
-        newText->SetText( clipboardData );
+        newText->SetText( pasteText );
         newPart->AddDrawItem( newText );
     }
 
