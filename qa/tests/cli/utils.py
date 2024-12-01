@@ -21,6 +21,9 @@
 #
 
 import difflib
+import os
+import platform
+
 import cairosvg
 import logging
 import subprocess
@@ -35,13 +38,25 @@ Image.MAX_IMAGE_PIXELS = 800 * 1024 * 1024 // 4 # Increase limit to ~800MB uncom
 def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
     logger.info("Executing command \"%s\"", " ".join( command ))
 
+    # MacOS qa_cli uses the installed kicad-cli
+    if platform.system() == "Darwin":
+        env = {}
+        env.update(os.environ)
+        env.pop('KICAD_RUN_FROM_BUILD_DIR')
+
     proc = subprocess.Popen( command,
         stdout = subprocess.PIPE,
         stderr = subprocess.PIPE,
-        encoding = 'utf-8'
+        encoding = 'utf-8',
+        env = env
     )
 
     out,err = proc.communicate()
+
+    if proc.returncode != 0 or len(err) != 0:
+        logger.info(f"command returned {proc.returncode}")
+        logger.info(f"stdout: {out}")
+        logger.info(f"stderr: {err}")
 
     return out, err, proc.returncode
 
