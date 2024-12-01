@@ -1237,11 +1237,12 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
 int ERC_TESTER::TestSimilarLabels()
 {
     int errors = 0;
-    std::unordered_map<wxString, std::tuple<wxString, SCH_ITEM*, SCH_SHEET_PATH>> generalMap;
+    std::unordered_map<wxString, std::vector<std::tuple<wxString, SCH_ITEM*, SCH_SHEET_PATH>>> generalMap;
 
-    auto logError = [&]( const wxString& normalized, SCH_ITEM* item, const SCH_SHEET_PATH& sheet )
+    auto logError = [&]( const wxString& normalized, SCH_ITEM* item, const SCH_SHEET_PATH& sheet,
+                         const std::tuple<wxString, SCH_ITEM*, SCH_SHEET_PATH>& other )
     {
-        auto& [otherText, otherItem, otherSheet] = generalMap.at( normalized );
+        auto& [otherText, otherItem, otherSheet] = other;
         ERCE_T typeOfWarning = ERCE_SIMILAR_LABELS;
 
         if( item->Type() == SCH_PIN_T && otherItem->Type() == SCH_PIN_T )
@@ -1287,17 +1288,17 @@ int ERC_TESTER::TestSimilarLabels()
                     wxString        unnormalized = label->GetShownText( &sheet, false );
                     wxString        normalized = unnormalized.Lower();
 
-                    if( !generalMap.count( normalized ) )
-                    {
-                        generalMap[normalized] = std::make_tuple( unnormalized, label, sheet );
-                    }
+                    generalMap[normalized].emplace_back( std::make_tuple( unnormalized, label, sheet ) );
 
-                    auto& [otherText, otherItem, otherSheet] = generalMap.at( normalized );
-
-                    if( unnormalized != otherText )
+                    for( const auto& otherTuple : generalMap.at( normalized ) )
                     {
-                        logError( normalized, label, sheet );
-                        errors += 1;
+                        const auto& [otherText, otherItem, otherSheet] = otherTuple;
+
+                        if( unnormalized != otherText )
+                        {
+                            logError( normalized, label, sheet, otherTuple );
+                            errors += 1;
+                        }
                     }
 
                     break;
@@ -1315,17 +1316,17 @@ int ERC_TESTER::TestSimilarLabels()
                     wxString    unnormalized = symbol->GetValue( true, &sheet, false );
                     wxString    normalized = unnormalized.Lower();
 
-                    if( !generalMap.count( normalized ) )
-                    {
-                        generalMap[normalized] = std::make_tuple( unnormalized, pin, sheet );
-                    }
+                    generalMap[normalized].emplace_back( std::make_tuple( unnormalized, pin, sheet ) );
 
-                    auto& [otherText, otherItem, otherSheet] = generalMap.at( normalized );
-
-                    if( unnormalized != otherText )
+                    for( const auto& otherTuple : generalMap.at( normalized ) )
                     {
-                        logError( normalized, pin, sheet );
-                        errors += 1;
+                        const auto& [otherText, otherItem, otherSheet] = otherTuple;
+
+                        if( unnormalized != otherText )
+                        {
+                            logError( normalized, pin, sheet, otherTuple );
+                            errors += 1;
+                        }
                     }
 
                     break;
