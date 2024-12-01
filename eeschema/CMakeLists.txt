@@ -20,10 +20,12 @@ set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
 # Find out the exact libngspice file name
 get_filename_component( NGSPICE_DLL_ABSPATH "${NGSPICE_DLL}" ABSOLUTE )
 get_filename_component( NGSPICE_DLL_FILE "${NGSPICE_DLL_ABSPATH}" NAME )
+get_filename_component( NGSPICE_DLL_DIR "${NGSPICE_DLL_ABSPATH}" DIRECTORY )
 
 set_property( SOURCE sim/ngspice.cpp
     APPEND PROPERTY COMPILE_DEFINITIONS
     NGSPICE_DLL_FILE="${NGSPICE_DLL_FILE}"
+    NGSPICE_DLL_DIR="${NGSPICE_DLL_DIR}"
     )
 
 include_directories( BEFORE ${INC_BEFORE} )

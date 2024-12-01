@@ -436,12 +436,12 @@ void NGSPICE::init_dll()
     wxFileName dllFile( "", NGSPICE_DLL_FILE );
 #if defined(__WINDOWS__)
   #if defined( _MSC_VER )
-    const std::vector<std::string> dllPaths = { "" };
+    std::vector<std::string> dllPaths = { "" };
   #else
-    const std::vector<std::string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
+    std::vector<std::string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
   #endif
 #elif defined(__WXMAC__)
-    const std::vector<std::string> dllPaths = {
+    std::vector<std::string> dllPaths = {
         PATHS::GetOSXKicadUserDataDir().ToStdString() + "/PlugIns/ngspice",
         PATHS::GetOSXKicadMachineDataDir().ToStdString() + "/PlugIns/ngspice",
 
@@ -453,8 +453,11 @@ void NGSPICE::init_dll()
                 "/../../../../../Contents/PlugIns/sim"
     };
 #else   // Unix systems
-    const std::vector<std::string> dllPaths = { "/usr/local/lib" };
+    std::vector<std::string> dllPaths = { "/usr/local/lib" };
 #endif
+
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+        dllPaths.emplace_back( NGSPICE_DLL_DIR );
 
 #if defined(__WINDOWS__) || (__WXMAC__)
     for( const auto& path : dllPaths )
