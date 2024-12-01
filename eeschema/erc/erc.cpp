@@ -1563,17 +1563,24 @@ int ERC_TESTER::TestFootprintFilters()
             if( filters.empty() )
                 continue;
 
-            LIB_ID footprint;
+            wxString lowerId = sch_symbol->GetFootprintFieldText( true, &sheet, false ).Lower();
+            LIB_ID   footprint;
 
-            if( footprint.Parse( sch_symbol->GetFootprintFieldText( true, &sheet, false ) ) > 0 )
+            if( footprint.Parse( lowerId ) > 0 )
                 continue;
 
-            wxString footprintName = footprint.GetUniStringLibItemName();
+            wxString lowerItemName = footprint.GetUniStringLibItemName().Lower();
             bool     found = false;
 
-            for( const wxString& filter : filters )
+            for( wxString filter : filters )
             {
-                found |= footprintName.Matches( filter );
+                filter.LowerCase();
+
+                // If the filter contains a ':' character, include the library name in the pattern
+                if( filter.Contains( wxS( ":" ) ) )
+                    found |= lowerId.Matches( filter );
+                else
+                    found |= lowerItemName.Matches( filter );
 
                 if( found )
                     break;
@@ -1583,7 +1590,7 @@ int ERC_TESTER::TestFootprintFilters()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
                 msg.Printf( _( "Assigned footprint (%s) doesn't match footprint filters (%s)." ),
-                            footprintName,
+                            lowerItemName,
                             wxJoin( filters, ' ' ) );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( sch_symbol );
