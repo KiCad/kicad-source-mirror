@@ -315,3 +315,37 @@ message GetTitleBlockInfo
 {
   kiapi.common.types.DocumentSpecifier document = 1;
 }
+
+message SaveDocumentToString
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+message SavedDocumentResponse
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string contents = 2;
+}
+
+message SaveSelectionToString
+{
+}
+
+message SavedSelectionResponse
+{
+  repeated kiapi.common.types.KIID ids = 1;
+
+  string contents = 2;
+}
+
+// Attempts to parse the given string as a s-expression formatted container with items,
+// similar to how the Paste action inside the KiCad editor works.  If the parse is successful,
+// the items will be created and inserted into the editor.
+// Returns CreateItemsResponse
+message ParseAndCreateItemsFromString
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string contents = 2;
+}
