@@ -101,7 +101,6 @@ private:
     wxGridCellAttr* m_layerColAttr;
     wxGridCellAttr* m_referenceAttr;
     wxGridCellAttr* m_valueAttr;
-    wxGridCellAttr* m_footprintAttr;
     wxGridCellAttr* m_urlAttr;
 
     std::unique_ptr<NUMERIC_EVALUATOR>        m_eval;

@@ -392,9 +392,6 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
                                  m_reset3DModels->GetValue(),
                                  &updated );
 
-    // Update footprint field with the new FPID
-    newFootprint->Footprint().SetText( aNewFPID.Format() );
-
     if( aFootprint == m_currentFootprint )
         m_currentFootprint = newFootprint;
 

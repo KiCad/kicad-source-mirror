@@ -4557,8 +4557,17 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             }
 
             PCB_FIELD* field = nullptr;
+            std::unique_ptr<PCB_FIELD> unusedField;
 
-            if( footprint->HasFieldByName( pName ) )
+            if( pName == "Footprint" )
+            {
+                // Until V9, footprints had a Footprint field that usually (but not always)
+                // duplicated the footprint's LIB_ID.  In V9 this was removed.  Parse it
+                // like any other, but don't add it to anything.
+                unusedField = std::make_unique<PCB_FIELD>( footprint.get(), 0 );
+                field = unusedField.get();
+            }
+            else if( footprint->HasFieldByName( pName ) )
             {
                 field = footprint->GetFieldByName( pName );
                 field->SetText( pValue );

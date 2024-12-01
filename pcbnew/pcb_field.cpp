@@ -262,18 +262,6 @@ static struct PCB_FIELD_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( PCB_TEXT ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ) );
 
-        auto isNotFootprintFootprint =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
-                        return !field->IsFootprint();
-
-                    return true;
-                };
-
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ),
-                                      isNotFootprintFootprint );
-
         // These properties, inherited from EDA_TEXT, have no sense for the board editor
         propMgr.Mask( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
         propMgr.Mask( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );

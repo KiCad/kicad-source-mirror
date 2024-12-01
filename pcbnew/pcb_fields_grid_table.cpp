@@ -91,15 +91,6 @@ PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHI
     valueEditor->SetValidator( m_valueValidator );
     m_valueAttr->SetEditor( valueEditor );
 
-    m_footprintAttr = new wxGridCellAttr;
-
-    if( !m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
-        m_footprintAttr->SetReadOnly( true );
-
-    GRID_CELL_FPID_EDITOR* fpIdEditor = new GRID_CELL_FPID_EDITOR( m_dialog, "" );
-    fpIdEditor->SetValidator( m_nonUrlValidator );
-    m_footprintAttr->SetEditor( fpIdEditor );
-
     EMBEDDED_FILES* files = nullptr;
 
     // In the case of the footprint editor, we need to distinguish between the footprint
@@ -147,7 +138,6 @@ PCB_FIELDS_GRID_TABLE::~PCB_FIELDS_GRID_TABLE()
     m_layerColAttr->DecRef();
     m_referenceAttr->DecRef();
     m_valueAttr->DecRef();
-    m_footprintAttr->DecRef();
     m_urlAttr->DecRef();
 
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PCB_FIELDS_GRID_TABLE::onUnitsChanged, this );
@@ -247,11 +237,6 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
         {
             m_valueAttr->IncRef();
             return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
-        }
-        else if( aRow == FOOTPRINT_FIELD )
-        {
-            m_footprintAttr->IncRef();
-            return enhanceAttr( m_footprintAttr, aRow, aCol, aKind );
         }
         else if( aRow == DATASHEET_FIELD )
         {

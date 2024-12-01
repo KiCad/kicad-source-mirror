@@ -1167,9 +1167,6 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 fp->SetOrientation( ANGLE_0 );
                 fp->SetPosition( cursorPos );
 
-                // Fill this in since it won't be synced from a symbol
-                fp->GetField( FOOTPRINT_FIELD )->SetText( UnescapeString( fp->GetFPIDAsString() ) );
-
                 commit.Add( fp );
                 m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
 

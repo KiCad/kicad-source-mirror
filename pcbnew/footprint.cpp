@@ -616,6 +616,12 @@ void FOOTPRINT::GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly )
 {
     for( PCB_FIELD* field : m_fields )
     {
+        // FOOTPRINT field doesn't exist on FOOTPRINT, but it's kept in the m_fields vector
+        // for the moment so that the MANDATORY_FIELD ids line up with vector indices.
+        // This could be cleaned up by making m_fields a map in the future.
+        if( field->GetId() == FOOTPRINT_FIELD )
+            continue;
+
         if( aVisibleOnly )
         {
             if( !field->IsVisible() || field->GetText().IsEmpty() )
@@ -2532,8 +2538,6 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
             case VALUE_FIELD: new_text->SetText( wxT( "${VALUE}" ) ); break;
 
             case DATASHEET_FIELD: new_text->SetText( wxT( "${DATASHEET}" ) ); break;
-
-            case FOOTPRINT_FIELD: new_text->SetText( wxT( "${FOOTPRINT}" ) ); break;
             }
         }
 

@@ -423,23 +423,6 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    // Test for footprint change. This is controlled by a separate flag, that will output
-    // its own message if the footprint is changed, so we just set the field here.
-    if( ( m_replaceFootprints || ( aPcbFootprint->GetAttributes() & FP_JUST_ADDED ) )
-        && !m_isDryRun )
-    {
-        // Update FOOTPRINT_FIELD (if exists in the netlist)
-        try
-        {
-            aPcbFootprint->Footprint().SetText(
-                aNetlistComponent->GetFields()[GetCanonicalFieldName( FOOTPRINT_FIELD )] );
-        }
-        catch( ... )
-        {
-            // If not exist (old netlist), just skip it: What else?
-        }
-    }
-
     // Test for time stamp change.
     KIID_PATH new_path = aNetlistComponent->GetPath();
 
@@ -474,8 +457,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     for( PCB_FIELD* field : aPcbFootprint->GetFields() )
     {
         // These fields are individually checked above
-        if( field->IsReference() || field->IsValue() || field->IsFootprint()
-            || field->IsComponentClass() )
+        if( field->IsReference() || field->IsValue() || field->IsComponentClass() )
         {
             continue;
         }

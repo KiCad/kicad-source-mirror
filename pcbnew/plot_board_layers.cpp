@@ -115,7 +115,7 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
         {
             PCB_FIELD* field = fp->GetFields().at( i );
 
-            if( field->IsReference() || field->IsValue() || field->IsFootprint() )
+            if( field->IsReference() || field->IsValue() )
                 continue;
 
             if( field->GetText().IsEmpty() )

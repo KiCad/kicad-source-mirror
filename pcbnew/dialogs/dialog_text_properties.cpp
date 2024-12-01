@@ -114,10 +114,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
             }
             else
             {
-                // Don't let users modify the library link, in the board editor
-                if( field->IsFootprint() && !m_frame->IsType(  FRAME_FOOTPRINT_EDITOR ) )
-                    m_SingleLineText->SetEditable( false );
-
                 title = _( "Footprint Field Properties" );
                 m_TextLabel->SetLabel( _( "Text:" ) );
             }

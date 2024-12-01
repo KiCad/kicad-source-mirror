@@ -58,8 +58,6 @@ public:
                 return true;
             else if( scanType == PCB_FIELD_LOCATE_VALUE_T && m_id == VALUE_FIELD )
                 return true;
-            else if( scanType == PCB_FIELD_LOCATE_FOOTPRINT_T && m_id == FOOTPRINT_FIELD )
-                return true;
             else if( scanType == PCB_FIELD_LOCATE_DATASHEET_T && m_id == DATASHEET_FIELD )
                 return true;
         }
@@ -69,7 +67,6 @@ public:
 
     bool IsReference() const { return m_id == REFERENCE_FIELD; }
     bool IsValue() const { return m_id == VALUE_FIELD; }
-    bool IsFootprint() const { return m_id == FOOTPRINT_FIELD; }
     bool IsDatasheet() const { return m_id == DATASHEET_FIELD; }
     bool IsComponentClass() const { return GetName() == wxT( "Component Class" ); }
 

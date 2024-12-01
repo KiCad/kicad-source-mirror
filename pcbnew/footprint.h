@@ -637,12 +637,10 @@ public:
     /// read/write accessors:
     PCB_FIELD& Value()           { return *GetField( VALUE_FIELD ); }
     PCB_FIELD& Reference()       { return *GetField( REFERENCE_FIELD ); }
-    PCB_FIELD& Footprint()       { return *GetField( FOOTPRINT_FIELD ); }
 
     /// The const versions to keep the compiler happy.
     const PCB_FIELD& Value() const     { return *GetField( VALUE_FIELD ); }
     const PCB_FIELD& Reference() const { return *GetField( REFERENCE_FIELD ); }
-    const PCB_FIELD& Footprint() const { return *GetField( FOOTPRINT_FIELD ); }
 
     //-----<Fields>-----------------------------------------------------------
 
