@@ -39,9 +39,10 @@ def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
     logger.info("Executing command \"%s\"", " ".join( command ))
 
     # MacOS qa_cli uses the installed kicad-cli
+    env = {}
+    env.update(os.environ)
+
     if platform.system() == "Darwin":
-        env = {}
-        env.update(os.environ)
         env.pop('KICAD_RUN_FROM_BUILD_DIR')
 
     proc = subprocess.Popen( command,
