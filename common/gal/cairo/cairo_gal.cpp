@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2024 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017-2018 CERN
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -29,7 +29,6 @@
 
 #include <wx/image.h>
 #include <wx/log.h>
-#include <wx/rawbmp.h>
 
 #include <gal/cairo/cairo_gal.h>
 #include <gal/cairo/cairo_compositor.h>
@@ -583,9 +582,6 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
 void CAIRO_GAL_BASE::ResizeScreen( int aWidth, int aHeight )
 {
     m_screenSize = VECTOR2I( aWidth, aHeight );
-
-    m_bitmapSize = VECTOR2I( std::ceil( m_screenSize.x * getScalingFactor() ),
-                             std::ceil( m_screenSize.y * getScalingFactor() ) );
 }
 
 
@@ -597,9 +593,9 @@ void CAIRO_GAL_BASE::Flush()
 
 void CAIRO_GAL_BASE::ClearScreen()
 {
-    cairo_set_source_rgb( m_context, m_clearColor.r, m_clearColor.g, m_clearColor.b );
-    cairo_rectangle( m_context, 0.0, 0.0, m_bitmapSize.x, m_bitmapSize.y );
-    cairo_fill( m_context );
+    cairo_set_source_rgb( m_currentContext, m_clearColor.r, m_clearColor.g, m_clearColor.b );
+    cairo_rectangle( m_currentContext, 0.0, 0.0, m_screenSize.x, m_screenSize.y );
+    cairo_fill( m_currentContext );
 }
 
 
@@ -1024,15 +1020,15 @@ void CAIRO_GAL_BASE::resetContext()
 
     m_imageSurfaces.clear();
 
+    ClearScreen();
+
     // Compute the world <-> screen transformations
     ComputeWorldScreenMatrix();
 
-    double sf = getScalingFactor();
-
-    cairo_matrix_init( &m_cairoWorldScreenMatrix,
-                       m_worldScreenMatrix.m_data[0][0] * sf, m_worldScreenMatrix.m_data[1][0] * sf,
-                       m_worldScreenMatrix.m_data[0][1] * sf, m_worldScreenMatrix.m_data[1][1] * sf,
-                       m_worldScreenMatrix.m_data[0][2] * sf, m_worldScreenMatrix.m_data[1][2] * sf );
+    cairo_matrix_init( &m_cairoWorldScreenMatrix, m_worldScreenMatrix.m_data[0][0],
+                       m_worldScreenMatrix.m_data[1][0], m_worldScreenMatrix.m_data[0][1],
+                       m_worldScreenMatrix.m_data[1][1], m_worldScreenMatrix.m_data[0][2],
+                       m_worldScreenMatrix.m_data[1][2] );
 
     // we work in screen-space coordinates and do the transforms outside.
     cairo_identity_matrix( m_context );
@@ -1340,10 +1336,8 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     m_currentTarget = TARGET_NONCACHED;
     SetTarget( TARGET_NONCACHED );
 
-    SetBackgroundStyle( wxBG_STYLE_PAINT );
-
     m_bitmapBuffer = nullptr;
-    m_wxBitmap = nullptr;
+    m_wxOutput = nullptr;
 
     m_parentWindow = aParent;
     m_mouseListener = aMouseListener;
@@ -1382,6 +1376,10 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     Bind( wxEVT_GESTURE_PAN, &CAIRO_GAL::skipGestureEvent, this );
 
     SetSize( aParent->GetClientSize() );
+    m_screenSize = ToVECTOR2I( aParent->GetClientSize() );
+
+    // Allocate memory for pixel storage
+    allocateBitmaps();
 
     m_isInitialized = false;
 }
@@ -1417,44 +1415,45 @@ void CAIRO_GAL::EndDrawing()
 
     // Now translate the raw context data from the format stored
     // by cairo into a format understood by wxImage.
-    int height = m_bitmapSize.y;
+    int height = m_screenSize.y;
     int stride = m_stride;
 
     unsigned char* srcRow = m_bitmapBuffer;
-
-    wxNativePixelData           dstData( *m_wxBitmap );
-    wxNativePixelData::Iterator di( dstData );
+    unsigned char* dst = m_wxOutput;
 
     for( int y = 0; y < height; y++ )
     {
-        wxNativePixelData::Iterator rowStart = di;
-
-        for( int x = 0; x < stride; x += 4, ++di )
+        for( int x = 0; x < stride; x += 4 )
         {
             const unsigned char* src = srcRow + x;
 
 #if defined( __BYTE_ORDER__ ) && ( __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__ )
             // XRGB
-            di.Red() = src[1];
-            di.Green() = src[2];
-            di.Blue() = src[3];
+            dst[0] = src[1];
+            dst[1] = src[2];
+            dst[2] = src[3];
 #else
             // BGRX
-            di.Red() = src[2];
-            di.Green() = src[1];
-            di.Blue() = src[0];
+            dst[0] = src[2];
+            dst[1] = src[1];
+            dst[2] = src[0];
 #endif
+            dst += 3;
         }
 
         srcRow += stride;
-
-        di = rowStart;
-        di.OffsetY( dstData, 1 );
     }
 
-    deinitSurface();
+    wxImage    img( m_wxBufferWidth, m_screenSize.y, m_wxOutput, true );
+    wxBitmap   bmp( img );
+    wxMemoryDC mdc( bmp );
+    wxClientDC clientDC( this );
 
-    Refresh(); // Trigger repaint
+    // Now it is the time to blit the mouse cursor
+    blitCursor( mdc );
+    clientDC.Blit( 0, 0, m_screenSize.x, m_screenSize.y, &mdc, 0, 0, wxCOPY );
+
+    deinitSurface();
 }
 
 
@@ -1475,7 +1474,7 @@ void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
     allocateBitmaps();
 
     if( m_validCompositor )
-        m_compositor->Resize( m_bitmapSize.x, m_bitmapSize.y );
+        m_compositor->Resize( aWidth, aHeight );
 
     m_validCompositor = false;
 
@@ -1566,7 +1565,7 @@ void CAIRO_GAL::initSurface()
         return;
 
     m_surface = cairo_image_surface_create_for_data( m_bitmapBuffer, GAL_FORMAT, m_wxBufferWidth,
-                                                     m_bitmapSize.y, m_stride );
+                                                     m_screenSize.y, m_stride );
 
     m_context = cairo_create( m_surface );
 
@@ -1597,18 +1596,17 @@ void CAIRO_GAL::deinitSurface()
 
 void CAIRO_GAL::allocateBitmaps()
 {
-    m_wxBufferWidth = m_bitmapSize.x;
+    m_wxBufferWidth = m_screenSize.x;
 
     // Create buffer, use the system independent Cairo context backend
     m_stride = cairo_format_stride_for_width( GAL_FORMAT, m_wxBufferWidth );
-    m_bufferSize = m_stride * m_bitmapSize.y;
+    m_bufferSize = m_stride * m_screenSize.y;
 
     wxASSERT( m_bitmapBuffer == nullptr );
     m_bitmapBuffer = new unsigned char[m_bufferSize];
 
-    wxASSERT( m_wxBitmap == nullptr );
-    m_wxBitmap = new wxBitmap( m_wxBufferWidth, m_bitmapSize.y, 24 );
-    m_wxBitmap->SetScaleFactor( getScalingFactor() );
+    wxASSERT( m_wxOutput == nullptr );
+    m_wxOutput = new unsigned char[m_wxBufferWidth * 3 * m_screenSize.y];
 }
 
 
@@ -1617,8 +1615,8 @@ void CAIRO_GAL::deleteBitmaps()
     delete[] m_bitmapBuffer;
     m_bitmapBuffer = nullptr;
 
-    delete m_wxBitmap;
-    m_wxBitmap = nullptr;
+    delete[] m_wxOutput;
+    m_wxOutput = nullptr;
 }
 
 
@@ -1626,7 +1624,7 @@ void CAIRO_GAL::setCompositor()
 {
     // Recreate the compositor with the new Cairo context
     m_compositor.reset( new CAIRO_COMPOSITOR( &m_currentContext ) );
-    m_compositor->Resize( m_bitmapSize.x, m_bitmapSize.y );
+    m_compositor->Resize( m_screenSize.x, m_screenSize.y );
     m_compositor->SetAntialiasingMode( m_options.cairo_antialiasing_mode );
 
     // Prepare buffers
@@ -1640,22 +1638,7 @@ void CAIRO_GAL::setCompositor()
 
 void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
 {
-    // We should have the rendered image in m_wxBitmap after EDA_DRAW_PANEL_GAL::onPaint
-
-    if( !m_wxBitmap )
-    {
-        wxLogDebug( "CAIRO_GAL::onPaint null output bitmap buffer" );
-        return;
-    }
-
-    {
-        // Now it is the time to blit the mouse cursor
-        wxMemoryDC mdc( *m_wxBitmap );
-        blitCursor( mdc );
-    }
-
-    wxPaintDC paintDC( this );
-    paintDC.DrawBitmap( *m_wxBitmap, 0, 0 );
+    PostPaint( aEvent );
 }
 
 
@@ -1697,12 +1680,6 @@ bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
     return refresh;
 }
-
-
-double CAIRO_GAL::getScalingFactor()
-{
-    return GetContentScaleFactor();
-};
 
 
 bool CAIRO_GAL::SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI )

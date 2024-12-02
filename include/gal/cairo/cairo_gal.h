@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017-2018 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -252,9 +252,6 @@ protected:
     const VECTOR2D xform( double x, double y ); // rotation, scale and offset
     const VECTOR2D xform( const VECTOR2D& aP ); // rotation, scale and offset
 
-    // Return the scaling factor for current window.
-    virtual double getScalingFactor() { return 1.0; }
-
     /**
      * Transform according to the rotation from m_currentWorld2Screen transform matrix.
      *
@@ -455,8 +452,6 @@ public:
     /// @copydoc GAL::EndDrawing()
     void EndDrawing() override;
 
-protected:
-
     /// Prepare Cairo surfaces for drawing
     void initSurface();
 
@@ -504,9 +499,6 @@ protected:
     ///< Cairo-specific update handlers
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
-    ///< For HiDPI support
-    double getScalingFactor() override;
-
 protected:
     // Compositor related variables
     std::shared_ptr<CAIRO_COMPOSITOR> m_compositor;  ///< Object for layers compositing
@@ -522,7 +514,7 @@ protected:
     wxEvtHandler*       m_mouseListener;       ///< Mouse listener
     wxEvtHandler*       m_paintListener;       ///< Paint listener
     unsigned int        m_bufferSize;          ///< Size of buffers cairoOutput, bitmapBuffers
-    wxBitmap*           m_wxBitmap;            ///< Output buffer bitmap
+    unsigned char*      m_wxOutput;            ///< wxImage compatible buffer
 
     // Variables related to Cairo <-> wxWidgets
     unsigned char*      m_bitmapBuffer;        ///< Storage of the Cairo image
