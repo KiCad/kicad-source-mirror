@@ -61,7 +61,7 @@ public:
     wxString
             m_part_name; ///<! Part identification is a single string of ASCII characters without spaces
 
-    std::vector<std::pair<wxString, wxString>> m_prp; // !< Component Property Record
+    std::map<wxString, wxString> m_prp; // !< Component Property Record
 
     struct TOEPRINT
     {

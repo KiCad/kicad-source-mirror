@@ -61,6 +61,16 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
         comp.m_comp_name = wxString::Format( "UNNAMED%zu", m_compList.size() );
     }
 
+    for( PCB_FIELD* field : aFp->Fields() )
+    {
+        if( field->GetId() == REFERENCE_FIELD )
+            continue;
+
+        wxString key = field->GetName();
+        ODB::RemoveWhitespace( key );
+        comp.m_prp[key] = wxString::Format( "'%s'", field->GetText() );
+    }
+
     return comp;
 }
 
@@ -87,6 +97,11 @@ void ODB_COMPONENT::Write( std::ostream& ost ) const
     WriteAttributes( ost );
 
     ost << std::endl;
+
+    for( const auto& [key, value] : m_prp )
+    {
+        ost << "PRP " << key << " " << value << std::endl;
+    }
 
     for( const auto& toep : m_toeprints )
     {
