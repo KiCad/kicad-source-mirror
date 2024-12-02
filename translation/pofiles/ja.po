@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-21 09:28-0800\n"
-"PO-Revision-Date: 2024-12-01 14:00+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2024-12-02 01:24+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -38444,7 +38444,7 @@ msgstr "CrtYd_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:51
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:639
 msgid "Off-board, testing"
-msgstr "Off-board、テスト用"
+msgstr "Off-board、部品の安全な実装に必要な余白"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:58
 msgid "If you want a fabrication layer for the front side of the board"
