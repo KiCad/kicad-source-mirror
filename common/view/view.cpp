@@ -675,8 +675,18 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 
     for( auto& [_, layer] : m_layers )
     {
-        auto [it,__] = new_map.emplace( aReorderMap[layer.id], layer );
-        it->second.id = aReorderMap[layer.id];
+        auto reorder_it = aReorderMap.find( layer.id );
+
+        // If the layer is not in the reorder map or if it is mapped to itself,
+        // just copy the layer to the new map.
+        if( reorder_it == aReorderMap.end() || reorder_it->second == layer.id )
+        {
+            new_map.emplace( layer.id, layer );
+            continue;
+        }
+
+        auto [new_it,__] = new_map.emplace( reorder_it->second, layer );
+        new_it->second.id = reorder_it->second;
     }
 
     // Transfer reordered data (using the copy assignment operator ):
