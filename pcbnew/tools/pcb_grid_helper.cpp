@@ -1079,7 +1079,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
     auto checkVisibility =
             [&]( BOARD_ITEM* item )
             {
-                if( !view->IsVisible( item ) )
+                // New moved items don't yet have view flags so VIEW will call them invisible
+                if( !view->IsVisible( item ) && !item->IsMoving() )
                     return false;
 
                 bool onActiveLayer = !isHighContrast;

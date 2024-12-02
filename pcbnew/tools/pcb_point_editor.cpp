@@ -2171,7 +2171,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
     bool inDrag = false;
-    bool useAltContraint = true;
 
     BOARD_COMMIT commit( editFrame );
 
