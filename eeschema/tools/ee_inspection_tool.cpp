@@ -112,7 +112,11 @@ void EE_INSPECTION_TOOL::ShowERCDialog()
     // Bring it to the top if already open.  Dual monitor users need this.
     dlg->Raise();
 
-    KIPLATFORM::UI::ForceFocus( dlg->FindWindow( wxID_OK ) );
+    if( wxButton* okButton = dynamic_cast<wxButton*>( dlg->FindWindow( wxID_OK ) ) )
+    {
+        KIPLATFORM::UI::ForceFocus( okButton );
+        okButton->SetDefault();
+    }
 }
 
 
