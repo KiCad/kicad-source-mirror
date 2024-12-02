@@ -44,6 +44,9 @@ public:
     CLIPBOARD_IO();
     ~CLIPBOARD_IO();
 
+    void SetWriter( std::function<void(const wxString&)> aWriter ) { m_writer = aWriter; }
+    void SetReader( std::function<wxString()> aReader ) { m_reader = aReader; }
+
     /*
      * Saves the entire board to the clipboard formatted using the PCB_IO_KICAD_SEXPR formatting
      */
@@ -64,7 +67,12 @@ public:
     void SetBoard( BOARD* aBoard );
 
 private:
+    static void clipboardWriter( const wxString& aData );
+    static wxString clipboardReader();
+
     STRING_FORMATTER m_formatter;
+    std::function<void(const wxString&)> m_writer;
+    std::function<wxString()> m_reader;
 };
 
 

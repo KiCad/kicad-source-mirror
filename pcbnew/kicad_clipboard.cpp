@@ -45,7 +45,9 @@
 
 CLIPBOARD_IO::CLIPBOARD_IO():
         PCB_IO_KICAD_SEXPR(CTL_FOR_CLIPBOARD ),
-        m_formatter()
+        m_formatter(),
+        m_writer( &CLIPBOARD_IO::clipboardWriter ),
+        m_reader( &CLIPBOARD_IO::clipboardReader )
 {
     m_out = &m_formatter;
 }
@@ -59,6 +61,58 @@ CLIPBOARD_IO::~CLIPBOARD_IO()
 void CLIPBOARD_IO::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
+}
+
+
+void CLIPBOARD_IO::clipboardWriter( const wxString& aData )
+{
+    wxLogNull         doNotLog; // disable logging of failed clipboard actions
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
+
+    if( !clipboardLock || !clipboard->IsOpened() )
+        return;
+
+    clipboard->SetData( new wxTextDataObject( aData ) );
+
+    clipboard->Flush();
+
+#ifndef __WXOSX__
+    // This section exists to return the clipboard data, ensuring it has fully
+    // been processed by the system clipboard.  This appears to be needed for
+    // extremely large clipboard copies on asynchronous linux clipboard managers
+    // such as KDE's Klipper. However, a read back of the data on OSX before the
+    // clipboard is closed seems to cause an ASAN error (heap-buffer-overflow)
+    // since it uses the cached version of the clipboard data and not the system
+    // clipboard data.
+    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
+    {
+        wxTextDataObject data;
+        clipboard->GetData( data );
+        ignore_unused( data.GetText() );
+    }
+#endif
+}
+
+
+wxString CLIPBOARD_IO::clipboardReader()
+{
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
+
+    if( !clipboardLock )
+        return wxEmptyString;
+
+    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
+    {
+        wxTextDataObject data;
+        clipboard->GetData( data );
+        return data.GetText();
+    }
+
+    return wxEmptyString;
 }
 
 
@@ -399,54 +453,14 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
     KICAD_FORMAT::Prettify( prettyData, true );
 
     // These are placed at the end to minimize the open time of the clipboard
-    wxLogNull         doNotLog; // disable logging of failed clipboard actions
-    auto clipboard = wxTheClipboard;
-    wxClipboardLocker clipboardLock( clipboard );
-
-    if( !clipboardLock || !clipboard->IsOpened() )
-        return;
-
-    clipboard->SetData( new wxTextDataObject( wxString( prettyData.c_str(), wxConvUTF8 ) ) );
-
-    clipboard->Flush();
-
-#ifndef __WXOSX__
-    // This section exists to return the clipboard data, ensuring it has fully
-    // been processed by the system clipboard.  This appears to be needed for
-    // extremely large clipboard copies on asynchronous linux clipboard managers
-    // such as KDE's Klipper. However, a read back of the data on OSX before the
-    // clipboard is closed seems to cause an ASAN error (heap-buffer-overflow)
-    // since it uses the cached version of the clipboard data and not the system
-    // clipboard data.
-    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
-    {
-        wxTextDataObject data;
-        clipboard->GetData( data );
-        ignore_unused( data.GetText() );
-    }
-#endif
+    m_writer( wxString( prettyData.c_str(), wxConvUTF8 ) );
 }
 
 
 BOARD_ITEM* CLIPBOARD_IO::Parse()
 {
     BOARD_ITEM* item;
-    wxString result;
-
-    wxLogNull doNotLog; // disable logging of failed clipboard actions
-
-    auto clipboard = wxTheClipboard;
-    wxClipboardLocker clipboardLock( clipboard );
-
-    if( !clipboardLock )
-        return nullptr;
-
-    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
-    {
-        wxTextDataObject data;
-        clipboard->GetData( data );
-        result = data.GetText();
-    }
+    wxString result = m_reader();
 
     try
     {
@@ -471,65 +485,25 @@ void CLIPBOARD_IO::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     // Prepare net mapping that assures that net codes saved in a file are consecutive integers
     m_mapping->SetBoard( aBoard );
 
-    STRING_FORMATTER    formatter;
-
-    m_out = &formatter;
-
-    m_out->Print( "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version %s)",
+    m_formatter.Print( "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version %s)",
                   SEXPR_BOARD_FILE_VERSION,
-                  m_out->Quotew( GetMajorMinorVersion() ).c_str() );
+                  m_formatter.Quotew( GetMajorMinorVersion() ).c_str() );
 
     Format( aBoard );
 
-    m_out->Print( ")" );
+    m_formatter.Print( ")" );
 
-    wxLogNull doNotLog; // disable logging of failed clipboard actions
+    std::string prettyData = m_formatter.GetString();
+    KICAD_FORMAT::Prettify( prettyData, true );
 
-    auto clipboard = wxTheClipboard;
-    wxClipboardLocker clipboardLock( clipboard );
-
-    if( !clipboardLock )
-        return;
-
-    clipboard->SetData( new wxTextDataObject(
-                wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
-    clipboard->Flush();
-
-    // This section exists to return the clipboard data, ensuring it has fully
-    // been processed by the system clipboard.  This appears to be needed for
-    // extremely large clipboard copies on asynchronous linux clipboard managers
-    // such as KDE's Klipper
-    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
-    {
-        wxTextDataObject data;
-        clipboard->GetData( data );
-        ignore_unused( data.GetText() );
-    }
+    m_writer( wxString( prettyData.c_str(), wxConvUTF8 ) );
 }
 
 
 BOARD* CLIPBOARD_IO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                                 const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
-    std::string result;
-
-    wxLogNull doNotLog; // disable logging of failed clipboard actions
-
-    fontconfig::FONTCONFIG::SetReporter( nullptr );
-
-    auto clipboard = wxTheClipboard;
-    wxClipboardLocker clipboardLock( clipboard );
-
-    if( !clipboardLock )
-        return nullptr;
-
-    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
-    {
-        wxTextDataObject data;
-        clipboard->GetData( data );
-
-        result = data.GetText().mb_str();
-    }
+    std::string result( m_reader().mb_str() );
 
     std::function<bool( wxString, int, wxString, wxString )> queryUser =
             [&]( wxString aTitle, int aIcon, wxString aMessage, wxString aAction ) -> bool

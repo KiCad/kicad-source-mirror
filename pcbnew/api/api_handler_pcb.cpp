@@ -27,6 +27,7 @@
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <kicad_clipboard.h>
 #include <netinfo.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>
@@ -45,9 +46,9 @@
 #include <api/common/types/base_types.pb.h>
 
 using namespace kiapi::common::commands;
-using kiapi::common::types::CommandStatus;
-using kiapi::common::types::DocumentType;
-using kiapi::common::types::ItemRequestStatus;
+using types::CommandStatus;
+using types::DocumentType;
+using types::ItemRequestStatus;
 
 
 API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
@@ -75,6 +76,13 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
     registerHandler<InteractiveMoveItems, Empty>( &API_HANDLER_PCB::handleInteractiveMoveItems );
     registerHandler<GetNets, NetsResponse>( &API_HANDLER_PCB::handleGetNets );
     registerHandler<RefillZones, Empty>( &API_HANDLER_PCB::handleRefillZones );
+
+    registerHandler<SaveDocumentToString, SavedDocumentResponse>(
+            &API_HANDLER_PCB::handleSaveDocumentToString );
+    registerHandler<SaveSelectionToString, SavedSelectionResponse>(
+            &API_HANDLER_PCB::handleSaveSelectionToString );
+    registerHandler<ParseAndCreateItemsFromString, CreateItemsResponse>(
+            &API_HANDLER_PCB::handleParseAndCreateItemsFromString );
 }
 
 
@@ -845,4 +853,67 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( RefillZones& aMsg,
     }
 
     return Empty();
+}
+
+
+HANDLER_RESULT<SavedDocumentResponse> API_HANDLER_PCB::handleSaveDocumentToString(
+        SaveDocumentToString& aMsg, const HANDLER_CONTEXT& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    SavedDocumentResponse response;
+    response.mutable_document()->CopyFrom( aMsg.document() );
+
+    CLIPBOARD_IO io;
+    io.SetWriter(
+        [&]( const wxString& aData )
+        {
+            response.set_contents( aData.ToUTF8() );
+        } );
+
+    io.SaveBoard( wxEmptyString, frame()->GetBoard(), nullptr );
+
+    return response;
+}
+
+
+HANDLER_RESULT<SavedSelectionResponse> API_HANDLER_PCB::handleSaveSelectionToString(
+        SaveSelectionToString& aMsg, const HANDLER_CONTEXT& aCtx )
+{
+    SavedSelectionResponse response;
+
+    TOOL_MANAGER* mgr = frame()->GetToolManager();
+    PCB_SELECTION_TOOL* selectionTool = mgr->GetTool<PCB_SELECTION_TOOL>();
+    PCB_SELECTION& selection = selectionTool->GetSelection();
+
+    CLIPBOARD_IO io;
+    io.SetWriter(
+        [&]( const wxString& aData )
+        {
+            response.set_contents( aData.ToUTF8() );
+        } );
+
+    io.SetBoard( frame()->GetBoard() );
+    io.SaveSelection( selection, false );
+
+    return response;
+}
+
+
+HANDLER_RESULT<CreateItemsResponse> API_HANDLER_PCB::handleParseAndCreateItemsFromString(
+        ParseAndCreateItemsFromString& aMsg, const HANDLER_CONTEXT& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    CreateItemsResponse response;
+    return response;
 }

@@ -93,6 +93,15 @@ private:
 
     HANDLER_RESULT<Empty> handleRefillZones( RefillZones& aMsg, const HANDLER_CONTEXT& aCtx );
 
+    HANDLER_RESULT<commands::SavedDocumentResponse> handleSaveDocumentToString(
+                commands::SaveDocumentToString& aMsg, const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<commands::SavedSelectionResponse> handleSaveSelectionToString(
+                commands::SaveSelectionToString& aMsg, const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<commands::CreateItemsResponse> handleParseAndCreateItemsFromString(
+                commands::ParseAndCreateItemsFromString& aMsg, const HANDLER_CONTEXT& aCtx );
+
 protected:
     std::unique_ptr<COMMIT> createCommit() override;
 
