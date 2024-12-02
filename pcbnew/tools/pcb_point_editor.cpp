@@ -2977,8 +2977,8 @@ int PCB_POINT_EDITOR::chamferCorner( const TOOL_EVENT& aEvent )
 
         // A plausible setback that won't consume a whole edge
         int setback = pcbIUScale.mmToIU( 5 );
-        setback = std::min( setback, (int) ( segA.Length() * 0.8 ) );
-        setback = std::min( setback, (int) ( segB.Length() * 0.8 ) );
+        setback = std::min( setback, (int) ( segA.Length() * 0.25 ) );
+        setback = std::min( setback, (int) ( segB.Length() * 0.25 ) );
 
         CHAMFER_PARAMS chamferParams{ setback, setback };
 
