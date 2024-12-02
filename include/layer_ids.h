@@ -530,7 +530,7 @@ inline bool IsPcbLayer( int aLayer )
  */
 inline bool IsCopperLayer( int aLayerId )
 {
-    return !( aLayerId & 1 ) && aLayerId <= PCB_LAYER_ID_COUNT && aLayerId >= 0;
+    return !( aLayerId & 1 ) && aLayerId < PCB_LAYER_ID_COUNT && aLayerId >= 0;
 }
 
 /**
