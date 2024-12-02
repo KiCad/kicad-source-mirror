@@ -2070,22 +2070,16 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 
     if( selection.Size() == 1 )
     {
-        const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
-
-        // Note: EDIT_TOOL::Drag temporarily handles items of type PCB_ARC_T on its own using
-        // DragArcTrack(), so PCB_ARC_T should never occur here.
-        if( item->IsType( GENERAL_COLLECTOR::DraggableItems ) )
-        {
-            // Footprints cannot be dragged freely.
-            if( item->IsType( { PCB_FOOTPRINT_T } ) )
-                return !( aDragMode & PNS::DM_FREE_ANGLE );
-            else
-                return true;
-        }
+        return selection.Front()->IsType( GENERAL_COLLECTOR::DraggableItems );
     }
-    else // more than 1 item - let's check if these are all track segments
+    else if( selection.CountType( PCB_FOOTPRINT_T ) == selection.Size() )
     {
-        return selection.CountType( PCB_TRACE_T ) == selection.Size();
+        // Footprints cannot be dragged freely.
+        return !( aDragMode & PNS::DM_FREE_ANGLE );
+    }
+    else if( selection.CountType( PCB_TRACE_T ) == selection.Size() )
+    {
+        return true;
     }
 
     return false;

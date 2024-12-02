@@ -562,9 +562,16 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                     }
                 }
 
-                if( footprints.size() == (unsigned) aCollector.GetCount() )
+                if( footprints.size() )
                 {
-                    // We can drag multiple footprints; no need to whittle down selection.
+                    /*
+                     * Remove non-footprints
+                     */
+                    for( int ii = aCollector.GetCount() - 1; ii >= 0; --ii )
+                    {
+                        if( aCollector[ii]->Type() != PCB_FOOTPRINT_T )
+                            aCollector.Remove( ii );
+                    }
                 }
                 else if( tracks.size() || vias.size() )
                 {
