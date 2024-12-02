@@ -400,7 +400,7 @@ private:
 class DS_DRAW_ITEM_LIST
 {
 public:
-    DS_DRAW_ITEM_LIST( const EDA_IU_SCALE& aIuScale ) :
+    DS_DRAW_ITEM_LIST( const EDA_IU_SCALE& aIuScale, int aFlags = 0 ) :
         m_iuScale( aIuScale )
     {
         m_idx = 0;
@@ -411,6 +411,7 @@ public:
         m_titleBlock = nullptr;
         m_project = nullptr;
         m_isFirstPage = true;
+        m_flags = aFlags;
         m_properties = nullptr;
     }
 
@@ -578,6 +579,7 @@ protected:
     wxString           m_pageNumber;      ///< The actual page number displayed in the title block.
     wxString           m_sheetLayer;      // for text variable references
     const PROJECT*     m_project;         // for project-based text variable references
+    int                m_flags;
 
     const std::map<wxString, wxString>* m_properties;    // for text variable references
 };

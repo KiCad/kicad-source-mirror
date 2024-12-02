@@ -88,10 +88,14 @@ KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString,
 /**
  * Expand '${var-name}' templates in text.
  */
-KICOMMON_API wxString ExpandTextVars( const wxString&                         aSource,
-                                      const std::function<bool( wxString* )>* aResolver );
+#define FOR_ERC_DRC 1
 
-KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
+KICOMMON_API wxString ExpandTextVars( const wxString& aSource,
+                                      const std::function<bool( wxString* )>* aResolver,
+                                      int aFlags = 0 );
+
+KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject,
+                                      int aFlags = 0 );
 
 /**
  * Returns any variables unexpanded, e.g. ${VAR} -> VAR

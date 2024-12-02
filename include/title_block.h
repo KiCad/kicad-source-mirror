@@ -116,7 +116,7 @@ public:
     }
 
     static void GetContextualTextVars( wxArrayString* aVars );
-    bool TextVarResolver( wxString* aToken, const PROJECT* aProject ) const;
+    bool TextVarResolver( wxString* aToken, const PROJECT* aProject, int aFlags = 0 ) const;
 
     /**
      * Output the object to \a aFormatter in s-expression form.

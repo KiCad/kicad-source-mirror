@@ -280,44 +280,6 @@ void DRC_TEST_PROVIDER_MISC::testAssertions()
                             } );
                 }
 
-                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_WARNING ) )
-                {
-                    if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item ) )
-                    {
-                        static wxRegEx warningExpr( wxS( "^\\$\\{DRC_WARNING\\s*([^}]*)\\}(.*)$" ) );
-
-                        wxString text = textItem->GetText();
-
-                        if( warningExpr.Matches( text ) )
-                        {
-                            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_WARNING );
-                            drcItem->SetItems( item );
-                            drcItem->SetErrorMessage( warningExpr.GetMatch( text, 1 ) );
-
-                            reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
-                        }
-                    }
-                }
-
-                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_ERROR ) )
-                {
-                    if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item ) )
-                    {
-                        static wxRegEx errorExpr( wxS( "^\\$\\{DRC_ERROR\\s*([^}]*)\\}(.*)$" ) );
-
-                        wxString text = textItem->GetText();
-
-                        if( errorExpr.Matches( text ) )
-                        {
-                            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_ERROR );
-                            drcItem->SetItems( item );
-                            drcItem->SetErrorMessage( errorExpr.GetMatch( text, 1 ) );
-
-                            reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
-                        }
-                    }
-                }
-
                 return true;
             };
 
@@ -338,6 +300,55 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         PCB_TEXTBOX_T,
         PCB_DIMENSION_T
     };
+
+    auto testAssertion =
+            [&]( BOARD_ITEM* item, const wxString& text, const VECTOR2I& pos, int layer )
+            {
+                static wxRegEx warningExpr( wxS( "^\\$\\{DRC_WARNING\\s*([^}]*)\\}(.*)$" ) );
+                static wxRegEx errorExpr( wxS( "^\\$\\{DRC_ERROR\\s*([^}]*)\\}(.*)$" ) );
+
+                if( warningExpr.Matches( text ) )
+                {
+                    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_WARNING ) )
+                    {
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_WARNING );
+                        wxString                  drcText = warningExpr.GetMatch( text, 1 );
+
+                        if( item )
+                            drcItem->SetItems( item );
+                        else
+                            drcText += _( " (in drawing sheet)" );
+
+                        drcItem->SetErrorMessage( drcText );
+
+                        reportViolation( drcItem, pos, layer );
+                    }
+
+                    return true;
+                }
+
+                if( errorExpr.Matches( text ) )
+                {
+                    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_ERROR ) )
+                    {
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_ERROR );
+                        wxString                  drcText = errorExpr.GetMatch( text, 1 );
+
+                        if( item )
+                            drcItem->SetItems( item );
+                        else
+                            drcText += _( " (in drawing sheet)" );
+
+                        drcItem->SetErrorMessage( drcText );
+
+                        reportViolation( drcItem, pos, layer );
+                    }
+
+                    return true;
+                }
+
+                return false;
+            };
 
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
@@ -367,13 +378,15 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
 
                         reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                     }
+
+                    testAssertion( item, textItem->GetText(), item->GetPosition(), item->GetLayer() );
                 }
 
                 return true;
             } );
 
     DS_PROXY_VIEW_ITEM* drawingSheet = m_drcEngine->GetDrawingSheet();
-    DS_DRAW_ITEM_LIST   drawItems( pcbIUScale );
+    DS_DRAW_ITEM_LIST   drawItems( pcbIUScale, FOR_ERC_DRC );
 
     if( !drawingSheet || m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
         return;
@@ -394,14 +407,19 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         if( m_drcEngine->IsCancelled() )
             return;
 
-        DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item );
-
-        if( text && text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
+        if( DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item ) )
         {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
-            drcItem->SetItems( drawingSheet );
+            if( testAssertion( nullptr, text->GetText(), text->GetPosition(), LAYER_DRAWINGSHEET ) )
+            {
+                // Don't run unresolved test
+            }
+            else if( text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
+                drcItem->SetItems( drawingSheet );
 
-            reportViolation( drcItem, text->GetPosition(), LAYER_DRAWINGSHEET );
+                reportViolation( drcItem, text->GetPosition(), LAYER_DRAWINGSHEET );
+            }
         }
     }
 }

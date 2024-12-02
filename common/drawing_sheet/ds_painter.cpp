@@ -173,7 +173,7 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 }
                 else if( m_titleBlock )
                 {
-                    if( m_titleBlock->TextVarResolver( token, m_project ) )
+                    if( m_titleBlock->TextVarResolver( token, m_project, m_flags ) )
                     {
                         // No need for tokenUpdated; TITLE_BLOCK::TextVarResolver() already goes
                         // up to the project.
@@ -185,7 +185,7 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
                         m_titleBlock = nullptr;
                         {
-                            *token = ExpandTextVars( *token, &wsResolver );
+                            *token = ExpandTextVars( *token, &wsResolver, m_flags );
                         }
                         m_titleBlock = savedTitleBlock;
 
@@ -200,7 +200,7 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
                 if( tokenUpdated )
                 {
-                   *token = ExpandTextVars( *token, m_project );
+                   *token = ExpandTextVars( *token, m_project, m_flags );
                    return true;
                 }
 
@@ -210,7 +210,7 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 return false;
             };
 
-    return ExpandTextVars( aTextbase, &wsResolver );
+    return ExpandTextVars( aTextbase, &wsResolver, m_flags );
 }
 
 

@@ -56,7 +56,7 @@ enum Bracket
 };
 
 
-wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject )
+wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int aFlags )
 {
     std::function<bool( wxString* )> projectResolver =
             [&]( wxString* token ) -> bool
@@ -64,12 +64,12 @@ wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject )
                 return aProject->TextVarResolver( token );
             };
 
-    return ExpandTextVars( aSource, &projectResolver );
+    return ExpandTextVars( aSource, &projectResolver, aFlags );
 }
 
 
 wxString ExpandTextVars( const wxString& aSource,
-                         const std::function<bool( wxString* )>* aResolver )
+                         const std::function<bool( wxString* )>* aResolver, int aFlags )
 {
     static wxRegEx userDefinedWarningError( wxS( "^(ERC|DRC)_(WARNING|ERROR).*$" ) );
     wxString       newbuf;
@@ -94,7 +94,7 @@ wxString ExpandTextVars( const wxString& aSource,
             if( token.IsEmpty() )
                 continue;
 
-            if( userDefinedWarningError.Matches( token ) )
+            if( ( aFlags & FOR_ERC_DRC ) == 0 && userDefinedWarningError.Matches( token ) )
             {
                 // Only show user-defined warnings/errors during ERC/DRC
             }
