@@ -2127,6 +2127,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
                 items.emplace_back( sheet );
                 m_frame->Schematic().OnItemsRemoved( items );
                 m_frame->Schematic().OnItemsAdded( items );
+                m_frame->OnModify();
                 m_frame->Schematic().RefreshHierarchy();
                 m_frame->UpdateHierarchyNavigator();
             }
