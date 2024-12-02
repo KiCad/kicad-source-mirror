@@ -93,7 +93,7 @@
 
     # Disallow solder mask margin overrides
     (rule "disallow solder mask margin overrides"
-        (constraint assertion "A.Soldermask_Margin_Override == 0mm")
+        (constraint assertion "A.Soldermask_Margin_Override == null")
         (condition "A.Type == 'Pad'"))
 
 

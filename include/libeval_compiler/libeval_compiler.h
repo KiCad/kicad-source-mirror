@@ -85,7 +85,8 @@ enum VAR_TYPE_T
     VT_STRING = 1,
     VT_NUMERIC,
     VT_UNDEFINED,
-    VT_PARSE_ERROR
+    VT_PARSE_ERROR,
+    VT_NULL
 };
 
 enum TOKEN_TYPE_T
@@ -209,6 +210,13 @@ public:
         m_isDeferredDbl( false ),
         m_isDeferredStr( false )
     {};
+
+    static VALUE* MakeNullValue()
+    {
+        VALUE* v = new VALUE();
+        v->m_type = VT_NULL;
+        return v;
+    }
 
     virtual ~VALUE()
     {};

@@ -115,6 +115,9 @@ bool VALUE::EqualTo( CONTEXT* aCtx, const VALUE* b ) const
     if( m_type == VT_UNDEFINED || b->m_type == VT_UNDEFINED )
         return false;
 
+    if( m_type == VT_NULL && b->m_type == VT_NULL )
+        return true;
+
     if( m_type == VT_NUMERIC && b->m_type == VT_NUMERIC )
     {
         return AsDouble() == b->AsDouble();

@@ -85,13 +85,17 @@ public:
     PCBEXPR_VAR_REF( int aItemIndex ) :
             m_itemIndex( aItemIndex ),
             m_type( LIBEVAL::VT_UNDEFINED ),
-            m_isEnum( false )
+            m_isEnum( false ),
+            m_isOptional( false )
     {}
 
     ~PCBEXPR_VAR_REF() {};
 
     void SetIsEnum( bool s ) { m_isEnum = s; }
     bool IsEnum() const { return m_isEnum; }
+
+    void SetIsOptional( bool s = true ) { m_isOptional = s; }
+    bool IsOptional() const { return m_isOptional; }
 
     void SetType( LIBEVAL::VAR_TYPE_T type ) { m_type = type; }
     LIBEVAL::VAR_TYPE_T GetType() const override { return m_type; }
@@ -110,6 +114,7 @@ private:
     int                                         m_itemIndex;
     LIBEVAL::VAR_TYPE_T                         m_type;
     bool                                        m_isEnum;
+    bool                                        m_isOptional;
 };
 
 

@@ -272,6 +272,9 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
     PCBEXPR_CONTEXT* context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
 
+    if( m_type == LIBEVAL::VT_NULL )
+        return LIBEVAL::VALUE::MakeNullValue();
+
     if( m_itemIndex == 2 )
         return new PCBEXPR_LAYER_VALUE( context->GetLayer() );
 
@@ -294,7 +297,17 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
     {
         if( m_type == LIBEVAL::VT_NUMERIC )
         {
-            return new LIBEVAL::VALUE( (double) item->Get<int>( it->second ) );
+            if( m_isOptional )
+            {
+                auto val = item->Get<std::optional<int>>( it->second );
+
+                if( val.has_value() )
+                    return new LIBEVAL::VALUE( static_cast<double>( val.value() ) );
+
+                return LIBEVAL::VALUE::MakeNullValue();
+            }
+
+            return new LIBEVAL::VALUE( static_cast<double>( item->Get<int>( it->second ) ) );
         }
         else
         {
@@ -394,6 +407,13 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     std::unique_ptr<PCBEXPR_VAR_REF> vref;
 
+    if( aVar.IsSameAs( wxT( "null" ), false ) )
+    {
+        vref = std::make_unique<PCBEXPR_VAR_REF>( 0 );
+        vref->SetType( LIBEVAL::VT_NULL );
+        return vref;
+    }
+
     // Check for a couple of very common cases and compile them straight to "object code".
 
     if( aField.CmpNoCase( wxT( "NetClass" ) ) == 0 )
@@ -464,6 +484,11 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                 {
                     vref->SetType( LIBEVAL::VT_NUMERIC );
                 }
+                if( prop->TypeHash() == TYPE_HASH( std::optional<int> ) )
+                {
+                    vref->SetType( LIBEVAL::VT_NUMERIC );
+                    vref->SetIsOptional();
+                }
                 else if( prop->TypeHash() == TYPE_HASH( bool ) )
                 {
                     vref->SetType( LIBEVAL::VT_NUMERIC );
@@ -475,7 +500,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                 else if ( prop->HasChoices() )
                 {   // it's an enum, we treat it as string
                     vref->SetType( LIBEVAL::VT_STRING );
-                    vref->SetIsEnum ( true );
+                    vref->SetIsEnum( true );
                 }
                 else
                 {
