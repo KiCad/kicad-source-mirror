@@ -64,6 +64,7 @@
 #include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_map_layers.h>
 #include <dialogs/dialog_export_odbpp.h>
+#include <jobs/job_export_pcb_odb.h>
 #include <dialogs/dialog_import_choose_project.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
@@ -1415,198 +1416,21 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    wxFileName pcbFileName = dlg.GetOutputPath();
+    JOB_EXPORT_PCB_ODB job;
 
-    // Write through symlinks, don't replace them
-    WX_FILENAME::ResolvePossibleSymlinks( pcbFileName );
+    job.SetOutputPath( dlg.GetOutputPath() );
+    job.m_filename = GetBoard()->GetFileName();
+    job.m_compressionMode = dlg.GetCompress() ? JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP
+                                              : JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
+    job.m_precision = dlg.GetPrecision();
+    job.m_units = dlg.GetUnitsString() == "mm" ? JOB_EXPORT_PCB_ODB::ODB_UNITS::MILLIMETERS
+                                               : JOB_EXPORT_PCB_ODB::ODB_UNITS::INCHES;
 
-    if( !IsWritable( pcbFileName ) )
-    {
-        wxString msg = wxString::Format( _( "Insufficient permissions to write file '%s'." ),
-                                         pcbFileName.GetFullPath() );
+    WX_PROGRESS_REPORTER progressReporter( this, _( "Generating ODB++ output files" ), 3, false );
+    WX_STRING_REPORTER reporter;
 
-        DisplayErrorMessage( this, msg );
-        return;
-    }
+    DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( job, GetBoard(), this, &progressReporter, &reporter );
 
-    if( !wxFileName::DirExists( pcbFileName.GetFullPath() ) )
-    {
-        // Make every directory provided when the provided path doesn't exist
-        if( !wxFileName::Mkdir( pcbFileName.GetFullPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        {
-            wxString msg;
-
-            msg.Printf( _( "Cannot create output directory '%s'." ), pcbFileName.GetFullPath() );
-
-            DisplayErrorMessage( this, msg );
-            return;
-        }
-    }
-
-    wxFileName zipFileName( pcbFileName.GetFullPath(),
-                            wxString::Format( wxS( "%s-odb.zip" ), Prj().GetProjectName() ) );
-
-    wxFileName tempFile( pcbFileName.GetFullPath(), "" );
-    tempFile.AppendDir( "odb" );
-
-    if( dlg.GetCompress() )
-    {
-        if( zipFileName.Exists() )
-        {
-            wxString msg = wxString::Format( _( "Output files '%s' already exists. "
-                                                "Do you want to overwrite it?" ),
-                                             zipFileName.GetFullPath() );
-
-            KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-            errorDlg.SetOKLabel( _( "Overwrite" ) );
-
-            if( errorDlg.ShowModal() != wxID_OK )
-                return;
-
-            if( !wxRemoveFile( zipFileName.GetFullPath() ) )
-            {
-                msg.Printf( _( "Cannot remove existing output file '%s'." ),
-                            zipFileName.GetFullPath() );
-                DisplayErrorMessage( this, msg );
-                return;
-            }
-        }
-
-        tempFile.AssignDir( wxFileName::GetTempDir() );
-        tempFile.AppendDir( "kicad" );
-        tempFile.AppendDir( "odb" );
-
-        if( !wxFileName::Mkdir( tempFile.GetFullPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        {
-            wxString msg;
-            msg.Printf( _( "Cannot create temporary output directory." ) );
-            DisplayErrorMessage( this, msg );
-            return;
-        }
-    }
-    else
-    {
-        wxDir testDir( tempFile.GetFullPath() );
-
-        if( testDir.IsOpened() && ( testDir.HasFiles() || testDir.HasSubDirs() ) )
-        {
-            wxString msg = wxString::Format( _( "Output directory '%s' already exists and is not empty. "
-                                                "Do you want to overwrite it?" ),
-                                             tempFile.GetFullPath() );
-
-            KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-            errorDlg.SetOKLabel( _( "Overwrite" ) );
-
-            if( errorDlg.ShowModal() != wxID_OK )
-                return;
-
-            if( !tempFile.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
-            {
-                msg.Printf( _( "Cannot remove existing output directory '%s'." ),
-                            pcbFileName.GetFullPath() );
-                DisplayErrorMessage( this, msg );
-                return;
-            }
-        }
-    }
-
-    wxString                    upperTxt;
-    wxString                    lowerTxt;
-    std::map<std::string, UTF8> props;
-
-    props["units"] = dlg.GetUnitsString();
-    props["sigfig"] = dlg.GetPrecision();
-    WX_PROGRESS_REPORTER reporter( this, _( "Generating ODB++ output files" ), 5 );
-
-    auto saveFile = [&]() -> bool
-    {
-        try
-        {
-            IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::ODBPP ) );
-            pi->SetProgressReporter( &reporter );
-            pi->SaveBoard( tempFile.GetFullPath(), GetBoard(), &props );
-            return true;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayError( this, wxString::Format( _( "Error generating ODBPP files '%s'.\n%s" ),
-                                                  tempFile.GetFullPath(), ioe.What() ) );
-
-            lowerTxt.Printf( _( "Failed to create directory '%s'." ), tempFile.GetFullPath() );
-
-            SetMsgPanel( upperTxt, lowerTxt );
-
-            // In case we started a file but didn't fully write it, clean up
-            wxFileName::Rmdir( tempFile.GetFullPath() );
-            return false;
-        }
-    };
-
-    thread_pool& tp = GetKiCadThreadPool();
-    auto         ret = tp.submit( saveFile );
-
-    std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
-
-    while( status != std::future_status::ready )
-    {
-        reporter.KeepRefreshing();
-        status = ret.wait_for( std::chrono::milliseconds( 250 ) );
-    }
-
-    try
-    {
-        if( !ret.get() )
-            return;
-    }
-    catch( const std::exception& e )
-    {
-        wxLogError( "Exception in ODB++ generation: %s", e.what() );
-        return;
-    }
-
-    if( dlg.GetCompress() )
-    {
-        reporter.AdvancePhase( _( "Compressing output" ) );
-        wxFFileOutputStream fnout( zipFileName.GetFullPath() );
-        wxZipOutputStream   zipStream( fnout );
-
-        std::function<void( const wxString&, const wxString& )> addDirToZip =
-                [&]( const wxString& dirPath, const wxString& parentPath )
-        {
-            wxDir    dir( dirPath );
-            wxString fileName;
-
-            bool cont = dir.GetFirst( &fileName, wxEmptyString, wxDIR_DEFAULT );
-
-            while( cont )
-            {
-                wxFileName fileInZip( dirPath, fileName );
-                wxString   relativePath =
-                        parentPath.IsEmpty()
-                                  ? fileName
-                                  : parentPath + wxString( wxFileName::GetPathSeparator() )
-                                          + fileName;
-
-                if( wxFileName::DirExists( fileInZip.GetFullPath() ) )
-                {
-                    zipStream.PutNextDirEntry( relativePath );
-                    addDirToZip( fileInZip.GetFullPath(), relativePath );
-                }
-                else
-                {
-                    wxFFileInputStream fileStream( fileInZip.GetFullPath() );
-                    zipStream.PutNextEntry( relativePath );
-                    fileStream.Read( zipStream );
-                }
-                cont = dir.GetNext( &fileName );
-            }
-        };
-
-        addDirToZip( tempFile.GetFullPath(), wxEmptyString );
-
-        zipStream.Close();
-        fnout.Close();
-
-        tempFile.Rmdir( wxPATH_RMDIR_RECURSIVE );
-    }
+    if( reporter.HasMessage() )
+        DisplayError( this, reporter.GetMessages() );
 }

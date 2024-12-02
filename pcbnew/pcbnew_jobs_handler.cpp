@@ -29,6 +29,7 @@
 #include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
 #include <jobs/job_export_pcb_ipc2581.h>
+#include <jobs/job_export_pcb_odb.h>
 #include <jobs/job_export_pcb_gerber.h>
 #include <jobs/job_export_pcb_gerbers.h>
 #include <jobs/job_export_pcb_drill.h>
@@ -81,6 +82,7 @@
 #include <dialogs/dialog_gendrill.h>
 #include <dialogs/dialog_gen_footprint_position.h>
 #include <dialogs/dialog_export_2581.h>
+#include <dialogs/dialog_export_odbpp.h>
 #include <dialogs/dialog_export_step.h>
 #include <dialogs/dialog_plot.h>
 
@@ -235,6 +237,19 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   DIALOG_EXPORT_2581 dlg( ipcJob, editFrame, aParent );
+                  dlg.ShowModal();
+
+                  return dlg.GetReturnCode() == wxID_OK;
+              } );
+    Register( "odb",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportOdb, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_PCB_ODB* odbJob = dynamic_cast<JOB_EXPORT_PCB_ODB*>( job );
+
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  DIALOG_EXPORT_ODBPP dlg( odbJob, editFrame, aParent );
                   dlg.ShowModal();
 
                   return dlg.GetReturnCode() == wxID_OK;
@@ -1759,6 +1774,33 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
                                               job->GetFullOutputPath(), tempFile ),
                             RPT_SEVERITY_ERROR );
     }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
+{
+    JOB_EXPORT_PCB_ODB* job = dynamic_cast<JOB_EXPORT_PCB_ODB*>( aJob );
+
+    if( job == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* brd = getBoard( job->m_filename );
+
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( job->OutputPathFullSpecified() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( "zip" );
+
+        job->SetOutputPath( fn.GetName() );
+    }
+
+    DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( *job, brd, nullptr, m_progressReporter, m_reporter );
 
     return CLI::EXIT_CODES::SUCCESS;
 }

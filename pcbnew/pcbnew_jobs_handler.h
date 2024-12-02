@@ -49,6 +49,7 @@ public:
     int JobExportFpSvg( JOB* aJob );
     int JobExportDrc( JOB* aJob );
     int JobExportIpc2581( JOB* aJob );
+    int JobExportOdb( JOB* aJob );
 
 private:
     BOARD* getBoard( const wxString& aPath = wxEmptyString );

@@ -22,11 +22,16 @@
 #include "dialog_export_odbpp_base.h"
 
 class PCB_EDIT_FRAME;
+class JOB_EXPORT_PCB_ODB;
+class REPORTER;
+class PROGRESS_REPORTER;
+class BOARD;
 
 class DIALOG_EXPORT_ODBPP : public DIALOG_EXPORT_ODBPP_BASE
 {
 public:
     DIALOG_EXPORT_ODBPP( PCB_EDIT_FRAME* aParent );
+    DIALOG_EXPORT_ODBPP( JOB_EXPORT_PCB_ODB* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent );
 
     wxString GetOutputPath() const { return m_outputFileName->GetValue(); }
 
@@ -38,10 +43,16 @@ public:
             return wxT( "inch" );
     }
 
-    wxString GetPrecision() const { return wxString::Format( "%d", m_precision->GetValue() ); }
+    int GetPrecision() const { return m_precision->GetValue(); }
 
 
     bool GetCompress() const { return m_cbCompress->GetValue(); }
+
+    // Runs the actual generation process; shared between GUI and CLI system
+    static void GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard,
+                                    PCB_EDIT_FRAME* aParentFrame = nullptr,
+                                    PROGRESS_REPORTER* aProgressReporter = nullptr,
+                                    REPORTER* aErrorReporter = nullptr );
 
 private:
     void onBrowseClicked( wxCommandEvent& event ) override;
@@ -51,6 +62,7 @@ private:
     bool TransferDataFromWindow() override;
 
     PCB_EDIT_FRAME* m_parent;
+    JOB_EXPORT_PCB_ODB* m_job;
 };
 
 #endif // ODBPP_EXPORT_DIALOG_H
