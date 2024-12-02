@@ -258,6 +258,12 @@ public:
                 }
                 else if ( item->OfKind( ITEM::SOLID_T | ITEM::VIA_T ) )
                 {
+                    if( item->Kind() == ITEM::VIA_T && item->IsVirtual() && aAllowLockedSegs )
+                    {
+                        // Virtual via will be added at the joint between an unlocked and locked seg
+                        continue;
+                    }
+
                     return nullptr;
                 }
             }
