@@ -1410,6 +1410,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        bool is45Limited = Is45Limited() && !evt->Modifier( MD_CTRL );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( step == SET_HEIGHT && t != PCB_DIM_ORTHOGONAL_T )
@@ -1621,7 +1622,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             case SET_END:
                 dimension->SetEnd( cursorPos );
 
-                if( Is45Limited() || t == PCB_DIM_CENTER_T )
+                if( is45Limited || t == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
 
                 if( t == PCB_DIM_ORTHOGONAL_T )
@@ -2227,6 +2228,12 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             m_frame->SetMsgPanel( graphic );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        bool is45Limited = Is45Limited() && !evt->Modifier( MD_CTRL );
+
+        // Rectangular shapes never get 45-degree snapping
+        if( shape == SHAPE_T::RECTANGLE )
+            is45Limited = false;
+
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         cursorPos = GetClampedCoords(
                 grid.BestSnapAnchor( m_controls->GetMousePosition(), { m_layer }, GRID_GRAPHICS ),
@@ -2405,7 +2412,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 clampedCursorPos = getClampedDifferenceEnd( twoPointMgr.GetOrigin(), cursorPos );
 
             // 45 degree lines
-            if( started && Is45Limited() )
+            if( started && is45Limited )
             {
                 const VECTOR2I lineVector( clampedCursorPos - VECTOR2I( twoPointMgr.GetOrigin() ) );
 
@@ -2617,6 +2624,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         graphic->SetLayer( m_layer );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        bool is45Limited = Is45Limited() && !evt->Modifier( MD_CTRL );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = GetClampedCoords(
                 grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic, GRID_GRAPHICS ),
@@ -2692,7 +2700,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         else if( evt->IsMotion() )
         {
             // set angle snap
-            arcManager.SetAngleSnap( Is45Limited() );
+            arcManager.SetAngleSnap( is45Limited );
 
             // update, but don't step the manager state
             arcManager.AddPoint( cursorPos, false );
@@ -3293,6 +3301,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
         LSET layers( { m_frame->GetActiveLayer() } );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        bool is45Limited = Is45Limited() && !evt->Modifier( MD_CTRL );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
@@ -3301,8 +3310,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        polyGeomMgr.SetLeaderMode( Is45Limited() ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
-                                                 : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
+        polyGeomMgr.SetLeaderMode( is45Limited ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
+                                               : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
 
         if( evt->IsCancelInteractive() )
         {
