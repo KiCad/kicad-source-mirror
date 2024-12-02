@@ -2171,7 +2171,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
     bool inDrag = false;
-    bool useAltContraint = false;
+    bool useAltContraint = true;
 
     BOARD_COMMIT commit( editFrame );
 
@@ -2179,16 +2179,15 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_CTRL ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( editFrame->IsType( FRAME_PCB_EDITOR ) )
         {
-            useAltContraint = editFrame->GetPcbNewSettings()->m_Use45DegreeLimit;
             m_arcEditMode = editFrame->GetPcbNewSettings()->m_ArcEditMode;
         }
         else
         {
-            useAltContraint = editFrame->GetFootprintEditorSettings()->m_Use45Limit;
             m_arcEditMode = editFrame->GetFootprintEditorSettings()->m_ArcEditMode;
         }
 
@@ -2284,8 +2283,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             m_editedPoint->SetPosition( pos );
 
-            // The alternative constraint limits to 45 degrees
-            if( useAltContraint )
+            // Constrain edited line midpoints to move normal to themselves
+            if( dynamic_cast<EDIT_LINE*>( m_editedPoint ) )
             {
                 m_altConstraint->Apply( grid );
             }
