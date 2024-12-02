@@ -770,8 +770,8 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
 
     SetFlags( IN_EDIT );
 
-    int          layer = GetLayer();
     PNS::ROUTER* router = aTool->Router();
+    int          layer = router->GetInterface()->GetPNSLayerFromBoardLayer( GetLayer() );
 
     aTool->ClearRouterChanges();
     router->SyncWorld();
