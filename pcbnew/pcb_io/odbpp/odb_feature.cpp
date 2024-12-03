@@ -185,7 +185,7 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
     {
         const std::vector<VECTOR2I>& points = aShape.GetBezierPoints();
 
-        for( size_t i = 0; i < points.size(); i++ )
+        for( size_t i = 0; i < points.size() - 1; i++ )
         {
             AddFeatureLine( points[i], points[i + 1], aShape.GetStroke().GetWidth() );
         }
