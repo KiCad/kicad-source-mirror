@@ -807,8 +807,11 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             if( !aArea || aArea == item || aArea->GetParent() == item )
                                 return false;
 
-                            if( !( aArea->GetLayerSet() & item->GetLayerSet() ).any() )
-                                return false;
+                            if( item->Type() != PCB_FOOTPRINT_T )
+                            {
+                                if( !( aArea->GetLayerSet() & item->GetLayerSet() ).any() )
+                                    return false;
+                            }
 
                             if( !aArea->GetBoundingBox().Intersects( itemBBox ) )
                                 return false;
@@ -831,6 +834,18 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             if( item->Type() == PCB_ZONE_T )
                             {
                                 itemShape = *static_cast<ZONE*>( item )->Outline();
+                            }
+                            else if( item->Type() == PCB_FOOTPRINT_T )
+                            {
+                                FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+
+                                for( PCB_LAYER_ID testLayer : aArea->GetLayerSet() )
+                                {
+                                    fp->TransformPadsToPolySet( itemShape, testLayer, 0,
+                                                                maxError, ERROR_OUTSIDE );
+                                    fp->TransformFPShapesToPolySet( itemShape, testLayer, 0,
+                                                                    maxError, ERROR_OUTSIDE );
+                                }
                             }
                             else
                             {
