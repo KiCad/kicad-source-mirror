@@ -1506,7 +1506,9 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         // envelope.
         SHAPE_POLY_SET poly = maxExtents->CloneDropTriangulation();
         poly.Inflate( m_ZoneMinThickness, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
-        poly.BooleanIntersection( withSameNetIntersectingZones, SHAPE_POLY_SET::PM_FAST );
+
+        if( !keepExternalFillets )
+            poly.BooleanIntersection( withSameNetIntersectingZones, SHAPE_POLY_SET::PM_FAST );
 
         *aSmoothedPolyWithApron = aSmoothedPoly;
         aSmoothedPolyWithApron->BooleanIntersection( poly, SHAPE_POLY_SET::PM_FAST );
