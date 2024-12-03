@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-01 17:25-0800\n"
-"PO-Revision-Date: 2024-11-25 19:00+0000\n"
+"PO-Revision-Date: 2024-12-04 09:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -6469,6 +6469,8 @@ msgstr "Die importierte Grafik ist zu groß. Maximaler Maßstab ist %f"
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Importversatz auf (%f, %f) angepasst, um innerhalb der numerischen Grenzen "
+"zu liegen"
 
 #: common/io/altium/altium_binary_parser.cpp:56 common/richio.cpp:121
 #, c-format
