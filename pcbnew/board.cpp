@@ -545,24 +545,19 @@ TRACKS BOARD::TracksInNet( int aNetCode )
 
 bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 {
-    if( unsigned( aIndex ) < arrayDim( m_layers ) )
-    {
-        m_layers[ aIndex ] = aLayer;
-        recalcOpposites();
-        return true;
-    }
-
-    return false;
+    m_layers[ aIndex ] = aLayer;
+    recalcOpposites();
+    return true;
 }
 
 
 PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
 {
     // Check the BOARD physical layer names.
-    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    for( auto& [ layer_id, layer ] : m_layers )
     {
-        if ( m_layers[ layer ].m_name == aLayerName || m_layers[ layer ].m_userName == aLayerName )
-            return ToLAYER_ID( layer );
+        if( layer.m_name == aLayerName || layer.m_userName == aLayerName )
+            return ToLAYER_ID( layer_id );
     }
 
     // Otherwise fall back to the system standard layer names for virtual layers.
@@ -581,11 +576,13 @@ const wxString BOARD::GetLayerName( PCB_LAYER_ID aLayer ) const
     // All layer names are stored in the BOARD.
     if( IsLayerEnabled( aLayer ) )
     {
+        auto it = m_layers.find( aLayer );
+
         // Standard names were set in BOARD::BOARD() but they may be over-ridden by
         // BOARD::SetLayerName().  For copper layers, return the user defined layer name,
         // if it was set.  Otherwise return the Standard English layer name.
-        if( !m_layers[aLayer].m_userName.IsEmpty() )
-            return m_layers[aLayer].m_userName;
+        if( it != m_layers.end() && !it->second.m_userName.IsEmpty() )
+            return it->second.m_userName;
     }
 
     return GetStandardLayerName( aLayer );
@@ -615,7 +612,12 @@ bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
 LAYER_T BOARD::GetLayerType( PCB_LAYER_ID aLayer ) const
 {
     if( IsLayerEnabled( aLayer ) )
-        return m_layers[aLayer].m_type;
+    {
+        auto it = m_layers.find( aLayer );
+
+        if( it != m_layers.end() )
+            return it->second.m_type;
+    }
 
     if( aLayer >= User_1 && aLayer <= User_9 )
         return LT_AUX;
@@ -731,7 +733,8 @@ void BOARD::recalcOpposites()
 
 PCB_LAYER_ID BOARD::FlipLayer( PCB_LAYER_ID aLayer ) const
 {
-    return ToLAYER_ID( m_layers[aLayer].m_opposite );
+    auto it = m_layers.find( aLayer );
+    return it == m_layers.end() ? aLayer : ToLAYER_ID( it->second.m_opposite );
 }
 
 

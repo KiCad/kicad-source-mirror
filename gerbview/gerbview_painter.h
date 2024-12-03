@@ -62,7 +62,8 @@ public:
      */
     inline const COLOR4D& GetLayerColor( int aLayer ) const
     {
-        return m_layerColors[aLayer];
+        auto it = m_layerColors.find( aLayer );
+        return it == m_layerColors.end() ? COLOR4D::WHITE : it->second;
     }
 
     /**
@@ -80,7 +81,8 @@ public:
 
     const COLOR4D& GetBackgroundColor() const override
     {
-        return m_layerColors[ LAYER_GERBVIEW_BACKGROUND ];
+        auto it = m_layerColors.find( LAYER_GERBVIEW_BACKGROUND );
+        return it == m_layerColors.end() ? COLOR4D::BLACK : it->second;
     }
 
     void SetBackgroundColor( const COLOR4D& aColor ) override

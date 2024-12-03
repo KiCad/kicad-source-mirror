@@ -41,17 +41,20 @@ public:
 
     virtual COLOR4D GetColor( const KIGFX::VIEW_ITEM* aItem, int aLayer ) const override
     {
-        return m_layerColors[ aLayer ];
+        auto it = m_layerColors.find( aLayer );
+        return it == m_layerColors.end() ? COLOR4D::WHITE : it->second;
     }
 
     bool IsBackgroundDark() const override
     {
-        return m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ].GetBrightness() < 0.5;
+        auto it = m_layerColors.find( LAYER_SCHEMATIC_BACKGROUND );
+        return it != m_layerColors.end() && it->second.GetBrightness() < 0.5;
     }
 
     const KIGFX::COLOR4D& GetBackgroundColor() const override
     {
-        return m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ];
+        auto it = m_layerColors.find( LAYER_SCHEMATIC_BACKGROUND );
+        return it == m_layerColors.end() ? COLOR4D::BLACK : it->second;
     }
 
     void SetBackgroundColor( const COLOR4D& aColor ) override

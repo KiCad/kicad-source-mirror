@@ -45,7 +45,7 @@ private:
     LSEQ                m_printMaskLayer;
     // the list of existing board layers in wxCheckListBox, with the
     // board layers id:
-    std::pair<wxCheckListBox*, int> m_boxSelectLayer[PCB_LAYER_ID_COUNT];
+    std::map<int, std::pair<wxCheckListBox*, int>> m_boxSelectLayer;
     bool                            m_printBW;
     wxString                        m_outputDirectory;
     bool                            m_printMirror;

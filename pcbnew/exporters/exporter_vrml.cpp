@@ -113,9 +113,6 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aBoard ) :
     for( int ii = 0; ii < VRML_COLOR_LAST; ++ii )
         m_sgmaterial[ii] = nullptr;
 
-    for( unsigned i = 0; i < arrayDim( m_layer_z );  ++i )
-        m_layer_z[i] = 0;
-
     // this default only makes sense if the output is in mm
     m_brd_thickness = pcbIUScale.IUTomm( m_board->GetDesignSettings().GetBoardThickness() );
 

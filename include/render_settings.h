@@ -269,7 +269,7 @@ public:
         if( aLayer == LAYER_INTERSHEET_REFS )
             aLayer = LAYER_GLOBLABEL;
 
-        return m_layerColors[aLayer];
+        return m_layerColors.count( aLayer ) ? m_layerColors.at( aLayer ) : COLOR4D::BLACK;
     }
 
     /**
@@ -319,12 +319,11 @@ protected:
     wxString               m_layerName;
     std::set<int>          m_highContrastLayers; // High-contrast layers (both board layers and
                                                  //   synthetic GAL layers)
-    COLOR4D m_layerColors[LAYER_ID_COUNT];       // Layer colors
-    COLOR4D m_layerColorsHi[LAYER_ID_COUNT];     // Layer colors for highlighted objects
-    COLOR4D m_layerColorsSel[LAYER_ID_COUNT];    // Layer colors for selected objects
-
-    COLOR4D m_hiContrastColor[LAYER_ID_COUNT];   // High-contrast mode layer colors
-    COLOR4D m_layerColorsDark[LAYER_ID_COUNT];   // Darkened layer colors (for high-contrast mode)
+    std::map<int, COLOR4D> m_layerColors;        // Layer colors
+    std::map<int, COLOR4D> m_layerColorsHi;      // Layer colors for highlighted objects
+    std::map<int, COLOR4D> m_layerColorsSel;     // Layer colors for selected objects
+    std::map<int, COLOR4D> m_hiContrastColor;    // High-contrast mode layer colors
+    std::map<int, COLOR4D> m_layerColorsDark;    // Darkened layer colors (for high-contrast mode)
 
     COLOR4D m_backgroundColor;                   // The background color
 

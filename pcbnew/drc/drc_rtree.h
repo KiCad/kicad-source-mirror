@@ -89,7 +89,7 @@ public:
 
     ~DRC_RTREE()
     {
-        for( drc_rtree* tree : m_tree )
+        for( auto& [_, tree] : m_tree )
         {
             for( DRC_RTREE::ITEM_WITH_SHAPE* el : *tree )
                 delete el;
@@ -169,7 +169,7 @@ public:
      */
     void clear()
     {
-        for( auto tree : m_tree )
+        for( auto& [_, tree] : m_tree )
             tree->RemoveAll();
 
         m_count = 0;
@@ -203,7 +203,9 @@ public:
                     return true;
                 };
 
-        this->m_tree[aTargetLayer]->Search( min, max, visit );
+        if( auto it = m_tree.find( aTargetLayer ); it != m_tree.end() )
+            it->second->Search( min, max, visit );
+
         return count > 0;
     }
 
@@ -275,7 +277,9 @@ public:
                     return true;
                 };
 
-        this->m_tree[aTargetLayer]->Search( min, max, visit );
+        if( auto it = m_tree.find( aTargetLayer ); it != m_tree.end() )
+            it->second->Search( min, max, visit );
+
         return count;
     }
 
@@ -322,7 +326,8 @@ public:
                     return true;
                 };
 
-        this->m_tree[aLayer]->Search( min, max, visit );
+        if( auto it = m_tree.find( aLayer ); it != m_tree.end() )
+            it->second->Search( min, max, visit );
 
         if( collision )
         {
@@ -397,11 +402,15 @@ public:
 
                     return true;
                 };
+        auto it = m_tree.find( aLayer );
+
+        if( it == m_tree.end() )
+            return false;
 
         if( poly && poly->OutlineCount() == 1 && poly->HoleCount( 0 ) == 0 )
-            this->m_tree[aLayer]->Search( min, max, polyVisitor );
+            it->second->Search( min, max, polyVisitor );
         else
-            this->m_tree[aLayer]->Search( min, max, visitor );
+            it->second->Search( min, max, visitor );
 
         return collision;
     }
@@ -478,7 +487,10 @@ public:
                             return true;
                         };
 
-                this->m_tree[targetLayer]->Search( min, max, visit );
+                auto it = m_tree.find( targetLayer );
+
+                if( it != m_tree.end() )
+                    it->second->Search( min, max, visit );
             };
         }
 
@@ -572,25 +584,28 @@ public:
 
     DRC_LAYER OnLayer( PCB_LAYER_ID aLayer ) const
     {
-        return DRC_LAYER( m_tree[int( aLayer )] );
+        auto it = m_tree.find( int( aLayer ) );
+        return it == m_tree.end() ? DRC_LAYER( nullptr ) : DRC_LAYER( it->second );
     }
 
     DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const VECTOR2I& aPoint, int aAccuracy = 0 ) const
     {
         BOX2I rect( aPoint, VECTOR2I( 0, 0 ) );
         rect.Inflate( aAccuracy );
-        return DRC_LAYER( m_tree[int( aLayer )], rect );
+        auto it = m_tree.find( int( aLayer ) );
+        return it == m_tree.end() ? DRC_LAYER( nullptr ) : DRC_LAYER( it->second, rect );
     }
 
     DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const BOX2I& aRect ) const
     {
-        return DRC_LAYER( m_tree[int( aLayer )], aRect );
+        auto it = m_tree.find( int( aLayer ) );
+        return it == m_tree.end() ? DRC_LAYER( nullptr ) : DRC_LAYER( it->second, aRect );
     }
 
 
 private:
-    drc_rtree*  m_tree[PCB_LAYER_ID_COUNT];
-    size_t      m_count;
+    std::map<int, drc_rtree*> m_tree;
+    size_t                    m_count;
 };
 
 

@@ -136,15 +136,15 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
     if( cfg )
         cfg->m_ExportSvg.layers.clear();
 
-    for( unsigned layer = 0; layer < arrayDim( m_boxSelectLayer ); ++layer )
+    for( auto& [ layer_idx, layer] : m_boxSelectLayer )
     {
-        if( !m_boxSelectLayer[layer].first )
+        if( !layer.first )
             continue;
 
-        if( m_boxSelectLayer[layer].first->IsChecked( m_boxSelectLayer[layer].second ) )
+        if( layer.first->IsChecked( layer.second ) )
         {
             if( cfg )
-                cfg->m_ExportSvg.layers.push_back( layer );
+                cfg->m_ExportSvg.layers.push_back( layer_idx );
         }
     }
 }
@@ -200,13 +200,13 @@ LSET DIALOG_EXPORT_SVG::getCheckBoxSelectedLayers() const
 {
     LSET ret;
 
-    for( unsigned layer = 0; layer < arrayDim(m_boxSelectLayer);  ++layer )
+    for( auto& [layer_idx, layer] : m_boxSelectLayer )
     {
-        if( !m_boxSelectLayer[layer].first )
+        if( !layer.first )
             continue;
 
-        if( m_boxSelectLayer[layer].first->IsChecked( m_boxSelectLayer[layer].second ) )
-            ret.set( layer );
+        if( layer.first->IsChecked( layer.second ) )
+            ret.set( layer_idx );
     }
 
     return ret;

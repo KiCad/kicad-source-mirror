@@ -107,12 +107,19 @@ public:
 
     inline bool IsBackgroundDark() const override
     {
-        auto luma = m_layerColors[ LAYER_PCB_BACKGROUND ].GetBrightness();
+        auto it = m_layerColors.find( LAYER_PCB_BACKGROUND );
 
-        return luma < 0.5;
+        if( it == m_layerColors.end() )
+            return false;
+
+        return it->second.GetBrightness() < 0.5;
     }
 
-    const COLOR4D& GetBackgroundColor() const override { return m_layerColors[ LAYER_PCB_BACKGROUND ]; }
+    const COLOR4D& GetBackgroundColor() const override
+    {
+        auto it = m_layerColors.find( LAYER_PCB_BACKGROUND );
+        return it == m_layerColors.end() ? COLOR4D::BLACK : it->second;
+    }
 
     void SetBackgroundColor( const COLOR4D& aColor ) override
     {

@@ -1349,7 +1349,7 @@ private:
     // Cache for fast access to items in the containers above by KIID, including children
     std::unordered_map<KIID, BOARD_ITEM*> m_itemByIdCache;
 
-    LAYER               m_layers[PCB_LAYER_ID_COUNT];
+    std::map<int, LAYER> m_layers;                  // layer data
 
     HIGH_LIGHT_INFO     m_highLight;                // current high light data
     HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data

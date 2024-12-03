@@ -108,46 +108,76 @@ COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer )
 
     // All DCODE layers stored under a single color setting
     if( IsDCodeLayer( aLayer ) )
-        return m_layerColors[ LAYER_DCODES ];
+    {
+        auto it = m_layerColors.find( LAYER_DCODES );
+        return it == m_layerColors.end() ? COLOR4D::WHITE : it->second;
+    }
 
     if( item && item->IsSelected() )
-        return m_layerColorsSel[aLayer];
+    {
+        auto it = m_layerColorsSel.find( aLayer );
+        return it == m_layerColorsSel.end() ? COLOR4D::WHITE : it->second;
+    }
 
     if( gbrItem && gbrItem->GetLayerPolarity() )
     {
         if( gvconfig()->m_Appearance.show_negative_objects )
-            return m_layerColors[LAYER_NEGATIVE_OBJECTS];
+        {
+            auto it = m_layerColors.find( LAYER_NEGATIVE_OBJECTS );
+            return it == m_layerColors.end() ? COLOR4D::WHITE : it->second;
+        }
         else
+        {
             return transparent;
+        }
     }
 
     if( !m_netHighlightString.IsEmpty() && gbrItem &&
         m_netHighlightString == gbrItem->GetNetAttributes().m_Netname )
-        return m_layerColorsHi[aLayer];
+    {
+        auto it = m_layerColorsHi.find( aLayer );
+        return it == m_layerColorsHi.end() ? COLOR4D::WHITE : it->second;
+    }
 
     if( !m_componentHighlightString.IsEmpty() && gbrItem &&
         m_componentHighlightString == gbrItem->GetNetAttributes().m_Cmpref )
-        return m_layerColorsHi[aLayer];
+    {
+        auto it = m_layerColorsHi.find( aLayer );
+        return it == m_layerColorsHi.end() ? COLOR4D::WHITE : it->second;
+    }
 
     if( !m_attributeHighlightString.IsEmpty() && gbrItem && gbrItem->GetDcodeDescr() &&
         m_attributeHighlightString == gbrItem->GetDcodeDescr()->m_AperFunction )
-        return m_layerColorsHi[aLayer];
+    {
+        auto it = m_layerColorsHi.find( aLayer );
+        return it == m_layerColorsHi.end() ? COLOR4D::WHITE : it->second;
+    }
 
     if( m_dcodeHighlightValue> 0 && gbrItem && gbrItem->GetDcodeDescr() &&
         m_dcodeHighlightValue == gbrItem->GetDcodeDescr()->m_Num_Dcode )
-        return m_layerColorsHi[aLayer];
+    {
+        auto it = m_layerColorsHi.find( aLayer );
+        return it == m_layerColorsHi.end() ? COLOR4D::WHITE : it->second;
+    }
 
     // Return grayish color for non-highlighted layers in the high contrast mode
     if( m_hiContrastEnabled && m_highContrastLayers.count( aLayer ) == 0)
-        return m_hiContrastColor[aLayer];
+    {
+        auto it = m_hiContrastColor.find( aLayer );
+        return it == m_hiContrastColor.end() ? COLOR4D::WHITE.Darkened( 0.25 ) : it->second;
+    }
 
     // Catch the case when highlight and high-contraste modes are enabled
     // and we are drawing a not highlighted track
     if( m_highlightEnabled )
-        return m_layerColorsDark[aLayer];
+    {
+        auto it = m_layerColorsDark.find( aLayer );
+        return it == m_layerColorsDark.end() ? COLOR4D::WHITE.Darkened( 0.5 ) : it->second;
+    }
 
     // No special modificators enabled
-    return m_layerColors[aLayer];
+    auto it = m_layerColors.find( aLayer );
+    return it == m_layerColors.end() ? COLOR4D::WHITE : it->second;
 }
 
 

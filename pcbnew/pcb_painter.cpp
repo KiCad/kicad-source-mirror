@@ -226,10 +226,13 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         else if( via )
             annularRingLayer = F_Cu;
 
-        if( annularRingLayer != UNDEFINED_LAYER
-                && m_layerColors[ holeLayer ] == m_layerColors[ annularRingLayer ] )
+        if( annularRingLayer != UNDEFINED_LAYER )
         {
-            aLayer = LAYER_PCB_BACKGROUND;
+            auto it = m_layerColors.find( holeLayer );
+            auto it2 = m_layerColors.find( annularRingLayer );
+
+            if( it != m_layerColors.end() && it2 != m_layerColors.end() && it->second == it2->second )
+                aLayer = LAYER_PCB_BACKGROUND;
         }
     }
 
@@ -267,10 +270,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     }
 
     // Normal path: get the layer base color
-    COLOR4D color = m_layerColors[aLayer];
+    auto it = m_layerColors.find( aLayer );
+    COLOR4D color = it == m_layerColors.end() ? COLOR4D::WHITE : it->second;
 
     if( !aItem )
-        return m_layerColors[aLayer];
+        return color;
 
     // Selection disambiguation
     if( aItem->IsBrightened() )
@@ -278,7 +282,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
     // Normal selection
     if( aItem->IsSelected() )
-        color = m_layerColorsSel[aLayer];
+    {
+        auto it_selected = m_layerColorsSel.find( aLayer );
+        color = it_selected == m_layerColorsSel.end() ? color.Brightened( 0.8 ) : it_selected->second;
+    }
 
     // Some graphic objects are BOARD_CONNECTED_ITEM, but they are seen here as
     // actually board connected objects only if on a copper layer
@@ -334,8 +341,16 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     else if( !selected && m_highlightEnabled )
     {
         // Single net highlight mode
-        color = m_highlightNetcodes.count( netCode ) ? m_layerColorsHi[aLayer]
-                                                     : m_layerColorsDark[aLayer];
+        if( m_highlightNetcodes.contains( netCode ) )
+        {
+            auto it_hi = m_layerColorsHi.find( aLayer );
+            color = it_hi == m_layerColorsHi.end() ? color.Brightened( m_highlightFactor ) : it_hi->second;
+        }
+        else
+        {
+            auto it_dark = m_layerColorsDark.find( aLayer );
+            color = it_dark == m_layerColorsDark.end() ? color.Darkened( 1.0 - m_highlightFactor ) : it_dark->second;
+        }
     }
 
     // Apply high-contrast dimming
@@ -450,16 +465,26 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
                 || hide )
             {
                 if( originalLayer == Edge_Cuts )
-                    color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], dim_factor_Edge_Cuts );
+                {
+                    it = m_layerColors.find( LAYER_PCB_BACKGROUND );
+
+                    if( it != m_layerColors.end() )
+                        color = color.Mix( it->second, dim_factor_Edge_Cuts );
+                    else
+                        color = color.Mix( COLOR4D::BLACK, dim_factor_Edge_Cuts );
+                }
                 else
                     color = COLOR4D::CLEAR;
             }
             else
             {
+                it = m_layerColors.find( LAYER_PCB_BACKGROUND );
+                COLOR4D backgroundColor = it == m_layerColors.end() ? COLOR4D::BLACK : it->second;
+
                 if( originalLayer == Edge_Cuts )
-                    color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], dim_factor_Edge_Cuts );
+                    color = color.Mix( backgroundColor, dim_factor_Edge_Cuts );
                 else
-                    color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
+                    color = color.Mix( backgroundColor, m_hiContrastFactor );
 
                 // Reference images can't have their color mixed so just reduce the opacity a bit
                 // so they show through less

@@ -139,10 +139,12 @@ private:
 
     double GetLayerZ( int aLayer )
     {
-        if( unsigned( aLayer ) >= arrayDim( m_layer_z ) )
+        auto it = m_layer_z.find( aLayer );
+
+        if( it == m_layer_z.end() )
             return 0;
 
-        return m_layer_z[ aLayer ];
+        return it->second;
     }
 
     void SetLayerZ( int aLayer, double aValue )
@@ -263,10 +265,10 @@ private:
     double   m_brd_thickness; // depth of the PCB
 
 private:
-    BOARD*      m_board;
-    VRML_COLOR  vrml_colors_list[VRML_COLOR_LAST];
-    double      m_layer_z[PCB_LAYER_ID_COUNT];
-    SHAPE_POLY_SET  m_pcbOutlines;          // stores the board main outlines
+    BOARD*                m_board;
+    VRML_COLOR            vrml_colors_list[VRML_COLOR_LAST];
+    std::map<int, double> m_layer_z;
+    SHAPE_POLY_SET        m_pcbOutlines; // stores the board main outlines
 
     int         m_precision;                // precision factor when exporting fp shapes
                                             // to separate files
