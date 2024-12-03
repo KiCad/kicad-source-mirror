@@ -442,7 +442,7 @@ TOOL_ACTION EE_ACTIONS::placePower( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Place Power Symbols" ) )
         .Icon( BITMAPS::add_power )
         .Flags( AF_ACTIVATE )
-        .Parameter<SCH_SYMBOL*>( nullptr ) );
+        .Parameter<EE_ACTIONS::PLACE_SYMBOL_PARAMS>( {} ) );
 
 TOOL_ACTION EE_ACTIONS::placeDesignBlock( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeDesignBlock" )
