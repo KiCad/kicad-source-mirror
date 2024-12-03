@@ -2109,7 +2109,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         return 0;
 
     // selection gets cleared in the next action, we need a copy of the selected items.
-    std::deque<EDA_ITEM*> selectedItems = selection.GetItems(); 
+    std::deque<EDA_ITEM*> selectedItems = selection.GetItems();
 
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
@@ -2277,8 +2277,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     }
 
     int dragMode = aEvent.Parameter<int> ();
-
-
 
     bool dragStarted = m_router->StartDragging( p, itemsToDrag, dragMode );
 
@@ -2529,6 +2527,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     frame()->UndoRedoBlock( false );
     frame()->PopTool( aEvent );
     highlightNets( false );
+    view()->ClearPreview();
+    view()->ShowPreview( false );
 
     return 0;
 }
