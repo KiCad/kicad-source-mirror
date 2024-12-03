@@ -109,7 +109,12 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 
             int row = m_toolsSizer->GetRows();
 
+#if wxCHECK_VERSION( 3, 2, 6 )
+            m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ) );
+#else
+            // Work around the wxGridBagSizer gap bug in wx
             m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ), wxBOTTOM, 12 );
+#endif
 
             // Due to https://trac.wxwidgets.org/ticket/16088?cversion=0&cnum_hist=7 GTK fails to
             // correctly set the BestSize of non-default-size or styled text so we need to make
