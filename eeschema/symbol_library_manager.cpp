@@ -137,7 +137,9 @@ wxArrayString SYMBOL_LIBRARY_MANAGER::GetLibraryNames() const
     for( const wxString& libName : symTable()->GetLogicalLibs() )
     {
         // Database libraries are hidden from the symbol editor at the moment
-        if( GetLibrary( libName )->SchLibType() == SCH_IO_MGR::SCH_DATABASE )
+        SYMBOL_LIB_TABLE_ROW* row = GetLibrary( libName );
+
+        if( !row || row->SchLibType() == SCH_IO_MGR::SCH_DATABASE )
             continue;
 
         res.Add( libName );
