@@ -169,11 +169,15 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
             };
 
     if( selectedOnly )
+    {
         for( EDA_ITEM* item : m_selectionTool->GetSelection() )
             addItem( static_cast<SCH_ITEM*>( item ) );
+    }
     else
+    {
         for( SCH_ITEM* item : aScreen->Items() )
             addItem( item );
+    }
 
     std::sort( sorted_items.begin(), sorted_items.end(),
             [&]( SCH_ITEM* a, SCH_ITEM* b )
