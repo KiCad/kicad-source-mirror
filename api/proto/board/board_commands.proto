@@ -148,6 +148,44 @@ message PadShapeAsPolygonResponse
   repeated kiapi.common.types.PolygonWithHoles polygons = 2;
 }
 
+// PCB editor commands
+
+// returns BoardLayers
+message GetVisibleLayers
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+}
+
+message BoardLayerResponse
+{
+  kiapi.board.types.BoardLayer layer = 1;
+}
+
+message BoardLayers
+{
+  repeated kiapi.board.types.BoardLayer layers = 1;
+}
+
+message SetVisibleLayers
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  repeated kiapi.board.types.BoardLayer layers = 2;
+}
+
+// returns BoardLayerResponse
+message GetActiveLayer
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+}
+
+message SetActiveLayer
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  kiapi.board.types.BoardLayer layer = 2;
+}
+
 //// Interactive commands ////
 // These commands begin an interactive operation in the editor.
 // They return a response immediately, but the editor will become busy

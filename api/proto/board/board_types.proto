@@ -88,6 +88,7 @@ enum BoardLayer
   BL_User_7 = 59;
   BL_User_8 = 60;
   BL_User_9 = 61;
+  BL_Rescue = 62;
 }
 
 message NetCode

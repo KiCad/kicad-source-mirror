@@ -44,6 +44,7 @@
 #include <zone.h>
 
 #include <api/common/types/base_types.pb.h>
+#include <widgets/appearance_controls.h>
 
 using namespace kiapi::common::commands;
 using types::CommandStatus;
@@ -83,6 +84,10 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
             &API_HANDLER_PCB::handleSaveSelectionToString );
     registerHandler<ParseAndCreateItemsFromString, CreateItemsResponse>(
             &API_HANDLER_PCB::handleParseAndCreateItemsFromString );
+    registerHandler<GetVisibleLayers, BoardLayers>( &API_HANDLER_PCB::handleGetVisibleLayers );
+    registerHandler<SetVisibleLayers, Empty>( &API_HANDLER_PCB::handleSetVisibleLayers );
+    registerHandler<GetActiveLayer, BoardLayerResponse>( &API_HANDLER_PCB::handleGetActiveLayer );
+    registerHandler<SetActiveLayer, Empty>( &API_HANDLER_PCB::handleSetActiveLayer );
 }
 
 
@@ -916,4 +921,95 @@ HANDLER_RESULT<CreateItemsResponse> API_HANDLER_PCB::handleParseAndCreateItemsFr
 
     CreateItemsResponse response;
     return response;
+}
+
+
+HANDLER_RESULT<BoardLayers> API_HANDLER_PCB::handleGetVisibleLayers( GetVisibleLayers&      aMsg,
+                                                                     const HANDLER_CONTEXT& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    BoardLayers response;
+
+    for( PCB_LAYER_ID layer : frame()->GetBoard()->GetVisibleLayers() )
+        response.add_layers( ToProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( layer ) );
+
+    return response;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetVisibleLayers( SetVisibleLayers&      aMsg,
+                                                               const HANDLER_CONTEXT& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    LSET visible;
+    LSET enabled = frame()->GetBoard()->GetEnabledLayers();
+
+    for( int layerIdx : aMsg.layers() )
+    {
+        PCB_LAYER_ID layer =
+                FromProtoEnum<PCB_LAYER_ID>( static_cast<board::types::BoardLayer>( layerIdx ) );
+
+        if( enabled.Contains( layer ) )
+            visible.set( layer );
+    }
+
+    frame()->GetBoard()->SetVisibleLayers( visible );
+    frame()->GetAppearancePanel()->OnBoardChanged();
+    frame()->GetCanvas()->SyncLayersVisibility( frame()->GetBoard() );
+    frame()->Refresh();
+    return Empty();
+}
+
+
+HANDLER_RESULT<BoardLayerResponse> API_HANDLER_PCB::handleGetActiveLayer(
+            GetActiveLayer& aMsg, const HANDLER_CONTEXT& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    BoardLayerResponse response;
+    response.set_layer(
+            ToProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( frame()->GetActiveLayer() ) );
+
+    return response;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetActiveLayer( SetActiveLayer&        aMsg,
+                                                             const HANDLER_CONTEXT& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID>( aMsg.layer() );
+
+    if( !frame()->GetBoard()->GetEnabledLayers().Contains( layer ) )
+    {
+        ApiResponseStatus err;
+        err.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        err.set_error_message( fmt::format( "Layer {} is not a valid layer for the given board",
+                                            magic_enum::enum_name( layer ) ) );
+        return tl::unexpected( err );
+    }
+
+    frame()->SetActiveLayer( layer );
+    return Empty();
 }

@@ -102,6 +102,16 @@ private:
     HANDLER_RESULT<commands::CreateItemsResponse> handleParseAndCreateItemsFromString(
                 commands::ParseAndCreateItemsFromString& aMsg, const HANDLER_CONTEXT& aCtx );
 
+    HANDLER_RESULT<BoardLayers> handleGetVisibleLayers( GetVisibleLayers& aMsg,
+                                                        const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<Empty> handleSetVisibleLayers( SetVisibleLayers& aMsg,
+                                                  const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<BoardLayerResponse> handleGetActiveLayer( GetActiveLayer& aMsg,
+            const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<Empty> handleSetActiveLayer( SetActiveLayer& aMsg, const HANDLER_CONTEXT& aCtx );
+
 protected:
     std::unique_ptr<COMMIT> createCommit() override;
 

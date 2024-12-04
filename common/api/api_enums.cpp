@@ -213,6 +213,7 @@ PCB_LAYER_ID FromProtoEnum( board::types::BoardLayer aValue )
     case board::types::BoardLayer::BL_User_7:      return User_7;
     case board::types::BoardLayer::BL_User_8:      return User_8;
     case board::types::BoardLayer::BL_User_9:      return User_9;
+    case board::types::BoardLayer::BL_Rescue:      return Rescue;
 
     case board::types::BoardLayer::BL_UNKNOWN:     return UNDEFINED_LAYER;
     default:
@@ -288,6 +289,7 @@ board::types::BoardLayer ToProtoEnum( PCB_LAYER_ID aValue )
     case User_7:            return board::types::BoardLayer::BL_User_7;
     case User_8:            return board::types::BoardLayer::BL_User_8;
     case User_9:            return board::types::BoardLayer::BL_User_9;
+    case Rescue:            return board::types::BoardLayer::BL_Rescue;
     default:
         wxCHECK_MSG( false, board::types::BoardLayer::BL_UNKNOWN,
                      "Unhandled case in ToProtoEnum<PCB_LAYER_ID>");
