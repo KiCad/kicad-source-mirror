@@ -134,6 +134,7 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
 
         if( aLayer != UNDEFINED_LAYER && LSET( { F_Mask, B_Mask } ).Contains( aLayer ) )
             soldermask_min_thickness = aShape.GetWidth();
+
         int            maxError = m_board->GetDesignSettings().m_MaxError;
         SHAPE_POLY_SET poly_set;
 
@@ -158,14 +159,36 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
             poly_set.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         }
 
-        for( int ii = 0; ii < poly_set.OutlineCount(); ++ii )
+        int strokeWidth = aShape.GetStroke().GetWidth();
+
+        // ODB++ surface features can only represent closed polygons.  We add a surface for
+        // the fill of the shape, if present, and add line segments for the outline, if present.
+        if( aShape.IsFilled() )
         {
-            if( aShape.GetFillMode() != FILL_T::NO_FILL )
+            for( int ii = 0; ii < poly_set.OutlineCount(); ++ii )
             {
                 AddContour( poly_set, ii, FILL_T::FILLED_SHAPE );
-            }
 
-            AddContour( poly_set, ii, FILL_T::NO_FILL );
+                if( strokeWidth != 0 )
+                {
+                    for( int jj = 0; jj < poly_set.COutline( ii ).SegmentCount(); ++jj )
+                    {
+                        const SEG& seg = poly_set.COutline( ii ).CSegment( jj );
+                        AddFeatureLine( seg.A, seg.B, strokeWidth );
+                    }
+                }
+            }
+        }
+        else
+        {
+            for( int ii = 0; ii < poly_set.OutlineCount(); ++ii )
+            {
+                for( int jj = 0; jj < poly_set.COutline( ii ).SegmentCount(); ++jj )
+                {
+                    const SEG& seg = poly_set.COutline( ii ).CSegment( jj );
+                    AddFeatureLine( seg.A, seg.B, strokeWidth );
+                }
+            }
         }
 
         break;
