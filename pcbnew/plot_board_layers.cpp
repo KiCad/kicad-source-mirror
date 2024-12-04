@@ -578,6 +578,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     }
 
     aPlotter->StartBlock( nullptr );
+    bool plotViasOnMask = aPlotOpt.GetPlotViaOnMaskLayer();
+    LSET maskLayers( F_Mask );
+    maskLayers.set( B_Mask );
 
     for( const PCB_TRACK* track : aBoard->Tracks() )
     {
@@ -589,8 +592,17 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         // vias are not plotted if not on selected layer
         LSET via_mask_layer = via->GetLayerSet();
 
-        if( !( via_mask_layer & aLayerMask ).any() )
+        // The board may have a different setting for via tenting than the plot options.  Plot
+        // options should win, so we want to handle mask layers differently from other layers here.
+        if( ( aLayerMask & maskLayers ).any() )
+        {
+            if( !plotViasOnMask )
+                continue;
+        }
+        else if( !( via_mask_layer & aLayerMask ).any() )
+        {
             continue;
+        }
 
         int via_margin = 0;
         double width_adj = 0;
