@@ -305,6 +305,12 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     {
         m_afterItem = item;
 
+        if( !selectedOnly )
+        {
+            m_selectionTool->ClearSelection();
+            m_selectionTool->AddItemToSel( item );
+        }
+
         if( !item->IsBrightened() )
         {
             // Clear any previous brightening
@@ -314,12 +320,6 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
             item->SetForceVisible( true );
             m_selectionTool->BrightenItem( item );
             m_foundItemHighlighted = true;
-        }
-
-        if( !selectedOnly )
-        {
-            m_selectionTool->ClearSelection();
-            m_selectionTool->AddItemToSel( item );
         }
 
         m_frame->FocusOnLocation( item->GetBoundingBox().GetCenter() );
