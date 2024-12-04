@@ -391,12 +391,15 @@ VECTOR2I PCB_GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& a
 }
 
 
-VECTOR2I PCB_GRID_HELPER::AlignToNearestPad( const VECTOR2I& aMousePos, std::deque<PAD*>& aPads )
+VECTOR2I PCB_GRID_HELPER::SnapToPad( const VECTOR2I& aMousePos, std::deque<PAD*>& aPads )
 {
     clearAnchors();
 
     for( BOARD_ITEM* item : aPads )
-        computeAnchors( item, aMousePos, true, nullptr );
+    {
+        if( item->HitTest( aMousePos ) )
+            computeAnchors( item, aMousePos, true, nullptr );
+    }
 
     double  minDist = std::numeric_limits<double>::max();
     ANCHOR* nearestOrigin = nullptr;
@@ -404,15 +407,6 @@ VECTOR2I PCB_GRID_HELPER::AlignToNearestPad( const VECTOR2I& aMousePos, std::deq
     for( ANCHOR& a : m_anchors )
     {
         if( ( ORIGIN & a.flags ) != ORIGIN )
-            continue;
-
-        bool hitAny = true;
-        for( EDA_ITEM* item : m_snapItem->items )
-        {
-            hitAny = hitAny && item->HitTest( aMousePos );
-        }
-
-        if( !hitAny )
             continue;
 
         double dist = a.Distance( aMousePos );

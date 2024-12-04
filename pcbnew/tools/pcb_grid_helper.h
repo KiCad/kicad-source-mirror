@@ -68,7 +68,7 @@ public:
 
     VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
 
-    VECTOR2I AlignToNearestPad( const VECTOR2I& aMousePos, std::deque<PAD*>& aPads );
+    VECTOR2I SnapToPad( const VECTOR2I& aMousePos, std::deque<PAD*>& aPads );
 
     virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override
     {

@@ -417,7 +417,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        VECTOR2I cursorPos = grid.AlignToNearestPad( getViewControls()->GetMousePosition(), pads );
+        VECTOR2I cursorPos = grid.SnapToPad( getViewControls()->GetMousePosition(), pads );
         getViewControls()->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
