@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,11 @@ DIALOG_ENUM_PADS::DIALOG_ENUM_PADS( wxWindow*                          aParent,
     m_padStartNum->SetValue( m_params.m_start_number );
     m_padNumStep->SetValue( m_params.m_step );
     m_padPrefix->SetValue( m_params.m_prefix.value_or( "" ) );
+
+    SetInitialFocus( m_padPrefix );
+
+    if( m_stdButtons->GetAffirmativeButton() )
+        m_stdButtons->GetAffirmativeButton()->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
