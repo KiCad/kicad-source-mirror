@@ -91,7 +91,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttrib
                               BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera,
                               S3D_CACHE* a3DCachePointer ) :
         HIDPI_GL_3D_CANVAS( EDA_DRAW_PANEL_GAL::GetVcSettings(), aCamera, aParent, aGLAttribs,
-                            wxID_ANY, wxDefaultPosition,
+                            EDA_3D_CANVAS_ID, wxDefaultPosition,
                             wxDefaultSize, wxFULL_REPAINT_ON_RESIZE ),
         m_eventDispatcher( nullptr ),
         m_parentStatusBar( nullptr ),

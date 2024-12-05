@@ -64,7 +64,9 @@ class BOARD_ADAPTER;
 class FOOTPRINT;
 class NL_FOOTPRINT_PROPERTIES_PLUGIN;
 
-class PANEL_PREVIEW_3D_MODEL: public EDA_3D_BOARD_HOLDER, public TOOLS_HOLDER, public PANEL_PREVIEW_3D_MODEL_BASE
+static wxWindowID PANEL_PREVIEW_3D_MODEL_ID = wxID_HIGHEST + 1244;
+
+class PANEL_PREVIEW_3D_MODEL: public TOOLS_HOLDER, public PANEL_PREVIEW_3D_MODEL_BASE
 {
 public:
     PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRINT* aFootprint,
@@ -80,8 +82,8 @@ public:
 
     wxWindow* GetToolCanvas() const override { return m_previewPane; }
 
-    BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
-    CAMERA& GetCurrentCamera() override { return m_currentCamera; }
+    BOARD_ADAPTER& GetAdapter() { return m_boardAdapter; }
+    CAMERA& GetCurrentCamera() { return m_currentCamera; }
 
     /**
      * Set the currently selected index in the model list so that the scale/rotation/offset

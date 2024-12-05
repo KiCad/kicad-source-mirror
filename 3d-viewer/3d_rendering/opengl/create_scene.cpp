@@ -898,9 +898,7 @@ void RENDER_3D_OPENGL::Load3dModelsIfNeeded()
     if( m_3dModelMap.size() > 0 )
         return;
 
-    wxFrame* frame = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_canvas->GetParent() );
-
-    if( frame )
+    if( wxFrame* frame = dynamic_cast<wxFrame*>( m_canvas->GetParent() ) )
     {
         STATUSBAR_REPORTER activityReporter( frame->GetStatusBar(),
                                              (int) EDA_3D_VIEWER_STATUSBAR::ACTIVITY );

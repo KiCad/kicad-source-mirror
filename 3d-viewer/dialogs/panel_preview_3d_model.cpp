@@ -51,7 +51,7 @@
 PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
                                                 FOOTPRINT* aFootprint,
                                                 std::vector<FP_3DMODEL>* aParentModelList ) :
-        PANEL_PREVIEW_3D_MODEL_BASE( aParent, wxID_ANY ),
+        PANEL_PREVIEW_3D_MODEL_BASE( aParent, PANEL_PREVIEW_3D_MODEL_ID ),
         m_parentFrame( aFrame ),
         m_previewPane( nullptr ),
         m_infobar( nullptr ),
@@ -652,6 +652,8 @@ void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
 
 void PANEL_PREVIEW_3D_MODEL::onModify()
 {
-    if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
-        dlg->OnModify();
+    KIWAY_HOLDER* kiwayHolder = dynamic_cast<KIWAY_HOLDER*>( wxGetTopLevelParent( this ) );
+
+    if( kiwayHolder && kiwayHolder->GetType() == KIWAY_HOLDER::DIALOG )
+        static_cast<DIALOG_SHIM*>( kiwayHolder )->OnModify();
 }

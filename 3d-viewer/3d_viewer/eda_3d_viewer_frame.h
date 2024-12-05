@@ -60,7 +60,7 @@ enum EDA_3D_VIEWER_STATUSBAR
 /**
  * Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard
  */
-class EDA_3D_VIEWER_FRAME : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
+class EDA_3D_VIEWER_FRAME : public KIWAY_PLAYER
 {
 public:
     EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, const wxString& aTitle,
@@ -100,8 +100,8 @@ public:
 
     void Redraw();
 
-    BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
-    CAMERA& GetCurrentCamera() override { return m_currentCamera; }
+    BOARD_ADAPTER& GetAdapter() { return m_boardAdapter; }
+    CAMERA& GetCurrentCamera() { return m_currentCamera; }
 
     EDA_3D_CANVAS* GetCanvas()  { return m_canvas; }
 
