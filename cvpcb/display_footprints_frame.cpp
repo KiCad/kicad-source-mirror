@@ -551,6 +551,7 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
     PCB_DRAW_PANEL_GAL* dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetCanvas() );
     dp->UpdateColors();
     dp->DisplayBoard( GetBoard() );
+    dp->SyncLayersVisibility( GetBoard() );
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 

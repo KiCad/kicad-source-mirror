@@ -172,6 +172,8 @@ public:
 
     virtual ~SCH_ITEM();
 
+    bool IsSchItem() const override { return true; }
+
     virtual wxString GetClass() const override
     {
         return wxT( "SCH_ITEM" );

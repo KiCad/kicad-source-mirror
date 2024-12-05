@@ -87,6 +87,8 @@ public:
 
     ~BOARD_ITEM();
 
+    bool IsBoardItem() const override { return true; }
+
     void SetParentGroup( PCB_GROUP* aGroup ) { m_group = aGroup; }
     PCB_GROUP* GetParentGroup() const { return m_group; }
 

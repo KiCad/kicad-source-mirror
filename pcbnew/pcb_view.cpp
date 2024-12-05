@@ -56,8 +56,8 @@ PCB_VIEW::~PCB_VIEW()
 
 void PCB_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
 {
-    if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aItem ) )
-        footprint->RunOnChildren( std::bind( &PCB_VIEW::Add, this, _1, aDrawPriority ) );
+    if( static_cast<EDA_ITEM*>( aItem )->Type() == PCB_FOOTPRINT_T )
+        static_cast<FOOTPRINT*>( aItem )->RunOnChildren( std::bind( &PCB_VIEW::Add, this, _1, aDrawPriority ) );
 
     VIEW::Add( aItem, aDrawPriority );
 }
@@ -65,8 +65,8 @@ void PCB_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
 
 void PCB_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
 {
-    if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aItem ) )
-        footprint->RunOnChildren( std::bind( &PCB_VIEW::Remove, this, _1 ) );
+    if( static_cast<EDA_ITEM*>( aItem )->Type() == PCB_FOOTPRINT_T )
+        static_cast<FOOTPRINT*>( aItem )->RunOnChildren( std::bind( &PCB_VIEW::Remove, this, _1 ) );
 
     VIEW::Remove( aItem );
 }
@@ -74,8 +74,9 @@ void PCB_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
 
 void PCB_VIEW::Update( const KIGFX::VIEW_ITEM* aItem, int aUpdateFlags ) const
 {
-    if( const BOARD_ITEM* boardItem = dynamic_cast<const BOARD_ITEM*>( aItem ) )
+    if( static_cast<const EDA_ITEM*>( aItem )->IsBoardItem() )
     {
+        auto boardItem = static_cast<const BOARD_ITEM*>( aItem );
         boardItem->RunOnChildren(
                 [this, aUpdateFlags]( BOARD_ITEM* child )
                 {
