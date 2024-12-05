@@ -147,9 +147,7 @@ target_link_libraries( gerbview_kiface_objects
 message( STATUS "Including 3Dconnexion SpaceMouse navigation support in gerbview" )
 add_subdirectory( navlib )
 
-if( NOT MINGW )
-    target_link_libraries( gerbview_kiface_objects PUBLIC gerbview_navlib)
-endif()
+target_link_libraries( gerbview_kiface_objects PUBLIC gerbview_navlib)
 
 add_dependencies( gerbview_kiface_objects gerbview_navlib )
 
