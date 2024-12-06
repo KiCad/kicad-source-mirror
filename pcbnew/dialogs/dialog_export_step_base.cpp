@@ -49,105 +49,117 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
 
-	wxStaticBoxSizer* sbGeneralOptions;
-	sbGeneralOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options") ), wxVERTICAL );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
-	m_cbExportCompound_hidden = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export as Compound shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxStaticBoxSizer* sbBoardOptions;
+	sbBoardOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Board Options") ), wxVERTICAL );
+
+	m_cbExportCompound_hidden = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export as Compound shape"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportCompound_hidden->Hide();
 	m_cbExportCompound_hidden->SetToolTip( _("Merges all shapes into a single Compound shape. Useful for external software that does de-duplication based on shape names.") );
 
-	sbGeneralOptions->Add( m_cbExportCompound_hidden, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbBoardOptions->Add( m_cbExportCompound_hidden, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_cbExportBody = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export board body"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbGeneralOptions->Add( m_cbExportBody, 0, wxALL, 5 );
+	m_cbExportBody = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export board body"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbBoardOptions->Add( m_cbExportBody, 0, wxALL, 5 );
 
-	m_cbExportComponents = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export components"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbGeneralOptions->Add( m_cbExportComponents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_cbExportSilkscreen = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportSilkscreen->SetToolTip( _("Export silkscreen graphics as a set of flat faces.") );
+
+	sbBoardOptions->Add( m_cbExportSilkscreen, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbExportSoldermask = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportSoldermask->SetToolTip( _("Export solder mask layers as a set of flat faces.") );
+
+	sbBoardOptions->Add( m_cbExportSoldermask, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbExportSolderpaste_hidden = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export solder paste"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportSolderpaste_hidden->Hide();
+	m_cbExportSolderpaste_hidden->SetToolTip( _("Export solder paste graphics.") );
+
+	sbBoardOptions->Add( m_cbExportSolderpaste_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbExportComponents = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export components"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbBoardOptions->Add( m_cbExportComponents, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxVERTICAL );
 
-	m_rbAllComponents = new wxRadioButton( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("All components"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbAllComponents = new wxRadioButton( sbBoardOptions->GetStaticBox(), wxID_ANY, _("All components"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbAllComponents->SetValue( true );
 	bSizer51->Add( m_rbAllComponents, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_rbOnlySelected = new wxRadioButton( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Only selected"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbOnlySelected = new wxRadioButton( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Only selected"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbOnlySelected->SetToolTip( _("Export only the component models that are selected in the PCB editor") );
 
 	bSizer51->Add( m_rbOnlySelected, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_rbFilteredComponents = new wxRadioButton( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Components matching filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbFilteredComponents = new wxRadioButton( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Components matching filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer51->Add( m_rbFilteredComponents, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_txtComponentFilter = new wxTextCtrl( sbGeneralOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtComponentFilter = new wxTextCtrl( sbBoardOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtComponentFilter->Enable( false );
 	m_txtComponentFilter->SetToolTip( _("A list of comma-selected reference designators to export (wildcards are supported)") );
 
 	bSizer51->Add( m_txtComponentFilter, 0, wxALL|wxEXPAND, 5 );
 
 
-	sbGeneralOptions->Add( bSizer51, 1, wxEXPAND|wxLEFT, 20 );
+	sbBoardOptions->Add( bSizer51, 1, wxEXPAND|wxLEFT, 20 );
 
-	m_cbExportTracks = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export tracks and vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExportTracks->SetToolTip( _("Export tracks and vias on external copper layers.") );
-
-	sbGeneralOptions->Add( m_cbExportTracks, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_cbExportPads = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbGeneralOptions->Add( m_cbExportPads, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_cbExportZones = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export zones"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExportZones->SetToolTip( _("Export zones on external copper layers.") );
-
-	sbGeneralOptions->Add( m_cbExportZones, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_cbExportInnerCopper = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export inner copper layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbGeneralOptions->Add( m_cbExportInnerCopper, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_cbExportSilkscreen = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExportSilkscreen->SetToolTip( _("Export silkscreen graphics as a set of flat faces.") );
-
-	sbGeneralOptions->Add( m_cbExportSilkscreen, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_cbExportSoldermask = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExportSoldermask->SetToolTip( _("Export solder mask layers as a set of flat faces.") );
-
-	sbGeneralOptions->Add( m_cbExportSoldermask, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_cbFuseShapes = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Fuse shapes (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbFuseShapes->SetToolTip( _("Combine intersecting geometry into one shape.") );
-
-	sbGeneralOptions->Add( m_cbFuseShapes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_cbExportSolderpaste_hidden = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export solder paste"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExportSolderpaste_hidden->Hide();
-	m_cbExportSolderpaste_hidden->SetToolTip( _("Export solder paste graphics.") );
-
-	sbGeneralOptions->Add( m_cbExportSolderpaste_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
-
-	m_staticTextNetFilter = new wxStaticText( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Net filter (supports wildcards):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextNetFilter->Wrap( -1 );
-	sbGeneralOptions->Add( m_staticTextNetFilter, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_txtNetFilter = new wxTextCtrl( sbGeneralOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_txtNetFilter->SetToolTip( _("Only copper items belonging to nets matching this filter will be exported.") );
-
-	sbGeneralOptions->Add( m_txtNetFilter, 0, wxALL|wxEXPAND, 5 );
-
-	m_staticTextTolerance = new wxStaticText( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTolerance = new wxStaticText( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTolerance->Wrap( -1 );
-	sbGeneralOptions->Add( m_staticTextTolerance, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	sbBoardOptions->Add( m_staticTextTolerance, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxString m_choiceToleranceChoices[] = { _("Tight (0.001 mm)"), _("Standard (0.01 mm)"), _("Loose (0.1 mm)") };
 	int m_choiceToleranceNChoices = sizeof( m_choiceToleranceChoices ) / sizeof( wxString );
-	m_choiceTolerance = new wxChoice( sbGeneralOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceToleranceNChoices, m_choiceToleranceChoices, 0 );
-	m_choiceTolerance->SetSelection( 1 );
+	m_choiceTolerance = new wxChoice( sbBoardOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceToleranceNChoices, m_choiceToleranceChoices, 0 );
+	m_choiceTolerance->SetSelection( 0 );
 	m_choiceTolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined when building the board outlines.") );
 
-	sbGeneralOptions->Add( m_choiceTolerance, 0, wxALL|wxEXPAND, 5 );
+	sbBoardOptions->Add( m_choiceTolerance, 0, wxALL|wxEXPAND, 5 );
 
 
-	bSizerMain->Add( sbGeneralOptions, 1, wxEXPAND|wxALL, 5 );
+	bSizer8->Add( sbBoardOptions, 0, wxEXPAND|wxALL, 5 );
+
+	wxStaticBoxSizer* sbConductorOptions;
+	sbConductorOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Conductor Options") ), wxVERTICAL );
+
+	m_cbExportTracks = new wxCheckBox( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Export tracks and vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportTracks->SetToolTip( _("Export tracks and vias on external conductor layers.") );
+
+	sbConductorOptions->Add( m_cbExportTracks, 0, wxALL, 5 );
+
+	m_cbExportPads = new wxCheckBox( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Export pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbConductorOptions->Add( m_cbExportPads, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbExportZones = new wxCheckBox( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Export zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportZones->SetToolTip( _("Export zones on external conductor layers.") );
+
+	sbConductorOptions->Add( m_cbExportZones, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbExportInnerCopper = new wxCheckBox( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Export inner conductor layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbConductorOptions->Add( m_cbExportInnerCopper, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbFuseShapes = new wxCheckBox( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Fuse shapes (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbFuseShapes->SetToolTip( _("Combine intersecting geometry into one shape.") );
+
+	sbConductorOptions->Add( m_cbFuseShapes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_staticTextNetFilter = new wxStaticText( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Net filter (supports wildcards):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNetFilter->Wrap( -1 );
+	sbConductorOptions->Add( m_staticTextNetFilter, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_txtNetFilter = new wxTextCtrl( sbConductorOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtNetFilter->SetToolTip( _("Only copper items belonging to nets matching this filter will be exported.") );
+
+	sbConductorOptions->Add( m_txtNetFilter, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer8->Add( sbConductorOptions, 0, wxEXPAND|wxALL, 5 );
+
+
+	bSizerMain->Add( bSizer8, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
