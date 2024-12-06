@@ -2838,7 +2838,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    // Duplicating tuhing patterns alone is not supported
+    // Duplicating tuning patterns alone is not supported
     if( selection.Size() == 1 && selection.CountType( PCB_GENERATOR_T ) )
         return 0;
 
@@ -2866,7 +2866,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         {
             FOOTPRINT* parentFootprint = editFrame->GetBoard()->GetFirstFootprint();
 
-            // PCB_FIELD items are specific items (not only graphic, but are properies )
+            // PCB_FIELD items are specific items (not only graphic, but are properies)
             // and cannot be duplicated like other footprint items. So skip it:
             if( orig_item->Type() == PCB_FIELD_T )
             {
