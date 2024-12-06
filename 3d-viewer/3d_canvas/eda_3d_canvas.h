@@ -42,7 +42,7 @@ class RENDER_3D_RAYTRACE_GL;
 class RENDER_3D_OPENGL;
 
 
-static wxWindowID EDA_3D_CANVAS_ID = wxID_HIGHEST + 1321;
+#define EDA_3D_CANVAS_ID wxID_HIGHEST + 1321
 
 /**
  *  Implement a canvas based on a wxGLCanvas
