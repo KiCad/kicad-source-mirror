@@ -180,9 +180,6 @@ public:
         return false;
     }
 
-    virtual bool IsBoardItem() const { return false; }
-    virtual bool IsSchItem() const { return false; }
-
     /**
      * Set and clear force visible flag used to force the item to be drawn even if it's draw
      * attribute is set to not visible.

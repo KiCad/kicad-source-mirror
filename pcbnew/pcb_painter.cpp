@@ -533,11 +533,10 @@ int PCB_PAINTER::getViaDrillSize( const PCB_VIA* aVia ) const
 
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
-    // Do not use dynamic_cast, it does not work reliably across modules
-    if( !static_cast<const EDA_ITEM*>( aItem )->IsBoardItem() )
-        return false;
+    const BOARD_ITEM* item = dynamic_cast<const BOARD_ITEM*>( aItem );
 
-    auto item = static_cast<const BOARD_ITEM*>( aItem );
+    if( !item )
+        return false;
 
     if( const BOARD* board = item->GetBoard() )
     {
