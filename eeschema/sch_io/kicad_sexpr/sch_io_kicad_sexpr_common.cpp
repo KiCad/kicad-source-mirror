@@ -308,8 +308,19 @@ void formatPoly( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aPolyLine, bool aIsPriv
     aFormatter->Print( "(polyline %s (pts ",
                        aIsPrivate ? "private" : "" );
 
-    for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
-        aFormatter->Print( "(xy %s)", formatIU( pt, aInvertY ).c_str() );
+    const SHAPE_POLY_SET& aPolySet = aPolyLine->GetPolyShape();
+
+    if( aPolySet.OutlineCount() == 0 )
+    {
+        // If we've managed to get a polyline with no points, that's probably a bad thing,
+        // but at least don't dereference it and crash.
+        wxFAIL_MSG( "Polyline has no outlines" );
+    }
+    else
+    {
+        for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
+            aFormatter->Print( "(xy %s)", formatIU( pt, aInvertY ).c_str() );
+    }
 
     aFormatter->Print( ")" );  // Closes pts token
 
