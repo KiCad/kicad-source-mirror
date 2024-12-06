@@ -309,29 +309,42 @@ void formatPoly( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aPolyLi
 {
     int newLine = 0;
     int lineCount = 1;
+
     aFormatter->Print( aNestLevel, "(polyline%s\n",
                        aIsPrivate ? " private" : "" );
     aFormatter->Print( aNestLevel + 1, "(pts" );
 
-    for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
-    {
-        if( newLine == 4 || !ADVANCED_CFG::GetCfg().m_CompactSave )
-        {
-            aFormatter->Print( 0, "\n" );
-            aFormatter->Print( aNestLevel + 2, "(xy %s %s)",
-                               EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.x ).c_str(),
-                               EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.y ).c_str() );
-            newLine = 0;
-            lineCount += 1;
-        }
-        else
-        {
-            aFormatter->Print( 0, " (xy %s %s)",
-                               EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.x ).c_str(),
-                               EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.y ).c_str() );
-        }
+    const SHAPE_POLY_SET& polySet = aPolyLine->GetPolyShape();
 
-        newLine += 1;
+
+    if( polySet.OutlineCount() == 0 )
+    {
+        // If we've managed to get a polyline with no points, that's probably a bad thing,
+        // but at least don't dereference it and crash.
+        wxFAIL_MSG( "Polyline has no outline" );
+    }
+    else
+    {
+        for( const VECTOR2I& pt : polySet.Outline( 0 ).CPoints() )
+        {
+            if( newLine == 4 || !ADVANCED_CFG::GetCfg().m_CompactSave )
+            {
+                aFormatter->Print( 0, "\n" );
+                aFormatter->Print( aNestLevel + 2, "(xy %s %s)",
+                                EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.x ).c_str(),
+                                EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.y ).c_str() );
+                newLine = 0;
+                lineCount += 1;
+            }
+            else
+            {
+                aFormatter->Print( 0, " (xy %s %s)",
+                                EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.x ).c_str(),
+                                EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.y ).c_str() );
+            }
+
+            newLine += 1;
+        }
     }
 
     if( lineCount == 1 )
