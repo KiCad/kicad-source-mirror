@@ -332,10 +332,10 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     frame()->PushTool( aEvent );
 
-    VECTOR2I          oldCursorPos;  // store the previous mouse cursor position, during mouse drag
+    VECTOR2I          oldMousePos;  // store the previous mouse cursor position, during mouse drag
     std::list<PAD*>   selectedPads;
     BOARD_COMMIT      commit( frame() );
-    bool              isFirstPoint = true;   // make sure oldCursorPos is initialized at least once
+    bool              isFirstPoint = true;   // make sure oldMousePos is initialized at least once
     std::deque<PAD*>  pads = board()->GetFirstFootprint()->Pads();
     MAGNETIC_SETTINGS mag_settings;
 
@@ -365,23 +365,24 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 if( !view->IsVisible( item ) )
                     return false;
 
-                bool onActiveLayer = !isHighContrast;
-                bool isLODVisible = false;
-
                 for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
                 {
-                    if( !onActiveLayer && activeLayers.count( layer ) )
-                        onActiveLayer = true;
-
-                    if( !isLODVisible && item->ViewGetLOD( layer, view ) < view->GetScale() )
-                        isLODVisible = true;
-
-                    if( onActiveLayer && isLODVisible )
-                        return true;
+                    if( ( isHighContrast && activeLayers.count( layer ) )
+                            || view->IsLayerVisible( layer ) )
+                    {
+                        if( item->ViewGetLOD( layer, view ) < view->GetScale() )
+                            return true;
+                    }
                 }
 
                 return false;
             };
+
+    for( PAD* pad : board()->GetFirstFootprint()->Pads() )
+    {
+        if( checkVisibility( pad ) )
+            pads.push_back( pad );
+    }
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -417,7 +418,8 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        VECTOR2I cursorPos = grid.SnapToPad( getViewControls()->GetMousePosition(), pads );
+        VECTOR2I mousePos = getViewControls()->GetMousePosition();
+        VECTOR2I cursorPos = grid.SnapToPad( mousePos, pads );
         getViewControls()->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -442,23 +444,23 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             // Be sure the old cursor mouse position was initialized:
             if( isFirstPoint )
             {
-                oldCursorPos = cursorPos;
+                oldMousePos = mousePos;
                 isFirstPoint = false;
             }
 
             // wxWidgets deliver mouse move events not frequently enough, resulting in skipping
             // pads if the user moves cursor too fast. To solve it, create a line that approximates
             // the mouse move and search pads that are on the line.
-            int distance = ( cursorPos - oldCursorPos ).EuclideanNorm();
+            int distance = ( mousePos - oldMousePos ).EuclideanNorm();
             // Search will be made every 0.1 mm:
             int            segments = distance / int( 0.1 * pcbIUScale.IU_PER_MM ) + 1;
-            const VECTOR2I line_step( ( cursorPos - oldCursorPos ) / segments );
+            const VECTOR2I line_step( ( mousePos - oldMousePos ) / segments );
 
             collector.Empty();
 
             for( int j = 0; j < segments; ++j )
             {
-                VECTOR2I testpoint( cursorPos.x - j * line_step.x, cursorPos.y - j * line_step.y );
+                VECTOR2I testpoint( mousePos.x - j * line_step.x, mousePos.y - j * line_step.y );
                 collector.Collect( board(), { PCB_PAD_T }, testpoint, guide );
 
                 for( int i = 0; i < collector.GetCount(); ++i )
@@ -548,7 +550,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
         // Prepare the next loop by updating the old cursor mouse position
         // to this last mouse cursor position
-        oldCursorPos = getViewControls()->GetCursorPosition();
+        oldMousePos = mousePos;
         statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
     }
 
