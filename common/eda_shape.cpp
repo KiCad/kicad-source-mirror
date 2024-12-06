@@ -1185,8 +1185,9 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         {
             if( !m_poly.COutline( 0 ).IsClosed() )
             {
-                SHAPE_POLY_SET copy( m_poly );
-                copy.Outline( 0 ).Append( copy.Outline( 0 ).CPoint( 0 ) );
+                // Only one outline is expected
+                SHAPE_LINE_CHAIN copy( m_poly.COutline( 0 ) );
+                copy.SetClosed( true );
                 return copy.Collide( aPosition, maxdist );
             }
             else
