@@ -2845,6 +2845,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // we have a selection to work on now, so start the tool process
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     BOARD_COMMIT         commit( this );
+    FOOTPRINT*           parentFootprint = nullptr;
+
+    if( m_isFootprintEditor )
+        parentFootprint = editFrame->GetBoard()->GetFirstFootprint();
 
     // If the selection was given a hover, we do not keep the selection after completion
     bool is_hover = selection.IsHover();
@@ -2862,35 +2866,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         BOARD_ITEM* dupe_item = nullptr;
         BOARD_ITEM* orig_item = static_cast<BOARD_ITEM*>( item );
 
-        if( m_isFootprintEditor )
-        {
-            FOOTPRINT* parentFootprint = editFrame->GetBoard()->GetFirstFootprint();
-
-            // PCB_FIELD items are specific items (not only graphic, but are properies)
-            // and cannot be duplicated like other footprint items. So skip it:
-            if( orig_item->Type() == PCB_FIELD_T )
-            {
-                orig_item->ClearSelected();
-                continue;
-            }
-
-            dupe_item = parentFootprint->DuplicateItem( orig_item );
-
-            if( increment && dupe_item->Type() == PCB_PAD_T
-                && static_cast<PAD*>( dupe_item )->CanHaveNumber() )
-            {
-                PAD_TOOL* padTool = m_toolMgr->GetTool<PAD_TOOL>();
-                wxString padNumber = padTool->GetLastPadNumber();
-                padNumber = parentFootprint->GetNextPadNumber( padNumber );
-                padTool->SetLastPadNumber( padNumber );
-                static_cast<PAD*>( dupe_item )->SetNumber( padNumber );
-            }
-
-            dupe_item->ClearSelected();
-            new_items.push_back( dupe_item );
-            commit.Add( dupe_item );
-        }
-        else if( /*FOOTPRINT* parentFootprint =*/ orig_item->GetParentFootprint() )
+        if( !m_isFootprintEditor
+                && /*FOOTPRINT* parentFootprint =*/ orig_item->GetParentFootprint() )
         {
             // No sub-footprint modifications allowed outside of footprint editor
             // and parentFootprint is not (yet?) used
@@ -2914,7 +2891,36 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                dupe_item = orig_item->Duplicate();
+                if( m_isFootprintEditor )
+                    dupe_item = parentFootprint->DuplicateItem( orig_item );
+                else
+                    dupe_item = orig_item->Duplicate();
+
+                // Clear the selection flag here, otherwise the PCB_SELECTION_TOOL
+                // will not properly select it later on
+                dupe_item->ClearSelected();
+
+                new_items.push_back( dupe_item );
+                commit.Add( dupe_item );
+                break;
+
+            case PCB_FIELD_T:
+                // PCB_FIELD items are specific items (not only graphic, but are properies)
+                // and cannot be duplicated like other footprint items. So skip it:
+                orig_item->ClearSelected();
+                break;
+
+            case PCB_PAD_T:
+                dupe_item = parentFootprint->DuplicateItem( orig_item );
+
+                if( increment && static_cast<PAD*>( dupe_item )->CanHaveNumber() )
+                {
+                    PAD_TOOL* padTool = m_toolMgr->GetTool<PAD_TOOL>();
+                    wxString padNumber = padTool->GetLastPadNumber();
+                    padNumber = parentFootprint->GetNextPadNumber( padNumber );
+                    padTool->SetLastPadNumber( padNumber );
+                    static_cast<PAD*>( dupe_item )->SetNumber( padNumber );
+                }
 
                 // Clear the selection flag here, otherwise the PCB_SELECTION_TOOL
                 // will not properly select it later on
