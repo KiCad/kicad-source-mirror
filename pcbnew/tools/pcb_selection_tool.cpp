@@ -2659,8 +2659,11 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             }
         }
 
-        if( !onActiveLayer ) // We do not want to select items that are in the background
+        if( !onActiveLayer && aItem->Type() != PCB_MARKER_T )
+        {
+            // We do not want to select items that are in the background
             return false;
+        }
     }
 
     if( aItem->Type() == PCB_FOOTPRINT_T )
