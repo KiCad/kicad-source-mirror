@@ -127,6 +127,9 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
         aSchematic->SetProject( nullptr );
         aSettingsManager.UnloadProject( prj, false );
         aSchematic->Reset();
+
+        // Delete old schematic data and clear old pointer
+        aSchematic.reset();
     }
 
     std::string absPath = GetEeschemaTestDataDir() + aRelPath.ToStdString();
