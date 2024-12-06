@@ -257,7 +257,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbOverwriteFile = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Overwrite old file"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbOtherOptions->Add( m_cbOverwriteFile, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_cbOptimizeStep = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Optimize STEP file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOptimizeStep = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Don't write P-curves to STEP file"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbOptimizeStep->SetToolTip( _("Disables writing parametric curves. Optimizes file size and write/read times, but may reduce compatibility with other software.") );
 
 	sbOtherOptions->Add( m_cbOptimizeStep, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
