@@ -79,7 +79,7 @@ S3D_CACHE* PROJECT_PCB::Get3DCacheManager( PROJECT* aProject, bool aUpdateProjDi
     std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
 
     // Get the existing cache from the project
-    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( aProject->GetElem( PROJECT::ELEM_3DCACHE ) );
+    S3D_CACHE* cache = static_cast<S3D_CACHE*>( aProject->GetElem( PROJECT::ELEM_3DCACHE ) );
 
     if( !cache )
     {
@@ -115,7 +115,7 @@ void PROJECT_PCB::Cleanup3DCache( PROJECT* aProject )
     std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
 
     // Get the existing cache from the project
-    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( aProject->GetElem( PROJECT::ELEM_3DCACHE ) );
+    S3D_CACHE* cache = static_cast<S3D_CACHE*>( aProject->GetElem( PROJECT::ELEM_3DCACHE ) );
 
     if( cache )
     {

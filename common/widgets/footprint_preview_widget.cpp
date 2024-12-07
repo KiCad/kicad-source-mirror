@@ -135,21 +135,16 @@ void FOOTPRINT_PREVIEW_WIDGET::RefreshAll()
 FOOTPRINT_PREVIEW_PANEL_BASE* FOOTPRINT_PREVIEW_PANEL_BASE::Create( wxWindow* aParent,
                                                                     KIWAY& aKiway )
 {
-    FOOTPRINT_PREVIEW_PANEL_BASE* panel = nullptr;
+    wxWindow* panel = nullptr;
 
     try
     {
-        KIFACE*   kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
-        wxWindow* window = kiface->CreateKiWindow( aParent, FRAME_FOOTPRINT_PREVIEW, &aKiway );
-
-        panel = dynamic_cast<FOOTPRINT_PREVIEW_PANEL_BASE*>( window );
-
-        if( window && !panel )
-            delete window;
+        if( KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB ) )
+            panel = kiface->CreateKiWindow( aParent, FRAME_FOOTPRINT_PREVIEW, &aKiway );
     }
     catch( ... )
     {
     }
 
-    return panel;
+    return (FOOTPRINT_PREVIEW_PANEL_BASE*) panel;
 }
