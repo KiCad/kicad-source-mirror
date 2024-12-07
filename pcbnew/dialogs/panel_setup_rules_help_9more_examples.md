@@ -104,6 +104,13 @@
         (condition "B.Layer == 'Edge.Cuts'"))
 
 
+    # Allow silk intersection with board edge for connectors
+    (rule silk_board_edge_celarance
+        (constraint silk_clearance)
+        (severity ignore)
+        (condition "A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'"))
+
+
     # Check current-carrying capacity
     (rule high-current
         (constraint track_width (min 1.0mm))
