@@ -105,7 +105,7 @@
 
 
     # Allow silk intersection with board edge for connectors
-    (rule silk_board_edge_celarance
+    (rule silk_board_edge_clearance
         (constraint silk_clearance)
         (severity ignore)
         (condition "A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'"))
