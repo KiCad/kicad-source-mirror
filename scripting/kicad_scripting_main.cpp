@@ -39,7 +39,8 @@ static struct IFACE : public KIFACE_BASE
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                              int aCtlBits = 0 ) override
     {
         KIPYTHON_FRAME* frame = new KIPYTHON_FRAME( aKiway, aParent );
 

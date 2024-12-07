@@ -37,7 +37,7 @@ static struct IFACE : public KIFACE_BASE
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
 
     wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
-                            int aCtlBits = 0 ) override
+                              int aCtlBits = 0 ) override
     {
         InitSettings( new BITMAP2CMP_SETTINGS );
         Pgm().GetSettingsManager().RegisterSettings( KifaceSettings() );

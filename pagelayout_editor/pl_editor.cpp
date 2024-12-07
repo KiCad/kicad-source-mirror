@@ -55,7 +55,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     void OnKifaceEnd() override;
 
     wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
-                            int aCtlBits = 0 ) override
+                              int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {

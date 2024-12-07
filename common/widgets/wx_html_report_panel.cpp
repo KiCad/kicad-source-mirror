@@ -357,13 +357,13 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
     {
         fn = wxT( "report.txt" );
 
-        KIWAY_HOLDER* parent = dynamic_cast<KIWAY_HOLDER*>( m_parent );
-
-        if( parent )
+        if( KIWAY_HOLDER* parent = dynamic_cast<KIWAY_HOLDER*>( m_parent ) )
             fn.SetPath( parent->Prj().GetProjectPath() );
     }
     else
+    {
         fn = m_reportFileName;
+    }
 
     wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
