@@ -1198,7 +1198,9 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
             wxCHECK2( screen, continue );
 
-            sheets.emplace_back( std::make_pair( screen->GetUuid(), sheet->GetName() ) );
+            // For the root sheet we use the canonical name ( "Root" ) because its name
+            // cannot be modified by the user
+            sheets.emplace_back( std::make_pair( screen->GetUuid(), wxT( "Root" ) ) );
         }
         else
         {
