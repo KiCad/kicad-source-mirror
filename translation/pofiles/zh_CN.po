@@ -33,13 +33,14 @@
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 # zly20129 <zly20129@icloud.com>, 2024.
 # Wang <wang@plasma.ac.cn>, 2024.
+# HalfSweet <HalfSweet@halfsweet.cn>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-01 17:25-0800\n"
-"PO-Revision-Date: 2024-11-18 11:09+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2024-12-07 18:00+0000\n"
+"Last-Translator: HalfSweet <HalfSweet@halfsweet.cn>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -7358,29 +7359,24 @@ msgid "Schematic: Export Netlist"
 msgstr "原理图: 导出网表"
 
 #: common/jobs/job_export_sch_plot.cpp:128
-#, fuzzy
 msgid "Schematic PDF Plot"
-msgstr "原理图数据"
+msgstr "绘制原理图PDF"
 
 #: common/jobs/job_export_sch_plot.cpp:141
-#, fuzzy
 msgid "Schematic DXF Plot"
-msgstr "原理图数据"
+msgstr "绘制原理图DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:154
-#, fuzzy
 msgid "Schematic SVG Plot"
-msgstr "原理图配置"
+msgstr "绘制原理图SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:167
-#, fuzzy
 msgid "Schematic PS Plot"
-msgstr "原理图配置"
+msgstr "绘制原理图PS"
 
 #: common/jobs/job_export_sch_plot.cpp:180
-#, fuzzy
 msgid "Schematic HPGL Plot"
-msgstr "原理图一致性检验"
+msgstr "绘制原理图HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:184
 msgid "Schematic: Export SVG"
@@ -7809,7 +7805,7 @@ msgstr "库名称中包含非法字符"
 #: common/lib_table_base.cpp:532
 #, c-format
 msgid "Failed to get writer for %s"
-msgstr ""
+msgstr "无法写入%s文件"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -8433,23 +8429,23 @@ msgstr "增量"
 
 #: common/tool/actions.cpp:342
 msgid "Increment the selected item(s)"
-msgstr ""
+msgstr "对所选项目进行递增"
 
 #: common/tool/actions.cpp:347
 msgid "Increment Primary"
-msgstr ""
+msgstr "递增主项"
 
 #: common/tool/actions.cpp:348
 msgid "Increment the primary field of the selected item(s)"
-msgstr ""
+msgstr "递增所选项目的主字段"
 
 #: common/tool/actions.cpp:354
 msgid "Decrement Primary"
-msgstr ""
+msgstr "递减主字段"
 
 #: common/tool/actions.cpp:355
 msgid "Decrement the primary field of the selected item(s)"
-msgstr ""
+msgstr "减少所选项目的主字段"
 
 #: common/tool/actions.cpp:361
 msgid "Increment Secondary"
