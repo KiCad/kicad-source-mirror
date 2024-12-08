@@ -1163,7 +1163,6 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( candidate.first );
 
-
                 if( item && Selectable( item ) && item->HitTest( selectionRect, !greedySelection )
                         && ( greedySelection || !group_items.count( item ) ) )
                 {
