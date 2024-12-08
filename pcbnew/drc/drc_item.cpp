@@ -291,6 +291,14 @@ DRC_ITEM DRC_ITEM::footprintTHPadhasNoHole( DRCE_PAD_TH_WITH_NO_HOLE,
         _( "Through hole pad has no hole" ),
         wxT( "through_hole_pad_without_hole" ) );
 
+DRC_ITEM DRC_ITEM::mirroredTextOnFrontLayer( DRCE_MIRRORED_TEXT_ON_FRONT_LAYER,
+        _( "Mirrored text on front layer" ),
+        wxT( "mirrored_text_on_front_layer" ) );
+
+DRC_ITEM DRC_ITEM::nonMirroredTextOnBackLayer( DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER,
+        _( "Non-Mirrored text on back layer" ),
+        wxT( "nonmirrored_text_on_back_layer" ) );
+
 
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
         {
@@ -433,6 +441,8 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_FOOTPRINT:                return std::make_shared<DRC_ITEM>( footprint );
     case DRCE_FOOTPRINT_TYPE_MISMATCH:  return std::make_shared<DRC_ITEM>( footprintTypeMismatch );
     case DRCE_PAD_TH_WITH_NO_HOLE:      return std::make_shared<DRC_ITEM>( footprintTHPadhasNoHole );
+    case DRCE_MIRRORED_TEXT_ON_FRONT_LAYER:        return std::make_shared<DRC_ITEM>( mirroredTextOnFrontLayer );
+    case DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER:      return std::make_shared<DRC_ITEM>( nonMirroredTextOnBackLayer );
     default:
         wxFAIL_MSG( wxT( "Unknown DRC error code" ) );
         return nullptr;

@@ -285,6 +285,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_matched_length.cpp
     drc/drc_test_provider_diff_pair_coupling.cpp
     drc/drc_test_provider_sliver_checker.cpp
+    drc/drc_test_provider_text_mirroring.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS

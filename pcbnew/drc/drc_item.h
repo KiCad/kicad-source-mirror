@@ -106,7 +106,10 @@ enum PCB_DRC_CODE {
     DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE,
     DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG,
 
-    DRCE_LAST = DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
+    DRCE_MIRRORED_TEXT_ON_FRONT_LAYER,
+    DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER,
+
+    DRCE_LAST = DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER
 };
 
 
@@ -236,6 +239,8 @@ private:
     static DRC_ITEM footprint;
     static DRC_ITEM footprintTypeMismatch;
     static DRC_ITEM footprintTHPadhasNoHole;
+    static DRC_ITEM mirroredTextOnFrontLayer;
+    static DRC_ITEM nonMirroredTextOnBackLayer;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;

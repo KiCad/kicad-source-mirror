@@ -196,6 +196,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_DRCSeverities[ DRCE_CONNECTION_WIDTH ] = RPT_SEVERITY_WARNING;
 
+    m_DRCSeverities[DRCE_MIRRORED_TEXT_ON_FRONT_LAYER] = RPT_SEVERITY_WARNING;
+    m_DRCSeverities[DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER] = RPT_SEVERITY_WARNING;
+
     m_MaxError = ARC_HIGH_DEF;
     m_ZoneKeepExternalFillets = false;
     m_UseHeightForLengthCalcs = true;
