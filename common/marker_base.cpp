@@ -107,6 +107,17 @@ bool MARKER_BASE::HitTestMarker( const VECTOR2I& aHitPosition, int aAccuracy ) c
 }
 
 
+bool MARKER_BASE::HitTestMarker( const BOX2I& aRect, bool aContained, int aAccuracy ) const
+{
+    const BOX2I bbox = GetBoundingBoxMarker().Inflate( aAccuracy );
+
+    if( aContained )
+        return aRect.Contains( bbox );
+
+    return aRect.Intersects( bbox );
+}
+
+
 void MARKER_BASE::ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon, int aScale ) const
 {
     if( aScale < 0 )

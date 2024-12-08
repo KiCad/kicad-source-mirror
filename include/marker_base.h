@@ -114,6 +114,11 @@ public:
     bool HitTestMarker( const VECTOR2I& aHitPosition, int aAccuracy ) const;
 
     /**
+    * Test if the given BOX2I intersects or contains the bounds of this object
+*/
+    bool HitTestMarker( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const;
+
+    /**
      * Return the orthogonal, bounding box of this object for display purposes.
      *
      * This box should be an enclosing perimeter for visible components of this

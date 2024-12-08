@@ -81,6 +81,14 @@ public:
             return HitTestMarker( aPosition, aAccuracy );
     }
 
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override
+    {
+        if( GetMarkerType() == MARKER_RATSNEST )
+            return false;
+
+        return HitTestMarker( aRect, aContained, aAccuracy );
+    }
+
     EDA_ITEM* Clone() const override
     {
         return new PCB_MARKER( *this );
