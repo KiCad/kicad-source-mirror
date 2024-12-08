@@ -203,8 +203,26 @@ public:
             anchorChains[anchors.size() - 1].push_back( n );
         }
 
-        if( anchors.size() < 2 )
+        if( anchors.empty() )
         {
+            return;
+        }
+        else if( anchors.size() == 1 )
+        {
+            // The anchors all have the same position, but may not have overlapping layers.
+            prev = nullptr;
+
+            for( const std::shared_ptr<CN_ANCHOR>& n : m_allNodes )
+            {
+                if( prev && !( prev->Parent()->GetLayerSet() & n->Parent()->GetLayerSet() ).any() )
+                {
+                    // Use a minimal but non-zero distance or the edge will be ignored
+                    mstEdges.emplace_back( prev, n, 1 );
+                }
+
+                prev = n;
+            }
+
             return;
         }
         else if( areNodesColinear( anchors ) )
