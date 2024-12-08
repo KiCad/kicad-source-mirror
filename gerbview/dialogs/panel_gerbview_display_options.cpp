@@ -43,7 +43,8 @@ static const wxChar* gerberPageSizeList[] =
 PANEL_GERBVIEW_DISPLAY_OPTIONS::PANEL_GERBVIEW_DISPLAY_OPTIONS( wxWindow* aParent ) :
     PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( aParent, wxID_ANY )
 {
-    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
 
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, cfg );
     m_galOptionsSizer->Add( m_galOptsPanel, 0, wxEXPAND|wxRIGHT, 15 );
@@ -78,7 +79,8 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     m_galOptsPanel->TransferDataToWindow();
 
-    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
 
     loadSettings( cfg );
 
@@ -88,7 +90,8 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
 
     m_galOptsPanel->TransferDataFromWindow();
 

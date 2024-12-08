@@ -392,7 +392,7 @@ void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 COLOR_SETTINGS* GERBVIEW_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>();
+    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
     wxString currentTheme = cfg->m_ColorTheme;
     return mgr.GetColorSettings( currentTheme );
 }
@@ -1215,7 +1215,9 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     // Update gal display options like cursor shape, grid options:
-    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
+
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
     SetPageSettings( PAGE_INFO( gvconfig()->m_Appearance.page_type ) );

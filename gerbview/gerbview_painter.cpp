@@ -37,7 +37,7 @@ using namespace KIGFX;
 
 GERBVIEW_SETTINGS* gvconfig()
 {
-    return Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    return Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
 }
 
 

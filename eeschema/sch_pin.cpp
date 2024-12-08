@@ -110,14 +110,16 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol ) :
 {
     // Use the application settings for pin sizes if exists.
     // pgm can be nullptr when running a shared lib from a script, not from a kicad appl
-    PGM_BASE* pgm  = PgmOrNull();
+    PGM_BASE* pgm = PgmOrNull();
 
     if( pgm )
     {
-        auto* settings = pgm->GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-        m_length       = schIUScale.MilsToIU( settings->m_Defaults.pin_length );
-        m_numTextSize  = schIUScale.MilsToIU( settings->m_Defaults.pin_num_size );
-        m_nameTextSize = schIUScale.MilsToIU( settings->m_Defaults.pin_name_size );
+        SETTINGS_MANAGER&       mgr = pgm->GetSettingsManager();
+        SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+
+        m_length       = schIUScale.MilsToIU( cfg->m_Defaults.pin_length );
+        m_numTextSize  = schIUScale.MilsToIU( cfg->m_Defaults.pin_num_size );
+        m_nameTextSize = schIUScale.MilsToIU( cfg->m_Defaults.pin_name_size );
     }
     else    // Use hardcoded eeschema defaults: symbol_editor settings are not existing.
     {

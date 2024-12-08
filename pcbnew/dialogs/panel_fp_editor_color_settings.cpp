@@ -34,8 +34,8 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( wxWindow* aParen
     m_colorNamespace = "board";
 
     SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-    COLOR_SETTINGS*            current  = mgr.GetColorSettings( settings->m_ColorTheme );
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    COLOR_SETTINGS*            current  = mgr.GetColorSettings( cfg->m_ColorTheme );
 
     // Store the current settings before reloading below
     current->Store();
@@ -46,7 +46,7 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( wxWindow* aParen
     m_currentSettings = new COLOR_SETTINGS( *current );
 
     mgr.ReloadColorSettings();
-    createThemeList( settings->m_ColorTheme );
+    createThemeList( cfg->m_ColorTheme );
 
     m_validLayers.push_back( F_Cu );
     m_validLayers.push_back( In1_Cu );  // "Internal Layers"
@@ -78,9 +78,10 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::~PANEL_FP_EDITOR_COLOR_SETTINGS()
 
 bool PANEL_FP_EDITOR_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&          settingsMgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-    settings->m_ColorTheme = m_currentSettings->GetFilename();
+    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+
+    cfg->m_ColorTheme = m_currentSettings->GetFilename();
 
     return true;
 }

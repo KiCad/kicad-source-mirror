@@ -52,7 +52,8 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
         m_global = true;
         m_templateMgr = &m_templateMgrInstance;
 
-        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
         if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
             m_templateMgr->AddTemplateFieldNames( cfg->m_Drawing.field_names );
@@ -229,7 +230,8 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
 
     if( m_global )
     {
-        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
         if( cfg )
         {

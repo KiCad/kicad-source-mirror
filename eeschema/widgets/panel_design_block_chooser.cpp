@@ -64,7 +64,7 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
     DESIGN_BLOCK_LIB_TABLE* libs = m_frame->Prj().DesignBlockLibs();
 
     // Make sure settings are loaded before we start running multi-threaded design block loaders
-    Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     // Load design block files:
     WX_PROGRESS_REPORTER* progressReporter =

@@ -69,7 +69,7 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( wxWindow* aParent 
 
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     COMMON_SETTINGS*   common_settings = Pgm().GetCommonSettings();
-    EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     COLOR_SETTINGS*    current = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
     // Saved theme doesn't exist?  Reset to default
@@ -122,9 +122,10 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::TransferDataFromWindow()
     if( !saveCurrentTheme( true ) )
         return false;
 
-    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* app_settings = settingsMgr.GetAppSettings<EESCHEMA_SETTINGS>();
-    app_settings->m_ColorTheme = m_currentSettings->GetFilename();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+
+    cfg->m_ColorTheme = m_currentSettings->GetFilename();
 
     return true;
 }

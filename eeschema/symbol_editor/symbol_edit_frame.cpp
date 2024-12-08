@@ -137,7 +137,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetIcons( icon_bundle );
 
-    m_settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    m_settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
     LoadSettings( m_settings );
 
     m_libMgr = new LIB_SYMBOL_LIBRARY_MANAGER( *this );
@@ -301,19 +301,11 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
-    SYMBOL_EDITOR_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
     if( cfg )
-        Pgm().GetSettingsManager().Save( cfg );
+        mgr.Save( cfg );
 
     delete m_libMgr;
 }
@@ -370,7 +362,7 @@ COLOR_SETTINGS* SYMBOL_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) const
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
     if( GetSettings()->m_UseEeschemaColorSettings )
-        return mgr.GetColorSettings( mgr.GetAppSettings<EESCHEMA_SETTINGS>()->m_ColorTheme );
+        return mgr.GetColorSettings( mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" )->m_ColorTheme );
     else
         return mgr.GetColorSettings( GetSettings()->m_ColorTheme );
 }
@@ -1349,7 +1341,7 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextV
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     SETTINGS_MANAGER*       mgr = GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
     GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_ShowPinElectricalType;
     GetRenderSettings()->m_ShowHiddenPins = cfg->m_ShowHiddenPins;

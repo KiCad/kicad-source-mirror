@@ -227,16 +227,8 @@ void BOARD_ADAPTER::ReloadColorSettings() noexcept
 {
     wxCHECK( PgmOrNull(), /* void */ );
 
-    PCBNEW_SETTINGS* cfg = nullptr;
-
-    try
-    {
-        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     if( cfg )
     {

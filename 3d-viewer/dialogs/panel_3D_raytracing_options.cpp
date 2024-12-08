@@ -110,8 +110,8 @@ void PANEL_3D_RAYTRACING_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 
 bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataToWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     loadSettings( cfg );
 
@@ -121,8 +121,8 @@ bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataToWindow()
 
 bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     cfg->m_Render.raytrace_shadows = m_cbRaytracing_renderShadows->GetValue();
     cfg->m_Render.raytrace_backfloor = m_cbRaytracing_addFloor->GetValue();

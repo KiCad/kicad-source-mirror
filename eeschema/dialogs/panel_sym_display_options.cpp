@@ -51,7 +51,7 @@ void PANEL_SYM_DISPLAY_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* c
 bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
     loadSymEditorSettings( cfg );
 
@@ -64,7 +64,7 @@ bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataToWindow()
 bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
     cfg->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
     cfg->m_ShowHiddenFields = m_checkShowHiddenFields->GetValue();

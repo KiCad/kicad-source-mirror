@@ -56,7 +56,8 @@ void PANEL_3D_OPENGL_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 
 bool PANEL_3D_OPENGL_OPTIONS::TransferDataToWindow()
 {
-    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     loadSettings( cfg );
 
@@ -66,7 +67,8 @@ bool PANEL_3D_OPENGL_OPTIONS::TransferDataToWindow()
 
 bool PANEL_3D_OPENGL_OPTIONS::TransferDataFromWindow()
 {
-    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     cfg->m_Render.opengl_copper_thickness = m_checkBoxCuThickness->GetValue();
     cfg->m_Render.show_model_bbox = m_checkBoxBoundingBoxes->GetValue();

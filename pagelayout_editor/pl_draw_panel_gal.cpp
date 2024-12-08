@@ -54,9 +54,10 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
 
     m_painter = std::make_unique<KIGFX::DS_PAINTER>( m_gal );
 
-    SETTINGS_MANAGER&   settingsManager = Pgm().GetSettingsManager();
-    PL_EDITOR_SETTINGS* cfg = settingsManager.GetAppSettings<PL_EDITOR_SETTINGS>();
-    m_painter->GetSettings()->LoadColors( settingsManager.GetColorSettings( cfg->m_ColorTheme ) );
+    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
+    PL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
+
+    m_painter->GetSettings()->LoadColors( mgr.GetColorSettings( cfg->m_ColorTheme ) );
 
     m_view->SetPainter( m_painter.get() );
     // This fixes the zoom in and zoom out limits

@@ -225,7 +225,8 @@ int KICAD_MANAGER_CONTROL::NewJobsetFile( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 {
-    KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
+    SETTINGS_MANAGER&         mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*           settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
     DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( m_frame, settings->m_TemplateWindowPos,
                                                                 settings->m_TemplateWindowSize );
 
@@ -942,7 +943,8 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
         m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_PLUGINS, payload );
     }
 
-    KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
     if( changed.count( PCM_PACKAGE_TYPE::PT_LIBRARY )
         && ( settings->m_PcmLibAutoAdd || settings->m_PcmLibAutoRemove ) )

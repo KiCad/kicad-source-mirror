@@ -244,7 +244,8 @@ void DIALOG_EXPORT_2581::onDistPNChange( wxCommandEvent& event )
 
 bool DIALOG_EXPORT_2581::Init()
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     std::set<wxString> options;
     BOARD* board = m_parent->GetBoard();
@@ -352,7 +353,8 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
 {
     if( !m_job )
     {
-        PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
         cfg->m_Export2581.units = m_choiceUnits->GetSelection();
         cfg->m_Export2581.precision = m_precision->GetValue();

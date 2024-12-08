@@ -641,7 +641,11 @@ void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 FOOTPRINT_EDITOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetSettings()
 {
     if( !m_editorSettings )
-        m_editorSettings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    {
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+        m_editorSettings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+    }
 
     return m_editorSettings;
 }
@@ -649,8 +653,10 @@ FOOTPRINT_EDITOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetSettings()
 
 APP_SETTINGS_BASE* FOOTPRINT_EDIT_FRAME::config() const
 {
-    return m_editorSettings ? m_editorSettings
-                            : Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    if( m_editorSettings )
+        return m_editorSettings;
+
+    return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 }
 
 
@@ -1384,7 +1390,9 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTe
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
     GetBoard()->GetDesignSettings() = cfg->m_DesignSettings;

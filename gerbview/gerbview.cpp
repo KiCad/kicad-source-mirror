@@ -79,7 +79,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case PANEL_GBR_GRIDS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>();
+            GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
             EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_GERBER, false );
 
             if( frame )

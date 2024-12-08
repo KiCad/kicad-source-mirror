@@ -93,7 +93,7 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
 bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     loadEEschemaSettings( cfg );
 
@@ -104,7 +104,7 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataToWindow()
 bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
     cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();

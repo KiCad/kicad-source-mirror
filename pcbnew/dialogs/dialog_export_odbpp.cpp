@@ -123,7 +123,8 @@ void DIALOG_EXPORT_ODBPP::onOKClick( wxCommandEvent& event )
 
 bool DIALOG_EXPORT_ODBPP::Init()
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     if( !m_job )
     {
@@ -146,7 +147,8 @@ bool DIALOG_EXPORT_ODBPP::TransferDataFromWindow()
 {
     if( !m_job )
     {
-        PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
         cfg->m_ExportODBPP.units = m_choiceUnits->GetSelection();
         cfg->m_ExportODBPP.precision = m_precision->GetValue();

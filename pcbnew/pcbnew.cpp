@@ -148,17 +148,17 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_FP_DISPLAY_OPTIONS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+            SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+            FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
             return new PANEL_PCB_DISPLAY_OPTIONS( aParent, cfg );
         }
 
         case PANEL_FP_GRIDS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-            EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+            SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+            FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+            EDA_BASE_FRAME*            frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
 
             if( !frame )
                 frame = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
@@ -174,8 +174,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_FP_ORIGINS_AXES:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+            SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+            FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
             return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, cfg, FRAME_FOOTPRINT_EDITOR );
         }
@@ -217,17 +217,17 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_PCB_DISPLAY_OPTS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+            SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+            PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
             return new PANEL_PCB_DISPLAY_OPTIONS( aParent, cfg );
         }
 
         case PANEL_PCB_GRIDS:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-            EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_PCB_EDITOR, false );
+            SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+            PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+            EDA_BASE_FRAME*   frame = aKiway->Player( FRAME_PCB_EDITOR, false );
 
             if( !frame )
                 frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
@@ -243,8 +243,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_PCB_ORIGINS_AXES:
         {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+            SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+            PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
             return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, cfg, FRAME_PCB_EDITOR );
         }
@@ -380,34 +380,31 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
     // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
     InitSettings( new PCBNEW_SETTINGS );
-    aProgram->GetSettingsManager().RegisterSettings( new FOOTPRINT_EDITOR_SETTINGS );
-    aProgram->GetSettingsManager().RegisterSettings( new EDA_3D_VIEWER_SETTINGS );
+
+    SETTINGS_MANAGER& mgr = aProgram->GetSettingsManager();
+
+    mgr.RegisterSettings( new FOOTPRINT_EDITOR_SETTINGS );
+    mgr.RegisterSettings( new EDA_3D_VIEWER_SETTINGS );
 
     // We intentionally register KifaceSettings after FOOTPRINT_EDITOR_SETTINGS and EDA_3D_VIEWER_SETTINGS
     // In legacy configs, many settings were in a single editor config and the migration routine
     // for the main editor file will try and call into the now separate settings stores
     // to move the settings into them
-    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
+    mgr.RegisterSettings( KifaceSettings() );
 
     // Register the footprint editor settings as well because they share a KiFACE and need to be
     // loaded prior to use to avoid threading deadlocks
-    aProgram->GetSettingsManager().RegisterSettings( new CVPCB_SETTINGS );
+    mgr.RegisterSettings( new CVPCB_SETTINGS );
 
     start_common( aCtlBits );
 
     if( !loadGlobalLibTable() )
     {
-        // we didnt get anywhere deregister the
-        aProgram->GetSettingsManager().FlushAndRelease(
-                aProgram->GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>(), false );
-
-        aProgram->GetSettingsManager().FlushAndRelease( KifaceSettings(), false );
-
-        aProgram->GetSettingsManager().FlushAndRelease(
-                aProgram->GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>(), false );
-
-        aProgram->GetSettingsManager().FlushAndRelease(
-                aProgram->GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>(), false );
+        // we didnt get anywhere deregister the settings
+        mgr.FlushAndRelease( mgr.GetAppSettings<CVPCB_SETTINGS>( "cvpcb" ), false );
+        mgr.FlushAndRelease( KifaceSettings(), false );
+        mgr.FlushAndRelease( mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ), false );
+        mgr.FlushAndRelease( mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ), false );
 
         return false;
     }

@@ -204,7 +204,8 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
     // TODO(JE) use all control options
     m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;
 
-    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     if( cfg )
     {

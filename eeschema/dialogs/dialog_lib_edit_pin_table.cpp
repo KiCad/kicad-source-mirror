@@ -328,7 +328,8 @@ public:
 
                     VECTOR2I pos = last->GetPosition();
 
-                    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+                    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+                    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
                     if( last->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
                         || last->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )

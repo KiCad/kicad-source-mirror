@@ -638,9 +638,9 @@ void PL_EDITOR_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVar
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    SETTINGS_MANAGER&   settingsManager = Pgm().GetSettingsManager();
-    PL_EDITOR_SETTINGS* cfg = settingsManager.GetAppSettings<PL_EDITOR_SETTINGS>();
-    COLOR_SETTINGS*     colors = settingsManager.GetColorSettings( cfg->m_ColorTheme );
+    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
+    PL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>( "pl_editor" );
+    COLOR_SETTINGS*     colors = mgr.GetColorSettings( cfg->m_ColorTheme );
 
     // Update gal display options like cursor shape, grid options:
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );

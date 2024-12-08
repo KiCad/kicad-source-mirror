@@ -201,7 +201,8 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
         requestContent.current_version = verString;
         requestContent.lang = Pgm().GetLanguageTag();
 
-        KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
         requestContent.last_check = settings->m_lastUpdateCheckTime;
 
@@ -240,8 +241,8 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
                                     // basically saving the last received update prevents us from
                                     // prompting again
                                     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-                                    KICAD_SETTINGS*   curr_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
-                                    curr_settings->m_lastReceivedUpdate = response.version;
+                                    KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+                                    cfg->m_lastReceivedUpdate = response.version;
                                 }
                             } );
                 }

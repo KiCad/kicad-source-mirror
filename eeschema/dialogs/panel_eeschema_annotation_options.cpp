@@ -80,7 +80,7 @@ void PANEL_EESCHEMA_ANNOTATION_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS*
 bool PANEL_EESCHEMA_ANNOTATION_OPTIONS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     loadEEschemaSettings( cfg );
 
@@ -91,7 +91,7 @@ bool PANEL_EESCHEMA_ANNOTATION_OPTIONS::TransferDataToWindow()
 bool PANEL_EESCHEMA_ANNOTATION_OPTIONS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     cfg->m_AnnotatePanel.automatic = m_checkAutoAnnotate->GetValue();
 

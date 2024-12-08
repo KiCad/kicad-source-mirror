@@ -38,6 +38,7 @@
 #include <pad.h>
 
 #include <advanced_config.h>
+#include <pgm_base.h>
 
 PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo ) :
         BOARD_PRINTOUT_SETTINGS( aPageInfo )
@@ -53,7 +54,10 @@ void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Load( aConfig );
 
-    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+
+    if( cfg )
     {
         m_DrillMarks = static_cast<DRILL_MARKS>( cfg->m_Plot.pads_drill_mode );
         m_Pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
@@ -68,7 +72,10 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Save( aConfig );
 
-    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+
+    if( cfg )
     {
         cfg->m_Plot.pads_drill_mode        = (int)m_DrillMarks;
         cfg->m_Plot.all_layers_on_one_page = m_Pagination;

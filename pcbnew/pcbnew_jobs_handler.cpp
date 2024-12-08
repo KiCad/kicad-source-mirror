@@ -443,11 +443,10 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
 
     boardAdapter.SetBoard( brd );
     boardAdapter.m_IsBoardView = false;
-    boardAdapter.m_IsPreviewer =
-            true; // Force display 3D models, regardless the 3D viewer options
+    boardAdapter.m_IsPreviewer = true; // Force display 3D models, regardless of 3D viewer options
 
-    EDA_3D_VIEWER_SETTINGS* cfg =
-            Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     if( aRenderJob->m_quality == JOB_PCB_RENDER::QUALITY::BASIC )
     {

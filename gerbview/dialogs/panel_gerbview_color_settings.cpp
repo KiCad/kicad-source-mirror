@@ -32,7 +32,7 @@ PANEL_GERBVIEW_COLOR_SETTINGS::PANEL_GERBVIEW_COLOR_SETTINGS( wxWindow* aParent 
     m_colorNamespace = "gerbview";
 
     SETTINGS_MANAGER&  mgr          = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS* app_settings = mgr.GetAppSettings<GERBVIEW_SETTINGS>();
+    GERBVIEW_SETTINGS* app_settings = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
     COLOR_SETTINGS*    current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
     // Colors can also be modified from the LayersManager, so collect last settings if exist
@@ -75,9 +75,10 @@ PANEL_GERBVIEW_COLOR_SETTINGS::~PANEL_GERBVIEW_COLOR_SETTINGS()
 
 bool PANEL_GERBVIEW_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
-    GERBVIEW_SETTINGS*  app_settings = mgr.GetAppSettings<GERBVIEW_SETTINGS>();
-    app_settings->m_ColorTheme = m_currentSettings->GetFilename();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
+
+    cfg->m_ColorTheme = m_currentSettings->GetFilename();
 
     return true;
 }

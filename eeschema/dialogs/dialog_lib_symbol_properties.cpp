@@ -187,7 +187,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     // Add in any template fieldnames not yet defined:
     // Read global fieldname templates
-    if( EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>() )
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+
+    if( cfg )
     {
         TEMPLATES templateMgr;
 

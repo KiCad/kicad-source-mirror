@@ -314,7 +314,8 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
         choices.Add( DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
 
 
-    KICAD_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
     if( cfg->m_lastDesignBlockLibDir.IsEmpty() )
         cfg->m_lastDesignBlockLibDir = PATHS::GetDefaultUserDesignBlocksPath();
@@ -916,7 +917,8 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event
     }
 
     const IO_BASE::IO_FILE_DESC& fileDesc = m_supportedDesignBlockFiles.at( fileType );
-    KICAD_SETTINGS*              cfg = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
+    SETTINGS_MANAGER&            mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*              cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
     wxString title =
             wxString::Format( _( "Select %s Library" ), DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );

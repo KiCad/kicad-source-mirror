@@ -1446,7 +1446,8 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     for( const std::unique_ptr<SCH_ITEM>& item : sourceItems )
     {
         SCH_ITEM*          newItem = item->Duplicate();
-        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
         bool               restore_state = false;
 
         // Ensure newItem has a suitable parent: the current screen, because an item from

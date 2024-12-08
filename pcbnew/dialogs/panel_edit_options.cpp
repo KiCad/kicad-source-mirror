@@ -108,13 +108,13 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 
     if( m_isFootprintEditor )
     {
-        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
         loadFPSettings( cfg );
     }
     else
     {
-        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
         loadPCBSettings( cfg );
     }
@@ -129,7 +129,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
     if( m_isFootprintEditor )
     {
-        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
         cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
 
@@ -142,7 +142,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
     }
     else
     {
-        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
         cfg->m_Display.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
         cfg->m_Display.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();

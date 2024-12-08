@@ -937,7 +937,8 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     // Migrate color settings that were stored in the pcbnew config file
 
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetMigratedColorSettings();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    COLOR_SETTINGS*   cs = mgr.GetMigratedColorSettings();
 
     auto migrateLegacyColor =
             [&] ( const std::string& aKey, int aLayerId )
@@ -967,7 +968,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DWorksheet",          LAYER_DRAWINGSHEET );
     migrateLegacyColor( "Color4DGrid",               LAYER_PAGE_LIMITS );
 
-    Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
+    mgr.SaveColorSettings( cs, "board" );
 
     Set( "appearance.color_theme", cs->GetFilename() );
 
@@ -987,12 +988,12 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     }
 
     // Footprint editor settings were stored in pcbnew config file.  Migrate them here.
-    auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    FOOTPRINT_EDITOR_SETTINGS* fpedit = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
     fpedit->MigrateFromLegacy( aCfg );
     fpedit->Load();
 
     // Same with 3D viewer
-    auto viewer3d = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    EDA_3D_VIEWER_SETTINGS* viewer3d = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
     viewer3d->MigrateFromLegacy( aCfg );
     viewer3d->Load();
 

@@ -318,7 +318,7 @@ void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
 bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
     loadFPSettings( cfg );
 
@@ -355,7 +355,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
         return false;
 
     SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
-    BOARD_DESIGN_SETTINGS& cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_DesignSettings;
+    BOARD_DESIGN_SETTINGS& cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_DesignSettings;
 
     // A minimal value for sizes and thickness:
     const int minWidth = pcbIUScale.mmToIU( MINIMUM_LINE_WIDTH_MM );

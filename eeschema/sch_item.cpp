@@ -454,7 +454,8 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 
 const wxString& SCH_ITEM::GetDefaultFont() const
 {
-    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     return cfg->m_Appearance.default_font;
 }

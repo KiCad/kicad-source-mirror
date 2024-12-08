@@ -90,12 +90,8 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
     KI_TRACE( traceGalProfile, "%s\n", cntView.to_string() );
 
 #ifdef USE_TOOL_MANAGER
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-
-    mgr.RegisterSettings( new PCBNEW_SETTINGS, false );
-
-    PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.RegisterSettings( new PCBNEW_SETTINGS, false );
     
     m_toolManager = new TOOL_MANAGER;
 

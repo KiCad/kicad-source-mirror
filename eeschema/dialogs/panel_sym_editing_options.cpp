@@ -62,9 +62,9 @@ void PANEL_SYM_EDITING_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* a
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* settings = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
-    loadSymEditorSettings( settings );
+    loadSymEditorSettings( cfg );
 
     return true;
 }
@@ -73,19 +73,19 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* settings = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
-    settings->m_Defaults.line_width = schIUScale.IUToMils( m_lineWidth.GetIntValue() );
-    settings->m_Defaults.text_size = schIUScale.IUToMils( m_textSize.GetIntValue() );
-    settings->m_Defaults.pin_length = schIUScale.IUToMils( m_pinLength.GetIntValue() );
-    settings->m_Defaults.pin_num_size = schIUScale.IUToMils( m_pinNumberSize.GetIntValue() );
-    settings->m_Defaults.pin_name_size = schIUScale.IUToMils( m_pinNameSize.GetIntValue() );
-    settings->m_Repeat.label_delta = m_spinRepeatLabel->GetValue();
-    settings->m_Repeat.pin_step = schIUScale.IUToMils( m_pinPitch.GetIntValue() );
-    settings->m_dragPinsAlongWithEdges = m_dragPinsWithEdges->GetValue();
+    cfg->m_Defaults.line_width = schIUScale.IUToMils( m_lineWidth.GetIntValue() );
+    cfg->m_Defaults.text_size = schIUScale.IUToMils( m_textSize.GetIntValue() );
+    cfg->m_Defaults.pin_length = schIUScale.IUToMils( m_pinLength.GetIntValue() );
+    cfg->m_Defaults.pin_num_size = schIUScale.IUToMils( m_pinNumberSize.GetIntValue() );
+    cfg->m_Defaults.pin_name_size = schIUScale.IUToMils( m_pinNameSize.GetIntValue() );
+    cfg->m_Repeat.label_delta = m_spinRepeatLabel->GetValue();
+    cfg->m_Repeat.pin_step = schIUScale.IUToMils( m_pinPitch.GetIntValue() );
+    cfg->m_dragPinsAlongWithEdges = m_dragPinsWithEdges->GetValue();
 
     // Force pin_step to a grid multiple
-    settings->m_Repeat.pin_step = KiROUND( double( settings->m_Repeat.pin_step ) / MIN_GRID ) * MIN_GRID;
+    cfg->m_Repeat.pin_step = KiROUND( double( cfg->m_Repeat.pin_step ) / MIN_GRID ) * MIN_GRID;
 
     return true;
 }

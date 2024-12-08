@@ -1167,7 +1167,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         applyPlotSettings();
 
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
         m_plotOpts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
 

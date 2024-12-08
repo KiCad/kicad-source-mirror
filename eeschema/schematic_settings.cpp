@@ -66,26 +66,20 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_SpiceModelCurSheetAsRoot( true ),
         m_NgspiceSettings( nullptr )
 {
-    EESCHEMA_SETTINGS* appSettings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
-    int defaultLineThickness =
-            appSettings ? appSettings->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
-    int defaultTextSize =
-            appSettings ? appSettings->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
-    int defaultPinSymbolSize =
-            appSettings ? appSettings->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
-    int defaultJunctionSizeChoice =
-            appSettings ? appSettings->m_Drawing.junction_size_choice : 3;
-    bool defaultIntersheetsRefShow =
-            appSettings ? appSettings->m_Drawing.intersheets_ref_show : false;
-    bool defaultIntersheetsRefOwnPage =
-            appSettings ? appSettings->m_Drawing.intersheets_ref_own_page : true;
-    bool defaultIntersheetsRefFormatShort =
-            appSettings ? appSettings->m_Drawing.intersheets_ref_short : false;
-    wxString defaultIntersheetsRefPrefix =
-            appSettings ? appSettings->m_Drawing.intersheets_ref_prefix : wxString( wxS( DEFAULT_IREF_PREFIX ) );
-    wxString defaultIntersheetsRefSuffix =
-            appSettings ? appSettings->m_Drawing.intersheets_ref_suffix : wxString( wxS( DEFAULT_IREF_SUFFIX ) );
+    int defaultLineThickness = cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
+    int defaultTextSize = cfg ? cfg->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
+    int defaultPinSymbolSize = cfg ? cfg->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
+    int defaultJunctionSizeChoice = cfg ? cfg->m_Drawing.junction_size_choice : 3;
+    bool defaultIntersheetsRefShow = cfg ? cfg->m_Drawing.intersheets_ref_show : false;
+    bool defaultIntersheetsRefOwnPage = cfg ? cfg->m_Drawing.intersheets_ref_own_page : true;
+    bool defaultIntersheetsRefFormatShort = cfg ? cfg->m_Drawing.intersheets_ref_short : false;
+    wxString defaultIntersheetsRefPrefix = cfg ? cfg->m_Drawing.intersheets_ref_prefix
+                                               : wxString( wxS( DEFAULT_IREF_PREFIX ) );
+    wxString defaultIntersheetsRefSuffix = cfg ? cfg->m_Drawing.intersheets_ref_suffix
+                                               : wxString( wxS( DEFAULT_IREF_SUFFIX ) );
 
     m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_show",
             &m_IntersheetRefsShow, defaultIntersheetsRefShow ) );
@@ -191,7 +185,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 }
 
                 // Read global fieldname templates
-                auto* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+                SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+                EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
                 if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
                     m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );

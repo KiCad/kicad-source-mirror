@@ -36,7 +36,7 @@ PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( wxWindow* aWindow ) :
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
     if( cfg->m_UseEeschemaColorSettings )
         m_eeschemaRB->SetValue( true );
@@ -73,7 +73,7 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
     cfg->m_UseEeschemaColorSettings = m_eeschemaRB->GetValue();
 

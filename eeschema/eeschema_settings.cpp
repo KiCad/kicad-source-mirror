@@ -977,7 +977,8 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     if( aCfg->Read( "MoveWarpsCursor", &tmp ) )
         Pgm().GetCommonSettings()->m_Input.warp_mouse_on_move = tmp;
 
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetMigratedColorSettings();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    COLOR_SETTINGS*   cs = mgr.GetMigratedColorSettings();
 
     auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
         wxString str;
@@ -1016,14 +1017,14 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DWireEx",            LAYER_WIRE );
     migrateLegacyColor( "Color4DWorksheetEx",       LAYER_SCHEMATIC_DRAWINGSHEET );
 
-    Pgm().GetSettingsManager().SaveColorSettings( cs, "schematic" );
+    mgr.SaveColorSettings( cs, "schematic" );
 
     Set( "appearance.color_theme", cs->GetFilename() );
 
     // LibEdit settings were stored with eeschema.  If eeschema is the first app to run,
     // we need to migrate the LibEdit settings here
 
-    auto libedit = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* libedit = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
     libedit->MigrateFromLegacy( aCfg );
     libedit->Load();
 

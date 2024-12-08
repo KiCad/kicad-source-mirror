@@ -1093,7 +1093,7 @@ bool EDA_3D_CANVAS::SetView3D( VIEW3D_TYPE aRequestedView )
 void EDA_3D_CANVAS::RenderEngineChanged()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     switch( cfg->m_Render.engine )
     {

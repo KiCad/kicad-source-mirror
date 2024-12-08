@@ -191,7 +191,7 @@ bool PCB_EDITOR_CONDITIONS::get45degModeFunc( const SELECTION& aSelection, PCB_B
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
     if( aFrame->IsType( FRAME_PCB_EDITOR ) )
-        return mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit;
+        return mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
     else
-        return mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
+        return mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
 }

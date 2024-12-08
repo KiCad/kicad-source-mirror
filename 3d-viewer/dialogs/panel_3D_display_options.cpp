@@ -64,7 +64,8 @@ void PANEL_3D_DISPLAY_OPTIONS::loadViewSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 
 bool PANEL_3D_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     loadViewSettings( cfg );
 
@@ -74,7 +75,8 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     // Set visibility of items
     cfg->m_Render.show_zones = m_checkBoxAreas->GetValue();

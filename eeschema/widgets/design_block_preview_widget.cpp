@@ -48,8 +48,9 @@ DESIGN_BLOCK_PREVIEW_WIDGET::DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, boo
         m_statusSizer( nullptr ),
         m_previewItem( nullptr )
 {
-    auto common_settings = Pgm().GetCommonSettings();
-    auto app_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    COMMON_SETTINGS*   common_settings = Pgm().GetCommonSettings();
+    EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
     m_galDisplayOptions.m_forceDisplayCursor = false;

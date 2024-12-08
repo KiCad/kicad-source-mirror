@@ -208,7 +208,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case PANEL_SYM_DISP_OPTIONS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
             return new PANEL_SYM_DISPLAY_OPTIONS( aParent, cfg );
         }
@@ -216,7 +216,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case PANEL_SYM_EDIT_GRIDS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
             EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
             if( !frame )
@@ -253,7 +253,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case PANEL_SCH_DISP_OPTIONS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+            EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
             return new PANEL_EESCHEMA_DISPLAY_OPTIONS( aParent, cfg );
         }
@@ -261,7 +261,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case PANEL_SCH_GRIDS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+            EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
             EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_SCH, false );
 
             if( !frame )

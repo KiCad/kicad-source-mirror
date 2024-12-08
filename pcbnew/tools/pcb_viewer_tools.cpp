@@ -323,9 +323,9 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             bool              force45Deg;
 
             if( frame()->IsType( FRAME_PCB_EDITOR ) )
-                force45Deg = mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit;
+                force45Deg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
             else
-                force45Deg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
+                force45Deg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
 
             twoPtMgr.SetAngleSnap( force45Deg );
             twoPtMgr.SetEnd( cursorPos );

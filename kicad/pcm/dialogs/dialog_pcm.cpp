@@ -244,9 +244,9 @@ void DIALOG_PCM::OnManageRepositoriesClicked( wxCommandEvent& event )
         m_pcm->SetRepositoryList( dialog_data );
 
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
+        KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
-        app_settings->m_PcmRepositories = std::move( dialog_data );
+        cfg->m_PcmRepositories = std::move( dialog_data );
 
         setRepositoryListFromPcm();
     }

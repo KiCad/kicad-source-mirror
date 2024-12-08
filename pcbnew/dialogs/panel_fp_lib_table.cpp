@@ -317,7 +317,8 @@ protected:
 
 void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     auto autoSizeCol = [&]( WX_GRID* aLocGrid, int aCol )
     {
@@ -408,7 +409,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
         m_pluginChoices.Add( PCB_IO_MGR::ShowType( fileType ) );
 
 
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     if( cfg->m_lastFootprintLibDir.IsEmpty() )
         cfg->m_lastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
@@ -951,7 +953,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
 
     const IO_BASE::IO_FILE_DESC& fileDesc = m_supportedFpFiles.at( fileType );
-    PCBNEW_SETTINGS*        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    SETTINGS_MANAGER&            mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*             cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     wxString title = wxString::Format( _( "Select %s Library" ), PCB_IO_MGR::ShowType( fileType ) );
     wxString openDir = cfg->m_lastFootprintLibDir;

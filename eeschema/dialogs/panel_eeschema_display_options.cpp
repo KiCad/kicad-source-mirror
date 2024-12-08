@@ -81,7 +81,7 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     loadEEschemaSettings( cfg );
 
@@ -94,7 +94,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     cfg->m_Appearance.default_font = m_defaultFontCtrl->GetSelection() <= 0
                                         ? wxString( KICAD_FONT_NAME )   // This is a keyword. Do not translate

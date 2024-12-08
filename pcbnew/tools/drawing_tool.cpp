@@ -338,9 +338,9 @@ void DRAWING_TOOL::UpdateStatusBar() const
         bool              constrained;
 
         if( m_frame->IsType( FRAME_PCB_EDITOR ) )
-            constrained = mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit;
+            constrained = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
         else
-            constrained = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
+            constrained = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
 
         m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" ) : wxString( "" ) );
     }
@@ -2113,9 +2113,9 @@ int DRAWING_TOOL::ToggleHV45Mode( const TOOL_EVENT& toolEvent )
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
     if( frame()->IsType( FRAME_PCB_EDITOR ) )
-        TOGGLE( mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit );
+        TOGGLE( mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit );
     else
-        TOGGLE( mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit );
+        TOGGLE( mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit );
 
     UpdateStatusBar();
 

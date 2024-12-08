@@ -67,8 +67,8 @@ COLOR4D PCB_LAYER_PRESENTATION::getLayerColor( int aLayer ) const
     else
     {
         SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-        FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-        COLOR_SETTINGS*            current = mgr.GetColorSettings( settings->m_ColorTheme );
+        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+        COLOR_SETTINGS*            current = mgr.GetColorSettings( cfg->m_ColorTheme );
 
         return current->GetColor( aLayer );
     }

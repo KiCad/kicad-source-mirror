@@ -535,12 +535,12 @@ COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings( bool aForceRefresh ) const
     if( !m_colorSettings || aForceRefresh )
     {
         SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
         wxString           colorTheme = cfg->m_ColorTheme;
 
         if( IsType( FRAME_SCH_SYMBOL_EDITOR ) )
         {
-            SYMBOL_EDITOR_SETTINGS* symCfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+            SYMBOL_EDITOR_SETTINGS* symCfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
             if( !symCfg->m_UseEeschemaColorSettings )
                 colorTheme = symCfg->m_ColorTheme;

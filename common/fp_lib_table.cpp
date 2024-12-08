@@ -622,7 +622,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
     aTable.Load( fn.GetFullPath() );
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
+    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
     wxString packagesPath;

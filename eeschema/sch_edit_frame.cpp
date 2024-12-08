@@ -2145,7 +2145,8 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
-    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
     GetRenderSettings()->SetDefaultFont( cfg->m_Appearance.default_font );
 

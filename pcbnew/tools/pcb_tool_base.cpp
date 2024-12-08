@@ -333,9 +333,9 @@ bool PCB_TOOL_BASE::Is45Limited() const
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
     if( frame()->IsType( FRAME_PCB_EDITOR ) )
-        return mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit;
+        return mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
     else
-        return mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
+        return mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
 }
 
 

@@ -524,10 +524,10 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
     const wxString& url = *ver_it->download_url;
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
+    KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
     wxWindow* topLevelParent = wxGetTopLevelParent( this );
-    wxFileDialog dialog( topLevelParent, _( "Save Package" ), app_settings->m_PcmLastDownloadDir,
+    wxFileDialog dialog( topLevelParent, _( "Save Package" ), cfg->m_PcmLastDownloadDir,
                          wxString::Format( wxT( "%s_v%s.zip" ), package.identifier, version ),
                          wxT( "ZIP files (*.zip)|*.zip" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -535,7 +535,7 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
         return;
 
     wxString path = dialog.GetPath();
-    app_settings->m_PcmLastDownloadDir = wxPathOnly( path );
+    cfg->m_PcmLastDownloadDir = wxPathOnly( path );
 
     std::ofstream output( path.ToUTF8(), std::ios_base::binary );
 

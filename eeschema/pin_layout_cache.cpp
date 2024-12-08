@@ -138,7 +138,8 @@ void PIN_LAYOUT_CACHE::recomputeExtentsCache( bool aDefinitelyDirty, KIFONT::FON
 
 void PIN_LAYOUT_CACHE::recomputeCaches()
 {
-    EESCHEMA_SETTINGS*     cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS*     cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     KIFONT::FONT*          font = KIFONT::FONT::GetFont( cfg->m_Appearance.default_font );
     const KIFONT::METRICS& metrics = m_pin.GetFontMetrics();
 

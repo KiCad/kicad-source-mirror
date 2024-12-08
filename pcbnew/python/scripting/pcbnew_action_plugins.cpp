@@ -531,7 +531,8 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
 
 std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     std::vector<ACTION_PLUGIN*> plugins;
     std::vector<ACTION_PLUGIN*> orderedPlugins;
@@ -566,7 +567,8 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath,
                                                    bool aPluginDefault )
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     for( const auto& entry : cfg->m_VisibleActionPlugins )
     {

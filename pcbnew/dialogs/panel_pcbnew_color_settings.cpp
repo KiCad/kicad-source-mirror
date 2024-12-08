@@ -691,15 +691,15 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOA
 {
     m_colorNamespace = "board";
 
-    SETTINGS_MANAGER& mgr          = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-    COLOR_SETTINGS*   current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
+    SETTINGS_MANAGER& mgr     = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  cfg     = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+    COLOR_SETTINGS*   current = mgr.GetColorSettings( cfg->m_ColorTheme );
 
     // Saved theme doesn't exist?  Reset to default
-    if( current->GetFilename() != app_settings->m_ColorTheme )
-        app_settings->m_ColorTheme = current->GetFilename();
+    if( current->GetFilename() != cfg->m_ColorTheme )
+        cfg->m_ColorTheme = current->GetFilename();
 
-    createThemeList( app_settings->m_ColorTheme );
+    createThemeList( cfg->m_ColorTheme );
 
     // Currently this only applies to eeschema
     m_optOverrideColors->Hide();
@@ -740,8 +740,9 @@ PANEL_PCBNEW_COLOR_SETTINGS::~PANEL_PCBNEW_COLOR_SETTINGS()
 bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-    app_settings->m_ColorTheme = m_currentSettings->GetFilename();
+    PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+
+    cfg->m_ColorTheme = m_currentSettings->GetFilename();
 
     return true;
 }

@@ -597,7 +597,9 @@ void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
     m_boardAdapter.m_IsBoardView = false;
     m_boardAdapter.m_IsPreviewer = true;   // Force display 3D models, regardless the 3D viewer options
 
-    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+
     m_boardAdapter.m_Cfg = cfg;
 
     // Build the 3D canvas
