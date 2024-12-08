@@ -86,7 +86,7 @@ public:
 
         bool exclude = fn.GetName().Contains( "fp-info-cache" )
                        || fn.GetName().StartsWith( FILEEXT::AutoSaveFilePrefix )
-                       || fn.GetExt().Contains( "lck" );
+                       || fn.GetName().StartsWith( FILEEXT::LockFilePrefix );
 
         if( !exclude )
             m_files.emplace_back( wxFileName( filename ) );
@@ -255,10 +255,10 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
         {
             currname.Replace( basename, aNewProjectPath.GetName() );
         }
-        else if( destFile.GetExt() == "dcm"
-                    || destFile.GetExt() == "lib"
-                    // Footprint libraries are directories not files, so GetExt() won't work
-                    || destFile.GetPath().EndsWith( ".pretty" ) )
+        else if( destFile.GetExt() == FILEEXT::LegacySymbolDocumentFileExtension
+                 || destFile.GetExt() == FILEEXT::LegacySymbolLibFileExtension
+                 // Footprint libraries are directories not files, so GetExt() won't work
+                 || destFile.GetPath().EndsWith( '.' + FILEEXT::KiCadFootprintLibPathExtension ) )
         {
             // Don't rename project-specific libraries.  This will break the library tables and
             // cause broken links in the schematic/pcb.
@@ -330,6 +330,7 @@ wxString* PROJECT_TEMPLATE::GetTitle()
         int start = 0;
         int finish = 0;
         bool done = false;
+        bool hasStart = false;
 
         while( input.IsOk() && !input.Eof() && !done )
         {
@@ -346,27 +347,32 @@ wxString* PROJECT_TEMPLATE::GetTitle()
                 if( finish != wxNOT_FOUND )
                 {
                     m_title = line( start + 7, length );
+                    done = true;
                 }
                 else
                 {
                     m_title = line.Mid( start + 7 );
+                    hasStart = true;
                 }
-
-                done = true;
             }
             else
             {
                 if( finish != wxNOT_FOUND )
                 {
-                    m_title += line.SubString( 0, finish );
+                    m_title += line.SubString( 0, finish - 1 );
                     done = true;
                 }
+                else if( hasStart )
+                    m_title += line;
             }
-
-            // Remove line endings
-            m_title.Replace( wxT( "\r" ), wxT( " " ) );
-            m_title.Replace( wxT( "\n" ), wxT( " " ) );
         }
+
+        // Remove line endings
+        m_title.Replace( wxT( "\r" ), wxT( "" ) );
+        m_title.Replace( wxT( "\n" ), wxT( "" ) );
+
+        m_title.Trim( false ); // Trim from left
+        m_title.Trim();        // Trim from right
     }
 
     return &m_title;
