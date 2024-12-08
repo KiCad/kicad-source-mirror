@@ -54,4 +54,17 @@ BOOST_AUTO_TEST_CASE( CopperLayers )
 }
 
 
+BOOST_AUTO_TEST_CASE( FlipLset )
+{
+    LSET front( { F_Cu, In1_Cu, In2_Cu } );
+    LSET back( { B_Cu, In3_Cu, In4_Cu } );
+
+    front.Flip( 6 );
+    back.Flip( 6 );
+
+    BOOST_TEST( front.compare( LSET { B_Cu, In3_Cu, In4_Cu } ) == 0 );
+    BOOST_TEST( back.compare( LSET { F_Cu, In1_Cu, In2_Cu } ) == 0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
