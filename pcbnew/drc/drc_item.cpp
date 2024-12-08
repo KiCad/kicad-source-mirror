@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -367,6 +367,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
             DRC_ITEM::libFootprintIssues,
             DRC_ITEM::libFootprintMismatch,
             DRC_ITEM::footprintTHPadhasNoHole,
+            DRC_ITEM::mirroredTextOnFrontLayer,
+            DRC_ITEM::nonMirroredTextOnBackLayer,
 
             // DRC_ITEM types with no user-editable severities
             // NOTE: this MUST be the last grouping in the list!
