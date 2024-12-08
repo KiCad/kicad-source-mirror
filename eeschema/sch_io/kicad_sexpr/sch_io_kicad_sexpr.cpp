@@ -1331,7 +1331,7 @@ void SCH_IO_KICAD_SEXPR::saveText( SCH_TEXT* aText, int aNestLevel )
                       EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
     }
 
-    if( aText->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
+    if( label && !label->GetFields().empty() && label->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
         m_out->Print( 0, " (fields_autoplaced yes)" );
 
     m_out->Print( 0, "\n" );
