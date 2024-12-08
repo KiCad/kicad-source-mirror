@@ -603,9 +603,6 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
 
     aLibFP = temp.get();
 
-    TEST( GetLibDescription(), aLibFP->GetLibDescription(), _( "Footprint descriptions differ." ) );
-    TEST( GetKeywords(), aLibFP->GetKeywords(), _( "Footprint keywords differ." ) );
-
 #define TEST_ATTR( a, b, attr, msg ) TEST( ( a & attr ), ( b & attr ), msg )
 
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), (FP_THROUGH_HOLE | FP_SMD),
