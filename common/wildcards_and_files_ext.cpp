@@ -125,6 +125,7 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
 const std::string FILEEXT::BackupFileSuffix( "-bak" );
 const std::string FILEEXT::LockFilePrefix( "~" );
 const std::string FILEEXT::LockFileExtension( "lck" );
+const std::string FILEEXT::AutoSaveFilePrefix( "_autosave-" );
 
 const std::string FILEEXT::KiCadSymbolLibFileExtension( "kicad_sym" );
 const std::string FILEEXT::SchematicSymbolFileExtension( "sym" );

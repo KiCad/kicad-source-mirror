@@ -116,6 +116,7 @@ public:
     static const std::string BackupFileSuffix;
     static const std::string LockFilePrefix;
     static const std::string LockFileExtension;
+    static const std::string AutoSaveFilePrefix;
 
     static const std::string SchematicSymbolFileExtension;
     static const std::string LegacySymbolLibFileExtension;
