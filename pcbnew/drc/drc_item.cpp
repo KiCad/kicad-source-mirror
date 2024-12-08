@@ -352,6 +352,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
             DRC_ITEM::silkEdgeClearance,
             DRC_ITEM::textHeightOutOfRange,
             DRC_ITEM::textThicknessOutOfRange,
+            DRC_ITEM::mirroredTextOnFrontLayer,
+            DRC_ITEM::nonMirroredTextOnBackLayer,
 
             DRC_ITEM::heading_misc,
             DRC_ITEM::itemsNotAllowed,
@@ -367,8 +369,6 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
             DRC_ITEM::libFootprintIssues,
             DRC_ITEM::libFootprintMismatch,
             DRC_ITEM::footprintTHPadhasNoHole,
-            DRC_ITEM::mirroredTextOnFrontLayer,
-            DRC_ITEM::nonMirroredTextOnBackLayer,
 
             // DRC_ITEM types with no user-editable severities
             // NOTE: this MUST be the last grouping in the list!
