@@ -36,6 +36,7 @@
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
 
+
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
                                                           const PCB_SELECTION& aItems ) :
         DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
@@ -706,14 +707,20 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     break;
                 }
 
-                auto startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
-                auto endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
+                PCB_LAYER_ID startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
+                PCB_LAYER_ID endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
 
                 if (startLayer != UNDEFINED_LAYER )
+                {
+                    m_viaStack->Drill().start = startLayer;
                     v->SetTopLayer( startLayer );
+                }
 
                 if (endLayer != UNDEFINED_LAYER )
+                {
+                    m_viaStack->Drill().end = endLayer;
                     v->SetBottomLayer( endLayer );
+                }
 
                 switch( m_annularRingsCtrl->GetSelection() )
                 {
@@ -749,10 +756,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 case 2: v->Padstack().BackOuterLayers().has_solder_mask = false;  break;
                 }
 
-                v->SanitizeLayers();
-
                 if( !m_viaDiameter.IsIndeterminate() )
                     v->SetPadstack( *m_viaStack );
+
+                v->SanitizeLayers();
 
                 if( !m_viaDrill.IsIndeterminate() )
                     v->SetDrill( m_viaDrill.GetIntValue() );
