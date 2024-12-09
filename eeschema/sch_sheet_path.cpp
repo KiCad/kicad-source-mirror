@@ -693,9 +693,13 @@ void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectNam
             {
                 symbolInstance.m_Reference =
                         symbol->GetField( REFERENCE_FIELD )->GetShownText( this, true );
+                symbolInstance.m_Unit = symbol->GetUnit();
             }
             else
             {
+                // When schematics are shared, we cannot know which instance the current symbol
+                // reference field and unit belong to.  In this case, we clear the reference
+                // annotation and set the unit to 1.
                 symbolInstance.m_Reference = UTIL::GetRefDesUnannotated( symbol->GetPrefix() );
             }
 
