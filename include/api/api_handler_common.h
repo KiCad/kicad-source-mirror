@@ -38,22 +38,22 @@ public:
     ~API_HANDLER_COMMON() override {}
 
 private:
-    HANDLER_RESULT<commands::GetVersionResponse> handleGetVersion( commands::GetVersion& aMsg,
-                                                                   const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::GetVersionResponse> handleGetVersion(
+        const HANDLER_CONTEXT<commands::GetVersion>& aCtx );
 
-    HANDLER_RESULT<commands::NetClassesResponse> handleGetNetClasses( commands::GetNetClasses& aMsg,
-                                                                      const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::NetClassesResponse> handleGetNetClasses(
+        const HANDLER_CONTEXT<commands::GetNetClasses>& aCtx );
 
-    HANDLER_RESULT<Empty> handlePing( commands::Ping& aMsg, const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<Empty> handlePing( const HANDLER_CONTEXT<commands::Ping>& aCtx );
 
-    HANDLER_RESULT<types::Box2> handleGetTextExtents( commands::GetTextExtents& aMsg,
-            const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<types::Box2> handleGetTextExtents(
+        const HANDLER_CONTEXT<commands::GetTextExtents>& aCtx );
 
-    HANDLER_RESULT<commands::GetTextAsShapesResponse>
-    handleGetTextAsShapes( commands::GetTextAsShapes& aMsg, const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::GetTextAsShapesResponse> handleGetTextAsShapes(
+        const HANDLER_CONTEXT<commands::GetTextAsShapes>& aCtx );
 
-    HANDLER_RESULT<commands::ExpandTextVariablesResponse>
-    handleExpandTextVariables( commands::ExpandTextVariables& aMsg, const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::ExpandTextVariablesResponse> handleExpandTextVariables(
+        const HANDLER_CONTEXT<commands::ExpandTextVariables>& aCtx );
 };
 
 #endif //KICAD_API_HANDLER_COMMON_H

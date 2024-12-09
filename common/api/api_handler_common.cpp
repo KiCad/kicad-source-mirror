@@ -52,8 +52,8 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
 }
 
 
-HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion( commands::GetVersion&,
-                                                                         const HANDLER_CONTEXT& )
+HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion(
+        const HANDLER_CONTEXT<GetVersion>& )
 {
     GetVersionResponse reply;
 
@@ -68,8 +68,8 @@ HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion( command
 }
 
 
-HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses( GetNetClasses& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses(
+        const HANDLER_CONTEXT<GetNetClasses>& aCtx )
 {
     NetClassesResponse reply;
 
@@ -85,18 +85,18 @@ HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses( GetN
 }
 
 
-HANDLER_RESULT<Empty> API_HANDLER_COMMON::handlePing( Ping& aMsg, const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<Empty> API_HANDLER_COMMON::handlePing( const HANDLER_CONTEXT<Ping>& aCtx )
 {
     return Empty();
 }
 
 
-HANDLER_RESULT<types::Box2> API_HANDLER_COMMON::handleGetTextExtents( GetTextExtents& aMsg,
-                                                                      const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<types::Box2> API_HANDLER_COMMON::handleGetTextExtents(
+        const HANDLER_CONTEXT<GetTextExtents>& aCtx )
 {
     EDA_TEXT text( pcbIUScale );
     google::protobuf::Any any;
-    any.PackFrom( aMsg.text() );
+    any.PackFrom( aCtx.Request.text() );
 
     if( !text.Deserialize( any ) )
     {
@@ -124,11 +124,11 @@ HANDLER_RESULT<types::Box2> API_HANDLER_COMMON::handleGetTextExtents( GetTextExt
 
 
 HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShapes(
-        GetTextAsShapes& aMsg, const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<GetTextAsShapes>& aCtx )
 {
     GetTextAsShapesResponse reply;
 
-    for( const TextOrTextBox& textMsg : aMsg.text() )
+    for( const TextOrTextBox& textMsg : aCtx.Request.text() )
     {
         Text dummyText;
         const Text* textPtr = &textMsg.text();
@@ -202,9 +202,9 @@ HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShape
 
 
 HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_COMMON::handleExpandTextVariables(
-    ExpandTextVariables& aMsg, const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<ExpandTextVariables>& aCtx )
 {
-    if( !aMsg.has_document() || aMsg.document().type() != DocumentType::DOCTYPE_PROJECT )
+    if( !aCtx.Request.has_document() || aCtx.Request.document().type() != DOCTYPE_PROJECT )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_UNHANDLED );
@@ -215,7 +215,7 @@ HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_COMMON::handleExpandText
     ExpandTextVariablesResponse reply;
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
-    for( const std::string& textMsg : aMsg.text() )
+    for( const std::string& textMsg : aCtx.Request.text() )
     {
         wxString result = ExpandTextVars( wxString::FromUTF8( textMsg ), &project );
         reply.add_text( result.ToUTF8() );

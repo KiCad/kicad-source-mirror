@@ -54,27 +54,27 @@ protected:
      */
     virtual std::optional<ApiResponseStatus> checkForBusy();
 
-    HANDLER_RESULT<commands::BeginCommitResponse> handleBeginCommit( commands::BeginCommit& aMsg,
-                                                                     const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::BeginCommitResponse> handleBeginCommit(
+        const HANDLER_CONTEXT<commands::BeginCommit>& aCtx );
 
-    HANDLER_RESULT<commands::EndCommitResponse> handleEndCommit( commands::EndCommit& aMsg,
-                                                                 const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::EndCommitResponse> handleEndCommit(
+        const HANDLER_CONTEXT<commands::EndCommit>& aCtx );
 
-    COMMIT* getCurrentCommit( const HANDLER_CONTEXT& aCtx );
+    COMMIT* getCurrentCommit( const std::string& aClientName );
 
-    virtual void pushCurrentCommit( const HANDLER_CONTEXT& aCtx, const wxString& aMessage );
+    virtual void pushCurrentCommit( const std::string& aClientName, const wxString& aMessage );
 
-    HANDLER_RESULT<commands::CreateItemsResponse> handleCreateItems( commands::CreateItems& aMsg,
-                                                                     const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::CreateItemsResponse> handleCreateItems(
+        const HANDLER_CONTEXT<commands::CreateItems>& aCtx );
 
-    HANDLER_RESULT<commands::UpdateItemsResponse> handleUpdateItems( commands::UpdateItems& aMsg,
-                                                                     const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::UpdateItemsResponse> handleUpdateItems(
+        const HANDLER_CONTEXT<commands::UpdateItems>& aCtx );
 
-    HANDLER_RESULT<commands::DeleteItemsResponse> handleDeleteItems( commands::DeleteItems& aMsg,
-                                                                     const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::DeleteItemsResponse> handleDeleteItems(
+        const HANDLER_CONTEXT<commands::DeleteItems>& aCtx );
 
-    HANDLER_RESULT<commands::HitTestResponse> handleHitTest( commands::HitTest& aMsg,
-                                                             const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::HitTestResponse> handleHitTest(
+        const HANDLER_CONTEXT<commands::HitTest>& aCtx );
 
     /**
      * Override this to create an appropriate COMMIT subclass for the frame in question
@@ -85,7 +85,7 @@ protected:
     /**
      * Override this to specify which document type this editor handles
      */
-    virtual kiapi::common::types::DocumentType thisDocumentType() const = 0;
+    virtual types::DocumentType thisDocumentType() const = 0;
 
     /**
      * @return true if the given document is valid for this editor and is currently open
@@ -93,13 +93,13 @@ protected:
     virtual bool validateDocumentInternal( const DocumentSpecifier& aDocument ) const = 0;
 
     virtual HANDLER_RESULT<ItemRequestStatus> handleCreateUpdateItemsInternal( bool aCreate,
-        const HANDLER_CONTEXT& aCtx,
+        const std::string& aClientName,
         const types::ItemHeader &aHeader,
         const google::protobuf::RepeatedPtrField<google::protobuf::Any>& aItems,
         std::function<void( commands::ItemStatus, google::protobuf::Any )> aItemHandler ) = 0;
 
     virtual void deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& aItemsToDelete,
-                                      const HANDLER_CONTEXT& aCtx ) = 0;
+                                      const std::string& aClientName ) = 0;
 
     virtual std::optional<EDA_ITEM*> getItemFromDocument( const DocumentSpecifier& aDocument,
                                                           const KIID& aId ) = 0;

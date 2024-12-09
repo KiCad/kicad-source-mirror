@@ -97,15 +97,15 @@ PCB_EDIT_FRAME* API_HANDLER_PCB::frame() const
 }
 
 
-HANDLER_RESULT<RunActionResponse> API_HANDLER_PCB::handleRunAction( RunAction& aRequest,
-                                                                    const HANDLER_CONTEXT& )
+HANDLER_RESULT<RunActionResponse> API_HANDLER_PCB::handleRunAction(
+        const HANDLER_CONTEXT<RunAction>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
     RunActionResponse response;
 
-    if( frame()->GetToolManager()->RunAction( aRequest.action(), true ) )
+    if( frame()->GetToolManager()->RunAction( aCtx.Request.action(), true ) )
         response.set_status( RunActionStatus::RAS_OK );
     else
         response.set_status( RunActionStatus::RAS_INVALID );
@@ -115,9 +115,9 @@ HANDLER_RESULT<RunActionResponse> API_HANDLER_PCB::handleRunAction( RunAction& a
 
 
 HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_PCB::handleGetOpenDocuments(
-        GetOpenDocuments& aMsg, const HANDLER_CONTEXT& )
+        const HANDLER_CONTEXT<GetOpenDocuments>& aCtx )
 {
-    if( aMsg.type() != DocumentType::DOCTYPE_PCB )
+    if( aCtx.Request.type() != DocumentType::DOCTYPE_PCB )
     {
         ApiResponseStatus e;
         // No message needed for AS_UNHANDLED; this is an internal flag for the API server
@@ -141,9 +141,9 @@ HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_PCB::handleGetOpenDocuments
 }
 
 
-void API_HANDLER_PCB::pushCurrentCommit( const HANDLER_CONTEXT& aCtx, const wxString& aMessage )
+void API_HANDLER_PCB::pushCurrentCommit( const std::string& aClientName, const wxString& aMessage )
 {
-    API_HANDLER_EDITOR::pushCurrentCommit( aCtx, aMessage );
+    API_HANDLER_EDITOR::pushCurrentCommit( aClientName, aMessage );
     frame()->Refresh();
 }
 
@@ -219,7 +219,7 @@ HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> API_HANDLER_PCB::createItemForType( 
 
 
 HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsInternal( bool aCreate,
-        const HANDLER_CONTEXT& aCtx,
+        const std::string& aClientName,
         const types::ItemHeader &aHeader,
         const google::protobuf::RepeatedPtrField<google::protobuf::Any>& aItems,
         std::function<void( ItemStatus, google::protobuf::Any )> aItemHandler )
@@ -271,7 +271,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
         }
     }
 
-    BOARD_COMMIT* commit = static_cast<BOARD_COMMIT*>( getCurrentCommit( aCtx ) );
+    BOARD_COMMIT* commit = static_cast<BOARD_COMMIT*>( getCurrentCommit( aClientName ) );
 
     for( const google::protobuf::Any& anyItem : aItems )
     {
@@ -371,10 +371,10 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
         aItemHandler( status, newItem );
     }
 
-    if( !m_activeClients.count( aCtx.ClientName ) )
+    if( !m_activeClients.count( aClientName ) )
     {
-        pushCurrentCommit( aCtx, aCreate ? _( "Created items via API" )
-                                         : _( "Added items via API" ) );
+        pushCurrentCommit( aClientName, aCreate ? _( "Created items via API" )
+                                                : _( "Added items via API" ) );
     }
 
 
@@ -382,13 +382,13 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
 }
 
 
-HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( GetItems& aMsg,
-                                                                  const HANDLER_CONTEXT& )
+HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems(
+        const HANDLER_CONTEXT<GetItems>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    if( !validateItemHeaderDocument( aMsg.header() ) )
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
     {
         ApiResponseStatus e;
         // No message needed for AS_UNHANDLED; this is an internal flag for the API server
@@ -403,7 +403,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( GetItems& aMsg
     std::set<KICAD_T> typesRequested, typesInserted;
     bool handledAnything = false;
 
-    for( int typeRaw : aMsg.types() )
+    for( int typeRaw : aCtx.Request.types() )
     {
         auto typeMessage = static_cast<common::types::KiCadObjectType>( typeRaw );
         KICAD_T type = FromProtoEnum<KICAD_T>( typeMessage );
@@ -514,7 +514,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( GetItems& aMsg
 
 
 void API_HANDLER_PCB::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& aItemsToDelete,
-                                           const HANDLER_CONTEXT& aCtx )
+                                           const std::string& aClientName )
 {
     BOARD* board = frame()->GetBoard();
     std::vector<BOARD_ITEM*> validatedItems;
@@ -531,13 +531,13 @@ void API_HANDLER_PCB::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& a
         // to add it in the future (and return IDS_IMMUTABLE)
     }
 
-    COMMIT* commit = getCurrentCommit( aCtx );
+    COMMIT* commit = getCurrentCommit( aClientName );
 
     for( BOARD_ITEM* item : validatedItems )
         commit->Remove( item );
 
-    if( !m_activeClients.count( aCtx.ClientName ) )
-        pushCurrentCommit( aCtx, _( "Deleted items via API" ) );
+    if( !m_activeClients.count( aClientName ) )
+        pushCurrentCommit( aClientName, _( "Deleted items via API" ) );
 }
 
 
@@ -551,13 +551,13 @@ std::optional<EDA_ITEM*> API_HANDLER_PCB::getItemFromDocument( const DocumentSpe
 }
 
 
-HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup( GetBoardStackup& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup(
+        const HANDLER_CONTEXT<GetBoardStackup>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -574,13 +574,12 @@ HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup( GetBoard
 
 
 HANDLER_RESULT<GraphicsDefaultsResponse> API_HANDLER_PCB::handleGetGraphicsDefaults(
-        GetGraphicsDefaults& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<GetGraphicsDefaults>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -617,13 +616,13 @@ HANDLER_RESULT<GraphicsDefaultsResponse> API_HANDLER_PCB::handleGetGraphicsDefau
 }
 
 
-HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_PCB::handleGetBoundingBox( GetBoundingBox& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_PCB::handleGetBoundingBox(
+        const HANDLER_CONTEXT<GetBoundingBox>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    if( !validateItemHeaderDocument( aMsg.header() ) )
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
     {
         ApiResponseStatus e;
         // No message needed for AS_UNHANDLED; this is an internal flag for the API server
@@ -632,9 +631,9 @@ HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_PCB::handleGetBoundingBox( Ge
     }
 
     GetBoundingBoxResponse response;
-    bool includeText = aMsg.mode() == BoundingBoxMode::BBM_ITEM_AND_CHILD_TEXT;
+    bool includeText = aCtx.Request.mode() == BoundingBoxMode::BBM_ITEM_AND_CHILD_TEXT;
 
-    for( const types::KIID& idMsg : aMsg.items() )
+    for( const types::KIID& idMsg : aCtx.Request.items() )
     {
         KIID id( idMsg.value() );
         std::optional<BOARD_ITEM*> optItem = getItemById( id );
@@ -659,19 +658,18 @@ HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_PCB::handleGetBoundingBox( Ge
 
 
 HANDLER_RESULT<PadShapeAsPolygonResponse> API_HANDLER_PCB::handleGetPadShapeAsPolygon(
-        GetPadShapeAsPolygon& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<GetPadShapeAsPolygon>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
     SHAPE_POLY_SET poly;
     PadShapeAsPolygonResponse response;
-    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( aMsg.layer() );
+    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( aCtx.Request.layer() );
 
-    for( const types::KIID& padRequest : aMsg.pads() )
+    for( const types::KIID& padRequest : aCtx.Request.pads() )
     {
         KIID id( padRequest.value() );
         std::optional<BOARD_ITEM*> optPad = getItemById( id );
@@ -694,10 +692,9 @@ HANDLER_RESULT<PadShapeAsPolygonResponse> API_HANDLER_PCB::handleGetPadShapeAsPo
 
 
 HANDLER_RESULT<types::TitleBlockInfo> API_HANDLER_PCB::handleGetTitleBlockInfo(
-        GetTitleBlockInfo& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<GetTitleBlockInfo>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.document() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -726,9 +723,9 @@ HANDLER_RESULT<types::TitleBlockInfo> API_HANDLER_PCB::handleGetTitleBlockInfo(
 
 
 HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_PCB::handleExpandTextVariables(
-    ExpandTextVariables& aMsg, const HANDLER_CONTEXT& aCtx )
+    const HANDLER_CONTEXT<ExpandTextVariables>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.document() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -743,7 +740,7 @@ HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_PCB::handleExpandTextVar
                 return board->ResolveTextVar( token, 0 );
             };
 
-    for( const std::string& textMsg : aMsg.text() )
+    for( const std::string& textMsg : aCtx.Request.text() )
     {
         wxString text = ExpandTextVars( wxString::FromUTF8( textMsg ), &textResolver );
         reply.add_text( text.ToUTF8() );
@@ -753,13 +750,13 @@ HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_PCB::handleExpandTextVar
 }
 
 
-HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems( InteractiveMoveItems& aMsg,
-                                                                   const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems(
+        const HANDLER_CONTEXT<InteractiveMoveItems>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -767,7 +764,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems( InteractiveMo
     TOOL_MANAGER* mgr = frame()->GetToolManager();
     std::vector<EDA_ITEM*> toSelect;
 
-    for( const kiapi::common::types::KIID& id : aMsg.items() )
+    for( const kiapi::common::types::KIID& id : aCtx.Request.items() )
     {
         if( std::optional<BOARD_ITEM*> item = getItemById( KIID( id.value() ) ) )
             toSelect.emplace_back( static_cast<EDA_ITEM*>( *item ) );
@@ -778,7 +775,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems( InteractiveMo
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
         e.set_error_message( fmt::format( "None of the given items exist on the board",
-                                          aMsg.board().board_filename() ) );
+                                          aCtx.Request.board().board_filename() ) );
         return tl::unexpected( e );
     }
 
@@ -788,20 +785,19 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems( InteractiveMo
     mgr->RunAction( PCB_ACTIONS::selectionClear );
     mgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &toSelect );
 
-    COMMIT* commit = getCurrentCommit( aCtx );
+    COMMIT* commit = getCurrentCommit( aCtx.ClientName );
     mgr->PostAction( PCB_ACTIONS::move, commit );
 
     return Empty();
 }
 
 
-HANDLER_RESULT<NetsResponse> API_HANDLER_PCB::handleGetNets( GetNets& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<NetsResponse> API_HANDLER_PCB::handleGetNets( const HANDLER_CONTEXT<GetNets>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -811,7 +807,7 @@ HANDLER_RESULT<NetsResponse> API_HANDLER_PCB::handleGetNets( GetNets& aMsg,
 
     std::set<wxString> netclassFilter;
 
-    for( const std::string& nc : aMsg.netclass_filter() )
+    for( const std::string& nc : aCtx.Request.netclass_filter() )
         netclassFilter.insert( wxString( nc.c_str(), wxConvUTF8 ) );
 
     for( NETINFO_ITEM* net : board->GetNetInfo() )
@@ -830,18 +826,17 @@ HANDLER_RESULT<NetsResponse> API_HANDLER_PCB::handleGetNets( GetNets& aMsg,
 }
 
 
-HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( RefillZones& aMsg,
-                                                          const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<RefillZones>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    if( aMsg.zones().empty() )
+    if( aCtx.Request.zones().empty() )
     {
         TOOL_MANAGER* mgr = frame()->GetToolManager();
         frame()->CallAfter( [mgr]()
@@ -862,15 +857,15 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( RefillZones& aMsg,
 
 
 HANDLER_RESULT<SavedDocumentResponse> API_HANDLER_PCB::handleSaveDocumentToString(
-        SaveDocumentToString& aMsg, const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<SaveDocumentToString>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.document() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
     SavedDocumentResponse response;
-    response.mutable_document()->CopyFrom( aMsg.document() );
+    response.mutable_document()->CopyFrom( aCtx.Request.document() );
 
     CLIPBOARD_IO io;
     io.SetWriter(
@@ -886,7 +881,7 @@ HANDLER_RESULT<SavedDocumentResponse> API_HANDLER_PCB::handleSaveDocumentToStrin
 
 
 HANDLER_RESULT<SavedSelectionResponse> API_HANDLER_PCB::handleSaveSelectionToString(
-        SaveSelectionToString& aMsg, const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<SaveSelectionToString>& aCtx )
 {
     SavedSelectionResponse response;
 
@@ -909,12 +904,12 @@ HANDLER_RESULT<SavedSelectionResponse> API_HANDLER_PCB::handleSaveSelectionToStr
 
 
 HANDLER_RESULT<CreateItemsResponse> API_HANDLER_PCB::handleParseAndCreateItemsFromString(
-        ParseAndCreateItemsFromString& aMsg, const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<ParseAndCreateItemsFromString>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.document() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -924,10 +919,10 @@ HANDLER_RESULT<CreateItemsResponse> API_HANDLER_PCB::handleParseAndCreateItemsFr
 }
 
 
-HANDLER_RESULT<BoardLayers> API_HANDLER_PCB::handleGetVisibleLayers( GetVisibleLayers&      aMsg,
-                                                                     const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<BoardLayers> API_HANDLER_PCB::handleGetVisibleLayers(
+        const HANDLER_CONTEXT<GetVisibleLayers>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -941,13 +936,13 @@ HANDLER_RESULT<BoardLayers> API_HANDLER_PCB::handleGetVisibleLayers( GetVisibleL
 }
 
 
-HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetVisibleLayers( SetVisibleLayers&      aMsg,
-                                                               const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetVisibleLayers(
+        const HANDLER_CONTEXT<SetVisibleLayers>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -955,7 +950,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetVisibleLayers( SetVisibleLayers&
     LSET visible;
     LSET enabled = frame()->GetBoard()->GetEnabledLayers();
 
-    for( int layerIdx : aMsg.layers() )
+    for( int layerIdx : aCtx.Request.layers() )
     {
         PCB_LAYER_ID layer =
                 FromProtoEnum<PCB_LAYER_ID>( static_cast<board::types::BoardLayer>( layerIdx ) );
@@ -973,9 +968,9 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetVisibleLayers( SetVisibleLayers&
 
 
 HANDLER_RESULT<BoardLayerResponse> API_HANDLER_PCB::handleGetActiveLayer(
-            GetActiveLayer& aMsg, const HANDLER_CONTEXT& aCtx )
+        const HANDLER_CONTEXT<GetActiveLayer>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
@@ -988,18 +983,18 @@ HANDLER_RESULT<BoardLayerResponse> API_HANDLER_PCB::handleGetActiveLayer(
 }
 
 
-HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetActiveLayer( SetActiveLayer&        aMsg,
-                                                             const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetActiveLayer(
+        const HANDLER_CONTEXT<SetActiveLayer>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aMsg.board() );
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID>( aMsg.layer() );
+    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID>( aCtx.Request.layer() );
 
     if( !frame()->GetBoard()->GetEnabledLayers().Contains( layer ) )
     {

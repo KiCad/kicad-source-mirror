@@ -58,59 +58,51 @@ private:
     static HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> createItemForType( KICAD_T aType,
                                                           BOARD_ITEM_CONTAINER* aContainer );
 
-    HANDLER_RESULT<commands::RunActionResponse> handleRunAction( commands::RunAction& aMsg,
-                                                                 const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::RunActionResponse> handleRunAction( const HANDLER_CONTEXT<commands::RunAction>& aCtx );
 
     HANDLER_RESULT<commands::GetOpenDocumentsResponse> handleGetOpenDocuments(
-            commands::GetOpenDocuments& aMsg, const HANDLER_CONTEXT& aCtx );
+            const HANDLER_CONTEXT<commands::GetOpenDocuments>& aCtx );
 
-    HANDLER_RESULT<commands::GetItemsResponse> handleGetItems( commands::GetItems& aMsg,
-                                                               const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::GetItemsResponse> handleGetItems(
+            const HANDLER_CONTEXT<commands::GetItems>& aCtx );
 
-    HANDLER_RESULT<BoardStackupResponse> handleGetStackup( GetBoardStackup& aMsg,
-                                                           const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<BoardStackupResponse> handleGetStackup( const HANDLER_CONTEXT<GetBoardStackup>& aCtx );
 
-    HANDLER_RESULT<GraphicsDefaultsResponse> handleGetGraphicsDefaults( GetGraphicsDefaults& aMsg,
-            const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<GraphicsDefaultsResponse> handleGetGraphicsDefaults(
+            const HANDLER_CONTEXT<GetGraphicsDefaults>& aCtx );
 
-    HANDLER_RESULT<commands::GetBoundingBoxResponse> handleGetBoundingBox( commands::GetBoundingBox& aMsg,
-            const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::GetBoundingBoxResponse> handleGetBoundingBox(
+            const HANDLER_CONTEXT<commands::GetBoundingBox>& aCtx );
 
-    HANDLER_RESULT<PadShapeAsPolygonResponse> handleGetPadShapeAsPolygon( GetPadShapeAsPolygon& aMsg,
-            const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<PadShapeAsPolygonResponse> handleGetPadShapeAsPolygon(
+            const HANDLER_CONTEXT<GetPadShapeAsPolygon>& aCtx );
 
-    HANDLER_RESULT<types::TitleBlockInfo> handleGetTitleBlockInfo( commands::GetTitleBlockInfo& aMsg,
-            const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<types::TitleBlockInfo> handleGetTitleBlockInfo(
+            const HANDLER_CONTEXT<commands::GetTitleBlockInfo>& aCtx );
 
-    HANDLER_RESULT<commands::ExpandTextVariablesResponse>
-    handleExpandTextVariables( commands::ExpandTextVariables& aMsg, const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<commands::ExpandTextVariablesResponse> handleExpandTextVariables(
+            const HANDLER_CONTEXT<commands::ExpandTextVariables>& aCtx );
 
-    HANDLER_RESULT<Empty> handleInteractiveMoveItems( InteractiveMoveItems& aMsg,
-                                                      const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<Empty> handleInteractiveMoveItems( const HANDLER_CONTEXT<InteractiveMoveItems>& aCtx );
 
-    HANDLER_RESULT<NetsResponse> handleGetNets( GetNets& aMsg,
-                                                const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<NetsResponse> handleGetNets( const HANDLER_CONTEXT<GetNets>& aCtx );
 
-    HANDLER_RESULT<Empty> handleRefillZones( RefillZones& aMsg, const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<Empty> handleRefillZones( const HANDLER_CONTEXT<RefillZones>& aCtx );
 
     HANDLER_RESULT<commands::SavedDocumentResponse> handleSaveDocumentToString(
-                commands::SaveDocumentToString& aMsg, const HANDLER_CONTEXT& aCtx );
+                const HANDLER_CONTEXT<commands::SaveDocumentToString>& aCtx );
 
     HANDLER_RESULT<commands::SavedSelectionResponse> handleSaveSelectionToString(
-                commands::SaveSelectionToString& aMsg, const HANDLER_CONTEXT& aCtx );
+                const HANDLER_CONTEXT<commands::SaveSelectionToString>& aCtx );
 
     HANDLER_RESULT<commands::CreateItemsResponse> handleParseAndCreateItemsFromString(
-                commands::ParseAndCreateItemsFromString& aMsg, const HANDLER_CONTEXT& aCtx );
+                const HANDLER_CONTEXT<commands::ParseAndCreateItemsFromString>& aCtx );
 
-    HANDLER_RESULT<BoardLayers> handleGetVisibleLayers( GetVisibleLayers& aMsg,
-                                                        const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<BoardLayers> handleGetVisibleLayers( const HANDLER_CONTEXT<GetVisibleLayers>& aCtx );
+    HANDLER_RESULT<Empty> handleSetVisibleLayers( const HANDLER_CONTEXT<SetVisibleLayers>& aCtx );
 
-    HANDLER_RESULT<Empty> handleSetVisibleLayers( SetVisibleLayers& aMsg,
-                                                  const HANDLER_CONTEXT& aCtx );
-
-    HANDLER_RESULT<BoardLayerResponse> handleGetActiveLayer( GetActiveLayer& aMsg,
-            const HANDLER_CONTEXT& aCtx );
-    HANDLER_RESULT<Empty> handleSetActiveLayer( SetActiveLayer& aMsg, const HANDLER_CONTEXT& aCtx );
+    HANDLER_RESULT<BoardLayerResponse> handleGetActiveLayer( const HANDLER_CONTEXT<GetActiveLayer>& aCtx );
+    HANDLER_RESULT<Empty> handleSetActiveLayer( const HANDLER_CONTEXT<SetActiveLayer>& aCtx );
 
 protected:
     std::unique_ptr<COMMIT> createCommit() override;
@@ -123,20 +115,19 @@ protected:
     bool validateDocumentInternal( const DocumentSpecifier& aDocument ) const override;
 
     void deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& aItemsToDelete,
-                              const HANDLER_CONTEXT& aCtx ) override;
+                              const std::string& aClientName ) override;
 
-    std::optional<EDA_ITEM*> getItemFromDocument( const DocumentSpecifier& aDocument,
-                                                  const KIID& aId ) override;
+    std::optional<EDA_ITEM*> getItemFromDocument( const DocumentSpecifier& aDocument, const KIID& aId ) override;
 
 private:
     PCB_EDIT_FRAME* frame() const;
 
-    void pushCurrentCommit( const HANDLER_CONTEXT& aCtx, const wxString& aMessage ) override;
+    void pushCurrentCommit( const std::string& aClientName, const wxString& aMessage ) override;
 
     std::optional<BOARD_ITEM*> getItemById( const KIID& aId ) const;
 
     HANDLER_RESULT<types::ItemRequestStatus> handleCreateUpdateItemsInternal( bool aCreate,
-            const HANDLER_CONTEXT& aCtx,
+            const std::string& aClientName,
             const types::ItemHeader &aHeader,
             const google::protobuf::RepeatedPtrField<google::protobuf::Any>& aItems,
             std::function<void(commands::ItemStatus, google::protobuf::Any)> aItemHandler )

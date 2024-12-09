@@ -40,8 +40,8 @@ API_HANDLER_EDITOR::API_HANDLER_EDITOR( EDA_BASE_FRAME* aFrame ) :
 }
 
 
-HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit( BeginCommit& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit(
+        const HANDLER_CONTEXT<BeginCommit>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
@@ -69,8 +69,8 @@ HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit( Begin
 }
 
 
-HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit( EndCommit& aMsg,
-                                                                       const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit(
+        const HANDLER_CONTEXT<EndCommit>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
@@ -93,7 +93,7 @@ HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit( EndCommit
     EndCommitResponse response;
 
     // Do not check IDs with drop; it is a safety net in case the id was lost on the client side
-    switch( aMsg.action() )
+    switch( aCtx.Request.action() )
     {
     case kiapi::common::commands::CMA_DROP:
     {
@@ -105,16 +105,16 @@ HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit( EndCommit
 
     case kiapi::common::commands::CMA_COMMIT:
     {
-        if( aMsg.id().value().compare( id.AsStdString() ) != 0 )
+        if( aCtx.Request.id().value().compare( id.AsStdString() ) != 0 )
         {
             ApiResponseStatus e;
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
             e.set_error_message( fmt::format( "the id {} does not match the commit in progress",
-                                              aMsg.id().value() ) );
+                                              aCtx.Request.id().value() ) );
             return tl::unexpected( e );
         }
 
-        pushCurrentCommit( aCtx, wxString( aMsg.message().c_str(), wxConvUTF8 ) );
+        pushCurrentCommit( aCtx.ClientName, wxString( aCtx.Request.message().c_str(), wxConvUTF8 ) );
         break;
     }
 
@@ -126,33 +126,33 @@ HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit( EndCommit
 }
 
 
-COMMIT* API_HANDLER_EDITOR::getCurrentCommit( const HANDLER_CONTEXT& aCtx )
+COMMIT* API_HANDLER_EDITOR::getCurrentCommit( const std::string& aClientName )
 {
-    if( !m_commits.count( aCtx.ClientName ) )
+    if( !m_commits.count( aClientName ) )
     {
         KIID id;
-        m_commits[aCtx.ClientName] = std::make_pair( id, createCommit() );
+        m_commits[aClientName] = std::make_pair( id, createCommit() );
     }
 
-    return m_commits.at( aCtx.ClientName ).second.get();
+    return m_commits.at( aClientName ).second.get();
 }
 
 
-void API_HANDLER_EDITOR::pushCurrentCommit( const HANDLER_CONTEXT& aCtx, const wxString& aMessage )
+void API_HANDLER_EDITOR::pushCurrentCommit( const std::string& aClientName,
+                                            const wxString& aMessage )
 {
-    auto it = m_commits.find( aCtx.ClientName );
+    auto it = m_commits.find( aClientName );
 
     if( it == m_commits.end() )
         return;
 
     it->second.second->Push( aMessage.IsEmpty() ? m_defaultCommitMessage : aMessage );
     m_commits.erase( it );
-    m_activeClients.erase( aCtx.ClientName );
+    m_activeClients.erase( aClientName );
 }
 
 
-HANDLER_RESULT<bool> API_HANDLER_EDITOR::validateDocument(
-        const kiapi::common::types::DocumentSpecifier& aDocument )
+HANDLER_RESULT<bool> API_HANDLER_EDITOR::validateDocument( const DocumentSpecifier& aDocument )
 {
     if( !validateDocumentInternal( aDocument ) )
     {
@@ -168,7 +168,7 @@ HANDLER_RESULT<bool> API_HANDLER_EDITOR::validateDocument(
 
 
 HANDLER_RESULT<std::optional<KIID>> API_HANDLER_EDITOR::validateItemHeaderDocument(
-        const kiapi::common::types::ItemHeader& aHeader )
+        const types::ItemHeader& aHeader )
 {
     if( !aHeader.has_document() || aHeader.document().type() != thisDocumentType() )
     {
@@ -216,16 +216,17 @@ std::optional<ApiResponseStatus> API_HANDLER_EDITOR::checkForBusy()
 }
 
 
-HANDLER_RESULT<CreateItemsResponse> API_HANDLER_EDITOR::handleCreateItems( CreateItems& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<CreateItemsResponse> API_HANDLER_EDITOR::handleCreateItems(
+        const HANDLER_CONTEXT<CreateItems>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
     CreateItemsResponse response;
 
-    HANDLER_RESULT<ItemRequestStatus> result = handleCreateUpdateItemsInternal( true, aCtx,
-            aMsg.header(), aMsg.items(),
+    HANDLER_RESULT<ItemRequestStatus> result = handleCreateUpdateItemsInternal( true,
+            aCtx.ClientName,
+            aCtx.Request.header(), aCtx.Request.items(),
             [&]( const ItemStatus& aStatus, const google::protobuf::Any& aItem )
             {
                 ItemCreationResult itemResult;
@@ -242,16 +243,17 @@ HANDLER_RESULT<CreateItemsResponse> API_HANDLER_EDITOR::handleCreateItems( Creat
 }
 
 
-HANDLER_RESULT<UpdateItemsResponse> API_HANDLER_EDITOR::handleUpdateItems( UpdateItems& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<UpdateItemsResponse> API_HANDLER_EDITOR::handleUpdateItems(
+        const HANDLER_CONTEXT<UpdateItems>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
     UpdateItemsResponse response;
 
-    HANDLER_RESULT<ItemRequestStatus> result = handleCreateUpdateItemsInternal( false, aCtx,
-            aMsg.header(), aMsg.items(),
+    HANDLER_RESULT<ItemRequestStatus> result = handleCreateUpdateItemsInternal( false,
+            aCtx.ClientName,
+            aCtx.Request.header(), aCtx.Request.items(),
             [&]( const ItemStatus& aStatus, const google::protobuf::Any& aItem )
             {
                 ItemUpdateResult itemResult;
@@ -268,13 +270,13 @@ HANDLER_RESULT<UpdateItemsResponse> API_HANDLER_EDITOR::handleUpdateItems( Updat
 }
 
 
-HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems( DeleteItems& aMsg,
-        const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems(
+        const HANDLER_CONTEXT<DeleteItems>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    if( !validateItemHeaderDocument( aMsg.header() ) )
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
     {
         ApiResponseStatus e;
         // No message needed for AS_UNHANDLED; this is an internal flag for the API server
@@ -284,7 +286,7 @@ HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems( Delet
 
     std::map<KIID, ItemDeletionStatus> itemsToDelete;
 
-    for( const kiapi::common::types::KIID& kiidBuf : aMsg.item_ids() )
+    for( const kiapi::common::types::KIID& kiidBuf : aCtx.Request.item_ids() )
     {
         if( !kiidBuf.value().empty() )
         {
@@ -301,7 +303,7 @@ HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems( Delet
         return tl::unexpected( e );
     }
 
-    deleteItemsInternal( itemsToDelete, aCtx );
+    deleteItemsInternal( itemsToDelete, aCtx.ClientName );
 
     DeleteItemsResponse response;
 
@@ -317,13 +319,13 @@ HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems( Delet
 }
 
 
-HANDLER_RESULT<HitTestResponse> API_HANDLER_EDITOR::handleHitTest( HitTest& aMsg,
-                                                                   const HANDLER_CONTEXT& aCtx )
+HANDLER_RESULT<HitTestResponse> API_HANDLER_EDITOR::handleHitTest(
+        const HANDLER_CONTEXT<HitTest>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    if( !validateItemHeaderDocument( aMsg.header() ) )
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
     {
         ApiResponseStatus e;
         // No message needed for AS_UNHANDLED; this is an internal flag for the API server
@@ -333,8 +335,8 @@ HANDLER_RESULT<HitTestResponse> API_HANDLER_EDITOR::handleHitTest( HitTest& aMsg
 
     HitTestResponse response;
 
-    std::optional<EDA_ITEM*> item = getItemFromDocument( aMsg.header().document(),
-                                                         KIID( aMsg.id().value() ) );
+    std::optional<EDA_ITEM*> item = getItemFromDocument( aCtx.Request.header().document(),
+                                                         KIID( aCtx.Request.id().value() ) );
 
     if( !item )
     {
@@ -344,7 +346,7 @@ HANDLER_RESULT<HitTestResponse> API_HANDLER_EDITOR::handleHitTest( HitTest& aMsg
         return tl::unexpected( e );
     }
 
-    if( ( *item )->HitTest( kiapi::common::UnpackVector2( aMsg.position() ), aMsg.tolerance() ) )
+    if( ( *item )->HitTest( UnpackVector2( aCtx.Request.position() ), aCtx.Request.tolerance() ) )
         response.set_result( HitTestResult::HTR_HIT );
     else
         response.set_result( HitTestResult::HTR_NO_HIT );

@@ -62,9 +62,9 @@ bool API_HANDLER_SCH::validateDocumentInternal( const DocumentSpecifier& aDocume
 
 
 HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_SCH::handleGetOpenDocuments(
-        GetOpenDocuments& aMsg, const HANDLER_CONTEXT& )
+        const HANDLER_CONTEXT<GetOpenDocuments>& aCtx )
 {
-    if( aMsg.type() != DocumentType::DOCTYPE_SCHEMATIC )
+    if( aCtx.Request.type() != DocumentType::DOCTYPE_SCHEMATIC )
     {
         ApiResponseStatus e;
         // No message needed for AS_UNHANDLED; this is an internal flag for the API server
@@ -129,7 +129,7 @@ HANDLER_RESULT<std::unique_ptr<EDA_ITEM>> API_HANDLER_SCH::createItemForType( KI
 
 
 HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsInternal( bool aCreate,
-        const HANDLER_CONTEXT& aCtx,
+        const std::string& aClientName,
         const types::ItemHeader &aHeader,
         const google::protobuf::RepeatedPtrField<google::protobuf::Any>& aItems,
         std::function<void( ItemStatus, google::protobuf::Any )> aItemHandler )
@@ -190,7 +190,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         }
     }
 
-    COMMIT* commit = getCurrentCommit( aCtx );
+    COMMIT* commit = getCurrentCommit( aClientName );
 
     for( const google::protobuf::Any& anyItem : aItems )
     {
@@ -252,8 +252,8 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             item->Serialize( newItem );
             commit->Add( item.release() );
 
-            if( !m_activeClients.count( aCtx.ClientName ) )
-                pushCurrentCommit( aCtx, _( "Added items via API" ) );
+            if( !m_activeClients.count( aClientName ) )
+                pushCurrentCommit( aClientName, _( "Added items via API" ) );
         }
         else
         {
@@ -270,8 +270,8 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                 wxASSERT( false );
             }
 
-            if( !m_activeClients.count( aCtx.ClientName ) )
-                pushCurrentCommit( aCtx, _( "Created items via API" ) );
+            if( !m_activeClients.count( aClientName ) )
+                pushCurrentCommit( aClientName, _( "Created items via API" ) );
         }
 
         aItemHandler( status, newItem );
@@ -283,7 +283,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 
 
 void API_HANDLER_SCH::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& aItemsToDelete,
-                                           const HANDLER_CONTEXT& aCtx )
+                                           const std::string& aClientName )
 {
     // TODO
 }

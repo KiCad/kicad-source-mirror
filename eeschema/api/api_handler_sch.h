@@ -51,21 +51,21 @@ protected:
                                                                  EDA_ITEM* aContainer );
 
     HANDLER_RESULT<types::ItemRequestStatus> handleCreateUpdateItemsInternal( bool aCreate,
-            const HANDLER_CONTEXT& aCtx,
+            const std::string& aClientName,
             const types::ItemHeader &aHeader,
             const google::protobuf::RepeatedPtrField<google::protobuf::Any>& aItems,
             std::function<void(commands::ItemStatus, google::protobuf::Any)> aItemHandler )
             override;
 
     void deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& aItemsToDelete,
-                              const HANDLER_CONTEXT& aCtx ) override;
+                              const std::string& aClientName ) override;
 
     std::optional<EDA_ITEM*> getItemFromDocument( const DocumentSpecifier& aDocument,
                                                   const KIID& aId ) override;
 
 private:
     HANDLER_RESULT<commands::GetOpenDocumentsResponse> handleGetOpenDocuments(
-            commands::GetOpenDocuments& aMsg, const HANDLER_CONTEXT& aCtx );
+            const HANDLER_CONTEXT<commands::GetOpenDocuments>& aCtx );
 
     SCH_EDIT_FRAME* m_frame;
 };

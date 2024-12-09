@@ -45,9 +45,11 @@ template <typename T>
 using HANDLER_RESULT = tl::expected<T, ApiResponseStatus>;
 
 
+template <typename RequestMessageType>
 struct HANDLER_CONTEXT
 {
     std::string ClientName;
+    RequestMessageType Request;
 };
 
 
@@ -88,9 +90,8 @@ protected:
      * @param aHandler is the handler function for the given request and response types
      */
     template <class RequestType, class ResponseType, class HandlerType>
-    void registerHandler(
-            HANDLER_RESULT<ResponseType>( HandlerType::* aHandler )( RequestType&,
-                                                                     const HANDLER_CONTEXT& ) )
+    void registerHandler( HANDLER_RESULT<ResponseType> ( HandlerType::*aHandler )(
+            const HANDLER_CONTEXT<RequestType>& ) )
     {
         std::string typeName = RequestType().GetTypeName();
 
@@ -100,17 +101,16 @@ protected:
         m_handlers[typeName] =
                 [this, aHandler]( ApiRequest& aRequest ) -> API_RESULT
                 {
-                    RequestType cmd;
+                    HANDLER_CONTEXT<RequestType> ctx;
                     ApiResponse envelope;
 
-                    if( !tryUnpack( aRequest, envelope, cmd ) )
+                    if( !tryUnpack( aRequest, envelope, ctx.Request ) )
                         return envelope;
 
-                    HANDLER_CONTEXT ctx;
                     ctx.ClientName = aRequest.header().client_name();
 
                     HANDLER_RESULT<ResponseType> response =
-                            std::invoke( aHandler, static_cast<HandlerType*>( this ), cmd, ctx );
+                            std::invoke( aHandler, static_cast<HandlerType*>( this ), ctx );
 
                     if( response.has_value() )
                     {
