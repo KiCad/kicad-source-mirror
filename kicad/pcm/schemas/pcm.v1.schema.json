@@ -273,7 +273,7 @@
                 },
                 "update_time_utc": {
                     "type": "string",
-                    "description": "Human readabla update time in UTC YYYY-MM-DD HH:MM:SS format",
+                    "description": "Human readable update time in UTC YYYY-MM-DD HH:MM:SS format",
                     "pattern": "^2\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d$"
                 }
             },
