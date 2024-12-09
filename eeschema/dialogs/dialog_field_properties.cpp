@@ -213,7 +213,10 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
 
         netlist << wxS( "\r" );
 
-        wxArrayString fpFilters = symbol->GetLibSymbolRef()->GetFPFilters();
+        wxArrayString fpFilters;
+
+        if( symbol->GetLibSymbolRef() )     // can be null with very old schematic
+            fpFilters = symbol->GetLibSymbolRef()->GetFPFilters();
 
         if( !fpFilters.IsEmpty() )
             netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
