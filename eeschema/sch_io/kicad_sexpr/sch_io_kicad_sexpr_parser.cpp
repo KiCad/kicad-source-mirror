@@ -956,6 +956,12 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
 
     T token = NextTok();
 
+    if( token == T_private )
+    {
+        field->SetPrivate( true );
+        token = NextTok();
+    }
+
     if( !IsSymbol( token ) )
     {
         THROW_PARSE_ERROR( _( "Invalid property name" ), CurSource(), CurLine(), CurLineNumber(),
@@ -2164,7 +2170,15 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     wxCHECK_MSG( CurTok() == T_property, nullptr,
                  "Cannot parse " + GetTokenString( CurTok() ) + " as a property token." );
 
+    bool is_private = false;
+
     T token = NextTok();
+
+    if( token == T_private )
+    {
+        is_private = true;
+        token = NextTok();
+    }
 
     if( !IsSymbol( token ) )
     {
@@ -2198,10 +2212,12 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     else if( aParent->Type() == SCH_SHEET_T )
         mandatoryFieldCount = SHEET_MANDATORY_FIELDS;
 
-    std::unique_ptr<SCH_FIELD> field =
-            std::make_unique<SCH_FIELD>( VECTOR2I( -1, -1 ), mandatoryFieldCount, aParent, name );
+    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( VECTOR2I( -1, -1 ),
+                                                                    mandatoryFieldCount,
+                                                                    aParent, name );
     field->SetText( value );
     field->SetVisible( true );
+    field->SetPrivate( is_private );
 
     // Correctly set the ID based on canonical (untranslated) field name
     // If ID is stored in the file (old versions), it will overwrite this

@@ -1071,6 +1071,8 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
                 }
             }
 
+            schField->SetPrivate( libField->IsPrivate() );
+
             if( aUpdateStyle )
             {
                 schField->ImportValues( *libField );

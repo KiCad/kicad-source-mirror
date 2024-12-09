@@ -411,7 +411,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
     if( aField->IsMandatory() )
         fieldName = GetCanonicalFieldName( aField->GetId() );
 
-    aFormatter.Print( "(property %s %s (at %s %s %g)",
+    aFormatter.Print( "(property %s %s %s (at %s %s %g)",
+                      aField->IsPrivate() ? "private" : "",
                       aFormatter.Quotew( fieldName ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,

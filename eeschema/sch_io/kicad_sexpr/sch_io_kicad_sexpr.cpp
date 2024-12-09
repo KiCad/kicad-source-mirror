@@ -881,7 +881,8 @@ void SCH_IO_KICAD_SEXPR::saveField( SCH_FIELD* aField )
         m_nextFreeFieldId = aField->GetId() + 1;
     }
 
-    m_out->Print( "(property %s %s (at %s %s %s)",
+    m_out->Print( "(property %s %s %s (at %s %s %s)",
+                  aField->IsPrivate() ? "private" : "",
                   m_out->Quotew( fieldName ).c_str(),
                   m_out->Quotew( aField->GetText() ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,

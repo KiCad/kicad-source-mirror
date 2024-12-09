@@ -2303,6 +2303,9 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     if( !isUnitAndConversionShown( aField ) )
         return;
 
+    if( aField->IsPrivate() && !m_schSettings.m_IsSymbolEditor )
+        return;
+
     // Must check layer as fields are sometimes drawn by their parent rather than directly
     // from the view.
     std::vector<int> layers = aField->ViewGetLayers();

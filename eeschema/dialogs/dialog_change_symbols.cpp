@@ -667,6 +667,8 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 
             if( libField )
             {
+                field.SetPrivate( libField->IsPrivate() );
+
                 bool resetText = libField->GetText().IsEmpty() ? m_resetEmptyFields->GetValue()
                                                                : m_resetFieldText->GetValue();
 
@@ -753,6 +755,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                 schField->SetAttributes( libField );
                 schField->SetText( libField.GetText() );
                 schField->SetTextPos( symbol->GetPosition() + libField.GetTextPos() );
+                schField->SetPrivate( libField.IsPrivate() );
             }
 
             if( resetPositions && frame->eeconfig()->m_AutoplaceFields.enable )

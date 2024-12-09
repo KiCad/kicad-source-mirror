@@ -39,19 +39,20 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200827  // Remove host tag.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200908  // Add include in BOM and on board support.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20201005  // Separate ki_fp_filters by spaces.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20210619   // Change pin overbar syntax from `~...~` to `~{...}`.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20211014   // Arc formatting.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220101   // Class flags.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220102   // Fonts.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220126   // Text boxes.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220328   // Text box start/end -> at/size.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220331   // Text colors.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Symbol unit display names.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Don't save property ID
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20230620   // ki_description -> Description Field
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20231120   // generator_version; V8 cleanups
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240529   // Embedded Files
-#define  SEXPR_SYMBOL_LIB_FILE_VERSION  20240819    // Embedded Files - Update hash algorithm to Murmur3
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20210619  // Change pin overbar syntax from `~...~` to `~{...}`.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20211014  // Arc formatting.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220101  // Class flags.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220102  // Fonts.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220126  // Text boxes.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220328  // Text box start/end -> at/size.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220331  // Text colors.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914  // Symbol unit display names.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914  // Don't save property ID
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20230620  // ki_description -> Description Field
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20231120  // generator_version; V8 cleanups
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240529  // Embedded Files
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240819  // Embedded Files - Update hash algorithm to Murmur3
+#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20241209  // Private flags for SCH_FIELDs
 /**
  * Schematic file version.
  */
@@ -111,4 +112,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240716  // Multiple netclass assignments
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240812  // Netclass color highlighting
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240819  // Embedded Files - Update hash algorithm to Murmur3
-#define SEXPR_SCHEMATIC_FILE_VERSION 20241004    // Use booleans for 'hide' in symbols
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20241004  // Use booleans for 'hide' in symbols
+#define SEXPR_SCHEMATIC_FILE_VERSION 20241209    // Private flags for SCH_FIELDs

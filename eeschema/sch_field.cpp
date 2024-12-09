@@ -90,6 +90,7 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
         SCH_ITEM( aField ),
         EDA_TEXT( aField )
 {
+    m_private         = aField.m_private;
     m_id              = aField.m_id;
     m_name            = aField.m_name;
     m_showName        = aField.m_showName;
@@ -119,6 +120,7 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
 {
     EDA_TEXT::operator=( aField );
 
+    m_private         = aField.m_private;
     m_id              = aField.m_id;
     m_name            = aField.m_name;
     m_showName        = aField.m_showName;
@@ -528,6 +530,7 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
     std::swap( m_showName, item->m_showName );
     std::swap( m_allowAutoPlace, item->m_allowAutoPlace );
     std::swap( m_isNamedVariable, item->m_isNamedVariable );
+    std::swap( m_private, item->m_private );
     SwapText( *item );
     SwapAttributes( *item );
 
