@@ -3267,11 +3267,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             else
                 symbol->AddField( *field );
 
-            if( m_fontTextMap.contains( field ) )
-            {
-                m_fontTextMap[symbol->GetFieldById( field->GetId() )] = m_fontTextMap[field];
-                m_fontTextMap.erase( field );
-            }
+            removeEntryInFontTextMap( field, symbol->GetFieldById( field->GetId() ), true );
 
             if( field->GetId() == REFERENCE_FIELD )
                 symbol->UpdatePrefix();
@@ -4376,6 +4372,9 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSchText()
             else
             {
                 static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().emplace_back( *field );
+                removeEntryInFontTextMap(
+                        field, &static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().back(),
+                        true );
             }
 
             delete field;
