@@ -152,6 +152,9 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
                          wxSizeEventHandler( DIALOG_TEMPLATE_SELECTOR::onNotebookResize ),
                          nullptr, this );
     m_selectedWidget = nullptr;
+
+    // When all widgets have the size fixed, call finishDialogSettings to update sizers
+    finishDialogSettings();
 }
 
 

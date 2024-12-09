@@ -252,11 +252,13 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     }
 
     // Show the project template selector dialog
-    if( ps->ShowModal() != wxID_OK )
-        return -1;
+    int result = ps->ShowModal();
 
     settings->m_TemplateWindowPos = ps->GetPosition();
     settings->m_TemplateWindowSize = ps->GetSize();
+
+    if( result != wxID_OK )
+        return -1;
 
     if( !ps->GetSelectedTemplate() )
     {

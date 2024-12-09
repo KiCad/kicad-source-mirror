@@ -44,7 +44,7 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	bmainSizer->Add( m_notebook, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_htmlWin = new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
-	m_htmlWin->SetMinSize( wxSize( 750,380 ) );
+	m_htmlWin->SetMinSize( wxSize( 400,100 ) );
 
 	bmainSizer->Add( m_htmlWin, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 12 );
 
