@@ -1073,6 +1073,9 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
 void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
 {
+    if( !m_layerMask[aTable->GetLayer()] )
+        return;
+
     VECTOR2I     pos = aTable->GetPosition();
     VECTOR2I     end = aTable->GetEnd();
     int          lineWidth;
