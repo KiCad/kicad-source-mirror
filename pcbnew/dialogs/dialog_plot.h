@@ -74,14 +74,14 @@ private:
     void applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
 
-    void updateJobFromDialog();
-
     void setPlotModeChoiceSelection( OUTLINE_MODE aPlotMode )
     {
         m_plotModeOpt->SetSelection( aPlotMode == SKETCH ? 1 : 0 );
     }
 
     void arrangeAllLayersList( const LSEQ& aSeq );
+    void loadPlotParamsFromJob();
+    void transferPlotParamsToJob();
 
 private:
     PCB_EDIT_FRAME*     m_editFrame;

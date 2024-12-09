@@ -63,8 +63,11 @@ public:
     bool m_plotFootprintValues;
     bool m_plotRefDes;
     bool m_plotDrawingSheet;
+    bool m_plotPadNumbers;
 
     LSEQ m_printMaskLayer;
+    ///< Layers to include on all individual layer prints
+    LSEQ m_printMaskLayersToIncludeOnAllLayers;
 
     // How holes in pads/vias are plotted:
     // 0 = no hole, 1 = small shape, 2 = actual shape

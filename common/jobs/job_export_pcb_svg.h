@@ -35,6 +35,7 @@ public:
     wxString GetDescription() override;
 
     int m_pageSizeMode;
+    unsigned int m_precision;
 };
 
 #endif

@@ -27,7 +27,8 @@ JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
         JOB_EXPORT_PCB_GERBER( "gerbers" ),
         m_layersIncludeOnAll(),
         m_layersIncludeOnAllSet( false ),
-        m_useBoardPlotParams( false )
+        m_useBoardPlotParams( false ),
+        m_createJobsFile( true )
 {
     m_params.emplace_back( new JOB_PARAM<bool>( "use_board_plot_params", &m_useBoardPlotParams,
                                                 m_useBoardPlotParams ) );

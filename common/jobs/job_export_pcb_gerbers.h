@@ -38,6 +38,8 @@ public:
 
     bool m_layersIncludeOnAllSet;
     bool m_useBoardPlotParams;
+
+    bool m_createJobsFile;
 };
 
 #endif

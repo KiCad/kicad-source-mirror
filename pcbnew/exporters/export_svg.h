@@ -43,6 +43,9 @@ struct PCB_PLOT_SVG_OPTIONS
     // 0 = no hole, 1 = small shape, 2 = actual shape
     // Not used in some plotters (Gerber)
     int m_drillShapeOption;
+
+    // coord format: 4 digits in mantissa (units always in mm). This is a good choice.
+    unsigned int m_precision = 4;
 };
 
 class EXPORT_SVG

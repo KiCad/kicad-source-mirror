@@ -64,8 +64,7 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
     plot_opts.SetMirror( aSvgPlotOptions.m_mirror );
     plot_opts.SetNegative( aSvgPlotOptions.m_negative );
     plot_opts.SetFormat( PLOT_FORMAT::SVG );
-    // coord format: 4 digits in mantissa (units always in mm). This is a good choice.
-    plot_opts.SetSvgPrecision( 4 );
+    plot_opts.SetSvgPrecision( aSvgPlotOptions.m_precision );
 
     PAGE_INFO savedPageInfo = aBoard->GetPageSettings();
     VECTOR2I  savedAuxOrigin = aBoard->GetDesignSettings().GetAuxOrigin();

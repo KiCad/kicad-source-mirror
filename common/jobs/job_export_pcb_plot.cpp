@@ -19,7 +19,9 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
 	m_plotFootprintValues( true ),
 	m_plotRefDes( true ),
 	m_plotDrawingSheet( true ),
+	m_plotPadNumbers( false ),
 	m_printMaskLayer(),
+    m_printMaskLayersToIncludeOnAllLayers(),
 	m_drillShapeOption( 2 )
 {
 

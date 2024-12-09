@@ -125,7 +125,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
                           aKiway->Player( FRAME_PCB_EDITOR, false ) );
-                  DIALOG_EXPORT_SVG dlg( svgJob, editFrame, aParent );
+
+                  DIALOG_PLOT dlg( editFrame, aParent, svgJob );
                   dlg.ShowModal();
 
                   return dlg.GetReturnCode() == wxID_OK;
@@ -625,7 +626,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
     svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
     svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
-    svgPlotOptions.m_drillShapeOption = aSvgJob->m_drillShapeOption;
+    svgPlotOptions.m_precision = aSvgJob->m_drillShapeOption;
 
     BOARD* brd = getBoard( aSvgJob->m_filename );
 
@@ -685,6 +686,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     plotOpts.SetPlotValue( aDxfJob->m_plotFootprintValues );
     plotOpts.SetPlotReference( aDxfJob->m_plotRefDes );
     plotOpts.SetLayerSelection( aDxfJob->m_printMaskLayer );
+    plotOpts.SetPlotOnAllLayersSelection( aDxfJob->m_printMaskLayersToIncludeOnAllLayers );
 
     PCB_LAYER_ID layer = UNDEFINED_LAYER;
     wxString     layerName;
@@ -754,6 +756,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     plotOpts.SetPlotReference( aPdfJob->m_plotRefDes );
 
     plotOpts.SetLayerSelection( aPdfJob->m_printMaskLayer );
+    plotOpts.SetPlotOnAllLayersSelection( aPdfJob->m_printMaskLayersToIncludeOnAllLayers );
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     plotOpts.SetColorSettings( mgr.GetColorSettings( aPdfJob->m_colorTheme ) );
@@ -1044,6 +1047,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     PCB_PLOT_PARAMS plotOpts;
     populateGerberPlotOptionsFromJob( plotOpts, aGerberJob );
     plotOpts.SetLayerSelection( aGerberJob->m_printMaskLayer );
+    plotOpts.SetPlotOnAllLayersSelection( aGerberJob->m_printMaskLayersToIncludeOnAllLayers );
 
     PCB_LAYER_ID layer = UNDEFINED_LAYER;
     wxString     layerName;

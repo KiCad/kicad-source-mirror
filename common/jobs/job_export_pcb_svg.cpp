@@ -25,7 +25,8 @@
 
 JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
     JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG, "svg", false ),
-    m_pageSizeMode( 0 )
+    m_pageSizeMode( 0 ),
+    m_precision( 4 )
 {
     m_plotDrawingSheet = true;
 
@@ -45,6 +46,7 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
             new JOB_PARAM<int>( "page_size_mode", &m_pageSizeMode, m_pageSizeMode ) );
     m_params.emplace_back(
             new JOB_PARAM<int>( "drill_shape_option", &m_drillShapeOption, m_drillShapeOption ) );
+    m_params.emplace_back( new JOB_PARAM<unsigned int>( "precision", &m_precision, m_precision ) );
 }
 
 

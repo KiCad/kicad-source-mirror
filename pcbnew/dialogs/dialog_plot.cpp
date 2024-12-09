@@ -49,6 +49,7 @@
 #include <jobs/job_export_pcb_gerbers.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_pdf.h>
+#include <jobs/job_export_pcb_svg.h>
 
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
@@ -104,11 +105,11 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
     BOARD* board = m_editFrame->GetBoard();
 
     SetName( DLG_WINDOW_NAME );
-    m_plotOpts = m_editFrame->GetPlotSettings();
     m_DRCWarningTemplate = m_DRCExclusionsWarning->GetLabel();
 
     if( m_job )
     {
+        loadPlotParamsFromJob();
         m_messagesPanel->Hide();
 
         m_browseButton->Hide();
@@ -118,6 +119,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
     }
     else
     {
+        m_plotOpts = m_editFrame->GetPlotSettings();
         m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
     }
 
@@ -258,175 +260,157 @@ void DIALOG_PLOT::init_Dialog()
     // Could devote a PlotOrder() function in place of UIOrder().
     m_layerList = board->GetEnabledLayers().UIOrder();
 
-    if( !m_job )
+    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
+
+    if( !projectFile.m_PcbLastPath[ LAST_PATH_PLOT ].IsEmpty() )
+        m_plotOpts.SetOutputDirectory( projectFile.m_PcbLastPath[ LAST_PATH_PLOT ] );
+
+    m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
+    m_YScaleAdjust = cfg->m_Plot.fine_scale_y;
+
+    m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
+
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_openDirButton->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
+
+    // m_PSWidthAdjust is stored in mm in user config
+    m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * pcbIUScale.IU_PER_MM );
+
+    // The reasonable width correction value must be in a range of
+    // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
+    m_widthAdjustMinValue   = -( board->GetDesignSettings().m_TrackMinWidth - 1 );
+    m_widthAdjustMaxValue   = board->GetDesignSettings().GetSmallestClearanceValue() - 1;
+
+    switch( m_plotOpts.GetFormat() )
     {
-        PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
-
-        if( !projectFile.m_PcbLastPath[ LAST_PATH_PLOT ].IsEmpty() )
-            m_plotOpts.SetOutputDirectory( projectFile.m_PcbLastPath[ LAST_PATH_PLOT ] );
-
-        m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
-        m_YScaleAdjust = cfg->m_Plot.fine_scale_y;
-
-        m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
-
-        m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
-        m_openDirButton->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
-
-        // m_PSWidthAdjust is stored in mm in user config
-        m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * pcbIUScale.IU_PER_MM );
-
-        // The reasonable width correction value must be in a range of
-        // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
-        m_widthAdjustMinValue   = -( board->GetDesignSettings().m_TrackMinWidth - 1 );
-        m_widthAdjustMaxValue   = board->GetDesignSettings().GetSmallestClearanceValue() - 1;
-
-        switch( m_plotOpts.GetFormat() )
-        {
-        default:
-        case PLOT_FORMAT::GERBER: m_plotFormatOpt->SetSelection( 0 ); break;
-        case PLOT_FORMAT::POST:   m_plotFormatOpt->SetSelection( 1 ); break;
-        case PLOT_FORMAT::SVG:    m_plotFormatOpt->SetSelection( 2 ); break;
-        case PLOT_FORMAT::DXF:    m_plotFormatOpt->SetSelection( 3 ); break;
-        case PLOT_FORMAT::HPGL:   m_plotFormatOpt->SetSelection( 4 ); break;
-        case PLOT_FORMAT::PDF:    m_plotFormatOpt->SetSelection( 5 ); break;
-        }
-
-        // Set units and value for HPGL pen size (this param is in mils).
-        m_defaultPenSize.SetValue( m_plotOpts.GetHPGLPenDiameter() * pcbIUScale.IU_PER_MILS );
-
-        // Test for a reasonable scale value. Set to 1 if problem
-        if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
-            || m_XScaleAdjust > PLOT_MAX_SCALE || m_YScaleAdjust > PLOT_MAX_SCALE )
-        {
-            m_XScaleAdjust = m_YScaleAdjust = 1.0;
-        }
-
-        m_fineAdjustXCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
-                unityScale, EDA_UNITS::UNSCALED, m_XScaleAdjust ) );
-
-        m_fineAdjustYCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
-                unityScale, EDA_UNITS::UNSCALED, m_YScaleAdjust ) );
-
-        // Test for a reasonable PS width correction value. Set to 0 if problem.
-        if( m_PSWidthAdjust < m_widthAdjustMinValue || m_PSWidthAdjust > m_widthAdjustMaxValue )
-            m_PSWidthAdjust = 0.;
-
-        m_trackWidthCorrection.SetValue( m_PSWidthAdjust );
-
-        m_plotPSNegativeOpt->SetValue( m_plotOpts.GetNegative() );
-        m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetA4Output() );
-
-        // Populate the check list box by all enabled layers names.
-        for( PCB_LAYER_ID layer : m_layerList )
-        {
-            int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
-
-            if( m_plotOpts.GetLayerSelection()[layer] )
-                m_layerCheckListBox->Check( checkIndex );
-        }
-
-        arrangeAllLayersList( s_lastAllLayersOrder );
-
-        // Option for disabling Gerber Aperture Macro (for broken Gerber readers)
-        m_disableApertMacros->SetValue( m_plotOpts.GetDisableGerberMacros() );
-
-        // Option for using proper Gerber extensions. Note also Protel extensions are
-        // a broken feature. However, for now, we need to handle it.
-        m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberProtelExtensions() );
-
-        // Option for including Gerber attributes, from Gerber X2 format, in the output
-        // In X1 format, they will be added as comments
-        m_useGerberX2Format->SetValue( m_plotOpts.GetUseGerberX2format() );
-
-        // Option for including Gerber netlist info (from Gerber X2 format) in the output
-        m_useGerberNetAttributes->SetValue( m_plotOpts.GetIncludeGerberNetlistInfo() );
-
-        // Option to generate a Gerber job file
-        m_generateGerberJobFile->SetValue( m_plotOpts.GetCreateGerberJobFile() );
-
-        // Gerber precision for coordinates
-        m_coordFormatCtrl->SetSelection( m_plotOpts.GetGerberPrecision() == 5 ? 0 : 1 );
-
-        // SVG precision and units for coordinates
-        m_svgPrecsision->SetValue( m_plotOpts.GetSvgPrecision() );
-
-        // Option to exclude pads from silkscreen layers
-        m_sketchPadsOnFabLayers->SetValue( m_plotOpts.GetSketchPadsOnFabLayers() );
-        m_plotPadNumbers->SetValue( m_plotOpts.GetPlotPadNumbers() );
-        m_plotPadNumbers->Enable( m_plotOpts.GetSketchPadsOnFabLayers() );
-
-        m_plotDNP->SetValue( m_plotOpts.GetHideDNPFPsOnFabLayers()
-                             || m_plotOpts.GetSketchDNPFPsOnFabLayers()
-                             || m_plotOpts.GetCrossoutDNPFPsOnFabLayers() );
-
-        if( m_plotDNP->GetValue() )
-        {
-            if( m_plotOpts.GetHideDNPFPsOnFabLayers() )
-                m_hideDNP->SetValue( true );
-            else
-                m_crossoutDNP->SetValue( true );
-        }
-
-        m_hideDNP->Enable( m_plotDNP->GetValue() );
-        m_crossoutDNP->Enable( m_plotDNP->GetValue() );
-
-        // Option to tent vias
-        m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
-
-        // Option to use aux origin
-        m_useAuxOriginCheckBox->SetValue( m_plotOpts.GetUseAuxOrigin() );
-
-        // Option to plot page references:
-        m_plotSheetRef->SetValue( m_plotOpts.GetPlotFrameRef() );
-
-        // Option to force ploting of hidden text in footprints
-        m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
-
-        // Options to plot pads and vias holes
-        m_drillShapeOpt->SetSelection( (int) m_plotOpts.GetDrillMarksType() );
-
-        // Scale option
-        m_scaleOpt->SetSelection( m_plotOpts.GetScaleSelection() );
-
-        // Plot mode
-        setPlotModeChoiceSelection( m_plotOpts.GetPlotMode() );
-
-        // DXF outline mode
-        m_DXF_plotModeOpt->SetValue( m_plotOpts.GetDXFPlotPolygonMode() );
-
-        // DXF text mode
-        m_DXF_plotTextStrokeFontOpt->SetValue( m_plotOpts.GetTextMode()
-                                               == PLOT_TEXT_MODE::DEFAULT );
-
-        // DXF units selection
-        m_DXF_plotUnits->SetSelection( m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCHES ? 0 : 1 );
-
-        // Plot mirror option
-        m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
-
-        // Black and white plotting
-        m_SVGColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
-        m_PDFColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
-        m_frontFPPropertyPopups->SetValue( m_plotOpts.m_PDFFrontFPPropertyPopups );
-        m_backFPPropertyPopups->SetValue( m_plotOpts.m_PDFBackFPPropertyPopups );
-        m_pdfMetadata->SetValue( m_plotOpts.m_PDFMetadata );
+    default:
+    case PLOT_FORMAT::GERBER: m_plotFormatOpt->SetSelection( 0 ); break;
+    case PLOT_FORMAT::POST:   m_plotFormatOpt->SetSelection( 1 ); break;
+    case PLOT_FORMAT::SVG:    m_plotFormatOpt->SetSelection( 2 ); break;
+    case PLOT_FORMAT::DXF:    m_plotFormatOpt->SetSelection( 3 ); break;
+    case PLOT_FORMAT::HPGL:   m_plotFormatOpt->SetSelection( 4 ); break;
+    case PLOT_FORMAT::PDF:    m_plotFormatOpt->SetSelection( 5 ); break;
     }
-    else
+
+    // Set units and value for HPGL pen size (this param is in mils).
+    m_defaultPenSize.SetValue( m_plotOpts.GetHPGLPenDiameter() * pcbIUScale.IU_PER_MILS );
+
+    // Test for a reasonable scale value. Set to 1 if problem
+    if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
+        || m_XScaleAdjust > PLOT_MAX_SCALE || m_YScaleAdjust > PLOT_MAX_SCALE )
     {
-        m_plotFormatOpt->Hide();
-
-        switch( m_job->m_plotFormat )
-        {
-        default:
-        case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER: m_plotFormatOpt->SetSelection( 0 ); break;
-        case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST: m_plotFormatOpt->SetSelection( 1 ); break;
-        case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG: m_plotFormatOpt->SetSelection( 2 ); break;
-        case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF: m_plotFormatOpt->SetSelection( 3 ); break;
-        case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
-        case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF: m_plotFormatOpt->SetSelection( 5 ); break;
-        }
+        m_XScaleAdjust = m_YScaleAdjust = 1.0;
     }
+
+    m_fineAdjustXCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+            unityScale, EDA_UNITS::UNSCALED, m_XScaleAdjust ) );
+
+    m_fineAdjustYCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+            unityScale, EDA_UNITS::UNSCALED, m_YScaleAdjust ) );
+
+    // Test for a reasonable PS width correction value. Set to 0 if problem.
+    if( m_PSWidthAdjust < m_widthAdjustMinValue || m_PSWidthAdjust > m_widthAdjustMaxValue )
+        m_PSWidthAdjust = 0.;
+
+    m_trackWidthCorrection.SetValue( m_PSWidthAdjust );
+
+    m_plotPSNegativeOpt->SetValue( m_plotOpts.GetNegative() );
+    m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetA4Output() );
+
+    // Populate the check list box by all enabled layers names.
+    for( PCB_LAYER_ID layer : m_layerList )
+    {
+        int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
+
+        if( m_plotOpts.GetLayerSelection()[layer] )
+            m_layerCheckListBox->Check( checkIndex );
+    }
+
+    arrangeAllLayersList( s_lastAllLayersOrder );
+
+    // Option for disabling Gerber Aperture Macro (for broken Gerber readers)
+    m_disableApertMacros->SetValue( m_plotOpts.GetDisableGerberMacros() );
+
+    // Option for using proper Gerber extensions. Note also Protel extensions are
+    // a broken feature. However, for now, we need to handle it.
+    m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberProtelExtensions() );
+
+    // Option for including Gerber attributes, from Gerber X2 format, in the output
+    // In X1 format, they will be added as comments
+    m_useGerberX2Format->SetValue( m_plotOpts.GetUseGerberX2format() );
+
+    // Option for including Gerber netlist info (from Gerber X2 format) in the output
+    m_useGerberNetAttributes->SetValue( m_plotOpts.GetIncludeGerberNetlistInfo() );
+
+    // Option to generate a Gerber job file
+    m_generateGerberJobFile->SetValue( m_plotOpts.GetCreateGerberJobFile() );
+
+    // Gerber precision for coordinates
+    m_coordFormatCtrl->SetSelection( m_plotOpts.GetGerberPrecision() == 5 ? 0 : 1 );
+
+    // SVG precision and units for coordinates
+    m_svgPrecsision->SetValue( m_plotOpts.GetSvgPrecision() );
+
+    // Option to exclude pads from silkscreen layers
+    m_sketchPadsOnFabLayers->SetValue( m_plotOpts.GetSketchPadsOnFabLayers() );
+    m_plotPadNumbers->SetValue( m_plotOpts.GetPlotPadNumbers() );
+    m_plotPadNumbers->Enable( m_plotOpts.GetSketchPadsOnFabLayers() );
+
+    m_plotDNP->SetValue( m_plotOpts.GetHideDNPFPsOnFabLayers()
+                            || m_plotOpts.GetSketchDNPFPsOnFabLayers()
+                            || m_plotOpts.GetCrossoutDNPFPsOnFabLayers() );
+
+    if( m_plotDNP->GetValue() )
+    {
+        if( m_plotOpts.GetHideDNPFPsOnFabLayers() )
+            m_hideDNP->SetValue( true );
+        else
+            m_crossoutDNP->SetValue( true );
+    }
+
+    m_hideDNP->Enable( m_plotDNP->GetValue() );
+    m_crossoutDNP->Enable( m_plotDNP->GetValue() );
+
+    // Option to tent vias
+    m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
+
+    // Option to use aux origin
+    m_useAuxOriginCheckBox->SetValue( m_plotOpts.GetUseAuxOrigin() );
+
+    // Option to plot page references:
+    m_plotSheetRef->SetValue( m_plotOpts.GetPlotFrameRef() );
+
+    // Option to force ploting of hidden text in footprints
+    m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
+
+    // Options to plot pads and vias holes
+    m_drillShapeOpt->SetSelection( (int) m_plotOpts.GetDrillMarksType() );
+
+    // Scale option
+    m_scaleOpt->SetSelection( m_plotOpts.GetScaleSelection() );
+
+    // Plot mode
+    setPlotModeChoiceSelection( m_plotOpts.GetPlotMode() );
+
+    // DXF outline mode
+    m_DXF_plotModeOpt->SetValue( m_plotOpts.GetDXFPlotPolygonMode() );
+
+    // DXF text mode
+    m_DXF_plotTextStrokeFontOpt->SetValue( m_plotOpts.GetTextMode()
+                                            == PLOT_TEXT_MODE::DEFAULT );
+
+    // DXF units selection
+    m_DXF_plotUnits->SetSelection( m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCHES ? 0 : 1 );
+
+    // Plot mirror option
+    m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
+
+    // Black and white plotting
+    m_SVGColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
+    m_PDFColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
+    m_frontFPPropertyPopups->SetValue( m_plotOpts.m_PDFFrontFPPropertyPopups );
+    m_backFPPropertyPopups->SetValue( m_plotOpts.m_PDFBackFPPropertyPopups );
+    m_pdfMetadata->SetValue( m_plotOpts.m_PDFMetadata );
 
     // Initialize a few other parameters, which can also be modified
     // from the drill dialog
@@ -436,6 +420,110 @@ void DIALOG_PLOT::init_Dialog()
     wxCommandEvent cmd_event;
     SetPlotFormat( cmd_event );
     OnSetScaleOpt( cmd_event );
+}
+
+
+void DIALOG_PLOT::loadPlotParamsFromJob()
+{
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER )
+    {
+        JOB_EXPORT_PCB_GERBERS* gJob = static_cast<JOB_EXPORT_PCB_GERBERS*>( m_job );
+        m_plotOpts.SetDisableGerberMacros( gJob->m_disableApertureMacros );
+        m_plotOpts.SetUseGerberProtelExtensions( gJob->m_useProtelFileExtension );
+        m_plotOpts.SetUseGerberX2format( gJob->m_useX2Format );
+        m_plotOpts.SetIncludeGerberNetlistInfo( gJob->m_includeNetlistAttributes );
+        m_plotOpts.SetCreateGerberJobFile( gJob->m_createJobsFile );
+        m_plotOpts.SetGerberPrecision( gJob->m_precision );
+        m_plotOpts.SetSubtractMaskFromSilk( gJob->m_subtractSolderMaskFromSilk );
+        m_plotOpts.SetUseAuxOrigin( gJob->m_useAuxOrigin );
+    }
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
+    {
+		JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( m_job );
+        m_plotOpts.SetSvgPrecision( svgJob->m_precision );
+        m_plotOpts.SetUseAuxOrigin( true );
+    }
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
+    {
+        JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( m_job );
+        m_plotOpts.SetDXFPlotUnits( dxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES
+                                    ? DXF_UNITS::INCHES : DXF_UNITS::MILLIMETERS );
+        m_plotOpts.SetPlotMode( dxfJob->m_plotGraphicItemsUsingContours ? OUTLINE_MODE::SKETCH
+                                                                        : OUTLINE_MODE::FILLED );
+        m_plotOpts.SetUseAuxOrigin( dxfJob->m_useDrillOrigin );
+    }
+
+    m_plotOpts.SetSketchPadsOnFabLayers( m_job->m_sketchPadsOnFabLayers );
+    m_plotOpts.SetHideDNPFPsOnFabLayers( m_job->m_hideDNPFPsOnFabLayers );
+    m_plotOpts.SetSketchDNPFPsOnFabLayers( m_job->m_sketchDNPFPsOnFabLayers );
+    m_plotOpts.SetCrossoutDNPFPsOnFabLayers( m_job->m_crossoutDNPFPsOnFabLayers );
+    m_plotOpts.SetPlotPadNumbers( m_job->m_plotPadNumbers );
+
+    m_plotOpts.SetBlackAndWhite( m_job->m_blackAndWhite );
+    m_plotOpts.SetMirror( m_job->m_mirror );
+    m_plotOpts.SetNegative( m_job->m_negative );
+
+    m_plotOpts.SetLayerSelection( m_job->m_printMaskLayer );
+    m_plotOpts.SetPlotOnAllLayersSelection( m_job->m_printMaskLayersToIncludeOnAllLayers );
+
+    switch( m_job->m_plotFormat )
+    {
+    default:
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER: m_plotOpts.SetFormat( PLOT_FORMAT::GERBER ); break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST: m_plotOpts.SetFormat( PLOT_FORMAT::POST ); break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG: m_plotOpts.SetFormat( PLOT_FORMAT::SVG ); break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF: m_plotOpts.SetFormat( PLOT_FORMAT::DXF ); break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL: m_plotOpts.SetFormat( PLOT_FORMAT::HPGL ); break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF: m_plotOpts.SetFormat( PLOT_FORMAT::PDF ); break;
+    }
+}
+
+
+void DIALOG_PLOT::transferPlotParamsToJob()
+{
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER )
+    {
+        JOB_EXPORT_PCB_GERBERS* gJob = static_cast<JOB_EXPORT_PCB_GERBERS*>( m_job );
+		gJob->m_disableApertureMacros = m_plotOpts.GetDisableGerberMacros();
+		gJob->m_useProtelFileExtension = m_plotOpts.GetUseGerberProtelExtensions();
+		gJob->m_useX2Format = m_plotOpts.GetUseGerberX2format();
+		gJob->m_includeNetlistAttributes = m_plotOpts.GetIncludeGerberNetlistInfo();
+        gJob->m_createJobsFile = m_plotOpts.GetCreateGerberJobFile();
+		gJob->m_precision = m_plotOpts.GetGerberPrecision();
+        gJob->m_subtractSolderMaskFromSilk = m_plotOpts.GetSubtractMaskFromSilk();
+        gJob->m_useAuxOrigin = m_plotOpts.GetUseAuxOrigin();
+        gJob->m_useBoardPlotParams = false;
+    }
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
+	{
+		JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( m_job );
+		svgJob->m_precision = m_plotOpts.GetSvgPrecision();
+	}
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
+	{
+		JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( m_job );
+		dxfJob->m_dxfUnits = m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCHES
+							? JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES : JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS;
+		dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
+        dxfJob->m_useDrillOrigin = m_plotOpts.GetUseAuxOrigin();
+	}
+
+    m_job->m_crossoutDNPFPsOnFabLayers = m_plotOpts.GetCrossoutDNPFPsOnFabLayers();
+    m_job->m_hideDNPFPsOnFabLayers = m_plotOpts.GetHideDNPFPsOnFabLayers();
+    m_job->m_sketchDNPFPsOnFabLayers = m_plotOpts.GetSketchDNPFPsOnFabLayers();
+    m_job->m_sketchPadsOnFabLayers = m_plotOpts.GetSketchPadsOnFabLayers();
+
+    m_job->m_plotPadNumbers = m_plotOpts.GetPlotPadNumbers();
+
+    m_job->m_blackAndWhite = m_plotOpts.GetBlackAndWhite();
+    m_job->m_mirror = m_plotOpts.GetMirror();
+    m_job->m_negative = m_plotOpts.GetNegative();
+    m_job->m_printMaskLayer = m_plotOpts.GetLayerSelection().UIOrder();
+    m_job->m_printMaskLayersToIncludeOnAllLayers = m_plotOpts.GetPlotOnAllLayersSelection().UIOrder();
 }
 
 
@@ -1127,10 +1215,14 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetOutputDirectory( dirStr );
     m_editFrame->Prj().GetProjectFile().m_PcbLastPath[ LAST_PATH_PLOT ] = dirStr;
 
-    if( !m_plotOpts.IsSameAs( tempOptions ) )
+    if( !m_job && !m_plotOpts.IsSameAs( tempOptions ) )
     {
         m_editFrame->SetPlotSettings( tempOptions );
         m_editFrame->OnModify();
+        m_plotOpts = tempOptions;
+    }
+    else
+    {
         m_plotOpts = tempOptions;
     }
 }
@@ -1142,23 +1234,13 @@ void DIALOG_PLOT::OnGerberX2Checked( wxCommandEvent& event )
 }
 
 
-void DIALOG_PLOT::updateJobFromDialog()
-{
-    m_job->m_mirror = m_plotMirrorOpt->GetValue();
-    m_job->m_plotDrawingSheet = m_plotSheetRef->GetValue();
-    m_job->m_hideDNPFPsOnFabLayers = m_plotDNP->GetValue() && m_hideDNP->GetValue();
-    m_job->m_sketchDNPFPsOnFabLayers = m_plotDNP->GetValue() && m_crossoutDNP->GetValue();
-    m_job->m_crossoutDNPFPsOnFabLayers = m_plotDNP->GetValue() && m_crossoutDNP->GetValue();
-    //m_job->m_plotInvisibleText = m_plotInvisibleText->GetValue();
-    m_job->m_drillShapeOption = static_cast<int>( m_drillShapeOpt->GetSelection() );
-}
-
-
 void DIALOG_PLOT::Plot( wxCommandEvent& event )
 {
     if( m_job )
     {
-        updateJobFromDialog();
+        applyPlotSettings();
+        transferPlotParamsToJob();
+        Close();
     }
     else
     {
