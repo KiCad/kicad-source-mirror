@@ -185,11 +185,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 }
 
                 // Read global fieldname templates
-                SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-                EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+                SETTINGS_MANAGER&  curr_mgr = Pgm().GetSettingsManager();
+                EESCHEMA_SETTINGS* curr_cfg = curr_mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
-                if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
-                    m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+                if( curr_cfg && !curr_cfg->m_Drawing.field_names.IsEmpty() )
+                    m_TemplateFieldNames.AddTemplateFieldNames( curr_cfg->m_Drawing.field_names );
             }, {} ) );
 
     m_params.emplace_back( new PARAM<wxString>( "bom_export_filename",
