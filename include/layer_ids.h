@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2007-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -542,6 +542,17 @@ inline bool IsCopperLayer( int aLayerId )
 inline bool IsExternalCopperLayer( int aLayerId )
 {
     return aLayerId == F_Cu || aLayerId == B_Cu;
+}
+
+/**
+ * Tests whether a layer is an inner (In1_Cu to In30_Cu) copper layer.
+ *
+ * @param aLayerId = Layer  to test
+ * @return true if aLayer is a valid inner copper layer
+ */
+inline bool IsInnerCopperLayer( int aLayerId )
+{
+    return IsCopperLayer( aLayerId ) && !IsExternalCopperLayer( aLayerId );
 }
 
 /**

@@ -468,6 +468,12 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
     if( !m_layersToExport.Contains( pcblayer ) )
         return false;
 
+    if( IsCopperLayer( pcblayer ) && !m_params.m_ExportTracksVias )
+        return false;
+
+    if( IsInnerCopperLayer( pcblayer ) && !m_params.m_ExportInnerCopper )
+        return false;
+
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
     switch( aItem->Type() )
