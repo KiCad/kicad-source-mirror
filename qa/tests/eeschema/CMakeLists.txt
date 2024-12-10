@@ -57,6 +57,7 @@ set( QA_EESCHEMA_SRCS
 	erc/test_erc_no_connect.cpp
     erc/test_erc_hierarchical_schematics.cpp
 
+    test_connectivity_algo.cpp
     test_eagle_plugin.cpp
     test_lib_part.cpp
     test_netlist_exporter_kicad.cpp

@@ -1996,7 +1996,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                         subgraph->m_bus_neighbors[member].insert( candidate );
                         candidate->m_bus_parents[member].insert( subgraph );
                     }
-                    else if( connection->Type() == candidate->m_driver_connection->Type() )
+                    else if( !connection->IsBus() || connection->Type() == candidate->m_driver_connection->Type() )
                     {
                         wxLogTrace( ConnTrace, wxS( "%lu (%s) absorbs neighbor %lu (%s)" ),
                                     subgraph->m_code, connection->Name(),
@@ -2154,18 +2154,19 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                     if( !secondary_is_global && candidate->m_sheet != subgraph->m_sheet )
                         continue;
 
-                    SCH_CONNECTION* conn = candidate->m_driver_connection;
-
-                    if( conn->Name() == secondary_name )
+                    for( SCH_ITEM* candidate_driver : candidate->m_drivers )
                     {
-                        wxLogTrace( ConnTrace, wxS( "Global %lu (%s) promoted to %s" ),
-                                    candidate->m_code, conn->Name(),
-                                    subgraph->m_driver_connection->Name() );
+                        if( candidate->GetNameForDriver( candidate_driver ) == secondary_name )
+                        {
+                            wxLogTrace( ConnTrace, wxS( "Global %lu (%s) promoted to %s" ),
+                                        candidate->m_code, candidate->m_driver_connection->Name(),
+                                        subgraph->m_driver_connection->Name() );
 
-                        conn->Clone( *subgraph->m_driver_connection );
+                            candidate->m_driver_connection->Clone( *subgraph->m_driver_connection );
 
-                        candidate->m_dirty = false;
-                        propagateToNeighbors( candidate, false );
+                            candidate->m_dirty = false;
+                            propagateToNeighbors( candidate, false );
+                        }
                     }
                 }
             }
