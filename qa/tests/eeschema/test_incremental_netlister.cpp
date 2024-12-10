@@ -32,9 +32,9 @@
 #include <settings/settings_manager.h>
 #include <locale_io.h>
 
-struct INCREMENTAL_NETLIST_TEST_FIXTURE
+struct CONNECTIVITY_TEST_FIXTURE
 {
-    INCREMENTAL_NETLIST_TEST_FIXTURE() :
+    CONNECTIVITY_TEST_FIXTURE() :
             m_settingsManager( true /* headless */ )
     { }
 
@@ -42,7 +42,7 @@ struct INCREMENTAL_NETLIST_TEST_FIXTURE
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
 
-BOOST_FIXTURE_TEST_CASE( RemoveAddItems, INCREMENTAL_NETLIST_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( RemoveAddItems, CONNECTIVITY_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
 

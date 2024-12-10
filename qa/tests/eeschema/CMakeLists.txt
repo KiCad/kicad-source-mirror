@@ -62,6 +62,7 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_label_multiple_wires.cpp
     erc/test_erc_unconnected_wire_endpoints.cpp
 
+    test_connectivity_algo.cpp
     test_eagle_plugin.cpp
     test_junction_helpers.cpp
     test_lib_part.cpp
