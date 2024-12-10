@@ -537,6 +537,15 @@ public:
     bool m_EnableEeschemaPrintCairo;
 
     /**
+     * Enable Eeschema Export to clipboard using Cairo.
+     *
+     * Setting name: "EnableEeschemaExportClipboardCairo"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_EnableEeschemaExportClipboardCairo;
+
+    /**
      * Board object selection visibility limit.
      *
      * This ratio is used to determine if an object in a selected object layer stack is

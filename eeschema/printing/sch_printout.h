@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,7 +44,18 @@ public:
     bool HasPage( int page ) override;
     bool OnBeginDocument( int startPage, int endPage ) override;
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
-    void PrintPage( SCH_SCREEN* aScreen );
+
+    /**
+     * Print the current SCH_SCREEN using a given wxDC
+     * @param aScreen is the screen corresponding to the sheet to print
+     * @param aDC is the drawing context to use. It can be only
+     *  a wxDC returned by wxPrintout::GetDC() (a wxPrinterDC, a wxPostScriptDC or a wxMemoryDC )
+     *  a wxMemoryDC (to print to the clipboard)
+     * @param aForPrinting = true to draw to a printer, false to a wxMeoryDC used to
+     * draw to the Clipboard
+     * @return true if OK
+     */
+    bool PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting );
 
 private:
     SCH_EDIT_FRAME* m_parent;

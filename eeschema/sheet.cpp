@@ -47,6 +47,9 @@
 #include <wx/msgdlg.h>
 #include <wx/richmsgdlg.h>
 
+#include <advanced_config.h>
+#include "printing/sch_printout.h"
+
 
 bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet )
 {
@@ -620,6 +623,7 @@ bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHi
 
 void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 {
+    bool useCairo = ADVANCED_CFG::GetCfg().m_EnableEeschemaExportClipboardCairo;;
     wxRect       drawArea;
     BASE_SCREEN* screen = GetScreen();
 
@@ -673,7 +677,24 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 
     cfg->SetDefaultFont( eeconfig()->m_Appearance.default_font );
 
-    PrintPage( cfg );
+    if( useCairo )
+    {
+        try
+        {
+            dc.SetUserScale( 1.0, 1.0 );
+            SCH_PRINTOUT printout( this, wxEmptyString, true );
+            bool success = printout.PrintPage( GetScreen(), cfg->GetPrintDC(), false );
+
+            if( !success )
+                wxLogMessage( _( "Cannot create the schematic image") );
+        }
+        catch( ... )
+        {
+            wxLogMessage( "printout internal error" );
+        }
+    }
+    else
+        PrintPage( cfg );
 
     // Deselect Bitmap from DC before using the bitmap
     dc.SelectObject( wxNullBitmap );
