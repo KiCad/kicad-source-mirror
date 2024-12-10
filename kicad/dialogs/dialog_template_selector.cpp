@@ -226,19 +226,27 @@ void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPag
         }
         else
         {
-            wxDir       sub_dir;
-            wxString    sub_name;
+            wxString      sub_name;
+            wxArrayString subdirs;
 
             bool cont = dir.GetFirst( &sub_name, wxEmptyString, wxDIR_DIRS );
 
             while( cont )
             {
-                wxString sub_full = aPath + sub_name;
+                subdirs.Add( wxString( sub_name ) );
+                cont = dir.GetNext( &sub_name );
+            }
+
+            if( !subdirs.IsEmpty() )
+                subdirs.Sort();
+
+            for( const wxString& dir_name : subdirs )
+            {
+                wxDir    sub_dir;
+                wxString sub_full = aPath + dir_name;
 
                 if( sub_dir.Open( sub_full ) )
                     AddTemplate( aPage, new PROJECT_TEMPLATE( sub_full ) );
-
-                cont = dir.GetNext( &sub_name );
             }
         }
     }
