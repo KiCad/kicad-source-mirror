@@ -160,7 +160,10 @@ bool DRC_CACHE_GENERATOR::Run()
     // before we start.
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
         footprint->BuildCourtyardCaches();
+        footprint->BuildNetTieCache();
+    }
 
     std::vector<std::future<size_t>> returns;
 
