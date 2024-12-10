@@ -42,8 +42,17 @@ enum PCM_PACKAGE_TYPE
 {
     PT_INVALID,
     PT_PLUGIN,
+    PT_FAB,
     PT_LIBRARY,
     PT_COLORTHEME,
+};
+
+///< Plugin categories
+enum PCM_PLUGIN_CATEGORY
+{
+    PC_INVALID,
+    PC_GENERAL,
+    PC_FAB,
 };
 
 
@@ -94,18 +103,19 @@ struct PACKAGE_VERSION
 ///< Package metadata
 struct PCM_PACKAGE
 {
-    wxString                     name;
-    wxString                     description;
-    wxString                     description_full;
-    wxString                     identifier;
-    PCM_PACKAGE_TYPE             type;
-    PCM_CONTACT                  author;
-    std::optional<PCM_CONTACT>   maintainer;
-    wxString                     license;
-    STRING_MAP                   resources;
-    std::vector<std::string>     tags;
-    std::vector<std::string>     keep_on_update;
-    std::vector<PACKAGE_VERSION> versions;
+    wxString                           name;
+    wxString                           description;
+    wxString                           description_full;
+    wxString                           identifier;
+    PCM_PACKAGE_TYPE                   type;
+    std::optional<PCM_PLUGIN_CATEGORY> category;
+    PCM_CONTACT                        author;
+    std::optional<PCM_CONTACT>         maintainer;
+    wxString                           license;
+    STRING_MAP                         resources;
+    std::vector<std::string>           tags;
+    std::vector<std::string>           keep_on_update;
+    std::vector<PACKAGE_VERSION>       versions;
 };
 
 
@@ -152,8 +162,15 @@ struct PCM_INSTALLATION_ENTRY
 NLOHMANN_JSON_SERIALIZE_ENUM( PCM_PACKAGE_TYPE, {
                                                         { PT_INVALID, "invalid" },
                                                         { PT_PLUGIN, "plugin" },
+                                                        { PT_FAB, "fab" },
                                                         { PT_LIBRARY, "library" },
                                                         { PT_COLORTHEME, "colortheme" },
+                                                } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( PCM_PLUGIN_CATEGORY, {
+                                                        { PC_INVALID, "invalid" },
+                                                        { PC_GENERAL, "general" },
+                                                        { PC_FAB, "fab" },
                                                 } )
 
 

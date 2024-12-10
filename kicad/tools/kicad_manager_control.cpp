@@ -939,7 +939,7 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 
     const std::unordered_set<PCM_PACKAGE_TYPE>& changed = pcm.GetChangedPackageTypes();
 
-    if( changed.count( PCM_PACKAGE_TYPE::PT_PLUGIN ) )
+    if( changed.count( PCM_PACKAGE_TYPE::PT_PLUGIN ) || changed.count( PCM_PACKAGE_TYPE::PT_FAB ) )
     {
         std::string payload = "";
         m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_PLUGINS, payload );

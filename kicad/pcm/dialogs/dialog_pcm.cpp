@@ -48,6 +48,7 @@
 // transalted text
 static std::vector<std::pair<PCM_PACKAGE_TYPE, wxString>> PACKAGE_TYPE_LIST = {
     { PT_PLUGIN, _( "Plugins (%d)" ) },
+    { PT_FAB, _( "Fabrication plugins (%d)" ) },
     { PT_LIBRARY, _( "Libraries (%d)" ) },
     { PT_COLORTHEME, _( "Color themes (%d)" ) },
 };
@@ -373,7 +374,10 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
             package_data.repository_id = aRepositoryId;
             package_data.repository_name = m_choiceRepository->GetStringSelection();
 
-            data[pkg.type].emplace_back( package_data );
+            // Fabrication plugins are displayed in a different tab although they are still plugins
+            PCM_PACKAGE_TYPE type = pkg.category == PC_FAB ? PT_FAB : pkg.type;
+
+            data[type].emplace_back( package_data );
         }
 
         for( size_t i = 0; i < PACKAGE_TYPE_LIST.size(); i++ )
