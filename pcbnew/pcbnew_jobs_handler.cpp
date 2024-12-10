@@ -626,7 +626,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
     svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
     svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
-    svgPlotOptions.m_precision = aSvgJob->m_drillShapeOption;
+    svgPlotOptions.m_precision = aSvgJob->m_precision;
 
     BOARD* brd = getBoard( aSvgJob->m_filename );
 
