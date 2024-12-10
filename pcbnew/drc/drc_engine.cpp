@@ -745,6 +745,39 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 constraint.SetParentRule( c->constraint.GetParentRule() );
             };
 
+    // Handle Footprint net ties, which will zero out the clearance for footprint objects
+    if( aConstraintType == CLEARANCE_CONSTRAINT && ( ac || bc ) && !a_is_non_copper && !b_is_non_copper )
+    {
+        const FOOTPRINT* footprints[2] = {a ? a->GetParentFootprint() : nullptr,
+                                          b ? b->GetParentFootprint() : nullptr};
+        const BOARD_ITEM* child_items[2] = {a, b};
+
+        // These are the items being compared against, so the order is reversed
+        const BOARD_CONNECTED_ITEM* alt_items[2] = {bc, ac};
+
+        for( int ii = 0; ii < 2; ++ii )
+        {
+            // We need both a footprint item and a connected item to check for a net tie
+            if( !footprints[ii] || !alt_items[ii] )
+                continue;
+
+            const std::set<int>& netcodes = footprints[ii]->GetNetTieCache( child_items[ii] );
+
+            auto it = netcodes.find( alt_items[ii]->GetNetCode() );
+
+            if( it != netcodes.end() )
+            {
+                REPORT( "" )
+                REPORT( wxString::Format( _( "Net tie on %s; clearance: 0." ),
+                                          EscapeHTML( footprints[ii]->GetItemDescription( this, true ) ) ) )
+
+                constraint.SetName( _( "net tie" ) );
+                constraint.m_Value.SetMin( 0 );
+                return constraint;
+            }
+        }
+    }
+
     // Local overrides take precedence over everything *except* board min clearance
     if( aConstraintType == CLEARANCE_CONSTRAINT || aConstraintType == HOLE_CLEARANCE_CONSTRAINT )
     {

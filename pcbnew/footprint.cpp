@@ -3013,6 +3013,73 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
 }
 
 
+void FOOTPRINT::BuildNetTieCache()
+{
+    m_netTieCache.clear();
+    std::map<wxString, int> map = MapPadNumbersToNetTieGroups();
+    std::map<PCB_LAYER_ID, std::vector<PCB_SHAPE*>> layer_shapes;
+
+    std::for_each( m_drawings.begin(), m_drawings.end(),
+                   [&]( BOARD_ITEM* item )
+                   {
+                       if( item->Type() != PCB_SHAPE_T )
+                           return;
+
+                       for( PCB_LAYER_ID layer : item->GetLayerSet() )
+                           layer_shapes[layer].push_back( static_cast<PCB_SHAPE*>( item ) );
+                   } );
+
+    for( size_t ii = 0; ii < m_pads.size(); ++ii )
+    {
+        PAD* pad = m_pads[ ii ];
+        bool has_nettie = false;
+
+        auto it = map.find( pad->GetNumber() );
+
+        if( it == map.end() || it->second < 0 )
+            continue;
+
+        for( size_t jj = ii + 1; jj < m_pads.size(); ++jj )
+        {
+            PAD* other = m_pads[ jj ];
+
+            auto it2 = map.find( other->GetNumber() );
+
+            if( it2 == map.end() || it2->second < 0 )
+                continue;
+
+            if( it2->second == it->second )
+            {
+                m_netTieCache[pad].insert( pad->GetNetCode() );
+                m_netTieCache[pad].insert( other->GetNetCode() );
+                m_netTieCache[other].insert( other->GetNetCode() );
+                m_netTieCache[other].insert( pad->GetNetCode() );
+                has_nettie = true;
+            }
+        }
+
+        if( !has_nettie )
+            continue;
+
+        for( auto& [ layer, shapes ] : layer_shapes )
+        {
+            auto pad_shape = pad->GetEffectiveShape( layer );
+
+            for( auto other_shape : shapes )
+            {
+                auto shape = other_shape->GetEffectiveShape( layer );
+
+                if( pad_shape->Collide( shape.get() ) )
+                {
+                    std::set<int>& nettie = m_netTieCache[pad];
+                    m_netTieCache[other_shape].insert( nettie.begin(), nettie.end() );
+                }
+            }
+        }
+    }
+}
+
+
 std::map<wxString, int> FOOTPRINT::MapPadNumbersToNetTieGroups() const
 {
     std::map<wxString, int> padNumberToGroupIdxMap;

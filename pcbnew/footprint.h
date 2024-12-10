@@ -500,6 +500,26 @@ public:
     void CheckNetTiePadGroups( const std::function<void( const wxString& )>& aErrorHandler );
 
     /**
+     * Cache the pads that are allowed to connect to each other in the footprint.
+     */
+    void BuildNetTieCache();
+
+    /**
+     * Get the set of net codes that are allowed to connect to a footprint item
+     */
+    const std::set<int>& GetNetTieCache( const BOARD_ITEM* aItem ) const
+    {
+        static const std::set<int> emptySet;
+
+        auto it = m_netTieCache.find( aItem );
+
+        if( it == m_netTieCache.end() )
+            return emptySet;
+
+        return it->second;
+    }
+
+    /**
      * Generate pads shapes on layer \a aLayer as polygons and adds these polygons to
      * \a aBuffer.
      *
@@ -1064,6 +1084,9 @@ private:
     // A list of pad groups, each of which is allowed to short nets within their group.
     // A pad group is a comma-separated list of pad numbers.
     std::vector<wxString> m_netTiePadGroups;
+
+    // A list of 1:N footprint item to allowed net numbers
+    std::map<const BOARD_ITEM*, std::set<int>> m_netTieCache;
 
     // Optional overrides
     ZONE_CONNECTION       m_zoneConnection;
