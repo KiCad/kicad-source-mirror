@@ -202,6 +202,12 @@ public:
         return m_sheet;
     }
 
+    const std::unordered_map< std::shared_ptr<SCH_CONNECTION>,
+                        std::unordered_set<CONNECTION_SUBGRAPH*> >& GetBusParents() const
+    {
+        return m_bus_parents;
+    }
+
     void RemoveItem( SCH_ITEM* aItem );
 
     /**

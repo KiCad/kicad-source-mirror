@@ -1102,6 +1102,22 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 }
             }
         }
+
+        // Highlight the buses that contain the selected net
+        for( const auto& [_, bus_sgs] : sg->GetBusParents() )
+        {
+            for( const CONNECTION_SUBGRAPH* bus_sg : bus_sgs )
+            {
+                for( const SCH_ITEM* item : bus_sg->GetItems() )
+                {
+                    if( !item || !item->IsType( { SCH_ITEM_LOCATE_BUS_T } ) )
+                        continue;
+
+                    if( SCH_CONNECTION* connection = item->Connection() )
+                        connNames.emplace( connection->Name() );
+                }
+            }
+        }
     }
 
     for( SCH_ITEM* item : screen->Items() )
