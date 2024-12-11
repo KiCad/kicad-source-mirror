@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 16:05-0800\n"
-"PO-Revision-Date: 2024-11-21 16:06+0100\n"
+"POT-Creation-Date: 2024-12-11 16:47+0100\n"
+"PO-Revision-Date: 2024-12-11 09:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2777,14 +2777,12 @@ msgstr "Nom Projet"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1330
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1339 eeschema/sch_plotter.cpp:1029
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -3006,7 +3004,7 @@ msgstr "Bloc Titre"
 #: common/dialogs/dialog_page_settings.cpp:486
 #: eeschema/eeschema_jobs_handler.cpp:223 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:1853
+#: pcbnew/pcbnew_jobs_handler.cpp:1854
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Erreur de chargement de la feuille de dessin '%s'."
@@ -6961,6 +6959,7 @@ msgid "Failed to perform checkout operation."
 msgstr "Échec de l'opération d'extraction."
 
 #: common/git/git_pull_handler.cpp:217
+#, c++-format
 msgid "Could not lookup commit '{}'"
 msgstr "Impossible de rechercher le commit '{}'"
 
@@ -7490,14 +7489,12 @@ msgid "PCB: Export IPC2581"
 msgstr "PCB : Export IPC2581"
 
 #: common/jobs/job_export_pcb_odb.cpp:56
-#, fuzzy
 msgid "ODB++ export"
-msgstr "Export 3D"
+msgstr "Exportation ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:69
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "Exportation ODB++"
+msgstr "PCB: Exportation ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
 msgid "PCB PDF export"
@@ -8077,12 +8074,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1159
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1165
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -14813,6 +14808,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -16604,8 +16600,8 @@ msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Tracé du symbole '%s' sur '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:902
-#: eeschema/eeschema_jobs_handler.cpp:997 pcbnew/pcbnew_jobs_handler.cpp:1356
-#: pcbnew/pcbnew_jobs_handler.cpp:1427
+#: eeschema/eeschema_jobs_handler.cpp:997 pcbnew/pcbnew_jobs_handler.cpp:1357
+#: pcbnew/pcbnew_jobs_handler.cpp:1428
 msgid "Unable to load library\n"
 msgstr "Impossible de charger la librairie\n"
 
@@ -16613,12 +16609,12 @@ msgstr "Impossible de charger la librairie\n"
 msgid "There is no symbol selected to save."
 msgstr "Pas de composant sélectionné à sauver."
 
-#: eeschema/eeschema_jobs_handler.cpp:973 pcbnew/pcbnew_jobs_handler.cpp:1323
+#: eeschema/eeschema_jobs_handler.cpp:973 pcbnew/pcbnew_jobs_handler.cpp:1324
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 "Le chemin de sortie ne doit pas entrer en conflit avec un chemin existant\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:981 pcbnew/pcbnew_jobs_handler.cpp:1330
+#: eeschema/eeschema_jobs_handler.cpp:981 pcbnew/pcbnew_jobs_handler.cpp:1331
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
@@ -16637,7 +16633,7 @@ msgstr "La librairie de symboles n'a pas été mise à jour\n"
 msgid "Running ERC...\n"
 msgstr "Exécution ERC...\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1095 pcbnew/pcbnew_jobs_handler.cpp:1655
+#: eeschema/eeschema_jobs_handler.cpp:1095 pcbnew/pcbnew_jobs_handler.cpp:1656
 #, c-format
 msgid "Found %d violations\n"
 msgstr "Violations trouvées %d\n"
@@ -16718,9 +16714,8 @@ msgstr "Pas de Connexion"
 #: eeschema/erc/erc.cpp:209 eeschema/erc/erc.cpp:228
 #: pcbnew/drc/drc_test_provider_misc.cpp:320
 #: pcbnew/drc/drc_test_provider_misc.cpp:340
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Imprimer feuille de dessin"
+msgstr " (dans la feuille de dessin)"
 
 #: eeschema/erc/erc.cpp:422
 msgid "Unresolved text variable in drawing sheet"
@@ -17865,7 +17860,7 @@ msgid "Failed to create directory 'devices' ."
 msgstr "Échec de la création du répertoire 'devices' ."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:407
-#: pcbnew/pcbnew_jobs_handler.cpp:986
+#: pcbnew/pcbnew_jobs_handler.cpp:987
 #, c-format
 msgid "Failed to create file '%s'.\n"
 msgstr "Échec de la création du fichier '%s'.\n"
@@ -19448,7 +19443,7 @@ msgstr "Nom Pin"
 msgid "No sheets to plot."
 msgstr "Pas de feuilles à tracer."
 
-#: eeschema/sch_plotter.cpp:238 pcbnew/pcbnew_jobs_handler.cpp:923
+#: eeschema/sch_plotter.cpp:238 pcbnew/pcbnew_jobs_handler.cpp:924
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Tracé en '%s'\n"
@@ -20221,9 +20216,8 @@ msgstr ""
 "Voulez-vous continuer?"
 
 #: eeschema/sheet.cpp:689
-#, fuzzy
 msgid "Cannot create the schematic image"
-msgstr "Annotation des composants de la schématique"
+msgstr "Impossible de créer l'image du schéma"
 
 #: eeschema/sheet.cpp:766
 #, c-format
@@ -27111,9 +27105,9 @@ msgid "Plugins (%d)"
 msgstr "Plugins (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Fabrication plugins (%d)"
-msgstr "Fichiers de Fabrication"
+msgstr "Plugins de fabrication (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
@@ -31176,7 +31170,7 @@ msgstr "Caractéristiques du Matériau Diélectrique"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr "Pads à demi trou métallisé"
+msgstr "Avec \"castellated\" pads"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
@@ -33962,9 +33956,9 @@ msgid "Cannot remove existing output file '%s'."
 msgstr "Impossible de supprimer le fichier de sortie existant '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Output file '%s' already exists."
-msgstr "Le fichier '%s' existe déjà."
+msgstr "Le fichier de sortie '%s' existe déjà."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:277
 msgid "Cannot create temporary output directory."
@@ -33985,9 +33979,9 @@ msgid "Cannot remove existing output directory '%s'."
 msgstr "Impossible de supprimer le répertoire de sortie existant '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' already exists."
-msgstr "Répertoire de sortie '%s' créé."
+msgstr "Le répertoire de sortie '%s' existe déjà."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:350
 #, c-format
@@ -34100,9 +34094,8 @@ msgid "STL"
 msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
-#, fuzzy
 msgid "Board Options"
-msgstr "Options de Grille"
+msgstr "Options de PCB"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:58
 msgid "Export as Compound shape"
@@ -34197,24 +34190,20 @@ msgstr ""
 "comme joints pour construire les contours du PCB."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:126
-#, fuzzy
 msgid "Conductor Options"
-msgstr "Options du Curseur"
+msgstr "Options de Couches Cuivre"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
-#, fuzzy
 msgid "Export tracks and vias on external conductor layers."
 msgstr "Exporter pistes et vias sur les couches de cuivre externes."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
-#, fuzzy
 msgid "Export zones on external conductor layers."
 msgstr "Exporter les zones sur les couches de cuivre externes."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
-#, fuzzy
 msgid "Export inner conductor layers"
-msgstr "Exporter couches cuivre internes"
+msgstr "Exporter les couches cuivre internes"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:144
 msgid "Fuse shapes (time consuming)"
@@ -34287,7 +34276,7 @@ msgstr "Ecraser ancien fichier"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:260
 msgid "Don't write P-curves to STEP file"
-msgstr ""
+msgstr "Ne pas écrire les courbes Paramétriques dans le fichier STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:261
 msgid ""
@@ -36265,22 +36254,22 @@ msgid "Reference Rule Area:"
 msgstr "Surface à Règles de Référence :"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Copy footprint placement"
-msgstr "Copie placement"
+msgstr "Copier placement des empreintes"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
 msgid "Copy routing"
 msgstr "Copie routage"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
-#, fuzzy
 msgid "Copy other items"
-msgstr "Autres éléments"
+msgstr "Copier autres éléments"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
 msgstr ""
+"Copier textes, formes, zones et autres éléments à l'intérieur de la zone de "
+"règles source"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:91
 msgid "Include locked components"
@@ -36696,9 +36685,8 @@ msgstr ""
 "Fiducial global est un repère pour l'ensemble de la carte\n"
 "Test Point spécifie un point de test électrique\n"
 "Heatsink spécifie un pad thermique\n"
-"Castellated spécifie une pastille à trous traversants sur un bord de la "
-"carte\n"
-"Mécanique spécifie une pastille à trous traversants utilisée pour le support "
+"Castellated spécifie un pad à trous traversants sur un bord de la carte\n"
+"Mécanique spécifie un pad à trous traversants utilisé pour le support "
 "mécanique"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:2464
@@ -36968,7 +36956,6 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -37839,9 +37826,8 @@ msgid "By Length and Angle"
 msgstr "Par Longueur et Angle"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
-#, fuzzy
 msgid "By Start/Midpoint"
-msgstr "Par Début/Milieu/Fin"
+msgstr "Par Point Début/Milieu"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
@@ -39931,7 +39917,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -40151,8 +40136,7 @@ msgstr ""
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                   "
-"| Specifies the **electrical** creepage between copper objects of different "
-"nets."
+"| Specifies the creepage distance between copper objects of different nets."
 "<br>                                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
@@ -40696,7 +40680,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -40938,7 +40921,7 @@ msgstr ""
 "\n"
 "    # Disallow solder mask margin overrides\n"
 "    (rule \"disallow solder mask margin overrides\"\n"
-"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
 "        (condition \"A.Type == 'Pad'\"))\n"
 "\n"
 "\n"
@@ -40947,6 +40930,13 @@ msgstr ""
 "        (layer \"F.Courtyard\")\n"
 "        (constraint physical_clearance (min 3mm))\n"
 "        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Allow silk intersection with board edge for connectors\n"
+"    (rule silk_board_edge_clearance\n"
+"        (constraint silk_clearance)\n"
+"        (severity ignore)\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
 "\n"
 "\n"
 "    # Check current-carrying capacity\n"
@@ -41204,14 +41194,13 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Le pad n’est pas un pad à trou traversant; la connexion sera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Forçage local sur %s; isolation: %s."
+msgstr "Forçage local sur %s; isolation: 0."
 
 #: pcbnew/drc/drc_engine.cpp:774
-#, fuzzy
 msgid "net tie"
-msgstr "Titres de feuilles"
+msgstr "net tie"
 
 #: pcbnew/drc/drc_engine.cpp:801 pcbnew/drc/drc_engine.cpp:811
 #, c-format
@@ -41737,11 +41726,11 @@ msgstr "Le pad à trou traversant n'a pas de trou"
 
 #: pcbnew/drc/drc_item.cpp:295
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Texte en miroir sur la couche de dessus"
 
 #: pcbnew/drc/drc_item.cpp:299
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "Texte non en miroir sur la couche de dessous"
 
 #: pcbnew/drc/drc_item.cpp:495
 #, c-format
@@ -42604,9 +42593,8 @@ msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s épaisseur max %s; réelle %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:77
-#, fuzzy
 msgid "Checking text mirroring..."
-msgstr "Vérification dimensions textes..."
+msgstr "Vérification de la mise en miroir du texte..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
 msgid "Checking track angles..."
@@ -43034,7 +43022,7 @@ msgstr "Le PCB doit être sauvegardée avant de générer le fichier IPC2581."
 msgid "Generating IPC2581 file"
 msgstr "Génération fichier IPC2581"
 
-#: pcbnew/files.cpp:1333 pcbnew/pcbnew_jobs_handler.cpp:1744
+#: pcbnew/files.cpp:1333 pcbnew/pcbnew_jobs_handler.cpp:1745
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -43043,7 +43031,7 @@ msgstr ""
 "Erreur en génération du fichier IPC2581 '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1397 pcbnew/pcbnew_jobs_handler.cpp:1776
+#: pcbnew/files.cpp:1397 pcbnew/pcbnew_jobs_handler.cpp:1777
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -44706,7 +44694,7 @@ msgstr "Trapèze"
 
 #: pcbnew/pad.cpp:2469
 msgid "Castellated pad"
-msgstr "Castellated"
+msgstr "Castellated pad"
 
 #: pcbnew/pad.cpp:2470
 msgid "Mechanical pad"
@@ -44876,7 +44864,7 @@ msgstr ""
 "Afin de créer/mettre à jour le PCB à partir du schéma, vous devrez lancer "
 "Kicad manager et créer un projet."
 
-#: pcbnew/pcb_edit_frame.cpp:2015 pcbnew/pcbnew_jobs_handler.cpp:1610
+#: pcbnew/pcb_edit_frame.cpp:2015 pcbnew/pcbnew_jobs_handler.cpp:1611
 msgid "Eeschema netlist"
 msgstr "Netliste EEschema"
 
@@ -46101,9 +46089,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Forme de pad inconnue '%s' sur la couche '%s' à la ligne %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Ajoutez les couches sélectionnés à la liste des couches appairées."
+msgstr "Pas de couche utilisateur pour placer couche %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -46125,12 +46113,12 @@ msgstr "Forme de primitive de forme non reconnue '%s' en ligne %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Cercle avec rayons x et y inégaux (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "Attendu: x et y sont identiques, obtenu x = %f et y = %f"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -46167,6 +46155,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
+"Données X, Y ou de rotation manquantes dans la ligne %zu pour les refs "
+"schématiques %s. Il peut s'agir d'un composant non placé."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
 #, c-format
@@ -46194,12 +46184,13 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3268
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "Forme de type %d non gérée dans polygone sur la couche %s, seq %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3427
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
 msgstr ""
+"Trou non valide avec %d points dans la zone sur la couche %s avec le net %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3469
 #, c-format
@@ -46207,11 +46198,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Le tracé semble discontinu : le dernier point était %s, le point de départ "
+"du segment suivant est %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Nom de pin de feuille invalide"
+msgstr "Type de forme non valide %d dans le contour de zone"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
@@ -47039,90 +47032,90 @@ msgstr "Image de rendu 3D créée avec succès"
 msgid "Error creating 3D render image"
 msgstr "Erreur lors de la création d'une image de rendu 3D"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:641
+#: pcbnew/pcbnew_jobs_handler.cpp:642
 msgid "Successfully created svg file"
 msgstr "Le fichier svg a été créé avec succès"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:643 pcbnew/pcbnew_jobs_handler.cpp:1528
+#: pcbnew/pcbnew_jobs_handler.cpp:644 pcbnew/pcbnew_jobs_handler.cpp:1529
 msgid "Error creating svg file"
 msgstr "Erreur de création du fichier svg"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:930 pcbnew/pcbnew_jobs_handler.cpp:1087
+#: pcbnew/pcbnew_jobs_handler.cpp:931 pcbnew/pcbnew_jobs_handler.cpp:1088
 #, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "Échec du traçage dans '%s'.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:993
+#: pcbnew/pcbnew_jobs_handler.cpp:994
 msgid "Successfully created genCAD file\n"
 msgstr "Le fichier GenCAD a été créé avec succès\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1119
+#: pcbnew/pcbnew_jobs_handler.cpp:1120
 msgid "Failed to create output directory\n"
 msgstr "Échec de la création du répertoire de sortie\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1340
+#: pcbnew/pcbnew_jobs_handler.cpp:1341
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "La librairie d'empreinte n'existe pas ou n'est pas accessible\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1345 pcbnew/pcbnew_jobs_handler.cpp:1416
+#: pcbnew/pcbnew_jobs_handler.cpp:1346 pcbnew/pcbnew_jobs_handler.cpp:1417
 msgid "Loading footprint library\n"
 msgstr "Chargement de la librairie d'empreintes\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1373
+#: pcbnew/pcbnew_jobs_handler.cpp:1374
 msgid "Saving footprint library\n"
 msgstr "Sauvegarde de librairie d'empreintes\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1386
+#: pcbnew/pcbnew_jobs_handler.cpp:1387
 msgid "Unable to save library\n"
 msgstr "Impossible de sauver la librairie\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1392
+#: pcbnew/pcbnew_jobs_handler.cpp:1393
 msgid "Footprint library was not updated\n"
 msgstr "La librairie d'empreintes n'a pas été mise à jour\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1466
+#: pcbnew/pcbnew_jobs_handler.cpp:1467
 msgid "The given footprint could not be found to export."
 msgstr "L'empreinte donnée n'a pas pu être trouvée pour être exportée."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1508
+#: pcbnew/pcbnew_jobs_handler.cpp:1509
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Traçage de l'empreinte '%s' dans'%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1583
+#: pcbnew/pcbnew_jobs_handler.cpp:1584
 msgid "Running DRC...\n"
 msgstr "Exécuter DRC...\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1601
+#: pcbnew/pcbnew_jobs_handler.cpp:1602
 msgid "Failed to find schematic for parity tests.\n"
 msgstr "La schématique pour tests de parité n'a pas été trouvée.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1616
+#: pcbnew/pcbnew_jobs_handler.cpp:1617
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr ""
 "Échec de la récupération de la netliste de la schématique pour les tests de "
 "parité.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1637 pcbnew/tools/drc_tool.cpp:196
+#: pcbnew/pcbnew_jobs_handler.cpp:1638 pcbnew/tools/drc_tool.cpp:196
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1658
+#: pcbnew/pcbnew_jobs_handler.cpp:1659
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Trouvé %d éléments non connectés\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1664
+#: pcbnew/pcbnew_jobs_handler.cpp:1665
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "Trouvé %d problèmes de parité de schématique\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1680
+#: pcbnew/pcbnew_jobs_handler.cpp:1681
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "Impossible de sauvegarder le rapport DRC en %s\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1686
+#: pcbnew/pcbnew_jobs_handler.cpp:1687
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Rapport DRC sauvegardé en %s\n"
@@ -48749,11 +48742,10 @@ msgid "Some of the items could not be outset."
 msgstr "Certains éléments n'ont pas pu être mis en enveloppe."
 
 #: pcbnew/tools/multichannel_tool.cpp:420
-#, fuzzy
 msgid "Select a reference Rule Area to copy from..."
 msgstr ""
-"Veuillez sélectionner une surface à règles de référence à partir de laquelle "
-"vous souhaitez effectuer une copie."
+"Sélectionnez une zone à règles de référence à partir de laquelle effectuer "
+"une copie..."
 
 #: pcbnew/tools/multichannel_tool.cpp:439
 msgid "No Rule Areas to repeat layout to have been found."
@@ -52090,14 +52082,6 @@ msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-msgid "Circuit board"
-msgstr "Circuit Imprimé"
-
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -52155,14 +52139,14 @@ msgstr "Symbole Schématique KiCad"
 msgid "KiCad Drawing Sheet"
 msgstr "Feuille de Dessin KiCad"
 
-#~ msgid "Optimize STEP file"
-#~ msgstr "Optimiser le fichier STEP"
-
 #~ msgid "Footprint descriptions differ."
 #~ msgstr "Les descriptions des empreintes diffèrent."
 
 #~ msgid "Footprint keywords differ."
 #~ msgstr "Les mots-clés de l'empreinte diffèrent."
+
+#~ msgid "Optimize STEP file"
+#~ msgstr "Optimiser le fichier STEP"
 
 #, c-format
 #~ msgid "Failed to create directory '%s'."
@@ -54103,6 +54087,12 @@ msgstr "Feuille de Dessin KiCad"
 #~ "Ce fichier doit être supprimé manuellement ou la fonction "
 #~ "d’enregistrement automatique sera\n"
 #~ "affiché chaque fois que l’éditeur de schémas est lancé."
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit Imprimé"
 
 #~ msgid "Grey"
 #~ msgstr "Gris"
