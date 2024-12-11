@@ -245,12 +245,21 @@ std::vector<const PLUGIN_ACTION*> API_PLUGIN_MANAGER::GetActionsForScope( PLUGIN
 
 void API_PLUGIN_MANAGER::processPluginDependencies()
 {
+    bool addedAnyJobs = false;
+
     for( const std::unique_ptr<API_PLUGIN>& plugin : m_plugins )
     {
+        if( m_busyPlugins.contains( plugin->Identifier() ) )
+            continue;
+
+        wxLogTrace( traceApi, wxString::Format( "Manager: processing dependencies for %s",
+                                                plugin->Identifier() ) );
         m_environmentCache[plugin->Identifier()] = wxEmptyString;
 
         if( plugin->Runtime().type != PLUGIN_RUNTIME_TYPE::PYTHON )
         {
+            wxLogTrace( traceApi, wxString::Format( "Manager: %s is not a Python plugin, all set",
+                                                    plugin->Identifier() ) );
             m_readyPlugins.insert( plugin->Identifier() );
             continue;
         }
@@ -264,33 +273,42 @@ void API_PLUGIN_MANAGER::processPluginDependencies()
             continue;
         }
 
+        m_busyPlugins.insert( plugin->Identifier() );
+
         wxFileName envConfigPath( *env, wxS( "pyvenv.cfg" ) );
+        envConfigPath.MakeAbsolute();
 
         if( envConfigPath.IsFileReadable() )
         {
             wxLogTrace( traceApi, wxString::Format( "Manager: Python env for %s exists at %s",
-                                                    plugin->Identifier(), *env ) );
+                                                    plugin->Identifier(),
+                                                    envConfigPath.GetPath() ) );
             JOB job;
             job.type = JOB_TYPE::INSTALL_REQUIREMENTS;
             job.identifier = plugin->Identifier();
             job.plugin_path = plugin->BasePath();
-            job.env_path = *env;
+            job.env_path = envConfigPath.GetPath();
             m_jobs.emplace_back( job );
+            addedAnyJobs = true;
             continue;
         }
 
         wxLogTrace( traceApi, wxString::Format( "Manager: will create Python env for %s at %s",
-                                                plugin->Identifier(), *env ) );
+                                                plugin->Identifier(), envConfigPath.GetPath() ) );
         JOB job;
         job.type = JOB_TYPE::CREATE_ENV;
         job.identifier = plugin->Identifier();
         job.plugin_path = plugin->BasePath();
-        job.env_path = *env;
+        job.env_path = envConfigPath.GetPath();
         m_jobs.emplace_back( job );
+        addedAnyJobs = true;
     }
 
-    wxCommandEvent evt;
-    processNextJob( evt );
+    if( addedAnyJobs )
+    {
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
+        QueueEvent( evt );
+    }
 }
 
 
@@ -298,7 +316,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 {
     if( m_jobs.empty() )
     {
-        wxLogTrace( traceApi, "Manager: cleared job queue" );
+        wxLogTrace( traceApi, "Manager: no more jobs to process" );
         return;
     }
 
@@ -309,14 +327,15 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
     if( job.type == JOB_TYPE::CREATE_ENV )
     {
-        wxLogTrace( traceApi, "Manager: Python exe '%s'",
+        wxLogTrace( traceApi, "Manager: Using Python interpreter at %s",
                     Pgm().GetCommonSettings()->m_Api.python_interpreter );
         wxLogTrace( traceApi, wxString::Format( "Manager: creating Python env at %s",
                                                 job.env_path ) );
         PYTHON_MANAGER manager( Pgm().GetCommonSettings()->m_Api.python_interpreter );
 
         manager.Execute(
-                wxString::Format( wxS( "-m venv %s" ), job.env_path ),
+                wxString::Format( wxS( "-m venv --system-site-packages '%s'" ),
+                                  job.env_path ),
                 [this]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi,
@@ -329,6 +348,56 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                             new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
                     QueueEvent( evt );
                 } );
+
+        JOB nextJob( job );
+        nextJob.type = JOB_TYPE::SETUP_ENV;
+        m_jobs.emplace_back( nextJob );
+    }
+    else if( job.type == JOB_TYPE::SETUP_ENV )
+    {
+        wxLogTrace( traceApi, wxString::Format( "Manager: setting up environment for %s",
+                                                job.plugin_path ) );
+
+        std::optional<wxString> pythonHome = PYTHON_MANAGER::GetPythonEnvironment( job.identifier );
+        std::optional<wxString> python = PYTHON_MANAGER::GetVirtualPython( job.identifier );
+
+        if( !python )
+        {
+            wxLogTrace( traceApi, wxString::Format( "Manager: error: python not found at %s",
+                                                    job.env_path ) );
+        }
+        else
+        {
+            PYTHON_MANAGER manager( *python );
+            wxExecuteEnv env;
+
+            if( pythonHome )
+                env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
+
+            wxString cmd = wxS( "-m pip install --upgrade pip" );
+            wxLogTrace( traceApi, "Manager: calling python %s", cmd );
+
+            manager.Execute( cmd,
+                [=]( int aRetVal, const wxString& aOutput, const wxString& aError )
+                {
+                    wxLogTrace( traceApi, wxString::Format( "Manager: upgrade pip (%d): %s",
+                                                            aRetVal, aOutput ) );
+
+                    if( !aError.IsEmpty() )
+                    {
+                        wxLogTrace( traceApi,
+                                    wxString::Format( "Manager: upgrade pip stderr: %s", aError ) );
+                    }
+
+                    wxCommandEvent* evt =
+                            new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
+                    QueueEvent( evt );
+                }, &env );
+
+            JOB nextJob( job );
+            nextJob.type = JOB_TYPE::INSTALL_REQUIREMENTS;
+            m_jobs.emplace_back( nextJob );
+        }
     }
     else if( job.type == JOB_TYPE::INSTALL_REQUIREMENTS )
     {
@@ -360,43 +429,28 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             if( pythonHome )
                 env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
-            wxString cmd = wxS( "-m ensurepip" );
-            wxLogTrace( traceApi, "Manager: calling python `%s`", cmd );
-
-            manager.Execute( cmd,
-                [=]( int aRetVal, const wxString& aOutput, const wxString& aError )
-                {
-                    wxLogTrace( traceApi, wxString::Format( "Manager: ensurepip (%d): %s",
-                                                            aRetVal, aOutput ) );
-
-                    if( !aError.IsEmpty() )
-                    {
-                        wxLogTrace( traceApi,
-                                    wxString::Format( "Manager: ensurepip err: %s", aError ) );
-                    }
-                }, &env );
-
-            cmd = wxString::Format(
+            wxString cmd = wxString::Format(
                     wxS( "-m pip install --no-input --isolated --require-virtualenv "
                          "--exists-action i -r '%s'" ),
                     reqs.GetFullPath() );
 
-            wxLogTrace( traceApi, "Manager: calling python `%s`", cmd );
+            wxLogTrace( traceApi, "Manager: calling python %s", cmd );
 
             manager.Execute( cmd,
                 [this, job]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
-                    wxLogTrace( traceApi, wxString::Format( "Manager: pip (%d): %s",
-                                                            aRetVal, aOutput ) );
+                    if( !aOutput.IsEmpty() )
+                        wxLogTrace( traceApi, wxString::Format( "Manager: pip: %s", aOutput ) );
 
                     if( !aError.IsEmpty() )
-                        wxLogTrace( traceApi, wxString::Format( "Manager: pip err: %s", aError ) );
+                        wxLogTrace( traceApi, wxString::Format( "Manager: pip stderr: %s", aError ) );
 
                     if( aRetVal == 0 )
                     {
                         wxLogTrace( traceApi, wxString::Format( "Manager: marking %s as ready",
                                                                 job.identifier ) );
                         m_readyPlugins.insert( job.identifier );
+                        m_busyPlugins.erase( job.identifier );
                         wxCommandEvent* availabilityEvt =
                                 new wxCommandEvent( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, wxID_ANY );
                         wxTheApp->QueueEvent( availabilityEvt );
@@ -414,6 +468,6 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
     }
 
     m_jobs.pop_front();
-    wxLogTrace( traceApi, wxString::Format( "Manager: done processing; %zu jobs left in queue",
+    wxLogTrace( traceApi, wxString::Format( "Manager: finished job; %zu left in queue",
                                             m_jobs.size() ) );
 }

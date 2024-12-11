@@ -76,9 +76,12 @@ private:
 
     std::set<wxString> m_readyPlugins;
 
+    std::set<wxString> m_busyPlugins;
+
     enum class JOB_TYPE
     {
         CREATE_ENV,
+        SETUP_ENV,
         INSTALL_REQUIREMENTS
     };
 
