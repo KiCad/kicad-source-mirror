@@ -29,10 +29,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-10 16:05-0800\n"
-"PO-Revision-Date: 2024-12-06 10:01+0000\n"
+"PO-Revision-Date: 2024-12-13 07:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7512,14 +7512,12 @@ msgid "PCB: Export IPC2581"
 msgstr "PCB: IPC-2581 exportieren"
 
 #: common/jobs/job_export_pcb_odb.cpp:56
-#, fuzzy
 msgid "ODB++ export"
-msgstr "3D-Export"
+msgstr "ODB++-Export"
 
 #: common/jobs/job_export_pcb_odb.cpp:69
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "ODB++ exportieren"
+msgstr "PCB: ODB++ exportieren"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
 msgid "PCB PDF export"
@@ -16693,9 +16691,8 @@ msgstr "Keine Verbindung"
 #: eeschema/erc/erc.cpp:209 eeschema/erc/erc.cpp:228
 #: pcbnew/drc/drc_test_provider_misc.cpp:320
 #: pcbnew/drc/drc_test_provider_misc.cpp:340
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Zeichnungsblatt drucken"
+msgstr " (Zeichnungsblatt)"
 
 #: eeschema/erc/erc.cpp:422
 msgid "Unresolved text variable in drawing sheet"
@@ -20200,9 +20197,8 @@ msgstr ""
 "Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:689
-#, fuzzy
 msgid "Cannot create the schematic image"
-msgstr "Annotation Schaltplansymbole durchführen"
+msgstr "Kann das Schaltplanbild nicht erzeugen"
 
 #: eeschema/sheet.cpp:766
 #, c-format
@@ -27053,9 +27049,9 @@ msgid "Plugins (%d)"
 msgstr "Plugins (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Fabrication plugins (%d)"
-msgstr "Fertigungsdaten"
+msgstr "Fertigungsplugins (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
@@ -32315,7 +32311,7 @@ msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
 msgstr ""
-"(Pads, die in einer Netzverbund-Padgruppe erscheinen, werden nicht "
+"(Pads, die in einer Netzverbinder-Padgruppe erscheinen, werden nicht "
 "zusammengeführt.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
@@ -33898,9 +33894,9 @@ msgid "Cannot remove existing output file '%s'."
 msgstr "Vorhandene Ausgabedatei ‚%s‘ kann nicht entfernt werden."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Output file '%s' already exists."
-msgstr "Datei \"%s\" existiert bereits."
+msgstr "Ausgabedatei \"%s\" existiert bereits."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:277
 msgid "Cannot create temporary output directory."
@@ -33921,9 +33917,9 @@ msgid "Cannot remove existing output directory '%s'."
 msgstr "Vorhandenes Ausgabeverzeichnis ‚%s‘ kann nicht entfernt werden."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' already exists."
-msgstr "Ausgabeverzeichnis \"%s\" wurde erstellt."
+msgstr "Ausgabeverzeichnis \"%s\" existiert bereits."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:350
 #, c-format
@@ -34037,9 +34033,8 @@ msgid "STL"
 msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
-#, fuzzy
 msgid "Board Options"
-msgstr "Rasteroptionen"
+msgstr "Platinenoptionen"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:58
 msgid "Export as Compound shape"
@@ -34133,22 +34128,18 @@ msgstr ""
 "der Platinenumrisse als verbunden betrachtet werden."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:126
-#, fuzzy
 msgid "Conductor Options"
-msgstr "Cursor Anzeige"
+msgstr "Leiteroptionen"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
-#, fuzzy
 msgid "Export tracks and vias on external conductor layers."
 msgstr "Leiterbahnen und Vias auf externen Kupferlagen exportieren."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
-#, fuzzy
 msgid "Export zones on external conductor layers."
 msgstr "Zonen auf externen Kupferlagen exportieren."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
-#, fuzzy
 msgid "Export inner conductor layers"
 msgstr "Kupferinnnenlagen exportieren"
 
@@ -34222,7 +34213,7 @@ msgstr "Alte Datei überschreiben"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:260
 msgid "Don't write P-curves to STEP file"
-msgstr ""
+msgstr "P-Kurven nicht in STEP-Datei schreiben"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:261
 msgid ""
@@ -40636,7 +40627,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -40802,13 +40792,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40883,7 +40873,7 @@ msgstr ""
 "\n"
 "    # Überschreiben des Lötstopprands nicht zulassen\n"
 "    (rule \"disallow solder mask margin overrides\"\n"
-"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
 "        (condition \"A.Type == 'Pad'\"))\n"
 "\n"
 "\n"
@@ -40893,6 +40883,14 @@ msgstr ""
 "        (layer \"F.Courtyard\")\n"
 "        (constraint physical_clearance (min 3mm))\n"
 "        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Überschneidung von Bestückungsdruck und Platinenrand erlauben\n"
+"    (rule silk_board_edge_clearance\n"
+"        (constraint silk_clearance)\n"
+"        (severity ignore)\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer == 'Edge.Cuts'\"))"
+"\n"
 "\n"
 "\n"
 "    # Prüfung der Strombelastbarkeit \n"
@@ -40917,8 +40915,8 @@ msgstr ""
 "    # sofern es bekannt ist, dass in der Herstellung erstere mechanisch "
 "gebohrt -bevor- letztere gelasert werden.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -41152,14 +41150,13 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Pad ist kein Durchlochpad; Verbindung wird sein: %s."
 
 #: pcbnew/drc/drc_engine.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Lokale Überschreibung auf %s; Freiraum: %s."
+msgstr "Netzverbinder auf %s; Freiraum: 0."
 
 #: pcbnew/drc/drc_engine.cpp:774
-#, fuzzy
 msgid "net tie"
-msgstr "Schaltplan-Titel"
+msgstr "Netzverbinder"
 
 #: pcbnew/drc/drc_engine.cpp:801 pcbnew/drc/drc_engine.cpp:811
 #, c-format
@@ -41684,11 +41681,11 @@ msgstr "Durchlochpad hat kein Loch"
 
 #: pcbnew/drc/drc_item.cpp:295
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Gespiegelter Text auf Vorderseite"
 
 #: pcbnew/drc/drc_item.cpp:299
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "Nicht-gespiegelter Text auf Rückseite"
 
 #: pcbnew/drc/drc_item.cpp:495
 #, c-format
@@ -42317,7 +42314,7 @@ msgstr "Zonenverbindung überschrieben."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:688
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:693
 msgid "Net tie pad groups differ."
-msgstr "Die Netzknotengruppen unterscheiden sich."
+msgstr "Die Netzverbindergruppen unterscheiden sich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:770
 msgid "Pad count differs."
@@ -42548,9 +42545,8 @@ msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s max. Dicke %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:77
-#, fuzzy
 msgid "Checking text mirroring..."
-msgstr "Prüfe Textmaße ..."
+msgstr "Prüfe Textspiegelung ..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
 msgid "Checking track angles..."
@@ -46045,9 +46041,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Unbekannter Pad-Form-Name \"%s\" auf Lage \"%s\" in Zeile %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Fügt ausgewählte Lagen zur Liste der übereinstimmenden Lagen hinzu."
+msgstr "Keine Benutzerlage vorhanden um ihr Lage %s zu zuordnen"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -46069,12 +46065,14 @@ msgstr "Nicht erkannte Pad-Grundform \"%s\" in Zeile %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Kreis mit ungleichen x- und y-Radien (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
 msgstr ""
+"Für x und y wurden identische Werte erwartet, tatsächlich ist x = %f und y = "
+"%f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -46111,6 +46109,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
+"In Zeile %z fehlt für Referenzbezeichner %s entweder X, Y oder die Rotation "
+". Dies könnte ein unbestücktes Bauteil sein."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
 #, c-format
@@ -46137,12 +46137,12 @@ msgstr "Erwarte Ätzdaten auf Kupferlage. Zeile auf Lage \"%s\" gefunden"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3268
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "Unbehandelter Formtyp %d in Polygon auf Lage %s, seq %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3427
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "Ungültiges Loch mit %d Punkten in Zone auf Lage %s mit Netz %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3469
 #, c-format
@@ -46150,11 +46150,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Umriss scheint unterbrochen zu sein: der letzte Punkt war %s, Startpunkt des "
+"nächsten Segmentes ist %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Ungültiger Schaltplanpinname"
+msgstr "Ungültiger Formtyp %d in Zonenumrandung"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
