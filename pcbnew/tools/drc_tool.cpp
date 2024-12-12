@@ -38,12 +38,15 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <macros.h>
 #include <dialog_exchange_footprints.h>
+#include <drc/rule_editor/dialog_drc_rule_editor.h>
+
 
 DRC_TOOL::DRC_TOOL() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
         m_editFrame( nullptr ),
         m_pcb( nullptr ),
         m_drcDialog( nullptr ),
+        m_designRuleEditorDlg( nullptr ),
         m_drcRunning( false )
 {
 }
@@ -143,31 +146,37 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
     BOARD_COMMIT      commit( m_editFrame );
     NETLIST           netlist;
     bool              netlistFetched = false;
-    wxWindowDisabler  disabler( /* disable everything except: */ m_drcDialog );
+
+    if( m_drcDialog )
+        wxWindowDisabler  disabler( /* disable everything except: */ m_drcDialog );
 
     m_drcRunning = true;
 
-    if( aRefillZones )
+    if( m_drcDialog )
     {
-        aProgressReporter->AdvancePhase( _( "Refilling all zones..." ) );
-
-        zoneFiller->FillAllZones( m_drcDialog, aProgressReporter );
-    }
-
-    m_drcEngine->SetDrawingSheet( m_editFrame->GetCanvas()->GetDrawingSheet() );
-
-    if( aTestFootprints && !Kiface().IsSingle() )
-    {
-        if( m_editFrame->FetchNetlistFromSchematic( netlist, _( "Schematic parity tests require a "
-                                                                "fully annotated schematic." ) ) )
+        if( aRefillZones )
         {
-            netlistFetched = true;
+            aProgressReporter->AdvancePhase( _( "Refilling all zones..." ) );
+
+            zoneFiller->FillAllZones( m_drcDialog, aProgressReporter );
         }
 
-        if( m_drcDialog )
-            m_drcDialog->Raise();
+        m_drcEngine->SetDrawingSheet( m_editFrame->GetCanvas()->GetDrawingSheet() );
 
-        m_drcEngine->SetSchematicNetlist( &netlist );
+        if( aTestFootprints && !Kiface().IsSingle() )
+        {
+            if( m_editFrame->FetchNetlistFromSchematic( netlist,
+                                                        _( "Schematic parity tests require a "
+                                                           "fully annotated schematic." ) ) )
+            {
+                netlistFetched = true;
+            }
+
+            if( m_drcDialog )
+                m_drcDialog->Raise();
+
+            m_drcEngine->SetSchematicNetlist( &netlist );
+        }
     }
 
     m_drcEngine->SetProgressReporter( aProgressReporter );
@@ -385,6 +394,58 @@ void DRC_TOOL::FixDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
                 || aDRCItem->GetErrorCode() == DRCE_DANGLING_VIA )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::cleanupTracksAndVias );
+    }
+}
+
+
+void DRC_TOOL::ShowDesignRuleEditorDialog( wxWindow* aParent )
+{
+    bool show_dlg_modal = true;
+
+    // the dialog needs a parent frame. if it is not specified, this is the PCB editor frame
+    // specified in DRC_TOOL class.
+    if( !aParent )
+    {
+        // if any parent is specified, the dialog is modal.
+        // if this is the default PCB editor frame, it is not modal
+        show_dlg_modal = false;
+        aParent = m_editFrame;
+    }
+
+    Activate();
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+
+    if( !m_designRuleEditorDlg )
+    {
+        m_designRuleEditorDlg = new DIALOG_DRC_RULE_EDITOR( m_editFrame, aParent );
+        updatePointers( false );
+
+        if( show_dlg_modal )
+            m_designRuleEditorDlg->ShowModal();
+        else
+            m_designRuleEditorDlg->Show( true );
+    }
+    else // The dialog is just not visible (because the user has double clicked on an error item)
+    {
+        updatePointers( false );
+        m_designRuleEditorDlg->Show( true );
+    }
+}
+
+
+int DRC_TOOL::ShowDesignRuleEditorDialog( const TOOL_EVENT& aEvent )
+{
+    ShowDesignRuleEditorDialog( nullptr );
+    return 0;
+}
+
+
+void DRC_TOOL::DestroyDesignRuleEditorDialog()
+{
+    if( m_designRuleEditorDlg )
+    {
+        m_designRuleEditorDlg->Destroy();
+        m_designRuleEditorDlg = nullptr;
     }
 }
 

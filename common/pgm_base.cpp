@@ -394,18 +394,6 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     App().SetVendorName(  wxT( "KiCad" ) );
     App().SetAppName( pgm_name );
 
-    // Install some image handlers, mainly for help
-    if( wxImage::FindHandler( wxBITMAP_TYPE_PNG ) == nullptr )
-        wxImage::AddHandler( new wxPNGHandler );
-
-    if( wxImage::FindHandler( wxBITMAP_TYPE_GIF ) == nullptr )
-        wxImage::AddHandler( new wxGIFHandler );
-
-    if( wxImage::FindHandler( wxBITMAP_TYPE_JPEG ) == nullptr )
-        wxImage::AddHandler( new wxJPEGHandler );
-
-    wxFileSystem::AddHandler( new wxZipFSHandler );
-
     // Analyze the command line & initialize the binary path
     wxString tmp;
     SetLanguagePath();

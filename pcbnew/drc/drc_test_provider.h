@@ -68,6 +68,37 @@ public:
 };
 
 
+class DRC_SHOWMATCHES_PROVIDER_REGISTRY
+{
+public:
+    DRC_SHOWMATCHES_PROVIDER_REGISTRY() {}
+
+    ~DRC_SHOWMATCHES_PROVIDER_REGISTRY();
+
+    static DRC_SHOWMATCHES_PROVIDER_REGISTRY& Instance()
+    {
+        static DRC_SHOWMATCHES_PROVIDER_REGISTRY self;
+        return self;
+    }
+
+    void RegisterShowMatchesProvider( DRC_TEST_PROVIDER* provider ) { m_providers.push_back( provider ); }
+    std::vector<DRC_TEST_PROVIDER*> GetShowMatchesProviders() const { return m_providers; }
+
+private:
+    std::vector<DRC_TEST_PROVIDER*> m_providers;
+};
+
+template<class T> class DRC_REGISTER_SHOWMATCHES_PROVIDER
+{
+public:
+    DRC_REGISTER_SHOWMATCHES_PROVIDER()
+    {
+        T* provider = new T;
+        DRC_SHOWMATCHES_PROVIDER_REGISTRY::Instance().RegisterShowMatchesProvider( provider );
+    }
+};
+
+
 /**
  * Represent a DRC "provider" which runs some DRC functions over a #BOARD and spits out
  * #DRC_ITEM and positions as needed.

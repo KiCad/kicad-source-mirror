@@ -290,8 +290,6 @@ void BOARD::IncrementTimeStamp()
         m_CopperZoneRTreeCache.clear();
 
         m_maxClearanceValue.reset();
-
-        m_itemByIdCache.clear();
     }
 }
 

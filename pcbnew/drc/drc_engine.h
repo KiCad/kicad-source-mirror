@@ -196,6 +196,8 @@ public:
      */
     void InitEngine( const wxFileName& aRulePath );
 
+    void InitEngine( const std::shared_ptr<DRC_RULE>& rule );
+
     /**
      * Run the DRC tests.
      */

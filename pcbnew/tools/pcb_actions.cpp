@@ -1576,6 +1576,12 @@ TOOL_ACTION PCB_ACTIONS::showEeschema( TOOL_ACTION_ARGS()
         .Tooltip( _( "Open schematic in schematic editor" ) )
         .Icon( BITMAPS::icon_eeschema_24 ) );
 
+// DESIGN RULE EDITOR
+TOOL_ACTION PCB_ACTIONS::drcRuleEditor( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.DRETool.drcRuleEditor" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "DRC Rule Editor" ) )
+        .Tooltip( _( "Open drc rule editor window" ) ) );
 
 // PCB_CONTROL
 //

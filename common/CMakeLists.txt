@@ -520,6 +520,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_toolbar_customization.cpp
     dialogs/panel_toolbar_customization_base.cpp
 
+    dialogs/rule_editor_dialog_base.cpp
+
     libraries/lib_table_grid_data_model.cpp
     )
 
@@ -987,6 +989,8 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/length_delay_calculation/tuning_profile_parameters_user_defined.cpp
 
     widgets/net_selector.cpp
+    widgets/netclass_selector.cpp
+    widgets/area_selector.cpp
 )
 
 set( PCB_COMMON_SRCS

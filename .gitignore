@@ -25,6 +25,8 @@ common/template_fieldnames_lexer.h
 eeschema/schematic_keywords.*
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
+pcbnew/dialogs/panel_setup_rules_help_*.h
+pcbnew/dialogs/panel_setup_condition_help_*.h
 Makefile
 .cache/
 auto_renamed_to_cpp

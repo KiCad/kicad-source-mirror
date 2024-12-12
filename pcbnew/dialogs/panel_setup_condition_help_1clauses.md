@@ -1,0 +1,5 @@
+### Clause
+
+    (condition "<expression>")
+
+<br>

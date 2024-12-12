@@ -47,6 +47,8 @@
 #include <zone.h>
 #include <project/project_file.h>
 #include <project/tuning_profiles.h>
+#include <connectivity/connectivity_data.h>
+#include <connectivity/from_to_cache.h>
 
 
 // wxListBox's performance degrades horrifically with very large datasets.  It's not clear
@@ -751,6 +753,50 @@ void DRC_ENGINE::compileRules()
             }
         }
     }
+}
+
+
+void DRC_ENGINE::InitEngine( const std::shared_ptr<DRC_RULE>& rule )
+{
+    m_testProviders = DRC_SHOWMATCHES_PROVIDER_REGISTRY::Instance().GetShowMatchesProviders();
+
+    for( DRC_TEST_PROVIDER* provider : m_testProviders )
+    {
+        if( m_logReporter )
+            m_logReporter->Report( wxString::Format( wxT( "Create DRC provider: '%s'" ), provider->GetName() ) );
+
+        provider->SetDRCEngine( this );
+    }
+
+    m_rules.clear();
+    m_rulesValid = false;
+
+    for( std::pair<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> pair : m_constraintMap )
+    {
+        for( DRC_ENGINE_CONSTRAINT* constraint : *pair.second )
+            delete constraint;
+
+        delete pair.second;
+    }
+
+    m_constraintMap.clear();
+
+    m_board->IncrementTimeStamp(); // Clear board-level caches
+
+    try
+    {
+        m_rules.push_back( rule );
+        compileRules();
+    }
+    catch( PARSE_ERROR& original_parse_error )
+    {
+        throw original_parse_error;
+    }
+
+    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+        m_errorLimits[ii] = ERROR_LIMIT;
+
+    m_rulesValid = true;
 }
 
 
@@ -2322,6 +2368,8 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingCondition( const wxString& 
                                                                 DRC_CONSTRAINT_T aConstraint,
                                                                 REPORTER* aReporter )
 {
+    wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
+                wxS( "[ShowMatches] engine enter: expr='%s', constraint=%d" ), aExpression, (int) aConstraint );
     std::vector<BOARD_ITEM*> matches;
 
     if( !m_board )
@@ -2330,13 +2378,53 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingCondition( const wxString& 
     DRC_RULE_CONDITION condition( aExpression );
 
     if( !condition.Compile( aReporter ? aReporter : m_logReporter ) )
+    {
+        wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ), wxS( "[ShowMatches] engine: compile failed" ) );
         return matches;
+    }
+
+    // Rebuild the from-to cache so that fromTo() expressions can be evaluated.
+    // This cache requires explicit rebuilding before use since it depends on the full
+    // connectivity graph being available.
+    if( auto connectivity = m_board->GetConnectivity() )
+    {
+        if( auto ftCache = connectivity->GetFromToCache() )
+            ftCache->Rebuild( m_board );
+    }
 
     BOARD_ITEM_SET items = m_board->GetItemSet();
+    size_t totalItems = 0;
+    size_t skippedItems = 0;
+    size_t noLayerItems = 0;
+    size_t checkedItems = 0;
 
     for( auto& [kiid, item] : m_board->GetItemByIdCache() )
     {
+        totalItems++;
+
+        // Skip items that don't have visible geometry or can't be meaningfully matched
+        switch( item->Type() )
+        {
+        case PCB_NETINFO_T:
+        case PCB_GENERATOR_T:
+        case PCB_GROUP_T:
+            skippedItems++;
+            continue;
+
+        default:
+            break;
+        }
+
         LSET itemLayers = item->GetLayerSet();
+
+        if( itemLayers.none() )
+        {
+            noLayerItems++;
+            continue;
+        }
+
+        checkedItems++;
+        bool matched = false;
 
         for( PCB_LAYER_ID layer : itemLayers )
         {
@@ -2344,11 +2432,28 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingCondition( const wxString& 
                                     aReporter ? aReporter : m_logReporter ) )
             {
                 matches.push_back( item );
+                wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
+                            wxS( "[ShowMatches] engine: match type=%d kiid=%s layer=%d" ),
+                            (int) item->Type(), kiid.AsString(), (int) layer );
+                matched = true;
                 break; // No need to check other layers
             }
         }
+
+        // Log a few non-matching items to help debug condition issues
+        if( !matched && matches.size() == 0 && checkedItems <= 5 )
+        {
+            wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
+                        wxS( "[ShowMatches] engine: no-match sample type=%d kiid=%s layers=%s" ),
+                        (int) item->Type(), kiid.AsString(), itemLayers.FmtHex() );
+        }
     }
 
+    wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
+                wxS( "[ShowMatches] engine stats: total=%zu skipped=%zu noLayer=%zu checked=%zu" ),
+                totalItems, skippedItems, noLayerItems, checkedItems );
+
+    wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ), wxS( "[ShowMatches] engine exit: total=%zu" ), matches.size() );
     return matches;
 }
 
