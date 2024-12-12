@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-10 16:05-0800\n"
-"PO-Revision-Date: 2024-11-10 17:00+0000\n"
+"PO-Revision-Date: 2024-12-13 08:00+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -14494,9 +14494,9 @@ msgid "Untitled Field"
 msgstr "无标题字段"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "条目包含尾随空格。"
+msgstr "字段名称 \"%s\" 包含尾随空格/前导空格。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -41332,9 +41332,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "未知的焊盘形状名 '%s', 位于层 '%s' 的行 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "将选定层添加到匹配层列表。"
+msgstr "没有可用于放置图层 %s 的用户图层"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -41434,9 +41434,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "无效的图纸引脚名"
+msgstr "域轮廓中的形状类型 %d 无效"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
