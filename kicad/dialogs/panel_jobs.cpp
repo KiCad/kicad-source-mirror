@@ -82,6 +82,7 @@ public:
             m_choiceArchiveformat->Hide();
         }
 
+        m_textCtrlOutputPath->SetValue( m_output->m_outputHandler->GetOutputPath() );
         m_buttonOutputPath->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     }
 
@@ -100,7 +101,7 @@ public:
             fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
             wxString currPath = fn.GetFullPath();
 
-            wxDirDialog dirDialog( this, _( "Select Templates Directory" ), currPath,
+            wxDirDialog dirDialog( this, _( "Select output directory" ), currPath,
                                    wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
             if( dirDialog.ShowModal() != wxID_OK )
@@ -112,8 +113,9 @@ public:
         }
         else
         {
-            wxFileDialog dlg( this, _( "Select output path" ), m_textCtrlOutputPath->GetValue(),
-                              "test.zip",
+            wxFileName fname( m_textCtrlOutputPath->GetValue() );
+
+            wxFileDialog dlg( this, _( "Select output path" ), fname.GetPath(), fname.GetFullName(),
                               fileWildcard,
                               wxFD_OVERWRITE_PROMPT | wxFD_SAVE );
 
@@ -122,7 +124,7 @@ public:
                 return;
             }
 
-            wxFileName fname_log( dlg.GetPath() );
+            m_textCtrlOutputPath->SetValue( dlg.GetPath() );
         }
 
     }
