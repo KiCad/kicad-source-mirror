@@ -29,6 +29,7 @@
 #include <wx/log.h>
 #include <wx/timer.h>
 #include <wx/txtstrm.h>
+#include <wx/msgdlg.h>
 
 wxDEFINE_EVENT( wxEVT_THREAD_STDIN, wxThreadEvent );
 wxDEFINE_EVENT( wxEVT_THREAD_STDERR, wxThreadEvent );
@@ -77,7 +78,7 @@ wxThread::ExitCode STDSTREAM_THREAD::Entry()
         // Check if termination was requested.
         if( TestDestroy() )
         {
-            wxProcess::Kill( m_process->GetPid() );
+            wxProcess::Kill( m_process->GetPid(), wxSIGKILL );
             c = reinterpret_cast<ExitCode>( 1 );
             break;
         }
@@ -96,7 +97,7 @@ wxThread::ExitCode STDSTREAM_THREAD::Entry()
             }
             else if( m == DIALOG_EXPORT_STEP_LOG::STATE_MESSAGE::REQUEST_EXIT )
             {
-                wxProcess::Kill( m_process->GetPid() );
+                wxProcess::Kill( m_process->GetPid(), wxSIGKILL );
                 c = reinterpret_cast<ExitCode>( 1 );
                 break;
             }
@@ -207,15 +208,25 @@ void DIALOG_EXPORT_STEP_LOG::onClose( wxCloseEvent& aEvent )
 {
     if( m_stdioThread && m_stdioThread->IsRunning() )
     {
+        if( aEvent.CanVeto() )
+        {
+            wxMessageDialog dlg( this, _( "Do you want to cancel the export process?" ),
+                                 _( "Cancel Export" ), wxYES_NO );
+
+            if( dlg.ShowModal() == wxID_NO )
+            {
+                aEvent.Veto();
+                return;
+            }
+        }
+
         m_msgQueue.Post( STATE_MESSAGE::REQUEST_EXIT );
-        m_stdioThread->Wait();
+        m_stdioThread->Delete();
 
         m_process->DeletePendingEvents();
         m_process->Unlink();
         m_process->CloseOutput();
         m_process->Detach();
-
-        m_stdioThread->Delete();
     }
 
     aEvent.Skip();
