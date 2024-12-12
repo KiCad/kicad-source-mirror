@@ -39,8 +39,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-10 16:05-0800\n"
-"PO-Revision-Date: 2024-12-07 18:00+0000\n"
-"Last-Translator: HalfSweet <HalfSweet@halfsweet.cn>\n"
+"PO-Revision-Date: 2024-12-13 07:00+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -334,7 +334,7 @@ msgstr "遵循 PCB 编辑器"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:635
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
-msgstr "遵循 PCB 绘图设置"
+msgstr "遵循 PCB 绘制设置"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:588
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
@@ -1824,7 +1824,7 @@ msgstr "仍要打开 (&O)"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
-msgstr "保存变更吗?"
+msgstr "保存变更?"
 
 #: common/confirm.cpp:72 common/confirm.cpp:110
 msgid "If you don't save, all your changes will be permanently lost."
@@ -3412,7 +3412,7 @@ msgstr "自定义:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "调整 X 比例,使输出绘图比例更加精确"
+msgstr "调整 X 比例使输出的绘图比例更加精确"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
@@ -4273,16 +4273,17 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据，以便更有效地识别用户群中的关"
-"键错误, 并帮助分析功能以指导改进工作。\n"
+"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据，"
+"以便更有效地识别在用户群体中出现的重点程序问题, "
+"并帮助分析功能以指导改进工作。\n"
 "\n"
-"为了将来自同一 KiCad 安装的自动报告关联起来, 系统会生成一个完全随机的唯一标识"
-"符, 仅用于崩溃报告的目的。不会存储或连接任何个人可识别信息 (PII), 包括IP地"
-"址。\n"
+"为了将来自同一 KiCad 安装的自动报告关联起来, "
+"系统会生成一个完全随机的唯一标识符, 仅用于崩溃报告的目的。"
+"不会存储或连接任何个人可识别信息 (PII), 包括IP地址。\n"
 "您可以随时通过提供的按钮重置该标识符。\n"
 "\n"
-"如果您选择自愿参与, 那么发生崩溃或特殊事件时, KiCad 会自动处理并发送这些报"
-"告。\n"
+"如果您选择自愿参与, 那么发生崩溃或特殊事件时, KiCad "
+"会自动处理并发送这些报告。\n"
 "\n"
 "在此过程中, 您的设计文件 (如原理图或PCB) 绝对不会被共享。"
 
@@ -5213,7 +5214,7 @@ msgid ""
 "Do you wish to reload them?"
 msgstr ""
 "网络类在配置对话框外已被更改。\n"
-"要重新加载吗?"
+"是否重新加载?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:567
 msgid "Netclass must have a name."
@@ -7377,23 +7378,23 @@ msgstr "原理图: 导出网表"
 
 #: common/jobs/job_export_sch_plot.cpp:128
 msgid "Schematic PDF Plot"
-msgstr "绘制原理图PDF"
+msgstr "原理图 PDF 绘图"
 
 #: common/jobs/job_export_sch_plot.cpp:141
 msgid "Schematic DXF Plot"
-msgstr "绘制原理图DXF"
+msgstr "原理图 DXF 绘图"
 
 #: common/jobs/job_export_sch_plot.cpp:154
 msgid "Schematic SVG Plot"
-msgstr "绘制原理图SVG"
+msgstr "原理图 SVG 绘图"
 
 #: common/jobs/job_export_sch_plot.cpp:167
 msgid "Schematic PS Plot"
-msgstr "绘制原理图PS"
+msgstr "原理图 PS 绘图"
 
 #: common/jobs/job_export_sch_plot.cpp:180
 msgid "Schematic HPGL Plot"
-msgstr "绘制原理图HPGL"
+msgstr "原理图 HPGL 绘图"
 
 #: common/jobs/job_export_sch_plot.cpp:184
 msgid "Schematic: Export SVG"
@@ -7822,7 +7823,7 @@ msgstr "库名称中包含非法字符"
 #: common/lib_table_base.cpp:532
 #, c-format
 msgid "Failed to get writer for %s"
-msgstr "无法写入%s文件"
+msgstr "无法写入 %s"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -7975,12 +7976,12 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
-"为了更有效地帮助开发人员识别用户群体中的关键错误并改进功能, KiCad 可以匿名地"
-"向开发人员\n"
-"报告崩溃和特殊事件数据, 并协助进行分析。如果您选择自愿参与, KiCad 将在发生崩"
-"溃或特殊事件时\n"
-"自动处理并发送这些报告。在此过程中, 您的设计文件, 如原理图或 PCB 文件, 不会被"
-"上传。"
+"为了更有效地帮助开发人员识别在用户群体中出现的重点程序问题并改进功能, KiCad "
+"可以匿名地向开发人员\n"
+"报告崩溃和特殊事件数据, 并协助进行分析。如果您选择自愿参与, KiCad "
+"将在发生崩溃或特殊事件时\n"
+"自动处理并发送这些报告。在此过程中, 您的设计文件, 如原理图或 PCB 文件, "
+"不会被上传。"
 
 #: common/pgm_base.cpp:392
 msgid "Data collection opt in request"
@@ -8443,43 +8444,43 @@ msgstr "收起全部"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1201
 #: pcbnew/tools/edit_tool.cpp:3069
 msgid "Increment"
-msgstr "增量"
+msgstr "增加"
 
 #: common/tool/actions.cpp:342
 msgid "Increment the selected item(s)"
-msgstr "对所选项目进行递增"
+msgstr "增加所选项目值"
 
 #: common/tool/actions.cpp:347
 msgid "Increment Primary"
-msgstr "递增主项"
+msgstr "增加主字段值"
 
 #: common/tool/actions.cpp:348
 msgid "Increment the primary field of the selected item(s)"
-msgstr "递增所选项目的主字段"
+msgstr "增加所选项目的主字段值"
 
 #: common/tool/actions.cpp:354
 msgid "Decrement Primary"
-msgstr "递减主字段"
+msgstr "减小主字段值"
 
 #: common/tool/actions.cpp:355
 msgid "Decrement the primary field of the selected item(s)"
-msgstr "减少所选项目的主字段"
+msgstr "减小所选项目的主字段值"
 
 #: common/tool/actions.cpp:361
 msgid "Increment Secondary"
-msgstr ""
+msgstr "增加次字段值"
 
 #: common/tool/actions.cpp:362
 msgid "Increment the secondary field of the selected item(s)"
-msgstr ""
+msgstr "增加所选项目的次要字段值"
 
 #: common/tool/actions.cpp:368
 msgid "Decrement Secondary"
-msgstr ""
+msgstr "减小次字段值"
 
 #: common/tool/actions.cpp:369
 msgid "Decrement the secondary field of the selected item(s)"
-msgstr ""
+msgstr "减小所选项目的次要字段值"
 
 #: common/tool/actions.cpp:375
 msgid "Select Column(s)"
@@ -8674,7 +8675,7 @@ msgstr "水平放大"
 
 #: common/tool/actions.cpp:630
 msgid "Zoom in horizontally the plot area"
-msgstr "在绘图区水平放大"
+msgstr "水平放大绘图区"
 
 #: common/tool/actions.cpp:636
 msgid "Zoom Out Horizontally"
@@ -8682,7 +8683,7 @@ msgstr "水平缩小"
 
 #: common/tool/actions.cpp:637
 msgid "Zoom out horizontally the plot area"
-msgstr "在绘图区水平缩小"
+msgstr "水平缩小绘图区"
 
 #: common/tool/actions.cpp:643
 msgid "Zoom In Vertically"
@@ -8690,7 +8691,7 @@ msgstr "垂直放大"
 
 #: common/tool/actions.cpp:644
 msgid "Zoom in vertically the plot area"
-msgstr "在绘图区垂直放大"
+msgstr "垂直放大绘图区"
 
 #: common/tool/actions.cpp:650
 msgid "Zoom Out Vertically"
@@ -8698,7 +8699,7 @@ msgstr "垂直缩小"
 
 #: common/tool/actions.cpp:651
 msgid "Zoom out vertically the plot area"
-msgstr "在绘图区垂直缩小"
+msgstr "垂直缩小绘图区"
 
 #: common/tool/actions.cpp:659 common/widgets/mathplot.cpp:1385
 msgid "Center on Cursor"
@@ -8794,9 +8795,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "不再将库保持在列表顶部"
 
 #: common/tool/actions.cpp:804
-#, fuzzy
 msgid "Library Tree"
-msgstr "显示库结构树"
+msgstr "库结构树"
 
 #: common/tool/actions.cpp:810
 msgid "Hide Library Tree"
@@ -9492,11 +9492,11 @@ msgstr "选择列"
 
 #: common/widgets/mathplot.cpp:1383
 msgid "Zoom in plot view."
-msgstr "在绘制视图中进行放大。"
+msgstr "放大绘制视图。"
 
 #: common/widgets/mathplot.cpp:1384
 msgid "Zoom out plot view."
-msgstr "在绘制视图中进行缩小。"
+msgstr "缩小绘制视图。"
 
 #: common/widgets/mathplot.cpp:1385
 msgid "Center plot view to this position"
@@ -10038,7 +10038,7 @@ msgstr "封装发生变更的符号未保存"
 
 #: cvpcb/cvpcb_mainframe.cpp:399
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "符号和封装关联已经被修改。要保存修改吗?"
+msgstr "符号和封装关联已经被修改。是否保存修改?"
 
 #: cvpcb/cvpcb_mainframe.cpp:627 cvpcb/tools/cvpcb_association_tool.cpp:208
 #, c-format
@@ -12460,7 +12460,7 @@ msgstr "只读"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1218
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1341
 msgid "Save changes?"
-msgstr "保存变更吗?"
+msgstr "保存变更?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:26
 msgid "Pin numbers:"
@@ -12955,9 +12955,9 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"此引脚不在 %d mils 栅格上 (未与栅格对齐), 这可能会导致此引脚在在原理图中难以"
-"连接。\n"
-"确定继续吗?"
+"此引脚不在 %d mils 栅格上 (未与栅格对齐), "
+"这可能会导致此引脚在在原理图中难以连接。\n"
+"确定继续?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:443
 msgid "Synchronized Pins Mode."
@@ -13312,7 +13312,7 @@ msgstr "绘制成功后用关联应用打开输出文件"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
 msgid "Plot Schematic Options"
-msgstr "绘制原理图选项"
+msgstr "原理图绘制选项"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -13742,9 +13742,9 @@ msgid "Link '%s' to this file?"
 msgstr "将 '%s' 链接到此文件?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "未能将参数“%s”设置到“%s”模型中的“%s”"
+msgstr "无法将原理图文件 '%s' 复制到目标 '%s'。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:564
 #, c-format
@@ -14235,7 +14235,7 @@ msgstr "右:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:892
 msgid "Plot Setup"
-msgstr "绘图配置"
+msgstr "绘制配置"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:220
 msgid "Simulation Analysis"
@@ -14408,7 +14408,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr "来自文件的 SPICE 模型 (*.lib、 *.sub 或 *.ibs)"
+msgstr "来自文件的 SPICE 模型 (*.lib, *.sub 或 *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:85
 msgid "Pin:"
@@ -14570,7 +14570,7 @@ msgstr "字段名称 '%s' 已经被占用。"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "确定要移除字段 '%s'吗?"
+msgstr "确定移除字段 '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 msgid "Rename Field"
@@ -16037,7 +16037,7 @@ msgstr "将 %d 个库另存为当前 KiCad 版本格式 (*.kicad_sym) 并替换�
 #: pcbnew/dialogs/dialog_export_step.cpp:581
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "文件 '%s' 已存在, 要覆盖它吗?"
+msgstr "文件 '%s' 已存在, 是否覆盖?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1007 eeschema/libarch.cpp:129
 #: eeschema/libarch.cpp:135
@@ -16089,11 +16089,11 @@ msgstr ""
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:220
 msgid "Remove White Space"
-msgstr "移除空白区域"
+msgstr "移除空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:221
 msgid "Keep White Space"
-msgstr "保留空白区域"
+msgstr "保留空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
@@ -16715,7 +16715,7 @@ msgstr "原理图 '%s' 已由 '%s' 在 '%s' 中打开。"
 #: eeschema/files-io.cpp:137
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "原理图 '%s' 不存在。要创建它吗?"
+msgstr "原理图 '%s' 不存在。是否创建?"
 
 #: eeschema/files-io.cpp:159
 msgid "Creating Schematic"
@@ -17435,7 +17435,7 @@ msgstr "成功。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:213
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "错误: 重复的图纸名称。要继续吗?"
+msgstr "错误: 重复的图纸名称。是否继续?"
 
 #: eeschema/picksymbol.cpp:126
 #, c-format
@@ -17654,7 +17654,7 @@ msgid ""
 "Do you want to reload the library?"
 msgstr ""
 "包含当前符号的库已修改。\n"
-"要重新加载库吗?"
+"是否重新加载库?"
 
 #: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2205
 #: eeschema/sch_shape.cpp:689 eeschema/sch_symbol.cpp:2983
@@ -18901,7 +18901,7 @@ msgstr "引脚名称"
 
 #: eeschema/sch_plotter.cpp:140
 msgid "No sheets to plot."
-msgstr ""
+msgstr "没有可以绘制的图纸。"
 
 #: eeschema/sch_plotter.cpp:238 pcbnew/pcbnew_jobs_handler.cpp:923
 #, c-format
@@ -18930,7 +18930,7 @@ msgstr "完成"
 #: eeschema/sch_plotter.cpp:1037
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "无法写入绘制文件到文件夹 '%s'。"
+msgstr "无法将绘制文件写入到文件夹 '%s'。"
 
 #: eeschema/sch_reference_list.cpp:676
 #, c-format
@@ -19923,7 +19923,7 @@ msgstr "无法打开文件 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:832
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "文件 '意外' 结束。缺少 [END] 吗?"
+msgstr "文件 '意外' 结束。是否缺少 [END]?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:844
 msgid "Error on line "
@@ -20442,7 +20442,7 @@ msgstr " (相位)"
 #: eeschema/sim/sim_tab.cpp:91 eeschema/sim/sim_tab.cpp:108
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr "仿真没有提供任何绘图。请参考控制台窗口的结果。"
+msgstr "仿真没有提供任何绘图结果。请参考控制台窗口的结果。"
 
 #: eeschema/sim/simulator_frame.cpp:346
 msgid "SPICE Simulator"
@@ -20470,7 +20470,7 @@ msgstr "必须先运行 TRAN 仿真; 其结果将用于快速傅立叶变换。"
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
-msgstr "原理图表仿真命令指令已更改。你要更新仿真命令吗?"
+msgstr "原理图表仿真命令指令已更改。是否更新仿真命令?"
 
 #: eeschema/sim/simulator_frame.cpp:489 eeschema/sim/simulator_frame.cpp:834
 msgid "Another simulation is already running."
@@ -22842,19 +22842,19 @@ msgstr "将当前分析选项卡和设置保存到其他位置"
 
 #: eeschema/tools/ee_actions.cpp:1536
 msgid "Export Current Plot as PNG..."
-msgstr "导出当前绘图为 PNG..."
+msgstr "将当前绘制结果导出为 PNG..."
 
 #: eeschema/tools/ee_actions.cpp:1542
 msgid "Export Current Plot as CSV..."
-msgstr "导出当前绘图为 CSV..."
+msgstr "将当前绘制结果导出为 CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1548
 msgid "Export Current Plot to Clipboard"
-msgstr "将当前绘图导出到剪贴板"
+msgstr "将当前绘制结果导出到剪贴板"
 
 #: eeschema/tools/ee_actions.cpp:1554
 msgid "Export Current Plot to Schematic"
-msgstr "将当前绘图导出到原理图"
+msgstr "将当前绘制结果导出到原理图"
 
 #: eeschema/tools/ee_actions.cpp:1560
 msgid "Show Legend"
@@ -22870,11 +22870,11 @@ msgstr "用虚线绘制辅助信号线(电流或相位)"
 
 #: eeschema/tools/ee_actions.cpp:1572
 msgid "Dark Mode Plots"
-msgstr "暗色模式"
+msgstr "暗色模式绘制"
 
 #: eeschema/tools/ee_actions.cpp:1573
 msgid "Draw plots with a black background"
-msgstr "用黑色背景绘图"
+msgstr "用黑色背景进行绘制"
 
 #: eeschema/tools/ee_actions.cpp:1578
 msgid "Edit Analysis Tab..."
@@ -25116,10 +25116,9 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "导出组件 (Gerber, 钻孔, 坐标文件等)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:77
-#, fuzzy
 msgid ""
 "Output file format, options: step, brep, xao, glb (binary glTF), ply, stl"
-msgstr "输出文件格式, 可选: step, brep, xao, glb (binary glTF)"
+msgstr "输出文件格式, 可选: step, brep, xao, glb (binary glTF), ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:81
 msgid "Overwrite output file"
@@ -25258,7 +25257,7 @@ msgstr "有效的选项 excellon, gerber。"
 
 #: kicad/cli/command_pcb_export_drill.cpp:57
 msgid "Valid options are: absolute,plot"
-msgstr "有效的选项是: absolute、plot"
+msgstr "有效选项: absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:63
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
@@ -25350,7 +25349,7 @@ msgstr "使用轮廓绘制图形项目"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:59
 msgid "Plot using the drill/place file origin"
-msgstr "使用 钻孔/放置 文件原点"
+msgstr "绘制时使用 钻孔/放置 文件的原点"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:63
 #: kicad/cli/command_pcb_export_gerber.cpp:52
@@ -25448,11 +25447,11 @@ msgstr "为单个 PCB 绘制多个 Gerber, 并将电路板绘制设置参数包�
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
-msgstr "要包含在每张图上的层, 要包含的原始层名称, 用英文逗号分隔, 如 F.Cu,B.Cu"
+msgstr "要包含在所有绘制结果中的层, 要包含的原始层名称, 用英文逗号分隔, 如 F.Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:55
 msgid "Use the Gerber plot settings already configured in the board file"
-msgstr "使用已经在电路板文件中配置的 Gerber 图设置"
+msgstr "使用电路板文件中已配置的 Gerber 绘制设置"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:34
 msgid "Generate PDF from a list of layers"
@@ -25919,9 +25918,8 @@ msgid "Select output type:"
 msgstr "选择输出类型:"
 
 #: kicad/dialogs/panel_jobs.cpp:684
-#, fuzzy
 msgid "No outputs defined"
-msgstr "<未定义>"
+msgstr "未定义任何输出"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:145
 msgid "Edit the project schematic"
@@ -26013,9 +26011,9 @@ msgid ""
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
-"您选择的不是空目录。建议在空目录中创建工程。\n"
+"所选的目录非空, 建议在空目录中创建工程。\n"
 "\n"
-"您要创建一个与工程同名的新目录吗?"
+"是否创建一个与工程同名的新目录?"
 
 #: kicad/import_project.cpp:120
 msgid ""
@@ -26077,14 +26075,12 @@ msgid "Export VRML"
 msgstr "导出 VRML"
 
 #: kicad/kicad_cli.cpp:124
-#, fuzzy
 msgid "Export PLY"
-msgstr "导出 HPGL"
+msgstr "导出 PLY"
 
 #: kicad/kicad_cli.cpp:125
-#, fuzzy
 msgid "Export STL"
-msgstr "导出 STEP"
+msgstr "导出 STL"
 
 #: kicad/kicad_cli.cpp:141
 msgid "Export DXF"
@@ -26277,7 +26273,7 @@ msgstr "配色主题 (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:81
 #, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "你确定要将固定扩展内容包从版本 %s 更新到 %s 吗?"
+msgstr "确定将已固定的扩展内容包从版本 %s 更新到 %s 吗?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:84
 msgid "Confirm update"
@@ -26317,7 +26313,7 @@ msgstr "放弃挂起的更改"
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "您确定要关闭扩展内容包管理器并放弃挂起的变更吗?"
+msgstr "关闭扩展内容包管理器并放弃挂起的变更?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:293
 msgid "Install Package"
@@ -26462,7 +26458,7 @@ msgstr "正在下载扩展内容包"
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
-msgstr "无法验证下载的扩展内容包的完整性, HASH 值不匹配。您确定要保留此文件吗?"
+msgstr "无法验证下载的扩展内容包的完整性, HASH 值不匹配。确定保留此文件?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:563
 msgid "Keep downloaded file"
@@ -26473,7 +26469,7 @@ msgstr "保留已下载文件"
 msgid ""
 "This package version is incompatible with your KiCad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr "此扩展内容包版本与您的 KiCad 版本或操作系统不兼容。您确定要安装它吗?"
+msgstr "此扩展内容包版本与您的 KiCad 版本或操作系统不兼容。是否继续安装?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:615
 #: kicad/pcm/pcm_task_manager.cpp:385
@@ -26742,7 +26738,7 @@ msgid ""
 "Do you want to continue ?"
 msgstr ""
 "修改文件扩展名可能会导致文件不可用。\n"
-"你确定要修改吗?"
+"是否继续修改?"
 
 #: kicad/project_tree_item.cpp:134
 msgid "Rename File"
@@ -28761,7 +28757,7 @@ msgstr "选择 PCB 计算器数据文件"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:211
 msgid "Do you want to load this file and replace current regulator list?"
-msgstr "你要加载该文件, 并替换稳流器列表吗?"
+msgstr "是否要加载该文件并替换当前的稳压器列表?"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:229
 #, c-format
@@ -30903,7 +30899,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:624
 msgid "Reannotate anyway?"
-msgstr "无论如何都要重新批注吗?"
+msgstr "仍要重新批注?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:644
 msgid "Annotation"
@@ -32939,14 +32935,14 @@ msgid "Export ODB++ File"
 msgstr "导出 ODB++ 文件"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
-msgstr "文件 '%s' 已存在, 要覆盖它吗?"
+msgstr "输出文件 '%s' 已存在, 是否覆盖?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "无法移除临时输出文件"
+msgstr "无法移除现有输出文件'%s'。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:261
 #, fuzzy, c-format
@@ -32954,21 +32950,20 @@ msgid "Output file '%s' already exists."
 msgstr "文件 '%s' 已存在。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:277
-#, fuzzy
 msgid "Cannot create temporary output directory."
-msgstr "无法创建输出目录 '%s'。"
+msgstr "无法创建临时输出目录。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr "符号 '%s' 已存在于库 '%s' 中, 是否覆盖?"
+msgstr "输出目录 '%s' 已经存在并且不为空。 是否覆盖?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output directory '%s'."
-msgstr "无法创建输出目录 '%s'。"
+msgstr "无法移除现有的输出目录 '%s'。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:317
 #, fuzzy, c-format
@@ -32985,7 +32980,6 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:393
-#, fuzzy
 msgid "Compressing output"
 msgstr "压缩输出"
 
@@ -33027,14 +33021,12 @@ msgid "BREP (OCCT) files"
 msgstr "BREP (OCCT) 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
-#, fuzzy
 msgid "PLY files"
-msgstr "HTML 文件"
+msgstr "PLY 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:437
-#, fuzzy
 msgid "STL files"
-msgstr "HTML 文件"
+msgstr "STL 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:445
 msgid "3D Model Output File"
@@ -33078,9 +33070,8 @@ msgid "BREP (OCCT)"
 msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "PLY (ASCII)"
-msgstr "ASCII"
+msgstr "PLY (ASCII)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
@@ -33371,7 +33362,7 @@ msgstr "导出 SVG 文件"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:127
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr "你确定要覆盖现有的文件吗?"
+msgstr "是否覆盖现有文件?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:216
 #, c-format
@@ -34412,9 +34403,8 @@ msgstr "添加指定值的泪滴:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:176
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:171
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:156
-#, fuzzy
 msgid "Apply and Close"
-msgstr "应用挂起的更改"
+msgstr "应用并关闭"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:540
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:544
@@ -35149,12 +35139,10 @@ msgid "Move Item"
 msgstr "移动项目"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
-#, fuzzy
 msgid "Sheets"
 msgstr "图纸"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
-#, fuzzy
 msgid "Component Classes"
 msgstr "元件类"
 
@@ -35191,9 +35179,8 @@ msgid "Copy routing"
 msgstr "复制走线"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
-#, fuzzy
 msgid "Copy other items"
-msgstr "其他项目"
+msgstr "复制其他项目"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
@@ -35910,7 +35897,7 @@ msgstr "制造层上的草图焊盘"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr "绘图时在 F.Fab 和 B.Fab 层上包括焊盘外框"
+msgstr "绘制时在 F.Fab 和 B.Fab 层上包括焊盘外框"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 msgid "Include pad numbers"
@@ -35918,7 +35905,7 @@ msgstr "包含焊盘编号"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Check zone fills before plotting"
-msgstr "绘图前检查域填充"
+msgstr "绘制前检查域填充"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:240
@@ -36084,7 +36071,7 @@ msgstr "X 比例因子:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:288
 msgid "Set global X scale adjust for exact scale PostScript output."
-msgstr "将全局 X 比例调整设置为精确缩放 PostScript 输出。"
+msgstr "调整全局 X 比例使 PostScript 输出更加精确。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:295
 msgid "Y scale factor:"
@@ -36092,7 +36079,7 @@ msgstr "Y 比例因子:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:300
 msgid "Set global Y scale adjust for exact scale PostScript output."
-msgstr "将全局 Y 比例调整设置为精确缩放 PostScript 输出。"
+msgstr "调整全局 Y 比例使 PostScript 输出更加精确。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:307
 msgid "Track width correction:"
@@ -36679,32 +36666,31 @@ msgstr "根据中心和大小"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 msgid "By Endpoints"
-msgstr ""
+msgstr "根据端点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:101
 msgid "By Length and Angle"
 msgstr "根据长度和角度"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
-#, fuzzy
 msgid "By Start/Midpoint"
-msgstr "起始点"
+msgstr "根据 起点/中点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
-msgstr ""
+msgstr "根据 中心/起点/角度"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:149
 msgid "By Start/Mid/End"
-msgstr ""
+msgstr "根据 起点/中点/终点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
 msgid "By Center/Radius"
-msgstr "根据中心/半径"
+msgstr "根据 中心/半径"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
 msgid "By Center/Point"
-msgstr ""
+msgstr "根据 中心/点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:197
 msgid "Bezier Control Points"
@@ -36901,7 +36887,6 @@ msgstr ""
 "留空以使用 <电路板配置> 中定义的值。"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
-#, fuzzy
 msgid "Front/Inner/Back"
 msgstr "顶部/内部/底部"
 
@@ -38521,7 +38506,7 @@ msgid ""
 "Leave at 0 unless you know what you are doing."
 msgstr ""
 "两个焊盘区域之间最小距离。\n"
-"如两个焊盘之间的间距小于此值, 焊盘区域绘制时会被合并(没有阻焊桥)。\n"
+"如两个焊盘之间的间距小于此值, 焊盘区域绘制时会被合并 (没有阻焊桥)。\n"
 "这个参数仅用来绘制阻焊层。\n"
 "除非您知道自己在做什么, 请将其设置为0。"
 
@@ -38614,7 +38599,7 @@ msgstr "注意: 最终的间距由锡膏的绝对与相对间距相加得到。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:107
 msgid "Cancel Changes?"
-msgstr "取消变更吗?"
+msgstr "取消变更?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:705
 msgid "DRC rules"
@@ -40785,39 +40770,39 @@ msgid "%s orientation differs."
 msgstr "%s 个 '方向' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s 个 '焊盘形状类型' 差异。"
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs on layer %s."
-msgstr "%s 个 '大小' 差异。"
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s 个 'trapezoid delta' 差异。"
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "%s 个 '圆角' 差异。"
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "%s 个 '倒角' 尺寸差异。"
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "%s 个 '倒角' 差异。"
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "%s 个 '孔与形状的偏移量' 差异。"
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:351
 #, c-format
@@ -40830,9 +40815,9 @@ msgid "%s drill size differs."
 msgstr "%s 个 '钻孔大小' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "%s 个 'shape primitives' 差异。"
+msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 #, c-format
@@ -41028,7 +41013,7 @@ msgstr "正在加载封装库表..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:824
 msgid "Checking board footprints against library..."
-msgstr "正在根据库检查电路板封装..."
+msgstr "正在对照库内容检查电路板封装..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:925
 #, c-format
@@ -41548,7 +41533,7 @@ msgstr "找不到备份文件 '%s'。"
 #: pcbnew/files.cpp:320
 #, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "确定加载恢复文件 '%s' 吗?"
+msgstr "确定加载恢复文件 '%s'?"
 
 #: pcbnew/files.cpp:363
 #, c-format
@@ -41583,7 +41568,7 @@ msgstr "当前 PCB 已被修改。是否保存变更?"
 #: pcbnew/files.cpp:573
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "PCB '%s' 不存在, 要创建它吗?"
+msgstr "PCB '%s' 不存在, 是否创建?"
 
 #: pcbnew/files.cpp:582
 msgid "Creating PCB"
@@ -42285,7 +42270,7 @@ msgstr "修剪/延伸未闭合的图形或添加线段, 使图形闭合"
 #: pcbnew/initpcb.cpp:49
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
-msgstr "当前电路板将丢失, 此操作无法撤消。继续吗?"
+msgstr "当前电路板将丢失, 此操作无法撤消。是否继续?"
 
 #: pcbnew/initpcb.cpp:117 pcbnew/tools/footprint_editor_control.cpp:246
 msgid "The current footprint has been modified.  Save changes?"
@@ -42401,14 +42386,12 @@ msgid "Export IDF 3D board representation"
 msgstr "导出 IDF 3D 电路板表示"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP / GLB / BREP / XAO / PLY / STL..."
-msgstr "STEP / GLB / BREP / XAO..."
+msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
-#, fuzzy
 msgid "Export STEP / GLB / BREP / XAO / PLY / STL 3D board representation"
-msgstr "导出 STEP / GLB / BREP / XAO 3D 电路板表示"
+msgstr "导出 STEP / GLB / BREP / XAO / PLY / STL 格式的电路板模型"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
@@ -43342,7 +43325,7 @@ msgid ""
 "Do you want to reload the footprint?"
 msgstr ""
 "包含当前封装的库已更改。\n"
-"要重新加载封装吗?"
+"是否重新加载封装?"
 
 #: pcbnew/pcb_dimension.cpp:597 pcbnew/pcb_dimension.cpp:1778
 msgid "Prefix"
@@ -44897,9 +44880,9 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
-"请报告此错误。验证分组结构时出错: %s。\n"
+"请报告此程序问题。Error validating group structure: %s\n"
 "\n"
-"还是要保存吗?"
+"仍要保存?"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:322
 msgid "Save Anyway"
@@ -45142,14 +45125,12 @@ msgid "Failed to add component data"
 msgstr "元件数据添加失败"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating ODB++ Structure"
-msgstr "生成 ODB++ 文件"
+msgstr "创建 ODB++ 结构"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:118
-#, fuzzy
 msgid "Exporting board to ODB++"
-msgstr "导出电路板主体"
+msgstr "导出电路板为 ODB++"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
 msgid "ODB++ Production File"
@@ -45912,7 +45893,7 @@ msgstr "仍然拖动"
 #: pcbnew/router/router_tool.cpp:1903 pcbnew/router/router_tool.cpp:2421
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr "(无论如何都提交 %s)"
+msgstr "(仍要提交 %s)"
 
 #: pcbnew/router/router_tool.cpp:1907 pcbnew/router/router_tool.cpp:2425
 msgid "Track violates DRC."
@@ -47162,7 +47143,7 @@ msgstr ""
 #: pcbnew/tools/multichannel_tool.cpp:420
 #, fuzzy
 msgid "Select a reference Rule Area to copy from..."
-msgstr "请选择一个要从中复制的单一参考规则区。"
+msgstr "选择要从 ... 复制的参考规则区"
 
 #: pcbnew/tools/multichannel_tool.cpp:439
 msgid "No Rule Areas to repeat layout to have been found."
@@ -47203,7 +47184,7 @@ msgstr "拓扑结构不匹配"
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
-msgstr "由于原理图只有一张或没有层次图纸, 无法自动生成任何布置区。"
+msgstr "由于原理图只有一张或没有层次图纸或元件类, 无法自动生成任何布置区。"
 
 #: pcbnew/tools/multichannel_tool.cpp:1054
 msgid "Auto-generate placement rule areas"
@@ -50007,7 +49988,7 @@ msgstr "网络名称变量名不能为空。"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1824
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "网络 '%s' 正在使用中。仍要删除吗?"
+msgstr "网络 '%s' 正在使用中。仍要删除?"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1865
 #, c-format
