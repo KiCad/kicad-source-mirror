@@ -248,7 +248,6 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::busEntryNeeded,
             ERC_ITEM::endpointOffGrid,
             ERC_ITEM::fourWayJunction,
-            ERC_ITEM::duplicatePinError,
             ERC_ITEM::labelMultipleWires,
             ERC_ITEM::unconnectedWireEndpoint,
 
@@ -289,6 +288,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             // ERC_ITEM types with no user-editable severities
             // NOTE: this MUST be the last grouping in the list!
             ERC_ITEM::heading_internal,
+            ERC_ITEM::duplicatePinError,
             ERC_ITEM::pinTableWarning,
             ERC_ITEM::pinTableError,
             ERC_ITEM::genericWarning,
