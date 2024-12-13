@@ -37,10 +37,15 @@ class HTML_MESSAGE_BOX;
 class DIALOG_LABEL_PROPERTIES : public DIALOG_LABEL_PROPERTIES_BASE
 {
 public:
-    DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_LABEL_BASE* aLabel );
+    DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_LABEL_BASE* aLabel, bool aNew );
     ~DIALOG_LABEL_PROPERTIES();
 
     FIELDS_GRID_TABLE* GetFieldsGridTable() { return m_fields; }
+
+    void SetLabelList( std::list<std::unique_ptr<SCH_LABEL_BASE>>* aLabelList )
+    {
+        m_labelList = aLabelList;
+    }
 
 private:
     /**
@@ -57,14 +62,15 @@ private:
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnMoveUp( wxCommandEvent& event ) override;
     void OnMoveDown( wxCommandEvent& event ) override;
+    void onMultiLabelCheck( wxCommandEvent& aEvent ) override;
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     /**
      * Handles the filtering of items in the wxComboBox based on user input.
      *
-     * This function is triggered by the wxEVT_TEXT event when the user modifies 
-     * the text in the combo box. It filters the dropdown list to display only 
+     * This function is triggered by the wxEVT_TEXT event when the user modifies
+     * the text in the combo box. It filters the dropdown list to display only
      * the items that match the input text.
      *
      * @param event The wxCommandEvent associated with the wxEVT_TEXT event.
@@ -74,14 +80,14 @@ private:
     /**
      * Handles the selection of an item from the wxComboBox dropdown.
      *
-     * This function is triggered by the wxEVT_COMBOBOX event when the user selects 
-     * an item. It ensures that the selected value is correctly processed and 
+     * This function is triggered by the wxEVT_COMBOBOX event when the user selects
+     * an item. It ensures that the selected value is correctly processed and
      * prevents unnecessary re-filtering based on the selection.
      *
      * @param event The wxCommandEvent associated with the wxEVT_COMBOBOX event.
      */
     void OnLabelItemSelected( wxCommandEvent& event );
-    
+
     void AdjustGridColumns( int aWidth );
 
     bool TransferDataToWindow() override;
@@ -105,7 +111,9 @@ private:
     HTML_MESSAGE_BOX*     m_helpWindow;
     wxArrayString         m_existingLabelArray;
     // To store the previous value of the text typed in label combo
-    wxString              m_previousLabelText; 
+    wxString              m_previousLabelText;
+
+    std::list<std::unique_ptr<SCH_LABEL_BASE>>* m_labelList;
 };
 
 

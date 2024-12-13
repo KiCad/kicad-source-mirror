@@ -2294,7 +2294,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_HIER_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
     {
-        DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( curr_item ) );
+        DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( curr_item ), false );
 
         // QuasiModal for syntax help and Scintilla auto-complete
         dlg.ShowQuasiModal();

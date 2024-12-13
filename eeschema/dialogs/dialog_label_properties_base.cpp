@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,13 +44,34 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_valueCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
 	m_textEntrySizer->Add( m_valueCombo, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_labelMultiLine = new wxStaticText( this, wxID_ANY, _("Label:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelMultiLine->Wrap( -1 );
+	m_labelMultiLine->SetToolTip( _("Enter the text to be used within the schematic") );
+
+	m_textEntrySizer->Add( m_labelMultiLine, 0, wxALIGN_CENTER_VERTICAL, 2 );
+
+	m_valueMultiLine = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_textEntrySizer->Add( m_valueMultiLine, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
+
 
 	m_textEntrySizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_cbMultiLine = new wxCheckBox( this, wxID_ANY, _("Multiple label input"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_cbMultiLine, 0, 0, 5 );
+
+
+	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_ALIGN_RIGHT|wxHL_CONTEXTMENU );
 	m_syntaxHelp->SetToolTip( _("Show syntax help window") );
 
-	m_textEntrySizer->Add( m_syntaxHelp, 1, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	bSizer7->Add( m_syntaxHelp, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	m_textEntrySizer->Add( bSizer7, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( m_textEntrySizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );
@@ -269,7 +290,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	bSizer22 = new wxBoxSizer( wxVERTICAL );
 
 	m_textColorSwatch = new COLOR_SWATCH( m_panelBorderColor1, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer22->Add( m_textColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer22->Add( m_textColorSwatch, 0, 0, 5 );
 
 
 	m_panelBorderColor1->SetSizer( bSizer22 );
@@ -309,6 +330,8 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_valueSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
 	m_valueCombo->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_valueCombo->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
+	m_valueMultiLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
+	m_cbMultiLine->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::onMultiLabelCheck ), NULL, this );
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnAddField ), NULL, this );
@@ -325,6 +348,8 @@ DIALOG_LABEL_PROPERTIES_BASE::~DIALOG_LABEL_PROPERTIES_BASE()
 	m_valueSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
 	m_valueCombo->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_valueCombo->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
+	m_valueMultiLine->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
+	m_cbMultiLine->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::onMultiLabelCheck ), NULL, this );
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnAddField ), NULL, this );

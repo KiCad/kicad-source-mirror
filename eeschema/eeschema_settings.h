@@ -63,6 +63,7 @@ public:
         wxString edit_label_visible_columns;
         int edit_label_width;
         int edit_label_height;
+        bool edit_label_multiple;
         int  erc_severities;
         bool footprint_preview;
         bool print_sheet_reference;

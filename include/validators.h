@@ -103,7 +103,6 @@ public:
 
     virtual bool Validate( wxWindow *aParent ) override;
 
-protected:
     /// @return the error message if the contents of @a aVal are invalid.
     wxString IsValid( const wxString& aVal ) const override;
 
