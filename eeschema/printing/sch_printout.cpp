@@ -157,7 +157,26 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
         pageSizeIU = ToWxSize( aScreen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS ) );
         FitThisSizeToPaper( pageSizeIU );
 
-        fitRect = !aForPrinting ? wxRect( 0, 0, 6000, 4000 ) : GetLogicalPaperRect();
+        if( aForPrinting )
+            fitRect = GetLogicalPaperRect();
+        else
+        {
+            fitRect = wxRect( 0, 0, 6000, 4000 );
+
+            if( wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>( dc ) )
+            {
+                wxBitmap& bm = memdc->GetSelectedBitmap();
+                fitRect = wxRect( 0, 0, bm.GetWidth(), bm.GetHeight() );
+
+                // If the dc is a memory dc (should be the case when not printing on a printer,
+                // i.e. when printing on the clipboard), calculate a suitable dc user scale
+                double dc_scale;
+                double ppi = 300;   // Use 300 pixels per inch to create bitmap images on start
+                double inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
+                dc_scale = ppi / inch2Iu;
+                dc->SetUserScale( dc_scale, dc_scale );
+           }
+        }
 
         // When is the actual paper size does not match the schematic page size, the drawing will
         // not be centered on X or Y axis.  Give a draw offset to center the schematic page on the
