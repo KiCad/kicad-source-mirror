@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-10 16:05-0800\n"
-"PO-Revision-Date: 2024-12-02 01:24+0000\n"
+"PO-Revision-Date: 2024-12-13 07:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25619,7 +25619,7 @@ msgstr "このワイルドカードに一致するネットに属する導体ア
 
 #: kicad/cli/command_pcb_export_3d.cpp:172
 msgid "Do not optimize STEP file (enables writing parametric curves)"
-msgstr "STEPファイルを最適化しない (パラメトリック曲線を有効する)"
+msgstr "STEPファイルを最適化しない (パラメトリック曲線の書き込みを有効にする)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:179
 msgid ""
@@ -33789,7 +33789,7 @@ msgstr "古いファイルを上書き"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:260
 msgid "Don't write P-curves to STEP file"
-msgstr ""
+msgstr "STEPファイルにパラメトリック曲線を書き込まない"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:261
 msgid ""
@@ -35753,7 +35753,7 @@ msgstr "その他のアイテム"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
-msgstr ""
+msgstr "テキスト、形状、ゾーン、その他のアイテムをソースルールエリアからコピーします"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:91
 msgid "Include locked components"
@@ -40889,11 +40889,11 @@ msgstr "スルーホール パッドに穴がない"
 
 #: pcbnew/drc/drc_item.cpp:295
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "表面レイヤーのミラーテキスト"
 
 #: pcbnew/drc/drc_item.cpp:299
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "裏面レイヤーの非ミラーテキスト"
 
 #: pcbnew/drc/drc_item.cpp:495
 #, c-format
@@ -45219,12 +45219,12 @@ msgstr "認識されていないパッド形状プリミティブ '%s' が 行%z
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "半径が異なる楕円 (x=%d、y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "x と y が同じであることが期待されたが、x = %f 、 y = %f だった "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
