@@ -53,7 +53,6 @@ public:
 
     virtual wxObject* Clone() const override { return new SCH_NETNAME_VALIDATOR( *this ); }
 
-protected:
     /// @return the error message if the contents of \a aVal are invalid.
     wxString IsValid( const wxString& aVal ) const override;
 
