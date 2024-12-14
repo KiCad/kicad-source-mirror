@@ -39,7 +39,19 @@ enum class BITMAPS : unsigned int;
 class GRID_CELL_ICON_TEXT_RENDERER : public wxGridCellStringRenderer
 {
 public:
+    /**
+     * Construct a renderer that maps a list of icons from the bitmap system to a list of strings
+     * @param icons is a list of possible icons to render
+     * @param names is a list of names to render - must be the same length as icons
+     */
     GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BITMAPS>& icons, const wxArrayString& names );
+
+    /**
+     * Construct a renderer that renders a single icon next to the cell's value text
+     * @param aIcon is the icon to render next to the cell's value
+     */
+    GRID_CELL_ICON_TEXT_RENDERER( const wxBitmapBundle& aIcon,
+                                  wxSize aPreferredIconSize = wxDefaultSize );
 
     void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
@@ -48,6 +60,10 @@ public:
 private:
     std::vector<BITMAPS> m_icons;
     wxArrayString        m_names;
+
+    // For single-icon mode
+    wxBitmapBundle m_icon;
+    wxSize m_iconSize;
 };
 
 //---- Grid helpers: custom wxGridCellRenderer that renders just an icon ----------------

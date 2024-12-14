@@ -63,15 +63,14 @@ private:
 
     enum GRID_COLUMNS
     {
-        COLUMN_ICON,
+        COLUMN_ACTION_NAME,
         COLUMN_VISIBLE,
-        COLUMN_NAME,
-        COLUMN_CATEGORY,
+        COLUMN_PLUGIN_NAME,
         COLUMN_DESCRIPTION,
-        COLUMN_PATH
+        COLUMN_SETTINGS_IDENTIFIER,
     };
 
-    wxBitmap m_genericIcon;
+    wxBitmapBundle m_genericIcon;
 
     void SwapRows( int aRowA, int aRowB );
     void SelectRow( int aRow );

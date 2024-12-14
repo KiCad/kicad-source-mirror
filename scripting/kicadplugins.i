@@ -668,6 +668,9 @@ class ActionPlugin(KiCadPlugin, object):
         self.category = "Undefined"
         self.description = ""
 
+    def GetClassName(self):
+        return type(self).__name__
+
     def GetName( self ):
         return self.name
 

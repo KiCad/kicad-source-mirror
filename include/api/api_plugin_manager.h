@@ -46,6 +46,8 @@ public:
 
     void InvokeAction( const wxString& aIdentifier );
 
+    std::optional<const PLUGIN_ACTION*> GetAction( const wxString& aIdentifier );
+
     std::vector<const PLUGIN_ACTION*> GetActionsForScope( PLUGIN_ACTION_SCOPE aScope );
 
     std::map<int, wxString>& ButtonBindings() { return m_buttonBindings; }

@@ -43,6 +43,7 @@ public:
     PYTHON_ACTION_PLUGIN( PyObject* action );
     ~PYTHON_ACTION_PLUGIN();
     wxString    GetCategoryName() override;
+    wxString    GetClassName() override;
     wxString    GetName() override;
     wxString    GetDescription() override;
     bool        GetShowToolbarButton() override;

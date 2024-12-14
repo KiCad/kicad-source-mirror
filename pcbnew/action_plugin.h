@@ -54,6 +54,11 @@ public:
     virtual wxString GetName() = 0;
 
     /**
+     * @return the name of the Python class defining the action
+     */
+    virtual wxString GetClassName() = 0;
+
+    /**
      * @return a description of the action plugin.
      */
     virtual wxString GetDescription() = 0;
@@ -211,5 +216,8 @@ private:
     static std::vector<ACTION_PLUGIN*> m_actionsList;
     static bool m_actionRunning;
 };
+
+
+typedef std::variant<ACTION_PLUGIN*, const PLUGIN_ACTION*> LEGACY_OR_API_PLUGIN;
 
 #endif /* PCBNEW_ACTION_PLUGINS_H */

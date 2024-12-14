@@ -1365,19 +1365,72 @@ bool EDA_DRAW_FRAME::SaveCanvasImageToFile( const wxString& aFileName,
 }
 
 
+bool EDA_DRAW_FRAME::IsPluginActionButtonVisible( const PLUGIN_ACTION& aAction,
+                                                  APP_SETTINGS_BASE* aCfg )
+{
+    wxCHECK( aCfg, aAction.show_button );
+
+    for( const auto& [identifier, visible] : aCfg->m_Plugins.actions )
+    {
+        if( identifier == aAction.identifier )
+            return visible;
+    }
+
+    return aAction.show_button;
+}
+
+
+std::vector<const PLUGIN_ACTION*> EDA_DRAW_FRAME::GetOrderedPluginActions(
+    PLUGIN_ACTION_SCOPE aScope, APP_SETTINGS_BASE* aCfg )
+{
+    std::vector<const PLUGIN_ACTION*> actions;
+    wxCHECK( aCfg, actions );
+
+#ifdef KICAD_IPC_API
+
+    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+    std::vector<const PLUGIN_ACTION*> unsorted = mgr.GetActionsForScope( aScope );
+    std::map<wxString, const PLUGIN_ACTION*> actionMap;
+    std::set<const PLUGIN_ACTION*> handled;
+
+    for( const PLUGIN_ACTION* action : unsorted )
+        actionMap[action->identifier] = action;
+
+    for( const auto& identifier : aCfg->m_Plugins.actions | std::views::keys )
+    {
+        if( actionMap.contains( identifier ) )
+        {
+            const PLUGIN_ACTION* action = actionMap[ identifier ];
+            actions.emplace_back( action );
+            handled.insert( action );
+        }
+    }
+
+    for( const auto& action : actionMap | std::views::values )
+    {
+        if( !handled.contains( action ) )
+            actions.emplace_back( action );
+    }
+
+#endif
+
+    return actions;
+}
+
+
 void EDA_DRAW_FRAME::addApiPluginTools()
 {
 #ifdef KICAD_IPC_API
-    // TODO: Add user control over visibility and order
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
 
     mgr.ButtonBindings().clear();
 
-    std::vector<const PLUGIN_ACTION*> actions = mgr.GetActionsForScope( PluginActionScope() );
+    std::vector<const PLUGIN_ACTION*> actions =
+            GetOrderedPluginActions( PluginActionScope(), config() );
 
-    for( auto& action : actions )
+    for( const PLUGIN_ACTION* action : actions )
     {
-        if( !action->show_button )
+        if( !IsPluginActionButtonVisible( *action, config() ) )
             continue;
 
         const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk()

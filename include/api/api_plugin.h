@@ -118,6 +118,8 @@ public:
 
     const std::vector<PLUGIN_ACTION>& Actions() const;
 
+    wxString ActionSettingsKey( const PLUGIN_ACTION& aAction ) const;
+
 private:
     friend struct API_PLUGIN_CONFIG;
 

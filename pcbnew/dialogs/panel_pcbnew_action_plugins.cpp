@@ -19,15 +19,19 @@
  */
 
 #include <action_plugin.h>
+#include <api/api_plugin.h>
 #include <bitmaps.h>
 #include <dialog_footprint_wizard_list.h>
 #include <grid_tricks.h>
 #include <kiface_base.h>
+#include <kiplatform/ui.h>
 #include <panel_pcbnew_action_plugins.h>
 #include <pcb_edit_frame.h>
 #include <python/scripting/pcbnew_scripting.h>
 #include <pcb_scripting_tool.h>
 #include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <api/api_plugin_manager.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_grid.h>
@@ -39,7 +43,7 @@
 PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( wxWindow* aParent ) :
         PANEL_PCBNEW_ACTION_PLUGINS_BASE( aParent )
 {
-    m_genericIcon = KiBitmap( BITMAPS::puzzle_piece );
+    m_genericIcon = KiBitmapBundle( BITMAPS::puzzle_piece );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
     m_grid->SetUseNativeColLabels();
 
@@ -118,10 +122,9 @@ void PANEL_PCBNEW_ACTION_PLUGINS::SwapRows( int aRowA, int aRowB )
 {
     m_grid->Freeze();
 
-    // Swap all columns except icon
     wxString tempStr;
 
-    for( int column = 1; column < m_grid->GetNumberCols(); column++ )
+    for( int column = 0; column < m_grid->GetNumberCols(); column++ )
     {
         tempStr = m_grid->GetCellValue( aRowA, column );
         m_grid->SetCellValue( aRowA, column, m_grid->GetCellValue( aRowB, column ) );
@@ -129,9 +132,10 @@ void PANEL_PCBNEW_ACTION_PLUGINS::SwapRows( int aRowA, int aRowB )
     }
 
     // Swap icon column renderers
-    auto cellRenderer = m_grid->GetCellRenderer( aRowA, COLUMN_ICON );
-    m_grid->SetCellRenderer( aRowA, COLUMN_ICON, m_grid->GetCellRenderer( aRowB, COLUMN_ICON ) );
-    m_grid->SetCellRenderer( aRowB, COLUMN_ICON, cellRenderer );
+    auto cellRenderer = m_grid->GetCellRenderer( aRowA, COLUMN_ACTION_NAME );
+    m_grid->SetCellRenderer( aRowA, COLUMN_ACTION_NAME,
+                             m_grid->GetCellRenderer( aRowB, COLUMN_ACTION_NAME ) );
+    m_grid->SetCellRenderer( aRowB, COLUMN_ACTION_NAME, cellRenderer );
 
     m_grid->Thaw();
 }
@@ -149,15 +153,27 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
     PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( settings );
 
+    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+
     if( settings )
     {
         settings->m_VisibleActionPlugins.clear();
+        settings->m_Plugins.actions.clear();
 
         for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
         {
-            settings->m_VisibleActionPlugins.emplace_back( std::make_pair(
-                    m_grid->GetCellValue( ii, COLUMN_PATH ),
-                    m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) ) );
+            wxString id = m_grid->GetCellValue( ii, COLUMN_SETTINGS_IDENTIFIER );
+
+            if( mgr.GetAction( id ) != std::nullopt )
+            {
+                settings->m_Plugins.actions.emplace_back( std::make_pair(
+                        id, m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) ) );
+            }
+            else
+            {
+                settings->m_VisibleActionPlugins.emplace_back( std::make_pair(
+                        id, m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) ) );
+            }
         }
     }
 
@@ -171,30 +187,66 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
     m_grid->ClearRows();
 
-    const auto& orderedPlugins = PCB_EDIT_FRAME::GetOrderedActionPlugins();
+    const std::vector<LEGACY_OR_API_PLUGIN>& orderedPlugins =
+            PCB_EDIT_FRAME::GetOrderedActionPlugins();
     m_grid->AppendRows( orderedPlugins.size() );
+
+    int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+    wxSize iconSize( size, size );
 
     for( size_t row = 0; row < orderedPlugins.size(); row++ )
     {
-        ACTION_PLUGIN* ap = orderedPlugins[row];
+        if( std::holds_alternative<ACTION_PLUGIN*>( orderedPlugins[row] ) )
+        {
+            auto ap = std::get<ACTION_PLUGIN*>( orderedPlugins[row] );
 
-        // Icon
-        m_grid->SetCellRenderer( row, COLUMN_ICON, new GRID_CELL_ICON_RENDERER(
-                                 ap->iconBitmap.IsOk() ? ap->iconBitmap : m_genericIcon ) );
+            // Icon
+            m_grid->SetCellRenderer( row, COLUMN_ACTION_NAME,
+                    new GRID_CELL_ICON_TEXT_RENDERER( ap->iconBitmap.IsOk()
+                                                              ? wxBitmapBundle( ap->iconBitmap )
+                                                              : m_genericIcon,
+                                                      iconSize ) );
+            m_grid->SetCellValue( row, COLUMN_ACTION_NAME, ap->GetName() );
+            m_grid->SetCellValue( row, COLUMN_SETTINGS_IDENTIFIER, ap->GetPluginPath() );
 
-        // Toolbar button checkbox
-        m_grid->SetCellRenderer( row, COLUMN_VISIBLE, new wxGridCellBoolRenderer() );
-        m_grid->SetCellAlignment( row, COLUMN_VISIBLE, wxALIGN_CENTER, wxALIGN_CENTER );
+            // Toolbar button checkbox
+            m_grid->SetCellRenderer( row, COLUMN_VISIBLE, new wxGridCellBoolRenderer() );
+            m_grid->SetCellAlignment( row, COLUMN_VISIBLE, wxALIGN_CENTER, wxALIGN_CENTER );
 
-        bool show = PCB_EDIT_FRAME::GetActionPluginButtonVisible( ap->GetPluginPath(),
-                                                                  ap->GetShowToolbarButton() );
+            bool show = PCB_EDIT_FRAME::GetActionPluginButtonVisible( ap->GetPluginPath(),
+                                                                      ap->GetShowToolbarButton() );
 
-        m_grid->SetCellValue( row, COLUMN_VISIBLE, show ? wxT( "1" ) : wxEmptyString );
+            m_grid->SetCellValue( row, COLUMN_VISIBLE, show ? wxT( "1" ) : wxEmptyString );
 
-        m_grid->SetCellValue( row, COLUMN_NAME, ap->GetName() );
-        m_grid->SetCellValue( row, COLUMN_CATEGORY, ap->GetCategoryName() );
-        m_grid->SetCellValue( row, COLUMN_DESCRIPTION, ap->GetDescription() );
-        m_grid->SetCellValue( row, COLUMN_PATH, ap->GetPluginPath() );
+            m_grid->SetCellValue( row, COLUMN_PLUGIN_NAME, ap->GetClassName() );
+            m_grid->SetCellValue( row, COLUMN_DESCRIPTION, ap->GetDescription() );
+        }
+        else
+        {
+            auto action = std::get<const PLUGIN_ACTION*>( orderedPlugins[row] );
+
+            const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk()
+                                             ? action->icon_dark
+                                             : action->icon_light;
+
+            // Icon
+            m_grid->SetCellRenderer( row, COLUMN_ACTION_NAME, new GRID_CELL_ICON_TEXT_RENDERER(
+                                     icon.IsOk() ? icon : m_genericIcon, iconSize ) );
+            m_grid->SetCellValue( row, COLUMN_ACTION_NAME, action->name );
+            m_grid->SetCellValue( row, COLUMN_SETTINGS_IDENTIFIER, action->identifier );
+
+            // Toolbar button checkbox
+            m_grid->SetCellRenderer( row, COLUMN_VISIBLE, new wxGridCellBoolRenderer() );
+            m_grid->SetCellAlignment( row, COLUMN_VISIBLE, wxALIGN_CENTER, wxALIGN_CENTER );
+
+            bool show = PCB_EDIT_FRAME::GetActionPluginButtonVisible( action->identifier,
+                                                                      action->show_button );
+
+            m_grid->SetCellValue( row, COLUMN_VISIBLE, show ? wxT( "1" ) : wxEmptyString );
+
+            m_grid->SetCellValue( row, COLUMN_PLUGIN_NAME, action->plugin.Name() );
+            m_grid->SetCellValue( row, COLUMN_DESCRIPTION, action->description );
+        }
     }
 
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
@@ -209,6 +261,8 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
     }
 
     m_grid->AutoSizeRows();
+    m_grid->AutoSizeColumns();
+    m_grid->HideCol( COLUMN_SETTINGS_IDENTIFIER );
 
     m_grid->Thaw();
 

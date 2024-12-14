@@ -171,6 +171,14 @@ wxString PYTHON_ACTION_PLUGIN::GetCategoryName()
 }
 
 
+wxString PYTHON_ACTION_PLUGIN::GetClassName()
+{
+    PyLOCK lock;
+
+    return CallRetStrMethod( "GetClassName" );
+}
+
+
 wxString PYTHON_ACTION_PLUGIN::GetName()
 {
     PyLOCK lock;
@@ -496,10 +504,16 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
 void PCB_EDIT_FRAME::AddActionPluginTools()
 {
     bool need_separator = true;
-    const std::vector<ACTION_PLUGIN*>& orderedPlugins = GetOrderedActionPlugins();
+    const std::vector<LEGACY_OR_API_PLUGIN>& orderedPlugins = GetOrderedActionPlugins();
 
-    for( ACTION_PLUGIN* ap : orderedPlugins )
+    for( const auto& entry : orderedPlugins )
     {
+        // API plugins are handled by EDA_BASE_FRAME
+        if( !std::holds_alternative<ACTION_PLUGIN*>( entry ) )
+            continue;
+
+        ACTION_PLUGIN* ap = std::get<ACTION_PLUGIN*>( entry );
+
         if( GetActionPluginButtonVisible( ap->GetPluginPath(), ap->GetShowToolbarButton() ) )
         {
             if( need_separator )
@@ -529,13 +543,13 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
 }
 
 
-std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
+std::vector<LEGACY_OR_API_PLUGIN> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     std::vector<ACTION_PLUGIN*> plugins;
-    std::vector<ACTION_PLUGIN*> orderedPlugins;
+    std::vector<LEGACY_OR_API_PLUGIN> orderedPlugins;
 
     for( int i = 0; i < ACTION_PLUGINS::GetActionsCount(); i++ )
         plugins.push_back( ACTION_PLUGINS::GetAction( i ) );
@@ -560,6 +574,10 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
     for( auto remaining_plugin : plugins )
         orderedPlugins.push_back( remaining_plugin );
 
+    // Finally append API plugins
+    for( const PLUGIN_ACTION* action : GetOrderedPluginActions( PLUGIN_ACTION_SCOPE::PCB, cfg ) )
+        orderedPlugins.push_back( action );
+
     return orderedPlugins;
 }
 
@@ -570,10 +588,16 @@ bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath,
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
-    for( const auto& entry : cfg->m_VisibleActionPlugins )
+    for( const auto& [path, visible] : cfg->m_VisibleActionPlugins )
     {
-        if( entry.first == aPluginPath )
-            return entry.second;
+        if( path == aPluginPath )
+            return visible;
+    }
+
+    for( const auto& [identifier, visible] : cfg->m_Plugins.actions )
+    {
+        if( identifier == aPluginPath )
+            return visible;
     }
 
     // Plugin is not in settings, return default.

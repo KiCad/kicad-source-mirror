@@ -132,6 +132,15 @@ void API_PLUGIN_MANAGER::ReloadPlugins()
 }
 
 
+std::optional<const PLUGIN_ACTION*> API_PLUGIN_MANAGER::GetAction( const wxString& aIdentifier )
+{
+    if( !m_actionsCache.count( aIdentifier ) )
+        return std::nullopt;
+
+    return m_actionsCache.at( aIdentifier );
+}
+
+
 void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
 {
     if( !m_actionsCache.count( aIdentifier ) )

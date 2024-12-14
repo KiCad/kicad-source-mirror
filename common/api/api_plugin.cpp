@@ -208,6 +208,13 @@ wxString API_PLUGIN::BasePath() const
 }
 
 
+wxString API_PLUGIN::ActionSettingsKey( const PLUGIN_ACTION& aAction ) const
+{
+    return Identifier() + "." + aAction.identifier;
+}
+
+
+
 std::optional<PLUGIN_ACTION> API_PLUGIN::createActionFromJson( const nlohmann::json& aJson )
 {
     // TODO move to tl::expected and give user feedback about parse errors

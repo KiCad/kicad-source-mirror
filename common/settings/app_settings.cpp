@@ -41,6 +41,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_Printing(),
         m_SearchPane(),
         m_System(),
+        m_Plugins(),
         m_Window(),
         m_appSettingsSchemaVersion( aSchemaVersion )
 {
@@ -167,6 +168,39 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
 
     m_params.emplace_back( new PARAM<bool>( "system.show_import_issues",
                                             &m_System.show_import_issues, true ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "plugins.actions",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::array();
+
+                for( const auto& [identifier, visible] : m_Plugins.actions )
+                    js.push_back( nlohmann::json( { { identifier.ToUTF8(), visible } } ) );
+
+                return js;
+            },
+            [&]( const nlohmann::json& aObj )
+            {
+                m_Plugins.actions.clear();
+
+                if( !aObj.is_array() )
+                {
+                    return;
+                }
+
+                for( const auto& entry : aObj )
+                {
+                    if( entry.empty() || !entry.is_object() )
+                        continue;
+
+                    for( const auto& pair : entry.items() )
+                    {
+                        m_Plugins.actions.emplace_back( std::make_pair(
+                                wxString( pair.key().c_str(), wxConvUTF8 ), pair.value() ) );
+                    }
+                }
+            },
+            nlohmann::json::array() ) );
 
     m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme",
             &m_ColorTheme, COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT ) );

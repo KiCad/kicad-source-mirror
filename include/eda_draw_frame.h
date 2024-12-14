@@ -512,6 +512,16 @@ public:
 
     virtual PLUGIN_ACTION_SCOPE PluginActionScope() const { return PLUGIN_ACTION_SCOPE::INVALID; }
 
+    static bool IsPluginActionButtonVisible( const PLUGIN_ACTION& aAction, APP_SETTINGS_BASE* aCfg );
+
+    /**
+     * Return ordered list of plugin actions for display in the toolbar
+     * Must be static at the moment because this needs to be called from the preferences dialog,
+     * which can exist without the frame in question actually being created.
+     * @param aCfg is the settings to read the plugin ordering from
+     */
+    static std::vector<const PLUGIN_ACTION*> GetOrderedPluginActions( PLUGIN_ACTION_SCOPE aScope,
+        APP_SETTINGS_BASE* aCfg );
 
     DECLARE_EVENT_TABLE()
 

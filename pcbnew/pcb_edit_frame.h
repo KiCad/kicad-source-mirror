@@ -24,6 +24,7 @@
 #include "pcb_base_edit_frame.h"
 #include "zones.h"
 #include <mail_type.h>
+#include <settings/app_settings.h>
 
 class ACTION_PLUGIN;
 class PCB_SCREEN;
@@ -202,9 +203,9 @@ public:
 
     /**
      * Return ordered list of plugins in sequence in which they should appear on toolbar or
-     * in settings
+     * in settings.  Handles both legacy (SWIG) and API plugins, so returns a heterogenous list.
      */
-    static std::vector<ACTION_PLUGIN*> GetOrderedActionPlugins();
+    static std::vector<std::variant<ACTION_PLUGIN*, const PLUGIN_ACTION*>> GetOrderedActionPlugins();
 
     void SaveProjectLocalSettings() override;
 

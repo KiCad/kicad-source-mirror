@@ -158,6 +158,12 @@ public:
         bool                  show_import_issues;
     };
 
+    struct PLUGINS
+    {
+        /// Ordered list of plugin actions mapped to whether or not they are shown in the toolbar
+        std::vector<std::pair<wxString, bool>> actions;
+    };
+
     APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion );
 
     virtual ~APP_SETTINGS_BASE() {}
@@ -182,6 +188,8 @@ public:
     SEARCH_PANE m_SearchPane;
 
     SYSTEM m_System;
+
+    PLUGINS m_Plugins;
 
     WINDOW_SETTINGS m_Window;
 

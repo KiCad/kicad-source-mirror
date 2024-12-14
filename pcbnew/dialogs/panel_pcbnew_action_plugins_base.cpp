@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -14,6 +14,9 @@
 
 PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
 	wxBoxSizer* bPanelSizer;
 	bPanelSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -23,7 +26,7 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_grid->CreateGrid( 3, 6 );
+	m_grid->CreateGrid( 3, 5 );
 	m_grid->EnableEditing( false );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
@@ -33,12 +36,11 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	m_grid->AutoSizeColumns();
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelValue( 0, _("Icon") );
+	m_grid->SetColLabelValue( 0, _("Action") );
 	m_grid->SetColLabelValue( 1, _("Show Button") );
-	m_grid->SetColLabelValue( 2, _("Name") );
-	m_grid->SetColLabelValue( 3, _("Category") );
-	m_grid->SetColLabelValue( 4, _("Description") );
-	m_grid->SetColLabelValue( 5, _("Path") );
+	m_grid->SetColLabelValue( 2, _("Plugin") );
+	m_grid->SetColLabelValue( 3, _("Description") );
+	m_grid->SetColLabelValue( 4, wxEmptyString );
 	m_grid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -91,9 +93,12 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
-	this->SetSizer( bPanelSizer );
+	bSizer4->Add( bPanelSizer, 1, wxEXPAND, 5 );
+
+
+	this->SetSizer( bSizer4 );
 	this->Layout();
-	bPanelSizer->Fit( this );
+	bSizer4->Fit( this );
 
 	// Connect Events
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( PANEL_PCBNEW_ACTION_PLUGINS_BASE::OnGridCellClick ), NULL, this );

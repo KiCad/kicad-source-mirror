@@ -29,12 +29,21 @@
 #include <wx/dc.h>
 
 #include <bitmaps.h>
+#include <kiplatform/ui.h>
 
 
 GRID_CELL_ICON_TEXT_RENDERER::GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BITMAPS>& icons,
                                                             const wxArrayString& names ) :
     m_icons( icons ),
     m_names( names )
+{
+}
+
+
+GRID_CELL_ICON_TEXT_RENDERER::GRID_CELL_ICON_TEXT_RENDERER( const wxBitmapBundle& aIcon,
+                                                            wxSize aPreferredIconSize ) :
+    m_icon( aIcon ),
+    m_iconSize( aPreferredIconSize )
 {
 }
 
@@ -51,17 +60,18 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
     wxGridCellRenderer::Draw( aGrid, aAttr, aDC, aRect, aRow, aCol, isSelected );
 
     // draw the icon
-    // note that the set of icons might be smaller than the set of labels if the last
-    // label is <...>.
-    int position = m_names.Index( value );
     int leftCut = aDC.FromDIP( 4 );
 
-    if( position < (int) m_icons.size() && position != wxNOT_FOUND )
+    if( m_icon.IsOk() )
     {
-        wxBitmapBundle bundle = KiBitmapBundle( m_icons[position] );
+        wxSize size = m_iconSize == wxDefaultSize
+                            ? m_icon.GetPreferredBitmapSizeAtScale( aDC.GetContentScaleFactor() )
+                            : m_iconSize;
+        double scale = KIPLATFORM::UI::GetPixelScaleFactor( &aGrid );
+        wxBitmap bitmap = m_icon.GetBitmap( size * scale );
 
-        wxBitmap bitmap = bundle.GetBitmap(
-                bundle.GetPreferredBitmapSizeAtScale( aDC.GetContentScaleFactor() ) );
+        if( bitmap.IsOk() )
+            bitmap.SetScaleFactor( scale );
 
         aDC.DrawBitmap( bitmap,
                         rect.GetLeft() + leftCut,
@@ -70,14 +80,35 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
 
         leftCut += bitmap.GetLogicalWidth();
     }
-    else    // still need a bitmap to fetch the width
+    else
     {
-        wxBitmapBundle bundle = KiBitmapBundle( m_icons[0] );
+        // note that the set of icons might be smaller than the set of labels if the last
+        // label is <...>.
+        int position = m_names.Index( value );
 
-        wxBitmap bitmap = bundle.GetBitmap(
-                bundle.GetPreferredBitmapSizeAtScale( aDC.GetContentScaleFactor() ) );
+        if( position < (int) m_icons.size() && position != wxNOT_FOUND )
+        {
+            wxBitmapBundle bundle = KiBitmapBundle( m_icons[position] );
 
-        leftCut += bitmap.GetLogicalWidth();
+            wxBitmap bitmap = bundle.GetBitmap(
+                    bundle.GetPreferredBitmapSizeAtScale( aDC.GetContentScaleFactor() ) );
+
+            aDC.DrawBitmap( bitmap,
+                            rect.GetLeft() + leftCut,
+                            rect.GetTop() + ( rect.GetHeight() - bitmap.GetLogicalHeight() ) / 2,
+                            true );
+
+            leftCut += bitmap.GetLogicalWidth();
+        }
+        else    // still need a bitmap to fetch the width
+        {
+            wxBitmapBundle bundle = KiBitmapBundle( m_icons[0] );
+
+            wxBitmap bitmap = bundle.GetBitmap(
+                    bundle.GetPreferredBitmapSizeAtScale( aDC.GetContentScaleFactor() ) );
+
+            leftCut += bitmap.GetLogicalWidth();
+        }
     }
 
     leftCut += aDC.FromDIP( 4 );
@@ -90,19 +121,34 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
     aGrid.DrawTextRectangle( aDC, value, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
 }
 
+
 wxSize GRID_CELL_ICON_TEXT_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                                   int row, int col )
 {
-    int            bmpIdx = ( row < (int) m_icons.size() && row >= 0 ) ? row : 0;
-    wxBitmapBundle bundle = KiBitmapBundle( m_icons[bmpIdx] );
+    wxBitmap bitmap;
+    wxSize bitmapSize;
 
-    wxBitmap bitmap =
-            bundle.GetBitmap( bundle.GetPreferredBitmapSizeAtScale( dc.GetContentScaleFactor() ) );
+    if( m_icon.IsOk() )
+    {
+        bitmapSize = m_iconSize == wxDefaultSize
+                            ? m_icon.GetPreferredBitmapSizeAtScale( dc.GetContentScaleFactor() )
+                            : m_iconSize;
+    }
+    else
+    {
+        int            bmpIdx = ( row < (int) m_icons.size() && row >= 0 ) ? row : 0;
+        wxBitmapBundle bundle = KiBitmapBundle( m_icons[bmpIdx] );
+
+        bitmap = bundle.GetBitmap(
+                bundle.GetPreferredBitmapSizeAtScale( dc.GetContentScaleFactor() ) );
+        bitmapSize = wxSize( bitmap.GetLogicalWidth(), -1 );
+    }
 
     wxString text = grid.GetCellValue( row, col );
     wxSize   size = wxGridCellStringRenderer::DoGetBestSize( attr, dc, text );
 
-    size.x += bitmap.GetLogicalWidth() + dc.FromDIP( 8 );
+    size.x += bitmapSize.x + dc.FromDIP( 8 );
+    size.y = std::max( size.y, bitmapSize.y + dc.FromDIP( 2 ) );
 
     return size;
 }
