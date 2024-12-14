@@ -1333,12 +1333,12 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
     // Recache all bus aliases for later use
     wxCHECK_RET( m_schematic, wxS( "Connection graph cannot be built without schematic pointer" ) );
 
-    SCH_SHEET_LIST all_sheets = m_schematic->GetSheets();
+    SCH_SCREENS screens( m_schematic->Root() );
 
-    for( unsigned i = 0; i < all_sheets.size(); i++ )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        for( const std::shared_ptr<BUS_ALIAS>& alias : all_sheets[i].LastScreen()->GetBusAliases() )
-            m_bus_alias_cache[ alias->GetName() ] = alias;
+        for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
+            m_bus_alias_cache[alias->GetName()] = alias;
     }
 
     // Build subgraphs from items (on a per-sheet basis)
@@ -2051,12 +2051,12 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     // Recache all bus aliases for later use
     wxCHECK_RET( m_schematic, wxT( "Connection graph cannot be built without schematic pointer" ) );
 
-    SCH_SHEET_LIST all_sheets = m_schematic->GetSheets();
+    SCH_SCREENS screens( m_schematic->Root() );
 
-    for( unsigned i = 0; i < all_sheets.size(); i++ )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        for( const std::shared_ptr<BUS_ALIAS>& alias : all_sheets[i].LastScreen()->GetBusAliases() )
-            m_bus_alias_cache[ alias->GetName() ] = alias;
+        for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
+            m_bus_alias_cache[alias->GetName()] = alias;
     }
 
     PROF_TIMER sub_graph( "buildItemSubGraphs" );
