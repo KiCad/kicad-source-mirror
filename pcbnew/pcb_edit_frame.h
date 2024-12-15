@@ -25,6 +25,7 @@
 #include "zones.h"
 #include <mail_type.h>
 #include <settings/app_settings.h>
+#include <variant>
 
 class ACTION_PLUGIN;
 class PCB_SCREEN;
