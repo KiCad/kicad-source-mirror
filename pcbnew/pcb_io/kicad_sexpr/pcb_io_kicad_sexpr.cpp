@@ -2103,17 +2103,6 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable ) const
     if( aTable->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
-    EDA_ANGLE angle = aTable->GetOrientation();
-
-    if( FOOTPRINT* parentFP = aTable->GetParentFootprint() )
-    {
-        angle -= parentFP->GetOrientation();
-        angle.Normalize720();
-    }
-
-    if( !angle.IsZero() )
-        m_out->Print( "(angle %s)", EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
-
     formatLayer( aTable->GetLayer() );
 
     m_out->Print( "(border" );

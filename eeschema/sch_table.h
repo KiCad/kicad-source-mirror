@@ -93,6 +93,7 @@ public:
     void SetPosition( const VECTOR2I& aPos ) override;
     VECTOR2I GetPosition() const override;
     VECTOR2I GetEnd() const;
+    VECTOR2I GetCenter() const;
 
     // For property manager:
     void SetPositionX( int x ) { SetPosition( VECTOR2I( x, GetPosition().y ) ); }

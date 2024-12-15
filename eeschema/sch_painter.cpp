@@ -2018,6 +2018,9 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
 
 void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
 {
+    if( aTable->GetCells().empty() )
+        return;
+
     for( SCH_TABLECELL* cell : aTable->GetCells() )
         draw( cell, aLayer, aDimmed );
 
@@ -2108,6 +2111,9 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
                     SCH_TABLECELL* cell = aTable->GetCell( row, col );
                     VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
 
+                    if( !cell->GetTextAngle().IsHorizontal() )
+                        topRight = VECTOR2I( cell->GetStartX(), cell->GetEndY() );
+
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                         strokeLine( topRight, cell->GetEnd() );
                 }
@@ -2123,6 +2129,9 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
                     SCH_TABLECELL* cell = aTable->GetCell( row, col );
                     VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
 
+                    if( !cell->GetTextAngle().IsHorizontal() )
+                        botLeft = VECTOR2I( cell->GetEndX(), cell->GetStartY() );
+
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                         strokeLine( botLeft, cell->GetEnd() );
                 }
@@ -2132,16 +2141,28 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
 
     if( aTable->GetBorderStroke().GetWidth() >= 0 )
     {
+        SCH_TABLECELL* first = aTable->GetCell( 0, 0 );
+
         setupStroke( aTable->GetBorderStroke() );
 
         if( aTable->StrokeHeader() )
         {
-            SCH_TABLECELL* cell = aTable->GetCell( 0, 0 );
-            strokeLine( VECTOR2I( pos.x, cell->GetEndY() ), VECTOR2I( end.x, cell->GetEndY() ) );
+            if( !first->GetTextAngle().IsHorizontal() )
+                strokeLine( VECTOR2I( first->GetEndX(), pos.y ), VECTOR2I( first->GetEndX(), first->GetEndY() ) );
+            else
+                strokeLine( VECTOR2I( pos.x, first->GetEndY() ), VECTOR2I( end.x, first->GetEndY() ) );
         }
 
         if( aTable->StrokeExternal() )
+        {
+            if( !first->GetTextAngle().IsHorizontal() )
+            {
+                RotatePoint( pos, aTable->GetPosition(), ANGLE_90 );
+                RotatePoint( end, aTable->GetPosition(), ANGLE_90 );
+            }
+
             strokeRect( pos, end );
+        }
     }
 }
 

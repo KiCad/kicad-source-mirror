@@ -1101,16 +1101,14 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         break;
     }
 
-    // other types may use linked list
-    default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "BOARD::Add() needs work: BOARD_ITEM type (%d) not handled" ),
-                        aBoardItem->Type() );
-            wxFAIL_MSG( msg );
-            return;
-        }
+    case PCB_TABLECELL_T:
+        // Handled by parent table
         break;
+
+    default:
+        wxFAIL_MSG( wxString::Format( wxT( "BOARD::Add() item type %s not handled" ),
+                                      aBoardItem->GetClass() ) );
+        return;
     }
 
     aBoardItem->SetParent( this );
@@ -1120,9 +1118,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         m_connectivity->Add( aBoardItem );
 
     if( aMode != ADD_MODE::BULK_INSERT && aMode != ADD_MODE::BULK_APPEND )
-    {
         InvokeListeners( &BOARD_LISTENER::OnBoardItemAdded, *this, aBoardItem );
-    }
 }
 
 
@@ -1225,9 +1221,14 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         break;
     }
 
+    case PCB_TABLECELL_T:
+        // Handled by parent table
+        break;
+
     // other types may use linked list
     default:
-        wxFAIL_MSG( wxT( "BOARD::Remove() needs more ::Type() support" ) );
+        wxFAIL_MSG( wxString::Format( wxT( "BOARD::Remove() item type %s not handled" ),
+                                      aBoardItem->GetClass() ) );
     }
 
     aBoardItem->SetFlags( STRUCT_DELETED );

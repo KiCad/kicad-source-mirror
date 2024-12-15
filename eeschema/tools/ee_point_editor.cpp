@@ -354,8 +354,10 @@ private:
 class SCH_TABLECELL_POINT_EDIT_BEHAVIOR : public EDA_TABLECELL_POINT_EDIT_BEHAVIOR
 {
 public:
-    SCH_TABLECELL_POINT_EDIT_BEHAVIOR( SCH_TABLECELL& aCell ) :
-            EDA_TABLECELL_POINT_EDIT_BEHAVIOR( aCell ), m_cell( aCell )
+    SCH_TABLECELL_POINT_EDIT_BEHAVIOR( SCH_TABLECELL& aCell, SCH_SCREEN& aScreen ) :
+            EDA_TABLECELL_POINT_EDIT_BEHAVIOR( aCell ),
+            m_cell( aCell ),
+            m_screen( aScreen )
     {
     }
 
@@ -363,30 +365,60 @@ public:
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         SCH_TABLE& table = static_cast<SCH_TABLE&>( *m_cell.GetParent() );
-        aCommit.Modify( &table );
+        bool       rotated = !m_cell.GetTextAngle().IsHorizontal();
+
+        aCommit.Modify( &table, &m_screen );
         aUpdatedItems.push_back( &table );
 
-        if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
+        if( rotated )
         {
-            m_cell.SetEnd( VECTOR2I( aPoints.Point( 0 ).GetX(), m_cell.GetEndY() ) );
+            if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
+            {
+                m_cell.SetEnd( VECTOR2I( m_cell.GetEndX(), aPoints.Point( ROW_HEIGHT ).GetY() ) );
 
-            int colWidth = m_cell.GetRectangleWidth();
+                int colWidth = std::abs( m_cell.GetRectangleHeight() );
 
-            for( int ii = 0; ii < m_cell.GetColSpan() - 1; ++ii )
-                colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
+                for( int ii = 0; ii < m_cell.GetColSpan() - 1; ++ii )
+                    colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
 
-            table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
+                table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
+            {
+                m_cell.SetEnd( VECTOR2I( aPoints.Point( COL_WIDTH ).GetX(), m_cell.GetEndY() ) );
+
+                int rowHeight = m_cell.GetRectangleWidth();
+
+                for( int ii = 0; ii < m_cell.GetRowSpan() - 1; ++ii )
+                    rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
+
+                table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
+            }
         }
-        else if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
+        else
         {
-            m_cell.SetEnd( VECTOR2I( m_cell.GetEndX(), aPoints.Point( 1 ).GetY() ) );
+            if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
+            {
+                m_cell.SetEnd( VECTOR2I( aPoints.Point( COL_WIDTH ).GetX(), m_cell.GetEndY() ) );
 
-            int rowHeight = m_cell.GetRectangleHeight();
+                int colWidth = m_cell.GetRectangleWidth();
 
-            for( int ii = 0; ii < m_cell.GetRowSpan() - 1; ++ii )
-                rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
+                for( int ii = 0; ii < m_cell.GetColSpan() - 1; ++ii )
+                    colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
 
-            table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
+                table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
+            {
+                m_cell.SetEnd( VECTOR2I( m_cell.GetEndX(), aPoints.Point( ROW_HEIGHT ).GetY() ) );
+
+                int rowHeight = m_cell.GetRectangleHeight();
+
+                for( int ii = 0; ii < m_cell.GetRowSpan() - 1; ++ii )
+                    rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
+
+                table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
+            }
         }
 
         table.Normalize();
@@ -394,6 +426,7 @@ public:
 
 private:
     SCH_TABLECELL& m_cell;
+    SCH_SCREEN&    m_screen;
 };
 
 
@@ -902,7 +935,7 @@ void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
     case SCH_TABLECELL_T:
     {
         SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( aItem );
-        m_editBehavior = std::make_unique<SCH_TABLECELL_POINT_EDIT_BEHAVIOR>( *cell );
+        m_editBehavior = std::make_unique<SCH_TABLECELL_POINT_EDIT_BEHAVIOR>( *cell, *m_frame->GetScreen() );
         break;
     }
     case SCH_SHEET_T:
@@ -1082,8 +1115,8 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
             bool snap = !evt->DisableGridSnapping();
 
-            cursorPos =
-                    grid->Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+            cursorPos = grid->Align( controls->GetMousePosition(),
+                                     GRID_HELPER_GRIDS::GRID_GRAPHICS );
             controls->ForceCursorPosition( true, cursorPos );
 
             m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
@@ -1167,9 +1200,8 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
     m_editBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updatedItems );
 
     for( EDA_ITEM* updatedItem : updatedItems )
-    {
         updateItem( updatedItem, true );
-    }
+
     m_frame->SetMsgPanel( item );
 }
 

@@ -3722,8 +3722,7 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
             NeedRIGHT();
             break;
 
-        case T_angle:
-            table->SetOrientation( EDA_ANGLE( parseDouble( "table angle" ), DEGREES_T ) );
+        case T_angle:   // legacy token no longer used
             NeedRIGHT();
             break;
 
@@ -3853,9 +3852,6 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
                        "cells" );
         }
     }
-
-    if( FOOTPRINT* parentFP = table->GetParentFootprint() )
-        table->SetOrientation( table->GetOrientation() + parentFP->GetOrientation() );
 
     return table.release();
 }

@@ -515,7 +515,7 @@ void PCB_TEXTBOX::Move( const VECTOR2I& aMoveVector )
 void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     PCB_SHAPE::Rotate( aRotCentre, aAngle );
-    EDA_TEXT::SetTextAngle( ( GetTextAngle() + aAngle ).Normalized() );
+    EDA_TEXT::SetTextAngle( ( GetTextAngle() + aAngle ).Normalize90() );
 
     if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECTANGLE )
     {
@@ -556,10 +556,7 @@ void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     PCB_SHAPE::Flip( aCentre, aFlipDirection );
 
-    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-        EDA_TEXT::SetTextAngle( -GetTextAngle() );
-    else
-        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
+    EDA_TEXT::SetTextAngle( -GetTextAngle() );
 
     if( IsSideSpecific() )
         SetMirrored( !IsMirrored() );

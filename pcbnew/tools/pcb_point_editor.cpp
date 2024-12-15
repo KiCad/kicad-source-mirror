@@ -964,27 +964,55 @@ public:
         aCommit.Modify( &table );
         aUpdatedItems.push_back( &table );
 
-        if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
+        if( !m_cell.GetTextAngle().IsHorizontal() )
         {
-            m_cell.SetEnd( VECTOR2I( aPoints.Point( 0 ).GetX(), m_cell.GetEndY() ) );
+            if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
+            {
+                m_cell.SetEnd( VECTOR2I( m_cell.GetEndX(), aPoints.Point( ROW_HEIGHT ).GetY() ) );
 
-            int colWidth = m_cell.GetRectangleWidth();
+                int colWidth = std::abs( m_cell.GetRectangleHeight() );
 
-            for( int ii = 0; ii < m_cell.GetColSpan() - 1; ++ii )
-                colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
+                for( int ii = 0; ii < m_cell.GetColSpan() - 1; ++ii )
+                    colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
 
-            table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
+                table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
+            {
+                m_cell.SetEnd( VECTOR2I( aPoints.Point( COL_WIDTH ).GetX(), m_cell.GetEndY() ) );
+
+                int rowHeight = m_cell.GetRectangleWidth();
+
+                for( int ii = 0; ii < m_cell.GetRowSpan() - 1; ++ii )
+                    rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
+
+                table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
+            }
         }
-        else if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
+        else
         {
-            m_cell.SetEnd( VECTOR2I( m_cell.GetEndX(), aPoints.Point( 1 ).GetY() ) );
+            if( isModified( aEditedPoint, aPoints.Point( COL_WIDTH ) ) )
+            {
+                m_cell.SetEnd( VECTOR2I( aPoints.Point( COL_WIDTH ).GetX(), m_cell.GetEndY() ) );
 
-            int rowHeight = m_cell.GetRectangleHeight();
+                int colWidth = m_cell.GetRectangleWidth();
 
-            for( int ii = 0; ii < m_cell.GetRowSpan() - 1; ++ii )
-                rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
+                for( int ii = 0; ii < m_cell.GetColSpan() - 1; ++ii )
+                    colWidth -= table.GetColWidth( m_cell.GetColumn() + ii );
 
-            table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
+                table.SetColWidth( m_cell.GetColumn() + m_cell.GetColSpan() - 1, colWidth );
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( ROW_HEIGHT ) ) )
+            {
+                m_cell.SetEnd( VECTOR2I( m_cell.GetEndX(), aPoints.Point( ROW_HEIGHT ).GetY() ) );
+
+                int rowHeight = m_cell.GetRectangleHeight();
+
+                for( int ii = 0; ii < m_cell.GetRowSpan() - 1; ++ii )
+                    rowHeight -= table.GetRowHeight( m_cell.GetRow() + ii );
+
+                table.SetRowHeight( m_cell.GetRow() + m_cell.GetRowSpan() - 1, rowHeight );
+            }
         }
 
         table.Normalize();

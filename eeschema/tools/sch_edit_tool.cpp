@@ -873,10 +873,11 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         {
             // Rotate the table on itself. Tables do not have an anchor point.
             SCH_TABLE* table = static_cast<SCH_TABLE*>( head );
-            BOX2I      box( table->GetPosition(), table->GetEnd() - table->GetPosition() );
-            rotPoint = m_frame->GetNearestHalfGridPosition( box.GetCenter() );
+            rotPoint = m_frame->GetNearestHalfGridPosition( table->GetCenter() );
 
-            head->Rotate( rotPoint, !clockwise );
+            table->Rotate( rotPoint, !clockwise );
+
+            table->Move( rotPoint - m_frame->GetNearestHalfGridPosition( table->GetCenter() ) );
 
             break;
         }
@@ -966,6 +967,16 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 // Now that we're moving a field, they're no longer autoplaced.
                 static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
             }
+        }
+        else if( item->Type() == SCH_TABLE_T )
+        {
+            SCH_TABLE* table = static_cast<SCH_TABLE*>( item );
+            VECTOR2I   beforeCenter = table->GetCenter();
+
+            table->Rotate( rotPoint, !clockwise );
+            RotatePoint( beforeCenter, rotPoint, clockwise ? -ANGLE_90 : ANGLE_90 );
+
+            table->Move( beforeCenter - table->GetCenter() );
         }
         else
         {

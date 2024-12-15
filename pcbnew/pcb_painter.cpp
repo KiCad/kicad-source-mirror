@@ -2435,12 +2435,14 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
 {
+    if( aTable->GetCells().empty() )
+        return;
+
     for( PCB_TABLECELL* cell : aTable->GetCells() )
         draw( static_cast<PCB_TEXTBOX*>( cell ), aLayer );
 
     VECTOR2I  pos = aTable->GetPosition();
     VECTOR2I  end = aTable->GetEnd();
-    EDA_ANGLE drawOrientation = aTable->GetOrientation();
 
     // Selection for tables is done with a background wash, so pass in nullptr to GetColor()
     // so we just get the "normal" (un-selected/un-brightened) color for the borders.
@@ -2466,9 +2468,6 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                 STROKE_PARAMS::Stroke( &shape, lineStyle, lineWidth, &m_pcbSettings,
                         [&]( VECTOR2I a, VECTOR2I b )
                         {
-                            RotatePoint( a, pos, drawOrientation );
-                            RotatePoint( b, pos, drawOrientation );
-
                             // DrawLine has problem with 0 length lines so enforce minimum
                             if( a == b )
                                 m_gal->DrawLine( a+1, b );
@@ -2480,9 +2479,6 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
     auto strokeLine =
             [&]( VECTOR2I ptA, VECTOR2I ptB )
             {
-                RotatePoint( ptA, pos, drawOrientation );
-                RotatePoint( ptB, pos, drawOrientation );
-
                 if( lineStyle <= LINE_STYLE::FIRST_TYPE )
                 {
                     m_gal->DrawLine( ptA, ptB );
@@ -2497,9 +2493,6 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
     auto strokeRect =
             [&]( VECTOR2I ptA, VECTOR2I ptB )
             {
-                RotatePoint( ptA, pos, drawOrientation );
-                RotatePoint( ptB, pos, drawOrientation );
-
                 if( lineStyle <= LINE_STYLE::FIRST_TYPE )
                 {
                     m_gal->DrawRectangle( ptA, ptB );
@@ -2524,6 +2517,9 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
                     VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
 
+                    if( !cell->GetTextAngle().IsHorizontal() )
+                        topRight = VECTOR2I( cell->GetStartX(), cell->GetEndY() );
+
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                         strokeLine( topRight, cell->GetEnd() );
                 }
@@ -2539,6 +2535,9 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
                     VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
 
+                    if( !cell->GetTextAngle().IsHorizontal() )
+                        botLeft = VECTOR2I( cell->GetEndX(), cell->GetStartY() );
+
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                         strokeLine( botLeft, cell->GetEnd() );
                 }
@@ -2548,17 +2547,25 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
 
     if( aTable->GetBorderStroke().GetWidth() >= 0 )
     {
+        PCB_TABLECELL* first = aTable->GetCell( 0, 0 );
+
         setupStroke( aTable->GetBorderStroke() );
 
         if( aTable->StrokeHeader() )
         {
-            int headerBottom = pos.y + aTable->GetRowHeight( 0 );
-
-            strokeLine( VECTOR2I( pos.x, headerBottom ), VECTOR2I( end.x, headerBottom ) );
+            if( !first->GetTextAngle().IsHorizontal() )
+                strokeLine( VECTOR2I( first->GetEndX(), pos.y ), VECTOR2I( first->GetEndX(), first->GetEndY() ) );
+            else
+                strokeLine( VECTOR2I( pos.x, first->GetEndY() ), VECTOR2I( end.x, first->GetEndY() ) );
         }
 
         if( aTable->StrokeExternal() )
+        {
+            RotatePoint( pos, aTable->GetPosition(), first->GetTextAngle() );
+            RotatePoint( end, aTable->GetPosition(), first->GetTextAngle() );
+
             strokeRect( pos, end );
+        }
     }
 
     // Highlight selected tablecells with a background wash.

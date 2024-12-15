@@ -118,6 +118,20 @@ VECTOR2I SCH_TABLE::GetPosition() const
 }
 
 
+VECTOR2I SCH_TABLE::GetCenter() const
+{
+    BOX2I bbox;
+
+    for( SCH_TABLECELL* cell : m_cells )
+    {
+        bbox.Merge( cell->GetPosition() );
+        bbox.Merge( cell->GetEnd() );
+    }
+
+    return bbox.GetCenter();
+}
+
+
 VECTOR2I SCH_TABLE::GetEnd() const
 {
     VECTOR2I tableSize;
@@ -134,8 +148,6 @@ VECTOR2I SCH_TABLE::GetEnd() const
 
 void SCH_TABLE::Normalize()
 {
-    // JEY TODO: pukes on rotated tables...
-
     int y = GetPosition().y;
 
     for( int row = 0; row < GetRowCount(); ++row )
@@ -150,13 +162,15 @@ void SCH_TABLE::Normalize()
             SCH_TABLECELL* cell = GetCell( row, col );
             VECTOR2I       pos( x, y );
 
+            RotatePoint( pos, GetPosition(), cell->GetTextAngle() );
+
             if( cell->GetPosition() != pos )
             {
                 cell->SetPosition( pos );
                 cell->ClearRenderCache();
             }
 
-            VECTOR2I end = cell->GetStart() + VECTOR2I( colWidth, rowHeight );
+            VECTOR2I end = VECTOR2I( x + colWidth, y + rowHeight );
 
             if( cell->GetColSpan() > 1 || cell->GetRowSpan() > 1 )
             {
@@ -166,6 +180,8 @@ void SCH_TABLE::Normalize()
                 for( int ii = row + 1; ii < row + cell->GetRowSpan(); ++ii )
                     end.y += m_rowHeights[ii];
             }
+
+            RotatePoint( end, GetPosition(), cell->GetTextAngle() );
 
             if( cell->GetEnd() != end )
             {
