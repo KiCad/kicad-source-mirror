@@ -258,7 +258,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         if( !ent.m_item || !ent.m_item->IsBOARD_ITEM() )
             continue;
 
-        BOARD_ITEM* boardItem = boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
         int         changeType = ent.m_type & CHT_TYPE;
         int         changeFlags = ent.m_type & CHT_FLAGS;
 
