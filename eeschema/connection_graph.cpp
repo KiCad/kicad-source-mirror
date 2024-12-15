@@ -275,7 +275,9 @@ void CONNECTION_SUBGRAPH::getAllConnectedItems( std::set<std::pair<SCH_SHEET_PAT
 
     while( sg->m_absorbed_by )
     {
-        wxASSERT( sg->m_graph == sg->m_absorbed_by->m_graph );
+        // Using wxCHECK2 with continue statement causes a crash later in the connection
+        // graph rebuild.  See https://gitlab.com/kicad/code/kicad/-/issues/18136.
+        wxCHECK( sg->m_graph == sg->m_absorbed_by->m_graph, /* void */ );
         sg = sg->m_absorbed_by;
     }
 
@@ -453,7 +455,7 @@ const wxString CONNECTION_SUBGRAPH::GetNetclassForDriver( SCH_ITEM* aItem ) cons
 
 void CONNECTION_SUBGRAPH::Absorb( CONNECTION_SUBGRAPH* aOther )
 {
-    wxASSERT( m_sheet == aOther->m_sheet );
+    wxCHECK( m_sheet == aOther->m_sheet, /* void */ );
 
     for( SCH_ITEM* item : aOther->m_items )
     {
@@ -827,14 +829,14 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
         // Find the primary subgraph on this sheet
         while( aSubgraph->m_absorbed_by )
         {
-            wxASSERT( aSubgraph->m_graph == aSubgraph->m_absorbed_by->m_graph );
+            wxCHECK2( aSubgraph->m_graph == aSubgraph->m_absorbed_by->m_graph, continue );
             aSubgraph = aSubgraph->m_absorbed_by;
         }
 
         // Find the top most connected subgraph on all sheets
         while( aSubgraph->m_hier_parent )
         {
-            wxASSERT( aSubgraph->m_graph == aSubgraph->m_hier_parent->m_graph );
+            wxCHECK2( aSubgraph->m_graph == aSubgraph->m_hier_parent->m_graph, continue );
             aSubgraph = aSubgraph->m_hier_parent;
         }
 
@@ -848,9 +850,11 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
 
         if( !item_sg )
         {
-            wxLogTrace( ConnTrace, wxT( "Item %s not found in connection graph" ), aItem->GetTypeDesc() );
+            wxLogTrace( ConnTrace, wxT( "Item %s not found in connection graph" ),
+                        aItem->GetTypeDesc() );
             return;
         }
+
         if( !item_sg->ResolveDrivers( true ) )
         {
             wxLogTrace( ConnTrace, wxT( "Item %s in subgraph %ld (%p) has no driver" ),
@@ -1386,7 +1390,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
 
                     SCH_CONNECTION* connected_conn = connected_item->Connection( &sheet );
 
-                    wxASSERT( connected_conn );
+                    wxCHECK2( connected_conn, continue );
 
                     if( connected_conn->SubgraphCode() == 0 )
                     {
@@ -1536,7 +1540,7 @@ void CONNECTION_GRAPH::collectAllDriverValues()
             case SCH_PIN_T:
             {
                 SCH_PIN* pin = static_cast<SCH_PIN*>( driver );
-                wxASSERT( pin->IsGlobalPower() );
+                wxCHECK( pin->IsGlobalPower(), /* void */ );
                 m_global_label_cache[name].push_back( subgraph );
                 break;
             }
@@ -1972,9 +1976,10 @@ void CONNECTION_GRAPH::processSubGraphs()
                         }
                         else
                         {
-                            wxASSERT( driver->Type() == SCH_LABEL_T ||
+                            wxCHECK2( driver->Type() == SCH_LABEL_T ||
                                       driver->Type() == SCH_GLOBAL_LABEL_T ||
-                                      driver->Type() == SCH_HIER_LABEL_T );
+                                      driver->Type() == SCH_HIER_LABEL_T,
+                                      continue );
 
                             if( subgraph->GetNameForDriver( driver )  == test_name )
                             {
@@ -2198,7 +2203,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
         // All SGs should have been processed by propagateToNeighbors above
-        wxASSERT_MSG( !subgraph->m_dirty,
+        wxCHECK2_MSG( !subgraph->m_dirty, continue,
                       wxS( "Subgraph not processed by propagateToNeighbors!" ) );
 
         if( subgraph->m_bus_parents.size() < 2 )
@@ -2209,7 +2214,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
         wxLogTrace( ConnTrace, wxS( "%lu (%s) has multiple bus parents" ),
                     subgraph->m_code, conn->Name() );
 
-        wxASSERT( conn->IsNet() );
+        wxCHECK2( conn->IsNet(), continue );
 
         for( const auto& ii : subgraph->m_bus_parents )
         {
@@ -2575,7 +2580,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                         candidate->m_hier_parent = aParent;
                         aParent->m_hier_children.insert( candidate );
 
-                        wxASSERT( candidate->m_graph == aParent->m_graph );
+                        wxCHECK2( candidate->m_graph == aParent->m_graph, continue );
 
                         search_list.push_back( candidate );
                         break;
@@ -2693,7 +2698,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                     continue;
 
                 // Safety check against infinite recursion
-                wxASSERT( neighbor_conn->IsNet() );
+                wxCHECK2( neighbor_conn->IsNet(), continue );
 
                 wxLogTrace( ConnTrace, wxS( "%lu (%s) connected to bus member %s (local %s)" ),
                             neighbor->m_code, neighbor_name, member->Name(), member->LocalName() );
@@ -2903,7 +2908,7 @@ std::shared_ptr<SCH_CONNECTION> CONNECTION_GRAPH::getDefaultConnection( SCH_ITEM
 SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember( SCH_CONNECTION* aBusConnection,
                                                   SCH_CONNECTION* aSearch )
 {
-    wxASSERT( aBusConnection->IsBus() );
+    wxCHECK( aBusConnection->IsBus(), nullptr );
 
     SCH_CONNECTION* match = nullptr;
 
@@ -2985,7 +2990,7 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
     for( CONNECTION_SUBGRAPH* subgraph : m_subgraphs )
     {
         // Graph is supposed to be up-to-date before calling this
-        wxASSERT( !subgraph->m_dirty );
+        wxCHECK2( !subgraph->m_dirty, continue );
 
         if( !subgraph->m_driver )
             continue;
@@ -3063,7 +3068,7 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName( const wxString& aNetN
     for( CONNECTION_SUBGRAPH* sg : it->second )
     {
         // Cache is supposed to be valid by now
-        wxASSERT( sg && !sg->m_absorbed && sg->m_driver_connection );
+        wxCHECK2( sg && !sg->m_absorbed && sg->m_driver_connection, continue );
 
         if( sg->m_sheet == aPath && sg->m_driver_connection->Name() == aNetName )
             return sg;
@@ -3080,7 +3085,7 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindFirstSubgraphByName( const wxString& 
     if( it == m_net_name_to_subgraphs_map.end() )
         return nullptr;
 
-    wxASSERT( !it->second.empty() );
+    wxCHECK( !it->second.empty(), nullptr );
 
     return it->second[0];
 }
@@ -3130,7 +3135,7 @@ int CONNECTION_GRAPH::RunERC()
         wxCHECK2( subgraph, continue );
 
         // Graph is supposed to be up-to-date before calling RunERC()
-        wxASSERT( !subgraph->m_dirty );
+        wxCHECK2( !subgraph->m_dirty, continue );
 
         if( subgraph->m_absorbed )
             continue;
