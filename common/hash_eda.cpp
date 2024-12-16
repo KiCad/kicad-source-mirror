@@ -27,6 +27,7 @@
 #include <hash.h>
 #include <footprint.h>
 #include <pcb_text.h>
+#include <pcb_table.h>
 #include <pcb_textbox.h>
 #include <pcb_shape.h>
 #include <pad.h>
@@ -269,6 +270,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     }
         break;
 
+    case PCB_TABLECELL_T:
     case PCB_TEXTBOX_T:
     {
         const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( aItem );
@@ -315,7 +317,27 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         break;
 
     case PCB_TABLE_T:
-        // JEY TODO: tables
+    {
+        const PCB_TABLE* table = static_cast<const PCB_TABLE*>( aItem );
+
+        ret = hash_board_item( table, aFlags );
+
+        hash_combine( ret, table->StrokeExternal() );
+        hash_combine( ret, table->StrokeHeader() );
+        hash_combine( ret, table->StrokeColumns() );
+        hash_combine( ret, table->StrokeRows() );
+
+        auto hash_stroke =
+                [&]( const STROKE_PARAMS& stroke )
+                {
+                    hash_combine( ret, stroke.GetColor() );
+                    hash_combine( ret, stroke.GetWidth() );
+                    hash_combine( ret, stroke.GetLineStyle() );
+                };
+
+        hash_stroke( table->GetSeparatorsStroke() );
+        hash_stroke( table->GetBorderStroke() );
+    }
         break;
 
     default:
