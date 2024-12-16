@@ -20,7 +20,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../../../../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h"
 #include "tool/tool_action.h"
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
