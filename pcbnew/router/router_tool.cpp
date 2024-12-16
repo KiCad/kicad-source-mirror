@@ -20,7 +20,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tool/tool_action.h"
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
 #include <advanced_config.h>
@@ -56,6 +55,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <gal/painter.h>
+#include <tool/tool_action.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_menu.h>
