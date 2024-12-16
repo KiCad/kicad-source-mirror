@@ -475,8 +475,8 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     if( fileName != BASE_SCREEN::m_DrawingSheetFileName )
     {
-
-        wxString fullFileName = m_filenameResolver->ResolvePath( fileName, m_projectPath, m_embeddedFiles );
+        wxString fullFileName = m_filenameResolver->ResolvePath( fileName, m_projectPath,
+                                                                 m_embeddedFiles );
 
         BASE_SCREEN::m_DrawingSheetFileName = fileName;
 
