@@ -20,6 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../../../../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h"
 #include "tool/tool_action.h"
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
@@ -2172,9 +2173,13 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     std::unique_ptr<CONNECTIVITY_DATA>  dynamicData = nullptr;
     VECTOR2I                            lastOffset;
     std::vector<PNS::ITEM*>             leaderSegments;
+    bool                                singleFootprintDrag = false;
 
     if( !footprints.empty() )
     {
+        if( footprints.size() == 1 )
+            singleFootprintDrag = true;
+
         if( showCourtyardConflicts )
             courtyardClearanceDRC.Init( board() );
 
@@ -2250,7 +2255,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         if( highlightNetcodes.size() )
             highlightNets( true, highlightNetcodes );
     }
-    else if( !footprints.empty() )
+
+    if( !footprints.empty() && singleFootprintDrag )
     {
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
