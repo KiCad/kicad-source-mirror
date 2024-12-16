@@ -387,7 +387,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             wxLogTrace( traceApi, "Manager: calling python %s", cmd );
 
             manager.Execute( cmd,
-                [=]( int aRetVal, const wxString& aOutput, const wxString& aError )
+                [this]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi, wxString::Format( "Manager: upgrade pip (%d): %s",
                                                             aRetVal, aOutput ) );
