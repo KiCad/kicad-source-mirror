@@ -32,17 +32,17 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
     auto& comp = m_compList.emplace_back( m_compList.size(), aPkg.m_index );
 
     comp.m_center = ODB::AddXY( aFp->GetPosition() );
+    EDA_ANGLE angle = aFp->GetOrientation();
 
-    if( aFp->GetOrientation() != ANGLE_0 )
+    if( angle != ANGLE_0 )
     {
         // odb Rotation is expressed in degrees and is always clockwise.
         // while kicad EDA_ANGLE is anticlockwise.
-
-        comp.m_rot =
-                ODB::Double2String( ( ANGLE_360 - aFp->GetOrientation() ).Normalize().AsDegrees() );
+        angle = ANGLE_360 - angle;
+        comp.m_rot = ODB::Double2String( angle.Normalize().AsDegrees() );
     }
 
-    if( aFp->GetLayer() != F_Cu )
+    if( aFp->IsFlipped() )
     {
         comp.m_mirror = wxT( "M" );
     }

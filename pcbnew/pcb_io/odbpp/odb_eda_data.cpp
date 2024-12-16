@@ -199,8 +199,12 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
     fp->SetParentGroup( nullptr );
     fp->SetPosition( { 0, 0 } );
 
-    if( fp->GetLayer() != F_Cu )
+    if( aFp->IsFlipped() )
+    {
+        // ODB++ needs both flips
+        fp->Flip( fp->GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
         fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+    }
 
     fp->SetOrientation( ANGLE_0 );
 
@@ -233,6 +237,7 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
     for( size_t i = 0; i < fp->Pads().size(); ++i )
     {
         const PAD* pad1 = fp->Pads()[i];
+
         for( size_t j = i + 1; j < fp->Pads().size(); ++j )
         {
             const PAD*     pad2 = fp->Pads()[j];
