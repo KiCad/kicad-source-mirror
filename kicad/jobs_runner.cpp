@@ -107,6 +107,8 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 			m_reporter->Report( msg, RPT_SEVERITY_ERROR );
 		}
 
+        aOutput->m_lastRunSuccess = false;
+
 		return false;
     }
 
@@ -171,6 +173,15 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 			}
         }
 
+        if( result == 0 )
+        {
+            aOutput->m_lastRunSuccessMap[job.m_id] = true;
+        }
+        else
+        {
+            aOutput->m_lastRunSuccessMap[job.m_id] = false;
+        }
+
         if( m_reporter )
         {
             if( result == 0 )
@@ -207,8 +218,10 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
     if( success )
     {
-        aOutput->m_outputHandler->HandleOutputs( tempDirPath, outputs );
+        success = aOutput->m_outputHandler->HandleOutputs( tempDirPath, outputs );
     }
+
+    aOutput->m_lastRunSuccess = success;
 
     if( m_reporter )
     {

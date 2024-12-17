@@ -209,6 +209,54 @@ private:
 };
 
 
+class DIALOG_OUTPUT_RUN_RESULTS : public DIALOG_OUTPUT_RUN_RESULTS_BASE
+{
+public:
+    DIALOG_OUTPUT_RUN_RESULTS( wxWindow* aParent,
+                                JOBSET* aJobsFile,
+                                JOBSET_OUTPUT* aOutput ) :
+        DIALOG_OUTPUT_RUN_RESULTS_BASE( aParent )
+    {
+        m_staticTextOutputName->SetLabel( aOutput->m_outputHandler->GetOutputPath() );
+
+        int jobBmpColId = m_jobList->AppendColumn( _( "" ) );
+        int jobNoColId = m_jobList->AppendColumn( _( "No." ) );
+        int jobDescColId = m_jobList->AppendColumn( _( "Job Description" ) );
+        m_jobList->SetColumnWidth( jobBmpColId, wxLIST_AUTOSIZE_USEHEADER );
+        m_jobList->SetColumnWidth( jobNoColId, wxLIST_AUTOSIZE_USEHEADER );
+        m_jobList->SetColumnWidth( jobDescColId, wxLIST_AUTOSIZE_USEHEADER );
+
+        wxImageList* imageList = new wxImageList( 16, 16, true, 3 );
+        imageList->Add( KiBitmapBundle( BITMAPS::ercerr ).GetBitmap( wxSize( 16, 16 ) ) );
+        imageList->Add( KiBitmapBundle( BITMAPS::checked_ok ).GetBitmap( wxSize( 16, 16 ) ) );
+        m_jobList->SetImageList( imageList, wxIMAGE_LIST_SMALL );
+
+        int num = 1;
+        for( auto& job : aJobsFile->GetJobsForOutput( aOutput ) )
+        {
+            int imageIdx = -1;
+            if( aOutput->m_lastRunSuccessMap.contains( job.m_id ) )
+            {
+                if( aOutput->m_lastRunSuccessMap[job.m_id].value() )
+                {
+                    imageIdx = 1;
+                }
+                else
+                {
+                    imageIdx = 0;
+                }
+            }
+
+            long itemIndex = m_jobList->InsertItem( m_jobList->GetItemCount(), imageIdx );
+
+            m_jobList->SetItem( itemIndex, jobNoColId, wxString::Format( "%d", num++ ) );
+            m_jobList->SetItem( itemIndex, jobDescColId, job.m_job->GetDescription() );
+        }
+    }
+
+};
+
+
 class PANEL_JOB_OUTPUT : public PANEL_JOB_OUTPUT_BASE
 {
 public:
@@ -241,6 +289,29 @@ public:
                 wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
     }
 
+    void UpdateStatus()
+    {
+        if( m_output->m_lastRunSuccess.has_value() )
+        {
+            if( m_output->m_lastRunSuccess.value() )
+            {
+                m_statusBitmap->SetBitmap( KiBitmapBundle( BITMAPS::checked_ok ) );
+                m_statusBitmap->Show();
+                m_statusBitmap->SetToolTip( _( "Last run successful" ) );
+            }
+            else
+            {
+                m_statusBitmap->SetBitmap( KiBitmapBundle( BITMAPS::ercerr ) );
+                m_statusBitmap->Show();
+                m_statusBitmap->SetToolTip( _( "Last run failed" ) );
+            }
+        }
+        else
+        {
+            m_statusBitmap->Hide();
+        }
+    }
+
 
     virtual void OnOutputRunClick( wxCommandEvent& event ) override
     {
@@ -259,9 +330,16 @@ public:
                             new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );
 
                     jobRunner.RunJobsForOutput( m_output );
+                    UpdateStatus();
 
                     delete progressReporter;
                 } );
+    }
+
+    virtual void OnLastStatusClick(wxMouseEvent& event) override
+    {
+        DIALOG_OUTPUT_RUN_RESULTS dialog( m_frame, m_jobsFile, m_output );
+        dialog.ShowModal();
     }
 
     virtual void OnOutputOptionsClick( wxCommandEvent& event ) override
@@ -269,6 +347,12 @@ public:
         wxMenu menu;
         menu.Append( wxID_EDIT, _( "Edit..." ) );
         menu.Append( wxID_DELETE, _( "Delete" ) );
+
+        if( m_output->m_lastRunSuccess.has_value() )
+        {
+            menu.AppendSeparator();
+            menu.Append( wxID_VIEW_DETAILS, _( "View last run results..." ) );
+        }
 
         m_buttonOutputOptions->PopupMenu( &menu );
     }
@@ -290,6 +374,13 @@ private:
             case wxID_DELETE:
                 m_panelParent->RemoveOutput( m_output );
                 break;
+
+            case wxID_VIEW_DETAILS:
+            {
+                DIALOG_OUTPUT_RUN_RESULTS dialog( m_frame, m_jobsFile, m_output );
+                dialog.ShowModal();
+            }
+            break;
 
             default:
                 wxFAIL_MSG( wxT( "Unknown ID in context menu event" ) );
@@ -702,6 +793,12 @@ void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
 						new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );
 
 				jobRunner.RunJobsAllOutputs();
+
+                for( auto& output : m_jobsFile->GetOutputs() )
+                {
+                    PANEL_JOB_OUTPUT* panel = m_outputPanelMap[&output];
+                    panel->UpdateStatus();
+                }
 
 				delete progressReporter;
 			} );

@@ -126,11 +126,20 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_textOutputType = new wxStaticText( this, wxID_ANY, wxT("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputType->Wrap( -1 );
 	m_textOutputType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizer12->Add( m_textOutputType, 0, wxALL, 5 );
+	bSizer14->Add( m_textOutputType, 0, wxALL, 5 );
+
+	m_statusBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer14->Add( m_statusBitmap, 0, wxALL, 5 );
+
+
+	bSizer12->Add( bSizer14, 1, wxEXPAND, 5 );
 
 
 	bSizerMain->Add( bSizer12, 1, wxEXPAND, 5 );
@@ -153,6 +162,7 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerMain->Fit( this );
 
 	// Connect Events
+	m_statusBitmap->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_JOB_OUTPUT_BASE::OnLastStatusClick ), NULL, this );
 	m_buttonOutputRun->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputRunClick ), NULL, this );
 	m_buttonOutputOptions->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputOptionsClick ), NULL, this );
 }
@@ -160,6 +170,7 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 PANEL_JOB_OUTPUT_BASE::~PANEL_JOB_OUTPUT_BASE()
 {
 	// Disconnect Events
+	m_statusBitmap->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_JOB_OUTPUT_BASE::OnLastStatusClick ), NULL, this );
 	m_buttonOutputRun->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputRunClick ), NULL, this );
 	m_buttonOutputOptions->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputOptionsClick ), NULL, this );
 
@@ -331,5 +342,50 @@ DIALOG_SPECIAL_EXECUTE_BASE::~DIALOG_SPECIAL_EXECUTE_BASE()
 {
 	// Disconnect Events
 	m_cbRecordOutput->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SPECIAL_EXECUTE_BASE::OnRecordOutputClicked ), NULL, this );
+
+}
+
+DIALOG_OUTPUT_RUN_RESULTS_BASE::DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxSize( 450,250 ), wxDefaultSize );
+
+	wxBoxSizer* bMainSizer;
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_staticTextOutputName = new wxStaticText( this, wxID_ANY, wxT("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOutputName->Wrap( -1 );
+	bMainSizer->Add( m_staticTextOutputName, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizer16;
+	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_jobList = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL );
+	bSizer16->Add( m_jobList, 1, wxALL|wxEXPAND, 5 );
+
+
+	bMainSizer->Add( bSizer16, 1, wxEXPAND, 5 );
+
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizer->Realize();
+
+	bMainSizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+
+
+	this->SetSizer( bMainSizer );
+	this->Layout();
+	bMainSizer->Fit( this );
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OUTPUT_RUN_RESULTS_BASE::OnButtonOk ), NULL, this );
+}
+
+DIALOG_OUTPUT_RUN_RESULTS_BASE::~DIALOG_OUTPUT_RUN_RESULTS_BASE()
+{
+	// Disconnect Events
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OUTPUT_RUN_RESULTS_BASE::OnButtonOk ), NULL, this );
 
 }

@@ -50,11 +50,11 @@ enum class JOBSET_OUTPUT_TYPE
 struct KICOMMON_API JOBSET_OUTPUT
 {
     JOBSET_OUTPUT() :
-            m_type( JOBSET_OUTPUT_TYPE::FOLDER ), m_outputHandler( nullptr )
+            m_type( JOBSET_OUTPUT_TYPE::FOLDER ), m_outputHandler( nullptr ), m_lastRunSuccess()
             {}
 
     JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type, JOBS_OUTPUT_HANDLER* outputHandler ) :
-            m_id( id ), m_type( type ), m_outputHandler( outputHandler )
+            m_id( id ), m_type( type ), m_outputHandler( outputHandler ), m_lastRunSuccess()
     {
     }
 
@@ -62,6 +62,10 @@ struct KICOMMON_API JOBSET_OUTPUT
     JOBSET_OUTPUT_TYPE    m_type;
     JOBS_OUTPUT_HANDLER*  m_outputHandler;
     std::vector<wxString> m_only;
+
+    ///< Transient property, not stored for now
+    std::optional<bool>   m_lastRunSuccess;
+    std::unordered_map<wxString, std::optional<bool>> m_lastRunSuccessMap;
 
     bool operator==( const JOBSET_OUTPUT& rhs ) const;
 };

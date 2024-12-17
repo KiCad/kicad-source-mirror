@@ -86,10 +86,12 @@ class PANEL_JOB_OUTPUT_BASE : public wxPanel
 	protected:
 		wxStaticBitmap* m_bitmapOutputType;
 		wxStaticText* m_textOutputType;
+		wxStaticBitmap* m_statusBitmap;
 		wxBitmapButton* m_buttonOutputRun;
 		wxBitmapButton* m_buttonOutputOptions;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnLastStatusClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnOutputRunClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputOptionsClick( wxCommandEvent& event ) { event.Skip(); }
 
@@ -164,6 +166,31 @@ class DIALOG_SPECIAL_EXECUTE_BASE : public DIALOG_SHIM
 		DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_SPECIAL_EXECUTE_BASE();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_OUTPUT_RUN_RESULTS_BASE
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_OUTPUT_RUN_RESULTS_BASE : public DIALOG_SHIM
+{
+	private:
+
+	protected:
+		wxStaticText* m_staticTextOutputName;
+		wxListCtrl* m_jobList;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnButtonOk( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Job Output Run Log"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+
+		~DIALOG_OUTPUT_RUN_RESULTS_BASE();
 
 };
 
