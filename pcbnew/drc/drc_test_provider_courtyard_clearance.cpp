@@ -153,9 +153,22 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
     const int progressDelta = 100;
     int       ii = 0;
 
-    for( auto itA = m_board->Footprints().begin(); itA != m_board->Footprints().end(); itA++ )
+    // Stable sorting gives stable violation generation (and stable comparisons to previously-
+    // generated violations for exclusion checking).
+    std::vector<FOOTPRINT*> footprints;
+
+    footprints.insert( footprints.begin(), m_board->Footprints().begin(),
+                       m_board->Footprints().end() );
+
+    std::sort( footprints.begin(), footprints.end(),
+               []( const FOOTPRINT* a, const FOOTPRINT* b )
+               {
+                   return a->m_Uuid < b->m_Uuid;
+               } );
+
+    for( auto itA = footprints.begin(); itA != footprints.end(); itA++ )
     {
-        if( !reportProgress( ii++, m_board->Footprints().size(), progressDelta ) )
+        if( !reportProgress( ii++, footprints.size(), progressDelta ) )
             return false;   // DRC cancelled
 
         // Ensure tests realted to courtyard constraints are not fully disabled:
@@ -186,7 +199,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
 
         BOX2I fpA_bbox = fpA->GetBoundingBox();
 
-        for( auto itB = itA + 1; itB != m_board->Footprints().end(); itB++ )
+        for( auto itB = itA + 1; itB != footprints.end(); itB++ )
         {
             FOOTPRINT*            fpB = *itB;
             const SHAPE_POLY_SET& frontB = fpB->GetCourtyard( F_CrtYd );

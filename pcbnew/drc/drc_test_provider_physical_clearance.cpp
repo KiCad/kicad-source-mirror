@@ -73,7 +73,7 @@ public:
 
 private:
     int testItemAgainstItem( BOARD_ITEM* aItem, SHAPE* aItemShape, PCB_LAYER_ID aLayer,
-                              BOARD_ITEM* other );
+                              BOARD_ITEM* aOther );
 
     void testItemAgainstZones( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
@@ -611,9 +611,9 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER
 
 
 int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem,
-                                                                SHAPE* aItemShape,
-                                                                PCB_LAYER_ID aLayer,
-                                                                BOARD_ITEM* other )
+                                                               SHAPE* aItemShape,
+                                                               PCB_LAYER_ID aLayer,
+                                                               BOARD_ITEM* aOther )
 {
     bool           testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool           testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
@@ -623,17 +623,26 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
     int            violations = 0;
     VECTOR2I       pos;
 
-    std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( aLayer );
+    std::shared_ptr<SHAPE> otherShapeStorage = aOther->GetEffectiveShape( aLayer );
+    SHAPE*                 otherShape = otherShapeStorage.get();
 
     if( testClearance )
     {
-        constraint = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, aItem, other, aLayer );
+        constraint = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, aItem, aOther, aLayer );
         clearance = constraint.GetValue().Min();
     }
 
     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
     {
-        if( aItemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
+        // Collide (and generate violations) based on a well-defined order so that exclusion
+        // checking against previously-generated violations will work.
+        if( aItem->m_Uuid > aOther->m_Uuid )
+        {
+            std::swap( aItem, aOther );
+            std::swap( aItemShape, otherShape );
+        }
+
+        if( aItemShape->Collide( otherShape, clearance, &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
             wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
@@ -642,7 +651,7 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
                                       actual );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( aItem, other );
+            drce->SetItems( aItem, aOther );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
             reportViolation( drce, pos, aLayer );
@@ -679,9 +688,9 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
             itemHoleShape = aItem->GetEffectiveHoleShape();
         }
 
-        if( other->Type() == PCB_VIA_T )
+        if( aOther->Type() == PCB_VIA_T )
         {
-            LSET layers = other->GetLayerSet();
+            LSET layers = aOther->GetLayerSet();
 
             if( layers.Contains( F_Cu ) )
                 layers |= LSET::FrontBoardTechMask().set( F_CrtYd );
@@ -695,23 +704,23 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
             wxCHECK_MSG( layers.Contains( aLayer ), violations,
                     wxT( "Bug!  Vias should only be checked for layers on which they exist" ) );
 
-            otherHoleShape = other->GetEffectiveHoleShape();
+            otherHoleShape = aOther->GetEffectiveHoleShape();
         }
-        else if( other->HasHole() )
+        else if( aOther->HasHole() )
         {
-            otherHoleShape = other->GetEffectiveHoleShape();
+            otherHoleShape = aOther->GetEffectiveHoleShape();
         }
 
         if( itemHoleShape || otherHoleShape )
         {
-            constraint = m_drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, other, aItem,
+            constraint = m_drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, aOther, aItem,
                                                  aLayer );
             clearance = constraint.GetValue().Min();
         }
 
         if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
         {
-            if( itemHoleShape && itemHoleShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
+            if( itemHoleShape && itemHoleShape->Collide( otherShape, clearance, &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
                 wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
@@ -720,7 +729,7 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
                                           actual );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                drce->SetItems( aItem, other );
+                drce->SetItems( aItem, aOther );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drce, pos, aLayer );
@@ -736,7 +745,7 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
                                           actual );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                drce->SetItems( aItem, other );
+                drce->SetItems( aItem, aOther );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drce, pos, aLayer );

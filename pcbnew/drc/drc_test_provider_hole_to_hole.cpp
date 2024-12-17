@@ -291,6 +291,11 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
     {
         if( reportCoLocation )
         {
+            // Generate violations based on a well-defined order so that exclusion checking
+            // against previously-generated violations will work.
+            if( aItem->m_Uuid > aOther->m_Uuid )
+                std::swap( aItem, aOther );
+
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_COLOCATED );
             drce->SetItems( aItem, aOther );
             reportViolation( drce, aHole->GetCenter(), UNDEFINED_LAYER );
@@ -309,6 +314,11 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
                 && minClearance >= 0
                 && actual < minClearance )
         {
+            // Generate violations based on a well-defined order so that exclusion checking
+            // against previously-generated violations will work.
+            if( aItem->m_Uuid > aOther->m_Uuid )
+                std::swap( aItem, aOther );
+
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
             wxString msg = formatMsg( _( "(%s min %s; actual %s)" ),
                                       constraint.GetName(),

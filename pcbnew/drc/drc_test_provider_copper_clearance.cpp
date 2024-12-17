@@ -92,8 +92,8 @@ private:
      * @param other item against which to test the track item
      * @return false if there is a clearance violation reported, true if there is none
      */
-    bool testSingleLayerItemAgainstItem( BOARD_CONNECTED_ITEM* item, SHAPE* itemShape,
-                                         PCB_LAYER_ID layer, BOARD_ITEM* other );
+    bool testSingleLayerItemAgainstItem( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID layer,
+                                         BOARD_ITEM* other );
 
     void testTrackClearances();
 
@@ -198,7 +198,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 }
 
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_CONNECTED_ITEM* item,
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_ITEM* item,
                                                                          SHAPE* itemShape,
                                                                          PCB_LAYER_ID layer,
                                                                          BOARD_ITEM* other )
@@ -211,12 +211,19 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_C
     int            actual;
     VECTOR2I       pos;
     bool           has_error = false;
-    int            otherNet = 0;
+    NETINFO_ITEM*  net = nullptr;
+    NETINFO_ITEM*  otherNet = nullptr;
+
+    if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+        net = connectedItem->GetNet();
+
+    NETINFO_ITEM*  trackNet = net;
 
     if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
-        otherNet = connectedItem->GetNetCode();
+        otherNet = connectedItem->GetNet();
 
-    std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( layer );
+    std::shared_ptr<SHAPE> otherShapeStorage = other->GetEffectiveShape( layer );
+    SHAPE* otherShape = otherShapeStorage.get();
 
     if( other->Type() == PCB_PAD_T )
     {
@@ -234,6 +241,15 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_C
 
     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
     {
+        // Collide (and generate violations) based on a well-defined order so that exclusion
+        // checking against previously-generated violations will work.
+        if( item->m_Uuid > other->m_Uuid )
+        {
+            std::swap( item, other );
+            std::swap( itemShape, otherShape );
+            std::swap( net, otherNet );
+        }
+
         // Special processing for track:track intersections
         if( item->Type() == PCB_TRACE_T && other->Type() == PCB_TRACE_T )
         {
@@ -255,9 +271,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_C
             }
         }
 
-        if( itemShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
+        if( itemShape->Collide( otherShape, clearance - m_drcEpsilon, &actual, &pos ) )
         {
-            if( m_drcEngine->IsNetTieExclusion( item->GetNetCode(), layer, pos, other ) )
+            if( m_drcEngine->IsNetTieExclusion( trackNet->GetNetCode(), layer, pos, other ) )
             {
                 // Collision occurred as track was entering a pad marked as a net-tie.  We
                 // allow these.
@@ -267,8 +283,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_C
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 wxString msg;
 
-                msg.Printf( _( "(nets %s and %s)" ), item->GetNetname(),
-                            static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetname() );
+                msg.Printf( _( "(nets %s and %s)" ), net->GetNetname(), otherNet->GetNetname() );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( item, other );
@@ -304,7 +319,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_C
     {
         std::array<BOARD_ITEM*, 2> a{ item, other };
         std::array<BOARD_ITEM*, 2> b{ other, item };
-        std::array<SHAPE*, 2>      a_shape{ itemShape, otherShape.get() };
+        std::array<SHAPE*, 2>      a_shape{ itemShape, otherShape };
 
         for( size_t ii = 0; ii < 2; ++ii )
         {
@@ -316,6 +331,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_C
             {
                 continue;
             }
+
             if( b[ii]->Type() == PCB_VIA_T )
             {
                 if( b[ii]->GetLayerSet().Contains( layer ) )

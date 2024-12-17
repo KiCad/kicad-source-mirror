@@ -23,8 +23,6 @@
 
 #include <common.h>
 #include <board.h>
-#include <footprint.h>
-#include <pcb_shape.h>
 #include <pcb_track.h>
 #include <geometry/shape_segment.h>
 #include <geometry/seg.h>
@@ -224,6 +222,17 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                          && refItem->GetParentFootprint() == testItem->GetParentFootprint() )
                 {
                     return true;
+                }
+
+                // Collide (and generate violations) based on a well-defined order so that
+                // exclusion checking against previously-generated violations will work.
+                if( aLayers.first == aLayers.second )
+                {
+                    if( refItem->m_Uuid > testItem->m_Uuid )
+                    {
+                        std::swap( refItem, testItem );
+                        std::swap( refShape, testShape );
+                    }
                 }
 
                 if( refShape->Collide( testShape, minClearance, &actual, &pos ) )
