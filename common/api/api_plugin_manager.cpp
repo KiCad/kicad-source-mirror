@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <env_vars.h>
 #include <fmt/format.h>
 #include <wx/dir.h>
 #include <wx/log.h>
@@ -83,9 +84,6 @@ void API_PLUGIN_MANAGER::ReloadPlugins()
     m_menuBindings.clear();
     m_readyPlugins.clear();
 
-    // TODO support system-provided plugins
-    wxDir userPluginsDir( PATHS::GetUserPluginsPath() );
-
     PLUGIN_TRAVERSER loader(
             [&]( const wxFileName& aFile )
             {
@@ -119,13 +117,42 @@ void API_PLUGIN_MANAGER::ReloadPlugins()
                 }
             } );
 
+    wxDir systemPluginsDir( PATHS::GetStockPluginsPath() );
+
+    if( systemPluginsDir.IsOpened() )
+    {
+        wxLogTrace( traceApi, wxString::Format( "Manager: scanning system path (%s) for plugins...",
+                                                systemPluginsDir.GetName() ) );
+        systemPluginsDir.Traverse( loader );
+    }
+
+    wxString thirdPartyPath;
+    const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
+
+    if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( env, wxT( "3RD_PARTY" ) ) )
+        thirdPartyPath = *v;
+    else
+        thirdPartyPath = PATHS::GetDefault3rdPartyPath();
+
+    wxDir thirdParty( thirdPartyPath );
+
+    if( thirdParty.IsOpened() )
+    {
+        wxLogTrace( traceApi, wxString::Format( "Manager: scanning PCM path (%s) for plugins...",
+                                                thirdParty.GetName() ) );
+        thirdParty.Traverse( loader );
+    }
+
+    wxDir userPluginsDir( PATHS::GetUserPluginsPath() );
+
     if( userPluginsDir.IsOpened() )
     {
         wxLogTrace( traceApi, wxString::Format( "Manager: scanning user path (%s) for plugins...",
                                                 userPluginsDir.GetName() ) );
         userPluginsDir.Traverse( loader );
-        processPluginDependencies();
     }
+
+    processPluginDependencies();
 
     wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, wxID_ANY );
     m_parent->QueueEvent( evt );
