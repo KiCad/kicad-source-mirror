@@ -285,6 +285,15 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
 
         brd = m_cliBoard;
     }
+    else if( Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpen() )
+    {
+        PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_kiway->Player( FRAME_PCB_EDITOR, false ) );
+
+        if( editFrame )
+        {
+            brd = editFrame->GetBoard();
+        }
+    }
     else
     {
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );

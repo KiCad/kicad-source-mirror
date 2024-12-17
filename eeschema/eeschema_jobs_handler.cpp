@@ -171,6 +171,16 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
 
         sch = m_cliSchematic;
     }
+    else if( Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpen() )
+    {
+        SCH_EDIT_FRAME* editFrame =
+                dynamic_cast<SCH_EDIT_FRAME*>( m_kiway->Player( FRAME_SCH, false ) );
+
+        if( editFrame )
+        {
+            sch = &editFrame->Schematic();
+        }
+    }
     else if( !aPath.IsEmpty() )
     {
         m_reporter->Report( _( "Loading schematic\n" ), RPT_SEVERITY_INFO );
