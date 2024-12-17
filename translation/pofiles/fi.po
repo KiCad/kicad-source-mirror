@@ -1,6 +1,6 @@
 # Vesa Solonen <vesa.solonen@hut.fi>, 2009, 2010, 2012.
 # Kliment <kliment@0xfb.com>, 2020.
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021, 2024.
 # ZbeeGin <zbeegin@op.pl>, 2020.
 # Riku Viitanen <riku.viitanen@protonmail.com>, 2021.
 # Ola Rinta-Koski <weblate@rinta-koski.net>, 2021.
@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-10 16:05-0800\n"
 "PO-Revision-Date: 2024-12-18 11:00+0000\n"
-"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -32947,7 +32947,7 @@ msgstr "Nuolen suunta:"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:136
 #: pcbnew/pcb_dimension.cpp:1722
 msgid "0.0"
-msgstr "0.0"
+msgstr "0,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:136
