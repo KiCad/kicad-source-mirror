@@ -29,8 +29,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-10 16:05-0800\n"
-"PO-Revision-Date: 2024-12-13 07:00+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-12-18 11:00+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.9.2-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -33252,7 +33252,7 @@ msgstr "Pfeilrichtung:"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:136
 #: pcbnew/pcb_dimension.cpp:1722
 msgid "0.0"
-msgstr "0.0"
+msgstr "0,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:136
@@ -33386,19 +33386,19 @@ msgstr "Textausrichtung"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:241
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:189
 msgid "90.0"
-msgstr "90.0"
+msgstr "90,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:359
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:242
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:190
 msgid "-90.0"
-msgstr "−90.0"
+msgstr "−90,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:360
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:243
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:191
 msgid "180.0"
-msgstr "180.0"
+msgstr "180,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:363
 msgid "Position mode:"
@@ -36271,7 +36271,7 @@ msgstr "Rastergröße:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr "0.01"
+msgstr "0,01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
 msgid "Copy item layers"
