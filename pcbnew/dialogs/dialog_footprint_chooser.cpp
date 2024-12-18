@@ -279,3 +279,28 @@ void DIALOG_FOOTPRINT_CHOOSER::onFpViewReq( wxCommandEvent& event )
     m_chooserPanel->m_RightPanel->Layout();
     m_chooserPanel->m_RightPanel->Refresh();
 }
+
+
+void DIALOG_FOOTPRINT_CHOOSER::TearDownQuasiModal()
+{
+    wxLogDebug( wxS( "Entering DIALOG_FOOTPRINT_CHOOSER::TearDownQuasiModal()" ) );
+
+    if( m_chooserPanel )
+    {
+        FOOTPRINT_PREVIEW_WIDGET* viewerWidget = m_chooserPanel->GetViewerPanel();
+
+        if( viewerWidget )
+        {
+            FOOTPRINT_PREVIEW_PANEL_BASE* previewPanel = viewerWidget->GetPreviewPanel();
+
+            FOOTPRINT_PREVIEW_PANEL* fpPreviewPanel =
+                    static_cast<FOOTPRINT_PREVIEW_PANEL*>( previewPanel );
+
+            if( fpPreviewPanel )
+            {
+                wxLogDebug( wxS( "Stopping footprint preview panel drawing." ) );
+                fpPreviewPanel->StopDrawing();
+            }
+        }
+    }
+}
