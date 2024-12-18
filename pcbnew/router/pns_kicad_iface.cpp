@@ -1938,7 +1938,7 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 {
     BOARD_ITEM* parent = aItem->Parent();
 
-    if( aItem->OfKind( PNS::ITEM::SOLID_T ) )
+    if( aItem->OfKind( PNS::ITEM::SOLID_T ) && parent->Type() == PCB_PAD_T )
     {
         PAD*   pad = static_cast<PAD*>( parent );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
@@ -2014,13 +2014,16 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
 
     case PNS::ITEM::SOLID_T:
     {
-        PAD*     pad = static_cast<PAD*>( aItem->Parent() );
-        VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
+        if( aItem->Parent()->Type() == PCB_PAD_T )
+        {
+            PAD*     pad = static_cast<PAD*>( aItem->Parent() );
+            VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
-        // Don't add to commit; we'll add the parent footprints when processing the m_fpOffsets
+            // Don't add to commit; we'll add the parent footprints when processing the m_fpOffsets
 
-        m_fpOffsets[pad].p_old = pad->GetPosition();
-        m_fpOffsets[pad].p_new = pos;
+            m_fpOffsets[pad].p_old = pad->GetPosition();
+            m_fpOffsets[pad].p_new = pos;
+        }
         break;
     }
 

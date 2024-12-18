@@ -51,10 +51,18 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IF
     BOARD_ITEM* boardItem = aItem ? aItem->BoardItem() : nullptr;
 
     // A PNS::SOLID for an edge-cut item must have 0 width for collision calculations, but when
-    // highlighting an edge we want to show it with its parent PCB_SHAPE's shape.
+    // highlighting an edge we want to show it with its true width
     if( boardItem && boardItem->IsOnLayer( Edge_Cuts ) )
     {
-        m_shape = boardItem->GetEffectiveShape()->Clone();
+        m_shape = aItem->Shape( -1 )->Clone();
+
+        switch( m_shape->Type() )
+        {
+        case SH_SEGMENT:    static_cast<SHAPE_SEGMENT*>( m_shape )->SetWidth( 0 );    break;
+        case SH_ARC:        static_cast<SHAPE_ARC*>( m_shape )->SetWidth( 0 );        break;
+        case SH_LINE_CHAIN: static_cast<SHAPE_LINE_CHAIN*>( m_shape )->SetWidth( 0 ); break;
+        default:            /* remaining shapes don't have width */                   break;
+        }
     }
     else if( aItem )
     {

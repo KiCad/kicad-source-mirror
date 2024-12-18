@@ -1709,7 +1709,7 @@ ITEM *NODE::FindItemByParent( const BOARD_ITEM* aParent )
 }
 
 
-std::vector<ITEM*> NODE::FindItemsByZone( const ZONE* aParent )
+std::vector<ITEM*> NODE::FindItemsByParent( const BOARD_ITEM* aParent )
 {
     std::vector<ITEM*> ret;
 

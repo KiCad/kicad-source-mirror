@@ -473,7 +473,7 @@ public:
 
     ITEM* FindItemByParent( const BOARD_ITEM* aParent );
 
-    std::vector<ITEM*> FindItemsByZone( const ZONE* aParent );
+    std::vector<ITEM*> FindItemsByParent( const BOARD_ITEM* aParent );
 
     bool HasChildren() const
     {

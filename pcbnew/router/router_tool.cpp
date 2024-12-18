@@ -2160,7 +2160,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     PNS::ITEM*    startItem = nullptr;
     PNS::ITEM_SET itemsToDrag;
-    FOOTPRINT*    footprint = nullptr;
 
     bool showCourtyardConflicts = frame()->GetPcbNewSettings()->m_ShowCourtyardCollisions;
 
@@ -2184,30 +2183,39 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         for( FOOTPRINT* footprint : footprints )
         {
-        for( PAD* pad : footprint->Pads() )
-        {
-            PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
-
-            if( solid )
-                itemsToDrag.Add( solid );
-
-            if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
+            for( PAD* pad : footprint->Pads() )
             {
-                if( connectivityData->GetRatsnestForPad( pad ).size() > 0 )
-                    dynamicItems.push_back( pad );
+                PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
+
+                if( solid )
+                    itemsToDrag.Add( solid );
+
+                if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
+                {
+                    if( connectivityData->GetRatsnestForPad( pad ).size() > 0 )
+                        dynamicItems.push_back( pad );
+                }
             }
-        }
 
-        for( ZONE* zone : footprint->Zones() )
-        {
-            std::vector<PNS::ITEM*> solids = m_router->GetWorld()->FindItemsByZone( zone );
+            for( ZONE* zone : footprint->Zones() )
+            {
+                for( PNS::ITEM* solid : m_router->GetWorld()->FindItemsByParent( zone ) )
+                    itemsToDrag.Add( solid );
+            }
 
-            for( PNS::ITEM* solid : solids )
-                itemsToDrag.Add( solid );
-        }
+            for( BOARD_ITEM* shape : footprint->GraphicalItems() )
+            {
+                if( shape->GetLayer() == Edge_Cuts
+                    || shape->GetLayer() == Margin
+                    || IsCopperLayer( shape->GetLayer() ) )
+                {
+                    for( PNS::ITEM* solid : m_router->GetWorld()->FindItemsByParent( shape ) )
+                        itemsToDrag.Add( solid );
+                }
+            }
 
-        if( showCourtyardConflicts )
-            courtyardClearanceDRC.m_FpInMove.push_back( footprint );
+            if( showCourtyardConflicts )
+                courtyardClearanceDRC.m_FpInMove.push_back( footprint );
         }
 
         dynamicData = std::make_unique<CONNECTIVITY_DATA>( board()->GetConnectivity(),
@@ -2246,6 +2254,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             {
                 p = snapToItem( pitem, p0 );
                 m_startItem = pitem;
+
                 if( pitem->Net() )
                     highlightNetcodes.insert( pitem->Net() );
             }
