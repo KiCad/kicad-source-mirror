@@ -43,6 +43,7 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
 {
     wxArrayString symbolNames;
     m_libManager.GetSymbolNames( aLibName, symbolNames );
+    symbolNames.Sort();
 
     if( symbolNames.GetCount() )
     {

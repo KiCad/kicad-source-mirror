@@ -41,6 +41,8 @@ public:
 
     void SetSelectedSymbol( const wxString& aSymbolName );
 
+    wxString GetValue() const override;
+
 protected:
     SYMBOL_FILTER_COMBOPOPUP* m_selectorPopup;
     // wxString                 m_indeterminateString;

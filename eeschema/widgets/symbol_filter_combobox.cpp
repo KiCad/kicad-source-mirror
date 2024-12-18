@@ -26,6 +26,8 @@
 
 #include <iostream>
 
+static const wxString kNoParentSymbol( "<do not derive>" );
+
 class SYMBOL_FILTER_COMBOPOPUP : public FILTER_COMBOPOPUP
 {
 public:
@@ -68,6 +70,10 @@ private:
     {
         const wxString filterString = getFilterValue();
 
+        // Special handling for <no net>
+        if( filterString.IsEmpty() || kNoParentSymbol.Lower().Matches( filterString ) )
+            aListContent.insert( aListContent.begin(), kNoParentSymbol );
+
         // Simple substring, case-insensitive search
         for( const wxString& symbol : m_symbolList )
         {
@@ -100,4 +106,15 @@ void SYMBOL_FILTER_COMBOBOX::SetSymbolList( const wxArrayString& aSymbolList )
 void SYMBOL_FILTER_COMBOBOX::SetSelectedSymbol( const wxString& aSymbolName )
 {
     m_selectorPopup->SetSelectedSymbol( aSymbolName );
+}
+
+
+wxString SYMBOL_FILTER_COMBOBOX::GetValue() const
+{
+    wxString value = m_selectorPopup->GetStringValue();
+
+    if( value == kNoParentSymbol )
+        return wxEmptyString;
+
+    return value;
 }
