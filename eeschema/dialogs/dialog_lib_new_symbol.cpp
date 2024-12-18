@@ -26,30 +26,24 @@
 
 #include <default_values.h>
 #include <eda_draw_frame.h>
-#include <lib_symbol_library_manager.h>
 #include <sch_validators.h>
 #include <template_fieldnames.h>
 
 
-DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
-                                              const wxString& aLibName,
-                                              LIB_SYMBOL_LIBRARY_MANAGER& aLibManager,
-                                              const wxString& aInheritFromSymbolName,
+DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
+                                              const wxArrayString& aSymbolNames,
+                                              const wxString&      aInheritFromSymbolName,
                                               std::function<bool( wxString newName )> aValidator ) :
-        DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ), m_libManager( aLibManager ),
+        DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
         m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
                            m_staticPinTextPositionUnits, true ),
         m_validator( std::move( aValidator ) )
 {
-    wxArrayString symbolNames;
-    m_libManager.GetSymbolNames( aLibName, symbolNames );
-    symbolNames.Sort();
-
-    if( symbolNames.GetCount() )
+    if( aSymbolNames.GetCount() )
     {
         wxArrayString escapedNames;
 
-        for( const wxString& name : symbolNames )
+        for( const wxString& name : aSymbolNames )
             escapedNames.Add( UnescapeString( name ) );
 
         m_comboInheritanceSelect->SetSymbolList( escapedNames );

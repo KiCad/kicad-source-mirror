@@ -378,7 +378,10 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
                 return true;
             };
 
-    DIALOG_LIB_NEW_SYMBOL dlg( this, lib, *m_libMgr, aInheritFrom, validator );
+    wxArrayString symbolNamesInLib;
+    m_libMgr->GetSymbolNames( lib, symbolNamesInLib );
+
+    DIALOG_LIB_NEW_SYMBOL dlg( this, symbolNamesInLib, aInheritFrom, validator );
 
     dlg.SetMinSize( dlg.GetSize() );
 
