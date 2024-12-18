@@ -29,6 +29,18 @@ JOBS_OUTPUT_ARCHIVE::JOBS_OUTPUT_ARCHIVE() : JOBS_OUTPUT_HANDLER(),
 {
 }
 
+
+bool JOBS_OUTPUT_ARCHIVE::OutputPrecheck()
+{
+    if( m_outputPath.IsEmpty() )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
 bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTempPath,
                                          const std::vector<JOB_OUTPUT>& aOutputsToHandle )
 {

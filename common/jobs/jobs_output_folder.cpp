@@ -53,6 +53,17 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
 }
 
 
+bool JOBS_OUTPUT_FOLDER::OutputPrecheck()
+{
+    if( m_outputPath.IsEmpty() )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
 void JOBS_OUTPUT_FOLDER::FromJson( const nlohmann::json& j )
 {
     m_outputPath = j.value( "output_path", "" );

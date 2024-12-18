@@ -33,6 +33,7 @@ public:
     };
 
     bool HandleOutputs( const wxString& baseTempPath, const std::vector<JOB_OUTPUT>& aOutputsToHandle ) override;
+    bool OutputPrecheck() override;
 
     void FromJson( const nlohmann::json& j ) override;
     void ToJson( nlohmann::json& j ) const override;
