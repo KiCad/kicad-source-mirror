@@ -98,6 +98,8 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
     tmp.AssignDir( wxFileName::GetTempDir() );
     tmp.AppendDir( KIID().AsString() );
 
+    aOutput->m_lastRunSuccessMap.clear();
+
     wxString tempDirPath = tmp.GetFullPath();
     if( !wxFileName::Mkdir( tempDirPath, wxS_DIR_DEFAULT ) )
     {
@@ -110,6 +112,19 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         aOutput->m_lastRunSuccess = false;
 
 		return false;
+    }
+
+    bool continueOuput = aOutput->m_outputHandler->OutputPrecheck();
+
+    if( !continueOuput )
+    {
+        if( m_reporter )
+        {
+            msg = wxString::Format( wxT( "Output precheck failed for output %s" ), aOutput->m_id );
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        }
+        aOutput->m_lastRunSuccess = false;
+        return false;
     }
 
     if( m_reporter != nullptr )

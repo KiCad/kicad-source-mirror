@@ -23,7 +23,7 @@
 #include <gestfich.h>
 
 JOBS_OUTPUT_FOLDER::JOBS_OUTPUT_FOLDER() :
-	JOBS_OUTPUT_HANDLER()
+    JOBS_OUTPUT_HANDLER()
 {
 
 }
@@ -32,6 +32,11 @@ JOBS_OUTPUT_FOLDER::JOBS_OUTPUT_FOLDER() :
 bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempPath,
                                         const std::vector<JOB_OUTPUT>& aOutputsToHandle )
 {
+    if( wxFileName::DirExists( m_outputPath ) )
+    {
+        wxFileName::Rmdir( m_outputPath, wxPATH_RMDIR_RECURSIVE );
+    }
+
     bool success = true;
     if( !wxFileName::Mkdir( m_outputPath, wxS_DIR_DEFAULT ) )
     {
@@ -44,14 +49,13 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
         success = false;
     }
 
-	return success;
-
+    return success;
 }
 
 
 void JOBS_OUTPUT_FOLDER::FromJson( const nlohmann::json& j )
 {
-	m_outputPath = j.value( "output_path", "" );
+    m_outputPath = j.value( "output_path", "" );
 }
 
 

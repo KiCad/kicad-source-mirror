@@ -33,6 +33,13 @@ public:
 
     virtual ~JOBS_OUTPUT_HANDLER() {}
 
+    /**
+     * @brief Checks if the output process can proceed before doing anything else
+     * This can include user prompts
+     *
+     * @return true if the output process can proceed
+     */
+    virtual bool OutputPrecheck() { return true; }
     virtual bool HandleOutputs( const wxString&                baseTempPath,
                                 const std::vector<JOB_OUTPUT>& aOutputsToHandle ) = 0;
 
