@@ -608,7 +608,7 @@ void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
                                         m_boardAdapter, m_currentCamera,
                                         PROJECT_PCB::Get3DCacheManager( &Prj() ) );
 
-    m_chooserPanel->m_RightPanelSizer->Add( m_preview3DCanvas, 1, wxALL | wxEXPAND, 5 );
+    m_chooserPanel->m_RightPanelSizer->Add( m_preview3DCanvas, 1, wxEXPAND, 5 );
     m_chooserPanel->m_RightPanel->Layout();
 
     BOARD_DESIGN_SETTINGS& dummy_bds = m_dummyBoard->GetDesignSettings();

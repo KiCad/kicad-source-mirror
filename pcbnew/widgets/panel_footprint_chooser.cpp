@@ -145,7 +145,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
     m_preview_ctrl = new FOOTPRINT_PREVIEW_WIDGET( m_RightPanel, m_frame->Kiway() );
     m_preview_ctrl->SetUserUnits( m_frame->GetUserUnits() );
-    m_RightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND|wxRIGHT, 5 );
+    m_RightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND, 5 );
 
     m_RightPanel->SetSizer( m_RightPanelSizer );
     m_RightPanel->Layout();
