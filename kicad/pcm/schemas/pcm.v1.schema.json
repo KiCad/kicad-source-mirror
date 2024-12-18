@@ -33,6 +33,7 @@
                     "enum": [
                         "plugin",
                         "library",
+                        "fab",
                         "colortheme"
                     ],
                     "description": "Type of the package"
@@ -44,6 +45,14 @@
                 "maintainer": {
                     "$ref": "#/definitions/Contact",
                     "description": "Maintainer of the package"
+                },
+                "category": {
+                    "type": "string",
+                    "enum": [
+                        "general",
+                        "fab"
+                    ],
+                    "description": "Category of the package"
                 },
                 "license": {
                     "$ref": "#/definitions/License",
