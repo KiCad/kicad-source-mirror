@@ -356,32 +356,7 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
             return;
     }
 
-    m_libMgr->GetSymbolNames( lib, symbolNames );
-
-    wxString _inheritSymbolName;
-    wxString _infoMessage;
-    wxString msg;
-
-    // if the symbol being inherited from isn't a root symbol, find its root symbol
-    // and use that symbol instead
-    if( !aInheritFrom.IsEmpty() )
-    {
-        LIB_SYMBOL* inheritFromSymbol = m_libMgr->GetBufferedSymbol( aInheritFrom, lib );
-
-        if( inheritFromSymbol )
-        {
-            _inheritSymbolName = aInheritFrom;
-            _infoMessage = wxString::Format( _( "Deriving from symbol '%s'." ),
-                                             _inheritSymbolName );
-        }
-        else
-        {
-            _inheritSymbolName = aInheritFrom;
-        }
-    }
-
-    DIALOG_LIB_NEW_SYMBOL dlg( this, _infoMessage, &symbolNames, _inheritSymbolName,
-            [&]( wxString newName )
+    const auto validator = [&]( wxString newName ) -> bool
             {
                 if( newName.IsEmpty() )
                 {
@@ -391,19 +366,19 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
 
                 if( !lib.empty() && m_libMgr->SymbolExists( newName, lib ) )
                 {
-                    msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
-                                            newName,
-                                            lib );
+                    wxString msg = wxString::Format(
+                            _( "Symbol '%s' already exists in library '%s'." ), newName, lib );
 
-                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
-                                       wxOK | wxCANCEL | wxICON_WARNING );
+                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
                     errorDlg.SetOKLabel( _( "Overwrite" ) );
 
                     return errorDlg.ShowModal() == wxID_OK;
                 }
 
                 return true;
-            } );
+            };
+
+    DIALOG_LIB_NEW_SYMBOL dlg( this, lib, *m_libMgr, aInheritFrom, validator );
 
     dlg.SetMinSize( dlg.GetSize() );
 

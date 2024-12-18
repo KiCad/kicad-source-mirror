@@ -26,24 +26,29 @@
 
 #include <default_values.h>
 #include <eda_draw_frame.h>
+#include <lib_symbol_library_manager.h>
 #include <sch_validators.h>
 #include <template_fieldnames.h>
 
 
-DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxString& aMessage,
-                                              const wxArrayString* aRootSymbolNames,
+DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
+                                              const wxString& aLibName,
+                                              LIB_SYMBOL_LIBRARY_MANAGER& aLibManager,
                                               const wxString& aInheritFromSymbolName,
                                               std::function<bool( wxString newName )> aValidator ) :
-        DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
+        DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ), m_libManager( aLibManager ),
         m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
                            m_staticPinTextPositionUnits, true ),
         m_validator( std::move( aValidator ) )
 {
-    if( aRootSymbolNames && aRootSymbolNames->GetCount() )
+    wxArrayString symbolNames;
+    m_libManager.GetSymbolNames( aLibName, symbolNames );
+
+    if( symbolNames.GetCount() )
     {
         wxArrayString escapedNames;
 
-        for( const wxString& name : *aRootSymbolNames )
+        for( const wxString& name : symbolNames )
             escapedNames.Add( UnescapeString( name ) );
 
         m_comboInheritanceSelect->SetSymbolList( escapedNames );
@@ -51,15 +56,12 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxS
         if( !aInheritFromSymbolName.IsEmpty() )
         {
             m_comboInheritanceSelect->SetSelectedSymbol( aInheritFromSymbolName );
-            syncControls( !m_comboInheritanceSelect->GetValue().IsEmpty() );
         }
     }
 
-    if( !aMessage.IsEmpty() )
-    {
-        m_infoBar->RemoveAllButtons();
-        m_infoBar->ShowMessage( aMessage );
-    }
+    // Trigger the event handler to show/hide the info bar message.
+    wxCommandEvent dummyEvent;
+    onParentSymbolSelect( dummyEvent );
 
     m_textName->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
     m_textReference->SetValidator( FIELD_VALIDATOR( REFERENCE_FIELD ) );
@@ -96,7 +98,20 @@ bool DIALOG_LIB_NEW_SYMBOL::TransferDataFromWindow()
 
 void DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect( wxCommandEvent& aEvent )
 {
-    syncControls( !m_comboInheritanceSelect->GetValue().IsEmpty() );
+    const wxString parent = m_comboInheritanceSelect->GetValue();
+
+    if( !parent.IsEmpty() )
+    {
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->ShowMessage( wxString::Format( _( "Deriving from symbol '%s'." ), parent ),
+                                wxICON_INFORMATION );
+    }
+    else
+    {
+        m_infoBar->Dismiss();
+    }
+
+    syncControls( !parent.IsEmpty() );
 }
 
 

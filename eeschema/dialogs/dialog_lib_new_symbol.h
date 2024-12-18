@@ -29,13 +29,15 @@
 #include <dialog_lib_new_symbol_base.h>
 
 class EDA_DRAW_FRAME;
+class LIB_SYMBOL_LIBRARY_MANAGER;
 class wxArrayString;
 
 class DIALOG_LIB_NEW_SYMBOL : public DIALOG_LIB_NEW_SYMBOL_BASE
 {
 public:
-    DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxString& aMessage,
-                           const wxArrayString* aRootSymbolNames,
+    DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
+                           const wxString& aLibName,
+                           LIB_SYMBOL_LIBRARY_MANAGER& aLibManager,
                            const wxString&  aInheritFromSymbolName,
                            std::function<bool( wxString newName )> aValidator );
 
@@ -105,6 +107,7 @@ private:
     void syncControls( bool aIsDerivedPart );
 
 private:
+    LIB_SYMBOL_LIBRARY_MANAGER&             m_libManager;
     UNIT_BINDER                             m_pinTextPosition;
     std::function<bool( wxString newName )> m_validator;
 };
