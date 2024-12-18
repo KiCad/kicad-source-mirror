@@ -36,9 +36,6 @@ FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aK
 {
     m_prev_panel = FOOTPRINT_PREVIEW_PANEL_BASE::Create( this, aKiway );
 
-    if( !m_prev_panel )
-        return;
-
     m_statusPanel = new wxPanel( this );
     m_status = new wxStaticText( m_statusPanel, wxID_ANY, wxEmptyString );
     m_statusSizer = new wxBoxSizer( wxVERTICAL );
@@ -47,19 +44,25 @@ FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aK
     m_statusSizer->Add( 0, 0, 1 );  // add a spacer
     m_statusPanel->SetSizer( m_statusSizer );
 
-    // Give the status panel the same color scheme as the canvas so it isn't jarring when
-    // switched to
-    m_statusPanel->SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
-    m_statusPanel->SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
-    m_status->SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
+    if( m_prev_panel )
+    {
+        // Give the status panel the same color scheme as the canvas so it isn't jarring when
+        // switched to
+        m_statusPanel->SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
+        m_statusPanel->SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
+        m_status->SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
 
-    // Set our background so wx doesn't render a normal control background momentarily when
-    // rapidly navigating with arrow keys
-    SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
-    SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
+        // Set our background so wx doesn't render a normal control background momentarily when
+        // rapidly navigating with arrow keys
+        SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
+        SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
+    }
 
     m_outerSizer = new wxBoxSizer( wxVERTICAL );
-    m_outerSizer->Add( m_prev_panel->GetWindow(), 1, wxALL | wxEXPAND, 0 );
+
+    if( m_prev_panel )
+        m_outerSizer->Add( m_prev_panel->GetWindow(), 1, wxALL | wxEXPAND, 0 );
+
     m_outerSizer->Add( m_statusPanel, 1, wxALL | wxEXPAND, 0 );
 
     SetSizer( m_outerSizer );
@@ -72,7 +75,10 @@ void FOOTPRINT_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 {
     m_status->SetLabel( aText );
     m_statusPanel->Show();
-    m_prev_panel->GetWindow()->Hide();
+
+    if( m_prev_panel )
+        m_prev_panel->GetWindow()->Hide();
+
     Layout();
 }
 
@@ -81,20 +87,25 @@ void FOOTPRINT_PREVIEW_WIDGET::ClearStatus()
 {
     m_status->SetLabel( wxEmptyString );
     m_statusPanel->Hide();
-    m_prev_panel->GetWindow()->Show();
+
+    if( m_prev_panel )
+        m_prev_panel->GetWindow()->Show();
+
     Layout();
 }
 
 
 void FOOTPRINT_PREVIEW_WIDGET::SetUserUnits( EDA_UNITS aUnits )
 {
-    m_prev_panel->SetUserUnits( aUnits );
+    if( m_prev_panel )
+        m_prev_panel->SetUserUnits( aUnits );
 }
 
 
 void FOOTPRINT_PREVIEW_WIDGET::SetPinFunctions( const std::map<wxString, wxString>& aPinFunctions )
 {
-    m_prev_panel->SetPinFunctions( aPinFunctions );
+    if( m_prev_panel )
+        m_prev_panel->SetPinFunctions( aPinFunctions );
 }
 
 
@@ -122,13 +133,16 @@ void FOOTPRINT_PREVIEW_WIDGET::DisplayFootprints( std::shared_ptr<FOOTPRINT> aFo
                                                   std::shared_ptr<FOOTPRINT> aFootprintB )
 {
     ClearStatus();
-    m_prev_panel->DisplayFootprints( aFootprintA, aFootprintB );
+
+    if( m_prev_panel )
+        m_prev_panel->DisplayFootprints( aFootprintA, aFootprintB );
 }
 
 
 void FOOTPRINT_PREVIEW_WIDGET::RefreshAll()
 {
-    m_prev_panel->RefreshAll();
+    if( m_prev_panel )
+        m_prev_panel->RefreshAll();
 }
 
 
