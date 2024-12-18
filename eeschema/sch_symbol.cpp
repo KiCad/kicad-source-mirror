@@ -2718,7 +2718,6 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
 void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
 {
-    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
     BOX2I           bbox = GetBodyBoundingBox();
     BOX2I           pins = GetBodyAndPinsBoundingBox();
     VECTOR2D        margins( std::max( bbox.GetX() - pins.GetX(),
@@ -2731,7 +2730,8 @@ void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
     margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
     bbox.Inflate( KiROUND( margins.x ), KiROUND( margins.y ) );
 
-    aPlotter->SetColor( colors->GetColor( LAYER_DNP_MARKER ) );
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    aPlotter->SetColor( renderSettings->GetLayerColor( LAYER_DNP_MARKER ) );
 
     aPlotter->ThickSegment( bbox.GetOrigin(), bbox.GetEnd(), strokeWidth, FILLED, nullptr );
 
