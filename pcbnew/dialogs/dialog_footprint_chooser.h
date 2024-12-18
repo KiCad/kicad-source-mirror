@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,8 @@ protected:
 	void onFpChanged( wxCommandEvent& event );
 
     void build3DCanvas();
+
+    virtual void TearDownQuasiModal() override;
 
 protected:
     PANEL_FOOTPRINT_CHOOSER* m_chooserPanel;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2019, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,15 @@ protected:
     void resetSize();
 
     virtual void OnCharHook( wxKeyEvent& aEvt );
+
+    /**
+     * Override this method to perform dialog tear down actions not suitable for object dtor.
+     *
+     * @warning This only gets called for dialogs that are shown in the quasimodal mode.  If
+     *          you need to perform tear down actions in modal or modeless dialogs, create
+     *          a close window event handler.
+     */
+    virtual void TearDownQuasiModal() {}
 
 private:
     /**
