@@ -77,6 +77,8 @@
         else:
             raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
+    def __add__(self, other):            return VECTOR2I(self.x+other.x, self.y+other.y)
+    def __sub__(self, other):            return VECTOR2I(self.x-other.x, self.y-other.y)
 
     %}
 }
@@ -109,6 +111,8 @@
         else:
             raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
+    def __add__(self, other):            return VECTOR2L(self.x+other.x, self.y+other.y)
+    def __sub__(self, other):            return VECTOR2L(self.x-other.x, self.y-other.y)
 
     %}
 }
