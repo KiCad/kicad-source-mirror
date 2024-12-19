@@ -23,6 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+#include <vector>
+
 #include <confirm.h>
 #include <refdes_utils.h>
 
@@ -64,8 +67,23 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
     for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
     {
-        // Process symbol attributes
+        // The rtree returns items in a non-deterministic order (platform-dependent)
+        // Therefore we need to sort them before outputting to ensure file stability for version
+        // control and QA comparisons
+        std::vector<EDA_ITEM*> sheetItems;
+
         for( EDA_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            sheetItems.push_back( item );
+
+        auto pred = []( const EDA_ITEM* item1, const EDA_ITEM* item2 )
+        {
+            return item1->m_Uuid < item2->m_Uuid;
+        };
+
+        std::sort( sheetItems.begin(), sheetItems.end(), pred );
+
+        // Process symbol attributes
+        for( EDA_ITEM* item : sheetItems )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
 
