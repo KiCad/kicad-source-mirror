@@ -382,7 +382,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
 
         if( iter == GetODBPlugin()->GetViaTraceSubnetMap().end() )
         {
-            wxLogError( wxT( "Failed to get subnet trace data" ) );
+            wxLogError( wxT( "Failed to get subnet track data" ) );
             return;
         }
 

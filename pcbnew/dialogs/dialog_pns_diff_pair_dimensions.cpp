@@ -52,7 +52,7 @@ bool DIALOG_PNS_DIFF_PAIR_DIMENSIONS::TransferDataFromWindow()
 
     if( m_traceGap.GetValue() <= 0 )
     {
-        DisplayErrorMessage( this, _( "Trace gap must be greater than 0." ) );
+        DisplayErrorMessage( this, _( "Track gap must be greater than 0." ) );
         m_traceGapText->SetFocus();
         return false;
     }

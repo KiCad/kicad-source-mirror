@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,7 +64,7 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 
 	bSizer7->Add( fgSizer1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	m_viaTraceGapEqual = new wxCheckBox( this, wxID_ANY, _("Via gap same as trace gap"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaTraceGapEqual = new wxCheckBox( this, wxID_ANY, _("Via gap same as track gap"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaTraceGapEqual->SetValue(true);
 	bSizer7->Add( m_viaTraceGapEqual, 0, wxALL|wxEXPAND, 10 );
 

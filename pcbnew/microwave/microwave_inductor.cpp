@@ -363,7 +363,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
 
     // Enter the desired length.
     wxString             msg = editFrame->StringFromValue( aInductorPattern.m_Length );
-    WX_TEXT_ENTRY_DIALOG dlg( editFrame, _( "Length of Trace:" ), wxEmptyString, msg );
+    WX_TEXT_ENTRY_DIALOG dlg( editFrame, _( "Length of Track:" ), wxEmptyString, msg );
 
     // TODO: why is this QuasiModal?
     if( dlg.ShowQuasiModal() != wxID_OK )

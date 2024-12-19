@@ -1,6 +1,6 @@
-If you specify the maximum current, then the trace widths will be calculated to suit.
+If you specify the maximum current, then the track widths will be calculated to suit.
 
-If you specify one of the trace widths, the maximum current it can handle will be calculated. The width for the other trace to also handle this current will then be calculated.
+If you specify one of the track widths, the maximum current it can handle will be calculated. The width for the other track to also handle this current will then be calculated.
 
 The controlling value is shown in bold.
 
@@ -13,4 +13,4 @@ ___I___ is maximum current in A<br>
 ___&Delta;T___ is temperature rise above ambient in &deg;C<br>
 ___W___ is width in mils<br>
 ___H___ is thickness (height) in mils<br>
-___K___ is 0.024 for internal traces or 0.048 for external traces
+___K___ is 0.024 for internal tracks or 0.048 for external tracks

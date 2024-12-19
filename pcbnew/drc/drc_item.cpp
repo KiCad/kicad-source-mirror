@@ -259,11 +259,11 @@ DRC_ITEM DRC_ITEM::textThicknessOutOfRange( DRCE_TEXT_THICKNESS,
         wxT( "text_thickness" ) );
 
 DRC_ITEM DRC_ITEM::lengthOutOfRange( DRCE_LENGTH_OUT_OF_RANGE,
-        _( "Trace length out of range" ),
+        _( "Track length out of range" ),
         wxT( "length_out_of_range" ) );
 
 DRC_ITEM DRC_ITEM::skewOutOfRange( DRCE_SKEW_OUT_OF_RANGE,
-        _( "Skew between traces out of range" ),
+        _( "Skew between tracks out of range" ),
         wxT( "skew_out_of_range" ) );
 
 // Note: this used to only check against a max value, hence the settings key too_many_vias

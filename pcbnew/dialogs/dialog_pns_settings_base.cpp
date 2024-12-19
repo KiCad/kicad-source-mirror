@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,7 +54,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer3->Add( m_shoveVias, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
 
 	m_backPressure = new wxCheckBox( sbModeSizer->GetStaticBox(), wxID_ANY, _("Jump over obstacles"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_backPressure->SetToolTip( _("When enabled, the router tries to move colliding traces behind solid obstacles (e.g. pads) instead of \"reflecting\" back the collision") );
+	m_backPressure->SetToolTip( _("When enabled, the router tries to move colliding tracks behind solid obstacles (e.g. pads) instead of \"reflecting\" back the collision") );
 
 	bSizer3->Add( m_backPressure, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
 
@@ -80,12 +80,12 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	gSizer1 = new wxGridSizer( 0, 1, 2, 0 );
 
 	m_removeLoops = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Remove redundant tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_removeLoops->SetToolTip( _("Removes loops while routing (e.g. if the new track ensures same connectivity as an already existing one, the old track is removed).\nLoop removal works locally (only between the start and end of the currently routed trace).") );
+	m_removeLoops->SetToolTip( _("If the new track has the same connection as an already existing track, the old track is removed.") );
 
 	gSizer1->Add( m_removeLoops, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_smartPads = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize pad connections"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_smartPads->SetToolTip( _("When enabled, the router tries to break out pads/vias in a clean way, avoiding acute angles and jagged breakout traces.") );
+	m_smartPads->SetToolTip( _("When enabled, the router tries to break out pads/vias in a clean way, avoiding acute angles and jagged breakout tracks.") );
 
 	gSizer1->Add( m_smartPads, 0, wxRIGHT|wxLEFT, 5 );
 

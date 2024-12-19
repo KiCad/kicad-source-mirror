@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -92,7 +92,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	bSizeRight = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerTW_Result;
-	sbSizerTW_Result = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("External Layer Traces") ), wxVERTICAL );
+	sbSizerTW_Result = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("External Layer Tracks") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTW_Results;
 	fgSizerTW_Results = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -100,7 +100,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerTW_Results->SetFlexibleDirection( wxBOTH );
 	fgSizerTW_Results->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextExtWidth = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Trace width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextExtWidth = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Track width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextExtWidth->Wrap( -1 );
 	fgSizerTW_Results->Add( m_staticTextExtWidth, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
@@ -112,7 +112,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	m_TW_ExtTrackWidth_choiceUnit->SetSelection( 0 );
 	fgSizerTW_Results->Add( m_TW_ExtTrackWidth_choiceUnit, 0, wxEXPAND, 5 );
 
-	m_staticText65 = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Trace thickness (H):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText65 = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Track thickness (H):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText65->Wrap( -1 );
 	fgSizerTW_Results->Add( m_staticText65, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
@@ -188,7 +188,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	bSizeRight->Add( sbSizerTW_Result, 1, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizerTW_Result1;
-	sbSizerTW_Result1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Internal Layer Traces") ), wxVERTICAL );
+	sbSizerTW_Result1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Internal Layer Tracks") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTW_Results1;
 	fgSizerTW_Results1 = new wxFlexGridSizer( 7, 3, 0, 0 );
@@ -196,7 +196,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerTW_Results1->SetFlexibleDirection( wxBOTH );
 	fgSizerTW_Results1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextIntWidth = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Trace width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextIntWidth = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Track width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextIntWidth->Wrap( -1 );
 	m_staticTextIntWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
@@ -210,7 +210,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	m_TW_IntTrackWidth_choiceUnit->SetSelection( 0 );
 	fgSizerTW_Results1->Add( m_TW_IntTrackWidth_choiceUnit, 0, wxEXPAND, 5 );
 
-	m_staticText652 = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Trace thickness (H):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText652 = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Track thickness (H):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText652->Wrap( -1 );
 	fgSizerTW_Results1->Add( m_staticText652, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
