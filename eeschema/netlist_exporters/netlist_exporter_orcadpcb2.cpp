@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#include <algorithm>
+#include <vector>
 
 #include <confirm.h>
 #include <refdes_utils.h>
@@ -68,8 +71,23 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
     {
         SCH_SHEET_PATH sheet = sheetList[i];
 
-        // Process symbol attributes
+        // The rtree returns items in a non-deterministic order (platform-dependent)
+        // Therefore we need to sort them before outputting to ensure file stability for version
+        // control and QA comparisons
+        std::vector<EDA_ITEM*> sheetItems;
+
         for( EDA_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            sheetItems.push_back( item );
+
+        auto pred = []( const EDA_ITEM* item1, const EDA_ITEM* item2 )
+        {
+            return item1->m_Uuid < item2->m_Uuid;
+        };
+
+        std::sort( sheetItems.begin(), sheetItems.end(), pred );
+
+        // Process symbol attributes
+        for( EDA_ITEM* item : sheetItems )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
