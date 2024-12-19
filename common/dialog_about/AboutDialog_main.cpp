@@ -803,28 +803,38 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // Lead librarians
     ADD_LIBRARIAN( wxT( "Carsten Presser") );
 
-    // Active librarians
+    // Active librarians (last 2 years)
     ADD_LIBRARIAN( wxT( "Geries AbuAkel" ) );
     ADD_LIBRARIAN( wxT( "Patrick Baus" ) );
     ADD_LIBRARIAN( wxT( "John Beard" ) );
     ADD_LIBRARIAN( wxT( "Jeremy Boynes" ) );
     ADD_LIBRARIAN( wxT( "Greg Cormier" ) );
+    ADD_LIBRARIAN( wxT( "Tobias Falk" ) );
+    ADD_LIBRARIAN( wxT( "Simon Fivat" ) );
     ADD_LIBRARIAN( wxT( "Jan Sebastian Götte (jaseg)" ) );
     ADD_LIBRARIAN( wxT( "Petr Hodina" ) );
     ADD_LIBRARIAN( wxT( "Mikkel Jeppesen" ) );
     ADD_LIBRARIAN( wxT( "Aristeidis Kimirtzis" ) );
     ADD_LIBRARIAN( wxT( "Brandon Kirisaki" ) );
     ADD_LIBRARIAN( wxT( "Uli Köhler" ) );
+    ADD_LIBRARIAN( wxT( "Graham Keeth" ) );
     ADD_LIBRARIAN( wxT( "Andrew Lutsenko" ) );
+    ADD_LIBRARIAN( wxT( "Mojca Miklavec" ) );
     ADD_LIBRARIAN( wxT( "Jorge Neiva" ) );
-    ADD_LIBRARIAN( wxT( "Valentin Ochs" ) );
     ADD_LIBRARIAN( wxT( "Carlos Nieves Ónega" ) );
+    ADD_LIBRARIAN( wxT( "Lynn Ochs" ) );
+    ADD_LIBRARIAN( wxT( "Ed Peguillan" ) );
     ADD_LIBRARIAN( wxT( "Dash Peters" ) );
+    ADD_LIBRARIAN( wxT( "Sergio Rocha" ) );
+    ADD_LIBRARIAN( wxT( "Benjamin Reynier" ) );
     ADD_LIBRARIAN( wxT( "Armin Schoisswohl" ) );
+    ADD_LIBRARIAN( wxT( "Joel Schulz-Andres" ) );
+    ADD_LIBRARIAN( wxT( "Frank Severinsen" ) );
     ADD_LIBRARIAN( wxT( "Martin Sotirov" ) );
+    ADD_LIBRARIAN( wxT( "Philipp Swoboda" ) );
     ADD_LIBRARIAN( wxT( "Kliment Yanev" ) );
 
-    // Former librarians
+    // Previously active librarians
     ADD_LIBRARIAN( wxT( "Christian Schlüter" ) );
     ADD_LIBRARIAN( wxT( "Rene Poeschl" ) );
     ADD_LIBRARIAN( wxT( "Antonio Vázquez Blanco " ) );
@@ -845,7 +855,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 #define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Scripts by Maui" ),
                                          MODELS_3D_CONTRIBUTION,
-                                         wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D-generator" ) ) );
+                                         wxS( "https://gitlab.com/kicad/libraries/kicad-footprint-generator" ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
                                          MODELS_3D_CONTRIBUTION,
                                          wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D/-/graphs/master" ) ) );
