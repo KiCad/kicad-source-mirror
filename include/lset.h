@@ -45,6 +45,8 @@ public:
 
     LSET( std::initializer_list<PCB_LAYER_ID> aList );
 
+    LSET( const std::vector<PCB_LAYER_ID>& aList );
+
     LSET( const LSEQ& aSeq );
 
     LSET( const LAYER_RANGE& aRange );

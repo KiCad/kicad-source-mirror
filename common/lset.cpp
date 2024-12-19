@@ -51,6 +51,16 @@ LSET::LSET( std::initializer_list<PCB_LAYER_ID> aList ) :
     }
 }
 
+LSET::LSET( const std::vector<PCB_LAYER_ID>& aList ) :
+    LSET()
+{
+    for( PCB_LAYER_ID layer : aList )
+    {
+        if( layer >= 0 )
+            set( layer );
+    }
+}
+
 
 LSET::LSET( const LSEQ& aSeq ) :
     LSET()
