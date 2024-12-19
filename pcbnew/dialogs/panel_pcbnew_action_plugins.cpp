@@ -238,6 +238,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
         }
         else
         {
+#ifdef KICAD_IPC_API
             auto action = std::get<const PLUGIN_ACTION*>( orderedPlugins[row] );
 
             const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk()
@@ -261,6 +262,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
             m_grid->SetCellValue( row, COLUMN_PLUGIN_NAME, action->plugin.Name() );
             m_grid->SetCellValue( row, COLUMN_DESCRIPTION, action->description );
+#endif
         }
     }
 
