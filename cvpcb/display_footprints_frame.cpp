@@ -580,7 +580,7 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 
 COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fp_edit" );
+    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
     if( cfg )
         return Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );

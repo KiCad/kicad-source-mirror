@@ -160,5 +160,5 @@ FOOTPRINT_PREVIEW_PANEL_BASE* FOOTPRINT_PREVIEW_PANEL_BASE::Create( wxWindow* aP
     {
     }
 
-    return (FOOTPRINT_PREVIEW_PANEL_BASE*) panel;
+    return dynamic_cast<FOOTPRINT_PREVIEW_PANEL_BASE*>( panel );
 }
