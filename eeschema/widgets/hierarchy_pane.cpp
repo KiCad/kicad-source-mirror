@@ -417,11 +417,11 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
 
         if( dlg.ShowModal() == wxID_OK && dlg.GetValue() != itemData->m_SheetPath.GetPageNumber() )
         {
+            SCH_COMMIT commit( m_frame );
             SCH_SHEET_PATH parentPath = itemData->m_SheetPath;
             parentPath.pop_back();
 
-            m_frame->SaveCopyInUndoList( parentPath.LastScreen(), itemData->m_SheetPath.Last(),
-                                         UNDO_REDO::CHANGED, false );
+            commit.Modify( itemData->m_SheetPath.Last(), parentPath.LastScreen() );
 
             itemData->m_SheetPath.SetPageNumber( dlg.GetValue() );
 
@@ -431,7 +431,7 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
                 m_frame->OnPageSettingsChange();
             }
 
-            m_frame->OnModify();
+            commit.Push( wxS( "Change sheet page number." ) );
 
             UpdateLabelsHierarchyTree();
         }

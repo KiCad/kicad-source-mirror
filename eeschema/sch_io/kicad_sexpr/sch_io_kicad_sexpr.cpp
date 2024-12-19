@@ -691,10 +691,30 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                       mirrorY ? "y" : "" );
     }
 
-    // The symbol unit is always set to the first instance regardless of the current sheet
+    // The symbol unit is always set to the ordianal instance regardless of the current sheet
     // instance to prevent file churn.
-    int unit = ( aSymbol->GetInstances().size() == 0 ) ? aSymbol->GetUnit()
-                                                       : aSymbol->GetInstances()[0].m_Unit;
+    SCH_SYMBOL_INSTANCE ordinalInstance;
+
+    ordinalInstance.m_Reference = aSymbol->GetPrefix();
+
+    const SCH_SCREEN* parentScreen = static_cast<const SCH_SCREEN*>( aSymbol->GetParent() );
+
+    wxASSERT( parentScreen );
+
+    if( parentScreen && m_schematic )
+    {
+        std::optional<SCH_SHEET_PATH> ordinalPath =
+                m_schematic->Hierarchy().GetOrdinalPath( parentScreen );
+
+        wxASSERT( ordinalPath );
+
+        if( ordinalPath )
+            aSymbol->GetInstance( ordinalInstance, ordinalPath->Path() );
+        else if( aSymbol->GetInstances().size() )
+            ordinalInstance = aSymbol->GetInstances()[0];
+    }
+
+    int unit = ordinalInstance.m_Unit;
 
     if( aForClipboard && aRelativePath )
     {
@@ -732,7 +752,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             // sheet instance to prevent file churn.
             if( id == REFERENCE_FIELD )
             {
-                field.SetText( aSymbol->GetInstances()[0].m_Reference );
+                field.SetText( ordinalInstance.m_Reference );
             }
             else if( id == VALUE_FIELD )
             {

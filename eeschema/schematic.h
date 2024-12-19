@@ -96,7 +96,11 @@ public:
 
     SCH_SHEET_LIST BuildSheetListSortedByPageNumbers() const override
     {
-        return SCH_SHEET_LIST( m_rootSheet );
+        SCH_SHEET_LIST hierarchy( m_rootSheet );
+
+        hierarchy.SortByPageNumbers();
+
+        return hierarchy;
     }
 
     SCH_SHEET_LIST BuildUnorderedSheetList() const

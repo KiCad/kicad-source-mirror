@@ -221,9 +221,7 @@ SCH_SHEET_LIST SCHEMATIC::Hierarchy() const
 
 void SCHEMATIC::RefreshHierarchy()
 {
-    wxLogDebug( wxS( "Refreshing schematic heirarchy." ) );
-
-    m_hierarchy = SCH_SHEET_LIST( m_rootSheet );
+    m_hierarchy = BuildSheetListSortedByPageNumbers();
 }
 
 
