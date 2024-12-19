@@ -209,7 +209,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "John Beard" ), LEAD_DEV );
     ADD_DEV( wxT( "Jon Evans" ), LEAD_DEV );
     ADD_DEV( wxT( "Roberto Fernandez Bautista" ), LEAD_DEV );
+    ADD_DEV( wxT( "Ethan Chien" ), LEAD_DEV );
+    ADD_DEV( wxT( "Fabien Corona" ), LEAD_DEV );
     ADD_DEV( wxT( "Seth Hillbrand" ), LEAD_DEV );
+    ADD_DEV( wxT( "James Jackson" ), LEAD_DEV );
     ADD_DEV( wxT( "Ian McInerney" ), LEAD_DEV );
     ADD_DEV( wxT( "Mark Roszko" ), LEAD_DEV );
     ADD_DEV( wxT( "Thomas Pointhuber" ), LEAD_DEV );
@@ -218,7 +221,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Tomasz Wlostowski" ), LEAD_DEV );
     ADD_DEV( wxT( "Jeff Young" ), LEAD_DEV );
 
-    ADD_DEV( wxT( "Fabien Corona" ), FORMER_DEV );
     ADD_DEV( wxT( "Dick Hollenbeck" ), FORMER_DEV );
     ADD_DEV( wxT( "Alexis Lockwood" ), FORMER_DEV );
     ADD_DEV( wxT( "Brian Sidebotham" ), FORMER_DEV );
@@ -245,6 +247,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Roman Bashkov" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Michael Beardsworth" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Matthew Beckler" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Markus Becker" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Konrad Beckmann" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Eduardo Behr" ), CONTRIB_DEV );
     ADD_DEV( wxT( "David Beinder" ), CONTRIB_DEV );
@@ -255,6 +258,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Gustav Bergquist" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Cirilo Bernardo" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Joël Bertrand" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Harry Best" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Andreas Beutling" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Brian F. G. Bidulock" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Anton Blanchard" ), CONTRIB_DEV );
@@ -293,6 +297,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Ruben De Smet" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Alexander Dewing" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Okan Demir" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Troy Denton" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Jonas Diemer" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ben Dooks" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Pavel Dovgalyuk" ), CONTRIB_DEV );
@@ -320,8 +325,11 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Christian Gagneraud" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ben Gamari" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ashutosh Gangwar" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kamil Galik" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Alessandro Gatti" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Thomas Gambier" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Hal Gentz" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Lucas Gerads" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Davide Gerhard" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Michael Geselbracht" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Giulio Girardi" ), CONTRIB_DEV );
@@ -332,6 +340,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Element Green" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Mathias Grimmberger" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Johan Grip" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michal Grzegorzek" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Hildo Guillardi Júnior" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Niki Guldbrand" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Tanay Gupta" ), CONTRIB_DEV );
@@ -354,6 +363,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Hans Henry von Tresckow" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Diego Herranz" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Marco Hess" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Petri Hodju" ), CONTRIB_DEV );
     ADD_DEV( wxT( "David Holdeman" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Laurens Holst" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Yang Hongbo" ), CONTRIB_DEV );
@@ -370,7 +380,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Andre Iwers" ), CONTRIB_DEV );
 
     ADD_DEV( wxT( "Hasan Jaafar" ), CONTRIB_DEV );
-    ADD_DEV( wxT( "James Jackson" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Jerry Jacobs" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Christian Jacobsen" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Michal Jahelka" ), CONTRIB_DEV );
@@ -396,12 +405,16 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Ingo Kletti" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Kliment" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Sylwester Kocjan" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Uli Köhler" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Clemens Koller" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Asuki Kono" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Jakub Kozdon" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andrej Krpic" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Hajo Nils Krabbenhöft" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Simon Kueppers" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Martijn Kuipers" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dhinesh Kumar" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Eric Kuzmenko" ), CONTRIB_DEV );
 
     ADD_DEV( wxT( "Robbert Lagerweij" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Dimitris Lampridis" ), CONTRIB_DEV );
@@ -410,6 +423,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Mika Laitio" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Floris Lambrechts" ), CONTRIB_DEV );
     ADD_DEV( wxT( "lê văn lập" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Denis Latyshev" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Anton Lazarev" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Dag Lem" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ludovic Léau-mercier" ), CONTRIB_DEV );
@@ -437,6 +451,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Martin McNamara" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Cameron McQuinn" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ievgenii Meshcheriakov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mojca Miklavec" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ashley Mills" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Christoph Moench-Tegeder" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Peter Montgomery" ), CONTRIB_DEV );
@@ -444,6 +459,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Chris Morgan" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Felix Morgner" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Jan Mrázek" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Frank Muenstermann" ), CONTRIB_DEV );
 
     ADD_DEV( wxT( "Michael Narigon" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Jon Neal" ), CONTRIB_DEV );
@@ -459,6 +475,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Jason Oster" ), CONTRIB_DEV );
 
     ADD_DEV( wxT( "Frank Palazzolo" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Sven Pauli" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Matus Pavelek" ), CONTRIB_DEV );
     ADD_DEV( wxT( "luz paz" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Miguel Angel Ajo Pelayo" ), CONTRIB_DEV );
@@ -469,6 +486,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Fabian Pflug" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Christian Pfluger" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Brian Piccioni" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mathieu Pilato" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Nicolas Planel" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Paweł Płóciennik" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Carl Poirier" ), CONTRIB_DEV );
@@ -483,6 +501,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     ADD_DEV( wxT( "Barabas Raffai" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Urja Rannikko" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alexander Rauth" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Hendrik v. Raven" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Joshua Redstone" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Michele Renda" ), CONTRIB_DEV );
@@ -500,6 +519,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Heiko Rosemann" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Fabio Rossi" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ian Roth" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Huang Rui" ), CONTRIB_DEV );
 
     ADD_DEV( wxT( "Clément Saccoccio" ), CONTRIB_DEV );
     ADD_DEV( wxT( "J. Morio Sakaguchi" ), CONTRIB_DEV );
@@ -509,6 +529,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Felix Schneider" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Marvin Schmidt" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Carsten Schoenert" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Armin Schoisswohl" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Simon Schubert" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Michal Schulz" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Adrian Scripca" ), CONTRIB_DEV );
@@ -526,7 +547,9 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Martin Sivak" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Mateusz Skowroński" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Dominik Sliwa" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kacper Słomiński" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Blake Smith" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ikoma So" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Michal Sojka" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Rafael Sokolowski" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Vesa Solonen" ), CONTRIB_DEV );
@@ -546,12 +569,14 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Martin Thierer" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Karl Thorén" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Hiroshi Tokita" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Daniel Treffenstädt" ), CONTRIB_DEV );
 
     ADD_DEV( wxT( "Vladimir Ur" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Yon Uriarte" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Matthias Urlichs" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Vladimir Uryvaev" ), CONTRIB_DEV );
 
+    ADD_DEV( wxT( "Julie Vairai" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Henri Valta" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Dave Vandenbout" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Edwin van den Oetelaar" ), CONTRIB_DEV );
@@ -571,6 +596,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Dan Weatherill" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Stefan Weber" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Christian Weickhmann" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Bernhard M. Wiedemann" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Bevan Weiss" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Simon Wells" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Dominik Wernberger" ), CONTRIB_DEV );
@@ -578,8 +604,11 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Nick Winters" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Adam Wolf" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Andrzej Wolski" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Céleste Wouters" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Damian Wrobel" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Andrew Wygle" ), CONTRIB_DEV );
+
+    ADD_DEV( wxT( "xx" ), CONTRIB_DEV );
 
     ADD_DEV( wxT( "Jiaxun Yang" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Robert Yates" ), CONTRIB_DEV );
@@ -599,25 +628,31 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // The document writers
 #define DOC_TEAM _( "Documentation Team" )
 #define ADD_WRITER( name, category ) aInfo.AddDocWriter( new CONTRIBUTOR( name, category ) )
+    ADD_WRITER( wxT( "Scott Candey" ), DOC_TEAM );
     ADD_WRITER( wxS( "Jean-Pierre Charras" ), DOC_TEAM );
     ADD_WRITER( wxS( "Marco Ciampa" ), DOC_TEAM );
     ADD_WRITER( wxS( "Jon Evans" ), DOC_TEAM );
     ADD_WRITER( wxS( "Dick Hollenbeck" ), DOC_TEAM );
+    ADD_WRITER( wxS( "James Jackson" ), DOC_TEAM );
     ADD_WRITER( wxS( "Graham Keeth" ), DOC_TEAM );
     ADD_WRITER( wxS( "Igor Plyatov" ), DOC_TEAM );
     ADD_WRITER( wxS( "Wayne Stambaugh" ), DOC_TEAM );
     ADD_WRITER( wxS( "Fabrizio Tappero" ), DOC_TEAM );
+    ADD_WRITER( wxS( "taotieren" ), DOC_TEAM );
 
     /* The translators
      * As category the language to which the translation was done is used
      */
 #define ADD_TRANSLATOR( name, category ) aInfo.AddTranslator( new CONTRIBUTOR( name, category ) )
+    ADD_TRANSLATOR( wxT( "Radovan Blažek" ), wxS( "Czech (CS)" ) );
     ADD_TRANSLATOR( wxT( "Ondřej Čertík" ), wxS( "Czech (CS)" ) );
     ADD_TRANSLATOR( wxT( "Martin Kratoška" ), wxS( "Czech (CS)" ) );
     ADD_TRANSLATOR( wxT( "Radek Kuznik" ), wxS( "Czech (CS)" ) );
     ADD_TRANSLATOR( wxT( "Roman Ondráček" ), wxS( "Czech (CS)" ) );
+    ADD_TRANSLATOR( wxT( "Petr Pazourek" ), wxS( "Czech (CS)" ) );
     ADD_TRANSLATOR( wxT( "René Široký" ), wxS( "Czech (CS)" ) );
     ADD_TRANSLATOR( wxT( "Jan Straka" ), wxS( "Czech (CS)" ) );
+    ADD_TRANSLATOR( wxT( "Andrej Valek" ), wxS( "Czech (CS)" ) );
     ADD_TRANSLATOR( wxT( "Jan Vykydal" ), wxS( "Czech (CS)" ) );
 
     ADD_TRANSLATOR( wxS( "Mads Dyrmann" ), wxS( "Danish (DA)" ) );
@@ -635,6 +670,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_TRANSLATOR( wxT( "Mathias Neumann" ), wxS( "German (DE)" ) );
     ADD_TRANSLATOR( wxT( "Ken Ovo" ), wxS( "German (DE)" ) );
     ADD_TRANSLATOR( wxT( "Karl Schuh" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Frank Sonnenberg" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Lauritz Tieste" ), wxS( "German (DE)" ) );
     ADD_TRANSLATOR( wxT( "Dominik Wernberger" ), wxS( "German (DE)" ) );
 
     ADD_TRANSLATOR( wxS( "Manolis Stefanis" ), wxS( "Greek (el_GR)" ) );
@@ -645,14 +682,18 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     ADD_TRANSLATOR( wxT( "Adolfo Jayme Barrientos" ), wxS( "Spanish (ES)" ) );
     ADD_TRANSLATOR( wxT( "Roberto Fernandez Bautista" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "Pablo Bianchi" ), wxS( "Spanish (ES)" ) );
     ADD_TRANSLATOR( wxT( "Iñigo Figuero" ), wxS( "Spanish (ES)" ) );
     ADD_TRANSLATOR( wxT( "Augusto Fraga Giachero" ), wxS( "Spanish (ES)" ) );
     ADD_TRANSLATOR( wxS( "Pedro Martin del Valle" ), wxS( "Spanish (ES)" ) );
     ADD_TRANSLATOR( wxS( "Gabriel Martinez" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "Gallego Novato" ), wxS( "Spanish (ES)" ) );
     ADD_TRANSLATOR( wxT( "Jose Perez" ), wxS( "Spanish (ES)" ) );
     ADD_TRANSLATOR( wxT( "Iñigo Zuluaga" ), wxS( "Spanish (ES)" ) );
-    ADD_TRANSLATOR( wxT( "VicSanRoPe" ), wxS( "Spanish - Latin American (ES)" ) );
+    ADD_TRANSLATOR( wxT( "Ulices Avila Hernandez" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "VicSanRoPe" ), wxS( "Spanish (ES)" ) );
 
+    ADD_TRANSLATOR( wxT( "VicSanRoPe" ), wxS( "Spanish - Latin American (ES)" ) );
     ADD_TRANSLATOR( wxT( "Ulices Avila Hernandez" ), wxS( "Spanish - Latin American (ES)" ) );
 
     ADD_TRANSLATOR( wxT( "Vesa Solonen" ), wxS( "Finnish (FI)" ) );
@@ -669,6 +710,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     ADD_TRANSLATOR( wxT( "Jean-Pierre Charras" ), wxS( "French (FR)" ) );
 
+    ADD_TRANSLATOR( wxT( "Boromyr" ), wxS( "Italian (IT)" ) );
     ADD_TRANSLATOR( wxT( "Marco Ciampa" ), wxS( "Italian (IT)" ) );
 
     ADD_TRANSLATOR( wxT( "Subaru Arai" ), wxS( "Japanese (JA)" ) );
@@ -679,6 +721,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_TRANSLATOR( wxT( "Norio Suzuki" ), wxS( "Japanese (JA)" ) );
     ADD_TRANSLATOR( wxT( "starfort-jp" ), wxS( "Japanese (JA)" ) );
     ADD_TRANSLATOR( wxT( "Hiroshi Tokita" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Yutaro Urata" ), wxS( "Japanese (JA)" ) );
     ADD_TRANSLATOR( wxT( "Kenta Yonekura" ), wxS( "Japanese (JA)" ) );
     ADD_TRANSLATOR( wxT( "Kaoru Zenyouji" ), wxS( "Japanese (JA)" ) );
 
@@ -703,18 +746,21 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_TRANSLATOR( wxT( "김랑기" ), wxS( "Korean (KO)" ) );
     ADD_TRANSLATOR( wxT( "KwonHyeokbeom" ), wxS( "Korean (KO)" ) );
     ADD_TRANSLATOR( wxT( "Minsu Kim (0xGabriel)" ), wxS( "Korean (KO)" ) );
-    ADD_TRANSLATOR( wxT( "pedrolinharesmoreira" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "Pedro Moreira" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "jeong-sangwon" ), wxS( "Korean (KO)" ) );
 
+    ADD_TRANSLATOR( wxT( "Ignas Brašiškis" ), wxS( "Lithuanian (LT)" ) );
     ADD_TRANSLATOR( wxT( "Henrik Kauhanen" ), wxS( "Lithuanian (LT)" ) );
     ADD_TRANSLATOR( wxT( "Dainius Mazuika" ), wxS( "Lithuanian (LT)" ) );
 
-    ADD_TRANSLATOR( wxT( "Arend-Jan van Hilten" ), wxS( "Dutch (NL)" ) );
-    ADD_TRANSLATOR( wxT( "CJ van der Hoeven" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Stefan De Raedemaeker" ), wxS( "Dutch (NL)" ) );
     ADD_TRANSLATOR( wxT( "Laurens Holst" ), wxS( "Dutch (NL)" ) );
     ADD_TRANSLATOR( wxT( "Pim Jansen" ), wxS( "Dutch (NL)" ) );
     ADD_TRANSLATOR( wxT( "Henrik Kauhanen" ), wxS( "Dutch (NL)" ) );
     ADD_TRANSLATOR( wxT( "Tom Niesse" ), wxS( "Dutch (NL)" ) );
     ADD_TRANSLATOR( wxT( "Christiaan Nieuwlaat" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Ranforingus" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "CJ van der Hoeven" ), wxS( "Dutch (NL)" ) );
     ADD_TRANSLATOR( wxT( "Arend-Jan van Hilten" ), wxS( "Dutch (NL)" ) );
     ADD_TRANSLATOR( wxT( "Bas Wijnen" ), wxS( "Dutch (NL)" ) );
 
@@ -726,7 +772,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     ADD_TRANSLATOR( wxT( "Ivan Chuba" ), wxS( "Polish (PL)" ) );
     ADD_TRANSLATOR( wxT( "Kerusey Karyu" ), wxS( "Polish (PL)" ) );
-    ADD_TRANSLATOR( wxT( "Krzysztof Kawa" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Krzysztof Kawa" ), wxS( "Polish (PL)" ) )
+    ADD_TRANSLATOR( wxT( "J Kolod" ), wxS( "Polish (PL)" ) );
     ADD_TRANSLATOR( wxT( "Eryk Michalak" ), wxS( "Polish (PL)" ) );
     ADD_TRANSLATOR( wxT( "Filip Piękoś" ), wxS( "Polish (PL)" ) );
     ADD_TRANSLATOR( wxT( "Mark Roszko" ), wxS( "Polish (PL)" ) );
@@ -736,18 +783,23 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_TRANSLATOR( wxT( "ZbeeGin" ), wxS( "Polish (PL)" ) );
 
     ADD_TRANSLATOR( wxT( "Augusto Fraga Giachero" ), wxS( "Brazilian Portuguese (PT_BR)" ) );
+    ADD_TRANSLATOR( wxT( "Pedro Moreira" ), wxS( "Brazilian Portuguese (PT_BR)" ) );
     ADD_TRANSLATOR( wxT( "Wellington Terumi Uemura" ), wxS( "Brazilian Portuguese (PT_BR)" ) );
 
+    ADD_TRANSLATOR( wxT( "Julio Dias" ), wxS( "Portuguese (PT)" ) );
     ADD_TRANSLATOR( wxT( "Augusto Fraga Giachero" ), wxS( "Portuguese (PT)" ) );
     ADD_TRANSLATOR( wxT( "Renie Marquet" ), wxS( "Portuguese (PT)" ) );
     ADD_TRANSLATOR( wxT( "Rafael Silva" ), wxS( "Portuguese (PT)" ) );
     ADD_TRANSLATOR( wxT( "ssantos" ), wxS( "Portuguese (PT)" ) );
 
-    ADD_TRANSLATOR( wxT( "Igor Plyatov" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Konstantin Baranovskiy" ), wxS( "Russian (RU)" ) );
     ADD_TRANSLATOR( wxT( "Дмитрий Дёмин" ), wxS( "Russian (RU)" ) );
     ADD_TRANSLATOR( wxT( "Andrey Fedorushkov" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Alevtina Karashokova" ), wxS( "Russian (RU)" ) );
     ADD_TRANSLATOR( wxT( "Eldar Khayrullin" ), wxS( "Russian (RU)" ) );
-    ADD_TRANSLATOR( wxT( "Konstantin Baranovskiy" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Alex Life" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Dmitry Mikhirev" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Igor Plyatov" ), wxS( "Russian (RU)" ) );
 
     ADD_TRANSLATOR( wxT( "Hanna Breisand" ), wxS( "Swedish (SV)" ) );
     ADD_TRANSLATOR( wxT( "Axel Henriksson"  ), wxS( "Swedish (SV)" ) );
@@ -764,28 +816,31 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_TRANSLATOR( wxT( "Alexsandr Kuzemko" ), wxS( "Ukrainian (UK)" ) );
     ADD_TRANSLATOR( wxT( "Andrii Shelestov" ), wxS( "Ukrainian (UK)" ) );
 
-    ADD_TRANSLATOR( wxT( "向阳阳" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "欠陥電気" ), wxS( "Simplified Chinese (zh_CN)" ) );
-    ADD_TRANSLATOR( wxT( "Liu Guang" ), wxS( "Simplified Chinese (zh_CN)" ) );
-    ADD_TRANSLATOR( wxT( "Taotieren" ), wxS( "Simplified Chinese (zh_CN)" ) );
-    ADD_TRANSLATOR( wxT( "Dingzhong Chen" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "向阳阳" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "David Chen" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Dingzhong Chen" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "Eric" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "Hubert Hu" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Liu Guang" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "HalfSweet" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Huanyin Liu" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "Pinpang Liao" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "Rigo Ligo" ), wxS( "Simplified Chinese (zh_CN)" ) );
-    ADD_TRANSLATOR( wxT( "Huanyin Liu" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "Zhen Sun" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "Jason Tan" ), wxS( "Simplified Chinese (zh_CN)" ) );
-    ADD_TRANSLATOR( wxT( "yangyangdaji" ), wxS( "Simplified Chinese (zh_CN)" ) );
-    ADD_TRANSLATOR( wxT( "Li Yidong" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Taotieren" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "Tian Yunhao" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Li Yidong" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "yangyangdaji" ), wxS( "Simplified Chinese (zh_CN)" ) );
     ADD_TRANSLATOR( wxT( "Lao Zhu" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "zly20129" ), wxS( "Simplified Chinese (zh_CN)" ) );
 
     ADD_TRANSLATOR( wxT( "撒景賢" ), wxS( "Traditional Chinese (zh_TW)" ) );
     ADD_TRANSLATOR( wxT( "David Chen" ), wxS( "Traditional Chinese (zh_TW)" ) );
     ADD_TRANSLATOR( wxT( "pon dahai" ), wxS( "Traditional Chinese (zh_TW)" ) );
     ADD_TRANSLATOR( wxT( "kai chiao chuang" ), wxS( "Traditional Chinese (zh_TW)" ) );
+    ADD_TRANSLATOR( wxT( "Poming Lee" ), wxS( "Traditional Chinese (zh_TW)" ) );
     ADD_TRANSLATOR( wxT( "William Lin" ), wxS( "Traditional Chinese (zh_TW)" ) );
     ADD_TRANSLATOR( wxT( "Taotieren" ), wxS( "Traditional Chinese (zh_TW)" ) );
     ADD_TRANSLATOR( wxT( "Li Yidong" ), wxS( "Traditional Chinese (zh_TW)" ) );
