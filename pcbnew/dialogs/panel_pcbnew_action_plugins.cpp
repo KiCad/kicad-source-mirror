@@ -153,6 +153,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
     PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( settings );
 
+#ifdef KICAD_IPC_API
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
 
     if( settings )
@@ -176,6 +177,20 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
             }
         }
     }
+#else
+    if( settings )
+    {
+        settings->m_VisibleActionPlugins.clear();
+
+        for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
+        {
+            wxString id = m_grid->GetCellValue( ii, COLUMN_SETTINGS_IDENTIFIER );
+
+            settings->m_VisibleActionPlugins.emplace_back( std::make_pair(
+                    id, m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) ) );
+        }
+    }
+#endif
 
     return true;
 }
