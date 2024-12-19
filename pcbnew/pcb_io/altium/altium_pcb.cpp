@@ -1123,14 +1123,32 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
     LSET validRemappingLayers = enabledLayers    | LSET::AllBoardTechMask() |
                                 LSET::UserMask() | LSET::UserDefinedLayers();
 
+    if( aStackup.size() == 0 )
+        return;
+
     std::vector<INPUT_LAYER_DESC> inputLayers;
     std::map<wxString, ALTIUM_LAYER>  altiumLayerNameMap;
 
-    for( size_t ii = 0; ii < aStackup.size(); )
+    ABOARD6_LAYER_STACKUP& curLayer = aStackup[0];
+    ALTIUM_LAYER           layer_num;
+    INPUT_LAYER_DESC       iLdesc;
+
+    auto next =
+            [&]( size_t ii ) -> size_t
+            {
+                // Within the copper stack, the nextId can be used to hop over unused layers in
+                // a particular Altium board.  The IDs start with ALTIUM_LAYER::UNKNOWN but the
+                // first copper layer in the array will be ALTIUM_LAYER::TOP_LAYER.
+                if( layer_num < ALTIUM_LAYER::BOTTOM_LAYER )
+                    return curLayer.nextId - 1;
+                else
+                    return ii + 1;
+            };
+
+    for( size_t ii = 0; ii < aStackup.size(); ii = next( ii ) )
     {
-        ABOARD6_LAYER_STACKUP& curLayer = aStackup[ii];
-        ALTIUM_LAYER           layer_num = static_cast<ALTIUM_LAYER>( ii + 1 );
-        INPUT_LAYER_DESC       iLdesc;
+        curLayer = aStackup[ii];
+        layer_num = static_cast<ALTIUM_LAYER>( ii + 1 );
 
         if( ii >= m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
             && !( layer_num >= ALTIUM_LAYER::TOP_OVERLAY
@@ -1155,14 +1173,6 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
         inputLayers.push_back( iLdesc );
         altiumLayerNameMap.insert( { curLayer.name, layer_num } );
         m_layerNames.insert( { layer_num, curLayer.name } );
-
-        // Within the copper stack, the nextId can be used to hop over unused layers in a particular
-        // Altium board.  The IDs start with ALTIUM_LAYER::UNKNOWN but the first copper layer in the
-        // array will be ALTIUM_LAYER::TOP_LAYER.
-        if( layer_num < ALTIUM_LAYER::BOTTOM_LAYER )
-            ii = curLayer.nextId - 1;
-        else
-            ++ii;
     }
 
     if( inputLayers.size() == 0 )
