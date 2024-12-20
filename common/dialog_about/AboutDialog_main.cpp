@@ -215,14 +215,15 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "James Jackson" ), LEAD_DEV );
     ADD_DEV( wxT( "Ian McInerney" ), LEAD_DEV );
     ADD_DEV( wxT( "Mark Roszko" ), LEAD_DEV );
-    ADD_DEV( wxT( "Thomas Pointhuber" ), LEAD_DEV );
     ADD_DEV( wxT( "Alex Shvartzkop" ), LEAD_DEV );
     ADD_DEV( wxT( "Mike Williams" ), LEAD_DEV );
     ADD_DEV( wxT( "Tomasz Wlostowski" ), LEAD_DEV );
     ADD_DEV( wxT( "Jeff Young" ), LEAD_DEV );
+    ADD_DEV( wxT( "Eric Zhuang" ), LEAD_DEV );
 
     ADD_DEV( wxT( "Dick Hollenbeck" ), FORMER_DEV );
     ADD_DEV( wxT( "Alexis Lockwood" ), FORMER_DEV );
+    ADD_DEV( wxT( "Thomas Pointhuber" ), FORMER_DEV );
     ADD_DEV( wxT( "Brian Sidebotham" ), FORMER_DEV );
     ADD_DEV( wxT( "Orson (Maciej Sumiński)" ), FORMER_DEV );
     ADD_DEV( wxT( "Mikolaj Wielgus" ), FORMER_DEV );
