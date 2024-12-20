@@ -62,12 +62,12 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
             // Accept handler
             [this]()
             {
-                EndModal( wxID_OK );
+                EndQuasiModal( wxID_OK );
             },
             // Escape handler
             [this]()
             {
-                EndModal( wxID_CANCEL );
+                EndQuasiModal( wxID_CANCEL );
             } );
 
     m_SizerTop->Add( m_chooserPanel, 1, wxEXPAND | wxRIGHT, 5 );
@@ -291,5 +291,13 @@ void DIALOG_FOOTPRINT_CHOOSER::TearDownQuasiModal()
                 fpPreviewPanel->StopDrawing();
             }
         }
+    }
+
+    if( m_preview3DCanvas )
+    {
+        // Work around assertion firing when we try to LockCtx on a hidden 3D canvas during dtor
+        wxCloseEvent dummy;
+        m_preview3DCanvas->Show();
+        m_preview3DCanvas->OnCloseWindow( dummy );
     }
 }

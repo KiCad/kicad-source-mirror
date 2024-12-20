@@ -213,6 +213,11 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
 FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 {
+    // Work around assertion firing when we try to LockCtx on a hidden 3D canvas during dtor
+    wxCloseEvent dummy;
+    m_preview3DCanvas->Show();
+    m_preview3DCanvas->OnCloseWindow( dummy );
+
     // Disconnect Events
     m_grButton3DView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
                             wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ), NULL, this );
