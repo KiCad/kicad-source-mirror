@@ -67,7 +67,23 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
 
     for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
     {
-        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        // The rtree returns items in a non-deterministic order (platform-dependent)
+        // Therefore we need to sort them before outputting to ensure file stability for version
+        // control and QA comparisons
+        std::vector<EDA_ITEM*> sheetItems;
+
+        for( EDA_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            sheetItems.push_back( item );
+
+        auto pred = []( const EDA_ITEM* item1, const EDA_ITEM* item2 )
+        {
+            return item1->m_Uuid < item2->m_Uuid;
+        };
+
+        std::sort( sheetItems.begin(), sheetItems.end(), pred );
+
+        // Process symbol attributes
+        for( EDA_ITEM* item : sheetItems )
         {
             symbol = findNextSymbol( item, sheet );
 
@@ -115,13 +131,16 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
     wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
     wxString StartNetDesc = StartLine + wxT( "TER" );
     wxString InitNetDescLine;
-    wxString netName;
+
+    std::vector<std::pair<wxString, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>>> all_nets;
 
     for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
     {
+        wxString netName;
         netName.Printf( wxT( "\"%s\"" ), key.Name );
 
-        std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
+        all_nets.emplace_back( netName, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>{} );
+        std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>& sorted_items = all_nets.back().second;
 
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
@@ -134,7 +153,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
             }
         }
 
-        // Netlist ordering: Net name, then ref des, then pin name
+        // Intra-net ordering: Ref des, then pin name
         std::sort( sorted_items.begin(), sorted_items.end(),
                 []( std::pair<SCH_PIN*, SCH_SHEET_PATH> a, std::pair<SCH_PIN*, SCH_SHEET_PATH> b )
                 {
@@ -159,7 +178,17 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
                     return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
                 } ),
                 sorted_items.end() );
+    }
 
+    // Inter-net ordering by net name
+    std::sort( all_nets.begin(), all_nets.end(),
+               []( const auto& a, const auto& b )
+               {
+                   return a.first < b.first;
+               } );
+
+    for( const auto& [netName, sorted_items] : all_nets )
+    {
         print_ter = 0;
 
         for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : sorted_items )

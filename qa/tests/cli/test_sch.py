@@ -75,8 +75,7 @@ def test_sch_export_svg( kitest,
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.kicadsexpr", 5, True, []),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.kicadsexpr", 5, True,["--format=kicadsexpr"]),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.kicadxml", 6, True,["--format=kicadxml"]),
-                             # currently inconsistenly sorts nets between platforms (MSW/Linux)
-                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.cadstar", 3, True, ["--format=cadstar"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.cadstar", 3, False, ["--format=cadstar"]),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.orcadpcb2", 1, False, ["--format=orcadpcb2"])
                              ])
 def test_sch_export_netlist( kitest,
