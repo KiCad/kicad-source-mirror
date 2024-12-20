@@ -253,7 +253,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableDesignBlocks        = true;
     m_EnableGenerators          = false;
     m_EnableGit                 = false;
-    m_EnableJobset              = false;
+    m_EnableJobset              = true;
     m_EnableLibWithText         = false;
     m_EnableLibDir              = false;
 

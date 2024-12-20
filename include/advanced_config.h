@@ -496,7 +496,7 @@ public:
      *
      * Setting name: "EnableJobset"
      * Valid values: 0 or 1
-     * Default value: 0
+     * Default value: 1
      */
     bool m_EnableJobset;
 
