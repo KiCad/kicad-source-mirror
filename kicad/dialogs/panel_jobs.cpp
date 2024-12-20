@@ -131,6 +131,13 @@ public:
 
     bool TransferDataFromWindow() override
     {
+        wxString outputPath = m_textCtrlOutputPath->GetValue().Trim().Trim( false );
+        if( outputPath == wxEmptyString )
+        {
+            DisplayErrorMessage( this, _( "Output path cannot be empty" ) );
+            return false;
+        }
+
         wxArrayInt selectedItems;
         m_listBoxOnly->GetSelections( selectedItems );
 
@@ -144,7 +151,7 @@ public:
             }
         }
 
-        m_output->m_outputHandler->SetOutputPath( m_textCtrlOutputPath->GetValue() );
+        m_output->m_outputHandler->SetOutputPath( outputPath );
 
         if( m_output->m_type == JOBSET_OUTPUT_TYPE::ARCHIVE )
         {
