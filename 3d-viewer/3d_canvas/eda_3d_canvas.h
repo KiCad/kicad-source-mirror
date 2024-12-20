@@ -218,6 +218,8 @@ public:
      */
     void DoRePaint();
 
+    void OnCloseWindow( wxCloseEvent& event );
+
 private:
     // The wxPaintEvent event. mainly calls DoRePaint()
     void OnPaint( wxPaintEvent& aEvent );
@@ -228,14 +230,13 @@ private:
 
     void OnMouseWheel( wxMouseEvent& event );
 
-    void   OnMagnify( wxMouseEvent& event );
+    void OnMagnify( wxMouseEvent& event );
     void OnMouseMove( wxMouseEvent& event );
     void OnLeftDown( wxMouseEvent& event );
     void OnLeftUp( wxMouseEvent& event );
     void OnMiddleUp( wxMouseEvent& event );
     void OnMiddleDown( wxMouseEvent& event );
     void OnTimerTimeout_Editing( wxTimerEvent& event );
-    void OnCloseWindow( wxCloseEvent& event );
     void OnResize( wxSizeEvent& event );
     void OnTimerTimeout_Redraw( wxTimerEvent& event );
 
