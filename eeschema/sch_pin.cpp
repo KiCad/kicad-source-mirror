@@ -126,7 +126,8 @@ wxString SCH_PIN::GetShownNumber() const
 
 ELECTRICAL_PINTYPE SCH_PIN::GetType() const
 {
-    wxCHECK( m_libPin, ELECTRICAL_PINTYPE::PT_NC );
+    if( !m_libPin )
+        return ELECTRICAL_PINTYPE::PT_NC;
 
     if( !m_alt.IsEmpty() )
         return m_libPin->GetAlt( m_alt ).m_Type;
@@ -137,7 +138,8 @@ ELECTRICAL_PINTYPE SCH_PIN::GetType() const
 
 GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
 {
-    wxCHECK( m_libPin, GRAPHIC_PINSHAPE::LINE );
+    if( !m_libPin )
+        return GRAPHIC_PINSHAPE::LINE;
 
     if( !m_alt.IsEmpty() )
         return m_libPin->GetAlt( m_alt ).m_Shape;
@@ -148,7 +150,8 @@ GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
 
 PIN_ORIENTATION SCH_PIN::GetOrientation() const
 {
-    wxCHECK( m_libPin, PIN_ORIENTATION::PIN_RIGHT );
+    if( !m_libPin )
+        return PIN_ORIENTATION::PIN_RIGHT;
 
     return m_libPin->GetOrientation();
 }
@@ -156,7 +159,8 @@ PIN_ORIENTATION SCH_PIN::GetOrientation() const
 
 int SCH_PIN::GetLength() const
 {
-    wxCHECK( m_libPin, 0 );
+    if( !m_libPin )
+        return 0;
 
     return m_libPin->GetLength();
 }
@@ -301,7 +305,8 @@ bool SCH_PIN::IsStacked( const SCH_PIN* aPin ) const
 
 bool SCH_PIN::IsGlobalPower() const
 {
-    wxCHECK( m_libPin, false );
+    if( !m_libPin )
+        return false;
 
     return m_libPin->IsGlobalPower();
 }
@@ -425,8 +430,6 @@ const BOX2I SCH_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
     if( m_libPin )
         r = m_libPin->GetBoundingBox( aIncludeInvisiblePins, aIncludeNameAndNumber,
                                       aIncludeElectricalType );
-    else
-        wxFAIL;
 
     r.RevertYAxis();
 
@@ -491,7 +494,8 @@ bool SCH_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
 
 bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 {
-    wxCHECK( m_libPin, false );
+    if( !m_libPin )
+        return false;
 
     // Reciprocal checking is done in CONNECTION_GRAPH anyway
     return !( m_libPin->GetType() == ELECTRICAL_PINTYPE::PT_NC );
@@ -509,6 +513,9 @@ bool SCH_PIN::operator==( const SCH_ITEM& aOther ) const
         return false;
 
     if( m_position != other.m_position )
+        return false;
+
+    if( !m_libPin )
         return false;
 
     return m_libPin == other.m_libPin;
