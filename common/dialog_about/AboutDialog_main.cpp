@@ -772,7 +772,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     ADD_TRANSLATOR( wxT( "Ivan Chuba" ), wxS( "Polish (PL)" ) );
     ADD_TRANSLATOR( wxT( "Kerusey Karyu" ), wxS( "Polish (PL)" ) );
-    ADD_TRANSLATOR( wxT( "Krzysztof Kawa" ), wxS( "Polish (PL)" ) )
+    ADD_TRANSLATOR( wxT( "Krzysztof Kawa" ), wxS( "Polish (PL)" ) );
     ADD_TRANSLATOR( wxT( "J Kolod" ), wxS( "Polish (PL)" ) );
     ADD_TRANSLATOR( wxT( "Eryk Michalak" ), wxS( "Polish (PL)" ) );
     ADD_TRANSLATOR( wxT( "Filip Piękoś" ), wxS( "Polish (PL)" ) );
