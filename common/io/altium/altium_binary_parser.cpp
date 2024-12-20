@@ -493,7 +493,8 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
                 || canonicalKey == wxT( "NAME" )
                 || canonicalKey == wxT( "TEXT" ) )
         {
-            value = AltiumPropertyToKiCadString( value.Trim() );
+            if( kv[ wxT( "RECORD" ) ] != wxT( "4" ) )
+                value = AltiumPropertyToKiCadString( value.Trim() );
         }
 
         kv.insert( { canonicalKey, value.Trim() } );
