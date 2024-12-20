@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 16:05-0800\n"
+"POT-Creation-Date: 2024-12-19 16:48-0800\n"
 "PO-Revision-Date: 2022-12-07 22:47+0000\n"
 "Last-Translator: Sašo Domadenik <saso.doma@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
@@ -235,7 +235,7 @@ msgstr "Izvozi trenutni pogled kot JPEG ..."
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:657
 #: common/eda_base_frame.cpp:1185 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:978
+#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:981
 #: pcbnew/pcb_base_frame.cpp:670
 #, fuzzy
 msgid "3D Viewer"
@@ -2419,36 +2419,36 @@ msgstr ""
 msgid "Donate to KiCad"
 msgstr "Dobrodošli v KiCad %s!"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:759
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:761
 #, fuzzy
 msgid "&OK"
 msgstr "&Potrdi"
 
-#: common/dialog_shim.cpp:760
+#: common/dialog_shim.cpp:762
 #, fuzzy
 msgid "&Cancel"
 msgstr "&Prekliči"
 
-#: common/dialog_shim.cpp:761
+#: common/dialog_shim.cpp:763
 msgid "&Yes"
 msgstr ""
 
-#: common/dialog_shim.cpp:762
+#: common/dialog_shim.cpp:764
 #, fuzzy
 msgid "&No"
 msgstr "Ne"
 
-#: common/dialog_shim.cpp:763
+#: common/dialog_shim.cpp:765
 #, fuzzy
 msgid "&Apply"
 msgstr "Uveljavi"
 
-#: common/dialog_shim.cpp:764
+#: common/dialog_shim.cpp:766
 #, fuzzy
 msgid "&Save"
 msgstr "&Shrani ploščo"
 
-#: common/dialog_shim.cpp:765 common/dialog_shim.cpp:766
+#: common/dialog_shim.cpp:767 common/dialog_shim.cpp:768
 #: common/eda_base_frame.cpp:504 common/eda_base_frame.cpp:509
 #: common/eda_base_frame.cpp:530 common/eda_base_frame.cpp:534
 #, fuzzy
@@ -6780,7 +6780,7 @@ msgstr ""
 "Ukaz je \"%s\""
 
 #: common/gestfich.cpp:306 eeschema/eeschema.cpp:608 eeschema/eeschema.cpp:643
-#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:308
+#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:581
 #, fuzzy, c-format
 msgid "Cannot copy file '%s'."
@@ -8084,7 +8084,7 @@ msgstr "Napaka pri pridobivanju datoteke!\n"
 #: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
-#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
+#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/sch_plotter.cpp:174 eeschema/sch_plotter.cpp:386
 #: eeschema/sch_plotter.cpp:526 eeschema/sch_plotter.cpp:733
 #: eeschema/sch_plotter.cpp:901 gerbview/export_to_pcbnew.cpp:68
@@ -8965,7 +8965,7 @@ msgid "Create, delete and edit symbols"
 msgstr "Ustvarjanje, brisanje in urejanje simbolov"
 
 #: common/tool/actions.cpp:878 pcbnew/footprint_viewer_frame.cpp:111
-#: pcbnew/footprint_viewer_frame.cpp:1031
+#: pcbnew/footprint_viewer_frame.cpp:1034
 #, fuzzy
 msgid "Footprint Library Browser"
 msgstr "Footprint Browser"
@@ -9307,7 +9307,7 @@ msgstr "Odbor"
 msgid "Library"
 msgstr "Knjižnica"
 
-#: common/widgets/footprint_preview_widget.cpp:115
+#: common/widgets/footprint_preview_widget.cpp:126
 #, fuzzy
 msgid "Footprint not found."
 msgstr "Odtisa ni mogoče najti."
@@ -9744,254 +9744,254 @@ msgstr "Informacije"
 msgid "Save..."
 msgstr "Shrani ..."
 
-#: common/wildcards_and_files_ext.cpp:212
+#: common/wildcards_and_files_ext.cpp:213
 #, fuzzy
 msgid "All files"
 msgstr "Vse datoteke"
 
-#: common/wildcards_and_files_ext.cpp:218
+#: common/wildcards_and_files_ext.cpp:219
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:80
 #, fuzzy
 msgid "KiCad symbol library files"
 msgstr "Datoteke knjižnice simbolov KiCad"
 
-#: common/wildcards_and_files_ext.cpp:225
+#: common/wildcards_and_files_ext.cpp:226
 #, fuzzy
 msgid "KiCad project files"
 msgstr "Datoteke projekta KiCad"
 
-#: common/wildcards_and_files_ext.cpp:231
+#: common/wildcards_and_files_ext.cpp:232
 #, fuzzy
 msgid "KiCad legacy project files"
 msgstr "Datoteke starih projektov KiCad"
 
-#: common/wildcards_and_files_ext.cpp:238
+#: common/wildcards_and_files_ext.cpp:239
 #, fuzzy
 msgid "All KiCad project files"
 msgstr "Vse datoteke projekta KiCad"
 
-#: common/wildcards_and_files_ext.cpp:245
+#: common/wildcards_and_files_ext.cpp:246
 #, fuzzy
 msgid "All KiCad schematic files"
 msgstr "Shematske datoteke Altium"
 
-#: common/wildcards_and_files_ext.cpp:252
+#: common/wildcards_and_files_ext.cpp:253
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:75
 #, fuzzy
 msgid "KiCad legacy schematic files"
 msgstr "Stare shematske datoteke KiCad"
 
-#: common/wildcards_and_files_ext.cpp:259
+#: common/wildcards_and_files_ext.cpp:260
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:74
 #, fuzzy
 msgid "KiCad s-expression schematic files"
 msgstr "Shematske datoteke KiCad s-expression"
 
-#: common/wildcards_and_files_ext.cpp:266
+#: common/wildcards_and_files_ext.cpp:267
 #, fuzzy
 msgid "CADSTAR Archive files"
 msgstr "CADSTAR Arhivske datoteke"
 
-#: common/wildcards_and_files_ext.cpp:272
+#: common/wildcards_and_files_ext.cpp:273
 #, fuzzy
 msgid "Eagle XML files"
 msgstr "Eagle XML datoteke"
 
-#: common/wildcards_and_files_ext.cpp:278
+#: common/wildcards_and_files_ext.cpp:279
 #, fuzzy
 msgid "OrcadPCB2 netlist files"
 msgstr "Datoteke KiCad netlist"
 
-#: common/wildcards_and_files_ext.cpp:285
+#: common/wildcards_and_files_ext.cpp:286
 #, fuzzy
 msgid "KiCad netlist files"
 msgstr "Datoteke KiCad netlist"
 
-#: common/wildcards_and_files_ext.cpp:291
+#: common/wildcards_and_files_ext.cpp:292
 #, fuzzy
 msgid "Allegro netlist files"
 msgstr "Ne morem ustvariti datoteko spiska povezav"
 
-#: common/wildcards_and_files_ext.cpp:298
+#: common/wildcards_and_files_ext.cpp:299
 msgid "EasyEDA (JLCEDA) Std backup archive"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:304
+#: common/wildcards_and_files_ext.cpp:305
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:310
+#: common/wildcards_and_files_ext.cpp:311
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:278
 #, fuzzy
 msgid "KiCad printed circuit board files"
 msgstr "Datoteke tiskanih vezij KiCad"
 
-#: common/wildcards_and_files_ext.cpp:317
+#: common/wildcards_and_files_ext.cpp:318
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
 #, fuzzy
 msgid "KiCad footprint files"
 msgstr "Datoteke odtisa KiCad"
 
-#: common/wildcards_and_files_ext.cpp:323
+#: common/wildcards_and_files_ext.cpp:324
 #, fuzzy
 msgid "KiCad footprint library paths"
 msgstr "Poti knjižnice odtisa KiCad"
 
-#: common/wildcards_and_files_ext.cpp:330
+#: common/wildcards_and_files_ext.cpp:331
 #, fuzzy
 msgid "Drawing sheet files"
 msgstr "Risbe"
 
-#: common/wildcards_and_files_ext.cpp:338
+#: common/wildcards_and_files_ext.cpp:339
 #, fuzzy
 msgid "KiCad symbol footprint link files"
 msgstr "Datoteke povezav odtisa simbola KiCad"
 
-#: common/wildcards_and_files_ext.cpp:346 gerbview/files.cpp:70
+#: common/wildcards_and_files_ext.cpp:347 gerbview/files.cpp:70
 #, fuzzy
 msgid "Drill files"
 msgstr "Vrtalne datoteke"
 
-#: common/wildcards_and_files_ext.cpp:353
+#: common/wildcards_and_files_ext.cpp:354
 #, fuzzy
 msgid "SVG files"
 msgstr "Datoteke SVG"
 
-#: common/wildcards_and_files_ext.cpp:359
+#: common/wildcards_and_files_ext.cpp:360
 #, fuzzy
 msgid "HTML files"
 msgstr "Datoteke HTML"
 
-#: common/wildcards_and_files_ext.cpp:365
+#: common/wildcards_and_files_ext.cpp:366
 #, fuzzy
 msgid "CSV Files"
 msgstr "Datoteke CSV"
 
-#: common/wildcards_and_files_ext.cpp:371
+#: common/wildcards_and_files_ext.cpp:372
 #, fuzzy
 msgid "Portable document format files"
 msgstr "Prenosne datoteke v obliki zapisa dokumentov"
 
-#: common/wildcards_and_files_ext.cpp:377
+#: common/wildcards_and_files_ext.cpp:378
 #, fuzzy
 msgid "PostScript files"
 msgstr "Datoteke PostScript"
 
-#: common/wildcards_and_files_ext.cpp:383
+#: common/wildcards_and_files_ext.cpp:384
 #, fuzzy
 msgid "Json files"
 msgstr "Datoteke z delovnimi mesti"
 
-#: common/wildcards_and_files_ext.cpp:389
+#: common/wildcards_and_files_ext.cpp:390
 #, fuzzy
 msgid "Report files"
 msgstr "Datoteke s poročili"
 
-#: common/wildcards_and_files_ext.cpp:395
+#: common/wildcards_and_files_ext.cpp:396
 #, fuzzy
 msgid "Component placement files"
 msgstr "Parametri komponente"
 
-#: common/wildcards_and_files_ext.cpp:401
+#: common/wildcards_and_files_ext.cpp:402
 #, fuzzy
 msgid "VRML and X3D files"
 msgstr "Datoteke VRML in X3D"
 
-#: common/wildcards_and_files_ext.cpp:407
+#: common/wildcards_and_files_ext.cpp:408
 #, fuzzy
 msgid "IDFv3 footprint files"
 msgstr "Odtisne datoteke IDFv3"
 
-#: common/wildcards_and_files_ext.cpp:413
+#: common/wildcards_and_files_ext.cpp:414
 #, fuzzy
 msgid "Text files"
 msgstr "Besedilne datoteke"
 
-#: common/wildcards_and_files_ext.cpp:419
+#: common/wildcards_and_files_ext.cpp:420
 #, fuzzy
 msgid "Legacy footprint export files"
 msgstr "Podedovane izvozne datoteke"
 
-#: common/wildcards_and_files_ext.cpp:425
+#: common/wildcards_and_files_ext.cpp:426
 #, fuzzy
 msgid "Electrical rule check file"
 msgstr "Datoteka za preverjanje električnih pravil"
 
-#: common/wildcards_and_files_ext.cpp:431
+#: common/wildcards_and_files_ext.cpp:432
 #, fuzzy
 msgid "Spice library file"
 msgstr "Datoteka knjižnice začimb"
 
-#: common/wildcards_and_files_ext.cpp:437
+#: common/wildcards_and_files_ext.cpp:438
 #, fuzzy
 msgid "SPICE netlist file"
 msgstr "Datoteka s seznamom SPICE"
 
-#: common/wildcards_and_files_ext.cpp:443
+#: common/wildcards_and_files_ext.cpp:444
 #, fuzzy
 msgid "CadStar netlist file"
 msgstr "Datoteka netlist CadStar"
 
-#: common/wildcards_and_files_ext.cpp:449
+#: common/wildcards_and_files_ext.cpp:450
 #, fuzzy
 msgid "Symbol footprint association files"
 msgstr "Datoteke združitve odtisa simbola"
 
-#: common/wildcards_and_files_ext.cpp:455
+#: common/wildcards_and_files_ext.cpp:456
 #, fuzzy
 msgid "Zip file"
 msgstr "Zip datoteka"
 
-#: common/wildcards_and_files_ext.cpp:461
+#: common/wildcards_and_files_ext.cpp:462
 #, fuzzy
 msgid "GenCAD 1.4 board files"
 msgstr "Datoteke na plošči GenCAD 1.4"
 
-#: common/wildcards_and_files_ext.cpp:467
+#: common/wildcards_and_files_ext.cpp:468
 #, fuzzy
 msgid "DXF Files"
 msgstr "DXF datoteke"
 
-#: common/wildcards_and_files_ext.cpp:473
+#: common/wildcards_and_files_ext.cpp:474
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 #, fuzzy
 msgid "Gerber job file"
 msgstr "Gerberjeva delovna datoteka"
 
-#: common/wildcards_and_files_ext.cpp:479
+#: common/wildcards_and_files_ext.cpp:480
 #, fuzzy
 msgid "Specctra DSN file"
 msgstr "Datoteka Specctra DSN"
 
-#: common/wildcards_and_files_ext.cpp:486
+#: common/wildcards_and_files_ext.cpp:487
 #, fuzzy
 msgid "Specctra Session file"
 msgstr "Spoji datoteko seje Specctra:"
 
-#: common/wildcards_and_files_ext.cpp:493
+#: common/wildcards_and_files_ext.cpp:494
 #, fuzzy
 msgid "IPC-D-356 Test Files"
 msgstr "Testne datoteke IPC-D-356"
 
-#: common/wildcards_and_files_ext.cpp:500
+#: common/wildcards_and_files_ext.cpp:501
 #, fuzzy
 msgid "Workbook file"
 msgstr "Datoteka z delovnim zvezkom"
 
-#: common/wildcards_and_files_ext.cpp:507
+#: common/wildcards_and_files_ext.cpp:508
 #, fuzzy
 msgid "PNG file"
 msgstr "Datoteka PNG"
 
-#: common/wildcards_and_files_ext.cpp:513
+#: common/wildcards_and_files_ext.cpp:514
 #, fuzzy
 msgid "Jpeg file"
 msgstr "Datoteka JPEG"
 
-#: common/wildcards_and_files_ext.cpp:519
+#: common/wildcards_and_files_ext.cpp:520
 #, fuzzy
 msgid "Hotkey file"
 msgstr "Seznam bližnjičnih tipk"
@@ -10541,7 +10541,7 @@ msgstr ""
 "%s\n"
 "ni najdena. Skripta ni na voljo."
 
-#: eeschema/connection_graph.cpp:3245
+#: eeschema/connection_graph.cpp:3250
 #, fuzzy, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -10549,19 +10549,19 @@ msgstr ""
 "Tako %s kot %s sta pritrjena na iste predmete; %s bo uporabljen na seznamu "
 "vozlišč"
 
-#: eeschema/connection_graph.cpp:3524
+#: eeschema/connection_graph.cpp:3529
 #, fuzzy, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "Vozlišče %s je grafično povezano z vodilom %s, vendar ni član tega vodila"
 
-#: eeschema/connection_graph.cpp:4070
+#: eeschema/connection_graph.cpp:4075
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Za hierarhični priključek %s manjka oznaka hierarhičnega vozlišča"
 
-#: eeschema/connection_graph.cpp:4088
+#: eeschema/connection_graph.cpp:4093
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Opozorila splošna oznaka %s ni povezana z oznako strani"
@@ -22565,8 +22565,8 @@ msgstr "(ni bilo mogoče naložiti)"
 msgid "KiCad Symbol Library Browser"
 msgstr "Brskalnik knjižnice simbolov"
 
-#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1023
-#: pcbnew/footprint_viewer_frame.cpp:1028
+#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1026
+#: pcbnew/footprint_viewer_frame.cpp:1031
 #, fuzzy
 msgid "[no library selected]"
 msgstr "ni izbrana nobena knjižnica"
@@ -27146,7 +27146,7 @@ msgstr ""
 msgid "<h1>Template Selector</h1>"
 msgstr "<html> <h1> Izbirnik predlog </h1> </html>"
 
-#: kicad/dialogs/dialog_template_selector.cpp:254
+#: kicad/dialogs/dialog_template_selector.cpp:262
 #, fuzzy
 msgid "Select Templates Directory"
 msgstr "Izberite Imenik predlog"
@@ -28128,7 +28128,7 @@ msgstr "Za to predlogo ni bilo mogoče odpreti metapodatkovnega imenika!"
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "Za to predlogo ni mogoče najti datoteke z informacijami meta HTML!"
 
-#: kicad/project_template.cpp:289
+#: kicad/project_template.cpp:290
 #, fuzzy, c-format
 msgid "Cannot create folder '%s'."
 msgstr "Mape \"%s\" ni mogoče ustvariti."

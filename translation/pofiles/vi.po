@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 16:05-0800\n"
+"POT-Creation-Date: 2024-12-19 16:48-0800\n"
 "PO-Revision-Date: 2024-09-14 03:09+0000\n"
 "Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/"
@@ -206,7 +206,7 @@ msgstr "Xuất khung hình hiện tại ra ảnh JPEG ..."
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:657
 #: common/eda_base_frame.cpp:1185 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:978
+#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:981
 #: pcbnew/pcb_base_frame.cpp:670
 msgid "3D Viewer"
 msgstr "Trình xem 3D"
@@ -2083,31 +2083,31 @@ msgstr "Đóng góp"
 msgid "Donate to KiCad"
 msgstr "Đóng góp cho KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:759
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:761
 msgid "&OK"
 msgstr "&OK"
 
-#: common/dialog_shim.cpp:760
+#: common/dialog_shim.cpp:762
 msgid "&Cancel"
 msgstr "&Hủy bỏ"
 
-#: common/dialog_shim.cpp:761
+#: common/dialog_shim.cpp:763
 msgid "&Yes"
 msgstr "&Đồng ý"
 
-#: common/dialog_shim.cpp:762
+#: common/dialog_shim.cpp:764
 msgid "&No"
 msgstr "&Không"
 
-#: common/dialog_shim.cpp:763
+#: common/dialog_shim.cpp:765
 msgid "&Apply"
 msgstr "&Áp dụng"
 
-#: common/dialog_shim.cpp:764
+#: common/dialog_shim.cpp:766
 msgid "&Save"
 msgstr "&Lưu lại"
 
-#: common/dialog_shim.cpp:765 common/dialog_shim.cpp:766
+#: common/dialog_shim.cpp:767 common/dialog_shim.cpp:768
 #: common/eda_base_frame.cpp:504 common/eda_base_frame.cpp:509
 #: common/eda_base_frame.cpp:530 common/eda_base_frame.cpp:534
 msgid "&Help"
@@ -5922,7 +5922,7 @@ msgid "Problem while running the PDF viewer '%s'."
 msgstr "Có sự cố trong khi chạy trình xem PDF '%s'."
 
 #: common/gestfich.cpp:306 eeschema/eeschema.cpp:608 eeschema/eeschema.cpp:643
-#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:308
+#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:581
 #, c-format
 msgid "Cannot copy file '%s'."
@@ -7167,7 +7167,7 @@ msgstr "Lỗi khi giải nén tập tin!"
 #: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
-#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
+#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/sch_plotter.cpp:174 eeschema/sch_plotter.cpp:386
 #: eeschema/sch_plotter.cpp:526 eeschema/sch_plotter.cpp:733
 #: eeschema/sch_plotter.cpp:901 gerbview/export_to_pcbnew.cpp:68
@@ -7950,7 +7950,7 @@ msgid "Create, delete and edit symbols"
 msgstr "Tạo, xóa và chỉnh sửa các ký hiệu điện tử"
 
 #: common/tool/actions.cpp:878 pcbnew/footprint_viewer_frame.cpp:111
-#: pcbnew/footprint_viewer_frame.cpp:1031
+#: pcbnew/footprint_viewer_frame.cpp:1034
 msgid "Footprint Library Browser"
 msgstr "Trình duyệt Thư viện Footprint"
 
@@ -8262,7 +8262,7 @@ msgstr "Lật bo mạch"
 msgid "Library"
 msgstr "Thư Viện"
 
-#: common/widgets/footprint_preview_widget.cpp:115
+#: common/widgets/footprint_preview_widget.cpp:126
 msgid "Footprint not found."
 msgstr "Không tìm thấy Footprint."
 
@@ -8661,218 +8661,218 @@ msgstr "Các thông tin"
 msgid "Save..."
 msgstr "Lưu..."
 
-#: common/wildcards_and_files_ext.cpp:212
+#: common/wildcards_and_files_ext.cpp:213
 msgid "All files"
 msgstr "Tất cả Tập tin"
 
-#: common/wildcards_and_files_ext.cpp:218
+#: common/wildcards_and_files_ext.cpp:219
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:80
 msgid "KiCad symbol library files"
 msgstr "Tệp thư viện symbol KiCad"
 
-#: common/wildcards_and_files_ext.cpp:225
+#: common/wildcards_and_files_ext.cpp:226
 msgid "KiCad project files"
 msgstr "Tệp dự án KiCad"
 
-#: common/wildcards_and_files_ext.cpp:231
+#: common/wildcards_and_files_ext.cpp:232
 msgid "KiCad legacy project files"
 msgstr "Tệp dự án củ KiCad"
 
-#: common/wildcards_and_files_ext.cpp:238
+#: common/wildcards_and_files_ext.cpp:239
 msgid "All KiCad project files"
 msgstr "Tất cả các tệp dự án KiCad"
 
-#: common/wildcards_and_files_ext.cpp:245
+#: common/wildcards_and_files_ext.cpp:246
 #, fuzzy
 msgid "All KiCad schematic files"
 msgstr "Tệp sơ đồ mạch Altium"
 
-#: common/wildcards_and_files_ext.cpp:252
+#: common/wildcards_and_files_ext.cpp:253
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:75
 msgid "KiCad legacy schematic files"
 msgstr "Tệp sơ đồ mạch củ KiCad"
 
-#: common/wildcards_and_files_ext.cpp:259
+#: common/wildcards_and_files_ext.cpp:260
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:74
 msgid "KiCad s-expression schematic files"
 msgstr "Tệp sơ đồ mạch s-expression KiCad"
 
-#: common/wildcards_and_files_ext.cpp:266
+#: common/wildcards_and_files_ext.cpp:267
 msgid "CADSTAR Archive files"
 msgstr "Tệp lưu trữ CADSTAR"
 
-#: common/wildcards_and_files_ext.cpp:272
+#: common/wildcards_and_files_ext.cpp:273
 msgid "Eagle XML files"
 msgstr "Tệp Eagle XML"
 
-#: common/wildcards_and_files_ext.cpp:278
+#: common/wildcards_and_files_ext.cpp:279
 #, fuzzy
 msgid "OrcadPCB2 netlist files"
 msgstr "Tệp netlist KiCad"
 
-#: common/wildcards_and_files_ext.cpp:285
+#: common/wildcards_and_files_ext.cpp:286
 msgid "KiCad netlist files"
 msgstr "Tệp netlist KiCad"
 
-#: common/wildcards_and_files_ext.cpp:291
+#: common/wildcards_and_files_ext.cpp:292
 #, fuzzy
 msgid "Allegro netlist files"
 msgstr "Tệp netlist KiCad"
 
-#: common/wildcards_and_files_ext.cpp:298
+#: common/wildcards_and_files_ext.cpp:299
 msgid "EasyEDA (JLCEDA) Std backup archive"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:304
+#: common/wildcards_and_files_ext.cpp:305
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:310
+#: common/wildcards_and_files_ext.cpp:311
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:278
 msgid "KiCad printed circuit board files"
 msgstr "Tệp bảng mạch in KiCad"
 
-#: common/wildcards_and_files_ext.cpp:317
+#: common/wildcards_and_files_ext.cpp:318
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
 msgid "KiCad footprint files"
 msgstr "Tệp footprint KiCad"
 
-#: common/wildcards_and_files_ext.cpp:323
+#: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint library paths"
 msgstr "Đường dẫn thư viện footprint KiCad"
 
-#: common/wildcards_and_files_ext.cpp:330
+#: common/wildcards_and_files_ext.cpp:331
 #, fuzzy
 msgid "Drawing sheet files"
 msgstr "User.Drawings"
 
-#: common/wildcards_and_files_ext.cpp:338
+#: common/wildcards_and_files_ext.cpp:339
 msgid "KiCad symbol footprint link files"
 msgstr "Tệp liên kết footprint và symbol KiCad"
 
-#: common/wildcards_and_files_ext.cpp:346 gerbview/files.cpp:70
+#: common/wildcards_and_files_ext.cpp:347 gerbview/files.cpp:70
 msgid "Drill files"
 msgstr "Tệp lỗ khoan"
 
-#: common/wildcards_and_files_ext.cpp:353
+#: common/wildcards_and_files_ext.cpp:354
 msgid "SVG files"
 msgstr "Tệp SVG"
 
-#: common/wildcards_and_files_ext.cpp:359
+#: common/wildcards_and_files_ext.cpp:360
 msgid "HTML files"
 msgstr "Tệp HTML"
 
-#: common/wildcards_and_files_ext.cpp:365
+#: common/wildcards_and_files_ext.cpp:366
 msgid "CSV Files"
 msgstr "Tệp CSV"
 
-#: common/wildcards_and_files_ext.cpp:371
+#: common/wildcards_and_files_ext.cpp:372
 msgid "Portable document format files"
 msgstr "Tệp định dạng tài liệu di động"
 
-#: common/wildcards_and_files_ext.cpp:377
+#: common/wildcards_and_files_ext.cpp:378
 msgid "PostScript files"
 msgstr "Tệp PostScript"
 
-#: common/wildcards_and_files_ext.cpp:383
+#: common/wildcards_and_files_ext.cpp:384
 #, fuzzy
 msgid "Json files"
 msgstr "Không có tệp"
 
-#: common/wildcards_and_files_ext.cpp:389
+#: common/wildcards_and_files_ext.cpp:390
 msgid "Report files"
 msgstr "Tệp báo cáo"
 
-#: common/wildcards_and_files_ext.cpp:395
+#: common/wildcards_and_files_ext.cpp:396
 #, fuzzy
 msgid "Component placement files"
 msgstr "Tập tin đặt footprint"
 
-#: common/wildcards_and_files_ext.cpp:401
+#: common/wildcards_and_files_ext.cpp:402
 msgid "VRML and X3D files"
 msgstr "Tệp VRML và X3D"
 
-#: common/wildcards_and_files_ext.cpp:407
+#: common/wildcards_and_files_ext.cpp:408
 msgid "IDFv3 footprint files"
 msgstr "Tệp footprint IDFv3"
 
-#: common/wildcards_and_files_ext.cpp:413
+#: common/wildcards_and_files_ext.cpp:414
 msgid "Text files"
 msgstr "Tệp văn bản"
 
-#: common/wildcards_and_files_ext.cpp:419
+#: common/wildcards_and_files_ext.cpp:420
 msgid "Legacy footprint export files"
 msgstr "Tệp xuất footprint củ"
 
-#: common/wildcards_and_files_ext.cpp:425
+#: common/wildcards_and_files_ext.cpp:426
 #, fuzzy
 msgid "Electrical rule check file"
 msgstr "Tệp kiểm tra quy tắc điện tử"
 
-#: common/wildcards_and_files_ext.cpp:431
+#: common/wildcards_and_files_ext.cpp:432
 msgid "Spice library file"
 msgstr "Tệp thư viện Spice"
 
-#: common/wildcards_and_files_ext.cpp:437
+#: common/wildcards_and_files_ext.cpp:438
 msgid "SPICE netlist file"
 msgstr "Tệp danh sách netlist SPICE"
 
-#: common/wildcards_and_files_ext.cpp:443
+#: common/wildcards_and_files_ext.cpp:444
 msgid "CadStar netlist file"
 msgstr "Tệp netlist CadStar"
 
-#: common/wildcards_and_files_ext.cpp:449
+#: common/wildcards_and_files_ext.cpp:450
 msgid "Symbol footprint association files"
 msgstr "Tệp liên kết footprint và symbol"
 
-#: common/wildcards_and_files_ext.cpp:455
+#: common/wildcards_and_files_ext.cpp:456
 msgid "Zip file"
 msgstr "Tệp Zip"
 
-#: common/wildcards_and_files_ext.cpp:461
+#: common/wildcards_and_files_ext.cpp:462
 msgid "GenCAD 1.4 board files"
 msgstr "Các tệp bo mạch GenCAD 1.4"
 
-#: common/wildcards_and_files_ext.cpp:467
+#: common/wildcards_and_files_ext.cpp:468
 msgid "DXF Files"
 msgstr "Tệp DXF"
 
-#: common/wildcards_and_files_ext.cpp:473
+#: common/wildcards_and_files_ext.cpp:474
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 #, fuzzy
 msgid "Gerber job file"
 msgstr "Tệp làm việc Gerber"
 
-#: common/wildcards_and_files_ext.cpp:479
+#: common/wildcards_and_files_ext.cpp:480
 msgid "Specctra DSN file"
 msgstr "Tệp Specctra DSN"
 
-#: common/wildcards_and_files_ext.cpp:486
+#: common/wildcards_and_files_ext.cpp:487
 #, fuzzy
 msgid "Specctra Session file"
 msgstr "Tệp Specctra DSN"
 
-#: common/wildcards_and_files_ext.cpp:493
+#: common/wildcards_and_files_ext.cpp:494
 msgid "IPC-D-356 Test Files"
 msgstr "Tệp kiểm tra IPC-D-356"
 
-#: common/wildcards_and_files_ext.cpp:500
+#: common/wildcards_and_files_ext.cpp:501
 #, fuzzy
 msgid "Workbook file"
 msgstr "Tệp sổ làm việc"
 
-#: common/wildcards_and_files_ext.cpp:507
+#: common/wildcards_and_files_ext.cpp:508
 msgid "PNG file"
 msgstr "Tệp PNG"
 
-#: common/wildcards_and_files_ext.cpp:513
+#: common/wildcards_and_files_ext.cpp:514
 msgid "Jpeg file"
 msgstr "Tệp jpeg"
 
-#: common/wildcards_and_files_ext.cpp:519
+#: common/wildcards_and_files_ext.cpp:520
 #, fuzzy
 msgid "Hotkey file"
 msgstr "Danh sách phím nóng"
@@ -9381,7 +9381,7 @@ msgstr ""
 "%s\n"
 "không tìm thấy. Tập lệnh không có sẵn."
 
-#: eeschema/connection_graph.cpp:3245
+#: eeschema/connection_graph.cpp:3250
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -9389,7 +9389,7 @@ msgstr ""
 "Cả %s và %s đều được gắn vào các mục giống nhau; %s sẽ được sử dụng trong "
 "netlist"
 
-#: eeschema/connection_graph.cpp:3524
+#: eeschema/connection_graph.cpp:3529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -9397,13 +9397,13 @@ msgstr ""
 "Net %s được kết nối bằng đồ thị với bus %s nhưng không phải là thành viên "
 "của bus đó"
 
-#: eeschema/connection_graph.cpp:4070
+#: eeschema/connection_graph.cpp:4075
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "chân pin trang tính %s không có nhãn phân cấp phù hợp bên trong trang tính"
 
-#: eeschema/connection_graph.cpp:4088
+#: eeschema/connection_graph.cpp:4093
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -20323,8 +20323,8 @@ msgstr "Không tải được thư viện kiface \"%s\"."
 msgid "KiCad Symbol Library Browser"
 msgstr "Trình duyệt Thư viện Symbol"
 
-#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1023
-#: pcbnew/footprint_viewer_frame.cpp:1028
+#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1026
+#: pcbnew/footprint_viewer_frame.cpp:1031
 #, fuzzy
 msgid "[no library selected]"
 msgstr "Không có symbol nào được chọn"
@@ -24676,7 +24676,7 @@ msgstr ""
 msgid "<h1>Template Selector</h1>"
 msgstr ""
 
-#: kicad/dialogs/dialog_template_selector.cpp:254
+#: kicad/dialogs/dialog_template_selector.cpp:262
 msgid "Select Templates Directory"
 msgstr ""
 
@@ -25627,7 +25627,7 @@ msgstr ""
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr ""
 
-#: kicad/project_template.cpp:289
+#: kicad/project_template.cpp:290
 #, fuzzy, c-format
 msgid "Cannot create folder '%s'."
 msgstr "Không thể mở tệp '%s'"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 16:05-0800\n"
+"POT-Creation-Date: 2024-12-19 16:48-0800\n"
 "PO-Revision-Date: 2024-09-04 13:09+0000\n"
 "Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -216,7 +216,7 @@ msgstr "將當前視圖匯出為 JPEG..."
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:657
 #: common/eda_base_frame.cpp:1185 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:978
+#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:981
 #: pcbnew/pcb_base_frame.cpp:670
 msgid "3D Viewer"
 msgstr "3D 查看器"
@@ -2079,31 +2079,31 @@ msgstr "捐贈"
 msgid "Donate to KiCad"
 msgstr "捐贈給 KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:759
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:761
 msgid "&OK"
 msgstr "確定 (&O)"
 
-#: common/dialog_shim.cpp:760
+#: common/dialog_shim.cpp:762
 msgid "&Cancel"
 msgstr "取消 (&C)"
 
-#: common/dialog_shim.cpp:761
+#: common/dialog_shim.cpp:763
 msgid "&Yes"
 msgstr "是 (&Y)"
 
-#: common/dialog_shim.cpp:762
+#: common/dialog_shim.cpp:764
 msgid "&No"
 msgstr "否(&N)"
 
-#: common/dialog_shim.cpp:763
+#: common/dialog_shim.cpp:765
 msgid "&Apply"
 msgstr "應用(&A)"
 
-#: common/dialog_shim.cpp:764
+#: common/dialog_shim.cpp:766
 msgid "&Save"
 msgstr "儲存 (&S)"
 
-#: common/dialog_shim.cpp:765 common/dialog_shim.cpp:766
+#: common/dialog_shim.cpp:767 common/dialog_shim.cpp:768
 #: common/eda_base_frame.cpp:504 common/eda_base_frame.cpp:509
 #: common/eda_base_frame.cpp:530 common/eda_base_frame.cpp:534
 msgid "&Help"
@@ -5860,7 +5860,7 @@ msgid "Problem while running the PDF viewer '%s'."
 msgstr "運行 PDF 閱讀器 '%s' 時出現問題。"
 
 #: common/gestfich.cpp:306 eeschema/eeschema.cpp:608 eeschema/eeschema.cpp:643
-#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:308
+#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:581
 #, c-format
 msgid "Cannot copy file '%s'."
@@ -7005,7 +7005,7 @@ msgstr "提取檔案時出錯!"
 #: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
-#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
+#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/sch_plotter.cpp:174 eeschema/sch_plotter.cpp:386
 #: eeschema/sch_plotter.cpp:526 eeschema/sch_plotter.cpp:733
 #: eeschema/sch_plotter.cpp:901 gerbview/export_to_pcbnew.cpp:68
@@ -7733,7 +7733,7 @@ msgid "Create, delete and edit symbols"
 msgstr "建立, 刪除和編輯符號"
 
 #: common/tool/actions.cpp:878 pcbnew/footprint_viewer_frame.cpp:111
-#: pcbnew/footprint_viewer_frame.cpp:1031
+#: pcbnew/footprint_viewer_frame.cpp:1034
 msgid "Footprint Library Browser"
 msgstr "封裝庫瀏覽器"
 
@@ -8030,7 +8030,7 @@ msgstr "電路板"
 msgid "Library"
 msgstr "庫"
 
-#: common/widgets/footprint_preview_widget.cpp:115
+#: common/widgets/footprint_preview_widget.cpp:126
 msgid "Footprint not found."
 msgstr "找不到封裝。"
 
@@ -8400,208 +8400,208 @@ msgstr "資訊"
 msgid "Save..."
 msgstr "儲存..."
 
-#: common/wildcards_and_files_ext.cpp:212
+#: common/wildcards_and_files_ext.cpp:213
 msgid "All files"
 msgstr "所有檔案"
 
-#: common/wildcards_and_files_ext.cpp:218
+#: common/wildcards_and_files_ext.cpp:219
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:80
 msgid "KiCad symbol library files"
 msgstr "KiCad 符號庫檔案"
 
-#: common/wildcards_and_files_ext.cpp:225
+#: common/wildcards_and_files_ext.cpp:226
 msgid "KiCad project files"
 msgstr "KiCad 專案檔案"
 
-#: common/wildcards_and_files_ext.cpp:231
+#: common/wildcards_and_files_ext.cpp:232
 msgid "KiCad legacy project files"
 msgstr "KiCad 舊版專案檔案"
 
-#: common/wildcards_and_files_ext.cpp:238
+#: common/wildcards_and_files_ext.cpp:239
 msgid "All KiCad project files"
 msgstr "所有 KiCad 專案檔案"
 
-#: common/wildcards_and_files_ext.cpp:245
+#: common/wildcards_and_files_ext.cpp:246
 msgid "All KiCad schematic files"
 msgstr "所有 KiCad 原理圖檔案"
 
-#: common/wildcards_and_files_ext.cpp:252
+#: common/wildcards_and_files_ext.cpp:253
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:75
 msgid "KiCad legacy schematic files"
 msgstr "KiCad 舊版原理圖檔案"
 
-#: common/wildcards_and_files_ext.cpp:259
+#: common/wildcards_and_files_ext.cpp:260
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:74
 msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression 原理圖檔案"
 
-#: common/wildcards_and_files_ext.cpp:266
+#: common/wildcards_and_files_ext.cpp:267
 msgid "CADSTAR Archive files"
 msgstr "CADSTAR 存檔檔案"
 
-#: common/wildcards_and_files_ext.cpp:272
+#: common/wildcards_and_files_ext.cpp:273
 msgid "Eagle XML files"
 msgstr "Eagle XML 檔案"
 
-#: common/wildcards_and_files_ext.cpp:278
+#: common/wildcards_and_files_ext.cpp:279
 msgid "OrcadPCB2 netlist files"
 msgstr "OrcadPCB2 網表檔案"
 
-#: common/wildcards_and_files_ext.cpp:285
+#: common/wildcards_and_files_ext.cpp:286
 msgid "KiCad netlist files"
 msgstr "KiCad 網表檔案"
 
-#: common/wildcards_and_files_ext.cpp:291
+#: common/wildcards_and_files_ext.cpp:292
 msgid "Allegro netlist files"
 msgstr "Allegro 網表檔案"
 
-#: common/wildcards_and_files_ext.cpp:298
+#: common/wildcards_and_files_ext.cpp:299
 msgid "EasyEDA (JLCEDA) Std backup archive"
 msgstr "EasyEDA (嘉立創 EDA) 標準版備份壓縮"
 
-#: common/wildcards_and_files_ext.cpp:304
+#: common/wildcards_and_files_ext.cpp:305
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "EasyEDA (嘉立創 EDA) 專業版檔案"
 
-#: common/wildcards_and_files_ext.cpp:310
+#: common/wildcards_and_files_ext.cpp:311
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:278
 msgid "KiCad printed circuit board files"
 msgstr "KiCad PCB 檔案"
 
-#: common/wildcards_and_files_ext.cpp:317
+#: common/wildcards_and_files_ext.cpp:318
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
 msgid "KiCad footprint files"
 msgstr "KiCad 封裝檔案"
 
-#: common/wildcards_and_files_ext.cpp:323
+#: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint library paths"
 msgstr "KiCad 封裝庫路徑"
 
-#: common/wildcards_and_files_ext.cpp:330
+#: common/wildcards_and_files_ext.cpp:331
 msgid "Drawing sheet files"
 msgstr "圖紙檔案"
 
-#: common/wildcards_and_files_ext.cpp:338
+#: common/wildcards_and_files_ext.cpp:339
 msgid "KiCad symbol footprint link files"
 msgstr "KiCad 符號封裝鏈接檔案"
 
-#: common/wildcards_and_files_ext.cpp:346 gerbview/files.cpp:70
+#: common/wildcards_and_files_ext.cpp:347 gerbview/files.cpp:70
 msgid "Drill files"
 msgstr "鑽孔檔案"
 
-#: common/wildcards_and_files_ext.cpp:353
+#: common/wildcards_and_files_ext.cpp:354
 msgid "SVG files"
 msgstr "SVG 檔案"
 
-#: common/wildcards_and_files_ext.cpp:359
+#: common/wildcards_and_files_ext.cpp:360
 msgid "HTML files"
 msgstr "HTML 檔案"
 
-#: common/wildcards_and_files_ext.cpp:365
+#: common/wildcards_and_files_ext.cpp:366
 msgid "CSV Files"
 msgstr "CSV 檔案"
 
-#: common/wildcards_and_files_ext.cpp:371
+#: common/wildcards_and_files_ext.cpp:372
 msgid "Portable document format files"
 msgstr "便攜式文件格式檔案 (*.PDF)"
 
-#: common/wildcards_and_files_ext.cpp:377
+#: common/wildcards_and_files_ext.cpp:378
 msgid "PostScript files"
 msgstr "PostScript 檔案"
 
-#: common/wildcards_and_files_ext.cpp:383
+#: common/wildcards_and_files_ext.cpp:384
 msgid "Json files"
 msgstr "Json 檔案"
 
-#: common/wildcards_and_files_ext.cpp:389
+#: common/wildcards_and_files_ext.cpp:390
 msgid "Report files"
 msgstr "報告檔案"
 
-#: common/wildcards_and_files_ext.cpp:395
+#: common/wildcards_and_files_ext.cpp:396
 msgid "Component placement files"
 msgstr "元件定位檔案"
 
-#: common/wildcards_and_files_ext.cpp:401
+#: common/wildcards_and_files_ext.cpp:402
 msgid "VRML and X3D files"
 msgstr "VRML 和 X3D 檔案"
 
-#: common/wildcards_and_files_ext.cpp:407
+#: common/wildcards_and_files_ext.cpp:408
 msgid "IDFv3 footprint files"
 msgstr "IDFv3 封裝檔案"
 
-#: common/wildcards_and_files_ext.cpp:413
+#: common/wildcards_and_files_ext.cpp:414
 msgid "Text files"
 msgstr "文字檔案"
 
-#: common/wildcards_and_files_ext.cpp:419
+#: common/wildcards_and_files_ext.cpp:420
 msgid "Legacy footprint export files"
 msgstr "舊的封裝匯出檔案"
 
-#: common/wildcards_and_files_ext.cpp:425
+#: common/wildcards_and_files_ext.cpp:426
 msgid "Electrical rule check file"
 msgstr "電氣規則檢查 (ERC) 檔案"
 
-#: common/wildcards_and_files_ext.cpp:431
+#: common/wildcards_and_files_ext.cpp:432
 msgid "Spice library file"
 msgstr "Spice 庫檔案"
 
-#: common/wildcards_and_files_ext.cpp:437
+#: common/wildcards_and_files_ext.cpp:438
 msgid "SPICE netlist file"
 msgstr "SPICE 網表檔案"
 
-#: common/wildcards_and_files_ext.cpp:443
+#: common/wildcards_and_files_ext.cpp:444
 msgid "CadStar netlist file"
 msgstr "CadStar 網表檔案"
 
-#: common/wildcards_and_files_ext.cpp:449
+#: common/wildcards_and_files_ext.cpp:450
 msgid "Symbol footprint association files"
 msgstr "符號封裝分配檔案"
 
-#: common/wildcards_and_files_ext.cpp:455
+#: common/wildcards_and_files_ext.cpp:456
 msgid "Zip file"
 msgstr "Zip 檔案"
 
-#: common/wildcards_and_files_ext.cpp:461
+#: common/wildcards_and_files_ext.cpp:462
 msgid "GenCAD 1.4 board files"
 msgstr "GenCAD 1.4 線路板檔案"
 
-#: common/wildcards_and_files_ext.cpp:467
+#: common/wildcards_and_files_ext.cpp:468
 msgid "DXF Files"
 msgstr "DXF 檔案"
 
-#: common/wildcards_and_files_ext.cpp:473
+#: common/wildcards_and_files_ext.cpp:474
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
 msgstr "Gerber job 檔案"
 
-#: common/wildcards_and_files_ext.cpp:479
+#: common/wildcards_and_files_ext.cpp:480
 msgid "Specctra DSN file"
 msgstr "Specctra DSN 檔案"
 
-#: common/wildcards_and_files_ext.cpp:486
+#: common/wildcards_and_files_ext.cpp:487
 msgid "Specctra Session file"
 msgstr "Specctra 會話檔案"
 
-#: common/wildcards_and_files_ext.cpp:493
+#: common/wildcards_and_files_ext.cpp:494
 msgid "IPC-D-356 Test Files"
 msgstr "IPC-D-356 測試檔案"
 
-#: common/wildcards_and_files_ext.cpp:500
+#: common/wildcards_and_files_ext.cpp:501
 msgid "Workbook file"
 msgstr "工作簿檔案"
 
-#: common/wildcards_and_files_ext.cpp:507
+#: common/wildcards_and_files_ext.cpp:508
 msgid "PNG file"
 msgstr "PNG 檔案"
 
-#: common/wildcards_and_files_ext.cpp:513
+#: common/wildcards_and_files_ext.cpp:514
 msgid "Jpeg file"
 msgstr "JPEG 檔案"
 
-#: common/wildcards_and_files_ext.cpp:519
+#: common/wildcards_and_files_ext.cpp:520
 msgid "Hotkey file"
 msgstr "快捷鍵檔案"
 
@@ -9065,24 +9065,24 @@ msgstr ""
 "%s\n"
 "找不到。腳本不可用。"
 
-#: eeschema/connection_graph.cpp:3245
+#: eeschema/connection_graph.cpp:3250
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都連接到同一項上; 將使用 %s 作為網表中的網路名稱"
 
-#: eeschema/connection_graph.cpp:3524
+#: eeschema/connection_graph.cpp:3529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "網路 %s 以圖形方式連接到匯流排 %s, 但不是匯流排的成員"
 
-#: eeschema/connection_graph.cpp:4070
+#: eeschema/connection_graph.cpp:4075
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "圖紙接腳 %s 在子圖紙內沒有匹配的層次標籤"
 
-#: eeschema/connection_graph.cpp:4088
+#: eeschema/connection_graph.cpp:4093
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "層次標籤 %s 在父圖紙內沒有匹配的圖紙接腳"
@@ -19579,8 +19579,8 @@ msgstr "(載入失敗)"
 msgid "KiCad Symbol Library Browser"
 msgstr "KiCad 符號庫瀏覽器"
 
-#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1023
-#: pcbnew/footprint_viewer_frame.cpp:1028
+#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1026
+#: pcbnew/footprint_viewer_frame.cpp:1031
 msgid "[no library selected]"
 msgstr "[沒有選擇庫]"
 
@@ -23460,7 +23460,7 @@ msgstr "版本資訊格式 (簡明提交、關於)"
 msgid "<h1>Template Selector</h1>"
 msgstr "<h1>模板選擇器</h1>"
 
-#: kicad/dialogs/dialog_template_selector.cpp:254
+#: kicad/dialogs/dialog_template_selector.cpp:262
 msgid "Select Templates Directory"
 msgstr "選擇模板目錄"
 
@@ -24326,7 +24326,7 @@ msgstr "無法打開此模板的元資訊目錄!"
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "找不到此模板的元 HTML 資訊檔案!"
 
-#: kicad/project_template.cpp:289
+#: kicad/project_template.cpp:290
 #, c-format
 msgid "Cannot create folder '%s'."
 msgstr "無法建立資料夾 '%s'。"

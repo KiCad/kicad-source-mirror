@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 16:05-0800\n"
+"POT-Creation-Date: 2024-12-19 16:48-0800\n"
 "PO-Revision-Date: 2024-12-13 08:00+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -225,7 +225,7 @@ msgstr "Exportar visualização atual como JPEG…"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:657
 #: common/eda_base_frame.cpp:1185 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:978
+#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:981
 #: pcbnew/pcb_base_frame.cpp:670
 msgid "3D Viewer"
 msgstr "Visualizador 3D"
@@ -2120,31 +2120,31 @@ msgstr "Doe"
 msgid "Donate to KiCad"
 msgstr "Doe para o KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:759
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:761
 msgid "&OK"
 msgstr "&OK"
 
-#: common/dialog_shim.cpp:760
+#: common/dialog_shim.cpp:762
 msgid "&Cancel"
 msgstr "&Cancela"
 
-#: common/dialog_shim.cpp:761
+#: common/dialog_shim.cpp:763
 msgid "&Yes"
 msgstr "&Sim"
 
-#: common/dialog_shim.cpp:762
+#: common/dialog_shim.cpp:764
 msgid "&No"
 msgstr "&Não"
 
-#: common/dialog_shim.cpp:763
+#: common/dialog_shim.cpp:765
 msgid "&Apply"
 msgstr "&Aplicar"
 
-#: common/dialog_shim.cpp:764
+#: common/dialog_shim.cpp:766
 msgid "&Save"
 msgstr "&Salvar"
 
-#: common/dialog_shim.cpp:765 common/dialog_shim.cpp:766
+#: common/dialog_shim.cpp:767 common/dialog_shim.cpp:768
 #: common/eda_base_frame.cpp:504 common/eda_base_frame.cpp:509
 #: common/eda_base_frame.cpp:530 common/eda_base_frame.cpp:534
 msgid "&Help"
@@ -6001,7 +6001,7 @@ msgid "Problem while running the PDF viewer '%s'."
 msgstr "Houve um problema ao executar o visualizador de PDF '%s'."
 
 #: common/gestfich.cpp:306 eeschema/eeschema.cpp:608 eeschema/eeschema.cpp:643
-#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:308
+#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:581
 #, c-format
 msgid "Cannot copy file '%s'."
@@ -7161,7 +7161,7 @@ msgstr "Houve um erro na extração do arquivo!"
 #: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
-#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
+#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/sch_plotter.cpp:174 eeschema/sch_plotter.cpp:386
 #: eeschema/sch_plotter.cpp:526 eeschema/sch_plotter.cpp:733
 #: eeschema/sch_plotter.cpp:901 gerbview/export_to_pcbnew.cpp:68
@@ -7889,7 +7889,7 @@ msgid "Create, delete and edit symbols"
 msgstr "Crie, exclua e edite os símbolos"
 
 #: common/tool/actions.cpp:878 pcbnew/footprint_viewer_frame.cpp:111
-#: pcbnew/footprint_viewer_frame.cpp:1031
+#: pcbnew/footprint_viewer_frame.cpp:1034
 msgid "Footprint Library Browser"
 msgstr "Navegador da biblioteca de footprints"
 
@@ -8189,7 +8189,7 @@ msgstr "Placa"
 msgid "Library"
 msgstr "Biblioteca"
 
-#: common/widgets/footprint_preview_widget.cpp:115
+#: common/widgets/footprint_preview_widget.cpp:126
 msgid "Footprint not found."
 msgstr "O footprint não encontrada."
 
@@ -8562,209 +8562,209 @@ msgstr "Informações"
 msgid "Save..."
 msgstr "Salve…"
 
-#: common/wildcards_and_files_ext.cpp:212
+#: common/wildcards_and_files_ext.cpp:213
 msgid "All files"
 msgstr "Todos os arquivos"
 
-#: common/wildcards_and_files_ext.cpp:218
+#: common/wildcards_and_files_ext.cpp:219
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:80
 msgid "KiCad symbol library files"
 msgstr "Arquivos da biblioteca dos símbolos do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:225
+#: common/wildcards_and_files_ext.cpp:226
 msgid "KiCad project files"
 msgstr "Arquivo do projeto KiCad"
 
-#: common/wildcards_and_files_ext.cpp:231
+#: common/wildcards_and_files_ext.cpp:232
 msgid "KiCad legacy project files"
 msgstr "Arquivos legados do projeto KiCad"
 
-#: common/wildcards_and_files_ext.cpp:238
+#: common/wildcards_and_files_ext.cpp:239
 msgid "All KiCad project files"
 msgstr "Todos os arquivos do projeto KiCad"
 
-#: common/wildcards_and_files_ext.cpp:245
+#: common/wildcards_and_files_ext.cpp:246
 msgid "All KiCad schematic files"
 msgstr "Todos os arquivos de esquemas do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:252
+#: common/wildcards_and_files_ext.cpp:253
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:75
 msgid "KiCad legacy schematic files"
 msgstr "Arquivos dos esquemáticos legados do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:259
+#: common/wildcards_and_files_ext.cpp:260
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:74
 msgid "KiCad s-expression schematic files"
 msgstr "Arquivos dos esquemáticos s-expression do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:266
+#: common/wildcards_and_files_ext.cpp:267
 msgid "CADSTAR Archive files"
 msgstr "Arquivos dos documentos CADSTAR"
 
-#: common/wildcards_and_files_ext.cpp:272
+#: common/wildcards_and_files_ext.cpp:273
 msgid "Eagle XML files"
 msgstr "Arquivos XML do Eagle"
 
-#: common/wildcards_and_files_ext.cpp:278
+#: common/wildcards_and_files_ext.cpp:279
 msgid "OrcadPCB2 netlist files"
 msgstr "Arquivos netlist do OrcadPCB2"
 
-#: common/wildcards_and_files_ext.cpp:285
+#: common/wildcards_and_files_ext.cpp:286
 msgid "KiCad netlist files"
 msgstr "Arquivos netlist do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:291
+#: common/wildcards_and_files_ext.cpp:292
 msgid "Allegro netlist files"
 msgstr "Arquivos netlist do Allegro"
 
-#: common/wildcards_and_files_ext.cpp:298
+#: common/wildcards_and_files_ext.cpp:299
 msgid "EasyEDA (JLCEDA) Std backup archive"
 msgstr "EasyEDA (JLCEDA) Arquivo de backup padrão"
 
-#: common/wildcards_and_files_ext.cpp:304
+#: common/wildcards_and_files_ext.cpp:305
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "EasyEDA (JLCEDA) Arquivos Pro"
 
-#: common/wildcards_and_files_ext.cpp:310
+#: common/wildcards_and_files_ext.cpp:311
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:278
 msgid "KiCad printed circuit board files"
 msgstr "Arquivos da placa de circuito impresso do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:317
+#: common/wildcards_and_files_ext.cpp:318
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
 msgid "KiCad footprint files"
 msgstr "Arquivos do footprint do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:323
+#: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint library paths"
 msgstr "Os caminhos das bibliotecas do footprint do componente do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:330
+#: common/wildcards_and_files_ext.cpp:331
 msgid "Drawing sheet files"
 msgstr "Arquivos dos esquemáticos"
 
-#: common/wildcards_and_files_ext.cpp:338
+#: common/wildcards_and_files_ext.cpp:339
 msgid "KiCad symbol footprint link files"
 msgstr ""
 "Arquivos de ligação entre os símbolos e do footprint do componente do KiCad"
 
-#: common/wildcards_and_files_ext.cpp:346 gerbview/files.cpp:70
+#: common/wildcards_and_files_ext.cpp:347 gerbview/files.cpp:70
 msgid "Drill files"
 msgstr "Arquivos de perfuração"
 
-#: common/wildcards_and_files_ext.cpp:353
+#: common/wildcards_and_files_ext.cpp:354
 msgid "SVG files"
 msgstr "Arquivos SVG"
 
-#: common/wildcards_and_files_ext.cpp:359
+#: common/wildcards_and_files_ext.cpp:360
 msgid "HTML files"
 msgstr "Arquivos HTML"
 
-#: common/wildcards_and_files_ext.cpp:365
+#: common/wildcards_and_files_ext.cpp:366
 msgid "CSV Files"
 msgstr "Arquivos CSV"
 
-#: common/wildcards_and_files_ext.cpp:371
+#: common/wildcards_and_files_ext.cpp:372
 msgid "Portable document format files"
 msgstr "Arquivos PDF"
 
-#: common/wildcards_and_files_ext.cpp:377
+#: common/wildcards_and_files_ext.cpp:378
 msgid "PostScript files"
 msgstr "Arquivos PostScript"
 
-#: common/wildcards_and_files_ext.cpp:383
+#: common/wildcards_and_files_ext.cpp:384
 msgid "Json files"
 msgstr "Arquivos Json"
 
-#: common/wildcards_and_files_ext.cpp:389
+#: common/wildcards_and_files_ext.cpp:390
 msgid "Report files"
 msgstr "Arquivos do relatório"
 
-#: common/wildcards_and_files_ext.cpp:395
+#: common/wildcards_and_files_ext.cpp:396
 msgid "Component placement files"
 msgstr "Arquivos de posicionamento dos componentes"
 
-#: common/wildcards_and_files_ext.cpp:401
+#: common/wildcards_and_files_ext.cpp:402
 msgid "VRML and X3D files"
 msgstr "Arquivos VRML e X3D"
 
-#: common/wildcards_and_files_ext.cpp:407
+#: common/wildcards_and_files_ext.cpp:408
 msgid "IDFv3 footprint files"
 msgstr "Arquivos de representação real do componente IDFv3"
 
-#: common/wildcards_and_files_ext.cpp:413
+#: common/wildcards_and_files_ext.cpp:414
 msgid "Text files"
 msgstr "Arquivos de texto"
 
-#: common/wildcards_and_files_ext.cpp:419
+#: common/wildcards_and_files_ext.cpp:420
 msgid "Legacy footprint export files"
 msgstr "Arquivos de exportação legado do footprint do componente"
 
-#: common/wildcards_and_files_ext.cpp:425
+#: common/wildcards_and_files_ext.cpp:426
 msgid "Electrical rule check file"
 msgstr "Arquivo de verificação das regras elétricas"
 
-#: common/wildcards_and_files_ext.cpp:431
+#: common/wildcards_and_files_ext.cpp:432
 msgid "Spice library file"
 msgstr "Arquivo da biblioteca Spice"
 
-#: common/wildcards_and_files_ext.cpp:437
+#: common/wildcards_and_files_ext.cpp:438
 msgid "SPICE netlist file"
 msgstr "Arquivo netlist SPICE"
 
-#: common/wildcards_and_files_ext.cpp:443
+#: common/wildcards_and_files_ext.cpp:444
 msgid "CadStar netlist file"
 msgstr "Arquivo netlist CadStar"
 
-#: common/wildcards_and_files_ext.cpp:449
+#: common/wildcards_and_files_ext.cpp:450
 msgid "Symbol footprint association files"
 msgstr "Arquivos da associação do símbolo do footprint do componente"
 
-#: common/wildcards_and_files_ext.cpp:455
+#: common/wildcards_and_files_ext.cpp:456
 msgid "Zip file"
 msgstr "Arquivo zip"
 
-#: common/wildcards_and_files_ext.cpp:461
+#: common/wildcards_and_files_ext.cpp:462
 msgid "GenCAD 1.4 board files"
 msgstr "Arquivos da placa GenCAD 1.4"
 
-#: common/wildcards_and_files_ext.cpp:467
+#: common/wildcards_and_files_ext.cpp:468
 msgid "DXF Files"
 msgstr "Arquivos DXF"
 
-#: common/wildcards_and_files_ext.cpp:473
+#: common/wildcards_and_files_ext.cpp:474
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
 msgstr "Arquivo de trabalho Gerber"
 
-#: common/wildcards_and_files_ext.cpp:479
+#: common/wildcards_and_files_ext.cpp:480
 msgid "Specctra DSN file"
 msgstr "Arquivo Specctra DSN"
 
-#: common/wildcards_and_files_ext.cpp:486
+#: common/wildcards_and_files_ext.cpp:487
 msgid "Specctra Session file"
 msgstr "Arquivo Specctra Session"
 
-#: common/wildcards_and_files_ext.cpp:493
+#: common/wildcards_and_files_ext.cpp:494
 msgid "IPC-D-356 Test Files"
 msgstr "Arquivos de teste IPC-D-356"
 
-#: common/wildcards_and_files_ext.cpp:500
+#: common/wildcards_and_files_ext.cpp:501
 msgid "Workbook file"
 msgstr "Arquivo da pasta de trabalho"
 
-#: common/wildcards_and_files_ext.cpp:507
+#: common/wildcards_and_files_ext.cpp:508
 msgid "PNG file"
 msgstr "Arquivo PNG"
 
-#: common/wildcards_and_files_ext.cpp:513
+#: common/wildcards_and_files_ext.cpp:514
 msgid "Jpeg file"
 msgstr "Arquivo jpeg"
 
-#: common/wildcards_and_files_ext.cpp:519
+#: common/wildcards_and_files_ext.cpp:520
 msgid "Hotkey file"
 msgstr "Arquivo da lista das teclas de atalho"
 
@@ -9257,7 +9257,7 @@ msgstr ""
 "%s\n"
 "não foi encontrado. O script não está disponível."
 
-#: eeschema/connection_graph.cpp:3245
+#: eeschema/connection_graph.cpp:3250
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -9265,7 +9265,7 @@ msgstr ""
 "Ambos os %s e %s estão ligados aos mesmos itens; o %s será utilizado na "
 "netlist"
 
-#: eeschema/connection_graph.cpp:3524
+#: eeschema/connection_graph.cpp:3529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -9273,14 +9273,14 @@ msgstr ""
 "A net %s está graficamente conectada ao barramento %s mas, não é um membro "
 "deste barramento"
 
-#: eeschema/connection_graph.cpp:4070
+#: eeschema/connection_graph.cpp:4075
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "A folha de pinos %s não tem um rótulo hierárquico correspondente dentro da "
 "folha"
 
-#: eeschema/connection_graph.cpp:4088
+#: eeschema/connection_graph.cpp:4093
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -20128,8 +20128,8 @@ msgstr "(houve uma falha ao carregar)"
 msgid "KiCad Symbol Library Browser"
 msgstr "Navegador da biblioteca de símbolos do KiCad"
 
-#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1023
-#: pcbnew/footprint_viewer_frame.cpp:1028
+#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1026
+#: pcbnew/footprint_viewer_frame.cpp:1031
 msgid "[no library selected]"
 msgstr "[nenhuma biblioteca foi selecionada]"
 
@@ -24128,7 +24128,7 @@ msgstr "formato de informação da versão (plain, commit, about)"
 msgid "<h1>Template Selector</h1>"
 msgstr "<h1>Seletor de modelo</h1>"
 
-#: kicad/dialogs/dialog_template_selector.cpp:254
+#: kicad/dialogs/dialog_template_selector.cpp:262
 msgid "Select Templates Directory"
 msgstr "Seleciona a pasta dos modelos"
 
@@ -25030,7 +25030,7 @@ msgstr ""
 "Não foi possível localizar o arquivo de informação meta HTML para este "
 "modelo!"
 
-#: kicad/project_template.cpp:289
+#: kicad/project_template.cpp:290
 #, c-format
 msgid "Cannot create folder '%s'."
 msgstr "Não é possível criar a pasta '%s'."
@@ -37180,191 +37180,163 @@ msgstr ""
 "\n"
 "### Constraints\n"
 "\n"
-"| Constraint type           | Argument type                                  "
-"                                                                       | Desc"
-"ription                                                                      "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                  |\n"
-"|---------------------------|------------------------------------------------"
-"-----------------------------------------------------------------------|-----"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"--------------------------------------------------|\n"
-"| `annular_width`           | min/opt/max                                    "
-"                                                                       | "
-"Checks the width of annular rings on vias.<br>                               "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                      |\n"
-"| `assertion`               | \"&lt;expression>\"                            "
-"                                                                         | "
-"Checks the given expression.<br>                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                 |\n"
-"| `clearance`               | min                                            "
-"                                                                       | "
-"Specifies the **electrical** clearance between copper objects of different "
+"| Constraint type           | Argument "
+"type                                                                                                         "
+"| "
+"Description                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+"|\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                           "
+"| Checks the width of annular rings on vias."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
+"|\n"
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
+"| Checks the given expression."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"|\n"
+"| `clearance`               | "
+"min                                                                                                                   "
+"| Specifies the **electrical** clearance between copper objects of different "
 "nets.  (See `physical_clearance` if you wish to specify clearance between "
 "objects regardless of net.)<br><br>To allow copper objects to overlap "
 "(collide), create a `clearance` constraint with the `min` value less than "
-"zero (for example, `-1`).<br>                                                "
-"                                                                     |\n"
-"| `courtyard_clearance`     | min                                            "
-"                                                                       | "
-"Checks the clearance between footprint courtyards and generates an error if "
-"any two courtyards are closer than the `min` distance.  If a footprint does "
-"not have a courtyard shape, no errors will be generated from this constraint."
-"<br>                                                                         "
-"                                                                             "
-"                                                        |\n"
-"| `diff_pair_gap`           | min/opt/max                                    "
-"                                                                       | "
-"Checks the gap between coupled tracks in a differential pair.  Coupled "
+"zero (for example, `-1`)."
+"<br>                                                                                                                     "
+"|\n"
+"| `courtyard_clearance`     | "
+"min                                                                                                                   "
+"| Checks the clearance between footprint courtyards and generates an error "
+"if any two courtyards are closer than the `min` distance.  If a footprint "
+"does not have a courtyard shape, no errors will be generated from this "
+"constraint."
+"<br>                                                                                                                                                                                                              "
+"|\n"
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                           "
+"| Checks the gap between coupled tracks in a differential pair.  Coupled "
 "tracks are segments that are parallel to each other.  Differential pair gap "
 "is not tested on uncoupled portions of a differential pair (for example, the "
-"fanout from a component).<br>                                                "
-"                                                                             "
-"                                                             |\n"
-"| `diff_pair_uncoupled`     | max                                            "
-"                                                                       | "
-"Checks the distance that a differential pair track is routed uncoupled from "
-"the other polarity track in the pair (for example, where the pair fans out "
-"from a component, or becomes uncoupled to pass around another object such as "
-"a via).<br>                                                                  "
-"                                                                             "
-"                                                         |\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
-"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
-"Specify one or more object types to disallow, separated by spaces.  For "
+"fanout from a component)."
+"<br>                                                                                                                                                                                          "
+"|\n"
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                   "
+"| Checks the distance that a differential pair track is routed uncoupled "
+"from the other polarity track in the pair (for example, where the pair fans "
+"out from a component, or becomes uncoupled to pass around another object "
+"such as a via)."
+"<br>                                                                                                                                                                                                        "
+"|\n"
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Specify one or more object types to disallow, separated by spaces.  For "
 "example, `(constraint disallow track)` or `(constraint disallow track via "
 "pad)`.  If an object of this type matches the rule condition, a DRC error "
 "will be created.<br><br>This constraint is essentially the same as a keepout "
-"rule area, but can be used to create more specific keepout restrictions.<br> "
-"                                                                 |\n"
-"| `edge_clearance`          | min/opt/max                                    "
-"                                                                       | "
-"Checks the clearance between objects and the board edge.<br><br>This can "
+"rule area, but can be used to create more specific keepout restrictions."
+"<br>                                                                  |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                           "
+"| Checks the clearance between objects and the board edge.<br><br>This can "
 "also be thought of as the \"milling tolerance\" as the board edge will "
 "include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
-"pad holes.  (See `physical_hole_clearance` for the drilling tolerance.)<br>  "
-"                                                                             "
-"                                                                    |\n"
-"| `length`                  | min/max                                        "
-"                                                                       | "
-"Checks the total routed length for the nets that match the rule condition "
+"pad holes.  (See `physical_hole_clearance` for the drilling "
+"tolerance.)<br>                                                                                                                                                   "
+"|\n"
+"| `length`                  | min/"
+"max                                                                                                               "
+"| Checks the total routed length for the nets that match the rule condition "
 "and generates an error for each net that is below the `min` value (if "
-"specified) or above the `max` value (if specified) of the constraint.<br>    "
-"                                                                             "
-"                                                                             "
-"                                                                |\n"
-"| `hole`                    | min/max                                        "
-"                                                                       | "
-"Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
-"holes, the smaller (minor) diameter will be tested against the `min` value ("
-"if specified) and the larger (major) diameter will be tested against the "
-"`max` value (if specified).<br>                                              "
-"                                                                             "
-"                                                                |\n"
-"| `hole_clearance`          | min                                            "
-"                                                                       | "
-"Checks the clearance between a drilled hole in a pad or via and copper "
+"specified) or above the `max` value (if specified) of the constraint."
+"<br>                                                                                                                                                                                                                              "
+"|\n"
+"| `hole`                    | min/"
+"max                                                                                                               "
+"| Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
+"holes, the smaller (minor) diameter will be tested against the `min` value "
+"(if specified) and the larger (major) diameter will be tested against the "
+"`max` value (if specified)."
+"<br>                                                                                                                                                                                           "
+"|\n"
+"| `hole_clearance`          | "
+"min                                                                                                                   "
+"| Checks the clearance between a drilled hole in a pad or via and copper "
 "objects on a different net.  The clearance is measured from the diameter of "
-"the hole, not its center.<br>                                                "
-"                                                                             "
-"                                                                             "
-"                                                             |\n"
-"| `hole_to_hole`            | min                                            "
-"                                                                       | "
-"Checks the clearance between mechanically-drilled holes in pads and vias.  "
+"the hole, not its center."
+"<br>                                                                                                                                                                                                                                                                       "
+"|\n"
+"| `hole_to_hole`            | "
+"min                                                                                                                   "
+"| Checks the clearance between mechanically-drilled holes in pads and vias.  "
 "The clearance is measured between the diameters of the holes, not between "
 "their centers.<br><br>This constraint is soley for the protection of drill "
 "bits.  The clearance between **laser-drilled** (microvias) and other non-"
 "mechanically-drilled holes is not checked, nor is the clearance between "
 "**milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
-"| `physical_clearance`      | min                                            "
-"                                                                       | "
-"Checks the clearance between two objects on a given layer (including non-"
+"| `physical_clearance`      | "
+"min                                                                                                                   "
+"| Checks the clearance between two objects on a given layer (including non-"
 "copper layers).<br><br>While this can perform more general-purpose checks "
-"than `clearance`, it is much slower.  Use `clearance` where possible.<br>    "
-"                                                                             "
-"                                                                             "
-"                                                             |\n"
-"| `physical_hole_clearance` | min                                            "
-"                                                                       | "
-"Checks the clearance between a drilled hole in a pad or via and another "
+"than `clearance`, it is much slower.  Use `clearance` where possible."
+"<br>                                                                                                                                                                                                                           "
+"|\n"
+"| `physical_hole_clearance` | "
+"min                                                                                                                   "
+"| Checks the clearance between a drilled hole in a pad or via and another "
 "object, regardless of net. The clearance is measured from the diameter of "
 "the hole, not its center.<br><br>This can also be thought of as the "
 "\"drilling tolerance\" as it only includes **round** holes (see "
-"`edge_clearance` for the milling tolerance).<br>                             "
-"                                                                             "
-"         |\n"
-"| `silk_clearance`          | min/opt/max                                    "
-"                                                                       | "
-"Checks the clearance between objects on silkscreen layers and other objects.<"
-"br>                                                                          "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                      |\n"
-"| `skew`                    | max                                            "
-"                                                                       | "
-"Checks the total skew for the nets that match the rule condition, that is, "
+"`edge_clearance` for the milling tolerance)."
+"<br>                                                                                                                   "
+"|\n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                           "
+"| Checks the clearance between objects on silkscreen layers and other "
+"objects."
+"<br>                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
+"| `skew`                    | "
+"max                                                                                                                   "
+"| Checks the total skew for the nets that match the rule condition, that is, "
 "the difference between the length of each net and the average of all the "
 "lengths of each net that is matched by the rule.  If the absolute value of "
 "the difference between that average and the length of any one net is above "
-"the constraint `max` value, an error will be generated.<br>                  "
-"                                                                |\n"
-"| `thermal_relief_gap`      | min                                            "
-"                                                                       | "
-"Specifies the width of the gap between a pad and a zone with a thermal-"
-"relief connection.<br>                                                       "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                            |\n"
-"| `thermal_spoke_width`     | opt                                            "
-"                                                                       | "
-"Specifies the width of the spokes connecting a pad to a zone with a thermal-"
-"relief connection.<br>                                                       "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                       |\n"
-"| `track_width`             | min/opt/max                                    "
-"                                                                       | "
-"Checks the width of track and arc segments.  An error will be generated for "
-"each segment that has a width below the `min` value (if specified) or above "
-"the `max` value (if specified).<br>                                          "
-"                                                                             "
-"                                                                             "
-"                                                        |\n"
-"| `via_count`               | max                                            "
-"                                                                       | "
-"Counts the number of vias on every net matched by the rule condition.  If "
+"the constraint `max` value, an error will be generated."
+"<br>                                                                                  "
+"|\n"
+"| `thermal_relief_gap`      | "
+"min                                                                                                                   "
+"| Specifies the width of the gap between a pad and a zone with a thermal-"
+"relief connection."
+"<br>                                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                   "
+"| Specifies the width of the spokes connecting a pad to a zone with a "
+"thermal-relief connection."
+"<br>                                                                                                                                                                                                                                                                                                                                                     "
+"|\n"
+"| `track_width`             | min/opt/"
+"max                                                                                                           "
+"| Checks the width of track and arc segments.  An error will be generated "
+"for each segment that has a width below the `min` value (if specified) or "
+"above the `max` value (if specified)."
+"<br>                                                                                                                                                                                                                                                            "
+"|\n"
+"| `via_count`               | "
+"max                                                                                                                   "
+"| Counts the number of vias on every net matched by the rule condition.  If "
 "that number exceeds the constraint `max` value on any matched net, an error "
-"will be generated for that net.<br>                                          "
-"                                                                             "
-"                                                                             "
-"                                                          |\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
-"                                                                       | "
-"Specifies the connection to be made between a zone and a pad.<br>            "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                      |\n"
+"will be generated for that net."
+"<br>                                                                                                                                                                                                                                                              "
+"|\n"
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
+"| Specifies the connection to be made between a zone and a pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
+"|\n"
 "\n"
 "\n"
 "### Items\n"
@@ -37530,13 +37502,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 16:05-0800\n"
+"POT-Creation-Date: 2024-12-19 16:48-0800\n"
 "PO-Revision-Date: 2024-09-28 08:15+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v8/th/>\n"
@@ -197,7 +197,7 @@ msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:657
 #: common/eda_base_frame.cpp:1185 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:978
+#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:981
 #: pcbnew/pcb_base_frame.cpp:670
 msgid "3D Viewer"
 msgstr "โปรแกรมดู3มิติ"
@@ -2120,31 +2120,31 @@ msgstr "บริจาค"
 msgid "Donate to KiCad"
 msgstr "บริจาคเงินให้ KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:759
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:761
 msgid "&OK"
 msgstr "&OK"
 
-#: common/dialog_shim.cpp:760
+#: common/dialog_shim.cpp:762
 msgid "&Cancel"
 msgstr "(&C)ยกเลิก"
 
-#: common/dialog_shim.cpp:761
+#: common/dialog_shim.cpp:763
 msgid "&Yes"
 msgstr "(&Y)ใช่"
 
-#: common/dialog_shim.cpp:762
+#: common/dialog_shim.cpp:764
 msgid "&No"
 msgstr "(&N)ไม่ใช่"
 
-#: common/dialog_shim.cpp:763
+#: common/dialog_shim.cpp:765
 msgid "&Apply"
 msgstr "(&A)นำไปใช้"
 
-#: common/dialog_shim.cpp:764
+#: common/dialog_shim.cpp:766
 msgid "&Save"
 msgstr "(&S)บันทึก"
 
-#: common/dialog_shim.cpp:765 common/dialog_shim.cpp:766
+#: common/dialog_shim.cpp:767 common/dialog_shim.cpp:768
 #: common/eda_base_frame.cpp:504 common/eda_base_frame.cpp:509
 #: common/eda_base_frame.cpp:530 common/eda_base_frame.cpp:534
 msgid "&Help"
@@ -5973,7 +5973,7 @@ msgid "Problem while running the PDF viewer '%s'."
 msgstr "เกิดปัญหาระหว่างเรียกใช้โปรแกรมดู PDF คือ '%s'"
 
 #: common/gestfich.cpp:306 eeschema/eeschema.cpp:608 eeschema/eeschema.cpp:643
-#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:308
+#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:581
 #, c-format
 msgid "Cannot copy file '%s'."
@@ -7165,7 +7165,7 @@ msgstr "ผิดพลาด การแตกไฟล์!"
 #: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
-#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
+#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/sch_plotter.cpp:174 eeschema/sch_plotter.cpp:386
 #: eeschema/sch_plotter.cpp:526 eeschema/sch_plotter.cpp:733
 #: eeschema/sch_plotter.cpp:901 gerbview/export_to_pcbnew.cpp:68
@@ -7911,7 +7911,7 @@ msgid "Create, delete and edit symbols"
 msgstr "สร้าง,ลบและแก้ไขสัญลักษณ์"
 
 #: common/tool/actions.cpp:878 pcbnew/footprint_viewer_frame.cpp:111
-#: pcbnew/footprint_viewer_frame.cpp:1031
+#: pcbnew/footprint_viewer_frame.cpp:1034
 msgid "Footprint Library Browser"
 msgstr "เลือกไลบรารีฟุ้ทพรินท์"
 
@@ -8212,7 +8212,7 @@ msgstr "บอร์ด"
 msgid "Library"
 msgstr "ไลบรารี"
 
-#: common/widgets/footprint_preview_widget.cpp:115
+#: common/widgets/footprint_preview_widget.cpp:126
 msgid "Footprint not found."
 msgstr "ไม่พบฟุ้ทพรินท์"
 
@@ -8594,210 +8594,210 @@ msgstr "ข้อมูล"
 msgid "Save..."
 msgstr "บันทึก…"
 
-#: common/wildcards_and_files_ext.cpp:212
+#: common/wildcards_and_files_ext.cpp:213
 msgid "All files"
 msgstr "ไฟล์ทั้งหมด"
 
-#: common/wildcards_and_files_ext.cpp:218
+#: common/wildcards_and_files_ext.cpp:219
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:80
 msgid "KiCad symbol library files"
 msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad"
 
-#: common/wildcards_and_files_ext.cpp:225
+#: common/wildcards_and_files_ext.cpp:226
 msgid "KiCad project files"
 msgstr "ไฟล์โครงการ KiCad"
 
-#: common/wildcards_and_files_ext.cpp:231
+#: common/wildcards_and_files_ext.cpp:232
 msgid "KiCad legacy project files"
 msgstr "ไฟล์โครงการ KiCad รุ่นเก่า"
 
-#: common/wildcards_and_files_ext.cpp:238
+#: common/wildcards_and_files_ext.cpp:239
 msgid "All KiCad project files"
 msgstr "ไฟล์โครงการ KiCad ทั้งหมด"
 
-#: common/wildcards_and_files_ext.cpp:245
+#: common/wildcards_and_files_ext.cpp:246
 msgid "All KiCad schematic files"
 msgstr "ไฟล์วงจรไฟฟ้าคีแคดทั้งหมด"
 
-#: common/wildcards_and_files_ext.cpp:252
+#: common/wildcards_and_files_ext.cpp:253
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:75
 msgid "KiCad legacy schematic files"
 msgstr "ไฟล์วงจรไฟฟ้า KiCad รุ่นเก่า"
 
-#: common/wildcards_and_files_ext.cpp:259
+#: common/wildcards_and_files_ext.cpp:260
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:74
 msgid "KiCad s-expression schematic files"
 msgstr "ไฟล์วงจรไฟฟ้า KiCad s-expression"
 
-#: common/wildcards_and_files_ext.cpp:266
+#: common/wildcards_and_files_ext.cpp:267
 msgid "CADSTAR Archive files"
 msgstr "ไฟล์หน่วยเก็บถาวร CADSTAR"
 
-#: common/wildcards_and_files_ext.cpp:272
+#: common/wildcards_and_files_ext.cpp:273
 msgid "Eagle XML files"
 msgstr "ไฟล์ Eagle XML"
 
-#: common/wildcards_and_files_ext.cpp:278
+#: common/wildcards_and_files_ext.cpp:279
 msgid "OrcadPCB2 netlist files"
 msgstr "ไฟล์รายชื่อเน็ต OrcadPCB2"
 
-#: common/wildcards_and_files_ext.cpp:285
+#: common/wildcards_and_files_ext.cpp:286
 msgid "KiCad netlist files"
 msgstr "ไฟล์รายชื่อเน็ต KiCad"
 
-#: common/wildcards_and_files_ext.cpp:291
+#: common/wildcards_and_files_ext.cpp:292
 #, fuzzy
 msgid "Allegro netlist files"
 msgstr "ไฟล์รายชื่อเน็ต KiCad"
 
-#: common/wildcards_and_files_ext.cpp:298
+#: common/wildcards_and_files_ext.cpp:299
 msgid "EasyEDA (JLCEDA) Std backup archive"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:304
+#: common/wildcards_and_files_ext.cpp:305
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:310
+#: common/wildcards_and_files_ext.cpp:311
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:278
 msgid "KiCad printed circuit board files"
 msgstr "ไฟล์แผ่นวงจรพิมพ์ KiCad"
 
-#: common/wildcards_and_files_ext.cpp:317
+#: common/wildcards_and_files_ext.cpp:318
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
 msgid "KiCad footprint files"
 msgstr "ไฟล์ฟุ้ทพรินท์ KiCad"
 
-#: common/wildcards_and_files_ext.cpp:323
+#: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint library paths"
 msgstr "เส้นทางไลบรารีฟุ้ทพรินท์ KiCad"
 
-#: common/wildcards_and_files_ext.cpp:330
+#: common/wildcards_and_files_ext.cpp:331
 msgid "Drawing sheet files"
 msgstr "ไฟล์กระดาษเขียนแบบ"
 
-#: common/wildcards_and_files_ext.cpp:338
+#: common/wildcards_and_files_ext.cpp:339
 msgid "KiCad symbol footprint link files"
 msgstr "ไฟล์เชื่อมโยงสัญลักษณ์และฟุ้ทพรินท์ KiCad"
 
-#: common/wildcards_and_files_ext.cpp:346 gerbview/files.cpp:70
+#: common/wildcards_and_files_ext.cpp:347 gerbview/files.cpp:70
 msgid "Drill files"
 msgstr "ไฟล์เจาะ"
 
-#: common/wildcards_and_files_ext.cpp:353
+#: common/wildcards_and_files_ext.cpp:354
 msgid "SVG files"
 msgstr "ไฟล์ SVG"
 
-#: common/wildcards_and_files_ext.cpp:359
+#: common/wildcards_and_files_ext.cpp:360
 msgid "HTML files"
 msgstr "ไฟล์ HTML"
 
-#: common/wildcards_and_files_ext.cpp:365
+#: common/wildcards_and_files_ext.cpp:366
 msgid "CSV Files"
 msgstr "ไฟล์ CSV"
 
-#: common/wildcards_and_files_ext.cpp:371
+#: common/wildcards_and_files_ext.cpp:372
 msgid "Portable document format files"
 msgstr "ไฟล์รูปแบบ Portable Document"
 
-#: common/wildcards_and_files_ext.cpp:377
+#: common/wildcards_and_files_ext.cpp:378
 msgid "PostScript files"
 msgstr "ไฟล์โพสต์สคริปต์"
 
-#: common/wildcards_and_files_ext.cpp:383
+#: common/wildcards_and_files_ext.cpp:384
 #, fuzzy
 msgid "Json files"
 msgstr "ไฟล์งาน"
 
-#: common/wildcards_and_files_ext.cpp:389
+#: common/wildcards_and_files_ext.cpp:390
 msgid "Report files"
 msgstr "ไฟล์รายงาน"
 
-#: common/wildcards_and_files_ext.cpp:395
+#: common/wildcards_and_files_ext.cpp:396
 msgid "Component placement files"
 msgstr "ไฟล์ตำแหน่งอุปกรณ์"
 
-#: common/wildcards_and_files_ext.cpp:401
+#: common/wildcards_and_files_ext.cpp:402
 msgid "VRML and X3D files"
 msgstr "ไฟล์ VRML และ X3D"
 
-#: common/wildcards_and_files_ext.cpp:407
+#: common/wildcards_and_files_ext.cpp:408
 msgid "IDFv3 footprint files"
 msgstr "ไฟล์ฟุ้ทพรินท์ IDFv3"
 
-#: common/wildcards_and_files_ext.cpp:413
+#: common/wildcards_and_files_ext.cpp:414
 msgid "Text files"
 msgstr "ไฟล์ข้อความ"
 
-#: common/wildcards_and_files_ext.cpp:419
+#: common/wildcards_and_files_ext.cpp:420
 msgid "Legacy footprint export files"
 msgstr "ไฟล์ส่งออกฟุ้ทพรินท์ รุ่นเก่า"
 
-#: common/wildcards_and_files_ext.cpp:425
+#: common/wildcards_and_files_ext.cpp:426
 msgid "Electrical rule check file"
 msgstr "ไฟล์ตรวจสอบกฏทางไฟฟ้า"
 
-#: common/wildcards_and_files_ext.cpp:431
+#: common/wildcards_and_files_ext.cpp:432
 msgid "Spice library file"
 msgstr "ไฟล์ไลบรารี Spice"
 
-#: common/wildcards_and_files_ext.cpp:437
+#: common/wildcards_and_files_ext.cpp:438
 msgid "SPICE netlist file"
 msgstr "ไฟล์รายชื่อเน็ต SPICE"
 
-#: common/wildcards_and_files_ext.cpp:443
+#: common/wildcards_and_files_ext.cpp:444
 msgid "CadStar netlist file"
 msgstr "ไฟล์รายชื่อเน็ต CadStar"
 
-#: common/wildcards_and_files_ext.cpp:449
+#: common/wildcards_and_files_ext.cpp:450
 msgid "Symbol footprint association files"
 msgstr "ไฟล์ความสัมพันธ์สัญลักษณ์และฟุ้ทพรินท์"
 
-#: common/wildcards_and_files_ext.cpp:455
+#: common/wildcards_and_files_ext.cpp:456
 msgid "Zip file"
 msgstr "ไฟล์บีบอัด"
 
-#: common/wildcards_and_files_ext.cpp:461
+#: common/wildcards_and_files_ext.cpp:462
 msgid "GenCAD 1.4 board files"
 msgstr "ไฟล์บอร์ด GenCAD 1.4"
 
-#: common/wildcards_and_files_ext.cpp:467
+#: common/wildcards_and_files_ext.cpp:468
 msgid "DXF Files"
 msgstr "ไฟล์ DXF"
 
-#: common/wildcards_and_files_ext.cpp:473
+#: common/wildcards_and_files_ext.cpp:474
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
 msgstr "ไฟล์งานเกอร์เบอร์"
 
-#: common/wildcards_and_files_ext.cpp:479
+#: common/wildcards_and_files_ext.cpp:480
 msgid "Specctra DSN file"
 msgstr "ไฟล์ Specctra DSN"
 
-#: common/wildcards_and_files_ext.cpp:486
+#: common/wildcards_and_files_ext.cpp:487
 msgid "Specctra Session file"
 msgstr "รวมไฟล์เซสชั่น Specctra"
 
-#: common/wildcards_and_files_ext.cpp:493
+#: common/wildcards_and_files_ext.cpp:494
 msgid "IPC-D-356 Test Files"
 msgstr "ไฟล์ทดสอบ IPC-D-356"
 
-#: common/wildcards_and_files_ext.cpp:500
+#: common/wildcards_and_files_ext.cpp:501
 msgid "Workbook file"
 msgstr "ไฟล์ Workbook"
 
-#: common/wildcards_and_files_ext.cpp:507
+#: common/wildcards_and_files_ext.cpp:508
 msgid "PNG file"
 msgstr "ไฟล์ PNG"
 
-#: common/wildcards_and_files_ext.cpp:513
+#: common/wildcards_and_files_ext.cpp:514
 msgid "Jpeg file"
 msgstr "ไฟล์ Jpeg"
 
-#: common/wildcards_and_files_ext.cpp:519
+#: common/wildcards_and_files_ext.cpp:520
 msgid "Hotkey file"
 msgstr "ไฟล์คีย์ร้อน"
 
@@ -9274,24 +9274,24 @@ msgstr ""
 "%s\n"
 "ไม่พบ. สคริปต์ไม่พร้อมใช้งาน"
 
-#: eeschema/connection_graph.cpp:3245
+#: eeschema/connection_graph.cpp:3250
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "ทั้ง %s และ %s ติดเข้ากับชิ้นส่วนเดียวกัน; %s จะถูกใช้ในรายการเน็ต"
 
-#: eeschema/connection_graph.cpp:3524
+#: eeschema/connection_graph.cpp:3529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "เน็ต %s เชื่อมต่อกับบัสแบบกราฟิก %s แต่ไม่ได้เป็นสมาชิกของบัส"
 
-#: eeschema/connection_graph.cpp:4070
+#: eeschema/connection_graph.cpp:4075
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "ชีตพิน %s ไม่มีป้ายชื่อลำดับขั้นที่ตรงกันภายในแผ่นวงจร"
 
-#: eeschema/connection_graph.cpp:4088
+#: eeschema/connection_graph.cpp:4093
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "ป้ายชื่อตามลำดับขั้น %s ไม่มีชีตพินที่ตรงกันในแผ่นวงจรต้นกำเนิด"
@@ -20124,8 +20124,8 @@ msgstr "(โหลดไม่สำเร็จ)"
 msgid "KiCad Symbol Library Browser"
 msgstr "แสดงไลบรารีสัญลักษณ์"
 
-#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1023
-#: pcbnew/footprint_viewer_frame.cpp:1028
+#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1026
+#: pcbnew/footprint_viewer_frame.cpp:1031
 msgid "[no library selected]"
 msgstr "[ไม่ได้เลือกไลบรารี]"
 
@@ -24221,7 +24221,7 @@ msgstr ""
 msgid "<h1>Template Selector</h1>"
 msgstr "<h1> ตัวเลือกแม่แบบ</h1>"
 
-#: kicad/dialogs/dialog_template_selector.cpp:254
+#: kicad/dialogs/dialog_template_selector.cpp:262
 msgid "Select Templates Directory"
 msgstr "เลือกไดเรกทอรีแม่แบบ"
 
@@ -25125,7 +25125,7 @@ msgstr "เปิดไดเรกทอรีข้อมูลเมตาส
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "ไม่พบไฟล์ข้อมูลเมต้า HTML สําหรับแม่แบบนี้!"
 
-#: kicad/project_template.cpp:289
+#: kicad/project_template.cpp:290
 #, c-format
 msgid "Cannot create folder '%s'."
 msgstr "ไม่สามารถสร้างโฟลเดอร์ '%s'"

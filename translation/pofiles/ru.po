@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 16:05-0800\n"
+"POT-Creation-Date: 2024-12-19 16:48-0800\n"
 "PO-Revision-Date: 2024-12-17 06:00+0000\n"
 "Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
@@ -226,7 +226,7 @@ msgstr "Экспорт в JPEG-файл..."
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:657
 #: common/eda_base_frame.cpp:1185 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:978
+#: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:981
 #: pcbnew/pcb_base_frame.cpp:670
 msgid "3D Viewer"
 msgstr "Просмотрщик 3D"
@@ -2114,31 +2114,31 @@ msgstr "Поддержать KiCad"
 msgid "Donate to KiCad"
 msgstr "Поддержать KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:759
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:761
 msgid "&OK"
 msgstr "&OK"
 
-#: common/dialog_shim.cpp:760
+#: common/dialog_shim.cpp:762
 msgid "&Cancel"
 msgstr "Отмена"
 
-#: common/dialog_shim.cpp:761
+#: common/dialog_shim.cpp:763
 msgid "&Yes"
 msgstr "Да"
 
-#: common/dialog_shim.cpp:762
+#: common/dialog_shim.cpp:764
 msgid "&No"
 msgstr "Нет"
 
-#: common/dialog_shim.cpp:763
+#: common/dialog_shim.cpp:765
 msgid "&Apply"
 msgstr "Применить"
 
-#: common/dialog_shim.cpp:764
+#: common/dialog_shim.cpp:766
 msgid "&Save"
 msgstr "Сохранить"
 
-#: common/dialog_shim.cpp:765 common/dialog_shim.cpp:766
+#: common/dialog_shim.cpp:767 common/dialog_shim.cpp:768
 #: common/eda_base_frame.cpp:504 common/eda_base_frame.cpp:509
 #: common/eda_base_frame.cpp:530 common/eda_base_frame.cpp:534
 msgid "&Help"
@@ -5984,7 +5984,7 @@ msgid "Problem while running the PDF viewer '%s'."
 msgstr "Проблемы при запуске PDF-просмотрщика '%s'."
 
 #: common/gestfich.cpp:306 eeschema/eeschema.cpp:608 eeschema/eeschema.cpp:643
-#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:308
+#: gerbview/gerbview.cpp:261 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:581
 #, c-format
 msgid "Cannot copy file '%s'."
@@ -7138,7 +7138,7 @@ msgstr "Ошибка извлечения файла!"
 #: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
-#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
+#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/sch_plotter.cpp:174 eeschema/sch_plotter.cpp:386
 #: eeschema/sch_plotter.cpp:526 eeschema/sch_plotter.cpp:733
 #: eeschema/sch_plotter.cpp:901 gerbview/export_to_pcbnew.cpp:68
@@ -7872,7 +7872,7 @@ msgid "Create, delete and edit symbols"
 msgstr "Создание, удаление и редактирование символов"
 
 #: common/tool/actions.cpp:878 pcbnew/footprint_viewer_frame.cpp:111
-#: pcbnew/footprint_viewer_frame.cpp:1031
+#: pcbnew/footprint_viewer_frame.cpp:1034
 msgid "Footprint Library Browser"
 msgstr "Обозреватель библиотек посад. мест"
 
@@ -8170,7 +8170,7 @@ msgstr "Печатная плата"
 msgid "Library"
 msgstr "Библиотека"
 
-#: common/widgets/footprint_preview_widget.cpp:115
+#: common/widgets/footprint_preview_widget.cpp:126
 msgid "Footprint not found."
 msgstr "Посад. место не найдено."
 
@@ -8542,208 +8542,208 @@ msgstr "Информация"
 msgid "Save..."
 msgstr "Сохранить..."
 
-#: common/wildcards_and_files_ext.cpp:212
+#: common/wildcards_and_files_ext.cpp:213
 msgid "All files"
 msgstr "Все файлы"
 
-#: common/wildcards_and_files_ext.cpp:218
+#: common/wildcards_and_files_ext.cpp:219
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:80
 msgid "KiCad symbol library files"
 msgstr "Файлы библиотек символов KiCad"
 
-#: common/wildcards_and_files_ext.cpp:225
+#: common/wildcards_and_files_ext.cpp:226
 msgid "KiCad project files"
 msgstr "Файлы проекта KiCad"
 
-#: common/wildcards_and_files_ext.cpp:231
+#: common/wildcards_and_files_ext.cpp:232
 msgid "KiCad legacy project files"
 msgstr "Файлы проекта KiCad (устаревшие)"
 
-#: common/wildcards_and_files_ext.cpp:238
+#: common/wildcards_and_files_ext.cpp:239
 msgid "All KiCad project files"
 msgstr "Файлы проекта KiCad (все версии)"
 
-#: common/wildcards_and_files_ext.cpp:245
+#: common/wildcards_and_files_ext.cpp:246
 msgid "All KiCad schematic files"
 msgstr "Все файлы схем KiCad"
 
-#: common/wildcards_and_files_ext.cpp:252
+#: common/wildcards_and_files_ext.cpp:253
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:75
 msgid "KiCad legacy schematic files"
 msgstr "Файлы схемы KiCad (устаревшие)"
 
-#: common/wildcards_and_files_ext.cpp:259
+#: common/wildcards_and_files_ext.cpp:260
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:74
 msgid "KiCad s-expression schematic files"
 msgstr "Файлы схемы KiCad (s-expression)"
 
-#: common/wildcards_and_files_ext.cpp:266
+#: common/wildcards_and_files_ext.cpp:267
 msgid "CADSTAR Archive files"
 msgstr "Файлы архивов CADSTAR"
 
-#: common/wildcards_and_files_ext.cpp:272
+#: common/wildcards_and_files_ext.cpp:273
 msgid "Eagle XML files"
 msgstr "Файлы Eagle XML"
 
-#: common/wildcards_and_files_ext.cpp:278
+#: common/wildcards_and_files_ext.cpp:279
 msgid "OrcadPCB2 netlist files"
 msgstr "Файлы списка цепей OrcadPCB2"
 
-#: common/wildcards_and_files_ext.cpp:285
+#: common/wildcards_and_files_ext.cpp:286
 msgid "KiCad netlist files"
 msgstr "Файлы списка цепей KiCad"
 
-#: common/wildcards_and_files_ext.cpp:291
+#: common/wildcards_and_files_ext.cpp:292
 msgid "Allegro netlist files"
 msgstr "Файлы списка цепей Allegro"
 
-#: common/wildcards_and_files_ext.cpp:298
+#: common/wildcards_and_files_ext.cpp:299
 msgid "EasyEDA (JLCEDA) Std backup archive"
 msgstr "Архив EasyEDA (JLCEDA) Std бэкапа"
 
-#: common/wildcards_and_files_ext.cpp:304
+#: common/wildcards_and_files_ext.cpp:305
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "Файлы EasyEDA (JLCEDA) Pro"
 
-#: common/wildcards_and_files_ext.cpp:310
+#: common/wildcards_and_files_ext.cpp:311
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:278
 msgid "KiCad printed circuit board files"
 msgstr "Файлы печатной платы KiCad"
 
-#: common/wildcards_and_files_ext.cpp:317
+#: common/wildcards_and_files_ext.cpp:318
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
 msgid "KiCad footprint files"
 msgstr "Файлы печатной платы s-формата"
 
-#: common/wildcards_and_files_ext.cpp:323
+#: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint library paths"
 msgstr "Каталоги библиотек посад. мест KiCad"
 
-#: common/wildcards_and_files_ext.cpp:330
+#: common/wildcards_and_files_ext.cpp:331
 msgid "Drawing sheet files"
 msgstr "Файлы форматной рамки"
 
-#: common/wildcards_and_files_ext.cpp:338
+#: common/wildcards_and_files_ext.cpp:339
 msgid "KiCad symbol footprint link files"
 msgstr "Файлы связей символов с посад. местом"
 
-#: common/wildcards_and_files_ext.cpp:346 gerbview/files.cpp:70
+#: common/wildcards_and_files_ext.cpp:347 gerbview/files.cpp:70
 msgid "Drill files"
 msgstr "Файлы сверловки"
 
-#: common/wildcards_and_files_ext.cpp:353
+#: common/wildcards_and_files_ext.cpp:354
 msgid "SVG files"
 msgstr "SVG файлы"
 
-#: common/wildcards_and_files_ext.cpp:359
+#: common/wildcards_and_files_ext.cpp:360
 msgid "HTML files"
 msgstr "HTML файлы"
 
-#: common/wildcards_and_files_ext.cpp:365
+#: common/wildcards_and_files_ext.cpp:366
 msgid "CSV Files"
 msgstr "CSV файлы"
 
-#: common/wildcards_and_files_ext.cpp:371
+#: common/wildcards_and_files_ext.cpp:372
 msgid "Portable document format files"
 msgstr "Файлы PDF"
 
-#: common/wildcards_and_files_ext.cpp:377
+#: common/wildcards_and_files_ext.cpp:378
 msgid "PostScript files"
 msgstr "Файлы PostScript"
 
-#: common/wildcards_and_files_ext.cpp:383
+#: common/wildcards_and_files_ext.cpp:384
 msgid "Json files"
 msgstr "Файлы JSON"
 
-#: common/wildcards_and_files_ext.cpp:389
+#: common/wildcards_and_files_ext.cpp:390
 msgid "Report files"
 msgstr "Файлы отчёта"
 
-#: common/wildcards_and_files_ext.cpp:395
+#: common/wildcards_and_files_ext.cpp:396
 msgid "Component placement files"
 msgstr "Файлы расположения компонентов"
 
-#: common/wildcards_and_files_ext.cpp:401
+#: common/wildcards_and_files_ext.cpp:402
 msgid "VRML and X3D files"
 msgstr "VRML и X3D файлы"
 
-#: common/wildcards_and_files_ext.cpp:407
+#: common/wildcards_and_files_ext.cpp:408
 msgid "IDFv3 footprint files"
 msgstr "Файлы посадочных мест IDFv3"
 
-#: common/wildcards_and_files_ext.cpp:413
+#: common/wildcards_and_files_ext.cpp:414
 msgid "Text files"
 msgstr "Текстовые файлы"
 
-#: common/wildcards_and_files_ext.cpp:419
+#: common/wildcards_and_files_ext.cpp:420
 msgid "Legacy footprint export files"
 msgstr "Файлы экспорта посад. мест"
 
-#: common/wildcards_and_files_ext.cpp:425
+#: common/wildcards_and_files_ext.cpp:426
 msgid "Electrical rule check file"
 msgstr "Файлы проверки электрических правил"
 
-#: common/wildcards_and_files_ext.cpp:431
+#: common/wildcards_and_files_ext.cpp:432
 msgid "Spice library file"
 msgstr "Файлы библиотек Spice"
 
-#: common/wildcards_and_files_ext.cpp:437
+#: common/wildcards_and_files_ext.cpp:438
 msgid "SPICE netlist file"
 msgstr "Файл цепей SPICE"
 
-#: common/wildcards_and_files_ext.cpp:443
+#: common/wildcards_and_files_ext.cpp:444
 msgid "CadStar netlist file"
 msgstr "Файл цепей CadStar"
 
-#: common/wildcards_and_files_ext.cpp:449
+#: common/wildcards_and_files_ext.cpp:450
 msgid "Symbol footprint association files"
 msgstr "Файлы соответствий символ/посад. место"
 
-#: common/wildcards_and_files_ext.cpp:455
+#: common/wildcards_and_files_ext.cpp:456
 msgid "Zip file"
 msgstr "Zip файл"
 
-#: common/wildcards_and_files_ext.cpp:461
+#: common/wildcards_and_files_ext.cpp:462
 msgid "GenCAD 1.4 board files"
 msgstr "GenCAD 1.4 файлы платы"
 
-#: common/wildcards_and_files_ext.cpp:467
+#: common/wildcards_and_files_ext.cpp:468
 msgid "DXF Files"
 msgstr "Файлы DXF"
 
-#: common/wildcards_and_files_ext.cpp:473
+#: common/wildcards_and_files_ext.cpp:474
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
 msgstr "Файлы задания Gerber"
 
-#: common/wildcards_and_files_ext.cpp:479
+#: common/wildcards_and_files_ext.cpp:480
 msgid "Specctra DSN file"
 msgstr "Файлы Specctra DSN"
 
-#: common/wildcards_and_files_ext.cpp:486
+#: common/wildcards_and_files_ext.cpp:487
 msgid "Specctra Session file"
 msgstr "Файл сеанса Specctra"
 
-#: common/wildcards_and_files_ext.cpp:493
+#: common/wildcards_and_files_ext.cpp:494
 msgid "IPC-D-356 Test Files"
 msgstr "IPC-D-356 тестовые файлы"
 
-#: common/wildcards_and_files_ext.cpp:500
+#: common/wildcards_and_files_ext.cpp:501
 msgid "Workbook file"
 msgstr "Файл рабочей книги симуляции"
 
-#: common/wildcards_and_files_ext.cpp:507
+#: common/wildcards_and_files_ext.cpp:508
 msgid "PNG file"
 msgstr "PNG файл"
 
-#: common/wildcards_and_files_ext.cpp:513
+#: common/wildcards_and_files_ext.cpp:514
 msgid "Jpeg file"
 msgstr "Jpeg файл"
 
-#: common/wildcards_and_files_ext.cpp:519
+#: common/wildcards_and_files_ext.cpp:520
 msgid "Hotkey file"
 msgstr "Файл горячих клавиш"
 
@@ -9225,7 +9225,7 @@ msgstr ""
 "%s\n"
 "не найден. Плагин недоступен."
 
-#: eeschema/connection_graph.cpp:3245
+#: eeschema/connection_graph.cpp:3250
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -9233,20 +9233,20 @@ msgstr ""
 "%s и %s подключены к одним и тем же элементам; в списке цепей будет "
 "использован %s"
 
-#: eeschema/connection_graph.cpp:3524
+#: eeschema/connection_graph.cpp:3529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "Цепь %s графически подключена к шине %s, но она не является членом этой шины"
 
-#: eeschema/connection_graph.cpp:4070
+#: eeschema/connection_graph.cpp:4075
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Выводу листа %s не соответствует ни одна иерархическая метка внутри листа"
 
-#: eeschema/connection_graph.cpp:4088
+#: eeschema/connection_graph.cpp:4093
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Иерархическая метка %s не соответствует ни одному выводу листа"
@@ -19950,8 +19950,8 @@ msgstr "(не удалось загрузить)"
 msgid "KiCad Symbol Library Browser"
 msgstr "Просмотрщик библиотек символов KiCad"
 
-#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1023
-#: pcbnew/footprint_viewer_frame.cpp:1028
+#: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1026
+#: pcbnew/footprint_viewer_frame.cpp:1031
 msgid "[no library selected]"
 msgstr "[библиотека не выбрана]"
 
@@ -23911,7 +23911,7 @@ msgstr "формат информации о версии (plain, commit, about)
 msgid "<h1>Template Selector</h1>"
 msgstr "<h1>Выбор шаблона</h1>"
 
-#: kicad/dialogs/dialog_template_selector.cpp:254
+#: kicad/dialogs/dialog_template_selector.cpp:262
 msgid "Select Templates Directory"
 msgstr "Выбор каталога шаблонов"
 
@@ -24801,7 +24801,7 @@ msgstr "Не удалось открыть каталог мета информ�
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "Не удалось открыть файл HTML мета информации для данного шаблона!"
 
-#: kicad/project_template.cpp:289
+#: kicad/project_template.cpp:290
 #, c-format
 msgid "Cannot create folder '%s'."
 msgstr "Не удалось создать каталог '%s'."
