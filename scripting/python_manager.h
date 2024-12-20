@@ -32,9 +32,7 @@
 class KICOMMON_API PYTHON_MANAGER
 {
 public:
-    PYTHON_MANAGER( const wxString& aInterpreterPath ) :
-            m_interpreterPath( aInterpreterPath )
-    {}
+    PYTHON_MANAGER( const wxString& aInterpreterPath );
 
     void Execute( const wxString& aArgs,
                   const std::function<void(int, const wxString&, const wxString&)>& aCallback,

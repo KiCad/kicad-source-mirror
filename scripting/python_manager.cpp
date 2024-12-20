@@ -24,6 +24,7 @@
 
 #include <paths.h>
 #include <python_manager.h>
+#include <wx_filename.h>
 
 
 class PYTHON_PROCESS : public wxProcess
@@ -70,6 +71,14 @@ public:
 private:
     std::function<void(int, const wxString&, const wxString&)> m_callback;
 };
+
+
+PYTHON_MANAGER::PYTHON_MANAGER( const wxString& aInterpreterPath )
+{
+    wxFileName path( aInterpreterPath );
+    path.Normalize( FN_NORMALIZE_FLAGS );
+    m_interpreterPath = path.GetFullPath();
+}
 
 
 void PYTHON_MANAGER::Execute( const wxString& aArgs,
