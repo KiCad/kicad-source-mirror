@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-11 09:28+0100\n"
+"POT-Creation-Date: 2024-12-20 08:52+0100\n"
+"PO-Revision-Date: 2024-12-20 08:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Basepath: ../../../git_dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
 "X-Poedit-SearchPath-1: eeschema\n"
@@ -2775,14 +2775,12 @@ msgstr "Nom Projet"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1331
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1339 eeschema/sch_plotter.cpp:1029
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -6955,6 +6953,7 @@ msgid "Failed to perform checkout operation."
 msgstr "Échec de l'opération d'extraction."
 
 #: common/git/git_pull_handler.cpp:217
+#, c++-format
 msgid "Could not lookup commit '{}'"
 msgstr "Impossible de rechercher le commit '{}'"
 
@@ -8069,12 +8068,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1159
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1165
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -14810,6 +14807,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -26715,9 +26713,8 @@ msgid "%s Output Options"
 msgstr "%s Options de Sortie"
 
 #: kicad/dialogs/panel_jobs.cpp:104
-#, fuzzy
 msgid "Select output directory"
-msgstr "Sélection du Répertoire de Sortie"
+msgstr "Sélection répertoire de sortie"
 
 #: kicad/dialogs/panel_jobs.cpp:118
 msgid "Select output path"
@@ -26736,13 +26733,12 @@ msgid "Job Description"
 msgstr "Description de Tâche"
 
 #: kicad/dialogs/panel_jobs.cpp:300
-#, fuzzy
 msgid "Last run successful"
-msgstr "Tâche réussie"
+msgstr "Dernière exécution réussie"
 
 #: kicad/dialogs/panel_jobs.cpp:306
 msgid "Last run failed"
-msgstr ""
+msgstr "Échec de la dernière exécution"
 
 #: kicad/dialogs/panel_jobs.cpp:330 kicad/dialogs/panel_jobs.cpp:793
 msgid "Running jobs"
@@ -26750,7 +26746,7 @@ msgstr "Exécution des tâches"
 
 #: kicad/dialogs/panel_jobs.cpp:354
 msgid "View last run results..."
-msgstr ""
+msgstr "Voir les résultats de la dernière exécution..."
 
 #: kicad/dialogs/panel_jobs.cpp:597 kicad/dialogs/panel_jobs.cpp:644
 msgid "Job Types"
@@ -29941,19 +29937,16 @@ msgid "Copper resistivity:"
 msgstr "Résistivité du cuivre:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
-#, fuzzy
 msgid "External Layer Tracks"
 msgstr "Pistes sur Couches Externes"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
-#, fuzzy
 msgid "Track width (W):"
 msgstr "Largeur de piste (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
-#, fuzzy
 msgid "Track thickness (H):"
 msgstr "Épaisseur de piste (H):"
 
@@ -29987,7 +29980,6 @@ msgid "W"
 msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
-#, fuzzy
 msgid "Internal Layer Tracks"
 msgstr "Pistes sur Couches Internes"
 
@@ -30577,7 +30569,6 @@ msgstr ""
 "\tR1 + (R2|R3)... toute combinaison des éléments ci-dessus\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the track widths will be calculated "
 "to suit.\n"
@@ -34320,16 +34311,12 @@ msgid "Success"
 msgstr "Succès"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Voulez vous utiliser un chemin relatif à\n"
-"'%s'?"
+msgstr "Voulez-vous annuler le processus d'exportation ?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Rapport sur Isolation"
+msgstr "Annuler Exportation"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -36987,7 +36974,6 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -37316,7 +37302,6 @@ msgid "(%d known DRC violations; %d exclusions)"
 msgstr "(DRC: %d violations connues; %d exclusions)"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
-#, fuzzy
 msgid "Track gap must be greater than 0."
 msgstr "La distance entre pistes doit être plus grande que 0."
 
@@ -37336,7 +37321,6 @@ msgid "Via gap:"
 msgstr "Espacement via:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
-#, fuzzy
 msgid "Via gap same as track gap"
 msgstr "Espacement via identique espacement piste"
 
@@ -37392,7 +37376,6 @@ msgid "Jump over obstacles"
 msgstr "Sauter les obstacles"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
-#, fuzzy
 msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
@@ -37415,13 +37398,14 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Si la nouvelle piste a la même connexion qu'une piste déjà existante, "
+"l'ancienne piste est supprimée."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
 msgstr "Optimiser les connexions aux pads"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:88
-#, fuzzy
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
@@ -38679,9 +38663,8 @@ msgid "Show Button"
 msgstr "Afficher Bouton"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
-#, fuzzy
 msgid "Plugin"
-msgstr "Plugins"
+msgstr "Plugin"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
 msgid "Move Up"
@@ -41719,14 +41702,12 @@ msgid "Text thickness out of range"
 msgstr "Epaisseur de texte hors de plage"
 
 #: pcbnew/drc/drc_item.cpp:262
-#, fuzzy
 msgid "Track length out of range"
 msgstr "Longueur de piste hors de plage"
 
 #: pcbnew/drc/drc_item.cpp:266
-#, fuzzy
 msgid "Skew between tracks out of range"
-msgstr "Biais entre les traces hors de plage"
+msgstr "Biais entre les pistes hors de plage"
 
 #: pcbnew/drc/drc_item.cpp:271
 msgid "Too many or too few vias on a connection"
@@ -43922,9 +43903,8 @@ msgid "Add Microwave Inductor"
 msgstr "Ajouter Inductance Microonde"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Length of Track:"
-msgstr "Longueur de la Trace:"
+msgstr "Longueur de Piste:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:377
 msgid "Requested length < minimum length"
@@ -47259,7 +47239,6 @@ msgid "Routing"
 msgstr "Routage"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
-#, fuzzy
 msgid "Please select a differential pair track you want to tune."
 msgstr "SVP sélectionner la paire différentielle que vous voulez ajuster."
 
@@ -52112,14 +52091,6 @@ msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-msgid "Circuit board"
-msgstr "Circuit Imprimé"
-
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -52176,6 +52147,12 @@ msgstr "Symbole Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Feuille de Dessin KiCad"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit Imprimé"
 
 #~ msgid "Action Plugins"
 #~ msgstr "Plugins d'Action"
