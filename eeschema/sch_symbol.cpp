@@ -2297,12 +2297,12 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListB
 }
 
 
-VECTOR2I SCH_SYMBOL::GetPinPhysicalPosition( const SCH_PIN* Pin ) const
+VECTOR2I SCH_SYMBOL::GetPinPhysicalPosition( const SCH_PIN* aPin ) const
 {
-    wxCHECK_MSG( Pin != nullptr && Pin->Type() == SCH_PIN_T, VECTOR2I( 0, 0 ),
-                 wxT( "Cannot get physical position of pin." ) );
+    if( ( aPin == nullptr ) || ( aPin->Type() != SCH_PIN_T ) )
+        return VECTOR2I( 0, 0 );
 
-    return m_transform.TransformCoordinate( Pin->GetPosition() ) + m_pos;
+    return m_transform.TransformCoordinate( aPin->GetPosition() ) + m_pos;
 }
 
 
@@ -2865,7 +2865,8 @@ bool SCH_SYMBOL::IsSymbolLikePowerGlobalLabel() const
 
 bool SCH_SYMBOL::IsPower() const
 {
-    wxCHECK( m_part, false );
+    if( !m_part )
+        return false;
 
     return m_part->IsPower();
 }

@@ -261,7 +261,8 @@ PIN_ORIENTATION SCH_PIN::GetOrientation() const
 {
     if( m_orientation == PIN_ORIENTATION::INHERIT )
     {
-        wxCHECK_MSG( m_libPin, PIN_ORIENTATION::PIN_RIGHT, wxS( "Can't inherit without a libPin!" ) );
+        if( !m_libPin )
+            return PIN_ORIENTATION::PIN_RIGHT;
 
         return m_libPin->GetOrientation();
     }
@@ -274,14 +275,15 @@ GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
 {
     if( !m_alt.IsEmpty() )
     {
-        wxCHECK_MSG( m_libPin, GRAPHIC_PINSHAPE::LINE, wxS( "Can't specify alternate without a "
-                                                            "libPin!" ) );
+        if( !m_libPin )
+            return GRAPHIC_PINSHAPE::LINE;
 
         return m_libPin->GetAlt( m_alt ).m_Shape;
     }
     else if( m_shape == GRAPHIC_PINSHAPE::INHERIT )
     {
-        wxCHECK_MSG( m_libPin, GRAPHIC_PINSHAPE::LINE, wxS( "Can't inherit without a libPin!" ) );
+        if( !m_libPin )
+            return GRAPHIC_PINSHAPE::LINE;
 
         return m_libPin->GetShape();
     }
@@ -294,7 +296,8 @@ int SCH_PIN::GetLength() const
 {
     if( !m_length.has_value() )
     {
-        wxCHECK_MSG( m_libPin, 0, wxS( "Can't inherit without a libPin!" ) );
+        if( !m_libPin )
+            return 0;
 
         return m_libPin->GetLength();
     }
@@ -307,15 +310,15 @@ ELECTRICAL_PINTYPE SCH_PIN::GetType() const
 {
     if( !m_alt.IsEmpty() )
     {
-        wxCHECK_MSG( m_libPin, ELECTRICAL_PINTYPE::PT_UNSPECIFIED, wxS( "Can't specify alternate "
-                                                                        "without a libPin!" ) );
+        if( !m_libPin )
+            return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
 
         return m_libPin->GetAlt( m_alt ).m_Type;
     }
     else if( m_type == ELECTRICAL_PINTYPE::PT_INHERIT )
     {
-        wxCHECK_MSG( m_libPin, ELECTRICAL_PINTYPE::PT_UNSPECIFIED, wxS( "Can't inherit without a "
-                                                                        "libPin!" ) );
+        if( !m_libPin )
+            return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
 
         return m_libPin->GetType();
     }
@@ -337,8 +340,8 @@ wxString SCH_PIN::GetCanonicalElectricalTypeName() const
 {
     if( m_type == ELECTRICAL_PINTYPE::PT_INHERIT )
     {
-        wxCHECK_MSG( m_libPin, GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
-                     wxS( "Can't inherit without a m_libPin!" ) );
+        if( !m_libPin )
+            return GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
 
         return m_libPin->GetCanonicalElectricalTypeName();
     }
@@ -351,8 +354,8 @@ wxString SCH_PIN::GetElectricalTypeName() const
 {
     if( m_type == ELECTRICAL_PINTYPE::PT_INHERIT )
     {
-        wxCHECK_MSG( m_libPin, ElectricalPinTypeGetText( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
-                     wxS( "Can't inherit without a m_libPin!" ) );
+        if( !m_libPin )
+            return ElectricalPinTypeGetText( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
 
         return m_libPin->GetElectricalTypeName();
     }
@@ -365,7 +368,8 @@ bool SCH_PIN::IsVisible() const
 {
     if( !m_hidden.has_value() )
     {
-        wxCHECK_MSG( m_libPin, true, wxS( "Can't inherit without a libPin!" ) );
+        if( !m_libPin )
+            return true;
 
         return m_libPin->IsVisible();
     }
@@ -530,12 +534,11 @@ int SCH_PIN::GetNameTextSize() const
 {
     if( !m_nameTextSize.has_value() )
     {
-        wxCHECK_MSG( m_libPin, schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE ),
-                     wxS( "Can't inherit without a libPin!" ) );
+        if( !m_libPin )
+            return schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE );
 
         return m_libPin->GetNameTextSize();
     }
-    wxASSERT( !m_libPin );
 
     return m_nameTextSize.value();
 }
@@ -555,12 +558,11 @@ int SCH_PIN::GetNumberTextSize() const
 {
     if( !m_numTextSize.has_value() )
     {
-        wxCHECK_MSG( m_libPin, schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE ),
-                     wxS( "Can't inherit without a libPin!" ) );
+        if( !m_libPin )
+            return schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE );
 
         return m_libPin->GetNumberTextSize();
     }
-    wxASSERT( !m_libPin );
 
     return m_numTextSize.value();
 }
@@ -581,7 +583,10 @@ VECTOR2I SCH_PIN::GetPinRoot() const
     if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
     {
         const TRANSFORM& t = symbol->GetTransform();
-        wxCHECK( m_libPin, GetPosition() );
+
+        if( !m_libPin )
+            return GetPosition();
+
         return t.TransformCoordinate( m_libPin->GetPinRoot() ) + symbol->GetPosition();
     }
 
@@ -1775,7 +1780,8 @@ bool SCH_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
 
 bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 {
-    wxCHECK( m_libPin, false );
+    if( !m_libPin )
+        return false;
 
     // Reciprocal checking is done in CONNECTION_GRAPH anyway
     return m_libPin->GetType() != ELECTRICAL_PINTYPE::PT_NC;
@@ -1959,7 +1965,8 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 
     if( dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
     {
-        wxCHECK( m_libPin && tmp->m_libPin, -1 );
+        if( ( m_libPin == nullptr ) && ( tmp->m_libPin == nullptr ) )
+            return -1;
 
         retv = m_libPin->compare( *tmp->m_libPin );
 
