@@ -219,7 +219,7 @@ public:
     {
         m_staticTextOutputName->SetLabel( aOutput->m_outputHandler->GetOutputPath() );
 
-        int jobBmpColId = m_jobList->AppendColumn( _( "" ) );
+        int jobBmpColId = m_jobList->AppendColumn( wxT( "" ) );
         int jobNoColId = m_jobList->AppendColumn( _( "No." ) );
         int jobDescColId = m_jobList->AppendColumn( _( "Job Description" ) );
         m_jobList->SetColumnWidth( jobBmpColId, wxLIST_AUTOSIZE_USEHEADER );
