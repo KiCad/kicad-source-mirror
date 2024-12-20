@@ -24,6 +24,7 @@
  */
 
 #include <atomic>
+#include <wx/log.h>
 #include <reporter.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
@@ -39,6 +40,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <core/profile.h>
 #include <core/thread_pool.h>
 #include <zone.h>
 
@@ -47,6 +49,16 @@
 // they're useful to the user anyway.
 #define ERROR_LIMIT 199
 #define EXTENDED_ERROR_LIMIT 499
+
+
+/**
+ * Flag to enable DRC profile timing logging.
+ *
+ * Use "KICAD_DRC_PROFILE" to enable.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar* traceDrcProfile = wxT( "KICAD_DRC_PROFILE" );
 
 
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line )
@@ -598,6 +610,8 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints,
                            BOARD_COMMIT* aCommit )
 {
+    PROF_TIMER timer;
+
     SetUserUnits( aUnits );
 
     m_reportAllTrackErrors = aReportAllTrackErrors;
@@ -633,6 +647,9 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
         if( !provider->RunTests( aUnits ) )
             break;
     }
+
+    timer.Stop();
+    wxLogTrace( traceDrcProfile, "DRC took %0.3f ms", timer.msecs() );
 
     // DRC tests are multi-threaded; anything that causes us to attempt to re-generate the
     // caches while DRC is running is problematic.
