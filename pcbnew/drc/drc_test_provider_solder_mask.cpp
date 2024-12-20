@@ -432,24 +432,23 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
 
 bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aTestNet )
 {
-    FOOTPRINT* fp = aMaskItem->GetParentFootprint();
-
-    wxCHECK( fp, false );
-
-    if( ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
+    if( FOOTPRINT* fp = aMaskItem->GetParentFootprint() )
     {
-        // If we're allowing bridges then we're allowing bridges.  Nothing to check.
-        return false;
-    }
-
-    // Graphic items are used to implement net-ties between pads of a group within a net-tie
-    // footprint.  They must be allowed to intrude into their pad's mask aperture.
-    if( aTestNet < 0 && aMaskItem->Type() == PCB_PAD_T && fp->IsNetTie() )
-    {
-        std::map<wxString, int> padNumberToGroupIdxMap = fp->MapPadNumbersToNetTieGroups();
-
-        if( padNumberToGroupIdxMap[ static_cast<PAD*>( aMaskItem )->GetNumber() ] >= 0 )
+        if( ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
+        {
+            // If we're allowing bridges then we're allowing bridges.  Nothing to check.
             return false;
+        }
+
+        // Graphic items are used to implement net-ties between pads of a group within a net-tie
+        // footprint.  They must be allowed to intrude into their pad's mask aperture.
+        if( aTestNet < 0 && aMaskItem->Type() == PCB_PAD_T && fp->IsNetTie() )
+        {
+            std::map<wxString, int> padNumberToGroupIdxMap = fp->MapPadNumbersToNetTieGroups();
+
+            if( padNumberToGroupIdxMap[ static_cast<PAD*>( aMaskItem )->GetNumber() ] >= 0 )
+                return false;
+        }
     }
 
     return true;

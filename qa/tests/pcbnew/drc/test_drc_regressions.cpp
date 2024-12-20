@@ -144,7 +144,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "reverse_via", 3 },       // Via/track ordering
         { "intersectingzones", 1 }, // zones are too close to each other
         { "fill_bad",   1 },        // zone max BBox was too small
-        { "issue17967/issue17967", 1} // Arc dp coupling
+        { "issue17967/issue17967", 1}, // Arc dp coupling
+        { "issue18878", 9 }
     };
 
     for( const auto& [testName, expectedErrors] : tests )
