@@ -20,8 +20,13 @@
 
 #include "panel_pcbnew_action_plugins_base.h"
 
+class PLUGINS_GRID_TRICKS;
+
+
 class PANEL_PCBNEW_ACTION_PLUGINS : public PANEL_PCBNEW_ACTION_PLUGINS_BASE
 {
+    friend class PLUGINS_GRID_TRICKS;
+
 public:
     PANEL_PCBNEW_ACTION_PLUGINS ( wxWindow* aParent );
 

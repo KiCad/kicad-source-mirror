@@ -44,6 +44,8 @@ public:
 
     void ReloadPlugins();
 
+    void RecreatePluginEnvironment( const wxString& aIdentifier );
+
     void InvokeAction( const wxString& aIdentifier );
 
     std::optional<const PLUGIN_ACTION*> GetAction( const wxString& aIdentifier );

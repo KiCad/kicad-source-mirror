@@ -159,9 +159,42 @@ void API_PLUGIN_MANAGER::ReloadPlugins()
 }
 
 
+void API_PLUGIN_MANAGER::RecreatePluginEnvironment( const wxString& aIdentifier )
+{
+    if( !m_pluginsCache.contains( aIdentifier ) )
+        return;
+
+    const API_PLUGIN* plugin = m_pluginsCache.at( aIdentifier );
+    wxCHECK( plugin, /* void */ );
+
+    std::optional<wxString> env = PYTHON_MANAGER::GetPythonEnvironment( plugin->Identifier() );
+    wxCHECK( env.has_value(), /* void */ );
+
+    wxFileName envConfigPath( *env, wxS( "pyvenv.cfg" ) );
+    envConfigPath.MakeAbsolute();
+
+    if( envConfigPath.DirExists() && envConfigPath.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
+    {
+        wxLogTrace( traceApi,
+                    wxString::Format( "Manager: Removed existing Python environment at %s for %s",
+                                      envConfigPath.GetPath(), plugin->Identifier() ) );
+
+        JOB job;
+        job.type = JOB_TYPE::CREATE_ENV;
+        job.identifier = plugin->Identifier();
+        job.plugin_path = plugin->BasePath();
+        job.env_path = envConfigPath.GetPath();
+        m_jobs.emplace_back( job );
+
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
+        QueueEvent( evt );
+    }
+}
+
+
 std::optional<const PLUGIN_ACTION*> API_PLUGIN_MANAGER::GetAction( const wxString& aIdentifier )
 {
-    if( !m_actionsCache.count( aIdentifier ) )
+    if( !m_actionsCache.contains( aIdentifier ) )
         return std::nullopt;
 
     return m_actionsCache.at( aIdentifier );
@@ -170,7 +203,7 @@ std::optional<const PLUGIN_ACTION*> API_PLUGIN_MANAGER::GetAction( const wxStrin
 
 void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
 {
-    if( !m_actionsCache.count( aIdentifier ) )
+    if( !m_actionsCache.contains( aIdentifier ) )
         return;
 
     const PLUGIN_ACTION* action = m_actionsCache.at( aIdentifier );

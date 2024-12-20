@@ -40,11 +40,70 @@
 
 #define GRID_CELL_MARGIN 4
 
+enum
+{
+    MYID_RECREATE_ENV = GRIDTRICKS_FIRST_CLIENT_ID
+};
+
+class PLUGINS_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    PLUGINS_GRID_TRICKS( WX_GRID* aGrid ) :
+        GRID_TRICKS( aGrid )
+    {}
+
+protected:
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
+    void doPopupSelection( wxCommandEvent& event ) override;
+};
+
+
+void PLUGINS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
+{
+#ifdef KICAD_IPC_API
+    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+    wxString id = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
+                                        PANEL_PCBNEW_ACTION_PLUGINS::COLUMN_SETTINGS_IDENTIFIER );
+
+    if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id ) )
+    {
+        menu.Append( MYID_RECREATE_ENV, _( "Recreate Plugin Environment" ),
+                     _( "Recreate Plugin Environment" ) );
+        menu.AppendSeparator();
+    }
+#endif
+
+    GRID_TRICKS::showPopupMenu( menu, aEvent );
+}
+
+
+void PLUGINS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
+{
+    if( event.GetId() == MYID_RECREATE_ENV )
+    {
+#ifdef KICAD_IPC_API
+        API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+        wxString id = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
+                                            PANEL_PCBNEW_ACTION_PLUGINS::COLUMN_SETTINGS_IDENTIFIER );
+
+        if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id ) )
+        {
+            mgr.RecreatePluginEnvironment( ( *action )->plugin.Identifier() );
+        }
+#endif
+    }
+    else
+    {
+        GRID_TRICKS::doPopupSelection( event );
+    }
+}
+
+
 PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( wxWindow* aParent ) :
         PANEL_PCBNEW_ACTION_PLUGINS_BASE( aParent )
 {
     m_genericIcon = KiBitmapBundle( BITMAPS::puzzle_piece );
-    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    m_grid->PushEventHandler( new PLUGINS_GRID_TRICKS( m_grid ) );
     m_grid->SetUseNativeColLabels();
 
     m_moveUpButton->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
