@@ -537,8 +537,9 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
                 wxLogTrace( traceApi, wxString::Format( wxS( "Attempting to unpack unknown type %s "
                                                              "from footprint message, skipping" ),
                                                         itemMsg.type_url() ) );
-                continue;
             }
+
+            continue;
         }
 
         std::unique_ptr<BOARD_ITEM> item = CreateItemForType( *type, this );
