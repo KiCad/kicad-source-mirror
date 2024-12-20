@@ -28,6 +28,7 @@
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <sch_commit.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
@@ -45,8 +46,8 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
 {
     // Build a flat list of symbols in schematic:
     SCH_REFERENCE_LIST refs;
+    SCH_COMMIT         commit( m_frame );
     bool               isChanged = false;
-    bool               appendToUndoList = false;
 
     m_frame->Schematic().Hierarchy().GetSymbols( refs, false );
 
@@ -97,9 +98,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
                         isChanged = true;
                         SCH_SCREEN* screen = refs[ii].GetSheetPath().LastScreen();
 
-                        m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED,
-                                                     appendToUndoList, false );
-                        appendToUndoList = true;
+                        commit.Modify( symbol, screen );
 
                         symbol->SetFootprintFieldText( footprint );
                     }
@@ -116,8 +115,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
     if( isChanged )
     {
         m_frame->SyncView();
-        m_frame->GetCanvas()->Refresh();
-        m_frame->OnModify();
+        commit.Push( wxS( "Assign Footprints" ) );
     }
 }
 

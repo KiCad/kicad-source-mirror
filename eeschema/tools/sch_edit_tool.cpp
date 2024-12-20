@@ -2970,7 +2970,9 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == instance.GetPageNumber() )
         return 0;
 
-    m_frame->SaveCopyInUndoList( screen, sheet, UNDO_REDO::CHANGED, false );
+    SCH_COMMIT commit( m_frame );
+
+    commit.Modify( sheet, screen );
 
     instance.SetPageNumber( dlg.GetValue() );
 
@@ -2980,12 +2982,7 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
         m_frame->OnPageSettingsChange();
     }
 
-    m_frame->OnModify();
-
-    // Update the hierarchy navigator labels if needed
-    if( pageNumber != dlg.GetValue() )
-        m_frame->UpdateLabelsHierarchyNavigator();
-
+    commit.Push( wxS( "Change Sheet Page Number" ) );
     return 0;
 }
 

@@ -29,6 +29,7 @@
 
 
 #include <confirm.h>
+#include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
@@ -707,6 +708,8 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
     if( !validateLibIds() )
         return false;
 
+    SCH_COMMIT commit( GetParent() );
+
     auto getName = []( const LIB_ID& aLibId )
             {
                 return UnescapeString( aLibId.GetLibItemName().wx_str() );
@@ -751,8 +754,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
             if( symbol == nullptr )
                 continue;
 
-            GetParent()->SaveCopyInUndoList( candidate.m_Screen, candidate.m_Symbol,
-                                             UNDO_REDO::CHANGED, m_isModified );
+            commit.Modify( candidate.m_Symbol, candidate.m_Screen );
             m_isModified = true;
 
             candidate.m_Screen->Remove( candidate.m_Symbol );
@@ -778,6 +780,9 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
             }
         }
     }
+
+    if( m_modified )
+        commit.Push( wxS( "Change Symbol Library Indentifier" ) );
 
     return true;
 }

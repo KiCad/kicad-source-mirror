@@ -434,6 +434,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
     bool map = IsOK( m_frame, _( "Update symbols in schematic to refer to new library?" ) );
     bool append = false;
 
+    SCH_COMMIT commit( m_frame );
     SYMBOL_LIB_TABLE_ROW* row = mgr.GetLibrary( targetLib );
     SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->GetType() );
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( type ) );
@@ -467,8 +468,11 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
             for( SCH_SYMBOL* symbol : symbolMap[it.first] )
             {
-                m_frame->SaveCopyInUndoList( m_frame->GetScreen(), symbol, UNDO_REDO::CHANGED,
-                                             append, false );
+                SCH_SCREEN* parentScreen = static_cast<SCH_SCREEN*>( symbol->GetParent() );
+
+                wxCHECK2( parentScreen, continue );
+
+                commit.Modify( symbol, parentScreen );
                 symbol->SetLibId( id );
                 append = true;
             }
@@ -529,7 +533,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
             }
         }
 
-        m_frame->OnModify();
+        commit.Push( wxS( "Update Library Identifiers" ) );
     }
 
     return 0;

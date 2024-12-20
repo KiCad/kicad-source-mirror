@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <sch_commit.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <tools/ee_actions.h>
@@ -366,19 +367,17 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
     if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
-    // TODO: move to SCH_COMMIT....
-
     if( item && HasMatch() )
     {
+        SCH_COMMIT commit( m_frame );
         SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
 
-        m_frame->SaveCopyInUndoList( sheet->LastScreen(), sch_item, UNDO_REDO::CHANGED, false );
+        commit.Modify( sch_item, sheet->LastScreen() );
 
         if( item->Replace( data, sheet ) )
         {
-            m_frame->UpdateItem( item, false, true );
             m_frame->GetCurrentSheet().UpdateAllScreenReferences();
-            m_frame->OnModify();
+            commit.Push( wxS( "Find and Replace" ) );
         }
 
         FindNext( ACTIONS::findNext.MakeEvent() );
@@ -404,6 +403,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     {
     }
 
+    SCH_COMMIT commit( m_frame );
     bool modified = false;      // TODO: move to SCH_COMMIT....
 
     if( data.findString.IsEmpty() )
@@ -412,8 +412,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     auto doReplace =
             [&]( SCH_ITEM* aItem, SCH_SHEET_PATH* aSheet, EDA_SEARCH_DATA& aData )
             {
-                m_frame->SaveCopyInUndoList( aSheet->LastScreen(), aItem, UNDO_REDO::CHANGED,
-                                             modified );
+                commit.Modify( aItem, aSheet->LastScreen() );
 
                 if( aItem->Replace( aData, aSheet ) )
                 {
@@ -485,8 +484,8 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
 
     if( modified )
     {
+        commit.Push( wxS( "Find and Replace All" ) );
         m_frame->GetCurrentSheet().UpdateAllScreenReferences();
-        m_frame->OnModify();
     }
 
     return 0;
