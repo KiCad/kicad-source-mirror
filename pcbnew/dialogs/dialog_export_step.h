@@ -116,6 +116,8 @@ private:
     static bool        m_exportSilkscreen;  // remember last preference to export silkscreen (stored only for the session)
     static bool        m_exportSoldermask;  // remember last preference to export soldermask (stored only for the session)
     static bool        m_fuseShapes;     // remember last preference to fuse shapes (stored only for the session)
+    static bool        m_fillAllVias;    // remember last preference to fill all vias (stored only for the session)
+    static bool        m_cutViasInBody;  // remember last preference to cut via holes in body (stored only for the session)
     wxString           m_netFilter;      // filter copper nets
     static wxString    m_componentFilter; // filter component reference designators
     static COMPONENT_MODE m_componentMode;

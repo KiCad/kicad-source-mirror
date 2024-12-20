@@ -64,10 +64,15 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbExportBody = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export board body"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbBoardOptions->Add( m_cbExportBody, 0, wxALL, 5 );
 
+	m_cbCutViasInBody = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Cut vias in board body"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCutViasInBody->SetToolTip( _("Cut via holes in board body even if conductor layers are not exported.") );
+
+	sbBoardOptions->Add( m_cbCutViasInBody, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_cbExportSilkscreen = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportSilkscreen->SetToolTip( _("Export silkscreen graphics as a set of flat faces.") );
 
-	sbBoardOptions->Add( m_cbExportSilkscreen, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbBoardOptions->Add( m_cbExportSilkscreen, 0, wxALL, 5 );
 
 	m_cbExportSoldermask = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportSoldermask->SetToolTip( _("Export solder mask layers as a set of flat faces.") );
@@ -107,18 +112,6 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	sbBoardOptions->Add( bSizer51, 1, wxEXPAND|wxLEFT, 20 );
 
-	m_staticTextTolerance = new wxStaticText( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextTolerance->Wrap( -1 );
-	sbBoardOptions->Add( m_staticTextTolerance, 0, wxRIGHT|wxLEFT, 5 );
-
-	wxString m_choiceToleranceChoices[] = { _("Tight (0.001 mm)"), _("Standard (0.01 mm)"), _("Loose (0.1 mm)") };
-	int m_choiceToleranceNChoices = sizeof( m_choiceToleranceChoices ) / sizeof( wxString );
-	m_choiceTolerance = new wxChoice( sbBoardOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceToleranceNChoices, m_choiceToleranceChoices, 0 );
-	m_choiceTolerance->SetSelection( 0 );
-	m_choiceTolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined when building the board outlines.") );
-
-	sbBoardOptions->Add( m_choiceTolerance, 0, wxALL|wxEXPAND, 5 );
-
 
 	bSizer8->Add( sbBoardOptions, 0, wxEXPAND|wxALL, 5 );
 
@@ -145,6 +138,11 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbFuseShapes->SetToolTip( _("Combine intersecting geometry into one shape.") );
 
 	sbConductorOptions->Add( m_cbFuseShapes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbFillAllVias = new wxCheckBox( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Fill all vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbFillAllVias->SetToolTip( _("Don't cut via holes in copper layers.") );
+
+	sbConductorOptions->Add( m_cbFillAllVias, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_staticTextNetFilter = new wxStaticText( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Net filter (supports wildcards):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNetFilter->Wrap( -1 );
@@ -261,6 +259,18 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbOptimizeStep->SetToolTip( _("Disables writing parametric curves. Optimizes file size and write/read times, but may reduce compatibility with other software.") );
 
 	sbOtherOptions->Add( m_cbOptimizeStep, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_staticTextTolerance = new wxStaticText( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTolerance->Wrap( -1 );
+	sbOtherOptions->Add( m_staticTextTolerance, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxString m_choiceToleranceChoices[] = { _("Tight (0.001 mm)"), _("Standard (0.01 mm)"), _("Loose (0.1 mm)") };
+	int m_choiceToleranceNChoices = sizeof( m_choiceToleranceChoices ) / sizeof( wxString );
+	m_choiceTolerance = new wxChoice( sbOtherOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceToleranceNChoices, m_choiceToleranceChoices, 0 );
+	m_choiceTolerance->SetSelection( 0 );
+	m_choiceTolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined when building the board outlines.") );
+
+	sbOtherOptions->Add( m_choiceTolerance, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer5->Add( sbOtherOptions, 1, wxEXPAND|wxALL, 5 );

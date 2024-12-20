@@ -83,6 +83,8 @@ bool DIALOG_EXPORT_STEP::m_exportInnerCopper = false;
 bool DIALOG_EXPORT_STEP::m_exportSilkscreen = false;
 bool DIALOG_EXPORT_STEP::m_exportSoldermask = false;
 bool DIALOG_EXPORT_STEP::m_fuseShapes = false;
+bool DIALOG_EXPORT_STEP::m_fillAllVias = false;
+bool DIALOG_EXPORT_STEP::m_cutViasInBody = false;
 DIALOG_EXPORT_STEP::COMPONENT_MODE DIALOG_EXPORT_STEP::m_componentMode = COMPONENT_MODE::EXPORT_ALL;
 wxString DIALOG_EXPORT_STEP::m_componentFilter;
 
@@ -164,6 +166,8 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_cbExportSilkscreen->SetValue( m_exportSilkscreen );
         m_cbExportSoldermask->SetValue( m_exportSoldermask );
         m_cbFuseShapes->SetValue( m_fuseShapes );
+        m_cbCutViasInBody->SetValue( m_cutViasInBody );
+        m_cbFillAllVias->SetValue( m_fillAllVias );
         m_cbRemoveUnspecified->SetValue( m_noUnspecified );
         m_cbRemoveDNP->SetValue( m_noDNP );
         m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
@@ -218,6 +222,8 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_cbExportSilkscreen->SetValue( m_job->m_3dparams.m_ExportSilkscreen );
         m_cbExportSoldermask->SetValue( m_job->m_3dparams.m_ExportSoldermask );
         m_cbFuseShapes->SetValue( m_job->m_3dparams.m_FuseShapes );
+        m_cbCutViasInBody->SetValue( m_job->m_3dparams.m_CutViasInBody );
+        m_cbFillAllVias->SetValue( m_job->m_3dparams.m_FillAllVias );
         m_cbRemoveUnspecified->SetValue( !m_job->m_3dparams.m_IncludeUnspecified );
         m_cbRemoveDNP->SetValue( !m_job->m_3dparams.m_IncludeDNP );
         m_cbSubstModels->SetValue( m_job->m_3dparams.m_SubstModels );
@@ -336,6 +342,8 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
     m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
     m_exportSoldermask = m_cbExportSoldermask->GetValue();
     m_fuseShapes = m_cbFuseShapes->GetValue();
+    m_cutViasInBody = m_cbCutViasInBody->GetValue();
+    m_fillAllVias = m_cbFillAllVias->GetValue();
     m_componentFilter = m_txtComponentFilter->GetValue();
 
     if( m_rbAllComponents->GetValue() )
@@ -546,6 +554,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
         m_exportSoldermask = m_cbExportSoldermask->GetValue();
         m_fuseShapes = m_cbFuseShapes->GetValue();
+        m_cutViasInBody = m_cbCutViasInBody->GetValue();
+        m_fillAllVias = m_cbFillAllVias->GetValue();
 
         switch( m_choiceTolerance->GetSelection() )
         {
@@ -655,6 +665,12 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
         if( m_fuseShapes )
             cmdK2S.Append( wxT( " --fuse-shapes" ) );
+
+        if( m_cutViasInBody )
+            cmdK2S.Append( wxT( " --cut-vias-in-body" ) );
+
+        if( m_fillAllVias )
+            cmdK2S.Append( wxT( " --fill-all-vias" ) );
 
         // Note: for some reason, using \" to insert a quote in a format string, under MacOS
         // wxString::Format does not work. So use a %c format in string
@@ -773,6 +789,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         m_job->m_3dparams.m_ExportSilkscreen = m_cbExportSilkscreen->GetValue();
         m_job->m_3dparams.m_ExportSoldermask = m_cbExportSoldermask->GetValue();
         m_job->m_3dparams.m_FuseShapes = m_cbFuseShapes->GetValue();
+        m_job->m_3dparams.m_CutViasInBody = m_cbCutViasInBody->GetValue();
+        m_job->m_3dparams.m_FillAllVias = m_cbFillAllVias->GetValue();
         m_job->m_3dparams.m_OptimizeStep = m_cbOptimizeStep->GetValue();
         m_job->m_3dparams.m_Format = static_cast<EXPORTER_STEP_PARAMS::FORMAT>( m_choiceFormat->GetSelection() );
         m_job->m_3dparams.m_Overwrite = m_cbOverwriteFile->GetValue();

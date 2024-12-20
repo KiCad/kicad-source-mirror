@@ -107,6 +107,8 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
     m_params.emplace_back( new JOB_PARAM<double>( "board_outlines_chaining_epsilon",
                                                   &m_3dparams.m_BoardOutlinesChainingEpsilon,
                                                   m_3dparams.m_BoardOutlinesChainingEpsilon ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "cut_vias_in_body", &m_3dparams.m_CutViasInBody,
+                                                m_3dparams.m_CutViasInBody ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "export_board_body", &m_3dparams.m_ExportBoardBody,
                                                 m_3dparams.m_ExportBoardBody ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "export_components", &m_3dparams.m_ExportComponents,
@@ -126,6 +128,8 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
                                                 m_3dparams.m_ExportSoldermask ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "fuse_shapes", &m_3dparams.m_FuseShapes,
                                                 m_3dparams.m_FuseShapes ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "fill_all_vias", &m_3dparams.m_FillAllVias,
+                                                m_3dparams.m_FillAllVias ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "vrml_model_dir", &m_vrmlModelDir, m_vrmlModelDir ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "vrml_relative_paths", &m_vrmlRelativePaths,
                                                 m_vrmlRelativePaths ) );

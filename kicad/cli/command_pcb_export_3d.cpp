@@ -38,6 +38,7 @@
 #define ARG_MIN_DISTANCE "--min-distance"
 #define ARG_USER_ORIGIN "--user-origin"
 #define ARG_BOARD_ONLY "--board-only"
+#define ARG_CUT_VIAS_IN_BODY "--cut-vias-in-body"
 #define ARG_NO_BOARD_BODY "--no-board-body"
 #define ARG_NO_COMPONENTS "--no-components"
 #define ARG_INCLUDE_TRACKS "--include-tracks"
@@ -47,6 +48,7 @@
 #define ARG_INCLUDE_SILKSCREEN "--include-silkscreen"
 #define ARG_INCLUDE_SOLDERMASK "--include-soldermask"
 #define ARG_FUSE_SHAPES "--fuse-shapes"
+#define ARG_FILL_ALL_VIAS "--fill-all-vias"
 #define ARG_NO_OPTIMIZE_STEP "--no-optimize-step"
 #define ARG_NET_FILTER "--net-filter"
 #define ARG_FORMAT "--format"
@@ -112,6 +114,11 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .help( UTF8STDSTR( _( "Only generate a board with no components" ) ) )
                 .flag();
 
+        m_argParser.add_argument( ARG_CUT_VIAS_IN_BODY )
+                .help( UTF8STDSTR( _( "Cut via holes in board body even if conductor layers are "
+                                      "not exported." ) ) )
+                .flag();
+
         m_argParser.add_argument( ARG_NO_BOARD_BODY )
                 .help( UTF8STDSTR( _( "Exclude board body" ) ) )
                 .flag();
@@ -152,6 +159,10 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 
         m_argParser.add_argument( ARG_FUSE_SHAPES )
                 .help( UTF8STDSTR( _( "Fuse overlapping geometry together" ) ) )
+                .flag();
+
+        m_argParser.add_argument( ARG_FILL_ALL_VIAS )
+                .help( UTF8STDSTR( _( "Don't cut via holes in copper layers." ) ) )
                 .flag();
 
         m_argParser.add_argument( ARG_MIN_DISTANCE )
@@ -210,6 +221,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         params.m_UseDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
         params.m_UseGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
         params.m_SubstModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
+        params.m_CutViasInBody = m_argParser.get<bool>( ARG_CUT_VIAS_IN_BODY );
         params.m_ExportBoardBody = !m_argParser.get<bool>( ARG_NO_BOARD_BODY );
         params.m_ExportComponents = !m_argParser.get<bool>( ARG_NO_COMPONENTS );
         params.m_ExportTracksVias = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
@@ -219,6 +231,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         params.m_ExportSilkscreen = m_argParser.get<bool>( ARG_INCLUDE_SILKSCREEN );
         params.m_ExportSoldermask = m_argParser.get<bool>( ARG_INCLUDE_SOLDERMASK );
         params.m_FuseShapes = m_argParser.get<bool>( ARG_FUSE_SHAPES );
+        params.m_FillAllVias = m_argParser.get<bool>( ARG_FILL_ALL_VIAS );
         params.m_BoardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
         params.m_NetFilter = From_UTF8( m_argParser.get<std::string>( ARG_NET_FILTER ).c_str() );
         params.m_ComponentFilter =

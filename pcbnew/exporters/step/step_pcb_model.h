@@ -101,7 +101,8 @@ public:
 
     // add a pad hole or slot (must be in final position)
     bool AddHole( const SHAPE_SEGMENT& aShape, int aPlatingThickness, PCB_LAYER_ID aLayerTop,
-                  PCB_LAYER_ID aLayerBot, bool aVia, const VECTOR2D& aOrigin );
+                  PCB_LAYER_ID aLayerBot, bool aVia, const VECTOR2D& aOrigin, bool aCutCopper,
+                  bool aCutBody );
 
     // add a plated hole shape (without the hole)
     bool AddBarrel( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayerTop, PCB_LAYER_ID aLayerBot,
@@ -122,7 +123,6 @@ public:
     void SetEnabledLayers( const LSET& aLayers );
     void SetFuseShapes( bool aValue );
     void SetSimplifyShapes( bool aValue );
-    void SetAddVisMaterials( bool aValue );
     void SetStackup( const BOARD_STACKUP& aStackup );
     void SetNetFilter( const wxString& aFilter );
 

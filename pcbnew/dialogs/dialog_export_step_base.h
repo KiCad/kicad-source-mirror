@@ -53,6 +53,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxCheckBox* m_cbExportCompound_hidden;
 		wxCheckBox* m_cbExportBody;
+		wxCheckBox* m_cbCutViasInBody;
 		wxCheckBox* m_cbExportSilkscreen;
 		wxCheckBox* m_cbExportSoldermask;
 		wxCheckBox* m_cbExportSolderpaste_hidden;
@@ -61,13 +62,12 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbOnlySelected;
 		wxRadioButton* m_rbFilteredComponents;
 		wxTextCtrl* m_txtComponentFilter;
-		wxStaticText* m_staticTextTolerance;
-		wxChoice* m_choiceTolerance;
 		wxCheckBox* m_cbExportTracks;
 		wxCheckBox* m_cbExportPads;
 		wxCheckBox* m_cbExportZones;
 		wxCheckBox* m_cbExportInnerCopper;
 		wxCheckBox* m_cbFuseShapes;
+		wxCheckBox* m_cbFillAllVias;
 		wxStaticText* m_staticTextNetFilter;
 		wxTextCtrl* m_txtNetFilter;
 		wxRadioButton* m_rbDrillAndPlotOrigin;
@@ -85,6 +85,8 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbSubstModels;
 		wxCheckBox* m_cbOverwriteFile;
 		wxCheckBox* m_cbOptimizeStep;
+		wxStaticText* m_staticTextTolerance;
+		wxChoice* m_choiceTolerance;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

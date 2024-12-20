@@ -179,8 +179,11 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         {
             int platingThickness = pad->GetAttribute() == PAD_ATTRIB::PTH ? m_platingThickness : 0;
 
-            if( m_pcbModel->AddHole( *holeShape, platingThickness, F_Cu, B_Cu, false, aOrigin ) )
+            if( m_pcbModel->AddHole( *holeShape, platingThickness, F_Cu, B_Cu, false, aOrigin, true,
+                                     true ) )
+            {
                 hasdata = true;
+            }
 
             //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
             //if( m_layersToExport.Contains( F_SilkS ) || m_layersToExport.Contains( B_SilkS ) )
@@ -383,8 +386,9 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
 bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 {
-    if( !m_params.m_NetFilter.IsEmpty() && !aTrack->GetNetname().Matches( m_params.m_NetFilter ) )
-        return true;
+    bool skipCopper = !m_params.m_ExportTracksVias
+                      || ( !m_params.m_NetFilter.IsEmpty()
+                           && !aTrack->GetNetname().Matches( m_params.m_NetFilter ) );
 
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
@@ -398,14 +402,22 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 
         LSET layers( via->GetLayerSet() & m_layersToExport );
 
-        for( PCB_LAYER_ID pcblayer : layers.Seq() )
-        {
-            const std::shared_ptr<SHAPE>& shape = via->GetEffectiveShape( pcblayer );
+        PCB_LAYER_ID top_layer, bot_layer;
+        via->LayerPair( &top_layer, &bot_layer );
 
-            SHAPE_POLY_SET poly;
-            shape->TransformToPolygon( poly, maxError, ERROR_INSIDE );
-            m_poly_shapes[pcblayer].Append( poly );
-            m_poly_holes[pcblayer].Append( holePoly );
+        if( !skipCopper )
+        {
+            for( PCB_LAYER_ID pcblayer : layers.Seq() )
+            {
+                const std::shared_ptr<SHAPE>& shape = via->GetEffectiveShape( pcblayer );
+
+                SHAPE_POLY_SET poly;
+                shape->TransformToPolygon( poly, maxError, ERROR_INSIDE );
+                m_poly_shapes[pcblayer].Append( poly );
+                m_poly_holes[pcblayer].Append( holePoly );
+            }
+
+            m_pcbModel->AddBarrel( *holeShape, top_layer, bot_layer, true, aOrigin );
         }
 
         //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
@@ -415,14 +427,14 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
         //    m_poly_holes[B_SilkS].Append( holePoly );
         //}
 
-        PCB_LAYER_ID top_layer, bot_layer;
-        via->LayerPair( &top_layer, &bot_layer );
-
-        m_pcbModel->AddHole( *holeShape, m_platingThickness, top_layer, bot_layer, true, aOrigin );
-        m_pcbModel->AddBarrel( *holeShape, top_layer, bot_layer, true, aOrigin );
+        m_pcbModel->AddHole( *holeShape, m_platingThickness, top_layer, bot_layer, true, aOrigin,
+                             !m_params.m_FillAllVias, m_params.m_CutViasInBody );
 
         return true;
     }
+
+    if( skipCopper )
+        return true;
 
     PCB_LAYER_ID pcblayer = aTrack->GetLayer();
 
@@ -611,11 +623,8 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     for( FOOTPRINT* fp : m_board->Footprints() )
         buildFootprint3DShapes( fp, origin );
 
-    if( m_params.m_ExportTracksVias )
-    {
-        for( PCB_TRACK* track : m_board->Tracks() )
-            buildTrack3DShape( track, origin );
-    }
+    for( PCB_TRACK* track : m_board->Tracks() )
+        buildTrack3DShape( track, origin );
 
     for( BOARD_ITEM* item : m_board->Drawings() )
         buildGraphic3DShape( item, origin );

@@ -904,7 +904,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
 
 bool STEP_PCB_MODEL::AddHole( const SHAPE_SEGMENT& aShape, int aPlatingThickness,
                               PCB_LAYER_ID aLayerTop, PCB_LAYER_ID aLayerBot, bool aVia,
-                              const VECTOR2D& aOrigin )
+                              const VECTOR2D& aOrigin, bool aCutCopper, bool aCutBody )
 {
     double margin = 0.001; // a small margin on the Z axix to be sure the hole
                            // is bigger than the board with copper
@@ -928,24 +928,30 @@ bool STEP_PCB_MODEL::AddHole( const SHAPE_SEGMENT& aShape, int aPlatingThickness
 
     TopoDS_Shape copperHole, boardHole;
 
-    if( MakeShapeAsThickSegment( copperHole, aShape.GetSeg().A, aShape.GetSeg().B, copperDrill,
-                                 holeZsize, bottom - margin, aOrigin ) )
+    if( aCutCopper )
     {
-        m_copperCutouts.push_back( copperHole );
-    }
-    else
-    {
-        return false;
+        if( MakeShapeAsThickSegment( copperHole, aShape.GetSeg().A, aShape.GetSeg().B, copperDrill,
+                                     holeZsize, bottom - margin, aOrigin ) )
+        {
+            m_copperCutouts.push_back( copperHole );
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    if( MakeShapeAsThickSegment( boardHole, aShape.GetSeg().A, aShape.GetSeg().B, boardDrill,
-                                 holeZsize, bottom - margin, aOrigin ) )
+    if( aCutBody )
     {
-        m_boardCutouts.push_back( boardHole );
-    }
-    else
-    {
-        return false;
+        if( MakeShapeAsThickSegment( boardHole, aShape.GetSeg().A, aShape.GetSeg().B, boardDrill,
+                                     holeZsize, bottom - margin, aOrigin ) )
+        {
+            m_boardCutouts.push_back( boardHole );
+        }
+        else
+        {
+            return false;
+        }
     }
 
     return true;

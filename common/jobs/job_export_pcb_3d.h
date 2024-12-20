@@ -43,6 +43,7 @@ public:
             m_SubstModels( true ),
             m_BoardOutlinesChainingEpsilon( BOARD_DEFAULT_CHAINING_EPSILON ),
             m_BoardOnly( false ),
+            m_CutViasInBody( false ),
             m_ExportBoardBody( true ),
             m_ExportComponents( true ),
             m_ExportTracksVias( false ),
@@ -52,6 +53,7 @@ public:
             m_ExportSilkscreen( false ),
             m_ExportSoldermask( false ),
             m_FuseShapes( false ),
+            m_FillAllVias( false ),
             m_OptimizeStep( true ),
             m_Format( FORMAT::STEP ),
             m_OutputFile()
@@ -80,6 +82,7 @@ public:
     bool     m_SubstModels;
     double   m_BoardOutlinesChainingEpsilon;
     bool     m_BoardOnly;
+    bool     m_CutViasInBody;
     bool     m_ExportBoardBody;
     bool     m_ExportComponents;
     bool     m_ExportTracksVias;
@@ -89,6 +92,7 @@ public:
     bool     m_ExportSilkscreen;
     bool     m_ExportSoldermask;
     bool     m_FuseShapes;
+    bool     m_FillAllVias;
     bool     m_OptimizeStep;
     FORMAT   m_Format;
     wxString m_OutputFile;
