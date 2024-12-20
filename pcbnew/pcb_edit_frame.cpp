@@ -1822,6 +1822,7 @@ int PCB_EDIT_FRAME::TestStandalone()
 
     if( !frame->IsShownOnScreen() )
     {
+        wxEventBlocker blocker( this );
         wxFileName fn( Prj().GetProjectPath(), Prj().GetProjectName(),
                        FILEEXT::KiCadSchematicFileExtension );
 
@@ -1952,10 +1953,13 @@ void PCB_EDIT_FRAME::RunEeschema()
             }
             catch( const IO_ERROR& err )
             {
+
                 DisplayErrorMessage( this, _( "Eeschema failed to load." ) + wxS( "\n" ) + err.What() );
                 return;
             }
         }
+
+        wxEventBlocker blocker( this );
 
         // If Kiway() cannot create the eeschema frame, it shows a error message, and
         // frame is null

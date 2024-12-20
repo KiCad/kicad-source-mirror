@@ -1111,6 +1111,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
     }
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, false );
+    wxEventBlocker blocker( this );
 
     if( !frame )
     {
@@ -1338,6 +1339,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
         }
         else
         {
+            wxEventBlocker blocker(this);
             KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, false );
 
             if( !frame )
