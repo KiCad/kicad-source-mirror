@@ -117,7 +117,8 @@ std::map<wxString, wxString> ALTIUM_ASCII_PARSER::ReadProperties()
             if( canonicalKey == wxT( "DESIGNATOR" ) || canonicalKey == wxT( "NAME" )
                 || canonicalKey == wxT( "TEXT" ) )
             {
-                value = AltiumPropertyToKiCadString( value );
+                if( kv[ wxT( "RECORD" ) ] != wxT( "4" ) )
+                    value = AltiumPropertyToKiCadString( value );
             }
         }
 

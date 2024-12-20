@@ -45,40 +45,52 @@ LIB_ID AltiumToKiCadLibID( const wxString& aLibName, const wxString& aLibReferen
 
 wxString AltiumPropertyToKiCadString( const wxString& aString )
 {
-    wxString converted;
-    bool     inOverbar = false;
+    wxString  output;
+    wxString  tempString;
+    bool      hasPrev = false;
+    wxUniChar prev;
 
-    for( wxString::const_iterator chIt = aString.begin(); chIt != aString.end(); ++chIt )
+    for( wxString::const_iterator it = aString.begin(); it != aString.end(); ++it )
     {
-        wxString::const_iterator lookahead = chIt + 1;
+        char ch = 0;
 
-        if( lookahead != aString.end() && *lookahead == '\\' )
+        if( (*it).GetAsChar( &ch ) )
         {
-            if( !inOverbar )
+            if( ch == '\\' )
             {
-                converted += "~{";
-                inOverbar = true;
+                if( hasPrev )
+                {
+                    tempString += prev;
+                    hasPrev = false;
+                }
+
+                continue; // Backslash is ignored and not added to the output
+            }
+        }
+
+        if( hasPrev ) // Two letters in a row with no backslash
+        {
+            if( !tempString.empty() )
+            {
+                output += "~{" + tempString + "}";
+                tempString.Clear();
             }
 
-            converted += *chIt;
-            chIt = lookahead;
+            output += prev;
         }
-        else
-        {
-            if( inOverbar )
-            {
-                converted += "}";
-                inOverbar = false;
-            }
 
-            converted += *chIt;
-        }
+        prev = *it;
+        hasPrev = true;
     }
 
-    if( inOverbar )
-        converted += "}";
+    // Append any leftover escaped string
+    if( !tempString.IsEmpty() )
+        output += "~{" + tempString + "}";
 
-    return converted;
+    if( hasPrev )
+        output += prev;
+
+    return output;
 }
 
 
@@ -148,9 +160,7 @@ wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                 
                                                 const std::map<wxString, wxString>& aOverrides )
 {
     if( aString.IsEmpty() )
-    {
         return aString;
-    }
 
     // special case: string starts with dot -> whole string is special string
     if( aString.at( 0 ) == '.' )
@@ -174,57 +184,15 @@ wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                 
 
 wxString AltiumPinNamesToKiCad( wxString& aString )
 {
-    wxString  output;
-    wxString  tempString;
-    bool      hasPrev = false;
-    wxUniChar prev;
+    if( aString.IsEmpty() )
+        return wxEmptyString;
 
+    wxString rest;
 
-    for( wxString::const_iterator it = aString.begin(); it != aString.end(); ++it )
-    {
-        char ch = 0;
+    if( aString.StartsWith( '\\', &rest ) && !rest.Contains( '\\' ) )
+        return "~{" + rest + "}";
 
-        if( (*it).GetAsChar( &ch ) )
-        {
-            if( ch == '\\' )
-            {
-                if( hasPrev )
-                {
-                    tempString += prev;
-                    hasPrev = false;
-                }
-
-                continue; // Backslash is ignored and not added to the output
-            }
-        }
-
-        if( hasPrev ) // Two letters in a row with no backslash
-        {
-            if( !tempString.empty() )
-            {
-                output += "~{" + tempString + "}";
-                tempString.Clear();
-            }
-
-            output += prev;
-        }
-
-        prev = *it;
-        hasPrev = true;
-    }
-
-    // Append any leftover escaped string
-    if( !tempString.IsEmpty() )
-    {
-        output += "~{" + tempString + "}";
-    }
-
-    if( hasPrev )
-    {
-        output += prev;
-    }
-
-    return output;
+    return AltiumPropertyToKiCadString( aString );
 }
 
 VECTOR2I AltiumGetEllipticalPos( double aMajor, double aMinor, double aAngleRadians )
