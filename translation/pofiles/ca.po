@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-10-21 04:25+0000\n"
+"PO-Revision-Date: 2024-12-21 08:00+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -17218,9 +17218,8 @@ msgstr "Sense connectar"
 #: eeschema/erc/erc.cpp:209 eeschema/erc/erc.cpp:228
 #: pcbnew/drc/drc_test_provider_misc.cpp:320
 #: pcbnew/drc/drc_test_provider_misc.cpp:340
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Dibuix"
+msgstr " (a la fulla del planell)"
 
 #: eeschema/erc/erc.cpp:422
 #, fuzzy
@@ -24615,9 +24614,8 @@ msgid "Symbol Unit"
 msgstr "&Editor de biblioteques"
 
 #: eeschema/tools/sch_edit_tool.cpp:111
-#, fuzzy
 msgid " (already placed)"
-msgstr "Mou i posiciona"
+msgstr " (ja situat)"
 
 #: eeschema/tools/sch_edit_tool.cpp:179
 #, fuzzy
