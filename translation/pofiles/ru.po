@@ -20,17 +20,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-17 05:00+0000\n"
-"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2024-12-21 08:00+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -26401,35 +26401,32 @@ msgid "%s Output Options"
 msgstr "%s Параметры вывода"
 
 #: kicad/dialogs/panel_jobs.cpp:104
-#, fuzzy
 msgid "Select output directory"
-msgstr "Выбор выходного каталога"
+msgstr "Выберите выходной каталог"
 
 #: kicad/dialogs/panel_jobs.cpp:118
 msgid "Select output path"
-msgstr "Выберите выходной тракт"
+msgstr "Выберите выходной путь"
 
 #: kicad/dialogs/panel_jobs.cpp:198
-#, fuzzy
 msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:223 kicad/dialogs/panel_jobs.cpp:404
 msgid "No."
-msgstr "Нет."
+msgstr "Ном."
 
 #: kicad/dialogs/panel_jobs.cpp:224 kicad/dialogs/panel_jobs.cpp:405
 msgid "Job Description"
-msgstr "Описание работы"
+msgstr "Описание задания"
 
 #: kicad/dialogs/panel_jobs.cpp:300
-#, fuzzy
 msgid "Last run successful"
-msgstr "Работа успешная"
+msgstr "Последнее выполнение прошло успешно"
 
 #: kicad/dialogs/panel_jobs.cpp:306
 msgid "Last run failed"
-msgstr ""
+msgstr "Последнее выполнение завершилось неудачей"
 
 #: kicad/dialogs/panel_jobs.cpp:330 kicad/dialogs/panel_jobs.cpp:793
 msgid "Running jobs"
@@ -26437,11 +26434,11 @@ msgstr "Выполнение заданий"
 
 #: kicad/dialogs/panel_jobs.cpp:354
 msgid "View last run results..."
-msgstr ""
+msgstr "Просмотр результатов последнего запуска..."
 
 #: kicad/dialogs/panel_jobs.cpp:597 kicad/dialogs/panel_jobs.cpp:644
 msgid "Job Types"
-msgstr "Типы работы"
+msgstr "Типы заданий"
 
 #: kicad/dialogs/panel_jobs.cpp:608
 msgid "Add New Job"
@@ -26453,7 +26450,7 @@ msgstr "Выберите тип задания:"
 
 #: kicad/dialogs/panel_jobs.cpp:653
 msgid "Add New Output"
-msgstr "Добавить новый выход"
+msgstr "Добавить новый вывод"
 
 #: kicad/dialogs/panel_jobs.cpp:654
 msgid "Select output type:"
@@ -26461,7 +26458,7 @@ msgstr "Выберите тип вывода:"
 
 #: kicad/dialogs/panel_jobs.cpp:777
 msgid "No outputs defined"
-msgstr "Выходы не определены"
+msgstr "Выводы не определены"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:145
 msgid "Edit the project schematic"
@@ -48885,11 +48882,11 @@ msgstr "Нарисовать заполненные зоны"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Place Vias"
-msgstr "Место Виас"
+msgstr "Разместить перех. отв."
 
 #: pcbnew/tools/pcb_actions.cpp:297
 msgid "Place free-standing vias"
-msgstr "Разместить отдельно стоящие перегородки"
+msgstr "Разместить отдельно стоящие перех. отв."
 
 #: pcbnew/tools/pcb_actions.cpp:316
 msgid "Add a Zone Cutout"
@@ -49034,11 +49031,11 @@ msgstr "Разместить выбранные элементы на другу
 
 #: pcbnew/tools/pcb_actions.cpp:555
 msgid "Mirrors selected item(s) across the Y axis"
-msgstr "Отразить выбранный элемент(ы) по оси Y"
+msgstr "Отражает выбранный элемент(ы) по оси Y"
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Mirrors selected item(s) across the X axis"
-msgstr "Отразить выбранный элемент(ы) по оси X"
+msgstr "Отражает выбранный элемент(ы) по оси X"
 
 #: pcbnew/tools/pcb_actions.cpp:577
 msgid "Pack and Move Footprints"
@@ -49054,7 +49051,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:586
 msgid "Skip to next item"
-msgstr "Перейти к следующему пункту"
+msgstr "Пропустить до следующего элемента"
 
 #: pcbnew/tools/pcb_actions.cpp:592
 msgid "Change Track Width"
@@ -49086,11 +49083,11 @@ msgstr "Скосить углы между выбранными линиями"
 
 #: pcbnew/tools/pcb_actions.cpp:618
 msgid "Dogbone Corners..."
-msgstr "Собачьи углы..."
+msgstr "Углы в виде \"собачьих костей\"..."
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Add dogbone corners to selected lines"
-msgstr "Добавьте углы в виде собачьих костей к выбранным линиям"
+msgstr "Добавить углы в виде \"собачьих костей\" к выбранным линиям"
 
 #: pcbnew/tools/pcb_actions.cpp:625
 msgid "Simplify polygon outlines, removing superfluous points"
@@ -49310,7 +49307,7 @@ msgstr "Очистить от ненужных элементов и т.п."
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Draw Microwave Gaps"
-msgstr "Рисовать микроволновые зазоры"
+msgstr "Рисовать зазоры для СВЧ"
 
 #: pcbnew/tools/pcb_actions.cpp:871
 msgid "Create gap of specified length for microwave applications"
@@ -49326,7 +49323,7 @@ msgstr "Создать шлейф заданной длины для СВЧ ус
 
 #: pcbnew/tools/pcb_actions.cpp:888
 msgid "Draw Microwave Arc Stubs"
-msgstr "Нарисуйте шлейфы микроволновых дуг"
+msgstr "Рисовать СВЧ шлейфы (дуги)"
 
 #: pcbnew/tools/pcb_actions.cpp:889
 msgid "Create stub (arc) of specified size for microwave applications"
@@ -49334,7 +49331,7 @@ msgstr "Создать шлейф (дугу) заданной длины для 
 
 #: pcbnew/tools/pcb_actions.cpp:897
 msgid "Draw Microwave Polygonal Shapes"
-msgstr "Рисование микроволновых многоугольных фигур"
+msgstr "Рисовать полигональные формы для СВЧ"
 
 #: pcbnew/tools/pcb_actions.cpp:898
 msgid "Create a microwave polygonal shape from a list of vertices"
@@ -49342,7 +49339,7 @@ msgstr "Создать полигональную форму по вершина
 
 #: pcbnew/tools/pcb_actions.cpp:906
 msgid "Draw Microwave Lines"
-msgstr "Рисовать микроволновые линии"
+msgstr "Рисовать СВЧ линии"
 
 #: pcbnew/tools/pcb_actions.cpp:907
 msgid "Create line of specified length for microwave applications"
@@ -49554,7 +49551,7 @@ msgstr "Дублировать зону на слой..."
 
 #: pcbnew/tools/pcb_actions.cpp:1137
 msgid "Place Footprints"
-msgstr "Место следов"
+msgstr "Разместить посад. места"
 
 #: pcbnew/tools/pcb_actions.cpp:1145
 msgid "Drill/Place File Origin"
@@ -49707,7 +49704,7 @@ msgstr "Показать связи"
 
 #: pcbnew/tools/pcb_actions.cpp:1356
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr "Покажите на доске линии/дуги, обозначающие недостающие связи"
+msgstr "Показать линии/дуги, обозначающие недостающие связи на плате"
 
 #: pcbnew/tools/pcb_actions.cpp:1362
 msgid "Curved Ratsnest Lines"
@@ -49976,11 +49973,11 @@ msgstr "Сделать текущий слой более прозрачным"
 
 #: pcbnew/tools/pcb_actions.cpp:1821
 msgid "Cycle Layer Pair Presets"
-msgstr "Цикл Пара слоев Предустановки"
+msgstr "Переключение пресетов пар слоёв"
 
 #: pcbnew/tools/pcb_actions.cpp:1822
 msgid "Cycle between preset layer pairs"
-msgstr "Цикл между предустановленными парами слоев"
+msgstr "Переключение между пресетами пар слоёв"
 
 #: pcbnew/tools/pcb_actions.cpp:1833
 msgid "Show Board Statistics"
@@ -50150,15 +50147,15 @@ msgstr "Создать угол"
 
 #: pcbnew/tools/pcb_actions.cpp:1981
 msgid "Remove corner"
-msgstr "Убрать угол"
+msgstr "Удалить угол"
 
 #: pcbnew/tools/pcb_actions.cpp:1987
 msgid "Chamfer Corner"
-msgstr "Фаска угловая"
+msgstr "Снять фаску угла"
 
 #: pcbnew/tools/pcb_actions.cpp:1988
 msgid "Chamfer corner"
-msgstr "Фаска угловая"
+msgstr "Cнять фаску угла"
 
 #: pcbnew/tools/pcb_actions.cpp:1994
 msgid "Keep Arc Center, Adjust Radius"
@@ -50193,7 +50190,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2032
 msgid "Position Interactively..."
-msgstr "Должность Взаимодействие..."
+msgstr "Позиционировать интерактивно..."
 
 #: pcbnew/tools/pcb_actions.cpp:2033
 msgid ""
@@ -50349,7 +50346,7 @@ msgstr "Создание областей правил размещения"
 
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout"
-msgstr "Повтор макета"
+msgstr "Повторить разводку"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
@@ -50575,7 +50572,7 @@ msgstr "Показ неактивных слоев"
 
 #: pcbnew/tools/pcb_control.cpp:689
 msgid "Preset Layer Pairs"
-msgstr "Предустановленные пары слоев"
+msgstr "Пресеты пар слоев"
 
 #: pcbnew/tools/pcb_control.cpp:779
 msgid "Item locked."
@@ -50688,7 +50685,7 @@ msgstr "Разделить сегмент"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2850
 msgid "Split Arc"
-msgstr "Раздельная дуга"
+msgstr "Разделить дугу"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2927
 msgid "Remove Zone Corner"
@@ -50700,7 +50697,7 @@ msgstr "Удалить угол полигона"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3027
 msgid "Break Zone Corner"
-msgstr "Уголок зоны отдыха"
+msgstr "Разбить угол зоны"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3029
 msgid "Break Polygon Corner"
@@ -50744,11 +50741,11 @@ msgstr "Добавить вырез в зоне"
 
 #: pcbnew/tools/zone_create_helper.cpp:230
 msgid "Draw Zone"
-msgstr "Зона рисования"
+msgstr "Чертить зону"
 
 #: pcbnew/tools/zone_create_helper.cpp:252
 msgid "Draw Polygon"
-msgstr "Нарисовать многоугольник"
+msgstr "Чертить полигон"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
 msgid "Checking Zones"
@@ -51697,27 +51694,27 @@ msgstr "Зона %s  %s"
 
 #: pcbnew/zone.cpp:1914
 msgid "Keepout"
-msgstr "Хранить"
+msgstr "Запрет размещения"
 
 #: pcbnew/zone.cpp:1916
 msgid "Keep Out Tracks"
-msgstr "Не пропускать следы"
+msgstr "Запретить дорожки"
 
 #: pcbnew/zone.cpp:1922
 msgid "Keep Out Vias"
-msgstr "Не допускайте появления виа"
+msgstr "Запретить перех. отв."
 
 #: pcbnew/zone.cpp:1928
 msgid "Keep Out Pads"
-msgstr "Защитные коврики"
+msgstr "Запретить конт. пл."
 
 #: pcbnew/zone.cpp:1934
 msgid "Keep Out Copper Pours"
-msgstr "Не допускайте заливки меди"
+msgstr "Запретить медные зоны"
 
 #: pcbnew/zone.cpp:1940
 msgid "Keep Out Footprints"
-msgstr "Не оставлять следов"
+msgstr "Запретить посад. места"
 
 #: pcbnew/zone.cpp:1949
 msgid "Enable"
@@ -51814,13 +51811,13 @@ msgstr "Пополнение зон после внесения изменени
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:90
 msgid "Update Displayed Zones"
-msgstr "Обновление отображаемых зон"
+msgstr "Обновить отображаемые зоны"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
 msgstr ""
-"Обновление заполненных областей, отображаемых в диалоге, в соответствии с "
+"Обновить заполненные области, отображаемые в диалоге, в соответствии с "
 "новыми текущими настройками"
 
 #: pcbnew/zones.h:61
