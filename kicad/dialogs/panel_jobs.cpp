@@ -712,6 +712,9 @@ void PANEL_JOBS::EnsurePcbSchFramesOpen()
         wxFileName boardfn = project.GetProjectFullName();
         boardfn.SetExt( FILEEXT::PcbFileExtension );
 
+        // Prevent our window from being closed during the open process
+        wxEventBlocker blocker( this );
+
         frame->OpenProjectFiles( std::vector<wxString>( 1, boardfn.GetFullPath() ) );
     }
 
@@ -728,6 +731,8 @@ void PANEL_JOBS::EnsurePcbSchFramesOpen()
 
         wxFileName schFn = project.GetProjectFullName();
         schFn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+        wxEventBlocker blocker( this );
 
         frame->OpenProjectFiles( std::vector<wxString>( 1, schFn.GetFullPath() ) );
     }

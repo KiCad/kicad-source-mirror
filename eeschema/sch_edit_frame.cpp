@@ -1195,6 +1195,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB()
     }
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, false );
+    wxEventBlocker blocker( this );
 
     if( !frame )
     {
@@ -1425,6 +1426,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew()
         }
         else
         {
+            wxEventBlocker blocker(this);
             KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, false );
 
             if( !frame )
