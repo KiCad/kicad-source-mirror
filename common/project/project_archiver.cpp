@@ -154,6 +154,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.kicad_mod" ),
             wxT( "*.kicad_dru" ),
             wxT( "*.kicad_wks" ),
+            wxT( "*.kicad_jobset" ),
             wxT( "*.wbk" ),
             wxT( "fp-lib-table" ),
             wxT( "sym-lib-table" )
