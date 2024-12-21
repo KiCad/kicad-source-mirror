@@ -156,8 +156,8 @@ void PCB_IO_ODBPP::SaveBoard( const wxString& aFileName, BOARD* aBoard,
         if( it->second == "inch" )
         {
             m_unitsStr = "INCH";
-            m_scale = 25.4 / PCB_IU_PER_MM;
-            m_symbolScale = 25.4 / PL_IU_PER_MM;
+            m_scale = ( 1.0 / 25.4 ) / PCB_IU_PER_MM;
+            m_symbolScale = ( 1.0 / 25.4 ) / PL_IU_PER_MM;
         }
         else
         {
