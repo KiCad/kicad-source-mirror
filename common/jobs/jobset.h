@@ -49,14 +49,11 @@ enum class JOBSET_OUTPUT_TYPE
 
 struct KICOMMON_API JOBSET_OUTPUT
 {
-    JOBSET_OUTPUT() :
-            m_type( JOBSET_OUTPUT_TYPE::FOLDER ), m_outputHandler( nullptr ), m_lastRunSuccess()
-            {}
+    JOBSET_OUTPUT();
 
-    JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type, JOBS_OUTPUT_HANDLER* outputHandler ) :
-            m_id( id ), m_type( type ), m_outputHandler( outputHandler ), m_lastRunSuccess()
-    {
-    }
+    JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type );
+
+    void                  InitOutputHandler();
 
     wxString              m_id;
     JOBSET_OUTPUT_TYPE    m_type;
@@ -68,6 +65,7 @@ struct KICOMMON_API JOBSET_OUTPUT
     std::unordered_map<wxString, std::optional<bool>> m_lastRunSuccessMap;
 
     bool operator==( const JOBSET_OUTPUT& rhs ) const;
+
 };
 
 class KICOMMON_API JOBSET : public JSON_SETTINGS
@@ -96,8 +94,7 @@ public:
     wxString GetFullName() const { return m_fileNameWithoutPath; }
 
     void AddNewJob( wxString aType, JOB* aJob );
-    JOBSET_OUTPUT AddNewJobOutput( JOBSET_OUTPUT_TYPE aType,
-                                      JOBS_OUTPUT_HANDLER*  aJobOutput );
+    JOBSET_OUTPUT AddNewJobOutput( JOBSET_OUTPUT_TYPE aType );
 
     void RemoveOutput( JOBSET_OUTPUT* aOutput );
     void MoveJobUp( size_t aJobIdx );

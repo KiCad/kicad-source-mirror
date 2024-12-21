@@ -81,18 +81,40 @@ KICOMMON_API void from_json( const nlohmann::json& j, JOBSET_OUTPUT& f )
 
     nlohmann::json settings_obj = j.at( "settings" );
 
-    if( f.m_type == JOBSET_OUTPUT_TYPE::FOLDER )
-    {
-        f.m_outputHandler = new JOBS_OUTPUT_FOLDER();
-    }
-    else if( f.m_type == JOBSET_OUTPUT_TYPE::ARCHIVE )
-    {
-        f.m_outputHandler = new JOBS_OUTPUT_ARCHIVE();
-    }
+    f.InitOutputHandler();
 
     if( f.m_outputHandler != nullptr )
     {
         f.m_outputHandler->FromJson( settings_obj );
+    }
+}
+
+
+JOBSET_OUTPUT::JOBSET_OUTPUT() :
+        m_type( JOBSET_OUTPUT_TYPE::FOLDER ),
+        m_lastRunSuccess()
+{
+}
+
+
+JOBSET_OUTPUT::JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type ) :
+        m_id( id ),
+        m_type( type ),
+        m_lastRunSuccess()
+{
+    InitOutputHandler();
+}
+
+
+void JOBSET_OUTPUT::InitOutputHandler()
+{
+    if( m_type == JOBSET_OUTPUT_TYPE::FOLDER )
+    {
+        m_outputHandler = new JOBS_OUTPUT_FOLDER();
+    }
+    else if( m_type == JOBSET_OUTPUT_TYPE::ARCHIVE )
+    {
+        m_outputHandler = new JOBS_OUTPUT_ARCHIVE();
     }
 }
 
@@ -133,10 +155,9 @@ void JOBSET::AddNewJob( wxString aType, JOB* aJob )
 }
 
 
-JOBSET_OUTPUT JOBSET::AddNewJobOutput( JOBSET_OUTPUT_TYPE aType,
-                                             JOBS_OUTPUT_HANDLER*  aJobOutput )
+JOBSET_OUTPUT JOBSET::AddNewJobOutput( JOBSET_OUTPUT_TYPE aType )
 {
-    m_outputs.emplace_back( KIID().AsString(), aType, aJobOutput );
+    m_outputs.emplace_back( KIID().AsString(), aType);
     SetDirty();
 
     return m_outputs.back();
