@@ -33,6 +33,7 @@
 #include <background_jobs_monitor.h>
 #include <bitmaps.h>
 #include <build_version.h>
+#include <confirm.h>
 #include <dialogs/panel_kicad_launcher.h>
 #include <dialogs/dialog_update_check_prompt.h>
 #include <dialogs/panel_jobs.h>
@@ -116,9 +117,6 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_DROP_FILES( KICAD_MANAGER_FRAME::OnDropFiles )
 
 END_EVENT_TABLE()
-
-
-    static JOBSET* test = new JOBSET( "" );
 
 // See below the purpose of this include
 #include <wx/xml/xml.h>
@@ -717,6 +715,21 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
         return;
     }
 
+    for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
+    {
+        wxWindow* page = m_notebook->GetPage( i );
+
+        PANEL_JOBS* panel = dynamic_cast<PANEL_JOBS*>( page );
+        if( panel )
+        {
+            if( aFileName.GetFullPath() == panel->GetFilePath() )
+            {
+                m_notebook->SetSelection( i );
+                return;
+            }
+        }
+    }
+
     try
     {
         std::unique_ptr<JOBSET> jobsFile =
@@ -732,6 +745,7 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
     }
     catch( ... )
     {
+        DisplayErrorMessage( this, _( "Error opening jobs file" ) );
     }
 }
 

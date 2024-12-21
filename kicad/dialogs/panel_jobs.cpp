@@ -749,6 +749,12 @@ void PANEL_JOBS::EnsurePcbSchFramesOpen()
 }
 
 
+wxString PANEL_JOBS::GetFilePath() const
+{
+    return m_jobsFile->GetFullFilename();
+}
+
+
 void PANEL_JOBS::OnJobButtonUp( wxCommandEvent& aEvent )
 {
     long item = m_jobList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );

@@ -41,6 +41,8 @@ public:
 
     void EnsurePcbSchFramesOpen();
 
+    wxString GetFilePath() const;
+
 protected:
     virtual void OnAddJobClick( wxCommandEvent& aEvent ) override;
     virtual void OnAddOutputClick( wxCommandEvent& aEvent ) override;
