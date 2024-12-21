@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-13 07:00+0000\n"
+"PO-Revision-Date: 2024-12-21 08:00+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -26611,7 +26611,6 @@ msgid "%s Output Options"
 msgstr "%s Opções de saída"
 
 #: kicad/dialogs/panel_jobs.cpp:104
-#, fuzzy
 msgid "Select output directory"
 msgstr "Selecione a pasta de destino"
 
@@ -26632,13 +26631,12 @@ msgid "Job Description"
 msgstr "Descrição do trabalho"
 
 #: kicad/dialogs/panel_jobs.cpp:300
-#, fuzzy
 msgid "Last run successful"
-msgstr "Trabalho concluído com sucesso"
+msgstr "A última execução foi bem-sucedida"
 
 #: kicad/dialogs/panel_jobs.cpp:306
 msgid "Last run failed"
-msgstr ""
+msgstr "A última execução falhou"
 
 #: kicad/dialogs/panel_jobs.cpp:330 kicad/dialogs/panel_jobs.cpp:793
 msgid "Running jobs"
@@ -26646,7 +26644,7 @@ msgstr "Tarefas em execução"
 
 #: kicad/dialogs/panel_jobs.cpp:354
 msgid "View last run results..."
-msgstr ""
+msgstr "Ver os resultados da última execução..."
 
 #: kicad/dialogs/panel_jobs.cpp:597 kicad/dialogs/panel_jobs.cpp:644
 msgid "Job Types"
@@ -29825,21 +29823,18 @@ msgid "Copper resistivity:"
 msgstr "Resistividade do cobre:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
-#, fuzzy
 msgid "External Layer Tracks"
-msgstr "Traços da camada externa"
+msgstr "Trilhas da camada externa"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
-#, fuzzy
 msgid "Track width (W):"
-msgstr "Largura da trilha (W):"
+msgstr "Largura trilha (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
-#, fuzzy
 msgid "Track thickness (H):"
-msgstr "Espessura da trilha (H):"
+msgstr "Espessura trilha (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:234
@@ -29871,9 +29866,8 @@ msgid "W"
 msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
-#, fuzzy
 msgid "Internal Layer Tracks"
-msgstr "Traços da camada interna"
+msgstr "Trilhas da camada interna"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
@@ -30458,7 +30452,6 @@ msgstr ""
 "R1 + (R2|R3)... qualquer combinação dos anteriores\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the track widths will be calculated "
 "to suit.\n"
@@ -30483,28 +30476,28 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal tracks or 0.048 for external tracks\n"
 msgstr ""
-"Caso especifique a corrente máxima, então a largura da trilha será calculada "
-"automaticamente.\n"
+"Se você especificar a corrente máxima, as larguras das trilhas serão "
+"calculadas de acordo.\n"
 "\n"
-"Caso especifique uma das larguras da trilha, então a corrente máxima que ela "
-"suportará será calculada automaticamente. A largura para que a outra trilha "
-"também possa lidar com esta corrente também será calculada.\n"
+"Se você especificar uma das larguras de trilha, será calculada a corrente "
+"máxima que ela pode suportar. Em seguida, será calculada a largura da outra "
+"trilha para que ela também possa suportar essa corrente.\n"
 "\n"
 "O valor de controle é mostrado em negrito.\n"
 "\n"
-"Os cálculos são válidos para correntes de até 35 A (externo) ou 17,5 A "
-"(interno), aumentos de temperatura até 100 ºC e larguras com até 400 mil (10 "
-"mm).\n"
+"Os cálculos são válidos para correntes de até 35 A (externa) ou 17,5 A "
+"(interna), aumentos de temperatura de até 100 °C e larguras de até 400 mils ("
+"10 mm)\n"
 "\n"
-"A fórmula do IPC 2221 é\n"
+"A fórmula, do IPC 2221, é\n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
 "H)<sup>0.725</sup>___</center>\n"
-"onde:<br>\n"
-"___I___ = a corrente máxima em A<br>\n"
-"___&Delta;T___ = aumento da temperatura acima do ambiente em &deg;C<br>\n"
+"Onde:<br>\n"
+"___I___ É a corrente máxima em A<br>\n"
+"___&Delta;T___ é o aumento da temperatura acima do ambiente em &deg;C<br>\n"
 "___W___ é a largura em mils<br>\n"
 "___H___ é a espessura (altura) em mils<br>\n"
-"___K___ 0.024 para trilhas internas ou 0.048 para as trilhas externas\n"
+"___K___ é 0,024 para trilhas internas ou 0,048 para trilhas externas\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 msgid "Dielectric Loss Factor"
@@ -34190,16 +34183,12 @@ msgid "Success"
 msgstr "Sucesso"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Deseja usar um caminho relativo ao\n"
-"'%s'?"
+msgstr "Deseja cancelar o processo de exportação?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Relatório do isolamento"
+msgstr "Cancelar a exportação"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -37195,9 +37184,8 @@ msgid "(%d known DRC violations; %d exclusions)"
 msgstr "(%d violações conhecidas do DRC; %d exclusões)"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
-#, fuzzy
 msgid "Track gap must be greater than 0."
-msgstr "O intervalo do traço deve ser maior que 0."
+msgstr "A lacuna deve ser maior que 0."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:65
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
@@ -37215,9 +37203,8 @@ msgid "Via gap:"
 msgstr "Lacuna da via:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
-#, fuzzy
 msgid "Via gap same as track gap"
-msgstr "Lacuna da via igual a lacuna do traço"
+msgstr "Lacuna da via igual a lacuna da trilha"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:56
 msgid "Differential Pair Dimensions"
@@ -37271,13 +37258,13 @@ msgid "Jump over obstacles"
 msgstr "Saltar sobre obstáculos"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
-#, fuzzy
 msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"Quando ativado, o roteador tenta mover os traços em colisão para trás de "
-"obstáculos sólidos (ex. ilhas) ao invés de \"refletir\" de volta a colisão"
+"Quando ativado, o roteador tenta mover as trilhas que colidem para trás de "
+"obstáculos sólidos (por exemplo, ilhas) em vez de “refletir” de volta a "
+"colisão"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 #: pcbnew/router/router_tool.cpp:2733
@@ -37293,19 +37280,20 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Se a nova trilha tiver a mesma conexão que uma trilha já existente, a trilha "
+"antiga será removida."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
 msgstr "Otimiza as conexões da ilha"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:88
-#, fuzzy
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
 msgstr ""
-"Quando ativado, o roteador tenta quebrar ilhas/vias de forma limpa, evitando "
-"ângulos agudos e traços de saída irregulares."
+"Quando ativado, o roteador tenta quebrar as ilhas/vias de forma limpa, "
+"evitando ângulos agudos e trilhas com quebras irregulares."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid "Smooth dragged segments"
@@ -38541,7 +38529,6 @@ msgid "Show Button"
 msgstr "Mostrar o botão"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
-#, fuzzy
 msgid "Plugin"
 msgstr "Plug-ins"
 
@@ -41577,14 +41564,12 @@ msgid "Text thickness out of range"
 msgstr "A espessura do texto está fora do alcance"
 
 #: pcbnew/drc/drc_item.cpp:262
-#, fuzzy
 msgid "Track length out of range"
-msgstr "Comprimento do traço fora do alcance"
+msgstr "Comprimento da trilha fora do intervalo"
 
 #: pcbnew/drc/drc_item.cpp:266
-#, fuzzy
 msgid "Skew between tracks out of range"
-msgstr "Inclinação entre os traços fora do alcance"
+msgstr "Inclinação entre trilhas fora da faixa"
 
 #: pcbnew/drc/drc_item.cpp:271
 msgid "Too many or too few vias on a connection"
@@ -43777,9 +43762,8 @@ msgid "Add Microwave Inductor"
 msgstr "Adicionar indutor de micro-ondas"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Length of Track:"
-msgstr "Comprimento do traço:"
+msgstr "Comprimento da trilha:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:377
 msgid "Requested length < minimum length"
@@ -46032,7 +46016,7 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
-"Dados de X, Y ou rotação ausentes na linha %zu para refdes %s. Esse pode ser "
+"Dados de X, Y ou rotação ausentes na linha %zu para referência %s. Pode ser "
 "um componente não posicionado."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
@@ -47108,9 +47092,8 @@ msgid "Routing"
 msgstr "Roteando"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
-#, fuzzy
 msgid "Please select a differential pair track you want to tune."
-msgstr "Selecione o traço de par diferencial que deseja configurar."
+msgstr "Selecione a faixa de par diferencial que deseja ajustar."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:68
 msgid ""
