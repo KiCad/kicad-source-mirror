@@ -515,7 +515,7 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
             }
             catch( const IO_ERROR& ioe )
             {
-                DisplayError( m_frame, ioe.What() );
+                DisplayErrorMessage( m_frame, _( "Error renaming footprint" ), ioe.What() );
             }
             catch( ... )
             {

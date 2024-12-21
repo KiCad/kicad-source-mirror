@@ -371,7 +371,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.What() );
+        DisplayErrorMessage( this, _( "Error saving footprint library" ), ioe.What() );
         return false;
     }
 

@@ -291,7 +291,7 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
 
     if( m_settings->m_ThermalReliefSpokeWidth < m_settings->m_ZoneMinThickness )
     {
-        DisplayError( this, _( "Thermal spoke width cannot be smaller than the minimum width." ) );
+        DisplayErrorMessage( this, _( "Thermal spoke width cannot be smaller than the minimum width." ) );
         return false;
     }
 

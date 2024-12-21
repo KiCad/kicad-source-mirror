@@ -1962,7 +1962,7 @@ int PCB_EDIT_FRAME::TestStandalone()
 
             if( !fn.FileExists() )
             {
-                DisplayError( this, _( "The schematic for this board cannot be found." ) );
+                DisplayErrorMessage( this, _( "The schematic for this board cannot be found." ) );
                 return -2;
             }
         }

@@ -297,7 +297,7 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
         status = m_parent->WriteNetListFile( NET_TYPE_BOM, fullfilename, GNL_OPT_BOM|GNL_ALL, &reporter );
 
     if( !status )
-        DisplayError( this, _( "Failed to create file." ) );
+        DisplayErrorMessage( this, _( "Failed to create file." ) );
 
     m_Messages->SetValue( reporter.GetMessages() );
 
@@ -359,7 +359,7 @@ void DIALOG_BOM::OnAddGenerator( wxCommandEvent& event )
     }
     catch( const std::runtime_error& e )
     {
-        DisplayError( this, e.what() );
+        DisplayErrorMessage( this, e.what() );
     }
 }
 

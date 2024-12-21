@@ -32,7 +32,7 @@
 */
 
 
-#include <confirm.h>            // DisplayError()
+#include <confirm.h>            // DisplayErrorMessage()
 #include <gestfich.h>           // EDA_FileSelector()
 #include <pcb_edit_frame.h>
 #include <locale_io.h>
@@ -73,7 +73,7 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
 
         wxString extra = ioe.What();
 
-        DisplayErrorMessage( this, msg, extra);
+        DisplayErrorMessage( this, msg, extra );
         return false;
     }
 

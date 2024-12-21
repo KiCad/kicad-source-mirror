@@ -247,7 +247,7 @@ void DIALOG_CONFIG_EQUFILES::OnAddFiles( wxCommandEvent& event )
         }
         else
         {
-            DisplayError( this, wxString::Format( _( "File '%s' already exists in list." ),
+            DisplayErrorMessage( this, wxString::Format( _( "File '%s' already exists in list." ),
                                                   filepath.GetData() ) );
         }
     }

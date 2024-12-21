@@ -441,7 +441,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.What() );
+        DisplayErrorMessage( this, _( "Error loading footprint" ), ioe.What() );
         return nullptr;
     }
 

@@ -288,7 +288,7 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName,
     // Make sure the user has selected a library to save into
     if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
     {
-        DisplayError( this, _( "Please select a library to save the design block to." ) );
+        DisplayErrorMessage( this, _( "Please select a library to save the design block to." ) );
         return;
     }
 
@@ -298,7 +298,7 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName,
 
     if( !sheets.empty() )
     {
-        DisplayError( this, _( "Design blocks with nested sheets are not supported." ) );
+        DisplayErrorMessage( this, _( "Design blocks with nested sheets are not supported." ) );
         return;
     }
 
@@ -330,7 +330,7 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName,
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
     if( !saveSchematicFile( aSheetPath.Last(), tempFile ) )
     {
-        DisplayError( this, _( "Error saving temporary schematic file to create design block." ) );
+        DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
         return;
     }
@@ -366,7 +366,7 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     // Make sure the user has selected a library to save into
     if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
     {
-        DisplayError( this, _( "Please select a library to save the design block to." ) );
+        DisplayErrorMessage( this, _( "Please select a library to save the design block to." ) );
         return;
     }
 
@@ -375,7 +375,7 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 
     if( selection.Empty() )
     {
-        DisplayError( this, _( "Please select some items to save as a design block." ) );
+        DisplayErrorMessage( this, _( "Please select some items to save as a design block." ) );
         return;
     }
 
@@ -391,7 +391,7 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
             SaveSheetAsDesignBlock( aLibraryName, curPath );
         }
         else
-            DisplayError( this, _( "Design blocks with nested sheets are not supported." ) );
+            DisplayErrorMessage( this, _( "Design blocks with nested sheets are not supported." ) );
 
         return;
     }
@@ -424,7 +424,7 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
     if( !saveSchematicFile( tempSheet, tempFile ) )
     {
-        DisplayError( this, _( "Error saving temporary schematic file to create design block." ) );
+        DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
         return;
     }
@@ -461,7 +461,7 @@ bool SCH_EDIT_FRAME::DeleteDesignBlockLibrary( const wxString& aLibName, bool aC
 {
     if( aLibName.IsEmpty() )
     {
-        DisplayError( this, _( "Please select a library to delete." ) );
+        DisplayErrorMessage( this, _( "Please select a library to delete." ) );
         return false;
     }
 

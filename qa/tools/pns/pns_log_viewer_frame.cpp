@@ -388,7 +388,7 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
     drawLoggedItems( m_rewindIter );
     updateDumpPanel( m_rewindIter );
     updatePnsPreviewItems( m_rewindIter );
-    
+
 }
 
 
@@ -427,7 +427,7 @@ void PNS_LOG_VIEWER_FRAME::onSaveAs( wxCommandEvent& event )
 {
     if( !m_logFile )
     {
-        DisplayError( this, wxT( "No log file Loaded!" ) );
+        DisplayErrorMessage( this, wxT( "No log file Loaded!" ) );
         return;
     }
 

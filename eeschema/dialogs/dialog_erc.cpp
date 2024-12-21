@@ -1056,7 +1056,7 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
     }
     else
     {
-        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ),
-                                              fn.GetFullPath() ) );
+        DisplayErrorMessage( this, wxString::Format( _( "Failed to create file '%s'." ),
+                                                     fn.GetFullPath() ) );
     }
 }

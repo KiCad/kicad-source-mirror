@@ -246,7 +246,7 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
 
     wxString msg;
     msg.Printf( _( "Command '%s' could not be found." ), fullEditorName );
-    DisplayError( nullptr, msg, 20 );
+    DisplayErrorMessage( nullptr, msg );
     return -1;
 }
 
@@ -263,7 +263,7 @@ bool OpenPDF( const wxString& file )
         if( !LaunchExternal( filename ) )
         {
             msg.Printf( _( "Unable to find a PDF viewer for '%s'." ), filename );
-            DisplayError( nullptr, msg );
+            DisplayErrorMessage( nullptr, msg );
             return false;
         }
     }
@@ -278,7 +278,7 @@ bool OpenPDF( const wxString& file )
         if( wxExecute( const_cast<wchar_t**>( args ) ) == -1 )
         {
             msg.Printf( _( "Problem while running the PDF viewer '%s'." ), args[0] );
-            DisplayError( nullptr, msg );
+            DisplayErrorMessage( nullptr, msg );
             return false;
         }
     }

@@ -748,7 +748,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
                             id.GetLibNickname().wx_str(),
                             ioe.What() );
 
-                DisplayError( this, msg );
+                DisplayErrorMessage( this, msg );
             }
 
             if( symbol == nullptr )

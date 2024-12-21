@@ -221,7 +221,7 @@ bool REGEX_VALIDATOR::Validate( wxWindow* aParent )
     if( !valid )
     {
         m_validatorWindow->SetFocus();
-        DisplayError( aParent, wxString::Format( _( "Incorrect value: %s" ), value ) );
+        DisplayErrorMessage( aParent, wxString::Format( _( "Incorrect value: %s" ), value ) );
         return false;
     }
 

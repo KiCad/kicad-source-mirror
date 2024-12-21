@@ -156,7 +156,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
     if( !wxFileExists( fullfilename ) )
     {
         msg.Printf( _( "Documentation file '%s' not found." ), docname );
-        DisplayError( aParent, msg );
+        DisplayErrorMessage( aParent, msg );
         return false;
     }
 
@@ -202,7 +202,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
     if( !success )
     {
         msg.Printf( _( "Unknown MIME type for documentation file '%s'" ), fullfilename );
-        DisplayError( aParent, msg );
+        DisplayErrorMessage( aParent, msg );
     }
 
     return success;

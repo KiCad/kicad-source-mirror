@@ -1506,8 +1506,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error loading board.\n%s" ), ioe.What() );
-        DisplayError( editFrame, msg );
+        DisplayErrorMessage( editFrame, _( "Error loading board." ), ioe.What() );
 
         return 0;
     }

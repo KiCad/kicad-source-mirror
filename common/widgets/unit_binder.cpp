@@ -333,7 +333,7 @@ wxString valueDescriptionFromLabel( wxStaticText* aLabel )
 void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 {
     if( !m_errorMessage.IsEmpty() )
-        DisplayError( m_valueCtrl->GetParent(), m_errorMessage );
+        DisplayErrorMessage( m_valueCtrl->GetParent(), m_errorMessage );
 
     m_errorMessage = wxEmptyString;
     m_valueCtrl->SetFocus();
