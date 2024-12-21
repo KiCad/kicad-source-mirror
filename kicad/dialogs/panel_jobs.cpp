@@ -669,10 +669,10 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
         {
             if( wxGetTranslation( jobType.second.name ) == selectedString )
             {
-                JOBSET_OUTPUT output = m_jobsFile->AddNewJobOutput( jobType.first );
+                JOBSET_OUTPUT* output = m_jobsFile->AddNewJobOutput( jobType.first );
 
                 Freeze();
-                addJobOutputPanel( &output );
+                addJobOutputPanel( output );
                 m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() );
                 Thaw();
             }

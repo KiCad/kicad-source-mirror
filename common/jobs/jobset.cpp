@@ -155,12 +155,12 @@ void JOBSET::AddNewJob( wxString aType, JOB* aJob )
 }
 
 
-JOBSET_OUTPUT JOBSET::AddNewJobOutput( JOBSET_OUTPUT_TYPE aType )
+JOBSET_OUTPUT* JOBSET::AddNewJobOutput( JOBSET_OUTPUT_TYPE aType )
 {
     m_outputs.emplace_back( KIID().AsString(), aType);
     SetDirty();
 
-    return m_outputs.back();
+    return &m_outputs.back();
 }
 
 

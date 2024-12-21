@@ -94,7 +94,7 @@ public:
     wxString GetFullName() const { return m_fileNameWithoutPath; }
 
     void AddNewJob( wxString aType, JOB* aJob );
-    JOBSET_OUTPUT AddNewJobOutput( JOBSET_OUTPUT_TYPE aType );
+    JOBSET_OUTPUT* AddNewJobOutput( JOBSET_OUTPUT_TYPE aType );
 
     void RemoveOutput( JOBSET_OUTPUT* aOutput );
     void MoveJobUp( size_t aJobIdx );
