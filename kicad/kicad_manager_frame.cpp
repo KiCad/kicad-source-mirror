@@ -254,6 +254,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     {
         Layout();
         mainSizer->Fit( this );
+        Center();
     }
 
     if( ADVANCED_CFG::GetCfg().m_HideVersionFromTitle )
