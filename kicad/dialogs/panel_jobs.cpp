@@ -674,10 +674,19 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
             {
                 JOBSET_OUTPUT* output = m_jobsFile->AddNewJobOutput( jobType.first );
 
-                Freeze();
-                addJobOutputPanel( output );
-                m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() );
-                Thaw();
+                DIALOG_JOB_OUTPUT dialog( m_frame, m_jobsFile.get(), output );
+                if (dialog.ShowModal() == wxID_SAVE)
+                {
+                    Freeze();
+                    addJobOutputPanel( output );
+                    m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() );
+                    Thaw();
+                }
+                else
+                {
+                    // canceled
+                    m_jobsFile->RemoveOutput( output );
+                }
             }
         }
     }
