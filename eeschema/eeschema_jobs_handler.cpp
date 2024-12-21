@@ -812,29 +812,18 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
                 filename = filename.replace( forbidden_char, 1, wxS( '_' ) );
             }
 
-            //simplify the name if its single unit
-            if( symbol->GetUnitCount() > 1 )
-            {
-                filename += wxString::Format( "_%d", unit );
+            // Even single units get a unit number in the filename. This simplifies the
+            // handling of the files as they have a uniform pattern.
+            // Also avoids aliasing 'sym', unit 2 and 'sym_unit2', unit 1 to the same file.
+            filename += wxString::Format( "_unit%d", unit );
 
-                if( bodyStyle == 2 )
-                    filename += wxS( "_demorgan" );
+            if( bodyStyle == 2 )
+                filename += wxS( "_demorgan" );
 
-                fn.SetName( filename );
-                m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ),
-                                                      symbol->GetName(), unit, fn.GetFullPath() ),
-                                    RPT_SEVERITY_ACTION );
-            }
-            else
-            {
-                if( bodyStyle == 2 )
-                    filename += wxS( "_demorgan" );
-
-                fn.SetName( filename );
-                m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' to '%s'\n" ),
-                                                      symbol->GetName(), fn.GetFullPath() ),
-                                    RPT_SEVERITY_ACTION );
-            }
+            fn.SetName( filename );
+            m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ),
+                                                  symbol->GetName(), unit, fn.GetFullPath() ),
+                                RPT_SEVERITY_ACTION );
 
             // Get the symbol bounding box to fit the plot page to it
             BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle, !aSvgJob->m_includeHiddenFields );
