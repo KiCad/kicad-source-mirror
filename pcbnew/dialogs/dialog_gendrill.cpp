@@ -112,7 +112,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
 
 
 // Static members of DIALOG_GENDRILL
-int DIALOG_GENDRILL::m_UnitDrillIsInch  = true;     // Only for Excellon format
+int DIALOG_GENDRILL::m_UnitDrillIsInch  = false;     // Only for Excellon format
 int DIALOG_GENDRILL::m_ZerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::m_Mirror          = false;    // Only for Excellon format

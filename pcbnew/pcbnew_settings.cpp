@@ -331,7 +331,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_GenDrill.mirror, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "gen_drill.unit_drill_is_inch",
-            &m_GenDrill.unit_drill_is_inch, true ) );
+            &m_GenDrill.unit_drill_is_inch, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "gen_drill.use_route_for_oval_holes",
             &m_GenDrill.use_route_for_oval_holes, true ) );
