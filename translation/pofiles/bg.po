@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-03 08:00+0000\n"
+"PO-Revision-Date: 2024-12-21 22:44+0000\n"
 "Last-Translator: 109247019824 <stoyan@gmx.com>\n"
-"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/bg/>\n"
+"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: C:\\kicad\\trunk\n"
 "X-Poedit-Language: Bulgarian\n"
@@ -14316,7 +14316,7 @@ msgstr "Изтрий текущия маркер"
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:603
 #: pcbnew/dialogs/dialog_gendrill.cpp:388 pcbnew/dialogs/dialog_plot.cpp:787
 msgid "Select Output Directory"
-msgstr "Избор на Изходна Директория"
+msgstr "Изберете изходна папка"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:268
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1230
@@ -28348,9 +28348,8 @@ msgid "%s Output Options"
 msgstr "Postscript Опции"
 
 #: kicad/dialogs/panel_jobs.cpp:104
-#, fuzzy
 msgid "Select output directory"
-msgstr "Избор на Изходна Директория"
+msgstr "Изберете изходна папка"
 
 #: kicad/dialogs/panel_jobs.cpp:118
 #, fuzzy
@@ -28379,7 +28378,7 @@ msgstr "Операция по запис на файла е неуспешна."
 
 #: kicad/dialogs/panel_jobs.cpp:306
 msgid "Last run failed"
-msgstr ""
+msgstr "Последното изпълнение е завършило с грешка"
 
 #: kicad/dialogs/panel_jobs.cpp:330 kicad/dialogs/panel_jobs.cpp:793
 #, fuzzy
@@ -28388,17 +28387,15 @@ msgstr "Определени отвори"
 
 #: kicad/dialogs/panel_jobs.cpp:354
 msgid "View last run results..."
-msgstr ""
+msgstr "Резултати от последното изпълнение…"
 
 #: kicad/dialogs/panel_jobs.cpp:597 kicad/dialogs/panel_jobs.cpp:644
-#, fuzzy
 msgid "Job Types"
-msgstr "Внеси файлове"
+msgstr "Видове задачи"
 
 #: kicad/dialogs/panel_jobs.cpp:608
-#, fuzzy
 msgid "Add New Job"
-msgstr "Нова пътечка"
+msgstr "Нова задача"
 
 #: kicad/dialogs/panel_jobs.cpp:609
 #, fuzzy
