@@ -39,7 +39,8 @@ DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
 
     SetupStandardButtons();
 
-    GetSizer()->SetSizeHints( this );
+    Layout();
+    m_sizer->Fit( this );
     Centre();
 }
 
