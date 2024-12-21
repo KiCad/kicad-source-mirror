@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:48-0800\n"
-"PO-Revision-Date: 2024-12-13 08:00+0000\n"
+"PO-Revision-Date: 2024-12-21 22:44+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -42541,9 +42541,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Nome desconhecido do formado da ilha %s na camada '%s' na linha %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Adicione as camadas selecionadas à lista das camadas correspondentes."
+msgstr "Nenhuma camada de usuário para colocar a camada %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -42565,12 +42565,12 @@ msgstr "Formato inválido para o formato primitivo da ilha '%s' na linha %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Círculo com raios x e y desiguais (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "Esperava que x e y fossem iguais, mas obtive x = %f e y = %f. "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
@@ -42634,12 +42634,12 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3238
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "Tipo de forma não tratada: %d em polígono na camada %s, sequência %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "Furo inválido com %d pontos na zona da camada %s com %s líquido"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3438
 #, c-format
@@ -42647,6 +42647,8 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"O esboço parece descontínuo: o último ponto foi %s, e o ponto de início do "
+"próximo segmento é %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
 #, fuzzy, c-format
