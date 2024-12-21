@@ -98,6 +98,9 @@ public:
 private:
     void editFieldText( SCH_FIELD* aField );
 
+    void collectUnits( const EE_SELECTION& aSelection,
+                       std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>>& aCollectedUnits );
+
     ///< Set up handlers for various events.
     void setTransitions() override;
 

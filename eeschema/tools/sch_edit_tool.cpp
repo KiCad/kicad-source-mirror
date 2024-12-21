@@ -3058,34 +3058,65 @@ int SCH_EDIT_TOOL::DdAppendFile( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
+void SCH_EDIT_TOOL::collectUnits( const EE_SELECTION& aSelection,
+                                  std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>>& aCollectedUnits )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
-    SCH_COMMIT    commit( m_toolMgr );
-
-    if( selection.Empty() )
-        return 0;
-
-    for( EDA_ITEM* item : selection )
+    for( EDA_ITEM* item : aSelection )
     {
         if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            commit.Modify( symbol, m_frame->GetScreen() );
+            aCollectedUnits.insert( { symbol, m_frame->GetScreen() } );
 
-            if( aEvent.IsAction( &EE_ACTIONS::setDNP ) )
-                symbol->SetDNP( true );
+            // The attributes should be kept in sync in multi-unit parts.
+            // Of course the symbol must be annotated to collect other units.
+            if( symbol->IsAnnotated( &m_frame->GetCurrentSheet() ) )
+            {
+                wxString ref = symbol->GetRef( &m_frame->GetCurrentSheet() );
+                int      unit = symbol->GetUnit();
+                LIB_ID   libId = symbol->GetLibId();
 
-            if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) )
-                symbol->SetExcludedFromSim( true );
+                for( SCH_SHEET_PATH& sheet : m_frame->Schematic().Hierarchy() )
+                {
+                    SCH_SCREEN*              screen = sheet.LastScreen();
+                    std::vector<SCH_SYMBOL*> otherUnits;
 
-            if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) )
-                symbol->SetExcludedFromBOM( true );
+                    CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
 
-            if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) )
-                symbol->SetExcludedFromBoard( true );
+                    for( SCH_SYMBOL* otherUnit : otherUnits )
+                        aCollectedUnits.insert( { otherUnit, screen } );
+                }
+            }
         }
+    }
+}
+
+
+int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCH_COMMIT    commit( m_toolMgr );
+
+    std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>> collectedUnits;
+
+    collectUnits( selection, collectedUnits );
+
+    for( const auto& [symbol, screen] : collectedUnits )
+    {
+        commit.Modify( symbol, screen );
+
+        if( aEvent.IsAction( &EE_ACTIONS::setDNP ) )
+            symbol->SetDNP( true );
+
+        if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) )
+            symbol->SetExcludedFromSim( true );
+
+        if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) )
+            symbol->SetExcludedFromBOM( true );
+
+        if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) )
+            symbol->SetExcludedFromBoard( true );
     }
 
     if( !commit.Empty() )
@@ -3100,29 +3131,25 @@ int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
     SCH_COMMIT    commit( m_toolMgr );
 
-    if( selection.Empty() )
-        return 0;
+    std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>> collectedUnits;
 
-    for( EDA_ITEM* item : selection )
+    collectUnits( selection, collectedUnits );
+
+    for( const auto& [symbol, screen] : collectedUnits )
     {
-        if( item->Type() == SCH_SYMBOL_T )
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+        commit.Modify( symbol, screen );
 
-            commit.Modify( symbol, m_frame->GetScreen() );
+        if( aEvent.IsAction( &EE_ACTIONS::unsetDNP ) )
+            symbol->SetDNP( false );
 
-            if( aEvent.IsAction( &EE_ACTIONS::unsetDNP ) )
-                symbol->SetDNP( false );
+        if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromSimulation ) )
+            symbol->SetExcludedFromSim( false );
 
-            if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromSimulation ) )
-                symbol->SetExcludedFromSim( false );
+        if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBOM ) )
+            symbol->SetExcludedFromBOM( false );
 
-            if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBOM ) )
-                symbol->SetExcludedFromBOM( false );
-
-            if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBoard ) )
-                symbol->SetExcludedFromBoard( false );
-        }
+        if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBoard ) )
+            symbol->SetExcludedFromBoard( false );
     }
 
     if( !commit.Empty() )
@@ -3137,36 +3164,31 @@ int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
     SCH_COMMIT    commit( m_toolMgr );
 
-    if( selection.Empty() )
-        return 0;
+    std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>> collectedUnits;
 
-    for( EDA_ITEM* item : selection )
+    collectUnits( selection, collectedUnits );
+
+    for( const auto& [symbol, screen] : collectedUnits )
     {
-        if( item->Type() == SCH_SYMBOL_T )
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+        commit.Modify( symbol, screen );
 
-            commit.Modify( symbol, m_frame->GetScreen() );
+        if( aEvent.IsAction( &EE_ACTIONS::toggleDNP ) )
+            symbol->SetDNP( !symbol->GetDNP() );
 
-            if( aEvent.IsAction( &EE_ACTIONS::toggleDNP ) )
-                symbol->SetDNP( !symbol->GetDNP() );
+        if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromSimulation ) )
+            symbol->SetExcludedFromSim( !symbol->GetExcludedFromSim() );
 
-            if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromSimulation ) )
-                symbol->SetExcludedFromSim( !symbol->GetExcludedFromSim() );
+        if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBOM ) )
+            symbol->SetExcludedFromBOM( !symbol->GetExcludedFromBOM() );
 
-            if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBOM ) )
-                symbol->SetExcludedFromBOM( !symbol->GetExcludedFromBOM() );
-
-            if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBoard ) )
-                symbol->SetExcludedFromBoard( !symbol->GetExcludedFromBoard() );
-        }
+        if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBoard ) )
+            symbol->SetExcludedFromBoard( !symbol->GetExcludedFromBoard() );
     }
 
     if( !commit.Empty() )
         commit.Push( _( "Toggle Attribute" ) );
 
     return 0;
-
 }
 
 
