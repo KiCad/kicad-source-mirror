@@ -825,6 +825,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             break;
 
         case TREE_FILE_TYPE::ZIP_ARCHIVE:
+        case TREE_FILE_TYPE::PDF:
             can_edit = false;
             can_switch_to_project = false;
             can_create_new_directory = false;
