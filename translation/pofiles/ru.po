@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-21 08:00+0000\n"
+"PO-Revision-Date: 2024-12-21 22:44+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -31279,7 +31279,7 @@ msgstr "Только снизу"
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:91
 #: pcbnew/dialogs/dialog_export_step_base.cpp:93
 msgid "Only selected"
-msgstr "Только для выделенного"
+msgstr "Только выделенные"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
 msgid "Empty"
@@ -33814,12 +33814,12 @@ msgstr "Все компоненты"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:94
 msgid "Export only the component models that are selected in the PCB editor"
 msgstr ""
-"Экспортируйте только те модели компонентов, которые выбраны в редакторе "
-"печатных плат"
+"Экспортировать только модели компонентов, выделенные в редакторе печатных "
+"плат"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:98
 msgid "Components matching filter:"
-msgstr "Фильтр согласования компонентов:"
+msgstr "Компоненты соответствующие фильтру:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:103
 msgid ""
@@ -33831,7 +33831,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
 msgid "Board outline chaining tolerance:"
-msgstr "Допуск образования контура платы:"
+msgstr "Допуск формирования контура платы:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Tight (0.001 mm)"
@@ -33867,7 +33867,7 @@ msgstr "Зоны экспорта на внешних слоях проводн�
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
 msgid "Export inner conductor layers"
-msgstr "Экспорт внутренних слоев проводников"
+msgstr "Экспорт внутренних проводящих слоев"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:144
 msgid "Fuse shapes (time consuming)"
@@ -33939,7 +33939,7 @@ msgstr "Перезаписать старый файл"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:260
 msgid "Don't write P-curves to STEP file"
-msgstr "Не записывайте P-кривые в файл STEP"
+msgstr "Не записывать P-кривые в файл STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:261
 msgid ""
