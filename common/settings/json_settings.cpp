@@ -108,7 +108,7 @@ JSON_SETTINGS::~JSON_SETTINGS()
 
 wxString JSON_SETTINGS::GetFullFilename() const
 {
-    if( m_filename.BeforeLast( '.' ) == getFileExt() )
+    if( m_filename.AfterLast( '.' ) == getFileExt() )
         return m_filename;
 
     return wxString( m_filename + "." + getFileExt() );
