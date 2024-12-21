@@ -253,7 +253,12 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
         if( isIbisLoaded() && ( m_modelListBox->GetSelection() >= 0 ) )
         {
-            int  idx = m_modelListBox->GetSelection();
+            int      idx = 0;
+            wxString sel = m_modelListBox->GetStringSelection();
+
+            if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
+                idx = m_modelListBoxEntryToLibraryIdx.at( sel );
+
             auto ibismodel = dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
 
             if( ibismodel )
@@ -375,8 +380,13 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 
     if( isIbisLoaded() )
     {
-        SIM_MODEL_IBIS* ibismodel = static_cast<SIM_MODEL_IBIS*>(
-                &m_libraryModelsMgr.GetModels().at( m_modelListBox->GetSelection() ).get() );
+        int      idx = 0;
+        wxString sel = m_modelListBox->GetStringSelection();
+
+        if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
+            idx = m_modelListBoxEntryToLibraryIdx.at( sel );
+
+        auto* ibismodel = static_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels().at( idx ).get() );
 
         if( ibismodel )
         {
@@ -832,10 +842,14 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     m_rbLibraryModel->SetValue( true );
     m_libraryPathText->ChangeValue( aLibraryPath );
 
+    m_modelListBoxEntryToLibraryIdx.clear();
     wxArrayString modelNames;
 
     for( const auto& [name, model] : library()->GetModels() )
+    {
         modelNames.Add( name );
+        m_modelListBoxEntryToLibraryIdx[name] = m_modelListBoxEntryToLibraryIdx.size();
+    }
 
     modelNames.Sort();
 
@@ -1084,8 +1098,10 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
 {
     if( m_rbLibraryModel->GetValue() )
     {
-        if( library() && m_modelListBox->GetSelection() >= 0 )
-            return *library()->FindModel( m_modelListBox->GetStringSelection().ToStdString() );
+        wxString sel = m_modelListBox->GetStringSelection();
+
+        if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
+            return m_libraryModelsMgr.GetModels().at( m_modelListBoxEntryToLibraryIdx.at( sel ) ).get();
     }
     else
     {
@@ -1453,7 +1469,11 @@ void DIALOG_SIM_MODEL<T>::onWaveformChoice( wxCommandEvent& aEvent )
         if( equivalent( deviceType, SIM_MODEL::TypeInfo( type ).deviceType )
             && typeDescription == SIM_MODEL::TypeInfo( type ).description )
         {
-            int idx = m_modelListBox->GetSelection();
+            int      idx = 0;
+            wxString sel = m_modelListBox->GetStringSelection();
+
+            if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
+                idx = m_modelListBoxEntryToLibraryIdx.at( sel );
 
             auto& baseModel = static_cast<SIM_MODEL_IBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
 
