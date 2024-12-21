@@ -1965,7 +1965,7 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 
     if( dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
     {
-        if( ( m_libPin == nullptr ) && ( tmp->m_libPin == nullptr ) )
+        if( ( m_libPin == nullptr ) || ( tmp->m_libPin == nullptr ) )
             return -1;
 
         retv = m_libPin->compare( *tmp->m_libPin );
