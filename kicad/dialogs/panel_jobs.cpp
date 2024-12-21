@@ -195,11 +195,14 @@ public:
             i++;
         }
 
-        m_listBoxOnly->InsertItems( arrayStr, 0 );
-
-        for( int idx : selectedList )
+        if( arrayStr.size() != 0 )
         {
-            m_listBoxOnly->SetSelection( idx );
+            m_listBoxOnly->InsertItems( arrayStr, 0 );
+
+            for( int idx : selectedList )
+            {
+                m_listBoxOnly->SetSelection( idx );
+            }
         }
 
         m_choiceArchiveformat->AppendString( _( "Zip" ) );
