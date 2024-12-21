@@ -82,6 +82,10 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
             .help( UTF8STDSTR( _( ARG_EXCLUDE_DNP_DESC ) ) )
             .flag();
 
+    m_argParser.add_argument( ARG_INCLUDE_EXCLUDED_FROM_BOM )
+            .help( UTF8STDSTR( _( ARG_INCLUDE_EXCLUDED_FROM_BOM_DESC ) ) )
+            .flag();
+
     // Output formatting options
     m_argParser.add_argument( ARG_FIELD_DELIMITER )
             .help( UTF8STDSTR( _( ARG_FIELD_DELIMITER_DESC ) ) )
