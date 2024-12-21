@@ -824,6 +824,13 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             can_edit = false;
             break;
 
+        case TREE_FILE_TYPE::ZIP_ARCHIVE:
+            can_edit = false;
+            can_switch_to_project = false;
+            can_create_new_directory = false;
+            can_open_this_directory = false;
+            break;
+
         case TREE_FILE_TYPE::JOBSET_FILE:
             run_jobs = true;
             can_edit = false;
