@@ -96,6 +96,15 @@ private:
     bool mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 );
 
     /**
+     * helper function
+     * test if 2 segments are colinear.  Does not modify the connectivity
+     * @return true if the segments are colinear
+     * @param aSeg1 is the reference
+     * @param aSeg2 is the candidate
+     */
+    bool testMergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2, PCB_TRACK* aDummySeg = nullptr );
+
+    /**
      * @return true if a track end position is a node, i.e. a end connected
      * to more than one item.
      * @param aTrack is the track to test.
