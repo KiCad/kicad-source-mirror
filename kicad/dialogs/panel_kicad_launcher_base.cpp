@@ -14,17 +14,23 @@ PANEL_KICAD_LAUNCHER_BASE::PANEL_KICAD_LAUNCHER_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
-	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
-	m_scrolledWindow->SetScrollRate( 5, 5 );
+	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_scrolledWindow->SetScrollRate( 0, 5 );
+	wxBoxSizer* bSizerInner;
+	bSizerInner = new wxBoxSizer( wxVERTICAL );
+
 	m_toolsSizer = new wxFlexGridSizer( 0, 2, 2, 10 );
 	m_toolsSizer->SetFlexibleDirection( wxBOTH );
 	m_toolsSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	m_scrolledWindow->SetSizer( m_toolsSizer );
+	bSizerInner->Add( m_toolsSizer, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_scrolledWindow->SetSizer( bSizerInner );
 	m_scrolledWindow->Layout();
-	m_toolsSizer->Fit( m_scrolledWindow );
-	bSizer2->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 5 );
+	bSizerInner->Fit( m_scrolledWindow );
+	bSizer2->Add( m_scrolledWindow, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizer2 );

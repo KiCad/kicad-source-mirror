@@ -62,7 +62,7 @@
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND | wxALL</property>
+          <property name="flag">wxEXPAND</property>
           <property name="proportion">1</property>
           <object class="wxScrolledWindow" expanded="true">
             <property name="BottomDockable">1</property>
@@ -108,7 +108,7 @@
             <property name="pin_button">1</property>
             <property name="pos"></property>
             <property name="resize">Resizable</property>
-            <property name="scroll_rate_x">5</property>
+            <property name="scroll_rate_x">0</property>
             <property name="scroll_rate_y">5</property>
             <property name="show">1</property>
             <property name="size"></property>
@@ -117,19 +117,30 @@
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
-            <property name="window_style">wxHSCROLL|wxVSCROLL</property>
-            <object class="wxFlexGridSizer" expanded="true">
-              <property name="cols">2</property>
-              <property name="flexible_direction">wxBOTH</property>
-              <property name="growablecols"></property>
-              <property name="growablerows"></property>
-              <property name="hgap">10</property>
+            <property name="window_style">wxVSCROLL</property>
+            <object class="wxBoxSizer" expanded="true">
               <property name="minimum_size"></property>
-              <property name="name">m_toolsSizer</property>
-              <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
-              <property name="permission">protected</property>
-              <property name="rows">0</property>
-              <property name="vgap">2</property>
+              <property name="name">bSizerInner</property>
+              <property name="orient">wxVERTICAL</property>
+              <property name="permission">none</property>
+              <object class="sizeritem" expanded="true">
+                <property name="border">5</property>
+                <property name="flag">wxALL|wxEXPAND</property>
+                <property name="proportion">1</property>
+                <object class="wxFlexGridSizer" expanded="true">
+                  <property name="cols">2</property>
+                  <property name="flexible_direction">wxBOTH</property>
+                  <property name="growablecols"></property>
+                  <property name="growablerows"></property>
+                  <property name="hgap">10</property>
+                  <property name="minimum_size"></property>
+                  <property name="name">m_toolsSizer</property>
+                  <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                  <property name="permission">protected</property>
+                  <property name="rows">0</property>
+                  <property name="vgap">2</property>
+                </object>
+              </object>
             </object>
           </object>
         </object>
