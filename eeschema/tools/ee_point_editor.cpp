@@ -691,30 +691,28 @@ private:
         /*
         * Get a list of pins on a line segment
         */
-        const auto getPinsOnSeg = []( LIB_SYMBOL& aSymbol, int aUnit, const SEG& aSeg,
-                                      bool aIncludeEnds ) -> std::vector<SCH_PIN*>
-        {
-            // const BOX2I     segBox = BOX2I::ByCorners( aSeg.A, aSeg.B ).GetInflated( 1 );
-            // const EE_RTREE& rtree = m_frame->GetScreen()->Items().Overlapping( SCH_PIN_T, segBox );
-
-            std::vector<SCH_PIN*> pins;
-
-            for( SCH_PIN* pin : aSymbol.GetPins( aUnit ) )
-            {
-                // Figure out if the pin "connects" to the line
-                const VECTOR2I pinRootPos = pin->GetPinRoot();
-
-                if( aSeg.Contains( pinRootPos ) )
+        const auto getPinsOnSeg =
+                []( LIB_SYMBOL& aSymbol, int aUnit, const SEG& aSeg,
+                    bool aIncludeEnds ) -> std::vector<SCH_PIN*>
                 {
-                    if( aIncludeEnds || ( pinRootPos != aSeg.A && pinRootPos != aSeg.B ) )
-                    {
-                        pins.push_back( pin );
-                    }
-                }
-            }
+                    std::vector<SCH_PIN*> pins;
 
-            return pins;
-        };
+                    for( SCH_PIN* pin : aSymbol.GetPins( aUnit, 0 ) )
+                    {
+                        // Figure out if the pin "connects" to the line
+                        const VECTOR2I pinRootPos = pin->GetPinRoot();
+
+                        if( aSeg.Contains( pinRootPos ) )
+                        {
+                            if( aIncludeEnds || ( pinRootPos != aSeg.A && pinRootPos != aSeg.B ) )
+                            {
+                                pins.push_back( pin );
+                            }
+                        }
+                    }
+
+                    return pins;
+                };
 
         LIB_SYMBOL* const symbol = editor.GetCurSymbol();
 
@@ -723,8 +721,8 @@ private:
             if( aMoveVecs[i] == VECTOR2I( 0, 0 ) || !symbol )
                 continue;
 
-            const std::vector<SCH_PIN*> pins =
-                    getPinsOnSeg( *symbol, aEdgeUnit, aOldEdges[i], false );
+            const std::vector<SCH_PIN*> pins = getPinsOnSeg( *symbol, aEdgeUnit, aOldEdges[i],
+                                                             false );
 
             for( SCH_PIN* pin : pins )
             {
@@ -737,6 +735,7 @@ private:
         }
     }
 
+private:
     SCH_SHAPE&      m_rect;
     EDA_DRAW_FRAME& m_frame;
 };

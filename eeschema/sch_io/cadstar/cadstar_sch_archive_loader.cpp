@@ -901,7 +901,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     kiPart->SetShowPinNames( false );
                     kiPart->SetShowPinNumbers( false );
 
-                    std::vector<SCH_PIN*> pins = kiPart->GetAllLibPins();
+                    std::vector<SCH_PIN*> pins = kiPart->GetPins();
                     wxCHECK( pins.size() == 1, /*void*/ );
 
                     pins.at( 0 )->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
@@ -3318,7 +3318,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
         }
     }
 
-    for( SCH_PIN* pin : aSymbolToFix->GetPins( aGateNumber ) )
+    for( SCH_PIN* pin : aSymbolToFix->GetPins( aGateNumber, 0 ) )
     {
         auto setPinOrientation =
                 [&]( const EDA_ANGLE& aAngle )

@@ -851,7 +851,7 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetPins( int aUnit, int aBodyStyle ) const
 }
 
 
-std::vector<SCH_PIN*> LIB_SYMBOL::GetAllLibPins() const
+std::vector<SCH_PIN*> LIB_SYMBOL::GetPins() const
 {
     return GetPins( 0, 0 );
 }
@@ -878,49 +878,46 @@ SCH_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle 
 bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums, bool aTestNames,
                                    bool aTestType, bool aTestOrientation, bool aTestLength ) const
 {
-    std::vector<SCH_PIN*> thisPinList = GetAllLibPins();
-
-    for( const SCH_PIN* eachThisPin : thisPinList )
+    for( const SCH_PIN* pin : GetPins() )
     {
-        wxASSERT( eachThisPin );
-        std::vector<SCH_PIN*> otherPinList = aOtherPart.GetAllLibPins();
+        wxASSERT( pin );
         bool foundMatch = false;
 
-        for( const SCH_PIN* eachOtherPin : otherPinList )
+        for( const SCH_PIN* otherPin : aOtherPart.GetPins() )
         {
-            wxASSERT( eachOtherPin );
+            wxASSERT( otherPin );
 
             // Same unit?
-            if( eachThisPin->GetUnit() != eachOtherPin->GetUnit() )
+            if( pin->GetUnit() != otherPin->GetUnit() )
                 continue;
 
             // Same body stype?
-            if( eachThisPin->GetBodyStyle() != eachOtherPin->GetBodyStyle() )
+            if( pin->GetBodyStyle() != otherPin->GetBodyStyle() )
                 continue;
 
             // Same position?
-            if( eachThisPin->GetPosition() != eachOtherPin->GetPosition() )
+            if( pin->GetPosition() != otherPin->GetPosition() )
                 continue;
 
             // Same number?
-            if( aTestNums && ( eachThisPin->GetNumber() != eachOtherPin->GetNumber() ) )
+            if( aTestNums && ( pin->GetNumber() != otherPin->GetNumber() ) )
                 continue;
 
             // Same name?
-            if( aTestNames && ( eachThisPin->GetName() != eachOtherPin->GetName() ) )
+            if( aTestNames && ( pin->GetName() != otherPin->GetName() ) )
                 continue;
 
             // Same electrical type?
-            if( aTestType && ( eachThisPin->GetType() != eachOtherPin->GetType() ) )
+            if( aTestType && ( pin->GetType() != otherPin->GetType() ) )
                 continue;
 
             // Same orientation?
             if( aTestOrientation
-              && ( eachThisPin->GetOrientation() != eachOtherPin->GetOrientation() ) )
+              && ( pin->GetOrientation() != otherPin->GetOrientation() ) )
                 continue;
 
             // Same length?
-            if( aTestLength && ( eachThisPin->GetLength() != eachOtherPin->GetLength() ) )
+            if( aTestLength && ( pin->GetLength() != otherPin->GetLength() ) )
                 continue;
 
             foundMatch = true;
@@ -1039,16 +1036,32 @@ void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
 }
 
 
-void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList )
+void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly )
 {
     // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
     for( int id = 0; id < MANDATORY_FIELDS; ++id )
-        aList.push_back( GetFieldById( id ) );
+    {
+        SCH_FIELD* field = GetFieldById( id );
+
+        if( aVisibleOnly )
+        {
+            if( !field->IsVisible() || field->GetText().IsEmpty() )
+                continue;
+        }
+
+        aList.push_back( field );
+    }
 
     // Now grab all the rest of fields.
     for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
         SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
+
+        if( aVisibleOnly )
+        {
+            if( !field->IsVisible() || field->GetText().IsEmpty() )
+                continue;
+        }
 
         if( !field->IsMandatory() )
             aList.push_back( field );
@@ -1056,7 +1069,7 @@ void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList )
 }
 
 
-void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD>& aList )
+void LIB_SYMBOL::CopyFields( std::vector<SCH_FIELD>& aList )
 {
     // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
     for( int id = 0; id < MANDATORY_FIELDS; ++id )
@@ -1836,12 +1849,12 @@ double LIB_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
         similarity += max_similarity;
     }
 
-    for( const SCH_PIN* pin : GetAllLibPins() )
+    for( const SCH_PIN* pin : GetPins() )
     {
         totalItems += 1;
         double max_similarity = 0.0;
 
-        for( const SCH_PIN* otherPin : other.GetAllLibPins() )
+        for( const SCH_PIN* otherPin : other.GetPins() )
         {
             double temp_similarity = pin->Similarity( *otherPin );
             max_similarity = std::max( max_similarity, temp_similarity );

@@ -26,6 +26,35 @@
 
 #include <lib_id.h>
 #include <sch_item.h>
+#include <sch_field.h>
+#include <sch_pin.h>
+
+// @todo Move this to transform alone with all of the transform manipulation code.
+/// enum used in RotationMiroir()
+enum SYMBOL_ORIENTATION_T
+{
+    SYM_NORMAL,                     // Normal orientation, no rotation or mirror
+    SYM_ROTATE_CLOCKWISE,           // Rotate -90
+    SYM_ROTATE_COUNTERCLOCKWISE,    // Rotate +90
+    SYM_ORIENT_0,                   // No rotation and no mirror id SYM_NORMAL
+    SYM_ORIENT_90,                  // Rotate 90, no mirror
+    SYM_ORIENT_180,                 // Rotate 180, no mirror
+    SYM_ORIENT_270,                 // Rotate -90, no mirror
+    SYM_MIRROR_X = 0x100,           // Mirror around X axis
+    SYM_MIRROR_Y = 0x200            // Mirror around Y axis
+};
+
+
+// Cover for SYMBOL_ORIENTATION_T for property manager (in order to expose only a subset of
+// SYMBOL_ORIENTATION_T's values).
+enum SYMBOL_ORIENTATION_PROP
+{
+    SYMBOL_ANGLE_0   = SYMBOL_ORIENTATION_T::SYM_ORIENT_0,
+    SYMBOL_ANGLE_90  = SYMBOL_ORIENTATION_T::SYM_ORIENT_90,
+    SYMBOL_ANGLE_180 = SYMBOL_ORIENTATION_T::SYM_ORIENT_180,
+    SYMBOL_ANGLE_270 = SYMBOL_ORIENTATION_T::SYM_ORIENT_270
+};
+
 
 /**
  * A base class for LIB_SYMBOL and SCH_SYMBOL.
@@ -107,6 +136,10 @@ public:
     virtual const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
                                      bool aAllowExtraText ) const = 0;
 
+    virtual void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly ) = 0;
+
+    virtual std::vector<SCH_PIN*> GetPins() const = 0;
+
     /**
      * Set the offset in mils of the pin name text from the pin symbol.
      *
@@ -153,9 +186,30 @@ public:
     bool GetDNP() const { return m_DNP; }
     void SetDNP( bool aDNP ) { m_DNP = aDNP; }
 
+    virtual int GetOrientation() const { return SYM_NORMAL; }
+
+    const TRANSFORM& GetTransform() const { return m_transform; }
+    TRANSFORM& GetTransform() { return m_transform; }
+    void SetTransform( const TRANSFORM& aTransform ) { m_transform = aTransform; }
+
+    void SetPreviewUnit( int aUnit ) { m_previewUnit = aUnit; }
+    void SetPreviewBodyStyle( int aBodyStyle ) { m_previewBodyStyle = aBodyStyle; }
+
+    /**
+     * Return a bounding box for the symbol body but not the pins or fields.
+     */
+    virtual BOX2I GetBodyBoundingBox() const = 0;
+
+    /**
+     * Return a bounding box for the symbol body and pins but not the fields.
+     */
+    virtual BOX2I GetBodyAndPinsBoundingBox() const = 0;
+
     std::vector<int> ViewGetLayers() const override;
 
 protected:
+    TRANSFORM     m_transform;             ///< The rotation/mirror transformation.
+
     int           m_pinNameOffset;         ///< The offset in mils to draw the pin name.  Set to
                                            ///<   0 to draw the pin name above the pin.
     bool          m_showPinNames;
@@ -165,6 +219,9 @@ protected:
     bool          m_excludedFromBOM;
     bool          m_excludedFromBoard;
     bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
+
+    int           m_previewUnit = 1;
+    int           m_previewBodyStyle = 1;
 };
 
 #endif  //  SYMBOL_H

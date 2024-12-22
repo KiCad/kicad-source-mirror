@@ -440,7 +440,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         fprintf( d, "PACKAGE '%s'\n", TO_UTF8( formatDevice( footprintText ) ) );
         fprintf( d, "CLASS IC\n" );
 
-        std::vector<SCH_PIN*> pinList = sym->GetLibSymbolRef()->GetAllLibPins();
+        std::vector<SCH_PIN*> pinList = sym->GetLibSymbolRef()->GetPins();
 
         /*
          * We must erase redundant Pins references in pinList

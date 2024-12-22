@@ -416,7 +416,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
                 got_unit[curr_pin->GetUnit()] = true;
 
-                for( SCH_PIN* pin : symbol->GetAllLibPins() )
+                for( SCH_PIN* pin : symbol->GetPins() )
                 {
                     if( got_unit[pin->GetUnit()] )
                         continue;

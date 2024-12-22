@@ -838,7 +838,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    for( SCH_PIN* test : symbol->GetAllLibPins() )
+    for( SCH_PIN* test : symbol->GetPins() )
     {
         if( test->m_Uuid == g_lastPin )
         {

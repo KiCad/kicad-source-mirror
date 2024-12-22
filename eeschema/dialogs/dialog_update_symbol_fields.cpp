@@ -145,7 +145,7 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
 
     std::vector<SCH_FIELD> fields;
     std::vector<SCH_FIELD> result;
-    m_symbol->GetFields( fields );
+    m_symbol->CopyFields( fields );
 
     for( SCH_FIELD& field : fields )
     {

@@ -80,7 +80,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_infoBar->AddCloseButton();
 
-    for( SCH_PIN* pin : aSymbol.GetAllLibPins() )
+    for( SCH_PIN* pin : aSymbol.GetPins() )
     {
         // De Morgan conversions are equivalences, not additional items to simulate
         if( !pin->GetParentSymbol()->HasAlternateBodyStyle() || pin->GetBodyStyle() < 2 )

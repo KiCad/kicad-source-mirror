@@ -364,6 +364,13 @@ wxString SCH_PIN::GetElectricalTypeName() const
 }
 
 
+bool SCH_PIN::IsGlobalPower() const
+{
+    return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
+           && ( !IsVisible() || GetParentSymbol()->IsPower() );
+}
+
+
 bool SCH_PIN::IsVisible() const
 {
     if( !m_hidden.has_value() )

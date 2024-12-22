@@ -178,7 +178,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
         return false;
 
     // Push a copy of each field into m_updateFields
-    m_libEntry->GetFields( *m_fields );
+    m_libEntry->CopyFields( *m_fields );
 
     std::set<wxString> defined;
 

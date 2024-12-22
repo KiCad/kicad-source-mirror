@@ -70,33 +70,6 @@ typedef std::weak_ptr<LIB_SYMBOL> PART_REF;
 extern std::string toUTFTildaText( const wxString& txt );
 
 
-// @todo Move this to transform alone with all of the transform manipulation code.
-/// enum used in RotationMiroir()
-enum SYMBOL_ORIENTATION_T
-{
-    SYM_NORMAL,                     // Normal orientation, no rotation or mirror
-    SYM_ROTATE_CLOCKWISE,           // Rotate -90
-    SYM_ROTATE_COUNTERCLOCKWISE,    // Rotate +90
-    SYM_ORIENT_0,                   // No rotation and no mirror id SYM_NORMAL
-    SYM_ORIENT_90,                  // Rotate 90, no mirror
-    SYM_ORIENT_180,                 // Rotate 180, no mirror
-    SYM_ORIENT_270,                 // Rotate -90, no mirror
-    SYM_MIRROR_X = 0x100,           // Mirror around X axis
-    SYM_MIRROR_Y = 0x200            // Mirror around Y axis
-};
-
-
-// Cover for SYMBOL_ORIENTATION_T for property manager (in order to expose only a subset of
-// SYMBOL_ORIENTATION_T's values).
-enum SYMBOL_ORIENTATION_PROP
-{
-    SYMBOL_ANGLE_0   = SYMBOL_ORIENTATION_T::SYM_ORIENT_0,
-    SYMBOL_ANGLE_90  = SYMBOL_ORIENTATION_T::SYM_ORIENT_90,
-    SYMBOL_ANGLE_180 = SYMBOL_ORIENTATION_T::SYM_ORIENT_180,
-    SYMBOL_ANGLE_270 = SYMBOL_ORIENTATION_T::SYM_ORIENT_270
-};
-
-
 /**
  * Schematic symbol object.
  */
@@ -285,11 +258,6 @@ public:
 
     wxString SubReference( int aUnit, bool aAddSeparator = true ) const;
 
-    TRANSFORM& GetTransform() { return m_transform; }
-    const TRANSFORM& GetTransform() const { return m_transform; }
-
-    void SetTransform( const TRANSFORM& aTransform );
-
     /**
      * Return the number of units per package of the symbol.
      *
@@ -322,7 +290,7 @@ public:
      *
      * @return the orientation and mirror of the symbol.
      */
-    int GetOrientation() const;
+    int GetOrientation() const override;
 
     /**
      * Orientation/mirroring access for property manager.
@@ -432,12 +400,12 @@ public:
     /**
      * Return a bounding box for the symbol body but not the pins or fields.
      */
-    BOX2I GetBodyBoundingBox() const;
+    BOX2I GetBodyBoundingBox() const override;
 
     /**
      * Return a bounding box for the symbol body and pins but not the fields.
      */
-    BOX2I GetBodyAndPinsBoundingBox() const;
+    BOX2I GetBodyAndPinsBoundingBox() const override;
 
 
     //-----<Fields>-----------------------------------------------------------
@@ -479,7 +447,7 @@ public:
      * @param aVector is the vector to populate.
      * @param aVisibleOnly is used to add only the fields that are visible and contain text.
      */
-    void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly );
+    void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly ) override;
 
     /**
      * Return a vector of fields from the symbol
@@ -671,7 +639,9 @@ public:
      *
      * @return a vector of pointers (non-owning) to SCH_PINs
      */
-    std::vector<SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet = nullptr ) const;
+    std::vector<SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet ) const;
+
+    std::vector<SCH_PIN*> GetPins() const override;
 
 
     std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
@@ -915,7 +885,6 @@ private:
      */
     wxString                    m_schLibSymbolName;
 
-    TRANSFORM                   m_transform;     ///< The rotation/mirror transformation.
     std::vector<SCH_FIELD>      m_fields;        ///< Variable length list of fields.
 
     std::unique_ptr<LIB_SYMBOL> m_part;          ///< A flattened copy of the LIB_SYMBOL from the

@@ -53,7 +53,7 @@
 #include <boost/range/adaptor/reversed.hpp>
 
 #include <sch_edit_frame.h>
-#include <sch_symbol.h>
+#include <symbol.h>
 #include <sch_line.h>
 #include <sch_pin.h>
 #include <kiface_base.h>
@@ -99,9 +99,10 @@ public:
         COLLISION collision;
     };
 
-    AUTOPLACER( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScreen ) :
+    AUTOPLACER( SYMBOL* aSymbol, SCH_SCREEN* aScreen ) :
             m_screen( aScreen ),
-            m_symbol( aSymbol )
+            m_symbol( aSymbol ),
+            m_is_power_symbol( false )
     {
         m_symbol->GetFields( m_fields, /* aVisibleOnly */ true );
 
@@ -120,7 +121,8 @@ public:
         m_symbol_bbox = m_symbol->GetBodyBoundingBox();
         m_fbox_size = computeFBoxSize( /* aDynamic */ true );
 
-        m_is_power_symbol = !m_symbol->IsInNetlist();
+        if( SCH_SYMBOL* schSymbol = dynamic_cast<SCH_SYMBOL*>( m_symbol ) )
+            m_is_power_symbol = !schSymbol->IsInNetlist();
 
         if( aScreen )
             getPossibleCollisions( m_colliders );
@@ -708,7 +710,7 @@ protected:
 
 private:
     SCH_SCREEN*             m_screen;
-    SCH_SYMBOL*             m_symbol;
+    SYMBOL*                 m_symbol;
     std::vector<SCH_FIELD*> m_fields;
     std::vector<SCH_ITEM*>  m_colliders;
     BOX2I                   m_symbol_bbox;

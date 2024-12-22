@@ -1244,7 +1244,7 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
     wxString              library = GetFieldValue( aFields, SIM_LIBRARY_FIELD, aResolve );
     wxString              modelName = GetFieldValue( aFields, SIM_NAME_FIELD, aResolve );
     wxString              value = GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve );
-    std::vector<SCH_PIN*> pins = aSymbol.GetAllLibPins();
+    std::vector<SCH_PIN*> pins = aSymbol.GetPins();
 
     *aDeviceType = GetFieldValue( aFields, SIM_DEVICE_FIELD, aResolve );
     *aModelType = GetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, aResolve );
@@ -1568,7 +1568,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 
     wxString              prefix = aSymbol.GetPrefix();
     SCH_FIELD*            valueField = aSymbol.FindField( wxT( "Value" ) );
-    std::vector<SCH_PIN*> sourcePins = aSymbol.GetAllLibPins();
+    std::vector<SCH_PIN*> sourcePins = aSymbol.GetPins();
     bool                  sourcePinsSorted = false;
 
     auto lazySortSourcePins =

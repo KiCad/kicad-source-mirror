@@ -336,7 +336,7 @@ void SCH_SYMBOL::UpdatePins()
     if( !m_part )
         return;
 
-    for( SCH_PIN* libPin : m_part->GetAllLibPins() )
+    for( SCH_PIN* libPin : m_part->GetPins() )
     {
         // NW: Don't filter by unit: this data-structure is used for all instances,
         // some of which might have different units.
@@ -456,12 +456,6 @@ bool SCH_SYMBOL::HasAlternateBodyStyle() const
         return m_part->HasAlternateBodyStyle();
 
     return false;
-}
-
-
-void SCH_SYMBOL::SetTransform( const TRANSFORM& aTransform )
-{
-    m_transform = aTransform;
 }
 
 
@@ -1278,7 +1272,7 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetLibPins() const
 std::vector<SCH_PIN*> SCH_SYMBOL::GetAllLibPins() const
 {
     if( m_part )
-        return m_part->GetAllLibPins();
+        return m_part->GetPins();
 
     return std::vector<SCH_PIN*>();
 }
@@ -1327,6 +1321,12 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
     }
 
     return pins;
+}
+
+
+std::vector<SCH_PIN*> SCH_SYMBOL::GetPins() const
+{
+    return GetPins( nullptr );
 }
 
 

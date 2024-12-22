@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE( DefaultDrawings )
 {
     // default drawings exist
     BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), MANDATORY_FIELDS );
-    BOOST_CHECK_EQUAL( m_part_no_data.GetAllLibPins().size(), 0 );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetPins().size(), 0 );
 }
 
 
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE( DefaultDrawings )
 BOOST_AUTO_TEST_CASE( DefaultFields )
 {
     std::vector<SCH_FIELD> fields;
-    m_part_no_data.GetFields( fields );
+    m_part_no_data.CopyFields( fields );
 
     // Should get the 4 default fields
     BOOST_CHECK_PREDICATE( KI_TEST::AreDefaultFieldsCorrect, ( fields ) );
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE( DefaultFields )
 BOOST_AUTO_TEST_CASE( AddedFields )
 {
     std::vector<SCH_FIELD> fields;
-    m_part_no_data.GetFields( fields );
+    m_part_no_data.CopyFields( fields );
 
     // Ctor takes non-const ref (?!)
     const std::string newFieldName = "new_field";

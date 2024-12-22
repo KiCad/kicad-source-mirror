@@ -195,7 +195,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
 
                             got_unit[cur_pin->GetUnit()] = true;
 
-                            for( SCH_PIN* pin : symbol->GetAllLibPins() )
+                            for( SCH_PIN* pin : symbol->GetPins() )
                             {
                                 if( !got_unit[pin->GetUnit()]
                                         && pin->GetPosition() == cur_pin->GetPosition()

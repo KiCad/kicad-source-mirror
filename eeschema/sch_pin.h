@@ -27,7 +27,6 @@
 
 #include <pin_type.h>
 #include <sch_item.h>
-#include <symbol.h>
 
 class LIB_SYMBOL;
 class SCH_SYMBOL;
@@ -188,11 +187,7 @@ public:
      * Return whether this pin forms a global power connection: i.e., is part of a power symbol
      * and of type POWER_IN, or is a legacy invisible global power pin on a symbol.
      */
-    bool IsGlobalPower() const
-    {
-        return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
-               && ( !IsVisible() || GetParentSymbol()->IsPower() );
-    }
+    bool IsGlobalPower() const;
 
     int GetPenWidth() const override { return 0; }
 

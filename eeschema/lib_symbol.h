@@ -227,6 +227,11 @@ public:
     const BOX2I GetUnitBoundingBox( int aUnit, int aBodyStyle,
                                     bool aIgnoreHiddenFields = true ) const;
 
+    const BOX2I GetBoundingBox() const override
+    {
+        return GetUnitBoundingBox( 0, 0 );
+    }
+
     /**
      * Get the symbol bounding box excluding fields.
      *
@@ -240,9 +245,14 @@ public:
     const BOX2I GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aIncludePins,
                                     bool aIncludePrivateItems ) const;
 
-    const BOX2I GetBoundingBox() const override
+    BOX2I GetBodyBoundingBox() const override
     {
-        return GetUnitBoundingBox( 0, 0 );
+        return GetBodyBoundingBox( m_previewUnit, m_previewBodyStyle, false, false );
+    }
+
+    BOX2I GetBodyAndPinsBoundingBox() const override
+    {
+        return GetBodyBoundingBox( m_previewUnit, m_previewBodyStyle, true, false );
     }
 
     bool IsPower() const override;
@@ -275,8 +285,9 @@ public:
      *
      * @param aList - List to add fields to
      */
-    void GetFields( std::vector<SCH_FIELD*>& aList );
-    void GetFields( std::vector<SCH_FIELD>& aList );
+    void GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly = false ) override;
+
+    void CopyFields( std::vector<SCH_FIELD>& aList );
 
     /**
      * Add a field.  Takes ownership of the pointer.
@@ -403,13 +414,13 @@ public:
      * @param aBodyStyle - Symbol alternate body style of pins to collect.  Set to 0 to get pins
      *                     from any DeMorgan variant of symbol.
      */
-    std::vector<SCH_PIN*> GetPins( int aUnit = 0, int aBodyStyle = 0 ) const;
+    std::vector<SCH_PIN*> GetPins( int aUnit, int aBodyStyle ) const;
 
     /**
      * Return a list of pin pointers for all units / converts.  Used primarily for SPICE where
      * we want to treat all unit as a single part.
      */
-    std::vector<SCH_PIN*> GetAllLibPins() const;
+    std::vector<SCH_PIN*> GetPins() const override;
 
     /**
      * @return a count of pins for all units / converts.
