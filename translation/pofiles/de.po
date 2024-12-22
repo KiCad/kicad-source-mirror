@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-21 08:00+0000\n"
+"PO-Revision-Date: 2024-12-22 21:25+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -26654,7 +26654,6 @@ msgid "%s Output Options"
 msgstr "%s Ausgabeoptionen"
 
 #: kicad/dialogs/panel_jobs.cpp:104
-#, fuzzy
 msgid "Select output directory"
 msgstr "Ausgabeverzeichnis wählen"
 
@@ -26675,13 +26674,12 @@ msgid "Job Description"
 msgstr "Auftragsbeschreibung"
 
 #: kicad/dialogs/panel_jobs.cpp:300
-#, fuzzy
 msgid "Last run successful"
-msgstr "Auftrag erfolgreich"
+msgstr "Letzter Lauf erfolgreich"
 
 #: kicad/dialogs/panel_jobs.cpp:306
 msgid "Last run failed"
-msgstr ""
+msgstr "Letzter Lauf fehlgeschlagen"
 
 #: kicad/dialogs/panel_jobs.cpp:330 kicad/dialogs/panel_jobs.cpp:793
 msgid "Running jobs"
@@ -26689,7 +26687,7 @@ msgstr "Führe Aufträge aus"
 
 #: kicad/dialogs/panel_jobs.cpp:354
 msgid "View last run results..."
-msgstr ""
+msgstr "Ergebnisse des letzten Laufs anzeigen ..."
 
 #: kicad/dialogs/panel_jobs.cpp:597 kicad/dialogs/panel_jobs.cpp:644
 msgid "Job Types"
@@ -29875,19 +29873,16 @@ msgid "Copper resistivity:"
 msgstr "Kupferwiderstand:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
-#, fuzzy
 msgid "External Layer Tracks"
-msgstr "Leiterbahnen äußere Lage"
+msgstr "Leiterbahnen auf äußerer Lage"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
-#, fuzzy
 msgid "Track width (W):"
 msgstr "Leiterbahnbreite (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
-#, fuzzy
 msgid "Track thickness (H):"
 msgstr "Leiterbahndicke (H):"
 
@@ -29921,9 +29916,8 @@ msgid "W"
 msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
-#, fuzzy
 msgid "Internal Layer Tracks"
-msgstr "Leiterbahnen interne Lage"
+msgstr "Leiterbahnen auf interner Lage"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
@@ -30509,7 +30503,6 @@ msgstr ""
 "\tR1 + (R2 | R3) ...\teine beliebige Kombination der oben genannten\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the track widths will be calculated "
 "to suit.\n"
@@ -30543,20 +30536,19 @@ msgstr ""
 "\n"
 "Der bestimmende Wert ist fett dargestellt.\n"
 "\n"
-"Die Berechnungen gelten für Ströme bis zu 35 A (extern) bzw. 17,5 A "
-"(intern), Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil "
-"(10 mm).\n"
+"Die Berechnungen gelten für Ströme bis zu 35 A (extern) bzw. 17,5 A (intern)"
+", Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil (10 mm).\n"
 "\n"
 "Die zugehörige Formel aus IPC 2221 lautet\n"
 "<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; "
 "H)<sup>0,725</sup>___</center>\n"
 "wobei:<br>\n"
 "___I___ = Maximaler Strom in A<br>\n"
-"___&Delta;T___ = Temperaturanstieg über die Umgebungstemperatur in &deg;"
-"C<br>\n"
+"___&Delta;T___ = Temperaturanstieg über die Umgebungstemperatur in &deg;C<br>"
+"\n"
 "___W___ = Breite in mil<br>\n"
 "___H___ = Dicke (Höhe) in mil<br>\n"
-"___K___ = 0,024 für interne Leiterbahnen oder 0,048 für externe "
+"___K___ = 0,024 für innenliegende Leiterbahnen oder 0,048 für außenliegende "
 "Leiterbahnen\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
@@ -34259,9 +34251,8 @@ msgid "Do you want to cancel the export process?"
 msgstr "Soll der Exportprozess abgebrochen werden?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Freiraum-Bericht"
+msgstr "Export abbrechen"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -37260,9 +37251,8 @@ msgid "(%d known DRC violations; %d exclusions)"
 msgstr "(%d bekannte DRC-Verstöße; %d Ausnahmen)"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
-#, fuzzy
 msgid "Track gap must be greater than 0."
-msgstr "Der Abstand der Leiterbahn muss größer als 0 sein."
+msgstr "Der Leiterbahnabstand muss größer als 0 sein."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:65
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
@@ -37280,9 +37270,8 @@ msgid "Via gap:"
 msgstr "Via-Abstand:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
-#, fuzzy
 msgid "Via gap same as track gap"
-msgstr "Via-Abstand gleich Leiterbahn-Abstand"
+msgstr "Viaabstand gleich Leiterbahnabstand"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:56
 msgid "Differential Pair Dimensions"
@@ -37336,13 +37325,12 @@ msgid "Jump over obstacles"
 msgstr "Hindernisse überspringen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
-#, fuzzy
 msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
 "Wenn aktiviert, versucht der Router, kollidierende Leiterbahnen hinter feste "
-"Hindernisse (z. B. Pads) zu verschieben, anstatt die Kollision zu "
+"Hindernisse (z.B. Pads) zu verschieben, anstatt die Kollision zu "
 "\"reflektieren\""
 
 # FIXME
@@ -37361,13 +37349,14 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Wenn die neue Leiterbahn die gleiche Verbindung wie eine bereits vorhandene "
+"Leiterbahn hat, wird letztere entfernt."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
 msgstr "Padverbindungen optimieren"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:88
-#, fuzzy
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
@@ -38611,9 +38600,8 @@ msgid "Show Button"
 msgstr "Schaltfläche anzeigen"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
-#, fuzzy
 msgid "Plugin"
-msgstr "Plugins"
+msgstr "Plugin"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
 msgid "Move Up"
@@ -41668,14 +41656,12 @@ msgid "Text thickness out of range"
 msgstr "Schriftstärke außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:262
-#, fuzzy
 msgid "Track length out of range"
 msgstr "Leiterbahnlänge außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:266
-#, fuzzy
 msgid "Skew between tracks out of range"
-msgstr "Versatz zwischen Leiterbahnen außerhalb des zulässigen Bereichs"
+msgstr "Leiterbahnversatz außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:271
 msgid "Too many or too few vias on a connection"
@@ -43872,9 +43858,8 @@ msgid "Add Microwave Inductor"
 msgstr "Mikrowellen-Induktivität hinzufügen"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Length of Track:"
-msgstr "Länge der Leiterbahn:"
+msgstr "Leiterbahnlänge:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:377
 msgid "Requested length < minimum length"
@@ -47210,11 +47195,8 @@ msgid "Routing"
 msgstr "Route Leiterbahn"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
-#, fuzzy
 msgid "Please select a differential pair track you want to tune."
-msgstr ""
-"Bitte eine Differenzialpaar-Leiterbahn auswählen, welche abgestimmt werden "
-"soll."
+msgstr "Bitte eine Differenzialpaar-Leiterbahn zum Abstimmen auswählen."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:68
 msgid ""
