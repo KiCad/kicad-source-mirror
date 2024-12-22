@@ -231,7 +231,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     m_notebook->Freeze();
     m_launcher->SetClosable( false );
-    m_notebook->AddPage( m_launcher, "Editors", false );
+    m_notebook->AddPage( m_launcher, _( "Editors" ), false );
     m_notebook->Thaw();
 
     m_auimgr.AddPane( m_notebook, EDA_PANE()
