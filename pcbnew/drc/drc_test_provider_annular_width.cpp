@@ -44,107 +44,6 @@
     - pad stack support (different IAR/OAR values depending on layer)
 */
 
-/**
- * Find the nearest collision point between two shape line chains.
- *
- * @note This collision test only tests the shape line chain segments (outline) by setting the
- *       shape closed status to false.
- *
- * @param aLhs is the left hand shape line chain to run the collision test on.
- * @param aRhs is the right hand shape line chain the run the collision test against \a aLhs.
- * @param aClearance is the collision clearance between the two shape line changes.
- * @param[out] aDistance is an optional pointer to store the nearest collision distance.
- * @param[out] aPt1 is an optional pointer to store the nearest collision point.
- * @retrun true if a collision occurs between \a aLhs and \a aRhs otherwise false.
- */
-static inline bool collide( const SHAPE_LINE_CHAIN& aLhs, const SHAPE_LINE_CHAIN& aRhs,
-                            int aClearance, int* aDistance = nullptr, VECTOR2I* aPt1 = nullptr )
-{
-    wxCHECK( aLhs.PointCount() && aRhs.PointCount(), false );
-
-    VECTOR2I pt1;
-    bool retv = false;
-    int dist = std::numeric_limits<int>::max();
-    int tmp = dist;
-
-    SHAPE_LINE_CHAIN lhs( aLhs );
-    SHAPE_LINE_CHAIN rhs( aRhs );
-
-    lhs.SetClosed( false );
-    lhs.Append( lhs.CPoint( 0 ) );
-    rhs.SetClosed( false );
-    rhs.Append( rhs.CPoint( 0 ) );
-
-    for( int i = 0; i < rhs.SegmentCount(); i ++ )
-    {
-        if( lhs.Collide( rhs.CSegment( i ), tmp, &tmp, &pt1 ) )
-        {
-            retv = true;
-
-            if( tmp < dist )
-                dist = tmp;
-
-            if( aDistance )
-                *aDistance = dist;
-
-            if( aPt1 )
-                *aPt1 = pt1;
-        }
-    }
-
-    return retv;
-}
-
-
-static bool collide( const SHAPE_POLY_SET& aLhs, const SHAPE_LINE_CHAIN& aRhs, int aClearance,
-                     int* aDistance = nullptr, VECTOR2I* aPt1 = nullptr )
-{
-    VECTOR2I pt1;
-    bool retv = false;
-    int tmp = std::numeric_limits<int>::max();
-    int dist = tmp;
-
-    for( int i = 0; i < aLhs.OutlineCount(); i++ )
-    {
-        if( collide( aLhs.Outline( i ), aRhs, aClearance, &tmp, &pt1 ) )
-        {
-            retv = true;
-
-            if( tmp < dist )
-            {
-                dist = tmp;
-
-                if( aDistance )
-                    *aDistance = dist;
-
-                if( aPt1 )
-                    *aPt1 = pt1;
-            }
-        }
-
-        for( int j = 0; j < aLhs.HoleCount( i ); i++ )
-        {
-            if( collide( aLhs.CHole( i, j ), aRhs, aClearance, &tmp, &pt1 ) )
-            {
-                retv = true;
-
-                if( tmp < dist )
-                {
-                    dist = tmp;
-
-                    if( aDistance )
-                        *aDistance = dist;
-
-                    if( aPt1 )
-                        *aPt1 = pt1;
-                }
-            }
-        }
-    }
-
-    return retv;
-}
-
 
 class DRC_TEST_PROVIDER_ANNULAR_WIDTH : public DRC_TEST_PROVIDER
 {
@@ -246,7 +145,8 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, item, nullptr,
                                                           UNDEFINED_LAYER );
 
-                int  annularWidth = 0;
+                int  minAnnularWidth = INT_MAX;
+                int  maxAnnularWidth = 0;
                 int  v_min = 0;
                 int  v_max = 0;
                 bool fail_min = false;
@@ -258,7 +158,9 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 case PCB_VIA_T:
                 {
                     PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                    annularWidth = ( via->GetWidth() - via->GetDrillValue() ) / 2;
+                    int annularWidth = ( via->GetWidth() - via->GetDrillValue() ) / 2;
+                    minAnnularWidth = std::min( minAnnularWidth, annularWidth );
+                    maxAnnularWidth = std::max( maxAnnularWidth, annularWidth );
                     break;
                 }
 
@@ -266,6 +168,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 {
                     PAD* pad = static_cast<PAD*>( item );
                     bool handled = false;
+                    int annularWidth = 0;
 
                     if( !pad->HasHole() || pad->GetAttribute() != PAD_ATTRIB::PTH )
                         return true;
@@ -345,6 +248,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                                && ( annularWidth < constraint.Value().Min() ) )
                         {
                             SHAPE_POLY_SET otherPadOutline;
+                            SHAPE_POLY_SET otherPadHoles;
                             SHAPE_POLY_SET slotPolygon;
 
                             slot->TransformToPolygon( slotPolygon, 0, ERROR_INSIDE );
@@ -356,44 +260,46 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                                                                      UNDEFINED_LAYER, 0, maxError,
                                                                      ERROR_OUTSIDE );
 
-                                sameNumPad->TransformHoleToPolygon( otherPadOutline, 0, maxError,
+                                sameNumPad->TransformHoleToPolygon( otherPadHoles, 0, maxError,
                                                                     ERROR_INSIDE );
+                            }
 
+                            otherPadOutline.BooleanSubtract( otherPadHoles, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
-                                // If the pad hole under test intersects with another pad outline,
-                                // the annular width calculated above is used.
-                                bool intersects = false;
+                            // If the pad hole under test intersects with another pad outline,
+                            // the annular width calculated above is used.
+                            bool intersects = false;
 
-                                for( int i = 0; i < otherPadOutline.OutlineCount() && !intersects; i++ )
+                            for( int i = 0; i < otherPadOutline.OutlineCount() && !intersects; i++ )
+                            {
+                                intersects |= slotPolygon.COutline( 0 ).Intersects( otherPadOutline.COutline( i ) );
+
+                                for( int j = 0; j < otherPadOutline.HoleCount( i ) && !intersects; j++ )
                                 {
-                                    intersects |= slotPolygon.COutline( 0 ).Intersects( otherPadOutline.COutline( i ) );
-                                    if( intersects )
-                                        continue;
-
-                                    for( int j = 0; j < otherPadOutline.HoleCount( i ) && !intersects; j++ )
-                                    {
-                                        intersects |= slotPolygon.COutline( 0 ).Intersects( otherPadOutline.CHole( i, j ) );
-                                        if( intersects )
-                                            continue;
-                                    }
+                                    intersects |= slotPolygon.COutline( 0 ).Intersects( otherPadOutline.CHole( i, j ) );
                                 }
+                            }
 
-                                if( intersects )
-                                    continue;
-
+                            if( !intersects )
+                            {
                                 // Determine the effective annular width if the pad hole under
                                 // test lies withing the boundary of another pad outline.
                                 int effectiveWidth = std::numeric_limits<int>::max();
 
-                                if( collide( otherPadOutline, slotPolygon.Outline( 0 ),
-                                             effectiveWidth, &effectiveWidth ) )
+                                for( int ii = 0; ii < otherPadOutline.OutlineCount(); ii++ )
                                 {
-                                    if( effectiveWidth > annularWidth )
-                                        annularWidth = effectiveWidth;
+                                    if( slot->Collide( &otherPadOutline.Outline( ii ), 0 ) )
+                                    {
+                                        if( effectiveWidth > annularWidth )
+                                            annularWidth = effectiveWidth;
+                                    }
                                 }
                             }
                         }
                     }
+
+                    maxAnnularWidth = std::max( maxAnnularWidth, annularWidth );
+                    minAnnularWidth = std::min( minAnnularWidth, annularWidth );
 
                     break;
                 }
@@ -408,13 +314,13 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 if( constraint.Value().HasMin() )
                 {
                     v_min = constraint.Value().Min();
-                    fail_min = annularWidth < v_min;
+                    fail_min = minAnnularWidth < v_min;
                 }
 
                 if( constraint.Value().HasMax() )
                 {
                     v_max = constraint.Value().Max();
-                    fail_max = annularWidth > v_max;
+                    fail_max = maxAnnularWidth > v_max;
                 }
 
                 if( fail_min || fail_max )
@@ -427,7 +333,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         msg = formatMsg( _( "(%s min annular width %s; actual %s)" ),
                                          constraint.GetName(),
                                          v_min,
-                                         annularWidth );
+                                         minAnnularWidth );
                     }
 
                     if( fail_max )
@@ -435,7 +341,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         msg = formatMsg( _( "(%s max annular width %s; actual %s)" ),
                                          constraint.GetName(),
                                          v_max,
-                                         annularWidth );
+                                         maxAnnularWidth );
                     }
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
