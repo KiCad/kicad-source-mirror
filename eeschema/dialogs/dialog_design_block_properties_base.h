@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -9,24 +9,25 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
+#include <wx/string.h>
+#include <wx/font.h>
 #include <wx/grid.h>
+#include <wx/gdicmn.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,17 +41,17 @@ class DIALOG_DESIGN_BLOCK_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		WX_GRID* m_fieldsGrid;
+		STD_BITMAP_BUTTON* m_bpAdd;
+		STD_BITMAP_BUTTON* m_bpMoveUp;
+		STD_BITMAP_BUTTON* m_bpMoveDown;
+		STD_BITMAP_BUTTON* m_bpDelete;
 		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textName;
 		wxStaticText* m_staticTextKeywords;
 		wxTextCtrl* m_textKeywords;
 		wxStaticText* m_staticTextDescription;
 		wxTextCtrl* m_textDescription;
-		WX_GRID* m_fieldsGrid;
-		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpMoveUp;
-		wxBitmapButton* m_bpMoveDown;
-		wxBitmapButton* m_bpDelete;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
@@ -66,7 +67,7 @@ class DIALOG_DESIGN_BLOCK_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Design Block Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,637 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Design Block Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_DESIGN_BLOCK_PROPERTIES_BASE();
 
