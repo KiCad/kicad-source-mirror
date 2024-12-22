@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:48-0800\n"
-"PO-Revision-Date: 2024-12-05 17:00+0000\n"
+"PO-Revision-Date: 2024-12-22 21:25+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -42639,9 +42639,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Unbekannter Pad-Form-Name \"%s\" auf Lage \"%s\" in Zeile %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Fügt ausgewählte Lagen zur Liste der übereinstimmenden Lagen hinzu."
+msgstr "Keine Benutzerlage vorhanden um ihr Lage %s zu zuordnen"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -42663,12 +42663,14 @@ msgstr "Nicht erkannte Pad-Grundform \"%s\" in Zeile %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Kreis mit ungleichen x- und y-Radien (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
 msgstr ""
+"Für x und y wurden identische Werte erwartet, tatsächlich ist x = %f und y = "
+"%f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
@@ -42705,6 +42707,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
+"In Zeile %z fehlt für Referenzbezeichner %s entweder X, Y oder die Rotation "
+". Dies könnte ein unbestücktes Bauteil sein."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2627
 #, c-format
@@ -42731,12 +42735,12 @@ msgstr "Erwarte Ätzdaten auf Kupferlage. Zeile auf Lage \"%s\" gefunden"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3238
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "Unbehandelter Formtyp %d in Polygon auf Lage %s, seq %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "Ungültiges Loch mit %d Punkten in Zone auf Lage %s mit Netz %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3438
 #, c-format
@@ -42744,11 +42748,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Umriss scheint unterbrochen zu sein: der letzte Punkt war %s, Startpunkt des "
+"nächsten Segmentes ist %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Ungültiger Schaltplanpinname"
+msgstr "Ungültiger Formtyp %d in Zonenumrandung"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
