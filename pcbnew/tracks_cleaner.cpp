@@ -570,6 +570,9 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             return tracks;
         };
 
+        // The idea here is to parallelize the loop that does not modify the connectivity
+        // and extract all of the pairs of segments that might be merged.  Then, perform
+        // the actual merge in the main loop.
         thread_pool& tp = GetKiCadThreadPool();
         auto merge_returns = tp.parallelize_loop( 0, m_brd->Tracks().size(), track_loop );
 
