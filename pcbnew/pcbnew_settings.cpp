@@ -349,7 +349,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Export2581.units, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "export_2581.precision",
-            &m_Export2581.precision, 3 ) );
+            &m_Export2581.precision, 6 ) );
 
     m_params.emplace_back( new PARAM<int>( "export_2581.version",
             &m_Export2581.version, 1 ) );

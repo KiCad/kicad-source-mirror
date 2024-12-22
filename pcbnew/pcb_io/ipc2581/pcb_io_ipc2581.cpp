@@ -2923,7 +2923,7 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     m_board = aBoard;
     m_units_str = "MILLIMETER";
     m_scale = 1.0 / PCB_IU_PER_MM;
-    m_sigfig = 4;
+    m_sigfig = 6;
 
     if( auto it = aProperties->find( "units" ); it != aProperties->end() )
     {

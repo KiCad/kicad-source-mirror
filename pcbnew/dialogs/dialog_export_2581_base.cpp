@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -43,46 +43,46 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("File Format") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer;
-	fgSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer = new wxFlexGridSizer( 0, 2, 5, 5 );
 	fgSizer->AddGrowableCol( 1 );
 	fgSizer->SetFlexibleDirection( wxBOTH );
 	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_lblUnits = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblUnits->Wrap( -1 );
-	fgSizer->Add( m_lblUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_lblUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_choiceUnitsChoices[] = { _("Millimeters"), _("Inches") };
 	int m_choiceUnitsNChoices = sizeof( m_choiceUnitsChoices ) / sizeof( wxString );
 	m_choiceUnits = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnitsNChoices, m_choiceUnitsChoices, 0 );
 	m_choiceUnits->SetSelection( 0 );
-	fgSizer->Add( m_choiceUnits, 0, wxALL|wxEXPAND, 5 );
+	fgSizer->Add( m_choiceUnits, 0, wxEXPAND, 5 );
 
 	m_lblPrecision = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblPrecision->Wrap( -1 );
 	m_lblPrecision->SetToolTip( _("The number of values following the decimal separator") );
 
-	fgSizer->Add( m_lblPrecision, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_lblPrecision, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_precision = new wxSpinCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 2, 16, 3 );
+	m_precision = new wxSpinCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 4, 10, 6 );
 	m_precision->SetToolTip( _("The number of values following the decimal separator") );
 
-	fgSizer->Add( m_precision, 0, wxALL|wxEXPAND, 5 );
+	fgSizer->Add( m_precision, 0, wxEXPAND, 5 );
 
 	m_lblVersion = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Version:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblVersion->Wrap( -1 );
-	fgSizer->Add( m_lblVersion, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer->Add( m_lblVersion, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_versionChoiceChoices[] = { _("B"), _("C") };
 	int m_versionChoiceNChoices = sizeof( m_versionChoiceChoices ) / sizeof( wxString );
 	m_versionChoice = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_versionChoiceNChoices, m_versionChoiceChoices, 0 );
 	m_versionChoice->SetSelection( 1 );
-	fgSizer->Add( m_versionChoice, 0, wxALL|wxEXPAND, 5 );
+	fgSizer->Add( m_versionChoice, 0, wxEXPAND, 5 );
 
 	m_cbCompress = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Compress output"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbCompress->SetToolTip( _("Compress output into 'zip' file") );
 
-	fgSizer->Add( m_cbCompress, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer->Add( m_cbCompress, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
 
 
 	sbSizer1->Add( fgSizer, 3, wxEXPAND|wxALL, 5 );
@@ -94,7 +94,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("BOM Columns") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgSizer4 = new wxFlexGridSizer( 0, 2, 5, 5 );
 	fgSizer4->AddGrowableCol( 1 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -103,7 +103,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	m_lblOEM->Wrap( -1 );
 	m_lblOEM->SetToolTip( _("Part ID number used internally during design.\nThis number must be unique to each part.") );
 
-	fgSizer4->Add( m_lblOEM, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer4->Add( m_lblOEM, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	wxString m_oemRefChoices[] = { _("Generate Unique") };
 	int m_oemRefNChoices = sizeof( m_oemRefChoices ) / sizeof( wxString );
@@ -117,7 +117,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	m_staticText6->Wrap( -1 );
 	m_staticText6->SetToolTip( _("Column containing the manufacturer part number") );
 
-	fgSizer4->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer4->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	wxString m_choiceMPNChoices[] = { _("Omit") };
 	int m_choiceMPNNChoices = sizeof( m_choiceMPNChoices ) / sizeof( wxString );
@@ -129,7 +129,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText7 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Manufacturer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
-	fgSizer4->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer4->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	wxString m_choiceMfgChoices[] = { _("N/A") };
 	int m_choiceMfgNChoices = sizeof( m_choiceMfgChoices ) / sizeof( wxString );
@@ -141,7 +141,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText8 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Distributor P/N:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
-	fgSizer4->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer4->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_choiceDistPNChoices[] = { _("Omit") };
 	int m_choiceDistPNNChoices = sizeof( m_choiceDistPNChoices ) / sizeof( wxString );
@@ -153,13 +153,13 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText9 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Distributor:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	fgSizer4->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer4->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textDistributor = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, _("N/A"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	fgSizer4->Add( m_textDistributor, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	sbSizer2->Add( fgSizer4, 1, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
+	sbSizer2->Add( fgSizer4, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizer3->Add( sbSizer2, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );

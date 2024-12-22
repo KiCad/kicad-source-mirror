@@ -50,7 +50,7 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
     m_argParser.add_argument( ARG_PRECISION )
             .help( std::string( "Precision" ) )
             .scan<'i', int>()
-            .default_value( 3 )
+            .default_value( 6 )
             .metavar( "PRECISION" );
 
     m_argParser.add_argument( ARG_COMPRESS )

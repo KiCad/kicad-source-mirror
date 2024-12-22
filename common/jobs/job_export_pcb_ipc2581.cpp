@@ -41,7 +41,7 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
     m_drawingSheet(),
     m_units( IPC2581_UNITS::MILLIMETERS ),
     m_version( IPC2581_VERSION::C ),
-    m_precision( 3 ),
+    m_precision( 6 ),
     m_compress( false ),
     m_colInternalId(),
     m_colMfgPn(),
