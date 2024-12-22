@@ -247,7 +247,7 @@ bool SCH_EDIT_FRAME::AddDesignBlockLibrary( const wxString&         aFilename,
 
     wxString type = DESIGN_BLOCK_IO_MGR::ShowType( lib_type );
 
-    // KiCad lib is our default guess.  So it might not have the .kicad_blocks extension
+    // KiCad lib is our default guess.  So it might not have the .blocks extension
     // In this case, the extension is part of the library name
     if( lib_type == DESIGN_BLOCK_IO_MGR::KICAD_SEXP
         && fn.GetExt() != FILEEXT::KiCadDesignBlockLibPathExtension )
