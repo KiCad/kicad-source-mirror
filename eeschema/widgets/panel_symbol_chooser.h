@@ -44,18 +44,18 @@ struct PICKED_SYMBOL;
 class PANEL_SYMBOL_CHOOSER : public wxPanel
 {
 public:
-/**
- * Create dialog to choose symbol.
- *
- * @param aFrame  the parent frame (usually a SCH_EDIT_FRAME or SYMBOL_CHOOSER_FRAME)
- * @param aParent the parent window (usually a DIALOG_SHIM or SYMBOL_CHOOSER_FRAME)
- * @param aAllowFieldEdits  if false, all functions that allow the user to edit fields
- *                          (currently just footprint selection) will not be available.
- * @param aShowFootprints   if false, all footprint preview and selection features are
- *                          disabled. This forces aAllowFieldEdits false too.
- * @param aAcceptHandler a handler to be called on double-click of a footprint
- * @param aEscapeHandler a handler to be called on <ESC>
- */
+    /**
+     * Create dialog to choose symbol.
+     *
+     * @param aFrame  the parent frame (usually a SCH_EDIT_FRAME or SYMBOL_CHOOSER_FRAME)
+     * @param aParent the parent window (usually a DIALOG_SHIM or SYMBOL_CHOOSER_FRAME)
+     * @param aAllowFieldEdits  if false, all functions that allow the user to edit fields
+     *                          (currently just footprint selection) will not be available.
+     * @param aShowFootprints   if false, all footprint preview and selection features are
+     *                          disabled. This forces aAllowFieldEdits false too.
+     * @param aAcceptHandler a handler to be called on double-click of a footprint
+     * @param aEscapeHandler a handler to be called on <ESC>
+     */
     PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aParent,
                           const SYMBOL_LIBRARY_FILTER* aFilter,
                           std::vector<PICKED_SYMBOL>& aHistoryList,

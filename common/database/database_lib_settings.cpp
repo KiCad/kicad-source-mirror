@@ -22,6 +22,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
+#include <core/kicad_algo.h>
 #include <json_common.h>
 
 #include <database/database_lib_settings.h>
@@ -36,8 +37,11 @@ DATABASE_FIELD_MAPPING::DATABASE_FIELD_MAPPING( std::string aColumn, std::string
                                                 bool aVisibleOnAdd, bool aVisibleInChooser,
                                                 bool aShowName, bool aInheritProperties ) :
         column( aColumn ),
-        name( aName ), name_wx( aName.c_str(), wxConvUTF8 ), visible_on_add( aVisibleOnAdd ),
-        visible_in_chooser( aVisibleInChooser ), show_name( aShowName ),
+        name( aName ),
+        name_wx( aName.c_str(), wxConvUTF8 ),
+        visible_on_add( aVisibleOnAdd ),
+        visible_in_chooser( aVisibleInChooser ),
+        show_name( aShowName ),
         inherit_properties( aInheritProperties )
 {
 }
@@ -53,89 +57,86 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
 
     m_params.emplace_back( new PARAM<std::string>( "source.password", &m_Source.password, "" ) );
 
-    m_params.emplace_back(
-            new PARAM<std::string>( "source.connection_string", &m_Source.connection_string, "" ) );
+    m_params.emplace_back( new PARAM<std::string>( "source.connection_string",
+                                                   &m_Source.connection_string, "" ) );
 
     m_params.emplace_back( new PARAM<int>( "source.timeout_seconds", &m_Source.timeout, 2 ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
-        "libraries",
-        [&]() -> nlohmann::json
-        {
-            // TODO: implement this; libraries are read-only from KiCad at the moment
-            return {};
-        },
-        [&]( const nlohmann::json aObj )
-        {
-            m_Tables.clear();
-
-            if( !aObj.is_array() )
-                return;
-
-            for( const nlohmann::json& entry : aObj )
+            "libraries",
+            [&]() -> nlohmann::json
             {
-                if( entry.empty() || !entry.is_object() )
-                    continue;
+                // TODO: implement this; libraries are read-only from KiCad at the moment
+                return {};
+            },
+            [&]( const nlohmann::json aObj )
+            {
+                m_Tables.clear();
 
-                DATABASE_LIB_TABLE table;
+                if( !aObj.is_array() )
+                    return;
 
-                table.name           = entry["name"].get<std::string>();
-                table.table          = entry["table"].get<std::string>();
-                table.key_col        = entry["key"].get<std::string>();
-                table.symbols_col    = entry["symbols"].get<std::string>();
-                table.footprints_col = entry["footprints"].get<std::string>();
-
-                // Sanitize library display names; currently only `/` is removed because we use it
-                // as a separator and allow it in symbol names.
-                table.name.erase( std::remove( table.name.begin(), table.name.end(), '/' ),
-                                  table.name.end() );
-
-                if( entry.contains( "properties" ) && entry["properties"].is_object() )
+                for( const nlohmann::json& entry : aObj )
                 {
-                    const nlohmann::json& pj = entry["properties"];
+                    if( entry.empty() || !entry.is_object() )
+                        continue;
 
-                    table.properties.description = fetchOrDefault<std::string>( pj, "description" );
+                    DATABASE_LIB_TABLE table;
 
-                    table.properties.footprint_filters =
-                            fetchOrDefault<std::string>( pj, "footprint_filters" );
+                    table.name           = entry["name"].get<std::string>();
+                    table.table          = entry["table"].get<std::string>();
+                    table.key_col        = entry["key"].get<std::string>();
+                    table.symbols_col    = entry["symbols"].get<std::string>();
+                    table.footprints_col = entry["footprints"].get<std::string>();
 
-                    table.properties.keywords = fetchOrDefault<std::string>( pj, "keywords" );
+                    // Sanitize library display names; currently only `/` is removed because we
+                    // use it as a separator and allow it in symbol names.
+                    alg::delete_matching( table.name, '/' );
 
-                    table.properties.exclude_from_bom =
-                            fetchOrDefault<std::string>( pj, "exclude_from_bom" );
-
-                    table.properties.exclude_from_board =
-                            fetchOrDefault<std::string>( pj, "exclude_from_board" );
-
-                    table.properties.exclude_from_sim =
-                            fetchOrDefault<std::string>( pj, "exclude_from_sim" );
-                }
-
-                if( entry.contains( "fields" ) && entry["fields"].is_array() )
-                {
-                    for( const nlohmann::json& fieldJson : entry["fields"] )
+                    if( entry.contains( "properties" ) && entry["properties"].is_object() )
                     {
-                        if( fieldJson.empty() || !fieldJson.is_object() )
-                            continue;
+                        const nlohmann::json& propJson = entry["properties"];
 
-                        std::string column  = fetchOrDefault<std::string>( fieldJson, "column" );
-                        std::string name    = fetchOrDefault<std::string>( fieldJson, "name" );
-                        bool visible_on_add = fetchOrDefault<bool>( fieldJson, "visible_on_add" );
-                        bool visible_in_chooser =
-                                fetchOrDefault<bool>( fieldJson, "visible_in_chooser" );
-                        bool show_name = fetchOrDefault<bool>( fieldJson, "show_name" );
-                        bool inherit   = fetchOrDefault<bool>( fieldJson, "inherit_properties" );
+                        table.properties.description =
+                                    fetchOrDefault<std::string>( propJson, "description" );
 
-                        table.fields.emplace_back(
-                                DATABASE_FIELD_MAPPING( column, name, visible_on_add,
-                                                        visible_in_chooser, show_name, inherit ) );
+                        table.properties.footprint_filters =
+                                    fetchOrDefault<std::string>( propJson, "footprint_filters" );
+
+                        table.properties.keywords =
+                                    fetchOrDefault<std::string>( propJson, "keywords" );
+
+                        table.properties.exclude_from_bom =
+                                    fetchOrDefault<std::string>( propJson, "exclude_from_bom" );
+
+                        table.properties.exclude_from_board =
+                                    fetchOrDefault<std::string>( propJson, "exclude_from_board" );
+
+                        table.properties.exclude_from_sim =
+                                    fetchOrDefault<std::string>( propJson, "exclude_from_sim" );
                     }
-                }
 
-                m_Tables.emplace_back( std::move( table ) );
-            }
-        },
-        {} ) );
+                    if( entry.contains( "fields" ) && entry["fields"].is_array() )
+                    {
+                        for( const nlohmann::json& fieldJson : entry["fields"] )
+                        {
+                            if( fieldJson.empty() || !fieldJson.is_object() )
+                                continue;
+
+                            table.fields.emplace_back( DATABASE_FIELD_MAPPING(
+                                    fetchOrDefault<std::string>( fieldJson, "column" ),
+                                    fetchOrDefault<std::string>( fieldJson, "name" ),
+                                    fetchOrDefault<bool>( fieldJson, "visible_on_add" ),
+                                    fetchOrDefault<bool>( fieldJson, "visible_in_chooser" ),
+                                    fetchOrDefault<bool>( fieldJson, "show_name" ),
+                                    fetchOrDefault<bool>( fieldJson, "inherit_properties" ) ) );
+                        }
+                    }
+
+                    m_Tables.emplace_back( std::move( table ) );
+                }
+            },
+            {} ) );
 
     m_params.emplace_back( new PARAM<int>( "cache.max_size", &m_Cache.max_size, 256 ) );
 

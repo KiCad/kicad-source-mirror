@@ -148,7 +148,7 @@ public:
     bool GetExcludedFromBoard() const { return m_excludedFromBoard; }
 
     /**
-     * Set or clear the 'Do Not Populate' flaga
+     * Set or clear the 'Do Not Populate' flag.
      */
     bool GetDNP() const { return m_DNP; }
     void SetDNP( bool aDNP ) { m_DNP = aDNP; }
