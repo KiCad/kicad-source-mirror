@@ -123,7 +123,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
 {
     // These documents at one time failed to catch DRC errors that they should have
 
-    std::vector< std::pair<wxString, int> > tests =
+    std::vector<std::pair<wxString, int>> tests =
     {
         { "issue1358",  2 },
         { "issue2512",  5 },
@@ -145,7 +145,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "intersectingzones", 1 }, // zones are too close to each other
         { "fill_bad",   1 },        // zone max BBox was too small
         { "issue17967/issue17967", 1}, // Arc dp coupling
-        { "issue18878", 9 }
+        { "issue18878", 9 },
+        { "issue19325/issue19325", 4 }, // Overlapping pad annular ring calculation
     };
 
     for( const auto& [testName, expectedErrors] : tests )
