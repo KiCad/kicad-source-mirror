@@ -219,7 +219,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     wxSize client_size = GetClientSize();
     m_notebook = new wxAuiNotebook( this, wxID_ANY, wxPoint( client_size.x, client_size.y ),
-                                    FromDIP( wxSize( 610, 590 ) ),
+                                    FromDIP( wxSize( 700, 590 ) ),
                                     wxAUI_NB_TOP | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_TAB_MOVE
                                             | wxAUI_NB_SCROLL_BUTTONS | wxNO_BORDER );
 
