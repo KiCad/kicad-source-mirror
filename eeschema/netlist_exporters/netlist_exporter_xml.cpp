@@ -368,19 +368,19 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
             }
 
-            if( symbol->GetExcludedFromBOM() )
+            if( symbol->GetExcludedFromBOM() || sheet.GetExcludedFromBOM() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
             }
 
-            if( symbol->GetExcludedFromBoard() )
+            if( symbol->GetExcludedFromBoard() || sheet.GetExcludedFromBoard() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
             }
 
-            if( symbol->GetDNP() )
+            if( symbol->GetDNP() || sheet.GetDNP() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );

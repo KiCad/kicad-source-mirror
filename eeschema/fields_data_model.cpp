@@ -555,11 +555,17 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         if( !m_filter.IsEmpty() && !WildCompareString( m_filter, ref.GetFullRef(), false ) )
             continue;
 
-        if( m_excludeDNP && ref.GetSymbol()->GetDNP() )
+        if( m_excludeDNP && ( ref.GetSymbol()->GetDNP()
+                              || ref.GetSheetPath().GetDNP() ) )
+        {
             continue;
+        }
 
-        if( !m_includeExcluded && ref.GetSymbol()->GetExcludedFromBOM() )
+        if( !m_includeExcluded && ( ref.GetSymbol()->GetExcludedFromBOM()
+                                    || ref.GetSheetPath().GetExcludedFromBOM() ) )
+        {
             continue;
+        }
 
         // Check if the symbol if on the current sheet or, in the sheet path somewhere
         // depending on scope
