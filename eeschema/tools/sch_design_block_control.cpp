@@ -21,12 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <tool/library_editor_control.h>
-#include <wildcards_and_files_ext.h>
-#include <bitmaps/bitmap_types.h>
-#include <confirm.h>
-#include <kidialog.h>
-#include <gestfich.h> // To open with a text editor
-#include <wx/filedlg.h>
 #include <sch_design_block_control.h>
 #include <design_block_pane.h>
 #include <panel_design_block_chooser.h>
@@ -73,19 +67,21 @@ bool SCH_DESIGN_BLOCK_CONTROL::Init()
 
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
-    ctxMenu.AddItem( EE_ACTIONS::placeDesignBlock, isDesignBlock, 1);
-    ctxMenu.AddItem( ACTIONS::pinLibrary, unpinnedLib, 1 );
-    ctxMenu.AddItem( ACTIONS::unpinLibrary, pinnedLib, 1 );
+    ctxMenu.AddItem( ACTIONS::pinLibrary,                    unpinnedLib, 1 );
+    ctxMenu.AddItem( ACTIONS::unpinLibrary,                  pinnedLib, 1 );
+    ctxMenu.AddItem( ACTIONS::newLibrary,                    !isDesignBlock, 1 );
     ctxMenu.AddSeparator( 1 );
 
-    ctxMenu.AddItem( EE_ACTIONS::editDesignBlockProperties,     isDesignBlock, 10 );
-    ctxMenu.AddItem( ACTIONS::newLibrary,                       SELECTION_CONDITIONS::ShowAlways, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::saveSheetAsDesignBlock,        isInLibrary, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::saveSelectionAsDesignBlock,    isInLibrary, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::deleteDesignBlock,             isDesignBlock, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::placeDesignBlock,           isDesignBlock, 50 );
+    ctxMenu.AddSeparator( 50 );
 
-    ctxMenu.AddSeparator( 400 );
-    ctxMenu.AddItem( ACTIONS::hideLibraryTree, SELECTION_CONDITIONS::ShowAlways, 400 );
+    ctxMenu.AddItem( EE_ACTIONS::editDesignBlockProperties,  isDesignBlock, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::saveSheetAsDesignBlock,     isInLibrary, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::saveSelectionAsDesignBlock, isInLibrary, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::deleteDesignBlock,          isDesignBlock, 100 );
+    ctxMenu.AddSeparator( 100 );
+
+    ctxMenu.AddItem( ACTIONS::hideLibraryTree,               SELECTION_CONDITIONS::ShowAlways, 400 );
 
     return true;
 }
