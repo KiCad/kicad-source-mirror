@@ -461,7 +461,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
     updateBuiltinModelWidgets( model );
     updateModelParamsTab( model );
     updateModelCodeTab( model );
-    updatePinAssignments( model, false );
+    updatePinAssignments( model, model != m_prevModel );
 
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_REFERENCE_FIELD );
 
