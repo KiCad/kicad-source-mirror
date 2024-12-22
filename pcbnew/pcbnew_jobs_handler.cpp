@@ -87,6 +87,7 @@
 #include <dialogs/dialog_plot.h>
 
 #include "pcbnew_scripting_helpers.h"
+#include <locale_io.h>
 
 
 #ifdef _WIN32
@@ -812,8 +813,10 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
         sheetPath = aPdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
-    PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName, aPdfJob->GetFullOutputPath(), sheetName,
-                                                          sheetPath );
+    LOCALE_IO dummy;
+    PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
+                                                          aPdfJob->GetFullOutputPath(),
+                                                          sheetName, sheetPath );
 
     if( plotter )
     {
@@ -924,14 +927,19 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
             sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
         // We are feeding it one layer at the start here to silence a logic check
-        GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer,
-                                                                    layerName, fn.GetFullPath(),
-                                                                    sheetName, sheetPath );
+        GERBER_PLOTTER* plotter;
+        {
+            LOCALE_IO dummy;
+            plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer,
+                                                        layerName, fn.GetFullPath(),
+                                                        sheetName, sheetPath );
+        }
 
         if( plotter )
         {
             m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullPath() ),
                                 RPT_SEVERITY_ACTION );
+            LOCALE_IO dummy;
             PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
             plotter->EndPlot();
         }
