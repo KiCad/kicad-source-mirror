@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20240620)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "f461a5d8-fc6d-4642-8e2f-877b228249af")
 	(paper "A4")
 	(title_block
@@ -63,7 +63,8 @@
 			(symbol "+3,3V_0_0"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "+3.3V"
 						(effects
 							(font
@@ -108,7 +109,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "kit-coldfire_schlib:C"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -235,7 +238,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_20X2"
 			(pin_names
-				(offset 0.254) hide)
+				(offset 0.254)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1019,7 +1024,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_2X2"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1155,7 +1162,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_6"
 			(pin_names
-				(offset 0.762) hide)
+				(offset 0.762)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1393,7 +1402,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -1414,7 +1424,9 @@
 		)
 		(symbol "kit-coldfire_schlib:LED"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1559,7 +1571,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "kit-coldfire_schlib:R"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
 			)
@@ -1607,7 +1621,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "R? SM0603 SM0805 R?-* SM1206"
+			(property "ki_fp_filters" "R? SM0603 SM0805 R?-* SM1206 R_*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2846,7 +2860,8 @@
 				)
 				(pin power_in line
 					(at -13.97 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -2864,7 +2879,8 @@
 				)
 				(pin power_in line
 					(at -11.43 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -2882,7 +2898,8 @@
 				)
 				(pin power_in line
 					(at -11.43 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -2900,7 +2917,8 @@
 				)
 				(pin power_in line
 					(at -8.89 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -2918,7 +2936,8 @@
 				)
 				(pin power_in line
 					(at -8.89 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -2936,7 +2955,8 @@
 				)
 				(pin power_in line
 					(at -6.35 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -2954,7 +2974,8 @@
 				)
 				(pin power_in line
 					(at -6.35 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -2972,7 +2993,8 @@
 				)
 				(pin power_in line
 					(at -3.81 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -2990,7 +3012,8 @@
 				)
 				(pin power_in line
 					(at -3.81 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -3008,7 +3031,8 @@
 				)
 				(pin power_in line
 					(at -1.27 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3026,7 +3050,8 @@
 				)
 				(pin power_in line
 					(at -1.27 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -3044,7 +3069,8 @@
 				)
 				(pin power_in line
 					(at 1.27 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3062,7 +3088,8 @@
 				)
 				(pin power_in line
 					(at 1.27 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -3080,7 +3107,8 @@
 				)
 				(pin power_in line
 					(at 3.81 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3098,7 +3126,8 @@
 				)
 				(pin power_in line
 					(at 3.81 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -3116,7 +3145,8 @@
 				)
 				(pin power_in line
 					(at 6.35 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3134,7 +3164,8 @@
 				)
 				(pin power_in line
 					(at 6.35 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -3152,7 +3183,8 @@
 				)
 				(pin power_in line
 					(at 8.89 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3170,7 +3202,8 @@
 				)
 				(pin power_in line
 					(at 8.89 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -3188,7 +3221,8 @@
 				)
 				(pin power_in line
 					(at 11.43 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3206,7 +3240,8 @@
 				)
 				(pin power_in line
 					(at 11.43 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -3224,7 +3259,8 @@
 				)
 				(pin power_in line
 					(at 13.97 86.36 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3242,7 +3278,8 @@
 				)
 				(pin power_in line
 					(at 13.97 -88.9 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -4738,7 +4775,7 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 111.76) (xy 91.44 111.76)
+			(xy 78.74 111.76) (xy 91.44 111.76)
 		)
 		(stroke
 			(width 0)
@@ -4978,7 +5015,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 88.9) (xy 139.7 88.9)
+			(xy 154.94 88.9) (xy 139.7 88.9)
 		)
 		(stroke
 			(width 0)
@@ -5178,7 +5215,7 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 114.3) (xy 91.44 114.3)
+			(xy 78.74 114.3) (xy 91.44 114.3)
 		)
 		(stroke
 			(width 0)
@@ -5218,7 +5255,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 99.06) (xy 139.7 99.06)
+			(xy 154.94 99.06) (xy 139.7 99.06)
 		)
 		(stroke
 			(width 0)
@@ -5328,7 +5365,7 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 119.38) (xy 91.44 119.38)
+			(xy 78.74 119.38) (xy 91.44 119.38)
 		)
 		(stroke
 			(width 0)
@@ -5378,7 +5415,7 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 116.84) (xy 91.44 116.84)
+			(xy 78.74 116.84) (xy 91.44 116.84)
 		)
 		(stroke
 			(width 0)
@@ -5398,7 +5435,7 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 109.22) (xy 91.44 109.22)
+			(xy 78.74 109.22) (xy 91.44 109.22)
 		)
 		(stroke
 			(width 0)
@@ -5408,7 +5445,7 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 33.02) (xy 193.04 33.02)
+			(xy 177.8 33.02) (xy 187.96 33.02)
 		)
 		(stroke
 			(width 0)
@@ -5418,7 +5455,7 @@
 	)
 	(wire
 		(pts
-			(xy 139.7 55.88) (xy 161.29 55.88)
+			(xy 139.7 55.88) (xy 156.21 55.88)
 		)
 		(stroke
 			(width 0)
@@ -5428,7 +5465,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 60.96) (xy 139.7 60.96)
+			(xy 156.21 60.96) (xy 139.7 60.96)
 		)
 		(stroke
 			(width 0)
@@ -5528,7 +5565,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 101.6) (xy 139.7 101.6)
+			(xy 154.94 101.6) (xy 139.7 101.6)
 		)
 		(stroke
 			(width 0)
@@ -5608,7 +5645,7 @@
 	)
 	(wire
 		(pts
-			(xy 139.7 68.58) (xy 161.29 68.58)
+			(xy 139.7 68.58) (xy 156.21 68.58)
 		)
 		(stroke
 			(width 0)
@@ -5618,7 +5655,7 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 30.48) (xy 177.8 30.48)
+			(xy 187.96 30.48) (xy 177.8 30.48)
 		)
 		(stroke
 			(width 0)
@@ -5838,7 +5875,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 86.36) (xy 139.7 86.36)
+			(xy 154.94 86.36) (xy 139.7 86.36)
 		)
 		(stroke
 			(width 0)
@@ -5858,7 +5895,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 96.52) (xy 139.7 96.52)
+			(xy 154.94 96.52) (xy 139.7 96.52)
 		)
 		(stroke
 			(width 0)
@@ -6068,7 +6105,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 93.98) (xy 139.7 93.98)
+			(xy 154.94 93.98) (xy 139.7 93.98)
 		)
 		(stroke
 			(width 0)
@@ -6088,7 +6125,7 @@
 	)
 	(wire
 		(pts
-			(xy 139.7 66.04) (xy 161.29 66.04)
+			(xy 139.7 66.04) (xy 156.21 66.04)
 		)
 		(stroke
 			(width 0)
@@ -6118,7 +6155,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 91.44) (xy 139.7 91.44)
+			(xy 154.94 91.44) (xy 139.7 91.44)
 		)
 		(stroke
 			(width 0)
@@ -6258,7 +6295,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 58.42) (xy 139.7 58.42)
+			(xy 156.21 58.42) (xy 139.7 58.42)
 		)
 		(stroke
 			(width 0)
@@ -6428,7 +6465,6 @@
 	)
 	(label "XIL_D19"
 		(at 77.47 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6438,8 +6474,7 @@
 		(uuid "00765f4e-e970-4819-8c5c-d4bfcb270b9d")
 	)
 	(label "XIL_D32"
-		(at 78.74 73.66 0)
-		(fields_autoplaced yes)
+		(at 77.47 73.66 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6449,19 +6484,17 @@
 		(uuid "056864ed-ce6e-4ac2-992a-5fb045769803")
 	)
 	(label "XIL_D24"
-		(at 142.24 172.72 0)
-		(fields_autoplaced yes)
+		(at 153.67 172.72 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "0aaadba2-cb0f-4396-908d-e4f576d59ab4")
 	)
 	(label "XIL_D34"
-		(at 78.74 68.58 0)
-		(fields_autoplaced yes)
+		(at 77.47 68.58 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6471,30 +6504,27 @@
 		(uuid "0ab66dba-820b-4fa9-9ef7-26114af0b69f")
 	)
 	(label "XIL_DOUT"
-		(at 36.83 63.5 0)
-		(fields_autoplaced yes)
+		(at 54.61 63.5 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "0d676df7-a556-4c8a-a63e-21b2ba1063ed")
 	)
 	(label "XIL_RTS"
-		(at 179.07 33.02 0)
-		(fields_autoplaced yes)
+		(at 187.96 33.02 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "11a1d056-438e-4b5b-ace0-dd06d08ab46c")
 	)
 	(label "XIL_D36"
-		(at 78.74 48.26 0)
-		(fields_autoplaced yes)
+		(at 77.47 48.26 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6505,7 +6535,6 @@
 	)
 	(label "XIL_D30"
 		(at 78.74 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6515,19 +6544,17 @@
 		(uuid "1452cc7b-2d0c-4a6c-8a14-8d23c51002a1")
 	)
 	(label "XIL_D23"
-		(at 142.24 177.8 0)
-		(fields_autoplaced yes)
+		(at 153.67 177.8 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "14e1365e-9f6a-4a84-8703-5ceadcee1f2b")
 	)
 	(label "XIL_D10"
 		(at 77.47 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6538,7 +6565,6 @@
 	)
 	(label "XIL_D8"
 		(at 209.55 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6549,7 +6575,6 @@
 	)
 	(label "XIL_D9"
 		(at 209.55 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6559,30 +6584,27 @@
 		(uuid "22f6de7e-c404-438c-97e7-a8c12ed36262")
 	)
 	(label "XIL_D26"
-		(at 142.24 137.16 0)
-		(fields_autoplaced yes)
+		(at 153.67 137.16 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "260ba85b-165e-47ee-9be0-44f8f2b53b9a")
 	)
 	(label "XIL_D8"
-		(at 142.24 134.62 0)
-		(fields_autoplaced yes)
+		(at 153.67 134.62 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "28a08441-9c44-47dd-8370-8c17352d5685")
 	)
 	(label "XIL_D16"
 		(at 209.55 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6592,52 +6614,47 @@
 		(uuid "29c0241d-d85d-42ea-8fc3-6ef5573fa1de")
 	)
 	(label "XIL_D20"
-		(at 140.97 157.48 0)
-		(fields_autoplaced yes)
+		(at 153.67 157.48 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "2b28dd9e-1a76-4a15-8aa4-8cacfbc21bec")
 	)
 	(label "XIL_D22"
-		(at 246.38 60.96 0)
-		(fields_autoplaced yes)
+		(at 257.81 60.96 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "2bf03a29-7332-4900-8822-d06c05666c44")
 	)
 	(label "XIL_D36"
-		(at 246.38 96.52 0)
-		(fields_autoplaced yes)
+		(at 257.81 96.52 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "2c1a4efb-d460-4415-b939-0ddc912ac943")
 	)
 	(label "XIL_D9"
-		(at 142.24 124.46 0)
-		(fields_autoplaced yes)
+		(at 153.67 124.46 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "2e4933b7-1734-4275-8d0d-7d21396368d6")
 	)
 	(label "XIL_D16"
 		(at 77.47 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6647,19 +6664,17 @@
 		(uuid "2f0b6b0a-2a6d-44f5-b754-3a2cfcc76984")
 	)
 	(label "XIL_D0"
-		(at 140.97 119.38 0)
-		(fields_autoplaced yes)
+		(at 153.67 119.38 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "2f719436-18e1-485c-a27a-52078ef3e4aa")
 	)
 	(label "TCK"
 		(at 71.12 22.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6670,7 +6685,6 @@
 	)
 	(label "XIL_D6"
 		(at 209.55 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6680,19 +6694,17 @@
 		(uuid "35f5949f-4272-478d-9c1d-6d76679519c5")
 	)
 	(label "XIL_D24"
-		(at 246.38 66.04 0)
-		(fields_autoplaced yes)
+		(at 257.81 66.04 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "3af06be5-e307-4c7f-9a09-fe8dceba3eb5")
 	)
 	(label "LED_TEST1"
 		(at 212.09 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6702,19 +6714,17 @@
 		(uuid "42ebdff2-bb5f-47f7-8120-80b4e54725d6")
 	)
 	(label "XIL_D28"
-		(at 140.97 127 0)
-		(fields_autoplaced yes)
+		(at 153.67 127 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "4437012a-7e98-4136-99d1-5d65a965ace5")
 	)
 	(label "TMS"
 		(at 71.12 27.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6724,19 +6734,17 @@
 		(uuid "4609b34d-93e0-4a56-8b2d-9bdde8872fc6")
 	)
 	(label "XIL_D33"
-		(at 246.38 88.9 0)
-		(fields_autoplaced yes)
+		(at 257.81 88.9 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "472b7916-3e46-4c6c-a15b-a89513d55d8f")
 	)
 	(label "XIL_D19"
 		(at 209.55 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6747,7 +6755,6 @@
 	)
 	(label "TDO"
 		(at 71.12 20.32 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6757,19 +6764,17 @@
 		(uuid "5152d19f-d696-4a5d-a331-31ad09b8e3d9")
 	)
 	(label "XIL_D22"
-		(at 142.24 160.02 0)
-		(fields_autoplaced yes)
+		(at 153.67 160.02 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "59b4cf95-bfe9-4f09-9d08-d2e16086fd21")
 	)
 	(label "XIL_D2"
 		(at 209.55 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6779,19 +6784,17 @@
 		(uuid "5dfaa0bd-b062-4b28-b6ae-fc3a48563899")
 	)
 	(label "XIL_CCLK"
-		(at 36.83 58.42 0)
-		(fields_autoplaced yes)
+		(at 54.61 58.42 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "610aaab9-9192-4bbd-8d7a-234885d96200")
 	)
 	(label "XIL_D17"
 		(at 77.47 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6801,41 +6804,37 @@
 		(uuid "61d6e306-23d7-4acf-8228-d0821430be4e")
 	)
 	(label "XIL_RTS"
-		(at 143.51 99.06 0)
-		(fields_autoplaced yes)
+		(at 154.94 99.06 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "62bd9bd6-0ae2-4257-a8f7-2a3b6c9e251c")
 	)
 	(label "XIL_D7"
-		(at 142.24 139.7 0)
-		(fields_autoplaced yes)
+		(at 153.67 139.7 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "6503799a-c92f-4445-9579-18a011843215")
 	)
 	(label "XIL_CTS"
-		(at 179.07 30.48 0)
-		(fields_autoplaced yes)
+		(at 187.96 30.48 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "65d00bb6-5f2c-4ab4-9408-4668bb0f1197")
 	)
 	(label "TDI"
 		(at 71.12 25.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6845,8 +6844,7 @@
 		(uuid "6cfe5820-f617-4460-b79c-7003c70d4d79")
 	)
 	(label "XIL_D33"
-		(at 78.74 66.04 0)
-		(fields_autoplaced yes)
+		(at 77.47 66.04 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6856,19 +6854,17 @@
 		(uuid "6e902047-f53d-419e-837d-47f096dedac3")
 	)
 	(label "XIL_D27"
-		(at 140.97 132.08 0)
-		(fields_autoplaced yes)
+		(at 153.67 132.08 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "74ae2b02-a76b-48f3-8bae-eb95f8088897")
 	)
 	(label "XIL_D18"
 		(at 209.55 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6878,19 +6874,17 @@
 		(uuid "75ae3aef-e648-408f-9729-f778f92bbc50")
 	)
 	(label "XIL_D28"
-		(at 246.38 76.2 0)
-		(fields_autoplaced yes)
+		(at 257.81 76.2 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "77e88094-65fc-415b-a3ce-a1e9bfa0d238")
 	)
 	(label "+3,3V_OUT"
 		(at 243.84 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6900,30 +6894,27 @@
 		(uuid "7c65a2f7-0631-4b4c-be59-7bb5a7bb4703")
 	)
 	(label "XIL_D4"
-		(at 142.24 180.34 0)
-		(fields_autoplaced yes)
+		(at 153.67 180.34 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "7d93438d-1f58-4b58-8a6b-4a2c38a5abf0")
 	)
 	(label "XIL_D31"
-		(at 246.38 83.82 0)
-		(fields_autoplaced yes)
+		(at 257.81 83.82 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "80ae5ded-5a80-422d-b5e0-6ac0132c12b4")
 	)
 	(label "XIL_D3"
 		(at 209.55 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6933,63 +6924,57 @@
 		(uuid "83368f7c-1129-40f6-b66b-430d232c4e7e")
 	)
 	(label "XIL_CCLK"
-		(at 143.51 86.36 0)
-		(fields_autoplaced yes)
+		(at 154.94 86.36 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "857c80ef-1365-4ed4-843e-df5ca6ab995a")
 	)
 	(label "LED_TEST2"
-		(at 143.51 68.58 0)
-		(fields_autoplaced yes)
+		(at 156.21 68.58 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "870338cb-dc16-4436-babe-2495b832204d")
 	)
 	(label "XIL_D5"
-		(at 140.97 175.26 0)
-		(fields_autoplaced yes)
+		(at 153.67 175.26 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8d735fdf-70d6-4d69-899c-44ce3caf6435")
 	)
 	(label "XIL_D20"
-		(at 246.38 55.88 0)
-		(fields_autoplaced yes)
+		(at 257.81 55.88 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8d9e798d-ff2d-40b8-8f0b-0c0b69138859")
 	)
 	(label "XIL_D3"
-		(at 142.24 152.4 0)
-		(fields_autoplaced yes)
+		(at 153.67 152.4 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8eb5a9fa-9fc2-4539-ac1a-3fa4cbd8881b")
 	)
 	(label "XIL_D11"
 		(at 78.74 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7000,7 +6985,6 @@
 	)
 	(label "XIL_D7"
 		(at 209.55 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7011,7 +6995,6 @@
 	)
 	(label "XIL_D14"
 		(at 209.55 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7022,7 +7005,6 @@
 	)
 	(label "XIL_D13"
 		(at 209.55 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7032,19 +7014,17 @@
 		(uuid "91aa7e4c-57ae-4cfb-9907-7ed4b3839d06")
 	)
 	(label "XIL_INIT"
-		(at 36.83 83.82 0)
-		(fields_autoplaced yes)
+		(at 54.61 83.82 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9271189a-9eb8-4d6f-8284-d7043ec4b18c")
 	)
 	(label "XIL_D15"
 		(at 77.47 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7055,7 +7035,6 @@
 	)
 	(label "LED_TEST2"
 		(at 212.09 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7065,19 +7044,17 @@
 		(uuid "9cf44113-5a53-417c-9a12-93b04d05de0d")
 	)
 	(label "XIL_DOUT"
-		(at 143.51 91.44 0)
-		(fields_autoplaced yes)
+		(at 154.94 91.44 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9f39176f-1aeb-4b78-a33e-8e5039357a6c")
 	)
 	(label "XIL_D35"
-		(at 78.74 53.34 0)
-		(fields_autoplaced yes)
+		(at 77.47 53.34 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7087,19 +7064,17 @@
 		(uuid "a95d7c5e-b874-4239-afe5-0070641e1df8")
 	)
 	(label "XIL_IRQ1"
-		(at 143.51 55.88 0)
-		(fields_autoplaced yes)
+		(at 156.21 55.88 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "aad8c816-c21c-4921-8338-2448a65c8c99")
 	)
 	(label "XIL_D29"
 		(at 78.74 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7109,52 +7084,47 @@
 		(uuid "ad78a75f-3074-42f0-8a38-eabaa474a3c7")
 	)
 	(label "XIL_D34"
-		(at 246.38 91.44 0)
-		(fields_autoplaced yes)
+		(at 257.81 91.44 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "afba48e3-dec0-4469-9664-00310cd02a23")
 	)
 	(label "XIL_D1"
-		(at 142.24 144.78 0)
-		(fields_autoplaced yes)
+		(at 153.67 144.78 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "b144a74f-0ee9-421f-bbd7-2b0f2c172e0a")
 	)
 	(label "XIL_CTS"
-		(at 36.83 68.58 0)
-		(fields_autoplaced yes)
+		(at 54.61 68.58 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "b975de50-b85d-43fc-899a-e1882e9729ce")
 	)
 	(label "XIL_D32"
-		(at 246.38 86.36 0)
-		(fields_autoplaced yes)
+		(at 257.81 86.36 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "bb4f989f-92c7-4185-bc00-ed10911740dd")
 	)
 	(label "XIL_D18"
 		(at 77.47 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7164,30 +7134,27 @@
 		(uuid "be8f3c5e-9589-4bae-acaa-97200eb5195d")
 	)
 	(label "XIL_IRQ2"
-		(at 143.51 58.42 0)
-		(fields_autoplaced yes)
+		(at 156.21 58.42 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "bfc1ee09-0708-4d38-9ecb-14782c07d3b8")
 	)
 	(label "XIL_DATA"
-		(at 143.51 101.6 0)
-		(fields_autoplaced yes)
+		(at 154.94 101.6 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c0c3f469-dc70-41de-8034-65536e79fecf")
 	)
 	(label "XIL_D10"
 		(at 209.55 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7197,41 +7164,37 @@
 		(uuid "c2e316a0-d75d-4c50-81c7-7718fd27b518")
 	)
 	(label "XIL_DATA"
-		(at 36.83 73.66 0)
-		(fields_autoplaced yes)
+		(at 54.61 73.66 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c3386a67-8d3a-4dec-bdee-fab0f57f0606")
 	)
 	(label "XIL_D6"
-		(at 142.24 167.64 0)
-		(fields_autoplaced yes)
+		(at 153.67 167.64 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c4b58af5-19be-494b-b7c9-49aac0f3367b")
 	)
 	(label "LED_TEST1"
-		(at 143.51 66.04 0)
-		(fields_autoplaced yes)
+		(at 156.21 66.04 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c5f589fd-3849-499f-820f-445cdfc775e1")
 	)
 	(label "XIL_D13"
 		(at 77.47 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7242,7 +7205,6 @@
 	)
 	(label "XIL_D12"
 		(at 78.74 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7253,7 +7215,6 @@
 	)
 	(label "XIL_D12"
 		(at 209.55 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7264,7 +7225,6 @@
 	)
 	(label "XIL_D4"
 		(at 209.55 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7275,7 +7235,6 @@
 	)
 	(label "XIL_D11"
 		(at 209.55 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7285,107 +7244,97 @@
 		(uuid "c9bdd61d-85c8-443f-93e1-075162395715")
 	)
 	(label "XIL_SPI_CLK"
-		(at 143.51 93.98 0)
-		(fields_autoplaced yes)
+		(at 154.94 93.98 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "cbe995b6-46a9-42ff-851d-8e47d64d6cda")
 	)
 	(label "XIL_D29"
-		(at 246.38 78.74 0)
-		(fields_autoplaced yes)
+		(at 257.81 78.74 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "cc5a9fe7-40af-4f12-a578-cfff51425574")
 	)
 	(label "XIL_INIT"
-		(at 143.51 60.96 0)
-		(fields_autoplaced yes)
+		(at 156.21 60.96 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "cc6b134f-bf91-4329-bbbc-ef15da469cc9")
 	)
 	(label "XIL_D25"
-		(at 246.38 68.58 0)
-		(fields_autoplaced yes)
+		(at 257.81 68.58 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "cd2a9edb-7245-454b-abb5-42427b6c5127")
 	)
 	(label "XIL_DIN"
-		(at 36.83 60.96 0)
-		(fields_autoplaced yes)
+		(at 54.61 60.96 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "d3a52b00-e445-4753-8dc1-c7076d60f2e7")
 	)
 	(label "XIL_D25"
-		(at 142.24 165.1 0)
-		(fields_autoplaced yes)
+		(at 153.67 165.1 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "d759bc35-ed55-486e-bd8f-b4354442dcd2")
 	)
 	(label "XIL_IRQ1"
-		(at 36.83 78.74 0)
-		(fields_autoplaced yes)
+		(at 54.61 78.74 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "d943a538-d5b1-4d8b-bada-2ae46b76e9b7")
 	)
 	(label "XIL_DIN"
-		(at 143.51 88.9 0)
-		(fields_autoplaced yes)
+		(at 154.94 88.9 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "da0b6688-ee69-4ef7-970d-9b3da93e3fa6")
 	)
 	(label "XIL_D27"
-		(at 246.38 73.66 0)
-		(fields_autoplaced yes)
+		(at 257.81 73.66 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "dd8c2516-6dbb-4b13-997e-43c1f01f6956")
 	)
 	(label "XIL_D15"
 		(at 209.55 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7395,41 +7344,37 @@
 		(uuid "de3ebf9b-d1b0-4279-a500-95d6eb8ced46")
 	)
 	(label "XIL_IRQ2"
-		(at 36.83 81.28 0)
-		(fields_autoplaced yes)
+		(at 54.61 81.28 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "de4c3781-631c-4521-99dd-bc99ba132fda")
 	)
 	(label "XIL_D21"
-		(at 246.38 58.42 0)
-		(fields_autoplaced yes)
+		(at 257.81 58.42 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "df9c777a-ebf7-492b-9418-07a68b166fa1")
 	)
 	(label "XIL_D2"
-		(at 142.24 154.94 0)
-		(fields_autoplaced yes)
+		(at 153.67 154.94 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "dfabb1eb-8a20-488a-b461-ff7cd8c7acd1")
 	)
 	(label "XIL_D14"
 		(at 77.47 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7440,7 +7385,6 @@
 	)
 	(label "XIL_D5"
 		(at 209.55 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7451,7 +7395,6 @@
 	)
 	(label "XIL_D17"
 		(at 209.55 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7461,52 +7404,47 @@
 		(uuid "e77a7e0c-424c-4333-ba29-3e50d2507c34")
 	)
 	(label "XIL_D35"
-		(at 246.38 93.98 0)
-		(fields_autoplaced yes)
+		(at 257.81 93.98 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "e89f9938-6461-45ff-ab2f-ac67d8d3eb40")
 	)
 	(label "XIL_D23"
-		(at 246.38 63.5 0)
-		(fields_autoplaced yes)
+		(at 257.81 63.5 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ed8c6815-aa96-445c-a826-044b6d6ebea0")
 	)
 	(label "XIL_CTS"
-		(at 143.51 96.52 0)
-		(fields_autoplaced yes)
+		(at 154.94 96.52 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ef786822-ad64-42f4-a734-29e704f67050")
 	)
 	(label "XIL_SPI_CLK"
-		(at 36.83 66.04 0)
-		(fields_autoplaced yes)
+		(at 54.61 66.04 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f1c9de80-758a-4860-88eb-30b0ac798f94")
 	)
 	(label "XIL_D0"
 		(at 209.55 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7517,7 +7455,6 @@
 	)
 	(label "XIL_D31"
 		(at 78.74 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7527,52 +7464,47 @@
 		(uuid "f2aca26e-18a2-4843-b10c-23b0206f5172")
 	)
 	(label "XIL_RTS"
-		(at 36.83 71.12 0)
-		(fields_autoplaced yes)
+		(at 54.61 71.12 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f3fe9c61-6499-4673-a8d4-9f160f9518ba")
 	)
 	(label "XIL_D21"
-		(at 142.24 147.32 0)
-		(fields_autoplaced yes)
+		(at 153.67 147.32 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f8970c47-05e0-4b3f-afac-dedce6b2df2d")
 	)
 	(label "XIL_D30"
-		(at 246.38 81.28 0)
-		(fields_autoplaced yes)
+		(at 257.81 81.28 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f96efb9b-d15c-49b8-91e5-695e1caed005")
 	)
 	(label "XIL_D26"
-		(at 246.38 71.12 0)
-		(fields_autoplaced yes)
+		(at 257.81 71.12 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f9bcc971-1c0c-4103-8912-eb63c1259130")
 	)
 	(label "XIL_D1"
 		(at 209.55 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7584,7 +7516,6 @@
 	(hierarchical_label "QSPI_CS1"
 		(shape input)
 		(at 33.02 73.66 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7596,7 +7527,6 @@
 	(hierarchical_label "UCTS1-"
 		(shape input)
 		(at 33.02 68.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7608,7 +7538,6 @@
 	(hierarchical_label "IRQ-1"
 		(shape input)
 		(at 33.02 78.74 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7620,7 +7549,6 @@
 	(hierarchical_label "IRQ-3"
 		(shape input)
 		(at 33.02 83.82 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7632,7 +7560,6 @@
 	(hierarchical_label "URTS1-"
 		(shape input)
 		(at 33.02 71.12 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7644,7 +7571,6 @@
 	(hierarchical_label "IRQ-2"
 		(shape input)
 		(at 33.02 81.28 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7656,7 +7582,6 @@
 	(hierarchical_label "QSPI_DOUT"
 		(shape output)
 		(at 33.02 63.5 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7668,7 +7593,6 @@
 	(hierarchical_label "GLCK2"
 		(shape input)
 		(at 86.36 96.52 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7680,7 +7604,6 @@
 	(hierarchical_label "QSPI_SCLK"
 		(shape input)
 		(at 33.02 66.04 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7692,7 +7615,6 @@
 	(hierarchical_label "QSPI_CS2"
 		(shape input)
 		(at 33.02 58.42 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7704,7 +7626,6 @@
 	(hierarchical_label "QSPI_DIN"
 		(shape input)
 		(at 33.02 60.96 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)

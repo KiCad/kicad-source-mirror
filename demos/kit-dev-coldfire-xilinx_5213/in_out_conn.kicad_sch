@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20240620)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "5972e2f7-2ae5-4e2b-9014-46961391c60b")
 	(paper "A3")
 	(title_block
@@ -63,7 +63,8 @@
 			(symbol "+3.3V_0_0"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "+3.3V"
 						(effects
 							(font
@@ -160,7 +161,8 @@
 			(symbol "74LS125_0_0"
 				(pin power_in line
 					(at -3.81 3.81 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -178,7 +180,8 @@
 				)
 				(pin power_in line
 					(at -3.81 -3.81 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -444,7 +447,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "kit-coldfire_schlib:C"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -571,7 +576,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_1"
 			(pin_names
-				(offset 0.762) hide)
+				(offset 0.762)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -655,7 +662,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_2"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -755,7 +764,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_2X2"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -891,7 +902,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_3"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1009,7 +1022,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_30X2"
 			(pin_names
-				(offset 0.254) hide)
+				(offset 0.254)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -2153,7 +2168,9 @@
 		)
 		(symbol "kit-coldfire_schlib:CONN_4X2"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -2360,9 +2377,13 @@
 			(embedded_fonts no)
 		)
 		(symbol "kit-coldfire_schlib:CP"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0.254) hide)
+				(offset 0.254)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -2485,7 +2506,9 @@
 		)
 		(symbol "kit-coldfire_schlib:DB9"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -2833,7 +2856,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.2766 9.906) (xy -1.778 12.446)
+						(xy 3.2766 9.906) (xy 3.81 9.398)
 					)
 					(stroke
 						(width 0.2032)
@@ -2845,7 +2868,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.2766 9.906) (xy 3.81 9.398)
+						(xy 3.2766 9.906) (xy -1.778 12.446)
 					)
 					(stroke
 						(width 0.2032)
@@ -3059,9 +3082,13 @@
 			(embedded_fonts no)
 		)
 		(symbol "kit-coldfire_schlib:DIODE"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -3386,7 +3413,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -3472,7 +3500,8 @@
 			(symbol "GNDA_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GNDA"
 						(effects
 							(font
@@ -3695,7 +3724,9 @@
 		)
 		(symbol "kit-coldfire_schlib:JUMPER"
 			(pin_names
-				(offset 0.762) hide)
+				(offset 0.762)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -3816,7 +3847,9 @@
 		)
 		(symbol "kit-coldfire_schlib:LED"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -4861,7 +4894,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "kit-coldfire_schlib:R"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
 			)
@@ -4909,7 +4944,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "R? SM0603 SM0805 R?-* SM1206"
+			(property "ki_fp_filters" "R? SM0603 SM0805 R?-* SM1206 R_*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4972,7 +5007,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "kit-coldfire_schlib:SWITCH_INV"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
 			)
@@ -5128,9 +5165,13 @@
 			(embedded_fonts no)
 		)
 		(symbol "kit-coldfire_schlib:SW_PUSH"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -5664,7 +5705,7 @@
 	)
 	(wire
 		(pts
-			(xy 353.06 38.1) (xy 342.9 38.1)
+			(xy 350.52 38.1) (xy 342.9 38.1)
 		)
 		(stroke
 			(width 0)
@@ -5944,7 +5985,7 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 78.74) (xy 177.8 78.74)
+			(xy 187.96 78.74) (xy 179.07 78.74)
 		)
 		(stroke
 			(width 0)
@@ -5964,7 +6005,7 @@
 	)
 	(wire
 		(pts
-			(xy 353.06 45.72) (xy 342.9 45.72)
+			(xy 350.52 45.72) (xy 342.9 45.72)
 		)
 		(stroke
 			(width 0)
@@ -6454,7 +6495,7 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 50.8) (xy 177.8 50.8)
+			(xy 187.96 50.8) (xy 179.07 50.8)
 		)
 		(stroke
 			(width 0)
@@ -6491,6 +6532,16 @@
 			(type solid)
 		)
 		(uuid "4b6a289e-974b-4344-8db4-cb7acf599ee3")
+	)
+	(wire
+		(pts
+			(xy 342.9 83.82) (xy 350.52 83.82)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "4b7fed3a-5031-46ed-8635-69c1b7a9866e")
 	)
 	(wire
 		(pts
@@ -6704,16 +6755,6 @@
 	)
 	(wire
 		(pts
-			(xy 353.06 86.36) (xy 342.9 86.36)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "57562c76-0eea-4643-ae67-2164aa7f041c")
-	)
-	(wire
-		(pts
 			(xy 83.82 203.2) (xy 86.36 203.2)
 		)
 		(stroke
@@ -6894,7 +6935,7 @@
 	)
 	(wire
 		(pts
-			(xy 311.15 101.6) (xy 322.58 101.6)
+			(xy 312.42 101.6) (xy 322.58 101.6)
 		)
 		(stroke
 			(width 0)
@@ -6964,7 +7005,7 @@
 	)
 	(wire
 		(pts
-			(xy 320.04 203.2) (xy 309.88 203.2)
+			(xy 318.77 203.2) (xy 309.88 203.2)
 		)
 		(stroke
 			(width 0)
@@ -7441,16 +7482,6 @@
 			(type solid)
 		)
 		(uuid "8a76ff18-64ef-464a-9eea-451111f96b9b")
-	)
-	(wire
-		(pts
-			(xy 353.06 81.28) (xy 342.9 81.28)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "8b3cb522-dc02-4dac-8d33-5aec92b6a906")
 	)
 	(bus
 		(pts
@@ -7964,7 +7995,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 227.33) (xy 193.04 227.33)
+			(xy 208.28 227.33) (xy 194.31 227.33)
 		)
 		(stroke
 			(width 0)
@@ -7994,7 +8025,7 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 64.77) (xy 177.8 64.77)
+			(xy 187.96 64.77) (xy 179.07 64.77)
 		)
 		(stroke
 			(width 0)
@@ -8104,13 +8135,13 @@
 	)
 	(wire
 		(pts
-			(xy 353.06 78.74) (xy 342.9 78.74)
+			(xy 342.9 86.36) (xy 350.52 86.36)
 		)
 		(stroke
 			(width 0)
 			(type solid)
 		)
-		(uuid "bd0a9850-497f-40fb-b3d7-7a93bcce98e3")
+		(uuid "bd1ceddb-ad42-4211-8979-8788ec57a945")
 	)
 	(wire
 		(pts
@@ -8254,7 +8285,7 @@
 	)
 	(wire
 		(pts
-			(xy 318.77 223.52) (xy 307.34 223.52)
+			(xy 316.23 223.52) (xy 307.34 223.52)
 		)
 		(stroke
 			(width 0)
@@ -8274,7 +8305,7 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 92.71) (xy 177.8 92.71)
+			(xy 187.96 92.71) (xy 179.07 92.71)
 		)
 		(stroke
 			(width 0)
@@ -8364,7 +8395,17 @@
 	)
 	(wire
 		(pts
-			(xy 311.15 99.06) (xy 322.58 99.06)
+			(xy 342.9 81.28) (xy 350.52 81.28)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "cee03cba-f4e9-4ddc-bacf-cb1e9833dbb2")
+	)
+	(wire
+		(pts
+			(xy 312.42 99.06) (xy 322.58 99.06)
 		)
 		(stroke
 			(width 0)
@@ -8434,7 +8475,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 229.87) (xy 193.04 229.87)
+			(xy 208.28 229.87) (xy 194.31 229.87)
 		)
 		(stroke
 			(width 0)
@@ -8524,7 +8565,7 @@
 	)
 	(wire
 		(pts
-			(xy 353.06 99.06) (xy 342.9 99.06)
+			(xy 350.52 99.06) (xy 342.9 99.06)
 		)
 		(stroke
 			(width 0)
@@ -8564,7 +8605,7 @@
 	)
 	(wire
 		(pts
-			(xy 353.06 101.6) (xy 342.9 101.6)
+			(xy 350.52 101.6) (xy 342.9 101.6)
 		)
 		(stroke
 			(width 0)
@@ -8614,7 +8655,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 224.79) (xy 193.04 224.79)
+			(xy 208.28 224.79) (xy 194.31 224.79)
 		)
 		(stroke
 			(width 0)
@@ -8704,7 +8745,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 222.25) (xy 193.04 222.25)
+			(xy 208.28 222.25) (xy 194.31 222.25)
 		)
 		(stroke
 			(width 0)
@@ -8741,16 +8782,6 @@
 			(type solid)
 		)
 		(uuid "ea9a4950-3232-48e3-84cb-6ad89b520edc")
-	)
-	(wire
-		(pts
-			(xy 353.06 83.82) (xy 342.9 83.82)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "eab19003-a313-43df-a0de-99b577703601")
 	)
 	(wire
 		(pts
@@ -8854,7 +8885,7 @@
 	)
 	(wire
 		(pts
-			(xy 320.04 200.66) (xy 309.88 200.66)
+			(xy 318.77 200.66) (xy 309.88 200.66)
 		)
 		(stroke
 			(width 0)
@@ -8881,6 +8912,16 @@
 			(type solid)
 		)
 		(uuid "f16753a7-5748-4803-b76c-d4b53c5a1871")
+	)
+	(wire
+		(pts
+			(xy 342.9 78.74) (xy 350.52 78.74)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "f206591b-ea4a-4671-b98e-09c45344b855")
 	)
 	(wire
 		(pts
@@ -8994,7 +9035,7 @@
 	)
 	(wire
 		(pts
-			(xy 307.34 226.06) (xy 320.04 226.06)
+			(xy 307.34 226.06) (xy 317.5 226.06)
 		)
 		(stroke
 			(width 0)
@@ -9043,8 +9084,7 @@
 		(uuid "ff486510-4573-4128-8ed9-2ec4879e9845")
 	)
 	(label "IRQ-4"
-		(at 93.98 251.46 0)
-		(fields_autoplaced yes)
+		(at 92.71 251.46 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9055,7 +9095,6 @@
 	)
 	(label "DTIN2"
 		(at 179.07 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9066,7 +9105,6 @@
 	)
 	(label "RTS1"
 		(at 41.91 128.27 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9077,7 +9115,6 @@
 	)
 	(label "CTS0"
 		(at 41.91 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9088,7 +9125,6 @@
 	)
 	(label "AN7"
 		(at 344.17 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9098,8 +9134,7 @@
 		(uuid "16eefc65-79ec-483e-9acb-616d58e20e6f")
 	)
 	(label "CAN_H"
-		(at 48.26 233.68 0)
-		(fields_autoplaced yes)
+		(at 46.99 233.68 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9109,8 +9144,7 @@
 		(uuid "1d7da163-0b70-42ca-9881-3e29fa4951ba")
 	)
 	(label "CANRX"
-		(at 276.86 226.06 0)
-		(fields_autoplaced yes)
+		(at 275.59 226.06 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9120,30 +9154,27 @@
 		(uuid "1fe82bde-db31-4d70-9adf-72b16f15490d")
 	)
 	(label "DTIN1"
-		(at 344.17 81.28 0)
-		(fields_autoplaced yes)
+		(at 350.52 81.28 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "26a0af77-375a-49b9-ab4c-d737943feac7")
 	)
 	(label "GPT2"
-		(at 293.37 39.37 0)
-		(fields_autoplaced yes)
+		(at 299.72 39.37 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "353036fc-227d-4ace-beab-cc35c16bc9de")
 	)
 	(label "GPT2"
 		(at 312.42 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9153,19 +9184,17 @@
 		(uuid "35730468-79f5-4a32-bd9c-8dc22c717edb")
 	)
 	(label "GPT3"
-		(at 293.37 41.91 0)
-		(fields_autoplaced yes)
+		(at 299.72 41.91 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "438ee1c5-faf1-465d-97cf-97e7d50429ad")
 	)
 	(label "TXD0"
 		(at 41.91 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9176,7 +9205,6 @@
 	)
 	(label "IRQ-4"
 		(at 312.42 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9187,7 +9215,6 @@
 	)
 	(label "CTS1"
 		(at 41.91 123.19 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9197,19 +9224,17 @@
 		(uuid "48004869-1f5d-4743-ba66-a45079f39c53")
 	)
 	(label "URXD0"
-		(at 134.62 76.2 0)
-		(fields_autoplaced yes)
+		(at 142.24 76.2 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "4a306fed-0c4f-4c39-9a6c-f21db84afcdc")
 	)
 	(label "RxD_CAN"
 		(at 274.32 205.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9220,7 +9245,6 @@
 	)
 	(label "RxD_CAN"
 		(at 275.59 223.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9231,7 +9255,6 @@
 	)
 	(label "DTIN3"
 		(at 179.07 92.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9242,7 +9265,6 @@
 	)
 	(label "IRQ-5"
 		(at 312.42 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9253,7 +9275,6 @@
 	)
 	(label "QSPI_CS2"
 		(at 308.61 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9264,7 +9285,6 @@
 	)
 	(label "AN4"
 		(at 344.17 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9275,7 +9295,6 @@
 	)
 	(label "AN3"
 		(at 344.17 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9285,19 +9304,17 @@
 		(uuid "5bb55812-299f-4f18-b7a3-817a550866ec")
 	)
 	(label "URTS2"
-		(at 160.02 213.36 0)
-		(fields_autoplaced yes)
+		(at 167.64 213.36 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "5e115de7-cb33-4483-999a-5ede4a2e4212")
 	)
 	(label "QSPI_CS0"
 		(at 194.31 224.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9308,7 +9325,6 @@
 	)
 	(label "CAN_L"
 		(at 373.38 200.66 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9318,30 +9334,27 @@
 		(uuid "61610946-d8ae-45fa-a745-d6c18c870170")
 	)
 	(label "GPT0"
-		(at 293.37 34.29 0)
-		(fields_autoplaced yes)
+		(at 299.72 34.29 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "66dc81b9-673f-4fe2-bfa4-47aa455c4ba9")
 	)
 	(label "UCTS0"
-		(at 134.62 81.28 0)
-		(fields_autoplaced yes)
+		(at 142.24 81.28 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "69907cae-40c6-4cb8-803b-15e67f06d8b3")
 	)
 	(label "AN0"
 		(at 344.17 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9352,7 +9365,6 @@
 	)
 	(label "QSPI_CS0"
 		(at 308.61 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9363,7 +9375,6 @@
 	)
 	(label "TXD1"
 		(at 41.91 120.65 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9374,7 +9385,6 @@
 	)
 	(label "AN6"
 		(at 344.17 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9385,7 +9395,6 @@
 	)
 	(label "AN1"
 		(at 344.17 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9395,41 +9404,37 @@
 		(uuid "75c40652-628c-4719-821a-22b8868efa13")
 	)
 	(label "TxD_CAN"
-		(at 307.34 226.06 0)
-		(fields_autoplaced yes)
+		(at 317.5 226.06 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "76abf4e2-883b-4dcb-9a41-5df3d774a7b3")
 	)
 	(label "URTS1"
-		(at 135.89 146.05 0)
-		(fields_autoplaced yes)
+		(at 143.51 146.05 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "76e6d20e-6ab0-4a93-9066-33d03ab39deb")
 	)
 	(label "UTXD1"
-		(at 135.89 140.97 0)
-		(fields_autoplaced yes)
+		(at 143.51 140.97 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "77ebe3c4-f211-428e-a5b4-3e287cc84894")
 	)
 	(label "DTIN0"
 		(at 179.07 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9440,7 +9445,6 @@
 	)
 	(label "CAN_L"
 		(at 46.99 184.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9451,7 +9455,6 @@
 	)
 	(label "CANRX"
 		(at 194.31 229.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9461,19 +9464,17 @@
 		(uuid "82bdc36e-7d3d-4ea6-866d-b38884c9247b")
 	)
 	(label "GPT3"
-		(at 345.44 101.6 0)
-		(fields_autoplaced yes)
+		(at 350.52 101.6 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "82f8d54c-87ce-41b1-807f-aefc413fdc21")
 	)
 	(label "QSPI_SCLK"
 		(at 194.31 222.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9484,7 +9485,6 @@
 	)
 	(label "IRQ-6"
 		(at 312.42 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9494,19 +9494,17 @@
 		(uuid "8669c0dc-b628-42d0-98bc-6b4495bfede1")
 	)
 	(label "DTIN3"
-		(at 344.17 86.36 0)
-		(fields_autoplaced yes)
+		(at 350.52 86.36 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8675bfa8-b22f-4e17-8426-ca5de48be895")
 	)
 	(label "AN5"
 		(at 344.17 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9517,7 +9515,6 @@
 	)
 	(label "IRQ-3"
 		(at 312.42 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9527,30 +9524,27 @@
 		(uuid "871ef739-de1e-48a3-b290-1f49b4e37223")
 	)
 	(label "URXD2"
-		(at 160.02 210.82 0)
-		(fields_autoplaced yes)
+		(at 167.64 210.82 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8c7de4b9-9e5a-4b02-a527-d1e411048ac4")
 	)
 	(label "DTIN0"
-		(at 344.17 78.74 0)
-		(fields_autoplaced yes)
+		(at 350.52 78.74 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9231d2af-8702-478a-8aef-ef4227ebc914")
 	)
 	(label "GPT0"
 		(at 312.42 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9561,7 +9555,6 @@
 	)
 	(label "RXD0"
 		(at 41.91 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9572,7 +9565,6 @@
 	)
 	(label "RXD1"
 		(at 41.91 125.73 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9583,7 +9575,6 @@
 	)
 	(label "DTIN1"
 		(at 179.07 64.77 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9593,19 +9584,17 @@
 		(uuid "956ac67c-2848-45a2-9d79-bac1dc2a4dc3")
 	)
 	(label "UTXD2"
-		(at 160.02 208.28 0)
-		(fields_autoplaced yes)
+		(at 167.64 208.28 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "96ca5739-329d-424b-89b4-68762e804ce6")
 	)
 	(label "RTS0"
 		(at 41.91 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9616,7 +9605,6 @@
 	)
 	(label "CTS2/CANH"
 		(at 40.64 190.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9626,41 +9614,37 @@
 		(uuid "9f9f2703-2363-4288-945e-1e6be50a61b3")
 	)
 	(label "URXD1"
-		(at 135.89 143.51 0)
-		(fields_autoplaced yes)
+		(at 143.51 143.51 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "a7743536-22d8-4ec8-b59f-672159192d06")
 	)
 	(label "UTXD0"
-		(at 134.62 73.66 0)
-		(fields_autoplaced yes)
+		(at 142.24 73.66 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "aeaba55b-a67f-4d9c-b4e1-3d36128bfc7b")
 	)
 	(label "UCTS2"
-		(at 160.02 215.9 0)
-		(fields_autoplaced yes)
+		(at 167.64 215.9 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "b091e3f4-4fdb-4af8-8beb-8f9c475fd6b3")
 	)
 	(label "CAN_H"
 		(at 325.12 200.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9670,30 +9654,27 @@
 		(uuid "b6b4122d-038e-4e7c-b281-72d67654a503")
 	)
 	(label "GPT1"
-		(at 345.44 99.06 0)
-		(fields_autoplaced yes)
+		(at 350.52 99.06 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c162326f-e625-4a01-9ed7-92fc80a16906")
 	)
 	(label "URTS0"
-		(at 134.62 78.74 0)
-		(fields_autoplaced yes)
+		(at 142.24 78.74 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c49c9cf5-3efc-4caf-91e5-f52afae3e41f")
 	)
 	(label "CANTX"
 		(at 194.31 227.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9704,7 +9685,6 @@
 	)
 	(label "AN2"
 		(at 344.17 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9714,8 +9694,7 @@
 		(uuid "c6429d35-6ac4-4831-b8c7-01759f29ff9a")
 	)
 	(label "IRQ-5"
-		(at 93.98 261.62 0)
-		(fields_autoplaced yes)
+		(at 92.71 261.62 0)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9726,7 +9705,6 @@
 	)
 	(label "QSPI_CS3"
 		(at 308.61 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9737,7 +9715,6 @@
 	)
 	(label "QSPI_CS1"
 		(at 308.61 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9748,7 +9725,6 @@
 	)
 	(label "RTS2"
 		(at 40.64 195.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9758,19 +9734,17 @@
 		(uuid "caba3732-413c-4272-8922-dc0f4195381e")
 	)
 	(label "UCTS1"
-		(at 135.89 148.59 0)
-		(fields_autoplaced yes)
+		(at 143.51 148.59 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "cbfceb74-0ce5-422c-9413-1f232a82608b")
 	)
 	(label "TXD2/CANL"
 		(at 40.64 187.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9780,52 +9754,47 @@
 		(uuid "cd2c5740-39da-446b-a36c-b784798f6bb0")
 	)
 	(label "GPT1"
-		(at 293.37 36.83 0)
-		(fields_autoplaced yes)
+		(at 299.72 36.83 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "cfb07aca-2049-4cbc-806e-fd3510ccc242")
 	)
 	(label "IRQ-1"
-		(at 342.9 38.1 0)
-		(fields_autoplaced yes)
+		(at 350.52 38.1 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "dcd23797-2e74-4a4f-8fc2-af552f6a8ef6")
 	)
 	(label "IRQ-2"
-		(at 342.9 45.72 0)
-		(fields_autoplaced yes)
+		(at 350.52 45.72 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "e12e3efd-5fe7-4026-80f4-a503fec8b6b4")
 	)
 	(label "DTIN2"
-		(at 344.17 83.82 0)
-		(fields_autoplaced yes)
+		(at 350.52 83.82 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "e66d3f0f-7790-4d96-9cc6-04246fa32f05")
 	)
 	(label "IRQ-7"
 		(at 312.42 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9835,19 +9804,17 @@
 		(uuid "edf552f1-f064-44ac-8838-efb8bd890b88")
 	)
 	(label "CAN_H"
-		(at 311.15 200.66 0)
-		(fields_autoplaced yes)
+		(at 318.77 200.66 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ef0e327e-6a59-48d1-92fe-a45f7634cc84")
 	)
 	(label "TxD_CAN"
 		(at 274.32 198.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9858,7 +9825,6 @@
 	)
 	(label "RXD2"
 		(at 40.64 193.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9868,31 +9834,28 @@
 		(uuid "f62fbe2f-99e9-40bc-af99-faabe58a33cc")
 	)
 	(label "CANTX"
-		(at 308.61 223.52 0)
-		(fields_autoplaced yes)
+		(at 316.23 223.52 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "fc7de954-730c-433c-a0f5-5b79d7daddbd")
 	)
 	(label "CAN_L"
-		(at 311.15 203.2 0)
-		(fields_autoplaced yes)
+		(at 318.77 203.2 180)
 		(effects
 			(font
 				(size 1.524 1.524)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "fd4cb709-ff20-45bf-831b-aad95d30c148")
 	)
 	(hierarchical_label "UCTS0"
 		(shape input)
 		(at 353.06 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9904,7 +9867,6 @@
 	(hierarchical_label "RTS0-"
 		(shape input)
 		(at 353.06 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9916,7 +9878,6 @@
 	(hierarchical_label "RSTI-"
 		(shape input)
 		(at 353.06 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9928,7 +9889,6 @@
 	(hierarchical_label "URXD1"
 		(shape input)
 		(at 311.15 45.72 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9940,7 +9900,6 @@
 	(hierarchical_label "URXD2"
 		(shape input)
 		(at 311.15 96.52 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9952,7 +9911,6 @@
 	(hierarchical_label "AN[0..7]"
 		(shape input)
 		(at 360.68 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9964,7 +9922,6 @@
 	(hierarchical_label "UTXD0"
 		(shape input)
 		(at 311.15 88.9 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9976,7 +9933,6 @@
 	(hierarchical_label "VCCA"
 		(shape input)
 		(at 311.15 106.68 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -9988,7 +9944,6 @@
 	(hierarchical_label "URTS2"
 		(shape input)
 		(at 353.06 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10000,7 +9955,6 @@
 	(hierarchical_label "QSPI_CS[0..3]"
 		(shape input)
 		(at 293.37 68.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10012,7 +9966,6 @@
 	(hierarchical_label "PWM5"
 		(shape input)
 		(at 353.06 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10024,7 +9977,6 @@
 	(hierarchical_label "URXD0"
 		(shape input)
 		(at 311.15 91.44 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10036,7 +9988,6 @@
 	(hierarchical_label "VRL"
 		(shape input)
 		(at 353.06 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10048,7 +9999,6 @@
 	(hierarchical_label "QSPI_SCLK"
 		(shape input)
 		(at 311.15 63.5 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10060,7 +10010,6 @@
 	(hierarchical_label "UCTS2"
 		(shape input)
 		(at 353.06 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10072,7 +10021,6 @@
 	(hierarchical_label "URTS1"
 		(shape input)
 		(at 311.15 48.26 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10084,7 +10032,6 @@
 	(hierarchical_label "QSPI_DOUT"
 		(shape input)
 		(at 311.15 58.42 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10096,7 +10043,6 @@
 	(hierarchical_label "PWM3"
 		(shape input)
 		(at 311.15 55.88 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10108,7 +10054,6 @@
 	(hierarchical_label "RCON-"
 		(shape input)
 		(at 311.15 104.14 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10120,7 +10065,6 @@
 	(hierarchical_label "PWM7"
 		(shape input)
 		(at 353.06 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10132,7 +10076,6 @@
 	(hierarchical_label "UCTS1"
 		(shape input)
 		(at 311.15 50.8 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10144,7 +10087,6 @@
 	(hierarchical_label "PWM1"
 		(shape input)
 		(at 311.15 53.34 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10156,7 +10098,6 @@
 	(hierarchical_label "CANTX"
 		(shape input)
 		(at 353.06 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10168,7 +10109,6 @@
 	(hierarchical_label "UTXD2"
 		(shape input)
 		(at 311.15 93.98 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10180,7 +10120,6 @@
 	(hierarchical_label "QSPI_DIN"
 		(shape input)
 		(at 311.15 60.96 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10192,7 +10131,6 @@
 	(hierarchical_label "URTS0"
 		(shape input)
 		(at 353.06 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10204,7 +10142,6 @@
 	(hierarchical_label "IRQ-[1..7]"
 		(shape input)
 		(at 293.37 83.82 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10216,7 +10153,6 @@
 	(hierarchical_label "DTIN[0..3]"
 		(shape input)
 		(at 251.46 27.94 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10228,7 +10164,6 @@
 	(hierarchical_label "VRH"
 		(shape input)
 		(at 311.15 109.22 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10240,7 +10175,6 @@
 	(hierarchical_label "GPT[0..3]"
 		(shape input)
 		(at 281.94 31.75 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10252,7 +10186,6 @@
 	(hierarchical_label "UTXD1"
 		(shape input)
 		(at 311.15 43.18 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -10264,7 +10197,6 @@
 	(hierarchical_label "CANRX"
 		(shape input)
 		(at 353.06 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
