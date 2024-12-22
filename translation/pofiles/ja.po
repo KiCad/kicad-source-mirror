@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-17 05:00+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2024-12-22 21:25+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -26339,7 +26339,7 @@ msgstr "ジョブが成功しました"
 
 #: kicad/dialogs/panel_jobs.cpp:306
 msgid "Last run failed"
-msgstr ""
+msgstr "ジョブが失敗しました"
 
 #: kicad/dialogs/panel_jobs.cpp:330 kicad/dialogs/panel_jobs.cpp:793
 msgid "Running jobs"
@@ -26347,7 +26347,7 @@ msgstr "実行中のジョブ"
 
 #: kicad/dialogs/panel_jobs.cpp:354
 msgid "View last run results..."
-msgstr ""
+msgstr "ジョブの実行結果を表示。"
 
 #: kicad/dialogs/panel_jobs.cpp:597 kicad/dialogs/panel_jobs.cpp:644
 msgid "Job Types"
@@ -29507,9 +29507,8 @@ msgstr "外層配線"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
-#, fuzzy
 msgid "Track width (W):"
-msgstr "配線幅 (W):"
+msgstr "配線の幅 (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
@@ -33620,9 +33619,8 @@ msgid "STL"
 msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
-#, fuzzy
 msgid "Board Options"
-msgstr "グリッド オプション"
+msgstr "基板オプション"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:58
 msgid "Export as Compound shape"
@@ -33713,24 +33711,20 @@ msgstr ""
 "ます。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:126
-#, fuzzy
 msgid "Conductor Options"
-msgstr "カラー オプション"
+msgstr "導体オプション"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
-#, fuzzy
 msgid "Export tracks and vias on external conductor layers."
-msgstr "外部の導体層の配線とビアをエクスポート."
+msgstr "外部の導体レイヤーの配線とビアをエクスポートします。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
-#, fuzzy
 msgid "Export zones on external conductor layers."
-msgstr "外部の導体層上のゾーンをエクスポートします。"
+msgstr "外部の導体レイヤーのゾーンをエクスポートします。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
-#, fuzzy
 msgid "Export inner conductor layers"
-msgstr "内部の導体層をエクスポート"
+msgstr "内部の導体レイヤーをエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:144
 msgid "Fuse shapes (time consuming)"
