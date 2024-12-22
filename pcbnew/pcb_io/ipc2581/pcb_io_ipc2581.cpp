@@ -2930,7 +2930,7 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
         if( it->second == "inch" )
         {
             m_units_str = "INCH";
-            m_scale = 25.4 / PCB_IU_PER_MM;
+            m_scale = ( 1.0 / 25.4 ) / PCB_IU_PER_MM;
         }
     }
 
