@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-21 22:44+0000\n"
+"PO-Revision-Date: 2024-12-22 21:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -7415,23 +7415,23 @@ msgstr "Загрузка файла отменена пользователем.
 
 #: common/jobs/job_export_pcb_3d.cpp:137
 msgid "3D model export"
-msgstr "экспортировать 3D модель"
+msgstr "Экспорт 3D модели"
 
 #: common/jobs/job_export_pcb_3d.cpp:140
 msgid "PCB: Export 3D Model"
-msgstr "Печатная плата: экспортировать 3D модель"
+msgstr "PCB: Экспорт 3D модели"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
 msgid "Drill data export"
-msgstr "Экспорт данных бурения"
+msgstr "Экспорт данных сверловки"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr "PCB: Экспорт данных бурения"
+msgstr "PCB: Экспорт данных сверловки"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 msgid "PCB DXF export"
-msgstr "Экспорт печатных плат в формате DXF"
+msgstr "Экспорт печатной платы в DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:61
 msgid "PCB: Export DXF"
@@ -7439,15 +7439,15 @@ msgstr "PCB: Экспорт DXF"
 
 #: common/jobs/job_export_pcb_gerber.cpp:82
 msgid "Single gerber export"
-msgstr "Одиночный экспорт гербер"
+msgstr "Экспорт одиночного Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:46
 msgid "Multi gerber export"
-msgstr "Многократный экспорт гербер"
+msgstr "Экспорт нескольких Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:50
 msgid "PCB: Export Gerbers"
-msgstr "PCB: экспорт герберов"
+msgstr "PCB: Экспорт Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 msgid "IPC2581 export"
@@ -7467,11 +7467,11 @@ msgstr "PCB: Экспорт ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
 msgid "PCB PDF export"
-msgstr "Экспорт печатных плат в формате PDF"
+msgstr "Экспорт печатной платы в PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:57
 msgid "PCB: Export PDF"
-msgstr "Печатная плата: Экспорт PDF"
+msgstr "PCB: Экспорт PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
 msgid "Placement data export"
@@ -7479,31 +7479,31 @@ msgstr "Экспорт данных о размещении"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
-msgstr "PCB: экспорт данных о положении"
+msgstr "PCB: Экспорт данных о размещении"
 
 #: common/jobs/job_export_pcb_svg.cpp:55
 msgid "PCB SVG export"
-msgstr "Экспорт печатных плат SVG"
+msgstr "Экспорт печатной платы в SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:59
 msgid "PCB: Export SVG"
-msgstr "Печатная плата: Экспорт SVG"
+msgstr "PCB: Экспорт SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
 msgid "Schematic BOM export"
-msgstr "Экспорт схемы BOM"
+msgstr "Экспорт BOM схемы"
 
 #: common/jobs/job_export_sch_bom.cpp:89
 msgid "Schematic: Export BOM"
-msgstr "Схема: Экспорт спецификации"
+msgstr "Схема: Экспорт BOM"
 
 #: common/jobs/job_export_sch_netlist.cpp:61
 msgid "Schematic Netlist Export"
-msgstr "Экспорт схемных нетлистов"
+msgstr "Экспорт Netlist схемы"
 
 #: common/jobs/job_export_sch_netlist.cpp:65
 msgid "Schematic: Export Netlist"
-msgstr "Схема: Экспорт нетлиста"
+msgstr "Схема: Экспорт Netlist"
 
 #: common/jobs/job_export_sch_plot.cpp:128
 msgid "Schematic PDF Plot"
@@ -7518,13 +7518,12 @@ msgid "Schematic SVG Plot"
 msgstr "Схема в формате SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:167
-#, fuzzy
 msgid "Schematic PS Plot"
-msgstr "Схема PS Plot"
+msgstr "Схема в формате PS"
 
 #: common/jobs/job_export_sch_plot.cpp:180
 msgid "Schematic HPGL Plot"
-msgstr "Схематическое изображение в формате HPGL"
+msgstr "Схема в формате HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:184
 msgid "Schematic: Export SVG"
@@ -7548,7 +7547,7 @@ msgstr "Схема: Экспорт PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 msgid "Schematic PythonBOM export"
-msgstr "Экспорт схемы PythonBOM"
+msgstr "Экспорт PythonBOM схемы"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:39
 msgid "Schematic: Export PythonBOM"
@@ -7560,19 +7559,19 @@ msgstr "Выполнить DRC печатной платы"
 
 #: common/jobs/job_pcb_drc.cpp:62
 msgid "PCB: Perform DRC"
-msgstr "Печатная плата: Выполнить DRC"
+msgstr "PCB: Выполнить DRC"
 
 #: common/jobs/job_sch_erc.cpp:54
 msgid "Perform Schematic ERC"
-msgstr "Выполнить схему ERC"
+msgstr "Выполнить проверку ERC схемы"
 
 #: common/jobs/job_sch_erc.cpp:58
 msgid "Schematic: Perform ERC"
-msgstr "Схема: Выполнение ERC"
+msgstr "Схема: Выполнить ERC"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr "Специальный: Выполнить команду"
+msgstr "Специальная: Выполнить команду"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -26450,11 +26449,11 @@ msgstr "Выберите тип задания:"
 
 #: kicad/dialogs/panel_jobs.cpp:653
 msgid "Add New Output"
-msgstr "Добавить новый вывод"
+msgstr "Добавить новый выходной документ"
 
 #: kicad/dialogs/panel_jobs.cpp:654
 msgid "Select output type:"
-msgstr "Выберите тип вывода:"
+msgstr "Выберите тип выходного документа:"
 
 #: kicad/dialogs/panel_jobs.cpp:777
 msgid "No outputs defined"
