@@ -365,7 +365,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                                     }
                                 }
                                 else if( constraint.Value().HasMin()
-                                       && ( minAnnularWidth < constraint.Value().Min() ) )
+                                       && ( annularWidth < constraint.Value().Min() ) )
                                 {
                                     SHAPE_POLY_SET otherPadOutline;
                                     SHAPE_POLY_SET slotPolygon;
