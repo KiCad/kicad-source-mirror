@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 class STD_BITMAP_BUTTON;
 
 #include "dialogs/panel_notebook_base.h"
@@ -188,7 +189,7 @@ class DIALOG_OUTPUT_RUN_RESULTS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Job Output Run Log"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Job Output Run Log"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_OUTPUT_RUN_RESULTS_BASE();
 

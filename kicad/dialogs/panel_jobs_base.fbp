@@ -15,7 +15,7 @@
     <property name="encoding">UTF-8</property>
     <property name="file">panel_jobs_base</property>
     <property name="first_id">1000</property>
-    <property name="internationalize">0</property>
+    <property name="internationalize">1</property>
     <property name="lua_skip_events">1</property>
     <property name="lua_ui_table">UI</property>
     <property name="name">PANEL_JOBS_BASE</property>

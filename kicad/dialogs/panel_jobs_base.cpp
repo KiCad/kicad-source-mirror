@@ -19,7 +19,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	bSizer3->Add( m_staticText1, 0, wxALL, 5 );
 
@@ -41,7 +41,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 
 	bSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_buttonSave = new wxButton( this, wxID_ANY, wxT("Save"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonSave = new wxButton( this, wxID_ANY, _("Save"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_buttonSave, 0, wxALIGN_CENTER|wxALL, 5 );
 
 
@@ -56,7 +56,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Outputs"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Outputs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	bSizer14->Add( m_staticText4, 0, wxALL, 5 );
 
@@ -76,7 +76,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	m_outputListSizer->Fit( m_outputList );
 	bSizer4->Add( m_outputList, 1, wxEXPAND | wxALL, 0 );
 
-	m_buttonRunAllOutputs = new wxButton( this, wxID_ANY, wxT("Run All Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRunAllOutputs = new wxButton( this, wxID_ANY, _("Run All Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonRunAllOutputs->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
 	bSizer4->Add( m_buttonRunAllOutputs, 0, wxALIGN_RIGHT|wxALL, 5 );
@@ -129,7 +129,7 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_textOutputType = new wxStaticText( this, wxID_ANY, wxT("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputType = new wxStaticText( this, wxID_ANY, _("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputType->Wrap( -1 );
 	m_textOutputType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
@@ -183,7 +183,7 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("Options"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
 	m_staticText9->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
@@ -195,7 +195,7 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_textArchiveFormat = new wxStaticText( m_panel9, wxID_ANY, wxT("Format"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textArchiveFormat = new wxStaticText( m_panel9, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textArchiveFormat->Wrap( -1 );
 	fgSizer1->Add( m_textArchiveFormat, 0, wxALL, 5 );
 
@@ -204,7 +204,7 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	m_choiceArchiveformat->SetSelection( 0 );
 	fgSizer1->Add( m_choiceArchiveformat, 0, wxALL, 5 );
 
-	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, wxT("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, _("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputPath->Wrap( -1 );
 	fgSizer1->Add( m_textOutputPath, 0, wxALL, 5 );
 
@@ -222,7 +222,7 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 
 	fgSizer1->Add( bSizer16, 1, wxEXPAND, 5 );
 
-	m_staticText10 = new wxStaticText( m_panel9, wxID_ANY, wxT("Only Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( m_panel9, wxID_ANY, _("Only Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	fgSizer1->Add( m_staticText10, 0, wxALL, 5 );
 
@@ -270,7 +270,7 @@ DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("Options"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
 	m_staticText9->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
@@ -282,7 +282,7 @@ DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWi
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_textCommand = new wxStaticText( m_panel9, wxID_ANY, wxT("Command"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCommand = new wxStaticText( m_panel9, wxID_ANY, _("Command"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCommand->Wrap( -1 );
 	fgSizer1->Add( m_textCommand, 0, wxALL, 5 );
 
@@ -294,10 +294,10 @@ DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWi
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_cbRecordOutput = new wxCheckBox( m_panel9, wxID_ANY, wxT("Record Output"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRecordOutput = new wxCheckBox( m_panel9, wxID_ANY, _("Record Output"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_cbRecordOutput, 0, wxALL, 5 );
 
-	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, wxT("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, _("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputPath->Wrap( -1 );
 	fgSizer1->Add( m_textOutputPath, 0, wxALL, 5 );
 
@@ -309,7 +309,7 @@ DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWi
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_cbIgnoreExitCode = new wxCheckBox( m_panel9, wxID_ANY, wxT("Ignore non-zero exit code"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbIgnoreExitCode = new wxCheckBox( m_panel9, wxID_ANY, _("Ignore non-zero exit code"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_cbIgnoreExitCode, 1, wxALL, 5 );
 
 
@@ -352,7 +352,7 @@ DIALOG_OUTPUT_RUN_RESULTS_BASE::DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextOutputName = new wxStaticText( this, wxID_ANY, wxT("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOutputName = new wxStaticText( this, wxID_ANY, _("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOutputName->Wrap( -1 );
 	bMainSizer->Add( m_staticTextOutputName, 0, wxALL, 5 );
 
