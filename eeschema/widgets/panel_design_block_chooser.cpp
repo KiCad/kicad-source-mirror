@@ -314,6 +314,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
     }
     else
     {
+        m_frame->GetCanvas()->SetFocus();
         m_selectHandler();
         addDesignBlockToHistory( m_tree->GetSelectedLibId() );
     }
