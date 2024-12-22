@@ -152,8 +152,8 @@ long long DESIGN_BLOCK_IO::GetLibraryTimestamp( const wxString& aLibraryPath ) c
     {
         wxFileName blockDir( aLibraryPath, filename );
 
-        // Check if the directory ends with ".block", if so hash all the files in it
-        if( blockDir.GetFullName().EndsWith( FILEEXT::KiCadDesignBlockPathExtension ) )
+        // Check if the directory ends with ".kicad_block", if so hash all the files in it
+        if( blockDir.GetFullName().EndsWith( FILEEXT::KiCadDesignBlockFileExtension ) )
             ts += TimestampDir( blockDir.GetFullPath(), wxT( "*" ) );
 
         hasMoreFiles = libDir.GetNext( &filename );
@@ -260,14 +260,14 @@ void DESIGN_BLOCK_IO::DesignBlockEnumerate( wxArrayString&  aDesignBlockNames,
                                             const wxString& aLibraryPath, bool aBestEfforts,
                                             const std::map<std::string, UTF8>* aProperties )
 {
-    // From the starting directory, look for all directories ending in the .block extension
+    // From the starting directory, look for all directories ending in the .kicad_block extension
     wxDir dir( aLibraryPath );
 
     if( !dir.IsOpened() )
         return;
 
     wxString dirname;
-    wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadDesignBlockPathExtension );
+    wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadDesignBlockFileExtension );
     bool     cont = dir.GetFirst( &dirname, fileSpec, wxDIR_DIRS );
 
     while( cont )
@@ -283,7 +283,7 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
                                                 const std::map<std::string, UTF8>* aProperties )
 {
     wxString      dbPath = aLibraryPath + wxFileName::GetPathSeparator() +
-                           aDesignBlockName + wxT( "." ) + FILEEXT::KiCadDesignBlockPathExtension + wxFileName::GetPathSeparator();
+                           aDesignBlockName + wxT( "." ) + FILEEXT::KiCadDesignBlockFileExtension + wxFileName::GetPathSeparator();
     wxString      dbSchPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
     wxString      dbMetadataPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::JsonFileExtension;
 
@@ -360,7 +360,7 @@ void DESIGN_BLOCK_IO::DesignBlockSave( const wxString&                    aLibra
     // Create the design block folder
     wxFileName dbFolder( aLibraryPath + wxFileName::GetPathSeparator()
                          + aDesignBlock->GetLibId().GetLibItemName() + wxT( "." )
-                         + FILEEXT::KiCadDesignBlockPathExtension
+                         + FILEEXT::KiCadDesignBlockFileExtension
                          + wxFileName::GetPathSeparator() );
 
     if( !dbFolder.DirExists() )
@@ -427,7 +427,7 @@ void DESIGN_BLOCK_IO::DesignBlockDelete( const wxString& aLibPath, const wxStrin
                                          const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName dbDir = wxFileName( aLibPath + wxFileName::GetPathSeparator() + aDesignBlockName
-                                   + wxT( "." ) + FILEEXT::KiCadDesignBlockPathExtension );
+                                   + wxT( "." ) + FILEEXT::KiCadDesignBlockFileExtension );
 
     if( !dbDir.DirExists() )
     {

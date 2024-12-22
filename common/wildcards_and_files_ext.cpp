@@ -187,8 +187,8 @@ const std::string FILEEXT::IpcD356FileExtension( "d356" );
 const std::string FILEEXT::Ipc2581FileExtension( "xml" );
 const std::string FILEEXT::WorkbookFileExtension( "wbk" );
 
-const std::string FILEEXT::KiCadDesignBlockLibPathExtension( "blocks" ); // this is a directory
-const std::string FILEEXT::KiCadDesignBlockPathExtension( "block" );     // this is a directory
+const std::string FILEEXT::KiCadDesignBlockLibPathExtension( "kicad_blocks" ); // this is a directory
+const std::string FILEEXT::KiCadDesignBlockFileExtension( "kicad_block" );     // this is a directory
 
 const std::string FILEEXT::PngFileExtension( "png" );
 const std::string FILEEXT::JpegFileExtension( "jpg" );
@@ -343,10 +343,10 @@ wxString FILEEXT::KiCadFootprintLibPathWildcard()
 }
 
 
-wxString FILEEXT::KiCadDesignBlockPathWildcard()
+wxString FILEEXT::KiCadDesignBlockFileWildcard()
 {
-    return _( "KiCad design block path" )
-           + AddFileExtListToFilter( { KiCadDesignBlockPathExtension } );
+    return _( "KiCad design block files" )
+           + AddFileExtListToFilter( { KiCadDesignBlockFileExtension } );
 }
 
 
