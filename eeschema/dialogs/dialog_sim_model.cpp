@@ -1137,7 +1137,7 @@ wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
     }
 
     if( !pinName.IsEmpty() && pinName != pinNumber )
-        pinNumber += wxString::Format( wxT( " (%s)" ), pinName );
+        pinNumber += wxString::Format( wxT( " (\"%s\")" ), pinName );
 
     return pinNumber;
 }
@@ -1153,7 +1153,7 @@ wxString DIALOG_SIM_MODEL<T>::getModelPinString( SIM_MODEL* aModel, int aModelPi
     wxString modelPinNumber = wxString::Format( "%d", aModelPinIndex + 1 );
 
     if( !modelPinName.IsEmpty() && modelPinName != modelPinNumber )
-        modelPinNumber += wxString::Format( wxT( " (%s)" ), modelPinName );
+        modelPinNumber += wxString::Format( wxT( " (\"%s\")" ), modelPinName );
 
     return modelPinNumber;
 }
