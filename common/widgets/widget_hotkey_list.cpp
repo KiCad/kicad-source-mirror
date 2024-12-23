@@ -302,18 +302,6 @@ WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::getHKClientData( wxTreeListItem a
 }
 
 
-WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::getExpectedHkClientData( wxTreeListItem aItem )
-{
-    const auto hkdata = getHKClientData( aItem );
-
-    // This probably means a hotkey-only action is being attempted on
-    // a row that is not a hotkey (like a section heading)
-    wxASSERT_MSG( hkdata != nullptr, "No hotkey data found for list item" );
-
-    return hkdata;
-}
-
-
 void WIDGET_HOTKEY_LIST::updateFromClientData()
 {
     for( wxTreeListItem i = GetFirstItem(); i.IsOk(); i = GetNextItem( i ) )
@@ -371,7 +359,7 @@ void WIDGET_HOTKEY_LIST::changeHotkey( HOTKEY& aHotkey, long aKey, bool alternat
 
 void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem, int aEditId )
 {
-    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getHKClientData( aItem );
 
     if( !hkdata )
         return;
@@ -405,7 +393,7 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem, int aEditId )
 
 void WIDGET_HOTKEY_LIST::resetItem( wxTreeListItem aItem, int aResetId )
 {
-    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getHKClientData( aItem );
 
     if( !hkdata )
         return;
