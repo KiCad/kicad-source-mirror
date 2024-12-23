@@ -1599,7 +1599,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 
         // If we're moving a field with respect to its parent then it's no longer auto-placed
         if( aItem->Type() == SCH_FIELD_T && parent && !parent->IsSelected() )
-            parent->ClearFieldsAutoplaced();
+            parent->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
         break;
     }

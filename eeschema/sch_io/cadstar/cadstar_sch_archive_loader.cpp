@@ -983,7 +983,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 SCH_SCREEN* screen = m_sheetMap.at( sym.LayerID )->GetScreen();
 
                 // autoplace intersheet refs
-                netLabel->AutoplaceFields( screen, false );
+                netLabel->AutoplaceFields( screen, AUTOPLACE_AUTO );
 
                 screen->Append( netLabel );
                 m_globalLabelsMap.insert( { sym.ID, netLabel } );
@@ -1150,7 +1150,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                     SCH_SCREEN* screen = m_sheetMap.at( sheet )->GetScreen();
 
                     // autoplace intersheet refs again since we've changed the name
-                    m_globalLabelsMap.at( netTerm.SymbolID )->AutoplaceFields( screen, false );
+                    m_globalLabelsMap.at( netTerm.SymbolID )->AutoplaceFields( screen, AUTOPLACE_AUTO );
                 }
             }
             else if( !net.Name.IsEmpty() && Schematic.Symbols.count( netTerm.SymbolID )
@@ -2513,7 +2513,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets( const LAYER_ID&       
     wxString pageNumStr = wxString::Format( "%d", getSheetNumber( aCadstarSheetID ) );
     instance.SetPageNumber( pageNumStr );
 
-    sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+    sheet->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
 
     m_sheetMap.insert( { aCadstarSheetID, sheet } );
 

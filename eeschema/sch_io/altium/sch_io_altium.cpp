@@ -3614,7 +3614,7 @@ void SCH_IO_ALTIUM::ParsePort( const ASCH_PORT& aElem )
         break;
     }
 
-    label->AutoplaceFields( screen, false );
+    label->AutoplaceFields( screen, AUTOPLACE_AUTO );
 
     // Default "Sheet References" field should be hidden, at least for now
     if( label->GetFields().size() > 0 )

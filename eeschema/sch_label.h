@@ -239,7 +239,7 @@ public:
 
     void SetPosition( const VECTOR2I& aPosition ) override;
 
-    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
+    void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
 
     /**
      * Builds an array of { pageNumber, pageName } pairs.
@@ -472,7 +472,7 @@ public:
                              std::vector<VECTOR2I>& aPoints,
                              const VECTOR2I& aPos ) const override;
 
-    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
+    void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 

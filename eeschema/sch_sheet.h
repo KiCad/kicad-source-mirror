@@ -58,8 +58,7 @@ class SCH_SHEET : public SCH_ITEM
 public:
     SCH_SHEET( EDA_ITEM* aParent = nullptr, const VECTOR2I& aPos = VECTOR2I( 0, 0 ),
                VECTOR2I aSize = VECTOR2I( schIUScale.MilsToIU( MIN_SHEET_WIDTH ),
-                                          schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) ),
-               FIELDS_AUTOPLACED aAutoplaceFields = FIELDS_AUTOPLACED_AUTO );
+                                          schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) ) );
 
     /**
      * Copy \a aSheet into a new object.  All sheet pins are copied as is except and
@@ -335,7 +334,7 @@ public:
      */
     void Resize( const VECTOR2I& aSize );
 
-    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
+    void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
 
     void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList ) override;
 

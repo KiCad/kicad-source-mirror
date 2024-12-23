@@ -706,7 +706,7 @@ void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLAB
         if( show )
         {
             if( fields.size() == 1 && fields[0].GetTextPos() == globalLabel->GetPosition() )
-                globalLabel->AutoplaceFields( CurrentSheet().LastScreen(), false );
+                globalLabel->AutoplaceFields( CurrentSheet().LastScreen(), AUTOPLACE_AUTO );
 
             CurrentSheet().LastScreen()->Update( globalLabel );
             aItemCallback( globalLabel );

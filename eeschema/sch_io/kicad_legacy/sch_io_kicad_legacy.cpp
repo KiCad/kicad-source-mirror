@@ -632,7 +632,7 @@ SCH_SHEET* SCH_IO_KICAD_LEGACY::loadSheet( LINE_READER& aReader )
         }
         else if( strCompare( "$EndSheet", line ) )
         {
-            sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+            sheet->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
             return sheet.release();
         }
 

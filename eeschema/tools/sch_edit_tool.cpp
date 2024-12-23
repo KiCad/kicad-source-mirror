@@ -788,7 +788,12 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             symbol->Rotate( rotPoint, !clockwise );
 
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                symbol->AutoAutoplaceFields( m_frame->GetScreen() );
+            {
+                AUTOPLACE_ALGO fieldsAutoplaced = symbol->GetFieldsAutoplaced();
+
+                if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+                    symbol->AutoplaceFields( m_frame->GetScreen(), fieldsAutoplaced );
+            }
 
             break;
         }
@@ -857,7 +862,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 field->SetTextAngle( ANGLE_HORIZONTAL );
 
             // Now that we're moving a field, they're no longer autoplaced.
-            static_cast<SCH_ITEM*>( head->GetParent() )->ClearFieldsAutoplaced();
+            static_cast<SCH_ITEM*>( head->GetParent() )->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
             break;
         }
@@ -965,7 +970,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     field->SetTextAngle( ANGLE_HORIZONTAL );
 
                 // Now that we're moving a field, they're no longer autoplaced.
-                static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
+                static_cast<SCH_ITEM*>( field->GetParent() )->SetFieldsAutoplaced( AUTOPLACE_NONE );
             }
         }
         else if( item->Type() == SCH_TABLE_T )
@@ -1045,7 +1050,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             else
                 symbol->SetOrientation( SYM_MIRROR_Y );
 
-            symbol->ClearFieldsAutoplaced();
+            symbol->SetFieldsAutoplaced( AUTOPLACE_NONE );
             break;
         }
 
@@ -1084,7 +1089,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 field->SetHorizJustify( GetFlippedAlignment( field->GetHorizJustify() ) );
 
             // Now that we're re-justifying a field, they're no longer autoplaced.
-            static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
+            static_cast<SCH_ITEM*>( field->GetParent() )->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
             break;
         }
@@ -1163,7 +1168,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                     field->SetHorizJustify( GetFlippedAlignment( field->GetHorizJustify() ) );
 
                 // Now that we're re-justifying a field, they're no longer autoplaced.
-                static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
+                static_cast<SCH_ITEM*>( field->GetParent() )->SetFieldsAutoplaced( AUTOPLACE_NONE );
             }
             else
             {
@@ -1787,7 +1792,13 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     dlg.UpdateField( &commit, aField, &m_frame->GetCurrentSheet() );
 
     if( m_frame->eeconfig()->m_AutoplaceFields.enable || parentType == SCH_SHEET_T )
-        static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
+    {
+        SCH_ITEM*      parent = static_cast<SCH_ITEM*>( aField->GetParent() );
+        AUTOPLACE_ALGO fieldsAutoplaced = parent->GetFieldsAutoplaced();
+
+        if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+            parent->AutoplaceFields( m_frame->GetScreen(), fieldsAutoplaced );
+    }
 
     if( !commit.Empty() )
         commit.Push( caption );
@@ -1902,7 +1913,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
         if( !moving && !sch_item->IsNew() )
             commit.Modify( sch_item, m_frame->GetScreen() );
 
-        sch_item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+        sch_item->AutoplaceFields( m_frame->GetScreen(), AUTOPLACE_MANUAL );
 
         updateItem( sch_item, true );
     }
@@ -2057,7 +2068,12 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         if( retval == SYMBOL_PROPS_EDIT_OK )
         {
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                symbol->AutoAutoplaceFields( m_frame->GetScreen() );
+            {
+                AUTOPLACE_ALGO fieldsAutoplaced = symbol->GetFieldsAutoplaced();
+
+                if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+                    symbol->AutoplaceFields( m_frame->GetScreen(), fieldsAutoplaced );
+            }
 
             m_frame->OnModify();
         }
@@ -2676,7 +2692,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             new_eda_text->SetBold( eda_text->IsBold() );
             new_eda_text->SetItalic( eda_text->IsItalic() );
 
-            newtext->AutoplaceFields( m_frame->GetScreen(), false );
+            newtext->AutoplaceFields( m_frame->GetScreen(), AUTOPLACE_AUTO );
 
             SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item );
             SCH_LABEL_BASE* new_label = dynamic_cast<SCH_LABEL_BASE*>( newtext );
@@ -2775,7 +2791,7 @@ int SCH_EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
             setJustify( static_cast<SCH_FIELD*>( item ) );
 
             // Now that we're re-justifying a field, they're no longer autoplaced.
-            static_cast<SCH_ITEM*>( item->GetParent() )->ClearFieldsAutoplaced();
+            static_cast<SCH_ITEM*>( item->GetParent() )->SetFieldsAutoplaced( AUTOPLACE_NONE );
         }
         else if( item->Type() == SCH_TEXT_T )
         {

@@ -375,11 +375,11 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     m_fields->at( SHEETNAME ).SetText( newSheetname );
 
     // change all field positions from relative to absolute
-    for( unsigned i = 0;  i < m_fields->size();  ++i )
-        m_fields->at( i ).Offset( m_sheet->GetPosition() );
+    for( SCH_FIELD& m_field : *m_fields)
+        m_field.Offset( m_sheet->GetPosition() );
 
     if( positioningChanged( m_fields, m_sheet->GetFields() ) )
-        m_sheet->ClearFieldsAutoplaced();
+        m_sheet->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
     for( int ii = m_fields->GetNumberRows() - 1; ii >= SHEET_MANDATORY_FIELDS; ii-- )
     {

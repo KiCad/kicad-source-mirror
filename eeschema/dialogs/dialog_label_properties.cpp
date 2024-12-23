@@ -462,8 +462,6 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         m_currentLabel->SetText( text );
     }
 
-    bool doAutoplace = false;
-
     // change all field positions from relative to absolute
     for( SCH_FIELD& field : *m_fields )
     {
@@ -491,9 +489,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     }
 
     if( positioningChanged( m_fields, m_currentLabel->GetFields() ) )
-        m_currentLabel->ClearFieldsAutoplaced();
-    else
-        doAutoplace = true;
+        m_currentLabel->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
     for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
     {
@@ -583,8 +579,10 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         m_currentLabel->SetSpinStyle( selectedSpinStyle );
     }
 
-    if( doAutoplace )
-        m_currentLabel->AutoAutoplaceFields( m_Parent->GetScreen() );
+    AUTOPLACE_ALGO fieldsAutoplaced = m_currentLabel->GetFieldsAutoplaced();
+
+    if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+        m_currentLabel->AutoplaceFields( m_Parent->GetScreen(), fieldsAutoplaced );
 
     if( !commit.Empty() )
         commit.Push( _( "Edit Label Properties" ) );

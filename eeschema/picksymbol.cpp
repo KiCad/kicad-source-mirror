@@ -166,7 +166,12 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
     if( !commit.Empty() )
     {
         if( eeconfig()->m_AutoplaceFields.enable )
-            aSymbol->AutoAutoplaceFields( GetScreen() );
+        {
+            AUTOPLACE_ALGO fieldsAutoplaced = aSymbol->GetFieldsAutoplaced();
+
+            if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+                aSymbol->AutoplaceFields( GetScreen(), fieldsAutoplaced );
+        }
 
         commit.Push( _( "Change Unit" ) );
     }

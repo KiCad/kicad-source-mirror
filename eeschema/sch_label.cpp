@@ -166,7 +166,6 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KIC
         m_lastResolvedColor( COLOR4D::UNSPECIFIED )
 {
     SetMultilineAllowed( false );
-    ClearFieldsAutoplaced();    // fields are not yet autoplaced.
 
     if( !HasTextVars() )
         m_cached_driver_name = EscapeString( EDA_TEXT::GetShownText( true, 0 ), CTX_NETNAME );
@@ -403,16 +402,14 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
 {
     SCH_TEXT::Rotate90( aClockwise );
 
-    if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
+    if( m_fieldsAutoplaced == AUTOPLACE_AUTO || m_fieldsAutoplaced == AUTOPLACE_MANUAL )
     {
-        AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+        AutoplaceFields( nullptr, m_fieldsAutoplaced );
     }
     else
     {
         for( SCH_FIELD& field : m_fields )
-        {
             field.Rotate( GetPosition(), !aClockwise );
-        }
     }
 }
 
@@ -560,7 +557,7 @@ double SCH_LABEL_BASE::Similarity( const SCH_ITEM& aOther ) const
 }
 
 
-void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
     int margin = GetTextOffset() * 2;
     int labelLen = GetBodyBoundingBox().GetSizeMax();
@@ -627,7 +624,8 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
             accumulated += field.GetTextHeight() + margin;
     }
 
-    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
+    if( aAlgo == AUTOPLACE_AUTO || aAlgo == AUTOPLACE_MANUAL )
+        m_fieldsAutoplaced = aAlgo;
 }
 
 
@@ -1691,7 +1689,7 @@ void SCH_DIRECTIVE_LABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSett
 }
 
 
-void SCH_DIRECTIVE_LABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+void SCH_DIRECTIVE_LABEL::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
     int margin = GetTextOffset();
     int symbolWidth = m_symbolSize;
@@ -1740,7 +1738,8 @@ void SCH_DIRECTIVE_LABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
         origin -= field.GetTextHeight() + margin;
     }
 
-    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
+    if( aAlgo == AUTOPLACE_AUTO || aAlgo == AUTOPLACE_MANUAL )
+        m_fieldsAutoplaced = aAlgo;
 }
 
 

@@ -64,11 +64,13 @@ enum BODY_STYLE : int
 #define MINIMUM_SELECTION_DISTANCE 2 // Minimum selection distance in mils
 
 
-enum FIELDS_AUTOPLACED
+enum AUTOPLACE_ALGO
 {
-    FIELDS_AUTOPLACED_NO = 0,
-    FIELDS_AUTOPLACED_AUTO,
-    FIELDS_AUTOPLACED_MANUAL
+    AUTOPLACE_NONE,      // No autoplacement
+    AUTOPLACE_AUTO,      // A minimalist placement algorithm.
+    AUTOPLACE_MANUAL,    // A more involved routine that can be annoying if done from the get go.
+                         //   Initiated by a hotkey or menu item.
+    AUTOPLACE_AUTOADDED  // Autoplace only those fields marked as AutoAdded.
 };
 
 
@@ -545,25 +547,10 @@ public:
     /**
      * Return whether the fields have been automatically placed.
      */
-    FIELDS_AUTOPLACED GetFieldsAutoplaced() const { return m_fieldsAutoplaced; }
+    AUTOPLACE_ALGO GetFieldsAutoplaced() const { return m_fieldsAutoplaced; }
+    void SetFieldsAutoplaced( AUTOPLACE_ALGO aAlgo ) { m_fieldsAutoplaced = aAlgo; }
 
-    void SetFieldsAutoplaced() { m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO; }
-    void ClearFieldsAutoplaced() { m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO; }
-
-    /**
-     * Autoplace fields only if correct to do so automatically.
-     *
-     * Fields that have been moved by hand are not automatically placed.
-     *
-     * @param aScreen is the SCH_SCREEN associated with the current instance of the symbol.
-     */
-    void AutoAutoplaceFields( SCH_SCREEN* aScreen )
-    {
-        if( GetFieldsAutoplaced() )
-            AutoplaceFields( aScreen, GetFieldsAutoplaced() == FIELDS_AUTOPLACED_MANUAL );
-    }
-
-    virtual void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) { }
+    virtual void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) { }
 
     virtual void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) { }
 
@@ -724,7 +711,7 @@ protected:
     int               m_unit;               // set to 0 if common to all units
     int               m_bodyStyle;          // set to 0 if common to all body styles
     bool              m_private;            // only shown in Symbol Editor
-    FIELDS_AUTOPLACED m_fieldsAutoplaced;   // indicates status of field autoplacement
+    AUTOPLACE_ALGO    m_fieldsAutoplaced;   // indicates status of field autoplacement
     VECTOR2I          m_storedPos;          // temp variable used in some move commands to store
                                             // an initial position of the item or mouse cursor
 

@@ -133,25 +133,26 @@ public:
      * @param aManual - if true, use extra heuristics for smarter placement when manually
      * called up.
      */
-    void DoAutoplace( bool aManual )
+    void DoAutoplace( AUTOPLACE_ALGO aAlgo )
     {
         bool            forceWireSpacing = false;
-        SIDE_AND_NPINS  sideandpins = chooseSideForFields( aManual );
+        SIDE_AND_NPINS  sideandpins = chooseSideForFields( aAlgo == AUTOPLACE_MANUAL );
         SIDE            field_side = sideandpins.side;
         VECTOR2I        fbox_pos = fieldBoxPlacement( sideandpins );
         BOX2I           field_box( fbox_pos, m_fbox_size );
 
-        if( aManual )
+        if( aAlgo == AUTOPLACE_MANUAL )
             forceWireSpacing = fitFieldsBetweenWires( &field_box, field_side );
 
         // Move the fields
         int last_y_coord = field_box.GetTop();
 
-        for( unsigned field_idx = 0; field_idx < m_fields.size(); ++field_idx )
+        for( SCH_FIELD* field : m_fields )
         {
-            SCH_FIELD* field = m_fields[field_idx];
-
             if( !field->IsVisible() || !field->CanAutoplace() )
+                continue;
+
+            if( aAlgo == AUTOPLACE_AUTOADDED && !field->IsAutoAdded() )
                 continue;
 
             if( m_allow_rejustify )
@@ -727,12 +728,18 @@ const AUTOPLACER::SIDE AUTOPLACER::SIDE_LEFT( -1, 0 );
 const AUTOPLACER::SIDE AUTOPLACER::SIDE_RIGHT( 1, 0 );
 
 
-void SCH_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+void SCH_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
-    if( aManual )
+    if( aAlgo == AUTOPLACE_MANUAL )
         wxASSERT_MSG( aScreen, wxS( "A SCH_SCREEN pointer must be given for manual autoplacement" ) );
 
     AUTOPLACER autoplacer( this, aScreen );
-    autoplacer.DoAutoplace( aManual );
-    m_fieldsAutoplaced = ( aManual ? FIELDS_AUTOPLACED_MANUAL : FIELDS_AUTOPLACED_AUTO );
+    autoplacer.DoAutoplace( aAlgo );
+
+    if( aAlgo == AUTOPLACE_AUTO )
+        m_fieldsAutoplaced = AUTOPLACE_AUTO;
+    else if( aAlgo == AUTOPLACE_MANUAL )
+        m_fieldsAutoplaced = AUTOPLACE_MANUAL;
+    else if( aAlgo == AUTOPLACE_AUTOADDED )
+        /* leave m_fieldsAutoplaced as it is */;
 }

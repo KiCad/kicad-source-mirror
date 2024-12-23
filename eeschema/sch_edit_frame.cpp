@@ -1701,7 +1701,7 @@ void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
                     SCH_LABEL_BASE* otherLabel = static_cast<SCH_LABEL_BASE*>( item );
 
                     if( otherLabel != label && otherLabel->GetText() == label->GetText() )
-                        otherLabel->AutoplaceFields( aScreen, false );
+                        otherLabel->AutoplaceFields( aScreen, AUTOPLACE_AUTO );
                 }
             }
         }

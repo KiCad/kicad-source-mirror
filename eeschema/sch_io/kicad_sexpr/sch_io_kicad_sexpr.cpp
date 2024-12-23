@@ -734,7 +734,9 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
     KICAD_FORMAT::FormatBool( m_out, "on_board", !aSymbol->GetExcludedFromBoard() );
     KICAD_FORMAT::FormatBool( m_out, "dnp", aSymbol->GetDNP() );
 
-    if( aSymbol->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
+    AUTOPLACE_ALGO fieldsAutoplaced = aSymbol->GetFieldsAutoplaced();
+
+    if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
         KICAD_FORMAT::FormatBool( m_out, "fields_autoplaced", true );
 
     KICAD_FORMAT::FormatUuid( m_out, aSymbol->m_Uuid );
@@ -996,7 +998,9 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
     KICAD_FORMAT::FormatBool( m_out, "on_board", !aSheet->GetExcludedFromBoard() );
     KICAD_FORMAT::FormatBool( m_out, "dnp", aSheet->GetDNP() );
 
-    if( aSheet->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
+    AUTOPLACE_ALGO fieldsAutoplaced = aSheet->GetFieldsAutoplaced();
+
+    if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
         KICAD_FORMAT::FormatBool( m_out, "fields_autoplaced", true );
 
     STROKE_PARAMS stroke( aSheet->GetBorderWidth(), LINE_STYLE::SOLID, aSheet->GetBorderColor() );
@@ -1323,8 +1327,13 @@ void SCH_IO_KICAD_SEXPR::saveText( SCH_TEXT* aText )
                       EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
     }
 
-    if( label && !label->GetFields().empty() && label->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
-        KICAD_FORMAT::FormatBool( m_out, "fields_autoplaced", true );
+    if( label && !label->GetFields().empty() )
+    {
+        AUTOPLACE_ALGO fieldsAutoplaced = label->GetFieldsAutoplaced();
+
+        if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+            KICAD_FORMAT::FormatBool( m_out, "fields_autoplaced", true );
+    }
 
     aText->EDA_TEXT::Format( m_out, 0 );
     KICAD_FORMAT::FormatUuid( m_out, aText->m_Uuid );

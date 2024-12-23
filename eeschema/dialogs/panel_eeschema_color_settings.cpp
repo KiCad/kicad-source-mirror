@@ -442,12 +442,12 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     }
 
     SCH_SHEET* s = new SCH_SHEET(
-        /* aParent */ nullptr,
-        /* aPosition */ MILS_POINT( 4000, 1300 ),
+            /* aParent */ nullptr,
+            /* aPosition */ MILS_POINT( 4000, 1300 ),
             /* aSize */ VECTOR2I( schIUScale.MilsToIU( 800 ), schIUScale.MilsToIU( 1300 ) ) );
     s->GetFields().at( SHEETNAME ).SetText( wxT( "SHEET" ) );
     s->GetFields().at( SHEETFILENAME ).SetText( _( "/path/to/sheet" ) );
-    s->AutoplaceFields( nullptr, false );
+    s->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
     addItem( s );
 
     SCH_SHEET_PIN* sp = new SCH_SHEET_PIN( s, MILS_POINT( 4500, 1500 ), wxT( "SHEET PIN" ) );
@@ -459,7 +459,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         if( sch_item && sch_item->IsConnectable() )
         {
-            sch_item->AutoplaceFields( nullptr, false );
+            sch_item->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
             sch_item->GetEndPoints( endPointsByType );
         }
     }

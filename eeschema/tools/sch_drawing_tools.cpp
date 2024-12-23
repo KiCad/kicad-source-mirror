@@ -403,7 +403,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 existingRefs.SortByReferenceOnly();
 
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                    symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+                {
+                    // Not placed yet, so pass a nullptr screen reference
+                    symbol->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+                }
 
                 // Update cursor now that we have a symbol
                 setCursor();
@@ -414,7 +417,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 m_frame->AddToScreen( symbol, screen );
 
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                    symbol->AutoplaceFields( screen, false /* aManual */ );
+                    symbol->AutoplaceFields( screen, AUTOPLACE_AUTO );
 
                 m_frame->SaveCopyForRepeatItem( symbol );
 
@@ -2008,7 +2011,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     item->SetPosition( cursorPos );
 
                     item->SetFlags( IS_NEW | IS_MOVING );
-                    item->AutoplaceFields( nullptr, false /* aManual */ );
+
+                    // Not placed yet, so pass a nullptr screen reference
+                    item->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+
                     updatePreview();
                     m_selectionTool->AddItemToSel( item );
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
@@ -2041,7 +2047,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     commit.Added( item, m_frame->GetScreen() );
                 }
 
-                item->AutoplaceFields( m_frame->GetScreen(), false /* aManual */ );
+                item->AutoplaceFields( m_frame->GetScreen(), AUTOPLACE_AUTO );
 
                 commit.Push( description );
 
@@ -2110,7 +2116,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             item->SetPosition( cursorPos );
-            item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+
+            // Not placed yet, so pass a nullptr screen reference
+            item->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+
             updatePreview();
         }
         else if( item && evt->IsAction( &ACTIONS::doDelete ) )
@@ -3024,7 +3033,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             {
                 m_view->ClearPreview();
 
-                sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+                sheet->AutoplaceFields( m_frame->GetScreen(), AUTOPLACE_AUTO );
 
                 // Use the commit we were provided or make our own
                 SCH_COMMIT  tempCommit = SCH_COMMIT( m_toolMgr );

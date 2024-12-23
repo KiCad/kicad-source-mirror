@@ -915,7 +915,7 @@ SCH_LABEL_BASE* SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VEC
         field.SetVisible( true );
 
         label->AddField( field );
-        label->AutoplaceFields( nullptr, false );
+        label->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
     }
     else
     {

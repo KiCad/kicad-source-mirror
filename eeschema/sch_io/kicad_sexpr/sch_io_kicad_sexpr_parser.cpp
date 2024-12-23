@@ -2961,7 +2961,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
     std::set<int> fieldIDsRead;
 
     // We'll reset this if we find a fields_autoplaced token
-    symbol->ClearFieldsAutoplaced();
+    symbol->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
     m_fieldIDsRead.clear();
 
@@ -3101,7 +3101,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
 
         case T_fields_autoplaced:
             if( parseMaybeAbsentBool( true ) )
-                symbol->SetFieldsAutoplaced();
+                symbol->SetFieldsAutoplaced( AUTOPLACE_AUTO );
 
             break;
 
@@ -3435,7 +3435,7 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
     std::set<int> fieldIDsRead;
 
     // We'll reset this if we find a fields_autoplaced token
-    sheet->ClearFieldsAutoplaced();
+    sheet->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -3483,7 +3483,7 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
 
         case T_fields_autoplaced:
             if( parseMaybeAbsentBool( true ) )
-                sheet->SetFieldsAutoplaced();
+                sheet->SetFieldsAutoplaced( AUTOPLACE_AUTO );
 
             break;
 
@@ -4240,7 +4240,7 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSchText()
     }
 
     // We'll reset this if we find a fields_autoplaced token
-    text->ClearFieldsAutoplaced();
+    text->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
     NeedSYMBOL();
 
@@ -4322,7 +4322,7 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSchText()
 
         case T_fields_autoplaced:
             if( parseMaybeAbsentBool( true ) )
-                text->SetFieldsAutoplaced();
+                text->SetFieldsAutoplaced( AUTOPLACE_AUTO );
 
             break;
 
@@ -4389,7 +4389,7 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSchText()
     SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( text.get() );
 
     if( label && label->GetFields().empty() )
-        label->SetFieldsAutoplaced();
+        label->SetFieldsAutoplaced( AUTOPLACE_AUTO );
 
     return text.release();
 }

@@ -76,8 +76,7 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
 }
 
 
-SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
-                      FIELDS_AUTOPLACED aAutoplaceFields ) :
+SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) :
         SCH_ITEM( aParent, SCH_SHEET_T ),
         m_excludedFromSim( false ),
         m_excludedFromBOM( false ),
@@ -92,7 +91,7 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
     m_borderWidth = 0;
     m_borderColor = COLOR4D::UNSPECIFIED;
     m_backgroundColor = COLOR4D::UNSPECIFIED;
-    m_fieldsAutoplaced = aAutoplaceFields;
+    m_fieldsAutoplaced = AUTOPLACE_AUTO;
 
     for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
     {
@@ -107,7 +106,7 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
             m_fields.back().SetLayer( LAYER_SHEETFIELDS );
     }
 
-    AutoAutoplaceFields( nullptr );
+    AutoplaceFields( nullptr, m_fieldsAutoplaced );
 }
 
 
@@ -663,7 +662,7 @@ int SCH_SHEET::GetPenWidth() const
 }
 
 
-void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool /* aManual */ )
+void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
     VECTOR2I textSize = m_fields[SHEETNAME].GetTextSize();
     int      borderMargin = KiROUND( GetPenWidth() / 2.0 ) + 4;
@@ -702,7 +701,8 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool /* aManual */ )
         m_fields[ SHEETFILENAME ].SetTextAngle( ANGLE_HORIZONTAL );
     }
 
-    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
+    if( aAlgo == AUTOPLACE_AUTO || aAlgo == AUTOPLACE_MANUAL )
+        m_fieldsAutoplaced = aAlgo;
 }
 
 
@@ -937,9 +937,9 @@ void SCH_SHEET::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
     for( SCH_SHEET_PIN* sheetPin : m_pins )
         sheetPin->Rotate( aCenter, aRotateCCW );
 
-    if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
+    if( m_fieldsAutoplaced == AUTOPLACE_AUTO || m_fieldsAutoplaced == AUTOPLACE_MANUAL )
     {
-        AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+        AutoplaceFields( nullptr, m_fieldsAutoplaced );
     }
     else
     {
@@ -1011,8 +1011,8 @@ void SCH_SHEET::Resize( const VECTOR2I& aSize )
     m_size = aSize;
 
     // Move the fields if we're in autoplace mode
-    if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
-        AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+    if( m_fieldsAutoplaced == AUTOPLACE_AUTO || m_fieldsAutoplaced == AUTOPLACE_MANUAL )
+        AutoplaceFields( nullptr, m_fieldsAutoplaced );
 
     // Move the sheet labels according to the new sheet size.
     for( SCH_SHEET_PIN* sheetPin : m_pins )

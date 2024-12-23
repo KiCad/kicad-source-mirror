@@ -697,7 +697,7 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
     }
 
     if( positioningModified && parent )
-        parent->ClearFieldsAutoplaced();
+        parent->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
     //Update the hierarchy navigator labels if needed
     if( needUpdateHierNav )

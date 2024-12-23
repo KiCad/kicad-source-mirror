@@ -759,14 +759,24 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
             }
 
             if( resetPositions && frame->eeconfig()->m_AutoplaceFields.enable )
-                symbol->AutoAutoplaceFields( screen );
+            {
+                AUTOPLACE_ALGO fieldsAutoplaced = symbol->GetFieldsAutoplaced();
+
+                if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+                    symbol->AutoplaceFields( screen, fieldsAutoplaced );
+            }
         }
 
         symbol->SetSchSymbolLibraryName( wxEmptyString );
         screen->Append( symbol );
 
         if( resetPositions )
-            symbol->AutoAutoplaceFields( screen );
+        {
+            AUTOPLACE_ALGO fieldsAutoplaced = symbol->GetFieldsAutoplaced();
+
+            if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+                symbol->AutoplaceFields( screen, fieldsAutoplaced );
+        }
 
         frame->GetCanvas()->GetView()->Update( symbol );
 

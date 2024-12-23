@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
 
                 if( schItem != nullptr )
                 {
-                    schItem->ClearFieldsAutoplaced();
+                    schItem->SetFieldsAutoplaced( AUTOPLACE_NONE );
                     // Only rotating pins around the center of parent sheet works.
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
@@ -249,7 +249,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
 
                             if( schItem != nullptr )
                             {
-                                schItem->ClearFieldsAutoplaced();
+                                schItem->SetFieldsAutoplaced( AUTOPLACE_NONE );
                                 schItem->Rotate( aRef, false );
                                 schItem->Rotate( aRef, false );
                                 schItem->Rotate( aRef, false );
@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
                         // (warning: only for text items having no autoplaced fields).
                         if( schItem != nullptr )
                         {
-                            schItem->ClearFieldsAutoplaced();
+                            schItem->SetFieldsAutoplaced( AUTOPLACE_NONE );
                             schItem->MirrorHorizontally( aRef.x );
                             schItem->MirrorHorizontally( aRef.x );
                         }
@@ -327,7 +327,7 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
 
                         if( schItem != nullptr )
                         {
-                            schItem->ClearFieldsAutoplaced();
+                            schItem->SetFieldsAutoplaced( AUTOPLACE_NONE );
                             schItem->MirrorVertically( aRef.y );
                             schItem->MirrorVertically( aRef.y );
                         }

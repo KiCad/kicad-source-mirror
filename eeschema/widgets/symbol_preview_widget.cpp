@@ -231,7 +231,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 
         m_previewItem->SetPreviewUnit( settings->m_ShowUnit );
         m_previewItem->SetPreviewBodyStyle( settings->m_ShowBodyStyle );
-        m_previewItem->AutoAutoplaceFields( nullptr );
+        m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTOADDED );
 
         view->Add( m_previewItem );
 
@@ -284,7 +284,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBo
 
         m_previewItem->SetPreviewUnit( settings->m_ShowUnit );
         m_previewItem->SetPreviewBodyStyle( settings->m_ShowBodyStyle );
-        m_previewItem->AutoAutoplaceFields( nullptr );
+        m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTOADDED );
 
         view->Add( m_previewItem );
 

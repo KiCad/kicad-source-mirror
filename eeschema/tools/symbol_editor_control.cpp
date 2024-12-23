@@ -808,7 +808,10 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         symbol->SetParent( schframe->GetScreen() );
 
         if( schframe->eeconfig()->m_AutoplaceFields.enable )
-            symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+        {
+            // Not placed yet, so pass a nullptr screen reference
+            symbol->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+        }
 
         schframe->Raise();
         schframe->GetToolManager()->PostAction( EE_ACTIONS::placeSymbol,

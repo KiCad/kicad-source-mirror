@@ -576,13 +576,10 @@ public:
     /**
      * Automatically orient all the fields in the symbol.
      *
-     * @param aScreen is the SCH_SCREEN associated with the current instance of the
-     *                symbol. This can be NULL when aManual is false.
-     * @param aManual should be true if the autoplace was manually initiated (e.g. by a hotkey
-     *                or a menu item). Some more 'intelligent' routines will be used that would be
-     *                annoying if done automatically during moves.
+     * @param aScreen is the SCH_SCREEN associated with the current instance of the symbol.
+     *                Required when \a aAlgo is AUTOPLACE_MANUAL; optional otherwise.
      */
-    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
+    void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 

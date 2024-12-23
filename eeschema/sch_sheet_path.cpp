@@ -406,7 +406,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
                         && intersheetRefs.GetPosition() == VECTOR2I( 0, 0 )
                         && !intersheetRefs.IsVisible() )
                 {
-                    label->AutoplaceFields( LastScreen(), false );
+                    label->AutoplaceFields( LastScreen(), AUTOPLACE_AUTO );
                 }
 
                 intersheetRefs.SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
