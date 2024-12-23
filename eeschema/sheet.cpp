@@ -683,7 +683,13 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
         {
             dc.SetUserScale( 1.0, 1.0 );
             SCH_PRINTOUT printout( this, wxEmptyString, true );
+            // Ensure title block will be when printed on clipboard, regardless
+            // the current cairo print option
+            EESCHEMA_SETTINGS* eecfg = eeconfig();
+            bool print_tb_opt = eecfg->m_Printing.title_block;
+            eecfg->m_Printing.title_block = true;
             bool success = printout.PrintPage( GetScreen(), cfg->GetPrintDC(), false );
+            eecfg->m_Printing.title_block = print_tb_opt;
 
             if( !success )
                 wxLogMessage( _( "Cannot create the schematic image") );
