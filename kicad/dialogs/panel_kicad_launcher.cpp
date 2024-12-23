@@ -105,15 +105,13 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
         btn->SetPadding( FromDIP( 4 ) );
         btn->SetToolTip( aAction.GetTooltip() );
 
-        wxStaticText* label = new wxStaticText( m_scrolledWindow, wxID_ANY, wxEmptyString );
-        wxStaticText* help = new wxStaticText( m_scrolledWindow, wxID_ANY, wxEmptyString );
-
+        m_scrolledWindow->SetFont( titleFont ); // Use font inheritance to avoid extra SetFont call.
+        wxStaticText* label =
+                new wxStaticText( m_scrolledWindow, wxID_ANY, aAction.GetFriendlyName() );
         label->SetToolTip( aAction.GetTooltip() );
-        label->SetFont( titleFont );
-        label->SetLabel( aAction.GetFriendlyName() );
 
-        help->SetFont( helpFont );
-        help->SetLabel( aHelpText );
+        m_scrolledWindow->SetFont( helpFont ); // Use font inheritance to avoid extra SetFont call.
+        wxStaticText* help = new wxStaticText( m_scrolledWindow, wxID_ANY, aHelpText );
 
         btn->Bind( wxEVT_BUTTON, &PANEL_KICAD_LAUNCHER::onLauncherButtonClick, this );
         btn->SetClientData( (void*) &aAction );
