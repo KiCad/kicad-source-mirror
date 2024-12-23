@@ -25,12 +25,14 @@
 #include <lset.h>
 #include <pgm_base.h>
 #include <eda_text.h>
+#include <pcb_dimension.h>
 #include <settings/common_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
-#include <wx/config.h>
 #include <base_units.h>
+
+#include <wx/config.h>
 #include <wx/log.h>
 
 

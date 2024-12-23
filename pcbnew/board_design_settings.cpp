@@ -124,8 +124,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_DimensionPrecision       = DIM_PRECISION::X_XXXX;
     m_DimensionUnitsMode       = DIM_UNITS_MODE::AUTOMATIC;
-    m_DimensionUnitsFormat     = DIM_UNITS_FORMAT::BARE_SUFFIX;
-    m_DimensionSuppressZeroes  = false;
+    m_DimensionUnitsFormat     = DIM_UNITS_FORMAT::NO_SUFFIX;
+    m_DimensionSuppressZeroes  = true;
     m_DimensionTextPosition    = DIM_TEXT_POSITION::OUTSIDE;
     m_DimensionKeepTextAligned = true;
     m_DimensionArrowLength     = pcbIUScale.MilsToIU( DEFAULT_DIMENSION_ARROW_LENGTH );
@@ -799,11 +799,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_DimensionPrecision, DIM_PRECISION::X_XXXX, DIM_PRECISION::X, DIM_PRECISION::V_VVVVV ) );
 
     m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_FORMAT>( "defaults.dimensions.units_format",
-            &m_DimensionUnitsFormat, DIM_UNITS_FORMAT::BARE_SUFFIX, DIM_UNITS_FORMAT::NO_SUFFIX,
+            &m_DimensionUnitsFormat, DIM_UNITS_FORMAT::NO_SUFFIX, DIM_UNITS_FORMAT::NO_SUFFIX,
             DIM_UNITS_FORMAT::PAREN_SUFFIX ) );
 
     m_params.emplace_back( new PARAM<bool>( "defaults.dimensions.suppress_zeroes",
-            &m_DimensionSuppressZeroes, false ) );
+            &m_DimensionSuppressZeroes, true ) );
 
     // NOTE: excluding DIM_TEXT_POSITION::MANUAL from the valid range here
     m_params.emplace_back( new PARAM_ENUM<DIM_TEXT_POSITION>( "defaults.dimensions.text_position",
