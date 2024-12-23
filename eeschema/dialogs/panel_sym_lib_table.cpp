@@ -428,8 +428,9 @@ bool PANEL_SYM_LIB_TABLE::allowAutomaticPluginTypeSelection( wxString& aLibraryP
 
 bool PANEL_SYM_LIB_TABLE::verifyTables()
 {
-    wxString msg;
-    wxBusyCursor wait;
+    wxString                      msg;
+    std::unique_ptr<wxBusyCursor> wait;
+    wait.reset( new wxBusyCursor );
 
     for( SYMBOL_LIB_TABLE_GRID* model : { global_model(), project_model() } )
     {
@@ -460,12 +461,12 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
                                            wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
 
-                wxEndBusyCursor();
+                wait.reset();
 
                 if( badCellDlg.ShowModal() == wxID_NO )
                     return false;
 
-                wxBeginBusyCursor( wxHOURGLASS_CURSOR );
+                wait.reset( new wxBusyCursor );
 
                 // Delete the "empty" row, where empty means missing nick or uri.
                 // This also updates the UI which could be slow, but there should only be a few
@@ -490,7 +491,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                 wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
 
-                wxEndBusyCursor();
+                wait.reset();
                 errdlg.ShowModal();
                 return false;
             }
@@ -542,7 +543,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                     wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
-                    wxEndBusyCursor();
+                    wait.reset();
                     wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
                     errdlg.ShowModal();
 
@@ -582,7 +583,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 msg.Printf( _( "Symbol library '%s' failed to load." ), row.GetNickName() );
 
                 wxWindow* topLevelParent = wxGetTopLevelParent( this );
-                wxEndBusyCursor();
+                wait.reset();
                 wxMessageDialog errdlg( topLevelParent, msg + wxS( "\n" ) + ioe.What(),
                                         _( "Error Loading Library" ) );
                 errdlg.ShowModal();
