@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -421,7 +421,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_filletBitmap = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_filletBitmap, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_allowExternalFilletsOpt = new wxCheckBox( m_scrolledWindow, wxID_ANY, _("Allow fillets outside zone outline"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_allowExternalFilletsOpt = new wxCheckBox( m_scrolledWindow, wxID_ANY, _("Allow fillets/chamfers outside zone outline"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_allowExternalFilletsOpt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
