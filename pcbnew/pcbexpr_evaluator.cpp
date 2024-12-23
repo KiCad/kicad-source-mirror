@@ -484,7 +484,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                 {
                     vref->SetType( LIBEVAL::VT_NUMERIC );
                 }
-                if( prop->TypeHash() == TYPE_HASH( std::optional<int> ) )
+                else if( prop->TypeHash() == TYPE_HASH( std::optional<int> ) )
                 {
                     vref->SetType( LIBEVAL::VT_NUMERIC );
                     vref->SetIsOptional();
@@ -504,7 +504,8 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                 }
                 else
                 {
-                    wxFAIL_MSG( wxT( "PCBEXPR_UCODE::createVarRef: Unknown property type." ) );
+                    wxString msg = wxString::Format( wxT( "PCBEXPR_UCODE::createVarRef: Unknown property type %s from %s." ), cls.name, field );
+                    wxFAIL_MSG( msg );
                 }
             }
         }
