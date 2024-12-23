@@ -90,9 +90,7 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_errorLimits.resize( DRCE_LAST + 1 );
 
     for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
-        m_errorLimits[ ii ] = ERROR_LIMIT;
-
-    ClearGraphicsHandler();
+        m_errorLimits[ii] = ERROR_LIMIT;
 }
 
 
@@ -642,7 +640,6 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         ReportAux( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
-        provider->SetCommit( aCommit );
 
         if( !provider->RunTests( aUnits ) )
             break;
@@ -1635,7 +1632,7 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 
 
 void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
-                                  int aMarkerLayer )
+                                  int aMarkerLayer, DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
 {
     static std::mutex globalLock;
 
@@ -1644,7 +1641,7 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
     if( m_violationHandler )
     {
         std::lock_guard<std::mutex> guard( globalLock );
-        m_violationHandler( aItem, aPos, aMarkerLayer );
+        m_violationHandler( aItem, aPos, aMarkerLayer, aCustomHandler );
     }
 
     if( m_reporter )

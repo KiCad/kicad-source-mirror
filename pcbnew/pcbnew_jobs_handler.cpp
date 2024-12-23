@@ -1641,7 +1641,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     drcEngine->SetProgressReporter( nullptr );
     drcEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
+                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
             {
                 PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aLayer );
                 commit.Add( marker );

@@ -27,6 +27,7 @@
 
 #include <board.h>
 #include <board_commit.h>
+#include <drc/drc_engine.h>
 #include <pcb_marker.h>
 
 #include <functional>
@@ -100,9 +101,6 @@ public:
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
-    BOARD_COMMIT* GetCommit() const { return m_commit; };
-    void          SetCommit( BOARD_COMMIT* aCommit ) { m_commit = aCommit; };
-
 protected:
     int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
@@ -113,7 +111,8 @@ protected:
     virtual void reportAux( const wxChar* fmt, ... );
 
     virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const VECTOR2I& aMarkerPos,
-                                  int aMarkerLayer );
+                                  int                        aMarkerLayer,
+                                  DRC_CUSTOM_MARKER_HANDLER* aCustomHandler = nullptr );
     virtual bool reportProgress( size_t aCount, size_t aSize, size_t aDelta = 1 );
     virtual bool reportPhase( const wxString& aStageName );
 
@@ -138,8 +137,7 @@ protected:
     DRC_ENGINE* m_drcEngine;
     std::unordered_map<const DRC_RULE*, int> m_stats;
     bool        m_isRuleDriven = true;
-    std::mutex  m_statsMutex;
-    BOARD_COMMIT*                            m_commit;
+    std::mutex                               m_statsMutex;
 };
 
 #endif // DRC_TEST_PROVIDER__H

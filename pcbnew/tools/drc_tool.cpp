@@ -172,10 +172,14 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
     m_drcEngine->SetProgressReporter( aProgressReporter );
 
     m_drcEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
+                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
             {
                 PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aLayer );
-                m_drcEngine->GraphicsHandler( marker );
+
+                if( aCustomHandler )
+                    ( *aCustomHandler )( marker );
+
                 commit.Add( marker );
             } );
 

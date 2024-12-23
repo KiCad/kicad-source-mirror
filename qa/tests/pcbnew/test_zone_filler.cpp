@@ -101,7 +101,8 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
     bds.m_DRCEngine->InitEngine( wxFileName() );     // Just to be sure to be sure
 
     bds.m_DRCEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
+                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
             {
                 if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                 {
@@ -124,6 +125,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
                     else if( trk_b && trk_b->m_Uuid == arc8 )     foundArc8Error = true;
                     else if( trk_b && trk_b->m_Uuid == arc12 )    foundArc12Error = true;
                     else                                          foundOtherError = true;
+
                 }
             } );
 
@@ -194,7 +196,8 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
         std::vector<DRC_ITEM> violations;
 
         bds.m_DRCEngine->SetViolationHandler(
-                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
+                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
+                     DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
                 {
                     if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                         violations.push_back( *aItem );
@@ -242,7 +245,8 @@ BOOST_FIXTURE_TEST_CASE( RegressionSliverZoneFillTests, ZONE_FILL_TEST_FIXTURE )
         std::vector<DRC_ITEM> violations;
 
         bds.m_DRCEngine->SetViolationHandler(
-                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
+                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
+                     DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
                 {
                     if( aItem->GetErrorCode() == DRCE_COPPER_SLIVER )
                         violations.push_back( *aItem );

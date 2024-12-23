@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <pcb_track.h>
@@ -44,9 +43,7 @@ DRC_TEST_PROVIDER_REGISTRY::~DRC_TEST_PROVIDER_REGISTRY()
 
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
-        UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES ),
-        m_drcEngine( nullptr ),
-        m_commit (nullptr )
+        UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES ), m_drcEngine( nullptr )
 {
 }
 
@@ -74,14 +71,15 @@ const wxString DRC_TEST_PROVIDER::GetDescription() const { return wxEmptyString;
 
 
 void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item,
-                                         const VECTOR2I& aMarkerPos, int aMarkerLayer )
+                                         const VECTOR2I& aMarkerPos, int aMarkerLayer,
+                                         DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
 {
     std::lock_guard<std::mutex> lock( m_statsMutex );
     if( item->GetViolatingRule() )
         accountCheck( item->GetViolatingRule() );
 
     item->SetViolatingTest( this );
-    m_drcEngine->ReportViolation( item, aMarkerPos, aMarkerLayer );
+    m_drcEngine->ReportViolation( item, aMarkerPos, aMarkerLayer, aCustomHandler );
 }
 
 

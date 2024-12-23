@@ -25,9 +25,10 @@
 
 #include <drc/drc_test_provider_clearance_base.h>
 
-void DRC_TEST_PROVIDER_CLEARANCE_BASE::ShowPathDRC( const std::vector<PCB_SHAPE>& aShapes,
-                                                    const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                                                    int aLength )
+DRC_CUSTOM_MARKER_HANDLER
+DRC_TEST_PROVIDER_CLEARANCE_BASE::GetGraphicsHandler( const std::vector<PCB_SHAPE>& aShapes,
+                                                      const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                                      int aLength )
 {
     COLOR_SETTINGS* colorSettings = new COLOR_SETTINGS( COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT );
     COLOR_SETTINGS* defaultSettings = colorSettings->CreateBuiltinColorSettings()[0];
@@ -35,12 +36,6 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ShowPathDRC( const std::vector<PCB_SHAPE>
     delete colorSettings;
 
     std::vector<PCB_SHAPE> shortestPathShapes1, shortestPathShapes2;
-
-    // m_commit is protected and cannot be sent to the lambda function
-    BOARD_COMMIT* aCommit = m_commit;
-
-    if( !m_commit )
-        return;
 
     // Add the path and its outlined area
     for( PCB_SHAPE sh : aShapes )
@@ -82,17 +77,14 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ShowPathDRC( const std::vector<PCB_SHAPE>
         shortestPathShapes1.push_back( s2 );
     }
 
-    m_GraphicsHandlerBuffer =
-            [aCommit, shortestPathShapes1, shortestPathShapes2]( PCB_MARKER* aMarker )
+    return [shortestPathShapes1, shortestPathShapes2]( PCB_MARKER* aMarker )
     {
-        if( !aCommit || !aMarker )
+        if( !aMarker )
             return;
 
         aMarker->SetShapes1( std::move( shortestPathShapes1 ) );
         aMarker->SetShapes2( std::move( shortestPathShapes2 ) );
     };
-
-    std::swap( m_GraphicsHandlerBuffer, m_drcEngine->m_graphicsHandler );
 }
 
 
@@ -128,10 +120,9 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
     if( minGc )
     {
         PATH_CONNECTION pc = minGc->m_path;
-        ShowPathDRC( minGc->GetShapes(), pc.a1, pc.a2, aDistance );
-        reportViolation( aDrce, aMarkerPos, aMarkerLayer );
-        // After a ShowPathDRC() call, restore the handler
-        std::swap( m_GraphicsHandlerBuffer, m_drcEngine->m_graphicsHandler );
+        DRC_CUSTOM_MARKER_HANDLER handler =
+                GetGraphicsHandler( minGc->GetShapes(), pc.a1, pc.a2, aDistance );
+        reportViolation( aDrce, aMarkerPos, aMarkerLayer, &handler );
     }
     else
     {

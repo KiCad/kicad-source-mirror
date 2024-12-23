@@ -58,11 +58,9 @@ protected:
                                   int aMarkerLayer, const BOARD_ITEM* aItem1,
                                   const BOARD_ITEM* aItem2, PCB_LAYER_ID layer, int aDistance );
 
-    void ShowPathDRC( const std::vector<PCB_SHAPE>& aShapes, const VECTOR2I& aStart,
-                      const VECTOR2I& aEnd, int aLength );
-
-
-    DRC_GRAPHICS_HANDLER m_GraphicsHandlerBuffer;
+    DRC_CUSTOM_MARKER_HANDLER GetGraphicsHandler( const std::vector<PCB_SHAPE>& aShapes,
+                                                  const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                                  int aLength );
 };
 
 
