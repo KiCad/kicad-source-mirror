@@ -1620,19 +1620,19 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseLayer( LAYER* aLayer )
         Expecting( "hide, user defined name, or )" );
     }
 
-    aLayer->m_name    = From_UTF8( name.c_str() );
     aLayer->m_type    = LAYER::ParseType( type.c_str() );
     aLayer->m_number  = layer_num;
     aLayer->m_visible = isVisible;
 
-    if( !userName.empty() )
+    if( m_requiredVersion >= 20200922 )
+    {
         aLayer->m_userName = From_UTF8( userName.c_str() );
-
-    // The canonical name will get reset back to the default for copper layer on the next
-    // save.  The user defined name is now a separate optional layer token from the canonical
-    // name.
-    if( aLayer->m_name != LSET::Name( static_cast<PCB_LAYER_ID>( aLayer->m_number ) ) )
-        aLayer->m_userName = aLayer->m_name;
+        aLayer->m_name = From_UTF8( name.c_str() );
+    }
+    else // Older versions didn't have a dedicated user name field
+    {
+        aLayer->m_name = aLayer->m_userName = From_UTF8( name.c_str() );
+    }
 }
 
 
