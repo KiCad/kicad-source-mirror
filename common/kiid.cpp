@@ -37,6 +37,8 @@
 
 #include <cctype>
 #include <mutex>
+#include <utility>
+#include <stdlib.h>
 
 #include <wx/log.h>
 
@@ -109,7 +111,7 @@ KIID::KIID( int null ) :
 KIID::KIID( const std::string& aString ) :
         m_uuid()
 {
-    if( aString.length() == 8
+    if( !aString.empty() && aString.length() <= 8
         && std::all_of( aString.begin(), aString.end(),
                         []( unsigned char c )
                         {
@@ -119,9 +121,15 @@ KIID::KIID( const std::string& aString ) :
         // A legacy-timestamp-based UUID has only the last 4 octets filled in.
         // Convert them individually to avoid stepping in the little-endian/big-endian
         // doo-doo.
-        for( int i = 0; i < 4; ++i )
+        for( int i = 0; i < 4; i++ )
         {
-            std::string octet = aString.substr( i * 2, 2 );
+            int start = static_cast<int>( aString.length() ) - 8 + i * 2;
+            int end = start + 2;
+
+            start = std::max( 0, start );
+            int len = std::max( 0, end - start );
+
+            std::string octet = aString.substr( start, len );
             m_uuid.data[i + 12] = strtol( octet.data(), nullptr, 16 );
         }
     }
