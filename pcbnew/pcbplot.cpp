@@ -49,7 +49,7 @@ const wxString GetGerberProtelExtension( int aLayer )
         else if( aLayer == B_Cu )
             return wxT( "gbl" );
         else
-            return wxString::Format( wxT( "g%d" ), aLayer+1 );
+            return wxString( wxT( "g" ) ) << CopperLayerToOrdinal( ToLAYER_ID( aLayer ) );
     }
     else
     {
