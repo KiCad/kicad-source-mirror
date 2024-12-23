@@ -4,21 +4,22 @@
 # nickoe <oe.nick@gmail.com>, 2021.
 # Mads Dyrmann <madsdyrmannlarsen@gmail.com>, 2022.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
+# dsa-t <dudesuchamazing@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-18 11:00+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
-"source/da/>\n"
+"PO-Revision-Date: 2024-12-24 14:00+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/"
+"master-source/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -9589,7 +9590,7 @@ msgstr "Opdater skematisk med ændringer foretaget på PCB"
 
 #: common/tool/actions.cpp:1147
 msgid "Preferences..."
-msgstr "Pr&æferencer..."
+msgstr "Præferencer..."
 
 #: common/tool/actions.cpp:1148
 msgid "Show preferences for all open tools"
