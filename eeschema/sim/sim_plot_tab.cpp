@@ -978,36 +978,34 @@ bool SIM_PLOT_TAB::DeleteTrace( const wxString& aVectorName, int aTraceType )
 }
 
 
-void SIM_PLOT_TAB::EnableCursor( const wxString& aVectorName, int aType, int aCursorId,
-                                 bool aEnable, const wxString& aSignalName )
+void SIM_PLOT_TAB::EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName )
 {
-    TRACE* t = GetTrace( aVectorName, aType );
+    CURSOR*   cursor = new CURSOR( aTrace, this );
+    mpWindow* win = GetPlotWin();
+    int       width = win->GetXScreen() - win->GetMarginLeft() - win->GetMarginRight();
+    int       center = win->GetMarginLeft() + KiROUND( width * ( aCursorId == 1 ? 0.4 : 0.6 ) );
 
-    if( t == nullptr || t->HasCursor( aCursorId ) == aEnable )
-        return;
+    cursor->SetName( aSignalName );
+    cursor->SetX( center );
 
-    if( aEnable )
-    {
-        CURSOR*   cursor = new CURSOR( t, this );
-        mpWindow* win = GetPlotWin();
-        int       width = win->GetXScreen() - win->GetMarginLeft() - win->GetMarginRight();
-        int       center = win->GetMarginLeft() + KiROUND( width * ( aCursorId == 1 ? 0.4 : 0.6 ) );
-
-        cursor->SetName( aSignalName );
-        cursor->SetX( center );
-
-        t->SetCursor( aCursorId, cursor );
-        m_plotWin->AddLayer( cursor );
-    }
-    else
-    {
-        CURSOR* cursor = t->GetCursor( aCursorId );
-        t->SetCursor( aCursorId, nullptr );
-        m_plotWin->DelLayer( cursor, true );
-    }
+    aTrace->SetCursor( aCursorId, cursor );
+    m_plotWin->AddLayer( cursor );
 
     // Notify the parent window about the changes
-    wxQueueEvent( GetParent(), new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+    wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+}
+
+
+void SIM_PLOT_TAB::DisableCursor( TRACE* aTrace, int aCursorId )
+{
+    if( CURSOR* cursor = aTrace->GetCursor( aCursorId ) )
+    {
+        aTrace->SetCursor( aCursorId, nullptr );
+        GetPlotWin()->DelLayer( cursor, true );
+
+        // Notify the parent window about the changes
+        wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+    }
 }
 
 

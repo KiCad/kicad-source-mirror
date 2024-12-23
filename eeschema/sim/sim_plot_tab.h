@@ -331,9 +331,9 @@ public:
         return m_dotted_cp;
     }
 
-    ///< Toggle cursor for a particular trace.
-    void EnableCursor( const wxString& aVectorName, int aType, int aCursorId, bool aEnable,
-                       const wxString& aSignalName );
+    ///< Turn on/off the cursor for a particular trace.
+    void EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName );
+    void DisableCursor( TRACE* aTrace, int aCursorId );
 
     ///< Reset scale ranges to fit the current traces.
     void ResetScales( bool aIncludeX );

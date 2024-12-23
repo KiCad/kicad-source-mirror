@@ -1141,16 +1141,27 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
     }
     else if( col == COL_CURSOR_1 || col == COL_CURSOR_2 )
     {
-        for( int ii = 0; ii < m_signalsGrid->GetNumberRows(); ++ii )
+        int    id = col == COL_CURSOR_1 ? 1 : 2;
+        TRACE* activeTrace = nullptr;
+
+        if( text == wxS( "1" ) )
         {
-            signalName = m_signalsGrid->GetCellValue( ii, COL_SIGNAL_NAME );
+            signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
             vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
 
-            int  id = col == COL_CURSOR_1 ? 1 : 2;
-            bool enable = ii == row && text == wxS( "1" );
-
-            plotTab->EnableCursor( vectorName, traceType, id, enable, signalName );
+            activeTrace = plotTab->GetTrace( vectorName, traceType );
+            plotTab->EnableCursor( activeTrace, id, signalName );
             OnModify();
+        }
+
+        // Turn off cursor on other signals.
+        for( const auto& [name, trace] : plotTab->GetTraces() )
+        {
+            if( trace != activeTrace && trace->HasCursor( id ) )
+            {
+                plotTab->DisableCursor( trace, id );
+                OnModify();
+            }
         }
 
         // Update cursor checkboxes (which are really radio buttons)
