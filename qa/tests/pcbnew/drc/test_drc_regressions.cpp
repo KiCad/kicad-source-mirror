@@ -31,6 +31,7 @@
 #include <footprint.h>
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
+#include <widgets/report_severity.h>
 
 
 struct DRC_REGRESSION_TEST_FIXTURE
@@ -123,33 +124,36 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
 {
     // These documents at one time failed to catch DRC errors that they should have
 
-    std::vector<std::pair<wxString, int>> tests =
+    std::map<int, SEVERITY> issue19325_ignore;
+    issue19325_ignore[DRCE_DRILLED_HOLES_TOO_CLOSE] = SEVERITY::RPT_SEVERITY_IGNORE;
+
+    std::vector<std::tuple<wxString, int, decltype(BOARD_DESIGN_SETTINGS::m_DRCSeverities)>> tests =
     {
-        { "issue1358",  2 },
-        { "issue2512",  5 },
-        { "issue2528",  1 },
-        { "issue5750",  4 },   // Shorting zone fills pass DRC in some cases
-        { "issue5854",  3 },
-        { "issue6879",  6 },
-        { "issue6945",  2 },
-        { "issue7241",  1 },
-        { "issue7267",  5 },
-        { "issue7325",  4 },
-        { "issue8003",  2 },
-        { "issue9081",  2 },
-        { "issue12109", 8 },        // Pads fail annular width test
-        { "issue14334", 2 },        // Thermal spoke to otherwise unconnected island
-        { "issue16566", 6 },        // Pad_Shape vs Shape property
-        { "issue18142", 1 },        // blind/buried via to micro-via hole-to-hole
-        { "reverse_via", 3 },       // Via/track ordering
-        { "intersectingzones", 1 }, // zones are too close to each other
-        { "fill_bad",   1 },        // zone max BBox was too small
-        { "issue17967/issue17967", 1}, // Arc dp coupling
-        { "issue18878", 9 },
-        { "issue19325/issue19325", 4 }, // Overlapping pad annular ring calculation
+        { "issue1358",  2, {} },
+        { "issue2512",  5, {} },
+        { "issue2528",  1, {} },
+        { "issue5750",  4, {} },   // Shorting zone fills pass DRC in some cases
+        { "issue5854",  3, {} },
+        { "issue6879",  6, {} },
+        { "issue6945",  2, {} },
+        { "issue7241",  1, {} },
+        { "issue7267",  5, {} },
+        { "issue7325",  4, {} },
+        { "issue8003",  2, {} },
+        { "issue9081",  2, {} },
+        { "issue12109", 8, {} },        // Pads fail annular width test
+        { "issue14334", 2, {} },        // Thermal spoke to otherwise unconnected island
+        { "issue16566", 6, {} },        // Pad_Shape vs Shape property
+        { "issue18142", 1, {} },        // blind/buried via to micro-via hole-to-hole
+        { "reverse_via", 3, {} },       // Via/track ordering
+        { "intersectingzones", 1, {} }, // zones are too close to each other
+        { "fill_bad",   1, {} },        // zone max BBox was too small
+        { "issue17967/issue17967", 1, {}}, // Arc dp coupling
+        { "issue18878", 9, {} },
+        { "issue19325/issue19325", 4, issue19325_ignore }, // Overlapping pad annular ring calculation
     };
 
-    for( const auto& [testName, expectedErrors] : tests )
+    for( const auto& [testName, expectedErrors, customSeverities] : tests )
     {
         BOOST_TEST_CONTEXT( testName )
         {
@@ -164,6 +168,9 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
             bds.m_DRCSeverities[DRCE_COPPER_SLIVER] = SEVERITY::RPT_SEVERITY_IGNORE;
             bds.m_DRCSeverities[DRCE_LIB_FOOTPRINT_ISSUES] = SEVERITY::RPT_SEVERITY_IGNORE;
             bds.m_DRCSeverities[DRCE_LIB_FOOTPRINT_MISMATCH] = SEVERITY::RPT_SEVERITY_IGNORE;
+
+            for(const auto [test, severity] : customSeverities)
+                bds.m_DRCSeverities[test] = severity;
 
             bds.m_DRCEngine->SetViolationHandler(
                     [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
