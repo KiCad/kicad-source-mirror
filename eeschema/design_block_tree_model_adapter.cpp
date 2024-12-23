@@ -116,23 +116,21 @@ DESIGN_BLOCK_TREE_MODEL_ADAPTER::getDesignBlocks( EDA_BASE_FRAME* aParent,
 
 wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, int aUnit )
 {
-    const wxString DescriptionFormat = wxT(
+    static const wxString DescriptionFormat = wxT(
             "<b>__NAME__</b>"
-            "<br>__DESC__"
+            "__DESC__"
+            "__KEY__"
             "<hr><table border=0>"
             "__FIELDS__"
             "</table>" );
 
-    const wxString KeywordsFormat = wxT(
-            "<tr>"
-            "   <td><b>" + _( "Keywords" ) + "</b></td>"
-            "   <td>__KEYWORDS__</td>"
-            "</tr>" );
+    static const wxString DescFormat =      wxS( "<br>%s" );
+    static const wxString KeywordsFormat =  wxS( "<br>" ) + _( "Keywords" ) + wxS( ": %s" );
 
-    const wxString DocFormat = wxT(
+    static const wxString FieldFormat = wxT(
             "<tr>"
-            "   <td><b>" + _( "Documentation" ) + "</b></td>"
-            "   <td><a href=\"__HREF__\">__TEXT__</a></td>"
+            "   <td><b>__FIELD_NAME__</b></td>"
+            "   <td>__FIELD_VALUE__</td>"
             "</tr>" );
 
 
@@ -161,41 +159,8 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
         wxString name = aLibId.GetLibItemName();
         wxString desc = db->GetLibDescription();
         wxString keywords = db->GetKeywords();
-        wxString doc;
 
-        // It is currently common practice to store a documentation link in the description.
-        size_t idx = desc.find( wxT( "http:" ) );
-
-        if( idx == wxString::npos )
-            idx = desc.find( wxT( "https:" ) );
-
-        if( idx != wxString::npos )
-        {
-            int nesting = 0;
-
-            for( auto chit = desc.begin() + idx; chit != desc.end(); ++chit )
-            {
-                int ch = *chit;
-
-                // Break on invalid URI characters
-                if( ch <= 0x20 || ch >= 0x7F || ch == '"' )
-                    break;
-
-                // Check for nesting parentheses, e.g. (Body style from: https://this.url/part.pdf)
-                if( ch == '(' )
-                    ++nesting;
-                else if( ch == ')' && --nesting < 0 )
-                    break;
-
-                doc += ch;
-            }
-
-            // Trim trailing punctuation
-            static wxString punct = wxS( ".,:;" );
-
-            if( punct.find( doc.Last() ) != wxString::npos )
-                doc = doc.Left( doc.Length() - 1 );
-        }
+        html.Replace( "__NAME__", EscapeHTML( name ) );
 
         wxString esc_desc = EscapeHTML( UnescapeString( desc ) );
 
@@ -205,21 +170,27 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
         // Add links
         esc_desc = LinkifyHTML( esc_desc );
 
-        html.Replace( "__DESC__", esc_desc );
-        html.Replace( "__NAME__", EscapeHTML( name ) );
+        if( esc_desc.IsEmpty() )
+            html.Replace( "__DESC__", wxEmptyString );
+        else
+            html.Replace( "__DESC__", wxString::Format( DescFormat, esc_desc ) );
 
-        wxString keywordsHtml = KeywordsFormat;
-        keywordsHtml.Replace( "__KEYWORDS__", EscapeHTML( keywords ) );
+        if( keywords.IsEmpty() )
+            html.Replace( "__KEY__", wxEmptyString );
+        else
+            html.Replace( "__KEY__", wxString::Format( KeywordsFormat, EscapeHTML( keywords ) ) );
 
-        wxString docHtml = DocFormat;
-        docHtml.Replace( "__HREF__", doc );
+        wxString fieldTable;
 
-        if( doc.Length() > 75 )
-            doc = doc.Left( 72 ) + wxT( "..." );
+        for( const auto& [key, value] : db->GetFields() )
+        {
+            wxString fieldRow = FieldFormat;
+            fieldRow.Replace( wxS( "__FIELD_NAME__" ), EscapeHTML( key ) );
+            fieldRow.Replace( wxS( "__FIELD_VALUE__" ), EscapeHTML( value ) );
+            fieldTable += fieldRow;
+        }
 
-        docHtml.Replace( "__TEXT__", EscapeHTML( doc ) );
-
-        html.Replace( "__FIELDS__", keywordsHtml + docHtml );
+        html.Replace( "__FIELDS__", fieldTable );
     }
 
     return html;
