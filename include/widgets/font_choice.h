@@ -33,7 +33,14 @@ public:
 
     virtual ~FONT_CHOICE();
 
-    void SetFontSelection( KIFONT::FONT* aFont );
+    /**
+     * Set the selection in wxChoice widget
+     * @param aFont is the fotn to select
+     * @param aSilentMode allow or not a wxEVT_CHOICE on selection
+     * default = false: the event is sent.
+     * if true, just make silently the selection
+     */
+    void SetFontSelection( KIFONT::FONT* aFont, bool aSilentMode = false );
 
     bool HaveFontSelection() const;
 

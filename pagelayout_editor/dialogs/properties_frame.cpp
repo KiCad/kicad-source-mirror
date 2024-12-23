@@ -298,7 +298,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
         m_constraintY.SetDoubleValue( fromMM( item->m_BoundingBoxSize.y ) );
 
         // Font Options
-        m_fontCtrl->SetFontSelection( item->m_Font );
+        m_fontCtrl->SetFontSelection( item->m_Font, true /*silent mode */ );
 
         m_bold->Check( item->m_Bold );
         m_italic->Check( item->m_Italic );
@@ -477,6 +477,9 @@ void PROPERTIES_FRAME::OnUpdateUI( wxUpdateUIEvent& aEvent )
 {
     if( m_propertiesDirty )
     {
+        // Clear m_propertiesDirty now. Otherwise OnAcceptPrms() is called multiple
+        // times (probably by each updated widget)
+        m_propertiesDirty = false;
         CallAfter(
                 [this]()
                 {

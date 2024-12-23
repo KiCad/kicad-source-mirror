@@ -70,7 +70,7 @@ FONT_CHOICE::~FONT_CHOICE()
 }
 
 
-void FONT_CHOICE::SetFontSelection( KIFONT::FONT* aFont )
+void FONT_CHOICE::SetFontSelection( KIFONT::FONT* aFont, bool aSilentMode )
 {
     if( !aFont )
     {
@@ -87,7 +87,8 @@ void FONT_CHOICE::SetFontSelection( KIFONT::FONT* aFont )
         }
     }
 
-    SendSelectionChangedEvent( wxEVT_CHOICE );
+    if( !aSilentMode )
+        SendSelectionChangedEvent( wxEVT_CHOICE );
 }
 
 
