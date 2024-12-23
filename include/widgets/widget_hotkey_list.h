@@ -143,12 +143,6 @@ private:
     WIDGET_HOTKEY_CLIENT_DATA* getHKClientData( wxTreeListItem aItem );
 
     /**
-     * Get the WIDGET_HOTKEY_CLIENT_DATA form an item and assert if it isn't found. This is for
-     * use when the data not being present indicates an error.
-     */
-    WIDGET_HOTKEY_CLIENT_DATA* getExpectedHkClientData( wxTreeListItem aItem );
-
-    /**
      * Method updateFromClientData
      * Refresh the visible text on the widget from the rows' client data objects.
      */
