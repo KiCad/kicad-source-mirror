@@ -160,6 +160,9 @@ typedef long time_t;
 // std::optional type mappings
 %include optional.i
 
+// Mirror defs
+%include mirror.i
+
 // ignore warning relative to operator = and operator ++:
 #pragma SWIG nowarn=362,383
 
