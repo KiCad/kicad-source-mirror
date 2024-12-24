@@ -334,8 +334,10 @@ void PAGED_DIALOG::UpdateResetButton( int aPage )
     {
         if( panel && ( panel->GetWindowStyle() & wxRESETTABLE ) )
         {
-            m_resetButton->SetLabel( wxString::Format( _( "Reset %s to Defaults" ),
-                                                       m_treebook->GetPageText( aPage ) ) );
+            wxString name = m_treebook->GetPageText( aPage );
+            name.Replace( wxT( "&" ), wxT( "&&" ) );
+
+            m_resetButton->SetLabel( wxString::Format( _( "Reset %s to Defaults" ), name ) );
             m_resetButton->SetToolTip( panel->GetHelpTextAtPoint( wxPoint( -INT_MAX, INT_MAX ),
                                                                   wxHelpEvent::Origin_Unknown ) );
             m_resetButton->Enable( true );
