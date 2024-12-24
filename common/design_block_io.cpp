@@ -152,8 +152,8 @@ long long DESIGN_BLOCK_IO::GetLibraryTimestamp( const wxString& aLibraryPath ) c
     {
         wxFileName blockDir( aLibraryPath, filename );
 
-        // Check if the directory ends with ".block", if so hash all the files in it
         if( blockDir.GetFullName().EndsWith( FILEEXT::KiCadDesignBlockPathExtension ) )
+        // Check if the directory ends with ".kicad_block", if so hash all the files in it
             ts += TimestampDir( blockDir.GetFullPath(), wxT( "*" ) );
 
         hasMoreFiles = libDir.GetNext( &filename );
@@ -260,7 +260,7 @@ void DESIGN_BLOCK_IO::DesignBlockEnumerate( wxArrayString&  aDesignBlockNames,
                                             const wxString& aLibraryPath, bool aBestEfforts,
                                             const std::map<std::string, UTF8>* aProperties )
 {
-    // From the starting directory, look for all directories ending in the .block extension
+    // From the starting directory, look for all directories ending in the .kicad_block extension
     wxDir dir( aLibraryPath );
 
     if( !dir.IsOpened() )

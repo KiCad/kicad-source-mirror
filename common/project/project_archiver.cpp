@@ -155,9 +155,11 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.kicad_dru" ),
             wxT( "*.kicad_wks" ),
             wxT( "*.kicad_jobset" ),
+            wxT( "*.json" ), // for design blocks
             wxT( "*.wbk" ),
             wxT( "fp-lib-table" ),
-            wxT( "sym-lib-table" )
+            wxT( "sym-lib-table" ),
+            wxT( "design-block-lib-table" )
         };
 
     // List of additional file extensions that are only archived when aIncludeExtraFiles is true
