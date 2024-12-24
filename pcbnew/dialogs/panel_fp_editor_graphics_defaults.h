@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include <panel_fp_editor_defaults_base.h>
+#include <panel_fp_editor_graphics_defaults_base.h>
 
 class BOARD_DESIGN_SETTINGS;
 class PAGED_DIALOG;
@@ -30,11 +30,11 @@ class PANEL_SETUP_DIMENSIONS;
 class UNITS_PROVIDER;
 
 
-class PANEL_FP_EDITOR_DEFAULTS : public PANEL_FP_EDITOR_DEFAULTS_BASE
+class PANEL_FP_EDITOR_GRAPHICS_DEFAULTS : public PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE
 {
 public:
-    PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider );
-    ~PANEL_FP_EDITOR_DEFAULTS() override;
+    PANEL_FP_EDITOR_GRAPHICS_DEFAULTS( wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider );
+    ~PANEL_FP_EDITOR_GRAPHICS_DEFAULTS() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -42,12 +42,9 @@ public:
     void ResetPanel() override;
 
 private:
-    virtual void OnAddTextItem( wxCommandEvent& event ) override;
-    virtual void OnDeleteTextItem( wxCommandEvent& event ) override;
-
     bool Show( bool aShow ) override;
 
-    void loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg );
+    void loadFPSettings( const FOOTPRINT_EDITOR_SETTINGS* aCfg );
 
 private:
     bool                                    m_firstShow = true;

@@ -51,7 +51,8 @@
 #include <dialog_global_fp_lib_table_config.h>
 #include <panel_pcb_display_options.h>
 #include <panel_edit_options.h>
-#include <panel_fp_editor_defaults.h>
+#include <panel_fp_editor_field_defaults.h>
+#include <panel_fp_editor_graphics_defaults.h>
 #include <panel_fp_editor_color_settings.h>
 #include <panel_pcbnew_color_settings.h>
 #include <panel_pcbnew_action_plugins.h>
@@ -196,7 +197,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_EDIT_OPTIONS( aParent, this, frame, true );
         }
 
-        case PANEL_FP_DEFAULT_VALUES:
+        case PANEL_FP_DEFAULT_FIELDS:
         {
             EDA_BASE_FRAME* frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
 
@@ -209,7 +210,23 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             if( frame )
                 SetUserUnits( frame->GetUserUnits() );
 
-            return new PANEL_FP_EDITOR_DEFAULTS( aParent, this );
+            return new PANEL_FP_EDITOR_FIELD_DEFAULTS( aParent, this );
+        }
+
+        case PANEL_FP_DEFAULT_GRAPHICS_VALUES:
+        {
+            EDA_BASE_FRAME* frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_PCB_EDITOR, false );
+
+            if( frame )
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_FP_EDITOR_GRAPHICS_DEFAULTS( aParent, this );
         }
 
         case PANEL_FP_COLORS:

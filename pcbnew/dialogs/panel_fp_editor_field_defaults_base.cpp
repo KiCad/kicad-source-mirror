@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -8,11 +8,11 @@
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
-#include "panel_fp_editor_defaults_base.h"
+#include "panel_fp_editor_field_defaults_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
+PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
@@ -140,67 +140,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	bSizerMargins->Add( defaultTextItemsSizer, 1, wxEXPAND, 20 );
 
 
-	bSizerMargins->Add( 0, 20, 0, wxEXPAND, 5 );
-
-	wxBoxSizer* defaultPropertiesSizer;
-	defaultPropertiesSizer = new wxBoxSizer( wxVERTICAL );
-
-	wxStaticText* defaultPropertiesLabel;
-	defaultPropertiesLabel = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
-	defaultPropertiesLabel->Wrap( -1 );
-	defaultPropertiesSizer->Add( defaultPropertiesLabel, 0, wxEXPAND|wxRIGHT|wxLEFT, 8 );
-
-
-	defaultPropertiesSizer->Add( 0, 4, 0, wxEXPAND, 5 );
-
-	m_graphicsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-
-	// Grid
-	m_graphicsGrid->CreateGrid( 6, 5 );
-	m_graphicsGrid->EnableEditing( true );
-	m_graphicsGrid->EnableGridLines( true );
-	m_graphicsGrid->EnableDragGridSize( false );
-	m_graphicsGrid->SetMargins( 0, 0 );
-
-	// Columns
-	m_graphicsGrid->SetColSize( 0, 110 );
-	m_graphicsGrid->SetColSize( 1, 100 );
-	m_graphicsGrid->SetColSize( 2, 100 );
-	m_graphicsGrid->SetColSize( 3, 100 );
-	m_graphicsGrid->SetColSize( 4, 60 );
-	m_graphicsGrid->EnableDragColMove( false );
-	m_graphicsGrid->EnableDragColSize( true );
-	m_graphicsGrid->SetColLabelValue( 0, _("Line Thickness") );
-	m_graphicsGrid->SetColLabelValue( 1, _("Text Width") );
-	m_graphicsGrid->SetColLabelValue( 2, _("Text Height") );
-	m_graphicsGrid->SetColLabelValue( 3, _("Text Thickness") );
-	m_graphicsGrid->SetColLabelValue( 4, _("Italic") );
-	m_graphicsGrid->SetColLabelSize( wxGRID_AUTOSIZE );
-	m_graphicsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_graphicsGrid->EnableDragRowSize( false );
-	m_graphicsGrid->SetRowLabelValue( 0, _("Silk Layers") );
-	m_graphicsGrid->SetRowLabelValue( 1, _("Copper Layers") );
-	m_graphicsGrid->SetRowLabelValue( 2, _("Edge Cuts") );
-	m_graphicsGrid->SetRowLabelValue( 3, _("Courtyards") );
-	m_graphicsGrid->SetRowLabelValue( 4, _("Fab Layers") );
-	m_graphicsGrid->SetRowLabelValue( 5, _("Other Layers") );
-	m_graphicsGrid->SetRowLabelSize( 125 );
-	m_graphicsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_graphicsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	defaultPropertiesSizer->Add( m_graphicsGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 1 );
-
-
-	bSizerMargins->Add( defaultPropertiesSizer, 0, wxEXPAND|wxTOP, 5 );
-
-
 	bSizerMain->Add( bSizerMargins, 1, wxEXPAND, 5 );
-
 
 
 	this->SetSizer( bSizerMain );
@@ -208,18 +148,18 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	bSizerMain->Fit( this );
 
 	// Connect Events
-	m_fieldPropsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnGridSize ), NULL, this );
-	m_textItemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnGridSize ), NULL, this );
-	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
-	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
+	m_fieldPropsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_textItemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
+	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
 }
 
-PANEL_FP_EDITOR_DEFAULTS_BASE::~PANEL_FP_EDITOR_DEFAULTS_BASE()
+PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::~PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE()
 {
 	// Disconnect Events
-	m_fieldPropsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnGridSize ), NULL, this );
-	m_textItemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnGridSize ), NULL, this );
-	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
-	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
+	m_fieldPropsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_textItemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
+	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
 
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,11 +31,10 @@ class WX_GRID;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_FP_EDITOR_DEFAULTS_BASE
+/// Class PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_FP_EDITOR_DEFAULTS_BASE : public RESETTABLE_PANEL
+class PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE : public RESETTABLE_PANEL
 {
 	private:
 
@@ -46,7 +45,6 @@ class PANEL_FP_EDITOR_DEFAULTS_BASE : public RESETTABLE_PANEL
 		WX_GRID* m_textItemsGrid;
 		STD_BITMAP_BUTTON* m_bpAdd;
 		STD_BITMAP_BUTTON* m_bpDelete;
-		WX_GRID* m_graphicsGrid;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
@@ -56,9 +54,9 @@ class PANEL_FP_EDITOR_DEFAULTS_BASE : public RESETTABLE_PANEL
 
 	public:
 
-		PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_FP_EDITOR_DEFAULTS_BASE();
+		~PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE();
 
 };
 
