@@ -495,6 +495,15 @@ void EDA_TEXT::SetFont( KIFONT::FONT* aFont )
 }
 
 
+void EDA_TEXT::AssignFont( KIFONT::FONT* aFont )
+{
+    m_attributes.m_Font = aFont;
+
+    if( !m_render_cache.empty() )
+        m_render_cache_font = aFont;
+}
+
+
 void EDA_TEXT::SetLineSpacing( double aLineSpacing )
 {
     m_attributes.m_LineSpacing = aLineSpacing;

@@ -233,6 +233,10 @@ public:
     void SetFont( KIFONT::FONT* aFont );
     KIFONT::FONT* GetFont() const               { return m_attributes.m_Font; }
 
+    // This sets a font WITHOUT invalidating the render cache.  Use it when reading a document
+    // to assign a font to be used only if the item is edited.
+    void AssignFont( KIFONT::FONT* aFont );
+
     wxString GetFontName() const;
 
     void SetFontIndex( int aIdx );

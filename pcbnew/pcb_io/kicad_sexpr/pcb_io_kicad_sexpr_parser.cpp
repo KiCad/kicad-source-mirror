@@ -875,9 +875,9 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
     {
         const std::vector<wxString>* embeddedFonts = item->GetEmbeddedFiles()->UpdateFontFiles();
 
-        text->SetFont( KIFONT::FONT::GetFont( std::get<0>( params ), std::get<1>( params ),
-                                              std::get<2>( params ),
-                                              embeddedFonts ) );
+        text->AssignFont( KIFONT::FONT::GetFont( std::get<0>( params ), std::get<1>( params ),
+                                                 std::get<2>( params ),
+                                                 embeddedFonts ) );
     }
 
     resolveGroups( item );
