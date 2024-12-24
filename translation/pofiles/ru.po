@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-24 14:00+0000\n"
+"PO-Revision-Date: 2024-12-25 16:00+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -1854,7 +1854,7 @@ msgstr "Сохранить"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
 msgid "&Discard Changes"
-msgstr "&Убрать Изменения"
+msgstr "&Забыть Изменения"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
 msgid "&Apply to all"
