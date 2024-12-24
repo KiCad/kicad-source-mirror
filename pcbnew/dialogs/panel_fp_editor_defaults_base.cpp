@@ -202,6 +202,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	bSizerMain->Add( bSizerMargins, 1, wxEXPAND, 5 );
 
 
+
 	this->SetSizer( bSizerMain );
 	this->Layout();
 	bSizerMain->Fit( this );

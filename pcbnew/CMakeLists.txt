@@ -181,6 +181,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_rule_area_properties_placement_base.cpp
     dialogs/panel_setup_constraints.cpp
     dialogs/panel_setup_constraints_base.cpp
+    dialogs/panel_setup_dimensions.cpp
+    dialogs/panel_setup_dimensions_base.cpp
     dialogs/panel_setup_formatting.cpp
     dialogs/panel_setup_formatting_base.cpp
     dialogs/panel_setup_mask_and_paste.cpp

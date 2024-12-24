@@ -21,11 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_edit_frame.h>
+#include "panel_setup_text_and_graphics.h"
+
 #include <board_design_settings.h>
+#include <dialogs/panel_setup_dimensions.h>
+#include <pcb_edit_frame.h>
 #include <grid_tricks.h>
 #include <eda_text.h>
-#include <panel_setup_text_and_graphics.h>
+
 #include <kidialog.h>
 
 
@@ -53,16 +56,14 @@ enum
 };
 
 
-PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentWindow,
+PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow*       aParentWindow,
                                                               PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( aParentWindow ),
-        m_arrowLength( aFrame, m_lblArrowLength, m_dimensionArrowLength, m_arrowLengthUnits ),
-        m_extensionOffset( aFrame, m_lblExtensionOffset, m_dimensionExtensionOffset,
-                           m_dimensionExtensionOffsetUnits )
+        m_Frame( aFrame ),
+        m_BrdSettings( &m_Frame->GetBoard()->GetDesignSettings() ),
+        m_dimensionsPanel(
+                std::make_unique<PANEL_SETUP_DIMENSIONS>( this, *aFrame, *m_BrdSettings ) )
 {
-    m_Frame = aFrame;
-    m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
-
     m_grid->SetUnitsProvider( m_Frame );
     m_grid->SetAutoEvalCols( { COL_LINE_THICKNESS,
                                COL_TEXT_WIDTH,
@@ -94,6 +95,8 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentW
     }
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
+    GetSizer()->Add( m_dimensionsPanel.get(), 0, wxEXPAND | wxALL, 5 );
 
     m_Frame->Bind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
 }
@@ -178,17 +181,7 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     Layout();
 
-    m_dimensionUnits->SetSelection( static_cast<int>( m_BrdSettings->m_DimensionUnitsMode ) );
-    m_dimensionUnitsFormat->SetSelection( static_cast<int>( m_BrdSettings->m_DimensionUnitsFormat ) );
-    m_dimensionPrecision->SetSelection( static_cast<int>( m_BrdSettings->m_DimensionPrecision ) );
-    m_dimensionSuppressZeroes->SetValue( m_BrdSettings->m_DimensionSuppressZeroes );
-
-    int position = static_cast<int>( m_BrdSettings->m_DimensionTextPosition );
-    m_dimensionTextPositionMode->SetSelection( position );
-
-    m_dimensionTextKeepAligned->SetValue( m_BrdSettings->m_DimensionKeepTextAligned );
-    m_arrowLength.SetValue( m_BrdSettings->m_DimensionArrowLength );
-    m_extensionOffset.SetValue( m_BrdSettings->m_DimensionExtensionOffset );
+    m_dimensionsPanel->TransferDataToWindow();
 
     return true;
 }
@@ -289,21 +282,7 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_UPRIGHT ) );
     }
 
-    // These are all stored in project file, not board, so no need for OnModify()
-
-    int mode                                  = m_dimensionUnits->GetSelection();
-    m_BrdSettings->m_DimensionUnitsMode       = static_cast<DIM_UNITS_MODE>( mode );
-    int format                                = m_dimensionUnitsFormat->GetSelection();
-    m_BrdSettings->m_DimensionUnitsFormat     = static_cast<DIM_UNITS_FORMAT>( format );
-    int precision                             = m_dimensionPrecision->GetSelection();
-    m_BrdSettings->m_DimensionPrecision       = static_cast<DIM_PRECISION>( precision );
-    m_BrdSettings->m_DimensionSuppressZeroes  = m_dimensionSuppressZeroes->GetValue();
-    int position                              = m_dimensionTextPositionMode->GetSelection();
-    m_BrdSettings->m_DimensionTextPosition    = static_cast<DIM_TEXT_POSITION>( position );
-    m_BrdSettings->m_DimensionKeepTextAligned = m_dimensionTextKeepAligned->GetValue();
-    m_BrdSettings->m_DimensionArrowLength     = m_arrowLength.GetValue();
-    m_BrdSettings->m_DimensionExtensionOffset = m_extensionOffset.GetValue();
-
+    m_dimensionsPanel->TransferDataFromWindow();
 
     if( errorsMsg.IsEmpty() )
         return true;

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,37 +21,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#pragma once
 
-#include <memory>
+#pragma once
 
 #include <board.h>
 #include <widgets/unit_binder.h>
 #include <widgets/paged_dialog.h>
 
-#include <panel_setup_text_and_graphics_base.h>
+#include <panel_setup_dimensions_base.h>
 
 class BOARD_DESIGN_SETTINGS;
-class PANEL_SETUP_DIMENSIONS;
-class PCB_EDIT_FRAME;
 
-class PANEL_SETUP_TEXT_AND_GRAPHICS : public PANEL_SETUP_TEXT_AND_GRAPHICS_BASE
+
+class PANEL_SETUP_DIMENSIONS : public PANEL_SETUP_DIMENSIONS_BASE
 {
 public:
-    PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
-    ~PANEL_SETUP_TEXT_AND_GRAPHICS( ) override;
+    PANEL_SETUP_DIMENSIONS( wxWindow* aParentWindow, UNITS_PROVIDER& aUnitsProvider,
+                            BOARD_DESIGN_SETTINGS& aBrdSettings );
+    ~PANEL_SETUP_DIMENSIONS( ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void ImportSettingsFrom( BOARD* aBoard );
+    void LoadFromSettings( const BOARD_DESIGN_SETTINGS& aBrdSettings );
 
 private:
     void onUnitsChanged( wxCommandEvent& aEvent );
 
 private:
-    PCB_EDIT_FRAME*         m_Frame;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
-
-    std::unique_ptr<PANEL_SETUP_DIMENSIONS> m_dimensionsPanel;
+    wxWindow*               m_parentWindow;
+    UNITS_PROVIDER&         m_unitsProvider;
+    BOARD_DESIGN_SETTINGS*  m_brdSettings;
+    UNIT_BINDER             m_arrowLength;
+    UNIT_BINDER             m_extensionOffset;
 };

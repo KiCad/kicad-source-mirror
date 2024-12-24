@@ -277,6 +277,42 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "design_settings.others_text_italic",
             &m_DesignSettings.m_TextItalic[ LAYER_CLASS_OTHERS ], false ) );
 
+
+    // ---------------------------------------------------------------------------------------------
+    // Dimension settings
+
+    m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_MODE>( "design_settings.dimensions.units",
+            &m_DesignSettings.m_DimensionUnitsMode, DIM_UNITS_MODE::AUTOMATIC, DIM_UNITS_MODE::INCHES,
+            DIM_UNITS_MODE::AUTOMATIC ) );
+
+    m_params.emplace_back( new PARAM_ENUM<DIM_PRECISION>( "design_settings.dimensions.precision",
+            &m_DesignSettings.m_DimensionPrecision, DIM_PRECISION::X_XXXX, DIM_PRECISION::X, DIM_PRECISION::V_VVVVV ) );
+
+    m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_FORMAT>( "design_settings.dimensions.units_format",
+            &m_DesignSettings.m_DimensionUnitsFormat, DIM_UNITS_FORMAT::NO_SUFFIX, DIM_UNITS_FORMAT::NO_SUFFIX,
+            DIM_UNITS_FORMAT::PAREN_SUFFIX ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_settings.dimensions.suppress_zeroes",
+            &m_DesignSettings.m_DimensionSuppressZeroes, true ) );
+
+    // NOTE: excluding DIM_TEXT_POSITION::MANUAL from the valid range here
+    m_params.emplace_back( new PARAM_ENUM<DIM_TEXT_POSITION>( "design_settings.dimensions.text_position",
+            &m_DesignSettings.m_DimensionTextPosition, DIM_TEXT_POSITION::OUTSIDE, DIM_TEXT_POSITION::OUTSIDE,
+            DIM_TEXT_POSITION::INLINE ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_settings.dimensions.keep_text_aligned",
+            &m_DesignSettings.m_DimensionKeepTextAligned, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_settings.dimensions.arrow_length",
+            &m_DesignSettings.m_DimensionArrowLength,
+            pcbIUScale.MilsToIU( DEFAULT_DIMENSION_ARROW_LENGTH ) ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_settings.dimensions.extension_offset",
+            &m_DesignSettings.m_DimensionExtensionOffset,
+            pcbIUScale.mmToIU( DEFAULT_DIMENSION_EXTENSION_OFFSET ) ) );
+
+    // ---------------------------------------------------------------------------------------------
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "editing.selection_filter",
             [&]() -> nlohmann::json
             {

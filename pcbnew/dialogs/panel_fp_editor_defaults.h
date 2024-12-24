@@ -17,13 +17,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_FP_EDITOR_DEFAULTS_H
-#define PANEL_FP_EDITOR_DEFAULTS_H
+#pragma once
+
+#include <memory>
 
 #include <panel_fp_editor_defaults_base.h>
 
+class BOARD_DESIGN_SETTINGS;
 class PAGED_DIALOG;
 class FOOTPRINT_EDITOR_SETTINGS;
+class PANEL_SETUP_DIMENSIONS;
+class UNITS_PROVIDER;
 
 
 class PANEL_FP_EDITOR_DEFAULTS : public PANEL_FP_EDITOR_DEFAULTS_BASE
@@ -46,12 +50,8 @@ private:
     void loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg );
 
 private:
-    bool m_firstShow = true;
-    UNITS_PROVIDER* m_unitProvider;
+    bool                                    m_firstShow = true;
+    UNITS_PROVIDER*                         m_unitProvider;
+    BOARD_DESIGN_SETTINGS&                  m_designSettings;
+    std::unique_ptr<PANEL_SETUP_DIMENSIONS> m_dimensionsPanel;
 };
-
-
-
-
-#endif // PANEL_FP_EDITOR_DEFAULTS_H
-

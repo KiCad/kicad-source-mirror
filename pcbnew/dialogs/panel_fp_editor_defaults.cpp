@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "panel_fp_editor_defaults.h"
+
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
@@ -28,7 +30,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <grid_tricks.h>
 #include <eda_text.h>
-#include <panel_fp_editor_defaults.h>
+#include <panel_setup_dimensions.h>
 #include <grid_layer_box_helpers.h>
 #include <bitmaps.h>
 #include <confirm.h>
@@ -172,11 +174,21 @@ enum
 };
 
 
-PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
-                                                    UNITS_PROVIDER* aUnitsProvider ) :
-        PANEL_FP_EDITOR_DEFAULTS_BASE( aParent )
+static BOARD_DESIGN_SETTINGS& GetPgmDesignSettings()
 {
-    m_unitProvider = aUnitsProvider;
+    SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
+    return mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_DesignSettings;
+}
+
+
+PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow*       aParent,
+                                                    UNITS_PROVIDER* aUnitsProvider ) :
+        PANEL_FP_EDITOR_DEFAULTS_BASE( aParent ),
+        m_unitProvider( aUnitsProvider ),
+        m_designSettings( GetPgmDesignSettings() ),
+        m_dimensionsPanel(
+                std::make_unique<PANEL_SETUP_DIMENSIONS>( this, *m_unitProvider, m_designSettings ) )
+{
     m_fieldPropsGrid->SetDefaultRowSize( m_fieldPropsGrid->GetDefaultRowSize() + 4 );
 
     m_fieldPropsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE( true ), true );
@@ -225,6 +237,8 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
     m_graphicsGrid->DeleteRows( m_graphicsGrid->GetNumberRows() - 1, 1 );
 
     m_graphicsGrid->PushEventHandler( new GRID_TRICKS( m_graphicsGrid ) );
+
+    GetSizer()->Add( m_dimensionsPanel.get(), 0, wxEXPAND | wxALL, 5 );
 }
 
 
@@ -311,6 +325,8 @@ void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
 
     m_graphicsGrid->SetRowLabelSize( m_graphicsGrid->GetVisibleWidth( -1, true, true, true ) );
 
+    m_dimensionsPanel->LoadFromSettings( aCfg->m_DesignSettings );
+
     Layout();
 }
 
@@ -354,8 +370,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
     if( !m_textItemsGrid->CommitPendingChanges() || !m_graphicsGrid->CommitPendingChanges() )
         return false;
 
-    SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
-    BOARD_DESIGN_SETTINGS& cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_DesignSettings;
+    BOARD_DESIGN_SETTINGS& cfg = m_designSettings;
 
     // A minimal value for sizes and thickness:
     const int minWidth = pcbIUScale.mmToIU( MINIMUM_LINE_WIDTH_MM );
@@ -468,6 +483,8 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
 
         cfg.m_DefaultFPTextItems.emplace_back( text, visible, layer );
     }
+
+    m_dimensionsPanel->TransferDataFromWindow();
 
     if( errorsMsg.IsEmpty() )
         return true;
