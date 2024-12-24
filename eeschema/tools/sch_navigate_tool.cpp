@@ -42,7 +42,11 @@ void SCH_NAVIGATE_TOOL::ResetHistory()
 
 void SCH_NAVIGATE_TOOL::CleanHistory()
 {
+    wxCHECK( m_frame, /* void */ );
+
     SCH_SHEET_LIST sheets = m_frame->Schematic().Hierarchy();
+
+    wxCHECK( !sheets.empty(), /* void */ );
 
     // Search through our history, and removing any entries
     // that the no longer point to a sheet on the schematic
@@ -51,10 +55,22 @@ void SCH_NAVIGATE_TOOL::CleanHistory()
     while( entry != m_navHistory.end() )
     {
         if( std::find( sheets.begin(), sheets.end(), *entry ) != sheets.end() )
-            ++entry;
+        {
+            // Don't allow multiple consecutive instances of the same history.
+            if( ( entry != m_navHistory.begin() ) && ( *entry == *std::prev( entry ) ) )
+                entry = m_navHistory.erase( entry );
+            else
+                ++entry;
+        }
         else
+        {
             entry = m_navHistory.erase( entry );
+        }
     }
+    if( m_navHistory.size() == 1 )
+        m_navIndex = m_navHistory.begin();
+    else
+        m_navIndex = --m_navHistory.end();
 }
 
 
@@ -271,7 +287,9 @@ void SCH_NAVIGATE_TOOL::pushToHistory( SCH_SHEET_PATH aPath )
     if( CanGoForward() )
         m_navHistory.erase( std::next( m_navIndex ), m_navHistory.end() );
 
-    m_navHistory.push_back( aPath );
+    if( m_navHistory.empty() || ( *m_navHistory.end() != aPath ) )
+        m_navHistory.push_back( aPath );
+
     m_navIndex = --m_navHistory.end();
 }
 

@@ -3064,7 +3064,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
                 c.Push( isDrawSheetCopy ? "Import Sheet Copy" : "Draw Sheet" );
 
-                m_frame->UpdateHierarchyNavigator();
                 m_selectionTool->AddItemToSel( sheet );
             }
             else

@@ -261,10 +261,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
 
-    SCH_COMMIT commit( m_frame );
-
-    commit.Modify( m_sheet, m_frame->GetScreen() );
-
     if( m_isUndoable )
         *m_isUndoable = true;
 
