@@ -514,6 +514,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
     KIFONT::FONT*              font = getDrawFont();
     int                        penWidth = GetEffectiveTextPenWidth();
     TEXT_ATTRIBUTES            attrs = GetAttributes();
+    wxString                   shownText = GetShownText( true );
 
     attrs.m_Angle = GetDrawRotation();
 
@@ -537,7 +538,11 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
                     textShape.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText( true ), GetTextPos(), attrs, GetFontMetrics() );
+    if( auto* cache = GetRenderCache( font, shownText ) )
+        callback_gal.DrawGlyphs( *cache );
+    else
+        font->Draw( &callback_gal, shownText, GetTextPos(), attrs, GetFontMetrics() );
+
     textShape.Simplify();
 
     if( IsKnockout() )
