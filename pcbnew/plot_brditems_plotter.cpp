@@ -36,7 +36,9 @@
 #include <math/vector2d.h>                    // for VECTOR2I
 #include <plotters/plotter_gerber.h>
 #include <trigo.h>
-
+#include <font/stroke_font.h>
+#include <gal/gal_display_options.h>
+#include <callback_gal.h>
 #include <core/typeinfo.h>                    // for dyn_cast, PCB_DIMENSION_T
 #include <gbr_metadata.h>
 #include <gbr_netlist_metadata.h>             // for GBR_NETLIST_METADATA
@@ -551,7 +553,6 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 }
 
 
-#include <font/stroke_font.h>
 void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
                                  const KIFONT::METRICS& aFontMetrics )
 {
@@ -604,24 +605,46 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
         for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
             m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
     }
-    else if( aText->IsMultilineAllowed() )
-    {
-        std::vector<VECTOR2I> positions;
-        wxArrayString strings_list;
-        wxStringSplit( shownText, strings_list, '\n' );
-        positions.reserve(  strings_list.Count() );
-
-        aText->GetLinePositions( positions, strings_list.Count() );
-
-        for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
-        {
-            wxString& txt =  strings_list.Item( ii );
-            m_plotter->PlotText( positions[ii], color, txt, attrs, font, aFontMetrics, &gbr_metadata );
-        }
-    }
     else
     {
-        m_plotter->PlotText( pos, color, shownText, attrs, font, aFontMetrics, &gbr_metadata );
+        if( font->IsOutline() )
+        {
+            KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+
+            CALLBACK_GAL callback_gal( empty_opts,
+                    // Stroke callback
+                    [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+                    {
+                        m_plotter->ThickSegment( aPt1, aPt2, attrs.m_StrokeWidth, FILLED, nullptr );
+                    },
+                    // Polygon callback
+                    [&]( const SHAPE_LINE_CHAIN& aPoly )
+                    {
+                        m_plotter->PlotPoly( aPoly, FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
+                    } );
+
+            callback_gal.DrawGlyphs( *aText->GetRenderCache( font, shownText ) );
+        }
+        else if( aText->IsMultilineAllowed() )
+        {
+            std::vector<VECTOR2I> positions;
+            wxArrayString strings_list;
+            wxStringSplit( shownText, strings_list, '\n' );
+            positions.reserve(  strings_list.Count() );
+
+            aText->GetLinePositions( positions, (int) strings_list.Count() );
+
+            for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
+            {
+                wxString& txt =  strings_list.Item( ii );
+                m_plotter->PlotText( positions[ii], color, txt, attrs, font, aFontMetrics,
+                                     &gbr_metadata );
+            }
+        }
+        else
+        {
+            m_plotter->PlotText( pos, color, shownText, attrs, font, aFontMetrics, &gbr_metadata );
+        }
     }
 }
 
