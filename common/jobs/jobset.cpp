@@ -28,6 +28,7 @@
 #include <jobs/jobs_output_folder.h>
 #include <jobs/jobs_output_archive.h>
 #include <kiid.h>
+#include <reporter.h>
 
 #include <algorithm>
 
