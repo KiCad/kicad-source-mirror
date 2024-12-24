@@ -98,6 +98,7 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
     TEXT_ATTRIBUTES            attrs = aText->GetAttributes();
     float                      penWidth_3DU = TO_3DU( aText->GetEffectiveTextPenWidth() );
     KIFONT::FONT*              font = aText->GetFont();
+    wxString                   shownText = aText->GetShownText( true );
 
     if( !font )
         font = KIFONT::FONT::GetFont( wxEmptyString, aText->IsBold(), aText->IsItalic() );
@@ -132,8 +133,15 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
 
         attrs.m_Angle = aText->GetDrawRotation();
 
-        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs,
-                    aOwner->GetFontMetrics() );
+        if( auto* cache = aText->GetRenderCache( font, shownText ) )
+        {
+            callback_gal.DrawGlyphs( *cache );
+        }
+        else
+        {
+            font->Draw( &callback_gal, shownText, aText->GetDrawPos(), attrs,
+                        aOwner->GetFontMetrics() );
+        }
     }
 }
 
