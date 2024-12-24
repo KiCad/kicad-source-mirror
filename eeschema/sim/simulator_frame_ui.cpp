@@ -1759,26 +1759,35 @@ void SIMULATOR_FRAME_UI::updateSignalsGrid()
         {
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
 
-            wxGridCellAttr* attr = new wxGridCellAttr;
-            attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( this ) );
-            attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( this, m_signalsGrid ) );
+            wxGridCellAttrPtr attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_SIGNAL_COLOR );
+
+            if( !attr->HasRenderer() )
+                attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( this ) );
+
+            if( !attr->HasEditor() )
+                attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( this, m_signalsGrid ) );
+
             attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-            m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
+            attr->SetReadOnly( false );
 
             KIGFX::COLOR4D color( trace->GetPen().GetColour() );
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, color.ToCSSString() );
 
-            attr = new wxGridCellAttr;
-            attr->SetRenderer( new wxGridCellBoolRenderer() );
-            attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-            m_signalsGrid->SetAttr( row, COL_CURSOR_1, attr );
+            attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_CURSOR_1 );
 
-            attr = new wxGridCellAttr;
-            attr->SetRenderer( new wxGridCellBoolRenderer() );
+            if( !attr->HasRenderer() )
+                attr->SetRenderer( new wxGridCellBoolRenderer() );
+
             attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
             attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-            m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
+
+            attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_CURSOR_2 );
+
+            if( !attr->HasRenderer() )
+                attr->SetRenderer( new wxGridCellBoolRenderer() );
+
+            attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
             if( trace->HasCursor( 1 ) )
                 m_signalsGrid->SetCellValue( row, COL_CURSOR_1, wxS( "1" ) );
@@ -1794,19 +1803,22 @@ void SIMULATOR_FRAME_UI::updateSignalsGrid()
         {
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxEmptyString );
 
-            wxGridCellAttr* attr = new wxGridCellAttr;
+            wxGridCellAttrPtr attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_SIGNAL_COLOR );
+            attr->SetEditor( nullptr );
+            attr->SetRenderer( nullptr );
             attr->SetReadOnly();
-            m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, wxEmptyString );
 
-            attr = new wxGridCellAttr;
+            attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_CURSOR_1 );
+            attr->SetEditor( nullptr );
+            attr->SetRenderer( nullptr );
             attr->SetReadOnly();
-            m_signalsGrid->SetAttr( row, COL_CURSOR_1, attr );
             m_signalsGrid->SetCellValue( row, COL_CURSOR_1, wxEmptyString );
 
-            attr = new wxGridCellAttr;
+            attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_CURSOR_2 );
+            attr->SetEditor( nullptr );
+            attr->SetRenderer( nullptr );
             attr->SetReadOnly();
-            m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
             m_signalsGrid->SetCellValue( row, COL_CURSOR_2, wxEmptyString );
         }
     }
