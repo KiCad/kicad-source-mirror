@@ -276,7 +276,7 @@ void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     }
 
     // Footprint defaults
-    m_fieldPropsGrid->GetTable()->DeleteRows( 0, m_textItemsGrid->GetNumberRows() );
+    m_fieldPropsGrid->GetTable()->DeleteRows( 0, m_fieldPropsGrid->GetNumberRows() );
     m_fieldPropsGrid->GetTable()->AppendRows( 2 );
 
     for( int i : { REFERENCE_FIELD, VALUE_FIELD } )
