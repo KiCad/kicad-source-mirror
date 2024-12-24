@@ -652,12 +652,25 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         gbr_metadata.SetNetName( via->GetNetname() );
 
-        COLOR4D color = aPlotOpt.ColorSettings()->GetColor(
-                LAYER_VIAS + static_cast<int>( via->GetViaType() ) );
+        COLOR4D color;
 
-        // Set plot color (change WHITE to LIGHTGRAY because the white items are not seen on a
+        // If we're plotting a single layer, the color for that layer can be used directly.
+        if( aLayerMask.count() == 1 )
+        {
+            color = aPlotOpt.ColorSettings()->GetColor( aLayerMask.Seq()[0] );
+        }
+        else
+        {
+            color = aPlotOpt.ColorSettings()->GetColor(
+                LAYER_VIAS + static_cast<int>( via->GetViaType() ) );
+        }
+
+        // Change UNSPECIFIED or WHITE to LIGHTGRAY because the white items are not seen on a
         // white paper or screen
-        aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY );
+        if( color == COLOR4D::UNSPECIFIED || color == WHITE )
+            color = LIGHTGRAY;
+
+        aPlotter->SetColor( color );
         aPlotter->FlashPadCircle( via->GetStart(), diameter, plotMode, &gbr_metadata );
     }
 
