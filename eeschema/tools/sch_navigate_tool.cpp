@@ -68,7 +68,7 @@ void SCH_NAVIGATE_TOOL::CleanHistory()
         }
     }
 
-    if( m_navHistory.size() == 1 )
+    if( m_navHistory.size() <= 1 )
         m_navIndex = m_navHistory.begin();
     else
         m_navIndex = --m_navHistory.end();
