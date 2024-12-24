@@ -180,10 +180,12 @@ class DIALOG_OUTPUT_RUN_RESULTS_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextOutputName;
 		wxListCtrl* m_jobList;
+		wxTextCtrl* m_textCtrlOutput;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnJobListItemSelected( wxListEvent& event ) { event.Skip(); }
 		virtual void OnButtonOk( wxCommandEvent& event ) { event.Skip(); }
 
 

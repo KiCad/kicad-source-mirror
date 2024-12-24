@@ -347,6 +347,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         case JOB_EXPORT_PCB_3D::FORMAT::STL: fn.SetExt( FILEEXT::StlFileExtension );
             break;
         default:
+            m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
@@ -421,6 +422,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL;
             break;
         default:
+            m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 

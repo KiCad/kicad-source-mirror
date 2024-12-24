@@ -336,7 +336,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                      const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
                      const wxString& aSrcFilePath, wxString& aErrors ) override;
 
-    int HandleJob( JOB* aJob ) override;
+    int HandleJob( JOB* aJob, REPORTER* aReporter ) override;
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
@@ -568,9 +568,9 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
 }
 
 
-int IFACE::HandleJob( JOB* aJob )
+int IFACE::HandleJob( JOB* aJob, REPORTER* aReporter )
 {
-    return m_jobHandler->RunJob( aJob );
+    return m_jobHandler->RunJob( aJob, aReporter );
 }
 
 

@@ -225,7 +225,9 @@ public:
     DIALOG_OUTPUT_RUN_RESULTS( wxWindow* aParent,
                                 JOBSET* aJobsFile,
                                 JOBSET_OUTPUT* aOutput ) :
-        DIALOG_OUTPUT_RUN_RESULTS_BASE( aParent )
+        DIALOG_OUTPUT_RUN_RESULTS_BASE( aParent ),
+        m_jobsFile( aJobsFile ),
+        m_output( aOutput )
     {
         m_staticTextOutputName->SetLabel( aOutput->m_outputHandler->GetOutputPath() );
 
@@ -264,6 +266,33 @@ public:
         }
     }
 
+
+    virtual void OnJobListItemSelected( wxListEvent& event ) override
+    {
+        int itemIndex = event.GetIndex();
+
+        std::vector<JOBSET_JOB> jobs = m_jobsFile->GetJobsForOutput( m_output );
+
+        if( itemIndex < jobs.size() )
+        {
+            JOBSET_JOB& job = jobs[itemIndex];
+            if( m_output->m_lastRunReporters.contains( job.m_id ) )
+            {
+                WX_STRING_REPORTER* reporter =
+                        static_cast<WX_STRING_REPORTER*>( m_output->m_lastRunReporters[job.m_id] );
+                m_textCtrlOutput->SetValue( reporter->GetMessages() );
+            }
+            else
+            {
+                m_textCtrlOutput->SetValue( _( "No output available" ) );
+            }
+        }
+
+    }
+
+private:
+    JOBSET*        m_jobsFile;
+    JOBSET_OUTPUT* m_output;
 };
 
 

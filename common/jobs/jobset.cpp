@@ -92,7 +92,9 @@ KICOMMON_API void from_json( const nlohmann::json& j, JOBSET_OUTPUT& f )
 
 JOBSET_OUTPUT::JOBSET_OUTPUT() :
         m_type( JOBSET_OUTPUT_TYPE::FOLDER ),
-        m_lastRunSuccess()
+        m_outputHandler( nullptr ),
+        m_lastRunSuccess(),
+        m_lastRunReporters()
 {
 }
 
@@ -100,9 +102,21 @@ JOBSET_OUTPUT::JOBSET_OUTPUT() :
 JOBSET_OUTPUT::JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type ) :
         m_id( id ),
         m_type( type ),
-        m_lastRunSuccess()
+        m_outputHandler( nullptr ),
+        m_lastRunSuccess(),
+        m_lastRunReporters()
 {
     InitOutputHandler();
+}
+
+
+JOBSET_OUTPUT::~JOBSET_OUTPUT()
+{
+    for( auto& reporter : m_lastRunReporters )
+    {
+        delete reporter.second;
+    }
+    m_lastRunReporters.clear();
 }
 
 

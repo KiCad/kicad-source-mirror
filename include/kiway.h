@@ -133,6 +133,7 @@ class KIWAY_PLAYER;
 class wxTopLevelWindow;
 class TOOL_ACTION;
 class JOB;
+class REPORTER;
 
 
 /**
@@ -241,7 +242,7 @@ struct KIFACE
      */
     virtual void GetActions( std::vector<TOOL_ACTION*>& aActions ) const = 0;
 
-    virtual int HandleJob( JOB* aJob )
+    virtual int HandleJob( JOB* aJob, REPORTER* aReporter )
     {
         return 0;
     }
@@ -431,7 +432,7 @@ public:
 
     bool ProcessEvent( wxEvent& aEvent ) override;
 
-    int ProcessJob( KIWAY::FACE_T aFace, JOB* aJob );
+    int  ProcessJob( KIWAY::FACE_T aFace, JOB* aJob, REPORTER* aReporter = nullptr );
     bool ProcessJobConfigDialog( KIWAY::FACE_T aFace, JOB* aJob, wxWindow* aWindow );
 
     /**

@@ -28,6 +28,8 @@
 #include <ctime>
 #include <memory>
 
+class REPORTER;
+
 struct KICOMMON_API JOBSET_JOB
 {
     JOBSET_JOB() : m_job( nullptr ) {}
@@ -53,6 +55,8 @@ struct KICOMMON_API JOBSET_OUTPUT
 
     JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type );
 
+    ~JOBSET_OUTPUT();
+
     void                  InitOutputHandler();
 
     wxString              m_id;
@@ -63,6 +67,7 @@ struct KICOMMON_API JOBSET_OUTPUT
     ///< Transient property, not stored for now
     std::optional<bool>   m_lastRunSuccess;
     std::unordered_map<wxString, std::optional<bool>> m_lastRunSuccessMap;
+    std::unordered_map<wxString, REPORTER*>           m_lastRunReporters;
 
     bool operator==( const JOBSET_OUTPUT& rhs ) const;
 

@@ -38,7 +38,7 @@ public:
     JOB_DISPATCHER( KIWAY* aKiway );
     void Register( const std::string& aJobTypeName, std::function<int( JOB* job )> aHandler,
                          std::function<bool( JOB* job, wxWindow* aParent )> aConfigHandler );
-    int  RunJob( JOB* aJob );
+    int  RunJob( JOB* aJob, REPORTER* aReporter );
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent );
     void SetReporter( REPORTER* aReporter );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );

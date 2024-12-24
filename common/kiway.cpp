@@ -706,11 +706,11 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
 }
 
 
-int KIWAY::ProcessJob( KIWAY::FACE_T aFace, JOB* job )
+int KIWAY::ProcessJob( KIWAY::FACE_T aFace, JOB* job, REPORTER* aReporter )
 {
     KIFACE* kiface = KiFACE( aFace );
 
-    return kiface->HandleJob( job );
+    return kiface->HandleJob( job, aReporter );
 }
 
 

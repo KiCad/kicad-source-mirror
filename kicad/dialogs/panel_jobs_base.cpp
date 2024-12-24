@@ -362,6 +362,9 @@ DIALOG_OUTPUT_RUN_RESULTS_BASE::DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent
 	m_jobList = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL );
 	bSizer16->Add( m_jobList, 1, wxALL|wxEXPAND, 5 );
 
+	m_textCtrlOutput = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_BESTWRAP|wxTE_MULTILINE|wxTE_READONLY );
+	bSizer16->Add( m_textCtrlOutput, 1, wxALL|wxEXPAND, 5 );
+
 
 	bMainSizer->Add( bSizer16, 1, wxEXPAND, 5 );
 
@@ -380,12 +383,14 @@ DIALOG_OUTPUT_RUN_RESULTS_BASE::DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	m_jobList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_OUTPUT_RUN_RESULTS_BASE::OnJobListItemSelected ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OUTPUT_RUN_RESULTS_BASE::OnButtonOk ), NULL, this );
 }
 
 DIALOG_OUTPUT_RUN_RESULTS_BASE::~DIALOG_OUTPUT_RUN_RESULTS_BASE()
 {
 	// Disconnect Events
+	m_jobList->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_OUTPUT_RUN_RESULTS_BASE::OnJobListItemSelected ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OUTPUT_RUN_RESULTS_BASE::OnButtonOk ), NULL, this );
 
 }

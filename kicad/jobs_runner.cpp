@@ -100,6 +100,12 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
     aOutput->m_lastRunSuccessMap.clear();
 
+    for( auto& reporter : aOutput->m_lastRunReporters )
+    {
+        delete reporter.second;
+    }
+    aOutput->m_lastRunReporters.clear();
+
     wxString tempDirPath = tmp.GetFullPath();
     if( !wxFileName::Mkdir( tempDirPath, wxS_DIR_DEFAULT ) )
     {
@@ -131,7 +137,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
     {
         msg += wxT( "|--------------------------------\n" );
         msg += wxT( "| " );
-        msg += wxString::Format( "Performing jobs" );
+        msg += wxString::Format( "Performing jobs for output %s", aOutput->m_id );
         msg += wxT( "\n" );
         msg += wxT( "|--------------------------------\n" );
 
@@ -172,10 +178,17 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
         job.m_job->SetTempOutputDirectory( tempDirPath );
 
+        REPORTER* reporterToUse = m_reporter;
+        if( !reporterToUse || reporterToUse == &NULL_REPORTER::GetInstance() )
+        {
+            reporterToUse = new WX_STRING_REPORTER;
+            aOutput->m_lastRunReporters[job.m_id] = reporterToUse;
+        }
+
         int result = 0;
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
-            result = m_kiway->ProcessJob( iface, job.m_job.get() );
+            result = m_kiway->ProcessJob( iface, job.m_job.get(), reporterToUse );
         }
         else
         {
