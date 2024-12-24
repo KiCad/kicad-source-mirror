@@ -224,6 +224,7 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
         m_events_bound = false;
     }
 
+    SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetUnorderedSheets();
     std::set<SCH_SHEET_PATH> expandedNodes;
 
     std::function<void( const wxTreeItemId& )> getExpandedNodes =
@@ -233,7 +234,7 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
 
                 TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
 
-                if( m_tree->IsExpanded( id ) )
+                if( m_tree->IsExpanded( id ) && hierarchy.HasPath( itemData->m_SheetPath.Path() ) )
                     expandedNodes.emplace( itemData->m_SheetPath );
 
                 wxTreeItemIdValue cookie;

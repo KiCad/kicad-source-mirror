@@ -2161,7 +2161,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 SCH_SHEET_PATH newPath = m_frame->GetCurrentSheet();
                 newPath.push_back( sheet );
 
-                m_frame->UpdateHierarchyNavigator();
                 m_selectionTool->AddItemToSel( sheet );
             }
             else

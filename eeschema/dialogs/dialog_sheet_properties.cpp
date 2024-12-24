@@ -434,7 +434,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     for( SCH_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_SHEET_T ) )
         m_frame->UpdateItem( item );
 
-    if( isUndoable )
+    if( isUndoable && !m_sheet->IsNew() )
     {
         commit.Push( _( "Edit Sheet Properties" ) );
     }
