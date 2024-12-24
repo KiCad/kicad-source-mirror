@@ -130,22 +130,34 @@ public:
      */
     static std::shared_ptr<DRC_ITEM> Create( const wxString& aErrorKey );
 
-    static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
+    static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities( bool aIncludeDeprecated = false )
     {
-        static std::vector<std::reference_wrapper<RC_ITEM>> itemsWithSeverities;
+        static std::vector<std::reference_wrapper<RC_ITEM>> itemsWithSeveritiesAll;
+        static std::vector<std::reference_wrapper<RC_ITEM>> itemsWithSeveritiesDeprecated;
 
-        if( itemsWithSeverities.empty() )
+        if( itemsWithSeveritiesAll.empty() )
         {
             for( RC_ITEM& item : allItemTypes )
             {
                 if( &item == &heading_internal )
                     break;
 
-                itemsWithSeverities.push_back( item );
+                itemsWithSeveritiesAll.push_back( item );
             }
         }
 
-        return itemsWithSeverities;
+        if( itemsWithSeveritiesDeprecated.empty() )
+        {
+            for( RC_ITEM& item : allItemTypes )
+            {
+                if( &item == &heading_deprecated )
+                    break;
+
+                itemsWithSeveritiesDeprecated.push_back( item );
+            }
+        }
+
+        return aIncludeDeprecated ? itemsWithSeveritiesAll : itemsWithSeveritiesDeprecated;
     }
 
     void SetViolatingRule ( DRC_RULE *aRule ) { m_violatingRule = aRule; }
@@ -178,6 +190,7 @@ private:
     static DRC_ITEM heading_readability;
     static DRC_ITEM heading_misc;
     static DRC_ITEM heading_internal;
+    static DRC_ITEM heading_deprecated;
 
     static DRC_ITEM unconnectedItems;
     static DRC_ITEM shortingItems;
@@ -241,6 +254,9 @@ private:
     static DRC_ITEM footprintTHPadhasNoHole;
     static DRC_ITEM mirroredTextOnFrontLayer;
     static DRC_ITEM nonMirroredTextOnBackLayer;
+
+    /// Deprecated items
+    static DRC_ITEM holeNearHolev8;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;

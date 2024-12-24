@@ -49,6 +49,7 @@ DRC_ITEM DRC_ITEM::heading_signal_integrity( 0, _( "Signal Integrity" ), "" );
 DRC_ITEM DRC_ITEM::heading_readability( 0, _( "Readability" ), "" );
 DRC_ITEM DRC_ITEM::heading_misc( 0, _( "Miscellaneous" ), "" );
 DRC_ITEM DRC_ITEM::heading_internal( 0, "", "" );
+DRC_ITEM DRC_ITEM::heading_deprecated( 0, "", "" );
 
 DRC_ITEM DRC_ITEM::unconnectedItems( DRCE_UNCONNECTED_ITEMS,
         _( "Missing connection between items" ),
@@ -299,6 +300,12 @@ DRC_ITEM DRC_ITEM::nonMirroredTextOnBackLayer( DRCE_NONMIRRORED_TEXT_ON_BACK_LAY
         _( "Non-Mirrored text on back layer" ),
         wxT( "nonmirrored_text_on_back_layer" ) );
 
+/// Deprecated item names
+/// They have the current error code but the old name for compatibility with old settings files
+
+DRC_ITEM DRC_ITEM::holeNearHolev8( DRCE_DRILLED_HOLES_TOO_CLOSE,
+        _( "Drilled hole too close to other hole - deprecated" ),
+        wxT( "hole_near_hole" ) );
 
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
         {
@@ -370,12 +377,18 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
             DRC_ITEM::libFootprintMismatch,
             DRC_ITEM::footprintTHPadhasNoHole,
 
+            // Deprecated items need to come second to last in the list
+            // They will not be shown in the panel but will be used to
+            // parse old settings files
+            DRC_ITEM::heading_deprecated,
+            DRC_ITEM::holeNearHolev8,
+
             // DRC_ITEM types with no user-editable severities
             // NOTE: this MUST be the last grouping in the list!
             DRC_ITEM::heading_internal,
             DRC_ITEM::padstackInvalid,
             DRC_ITEM::genericError,
-            DRC_ITEM::genericWarning
+            DRC_ITEM::genericWarning,
         } );
 
 

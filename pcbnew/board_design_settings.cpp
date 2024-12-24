@@ -335,7 +335,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 if( !aJson.is_object() )
                     return;
 
-                for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
+                for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities( true ) )
                 {
                     wxString name = item.GetSettingsKey();
                     std::string key( name.ToUTF8() );
