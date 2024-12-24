@@ -288,7 +288,7 @@ void SCH_NAVIGATE_TOOL::pushToHistory( SCH_SHEET_PATH aPath )
     if( CanGoForward() )
         m_navHistory.erase( std::next( m_navIndex ), m_navHistory.end() );
 
-    if( m_navHistory.empty() || ( *m_navHistory.end() != aPath ) )
+    if( m_navHistory.empty() || ( *(--m_navHistory.end()) != aPath ) )
         m_navHistory.push_back( aPath );
 
     m_navIndex = --m_navHistory.end();
