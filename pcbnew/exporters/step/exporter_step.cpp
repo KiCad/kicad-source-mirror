@@ -463,7 +463,7 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
         {
             SHAPE_POLY_SET fill_shape;
             zone->TransformSolidAreasShapesToPolygon( layer, fill_shape );
-            fill_shape.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            fill_shape.Unfracture();
 
             fill_shape.SimplifyOutlines( ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
 
@@ -640,31 +640,31 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     for( PCB_LAYER_ID pcblayer : m_layersToExport.Seq() )
     {
         SHAPE_POLY_SET poly = m_poly_shapes[pcblayer];
-        poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        poly.Simplify();
 
         poly.SimplifyOutlines( pcbIUScale.mmToIU( 0.003 ) );
-        poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        poly.Simplify();
 
         SHAPE_POLY_SET holes = m_poly_holes[pcblayer];
-        holes.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        holes.Simplify();
 
         // Mask layer is negative
         if( pcblayer == F_Mask || pcblayer == B_Mask )
         {
             SHAPE_POLY_SET mask = pcbOutlinesNoArcs;
 
-            mask.BooleanSubtract( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            mask.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            mask.BooleanSubtract( poly );
+            mask.BooleanSubtract( holes );
 
             poly = mask;
         }
         else
         {
             // Subtract holes
-            poly.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            poly.BooleanSubtract( holes );
 
             // Clip to board outline
-            poly.BooleanIntersection( pcbOutlinesNoArcs, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            poly.BooleanIntersection( pcbOutlinesNoArcs );
         }
 
         m_pcbModel->AddPolygonShapes( &poly, pcblayer, origin );

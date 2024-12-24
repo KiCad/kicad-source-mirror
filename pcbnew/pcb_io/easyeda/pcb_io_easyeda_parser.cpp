@@ -572,7 +572,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                     }
                 }
 
-                fillPolySet.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                fillPolySet.Fracture();
 
                 zone->SetFilledPolysList( layer, fillPolySet );
                 zone->SetIsFilled( true );

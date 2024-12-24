@@ -24,6 +24,7 @@
 #define __PNS_ITEM_H
 
 #include <memory>
+#include <set>
 #include <unordered_set>
 #include <math/vector2d.h>
 

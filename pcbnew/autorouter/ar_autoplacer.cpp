@@ -146,7 +146,7 @@ bool AR_AUTOPLACER::fillMatrix()
 
     // Create a single board outline:
     SHAPE_POLY_SET brd_shape = m_boardShape.CloneDropTriangulation();
-    brd_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
+    brd_shape.Fracture();
     const SHAPE_LINE_CHAIN& outline = brd_shape.Outline(0);
     const BOX2I& rect = outline.BBox();
 
@@ -393,8 +393,8 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* Module )
     buildFpAreas( Module, margin );
 
     // Substract the shape to free areas
-    m_topFreeArea.BooleanSubtract( m_fpAreaTop, SHAPE_POLY_SET::PM_FAST );
-    m_bottomFreeArea.BooleanSubtract( m_fpAreaBottom, SHAPE_POLY_SET::PM_FAST );
+    m_topFreeArea.BooleanSubtract( m_fpAreaTop );
+    m_bottomFreeArea.BooleanSubtract( m_fpAreaBottom );
 }
 
 
@@ -802,7 +802,7 @@ void AR_AUTOPLACER::drawPlacementRoutingMatrix( )
     m_overlay->SetIsStroke( false );
 
     SHAPE_POLY_SET freeArea = m_topFreeArea.CloneDropTriangulation();
-    freeArea.Fracture( SHAPE_POLY_SET::PM_FAST );
+    freeArea.Fracture();
 
     // Draw the free polygon areas, top side:
     if( freeArea.OutlineCount() > 0 )
@@ -814,7 +814,7 @@ void AR_AUTOPLACER::drawPlacementRoutingMatrix( )
     }
 
     freeArea = m_bottomFreeArea;
-    freeArea.Fracture( SHAPE_POLY_SET::PM_FAST );
+    freeArea.Fracture();
 
     // Draw the free polygon areas, bottom side:
     if( freeArea.OutlineCount() > 0 )

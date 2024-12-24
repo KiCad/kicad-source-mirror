@@ -574,8 +574,8 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     // polygon and its thick outline
 
     // create the outline which contains thick outline:
-    bufferPolybase.BooleanAdd( bufferOutline, SHAPE_POLY_SET::PM_FAST );
-    bufferPolybase.Fracture( SHAPE_POLY_SET::PM_FAST );
+    bufferPolybase.BooleanAdd( bufferOutline );
+    bufferPolybase.Fracture();
 
     if( bufferPolybase.OutlineCount() < 1 )      // should not happen
         return;

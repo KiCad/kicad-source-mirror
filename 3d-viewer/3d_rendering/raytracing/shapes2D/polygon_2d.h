@@ -152,6 +152,5 @@ void ConvertPolygonToBlocks( const SHAPE_POLY_SET& aMainPath, CONTAINER_2D_BASE&
                             float aBiuTo3dUnitsScale, float aDivFactor,
                             const BOARD_ITEM& aBoardItem, int aPolyIndex );
 
-void Polygon2d_TestModule();
 
 #endif // _CPOLYGON2D_H_

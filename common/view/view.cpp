@@ -622,7 +622,7 @@ void VIEW::SetCenter( const VECTOR2D& aCenter, const std::vector<BOX2D>& obscuri
     for( const BOX2D& obscuringScreenRect : obscuringScreenRects )
     {
         SHAPE_POLY_SET obscuringPoly( obscuringScreenRect );
-        unobscuredPoly.BooleanSubtract( obscuringPoly, SHAPE_POLY_SET::PM_FAST );
+        unobscuredPoly.BooleanSubtract( obscuringPoly );
     }
 
     /*

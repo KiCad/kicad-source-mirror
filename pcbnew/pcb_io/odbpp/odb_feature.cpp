@@ -141,7 +141,7 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
         if( soldermask_min_thickness == 0 )
         {
             poly_set = aShape.GetPolyShape().CloneDropTriangulation();
-            poly_set.Fracture( SHAPE_POLY_SET::PM_FAST );
+            poly_set.Fracture();
         }
         else
         {
@@ -152,11 +152,11 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
             aShape.TransformShapeToPolygon( poly_set, aLayer, soldermask_min_thickness / 2 - 1,
                                             maxError, ERROR_OUTSIDE );
 
-            poly_set.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            poly_set.Simplify();
             poly_set.Deflate( soldermask_min_thickness / 2 - 1,
                               CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
-            poly_set.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
-            poly_set.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            poly_set.BooleanAdd( initialPolys );
+            poly_set.Fracture();
         }
 
         int strokeWidth = aShape.GetStroke().GetWidth();
@@ -338,7 +338,7 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
         if( mask_clearance )
         {
             outline.InflateWithLinkedHoles( expansion.x, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                            maxError, SHAPE_POLY_SET::PM_FAST );
+                                            maxError );
         }
 
         for( int ii = 0; ii < outline.OutlineCount(); ++ii )
@@ -360,8 +360,7 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
         if( expansion != VECTOR2I( 0, 0 ) )
         {
             shape.InflateWithLinkedHoles( std::max( expansion.x, expansion.y ),
-                                          CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
-                                          SHAPE_POLY_SET::PM_FAST );
+                                          CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
         }
 
         for( int ii = 0; ii < shape.OutlineCount(); ++ii )
@@ -644,7 +643,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
 
             text->TransformTextToPolySet( finalpolyset, 0, m_board->GetDesignSettings().m_MaxError,
                                           ERROR_INSIDE );
-            finalpolyset.Fracture( SHAPE_POLY_SET::PM_FAST );
+            finalpolyset.Fracture();
 
             for( int ii = 0; ii < finalpolyset.OutlineCount(); ++ii )
             {

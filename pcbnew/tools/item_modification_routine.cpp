@@ -571,8 +571,7 @@ std::optional<wxString> POLYGON_MERGE_ROUTINE::GetStatusMessage() const
 
 bool POLYGON_MERGE_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon )
 {
-    const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
-    GetWorkingPolygons().BooleanAdd( aPolygon, poly_mode );
+    GetWorkingPolygons().BooleanAdd( aPolygon );
     return true;
 }
 
@@ -599,11 +598,9 @@ std::optional<wxString> POLYGON_SUBTRACT_ROUTINE::GetStatusMessage() const
 
 bool POLYGON_SUBTRACT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon )
 {
-    const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
-
     SHAPE_POLY_SET& working_polygons = GetWorkingPolygons();
     SHAPE_POLY_SET  working_copy = working_polygons;
-    working_copy.BooleanSubtract( aPolygon, poly_mode );
+    working_copy.BooleanSubtract( aPolygon );
 
     // Subtraction can create holes or delete the polygon
     // In theory we can allow holes as the EDA_SHAPE will fracture for us, but that's
@@ -642,11 +639,9 @@ std::optional<wxString> POLYGON_INTERSECT_ROUTINE::GetStatusMessage() const
 
 bool POLYGON_INTERSECT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon )
 {
-    const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
-
     SHAPE_POLY_SET& working_polygons = GetWorkingPolygons();
     SHAPE_POLY_SET  working_copy = working_polygons;
-    working_copy.BooleanIntersection( aPolygon, poly_mode );
+    working_copy.BooleanIntersection( aPolygon );
 
     // Is there anything left?
     if( working_copy.OutlineCount() == 0 )

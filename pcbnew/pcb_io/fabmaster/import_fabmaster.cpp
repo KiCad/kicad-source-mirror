@@ -2724,7 +2724,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 }
                                 else
                                 {
-                                    poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                                    poly_outline.Fracture();
 
                                     poly_outline.Move( -newpad->GetPosition() );
 
@@ -3324,7 +3324,7 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
         SHAPE_POLY_SET poly_outline = loadShapePolySet( aLine->segment );
 
-        poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+        poly_outline.Fracture();
 
         if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
             return false;
@@ -3552,7 +3552,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
             {
                 SHAPE_POLY_SET poly_outline = loadShapePolySet( *( geom.elements ) );
 
-                poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                poly_outline.Fracture();
 
                 if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
                     continue;

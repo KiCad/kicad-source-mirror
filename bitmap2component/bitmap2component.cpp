@@ -524,15 +524,15 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
         // at the end of a group of a positive path and its negative children, fill.
         if( paths->next == nullptr || paths->next->sign == '+' )
         {
-            polyset_areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            polyset_holes.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            polyset_areas.BooleanSubtract( polyset_holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            polyset_areas.Simplify();
+            polyset_holes.Simplify();
+            polyset_areas.BooleanSubtract( polyset_holes );
 
             // Ensure there are no self intersecting polygons
             if( polyset_areas.NormalizeAreaOutlines() )
             {
                 // Convert polygon with holes to a unique polygon
-                polyset_areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                polyset_areas.Fracture();
 
                 // Output current resulting polygon(s)
                 for( int ii = 0; ii < polyset_areas.OutlineCount(); ii++ )

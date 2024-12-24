@@ -122,8 +122,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
         {
             if( zone->IsOnLayer( layer ) )
             {
-                solderMask->GetFill( layer )->BooleanAdd( *zone->GetFilledPolysList( layer ),
-                                                          SHAPE_POLY_SET::PM_FAST );
+                solderMask->GetFill( layer )->BooleanAdd( *zone->GetFilledPolysList( layer ) );
             }
         }
     }
@@ -222,8 +221,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
                 return true;
             } );
 
-    solderMask->GetFill( F_Mask )->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    solderMask->GetFill( B_Mask )->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    solderMask->GetFill( F_Mask )->Simplify();
+    solderMask->GetFill( B_Mask )->Simplify();
 
     solderMask->GetFill( F_Mask )->Deflate( m_webWidth / 2, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
                                             m_maxError );

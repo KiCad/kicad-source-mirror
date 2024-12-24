@@ -598,7 +598,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumP
             if( !zone->HasFilledPolysForLayer( layer ) )
                 continue;
 
-            zone->GetFilledPolysList( layer )->Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            zone->GetFilledPolysList( layer )->Fracture();
         }
     }
 
@@ -2824,9 +2824,9 @@ void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumP
             }
 
             if( zone->HasFilledPolysForLayer( klayer ) )
-                fill.BooleanAdd( *zone->GetFill( klayer ), SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                fill.BooleanAdd( *zone->GetFill( klayer ) );
 
-            fill.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            fill.Fracture();
 
             zone->SetFilledPolysList( klayer, fill );
             zone->SetIsFilled( true );

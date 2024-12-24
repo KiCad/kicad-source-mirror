@@ -33,7 +33,6 @@
 #include "../accelerators/container_2d.h"
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
-#include <clipper.hpp>
 
 class TRIANGLE_2D : public OBJECT_2D
 {

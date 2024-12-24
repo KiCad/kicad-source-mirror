@@ -733,7 +733,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 
         text->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
                                       ERROR_INSIDE );
-        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+        finalPoly.Fracture();
 
         for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
             m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
@@ -966,7 +966,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     // This must be simplified and fractured to prevent overlapping polygons
                     // from generating invalid Gerber files
                     SHAPE_POLY_SET tmpPoly = aShape->GetPolyShape().CloneDropTriangulation();
-                    tmpPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                    tmpPoly.Fracture();
 
                     if( margin < 0 )
                     {

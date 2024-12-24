@@ -384,7 +384,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                                                    ERROR_OUTSIDE );
                 }
 
-                itemsPoly.Poly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                itemsPoly.Poly.Fracture();
 
                 done.fetch_add( calc_effort( itemsPoly.Items, aLayer ) );
 

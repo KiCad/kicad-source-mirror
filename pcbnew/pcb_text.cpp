@@ -538,7 +538,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
             } );
 
     font->Draw( &callback_gal, GetShownText( true ), GetTextPos(), attrs, GetFontMetrics() );
-    textShape.Simplify( SHAPE_POLY_SET::PM_FAST );
+    textShape.Simplify();
 
     if( IsKnockout() )
     {
@@ -546,7 +546,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
         int            margin = GetKnockoutTextMargin( attrs.m_Size, penWidth );
 
         buildBoundingHull( &finalPoly, textShape, margin + aClearance );
-        finalPoly.BooleanSubtract( textShape, SHAPE_POLY_SET::PM_FAST );
+        finalPoly.BooleanSubtract( textShape );
 
         aBuffer.Append( finalPoly );
     }

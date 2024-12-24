@@ -880,7 +880,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
                                                     true );
                 }
 
-                polySet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                polySet.Simplify();
 
                 std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( footprint );
 
@@ -1158,7 +1158,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                     zoneFillPoly.AddOutline( contour );
 
                 zoneFillPoly.RebuildHolesFromContours();
-                zoneFillPoly.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                zoneFillPoly.Fracture();
 
                 std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aBoard );
 
@@ -1771,7 +1771,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
                         // The contour can be self-intersecting
                         SHAPE_POLY_SET simple( contour );
-                        simple.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                        simple.Simplify();
 
                         if( dataId == 0 )
                         {
@@ -1779,7 +1779,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                         }
                         else
                         {
-                            thisPoly.BooleanSubtract( simple, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                            thisPoly.BooleanSubtract( simple );
                         }
                     }
                     else
@@ -1801,16 +1801,16 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
             if( !fillPolySet.IsEmpty() )
             {
-                fillPolySet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                fillPolySet.Simplify();
 
                 const int strokeWidth = pcbIUScale.MilsToIU( 8 ); // Seems to be 8 mils
 
                 fillPolySet.Inflate( strokeWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
                                      ARC_HIGH_DEF, false );
 
-                fillPolySet.BooleanAdd( thermalSpokes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                fillPolySet.BooleanAdd( thermalSpokes );
 
-                fillPolySet.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                fillPolySet.Fracture();
 
                 zone->SetFilledPolysList( zone->GetFirstLayer(), fillPolySet );
                 zone->SetNeedRefill( false );

@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE( TestSimplify )
             {
                 BOOST_TEST_CONTEXT( "Simplify Iteration " << i )
                 {
-                    testPoly.Simplify( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                    testPoly.Simplify();
 
                     std::vector<SHAPE_ARC> foundArcs;
                     testPoly.GetArcs( foundArcs );
@@ -119,14 +119,14 @@ BOOST_AUTO_TEST_CASE( TestIntersectUnion )
             double opPolyArea = opPoly.Area();
 
             SHAPE_POLY_SET intersectionPoly = testPoly;
-            intersectionPoly.BooleanIntersection( opPoly, SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+            intersectionPoly.BooleanIntersection( opPoly );
             double intersectArea = intersectionPoly.Area();
 
             BOOST_CHECK( GEOM_TEST::IsPolySetValid( intersectionPoly ) );
 
 
             SHAPE_POLY_SET unionPoly = testPoly;
-            unionPoly.BooleanAdd( opPoly, SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+            unionPoly.BooleanAdd( opPoly );
             double unionArea = unionPoly.Area();
 
             BOOST_CHECK( GEOM_TEST::IsPolySetValid( unionPoly ) );

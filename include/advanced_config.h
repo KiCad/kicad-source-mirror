@@ -429,15 +429,6 @@ public:
     double m_3DRT_BevelExtentFactor;
 
     /**
-     * Use Clipper2 instead of Clipper1.
-     *
-     * Setting name: "UseClipper2"
-     * Valid values: 0 or 1
-     * Default value: 1
-     */
-    bool m_UseClipper2;
-
-    /**
      * Use the 3DConnexion Driver.
      *
      * Setting name: "3DConnexionDriver"

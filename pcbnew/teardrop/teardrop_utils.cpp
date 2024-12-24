@@ -388,7 +388,7 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
         clipping_rect.Move( ref_on_track );
 
         // Clip the shape to the max allowed teadrop area
-        c_buffer.BooleanIntersection( clipping_rect, SHAPE_POLY_SET::PM_FAST );
+        c_buffer.BooleanIntersection( clipping_rect );
     }
 
     /* in aPts:

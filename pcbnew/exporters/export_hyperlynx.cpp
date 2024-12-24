@@ -502,7 +502,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
                 const wxString layerName   = m_board->GetLayerName( layer );
                 SHAPE_POLY_SET fill = zone->GetFilledPolysList( layer )->CloneDropTriangulation();
 
-                fill.Simplify( SHAPE_POLY_SET::PM_FAST );
+                fill.Simplify();
 
                 for( int i = 0; i < fill.OutlineCount(); i++ )
                 {

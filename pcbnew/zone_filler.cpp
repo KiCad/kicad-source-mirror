@@ -796,8 +796,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
 
                         island.AddOutline( test_poly );
-                        intersection.BooleanIntersection( m_boardOutline, island,
-                                                          SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                        intersection.BooleanIntersection( m_boardOutline, island );
 
                         // Nominally, all of these areas should be either inside or outside the
                         // board outline.  So this test should be able to just compare areas (if
@@ -1118,7 +1117,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
         }
     }
 
-    aFill.BooleanSubtract( holes, SHAPE_POLY_SET::PM_FAST );
+    aFill.BooleanSubtract( holes );
 }
 
 
@@ -1505,7 +1504,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         }
     }
 
-    aHoles.Simplify( SHAPE_POLY_SET::PM_FAST );
+    aHoles.Simplify();
 }
 
 
@@ -1533,7 +1532,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
                     SHAPE_POLY_SET outline = aKnockout->Outline()->CloneDropTriangulation();
                     outline.ClearArcs();
 
-                    aRawFill.BooleanSubtract( outline, SHAPE_POLY_SET::PM_FAST );
+                    aRawFill.BooleanSubtract( outline );
                 }
             };
 
@@ -1617,7 +1616,7 @@ void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance
         { \
             m_board->SetLayerName( b, c ); \
             SHAPE_POLY_SET d = a; \
-            d.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
+            d.Fracture(); \
             aFillPolys = d; \
             return false; \
         } \
@@ -1699,7 +1698,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     // because the "real" subtract-clearance-holes has to be done after the spokes are added.
     static const bool USE_BBOX_CACHES = true;
     SHAPE_POLY_SET testAreas = aFillPolys.CloneDropTriangulation();
-    testAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+    testAreas.BooleanSubtract( clearanceHoles );
     DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, wxT( "minus-clearance-holes" ) );
 
     // Prune features that don't meet minimum-width criteria
@@ -1767,7 +1766,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+    aFillPolys.BooleanSubtract( clearanceHoles );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In8_Cu, wxT( "after-spoke-trimming" ) );
 
     /* -------------------------------------------------------------------------------------
@@ -1818,7 +1817,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
          * Connect nearby polygons with zero-width lines in order to ensure correct
          * re-inflation.
          */
-        aFillPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
+        aFillPolys.Fracture();
         connect_nearby_polys( aFillPolys, aZone->GetMinThickness() );
 
         DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In10_Cu, wxT( "connected-nearby-polys" ) );
@@ -1845,9 +1844,9 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     for( PAD* pad : thermalConnectionPads )
         addHoleKnockout( pad, 0, clearanceHoles );
 
-    aFillPolys.BooleanIntersection( aMaxExtents, SHAPE_POLY_SET::PM_FAST );
+    aFillPolys.BooleanIntersection( aMaxExtents );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In16_Cu, wxT( "after-trim-to-outline" ) );
-    aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+    aFillPolys.BooleanSubtract( clearanceHoles );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In17_Cu, wxT( "after-trim-to-clearance-holes" ) );
 
     /* -------------------------------------------------------------------------------------
@@ -1857,7 +1856,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     subtractHigherPriorityZones( aZone, aLayer, aFillPolys );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In18_Cu, wxT( "minus-higher-priority-zones" ) );
 
-    aFillPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
+    aFillPolys.Fracture();
     return true;
 }
 
@@ -1911,7 +1910,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     }
 
     aFillPolys = aSmoothedOutline;
-    aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+    aFillPolys.BooleanSubtract( clearanceHoles );
 
     for( ZONE* keepout : m_board->Zones() )
     {
@@ -1927,13 +1926,13 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
             {
                 if( keepout->Outline()->ArcCount() == 0 )
                 {
-                    aFillPolys.BooleanSubtract( *keepout->Outline(), SHAPE_POLY_SET::PM_FAST );
+                    aFillPolys.BooleanSubtract( *keepout->Outline() );
                 }
                 else
                 {
                     SHAPE_POLY_SET keepoutOutline( *keepout->Outline() );
                     keepoutOutline.ClearArcs();
-                    aFillPolys.BooleanSubtract( keepoutOutline, SHAPE_POLY_SET::PM_FAST );
+                    aFillPolys.BooleanSubtract( keepoutOutline );
                 }
             }
         }
@@ -1958,7 +1957,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     if( half_min_width - epsilon > epsilon )
         aFillPolys.Inflate( half_min_width - epsilon, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
 
-    aFillPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    aFillPolys.Fracture();
     return true;
 }
 
@@ -2375,12 +2374,12 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     SHAPE_POLY_SET deflatedFilledPolys = aFillPolys.CloneDropTriangulation();
     deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(),
                                  CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
-    holes.BooleanIntersection( deflatedFilledPolys, SHAPE_POLY_SET::PM_FAST );
+    holes.BooleanIntersection( deflatedFilledPolys );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
 
     SHAPE_POLY_SET deflatedOutline = aZone->Outline()->CloneDropTriangulation();
     deflatedOutline.Deflate( outline_margin, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
-    holes.BooleanIntersection( deflatedOutline, SHAPE_POLY_SET::PM_FAST );
+    holes.BooleanIntersection( deflatedOutline );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In12_Cu, wxT( "outline-clipped-hatch-holes" ) );
 
     if( aZone->GetNetCode() != 0 )
@@ -2438,7 +2437,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
             }
         }
 
-        holes.BooleanSubtract( aprons, SHAPE_POLY_SET::PM_FAST );
+        holes.BooleanSubtract( aprons );
     }
     DUMP_POLYS_TO_COPPER_LAYER( holes, In13_Cu, wxT( "pad-via-clipped-hatch-holes" ) );
 
@@ -2454,9 +2453,9 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
             ++ii;
     }
 
-    // create grid. Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to
+    // create grid. Useto
     // generate strictly simple polygons needed by Gerber files and Fracture()
-    aFillPolys.BooleanSubtract( aFillPolys, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    aFillPolys.BooleanSubtract( aFillPolys, holes );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In14_Cu, wxT( "after-hatching" ) );
 
     return true;

@@ -171,7 +171,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     SHAPE_POLY_SET originalOutline( *aZone.Outline() );
-    originalOutline.BooleanSubtract( *aCutout.Outline(), SHAPE_POLY_SET::PM_FAST );
+    originalOutline.BooleanSubtract( *aCutout.Outline() );
 
     // After substracting the hole, originalOutline can have more than one main outline.
     // But a zone can have only one main outline, so create as many zones as originalOutline

@@ -29,7 +29,6 @@
 #include <map>
 #include <string>            // for basic_string
 
-#include <clipper.hpp>
 #include <clipper2/clipper.h>
 #include <core/kicad_algo.h> // for alg::run_on_pair
 #include <geometry/circle.h>
@@ -79,50 +78,6 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed ) :
 }
 
 
-SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const ClipperLib::Path&             aPath,
-                                    const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
-                                    const std::vector<SHAPE_ARC>&       aArcBuffer ) :
-        SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-        m_closed( true ), m_width( 0 )
-{
-    std::map<ssize_t, ssize_t> loadedArcs;
-    m_points.reserve( aPath.size() );
-    m_shapes.reserve( aPath.size() );
-
-    auto loadArc =
-        [&]( ssize_t aArcIndex ) -> ssize_t
-        {
-            if( aArcIndex == SHAPE_IS_PT )
-            {
-                return SHAPE_IS_PT;
-            }
-            else if( loadedArcs.count( aArcIndex ) == 0 )
-            {
-                loadedArcs.insert( { aArcIndex, m_arcs.size() } );
-                m_arcs.push_back( aArcBuffer.at( aArcIndex ) );
-            }
-
-            return loadedArcs.at( aArcIndex );
-        };
-
-    for( size_t ii = 0; ii < aPath.size(); ++ii )
-    {
-        Append( aPath[ii].X, aPath[ii].Y );
-
-        m_shapes[ii].first = loadArc( aZValueBuffer[aPath[ii].Z].m_FirstArcIdx );
-        m_shapes[ii].second = loadArc( aZValueBuffer[aPath[ii].Z].m_SecondArcIdx );
-    }
-
-    // Clipper shouldn't return duplicate contiguous points. if it did, these would be
-    // removed during Append() and we would have different number of shapes to points
-    wxASSERT( m_shapes.size() == m_points.size() );
-
-    // Clipper might mess up the rotation of the indices such that an arc can be split between
-    // the end point and wrap around to the start point. Lets fix the indices up now
-    fixIndicesRotation();
-}
-
-
 SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const Clipper2Lib::Path64&          aPath,
                                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                                     const std::vector<SHAPE_ARC>&       aArcBuffer ) :
@@ -164,40 +119,6 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const Clipper2Lib::Path64&          aPath,
     // Clipper might mess up the rotation of the indices such that an arc can be split between
     // the end point and wrap around to the start point. Lets fix the indices up now
     fixIndicesRotation();
-}
-
-
-ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation,
-                                                     std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
-                                                     std::vector<SHAPE_ARC>& aArcBuffer ) const
-{
-    ClipperLib::Path c_path;
-    SHAPE_LINE_CHAIN input;
-    bool             orientation = Area( false ) >= 0;
-    ssize_t          shape_offset = aArcBuffer.size();
-
-    if( orientation != aRequiredOrientation )
-        input = Reverse();
-    else
-        input = *this;
-
-    int pointCount = input.PointCount();
-    c_path.reserve( pointCount );
-
-    for( int i = 0; i < pointCount; i++ )
-    {
-        const VECTOR2I& vertex = input.CPoint( i );
-
-        CLIPPER_Z_VALUE z_value( input.m_shapes[i], shape_offset );
-        size_t          z_value_ptr = aZValueBuffer.size();
-        aZValueBuffer.push_back( z_value );
-
-        c_path.emplace_back( vertex.x, vertex.y, z_value_ptr );
-    }
-
-    aArcBuffer.insert( aArcBuffer.end(), input.m_arcs.begin(), input.m_arcs.end() );
-
-    return c_path;
 }
 
 

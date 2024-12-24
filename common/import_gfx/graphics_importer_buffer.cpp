@@ -250,9 +250,9 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
         upscaledPaths.push_back( lc );
     }
 
-    SHAPE_POLY_SET result = SHAPE_POLY_SET::BuildPolysetFromOrientedPaths(
-            upscaledPaths, false, aFillRule == GRAPHICS_IMPORTER::PF_EVEN_ODD );
-    result.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    SHAPE_POLY_SET result;
+    result.BuildPolysetFromOrientedPaths( upscaledPaths, aFillRule == GRAPHICS_IMPORTER::PF_EVEN_ODD );
+    result.Fracture();
 
     for( int outl = 0; outl < result.OutlineCount(); outl++ )
     {

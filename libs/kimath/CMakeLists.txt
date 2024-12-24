@@ -51,7 +51,6 @@ add_library( kimath STATIC
 
 target_link_libraries( kimath
     core
-    clipper
     clipper2
     othermath
     rtree

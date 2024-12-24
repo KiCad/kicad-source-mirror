@@ -1022,9 +1022,9 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
         {
             GetCanvas()->GetView()->SetCenter( aPos, dialogScreenRects );
         }
-        catch( const ClipperLib::clipperException& e )
+        catch( const Clipper2Lib::Clipper2Exception& e )
         {
-            wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred centering object: %s" ),
+            wxFAIL_MSG( wxString::Format( wxT( "Clipper2 exception occurred centering object: %s" ),
                                           e.what() ) );
         }
     }

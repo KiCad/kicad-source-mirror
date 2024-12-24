@@ -1561,7 +1561,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                                  double aThickness, double aZposition, const VECTOR2D& aOrigin )
 {
     SHAPE_POLY_SET workingPoly = aPolySet;
-    workingPoly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    workingPoly.Simplify();
 
     SHAPE_POLY_SET fallbackPoly = workingPoly;
 

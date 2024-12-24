@@ -246,7 +246,7 @@ int polygon_triangulation_main( int argc, char *argv[] )
                     ignore_unused( poly );
 #if 0
                 PROF_TIMER unfrac("unfrac");
-                poly.Unfracture( SHAPE_POLY_SET::PM_FAST );
+                poly.Unfracture();
                 unfrac.Show();
 
                 PROF_TIMER triangulate("triangulate");

@@ -665,7 +665,7 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
     }
     else
     {
-        buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
+        buffer.Simplify();
     }
 
     aBuffer.Append( buffer );

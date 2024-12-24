@@ -34,7 +34,6 @@ set( CMAKE_POLICY_DEFAULT_CMP0077 NEW )
 
 set( ARGPARSE_INSTALL OFF )
 add_subdirectory( argparse )
-add_subdirectory( clipper )
 add_subdirectory( clipper2 )
 add_subdirectory( compoundfilereader )
 add_subdirectory( delaunator )

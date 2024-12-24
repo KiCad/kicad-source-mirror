@@ -1804,7 +1804,7 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
                 }
 
                 SHAPE_POLY_SET merged;
-                merged.BooleanAdd( chain1, chain2, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                merged.BooleanAdd( chain1, chain2 );
 
                 if( merged.OutlineCount() > 0 )
                     return merged.Outline( 0 );
@@ -1832,7 +1832,7 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
                                          CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, false );
 
             SHAPE_POLY_SET merged;
-            merged.BooleanAdd( poly, polyCoupled, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            merged.BooleanAdd( poly, polyCoupled );
 
             if( merged.OutlineCount() > 0 )
                 return merged.Outline( 0 );

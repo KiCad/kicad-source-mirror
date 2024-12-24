@@ -131,21 +131,6 @@ BOOST_AUTO_TEST_CASE( ClipperConstructorCase1 )
     // Case of an arc followed by a segment
     // The clipper path is not in order (on purpose), to simulate the typical return from clipper
 
-    ClipperLib::Path pathClipper1 = {
-        { { 125663951, 120099260, 24 }, { 125388111, 120170850, 25 }, { 125124975, 120280270, 26 },
-          { 124879705, 120425376, 27 }, { 124657110, 120603322, 28 }, { 124461556, 120810617, 29 },
-          { 124296876, 121043198, 30 }, { 124166301, 121296503, 31 }, { 124072391, 121565564, 32 },
-          { 124016988, 121845106, 33 }, { 124001177, 122129646, 34 }, { 124025270, 122413605, 35 },
-          { 124088794, 122691414, 36 }, { 124190502, 122957625, 37 }, { 124328401, 123207018, 38 },
-          { 124499787, 123434703, 39 }, { 124598846, 123537154, 40 }, { 127171000, 123786000, 4 },
-          { 127287862, 123704439, 5 },  { 127499716, 123513831, 6 },  { 127682866, 123295498, 7 },
-          { 127833720, 123053722, 8 },  { 127949321, 122793242, 9 },  { 128027402, 122519168, 10 },
-          { 128066430, 122236874, 11 }, { 128065642, 121951896, 12 }, { 128025053, 121669823, 13 },
-          { 127945457, 121396185, 14 }, { 127828417, 121136349, 15 }, { 127676227, 120895410, 16 },
-          { 127491873, 120678094, 17 }, { 127278968, 120488661, 18 }, { 127041689, 120330827, 19 },
-          { 126784688, 120207687, 20 }, { 126513005, 120121655, 21 }, { 126231968, 120074419, 22 },
-          { 125947087, 120066905, 23 } }
-    };
     Clipper2Lib::Path64 pathClipper2 = {
         { { 125663951, 120099260, 24 }, { 125388111, 120170850, 25 }, { 125124975, 120280270, 26 },
           { 124879705, 120425376, 27 }, { 124657110, 120603322, 28 }, { 124461556, 120810617, 29 },
@@ -180,22 +165,16 @@ BOOST_AUTO_TEST_CASE( ClipperConstructorCase1 )
         SHAPE_ARC( { 127171000, 123786000 }, { 126231718, 120077003 }, { 124598846, 123537154 }, 0 )
     };
 
-    SHAPE_LINE_CHAIN clipper1chain( pathClipper1, z_values, arcs );
     SHAPE_LINE_CHAIN clipper2chain( pathClipper2, z_values, arcs );
 
-    BOOST_CHECK( GEOM_TEST::IsOutlineValid( clipper1chain ) );
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( clipper2chain ) );
 
-    BOOST_CHECK_EQUAL( clipper1chain.PointCount(), 37 );
     BOOST_CHECK_EQUAL( clipper2chain.PointCount(), 37 );
 
-    BOOST_CHECK_EQUAL( clipper1chain.ArcCount(), 1 );
     BOOST_CHECK_EQUAL( clipper2chain.ArcCount(), 1 );
 
-    BOOST_CHECK_EQUAL( clipper1chain.ShapeCount(), 2 );
     BOOST_CHECK_EQUAL( clipper2chain.ShapeCount(), 2 );
 
-    BOOST_CHECK_EQUAL( clipper1chain.IsClosed(), true );
     BOOST_CHECK_EQUAL( clipper2chain.IsClosed(), true );
 }
 

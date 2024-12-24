@@ -574,7 +574,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLa
 void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     SHAPE_POLY_SET polys = aGbrItem->m_ShapeAsPolygon.CloneDropTriangulation();
-    polys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    polys.Simplify();
 
     if( polys.OutlineCount() == 0 )
         return;

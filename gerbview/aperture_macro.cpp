@@ -124,19 +124,19 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
 
             if( holeBuffer.OutlineCount() )     // we have a new hole in shape: remove the hole
             {
-                m_shape.BooleanSubtract( holeBuffer, SHAPE_POLY_SET::PM_FAST );
+                m_shape.BooleanSubtract( holeBuffer );
                 holeBuffer.RemoveAllContours();
             }
         }
     }
 
     // Merge and cleanup basic shape polygons
-    m_shape.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_shape.Simplify();
 
     // A hole can be is defined inside a polygon, or the polygons themselve can create
     // a hole when merged, so we must fracture the polygon to be able to drawn it
     // (i.e link holes by overlapping edges)
-    m_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
+    m_shape.Fracture();
 
     // Move m_shape to the actual draw position:
     for( int icnt = 0; icnt < m_shape.OutlineCount(); icnt++ )

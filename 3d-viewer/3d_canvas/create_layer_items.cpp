@@ -780,10 +780,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // End Build Copper layers
 
     // This will make a union of all added contours
-    m_TH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_NPTH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_viaTH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_viaAnnuliPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_TH_ODPolys.Simplify();
+    m_NPTH_ODPolys.Simplify();
+    m_viaTH_ODPolys.Simplify();
+    m_viaAnnuliPolys.Simplify();
 
     // Build Tech layers
     // Based on:
@@ -1022,7 +1022,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // This will make a union of all added contours
-            layerPoly->Simplify( SHAPE_POLY_SET::PM_FAST );
+            layerPoly->Simplify();
         }
     }
     // End Build Tech layers
@@ -1061,14 +1061,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // TRIM PLATED COPPER TO SOLDERMASK
         if( m_layers_poly.find( F_Mask ) != m_layers_poly.end() )
         {
-            m_frontPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( F_Mask ),
-                                                           SHAPE_POLY_SET::PM_FAST );
+            m_frontPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( F_Mask ) );
         }
 
         if( m_layers_poly.find( B_Mask ) != m_layers_poly.end() )
         {
-            m_backPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( B_Mask ),
-                                                          SHAPE_POLY_SET::PM_FAST );
+            m_backPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( B_Mask ) );
         }
 
         // Subtract plated copper from unplated copper
@@ -1077,15 +1075,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         if( m_layers_poly.find( F_Cu ) != m_layers_poly.end() )
         {
-            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedPadAndGraphicPolys, SHAPE_POLY_SET::PM_FAST );
-            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedCopperPolys, SHAPE_POLY_SET::PM_FAST );
+            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedPadAndGraphicPolys );
+            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedCopperPolys );
             hasF_Cu = true;
         }
 
         if( m_layers_poly.find( B_Cu ) != m_layers_poly.end() )
         {
-            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedPadAndGraphicPolys, SHAPE_POLY_SET::PM_FAST );
-            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedCopperPolys, SHAPE_POLY_SET::PM_FAST );
+            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedPadAndGraphicPolys );
+            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedCopperPolys );
             hasB_Cu = true;
         }
 
@@ -1096,10 +1094,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         if( hasB_Cu && m_backPlatedCopperPolys->OutlineCount() )
             m_backPlatedPadAndGraphicPolys->Append( *m_backPlatedCopperPolys );
 
-        m_frontPlatedPadAndGraphicPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
-        m_backPlatedPadAndGraphicPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
-        m_frontPlatedCopperPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
-        m_backPlatedCopperPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
+        m_frontPlatedPadAndGraphicPolys->Simplify();
+        m_backPlatedPadAndGraphicPolys->Simplify();
+        m_frontPlatedCopperPolys->Simplify();
+        m_backPlatedCopperPolys->Simplify();
 
         // ADD PLATED PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -1168,7 +1166,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                 {
                                     // This will make a union of all added contours
                                     layerPoly->second->ClearArcs();
-                                    layerPoly->second->Simplify( SHAPE_POLY_SET::PM_FAST );
+                                    layerPoly->second->Simplify();
                                 }
                             }
 
@@ -1193,12 +1191,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         {
             // found
             SHAPE_POLY_SET *polyLayer = m_layerHoleOdPolys[layer];
-            polyLayer->Simplify( SHAPE_POLY_SET::PM_FAST );
+            polyLayer->Simplify();
 
             wxASSERT( m_layerHoleIdPolys.find( layer ) != m_layerHoleIdPolys.end() );
 
             polyLayer = m_layerHoleIdPolys[layer];
-            polyLayer->Simplify( SHAPE_POLY_SET::PM_FAST );
+            polyLayer->Simplify();
         }
     }
 

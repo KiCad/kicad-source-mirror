@@ -135,7 +135,7 @@ int runDRCProto( PROJECT_CONTEXT project, std::shared_ptr<KIGFX::VIEW_OVERLAY> a
     {
         drcEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
     }
-    catch( const ClipperLib::clipperException& e )
+    catch( const Clipper2Lib::Clipper2Exception& e )
     {
         consoleLog.Print( wxString::Format( "Clipper exception %s occurred.", e.what() ) );
     }

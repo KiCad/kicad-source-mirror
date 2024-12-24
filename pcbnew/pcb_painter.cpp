@@ -2238,7 +2238,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
     {
         SHAPE_POLY_SET finalPoly;
         aText->TransformTextToPolySet( finalPoly, 0, m_maxError, ERROR_INSIDE );
-        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+        finalPoly.Fracture();
 
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );

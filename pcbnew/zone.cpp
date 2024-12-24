@@ -991,7 +991,7 @@ void ZONE::RemoveCutout( int aOutlineIdx, int aHoleIdx )
     SHAPE_POLY_SET cutPoly( m_Poly->Hole( aOutlineIdx, aHoleIdx ) );
 
     // Add the cutout back to the zone
-    m_Poly->BooleanAdd( cutPoly, SHAPE_POLY_SET::PM_FAST );
+    m_Poly->BooleanAdd( cutPoly );
 
     SetNeedRefill( true );
 }
@@ -1434,7 +1434,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     {
         withFillets = flattened;
         smooth( withFillets );
-        withFillets.BooleanAdd( flattened, SHAPE_POLY_SET::PM_FAST );
+        withFillets.BooleanAdd( flattened );
         maxExtents = &withFillets;
     }
 
@@ -1466,7 +1466,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
             if( diffNetZone->HigherPriority( sameNetZone )
                     && diffNetZone->GetBoundingBox().Intersects( sameNetBoundingBox ) )
             {
-                diffNetPoly.BooleanAdd( *diffNetZone->Outline(), SHAPE_POLY_SET::PM_FAST );
+                diffNetPoly.BooleanAdd( *diffNetZone->Outline() );
             }
         }
 
@@ -1479,19 +1479,19 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         {
             SHAPE_POLY_SET thisPoly = Outline()->CloneDropTriangulation();
 
-            thisPoly.BooleanSubtract( diffNetPoly, SHAPE_POLY_SET::PM_FAST );
+            thisPoly.BooleanSubtract( diffNetPoly );
             isolated = thisPoly.OutlineCount() == 0;
         }
 
         if( !isolated )
         {
             sameNetPoly.ClearArcs();
-            aSmoothedPoly.BooleanAdd( sameNetPoly, SHAPE_POLY_SET::PM_FAST );
+            aSmoothedPoly.BooleanAdd( sameNetPoly );
         }
     }
 
     if( aBoardOutline )
-        aSmoothedPoly.BooleanIntersection( *aBoardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        aSmoothedPoly.BooleanIntersection( *aBoardOutline );
 
     SHAPE_POLY_SET withSameNetIntersectingZones = aSmoothedPoly.CloneDropTriangulation();
 
@@ -1508,13 +1508,13 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         poly.Inflate( m_ZoneMinThickness, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
 
         if( !keepExternalFillets )
-            poly.BooleanIntersection( withSameNetIntersectingZones, SHAPE_POLY_SET::PM_FAST );
+            poly.BooleanIntersection( withSameNetIntersectingZones );
 
         *aSmoothedPolyWithApron = aSmoothedPoly;
-        aSmoothedPolyWithApron->BooleanIntersection( poly, SHAPE_POLY_SET::PM_FAST );
+        aSmoothedPolyWithApron->BooleanIntersection( poly );
     }
 
-    aSmoothedPoly.BooleanIntersection( *maxExtents, SHAPE_POLY_SET::PM_FAST );
+    aSmoothedPoly.BooleanIntersection( *maxExtents );
 
     return true;
 }
@@ -1576,7 +1576,7 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClea
         polybuffer.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
     }
 
-    polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
+    polybuffer.Fracture();
     aBuffer.Append( polybuffer );
 }
 
@@ -1612,8 +1612,7 @@ void ZONE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer
         if( aErrorLoc == ERROR_OUTSIDE )
             aClearance += aError;
 
-        temp_buf.InflateWithLinkedHoles( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aError,
-                                         SHAPE_POLY_SET::PM_FAST );
+        temp_buf.InflateWithLinkedHoles( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aError );
     }
 
     aBuffer.Append( temp_buf );

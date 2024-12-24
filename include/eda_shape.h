@@ -299,7 +299,7 @@ public:
         {
             if( m_poly.HoleCount( ii ) )
             {
-                m_poly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                m_poly.Fracture();
                 break;
             }
         }

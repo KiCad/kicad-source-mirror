@@ -60,7 +60,7 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, in
                                                                 aWalkaroundThickness ) );
             }
 
-            hullSet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            hullSet.Simplify();
             return hullSet.Outline( 0 );
         }
     }

@@ -91,7 +91,7 @@ std::unordered_map<uint32_t, SHAPE_POLY_SET> ConvertImageToPolygons( wxImage  im
 
     for( auto& [color, polySet] : colorPolys )
     {
-        polySet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        polySet.Simplify();
 
         for( int i = 0; i < polySet.OutlineCount(); i++ )
         {
@@ -114,7 +114,7 @@ void ConvertImageToLibShapes( LIB_SYMBOL* aSymbol, int unit, wxImage img, VECTOR
 
     for( auto& [color, polySet] : colorPolys )
     {
-        polySet.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        polySet.Fracture();
 
         for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
         {

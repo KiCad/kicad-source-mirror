@@ -2541,7 +2541,7 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
     }
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
-    aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    aOutlines.Simplify();
 
     return success;
 }

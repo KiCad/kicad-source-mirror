@@ -1956,7 +1956,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                 aClearance += aMaxError;
 
             outline.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aMaxError );
-            outline.Fracture( SHAPE_POLY_SET::PM_FAST );
+            outline.Fracture();
         }
         else if( aClearance < 0 )
         {
@@ -1965,7 +1965,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 
             // aClearance is negative so this is actually a deflate
             outline.Inflate( aClearance, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, aMaxError );
-            outline.Fracture( SHAPE_POLY_SET::PM_FAST );
+            outline.Fracture();
         }
 
         aBuffer.Append( outline );
@@ -2008,7 +2008,7 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
 
                     SHAPE_POLY_SET drawPoly;
                     shape->TransformShapeToPolygon( drawPoly, aLayer, 0, maxError, ERROR_INSIDE );
-                    drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
+                    drawPoly.BooleanIntersection( padPoly );
 
                     if( !drawPoly.IsEmpty() )
                         return shape;
@@ -2275,7 +2275,7 @@ void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider,
                                     hole->GetWidth(), ARC_HIGH_DEF, ERROR_OUTSIDE );
 
             SHAPE_POLY_SET copper = padOutline;
-            copper.BooleanSubtract( holeOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+            copper.BooleanSubtract( holeOutline );
 
             if( copper.IsEmpty() )
             {
@@ -2284,7 +2284,7 @@ void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider,
             else
             {
                 // Test if the pad hole is fully inside the copper area
-                holeOutline.BooleanSubtract( padOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                holeOutline.BooleanSubtract( padOutline );
 
                 if( !holeOutline.IsEmpty() )
                     aErrorHandler( DRCE_PADSTACK, _( "(PTH pad hole non fully inside copper)" ) );

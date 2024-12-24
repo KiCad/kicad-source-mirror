@@ -2627,8 +2627,7 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
 
                 inflatedFill.InflateWithLinkedHoles( zc->GetMinThickness() / 2,
                                                      CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                                     ARC_HIGH_DEF / 2,
-                                                     SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                                                     ARC_HIGH_DEF / 2 );
 
                 zc->SetFilledPolysList( layer, inflatedFill );
             }

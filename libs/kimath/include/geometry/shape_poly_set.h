@@ -39,7 +39,6 @@
 #include <stdlib.h>                     // for abs
 #include <vector>
 
-#include <clipper.hpp>                  // for ClipType, PolyTree (ptr only)
 #include <clipper2/clipper.h>
 #include <core/mirror.h>                // for FLIP_DIRECTION
 #include <geometry/corner_strategy.h>
@@ -986,55 +985,30 @@ public:
         return CIterateSegments( aOutline, aOutline, true );
     }
 
-    /**
-     * Operations on polygons use a \a aFastMode param
-     * if aFastMode is #PM_FAST (true) the result can be a weak polygon
-     * if aFastMode is #PM_STRICTLY_SIMPLE (false) (default) the result is (theoretically) a
-     * strictly simple polygon, but calculations can be really significantly time consuming
-     * Most of time #PM_FAST is preferable.
-     * #PM_STRICTLY_SIMPLE can be used in critical cases (Gerber output for instance)
-     */
-    enum POLYGON_MODE
-    {
-        PM_FAST = true,
-        PM_STRICTLY_SIMPLE = false
-    };
 
     /// Perform boolean polyset union
-    /// For \a aFastMode meaning, see function booleanOp
-    void BooleanAdd( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+    void BooleanAdd( const SHAPE_POLY_SET& b );
 
     /// Perform boolean polyset difference
-    /// For \a aFastMode meaning, see function booleanOp
-    void BooleanSubtract( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+    void BooleanSubtract( const SHAPE_POLY_SET& b );
 
     /// Perform boolean polyset intersection
-    /// For \a aFastMode meaning, see function booleanOp
-    void BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+    void BooleanIntersection( const SHAPE_POLY_SET& b );
 
     /// Perform boolean polyset exclusive or
-    /// For \a aFastMode meaning, see function booleanOp
-    void BooleanXor( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+    void BooleanXor( const SHAPE_POLY_SET& b );
 
     /// Perform boolean polyset union between a and b, store the result in it self
-    /// For \a aFastMode meaning, see function booleanOp
-    void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
-                     POLYGON_MODE aFastMode );
+    void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b );
 
     /// Perform boolean polyset difference between a and b, store the result in it self
-    /// For \a aFastMode meaning, see function booleanOp
-    void BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
-                          POLYGON_MODE aFastMode );
+    void BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b );
 
     /// Perform boolean polyset intersection between a and b, store the result in it self
-    /// For \a aFastMode meaning, see function booleanOp
-    void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
-                              POLYGON_MODE aFastMode );
+    void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b );
 
     /// Perform boolean polyset exclusive or between a and b, store the result in it self
-    /// For \a aFastMode meaning, see function booleanOp
-    void BooleanXor( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
-                              POLYGON_MODE aFastMode );
+    void BooleanXor( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b );
 
     /**
     * Extract all contours from this polygon set, then recreate polygons with holes.
@@ -1085,20 +1059,17 @@ public:
      * Perform outline inflation/deflation, using round corners.
      *
      * Polygons can have holes and/or linked holes with main outlines.  The resulting
-     * polygons are also polygons with linked holes to main outlines.  For \a aFastMode
-     * meaning, see function booleanOp  .
+     * polygons are also polygons with linked holes to main outlines.
      */
-    void InflateWithLinkedHoles( int aFactor, CORNER_STRATEGY aCornerStrategy, int aMaxError,
-                                 POLYGON_MODE aFastMode );
+    void InflateWithLinkedHoles( int aFactor, CORNER_STRATEGY aCornerStrategy, int aMaxError );
 
     /// Convert a set of polygons with holes to a single outline with "slits"/"fractures"
     /// connecting the outer ring to the inner holes
-    /// For \a aFastMode meaning, see function booleanOp
-    void Fracture( POLYGON_MODE aFastMode );
+    void Fracture();
 
     /// Convert a single outline slitted ("fractured") polygon into a set ouf outlines
     /// with holes.
-    void Unfracture( POLYGON_MODE aFastMode );
+    void Unfracture();
 
     /// Return true if the polygon set has any holes.
     bool HasHoles() const;
@@ -1108,8 +1079,7 @@ public:
 
 
     /// Simplify the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
-    /// For \a aFastMode meaning, see function booleanOp
-    void Simplify( POLYGON_MODE aFastMode );
+    void Simplify();
 
     /**
      * Simplifies the lines in the polyset.  This checks intermediate points to see if they are
@@ -1464,11 +1434,9 @@ public:
      * Build a SHAPE_POLY_SET from a bunch of outlines in provided in random order.
      *
      * @param aPath set of closed outlines forming the polygon. Positive orientation = outline, negative = hole
-     * @param aReverseOrientation inverts the sign of the orientation of aPaths (so negative = outline)
      * @param aEvenOdd forces the even-off fill rule (default is non zero)
-     * @return the constructed poly set
      */
-    static const SHAPE_POLY_SET BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths, bool aReverseOrientation = false, bool aEvenOdd = false );
+    void BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths, bool aEvenOdd = false );
 
     void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                              ERROR_LOC aErrorLoc ) const override
@@ -1487,9 +1455,6 @@ private:
 
     void fractureSingle( POLYGON& paths );
     void unfractureSingle ( POLYGON& path );
-    void importTree( ClipperLib::PolyTree*               tree,
-                     const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
-                     const std::vector<SHAPE_ARC>&       aArcBuffe );
     void importTree( Clipper2Lib::PolyTree64&            tree,
                      const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                      const std::vector<SHAPE_ARC>&       aArcBuffe );
@@ -1500,7 +1465,6 @@ private:
                      const std::vector<CLIPPER_Z_VALUE>&                 aZValueBuffer,
                      const std::vector<SHAPE_ARC>&                       aArcBuffer );
 
-    void inflate1( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy );
     void inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy, bool aSimplify = false );
 
     void inflateLine2( const SHAPE_LINE_CHAIN& aLine, int aAmount, int aCircleSegCount,
@@ -1510,20 +1474,9 @@ private:
      * This is the engine to execute all polygon boolean transforms (AND, OR, ... and polygon
      * simplification (merging overlapping  polygons).
      *
-     * @param aType is the transform type ( see ClipperLib::ClipType )
+     * @param aType is the transform type ( see Clipper2Lib::ClipType )
      * @param aOtherShape is the SHAPE_LINE_CHAIN to combine with me.
-     * @param aFastMode is an option to choose if the result can be a weak polygon
-     * or a strictly simple polygon.
-     * if aFastMode is PM_FAST the result can be a weak polygon
-     * if aFastMode is PM_STRICTLY_SIMPLE (default) the result is (theoretically) a strictly
-     * simple polygon, but calculations can be really significantly time consuming
      */
-    void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aOtherShape,
-                    POLYGON_MODE aFastMode );
-
-    void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
-                    const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
-
     void booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aOtherShape );
 
     void booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aShape,

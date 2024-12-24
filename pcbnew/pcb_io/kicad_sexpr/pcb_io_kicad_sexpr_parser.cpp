@@ -7231,8 +7231,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 {
                     polyset.InflateWithLinkedHoles( zone->GetMinThickness() / 2,
                                                     CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                                    ARC_HIGH_DEF / 2,
-                                                    SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                                                    ARC_HIGH_DEF / 2 );
                 }
             }
         }
@@ -7271,7 +7270,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 TransformOvalToPolygon( segPolygon, seg.A, seg.B, zone->GetMinThickness(),
                                         ARC_HIGH_DEF, ERROR_OUTSIDE );
 
-                layerFill.BooleanAdd( segPolygon, SHAPE_POLY_SET::PM_FAST );
+                layerFill.BooleanAdd( segPolygon );
             }
 
 

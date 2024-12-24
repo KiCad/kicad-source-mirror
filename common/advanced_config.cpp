@@ -98,7 +98,6 @@ static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
 static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
 static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
-static const wxChar UseClipper2[] = wxT( "UseClipper2" );
 static const wxChar EnableDesignBlocks[] = wxT( "EnableDesignBlocks" );
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
 static const wxChar EnableGit[] = wxT( "EnableGit" );
@@ -263,7 +262,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
 
-    m_UseClipper2               = true;
     m_EnableAPILogging          = false;
 
     m_Use3DConnexionDriver      = true;
@@ -463,9 +461,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                   &m_3DRT_BevelExtentFactor,
                                                   m_3DRT_BevelExtentFactor, 0.0, 100.0,
                                                   AC_GROUPS::V3D_RayTracing ) );
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::UseClipper2,
-                                                &m_UseClipper2, m_UseClipper2 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Use3DConnexionDriver,
                                                 &m_Use3DConnexionDriver, m_Use3DConnexionDriver ) );

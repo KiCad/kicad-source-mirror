@@ -307,12 +307,12 @@ int playground_main_func( int argc, char* argv[] )
 
     SHAPE_POLY_SET xorPad1ToPad2 = pad1Outline;
 
-    xorPad1ToPad2.BooleanXor( pad2Outline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    xorPad1ToPad2.BooleanXor( pad2Outline );
     xorPad1ToPad2.Move( VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ) );
 
     SHAPE_POLY_SET andPad1ToPad2 = pad2Outline;
 
-    andPad1ToPad2.BooleanIntersection( pad1Outline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    andPad1ToPad2.BooleanIntersection( pad1Outline );
     andPad1ToPad2.Move( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ) );
 
     std::shared_ptr<SHAPE_SEGMENT> slot = pad2.GetEffectiveHoleShape();

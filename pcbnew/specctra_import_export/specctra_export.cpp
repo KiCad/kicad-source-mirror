@@ -843,7 +843,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             TransformCircleToPolygon( polyBuffer, graphic->GetEnd() - move,
                                       graphic->GetWidth() / 2, ARC_HIGH_DEF, ERROR_INSIDE );
 
-            polyBuffer.Simplify( SHAPE_POLY_SET::PM_FAST );
+            polyBuffer.Simplify();
             SHAPE_LINE_CHAIN& poly = polyBuffer.Outline( 0 );
 
             for( int ii = 0; ii < poly.PointCount(); ++ii )

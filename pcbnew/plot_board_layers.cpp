@@ -467,8 +467,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                             // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                             // which can create bad shapes if margin.x is < 0
                             outline.InflateWithLinkedHoles( mask_clearance,
-                                                            CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
-                                                            SHAPE_POLY_SET::PM_FAST );
+                                                            CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
                             dummy.DeletePrimitivesList();
                             dummy.AddPrimitivePoly( aLayer, outline, 0, true );
 
@@ -518,8 +517,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                             dummy.TransformShapeToPolygon( outline, UNDEFINED_LAYER, 0, maxError,
                                                            ERROR_INSIDE );
                             outline.InflateWithLinkedHoles( mask_clearance,
-                                                            CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
-                                                            SHAPE_POLY_SET::PM_FAST );
+                                                            CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
 
                             // Initialize the dummy pad shape:
                             dummy.SetAnchorPadShape( aLayer, PAD_SHAPE::CIRCLE );
@@ -554,8 +552,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                         // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                         // which can create bad shapes if margin.x is < 0
                         shape.InflateWithLinkedHoles( mask_clearance,
-                                                      CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
-                                                      SHAPE_POLY_SET::PM_FAST );
+                                                      CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
                         dummy.DeletePrimitivesList();
                         dummy.AddPrimitivePoly( aLayer, shape, 0, true );
 
@@ -792,7 +789,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         outlines.RemoveAllContours();
         aBoard->ConvertBrdLayerToPolygonalContours( layer, outlines );
 
-        outlines.Simplify( SHAPE_POLY_SET::PM_FAST );
+        outlines.Simplify();
 
         // Plot outlines
         std::vector<VECTOR2I> cornerList;
@@ -1046,7 +1043,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     // Merge all polygons: After deflating, not merged (not overlapping) polygons will have the
     // initial shape (with perhaps small changes due to deflating transform)
-    areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    areas.Simplify();
     areas.Deflate( inflate, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
 
     // To avoid a lot of code, use a ZONE to handle and plot polygons, because our polygons look
@@ -1060,8 +1057,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     // Combine the current areas to initial areas. This is mandatory because inflate/deflate
     // transform is not perfect, and we want the initial areas perfectly kept
-    areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
-    areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    areas.BooleanAdd( initialPolys );
+    areas.Fracture();
 
     itemplotter.PlotZone( &zone, layer, areas );
 }

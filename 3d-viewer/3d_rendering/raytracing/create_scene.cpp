@@ -415,8 +415,8 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
 
             buildBoardBoundingBoxPoly( m_boardAdapter.GetBoard(), antiboardPoly );
 
-            antiboardPoly.BooleanSubtract( boardPolyCopy, SHAPE_POLY_SET::PM_FAST );
-            antiboardPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+            antiboardPoly.BooleanSubtract( boardPolyCopy );
+            antiboardPoly.Fracture();
 
             for( int ii = 0; ii < antiboardPoly.OutlineCount(); ii++ )
             {
@@ -427,7 +427,7 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
 
             m_antioutlineBoard2dObjects->BuildBVH();
 
-            boardPolyCopy.Fracture( SHAPE_POLY_SET::PM_FAST );
+            boardPolyCopy.Fracture();
 
             for( int ii = 0; ii < outlineCount; ii++ )
             {

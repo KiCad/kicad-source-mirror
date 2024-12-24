@@ -448,6 +448,6 @@ static void addHoleToPolygon( SHAPE_POLY_SET* aPolygon, APERTURE_DEF_HOLETYPE aH
         holeBuffer.Append( VECTOR2I( currpos ) );       // close hole
     }
 
-    aPolygon->BooleanSubtract( holeBuffer, SHAPE_POLY_SET::PM_FAST );
-    aPolygon->Fracture( SHAPE_POLY_SET::PM_FAST );
+    aPolygon->BooleanSubtract( holeBuffer );
+    aPolygon->Fracture();
 }

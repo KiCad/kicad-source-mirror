@@ -283,7 +283,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                                                 otherPadHoles, 0, maxError, ERROR_INSIDE );
                                     }
 
-                                    otherPadOutline.BooleanSubtract( otherPadHoles, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                                    otherPadOutline.BooleanSubtract( otherPadHoles );
 
                                     // If the pad hole under test intersects with another pad outline,
                                     // the annular width calculated above is used.

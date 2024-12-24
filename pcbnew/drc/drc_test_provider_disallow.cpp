@@ -132,7 +132,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     // exclude it.  This is particularly important for detecting copper fills as
                     // they will be exactly touching along the entire exclusion border.
                     SHAPE_POLY_SET areaPoly = ruleArea->Outline()->CloneDropTriangulation();
-                    areaPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                    areaPoly.Fracture();
                     areaPoly.Deflate( epsilon, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
 
                     DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ copperZone ].get();

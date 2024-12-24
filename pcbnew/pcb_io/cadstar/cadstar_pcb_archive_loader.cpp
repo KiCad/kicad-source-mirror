@@ -2173,7 +2173,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
                     }
 
                     poly.ClearArcs();
-                    fill.BooleanAdd( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                    fill.BooleanAdd( poly );
                 }
 
             }
@@ -2186,11 +2186,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
 
             if( pouredZone->HasFilledPolysForLayer( getKiCadLayer( csCopper.LayerID ) ) )
             {
-                fill.BooleanAdd( *pouredZone->GetFill( getKiCadLayer( csCopper.LayerID ) ),
-                                 SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                fill.BooleanAdd( *pouredZone->GetFill( getKiCadLayer( csCopper.LayerID ) ) );
             }
 
-            fill.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            fill.Fracture();
 
             pouredZone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), fill );
             pouredZone->SetIsFilled( true );
@@ -2270,7 +2269,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             zone->SetAssignedPriority( m_zonesMap.size() + 1 ); // Highest priority (always fill first)
 
             SHAPE_POLY_SET fill( *zone->Outline() );
-            fill.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+            fill.Fracture();
 
             zone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), fill );
         }
@@ -2822,7 +2821,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
                                                                 aScalingFactor, aTransformCentre,
                                                                 aMirrorInvert );
 
-        shapePolys.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+        shapePolys.Fracture();
 
         shape->SetPolyShape( shapePolys );
         shape->SetStroke( STROKE_PARAMS( aLineThickness, LINE_STYLE::SOLID ) );
@@ -3770,9 +3769,9 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
             SHAPE_POLY_SET lowerZoneFill( *aLowerZone->GetFilledPolysList( aLayer ) );
             SHAPE_POLY_SET lowerZoneOutline( *aLowerZone->Outline() );
 
-            lowerZoneOutline.BooleanSubtract( intersectShape, SHAPE_POLY_SET::PM_FAST );
+            lowerZoneOutline.BooleanSubtract( intersectShape );
 
-            lowerZoneFill.BooleanSubtract( lowerZoneOutline, SHAPE_POLY_SET::PM_FAST );
+            lowerZoneFill.BooleanSubtract( lowerZoneOutline );
 
             double leftOverArea = lowerZoneFill.Area();
 
@@ -3790,7 +3789,7 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
             outLineB.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
                               ARC_HIGH_DEF );
 
-            outLineA.BooleanIntersection( outLineB, SHAPE_POLY_SET::PM_FAST );
+            outLineA.BooleanIntersection( outLineB );
 
             return outLineA.Area();
         };

@@ -555,7 +555,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER
     SHAPE_POLY_SET fill = aZone->GetFilledPolysList( aLayer )->CloneDropTriangulation();
 
     // Turn fractured fill into outlines and holes
-    fill.Simplify( SHAPE_POLY_SET::PM_FAST );
+    fill.Simplify();
 
     for( int outlineIdx = 0; outlineIdx < fill.OutlineCount(); ++outlineIdx )
     {

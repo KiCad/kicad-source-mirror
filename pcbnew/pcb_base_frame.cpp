@@ -320,7 +320,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
 
         try
         {
-            viewportPoly.BooleanSubtract( dialogPoly, SHAPE_POLY_SET::PM_FAST );
+            viewportPoly.BooleanSubtract( dialogPoly );
         }
         catch( const std::exception& e )
         {
@@ -426,7 +426,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
 
             try
             {
-                clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
+                clippedPoly.BooleanIntersection( itemPoly, viewportPoly );
             }
             catch( const std::exception& e )
             {

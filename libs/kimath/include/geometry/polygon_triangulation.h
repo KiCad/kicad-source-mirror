@@ -51,7 +51,6 @@
 #include <cmath>
 
 #include <advanced_config.h>
-#include <clipper.hpp>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/vertex_set.h>

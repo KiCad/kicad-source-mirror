@@ -2777,7 +2777,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
             {
                 SHAPE_POLY_SET padPoly;
                 aItem->TransformShapeToPolygon( padPoly, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
-                poly.BooleanAdd( padPoly, SHAPE_POLY_SET::PM_FAST );
+                poly.BooleanAdd( padPoly );
             } );
     }
     else
@@ -2837,7 +2837,7 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         }
     }
 
-    coveredRegion.BooleanIntersection( footprintRegion, SHAPE_POLY_SET::PM_FAST );
+    coveredRegion.BooleanIntersection( footprintRegion );
 
     double footprintRegionArea = polygonArea( footprintRegion );
     double uncoveredRegionArea = footprintRegionArea - polygonArea( coveredRegion );
@@ -3327,7 +3327,7 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
             }
         }
 
-        copperOutlines.Simplify( SHAPE_POLY_SET::PM_FAST );
+        copperOutlines.Simplify();
 
         // Index each pad to the outline in the set that it is part of.
 

@@ -860,8 +860,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             }
                             else
                             {
-                                itemShape.BooleanSubtract( *aArea->Outline(),
-                                                           SHAPE_POLY_SET::PM_FAST );
+                                itemShape.BooleanSubtract( *aArea->Outline() );
 
                                 enclosedByArea = itemShape.IsEmpty();
                             }

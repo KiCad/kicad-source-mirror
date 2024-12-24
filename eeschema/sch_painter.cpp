@@ -664,8 +664,8 @@ static void knockoutText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2
     finalPoly.Append( bbox.GetRight(), bbox.GetBottom() );
     finalPoly.Append( bbox.GetLeft(),  bbox.GetBottom() );
 
-    finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
-    finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+    finalPoly.BooleanSubtract( knockouts );
+    finalPoly.Fracture();
 
     aGal.SetIsStroke( false );
     aGal.SetIsFill( true );

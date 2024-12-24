@@ -214,7 +214,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, co
     bbox.Append( corner.x, corner.y );
 
     // Now, clamp the shape
-    polyshape.BooleanIntersection( bbox, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    polyshape.BooleanIntersection( bbox );
     // Note the final polygon is a simple, convex polygon with no hole
     // due to the shape of initial polygons
 
@@ -663,6 +663,6 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aCentre, i
     TransformCircleToPolygon( buffer.Hole( 0, 0 ), aCentre, inner_radius,
                               aError, inner_err_loc );
 
-    buffer.Fracture( SHAPE_POLY_SET::PM_FAST );
+    buffer.Fracture();
     aBuffer.Append( buffer );
 }

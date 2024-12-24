@@ -71,7 +71,7 @@ void CALLBACK_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal 
             KIFONT::OUTLINE_GLYPH glyph = static_cast<const KIFONT::OUTLINE_GLYPH&>( aGlyph );
 
             if( glyph.HasHoles() )
-                glyph.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                glyph.Fracture();
 
             for( int ii = 0; ii < glyph.OutlineCount(); ++ii )
                 m_outlineCallback( glyph.Outline( ii ) );

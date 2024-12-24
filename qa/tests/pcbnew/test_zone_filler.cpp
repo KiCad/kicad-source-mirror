@@ -158,8 +158,7 @@ BOOST_FIXTURE_TEST_CASE( NotchedZones, ZONE_FILL_TEST_FIXTURE )
     {
         if( zone->GetLayerSet().Contains( F_Cu ) )
         {
-            frontCopper.BooleanAdd( *zone->GetFilledPolysList( F_Cu ),
-                                    SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            frontCopper.BooleanAdd( *zone->GetFilledPolysList( F_Cu ) );
         }
     }
 

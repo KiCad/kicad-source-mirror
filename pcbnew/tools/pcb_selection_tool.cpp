@@ -36,7 +36,6 @@ using namespace std::placeholders;
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_item.h>
-#include <clipper.hpp>
 #include <pcb_reference_image.h>
 #include <pcb_track.h>
 #include <footprint.h>

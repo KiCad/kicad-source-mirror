@@ -947,9 +947,7 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
         success = BuildFootprintPolygonOutlines( m_board, m_board_poly,
                                                  m_board->GetDesignSettings().m_MaxError,
                                                  chainingEpsilon );
-
-        // Make polygon strictly simple to avoid issues (especially in 3D viewer)
-        m_board_poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        m_board_poly.Simplify();
 
         if( !success && aErrorMsg )
         {

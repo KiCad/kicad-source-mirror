@@ -612,10 +612,9 @@ void ConvertPolygonToBlocks( const SHAPE_POLY_SET& aMainPath, CONTAINER_2D_BASE&
 
                 subBlockPoly.AddOutline( sb );
 
-                // We need here a strictly simple polygon with outlines and holes
+                // We need here a simple polygon with outlines and holes
                 SHAPE_POLY_SET solution;
-                solution.BooleanIntersection( aMainPath, subBlockPoly,
-                                              SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                solution.BooleanIntersection( aMainPath, subBlockPoly );
 
                 OUTERS_AND_HOLES outersAndHoles;
 
@@ -659,68 +658,3 @@ void ConvertPolygonToBlocks( const SHAPE_POLY_SET& aMainPath, CONTAINER_2D_BASE&
         topToBottom += topToBottom_inc;
     }
 }
-
-
-#ifdef DEBUG
-static void polygon_Convert( const ClipperLib::Path& aPath, SEGMENTS& aOutSegment,
-                             float aBiuTo3dUnitsScale )
-{
-    aOutSegment.resize( aPath.size() );
-
-    for( unsigned i = 0; i < aPath.size(); i++ )
-    {
-        aOutSegment[i].m_Start = SFVEC2F(
-                (float) aPath[i].X * aBiuTo3dUnitsScale, (float) -aPath[i].Y * aBiuTo3dUnitsScale );
-    }
-
-    unsigned int i;
-    unsigned int j = aOutSegment.size() - 1;
-
-    for( i = 0; i < aOutSegment.size(); j = i++ )
-    {
-        // Calculate constants for each segment
-        aOutSegment[i].m_inv_JY_minus_IY =
-                1.0f / ( aOutSegment[j].m_Start.y - aOutSegment[i].m_Start.y );
-        aOutSegment[i].m_JX_minus_IX = ( aOutSegment[j].m_Start.x - aOutSegment[i].m_Start.x );
-    }
-}
-
-
-void Polygon2d_TestModule()
-{
-    // "This structure contains a sequence of IntPoint vertices defining a single contour"
-    ClipperLib::Path aPath;
-
-    SEGMENTS aSegments;
-
-    aPath.resize( 4 );
-
-    aPath[0] = ClipperLib::IntPoint( -2, -2 );
-    aPath[1] = ClipperLib::IntPoint( 2, -2 );
-    aPath[2] = ClipperLib::IntPoint( 2, 2 );
-    aPath[3] = ClipperLib::IntPoint( -2, 2 );
-
-    // It must be an outer polygon
-    wxASSERT( ClipperLib::Orientation( aPath ) );
-
-    polygon_Convert( aPath, aSegments, 1.0f );
-
-    wxASSERT( aPath.size() == aSegments.size() );
-
-    wxASSERT( aSegments[0].m_Start == SFVEC2F( -2.0f, 2.0f ) );
-    wxASSERT( aSegments[1].m_Start == SFVEC2F( 2.0f, 2.0f ) );
-    wxASSERT( aSegments[2].m_Start == SFVEC2F( 2.0f, -2.0f ) );
-    wxASSERT( aSegments[3].m_Start == SFVEC2F( -2.0f, -2.0f ) );
-
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( 0.0f, 0.0f ) ) );
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( -1.9f, -1.9f ) ) );
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( -1.9f, 1.9f ) ) );
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( 1.9f, 1.9f ) ) );
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( 1.9f, -1.9f ) ) );
-
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( -2.1f, -2.0f ) ) == false );
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( -2.1f, 2.0f ) ) == false );
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( 2.1f, 2.0f ) ) == false );
-    wxASSERT( polygon_IsPointInside( aSegments, SFVEC2F( 2.1f, -2.0f ) ) == false );
-}
-#endif

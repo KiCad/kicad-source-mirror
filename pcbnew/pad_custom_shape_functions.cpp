@@ -45,7 +45,7 @@ void PAD::AddPrimitivePoly( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPoly, in
     poly_no_hole.Append( aPoly );
 
     if( poly_no_hole.HasHoles() )
-        poly_no_hole.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        poly_no_hole.Fracture();
 
     // There should never be multiple shapes, but if there are, we split them into
     // primitives so that we can edit them both.
@@ -142,13 +142,13 @@ void PAD::addPadPrimitivesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMerge
             primitive->TransformShapeToPolygon( polyset, UNDEFINED_LAYER, 0, aError, aErrorLoc );
     }
 
-    polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
+    polyset.Simplify();
 
     // Merge all polygons with the initial pad anchor shape
     if( polyset.OutlineCount() )
     {
-        aMergedPolygon->BooleanAdd( polyset, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        aMergedPolygon->Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        aMergedPolygon->BooleanAdd( polyset );
+        aMergedPolygon->Fracture();
     }
 }
 

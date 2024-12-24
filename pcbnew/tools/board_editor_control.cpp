@@ -1320,11 +1320,10 @@ static bool mergeZones( EDA_DRAW_FRAME* aFrame, BOARD_COMMIT& aCommit,
 
     for( unsigned int i = 1; i < aOriginZones.size(); i++ )
     {
-        aOriginZones[0]->Outline()->BooleanAdd( *aOriginZones[i]->Outline(),
-                                                SHAPE_POLY_SET::PM_FAST );
+        aOriginZones[0]->Outline()->BooleanAdd( *aOriginZones[i]->Outline() );
     }
 
-    aOriginZones[0]->Outline()->Simplify( SHAPE_POLY_SET::PM_FAST );
+    aOriginZones[0]->Outline()->Simplify();
 
     // We should have one polygon, possibly with holes.  If we end up with two polygons (either
     // because the intersection was a single point or because the intersection was within one of

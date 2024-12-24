@@ -155,7 +155,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                poly.Simplify( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                poly.Simplify();
 
                 return 1;
             };

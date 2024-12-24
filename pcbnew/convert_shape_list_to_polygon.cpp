@@ -164,8 +164,7 @@ static bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape
 
                 poly.ClearArcs();
 
-                poly.BooleanIntersection( *pad->GetEffectivePolygon( aLayer, ERROR_INSIDE ),
-                                          SHAPE_POLY_SET::PM_FAST );
+                poly.BooleanIntersection( *pad->GetEffectivePolygon( aLayer, ERROR_INSIDE ) );
 
                 if( poly.OutlineCount() == 0 )
                 {

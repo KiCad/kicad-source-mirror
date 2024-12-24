@@ -27,7 +27,6 @@
 #define __SHAPE_LINE_CHAIN
 
 
-#include <clipper.hpp>
 #include <clipper2/clipper.h>
 #include <geometry/seg.h>
 #include <geometry/shape.h>
@@ -37,7 +36,7 @@
 
 /**
  * Holds information on each point of a SHAPE_LINE_CHAIN that is retrievable
- * after an operation with ClipperLib
+ * after an operation with Clipper2Lib
  */
 struct CLIPPER_Z_VALUE
 {
@@ -175,10 +174,6 @@ public:
     SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false );
 
     SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false );
-
-    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath,
-                      const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
-                      const std::vector<SHAPE_ARC>& aArcBuffer );
 
     SHAPE_LINE_CHAIN( const Clipper2Lib::Path64& aPath,
                       const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
@@ -919,13 +914,6 @@ protected:
         else
             return m_shapes[aSegment].second;
     }
-
-    /**
-     * Create a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
-     */
-    ClipperLib::Path convertToClipper( bool aRequiredOrientation,
-                                       std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
-                                       std::vector<SHAPE_ARC>&       aArcBuffer ) const;
 
     /**
      * Create a new Clipper2 path from the SHAPE_LINE_CHAIN in a given orientation
