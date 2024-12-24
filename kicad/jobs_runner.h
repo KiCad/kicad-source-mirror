@@ -25,11 +25,13 @@ struct JOBSET_OUTPUT;
 struct JOBSET_JOB;
 class KIWAY;
 class REPORTER;
+class PROJECT;
 
 class JOBS_RUNNER
 {
 public:
-    JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, REPORTER* aReporter = nullptr );
+    JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
+                 REPORTER* aReporter = nullptr );
 
     bool RunJobsAllOutputs( bool aBail = false );
     bool RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail = false );
@@ -38,7 +40,8 @@ private:
     int runSpecialExecute( JOBSET_JOB* aJob );
 
 private:
-    KIWAY*     m_kiway;
+    KIWAY*          m_kiway;
     JOBSET*         m_jobsFile;
-    REPORTER*          m_reporter;
+    REPORTER*       m_reporter;
+    PROJECT*        m_project;
 };

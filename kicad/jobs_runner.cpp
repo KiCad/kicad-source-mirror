@@ -30,11 +30,12 @@
 #include <wx/sstream.h>
 #include <wx/wfstream.h>
 
-JOBS_RUNNER::JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile,
+JOBS_RUNNER::JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
                           REPORTER* aReporter ) :
         m_kiway( aKiway ),
         m_jobsFile( aJobsFile ),
-        m_reporter( aReporter )
+        m_reporter( aReporter ),
+        m_project( aProject )
 {
     if( !m_reporter )
     {
@@ -246,7 +247,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
     if( success )
     {
-        success = aOutput->m_outputHandler->HandleOutputs( tempDirPath, outputs );
+        success = aOutput->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
     }
 
     aOutput->m_lastRunSuccess = success;

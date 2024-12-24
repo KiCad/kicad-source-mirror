@@ -24,6 +24,8 @@
 #include <vector>
 #include <jobs/job.h>
 
+class PROJECT;
+
 class KICOMMON_API JOBS_OUTPUT_HANDLER
 {
 public:
@@ -40,7 +42,8 @@ public:
      * @return true if the output process can proceed
      */
     virtual bool OutputPrecheck() { return true; }
-    virtual bool HandleOutputs( const wxString&                baseTempPath,
+    virtual bool HandleOutputs( const wxString&                aBaseTempPath,
+                                PROJECT*                       aProject,
                                 const std::vector<JOB_OUTPUT>& aOutputsToHandle ) = 0;
 
     virtual void FromJson( const nlohmann::json& j ) = 0;

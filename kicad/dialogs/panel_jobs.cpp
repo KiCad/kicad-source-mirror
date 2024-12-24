@@ -363,7 +363,7 @@ public:
                     wxFileName fn = project.GetProjectFullName();
                     wxSetWorkingDirectory( fn.GetPath() );
 
-                    JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile );
+                    JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile, &project );
 
                     WX_PROGRESS_REPORTER* progressReporter =
                             new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );
@@ -846,7 +846,7 @@ void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
 				wxFileName fn = project.GetProjectFullName();
 				wxSetWorkingDirectory( fn.GetPath() );
 
-                JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile.get() );
+                JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile.get(), &project );
 
 				WX_PROGRESS_REPORTER* progressReporter =
 						new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );

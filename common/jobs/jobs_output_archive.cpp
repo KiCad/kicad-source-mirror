@@ -23,6 +23,7 @@
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 #include <gestfich.h>
+#include <common.h>
 
 JOBS_OUTPUT_ARCHIVE::JOBS_OUTPUT_ARCHIVE() : JOBS_OUTPUT_HANDLER(),
     m_format( FORMAT::ZIP )
@@ -42,11 +43,14 @@ bool JOBS_OUTPUT_ARCHIVE::OutputPrecheck()
 
 
 bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTempPath,
+                                         PROJECT* aProject,
                                          const std::vector<JOB_OUTPUT>& aOutputsToHandle )
 {
     bool success = true;
 
-    wxFFileOutputStream ostream( m_outputPath );
+    wxString outputPath = ExpandEnvVarSubstitutions( m_outputPath, aProject );
+
+    wxFFileOutputStream ostream( outputPath );
     if( !ostream.IsOk() ) // issue to create the file. Perhaps not writable dir
     {
         //msg.Printf( _( "Failed to create file '%s'." ), aDestFile );

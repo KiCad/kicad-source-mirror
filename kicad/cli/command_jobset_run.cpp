@@ -74,11 +74,14 @@ int CLI::JOBSET_RUN_COMMAND::doPerform( KIWAY& aKiway )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
+    PROJECT* project = Pgm().GetSettingsManager().GetProject( projectFile );
+
     JOBSET jobFile( jobsFilePath.ToStdString() );
 
     jobFile.LoadFromFile();
 
-    JOBS_RUNNER  jobsRunner( &aKiway, &jobFile, &CLI_REPORTER::GetInstance() );
+    JOBS_RUNNER jobsRunner( &aKiway, &jobFile, project,
+                            &CLI_REPORTER::GetInstance() );
 
     int return_code = CLI::EXIT_CODES::SUCCESS;
 

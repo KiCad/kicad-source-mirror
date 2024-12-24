@@ -21,6 +21,7 @@
 #include <jobs/jobs_output_folder.h>
 #include <wx/filename.h>
 #include <gestfich.h>
+#include <common.h>
 
 JOBS_OUTPUT_FOLDER::JOBS_OUTPUT_FOLDER() :
     JOBS_OUTPUT_HANDLER()
@@ -30,21 +31,24 @@ JOBS_OUTPUT_FOLDER::JOBS_OUTPUT_FOLDER() :
 
 
 bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempPath,
+                                        PROJECT* aProject,
                                         const std::vector<JOB_OUTPUT>& aOutputsToHandle )
 {
-    if( wxFileName::DirExists( m_outputPath ) )
+    wxString outputPath = ExpandEnvVarSubstitutions( m_outputPath, aProject );
+
+    if( wxFileName::DirExists( outputPath ) )
     {
-        wxFileName::Rmdir( m_outputPath, wxPATH_RMDIR_RECURSIVE );
+        wxFileName::Rmdir( outputPath, wxPATH_RMDIR_RECURSIVE );
     }
 
     bool success = true;
-    if( !wxFileName::Mkdir( m_outputPath, wxS_DIR_DEFAULT ) )
+    if( !wxFileName::Mkdir( outputPath, wxS_DIR_DEFAULT ) )
     {
         return false;
     }
 
     wxString errors;
-    if( !CopyDirectory( baseTempPath, m_outputPath, errors ) )
+    if( !CopyDirectory( baseTempPath, outputPath, errors ) )
     {
         success = false;
     }
