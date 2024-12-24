@@ -194,7 +194,6 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         if( m_colorTheme->GetSelection() == wxNOT_FOUND )
             m_colorTheme->SetSelection( 0 );
 
-        m_plotFormatOpt->SetSelection( static_cast<int>( m_job->m_plotFormat ) );
         m_plotBackgroundColor->SetValue( m_job->m_useBackgroundColor );
         m_penWidth.SetValue( m_job->m_HPGLPenSize );
         m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_job->m_HPGLPaperSizeSelect );
