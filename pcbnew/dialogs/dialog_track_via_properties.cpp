@@ -740,6 +740,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     break;
                 }
 
+                if( !m_viaDiameter.IsIndeterminate() )
+                    v->SetPadstack( *m_viaStack );
+
+                v->SanitizeLayers();
+
                 switch( m_tentingFrontCtrl->GetSelection() )
                 {
                 default:
@@ -755,11 +760,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 case 1: v->Padstack().BackOuterLayers().has_solder_mask = true;   break;
                 case 2: v->Padstack().BackOuterLayers().has_solder_mask = false;  break;
                 }
-
-                if( !m_viaDiameter.IsIndeterminate() )
-                    v->SetPadstack( *m_viaStack );
-
-                v->SanitizeLayers();
 
                 if( !m_viaDrill.IsIndeterminate() )
                     v->SetDrill( m_viaDrill.GetIntValue() );
