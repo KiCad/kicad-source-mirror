@@ -205,8 +205,27 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
     wxCHECK( connectionGraph, /* void */ );
 
     wxString sheetPathPrefix;
-    const std::vector<CONNECTION_SUBGRAPH*> subgraphs =
-            connectionGraph->GetAllSubgraphs( aNetName );
+    std::set<CONNECTION_SUBGRAPH*> subgraphs;
+
+    {
+        const std::vector<CONNECTION_SUBGRAPH*>& tmp = connectionGraph->GetAllSubgraphs( aNetName );
+        subgraphs.insert( tmp.begin(), tmp.end() );
+    }
+
+    for( CONNECTION_SUBGRAPH* sg : subgraphs )
+    {
+        for( const auto& [_, bus_sgs] : sg->GetBusParents() )
+        {
+            for( const CONNECTION_SUBGRAPH* bus_sg : bus_sgs )
+            {
+                const std::vector<CONNECTION_SUBGRAPH*>& tmp =
+                        connectionGraph->GetAllSubgraphs( bus_sg->GetNetName() );
+                subgraphs.insert( tmp.begin(), tmp.end() );
+            }
+        }
+    }
+
+    std::map<wxString, wxTreeItemId> sheetIds;
 
     for( const CONNECTION_SUBGRAPH* subGraph : subgraphs )
     {
@@ -222,7 +241,18 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
         bool stripTrailingSeparator = !sheetPath.Last()->IsRootSheet();
         wxString txt =  sheetPath.PathHumanReadable( true, stripTrailingSeparator );
-        wxTreeItemId sheetId = m_netNavigator->AppendItem( aParentId, txt, -1, -1, itemData );
+
+        wxTreeItemId sheetId;
+
+        if( auto sheetIdIt = sheetIds.find( txt ); sheetIdIt != sheetIds.end() )
+        {
+            sheetId = sheetIdIt->second;
+        }
+        else
+        {
+            sheetIds[txt] = m_netNavigator->AppendItem( aParentId, txt, -1, -1, itemData );
+            sheetId = sheetIds[txt];
+        }
 
         if( aSelection && *aSelection == *itemData )
             m_netNavigator->SelectItem( sheetId );
@@ -252,8 +282,12 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
                 m_netNavigator->SelectItem( id );
             }
         }
+
+        m_netNavigator->SortChildren( sheetId );
     }
 
+    // Sort the items in the tree control alphabetically
+    m_netNavigator->SortChildren( aParentId );
     m_netNavigator->Expand( aParentId );
 }
 

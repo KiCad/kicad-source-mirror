@@ -3111,10 +3111,10 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem ) con
 }
 
 
-const std::vector<CONNECTION_SUBGRAPH*>
+const std::vector<CONNECTION_SUBGRAPH*>&
 CONNECTION_GRAPH::GetAllSubgraphs( const wxString& aNetName ) const
 {
-    std::vector<CONNECTION_SUBGRAPH*> subgraphs;
+    static const std::vector<CONNECTION_SUBGRAPH*> subgraphs;
 
     auto it = m_net_name_to_subgraphs_map.find( aNetName );
 

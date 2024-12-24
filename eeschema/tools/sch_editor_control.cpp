@@ -1088,39 +1088,41 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     {
         connNames.emplace( selectedName );
 
-        CONNECTION_SUBGRAPH* sg = connectionGraph->FindSubgraphByName( selectedName, sheetPath );
-
-        if( sg && m_highlightBusMembers )
+        if( CONNECTION_SUBGRAPH* sg =
+                    connectionGraph->FindSubgraphByName( selectedName, sheetPath ) )
         {
-            for( const SCH_ITEM* item : sg->GetItems() )
+            if( m_highlightBusMembers )
             {
-                wxCHECK2( item, continue );
-
-                if( SCH_CONNECTION* connection = item->Connection() )
+                for( const SCH_ITEM* item : sg->GetItems() )
                 {
-                    for( const std::shared_ptr<SCH_CONNECTION>& member : connection->AllMembers() )
+                    wxCHECK2( item, continue );
+
+                    if( SCH_CONNECTION* connection = item->Connection() )
                     {
-                        if( member )
-                            connNames.emplace( member->Name() );
+                        for( const std::shared_ptr<SCH_CONNECTION>& member :
+                             connection->AllMembers() )
+                        {
+                            if( member )
+                                connNames.emplace( member->Name() );
+                        }
                     }
                 }
             }
         }
 
-        // Highlight the buses that contain the selected net
-        for( const auto& [_, bus_sgs] : sg->GetBusParents() )
+        // Place all bus names that are connected to the selected net in the set, regardless of
+        // their sheet. This ensures that nets that are connected to a bus on a different sheet
+        // get their buses highlighted as well.
+        for( CONNECTION_SUBGRAPH* sg : connectionGraph->GetAllSubgraphs( selectedName ) )
         {
-            for( const CONNECTION_SUBGRAPH* bus_sg : bus_sgs )
+            for( const auto& [_, bus_sgs] : sg->GetBusParents() )
             {
-                for( const SCH_ITEM* item : bus_sg->GetItems() )
+                for( CONNECTION_SUBGRAPH* bus_sg : bus_sgs )
                 {
-                    if( !item || !item->IsType( { SCH_ITEM_LOCATE_BUS_T } ) )
-                        continue;
-
-                    if( SCH_CONNECTION* connection = item->Connection() )
-                        connNames.emplace( connection->Name() );
+                    connNames.emplace( bus_sg->GetNetName() );
                 }
             }
+
         }
     }
 
