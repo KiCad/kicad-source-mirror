@@ -803,7 +803,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
             fn.SetPath( aSvgJob->m_outputDirectory );
             fn.SetExt( FILEEXT::SVGFileExtension );
 
-            filename = symbol->GetName().Lower();
+            filename = symbol->GetName();
 
             while( wxString::npos
                    != ( forbidden_char = filename.find_first_of(
