@@ -1148,9 +1148,11 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
         {
             signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
             vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
-
             activeTrace = plotTab->GetTrace( vectorName, traceType );
-            plotTab->EnableCursor( activeTrace, id, signalName );
+
+            if( activeTrace )
+                plotTab->EnableCursor( activeTrace, id, signalName );
+
             OnModify();
         }
 
