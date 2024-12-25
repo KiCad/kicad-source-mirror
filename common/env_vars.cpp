@@ -131,14 +131,14 @@ static void initialiseEnvVarHelp( STRING_MAP& aMap )
         _( "A directory containing user-specific scripts installed with KiCad" );
 
     // Deprecated vars
-    aMap[wxS( "KICAD_PTEMPLATES" )] =
-        _( "Deprecated version of KICAD_TEMPLATE_DIR.");
-    aMap[wxS( "KISYS3DMOD" )] =
-        _( "Deprecated version of KICAD7_3DMODEL_DIR." );
-    aMap[wxS( "KISYSMOD" )] =
-        _( "Deprecated version of KICAD7_FOOTPRINT_DIR." );
-    aMap[wxS( "KICAD_SYMBOL_DIR" )] =
-        _( "Deprecated version of KICAD_SYMBOL_DIR.");
+#define DEP( var ) wxString::Format( _( "Deprecated version of %s." ), var )
+
+    aMap[wxS( "KICAD_PTEMPLATES" )] = DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ) );
+    aMap[wxS( "KISYS3DMOD" )] = DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
+    aMap[wxS( "KISYSMOD" )] = DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ) );
+    aMap[wxS( "KICAD_SYMBOL_DIR" )] = DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ) );
+
+#undef DEP
 }
 
 
