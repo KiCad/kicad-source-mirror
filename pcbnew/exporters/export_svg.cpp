@@ -117,13 +117,17 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
         plotter->SetColorMode( !aSvgPlotOptions.m_blackAndWhite );
         PlotBoardLayers( aBoard, plotter, aSvgPlotOptions.m_printMaskLayer, plot_opts );
         plotter->EndPlot();
+
+        delete plotter;
+
+        // reset to the values saved earlier
+        aBoard->GetDesignSettings().SetAuxOrigin( savedAuxOrigin );
+        aBoard->SetPageSettings( savedPageInfo );
+
+        return true;
     }
-
-    delete plotter;
-
-    // reset to the values saved earlier
-    aBoard->GetDesignSettings().SetAuxOrigin( savedAuxOrigin );
-    aBoard->SetPageSettings( savedPageInfo );
-
-    return true;
+    else
+    {
+        return false;
+    }
 }

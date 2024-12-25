@@ -651,11 +651,15 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     brd->SynchronizeProperties();
 
     if( EXPORT_SVG::Plot( brd, svgPlotOptions ) )
+    {
         m_reporter->Report( _( "Successfully created svg file" ) + wxS( "\n" ), RPT_SEVERITY_INFO );
+        return CLI::EXIT_CODES::OK;
+    }
     else
+    {
         m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
-
-    return CLI::EXIT_CODES::OK;
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
 }
 
 
