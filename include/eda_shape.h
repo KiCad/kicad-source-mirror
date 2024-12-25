@@ -92,7 +92,7 @@ public:
         return GetFillMode() != FILL_T::NO_FILL;
     }
 
-    void SetFilled( bool aFlag )
+    virtual void SetFilled( bool aFlag )
     {
         setFilled( aFlag );
     }

@@ -66,6 +66,17 @@ void SCH_SHAPE::SetStroke( const STROKE_PARAMS& aStroke )
 }
 
 
+void SCH_SHAPE::SetFilled( bool aFilled )
+{
+    if( !aFilled )
+        m_fill = FILL_T::NO_FILL;
+    else if( GetParent()->IsType( { SCH_SYMBOL_T, LIB_SYMBOL_T } ) )
+        m_fill = FILL_T::FILLED_SHAPE;
+    else
+        m_fill = FILL_T::FILLED_WITH_COLOR;
+}
+
+
 void SCH_SHAPE::Move( const VECTOR2I& aOffset )
 {
     move( aOffset );
@@ -550,9 +561,55 @@ static struct SCH_SHAPE_DESC
                     return false;
                 };
 
+        auto isSymbolItem =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
+                        return shape->GetLayer() == LAYER_DEVICE;
+
+                    return false;
+                };
+
+        auto isSchematicItem =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
+                        return shape->GetLayer() != LAYER_DEVICE;
+
+                    return false;
+                };
+
+        auto isFillColorEditable =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
+                    {
+                        if( shape->GetParent()->IsType( { SCH_SYMBOL_T, LIB_SYMBOL_T } ) )
+                            return shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR;
+                        else
+                            return shape->IsFilled();
+                    }
+
+                    return true;
+                };
+
         propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( SCH_ITEM ),
                                       _HKI( "Position X" ), isPolygon );
         propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( SCH_ITEM ),
                                       _HKI( "Position Y" ), isPolygon );
+
+        propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "Filled" ), isSchematicItem );
+
+        propMgr.OverrideWriteability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "Fill Color" ), isFillColorEditable );
+
+        void ( SCH_SHAPE::*fillModeSetter )( FILL_T ) = &SCH_SHAPE::SetFillMode;
+        FILL_T ( SCH_SHAPE::*fillModeGetter )() const = &SCH_SHAPE::GetFillMode;
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_SHAPE, FILL_T>( _HKI( "Fill" ),
+                        fillModeSetter, fillModeGetter ),
+                        _HKI( "Shape Properties" ) )
+                .SetAvailableFunc( isSymbolItem );
     }
 } _SCH_SHAPE_DESC;

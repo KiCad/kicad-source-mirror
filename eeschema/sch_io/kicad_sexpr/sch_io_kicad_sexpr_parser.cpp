@@ -3578,6 +3578,16 @@ SCH_BUS_WIRE_ENTRY* SCH_IO_KICAD_SEXPR_PARSER::parseBusEntry()
 }
 
 
+void fixupSchFillMode( SCH_SHAPE* aShape )
+{
+    if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE )
+    {
+        aShape->SetFillColor( aShape->GetStroke().GetColor() );
+        aShape->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+    }
+}
+
+
 SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchPolyLine()
 {
     T             token;
@@ -3627,6 +3637,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchPolyLine()
             parseFill( fill );
             polyline->SetFillMode( fill.m_FillType );
             polyline->SetFillColor( fill.m_Color );
+            fixupSchFillMode( polyline.get() );
             break;
 
         case T_uuid:
@@ -3759,6 +3770,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchArc()
             parseFill( fill );
             arc->SetFillMode( fill.m_FillType );
             arc->SetFillColor( fill.m_Color );
+            fixupSchFillMode( arc.get() );
             break;
 
         case T_uuid:
@@ -3818,6 +3830,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchCircle()
             parseFill( fill );
             circle->SetFillMode( fill.m_FillType );
             circle->SetFillColor( fill.m_Color );
+            fixupSchFillMode( circle.get() );
             break;
 
         case T_uuid:
@@ -3876,6 +3889,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchRectangle()
             parseFill( fill );
             rectangle->SetFillMode( fill.m_FillType );
             rectangle->SetFillColor( fill.m_Color );
+            fixupSchFillMode( rectangle.get() );
             break;
 
         case T_uuid:
@@ -3949,6 +3963,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchBezier()
             parseFill( fill );
             bezier->SetFillMode( fill.m_FillType );
             bezier->SetFillColor( fill.m_Color );
+            fixupSchFillMode( bezier.get() );
             break;
 
         case T_uuid:
@@ -4201,6 +4216,7 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBox()
             parseFill( fill );
             textBox->SetFillMode( fill.m_FillType );
             textBox->SetFillColor( fill.m_Color );
+            fixupSchFillMode( textBox.get() );
             break;
 
         case T_effects:
