@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -195,18 +195,18 @@ private:
     ///< Used to generate unique IDs.  Must come up front so it's initialized before ctor.
 
 public:
-PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
-               ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD ) :
-        m_name( aName ),
-        m_display( aDisplay ),
-        m_coordType( aCoordType ),
-        m_hideFromPropertiesManager( false ),
-        m_hideFromLibraryEditors( false ),
-        m_hideFromDesignEditors( false ),
-        m_hideFromRulesEditor( false ),
-        m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
-        m_writeableFunc( [](INSPECTABLE*)->bool { return true; } ),
-        m_validator( NullValidator )
+    PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
+                   ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD ) :
+            m_name( aName ),
+            m_display( aDisplay ),
+            m_coordType( aCoordType ),
+            m_hideFromPropertiesManager( false ),
+            m_hideFromLibraryEditors( false ),
+            m_hideFromDesignEditors( false ),
+            m_hideFromRulesEditor( false ),
+            m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
+            m_writeableFunc( [](INSPECTABLE*)->bool { return true; } ),
+            m_validator( NullValidator )
     {
     }
 
@@ -447,21 +447,27 @@ public:
 
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
-            void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
-            PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
-            ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD )
-        : PROPERTY( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                           METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay, aCoordType )
+              void ( Base::*aSetter )( SetType ),
+              GetType( Base::*aGetter )(),
+              PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
+              ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD ) :
+        PROPERTY( aName,
+                  METHOD<Owner, T, Base>::Wrap( aSetter ),
+                  METHOD<Owner, T, Base>::Wrap( aGetter ),
+                  aDisplay, aCoordType )
     {
     }
 
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
-            void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
-            PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
-            ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD )
-        : PROPERTY( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                           METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay, aCoordType )
+              void ( Base::*aSetter )( SetType ),
+              GetType( Base::*aGetter )() const,
+              PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
+              ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD ) :
+        PROPERTY( aName,
+                  METHOD<Owner, T, Base>::Wrap( aSetter ),
+                  METHOD<Owner, T, Base>::Wrap( aGetter ),
+                  aDisplay, aCoordType )
     {
     }
 
@@ -486,11 +492,16 @@ public:
     }
 
 protected:
-    PROPERTY( const wxString& aName, SETTER_BASE<Owner, T>* s, GETTER_BASE<Owner, T>* g,
-              PROPERTY_DISPLAY aDisplay, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType )
-        : PROPERTY_BASE( aName, aDisplay, aCoordType ), m_setter( s ), m_getter( g ),
-                m_ownerHash( TYPE_HASH( Owner ) ), m_baseHash( TYPE_HASH( Base ) ),
-                m_typeHash( TYPE_HASH( BASE_TYPE ) )
+    PROPERTY( const wxString& aName,
+              SETTER_BASE<Owner, T>* s,
+              GETTER_BASE<Owner, T>* g,
+              PROPERTY_DISPLAY aDisplay, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) :
+        PROPERTY_BASE( aName, aDisplay, aCoordType ),
+        m_setter( s ),
+        m_getter( g ),
+        m_ownerHash( TYPE_HASH( Owner ) ),
+        m_baseHash( TYPE_HASH( Base ) ),
+        m_typeHash( TYPE_HASH( BASE_TYPE ) )
     {
     }
 
@@ -538,10 +549,13 @@ class PROPERTY_ENUM : public PROPERTY<Owner, T, Base>
 public:
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
-            void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
-            PROPERTY_DISPLAY aDisplay = PT_DEFAULT )
-        : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
+                   void ( Base::*aSetter )( SetType ),
+                   GetType( Base::*aGetter )(),
+                   PROPERTY_DISPLAY aDisplay = PT_DEFAULT ) :
+          PROPERTY<Owner, T, Base>( aName,
+                                    METHOD<Owner, T, Base>::Wrap( aSetter ),
+                                    METHOD<Owner, T, Base>::Wrap( aGetter ),
+                                    aDisplay )
     {
         if ( std::is_enum<T>::value )
         {
@@ -552,11 +566,14 @@ public:
 
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
-            void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
-            PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
-            ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD )
-        : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay, aCoordType )
+                   void ( Base::*aSetter )( SetType ),
+                   GetType( Base::*aGetter )() const,
+                   PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
+                   ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD ) :
+            PROPERTY<Owner, T, Base>( aName,
+                                      METHOD<Owner, T, Base>::Wrap( aSetter ),
+                                      METHOD<Owner, T, Base>::Wrap( aGetter ),
+                                      aDisplay, aCoordType )
     {
         if ( std::is_enum<T>::value )
         {
