@@ -105,7 +105,7 @@ public:
         return IsFilled();
     }
 
-    void SetFilled( bool aFlag )
+    virtual void SetFilled( bool aFlag )
     {
         setFilled( aFlag );
     }

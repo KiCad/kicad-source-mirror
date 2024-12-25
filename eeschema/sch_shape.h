@@ -65,6 +65,8 @@ public:
             return m_stroke.GetLineStyle();
     }
 
+    void SetFilled( bool aFilled ) override;
+
     const BOX2I GetBoundingBox() const override;
 
     VECTOR2I GetPosition() const override                   { return getPosition(); }
