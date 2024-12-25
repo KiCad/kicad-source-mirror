@@ -33,6 +33,7 @@
 #include <lib_table_lexer.h>
 #include <macros.h>
 #include <string_utils.h>
+#include <build_version.h>
 
 #define OPT_SEP     '|'         ///< options separator character
 
@@ -486,9 +487,17 @@ bool LIB_TABLE::migrate()
         wxString uri = row.GetFullURI( true );
 
         // If the uri still has a variable in it, that means that the user does not have
-        // these vars defined.  We update the old vars to the KICAD7 versions on load
-        row_updated |= ( uri.Replace( wxS( "${KICAD5_" ), wxS( "${KICAD7_" ), false ) > 0 );
-        row_updated |= ( uri.Replace( wxS( "${KICAD6_" ), wxS( "${KICAD7_" ), false ) > 0 );
+        // these vars defined.  We update the old vars to the current versions on load
+
+        static wxString fmtStr = wxS( "${KICAD%d_" );
+        int version = 0;
+        std::tie(version, std::ignore, std::ignore) = GetMajorMinorPatchTuple();
+
+        for( int ii = 5; ii < version - 1; ++ii )
+        {
+            row_updated |= ( uri.Replace( wxString::Format( fmtStr, ii ),
+                                          wxString::Format( fmtStr, version ), false ) > 0 );
+        }
 
         if( row_updated )
         {

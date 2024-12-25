@@ -46,6 +46,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
+#include <env_vars.h>
 
 
 SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
@@ -344,7 +345,7 @@ void SETTINGS_MANAGER::loadAllColorSettings()
 
     wxFileName third_party_path;
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-    auto               it = env.find( wxS( "KICAD7_3RD_PARTY" ) );
+    auto               it = env.find( ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
 
     if( it != env.end() && !it->second.GetValue().IsEmpty() )
         third_party_path.SetPath( it->second.GetValue() );
