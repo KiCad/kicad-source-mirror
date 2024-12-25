@@ -197,7 +197,6 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* showHidePanels = new ACTION_MENU( false, selTool );
     showHidePanels->SetTitle( _( "Panels" ) );
 
-    viewMenu->AppendSeparator();
     showHidePanels->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
     showHidePanels->Add( ACTIONS::showSearch, ACTION_MENU::CHECK );
     showHidePanels->Add( EE_ACTIONS::showHierarchy, ACTION_MENU::CHECK );
