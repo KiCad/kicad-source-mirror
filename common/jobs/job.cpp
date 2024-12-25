@@ -106,11 +106,10 @@ wxString JOB::GetFullOutputPath() const
         else
         {
             wxFileName fn( m_outputPath );
-            if( fn.IsAbsolute() || m_outputPath.IsEmpty() )
+            if( fn.IsAbsolute() )
             {
                 // uhhh, do nothing
-                // either its a full path passed by cli, so we return as-is
-                // or it's a empty path from either...in which case things will fail but who cares
+                // its a full path passed by cli, so we return as-is
                 // the job handlers should have fixed empty paths
             }
             else
