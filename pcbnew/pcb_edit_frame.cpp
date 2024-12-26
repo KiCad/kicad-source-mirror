@@ -569,12 +569,6 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         delete m_eventCounterTimer;
     }
 
-#ifdef KICAD_IPC_API
-    Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
-    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
-                      &PCB_EDIT_FRAME::onPluginAvailabilityChanged, this );
-#endif
-
     // Close modeless dialogs
     wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
 
@@ -1197,6 +1191,12 @@ void PCB_EDIT_FRAME::doCloseWindow()
     GetCanvas()->SetEvtHandlerEnabled( false );
 
     GetCanvas()->StopDrawing();
+
+#ifdef KICAD_IPC_API
+    Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+                      &PCB_EDIT_FRAME::onPluginAvailabilityChanged, this );
+#endif
 
     // Clean up mode-less dialogs.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs,
