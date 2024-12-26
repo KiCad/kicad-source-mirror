@@ -319,6 +319,8 @@ public:
             m_textOutputType->SetLabel( wxGetTranslation( jobTypeInfo.name ) );
             m_bitmapOutputType->SetBitmap( KiBitmapBundle( jobTypeInfo.bitmap ) );
         }
+
+        UpdateStatus();
     }
 
 
@@ -348,6 +350,15 @@ public:
         else
         {
             m_statusBitmap->Hide();
+        }
+
+        if( !m_jobsFile->GetJobsForOutput( m_output ).empty() )
+        {
+            m_buttonOutputRun->Enable();
+        }
+        else
+        {
+            m_buttonOutputRun->Disable();
         }
     }
 
@@ -456,7 +467,7 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
     rebuildJobList();
     buildOutputList();
 
-    m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() );
+    m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() && !m_jobsFile->GetJobs().empty() );
 }
 
 
@@ -502,6 +513,29 @@ void PANEL_JOBS::rebuildJobList()
     }
 
     updateTitle();
+
+    if( m_jobsFile->GetJobs().empty() )
+    {
+        m_buttonUp->Disable();
+        m_buttonDown->Disable();
+        m_buttonRunAllOutputs->Disable();
+    }
+    else
+    {
+        m_buttonUp->Enable();
+        m_buttonDown->Enable();
+        m_buttonRunAllOutputs->Enable();
+    }
+
+    // Ensure the outputs get their Run-ability status updated
+    for( auto& output : m_jobsFile->GetOutputs() )
+    {
+        if( m_outputPanelMap.contains( &output ) )
+        {
+            PANEL_JOB_OUTPUT* panel = m_outputPanelMap[&output];
+            panel->UpdateStatus();
+        }
+    }
 }
 
 
@@ -827,6 +861,7 @@ void PANEL_JOBS::OnJobButtonDown( wxCommandEvent& aEvent )
 
     m_jobList->SetItemState( item + 1, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 }
+
 
 void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
 {
