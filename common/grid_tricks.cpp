@@ -399,7 +399,8 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
         if( wxTheClipboard->IsSupported( wxDF_TEXT )
             || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
         {
-            menu.Enable( GRIDTRICKS_ID_PASTE, true );
+            if( m_grid->IsEditable() )
+                menu.Enable( GRIDTRICKS_ID_PASTE, true );
         }
 
         wxTheClipboard->Close();
