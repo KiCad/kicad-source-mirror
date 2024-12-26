@@ -139,15 +139,17 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
     m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->UpdateItems( std::move( pins_list ) );
     m_models[SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED]->UpdateItems( std::move( associated_list ) );
 
+#ifdef __WINDOWS__
 
-    for( auto& [_, view] : m_views )
+    for (auto& [_, view] : m_views)
     {
-        view->GetColumn( SHEET_SYNCHRONIZATION_MODEL::NAME )
-                ->SetWidth( static_cast<int>(
-                        view->GetBestColumnWidth( SHEET_SYNCHRONIZATION_MODEL::NAME ) ) );
+        view->GetColumn(SHEET_SYNCHRONIZATION_MODEL::NAME)
+            ->SetWidth(static_cast<int>(
+                view->GetBestColumnWidth(SHEET_SYNCHRONIZATION_MODEL::NAME)));
         view->OnColumnResized();
     }
-
+    
+#endif
 
     UpdatePageImage();
 }
