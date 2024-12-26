@@ -2588,7 +2588,8 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
         }
         else if( started
                  && ( evt->IsAction( &EE_ACTIONS::deleteLastPoint )
-                      || evt->IsAction( &ACTIONS::doDelete ) || evt->IsAction( &ACTIONS::undo ) ) )
+                      || evt->IsAction( &ACTIONS::doDelete )
+                      || evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( std::optional<VECTOR2I> last = polyGeomMgr.DeleteLastCorner() )
             {
@@ -2679,8 +2680,10 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = table && evt->IsActivate() && evt->HasPosition()
-                                && evt->Matches( aEvent );
+        bool isSyntheticClick = table
+                                    && evt->IsActivate()
+                                    && evt->HasPosition()
+                                    && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() || ( table && evt->IsAction( &ACTIONS::undo ) ) )
         {
