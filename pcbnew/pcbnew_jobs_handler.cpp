@@ -960,7 +960,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         delete plotter;
     }
 
-    wxFileName fn( aGerberJob->m_filename );
+    wxFileName fn( brd->GetFileName() );
 
     // Build gerber job file from basename
     BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath(), wxT( "job" ),
