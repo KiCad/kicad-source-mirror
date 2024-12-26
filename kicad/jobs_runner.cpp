@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <common.h>
 #include <jobs_runner.h>
 #include <jobs/job_registry.h>
 #include <jobs/jobset.h>
@@ -197,8 +198,11 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
             if( job.m_job->GetType() == "special_execute" )
 			{
 				JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job.get() );
+
+                wxString cmd = ExpandEnvVarSubstitutions( specialJob->m_command, m_project );
+
                 // static cast requried because wx used `long` which is 64-bit on linux but 32-bit on windows
-                result = static_cast<int>( wxExecute( specialJob->m_command ) );
+                result = static_cast<int>( wxExecute( cmd ) );
 			}
         }
 
