@@ -41,6 +41,7 @@ class SHEET_SYNCHRONIZATION_AGENT;
 using SHEET_SYNCHRONIZATION_MODEL_PTR = wxObjectDataPtr<SHEET_SYNCHRONIZATION_MODEL>;
 
 using SYNC_SHEET_PINT_MODELS = std::map<int, SHEET_SYNCHRONIZATION_MODEL_PTR>;
+using SYNC_SHEET_PINT_VIEWS = std::map<int, wxDataViewCtrl*>;
 
 class PANEL_SYNC_SHEET_PINS : public PANEL_SYNC_SHEET_PINS_BASE
 {
@@ -103,6 +104,7 @@ private:
     SYNC_SHEET_PINT_MODELS       m_models;
     SHEET_SYNCHRONIZATION_AGENT& m_agent;
     SCH_SHEET_PATH               m_path;
+    SYNC_SHEET_PINT_VIEWS        m_views;
 };
 
 #endif

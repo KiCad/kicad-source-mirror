@@ -42,14 +42,15 @@
 PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aSheet,
                                               wxNotebook* aNoteBook, int aIndex,
                                               SHEET_SYNCHRONIZATION_AGENT& aAgent,
-                                              const SCH_SHEET_PATH& aPath ) :
-        PANEL_SYNC_SHEET_PINS_BASE( aParent ),
-        m_sheet( aSheet ),
-        m_noteBook( aNoteBook ),
-        m_index( aIndex ),
-        m_sheetFileName( aSheet->GetFileName() ),
-        m_agent( aAgent ),
-        m_path( std::move( aPath ) )
+                                              const SCH_SHEET_PATH&        aPath ) :
+        PANEL_SYNC_SHEET_PINS_BASE( aParent ), m_sheet( aSheet ), m_noteBook( aNoteBook ),
+        m_index( aIndex ), m_sheetFileName( aSheet->GetFileName() ), m_agent( aAgent ),
+        m_path( std::move( aPath ) ),
+        m_views( {
+                { SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL, m_viewSheetLabels },
+                { SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN, m_viewSheetPins },
+                { SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED, m_viewAssociated },
+        } )
 {
     m_btnUsePinAsTemplate->SetBitmap( KiBitmapBundle( BITMAPS::add_hierar_pin ) );
     m_btnUseLabelAsTemplate->SetBitmap( KiBitmapBundle( BITMAPS::add_hierarchical_label ) );
@@ -59,37 +60,30 @@ PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aShe
     m_labelSymName->SetLabel( aSheet->GetShownName( true ) );
 
 
-    for( wxDataViewCtrl* view : { m_viewAssociated, m_viewSheetLabels, m_viewSheetPins } )
+    for( auto& [idx, view] : m_views )
     {
         for( int col : { SHEET_SYNCHRONIZATION_MODEL::NAME, SHEET_SYNCHRONIZATION_MODEL::SHAPE } )
         {
             switch( col )
             {
             case SHEET_SYNCHRONIZATION_MODEL::NAME:
-                view->AppendIconTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ), col );
+
+                idx, view->AppendIconTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ),
+                                                 col );
                 break;
             case SHEET_SYNCHRONIZATION_MODEL::SHAPE:
                 view->AppendTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ), col );
                 break;
             }
         }
-    }
 
-    std::map<int, wxDataViewCtrl*> view_idx = std::map<int, wxDataViewCtrl*>{
-        { SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL, m_viewSheetLabels },
-        { SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN, m_viewSheetPins },
-        { SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED, m_viewAssociated },
-    };
-
-    for( auto& [idx, view] : view_idx )
-    {
         auto model = wxObjectDataPtr<SHEET_SYNCHRONIZATION_MODEL>(
                 new SHEET_SYNCHRONIZATION_MODEL( m_agent, m_sheet, m_path ) );
         view->AssociateModel( model.get() );
         m_models.try_emplace( idx, std::move( model ) );
     }
 
-    for( auto& [idx, view] : view_idx )
+    for( auto& [idx, view] : m_views )
         PostProcessModelSelection( idx, {} );
 }
 
@@ -144,6 +138,16 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
     m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->UpdateItems( std::move( labels_list ) );
     m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->UpdateItems( std::move( pins_list ) );
     m_models[SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED]->UpdateItems( std::move( associated_list ) );
+
+
+    for( auto& [_, view] : m_views )
+    {
+        view->GetColumn( SHEET_SYNCHRONIZATION_MODEL::NAME )
+                ->SetWidth( static_cast<int>(
+                        view->GetBestColumnWidth( SHEET_SYNCHRONIZATION_MODEL::NAME ) ) );
+        view->OnColumnResized();
+    }
+
 
     UpdatePageImage();
 }
