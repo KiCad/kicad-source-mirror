@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-10-13 19:15+0000\n"
+"PO-Revision-Date: 2024-12-27 15:43+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -1808,9 +1808,8 @@ msgid "&Cancel"
 msgstr "&Відмінити"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
-#, fuzzy
 msgid "&Open Anyway"
-msgstr "Відкрити все одно"
+msgstr "&Відкрити все одно"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
@@ -1825,23 +1824,20 @@ msgid "&Save"
 msgstr "&Зберегти"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
-#, fuzzy
 msgid "&Discard Changes"
-msgstr "Скасувати зміни"
+msgstr "&Скасувати зміни"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
-#, fuzzy
 msgid "&Apply to all"
-msgstr "Застосувати до всіх"
+msgstr "&Застосувати до всіх"
 
 #: common/confirm.cpp:123
 msgid "Your current changes will be permanently lost."
 msgstr "Поточні зміни будуть втрачені назавжди."
 
 #: common/confirm.cpp:124
-#, fuzzy
 msgid "&Revert"
-msgstr "Відновити"
+msgstr "&Відновити"
 
 #: common/confirm.cpp:150 common/dialog_about/dialog_about_base.cpp:94
 #: common/dialog_shim.cpp:766
@@ -1972,51 +1968,51 @@ msgstr "Файл з метаданими блоків проектування '
 
 #: common/design_block_io.cpp:351
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Блок дизайну немає відповідного ідентифікатора бібліотеки."
 
 #: common/design_block_io.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Файл схеми '%s' вже існує."
+msgstr "Вихідний файл схеми '%s' не існує."
 
 #: common/design_block_io.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Теку блока дизайну '%s' не вдалося створити."
 
 #: common/design_block_io.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "Файл схеми '%s' вже існує."
+msgstr "Файл схеми '%s' не може бути збережений як блок дизайну '%s'."
 
 #: common/design_block_io.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Метадані блоку дизайну '%s' не вдалося зберегти."
 
 #: common/design_block_io.cpp:435
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "Тека '%s' не існує"
+msgstr "Блок дизайну '%s' не існує"
 
 #: common/design_block_io.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Тека блоку дизайну '%s' не вдалося видалити."
 
 #: common/design_block_lib_table.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
-"Знайдено дублікат запису скороченої назви бібліотеки '%s' в таблиці "
-"бібліотеки символів %d"
+"Повторюваний псевдонім бібліотеки '%s' знайдено у файлі таблиці бібліотек "
+"блоку дизайну на рядку %d."
 
 #: common/design_block_lib_table.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "файли fp-lib-table не містять бібліотеки з назвою '%s'."
+msgstr "файли design-block-lib-table не містять бібліотеки з іменем '%s'."
 
 #: common/design_block_lib_table.cpp:572 common/fp_lib_table.cpp:568
 #: eeschema/symbol_lib_table.cpp:609
@@ -2278,11 +2274,13 @@ msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Примітка: повне редагування призначень класів мережі можна виконати в меню "
+"Налаштування схеми > Проєкт."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 #, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Відповідність класу зв'язків:"
+msgstr "Додати відповідність класу зв'язків:"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -2461,9 +2459,8 @@ msgid "Path"
 msgstr "Шлях"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "Додати сигнали до діаграми"
+msgstr "блок дизайну"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
 #, fuzzy, c-format
