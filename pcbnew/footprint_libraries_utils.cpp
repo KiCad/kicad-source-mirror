@@ -677,6 +677,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 
         PCB_IO_MGR::PCB_FILE_T piType = PCB_IO_MGR::KICAD_SEXP;
         IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( piType ) );
+        std::map<std::string, UTF8> options { { "skip_cache_validation", "1" } }; // Skip cache validation -- we just created it
 
         for( FOOTPRINT* footprint : GetBoard()->Footprints() )
         {
@@ -691,7 +692,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                     resetGroup( fpCopy );
                     resetZones( fpCopy );
 
-                    pi->FootprintSave( libPath, fpCopy );
+                    pi->FootprintSave( libPath, fpCopy, &options );
 
                     delete fpCopy;
                 }
