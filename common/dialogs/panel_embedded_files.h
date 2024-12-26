@@ -26,21 +26,44 @@
 
 #include "panel_embedded_files_base.h"
 
+#include "grid_tricks.h"
+
 class EMBEDDED_FILES;
+
+class EMBEDDED_FILES_GRID_TRICKS : public GRID_TRICKS
+{
+    enum
+    {
+        EMBEDDED_FILES_GRID_TRICKS_COPY_FILENAME = GRIDTRICKS_FIRST_CLIENT_ID
+    };
+
+public:
+    explicit EMBEDDED_FILES_GRID_TRICKS( WX_GRID* aGrid );
+
+    ~EMBEDDED_FILES_GRID_TRICKS() override = default;
+
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
+    void doPopupSelection( wxCommandEvent& event ) override;
+
+protected:
+    //virtual void optionsEditor( int aRow ) = 0;
+
+    virtual bool supportsVisibilityColumn() { return false; }
+
+    int m_curRow;
+};
 
 class PANEL_EMBEDDED_FILES : public PANEL_EMBEDDED_FILES_BASE
 {
 public:
     PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aFiles );
-    ~PANEL_EMBEDDED_FILES() override {};
+    ~PANEL_EMBEDDED_FILES() override;
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
     bool GetEmbedFonts() const { return m_cbEmbedFonts->GetValue(); }
 
 protected:
-
-    void onGridRightClick( wxGridEvent& event ) override;
     void onAddEmbeddedFile( wxCommandEvent& event ) override;
     void onDeleteEmbeddedFile( wxCommandEvent& event ) override;
     void onExportFiles( wxCommandEvent& event ) override;

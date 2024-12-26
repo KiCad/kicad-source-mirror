@@ -35,12 +35,59 @@
 #include <wx/filename.h>
 #include <wx/menu.h>
 
-PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aFiles ) :
-    PANEL_EMBEDDED_FILES_BASE( parent ),
-    m_files( aFiles )
-{
-    m_localFiles = new EMBEDDED_FILES();
+/* ---------- GRID_TRICKS for embedded files grid ---------- */
 
+EMBEDDED_FILES_GRID_TRICKS::EMBEDDED_FILES_GRID_TRICKS( WX_GRID* aGrid ) :
+        GRID_TRICKS( aGrid ), m_curRow( -1 )
+{
+}
+
+
+void EMBEDDED_FILES_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
+{
+    if( const int row = aEvent.GetRow(); row >= 0 && row < m_grid->GetNumberRows() )
+    {
+        m_curRow = row;
+        menu.Append( EMBEDDED_FILES_GRID_TRICKS_COPY_FILENAME, _( "Copy Embedded Reference" ),
+                     _( "Copy the reference for this embedded file" ) );
+        menu.AppendSeparator();
+        GRID_TRICKS::showPopupMenu( menu, aEvent );
+    }
+    else
+    {
+        m_curRow = -1;
+    }
+}
+
+
+void EMBEDDED_FILES_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
+{
+    if( event.GetId() == EMBEDDED_FILES_GRID_TRICKS_COPY_FILENAME )
+    {
+        if( m_curRow >= 0 )
+        {
+            const wxString cellValue = m_grid->GetCellValue( m_curRow, 1 );
+
+            if( wxTheClipboard->Open() )
+            {
+                wxTheClipboard->SetData( new wxTextDataObject( cellValue ) );
+                wxTheClipboard->Close();
+            }
+        }
+    }
+    else
+    {
+        GRID_TRICKS::doPopupSelection( event );
+    }
+}
+
+
+/* ---------- End of GRID_TRICKS for embedded files grid ---------- */
+
+
+PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aFiles ) :
+        PANEL_EMBEDDED_FILES_BASE( parent ), m_files( aFiles ), m_localFiles( new EMBEDDED_FILES() )
+{
     for( auto& [name, file] : m_files->EmbeddedFileMap() )
     {
         EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file );
@@ -52,6 +99,15 @@ PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aF
     m_browse_button->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_files_grid->SetMargins( 0 - wxSYS_VSCROLL_X, 0 );
     m_files_grid->EnableAlternateRowColors();
+
+    m_files_grid->PushEventHandler( new EMBEDDED_FILES_GRID_TRICKS( m_files_grid ) );
+}
+
+
+PANEL_EMBEDDED_FILES::~PANEL_EMBEDDED_FILES()
+{
+    // Remove the GRID_TRICKS handler
+    m_files_grid->PopEventHandler( true );
 }
 
 
@@ -78,34 +134,6 @@ void PANEL_EMBEDDED_FILES::resizeGrid()
     m_files_grid->SetColSize( 0, panel_width * ratio );
     m_files_grid->SetColSize( 1, panel_width * ( 1 - ratio ) );
     Layout();
-}
-
-
-void PANEL_EMBEDDED_FILES::onGridRightClick( wxGridEvent& event )
-{
-    wxMenu menu;
-    const wxWindowID id = NewControlId();
-    menu.Append( id, _( "Copy Embedded Reference" ) );
-
-    menu.Bind(
-            wxEVT_COMMAND_MENU_SELECTED,
-            [&]( wxCommandEvent& )
-            {
-                int row = event.GetRow();
-                if( row >= 0 && row < m_files_grid->GetNumberRows() )
-                {
-                    wxString cellValue = m_files_grid->GetCellValue( row, 1 );
-
-                    if( wxTheClipboard->Open() )
-                    {
-                        wxTheClipboard->SetData( new wxTextDataObject( cellValue ) );
-                        wxTheClipboard->Close();
-                    }
-                }
-            },
-            id );
-
-    PopupMenu( &menu );
 }
 
 
