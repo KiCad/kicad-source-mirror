@@ -84,23 +84,26 @@ void PANEL_EMBEDDED_FILES::resizeGrid()
 void PANEL_EMBEDDED_FILES::onGridRightClick( wxGridEvent& event )
 {
     wxMenu menu;
-    menu.Append( wxID_COPY, _( "Copy Embedded Reference" ) );
+    const wxWindowID id = NewControlId();
+    menu.Append( id, _( "Copy Embedded Reference" ) );
 
-    menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
-        [&]( wxCommandEvent& )
-        {
-            int row = event.GetRow();
-            if( row >= 0 && row < m_files_grid->GetNumberRows() )
+    menu.Bind(
+            wxEVT_COMMAND_MENU_SELECTED,
+            [&]( wxCommandEvent& )
             {
-                wxString cellValue = m_files_grid->GetCellValue( row, 1 );
-
-                if( wxTheClipboard->Open() )
+                int row = event.GetRow();
+                if( row >= 0 && row < m_files_grid->GetNumberRows() )
                 {
-                    wxTheClipboard->SetData( new wxTextDataObject( cellValue ) );
-                    wxTheClipboard->Close();
+                    wxString cellValue = m_files_grid->GetCellValue( row, 1 );
+
+                    if( wxTheClipboard->Open() )
+                    {
+                        wxTheClipboard->SetData( new wxTextDataObject( cellValue ) );
+                        wxTheClipboard->Close();
+                    }
                 }
-            }
-        }, wxID_COPY );
+            },
+            id );
 
     PopupMenu( &menu );
 }
