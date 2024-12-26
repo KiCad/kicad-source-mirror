@@ -455,6 +455,8 @@ void DIALOG_PLOT::loadPlotParamsFromJob()
         m_plotOpts.SetUseAuxOrigin( dxfJob->m_useDrillOrigin );
     }
 
+    m_plotOpts.SetPlotFrameRef( m_job->m_plotDrawingSheet );
+    m_plotOpts.SetPlotInvisibleText( m_job->m_plotInvisibleText );
     m_plotOpts.SetSketchPadsOnFabLayers( m_job->m_sketchPadsOnFabLayers );
     m_plotOpts.SetHideDNPFPsOnFabLayers( m_job->m_hideDNPFPsOnFabLayers );
     m_plotOpts.SetSketchDNPFPsOnFabLayers( m_job->m_sketchDNPFPsOnFabLayers );
@@ -517,7 +519,9 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     m_job->m_sketchDNPFPsOnFabLayers = m_plotOpts.GetSketchDNPFPsOnFabLayers();
     m_job->m_sketchPadsOnFabLayers = m_plotOpts.GetSketchPadsOnFabLayers();
 
+    m_job->m_plotDrawingSheet = m_plotOpts.GetPlotFrameRef();
     m_job->m_plotPadNumbers = m_plotOpts.GetPlotPadNumbers();
+    m_job->m_plotInvisibleText = m_plotOpts.GetPlotInvisibleText();
 
     m_job->m_blackAndWhite = m_plotOpts.GetBlackAndWhite();
     m_job->m_mirror = m_plotOpts.GetMirror();
