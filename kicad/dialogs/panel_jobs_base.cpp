@@ -178,7 +178,7 @@ PANEL_JOB_OUTPUT_BASE::~PANEL_JOB_OUTPUT_BASE()
 
 DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( -1,369 ), wxDefaultSize );
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
@@ -230,13 +230,6 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	m_listBoxOnly->SetMinSize( wxSize( 300,200 ) );
 
 	fgSizer1->Add( m_listBoxOnly, 0, wxALL, 5 );
-
-	m_staticText12 = new wxStaticText( m_panel9, wxID_ANY, _("Overwrite Prompt"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	fgSizer1->Add( m_staticText12, 0, wxALL, 5 );
-
-	m_outputOverwrite = new wxCheckBox( m_panel9, wxID_ANY, _("Prompt about output overwrite?"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_outputOverwrite, 0, wxALL, 5 );
 
 
 	m_panel9->SetSizer( fgSizer1 );
