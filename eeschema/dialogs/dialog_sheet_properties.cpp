@@ -663,7 +663,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             currentSheet.LastScreen()->Remove( m_sheet );
         }
 
-        if( !m_frame->LoadSheetFromFile( m_sheet, &currentSheet, newAbsoluteFilename )
+        if( !m_frame->LoadSheetFromFile( m_sheet, &currentSheet, newAbsoluteFilename, false, true )
           || m_frame->CheckSheetForRecursion( m_sheet, &currentSheet ) )
         {
             if( restoreSheet )
