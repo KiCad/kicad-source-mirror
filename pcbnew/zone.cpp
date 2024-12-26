@@ -383,6 +383,8 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
         }
     }
 
+    HatchBorder();
+
     return true;
 }
 

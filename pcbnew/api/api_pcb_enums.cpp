@@ -55,6 +55,7 @@ PAD_ATTRIB FromProtoEnum( types::PadType aValue )
 {
     switch( aValue )
     {
+    case types::PadType::PT_UNKNOWN:
     case types::PadType::PT_PTH:            return PAD_ATTRIB::PTH;
     case types::PadType::PT_SMD:            return PAD_ATTRIB::SMD;
     case types::PadType::PT_EDGE_CONNECTOR: return PAD_ATTRIB::CONN;
@@ -87,6 +88,7 @@ PAD_DRILL_SHAPE FromProtoEnum( types::DrillShape aValue )
     {
     case types::DrillShape::DS_CIRCLE:      return PAD_DRILL_SHAPE::CIRCLE;
     case types::DrillShape::DS_OBLONG:      return PAD_DRILL_SHAPE::OBLONG;
+    case types::DrillShape::DS_UNKNOWN:
     case types::DrillShape::DS_UNDEFINED:   return PAD_DRILL_SHAPE::UNDEFINED;
     default:
         wxCHECK_MSG( false, PAD_DRILL_SHAPE::UNDEFINED,
@@ -119,6 +121,7 @@ PAD_SHAPE FromProtoEnum( types::PadStackShape aValue )
 {
     switch( aValue )
     {
+    case types::PadStackShape::PSS_UNKNOWN:
     case types::PadStackShape::PSS_CIRCLE:         return PAD_SHAPE::CIRCLE;
     case types::PadStackShape::PSS_RECTANGLE:      return PAD_SHAPE::RECTANGLE;
     case types::PadStackShape::PSS_OVAL:           return PAD_SHAPE::OVAL;
@@ -155,6 +158,7 @@ PADSTACK::MODE FromProtoEnum( types::PadStackType aValue )
 {
     switch( aValue )
     {
+    case types::PadStackType::PST_UNKNOWN:
     case types::PadStackType::PST_NORMAL:           return PADSTACK::MODE::NORMAL;
     case types::PadStackType::PST_FRONT_INNER_BACK: return PADSTACK::MODE::FRONT_INNER_BACK;
     case types::PadStackType::PST_CUSTOM:           return PADSTACK::MODE::CUSTOM;
@@ -187,6 +191,7 @@ VIATYPE FromProtoEnum( types::ViaType aValue )
 {
     switch( aValue )
     {
+    case types::ViaType::VT_UNKNOWN:
     case types::ViaType::VT_THROUGH:      return VIATYPE::THROUGH;
     case types::ViaType::VT_BLIND_BURIED: return VIATYPE::BLIND_BURIED;
     case types::ViaType::VT_MICRO:        return VIATYPE::MICROVIA;
@@ -261,6 +266,7 @@ PADSTACK::UNCONNECTED_LAYER_MODE FromProtoEnum( types::UnconnectedLayerRemoval a
 {
     switch( aValue )
     {
+    case types::UnconnectedLayerRemoval::ULR_UNKNOWN:
     case types::UnconnectedLayerRemoval::ULR_KEEP:
         return PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
 
@@ -298,6 +304,7 @@ ISLAND_REMOVAL_MODE FromProtoEnum( types::IslandRemovalMode aValue )
 {
     switch( aValue )
     {
+    case types::IslandRemovalMode::IRM_UNKNOWN:
     case types::IslandRemovalMode::IRM_ALWAYS:  return ISLAND_REMOVAL_MODE::ALWAYS;
     case types::IslandRemovalMode::IRM_NEVER:   return ISLAND_REMOVAL_MODE::NEVER;
     case types::IslandRemovalMode::IRM_AREA:    return ISLAND_REMOVAL_MODE::AREA;
@@ -329,6 +336,7 @@ ZONE_FILL_MODE FromProtoEnum( types::ZoneFillMode aValue )
 {
     switch( aValue )
     {
+    case types::ZoneFillMode::ZFM_UNKNOWN:
     case types::ZoneFillMode::ZFM_SOLID:    return ZONE_FILL_MODE::POLYGONS;
     case types::ZoneFillMode::ZFM_HATCHED:  return ZONE_FILL_MODE::HATCH_PATTERN;
 
@@ -363,6 +371,7 @@ ZONE_BORDER_DISPLAY_STYLE FromProtoEnum( types::ZoneBorderStyle aValue )
     {
     case types::ZoneBorderStyle::ZBS_SOLID:         return ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
     case types::ZoneBorderStyle::ZBS_DIAGONAL_FULL: return ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL;
+    case types::ZoneBorderStyle::ZBS_UNKNOWN:
     case types::ZoneBorderStyle::ZBS_DIAGONAL_EDGE: return ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
     case types::ZoneBorderStyle::ZBS_INVISIBLE:     return ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER;
 
@@ -396,6 +405,7 @@ RULE_AREA_PLACEMENT_SOURCE_TYPE FromProtoEnum( types::PlacementRuleSourceType aV
 {
     switch( aValue )
     {
+    case types::PlacementRuleSourceType::PRST_UNKNOWN:
     case types::PlacementRuleSourceType::PRST_SHEET_NAME:
         return RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
 
@@ -431,6 +441,7 @@ TEARDROP_TYPE FromProtoEnum( types::TeardropType aValue )
 {
     switch( aValue )
     {
+    case types::TeardropType::TDT_UNKNOWN:
     case types::TeardropType::TDT_NONE:         return TEARDROP_TYPE::TD_NONE;
     case types::TeardropType::TDT_UNSPECIFIED:  return TEARDROP_TYPE::TD_UNSPECIFIED;
     case types::TeardropType::TDT_VIA_PAD:      return TEARDROP_TYPE::TD_VIAPAD;
@@ -465,6 +476,7 @@ DIM_TEXT_BORDER FromProtoEnum( types::DimensionTextBorderStyle aValue )
 {
     switch( aValue )
     {
+    case types::DimensionTextBorderStyle::DTBS_UNKNOWN:
     case types::DimensionTextBorderStyle::DTBS_NONE:        return DIM_TEXT_BORDER::NONE;
     case types::DimensionTextBorderStyle::DTBS_RECTANGLE:   return DIM_TEXT_BORDER::RECTANGLE;
     case types::DimensionTextBorderStyle::DTBS_CIRCLE:      return DIM_TEXT_BORDER::CIRCLE;
@@ -498,6 +510,7 @@ DIM_UNITS_FORMAT FromProtoEnum( types::DimensionUnitFormat aValue )
 {
     switch( aValue )
     {
+    case types::DimensionUnitFormat::DUF_UNKNOWN:
     case types::DimensionUnitFormat::DUF_NO_SUFFIX:     return DIM_UNITS_FORMAT::NO_SUFFIX;
     case types::DimensionUnitFormat::DUF_BARE_SUFFIX:   return DIM_UNITS_FORMAT::BARE_SUFFIX;
     case types::DimensionUnitFormat::DUF_PAREN_SUFFIX:  return DIM_UNITS_FORMAT::PAREN_SUFFIX;
@@ -530,6 +543,7 @@ DIM_ARROW_DIRECTION FromProtoEnum( types::DimensionArrowDirection aValue )
     switch( aValue )
     {
     case types::DimensionArrowDirection::DAD_INWARD:    return DIM_ARROW_DIRECTION::INWARD;
+    case types::DimensionArrowDirection::DAD_UNKNOWN:
     case types::DimensionArrowDirection::DAD_OUTWARD:   return DIM_ARROW_DIRECTION::OUTWARD;
 
     default:
@@ -573,6 +587,7 @@ DIM_PRECISION FromProtoEnum( types::DimensionPrecision aValue )
     case types::DimensionPrecision::DP_FIXED_3:     return DIM_PRECISION::X_XXX;
     case types::DimensionPrecision::DP_FIXED_4:     return DIM_PRECISION::X_XXXX;
     case types::DimensionPrecision::DP_FIXED_5:     return DIM_PRECISION::X_XXXXX;
+    case types::DimensionPrecision::DP_UNKNOWN:
     case types::DimensionPrecision::DP_SCALED_IN_2: return DIM_PRECISION::V_VV;
     case types::DimensionPrecision::DP_SCALED_IN_3: return DIM_PRECISION::V_VVV;
     case types::DimensionPrecision::DP_SCALED_IN_4: return DIM_PRECISION::V_VVVV;
@@ -606,6 +621,7 @@ DIM_TEXT_POSITION FromProtoEnum( types::DimensionTextPosition aValue )
 {
     switch( aValue )
     {
+    case types::DimensionTextPosition::DTP_UNKNOWN:
     case types::DimensionTextPosition::DTP_OUTSIDE: return DIM_TEXT_POSITION::OUTSIDE;
     case types::DimensionTextPosition::DTP_INLINE:  return DIM_TEXT_POSITION::INLINE;
     case types::DimensionTextPosition::DTP_MANUAL:  return DIM_TEXT_POSITION::MANUAL;
@@ -642,6 +658,7 @@ DIM_UNITS_MODE FromProtoEnum( types::DimensionUnit aValue )
     case types::DimensionUnit::DU_INCHES:       return DIM_UNITS_MODE::INCHES;
     case types::DimensionUnit::DU_MILS:         return DIM_UNITS_MODE::MILS;
     case types::DimensionUnit::DU_MILLIMETERS:  return DIM_UNITS_MODE::MILLIMETRES;
+    case types::DimensionUnit::DU_UNKNOWN:
     case types::DimensionUnit::DU_AUTOMATIC:    return DIM_UNITS_MODE::AUTOMATIC;
 
     default:

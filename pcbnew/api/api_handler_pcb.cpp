@@ -343,11 +343,11 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
             continue;
         }
 
-        if( aCreate && !board->GetEnabledLayers().Contains( item->GetLayer() ) )
+        if( aCreate && !( board->GetEnabledLayers() & item->GetLayerSet() ).any() )
         {
             status.set_code( ItemStatusCode::ISC_INVALID_DATA );
-            status.set_error_message( fmt::format( "attempted to add item on disabled layer {}",
-                                                   LayerName( item->GetLayer() ).ToStdString() ) );
+            status.set_error_message(
+                "attempted to add item with no overlapping layers with the board" );
             aItemHandler( status, anyItem );
             continue;
         }
