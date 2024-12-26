@@ -787,6 +787,9 @@ void NODE::removeArcIndex( ARC* aArc )
 
 void NODE::rebuildJoint( const JOINT* aJoint, const ITEM* aItem )
 {
+    if( !aJoint )
+        return;
+
     // We have to split a single joint (associated with a via or a pad, binding together multiple
     // layers) into multiple independent joints. As I'm a lazy bastard, I simply delete the
     // via/solid and all its links and re-insert them.
