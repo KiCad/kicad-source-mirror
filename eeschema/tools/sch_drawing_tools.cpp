@@ -1751,6 +1751,16 @@ SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createNewSheetPin( SCH_SHEET* aSheet, const VE
     return pin;
 }
 
+SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createNewSheetPinFromLabel( SCH_SHEET*      aSheet,
+                                                              const VECTOR2I& aPosition,
+                                                              SCH_HIERLABEL*  aLabel )
+{
+    auto pin = createNewSheetPin( aSheet, aPosition );
+    pin->SetText( aLabel->GetText() );
+    pin->SetShape( aLabel->GetShape() );
+    return pin;
+}
+
 
 int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
@@ -1976,15 +1986,33 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        item = createNewSheetPin( sheet, cursorPos );
-
+                        // User is using the 'Sync Sheet Pins' tool
                         if( m_dialogSyncSheetPin && m_dialogSyncSheetPin->GetPlacementTemplate() )
                         {
-                            auto label = static_cast<SCH_HIERLABEL*>(
-                                    m_dialogSyncSheetPin->GetPlacementTemplate() );
-                            auto pin = static_cast<SCH_HIERLABEL*>( item );
-                            pin->SetText( label->GetText() );
-                            pin->SetShape( label->GetShape() );
+                            item = createNewSheetPinFromLabel(
+                                    sheet, cursorPos,
+                                    static_cast<SCH_HIERLABEL*>(
+                                            m_dialogSyncSheetPin->GetPlacementTemplate() ) );
+                        }
+                        else
+                        {
+                            // User is using the 'Place Sheet Pins' tool
+                            SCH_HIERLABEL* label = importHierLabel( sheet );
+
+                            if( !label )
+                            {
+                                m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
+                                m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+                                m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
+                                                     + wxPoint( 20, 20 ) );
+                                m_statusPopup->PopupFor( 2000 );
+                                item = nullptr;
+
+                                m_frame->PopTool( aEvent );
+                                break;
+                            }
+
+                            item = createNewSheetPinFromLabel( sheet, cursorPos, label );
                         }
                     }
 
@@ -2061,17 +2089,26 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     m_dialogSyncSheetPin->Show( true );
                     break;
                 }
-                else
-                {
-                    item = nullptr;
-                }
+
+                item = nullptr;
 
                 if( isSheetPin )
                 {
-                    item = createNewSheetPin( sheet, cursorPos );
-                    item->SetPosition( cursorPos );
-                    m_selectionTool->ClearSelection();
-                    m_selectionTool->AddItemToSel( item );
+                    SCH_HIERLABEL* label = importHierLabel( sheet );
+
+                    if( !label )
+                    {
+                        m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
+                        m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
+                                             + wxPoint( 20, 20 ) );
+                        m_statusPopup->PopupFor( 2000 );
+
+                        m_frame->PopTool( aEvent );
+                        break;
+                    }
+
+                    item = createNewSheetPinFromLabel( sheet, cursorPos, label );
                 }
             }
         }
@@ -3272,6 +3309,23 @@ int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
     current.push_back( &m_frame->Schematic().Root() );
     getSheetChildren( sheetPaths, m_frame->Schematic().Root().GetScreen(), visited, current );
     return doSyncSheetsPins( std::move( sheetPaths ) );
+}
+
+SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
+{
+    if( !aSheet->GetScreen() )
+        return nullptr;
+
+    for( EDA_ITEM* item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+    {
+        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+
+        /* A global label has been found: check if there a corresponding sheet label. */
+        if( !aSheet->HasPin( label->GetText() ) )
+            return label;
+    }
+
+    return nullptr;
 }
 
 

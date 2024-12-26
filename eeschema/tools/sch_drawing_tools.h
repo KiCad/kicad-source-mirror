@@ -76,12 +76,18 @@ private:
 
     SCH_SHEET_PIN* createNewSheetPin( SCH_SHEET* aSheet, const VECTOR2I& aPosition );
 
+    SCH_SHEET_PIN* createNewSheetPinFromLabel( SCH_SHEET* aSheet, const VECTOR2I& aPosition,
+                                               SCH_HIERLABEL* aLabel );
+
     void sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos );
 
     ///< Set up handlers for various events.
     void setTransitions() override;
 
     int doSyncSheetsPins( std::list<SCH_SHEET_PATH> aSheets );
+
+    ///< Try finding any hierlabel that does not have a sheet pin associated with it
+    SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
 
     std::vector<PICKED_SYMBOL> m_symbolHistoryList;
     std::vector<PICKED_SYMBOL> m_powerHistoryList;
