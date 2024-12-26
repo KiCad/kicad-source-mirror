@@ -329,7 +329,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
             return false;
     }
 
-    if( !prjScreens.HasSchematic( fullFilename ) )
+    if( !aSkipLibCheck && !prjScreens.HasSchematic( fullFilename ) )
     {
         if( fileName.GetPathWithSep() == Prj().GetProjectPath() )
         {
@@ -382,7 +382,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
             // If there are any new or duplicate libraries, check to see if it's possible that
             // there could be any missing libraries that would cause broken symbol library links.
-            if( !aSkipLibCheck && ( !newLibNames.IsEmpty() || !duplicateLibNames.IsEmpty() ) )
+            if( !newLibNames.IsEmpty() || !duplicateLibNames.IsEmpty() )
             {
                 if( !symLibTableFn.Exists() || !symLibTableFn.IsFileReadable() )
                 {
