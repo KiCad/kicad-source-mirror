@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-25 16:00+0000\n"
+"PO-Revision-Date: 2024-12-27 15:43+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -5818,7 +5818,7 @@ msgstr "Контроль версий"
 
 #: common/eda_base_frame.cpp:1122
 msgid "Data Collection"
-msgstr "Информация"
+msgstr "Сбор данных"
 
 #: common/eda_base_frame.cpp:1145 common/tool/actions.cpp:1088
 #: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:85
