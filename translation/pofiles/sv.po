@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-03 08:00+0000\n"
+"PO-Revision-Date: 2024-12-27 15:43+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -7412,14 +7412,12 @@ msgid "PCB: Export IPC2581"
 msgstr "Mönsterkort: Exportera IPC2581"
 
 #: common/jobs/job_export_pcb_odb.cpp:56
-#, fuzzy
 msgid "ODB++ export"
-msgstr "3D-export"
+msgstr "OBD++-export"
 
 #: common/jobs/job_export_pcb_odb.cpp:69
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "Exportera OBD++"
+msgstr "Mönsterkort: Exportera OBD++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
 msgid "PCB PDF export"
@@ -16550,9 +16548,8 @@ msgstr "Ingen förbindelse"
 #: eeschema/erc/erc.cpp:209 eeschema/erc/erc.cpp:228
 #: pcbnew/drc/drc_test_provider_misc.cpp:320
 #: pcbnew/drc/drc_test_provider_misc.cpp:340
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Skriv ut ritningsark"
+msgstr " (i ritningsark)"
 
 #: eeschema/erc/erc.cpp:422
 msgid "Unresolved text variable in drawing sheet"
@@ -20007,9 +20004,8 @@ msgstr ""
 "Vill du fortsätta?"
 
 #: eeschema/sheet.cpp:689
-#, fuzzy
 msgid "Cannot create the schematic image"
-msgstr "Annotera schema komponenter"
+msgstr "Kan inte skapa kretsschemabilden"
 
 #: eeschema/sheet.cpp:766
 #, c-format
@@ -26428,13 +26424,12 @@ msgid "Job Description"
 msgstr "Arbetsbeskrivning"
 
 #: kicad/dialogs/panel_jobs.cpp:300
-#, fuzzy
 msgid "Last run successful"
-msgstr "Arbetet lyckades"
+msgstr "Senaste körning lyckades"
 
 #: kicad/dialogs/panel_jobs.cpp:306
 msgid "Last run failed"
-msgstr ""
+msgstr "Senaste körning misslyckades"
 
 #: kicad/dialogs/panel_jobs.cpp:330 kicad/dialogs/panel_jobs.cpp:793
 msgid "Running jobs"
@@ -26442,7 +26437,7 @@ msgstr "Pågående arbeten"
 
 #: kicad/dialogs/panel_jobs.cpp:354
 msgid "View last run results..."
-msgstr ""
+msgstr "Se resultat från senaste körning..."
 
 #: kicad/dialogs/panel_jobs.cpp:597 kicad/dialogs/panel_jobs.cpp:644
 msgid "Job Types"
@@ -26815,9 +26810,9 @@ msgid "Plugins (%d)"
 msgstr "Insticksprogram (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Fabrication plugins (%d)"
-msgstr "Generera filer för tillverkning"
+msgstr "Insticksprogram för tillverkning (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
@@ -29617,19 +29612,16 @@ msgid "Copper resistivity:"
 msgstr "Kopparresistivitet:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
-#, fuzzy
 msgid "External Layer Tracks"
 msgstr "Ledare på yttre lager"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
-#, fuzzy
 msgid "Track width (W):"
 msgstr "Ledarbredd (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
-#, fuzzy
 msgid "Track thickness (H):"
 msgstr "Ledartjocklek (H):"
 
@@ -29663,7 +29655,6 @@ msgid "W"
 msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
-#, fuzzy
 msgid "Internal Layer Tracks"
 msgstr "Ledare på inre lager"
 
@@ -32553,9 +32544,8 @@ msgid "Alphabet, full 26 characters"
 msgstr "Alfabetet, hela 26 tecken"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:281
-#, fuzzy
 msgid "Select center item..."
-msgstr "Välj föremål..."
+msgstr "Välj mittobjekt..."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:287
 msgid "Select center point..."
@@ -32677,9 +32667,8 @@ msgid "Columns"
 msgstr "Kolumner"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:175
-#, fuzzy
 msgid "Grid Position"
-msgstr "Slutposition"
+msgstr "Matrisens placering"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
@@ -33640,9 +33629,9 @@ msgid "Cannot remove existing output file '%s'."
 msgstr "Kan inte ta bort existerande utmatningsfil '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Output file '%s' already exists."
-msgstr "Filen '%s' finns redan."
+msgstr "Utmatningsfilen '%s' finns redan."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:277
 msgid "Cannot create temporary output directory."
@@ -33662,9 +33651,9 @@ msgid "Cannot remove existing output directory '%s'."
 msgstr "Det går inte att ta bort existerande utmatningskatalogen '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' already exists."
-msgstr "Utmatningskatalogen '%s' skapades."
+msgstr "Utmatningskatalogen '%s' finns redan."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:350
 #, c-format
@@ -33776,9 +33765,8 @@ msgid "STL"
 msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
-#, fuzzy
 msgid "Board Options"
-msgstr "Alternativ för rutnät"
+msgstr "Alternativ för mönsterkort"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:58
 msgid "Export as Compound shape"
@@ -33871,24 +33859,20 @@ msgstr ""
 "mönsterkortets kontur skapas."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:126
-#, fuzzy
 msgid "Conductor Options"
-msgstr "Alternativ för markör"
+msgstr "Alternativ för ledare"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
-#, fuzzy
 msgid "Export tracks and vias on external conductor layers."
 msgstr "Exportera ledare och vior på yttre kopparlager."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
-#, fuzzy
 msgid "Export zones on external conductor layers."
 msgstr "Exportera kopparzoner på yttre kopparlager."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
-#, fuzzy
 msgid "Export inner conductor layers"
-msgstr "Exportera inre kopparskikt"
+msgstr "Exportera inre kopparlager"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:144
 msgid "Fuse shapes (time consuming)"
@@ -33960,7 +33944,7 @@ msgstr "Skriv över gammal fil"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:260
 msgid "Don't write P-curves to STEP file"
-msgstr ""
+msgstr "Skriv inte P-kurvor till STEP-fil"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:261
 msgid ""
@@ -33984,16 +33968,12 @@ msgid "Success"
 msgstr "Slutförd"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Vill du använda en sökväg relativ till\n"
-"'%s'?"
+msgstr "Vill du avbryta exportförloppet?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Isolationsavståndsrapport"
+msgstr "Avbryt export"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -35903,7 +35883,6 @@ msgid "Move Item"
 msgstr "Flytta objekt"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
-#, fuzzy
 msgid "Sheets"
 msgstr "Ark"
 
@@ -35934,22 +35913,20 @@ msgid "Reference Rule Area:"
 msgstr "Referensbetecknings regelområde:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Copy footprint placement"
-msgstr "Kopiera placering"
+msgstr "Kopiera fotavtrycks placering"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
 msgid "Copy routing"
 msgstr "Kopiera ledardragning"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
-#, fuzzy
 msgid "Copy other items"
-msgstr "Andra saker"
+msgstr "Kopiera övriga objekt"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
-msgstr ""
+msgstr "Kopiera text, former, zoner och andra objekt inom källregelområdet"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:91
 msgid "Include locked components"
@@ -36962,7 +36939,6 @@ msgid "(%d known DRC violations; %d exclusions)"
 msgstr "(%d kända kränkningar av DRC; %d undantag)"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
-#, fuzzy
 msgid "Track gap must be greater than 0."
 msgstr "Isolationsavståndet mellan ledarna måste vara större än 0."
 
@@ -36982,9 +36958,8 @@ msgid "Via gap:"
 msgstr "Viors isolationsavstånd:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
-#, fuzzy
 msgid "Via gap same as track gap"
-msgstr "Isolationsavstånd för via samma som för ledare"
+msgstr "Isolationsavstånd för via är samma som för ledare"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:56
 msgid "Differential Pair Dimensions"
@@ -37038,7 +37013,6 @@ msgid "Jump over obstacles"
 msgstr "Hoppa över hinder"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
-#, fuzzy
 msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
@@ -37060,13 +37034,14 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Om den nya ledaren har samma anslutning som en redan befintlig ledare, tas "
+"den befintliga ledaren bort."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
 msgstr "Optimera lödyteanslutningar"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:88
-#, fuzzy
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
@@ -37487,9 +37462,8 @@ msgid "By Length and Angle"
 msgstr "Enligt längd och vinkel"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:117
-#, fuzzy
 msgid "By Start/Midpoint"
-msgstr "Med början / mittpunkt / slut"
+msgstr "Enligt början / mittpunkt"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
@@ -38296,7 +38270,6 @@ msgid "Show Button"
 msgstr "Visa knapp"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
-#, fuzzy
 msgid "Plugin"
 msgstr "Insticksprogram"
 
@@ -40842,14 +40815,13 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Lödytan är inte för hålmontering; anslutningen blir: %s."
 
 #: pcbnew/drc/drc_engine.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Lokalt undantag för %s; frigång: %s."
+msgstr "Nätbrygga på %s; frigång: 0."
 
 #: pcbnew/drc/drc_engine.cpp:774
-#, fuzzy
 msgid "net tie"
-msgstr "Arktitlar"
+msgstr "nätbrygga"
 
 #: pcbnew/drc/drc_engine.cpp:801 pcbnew/drc/drc_engine.cpp:811
 #, c-format
@@ -41340,12 +41312,10 @@ msgid "Text thickness out of range"
 msgstr "Texttjocklek utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:262
-#, fuzzy
 msgid "Track length out of range"
 msgstr "Ledarlängd utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:266
-#, fuzzy
 msgid "Skew between tracks out of range"
 msgstr "Längdskillnad mellan ledare utanför tillåtet intervall"
 
@@ -41375,11 +41345,11 @@ msgstr "Hålmonterings-lödyta har inget hål"
 
 #: pcbnew/drc/drc_item.cpp:295
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Speglad text på främre lager"
 
 #: pcbnew/drc/drc_item.cpp:299
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "Icke speglad text på bakre lager"
 
 #: pcbnew/drc/drc_item.cpp:495
 #, c-format
@@ -42236,9 +42206,8 @@ msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s maximal tjocklek %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:77
-#, fuzzy
 msgid "Checking text mirroring..."
-msgstr "Kontrollerar textdimensioner..."
+msgstr "Kontrollerar textspegling..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
 msgid "Checking track angles..."
@@ -43527,7 +43496,6 @@ msgid "Add Microwave Inductor"
 msgstr "Lägg till mikrovågsinduktor"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Length of Track:"
 msgstr "Ledarens längd:"
 
@@ -45677,9 +45645,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Okänt namn på lödyteform '%s' på lager '%s' på rad %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Lägg till markerade lager i listan över matchade lager."
+msgstr "Det finns inget användarlager tillgängligt att lägga lager %s på."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -45699,12 +45667,12 @@ msgstr "Okänd lödyteformsprimitiv '%s' på rad %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Cirkel med olika x- och y-radier (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "x och y förväntades vara samma, faktiskt x = %f och y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -45739,6 +45707,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
+"Saknat X, Y eller rotationsdata i rad %z för referensbeteckning %s. Detta "
+"kan vara en icke utplacerad komponent."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
 #, c-format
@@ -45766,12 +45736,12 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3268
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "Ohanterad formtyp %d i polygon på lager %s, seq %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3427
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "Ogiltig hålbredd %d pukter i zon på lager %s med nät %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3469
 #, c-format
@@ -45779,11 +45749,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Konturen verkar vara avbruten: senaste punkt var %s, startpunkt för nästa "
+"segment är %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Ogiltigt namn på arkstift"
+msgstr "Ogiltig formtyp %d i zonkontur"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
@@ -46801,10 +46773,8 @@ msgid "Routing"
 msgstr "Ledardragning"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
-#, fuzzy
 msgid "Please select a differential pair track you want to tune."
-msgstr ""
-"Välj ett differentiellt ledarpar för vilket du vill anpassa ledarlängden."
+msgstr "Välj ett differentiellt ledarpar vars ledarlängd du vill anpassa."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:68
 msgid ""
@@ -48318,9 +48288,8 @@ msgid "Some of the items could not be outset."
 msgstr "Vissa av linjerna kunde inte rundas av."
 
 #: pcbnew/tools/multichannel_tool.cpp:420
-#, fuzzy
 msgid "Select a reference Rule Area to copy from..."
-msgstr "Vänligen välj ett enda referensregelområdet att kopiera från."
+msgstr "Välj ett referensregelområdet att kopiera från..."
 
 #: pcbnew/tools/multichannel_tool.cpp:439
 msgid "No Rule Areas to repeat layout to have been found."
