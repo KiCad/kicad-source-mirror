@@ -117,7 +117,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	sbAction->Add( m_removeTeardrops, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_removeAllTeardrops = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Remove all teardrops"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_removeAllTeardrops->SetToolTip( _("Remove all teadrops, regardless filtering options") );
+	m_removeAllTeardrops->SetToolTip( _("Remove all teardrops, regardless of filtering options") );
 
 	sbAction->Add( m_removeAllTeardrops, 0, wxBOTTOM|wxRIGHT, 5 );
 

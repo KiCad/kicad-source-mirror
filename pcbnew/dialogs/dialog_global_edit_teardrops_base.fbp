@@ -1159,7 +1159,7 @@
                 <property name="style"></property>
                 <property name="subclass">; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip">Remove all teadrops, regardless filtering options</property>
+                <property name="tooltip">Remove all teardrops, regardless of filtering options</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
