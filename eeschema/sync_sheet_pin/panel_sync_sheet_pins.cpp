@@ -39,6 +39,9 @@
 #include <wx/bookctrl.h>
 #include <eda_item.h>
 
+// sch_label.cpp
+extern wxString getElectricalTypeLabel( LABEL_FLAG_SHAPE aType );
+
 PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aSheet,
                                               wxNotebook* aNoteBook, int aIndex,
                                               SHEET_SYNCHRONIZATION_AGENT& aAgent,
@@ -138,17 +141,28 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
     m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->UpdateItems( std::move( pins_list ) );
     m_models[SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED]->UpdateItems( std::move( associated_list ) );
 
-#ifdef __WINDOWS__
 
-    for (auto& [_, view] : m_views)
+    static int SHAPE_COLUMN_WIDTH = ([this]{
+        int name_width = 0;
+
+        for(auto shape : { LABEL_FLAG_SHAPE::L_INPUT ,  LABEL_FLAG_SHAPE::L_OUTPUT ,  LABEL_FLAG_SHAPE::L_BIDI ,  LABEL_FLAG_SHAPE::L_TRISTATE ,  LABEL_FLAG_SHAPE::L_UNSPECIFIED })
+        {
+            name_width = std::max(name_width, static_cast<int>( GetTextExtent(  getElectricalTypeLabel( shape )).GetWidth()));
+        }
+
+        return name_width;
+
+    })();
+
+
+    for( auto [_, view] : m_views )
     {
-        view->GetColumn(SHEET_SYNCHRONIZATION_MODEL::NAME)
-            ->SetWidth(static_cast<int>(
-                view->GetBestColumnWidth(SHEET_SYNCHRONIZATION_MODEL::NAME)));
-        view->OnColumnResized();
+        wxDataViewColumn* name_col = view->GetColumn( SHEET_SYNCHRONIZATION_MODEL::NAME );
+        wxDataViewColumn* shape_col = view->GetColumn( SHEET_SYNCHRONIZATION_MODEL::SHAPE );
+        int               col_total_width = name_col->GetWidth() + shape_col->GetWidth();
+        shape_col->SetWidth( SHAPE_COLUMN_WIDTH );
+        name_col->SetWidth( col_total_width - SHAPE_COLUMN_WIDTH );
     }
-    
-#endif
 
     UpdatePageImage();
 }
