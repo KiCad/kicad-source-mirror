@@ -36,16 +36,15 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
 {
     wxString outputPath = ExpandEnvVarSubstitutions( m_outputPath, aProject );
 
-    if( wxFileName::DirExists( outputPath ) )
+    if( !wxFileName::DirExists( outputPath ) )
     {
-        wxFileName::Rmdir( outputPath, wxPATH_RMDIR_RECURSIVE );
+        if( !wxFileName::Mkdir( outputPath, wxS_DIR_DEFAULT ) )
+        {
+            return false;
+        }
     }
 
     bool success = true;
-    if( !wxFileName::Mkdir( outputPath, wxS_DIR_DEFAULT ) )
-    {
-        return false;
-    }
 
     wxString errors;
     if( !CopyDirectory( baseTempPath, outputPath, errors ) )
