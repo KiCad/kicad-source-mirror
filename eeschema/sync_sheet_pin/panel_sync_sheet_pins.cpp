@@ -68,8 +68,7 @@ PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aShe
             {
             case SHEET_SYNCHRONIZATION_MODEL::NAME:
 
-                idx, view->AppendIconTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ),
-                                                 col );
+                view->AppendIconTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ), col );
                 break;
             case SHEET_SYNCHRONIZATION_MODEL::SHAPE:
                 view->AppendTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ), col );
