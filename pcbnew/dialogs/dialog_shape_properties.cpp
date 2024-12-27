@@ -718,16 +718,15 @@ private:
 
     bool Validate() override;
 
-    // Show/hide the widgets used in net selection (shown only for copper layers)
-    void showHideNetInfo()
+    void enableNetInfo()
     {
         bool isCopper = IsCopperLayer( m_LayerSelectionCtrl->GetLayerSelection() );
 
-        m_netSelector->Show( isCopper );
-        m_netLabel->Show( isCopper );
+        m_netSelector->Enable( isCopper );
+        m_netLabel->Enable( isCopper );
     }
 
-    void showHideTechLayers()
+    void enableTechLayers()
     {
         bool isExtCopper = IsExternalCopperLayer( m_LayerSelectionCtrl->GetLayerSelection() );
 
@@ -1061,11 +1060,9 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape )
 void DIALOG_SHAPE_PROPERTIES::onLayerSelection( wxCommandEvent& event )
 {
     if( m_LayerSelectionCtrl->GetLayerSelection() >= 0 )
-    {
-        showHideNetInfo();
-    }
+        enableNetInfo();
 
-    showHideTechLayers();
+    enableTechLayers();
 }
 
 
@@ -1095,7 +1092,7 @@ void DIALOG_SHAPE_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
 
 void DIALOG_SHAPE_PROPERTIES::onTechLayersChanged( wxCommandEvent& event )
 {
-    showHideTechLayers();
+    enableTechLayers();
 }
 
 
@@ -1131,8 +1128,8 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     else
         m_solderMaskMargin.SetValue( wxEmptyString );
 
-    showHideNetInfo();
-    showHideTechLayers();
+    enableNetInfo();
+    enableTechLayers();
 
     return DIALOG_SHAPE_PROPERTIES_BASE::TransferDataToWindow();
 }

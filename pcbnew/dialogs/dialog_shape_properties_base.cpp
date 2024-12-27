@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -201,10 +201,10 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_upperSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 5, 5 );
+	gbSizer2 = new wxGridBagSizer( 2, 5 );
 	gbSizer2->SetFlexibleDirection( wxBOTH );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer2->SetEmptyCellSize( wxSize( -1,4 ) );
+	gbSizer2->SetEmptyCellSize( wxSize( -1,6 ) );
 
 	m_locked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_locked, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
@@ -236,14 +236,14 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
-	gbSizer2->Add( m_LayerLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer2->Add( m_LayerLabel, wxGBPosition( 8, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 8, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_techLayersLabel = new wxStaticText( this, wxID_ANY, _("Technical Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_techLayersLabel->Wrap( -1 );
-	gbSizer2->Add( m_techLayersLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
+	gbSizer2->Add( m_techLayersLabel, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM|wxTOP|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 4, 0, 0 );
@@ -268,19 +268,19 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_solderMaskMarginUnit, 0, wxALL, 5 );
 
 
-	gbSizer2->Add( fgSizer2, wxGBPosition( 8, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+	gbSizer2->Add( fgSizer2, wxGBPosition( 10, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
 
 	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netLabel->Wrap( -1 );
-	gbSizer2->Add( m_netLabel, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer2->Add( m_netLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_netSelector = new NET_SELECTOR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_netSelector, wxGBPosition( 9, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_netSelector, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
 	gbSizer2->AddGrowableCol( 1 );
 
-	m_upperSizer->Add( gbSizer2, 0, wxEXPAND, 5 );
+	m_upperSizer->Add( gbSizer2, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	bMainSizer->Add( m_upperSizer, 1, wxALL|wxEXPAND, 5 );
