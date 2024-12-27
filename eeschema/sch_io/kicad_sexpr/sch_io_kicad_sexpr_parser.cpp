@@ -280,12 +280,14 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMa
         }
     }
 
-    for( auto& [text, params] : m_fontTextMap )
-    {
-        text->SetFont( KIFONT::FONT::GetFont( std::get<0>( params ), std::get<1>( params ),
-                                              std::get<2>( params ),
-                                              newSymbol->GetEmbeddedFiles()->UpdateFontFiles() ) );
-    }
+    const std::vector<wxString>* embeddedFonts = newSymbol->GetEmbeddedFiles()->UpdateFontFiles();
+
+    newSymbol->RunOnChildren(
+            [&]( SCH_ITEM* aChild )
+            {
+                if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
+                    textItem->ResolveFont( embeddedFonts );
+            } );
 
     return newSymbol;
 }
@@ -700,7 +702,6 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
     T        token;
     bool     bold = false;
     bool     italic = false;
-    wxString faceName;
     COLOR4D  color = COLOR4D::UNSPECIFIED;
 
     // Various text objects (text boxes, schematic text, etc.) all have their own defaults,
@@ -725,7 +726,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
                 {
                 case T_face:
                     NeedSYMBOL();
-                    faceName = FromUTF8();
+                    aText->SetUnresolvedFontName( FromUTF8() );
                     NeedRIGHT();
                     break;
 
@@ -772,9 +773,6 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
                     Expecting( "face, size, thickness, line_spacing, bold, or italic" );
                 }
             }
-
-            if( !faceName.IsEmpty() )
-                m_fontTextMap[aText] = { faceName, bold, italic };
 
             break;
 
@@ -2930,13 +2928,6 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
         THROW_PARSE_ERROR( _( "No schematic object" ), CurSource(), CurLine(),
                             CurLineNumber(), CurOffset() );
 
-    for( auto& [text, params] : m_fontTextMap )
-    {
-        text->SetFont( KIFONT::FONT::GetFont( std::get<0>( params ), std::get<1>( params ),
-                                              std::get<2>( params ),
-                                              schematic->GetEmbeddedFiles()->UpdateFontFiles() ) );
-    }
-
     // When loading the schematic, take a moment to cache the fonts so that the font
     // picker can show the embedded fonts immediately.
     std::vector<std::string> fontNames;
@@ -3267,8 +3258,6 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             else
                 symbol->AddField( *field );
 
-            removeEntryInFontTextMap( field, symbol->GetFieldById( field->GetId() ), true );
-
             if( field->GetId() == REFERENCE_FIELD )
                 symbol->UpdatePrefix();
 
@@ -3533,12 +3522,6 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
                 field->SetId( field->GetId() + 1 );
 
             fields.emplace_back( *field );
-
-            // Remove field from m_fontTextMap (it is a temporary field.)
-            // Copy also font data (if field is in list) to the new field
-            // We don't know the final field (fields.back() is also temporary)
-            // so we just copy font info
-            removeEntryInFontTextMap( field, &fields.back(), false );
 
             delete field;
             break;
@@ -4387,9 +4370,6 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSchText()
             else
             {
                 static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().emplace_back( *field );
-                removeEntryInFontTextMap(
-                        field, &static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().back(),
-                        true );
             }
 
             delete field;
@@ -4749,31 +4729,4 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
     NeedRIGHT();
 
     aScreen->AddBusAlias( busAlias );
-}
-
-
-void SCH_IO_KICAD_SEXPR_PARSER::removeEntryInFontTextMap( EDA_TEXT* aEntry,
-                                                          EDA_TEXT* aCandidate,
-                                                          bool aReplaceInList )
-{
-    if( auto it = m_fontTextMap.find( aEntry ); it != m_fontTextMap.end() )
-    {
-        // Copy font from aEntry to aCandidate if not nullptr
-        if( aCandidate )
-        {
-            if( aReplaceInList )
-            {
-                m_fontTextMap[aCandidate] = it->second;
-            }
-            else
-            {
-                aCandidate->SetFont( KIFONT::FONT::GetFont( std::get<0>( it->second ),
-                                                            std::get<1>( it->second ),
-                                                            std::get<2>( it->second ) ) );
-            }
-        }
-
-        // Remove old entry from m_fontTextMap.
-        m_fontTextMap.erase( it );
-    }
 }

@@ -1381,6 +1381,8 @@ void SCH_SCREEN::FixupEmbeddedData()
 {
     SCHEMATIC* schematic = Schematic();
 
+    const std::vector<wxString>* embeddedFonts = schematic->GetEmbeddedFiles()->UpdateFontFiles();
+
     for( auto& [name, libSym] : m_libSymbols )
     {
         for( auto& [filename, embeddedFile] : libSym->EmbeddedFileMap() )
@@ -1395,6 +1397,31 @@ void SCH_SCREEN::FixupEmbeddedData()
                 embeddedFile->is_valid = file->is_valid;
             }
         }
+
+        libSym->RunOnChildren(
+                [&]( SCH_ITEM* aChild )
+                {
+                    if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
+                        textItem->ResolveFont( embeddedFonts );
+                } );
+    }
+
+    for( SCH_ITEM* item : Items() )
+    {
+        bool update = false;
+
+        if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item ) )
+            update |= textItem->ResolveFont( embeddedFonts );
+
+        item->RunOnChildren(
+                [&]( SCH_ITEM* aChild )
+                {
+                    if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
+                        update |= textItem->ResolveFont( embeddedFonts );
+                } );
+
+        if( update )
+            Update( item, false );
     }
 }
 

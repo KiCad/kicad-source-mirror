@@ -518,8 +518,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
     // Prior to v5.0 text size was omitted from file format if equal to 60mils
     // Now, it is always explicitly written to file
-    bool     foundTextSize = false;
-    wxString faceName;
+    bool foundTextSize = false;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -538,7 +537,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                 {
                 case T_face:
                     NeedSYMBOL();
-                    faceName = FromUTF8();
+                    aText->SetUnresolvedFontName( FromUTF8() );
                     NeedRIGHT();
                     break;
 
@@ -581,11 +580,6 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                 default:
                     Expecting( "face, size, line_spacing, thickness, bold, or italic" );
                 }
-            }
-
-            if( !faceName.IsEmpty() )
-            {
-                m_fontTextMap[aText] = { faceName, aText->IsBold(), aText->IsItalic() };
             }
 
             break;
@@ -869,16 +863,14 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
-    // Assign the fonts after we have parsed any potential embedded fonts from the board
-    // or footprint.  This also ensures that the embedded fonts are cached
-    for( auto& [text, params] : m_fontTextMap )
-    {
-        const std::vector<wxString>* embeddedFonts = item->GetEmbeddedFiles()->UpdateFontFiles();
+    const std::vector<wxString>* embeddedFonts = item->GetEmbeddedFiles()->UpdateFontFiles();
 
-        text->AssignFont( KIFONT::FONT::GetFont( std::get<0>( params ), std::get<1>( params ),
-                                                 std::get<2>( params ),
-                                                 embeddedFonts ) );
-    }
+    item->RunOnDescendants(
+            [&]( BOARD_ITEM* aChild )
+            {
+                if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
+                    textItem->ResolveFont( embeddedFonts );
+            } );
 
     resolveGroups( item );
 
@@ -4545,10 +4537,6 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
                 parsePCB_TEXT_effects( &ignored );
 
-                // This doesn't currently happen, but if it does, we don't want to leave a dangling pointer in the map
-                if( auto it = m_fontTextMap.find( &ignored ); it != m_fontTextMap.end() )
-                    m_fontTextMap.erase( it );
-
                 break;
             }
 
@@ -4760,21 +4748,20 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 case REFERENCE_FIELD:
                     footprint->Reference() = PCB_FIELD( *text, REFERENCE_FIELD );
                     const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
-                    // We don't want to leave a dangling pointer in the map
-                    removeReplaceEntryInFontTextMap( text, &footprint->Reference() );
                     delete text;
                     break;
 
                 case VALUE_FIELD:
                     footprint->Value() = PCB_FIELD( *text, VALUE_FIELD );
                     const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
-                    removeReplaceEntryInFontTextMap( text, &footprint->Value() );
                     delete text;
                     break;
                 }
             }
             else
+            {
                 footprint->Add( text, ADD_MODE::APPEND, true );
+            }
 
             break;
         }
@@ -7387,21 +7374,6 @@ PCB_TARGET* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TARGET()
     return target.release();
 }
 
-void PCB_IO_KICAD_SEXPR_PARSER::removeReplaceEntryInFontTextMap( EDA_TEXT* aEntry,
-                                                                 EDA_TEXT* aReplacer )
-{
-    if( auto it = m_fontTextMap.find( aEntry ); it != m_fontTextMap.end() )
-    {
-        // Replace it by aReplacer if not nullptr
-        if( aReplacer )
-        {
-            m_fontTextMap[aReplacer] = it->second;
-        }
-
-        // Remove old entry from m_fontTextMap.
-        m_fontTextMap.erase( it );
-    }
-}
 
 KIID PCB_IO_KICAD_SEXPR_PARSER::CurStrToKIID()
 {

@@ -233,9 +233,8 @@ public:
     void SetFont( KIFONT::FONT* aFont );
     KIFONT::FONT* GetFont() const               { return m_attributes.m_Font; }
 
-    // This sets a font WITHOUT invalidating the render cache.  Use it when reading a document
-    // to assign a font to be used only if the item is edited.
-    void AssignFont( KIFONT::FONT* aFont );
+    void SetUnresolvedFontName( const wxString& aFontName ) { m_unresolvedFontName = aFontName; }
+    bool ResolveFont( const std::vector<wxString>* aEmbeddedFonts );
 
     wxString GetFontName() const;
 
@@ -460,6 +459,7 @@ private:
     mutable BOX2I    m_bounding_box_cache;
 
     TEXT_ATTRIBUTES  m_attributes;
+    wxString         m_unresolvedFontName;
     VECTOR2I         m_pos;
 };
 

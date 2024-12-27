@@ -232,13 +232,6 @@ private:
     SCH_TABLE* parseSchTable();
     void parseBusAlias( SCH_SCREEN* aScreen );
 
-    /**
-     * Remove aEntry from m_fontTextMap.
-     * If aCandidate is not null, set the aCandidate font from the font of aEntry
-     * if aReplaceInList is true, aCandidate will replace aEntry in m_fontTextMap
-     */
-    void removeEntryInFontTextMap( EDA_TEXT* aEntry, EDA_TEXT* aCandidate, bool aReplaceInList );
-
 private:
     int      m_requiredVersion;   ///< Set to the symbol library file version required.
     wxString m_generatorVersion;
@@ -251,8 +244,6 @@ private:
     std::set<int>      m_fieldIDsRead;
 
     std::set<KIID>     m_uuids;
-
-    std::map<EDA_TEXT*, std::tuple<wxString, bool, bool>> m_fontTextMap;
 
     PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
     const LINE_READER* m_lineReader;        // for progress reporting

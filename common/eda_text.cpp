@@ -143,6 +143,8 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
     m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
     m_bounding_box_cache = aText.m_bounding_box_cache;
     m_bounding_box_cache_line = aText.m_bounding_box_cache_line;
+
+    m_unresolvedFontName = aText.m_unresolvedFontName;
 }
 
 
@@ -177,6 +179,8 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
 
     m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
     m_bounding_box_cache = aText.m_bounding_box_cache;
+
+    m_unresolvedFontName = aText.m_unresolvedFontName;
 
     return *this;
 }
@@ -495,12 +499,21 @@ void EDA_TEXT::SetFont( KIFONT::FONT* aFont )
 }
 
 
-void EDA_TEXT::AssignFont( KIFONT::FONT* aFont )
+bool EDA_TEXT::ResolveFont( const std::vector<wxString>* aEmbeddedFonts )
 {
-    m_attributes.m_Font = aFont;
+    if( !m_unresolvedFontName.IsEmpty() )
+    {
+        m_attributes.m_Font = KIFONT::FONT::GetFont( m_unresolvedFontName, IsBold(), IsItalic(),
+                                                     aEmbeddedFonts );
 
-    if( !m_render_cache.empty() )
-        m_render_cache_font = aFont;
+        if( !m_render_cache.empty() )
+            m_render_cache_font = m_attributes.m_Font;
+
+        m_unresolvedFontName = wxEmptyString;
+        return true;
+    }
+
+    return false;
 }
 
 

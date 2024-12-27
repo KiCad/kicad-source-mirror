@@ -393,12 +393,6 @@ private:
      */
     void resolveGroups( BOARD_ITEM* aParent );
 
-    /**
-     * Remove an entry from m_fontTextMap.
-     * Replace it by aReplacer if not nullptr
-     */
-    void removeReplaceEntryInFontTextMap( EDA_TEXT* aEntry, EDA_TEXT* aReplacer );
-
     ///< The type of progress bar timeout
     using TIMEOUT = std::chrono::milliseconds;
 
@@ -427,8 +421,6 @@ private:
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
     TIME_PT             m_lastProgressTime;  ///< for progress reporting
     unsigned            m_lineCount;         ///< for progress reporting
-
-    std::map<EDA_TEXT*, std::tuple<wxString, bool, bool>> m_fontTextMap;
 
     std::vector<GROUP_INFO>     m_groupInfos;
     std::vector<GENERATOR_INFO> m_generatorInfos;
