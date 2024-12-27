@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-25 16:00+0000\n"
+"PO-Revision-Date: 2024-12-27 15:43+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -26312,7 +26312,6 @@ msgid "%s Output Options"
 msgstr "%s 出力オプション"
 
 #: kicad/dialogs/panel_jobs.cpp:104
-#, fuzzy
 msgid "Select output directory"
 msgstr "出力するディレクトリを選択"
 
@@ -26333,7 +26332,6 @@ msgid "Job Description"
 msgstr "ジョブの説明"
 
 #: kicad/dialogs/panel_jobs.cpp:300
-#, fuzzy
 msgid "Last run successful"
 msgstr "ジョブが成功しました"
 
@@ -29501,7 +29499,6 @@ msgid "Copper resistivity:"
 msgstr "導体の抵抗率:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
-#, fuzzy
 msgid "External Layer Tracks"
 msgstr "外層配線"
 
@@ -29512,7 +29509,6 @@ msgstr "配線の幅 (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
-#, fuzzy
 msgid "Track thickness (H):"
 msgstr "配線の銅箔厚 (H):"
 
@@ -29546,7 +29542,6 @@ msgid "W"
 msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
-#, fuzzy
 msgid "Internal Layer Tracks"
 msgstr "内層配線"
 
@@ -33820,11 +33815,8 @@ msgid "Success"
 msgstr "成功"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"'%s'\n"
-"への相対パスを使用しますか?"
+msgstr "エクスポート処理をキャンセルしますか?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
 #, fuzzy
@@ -40370,12 +40362,11 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "パッドはスルーホール パッドではありません。接続は %s になります。"
 
 #: pcbnew/drc/drc_engine.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "%s のローカルで上書き; クリアランス: %s."
+msgstr "%s でシート タイトルを上書き; クリアランス: 0."
 
 #: pcbnew/drc/drc_engine.cpp:774
-#, fuzzy
 msgid "net tie"
 msgstr "シート タイトル"
 
@@ -45213,9 +45204,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "不明なパッド形状名 '%s' が レイヤー '%s' 上の 行 %zu にあります。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "選択したレイヤーを一致するレイヤーのリストに追加します。"
+msgstr "レイヤー %s を置くユーザーレイヤーがありません"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -45277,7 +45268,8 @@ msgstr "ID %d とシーケンス %d で重複したアイテムが %zu 行目に
 msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
-msgstr ""
+msgstr "%zu 行目(refdes %s 内)に X、Y、または回転データがありません。 "
+"これは配置されていないコンポーネントかもしれません。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
 #, c-format
@@ -45304,24 +45296,25 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3268
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "未処理のシェイプ タイプ %dが、レイヤー %s のシーケンス %d %d "
+"ポリゴン内にあります"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3427
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "不正なスルーホールが %d 箇所、レイヤー %s ネット %s のゾーン内にあります"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3469
 #, c-format
 msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
-msgstr ""
+msgstr "アウトラインが継続できないようです: 終点 %s, 次のセグメントの始点 %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "不正なシートピン名"
+msgstr "ゾーン アウトライン内の無効なシェイプ タイプ %d があります"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
