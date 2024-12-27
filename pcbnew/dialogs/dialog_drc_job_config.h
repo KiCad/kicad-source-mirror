@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,16 +18,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include <dialogs/dialog_rc_job.h>
+#include <jobs/job_pcb_drc.h>
 
-#include <jobs/job_rc.h>
-
-class KICOMMON_API JOB_PCB_DRC : public JOB_RC
+class DIALOG_DRC_JOB_CONFIG : public DIALOG_RC_JOB
 {
 public:
-    JOB_PCB_DRC();
-    wxString GetDescription() override;
+    DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJob );
 
-    bool m_reportAllTrackErrors;
-    bool m_parity;
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+private:
+    JOB_PCB_DRC* m_drcJob;
 };

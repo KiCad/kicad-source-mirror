@@ -50,6 +50,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_dimension_properties_base.cpp
     dialogs/dialog_drc.cpp
     dialogs/dialog_drc_base.cpp
+    dialogs/dialog_drc_job_config.cpp
     dialogs/dialog_footprint_associations.cpp
     dialogs/dialog_footprint_associations_base.cpp
     dialogs/dialog_footprint_checker.cpp

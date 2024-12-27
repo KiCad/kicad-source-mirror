@@ -87,6 +87,7 @@ set( KICOMMON_SRCS
     jobs/job_fp_upgrade.cpp
     jobs/job_pcb_render.cpp
     jobs/job_pcb_drc.cpp
+    jobs/job_rc.cpp
     jobs/job_sch_erc.cpp
     jobs/job_sym_export_svg.cpp
     jobs/job_sym_upgrade.cpp
@@ -114,6 +115,8 @@ set( KICOMMON_SRCS
 
     dialogs/dialog_migrate_settings.cpp
     dialogs/dialog_migrate_settings_base.cpp
+    dialogs/dialog_rc_job.cpp
+    dialogs/dialog_rc_job_base.cpp
 
     widgets/bitmap_button.cpp
     widgets/html_window.cpp

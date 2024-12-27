@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,13 +21,21 @@
 #pragma once
 
 #include <jobs/job_rc.h>
+#include <dialogs/dialog_rc_job_base.h>
 
-class KICOMMON_API JOB_PCB_DRC : public JOB_RC
+class KICOMMON_API DIALOG_RC_JOB : public DIALOG_RC_JOB_BASE
 {
 public:
-    JOB_PCB_DRC();
-    wxString GetDescription() override;
+    DIALOG_RC_JOB( wxWindow* aParent, JOB_RC* aJob, const wxString& aTitle );
 
-    bool m_reportAllTrackErrors;
-    bool m_parity;
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+    void OnFormatChoice( wxCommandEvent& aEvent ) override;
+
+protected:
+    JOB_RC::OUTPUT_FORMAT getSelectedFormat();
+    void                  setSelectedFormat( JOB_RC::OUTPUT_FORMAT aFormat );
+
+    JOB_RC* m_job;
 };

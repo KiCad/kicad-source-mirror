@@ -69,6 +69,7 @@
 
 #include <dialogs/dialog_export_netlist.h>
 #include <dialogs/dialog_plot_schematic.h>
+#include <dialogs/dialog_erc_job_config.h>
 
 
 EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
@@ -142,7 +143,10 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
     Register( "erc", std::bind( &EESCHEMA_JOBS_HANDLER::JobSchErc, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
-                  return false;
+                  JOB_SCH_ERC* ercJob = dynamic_cast<JOB_SCH_ERC*>( job );
+                  DIALOG_ERC_JOB_CONFIG dlg( aParent, ercJob );
+
+                  return dlg.ShowModal() == wxID_SAVE;
               } );
 }
 
@@ -1057,7 +1061,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     if( ercJob->m_outputFile.IsEmpty() )
     {
-        wxFileName fn = sch->GetFileName();
+        wxFileName fn = sch->GetFileName() + wxS( "-erc" );
         fn.SetName( fn.GetName() );
 
         if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )

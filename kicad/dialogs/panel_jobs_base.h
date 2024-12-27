@@ -197,3 +197,30 @@ class DIALOG_OUTPUT_RUN_RESULTS_BASE : public DIALOG_SHIM
 
 };
 
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_RC_JOB_BASE
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_RC_JOB_BASE : public DIALOG_SHIM
+{
+	private:
+
+	protected:
+		wxStaticText* m_staticText9;
+		wxPanel* m_panel9;
+		wxStaticText* m_textOutputPath;
+		wxTextCtrl* m_textCtrlOutputPath;
+		wxStaticText* m_staticText18;
+		wxChoice* m_choiceFormat;
+		wxCheckBox* m_cbHaltOutput;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1Save;
+		wxButton* m_sdbSizer1Cancel;
+
+	public:
+
+		DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+
+		~DIALOG_RC_JOB_BASE();
+
+};
+

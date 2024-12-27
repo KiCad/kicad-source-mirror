@@ -85,6 +85,7 @@
 #include <dialogs/dialog_export_odbpp.h>
 #include <dialogs/dialog_export_step.h>
 #include <dialogs/dialog_plot.h>
+#include <dialogs/dialog_drc_job_config.h>
 
 #include "pcbnew_scripting_helpers.h"
 #include <locale_io.h>
@@ -228,7 +229,9 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
     Register( "drc", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrc, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
-                  return false;
+                  DIALOG_DRC_JOB_CONFIG dlg( aParent, dynamic_cast<JOB_PCB_DRC*>( job ) );
+
+                  return dlg.ShowModal() == wxID_SAVE;
               } );
     Register( "ipc2581",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportIpc2581, this, std::placeholders::_1 ),
@@ -1572,7 +1575,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     if( drcJob->m_outputFile.IsEmpty() )
     {
-        wxFileName fn = brd->GetFileName();
+        wxFileName fn = brd->GetFileName() + wxS( "-drc" );
         fn.SetName( fn.GetName() );
 
         if( drcJob->m_format == JOB_PCB_DRC::OUTPUT_FORMAT::JSON )
