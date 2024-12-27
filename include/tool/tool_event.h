@@ -27,10 +27,11 @@
 #ifndef __TOOL_EVENT_H
 #define __TOOL_EVENT_H
 
-#include <any>
 #include <cstdio>
 #include <deque>
 #include <iterator>
+
+#include <ki_any.h>
 
 #include <math/vector2d.h>
 #include <optional>
@@ -466,9 +467,9 @@ public:
 
         try
         {
-            param = std::any_cast<T>( m_param );
+            param = ki::any_cast<T>( m_param );
         }
-        catch( const std::bad_any_cast& )
+        catch( const ki::bad_any_cast& )
         {
             wxCHECK_MSG( false, T(), wxString::Format( "Requested parameter type %s from event "
                                                        "with parameter type %s.",
@@ -492,9 +493,9 @@ public:
 
         try
         {
-            param = std::any_cast<T>( m_param );
+            param = ki::any_cast<T>( m_param );
         }
-        catch( const std::bad_any_cast& )
+        catch( const ki::bad_any_cast& )
         {
             wxCHECK_MSG( false, param, wxString::Format( "Requested parameter type %s from event "
                                                          "with parameter type %s.",
@@ -617,7 +618,7 @@ private:
     COMMIT* m_commit;
 
     ///< Generic parameter used for passing non-standard data.
-    std::any m_param;
+    ki::any m_param;
 
     ///< The first tool to receive the event
     TOOL_BASE* m_firstResponder;

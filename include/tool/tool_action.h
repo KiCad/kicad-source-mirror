@@ -28,12 +28,12 @@
 #ifndef __TOOL_ACTION_H
 #define __TOOL_ACTION_H
 
-#include <any>
 #include <cassert>
 #include <optional>
 #include <string>
 #include <string_view>
 
+#include <ki_any.h>
 #include <wx/string.h>
 
 class TOOL_EVENT;
@@ -251,7 +251,7 @@ protected:
 
     std::optional<TOOL_ACTION_GROUP>    m_group;
 
-    std::any                            m_param;
+    ki::any                             m_param;
 };
 
 /**
@@ -377,9 +377,9 @@ public:
 
         try
         {
-            param = std::any_cast<T>( m_param );
+            param = ki::any_cast<T>( m_param );
         }
-        catch( const std::bad_any_cast& e )
+        catch( const ki::bad_any_cast& e )
         {
             wxASSERT_MSG( false,
                           wxString::Format( "Requested parameter type %s from action with parameter type %s.",
@@ -455,7 +455,7 @@ protected:
     std::optional<int>   m_uiid;           // ID to use when interacting with the UI (if empty, generate one)
 
     TOOL_ACTION_FLAGS    m_flags;
-    std::any             m_param;          // Generic parameter
+    ki::any              m_param; // Generic parameter
 };
 
 #endif

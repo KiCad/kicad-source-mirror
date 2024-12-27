@@ -150,15 +150,15 @@ public:
     bool RunAction( const std::string& aActionName, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
-        std::any a( static_cast<T>( aParam ) );
+        ki::any a( static_cast<T>( aParam ) );
 
         return doRunAction( aActionName, true, a, nullptr );
     }
 
     bool RunAction( const std::string& aActionName )
     {
-        // Default initialize the parameter argument to an empty std::any
-        std::any a;
+        // Default initialize the parameter argument to an empty ki_any
+        ki::any a;
 
         return doRunAction( aActionName, true, a, nullptr );
     }
@@ -178,7 +178,7 @@ public:
     bool RunAction( const TOOL_ACTION& aAction, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
-        std::any a( static_cast<T>( aParam ) );
+        ki::any a( static_cast<T>( aParam ) );
 
         return doRunAction( aAction, true, a, nullptr );
     }
@@ -197,23 +197,23 @@ public:
     bool RunSynchronousAction( const TOOL_ACTION& aAction, COMMIT* aCommit, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
-        std::any a( static_cast<T>( aParam ) );
+        ki::any a( static_cast<T>( aParam ) );
 
         return doRunAction( aAction, true, a, aCommit );
     }
 
     bool RunSynchronousAction( const TOOL_ACTION& aAction, COMMIT* aCommit )
     {
-        // Default initialize the parameter argument to an empty std::any
-        std::any a;
+        // Default initialize the parameter argument to an empty ki_any
+        ki::any a;
 
         return doRunAction( aAction, true, a, aCommit );
     }
 
     bool RunAction( const TOOL_ACTION& aAction )
     {
-        // Default initialize the parameter argument to an empty std::any
-        std::any a;
+        // Default initialize the parameter argument to an empty ki_any
+        ki::any a;
 
         return doRunAction( aAction, true, a, nullptr );
     }
@@ -235,15 +235,15 @@ public:
     bool PostAction( const std::string& aActionName, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
-        std::any a( static_cast<T>( aParam ) );
+        ki::any a( static_cast<T>( aParam ) );
 
         return doRunAction( aActionName, false, a, nullptr );
     }
 
     bool PostAction( const std::string& aActionName )
     {
-        // Default initialize the parameter argument to an empty std::any
-        std::any a;
+        // Default initialize the parameter argument to an empty ki_any
+        ki::any a;
 
         return doRunAction( aActionName, false, a, nullptr );
     }
@@ -262,23 +262,23 @@ public:
     bool PostAction( const TOOL_ACTION& aAction, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
-        std::any a( static_cast<T>( aParam ) );
+        ki::any a( static_cast<T>( aParam ) );
 
         return doRunAction( aAction, false, a, nullptr );
     }
 
     void PostAction( const TOOL_ACTION& aAction )
     {
-        // Default initialize the parameter argument to an empty std::any
-        std::any a;
+        // Default initialize the parameter argument to an empty ki_any
+        ki::any a;
 
         doRunAction( aAction, false, a, nullptr );
     }
 
     bool PostAction( const TOOL_ACTION& aAction, COMMIT* aCommit )
     {
-        // Default initialize the parameter argument to an empty std::any
-        std::any a;
+        // Default initialize the parameter argument to an empty ki_any
+        ki::any a;
 
         return doRunAction( aAction, false, a, aCommit );
     }
@@ -537,8 +537,10 @@ private:
     /**
      * Helper function to actually run an action.
      */
-    bool doRunAction( const TOOL_ACTION& aAction, bool aNow, const std::any& aParam, COMMIT* aCommit );
-    bool doRunAction( const std::string& aActionName, bool aNow, const std::any& aParam, COMMIT* aCommit );
+    bool doRunAction( const TOOL_ACTION& aAction, bool aNow, const ki::any& aParam,
+                      COMMIT* aCommit );
+    bool doRunAction( const std::string& aActionName, bool aNow, const ki::any& aParam,
+                      COMMIT* aCommit );
 
     /**
      * Pass an event at first to the active tools, then to all others.
