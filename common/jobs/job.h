@@ -63,6 +63,52 @@ protected:
     ValueType  m_default;
 };
 
+
+template <typename ListElementType>
+class JOB_PARAM_LIST : public JOB_PARAM_BASE
+{
+public:
+    JOB_PARAM_LIST( const std::string& aJsonPath, std::vector<ListElementType>* aPtr,
+                    std::vector<ListElementType> aDefault ) :
+            JOB_PARAM_BASE( aJsonPath ),
+            m_ptr( aPtr ),
+            m_default( std::move( aDefault ) )
+    { }
+
+    virtual void FromJson( const nlohmann::json& j ) const override
+    {
+        if( j.contains( m_jsonPath ) )
+        {
+            auto js = j.at( m_jsonPath );
+            std::vector<ListElementType> val;
+
+            if( js.is_array() )
+            {
+                for( const auto& el : js.items() )
+                    val.push_back( el.value().get<ListElementType>() );
+            }
+
+            *m_ptr = val;
+        }
+        else
+            *m_ptr = m_default;
+    }
+
+    void ToJson( nlohmann::json& j ) override
+    {
+        nlohmann::json js = nlohmann::json::array();
+
+        for( const auto& el : *m_ptr )
+            js.push_back( el );
+
+        j[m_jsonPath] = js;
+    }
+
+protected:
+    std::vector<ListElementType>* m_ptr;
+    std::vector<ListElementType>  m_default;
+};
+
 struct KICOMMON_API JOB_OUTPUT
 {
     JOB_OUTPUT(){};

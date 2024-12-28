@@ -589,8 +589,13 @@ void PANEL_JOBS::openJobOptionsForListItem( size_t aItemIndex )
     {
         EnsurePcbSchFramesOpen();
 
-        m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job.get(), m_frame );
-	}
+        bool changes = m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job.get(), m_frame );
+        if( changes )
+        {
+            m_jobsFile->SetDirty();
+            updateTitle();
+        }
+    }
     else
     {
         // special jobs
@@ -657,7 +662,7 @@ void PANEL_JOBS::onJobListMenu( wxCommandEvent& aEvent )
 
 void PANEL_JOBS::OnSaveButtonClick( wxCommandEvent& aEvent )
 {
-    m_jobsFile->SaveToFile();
+    m_jobsFile->SaveToFile( wxEmptyString, true );
     updateTitle();
 }
 

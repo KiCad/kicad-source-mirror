@@ -37,12 +37,13 @@ struct BOM_PRESET;
 struct BOM_FMT_PRESET;
 class SCH_EDIT_FRAME;
 class FIELDS_EDITOR_GRID_DATA_MODEL;
+class JOB_EXPORT_SCH_BOM;
 
 
 class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_SYMBOL_FIELDS_TABLE_BASE, public SCHEMATIC_LISTENER
 {
 public:
-    DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent );
+    DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_SCH_BOM* aJob = nullptr );
     virtual ~DIALOG_SYMBOL_FIELDS_TABLE();
 
     bool TransferDataToWindow() override;
@@ -160,6 +161,8 @@ private:
     FIELDS_EDITOR_GRID_DATA_MODEL*     m_dataModel;
 
     SCHEMATIC_SETTINGS&                m_schSettings;
+
+    JOB_EXPORT_SCH_BOM* m_job;
 };
 
 #endif /* DIALOG_SYMBOL_FIELDS_TABLE_H */

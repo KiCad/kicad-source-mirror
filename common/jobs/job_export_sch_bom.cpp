@@ -59,13 +59,13 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
     m_params.emplace_back( new JOB_PARAM<bool>( "keep_line_breaks",
                                                 &m_keepLineBreaks,
                                                 m_keepLineBreaks ) );
-    m_params.emplace_back( new JOB_PARAM<std::vector<wxString>>( "fields_ordered",
+    m_params.emplace_back( new JOB_PARAM_LIST<wxString>( "fields_ordered",
                                                                  &m_fieldsOrdered,
                                                                  m_fieldsOrdered ) );
-    m_params.emplace_back( new JOB_PARAM<std::vector<wxString>>( "fields_labels",
+    m_params.emplace_back( new JOB_PARAM_LIST<wxString>( "fields_labels",
                                                                  &m_fieldsLabels,
                                                                  m_fieldsLabels ) );
-    m_params.emplace_back( new JOB_PARAM<std::vector<wxString>>( "fields_group_by",
+    m_params.emplace_back( new JOB_PARAM_LIST<wxString>( "fields_group_by",
                                                                  &m_fieldsGroupBy,
                                                                  m_fieldsGroupBy ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "sort_field", &m_sortField, m_sortField ) );

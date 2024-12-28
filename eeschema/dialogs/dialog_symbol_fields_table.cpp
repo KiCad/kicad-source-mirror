@@ -56,6 +56,7 @@
 #include <fields_data_model.h>
 #include <eda_list_dialog.h>
 #include <project_sch.h>
+#include <jobs/job_export_sch_bom.h>
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
@@ -168,12 +169,14 @@ protected:
 };
 
 
-DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent ) :
+DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
+                                                        JOB_EXPORT_SCH_BOM* aJob ) :
         DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ),
         m_currentBomPreset( nullptr ),
         m_lastSelectedBomPreset( nullptr ),
         m_parent( parent ),
-        m_schSettings( parent->Schematic().Settings() )
+        m_schSettings( parent->Schematic().Settings() ),
+        m_job( aJob )
 {
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, false );
@@ -267,12 +270,58 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     // Load our BOM view presets
     SetUserBomPresets( m_schSettings.m_BomPresets );
-    ApplyBomPreset( m_schSettings.m_BomSettings );
+
+    BOM_PRESET preset = m_schSettings.m_BomSettings;
+    if( m_job )
+    {
+        preset.name = m_job->m_bomPresetName;
+        preset.excludeDNP = m_job->m_excludeDNP;
+        preset.includeExcludedFromBOM = m_job->m_includeExcludedFromBOM;
+        preset.filterString = m_job->m_filterString;
+        preset.sortAsc = m_job->m_sortAsc;
+        preset.sortField = m_job->m_sortField;
+        preset.groupSymbols = ( m_job->m_fieldsGroupBy.size() > 0 );
+
+        preset.fieldsOrdered.clear();
+
+        size_t i = 0;
+        for( wxString fieldName : m_job->m_fieldsOrdered )
+        {
+            BOM_FIELD field;
+            field.name = fieldName;
+            field.show = true;
+            field.groupBy = std::find( m_job->m_fieldsGroupBy.begin(), m_job->m_fieldsGroupBy.end(),
+                                       field.name )
+                            != m_job->m_fieldsGroupBy.end();
+
+            if( ( m_job->m_fieldsLabels.size() > i ) && !m_job->m_fieldsLabels[i].IsEmpty() )
+                field.label = m_job->m_fieldsLabels[i];
+            else if( IsTextVar( field.name ) )
+                field.label = GetTextVars( field.name );
+            else
+                field.label = field.name;
+
+            preset.fieldsOrdered.emplace_back( field );
+            i++;
+        }
+    }
+    ApplyBomPreset( preset );
     syncBomPresetSelection();
 
     // Load BOM export format presets
     SetUserBomFmtPresets( m_schSettings.m_BomFmtPresets );
-    ApplyBomFmtPreset( m_schSettings.m_BomFmtSettings );
+    BOM_FMT_PRESET fmtPreset = m_schSettings.m_BomFmtSettings;
+    if( m_job )
+    {
+        fmtPreset.name = m_job->m_bomFmtPresetName;
+        fmtPreset.fieldDelimiter = m_job->m_fieldDelimiter;
+        fmtPreset.keepLineBreaks = m_job->m_keepLineBreaks;
+        fmtPreset.keepTabs = m_job->m_keepTabs;
+        fmtPreset.refDelimiter = m_job->m_refDelimiter;
+        fmtPreset.refRangeDelimiter = m_job->m_refRangeDelimiter;
+        fmtPreset.stringDelimiter = m_job->m_stringDelimiter;
+    }
+    ApplyBomFmtPreset( fmtPreset );
     syncBomFmtPresetSelection();
 
     SetInitialFocus( m_grid );
@@ -305,7 +354,14 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     case SCOPE::SCOPE_SHEET_RECURSIVE: m_radioRecursive->SetValue( true );    break;
     }
 
-    m_outputFileName->SetValue( m_schSettings.m_BomExportFileName );
+    if( m_job )
+    {
+        m_outputFileName->SetValue( m_job->GetOutputPath() );
+    }
+    else
+    {
+        m_outputFileName->SetValue( m_schSettings.m_BomExportFileName );
+    }
 
     Center();
 
@@ -319,8 +375,23 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_fieldsCtrl->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,
                         &DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange, this );
 
-    // Start listening for schematic changes
-    m_parent->Schematic().AddListener( this );
+    if( !m_job )
+    {
+        // Start listening for schematic changes
+        m_parent->Schematic().AddListener( this );
+    }
+    else
+    {
+        // Don't allow editing
+        m_grid->EnableEditing( false );
+        m_buttonApply->Hide();
+        m_buttonExport->Hide();
+
+        SetupStandardButtons( { { wxID_OK,     _( "Save" ) },
+                                { wxID_CANCEL, _( "Close" )   } } );
+
+        SetTitle( _( "BOM Export Job" ) );
+    }
 }
 
 
@@ -535,6 +606,12 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 
     if( !wxDialog::TransferDataFromWindow() )
         return false;
+
+    if( m_job )
+    {
+        // and exit, dont even dream of saving changes from the data model
+        return true;
+    }
 
     SCH_COMMIT     commit( m_parent );
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
@@ -1320,19 +1397,91 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnCancel( wxCommandEvent& aEvent )
 {
-    Close();
+    if( m_job )
+    {
+        EndModal( wxID_CANCEL );
+    }
+    else
+    {
+        Close();
+    }
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
 {
     TransferDataFromWindow();
-    Close();
+    if( m_job )
+    {
+        m_job->SetOutputPath( m_outputFileName->GetValue() );
+
+        if( m_currentBomFmtPreset )
+        {
+            m_job->m_bomFmtPresetName = m_currentBomFmtPreset->name;
+        }
+        else
+        {
+            m_job->m_bomFmtPresetName = wxEmptyString;
+        }
+
+        if( m_currentBomPreset )
+        {
+            m_job->m_bomPresetName = m_currentBomPreset->name;
+        }
+        else
+        {
+            m_job->m_bomPresetName = wxEmptyString;
+        }
+
+        BOM_FMT_PRESET fmtSettings = GetCurrentBomFmtSettings();
+        m_job->m_fieldDelimiter = fmtSettings.fieldDelimiter;
+        m_job->m_stringDelimiter = fmtSettings.stringDelimiter;
+        m_job->m_refDelimiter = fmtSettings.refDelimiter;
+        m_job->m_refRangeDelimiter = fmtSettings.refRangeDelimiter;
+        m_job->m_keepTabs = fmtSettings.keepTabs;
+        m_job->m_keepLineBreaks = fmtSettings.keepLineBreaks;
+
+        BOM_PRESET presetFields = m_dataModel->GetBomSettings();
+        m_job->m_sortAsc = presetFields.sortAsc;
+        m_job->m_excludeDNP = presetFields.excludeDNP;
+        m_job->m_includeExcludedFromBOM = presetFields.includeExcludedFromBOM;
+        m_job->m_filterString = presetFields.filterString;
+        m_job->m_sortField = presetFields.sortField;
+
+        m_job->m_fieldsOrdered.clear();
+        m_job->m_fieldsLabels.clear();
+        m_job->m_fieldsGroupBy.clear();
+        for( const BOM_FIELD& modelField : m_dataModel->GetFieldsOrdered() )
+        {
+            if( modelField.show )
+            {
+                m_job->m_fieldsOrdered.emplace_back( modelField.name );
+                m_job->m_fieldsLabels.emplace_back( modelField.label );
+
+                if( modelField.groupBy )
+                {
+                    m_job->m_fieldsGroupBy.emplace_back( modelField.name );
+                }
+            }
+        }
+
+        EndModal( wxID_OK );
+    }
+    else
+    {
+        Close();
+    }
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 {
+    if( m_job )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     // This is a cancel, so commit quietly as we're going to throw the results away anyway.
     m_grid->CommitPendingChanges( true );
 

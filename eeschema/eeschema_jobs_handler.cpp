@@ -70,6 +70,7 @@
 #include <dialogs/dialog_export_netlist.h>
 #include <dialogs/dialog_plot_schematic.h>
 #include <dialogs/dialog_erc_job_config.h>
+#include <dialogs/dialog_symbol_fields_table.h>
 
 
 EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
@@ -78,14 +79,19 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
 {
     Register( "bom",
                 std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
-                []( JOB* job, wxWindow* aParent ) -> bool
+                [aKiway]( JOB* job, wxWindow* aParent ) -> bool
                 {
 	                JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
 
 	                if( !bomJob )
 		                return false;
 
-                    return false;
+                    SCH_EDIT_FRAME* editFrame =
+                            dynamic_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+
+                    DIALOG_SYMBOL_FIELDS_TABLE dlg( editFrame, bomJob );
+
+                    return dlg.ShowModal() == wxID_OK;
                 } );
     Register( "pythonbom",
                 std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ),
@@ -651,10 +657,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     wxFile f;
 
-    if( !f.Open( aBomJob->GetOutputPath(), wxFile::write ) )
+    if( !f.Open( aBomJob->GetFullOutputPath(), wxFile::write ) )
     {
         m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ),
-                                              aBomJob->GetOutputPath() ),
+                                              aBomJob->GetFullOutputPath() ),
                             RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
