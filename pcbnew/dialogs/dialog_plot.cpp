@@ -480,6 +480,20 @@ void DIALOG_PLOT::loadPlotParamsFromJob()
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL: m_plotOpts.SetFormat( PLOT_FORMAT::HPGL ); break;
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF: m_plotOpts.SetFormat( PLOT_FORMAT::PDF ); break;
     }
+
+    switch (m_job->m_drillShapeOption)
+    {
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
+        m_plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+        break;
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
+        m_plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE );
+        break;
+    default:
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
+        m_plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
+        break;
+    }
 }
 
 
@@ -488,31 +502,32 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER )
     {
         JOB_EXPORT_PCB_GERBERS* gJob = static_cast<JOB_EXPORT_PCB_GERBERS*>( m_job );
-		gJob->m_disableApertureMacros = m_plotOpts.GetDisableGerberMacros();
-		gJob->m_useProtelFileExtension = m_plotOpts.GetUseGerberProtelExtensions();
-		gJob->m_useX2Format = m_plotOpts.GetUseGerberX2format();
-		gJob->m_includeNetlistAttributes = m_plotOpts.GetIncludeGerberNetlistInfo();
+        gJob->m_disableApertureMacros = m_plotOpts.GetDisableGerberMacros();
+        gJob->m_useProtelFileExtension = m_plotOpts.GetUseGerberProtelExtensions();
+        gJob->m_useX2Format = m_plotOpts.GetUseGerberX2format();
+        gJob->m_includeNetlistAttributes = m_plotOpts.GetIncludeGerberNetlistInfo();
         gJob->m_createJobsFile = m_plotOpts.GetCreateGerberJobFile();
-		gJob->m_precision = m_plotOpts.GetGerberPrecision();
+        gJob->m_precision = m_plotOpts.GetGerberPrecision();
         gJob->m_subtractSolderMaskFromSilk = m_plotOpts.GetSubtractMaskFromSilk();
         gJob->m_useAuxOrigin = m_plotOpts.GetUseAuxOrigin();
         gJob->m_useBoardPlotParams = false;
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
-	{
-		JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( m_job );
-		svgJob->m_precision = m_plotOpts.GetSvgPrecision();
-	}
+    {
+        JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( m_job );
+        svgJob->m_precision = m_plotOpts.GetSvgPrecision();
+    }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
-	{
-		JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( m_job );
-		dxfJob->m_dxfUnits = m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCHES
-							? JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES : JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS;
-		dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
+    {
+        JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( m_job );
+        dxfJob->m_dxfUnits = m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCHES
+                                     ? JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES
+                                     : JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS;
+        dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
         dxfJob->m_useDrillOrigin = m_plotOpts.GetUseAuxOrigin();
-	}
+    }
 
     m_job->m_crossoutDNPFPsOnFabLayers = m_plotOpts.GetCrossoutDNPFPsOnFabLayers();
     m_job->m_hideDNPFPsOnFabLayers = m_plotOpts.GetHideDNPFPsOnFabLayers();
@@ -528,6 +543,24 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     m_job->m_negative = m_plotOpts.GetNegative();
     m_job->m_printMaskLayer = m_plotOpts.GetLayerSelection().UIOrder();
     m_job->m_printMaskLayersToIncludeOnAllLayers = m_plotOpts.GetPlotOnAllLayersSelection().UIOrder();
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG ||
+        m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF )
+    {
+        switch( m_plotOpts.GetDrillMarksType() )
+        {
+        case DRILL_MARKS::NO_DRILL_SHAPE:
+            m_job->m_drillShapeOption = JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE;
+            break;
+        case DRILL_MARKS::SMALL_DRILL_SHAPE:
+            m_job->m_drillShapeOption = JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE;
+            break;
+        default:
+        case DRILL_MARKS::FULL_DRILL_SHAPE:
+            m_job->m_drillShapeOption = JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE;
+            break;
+        }
+    }
 }
 
 

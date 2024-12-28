@@ -45,7 +45,7 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
     m_params.emplace_back(
             new JOB_PARAM<int>( "page_size_mode", &m_pageSizeMode, m_pageSizeMode ) );
     m_params.emplace_back(
-            new JOB_PARAM<int>( "drill_shape_option", &m_drillShapeOption, m_drillShapeOption ) );
+            new JOB_PARAM<DRILL_MARKS>( "drill_shape", &m_drillShapeOption, m_drillShapeOption ) );
     m_params.emplace_back( new JOB_PARAM<unsigned int>( "precision", &m_precision, m_precision ) );
 }
 

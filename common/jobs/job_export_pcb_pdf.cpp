@@ -22,6 +22,12 @@
 #include <jobs/job_registry.h>
 #include <i18n_utility.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PDF::DRILL_MARKS,
+                              {
+                                { JOB_EXPORT_PCB_PDF::DRILL_MARKS::NO_DRILL_SHAPE, "none" },
+                                { JOB_EXPORT_PCB_PDF::DRILL_MARKS::SMALL_DRILL_SHAPE, "small" },
+                                { JOB_EXPORT_PCB_PDF::DRILL_MARKS::FULL_DRILL_SHAPE, "full" }
+                              } )
 
 JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
         JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF, "pdf", false )
@@ -44,7 +50,7 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
     m_params.emplace_back( new JOB_PARAM<bool>(
             "sketch_pads_on_fab_layers", &m_sketchPadsOnFabLayers, m_sketchPadsOnFabLayers ) );
     m_params.emplace_back(
-            new JOB_PARAM<int>( "drill_shape", &m_drillShapeOption, m_drillShapeOption ) );
+            new JOB_PARAM<DRILL_MARKS>( "drill_shape", &m_drillShapeOption, m_drillShapeOption ) );
 }
 
 

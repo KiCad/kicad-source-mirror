@@ -23,7 +23,7 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
 	m_plotInvisibleText( false ),
 	m_printMaskLayer(),
     m_printMaskLayersToIncludeOnAllLayers(),
-	m_drillShapeOption( 2 )
+	m_drillShapeOption( DRILL_MARKS::FULL_DRILL_SHAPE )
 {
 
 }

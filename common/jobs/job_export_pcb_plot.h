@@ -70,7 +70,13 @@ public:
     ///< Layers to include on all individual layer prints
     LSEQ m_printMaskLayersToIncludeOnAllLayers;
 
-    // How holes in pads/vias are plotted:
-    // 0 = no hole, 1 = small shape, 2 = actual shape
-    int m_drillShapeOption;
+    enum class DRILL_MARKS
+    {
+        NO_DRILL_SHAPE = 0,
+        SMALL_DRILL_SHAPE = 1,
+        FULL_DRILL_SHAPE = 2
+    };
+
+    ///< Used by SVG & PDF
+    DRILL_MARKS m_drillShapeOption;
 };

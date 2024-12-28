@@ -645,8 +645,21 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
     svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
     svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
-    svgPlotOptions.m_drillShapeOption = aSvgJob->m_drillShapeOption;
     svgPlotOptions.m_precision = aSvgJob->m_precision;
+
+    switch( aSvgJob->m_drillShapeOption )
+    {
+    default:
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
+        svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::NO_DRILL_SHAPE );
+        break;
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
+        svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::SMALL_DRILL_SHAPE );
+        break;
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
+        svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::FULL_DRILL_SHAPE );
+        break;
+    }
 
     BOARD* brd = getBoard( aSvgJob->m_filename );
 
@@ -801,9 +814,12 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     switch( aPdfJob->m_drillShapeOption )
     {
     default:
-        case 0: plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
-    case 1: plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
-        case 2: plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
+            plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
+            plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
+    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
+            plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
     }
 
     PCB_LAYER_ID layer = UNDEFINED_LAYER;
