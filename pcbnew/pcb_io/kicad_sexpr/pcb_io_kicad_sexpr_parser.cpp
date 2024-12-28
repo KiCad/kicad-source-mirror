@@ -6115,6 +6115,10 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
         }
         }
     }
+
+    // Previous versions had bugs which could save ghost tuning patterns.  Ignore them.
+    if( genInfo.genType == wxT( "tuning_pattern" ) && genInfo.memberUuids.empty() )
+        m_generatorInfos.pop_back();
 }
 
 

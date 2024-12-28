@@ -2179,6 +2179,13 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
 
 void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATOR* aGenerator ) const
 {
+    // Some conditions appear to still be creating ghost tuning patterns.  Don't save them.
+    if( aGenerator->GetGeneratorType() == wxT( "tuning_pattern" )
+            && aGenerator->GetItems().empty() )
+    {
+        return;
+    }
+
     m_out->Print( "(generated" );
 
     KICAD_FORMAT::FormatUuid( m_out, aGenerator->m_Uuid );
