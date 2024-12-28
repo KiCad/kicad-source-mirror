@@ -129,10 +129,12 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "board.plated_hole",              LAYER_NON_PLATEDHOLES    );
     CLR( "board.ratsnest",                 LAYER_RATSNEST           );
     CLR( "board.via_hole",                 LAYER_VIA_HOLES          );
+    CLR( "board.via_hole_walls",           LAYER_VIA_HOLEWALLS      );
     CLR( "board.worksheet",                LAYER_DRAWINGSHEET       );
     CLR( "board.page_limits",              LAYER_PAGE_LIMITS        );
     CLR( "board.track_net_names",          NETNAMES_LAYER_ID_START  );
-    CLR( "board.pad_net_names",            LAYER_PAD_NETNAMES  );
+    CLR( "board.pad_net_names",            LAYER_PAD_NETNAMES       );
+    CLR( "board.via_net_names",            LAYER_VIA_NETNAMES       );
 
     CLR( "board.copper.f",      F_Cu    );
     CLR( "board.copper.in1",    In1_Cu  );

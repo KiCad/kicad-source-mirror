@@ -658,7 +658,6 @@ std::set<int> g_excludedLayers =
         {
             LAYER_VIAS,
             LAYER_VIA_THROUGH,
-            LAYER_VIA_HOLEWALLS,
             LAYER_VIA_BBLIND,
             LAYER_VIA_MICROVIA,
             LAYER_FOOTPRINTS_FR,

@@ -123,6 +123,7 @@ static const wxChar ExtensionSnapActivateOnHover[] = wxT( "ExtensionSnapActivate
 static const wxChar EnableSnapAnchorsDebug[] = wxT( "EnableSnapAnchorsDebug" );
 static const wxChar EnableJobset[] = wxT( "EnableJobset" );
 static const wxChar MinParallelAngle[] = wxT( "MinParallelAngle" );
+static const wxChar HoleWallPaintingMultiplier[] = wxT( "HoleWallPaintingMultiplier" );
 
 } // namespace KEYS
 
@@ -294,6 +295,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableSnapAnchorsDebug = false;
 
     m_MinParallelAngle = 0.001;
+    m_HoleWallPaintingMultiplier = 1.5;
 
     loadFromConfigFile();
 }
@@ -562,6 +564,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinParallelAngle,
                                                   &m_MinParallelAngle, m_MinParallelAngle,
                                                   0.0, 45.0 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallPaintingMultiplier,
+                                                  &m_HoleWallPaintingMultiplier, m_HoleWallPaintingMultiplier,
+                                                  0.1, 100.0 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

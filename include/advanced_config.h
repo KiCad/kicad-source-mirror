@@ -706,6 +706,16 @@ public:
      */
     double m_MinParallelAngle;
 
+    /**
+     * What factor to use when painting via and PTH pad hole walls, so that
+     * the painted hole wall can be overemphasized compared to physical reality
+     * to make the wall easier to see on-screen.
+     *
+     * Setting name: "HoleWallPaintingMultiplier"
+     * Default value: 1.5
+     */
+    double m_HoleWallPaintingMultiplier;
+
 ///@}
 
 private:

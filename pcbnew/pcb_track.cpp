@@ -1422,7 +1422,7 @@ const BOX2I PCB_TRACK::ViewBBox() const
 std::vector<int> PCB_VIA::ViewGetLayers() const
 {
     LAYER_RANGE layers( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS );
-    std::vector<int> ret_layers{ LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS, LAYER_PAD_NETNAMES };
+    std::vector<int> ret_layers{ LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS, LAYER_VIA_NETNAMES };
     ret_layers.reserve( MAX_CU_LAYERS + 6 );
 
     // TODO(JE) Rendering order issue

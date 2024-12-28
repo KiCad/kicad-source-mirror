@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_track.h>
@@ -243,9 +244,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
             aLayer = aLayer - LAYER_ZONE_START;
     }
 
-    // Hole walls should pull from the via hole layer since it does not vary with active copper
-    // layer.  For simplicity of configuration, pad hole walls can use the via color.
-    else if( aLayer == LAYER_VIA_HOLEWALLS || aLayer == LAYER_PAD_HOLEWALLS )
+    // Use via "golden copper" hole color for pad hole walls for contrast
+    else if( aLayer == LAYER_PAD_HOLEWALLS )
         aLayer = LAYER_VIA_HOLES;
 
     // Show via mask layers if appropriate
@@ -1108,12 +1108,14 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
     if( aLayer == LAYER_VIA_HOLEWALLS )
     {
-        double radius = ( getViaDrillSize( aVia ) / 2.0 ) + m_holePlatingThickness;
+        double thickness =
+            m_holePlatingThickness * ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
+        double radius = ( getViaDrillSize( aVia ) / 2.0 ) + thickness;
 
         if( !outline_mode )
         {
-            m_gal->SetLineWidth( m_holePlatingThickness );
-            radius -= m_holePlatingThickness / 2.0;
+            m_gal->SetLineWidth( thickness );
+            radius -= thickness / 2.0;
         }
 
         // Underpaint the hole so that there aren't artifacts at its edge
@@ -1436,11 +1438,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     {
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( m_holePlatingThickness );
+        double widthFactor = ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
+        m_gal->SetLineWidth( widthFactor * m_holePlatingThickness );
         m_gal->SetStrokeColor( color );
 
         std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
-        int                            holeSize = slot->GetWidth() + m_holePlatingThickness;
+        int holeSize = slot->GetWidth() + ( widthFactor * m_holePlatingThickness );
 
         if( slot->GetSeg().A == slot->GetSeg().B )    // Circular hole
             m_gal->DrawCircle( slot->GetSeg().A, KiROUND( holeSize / 2.0 ) );

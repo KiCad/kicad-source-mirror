@@ -75,7 +75,7 @@ const int GAL_LAYER_ORDER[] =
 
     LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
     LAYER_DRC_SHAPE1, LAYER_DRC_SHAPE2,
-    LAYER_PAD_NETNAMES,
+    LAYER_PAD_NETNAMES, LAYER_VIA_NETNAMES,
     Dwgs_User, ZONE_LAYER_FOR( Dwgs_User ),
     Cmts_User, ZONE_LAYER_FOR( Cmts_User ),
     Eco1_User, ZONE_LAYER_FOR( Eco1_User ),
@@ -361,6 +361,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 LAYER_CONFLICTS_SHADOW,
                 GetNetnameLayer( aLayer ),
                 LAYER_PAD_FR_NETNAMES, LAYER_PAD_BK_NETNAMES, LAYER_PAD_NETNAMES,
+                LAYER_VIA_NETNAMES,
                 ZONE_LAYER_FOR( aLayer ),
                 BITMAP_LAYER_FOR( aLayer ),
                 LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES,
@@ -404,7 +405,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
             LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES,
             LAYER_VIA_HOLEWALLS,
             LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES,
-            LAYER_PAD_NETNAMES,
+            LAYER_PAD_NETNAMES, LAYER_VIA_NETNAMES,
             LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
             LAYER_RATSNEST,
             LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
@@ -458,6 +459,8 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
             // of layer ordering...
             m_view->SetLayerOrder( LAYER_PAD_NETNAMES,
                                    m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 3 );
+            m_view->SetLayerOrder( LAYER_VIA_NETNAMES,
+                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 4 );
         }
     }
 
@@ -694,6 +697,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetRequired( LAYER_VIA_MICROVIA, LAYER_VIAS );
     m_view->SetRequired( LAYER_VIA_BBLIND, LAYER_VIAS );
     m_view->SetRequired( LAYER_VIA_THROUGH, LAYER_VIAS );
+    m_view->SetRequired( LAYER_VIA_NETNAMES, LAYER_VIAS );
 
     m_view->SetLayerTarget( LAYER_SELECT_OVERLAY, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY ) ;
