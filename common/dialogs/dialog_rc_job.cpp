@@ -84,7 +84,7 @@ void DIALOG_RC_JOB::OnFormatChoice( wxCommandEvent& event )
 
 bool DIALOG_RC_JOB::TransferDataToWindow()
 {
-    m_textCtrlOutputPath->SetValue( m_job->m_filename );
+    m_textCtrlOutputPath->SetValue( m_job->GetOutputPath() );
     setSelectedFormat( m_job->m_format );
     m_cbHaltOutput->SetValue( m_job->m_exitCodeViolations );
 
@@ -97,7 +97,7 @@ bool DIALOG_RC_JOB::TransferDataToWindow()
 
 bool DIALOG_RC_JOB::TransferDataFromWindow()
 {
-    m_job->m_filename = m_textCtrlOutputPath->GetValue();
+    m_job->SetOutputPath( m_textCtrlOutputPath->GetValue() );
     m_job->m_format = getSelectedFormat();
     m_job->m_exitCodeViolations = m_cbHaltOutput->GetValue();
 

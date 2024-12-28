@@ -1575,15 +1575,15 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     if( drcJob->m_outputFile.IsEmpty() )
     {
-        wxFileName fn = brd->GetFileName() + wxS( "-drc" );
-        fn.SetName( fn.GetName() );
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() + wxS( "-drc" ) );
 
         if( drcJob->m_format == JOB_PCB_DRC::OUTPUT_FORMAT::JSON )
             fn.SetExt( FILEEXT::JsonFileExtension );
         else
             fn.SetExt( FILEEXT::ReportFileExtension );
 
-        drcJob->m_outputFile = fn.GetFullName();
+        drcJob->SetOutputPath( fn.GetFullName() );
     }
 
     EDA_UNITS units;
@@ -1699,20 +1699,19 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     bool wroteReport = false;
 
     if( drcJob->m_format == JOB_PCB_DRC::OUTPUT_FORMAT::JSON )
-        wroteReport = reportWriter.WriteJsonReport( drcJob->m_outputFile );
+        wroteReport = reportWriter.WriteJsonReport( drcJob->GetFullOutputPath() );
     else
-        wroteReport = reportWriter.WriteTextReport( drcJob->m_outputFile );
+        wroteReport = reportWriter.WriteTextReport( drcJob->GetFullOutputPath() );
 
     if( !wroteReport )
     {
         m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ),
-                                              drcJob->m_outputFile ),
+                                              drcJob->GetFullOutputPath() ),
                 RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ),
-                                          drcJob->m_outputFile ),
+    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), drcJob->GetFullOutputPath() ),
                         RPT_SEVERITY_INFO );
 
     if( drcJob->m_exitCodeViolations )

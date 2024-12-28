@@ -1067,15 +1067,15 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     if( ercJob->m_outputFile.IsEmpty() )
     {
-        wxFileName fn = sch->GetFileName() + wxS( "-erc" );
-        fn.SetName( fn.GetName() );
+        wxFileName fn = sch->GetFileName();
+        fn.SetName( fn.GetName() + wxS( "-erc" ) );
 
         if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )
             fn.SetExt( FILEEXT::JsonFileExtension );
         else
             fn.SetExt( FILEEXT::ReportFileExtension );
 
-        ercJob->m_outputFile = fn.GetFullName();
+        ercJob->SetOutputPath( fn.GetFullName() );
     }
 
     EDA_UNITS units;
@@ -1110,19 +1110,20 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     bool wroteReport = false;
 
     if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )
-        wroteReport = reportWriter.WriteJsonReport( ercJob->m_outputFile );
+        wroteReport = reportWriter.WriteJsonReport( ercJob->GetFullOutputPath() );
     else
-        wroteReport = reportWriter.WriteTextReport( ercJob->m_outputFile );
+        wroteReport = reportWriter.WriteTextReport( ercJob->GetFullOutputPath() );
 
     if( !wroteReport )
     {
         m_reporter->Report( wxString::Format( _( "Unable to save ERC report to %s\n" ),
-                                              ercJob->m_outputFile ),
+                                              ercJob->GetFullOutputPath() ),
                             RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), ercJob->m_outputFile ),
+    m_reporter->Report(
+            wxString::Format( _( "Saved ERC Report to %s\n" ), ercJob->GetFullOutputPath() ),
                         RPT_SEVERITY_INFO );
 
     if( ercJob->m_exitCodeViolations )
