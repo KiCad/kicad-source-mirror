@@ -104,7 +104,7 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
     aJob->m_includeNetlistAttributes = !m_argParser.get<bool>( ARG_NO_NETLIST );
     aJob->m_useX2Format = !m_argParser.get<bool>( ARG_NO_X2 );
-    aJob->m_useAuxOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );
+    aJob->m_useDrillOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );
     aJob->m_useProtelFileExtension = !m_argParser.get<bool>( ARG_NO_PROTEL_EXTENSION );
     aJob->m_precision = m_argParser.get<int>( ARG_PRECISION );
     aJob->m_printMaskLayer = m_selectedLayers;

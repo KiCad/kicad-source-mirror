@@ -435,14 +435,12 @@ void DIALOG_PLOT::loadPlotParamsFromJob()
         m_plotOpts.SetCreateGerberJobFile( gJob->m_createJobsFile );
         m_plotOpts.SetGerberPrecision( gJob->m_precision );
         m_plotOpts.SetSubtractMaskFromSilk( gJob->m_subtractSolderMaskFromSilk );
-        m_plotOpts.SetUseAuxOrigin( gJob->m_useAuxOrigin );
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
     {
 		JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( m_job );
         m_plotOpts.SetSvgPrecision( svgJob->m_precision );
-        m_plotOpts.SetUseAuxOrigin( true );
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
@@ -452,9 +450,8 @@ void DIALOG_PLOT::loadPlotParamsFromJob()
                                     ? DXF_UNITS::INCHES : DXF_UNITS::MILLIMETERS );
         m_plotOpts.SetPlotMode( dxfJob->m_plotGraphicItemsUsingContours ? OUTLINE_MODE::SKETCH
                                                                         : OUTLINE_MODE::FILLED );
-        m_plotOpts.SetUseAuxOrigin( dxfJob->m_useDrillOrigin );
     }
-
+    m_plotOpts.SetUseAuxOrigin( m_job->m_useDrillOrigin );
     m_plotOpts.SetPlotFrameRef( m_job->m_plotDrawingSheet );
     m_plotOpts.SetPlotInvisibleText( m_job->m_plotInvisibleText );
     m_plotOpts.SetSketchPadsOnFabLayers( m_job->m_sketchPadsOnFabLayers );
@@ -509,7 +506,6 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         gJob->m_createJobsFile = m_plotOpts.GetCreateGerberJobFile();
         gJob->m_precision = m_plotOpts.GetGerberPrecision();
         gJob->m_subtractSolderMaskFromSilk = m_plotOpts.GetSubtractMaskFromSilk();
-        gJob->m_useAuxOrigin = m_plotOpts.GetUseAuxOrigin();
         gJob->m_useBoardPlotParams = false;
     }
 
@@ -526,9 +522,9 @@ void DIALOG_PLOT::transferPlotParamsToJob()
                                      ? JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES
                                      : JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS;
         dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
-        dxfJob->m_useDrillOrigin = m_plotOpts.GetUseAuxOrigin();
     }
 
+    m_job->m_useDrillOrigin = m_plotOpts.GetUseAuxOrigin();
     m_job->m_crossoutDNPFPsOnFabLayers = m_plotOpts.GetCrossoutDNPFPsOnFabLayers();
     m_job->m_hideDNPFPsOnFabLayers = m_plotOpts.GetHideDNPFPsOnFabLayers();
     m_job->m_sketchDNPFPsOnFabLayers = m_plotOpts.GetSketchDNPFPsOnFabLayers();

@@ -51,6 +51,8 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
             "sketch_pads_on_fab_layers", &m_sketchPadsOnFabLayers, m_sketchPadsOnFabLayers ) );
     m_params.emplace_back(
             new JOB_PARAM<DRILL_MARKS>( "drill_shape", &m_drillShapeOption, m_drillShapeOption ) );
+    m_params.emplace_back(
+            new JOB_PARAM<bool>( "use_drill_origin", &m_useDrillOrigin, m_useDrillOrigin ) );
 }
 
 

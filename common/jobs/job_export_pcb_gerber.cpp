@@ -29,7 +29,6 @@ JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType ) :
     m_includeNetlistAttributes( true ),
     m_useX2Format( true ),
     m_disableApertureMacros( false ),
-    m_useAuxOrigin( false ),
     m_useProtelFileExtension( true ),
     m_precision( 5 )
 {
@@ -61,8 +60,8 @@ JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType ) :
     m_params.emplace_back( new JOB_PARAM<bool>( "disable_aperture_macros", &m_disableApertureMacros,
                                                 m_disableApertureMacros ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "use_aux_origin",
-                                                &m_useAuxOrigin,
-                                                m_useAuxOrigin ) );
+                                                &m_useDrillOrigin,
+                                                m_useDrillOrigin ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "use_protel_file_extension",
                                                 &m_useProtelFileExtension,
                                                 m_useProtelFileExtension ) );

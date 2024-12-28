@@ -38,7 +38,6 @@ public:
     bool m_includeNetlistAttributes;
     bool m_useX2Format;
     bool m_disableApertureMacros;
-    bool m_useAuxOrigin;
     bool m_useProtelFileExtension;
 
     int m_precision;

@@ -41,7 +41,6 @@ public:
     };
 
     bool m_plotGraphicItemsUsingContours;
-    bool m_useDrillOrigin;
     DXF_UNITS m_dxfUnits;
 };
 
