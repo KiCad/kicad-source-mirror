@@ -55,7 +55,7 @@ DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWind
 	m_fieldsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_fieldsGrid->SetMinSize( wxSize( -1,180 ) );
 
-	sbFields->Add( m_fieldsGrid, 1, wxEXPAND|wxBOTTOM, 5 );
+	sbFields->Add( m_fieldsGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -79,7 +79,7 @@ DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWind
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	sbFields->Add( bButtonSizer, 0, wxEXPAND, 5 );
+	sbFields->Add( bButtonSizer, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
 	bMargins->Add( sbFields, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
