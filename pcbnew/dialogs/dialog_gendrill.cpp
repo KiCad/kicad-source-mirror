@@ -208,7 +208,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
         m_Check_Merge_PTH_NPTH->SetValue( m_job->m_excellonCombinePTHNPTH );
         m_Choice_Drill_Map->SetSelection( static_cast<int>( m_job->m_mapFormat ) );
         m_radioBoxOvalHoleMode->SetSelection( m_job->m_excellonOvalDrillRoute ? 0 : 1 );
-        m_cbGenerateMap->SetValue( m_job->m_generate_map );
+        m_cbGenerateMap->SetValue( m_job->m_generateMap );
     }
 
     m_platedPadsHoleCount    = 0;
