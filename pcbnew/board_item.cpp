@@ -130,7 +130,7 @@ LSET BOARD_ITEM::BoardLayerSet() const
     const BOARD* board = GetBoard();
 
     if( board )
-        return board->GetLayerSet();
+        return board->GetEnabledLayers();
 
     return LSET::AllLayersMask();
 }
