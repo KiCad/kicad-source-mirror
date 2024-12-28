@@ -223,9 +223,6 @@ bool DIALOG_IMPORT_GFX_SCH::TransferDataFromWindow()
     double           xscale = scale;
     double           yscale = scale;
 
-    if( dynamic_cast<SYMBOL_EDIT_FRAME*>( m_parent ) )
-        yscale *= -1;
-
     VECTOR2D origin( m_xOrigin.GetValue() / xscale, m_yOrigin.GetValue() / yscale );
 
     if( std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = m_gfxImportMgr->GetPluginByExt( ext ) )
