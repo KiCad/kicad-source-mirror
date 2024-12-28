@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,6 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/radiobut.h>
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
@@ -43,9 +42,6 @@ class PANEL_SETUP_TEARDROPS_BASE : public wxPanel
 		wxStaticText* m_roundShapesLabel;
 		wxStaticLine* m_staticline1;
 		wxStaticBitmap* m_bitmapTeardrop;
-		wxStaticText* m_edgesLabel;
-		wxRadioButton* m_rbStraightLines;
-		wxRadioButton* m_rbCurved;
 		wxStaticText* m_stLenPercentLabel;
 		wxSpinCtrlDouble* m_spLenPercent;
 		wxStaticText* m_stMaxLen;
@@ -60,12 +56,10 @@ class PANEL_SETUP_TEARDROPS_BASE : public wxPanel
 		wxStaticText* m_stHDRatio;
 		wxSpinCtrlDouble* m_spTeardropHDPercent;
 		wxCheckBox* m_cbTeardropsUseNextTrack;
+		wxCheckBox* m_cbCurvedEdges;
 		wxStaticText* m_rectShapesLabel;
 		wxStaticLine* m_staticline2;
 		wxStaticBitmap* m_bitmapTeardrop1;
-		wxStaticText* m_edgesLabel1;
-		wxRadioButton* m_rbStraightLines1;
-		wxRadioButton* m_rbCurved1;
 		wxStaticText* m_stLenPercent1Label;
 		wxSpinCtrlDouble* m_spLenPercent1;
 		wxStaticText* m_stMaxLen1;
@@ -80,12 +74,10 @@ class PANEL_SETUP_TEARDROPS_BASE : public wxPanel
 		wxStaticText* m_stHDRatio1;
 		wxSpinCtrlDouble* m_spTeardropHDPercent1;
 		wxCheckBox* m_cbTeardropsUseNextTrack1;
+		wxCheckBox* m_cbCurvedEdges1;
 		wxStaticText* m_tracksLabel;
 		wxStaticLine* m_staticline3;
 		wxStaticBitmap* m_bitmapTeardrop2;
-		wxStaticText* m_edgesLabel2;
-		wxRadioButton* m_rbStraightLines2;
-		wxRadioButton* m_rbCurved2;
 		wxStaticText* m_stLenPercent2Label;
 		wxSpinCtrlDouble* m_spLenPercent2;
 		wxStaticText* m_stMaxLen2;
@@ -99,6 +91,7 @@ class PANEL_SETUP_TEARDROPS_BASE : public wxPanel
 		wxStaticText* m_stHDRatio2;
 		wxSpinCtrlDouble* m_spTeardropHDPercent2;
 		wxCheckBox* m_cbTeardropsUseNextTrack2;
+		wxCheckBox* m_cbCurvedEdges2;
 
 	public:
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,22 +31,6 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	m_bitmapTeardrop = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeftCol->Add( m_bitmapTeardrop, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizer41;
-	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_edgesLabel = new wxStaticText( this, wxID_ANY, _("Edges:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_edgesLabel->Wrap( -1 );
-	bSizer41->Add( m_edgesLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_rbStraightLines = new wxRadioButton( this, wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	bSizer41->Add( m_rbStraightLines, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_rbCurved = new wxRadioButton( this, wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer41->Add( m_rbCurved, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-
-	bSizerLeftCol->Add( bSizer41, 0, wxEXPAND|wxBOTTOM, 4 );
 
 
 	bSizerShapeColumns->Add( bSizerLeftCol, 0, wxEXPAND|wxRIGHT, 10 );
@@ -149,7 +133,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer->Add( m_cbPreferZoneConnection, wxGBPosition( 1, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
-	m_stHDRatio = new wxStaticText( this, wxID_ANY, _("Maximum track width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatio = new wxStaticText( this, wxID_ANY, _("Track width limit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHDRatio->Wrap( -1 );
 	m_stHDRatio->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
@@ -190,6 +174,9 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer->Add( m_cbTeardropsUseNextTrack, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
+	m_cbCurvedEdges = new wxCheckBox( this, wxID_ANY, _("Curved edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer->Add( m_cbCurvedEdges, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), 0, 5 );
+
 
 	bSizerShapeColumns->Add( gbSizer, 0, wxEXPAND|wxLEFT, 20 );
 
@@ -214,22 +201,6 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	m_bitmapTeardrop1 = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeftCol1->Add( m_bitmapTeardrop1, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizer411;
-	bSizer411 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_edgesLabel1 = new wxStaticText( this, wxID_ANY, _("Edges:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_edgesLabel1->Wrap( -1 );
-	bSizer411->Add( m_edgesLabel1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_rbStraightLines1 = new wxRadioButton( this, wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	bSizer411->Add( m_rbStraightLines1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_rbCurved1 = new wxRadioButton( this, wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer411->Add( m_rbCurved1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-
-	bSizerLeftCol1->Add( bSizer411, 0, wxEXPAND|wxBOTTOM, 4 );
 
 
 	bSizerShapeColumns1->Add( bSizerLeftCol1, 0, wxEXPAND|wxRIGHT, 10 );
@@ -332,7 +303,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer1->Add( m_cbPreferZoneConnection1, wxGBPosition( 1, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
-	m_stHDRatio1 = new wxStaticText( this, wxID_ANY, _("Maximum track width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatio1 = new wxStaticText( this, wxID_ANY, _("Track width limit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHDRatio1->Wrap( -1 );
 	m_stHDRatio1->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
@@ -373,6 +344,9 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer1->Add( m_cbTeardropsUseNextTrack1, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
+	m_cbCurvedEdges1 = new wxCheckBox( this, wxID_ANY, _("Curved edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_cbCurvedEdges1, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), 0, 5 );
+
 
 	bSizerShapeColumns1->Add( gbSizer1, 0, wxEXPAND|wxLEFT, 20 );
 
@@ -397,22 +371,6 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	m_bitmapTeardrop2 = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeftCol2->Add( m_bitmapTeardrop2, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizer412;
-	bSizer412 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_edgesLabel2 = new wxStaticText( this, wxID_ANY, _("Edges:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_edgesLabel2->Wrap( -1 );
-	bSizer412->Add( m_edgesLabel2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_rbStraightLines2 = new wxRadioButton( this, wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	bSizer412->Add( m_rbStraightLines2, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_rbCurved2 = new wxRadioButton( this, wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer412->Add( m_rbCurved2, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-
-	bSizerLeftCol2->Add( bSizer412, 0, wxEXPAND|wxBOTTOM, 4 );
 
 
 	bSizerShapeColumns2->Add( bSizerLeftCol2, 0, wxEXPAND|wxRIGHT, 10 );
@@ -510,7 +468,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_stMaxWidth2Units->Wrap( -1 );
 	gbSizer2->Add( m_stMaxWidth2Units, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stHDRatio2 = new wxStaticText( this, wxID_ANY, _("Maximum track width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatio2 = new wxStaticText( this, wxID_ANY, _("Track width limit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHDRatio2->Wrap( -1 );
 	m_stHDRatio2->SetToolTip( _("Max track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
@@ -550,6 +508,9 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_cbTeardropsUseNextTrack2->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
 
 	gbSizer2->Add( m_cbTeardropsUseNextTrack2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
+
+	m_cbCurvedEdges2 = new wxCheckBox( this, wxID_ANY, _("Curved edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_cbCurvedEdges2, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), 0, 5 );
 
 
 	bSizerShapeColumns2->Add( gbSizer2, 0, wxEXPAND|wxLEFT, 20 );

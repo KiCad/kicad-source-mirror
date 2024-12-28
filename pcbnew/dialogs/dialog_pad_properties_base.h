@@ -201,8 +201,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_tcMaxHeight;
 		wxStaticText* m_stMaxHeightUnits;
 		wxCheckBox* m_curvedEdges;
-		wxStaticText* m_curvePointsLabel;
-		wxSpinCtrl* m_curvePointsCtrl;
 		wxStaticBoxSizer* m_sbSizerZonesSettings;
 		wxStaticText* m_padConnectionLabel;
 		wxChoice* m_ZoneConnectionChoice;
@@ -280,7 +278,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onModify( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onModify( wxSpinDoubleEvent& event ) { event.Skip(); }
-		virtual void onTeardropCurvePointsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }

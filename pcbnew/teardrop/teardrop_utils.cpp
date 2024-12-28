@@ -736,7 +736,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
 
     computeAnchorPoints( aParams, aTrack->GetLayer(), aOther, aOtherPos, pts );
 
-    if( !aParams.IsCurved() )
+    if( !aParams.m_CurvedEdges )
     {
         aCorners = pts;
         return true;

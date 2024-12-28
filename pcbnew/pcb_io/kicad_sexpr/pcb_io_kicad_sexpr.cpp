@@ -731,7 +731,7 @@ bool isDefaultTeardropParameters( const TEARDROP_PARAMETERS& tdParams )
             && tdParams.m_TdMaxLen == defaults.m_TdMaxLen
             && tdParams.m_BestWidthRatio == defaults.m_BestWidthRatio
             && tdParams.m_TdMaxWidth == defaults.m_TdMaxWidth
-            && tdParams.m_CurveSegCount == defaults.m_CurveSegCount
+            && tdParams.m_CurvedEdges == defaults.m_CurvedEdges
             && tdParams.m_WidthtoSizeFilterRatio == defaults.m_WidthtoSizeFilterRatio
             && tdParams.m_AllowUseTwoTracks == defaults.m_AllowUseTwoTracks
             && tdParams.m_TdOnPadsInZones == defaults.m_TdOnPadsInZones;
@@ -741,12 +741,15 @@ bool isDefaultTeardropParameters( const TEARDROP_PARAMETERS& tdParams )
 void PCB_IO_KICAD_SEXPR::formatTeardropParameters( const TEARDROP_PARAMETERS& tdParams ) const
 {
     m_out->Print( "(teardrops (best_length_ratio %s) (max_length %s) (best_width_ratio %s) "
-                  "(max_width %s) (curve_points %d) (filter_ratio %s)",
+                  "(max_width %s)",
                   FormatDouble2Str( tdParams.m_BestLengthRatio ).c_str(),
                   formatInternalUnits( tdParams.m_TdMaxLen ).c_str(),
                   FormatDouble2Str( tdParams.m_BestWidthRatio ).c_str(),
-                  formatInternalUnits( tdParams.m_TdMaxWidth ).c_str(),
-                  tdParams.m_CurveSegCount,
+                  formatInternalUnits( tdParams.m_TdMaxWidth ).c_str() );
+
+    KICAD_FORMAT::FormatBool( m_out, "curved_edges", tdParams.m_CurvedEdges );
+
+    m_out->Print( "filter_ratio %s )",
                   FormatDouble2Str( tdParams.m_WidthtoSizeFilterRatio ).c_str() );
 
     KICAD_FORMAT::FormatBool( m_out, "enabled", tdParams.m_Enabled );

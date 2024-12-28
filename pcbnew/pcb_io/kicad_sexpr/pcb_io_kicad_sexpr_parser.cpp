@@ -479,9 +479,14 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTEARDROP_PARAMETERS( TEARDROP_PARAMETERS* t
             NeedRIGHT();
             break;
 
+        // Legacy token
         case T_curve_points:
-            tdParams->m_CurveSegCount = parseInt( "teardrop curve points count" );
+            tdParams->m_CurvedEdges = parseInt( "teardrop curve points count" ) > 0;
             NeedRIGHT();
+            break;
+
+        case T_curved_edges:
+            tdParams->m_CurvedEdges = parseMaybeAbsentBool( true );
             break;
 
         case T_filter_ratio:

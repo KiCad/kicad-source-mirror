@@ -709,8 +709,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_spTeardropLenPercent->SetValue( m_previewPad->GetTeardropParams().m_BestLengthRatio *100 );
     m_spTeardropSizePercent->SetValue( m_previewPad->GetTeardropParams().m_BestWidthRatio *100 );
     m_spTeardropHDPercent->SetValue( m_previewPad->GetTeardropParams().m_WidthtoSizeFilterRatio*100 );
-
-    m_curvedEdges->SetValue( m_previewPad->GetTeardropParams().IsCurved() );
+    m_curvedEdges->SetValue( m_previewPad->GetTeardropParams().m_CurvedEdges );
 
     switch( m_previewPad->GetLocalZoneConnection() )
     {
@@ -1284,12 +1283,6 @@ void DIALOG_PAD_PROPERTIES::onTeardropsUpdateUi( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_PAD_PROPERTIES::onTeardropCurvePointsUpdateUi( wxUpdateUIEvent& event )
-{
-    event.Enable( !m_board->LegacyTeardrops() && m_curvedEdges->GetValue() );
-}
-
-
 void DIALOG_PAD_PROPERTIES::OnUpdateUINonCopperWarning( wxUpdateUIEvent& event )
 {
     bool isOnCopperLayer = ( m_previewPad->GetLayerSet() & LSET::AllCuMask() ).any();
@@ -1739,12 +1732,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->GetTeardropParams().m_TdMaxWidth = m_teardropMaxHeightSetting.GetIntValue();
     aPad->GetTeardropParams().m_BestLengthRatio = m_spTeardropLenPercent->GetValue() / 100;
     aPad->GetTeardropParams().m_BestWidthRatio = m_spTeardropSizePercent->GetValue() / 100;
-
-    if( m_curvedEdges->GetValue() )
-        aPad->GetTeardropParams().m_CurveSegCount = 1;
-    else
-        aPad->GetTeardropParams().m_CurveSegCount = 0;
-
+    aPad->GetTeardropParams().m_CurvedEdges = m_curvedEdges->GetValue();
     aPad->GetTeardropParams().m_WidthtoSizeFilterRatio = m_spTeardropHDPercent->GetValue() / 100;
 
     // Read pad clearances values:

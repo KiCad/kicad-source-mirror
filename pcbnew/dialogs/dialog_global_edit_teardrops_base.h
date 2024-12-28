@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,11 +32,11 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/spinctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE
@@ -88,8 +88,6 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_tcMaxHeight;
 		wxStaticText* m_stMaxHeightUnits;
 		wxCheckBox* m_curvedEdges;
-		wxStaticText* m_curvePointsLabel;
-		wxSpinCtrl* m_curvePointsCtrl;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerApply;
@@ -103,7 +101,6 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		virtual void OnExistingFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onShowBoardSetup( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onSpecifiedValuesUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 
 
 	public:

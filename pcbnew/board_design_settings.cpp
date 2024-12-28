@@ -540,7 +540,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                             td_prm->m_AllowUseTwoTracks = entry["td_allow_use_two_tracks"].get<bool>();
 
                         if( entry.contains( "td_curve_segcount" ) )
-                            td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+                        {
+                            if( entry["td_curve_segcount"].get<int>() > 0 )
+                                td_prm->m_CurvedEdges = true;
+                        }
 
                         if( entry.contains( "td_on_pad_in_zone" ) )
                             td_prm->m_TdOnPadsInZones = entry["td_on_pad_in_zone"].get<bool>();
@@ -565,7 +568,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     entry["td_maxheight"]  = pcbIUScale.IUTomm( td_prm->m_TdMaxWidth );
                     entry["td_length_ratio"]  = td_prm->m_BestLengthRatio;
                     entry["td_height_ratio"]  = td_prm->m_BestWidthRatio;
-                    entry["td_curve_segcount"]  = td_prm->m_CurveSegCount;
+                    entry["td_curve_segcount"]  = td_prm->m_CurvedEdges ? 1 : 0;
                     entry["td_width_to_size_filter_ratio"] = td_prm->m_WidthtoSizeFilterRatio;
                     entry["td_allow_use_two_tracks"] = td_prm->m_AllowUseTwoTracks;
                     entry["td_on_pad_in_zone"]  = td_prm->m_TdOnPadsInZones;
@@ -607,7 +610,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                             td_prm->m_BestWidthRatio = entry["td_height_ratio"].get<double>();
 
                         if( entry.contains( "td_curve_segcount" ) )
-                            td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+                        {
+                            if( entry["td_curve_segcount"].get<int>() > 0 )
+                                td_prm->m_CurvedEdges = true;
+                        }
 
                         if( entry.contains( "td_width_to_size_filter_ratio" ) )
                             td_prm->m_WidthtoSizeFilterRatio = entry["td_width_to_size_filter_ratio"].get<double>();

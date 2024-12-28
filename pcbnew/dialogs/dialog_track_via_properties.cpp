@@ -259,7 +259,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_teardropLenPercent.SetDoubleValue( v->GetTeardropParams().m_BestLengthRatio*100.0 );
                     m_teardropWidthPercent.SetDoubleValue( v->GetTeardropParams().m_BestWidthRatio*100.0 );
                     m_teardropHDPercent.SetDoubleValue( v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 );
-                    m_curvedEdges->SetValue( v->GetTeardropParams().IsCurved() );
+                    m_curvedEdges->SetValue( v->GetTeardropParams().m_CurvedEdges );
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -789,12 +789,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     targetParams->m_WidthtoSizeFilterRatio = m_teardropHDPercent.GetDoubleValue() / 100.0;
 
                 if( m_curvedEdges->Get3StateValue() != wxCHK_UNDETERMINED )
-                {
-                    if( m_curvedEdges->GetValue() )
-                        targetParams->m_CurveSegCount = 1;
-                    else
-                        targetParams->m_CurveSegCount = 0;
-                }
+                    targetParams->m_CurvedEdges = m_curvedEdges->GetValue();
 
                 if( changeLock )
                     v->SetLocked( setLock );

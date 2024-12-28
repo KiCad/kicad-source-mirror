@@ -53,7 +53,7 @@ public:
             m_BestLengthRatio( 0.5),
             m_BestWidthRatio( 1.0 ),
             m_WidthtoSizeFilterRatio( 0.9 ),
-            m_CurveSegCount( 0 ),
+            m_CurvedEdges( false ),
             m_Enabled( false ),
             m_AllowUseTwoTracks( true ),
             m_TdOnPadsInZones( false )
@@ -81,16 +81,6 @@ public:
         m_BestWidthRatio = aHeightRatio;
     }
 
-    /**
-     * Set the teardrop curved or straight
-     */
-    void SetTeardropCurvedPrm( int aCurveSegCount = 0 )
-    {
-        m_CurveSegCount = aCurveSegCount;
-    }
-
-    bool IsCurved() const { return m_CurveSegCount > 0; }
-
     bool operator== ( const TEARDROP_PARAMETERS& aOther ) const
     {
         return m_Enabled == aOther.m_Enabled &&
@@ -99,7 +89,7 @@ public:
                m_TdMaxWidth == aOther.m_TdMaxWidth &&
                m_BestLengthRatio == aOther.m_BestLengthRatio &&
                m_BestWidthRatio == aOther.m_BestWidthRatio &&
-               m_CurveSegCount == aOther.m_CurveSegCount &&
+               m_CurvedEdges == aOther.m_CurvedEdges &&
                m_WidthtoSizeFilterRatio == aOther.m_WidthtoSizeFilterRatio &&
                m_TdOnPadsInZones == aOther.m_TdOnPadsInZones;
     }
@@ -122,7 +112,7 @@ public:
     /// 1.0 (100 %) always creates a teardrop, 0.0 (0%) never create a teardrop
     double  m_WidthtoSizeFilterRatio;
     /// True if the teardrop should be curved
-    int m_CurveSegCount;
+    bool    m_CurvedEdges;
 
     /// Flag to enable teardrops
     bool m_Enabled;

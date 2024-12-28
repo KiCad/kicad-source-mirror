@@ -211,8 +211,8 @@ public:
     void SetTeardropMaxWidth( int aMaxWidth ) { m_teardropParams.m_TdMaxWidth = aMaxWidth; }
     int GetTeardropMaxWidth() const { return m_teardropParams.m_TdMaxWidth; }
 
-    void SetTeardropCurved( bool aCurve ) { m_teardropParams.m_CurveSegCount = aCurve ? 1 : 0; }
-    bool GetTeardropCurved() const { return m_teardropParams.m_CurveSegCount > 0; }
+    void SetTeardropCurved( bool aCurve ) { m_teardropParams.m_CurvedEdges = aCurve; }
+    bool GetTeardropCurved() const { return m_teardropParams.m_CurvedEdges; }
 
     void SetTeardropPreferZoneConnections( bool aPrefer ) { m_teardropParams.m_TdOnPadsInZones = !aPrefer; }
     bool GetTeardropPreferZoneConnections() const { return !m_teardropParams.m_TdOnPadsInZones; }

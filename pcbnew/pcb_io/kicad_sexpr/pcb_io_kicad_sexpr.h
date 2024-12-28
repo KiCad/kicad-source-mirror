@@ -170,7 +170,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20241009  // Evolve placement rule areas file format
 //#define SEXPR_BOARD_FILE_VERSION    20241010  // Graphic shapes can have soldermask layer and margin
 //#define SEXPR_BOARD_FILE_VERSION    20241030  // Dimension arrow directions, suppress_zeroes normalization
-#define SEXPR_BOARD_FILE_VERSION      20241129  // Normalise keep_text_aligned and fill properties
+//#define SEXPR_BOARD_FILE_VERSION    20241129  // Normalise keep_text_aligned and fill properties
+#define SEXPR_BOARD_FILE_VERSION      20241228  // Convert teardrop curve points to bool
 
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag

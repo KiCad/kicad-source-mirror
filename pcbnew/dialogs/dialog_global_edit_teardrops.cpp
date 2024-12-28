@@ -73,11 +73,6 @@ protected:
     {
         event.Enable( m_specifiedValues->GetValue() );
     }
-    void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) override
-    {
-        event.Enable( m_specifiedValues->GetValue()
-                        && m_curvedEdges->GetValue() == wxCHK_CHECKED );
-    }
     void onFilterUpdateUi( wxUpdateUIEvent& event ) override
     {
         event.Enable( !m_trackToTrack->GetValue() );
@@ -343,12 +338,7 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::setSpecifiedParams( TEARDROP_PARAMETERS* targ
         targetParams->m_TdMaxWidth = m_teardropMaxHeight.GetIntValue();
 
     if( m_curvedEdges->Get3StateValue() != wxCHK_UNDETERMINED )
-    {
-        if( m_curvedEdges->GetValue() )
-            targetParams->m_CurveSegCount = 1;
-        else
-            targetParams->m_CurveSegCount = 0;
-    }
+        targetParams->m_CurvedEdges = m_curvedEdges->GetValue();
 }
 
 

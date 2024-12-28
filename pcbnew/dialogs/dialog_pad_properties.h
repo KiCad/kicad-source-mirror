@@ -78,7 +78,6 @@ private:
 	void OnCancel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
-    void onTeardropCurvePointsUpdateUi( wxUpdateUIEvent& event ) override;
     void OnPadstackModeChanged( wxCommandEvent& event ) override;
     void OnEditLayerChanged( wxCommandEvent& event ) override;
 
