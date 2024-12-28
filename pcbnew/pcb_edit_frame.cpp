@@ -174,7 +174,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_GEN_CMP_FILE, PCB_EDIT_FRAME::RecreateCmpFileFromBoard )
 
     // Horizontal toolbar
-    EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::ExportSVG )
     EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
     EVT_COMBOBOX( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
@@ -1761,12 +1760,6 @@ void PCB_EDIT_FRAME::HardRedraw()
 }
 
 
-void PCB_EDIT_FRAME::ExportSVG( wxCommandEvent& event )
-{
-    InvokeExportSVG( this, GetBoard() );
-}
-
-
 void PCB_EDIT_FRAME::UpdateTitle()
 {
     wxFileName fn = GetBoard()->GetFileName();
@@ -1918,6 +1911,9 @@ void PCB_EDIT_FRAME::ToPlotter( int aID )
         break;
     case ID_GEN_PLOT_PS:
         plotSettings.SetFormat( PLOT_FORMAT::POST );
+        break;
+    case ID_GEN_PLOT_SVG:
+        plotSettings.SetFormat( PLOT_FORMAT::SVG );
         break;
     case ID_GEN_PLOT:
         /* keep the previous setup */

@@ -78,7 +78,6 @@
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 #include <settings/settings_manager.h>
-#include <dialogs/dialog_export_svg.h>
 #include <dialogs/dialog_gendrill.h>
 #include <dialogs/dialog_gen_footprint_position.h>
 #include <dialogs/dialog_export_2581.h>

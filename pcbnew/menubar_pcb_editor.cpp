@@ -136,8 +136,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     submenuExport->Add( _( "STEP / GLB / BREP / XAO / PLY / STL..." ),
                         _( "Export STEP / GLB / BREP / XAO / PLY / STL 3D board representation" ),
                         ID_GEN_EXPORT_FILE_STEP, BITMAPS::export_step );
-    submenuExport->Add( _( "SVG..." ), _( "Export SVG board representation" ),
-                        ID_GEN_PLOT_SVG, BITMAPS::export_svg );
     submenuExport->Add( _( "Footprint Association (.cmp) File..." ),
                         _( "Export footprint association file (*.cmp) for schematic back annotation" ),
                         ID_PCB_GEN_CMP_FILE, BITMAPS::export_cmp );

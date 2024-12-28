@@ -159,11 +159,6 @@ public:
      */
     void ToPlotter( int aID );
 
-    /**
-     * Show the Export to SVG file dialog.
-     */
-    void ExportSVG( wxCommandEvent& event );
-
     // User interface update command event handlers.
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 

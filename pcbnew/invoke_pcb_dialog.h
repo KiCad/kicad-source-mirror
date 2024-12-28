@@ -72,13 +72,4 @@ class KIWAY;
  */
 void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller );
 
-/**
- * Function InvokeExportSVG
- * shows the Export SVG dialog
- * @param aCaller is the PCB_EDIT_FRAME which is invoking the dialog.
- * @param aBoard is the currently edited board.
- * @return bool - true if user pressed OK (did not abort), else false.
- */
-bool InvokeExportSVG( PCB_EDIT_FRAME* aCaller, BOARD* aBoard );
-
 #endif  // INVOKE_A_DIALOG_H_
