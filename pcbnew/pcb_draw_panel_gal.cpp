@@ -485,8 +485,8 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
             if( layer < PCB_LAYER_ID_COUNT )
             {
                 m_view->SetTopLayer( ZONE_LAYER_FOR( layer ) );
-                m_view->SetTopLayer( PAD_COPPER_LAYER_FOR( aLayer ) );
-                m_view->SetTopLayer( VIA_COPPER_LAYER_FOR( aLayer ) );
+                m_view->SetTopLayer( PAD_COPPER_LAYER_FOR( layer ) );
+                m_view->SetTopLayer( VIA_COPPER_LAYER_FOR( layer ) );
             }
         }
 
@@ -494,25 +494,23 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
         if( !IsCopperLayer( aLayer ) )
         {
             m_view->SetLayerOrder( aLayer, m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 1 );
-            m_view->SetLayerOrder( PAD_COPPER_LAYER_FOR( aLayer ),
-                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 2 );
-            m_view->SetLayerOrder( VIA_COPPER_LAYER_FOR( aLayer ),
-                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 3 );
             m_view->SetLayerOrder( ZONE_LAYER_FOR( aLayer ),
-                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 4 );
+                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 2 );
 
             // Fix up pad and via netnames to be below.  This is hacky, we need a rethink
             // of layer ordering...
             m_view->SetLayerOrder( LAYER_PAD_NETNAMES,
-                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 5 );
+                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 3 );
             m_view->SetLayerOrder( LAYER_VIA_NETNAMES,
-                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 6 );
+                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 4 );
         }
     }
 
     if( IsCopperLayer( aLayer ) )
     {
         m_view->SetTopLayer( ZONE_LAYER_FOR( aLayer ) );
+        m_view->SetTopLayer( PAD_COPPER_LAYER_FOR( aLayer ) );
+        m_view->SetTopLayer( VIA_COPPER_LAYER_FOR( aLayer ) );
 
         // Display labels for copper layers on the top
         m_view->SetTopLayer( GetNetnameLayer( aLayer ) );

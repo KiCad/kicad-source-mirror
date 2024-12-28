@@ -524,7 +524,7 @@ public:
      *
      * @param aLayers stores id of layers to be sorted.
      */
-    void SortLayers( std::vector<int> aLayers ) const;
+    void SortLayers( std::vector<int>& aLayers ) const;
 
     /**
      * Remap the data between layer ids without invalidating that data.

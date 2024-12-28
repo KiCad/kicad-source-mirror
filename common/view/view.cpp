@@ -659,12 +659,12 @@ int VIEW::GetLayerOrder( int aLayer ) const
 }
 
 
-void VIEW::SortLayers( std::vector<int> aLayers ) const
+void VIEW::SortLayers( std::vector<int>& aLayers ) const
 {
     std::sort( aLayers.begin(), aLayers.end(),
                [this]( int a, int b )
                {
-                   return GetLayerOrder( a ) < GetLayerOrder( b );
+                   return GetLayerOrder( a ) > GetLayerOrder( b );
                } );
 }
 

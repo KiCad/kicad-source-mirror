@@ -989,7 +989,9 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     if( color == COLOR4D::CLEAR )
         return;
 
-    PCB_LAYER_ID currentLayer = ToLAYER_ID( aLayer );
+    int copperLayer = IsViaCopperLayer( aLayer ) ? aLayer - LAYER_VIA_COPPER_START : aLayer;
+
+    PCB_LAYER_ID currentLayer = ToLAYER_ID( copperLayer );
     PCB_LAYER_ID layerTop, layerBottom;
     aVia->LayerPair( &layerTop, &layerBottom );
 
@@ -1165,7 +1167,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetLineWidth( margin );
         m_gal->DrawCircle( center, aVia->GetWidth( currentLayer ) / 2.0 + margin );
     }
-    else if( m_pcbSettings.IsPrinting() || IsCopperLayer( aLayer ) )
+    else if( m_pcbSettings.IsPrinting() || IsCopperLayer( currentLayer ) )
     {
         int    annular_width = ( aVia->GetWidth( currentLayer ) - getViaDrillSize( aVia ) ) / 2.0;
         double radius = aVia->GetWidth( currentLayer ) / 2.0;
@@ -1184,7 +1186,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
             draw = true;
         }
 
-        if( !aVia->FlashLayer( aLayer ) )
+        if( !aVia->FlashLayer( currentLayer ) )
             draw = false;
 
         if( !outline_mode )

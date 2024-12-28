@@ -1445,7 +1445,6 @@ std::vector<int> PCB_VIA::ViewGetLayers() const
         if( !cuMask.Contains( layer ) )
             continue;
 
-        ret_layers.push_back( layer );
         ret_layers.push_back( LAYER_VIA_COPPER_START + layer );
     }
 
