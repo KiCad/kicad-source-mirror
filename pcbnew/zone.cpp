@@ -322,6 +322,9 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
 
     *m_Poly = kiapi::common::UnpackPolySet( zone.outline() );
 
+    if( m_Poly->OutlineCount() == 0 )
+        return false;
+
     if( m_isRuleArea )
     {
         const types::RuleAreaSettings& ra = zone.rule_area_settings();
