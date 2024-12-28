@@ -553,7 +553,7 @@ bool LINE_PLACER::cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I&
 }
 
 
-bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisionMask,
+bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisionMask, PNS::PNS_MODE aMode,
                               bool& aViaOk )
 {
     LINE walkFull( m_head );
@@ -582,7 +582,7 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
         PNS_DBG( Dbg(), BeginGroup, wxString::Format( "walk-round-%d", round ), 0 );
         round++;
 
-        aViaOk = buildInitialLine( walkP, l1, round == 0 );
+        aViaOk = buildInitialLine( walkP, l1, aMode, round == 0 );
         PNS_DBG( Dbg(), AddItem, &l1, BLUE, 20000, wxT( "walk-base-l1" ) );
 
         if( l1.EndsWithVia() )
@@ -748,7 +748,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail
     int effort = 0;
     bool viaOk = false;
 
-    if( ! rhWalkBase( aP, walkFull, ITEM::ANY_T, viaOk ) )
+    if( ! rhWalkBase( aP, walkFull, ITEM::ANY_T, RM_Walkaround, viaOk ) )
         return false;
 
     switch( Settings().OptimizerEffort() )
@@ -814,7 +814,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail
 
 bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail )
 {
-    buildInitialLine( aP, m_head );
+    buildInitialLine( aP, m_head, RM_MarkObstacles );
     m_head.SetBlockingObstacle( nullptr );
 
     auto obs = m_currentNode->NearestObstacle( &m_head );
@@ -836,7 +836,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead, LINE& aNe
             nearest = hull.NearestPoint( aP );
 
         if( ( nearest - aP ).EuclideanNorm() < m_head.Width() / 2 )
-            buildInitialLine( nearest, m_head );
+            buildInitialLine( nearest, m_head, RM_MarkObstacles );
     }
 
     // Note: Something like the below could be used to implement a "stop at first obstacle" mode,
@@ -930,7 +930,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
 
     bool viaOk = false;
 
-    if( ! rhWalkBase( aP, walkSolids, ITEM::SOLID_T, viaOk ) )
+    if( ! rhWalkBase( aP, walkSolids, ITEM::SOLID_T, RM_Shove, viaOk ) )
         return false;
 
     m_currentNode = m_shove->CurrentNode();
@@ -1976,7 +1976,7 @@ void LINE_PLACER::SetOrthoMode( bool aOrthoMode )
 }
 
 
-bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForceNoVia )
+bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, PNS::PNS_MODE aMode, bool aForceNoVia )
 {
     SHAPE_LINE_CHAIN l;
     DIRECTION_45 guessedDir = m_mouseTrailTracer.GetPosture( aP );
@@ -2031,13 +2031,13 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
     VIA v( makeVia( aP ) );
     v.SetNet( aHead.Net() );
 
-    if( Settings().Mode() == RM_MarkObstacles )
+    if( aMode == RM_MarkObstacles )
     {
         aHead.AppendVia( v );
         return true;
     }
 
-    const int collMask = ( Settings().Mode() == RM_Walkaround ) ? ITEM::ANY_T : ITEM::SOLID_T;
+    const int collMask = ( aMode == RM_Walkaround ) ? ITEM::ANY_T : ITEM::SOLID_T;
     const int iterLimit = Settings().ViaForcePropIterationLimit();
 
     for( int attempt = 0; attempt < 2; attempt++)
@@ -2076,6 +2076,7 @@ void LINE_PLACER::GetModifiedNets( std::vector<NET_HANDLE>& aNets ) const
 bool LINE_PLACER::AbortPlacement()
 {
     m_world->KillChildren();
+    m_lastNode = nullptr;
     return true;
 }
 
