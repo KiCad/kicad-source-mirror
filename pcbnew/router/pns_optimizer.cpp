@@ -1103,7 +1103,7 @@ bool OPTIMIZER::runSmartPads( LINE* aLine )
 }
 
 
-bool OPTIMIZER::Optimize( const LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I& aV )
+bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I& aV )
 {
     OPTIMIZER opt( aWorld );
 
@@ -1113,7 +1113,8 @@ bool OPTIMIZER::Optimize( const LINE* aLine, int aEffortLevel, NODE* aWorld, con
     if( aEffortLevel & OPTIMIZER::PRESERVE_VERTEX )
         opt.SetPreserveVertex( aV );
 
-    return opt.Optimize( aLine );
+    LINE tmp( *aLine );
+    return opt.Optimize( &tmp, aLine );
 }
 
 

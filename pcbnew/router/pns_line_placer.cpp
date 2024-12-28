@@ -991,8 +991,6 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
         if( m_shove->HeadsModified() )
             newHead = m_shove->GetModifiedHead( 0 );
 
-        OPTIMIZER optimizer( m_currentNode );
-
         if( newHead.EndsWithVia() )
         {
             PNS_DBG( Dbg(), AddPoint, newHead.Via().Pos(), GREEN, 1000000, "shove-via-preopt" );
@@ -1005,9 +1003,8 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
         if( newHead.EndsWithVia() )
             aNewHead.AppendVia( newHead.Via() );
 
-        optimizer.SetEffortLevel( effort );
-        optimizer.SetCollisionMask( ITEM::ANY_T );
-        optimizer.Optimize( &aNewHead );
+        OPTIMIZER::Optimize( &aNewHead, effort, m_currentNode );
+        PNS_DBG( Dbg(), AddItem, aNewHead.Clone(), GREEN, 1000000, "head-sh-postopt" );
 
         return true;
     }
