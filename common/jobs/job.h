@@ -85,7 +85,7 @@ public:
             if( js.is_array() )
             {
                 for( const auto& el : js.items() )
-                    val.push_back( el.value().get<ListElementType>() );
+                    val.push_back( el.value().template get<ListElementType>() );
             }
 
             *m_ptr = val;
