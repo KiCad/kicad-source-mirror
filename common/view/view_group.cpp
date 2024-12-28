@@ -156,6 +156,14 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
             int zone_main_layer = layer - LAYER_ZONE_START;
             draw = aView->IsLayerVisible( zone_main_layer );
         }
+        else if( IsPadCopperLayer( layer ) )
+        {
+            draw = aView->IsLayerVisible( layer - LAYER_PAD_COPPER_START );
+        }
+        else if( IsViaCopperLayer( layer ) )
+        {
+            draw = aView->IsLayerVisible( layer - LAYER_VIA_COPPER_START );
+        }
 
         if( isSelection )
         {

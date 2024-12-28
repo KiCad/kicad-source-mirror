@@ -1634,13 +1634,13 @@ std::vector<int> PAD::ViewGetLayers() const
     {
         // Multi layer pad
         for( PCB_LAYER_ID layer : cuLayers.Seq() )
-            layers.push_back( layer );
+            layers.push_back( LAYER_PAD_COPPER_START + layer );
 
         layers.push_back( LAYER_PAD_NETNAMES );
     }
     else if( IsOnLayer( F_Cu ) )
     {
-        layers.push_back( F_Cu );
+        layers.push_back( LAYER_PAD_COPPER_START );
 
         // Is this a PTH pad that has only front copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
@@ -1651,7 +1651,7 @@ std::vector<int> PAD::ViewGetLayers() const
     }
     else if( IsOnLayer( B_Cu ) )
     {
-        layers.push_back( B_Cu );
+        layers.push_back( LAYER_PAD_COPPER_START + B_Cu );
 
         // Is this a PTH pad that has only back copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.

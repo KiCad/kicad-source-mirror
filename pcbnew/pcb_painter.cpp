@@ -244,6 +244,12 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
             aLayer = aLayer - LAYER_ZONE_START;
     }
 
+    // Pad and via copper take their color from the copper layer
+    if( IsPadCopperLayer( aLayer ) )
+        aLayer = aLayer - LAYER_PAD_COPPER_START;
+    else if( IsViaCopperLayer( aLayer ) )
+        aLayer = aLayer - LAYER_VIA_COPPER_START;
+
     // Use via "golden copper" hole color for pad hole walls for contrast
     else if( aLayer == LAYER_PAD_HOLEWALLS )
         aLayer = LAYER_VIA_HOLES;
@@ -1235,7 +1241,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
     const BOARD* board = aPad->GetBoard();
     COLOR4D      color = m_pcbSettings.GetColor( aPad, aLayer );
-    const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( aLayer );
+
+    int copperLayer = IsPadCopperLayer( aLayer ) ? aLayer - LAYER_PAD_COPPER_START : aLayer;
+
+    const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( copperLayer );
 
     if( IsNetnameLayer( aLayer ) )
     {

@@ -154,6 +154,8 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
 
         // Enable the corresponding zone layer (copper layers and other layers)
         aView.SetLayerVisible( LAYER_ZONE_START + layer, true );
+        aView.SetLayerVisible( LAYER_PAD_COPPER_START + layer, true );
+        aView.SetLayerVisible( LAYER_VIA_COPPER_START + layer, true );
     }
 
     RENDER_SETTINGS* renderSettings = aView.GetPainter()->GetSettings();

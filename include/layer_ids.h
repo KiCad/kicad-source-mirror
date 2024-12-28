@@ -258,6 +258,14 @@ enum GAL_LAYER_ID: int
     LAYER_ZONE_START,
     LAYER_ZONE_END = LAYER_ZONE_START + PCB_LAYER_ID_COUNT,
 
+    /// Virtual layers for pad copper on a given copper layer
+    LAYER_PAD_COPPER_START,
+    LAYER_PAD_COPPER_END = LAYER_PAD_COPPER_START + PCB_LAYER_ID_COUNT,
+
+    /// Virtual layers for via copper on a given copper layer
+    LAYER_VIA_COPPER_START,
+    LAYER_VIA_COPPER_END = LAYER_VIA_COPPER_START + PCB_LAYER_ID_COUNT,
+
     /// Virtual layers for background images per board layer
     LAYER_BITMAP_START,
     LAYER_BITMAP_END = LAYER_BITMAP_START + PCB_LAYER_ID_COUNT,
@@ -275,6 +283,8 @@ enum GAL_LAYER_ID: int
 /// Macros for getting the extra layers for a given board layer
 #define BITMAP_LAYER_FOR( boardLayer ) ( LAYER_BITMAP_START + boardLayer )
 #define ZONE_LAYER_FOR( boardLayer ) ( LAYER_ZONE_START + boardLayer )
+#define PAD_COPPER_LAYER_FOR( boardLayer ) ( LAYER_PAD_COPPER_START + boardLayer )
+#define VIA_COPPER_LAYER_FOR( boardLayer ) ( LAYER_VIA_COPPER_START + boardLayer )
 
 constexpr int GAL_LAYER_ID_COUNT = GAL_LAYER_ID_END - GAL_LAYER_ID_START;
 
@@ -728,6 +738,18 @@ inline bool IsNetnameLayer( int aLayer )
 inline bool IsZoneFillLayer( int aLayer )
 {
     return aLayer >= LAYER_ZONE_START && aLayer <= LAYER_ZONE_END;
+}
+
+
+inline bool IsPadCopperLayer( int aLayer )
+{
+    return aLayer >= LAYER_PAD_COPPER_START && aLayer <= LAYER_PAD_COPPER_END;
+}
+
+
+inline bool IsViaCopperLayer( int aLayer )
+{
+    return aLayer >= LAYER_VIA_COPPER_START && aLayer <= LAYER_VIA_COPPER_END;
 }
 
 

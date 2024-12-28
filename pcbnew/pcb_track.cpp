@@ -1435,9 +1435,19 @@ std::vector<int> PCB_VIA::ViewGetLayers() const
             m_viaType == VIATYPE::BLIND_BURIED
             || ( m_viaType == VIATYPE::MICROVIA && ( layerTop != F_Cu || layerBottom != B_Cu ) );
 #endif
+    LSET cuMask = LSET::AllCuMask();
+
+    if( const BOARD* board = GetBoard() )
+        cuMask = board->GetEnabledLayers();
 
     for( PCB_LAYER_ID layer : layers )
+    {
+        if( !cuMask.Contains( layer ) )
+            continue;
+
         ret_layers.push_back( layer );
+        ret_layers.push_back( LAYER_VIA_COPPER_START + layer );
+    }
 
     if( IsLocked() )
         ret_layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
