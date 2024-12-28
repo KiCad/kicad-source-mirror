@@ -711,7 +711,7 @@ struct EPAD_COMMON
 /// Eagle thru hole pad
 struct EPAD : public EPAD_COMMON
 {
-    ECOORD     drill;
+    opt_ecoord drill;
     opt_ecoord diameter;
 
     // for shape: (square | round | octagon | long | offset)

@@ -1938,7 +1938,7 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
     int shape = EPAD::UNDEF;
-    int eagleDrillz = e.drill.ToPcbUnits();
+    int  eagleDrillz = e.drill ? e.drill->ToPcbUnits() : 0;
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
     transferPad( e, pad.get() );
@@ -2029,7 +2029,7 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     // Eagle spokes are always '+'
     pad->SetThermalSpokeAngle( ANGLE_0 );
 
-    if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+    if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 && pad->HasHole() )
     {
         aFootprint->Add( pad.release() );
     }
