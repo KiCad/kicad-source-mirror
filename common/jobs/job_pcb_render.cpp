@@ -19,10 +19,63 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <jobs/job_registry.h>
 #include <jobs/job_pcb_render.h>
+#include <i18n_utility.h>
 
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_RENDER::FORMAT,
+                              {
+                                    { JOB_PCB_RENDER::FORMAT::JPEG, "jpeg" },
+                                    { JOB_PCB_RENDER::FORMAT::PNG, "png" }
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_RENDER::QUALITY,
+                              {
+                                    { JOB_PCB_RENDER::QUALITY::BASIC, "basic" },
+                                    { JOB_PCB_RENDER::QUALITY::HIGH, "high" },
+                                    { JOB_PCB_RENDER::QUALITY::USER, "user" }
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_RENDER::SIDE,
+                              {
+                                    { JOB_PCB_RENDER::SIDE::BACK, "back" },
+                                    { JOB_PCB_RENDER::SIDE::BOTTOM, "bottom" },
+                                    { JOB_PCB_RENDER::SIDE::FRONT, "front" },
+                                    { JOB_PCB_RENDER::SIDE::LEFT, "left" },
+                                    { JOB_PCB_RENDER::SIDE::RIGHT, "right" },
+                                    { JOB_PCB_RENDER::SIDE::TOP, "top" }
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_RENDER::BG_STYLE,
+                            {
+                                    { JOB_PCB_RENDER::BG_STYLE::BG_DEFAULT, "default" },
+                                    { JOB_PCB_RENDER::BG_STYLE::BG_OPAQUE, "opaque" },
+                                    { JOB_PCB_RENDER::BG_STYLE::BG_TRANSPARENT, "transparent" }
+                            } )
 
 JOB_PCB_RENDER::JOB_PCB_RENDER() :
         JOB( "render", false ), m_filename()
 {
+    m_params.emplace_back( new JOB_PARAM<FORMAT>( "format", &m_format, m_format ) );
+    m_params.emplace_back( new JOB_PARAM<QUALITY>( "quality", &m_quality, m_quality ) );
+    m_params.emplace_back( new JOB_PARAM<BG_STYLE>( "bg_style", &m_bgStyle, m_bgStyle ) );
+    m_params.emplace_back( new JOB_PARAM<SIDE>( "side", &m_side, m_side ) );
+
+    m_params.emplace_back( new JOB_PARAM<double>( "zoom", &m_zoom, m_zoom ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "perspective", &m_perspective, m_perspective ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "floor", &m_floor, m_floor ) );
+
+    m_params.emplace_back( new JOB_PARAM<int>( "width", &m_width, m_width ) );
+    m_params.emplace_back( new JOB_PARAM<int>( "height", &m_height, m_height ) );
+
 }
+
+
+wxString JOB_PCB_RENDER::GetDescription()
+{
+    return _( "Render PCB" );
+}
+
+
+REGISTER_JOB( pcb_render, _HKI( "PCB: Render" ), KIWAY::FACE_PCB, JOB_PCB_RENDER );

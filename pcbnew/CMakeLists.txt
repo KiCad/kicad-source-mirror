@@ -134,6 +134,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_position_relative.cpp
     dialogs/dialog_position_relative_base.cpp
     dialogs/dialog_print_pcbnew.cpp
+    dialogs/dialog_render_job_base.cpp
+    dialogs/dialog_render_job.cpp
     dialogs/dialog_set_offset_base.cpp
     dialogs/dialog_set_offset.cpp
     dialogs/dialog_swap_layers.cpp

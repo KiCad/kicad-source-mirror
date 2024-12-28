@@ -243,7 +243,7 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_PCB_RENDER> renderJob( new JOB_PCB_RENDER() );
 
-    renderJob->m_outputFile = m_argOutput;
+    renderJob->SetOutputPath( m_argOutput );
     renderJob->m_filename = m_argInput;
     renderJob->SetVarOverrides( m_argDefineVars );
 

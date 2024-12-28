@@ -86,6 +86,7 @@
 #include <dialogs/dialog_export_step.h>
 #include <dialogs/dialog_plot.h>
 #include <dialogs/dialog_drc_job_config.h>
+#include <dialogs/dialog_render_job.h>
 
 #include "pcbnew_scripting_helpers.h"
 #include <locale_io.h>
@@ -118,7 +119,10 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportRender, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
-                  return false;
+                  DIALOG_RENDER_JOB dlg( aParent, dynamic_cast<JOB_PCB_RENDER*>( job ) );
+                  dlg.ShowModal();
+
+                  return dlg.GetReturnCode() == wxID_OK;
               } );
     Register( "svg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
@@ -505,8 +509,8 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     cfg->m_CurrentPreset = aRenderJob->m_colorPreset;
     boardAdapter.m_Cfg = cfg;
 
-    if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT
-        || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::DEFAULT
+    if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::BG_TRANSPARENT
+        || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::BG_DEFAULT
              && aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ) )
     {
         boardAdapter.m_ColorOverrides[LAYER_3D_BACKGROUND_TOP] = COLOR4D( 1.0, 1.0, 1.0, 0.0 );
@@ -601,7 +605,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         image = image.Mirror( false );
 
         image.SetOption( wxIMAGE_OPTION_QUALITY, 90 );
-        image.SaveFile( aRenderJob->m_outputFile,
+        image.SaveFile( aRenderJob->GetFullOutputPath(),
                         aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG
                                                                             : wxBITMAP_TYPE_JPEG );
     }

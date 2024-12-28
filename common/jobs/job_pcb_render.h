@@ -32,9 +32,9 @@ class KICOMMON_API JOB_PCB_RENDER : public JOB
 {
 public:
     JOB_PCB_RENDER();
+    wxString GetDescription() override;
 
     wxString m_filename;
-    wxString m_outputFile;
 
     enum class FORMAT
     {
@@ -51,9 +51,9 @@ public:
 
     enum class BG_STYLE
     {
-        DEFAULT,
-        TRANSPARENT,
-        OPAQUE
+        BG_DEFAULT,
+        BG_TRANSPARENT,
+        BG_OPAQUE
     };
 
     enum class SIDE
@@ -68,7 +68,7 @@ public:
 
     FORMAT      m_format = FORMAT::PNG;
     QUALITY     m_quality = QUALITY::BASIC;
-    BG_STYLE    m_bgStyle = BG_STYLE::DEFAULT;
+    BG_STYLE    m_bgStyle = BG_STYLE::BG_DEFAULT;
     int         m_width = 0;
     int         m_height = 0;
     std::string m_colorPreset;
