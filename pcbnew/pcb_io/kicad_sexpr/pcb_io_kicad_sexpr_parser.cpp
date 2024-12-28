@@ -4533,7 +4533,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 // Use the text effect parsing function because it will handle ki_fp_filters as a property
                 // with no text effects, but will also handle parsing the text effects. We just drop the effects
                 // if they're present.
-                PCB_FIELD ignored = PCB_FIELD( footprint.get(), footprint->GetFieldCount(), pName );
+                PCB_FIELD ignored =
+                        PCB_FIELD( footprint.get(), footprint->GetNextFieldId(), pName );
 
                 parsePCB_TEXT_effects( &ignored );
 
@@ -4558,8 +4559,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             }
             else
             {
-                field = footprint->AddField( PCB_FIELD( footprint.get(), footprint->GetFieldCount(),
-                                                        pName ) );
+                field = footprint->AddField(
+                        PCB_FIELD( footprint.get(), footprint->GetNextFieldId(), pName ) );
 
                 field->SetText( pValue );
                 field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );

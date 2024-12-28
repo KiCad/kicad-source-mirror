@@ -61,7 +61,7 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
         comp.m_comp_name = wxString::Format( "UNNAMED%zu", m_compList.size() );
     }
 
-    for( PCB_FIELD* field : aFp->Fields() )
+    for( PCB_FIELD* field : aFp->GetFields() )
     {
         if( field->GetId() == REFERENCE_FIELD )
             continue;

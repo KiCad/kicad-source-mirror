@@ -384,7 +384,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     std::vector<PCB_TEXT*> texts;
 
     // Skip the reference and value texts that are handled specially
-    for( PCB_FIELD* field : aFootprint->Fields() )
+    for( PCB_FIELD* field : aFootprint->GetFields() )
     {
         if( field->IsReference() || field->IsValue() )
             continue;

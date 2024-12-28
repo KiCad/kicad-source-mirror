@@ -769,7 +769,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
     const VECTOR2I defaultTextSize( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) );
     const int      defaultTextThickness( pcbIUScale.mmToIU( 0.15 ) );
 
-    for( PCB_FIELD* field : footprint->Fields() )
+    for( PCB_FIELD* field : footprint->GetFields() )
     {
         field->SetTextSize( defaultTextSize );
         field->SetTextThickness( defaultTextThickness );

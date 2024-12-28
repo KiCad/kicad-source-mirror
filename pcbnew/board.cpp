@@ -1434,9 +1434,9 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
                 return pad;
         }
 
-        for( PCB_FIELD* field : footprint->Fields() )
+        for( PCB_FIELD* field : footprint->GetFields() )
         {
-            if( field->m_Uuid == aID )
+            if( field && field->m_Uuid == aID )
                 return field;
         }
 

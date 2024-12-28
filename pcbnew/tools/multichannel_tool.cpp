@@ -830,7 +830,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             VECTOR2I targetPos = refFP->GetPosition() + disp;
             targetFP->SetPosition( targetPos );
 
-            for( PCB_FIELD* refField : refFP->Fields() )
+            for( PCB_FIELD* refField : refFP->GetFields() )
             {
                 if( !refField->IsVisible() )
                     continue;

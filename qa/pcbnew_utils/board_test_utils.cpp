@@ -246,7 +246,7 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
     BOOST_CHECK_EQUAL( expected->GetTypeName(), fp->GetTypeName() );
 
     // simple test if count matches
-    BOOST_CHECK_EQUAL( expected->Fields().size(), fp->Fields().size() );
+    BOOST_CHECK_EQUAL( expected->GetFields().size(), fp->GetFields().size() );
     BOOST_CHECK_EQUAL( expected->Pads().size(), fp->Pads().size() );
     BOOST_CHECK_EQUAL( expected->GraphicalItems().size(), fp->GraphicalItems().size() );
     BOOST_CHECK_EQUAL( expected->Zones().size(), fp->Zones().size() );

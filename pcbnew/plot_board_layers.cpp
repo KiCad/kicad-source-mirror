@@ -111,10 +111,8 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
                                                    _( "Footprint" ),
                                                    fp->GetFPID().GetUniStringLibItemName() ) );
 
-        for( int i = 0; i < fp->GetFieldCount(); i++ )
+        for( const PCB_FIELD* field : fp->GetFields() )
         {
-            PCB_FIELD* field = fp->GetFields().at( i );
-
             if( field->IsReference() || field->IsValue() )
                 continue;
 
@@ -947,7 +945,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             // add shapes inflated by aMinThickness/2 in areas
             footprint->TransformPadsToPolySet( areas, layer, inflate, maxError, ERROR_OUTSIDE );
 
-            for( const PCB_FIELD* field : footprint->Fields() )
+            for( const PCB_FIELD* field : footprint->GetFields() )
             {
                 if( field->IsReference() && !itemplotter.GetPlotReference() )
                     continue;

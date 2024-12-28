@@ -410,7 +410,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                     if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( copy ) )
                     {
                         if( field->IsMandatoryField() )
-                            field->SetId( footprint->GetFieldCount() );
+                            field->SetId( footprint->GetNextFieldId() );
                     }
 
                     copy = footprint;

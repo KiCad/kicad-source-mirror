@@ -213,7 +213,7 @@ void PCB_IO_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, con
 
     if( !modelUuid.IsEmpty() && !footprint->GetFieldByName( QUERY_MODEL_UUID_KEY ) )
     {
-        PCB_FIELD field( footprint, footprint->GetFieldCount(), QUERY_MODEL_UUID_KEY );
+        PCB_FIELD field( footprint, footprint->GetNextFieldId(), QUERY_MODEL_UUID_KEY );
         field.SetLayer( Cmts_User );
         field.SetVisible( false );
         field.SetText( modelUuid );
@@ -229,7 +229,7 @@ void PCB_IO_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, con
 
         if( fitXmm > 0.0 && fitYmm > 0.0 )
         {
-            PCB_FIELD field( footprint, footprint->GetFieldCount(), MODEL_SIZE_KEY );
+            PCB_FIELD field( footprint, footprint->GetNextFieldId(), MODEL_SIZE_KEY );
             field.SetLayer( Cmts_User );
             field.SetVisible( false );
             field.SetText( wxString::FromCDouble( fitXmm ) + wxS( " " )
@@ -736,7 +736,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
     const VECTOR2I defaultTextSize( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) );
     const int      defaultTextThickness( pcbIUScale.mmToIU( 0.15 ) );
 
-    for( PCB_FIELD* field : footprint->Fields() )
+    for( PCB_FIELD* field : footprint->GetFields() )
     {
         field->SetTextSize( defaultTextSize );
         field->SetTextThickness( defaultTextThickness );

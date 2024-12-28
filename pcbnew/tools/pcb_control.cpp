@@ -876,7 +876,7 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
     // Not all items can be added to the current footprint: mandatory fields are already existing
     // in the current footprint.
     //
-    for( PCB_FIELD* field : aClipFootprint->Fields() )
+    for( PCB_FIELD* field : aClipFootprint->GetFields() )
     {
         if( field->IsMandatoryField() )
         {
@@ -898,7 +898,7 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
         }
     }
 
-    aClipFootprint->Fields().clear();
+    aClipFootprint->ClearFields();
 
     for( BOARD_ITEM* item : aClipFootprint->GraphicalItems() )
     {

@@ -275,7 +275,7 @@ void DIALOG_FIND::search( bool aDirection )
                         }
                     }
 
-                    for( PCB_FIELD* field : fp->Fields() )
+                    for( PCB_FIELD* field : fp->GetFields() )
                     {
                         if( field->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                             m_hitList.push_back( fp );

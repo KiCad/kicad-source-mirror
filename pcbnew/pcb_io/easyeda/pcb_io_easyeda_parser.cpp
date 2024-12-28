@@ -650,7 +650,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                     if( euuid )
                     {
-                        PCB_FIELD field( footprint, footprint->GetFieldCount(),
+                        PCB_FIELD field( footprint, footprint->GetNextFieldId(),
                                          DIRECT_MODEL_UUID_KEY );
                         field.SetLayer( Cmts_User );
                         field.SetVisible( false );
@@ -676,7 +676,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                         fitXmm = KiROUND( fitXmm / rounding ) * rounding;
                         fitYmm = KiROUND( fitYmm / rounding ) * rounding;
 
-                        PCB_FIELD field( footprint, footprint->GetFieldCount(), MODEL_SIZE_KEY );
+                        PCB_FIELD field( footprint, footprint->GetNextFieldId(), MODEL_SIZE_KEY );
                         field.SetLayer( Cmts_User );
                         field.SetVisible( false );
                         field.SetText( wxString::FromCDouble( fitXmm ) + wxS( " " )

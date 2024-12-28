@@ -195,13 +195,7 @@ public:
     */
     const BOX2I GetLayerBoundingBox( LSET aLayers ) const;
 
-    VECTOR2I GetCenter() const override
-    {
-        return GetBoundingBox( false ).GetCenter();
-    }
-
-    PCB_FIELDS& Fields()                   { return m_fields; }
-    const PCB_FIELDS& Fields() const       { return m_fields; }
+    VECTOR2I GetCenter() const override { return GetBoundingBox( false ).GetCenter(); }
 
     std::deque<PAD*>& Pads()               { return m_pads; }
     const std::deque<PAD*>& Pads() const   { return m_pads; }
@@ -708,13 +702,19 @@ public:
      * @param aVector is the vector to populate.
      * @param aVisibleOnly is used to add only the fields that are visible and contain text.
      */
-    void GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly );
+    void GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly ) const;
 
     /**
      * Return a vector of fields from the symbol
+     *
+     * @param aVisibleOnly is used to add only the fields that are visible and contain text.
      */
-    PCB_FIELDS        GetFields() { return m_fields; }
-    const PCB_FIELDS& GetFields() const { return m_fields; }
+    std::vector<PCB_FIELD*> GetFields( bool aVisibleOnly = false ) const;
+
+    /**
+     * Clears all fields from the footprint
+     */
+    void ClearFields() { m_fields.clear(); }
 
     /**
      * Add a field to the symbol.
@@ -733,9 +733,9 @@ public:
     void RemoveField( const wxString& aFieldName );
 
     /**
-     * Return the number of fields in this symbol.
+     * Return the next ID for a field for this footprint
      */
-    int GetFieldCount() const { return (int) m_fields.size(); }
+    int GetNextFieldId() const { return m_fields.size(); }
 
     /**
      * @brief Apply default board settings to the footprint field text properties.

@@ -174,7 +174,7 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
-        for( PCB_FIELD* field : fp->Fields() )
+        for( PCB_FIELD* field : fp->GetFields() )
         {
             view()->Update( field, KIGFX::REPAINT );
         }

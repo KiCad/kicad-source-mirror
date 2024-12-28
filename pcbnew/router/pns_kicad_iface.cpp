@@ -1718,7 +1718,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         for( ZONE* zone : footprint->Zones() )
             syncZone( aWorld, zone, boardOutline );
 
-        for( PCB_FIELD* field : footprint->Fields() )
+        for( PCB_FIELD* field : footprint->GetFields() )
             syncTextItem( aWorld, static_cast<PCB_TEXT*>( field ), field->GetLayer() );
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )

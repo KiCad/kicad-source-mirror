@@ -298,9 +298,9 @@ public:
     {
         for( const auto& it : aList )
         {
-            if( static_cast<EDA_ITEM*>( it )->Visit( inspector,
-                                                     testData,
-                                                     scanTypes ) == INSPECT_RESULT::QUIT )
+            EDA_ITEM* item = static_cast<EDA_ITEM*>( it );
+
+            if( item && item->Visit( inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
             {
                 return INSPECT_RESULT::QUIT;
             }
@@ -318,9 +318,9 @@ public:
     {
         for( const auto& it : aList )
         {
-            if( static_cast<EDA_ITEM*>( it )->Visit( inspector,
-                                                     testData,
-                                                     scanTypes ) == INSPECT_RESULT::QUIT )
+            EDA_ITEM* item = static_cast<EDA_ITEM*>( it );
+
+            if( item && item->Visit( inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
             {
                 return INSPECT_RESULT::QUIT;
             }

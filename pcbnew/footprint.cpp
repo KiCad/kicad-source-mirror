@@ -88,11 +88,21 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     // These are the mandatory fields for the editor to work
     for( int i = 0; i < MANDATORY_FIELDS; i++ )
     {
-        PCB_FIELD* field = new PCB_FIELD( this, i );
-        m_fields.push_back( field );
+        PCB_FIELD* field;
+
+        if( i == FOOTPRINT_FIELD )
+        {
+            m_fields.push_back( nullptr );
+        }
+        else
+        {
+            field = new PCB_FIELD( this, i );
+            m_fields.push_back( field );
+        }
 
         switch( i )
         {
+        case FOOTPRINT_FIELD: break;
         case REFERENCE_FIELD:
             field->SetLayer( F_SilkS );
             field->SetVisible( true );
@@ -145,11 +155,18 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
     // Copy fields
-    for( PCB_FIELD* field : aFootprint.Fields() )
+    for( PCB_FIELD* field : aFootprint.m_fields )
     {
-        PCB_FIELD* newField = static_cast<PCB_FIELD*>( field->Clone() );
-        ptrMap[field] = newField;
-        Add( newField, ADD_MODE::APPEND ); // Append to ensure indexes are identical
+        if( field )
+        {
+            PCB_FIELD* newField = static_cast<PCB_FIELD*>( field->Clone() );
+            ptrMap[field] = newField;
+            Add( newField, ADD_MODE::APPEND ); // Append to ensure indexes are identical
+        }
+        else
+        {
+            m_fields.push_back( nullptr );
+        }
     }
 
     // Copy pads
@@ -338,8 +355,11 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     for( PCB_LAYER_ID layer : GetPrivateLayers().Seq() )
         def->add_private_layers( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
 
-    for( const PCB_FIELD* item : Fields() )
+    for( const PCB_FIELD* item : m_fields )
     {
+        if( !item )
+            continue;
+
         if( item->GetId() < MANDATORY_FIELDS )
             continue;
 
@@ -494,9 +514,9 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     SetPrivateLayers( privateLayers );
 
     // Footprint items
-    for( PCB_FIELD* field : Fields() )
+    for( PCB_FIELD* field : m_fields )
     {
-        if( field->GetId() >= MANDATORY_FIELDS )
+        if( field && field->GetId() >= MANDATORY_FIELDS )
             Remove( field );
     }
 
@@ -554,12 +574,18 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
 PCB_FIELD* FOOTPRINT::GetField( MANDATORY_FIELD_T aFieldType )
 {
+    PCB_FIELD* field = m_fields[aFieldType];
+    wxASSERT_MSG( field, wxT( "Requesting a null field (likely FOOTPRINT)" ) );
+
     return m_fields[aFieldType];
 }
 
 
 const PCB_FIELD* FOOTPRINT::GetField( MANDATORY_FIELD_T aFieldType ) const
 {
+    const PCB_FIELD* field = m_fields[aFieldType];
+    wxASSERT_MSG( field, wxT( "Requesting a null field (likely FOOTPRINT)" ) );
+
     return m_fields[aFieldType];
 }
 
@@ -568,7 +594,7 @@ PCB_FIELD* FOOTPRINT::GetFieldById( int aFieldId )
 {
     for( PCB_FIELD* field : m_fields )
     {
-        if( field->GetId() == aFieldId )
+        if( field && field->GetId() == aFieldId )
             return field;
     }
 
@@ -579,7 +605,7 @@ bool FOOTPRINT::HasFieldByName( const wxString& aFieldName ) const
 {
     for( PCB_FIELD* field : m_fields )
     {
-        if( field->GetCanonicalName() == aFieldName )
+        if( field && field->GetCanonicalName() == aFieldName )
             return true;
     }
 
@@ -593,7 +619,7 @@ PCB_FIELD* FOOTPRINT::GetFieldByName( const wxString& aFieldName )
 
     for( PCB_FIELD* field : m_fields )
     {
-        if( field->GetName() == aFieldName )
+        if( field && field->GetName() == aFieldName )
             return field;
     }
 
@@ -605,7 +631,7 @@ wxString FOOTPRINT::GetFieldText( const wxString& aFieldName ) const
 {
     for( const PCB_FIELD* field : m_fields )
     {
-        if( aFieldName == field->GetName() || aFieldName == field->GetCanonicalName() )
+        if( field && ( aFieldName == field->GetName() || aFieldName == field->GetCanonicalName() ) )
             return field->GetText();
     }
 
@@ -613,14 +639,16 @@ wxString FOOTPRINT::GetFieldText( const wxString& aFieldName ) const
 }
 
 
-void FOOTPRINT::GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly )
+std::vector<PCB_FIELD*> FOOTPRINT::GetFields( bool aVisibleOnly ) const
 {
+    std::vector<PCB_FIELD*> fields;
+
     for( PCB_FIELD* field : m_fields )
     {
         // FOOTPRINT field doesn't exist on FOOTPRINT, but it's kept in the m_fields vector
         // for the moment so that the MANDATORY_FIELD ids line up with vector indices.
         // This could be cleaned up by making m_fields a map in the future.
-        if( field->GetId() == FOOTPRINT_FIELD )
+        if( !field || field->GetId() == FOOTPRINT_FIELD )
             continue;
 
         if( aVisibleOnly )
@@ -629,8 +657,16 @@ void FOOTPRINT::GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly )
                 continue;
         }
 
-        aVector.push_back( field );
+        fields.push_back( field );
     }
+
+    return fields;
+}
+
+
+void FOOTPRINT::GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly ) const
+{
+    aVector = GetFields( aVisibleOnly );
 }
 
 
@@ -662,7 +698,10 @@ void FOOTPRINT::ApplyDefaultSettings( const BOARD& board, bool aStyleFields, boo
     if( aStyleFields )
     {
         for( PCB_FIELD* field : m_fields )
-            field->StyleFromSettings( board.GetDesignSettings() );
+        {
+            if( field )
+                field->StyleFromSettings( board.GetDesignSettings() );
+        }
     }
 
     for( BOARD_ITEM* item : m_drawings )
@@ -695,7 +734,10 @@ bool FOOTPRINT::FixUuids()
     std::vector< BOARD_ITEM* > item_list;
 
     for( PCB_FIELD* field : m_fields )
-        item_list.push_back( field );
+    {
+        if( field )
+            item_list.push_back( field );
+    }
 
     for( PAD* pad : m_pads )
         item_list.push_back( pad );
@@ -759,8 +801,13 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     // Move the fields
     m_fields.clear();
 
-    for( PCB_FIELD* field : aOther.Fields() )
-        Add( field );
+    for( PCB_FIELD* field : aOther.m_fields )
+    {
+        if( field )
+            Add( field );
+        else
+            m_fields.push_back( nullptr );
+    }
 
     // Move the pads
     m_pads.clear();
@@ -811,7 +858,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_initial_comments = aOther.m_initial_comments;
 
     // Clear the other item's containers since this is a move
-    aOther.Fields().clear();
+    aOther.m_fields.clear();
     aOther.Pads().clear();
     aOther.Zones().clear();
     aOther.GraphicalItems().clear();
@@ -855,11 +902,18 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     // Copy fields
     m_fields.clear();
 
-    for( PCB_FIELD* field : aOther.GetFields() )
+    for( PCB_FIELD* field : aOther.m_fields )
     {
-        PCB_FIELD* newField = new PCB_FIELD( *field );
-        ptrMap[field] = newField;
-        Add( newField );
+        if( field )
+        {
+            PCB_FIELD* newField = new PCB_FIELD( *field );
+            ptrMap[field] = newField;
+            Add( newField );
+        }
+        else
+        {
+            m_fields.push_back( nullptr );
+        }
     }
 
     // Copy pads
@@ -1362,7 +1416,7 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
     for( PCB_FIELD* field : m_fields )
     {
         // Reference and value get their own processing
-        if( !field->IsReference() && !field->IsValue() )
+        if( field && !field->IsReference() && !field->IsValue() )
             texts.push_back( field );
     }
 
@@ -1703,7 +1757,7 @@ bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
     for( PCB_FIELD* field : m_fields )
     {
-        if( field->IsOnLayer( aLayer ) )
+        if( field && field->IsOnLayer( aLayer ) )
             return true;
     }
 
@@ -2083,7 +2137,10 @@ void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunct
     try
     {
         for( PCB_FIELD* field : m_fields )
-            aFunction( field );
+        {
+            if( field )
+                aFunction( field );
+        }
 
         for( PAD* pad : m_pads )
             aFunction( pad );
@@ -2114,7 +2171,10 @@ void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
     try
     {
         for( PCB_FIELD* field : m_fields )
-            aFunction( field );
+        {
+            if( field )
+                aFunction( field );
+        }
 
         for( PAD* pad : m_pads )
             aFunction( pad );
@@ -2304,7 +2364,10 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     SetOrientation( newOrientation );
 
     for( PCB_FIELD* field : m_fields )
-        field->KeepUpright();
+    {
+        if( field )
+            field->KeepUpright();
+    }
 
     for( BOARD_ITEM* item : m_drawings )
     {
@@ -2355,7 +2418,10 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     // Mirror fields to other side of board.
     for( PCB_FIELD* field : m_fields )
-        field->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+    {
+        if( field )
+            field->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+    }
 
     // Mirror pads to other side of board.
     for( PAD* pad : m_pads )
@@ -2392,7 +2458,10 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
     m_pos += delta;
 
     for( PCB_FIELD* field : m_fields )
-        field->EDA_TEXT::Offset( delta );
+    {
+        if( field )
+            field->EDA_TEXT::Offset( delta );
+    }
 
     for( PAD* pad : m_pads )
         pad->SetPosition( pad->GetPosition() + delta );
@@ -2428,7 +2497,10 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
 
     // Update field local coordinates
     for( PCB_FIELD* field : m_fields )
-        field->Move( moveVector );
+    {
+        if( field )
+            field->Move( moveVector );
+    }
 
     // Update the pad local coordinates.
     for( PAD* pad : m_pads )
@@ -2463,7 +2535,10 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     m_orient.Normalize180();
 
     for( PCB_FIELD* field : m_fields )
-        field->Rotate( GetPosition(), angleChange );
+    {
+        if( field )
+            field->Rotate( GetPosition(), angleChange );
+    }
 
     for( PAD* pad : m_pads )
         pad->Rotate( GetPosition(), angleChange );
@@ -3305,7 +3380,7 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
 
     for( PCB_FIELD* field : m_fields )
     {
-        if( field->IsOnCopperLayer() )
+        if( field && field->IsOnCopperLayer() )
             copperItems.push_back( field );
     }
 
@@ -3485,8 +3560,11 @@ bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
 
     for( size_t ii = 0; ii < m_fields.size(); ++ii )
     {
-        if( !( *m_fields[ii] == *aOther.m_fields[ii] ) )
-            return false;
+        if( m_fields[ii] )
+        {
+            if( !( *m_fields[ii] == *aOther.m_fields[ii] ) )
+                return false;
+        }
     }
 
     return true;
@@ -3860,7 +3938,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
     {
         for( const PCB_FIELD* field : m_fields )
         {
-            if( field->GetLayer() == aLayer && field->IsVisible() )
+            if( field && field->GetLayer() == aLayer && field->IsVisible() )
                 texts.push_back( field );
         }
     }

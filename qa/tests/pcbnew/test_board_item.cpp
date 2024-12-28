@@ -77,7 +77,7 @@ public:
         {
         case PCB_FOOTPRINT_T:         return new FOOTPRINT( &m_board );
         case PCB_PAD_T:               return new PAD( &m_footprint );
-        case PCB_FIELD_T:             return new PCB_FIELD( &m_footprint, m_footprint.GetFieldCount() );
+        case PCB_FIELD_T:             return new PCB_FIELD( &m_footprint, m_footprint.GetNextFieldId() );
         case PCB_SHAPE_T:             return new PCB_SHAPE( &m_board );
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
         case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );

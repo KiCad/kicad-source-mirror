@@ -484,7 +484,7 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 
         nlohmann::ordered_map<wxString, wxString> fields;
 
-        for( PCB_FIELD* field : footprint->Fields() )
+        for( PCB_FIELD* field : footprint->GetFields() )
             fields[field->GetCanonicalName()] = field->GetText();
 
         component->SetFields( fields );

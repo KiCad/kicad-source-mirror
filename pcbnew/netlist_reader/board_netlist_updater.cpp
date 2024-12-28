@@ -526,7 +526,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                 }
                 else
                 {
-                    int        idx = aPcbFootprint->GetFieldCount();
+                    int        idx = aPcbFootprint->GetNextFieldId();
                     PCB_FIELD* newField = aPcbFootprint->AddField( PCB_FIELD( aPcbFootprint, idx ) );
 
                     newField->SetName( name );
