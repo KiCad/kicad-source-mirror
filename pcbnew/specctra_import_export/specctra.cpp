@@ -553,22 +553,23 @@ void SPECCTRA_DB::doPARSER( PARSER* growth )
 
 void SPECCTRA_DB::doRESOLUTION( UNIT_RES* growth )
 {
-    T       tok = NextTok();
+    NextTok();
+    wxString str = wxString( CurText() ).MakeLower();
 
-    switch( tok )
-    {
-    case T_inch:
-    case T_mil:
-    case T_cm:
-    case T_mm:
-    case T_um:
-        growth->units = tok;
-        break;
-    default:
+    if( str == wxS( "inch" ) )
+        growth->units = T_inch;
+    else if( str == wxS( "mil" ) )
+        growth->units = T_mil;
+    else if( str == wxS( "cm" ) )
+        growth->units = T_cm;
+    else if( str == wxS( "mm" ) )
+        growth->units = T_mm;
+    else if( str == wxS( "um" ) )
+        growth->units = T_um;
+    else
         Expecting( "inch|mil|cm|mm|um" );
-    }
 
-    tok = NextTok();
+    T tok = NextTok();
 
     if( tok != T_NUMBER )
         Expecting( T_NUMBER );
