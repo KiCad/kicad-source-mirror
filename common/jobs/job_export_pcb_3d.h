@@ -108,6 +108,8 @@ public:
     JOB_EXPORT_PCB_3D();
     wxString GetDescription() override;
 
+    void SetStepFormat( EXPORTER_STEP_PARAMS::FORMAT aFormat );
+
     enum class FORMAT
     {
         UNKNOWN, // defefer to arg

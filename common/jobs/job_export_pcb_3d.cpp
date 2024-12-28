@@ -34,7 +34,6 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::FORMAT,
                                       { JOB_EXPORT_PCB_3D::FORMAT::STL, "stl" },
                               } )
 
-
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::VRML_UNITS,
                               {
                                       { JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES, "in" },
@@ -133,12 +132,31 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
     m_params.emplace_back( new JOB_PARAM<wxString>( "vrml_model_dir", &m_vrmlModelDir, m_vrmlModelDir ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "vrml_relative_paths", &m_vrmlRelativePaths,
                                                 m_vrmlRelativePaths ) );
+    m_params.emplace_back(
+            new JOB_PARAM<JOB_EXPORT_PCB_3D::FORMAT>( "format", &m_format, m_format ) );
+    m_params.emplace_back( new JOB_PARAM<EXPORTER_STEP_PARAMS::FORMAT>(
+            "occt_format", &m_3dparams.m_Format, m_3dparams.m_Format ) );
 }
 
 
 wxString JOB_EXPORT_PCB_3D::GetDescription()
 {
     return wxString::Format( _( "3D model export" ) );
+}
+
+
+void JOB_EXPORT_PCB_3D::SetStepFormat( EXPORTER_STEP_PARAMS::FORMAT aFormat )
+{
+    m_3dparams.m_Format = aFormat;
+    switch( m_3dparams.m_Format )
+    {
+    case EXPORTER_STEP_PARAMS::FORMAT::STEP: m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP; break;
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB: m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB; break;
+    case EXPORTER_STEP_PARAMS::FORMAT::XAO: m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO; break;
+    case EXPORTER_STEP_PARAMS::FORMAT::BREP: m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP; break;
+    case EXPORTER_STEP_PARAMS::FORMAT::PLY: m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY; break;
+    case EXPORTER_STEP_PARAMS::FORMAT::STL: m_format = JOB_EXPORT_PCB_3D::FORMAT::STL; break;
+    }
 }
 
 REGISTER_JOB( pcb_export_3d, _HKI( "PCB: Export 3D Model" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_3D );

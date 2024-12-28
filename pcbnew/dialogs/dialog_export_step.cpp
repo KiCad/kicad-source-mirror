@@ -792,11 +792,36 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         m_job->m_3dparams.m_CutViasInBody = m_cbCutViasInBody->GetValue();
         m_job->m_3dparams.m_FillAllVias = m_cbFillAllVias->GetValue();
         m_job->m_3dparams.m_OptimizeStep = m_cbOptimizeStep->GetValue();
-        m_job->m_3dparams.m_Format = static_cast<EXPORTER_STEP_PARAMS::FORMAT>( m_choiceFormat->GetSelection() );
         m_job->m_3dparams.m_Overwrite = m_cbOverwriteFile->GetValue();
         m_job->m_3dparams.m_IncludeUnspecified = !m_cbRemoveUnspecified->GetValue();
         m_job->m_3dparams.m_IncludeDNP = !m_cbRemoveDNP->GetValue();
         m_job->m_3dparams.m_SubstModels = m_cbSubstModels->GetValue();
+
+        m_job->SetStepFormat(
+                static_cast<EXPORTER_STEP_PARAMS::FORMAT>( m_choiceFormat->GetSelection() ) );
+
+        // ensure the main format on the job is populated
+        switch( m_job->m_3dparams.m_Format )
+        {
+        case EXPORTER_STEP_PARAMS::FORMAT::STEP:
+            m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;
+            break;
+        case EXPORTER_STEP_PARAMS::FORMAT::GLB:
+            m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;
+            break;
+        case EXPORTER_STEP_PARAMS::FORMAT::XAO:
+            m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;
+            break;
+        case EXPORTER_STEP_PARAMS::FORMAT::BREP:
+            m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP;
+            break;
+        case EXPORTER_STEP_PARAMS::FORMAT::PLY:
+            m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY;
+            break;
+        case EXPORTER_STEP_PARAMS::FORMAT::STL:
+            m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STL;
+            break;
+        }
 
         switch( GetOriginOption() )
         {
@@ -836,7 +861,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             }
         }
 
-        Close();
+        EndModal( wxID_OK );
     }
 }
 
