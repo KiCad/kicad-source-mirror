@@ -989,7 +989,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     if( color == COLOR4D::CLEAR )
         return;
 
-    int copperLayer = IsViaCopperLayer( aLayer ) ? aLayer - LAYER_VIA_COPPER_START : aLayer;
+    const int copperLayer = IsViaCopperLayer( aLayer ) ? aLayer - LAYER_VIA_COPPER_START : aLayer;
 
     PCB_LAYER_ID currentLayer = ToLAYER_ID( copperLayer );
     PCB_LAYER_ID layerTop, layerBottom;
@@ -1218,9 +1218,10 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
          * of this, we choose to not display clearance lines at all on non-copper active layers as
          * it's not clear which we'd be displaying.
          */
-        PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
+        const PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
 
-        if( IsCopperLayer( activeLayer ) && board->GetVisibleLayers().test( activeLayer ) )
+        if( activeLayer == copperLayer && IsCopperLayer( activeLayer )
+            && board->GetVisibleLayers().test( activeLayer ) )
         {
             double radius;
 
@@ -1244,7 +1245,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     const BOARD* board = aPad->GetBoard();
     COLOR4D      color = m_pcbSettings.GetColor( aPad, aLayer );
 
-    int copperLayer = IsPadCopperLayer( aLayer ) ? aLayer - LAYER_PAD_COPPER_START : aLayer;
+    const int copperLayer = IsPadCopperLayer( aLayer ) ? aLayer - LAYER_PAD_COPPER_START : aLayer;
 
     const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( copperLayer );
 
@@ -1757,9 +1758,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
          * we choose to not display clearance lines at all on non-copper active layers as it's
          * not clear which we'd be displaying.
          */
-        PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
+        const PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
 
-        if( activeLayer == aLayer && IsCopperLayer( activeLayer )
+        if( activeLayer == copperLayer && IsCopperLayer( activeLayer )
             && board->GetVisibleLayers().test( activeLayer ) )
         {
             if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
