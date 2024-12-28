@@ -2778,6 +2778,10 @@ public:
                 space = ""; // no space at first net_id of the line
             }
 
+            // Allegro PCB Router (Specctra) doesn't like empty net names
+            if( i->empty() )
+                continue;
+
             quote = out->GetQuoteChar( i->c_str() );
             perLine += out->Print( 0, "%s%s%s%s", space, quote, i->c_str(), quote );
         }

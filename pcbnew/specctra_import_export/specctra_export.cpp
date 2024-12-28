@@ -1190,21 +1190,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         std::snprintf( rule, sizeof( rule ), "(clearance %.6g)", clearance );
         rules.push_back( rule );
 
-        // On a high density board (4 mil tracks, 4 mil spacing) a typical solder mask clearance
-        // will be 2-3 mils.  This exposes 2 to 3 mils of bare board around each pad, and would
-        // leave only 1 to 2 mils of solder mask between the solder mask's boundary and the edge of
-        // any trace within "clearance" of the pad.  So we need at least 2 mils *extra* clearance
-        // for traces which would come near a pad on a different net.  So if the baseline trace to
-        // trace clearance was 4 mils, then the SMD to trace clearance should be at least 6 mils.
-        double default_smd = clearance;
-
-        if( default_smd <= 6.0 )
-            default_smd = 6.0;
-
-        std::snprintf( rule, sizeof( rule ), "(clearance %.6g (type default_smd))", default_smd );
-
-        rules.push_back( rule );
-
         // Pad to pad spacing on a single SMT part can be closer than our clearance. We don't want
         // freerouter complaining about that, so output a significantly smaller pad to pad
         // clearance to freerouter.
@@ -1778,7 +1763,7 @@ void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BO
     PADSTACK* via = makeVia( aNetClass->GetViaDiameter(), aNetClass->GetViaDrill(),
                              m_top_via_layer, m_bot_via_layer );
 
-    snprintf( text, sizeof(text), "(use_via %s)", via->GetPadstackId().c_str() );
+    snprintf( text, sizeof( text ), "(use_via \"%s\")", via->GetPadstackId().c_str() );
     clazz->m_circuit.push_back( text );
 
     delete via;

@@ -156,7 +156,7 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp )
 
     struct tm   mytime;
 
-    static const char time_toks[] = "<month> <day> <hour> : <minute> : <second> <year>";
+    static const char time_toks[] = "<month> <day> <hour> : <minute> : <second> <year> or <month> <day> <hour>:<minute>:<second> <year>";
 
     static const char* months[] = {  // index 0 = Jan
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -185,38 +185,50 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp )
 
     mytime.tm_mday = atoi( CurText() );
 
-    tok = NextTok();    // hour
+    tok = NextTok();    // hour or H:M:S
 
-    if( tok != T_NUMBER )
-        Expecting( time_toks );
+    if( tok == T_NUMBER )
+    {
+        mytime.tm_hour = atoi( CurText() );
 
-    mytime.tm_hour = atoi( CurText() );
+        // : colon
+        NeedSYMBOL();
 
-    // : colon
-    NeedSYMBOL();
+        if( *CurText() != ':' || strlen( CurText() ) != 1 )
+            Expecting( time_toks );
 
-    if( *CurText() != ':' || strlen( CurText() )!=1 )
-        Expecting( time_toks );
+        tok = NextTok(); // minute
 
-    tok = NextTok();    // minute
+        if( tok != T_NUMBER )
+            Expecting( time_toks );
 
-    if( tok != T_NUMBER )
-        Expecting( time_toks );
+        mytime.tm_min = atoi( CurText() );
 
-    mytime.tm_min = atoi( CurText() );
+        // : colon
+        NeedSYMBOL();
 
-    // : colon
-    NeedSYMBOL();
+        if( *CurText() != ':' || strlen( CurText() ) != 1 )
+            Expecting( time_toks );
 
-    if( *CurText() != ':' || strlen( CurText() )!=1 )
-        Expecting( time_toks );
+        tok = NextTok(); // second
 
-    tok = NextTok();    // second
+        if( tok != T_NUMBER )
+            Expecting( time_toks );
 
-    if( tok != T_NUMBER )
-        Expecting( time_toks );
+        mytime.tm_sec = atoi( CurText() );
+    }
+    else if( tok == T_SYMBOL )
+    {
+        wxString      str = wxString( CurText() );
+        wxArrayString arr = wxSplit( str, ':', '\0' );
 
-    mytime.tm_sec = atoi( CurText() );
+        if( arr.size() != 3 )
+            Expecting( time_toks );
+
+        mytime.tm_hour = wxAtoi( arr[0] );
+        mytime.tm_min = wxAtoi( arr[1] );
+        mytime.tm_sec = wxAtoi( arr[2] );
+    }
 
     tok = NextTok();    // year
 
@@ -3538,7 +3550,9 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth )
 
                 tok = NextTok();
 
-                if( tok != T_net )      // it is class NET_OUT, but token T_net
+                // it is class NET_OUT, but token T_net in Freerouting
+                // Allegro PCB Router (Specctra) uses capitalized "Net"
+                if( tok != T_net && !( tok == T_SYMBOL && !strcmp( CurText(), "Net" ) ) )
                     Unexpected( CurText() );
 
                 NET_OUT*    net_out;
@@ -3548,6 +3562,14 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth )
                 doNET_OUT( net_out );
             }
 
+            break;
+
+        case T_test_points:
+            while( ( tok = NextTok() ) != T_RIGHT )
+            {
+                // TODO: Not supported yet
+                Unexpected( CurText() );
+            }
             break;
 
         default:
