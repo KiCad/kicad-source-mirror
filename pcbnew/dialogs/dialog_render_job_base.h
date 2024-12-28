@@ -18,11 +18,11 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/spinctrl.h>
+#include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/radiobox.h>
-#include <wx/spinctrl.h>
-#include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -41,6 +41,12 @@ class DIALOG_RENDER_JOB_BASE : public DIALOG_SHIM
 		wxPanel* m_panel9;
 		wxStaticText* m_textOutputPath;
 		wxTextCtrl* m_textCtrlOutputFile;
+		wxStaticText* m_staticText16;
+		wxSpinCtrl* m_spinCtrlWidth;
+		wxStaticText* m_staticText17;
+		wxStaticText* m_staticText19;
+		wxSpinCtrl* m_spinCtrlHeight;
+		wxStaticText* m_staticText182;
 		wxStaticText* m_staticText18;
 		wxChoice* m_choiceFormat;
 		wxStaticText* m_staticText181;

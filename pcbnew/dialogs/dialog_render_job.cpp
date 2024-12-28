@@ -21,6 +21,7 @@
 #include <dialogs/dialog_render_job.h>
 #include <jobs/job_pcb_render.h>
 #include <i18n_utility.h>
+#include <wx/display.h>
 
 static std::map<JOB_PCB_RENDER::FORMAT, wxString> outputFormatMap = {
     { JOB_PCB_RENDER::FORMAT::JPEG, _HKI( "JPEG" ) },
@@ -167,6 +168,9 @@ bool DIALOG_RENDER_JOB::TransferDataFromWindow()
     m_job->m_zoom = m_spinCtrlZoom->GetValue();
     m_job->m_floor = m_cbFloor->GetValue();
 
+    m_job->m_width = m_spinCtrlWidth->GetValue();
+    m_job->m_height = m_spinCtrlHeight->GetValue();
+
     m_radioProjection->GetSelection() == 0 ? m_job->m_perspective = true
                                            : m_job->m_perspective = false;
 
@@ -185,6 +189,26 @@ bool DIALOG_RENDER_JOB::TransferDataToWindow()
     m_spinCtrlZoom->SetValue( m_job->m_zoom );
     m_radioProjection->SetSelection( m_job->m_perspective ? 0 : 1 );
     m_cbFloor->SetValue( m_job->m_floor );
+
+    int width = m_job->m_width;
+    int height = m_job->m_height;
+
+    // if the values are the job constructor default, use the screen size
+    // as a reasonable default
+    if (width == 0 || height == 0)
+    {
+        int disp = wxDisplay::GetFromWindow( this );
+        wxRect rect = wxDisplay( disp ).GetGeometry();
+
+        if( width == 0 )
+            width = rect.GetWidth();
+
+        if( height == 0 )
+            height = rect.GetHeight();
+    }
+
+    m_spinCtrlWidth->SetValue( width );
+    m_spinCtrlHeight->SetValue( height );
 
     return true;
 }

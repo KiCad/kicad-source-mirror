@@ -37,6 +37,34 @@ DIALOG_RENDER_JOB_BASE::DIALOG_RENDER_JOB_BASE( wxWindow* parent, wxWindowID id,
 
 	fgSizer1->Add( m_textCtrlOutputFile, 0, wxALL, 5 );
 
+	m_staticText16 = new wxStaticText( m_panel9, wxID_ANY, _("Dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText16->Wrap( -1 );
+	fgSizer1->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_spinCtrlWidth = new wxSpinCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 128, 32767, 0 );
+	bSizer3->Add( m_spinCtrlWidth, 0, wxALL, 5 );
+
+	m_staticText17 = new wxStaticText( m_panel9, wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText17->Wrap( -1 );
+	bSizer3->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_staticText19 = new wxStaticText( m_panel9, wxID_ANY, _("x"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19->Wrap( -1 );
+	bSizer3->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_spinCtrlHeight = new wxSpinCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 128, 32767, 0 );
+	bSizer3->Add( m_spinCtrlHeight, 0, wxALL, 5 );
+
+	m_staticText182 = new wxStaticText( m_panel9, wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText182->Wrap( -1 );
+	bSizer3->Add( m_staticText182, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	fgSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
+
 	m_staticText18 = new wxStaticText( m_panel9, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
 	fgSizer1->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
