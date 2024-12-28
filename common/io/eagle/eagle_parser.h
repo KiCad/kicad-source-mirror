@@ -1011,7 +1011,7 @@ struct EPAD : public EPAD_COMMON
      *           first         %Bool;         "no"
      *           >
      */
-    ECOORD     drill;
+    opt_ecoord drill;
     opt_ecoord diameter;
 
     // for shape: (square | round | octagon | long | offset)

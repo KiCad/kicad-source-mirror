@@ -1063,11 +1063,11 @@ EPAD::EPAD( wxXmlNode* aPad, IO_BASE* aIo ) :
           >
     */
 
-    // #REQUIRED says DTD, throw exception if not found
-    drill        = parseRequiredAttribute<ECOORD>( aPad, "drill" );
+    // #REQUIRED says DTD, but DipTrace doesn't write it sometimes
+    drill = parseOptionalAttribute<ECOORD>( aPad, "drill" );
 
     // Optional attributes
-    diameter     = parseOptionalAttribute<ECOORD>( aPad, "diameter" );
+    diameter = parseOptionalAttribute<ECOORD>( aPad, "diameter" );
 
     opt_wxString s = parseOptionalAttribute<wxString>( aPad, "shape" );
 
