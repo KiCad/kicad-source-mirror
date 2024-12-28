@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20240716)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "994297ef-4ddc-40ea-b4d6-64ee58be7864")
 	(paper "A4")
 	(title_block
@@ -101,7 +101,8 @@
 			(symbol "+12V_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "+12V"
 						(effects
 							(font
@@ -173,7 +174,8 @@
 			(symbol "-VAA_0_0"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "-VAA"
 						(effects
 							(font
@@ -219,7 +221,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:C"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -346,7 +350,9 @@
 		)
 		(symbol "complex_hierarchy_schlib:CONN_2"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -445,9 +451,13 @@
 			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:D_Small"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0.254) hide)
+				(offset 0.254)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -636,7 +646,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -708,7 +719,8 @@
 			(symbol "HT_0_0"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "HT"
 						(effects
 							(font
@@ -1242,18 +1254,6 @@
 				)
 				(polyline
 					(pts
-						(xy 0.635 -0.635) (xy 1.27 -1.905) (xy 1.905 -1.27) (xy 0.635 -0.635) (xy 0.635 -0.635)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
 						(xy 0.635 -0.635) (xy 0 0) (xy 0 0)
 					)
 					(stroke
@@ -1262,6 +1262,18 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 -0.635) (xy 1.27 -1.905) (xy 1.905 -1.27) (xy 0.635 -0.635) (xy 0.635 -0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 				(circle
@@ -1348,7 +1360,9 @@
 		)
 		(symbol "complex_hierarchy_schlib:POT"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1477,7 +1491,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:R"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
 			)
@@ -2492,7 +2508,6 @@
 	)
 	(label "Vpil_0_3,3V"
 		(at 132.08 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -2503,7 +2518,6 @@
 	)
 	(label "S_OUT+"
 		(at 180.34 162.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -2514,7 +2528,6 @@
 	)
 	(label "PIEZO_OUT"
 		(at 254 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -2525,7 +2538,6 @@
 	)
 	(label "PIEZO_IN"
 		(at 44.45 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)

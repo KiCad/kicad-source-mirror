@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20240716)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "6ef8dcea-e7e0-41da-b420-77ba9c5e63ff")
 	(paper "A4")
 	(title_block
@@ -759,18 +759,6 @@
 				)
 				(polyline
 					(pts
-						(xy 0.635 -0.635) (xy 1.27 -1.905) (xy 1.905 -1.27) (xy 0.635 -0.635) (xy 0.635 -0.635)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
 						(xy 0.635 -0.635) (xy 0 0) (xy 0 0)
 					)
 					(stroke
@@ -779,6 +767,18 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 -0.635) (xy 1.27 -1.905) (xy 1.905 -1.27) (xy 0.635 -0.635) (xy 0.635 -0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 				(circle
@@ -864,7 +864,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "flat_hierarchy_schlib:C"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -990,9 +992,13 @@
 			(embedded_fonts no)
 		)
 		(symbol "flat_hierarchy_schlib:CONN_1"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0.762) hide)
+				(offset 0.762)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1088,7 +1094,9 @@
 		)
 		(symbol "flat_hierarchy_schlib:CONN_2"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1187,7 +1195,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "flat_hierarchy_schlib:CP"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -1249,7 +1259,7 @@
 			(symbol "CP_0_1"
 				(rectangle
 					(start -2.286 0.508)
-					(end -2.286 1.016)
+					(end 2.286 0.508)
 					(stroke
 						(width 0)
 						(type default)
@@ -1260,7 +1270,7 @@
 				)
 				(rectangle
 					(start -2.286 0.508)
-					(end 2.286 0.508)
+					(end -2.286 1.016)
 					(stroke
 						(width 0)
 						(type default)
@@ -1490,7 +1500,9 @@
 		)
 		(symbol "flat_hierarchy_schlib:DB9"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1838,7 +1850,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.2766 9.906) (xy 3.81 9.398)
+						(xy 3.2766 9.906) (xy -1.778 12.446)
 					)
 					(stroke
 						(width 0.2032)
@@ -1850,7 +1862,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.2766 9.906) (xy -1.778 12.446)
+						(xy 3.2766 9.906) (xy 3.81 9.398)
 					)
 					(stroke
 						(width 0.2032)
@@ -2254,7 +2266,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -2274,9 +2287,13 @@
 			(embedded_fonts no)
 		)
 		(symbol "flat_hierarchy_schlib:INDUCTOR"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -2413,7 +2430,9 @@
 		)
 		(symbol "flat_hierarchy_schlib:JUMPER"
 			(pin_names
-				(offset 0.762) hide)
+				(offset 0.762)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -2534,7 +2553,9 @@
 		)
 		(symbol "flat_hierarchy_schlib:LED"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -2889,7 +2910,9 @@
 		)
 		(symbol "flat_hierarchy_schlib:POT"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -3019,9 +3042,13 @@
 		)
 		(symbol "flat_hierarchy_schlib:PWR_FLAG"
 			(power)
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0) hide)
+				(offset 0)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -3104,7 +3131,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "flat_hierarchy_schlib:R"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
 			)
@@ -3267,7 +3296,8 @@
 			(symbol "VCC_0_0"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3363,7 +3393,8 @@
 			(symbol "VPP_0_0"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VPP"
 						(effects
 							(font
@@ -5337,7 +5368,6 @@
 	)
 	(label "PC-CLOCK-OUT"
 		(at 59.69 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5348,7 +5378,6 @@
 	)
 	(label "PC-DATA-OUT"
 		(at 60.96 82.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5359,7 +5388,6 @@
 	)
 	(label "VPP_ON"
 		(at 63.5 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5370,7 +5398,6 @@
 	)
 	(label "PC-DATA-IN"
 		(at 63.5 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)

@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20240716)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "ed798b7a-1350-4628-8daa-af93a9726796")
 	(paper "A4")
 	(title_block
@@ -221,7 +221,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "flat_hierarchy_schlib:C"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -414,7 +416,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -2910,7 +2913,8 @@
 			(symbol "VCC_0_0"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "VCC"
 						(effects
 							(font
@@ -3965,7 +3969,6 @@
 	)
 	(label "DATA-RB7"
 		(at 229.87 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -3976,7 +3979,6 @@
 	)
 	(label "VCC_PIC"
 		(at 109.22 123.19 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -3987,7 +3989,6 @@
 	)
 	(label "CLOCK-RB6"
 		(at 105.41 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -3998,7 +3999,6 @@
 	)
 	(label "DATA-RB7"
 		(at 229.87 54.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4009,7 +4009,6 @@
 	)
 	(label "CLOCK-RB6"
 		(at 104.14 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4020,7 +4019,6 @@
 	)
 	(label "CLOCK-RB6"
 		(at 229.87 57.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4031,7 +4029,6 @@
 	)
 	(label "VCC_PIC"
 		(at 175.26 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4042,7 +4039,6 @@
 	)
 	(label "CLOCK-RB6"
 		(at 229.87 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4053,7 +4049,6 @@
 	)
 	(label "VPP-MCLR"
 		(at 179.07 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4064,7 +4059,6 @@
 	)
 	(label "VCC_PIC"
 		(at 50.8 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4075,7 +4069,6 @@
 	)
 	(label "VCC_PIC"
 		(at 76.2 157.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4086,7 +4079,6 @@
 	)
 	(label "VCC_PIC"
 		(at 232.41 74.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4097,7 +4089,6 @@
 	)
 	(label "VCC_PIC"
 		(at 232.41 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4108,7 +4099,6 @@
 	)
 	(label "VPP-MCLR"
 		(at 74.93 154.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4119,7 +4109,6 @@
 	)
 	(label "DATA-RB7"
 		(at 106.68 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4130,7 +4119,6 @@
 	)
 	(label "CLOCK-RB6"
 		(at 106.68 130.81 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4141,7 +4129,6 @@
 	)
 	(label "VPP-MCLR"
 		(at 179.07 54.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4152,7 +4139,6 @@
 	)
 	(label "DATA-RB7"
 		(at 105.41 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4163,7 +4149,6 @@
 	)
 	(label "VPP-MCLR"
 		(at 48.26 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4174,7 +4159,6 @@
 	)
 	(label "DATA-RB7"
 		(at 104.14 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -4185,7 +4169,6 @@
 	)
 	(label "VPP-MCLR"
 		(at 46.99 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
