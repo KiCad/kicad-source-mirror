@@ -57,7 +57,6 @@ private:
     void OnSelDrillUnitsSelected( wxCommandEvent& event ) override;
     void OnSelZerosFmtSelected( wxCommandEvent& event ) override;
     void OnGenDrillFile( wxCommandEvent& event ) override;
-    void OnGenMapFile( wxCommandEvent& event ) override;
 	void onFileFormatSelection( wxCommandEvent& event ) override;
 
     // Called when closing the dialog: Update config.
@@ -104,6 +103,7 @@ public:
     static bool      m_MinimalHeader;
     static bool      m_Mirror;
     static bool      m_Merge_PTH_NPTH;
+    static bool      m_GenerateMap;
     DRILL_PRECISION  m_Precision;                // Precision for drill files, in non decimal format
     VECTOR2I         m_DrillFileOffset;          // Drill offset: 0,0 for absolute coordinates,
                                                  // or origin of the auxiliary axis

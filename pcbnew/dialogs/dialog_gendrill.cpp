@@ -75,9 +75,8 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aPare
     m_job = nullptr;
     m_plotOpts = m_pcbEditFrame->GetPlotSettings();
 
-    SetupStandardButtons( { { wxID_OK,     _( "Generate Drill File" ) },
-                            { wxID_APPLY,  _( "Generate Map File" )   },
-                            { wxID_CANCEL, _( "Close" )               } } );
+    SetupStandardButtons( { { wxID_OK,     _( "Generate" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     m_buttonsSizer->Layout();
 
@@ -101,7 +100,6 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
     bMainSizer->Remove( bMsgSizer );
     m_messagesBox->Hide();
 
-    m_sdbSizerApply->Hide();
     SetupStandardButtons( { { wxID_OK, _( "Save" ) }, { wxID_CANCEL, _( "Cancel" ) } } );
     m_buttonsSizer->Layout();
 
@@ -117,6 +115,7 @@ int DIALOG_GENDRILL::m_ZerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::m_Mirror          = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::m_Merge_PTH_NPTH  = false;    // Only for Excellon format
+bool DIALOG_GENDRILL::m_GenerateMap     = false;
 int DIALOG_GENDRILL::m_mapFileType      = 4;        // The last choice in m_Choice_Drill_Map
 int DIALOG_GENDRILL::m_drillFileType    = 0;
 bool DIALOG_GENDRILL::m_UseRouteModeForOvalHoles = true;    // Use G00 route mode to "drill" oval holes
@@ -153,6 +152,8 @@ void DIALOG_GENDRILL::initDialog()
         m_drillFileType = cfg->m_GenDrill.drill_file_type;
         m_mapFileType = cfg->m_GenDrill.map_file_type;
         m_ZerosFormat = cfg->m_GenDrill.zeros_format;
+        m_GenerateMap = cfg->m_GenDrill.generate_map;
+
 
         // Ensure validity of m_mapFileType
         if( m_mapFileType < 0 || m_mapFileType >= (int) m_Choice_Drill_Map->GetCount() )
@@ -184,6 +185,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
         m_Check_Merge_PTH_NPTH->SetValue( m_Merge_PTH_NPTH );
         m_Choice_Drill_Map->SetSelection( m_mapFileType );
         m_radioBoxOvalHoleMode->SetSelection( m_UseRouteModeForOvalHoles ? 0 : 1 );
+        m_cbGenerateMap->SetValue( m_GenerateMap );
 
         // Output directory
         m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
@@ -309,6 +311,7 @@ void DIALOG_GENDRILL::UpdateConfig()
     cfg->m_GenDrill.drill_file_type          = m_drillFileType;
     cfg->m_GenDrill.map_file_type            = m_mapFileType;
     cfg->m_GenDrill.zeros_format             = m_ZerosFormat;
+    cfg->m_GenDrill.generate_map             = m_GenerateMap;
 }
 
 
@@ -318,20 +321,11 @@ void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
 }
 
 
-void DIALOG_GENDRILL::OnGenMapFile( wxCommandEvent& event )
-{
-    if( !m_job )
-    {
-        GenDrillAndMapFiles( false, true );
-    }
-}
-
-
 void DIALOG_GENDRILL::OnGenDrillFile( wxCommandEvent& event )
 {
     if( !m_job )
     {
-        GenDrillAndMapFiles( true, false );
+        GenDrillAndMapFiles( true, m_cbGenerateMap->GetValue() );
     }
     else
     {
@@ -348,6 +342,7 @@ void DIALOG_GENDRILL::OnGenDrillFile( wxCommandEvent& event )
         m_job->m_excellonOvalDrillRoute = m_radioBoxOvalHoleMode->GetSelection() == 0;
         m_job->m_mapFormat = static_cast<JOB_EXPORT_PCB_DRILL::MAP_FORMAT>( m_Choice_Drill_Map->GetSelection() );
         m_job->m_zeroFormat = static_cast<JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT>( m_Choice_Zeros_Format->GetSelection() );
+        m_job->m_generateMap = m_cbGenerateMap->IsChecked();
         Close();
     }
 }
@@ -431,6 +426,7 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     m_Merge_PTH_NPTH = m_Check_Merge_PTH_NPTH->IsChecked();
     m_ZerosFormat = m_Choice_Zeros_Format->GetSelection();
     m_UseRouteModeForOvalHoles = m_radioBoxOvalHoleMode->GetSelection() == 0;
+    m_GenerateMap = m_cbGenerateMap->IsChecked();
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_DrillFileOffset = VECTOR2I( 0, 0 );

@@ -52,6 +52,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Check_Merge_PTH_NPTH;
 		wxRadioBox* m_radioBoxOvalHoleMode;
 		wxRadioButton* m_rbGerberX2;
+		wxCheckBox* m_cbGenerateMap;
 		wxRadioBox* m_Choice_Drill_Map;
 		wxRadioBox* m_Choice_Drill_Offset;
 		wxRadioBox* m_Choice_Unit;
@@ -74,7 +75,6 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxButton* m_buttonReport;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
-		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
@@ -84,7 +84,6 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		virtual void OnSelDrillUnitsSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelZerosFmtSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGenReportFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnGenMapFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onQuitDlg( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGenDrillFile( wxCommandEvent& event ) { event.Skip(); }
 

@@ -345,6 +345,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "gen_drill.zeros_format",
             &m_GenDrill.zeros_format, 0, 0, 3 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "gen_drill.generate_map",
+            &m_GenDrill.generate_map, false ) );
+
     m_params.emplace_back( new PARAM<int>( "export_2581.units",
             &m_Export2581.units, 0 ) );
 

@@ -252,6 +252,7 @@ public:
         int  drill_file_type;
         int  map_file_type;
         int  zeros_format;
+        bool generate_map;
     };
 
     struct DIALOG_IMPORT_GRAPHICS
