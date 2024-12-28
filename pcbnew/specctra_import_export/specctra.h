@@ -3981,8 +3981,8 @@ private:
 
     STRINGS           m_layerIds;        ///< indexed by PCB layer number
 
-    std::vector<int>          m_kicadLayer2pcb;  ///< maps BOARD layer number to PCB layer numbers
-    std::vector<PCB_LAYER_ID> m_pcbLayer2kicad;  ///< maps PCB layer number to BOARD layer numbers
+    std::map<PCB_LAYER_ID, int> m_kicadLayer2pcb; ///< maps BOARD layer number to PCB layer numbers
+    std::map<int, PCB_LAYER_ID> m_pcbLayer2kicad;  ///< maps PCB layer number to BOARD layer numbers
 
     /// used during FromSESSION() only, memory for it is not owned here.
     UNIT_RES*         m_routeResolution;

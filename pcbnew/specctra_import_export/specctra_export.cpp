@@ -889,16 +889,10 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
         // Now, build keepout polygon on each copper layer where the zone
         // keepout is living (keepout zones can live on many copper layers)
-        const int copperCount = aBoard->GetCopperLayerCount();
+        LSET layerset = aBoard->GetEnabledLayers() & zone->GetLayerSet() & LSET::AllCuMask();
 
-        for( int layer = 0; layer < copperCount; layer++ )
+        for( PCB_LAYER_ID layer : layerset.CuStack() )
         {
-            if( layer == copperCount-1 )
-                layer = B_Cu;
-
-            if( !zone->IsOnLayer( PCB_LAYER_ID( layer ) ) )
-                continue;
-
             KEEPOUT* keepout = new KEEPOUT( m_pcb->m_structure, keepout_type );
             image->m_keepouts.push_back( keepout );
 
@@ -1236,16 +1230,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             // Now, build zone polygon on each copper layer where the zone
             // is living (zones can live on many copper layers)
-            const int copperCount = aBoard->GetCopperLayerCount();
+            LSET layerset = aBoard->GetEnabledLayers() & zone->GetLayerSet() & LSET::AllCuMask();
 
-            for( int layer = 0; layer < copperCount; layer++ )
+            for( PCB_LAYER_ID layer : layerset )
             {
-                if( layer == copperCount-1 )
-                    layer = B_Cu;
-
-                if( !zone->IsOnLayer( PCB_LAYER_ID( layer ) ) )
-                    continue;
-
                 COPPER_PLANE*   plane = new COPPER_PLANE( m_pcb->m_structure );
 
                 m_pcb->m_structure->m_planes.push_back( plane );
@@ -1366,16 +1354,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             // Now, build keepout polygon on each copper layer where the zone
             // keepout is living (keepout zones can live on many copper layers)
-            const int copperCount = aBoard->GetCopperLayerCount();
+            LSET layerset = aBoard->GetEnabledLayers() & zone->GetLayerSet() & LSET::AllCuMask();
 
-            for( int layer = 0; layer < copperCount; layer++ )
+            for( PCB_LAYER_ID layer : layerset )
             {
-                if( layer == copperCount - 1 )
-                    layer = B_Cu;
-
-                if( !zone->IsOnLayer( PCB_LAYER_ID( layer ) ) )
-                    continue;
-
                 KEEPOUT*   keepout = new KEEPOUT( m_pcb->m_structure, keepout_type );
                 m_pcb->m_structure->m_keepouts.push_back( keepout );
 
@@ -1649,8 +1631,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 else
                     wire->m_wire_type = T_route;  // could be T_protect
 
-                int kiLayer  = track->GetLayer();
-                int pcbLayer = m_kicadLayer2pcb[kiLayer];
+                PCB_LAYER_ID kiLayer = track->GetLayer();
+                int          pcbLayer = m_kicadLayer2pcb[kiLayer];
 
                 path = new PATH( wire );
                 wire->SetShape( path );

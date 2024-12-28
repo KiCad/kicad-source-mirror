@@ -75,50 +75,24 @@ const char* GetTokenText( T aTok )
 
 void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 {
+    m_layerIds.clear();
+
     // specctra wants top physical layer first, then going down to the
     // bottom most physical layer in physical sequence.
-    // Same as KiCad now except for B_Cu
-    unsigned layerCount = aBoard->GetCopperLayerCount();
 
-    m_layerIds.clear();
-    m_pcbLayer2kicad.resize( layerCount );
-    m_kicadLayer2pcb.resize( B_Cu + 1 );
+    LSET layerset = aBoard->GetEnabledLayers() & LSET::AllCuMask();
+    int  pcbLayer = 0;
 
-#if 0 // was:
-    for( int kiNdx = layerCount - 1, pcbNdx=FIRST_LAYER; kiNdx >= 0; --kiNdx, ++pcbNdx )
+    for( PCB_LAYER_ID kiLayer : layerset.CuStack() )
     {
-        int kilayer = (kiNdx>0 && kiNdx==layerCount-1) ? F_Cu : kiNdx;
-
-        // establish bi-directional mapping between KiCad's BOARD layer and PCB layer
-        pcbLayer2kicad[pcbNdx]  = kilayer;
-        kicadLayer2pcb[kilayer] = pcbNdx;
+        m_kicadLayer2pcb[kiLayer] = pcbLayer;
+        m_pcbLayer2kicad[pcbLayer] = kiLayer;
 
         // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( ToLAYER_ID( kilayer ) ) ) );
+        m_layerIds.push_back( TO_UTF8( aBoard->GetLayerName( kiLayer ) ) );
+
+        pcbLayer++;
     }
-#else
-
-    // establish bi-directional mapping between KiCad's BOARD layer and PCB layer
-
-    for( unsigned i = 0; i < m_kicadLayer2pcb.size(); ++i )
-    {
-        if( i < layerCount-1 )
-            m_kicadLayer2pcb[i] = i;
-        else
-            m_kicadLayer2pcb[i] = layerCount - 1;
-    }
-
-    for( unsigned i = 0; i < m_pcbLayer2kicad.size(); ++i )
-    {
-        PCB_LAYER_ID id = ( i < layerCount-1 ) ? ToLAYER_ID( i ) : B_Cu;
-
-        m_pcbLayer2kicad[i] = id;
-
-        // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-        m_layerIds.push_back(TO_UTF8( aBoard->GetLayerName( id ) ) );
-    }
-
-#endif
 }
 
 
