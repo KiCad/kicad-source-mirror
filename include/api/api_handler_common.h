@@ -54,6 +54,9 @@ private:
 
     HANDLER_RESULT<commands::ExpandTextVariablesResponse> handleExpandTextVariables(
         const HANDLER_CONTEXT<commands::ExpandTextVariables>& aCtx );
+
+    HANDLER_RESULT<commands::StringResponse> handleGetPluginSettingsPath(
+        const HANDLER_CONTEXT<commands::GetPluginSettingsPath>& aCtx );
 };
 
 #endif //KICAD_API_HANDLER_COMMON_H

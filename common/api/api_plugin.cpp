@@ -115,10 +115,7 @@ API_PLUGIN_CONFIG::API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aCo
         return;
     }
 
-    // At minimum, we need a reverse-DNS style identifier with two dots and a 2+ character TLD
-    wxRegEx identifierRegex( wxS( "[\\w\\d]{2,}\\.[\\w\\d]+\\.[\\w\\d]+" ) );
-
-    if( !identifierRegex.Matches( identifier ) )
+    if( !API_PLUGIN::IsValidIdentifier( identifier ) )
     {
         wxLogTrace( traceApi, wxString::Format( "Plugin: identifier %s does not meet requirements",
                                                 identifier ) );
@@ -169,6 +166,14 @@ API_PLUGIN::~API_PLUGIN()
 bool API_PLUGIN::IsOk() const
 {
     return m_config->valid;
+}
+
+
+bool API_PLUGIN::IsValidIdentifier( const wxString& aIdentifier )
+{
+    // At minimum, we need a reverse-DNS style identifier with two dots and a 2+ character TLD
+    wxRegEx identifierRegex( wxS( "[\\w\\d]{2,}\\.[\\w\\d]+\\.[\\w\\d]+" ) );
+    return identifierRegex.Matches( aIdentifier );
 }
 
 

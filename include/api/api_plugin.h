@@ -110,6 +110,8 @@ public:
 
     bool IsOk() const;
 
+    static bool IsValidIdentifier( const wxString& aIdentifier );
+
     const wxString& Identifier() const;
     const wxString& Name() const;
     const wxString& Description() const;

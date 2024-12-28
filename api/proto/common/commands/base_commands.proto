@@ -71,3 +71,20 @@ message GetTextAsShapesResponse
 {
   repeated TextWithShapes text_with_shapes = 1;
 }
+
+// Return a writeable path that a plugin can use for storing persistent data such as configuration
+// files, etc.  This path may not yet exist; actual creation of the directory for a given plugin is
+// up to the plugin itself.  Files in this path will not be modified if the plugin is uninstalled or
+// upgraded.
+//
+// Returns StringResponse
+message GetPluginSettingsPath
+{
+  // The identifier of the plugin
+  string identifier = 1;
+}
+
+message StringResponse
+{
+  string response = 1;
+}

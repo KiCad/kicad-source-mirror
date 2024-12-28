@@ -26,7 +26,9 @@
 #include <eda_text.h>
 #include <geometry/shape_compound.h>
 #include <google/protobuf/empty.pb.h>
+#include <paths.h>
 #include <pgm_base.h>
+#include <api/api_plugin.h>
 #include <api/api_utils.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
@@ -49,6 +51,9 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
             &API_HANDLER_COMMON::handleGetTextAsShapes );
     registerHandler<ExpandTextVariables, ExpandTextVariablesResponse>(
             &API_HANDLER_COMMON::handleExpandTextVariables );
+    registerHandler<GetPluginSettingsPath, StringResponse>(
+            &API_HANDLER_COMMON::handleGetPluginSettingsPath );
+
 }
 
 
@@ -221,5 +226,40 @@ HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_COMMON::handleExpandText
         reply.add_text( result.ToUTF8() );
     }
 
+    return reply;
+}
+
+
+HANDLER_RESULT<StringResponse> API_HANDLER_COMMON::handleGetPluginSettingsPath(
+        const HANDLER_CONTEXT<GetPluginSettingsPath>& aCtx )
+{
+    wxString identifier = wxString::FromUTF8( aCtx.Request.identifier() );
+
+    if( identifier.IsEmpty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "plugin identifier is missing" );
+        return tl::unexpected( e );
+    }
+
+    if( API_PLUGIN::IsValidIdentifier( identifier ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "plugin identifier is invalid" );
+        return tl::unexpected( e );
+    }
+
+    wxFileName path( PATHS::GetUserSettingsPath(), wxEmptyString );
+    path.AppendDir( "plugins" );
+
+    // Create the base plugins path if needed, but leave the specific plugin to create its own path
+    PATHS::EnsurePathExists( path.GetPath() );
+
+    path.AppendDir( identifier );
+
+    StringResponse reply;
+    reply.set_response( path.GetPath() );
     return reply;
 }
