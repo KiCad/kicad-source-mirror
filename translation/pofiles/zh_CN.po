@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:47-0800\n"
-"PO-Revision-Date: 2024-12-27 15:43+0000\n"
+"PO-Revision-Date: 2024-12-29 16:00+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -1768,7 +1768,7 @@ msgstr "通过 API 修改"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
-msgstr "后台任务"
+msgstr "后台作业"
 
 #: common/common.cpp:301
 #, c-format
@@ -3340,7 +3340,7 @@ msgstr "没有可打印的内容"
 #: common/dialogs/dialog_print_generic.cpp:285
 #: eeschema/printing/dialog_print_using_printer.cpp:307
 msgid "Previous print job not yet complete."
-msgstr "上一个打印任务尚未完成。"
+msgstr "上一个打印作业尚未完成。"
 
 #: common/dialogs/dialog_print_generic.cpp:310
 msgid "There was a problem printing."
@@ -9916,7 +9916,7 @@ msgstr "DXF 文件"
 #: common/wildcards_and_files_ext.cpp:505
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
-msgstr "Gerber job 文件"
+msgstr "Gerber 作业文件"
 
 #: common/wildcards_and_files_ext.cpp:511
 msgid "Specctra DSN file"
@@ -9948,7 +9948,7 @@ msgstr "快捷键文件"
 
 #: common/wildcards_and_files_ext.cpp:557
 msgid "KiCad jobset files"
-msgstr "KiCad 任务集文件"
+msgstr "KiCad 作业集文件"
 
 #: cvpcb/auto_associate.cpp:108
 #, c-format
@@ -24283,7 +24283,7 @@ msgstr "找不到文件:"
 #: gerbview/files.cpp:290
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>Gerber job 文件无法作为绘制文件加载</b><i>%s</i>"
+msgstr "<b>Gerber 作业文件无法作为绘制文件加载</b><i>%s</i>"
 
 #: gerbview/files.cpp:303
 msgid "Loading files..."
@@ -24302,7 +24302,7 @@ msgstr "无法打开 Zip 文件 '%s'。"
 #: gerbview/files.cpp:486
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "已跳过文件 '%s'(Gerber job 文件)。"
+msgstr "已跳过文件 '%s'(Gerber 作业文件)。"
 
 #: gerbview/files.cpp:531
 #, c-format
@@ -24462,7 +24462,7 @@ msgstr "X2 属性"
 
 #: gerbview/job_file_reader.cpp:156
 msgid "This job file uses an outdated format. Please recreate it."
-msgstr "此 job 文件使用了过时的格式, 请重新创建。"
+msgstr "此作业文件使用了过时的格式, 请重新创建。"
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
@@ -24597,7 +24597,7 @@ msgstr "打开 Gerber Job 文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr "打开 Gerber job 文件及其关联的 Gerber 绘制文件"
+msgstr "打开 Gerber 作业文件及其关联的 Gerber 绘制文件"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
@@ -25024,27 +25024,27 @@ msgstr "无论版本如何, 强制重新保存封装库"
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr "任务集"
+msgstr "作业集"
 
 #: kicad/cli/command_jobset_run.cpp:45
 msgid "Runs a jobset file"
-msgstr "运行任务集文件"
+msgstr "运行作业集文件"
 
 #: kicad/cli/command_jobset_run.cpp:49
 msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
-msgstr "任务失败时停止执行后续任务"
+msgstr "作业失败时停止执行后续作业"
 
 #: kicad/cli/command_jobset_run.cpp:53
 msgid "Jobset file to be run"
-msgstr "要运行的任务集文件"
+msgstr "要运行的作业集文件"
 
 #: kicad/cli/command_jobset_run.cpp:58
 msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
-msgstr "生成任务集文件输出, 如留空则生成任务集中定义的所有输出"
+msgstr "生成作业集文件输出, 如留空则生成作业集中定义的所有输出"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -25889,19 +25889,19 @@ msgstr "否。"
 
 #: kicad/dialogs/panel_jobs.cpp:224 kicad/dialogs/panel_jobs.cpp:405
 msgid "Job Description"
-msgstr "任务描述"
+msgstr "作业描述"
 
 #: kicad/dialogs/panel_jobs.cpp:300
 msgid "Last run successful"
-msgstr "任务运行成功"
+msgstr "作业运行成功"
 
 #: kicad/dialogs/panel_jobs.cpp:306
 msgid "Last run failed"
-msgstr "任务运行失败"
+msgstr "作业运行失败"
 
 #: kicad/dialogs/panel_jobs.cpp:330 kicad/dialogs/panel_jobs.cpp:793
 msgid "Running jobs"
-msgstr "正在运行中的任务"
+msgstr "正在运行中的作业"
 
 #: kicad/dialogs/panel_jobs.cpp:354
 msgid "View last run results..."
@@ -25909,15 +25909,15 @@ msgstr "查看上次运行结果..."
 
 #: kicad/dialogs/panel_jobs.cpp:597 kicad/dialogs/panel_jobs.cpp:644
 msgid "Job Types"
-msgstr "任务类型"
+msgstr "作业类型"
 
 #: kicad/dialogs/panel_jobs.cpp:608
 msgid "Add New Job"
-msgstr "新建任务"
+msgstr "新建作业"
 
 #: kicad/dialogs/panel_jobs.cpp:609
 msgid "Select job type:"
-msgstr "选择任务类型:"
+msgstr "选择作业类型:"
 
 #: kicad/dialogs/panel_jobs.cpp:653
 msgid "Add New Output"
@@ -26049,11 +26049,11 @@ msgstr "导入 EasyEDA Pro 工程"
 
 #: kicad/jobs_runner.cpp:205
 msgid "Job successful"
-msgstr "任务运行成功"
+msgstr "作业运行成功"
 
 #: kicad/jobs_runner.cpp:212
 msgid "Job failed"
-msgstr "任务运行失败"
+msgstr "作业运行失败"
 
 #: kicad/kicad.cpp:316
 #, c-format
@@ -26838,7 +26838,7 @@ msgstr "在文本编辑器中编辑"
 
 #: kicad/project_tree_pane.cpp:903
 msgid "Run Jobs"
-msgstr "运行任务"
+msgstr "运行作业"
 
 #: kicad/project_tree_pane.cpp:911
 msgid "Rename File..."
@@ -27077,7 +27077,7 @@ msgstr "从仓库克隆工程..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
 msgid "New Jobset File..."
-msgstr "新建任务集文件..."
+msgstr "新建作业集文件..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -27168,7 +27168,7 @@ msgstr "仓库中没有工程文件。"
 
 #: kicad/tools/kicad_manager_control.cpp:211
 msgid "Create New Jobset"
-msgstr "创建新的任务集"
+msgstr "创建新的作业集"
 
 #: kicad/tools/kicad_manager_control.cpp:242
 msgid "System Templates"
@@ -36005,14 +36005,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "Generate Gerber job file"
-msgstr "生成 Gerber job 文件"
+msgstr "生成 Gerber 作业文件"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"生成一个 Gerber job 文件, 其中包含有关于电路板的信息, \n"
+"生成一个 Gerber 作业文件, 其中包含有关于电路板的信息, \n"
 "及生成的 Gerber 绘制文件列表"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
@@ -41368,7 +41368,7 @@ msgstr "创建文件 '%s'。"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:149
 #, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "已创建 Gerber job 文件 '%s'。"
+msgstr "已创建 Gerber 作业文件 '%s'。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:582
 msgid "Board stackup settings not up to date."
