@@ -2982,7 +2982,7 @@ const SHAPE_POLY_SET& FOOTPRINT::GetCourtyard( PCB_LAYER_ID aLayer ) const
     if( m_courtyard_cache_front_hash != m_courtyard_cache_front.GetHash()
         || m_courtyard_cache_back_hash != m_courtyard_cache_back.GetHash() )
     {
-        BuildCourtyardCaches();
+        const_cast<FOOTPRINT*>(this)->BuildCourtyardCaches();
     }
 
     return GetCachedCourtyard( aLayer );
