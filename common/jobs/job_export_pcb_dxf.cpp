@@ -33,22 +33,11 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
     m_plotGraphicItemsUsingContours( true ),
     m_dxfUnits( DXF_UNITS::INCHES )
 {
-    m_plotDrawingSheet = false;
-
-    m_params.emplace_back(
-            new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
     m_params.emplace_back(
             new JOB_PARAM<bool>( "plot_footprint_values", &m_plotFootprintValues, m_plotFootprintValues ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_ref_des", &m_plotRefDes, m_plotRefDes ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_graphic_items_using_contours", &m_plotGraphicItemsUsingContours,
                                                 m_plotGraphicItemsUsingContours ) );
-    m_params.emplace_back(
-            new JOB_PARAM<bool>( "use_drill_origin", &m_useDrillOrigin, m_useDrillOrigin ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_border_title_blocks", &m_plotDrawingSheet,
-                                                m_plotDrawingSheet ) );
     m_params.emplace_back( new JOB_PARAM<DXF_UNITS>( "units", &m_dxfUnits, m_dxfUnits ) );
-    m_params.emplace_back(
-            new JOB_PARAM<LSEQ>( "layers", &m_printMaskLayer, m_printMaskLayer ) );
 }
 
 

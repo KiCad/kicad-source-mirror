@@ -41,12 +41,6 @@ JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType ) :
                                                 &m_plotFootprintValues,
                                                 m_plotFootprintValues ) );
 
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_ref_des", &m_plotRefDes, m_plotRefDes ) );
-
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_drawing_sheet",
-                                                &m_plotDrawingSheet,
-                                                m_plotDrawingSheet ) );
-
 
     m_params.emplace_back( new JOB_PARAM<bool>( "subtract_solder_mask_from_silk",
                                                 &m_subtractSolderMaskFromSilk,
@@ -59,14 +53,10 @@ JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType ) :
     m_params.emplace_back( new JOB_PARAM<bool>( "use_x2_format", &m_useX2Format, m_useX2Format ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "disable_aperture_macros", &m_disableApertureMacros,
                                                 m_disableApertureMacros ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "use_aux_origin",
-                                                &m_useDrillOrigin,
-                                                m_useDrillOrigin ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "use_protel_file_extension",
                                                 &m_useProtelFileExtension,
                                                 m_useProtelFileExtension ) );
     m_params.emplace_back( new JOB_PARAM<int>( "precision", &m_precision, m_precision ) );
-    m_params.emplace_back( new JOB_PARAM<LSEQ>( "layers", &m_printMaskLayer, m_printMaskLayer ) );
 }
 
 

@@ -1273,7 +1273,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     {
         applyPlotSettings();
         transferPlotParamsToJob();
-        Close();
+        EndModal( wxID_OK );
     }
     else
     {

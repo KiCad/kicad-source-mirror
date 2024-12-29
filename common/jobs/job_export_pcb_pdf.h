@@ -33,8 +33,6 @@ class KICOMMON_API JOB_EXPORT_PCB_PDF : public JOB_EXPORT_PCB_PLOT
 public:
     JOB_EXPORT_PCB_PDF();
     wxString GetDefaultDescription() const override;
-
-    bool m_useDrillOrigin;
 };
 
 #endif

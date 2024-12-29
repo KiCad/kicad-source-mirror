@@ -30,9 +30,6 @@ JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
         m_useBoardPlotParams( false ),
         m_createJobsFile( true )
 {
-    m_params.emplace_back( new JOB_PARAM<bool>( "use_board_plot_params", &m_useBoardPlotParams,
-                                                m_useBoardPlotParams ) );
-
     m_params.emplace_back( new JOB_PARAM<bool>( "layers_include_on_all_set", &m_layersIncludeOnAllSet,
                                                 m_layersIncludeOnAllSet ) );
 
@@ -43,7 +40,7 @@ JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
 
 wxString JOB_EXPORT_PCB_GERBERS::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Multi gerber export" ) );
+    return wxString::Format( _( "PCB Gerbers export" ) );
 }
 
 
