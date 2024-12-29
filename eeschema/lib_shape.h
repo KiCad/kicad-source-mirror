@@ -139,5 +139,4 @@ private:
                 const TRANSFORM& aTransform, bool aDimmed ) override;
 };
 
-
 #endif    // LIB_SHAPE_H

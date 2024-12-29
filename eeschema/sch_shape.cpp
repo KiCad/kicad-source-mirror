@@ -34,6 +34,8 @@
 #include <sch_shape.h>
 #include "plotters/plotter.h"
 
+// This is a horribly fix for a link issue
+extern template class wxAnyValueTypeImpl<FILL_T>;
 
 SCH_SHAPE::SCH_SHAPE( SHAPE_T aShape, int aLineWidth, FILL_T aFillType, KICAD_T aType ) :
     SCH_ITEM( nullptr, aType ),
