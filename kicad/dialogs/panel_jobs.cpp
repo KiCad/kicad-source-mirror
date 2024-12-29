@@ -654,10 +654,13 @@ void PANEL_JOBS::onJobListMenu( wxCommandEvent& aEvent )
 
         JOBSET_JOB& job = m_jobsFile->GetJobs()[item];
         wxString    desc = job.GetDescription();
-        wxString newDesc = wxGetTextFromUser( _( "Enter new description:" ), _( "Edit Description" ), desc );
-        if( desc != newDesc )
+
+        wxTextEntryDialog descDialog( this, _( "Edit Description" ), _( "Enter new description:" ),
+                                       desc );
+
+        if( descDialog.ShowModal() == wxID_OK && desc != descDialog.GetValue() )
         {
-            job.SetDescription( newDesc );
+            job.SetDescription( descDialog.GetValue() );
 
             m_jobsFile->SetDirty();
             updateTitle();
