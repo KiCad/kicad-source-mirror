@@ -26,7 +26,7 @@
 #include <nlohmann/json.hpp>
 
 
-class DESIGN_BLOCK
+class KICOMMON_API DESIGN_BLOCK
 {
 public:
     void          SetLibId( const LIB_ID& aName ) { m_lib_id = aName; }
@@ -46,6 +46,10 @@ public:
         m_fields = std::move( aFields );
     }
     const nlohmann::ordered_map<wxString, wxString>& GetFields() const { return m_fields; }
+
+    DESIGN_BLOCK() = default;
+    ///< This is the only way to get m_fields to compile as a class member
+    DESIGN_BLOCK( DESIGN_BLOCK&& aOther ) = delete;
 
 private:
     LIB_ID m_lib_id;
