@@ -1506,6 +1506,28 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     GetCanvas()->SetFocus();                                // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
 
+    /*
+    * Only show pad, via and track clearances when a copper layer is active
+    * and then only show the clearance layer for that copper layer.
+    *
+    * For pads/vias, this is to avoid clutter when there are pad/via layers
+    * that vary in flash (i.e. clearance from the hole or pad edge), padstack
+    * shape on eahc layer or clearances on each layer.
+    *
+    * For tracks, this follows the same logic as pads/vias, but in theory could
+    * have their own set of independent clearance layers to allow track clearance
+    * to be shown for more layers.
+    */
+    if( IsCopperLayer( oldLayer ) )
+    {
+        GetCanvas()->GetView()->SetLayerVisible( CLEARANCE_LAYER_FOR( oldLayer ), false );
+    }
+
+    if( IsCopperLayer( aLayer ) )
+    {
+        GetCanvas()->GetView()->SetLayerVisible( CLEARANCE_LAYER_FOR( aLayer ), true );
+    }
+
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
@@ -1536,11 +1558,6 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
                     if( via->GetRemoveUnconnected() )
                         return KIGFX::ALL;
-
-                    // Clearances could be layer-dependent so redraw them when the active layer
-                    // is changed
-                    if( GetPcbNewSettings()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
-                        return KIGFX::REPAINT;
                 }
                 else if( item->Type() == PCB_PAD_T )
                 {
@@ -1548,40 +1565,6 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
                     if( pad->GetRemoveUnconnected() )
                         return KIGFX::ALL;
-
-                    // Clearances could be layer-dependent so redraw them when the active layer
-                    // is changed
-                    if( GetPcbNewSettings()->m_Display.m_PadClearance )
-                    {
-                        // Round-corner rects are expensive to draw, but are mostly found on
-                        // SMD pads which only need redrawing on an active-to-not-active
-                        // switch.
-                        if( pad->GetAttribute() == PAD_ATTRIB::SMD )
-                        {
-                            if( ( oldLayer == F_Cu || aLayer == F_Cu ) && pad->IsOnLayer( F_Cu ) )
-                                return KIGFX::REPAINT;
-
-                            if( ( oldLayer == B_Cu || aLayer == B_Cu ) && pad->IsOnLayer( B_Cu ) )
-                                return KIGFX::REPAINT;
-                        }
-                        else if( pad->IsOnLayer( oldLayer ) || pad->IsOnLayer( aLayer ) )
-                        {
-                            return KIGFX::REPAINT;
-                        }
-                    }
-                }
-                else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
-                {
-                    PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
-
-                    // Clearances could be layer-dependent so redraw them when the active layer
-                    // is changed
-                    if( GetPcbNewSettings()->m_Display.m_TrackClearance )
-                    {
-                        // Tracks aren't particularly expensive to draw, but it's an easy check.
-                        if( track->IsOnLayer( oldLayer ) || track->IsOnLayer( aLayer ) )
-                            return KIGFX::REPAINT;
-                    }
                 }
 
                 return 0;

@@ -266,6 +266,10 @@ enum GAL_LAYER_ID: int
     LAYER_VIA_COPPER_START,
     LAYER_VIA_COPPER_END = LAYER_VIA_COPPER_START + PCB_LAYER_ID_COUNT,
 
+    /// Virtual layers for pad/via/track clearance outlines for a given copper layer
+    LAYER_CLEARANCE_START,
+    LAYER_CLEARANCE_END = LAYER_CLEARANCE_START + PCB_LAYER_ID_COUNT,
+
     /// Virtual layers for background images per board layer
     LAYER_BITMAP_START,
     LAYER_BITMAP_END = LAYER_BITMAP_START + PCB_LAYER_ID_COUNT,
@@ -285,6 +289,7 @@ enum GAL_LAYER_ID: int
 #define ZONE_LAYER_FOR( boardLayer ) ( LAYER_ZONE_START + boardLayer )
 #define PAD_COPPER_LAYER_FOR( boardLayer ) ( LAYER_PAD_COPPER_START + boardLayer )
 #define VIA_COPPER_LAYER_FOR( boardLayer ) ( LAYER_VIA_COPPER_START + boardLayer )
+#define CLEARANCE_LAYER_FOR( boardLayer ) ( LAYER_CLEARANCE_START + boardLayer )
 
 constexpr int GAL_LAYER_ID_COUNT = GAL_LAYER_ID_END - GAL_LAYER_ID_START;
 
@@ -750,6 +755,12 @@ inline bool IsPadCopperLayer( int aLayer )
 inline bool IsViaCopperLayer( int aLayer )
 {
     return aLayer >= LAYER_VIA_COPPER_START && aLayer <= LAYER_VIA_COPPER_END;
+}
+
+
+inline bool IsClearanceLayer( int aLayer )
+{
+    return aLayer >= LAYER_CLEARANCE_START && aLayer <= LAYER_CLEARANCE_END;
 }
 
 

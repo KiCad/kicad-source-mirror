@@ -1326,9 +1326,14 @@ void PCB_VIA::GetOutermostConnectedLayers( PCB_LAYER_ID* aTopmost,
 std::vector<int> PCB_TRACK::ViewGetLayers() const
 {
     // Show the track and its netname on different layers
-    std::vector<int> layers { GetLayer(), GetNetnameLayer( GetLayer() ) };
+    const PCB_LAYER_ID layer = GetLayer();
+    std::vector<int>   layers{
+        layer,
+        GetNetnameLayer( layer ),
+        LAYER_CLEARANCE_START + layer,
+    };
 
-    layers.reserve( 5 );
+    layers.reserve( 6 );
 
     if( m_hasSolderMask )
     {
@@ -1446,6 +1451,7 @@ std::vector<int> PCB_VIA::ViewGetLayers() const
             continue;
 
         ret_layers.push_back( LAYER_VIA_COPPER_START + layer );
+        ret_layers.push_back( LAYER_CLEARANCE_START + layer );
     }
 
     if( IsLocked() )

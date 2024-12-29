@@ -954,6 +954,8 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
             boardCuLayer = ToLAYER_ID( static_cast<int>( aLayer ) - LAYER_VIA_COPPER_START );
         else if( IsPadCopperLayer( aLayer ) )
             boardCuLayer = ToLAYER_ID( static_cast<int>( aLayer ) - LAYER_PAD_COPPER_START );
+        else if( IsClearanceLayer( aLayer ) )
+            boardCuLayer = ToLAYER_ID( static_cast<int>( aLayer ) - LAYER_CLEARANCE_START );
 
         if( IsFrontLayer( boardCuLayer ) )
             return F_Cu;

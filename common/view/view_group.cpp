@@ -164,6 +164,10 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
         {
             draw = aView->IsLayerVisible( layer - LAYER_VIA_COPPER_START );
         }
+        else if( IsClearanceLayer( layer ) )
+        {
+            draw = aView->IsLayerVisible( layer - LAYER_CLEARANCE_START );
+        }
 
         if( isSelection )
         {
