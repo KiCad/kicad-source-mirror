@@ -35,4 +35,6 @@ public:
 
     void FromJson( const nlohmann::json& j ) override;
     void ToJson( nlohmann::json& j ) const override;
+
+    wxString GetDefaultDescription() const override;
 };

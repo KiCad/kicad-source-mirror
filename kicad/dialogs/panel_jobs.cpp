@@ -75,7 +75,7 @@ public:
         // prevent someone from failing to add the type info in the future
         wxASSERT( jobTypeInfos.contains( m_output->m_type ) );
 
-        SetTitle( wxString::Format( _( "%s Output Options" ), jobTypeInfos[m_output->m_type].name ) );
+        SetTitle( wxString::Format( _( "%s Output Options" ), m_output->m_outputHandler->GetDefaultDescription() ) );
 
         if( m_output->m_type != JOBSET_OUTPUT_TYPE::ARCHIVE )
         {
@@ -85,6 +85,7 @@ public:
 
         m_textCtrlOutputPath->SetValue( m_output->m_outputHandler->GetOutputPath() );
         m_buttonOutputPath->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+        m_textCtrlDescription->SetValue( m_output->GetDescription() );
     }
 
 
@@ -162,6 +163,7 @@ public:
             archive->SetFormat( JOBS_OUTPUT_ARCHIVE::FORMAT::ZIP );
         }
 
+        m_output->SetDescription( m_textCtrlDescription->GetValue() );
 
         return true;
     }
@@ -317,7 +319,7 @@ public:
         if( jobTypeInfos.contains( aOutput->m_type ) )
         {
             JOB_TYPE_INFO& jobTypeInfo = jobTypeInfos[aOutput->m_type];
-            m_textOutputType->SetLabel( wxGetTranslation( jobTypeInfo.name ) );
+            m_textOutputType->SetLabel( aOutput->GetDescription() );
             m_bitmapOutputType->SetBitmap( KiBitmapBundle( jobTypeInfo.bitmap ) );
         }
 
@@ -417,8 +419,12 @@ private:
             case wxID_EDIT:
             {
                 DIALOG_JOB_OUTPUT dialog( m_frame, m_jobsFile, m_output );
-
-                dialog.ShowModal();
+                if( dialog.ShowModal() == wxID_SAVE )
+                {
+                    m_textOutputType->SetLabel( m_output->GetDescription() );
+                    m_jobsFile->SetDirty();
+                    m_panelParent->UpdateTitle();
+                }
             }
                 break;
 
@@ -513,7 +519,7 @@ void PANEL_JOBS::rebuildJobList()
         m_jobList->SetItem( itemIndex, 1, job.GetDescription() );
     }
 
-    updateTitle();
+    UpdateTitle();
 
     if( m_jobsFile->GetJobs().empty() )
     {
@@ -540,7 +546,7 @@ void PANEL_JOBS::rebuildJobList()
 }
 
 
-void PANEL_JOBS::updateTitle()
+void PANEL_JOBS::UpdateTitle()
 {
     wxString tabName = m_jobsFile->GetFullName();
     if( m_jobsFile->GetDirty() )
@@ -594,7 +600,7 @@ void PANEL_JOBS::openJobOptionsForListItem( size_t aItemIndex )
         if( changes )
         {
             m_jobsFile->SetDirty();
-            updateTitle();
+            UpdateTitle();
         }
     }
     else
@@ -663,7 +669,7 @@ void PANEL_JOBS::onJobListMenu( wxCommandEvent& aEvent )
             job.SetDescription( descDialog.GetValue() );
 
             m_jobsFile->SetDirty();
-            updateTitle();
+            UpdateTitle();
 
             m_jobList->SetItem( item, 1, job.GetDescription() );
         }
@@ -691,7 +697,7 @@ void PANEL_JOBS::onJobListMenu( wxCommandEvent& aEvent )
 void PANEL_JOBS::OnSaveButtonClick( wxCommandEvent& aEvent )
 {
     m_jobsFile->SaveToFile( wxEmptyString, true );
-    updateTitle();
+    UpdateTitle();
 }
 
 
@@ -747,12 +753,12 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
     wxArrayString              headers;
     std::vector<wxArrayString> items;
 
-    headers.Add( _( "Job Types" ) );
+    headers.Add( _( "Output Types" ) );
 
-    for( const std::pair<const JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO>& jobType : jobTypeInfos )
+    for( const std::pair<const JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO>& outputType : jobTypeInfos )
     {
         wxArrayString item;
-        item.Add( wxGetTranslation( jobType.second.name ) );
+        item.Add( wxGetTranslation( outputType.second.name ) );
         items.emplace_back( item );
     }
 

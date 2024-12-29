@@ -129,11 +129,17 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
 
+	wxBoxSizer* bSizer17;
+	bSizer17 = new wxBoxSizer( wxVERTICAL );
+
 	m_textOutputType = new wxStaticText( this, wxID_ANY, _("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputType->Wrap( -1 );
 	m_textOutputType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizer14->Add( m_textOutputType, 0, wxALL, 5 );
+	bSizer17->Add( m_textOutputType, 0, wxALL, 5 );
+
+
+	bSizer14->Add( bSizer17, 1, wxEXPAND, 5 );
 
 	m_statusBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer14->Add( m_statusBitmap, 0, wxALL, 5 );
@@ -195,9 +201,16 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	m_textArchiveDesc = new wxStaticText( m_panel9, wxID_ANY, _("Description"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textArchiveDesc->Wrap( -1 );
+	fgSizer1->Add( m_textArchiveDesc, 0, wxALL, 5 );
+
+	m_textCtrlDescription = new wxTextCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_textCtrlDescription, 0, wxALL|wxEXPAND, 5 );
+
 	m_textArchiveFormat = new wxStaticText( m_panel9, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textArchiveFormat->Wrap( -1 );
-	fgSizer1->Add( m_textArchiveFormat, 0, wxALL, 5 );
+	fgSizer1->Add( m_textArchiveFormat, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxArrayString m_choiceArchiveformatChoices;
 	m_choiceArchiveformat = new wxChoice( m_panel9, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceArchiveformatChoices, 0 );
@@ -206,7 +219,7 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 
 	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, _("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputPath->Wrap( -1 );
-	fgSizer1->Add( m_textOutputPath, 0, wxALL, 5 );
+	fgSizer1->Add( m_textOutputPath, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxBoxSizer* bSizer16;
 	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
@@ -249,6 +262,7 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 

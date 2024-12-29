@@ -43,6 +43,8 @@ public:
     FORMAT GetFormat() const { return m_format; }
     void SetFormat( FORMAT format ) { m_format = format; }
 
+    wxString GetDefaultDescription() const override;
+
 private:
     FORMAT m_format;
 };

@@ -90,3 +90,9 @@ void JOBS_OUTPUT_ARCHIVE::ToJson( nlohmann::json& j ) const
     j["output_path"] = m_outputPath;
 	j["format"] = "zip";
 }
+
+
+wxString JOBS_OUTPUT_ARCHIVE::GetDefaultDescription() const
+{
+    return _( "Archive" );
+}

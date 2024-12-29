@@ -53,6 +53,8 @@ public:
     void SetOutputPath( const wxString& aPath ) { m_outputPath = aPath; }
     wxString GetOutputPath() const { return m_outputPath; }
 
+    virtual wxString GetDefaultDescription() const { return wxEmptyString; }
+
 protected:
     wxString m_outputPath;
 };

@@ -42,6 +42,7 @@ public:
     void EnsurePcbSchFramesOpen();
 
     wxString GetFilePath() const;
+    void     UpdateTitle();
 
 protected:
     virtual void OnAddJobClick( wxCommandEvent& aEvent ) override;
@@ -57,7 +58,6 @@ protected:
 
 private:
     void rebuildJobList();
-    void updateTitle();
     void buildOutputList();
     void addJobOutputPanel( JOBSET_OUTPUT* aOutput );
     void onJobListMenu( wxCommandEvent& aEvent );

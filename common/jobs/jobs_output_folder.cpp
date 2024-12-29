@@ -77,3 +77,9 @@ void JOBS_OUTPUT_FOLDER::ToJson( nlohmann::json& j ) const
 {
     j["output_path"] = m_outputPath;
 }
+
+
+wxString JOBS_OUTPUT_FOLDER::GetDefaultDescription() const
+{
+    return _( "Folder" );
+}

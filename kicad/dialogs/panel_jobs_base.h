@@ -30,8 +30,8 @@ class STD_BITMAP_BUTTON;
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
 #include <wx/statbmp.h>
-#include <wx/choice.h>
 #include <wx/textctrl.h>
+#include <wx/choice.h>
 #include <wx/listbox.h>
 #include <wx/dialog.h>
 #include <wx/checkbox.h>
@@ -115,6 +115,8 @@ class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText9;
 		wxPanel* m_panel9;
+		wxStaticText* m_textArchiveDesc;
+		wxTextCtrl* m_textCtrlDescription;
 		wxStaticText* m_textArchiveFormat;
 		wxChoice* m_choiceArchiveformat;
 		wxStaticText* m_textOutputPath;
@@ -132,7 +134,7 @@ class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 495,369 ), long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_JOB_OUTPUT_BASE();
 

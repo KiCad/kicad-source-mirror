@@ -71,7 +71,12 @@ KICOMMON_API void from_json( const nlohmann::json& j, JOBSET_JOB& f )
 
 KICOMMON_API void to_json( nlohmann::json& j, const JOBSET_OUTPUT& f )
 {
-    j = nlohmann::json{ { "type", f.m_type }, { "settings", nlohmann::json::object( {} ) } };
+    j = nlohmann::json{ { "id", f.m_id },
+                        { "type", f.m_type },
+                        { "only", f.m_only },
+                        { "description", f.m_description },
+                        { "settings", nlohmann::json::object( {} ) }
+                        };
 
     f.m_outputHandler->ToJson( j.at( "settings" ) );
 }
@@ -79,8 +84,10 @@ KICOMMON_API void to_json( nlohmann::json& j, const JOBSET_OUTPUT& f )
 
 KICOMMON_API void from_json( const nlohmann::json& j, JOBSET_OUTPUT& f )
 {
+    j.at( "id" ).get_to( f.m_id );
     j.at( "type" ).get_to( f.m_type );
     f.m_only = j.value( "only", std::vector<wxString>() );
+    f.m_description = j.value( "description", "" );
 
     nlohmann::json settings_obj = j.at( "settings" );
 
@@ -133,6 +140,21 @@ void JOBSET_OUTPUT::InitOutputHandler()
     {
         m_outputHandler = new JOBS_OUTPUT_ARCHIVE();
     }
+}
+
+
+wxString JOBSET_OUTPUT::GetDescription() const
+{
+    return m_description.IsEmpty() ? m_outputHandler->GetDefaultDescription() : m_description;
+}
+
+
+void JOBSET_OUTPUT::SetDescription( const wxString& aDescription )
+{
+    if( aDescription == m_outputHandler->GetDefaultDescription() )
+        m_description = wxEmptyString;
+    else
+        m_description = aDescription;
 }
 
 
