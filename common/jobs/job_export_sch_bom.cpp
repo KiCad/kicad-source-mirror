@@ -81,7 +81,7 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
 }
 
 
-wxString JOB_EXPORT_SCH_BOM::GetDescription()
+wxString JOB_EXPORT_SCH_BOM::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic BOM export" ) );
 }

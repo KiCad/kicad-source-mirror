@@ -29,7 +29,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PYTHONBOM : public JOB
 {
 public:
     JOB_EXPORT_SCH_PYTHONBOM();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     wxString m_filename;
 };

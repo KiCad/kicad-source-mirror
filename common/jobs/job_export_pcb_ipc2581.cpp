@@ -67,7 +67,7 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
 }
 
 
-wxString JOB_EXPORT_PCB_IPC2581::GetDescription()
+wxString JOB_EXPORT_PCB_IPC2581::GetDefaultDescription() const
 {
     return wxString::Format( _( "IPC2581 export" ) );
 }

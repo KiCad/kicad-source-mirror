@@ -26,8 +26,12 @@ JOB::JOB( const std::string& aType, bool aOutputIsDirectory ) :
         m_varOverrides(),
         m_tempOutputDirectory(),
         m_outputPath(),
-        m_outputPathIsDirectory( aOutputIsDirectory )
+        m_outputPathIsDirectory( aOutputIsDirectory ),
+        m_description()
 {
+    m_params.emplace_back(
+            new JOB_PARAM<wxString>( "description", &m_description, m_description ) );
+
     if( m_outputPathIsDirectory )
     {
         m_params.emplace_back(
@@ -64,7 +68,7 @@ void JOB::ToJson( nlohmann::json& j ) const
 }
 
 
-wxString JOB::GetDescription()
+wxString JOB::GetDefaultDescription() const
 {
     return wxEmptyString;
 }

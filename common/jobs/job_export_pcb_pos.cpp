@@ -86,7 +86,7 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
 }
 
 
-wxString JOB_EXPORT_PCB_POS::GetDescription()
+wxString JOB_EXPORT_PCB_POS::GetDefaultDescription() const
 {
     return wxString::Format( _( "Placement data export" ) );
 }

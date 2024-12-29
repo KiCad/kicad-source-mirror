@@ -76,7 +76,7 @@ JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER() :
 }
 
 
-wxString JOB_EXPORT_PCB_GERBER::GetDescription()
+wxString JOB_EXPORT_PCB_GERBER::GetDefaultDescription() const
 {
     return wxString::Format( _( "Single gerber export" ) );
 }

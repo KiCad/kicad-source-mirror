@@ -30,7 +30,7 @@ class KICOMMON_API JOB_EXPORT_SCH_BOM : public JOB
 {
 public:
     JOB_EXPORT_SCH_BOM();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     // Basic options
     wxString m_filename;

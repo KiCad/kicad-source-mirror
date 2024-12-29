@@ -36,9 +36,13 @@ struct KICOMMON_API JOBSET_JOB
 
     JOBSET_JOB( wxString id, wxString type, JOB* job ) : m_id( id ), m_type( type ), m_job( job ) {}
 
-    wxString m_id;
-    wxString m_type;
-    std::shared_ptr<JOB>    m_job;
+    wxString             m_id;
+    wxString             m_type;
+    wxString             m_description;
+    std::shared_ptr<JOB> m_job;
+
+    wxString GetDescription() const;
+    void     SetDescription( const wxString& aDescription );
 
     bool operator==( const JOBSET_JOB& rhs ) const;
 };

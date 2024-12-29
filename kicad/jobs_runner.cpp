@@ -149,7 +149,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         for( const JOBSET_JOB& job : jobsForOutput )
         {
             msg += wxString::Format( wxT( "|%-5d | %-50s\n" ), jobNum,
-                                               job.m_job->GetDescription() );
+                                               job.GetDescription() );
             jobNum++;
         }
         msg += wxT( "|--------------------------------\n" );
@@ -169,7 +169,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         if( m_reporter != nullptr )
         {
             msg = wxT( "|--------------------------------\n" );
-            msg += wxString::Format( wxT( "| Running job %d, %s" ), jobNum, job.m_job->GetDescription() );
+            msg += wxString::Format( wxT( "| Running job %d, %s" ), jobNum, job.GetDescription() );
             msg += wxT( "\n" );
             msg += wxT( "|--------------------------------\n" );
 

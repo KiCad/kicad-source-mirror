@@ -26,5 +26,5 @@ class KICOMMON_API JOB_SCH_ERC : public JOB_RC
 {
 public:
     JOB_SCH_ERC();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 };

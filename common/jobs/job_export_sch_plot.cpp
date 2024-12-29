@@ -123,7 +123,7 @@ JOB_EXPORT_SCH_PLOT_PDF::JOB_EXPORT_SCH_PLOT_PDF() :
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_PDF::GetDescription()
+wxString JOB_EXPORT_SCH_PLOT_PDF::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic PDF Plot" ) );
 }
@@ -136,7 +136,7 @@ JOB_EXPORT_SCH_PLOT_DXF ::JOB_EXPORT_SCH_PLOT_DXF () :
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_DXF::GetDescription()
+wxString JOB_EXPORT_SCH_PLOT_DXF::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic DXF Plot" ) );
 }
@@ -149,7 +149,7 @@ JOB_EXPORT_SCH_PLOT_SVG::JOB_EXPORT_SCH_PLOT_SVG() :
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_SVG::GetDescription()
+wxString JOB_EXPORT_SCH_PLOT_SVG::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic SVG Plot" ) );
 }
@@ -162,7 +162,7 @@ JOB_EXPORT_SCH_PLOT_PS::JOB_EXPORT_SCH_PLOT_PS() :
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_PS::GetDescription()
+wxString JOB_EXPORT_SCH_PLOT_PS::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic PS Plot" ) );
 }
@@ -175,7 +175,7 @@ JOB_EXPORT_SCH_PLOT_HPGL::JOB_EXPORT_SCH_PLOT_HPGL() :
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_HPGL::GetDescription()
+wxString JOB_EXPORT_SCH_PLOT_HPGL::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic HPGL Plot" ) );
 }

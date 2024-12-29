@@ -140,7 +140,7 @@ public:
     virtual void FromJson( const nlohmann::json& j );
     virtual void ToJson( nlohmann::json& j ) const;
 
-    virtual wxString GetDescription();
+    virtual wxString GetDefaultDescription() const;
 
     const std::vector<JOB_PARAM_BASE*>& GetParams() {
         return m_params;
@@ -175,7 +175,8 @@ protected:
     wxString m_tempOutputDirectory;
 
     wxString m_outputPath;
-    bool m_outputPathIsDirectory;
+    bool     m_outputPathIsDirectory;
+    wxString m_description;
 
     std::vector<JOB_PARAM_BASE*> m_params;
 

@@ -118,7 +118,7 @@ JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL() :
 }
 
 
-wxString JOB_EXPORT_PCB_DRILL::GetDescription()
+wxString JOB_EXPORT_PCB_DRILL::GetDefaultDescription() const
 {
     return wxString::Format( _( "Drill data export" ), m_format );
 }

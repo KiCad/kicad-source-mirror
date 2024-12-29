@@ -139,7 +139,7 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
 }
 
 
-wxString JOB_EXPORT_PCB_3D::GetDescription()
+wxString JOB_EXPORT_PCB_3D::GetDefaultDescription() const
 {
     return wxString::Format( _( "3D model export" ) );
 }

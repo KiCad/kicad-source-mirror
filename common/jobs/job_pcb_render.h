@@ -32,7 +32,7 @@ class KICOMMON_API JOB_PCB_RENDER : public JOB
 {
 public:
     JOB_PCB_RENDER();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     wxString m_filename;
 

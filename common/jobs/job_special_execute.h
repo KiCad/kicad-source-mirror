@@ -29,7 +29,7 @@ class KICOMMON_API JOB_SPECIAL_EXECUTE : public JOB
 public:
     JOB_SPECIAL_EXECUTE();
 
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     wxString m_command;
 

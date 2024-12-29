@@ -28,7 +28,7 @@ class KICOMMON_API JOB_EXPORT_PCB_ODB : public JOB
 {
 public:
     JOB_EXPORT_PCB_ODB();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
 

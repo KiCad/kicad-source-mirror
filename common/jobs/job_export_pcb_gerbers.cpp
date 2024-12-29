@@ -41,7 +41,7 @@ JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
 }
 
 
-wxString JOB_EXPORT_PCB_GERBERS::GetDescription()
+wxString JOB_EXPORT_PCB_GERBERS::GetDefaultDescription() const
 {
     return wxString::Format( _( "Multi gerber export" ) );
 }

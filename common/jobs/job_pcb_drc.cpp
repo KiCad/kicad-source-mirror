@@ -32,7 +32,7 @@ JOB_PCB_DRC::JOB_PCB_DRC() :
 }
 
 
-wxString JOB_PCB_DRC::GetDescription()
+wxString JOB_PCB_DRC::GetDefaultDescription() const
 {
     return wxString::Format( _( "Perform PCB DRC" ) );
 }

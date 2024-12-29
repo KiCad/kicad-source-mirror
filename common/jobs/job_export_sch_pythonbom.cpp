@@ -30,7 +30,7 @@ JOB_EXPORT_SCH_PYTHONBOM::JOB_EXPORT_SCH_PYTHONBOM() :
 }
 
 
-wxString JOB_EXPORT_SCH_PYTHONBOM::GetDescription()
+wxString JOB_EXPORT_SCH_PYTHONBOM::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic PythonBOM export" ) );
 }

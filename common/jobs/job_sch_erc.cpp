@@ -28,7 +28,7 @@ JOB_SCH_ERC::JOB_SCH_ERC() :
 }
 
 
-wxString JOB_SCH_ERC::GetDescription()
+wxString JOB_SCH_ERC::GetDefaultDescription() const
 {
     return wxString::Format( _( "Perform Schematic ERC" ) );
 }

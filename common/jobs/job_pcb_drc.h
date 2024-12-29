@@ -26,7 +26,7 @@ class KICOMMON_API JOB_PCB_DRC : public JOB_RC
 {
 public:
     JOB_PCB_DRC();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     bool m_reportAllTrackErrors;
     bool m_parity;

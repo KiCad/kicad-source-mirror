@@ -44,6 +44,7 @@
 
 #include <jobs/job_special_execute.h>
 #include <dialogs/dialog_special_execute.h>
+#include <wx/textdlg.h>
 
 
 struct JOB_TYPE_INFO
@@ -175,7 +176,7 @@ public:
         int                        i = 0;
         for( JOBSET_JOB& job : jobs )
         {
-            arrayStr.Add( job.m_job->GetDescription() );
+            arrayStr.Add( job.GetDescription() );
 
             auto it = std::find_if( m_output->m_only.begin(), m_output->m_only.end(),
                                     [&]( const wxString& only )
@@ -262,7 +263,7 @@ public:
             long itemIndex = m_jobList->InsertItem( m_jobList->GetItemCount(), imageIdx );
 
             m_jobList->SetItem( itemIndex, jobNoColId, wxString::Format( "%d", num++ ) );
-            m_jobList->SetItem( itemIndex, jobDescColId, job.m_job->GetDescription() );
+            m_jobList->SetItem( itemIndex, jobDescColId, job.GetDescription() );
         }
     }
 
@@ -509,7 +510,7 @@ void PANEL_JOBS::rebuildJobList()
     {
         long itemIndex =
                 m_jobList->InsertItem( m_jobList->GetItemCount(), wxString::Format( "%d", num++ ) );
-        m_jobList->SetItem( itemIndex, 1, job.m_job->GetDescription() );
+        m_jobList->SetItem( itemIndex, 1, job.GetDescription() );
     }
 
     updateTitle();
@@ -621,7 +622,9 @@ void PANEL_JOBS::OnJobListDoubleClicked( wxListEvent& aEvent )
 void PANEL_JOBS::OnJobListItemRightClick( wxListEvent& event )
 {
     wxMenu menu;
-    menu.Append( wxID_EDIT, _( "Edit..." ) );
+    menu.Append( wxID_PROPERTIES, _( "Edit Options" ) );
+    menu.Append( wxID_EDIT, _( "Edit Description" ) );
+    menu.AppendSeparator();
     menu.Append( wxID_DELETE, _( "Delete" ) );
 
     m_jobList->PopupMenu( &menu, event.GetPoint() );
@@ -632,7 +635,7 @@ void PANEL_JOBS::onJobListMenu( wxCommandEvent& aEvent )
 {
     switch( aEvent.GetId() )
     {
-    case wxID_EDIT:
+    case wxID_PROPERTIES:
     {
         long item = m_jobList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
 
@@ -641,6 +644,28 @@ void PANEL_JOBS::onJobListMenu( wxCommandEvent& aEvent )
 
         openJobOptionsForListItem( item );
     }
+    break;
+
+    case wxID_EDIT:
+    {
+        long item = m_jobList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+        if( item == -1 )
+            return;
+
+        JOBSET_JOB& job = m_jobsFile->GetJobs()[item];
+        wxString    desc = job.GetDescription();
+        wxString newDesc = wxGetTextFromUser( _( "Enter new description:" ), _( "Edit Description" ), desc );
+        if( desc != newDesc )
+        {
+            job.SetDescription( newDesc );
+
+            m_jobsFile->SetDirty();
+            updateTitle();
+
+            m_jobList->SetItem( item, 1, job.GetDescription() );
+        }
+    }
+        break;
     break;
 
     case wxID_DELETE:

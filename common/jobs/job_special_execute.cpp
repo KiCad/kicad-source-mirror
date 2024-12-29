@@ -34,7 +34,7 @@ JOB_SPECIAL_EXECUTE::JOB_SPECIAL_EXECUTE() :
             new JOB_PARAM<bool>( "record_output", &m_recordOutput, m_recordOutput ) );
 }
 
-wxString JOB_SPECIAL_EXECUTE::GetDescription()
+wxString JOB_SPECIAL_EXECUTE::GetDefaultDescription() const
 {
     return wxString( "Execute command: " ) + m_command;
 }

@@ -56,7 +56,7 @@ JOB_EXPORT_SCH_NETLIST::JOB_EXPORT_SCH_NETLIST() :
 }
 
 
-wxString JOB_EXPORT_SCH_NETLIST::GetDescription()
+wxString JOB_EXPORT_SCH_NETLIST::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic Netlist Export" ) );
 }

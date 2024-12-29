@@ -32,7 +32,7 @@ class KICOMMON_API JOB_EXPORT_PCB_DXF : public JOB_EXPORT_PCB_PLOT
 {
 public:
     JOB_EXPORT_PCB_DXF();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     enum class DXF_UNITS
     {

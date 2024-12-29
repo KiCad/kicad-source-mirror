@@ -32,7 +32,7 @@ class KICOMMON_API JOB_EXPORT_PCB_GERBER : public JOB_EXPORT_PCB_PLOT
 public:
     JOB_EXPORT_PCB_GERBER( const std::string& aType );
     JOB_EXPORT_PCB_GERBER();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     bool m_subtractSolderMaskFromSilk;
     bool m_includeNetlistAttributes;

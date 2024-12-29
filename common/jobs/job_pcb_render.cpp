@@ -72,7 +72,7 @@ JOB_PCB_RENDER::JOB_PCB_RENDER() :
 }
 
 
-wxString JOB_PCB_RENDER::GetDescription()
+wxString JOB_PCB_RENDER::GetDefaultDescription() const
 {
     return _( "Render PCB" );
 }

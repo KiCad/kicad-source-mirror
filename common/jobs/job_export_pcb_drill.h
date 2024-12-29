@@ -31,7 +31,7 @@ class KICOMMON_API JOB_EXPORT_PCB_DRILL : public JOB
 public:
     JOB_EXPORT_PCB_DRILL();
 
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     wxString m_filename;
 

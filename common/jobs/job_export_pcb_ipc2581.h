@@ -29,7 +29,7 @@ class KICOMMON_API JOB_EXPORT_PCB_IPC2581 : public JOB
 {
 public:
     JOB_EXPORT_PCB_IPC2581();
-    wxString GetDescription() override;
+    wxString GetDefaultDescription() const override;
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
 

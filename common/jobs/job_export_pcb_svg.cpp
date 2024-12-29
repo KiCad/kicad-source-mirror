@@ -52,7 +52,7 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
 }
 
 
-wxString JOB_EXPORT_PCB_SVG::GetDescription()
+wxString JOB_EXPORT_PCB_SVG::GetDefaultDescription() const
 {
     return wxString::Format( _( "PCB SVG export" ) );
 }
