@@ -21,7 +21,7 @@
 
 #include <wx/string.h>
 #include <wx/wxcrt.h>
-
+#include <wx/filename.h>
 #include <windows.h>
 
 // Define USE_MSYS2_FALlBACK if the code for _MSC_VER does not compile on msys2
@@ -123,4 +123,24 @@ bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
         result = true;
 
     return result;
+}
+
+
+void KIPLATFORM::IO::LongPathAdjustment( wxFileName& aFilename )
+{
+    // dont shortcut this for shorter lengths as there are uses like directory
+    // paths that exceed the path length when you start traversing their subdirectories
+    // so we want to start with the long path prefix all the time
+
+    if( aFilename.GetVolume().Length() == 1 )
+        // assume single letter == drive volume
+        aFilename.SetVolume( "\\\\?\\" + aFilename.GetVolume() + ":" );
+    else if( aFilename.GetVolume().Length() > 1
+            && aFilename.GetVolume().StartsWith( wxT( "\\\\" ) )
+            && !aFilename.GetVolume().StartsWith( wxT( "\\\\?\\" ) ) )
+        // unc path aka network share, wx returns with \\ already
+        // so skip the first slash and combine with the prefix
+        // which in the case of UNCs is actually \\?\UNC\<server>\<share>
+        // where UNC is literally the text UNC
+        aFilename.SetVolume( "\\\\?\\UNC" + aFilename.GetVolume().Mid(1) );
 }

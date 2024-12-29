@@ -23,6 +23,7 @@
 #include <stdio.h>
 
 class wxString;
+class wxFileName;
 
 namespace KIPLATFORM
 {
@@ -50,6 +51,12 @@ namespace IO
     * @return true if the file attribut is set.
     */
     bool IsFileHidden( const wxString& aFileName );
+
+    /**
+     * Adjusts a filename to be a long path compatible.
+     * This is a no-op on non-Windows platforms.
+     */
+    void LongPathAdjustment( wxFileName& aFilename );
 } // namespace IO
 } // namespace KIPLATFORM
 
