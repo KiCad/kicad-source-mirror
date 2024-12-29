@@ -34,7 +34,3 @@ wxString JOB_EXPORT_SCH_PYTHONBOM::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic PythonBOM export" ) );
 }
-
-
-REGISTER_JOB( sch_export_pythonbom, _HKI( "Schematic: Export PythonBOM" ), KIWAY::FACE_SCH,
-              JOB_EXPORT_SCH_PYTHONBOM );
