@@ -115,7 +115,8 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Selection.selection_thickness = KiROUND( m_selWidthCtrl->GetValue() );
     cfg->m_Selection.highlight_thickness = KiROUND( m_highlightWidthCtrl->GetValue() );
     cfg->m_Selection.highlight_netclass_colors = m_highlightNetclassColors->GetValue();
-    cfg->m_Selection.highlight_netclass_colors_thickness = m_colHighlightThickness->GetValue();
+    cfg->m_Selection.highlight_netclass_colors_thickness =
+            KiROUND( m_colHighlightThickness->GetValue() );
     cfg->m_Selection.highlight_netclass_colors_alpha =
             m_colHighlightTransparency->GetValue() / 100.0;
 
