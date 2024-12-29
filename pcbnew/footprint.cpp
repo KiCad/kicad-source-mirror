@@ -2443,8 +2443,9 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     m_cachedHull.Mirror( m_pos, aFlipDirection );
 
+    // Re-use cached geometry, just update the hashes. See SetPosition().
     std::swap( m_courtyard_cache_front, m_courtyard_cache_back );
-    std::swap( m_courtyard_cache_front_hash, m_courtyard_cache_back_hash );
+    std::swap( m_courtyard_cache_back_hash, m_courtyard_cache_front_hash );
 }
 
 
@@ -2471,9 +2472,14 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
 
     m_cachedBoundingBox.Move( delta );
     m_cachedTextExcludedBBox.Move( delta );
-    m_courtyard_cache_back.Move( delta );
-    m_courtyard_cache_front.Move( delta );
     m_cachedHull.Move( delta );
+
+    // The geometry work has been conserved by using Move(). But the hashes
+    // need to be updated, otherwise the cached polygons will still be rebuild.
+    m_courtyard_cache_back.Move( delta );
+    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
+    m_courtyard_cache_front.Move( delta );
+    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
 }
 
 
@@ -2521,6 +2527,13 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
     m_cachedBoundingBox.Move( moveVector );
     m_cachedTextExcludedBBox.Move( moveVector );
     m_cachedHull.Move( moveVector );
+
+    // The geometry work have been conserved by using Move(). But the hashes
+    // need to be updated, otherwise the cached polygons will still be rebuild.
+    m_courtyard_cache_back.Move( moveVector );
+    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
+    m_courtyard_cache_front.Move( moveVector );
+    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
 }
 
 
@@ -2546,13 +2559,11 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     for( BOARD_ITEM* item : m_drawings )
         item->Rotate( GetPosition(), angleChange );
 
-    BuildCourtyardCaches();
-
     m_boundingBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
     m_hullCacheTimeStamp = 0;
-
-    m_cachedHull.Rotate( angleChange, GetPosition() );
+    m_courtyard_cache_front_hash.Clear();
+    m_courtyard_cache_back_hash.Clear();
 }
 
 
@@ -2971,7 +2982,7 @@ const SHAPE_POLY_SET& FOOTPRINT::GetCourtyard( PCB_LAYER_ID aLayer ) const
     if( m_courtyard_cache_front_hash != m_courtyard_cache_front.GetHash()
         || m_courtyard_cache_back_hash != m_courtyard_cache_back.GetHash() )
     {
-        const_cast<FOOTPRINT*>( this )->BuildCourtyardCaches();
+        BuildCourtyardCaches();
     }
 
     return GetCachedCourtyard( aLayer );
