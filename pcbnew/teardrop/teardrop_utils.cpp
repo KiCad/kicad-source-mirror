@@ -92,8 +92,7 @@ bool TEARDROP_MANAGER::IsRound( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 
         return pad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE
                || ( pad->GetShape( aLayer ) == PAD_SHAPE::OVAL
-                    && pad->GetSize( aLayer ).x
-                               == pad->GetSize( aLayer ).y );
+                    && pad->GetSize( aLayer ).x == pad->GetSize( aLayer ).y );
     }
 
     return true;
@@ -243,13 +242,15 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
 
     VECTOR2I vecC = (VECTOR2I)pts[2] - aOtherPos;
     VECTOR2I tangentC = VECTOR2I( pts[2].x - vecC.y * biasBC * weaken,
-                                pts[2].y + vecC.x * biasBC * weaken );
+                                  pts[2].y + vecC.x * biasBC * weaken );
     VECTOR2I vecE = (VECTOR2I)pts[4] - aOtherPos;
     VECTOR2I tangentE = VECTOR2I( pts[4].x + vecE.y * biasAE * weaken,
-                                pts[4].y - vecE.x * biasAE * weaken );
+                                  pts[4].y - vecE.x * biasAE * weaken );
 
-    VECTOR2I tangentB = VECTOR2I( pts[1].x - aTrackDir.x * biasBC, pts[1].y - aTrackDir.y * biasBC );
-    VECTOR2I tangentA = VECTOR2I( pts[0].x - aTrackDir.x * biasAE, pts[0].y - aTrackDir.y * biasAE );
+    VECTOR2I tangentB = VECTOR2I( pts[1].x - aTrackDir.x * biasBC,
+                                  pts[1].y - aTrackDir.y * biasBC );
+    VECTOR2I tangentA = VECTOR2I( pts[0].x - aTrackDir.x * biasAE,
+                                  pts[0].y - aTrackDir.y * biasAE );
 
     std::vector<VECTOR2I> curve_pts;
     BEZIER_POLY( pts[1], tangentB, tangentC, pts[2] ).GetPoly( curve_pts, ARC_HIGH_DEF );
@@ -354,6 +355,21 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
         force_clip = true;
 
         preferred_width = KiROUND( GetWidth( pad, aLayer ) * aParams.m_BestWidthRatio );
+
+        const double SIN_60 = EDA_ANGLE( 60.0, DEGREES_T ).Sin();
+
+        // When the teardrop edges are curved we attempt to avoid undercutting rounded corners
+        // on the pads.  While chamfered corners also have this issue, they aren't necessarily
+        // uniform and it's probably better if we let the user adjust the max teardrop width
+        // accordingly.
+        if( aParams.m_CurvedEdges && pad->GetShape( aLayer ) == PAD_SHAPE::ROUNDRECT )
+        {
+            int adjustedWidth = GetWidth( pad, aLayer );
+            adjustedWidth -= KiROUND( pad->GetRoundRectCornerRadius( aLayer ) * ( SIN_60 ) * 2 );
+
+            preferred_width = std::min( preferred_width, adjustedWidth );
+        }
+
         pad->TransformShapeToPolygon( c_buffer, aLayer, 0, ARC_LOW_DEF, ERROR_INSIDE );
     }
 
@@ -361,7 +377,7 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
     // clip the shape to the smallest of size.x and size.y values.
     if( force_clip || ( aParams.m_TdMaxWidth > 0 && aParams.m_TdMaxWidth < preferred_width ) )
     {
-        int halfsize = std::min( aParams.m_TdMaxWidth, preferred_width )/2;
+        int halfsize = std::min( aParams.m_TdMaxWidth, preferred_width ) / 2;
 
         // teardrop_axis is the line from anchor point on the track and the end point
         // of the teardrop in the pad/via
@@ -712,7 +728,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     PCB_LAYER_ID layer = aTrack->GetLayer();
 
     // To build a polygonal valid shape pointA and point B must be outside the pad
-    // It can be inside with some pad shapes having very different X and X sizes
+    // It can be inside with some pad shapes having very different X and Y sizes
     if( !IsRound( aOther, layer ) )
     {
         PAD* pad = static_cast<PAD*>( aOther );
@@ -745,7 +761,8 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     // See if we can use curved teardrop shape
     if( IsRound( aOther, layer ) )
     {
-        computeCurvedForRoundShape( aParams, aCorners, layer, track_halfwidth, vecT, aOther, aOtherPos, pts );
+        computeCurvedForRoundShape( aParams, aCorners, layer, track_halfwidth, vecT, aOther,
+                                    aOtherPos, pts );
     }
     else
     {
@@ -754,7 +771,8 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
         if( aParams.m_TdMaxWidth > 0 && aParams.m_TdMaxWidth < td_width )
             td_width = aParams.m_TdMaxWidth;
 
-        computeCurvedForRectShape( aParams, aCorners, td_width, track_halfwidth, pts, intersection );
+        computeCurvedForRectShape( aParams, aCorners, td_width, track_halfwidth, pts,
+                                   intersection );
     }
 
     return true;
