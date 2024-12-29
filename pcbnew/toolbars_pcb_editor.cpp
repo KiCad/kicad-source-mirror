@@ -696,10 +696,12 @@ void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 void PCB_EDIT_FRAME::ToggleLayersManager()
 {
     PCBNEW_SETTINGS* settings      = GetPcbNewSettings();
-    wxAuiPaneInfo&   layersManager = m_auimgr.GetPane( "LayersManager" );
+    wxAuiPaneInfo&   layersManager = m_auimgr.GetPane( AppearancePanelName() );
     wxAuiPaneInfo&   selectionFilter = m_auimgr.GetPane( "SelectionFilter" );
 
     // show auxiliary Vertical layers and visibility manager toolbar
+    m_show_layer_manager_tools = layersManager.IsShown();
+
     m_show_layer_manager_tools = !m_show_layer_manager_tools;
 
     layersManager.Show( m_show_layer_manager_tools );
@@ -721,6 +723,8 @@ void PCB_EDIT_FRAME::ToggleNetInspector()
 {
     PCBNEW_SETTINGS* settings          = GetPcbNewSettings();
     wxAuiPaneInfo&   netInspectorPanel = m_auimgr.GetPane( NetInspectorPanelName() );
+
+    m_show_net_inspector = netInspectorPanel.IsShown();
 
     m_show_net_inspector = !m_show_net_inspector;
 
@@ -752,7 +756,7 @@ void PCB_EDIT_FRAME::ToggleSearch()
 
     wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
     searchPaneInfo.Show( m_show_search );
-    
+
     if( m_show_search )
     {
         searchPaneInfo.Direction( settings->m_AuiPanels.search_panel_dock_direction );
@@ -772,7 +776,7 @@ void PCB_EDIT_FRAME::ToggleSearch()
         m_searchPane->FocusSearch();
     }
     else
-    {  
+    {
         settings->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
         settings->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
         settings->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;

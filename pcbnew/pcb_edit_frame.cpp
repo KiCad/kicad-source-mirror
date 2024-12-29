@@ -322,17 +322,26 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( wxS( "LayersManager" ) )
                       .Right().Layer( 4 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
-                      .MinSize( FromDIP( 180 ), -1 ).BestSize( FromDIP( 180 ), -1 ) );
+                      .MinSize( FromDIP( 180 ), -1 )
+                      .BestSize( FromDIP( 180 ), -1 )
+                      .FloatingSize( FromDIP( 180 ), -1 )
+                      .CloseButton( false ) );
 
     m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Name( wxS( "SelectionFilter" ) )
                       .Right().Layer( 4 ).Position( 2 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
-                      .MinSize( FromDIP( 180 ), -1 ).BestSize( FromDIP( 180 ), -1 ) );
+                      .MinSize( FromDIP( 180 ), -1 )
+                      .BestSize( FromDIP( 180 ), -1 )
+                      .FloatingSize( FromDIP( 180 ), -1 )
+                      .CloseButton( false ) );
 
     m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
                       .Left().Layer( 5 )
                       .Caption( _( "Properties" ) ).PaneBorder( false )
-                      .MinSize( FromDIP( wxSize( 240, 60 ) ) ).BestSize( FromDIP( wxSize( 300, 200 ) ) ) );
+                      .MinSize( FromDIP( wxSize( 240, 60 ) ) )
+                      .BestSize( FromDIP( wxSize( 300, 200 ) ) )
+                      .FloatingSize( wxSize( 300, 200 ) )
+                      .CloseButton( true ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
@@ -344,14 +353,18 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                                    .Caption( _( "Net Inspector" ) )
                                                    .PaneBorder( false )
                                                    .MinSize( FromDIP( wxSize( 240, 60 ) ) )
-                                                   .BestSize( FromDIP( wxSize( 300, 200 ) ) ) );
+                                                   .BestSize( FromDIP( wxSize( 300, 200 ) ) )
+                                                   .FloatingSize( wxSize( 300, 200 ) )
+                                                   .CloseButton( true ) );
 
     m_auimgr.AddPane( m_searchPane, EDA_PANE().Name( SearchPaneName() )
                       .Bottom()
                       .Caption( _( "Search" ) ).PaneBorder( false )
-                      .MinSize( FromDIP( wxSize ( 180, 60 ) ) ).BestSize( FromDIP( wxSize ( 180, 100 ) ) )
+                      .MinSize( FromDIP( wxSize ( 180, 60 ) ) )
+                      .BestSize( FromDIP( wxSize ( 180, 100 ) ) )
                       .FloatingSize( FromDIP( wxSize( 480, 200 ) ) )
-                      .DestroyOnClose( false ) );
+                      .DestroyOnClose( false )
+                      .CloseButton( true ) );
 
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
@@ -1420,7 +1433,8 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        cfg->m_AuiPanels.show_layer_manager = m_show_layer_manager_tools;
+        wxAuiPaneInfo& apperancePane = m_auimgr.GetPane( AppearancePanelName() );
+        cfg->m_AuiPanels.show_layer_manager = apperancePane.IsShown();
 
         if( m_propertiesPanel )
         {

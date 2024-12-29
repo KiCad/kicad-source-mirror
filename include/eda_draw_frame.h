@@ -419,6 +419,8 @@ public:
 
     static const wxString DesignBlocksPaneName() { return wxS( "DesignBlocks" ); }
 
+    static const wxString AppearancePanelName() { return wxS( "LayersManager" ); }
+
     /**
      * Fetch an item by KIID.  Frame-type-specific implementation.
      */
