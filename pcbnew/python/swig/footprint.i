@@ -86,7 +86,7 @@
       if self.HasFieldByName(key):
         self.GetFieldByName(key).SetText(value)
       else:
-        field = PCB_FIELD(self, self.GetFieldCount(), key)
+        field = PCB_FIELD(self, self.GetNextFieldId(), key)
         field.SetText(value)
         self.AddField(field)
 
