@@ -204,6 +204,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         m_ModeColorOption->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
         m_plotOriginOpt->SetSelection( static_cast<int>( m_job->m_HPGLPlotOrigin ) );
         m_pageSizeSelect = static_cast<int>( m_job->m_pageSizeSelect );
+        m_plotDrawingSheet->SetValue( m_job->m_plotDrawingSheet );
         setModeColor( !m_job->m_blackAndWhite );
 
         // Set the plot format
