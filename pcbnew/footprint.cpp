@@ -2374,10 +2374,6 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         if( item->Type() == PCB_TEXT_T )
             static_cast<PCB_TEXT*>( item )->KeepUpright();
     }
-
-    m_boundingBoxCacheTimeStamp = 0;
-    m_textExcludedBBoxCacheTimeStamp = 0;
-    m_hullCacheTimeStamp = 0;
 }
 
 
@@ -2448,6 +2444,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     m_cachedHull.Mirror( m_pos, aFlipDirection );
 
     std::swap( m_courtyard_cache_front, m_courtyard_cache_back );
+    std::swap( m_courtyard_cache_front_hash, m_courtyard_cache_back_hash );
 }
 
 
@@ -2549,8 +2546,11 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     for( BOARD_ITEM* item : m_drawings )
         item->Rotate( GetPosition(), angleChange );
 
+    BuildCourtyardCaches();
+
     m_boundingBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
+    m_hullCacheTimeStamp = 0;
 
     m_cachedHull.Rotate( angleChange, GetPosition() );
 }
