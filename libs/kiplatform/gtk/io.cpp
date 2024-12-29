@@ -66,3 +66,9 @@ bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
 
     return fn.GetName().StartsWith( wxT( "." ) );
 }
+
+
+void KIPLATFORM::IO::LongPathAdjustment( wxFileName& aFilename )
+{
+    // no-op
+}

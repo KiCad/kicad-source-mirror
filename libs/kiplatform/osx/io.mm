@@ -49,16 +49,16 @@ bool KIPLATFORM::IO::DuplicatePermissions(const wxString& sourceFilePath, const 
 
     NSNumber *permissions = sourceAttributes[NSFilePosixPermissions];
 
-    if (permissions == nil) 
+    if (permissions == nil)
     {
         return false;
     }
 
-    if ([fileManager setAttributes:@{NSFilePosixPermissions: permissions} ofItemAtPath:destPath error:&error]) 
+    if ([fileManager setAttributes:@{NSFilePosixPermissions: permissions} ofItemAtPath:destPath error:&error])
     {
         return true;
-    } 
-    else 
+    }
+    else
     {
         NSLog(@"Error assigning permissions: %@", error);
         return false;
@@ -70,4 +70,10 @@ bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
     wxFileName fn( aFileName );
 
     return fn.GetName().StartsWith( wxT( "." ) );
+}
+
+
+void KIPLATFORM::IO::LongPathAdjustment( wxFileName& aFilename )
+{
+    // no-op
 }
