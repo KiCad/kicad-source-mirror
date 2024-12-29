@@ -28,7 +28,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
-#include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/dialog.h>
 
@@ -50,20 +49,21 @@ class DIALOG_EXPORT_ODBPP_BASE : public DIALOG_SHIM
 		wxChoice* m_choiceUnits;
 		wxStaticText* m_lblPrecision;
 		wxSpinCtrl* m_precision;
-		wxCheckBox* m_cbCompress;
+		wxStaticText* m_lblCompress;
+		wxChoice* m_choiceCompress;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCompressCheck( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFormatChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOKClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export ODB++"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 380,300 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export ODB++"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxBORDER_DEFAULT );
 
 		~DIALOG_EXPORT_ODBPP_BASE();
 

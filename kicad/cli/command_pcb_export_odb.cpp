@@ -49,7 +49,7 @@ CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
     m_argParser.add_argument( ARG_COMPRESS )
             .default_value( std::string( "zip" ) )
             .help( std::string( "Compression mode" ) )
-            .choices( "none", "zip" );
+            .choices( "none", "zip", "tgz" );
 
     m_argParser.add_argument( ARG_UNITS )
             .default_value( std::string( "mm" ) )
@@ -87,11 +87,13 @@ int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
     else if( units == "in" )
         job->m_units = JOB_EXPORT_PCB_ODB::ODB_UNITS::INCHES;
 
-    wxString compression = From_UTF8( m_argParser.get<std::string>( ARG_COMPRESS ).c_str() );
+    wxString compression = From_UTF8( m_argParser.get<std::string>( ARG_COMPRESS ).c_str() ).Lower();
 
     if( compression == "zip" )
         job->m_compressionMode = JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP;
-    else
+    else if( compression == "tgz" )
+        job->m_compressionMode = JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ;
+    else if( compression == "none" )
         job->m_compressionMode = JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
 
     LOCALE_IO dummy;

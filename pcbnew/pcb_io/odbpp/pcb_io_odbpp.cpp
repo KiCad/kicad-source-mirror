@@ -90,7 +90,7 @@ bool PCB_IO_ODBPP::ExportODB( const wxString& aFileName )
     try
     {
         std::shared_ptr<ODB_TREE_WRITER> writer =
-                std::make_shared<ODB_TREE_WRITER>( aFileName, "odb" );
+                std::make_shared<ODB_TREE_WRITER>( aFileName );
         writer->SetRootPath( writer->GetCurrentPath() );
         
         if( m_progressReporter )

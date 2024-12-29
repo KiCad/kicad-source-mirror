@@ -1420,8 +1420,8 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
 
     job.SetOutputPath( dlg.GetOutputPath() );
     job.m_filename = GetBoard()->GetFileName();
-    job.m_compressionMode = dlg.GetCompress() ? JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP
-                                              : JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
+    job.m_compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( dlg.GetCompressFormat() );
+
     job.m_precision = dlg.GetPrecision();
     job.m_units = dlg.GetUnitsString() == "mm" ? JOB_EXPORT_PCB_ODB::ODB_UNITS::MILLIMETERS
                                                : JOB_EXPORT_PCB_ODB::ODB_UNITS::INCHES;

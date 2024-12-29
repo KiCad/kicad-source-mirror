@@ -45,8 +45,7 @@ public:
 
     int GetPrecision() const { return m_precision->GetValue(); }
 
-
-    bool GetCompress() const { return m_cbCompress->GetValue(); }
+    int GetCompressFormat() const { return m_choiceCompress->GetSelection(); }
 
     // Runs the actual generation process; shared between GUI and CLI system
     static void GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard,
@@ -56,7 +55,11 @@ public:
 
 private:
     void onBrowseClicked( wxCommandEvent& event ) override;
+    void onFormatChoice( wxCommandEvent& event ) override;
     void onOKClick( wxCommandEvent& event ) override;
+
+    void OnFmtChoiceOptionChanged();
+
 
     bool Init();
     bool TransferDataFromWindow() override;

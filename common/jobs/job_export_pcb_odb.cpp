@@ -32,6 +32,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION,
                               {
                                       { JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE, "none" },
                                       { JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP, "zip" },
+                                      { JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ, "tgz" },
                               } )
 
 

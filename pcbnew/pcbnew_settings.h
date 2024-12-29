@@ -206,7 +206,7 @@ public:
     {
         int    precision;
         int    units;
-        bool   compress;
+        int    compressFormat;
     };
 
     struct DIALOG_EXPORT_SVG

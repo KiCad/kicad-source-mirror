@@ -42,6 +42,7 @@ public:
     {
         NONE,
         ZIP,
+        TGZ,
     };
 
     wxString m_filename;

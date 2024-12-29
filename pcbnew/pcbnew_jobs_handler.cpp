@@ -1842,14 +1842,38 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    if( job->OutputPathFullSpecified() )
-    {
-        wxFileName fn = brd->GetFileName();
-        fn.SetName( fn.GetName() );
-        fn.SetExt( "zip" );
+    wxFileName fn( brd->GetFileName() );
+    wxString   path = job->GetOutputPath();
 
-        job->SetOutputPath( fn.GetName() );
+    if( path.IsEmpty() )
+    {
+        wxFileName outputfn( fn.GetPath(), wxString::Format( wxS( "%s-odb" ), fn.GetName() ) );
+        path = outputfn.GetFullPath();
     }
+
+    wxFileName fileName( path );
+
+    int sepIdx = std::max( path.Find( '/', true ), path.Find( '\\', true ) );
+    int dotIdx = path.Find( '.', true );
+
+    if( fileName.IsDir() && path.EndsWith( wxFileName::GetPathSeparator() ) )
+        path = path.Mid( 0, sepIdx );
+    else if( sepIdx < dotIdx )
+        path = path.Mid( 0, dotIdx );
+
+    switch( job->m_compressionMode )
+    {
+    case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP:
+        path = path + '.' + FILEEXT::ArchiveFileExtension;
+        break;
+    case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ: path += ".tgz"; break;
+    case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE:
+        path = wxFileName( path, "" ).GetFullPath();
+        break;
+    default: break;
+    };
+
+    job->SetOutputPath( path );
 
     DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( *job, brd, nullptr, m_progressReporter, m_reporter );
 
