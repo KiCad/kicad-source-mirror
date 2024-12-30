@@ -537,7 +537,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         // Create a dummy GAL
         new_gal = new KIGFX::GAL( m_options );
         aGalType = GAL_TYPE_NONE;
-        DisplayErrorMessage( m_parent, _( "Error switch GAL backend" ), wxString( err.what() ) );
+        DisplayErrorMessage( m_parent, _( "Error switching GAL backend" ), wxString( err.what() ) );
         result = false;
     }
 
