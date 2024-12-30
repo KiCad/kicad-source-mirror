@@ -111,16 +111,16 @@ void SHEET_SYNCHRONIZATION_AGENT::RemoveItem( SHEET_SYNCHRONIZATION_ITEM& aItem,
 
 
 void SHEET_SYNCHRONIZATION_AGENT::PlaceSheetPin( SCH_SHEET* aSheet, SCH_SHEET_PATH const& aPath,
-                                                 SCH_HIERLABEL* aLabel )
+                                                 std::set<EDA_ITEM*> const& aLabels )
 {
     SCH_SHEET_PATH cp = aPath;
     cp.pop_back();
-    m_doPlaceItem( aSheet, cp, SHEET_SYNCHRONIZATION_PLACEMENT::PLACE_SHEET_PIN, aLabel );
+    m_doPlaceItem( aSheet, cp, SHEET_SYNCHRONIZATION_PLACEMENT::PLACE_SHEET_PIN, aLabels );
 }
 
 
 void SHEET_SYNCHRONIZATION_AGENT::PlaceHieraLable( SCH_SHEET* aSheet, SCH_SHEET_PATH const& aPath,
-                                                   SCH_SHEET_PIN* aPin )
+                                                   std::set<EDA_ITEM*> const& aPins )
 {
-    m_doPlaceItem( aSheet, aPath, SHEET_SYNCHRONIZATION_PLACEMENT::PLACE_HIERLABEL, aPin );
+    m_doPlaceItem( aSheet, aPath, SHEET_SYNCHRONIZATION_PLACEMENT::PLACE_HIERLABEL, aPins );
 }

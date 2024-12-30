@@ -57,16 +57,15 @@ public:
 
     void OnClose( wxCloseEvent& aEvent );
 
-    void EndPlaceItem( EDA_ITEM* aNewItem );
-
     /**
-     * Start place a new #SHEET_PIN/#HIERLABEL.
-     *
-     * @param aSheet The sheet instance
-     * @param aKind   SHEET_PIN / HIERLABEL
-     * @param aTemplate The template used for the new SHEET_PIN / HIERLABEL
+     * @brief Either selected HIERLABELs or SHEET_PINs will be used as templates for placing the new ones.
+     * 
+     * @param aSheet The sheet where the new HIERLABELs or SHEET_PINs will be placed. For SHEET_PINs, it's the corresponding sheet symbol
+     * @param aKind Either PlaceItemKind::HIERLABEL or PlaceItemKind::SHEET_PIN
+     * @param aPlacementTemplateSet All the selected HIERLABELs or SHEET_PINs
      */
-    void BeginPlaceItem( SCH_SHEET* aSheet, PlaceItemKind aKind, EDA_ITEM* aTemplate );
+    void PreparePlacementTemplate( SCH_SHEET* aSheet, PlaceItemKind aKind,
+                                   std::set<EDA_ITEM*> const& aPlacementTemplateSet );
 
     /**
      * Get the Placement Template SHEET_PIN / HIERLABEL used for place a new #HIERLABEL/#SHEET_PIN.
@@ -75,6 +74,19 @@ public:
      */
     SCH_HIERLABEL* GetPlacementTemplate() const;
 
+    /**
+     * @brief End place a new #HIERLABEL/#SHEET_PIN , and add the new item to the corresponding table.
+     * 
+     * @param aNewItem The new #HIERLABEL/#SHEET_PIN to be placed.
+     */
+    void EndPlaceItem( EDA_ITEM* aNewItem );
+
+    /**
+     * @brief Check if there are more items to be placed.
+     */
+    bool CanPlaceMore() const;
+
+    void EndPlacement();
 
 private:
     //It's the agent that performs modification and placement
@@ -84,7 +96,8 @@ private:
     //The same sheet may have mutiple instances
     std::unordered_map<SCH_SHEET*, PANEL_SYNC_SHEET_PINS*> m_panels;
     PlaceItemKind                                          m_placeItemKind;
-    EDA_ITEM*                                              m_placementTemplate;
+    EDA_ITEM*                                              m_currentTemplate;
+    std::set<EDA_ITEM*>                                    m_placementTemplateSet;
 };
 
 #endif

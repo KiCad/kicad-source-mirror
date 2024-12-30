@@ -183,6 +183,13 @@ SHEET_SYNCHRONIZATION_MODEL::GetSynchronizationItem( unsigned aIndex ) const
 }
 
 
+SHEET_SYNCHRONIZATION_ITE_PTR
+SHEET_SYNCHRONIZATION_MODEL::GetSynchronizationItem( wxDataViewItem const& aItem ) const
+{
+    return GetSynchronizationItem( GetRow( aItem ) );
+}
+
+
 void SHEET_SYNCHRONIZATION_MODEL::OnRowSelected( std::optional<unsigned> aRow )
 {
     m_selectedIndex = aRow;

@@ -98,6 +98,8 @@ public:
 
     SHEET_SYNCHRONIZATION_ITE_PTR GetSynchronizationItem( unsigned aIndex ) const;
 
+    SHEET_SYNCHRONIZATION_ITE_PTR GetSynchronizationItem( wxDataViewItem const& aItem ) const;
+
     void OnRowSelected( std::optional<unsigned> aRow );
 
     void UpdateItems( SHEET_SYNCHRONIZATION_ITEM_LIST aItems );

@@ -58,8 +58,9 @@ public:
 
     using DO_MODIFY_ITEM = std::function<void( EDA_ITEM*, SCH_SHEET_PATH, MODIFICATION const& )>;
 
-    using DO_PLACE_ITEM = std::function<void( SCH_SHEET*, SCH_SHEET_PATH,
-                                              SHEET_SYNCHRONIZATION_PLACEMENT, EDA_ITEM* )>;
+    using DO_PLACE_ITEM =
+            std::function<void( SCH_SHEET*, SCH_SHEET_PATH, SHEET_SYNCHRONIZATION_PLACEMENT,
+                                std::set<EDA_ITEM*> const& )>;
 
 
     SHEET_SYNCHRONIZATION_AGENT( DO_MODIFY_ITEM aDoModify, DO_DELETE_ITEM aDoDelete,
@@ -76,9 +77,11 @@ public:
     void RemoveItem( SHEET_SYNCHRONIZATION_ITEM& aItem, SCH_SHEET* aSheet,
                      SCH_SHEET_PATH const& aPath );
 
-    void PlaceSheetPin( SCH_SHEET* aSheet, SCH_SHEET_PATH const& aPath, SCH_HIERLABEL* aLabel );
+    void PlaceSheetPin( SCH_SHEET* aSheet, SCH_SHEET_PATH const& aPath,
+                        std::set<EDA_ITEM*> const& aLabels );
 
-    void PlaceHieraLable( SCH_SHEET* aSheet, SCH_SHEET_PATH const& aPath, SCH_SHEET_PIN* aPin );
+    void PlaceHieraLable( SCH_SHEET* aSheet, SCH_SHEET_PATH const& aPath,
+                          std::set<EDA_ITEM*> const& aPins );
 
 
 private:

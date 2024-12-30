@@ -174,35 +174,43 @@ void PANEL_SYNC_SHEET_PINS::OnBtnAddLabelsClicked( wxCommandEvent& aEvent )
 {
     WXUNUSED( aEvent )
 
-    if( auto idx = m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->GetSelectedIndex();
-        idx.has_value() )
+    wxDataViewItemArray selected_items;
+    std::set<EDA_ITEM*> selected_items_set;
+    m_viewSheetPins->GetSelections( selected_items );
+
+    for( const auto& it : selected_items )
     {
         if( SHEET_SYNCHRONIZATION_ITE_PTR item =
-                    m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->GetSynchronizationItem(
-                            *idx ) )
-        {
-            m_agent.PlaceHieraLable( m_sheet, m_path,
-                                     static_cast<SCH_SHEET_PIN*>( item->GetItem() ) );
-        }
+                    m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->GetSynchronizationItem( it ) )
+            selected_items_set.insert( item->GetItem() );
     }
+
+    if( selected_items_set.empty() )
+        return;
+
+    m_agent.PlaceHieraLable( m_sheet, m_path, std::move( selected_items_set ) );
 }
 
 
 void PANEL_SYNC_SHEET_PINS::OnBtnAddSheetPinsClicked( wxCommandEvent& aEvent )
 {
     WXUNUSED( aEvent )
+    wxDataViewItemArray selected_items;
+    std::set<EDA_ITEM*> selected_items_set;
+    m_viewSheetLabels->GetSelections( selected_items );
 
-    if( auto idx = m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->GetSelectedIndex();
-        idx.has_value() )
+    for( const auto& it : selected_items )
     {
         if( SHEET_SYNCHRONIZATION_ITE_PTR item =
                     m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->GetSynchronizationItem(
-                            *idx ) )
-        {
-            m_agent.PlaceSheetPin( m_sheet, m_path,
-                                   static_cast<SCH_HIERLABEL*>( item->GetItem() ) );
-        }
+                            it ) )
+            selected_items_set.insert( item->GetItem() );
     }
+
+    if( selected_items_set.empty() )
+        return;
+
+    m_agent.PlaceSheetPin( m_sheet, m_path, std::move( selected_items_set ) );
 }
 
 

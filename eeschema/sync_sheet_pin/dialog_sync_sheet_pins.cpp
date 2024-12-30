@@ -40,14 +40,12 @@
 #include <sch_drawing_tools.h>
 
 
-DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS( wxWindow* aParent,
-                                                std::list<SCH_SHEET_PATH> aSheetPath,
-                                                std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT> aAgent ) :
-        DIALOG_SYNC_SHEET_PINS_BASE( aParent ),
-        m_agent( std::move( aAgent ) ),
-        m_lastEditSheet( nullptr ),
-        m_placeItemKind( PlaceItemKind::UNDEFINED ),
-        m_placementTemplate( nullptr )
+DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS(
+        wxWindow* aParent, std::list<SCH_SHEET_PATH> aSheetPath,
+        std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT> aAgent ) :
+        DIALOG_SYNC_SHEET_PINS_BASE( aParent ), m_agent( std::move( aAgent ) ),
+        m_lastEditSheet( nullptr ), m_placeItemKind( PlaceItemKind::UNDEFINED ),
+        m_currentTemplate( nullptr )
 {
     wxImageList* imageList = new wxImageList( SYNC_SHEET_PIN_PREFERENCE::NORMAL_WIDTH,
                                               SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT );
@@ -135,21 +133,31 @@ void DIALOG_SYNC_SHEET_PINS::OnClose( wxCloseEvent& aEvent )
 
 void DIALOG_SYNC_SHEET_PINS::EndPlaceItem( EDA_ITEM* aNewItem )
 {
-    auto post_end_place_item = std::shared_ptr<std::nullptr_t>( nullptr,
-                                                           [&]( std::nullptr_t )
-                                                           {
-                                                               m_placeItemKind =
-                                                                       PlaceItemKind::UNDEFINED;
-                                                               m_placementTemplate = nullptr;
-                                                           } );
-
     if( !aNewItem )
         return;
+
+    auto post_end_place_item =
+            std::shared_ptr<std::nullptr_t>( nullptr,
+                                             [&]( std::nullptr_t )
+                                             {
+                                                 m_placementTemplateSet.erase( m_currentTemplate );
+
+                                                 if( m_placementTemplateSet.empty() )
+                                                 {
+                                                     EndPlacement();
+                                                 }
+                                                 else
+                                                 {
+                                                     m_currentTemplate =
+                                                             *m_placementTemplateSet.begin();
+                                                 }
+                                             } );
+
 
     if( m_lastEditSheet && m_panels.find( m_lastEditSheet ) != m_panels.end() )
     {
         auto& panel = m_panels[m_lastEditSheet];
-        auto  template_item = static_cast<SCH_HIERLABEL*>( m_placementTemplate );
+        auto  template_item = static_cast<SCH_HIERLABEL*>( m_currentTemplate );
         auto  new_item = static_cast<SCH_HIERLABEL*>( aNewItem );
 
         //Usr may edit the name or shape while placing the new item , do sync if either differs
@@ -175,21 +183,34 @@ void DIALOG_SYNC_SHEET_PINS::EndPlaceItem( EDA_ITEM* aNewItem )
             panel->GetModel( SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL )->DoNotify();
     }
 }
-
-
-void DIALOG_SYNC_SHEET_PINS::BeginPlaceItem( SCH_SHEET* aSheet, PlaceItemKind aKind,
-                                             EDA_ITEM* aTemplate )
+void DIALOG_SYNC_SHEET_PINS::PreparePlacementTemplate(
+        SCH_SHEET* aSheet, PlaceItemKind aKind, std::set<EDA_ITEM*> const& aPlacementTemplateSet )
 {
+    if( aPlacementTemplateSet.empty() )
+        return;
+
     m_lastEditSheet = aSheet;
     m_placeItemKind = aKind;
-    m_placementTemplate = aTemplate;
+    m_placementTemplateSet = aPlacementTemplateSet;
+    m_currentTemplate = *m_placementTemplateSet.begin();
 }
-
 
 SCH_HIERLABEL* DIALOG_SYNC_SHEET_PINS::GetPlacementTemplate() const
 {
-    if( !m_placementTemplate )
+    if( !m_currentTemplate )
         return {};
 
-    return static_cast<SCH_HIERLABEL*>( m_placementTemplate );
+    return static_cast<SCH_HIERLABEL*>( m_currentTemplate );
+}
+
+bool DIALOG_SYNC_SHEET_PINS::CanPlaceMore() const
+{
+    return !m_placementTemplateSet.empty();
+}
+
+void DIALOG_SYNC_SHEET_PINS::EndPlacement()
+{
+    m_placementTemplateSet.clear();
+    m_placeItemKind = PlaceItemKind::UNDEFINED;
+    m_currentTemplate = nullptr;
 }
