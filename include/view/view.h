@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -37,7 +37,6 @@
 #include <gal/definitions.h>
 
 #include <view/view_overlay.h>
-#include <view/view.h>
 
 namespace KIGFX
 {
@@ -739,10 +738,10 @@ public:
     std::unique_ptr<VIEW> DataReference() const;
 
     ///< Maximum number of layers that may be shown
-    static constexpr int VIEW_MAX_LAYERS = 1024;//512;
+    static constexpr int VIEW_MAX_LAYERS = MAX_LAYERS_FOR_VIEW;
 
     ///< Rendering order modifier for layers that are marked as top layers.
-    static constexpr int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
+    static constexpr int TOP_LAYER_MODIFIER = -MAX_LAYERS_FOR_VIEW;
 
 protected:
     struct VIEW_LAYER

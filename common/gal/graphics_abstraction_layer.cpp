@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) - base class
  *
@@ -236,8 +236,13 @@ VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 #endif
 }
 
-const int GAL::MIN_DEPTH = -2048;
-const int GAL::MAX_DEPTH = 2047;
+// MIN_DEPTH must be set to be - (VIEW::VIEW_MAX_LAYERS + abs(VIEW::TOP_LAYER_MODIFIER))
+// MAX_DEPTH must be set to be VIEW::VIEW_MAX_LAYERS + abs(VIEW::TOP_LAYER_MODIFIER) -1
+// VIEW_MAX_LAYERS and TOP_LAYER_MODIFIER are defined in view.h.
+// TOP_LAYER_MODIFIER is set as -VIEW_MAX_LAYERS
+// Currently KIGFX::VIEW::VIEW_MAX_LAYERS = MAX_LAYERS_FOR_VIEW
+const int GAL::MIN_DEPTH = -2*MAX_LAYERS_FOR_VIEW;
+const int GAL::MAX_DEPTH = 2*MAX_LAYERS_FOR_VIEW - 1;
 const int GAL::GRID_DEPTH = MAX_DEPTH - 1;
 
 
