@@ -931,6 +931,7 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
 
         // For these, just give the front copper geometry, it doesn't matter.
     case LAYER_PAD_NETNAMES:
+    case LAYER_VIA_NETNAMES:
     case LAYER_PADS:
     case LAYER_PAD_PLATEDHOLES:
     case LAYER_VIA_HOLES:
@@ -947,13 +948,20 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
     case MODE::CUSTOM:
     case MODE::FRONT_INNER_BACK:
     {
-        if( IsFrontLayer( aLayer ) )
+        PCB_LAYER_ID boardCuLayer = aLayer;
+
+        if( IsViaCopperLayer( aLayer ) )
+            boardCuLayer = ToLAYER_ID( static_cast<int>( aLayer ) - LAYER_VIA_COPPER_START );
+        else if( IsPadCopperLayer( aLayer ) )
+            boardCuLayer = ToLAYER_ID( static_cast<int>( aLayer ) - LAYER_PAD_COPPER_START );
+
+        if( IsFrontLayer( boardCuLayer ) )
             return F_Cu;
 
-        if( IsBackLayer( aLayer ) )
+        if( IsBackLayer( boardCuLayer ) )
             return B_Cu;
 
-        wxASSERT_MSG( IsCopperLayer( aLayer ),
+        wxASSERT_MSG( IsCopperLayer( boardCuLayer ),
                       wxString::Format( wxT( "Unhandled layer %d in PADSTACK::EffectiveLayerFor" ),
                                         aLayer ) );
 
@@ -965,8 +973,8 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
         {
             LSET boardCopper = m_parent->BoardLayerSet() & LSET::AllCuMask();
 
-            if( boardCopper.Contains( aLayer ) )
-                return aLayer;
+            if( boardCopper.Contains( boardCuLayer ) )
+                return boardCuLayer;
 
             // We're asked for an inner copper layer not present in the board.  There is no right
             // answer here, so fall back on the front shape
@@ -974,7 +982,7 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
         }
 
         // No parent, just pass through
-        return aLayer;
+        return boardCuLayer;
     }
 
     case MODE::NORMAL:
