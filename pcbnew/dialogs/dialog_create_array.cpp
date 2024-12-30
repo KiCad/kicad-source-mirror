@@ -43,77 +43,43 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
      * Construct with some sensible defaults.
      * In future, this could be loaded from config?
      */
-    CREATE_ARRAY_DIALOG_ENTRIES() :
-            m_OptionsSet( true ),
-            m_GridNx( 5 ),
-            m_GridNy( 5 ),
-            m_GridDx( pcbIUScale.mmToIU( 2.54 ) ),
-            m_GridDy( pcbIUScale.mmToIU( 2.54 ) ),
-            m_GridOffsetX( 0 ),
-            m_GridOffsetY( 0 ),
-            m_GridStagger( 1 ),
-            m_GridStaggerRows( true ),
-            m_GridPositionCentreOnItems( true ),
-            m_GridNumberingAxis( 0 ),                // h then v
-            m_GridNumReverseAlt( false ),
-            m_GridNumStartSet( 1 ),                  // use specified start
-            m_Grid2dArrayNumbering( 0 ),             // linear numbering
-            m_GridPrimaryAxisScheme( 0 ),            // numeric
-            m_GridSecondaryAxisScheme( 0 ),          // numeric
-            m_GridPrimaryNumOffset( wxT( "1" ) ),    // numeric
-            m_GridSecondaryNumOffset( wxT( "1" ) ),  // numeric
-            m_GridPrimaryAxisStep( 1 ),
-            m_GridSecondaryAxisStep( 1 ),
-            m_CircCentreX( 0 ),
-            m_CircCentreY( 0 ),
-            m_CircAngle( ANGLE_90 ),
-            m_CircCount( 4 ),
-            m_CircNumStartSet( 1 ),                  // use specified start
-            m_GridCircNumScheme( 0 ),
-            m_CircNumberingOffset( wxT( "1" ) ),
-            m_CircNumberingStep( 1 ),
-            m_CircRotatationStep( false ),
-            m_ArrayTypeTab( 0 ),                     // start on grid view
-            m_FootprintKeepAnnotations( false ),
-            m_FootprintReannotate( true )            // Assign unique by default
-    {
-    }
+    CREATE_ARRAY_DIALOG_ENTRIES() {}
 
-    bool      m_OptionsSet;
+    bool     m_OptionsSet = true;
 
-    long     m_GridNx;
-    long     m_GridNy;
-    long     m_GridDx;
-    long     m_GridDy;
-    long     m_GridOffsetX;
-    long     m_GridOffsetY;
-    long     m_GridStagger;
-    bool     m_GridStaggerRows;
-    bool     m_GridPositionCentreOnItems;
-    long     m_GridNumberingAxis;
-    bool     m_GridNumReverseAlt;
-    long     m_GridNumStartSet;
-    long     m_Grid2dArrayNumbering;
-    long     m_GridPrimaryAxisScheme;
-    long     m_GridSecondaryAxisScheme;
-    wxString m_GridPrimaryNumOffset;
-    wxString m_GridSecondaryNumOffset;
-    long     m_GridPrimaryAxisStep;
-    long     m_GridSecondaryAxisStep;
+    long     m_GridNx                    = 5;
+    long     m_GridNy                    = 5;
+    long     m_GridDx                    = pcbIUScale.mmToIU( 2.54 );
+    long     m_GridDy                    = pcbIUScale.mmToIU( 2.54 );
+    long     m_GridOffsetX               = 0;
+    long     m_GridOffsetY               = 0;
+    long     m_GridStagger               = 1;
+    bool     m_GridStaggerRows           = true;
+    bool     m_GridPositionCentreOnItems = true;
+    long     m_GridNumberingAxis         = 0;           // h then v
+    bool     m_GridNumReverseAlt         = false;
+    long     m_GridNumStartSet           = 1;           // use specified start
+    long     m_Grid2dArrayNumbering      = 0;           // linear numbering
+    long     m_GridPrimaryAxisScheme     = 0;           // numeric
+    long     m_GridSecondaryAxisScheme   = 0;           // numeric
+    wxString m_GridPrimaryNumOffset      = wxT( "1" );  // numeric
+    wxString m_GridSecondaryNumOffset    = wxT( "1" );  // numeric
+    long     m_GridPrimaryAxisStep       = 1;
+    long     m_GridSecondaryAxisStep     = 1;
 
-    long      m_CircCentreX;
-    long      m_CircCentreY;
-    EDA_ANGLE m_CircAngle;
-    long      m_CircCount;
-    bool      m_CircFullCircle;
-    long      m_CircNumStartSet;
-    long      m_GridCircNumScheme;
-    wxString  m_CircNumberingOffset;
-    long      m_CircNumberingStep;
-    bool      m_CircRotatationStep;
-    long      m_ArrayTypeTab;
-    bool      m_FootprintKeepAnnotations;
-    bool      m_FootprintReannotate;
+    long      m_CircCentreX              = 0;
+    long      m_CircCentreY              = 0;
+    EDA_ANGLE m_CircAngle                = ANGLE_90;
+    long      m_CircCount                = 4;
+    bool      m_CircFullCircle           = 0;
+    long      m_CircNumStartSet          = 1;        // use specified start
+    long      m_GridCircNumScheme        = 0;
+    wxString  m_CircNumberingOffset      = wxT("1");
+    long      m_CircNumberingStep        = 1;
+    bool      m_CircRotatationStep       = false;
+    long      m_ArrayTypeTab             = 0;       // start on grid view
+    bool      m_FootprintKeepAnnotations = false;
+    bool      m_FootprintReannotate      = true;    // Assign unique by default
 };
 
 // Persistent options settings

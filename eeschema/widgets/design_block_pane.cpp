@@ -131,7 +131,10 @@ void DESIGN_BLOCK_PANE::RefreshLibs()
 }
 
 
-FILEDLG_IMPORT_SHEET_CONTENTS::FILEDLG_IMPORT_SHEET_CONTENTS( EESCHEMA_SETTINGS* aSettings )
+FILEDLG_IMPORT_SHEET_CONTENTS::FILEDLG_IMPORT_SHEET_CONTENTS( EESCHEMA_SETTINGS* aSettings ) :
+    m_cbRepeatedPlacement( nullptr ),
+    m_cbPlaceAsSheet( nullptr ),
+    m_cbKeepAnnotations( nullptr )
 {
     wxASSERT( aSettings );
     m_settings = aSettings;

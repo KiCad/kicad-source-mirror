@@ -106,6 +106,8 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aBoard ) :
     m_precision = 6;
     m_WorldScale = 1.0;
     m_Cache3Dmodels = nullptr;
+    m_includeDNP = false;
+    m_includeUnspecified = false;
     m_UseInlineModelsInBrdfile = false;
     m_UseRelPathIn3DModelFilename = false;
     m_BoardToVrmlScale = pcbIUScale.MM_PER_IU;

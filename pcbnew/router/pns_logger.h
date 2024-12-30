@@ -61,7 +61,9 @@ public:
         SIZES_SETTINGS sizes;
         int layer;
 
-        EVENT_ENTRY() {}
+        EVENT_ENTRY() : layer( 0 )
+        {
+        }
 
         EVENT_ENTRY( const EVENT_ENTRY& aE ) :
                 p( aE.p ), type( aE.type ), uuids( aE.uuids ), sizes( aE.sizes ), layer( aE.layer )

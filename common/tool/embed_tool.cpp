@@ -30,20 +30,21 @@
 
 
 EMBED_TOOL::EMBED_TOOL( const std::string& aName ) :
-        TOOL_INTERACTIVE( aName )
+        TOOL_INTERACTIVE( aName ),
+        m_files( nullptr )
 {
 }
 
 
 EMBED_TOOL::EMBED_TOOL() :
-        TOOL_INTERACTIVE( "common.Embed" )
+        TOOL_INTERACTIVE( "common.Embed" ),
+        m_files( nullptr )
 {
 }
 
 
 bool EMBED_TOOL::Init()
 {
-
     m_files = getModel<EDA_ITEM>()->GetEmbeddedFiles();
 
     return true;
@@ -53,7 +54,6 @@ bool EMBED_TOOL::Init()
 void EMBED_TOOL::Reset( RESET_REASON aReason )
 {
     m_files = getModel<EDA_ITEM>()->GetEmbeddedFiles();
-
 }
 
 int EMBED_TOOL::AddFile( const TOOL_EVENT& aEvent )

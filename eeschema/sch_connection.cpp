@@ -85,7 +85,8 @@ SCH_CONNECTION::SCH_CONNECTION( CONNECTION_GRAPH* aGraph ) :
 
 
 SCH_CONNECTION::SCH_CONNECTION( SCH_CONNECTION& aOther ) :
-        m_parent( nullptr )
+        m_parent( nullptr ),
+        m_driver( nullptr )
 {
     Reset();
     Clone( aOther );

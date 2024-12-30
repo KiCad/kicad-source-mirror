@@ -336,7 +336,7 @@ public:
         LINE_TYPE m_type = LINE_TYPE::SEGMENT;
 
         VECTOR2I      m_center;
-        ODB_DIRECTION m_direction;
+        ODB_DIRECTION m_direction = ODB_DIRECTION::CW;
     };
 
     void AddPolygonHoles( const SHAPE_POLY_SET::POLYGON& aPolygon );

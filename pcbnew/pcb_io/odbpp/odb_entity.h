@@ -85,8 +85,8 @@ public:
 
         uint32_t     m_rowNumber;
         wxString     m_layerName;
-        ODB_CONTEXT  m_context;
-        ODB_TYPE     m_type;
+        ODB_CONTEXT  m_context  = ODB_CONTEXT::BOARD;
+        ODB_TYPE     m_type     = ODB_TYPE::UNDEFINED;
         ODB_POLARITY m_polarity = ODB_POLARITY::POSITIVE;
 
         MATRIX_LAYER( uint32_t aRow, const wxString& aLayerName ) :

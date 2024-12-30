@@ -108,7 +108,7 @@ public:
     PNS::DRAG_MODE Mode() const override;
 
 // Use case: we are dragging multiple tracks. The router erases a few of them, adds a few new ones. For the ease of use, it would be good for the tracks the be still selected when
-// the drag operation is completed. This method returns a set of the 'leader' (segments/arcs that have been selected for multi-fragging)  
+// the drag operation is completed. This method returns a set of the 'leader' (segments/arcs that have been selected for multi-fragging)
     virtual std::vector<PNS::ITEM*> GetLastCommittedLeaderSegments() override { return m_leaderSegments; };
 
     virtual bool GetForceMarkObstaclesMode( bool* aDragStatus ) const override
@@ -117,11 +117,11 @@ public:
         return false;
     }
 
-    
+
 
 private:
 
-    
+
 
 
     struct MDRAG_LINE
@@ -130,27 +130,28 @@ private:
         ITEM* leaderItem = nullptr;
         std::vector<PNS::ITEM*> originalLeaders;
 
-
         bool isStrict = false;
         bool isMidSeg = false;
         bool isCorner = false;
         bool isDraggable = false;
 
         int leaderSegIndex = -1;
-        bool cornerIsLast = false;
+        bool cornerIsLast  = false;
 
         PNS::LINE originalLine; // complete line (in a bundle) to drag
         PNS::LINE preDragLine; // complete line (in a bundle) to drag
         PNS::LINE draggedLine; // result of the drag calculation
         PNS::LINE preShoveLine; // result of the drag calculation
-        bool dragOK = false;
-        bool      isPrimaryLine = false; // when true, it's the "leader"/"primary one" - the one the cursor is attached to
-        bool clipDone = false;
-        int       offset; // distance between this line and the primary one (only applicable if the respective end segments are parallel)
+
+        bool dragOK        = false;
+        bool isPrimaryLine = false; // when true, it's the "leader"/"primary one" - the one the cursor is attached to
+        bool clipDone      = false;
+        int  offset        = 0; // distance between this line and the primary one (only applicable if the respective end segments are parallel)
         SEG midSeg;
 //        VECTOR2I dragAnchor;
-        int dragDist;
-        int cornerDistance, leaderSegDistance;
+        int dragDist          = 0;
+        int cornerDistance    = 0;
+        int leaderSegDistance = 0;
     };
 
     bool multidragMarkObstacles ( std::vector<MDRAG_LINE>& aCompletedLines );
@@ -174,7 +175,7 @@ private:
     VECTOR2I m_dragStartPoint;
     SEG m_guide;
     std::unique_ptr<SHOVE> m_shove;
-    
+
 };
 
 }

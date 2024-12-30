@@ -498,7 +498,7 @@ struct APOLYGON6
 struct ARULE6
 {
     wxString name;
-    int      priority;
+    int      priority = 0;
 
     ALTIUM_RULE_KIND kind;
 
@@ -507,38 +507,38 @@ struct ARULE6
 
     // ALTIUM_RULE_KIND::CLEARANCE
     // ALTIUM_RULE_KIND::HOLE_TO_HOLE_CLEARANCE
-    int clearanceGap;
+    int clearanceGap = 0;
 
     // ALTIUM_RULE_KIND::WIDTH
     // ALTIUM_RULE_KIND::HOLE_SIZE
-    int minLimit;
-    int maxLimit;
+    int minLimit = 0;
+    int maxLimit = 0;
 
     // ALTIUM_RULE_KIND::WIDTH
-    int preferredWidth;
+    int preferredWidth = 0;
 
     // ALTIUM_RULE_KIND::ROUTING_VIAS
-    int width;
-    int minWidth;
-    int maxWidth;
-    int holeWidth;
-    int minHoleWidth;
-    int maxHoleWidth;
+    int width        = 0;
+    int minWidth     = 0;
+    int maxWidth     = 0;
+    int holeWidth    = 0;
+    int minHoleWidth = 0;
+    int maxHoleWidth = 0;
 
     // ALTIUM_RULE_KIND::PLANE_CLEARANCE
-    int planeclearanceClearance;
+    int planeclearanceClearance = 0;
 
     // ALTIUM_RULE_KIND::SOLDER_MASK_EXPANSION
-    int soldermaskExpansion;
+    int soldermaskExpansion = 0;
 
     // ALTIUM_RULE_KIND::PASTE_MASK_EXPANSION
-    int pastemaskExpansion;
+    int pastemaskExpansion = 0;
 
     // ALTIUM_RULE_KIND::POLYGON_CONNECT
-    int32_t              polygonconnectAirgapwidth;
-    int32_t              polygonconnectReliefconductorwidth;
-    int                  polygonconnectReliefentries;
-    ALTIUM_CONNECT_STYLE polygonconnectStyle;
+    int32_t              polygonconnectAirgapwidth          = 0;
+    int32_t              polygonconnectReliefconductorwidth = 0;
+    int                  polygonconnectReliefentries        = 0;
+    ALTIUM_CONNECT_STYLE polygonconnectStyle                = ALTIUM_CONNECT_STYLE::UNKNOWN;
 
     // TODO: implement different types of rules we need to parse
 
@@ -592,39 +592,39 @@ struct AARC6
 
 struct ACOMPONENTBODY6
 {
-    uint16_t             component;
+    uint16_t             component = 0;
 
     wxString             body_name;
-    int                  kind;
-    int                  subpolyindex;
-    int                  unionindex;
-    int                  arc_resolution;
-    bool                 is_shape_based;
-    int                  cavity_height;
-    int                  standoff_height;
-    int                  overall_height;
-    int                  body_projection;
-    int                  body_color_3d;
-    int                  body_opacity_3d;
+    int                  kind             = 0;
+    int                  subpolyindex     = 0;
+    int                  unionindex       = 0;
+    int                  arc_resolution   = 0;;
+    bool                 is_shape_based   = false;
+    int                  cavity_height    = 0;
+    int                  standoff_height  = 0;
+    int                  overall_height   = 0;
+    int                  body_projection  = 0;
+    int                  body_color_3d    = 0;
+    int                  body_opacity_3d  = 0;
     wxString             identifier;
     wxString             texture;
-    int                  texture_center_x;
-    int                  texture_center_y;
-    int                  texture_size_x;
-    int                  texture_size_y;
-    int                  texture_rotation;
+    int                  texture_center_x = 0;
+    int                  texture_center_y = 0;
+    int                  texture_size_x   = 0;
+    int                  texture_size_y   = 0;
+    int                  texture_rotation = 0;
 
     wxString             modelId;
     wxString             modelChecksum;
-    bool                 modelIsEmbedded;
+    bool                 modelIsEmbedded = false;
     wxString             modelName;
-    int                  modelType;
-    int                  modelSource;
-    int                  modelSnapCount;
+    int                  modelType       = 0;
+    int                  modelSource     = 0;
+    int                  modelSnapCount  = 0;
 
     VECTOR3D             modelPosition;
     VECTOR3D             modelRotation;
-    double               rotation;
+    double               rotation = 0.0;
 
     explicit ACOMPONENTBODY6( ALTIUM_BINARY_PARSER& aReader );
 };
@@ -686,28 +686,28 @@ struct APAD6
 
 struct AVIA6
 {
-    bool is_locked;
-    bool is_tent_top;
-    bool is_tent_bottom;
-    bool is_test_fab_top;
-    bool is_test_fab_bottom;
+    bool is_locked          = false;
+    bool is_tent_top        = false;
+    bool is_tent_bottom     = false;
+    bool is_test_fab_top    = false;
+    bool is_test_fab_bottom = false;
 
-    uint16_t net;
+    uint16_t net = 0;
 
     VECTOR2I position;
-    uint32_t pos_tolerance; // 2147483640 is N/A
-    uint32_t neg_tolerance; // 2147483640 is N/A
-    uint32_t diameter;
-    uint32_t holesize;
+    uint32_t pos_tolerance = 2147483640; // 2147483640 is N/A
+    uint32_t neg_tolerance = 2147483640; // 2147483640 is N/A
+    uint32_t diameter      = 0;
+    uint32_t holesize      = 0;
 
-    int32_t thermal_relief_airgap;
-    uint32_t thermal_relief_conductorcount;
-    uint32_t thermal_relief_conductorwidth;
+    int32_t  thermal_relief_airgap         = 0;
+    uint32_t thermal_relief_conductorcount = 0;
+    uint32_t thermal_relief_conductorwidth = 0;
 
-    int32_t soldermask_expansion_front;
-    int32_t soldermask_expansion_back;
-    bool    soldermask_expansion_manual;
-    bool    soldermask_expansion_linked;
+    int32_t soldermask_expansion_front  = 0;
+    int32_t soldermask_expansion_back   = 0;
+    bool    soldermask_expansion_manual = false;
+    bool    soldermask_expansion_linked = false;
 
     ALTIUM_LAYER    layer_start;
     ALTIUM_LAYER    layer_end;
@@ -752,36 +752,36 @@ struct ATEXT6
 
 
     ALTIUM_LAYER layer;
-    uint16_t     component;
+    uint16_t     component = 0;
 
     VECTOR2I             position;
-    uint32_t             height;
-    double               rotation;
-    uint32_t             strokewidth;
+    uint32_t             height       = 0;
+    double               rotation     = 0.0;
+    uint32_t             strokewidth  = 0;
     STROKE_FONT_TYPE     strokefonttype;
 
-    bool isBold;
-    bool isItalic;
-    bool isMirrored;
-    bool isInverted;
-    bool isInvertedRect;
-    bool isFrame;
-    bool isOffsetBorder;
-    bool isJustificationValid;
+    bool isBold               = false;
+    bool isItalic             = false;
+    bool isMirrored           = false;
+    bool isInverted           = false;
+    bool isInvertedRect       = false;
+    bool isFrame              = false;
+    bool isOffsetBorder       = false;
+    bool isJustificationValid = false;
 
-    uint32_t margin_border_width;
-    uint32_t textbox_rect_width;
-    uint32_t textbox_rect_height;
-    uint32_t text_offset_width;
+    uint32_t margin_border_width = 0;
+    uint32_t textbox_rect_width  = 0;
+    uint32_t textbox_rect_height = 0;
+    uint32_t text_offset_width   = 0;
 
     // Justification only applies when there is a text box size specified
     // Then, the text is justified within the box
     ALTIUM_TEXT_POSITION textbox_rect_justification;
 
-    uint32_t widestring_index;
+    uint32_t widestring_index = 0;
 
-    bool isComment;
-    bool isDesignator;
+    bool isComment    = false;
+    bool isDesignator = false;
 
     ALTIUM_TEXT_TYPE fonttype;
     wxString         fontname;

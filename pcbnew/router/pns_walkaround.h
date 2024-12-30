@@ -36,7 +36,7 @@ namespace PNS {
 class WALKAROUND : public ALGO_BASE
 {
     static constexpr int MaxWalkPolicies = 3;
-    
+
 public:
     WALKAROUND( NODE* aWorld, ROUTER* aRouter ) :
         ALGO_BASE ( aRouter ),
@@ -47,6 +47,7 @@ public:
 
         // Initialize other members, to avoid uninitialized variables.
         m_iteration = 0;
+        m_initialLength = 0.0;
         m_forceCw = false;
         m_forceLongerPath = false;
         m_lengthLimitOn = true;
@@ -133,7 +134,7 @@ public:
     }
 
     void SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies);
-    
+
 private:
     void start( const LINE& aInitialPath );
     bool singleStep();

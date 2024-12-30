@@ -104,20 +104,20 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
     m_buttonsSizer->Layout();
 
     SetReturnCode( 1 );
-
+    initDialog();
     GetSizer()->SetSizeHints( this );
 }
 
 
 // Static members of DIALOG_GENDRILL
-int DIALOG_GENDRILL::m_UnitDrillIsInch  = false;     // Only for Excellon format
-int DIALOG_GENDRILL::m_ZerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
-bool DIALOG_GENDRILL::m_MinimalHeader   = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::m_Mirror          = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::m_Merge_PTH_NPTH  = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::m_GenerateMap     = false;
-int DIALOG_GENDRILL::m_mapFileType      = 4;        // The last choice in m_Choice_Drill_Map
-int DIALOG_GENDRILL::m_drillFileType    = 0;
+int  DIALOG_GENDRILL::m_UnitDrillIsInch  = false;     // Only for Excellon format
+int  DIALOG_GENDRILL::m_ZerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
+bool DIALOG_GENDRILL::m_MinimalHeader    = false;    // Only for Excellon format
+bool DIALOG_GENDRILL::m_Mirror           = false;    // Only for Excellon format
+bool DIALOG_GENDRILL::m_Merge_PTH_NPTH   = false;    // Only for Excellon format
+bool DIALOG_GENDRILL::m_GenerateMap      = false;
+int  DIALOG_GENDRILL::m_mapFileType      = 4;        // The last choice in m_Choice_Drill_Map
+int  DIALOG_GENDRILL::m_drillFileType    = 0;
 bool DIALOG_GENDRILL::m_UseRouteModeForOvalHoles = true;    // Use G00 route mode to "drill" oval holes
 
 DIALOG_GENDRILL::~DIALOG_GENDRILL()

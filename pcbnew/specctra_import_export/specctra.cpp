@@ -156,6 +156,11 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp )
 
     struct tm   mytime;
 
+    mytime.tm_hour  = 0;
+    mytime.tm_min   = 0;
+    mytime.tm_sec   = 0;
+    mytime.tm_isdst = 0;   // useless param here.
+
     static const char time_toks[] = "<month> <day> <hour> : <minute> : <second> <year> or <month> <day> <hour>:<minute>:<second> <year>";
 
     static const char* months[] = {  // index 0 = Jan
@@ -236,7 +241,6 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp )
         Expecting( time_toks );
 
     mytime.tm_year = atoi( CurText() ) - 1900;
-    mytime.tm_isdst = 0;   // useless param here.
 
     *time_stamp = mktime( &mytime );
 }

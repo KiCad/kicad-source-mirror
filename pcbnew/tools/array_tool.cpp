@@ -48,7 +48,8 @@ static void TransformItem( const ARRAY_OPTIONS& aArrOpts, int aIndex, BOARD_ITEM
 }
 
 
-ARRAY_TOOL::ARRAY_TOOL() : PCB_TOOL_BASE( "pcbnew.Array" )
+ARRAY_TOOL::ARRAY_TOOL() : PCB_TOOL_BASE( "pcbnew.Array" ),
+    m_dialog( nullptr )
 {
 }
 

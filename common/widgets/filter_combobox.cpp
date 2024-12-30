@@ -388,7 +388,8 @@ void FILTER_COMBOPOPUP::doSetFocus( wxWindow* aWindow )
 
 FILTER_COMBOBOX::FILTER_COMBOBOX( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                             const wxSize &size, long style ) :
-        wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY|wxTE_PROCESS_ENTER )
+        wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY|wxTE_PROCESS_ENTER ),
+        m_filterPopup( nullptr )
 {
     UseAltPopupWindow();
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( FILTER_COMBOBOX::onKeyDown ), nullptr, this );

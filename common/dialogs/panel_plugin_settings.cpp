@@ -28,7 +28,8 @@
 
 
 PANEL_PLUGIN_SETTINGS::PANEL_PLUGIN_SETTINGS( wxWindow* aParent ) :
-        PANEL_PLUGIN_SETTINGS_BASE( aParent )
+        PANEL_PLUGIN_SETTINGS_BASE( aParent ),
+        m_pythonInterpreterValid( false )
 {
     wxFont helpFont = KIUI::GetInfoFont( this ).Italic();
     m_stPythonStatus->SetFont( helpFont );

@@ -39,7 +39,11 @@ DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset
         DIALOG_SET_OFFSET_BASE( &aParent ), m_clearToZero( aClearToZero ),
         m_originalOffset( aOffset ), m_updatedOffset( aOffset ),
         m_xOffset( &aParent, m_xLabel, m_xEntry, m_xUnit ),
-        m_yOffset( &aParent, m_yLabel, m_yEntry, m_yUnit )
+        m_yOffset( &aParent, m_yLabel, m_yEntry, m_yUnit ),
+        m_stateX( 0.0 ),
+        m_stateY( 0.0 ),
+        m_stateRadius( 0.0 ),
+        m_stateTheta( ANGLE_0 )
 {
     m_xOffset.SetCoordType( ORIGIN_TRANSFORMS::REL_X_COORD );
     m_yOffset.SetCoordType( ORIGIN_TRANSFORMS::REL_Y_COORD );

@@ -195,6 +195,7 @@ SHOVE::SHOVE( NODE* aWorld, ROUTER* aRouter ) :
     m_draggedVia = nullptr;
     m_iter = 0;
     m_multiLineMode = false;
+    m_headsModified = false;
     m_restrictSpringbackTagId = 0;
     m_springbackDoNotTouchNode = nullptr;
     m_defaultPolicy = SHP_SHOVE;

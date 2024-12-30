@@ -46,7 +46,8 @@ DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME
                                                                   LIB_TABLE*      aLibs ) :
         LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ),
                                 Kiface().KifaceSettings() ),
-        m_libs( (DESIGN_BLOCK_LIB_TABLE*) aLibs )
+        m_libs( (DESIGN_BLOCK_LIB_TABLE*) aLibs ),
+        m_frame( aParent )
 {
 }
 
