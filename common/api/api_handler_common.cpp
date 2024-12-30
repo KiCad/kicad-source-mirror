@@ -53,6 +53,10 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
             &API_HANDLER_COMMON::handleExpandTextVariables );
     registerHandler<GetPluginSettingsPath, StringResponse>(
             &API_HANDLER_COMMON::handleGetPluginSettingsPath );
+    registerHandler<GetTextVariables, project::TextVariables>(
+            &API_HANDLER_COMMON::handleGetTextVariables );
+    registerHandler<SetTextVariables, Empty>(
+            &API_HANDLER_COMMON::handleSetTextVariables );
 
 }
 
@@ -262,4 +266,73 @@ HANDLER_RESULT<StringResponse> API_HANDLER_COMMON::handleGetPluginSettingsPath(
     StringResponse reply;
     reply.set_response( path.GetPath() );
     return reply;
+}
+
+
+HANDLER_RESULT<project::TextVariables> API_HANDLER_COMMON::handleGetTextVariables(
+        const HANDLER_CONTEXT<GetTextVariables>& aCtx )
+{
+    if( !aCtx.Request.has_document() || aCtx.Request.document().type() != DOCTYPE_PROJECT )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        // No error message, this is a flag that the server should try a different handler
+        return tl::unexpected( e );
+    }
+
+    const PROJECT& project = Pgm().GetSettingsManager().Prj();
+
+    if( project.IsNullProject() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_NOT_READY );
+        e.set_error_message( "no valid project is loaded, cannot get text variables" );
+        return tl::unexpected( e );
+    }
+
+    const std::map<wxString, wxString>& vars = project.GetTextVars();
+
+    project::TextVariables reply;
+    auto map = reply.mutable_variables();
+
+    for( const auto& [key, value] : vars )
+        ( *map )[ std::string( key.ToUTF8() ) ] = value.ToUTF8();
+
+    return reply;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetTextVariables(
+    const HANDLER_CONTEXT<SetTextVariables>& aCtx )
+{
+    if( !aCtx.Request.has_document() || aCtx.Request.document().type() != DOCTYPE_PROJECT )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        // No error message, this is a flag that the server should try a different handler
+        return tl::unexpected( e );
+    }
+
+    PROJECT& project = Pgm().GetSettingsManager().Prj();
+
+    if( project.IsNullProject() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_NOT_READY );
+        e.set_error_message( "no valid project is loaded, cannot set text variables" );
+        return tl::unexpected( e );
+    }
+
+    const project::TextVariables& newVars = aCtx.Request.variables();
+    std::map<wxString, wxString>& vars = project.GetTextVars();
+
+    if( aCtx.Request.merge_mode() == MapMergeMode::MMM_REPLACE )
+        vars.clear();
+
+    for( const auto& [key, value] : newVars.variables() )
+        vars[wxString::FromUTF8( key )] = wxString::FromUTF8( value );
+
+    Pgm().GetSettingsManager().SaveProject();
+
+    return Empty();
 }

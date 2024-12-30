@@ -33,3 +33,8 @@ message NetClass
   string name = 1;
 
 }
+
+message TextVariables
+{
+  map<string, string> variables = 1;
+}

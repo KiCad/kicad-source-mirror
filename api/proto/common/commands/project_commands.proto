@@ -47,3 +47,20 @@ message ExpandTextVariablesResponse
 {
   repeated string text = 1;
 }
+
+
+// returns kiapi.common.project.TextVariables
+message GetTextVariables
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+
+message SetTextVariables
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  kiapi.common.project.TextVariables variables = 2;
+  // Whether to merge or replace the existing text variables map with the contents of this message
+  kiapi.common.types.MapMergeMode merge_mode = 3;
+}

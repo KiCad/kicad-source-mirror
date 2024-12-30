@@ -57,6 +57,12 @@ private:
 
     HANDLER_RESULT<commands::StringResponse> handleGetPluginSettingsPath(
         const HANDLER_CONTEXT<commands::GetPluginSettingsPath>& aCtx );
+
+    HANDLER_RESULT<project::TextVariables> handleGetTextVariables(
+        const HANDLER_CONTEXT<commands::GetTextVariables>& aCtx );
+
+    HANDLER_RESULT<Empty> handleSetTextVariables(
+        const HANDLER_CONTEXT<commands::SetTextVariables>& aCtx );
 };
 
 #endif //KICAD_API_HANDLER_COMMON_H

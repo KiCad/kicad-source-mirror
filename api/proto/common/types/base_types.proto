@@ -438,3 +438,13 @@ enum AxisAlignment
   AA_X_AXIS = 1;
   AA_Y_AXIS = 2;
 }
+
+enum MapMergeMode
+{
+  MMM_UNKNOWN = 0;
+  // The existing map will be merged with the incoming map; keys that are not present in the
+  // incoming map will be preserved with their original values
+  MMM_MERGE = 1;
+  // The existing map will be cleared and replaced with the incoming map
+  MMM_REPLACE = 2;
+}
