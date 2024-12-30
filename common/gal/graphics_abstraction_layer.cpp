@@ -236,8 +236,8 @@ VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 #endif
 }
 
-const int GAL::MIN_DEPTH = -1024;
-const int GAL::MAX_DEPTH = 1023;
+const int GAL::MIN_DEPTH = -2048;
+const int GAL::MAX_DEPTH = 2047;
 const int GAL::GRID_DEPTH = MAX_DEPTH - 1;
 
 
