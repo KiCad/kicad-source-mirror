@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-19 16:48-0800\n"
+"POT-Creation-Date: 2024-12-30 13:31-0800\n"
 "PO-Revision-Date: 2024-10-13 19:15+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v8/uk/>\n"
@@ -1332,13 +1332,13 @@ msgid "Clear Recent Files"
 msgstr "Очистити останні файли"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:401
-#: eeschema/tools/sch_drawing_tools.cpp:654
+#: eeschema/tools/sch_drawing_tools.cpp:648
 #: pagelayout_editor/pl_editor_frame.cpp:876 pcbnew/tools/drawing_tool.cpp:672
 msgid "Choose Image"
 msgstr "Виберати зображення"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:402
-#: eeschema/tools/sch_drawing_tools.cpp:655
+#: eeschema/tools/sch_drawing_tools.cpp:649
 #: pagelayout_editor/pl_editor_frame.cpp:877 pcbnew/tools/drawing_tool.cpp:673
 msgid "Image Files"
 msgstr "Файли зображень"
@@ -1869,7 +1869,7 @@ msgid "Confirmation"
 msgstr "Підтвердження"
 
 #: common/confirm.cpp:383 eeschema/lib_field.cpp:548 eeschema/lib_pin.cpp:1196
-#: eeschema/sch_field.cpp:935 eeschema/sch_pin.cpp:261
+#: eeschema/sch_field.cpp:935 eeschema/sch_pin.cpp:265
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/pcb_text.cpp:236 pcbnew/pcb_text.cpp:240 pcbnew/pcb_textbox.cpp:374
@@ -1881,7 +1881,7 @@ msgid "Yes"
 msgstr "Так"
 
 #: common/confirm.cpp:383 eeschema/lib_field.cpp:548 eeschema/lib_pin.cpp:1196
-#: eeschema/sch_field.cpp:935 eeschema/sch_pin.cpp:261
+#: eeschema/sch_field.cpp:935 eeschema/sch_pin.cpp:265
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/pcb_text.cpp:236 pcbnew/pcb_text.cpp:240 pcbnew/pcb_textbox.cpp:374
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:457
@@ -2299,7 +2299,7 @@ msgstr "Змінні середовища"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:382 eeschema/lib_pin.cpp:1191
-#: eeschema/sch_pin.cpp:256 eeschema/sch_symbol.cpp:1979
+#: eeschema/sch_pin.cpp:260 eeschema/sch_symbol.cpp:1979
 #: eeschema/sch_symbol.cpp:2029 eeschema/symbol_editor/symbol_editor.cpp:1265
 #: eeschema/symbol_viewer_frame.cpp:458
 #: eeschema/widgets/search_handlers.cpp:301
@@ -2649,17 +2649,17 @@ msgstr "Заблоковані елементи"
 msgid "Quit KiCad"
 msgstr "Вийти з KiCad"
 
-#: common/dialogs/dialog_migrate_settings.cpp:58
+#: common/dialogs/dialog_migrate_settings.cpp:59
 #: common/dialogs/dialog_migrate_settings_base.cpp:23
 #, c-format
 msgid "Welcome to KiCad %s!"
 msgstr "Ласкаво просимо до KiCad %s!"
 
-#: common/dialogs/dialog_migrate_settings.cpp:67
+#: common/dialogs/dialog_migrate_settings.cpp:68
 msgid "Import settings from a previous version (none found)"
 msgstr "Імпортувати налаштування з попередньої версії (не знайдено)"
 
-#: common/dialogs/dialog_migrate_settings.cpp:138
+#: common/dialogs/dialog_migrate_settings.cpp:139
 msgid "Select Settings Path"
 msgstr "Виберати шлях до налаштувань"
 
@@ -2695,7 +2695,7 @@ msgstr ""
 msgid "Start with default settings"
 msgstr "Почати з типових параметрів"
 
-#: common/dialogs/dialog_migrate_settings_base.h:67
+#: common/dialogs/dialog_migrate_settings_base.h:66
 msgid "Configure KiCad Settings Path"
 msgstr "Конфігурувати шлях до параметрів KiCad"
 
@@ -3028,9 +3028,9 @@ msgstr "Опція"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:375
 #: eeschema/fields_grid_table.cpp:383 eeschema/sch_symbol.cpp:1976
-#: eeschema/sch_symbol.cpp:2026 eeschema/sch_symbol.cpp:2828
+#: eeschema/sch_symbol.cpp:2026 eeschema/sch_symbol.cpp:2829
 #: eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2613
+#: eeschema/sim/simulator_frame_ui.cpp:2625
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:131
@@ -3168,7 +3168,7 @@ msgstr "Режим виводу:"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
 #: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_field.cpp:231
-#: pcbnew/pcb_text.cpp:565 pcbnew/pcb_textbox.cpp:688
+#: pcbnew/pcb_text.cpp:570 pcbnew/pcb_textbox.cpp:688
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Color"
 msgstr "Колір"
@@ -4817,7 +4817,7 @@ msgstr "Коментар"
 msgid "Text '%s'"
 msgstr "Текст '%s'"
 
-#: common/drawing_sheet/ds_draw_item.cpp:427 eeschema/sch_shape.cpp:445
+#: common/drawing_sheet/ds_draw_item.cpp:427 eeschema/sch_shape.cpp:458
 #, c-format
 msgid "Rectangle, width %s height %s"
 msgstr "Прямокутник, ширина %s висота %s"
@@ -5315,7 +5315,7 @@ msgid "Symbol"
 msgstr "Символ"
 
 #: common/eda_item.cpp:386 common/eda_item.cpp:401 eeschema/lib_pin.h:65
-#: eeschema/sch_pin.cpp:237
+#: eeschema/sch_pin.cpp:241
 msgid "Pin"
 msgstr "Вивід"
 
@@ -5423,8 +5423,8 @@ msgstr "Кут"
 #: common/eda_shape.cpp:745 common/eda_shape.cpp:763
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1690 eeschema/sch_pin.cpp:263
-#: eeschema/sch_pin.cpp:552
+#: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1690 eeschema/sch_pin.cpp:267
+#: eeschema/sch_pin.cpp:559
 msgid "Length"
 msgstr "Довжина"
 
@@ -5469,6 +5469,7 @@ msgid "Bezier"
 msgstr "Безьє"
 
 #: common/eda_shape.cpp:1974 eeschema/lib_shape.cpp:604
+#: eeschema/sch_shape.cpp:614
 #, fuzzy
 msgid "Shape Properties"
 msgstr "Властивості листа"
@@ -5512,11 +5513,13 @@ msgid "Line Color"
 msgstr "Колір лінії"
 
 #: common/eda_shape.cpp:2068 eeschema/lib_shape.cpp:587
-#: pcbnew/dialogs/dialog_plot_base.cpp:134 pcbnew/pcb_textbox.cpp:686
+#: eeschema/sch_shape.cpp:604 pcbnew/dialogs/dialog_plot_base.cpp:134
+#: pcbnew/pcb_textbox.cpp:686
 msgid "Filled"
 msgstr "Заповнено"
 
-#: common/eda_shape.cpp:2073 pcbnew/pcb_shape.cpp:720
+#: common/eda_shape.cpp:2073 eeschema/sch_shape.cpp:607
+#: pcbnew/pcb_shape.cpp:720
 msgid "Fill Color"
 msgstr "Колір заповнення"
 
@@ -5632,8 +5635,8 @@ msgstr "Вниз"
 #: eeschema/fields_grid_table.cpp:391 eeschema/lib_field.cpp:672
 #: eeschema/lib_pin.cpp:1201 eeschema/lib_pin.cpp:1687
 #: eeschema/lib_text.cpp:536 eeschema/lib_textbox.cpp:567
-#: eeschema/sch_field.cpp:1443 eeschema/sch_pin.cpp:265
-#: eeschema/sch_symbol.cpp:2785 eeschema/sch_text.cpp:504
+#: eeschema/sch_field.cpp:1443 eeschema/sch_pin.cpp:269
+#: eeschema/sch_symbol.cpp:2786 eeschema/sch_text.cpp:504
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
@@ -5646,8 +5649,8 @@ msgstr "Орієнтація"
 #: eeschema/lib_field.cpp:670 eeschema/lib_textbox.cpp:565
 #: eeschema/sch_field.cpp:1441 eeschema/sch_text.cpp:501
 #: eeschema/sch_textbox.cpp:524 pcbnew/dialogs/dialog_text_properties.cpp:154
-#: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:569
-#: pcbnew/pcb_text.cpp:573
+#: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:574
+#: pcbnew/pcb_text.cpp:578
 msgid "Text Properties"
 msgstr "Властивості тексту"
 
@@ -5695,7 +5698,7 @@ msgstr "Віддзеркалений"
 #: eeschema/lib_field.cpp:548 eeschema/lib_field.cpp:663
 #: eeschema/lib_pin.cpp:1702 eeschema/lib_text.cpp:531
 #: eeschema/lib_textbox.cpp:558 eeschema/sch_field.cpp:935
-#: eeschema/sch_pin.cpp:261 eeschema/sch_text.cpp:494
+#: eeschema/sch_pin.cpp:265 eeschema/sch_text.cpp:494
 #: include/lib_table_grid.h:215
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:86
@@ -5703,7 +5706,7 @@ msgstr "Віддзеркалений"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94 pcbnew/pcb_dimension.cpp:1530
 #: pcbnew/pcb_dimension.cpp:1566 pcbnew/pcb_dimension.cpp:1607
 #: pcbnew/pcb_dimension.cpp:1652 pcbnew/pcb_dimension.cpp:1689
-#: pcbnew/pcb_text.cpp:585 pcbnew/pcb_textbox.cpp:687
+#: pcbnew/pcb_text.cpp:590 pcbnew/pcb_textbox.cpp:687
 msgid "Visible"
 msgstr "Видимий"
 
@@ -5723,7 +5726,7 @@ msgstr "Вертикальне вирівнювання"
 #: pcbnew/pcb_dimension.cpp:1539 pcbnew/pcb_dimension.cpp:1575
 #: pcbnew/pcb_dimension.cpp:1616 pcbnew/pcb_dimension.cpp:1661
 #: pcbnew/pcb_dimension.cpp:1698 pcbnew/pcb_field.cpp:230
-#: pcbnew/pcb_text.cpp:591
+#: pcbnew/pcb_text.cpp:596
 msgid "Hyperlink"
 msgstr "Hyperlink"
 
@@ -6564,8 +6567,8 @@ msgstr "Помилка при завантаженні редактора."
 msgid "Unable to switch language to %s"
 msgstr "Не вдалося перемкнути мову на %s"
 
-#: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:965
-#: pcbnew/drc/drc_engine.cpp:966 pcbnew/drc/drc_engine.cpp:967
+#: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:982
+#: pcbnew/drc/drc_engine.cpp:983 pcbnew/drc/drc_engine.cpp:984
 #: pcbnew/tools/board_inspection_tool.cpp:250
 #: pcbnew/tools/board_inspection_tool.cpp:259
 #: pcbnew/tools/board_inspection_tool.cpp:268
@@ -6607,11 +6610,11 @@ msgstr "Глобальні мітки"
 msgid "Hierarchical labels"
 msgstr "Ієрархічні мітки"
 
-#: common/layer_id.cpp:118 eeschema/sch_symbol.cpp:2800
+#: common/layer_id.cpp:118 eeschema/sch_symbol.cpp:2801
 msgid "Pin numbers"
 msgstr "Номера виводів"
 
-#: common/layer_id.cpp:119 eeschema/sch_symbol.cpp:2805
+#: common/layer_id.cpp:119 eeschema/sch_symbol.cpp:2806
 msgid "Pin names"
 msgstr "Імена виводів"
 
@@ -6922,8 +6925,8 @@ msgstr "Налаштування бібліотеки для %s..."
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:608 eeschema/lib_item.cpp:78
-#: eeschema/lib_item.cpp:222 eeschema/sch_pin.cpp:245
-#: eeschema/sch_symbol.cpp:2819 eeschema/symbol_editor/symbol_editor.cpp:1278
+#: eeschema/lib_item.cpp:222 eeschema/sch_pin.cpp:249
+#: eeschema/sch_symbol.cpp:2820 eeschema/symbol_editor/symbol_editor.cpp:1278
 msgid "Unit"
 msgstr "Частина"
 
@@ -7064,7 +7067,7 @@ msgstr "Показати сторінку %s"
 
 #: common/plotters/PDF_plotter.cpp:1401
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:881
-#: eeschema/tools/sch_navigate_tool.cpp:87
+#: eeschema/tools/sch_navigate_tool.cpp:104
 #, c-format
 msgid "Open %s"
 msgstr "Відкрити %s"
@@ -7077,25 +7080,25 @@ msgstr "Помилка завантаження таблиці бібліоте�
 msgid "This is the default net class."
 msgstr "Це типовий клас звʼязків."
 
-#: common/project/project_archiver.cpp:53 kicad/pcm/pcm_task_manager.cpp:329
+#: common/project/project_archiver.cpp:54 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
 msgstr "Не вдалося відкрити файл архіву."
 
-#: common/project/project_archiver.cpp:62 kicad/pcm/pcm_task_manager.cpp:337
+#: common/project/project_archiver.cpp:63 kicad/pcm/pcm_task_manager.cpp:337
 msgid "Invalid archive file format."
 msgstr "Невірний формат архіву."
 
-#: common/project/project_archiver.cpp:73
+#: common/project/project_archiver.cpp:74
 #, c-format
 msgid "Extracting file '%s'."
 msgstr "Розпакування файлу '%s'."
 
-#: common/project/project_archiver.cpp:96 kicad/pcm/pcm_task_manager.cpp:251
+#: common/project/project_archiver.cpp:97 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
 msgid "Error extracting file!"
 msgstr "Помилка розпакування файлу!"
 
-#: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
+#: common/project/project_archiver.cpp:168 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -7123,17 +7126,17 @@ msgstr "Помилка розпакування файлу!"
 msgid "Failed to create file '%s'."
 msgstr "Не вдалося створити файл '%s'."
 
-#: common/project/project_archiver.cpp:233
+#: common/project/project_archiver.cpp:240
 #, c-format
 msgid "Archived file '%s'."
 msgstr "Архівований файл '%s'."
 
-#: common/project/project_archiver.cpp:243
+#: common/project/project_archiver.cpp:250
 #, c-format
 msgid "Failed to archive file '%s'."
 msgstr "Не вдалося архівувати файл '%s'."
 
-#: common/project/project_archiver.cpp:269
+#: common/project/project_archiver.cpp:276
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Архів Zip '%s' створений (%s нестиснено, %s стиснуто)."
@@ -7177,7 +7180,7 @@ msgstr "Групувати за значенням"
 #: common/settings/bom_settings.cpp:156
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
 #: eeschema/dialogs/dialog_sim_model_base.cpp:262 eeschema/sch_symbol.cpp:1972
-#: eeschema/sch_symbol.cpp:2024 eeschema/sch_symbol.cpp:2825
+#: eeschema/sch_symbol.cpp:2024 eeschema/sch_symbol.cpp:2826
 #: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3490
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
@@ -7191,7 +7194,7 @@ msgstr "Групувати за значенням та посадковим м�
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:175
-#: eeschema/sch_symbol.cpp:2841 eeschema/tools/sch_edit_tool.cpp:478
+#: eeschema/sch_symbol.cpp:2842 eeschema/tools/sch_edit_tool.cpp:478
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 #: pcbnew/footprint.cpp:3507
@@ -8800,7 +8803,7 @@ msgstr "'%s' - недійсне посадкове місце."
 
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:2019 eeschema/sch_symbol.cpp:2577
-#: eeschema/sch_symbol.cpp:2837 eeschema/symbol_editor/symbol_editor.cpp:1296
+#: eeschema/sch_symbol.cpp:2838 eeschema/symbol_editor/symbol_editor.cpp:1296
 #: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3503
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
@@ -9237,7 +9240,7 @@ msgid "%s found"
 msgstr "%s знайдено"
 
 #: eeschema/cross-probing.cpp:166 eeschema/sim/simulator_frame_ui.cpp:1437
-#: eeschema/sim/simulator_frame_ui.cpp:1851
+#: eeschema/sim/simulator_frame_ui.cpp:1863
 #: eeschema/widgets/tuner_slider.cpp:56
 #, c-format
 msgid "%s not found"
@@ -10838,7 +10841,7 @@ msgstr "Показати вікно довідки з синтаксису"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2823
+#: eeschema/sch_symbol.cpp:2824
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
 #: pcbnew/footprint.cpp:3488
@@ -11007,7 +11010,7 @@ msgstr "Кількість"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:88
 #: eeschema/dialogs/dialog_symbol_properties.cpp:151 eeschema/lib_pin.cpp:1192
-#: eeschema/sch_pin.cpp:257
+#: eeschema/sch_pin.cpp:261
 msgid "Number"
 msgstr "Номер"
 
@@ -12427,7 +12430,7 @@ msgstr "Листу повинен бути призначений файл."
 #: eeschema/lib_field.cpp:552 eeschema/lib_pin.cpp:1194
 #: eeschema/lib_pin.cpp:1196 eeschema/lib_text.cpp:419
 #: eeschema/lib_textbox.cpp:490 eeschema/sch_field.cpp:939
-#: eeschema/sch_label.cpp:1273 eeschema/sch_pin.cpp:259
+#: eeschema/sch_label.cpp:1273 eeschema/sch_pin.cpp:263
 #: eeschema/sch_text.cpp:413 eeschema/sch_textbox.cpp:454
 msgid "Style"
 msgstr "Стиль"
@@ -13011,7 +13014,7 @@ msgstr "Параметр"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:610 eeschema/lib_item.cpp:73
 #: eeschema/lib_pin.cpp:1193 eeschema/sch_label.cpp:1267
-#: eeschema/sch_pin.cpp:237 eeschema/sch_pin.cpp:258
+#: eeschema/sch_pin.cpp:241 eeschema/sch_pin.cpp:262
 #: eeschema/symbol_editor/symbol_editor.cpp:1294
 #: eeschema/widgets/search_handlers.cpp:216
 #: eeschema/widgets/search_handlers.cpp:300 gerbview/gerber_draw_item.cpp:668
@@ -13540,7 +13543,7 @@ msgid "Edit Library Symbol..."
 msgstr "Редагувати символ бібліотеки..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
-#: eeschema/lib_pin.cpp:1670 eeschema/sch_pin.cpp:549
+#: eeschema/lib_pin.cpp:1670 eeschema/sch_pin.cpp:556
 msgid "Pin Number"
 msgstr "Номер виводу"
 
@@ -15761,7 +15764,7 @@ msgstr "Верт. вирівнювання"
 msgid "Show Field Name"
 msgstr "Показати ім'я поля"
 
-#: eeschema/lib_item.cpp:81 eeschema/lib_item.cpp:225 eeschema/sch_pin.cpp:252
+#: eeschema/lib_item.cpp:81 eeschema/lib_item.cpp:225 eeschema/sch_pin.cpp:256
 #, fuzzy
 msgid "Body Style"
 msgstr "Стиль рамки"
@@ -15865,20 +15868,20 @@ msgstr "Динамічний із спадаючим краєм"
 msgid "NonLogic"
 msgstr "Нелогічний"
 
-#: eeschema/lib_pin.cpp:1667 eeschema/sch_pin.cpp:546 pcbnew/pad.cpp:1044
+#: eeschema/lib_pin.cpp:1667 eeschema/sch_pin.cpp:553 pcbnew/pad.cpp:1044
 #: pcbnew/pad.cpp:2417
 msgid "Pin Name"
 msgstr "Ім'я виводу"
 
 #: eeschema/lib_pin.cpp:1681 eeschema/lib_shape.cpp:583
-#: eeschema/sch_shape.cpp:554 eeschema/sch_symbol.cpp:2777
+#: eeschema/sch_shape.cpp:599 eeschema/sch_symbol.cpp:2778
 #: pcbnew/board_item.cpp:334 pcbnew/pcb_group.cpp:488 pcbnew/pcb_shape.cpp:715
 #: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1594 pcbnew/zone.cpp:1606
 msgid "Position X"
 msgstr "Позиція X"
 
 #: eeschema/lib_pin.cpp:1684 eeschema/lib_shape.cpp:585
-#: eeschema/sch_shape.cpp:556 eeschema/sch_symbol.cpp:2780
+#: eeschema/sch_shape.cpp:601 eeschema/sch_symbol.cpp:2781
 #: pcbnew/board_item.cpp:337 pcbnew/pcb_group.cpp:489 pcbnew/pcb_shape.cpp:717
 #: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1600 pcbnew/zone.cpp:1607
 msgid "Position Y"
@@ -15923,7 +15926,8 @@ msgstr "Креслити колір фону"
 msgid "Fill color"
 msgstr "Колір заповнення"
 
-#: eeschema/lib_shape.cpp:602 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
+#: eeschema/lib_shape.cpp:602 eeschema/sch_shape.cpp:612
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
 msgid "Fill"
 msgstr "Заливка"
@@ -16445,7 +16449,7 @@ msgstr "Псевдонім шини %s учасники"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad редактор схеми"
 
-#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1965
+#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1961
 msgid "Schematic Hierarchy"
 msgstr "Ієрархія схеми"
 
@@ -16510,22 +16514,22 @@ msgstr "[Не збережено]"
 msgid "[no schematic loaded]"
 msgstr "[схема не завантажена]"
 
-#: eeschema/sch_edit_frame.cpp:1877
+#: eeschema/sch_edit_frame.cpp:1873
 #, fuzzy
 msgid "Schematic Cleanup"
 msgstr "Параметри схеми"
 
-#: eeschema/sch_edit_frame.cpp:1990
+#: eeschema/sch_edit_frame.cpp:1986
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Підсвічений звʼязок: %s"
 
-#: eeschema/sch_edit_frame.cpp:2167
+#: eeschema/sch_edit_frame.cpp:2163
 #, fuzzy
 msgid "Save Symbol to Schematic"
 msgstr "Додати символ в схему"
 
-#: eeschema/sch_edit_frame.cpp:2272 eeschema/tools/ee_actions.cpp:60
+#: eeschema/sch_edit_frame.cpp:2268 eeschema/tools/ee_actions.cpp:60
 #, fuzzy
 msgid "Compare Symbol with Library"
 msgstr "Символи до бібліотеки..."
@@ -17703,22 +17707,22 @@ msgstr "Повернення до кешу, щоб встановити симв
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr "Не знайдено бібліотеки символів для символу в схемі '%s %s'."
 
-#: eeschema/sch_shape.cpp:437
+#: eeschema/sch_shape.cpp:450
 #, c-format
 msgid "Arc, radius %s"
 msgstr "Дуга, радіус %s"
 
-#: eeschema/sch_shape.cpp:441
+#: eeschema/sch_shape.cpp:454
 #, c-format
 msgid "Circle, radius %s"
 msgstr "Коло, радіус %s"
 
-#: eeschema/sch_shape.cpp:450
+#: eeschema/sch_shape.cpp:463
 #, c-format
 msgid "Polyline, %d points"
 msgstr "Ломана лінія, %d точки"
 
-#: eeschema/sch_shape.cpp:454
+#: eeschema/sch_shape.cpp:467
 #, c-format
 msgid "Bezier Curve, %d points"
 msgstr "Крива Безьє, %d точки"
@@ -17831,43 +17835,43 @@ msgstr "Символ не знайдено в %s!"
 msgid "Symbol %s [%s]"
 msgstr "Символ %s [%s]"
 
-#: eeschema/sch_symbol.cpp:2787
+#: eeschema/sch_symbol.cpp:2788
 #, fuzzy
 msgid "Mirror X"
 msgstr "Віддзеркалити"
 
-#: eeschema/sch_symbol.cpp:2789
+#: eeschema/sch_symbol.cpp:2790
 #, fuzzy
 msgid "Mirror Y"
 msgstr "Віддзеркалити"
 
-#: eeschema/sch_symbol.cpp:2831 pcbnew/footprint.cpp:3497
+#: eeschema/sch_symbol.cpp:2832 pcbnew/footprint.cpp:3497
 #, fuzzy
 msgid "Library Link"
 msgstr "Посилання на бібліотеку"
 
-#: eeschema/sch_symbol.cpp:2834 pcbnew/footprint.cpp:3500
+#: eeschema/sch_symbol.cpp:2835 pcbnew/footprint.cpp:3500
 #: pcbnew/plot_board_layers.cpp:129
 #, fuzzy
 msgid "Library Description"
 msgstr "Опис"
 
-#: eeschema/sch_symbol.cpp:2843
+#: eeschema/sch_symbol.cpp:2844
 #, fuzzy
 msgid "Exclude From Board"
 msgstr "Виключити з плати"
 
-#: eeschema/sch_symbol.cpp:2846
+#: eeschema/sch_symbol.cpp:2847
 #, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Виключити з моделювання"
 
-#: eeschema/sch_symbol.cpp:2849 pcbnew/footprint.cpp:3514
+#: eeschema/sch_symbol.cpp:2850 pcbnew/footprint.cpp:3514
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Виключити з переліку компонентів"
 
-#: eeschema/sch_symbol.cpp:2852 pcbnew/footprint.cpp:3517
+#: eeschema/sch_symbol.cpp:2853 pcbnew/footprint.cpp:3517
 #, fuzzy
 msgid "Do not Populate"
 msgstr "Не заповнювати"
@@ -19085,8 +19089,8 @@ msgstr "Напруга (вимірювання)"
 #: eeschema/sim/simulator_frame_ui.cpp:744
 #: eeschema/sim/simulator_frame_ui.cpp:850
 #: eeschema/sim/simulator_frame_ui.cpp:1021
-#: eeschema/sim/simulator_frame_ui.cpp:2173
-#: eeschema/sim/simulator_frame_ui.cpp:2174
+#: eeschema/sim/simulator_frame_ui.cpp:2185
+#: eeschema/sim/simulator_frame_ui.cpp:2186
 msgid " (gain)"
 msgstr " (сила)"
 
@@ -19096,8 +19100,8 @@ msgstr " (сила)"
 #: eeschema/sim/simulator_frame_ui.cpp:851
 #: eeschema/sim/simulator_frame_ui.cpp:856
 #: eeschema/sim/simulator_frame_ui.cpp:1022
-#: eeschema/sim/simulator_frame_ui.cpp:2171
-#: eeschema/sim/simulator_frame_ui.cpp:2172
+#: eeschema/sim/simulator_frame_ui.cpp:2183
+#: eeschema/sim/simulator_frame_ui.cpp:2184
 msgid " (phase)"
 msgstr " (фаза)"
 
@@ -19280,18 +19284,18 @@ msgid "Cursor 2"
 msgstr "Курсор 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1171
-#: eeschema/sim/simulator_frame_ui.cpp:2604
+#: eeschema/sim/simulator_frame_ui.cpp:2616
 msgid "Diff"
 msgstr "Різниця"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1436
 #: eeschema/sim/simulator_frame_ui.cpp:1449
-#: eeschema/sim/simulator_frame_ui.cpp:1869
+#: eeschema/sim/simulator_frame_ui.cpp:1881
 msgid "Could not apply tuned value(s):"
 msgstr "Не вдалося застосувати значення налаштувань:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1450
-#: eeschema/sim/simulator_frame_ui.cpp:1859
+#: eeschema/sim/simulator_frame_ui.cpp:1871
 #, c-format
 msgid "%s is not tunable"
 msgstr "%s не налаштовується"
@@ -19308,9 +19312,9 @@ msgstr "Помилка: не визначено типу симуляції.\n"
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Помилка: тип симуляції не підтримує діаграми.\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2710
-#: eeschema/sim/simulator_frame_ui.cpp:2825
-#: eeschema/sim/simulator_frame_ui.cpp:2868
+#: eeschema/sim/simulator_frame_ui.cpp:2722
+#: eeschema/sim/simulator_frame_ui.cpp:2837
+#: eeschema/sim/simulator_frame_ui.cpp:2880
 msgid ""
 "\n"
 "\n"
@@ -20508,7 +20512,7 @@ msgid "Add a pin"
 msgstr "Додати вивід"
 
 #: eeschema/tools/ee_actions.cpp:341 eeschema/tools/ee_actions.cpp:524
-#: eeschema/tools/sch_drawing_tools.cpp:1538
+#: eeschema/tools/sch_drawing_tools.cpp:1532
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:298
 #: pagelayout_editor/tools/pl_actions.cpp:63 pcbnew/tools/pcb_actions.cpp:174
 msgid "Add Text"
@@ -20520,7 +20524,7 @@ msgid "Add a text item"
 msgstr "Додати напис"
 
 #: eeschema/tools/ee_actions.cpp:350 eeschema/tools/ee_actions.cpp:532
-#: eeschema/tools/sch_drawing_tools.cpp:1882
+#: eeschema/tools/sch_drawing_tools.cpp:1876
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:481
 #: pcbnew/tools/pcb_actions.cpp:182
 msgid "Add Text Box"
@@ -20581,7 +20585,7 @@ msgstr "Виконати розмір номеру виводу"
 msgid "Copy pin number size to other pins in symbol"
 msgstr "Копіювати розмір номеру виводу для інших виводів символу"
 
-#: eeschema/tools/ee_actions.cpp:412 eeschema/tools/sch_drawing_tools.cpp:403
+#: eeschema/tools/ee_actions.cpp:412 eeschema/tools/sch_drawing_tools.cpp:397
 msgid "Add Symbol"
 msgstr "Додати символ"
 
@@ -20599,7 +20603,7 @@ msgstr "Додати живлення"
 msgid "Add power symbols"
 msgstr "Додати символ живлення"
 
-#: eeschema/tools/ee_actions.cpp:434 eeschema/tools/sch_drawing_tools.cpp:966
+#: eeschema/tools/ee_actions.cpp:434 eeschema/tools/sch_drawing_tools.cpp:960
 msgid "Add No Connect Flag"
 msgstr "Додати мітку \"Не підключено\""
 
@@ -20608,7 +20612,7 @@ msgstr "Додати мітку \"Не підключено\""
 msgid "Draw no-connection flags"
 msgstr "Додати мітку \"Не підключено\""
 
-#: eeschema/tools/ee_actions.cpp:445 eeschema/tools/sch_drawing_tools.cpp:973
+#: eeschema/tools/ee_actions.cpp:445 eeschema/tools/sch_drawing_tools.cpp:967
 msgid "Add Junction"
 msgstr "Додати з'єднання"
 
@@ -20617,7 +20621,7 @@ msgstr "Додати з'єднання"
 msgid "Draw junctions"
 msgstr "Підключення до шини"
 
-#: eeschema/tools/ee_actions.cpp:456 eeschema/tools/sch_drawing_tools.cpp:979
+#: eeschema/tools/ee_actions.cpp:456 eeschema/tools/sch_drawing_tools.cpp:973
 msgid "Add Wire to Bus Entry"
 msgstr "Додати провідник до входу шини"
 
@@ -20625,9 +20629,9 @@ msgstr "Додати провідник до входу шини"
 msgid "Add a wire entry to a bus"
 msgstr "Додати провідник до входу шини"
 
-#: eeschema/tools/ee_actions.cpp:467 eeschema/tools/sch_drawing_tools.cpp:1548
-#: eeschema/tools/sch_drawing_tools.cpp:1553
-#: eeschema/tools/sch_drawing_tools.cpp:1558
+#: eeschema/tools/ee_actions.cpp:467 eeschema/tools/sch_drawing_tools.cpp:1542
+#: eeschema/tools/sch_drawing_tools.cpp:1547
+#: eeschema/tools/sch_drawing_tools.cpp:1552
 msgid "Add Label"
 msgstr "Додати мітку"
 
@@ -20645,7 +20649,7 @@ msgstr "Додати директиву класу звʼязку"
 msgid "Add net class directive labels"
 msgstr "Додати мітку директиви класу звʼязку"
 
-#: eeschema/tools/ee_actions.cpp:485 eeschema/tools/sch_drawing_tools.cpp:1543
+#: eeschema/tools/ee_actions.cpp:485 eeschema/tools/sch_drawing_tools.cpp:1537
 msgid "Add Hierarchical Label"
 msgstr "Додати ієрархічну мітку"
 
@@ -20718,7 +20722,7 @@ msgstr "Додати дугу"
 msgid "Draw arcs"
 msgstr "Накреслити дугу"
 
-#: eeschema/tools/ee_actions.cpp:568 eeschema/tools/sch_drawing_tools.cpp:706
+#: eeschema/tools/ee_actions.cpp:568 eeschema/tools/sch_drawing_tools.cpp:700
 msgid "Add Image"
 msgstr "Додати зображення"
 
@@ -21771,66 +21775,66 @@ msgstr "Додати живлення"
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Натисніть <ESC> для відміни створення символу."
 
-#: eeschema/tools/sch_drawing_tools.cpp:632 pcbnew/tools/drawing_tool.cpp:650
+#: eeschema/tools/sch_drawing_tools.cpp:626 pcbnew/tools/drawing_tool.cpp:650
 msgid "Press <ESC> to cancel image creation."
 msgstr "Натисніть <ESC> для відміни створення зображення."
 
-#: eeschema/tools/sch_drawing_tools.cpp:683
+#: eeschema/tools/sch_drawing_tools.cpp:677
 #: pagelayout_editor/pl_editor_frame.cpp:888
 #: pagelayout_editor/pl_editor_frame.cpp:896 pcbnew/tools/drawing_tool.cpp:702
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr "Не вдалося завантажити зображення з '%s'."
 
-#: eeschema/tools/sch_drawing_tools.cpp:797
+#: eeschema/tools/sch_drawing_tools.cpp:791
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:684
 #: pcbnew/tools/drawing_tool.cpp:1505
 msgid "No graphic items found in file."
 msgstr "Графічні елементи не знайдені у файлі."
 
-#: eeschema/tools/sch_drawing_tools.cpp:827
-#: eeschema/tools/sch_drawing_tools.cpp:909
+#: eeschema/tools/sch_drawing_tools.cpp:821
+#: eeschema/tools/sch_drawing_tools.cpp:903
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:719
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:808
 #, fuzzy
 msgid "Import Graphic"
 msgstr "Імпортувати графіку..."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1054
+#: eeschema/tools/sch_drawing_tools.cpp:1048
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "В точці з'єднання є провідники і/або виводи, що не можна підключити."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1508
+#: eeschema/tools/sch_drawing_tools.cpp:1502
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:182
 msgid "Press <ESC> to cancel item creation."
 msgstr "Натисніть <ESC> для відміни створення елементу."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1571
+#: eeschema/tools/sch_drawing_tools.cpp:1565
 msgid "Click over a sheet."
 msgstr "Натисніть на лист."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1584
-#: eeschema/tools/sch_drawing_tools.cpp:1670
+#: eeschema/tools/sch_drawing_tools.cpp:1578
+#: eeschema/tools/sch_drawing_tools.cpp:1664
 msgid "No new hierarchical labels found."
 msgstr "Нових ієрархічних міток не знайдено."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1597
+#: eeschema/tools/sch_drawing_tools.cpp:1591
 #, fuzzy
 msgid "Add Sheet Pin"
 msgstr "Вивід листа"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1891
+#: eeschema/tools/sch_drawing_tools.cpp:1885
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:486
 #, fuzzy, c-format
 msgid "Add %s"
 msgstr "Додати шину"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1946
+#: eeschema/tools/sch_drawing_tools.cpp:1940
 #, fuzzy, c-format
 msgid "Draw %s"
 msgstr "Креслення"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2092
+#: eeschema/tools/sch_drawing_tools.cpp:2086
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Натисніть <ESC> для відміни створення листа."
 
@@ -21917,7 +21921,7 @@ msgid "Enter page number for sheet path%s"
 msgstr "Введіть номер сторінки для листа %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:2528
-#: eeschema/widgets/hierarchy_pane.cpp:393
+#: eeschema/widgets/hierarchy_pane.cpp:394
 msgid "Edit Sheet Page Number"
 msgstr "Редагувати номер сторінки листа"
 
@@ -22042,7 +22046,7 @@ msgstr "Натисніть <ESC> для відміни перетягуванн�
 msgid "Press <ESC> to cancel move."
 msgstr "Натисніть <ESC> для відміни переміщення."
 
-#: eeschema/tools/sch_navigate_tool.cpp:81
+#: eeschema/tools/sch_navigate_tool.cpp:98
 #, c-format
 msgid "Page '%s' not found."
 msgstr "Сторінку '%s' не знайдено."
@@ -22156,16 +22160,16 @@ msgstr "Вивід листа"
 msgid "Create a new project for this schematic"
 msgstr "Створити новий проект для цієї схеми"
 
-#: eeschema/widgets/hierarchy_pane.cpp:381
+#: eeschema/widgets/hierarchy_pane.cpp:382
 msgid "Edit Page Number"
 msgstr "Редагувати номер сторінки"
 
-#: eeschema/widgets/hierarchy_pane.cpp:389
+#: eeschema/widgets/hierarchy_pane.cpp:390
 #, c-format
 msgid "Enter page number for sheet path %s"
 msgstr "Введіть номер сторінки для шляху до аркушу %s"
 
-#: eeschema/widgets/hierarchy_pane.cpp:433
+#: eeschema/widgets/hierarchy_pane.cpp:434
 #, c-format
 msgid "(page %s)"
 msgstr "(сторінка %s)"
@@ -31851,8 +31855,8 @@ msgstr "Текстові поля"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:54
-#: pcbnew/fp_text_grid_table.cpp:146 pcbnew/pcb_text.cpp:571
-#: pcbnew/pcb_text.cpp:588
+#: pcbnew/fp_text_grid_table.cpp:146 pcbnew/pcb_text.cpp:576
+#: pcbnew/pcb_text.cpp:593
 msgid "Keep Upright"
 msgstr "Утримувати звверху і вправо"
 
@@ -33120,7 +33124,7 @@ msgid "Set Track and Via Properties"
 msgstr "Встановити властивості доріжки і перехідного отвору"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
-#: pcbnew/drc/drc_engine.cpp:1433
+#: pcbnew/drc/drc_engine.cpp:1450
 msgid "footprint"
 msgstr "посадкове місце"
 
@@ -35045,7 +35049,7 @@ msgstr "Змінити властивості тексту"
 #: pcbnew/fp_text_grid_table.cpp:149 pcbnew/pcb_dimension.cpp:1542
 #: pcbnew/pcb_dimension.cpp:1578 pcbnew/pcb_dimension.cpp:1619
 #: pcbnew/pcb_dimension.cpp:1664 pcbnew/pcb_dimension.cpp:1701
-#: pcbnew/pcb_text.cpp:567
+#: pcbnew/pcb_text.cpp:572
 msgid "Knockout"
 msgstr "Перекриття"
 
@@ -37421,349 +37425,349 @@ msgstr "Типові властивості для нових графічних
 msgid "Gathering copper items..."
 msgstr "Збір мідних елементів..."
 
-#: pcbnew/drc/drc_engine.cpp:146 pcbnew/drc/drc_test_provider_hole_size.cpp:160
+#: pcbnew/drc/drc_engine.cpp:158 pcbnew/drc/drc_test_provider_hole_size.cpp:160
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:233
 #: pcbnew/drc/drc_test_provider_track_width.cpp:135
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:120
 msgid "board setup constraints"
 msgstr "встановити обмеження плати"
 
-#: pcbnew/drc/drc_engine.cpp:172
+#: pcbnew/drc/drc_engine.cpp:184
 msgid "board setup constraints zone fill strategy"
 msgstr "обмеження налаштування плати для заповнення зон"
 
-#: pcbnew/drc/drc_engine.cpp:177
+#: pcbnew/drc/drc_engine.cpp:189
 msgid "board setup constraints silk"
 msgstr "встановлення обмежень шовкографії для плати"
 
-#: pcbnew/drc/drc_engine.cpp:183
+#: pcbnew/drc/drc_engine.cpp:195
 msgid "board setup constraints silk text height"
 msgstr "обмеження налаштування дошки висота тексту на шару шовкографії"
 
-#: pcbnew/drc/drc_engine.cpp:189
+#: pcbnew/drc/drc_engine.cpp:201
 msgid "board setup constraints silk text thickness"
 msgstr "обмеження налаштувань плати товщина тексту для шару шовкографії"
 
-#: pcbnew/drc/drc_engine.cpp:195
+#: pcbnew/drc/drc_engine.cpp:207
 msgid "board setup constraints hole"
 msgstr "налаштування обмежень отворів для плати"
 
-#: pcbnew/drc/drc_engine.cpp:200
+#: pcbnew/drc/drc_engine.cpp:212
 msgid "board setup constraints edge"
 msgstr "налаштування контуру плати"
 
-#: pcbnew/drc/drc_engine.cpp:205
+#: pcbnew/drc/drc_engine.cpp:217
 msgid "board setup constraints courtyard"
 msgstr "налаштування області встановлення для плати"
 
-#: pcbnew/drc/drc_engine.cpp:212
+#: pcbnew/drc/drc_engine.cpp:224
 msgid "board setup micro-via constraints"
 msgstr "налаштування обмежень для мікро перехідних отворів плати"
 
-#: pcbnew/drc/drc_engine.cpp:246 pcbnew/drc/drc_engine.cpp:325
+#: pcbnew/drc/drc_engine.cpp:258 pcbnew/drc/drc_engine.cpp:337
 #, c-format
 msgid "netclass '%s'"
 msgstr "клас звʼязків '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:272 pcbnew/drc/drc_engine.cpp:290
-#: pcbnew/drc/drc_engine.cpp:307
+#: pcbnew/drc/drc_engine.cpp:284 pcbnew/drc/drc_engine.cpp:302
+#: pcbnew/drc/drc_engine.cpp:319
 #, c-format
 msgid "netclass '%s' (diff pair)"
 msgstr "клас звʼязків '%s' (диференційна пара)"
 
-#: pcbnew/drc/drc_engine.cpp:353
+#: pcbnew/drc/drc_engine.cpp:365
 #, c-format
 msgid "netclass '%s' (uvia)"
 msgstr "клас звʼязків '%s' (мікро перехідний отвір)"
 
-#: pcbnew/drc/drc_engine.cpp:428
+#: pcbnew/drc/drc_engine.cpp:440
 msgid "keepout area"
 msgstr "площина заборони"
 
-#: pcbnew/drc/drc_engine.cpp:430
+#: pcbnew/drc/drc_engine.cpp:442
 #, c-format
 msgid "keepout area '%s'"
 msgstr "площина заборони '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:624
+#: pcbnew/drc/drc_engine.cpp:641
 #, c-format
 msgid "Resolved zone connection type: %s."
 msgstr "Тип з'єднання заданої зони: %s."
 
-#: pcbnew/drc/drc_engine.cpp:642
+#: pcbnew/drc/drc_engine.cpp:659
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Контактна площадка немає площадки з отвором; з'єднання буде: %s."
 
-#: pcbnew/drc/drc_engine.cpp:764 pcbnew/drc/drc_engine.cpp:774
+#: pcbnew/drc/drc_engine.cpp:781 pcbnew/drc/drc_engine.cpp:791
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "Локально перевизначено на %s; зазор: %s."
 
-#: pcbnew/drc/drc_engine.cpp:789 pcbnew/drc/drc_engine.cpp:1397
-#: pcbnew/drc/drc_engine.cpp:1413
+#: pcbnew/drc/drc_engine.cpp:806 pcbnew/drc/drc_engine.cpp:1414
+#: pcbnew/drc/drc_engine.cpp:1430
 msgid "board minimum"
 msgstr "мінімум плати"
 
-#: pcbnew/drc/drc_engine.cpp:792 pcbnew/drc/drc_engine.cpp:1391
-#: pcbnew/drc/drc_engine.cpp:1407
+#: pcbnew/drc/drc_engine.cpp:809 pcbnew/drc/drc_engine.cpp:1408
+#: pcbnew/drc/drc_engine.cpp:1424
 #, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Мінімальний зазор для плати: %s."
 
-#: pcbnew/drc/drc_engine.cpp:801
+#: pcbnew/drc/drc_engine.cpp:818
 msgid "board minimum hole"
 msgstr "мінімальний отвір плати"
 
-#: pcbnew/drc/drc_engine.cpp:804
+#: pcbnew/drc/drc_engine.cpp:821
 #, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "Мінімальна зазор для отворів: %s."
 
-#: pcbnew/drc/drc_engine.cpp:823
+#: pcbnew/drc/drc_engine.cpp:840
 #, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr "Локально перевизначено на %s, з'єднання з зоною: %s."
 
-#: pcbnew/drc/drc_engine.cpp:840
+#: pcbnew/drc/drc_engine.cpp:857
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr "Локально перевизначено на %s; тепловий відступ зв'язку: %s."
 
-#: pcbnew/drc/drc_engine.cpp:857
+#: pcbnew/drc/drc_engine.cpp:874
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Локально перевизначено на %s; ширина теплового переходу: %s."
 
-#: pcbnew/drc/drc_engine.cpp:866
+#: pcbnew/drc/drc_engine.cpp:883
 #, c-format
 msgid "%s min thickness: %s."
 msgstr "%s мін. товщина: %s."
 
-#: pcbnew/drc/drc_engine.cpp:880
+#: pcbnew/drc/drc_engine.cpp:897
 #, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "Перевірка твердження \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:886 pcbnew/drc/drc_engine.cpp:1517
+#: pcbnew/drc/drc_engine.cpp:903 pcbnew/drc/drc_engine.cpp:1534
 msgid "Assertion passed."
 msgstr "Призначення перевірено."
 
-#: pcbnew/drc/drc_engine.cpp:890 pcbnew/drc/drc_engine.cpp:1521
+#: pcbnew/drc/drc_engine.cpp:907 pcbnew/drc/drc_engine.cpp:1538
 msgid "--> Assertion failed. <--"
 msgstr "--> Помилка твердження. <--"
 
-#: pcbnew/drc/drc_engine.cpp:910
+#: pcbnew/drc/drc_engine.cpp:927
 #, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Перевірка %s зазору: %s."
 
-#: pcbnew/drc/drc_engine.cpp:916
+#: pcbnew/drc/drc_engine.cpp:933
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "Перевірка %s максимальна довжина без зв’язку: %s."
 
-#: pcbnew/drc/drc_engine.cpp:922
+#: pcbnew/drc/drc_engine.cpp:939
 #, c-format
 msgid "Checking %s max skew: %s."
 msgstr "Перевірка %s максимум нахилу: %s."
 
-#: pcbnew/drc/drc_engine.cpp:928
+#: pcbnew/drc/drc_engine.cpp:945
 #, c-format
 msgid "Checking %s gap: %s."
 msgstr "Перевірка %s відступу: %s."
 
-#: pcbnew/drc/drc_engine.cpp:934
+#: pcbnew/drc/drc_engine.cpp:951
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "Перевірка %s ширини термічного переходу: %s."
 
-#: pcbnew/drc/drc_engine.cpp:940
+#: pcbnew/drc/drc_engine.cpp:957
 #, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "Перевірка %s мінімальної к-ті переходів: %s."
 
-#: pcbnew/drc/drc_engine.cpp:947
+#: pcbnew/drc/drc_engine.cpp:964
 #, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "Перевірка %s зони з'єднання: %s."
 
-#: pcbnew/drc/drc_engine.cpp:979
+#: pcbnew/drc/drc_engine.cpp:996
 #, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "Перевірка %s ширина доріжки: оптимально %s."
 
-#: pcbnew/drc/drc_engine.cpp:985
+#: pcbnew/drc/drc_engine.cpp:1002
 #, c-format
 msgid "Checking %s track width: min %s."
 msgstr "Перевірка %s ширина доріжки: мінімально %s."
 
-#: pcbnew/drc/drc_engine.cpp:993
+#: pcbnew/drc/drc_engine.cpp:1010
 #, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "Перевірка %s ширини кільця: мін. %s."
 
-#: pcbnew/drc/drc_engine.cpp:1001
+#: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "Перевірка %s діаметр перехідного отвору: опт %s."
 
-#: pcbnew/drc/drc_engine.cpp:1007
+#: pcbnew/drc/drc_engine.cpp:1024
 #, c-format
 msgid "Checking %s via diameter: min %s."
 msgstr "Перевірка %s діаметр перехідного отвору: мін %s."
 
-#: pcbnew/drc/drc_engine.cpp:1016
+#: pcbnew/drc/drc_engine.cpp:1033
 #, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "Перевірка %s розмір отвору: опт %s."
 
-#: pcbnew/drc/drc_engine.cpp:1022
+#: pcbnew/drc/drc_engine.cpp:1039
 #, c-format
 msgid "Checking %s hole size: min %s."
 msgstr "Перевірка %s розмір отвору: мін %s."
 
-#: pcbnew/drc/drc_engine.cpp:1032
+#: pcbnew/drc/drc_engine.cpp:1049
 #, c-format
 msgid "Checking %s: min %s."
 msgstr "Перевірка %s: мін %s."
 
-#: pcbnew/drc/drc_engine.cpp:1040
+#: pcbnew/drc/drc_engine.cpp:1057
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "Перевірка %s відступу диференційних пар: опт %s."
 
-#: pcbnew/drc/drc_engine.cpp:1046
+#: pcbnew/drc/drc_engine.cpp:1063
 #, c-format
 msgid "Checking %s clearance: min %s."
 msgstr "Перевірка %s зазору: мін %s."
 
-#: pcbnew/drc/drc_engine.cpp:1054
+#: pcbnew/drc/drc_engine.cpp:1071
 #, c-format
 msgid "Checking %s hole to hole: min %s."
 msgstr "Перевірка %s між отворами: мін %s."
 
-#: pcbnew/drc/drc_engine.cpp:1060 pcbnew/drc/drc_engine.cpp:1086
-#: pcbnew/drc/drc_engine.cpp:1530
+#: pcbnew/drc/drc_engine.cpp:1077 pcbnew/drc/drc_engine.cpp:1103
+#: pcbnew/drc/drc_engine.cpp:1547
 #, c-format
 msgid "Checking %s."
 msgstr "Перевірка %s."
 
-#: pcbnew/drc/drc_engine.cpp:1075
+#: pcbnew/drc/drc_engine.cpp:1092
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Перевірка %s: мін %s; опт %s; макс %s."
 
-#: pcbnew/drc/drc_engine.cpp:1096
+#: pcbnew/drc/drc_engine.cpp:1113
 #, fuzzy
 msgid "Netclass clearances apply only between copper items."
 msgstr ""
 "Зазори плати та класи зв'язків що застосовуються лише між мідними елементами."
 
-#: pcbnew/drc/drc_engine.cpp:1100 pcbnew/drc/drc_engine.cpp:1105
+#: pcbnew/drc/drc_engine.cpp:1117 pcbnew/drc/drc_engine.cpp:1122
 #, fuzzy, c-format
 msgid "%s contains no copper.  Rule ignored."
 msgstr "%s не є наскрізним отвором; правило проігноровано."
 
-#: pcbnew/drc/drc_engine.cpp:1161
+#: pcbnew/drc/drc_engine.cpp:1178
 msgid "Keepout constraint not met."
 msgstr "Обмеження зони заборони не порушується."
 
-#: pcbnew/drc/drc_engine.cpp:1163
+#: pcbnew/drc/drc_engine.cpp:1180
 msgid "Disallow constraint not met."
 msgstr "Задані обмеження не порушуються."
 
-#: pcbnew/drc/drc_engine.cpp:1185
+#: pcbnew/drc/drc_engine.cpp:1202
 msgid "Keepout layer(s) not matched."
 msgstr "Співпадіння між шаром(и) і забороненої зони відсутні."
 
-#: pcbnew/drc/drc_engine.cpp:1189 pcbnew/drc/drc_engine.cpp:1210
-#: pcbnew/drc/drc_engine.cpp:1534
+#: pcbnew/drc/drc_engine.cpp:1206 pcbnew/drc/drc_engine.cpp:1227
+#: pcbnew/drc/drc_engine.cpp:1551
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "Шар правил '%s' не співпадає; правило проігноровано."
 
-#: pcbnew/drc/drc_engine.cpp:1194 pcbnew/drc/drc_engine.cpp:1215
+#: pcbnew/drc/drc_engine.cpp:1211 pcbnew/drc/drc_engine.cpp:1232
 msgid "Rule layer not matched; rule ignored."
 msgstr "Шар правил не співпадає; правило проігноровано."
 
-#: pcbnew/drc/drc_engine.cpp:1206
+#: pcbnew/drc/drc_engine.cpp:1223
 msgid "Constraint layer not matched."
 msgstr "Обмеження шару не збігається."
 
-#: pcbnew/drc/drc_engine.cpp:1226
+#: pcbnew/drc/drc_engine.cpp:1243
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr "%s не є наскрізним отвором; правило проігноровано."
 
-#: pcbnew/drc/drc_engine.cpp:1236
+#: pcbnew/drc/drc_engine.cpp:1253
 msgid "Unconditional constraint applied."
 msgstr "Застосовано безумовне обмеження."
 
-#: pcbnew/drc/drc_engine.cpp:1240 pcbnew/drc/drc_engine.cpp:1540
+#: pcbnew/drc/drc_engine.cpp:1257 pcbnew/drc/drc_engine.cpp:1557
 msgid "Unconditional rule applied."
 msgstr "Застосовано безумовне правило."
 
-#: pcbnew/drc/drc_engine.cpp:1245
+#: pcbnew/drc/drc_engine.cpp:1262
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Застосовано безумовне правило; заміняє попередні обмеження."
 
-#: pcbnew/drc/drc_engine.cpp:1259 pcbnew/drc/drc_engine.cpp:1545
+#: pcbnew/drc/drc_engine.cpp:1276 pcbnew/drc/drc_engine.cpp:1562
 #, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Перевірка умов правила \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:1269
+#: pcbnew/drc/drc_engine.cpp:1286
 msgid "Constraint applied."
 msgstr "Обмеження застосовано."
 
-#: pcbnew/drc/drc_engine.cpp:1273 pcbnew/drc/drc_engine.cpp:1551
+#: pcbnew/drc/drc_engine.cpp:1290 pcbnew/drc/drc_engine.cpp:1568
 msgid "Rule applied."
 msgstr "Правило застосовано."
 
-#: pcbnew/drc/drc_engine.cpp:1278
+#: pcbnew/drc/drc_engine.cpp:1295
 msgid "Rule applied; overrides previous constraints."
 msgstr "Застосовано правило; перевизначає попередні обмеження."
 
-#: pcbnew/drc/drc_engine.cpp:1286
+#: pcbnew/drc/drc_engine.cpp:1303
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Членство не задоволене; обмеження проігноровано."
 
-#: pcbnew/drc/drc_engine.cpp:1287 pcbnew/drc/drc_engine.cpp:1556
+#: pcbnew/drc/drc_engine.cpp:1304 pcbnew/drc/drc_engine.cpp:1573
 msgid "Condition not satisfied; rule ignored."
 msgstr "Умови незадоволені; правило ігнорується."
 
-#: pcbnew/drc/drc_engine.cpp:1347 pcbnew/drc/drc_engine.cpp:1369
+#: pcbnew/drc/drc_engine.cpp:1364 pcbnew/drc/drc_engine.cpp:1386
 #, fuzzy, c-format
 msgid "Local clearance on %s: %s."
 msgstr "Локальний зазор на %s; зазор: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1428
+#: pcbnew/drc/drc_engine.cpp:1445
 #, c-format
 msgid "%s zone connection: %s."
 msgstr "%s зона з'єднання: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1444
+#: pcbnew/drc/drc_engine.cpp:1461
 #, c-format
 msgid "%s pad connection: %s."
 msgstr "%s підключення контактної площадки: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1449 pcbnew/drc/drc_engine.cpp:1466
-#: pcbnew/drc/drc_engine.cpp:1483 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
+#: pcbnew/drc/drc_engine.cpp:1466 pcbnew/drc/drc_engine.cpp:1483
+#: pcbnew/drc/drc_engine.cpp:1500 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
 msgid "zone"
 msgstr "зона"
 
-#: pcbnew/drc/drc_engine.cpp:1461
+#: pcbnew/drc/drc_engine.cpp:1478
 #, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "%s відступ теплового зазору: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1478
+#: pcbnew/drc/drc_engine.cpp:1495
 #, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "%s ширина термічного переходу: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1511
+#: pcbnew/drc/drc_engine.cpp:1528
 #, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "Перевірка твердження правил \"%s\"."
@@ -38139,16 +38143,16 @@ msgstr "Нерозпізнаний шар '%s'."
 msgid "Missing severity name."
 msgstr "Відсутня назва ступеня серйозності."
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:190
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:89
 msgid "Checking pad & via annular rings..."
 msgstr "Перевірка контактної площадки і пояска перехідних отворів..."
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:427
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:333
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s мінімальна ширина пояска %s; поточне %s)"
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:435
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:341
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s максимальна ширина пояска %s; поточне %s)"
