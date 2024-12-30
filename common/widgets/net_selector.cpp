@@ -227,9 +227,8 @@ NET_SELECTOR::NET_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                             long style ) :
         FILTER_COMBOBOX( parent, id, pos, size, style )
 {
-    std::unique_ptr<NET_SELECTOR_COMBOPOPUP> popup = std::make_unique<NET_SELECTOR_COMBOPOPUP>();
-    m_netSelectorPopup = popup.get();
-    setFilterPopup( std::move( popup ) );
+    m_netSelectorPopup = new NET_SELECTOR_COMBOPOPUP();
+    setFilterPopup( m_netSelectorPopup );
 }
 
 

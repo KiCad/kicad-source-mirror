@@ -126,7 +126,7 @@ void FILTER_COMBOPOPUP::OnPopup()
 }
 
 
-void FILTER_COMBOPOPUP::    OnStartingKey( wxKeyEvent& aEvent )
+void FILTER_COMBOPOPUP::OnStartingKey( wxKeyEvent& aEvent )
 {
     doSetFocus( m_filterCtrl );
     doStartingKey( aEvent );
@@ -403,10 +403,10 @@ FILTER_COMBOBOX::~FILTER_COMBOBOX()
 }
 
 
-void FILTER_COMBOBOX::setFilterPopup( std::unique_ptr<FILTER_COMBOPOPUP> aPopup )
+void FILTER_COMBOBOX::setFilterPopup( FILTER_COMBOPOPUP* aPopup )
 {
-    m_filterPopup = aPopup.get();
-    SetPopupControl( aPopup.release() );
+    m_filterPopup = aPopup;
+    SetPopupControl( aPopup );
 }
 
 

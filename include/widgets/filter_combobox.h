@@ -119,7 +119,7 @@ public:
     ~FILTER_COMBOBOX();
 
 protected:
-    void setFilterPopup( std::unique_ptr<FILTER_COMBOPOPUP> aPopup );
+    void setFilterPopup( FILTER_COMBOPOPUP* aPopup );
 
     void onKeyDown( wxKeyEvent& aEvt );
 

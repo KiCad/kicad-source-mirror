@@ -91,9 +91,8 @@ SYMBOL_FILTER_COMBOBOX::SYMBOL_FILTER_COMBOBOX( wxWindow* parent, wxWindowID id,
                                                 const wxSize& size, long style ) :
         FILTER_COMBOBOX( parent, id, pos, size, style )
 {
-    std::unique_ptr<SYMBOL_FILTER_COMBOPOPUP> popup = std::make_unique<SYMBOL_FILTER_COMBOPOPUP>();
-    m_selectorPopup = popup.get();
-    setFilterPopup( std::move( popup ) );
+    m_selectorPopup = new SYMBOL_FILTER_COMBOPOPUP();
+    setFilterPopup( m_selectorPopup );
 }
 
 
