@@ -134,10 +134,10 @@ void KINNG_REQUEST_SERVER::listenThread()
             break;
         }
 
-        std::string message( buf, sz );
+        m_sharedMessage.assign( buf, sz );
 
         if( m_callback )
-            m_callback( &message );
+            m_callback( &m_sharedMessage );
 
         std::unique_lock<std::mutex> lock( m_mutex );
         m_replyReady.wait( lock, [&]() { return !m_pendingReply.empty(); } );

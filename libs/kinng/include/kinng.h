@@ -58,6 +58,8 @@ private:
 
     std::function<void(std::string*)> m_callback;
 
+    std::string m_sharedMessage;
+
     std::string m_pendingReply;
 
     std::condition_variable m_replyReady;
