@@ -137,10 +137,22 @@ void KIPLATFORM::IO::LongPathAdjustment( wxFileName& aFilename )
         aFilename.SetVolume( "\\\\?\\" + aFilename.GetVolume() + ":" );
     else if( aFilename.GetVolume().Length() > 1
             && aFilename.GetVolume().StartsWith( wxT( "\\\\" ) )
-            && !aFilename.GetVolume().StartsWith( wxT( "\\\\?\\" ) ) )
+            && !aFilename.GetVolume().StartsWith( wxT( "\\\\?" ) ) )
         // unc path aka network share, wx returns with \\ already
         // so skip the first slash and combine with the prefix
         // which in the case of UNCs is actually \\?\UNC\<server>\<share>
         // where UNC is literally the text UNC
-        aFilename.SetVolume( "\\\\?\\UNC" + aFilename.GetVolume().Mid(1) );
+        aFilename.SetVolume( "\\\\?\\UNC" + aFilename.GetVolume().Mid( 1 ) );
+    else if( aFilename.GetVolume().StartsWith( wxT( "\\\\?" ) )
+             && aFilename.GetDirs().size() >= 2
+             && aFilename.GetDirs()[0] == "UNC" )
+    {
+        // wxWidgets can parse \\?\UNC\<server> into a mess
+        // UNC gets stored into a directory
+        // volume gets reduced to just \\?
+        // so we need to repair it
+        aFilename.SetVolume( "\\\\?\\UNC\\" + aFilename.GetDirs()[1] );
+        aFilename.RemoveDir( 0 );
+        aFilename.RemoveDir( 0 );
+    }
 }
