@@ -1626,117 +1626,121 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             }
         }
 
+        const auto drawOneSimpleShape = [&]( const SHAPE& aShape )
+        {
+            switch( aShape.Type() )
+            {
+            case SH_SEGMENT:
+            {
+                const SHAPE_SEGMENT& seg = (const SHAPE_SEGMENT&) aShape;
+                int                  effectiveWidth = seg.GetWidth() + 2 * margin.x;
+
+                if( effectiveWidth > 0 )
+                    m_gal->DrawSegment( seg.GetSeg().A, seg.GetSeg().B, effectiveWidth );
+
+                break;
+            }
+
+            case SH_CIRCLE:
+            {
+                const SHAPE_CIRCLE& circle = (const SHAPE_CIRCLE&) aShape;
+                int                 effectiveRadius = circle.GetRadius() + margin.x;
+
+                if( effectiveRadius > 0 )
+                    m_gal->DrawCircle( circle.GetCenter(), effectiveRadius );
+
+                break;
+            }
+
+            case SH_RECT:
+            {
+                const SHAPE_RECT& r = (const SHAPE_RECT&) aShape;
+                VECTOR2I          pos = r.GetPosition();
+                VECTOR2I          effectiveMargin = margin;
+
+                if( effectiveMargin.x < 0 )
+                {
+                    // A negative margin just produces a smaller rect.
+                    VECTOR2I effectiveSize = r.GetSize() + effectiveMargin;
+
+                    if( effectiveSize.x > 0 && effectiveSize.y > 0 )
+                        m_gal->DrawRectangle( pos - effectiveMargin, pos + effectiveSize );
+                }
+                else if( effectiveMargin.x > 0 )
+                {
+                    // A positive margin produces a larger rect, but with rounded corners
+                    m_gal->DrawRectangle( r.GetPosition(), r.GetPosition() + r.GetSize() );
+
+                    // Use segments to produce the margin with rounded corners
+                    m_gal->DrawSegment( pos,
+                                        pos + VECTOR2I( r.GetWidth(), 0 ),
+                                        effectiveMargin.x * 2 );
+                    m_gal->DrawSegment( pos + VECTOR2I( r.GetWidth(), 0 ),
+                                        pos + r.GetSize(),
+                                        effectiveMargin.x * 2 );
+                    m_gal->DrawSegment( pos + r.GetSize(),
+                                        pos + VECTOR2I( 0, r.GetHeight() ),
+                                        effectiveMargin.x * 2 );
+                    m_gal->DrawSegment( pos + VECTOR2I( 0, r.GetHeight() ),
+                                        pos,
+                                        effectiveMargin.x * 2 );
+                }
+                else
+                {
+                    m_gal->DrawRectangle( r.GetPosition(), r.GetPosition() + r.GetSize() );
+                }
+
+                break;
+            }
+
+            case SH_SIMPLE:
+            {
+                const SHAPE_SIMPLE& poly = static_cast<const SHAPE_SIMPLE&>( aShape );
+
+                if( poly.PointCount() < 2 ) // Careful of empty pads
+                    break;
+
+                if( margin.x < 0 ) // The poly shape must be deflated
+                {
+                    SHAPE_POLY_SET outline;
+                    outline.NewOutline();
+
+                    for( int ii = 0; ii < poly.PointCount(); ++ii )
+                        outline.Append( poly.CPoint( ii ) );
+
+                    outline.Deflate( -margin.x, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, m_maxError );
+
+                    m_gal->DrawPolygon( outline );
+                }
+                else
+                {
+                    m_gal->DrawPolygon( poly.Vertices() );
+                }
+
+                // Now add on a rounded margin (using segments) if the margin > 0
+                if( margin.x > 0 )
+                {
+                    for( size_t ii = 0; ii < poly.GetSegmentCount(); ++ii )
+                    {
+                        SEG seg = poly.GetSegment( ii );
+                        m_gal->DrawSegment( seg.A, seg.B, margin.x * 2 );
+                    }
+                }
+
+                break;
+            }
+
+            default:
+                // Better not get here; we already pre-flighted the shapes...
+                break;
+            }
+        };
+
         if( simpleShapes )
         {
             for( const SHAPE* shape : shapes->Shapes() )
             {
-                switch( shape->Type() )
-                {
-                case SH_SEGMENT:
-                {
-                    const SHAPE_SEGMENT* seg = (const SHAPE_SEGMENT*) shape;
-                    int                  effectiveWidth = seg->GetWidth() + 2 * margin.x;
-
-                    if( effectiveWidth > 0 )
-                        m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, effectiveWidth );
-
-                    break;
-                }
-
-                case SH_CIRCLE:
-                {
-                    const SHAPE_CIRCLE* circle = (const SHAPE_CIRCLE*) shape;
-                    int                 effectiveRadius = circle->GetRadius() + margin.x;
-
-                    if( effectiveRadius > 0 )
-                        m_gal->DrawCircle( circle->GetCenter(), effectiveRadius );
-
-                    break;
-                }
-
-                case SH_RECT:
-                {
-                    const SHAPE_RECT* r = (const SHAPE_RECT*) shape;
-                    VECTOR2I          pos = r->GetPosition();
-                    VECTOR2I          effectiveMargin = margin;
-
-                    if( effectiveMargin.x < 0 )
-                    {
-                        // A negative margin just produces a smaller rect.
-                        VECTOR2I effectiveSize = r->GetSize() + effectiveMargin;
-
-                        if( effectiveSize.x > 0 && effectiveSize.y > 0 )
-                            m_gal->DrawRectangle( pos - effectiveMargin, pos + effectiveSize );
-                    }
-                    else if( effectiveMargin.x > 0 )
-                    {
-                        // A positive margin produces a larger rect, but with rounded corners
-                        m_gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
-
-                        // Use segments to produce the margin with rounded corners
-                        m_gal->DrawSegment( pos,
-                                            pos + VECTOR2I( r->GetWidth(), 0 ),
-                                            effectiveMargin.x * 2 );
-                        m_gal->DrawSegment( pos + VECTOR2I( r->GetWidth(), 0 ),
-                                            pos + r->GetSize(),
-                                            effectiveMargin.x * 2 );
-                        m_gal->DrawSegment( pos + r->GetSize(),
-                                            pos + VECTOR2I( 0, r->GetHeight() ),
-                                            effectiveMargin.x * 2 );
-                        m_gal->DrawSegment( pos + VECTOR2I( 0, r->GetHeight() ),
-                                            pos,
-                                            effectiveMargin.x * 2 );
-                    }
-                    else
-                    {
-                        m_gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
-                    }
-
-                    break;
-                }
-
-                case SH_SIMPLE:
-                {
-                    const SHAPE_SIMPLE* poly = static_cast<const SHAPE_SIMPLE*>( shape );
-
-                    if( poly->PointCount() < 2 )     // Careful of empty pads
-                        break;
-
-                    if( margin.x < 0 )  // The poly shape must be deflated
-                    {
-                        SHAPE_POLY_SET outline;
-                        outline.NewOutline();
-
-                        for( int ii = 0; ii < poly->PointCount(); ++ii )
-                            outline.Append( poly->CPoint( ii ) );
-
-                        outline.Deflate( -margin.x, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
-                                         m_maxError );
-
-                        m_gal->DrawPolygon( outline );
-                    }
-                    else
-                    {
-                        m_gal->DrawPolygon( poly->Vertices() );
-                    }
-
-                    // Now add on a rounded margin (using segments) if the margin > 0
-                    if( margin.x > 0 )
-                    {
-                        for( size_t ii = 0; ii < poly->GetSegmentCount(); ++ii )
-                        {
-                            SEG seg = poly->GetSegment( ii );
-                            m_gal->DrawSegment( seg.A, seg.B, margin.x * 2 );
-                        }
-                    }
-
-                    break;
-                }
-
-                default:
-                    // Better not get here; we already pre-flighted the shapes...
-                    break;
-                }
+                drawOneSimpleShape( *shape );
             }
         }
         else
