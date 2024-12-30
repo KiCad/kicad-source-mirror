@@ -944,16 +944,16 @@ LIB_SYMBOL* SCH_EASYEDA_PARSER::ParseSymbol( const VECTOR2D&              aOrigi
     std::optional<wxString> valOpt;
     wxString                symbolName = wxS( "Unknown" );
 
-    if( valOpt = get_opt( aParams, wxS( "name" ) ) )
+    if( ( valOpt = get_opt( aParams, wxS( "name" ) ) ) )
         symbolName = *valOpt;
-    else if( valOpt = get_opt( aParams, wxS( "spiceSymbolName" ) ) )
+    else if( ( valOpt = get_opt( aParams, wxS( "spiceSymbolName" ) ) ) )
         symbolName = *valOpt;
 
     wxString symbolPrefix;
 
-    if( valOpt = get_opt( aParams, wxS( "pre" ) ) )
+    if( ( valOpt = get_opt( aParams, wxS( "pre" ) ) ) )
         symbolPrefix = *valOpt;
-    else if( valOpt = get_opt( aParams, wxS( "spicePre" ) ) )
+    else if( ( valOpt = get_opt( aParams, wxS( "spicePre" ) ) ) )
         symbolPrefix = *valOpt;
 
     LIB_ID libId = EasyEdaToKiCadLibID( wxEmptyString, symbolName );
@@ -971,7 +971,7 @@ LIB_SYMBOL* SCH_EASYEDA_PARSER::ParseSymbol( const VECTOR2D&              aOrigi
         if( srcName == wxS( "Datasheet" ) )
             srcName = wxS( "link" );
 
-        if( valOpt = get_opt( aParams, srcName ) )
+        if( ( valOpt = get_opt( aParams, srcName ) ) )
         {
             if( valOpt->empty() )
                 continue;
