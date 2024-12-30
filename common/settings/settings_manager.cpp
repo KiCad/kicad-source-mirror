@@ -32,6 +32,7 @@
 #include <dialogs/dialog_migrate_settings.h>
 #include <gestfich.h>
 #include <kiplatform/environment.h>
+#include <kiplatform/io.h>
 #include <kiway.h>
 #include <lockfile.h>
 #include <macros.h>
@@ -1222,6 +1223,7 @@ bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter ) const
     target.SetPath( GetProjectBackupsPath() );
     target.SetName( fileName );
     target.SetExt( FILEEXT::ArchiveFileExtension );
+    KIPLATFORM::IO::LongPathAdjustment( target );
 
     if( !target.DirExists() && !wxMkdir( target.GetPath() ) )
     {
