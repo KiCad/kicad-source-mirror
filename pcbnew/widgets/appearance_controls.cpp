@@ -3032,7 +3032,11 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
     view->UpdateLayerColor( GetNetnameLayer( layer ) );
 
     if( IsCopperLayer( layer ) )
+    {
         view->UpdateLayerColor( ZONE_LAYER_FOR( layer ) );
+        view->UpdateLayerColor( VIA_COPPER_LAYER_FOR( layer ) );
+        view->UpdateLayerColor( PAD_COPPER_LAYER_FOR( layer ) );
+    }
 
     // Update the bitmap of the layer box
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )

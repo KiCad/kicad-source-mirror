@@ -707,6 +707,9 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
         if( IsCopperLayer( layer ) )
         {
             m_view->SetRequired( ZONE_LAYER_FOR( layer ), layer );
+            m_view->SetRequired( PAD_COPPER_LAYER_FOR( layer ), layer );
+            m_view->SetRequired( VIA_COPPER_LAYER_FOR( layer ), layer );
+
             m_view->SetRequired( BITMAP_LAYER_FOR( layer ), layer );
             m_view->SetLayerTarget( BITMAP_LAYER_FOR( layer ), KIGFX::TARGET_NONCACHED );
             m_view->SetRequired( GetNetnameLayer( layer ), layer );
