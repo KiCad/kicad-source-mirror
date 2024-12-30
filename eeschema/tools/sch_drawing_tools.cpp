@@ -3182,7 +3182,9 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
 int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
 {
     if( !sheetPaths.size() )
+    {
         return 0;
+    }
 
     m_dialogSyncSheetPin = std::make_unique<DIALOG_SYNC_SHEET_PINS>(
             m_frame, std::move( sheetPaths ),
@@ -3311,6 +3313,14 @@ int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
     SCH_SHEET_PATH current;
     current.push_back( &m_frame->Schematic().Root() );
     getSheetChildren( sheetPaths, m_frame->Schematic().Root().GetScreen(), visited, current );
+
+    if( sheetPaths.size() == 0 )
+    {
+        m_frame->ShowInfoBarMsg( _( "No sub schematic found in the current project" ) );
+        return 0;
+    }
+
+
     return doSyncSheetsPins( std::move( sheetPaths ) );
 }
 
