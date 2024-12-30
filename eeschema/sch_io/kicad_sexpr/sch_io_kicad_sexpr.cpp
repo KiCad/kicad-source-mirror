@@ -1308,24 +1308,12 @@ void SCH_IO_KICAD_SEXPR::saveText( SCH_TEXT* aText )
         }
     }
 
-    if( aText->GetText().Length() < 50 )
-    {
-        m_out->Print( "(at %s %s %s)",
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aText->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aText->GetPosition().y ).c_str(),
-                      EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
-    }
-    else
-    {
-        m_out->Print( "(at %s %s %s)",
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aText->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aText->GetPosition().y ).c_str(),
-                      EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
-    }
+    m_out->Print( "(at %s %s %s)",
+                    EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                        aText->GetPosition().x ).c_str(),
+                    EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                        aText->GetPosition().y ).c_str(),
+                    EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
 
     if( label && !label->GetFields().empty() )
     {
