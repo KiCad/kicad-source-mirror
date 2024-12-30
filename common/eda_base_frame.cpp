@@ -1182,7 +1182,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_ORIGINS_AXES ), _( "Origins & Axes" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_FIELDS ), _( "New Footprint Defaults" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_FIELDS ), _( "Footprint Defaults" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_GRAPHICS_VALUES ), _( "Graphics Defaults" ) );
 
             if( GetFrameType() ==  FRAME_PCB_EDITOR )
