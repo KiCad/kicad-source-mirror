@@ -79,6 +79,12 @@ class KiCadPyShell(KiCadEditorNotebookFrame):
         """
         self.notebook = KiCadEditorNotebook(parent=self.parent)
         intro = 'Py %s' % version.VERSION
+
+        intro += """\n\nDeprecation Notice:\n
+This SWIG-based Python interface to the PCB editor is deprecated and will be removed 
+in a future version of KiCad.  Please plan to move to the new IPC API and/or make 
+use of the kicad-cli tool for your KiCad automation needs.\n\n"""
+
         import types
         import builtins
         module = types.ModuleType('__main__')

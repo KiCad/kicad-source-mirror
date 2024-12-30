@@ -30,6 +30,16 @@
 
 %module pcbnew
 
+%pythoncode
+{
+import warnings
+warnings.filterwarnings("default", category=DeprecationWarning, module=__name__)
+warnings.warn("The SWIG-based Python interface to the PCB editor is deprecated and will be removed "
+              "in a future version of KiCad.  Please plan to move to the new IPC API and/or make "
+              "use of the kicad-cli tool for your KiCad automation needs.",
+               category=DeprecationWarning)
+}
+
 %feature("autodoc", "1");
 #ifdef ENABLE_DOCSTRINGS_FROM_DOXYGEN
 %include "docstrings.i"
