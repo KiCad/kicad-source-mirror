@@ -32,6 +32,14 @@ set( BUILD_SHARED_LIBS OFF )
 # instead of with cmake_policy will apply the change to the third-party CMakeLists files.
 set( CMAKE_POLICY_DEFAULT_CMP0077 NEW )
 
+# Avoid spurious warnings on g++
+if(CMAKE_C_COMPILER_ID MATCHES "GNU")
+    set_source_files_properties(
+        ${CMAKE_SOURCE_DIR}/thirdparty/3dxware_sdk/src/navlib_stub.c
+        PROPERTIES COMPILE_FLAGS "-Wno-attributes"
+    )
+endif()
+
 set( ARGPARSE_INSTALL OFF )
 add_subdirectory( argparse )
 add_subdirectory( clipper2 )
