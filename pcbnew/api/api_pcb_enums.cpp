@@ -21,6 +21,7 @@
 #include <import_export.h>
 #include <api/api_enums.h>
 #include <api/board/board_types.pb.h>
+#include <api/board/board_commands.pb.h>
 #include <wx/wx.h>
 
 #include <padstack.h>
@@ -28,6 +29,7 @@
 #include <pcb_track.h>
 #include <zones.h>
 #include <zone_settings.h>
+#include <project/board_project_settings.h>
 
 // Adding something new here?  Add it to test_api_enums.cpp!
 
@@ -667,5 +669,101 @@ DIM_UNITS_MODE FromProtoEnum( types::DimensionUnit aValue )
     }
 }
 
+
+template<>
+commands::InactiveLayerDisplayMode ToProtoEnum( HIGH_CONTRAST_MODE aValue )
+{
+    switch( aValue )
+    {
+    case HIGH_CONTRAST_MODE::NORMAL:    return commands::InactiveLayerDisplayMode::ILDM_NORMAL;
+    case HIGH_CONTRAST_MODE::DIMMED:    return commands::InactiveLayerDisplayMode::ILDM_DIMMED;
+    case HIGH_CONTRAST_MODE::HIDDEN:    return commands::InactiveLayerDisplayMode::ILDM_HIDDEN;
+
+    default:
+        wxCHECK_MSG( false, commands::InactiveLayerDisplayMode::ILDM_NORMAL,
+                     "Unhandled case in ToProtoEnum<HIGH_CONTRAST_MODE>");
+    }
+}
+
+
+template<>
+HIGH_CONTRAST_MODE FromProtoEnum( commands::InactiveLayerDisplayMode aValue )
+{
+    switch( aValue )
+    {
+    case commands::InactiveLayerDisplayMode::ILDM_DIMMED:   return HIGH_CONTRAST_MODE::DIMMED;
+    case commands::InactiveLayerDisplayMode::ILDM_HIDDEN:   return HIGH_CONTRAST_MODE::HIDDEN;
+    case commands::InactiveLayerDisplayMode::ILDM_UNKNOWN:
+    case commands::InactiveLayerDisplayMode::ILDM_NORMAL:   return HIGH_CONTRAST_MODE::NORMAL;
+
+    default:
+        wxCHECK_MSG( false, HIGH_CONTRAST_MODE::NORMAL,
+                     "Unhandled case in FromProtoEnum<commands::InactiveLayerDisplayMode>" );
+    }
+}
+
+
+template<>
+commands::NetColorDisplayMode ToProtoEnum( NET_COLOR_MODE aValue )
+{
+    switch( aValue )
+    {
+    case NET_COLOR_MODE::ALL:       return commands::NetColorDisplayMode::NCDM_ALL;
+    case NET_COLOR_MODE::RATSNEST:  return commands::NetColorDisplayMode::NCDM_RATSNEST;
+    case NET_COLOR_MODE::OFF:       return commands::NetColorDisplayMode::NCDM_OFF;
+
+    default:
+        wxCHECK_MSG( false, commands::NetColorDisplayMode::NCDM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<NET_COLOR_MODE>");
+    }
+}
+
+
+template<>
+NET_COLOR_MODE FromProtoEnum( commands::NetColorDisplayMode aValue )
+{
+    switch( aValue )
+    {
+    case commands::NetColorDisplayMode::NCDM_ALL:       return NET_COLOR_MODE::ALL;
+    case commands::NetColorDisplayMode::NCDM_OFF:       return NET_COLOR_MODE::OFF;
+    case commands::NetColorDisplayMode::NCDM_UNKNOWN:
+    case commands::NetColorDisplayMode::NCDM_RATSNEST:  return NET_COLOR_MODE::RATSNEST;
+
+    default:
+        wxCHECK_MSG( false, NET_COLOR_MODE::RATSNEST,
+                     "Unhandled case in FromProtoEnum<commands::NetColorDisplayMode>" );
+    }
+}
+
+
+template<>
+commands::RatsnestDisplayMode ToProtoEnum( RATSNEST_MODE aValue )
+{
+    switch( aValue )
+    {
+    case RATSNEST_MODE::ALL:        return commands::RatsnestDisplayMode::RDM_ALL_LAYERS;
+    case RATSNEST_MODE::VISIBLE:    return commands::RatsnestDisplayMode::RDM_VISIBLE_LAYERS;
+
+    default:
+        wxCHECK_MSG( false, commands::RatsnestDisplayMode::RDM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<RATSNEST_MODE>");
+    }
+}
+
+
+template<>
+RATSNEST_MODE FromProtoEnum( commands::RatsnestDisplayMode aValue )
+{
+    switch( aValue )
+    {
+    case commands::RatsnestDisplayMode::RDM_VISIBLE_LAYERS: return RATSNEST_MODE::VISIBLE;
+    case commands::RatsnestDisplayMode::RDM_UNKNOWN:
+    case commands::RatsnestDisplayMode::RDM_ALL_LAYERS:     return RATSNEST_MODE::ALL;
+
+    default:
+        wxCHECK_MSG( false, RATSNEST_MODE::ALL,
+                     "Unhandled case in FromProtoEnum<commands::RatsnestDisplayMode>" );
+    }
+}
 
 // Adding something new here?  Add it to test_api_enums.cpp!

@@ -186,6 +186,67 @@ message SetActiveLayer
   kiapi.board.types.BoardLayer layer = 2;
 }
 
+enum InactiveLayerDisplayMode
+{
+  ILDM_UNKNOWN = 0;
+  // Inactive layers are shown
+  ILDM_NORMAL = 1;
+  // Inactive layers are shown with dimmed colors
+  ILDM_DIMMED = 2;
+  // Inactive layers are hidden
+  ILDM_HIDDEN = 3;
+}
+
+enum NetColorDisplayMode
+{
+  NCDM_UNKNOWN = 0;
+  // Net and netclass colors are shown in the ratsnest and on all copper items
+  NCDM_ALL = 1;
+  // Net and netclass colors are shown in the ratsnest only
+  NCDM_RATSNEST = 2;
+  // Net and netclass colors are not shown
+  NCDM_OFF = 3;
+}
+
+enum BoardFlipMode
+{
+  BFM_UNKNOWN = 0;
+  // Normal ("non-flipped") mode
+  BFM_NORMAL = 1;
+  // "Flipped" mode, viewed from the back and mirrored around the X axis
+  BFM_FLIPPED_X = 2;
+}
+
+enum RatsnestDisplayMode
+{
+  RDM_UNKNOWN = 0;
+  // Ratsnest lines are drawn to objects even if they are on hidden layers
+  RDM_ALL_LAYERS = 1;
+  // Ratsnest lines are hidden when at least one endpoint is an item on a hidden layer
+  RDM_VISIBLE_LAYERS = 2;
+}
+
+message BoardEditorAppearanceSettings
+{
+  InactiveLayerDisplayMode inactive_layer_display = 1;
+
+  NetColorDisplayMode net_color_display = 2;
+
+  BoardFlipMode board_flip = 3;
+
+  RatsnestDisplayMode ratsnest_display = 4;
+}
+
+// Returns BoardEditorAppearanceSettings
+message GetBoardEditorAppearanceSettings
+{
+}
+
+message SetBoardEditorAppearanceSettings
+{
+  BoardEditorAppearanceSettings settings = 1;
+}
+
 //// Interactive commands ////
 // These commands begin an interactive operation in the editor.
 // They return a response immediately, but the editor will become busy

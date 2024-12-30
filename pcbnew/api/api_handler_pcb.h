@@ -104,6 +104,12 @@ private:
     HANDLER_RESULT<BoardLayerResponse> handleGetActiveLayer( const HANDLER_CONTEXT<GetActiveLayer>& aCtx );
     HANDLER_RESULT<Empty> handleSetActiveLayer( const HANDLER_CONTEXT<SetActiveLayer>& aCtx );
 
+    HANDLER_RESULT<BoardEditorAppearanceSettings> handleGetBoardEditorAppearanceSettings(
+            const HANDLER_CONTEXT<GetBoardEditorAppearanceSettings>& aCtx );
+
+    HANDLER_RESULT<Empty> handleSetBoardEditorAppearanceSettings(
+            const HANDLER_CONTEXT<SetBoardEditorAppearanceSettings>& aCtx );
+
 protected:
     std::unique_ptr<COMMIT> createCommit() override;
 

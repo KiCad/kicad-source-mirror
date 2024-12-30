@@ -88,6 +88,10 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
     registerHandler<SetVisibleLayers, Empty>( &API_HANDLER_PCB::handleSetVisibleLayers );
     registerHandler<GetActiveLayer, BoardLayerResponse>( &API_HANDLER_PCB::handleGetActiveLayer );
     registerHandler<SetActiveLayer, Empty>( &API_HANDLER_PCB::handleSetActiveLayer );
+    registerHandler<GetBoardEditorAppearanceSettings, BoardEditorAppearanceSettings>(
+            &API_HANDLER_PCB::handleGetBoardEditorAppearanceSettings );
+    registerHandler<SetBoardEditorAppearanceSettings, Empty>(
+            &API_HANDLER_PCB::handleSetBoardEditorAppearanceSettings );
 }
 
 
@@ -1006,5 +1010,64 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetActiveLayer(
     }
 
     frame()->SetActiveLayer( layer );
+    return Empty();
+}
+
+
+HANDLER_RESULT<BoardEditorAppearanceSettings> API_HANDLER_PCB::handleGetBoardEditorAppearanceSettings(
+        const HANDLER_CONTEXT<GetBoardEditorAppearanceSettings>& aCtx )
+{
+    BoardEditorAppearanceSettings reply;
+
+    // TODO: might be nice to put all these things in one place and have it derive SERIALIZABLE
+
+    const PCB_DISPLAY_OPTIONS& displayOptions = frame()->GetDisplayOptions();
+
+    reply.set_inactive_layer_display( ToProtoEnum<HIGH_CONTRAST_MODE, InactiveLayerDisplayMode>(
+            displayOptions.m_ContrastModeDisplay ) );
+    reply.set_net_color_display(
+            ToProtoEnum<NET_COLOR_MODE, NetColorDisplayMode>( displayOptions.m_NetColorMode ) );
+
+    reply.set_board_flip( frame()->GetCanvas()->GetView()->IsMirroredX()
+                                  ? BoardFlipMode::BFM_FLIPPED_X
+                                  : BoardFlipMode::BFM_NORMAL );
+
+    PCBNEW_SETTINGS* editorSettings = frame()->GetPcbNewSettings();
+
+    reply.set_ratsnest_display( ToProtoEnum<RATSNEST_MODE, RatsnestDisplayMode>(
+            editorSettings->m_Display.m_RatsnestMode ) );
+
+    return reply;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardEditorAppearanceSettings(
+        const HANDLER_CONTEXT<SetBoardEditorAppearanceSettings>& aCtx )
+{
+    PCB_DISPLAY_OPTIONS options = frame()->GetDisplayOptions();
+    KIGFX::PCB_VIEW* view = frame()->GetCanvas()->GetView();
+    PCBNEW_SETTINGS* editorSettings = frame()->GetPcbNewSettings();
+    const BoardEditorAppearanceSettings& newSettings = aCtx.Request.settings();
+
+    options.m_ContrastModeDisplay =
+            FromProtoEnum<HIGH_CONTRAST_MODE>( newSettings.inactive_layer_display() );
+    options.m_NetColorMode =
+            FromProtoEnum<NET_COLOR_MODE>( newSettings.net_color_display() );
+
+    bool flip = newSettings.board_flip() == BoardFlipMode::BFM_FLIPPED_X;
+
+    if( flip != view->IsMirroredX() )
+    {
+        view->SetMirror( !view->IsMirroredX(), view->IsMirroredY() );
+        view->RecacheAllItems();
+    }
+
+    editorSettings->m_Display.m_RatsnestMode =
+            FromProtoEnum<RATSNEST_MODE>( newSettings.ratsnest_display() );
+
+    frame()->SetDisplayOptions( options );
+    frame()->GetCanvas()->GetView()->UpdateAllLayersColor();
+    frame()->GetCanvas()->Refresh();
+
     return Empty();
 }

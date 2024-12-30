@@ -26,16 +26,18 @@
 // Common
 #include <api/api_enums.h>
 #include <api/common/types/enums.pb.h>
-#include <api/board/board_types.pb.h>
 #include <core/typeinfo.h>
 #include <font/text_attributes.h>
 #include <layer_ids.h>
 #include <stroke_params.h>
 
 // Board-specific
+#include <api/board/board_types.pb.h>
+#include <api/board/board_commands.pb.h>
 #include <padstack.h>
 #include <pcb_dimension.h>
 #include <pcb_track.h>
+#include <project/board_project_settings.h>
 #include <zones.h>
 #include <zone_settings.h>
 
@@ -242,6 +244,21 @@ BOOST_AUTO_TEST_CASE( DimensionTextPosition )
 BOOST_AUTO_TEST_CASE( DimensionUnit )
 {
     testEnums<DIM_UNITS_MODE, kiapi::board::types::DimensionUnit>();
+}
+
+BOOST_AUTO_TEST_CASE( InactiveLayerDisplayMode )
+{
+    testEnums<HIGH_CONTRAST_MODE, kiapi::board::commands::InactiveLayerDisplayMode>();
+}
+
+BOOST_AUTO_TEST_CASE( NetColorDisplayMode )
+{
+    testEnums<NET_COLOR_MODE, kiapi::board::commands::NetColorDisplayMode>();
+}
+
+BOOST_AUTO_TEST_CASE( RatsnestDisplayMode )
+{
+    testEnums<RATSNEST_MODE, kiapi::board::commands::RatsnestDisplayMode>();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
