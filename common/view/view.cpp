@@ -694,6 +694,8 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
     // Transfer reordered data (using the copy assignment operator ):
     m_layers = new_map;
 
+    sortLayers();
+
     for( VIEW_ITEM* item : *m_allItems )
     {
         VIEW_ITEM_DATA* viewData = item->viewPrivData();
