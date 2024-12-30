@@ -487,7 +487,8 @@ float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows,
         if( aDrawingShadows && aItem->IsType( g_ScaledSelectionTypes ) )
             width += getShadowWidth( aItem->IsBrightened() );
     }
-    else if( aDrawingWireColorHighlights )
+
+    if( aDrawingWireColorHighlights )
     {
         float              colorHighlightWidth = schIUScale.MilsToIU( 15.0 );
         EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
@@ -1332,7 +1333,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     float      width = getLineWidth( aLine, drawingShadows, drawingNetColorHighlights );
     LINE_STYLE lineStyle = aLine->GetEffectiveLineStyle();
 
-    if( highlightNetclassColors && !aLine->IsBrightened() )
+    if( highlightNetclassColors )
     {
         // Force default color for nets we are going to highlight
         if( drawingWires )
