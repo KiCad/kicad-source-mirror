@@ -263,7 +263,7 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
         break;
 
     default:
-        OpenFile( fullFileName );
+        wxLaunchDefaultApplication( fullFileName );
         break;
     }
 }

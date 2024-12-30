@@ -48,7 +48,6 @@ class EDA_LIST_DIALOG;
  * @return true is success or false if no PDF viewer found.
  */
 KICOMMON_API bool OpenPDF( const wxString& file );
-KICOMMON_API void  OpenFile( const wxString& file );
 
 /**
  * @param aSrcPath is the full filename of the source.

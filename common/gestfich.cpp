@@ -287,25 +287,6 @@ bool OpenPDF( const wxString& file )
 }
 
 
-void OpenFile( const wxString& file )
-{
-    wxFileName  fileName( file );
-    wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( fileName.GetExt() );
-
-    if( !filetype )
-        return;
-
-    wxString    command;
-    wxFileType::MessageParameters params( file );
-
-    filetype->GetOpenCommand( &command, params );
-    delete filetype;
-
-    if( !command.IsEmpty() )
-        wxExecute( command );
-}
-
-
 void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& aErrors )
 {
     if( !wxCopyFile( aSrcPath, aDestPath ) )
