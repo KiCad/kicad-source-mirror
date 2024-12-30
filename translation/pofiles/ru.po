@@ -20,10 +20,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-27 15:43+0000\n"
+"PO-Revision-Date: 2024-12-31 22:17+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3491,7 +3491,7 @@ msgstr "Парам. страницы..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job.cpp:41 common/tool/actions.cpp:91
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
@@ -3533,13 +3533,12 @@ msgstr "Предупреждения"
 #: common/dialogs/dialog_rc_job_base.cpp:60
 #: kicad/dialogs/panel_jobs_base.cpp:471
 #: pcbnew/dialogs/dialog_render_job_base.cpp:31
-#, fuzzy
 msgid "Output File"
 msgstr "Выходной файл"
 
 #: common/dialogs/dialog_rc_job_base.cpp:72
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Сообщать о сбоях задания при наличии нарушений"
 
 #: common/dialogs/dialog_rc_job_base.cpp:78 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4771,7 +4770,7 @@ msgstr "Копирование встроенной ссылки"
 
 #: common/dialogs/panel_embedded_files.cpp:52
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Скопировать ссылку на этот внедренный файл"
 
 #: common/dialogs/panel_embedded_files.cpp:190
 msgid "Select a file to embed"
@@ -5636,7 +5635,7 @@ msgstr "Не удаётся использовать OpenGL"
 
 #: common/draw_panel_gal.cpp:540
 msgid "Error switch GAL backend"
-msgstr ""
+msgstr "Ошибка переключения GAL бэкенда"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3390
@@ -5962,14 +5961,12 @@ msgid "Origins & Axes"
 msgstr "Начало координат и оси"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "New Footprint Defaults"
-msgstr "Создать посад. место"
+msgstr "По умолчанию для новых посад. мест"
 
 #: common/eda_base_frame.cpp:1186
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Оптимизация графики"
+msgstr "По умолчанию для графики"
 
 #: common/eda_base_frame.cpp:1191 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:129
@@ -6782,9 +6779,9 @@ msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr "Каталог, содержащий пользовательские скрипты, установленные с KiCad"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Устаревшая версия переменной KICAD_SYMBOL_DIR."
+msgstr "Устаревшая версия %s."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -7520,9 +7517,8 @@ msgid "Single gerber export"
 msgstr "Экспорт одиночного Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "PCB Gerbers export"
-msgstr "Экспорт печатной платы в SVG"
+msgstr "Экспорт печатной платы в Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
@@ -7637,13 +7633,12 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: Выполнить DRC"
 
 #: common/jobs/job_pcb_render.cpp:77
-#, fuzzy
 msgid "Render PCB"
-msgstr "Обозначить компоненты"
+msgstr "Рендер печатной платы"
 
 #: common/jobs/job_pcb_render.cpp:81
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCB: Рендер"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform Schematic ERC"
@@ -8004,11 +7999,11 @@ msgstr "Ошибки DRC"
 
 #: common/layer_id.cpp:184
 msgid "DRC shape 1"
-msgstr "Форма DRC 1"
+msgstr "Фигура DRC 1"
 
 #: common/layer_id.cpp:185
 msgid "DRC shape 2"
-msgstr "Форма DRC 2"
+msgstr "Фигура DRC 2"
 
 #: common/layer_id.cpp:186
 msgid "DRC exclusions"
@@ -8032,16 +8027,15 @@ msgstr "Пересечения обл. установки"
 
 #: common/layer_id.cpp:199
 msgid "Track net names"
-msgstr "Отслеживать сетевые названия"
+msgstr "Названия цепей дорожек"
 
 #: common/layer_id.cpp:200
 msgid "Pad net names"
-msgstr "Названия сетей Pad"
+msgstr "Названия цепей конт. пл."
 
 #: common/layer_id.cpp:201
-#, fuzzy
 msgid "Via net names"
-msgstr "Искать имена цепей"
+msgstr "Названия цепей перех. отв."
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -8050,7 +8044,7 @@ msgstr "Найден недопустимый символ в псевдоним
 #: common/lib_table_base.cpp:541
 #, c-format
 msgid "Failed to get writer for %s"
-msgstr "Не удалось получить писателя для %s"
+msgstr "Не удалось найти писателя для %s"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -10177,7 +10171,7 @@ msgstr "Файл горячих клавиш"
 
 #: common/wildcards_and_files_ext.cpp:557
 msgid "KiCad jobset files"
-msgstr "Файлы набора заданий KiCad"
+msgstr "Файлы списка заданий KiCad"
 
 #: cvpcb/auto_associate.cpp:108
 #, c-format
@@ -10427,9 +10421,8 @@ msgid "Footprint '%s' not found."
 msgstr "Посад. место '%s' не найдено."
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Ошибка загрузки шрифта '%s'."
+msgstr "Ошибка загрузки посад. места"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -11820,9 +11813,8 @@ msgid "Electrical Rules Checker"
 msgstr "Проверка электрических правил"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:4
-#, fuzzy
 msgid "ERC Job Configuration"
-msgstr "Перезагрузить конфигурацию"
+msgstr "Конфигурация задания ERC"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:232
 msgid "Export netlist in KiCad format"
@@ -14847,9 +14839,8 @@ msgid "Group By"
 msgstr "Группировать по"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:393
-#, fuzzy
 msgid "BOM Export Job"
-msgstr "PCB: Экспорт DXF"
+msgstr "Задание экспорта BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 msgid "Qty"
@@ -16863,9 +16854,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Вход питания не подключён ни к одному выходу питания"
 
 #: eeschema/erc/erc_item.cpp:68
-#, fuzzy
 msgid "Multiple pins with the same pin number"
-msgstr "Несколько выводов с одинаковыми номерами"
+msgstr "Несколько выводов с одинаковым номером"
 
 #: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
 msgid "Conflict problem between pins"
@@ -23668,9 +23658,8 @@ msgid "Modify schematic item"
 msgstr "Изменить элемент схемы"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3327
-#, fuzzy
 msgid "No sub schematic found in the current project"
-msgstr "Закрыть текущий редактор"
+msgstr "В текущем проекте не найдено ни одной подсхемы"
 
 #: eeschema/tools/sch_edit_tool.cpp:77
 msgid "Symbol Unit"
@@ -23859,7 +23848,7 @@ msgstr "Достигнут конец листа."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:336
 msgid "Find again to wrap around to the start."
-msgstr "Дальнейший поиск будет производиться сначала."
+msgstr "Дальнейший поиск будет производиться с начала."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:106
 msgid "No bus selected"
@@ -25564,11 +25553,11 @@ msgstr ""
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr "Работа"
+msgstr "Список заданий"
 
 #: kicad/cli/command_jobset_run.cpp:45
 msgid "Runs a jobset file"
-msgstr "Запуск файла набора заданий"
+msgstr "Запускает файла списка заданий"
 
 #: kicad/cli/command_jobset_run.cpp:49
 msgid ""
@@ -25580,15 +25569,15 @@ msgstr ""
 
 #: kicad/cli/command_jobset_run.cpp:53
 msgid "Jobset file to be run"
-msgstr "Файл набора заданий для выполнения"
+msgstr "Файл списка заданий для выполнения"
 
 #: kicad/cli/command_jobset_run.cpp:58
 msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
 msgstr ""
-"Выходной файл набора заданий для генерации, оставьте пустым для всех "
-"выходов, определенных в наборе заданий"
+"Выходной файл списка заданий для генерации, оставьте пустым для всех "
+"выходов, определенных в списке заданий"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -25695,6 +25684,8 @@ msgstr "Генерировать только плату без компонен
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
 msgstr ""
+"Вырезать переходные отверстия в корпусе платы, даже если слои проводников не "
+"экспортируются."
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 msgid "Exclude board body"
@@ -25746,9 +25737,8 @@ msgstr "Объединить пересекающиеся геометричес
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in copper layers."
-msgstr "Предупреждение: SMD конт.пл. не имеет наружных слоёв."
+msgstr "Не вырезать переходные отверстия в слоях меди."
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26479,9 +26469,8 @@ msgid "Select output path"
 msgstr "Выберите выходной путь"
 
 #: kicad/dialogs/panel_jobs.cpp:138
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "Имя цепи не может быть пустым."
+msgstr "Выходной путь не может быть пустым."
 
 #: kicad/dialogs/panel_jobs.cpp:205
 msgid "Zip"
@@ -26496,9 +26485,8 @@ msgid "Job Description"
 msgstr "Описание задания"
 
 #: kicad/dialogs/panel_jobs.cpp:280
-#, fuzzy
 msgid "No output available"
-msgstr "Нет доступных обновлений пакетов"
+msgstr "Нет выходных сообщений"
 
 #: kicad/dialogs/panel_jobs.cpp:334
 msgid "Last run successful"
@@ -26517,24 +26505,20 @@ msgid "View last run results..."
 msgstr "Просмотр результатов последнего запуска..."
 
 #: kicad/dialogs/panel_jobs.cpp:453
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Описание задания"
+msgstr "Править описание задания"
 
 #: kicad/dialogs/panel_jobs.cpp:454
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "Редактировать параметры..."
+msgstr "Править параметры задания..."
 
 #: kicad/dialogs/panel_jobs.cpp:459
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Удалить выбранные цепи"
+msgstr "Удалить выбранные задания"
 
 #: kicad/dialogs/panel_jobs.cpp:461
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Выбрать всё"
+msgstr "Выбрать все задания"
 
 #: kicad/dialogs/panel_jobs.cpp:701
 msgid "Job Types"
@@ -26549,9 +26533,8 @@ msgid "Select job type:"
 msgstr "Выберите тип задания:"
 
 #: kicad/dialogs/panel_jobs.cpp:748
-#, fuzzy
 msgid "Output Types"
-msgstr "Выходной размер"
+msgstr "Типы выводов"
 
 #: kicad/dialogs/panel_jobs.cpp:757
 msgid "Add New Output"
@@ -26566,56 +26549,48 @@ msgid "No outputs defined"
 msgstr "Выводы не определены"
 
 #: kicad/dialogs/panel_jobs_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "Работа"
+msgstr "Задания"
 
 #: kicad/dialogs/panel_jobs_base.cpp:82
-#, fuzzy
 msgid "Outputs"
-msgstr "Выход"
+msgstr "Выходные файлы"
 
 #: kicad/dialogs/panel_jobs_base.cpp:115
-#, fuzzy
 msgid "Save Jobset"
-msgstr "Работа"
+msgstr "Сохранить список заданий"
 
 #: kicad/dialogs/panel_jobs_base.cpp:121
-#, fuzzy
 msgid "Generate All Outputs"
-msgstr "Общие настройки"
+msgstr "Сгенерировать все выходные файлы"
 
 #: kicad/dialogs/panel_jobs_base.cpp:175 kicad/dialogs/panel_jobs_base.cpp:409
-#, fuzzy
 msgid "Placeholder"
-msgstr "Разместить компонент"
+msgstr "Placeholder"
 
 #: kicad/dialogs/panel_jobs_base.cpp:260 kicad/dialogs/panel_jobs_base.cpp:354
-#, fuzzy
 msgid "Output Path"
-msgstr "Выходной тракт:"
+msgstr "Выходной путь"
 
 #: kicad/dialogs/panel_jobs_base.cpp:278
-#, fuzzy
 msgid "Only Jobs"
-msgstr "Только %s"
+msgstr "Только задания"
 
 #: kicad/dialogs/panel_jobs_base.cpp:351
-#, fuzzy
 msgid "Record Output"
-msgstr "Выход питания"
+msgstr "Записывать выходные сообщения"
 
 #: kicad/dialogs/panel_jobs_base.cpp:366
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Игнорировать ненулевой код выхода"
 
 #: kicad/dialogs/panel_jobs_base.cpp:492
 msgid "Halt output generation on error"
-msgstr ""
+msgstr "Прекратить генерацию выходных файлов при ошибке"
 
 #: kicad/dialogs/panel_jobs_base.h:198
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "Журнал выполнения заданий"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -26826,9 +26801,8 @@ msgid "%d package update(s) avaliable"
 msgstr "Доступно %d обновлений пакетов"
 
 #: kicad/kicad_manager_frame.cpp:752
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Ошибка создания файла svg"
+msgstr "Ошибка открытия файла заданий"
 
 #: kicad/kicad_manager_frame.cpp:898
 msgid "Edit File in Text Editor"
@@ -27788,7 +27762,7 @@ msgstr "Клонировать проект из репозитория..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
 msgid "New Jobset File..."
-msgstr "Новый файл набора заданий..."
+msgstr "Новый файл списка заданий..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -27880,7 +27854,7 @@ msgstr "В репозитории не найдено ни одного файл
 
 #: kicad/tools/kicad_manager_control.cpp:211
 msgid "Create New Jobset"
-msgstr "Создать новый набор рабочих мест"
+msgstr "Создать новый список заданий"
 
 #: kicad/tools/kicad_manager_control.cpp:242
 msgid "System Templates"
@@ -29758,19 +29732,16 @@ msgid "Copper resistivity:"
 msgstr "Удельное сопротивление:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
-#, fuzzy
 msgid "External Layer Tracks"
 msgstr "Дорожки на внешнем слое"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
-#, fuzzy
 msgid "Track width (W):"
 msgstr "Ширина дорожки (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
-#, fuzzy
 msgid "Track thickness (H):"
 msgstr "Толщина дорожки (H):"
 
@@ -29804,7 +29775,6 @@ msgid "W"
 msgstr "Вт"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
-#, fuzzy
 msgid "Internal Layer Tracks"
 msgstr "Дорожки на внутренних слоях"
 
@@ -30391,7 +30361,6 @@ msgstr ""
 "соединений\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the track widths will be calculated "
 "to suit.\n"
@@ -33448,9 +33417,8 @@ msgid "Design Rules Checker"
 msgstr "Проверка правил проектирования"
 
 #: pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Configuration"
-msgstr "Перезагрузить конфигурацию"
+msgstr "Конфигурация задания DRC"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -33773,32 +33741,29 @@ msgid "Export IDFv3"
 msgstr "Экспорт IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:104
-#, fuzzy
 msgid "zip files"
-msgstr "Zip файлы"
+msgstr "zip файлы"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:106
-#, fuzzy
 msgid "tgz files"
-msgstr "Текстовые файлы"
+msgstr "tgz файлы"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:118
 msgid "Export ODB++ File"
 msgstr "Экспорт файла ODB++"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:146
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "Выбранный файл неверный или повреждён!"
+msgstr ""
+"Выбранное имя выходного файла не является поддерживаемым форматом архива."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:199
-#, fuzzy
 msgid "Output file name cannot be empty."
-msgstr "Имя переменной не может быть пустым."
+msgstr "Имя выходного файла не может быть пустым."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:218
 msgid "The output file name conflicts with the selected compression format."
-msgstr ""
+msgstr "Имя выходного файла противоречит выбранному формату сжатия."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:342
 #, c-format
@@ -33853,26 +33818,24 @@ msgid "Compressing output"
 msgstr "Сжатие выходных данных"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:23
-#, fuzzy
 msgid "Output File:"
 msgstr "Выходной файл:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression Format:"
-msgstr "Формат размерной линии"
+msgstr "Формат сжатия:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "Выберите формат для сжатия выходных файлов ODB++"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:66
 msgid "Export ODB++"
@@ -33965,12 +33928,10 @@ msgid "BREP (OCCT)"
 msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "PLY (ASCII)"
 msgstr "PLY (ASCII)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "STL"
 msgstr "STL"
 
@@ -33995,9 +33956,8 @@ msgid "Export board body"
 msgstr "Экспорт тела платы"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "Экспорт тела платы"
+msgstr "Вырезать перех. отв. в теле платы"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
@@ -34074,9 +34034,8 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "Объединить пересекающиеся геометрии в одну фигуру."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:142
-#, fuzzy
 msgid "Fill all vias"
-msgstr "Залить все зоны"
+msgstr "Заполнить все перех. отв."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Net filter (supports wildcards):"
@@ -34188,16 +34147,12 @@ msgid "Success"
 msgstr "Успех"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Использовать относительный путь для\n"
-"'%s'?"
+msgstr "Вы хотите прервать процесс экспорта?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Отчёт о зазоре"
+msgstr "Отменить экспорт"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -34336,29 +34291,28 @@ msgid "Search for:"
 msgstr "Найти:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
-#, fuzzy
 msgid "Wra&p"
-msgstr "Завернуть и выкинуть"
+msgstr "Зациклить"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference &designators"
-msgstr "Поисковые ссылки и обозначения"
+msgstr "Искать обозначения посад. мест"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint &values"
-msgstr "Поисковый след и значения"
+msgstr "Искать значения посад. мест"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
 msgid "Search &other text items"
-msgstr "Поиск и другие текстовые элементы"
+msgstr "Искать другие надписи"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC &markers"
-msgstr "Поиск DRC и маркеров"
+msgstr "Искать маркеры DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 msgid "Search &net names"
-msgstr "Поиск и сетевые названия"
+msgstr "Искать имена цепей"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
 msgid "Restart Search"
@@ -35085,9 +35039,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:83
-#, fuzzy
 msgid "Generate Map"
-msgstr "Создать файл карты"
+msgstr "Создать карту"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "PostScript"
@@ -35348,9 +35301,8 @@ msgid "Remove all teardrops"
 msgstr "Удалить все капли"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Remove all teardrops, regardless of filtering options"
-msgstr "Удалить все тиадропы, независимо от параметров фильтрации"
+msgstr "Удалить все каплевидные переходы, независимо от параметров фильтра"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -35396,9 +35348,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
-#, fuzzy
 msgid "Track width limit:"
-msgstr "Ширина дорожки:"
+msgstr "Лимит ширины дорожки:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
@@ -36140,7 +36091,6 @@ msgstr "Выход:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
-#, fuzzy
 msgid "0.1"
 msgstr "0.1"
 
@@ -36162,7 +36112,6 @@ msgid "Grid size:"
 msgstr "Размер сетки:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
-#, fuzzy
 msgid "0.01"
 msgstr "0.01"
 
@@ -37124,7 +37073,6 @@ msgid "(%d known DRC violations; %d exclusions)"
 msgstr "(%d известных DRC нарушений; %d исключений)"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
-#, fuzzy
 msgid "Track gap must be greater than 0."
 msgstr "Зазор дорожки должен быть больше 0."
 
@@ -37144,7 +37092,6 @@ msgid "Via gap:"
 msgstr "Зазор перех. отв.:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
-#, fuzzy
 msgid "Via gap same as track gap"
 msgstr "Зазор перех. отв. равен зазору дорожек"
 
@@ -37200,7 +37147,6 @@ msgid "Jump over obstacles"
 msgstr "Перепрыгивать через препятствия"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
-#, fuzzy
 msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
@@ -37223,13 +37169,14 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Если новая дорожка имеет то же подключение, что и существующая, старая "
+"дорожка удаляется."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
 msgstr "Оптимизировать подключения к конт. пл."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:88
-#, fuzzy
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
@@ -37493,30 +37440,27 @@ msgstr "Свойства фонового изображения"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:27
 msgid "JPEG"
-msgstr ""
+msgstr "JPEG"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:33
 msgid "Opaque"
-msgstr ""
+msgstr "Непрозрачный"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
-#, fuzzy
 msgid "Transparent"
-msgstr "Переходной процесс"
+msgstr "Прозрачный"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:39
-#, fuzzy
 msgid "High"
-msgstr "Подсветить"
+msgstr "Высокое"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:40
-#, fuzzy
 msgid "User"
-msgstr "User1"
+msgstr "Пользовательское"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:40
 #: pcbnew/widgets/panel_selection_filter.cpp:202
@@ -37530,38 +37474,33 @@ msgid "px"
 msgstr "пикс."
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:54
-#, fuzzy
 msgid "x"
-msgstr "2x"
+msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:77
 msgid "Quality"
-msgstr ""
+msgstr "Качество"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Background Style"
-msgstr "Начало фона"
+msgstr "Стиль фона"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:95
-#, fuzzy
 msgid "Side"
-msgstr "Сторона:"
+msgstr "Сторона"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:107
-#, fuzzy
 msgid "Show floor"
-msgstr "Показать сетку"
+msgstr "Показать пол"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:110
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
-#, fuzzy
 msgid "Perspective"
-msgstr "Директивная"
+msgstr "Перспективная"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
 msgid "Orthogonal"
-msgstr ""
+msgstr "Ортогональная"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:120
 #: pcbnew/tools/board_inspection_tool.cpp:1466
@@ -37638,7 +37577,6 @@ msgid "X"
 msgstr "X"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:773
-#, fuzzy
 msgid "Y"
 msgstr "Y"
 
@@ -38551,18 +38489,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:71
-#, fuzzy
 msgid "Recreate Plugin Environment"
-msgstr "Альтернативные функции выводов"
+msgstr "Пересоздать среду плагинов"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 msgid "Show Button"
 msgstr "Показать кнопку"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
-#, fuzzy
 msgid "Plugin"
-msgstr "Модули"
+msgstr "Плагин"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
 msgid "Move Up"
@@ -38903,9 +38839,8 @@ msgid "Zone fill strategy"
 msgstr "Метод заполнения зоны"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "Разрешить заполнение за пределами зоны"
+msgstr "Разрешить скругление/фаску за пределами контура зоны"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
@@ -39870,7 +39805,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -40053,477 +39987,184 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"### Определения верхнего уровня\n"
-"\n"
-"    (version <номер>)\n"
-"\n"
-"    (rule <имя_правила> <определение_правила> ...)\n"
-"\n"
-"\n"
-"<br>\n"
-"\n"
-"### Определения правил\n"
-"\n"
-"    (constraint <тип_ограничения> ...)\n"
-"\n"
-"    (condition \"<выражение>\")\n"
-"\n"
-"    (layer \"<имя_слоя>\")\n"
-"\n"
-"    (severity <имя_уровня>)\n"
-"\n"
-"\n"
-"<br>\n"
-"\n"
 "### Ограничения\n"
 "\n"
 "| Тип ограничения           | Тип "
-"аргумента                                                                                                         "
+"аргумента                                                                                                          "
 "| "
-"Описание                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+"Описание                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
-"max                                                                                                           "
-"| Проверяет ширину поясков перех. отв."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
+"max                                                                                                            "
+"| Проверяет ширину поясков "
+"перех.отв.<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
-"| Проверяет заданное выражение."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                      "
+"| Проверяет заданное "
+"выражение.<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
 "| `clearance`               | "
-"min                                                                                                                   "
-"| Определяет **электрический** зазор между медными объектами разных цепей. "
-"(См. `physical_clearance`, если хотите указать зазор между объектами "
+"min                                                                                                                    "
+"| Определяет **электрический** зазор между медными объектами разных цепей. ("
+"См. `physical_clearance`, если хотите указать зазор между объектами "
 "независимо от цепи.)<br><br> Чтобы разрешить медным объектам пересекаться "
 "(сталкиваться), создайте ограничение `clearance` со значением `min` меньше "
-"нуля (например, `-1`)."
-"<br>                                                                                                                     "
+"нуля (например, `-1`)"
+".<br>                                                                                                                      "
 "|\n"
 "| `courtyard_clearance`     | "
-"min                                                                                                                   "
-"| Проверяет расстояние между областями установки посад. мест и генерирует "
+"min                                                                                                                    "
+"| Проверяет расстояние между областями установки посад.мест и генерирует "
 "ошибку, если любые две области находятся ближе, чем `min` расстояние.  Если "
-"посад. место не имеет области установки, это ограничение не создаёт ошибок."
-"<br>                                                                                                                                                                                                              "
+"посад.место не имеет области установки, это ограничение не создает "
+"ошибок.<br>                                                                                                                                                                                                               "
+"|\n"
+"| `creepage`                | "
+"min                                                                                                                    "
+"| Определяет длину пути утечки между медными объектами разных "
+"цепей.<br>                                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
-"max                                                                                                           "
+"max                                                                                                            "
 "| Проверяет зазор между связанными дорожками в дифференциальной паре.  "
-"Связанные дорожки — это сегменты, параллельные друг другу. Зазор между "
+"Связанные дорожки - это сегменты, параллельные друг другу.  Зазор между "
 "дифференциальными парами не проверяется на несвязанных участках "
-"дифференциальной пары (например, на выходе из компонента)."
-"<br>                                                                                                                                                                                          "
+"дифференциальной пары (например, на выходе из компонента)"
+".<br>                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_uncoupled`     | "
-"max                                                                                                                   "
-"| Проверяет расстояние, которое дорожка дифференциальной пары проходит без "
-"связи с дорожкой другой полярности в паре (например, когда пара выходит из "
-"компонента или становится без связи, чтобы обойти другой объект, например, "
-"перех. отв.)."
-"<br>                                                                                                                                                                                                        "
+"max                                                                                                                    "
+"| Проверяет расстояние, на которое дорожка дифференциальной пары проходит "
+"без связи с дорожкой другой полярности в паре (например, когда пара выходит "
+"из компонента или становится без связи, чтобы обойти другой объект, "
+"например, перех.отв.)"
+".<br>                                                                                                                                                                                                         "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Укажите один или несколько типов объектов для запрета, разделённых "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | Укажите один или несколько типов объектов для запрета, разделенных "
 "пробелами.  Например, `(constraint disallow track)` или `(constraint "
 "disallow track via pad)`. Если объект этого типа соответствует условию "
 "правила, будет создана ошибка DRC.<br><br>Это ограничение, по сути, "
 "аналогично области правил запрета, но может быть использовано для создания "
-"более конкретных ограничений запрета."
-"<br>                                                                  |\n"
+"более конкретных ограничений "
+"запрета.<br>                                                                   "
+"|\n"
 "| `edge_clearance`          | min/opt/"
-"max                                                                                                           "
+"max                                                                                                            "
 "| Проверяет зазор между объектами и краем платы.<br><br>Это также можно "
-"считать «допуском на фрезеровку», поскольку край платы будет включать все "
+"считать \"допуском на фрезеровку\", поскольку край платы будет включать все "
 "графические элементы на слое `Edge.Cuts`, а также любые *овальные* отверстия "
-"в конт. пл. (См. `physical_hole_clearance` для допуска на "
-"сверление)<br>                                                                                                                                                   "
+"в конт.пл. (См. `physical_hole_clearance` для допуска на сверление)"
+"<br>                                                                                                                                                    "
 "|\n"
 "| `length`                  | min/"
-"max                                                                                                               "
+"max                                                                                                                "
 "| Проверяет общую проложенную длину для цепей, соответствующих условию "
-"правила, и выдает ошибку для каждой цепи, длина которой меньше значения "
-"`min` (если указано) или больше значения `max` (если указано), заданного "
-"ограничением."
-"<br>                                                                                                                                                                                                                              "
+"правила, и выдает ошибку для каждой цепи, длина которой меньше значения `min`"
+" (если указано) или больше значения `max` (если указано), заданного "
+"ограничением.<br>                                                                                                                                                                                                                               "
 "|\n"
 "| `hole`                    | min/"
-"max                                                                                                               "
-"| Проверяет размер (диаметр) сверленого отверстия в конт. пл. или перех. "
-"отв.  Для овальных отверстий меньший (минорный) диаметр проверяется "
+"max                                                                                                                "
+"| Проверяет размер (диаметр) сверленного отверстия в конт.пл. или "
+"перех.отв.  Для овальных отверстий меньший (минорный) диаметр проверяется "
 "относительно значения `min` (если указано), а больший (основной) диаметр "
-"проверяется относительно значения `max` (если указано)."
-"<br>                                                                                                                                                                                           "
+"проверяется относительно значения `max` (если указано)"
+".<br>                                                                                                                                                                                            "
 "|\n"
 "| `hole_clearance`          | "
-"min                                                                                                                   "
-"| Проверяет зазор между просверленным отверстием в конт. пл. или перех. отв. "
-"и медными объектами другой цепи.  Зазор измеряется от диаметра отверстия, а "
-"не от центра."
-"<br>                                                                                                                                                                                                                                                                       "
+"min                                                                                                                    "
+"| Проверяет зазор между просверленным отверстием в конт.пл. или перех.отв. и "
+"медными объектами другой цепи.  Зазор измеряется от диаметра отверстия, а не "
+"от "
+"центра.<br>                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `hole_to_hole`            | "
-"min                                                                                                                   "
-"| Проверяет зазор между механически сверлеными отверстиями в конт. пл. и "
-"перех. отв.  Зазор измеряется между диаметрами отверстий, а не между "
-"центрами.<br><br>Это ограничение служит только для защиты сверл. Зазор между "
-"**просверленными лазером** (микроотверстиями) и другими отверстиями, "
+"min                                                                                                                    "
+"| Проверяет зазор между механически сверленными отверстиями в конт.пл. и "
+"перех.отв.  Зазор измеряется между диаметрами отверстий, а не между "
+"центрами.<br><br>Это ограничение служит только для защиты сверл.  Зазор "
+"между **просверленными лазером** (микроотверстиями) и другими отверстиями, "
 "просверленными не механически, не проверяется, также как и зазор между "
 "**фрезерованными** (овальной формы) и другими отверстиями, сделанными не "
 "механически.<br> |\n"
 "| `physical_clearance`      | "
-"min                                                                                                                   "
+"min                                                                                                                    "
 "| Проверяет зазор между двумя объектами на заданном слое (включая немедные "
 "слои).<br><br>Хотя эта функция может выполнять более широкие проверки, чем "
-"`clearance`, она намного медленнее. По возможности используйте `clearance`."
-"<br>                                                                                                                                                                                                                           "
+"`clearance`, она намного медленнее.  По возможности используйте `clearance`"
+".<br>                                                                                                                                                                                                                            "
 "|\n"
 "| `physical_hole_clearance` | "
-"min                                                                                                                   "
-"| Проверяет зазор между сверленым отверстием в конт. пл. или перех. отв. и "
+"min                                                                                                                    "
+"| Проверяет зазор между сверленным отверстием в конт.пл. или перех.отв. и "
 "другим объектом, независимо от цепи. Зазор измеряется от диаметра отверстия, "
-"а не от центра.<br><br>Это также можно рассматривать как «допуск сверления», "
-"поскольку он учитывает только **круглые** отверстия (см. `edge_clearance` "
-"для допуска фрезеровки)."
-"<br>                                                                                                                   "
+"а не от центра.<br><br>Это также можно рассматривать как \"допуск сверления\""
+", поскольку он учитывает только **круглые** отверстия (см. `edge_clearance` "
+"для допуска фрезеровки)"
+".<br>                                                                                                                    "
 "|\n"
 "| `silk_clearance`          | min/opt/"
-"max                                                                                                           "
-"| Проверяет зазор между объектами на слоях шелкографии и другими объектами."
-"<br>                                                                                                                                                                                                                                                                                                                                                                       "
+"max                                                                                                            "
+"| Проверяет зазор между объектами на слоях шелкографии и другими "
+"объектами.<br>                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `skew`                    | "
-"max                                                                                                                   "
+"max                                                                                                                    "
 "| Проверяет суммарный перекос для цепей, соответствующих условию правила, то "
 "есть разницу между длиной каждой цепи и средним значением всех длин цепей, "
 "соответствующих правилу.  Если абсолютное значение разницы между средним "
 "значением и длиной какой-либо цепи превышает значение ограничения `max`, "
-"будет сгенерирована ошибка."
-"<br>                                                                                  "
+"будет сгенерирована "
+"ошибка.<br>                                                                                   "
 "|\n"
 "| `thermal_relief_gap`      | "
-"min                                                                                                                   "
-"| Задаёт зазор терморазгрузки в соединении конт. пл. с зоной."
-"<br>                                                                                                                                                                                                                                                                                                                                                          "
+"min                                                                                                                    "
+"| Задает зазор терморазгрузки в соединении конт.пл. с "
+"зоной.<br>                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "| `thermal_spoke_width`     | "
-"opt                                                                                                                   "
-"| Задаёт ширину мостиков терморазгрузки в соединении конт. пл. с зоной."
-"<br>                                                                                                                                                                                                                                                                                                                                                     "
+"opt                                                                                                                    "
+"| Задает ширину мостиков терморазгрузки в соединении конт.пл. с "
+"зоной.<br>                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "| `track_width`             | min/opt/"
-"max                                                                                                           "
-"|Проверяет ширину сегментов дорожек и дуг. Для каждого сегмента, ширина "
+"max                                                                                                            "
+"| Проверяет ширину сегментов дорожек и дуг.  Для каждого сегмента, ширина "
 "которого меньше `min` (если указано) или больше `max` (если указано), будет "
-"выдана ошибка."
-"<br>                                                                                                                                                                                                                                                            "
+"выдана "
+"ошибка.<br>                                                                                                                                                                                                                                                             "
+"|\n"
+"| `track_angle`             | min/opt/"
+"max                                                                                                            "
+"| Проверяет угол между двумя соединенными сегментами дорожки.  Для каждой "
+"пары соединенных сегментов с углом ниже значения `min` (если указано) или "
+"выше значения `max` (если указано) будет сгенерирована "
+"ошибка.<br>                                                                                                                                                                                                                                             "
+"|\n"
+"| `track_segment_length`    | min/"
+"max                                                                                                                "
+"| Проверяет длину сегментов дорожек и дуг.  Для каждого сегмента, длина "
+"которого меньше `min` (если указано) или больше `max` (если указано), будет "
+"выдана "
+"ошибка.<br>                                                                                                                                                                                                                                                            "
 "|\n"
 "| `via_count`               | "
-"max                                                                                                                   "
-"| Считает количество перех. отв. в каждой цепи, соответствующей условию "
+"max                                                                                                                    "
+"| Считает количество перех.отв. в каждой цеп   и, соответствующей условию "
 "правила.  Если это число превышает значение `max` в любой совпадающей цепи, "
-"для этой цепи будет сгенерирована ошибка."
-"<br>                                                                                                                                                                                                                                                              "
+"для этой цепи будет сгенерирована "
+"ошибка.<br>                                                                                                                                                                                                                                                               "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Задаёт соединение, выполняемое между зоной и конт. площадкой."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                 "
+"| Задает соединение, выполняемое между зоной и конт. "
+"площадкой.<br>                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
-"\n"
-"\n"
-"### Элементы\n"
-"\n"
-" * `A` &nbsp;&nbsp; _первый (или единственный) тестируемый элемент_\n"
-" * `B` &nbsp;&nbsp; _второй тестируемый элемент (для бинарных тестов)_\n"
-" * `L` &nbsp;&nbsp; _текущий тестируемый слой_\n"
-"\n"
-"<br>\n"
-"\n"
-"### Уровни нарушений\n"
-"\n"
-" * warning\n"
-" * error\n"
-" * exclusion\n"
-" * ignore\n"
-"\n"
-"<br>\n"
-"\n"
-"### Примеры\n"
-"\n"
-"    (version 1)\n"
-"\n"
-"    (rule HV\n"
-"       (constraint clearance (min 1.5mm))\n"
-"       (condition \"A.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV\n"
-"       (layer outer)\n"
-"       (constraint clearance (min 1.5mm))\n"
-"       (condition \"A.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV_HV\n"
-"       # wider clearance between HV tracks\n"
-"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
-"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV_unshielded\n"
-"       (constraint clearance (min 2mm))\n"
-"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
-"\n"
-"\n"
-"    (rule heavy_thermals\n"
-"       (constraint thermal_spoke_width (min 0.5mm))\n"
-"       (condition \"A.NetClass == 'HV'\"))\n"
-"<br><br>\n"
-"\n"
-"### Примечания\n"
-"\n"
-"Определение version должно быть первым. Оно указывает версию синтаксиса "
-"файла, чтобы \n"
-"будущие анализаторы правил могли выполнять автоматическое обновление. Оно "
-"должно\n"
-"иметь значение «1».\n"
-"\n"
-"Правила должны следовать в определённом порядке. Более поздние правила\n"
-"имеют приоритет над более ранними; как только подходящее правило найдено,\n"
-"остальные правила не проверяются.\n"
-"\n"
-"Используйте Ctrl+/ для (рас)комментирования строк.\n"
-"<br><br><br>\n"
-"\n"
-"### Функции\n"
-"\n"
-"Параметры всех функций поддерживают простые шаблоны (`*` и `?`).\n"
-"<br><br>\n"
-"\n"
-"    A.intersectsCourtyard('<обозначение_посад_места>')\n"
-"Истина, если любая часть `A` лежит в главной области установки указанного "
-"посад.места.\n"
-"<br><br>\n"
-"\n"
-"    A.intersectsFrontCourtyard('<обозначение_посад_места>')\n"
-"Истина, если любая часть `A` лежит в области установки указанного посад. "
-"места. сверху.\n"
-"<br><br>\n"
-"\n"
-"    A.intersectsBackCourtyard('<обозначение_посад_места>')\n"
-"Истина, если любая часть `A` лежит в области установки указанного посад. "
-"места. снизу.\n"
-"<br><br>\n"
-"\n"
-"    A.intersectsArea('<имя_зоны>')\n"
-"Истина, если любая часть `A` лежит внутри контура указанной зоны.\n"
-"<br><br>\n"
-"\n"
-"    A.enclosedByArea('<имя_зоны>')\n"
-"Истина, если вся `A` лежит внутри контура указанной зоны.\n"
-"\n"
-"Обратите внимание: это потенциально более дорогой вызов, чем "
-"`intersectsArea()`.  \n"
-"Используйте `intersectsArea()` там, где это возможно.\n"
-"<br><br>\n"
-"\n"
-"    A.getField('<имя_поля>')\n"
-"Значение поля. Поля есть только у посад. мест, поэтому значение возвращается "
-"только\n"
-"в том случае, если `A` является посад.местом.\n"
-"<br><br>\n"
-"\n"
-"    A.isPlated()\n"
-"Истина, если `A` имеет металлизированное отверстие.\n"
-"<br><br>\n"
-"\n"
-"    A.inDiffPair('<имя_цепи>')\n"
-"Истина, если `A` имеет цепь, которая является частью указанной диф. пары.\n"
-"`<имя_цепи>` — это базовое имя диф. пары. Например, `inDiffPair('/CLK')`\n"
-"соответствует цепям`/CLK_P` и `/CLK_N`.\n"
-"<br><br>\n"
-"\n"
-"    AB.isCoupledDiffPair()\n"
-"Истина, если `A` и `B` являются членами одной диф. пары.\n"
-"<br><br>\n"
-"\n"
-"    A.memberOfGroup('<имя_группы>')\n"
-"Истина если `A` является членом указанной группы. Имя может содержать "
-"шаблоны.\n"
-"Включает вложенные группы.\n"
-"<br><br>\n"
-"\n"
-"    A.memberOfFootprint('<обозначение_посад_места>')\n"
-"Истина, если `A` является членом посад. места, соответствующим заданному "
-"обозначению или идентификатору\n"
-"посад. места.  Параметр может содержать шаблоны.\n"
-"\n"
-"Обратите внимание: если необходимо выполнить поиск по идентификатору посад. "
-"места, параметр должен содержать символ ':'.\n"
-"<br><br>\n"
-"\n"
-"    A.memberOfSheet('<путь_к_листу>')\n"
-"Истина, если `A` является членом заданного листа схемы. Путь листа может "
-"содержать шаблоны.\n"
-"<br><br>\n"
-"\n"
-"    A.existsOnLayer('<имя_слоя>')\n"
-"Истина, если `A` существует на указанном слое. Имя слоя может быть как\n"
-"наименованием, указанным в меню «Параметры платы >Слои редактора», так и\n"
-"стандартным именем (например,`F.Cu`).\n"
-"\n"
-"Обратите внимание: эта функция вернёт истину, если `A` лежит на указанном "
-"слое,\n"
-"независимо от того, может ли правило быть применено к этому слою.\n"
-"В таком случае лучше использовать определение `(layer «имя_слоя»)` для "
-"правила.\n"
-"<br><br>\n"
-"\n"
-"### Ещё примеры\n"
-"\n"
-"    (rule \"copper keepout\"\n"
-"       (constraint disallow track via zone)\n"
-"       (condition \"A.intersectsArea('zone3')\"))\n"
-"\n"
-"\n"
-"    (rule \"BGA neckdown\"\n"
-"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
-"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.intersectsCourtyard('U3')\"))\n"
-"\n"
-"\n"
-"    # Предотвращать попадание шёлкографии на тентированные перех. отв.\n"
-"    (rule silk_over_via\n"
-"       (constraint silk_clearance (min 0.2mm))\n"
-"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
-"\n"
-"\n"
-"    (rule \"Distance between Vias of Different Nets\"\n"
-"        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
-"\n"
-"    (rule \"Clearance between Pads of Different Nets\"\n"
-"        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
-"\n"
-"\n"
-"    (rule \"Via Hole to Track Clearance\"\n"
-"        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
-"\n"
-"    (rule \"Pad to Track Clearance\"\n"
-"        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
-"\n"
-"\n"
-"    (rule \"clearance-to-1mm-cutout\"\n"
-"        (constraint edge_clearance (min 0.8mm))\n"
-"        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
-"\n"
-"\n"
-"    (rule \"Max Drill Hole Size Mechanical\"\n"
-"        (constraint hole_size (max 6.3mm))\n"
-"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"\n"
-"    (rule \"Max Drill Hole Size PTH\"\n"
-"        (constraint hole_size (max 6.35mm))\n"
-"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
-"\n"
-"\n"
-"    # Задать оптимальный зазор для отдельной диф. пары\n"
-"    (rule \"dp clock gap\"\n"
-"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('/CLK')\"))\n"
-"\n"
-"    # Задать больший зазор между любыми диф. парами\n"
-"    (rule \"dp clearance\"\n"
-"        (constraint clearance (min \"1.5mm\"))\n"
-"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
-"\n"
-"\n"
-"    # Не использовать терморазгрузку на конт. пл. с параметром «для отвода "
-"тепла»\n"
-"    (rule heat_sink_pad\n"
-"        (constraint zone_connection solid)\n"
-"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
-"\n"
-"    # Требовать подключения всех четырех мостиков терморазгрузки к "
-"родительской зоне\n"
-"    (rule fully_spoked_pads\n"
-"        (constraint min_resolved_spokes 4))\n"
-"\n"
-"    # Установить зазор и ширину мостиков терморазгрузки для всех зон\n"
-"    (rule defined_relief\n"
-"        (constraint thermal_relief_gap (min 10mil))\n"
-"        (constraint thermal_spoke_width (min 12mil)))\n"
-"\n"
-"    # Переопределить зазор и ширину мостиков терморазгрузки для зон GND и "
-"PWR\n"
-"    (rule defined_relief_pwr\n"
-"        (constraint thermal_relief_gap (min 10mil))\n"
-"        (constraint thermal_spoke_width (min 12mil))\n"
-"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
-"\n"
-"    # Предотвращать заливку меди под обл. установки конденсаторов\n"
-"    (rule no_copper_under_caps\n"
-"        (constraint physical_clearance (min 0mm))\n"
-"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
-"\n"
-"\n"
-"    # Предотвращать стекание припоя из SMD конт. пл. в отверстия\n"
-"    (rule holes_in_pads\n"
-"        (constraint physical_hole_clearance (min 0.2mm))\n"
-"        (condition \"B.Pad_Type == 'SMD'\"))\n"
-"\n"
-"    # Запретить переопределение отступа паяльной маски у конт. пл.\n"
-"    (rule \"disallow solder mask margin overrides\"\n"
-"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-"        (condition \"A.Type == 'Pad'\"))\n"
-"\n"
-"\n"
-"    # Обеспечить механический зазор между компонентами и контуром платы\n"
-"    (rule front_mechanical_board_edge_clearance\n"
-"        (layer \"F.Courtyard\")\n"
-"        (constraint physical_clearance (min 3mm))\n"
-"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
-"\n"
-"\n"
-"    # Проверка на токовую нагрузку\n"
-"    (rule high-current\n"
-"        (constraint track_width (min 1.0mm))\n"
-"        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.NetClass == 'Power'\"))\n"
-"\n"
-"\n"
-"    # Раздельное ограничение размеров сверл и фрез\n"
-"    (rule \"Plated through-hole size\"\n"
-"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
-"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
-"    (rule \"Plated slot size\"\n"
-"        (constraint hole_size (min 0.5mm))\n"
-"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
-"\n"
-"\n"
-"    # Разрешить нарушения, связанные с глухими/внутренними отверстиями, "
-"когда известно, что\n"
-"    # производитель будет механически сверлить глухие/внутренние перех. отв. "
-"-до- лазерного сверления \n"
-"    # микроотверстий.\n"
-"    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
-"        (constraint hole_to_hole)\n"
-"        (severity ignore))\n"
-"\n"
-"### Документация\n"
-"\n"
-"Полная документация приведена на сайте [https://docs.kicad.org](https://docs."
-"kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules).\n"
 "\n"
 "\n"
 
@@ -40847,6 +40488,113 @@ msgid ""
 "<br><br>\n"
 "\n"
 msgstr ""
+"### Функции выражений\n"
+"\n"
+"Параметры всех функций поддерживают простые шаблоны (`*` и `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<имя_зоны>')\n"
+"Истина, если вся `A` лежит в пределах контура указанной зоны.\n"
+"\n"
+"Обратите внимание: это потенциально более дорогой вызов, чем "
+"`intersectsArea()`.\n"
+"Используйте `intersectsArea()`, когда возможно.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<имя_слоя>')\n"
+"Истина, если `A` существует на указанном слое. Имя слоя может быть\n"
+"как из меню Параметры платы > Слои редактора, так и стандартным (`F.Cu`).\n"
+"\n"
+"Обратите внимание: функция возвращает истину, даже если правило оценивается\n"
+"не для этого слоя. Для контроля слоя в правиле лучше использовать `(layer "
+"\"имя_слоя\")`.\n"
+"<br><br>\n"
+"\n"
+"    A.fromTo('x', 'y')\n"
+"Истина, если объект находится на медном соединении между указанными конт. пл."
+"\n"
+"`x` и `y` — полные имена конт. пл. (например, `R1-Pad1`).\n"
+"<br><br>\n"
+"\n"
+"    A.getField('<имя_поля>')\n"
+"Возвращает значение указанного поля. Поля есть только у посадочных мест,\n"
+"поэтому результат возвращается только при условии, что `A` — посадочное "
+"место.\n"
+"<br><br>\n"
+"\n"
+"    A.hasComponentClass('<имя_класса_компонентов>')\n"
+"Истина, если `A` пренадлежит классу компонентов с указанным именем.\n"
+"<br><br>\n"
+"\n"
+"    A.hasNetclass('<имя_неткласса>')\n"
+"Истина, если `A` принадлежит указанному классу цепей (явно или по шаблону).\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<имя_цепи>')\n"
+"Истина, если `A` относится к цепи, которая является частью указанной "
+"диф.пары.\n"
+"Например, `inDiffPair('/CLK')` соответствует цепям `/CLK_P` и `/CLK_N`.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsArea('<имя_зоны>')\n"
+"Истина, если любая часть `A` лежит в пределах контуров указанной зоны.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsCourtyard('<обозначение_посад_места>')\n"
+"Истина, если любая часть `A` лежит в главной области указанного посадочного "
+"места.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsFrontCourtyard('<обозначение_посад_места>')\n"
+"Истина, если любая часть `A` лежит в области указанного посадочного места "
+"сверху.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsBackCourtyard('<обозначение_посад_места>')\n"
+"Истина, если любая часть `A` лежит в области указанного посадочного места "
+"снизу.\n"
+"<br><br>\n"
+"\n"
+"`<обозначение_посад_места>` может быть:\n"
+"1. Обозначением посадочного места (может содержать шаблоны `*` и `?`)\n"
+"2. Идентификатором в виде `LibName:FootprintName` (оба имени могут "
+"содержать\n"
+"   шаблоны, обязательно наличие `:`)\n"
+"3. Классом компонентов в форме `${Class:ClassName}` (регистр слова `Class`\n"
+"   не важен, а имя класса чувствительно к регистру)\n"
+"<br><br>\n"
+"\n"
+"    A.isBlindBuriedVia()\n"
+"Истина, если `A` — это глухое/внутреннее переходное отверстие.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"Истина, если `A` и `B` являются членами одной диф.пары.\n"
+"<br><br>\n"
+"\n"
+"    A.isMicroVia()\n"
+"Истина, если `A` — это переходное микроотверстие.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"Истина, если отверстие в `A` металлизировано.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfGroup('<имя_группы>')\n"
+"Истина, если `A` входит в указанную группу (включая вложенные).\n"
+"Имя может содержать шаблоны.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfFootprint('<обозначение_посад_места>')\n"
+"Истина, если `A` является частью указанного посадочного места\n"
+"(например, контактная площадка или графика).\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheet('<путь_листа>')\n"
+"Истина, если `A` принадлежит указанному листу схемы.\n"
+"Путь может содержать шаблоны.\n"
+"<br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
 msgid ""
@@ -41892,14 +41640,12 @@ msgid "Text thickness out of range"
 msgstr "Толщина текста вне допустимого диапазона"
 
 #: pcbnew/drc/drc_item.cpp:263
-#, fuzzy
 msgid "Track length out of range"
-msgstr "Длина дорожки превышает предел"
+msgstr "Длина дорожки вне допустимого диапазона"
 
 #: pcbnew/drc/drc_item.cpp:267
-#, fuzzy
 msgid "Skew between tracks out of range"
-msgstr "Перекос между дорожками превышает предел"
+msgstr "Перекос между дорожками вне допустимого диапазона"
 
 #: pcbnew/drc/drc_item.cpp:272
 msgid "Too many or too few vias on a connection"
@@ -41934,9 +41680,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Незеркальный текст на заднем слое"
 
 #: pcbnew/drc/drc_item.cpp:307
-#, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
-msgstr "Сверленое отверстие слишком близко к другому отверстию"
+msgstr "Сверленое отверстие слишком близко к другому отверстию (устаревшее)"
 
 #: pcbnew/drc/drc_item.cpp:508
 #, c-format
@@ -43887,9 +43632,8 @@ msgid "Footprint '%s' saved."
 msgstr "Посад. место '%s' сохранено."
 
 #: pcbnew/load_select_footprint.cpp:374
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Сохранение библиотеки посад. мест\n"
+msgstr "Ошибка сохранения библиотеки посад. мест"
 
 #: pcbnew/load_select_footprint.cpp:378
 #, c-format
@@ -43984,7 +43728,6 @@ msgid "Export IDF 3D board representation"
 msgstr "Экспорт представления платы из IDF 3D"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP / GLB / BREP / XAO / PLY / STL..."
 msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
 
@@ -44089,9 +43832,8 @@ msgid "Add Microwave Inductor"
 msgstr "Добавить СВЧ индуктор"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Length of Track:"
-msgstr "Длина трассировки:"
+msgstr "Длина дорожки:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:377
 msgid "Requested length < minimum length"
@@ -46251,9 +45993,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Неизвестное имя формы конт. пл. '%s' на слое '%s' в строке %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Добавить выбранные слои в список распознанных."
+msgstr "Нет пользовательского слоя для размещения %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -46275,12 +46017,12 @@ msgstr "Неопознанная форма примитива конт. пл. '
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Круг с разными радиусами по осям x и y (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "Ожидалось, что x и y будут одинаковыми, а получили x = %f и y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -46316,6 +46058,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
+"Отсутствуют данные X, Y или поворота в строке %zu для refdes %s. Это может "
+"быть неразмещенным компонентом."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
 #, c-format
@@ -46345,11 +46089,12 @@ msgstr ""
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
 msgstr ""
+"Необработанный тип фигуры %d в полигоне на слое %s, последовательность %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3427
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "Недопустимое отверстие с %d точками в зоне на слое %s с цепью %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3469
 #, c-format
@@ -46357,11 +46102,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Контур кажется прерывистым: последняя точка была %s, начальная точка "
+"следующего сегмента %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Неверное имя вывода листа"
+msgstr "Недопустимый тип фигуры %d в контуре зоны"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
@@ -47171,9 +46918,8 @@ msgid "Failed to load board\n"
 msgstr "Не удалось загрузить плату\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:356 pcbnew/pcbnew_jobs_handler.cpp:431
-#, fuzzy
 msgid "Unknown export format"
-msgstr "Неизвестный формат списка сетей.\n"
+msgstr "Неизвестный формат экспорта"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:396
 #, c-format
@@ -47390,9 +47136,8 @@ msgid "Routing"
 msgstr "Трассировка"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
-#, fuzzy
 msgid "Please select a differential pair track you want to tune."
-msgstr "Выберите дорожку диф.пары, которую хотите настроить."
+msgstr "Пожалуйста, выберите дорожку диф.пары, которую хотите настроить."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:68
 msgid ""
@@ -48737,9 +48482,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Посад. место '%s' уже существует в библиотеке '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:518
-#, fuzzy
 msgid "Error renaming footprint"
-msgstr "Из родительского посад. места"
+msgstr "Ошибка переименования посад. места"
 
 #: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
@@ -49109,28 +48853,27 @@ msgstr "Уменьшить амплитуду меандра на один пу�
 
 #: pcbnew/tools/pcb_actions.cpp:244
 msgid "Draw Aligned Dimensions"
-msgstr "Нарисовать выровненные размеры"
+msgstr "Рисовать выровненные размеры"
 
 #: pcbnew/tools/pcb_actions.cpp:251
 msgid "Draw Center Dimensions"
-msgstr "Размеры центра рисунка"
+msgstr "Рисовать осевые линии"
 
 #: pcbnew/tools/pcb_actions.cpp:258
 msgid "Draw Radial Dimensions"
-msgstr "Начертить радиальные размеры"
+msgstr "Рисовать радиальные размеры"
 
 #: pcbnew/tools/pcb_actions.cpp:266
 msgid "Draw Orthogonal Dimensions"
-msgstr "Нарисовать ортогональные размеры"
+msgstr "Рисовать ортогональные размеры"
 
 #: pcbnew/tools/pcb_actions.cpp:273
-#, fuzzy
 msgid "Draw Leaders"
-msgstr "Лидеры розыгрыша"
+msgstr "Рисовать выноски"
 
 #: pcbnew/tools/pcb_actions.cpp:286
 msgid "Draw Filled Zones"
-msgstr "Нарисовать заполненные зоны"
+msgstr "Рисовать зоны заливки"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Place Vias"
@@ -50849,11 +50592,8 @@ msgid "Invalid clipboard contents"
 msgstr "Содержимое буфера обмена повреждено"
 
 #: pcbnew/tools/pcb_control.cpp:1509
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"Ошибка загрузки платы.\n"
-"%s"
+msgstr "Ошибка загрузки платы."
 
 #: pcbnew/tools/pcb_control.cpp:1543
 msgid "Append Board"
