@@ -65,12 +65,12 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
         {
             wxASSERT( ref->first == "ref" );
 
-            wxString reference = (UTF8&) ref->second.front().first;
+            wxString reference = UTF8( ref->second.front().first );
 
             // Ensure the "fpid" node contains a footprint name, and get it if exists
             if( ref->second.get_child( "fpid" ).size() )
             {
-                wxString tmp = (UTF8&) ref->second.get_child( "fpid" ).front().first;
+                wxString tmp = UTF8( ref->second.get_child( "fpid" ).front().first );
                 footprint = tmp;
             }
             else
