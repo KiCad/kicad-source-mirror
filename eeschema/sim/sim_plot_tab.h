@@ -378,6 +378,8 @@ private:
         m.verticalWithCtrl   = static_cast<A>( s.vertical_with_ctrl );
         m.verticalWithShift  = static_cast<A>( s.vertical_with_shift );
         m.verticalWithAlt    = static_cast<A>( s.vertical_with_alt );
+        m.horizontal         = static_cast<A>( s.horizontal );
+
         return m;
     }
 
