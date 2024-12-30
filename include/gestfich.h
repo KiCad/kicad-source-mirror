@@ -46,7 +46,6 @@ class EDA_LIST_DIALOG;
  * @return true is success or false if no PDF viewer found.
  */
 bool OpenPDF( const wxString& file );
-void OpenFile( const wxString& file );
 
 /**
  * @param aSrcPath is the full filename of the source.
