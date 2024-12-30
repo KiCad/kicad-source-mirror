@@ -3223,7 +3223,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
         // Pass events unless we receive a null event, then we must shut down
         if( TOOL_EVENT* evt = Wait() )
         {
-            if( evt->Matches( PCB_EVENTS::SnappingModeChangedByKeyEvent ) )
+            if( evt->Matches( PCB_EVENTS::SnappingModeChangedByKeyEvent() ) )
             {
                 // Update the layer set when the snapping mode changes
                 setPickerLayerSet();

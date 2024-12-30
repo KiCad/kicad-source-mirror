@@ -640,7 +640,7 @@ int PCB_CONTROL::CycleLayerPresets( const TOOL_EVENT& aEvent )
 
     settings->SetCurrentLayerPair( nextPair );
 
-    m_toolMgr->PostEvent( PCB_EVENTS::LayerPairPresetChangedByKeyEvent );
+    m_toolMgr->PostEvent( PCB_EVENTS::LayerPairPresetChangedByKeyEvent() );
     return 0;
 }
 
@@ -1589,7 +1589,7 @@ int PCB_CONTROL::SnapMode( const TOOL_EVENT& aEvent )
     else
         snapMode = !snapMode;
 
-    m_toolMgr->PostEvent( PCB_EVENTS::SnappingModeChangedByKeyEvent );
+    m_toolMgr->PostEvent( PCB_EVENTS::SnappingModeChangedByKeyEvent() );
 
     return 0;
 }
@@ -1971,7 +1971,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::LayerAlphaDec,        PCB_ACTIONS::layerAlphaDec.MakeEvent() );
 
     Go( &PCB_CONTROL::CycleLayerPresets,    PCB_ACTIONS::layerPairPresetsCycle.MakeEvent() );
-    Go( &PCB_CONTROL::LayerPresetFeedback,  PCB_EVENTS::LayerPairPresetChangedByKeyEvent );
+    Go( &PCB_CONTROL::LayerPresetFeedback,  PCB_EVENTS::LayerPairPresetChangedByKeyEvent() );
 
     // Grid control
     Go( &PCB_CONTROL::GridPlaceOrigin,      ACTIONS::gridSetOrigin.MakeEvent() );
@@ -1984,7 +1984,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::SnapMode,             PCB_ACTIONS::magneticSnapActiveLayer.MakeEvent() );
     Go( &PCB_CONTROL::SnapMode,             PCB_ACTIONS::magneticSnapAllLayers.MakeEvent() );
     Go( &PCB_CONTROL::SnapMode,             PCB_ACTIONS::magneticSnapToggle.MakeEvent() );
-    Go( &PCB_CONTROL::SnapModeFeedback,     PCB_EVENTS::SnappingModeChangedByKeyEvent );
+    Go( &PCB_CONTROL::SnapModeFeedback,     PCB_EVENTS::SnappingModeChangedByKeyEvent() );
 
     // Miscellaneous
     Go( &PCB_CONTROL::InteractiveDelete,    ACTIONS::deleteTool.MakeEvent() );

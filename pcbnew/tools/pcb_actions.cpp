@@ -2507,8 +2507,20 @@ TOOL_ACTION PCB_ACTIONS::ddImportFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.ddImportFootprint" )
         .Scope( AS_GLOBAL ) );
 
-const TOOL_EVENT PCB_EVENTS::SnappingModeChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
-                                                "common.Interactive.snappingModeChangedByKey" );
 
-const TOOL_EVENT PCB_EVENTS::LayerPairPresetChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
-                                                "pcbnew.Control.layerPairPresetChangedByKey" );
+const TOOL_EVENT& PCB_EVENTS::SnappingModeChangedByKeyEvent()
+{
+    static TOOL_EVENT event = TOOL_EVENT( TC_MESSAGE, TA_ACTION,
+                                          "common.Interactive.snappingModeChangedByKey" );
+
+    return event;
+}
+
+
+const TOOL_EVENT& PCB_EVENTS::LayerPairPresetChangedByKeyEvent()
+{
+    static TOOL_EVENT event = TOOL_EVENT( TC_MESSAGE, TA_ACTION,
+                                          "pcbnew.Control.layerPairPresetChangedByKey" );
+
+    return event;
+}

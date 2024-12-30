@@ -596,9 +596,12 @@ public:
 class PCB_EVENTS
 {
 public:
+    // These are functions that access the underlying event because the event constructor
+    // needs the ACTION::cancelInteractive action, so we must
+
     /// Hotkey feedback
-    const static TOOL_EVENT SnappingModeChangedByKeyEvent;
-    const static TOOL_EVENT LayerPairPresetChangedByKeyEvent;
+    static const TOOL_EVENT& SnappingModeChangedByKeyEvent();
+    static const TOOL_EVENT& LayerPairPresetChangedByKeyEvent();
 };
 
 #endif
