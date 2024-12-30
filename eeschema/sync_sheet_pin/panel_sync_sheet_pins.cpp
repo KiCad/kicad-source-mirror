@@ -65,24 +65,25 @@ PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aShe
 
     for( auto& [idx, view] : m_views )
     {
+        auto model = wxObjectDataPtr<SHEET_SYNCHRONIZATION_MODEL>(
+                new SHEET_SYNCHRONIZATION_MODEL( m_agent, m_sheet, m_path ) );
+        view->AssociateModel( model.get() );
+        m_models.try_emplace( idx, std::move( model ) );
+
         for( int col : { SHEET_SYNCHRONIZATION_MODEL::NAME, SHEET_SYNCHRONIZATION_MODEL::SHAPE } )
         {
             switch( col )
             {
             case SHEET_SYNCHRONIZATION_MODEL::NAME:
-
-                view->AppendIconTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ), col );
+                view->AppendIconTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ), col,
+                                            wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
                 break;
             case SHEET_SYNCHRONIZATION_MODEL::SHAPE:
-                view->AppendTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ), col );
+                view->AppendTextColumn( SHEET_SYNCHRONIZATION_MODEL::GetColName( col ), col,
+                                        wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
                 break;
             }
         }
-
-        auto model = wxObjectDataPtr<SHEET_SYNCHRONIZATION_MODEL>(
-                new SHEET_SYNCHRONIZATION_MODEL( m_agent, m_sheet, m_path ) );
-        view->AssociateModel( model.get() );
-        m_models.try_emplace( idx, std::move( model ) );
     }
 
     for( auto& [idx, view] : m_views )
@@ -140,29 +141,6 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
     m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->UpdateItems( std::move( labels_list ) );
     m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->UpdateItems( std::move( pins_list ) );
     m_models[SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED]->UpdateItems( std::move( associated_list ) );
-
-
-    static int SHAPE_COLUMN_WIDTH = ([this]{
-        int name_width = 0;
-
-        for(auto shape : { LABEL_FLAG_SHAPE::L_INPUT ,  LABEL_FLAG_SHAPE::L_OUTPUT ,  LABEL_FLAG_SHAPE::L_BIDI ,  LABEL_FLAG_SHAPE::L_TRISTATE ,  LABEL_FLAG_SHAPE::L_UNSPECIFIED })
-        {
-            name_width = std::max(name_width, static_cast<int>( GetTextExtent(  getElectricalTypeLabel( shape )).GetWidth()));
-        }
-
-        return name_width;
-
-    })();
-
-
-    for( auto [_, view] : m_views )
-    {
-        wxDataViewColumn* name_col = view->GetColumn( SHEET_SYNCHRONIZATION_MODEL::NAME );
-        wxDataViewColumn* shape_col = view->GetColumn( SHEET_SYNCHRONIZATION_MODEL::SHAPE );
-        int               col_total_width = name_col->GetWidth() + shape_col->GetWidth();
-        shape_col->SetWidth( SHAPE_COLUMN_WIDTH );
-        name_col->SetWidth( col_total_width - SHAPE_COLUMN_WIDTH );
-    }
 
     UpdatePageImage();
 }
