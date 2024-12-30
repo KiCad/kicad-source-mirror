@@ -739,7 +739,7 @@ public:
     std::unique_ptr<VIEW> DataReference() const;
 
     ///< Maximum number of layers that may be shown
-    static constexpr int VIEW_MAX_LAYERS = 512;
+    static constexpr int VIEW_MAX_LAYERS = 1024;//512;
 
     ///< Rendering order modifier for layers that are marked as top layers.
     static constexpr int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
