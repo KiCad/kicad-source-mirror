@@ -42,6 +42,7 @@
 GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ) :
     m_grid( aGrid ),
     m_addHandler( []( wxCommandEvent& ) {} ),
+    m_enableSingleClickEdit( true ),
     m_multiCellEditEnabled( true )
 {
     init();
@@ -51,6 +52,7 @@ GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ) :
 GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler ) :
     m_grid( aGrid ),
     m_addHandler( aAddHandler ),
+    m_enableSingleClickEdit( true ),
     m_multiCellEditEnabled( true )
 {
     init();
@@ -209,7 +211,7 @@ void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
 
         if( toggleCell( row, col, true ) )
             toggled = true;
-        else if( showEditor( row, col ) )
+        else if( m_enableSingleClickEdit && showEditor( row, col ) )
             return;
 
         // Apply checkbox changes to multi-selection.

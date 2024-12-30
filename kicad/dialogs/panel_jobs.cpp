@@ -37,7 +37,6 @@
 
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
-#include <wx/combo.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
@@ -47,7 +46,6 @@
 
 #include <jobs/job_special_execute.h>
 #include <dialogs/dialog_special_execute.h>
-#include <wx/textdlg.h>
 
 
 struct JOB_TYPE_INFO
@@ -125,9 +123,7 @@ public:
                               wxFD_OVERWRITE_PROMPT | wxFD_SAVE );
 
             if( dlg.ShowModal() != wxID_OK )
-            {
                 return;
-            }
 
             m_textCtrlOutputPath->SetValue( dlg.GetPath() );
         }
@@ -148,12 +144,11 @@ public:
 
         // Update the only job map
         m_output->m_only.clear();
+
         for( int i : selectedItems )
         {
             if( m_onlyMap.contains( i ) )
-            {
                 m_output->m_only.emplace_back( m_onlyMap[i] );
-            }
         }
 
         m_output->m_outputHandler->SetOutputPath( outputPath );
@@ -193,9 +188,7 @@ public:
                                     } );
 
             if( it != m_output->m_only.end() )
-            {
                 selectedList.emplace_back( i );
-            }
 
             m_onlyMap.emplace( i, job.m_id );
             i++;
@@ -206,9 +199,7 @@ public:
             m_listBoxOnly->InsertItems( arrayStr, 0 );
 
             for( int idx : selectedList )
-            {
                 m_listBoxOnly->SetSelection( idx );
-            }
         }
 
         m_choiceArchiveformat->AppendString( _( "Zip" ) );
@@ -219,8 +210,8 @@ public:
 
 
 private:
-    JOBSET*        m_jobsFile;
-    JOBSET_OUTPUT* m_output;
+    JOBSET*                 m_jobsFile;
+    JOBSET_OUTPUT*          m_output;
     std::map<int, wxString> m_onlyMap;
 };
 
@@ -256,13 +247,9 @@ public:
             if( aOutput->m_lastRunSuccessMap.contains( job.m_id ) )
             {
                 if( aOutput->m_lastRunSuccessMap[job.m_id].value() )
-                {
                     imageIdx = 1;
-                }
                 else
-                {
                     imageIdx = 0;
-                }
             }
 
             long itemIndex = m_jobList->InsertItem( m_jobList->GetItemCount(), imageIdx );
@@ -279,7 +266,7 @@ public:
 
         std::vector<JOBSET_JOB> jobs = m_jobsFile->GetJobsForOutput( m_output );
 
-        if( itemIndex < jobs.size() )
+        if( itemIndex < (int) jobs.size() )
         {
             JOBSET_JOB& job = jobs[itemIndex];
             if( m_output->m_lastRunReporters.contains( job.m_id ) )
@@ -358,14 +345,7 @@ public:
             m_statusBitmap->Hide();
         }
 
-        if( !m_jobsFile->GetJobsForOutput( m_output ).empty() )
-        {
-            m_buttonOutputRun->Enable();
-        }
-        else
-        {
-            m_buttonOutputRun->Disable();
-        }
+        m_buttonOutputRun->Enable( !m_jobsFile->GetJobsForOutput( m_output ).empty() );
     }
 
 
@@ -447,84 +427,92 @@ private:
         }
     }
 
-    JOBSET*           m_jobsFile;
-    JOBSET_OUTPUT*    m_output;
+    JOBSET*              m_jobsFile;
+    JOBSET_OUTPUT*       m_output;
     KICAD_MANAGER_FRAME* m_frame;
     PANEL_JOBS*          m_panelParent;
 };
 
 
-/* ---------- support for jobs grid ---------- */
-
 JOBS_GRID_TRICKS::JOBS_GRID_TRICKS( PANEL_JOBS* aParent, WX_GRID* aGrid ) :
         GRID_TRICKS( aGrid ),
         m_parent( aParent )
 {
+    m_enableSingleClickEdit = false;
     m_multiCellEditEnabled = false;
 }
 
 
-class TEXT_BUTTON_JOB_PROPERTIES : public wxComboCtrl
+void JOBS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
-public:
-    TEXT_BUTTON_JOB_PROPERTIES( wxWindow* aParent, PANEL_JOBS* aController, WX_GRID* aGrid ) :
-            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxTE_PROCESS_ENTER | wxBORDER_NONE ),
-            m_controller( aController ),
-            m_grid( aGrid )
-    {
-        SetButtonBitmaps( KiBitmapBundle( BITMAPS::edit ) );
+    wxArrayInt selectedRows = m_grid->GetSelectedRows();
 
-        // win32 fix, avoids drawing the "native dropdown caret"
-        Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
-    }
+    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_grid->GetGridCursorRow() );
 
-protected:
-    void DoSetPopupControl( wxComboPopup* popup ) override
-    {
-        m_popup = nullptr;
-    }
+    menu.Append( JOB_DESCRIPTION, _( "Edit Job Description" ) );
+    menu.Append( JOB_PROPERTIES, _( "Edit Job Settings..." ) );
+    menu.AppendSeparator();
+    menu.Append( GRIDTRICKS_ID_COPY, _( "Copy" ) + "\tCtrl+C",
+                 _( "Copy selected cells to clipboard" ) );
+    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel",
+                 _( "Delete selected jobs" ) );
+    menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A",
+                 _( "Select all jobs" ) );
 
-    void OnButtonClick() override
-    {
-        int row = m_grid->GetGridCursorRow();
+    menu.Enable( JOB_DESCRIPTION, selectedRows.size() == 1 );
+    menu.Enable( JOB_PROPERTIES, selectedRows.size() == 1 );
+    menu.Enable( GRIDTRICKS_ID_DELETE, selectedRows.size() > 0 );
 
-        if( row >= 0 && row < (int) m_controller->GetJobsFile()->GetJobs().size() )
-            m_controller->OpenJobOptionsForListItem( m_grid->GetGridCursorRow() );
-    }
-
-    PANEL_JOBS* m_controller;
-    WX_GRID*    m_grid;
-};
+    m_grid->PopupMenu( &menu );
+}
 
 
-class GRID_CELL_JOB_PROPERTIES_EDITOR : public GRID_CELL_TEXT_BUTTON
+void JOBS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
-public:
-    GRID_CELL_JOB_PROPERTIES_EDITOR( PANEL_JOBS* aController, WX_GRID* aGrid ) :
-            m_controller( aController ),
-            m_grid( aGrid )
-    { }
+    wxArrayInt selectedRows = m_grid->GetSelectedRows();
 
-    wxGridCellEditor* Clone() const override
+    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_grid->GetGridCursorRow() );
+
+    if( event.GetId() == JOB_DESCRIPTION )
     {
-        return new GRID_CELL_JOB_PROPERTIES_EDITOR( m_controller, m_grid );
+        if( selectedRows.size() > 0 )
+        {
+            m_grid->SetGridCursor( selectedRows[0], 1 );
+            m_grid->EnableCellEditControl();
+        }
+    }
+    else if( event.GetId() == JOB_PROPERTIES )
+    {
+        if( selectedRows.size() > 0 )
+            m_parent->OpenJobOptionsForListItem( selectedRows[0] );
+    }
+    else if( event.GetId() == GRIDTRICKS_ID_DELETE )
+    {
+        wxCommandEvent dummy;
+        m_parent->OnJobButtonDelete( dummy );
+    }
+    else
+    {
+        GRID_TRICKS::doPopupSelection( event );
+    }
+}
+
+
+bool JOBS_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
+{
+    int col = aEvent.GetCol();
+    int row = aEvent.GetRow();
+
+    if( col == 1 && row >= 0 && row < (int) m_parent->GetJobsFile()->GetJobs().size() )
+    {
+        m_parent->OpenJobOptionsForListItem( row );
+        return true;
     }
 
-    void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override
-    {
-        m_control = new TEXT_BUTTON_JOB_PROPERTIES( aParent, m_controller, m_grid );
-        WX_GRID::CellEditorSetMargins( Combo() );
-
-        wxGridCellEditor::Create( aParent, aId, aEventHandler );
-    }
-
-protected:
-    PANEL_JOBS* m_controller;
-    WX_GRID*    m_grid;
-};
-
-/* ---------- end of support for jobs grid ---------- */
+    return false;
+}
 
 
 PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
@@ -536,9 +524,8 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
 {
     m_jobsGrid->PushEventHandler( new JOBS_GRID_TRICKS( this, m_jobsGrid ) );
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_JOB_PROPERTIES_EDITOR( this, m_jobsGrid ) );
-    m_jobsGrid->SetColAttr( 1, attr );
+    m_jobsGrid->SetDefaultRowSize( m_jobsGrid->GetDefaultRowSize() + 4 );
+    m_jobsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     m_buttonAddJob->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_buttonUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
@@ -564,6 +551,7 @@ PANEL_JOBS::~PANEL_JOBS()
 void PANEL_JOBS::RemoveOutput( JOBSET_OUTPUT* aOutput )
 {
     auto it = m_outputPanelMap.find( aOutput );
+
     if( it != m_outputPanelMap.end() )
     {
         PANEL_JOB_OUTPUT* panel = m_outputPanelMap[aOutput];
@@ -632,10 +620,10 @@ void PANEL_JOBS::rebuildJobList()
 void PANEL_JOBS::UpdateTitle()
 {
     wxString tabName = m_jobsFile->GetFullName();
+
     if( m_jobsFile->GetDirty() )
-    {
         tabName = wxS( "*" ) + tabName;
-    }
+
     int pageIdx = m_parentBook->FindPage( this );
     m_parentBook->SetPageText( pageIdx, tabName );
 }
@@ -659,9 +647,7 @@ void PANEL_JOBS::buildOutputList()
     m_outputPanelMap.clear();
 
     for( JOBSET_OUTPUT& job : m_jobsFile->GetOutputs() )
-    {
         addJobOutputPanel( &job );
-    }
 
     // ensure the window contents get shifted as needed
     Layout();

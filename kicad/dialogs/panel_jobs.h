@@ -33,10 +33,22 @@ struct JOBSET_OUTPUT;
 
 class JOBS_GRID_TRICKS : public GRID_TRICKS
 {
+    enum
+    {
+        JOB_DESCRIPTION = GRIDTRICKS_FIRST_CLIENT_ID,
+        JOB_PROPERTIES
+    };
+
 public:
     explicit JOBS_GRID_TRICKS( PANEL_JOBS* aParent, WX_GRID* aGrid );
 
     ~JOBS_GRID_TRICKS() override = default;
+
+protected:
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
+    void doPopupSelection( wxCommandEvent& event ) override;
+
+    bool handleDoubleClick( wxGridEvent& aEvent ) override;
 
 protected:
     PANEL_JOBS* m_parent;
@@ -61,6 +73,7 @@ public:
     JOBSET* GetJobsFile() { return m_jobsFile.get(); }
 
     void OpenJobOptionsForListItem( size_t aItemIndex );
+    void OnJobButtonDelete( wxCommandEvent& aEvent ) override;
 
 protected:
     virtual void OnSizeGrid( wxSizeEvent& aEvent ) override;
@@ -69,7 +82,6 @@ protected:
     virtual void OnSaveButtonClick( wxCommandEvent& aEvent ) override;
     virtual void OnJobButtonUp( wxCommandEvent& aEvent ) override;
     virtual void OnJobButtonDown( wxCommandEvent& aEvent ) override;
-    virtual void OnJobButtonDelete( wxCommandEvent& aEvent ) override;
     virtual void OnRunAllJobsClick( wxCommandEvent& event ) override;
 
     bool GetCanClose() override;

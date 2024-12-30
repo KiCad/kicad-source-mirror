@@ -135,6 +135,7 @@ protected:
 
     std::bitset<GRIDTRICKS_MAX_COL>        m_tooltipEnabled;
 
+    bool                                   m_enableSingleClickEdit;
     bool                                   m_multiCellEditEnabled;
 };
 
