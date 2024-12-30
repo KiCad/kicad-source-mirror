@@ -54,6 +54,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_DrcDialog(),
           m_ExportIdf(),
           m_ExportStep(),
+          m_ExportODBPP(),
           m_ExportSvg(),
           m_ExportVrml(),
           m_FootprintWizardList(),
@@ -359,6 +360,15 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "export_2581.compress",
             &m_Export2581.compress, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_odb.units",
+            &m_ExportODBPP.units, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_odb.precision",
+            &m_ExportODBPP.precision, 6 ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_odb.compress_format",
+            &m_ExportODBPP.compressFormat, 1 ) );
 
     m_params.emplace_back( new PARAM<bool>( "export_idf.auto_adjust",
             &m_ExportIdf.auto_adjust, false ) );
