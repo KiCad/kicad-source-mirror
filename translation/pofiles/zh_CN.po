@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-19 16:48-0800\n"
-"PO-Revision-Date: 2024-12-28 16:00+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2024-12-30 21:16+0000\n"
+"Last-Translator: Huanyin Liu <13316560709@189.cn>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -6316,7 +6316,7 @@ msgstr "目前不支持 DXF 中的图像。"
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "导入的图形太大。最大缩放比例是 %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
@@ -15145,7 +15145,7 @@ msgstr "此文件由较旧版本的 KiCad 创建, 保存文件时将转换为新
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr ""
+msgstr "该原理图包含的符号，其字段名称前后带有空格。"
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
@@ -41353,12 +41353,12 @@ msgstr "未识别的焊盘形状基元 '%s', 位于行 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "圆的x和y半径不相等（x=%d，y=%d）"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "预期x和y相同，但得到x=%f和y=%f。 "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
@@ -41392,7 +41392,7 @@ msgstr "ID %d 和序列 %d 的重复项位于行 %zu。"
 msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
-msgstr ""
+msgstr "在第%zu行的 refdes %s中缺少X、Y或旋转数据。这可能是一个未放置的组件。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2627
 #, c-format
@@ -41418,7 +41418,7 @@ msgstr "期望蚀刻数据在铜层上。在层 '%s' 上找到行"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3238
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "在层 %s 的多边形中有未处理的形状类型 %d ，序列 %d %d 。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
