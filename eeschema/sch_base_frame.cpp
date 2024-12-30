@@ -99,8 +99,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
         EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle,
                         aFrameName, schIUScale ),
         m_base_frame_defaults( nullptr, "base_Frame_defaults" ),
-        m_selectionFilterPanel( nullptr ),
-        m_spaceMouse( nullptr )
+        m_selectionFilterPanel( nullptr )
 {
     if( ( aStyle & wxFRAME_NO_TASKBAR ) == 0 )
         createCanvas();
@@ -123,10 +122,9 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
 }
 
 
+/// Needs to be in the cpp file to encode the sizeof() for std::unique_ptr
 SCH_BASE_FRAME::~SCH_BASE_FRAME()
-{
-    delete m_spaceMouse;
-}
+{}
 
 
 SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const
@@ -377,7 +375,7 @@ void SCH_BASE_FRAME::ActivateGalCanvas()
     try
     {
         if( !m_spaceMouse )
-            m_spaceMouse = new NL_SCHEMATIC_PLUGIN();
+            m_spaceMouse = std::make_unique<NL_SCHEMATIC_PLUGIN>();
 
         m_spaceMouse->SetCanvas( GetCanvas() );
     }

@@ -81,8 +81,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName,
                         pcbIUScale ),
         m_pcb( nullptr ),
-        m_originTransforms( *this ),
-        m_spaceMouse( nullptr )
+        m_originTransforms( *this )
 {
     m_watcherDebounceTimer.Bind( wxEVT_TIMER, &PCB_BASE_FRAME::OnFpChangeDebounceTimer, this );
 }
@@ -90,9 +89,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
-    delete m_spaceMouse;
-    m_spaceMouse = nullptr;
-
     // Ensure m_canvasType is up to date, to save it in config
     if( GetCanvas() )
         m_canvasType = GetCanvas()->GetBackend();
@@ -132,7 +128,7 @@ void PCB_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleIconizeEvent( aEvent );
 
-    if( m_spaceMouse != nullptr && aEvent.IsIconized() )
+    if( m_spaceMouse && aEvent.IsIconized() )
         m_spaceMouse->SetFocus( false );
 }
 
@@ -1040,9 +1036,9 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     try
 
     {
-        if( m_spaceMouse == nullptr )
+        if( !m_spaceMouse )
         {
-            m_spaceMouse = new NL_PCBNEW_PLUGIN( GetCanvas() );
+            m_spaceMouse = std::make_unique<NL_PCBNEW_PLUGIN>( GetCanvas() );
         }
     }
     catch( const std::system_error& e )

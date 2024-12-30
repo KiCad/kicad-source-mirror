@@ -130,8 +130,15 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
                                        m_boardAdapter, m_currentCamera,
                                        PROJECT_PCB::Get3DCacheManager( &aFrame->Prj() ) );
 
-    m_spaceMouse = new NL_FOOTPRINT_PROPERTIES_PLUGIN( m_previewPane );
-    m_spaceMouse->SetFocus( true );
+    try
+    {
+        m_spaceMouse = std::make_unique<NL_FOOTPRINT_PROPERTIES_PLUGIN>( m_previewPane );
+        m_spaceMouse->SetFocus( true );
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
+    }
 
     m_boardAdapter.SetBoard( m_dummyBoard );
     m_boardAdapter.m_IsBoardView = false;
@@ -180,7 +187,6 @@ PANEL_PREVIEW_3D_MODEL::~PANEL_PREVIEW_3D_MODEL()
     if( m_boardAdapter.m_Cfg )
         m_boardAdapter.m_Cfg->m_Render = m_initialRender;
 
-    delete m_spaceMouse;
     delete m_dummyBoard;
     delete m_previewPane;
 }
@@ -625,7 +631,7 @@ void PANEL_PREVIEW_3D_MODEL::onUnitsChanged( wxCommandEvent& aEvent )
 
 void PANEL_PREVIEW_3D_MODEL::onPanelShownEvent( wxCommandEvent& aEvent )
 {
-    if( m_spaceMouse != nullptr )
+    if( m_spaceMouse )
     {
         m_spaceMouse->SetFocus( static_cast<bool>( aEvent.GetInt() ) );
     }

@@ -226,7 +226,7 @@ private:
     /// The 3d viewer Render initial settings (must be saved and restored)
     EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS m_initialRender;
 
-    NL_FOOTPRINT_PROPERTIES_PLUGIN*     m_spaceMouse;
+    std::unique_ptr<NL_FOOTPRINT_PROPERTIES_PLUGIN>     m_spaceMouse;
 };
 
 #endif  // PANEL_PREVIEW_3D_MODEL_H

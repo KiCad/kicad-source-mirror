@@ -180,7 +180,7 @@ private:
 
     bool                           m_disable_ray_tracing;
 
-    NL_3D_VIEWER_PLUGIN*           m_spaceMouse;
+    std::unique_ptr<NL_3D_VIEWER_PLUGIN> m_spaceMouse;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

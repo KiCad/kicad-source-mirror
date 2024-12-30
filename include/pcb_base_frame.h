@@ -428,7 +428,7 @@ protected:
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
 
 private:
-    NL_PCBNEW_PLUGIN*       m_spaceMouse;
+    std::unique_ptr<NL_PCBNEW_PLUGIN>       m_spaceMouse;
 
     std::unique_ptr<wxFileSystemWatcher>    m_watcher;
     wxFileName                              m_watcherFileName;

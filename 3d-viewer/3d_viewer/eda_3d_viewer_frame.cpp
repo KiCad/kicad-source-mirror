@@ -94,8 +94,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
         m_mainToolBar( nullptr ),
         m_canvas( nullptr ),
         m_currentCamera( m_trackBallCamera ),
-        m_trackBallCamera( 2 * RANGE_SCALE_3D ),
-        m_spaceMouse( nullptr )
+        m_trackBallCamera( 2 * RANGE_SCALE_3D )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME %s" ), aTitle );
 
@@ -187,7 +186,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
     try
     {
-        m_spaceMouse = new NL_3D_VIEWER_PLUGIN( m_canvas );
+        m_spaceMouse = std::make_unique<NL_3D_VIEWER_PLUGIN>( m_canvas );
     }
     catch( const std::system_error& e )
     {
@@ -203,8 +202,6 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
 EDA_3D_VIEWER_FRAME::~EDA_3D_VIEWER_FRAME()
 {
-    delete m_spaceMouse;
-
     Prj().GetProjectFile().m_Viewports3D = m_appearancePanel->GetUserViewports();
 
     m_canvas->SetEventDispatcher( nullptr );
