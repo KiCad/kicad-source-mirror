@@ -264,9 +264,13 @@ public:
     {
         int itemIndex = event.GetIndex();
 
+        // The index could be negative (it is default -1)
+        if( itemIndex < 0 )
+            return;
+
         std::vector<JOBSET_JOB> jobs = m_jobsFile->GetJobsForOutput( m_output );
 
-        if( itemIndex < (int) jobs.size() )
+        if( static_cast<size_t>( itemIndex ) < jobs.size() )
         {
             JOBSET_JOB& job = jobs[itemIndex];
             if( m_output->m_lastRunReporters.contains( job.m_id ) )
