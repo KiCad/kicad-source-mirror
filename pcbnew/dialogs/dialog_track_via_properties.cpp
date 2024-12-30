@@ -691,11 +691,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( m_viaNotFree->Get3StateValue() != wxCHK_UNDETERMINED )
                     v->SetIsFree( !m_viaNotFree->GetValue() );
 
+                if( !m_viaDiameter.IsIndeterminate() )
+                    v->SetPadstack( *m_viaStack );
+
                 switch( m_ViaTypeChoice->GetSelection() )
                 {
                 case 0:
                     v->SetViaType( VIATYPE::THROUGH );
-                    v->SanitizeLayers();
                     break;
                 case 1:
                     v->SetViaType( VIATYPE::MICROVIA );
@@ -710,17 +712,19 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 PCB_LAYER_ID startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
                 PCB_LAYER_ID endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
 
-                if (startLayer != UNDEFINED_LAYER )
+                if( startLayer != UNDEFINED_LAYER )
                 {
                     m_viaStack->Drill().start = startLayer;
                     v->SetTopLayer( startLayer );
                 }
 
-                if (endLayer != UNDEFINED_LAYER )
+                if( endLayer != UNDEFINED_LAYER )
                 {
                     m_viaStack->Drill().end = endLayer;
                     v->SetBottomLayer( endLayer );
                 }
+
+                v->SanitizeLayers();
 
                 switch( m_annularRingsCtrl->GetSelection() )
                 {
@@ -739,11 +743,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 default:
                     break;
                 }
-
-                if( !m_viaDiameter.IsIndeterminate() )
-                    v->SetPadstack( *m_viaStack );
-
-                v->SanitizeLayers();
 
                 switch( m_tentingFrontCtrl->GetSelection() )
                 {
