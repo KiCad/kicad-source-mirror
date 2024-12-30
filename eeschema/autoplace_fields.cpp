@@ -736,10 +736,11 @@ void SCH_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
     AUTOPLACER autoplacer( this, aScreen );
     autoplacer.DoAutoplace( aAlgo );
 
-    if( aAlgo == AUTOPLACE_AUTO )
-        m_fieldsAutoplaced = AUTOPLACE_AUTO;
-    else if( aAlgo == AUTOPLACE_MANUAL )
-        m_fieldsAutoplaced = AUTOPLACE_MANUAL;
-    else if( aAlgo == AUTOPLACE_AUTOADDED )
-        /* leave m_fieldsAutoplaced as it is */;
+    switch( aAlgo )
+    {
+    case AUTOPLACE_AUTO:        m_fieldsAutoplaced = AUTOPLACE_AUTO;                    break;
+    case AUTOPLACE_MANUAL:      m_fieldsAutoplaced = AUTOPLACE_MANUAL;                  break;
+    case AUTOPLACE_AUTOADDED:   /* leave m_fieldsAutoplaced as it is */                 break;
+    default:                    wxFAIL_MSG( "Unknown autoplace algorithm" );            break;
+    }
 }
