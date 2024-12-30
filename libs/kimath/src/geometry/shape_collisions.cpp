@@ -651,6 +651,13 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aC
                                            aA.TypeName(),
                                            aB.TypeName() ) );
 
+    // If the arc radius is too large, it is effectively a line segment
+    if( aA.IsEffectiveLine() )
+    {
+        SHAPE_SEGMENT tmp( aA.GetP0(), aA.GetP1(), aA.GetWidth() );
+        return Collide( tmp, aB, aClearance, aActual, aLocation, aMTV );
+    }
+
     bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
     if( rv && aActual )
@@ -663,6 +670,13 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aC
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    // If the arc radius is too large, it is effectively a line segment
+    if( aA.IsEffectiveLine() )
+    {
+        SHAPE_SEGMENT tmp( aA.GetP0(), aA.GetP1(), aA.GetWidth() );
+        return Collide( aB, tmp, aClearance, aActual, aLocation, aMTV );
+    }
+
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
                                            aA.TypeName(),
                                            aB.TypeName() ) );

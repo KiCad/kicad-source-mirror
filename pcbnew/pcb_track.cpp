@@ -1982,7 +1982,12 @@ std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
     if( IsSolderMaskLayer( aLayer ) )
         width += 2 * GetSolderMaskExpansion();
 
-    return std::make_shared<SHAPE_ARC>( GetStart(), GetMid(), GetEnd(), width );
+    SHAPE_ARC arc( GetStart(), GetMid(), GetEnd(), width );
+
+    if( arc.IsEffectiveLine() )
+        return std::make_shared<SHAPE_SEGMENT>( GetStart(), GetEnd(), width );
+
+    return std::make_shared<SHAPE_ARC>( arc );
 }
 
 

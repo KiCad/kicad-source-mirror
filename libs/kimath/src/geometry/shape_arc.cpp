@@ -241,6 +241,15 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndCenter( const VECTOR2I& aStart, const
 }
 
 
+bool SHAPE_ARC::IsEffectiveLine() const
+{
+    SEG v1 = SEG( m_start, m_mid );
+    SEG v2 = SEG( m_mid, m_end );
+
+    return v1.ApproxCollinear( v2 );
+}
+
+
 bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
     VECTOR2I center = GetCenter();

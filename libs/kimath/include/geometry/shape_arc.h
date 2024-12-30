@@ -175,6 +175,8 @@ public:
         return true;
     }
 
+    bool IsEffectiveLine() const;
+
     void Move( const VECTOR2I& aVector ) override;
 
     /**
