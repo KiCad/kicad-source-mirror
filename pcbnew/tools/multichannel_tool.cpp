@@ -749,49 +749,112 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
     if( aOpts.m_copyOtherItems )
     {
         std::set<BOARD_ITEM*> sourceItems;
+        std::set<BOARD_ITEM*> targetItems;
 
         findOtherItemsInRuleArea( aRefArea->m_area, sourceItems );
+        findOtherItemsInRuleArea( aTargetArea->m_area, targetItems );
 
-        for( BOARD_ITEM* item : sourceItems )
+        for( BOARD_ITEM* item : targetItems )
         {
-            if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+            if( item->Type() == PCB_TEXT_T && item->GetParent()
+                && item->GetParent()->Type() == PCB_FOOTPRINT_T )
                 continue;
 
-            if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+            if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
 
-            // Groups that are fully-contained within the area are added themselves; copy their
-            // items as part of DeepClone rather than explicitly
-            if( item->GetParentGroup() && sourceItems.contains( item->GetParentGroup() )  )
+            // item already removed
+            if( aCommit->GetStatus( item ) != 0 )
                 continue;
 
-            BOARD_ITEM* copied;
-
-            if( item->Type() == PCB_GROUP_T )
+            if( item->Type() != PCB_ZONE_T )
             {
-                copied = static_cast<PCB_GROUP*>( item )->DeepClone();
+                if( aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                {
+                    aAffectedItems.insert( item );
+                    aCommit->Remove( item );
+                }
             }
             else
             {
-                copied = static_cast<BOARD_ITEM*>( item->Clone() );
+                ZONE* zone = static_cast<ZONE*>( item );
+
+                // Check all zone layers are included in the rule area
+                bool layerMismatch = false;
+                LSET zoneLayers = zone->GetLayerSet();
+
+                for( const PCB_LAYER_ID& layer : zoneLayers )
+                {
+                    if( !aTargetArea->m_area->GetLayerSet().Contains( layer ) )
+                        layerMismatch = true;
+                }
+
+                if( !layerMismatch )
+                {
+                    aAffectedItems.insert( zone );
+                    aCommit->Remove( zone );
+                }
+            }
+        }
+
+        for( BOARD_ITEM* item : sourceItems )
+        {
+            if( item->Type() == PCB_TEXT_T && item->GetParent()
+                && item->GetParent()->Type() == PCB_FOOTPRINT_T )
+                continue;
+
+            BOARD_ITEM* copied = nullptr;
+
+            if( item->Type() != PCB_ZONE_T )
+            {
+                if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                    continue;
+                if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                    continue;
+
+                if( item->Type() == PCB_GROUP_T )
+                {
+                    copied = static_cast<PCB_GROUP*>( item )->DeepClone();
+                }
+                else
+                {
+                    copied = static_cast<BOARD_ITEM*>( item->Clone() );
+                }
+            }
+            else
+            {
+                ZONE* zone = static_cast<ZONE*>( item );
+
+                // Check all zone layers are included in the rule area
+                bool layerMismatch = false;
+                LSET zoneLayers = zone->GetLayerSet();
+
+                for( const PCB_LAYER_ID& layer : zoneLayers )
+                {
+                    if( !aRefArea->m_area->GetLayerSet().Contains( layer )
+                        || !aTargetArea->m_area->GetLayerSet().Contains( layer ) )
+                    {
+                        layerMismatch = true;
+                    }
+                }
+
+                if( layerMismatch )
+                    continue;
+
+                ZONE* targetZone = static_cast<ZONE*>( item->Clone() );
+                fixupZoneNets( zone, targetZone, aMatches );
+
+                copied = targetZone;
             }
 
-            copied->ClearFlags();
-            copied->SetParentGroup( nullptr );
-            copied->Move( disp );
-            aGroupableItems.insert( copied );
-            aCommit->Add( copied );
-
-            getView()->Query( copied->GetBoundingBox(),
-                [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
-                {
-                    BOARD_ITEM* existingItem = static_cast<BOARD_ITEM*>( viewItem );
-
-                    if( existingItem && existingItem->Similarity( *copied ) == 1.0 )
-                        aCommit->Remove( existingItem );
-
-                    return true;
-                } );
+            if( copied )
+            {
+                copied->ClearFlags();
+                copied->SetParentGroup( nullptr );
+                copied->Move( disp );
+                aGroupableItems.insert( copied );
+                aCommit->Add( copied );
+            }
         }
     }
 
@@ -849,6 +912,42 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
     }
 
     return true;
+}
+
+
+/**
+ * @brief Attempts to modify the assigned net of a copied zone
+ *
+ */
+void MULTICHANNEL_TOOL::fixupZoneNets( ZONE* aRefZone, ZONE* aTargetZone,
+                                       TMATCH::COMPONENT_MATCHES& aComponentMatches )
+{
+    auto                                     connectivity = board()->GetConnectivity();
+    const std::vector<BOARD_CONNECTED_ITEM*> refZoneConnectedPads =
+            connectivity->GetNetItems( aRefZone->GetNetCode(), { PCB_PAD_T } );
+
+    for( const BOARD_CONNECTED_ITEM* refConItem : refZoneConnectedPads )
+    {
+        if( refConItem->Type() != PCB_PAD_T )
+            continue;
+
+        const PAD* refPad = static_cast<const PAD*>( refConItem );
+        FOOTPRINT* sourceFootprint = refPad->GetParentFootprint();
+
+        if( aComponentMatches.contains( sourceFootprint ) )
+        {
+            const FOOTPRINT*        targetFootprint = aComponentMatches[sourceFootprint];
+            std::vector<const PAD*> targetFpPads = targetFootprint->GetPads( refPad->GetNumber() );
+
+            if( !targetFpPads.empty() )
+            {
+                int targetNetCode = targetFpPads[0]->GetNet()->GetNetCode();
+                aTargetZone->SetNetCode( targetNetCode );
+
+                break;
+            }
+        }
+    }
 }
 
 
