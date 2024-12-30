@@ -108,8 +108,14 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const Clipper2Lib::Path64&          aPath,
     {
         Append( aPath[ii].x, aPath[ii].y );
 
-        m_shapes[ii].first = loadArc( aZValueBuffer[aPath[ii].z].m_FirstArcIdx );
-        m_shapes[ii].second = loadArc( aZValueBuffer[aPath[ii].z].m_SecondArcIdx );
+        // Add arc info (if exists)
+        int idx_z = aPath[ii].z;
+
+        if( idx_z < 0 || idx_z >= (int)aZValueBuffer.size() )
+            continue;
+
+        m_shapes[ii].first = loadArc( aZValueBuffer[idx_z].m_FirstArcIdx );
+        m_shapes[ii].second = loadArc( aZValueBuffer[idx_z].m_SecondArcIdx );
     }
 
     // Clipper shouldn't return duplicate contiguous points. if it did, these would be
