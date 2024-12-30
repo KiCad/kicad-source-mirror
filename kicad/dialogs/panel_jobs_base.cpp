@@ -1,11 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/std_bitmap_button.h"
+#include "widgets/wx_grid.h"
 
 #include "panel_jobs_base.h"
 
@@ -14,59 +15,73 @@
 PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : PANEL_NOTEBOOK_BASE( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizerMain;
-	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerUpper;
+	bSizerUpper = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	bSizer3->Add( m_staticText1, 0, wxALL, 5 );
+	wxStaticBoxSizer* sbJobs;
+	sbJobs = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Jobs") ), wxVERTICAL );
 
-	m_jobList = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL );
-	bSizer3->Add( m_jobList, 1, wxALL|wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	m_jobsGrid = new WX_GRID( sbJobs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+	// Grid
+	m_jobsGrid->CreateGrid( 5, 2 );
+	m_jobsGrid->EnableEditing( true );
+	m_jobsGrid->EnableGridLines( true );
+	m_jobsGrid->EnableDragGridSize( false );
+	m_jobsGrid->SetMargins( 0, 0 );
 
-	m_buttonAddJob = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer2->Add( m_buttonAddJob, 0, wxALIGN_CENTER|wxALL, 5 );
+	// Columns
+	m_jobsGrid->SetColSize( 0, 40 );
+	m_jobsGrid->SetColSize( 1, 260 );
+	m_jobsGrid->EnableDragColMove( false );
+	m_jobsGrid->EnableDragColSize( true );
+	m_jobsGrid->SetColLabelSize( 0 );
+	m_jobsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
-	m_buttonUp = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer2->Add( m_buttonUp, 0, wxALL, 5 );
+	// Rows
+	m_jobsGrid->EnableDragRowSize( true );
+	m_jobsGrid->SetRowLabelSize( 0 );
+	m_jobsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
-	m_buttonDown = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer2->Add( m_buttonDown, 0, wxALL, 5 );
+	// Label Appearance
 
+	// Cell Defaults
+	m_jobsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	sbJobs->Add( m_jobsGrid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 
-	bSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+	wxBoxSizer* bJobsButtons;
+	bJobsButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonSave = new wxButton( this, wxID_ANY, _("Save"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_buttonSave, 0, wxALIGN_CENTER|wxALL, 5 );
+	m_buttonAddJob = new STD_BITMAP_BUTTON( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bJobsButtons->Add( m_buttonAddJob, 0, wxALIGN_CENTER|wxTOP|wxBOTTOM, 5 );
 
+	m_buttonUp = new STD_BITMAP_BUTTON( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bJobsButtons->Add( m_buttonUp, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	bSizer3->Add( bSizer2, 0, wxEXPAND, 5 );
-
-
-	bSizerMain->Add( bSizer3, 2, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizer14;
-	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Outputs"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	bSizer14->Add( m_staticText4, 0, wxALL, 5 );
-
-	m_buttonOutputAdd = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer14->Add( m_buttonOutputAdd, 0, 0, 5 );
+	m_buttonDown = new STD_BITMAP_BUTTON( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bJobsButtons->Add( m_buttonDown, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizer4->Add( bSizer14, 0, wxEXPAND, 5 );
+	bJobsButtons->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_outputList = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_buttonDelete = new wxBitmapButton( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bJobsButtons->Add( m_buttonDelete, 0, wxALL, 5 );
+
+
+	bJobsButtons->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	sbJobs->Add( bJobsButtons, 0, wxEXPAND|wxRIGHT|wxLEFT, 3 );
+
+
+	bSizerUpper->Add( sbJobs, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticBoxSizer* sbOutputs;
+	sbOutputs = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Outputs") ), wxVERTICAL );
+
+	m_outputList = new wxScrolledWindow( sbOutputs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_RAISED|wxVSCROLL );
 	m_outputList->SetScrollRate( 5, 5 );
 	m_outputListSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -74,41 +89,66 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	m_outputList->SetSizer( m_outputListSizer );
 	m_outputList->Layout();
 	m_outputListSizer->Fit( m_outputList );
-	bSizer4->Add( m_outputList, 1, wxEXPAND | wxALL, 0 );
+	sbOutputs->Add( m_outputList, 1, wxEXPAND|wxALL, 0 );
 
-	m_buttonRunAllOutputs = new wxButton( this, wxID_ANY, _("Run All Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonRunAllOutputs->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	wxBoxSizer* bOutputButtons;
+	bOutputButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	bSizer4->Add( m_buttonRunAllOutputs, 0, wxALIGN_RIGHT|wxALL, 5 );
+	m_buttonOutputAdd = new STD_BITMAP_BUTTON( sbOutputs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bOutputButtons->Add( m_buttonOutputAdd, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 
-	bSizerMain->Add( bSizer4, 1, wxEXPAND, 5 );
+	sbOutputs->Add( bOutputButtons, 0, wxEXPAND, 5 );
+
+
+	bSizerUpper->Add( sbOutputs, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizerButtons->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_buttonSave = new wxButton( this, wxID_ANY, _("Save Jobset"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonSave, 0, wxALL, 5 );
+
+
+	bSizerButtons->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	m_buttonRunAllOutputs = new wxButton( this, wxID_ANY, _("Generate All Outputs"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonRunAllOutputs, 0, wxALL, 5 );
+
+
+	bSizerMain->Add( bSizerButtons, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
 
 	// Connect Events
-	m_jobList->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( PANEL_JOBS_BASE::OnJobListDoubleClicked ), NULL, this );
-	m_jobList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( PANEL_JOBS_BASE::OnJobListItemRightClick ), NULL, this );
+	m_jobsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_JOBS_BASE::OnSizeGrid ), NULL, this );
 	m_buttonAddJob->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnAddJobClick ), NULL, this );
 	m_buttonUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnJobButtonUp ), NULL, this );
 	m_buttonDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnJobButtonDown ), NULL, this );
-	m_buttonSave->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnSaveButtonClick ), NULL, this );
+	m_buttonDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnJobButtonDelete ), NULL, this );
 	m_buttonOutputAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnAddOutputClick ), NULL, this );
+	m_buttonSave->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnSaveButtonClick ), NULL, this );
 	m_buttonRunAllOutputs->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnRunAllJobsClick ), NULL, this );
 }
 
 PANEL_JOBS_BASE::~PANEL_JOBS_BASE()
 {
 	// Disconnect Events
-	m_jobList->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( PANEL_JOBS_BASE::OnJobListDoubleClicked ), NULL, this );
-	m_jobList->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( PANEL_JOBS_BASE::OnJobListItemRightClick ), NULL, this );
+	m_jobsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_JOBS_BASE::OnSizeGrid ), NULL, this );
 	m_buttonAddJob->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnAddJobClick ), NULL, this );
 	m_buttonUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnJobButtonUp ), NULL, this );
 	m_buttonDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnJobButtonDown ), NULL, this );
-	m_buttonSave->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnSaveButtonClick ), NULL, this );
+	m_buttonDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnJobButtonDelete ), NULL, this );
 	m_buttonOutputAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnAddOutputClick ), NULL, this );
+	m_buttonSave->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnSaveButtonClick ), NULL, this );
 	m_buttonRunAllOutputs->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnRunAllJobsClick ), NULL, this );
 
 }
@@ -136,16 +176,16 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	m_textOutputType->Wrap( -1 );
 	m_textOutputType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizer17->Add( m_textOutputType, 0, wxALL, 5 );
+	bSizer17->Add( m_textOutputType, 0, wxTOP, 8 );
 
 
-	bSizer14->Add( bSizer17, 1, wxEXPAND, 5 );
+	bSizer14->Add( bSizer17, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_statusBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer14->Add( m_statusBitmap, 0, wxALL, 5 );
 
 
-	bSizer12->Add( bSizer14, 1, wxEXPAND, 5 );
+	bSizer12->Add( bSizer14, 0, wxEXPAND, 5 );
 
 
 	bSizerMain->Add( bSizer12, 1, wxEXPAND, 5 );
@@ -154,7 +194,7 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
 
 	m_buttonOutputRun = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer13->Add( m_buttonOutputRun, 0, wxALL, 5 );
+	bSizer13->Add( m_buttonOutputRun, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_buttonOutputOptions = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer13->Add( m_buttonOutputOptions, 0, wxALL, 5 );

@@ -22,12 +22,26 @@
 
 #include "panel_jobs_base.h"
 #include <memory>
+#include <grid_tricks.h>
 
 class wxAuiNotebook;
 class JOBSET;
 class KICAD_MANAGER_FRAME;
+class PANEL_JOBS;
 class PANEL_JOB_OUTPUT;
 struct JOBSET_OUTPUT;
+
+class JOBS_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    explicit JOBS_GRID_TRICKS( PANEL_JOBS* aParent, WX_GRID* aGrid );
+
+    ~JOBS_GRID_TRICKS() override = default;
+
+protected:
+    PANEL_JOBS* m_parent;
+};
+
 
 class PANEL_JOBS : public PANEL_JOBS_BASE
 {
@@ -44,14 +58,18 @@ public:
     wxString GetFilePath() const;
     void     UpdateTitle();
 
+    JOBSET* GetJobsFile() { return m_jobsFile.get(); }
+
+    void OpenJobOptionsForListItem( size_t aItemIndex );
+
 protected:
+    virtual void OnSizeGrid( wxSizeEvent& aEvent ) override;
     virtual void OnAddJobClick( wxCommandEvent& aEvent ) override;
     virtual void OnAddOutputClick( wxCommandEvent& aEvent ) override;
-    virtual void OnJobListDoubleClicked( wxListEvent& aEvent ) override;
-    virtual void OnJobListItemRightClick( wxListEvent& event ) override;
     virtual void OnSaveButtonClick( wxCommandEvent& aEvent ) override;
     virtual void OnJobButtonUp( wxCommandEvent& aEvent ) override;
     virtual void OnJobButtonDown( wxCommandEvent& aEvent ) override;
+    virtual void OnJobButtonDelete( wxCommandEvent& aEvent ) override;
     virtual void OnRunAllJobsClick( wxCommandEvent& event ) override;
 
     bool GetCanClose() override;
@@ -60,9 +78,9 @@ private:
     void rebuildJobList();
     void buildOutputList();
     void addJobOutputPanel( JOBSET_OUTPUT* aOutput );
-    void onJobListMenu( wxCommandEvent& aEvent );
-    void openJobOptionsForListItem( size_t aItemIndex );
+    void adjustGridColumns();
 
+private:
     wxAuiNotebook*             m_parentBook;
     KICAD_MANAGER_FRAME*       m_frame;
     std::unique_ptr<JOBSET> m_jobsFile;

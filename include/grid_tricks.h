@@ -134,6 +134,8 @@ protected:
     std::function<void( wxCommandEvent& )> m_addHandler;
 
     std::bitset<GRIDTRICKS_MAX_COL>        m_tooltipEnabled;
+
+    bool                                   m_multiCellEditEnabled;
 };
 
 #endif  // _GRID_TRICKS_H_

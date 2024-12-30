@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,32 +11,36 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
+class WX_GRID;
 
 #include "dialogs/panel_notebook_base.h"
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/listctrl.h>
+#include <wx/string.h>
+#include <wx/font.h>
+#include <wx/grid.h>
+#include <wx/gdicmn.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
 #include <wx/statbmp.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/listbox.h>
 #include <wx/dialog.h>
 #include <wx/checkbox.h>
+#include <wx/listctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_JOBS_BASE
@@ -46,26 +50,25 @@ class PANEL_JOBS_BASE : public PANEL_NOTEBOOK_BASE
 	private:
 
 	protected:
-		wxStaticText* m_staticText1;
-		wxListCtrl* m_jobList;
-		wxBitmapButton* m_buttonAddJob;
-		wxBitmapButton* m_buttonUp;
-		wxBitmapButton* m_buttonDown;
-		wxButton* m_buttonSave;
-		wxStaticText* m_staticText4;
-		wxBitmapButton* m_buttonOutputAdd;
+		WX_GRID* m_jobsGrid;
+		STD_BITMAP_BUTTON* m_buttonAddJob;
+		STD_BITMAP_BUTTON* m_buttonUp;
+		STD_BITMAP_BUTTON* m_buttonDown;
+		wxBitmapButton* m_buttonDelete;
 		wxScrolledWindow* m_outputList;
 		wxBoxSizer* m_outputListSizer;
+		STD_BITMAP_BUTTON* m_buttonOutputAdd;
+		wxButton* m_buttonSave;
 		wxButton* m_buttonRunAllOutputs;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnJobListDoubleClicked( wxListEvent& event ) { event.Skip(); }
-		virtual void OnJobListItemRightClick( wxListEvent& event ) { event.Skip(); }
+		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddJobClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnJobButtonUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnJobButtonDown( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSaveButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnJobButtonDelete( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddOutputClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSaveButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRunAllJobsClick( wxCommandEvent& event ) { event.Skip(); }
 
 
