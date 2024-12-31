@@ -184,7 +184,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
                 bestSeg = &l;
             }
         }
-        
+
         if( bestCorner && bestSeg )
         {
             if( minCornerDist < minLeadSegDist )
@@ -296,7 +296,7 @@ bool clipToOtherLine( NODE* aNode, const LINE& aRef, LINE& aClipped )
         VECTOR2I pclip = sl_tmp.PointAlong( curL );
         int idx = sl_tmp.Split( pclip );
         sl_tmp = sl_tmp.Slice(0, idx);
-    
+
         l.SetShape( sl_tmp );
 
         //PNS_DBG( dbg, 3int, pclip, WHITE, 500000, wxT(""));
@@ -545,7 +545,7 @@ bool MULTI_DRAGGER::multidragMarkObstacles( std::vector<MDRAG_LINE>& aCompletedL
         m_lastNode = nullptr;
     }
 
-    // m_lastNode contains the temporary (post-modification) state. Think of it as 
+    // m_lastNode contains the temporary (post-modification) state. Think of it as
     // of an efficient undo buffer. We don't change the PCB directly, but a branch of it
     // created below. We can then commit its state (applying the modifications to the host board
     // by calling ROUTING::CommitRouting(m_lastNode) or simply discard it.
@@ -557,8 +557,8 @@ bool MULTI_DRAGGER::multidragMarkObstacles( std::vector<MDRAG_LINE>& aCompletedL
     {
         for( int l2 = l1 + 1; l2 < aCompletedLines.size(); l2++ )
         {
-            auto l1l = aCompletedLines[l1].draggedLine;
-            auto l2l = aCompletedLines[l2].draggedLine;
+            const auto& l1l = aCompletedLines[l1].draggedLine;
+            auto l2l        = aCompletedLines[l2].draggedLine;
 
             if( clipToOtherLine( m_lastNode, l1l, l2l ) )
             {
@@ -601,8 +601,8 @@ bool MULTI_DRAGGER::multidragShove( std::vector<MDRAG_LINE>& aCompletedLines )
 
     for( auto& l : m_mdragLines )
     {
-        PNS_DBG( Dbg(), Message, wxString::Format ( wxT("net %-30s: isCorner %d isStrict %d c-Dist %-10d l-dist %-10d leadIndex %-2d CisLast %d dragDist %-10d"), 
-            iface->GetNetName( l.draggedLine.Net() ), 
+        PNS_DBG( Dbg(), Message, wxString::Format ( wxT("net %-30s: isCorner %d isStrict %d c-Dist %-10d l-dist %-10d leadIndex %-2d CisLast %d dragDist %-10d"),
+            iface->GetNetName( l.draggedLine.Net() ),
             (int) l.isCorner?1:0,
             (int) l.isStrict?1:0,
             (int) l.cornerDistance,
@@ -612,7 +612,7 @@ bool MULTI_DRAGGER::multidragShove( std::vector<MDRAG_LINE>& aCompletedLines )
             (int) l.dragDist ) );
     }
 
-    
+
     m_shove->SetDefaultShovePolicy( SHOVE::SHP_SHOVE );
     m_shove->ClearHeads();
 
@@ -859,7 +859,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                     }
                 }
             }
-            
+
             if (l.isPrimaryLine)
             {
                 l.draggedLine = *primaryDragged;

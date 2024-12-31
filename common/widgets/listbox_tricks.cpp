@@ -215,7 +215,7 @@ void LISTBOX_TRICKS::OnListBoxRDown( wxMouseEvent& aEvent )
 {
     wxMenu menu;
 
-    const auto mstr = [&]( const MENU_ID& id )
+    const auto mstr = [&]( const MENU_ID& id ) -> const wxString&
     {
         return m_menuStrings[id];
     };

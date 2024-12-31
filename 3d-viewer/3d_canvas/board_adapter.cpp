@@ -639,8 +639,9 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
         const BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
         KIGFX::COLOR4D       bodyColor( 0, 0, 0, 0 );
 
+        // Can't do a const KIGFX::COLOR4D& return type here because there are temporary variables
         auto findColor =
-                []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet )
+                []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet ) -> const KIGFX::COLOR4D
                 {
                     if( aColorName.StartsWith( wxT( "#" ) ) )
                     {

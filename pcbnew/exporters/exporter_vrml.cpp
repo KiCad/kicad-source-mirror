@@ -131,8 +131,9 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aBoard ) :
 
     const BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
 
+    // Can't do a const KIGFX::COLOR4D& return type here because there are temporary variables
     auto findColor =
-            []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet )
+            []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet ) -> const KIGFX::COLOR4D
             {
                 if( aColorName.StartsWith( wxT( "#" ) ) )
                 {

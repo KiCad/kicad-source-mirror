@@ -2282,8 +2282,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
     auto applyCommonSettings = [&]( PCB_TUNING_PATTERN* aPattern )
     {
-        auto origTargetLength = aPattern->GetSettings().m_targetLength;
-        auto origTargetSkew = aPattern->GetSettings().m_targetSkew;
+        const auto& origTargetLength = aPattern->GetSettings().m_targetLength;
+        const auto& origTargetSkew   = aPattern->GetSettings().m_targetSkew;
 
         aPattern->GetSettings() = meanderSettings;
 
