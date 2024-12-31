@@ -115,6 +115,8 @@ set( KICOMMON_SRCS
 
     dialogs/dialog_migrate_settings.cpp
     dialogs/dialog_migrate_settings_base.cpp
+    dialogs/dialog_rc_job.cpp
+    dialogs/dialog_rc_job_base.cpp
 
     widgets/bitmap_button.cpp
     widgets/html_window.cpp
@@ -358,8 +360,6 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_page_settings.cpp
     dialogs/dialog_print_generic.cpp
     dialogs/dialog_print_generic_base.cpp
-    dialogs/dialog_rc_job.cpp
-    dialogs/dialog_rc_job_base.cpp
     dialogs/dialog_text_entry.cpp
     dialogs/dialog_unit_entry.cpp
     dialogs/dialog_unit_entry_base.cpp
