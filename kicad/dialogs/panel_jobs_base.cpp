@@ -172,7 +172,7 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxVERTICAL );
 
-	m_textOutputType = new wxStaticText( this, wxID_ANY, _("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputType = new wxStaticText( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputType->Wrap( -1 );
 	m_textOutputType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
@@ -406,7 +406,7 @@ DIALOG_OUTPUT_RUN_RESULTS_BASE::DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextOutputName = new wxStaticText( this, wxID_ANY, _("Placeholder"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOutputName = new wxStaticText( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOutputName->Wrap( -1 );
 	bMainSizer->Add( m_staticTextOutputName, 0, wxALL, 5 );
 
