@@ -48,6 +48,39 @@
 #include <view/view_controls.h>
 
 
+/**
+ * Move each item in the selection by the given vector.
+ *
+ * If any pads are part of a footprint, the whole footprint is moved.
+ */
+static void moveSelectionBy( const PCB_SELECTION& aSelection, const VECTOR2I& aMoveVec,
+                             BOARD_COMMIT& commit )
+{
+    for( EDA_ITEM* item : aSelection )
+    {
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+        commit.Modify( boardItem );
+        boardItem->Move( aMoveVec );
+    }
+}
+
+
+/**
+ * Position relative tools all use the same filter for selecting items.
+ */
+static void positionRelativeClientSelectionFilter( const VECTOR2I&     aPt,
+                                                   GENERAL_COLLECTOR&  aCollector,
+                                                   PCB_SELECTION_TOOL* sTool )
+{
+    sTool->FilterCollectorForHierarchy( aCollector, true );
+    sTool->FilterCollectorForMarkers( aCollector );
+    sTool->FilterCollectorForFreePads( aCollector, false );
+}
+
+
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
     PCB_TOOL_BASE( "pcbnew.PositionRelative" ),
     m_dialog( nullptr ),
@@ -77,11 +110,7 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-            {
-                sTool->FilterCollectorForHierarchy( aCollector, true );
-                sTool->FilterCollectorForMarkers( aCollector );
-            },
+            positionRelativeClientSelectionFilter,
             !m_isFootprintEditor /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
@@ -127,17 +156,12 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
 int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEvent )
 {
     // First, acquire the selection that we will be moving after
     // we have the new offset vector.
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-            {
-                sTool->FilterCollectorForHierarchy( aCollector, true );
-                sTool->FilterCollectorForMarkers( aCollector );
-            },
+            positionRelativeClientSelectionFilter,
             !m_isFootprintEditor /* prompt user regarding locked items */ );
 
     if( m_isFootprintEditor && !frame()->GetModel() )
@@ -194,24 +218,7 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
     const auto applyVector = [&]( const VECTOR2I& aMoveVec )
     {
         BOARD_COMMIT commit( frame() );
-
-        for( EDA_ITEM* item : selection )
-        {
-            if( !item->IsBOARD_ITEM() )
-                continue;
-
-            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-
-            // Don't move a pad by itself unless editing the footprint
-            if( boardItem->Type() == PCB_PAD_T
-                && !frame()->GetPcbNewSettings()->m_AllowFreePads
-                && frame()->IsType( FRAME_PCB_EDITOR ) )
-                continue;
-
-            commit.Modify( boardItem );
-            boardItem->Move( aMoveVec );
-        }
-
+        moveSelectionBy( selection, aMoveVec, commit );
         commit.Push( _( "Set Relative Position Interactively" ) );
     };
 
@@ -395,26 +402,7 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
                                                        const VECTOR2I& aTranslation )
 {
     VECTOR2I aggregateTranslation = aPosAnchor + aTranslation - GetSelectionAnchorPosition();
-
-    for( EDA_ITEM* item : m_selection )
-    {
-        if( !item->IsBOARD_ITEM() )
-            continue;
-
-        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-
-        // Don't move a pad by itself unless editing the footprint
-        if( boardItem->Type() == PCB_PAD_T
-            && !frame()->GetPcbNewSettings()->m_AllowFreePads
-            && frame()->IsType( FRAME_PCB_EDITOR ) )
-        {
-            boardItem = boardItem->GetParent();
-        }
-
-        m_commit->Modify( boardItem );
-        boardItem->Move( aggregateTranslation );
-    }
-
+    moveSelectionBy( m_selection, aggregateTranslation, *m_commit );
     m_commit->Push( _( "Position Relative" ) );
 
     if( m_selection.IsHover() )
