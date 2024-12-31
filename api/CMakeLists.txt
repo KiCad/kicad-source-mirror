@@ -52,6 +52,7 @@ add_custom_command( COMMAND ${CMAKE_COMMAND} -E make_directory ${KIAPI_CPP_BASEP
     COMMAND ${Protobuf_PROTOC_EXECUTABLE}
     --cpp_out=dllexport_decl=KIAPI_IMPORTEXPORT:${KIAPI_CPP_BASEPATH}
     --proto_path=${CMAKE_CURRENT_SOURCE_DIR}/proto
+    --experimental_allow_proto3_optional
     ${KIAPI_PROTO_SRCS}
     COMMENT "Generating API protobuf source files from proto definitions..."
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
