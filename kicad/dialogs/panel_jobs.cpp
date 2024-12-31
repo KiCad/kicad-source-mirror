@@ -277,7 +277,7 @@ public:
             }
             else
             {
-                m_textCtrlOutput->SetValue( _( "No output available" ) );
+                m_textCtrlOutput->SetValue( _( "No output messages" ) );
             }
         }
 
