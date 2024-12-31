@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -123,6 +123,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_frontFPPropertyPopups;
 		wxCheckBox* m_backFPPropertyPopups;
 		wxCheckBox* m_pdfMetadata;
+		wxCheckBox* m_pdfSingle;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;

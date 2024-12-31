@@ -140,6 +140,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_PDFFrontFPPropertyPopups   = true;
     m_PDFBackFPPropertyPopups    = true;
     m_PDFMetadata                = true;
+    m_PDFSingle                  = false;
 
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter

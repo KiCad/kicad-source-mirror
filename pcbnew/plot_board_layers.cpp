@@ -1205,7 +1205,9 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter, const PCB_PLOT_PARAMS
  */
 PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
                          const wxString& aLayerName, const wxString& aFullFileName,
-                         const wxString& aSheetName, const wxString& aSheetPath )
+                         const wxString& aSheetName, const wxString& aSheetPath,
+                         const wxString& aPageName, const wxString& aPageNumber,
+                         const int aPageCount )
 {
     wxCHECK( aBoard && aPlotOpts, nullptr );
 
@@ -1300,14 +1302,26 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
             AddGerberX2Attribute( plotter, aBoard, aLayer, not useX2mode );
         }
 
-        if( plotter->StartPlot( wxT( "1" ) ) )
+        bool startPlotSuccess = false;
+        if (plotter->GetPlotterType() == PLOT_FORMAT::PDF)
+        {
+            startPlotSuccess =
+                    static_cast<PDF_PLOTTER*>( plotter )->StartPlot( aPageNumber, aPageName );
+        }
+        else
+        {
+            startPlotSuccess = plotter->StartPlot( aPageName );
+        }
+
+
+        if( startPlotSuccess )
         {
             // Plot the frame reference if requested
             if( aPlotOpts->GetPlotFrameRef() )
             {
                 PlotDrawingSheet( plotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
-                                  aBoard->GetPageSettings(), &aBoard->GetProperties(), wxT( "1" ),
-                                  1, aSheetName, aSheetPath, aBoard->GetFileName(),
+                                  aBoard->GetPageSettings(), &aBoard->GetProperties(), aPageNumber,
+                                  aPageCount, aSheetName, aSheetPath, aBoard->GetFileName(),
                                   renderSettings->GetLayerColor( LAYER_DRAWINGSHEET ) );
 
                 if( aPlotOpts->GetMirror() )
@@ -1330,4 +1344,24 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
     delete plotter->RenderSettings();
     delete plotter;
     return nullptr;
+}
+
+void setupPlotterNewPDFPage( PLOTTER* aPlotter,
+                            BOARD* aBoard,
+                             const PCB_PLOT_PARAMS* aPlotOpts,
+                             const wxString& aSheetName, const wxString& aSheetPath,
+                             const wxString& aPageNumber, int aPageCount )
+{
+    // Plot the frame reference if requested
+    if( aPlotOpts->GetPlotFrameRef() )
+    {
+        PlotDrawingSheet( aPlotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
+                          aBoard->GetPageSettings(), &aBoard->GetProperties(), aPageNumber,
+                          aPageCount,
+                          aSheetName, aSheetPath, aBoard->GetFileName(),
+                          aPlotter->RenderSettings()->GetLayerColor( LAYER_DRAWINGSHEET ) );
+
+        if( aPlotOpts->GetMirror() )
+            initializePlotter( aPlotter, aBoard, aPlotOpts );
+    }
 }

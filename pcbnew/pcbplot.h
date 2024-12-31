@@ -157,9 +157,15 @@ private:
 
 PLOTTER* StartPlotBoard( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, int aLayer,
                          const wxString& aLayerName, const wxString& aFullFileName,
-                         const wxString& aSheetName, const wxString& aSheetPath );
+                         const wxString& aSheetName, const wxString& aSheetPath,
+                         const wxString& aPageName = wxT( "1" ),
+                         const wxString& aPageNumber = wxEmptyString,
+                         const int aPageCount = 1);
 
-/**
+void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts,
+                             const wxString& aSheetName, const wxString& aSheetPath,
+                             const wxString& aPageNumber, int aPageCount );
+        /**
  * Plot a sequence of board layer IDs.
  *
  * @param aBoard is the board to plot.
