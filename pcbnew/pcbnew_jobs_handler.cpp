@@ -775,7 +775,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_PAGE
+    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE
         && aPdfJob->GetOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -833,7 +833,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     int returnCode = CLI::EXIT_CODES::OK;
 
     // DEPRECATED CLI BEHAVIOR AS OF KICAD 9.0, TO BE REMOVED
-    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_PAGE )
+    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
     {
         PCB_LAYER_ID layer = UNDEFINED_LAYER;
         wxString     layerName;
@@ -922,7 +922,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
             wxString   msg;
             fn.SetName( brdFn.GetName() );
 
-            if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE )
+            if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE )
             {
                 fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
             }
@@ -932,10 +932,10 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
                 fn.SetName( fn.GetName() + wxString::Format( wxT( "_%s" ), layerName ) );
             }
 
-            if( ( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE
+            if( ( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE
                   && i == 0 )
                 || aPdfJob->m_pdfGenMode
-                           == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_PAGES )
+                           == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_FILE )
             {
                 // this will only be used by pdf
                 wxString pageNumber = wxString::Format( "%zu", pageNum );
@@ -970,7 +970,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
                 PlotInteractiveLayer( brd, plotter, plotOpts );
 
 
-                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE
+                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE
                     && i != aPdfJob->m_printMaskLayer.size() - 1 )
                 {
                     wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
@@ -986,7 +986,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
 
                 // last page
-                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_PAGES
+                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_FILE
                     || i == aPdfJob->m_printMaskLayer.size() - 1 )
                 {
                     plotter->EndPlot();
@@ -1005,7 +1005,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
                 returnCode = CLI::EXIT_CODES::ERR_UNKNOWN;
 
-                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE )
+                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE )
                 {
                     // bail so we dont continue pointlessly
                     break;

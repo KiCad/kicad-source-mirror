@@ -543,6 +543,16 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         pdfJob->m_pdfBackFPPropertyPopups = m_plotOpts.m_PDFBackFPPropertyPopups;
         pdfJob->m_pdfMetadata = m_plotOpts.m_PDFMetadata;
         pdfJob->m_pdfSingle = m_plotOpts.m_PDFSingle;
+
+        // we need to embed this for the cli deprecation fix
+        if( pdfJob->m_pdfSingle )
+        {
+            pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE;
+        }
+        else
+        {
+            pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_FILE;
+        }
     }
 
     m_job->m_useDrillOrigin = m_plotOpts.GetUseAuxOrigin();

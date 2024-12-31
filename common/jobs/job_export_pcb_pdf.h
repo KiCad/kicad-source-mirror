@@ -47,11 +47,11 @@ public:
     enum class GEN_MODE
     {
         ///< DEPRECATED MODE
-        ALL_LAYERS_ONE_PAGE,
+        ALL_LAYERS_ONE_FILE,
         ///< "Single Document" mode
-        ONE_LAYER_ONE_PAGE,
+        ONE_PAGE_PER_LAYER_ONE_FILE,
         ///< The most traditional output mode KiCad has had
-        ALL_LAYERS_SEPARATE_PAGES
+        ALL_LAYERS_SEPARATE_FILE
     };
 
     ///< uused by the cli, will be removed when the other behavior is deprecated

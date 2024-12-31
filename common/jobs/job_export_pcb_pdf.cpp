@@ -40,7 +40,7 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
         JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF, "pdf", false ),
         m_pdfFrontFPPropertyPopups( true ),
         m_pdfBackFPPropertyPopups( true ),
-        m_pdfMetadata( true ), m_pdfSingle( false ), m_pdfGenMode( GEN_MODE::ALL_LAYERS_ONE_PAGE )
+        m_pdfMetadata( true ), m_pdfSingle( false ), m_pdfGenMode( GEN_MODE::ALL_LAYERS_ONE_FILE )
 {
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_colorTheme, m_colorTheme ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "mirror", &m_mirror, m_mirror ) );
