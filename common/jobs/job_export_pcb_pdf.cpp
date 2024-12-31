@@ -31,9 +31,9 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PDF::DRILL_MARKS,
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PDF::GEN_MODE,
                               {
-                                { JOB_EXPORT_PCB_PDF::GEN_MODE::NO_DRILL_SHAPE, "none" },
-                                { JOB_EXPORT_PCB_PDF::GEN_MODE::SMALL_DRILL_SHAPE, "small" },
-                                { JOB_EXPORT_PCB_PDF::GEN_MODE::FULL_DRILL_SHAPE, "full" }
+                                { JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE, "all-layers-one-file" },
+                                { JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_FILE, "all-layers-separate-files" },
+                                { JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE, "one-page-per-layer-one-file" }
                               } )
 
 JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
