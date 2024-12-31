@@ -90,11 +90,10 @@ private:
     void rebuildJobList();
     void buildOutputList();
     void addJobOutputPanel( JOBSET_OUTPUT* aOutput );
-    void adjustGridColumns();
 
 private:
-    wxAuiNotebook*             m_parentBook;
-    KICAD_MANAGER_FRAME*       m_frame;
+    wxAuiNotebook*          m_parentBook;
+    KICAD_MANAGER_FRAME*    m_frame;
     std::unique_ptr<JOBSET> m_jobsFile;
 
     std::unordered_map<JOBSET_OUTPUT*, PANEL_JOB_OUTPUT*> m_outputPanelMap;

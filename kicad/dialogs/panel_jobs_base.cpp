@@ -36,7 +36,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	m_jobsGrid->SetColSize( 0, 40 );
 	m_jobsGrid->SetColSize( 1, 260 );
 	m_jobsGrid->EnableDragColMove( false );
-	m_jobsGrid->EnableDragColSize( true );
+	m_jobsGrid->EnableDragColSize( false );
 	m_jobsGrid->SetColLabelSize( 0 );
 	m_jobsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

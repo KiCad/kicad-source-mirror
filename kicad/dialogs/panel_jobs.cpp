@@ -610,7 +610,7 @@ void PANEL_JOBS::rebuildJobList()
     }
 
     // Ensure the outputs get their Run-ability status updated
-    for( auto& output : m_jobsFile->GetOutputs() )
+    for( JOBSET_OUTPUT& output : m_jobsFile->GetOutputs() )
     {
         if( m_outputPanelMap.contains( &output ) )
         {
@@ -965,18 +965,9 @@ void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
 }
 
 
-void PANEL_JOBS::adjustGridColumns()
-{
-    // Account for scroll bars
-    int width = KIPLATFORM::UI::GetUnobscuredSize( m_jobsGrid ).x;
-
-    m_jobsGrid->SetColSize( 1, width - m_jobsGrid->GetColSize( 0 ) );
-}
-
-
 void PANEL_JOBS::OnSizeGrid( wxSizeEvent& aEvent )
 {
-    adjustGridColumns();
+    m_jobsGrid->SetColSize( 1, m_jobsGrid->GetSize().x - m_jobsGrid->GetColSize( 0 ) );
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     aEvent.Skip();
