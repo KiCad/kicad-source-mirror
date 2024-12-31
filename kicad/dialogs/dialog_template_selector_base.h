@@ -49,7 +49,6 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_browseButton;
 		STD_BITMAP_BUTTON* m_reloadButton;
 		wxNotebook* m_notebook;
-		HTML_WINDOW* m_htmlWin;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -62,8 +61,9 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 
 
 	public:
+		HTML_WINDOW* m_htmlWin;
 
-		DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Template Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,499 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Template Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_TEMPLATE_SELECTOR_BASE();
 
@@ -77,13 +77,13 @@ class TEMPLATE_SELECTION_PANEL_BASE : public wxPanel
 	private:
 
 	protected:
-		wxBoxSizer* m_SizerChoice;
 
 	public:
 		wxBoxSizer* m_SizerBase;
 		wxScrolledWindow* m_scrolledWindow;
+		wxBoxSizer* m_SizerChoice;
 
-		TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 258,140 ), long style = wxTAB_TRAVERSAL|wxBORDER_NONE, const wxString& name = wxEmptyString );
+		TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL|wxBORDER_NONE, const wxString& name = wxEmptyString );
 
 		~TEMPLATE_SELECTION_PANEL_BASE();
 
@@ -102,7 +102,7 @@ class TEMPLATE_WIDGET_BASE : public wxPanel
 
 	public:
 
-		TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 108,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~TEMPLATE_WIDGET_BASE();
 

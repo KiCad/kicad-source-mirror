@@ -23,7 +23,7 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 
 	m_staticTextTpath = new wxStaticText( this, wxID_ANY, _("Folder:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTpath->Wrap( -1 );
-	bsizerTemplateSelector->Add( m_staticTextTpath, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bsizerTemplateSelector->Add( m_staticTextTpath, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_tcTemplatePath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	bsizerTemplateSelector->Add( m_tcTemplatePath, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 2 );
@@ -32,21 +32,19 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	bsizerTemplateSelector->Add( m_browseButton, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_reloadButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bsizerTemplateSelector->Add( m_reloadButton, 0, wxALL, 5 );
+	bsizerTemplateSelector->Add( m_reloadButton, 0, wxBOTTOM|wxTOP, 5 );
 
 
-	bmainSizer->Add( bsizerTemplateSelector, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bmainSizer->Add( bsizerTemplateSelector, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_notebook->SetMinSize( wxSize( -1,185 ) );
 
-
-	bmainSizer->Add( m_notebook, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bmainSizer->Add( m_notebook, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_htmlWin = new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
 	m_htmlWin->SetMinSize( wxSize( 400,100 ) );
 
-	bmainSizer->Add( m_htmlWin, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 12 );
+	bmainSizer->Add( m_htmlWin, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -60,6 +58,7 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 
 	this->SetSizer( bmainSizer );
 	this->Layout();
+	bmainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 
@@ -85,18 +84,19 @@ TEMPLATE_SELECTION_PANEL_BASE::TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, 
 	m_SizerBase = new wxBoxSizer( wxHORIZONTAL );
 
 	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxALWAYS_SHOW_SB|wxHSCROLL );
-	m_scrolledWindow->SetScrollRate( 100, 5 );
+	m_scrolledWindow->SetScrollRate( 25, 5 );
 	m_SizerChoice = new wxBoxSizer( wxHORIZONTAL );
 
 
 	m_scrolledWindow->SetSizer( m_SizerChoice );
 	m_scrolledWindow->Layout();
 	m_SizerChoice->Fit( m_scrolledWindow );
-	m_SizerBase->Add( m_scrolledWindow, 1, wxEXPAND, 5 );
+	m_SizerBase->Add( m_scrolledWindow, 1, wxBOTTOM|wxEXPAND, 10 );
 
 
 	this->SetSizer( m_SizerBase );
 	this->Layout();
+	m_SizerBase->Fit( this );
 }
 
 TEMPLATE_SELECTION_PANEL_BASE::~TEMPLATE_SELECTION_PANEL_BASE()
@@ -105,9 +105,6 @@ TEMPLATE_SELECTION_PANEL_BASE::~TEMPLATE_SELECTION_PANEL_BASE()
 
 TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	this->SetMinSize( wxSize( 108,-1 ) );
-	this->SetMaxSize( wxSize( 108,-1 ) );
-
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
@@ -123,6 +120,7 @@ TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, con
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 }
 
 TEMPLATE_WIDGET_BASE::~TEMPLATE_WIDGET_BASE()

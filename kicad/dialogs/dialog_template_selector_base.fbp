@@ -50,7 +50,7 @@
       <property name="minimum_size">-1,-1</property>
       <property name="name">DIALOG_TEMPLATE_SELECTOR_BASE</property>
       <property name="pos"></property>
-      <property name="size">600,499</property>
+      <property name="size">-1,-1</property>
       <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
       <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
       <property name="title">Project Template Selector</property>
@@ -66,7 +66,7 @@
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
+          <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -75,7 +75,7 @@
             <property name="permission">none</property>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
               <property name="proportion">0</property>
               <object class="wxStaticText" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -277,7 +277,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALL</property>
+              <property name="flag">wxBOTTOM|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -354,7 +354,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
+          <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
           <property name="proportion">0</property>
           <object class="wxNotebook" expanded="true">
             <property name="BottomDockable">1</property>
@@ -391,7 +391,7 @@
             <property name="maximum_size">-1,-1</property>
             <property name="min_size"></property>
             <property name="minimize_button">0</property>
-            <property name="minimum_size">-1,185</property>
+            <property name="minimum_size">-1,-1</property>
             <property name="moveable">1</property>
             <property name="name">m_notebook</property>
             <property name="pane_border">1</property>
@@ -414,8 +414,8 @@
           </object>
         </object>
         <object class="sizeritem" expanded="true">
-          <property name="border">12</property>
-          <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
+          <property name="border">5</property>
+          <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
           <property name="proportion">1</property>
           <object class="wxHtmlWindow" expanded="true">
             <property name="BottomDockable">1</property>
@@ -457,7 +457,7 @@
             <property name="pane_border">1</property>
             <property name="pane_position"></property>
             <property name="pane_size"></property>
-            <property name="permission">protected</property>
+            <property name="permission">public</property>
             <property name="pin_button">1</property>
             <property name="pos"></property>
             <property name="resize">Resizable</property>
@@ -510,7 +510,7 @@
       <property name="minimum_size">-1,-1</property>
       <property name="name">TEMPLATE_SELECTION_PANEL_BASE</property>
       <property name="pos"></property>
-      <property name="size">258,140</property>
+      <property name="size">-1,-1</property>
       <property name="subclass"></property>
       <property name="tooltip"></property>
       <property name="two_step_creation">0</property>
@@ -523,8 +523,8 @@
         <property name="orient">wxHORIZONTAL</property>
         <property name="permission">public</property>
         <object class="sizeritem" expanded="true">
-          <property name="border">5</property>
-          <property name="flag">wxEXPAND</property>
+          <property name="border">10</property>
+          <property name="flag">wxBOTTOM|wxEXPAND</property>
           <property name="proportion">1</property>
           <object class="wxScrolledWindow" expanded="true">
             <property name="BottomDockable">1</property>
@@ -570,7 +570,7 @@
             <property name="pin_button">1</property>
             <property name="pos"></property>
             <property name="resize">Resizable</property>
-            <property name="scroll_rate_x">100</property>
+            <property name="scroll_rate_x">25</property>
             <property name="scroll_rate_y">5</property>
             <property name="show">1</property>
             <property name="size"></property>
@@ -584,7 +584,7 @@
               <property name="minimum_size"></property>
               <property name="name">m_SizerChoice</property>
               <property name="orient">wxHORIZONTAL</property>
-              <property name="permission">protected</property>
+              <property name="permission">public</property>
             </object>
           </object>
         </object>
@@ -603,11 +603,11 @@
       <property name="font"></property>
       <property name="hidden">0</property>
       <property name="id">wxID_ANY</property>
-      <property name="maximum_size">108,-1</property>
-      <property name="minimum_size">108,-1</property>
+      <property name="maximum_size">-1,-1</property>
+      <property name="minimum_size">-1,-1</property>
       <property name="name">TEMPLATE_WIDGET_BASE</property>
       <property name="pos"></property>
-      <property name="size">108,-1</property>
+      <property name="size">-1,-1</property>
       <property name="subclass"></property>
       <property name="tooltip"></property>
       <property name="two_step_creation">0</property>
