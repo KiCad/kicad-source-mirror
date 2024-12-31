@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -256,7 +256,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_solderMaskMarginLabel = new wxStaticText( this, wxID_ANY, _("Expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_solderMaskMarginLabel->Wrap( -1 );
-	fgSizer2->Add( m_solderMaskMarginLabel, 0, wxALL, 5 );
+	fgSizer2->Add( m_solderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_solderMaskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_solderMaskMarginCtrl->SetToolTip( _("This is the local clearance between the shape and the solder mask opening.\nLeave blank to use the value defined in the Board Setup.") );
@@ -265,7 +265,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_solderMaskMarginUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_solderMaskMarginUnit->Wrap( -1 );
-	fgSizer2->Add( m_solderMaskMarginUnit, 0, wxALL, 5 );
+	fgSizer2->Add( m_solderMaskMarginUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	gbSizer2->Add( fgSizer2, wxGBPosition( 10, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
