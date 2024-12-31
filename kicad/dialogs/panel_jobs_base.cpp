@@ -348,7 +348,7 @@ DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWi
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_cbRecordOutput = new wxCheckBox( m_panel9, wxID_ANY, _("Record Output"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRecordOutput = new wxCheckBox( m_panel9, wxID_ANY, _("Record output messages"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_cbRecordOutput, 0, wxALL, 5 );
 
 	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, _("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
