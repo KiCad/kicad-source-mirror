@@ -182,7 +182,7 @@
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style">wxTAB_TRAVERSAL</property>
-            <object class="wxFlexGridSizer" expanded="true">
+            <object class="wxFlexGridSizer" expanded="false">
               <property name="cols">2</property>
               <property name="flexible_direction">wxBOTH</property>
               <property name="growablecols"></property>
@@ -199,7 +199,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND</property>
+          <property name="flag">wxBOTTOM|wxEXPAND</property>
           <property name="proportion">0</property>
           <object class="wxStdDialogButtonSizer" expanded="true">
             <property name="Apply">0</property>

@@ -105,7 +105,7 @@ public:
             wxString currPath = fn.GetFullPath();
 
             wxDirDialog dirDialog( this, _( "Select output directory" ), currPath,
-                                   wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+                                   wxDD_DEFAULT_STYLE );
 
             if( dirDialog.ShowModal() != wxID_OK )
                 return;

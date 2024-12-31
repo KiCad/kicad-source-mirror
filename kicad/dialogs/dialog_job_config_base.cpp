@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,7 +37,7 @@ DIALOG_JOB_CONFIG_BASE::DIALOG_JOB_CONFIG_BASE( wxWindow* parent, wxWindowID id,
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	m_mainSizer->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( m_sdbSizer1, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
 	this->SetSizer( m_mainSizer );

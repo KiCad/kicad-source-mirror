@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,7 +53,7 @@ class PANEL_JOBS_BASE : public PANEL_NOTEBOOK_BASE
 		STD_BITMAP_BUTTON* m_buttonAddJob;
 		STD_BITMAP_BUTTON* m_buttonUp;
 		STD_BITMAP_BUTTON* m_buttonDown;
-		wxBitmapButton* m_buttonDelete;
+		STD_BITMAP_BUTTON* m_buttonDelete;
 		wxScrolledWindow* m_outputList;
 		wxBoxSizer* m_outputListSizer;
 		STD_BITMAP_BUTTON* m_buttonOutputAdd;

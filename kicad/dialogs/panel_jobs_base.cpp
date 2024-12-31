@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,31 +49,31 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 
 	// Cell Defaults
 	m_jobsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	sbJobs->Add( m_jobsGrid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
+	sbJobs->Add( m_jobsGrid, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 3 );
 
 	wxBoxSizer* bJobsButtons;
 	bJobsButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonAddJob = new STD_BITMAP_BUTTON( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bJobsButtons->Add( m_buttonAddJob, 0, wxALIGN_CENTER|wxTOP|wxBOTTOM, 5 );
+	bJobsButtons->Add( m_buttonAddJob, 0, wxALIGN_CENTER|wxBOTTOM|wxTOP, 5 );
 
 	m_buttonUp = new STD_BITMAP_BUTTON( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bJobsButtons->Add( m_buttonUp, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bJobsButtons->Add( m_buttonUp, 0, wxALIGN_CENTER|wxBOTTOM|wxLEFT|wxTOP, 5 );
 
 	m_buttonDown = new STD_BITMAP_BUTTON( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bJobsButtons->Add( m_buttonDown, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bJobsButtons->Add( m_buttonDown, 0, wxALIGN_CENTER|wxBOTTOM|wxLEFT|wxTOP, 5 );
 
 
 	bJobsButtons->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_buttonDelete = new wxBitmapButton( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDelete = new STD_BITMAP_BUTTON( sbJobs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bJobsButtons->Add( m_buttonDelete, 0, wxALL, 5 );
 
 
 	bJobsButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	sbJobs->Add( bJobsButtons, 0, wxEXPAND|wxRIGHT|wxLEFT, 3 );
+	sbJobs->Add( bJobsButtons, 0, wxEXPAND|wxLEFT|wxRIGHT, 3 );
 
 
 	bSizerUpper->Add( sbJobs, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -95,10 +95,10 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	bOutputButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonOutputAdd = new STD_BITMAP_BUTTON( sbOutputs->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bOutputButtons->Add( m_buttonOutputAdd, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	bOutputButtons->Add( m_buttonOutputAdd, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP, 5 );
 
 
-	sbOutputs->Add( bOutputButtons, 0, wxEXPAND, 5 );
+	sbOutputs->Add( bOutputButtons, 0, wxEXPAND|wxLEFT, 3 );
 
 
 	bSizerUpper->Add( sbOutputs, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -297,7 +297,7 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizer1, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
