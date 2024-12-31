@@ -393,120 +393,37 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+        VECTOR2I newPos = grid.AlignGrid( item->GetPosition(), grid.GetItemGrid( item ) );
+        VECTOR2I delta = newPos - item->GetPosition();
+
+        if( delta != VECTOR2I( 0, 0 ) )
+            doMoveItem( item, delta );
+
+        if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( item ) )
         {
-            VECTOR2I newStart = grid.AlignGrid( shape->GetStart(), grid.GetItemGrid( shape ) );
-            VECTOR2I newEnd = grid.AlignGrid( shape->GetEnd(), grid.GetItemGrid( shape ) );
+            int length = pin->GetLength();
+            int pinGrid;
 
-            switch( shape->GetShape() )
+            if( pin->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
+                    || pin->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
             {
-            case SHAPE_T::SEGMENT:
-            case SHAPE_T::RECTANGLE:
-            case SHAPE_T::CIRCLE:
-            case SHAPE_T::ARC:
-                if( newStart == newEnd ||
-                    shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::ARC )
-                {
-                    // For arc and circle, never modify the shape. just snap its position
-                    // For others, don't collapse shape; just snap its position
-                    if( newStart != shape->GetStart() )
-                        doMoveItem( shape, newStart - shape->GetStart() );
-                }
-                else if( newStart != shape->GetStart() || newEnd != shape->GetEnd() )
-                {
-                    // Snap both ends
-                    commit.Modify( shape, m_frame->GetScreen() );
-
-                    shape->SetStart( newStart );
-                    shape->SetEnd( newEnd );
-
-                    updateItem( item, true );
-                }
-
-                break;
-
-            case SHAPE_T::POLY:
-                if( shape->GetPointCount() > 0 )
-                {
-                    std::vector<VECTOR2I> newPts;
-
-                    for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                        newPts.push_back( grid.AlignGrid( pt, grid.GetItemGrid( shape ) ) );
-
-                    bool collapsed = false;
-
-                    for( int ii = 0; ii < (int) newPts.size() - 1; ++ii )
-                    {
-                        if( newPts[ii] == newPts[ii + 1] )
-                            collapsed = true;
-                    }
-
-                    if( collapsed )
-                    {
-                        // Don't collapse shape; just snap its position
-                        if( newStart != shape->GetStart() )
-                            doMoveItem( shape, newStart - shape->GetStart() );
-                    }
-                    else
-                    {
-                        commit.Modify( shape, m_frame->GetScreen() );
-
-                        for( int ii = 0; ii < (int) newPts.size(); ++ii )
-                            shape->GetPolyShape().Outline( 0 ).SetPoint( ii, newPts[ii] );
-
-                        updateItem( item, true );
-                    }
-                }
-
-                break;
-
-            case SHAPE_T::BEZIER:
-                // Snapping bezier control points is unlikely to be useful.  Just snap its
-                // position.
-                if( newStart != shape->GetStart() )
-                    doMoveItem( shape, newStart - shape->GetStart() );
-
-                break;
-
-            case SHAPE_T::UNDEFINED:
-                wxASSERT_MSG( false, wxT( "Undefined shape in AlignElements" ) );
-                break;
+                pinGrid = KiROUND( grid.GetGridSize( grid.GetItemGrid( item ) ).x );
             }
-        }
-        else
-        {
-            VECTOR2I newPos = grid.AlignGrid( item->GetPosition(), grid.GetItemGrid( item ) );
-            VECTOR2I delta = newPos - item->GetPosition();
-
-            if( delta != VECTOR2I( 0, 0 ) )
-                doMoveItem( item, delta );
-
-            if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( item ) )
+            else
             {
-                int length = pin->GetLength();
-                int pinGrid;
-
-                if( pin->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
-                        || pin->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
-                {
-                    pinGrid = KiROUND( grid.GetGridSize( grid.GetItemGrid( item ) ).x );
-                }
-                else
-                {
-                    pinGrid = KiROUND( grid.GetGridSize( grid.GetItemGrid( item ) ).y );
-                }
-
-                int newLength = KiROUND( (double) length / pinGrid ) * pinGrid;
-
-                if( newLength > 0 )
-                    pin->SetLength( newLength );
+                pinGrid = KiROUND( grid.GetGridSize( grid.GetItemGrid( item ) ).y );
             }
+
+            int newLength = KiROUND( (double) length / pinGrid ) * pinGrid;
+
+            if( newLength > 0 )
+                pin->SetLength( newLength );
         }
     }
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
 
-    commit.Push( _( "Align" ) );
+    commit.Push( _( "Align Items to Grid" ) );
     return 0;
 }
 
