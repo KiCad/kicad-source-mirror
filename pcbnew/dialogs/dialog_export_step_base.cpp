@@ -140,7 +140,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	sbConductorOptions->Add( m_cbFuseShapes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbFillAllVias = new wxCheckBox( sbConductorOptions->GetStaticBox(), wxID_ANY, _("Fill all vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbFillAllVias->SetToolTip( _("Don't cut via holes in copper layers.") );
+	m_cbFillAllVias->SetToolTip( _("Don't cut via holes in conductor layers.") );
 
 	sbConductorOptions->Add( m_cbFillAllVias, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 

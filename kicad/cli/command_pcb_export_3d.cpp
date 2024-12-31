@@ -162,7 +162,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .flag();
 
         m_argParser.add_argument( ARG_FILL_ALL_VIAS )
-                .help( UTF8STDSTR( _( "Don't cut via holes in copper layers." ) ) )
+                .help( UTF8STDSTR( _( "Don't cut via holes in conductor layers." ) ) )
                 .flag();
 
         m_argParser.add_argument( ARG_MIN_DISTANCE )
