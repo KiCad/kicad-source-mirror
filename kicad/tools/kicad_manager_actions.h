@@ -37,6 +37,7 @@ public:
     static TOOL_ACTION newJobsetFile;
     static TOOL_ACTION openDemoProject;
     static TOOL_ACTION openProject;
+    static TOOL_ACTION openJobsetFile;
     static TOOL_ACTION closeProject;
     static TOOL_ACTION loadProject;
     static TOOL_ACTION viewDroppedGerbers;
