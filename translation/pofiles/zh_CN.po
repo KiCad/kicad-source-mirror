@@ -39,8 +39,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-29 16:00+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2024-12-31 22:17+0000\n"
+"Last-Translator: HalfSweet <HalfSweet@halfsweet.cn>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3427,7 +3427,7 @@ msgstr "页面配置..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job.cpp:41 common/tool/actions.cpp:91
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
@@ -3475,7 +3475,7 @@ msgstr "输出文件"
 
 #: common/dialogs/dialog_rc_job_base.cpp:72
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "出现异常时报告工作失败"
 
 #: common/dialogs/dialog_rc_job_base.cpp:78 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4672,7 +4672,7 @@ msgstr "复制嵌入参考"
 
 #: common/dialogs/panel_embedded_files.cpp:52
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "复制该嵌入文件的引用"
 
 #: common/dialogs/panel_embedded_files.cpp:190
 msgid "Select a file to embed"
@@ -5516,7 +5516,7 @@ msgstr "无法使用 OpenGL"
 
 #: common/draw_panel_gal.cpp:540
 msgid "Error switch GAL backend"
-msgstr ""
+msgstr "切换GAL后端错误"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3390
@@ -6658,7 +6658,7 @@ msgstr ""
 #: common/env_vars.cpp:134
 #, fuzzy, c-format
 msgid "Deprecated version of %s."
-msgstr "KICAD_SYMBOL_DIR 的弃用版本。"
+msgstr "%s 的弃用版本。"
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -7505,7 +7505,7 @@ msgstr "重新批注 PCB"
 
 #: common/jobs/job_pcb_render.cpp:81
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCB: 渲染"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform Schematic ERC"
@@ -26078,15 +26078,15 @@ msgstr "电源输出"
 
 #: kicad/dialogs/panel_jobs_base.cpp:366
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "忽略非零退出代码"
 
 #: kicad/dialogs/panel_jobs_base.cpp:492
 msgid "Halt output generation on error"
-msgstr ""
+msgstr "出错时停止输出"
 
 #: kicad/dialogs/panel_jobs_base.h:198
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "工作输出日志"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -33139,7 +33139,7 @@ msgstr "变量名不能为空。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:218
 msgid "The output file name conflicts with the selected compression format."
-msgstr ""
+msgstr "输出文件名与所选压缩格式冲突。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:342
 #, c-format
@@ -33202,15 +33202,15 @@ msgstr "测量标注格式"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "选择用于压缩 ODB++ 输出文件的格式"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:66
 msgid "Export ODB++"
@@ -35407,7 +35407,7 @@ msgstr "向外取整至网格倍数 (如果可能)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "这只适用于矩形外框。"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
@@ -35434,7 +35434,7 @@ msgstr "复制项目宽度 (如果可能)"
 msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
-msgstr ""
+msgstr "焊盘等项目无法使用，它们仍将使用下面的值。"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
 msgid "Layer default"
@@ -35442,7 +35442,7 @@ msgstr "默认层"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 msgid "Delete source items after outset"
-msgstr ""
+msgstr "转换后删除源项目"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
 msgid "Outset Items"
@@ -42560,9 +42560,8 @@ msgid "Footprint '%s' saved."
 msgstr "封装 '%s' 已保存。"
 
 #: pcbnew/load_select_footprint.cpp:374
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "保存封装库\n"
+msgstr "保存封装库"
 
 #: pcbnew/load_select_footprint.cpp:378
 #, c-format
@@ -45714,9 +45713,8 @@ msgid "Failed to load board\n"
 msgstr "电路板加载失败\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:356 pcbnew/pcbnew_jobs_handler.cpp:431
-#, fuzzy
 msgid "Unknown export format"
-msgstr "未知的网表格式。\n"
+msgstr "未知的网表格式。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:396
 #, c-format
