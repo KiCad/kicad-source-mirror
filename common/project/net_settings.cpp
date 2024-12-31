@@ -492,6 +492,7 @@ void NET_SETTINGS::SetNetclass( const wxString& netclassName, std::shared_ptr<NE
 void NET_SETTINGS::SetNetclasses( const std::map<wxString, std::shared_ptr<NETCLASS>>& netclasses )
 {
     m_netClasses = netclasses;
+    ClearAllCaches();
 }
 
 
@@ -511,6 +512,7 @@ void NET_SETTINGS::ClearNetclasses()
 {
     m_netClasses.clear();
     m_impicitNetClasses.clear();
+    ClearAllCaches();
 }
 
 

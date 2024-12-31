@@ -47,6 +47,7 @@ public:
     bool operator!=( const NET_SETTINGS& aOther ) const { return !operator==( aOther ); }
 
     /// @brief Sets the default netclass for the project
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void SetDefaultNetclass( std::shared_ptr<NETCLASS> netclass );
 
     /// @brief Gets the default netclass for the project
@@ -56,9 +57,11 @@ public:
     bool HasNetclass( const wxString& netclassName ) const;
 
     /// @brief Sets the given netclass
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void SetNetclass( const wxString& netclassName, std::shared_ptr<NETCLASS>& netclass );
 
     /// @brief Sets all netclass
+    /// Calling this method will reset the effective netclass calculation caches
     void SetNetclasses( const std::map<wxString, std::shared_ptr<NETCLASS>>& netclasses );
 
     /// @brief Gets all netclasses
@@ -70,22 +73,27 @@ public:
     const std::map<wxString, std::shared_ptr<NETCLASS>>& GetCompositeNetclasses() const;
 
     /// @brief Clears all netclasses
+    /// Calling this method will reset the effective netclass calculation caches
     void ClearNetclasses();
 
     /// @brief Gets all current net name to netclasses assignments
     const std::map<wxString, std::set<wxString>>& GetNetclassLabelAssignments() const;
 
     /// @brief Clears all net name to netclasses assignments
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void ClearNetclassLabelAssignments();
 
     /// @brief Clears a specific net name to netclass assignment
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void ClearNetclassLabelAssignment( const wxString& netName );
 
     /// @brief Sets a net name to netclasses assignment
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void SetNetclassLabelAssignment( const wxString&           netName,
                                      const std::set<wxString>& netclasses );
 
     /// @brief Apppends to a net name to netclasses assignment
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void AppendNetclassLabelAssignment( const wxString&           netName,
                                         const std::set<wxString>& netclasses );
 
@@ -93,9 +101,11 @@ public:
     bool HasNetclassLabelAssignment( const wxString& netName ) const;
 
     /// @brief Sets a netclass pattern assignment
+    /// Calling this method will reset the effective netclass calculation caches
     void SetNetclassPatternAssignment( const wxString& pattern, const wxString& netclass );
 
     /// @brief Sets all netclass pattern assignments
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void SetNetclassPatternAssignments(
             std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>&&
                     netclassPatterns );
@@ -110,16 +120,18 @@ public:
     /// @brief Clears effective netclass cache for the given net
     void ClearCacheForNet( const wxString& netName );
 
-    // @brief Clears the effective netclass cache for all nets
+    /// @brief Clears the effective netclass cache for all nets
     void ClearAllCaches();
 
     /// @brief Sets a net to color assignment
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void SetNetColorAssignment( const wxString& netName, const KIGFX::COLOR4D& color );
 
     /// @brief Gets all net name to color assignments
     const std::map<wxString, KIGFX::COLOR4D>& GetNetColorAssignments() const;
 
     /// @brief Clears all net name to color assignments
+    /// Calling user is responsible for resetting the effective netclass calculation caches
     void ClearNetColorAssignments();
 
     /// @brief Determines if an effective netclass for the given net name has been cached
@@ -134,8 +146,8 @@ public:
     std::shared_ptr<NETCLASS> GetEffectiveNetClass( const wxString& aNetName );
 
     /// @brief Recomputes the internal values of all aggregate effective netclasses
-    // Called when a value of a user-defined netclass changes, but the whole netclass list is not
-    // being recomputed.
+    /// Called when a value of a user-defined netclass changes, but the whole netclass list is not
+    /// being recomputed.
     void RecomputeEffectiveNetclasses();
 
     /**
