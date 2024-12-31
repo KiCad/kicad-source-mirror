@@ -87,6 +87,9 @@ private:
 
     HANDLER_RESULT<NetsResponse> handleGetNets( const HANDLER_CONTEXT<GetNets>& aCtx );
 
+    HANDLER_RESULT<NetClassForNetsResponse> handleGetNetClassForNets(
+            const HANDLER_CONTEXT<GetNetClassForNets>& aCtx );
+
     HANDLER_RESULT<Empty> handleRefillZones( const HANDLER_CONTEXT<RefillZones>& aCtx );
 
     HANDLER_RESULT<commands::SavedDocumentResponse> handleSaveDocumentToString(

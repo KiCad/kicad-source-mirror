@@ -76,6 +76,8 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
 
     registerHandler<InteractiveMoveItems, Empty>( &API_HANDLER_PCB::handleInteractiveMoveItems );
     registerHandler<GetNets, NetsResponse>( &API_HANDLER_PCB::handleGetNets );
+    registerHandler<GetNetClassForNets, NetClassForNetsResponse>(
+            &API_HANDLER_PCB::handleGetNetClassForNets );
     registerHandler<RefillZones, Empty>( &API_HANDLER_PCB::handleRefillZones );
 
     registerHandler<SaveDocumentToString, SavedDocumentResponse>(
@@ -824,6 +826,31 @@ HANDLER_RESULT<NetsResponse> API_HANDLER_PCB::handleGetNets( const HANDLER_CONTE
         board::types::Net* netProto = response.add_nets();
         netProto->set_name( net->GetNetname() );
         netProto->mutable_code()->set_value( net->GetNetCode() );
+    }
+
+    return response;
+}
+
+
+HANDLER_RESULT<NetClassForNetsResponse> API_HANDLER_PCB::handleGetNetClassForNets(
+            const HANDLER_CONTEXT<GetNetClassForNets>& aCtx )
+{
+    NetClassForNetsResponse response;
+
+    BOARD* board = frame()->GetBoard();
+    NETINFO_LIST nets = board->GetNetInfo();
+    google::protobuf::Any any;
+
+    for( const board::types::Net& net : aCtx.Request.net() )
+    {
+        NETINFO_ITEM* netInfo = nets.GetNetItem( wxString::FromUTF8( net.name() ) );
+
+        if( !netInfo )
+            continue;
+
+        netInfo->GetNetClass()->Serialize( any );
+        auto [pair, rc] = response.mutable_classes()->insert( { net.name(), {} } );
+        any.UnpackTo( &pair->second );
     }
 
     return response;

@@ -24,6 +24,7 @@ package kiapi.board.commands;
 
 import "common/types/base_types.proto";
 import "common/types/enums.proto";
+import "common/types/project_settings.proto";
 import "board/board.proto";
 import "board/board_types.proto";
 
@@ -102,6 +103,22 @@ message GetItemsByNetClass
 
   // A list of net class names to filter items by
   repeated string net_classes = 3;
+}
+
+// A net may be part of multiple classes that have a priority ordering, which will result in a
+// composite "effective" netclass containing the merged/overridden properties of all the constituent
+// netclasses it contains.  This message retrieves this effective netclass for a net or list of
+// nets.
+// Returns NetClassForNetsResponse
+message GetNetClassForNets
+{
+  repeated kiapi.board.types.Net net = 1;
+}
+
+message NetClassForNetsResponse
+{
+  // Map of net name to netclass info
+  map<string, kiapi.common.project.NetClass> classes = 1;
 }
 
 /*

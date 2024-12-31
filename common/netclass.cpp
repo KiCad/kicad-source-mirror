@@ -137,6 +137,11 @@ void NETCLASS::Serialize( google::protobuf::Any &aContainer ) const
     nc.set_name( m_Name.ToUTF8() );
     nc.set_priority( m_Priority );
 
+    nc.set_type( m_constituents.empty() ? project::NCT_EXPLICIT : project::NCT_IMPLICIT );
+
+    for( NETCLASS* member : m_constituents )
+        nc.add_constituents( member->GetName() );
+
     project::NetClassBoardSettings* board = nc.mutable_board();
 
     if( m_Clearance )
@@ -203,6 +208,12 @@ bool NETCLASS::Deserialize( const google::protobuf::Any &aContainer )
 
     m_Name = wxString::FromUTF8( nc.name() );
     m_Priority = nc.priority();
+
+    // We don't allow creating implicit classes directly
+    if( nc.type() == project::NCT_IMPLICIT )
+        return false;
+
+    SetConstituentNetclasses( {} );
 
     if( nc.board().has_clearance() )
         m_Clearance = nc.board().clearance().value_nm();
