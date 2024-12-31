@@ -34,7 +34,7 @@ class WX_GRID;
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
-#include <wx/listbox.h>
+#include <wx/checklst.h>
 #include <wx/dialog.h>
 #include <wx/checkbox.h>
 #include <wx/listctrl.h>
@@ -116,8 +116,6 @@ class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticText9;
-		wxPanel* m_panel9;
 		wxStaticText* m_textArchiveDesc;
 		wxTextCtrl* m_textCtrlDescription;
 		wxStaticText* m_textArchiveFormat;
@@ -126,7 +124,7 @@ class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlOutputPath;
 		STD_BITMAP_BUTTON* m_buttonOutputPath;
 		wxStaticText* m_staticText10;
-		wxListBox* m_listBoxOnly;
+		wxCheckListBox* m_includeJobs;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1Save;
 		wxButton* m_sdbSizer1Cancel;
@@ -199,33 +197,6 @@ class DIALOG_OUTPUT_RUN_RESULTS_BASE : public DIALOG_SHIM
 		DIALOG_OUTPUT_RUN_RESULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Job Output Run Log"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_OUTPUT_RUN_RESULTS_BASE();
-
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_RC_JOB_BASE
-///////////////////////////////////////////////////////////////////////////////
-class DIALOG_RC_JOB_BASE : public DIALOG_SHIM
-{
-	private:
-
-	protected:
-		wxStaticText* m_staticText9;
-		wxPanel* m_panel9;
-		wxStaticText* m_textOutputPath;
-		wxTextCtrl* m_textCtrlOutputPath;
-		wxStaticText* m_staticText18;
-		wxChoice* m_choiceFormat;
-		wxCheckBox* m_cbHaltOutput;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1Save;
-		wxButton* m_sdbSizer1Cancel;
-
-	public:
-
-		DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-
-		~DIALOG_RC_JOB_BASE();
 
 };
 

@@ -21,7 +21,7 @@
 #include <dialogs/dialog_drc_job_config.h>
 
 DIALOG_DRC_JOB_CONFIG::DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJob ) :
-        DIALOG_RC_JOB( parent, aJob, _( "DRC Job Configuration" )),
+        DIALOG_RC_JOB( parent, aJob, _( "DRC Job Settings" ) ),
         m_drcJob( aJob )
 {
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,29 +20,24 @@
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
-#include "kicommon.h"
-
 ///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_RC_JOB_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class KICOMMON_API DIALOG_RC_JOB_BASE : public DIALOG_SHIM
+class DIALOG_RC_JOB_BASE : public DIALOG_SHIM
 {
 	private:
 
 	protected:
-		wxStaticText* m_staticText9;
-		wxPanel* m_panel9;
 		wxStaticText* m_staticText18;
 		wxChoice* m_choiceFormat;
 		wxStaticText* m_staticText10;
-		wxPanel* m_panel6;
 		wxCheckBox* m_cbViolationErrors;
 		wxCheckBox* m_cbViolationWarnings;
 		wxStaticText* m_textOutputPath;
@@ -60,7 +55,7 @@ class KICOMMON_API DIALOG_RC_JOB_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_RC_JOB_BASE();
 

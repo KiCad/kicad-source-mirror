@@ -140,15 +140,18 @@ public:
         }
 
         wxArrayInt selectedItems;
-        m_listBoxOnly->GetSelections( selectedItems );
+        m_includeJobs->GetCheckedItems( selectedItems );
 
         // Update the only job map
         m_output->m_only.clear();
 
-        for( int i : selectedItems )
+        if( selectedItems.size() < m_includeJobs->GetCount() )
         {
-            if( m_onlyMap.contains( i ) )
-                m_output->m_only.emplace_back( m_onlyMap[i] );
+            for( int i : selectedItems )
+            {
+                if( m_onlyMap.contains( i ) )
+                    m_output->m_only.emplace_back( m_onlyMap[i] );
+            }
         }
 
         m_output->m_outputHandler->SetOutputPath( outputPath );
@@ -169,14 +172,14 @@ public:
 
     bool TransferDataToWindow() override
     {
-        wxArrayString arrayStr;
-        std::vector<int>    selectedList;
+        wxArrayString    arrayStr;
+        std::vector<int> selectedList;
 
-        std::vector<JOBSET_JOB> jobs = m_jobsFile->GetJobs();
-        int                        i = 0;
-        for( JOBSET_JOB& job : jobs )
+        for( JOBSET_JOB& job : m_jobsFile->GetJobs() )
         {
-            arrayStr.Add( job.GetDescription() );
+            arrayStr.Add( wxString::Format( wxT( "%d.  %s" ),
+                                            (int) arrayStr.size() + 1,
+                                            job.GetDescription() ) );
 
             auto it = std::find_if( m_output->m_only.begin(), m_output->m_only.end(),
                                     [&]( const wxString& only )
@@ -188,18 +191,25 @@ public:
                                     } );
 
             if( it != m_output->m_only.end() )
-                selectedList.emplace_back( i );
+                selectedList.emplace_back( arrayStr.size() - 1 );
 
-            m_onlyMap.emplace( i, job.m_id );
-            i++;
+            m_onlyMap.emplace( arrayStr.size() - 1, job.m_id );
         }
 
         if( arrayStr.size() != 0 )
         {
-            m_listBoxOnly->InsertItems( arrayStr, 0 );
+            m_includeJobs->InsertItems( arrayStr, 0 );
 
-            for( int idx : selectedList )
-                m_listBoxOnly->SetSelection( idx );
+            if( selectedList.size() )
+            {
+                for( int idx : selectedList )
+                    m_includeJobs->Check( idx );
+            }
+            else
+            {
+                for( size_t idx = 0; idx < m_includeJobs->GetCount(); ++idx )
+                    m_includeJobs->Check( idx );
+            }
         }
 
         m_choiceArchiveformat->AppendString( _( "Zip" ) );

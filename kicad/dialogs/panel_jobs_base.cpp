@@ -229,66 +229,59 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	m_staticText9->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
-	bSizerMain->Add( m_staticText9, 0, wxALL, 5 );
-
-	m_panel9 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 4, 2, 5, 5 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->AddGrowableRow( 3 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_textArchiveDesc = new wxStaticText( m_panel9, wxID_ANY, _("Description"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textArchiveDesc = new wxStaticText( this, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textArchiveDesc->Wrap( -1 );
-	fgSizer1->Add( m_textArchiveDesc, 0, wxALL, 5 );
+	fgSizer1->Add( m_textArchiveDesc, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textCtrlDescription = new wxTextCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textCtrlDescription, 0, wxALL|wxEXPAND, 5 );
+	m_textCtrlDescription = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_textCtrlDescription, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textArchiveFormat = new wxStaticText( m_panel9, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textArchiveFormat = new wxStaticText( this, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textArchiveFormat->Wrap( -1 );
-	fgSizer1->Add( m_textArchiveFormat, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer1->Add( m_textArchiveFormat, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxArrayString m_choiceArchiveformatChoices;
-	m_choiceArchiveformat = new wxChoice( m_panel9, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceArchiveformatChoices, 0 );
+	m_choiceArchiveformat = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceArchiveformatChoices, 0 );
 	m_choiceArchiveformat->SetSelection( 0 );
-	fgSizer1->Add( m_choiceArchiveformat, 0, wxALL, 5 );
+	fgSizer1->Add( m_choiceArchiveformat, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, _("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Output path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputPath->Wrap( -1 );
-	fgSizer1->Add( m_textOutputPath, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer1->Add( m_textOutputPath, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer16;
 	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_textCtrlOutputPath = new wxTextCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlOutputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
 
-	bSizer16->Add( m_textCtrlOutputPath, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer16->Add( m_textCtrlOutputPath, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_buttonOutputPath = new STD_BITMAP_BUTTON( m_panel9, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer16->Add( m_buttonOutputPath, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_buttonOutputPath = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer16->Add( m_buttonOutputPath, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizer1->Add( bSizer16, 1, wxEXPAND, 5 );
+	fgSizer1->Add( bSizer16, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticText10 = new wxStaticText( m_panel9, wxID_ANY, _("Only Jobs"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( this, wxID_ANY, _("Include jobs:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
-	fgSizer1->Add( m_staticText10, 0, wxALL, 5 );
+	fgSizer1->Add( m_staticText10, 0, wxTOP, 5 );
 
-	m_listBoxOnly = new wxListBox( m_panel9, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_ALWAYS_SB|wxLB_MULTIPLE );
-	m_listBoxOnly->SetMinSize( wxSize( 300,200 ) );
+	wxArrayString m_includeJobsChoices;
+	m_includeJobs = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_includeJobsChoices, 0 );
+	m_includeJobs->SetMinSize( wxSize( 300,200 ) );
 
-	fgSizer1->Add( m_listBoxOnly, 0, wxALL, 5 );
+	fgSizer1->Add( m_includeJobs, 1, wxEXPAND, 5 );
 
 
-	m_panel9->SetSizer( fgSizer1 );
-	m_panel9->Layout();
-	fgSizer1->Fit( m_panel9 );
-	bSizerMain->Add( m_panel9, 1, wxEXPAND | wxALL, 5 );
+	bSizerMain->Add( fgSizer1, 1, wxEXPAND|wxALL, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
@@ -447,74 +440,4 @@ DIALOG_OUTPUT_RUN_RESULTS_BASE::~DIALOG_OUTPUT_RUN_RESULTS_BASE()
 	m_jobList->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_OUTPUT_RUN_RESULTS_BASE::OnJobListItemSelected ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OUTPUT_RUN_RESULTS_BASE::OnButtonOk ), NULL, this );
 
-}
-
-DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
-{
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-
-	wxBoxSizer* bSizerMain;
-	bSizerMain = new wxBoxSizer( wxVERTICAL );
-
-	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	m_staticText9->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
-	bSizerMain->Add( m_staticText9, 0, wxALL, 5 );
-
-	m_panel9 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, _("Output File"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textOutputPath->Wrap( -1 );
-	fgSizer1->Add( m_textOutputPath, 0, wxALL, 5 );
-
-	m_textCtrlOutputPath = new wxTextCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
-
-	fgSizer1->Add( m_textCtrlOutputPath, 0, wxALL, 5 );
-
-	m_staticText18 = new wxStaticText( m_panel9, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText18->Wrap( -1 );
-	fgSizer1->Add( m_staticText18, 0, wxALL, 5 );
-
-	wxArrayString m_choiceFormatChoices;
-	m_choiceFormat = new wxChoice( m_panel9, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceFormatChoices, 0 );
-	m_choiceFormat->SetSelection( 0 );
-	fgSizer1->Add( m_choiceFormat, 0, wxALL, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbHaltOutput = new wxCheckBox( m_panel9, wxID_ANY, _("Halt output generation on error"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_cbHaltOutput, 1, wxALL, 5 );
-
-
-	m_panel9->SetSizer( fgSizer1 );
-	m_panel9->Layout();
-	fgSizer1->Fit( m_panel9 );
-	bSizerMain->Add( m_panel9, 1, wxEXPAND | wxALL, 5 );
-
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
-	m_sdbSizer1->AddButton( m_sdbSizer1Save );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
-
-	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
-
-
-	this->SetSizer( bSizerMain );
-	this->Layout();
-	bSizerMain->Fit( this );
-
-	this->Centre( wxBOTH );
-}
-
-DIALOG_RC_JOB_BASE::~DIALOG_RC_JOB_BASE()
-{
 }

@@ -74,7 +74,7 @@ void DIALOG_RC_JOB::OnFormatChoice( wxCommandEvent& event )
         switch( selectedFormat )
         {
         case JOB_RC::OUTPUT_FORMAT::REPORT: fn.SetExt( FILEEXT::ReportFileExtension ); break;
-        case JOB_RC::OUTPUT_FORMAT::JSON: fn.SetExt( FILEEXT::JsonFileExtension ); break;
+        case JOB_RC::OUTPUT_FORMAT::JSON:   fn.SetExt( FILEEXT::JsonFileExtension );   break;
         }
 
         m_textCtrlOutputPath->SetValue( fn.GetFullPath() );

@@ -212,7 +212,7 @@ set( EESCHEMA_SIM_SRCS
 
     sim/sim_library.cpp
     sim/sim_library_spice.cpp
-        sim/sim_library_ibis.cpp
+    sim/sim_library_ibis.cpp
     sim/sim_lib_mgr.cpp
 
     sim/sim_model_serializer.cpp
@@ -220,7 +220,7 @@ set( EESCHEMA_SIM_SRCS
     sim/sim_model_behavioral.cpp
     sim/sim_model_ideal.cpp
     sim/sim_model_l_mutual.cpp
-        sim/sim_model_ibis.cpp
+    sim/sim_model_ibis.cpp
     sim/sim_model_ngspice.cpp
     sim/sim_model_ngspice_data_bjt.cpp
     sim/sim_model_ngspice_data_bsim1.cpp
