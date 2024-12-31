@@ -63,6 +63,7 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
             "front_fp_property_popups", &m_pdfFrontFPPropertyPopups, m_pdfFrontFPPropertyPopups ) );
     m_params.emplace_back( new JOB_PARAM<bool>(
             "back_fp_property_popups", &m_pdfBackFPPropertyPopups, m_pdfBackFPPropertyPopups ) );
+    m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "pdf_gen_mode", &m_pdfGenMode, m_pdfGenMode ) );
 }
 
 
