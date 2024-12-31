@@ -555,7 +555,7 @@ void BOARD::RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFuncti
     }
     catch( std::bad_function_call& )
     {
-        wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnDescendants" ) );
+        wxFAIL_MSG( wxT( "Error running BOARD::RunOnDescendants" ) );
     }
 }
 
