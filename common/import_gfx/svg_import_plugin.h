@@ -76,15 +76,15 @@ private:
     void DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath,
                    const IMPORTED_STROKE& aStroke, bool aFilled, const COLOR4D& aFillColor );
 
-    void DrawCubicBezierPath( const float* aPoints, int aNumPoints,
-                              std::vector<VECTOR2D>& aGeneratedPoints );
-
-    void DrawCubicBezierCurve( const float* aPoints, std::vector<VECTOR2D>& aGeneratedPoints );
-
     void DrawPolygon( const std::vector<VECTOR2D>& aPoints, const IMPORTED_STROKE& aStroke,
                       bool aFilled, const COLOR4D& aFillColor );
 
     void DrawLineSegments( const std::vector<VECTOR2D>& aPoints, const IMPORTED_STROKE& aStroke );
+
+    /**
+     * Draw a path made up of cubic Bezier curves, adding them as real bezier curves.
+     */
+    void DrawSplinePath( const float* aPoints, int aNumPoints, const IMPORTED_STROKE& aStroke );
 
     struct NSVGimage* m_parsedImage;
 

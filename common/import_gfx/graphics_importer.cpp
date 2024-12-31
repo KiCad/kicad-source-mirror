@@ -24,9 +24,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eda_item.h>
 #include "graphics_importer.h"
+
+#include <eda_item.h>
+#include <eda_shape.h>
+
 #include "graphics_import_plugin.h"
+
 #include <wx/log.h>
 
 GRAPHICS_IMPORTER::GRAPHICS_IMPORTER()
@@ -95,4 +99,49 @@ bool GRAPHICS_IMPORTER::Import( const VECTOR2D& aScale )
 void GRAPHICS_IMPORTER::NewShape( POLY_FILL_RULE aFillRule )
 {
     m_shapeFillRules.push_back( aFillRule );
+}
+
+
+void GRAPHICS_IMPORTER::addItem( std::unique_ptr<EDA_ITEM> aItem )
+{
+    m_items.emplace_back( std::move( aItem ) );
+}
+
+
+bool GRAPHICS_IMPORTER::setupSplineOrLine( EDA_SHAPE& aSpline, int aAccuracy )
+{
+    aSpline.SetShape( SHAPE_T::BEZIER );
+
+    bool degenerate = false;
+
+    SEG s_e{ aSpline.GetStart(), aSpline.GetEnd() };
+    SEG s_c1{ aSpline.GetStart(), aSpline.GetBezierC1() };
+    SEG e_c2{ aSpline.GetEnd(), aSpline.GetBezierC2() };
+
+    if( s_e.ApproxCollinear( s_c1 ) && s_e.ApproxCollinear( e_c2 ) )
+        degenerate = true;
+
+    if( !degenerate )
+    {
+        aSpline.RebuildBezierToSegmentsPointsList( aAccuracy );
+        if( aSpline.GetBezierPoints().size() <= 2 )
+        {
+            degenerate = true;
+        }
+    }
+
+    // If the spline is degenerated (i.e. a segment) add it as segment or discard it if
+    // null (i.e. very small) length
+    if( degenerate )
+    {
+        aSpline.SetShape( SHAPE_T::SEGMENT );
+
+        // segment smaller than MIN_SEG_LEN_ACCEPTABLE_NM nanometers are skipped.
+        constexpr int MIN_SEG_LEN_ACCEPTABLE_NM = 20;
+
+        if( s_e.Length() < MIN_SEG_LEN_ACCEPTABLE_NM )
+            return false;
+    }
+
+    return true;
 }

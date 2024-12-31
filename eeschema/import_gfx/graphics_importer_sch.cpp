@@ -196,10 +196,9 @@ void GRAPHICS_IMPORTER_SCH::AddText( const VECTOR2D& aOrigin, const wxString& aT
 }
 
 
-void GRAPHICS_IMPORTER_SCH::AddSpline( const VECTOR2D& aStart,
-                                              const VECTOR2D& aBezierControl1,
-                                              const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
-                                              const IMPORTED_STROKE& aStroke )
+void GRAPHICS_IMPORTER_SCH::AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
+                                       const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                                       const IMPORTED_STROKE& aStroke )
 {
     std::unique_ptr<SCH_SHAPE> spline = std::make_unique<SCH_SHAPE>( SHAPE_T::BEZIER );
     spline->SetStroke( MapStrokeParams( aStroke ) );
@@ -207,20 +206,13 @@ void GRAPHICS_IMPORTER_SCH::AddSpline( const VECTOR2D& aStart,
     spline->SetBezierC1( MapCoordinate( aBezierControl1 ) );
     spline->SetBezierC2( MapCoordinate( aBezierControl2 ) );
     spline->SetEnd( MapCoordinate( aEnd ) );
-    spline->RebuildBezierToSegmentsPointsList( aStroke.GetWidth() / 2 );
 
-    // If the spline is degenerated (i.e. a segment) add it as segment or discard it if
-    // null (i.e. very small) length
-    if( spline->GetBezierPoints().size() <= 2 )
+    if( setupSplineOrLine( *spline, aStroke.GetWidth() / 2 ) )
     {
-        spline->SetShape( SHAPE_T::SEGMENT );
-        int dist = VECTOR2I( spline->GetStart() - spline->GetEnd() ).EuclideanNorm();
-
-// segment smaller than MIN_SEG_LEN_ACCEPTABLE_NM nanometers are skipped.
-#define MIN_SEG_LEN_ACCEPTABLE_NM 20
-        if( dist < MIN_SEG_LEN_ACCEPTABLE_NM )
-            return;
+        // SCH_LINES aren't SCH_SHAPES
+        if( spline->GetShape() == SHAPE_T::SEGMENT )
+            AddLine( aStart, aEnd, aStroke );
+        else
+            addItem( std::move( spline ) );
     }
-
-    addItem( std::move( spline ) );
 }

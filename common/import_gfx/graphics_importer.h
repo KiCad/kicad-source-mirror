@@ -40,6 +40,7 @@
 #include <vector>
 
 class EDA_ITEM;
+class EDA_SHAPE;
 
 /**
  * A clone of IMPORTED_STROKE, but with floating-point width.
@@ -313,10 +314,14 @@ public:
 
 protected:
     ///< Add an item to the imported shapes list.
-    void addItem( std::unique_ptr<EDA_ITEM> aItem )
-    {
-        m_items.emplace_back( std::move( aItem ) );
-    }
+    void addItem( std::unique_ptr<EDA_ITEM> aItem );
+
+    /*
+     * Configure a shape as a spline or a line segment if it's degenerate.
+     *
+     * @return false if the shape is near-zero length and should be ignored.
+     */
+    bool setupSplineOrLine( EDA_SHAPE& aShape, int aAccuracy );
 
     ///< factor to convert millimeters to Internal Units
     double m_millimeterToIu;

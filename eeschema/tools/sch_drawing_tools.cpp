@@ -1186,7 +1186,7 @@ int SCH_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
     {
         SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( ptr.get() );
-        wxCHECK2( item, continue );
+        wxCHECK2_MSG( item, continue, wxString::Format( "Bad item type: ", ptr->Type() ) );
 
         newItems.push_back( item );
         selectedItems.push_back( item );
