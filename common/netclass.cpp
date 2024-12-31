@@ -27,6 +27,9 @@
 #include <netclass.h>
 #include <macros.h>
 #include <base_units.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/common/types/project_settings.pb.h>
 
 // This will get mapped to "kicad_default" in the specctra_export.
 const char NETCLASS::Default[] = "Default";
@@ -123,6 +126,125 @@ void NETCLASS::ResetParameters()
 bool NETCLASS::operator==( const NETCLASS& other ) const
 {
     return m_constituents == other.m_constituents;
+}
+
+
+void NETCLASS::Serialize( google::protobuf::Any &aContainer ) const
+{
+    using namespace kiapi::common;
+    project::NetClass nc;
+
+    nc.set_name( m_Name.ToUTF8() );
+    nc.set_priority( m_Priority );
+
+    project::NetClassBoardSettings* board = nc.mutable_board();
+
+    if( m_Clearance )
+        board->mutable_clearance()->set_value_nm( *m_Clearance );
+
+    if( m_TrackWidth )
+        board->mutable_track_width()->set_value_nm( *m_TrackWidth );
+
+    if( m_diffPairWidth )
+        board->mutable_diff_pair_track_width()->set_value_nm( *m_diffPairWidth );
+
+    if( m_diffPairGap )
+        board->mutable_diff_pair_gap()->set_value_nm( *m_diffPairGap );
+
+    if( m_diffPairViaGap )
+        board->mutable_diff_pair_via_gap()->set_value_nm( *m_diffPairViaGap );
+
+    if( m_ViaDia )
+    {
+        kiapi::board::types::PadStackLayer* layer = board->mutable_via_stack()->add_copper_layers();
+        layer->set_shape( kiapi::board::types::PSS_CIRCLE );
+        layer->set_layer( kiapi::board::types::BoardLayer::BL_F_Cu );
+        PackVector2( *layer->mutable_size(), { *m_ViaDia, *m_ViaDia } );
+    }
+
+    if( m_ViaDrill )
+    {
+        PackVector2( *board->mutable_via_stack()->mutable_drill()->mutable_diameter(),
+                     { *m_ViaDrill, *m_ViaDrill } );
+    }
+
+    if( m_pcbColor != COLOR4D::UNSPECIFIED )
+        PackColor( *board->mutable_color(), m_pcbColor );
+
+    project::NetClassSchematicSettings* schematic = nc.mutable_schematic();
+
+    if( m_wireWidth )
+        schematic->mutable_wire_width()->set_value_nm( *m_wireWidth );
+
+    if( m_busWidth )
+        schematic->mutable_bus_width()->set_value_nm( *m_busWidth );
+
+    if( m_schematicColor != COLOR4D::UNSPECIFIED )
+        PackColor( *schematic->mutable_color(), m_schematicColor );
+
+    if( m_lineStyle )
+    {
+        // TODO(JE) resolve issues with moving to kicommon
+        // schematic->set_line_style( ToProtoEnum<LINE_STYLE, types::StrokeLineStyle>(
+        //         static_cast<LINE_STYLE>( *m_lineStyle ) ) );
+    }
+
+    aContainer.PackFrom( nc );
+}
+
+
+bool NETCLASS::Deserialize( const google::protobuf::Any &aContainer )
+{
+    using namespace kiapi::common;
+    project::NetClass nc;
+
+    if( !aContainer.UnpackTo( &nc ) )
+        return false;
+
+    m_Name = wxString::FromUTF8( nc.name() );
+    m_Priority = nc.priority();
+
+    if( nc.board().has_clearance() )
+        m_Clearance = nc.board().clearance().value_nm();
+
+    if( nc.board().has_track_width() )
+        m_TrackWidth = nc.board().track_width().value_nm();
+
+    if( nc.board().has_diff_pair_track_width() )
+        m_diffPairWidth = nc.board().diff_pair_track_width().value_nm();
+
+    if( nc.board().has_diff_pair_gap() )
+        m_diffPairGap = nc.board().diff_pair_gap().value_nm();
+
+    if( nc.board().has_diff_pair_via_gap() )
+        m_diffPairViaGap = nc.board().diff_pair_via_gap().value_nm();
+
+    if( nc.board().has_via_stack() )
+    {
+        if( nc.board().via_stack().copper_layers_size() > 0 )
+            m_ViaDia = nc.board().via_stack().copper_layers().at( 0 ).size().x_nm();
+
+        if( nc.board().via_stack().has_drill() )
+            m_ViaDrill = nc.board().via_stack().drill().diameter().x_nm();
+    }
+
+    if( nc.board().has_color() )
+        m_pcbColor = UnpackColor( nc.board().color() );
+
+    if( nc.schematic().has_wire_width() )
+        m_wireWidth = nc.schematic().wire_width().value_nm();
+
+    if( nc.schematic().has_bus_width() )
+        m_busWidth = nc.schematic().bus_width().value_nm();
+
+    if( nc.schematic().has_color() )
+        m_schematicColor = UnpackColor( nc.schematic().color() );
+
+    // TODO(JE) resolve issues with moving to kicommon
+    // if( nc.schematic().has_line_style() )
+    //     m_lineStyle = static_cast<int>( FromProtoEnum<LINE_STYLE>( nc.schematic().line_style() ) );
+
+    return true;
 }
 
 

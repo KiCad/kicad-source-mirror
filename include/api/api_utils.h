@@ -31,6 +31,7 @@
 #include <geometry/shape_line_chain.h>
 #include <math/vector2d.h>
 #include <math/vector3.h>
+#include <gal/color4d.h>
 
 class SHAPE_LINE_CHAIN;
 
@@ -71,6 +72,10 @@ KICOMMON_API SHAPE_LINE_CHAIN UnpackPolyLine( const types::PolyLine& aInput );
 KICOMMON_API void PackPolySet( types::PolySet& aOutput, const SHAPE_POLY_SET& aInput );
 
 KICOMMON_API SHAPE_POLY_SET UnpackPolySet( const types::PolySet& aInput );
+
+KICOMMON_API void PackColor( types::Color& aOutput, const KIGFX::COLOR4D& aInput );
+
+KICOMMON_API KIGFX::COLOR4D UnpackColor( const types::Color& aInput );
 
 } // namespace kiapi::common
 

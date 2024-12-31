@@ -45,6 +45,7 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
 {
     registerHandler<commands::GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
     registerHandler<GetNetClasses, NetClassesResponse>( &API_HANDLER_COMMON::handleGetNetClasses );
+    registerHandler<SetNetClasses, Empty>( &API_HANDLER_COMMON::handleSetNetClasses );
     registerHandler<Ping, Empty>( &API_HANDLER_COMMON::handlePing );
     registerHandler<GetTextExtents, types::Box2>( &API_HANDLER_COMMON::handleGetTextExtents );
     registerHandler<GetTextAsShapes, GetTextAsShapesResponse>(
@@ -85,12 +86,54 @@ HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses(
     std::shared_ptr<NET_SETTINGS>& netSettings =
             Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
 
-    for( const auto& [name, netClass] : netSettings->GetNetclasses() )
+    google::protobuf::Any any;
+
+    netSettings->GetDefaultNetclass()->Serialize( any );
+    any.UnpackTo( reply.add_net_classes() );
+
+    for( const auto& netClass : netSettings->GetNetclasses() | std::views::values )
     {
-        reply.add_net_classes()->set_name( name.ToStdString() );
+        netClass->Serialize( any );
+        any.UnpackTo( reply.add_net_classes() );
     }
 
     return reply;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses(
+        const HANDLER_CONTEXT<SetNetClasses>& aCtx )
+{
+    std::shared_ptr<NET_SETTINGS>& netSettings =
+            Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
+
+    if( aCtx.Request.merge_mode() == MapMergeMode::MMM_REPLACE )
+        netSettings->ClearNetclasses();
+
+    auto netClasses = netSettings->GetNetclasses();
+    google::protobuf::Any any;
+
+    for( const auto& ncProto : aCtx.Request.net_classes() )
+    {
+        any.PackFrom( ncProto );
+        wxString name = wxString::FromUTF8( ncProto.name() );
+
+        if( name == wxT( "Default" ) )
+        {
+            netSettings->GetDefaultNetclass()->Deserialize( any );
+        }
+        else
+        {
+            if( !netClasses.contains( name ) )
+                netClasses.insert( { name, std::make_shared<NETCLASS>( name, false ) } );
+
+            netClasses[name]->Deserialize( any );
+        }
+    }
+
+    netSettings->SetNetclasses( netClasses );
+
+    return Empty();
 }
 
 

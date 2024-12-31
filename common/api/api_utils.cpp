@@ -212,4 +212,24 @@ KICOMMON_API SHAPE_POLY_SET UnpackPolySet( const types::PolySet& aInput )
     return sps;
 }
 
+
+KICOMMON_API void PackColor( types::Color& aOutput, const KIGFX::COLOR4D& aInput )
+{
+    aOutput.set_r( aInput.r );
+    aOutput.set_g( aInput.g );
+    aOutput.set_b( aInput.b );
+    aOutput.set_a( aInput.a );
+}
+
+
+KICOMMON_API KIGFX::COLOR4D UnpackColor( const types::Color& aInput )
+{
+    double r = std::clamp( aInput.r(), 0.0, 1.0 );
+    double g = std::clamp( aInput.g(), 0.0, 1.0 );
+    double b = std::clamp( aInput.b(), 0.0, 1.0 );
+    double a = std::clamp( aInput.a(), 0.0, 1.0 );
+
+    return KIGFX::COLOR4D( r, g, b, a );
+}
+
 } // namespace kiapi::common

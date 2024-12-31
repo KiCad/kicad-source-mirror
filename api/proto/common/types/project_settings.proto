@@ -26,12 +26,48 @@ syntax = "proto3";
 
 package kiapi.common.project;
 
+import "common/types/base_types.proto";
+import "common/types/enums.proto";
+import "board/board_types.proto";
+
+message NetClassBoardSettings
+{
+  optional kiapi.common.types.Distance clearance = 1;
+  optional kiapi.common.types.Distance track_width = 2;
+  optional kiapi.common.types.Distance diff_pair_track_width = 3;
+  optional kiapi.common.types.Distance diff_pair_gap = 4;
+  optional kiapi.common.types.Distance diff_pair_via_gap = 5;
+
+  // The default padstack to use for vias belonging to this netclass
+  // Currently KiCad only supports specifying the drill diameter and annular size on all layers for
+  // netclass via stacks.  Complex padstacks and other via features cannot be specified here.
+  optional kiapi.board.types.PadStack via_stack = 6;
+
+  // The default padstack to use for microvias belonging to this netclass
+  // Currently KiCad only supports specifying the drill diameter and annular size on all layers for
+  // netclass via stacks.  Complex padstacks and other via features cannot be specified here.
+  optional kiapi.board.types.PadStack microvia_stack = 7;
+
+  optional kiapi.common.types.Color color = 8;
+}
+
+message NetClassSchematicSettings
+{
+  optional kiapi.common.types.Distance wire_width = 1;
+  optional kiapi.common.types.Distance bus_width = 2;
+  optional kiapi.common.types.Color color = 3;
+  optional kiapi.common.types.StrokeLineStyle line_style = 4;
+}
 
 message NetClass
 {
   // The name of the netclass (the literal string "Default" for the default netclass)
   string name = 1;
 
+  optional int32 priority = 2;
+
+  optional NetClassBoardSettings board = 3;
+  optional NetClassSchematicSettings schematic = 4;
 }
 
 message TextVariables

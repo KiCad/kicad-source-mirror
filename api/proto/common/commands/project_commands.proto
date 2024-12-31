@@ -35,6 +35,22 @@ message NetClassesResponse
 }
 
 
+message SetNetClasses
+{
+  repeated kiapi.common.project.NetClass net_classes = 1;
+
+  // Whether to merge or replace the existing netclasses with the contents of this message
+  // Note that this only happens at the level of netclass name: for example, if merge_mode is set to
+  // MMM_MERGE, the design has netclasses ["Default", "HV"], and this message has netclasses
+  // ["Default", "LV"], the resulting set will be ["Default", "HV", "LV"] -- the Default netclass
+  // will have its properties replaced with those in this message, the "LV" netclass will be added,
+  // and the "HV" netclass will be left alone.  If merge_mode is set to MMM_REPLACE, the "HV" class
+  // will be erased.  Note that there must always be a "Default" netclass, so it will not be erased
+  // even if merge_mode is MMM_REPLACE and there is no "Default" class specified in this message.
+  kiapi.common.types.MapMergeMode merge_mode = 3;
+}
+
+
 message ExpandTextVariables
 {
   kiapi.common.types.DocumentSpecifier document = 1;

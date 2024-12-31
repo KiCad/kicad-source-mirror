@@ -44,6 +44,9 @@ private:
     HANDLER_RESULT<commands::NetClassesResponse> handleGetNetClasses(
         const HANDLER_CONTEXT<commands::GetNetClasses>& aCtx );
 
+    HANDLER_RESULT<Empty> handleSetNetClasses(
+        const HANDLER_CONTEXT<commands::SetNetClasses>& aCtx );
+
     HANDLER_RESULT<Empty> handlePing( const HANDLER_CONTEXT<commands::Ping>& aCtx );
 
     HANDLER_RESULT<types::Box2> handleGetTextExtents(

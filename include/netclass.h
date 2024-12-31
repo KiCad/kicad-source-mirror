@@ -32,6 +32,7 @@
 #include <kicommon.h>
 #include <macros_swig.h>
 #include <stroke_params.h>
+#include <api/serializable.h>
 
 using KIGFX::COLOR4D;
 
@@ -40,7 +41,7 @@ DECL_SET_FOR_SWIG( STRINGSET, wxString )
 /**
  * A collection of nets and the parameters used to route or test these nets.
  */
-class KICOMMON_API NETCLASS
+class KICOMMON_API NETCLASS : public SERIALIZABLE
 {
 public:
     static const char Default[];        ///< the name of the default NETCLASS
@@ -61,6 +62,9 @@ public:
     {
         return wxT( "NETCLASS" );
     }
+
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
     /// @brief Resets all parent fields to point to this netclass
     void ResetParents();
