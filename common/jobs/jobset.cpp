@@ -127,8 +127,6 @@ JOBSET_OUTPUT::~JOBSET_OUTPUT()
         delete reporter.second;
     }
     m_lastRunReporters.clear();
-
-    delete m_outputHandler;
 }
 
 
