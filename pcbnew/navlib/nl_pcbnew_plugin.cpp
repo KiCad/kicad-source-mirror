@@ -28,15 +28,13 @@ NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport ) : m_impl( nu
     if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver
         && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion() )
     {
-        m_impl = new NL_PCBNEW_PLUGIN_IMPL( aViewport );
+        m_impl = std::make_unique<NL_PCBNEW_PLUGIN_IMPL>( aViewport );
     }
 }
 
 
 NL_PCBNEW_PLUGIN::~NL_PCBNEW_PLUGIN()
-{
-    delete m_impl;
-}
+{}
 
 
 void NL_PCBNEW_PLUGIN::SetFocus( bool focus )

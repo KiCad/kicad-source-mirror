@@ -26,6 +26,8 @@
 #ifndef NL_SCHEMATIC_PLUGIN_H_
 #define NL_SCHEMATIC_PLUGIN_H_
 
+#include <memory>
+
 // Forward declarations.
 class EDA_DRAW_PANEL_GAL;
 class NL_SCHEMATIC_PLUGIN_IMPL;
@@ -61,7 +63,7 @@ public:
     void SetFocus( bool aFocus );
 
 private:
-    NL_SCHEMATIC_PLUGIN_IMPL* m_impl;
+    std::unique_ptr<NL_SCHEMATIC_PLUGIN_IMPL> m_impl;
 };
 
 #endif // NL_SCHEMATIC_PLUGIN_H_

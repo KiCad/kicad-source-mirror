@@ -30,15 +30,13 @@ NL_SCHEMATIC_PLUGIN::NL_SCHEMATIC_PLUGIN() : m_impl( nullptr )
     if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver
         && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion() )
     {
-        m_impl = new NL_SCHEMATIC_PLUGIN_IMPL();
+        m_impl = std::make_unique<NL_SCHEMATIC_PLUGIN_IMPL>();
     }
 }
 
 
 NL_SCHEMATIC_PLUGIN::~NL_SCHEMATIC_PLUGIN()
-{
-    delete m_impl;
-}
+{}
 
 
 void NL_SCHEMATIC_PLUGIN::SetFocus( bool focus )

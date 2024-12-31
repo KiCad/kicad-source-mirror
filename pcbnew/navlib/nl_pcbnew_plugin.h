@@ -26,6 +26,8 @@
 #ifndef NL_PCBNEW_PLUGIN_H_
 #define NL_PCBNEW_PLUGIN_H_
 
+#include <memory>
+
 // Forward declarations.
 class PCB_DRAW_PANEL_GAL;
 class NL_PCBNEW_PLUGIN_IMPL;
@@ -54,7 +56,7 @@ public:
     void SetFocus( bool aFocus );
 
 private:
-    NL_PCBNEW_PLUGIN_IMPL* m_impl;
+    std::unique_ptr<NL_PCBNEW_PLUGIN_IMPL> m_impl;
 };
 
 #endif // NL_PCBNEW_PLUGIN_H_
