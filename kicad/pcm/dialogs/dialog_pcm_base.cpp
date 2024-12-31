@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -120,7 +120,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer8->Fit( m_panelPending );
 	m_dialogNotebook->AddPage( m_panelPending, _("Pending (%d)"), false );
 
-	m_TopSizer->Add( m_dialogNotebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_TopSizer->Add( m_dialogNotebook, 1, wxEXPAND|wxALL, 5 );
 
 
 	m_MainSizer->Add( m_TopSizer, 1, wxEXPAND, 5 );

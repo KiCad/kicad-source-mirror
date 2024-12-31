@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -70,7 +70,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_infoText = new HTML_WINDOW( m_infoScrollWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_NEVER );
 	m_infoText->SetMinSize( wxSize( -1,100 ) );
 
-	bSizerScrolledWindow->Add( m_infoText, 0, wxALL|wxEXPAND, 5 );
+	bSizerScrolledWindow->Add( m_infoText, 0, wxEXPAND, 5 );
 
 	m_sizerVersions = new wxBoxSizer( wxVERTICAL );
 

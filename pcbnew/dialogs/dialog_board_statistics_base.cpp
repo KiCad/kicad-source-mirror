@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -252,20 +252,20 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bDrillsSizer->Fit( m_drillsPanel );
 	topNotebook->AddPage( m_drillsPanel, _("Drill Holes"), false );
 
-	bMainBoxSizer->Add( topNotebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMainBoxSizer->Add( topNotebook, 1, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonSaveReport = new wxButton( this, wxID_ANY, _("Generate Report File..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_buttonSaveReport, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 15 );
+	bSizerBottom->Add( m_buttonSaveReport, 0, wxALIGN_CENTER_VERTICAL|wxALL, 15 );
 
 	m_sdbControlSizer = new wxStdDialogButtonSizer();
 	m_sdbControlSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbControlSizer->AddButton( m_sdbControlSizerCancel );
 	m_sdbControlSizer->Realize();
 
-	bSizerBottom->Add( m_sdbControlSizer, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerBottom->Add( m_sdbControlSizer, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bMainBoxSizer->Add( bSizerBottom, 0, wxEXPAND, 5 );

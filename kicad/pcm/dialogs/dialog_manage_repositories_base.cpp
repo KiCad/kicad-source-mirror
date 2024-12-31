@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,7 +58,7 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 	m_buttonAdd = new SPLIT_BUTTON( this, wxID_ANY, _( "Add Existing" ) );
 	m_buttonAdd->SetToolTip( _("Add repository") );
 
-	bButtonsSizer->Add( m_buttonAdd, 0, wxRIGHT, 5 );
+	bButtonsSizer->Add( m_buttonAdd, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_buttonMoveUp = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonMoveUp->SetToolTip( _("Move up") );
@@ -79,7 +79,7 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 	bButtonsSizer->Add( m_buttonRemove, 0, 0, 5 );
 
 
-	m_TopSizer->Add( bButtonsSizer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_TopSizer->Add( bButtonsSizer, 0, wxRIGHT, 5 );
 
 
 	m_MainSizer->Add( m_TopSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );

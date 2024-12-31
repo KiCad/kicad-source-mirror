@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_layer_selection_base.h"
@@ -242,11 +243,11 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_presetsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_presetsSizer->Add( m_presetsGrid, 1, wxALL|wxEXPAND, 0 );
 
-	m_deleteRowButton = new wxBitmapButton( m_presetsSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_presetsSizer->Add( m_deleteRowButton, 0, wxALL, 5 );
+	m_deleteRowButton = new STD_BITMAP_BUTTON( m_presetsSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_presetsSizer->Add( m_deleteRowButton, 0, wxTOP, 5 );
 
 
-	bSizerUpper->Add( m_presetsSizer, 1, wxEXPAND, 5 );
+	bSizerUpper->Add( m_presetsSizer, 1, wxEXPAND|wxLEFT, 10 );
 
 
 	bSizerMain->Add( bSizerUpper, 1, wxALL|wxEXPAND, 5 );

@@ -45,6 +45,7 @@
 #include <widgets/layer_box_selector.h>
 #include <widgets/wx_grid.h>
 #include <widgets/wx_grid_autosizer.h>
+#include <widgets/std_bitmap_button.h>
 
 
 // Column position by function:
@@ -685,7 +686,7 @@ public:
             m_presetsGridController( *m_presetsGrid, m_layerPresentation, m_dialogPairSettings )
     {
         m_addToPresetsButton->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
-        m_deleteRowButton->SetBitmap( KiBitmapBundle( BITMAPS::trash ) );
+        m_deleteRowButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
         m_addToPresetsButton->Bind( wxEVT_BUTTON,
                                     [this]( wxCommandEvent& aEvent )

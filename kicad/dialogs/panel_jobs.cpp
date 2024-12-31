@@ -529,6 +529,7 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
     m_jobsGrid->PushEventHandler( new JOBS_GRID_TRICKS( this, m_jobsGrid ) );
 
     m_jobsGrid->SetDefaultRowSize( m_jobsGrid->GetDefaultRowSize() + 4 );
+    m_jobsGrid->OverrideMinSize( 0.6, 0.3 );
     m_jobsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     m_buttonAddJob->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );

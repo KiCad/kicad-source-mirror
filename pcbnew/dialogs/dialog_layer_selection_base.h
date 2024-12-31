@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -74,7 +75,7 @@ class DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE : public DIALOG_SHIM
 		wxGrid* m_rightGridLayers;
 		wxBitmapButton* m_addToPresetsButton;
 		WX_GRID* m_presetsGrid;
-		wxBitmapButton* m_deleteRowButton;
+		STD_BITMAP_BUTTON* m_deleteRowButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -76,7 +76,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	sbJobs->Add( bJobsButtons, 0, wxEXPAND|wxLEFT|wxRIGHT, 3 );
 
 
-	bSizerUpper->Add( sbJobs, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerUpper->Add( sbJobs, 7, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbOutputs;
 	sbOutputs = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Outputs") ), wxVERTICAL );
@@ -101,7 +101,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	sbOutputs->Add( bOutputButtons, 0, wxEXPAND|wxLEFT, 3 );
 
 
-	bSizerUpper->Add( sbOutputs, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerUpper->Add( sbOutputs, 4, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
@@ -116,7 +116,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	bSizerButtons->Add( m_buttonSave, 0, wxALL, 5 );
 
 
-	bSizerButtons->Add( 20, 0, 0, wxEXPAND, 5 );
+	bSizerButtons->Add( 10, 0, 0, wxEXPAND, 5 );
 
 	m_buttonRunAllOutputs = new wxButton( this, wxID_ANY, _("Generate All Outputs"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonRunAllOutputs, 0, wxALL, 5 );

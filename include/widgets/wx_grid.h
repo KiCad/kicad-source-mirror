@@ -197,6 +197,24 @@ public:
      */
     static void CellEditorTransformSizeRect( wxRect& aRect );
 
+    /**
+     * Grids that have column sizes automatically set to fill the available width don't want
+     * to shrink afterwards (because wxGrid reports the aggregate column size as the bestSize.
+     * @param aSize
+     */
+    void OverrideMinSize( double aXPct, double aYPct )
+    {
+        wxSize size = DoGetBestSize();
+        m_minSizeOverride = wxSize( KiROUND( size.x * aXPct ), KiROUND( size.y * aYPct ) );
+    }
+    wxSize DoGetBestSize() const override
+    {
+        if( m_minSizeOverride )
+            return m_minSizeOverride.value();
+        else
+            return wxGrid::DoGetBestSize();
+    }
+
 protected:
     /**
      * A re-implementation of wxGrid::DrawColLabel which left-aligns the first column and draws
@@ -229,6 +247,8 @@ protected:
     std::vector<int>                   m_autoEvalCols;
 
     std::map< std::pair<int, int>, std::pair<wxString, wxString> > m_evalBeforeAfter;
+
+    std::optional<wxSize>              m_minSizeOverride;
 };
 
 #endif //KICAD_WX_GRID_H

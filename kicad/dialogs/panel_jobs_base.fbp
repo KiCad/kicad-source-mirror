@@ -70,7 +70,7 @@
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
               <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
-              <property name="proportion">2</property>
+              <property name="proportion">7</property>
               <object class="wxStaticBoxSizer" expanded="true">
                 <property name="id">wxID_ANY</property>
                 <property name="label">Jobs</property>
@@ -165,7 +165,7 @@
                     <property name="tooltip"></property>
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
-                    <property name="window_style">wxHSCROLL</property>
+                    <property name="window_style"></property>
                     <event name="OnSize">OnSizeGrid</event>
                   </object>
                 </object>
@@ -505,7 +505,7 @@
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
               <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
-              <property name="proportion">1</property>
+              <property name="proportion">4</property>
               <object class="wxStaticBoxSizer" expanded="true">
                 <property name="id">wxID_ANY</property>
                 <property name="label">Outputs</property>
@@ -771,7 +771,7 @@
               <object class="spacer" expanded="true">
                 <property name="height">0</property>
                 <property name="permission">protected</property>
-                <property name="width">20</property>
+                <property name="width">10</property>
               </object>
             </object>
             <object class="sizeritem" expanded="false">

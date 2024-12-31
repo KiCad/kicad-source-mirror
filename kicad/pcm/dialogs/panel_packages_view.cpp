@@ -689,6 +689,12 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
         {
             sizer->Add( panel, 0, wxEXPAND );
             panel->Show();
+
+            if( !m_currentSelected )
+            {
+                wxMouseEvent dummy;
+                panel->OnClick( dummy );
+            }
         }
         else
         {

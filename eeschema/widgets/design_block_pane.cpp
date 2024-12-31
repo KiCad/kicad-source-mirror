@@ -77,11 +77,11 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
     m_placeAsSheet->Bind( wxEVT_CHECKBOX, &DESIGN_BLOCK_PANE::OnCheckBox, this );
     m_keepAnnotations->Bind( wxEVT_CHECKBOX, &DESIGN_BLOCK_PANE::OnCheckBox, this );
 
-    cbSizer->Add( m_repeatedPlacement, 0, wxLEFT, 5 );
-    cbSizer->Add( m_placeAsSheet, 0, wxLEFT, 5 );
-    cbSizer->Add( m_keepAnnotations, 0, wxLEFT, 5 );
+    cbSizer->Add( m_repeatedPlacement, 0, wxTOP|wxLEFT, 2 );
+    cbSizer->Add( m_placeAsSheet, 0, wxTOP|wxLEFT, 2 );
+    cbSizer->Add( m_keepAnnotations, 0, wxTOP|wxLEFT|wxBOTTOM, 2 );
 
-    sizer->Add( cbSizer, 0, wxEXPAND | wxLEFT, 5 );
+    sizer->Add( cbSizer, 0, wxEXPAND, 5 );
     SetSizer( sizer );
 
     m_chooserPanel->FinishSetup();

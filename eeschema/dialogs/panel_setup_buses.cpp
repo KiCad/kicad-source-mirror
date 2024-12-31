@@ -45,6 +45,8 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
 
     m_source->SetFont( KIUI::GetInfoFont( aWindow ) );
 
+    m_aliasesGrid->OverrideMinSize( 0.6, 0.3 );
+    m_membersGrid->OverrideMinSize( 0.6, 0.3 );
     m_aliasesGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_membersGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
