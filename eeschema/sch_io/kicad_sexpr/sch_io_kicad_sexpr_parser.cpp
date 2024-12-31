@@ -271,6 +271,16 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMa
         {
             m_requiredVersion = aFileVersion;
             newSymbol         = parseLibSymbol( aSymbolLibMap );
+
+            const std::vector<wxString>* embeddedFonts =
+                    newSymbol->GetEmbeddedFiles()->UpdateFontFiles();
+
+            newSymbol->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
+                            textItem->ResolveFont( embeddedFonts );
+                    } );
         }
         else
         {
@@ -279,15 +289,6 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMa
             THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
         }
     }
-
-    const std::vector<wxString>* embeddedFonts = newSymbol->GetEmbeddedFiles()->UpdateFontFiles();
-
-    newSymbol->RunOnChildren(
-            [&]( SCH_ITEM* aChild )
-            {
-                if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
-                    textItem->ResolveFont( embeddedFonts );
-            } );
 
     return newSymbol;
 }
