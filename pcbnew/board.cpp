@@ -521,6 +521,45 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
 }
 
 
+void BOARD::RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFunction,
+                              int aDepth ) const
+{
+    try
+    {
+        for( PCB_TRACK* track : m_tracks )
+            aFunction( track );
+
+        for( ZONE* zone : m_zones )
+            aFunction( zone );
+
+        for( PCB_MARKER* marker : m_markers )
+            aFunction( marker );
+
+        for( FOOTPRINT* footprint : m_footprints )
+        {
+            aFunction( footprint );
+            footprint->RunOnDescendants( aFunction, aDepth + 1 );
+        }
+
+        for( PCB_GROUP* group : m_groups )
+        {
+            aFunction( group );
+            group->RunOnDescendants( aFunction, aDepth + 1 );
+        }
+
+        for( BOARD_ITEM* drawing : m_drawings )
+        {
+            aFunction( drawing );
+            drawing->RunOnDescendants( aFunction, aDepth + 1 );
+        }
+    }
+    catch( std::bad_function_call& )
+    {
+        wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnDescendants" ) );
+    }
+}
+
+
 TRACKS BOARD::TracksInNet( int aNetCode )
 {
     TRACKS ret;
