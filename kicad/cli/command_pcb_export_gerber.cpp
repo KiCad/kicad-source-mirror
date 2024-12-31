@@ -127,6 +127,9 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 
 int CLI::PCB_EXPORT_GERBER_COMMAND::doPerform( KIWAY& aKiway )
 {
+    wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
+               _( "This command is deprecated, please use \"gerbers\" instead\n" ) );
+
     int exitCode = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
 
     if( exitCode != EXIT_CODES::OK )
