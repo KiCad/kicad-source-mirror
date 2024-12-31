@@ -516,6 +516,8 @@ void JOBS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
 bool JOBS_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 {
+    m_grid->CancelShowEditorOnMouseUp();
+
     int col = aEvent.GetCol();
     int row = aEvent.GetRow();
 

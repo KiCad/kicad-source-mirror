@@ -175,6 +175,7 @@ public:
      * re-purpose this hack to work-around the bugs when we want to open an editor.
      */
     void ShowEditorOnMouseUp() { m_waitForSlowClick = true; }
+    void CancelShowEditorOnMouseUp() { m_waitForSlowClick = false; }
 
     /**
      * wxWidgets recently added an ASSERT which fires if the position is greater than or equal
