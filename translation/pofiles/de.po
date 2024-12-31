@@ -29,10 +29,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-22 21:25+0000\n"
+"PO-Revision-Date: 2024-12-31 22:17+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6825,9 +6825,9 @@ msgstr ""
 "worden sind"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Veraltete Version von KICAD_SYMBOL_DIR."
+msgstr "Veraltete Version von %s."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -26844,9 +26844,8 @@ msgid "Placeholder"
 msgstr "Anker platzieren"
 
 #: kicad/dialogs/panel_jobs_base.cpp:260 kicad/dialogs/panel_jobs_base.cpp:354
-#, fuzzy
 msgid "Output Path"
-msgstr "Ausgangspfad:"
+msgstr "Ausgabepfad"
 
 #: kicad/dialogs/panel_jobs_base.cpp:278
 #, fuzzy
@@ -34072,9 +34071,8 @@ msgid "Export ODB++ File"
 msgstr "ODB++ Datei exportieren"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:146
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "Die ausgewählte Datei ist ungültig oder möglicherweise beschädigt!"
+msgstr "Die ausgewählte Ausgabedatei ist keine unterstütztes Archivformat."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:199
 #, fuzzy
@@ -34145,7 +34143,7 @@ msgstr "Ausgabedatei:"
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
 #, fuzzy
 msgid "Compression Format:"
-msgstr "Bemaßungsformat"
+msgstr "Kompressionsformat"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
@@ -37839,9 +37837,8 @@ msgid "Background Style"
 msgstr "Hintergrund Beginn"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:95
-#, fuzzy
 msgid "Side"
-msgstr "Seite:"
+msgstr "Seite"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:107
 #, fuzzy
@@ -43899,9 +43896,8 @@ msgid "Footprint '%s' saved."
 msgstr "Footprint \"%s\" gespeichert."
 
 #: pcbnew/load_select_footprint.cpp:374
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Footprint-Bibliothek wird gespeichert\n"
+msgstr "Fehler beim Speichern der Footprint-Bibliothek"
 
 #: pcbnew/load_select_footprint.cpp:378
 #, c-format
@@ -47215,9 +47211,8 @@ msgid "Failed to load board\n"
 msgstr "Fehler beim Laden der Platine.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:356 pcbnew/pcbnew_jobs_handler.cpp:431
-#, fuzzy
 msgid "Unknown export format"
-msgstr "Unbekanntes Netzlistenformat.\n"
+msgstr "Unbekanntes Exportformat"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:396
 #, c-format
@@ -50967,11 +50962,8 @@ msgid "Invalid clipboard contents"
 msgstr "Inhalt der Zwischenablage ungültig"
 
 #: pcbnew/tools/pcb_control.cpp:1509
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"Fehler beim Einlesen der Platine.\n"
-"%s"
+msgstr "Fehler beim Einlesen der Platine."
 
 #: pcbnew/tools/pcb_control.cpp:1543
 msgid "Append Board"
