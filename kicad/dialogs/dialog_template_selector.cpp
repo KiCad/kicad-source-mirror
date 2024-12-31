@@ -141,8 +141,10 @@ void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 }
 
 
-DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize ) :
-    DIALOG_TEMPLATE_SELECTOR_BASE( aParent, wxID_ANY, wxEmptyString, aPos, aSize )
+DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos,
+                                                    const wxSize& aSize ) :
+    DIALOG_TEMPLATE_SELECTOR_BASE( aParent, wxID_ANY, _("Project Template Selector"),
+                                   aPos, aSize )
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_reloadButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
