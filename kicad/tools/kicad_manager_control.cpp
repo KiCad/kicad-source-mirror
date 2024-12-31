@@ -423,7 +423,7 @@ int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
 int KICAD_MANAGER_CONTROL::OpenJobsetFile( const TOOL_EVENT& aEvent )
 {
     wxString     default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
-    wxFileDialog dlg( m_frame, _( "Create New Jobset" ), default_dir, wxEmptyString,
+    wxFileDialog dlg( m_frame, _( "Open Jobset" ), default_dir, wxEmptyString,
                       FILEEXT::JobsetFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )

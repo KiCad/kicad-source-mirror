@@ -84,6 +84,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     if( ADVANCED_CFG::GetCfg().m_EnableJobset )
     {
         fileMenu->Add( KICAD_MANAGER_ACTIONS::newJobsetFile );
+        fileMenu->Add( KICAD_MANAGER_ACTIONS::openJobsetFile );
     }
 
     if( wxDir::Exists( PATHS::GetStockDemosPath() ) )

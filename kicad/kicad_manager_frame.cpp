@@ -422,6 +422,7 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
     manager->SetConditions( ACTIONS::saveAs,                       activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::closeProject, activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::newJobsetFile, activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::openJobsetFile, activeProjectCond );
 
     // These are just here for text boxes, search boxes, etc. in places such as the standard
     // file dialogs.
