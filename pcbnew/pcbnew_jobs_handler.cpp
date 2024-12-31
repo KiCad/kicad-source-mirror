@@ -775,7 +775,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aPdfJob->GetOutputPath().IsEmpty() )
+    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_PAGE
+        && aPdfJob->GetOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
@@ -790,6 +791,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     plotOpts.SetPlotFrameRef( aPdfJob->m_plotDrawingSheet );
     plotOpts.SetPlotValue( aPdfJob->m_plotFootprintValues );
     plotOpts.SetPlotReference( aPdfJob->m_plotRefDes );
+    plotOpts.SetPlotInvisibleText( aPdfJob->m_plotInvisibleText );
 
     plotOpts.SetLayerSelection( aPdfJob->m_printMaskLayer );
     plotOpts.SetPlotOnAllLayersSelection( aPdfJob->m_printMaskLayersToIncludeOnAllLayers );
@@ -806,9 +808,16 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         plotOpts.SetPlotPadNumbers( true );
     }
 
+    plotOpts.SetUseAuxOrigin( aPdfJob->m_useDrillOrigin );
+
     plotOpts.SetHideDNPFPsOnFabLayers( aPdfJob->m_hideDNPFPsOnFabLayers );
     plotOpts.SetSketchDNPFPsOnFabLayers( aPdfJob->m_sketchDNPFPsOnFabLayers );
     plotOpts.SetCrossoutDNPFPsOnFabLayers( aPdfJob->m_crossoutDNPFPsOnFabLayers );
+
+    plotOpts.m_PDFBackFPPropertyPopups = aPdfJob->m_pdfBackFPPropertyPopups;
+    plotOpts.m_PDFFrontFPPropertyPopups = aPdfJob->m_pdfFrontFPPropertyPopups;
+    plotOpts.m_PDFMetadata = aPdfJob->m_pdfMetadata;
+    plotOpts.m_PDFSingle = aPdfJob->m_pdfSingle;
 
     switch( aPdfJob->m_drillShapeOption )
     {
@@ -821,41 +830,192 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
             plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
     }
 
-    PCB_LAYER_ID layer = UNDEFINED_LAYER;
-    wxString     layerName;
-    wxString     sheetName;
-    wxString     sheetPath;
+    int returnCode = CLI::EXIT_CODES::OK;
 
-    if( aPdfJob->m_printMaskLayer.size() == 1 )
+    // DEPRECATED CLI BEHAVIOR AS OF KICAD 9.0, TO BE REMOVED
+    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_PAGE )
     {
-        layer = aPdfJob->m_printMaskLayer.front();
-        layerName = brd->GetLayerName( layer );
+        PCB_LAYER_ID layer = UNDEFINED_LAYER;
+        wxString     layerName;
+        wxString     sheetName;
+        wxString     sheetPath;
+
+        if( aPdfJob->m_printMaskLayer.size() == 1 )
+        {
+            layer = aPdfJob->m_printMaskLayer.front();
+            layerName = brd->GetLayerName( layer );
+        }
+
+        if( aPdfJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+            layerName = aPdfJob->GetVarOverrides().at( wxT( "LAYER" ) );
+
+        if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+            sheetName = aPdfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+
+        if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+            sheetPath = aPdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+
+        LOCALE_IO dummy;
+        PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
+                                                              aPdfJob->GetFullOutputPath(),
+                                                              sheetName, sheetPath );
+
+        if( plotter )
+        {
+            PlotBoardLayers( brd, plotter, aPdfJob->m_printMaskLayer, plotOpts );
+            PlotInteractiveLayer( brd, plotter, plotOpts );
+            plotter->EndPlot();
+        }
+        else
+        {
+            wxString msg;
+            msg.Printf( _( "Failed to create file '%s'." ), aPdfJob->GetFullOutputPath() );
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+
+            returnCode = CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        delete plotter;
+    }
+    else
+    {
+        // ensure output dir exists
+        wxFileName fnOut( aPdfJob->GetFullOutputPath() + wxT( "/" ) );
+
+        if( !fnOut.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
+
+        std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
+        {
+            // Handles board->GetTitleBlock() *and* board->GetProject()
+            return brd->ResolveTextVar( token, 0 );
+        };
+
+        size_t finalPageCount = 0;
+        for( size_t i = 0; i < aPdfJob->m_printMaskLayer.size(); i++ )
+        {
+            PCB_LAYER_ID layer = aPdfJob->m_printMaskLayer[i];
+            if( ( LSET::AllCuMask() & ~brd->GetEnabledLayers() )[layer] )
+                continue;
+
+            finalPageCount++;
+        }
+
+        wxString sheetPath;
+        PLOTTER* plotter = nullptr;
+        for( size_t i = 0, pageNum = 1; i < aPdfJob->m_printMaskLayer.size(); i++ )
+        {
+            PCB_LAYER_ID layer = aPdfJob->m_printMaskLayer[i];
+
+            if( ( LSET::AllCuMask() & ~brd->GetEnabledLayers() )[layer] )
+                continue;
+
+            LSEQ plotSequence = getPlotSequence( layer, aPdfJob->m_printMaskLayersToIncludeOnAllLayers );
+
+            wxString layerName = brd->GetLayerName( layer );
+
+            wxFileName fn( aPdfJob->GetFullOutputPath() );
+            wxFileName brdFn = brd->GetFileName();
+            wxString   msg;
+            fn.SetName( brdFn.GetName() );
+
+            if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE )
+            {
+                fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
+            }
+            else
+            {
+                fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
+                fn.SetName( fn.GetName() + wxString::Format( wxT( "_%s" ), layerName ) );
+            }
+
+            if( ( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE
+                  && i == 0 )
+                || aPdfJob->m_pdfGenMode
+                           == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_PAGES )
+            {
+                // this will only be used by pdf
+                wxString pageNumber = wxString::Format( "%zu", pageNum );
+                wxString pageName = layerName;
+                wxString sheetName = layerName;
+
+                plotter = StartPlotBoard( brd, &plotOpts, layer, layerName, fn.GetFullPath(),
+                                          sheetName, sheetPath, pageName, pageNumber,
+                                          finalPageCount );
+            }
+
+            if (plotter)
+            {
+                plotter->SetTitle(
+                        ExpandTextVars( brd->GetTitleBlock().GetTitle(), &textResolver ) );
+
+                if( plotOpts.m_PDFMetadata )
+                {
+
+                    msg = wxS( "AUTHOR" );
+
+                    if( brd->ResolveTextVar( &msg, 0 ) )
+                        plotter->SetAuthor( msg );
+
+                    msg = wxS( "SUBJECT" );
+
+                    if( brd->ResolveTextVar( &msg, 0 ) )
+                        plotter->SetSubject( msg );
+                }
+
+                PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
+                PlotInteractiveLayer( brd, plotter, plotOpts );
+
+
+                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE
+                    && i != aPdfJob->m_printMaskLayer.size() - 1 )
+                {
+                    wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
+                    PCB_LAYER_ID nextLayer = aPdfJob->m_printMaskLayer[i + 1];
+                    wxString     pageName = brd->GetLayerName( nextLayer );
+                    wxString     sheetName = layerName;
+
+                    static_cast<PDF_PLOTTER*>( plotter )->ClosePage();
+                    static_cast<PDF_PLOTTER*>( plotter )->StartPage( pageNumber, pageName );
+                    setupPlotterNewPDFPage( plotter, brd, &plotOpts, sheetName, sheetPath,
+                                            pageNumber, finalPageCount );
+                }
+
+
+                // last page
+                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_PAGES
+                    || i == aPdfJob->m_printMaskLayer.size() - 1 )
+                {
+                    plotter->EndPlot();
+                    delete plotter->RenderSettings();
+                    delete plotter;
+                    plotter = nullptr;
+
+                    msg.Printf( _( "Plotted to '%s'." ), fn.GetFullPath() );
+                    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                }
+            }
+            else
+            {
+                msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
+                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+
+                returnCode = CLI::EXIT_CODES::ERR_UNKNOWN;
+
+                if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE )
+                {
+                    // bail so we dont continue pointlessly
+                    break;
+                }
+            }
+
+        }
     }
 
-    if( aPdfJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-        layerName = aPdfJob->GetVarOverrides().at( wxT( "LAYER" ) );
-
-    if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-        sheetName = aPdfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
-
-    if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-        sheetPath = aPdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-
-    LOCALE_IO dummy;
-    PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
-                                                          aPdfJob->GetFullOutputPath(),
-                                                          sheetName, sheetPath );
-
-    if( plotter )
-    {
-        PlotBoardLayers( brd, plotter, aPdfJob->m_printMaskLayer, plotOpts );
-        PlotInteractiveLayer( brd, plotter, plotOpts );
-        plotter->EndPlot();
-    }
-
-    delete plotter;
-
-    return CLI::EXIT_CODES::OK;
+    return returnCode;
 }
 
 
@@ -1935,4 +2095,26 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
 
     // failed loading custom path, revert back to default
     loadSheet( aBrd->GetProject()->GetProjectFile().m_BoardDrawingSheetFile );
+}
+
+
+LSEQ PCBNEW_JOBS_HANDLER::getPlotSequence( PCB_LAYER_ID aLayerToPlot, LSEQ aPlotWithAllLayersSeq )
+{
+    LSEQ plotSequence;
+
+    // Base layer always gets plotted first.
+    plotSequence.push_back( aLayerToPlot );
+
+    for (size_t i = 0; i < aPlotWithAllLayersSeq.size(); i++)
+    {
+        PCB_LAYER_ID layer = aPlotWithAllLayersSeq[i];
+
+        // Don't plot the same layer more than once;
+        if( find( plotSequence.begin(), plotSequence.end(), layer ) != plotSequence.end() )
+            continue;
+
+        plotSequence.push_back( layer );
+    }
+
+    return plotSequence;
 }

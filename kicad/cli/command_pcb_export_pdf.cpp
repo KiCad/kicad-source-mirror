@@ -28,6 +28,8 @@
 
 #include <locale_io.h>
 
+#define ARG_MODE_SEPARATE "--mode-separate"
+#define ARG_MODE_MULTIPAGE "--mode-multipage"
 
 CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "pdf" )
 {
@@ -36,6 +38,14 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
     addLayerArg( true );
     addDrawingSheetArg();
     addDefineArg();
+
+    m_argParser.add_argument( ARG_MODE_SEPARATE )
+            .help( UTF8STDSTR( _( "Plot the layers to individual PDF files" ) ) )
+            .flag();
+
+    m_argParser.add_argument( ARG_MODE_MULTIPAGE )
+            .help( UTF8STDSTR( _( "Plot the layers to a single PDF file with multiple pages" ) ) )
+            .flag();
 
     m_argParser.add_argument( "-m", ARG_MIRROR )
             .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
@@ -86,6 +96,14 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .help( UTF8STDSTR( _( ARG_DRILL_SHAPE_OPTION_DESC ) ) )
             .scan<'i', int>()
             .default_value( 2 );
+
+    m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
+            .default_value( std::string() )
+            .help( UTF8STDSTR(
+                    _( "Layers to include on each plot, comma separated list of untranslated "
+                       "layer names to include such as "
+                       "F.Cu,B.Cu" ) ) )
+            .metavar( "COMMON_LAYER_LIST" );
 }
 
 
@@ -128,6 +146,41 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_PDF::DRILL_MARKS>( drillShape );
 
     pdfJob->m_printMaskLayer = m_selectedLayers;
+
+    bool argModeMulti = m_argParser.get<bool>( ARG_MODE_MULTIPAGE );
+    bool argModeSeparate = m_argParser.get<bool>( ARG_MODE_SEPARATE );
+
+    if( argModeMulti && argModeSeparate )
+    {
+        wxFprintf( stderr, _( "Cannot use more than one mode flag\n" ) );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
+    wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
+    bool     blah = false;
+    pdfJob->m_printMaskLayersToIncludeOnAllLayers = convertLayerStringList( layers, blah );
+
+    if( argModeMulti )
+    {
+        pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_LAYER_ONE_PAGE;
+    }
+    else if( argModeSeparate )
+    {
+        pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_PAGES;
+    }
+
+    if( pdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_PAGE )
+    {
+        wxFprintf( stdout,
+                wxT( "\033[33;1m%s\033[0m\n" ),
+                _( "This command has deprecated behavior as of KiCad 9.0, the default behavior of this command will change in a future release." ) );
+
+        wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
+                _( "The new behavior will match --mode-separate" ) );
+
+        wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
+                   _( "The behavior with neither --mode flags will no longer exist" ) );
+    }
 
     LOCALE_IO dummy;    // Switch to "C" locale
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, pdfJob.get() );

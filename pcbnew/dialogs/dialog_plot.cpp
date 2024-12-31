@@ -453,6 +453,16 @@ void DIALOG_PLOT::loadPlotParamsFromJob()
         m_plotOpts.SetPlotMode( dxfJob->m_plotGraphicItemsUsingContours ? OUTLINE_MODE::SKETCH
                                                                         : OUTLINE_MODE::FILLED );
     }
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF )
+    {
+        JOB_EXPORT_PCB_PDF* pdfJob = static_cast<JOB_EXPORT_PCB_PDF*>( m_job );
+        m_plotOpts.m_PDFFrontFPPropertyPopups = pdfJob->m_pdfFrontFPPropertyPopups;
+        m_plotOpts.m_PDFBackFPPropertyPopups = pdfJob->m_pdfBackFPPropertyPopups;
+        m_plotOpts.m_PDFMetadata = pdfJob->m_pdfMetadata;
+        m_plotOpts.m_PDFSingle = pdfJob->m_pdfSingle;
+    }
+
     m_plotOpts.SetUseAuxOrigin( m_job->m_useDrillOrigin );
     m_plotOpts.SetPlotFrameRef( m_job->m_plotDrawingSheet );
     m_plotOpts.SetPlotInvisibleText( m_job->m_plotInvisibleText );
@@ -524,6 +534,15 @@ void DIALOG_PLOT::transferPlotParamsToJob()
                                      ? JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES
                                      : JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS;
         dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
+    }
+
+    if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF )
+    {
+        JOB_EXPORT_PCB_PDF* pdfJob = static_cast<JOB_EXPORT_PCB_PDF*>( m_job );
+        pdfJob->m_pdfFrontFPPropertyPopups = m_plotOpts.m_PDFFrontFPPropertyPopups;
+        pdfJob->m_pdfBackFPPropertyPopups = m_plotOpts.m_PDFBackFPPropertyPopups;
+        pdfJob->m_pdfMetadata = m_plotOpts.m_PDFMetadata;
+        pdfJob->m_pdfSingle = m_plotOpts.m_PDFSingle;
     }
 
     m_job->m_useDrillOrigin = m_plotOpts.GetUseAuxOrigin();

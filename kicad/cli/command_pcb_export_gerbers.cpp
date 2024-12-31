@@ -31,7 +31,6 @@
 
 #include <locale_io.h>
 
-#define ARG_COMMON_LAYERS "--common-layers"
 #define ARG_USE_BOARD_PLOT_PARAMS "--board-plot-params"
 
 

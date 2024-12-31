@@ -28,11 +28,34 @@
 #include <wx/string.h>
 #include <jobs/job_export_pcb_plot.h>
 
+
 class KICOMMON_API JOB_EXPORT_PCB_PDF : public JOB_EXPORT_PCB_PLOT
 {
 public:
     JOB_EXPORT_PCB_PDF();
     wxString GetDefaultDescription() const override;
+
+    bool m_pdfFrontFPPropertyPopups;
+    bool m_pdfBackFPPropertyPopups;
+    bool m_pdfMetadata;
+
+    bool m_pdfSingle;
+
+    ///< This is a hack to deal with cli having the wrong behavior
+    ///< We will deprecate out the wrong behavior, at which point this enum
+    ///< can be replaced with a bool
+    enum class GEN_MODE
+    {
+        ///< DEPRECATED MODE
+        ALL_LAYERS_ONE_PAGE,
+        ///< "Single Document" mode
+        ONE_LAYER_ONE_PAGE,
+        ///< The most traditional output mode KiCad has had
+        ALL_LAYERS_SEPARATE_PAGES
+    };
+
+    ///< uused by the cli, will be removed when the other behavior is deprecated
+    GEN_MODE m_pdfGenMode;
 };
 
 #endif

@@ -31,6 +31,7 @@
 #include <locale_io.h>
 
 
+
 CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aName ) :
         PCB_EXPORT_BASE_COMMAND( aName )
 {
@@ -128,7 +129,7 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 int CLI::PCB_EXPORT_GERBER_COMMAND::doPerform( KIWAY& aKiway )
 {
     wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
-               _( "This command is deprecated, please use \"gerbers\" instead\n" ) );
+               _( "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n" ) );
 
     int exitCode = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
 

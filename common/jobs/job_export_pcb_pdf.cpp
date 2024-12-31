@@ -29,8 +29,18 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PDF::DRILL_MARKS,
                                 { JOB_EXPORT_PCB_PDF::DRILL_MARKS::FULL_DRILL_SHAPE, "full" }
                               } )
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PDF::GEN_MODE,
+                              {
+                                { JOB_EXPORT_PCB_PDF::GEN_MODE::NO_DRILL_SHAPE, "none" },
+                                { JOB_EXPORT_PCB_PDF::GEN_MODE::SMALL_DRILL_SHAPE, "small" },
+                                { JOB_EXPORT_PCB_PDF::GEN_MODE::FULL_DRILL_SHAPE, "full" }
+                              } )
+
 JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
-        JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF, "pdf", false )
+        JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF, "pdf", false ),
+        m_pdfFrontFPPropertyPopups( true ),
+        m_pdfBackFPPropertyPopups( true ),
+        m_pdfMetadata( true ), m_pdfSingle( false ), m_pdfGenMode( GEN_MODE::ALL_LAYERS_ONE_PAGE )
 {
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_colorTheme, m_colorTheme ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "mirror", &m_mirror, m_mirror ) );
@@ -46,6 +56,13 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
             "sketch_pads_on_fab_layers", &m_sketchPadsOnFabLayers, m_sketchPadsOnFabLayers ) );
     m_params.emplace_back(
             new JOB_PARAM<DRILL_MARKS>( "drill_shape", &m_drillShapeOption, m_drillShapeOption ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "pdf_metadata", &m_pdfMetadata, m_pdfMetadata ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "single_document", &m_pdfSingle, m_pdfSingle ) );
+    m_params.emplace_back( new JOB_PARAM<bool>(
+            "front_fp_property_popups", &m_pdfFrontFPPropertyPopups, m_pdfFrontFPPropertyPopups ) );
+    m_params.emplace_back( new JOB_PARAM<bool>(
+            "back_fp_property_popups", &m_pdfBackFPPropertyPopups, m_pdfBackFPPropertyPopups ) );
 }
 
 

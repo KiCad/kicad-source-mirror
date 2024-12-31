@@ -59,6 +59,7 @@ private:
     void loadOverrideDrawingSheet( BOARD* brd, const wxString& aSheetPath );
 
     DS_PROXY_VIEW_ITEM* getDrawingSheetProxyView( BOARD* aBrd );
+    LSEQ                getPlotSequence( PCB_LAYER_ID aLayerToPlot, LSEQ aPlotWithAllLayersSeq );
 
     BOARD* m_cliBoard;
 };

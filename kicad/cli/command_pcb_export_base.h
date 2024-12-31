@@ -61,6 +61,8 @@ namespace CLI
 #define ARG_USE_DRILL_ORIGIN "--use-drill-origin"
 #define ARG_STORE_ORIGIN_COORD "--store-origin-coord"
 
+#define ARG_COMMON_LAYERS "--common-layers"
+
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
     PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputIsDir = false,
