@@ -189,9 +189,22 @@ bool SVG_IMPORT_PLUGIN::Import()
 
         for( NSVGpath* path = shape->paths; path != nullptr; path = path->next )
         {
-            bool closed = path->closed || filled || rule == GRAPHICS_IMPORTER::PF_EVEN_ODD;
+            if( filled && !path->closed )
+            {
+                // KiCad doesn't support a single object representing a filled shape that is not closed
+                // so create a filled, closed shape for the fill, and an unfilled, open shape for the outline
+                IMPORTED_STROKE noStroke( 0, LINE_STYLE::SOLID, COLOR4D::UNSPECIFIED );
+                DrawPath( path->pts, path->npts, true, noStroke, true, fillColor );
+                DrawPath( path->pts, path->npts, false, stroke, false, COLOR4D::UNSPECIFIED );
+            }
+            else
+            {
+                // Either the shape has fill and no stroke, so we implicitly close it (for no difference),
+                // or it's really closed
+                const bool closed = path->closed || filled;
 
-            DrawPath( path->pts, path->npts, closed, stroke, filled, fillColor );
+                DrawPath( path->pts, path->npts, closed, stroke, filled, fillColor );
+            }
         }
     }
 
