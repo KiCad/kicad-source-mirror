@@ -306,7 +306,9 @@ void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float*           aPoints,
     auto end = getBezierPoint( aPoints, 1.0f );
     auto segmentationThreshold = calculateBezierSegmentationThreshold( aPoints );
 
-    aGeneratedPoints.push_back( start );
+    if( aGeneratedPoints.size() == 0 || aGeneratedPoints.back() != start )
+        aGeneratedPoints.push_back( start );
+
     segmentBezierCurve( start, end, 0.0f, 0.5f, aPoints, segmentationThreshold, aGeneratedPoints );
     aGeneratedPoints.push_back( end );
 }
