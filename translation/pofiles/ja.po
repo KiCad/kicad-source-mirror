@@ -6,7 +6,7 @@
 # Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # "Tokita, Hiroshi" <tokita.hiroshi@fujitsu.com>, 2023, 2024.
-# 2tama3 <2tama3@gmail.com>, 2023, 2024.
+# 2tama3 <2tama3@gmail.com>, 2023, 2024, 2025.
 # SubaruArai <subaruletian.arai@minebea.com>, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 # Yutaro Urata2 <yutarourata03@gmail.com>, 2024.
@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-27 15:43+0000\n"
+"PO-Revision-Date: 2025-01-03 00:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3451,7 +3451,7 @@ msgstr "ページ設定..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job.cpp:41 common/tool/actions.cpp:91
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
@@ -3493,13 +3493,12 @@ msgstr "警告"
 #: common/dialogs/dialog_rc_job_base.cpp:60
 #: kicad/dialogs/panel_jobs_base.cpp:471
 #: pcbnew/dialogs/dialog_render_job_base.cpp:31
-#, fuzzy
 msgid "Output File"
 msgstr "出力ファイル"
 
 #: common/dialogs/dialog_rc_job_base.cpp:72
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "違反がある場合にジョブの失敗をレポート"
 
 #: common/dialogs/dialog_rc_job_base.cpp:78 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4382,18 +4381,21 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、ユーザーベース"
-"全体を通じて重要なバグをより効果的に特定したり、機能改善のための分析の手がか"
-"りにします。\n"
+"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、\n"
+"ユーザーベース全体を通じて重要なバグをより効果的に特定したり、\n"
+"機能改善のための分析の手がかりにします。\n"
 "\n"
-"インストールされたKiCadと自動的に送信するレポートを紐づけるために完全にランダ"
-"ムで一意の識別子を生成し、クラッシュのレポートの目的だけに使用します。IPアド"
-"レスを含む個人情報はこの識別子に保存されたり関連付けたりしません。この識別子"
-"はボタンを押すことでいつでもリセットすることができます。\n"
+"インストールされたKiCadと自動的に送信するレポートを\n"
+"紐づけるために完全にランダムで一意の識別子を生成し、\n"
+"クラッシュのレポートの目的だけに使用します。\n"
+"IPアドレスを含む個人情報はこの識別子に保存されたり\n"
+"関連付けたりしません。\n"
+"この識別子はボタンを押すことでいつでもリセットすることができます。\n"
 "\n"
-"この活動に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時"
-"に自動的にレポートを送信します。回路図やPCBのようなユーザーの設計ファイルはこ"
-"の過程で共有されることはありません。"
+"この活動に参加することを選択した場合、\n"
+"KiCadはクラッシュやイベントが発生した時に自動的にレポートを送信します。\n"
+"回路図やPCBのようなユーザーの設計ファイルは\n"
+"この過程で共有されることはありません。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
