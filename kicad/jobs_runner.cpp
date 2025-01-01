@@ -58,15 +58,18 @@ bool JOBS_RUNNER::RunJobsAllOutputs( bool aBail )
 }
 
 
-int JOBS_RUNNER::runSpecialExecute( JOBSET_JOB* aJob )
+int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
 {
     JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( aJob->m_job.get() );
+
+
+    wxString             cmd = ExpandEnvVarSubstitutions( specialJob->m_command, m_project );
 
     // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
     wxProcess process;
     process.Redirect();
 
-    int result = static_cast<int>( wxExecute( specialJob->m_command, wxEXEC_SYNC, &process ) );
+    int result = static_cast<int>( wxExecute( cmd, wxEXEC_SYNC, &process ) );
 
     wxString output;
 
@@ -197,12 +200,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
             // special jobs
             if( job.m_job->GetType() == "special_execute" )
 			{
-				JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job.get() );
-
-                wxString cmd = ExpandEnvVarSubstitutions( specialJob->m_command, m_project );
-
-                // static cast requried because wx used `long` which is 64-bit on linux but 32-bit on windows
-                result = static_cast<int>( wxExecute( cmd ) );
+                runSpecialExecute( &job, m_project );
 			}
         }
 

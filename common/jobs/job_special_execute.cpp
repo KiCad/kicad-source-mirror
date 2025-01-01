@@ -29,7 +29,7 @@ JOB_SPECIAL_EXECUTE::JOB_SPECIAL_EXECUTE() :
         m_recordOutput( true )
 {
     m_params.emplace_back( new JOB_PARAM<wxString>( "command", &m_command, m_command ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "command", &m_ignoreExitcode, m_ignoreExitcode ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "ignore_exit_code", &m_ignoreExitcode, m_ignoreExitcode ) );
     m_params.emplace_back(
             new JOB_PARAM<bool>( "record_output", &m_recordOutput, m_recordOutput ) );
 }

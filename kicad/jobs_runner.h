@@ -37,7 +37,7 @@ public:
     bool RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail = false );
 
 private:
-    int runSpecialExecute( JOBSET_JOB* aJob );
+    int runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject );
 
 private:
     KIWAY*          m_kiway;
