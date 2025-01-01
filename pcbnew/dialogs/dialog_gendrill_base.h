@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,6 +33,7 @@ class STD_BITMAP_BUTTON;
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GENDRILL_BASE
@@ -84,8 +85,6 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		virtual void OnSelDrillUnitsSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelZerosFmtSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGenReportFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onQuitDlg( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnGenDrillFile( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

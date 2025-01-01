@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 Jean_Pierre Charras <jp.charras@ujf-grenoble.fr>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,19 +56,12 @@ private:
     // event functions
     void OnSelDrillUnitsSelected( wxCommandEvent& event ) override;
     void OnSelZerosFmtSelected( wxCommandEvent& event ) override;
-    void OnGenDrillFile( wxCommandEvent& event ) override;
 	void onFileFormatSelection( wxCommandEvent& event ) override;
 
     // Called when closing the dialog: Update config.
     // This is not done in Dtor, because the dtor call is often delayed and the update
     // could happen too late for the caller.
 	void onCloseDlg( wxCloseEvent& event ) override
-    {
-        UpdateConfig();
-        event.Skip();
-    }
-
-	void onQuitDlg( wxCommandEvent& event ) override
     {
         UpdateConfig();
         event.Skip();

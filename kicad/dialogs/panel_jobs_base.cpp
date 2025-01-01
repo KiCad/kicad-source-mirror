@@ -244,6 +244,8 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	wxArrayString m_choiceArchiveformatChoices;
 	m_choiceArchiveformat = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceArchiveformatChoices, 0 );
 	m_choiceArchiveformat->SetSelection( 0 );
+	m_choiceArchiveformat->SetMinSize( wxSize( 100,-1 ) );
+
 	fgSizer1->Add( m_choiceArchiveformat, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Output path:"), wxDefaultPosition, wxDefaultSize, 0 );

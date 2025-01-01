@@ -76,7 +76,8 @@ public:
         // prevent someone from failing to add the type info in the future
         wxASSERT( jobTypeInfos.contains( m_output->m_type ) );
 
-        SetTitle( wxString::Format( _( "%s Output Options" ), m_output->m_outputHandler->GetDefaultDescription() ) );
+        SetTitle( wxString::Format( _( "%s Output Options" ),
+                                    m_output->m_outputHandler->GetDefaultDescription() ) );
 
         if( m_output->m_type != JOBSET_OUTPUT_TYPE::ARCHIVE )
         {
@@ -133,7 +134,8 @@ public:
     bool TransferDataFromWindow() override
     {
         wxString outputPath = m_textCtrlOutputPath->GetValue().Trim().Trim( false );
-        if( outputPath == wxEmptyString )
+
+        if( outputPath.IsEmpty() )
         {
             DisplayErrorMessage( this, _( "Output path cannot be empty" ) );
             return false;

@@ -1285,7 +1285,7 @@
       <property name="name">DIALOG_JOB_OUTPUT_BASE</property>
       <property name="pos"></property>
       <property name="size">-1,-1</property>
-      <property name="style">wxDEFAULT_DIALOG_STYLE</property>
+      <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
       <property name="subclass">DIALOG_SHIM; dialog_shim.h; forward_declare</property>
       <property name="title"></property>
       <property name="tooltip"></property>
@@ -1542,7 +1542,7 @@
                 <property name="maximum_size"></property>
                 <property name="min_size"></property>
                 <property name="minimize_button">0</property>
-                <property name="minimum_size"></property>
+                <property name="minimum_size">100,-1</property>
                 <property name="moveable">1</property>
                 <property name="name">m_choiceArchiveformat</property>
                 <property name="pane_border">1</property>
