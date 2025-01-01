@@ -459,6 +459,27 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
+    if( aRenderJob->GetOutputPath().IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+
+        switch( aRenderJob->m_format )
+        {
+        case JOB_PCB_RENDER::FORMAT::JPEG: fn.SetExt( FILEEXT::JpegFileExtension ); break;
+        case JOB_PCB_RENDER::FORMAT::PNG: fn.SetExt( FILEEXT::PngFileExtension ); break;
+        default:
+            m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
+        }
+
+        // set the name to board name + "side", its lazy but its hard to generate anything truely unique
+        // incase someone is doing this in a jobset with multiple jobs, they should be setting the output themselves
+        // or we do a hash based on all the options
+        fn.SetName( wxString::Format( "%s-%d", fn.GetName(), static_cast<int>( aRenderJob->m_side ) ) );
+
+        aRenderJob->SetOutputPath( fn.GetFullName() );
+    }
+
     BOARD_ADAPTER boardAdapter;
 
     boardAdapter.SetBoard( brd );
