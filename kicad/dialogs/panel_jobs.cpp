@@ -935,10 +935,18 @@ void PANEL_JOBS::OnJobButtonDelete( wxCommandEvent& aEvent )
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
     selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
 
+    int select = selectedRows[0];
+
     for( int row : selectedRows )
         m_jobsFile->RemoveJob( row );
 
     rebuildJobList();
+
+    if( m_jobsGrid->GetNumberRows() )
+    {
+        m_jobsGrid->MakeCellVisible( std::max( 0, select-1 ), m_jobsGrid->GetGridCursorCol() );
+        m_jobsGrid->SetGridCursor( std::max( 0, select-1 ), m_jobsGrid->GetGridCursorCol() );
+    }
 }
 
 
