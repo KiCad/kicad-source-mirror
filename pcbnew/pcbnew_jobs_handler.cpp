@@ -690,7 +690,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
         PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob );
 
         PCB_PLOTTER     plotter( brd, m_reporter, plotOpts );
-        if( plotter.Plot( aSvgJob->GetFullOutputPath(), aSvgJob->m_printMaskLayer,
+        if( !plotter.Plot( aSvgJob->GetFullOutputPath(), aSvgJob->m_printMaskLayer,
                           aSvgJob->m_printMaskLayersToIncludeOnAllLayers, false ) )
         {
             return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -782,7 +782,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
         PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob );
 
         PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
-        if( plotter.Plot( aDxfJob->GetFullOutputPath(), aDxfJob->m_printMaskLayer,
+        if( !plotter.Plot( aDxfJob->GetFullOutputPath(), aDxfJob->m_printMaskLayer,
                           aDxfJob->m_printMaskLayersToIncludeOnAllLayers, false ) )
         {
             return CLI::EXIT_CODES::ERR_UNKNOWN;
