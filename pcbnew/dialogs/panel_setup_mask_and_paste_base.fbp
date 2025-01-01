@@ -416,7 +416,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Global clearance between pads and the solder mask.&#x0A;This value can be superseded by local values for a footprint or a pad.</property>
+                    <property name="tooltip">Global clearance between pads and the solder mask.&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Positive clearance means a solder mask opening bigger than the pad (typical for solder mask clearance).</property>
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
@@ -545,7 +545,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Positive clearance means area bigger than the pad (usual for solder mask clearance).</property>
+                    <property name="tooltip">Global clearance between pads and the solder mask.&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Positive clearance means a solder mask opening bigger than the pad (typical for solder mask clearance).</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>
@@ -679,7 +679,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Min. dist between 2 pad areas.&#x0A;Two pad areas nearer than this value will be merged during plotting.&#x0A;This parameter is only used to plot solder mask layers.&#x0A;Leave at 0 unless you know what you are doing.</property>
+                    <property name="tooltip">Minimum distance between openings in the solder mask.&#x0A;Pad openings closer than this distance will be plotted as a single opening.</property>
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
@@ -743,7 +743,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Minimum distance between openings in the solder mask.  Pad openings closer than this distance will be plotted as a single opening.</property>
+                    <property name="tooltip">Minimum distance between openings in the solder mask.&#x0A;Pad openings closer than this distance will be plotted as a single opening.</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>
@@ -877,7 +877,7 @@
                     <property name="style"></property>
                     <property name="subclass">; ; forward_declare</property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">For DRC tests:&#x0A;max distance between a solder mask opening and a copper item having a different net than the parent solder mask opening to create a DRC error</property>
+                    <property name="tooltip">Minimum distance between a solder mask opening and a copper item with a different net than the solder mask opening's parent.&#x0A;Distances smaller than this minimum will create a DRC error.</property>
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
@@ -941,7 +941,7 @@
                     <property name="style"></property>
                     <property name="subclass">; ; forward_declare</property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip"></property>
+                    <property name="tooltip">Minimum distance between a solder mask opening and a copper item with a different net than the solder mask opening's parent.&#x0A;Distances smaller than this minimum will create a DRC error.</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>
@@ -1075,7 +1075,7 @@
                     <property name="style"></property>
                     <property name="subclass">; ; forward_declare</property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">For DRC tests:&#x0A;Disable DRC error type solder mask aperture bridge between pads of the same footprint (useful for net ties)</property>
+                    <property name="tooltip">Disable DRC error checking for solder mask aperture bridging between pads in the same footprint.</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>
@@ -1214,7 +1214,7 @@
                         <property name="style"></property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="toolbar_pane">0</property>
-                        <property name="tooltip">Tented vias: not plotted on soldermask layer&#x0A;Not tented: vias are plotted on soldermask layer&#x0A;(Solder mask is a negative layer)</property>
+                        <property name="tooltip">Tented: vias are covered with solder mask.&#x0A;Not tented: vias are not covered with solder mask.</property>
                         <property name="validator_data_type"></property>
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
@@ -1279,7 +1279,7 @@
                         <property name="style"></property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="toolbar_pane">0</property>
-                        <property name="tooltip">Tented vias: not plotted on soldermask layer&#x0A;Not tented: vias are plotted on soldermask layer&#x0A;(Solder mask is a negative layer)</property>
+                        <property name="tooltip">Tented: vias are covered with solder mask.&#x0A;Not tented: vias are not covered with solder mask.</property>
                         <property name="validator_data_type"></property>
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
@@ -1414,7 +1414,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Global clearance between pads and the solder paste.&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Final clearance value is the sum of this value and the clearance value ratio.</property>
+                    <property name="tooltip">Global absolute clearance between pads and the solder paste.&#x0A;Negative clearance means solder paste area smaller than the pad (typical for solder paste clearance).&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Final clearance value is the sum of this value and the relative clearance value.</property>
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
@@ -1478,7 +1478,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Negative clearance means area smaller than the pad (usual for solder paste clearance).</property>
+                    <property name="tooltip">Global absolute clearance between pads and the solder paste.&#x0A;Negative clearance means solder paste area smaller than the pad (typical for solder paste clearance).&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Final clearance value is the sum of this value and the relative clearance value.</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>
@@ -1612,7 +1612,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Global clearance ratio in percent between pads and the solder paste.&#x0A;A value of 10 means the clearance value is 10 percent of the pad size.&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Final clearance value is the sum of this value and the clearance value.</property>
+                    <property name="tooltip">Global clearance ratio between pads and the solder paste as a percentage of the pad size.&#x0A;A value of 10 means the clearance value is 10 percent of the pad size.&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Final clearance value is the sum of this value and the absolute clearance value.</property>
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
@@ -1676,7 +1676,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Additional clearance as a percentage of the pad size.</property>
+                    <property name="tooltip">Global clearance ratio between pads and the solder paste as a percentage of the pad size.&#x0A;A value of 10 means the clearance value is 10 percent of the pad size.&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Final clearance value is the sum of this value and the absolute clearance value.</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>

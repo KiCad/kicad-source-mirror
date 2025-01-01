@@ -53,7 +53,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_maskMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder mask expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maskMarginLabel->Wrap( -1 );
-	m_maskMarginLabel->SetToolTip( _("Global clearance between pads and the solder mask.\nThis value can be superseded by local values for a footprint or a pad.") );
+	m_maskMarginLabel->SetToolTip( _("Global clearance between pads and the solder mask.\nThis value can be superseded by local values for a footprint or a pad.\nPositive clearance means a solder mask opening bigger than the pad (typical for solder mask clearance).") );
 
 	gbSizer1->Add( m_maskMarginLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -64,7 +64,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	gbSizer1->Add( m_stSolderMaskSettings, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_maskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_maskMarginCtrl->SetToolTip( _("Positive clearance means area bigger than the pad (usual for solder mask clearance).") );
+	m_maskMarginCtrl->SetToolTip( _("Global clearance between pads and the solder mask.\nThis value can be superseded by local values for a footprint or a pad.\nPositive clearance means a solder mask opening bigger than the pad (typical for solder mask clearance).") );
 
 	gbSizer1->Add( m_maskMarginCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -74,12 +74,12 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_maskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask minimum web width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maskMinWidthLabel->Wrap( -1 );
-	m_maskMinWidthLabel->SetToolTip( _("Min. dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting.\nThis parameter is only used to plot solder mask layers.\nLeave at 0 unless you know what you are doing.") );
+	m_maskMinWidthLabel->SetToolTip( _("Minimum distance between openings in the solder mask.\nPad openings closer than this distance will be plotted as a single opening.") );
 
 	gbSizer1->Add( m_maskMinWidthLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_maskMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_maskMinWidthCtrl->SetToolTip( _("Minimum distance between openings in the solder mask.  Pad openings closer than this distance will be plotted as a single opening.") );
+	m_maskMinWidthCtrl->SetToolTip( _("Minimum distance between openings in the solder mask.\nPad openings closer than this distance will be plotted as a single opening.") );
 
 	gbSizer1->Add( m_maskMinWidthCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -89,19 +89,20 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_maskToCopperClearanceLabel = new wxStaticText( this, wxID_ANY, _("Solder mask to copper clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maskToCopperClearanceLabel->Wrap( -1 );
-	m_maskToCopperClearanceLabel->SetToolTip( _("For DRC tests:\nmax distance between a solder mask opening and a copper item having a different net than the parent solder mask opening to create a DRC error") );
+	m_maskToCopperClearanceLabel->SetToolTip( _("Minimum distance between a solder mask opening and a copper item with a different net than the solder mask opening's parent.\nDistances smaller than this minimum will create a DRC error.") );
 
 	gbSizer1->Add( m_maskToCopperClearanceLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_maskToCopperClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+        m_maskToCopperClearanceCtrl->SetToolTip( _("Minimum distance between a solder mask opening and a copper item with a different net than the solder mask opening's parent.\nDistances smaller than this minimum will create a DRC error.") );
 	gbSizer1->Add( m_maskToCopperClearanceCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_maskToCopperClearanceUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maskToCopperClearanceUnits->Wrap( -1 );
 	gbSizer1->Add( m_maskToCopperClearanceUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_allowBridges = new wxCheckBox( this, wxID_ANY, _("Allow bridged solder mask apertures between pads within footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_allowBridges->SetToolTip( _("For DRC tests:\nDisable DRC error type solder mask aperture bridge between pads of the same footprint (useful for net ties)") );
+	m_allowBridges = new wxCheckBox( this, wxID_ANY, _("Allow bridged solder mask apertures between pads within footprints."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_allowBridges->SetToolTip( _("Disable DRC error checking for solder mask aperture bridging between pads in the same footprint.") );
 
 	gbSizer1->Add( m_allowBridges, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 
@@ -113,12 +114,12 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bSizer6->Add( m_stTenting, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT|wxRIGHT, 5 );
 
 	m_tentViasFront = new wxCheckBox( this, wxID_ANY, _("Front"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tentViasFront->SetToolTip( _("Tented vias: not plotted on soldermask layer\nNot tented: vias are plotted on soldermask layer\n(Solder mask is a negative layer)") );
+	m_tentViasFront->SetToolTip( _("Tented: vias are covered with solder mask.\nNot tented: vias are not covered with solder mask.") );
 
 	bSizer6->Add( m_tentViasFront, 0, wxALL, 5 );
 
 	m_tentViasBack = new wxCheckBox( this, wxID_ANY, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tentViasBack->SetToolTip( _("Tented vias: not plotted on soldermask layer\nNot tented: vias are plotted on soldermask layer\n(Solder mask is a negative layer)") );
+	m_tentViasBack->SetToolTip( _("Tented: vias are covered with solder mask.\nNot tented: vias are not covered with solder mask.") );
 
 	bSizer6->Add( m_tentViasBack, 0, wxALL, 5 );
 
@@ -133,12 +134,12 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_pasteMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pasteMarginLabel->Wrap( -1 );
-	m_pasteMarginLabel->SetToolTip( _("Global clearance between pads and the solder paste.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the clearance value ratio.") );
+	m_pasteMarginLabel->SetToolTip( _("Global absolute clearance between pads and the solder paste.\nNegative clearance means solder paste area smaller than the pad (typical for solder paste clearance).\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the relative clearance value.") );
 
 	gbSizer1->Add( m_pasteMarginLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_pasteMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_pasteMarginCtrl->SetToolTip( _("Negative clearance means area smaller than the pad (usual for solder paste clearance).") );
+	m_pasteMarginCtrl->SetToolTip( _("Global absolute clearance between pads and the solder paste.\nNegative clearance means solder paste area smaller than the pad (typical for solder paste clearance).\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the relative clearance value.") );
 
 	gbSizer1->Add( m_pasteMarginCtrl, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -148,12 +149,12 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_pasteMarginRatioLabel = new wxStaticText( this, wxID_ANY, _("Solder paste relative clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pasteMarginRatioLabel->Wrap( -1 );
-	m_pasteMarginRatioLabel->SetToolTip( _("Global clearance ratio in percent between pads and the solder paste.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the clearance value.") );
+	m_pasteMarginRatioLabel->SetToolTip( _("Global clearance ratio between pads and the solder paste as a percentage of the pad size.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the absolute clearance value.") );
 
 	gbSizer1->Add( m_pasteMarginRatioLabel, wxGBPosition( 8, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_pasteMarginRatioCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_pasteMarginRatioCtrl->SetToolTip( _("Additional clearance as a percentage of the pad size.") );
+	m_pasteMarginRatioCtrl->SetToolTip( _("Global clearance ratio between pads and the solder paste as a percentage of the pad size.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the absolute clearance value.") );
 
 	gbSizer1->Add( m_pasteMarginRatioCtrl, wxGBPosition( 8, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
