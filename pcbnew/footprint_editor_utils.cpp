@@ -289,7 +289,30 @@ COLOR4D FOOTPRINT_EDIT_FRAME::GetGridColor()
 
 void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
+    const PCB_LAYER_ID oldLayer = GetActiveLayer();
+
+    if( oldLayer == aLayer )
+        return;
+
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
+
+    /*
+     * Follow the PCB editor logic for showing/hiding clearance layers: show only for
+     * the active copper layer or a front/back non-copper layer.
+     */
+    const auto getClearanceLayerForActive = []( PCB_LAYER_ID aActiveLayer ) -> std::optional<int>
+    {
+        if( IsCopperLayer( aActiveLayer ) )
+            return CLEARANCE_LAYER_FOR( aActiveLayer );
+
+        return std::nullopt;
+    };
+
+    if( std::optional<int> oldClearanceLayer = getClearanceLayerForActive( oldLayer ) )
+        GetCanvas()->GetView()->SetLayerVisible( *oldClearanceLayer, false );
+
+    if( std::optional<int> newClearanceLayer = getClearanceLayerForActive( aLayer ) )
+        GetCanvas()->GetView()->SetLayerVisible( *newClearanceLayer, true );
 
     m_appearancePanel->OnLayerChanged();
 

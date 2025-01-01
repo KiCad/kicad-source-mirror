@@ -1493,7 +1493,7 @@ void PCB_EDIT_FRAME::SetGridColor( const COLOR4D& aColor )
 
 void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
-    PCB_LAYER_ID oldLayer = GetActiveLayer();
+    const PCB_LAYER_ID oldLayer = GetActiveLayer();
 
     if( oldLayer == aLayer )
         return;
@@ -1508,7 +1508,9 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
     /*
     * Only show pad, via and track clearances when a copper layer is active
-    * and then only show the clearance layer for that copper layer.
+    * and then only show the clearance layer for that copper layer. For
+    * front/back non-copper layers, show the clearance layer for the outer
+    * layer on that side.
     *
     * For pads/vias, this is to avoid clutter when there are pad/via layers
     * that vary in flash (i.e. clearance from the hole or pad edge), padstack
@@ -1518,15 +1520,19 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     * have their own set of independent clearance layers to allow track clearance
     * to be shown for more layers.
     */
-    if( IsCopperLayer( oldLayer ) )
+    const auto getClearanceLayerForActive = []( PCB_LAYER_ID aActiveLayer ) -> std::optional<int>
     {
-        GetCanvas()->GetView()->SetLayerVisible( CLEARANCE_LAYER_FOR( oldLayer ), false );
-    }
+        if( IsCopperLayer( aActiveLayer ) )
+            return CLEARANCE_LAYER_FOR( aActiveLayer );
 
-    if( IsCopperLayer( aLayer ) )
-    {
-        GetCanvas()->GetView()->SetLayerVisible( CLEARANCE_LAYER_FOR( aLayer ), true );
-    }
+        return std::nullopt;
+    };
+
+    if( std::optional<int> oldClearanceLayer = getClearanceLayerForActive( oldLayer ) )
+        GetCanvas()->GetView()->SetLayerVisible( *oldClearanceLayer, false );
+
+    if( std::optional<int> newClearanceLayer = getClearanceLayerForActive( aLayer ) )
+        GetCanvas()->GetView()->SetLayerVisible( *newClearanceLayer, true );
 
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int
