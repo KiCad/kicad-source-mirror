@@ -635,7 +635,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         int diameter = 0;
 
-        for( PCB_LAYER_ID layer : LSET( aLayerMask & LSET::AllCuMask() ).Seq() )
+        for( PCB_LAYER_ID layer : aLayerMask.Seq() )
             diameter = std::max( diameter, via->GetWidth( layer ) );
 
         diameter += 2 * via_margin + width_adj;
