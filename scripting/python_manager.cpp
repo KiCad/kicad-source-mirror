@@ -106,8 +106,8 @@ wxString PYTHON_MANAGER::FindPythonInterpreter()
 #if defined( __WINDOWS__ )
     wxFileName pythonExe = FindKicadFile( "python.exe" );
 
-    if( pythonExe.IsFileExecutable() )
-        return pythonExe.GetFullPath();
+    //if( pythonExe.IsFileExecutable() )
+      //  return pythonExe.GetFullPath();
 #elif defined( __WXMAC__ )
     wxFileName pythonExe( PATHS::GetOSXKicadDataDir(), wxEmptyString );
     pythonExe.RemoveLastDir();
@@ -125,13 +125,19 @@ wxString PYTHON_MANAGER::FindPythonInterpreter()
     // In case one is forced with cmake
     pythonExe.Assign( wxString::FromUTF8Unchecked( PYTHON_EXECUTABLE ) );
 
-    if( pythonExe.IsFileExecutable() )
-        return pythonExe.GetFullPath();
+    //if( pythonExe.IsFileExecutable() )
+      //  return pythonExe.GetFullPath();
 
     // Fall back on finding any Python in the user's path
 
 #ifdef _WIN32
-    // TODO(JE) where
+    wxArrayString output;
+
+    if( 0 == wxExecute( wxS( "where python.exe" ), output, wxEXEC_SYNC ) )
+    {
+        if( !output.IsEmpty() )
+            return output[0];
+    }
 #else
     wxArrayString output;
 
