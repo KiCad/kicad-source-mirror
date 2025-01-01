@@ -55,6 +55,9 @@ namespace CLI
 #define ARG_INCLUDE_BORDER_TITLE "--include-border-title"
 #define ARG_MIRROR "--mirror"
 
+#define ARG_PLOT_INVISIBLE_TEXT "--plot-invisible-text"
+#define ARG_PLOT_INVISIBLE_TEXT_DESC "Force plotting of invisible values / refs"
+
 #define ARG_FLIP_BOTTOM_PADS "--flip-bottom-pads"
 #define ARG_UNIQUE_PINS "--unique-pins"
 #define ARG_UNIQUE_FOOTPRINTS "--unique-footprints"
