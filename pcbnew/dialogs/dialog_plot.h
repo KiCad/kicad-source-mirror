@@ -83,8 +83,6 @@ private:
     void loadPlotParamsFromJob();
     void transferPlotParamsToJob();
 
-    LSEQ getPlotSequence( PCB_LAYER_ID aLayerToPlot );
-
 private:
     PCB_EDIT_FRAME*     m_editFrame;
     LSEQ                m_layerList;                // List to hold CheckListBox layer numbers

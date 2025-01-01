@@ -359,6 +359,7 @@ set( PCBNEW_CLASS_SRCS
     pcb_base_edit_frame.cpp
     pcb_layer_box_selector.cpp
     pcb_edit_frame.cpp
+    pcb_plotter.cpp
     pcbnew_config.cpp
     pcbnew_jobs_handler.cpp
     pcbnew_printout.cpp

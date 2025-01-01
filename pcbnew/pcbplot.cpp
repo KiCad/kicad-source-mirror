@@ -38,7 +38,7 @@
 #include <build_version.h>
 #include <gbr_metadata.h>
 #include <render_settings.h>
-
+#include <pcb_plotter.h>
 
 const wxString GetGerberProtelExtension( int aLayer )
 {
@@ -379,32 +379,8 @@ void AddGerberX2Attribute( PLOTTER* aPlotter, const BOARD* aBoard, int aLayer,
 void BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir,
                         const wxString& aSuffix, const wxString& aExtension )
 {
-    // aFilename contains the base filename only (without path and extension)
-    // when calling this function.
-    // It is expected to be a valid filename (this is usually the board filename)
-    aFilename->SetPath( aOutputDir );
-
-    // Set the file extension
-    aFilename->SetExt( aExtension );
-
-    // remove leading and trailing spaces if any from the suffix, if
-    // something survives add it to the name;
-    // also the suffix can contain some not allowed chars in filename (/ \ . : and some others),
-    // so change them to underscore
-    // Remember it can be called from a python script, so the illegal chars
-    // have to be filtered here.
-    wxString suffix = aSuffix;
-    suffix.Trim( true );
-    suffix.Trim( false );
-
-    wxString badchars = wxFileName::GetForbiddenChars(wxPATH_DOS);
-    badchars.Append( "%." );
-
-    for( unsigned ii = 0; ii < badchars.Len(); ii++ )
-        suffix.Replace( badchars[ii], wxT("_") );
-
-    if( !suffix.IsEmpty() )
-        aFilename->SetName( aFilename->GetName() + wxT( "-" ) + suffix );
+    // Kept as compat, incase python junk used it
+    PCB_PLOTTER::BuildPlotFileName( aFilename, aOutputDir, aSuffix, aExtension );
 }
 
 

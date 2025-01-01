@@ -51,6 +51,7 @@
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <plotters/plotters_pslike.h>
+#include <pcb_plotter.h>
 
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
@@ -1384,8 +1385,6 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             m_plotOpts.SetWidthAdjust( m_PSWidthAdjust );
         }
 
-        wxString file_ext( GetDefaultPlotExtension( m_plotOpts.GetFormat() ) );
-
         // Test for a reasonable scale value
         // XXX could this actually happen? isn't it constrained in the apply function?
         if( m_plotOpts.GetScale() < PLOT_MIN_SCALE )
@@ -1394,206 +1393,34 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( m_plotOpts.GetScale() > PLOT_MAX_SCALE )
             DisplayInfoMessage( this, _( "Warning: Scale option set to a very large value" ) );
 
-        GERBER_JOBFILE_WRITER jobfile_writer( board, &reporter );
 
         // Save the current plot options in the board
         m_editFrame->SetPlotSettings( m_plotOpts );
 
-        wxBusyCursor dummy;
+        PCB_PLOTTER pcbPlotter( m_editFrame->GetBoard(), &reporter, m_plotOpts );
 
-        if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF &&
-            m_plotOpts.m_PDFSingle )
+        LSEQ layersToPlot = m_plotOpts.GetLayerSelection().UIOrder();
+
+        wxArrayInt plotOnAllLayers;
+        LSEQ commonLayers;
+
+        if( m_plotAllLayersList->GetCheckedItems( plotOnAllLayers ) )
         {
+            size_t count = plotOnAllLayers.GetCount();
 
+            for( size_t i = 0; i < count; i++ )
+            {
+                int          index = plotOnAllLayers.Item( i );
+                PCB_LAYER_ID client_layer =
+                        getLayerClientData( m_plotAllLayersList, index )->Layer();
+
+                commonLayers.push_back( client_layer );
+            }
         }
 
-        LSEQ   layersToPlot = m_plotOpts.GetLayerSelection().UIOrder();
-        size_t finalPageCount = 0;
-        for( size_t i = 0; i < layersToPlot.size(); i++ )
-        {
-            PCB_LAYER_ID layer = layersToPlot[i];
-
-            // All copper layers that are disabled are actually selected
-            // This is due to wonkyness in automatically selecting copper layers
-            // for plotting when adding more than two layers to a board.
-            // If plot options become accessible to the layers setup dialog
-            // please move this functionality there!
-            // This skips a copper layer if it is actually disabled on the board.
-            if( ( LSET::AllCuMask() & ~board->GetEnabledLayers() )[layer] )
-                continue;
-
-            finalPageCount++;
-        }
-
-        PLOTTER* plotter = nullptr;
-        for( size_t i = 0, pageNum = 1; i < layersToPlot.size(); i++ )
-        {
-            PCB_LAYER_ID layer = layersToPlot[i];
-
-            // All copper layers that are disabled are actually selected
-            // This is due to wonkyness in automatically selecting copper layers
-            // for plotting when adding more than two layers to a board.
-            // If plot options become accessible to the layers setup dialog
-            // please move this functionality there!
-            // This skips a copper layer if it is actually disabled on the board.
-            if( ( LSET::AllCuMask() & ~board->GetEnabledLayers() )[layer] )
-                continue;
-
-            LSEQ plotSequence = getPlotSequence( layer );
-
-            wxString     layerName = board->GetLayerName( layer );
-            //@todo allow controlling the sheet name and path that will be displayed in the title block
-            // Leave blank for now
-            wxString     sheetPath;
-
-            // Pick the basename from the board file
-            wxFileName fn( boardFilename );
-
-            // Use Gerber Extensions based on layer number
-            // (See http://en.wikipedia.org/wiki/Gerber_File)
-            if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && m_useGerberExtensions->GetValue() )
-                file_ext = GetGerberProtelExtension( layer );
-
-            if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle )
-            {
-                fn.SetExt( FILEEXT::PdfFileExtension );
-            }
-            else
-            {
-                BuildPlotFileName( &fn, outputDir.GetPath(), layerName, file_ext );
-            }
-
-            if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER )
-            {
-                wxString fullname = fn.GetFullName();
-                jobfile_writer.AddGbrFile( layer, fullname );
-            }
-
-            LOCALE_IO toggle;
-
-            if( m_plotOpts.GetFormat() != PLOT_FORMAT::PDF
-                || !m_plotOpts.m_PDFSingle
-                || ( i == 0 && m_plotOpts.GetFormat() == PLOT_FORMAT::PDF
-                     && m_plotOpts.m_PDFSingle ) )
-            {
-                // this will only be used by pdf
-                wxString pageNumber = wxString::Format( "%zu", pageNum );
-                wxString pageName = layerName;
-                wxString sheetName = layerName;
-
-                plotter = StartPlotBoard( board, &m_plotOpts, layer, layerName, fn.GetFullPath(),
-                                          sheetName, sheetPath, pageName, pageNumber,
-                                          finalPageCount );
-            }
-
-            // Print diags in messages box:
-            wxString msg;
-
-            if( plotter )
-            {
-                plotter->SetTitle( ExpandTextVars( board->GetTitleBlock().GetTitle(), &textResolver ) );
-
-                if( m_plotOpts.m_PDFMetadata )
-                {
-                    msg = wxS( "AUTHOR" );
-
-                    if( board->ResolveTextVar( &msg, 0 ) )
-                        plotter->SetAuthor( msg );
-
-                    msg = wxS( "SUBJECT" );
-
-                    if( board->ResolveTextVar( &msg, 0 ) )
-                        plotter->SetSubject( msg );
-                }
-
-                PlotBoardLayers( board, plotter, plotSequence, m_plotOpts );
-                PlotInteractiveLayer( board, plotter, m_plotOpts );
-
-                if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle &&
-                    i != layersToPlot.size() - 1)
-                {
-                    // this will only be used by pdf
-                // this will only be used by pdf
-                    wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
-                    PCB_LAYER_ID nextLayer = layersToPlot[i + 1];
-                    wxString     pageName = board->GetLayerName( nextLayer );
-                    wxString     sheetName = layerName;
-
-                    static_cast<PDF_PLOTTER*>( plotter )->ClosePage();
-                    static_cast<PDF_PLOTTER*>( plotter )->StartPage( pageNumber, pageName );
-                    setupPlotterNewPDFPage( plotter, board, &m_plotOpts, sheetName, sheetPath,
-                                            pageNumber, finalPageCount );
-                }
-
-                if( m_plotOpts.GetFormat() != PLOT_FORMAT::PDF
-                        || !m_plotOpts.m_PDFSingle
-                        || i == layersToPlot.size()-1 )
-                {
-                    plotter->EndPlot();
-                    delete plotter->RenderSettings();
-                    delete plotter;
-                    plotter = nullptr;
-
-                    msg.Printf( _( "Plotted to '%s'." ), fn.GetFullPath() );
-                    reporter.Report( msg, RPT_SEVERITY_ACTION );
-                }
-
-            }
-            else
-            {
-                msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
-                reporter.Report( msg, RPT_SEVERITY_ERROR );
-            }
-
-            pageNum++;
-
-            wxSafeYield();      // displays report message.
-        }
-
-        if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && m_plotOpts.GetCreateGerberJobFile() )
-        {
-            // Pick the basename from the board file
-            wxFileName fn( boardFilename );
-
-            // Build gerber job file from basename
-            BuildPlotFileName( &fn, outputDir.GetPath(), wxT( "job" ),
-                               FILEEXT::GerberJobFileExtension );
-            jobfile_writer.CreateJobFile( fn.GetFullPath() );
-        }
-
-        reporter.ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
+        pcbPlotter.Plot( outputDir.GetPath(), layersToPlot, commonLayers,
+                         m_useGerberExtensions->GetValue() );
     }
-}
-
-LSEQ DIALOG_PLOT::getPlotSequence( PCB_LAYER_ID aLayerToPlot )
-{
-    LSEQ plotSequence;
-
-    // Base layer always gets plotted first.
-    plotSequence.push_back( aLayerToPlot );
-
-    // Add selected layers from plot on all layers list in order set by user.
-    wxArrayInt plotOnAllLayers;
-
-    if( m_plotAllLayersList->GetCheckedItems( plotOnAllLayers ) )
-    {
-        size_t count = plotOnAllLayers.GetCount();
-
-        for( size_t i = 0; i < count; i++ )
-        {
-            int          index = plotOnAllLayers.Item( i );
-            PCB_LAYER_ID client_layer = getLayerClientData( m_plotAllLayersList, index )->Layer();
-
-            // Don't plot the same layer more than once;
-            if( find( plotSequence.begin(), plotSequence.end(), client_layer )
-                != plotSequence.end() )
-                continue;
-
-            plotSequence.push_back( client_layer );
-        }
-    }
-
-    return plotSequence;
 }
 
 
