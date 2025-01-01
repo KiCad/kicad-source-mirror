@@ -3,7 +3,7 @@
 # Axel Henriksson <axe.henriksson@gmail.com>, 2021, 2022.
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
-# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024, 2025.
 # Hanna Breisand <weblate.org@breisand.se>, 2022, 2024.
 # Elias Sjögreen <eliassjogreen1@gmail.com>, 2023.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-27 15:43+0000\n"
+"PO-Revision-Date: 2025-01-01 14:47+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3451,7 +3451,7 @@ msgstr "Sidinställningar..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job.cpp:41 common/tool/actions.cpp:91
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
@@ -3493,13 +3493,13 @@ msgstr "Varningar"
 #: common/dialogs/dialog_rc_job_base.cpp:60
 #: kicad/dialogs/panel_jobs_base.cpp:471
 #: pcbnew/dialogs/dialog_render_job_base.cpp:31
-#, fuzzy
 msgid "Output File"
 msgstr "Fil för utdata"
 
 #: common/dialogs/dialog_rc_job_base.cpp:72
+#, fuzzy
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Rapportera misslyckad åtgärd när överträdelser förekommer"
 
 #: common/dialogs/dialog_rc_job_base.cpp:78 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4729,8 +4729,9 @@ msgid "Copy Embedded Reference"
 msgstr "Kopiera inbäddad referens"
 
 #: common/dialogs/panel_embedded_files.cpp:52
+#, fuzzy
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Kopiera referens för denna inbäddade fil"
 
 #: common/dialogs/panel_embedded_files.cpp:190
 msgid "Select a file to embed"
@@ -5919,12 +5920,11 @@ msgstr "Origo & Koordinataxlar"
 #: common/eda_base_frame.cpp:1185
 #, fuzzy
 msgid "New Footprint Defaults"
-msgstr "Nytt fotavtryck"
+msgstr "Nya fotavtrycksförinställningar / Förinställningar för nytt fotavtryck"
 
 #: common/eda_base_frame.cpp:1186
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Städning av grafik"
+msgstr "Förinställningar för grafik"
 
 #: common/eda_base_frame.cpp:1191 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:129
@@ -6740,9 +6740,9 @@ msgstr ""
 "En katalog som innehåller användarspecifika skript installerade med KiCad"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Föråldrad version av KICAD_SYMBOL_DIR."
+msgstr "Föråldrad version av %s."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -7474,9 +7474,8 @@ msgid "Single gerber export"
 msgstr "Exportera enskild gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "PCB Gerbers export"
-msgstr "Exportera mönsterkorts SVG"
+msgstr "Exportera mönsterkorts Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
@@ -7492,11 +7491,11 @@ msgstr "Mönsterkort: Exportera IPC2581"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 msgid "ODB++ export"
-msgstr "OBD++-export"
+msgstr "ODB++-export"
 
 #: common/jobs/job_export_pcb_odb.cpp:70
 msgid "PCB: Export ODB++"
-msgstr "Mönsterkort: Exportera OBD++"
+msgstr "Mönsterkort: Exportera ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:54
 msgid "PCB PDF export"
@@ -7591,13 +7590,12 @@ msgid "PCB: Perform DRC"
 msgstr "Mönsterkort: Utför designregelkontroll"
 
 #: common/jobs/job_pcb_render.cpp:77
-#, fuzzy
 msgid "Render PCB"
-msgstr "Numrera om mönsterkortet"
+msgstr "Rendera mönsterkortet"
 
 #: common/jobs/job_pcb_render.cpp:81
 msgid "PCB: Render"
-msgstr ""
+msgstr "Mönsterkort: Rendera"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform Schematic ERC"
@@ -8621,7 +8619,6 @@ msgid "Increment the selected item(s)"
 msgstr "Räkna upp valt(valda) objekt"
 
 #: common/tool/actions.cpp:347
-#, fuzzy
 msgid "Increment Primary"
 msgstr "Räkna upp primärfält"
 
@@ -10392,9 +10389,8 @@ msgid "Footprint '%s' not found."
 msgstr "Fotavtryck '%s' hittades inte."
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Fel vid inläsning av typsnitt '%s'."
+msgstr "Fel vid inläsning av fotavtryck"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -11794,7 +11790,7 @@ msgstr "Kontrollera elektriska regler (ERC)"
 #: eeschema/dialogs/dialog_erc_job_config.cpp:4
 #, fuzzy
 msgid "ERC Job Configuration"
-msgstr "Ladda om konfiguration"
+msgstr "Konfiguration av elektrisk regelkontrollåtgärd"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:232
 msgid "Export netlist in KiCad format"
@@ -12381,7 +12377,6 @@ msgstr ""
 "standardkomponentvärdet när symbolen läses in i kretsschemat."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
 msgstr "Ökningssteg:"
 
@@ -14822,7 +14817,7 @@ msgstr "Gruppera efter"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:393
 #, fuzzy
 msgid "BOM Export Job"
-msgstr "Mönsterkort: Exportera DXF"
+msgstr "Åtgärd exportera Materiallista"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 msgid "Qty"
@@ -33795,7 +33790,7 @@ msgstr "Textfiler"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:118
 msgid "Export ODB++ File"
-msgstr "Exportera OBD++ fil"
+msgstr "Exportera ODB++ fil"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:146
 #, fuzzy
@@ -33854,7 +33849,7 @@ msgid ""
 "Error generating ODBPP files '%s'.\n"
 "%s"
 msgstr ""
-"Fel vid generering av OBDPP-filer '%s'.\n"
+"Fel vid generering av ODBPP-filer '%s'.\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:492
@@ -33885,7 +33880,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:66
 msgid "Export ODB++"
-msgstr "Exportera OBD++"
+msgstr "Exportera ODB++"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:269
 msgid "Non-unity scaled models:"
@@ -42894,7 +42889,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:1429
 msgid "Generating ODB++ output files"
-msgstr "Skapar OBD++ utmatningsfiler"
+msgstr "Skapar ODB++ utmatningsfiler"
 
 #: pcbnew/footprint.cpp:1305
 msgid "Other"
@@ -46458,15 +46453,15 @@ msgstr "Det gick inte att lägga till komponentdata"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
 msgid "Creating ODB++ Structure"
-msgstr "Skapar OBD++ struktur"
+msgstr "Skapar ODB++ struktur"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:118
 msgid "Exporting board to ODB++"
-msgstr "Exportera mönsterkortet till OBD++"
+msgstr "Exportera mönsterkortet till ODB++"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
 msgid "ODB++ Production File"
-msgstr "OBD++ produktionsfil"
+msgstr "ODB++ produktionsfil"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -49387,11 +49382,11 @@ msgstr "Generera en IPC-2581-fil"
 
 #: pcbnew/tools/pcb_actions.cpp:1058
 msgid "ODB++ Output File..."
-msgstr "OBD++ utmatningsfil..."
+msgstr "ODB++ utmatningsfil..."
 
 #: pcbnew/tools/pcb_actions.cpp:1059
 msgid "Generate ODB++ output files"
-msgstr "Generera OBD++ utmatningsfiler"
+msgstr "Generera ODB++ utmatningsfiler"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "IPC-D-356 Netlist File..."
