@@ -19,6 +19,7 @@
  */
 
 #include <common.h>
+#include <cli/exit_codes.h>
 #include <jobs_runner.h>
 #include <jobs/job_registry.h>
 #include <jobs/jobset.h>
@@ -71,11 +72,20 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
 
     int result = static_cast<int>( wxExecute( cmd, wxEXEC_SYNC, &process ) );
 
-    wxString output;
-
     if( specialJob->m_recordOutput )
     {
+        if( specialJob->GetOutputPath().IsEmpty() )
+        {
+            wxFileName fn( aJob->m_id );
+            fn.SetExt( wxT( "log" ) );
+            specialJob->SetOutputPath( fn.GetFullPath() );
+        }
+
         wxFFileOutputStream procOutput( specialJob->GetFullOutputPath() );
+
+        if( !procOutput.IsOk() )
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+
         wxInputStream*      inputStream = process.GetInputStream();
         if( inputStream )
         {
