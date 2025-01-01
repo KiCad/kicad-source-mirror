@@ -460,8 +460,31 @@ void PAD::SetRoundRectRadiusRatio( PCB_LAYER_ID aLayer, double aRadiusScale )
 
 void PAD::SetFrontRoundRectRadiusRatio( double aRadiusScale )
 {
+    wxASSERT_MSG( m_padStack.Mode() == PADSTACK::MODE::NORMAL,
+                  "Set front radius only meaningful for normal padstacks" );
+
     m_padStack.SetRoundRectRadiusRatio( std::clamp( aRadiusScale, 0.0, 0.5 ), F_Cu );
     SetDirty();
+}
+
+
+void PAD::SetFrontRoundRectRadiusSize( int aRadius )
+{
+    const VECTOR2I size = m_padStack.Size( F_Cu );
+    const int      minSize = std::min( size.x, size.y );
+    const double   newRatio = aRadius / double( minSize );
+
+    SetFrontRoundRectRadiusRatio( newRatio );
+}
+
+
+int PAD::GetFrontRoundRectRadiusSize() const
+{
+    const VECTOR2I size = m_padStack.Size( F_Cu );
+    const int      minSize = std::min( size.x, size.y );
+    const double   ratio = GetFrontRoundRectRadiusRatio();
+
+    return KiROUND( ratio * minSize );
 }
 
 
@@ -2588,23 +2611,30 @@ static struct PAD_DESC
                             return true;
                         } );
 
+        const auto hasRoundRadius = [=]( INSPECTABLE* aItem ) -> bool
+        {
+            if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+            {
+                // Custom padstacks can't have this property modified through panel
+                if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+                    return false;
+
+                return pad->GetShape( F_Cu ) == PAD_SHAPE::ROUNDRECT;
+            }
+
+            return false;
+        };
+
         auto roundRadiusRatio = new PROPERTY<PAD, double>( _HKI( "Corner Radius Ratio" ),
                     &PAD::SetFrontRoundRectRadiusRatio, &PAD::GetFrontRoundRectRadiusRatio );
-        roundRadiusRatio->SetAvailableFunc(
-                    [=]( INSPECTABLE* aItem ) -> bool
-                    {
-                        if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                        {
-                            // Custom padstacks can't have this property modified through panel
-                            if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
-                                return false;
-
-                            return pad->GetShape( F_Cu ) == PAD_SHAPE::ROUNDRECT;
-                        }
-
-                        return false;
-                    } );
+        roundRadiusRatio->SetAvailableFunc( hasRoundRadius );
         propMgr.AddProperty( roundRadiusRatio, groupPad );
+
+        auto roundRadiusSize = new PROPERTY<PAD, int>( _HKI( "Corner Radius Size" ),
+                    &PAD::SetFrontRoundRectRadiusSize, &PAD::GetFrontRoundRectRadiusSize,
+                    PROPERTY_DISPLAY::PT_SIZE );
+        roundRadiusSize->SetAvailableFunc( hasRoundRadius );
+        propMgr.AddProperty( roundRadiusSize, groupPad );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_SHAPE>( _HKI( "Hole Shape" ),
                     &PAD::SetDrillShape, &PAD::GetDrillShape ), groupPad )

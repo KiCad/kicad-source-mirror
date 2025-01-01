@@ -661,6 +661,10 @@ public:
        return m_padStack.RoundRectRadiusRatio( F_Cu );
     }
 
+    // For properties panel, which only supports normal padstacks
+    void SetFrontRoundRectRadiusSize( int aRadius );
+    int  GetFrontRoundRectRadiusSize() const;
+
     /**
      * Has meaning only for chamfered rectangular pads.
      *
