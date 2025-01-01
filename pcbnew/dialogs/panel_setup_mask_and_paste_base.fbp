@@ -1426,7 +1426,7 @@
                   <property name="colspan">1</property>
                   <property name="column">1</property>
                   <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                  <property name="row">8</property>
+                  <property name="row">7</property>
                   <property name="rowspan">1</property>
                   <object class="wxTextCtrl" expanded="false">
                     <property name="BottomDockable">1</property>
@@ -1624,7 +1624,7 @@
                   <property name="colspan">1</property>
                   <property name="column">1</property>
                   <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                  <property name="row">7</property>
+                  <property name="row">8</property>
                   <property name="rowspan">1</property>
                   <object class="wxTextCtrl" expanded="false">
                     <property name="BottomDockable">1</property>
