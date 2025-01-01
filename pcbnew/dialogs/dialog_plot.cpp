@@ -111,12 +111,17 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
 
     if( m_job )
     {
+        SetTitle( _( "Plot Job Options" ) );
+
         PCB_PLOTTER::PlotJobToPlotOpts( m_plotOpts, m_job );
         m_messagesPanel->Hide();
 
         m_browseButton->Hide();
+        m_openDirButton->Hide();
         m_staticTextPlotFmt->Hide();
         m_plotFormatOpt->Hide();
+        m_buttonDRC->Hide();
+        m_DRCExclusionsWarning->Hide();
         m_sdbSizer1Apply->Hide();
     }
     else
@@ -124,6 +129,10 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
         m_plotOpts = m_editFrame->GetPlotSettings();
         m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     int                       order = 0;
     LSET                      plotOnAllLayersSelection = m_plotOpts.GetPlotOnAllLayersSelection();
@@ -533,7 +542,7 @@ void DIALOG_PLOT::reInitDialog()
             knownViolations++;
     }
 
-    if( knownViolations || exclusions )
+    if( !m_job && ( knownViolations || exclusions ) )
     {
         m_DRCExclusionsWarning->SetLabel( wxString::Format( m_DRCWarningTemplate, knownViolations,
                                                             exclusions ) );
