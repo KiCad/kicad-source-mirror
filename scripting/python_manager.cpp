@@ -18,11 +18,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <config.h>
+#include <gestfich.h>
 #include <wx/process.h>
 
 #include <utility>
 
 #include <paths.h>
+#include <pgm_base.h>
 #include <python_manager.h>
 #include <wx_filename.h>
 
@@ -99,6 +102,34 @@ void PYTHON_MANAGER::Execute( const wxString& aArgs,
 
 wxString PYTHON_MANAGER::FindPythonInterpreter()
 {
+    // First, attempt to use a Python we distribute with KiCad
+#if defined( __WINDOWS__ )
+    wxFileName pythonExe = FindKicadFile( "python.exe" );
+
+    if( pythonExe.IsFileExecutable() )
+        return pythonExe.GetFullPath();
+#elif defined( __WXMAC__ )
+    wxFileName pythonExe( PATHS::GetOSXKicadDataDir(), wxEmptyString );
+    pythonExe.RemoveLastDir();
+    pythonExe.AppendDir( wxT( "Frameworks" ) );
+    pythonExe.AppendDir( wxT( "Python.framework" ) );
+    pythonExe.AppendDir( wxT( "Versions" ) );
+    pythonExe.AppendDir( wxT( "Current" ) );
+    pythonExe.AppendDir( wxT( "bin" ) );
+    pythonExe.SetFullName(wxT( "python3" ) );
+
+    if( pythonExe.IsFileExecutable() )
+        return pythonExe.GetFullPath();
+#endif
+
+    // In case one is forced with cmake
+    pythonExe.Assign( wxString::FromUTF8Unchecked( PYTHON_EXECUTABLE ) );
+
+    if( pythonExe.IsFileExecutable() )
+        return pythonExe.GetFullPath();
+
+    // Fall back on finding any Python in the user's path
+
 #ifdef _WIN32
     // TODO(JE) where
 #else
