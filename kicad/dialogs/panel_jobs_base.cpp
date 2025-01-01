@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,7 +33,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	m_jobsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_jobsGrid->SetColSize( 0, 40 );
+	m_jobsGrid->SetColSize( 0, 30 );
 	m_jobsGrid->SetColSize( 1, 260 );
 	m_jobsGrid->EnableDragColMove( false );
 	m_jobsGrid->EnableDragColSize( false );
@@ -280,8 +280,8 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	bSizerMain->Add( fgSizer1, 1, wxEXPAND|wxALL, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
+	m_sdbSizer1->AddButton( m_sdbSizer1Save );
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();

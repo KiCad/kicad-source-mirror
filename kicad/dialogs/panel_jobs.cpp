@@ -546,6 +546,9 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
     m_jobsGrid->OverrideMinSize( 0.6, 0.3 );
     m_jobsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
+    // 'm' for margins
+    m_jobsGrid->SetColSize( 0, GetTextExtent( wxT( "99m" ) ).x );
+
     m_buttonAddJob->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_buttonUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_buttonDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
