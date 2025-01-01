@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2025-01-01 14:47+0000\n"
+"PO-Revision-Date: 2025-01-01 19:35+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3551,7 +3551,6 @@ msgstr "Warnungen"
 #: common/dialogs/dialog_rc_job_base.cpp:60
 #: kicad/dialogs/panel_jobs_base.cpp:471
 #: pcbnew/dialogs/dialog_render_job_base.cpp:31
-#, fuzzy
 msgid "Output File"
 msgstr "Ausgabedatei"
 
@@ -5672,7 +5671,7 @@ msgstr "OpenGL kann nicht verwendet werden"
 
 #: common/draw_panel_gal.cpp:540
 msgid "Error switch GAL backend"
-msgstr ""
+msgstr "Fehler beim Welchseln des GAL-Backends"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3390
@@ -5995,14 +5994,12 @@ msgid "Origins & Axes"
 msgstr "Ursprünge & Achsen"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "New Footprint Defaults"
-msgstr "Neuer Footprint"
+msgstr "Standardeinstellungen für neuen Footprint"
 
 #: common/eda_base_frame.cpp:1186
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Grafikbereinigung"
+msgstr "Standardeinstellungen für Graphik"
 
 #: common/eda_base_frame.cpp:1191 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:129
@@ -7568,9 +7565,8 @@ msgid "Single gerber export"
 msgstr "Einzelner Gerber-Export"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "PCB Gerbers export"
-msgstr "PCB SVG-Export"
+msgstr "PCB Gerber-Export"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
@@ -7685,13 +7681,12 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: DRC ausführen"
 
 #: common/jobs/job_pcb_render.cpp:77
-#, fuzzy
 msgid "Render PCB"
-msgstr "Platine neu annotieren"
+msgstr "PCB rendern"
 
 #: common/jobs/job_pcb_render.cpp:81
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCB: Rendern"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform Schematic ERC"
@@ -25937,6 +25932,8 @@ msgstr "Nur Platine ohne Bauteile ausgeben"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
 msgstr ""
+"Vias in Platine schneiden, selbst wenn die Leiterbahnen nicht exportiert "
+"werden."
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 msgid "Exclude board body"
@@ -26857,15 +26854,15 @@ msgstr "Stromausgang"
 
 #: kicad/dialogs/panel_jobs_base.cpp:366
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Ergebniscode ungleich Null ignorieren"
 
 #: kicad/dialogs/panel_jobs_base.cpp:492
 msgid "Halt output generation on error"
-msgstr ""
+msgstr "Ausgabe bei Auftreten eines Fehler stoppen"
 
 #: kicad/dialogs/panel_jobs_base.h:198
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "Auftragsausgabelog"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -34080,6 +34077,7 @@ msgstr "Der Variablenname darf nicht leer sein."
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:218
 msgid "The output file name conflicts with the selected compression format."
 msgstr ""
+"Der Ausgabedateiname stimmt nicht mit gewähltem Kompressionsformat überein."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:342
 #, c-format
@@ -34144,15 +34142,15 @@ msgstr "Kompressionsformat:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "Format wählen mit dem die ODB++ Ausgabedateien komprimiert werden"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:66
 msgid "Export ODB++"
@@ -37783,15 +37781,15 @@ msgstr "Referenzbild-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:27
 msgid "JPEG"
-msgstr ""
+msgstr "JPEG"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:33
 msgid "Opaque"
-msgstr ""
+msgstr "Undurchsichtig"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
 #, fuzzy
@@ -37826,7 +37824,7 @@ msgstr "2×"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:77
 msgid "Quality"
-msgstr ""
+msgstr "Qualität"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
 #, fuzzy
@@ -37850,7 +37848,7 @@ msgstr "Anweisung"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
 msgid "Orthogonal"
-msgstr ""
+msgstr "Orthogonal"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:120
 #: pcbnew/tools/board_inspection_tool.cpp:1466
