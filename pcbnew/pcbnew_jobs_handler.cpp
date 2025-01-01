@@ -451,6 +451,14 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     if( aRenderJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
+    // Reject width and height being invalid
+    // Final bit of sanity because this can blow things up
+    if( aRenderJob->m_width <= 0 || aRenderJob->m_height <= 0 )
+    {
+        m_reporter->Report( _( "Invalid image dimensions" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
     BOARD* brd = getBoard( aRenderJob->m_filename );
 
     if( !brd )
