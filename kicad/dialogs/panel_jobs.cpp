@@ -356,7 +356,7 @@ public:
         }
         else
         {
-            m_statusBitmap->Hide();
+            m_statusBitmap->SetBitmap( wxNullBitmap );
         }
 
         m_buttonOutputRun->Enable( !m_jobsFile->GetJobsForOutput( m_output ).empty() );

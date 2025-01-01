@@ -160,47 +160,41 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
 
+	wxFlexGridSizer* fgSizer3;
+	fgSizer3 = new wxFlexGridSizer( 2, 4, 5, 5 );
+	fgSizer3->AddGrowableCol( 1 );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
+	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
 	m_bitmapOutputType = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerMain->Add( m_bitmapOutputType, 0, wxALL, 5 );
-
-	wxBoxSizer* bSizer12;
-	bSizer12 = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizer14;
-	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bSizer17;
-	bSizer17 = new wxBoxSizer( wxVERTICAL );
+	fgSizer3->Add( m_bitmapOutputType, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textOutputType = new wxStaticText( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputType->Wrap( -1 );
 	m_textOutputType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizer17->Add( m_textOutputType, 0, wxTOP, 8 );
-
-
-	bSizer14->Add( bSizer17, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer3->Add( m_textOutputType, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 1 );
 
 	m_statusBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer14->Add( m_statusBitmap, 0, wxALL, 5 );
-
-
-	bSizer12->Add( bSizer14, 0, wxEXPAND, 5 );
-
-
-	bSizerMain->Add( bSizer12, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer13;
-	bSizer13 = new wxBoxSizer( wxVERTICAL );
+	fgSizer3->Add( m_statusBitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_buttonOutputRun = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer13->Add( m_buttonOutputRun, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_buttonOutputRun, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_buttonOutputOptions = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer13->Add( m_buttonOutputOptions, 0, wxALL, 5 );
+	fgSizer3->Add( m_buttonOutputOptions, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerMain->Add( bSizer13, 0, wxEXPAND, 5 );
+	bSizerMain->Add( fgSizer3, 1, wxALL, 5 );
 
 
 	this->SetSizer( bSizerMain );
