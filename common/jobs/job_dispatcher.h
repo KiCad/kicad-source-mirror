@@ -21,6 +21,7 @@
 #ifndef JOB_DISPATCHER_H
 #define JOB_DISPATCHER_H
 
+#include <kicommon.h>
 #include <functional>
 #include <string>
 #include <map>
@@ -32,7 +33,7 @@ class REPORTER;
 class PROGRESS_REPORTER;
 class wxWindow;
 
-class JOB_DISPATCHER
+class KICOMMON_API JOB_DISPATCHER
 {
 public:
     JOB_DISPATCHER( KIWAY* aKiway );

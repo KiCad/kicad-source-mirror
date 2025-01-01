@@ -62,6 +62,7 @@ set( KICOMMON_SRCS
     gal/color4d.cpp
     # Jobs
     jobs/job.cpp
+    jobs/job_dispatcher.cpp
     jobs/job_registry.cpp
     jobs/jobs_output_archive.cpp
     jobs/jobs_output_folder.cpp
@@ -144,6 +145,7 @@ set( KICOMMON_SRCS
     bitmap_info.cpp
     bitmap_store.cpp
     build_version.cpp
+    cli_progress_reporter.cpp
     common.cpp
     config_params.cpp
     confirm.cpp
@@ -560,13 +562,11 @@ set( COMMON_SRCS
 	${FONT_SRCS}
     ${COMMON_IMPORT_GFX_SRCS}
     ${COMMON_GIT_SRCS}
-    jobs/job_dispatcher.cpp
     base_screen.cpp
     bin_mod.cpp
     bitmap_base.cpp
     board_printout.cpp
     clipboard.cpp
-    cli_progress_reporter.cpp
     commit.cpp
     draw_panel_gal.cpp
     gal_display_options_common.cpp
