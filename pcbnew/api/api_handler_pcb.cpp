@@ -671,7 +671,6 @@ HANDLER_RESULT<PadShapeAsPolygonResponse> API_HANDLER_PCB::handleGetPadShapeAsPo
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    SHAPE_POLY_SET poly;
     PadShapeAsPolygonResponse response;
     PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( aCtx.Request.layer() );
 
@@ -686,6 +685,7 @@ HANDLER_RESULT<PadShapeAsPolygonResponse> API_HANDLER_PCB::handleGetPadShapeAsPo
         response.add_pads()->set_value( padRequest.value() );
 
         PAD* pad = static_cast<PAD*>( *optPad );
+        SHAPE_POLY_SET poly;
         pad->TransformShapeToPolygon( poly, pad->Padstack().EffectiveLayerFor( layer ), 0,
                                       ARC_HIGH_DEF, ERROR_INSIDE );
 
