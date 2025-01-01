@@ -28,6 +28,7 @@
 class BOARD;
 class REPORTER;
 class wxFileName;
+class JOB_EXPORT_PCB_PLOT;
 
 class PCB_PLOTTER
 {
@@ -61,6 +62,11 @@ public:
      */
     static void BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir, const wxString& aSuffix,
                                    const wxString& aExtension );
+
+    /**
+     * Translate a JOB to PCB_PLOT_PARAMS
+     */
+    static void PlotJobToPlotOpts( PCB_PLOT_PARAMS& aPlotOpts, JOB_EXPORT_PCB_PLOT* aJob );
 
 protected:
     BOARD*          m_board;

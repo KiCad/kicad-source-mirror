@@ -40,8 +40,17 @@ public:
         MILLIMETERS
     };
 
-    bool m_plotGraphicItemsUsingContours;
+    enum class GEN_MODE
+    {
+        DEPRECATED,
+        NEW
+    };
+
+    bool      m_plotGraphicItemsUsingContours;
+    bool      m_polygonMode;
     DXF_UNITS m_dxfUnits;
+
+    GEN_MODE m_genMode;
 };
 
 #endif

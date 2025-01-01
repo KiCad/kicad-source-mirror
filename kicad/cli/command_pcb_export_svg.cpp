@@ -32,7 +32,7 @@
 
 #define ARG_EXCLUDE_DRAWING_SHEET "--exclude-drawing-sheet"
 #define ARG_PAGE_SIZE "--page-size-mode"
-
+#define ARG_MODE_NEW "--mode-new"
 
 CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
 {
@@ -91,6 +91,20 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .scan<'i', int>()
             .default_value( 2 )
             .metavar( "SHAPE_OPTION" );
+
+    m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
+            .default_value( std::string() )
+            .help( UTF8STDSTR(
+                    _( "Layers to include on each plot, comma separated list of untranslated "
+                       "layer names to include such as "
+                       "F.Cu,B.Cu" ) ) )
+            .metavar( "COMMON_LAYER_LIST" );
+
+    m_argParser.add_argument( ARG_MODE_NEW )
+            .help( UTF8STDSTR(
+                    _( "Opt into the new behavior which means output path is a directory, a file "
+                       "per layer is generated and the common layers arg becomes available. " ) ) )
+            .flag();
 }
 
 
@@ -120,6 +134,10 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
     svgJob->SetVarOverrides( m_argDefineVars );
 
+    wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
+    bool     blah = false;
+    svgJob->m_printMaskLayersToIncludeOnAllLayers = convertLayerStringList( layers, blah );
+
     if( !wxFile::Exists( svgJob->m_filename ) )
     {
         wxFprintf( stderr, _( "Board file does not exist or is not accessible\n" ) );
@@ -127,6 +145,21 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     svgJob->m_printMaskLayer = m_selectedLayers;
+
+    if( m_argParser.get<bool>( ARG_MODE_NEW ) )
+        svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::NEW;
+    else
+        svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::DEPRECATED;
+
+    if( svgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::DEPRECATED )
+    {
+        wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
+                   _( "This command has deprecated behavior as of KiCad 9.0, the default behavior "
+                      "of this command will change in a future release." ) );
+
+        wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
+                   _( "The new behavior will match --mode-new" ) );
+    }
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
 

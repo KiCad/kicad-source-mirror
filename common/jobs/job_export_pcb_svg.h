@@ -36,6 +36,14 @@ public:
 
     int m_pageSizeMode;
     unsigned int m_precision;
+
+    enum class GEN_MODE
+    {
+        DEPRECATED,
+        NEW
+    };
+
+    GEN_MODE m_genMode;
 };
 
 #endif

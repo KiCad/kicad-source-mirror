@@ -42,6 +42,8 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
         m_pdfBackFPPropertyPopups( true ),
         m_pdfMetadata( true ), m_pdfSingle( false ), m_pdfGenMode( GEN_MODE::ALL_LAYERS_ONE_FILE )
 {
+    m_plotDrawingSheet = false;
+
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_colorTheme, m_colorTheme ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "mirror", &m_mirror, m_mirror ) );
     m_params.emplace_back(

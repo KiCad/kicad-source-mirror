@@ -34,6 +34,7 @@
 #define ARG_USE_CONTOURS "--use-contours"
 #define ARG_OUTPUT_UNITS "--output-units"
 #define ARG_USE_DRILL_ORIGIN "--use-drill-origin"
+#define ARG_MODE_NEW "--mode-new"
 
 CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "dxf" )
 {
@@ -67,6 +68,20 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .default_value( std::string( "in" ) )
             .help( UTF8STDSTR( _( "Output units, valid options: mm, in" ) ) )
             .metavar( "UNITS" );
+
+    m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
+            .default_value( std::string() )
+            .help( UTF8STDSTR(
+                    _( "Layers to include on each plot, comma separated list of untranslated "
+                       "layer names to include such as "
+                       "F.Cu,B.Cu" ) ) )
+            .metavar( "COMMON_LAYER_LIST" );
+
+    m_argParser.add_argument( ARG_MODE_NEW )
+            .help( UTF8STDSTR(
+                    _( "Opt into the new behavior which means output path is a directory, a file "
+                       "per layer is generated and the common layers arg becomes available. " ) ) )
+            .flag();
 }
 
 
@@ -112,6 +127,26 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     dxfJob->m_printMaskLayer = m_selectedLayers;
+
+    wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
+    bool     blah = false;
+    dxfJob->m_printMaskLayersToIncludeOnAllLayers = convertLayerStringList( layers, blah );
+
+    if( m_argParser.get<bool>( ARG_MODE_NEW ) )
+        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::NEW;
+    else
+        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::DEPRECATED;
+
+    if( dxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::DEPRECATED )
+    {
+        wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
+                   _( "This command has deprecated behavior as of KiCad 9.0, the default behavior "
+                      "of this command will change in a future release." ) );
+
+        wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
+                   _( "The new behavior will match --mode-new" ) );
+    }
+
 
     LOCALE_IO dummy;    // Switch to "C" locale
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, dxfJob.get() );

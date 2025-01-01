@@ -22,6 +22,12 @@
 #include <jobs/job_registry.h>
 #include <i18n_utility.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DXF::GEN_MODE,
+                              {
+                                      { JOB_EXPORT_PCB_DXF::GEN_MODE::DEPRECATED, "deprecated" },
+                                      { JOB_EXPORT_PCB_DXF::GEN_MODE::NEW, "new" },
+                              } )
+
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DXF::DXF_UNITS,
                               {
                                       { JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES, "in" },
@@ -31,13 +37,19 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DXF::DXF_UNITS,
 JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
     JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF, "dxf", false ),
     m_plotGraphicItemsUsingContours( true ),
-    m_dxfUnits( DXF_UNITS::INCHES )
+    m_polygonMode( true ),
+    m_dxfUnits( DXF_UNITS::INCHES ),
+    m_genMode( GEN_MODE::NEW )
 {
+    m_plotDrawingSheet = false;
+
     m_params.emplace_back(
             new JOB_PARAM<bool>( "plot_footprint_values", &m_plotFootprintValues, m_plotFootprintValues ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_graphic_items_using_contours", &m_plotGraphicItemsUsingContours,
                                                 m_plotGraphicItemsUsingContours ) );
     m_params.emplace_back( new JOB_PARAM<DXF_UNITS>( "units", &m_dxfUnits, m_dxfUnits ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "polygon_mode", &m_polygonMode, m_polygonMode ) );
+    m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
 }
 
 

@@ -632,35 +632,6 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( aSvgJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    PCB_PLOT_SVG_OPTIONS svgPlotOptions;
-    svgPlotOptions.m_blackAndWhite = aSvgJob->m_blackAndWhite;
-    svgPlotOptions.m_colorTheme = aSvgJob->m_colorTheme;
-    svgPlotOptions.m_outputFile = aSvgJob->GetFullOutputPath();
-    svgPlotOptions.m_mirror = aSvgJob->m_mirror;
-    svgPlotOptions.m_negative = aSvgJob->m_negative;
-    svgPlotOptions.m_pageSizeMode = aSvgJob->m_pageSizeMode;
-    svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
-    svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
-    svgPlotOptions.m_sketchPadsOnFabLayers = aSvgJob->m_sketchPadsOnFabLayers;
-    svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
-    svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
-    svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
-    svgPlotOptions.m_precision = aSvgJob->m_precision;
-
-    switch( aSvgJob->m_drillShapeOption )
-    {
-    default:
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
-        svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::NO_DRILL_SHAPE );
-        break;
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
-        svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::SMALL_DRILL_SHAPE );
-        break;
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
-        svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::FULL_DRILL_SHAPE );
-        break;
-    }
-
     BOARD* brd = getBoard( aSvgJob->m_filename );
 
     if( !brd )
@@ -670,16 +641,63 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( EXPORT_SVG::Plot( brd, svgPlotOptions ) )
+    if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::DEPRECATED )
     {
-        m_reporter->Report( _( "Successfully created svg file" ) + wxS( "\n" ), RPT_SEVERITY_INFO );
-        return CLI::EXIT_CODES::OK;
+        PCB_PLOT_SVG_OPTIONS svgPlotOptions;
+        svgPlotOptions.m_blackAndWhite = aSvgJob->m_blackAndWhite;
+        svgPlotOptions.m_colorTheme = aSvgJob->m_colorTheme;
+        svgPlotOptions.m_outputFile = aSvgJob->GetFullOutputPath();
+        svgPlotOptions.m_mirror = aSvgJob->m_mirror;
+        svgPlotOptions.m_negative = aSvgJob->m_negative;
+        svgPlotOptions.m_pageSizeMode = aSvgJob->m_pageSizeMode;
+        svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
+        svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
+        svgPlotOptions.m_sketchPadsOnFabLayers = aSvgJob->m_sketchPadsOnFabLayers;
+        svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
+        svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
+        svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
+        svgPlotOptions.m_precision = aSvgJob->m_precision;
+
+        switch( aSvgJob->m_drillShapeOption )
+        {
+        default:
+        case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
+            svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::NO_DRILL_SHAPE );
+            break;
+        case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
+            svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::SMALL_DRILL_SHAPE );
+            break;
+        case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
+            svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::FULL_DRILL_SHAPE );
+            break;
+        }
+
+        if( EXPORT_SVG::Plot( brd, svgPlotOptions ) )
+        {
+            m_reporter->Report( _( "Successfully created svg file" ) + wxS( "\n" ),
+                                RPT_SEVERITY_INFO );
+            return CLI::EXIT_CODES::OK;
+        }
+        else
+        {
+            m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
     }
     else
     {
-        m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        PCB_PLOT_PARAMS plotOpts;
+        PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob );
+
+        PCB_PLOTTER     plotter( brd, m_reporter, plotOpts );
+        if( plotter.Plot( aSvgJob->GetFullOutputPath(), aSvgJob->m_printMaskLayer,
+                          aSvgJob->m_printMaskLayersToIncludeOnAllLayers, false ) )
+        {
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
     }
+
+    return CLI::EXIT_CODES::OK;
 }
 
 
@@ -699,62 +717,77 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aDxfJob->GetOutputPath().IsEmpty() )
+    if( aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::DEPRECATED )
     {
-        wxFileName fn = brd->GetFileName();
-        fn.SetName( fn.GetName() );
-        fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::DXF ) );
+        if( aDxfJob->GetOutputPath().IsEmpty() )
+        {
+            wxFileName fn = brd->GetFileName();
+            fn.SetName( fn.GetName() );
+            fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::DXF ) );
 
-        aDxfJob->SetOutputPath( fn.GetFullName() );
+            aDxfJob->SetOutputPath( fn.GetFullName() );
+        }
+
+        PCB_PLOT_PARAMS plotOpts;
+        plotOpts.SetFormat( PLOT_FORMAT::DXF );
+
+        plotOpts.SetDXFPlotPolygonMode( aDxfJob->m_polygonMode );
+        plotOpts.SetUseAuxOrigin( aDxfJob->m_useDrillOrigin );
+
+        if( aDxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS )
+            plotOpts.SetDXFPlotUnits( DXF_UNITS::MILLIMETERS );
+        else
+            plotOpts.SetDXFPlotUnits( DXF_UNITS::INCHES );
+
+        plotOpts.SetPlotFrameRef( aDxfJob->m_plotDrawingSheet );
+        plotOpts.SetPlotValue( aDxfJob->m_plotFootprintValues );
+        plotOpts.SetPlotReference( aDxfJob->m_plotRefDes );
+        plotOpts.SetLayerSelection( aDxfJob->m_printMaskLayer );
+        plotOpts.SetPlotOnAllLayersSelection( aDxfJob->m_printMaskLayersToIncludeOnAllLayers );
+
+        PCB_LAYER_ID layer = UNDEFINED_LAYER;
+        wxString     layerName;
+        wxString     sheetName;
+        wxString     sheetPath;
+
+        if( aDxfJob->m_printMaskLayer.size() == 1 )
+        {
+            layer = aDxfJob->m_printMaskLayer.front();
+            layerName = brd->GetLayerName( layer );
+        }
+
+        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+            layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
+
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+            sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+            sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+
+        DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard(
+                brd, &plotOpts, layer, layerName, aDxfJob->GetFullOutputPath(), sheetName, sheetPath );
+
+        if( plotter )
+        {
+            PlotBoardLayers( brd, plotter, aDxfJob->m_printMaskLayer, plotOpts );
+            plotter->EndPlot();
+        }
+
+        delete plotter;
     }
-
-    PCB_PLOT_PARAMS plotOpts;
-    plotOpts.SetFormat( PLOT_FORMAT::DXF );
-
-    plotOpts.SetDXFPlotPolygonMode( aDxfJob->m_plotGraphicItemsUsingContours );
-    plotOpts.SetUseAuxOrigin( aDxfJob->m_useDrillOrigin );
-
-    if( aDxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS )
-        plotOpts.SetDXFPlotUnits( DXF_UNITS::MILLIMETERS );
     else
-        plotOpts.SetDXFPlotUnits( DXF_UNITS::INCHES );
-
-    plotOpts.SetPlotFrameRef( aDxfJob->m_plotDrawingSheet );
-    plotOpts.SetPlotValue( aDxfJob->m_plotFootprintValues );
-    plotOpts.SetPlotReference( aDxfJob->m_plotRefDes );
-    plotOpts.SetLayerSelection( aDxfJob->m_printMaskLayer );
-    plotOpts.SetPlotOnAllLayersSelection( aDxfJob->m_printMaskLayersToIncludeOnAllLayers );
-
-    PCB_LAYER_ID layer = UNDEFINED_LAYER;
-    wxString     layerName;
-    wxString     sheetName;
-    wxString     sheetPath;
-
-    if( aDxfJob->m_printMaskLayer.size() == 1 )
     {
-        layer = aDxfJob->m_printMaskLayer.front();
-        layerName = brd->GetLayerName( layer );
+        PCB_PLOT_PARAMS plotOpts;
+        PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob );
+
+        PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
+        if( plotter.Plot( aDxfJob->GetFullOutputPath(), aDxfJob->m_printMaskLayer,
+                          aDxfJob->m_printMaskLayersToIncludeOnAllLayers, false ) )
+        {
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
     }
-
-    if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-        layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
-
-    if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-        sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
-
-    if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-        sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-
-    DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName, aDxfJob->GetFullOutputPath(), sheetName,
-                                                          sheetPath );
-
-    if( plotter )
-    {
-        PlotBoardLayers( brd, plotter, aDxfJob->m_printMaskLayer, plotOpts );
-        plotter->EndPlot();
-    }
-
-    delete plotter;
 
     return CLI::EXIT_CODES::OK;
 }
@@ -787,49 +820,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     }
 
     PCB_PLOT_PARAMS plotOpts;
-    plotOpts.SetFormat( PLOT_FORMAT::PDF );
-
-    plotOpts.SetPlotFrameRef( aPdfJob->m_plotDrawingSheet );
-    plotOpts.SetPlotValue( aPdfJob->m_plotFootprintValues );
-    plotOpts.SetPlotReference( aPdfJob->m_plotRefDes );
-    plotOpts.SetPlotInvisibleText( aPdfJob->m_plotInvisibleText );
-
-    plotOpts.SetLayerSelection( aPdfJob->m_printMaskLayer );
-    plotOpts.SetPlotOnAllLayersSelection( aPdfJob->m_printMaskLayersToIncludeOnAllLayers );
-
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    plotOpts.SetColorSettings( mgr.GetColorSettings( aPdfJob->m_colorTheme ) );
-    plotOpts.SetMirror( aPdfJob->m_mirror );
-    plotOpts.SetBlackAndWhite( aPdfJob->m_blackAndWhite );
-    plotOpts.SetNegative( aPdfJob->m_negative );
-
-    if( aPdfJob->m_sketchPadsOnFabLayers )
-    {
-        plotOpts.SetSketchPadsOnFabLayers( true );
-        plotOpts.SetPlotPadNumbers( true );
-    }
-
-    plotOpts.SetUseAuxOrigin( aPdfJob->m_useDrillOrigin );
-
-    plotOpts.SetHideDNPFPsOnFabLayers( aPdfJob->m_hideDNPFPsOnFabLayers );
-    plotOpts.SetSketchDNPFPsOnFabLayers( aPdfJob->m_sketchDNPFPsOnFabLayers );
-    plotOpts.SetCrossoutDNPFPsOnFabLayers( aPdfJob->m_crossoutDNPFPsOnFabLayers );
-
-    plotOpts.m_PDFBackFPPropertyPopups = aPdfJob->m_pdfBackFPPropertyPopups;
-    plotOpts.m_PDFFrontFPPropertyPopups = aPdfJob->m_pdfFrontFPPropertyPopups;
-    plotOpts.m_PDFMetadata = aPdfJob->m_pdfMetadata;
-    plotOpts.m_PDFSingle = aPdfJob->m_pdfSingle;
-
-    switch( aPdfJob->m_drillShapeOption )
-    {
-    default:
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
-            plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
-            plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
-            plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
-    }
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aPdfJob );
 
     int returnCode = CLI::EXIT_CODES::OK;
 
