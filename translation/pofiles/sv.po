@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2025-01-01 14:47+0000\n"
+"PO-Revision-Date: 2025-01-01 19:35+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -25687,6 +25687,7 @@ msgstr "Generera endast mönsterkort utan komponenter"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
 msgstr ""
+"Gör viahål i mönsterkortets basmaterial även om ledarlager inte exporteras."
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 msgid "Exclude board body"
@@ -25738,9 +25739,8 @@ msgstr "Slå ihop överlappande geometrier"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in copper layers."
-msgstr " (Hålmonteringslödyta har inga kopparlager)"
+msgstr "Gör inte viahål i kopparlager."
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26467,7 +26467,6 @@ msgid "%s Output Options"
 msgstr "%s Utmatningsalternativ"
 
 #: kicad/dialogs/panel_jobs.cpp:107
-#, fuzzy
 msgid "Select output directory"
 msgstr "Välj katalog för utdata"
 
@@ -26476,9 +26475,8 @@ msgid "Select output path"
 msgstr "Välj utmatningssökväg"
 
 #: kicad/dialogs/panel_jobs.cpp:138
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Utmatningssökvägen kan inte lämnas blank"
 
 #: kicad/dialogs/panel_jobs.cpp:205
 msgid "Zip"
@@ -26494,9 +26492,8 @@ msgid "Job Description"
 msgstr "Arbetsbeskrivning"
 
 #: kicad/dialogs/panel_jobs.cpp:280
-#, fuzzy
 msgid "No output available"
-msgstr "Inga paketuppdateringar tillgängliga"
+msgstr "Ingen utmatning finns tillgänglig"
 
 #: kicad/dialogs/panel_jobs.cpp:334
 msgid "Last run successful"
@@ -26517,7 +26514,7 @@ msgstr "Se resultat från senaste körning..."
 #: kicad/dialogs/panel_jobs.cpp:453
 #, fuzzy
 msgid "Edit Job Description"
-msgstr "Arbetsbeskrivning"
+msgstr "Redigera Arbetsbeskrivning"
 
 #: kicad/dialogs/panel_jobs.cpp:454
 #, fuzzy
@@ -26547,9 +26544,8 @@ msgid "Select job type:"
 msgstr "Välj jobbtyp:"
 
 #: kicad/dialogs/panel_jobs.cpp:748
-#, fuzzy
 msgid "Output Types"
-msgstr "Utmatningsstorlek"
+msgstr "Utmatningstyper"
 
 #: kicad/dialogs/panel_jobs.cpp:757
 msgid "Add New Output"
@@ -26581,7 +26577,7 @@ msgstr "Spara som"
 #: kicad/dialogs/panel_jobs_base.cpp:121
 #, fuzzy
 msgid "Generate All Outputs"
-msgstr "Allmäna inställningar"
+msgstr "Generera alla utmatningar"
 
 #: kicad/dialogs/panel_jobs_base.cpp:175 kicad/dialogs/panel_jobs_base.cpp:409
 #, fuzzy
@@ -26589,9 +26585,8 @@ msgid "Placeholder"
 msgstr "Placera ankare"
 
 #: kicad/dialogs/panel_jobs_base.cpp:260 kicad/dialogs/panel_jobs_base.cpp:354
-#, fuzzy
 msgid "Output Path"
-msgstr "Utmatningssökväg:"
+msgstr "Utmatningssökväg"
 
 #: kicad/dialogs/panel_jobs_base.cpp:278
 #, fuzzy
@@ -26609,7 +26604,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_jobs_base.cpp:492
 msgid "Halt output generation on error"
-msgstr ""
+msgstr "Stoppa generering av utmatning vid fel"
 
 #: kicad/dialogs/panel_jobs_base.h:198
 msgid "Job Output Run Log"
@@ -26832,7 +26827,7 @@ msgstr "%d paketuppdatering(ar) tillgänglig(a)"
 #: kicad/kicad_manager_frame.cpp:752
 #, fuzzy
 msgid "Error opening jobs file"
-msgstr "Fel vid försök att skapa svg-fil"
+msgstr "Fel vid försök att öppna jobb-fil"
 
 #: kicad/kicad_manager_frame.cpp:898
 msgid "Edit File in Text Editor"
@@ -27559,7 +27554,7 @@ msgstr "Redigera i en textredigerare"
 #: kicad/project_tree_pane.cpp:911
 #, fuzzy
 msgid "Run Jobs"
-msgstr "Utför %s"
+msgstr "Utför"
 
 #: kicad/project_tree_pane.cpp:919
 msgid "Rename File..."
@@ -27688,9 +27683,8 @@ msgid "Fetching Remote"
 msgstr "Hämtar fjärrförvar"
 
 #: kicad/project_tree_pane.cpp:1744
-#, fuzzy
 msgid "Failed to pull project"
-msgstr "Lyckades inte skicka projekt"
+msgstr "Lyckades inte hämta projekt"
 
 #: kicad/project_tree_pane.cpp:1771
 msgid "Failed to push project"
@@ -27800,7 +27794,7 @@ msgstr "Klona projekt från förvar..."
 #: kicad/tools/kicad_manager_actions.cpp:67
 #, fuzzy
 msgid "New Jobset File..."
-msgstr "Spara &projektfiler"
+msgstr "Ny Jobset fil..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -33456,7 +33450,7 @@ msgstr "Designregelkontroll (DRC)"
 #: pcbnew/dialogs/dialog_drc_job_config.cpp:24
 #, fuzzy
 msgid "DRC Job Configuration"
-msgstr "Ladda om konfiguration"
+msgstr "Konfiguration av designregelkontrollåtgärd"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -33779,32 +33773,29 @@ msgid "Export IDFv3"
 msgstr "Exportera IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:104
-#, fuzzy
 msgid "zip files"
-msgstr "Zip-filer"
+msgstr "zip-filer"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:106
-#, fuzzy
 msgid "tgz files"
-msgstr "Textfiler"
+msgstr "tgz-filer"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:118
 msgid "Export ODB++ File"
 msgstr "Exportera ODB++ fil"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:146
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "Den valda filen är inte giltig eller kan vara skadad!"
+msgstr "Det valda utmatningsfilnamnet är inte ett giltigt arkivformat."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:199
 #, fuzzy
 msgid "Output file name cannot be empty."
-msgstr "Variabelnamn kan inte utelämnas."
+msgstr "Utmatningsfilnamn kan inte utelämnas."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:218
 msgid "The output file name conflicts with the selected compression format."
-msgstr ""
+msgstr "Utmatningsfilnamnet är i konflikt med valt kompressionsformat."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:342
 #, c-format
@@ -33857,26 +33848,24 @@ msgid "Compressing output"
 msgstr "Komprimerar utmatning"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:23
-#, fuzzy
 msgid "Output File:"
 msgstr "Fil för utdata:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression Format:"
-msgstr "Måttsättningsformat"
+msgstr "Kompressionsformat:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "Välj formatet för att komprimera de utmatade ODB++ filerna"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:66
 msgid "Export ODB++"
@@ -33995,9 +33984,8 @@ msgid "Export board body"
 msgstr "Exportera mönsterkortets basmaterial"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "Exportera mönsterkortets basmaterial"
+msgstr "Gör viahål i mönsterkortets basmaterial"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
@@ -34074,9 +34062,8 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "Sammanfoga överlappande geometriska former till en form."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:142
-#, fuzzy
 msgid "Fill all vias"
-msgstr "Fyll alla zoner"
+msgstr "Fyll alla vior"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Net filter (supports wildcards):"
@@ -35073,7 +35060,6 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:83
-#, fuzzy
 msgid "Generate Map"
 msgstr "Skapa kartfil"
 
@@ -35333,7 +35319,6 @@ msgid "Remove all teardrops"
 msgstr "Ta bort alla kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Remove all teardrops, regardless of filtering options"
 msgstr "Ta bort alla kragförstärkningar, oavsett filterkriterier"
 
@@ -35382,9 +35367,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
-#, fuzzy
 msgid "Track width limit:"
-msgstr "Ledarbredd:"
+msgstr "Ledarbreddsbegränsning:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
@@ -37466,30 +37450,27 @@ msgstr "Referensbildsegenskaper"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:27
 msgid "JPEG"
-msgstr ""
+msgstr "JPEG"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:33
 msgid "Opaque"
-msgstr ""
+msgstr "Ogenomskinlig"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
-#, fuzzy
 msgid "Transparent"
-msgstr "Transient"
+msgstr "Transparent"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:39
-#, fuzzy
 msgid "High"
-msgstr "Färgmarkering"
+msgstr "Hög"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:40
-#, fuzzy
 msgid "User"
-msgstr "Användare1"
+msgstr "Användardefinierad"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:40
 #: pcbnew/widgets/panel_selection_filter.cpp:202
@@ -37503,38 +37484,33 @@ msgid "px"
 msgstr "px"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:54
-#, fuzzy
 msgid "x"
-msgstr "2x"
+msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:77
 msgid "Quality"
-msgstr ""
+msgstr "Kvalitet"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Background Style"
-msgstr "Bakgrunds början"
+msgstr "Bakgrundsstil"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:95
-#, fuzzy
 msgid "Side"
-msgstr "Sida:"
+msgstr "Sida"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:107
-#, fuzzy
 msgid "Show floor"
-msgstr "Visa markören"
+msgstr "Visa golv"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:110
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
-#, fuzzy
 msgid "Perspective"
-msgstr "Direktiv"
+msgstr "Perspektiv"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
 msgid "Orthogonal"
-msgstr ""
+msgstr "Ortogonal"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:120
 #: pcbnew/tools/board_inspection_tool.cpp:1466
@@ -37578,12 +37554,12 @@ msgstr "Återställ detta värde till sitt ursprungliga värde."
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 #, fuzzy
 msgid "Set a new value for this offset:"
-msgstr "Skapa en ny katalog för projektet"
+msgstr "Sätt ett nytt värde för denna förskjutning:"
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:63
 #, fuzzy
 msgid "Set Offset"
-msgstr "X Offset"
+msgstr "Sätt förskjutning"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:191
 msgid "Rectangle cannot be zero-sized."
@@ -38513,9 +38489,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:71
-#, fuzzy
 msgid "Recreate Plugin Environment"
-msgstr "Alternativa stifttilldelningar"
+msgstr "Återskapa insticksprogramsmiljön"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 msgid "Show Button"
@@ -38859,9 +38834,8 @@ msgid "Zone fill strategy"
 msgstr "Zonfyllningsstrategi"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "Tillåt rundning utanför zonerna"
+msgstr "Tillåt rundning/fasning utanför zonerna"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
@@ -41583,9 +41557,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Icke speglad text på bakre lager"
 
 #: pcbnew/drc/drc_item.cpp:307
-#, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
-msgstr "Borrat hål för nära ett annat hål"
+msgstr "Borrat hål för nära ett annat hål - föråldrat"
 
 #: pcbnew/drc/drc_item.cpp:508
 #, c-format
@@ -43529,9 +43502,8 @@ msgid "Footprint '%s' saved."
 msgstr "Fotavtryck '%s' sparat."
 
 #: pcbnew/load_select_footprint.cpp:374
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Sparar fotavtrycksbibliotek\n"
+msgstr "Fel vid försök att spara fotavtrycksbibliotek"
 
 #: pcbnew/load_select_footprint.cpp:378
 #, c-format
@@ -46789,9 +46761,8 @@ msgid "Failed to load board\n"
 msgstr "Det gick inte att läsa in mönsterkortet\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:356 pcbnew/pcbnew_jobs_handler.cpp:431
-#, fuzzy
 msgid "Unknown export format"
-msgstr "Okänt format för nätlista.\n"
+msgstr "Okänt exportformat"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:396
 #, c-format
@@ -48366,9 +48337,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Fotavtryck '%s' existerar redan i bibliotek '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:518
-#, fuzzy
 msgid "Error renaming footprint"
-msgstr "Från fotavtryckets förälder"
+msgstr "Fel vid försök att byta namn på fotavtryck"
 
 #: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
@@ -50479,11 +50449,8 @@ msgid "Invalid clipboard contents"
 msgstr "Ogiltigt urklippsinnehåll"
 
 #: pcbnew/tools/pcb_control.cpp:1509
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"Fel vid inläsning av kort.\n"
-"%s"
+msgstr "Fel vid inläsning av mönsterkort."
 
 #: pcbnew/tools/pcb_control.cpp:1543
 msgid "Append Board"
