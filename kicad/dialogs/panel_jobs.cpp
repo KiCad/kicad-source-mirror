@@ -71,7 +71,7 @@ public:
     DIALOG_JOB_OUTPUT( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_OUTPUT* aOutput ) :
             DIALOG_JOB_OUTPUT_BASE( aParent ), m_jobsFile( aJobsFile ), m_output( aOutput )
     {
-        SetAffirmativeId( wxID_SAVE );
+        SetAffirmativeId( wxID_OK );
 
         // prevent someone from failing to add the type info in the future
         wxASSERT( jobTypeInfos.contains( m_output->m_type ) );
@@ -416,7 +416,7 @@ private:
             case wxID_EDIT:
             {
                 DIALOG_JOB_OUTPUT dialog( m_frame, m_jobsFile, m_output );
-                if( dialog.ShowModal() == wxID_SAVE )
+                if( dialog.ShowModal() == wxID_OK )
                 {
                     m_textOutputType->SetLabel( m_output->GetDescription() );
                     m_jobsFile->SetDirty();
@@ -697,8 +697,12 @@ bool PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
             JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job.get() );
 
             DIALOG_SPECIAL_EXECUTE dialog( m_frame, specialJob );
-
-            return dialog.ShowModal() == wxID_OK;
+            if( dialog.ShowModal() == wxID_OK )
+            {
+                m_jobsFile->SetDirty();
+                UpdateTitle();
+                return true;
+            }
         }
     }
 
@@ -803,7 +807,7 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
                 JOBSET_OUTPUT* output = m_jobsFile->AddNewJobOutput( jobType.first );
 
                 DIALOG_JOB_OUTPUT dialog( m_frame, m_jobsFile.get(), output );
-                if (dialog.ShowModal() == wxID_SAVE)
+                if (dialog.ShowModal() == wxID_OK)
                 {
                     Freeze();
                     addJobOutputPanel( output );

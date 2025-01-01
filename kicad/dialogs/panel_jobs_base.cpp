@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -278,8 +278,8 @@ DIALOG_JOB_OUTPUT_BASE::DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id,
 	bSizerMain->Add( fgSizer1, 1, wxEXPAND|wxALL, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
-	m_sdbSizer1->AddButton( m_sdbSizer1Save );
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
@@ -341,17 +341,17 @@ DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWi
 	bSizerBottom = new wxBoxSizer( wxVERTICAL );
 
 	m_cbRecordOutput = new wxCheckBox( this, wxID_ANY, _("Record output messages"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_cbRecordOutput, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerBottom->Add( m_cbRecordOutput, 0, wxLEFT, 5 );
 
 	m_cbIgnoreExitCode = new wxCheckBox( this, wxID_ANY, _("Ignore non-zero exit code"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_cbIgnoreExitCode, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	bSizerBottom->Add( m_cbIgnoreExitCode, 0, wxLEFT|wxTOP, 5 );
 
 
 	bSizerMain->Add( bSizerBottom, 0, wxALL|wxEXPAND, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
-	m_sdbSizer1->AddButton( m_sdbSizer1Save );
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();

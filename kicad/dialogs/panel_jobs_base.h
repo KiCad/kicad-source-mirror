@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,6 @@ class WX_GRID;
 #include <wx/listctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_JOBS_BASE
@@ -126,7 +125,7 @@ class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText10;
 		wxCheckListBox* m_includeJobs;
 		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1Save;
+		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
@@ -156,7 +155,7 @@ class DIALOG_SPECIAL_EXECUTE_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbRecordOutput;
 		wxCheckBox* m_cbIgnoreExitCode;
 		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1Save;
+		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
