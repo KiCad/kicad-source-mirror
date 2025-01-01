@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2021 CERN
- * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -352,7 +352,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     m_lastProjectLibDir = m_project->GetProjectPath();
 
 
-    setupGrid( m_global_grid );    
+    setupGrid( m_global_grid );
     m_global_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
 
     if( m_projectTable )

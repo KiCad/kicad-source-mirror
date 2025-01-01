@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>

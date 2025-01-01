@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2018 CERN
- * Copyright (C) 2004-2024 KiCad Developers, see AUTHOR.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHOR.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or

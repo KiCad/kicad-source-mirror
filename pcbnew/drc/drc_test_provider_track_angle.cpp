@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2023 KiCad Developers.
+ * Copyright The KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 
 
 /*
-    Track angle test. Checks the angle between two connected track segments. 
+    Track angle test. Checks the angle between two connected track segments.
     Errors generated:
     - DRCE_TRACK_ANGLE
 */

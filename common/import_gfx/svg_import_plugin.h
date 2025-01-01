@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Janito V. Ferreira Filho <janito.vff@gmail.com>
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

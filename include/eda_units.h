@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,9 +129,9 @@ namespace EDA_UNIT_UTILS
 #if 0   // No support for std::from_chars on MacOS yet
     /**
      * Converts \a aInput string to internal units when reading from a file.
-     * 
+     *
      * This should only be used for reading from files as it ignores locale
-     * 
+     *
      * @param aInput is std::string to parse.
      * @param aIuScale is the scale to use.
      * @param aOut is the output reference.
@@ -142,9 +142,9 @@ namespace EDA_UNIT_UTILS
 
     /**
      * Converts \a aInput string to internal units vector when reading from a file.
-     * 
+     *
      * This should only be used for reading from files as it ignores locale
-     * 
+     *
      * @param aInput is std::string to parse.
      * @param aIuScale is the scale to use.
      * @param aOut is the output reference vector.

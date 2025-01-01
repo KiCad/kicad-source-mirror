@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -92,7 +92,7 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
 #ifdef USE_TOOL_MANAGER
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     PCBNEW_SETTINGS*  cfg = mgr.RegisterSettings( new PCBNEW_SETTINGS, false );
-    
+
     m_toolManager = new TOOL_MANAGER;
 
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),

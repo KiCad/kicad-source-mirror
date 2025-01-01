@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013-2021 CERN
- * Copyright (C) 2012-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -398,7 +398,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     m_projectBasePath( aProjectBasePath ),
     m_parent( aParent )
 {
-    m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *aGlobalTable ), true );   
+    m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *aGlobalTable ), true );
 
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
@@ -417,7 +417,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
     m_lastProjectLibDir = m_projectBasePath;
 
-    setupGrid( m_global_grid ); 
+    setupGrid( m_global_grid );
     m_global_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler, this );
 
     populateEnvironReadOnlyTable();
@@ -527,7 +527,7 @@ PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
     {
         m_project_grid->PopEventHandler( true );
         m_project_grid->Unbind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler, this );
-    }  
+    }
 
     m_path_subs_grid->PopEventHandler( true );
 }

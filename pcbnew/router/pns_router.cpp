@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -202,7 +202,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
         else if( aStartItems.Size() > 1 )
             m_logger->LogM( LOGGER::EVT_START_MULTIDRAG, aP, aStartItems.Items() ); // fixme default args
     }
-    
+
     if( m_dragger->Start( aP, aStartItems ) )
     {
         return true;

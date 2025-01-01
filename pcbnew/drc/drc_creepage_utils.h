@@ -1,6 +1,6 @@
 
 /*
-    * Copyright (C) 2024 KiCad Developers.
+    * Copyright The KiCad Developers.
     * Copyright (C) 2024 Fabien Corona f.corona<at>laposte.net
     *
     * This program is free software; you can redistribute it and/or
@@ -61,8 +61,8 @@ struct PATH_CONNECTION
     bool m_forceA2concavityCheck = false;
 
 
-    /** @brief Test if a path is valid 
-     *  
+    /** @brief Test if a path is valid
+     *
      * Check if a paths intersects the board edge or a track
      */
     bool isValid( const BOARD& aBoard, PCB_LAYER_ID aLayer,
@@ -155,7 +155,7 @@ class CU_SHAPE_CIRCLE;
 class CU_SHAPE_ARC;
 
 /** @class CREEP_SHAPE
- * 
+ *
  *  @brief A class used to represent the shapes for creepage calculation
  */
 class CREEP_SHAPE
@@ -256,7 +256,7 @@ protected:
 
 
 /** @class CU_SHAPE
- * 
+ *
  *  @brief Creepage: a conductive shape
  */
 class CU_SHAPE : public CREEP_SHAPE
@@ -266,7 +266,7 @@ public:
 };
 
 /** @class BE_SHAPE
- * 
+ *
  *  @brief Creepage: a board edge shape
  */
 class BE_SHAPE : public CREEP_SHAPE
@@ -276,7 +276,7 @@ public:
 };
 
 /** @class CU_SHAPE_SEGMENT
- * 
+ *
  *  @brief Creepage: a conductive segment
  */
 class CU_SHAPE_SEGMENT : public CU_SHAPE
@@ -314,7 +314,7 @@ private:
 };
 
 /** @class CU_SHAPE_CIRCLE
- * 
+ *
  *  @brief Creepage: a conductive circle
  */
 class CU_SHAPE_CIRCLE : public CU_SHAPE
@@ -352,7 +352,7 @@ private:
 };
 
 /** @class CU_SHAPE_ARC
- * 
+ *
  *  @brief Creepage: a conductive arc
  */
 class CU_SHAPE_ARC : public CU_SHAPE_CIRCLE
@@ -421,7 +421,7 @@ private:
 };
 
 /** @class Graphnode
- * 
+ *
  *  @brief a node in a @class CreepageGraph
  */
 class GraphNode
@@ -461,7 +461,7 @@ public:
 };
 
 /** @class GraphConnection
- * 
+ *
  *  @brief a connection in a @class CreepageGraph
  */
 class GraphConnection
@@ -483,7 +483,7 @@ public:
 
 
 /** @class BE_SHAPE_POINT
- * 
+ *
  *  @brief Creepage: a board edge point
  */
 class BE_SHAPE_POINT : public BE_SHAPE
@@ -523,7 +523,7 @@ public:
 };
 
 /** @class BE_SHAPE_CIRCLE
- * 
+ *
  *  @brief Creepage: a board edge circle
  */
 class BE_SHAPE_CIRCLE : public BE_SHAPE
@@ -569,7 +569,7 @@ protected:
 };
 
 /** @class BE_SHAPE_ARC
- * 
+ *
  *  @brief Creepage: a board edge arc
  */
 class BE_SHAPE_ARC : public BE_SHAPE_CIRCLE
@@ -651,7 +651,7 @@ protected:
 
 
 /** @class CreepageGraph
- * 
+ *
  *  @brief A graph with nodes and connections for creepage calculation
  */
 class CreepageGraph

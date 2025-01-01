@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,7 +34,7 @@ class EDA_BASE_FRAME;
 
 /**
  * A base class used to implement docking net inspector panels.
- * 
+ *
  * Provides a filter control, a settings button, and a data-driven wxDataViewCtrl
  */
 class NET_INSPECTOR_PANEL : public wxPanel
@@ -49,7 +49,7 @@ public:
 
     /**
      * Rebuild inspector data if project settings updated
-     * 
+     *
      * Called by the parent EDA_EDIT_FRAME on change of settings (e.g. stackup, netclass
      * definitions)
      */

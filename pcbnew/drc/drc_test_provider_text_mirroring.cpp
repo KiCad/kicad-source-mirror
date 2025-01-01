@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2023 KiCad Developers.
+ * Copyright The KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,19 +43,19 @@
 class DRC_TEST_PROVIDER_TEXT_MIRRORING : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_TEXT_MIRRORING() 
+    DRC_TEST_PROVIDER_TEXT_MIRRORING()
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_TEXT_MIRRORING() 
+    virtual ~DRC_TEST_PROVIDER_TEXT_MIRRORING()
     {
     }
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override 
-    { 
-        return wxT( "text_mirroring" ); 
+    virtual const wxString GetName() const override
+    {
+        return wxT( "text_mirroring" );
     };
 
     virtual const wxString GetDescription() const override

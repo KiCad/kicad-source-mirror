@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ BOOST_FIXTURE_TEST_CASE( ERCLabelNotConnected, ERC_REGRESSION_TEST_FIXTURE )
     // Check not-connected ERC errors
 
     std::vector<std::pair<wxString, int>> tests =
-    { 
+    {
         { "erc_pin_not_connected_basic",        2 },
         { "issue7203",                          3 },
         { "issue11926",                         2 },

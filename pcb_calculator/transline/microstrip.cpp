@@ -5,7 +5,7 @@
  * Copyright (C) 2002 Claudio Girardi <claudio.girardi@ieee.org>
  * Copyright (C) 2005, 2006 Stefan Jahn <stefan@lkcc.org>
  * Modified for Kicad: 2018 Jean-Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

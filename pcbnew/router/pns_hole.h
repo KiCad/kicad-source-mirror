@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -35,7 +35,7 @@ class HOLE : public ITEM
 public:
     HOLE( SHAPE* aShape ) :
             ITEM( ITEM::HOLE_T ),
-            m_holeShape( aShape ), 
+            m_holeShape( aShape ),
             m_parentPadVia( nullptr )
     {
     }

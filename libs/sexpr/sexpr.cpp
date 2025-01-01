@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

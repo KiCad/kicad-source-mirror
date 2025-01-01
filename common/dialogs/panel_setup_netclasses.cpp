@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2009-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,7 +385,7 @@ void PANEL_SETUP_NETCLASSES::setNetclassRowNullableEditors( int aRowId, bool aIs
             cellEditor = new GRID_CELL_MARK_AS_NULLABLE( false );
         else
             cellEditor = new GRID_CELL_MARK_AS_NULLABLE( true );
-    
+
         wxGridCellAttr* attr = m_netclassGrid->GetOrCreateCellAttr( aRowId, aCol );
         attr->SetEditor( cellEditor );
         attr->DecRef();
@@ -516,7 +516,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 
                     if( newPcbColor != KIGFX::COLOR4D::UNSPECIFIED )
                         nc->SetPcbColor( newPcbColor );
-                    
+
                     color = m_netclassGrid->GetCellValue( aRow, GRID_SCHEMATIC_COLOR );
                     KIGFX::COLOR4D newSchematicColor( color );
 
@@ -956,10 +956,10 @@ void PANEL_SETUP_NETCLASSES::OnMoveNetclassUpClick( wxCommandEvent& event )
     for( int col = 0; col < m_netclassGrid->GetNumberCols(); col++ )
         m_netclassGrid->SetCellValue( newRowId, col,
                                       m_netclassGrid->GetCellValue( newRowId + 2, col ) );
-    
+
     // Set the row nullable editors
     setNetclassRowNullableEditors( newRowId, false );
-    
+
     m_netclassGrid->DeleteRows( newRowId + 2, 1 );
     m_netclassGrid->MakeCellVisible( newRowId, 0 );
     m_netclassGrid->SetGridCursor( newRowId, 0 );

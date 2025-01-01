@@ -37,7 +37,7 @@
  * ====================================================================
  * Code in this file has been modified by the KiCad project.
  * For modifications:
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  */
 /*
  * Trackball code:

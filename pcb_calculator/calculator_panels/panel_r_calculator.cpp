@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ wxString r_calculator_help =
 #include "r_calculator_help.h"
 
 /* RES_EQUIV_CALC class considers resistor values from a limited range
- * and only combinations of up to 4 resistors, so target values less than 
+ * and only combinations of up to 4 resistors, so target values less than
  * parallel combination of minimum resistors or greater than serial combination
  * of maximum resistors cannot be reasonably looked for
  */
@@ -109,7 +109,7 @@ void PANEL_R_CALCULATOR::OnCalculateESeries( wxCommandEvent& event )
                                         m_ResRequired->GetValue() ) );
         return;
     }
-    
+
     wxBusyCursor busyCursor; // As long as this variable exists, the cursor will be 'busy'
 
     m_eSeries.NewCalc( reqr ); // assume all values available

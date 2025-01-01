@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -74,13 +74,13 @@ const VIA LINE_PLACER::makeVia( const VECTOR2I& aP )
 {
     // fixme: should belong to KICAD_IFACE
     auto iface = Router()->GetInterface();
-    
+
     int start = m_sizes.ViaType() == VIATYPE::THROUGH ?iface->GetPNSLayerFromBoardLayer( F_Cu ) : m_sizes.GetLayerTop();
     int end = m_sizes.ViaType() == VIATYPE::THROUGH ? iface->GetPNSLayerFromBoardLayer( B_Cu ) : m_sizes.GetLayerBottom();
 
-    const PNS_LAYER_RANGE layers( 
+    const PNS_LAYER_RANGE layers(
         start ,
-        end 
+        end
     );
 
     return VIA( aP, layers, m_sizes.ViaDiameter(), m_sizes.ViaDrill(), nullptr, m_sizes.ViaType() );
@@ -674,7 +674,7 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
 
         SHAPE_LINE_CHAIN l_cw, l_ccw;
 
-        
+
         if( wr.status[WP_CW] != WALKAROUND::ST_STUCK )
         {
             validCw = cursorDistMinimum( wr.lines[WP_CW].CLine(), aP, hugThresholdLength, l_cw );

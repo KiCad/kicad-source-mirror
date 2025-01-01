@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
 {
     std::string r = "0";
     std::string position = "";
-    
+
     if( const SIM_MODEL::PARAM* r_param = m_model.FindParam( "r" ) )
         r = SIM_VALUE::ToSpice( r_param->value );
 

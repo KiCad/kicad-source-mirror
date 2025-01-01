@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 BeagleBoard Foundation
- * Copyright (C) 2020-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Seth Hillbrand <hillbrand@kipro-pcb.com>
  *
  * This program is free software; you can redistribute it and/or

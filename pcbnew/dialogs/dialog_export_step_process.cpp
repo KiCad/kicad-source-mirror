@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2020 New Pagodi(https://stackoverflow.com/users/6846682/new-pagodi)
  *                    from https://stackoverflow.com/a/63289812/1522001
  *

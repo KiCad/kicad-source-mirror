@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Anil8735(https://stackoverflow.com/users/3659387/anil8753)
  *                    from https://stackoverflow.com/a/37274011
- * Copyright (C) 2020-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

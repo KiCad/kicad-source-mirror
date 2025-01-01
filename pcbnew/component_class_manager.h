@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,7 +30,7 @@
 /*
  * A lightweight representation of a component class. The membership within
  * m_consituentClasses allows determination of the type of class this is:
- * 
+ *
  * m_constituentClasses.size() == 0: This is a null class (no assigment).
  *     m_name is empty.
  * m_constituentClasses.size() == 1: This is an atomic class. The constituent class

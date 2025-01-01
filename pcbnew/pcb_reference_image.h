@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 jean-pierre.charras
  * Copyright (C) 2022 Mike Williams
- * Copyright (C) 2011-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

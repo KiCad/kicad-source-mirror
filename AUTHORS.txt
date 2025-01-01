@@ -1,94 +1,627 @@
-* Copyright (C) 1992-2015 Jean-Pierre Charras
-* Copyright (C) 1992-2021 KiCad Developers Team
-* under GNU General Public License (see LICENSE.README)
+ 김랑기
+ 킴슨김랑기
+ Camille 019
+ minsu kim (0xGabriel)
+ 109247019824
+ 2tama3
+ 3GO
+ Marcus A
+ Martin Aberg
+ YÜKSEL AÇIKGÖZ
+ Rohan Agrawal
+ Johannes Agricola
+ Erik Agsjö
+ Nabeel Ahmad
+ aimylios
+ Miguel Angel Ajo
+ alevtina-karashokova
+ Nicoara Alex
+ alexfanqi
+ Kuzemko Alexsandr
+ Martin d' Allens
+ Reza Almanda
+ Werner Almesberger
+ Shawn Anastasio
+ Collin Anderson
+ Tom Andrews
+ Andrzej.W
+ Subaru Arai
+ Mikael Arguedas
+ aris-kimi
+ arturo182
+ Mahsum Aslan
+ Ettore Atalan
+ Lachlan Audas
+ Jean-Noel Avila
+ Pascal Baerten
+ Konstantin Baranovskiy
+ Adolfo Jayme Barrientos
+ Roman Bashkov
+ Roberto Fernandez Bautista
+ Bahtiyar Bayram
+ Cirilo Bbernardo
+ Balint Kiss
+ John Beard
+ Michael Beardsworth
+ Markus Becker
+ Matthew Beckler
+ Konrad Beckmann
+ Eduardo Behr
+ Frank Bennett
+ Roman Beranek
+ Francois Berder
+ Martin Berglund
+ Gustav Bergquist
+ Cirilo Bernardo
+ Joël Bertrand
+ Harry Best
+ Andreas Beutling
+ Pablo Bianchi
+ Brian F. G. Bidulock
+ Marine Biologist
+ Heitor Pascoal de Bittencourt
+ Anton Blanchard
+ Radovan Blažek
+ Steve Bollinger
+ Blair Bonnett
+ Franck Bourdonnec
+ Carlo Bramini
+ Ignas Brašiškis
+ Hanna Breisand
+ Matthias Breithaupt
+ Stefan Brüns
+ BugRepellentExtraStrong
+ Andreas Buhr
+ Ryan Bunch
+ Emery Burhan
+ Scott Candey
+ Mustafa Selçuk ÇAVDAR
+ Ondřej Čertík
+ Phinitnan Chanasabaeng
+ Fabrizio Tappero
+ jean-pierre charras
+ Shivpratap Chauhan
+ David Chen
+ Dingzhong Chen
+ Jiajie Chen
+ Joseph Chen
+ Joseph Y. Chen
+ Alexey Chernov
+ Chuang Kai Chiao
+ Ethan Chien
+ Ji Yoon Choi
+ David Chorváth
+ kai chiao chuang
+ Ivan Chuba
+ Marco Ciampa
+ Massimo Cioce
+ CloverGit
+ CNLiuGuang
+ Marcus Comstedt
+ Diogo Condeco
+ Colin Cooper
+ Emile Cormier
+ Fabien Corona
+ Garth Corral
+ Sergio Costas
+ Kevin Cozens
+ CraftedNightmare
+ Dan Cross
+ Andrew D'Addesio
+ Martin d'Allens
+ Julian Daube
+ David Beinder
+ Greg Davill
+ Camille Delbegue
+ Djamel Dellaa
+ Okan Demir
+ Albin Dennevi
+ Troy Denton
+ Alexander Dewing
+ Julio Dias
+ Nguyen Van Dien
+ Yann Diorcet
+ Mark van Doesburg
+ Sadıkhan Doğdu
+ Temuri Doghonadze
+ Sašo Domadenik
+ Ben Dooks
+ Pavel Dovgalyuk
+ Andrew Downing
+ Jan Dubiec
+ Lucas Dumont
+ Mads Dyrmann
+ Gerd v. Egidy
+ Jean Philippe EIMER
+ Ben Ellis
+ Ahmed Elswah
+ Oleg Endo
+ José Jorge Enríquez
+ Oğuz Ersen
+ Damien Espitallier
+ Jon Evans
+ Evan Shultz
+ Paul LeoNerd Evens
+ Paul Ewing
+ Steven A. Falco
+ István Farkas
+ Fat-Zer
+ Julien FAUCHER
+ Andrey Fedorushkov
+ Julian Fellinger
+ ferdymercury
+ Joe Ferner
+ Chris Fiege
+ Brian Fiete
+ Thomas Figueroa
+ Gilbert J.M. Forkel
+ Vincenzo Fortunato
+ Benedikt Freisen
+ Jacque Fresco
+ Drew Fustini
+ Flórián Fuszkó
+ Ronnie Gaensli
+ Christian Gagneraud
+ Kamil Galik
+ Gallego Novato
+ Ben Gamari
+ Thomas Gambier
+ Ashutosh Gangwar
+ Alessandro Gatti
+ Alex Gellen
+ Robert Antoni Buj Gelonch
+ Robert Antoni Buj Genlonch
+ Hal Gentz
+ Lucas Gerads
+ Davide Gerhard
+ Michael Geselbracht
+ Augusto Fraga Giachero
+ Rob Gilton
+ Giulio Girardi
+ Jarl Gjessing
+ Jeff Glass
+ Alexander Golubev
+ Hidemichi Gotou
+ Angus Gratton
+ Andrea Greco
+ Element Green
+ Mathias Grimmberger
+ Johan Grip
+ Michal Grzegorzek
+ WANG Guan
+ Liu Guang
+ Niki Guldbrand
+ Mert Gülsoy
+ Tanay Gupta
+ gurqja3810
+ Alexander Guy
+ Zoltan Gyarmati
+ Jonathan Haas
+ Trần Phi Hải
+ Mark Hämmerling
+ Stefan Hamminga
+ Ma Han
+ hanebefl
+ Scott Hanson
+ Ben Harris
+ Lukas F. Hartmann
+ Jakob Haufe
+ Aylons Hazzud
+ Marcel Hecko
+ Stefan Helmert
+ Hartmut Henkel
+ Henner Zeller
+ Brian Henning
+ Axel Henriksson
+ Diego Herranz
+ Marco Hess
+ Seth Hillbrand
+ Arend-Jan van Hilten
+ SUENAGA Hiroki
+ Tokita, Hiroshi
+ Petri Hodju
+ CJ van der Hoeven
+ David Holdeman
+ Dick Hollenbeck
+ Laurens Holst
+ Yang Hongbo
+ Mario Hros
+ Hubert Hu
+ Josue Huaroto
+ Huibean
+ Matt Huszagh
+ José Ignacio
+ IkomaSo
+ Marco Inacio
+ Jose Ingnacio
+ Kinichiro Inoguchi
+ Fabián Inostroza
+ Evgeniy Ivanov
+ Vlad Ivanov
+ Andre Iwers
+ Aurabindo J
+ Hasan Jaafar
+ James Jackson
+ Jerry Jacobs
+ Christian Jacobsen
+ Michal Jahelka
+ Jakub Janek
+ Martin Janitschke
+ Jonathan Jara-Almonte
+ Jason Tan
+ jehunseo
+ jeong-sangwon
+ jeongsuAn
+ Jerry Jacobs
+ Zhuang Jiezhi
+ j.Kolod
+ Johannes Wilkens
+ Richard Jonsson
+ Franck Jullien
+ Uibeom Jung
+ Hildo Guillardi Júnior
+ boonchai k
+ Radek K
+ Eeli Kaikkonen
+ Stanislav Kaliuk
+ Mert Kalkancı
+ lajos kamocsay
+ Povilas Kanapickas
+ KaoruZenyouji
+ Mikhail Karpenko
+ Kerusey Karyu
+ Henrik Kauhanen
+ Michael Kavanagh
+ Krzysztof Kawa
+ Tom Keddie
+ Graham Keeth
+ Yury Khalyavin
+ Nguyễn Ngọc Khánh
+ Eldar Khayrullin
+ Georges Khaznadar
+ Gary Kim
+ kinichiro
+ Ingo Kletti
+ Kliment
+ Sylwester Kocjan
+ Gökhan Koçmarlı
+ Uli Köhler
+ Clemens Koller
+ Ricky From Hong Kong
+ Asuki Kono
+ Baranoviskiy Konstantin
+ Baranovskiy Konstantin
+ Vitan Košpenda
+ Milonas Kostas
+ Jakub Kozdon
+ Hajo Nils Krabbenhöft
+ Martin Kratoška
+ Andrej Krpic
+ Simon Kueppers
+ Martijn Kuipers
+ Eric Kuzmenko
+ Radek Kuznik
+ KwonHyeokbeom
+ Robbert Lagerweij
+ Toni Laiho
+ Mika Laitio
+ Floris Lambrechts
+ Dimitris Lampridis
+ Marco Langer
+ Kevin Lannen
+ Lao Zhu
+ lê văn lập
+ Denis Latyshev
+ J. Lavoie
+ Anton Lazarev
+ ludovic léau-mercier
+ Dag Lem
+ leonardokr
+ levanlap2502
+ Pinpang Liao
+ Alex Life
+ lifekidyeaa
+ Rigo Ligo
+ Jonatan Liljedahl
+ William Lin
+ Huanyin Liu
+ Alexis Lockwood
+ Lukas Heiligenbrunner
+ Lukasz Iwaszkiewicz
+ Alexander Lunev
+ Mário Luzeiro
+ Johannes Maibaum
+ Mateusz Majchrzycki
+ Rachel Mant
+ Lorenzo Marcantonio
+ Markus Bonk
+ Martin Dallens
+ Gabriel Martinez
+ Miklós Márton
+ Massimo
+ Marco Mattila
+ Simo Mattila
+ Steffen Mauch
+ Maurice
+ Kirill Mavreshko
+ Brian Mayton
+ Miles McCoo
+ Charles McDowell
+ Ian McInerney
+ Ian McKellar
+ Moses McKnight
+ Martin McNamara
+ Cameron McQuinn
+ Jacob Mealey
+ Ievgenii Meshcheriakov
+ Balázs Meskó
+ Eryk Michalak
+ Michal Jahelka
+ Dmitry Mikhirev
+ Mojca Miklavec
+ Ashley Mills
+ Michael Misirlis
+ Michail Misirlis
+ Christoph Moench-Tegeder
+ Peter Montgomery
+ Alejandro García Montoro
+ Tomás Mora
+ Pedro Moreira
+ Chris Morgan
+ Felix Morgner
+ Jan Mrázek
+ M.Scholz
+ Frank Muenstermann
+ Keisuke Nakao
+ Michael Narigon
+ Jon Neal
+ Neko Nekowazarashi
+ Bastian Neumann
+ Mathias Neumann
+ Bế Trọng Nghĩa
+ Kristian Nielsen
+ Petri Niemelä
+ Christoph Nieß
+ Tom Niesse
+ Christiaan Nieuwlaat
+ Daniil Nikolaev
+ Érico Nogueira
+ nopeppermint
+ Hajdu Norbert
+ Allan Nordhøy
+ Nox_firegalaxy
+ Triyan W. Nugroho
+ Henrik Nyberg
+ Kristoffer Ödmark
+ Edwin van den Oetelaar
+ Russell Oliver
+ Roman Ondráček
+ Jason Oster
+ Nick Østergaard
+ Ken Ovo
+ Frank Palazzolo
+ Karl Palsson
+ Sven Pauli
+ Matus Pavelek
+ Chris Pavlina
+ Petr Pazourek
+ pedrolinharesmoreira
+ Peng Peng
+ Francisco R. Pereira
+ Patrick Pereira
+ Jacobo Aragunde Perez
+ Jose Perez
+ Matthew Petroff
+ Daniel Petrovich
+ Johannes Pfister
+ Fabian Pflug
+ Christian Pfluger
+ brian piccioni
+ Filip Piękoś
+ Mathieu Pilato
+ Nicolas Planel
+ Paweł Płóciennik
+ Thomas Pointhuber
+ Carl Poirier
+ Reece R. Pollack
+ pominglee
+ pondahai
+ Alain Portal
+ Andrei Pozolotin
+ Antia Puentes
+ Heikki Pulkkinen
+ PurkkaKoodari
+ Zoltan Puskas
+ Morgan Quigley
+ Robert Burton
+ Michał Radziejewicz
+ Stefan De Raedemaeker
+ Barabas Raffai
+ Jarrett Rainier
+ Urja Rannikko
+ Alexander Rauth
+ Hendrik v. Raven
+ Joshua Redstone
+ Petter Reinholdtsen
+ Michele Renda
+ reniemarquet
+ Jean-Samuel Reynaud
+ Dmitry Rezvanov
+ Simon Richter
+ Christoph Riehl
+ Thiadmer Riemersma
+ Gregor Riepl
+ RigoLigoRLC
+ Ola Rinta-Koski
+ Lubomir Rintel
+ Jonas Rittershofer
+ Érico Rolim
+ Marcus A. Romer
+ José Ignacio Romero
+ Jose I Romero
+ Heiko Rosemann
+ Fabio Rossi
+ Mark Roszko
+ Ian Roth
+ Erwan Rouault
+ Huang Rui
+ Dhineshkumar S
+ Clément Saccoccio
+ J. Morio Sakaguchi
+ Milan Šalka
+ Iñigo Figuero Sanz
+ Kuba Sawulski
+ Simon Schaak
+ Ross Schlaikjer
+ Christian Schlüter
+ Julius Schmidt
+ Marvin Schmidt
+ Felix Schneider
+ Carsten Schoenert
+ Armin Schoisswohl
+ Simon Schubert
+ Karl SCHUH
+ Michal Schulz
+ Adrian Scripcă
+ Pradeepa Senanayake
+ Marco Serantoni
+ Rafael Serrano
+ Frank Severinsen
+ David Shah
+ Andrii Shelestov
+ Yang sheng
+ Cheng Sheng
+ Chetan Shinde
+ Alexander Shuklin
+ Alex Shvartzkop
+ Brian Sidebotham
+ Fernando Ferreira Silva
+ Paulo Henrique Silva
+ Rafael Silva
+ Guillaume Simard
+ Adam Simpkins
+ René Široký
+ Slawomir Siudym
+ Martin Sivak
+ Elias Sjögreen
+ Rihards Skuja
+ Dominik Sliwa
+ Kacper Słomiński
+ Ruben De Smet
+ Blake Smith
+ Dejan Smole
+ Ikoma So
+ Jan Sobków
+ Michal Sojka
+ Rafael Sokolowski
+ Vesa Solonen
+ Frank Sonnenberg
+ Ronald Sousa
+ Craig Southeren
+ Dr. Thomas Spindler
+ Wayne Stambaugh
+ Seppe Stas
+ Bernhard Stegmaier
+ Michael Steinberg
+ Marco Sterbik
+ Alexander Stock
+ Martin Stoilov
+ Jan Straka
+ Stuart Tyler Relyt
+ SubaruArai
+ Maciej Sumiński
+ Zhen Sun
+ Kuba Sunderland-Ober
+ Håvard Syslak
+ Build System
+ SYSUeric66
+ Grzegorz Szymaszek
+ Phạm Minh Tấn
+ taotieren
+ Fabrizio Tappero
+ Dimitris Tassopoulos
+ Nimish Telang
+ Martin Thierer
+ Karl Thorén
+ Lauritz Tieste
+ Ricky Tigg
+ Daniel Treffenstädt
+ Hans Henry von Tresckow
+ Salvador E. Tropea
+ Wellington Terumi Uemura
+ Uli Koehler
+ Vladimir Ur
+ Yutaro Urata
+ Yon Uriarte
+ Matthias Urlichs
+ Murat Ursavaş
+ Vladimir Uryvaev
+ Julie Vairai
+ Andrej Valek
+ Henri Valta
+ Dave Vandenbout
+ Fabio Varesano
+ Benjamin Vernoux
+ VicSanRoPe
+ Arnau Llovet Vidal
+ Riku Viitanen
+ Frank Villaro-Dixon
+ Mark Visser
+ Forrest Voight
+ Tormod Volden
+ Jan Vykydal
+ Bartek Wacławik
+ Johannes Wågen
+ Adam Wahab
+ Oliver Walters
+ Jonathan Warner
+ Dan Weatherill
+ Christian Weickhmann
+ Bevan Weiss
+ Simon Wells
+ Dominik Wernberger
+ Jan Wichmann
+ Bernhard M. Wiedemann
+ Mikołaj Wielgus
+ Bas Wijnen
+ Mike Williams
+ Nick Winters
+ Tomasz Włostowski
+ Adam Wolf
+ Andrzej Wolski
+ Céleste Wouters
+ Damian Wrobel
+ Andrew Wygle
+ VEDAT YAMAN
+ Jiaxun Yang
+ yangyangdaji
+ Robert Yates
+ Yegor Yefremov
+ Li Yidong
+ Kenta Yonekura
+ Youbao
+ Jeff Young
+ Tian Yunhao
+ YunJiSang
+ yurayko
+ Alexander Zakamaldin
+ ZbeeGin
+ Frank Zeeman
+ Karl Zeilhofer
+ Henner Zeller
+ Kevin Zheng
+ Eric Zhuang
+ Farkas G. Zoltán
+ Andrew Zonenberg
+ Nils VAN ZUIJLEN
+ Дмитрий Дёмин
+ Александр Закамалдин
+ 向阳阳
+ 撒景賢
+ 欠陥電気
+ 木 王
+ 郝弘毅
 
-== Main Authors
-Jean-Pierre Charras <jean-pierre.charras[at]wanadoo-dot-fr>
-Dick Hollenbeck <dick[at]softplc-dot-com>
-Wayne Stambaugh <stambaughw[at]gmail-dot-com>
-Maciej Sumiński <maciej.suminski[at]cern-dot-ch>
-Tomasz Wlostowski <tomasz.wlostowski[at]cern-dot-ch>
-
-
-== Contributors
-Hauptmech <hauptmech[at]gmail-dot-com>
-Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
-Jonas Diemer <diemer[at]gmx-dot-de>
-Lorenzo <lomarcan[at]tin-dot-it>
-Marco Serantoni <marco.serantoni[at]gmail-dot-com>  (OSX maintener)
-Rok Markovic <rok[at]kanardia.eu>
-Tim Hanson <sideskate[at]gmail-dot-com>
-Vesa Solonen <vesa.solonen[at]hut-dot-fi>
-Alexander Zakamaldin <zaka62[at]mail-dot-ru>
-Miguel Angel Ajo Pelayo <miguelangel[at]nbee-dot-es> (Python Scripting)
-Alexander Lunev <al.lunev[at]yahoo-dot-com>  (Pcad to Kicad converter)
-Jacobo Aragunde Perez <jaragunde[at]igalia-dot-com> for Igalia and the CERN
-Brian Sidebotham <brian.sidebotham[at]gmail-dot-com>
-Henner Zeller <h.zeller[at]acm-dot-org>
-Mark Roszko <mark.roszko[at]gmail-dot-com>
-Daniel Majewski <lordblick[at]gmail-dot-com>
-Konstantin Baranovskiy <baranovskiykonstantin[at]gmail-dot-com>
-Torsten Hüter <torstenhtr[at]gmx-dot-de>
-Nick Østergaard <oe.nick[at]gmail-dot-com>
-Andrew Zonenberg <azonenberg[at]drawersteak-dot-com>
-Cirilo Bernardo <cirilo_bernardo[at]yahoo-dot-com>
-Adam Wolf <adamwolf[at]feelslikeburning-dot-com>
-Bernhard Stegmaier <stegmaier[at]sw-systems-dot-de>
-Alexis Lockwood <alexlockwood[at]fastmail-dot-com>
-Simon Richter <Simon.Richter[at]hogyros-dot-de>
-Mario Luzeiro <mrluzeiro[at]ua-dot-pt>
-Mateusz Skowroński <skowri[at]gmail-dot-com>
-Cheng Sheng <chengsheng[at]google-dot-com> Google Inc.
-Kristoffer Ödmark <kristoffer.odmark90[at]gmail-dot-com>
-Oliver Walters <oliver.henry.walters[at]gmail-dot-com>
-Jon Evans <jon[at]craftyjon-dot-com>
-Russell Oliver <roliver8143[at]gmail-dot-com>
-Seth Hillbrand <hillbrand[at]ucdavis-dot-edu>
-Jeff Young <jeff[at]rokeby-dot-ie>
-Kevin Cozens <kevin[at]ve3syb-dot-ca>
-Ian McInerney <ian.s.mcinerney[at]ieee-dot-org>
-Thomas Pointhuber <thomas.pointhuber[at]gmx-dot-at>
-Roberto Fernandez Bautista <roberto.fer.bau[at]gmail-dot-com>
-Mikołaj Wielgus <wielgusmikolaj[at]gmail-dot-com>
-Mike Williams <mike[at]mikebwilliams-dot-com>
-Emile Cormier <emile.cormier.jr[at]gmail-dot-com>
 
 See git repo on GitLab for contributors at
 https://gitlab.com/kicad/code/kicad/-/graphs/master
-
-
-== Document Writers
-Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab.inpg-dot-fr>
-Igor Plyatov <plyatov[at]gmail-dot-com>
-Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
-Marco Ciampa <ciampix[at]posteo-dot-net>
-Wayne Stambaugh <stambaughw[at]gmail-dot-com
-
-
-== Translators
-Czech (CZ) Martin KratoÅ¡ka <martin[at]ok1rr-dot-com>
-Dutch (NL) Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
-Finnish (FI) Vesa Solonen <vesa.solonen[at]hut-dot-fi>
-French (FR) Jean-Pierre Charras <jean-pierre.charras[at]inpg-dot-fr>
-Italian (IT) Marco Ciampa  <ciampix[at]posteo-dot-net>
-Polish (PL) Mateusz Skowro¿ski <skowri[at]gmail-dot-com>
-Polish (PL) Kerusey Karyu <keruseykaryu[at]o2.pl>
-Portuguese (PT) Renie Marquet <reniemarquet[at]uol-dot-com-dot-br>"
-Russian (RU) Igor Plyatov <plyatov[at]gmail-dot-com>
-Russian (RU) Andrey Fedorushkov <andrf[at]mail-dot-ru>
-Russian (RU) Eldar Khayrullin <eldar.khayrullin[at]mail-dot-ru>
-Spanish (ES) Pedro Martin del Valle <pkicad[at]yahoo-dot-es>
-Spanish (ES) Iñigo Zuluaga <inigo_zuluaga[at]yahoo-dot-es>
-German (DE) Rafael Sokolowski <Rafael.Sokolowski[at]web-dot-de
-Japanese (JA) Kenta Yonekura <yoneken[at]kicad-dot-jp>
-Simplified Chinese (zh_CN) taotieren <admin[at]taotieren-dot-com>
-
-Remy Halvick, David J S Briscoe, Dominique Laigle, Paul Burke
-
-
-== Programm credits for icons and others
-Icons by Iñigo Zuluagaz <inigo_zuluaga[at]yahoo-dot-es>
-New Icons by Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
-3D modules by Renie Marquet <reniemarquet[at]uol-dot-com-dot-br>
-3D modules by Christophe Boschat <nox454[at]hotmail-dot-fr>
-Icon revisions 2020 by Aleksandr Zyrianov

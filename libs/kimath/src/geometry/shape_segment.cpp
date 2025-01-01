@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -99,7 +100,7 @@ void SHAPE_CIRCLE::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
 bool SHAPE_SEGMENT::Is45Degree( EDA_ANGLE aTollerance ) const
 {
     EDA_ANGLE mag = EDA_ANGLE( m_seg.A - m_seg.B ).Normalize180();
-    
+
     double f = fmod( mag.AsDegrees(), 45.0 );
     double d = aTollerance.AsDegrees();
 

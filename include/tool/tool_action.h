@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2023 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -435,7 +435,7 @@ protected:
     ///< Name of the action (convention is "app.tool.actionName")
     std::string          m_name;
     TOOL_ACTION_SCOPE    m_scope;
-    
+
     std::optional<TOOL_ACTION_GROUP>    m_group;    // Optional group for the action to belong to
 
     const int            m_defaultHotKey;    // Default hot key

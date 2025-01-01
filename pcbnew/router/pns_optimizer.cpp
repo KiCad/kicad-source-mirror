@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -626,7 +626,7 @@ bool OPTIMIZER::Optimize( const LINE* aLine, LINE* aResult, LINE* aRoot )
 
     *aResult = *aLine;
     aResult->ClearLinks();
-    
+
     bool hasArcs = aLine->ArcCount();
     bool rv = false;
 

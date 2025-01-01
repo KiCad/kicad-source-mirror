@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -66,7 +66,7 @@ public:
 
     /// @brief Gets all netclasses
     const std::map<wxString, std::shared_ptr<NETCLASS>>& GetNetclasses() const;
-    
+
     /// @brief Gets all composite (multiple assignment / missing defaults) netclasses
     // Note the full connectivity or board net synchronisation must be run before calling
     // this, otherwise resolved netclasses may be missing
@@ -190,7 +190,7 @@ private:
 
     /**
      * @brief Creates an effective aggregate netclass from the given constituent netclasses
-     * 
+     *
      * Takes the aggregate parameters from the constituent netclasses in priority order. If any
      * parameters are missing from the overall union, then they are filled from the default
      * netclass. Note that the netclasses vector will have the default netclass added if it is used

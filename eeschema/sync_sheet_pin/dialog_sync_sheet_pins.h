@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Ethan Chien <liangtie.qian@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ public:
 
     /**
      * @brief Either selected HIERLABELs or SHEET_PINs will be used as templates for placing the new ones.
-     * 
+     *
      * @param aSheet The sheet where the new HIERLABELs or SHEET_PINs will be placed. For SHEET_PINs, it's the corresponding sheet symbol
      * @param aKind Either PlaceItemKind::HIERLABEL or PlaceItemKind::SHEET_PIN
      * @param aPlacementTemplateSet All the selected HIERLABELs or SHEET_PINs
@@ -76,7 +76,7 @@ public:
 
     /**
      * @brief End place a new #HIERLABEL/#SHEET_PIN , and add the new item to the corresponding table.
-     * 
+     *
      * @param aNewItem The new #HIERLABEL/#SHEET_PIN to be placed.
      */
     void EndPlaceItem( EDA_ITEM* aNewItem );

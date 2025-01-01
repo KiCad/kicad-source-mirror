@@ -1,6 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ namespace SPICE_GRAMMAR
 
     struct eolfComment : seq<eolfCommentStart,
                             until<eolf>> {};
-                                            
+
 
     struct commentLine : seq<opt<garbage>,
                              one<'*'>,
@@ -71,7 +71,7 @@ namespace SPICE_GRAMMAR
                                                   string<'\\', '\\'>,
                                                   opt<trailers>,
                                                   eolf>> {};
-                                                  
+
 
     struct plusContinuation : seq<sor<eolf,
                                       eolfComment>,
@@ -294,21 +294,21 @@ namespace SPICE_GRAMMAR
             "expected newline";
     template <> inline constexpr auto errorMessage<sep> =
             "expected token separator (one or more whitespace, parenthesis, '=', ',', or line continuation)";
-    template <> inline constexpr auto errorMessage<opt<sep>> = 
+    template <> inline constexpr auto errorMessage<opt<sep>> =
             "";
-    template <> inline constexpr auto errorMessage<modelName> = 
+    template <> inline constexpr auto errorMessage<modelName> =
             "expected model name";
-    template <> inline constexpr auto errorMessage<dotModelType> = 
+    template <> inline constexpr auto errorMessage<dotModelType> =
             "expected model type";
-    template <> inline constexpr auto errorMessage<opt<sep, dotModelType>> = 
+    template <> inline constexpr auto errorMessage<opt<sep, dotModelType>> =
             "";
-    template <> inline constexpr auto errorMessage<opt<sep, paramValuePairs>> = 
+    template <> inline constexpr auto errorMessage<opt<sep, paramValuePairs>> =
             "";
     template <> inline constexpr auto errorMessage<opt<sep, cplParamValuePairs>> =
             "";
     template <> inline constexpr auto errorMessage<opt<sep, dotSubcktPinSequence>> =
             "";
-    template <> inline constexpr auto errorMessage<opt<sep, dotSubcktParams>> = 
+    template <> inline constexpr auto errorMessage<opt<sep, dotSubcktParams>> =
             "";
     template <> inline constexpr auto errorMessage<until<dotSubcktEnd, spiceUnit>> =
             "expected (possibly empty) sequence of Spice lines followed by an .ends line";

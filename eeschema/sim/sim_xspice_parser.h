@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,9 +38,9 @@ using namespace SIM_VALUE_GRAMMAR;
 *  ~ can only be before ?
 *  ~~ is not allowed
 *  [] can enclose as many '?' with modifiers as we want
-*  nested vectors are not allowed [ [?] ? ] 
+*  nested vectors are not allowed [ [?] ? ]
 *  () and spaces are allowed and treated as separators
-*  we want at least one node '?' 
+*  we want at least one node '?'
 **/
 struct nodeName : one<'?'>
 {
@@ -101,7 +101,7 @@ struct portModifiersDifferential : seq<one<'%'>, sep, portModifierDifferentialNa
 struct validPortTypes
         : until<if_must<one<'%'>, sep,
                         sor<portModifierDifferentialNames,
-                            portModifiersSingleNames,      
+                            portModifiersSingleNames,
                             istring<'d'>>>>
 {
 };

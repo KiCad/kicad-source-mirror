@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -62,7 +62,7 @@ protected:
      * When rows are created programmatically by pasting values from the clipboard,
      * the cell change event may not be triggered. This can prevent members from
      * being automatically added to the corresponding alias.
-     * 
+     *
      * To ensure that members are correctly associated with the alias,
      * we manually update the members for the needed alias.
      */

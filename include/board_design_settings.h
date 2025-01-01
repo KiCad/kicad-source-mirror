@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -688,7 +688,7 @@ public:
                                             // connected track
     bool       m_TempOverrideTrackWidth;    // use selected track width temporarily even when
                                             // using connected track width
-    int        m_MinClearance;              // overall min 
+    int        m_MinClearance;              // overall min
     int        m_MinGrooveWidth;            // Minimum groove width for creepage checks
     int        m_MinConn;                   // overall min connection width
     int        m_TrackMinWidth;             // overall min track width

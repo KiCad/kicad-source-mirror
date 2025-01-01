@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2024 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney at ieee dot org>
- * Copyright (C) 2020-2024 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxBitmap&
 
 
 void BITMAP_BUTTON::setupEvents()
-{    
+{
     Bind( wxEVT_DPI_CHANGED,  &BITMAP_BUTTON::OnDPIChanged,     this );
     Bind( wxEVT_PAINT,        &BITMAP_BUTTON::OnPaint,          this );
     Bind( wxEVT_LEFT_UP,      &BITMAP_BUTTON::OnLeftButtonUp,   this );

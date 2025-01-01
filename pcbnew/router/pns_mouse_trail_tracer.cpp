@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2020 CERN
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -130,7 +131,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
     double areaDiag = diag.Area();
     double ratio    = areaS / ( areaDiag + 1.0 );
-    
+
     // heuristic to detect that the user dragged back the cursor to the beginning of the trace
     // in this case, we cancel any forced posture and restart the trail
     if( m_forced && refLength < unlockDistanceFactor * m_tolerance )

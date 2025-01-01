@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -201,7 +201,7 @@ private:
     LINE assembleLine( const LINKED_ITEM* aSeg, int* aIndex = nullptr, bool aPreCleanup = false );
 
     void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
-    ROOT_LINE_ENTRY* replaceLine( LINE& aOld, LINE& aNew, 
+    ROOT_LINE_ENTRY* replaceLine( LINE& aOld, LINE& aNew,
                     bool aIncludeInChangedArea = true,
                       NODE *aNode = nullptr );
 

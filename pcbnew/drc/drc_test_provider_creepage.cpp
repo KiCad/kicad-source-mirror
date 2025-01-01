@@ -1,5 +1,5 @@
 /*
-    * Copyright (C) 2024 KiCad Developers.
+    * Copyright The KiCad Developers.
     * Copyright (C) 2024 Fabien Corona f.corona<at>laposte.net
     *
     * This program is free software; you can redistribute it and/or

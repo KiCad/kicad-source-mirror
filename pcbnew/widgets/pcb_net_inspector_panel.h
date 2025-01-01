@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -55,7 +55,7 @@ class EDA_COMBINED_MATCHER;
  *      2. IC1-IC2
  *      3. IC2-IC3
  * <p>
- * In this instance, all sub-nets as a result of a constraint will be grouped by the constraint. 
+ * In this instance, all sub-nets as a result of a constraint will be grouped by the constraint.
  */
 class PCB_NET_INSPECTOR_PANEL : public NET_INSPECTOR_PANEL, public BOARD_LISTENER
 {
@@ -65,7 +65,7 @@ public:
 
     /**
      * Updates the netlist based on global board changes (e.g. stackup definition)
-     * 
+     *
      * Called by PCB_EDIT_FRAME after displaying the Board Setup dialog
      */
     virtual void OnParentSetupChanged() override;
@@ -159,14 +159,14 @@ private:
 
     /**
      * Adjust the sizing of list columns
-     * 
+     *
      * @param cfg the PANEL_NET_INSPECTOR_SETTINGS from which to read column widths
     */
     void adjustListColumnSizes( PANEL_NET_INSPECTOR_SETTINGS* cfg );
 
     /**
      * Sets the sort column in the grid to that showing the given model ID column
-     * 
+     *
      * @param sortingColumnId The model ID of the column to sort by
      * @param sortOrderAsc True for ascending sort, False for descending sort
      * @returns true if the column was found
@@ -175,7 +175,7 @@ private:
 
     /**
      * Fetches the displayed grid view column for the given model column ID
-     * 
+     *
      * @param columnId The ID (from column static IDs enum) to find
      * @returns Pointer to the wxDataViewColumn, or nullptr if not found
     */

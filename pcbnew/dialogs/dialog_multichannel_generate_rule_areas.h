@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ class MULTICHANNEL_TOOL;
 class DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS : public DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE
 {
 public:
-    DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS( 
+    DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS(
         PCB_BASE_FRAME* aFrame,
         MULTICHANNEL_TOOL* aParentTool );
     ~DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS();

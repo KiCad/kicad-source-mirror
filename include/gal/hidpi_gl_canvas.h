@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 Bernhard Stegmaier <stegmaier@sw-systems.de>
- * Copyright (C) 2016-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Base class for HiDPI aware wxGLCanvas implementations.
  *

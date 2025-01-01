@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Jan Mrázek <email@honzamrazek.cz>
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

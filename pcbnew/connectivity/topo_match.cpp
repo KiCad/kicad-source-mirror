@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Kicad Developers, see change_log.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,14 +50,14 @@ bool PIN::IsIsomorphic( const PIN& b ) const
 {
     if( m_conns.size() != b.m_conns.size() )
     {
-        wxLogTrace( traceTopoMatch, wxT("[conns mismatch n1 %d n2 %d c-ref %d c-other %d thispin %s-%s otherpin %s-%s"), 
-            m_netcode, 
-            b.m_netcode, 
-            (int) m_conns.size(), 
+        wxLogTrace( traceTopoMatch, wxT("[conns mismatch n1 %d n2 %d c-ref %d c-other %d thispin %s-%s otherpin %s-%s"),
+            m_netcode,
+            b.m_netcode,
+            (int) m_conns.size(),
             (int) b.m_conns.size(),
-            m_parent->m_reference, 
+            m_parent->m_reference,
             m_ref,
-            b.m_parent->m_reference, 
+            b.m_parent->m_reference,
             b.m_ref );
 
         for( auto c : m_conns )
@@ -124,7 +124,7 @@ bool checkIfPadNetsMatch( BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRefGraph
     std::vector<PIN*>    pref, ptgt;
 
     // GetMatchingComponentPairs() returns target->reference map
-    for( auto& m : aMatches.GetMatchingComponentPairs() ) 
+    for( auto& m : aMatches.GetMatchingComponentPairs() )
     {
         for( PIN* p : m.second->Pins() )
         {

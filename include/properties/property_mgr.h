@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2023 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -191,7 +191,7 @@ public:
     /**
      * Sets a base class property as masked in a derived class.  Masked properties are hidden from
      * the list of editable properties for this class.
-     * 
+     *
      * @param aDerived is the type to apply the mask for.
      * @param aBase is the type that aName belongs to.
      * @param aName is the name of a property on the base class.
@@ -200,7 +200,7 @@ public:
 
     /**
      * Sets an override availability functor for a base class property of a given derived class.
-     * 
+     *
      * @param aDerived is the type to apply the mask for.
      * @param aBase is the type that aName belongs to.
      * @param aName is the name of a property on the base class.
@@ -223,7 +223,7 @@ public:
     /**
      * Checks overriden availability and original availability of a property, returns false
      * if the property is unavailable in either case.
-     * 
+     *
      * TODO: This isn't the cleanest API, consider how to merge with PROPERTY_BASE::Available
      */
     bool IsAvailableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp, INSPECTABLE* aItem );

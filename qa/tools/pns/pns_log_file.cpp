@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2023 KiCad Developers.
+ * Copyright The KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS::LOGGER::EVENT_ENTRY& ev
     auto parents = ItemsById( evt );
     if ( parents.size() > 0 )
         return parents[0];
-    
+
     return nullptr;
 }
 

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -688,7 +688,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
             if( m_shove->HeadsModified() )
             {
                 newVia = m_shove->GetModifiedHeadVia( 0 );
-                
+
                 PNS_DBG( Dbg(), Message, wxString::Format("newvia %d %d %d %d",
                         newVia.pos.x,
                         newVia.pos.y,
@@ -699,7 +699,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
                 m_draggedVia = newVia;
             }
 
-        
+
         m_lastNode = m_shove->CurrentNode()->Branch();
 
         m_draggedItems.Clear();
@@ -713,7 +713,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         break;
     }
     }
-    
+
     return m_dragStatus;
 }
 

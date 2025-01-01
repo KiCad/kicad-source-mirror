@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2021 Ola Rinta-Koski
  * Copyright (C) 2023 CERN (www.cern.ch)
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

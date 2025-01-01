@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  * Copyright (C) CERN
- * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *

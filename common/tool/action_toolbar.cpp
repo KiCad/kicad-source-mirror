@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright The KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,7 +226,7 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 
     Unbind( wxEVT_SYS_COLOUR_CHANGED,
             wxSysColourChangedEventHandler( ACTION_TOOLBAR::onThemeChanged ), this );
-            
+
     delete m_paletteTimer;
 
     // Clear all the maps keeping track of our items on the toolbar

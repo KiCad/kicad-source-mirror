@@ -2,7 +2,7 @@
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
 * Copyright (C) 2020 Mark Roszko <mark.roszko@gmail.com>
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright The KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software: you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -38,7 +38,7 @@ namespace KIPLATFORM
 
         /**
          * Tries to attach a console window with stdout, stderr and stdin.
-         * 
+         *
          * @param aTryAlloc try to allocate the console if cannot attach to it.
          * @return true if attach successful, false if unsuccessful
          */
