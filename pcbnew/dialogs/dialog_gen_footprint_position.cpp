@@ -74,8 +74,7 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS
     m_messagesPanel->Hide();
     initDialog();
 
-    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
-                            { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons();
 
     GetSizer()->SetSizeHints( this );
     Centre();

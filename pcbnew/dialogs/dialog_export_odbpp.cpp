@@ -57,8 +57,7 @@ DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( PCB_EDIT_FRAME* aParent ) :
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    SetupStandardButtons( { { wxID_OK, _( "Export" ) },
-                            { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons();
 
     wxString path = m_parent->GetLastPath( LAST_PATH_ODBPP );
 
@@ -90,8 +89,7 @@ DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( JOB_EXPORT_PCB_ODB* aJob, PCB_EDIT_FRA
 {
     m_browseButton->Hide();
 
-    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
-                            { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons();
 
     m_outputFileName->SetValue( m_job->GetOutputPath() );
 

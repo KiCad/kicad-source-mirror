@@ -275,8 +275,7 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
         m_MessagesBox->Hide();
         m_outputPath->SetValue( m_job->GetOutputPath() );
 
-        SetupStandardButtons( { { wxID_OK,     _( "Save" ) },
-                                { wxID_CANCEL, _( "Close" )          } } );
+        SetupStandardButtons();
 
         // custom netlist (external invokes, not supported)
         auto it = jobNetlistNameLookup.find( m_job->format );

@@ -96,8 +96,7 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
         m_sdbSizer1Apply->Hide();
         m_openFileAfterPlot->Hide();
 
-        SetupStandardButtons( { { wxID_OK, _( "Save" ) },
-                                { wxID_CANCEL, _( "Close" ) } } );
+        SetupStandardButtons();
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and

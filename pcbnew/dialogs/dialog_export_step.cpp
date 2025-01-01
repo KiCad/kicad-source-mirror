@@ -114,8 +114,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         SetTitle( m_job->GetOptionsDialogTitle() );
 
         m_browseButton->Hide();
-        SetupStandardButtons( { { wxID_OK,     _( "Save" ) },
-                                { wxID_CANCEL, _( "Close" )  } } );
+        SetupStandardButtons();
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and

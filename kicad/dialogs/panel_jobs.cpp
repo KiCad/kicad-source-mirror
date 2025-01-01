@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2024 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -672,7 +672,7 @@ void PANEL_JOBS::buildOutputList()
 }
 
 
-void PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
+bool PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
 {
     JOBSET_JOB& job = m_jobsFile->GetJobs()[aItemIndex];
 
@@ -682,11 +682,11 @@ void PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
     {
         EnsurePcbSchFramesOpen();
 
-        bool changes = m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job.get(), m_frame );
-        if( changes )
+        if( m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job.get(), m_frame ) )
         {
             m_jobsFile->SetDirty();
             UpdateTitle();
+            return true;
         }
     }
     else
@@ -697,9 +697,12 @@ void PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
             JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job.get() );
 
             DIALOG_SPECIAL_EXECUTE dialog( m_frame, specialJob );
-            dialog.ShowModal();
+
+            return dialog.ShowModal() == wxID_OK;
         }
     }
+
+    return false;
 }
 
 
@@ -748,10 +751,24 @@ void PANEL_JOBS::OnAddJobClick( wxCommandEvent& aEvent )
 
         if( !jobKey.IsEmpty() )
         {
+            int  row = m_jobsFile->GetJobs().size();
+            bool wasDirty = m_jobsFile->GetDirty();
             JOB* job = JOB_REGISTRY::CreateInstance<JOB>( jobKey );
+
             m_jobsFile->AddNewJob( jobKey, job );
 
-            rebuildJobList();
+            if( OpenJobOptionsForListItem( row ) )
+            {
+                rebuildJobList();
+
+                m_jobsGrid->SetGridCursor( row, 1 );
+                m_jobsGrid->EnableCellEditControl();
+            }
+            else
+            {
+                m_jobsFile->RemoveJob( row );
+                m_jobsFile->SetDirty( wasDirty );
+            }
         }
     }
 }

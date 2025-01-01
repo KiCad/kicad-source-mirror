@@ -223,8 +223,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
 
     if( m_job )
     {
-        SetupStandardButtons( { { wxID_OK, _( "Save" ) },
-                                { wxID_CANCEL, _( "Close" ) } } );
+        SetupStandardButtons();
     }
     else
     {

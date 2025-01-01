@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017-2025, 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -395,8 +395,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
         m_buttonApply->Hide();
         m_buttonExport->Hide();
 
-        SetupStandardButtons( { { wxID_OK,     _( "Save" ) },
-                                { wxID_CANCEL, _( "Close" )   } } );
+        SetupStandardButtons();
 
         SetTitle( _( "BOM Export Job" ) );
     }

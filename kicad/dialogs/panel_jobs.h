@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2024 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -72,7 +72,7 @@ public:
 
     JOBSET* GetJobsFile() { return m_jobsFile.get(); }
 
-    void OpenJobOptionsForListItem( size_t aItemIndex );
+    bool OpenJobOptionsForListItem( size_t aItemIndex );
     void OnJobButtonDelete( wxCommandEvent& aEvent ) override;
 
 protected:

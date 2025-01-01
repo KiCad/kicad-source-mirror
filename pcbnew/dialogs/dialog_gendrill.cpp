@@ -100,8 +100,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
     bMainSizer->Remove( bMsgSizer );
     m_messagesBox->Hide();
 
-    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
-                            { wxID_CANCEL, _( "Cancel" ) } } );
+    SetupStandardButtons();
     m_buttonsSizer->Layout();
 
     SetReturnCode( 1 );

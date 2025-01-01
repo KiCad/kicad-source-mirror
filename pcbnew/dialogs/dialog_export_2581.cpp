@@ -70,7 +70,7 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
 }
 
 
-DIALOG_EXPORT_2581::DIALOG_EXPORT_2581(JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_FRAME* aEditFrame,
+DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_FRAME* aEditFrame,
                                         wxWindow* aParent ) :
         DIALOG_EXPORT_2581_BASE( aParent ),
         m_parent( aEditFrame ),
@@ -78,8 +78,7 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581(JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_FR
 {
     m_browseButton->Hide();
 
-    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
-                            { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons();
 
     m_outputFileName->SetValue( m_job->GetOutputPath() );
 

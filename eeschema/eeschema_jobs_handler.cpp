@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -97,7 +97,7 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
                 std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ),
                 []( JOB* job, wxWindow* aParent ) -> bool
                 {
-                    return false;
+                    return true;
                 });
     Register( "netlist",
                 std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ),
@@ -132,19 +132,19 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
                     DIALOG_PLOT_SCHEMATIC dlg( editFrame, aParent, plotJob );
                     dlg.ShowModal();
 
-                    return false;
+                    return true;
                 } );
     Register( "symupgrade",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
-                  return false;
+                  return true;
               } );
     Register( "symsvg",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobSymExportSvg, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
-                  return false;
+                  return true;
               } );
     Register( "erc", std::bind( &EESCHEMA_JOBS_HANDLER::JobSchErc, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool

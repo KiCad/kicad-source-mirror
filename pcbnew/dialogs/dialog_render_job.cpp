@@ -66,8 +66,7 @@ DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  )
     for( const auto& [k, name] : sideMap )
         m_choiceSide->Append( wxGetTranslation( name ) );
 
-    SetupStandardButtons( { { wxID_OK,     _( "Save" ) },
-                            { wxID_CANCEL, _( "Close" )  } } );
+    SetupStandardButtons();
 }
 
 
