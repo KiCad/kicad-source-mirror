@@ -78,4 +78,11 @@ wxString JOB_PCB_RENDER::GetDefaultDescription() const
 }
 
 
+wxString JOB_PCB_RENDER::GetOptionsDialogTitle() const
+{
+    return wxString::Format( _( "PCB Render Job Options" ) );
+}
+
+
+
 REGISTER_JOB( pcb_render, _HKI( "PCB: Render" ), KIWAY::FACE_PCB, JOB_PCB_RENDER );
