@@ -29,20 +29,27 @@ std::vector<int> SYMBOL::ViewGetLayers() const
     // Pins and op point currents are drawn by their parent symbol,
     // so the parent must draw to LAYER_DANGLING and LAYER_OP_CURRENTS
     if( Type() == SCH_SYMBOL_T )
-        return { LAYER_DANGLING,          LAYER_OP_CURRENTS,      LAYER_DEVICE,
-                 LAYER_REFERENCEPART,     LAYER_VALUEPART,        LAYER_FIELDS,
-                 LAYER_DEVICE_BACKGROUND, LAYER_NOTES_BACKGROUND, LAYER_SELECTION_SHADOWS };
+        return { LAYER_DANGLING,          LAYER_OP_CURRENTS,       LAYER_DEVICE,
+                 LAYER_REFERENCEPART,     LAYER_VALUEPART,         LAYER_FIELDS,
+                 LAYER_DEVICE_BACKGROUND, LAYER_SHAPES_BACKGROUND, LAYER_NOTES_BACKGROUND,
+                 LAYER_SELECTION_SHADOWS };
 
     // Library symbols must include LAYER_PRIVATE_NOTES
     if( Type() == LIB_SYMBOL_T )
-        return { LAYER_DEVICE,           LAYER_REFERENCEPART,    LAYER_VALUEPART,
-                 LAYER_FIELDS,           LAYER_PRIVATE_NOTES,    LAYER_DEVICE_BACKGROUND,
-                 LAYER_NOTES_BACKGROUND, LAYER_SELECTION_SHADOWS };
+        return { LAYER_DEVICE,
+                 LAYER_REFERENCEPART,
+                 LAYER_VALUEPART,
+                 LAYER_FIELDS,
+                 LAYER_PRIVATE_NOTES,
+                 LAYER_DEVICE_BACKGROUND,
+                 LAYER_SHAPES_BACKGROUND,
+                 LAYER_NOTES_BACKGROUND,
+                 LAYER_SELECTION_SHADOWS };
 
     // This should never happen but if it does, return a reasonable default
     return { LAYER_DEVICE,           LAYER_REFERENCEPART,     LAYER_VALUEPART,
-             LAYER_FIELDS,           LAYER_DEVICE_BACKGROUND, LAYER_NOTES_BACKGROUND,
-             LAYER_SELECTION_SHADOWS };
+             LAYER_FIELDS,           LAYER_DEVICE_BACKGROUND, LAYER_SHAPES_BACKGROUND,
+             LAYER_NOTES_BACKGROUND, LAYER_SELECTION_SHADOWS };
 }
 
 

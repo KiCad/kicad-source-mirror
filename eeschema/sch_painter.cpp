@@ -364,7 +364,8 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         {
             const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
 
-            if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
+            if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
+                || aLayer == LAYER_SHAPES_BACKGROUND )
             {
                 if( !isSymbolChild || shape->GetFillColor() != COLOR4D::UNSPECIFIED )
                     color = shape->GetFillColor();
@@ -410,7 +411,8 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         {
             const SCH_TEXTBOX* textBox = dynamic_cast<const SCH_TEXTBOX*>( aItem );
 
-            if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
+            if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
+                || aLayer == LAYER_SHAPES_BACKGROUND )
                 color = textBox->GetFillColor();
             else if( !isSymbolChild || textBox->GetTextColor() != COLOR4D::UNSPECIFIED )
                 color = textBox->GetTextColor();
@@ -436,7 +438,8 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
             else
                 color = color.WithAlpha( 0.15 );
         }
-        else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND )
+        else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND
+                 || aLayer == LAYER_SHAPES_BACKGROUND )
         {
             color = color.WithAlpha( 0.2 );
         }
@@ -445,9 +448,9 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
     {
         color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
     }
-    else if( aItem->IsSelected() && ( aLayer == LAYER_DEVICE_BACKGROUND
-                                   || aLayer == LAYER_SHEET_BACKGROUND
-                                   || aLayer == LAYER_NOTES_BACKGROUND ) )
+    else if( aItem->IsSelected()
+             && ( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND
+                  || aLayer == LAYER_NOTES_BACKGROUND || aLayer == LAYER_SHAPES_BACKGROUND ) )
     {
         // Selected items will be painted over all other items, so make backgrounds translucent so
         // that non-selected overlapping objects are visible
@@ -1552,7 +1555,8 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
 
         drawShape( aShape );
     }
-    else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
+    else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
+             || aLayer == LAYER_SHAPES_BACKGROUND )
     {
         switch( aShape->GetFillMode() )
         {
@@ -1943,7 +1947,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
 
         m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
     }
-    else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
+    else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
+             || aLayer == LAYER_SHAPES_BACKGROUND )
     {
         // Do not fill the shape in B&W print mode, to avoid to visible items
         // inside the shape

@@ -575,11 +575,20 @@ std::vector<int> SCH_SHAPE::ViewGetLayers() const
     layers[0] = IsPrivate() ? LAYER_PRIVATE_NOTES : m_layer;
 
     if( m_layer == LAYER_PRIVATE_NOTES )
-        layers[1] = LAYER_NOTES_BACKGROUND;
+    {
+        layers[1] = LAYER_SHAPES_BACKGROUND;
+    }
     else if( m_layer == LAYER_DEVICE )
-        layers[1] = LAYER_DEVICE_BACKGROUND;
+    {
+        if( m_fill == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+            layers[1] = LAYER_DEVICE_BACKGROUND;
+        else
+            layers[1] = LAYER_SHAPES_BACKGROUND;
+    }
     else
-        layers[1] = LAYER_NOTES_BACKGROUND;
+    {
+        layers[1] = LAYER_SHAPES_BACKGROUND;
+    }
 
     layers[2] = LAYER_SELECTION_SHADOWS;
 
