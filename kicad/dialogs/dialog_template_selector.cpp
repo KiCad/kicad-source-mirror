@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,15 +38,13 @@ TEMPLATE_SELECTION_PANEL::TEMPLATE_SELECTION_PANEL( wxNotebookPage* aParent,
 {
     m_parent = aParent;
     m_templatesPath = aPath;
-    m_minHeight = 0;
 }
 
 
 void TEMPLATE_SELECTION_PANEL::AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidget )
 {
     m_SizerChoice->Add( aTemplateWidget );
-    int height = aTemplateWidget->GetBestSize().GetHeight();
-    m_minHeight = std::max( m_minHeight, height );
+    Layout();
 }
 
 
@@ -92,8 +90,8 @@ void TEMPLATE_WIDGET::Unselect()
 void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
 {
     m_currTemplate = aTemplate;
-    m_staticTitle->SetLabel( *aTemplate->GetTitle() );
     m_staticTitle->SetFont( KIUI::GetInfoFont( this ) );
+    m_staticTitle->SetLabel( *aTemplate->GetTitle() );
     m_staticTitle->Wrap( 100 );
     m_bitmapIcon->SetBitmap( *aTemplate->GetIcon() );
 }
@@ -103,29 +101,6 @@ void TEMPLATE_WIDGET::OnMouse( wxMouseEvent& event )
 {
     // Toggle selection here
     Select();
-    event.Skip();
-}
-
-
-void DIALOG_TEMPLATE_SELECTOR::onNotebookResize( wxSizeEvent& event )
-{
-    // Ensure all panels have the full available width:
-    for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
-    {
-        // Gives a little margin for panel horizontal size, especially to show the
-        // full scroll bars of wxScrolledWindow
-        // Fix me if a better way exists
-        const int h_margin = 10;
-        const int v_margin = 22;
-
-        int max_width = m_notebook->GetClientSize().GetWidth() - h_margin;
-        int min_height = m_panels[i]->GetMinHeight() + v_margin;
-        m_panels[i]->SetSize( max_width, std::max( m_panels[i]->GetSize().GetY(), min_height ) );
-        m_panels[i]->SetMinSize( wxSize( -1, min_height ) );
-    }
-
-    Refresh();
-
     event.Skip();
 }
 
@@ -142,18 +117,32 @@ void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 
 
 DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos,
-                                                    const wxSize& aSize ) :
-    DIALOG_TEMPLATE_SELECTOR_BASE( aParent, wxID_ANY, _("Project Template Selector"),
-                                   aPos, aSize )
+                                                    const wxSize&                  aSize,
+                                                    std::map<wxString, wxFileName> aTitleDirMap ) :
+        DIALOG_TEMPLATE_SELECTOR_BASE( aParent, wxID_ANY, _( "Project Template Selector" ), aPos,
+                                       aSize )
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_reloadButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
 
     m_htmlWin->SetPage( _( "<h1>Template Selector</h1>" ) );
-    m_notebook->Connect( wxEVT_SIZE,
-                         wxSizeEventHandler( DIALOG_TEMPLATE_SELECTOR::onNotebookResize ),
-                         nullptr, this );
     m_selectedWidget = nullptr;
+
+    for( auto& [title, pathFname] : aTitleDirMap )
+    {
+        pathFname.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+        wxString path = pathFname.GetFullPath(); // caller ensures this ends with file separator.
+
+        TEMPLATE_SELECTION_PANEL* tpanel = new TEMPLATE_SELECTION_PANEL( m_notebook, path );
+        m_panels.push_back( tpanel );
+
+        m_notebook->AddPage( tpanel, title );
+
+        if( m_notebook->GetPageCount() == 1 )
+            m_tcTemplatePath->SetValue( path );
+
+        buildPageContent( path, m_notebook->GetPageCount() - 1 );
+    }
 
     // When all widgets have the size fixed, call finishDialogSettings to update sizers
     finishDialogSettings();
@@ -175,8 +164,6 @@ void DIALOG_TEMPLATE_SELECTOR::AddTemplate( int aPage, PROJECT_TEMPLATE* aTempla
     TEMPLATE_WIDGET* w = new TEMPLATE_WIDGET( m_panels[aPage]->m_scrolledWindow, this  );
     w->SetTemplate( aTemplate );
     m_panels[aPage]->AddTemplateWidget( w );
-
-    m_notebook->Refresh();
 }
 
 
@@ -186,39 +173,10 @@ PROJECT_TEMPLATE* DIALOG_TEMPLATE_SELECTOR::GetSelectedTemplate()
 }
 
 
-void DIALOG_TEMPLATE_SELECTOR::AddTemplatesPage( const wxString& aTitle, wxFileName& aPath )
-{
-    wxNotebookPage* newPage = new wxNotebookPage( m_notebook, wxID_ANY );
-
-    aPath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-    wxString path = aPath.GetFullPath();    // caller ensures this ends with file separator.
-
-    TEMPLATE_SELECTION_PANEL* tpanel = new TEMPLATE_SELECTION_PANEL( newPage, path );
-    m_panels.push_back( tpanel );
-
-    m_notebook->AddPage( newPage, aTitle );
-
-    if( m_notebook->GetPageCount() == 1 )
-        m_tcTemplatePath->SetValue( path );
-
-    buildPageContent( path, m_notebook->GetPageCount() - 1 );
-
-    // Ensure m_notebook has a minimal height to show the template widgets:
-    // and add a margin for scroll bars and decorations
-    // FIX ME: find a better way to allow space for these items: the value works on MSW
-    // but is too big on GTK. But I did not find a better way (JPC)
-    const int margin = 50;
-    int min_height = tpanel->GetMinHeight() + margin;
-
-    if( m_notebook->GetMinClientSize().GetHeight() < min_height )
-        m_notebook->SetMinClientSize( wxSize( -1, min_height ) );
-}
-
-
 void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPage )
 {
     // Get a list of files under the template path to include as choices...
-    wxDir           dir;
+    wxDir dir;
 
     if( dir.Open( aPath ) )
     {
@@ -252,9 +210,8 @@ void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPag
             }
         }
     }
-
-    wxSizeEvent dummy;
-    onNotebookResize( dummy );
+    
+    Layout();
 }
 
 
@@ -312,15 +269,15 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
 
     m_notebook->DeletePage( page );
 
-    wxNotebookPage* newPage = new wxNotebookPage( m_notebook, wxID_ANY );
-    TEMPLATE_SELECTION_PANEL* tpanel = new TEMPLATE_SELECTION_PANEL( newPage, currPath );
+    TEMPLATE_SELECTION_PANEL* tpanel = new TEMPLATE_SELECTION_PANEL( m_notebook, currPath );
     m_panels[page] = tpanel;
-    m_notebook->InsertPage( page, newPage, title, true );
+    m_notebook->InsertPage( page, tpanel, title, true );
 
     buildPageContent( m_tcTemplatePath->GetValue(), page );
 
     m_selectedWidget = nullptr;
-    PostSizeEvent();    // A easy way to force refresh displays
+
+    Layout();
 }
 
 

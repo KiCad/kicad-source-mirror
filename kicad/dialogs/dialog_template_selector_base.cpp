@@ -42,7 +42,7 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	bmainSizer->Add( m_notebook, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_htmlWin = new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
-	m_htmlWin->SetMinSize( wxSize( 400,200 ) );
+	m_htmlWin->SetMinSize( wxSize( 700,300 ) );
 
 	bmainSizer->Add( m_htmlWin, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
@@ -81,17 +81,21 @@ DIALOG_TEMPLATE_SELECTOR_BASE::~DIALOG_TEMPLATE_SELECTOR_BASE()
 
 TEMPLATE_SELECTION_PANEL_BASE::TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	m_SizerBase = new wxBoxSizer( wxHORIZONTAL );
+	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+
+	m_SizerBase = new wxBoxSizer( wxVERTICAL );
 
 	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxALWAYS_SHOW_SB|wxHSCROLL );
-	m_scrolledWindow->SetScrollRate( 25, 5 );
+	m_scrolledWindow->SetScrollRate( 25, 0 );
+	m_scrolledWindow->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+
 	m_SizerChoice = new wxBoxSizer( wxHORIZONTAL );
 
 
 	m_scrolledWindow->SetSizer( m_SizerChoice );
 	m_scrolledWindow->Layout();
 	m_SizerChoice->Fit( m_scrolledWindow );
-	m_SizerBase->Add( m_scrolledWindow, 1, wxBOTTOM|wxEXPAND, 10 );
+	m_SizerBase->Add( m_scrolledWindow, 1, wxEXPAND, 10 );
 
 
 	this->SetSizer( m_SizerBase );
@@ -105,15 +109,19 @@ TEMPLATE_SELECTION_PANEL_BASE::~TEMPLATE_SELECTION_PANEL_BASE()
 
 TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
+	this->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	m_bitmapIcon = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 64,64 ), 0 );
+	m_bitmapIcon->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_bitmapIcon->SetMinSize( wxSize( 64,64 ) );
 
 	bSizerMain->Add( m_bitmapIcon, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticTitle = new wxStaticText( this, wxID_ANY, _("Project Template Title"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
+	m_staticTitle = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
 	m_staticTitle->Wrap( 100 );
 	bSizerMain->Add( m_staticTitle, 1, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 2 );
 

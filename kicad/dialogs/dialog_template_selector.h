@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@
 
 #include <dialogs/dialog_template_selector_base.h>
 #include "project_template.h"
+
+#include <map>
 
 class DIALOG_TEMPLATE_SELECTOR;
 
@@ -76,29 +78,18 @@ public:
 
     void AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidget );
 
-    int GetMinHeight() { return m_minHeight; }
-
 protected:
     wxNotebookPage* m_parent;
     wxString        m_templatesPath;   ///< the path to access to the folder
                                        ///<   containing the templates (which are also folders)
-    int             m_minHeight;       ///< minimal height to show templates (this is the height
-                                       ///<   of the biggest template widget)
 };
 
 
 class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
 public:
-    DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize );
-
-    /**
-     * Add a new page with \a aTitle, populated with templates from \a aPath
-     * - All directories under the path are treated as templates
-     * @param aTitle = the title of the wxNoteBook page
-     * @param aPath = the path of the main folder containing templates
-     */
-    void AddTemplatesPage( const wxString& aTitle, wxFileName& aPath );
+    DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
+                              std::map<wxString, wxFileName> aTitleDirMap );
 
     /**
      * @return the selected template, or NULL
@@ -120,7 +111,6 @@ private:
     void buildPageContent( const wxString& aPath, int aPage );
     void replaceCurrentPage();
 
-    void onNotebookResize( wxSizeEvent& event );
     void OnPageChange( wxNotebookEvent& event ) override;
     void onDirectoryBrowseClicked( wxCommandEvent& event ) override;
 	void onReload( wxCommandEvent& event ) override;

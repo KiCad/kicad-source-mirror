@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -225,10 +225,9 @@ int KICAD_MANAGER_CONTROL::NewJobsetFile( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 {
-    SETTINGS_MANAGER&         mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*           settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
-    DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( m_frame, settings->m_TemplateWindowPos,
-                                                                settings->m_TemplateWindowSize );
+    SETTINGS_MANAGER&              mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*                settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+    std::map<wxString, wxFileName> titleDirMap;
 
     wxFileName  templatePath;
 
@@ -239,7 +238,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     if( v && !v->IsEmpty() )
     {
         templatePath.AssignDir( *v );
-        ps->AddTemplatesPage( _( "System Templates" ), templatePath );
+        titleDirMap.emplace( _( "System Templates" ), templatePath );
     }
 
     // User template path.
@@ -248,19 +247,22 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     if( it != Pgm().GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
     {
         templatePath.AssignDir( it->second.GetValue() );
-        ps->AddTemplatesPage( _( "User Templates" ), templatePath );
+        titleDirMap.emplace( _( "User Templates" ), templatePath );
     }
 
-    // Show the project template selector dialog
-    int result = ps->ShowModal();
+    DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos,
+                                 settings->m_TemplateWindowSize, titleDirMap );
 
-    settings->m_TemplateWindowPos = ps->GetPosition();
-    settings->m_TemplateWindowSize = ps->GetSize();
+    // Show the project template selector dialog
+    int result = ps.ShowModal();
+
+    settings->m_TemplateWindowPos = ps.GetPosition();
+    settings->m_TemplateWindowSize = ps.GetSize();
 
     if( result != wxID_OK )
         return -1;
 
-    if( !ps->GetSelectedTemplate() )
+    if( !ps.GetSelectedTemplate() )
     {
         wxMessageBox( _( "No project template was selected.  Cannot generate new project." ),
                       _( "Error" ), wxOK | wxICON_ERROR, m_frame );
@@ -328,7 +330,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     // Make sure we are not overwriting anything in the destination folder.
     std::vector< wxFileName > destFiles;
 
-    if( ps->GetSelectedTemplate()->GetDestinationFiles( fn, destFiles ) )
+    if( ps.GetSelectedTemplate()->GetDestinationFiles( fn, destFiles ) )
     {
         std::vector<wxFileName> overwrittenFiles;
 
@@ -362,7 +364,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 
     // The selected template widget contains the template we're attempting to use to
     // create a project
-    if( !ps->GetSelectedTemplate()->CreateProject( fn, &errorMsg ) )
+    if( !ps.GetSelectedTemplate()->CreateProject( fn, &errorMsg ) )
     {
         wxMessageDialog createDlg( m_frame,
                                    _( "A problem occurred creating new project from template." ),
