@@ -211,16 +211,14 @@ std::vector<int> PCB_TEXT::ViewGetLayers() const
 
 double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = std::numeric_limits<double>::max();
-
     if( !aView )
-        return 0.0;
+        return LOD_SHOW;
 
     KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
 
     if( !aView->IsLayerVisible( GetLayer() ) )
-        return HIDE;
+        return LOD_HIDE;
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
@@ -228,7 +226,7 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         if( renderSettings->GetHighContrast() )
         {
             if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
-                return HIDE;
+                return LOD_HIDE;
         }
     }
 
@@ -238,26 +236,26 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         if( GetText() == wxT( "${VALUE}" ) )
         {
             if( !aView->IsLayerVisible( LAYER_FP_VALUES ) )
-                return HIDE;
+                return LOD_HIDE;
         }
 
         if( GetText() == wxT( "${REFERENCE}" ) )
         {
             if( !aView->IsLayerVisible( LAYER_FP_REFERENCES ) )
-                return HIDE;
+                return LOD_HIDE;
         }
 
         if( parentFP->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
-            return HIDE;
+            return LOD_HIDE;
 
         if( parentFP->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-            return HIDE;
+            return LOD_HIDE;
 
         if( !aView->IsLayerVisible( LAYER_FP_TEXT ) )
-            return HIDE;
+            return LOD_HIDE;
     }
 
-    return 0.0;
+    return LOD_SHOW;
 }
 
 

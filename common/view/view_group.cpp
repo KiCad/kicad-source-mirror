@@ -112,7 +112,6 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
     bool        isSelection = m_layer == LAYER_SELECT_OVERLAY;
 
     const std::vector<VIEW_ITEM*> drawList = updateDrawList();
-    constexpr double              HIDE = std::numeric_limits<double>::max();
 
     std::map<int, std::vector<VIEW_ITEM*>> layer_item_map;
 
@@ -191,7 +190,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
             {
                 // Ignore LOD scale for selected items, but don't ignore things explicitly
                 // hidden.
-                if( item->ViewGetLOD( layer, aView ) == HIDE )
+                if( item->ViewGetLOD( layer, aView ) == LOD_HIDE )
                     continue;
 
                 if( !painter->Draw( item, layer ) )

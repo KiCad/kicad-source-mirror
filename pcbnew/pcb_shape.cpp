@@ -571,9 +571,6 @@ void PCB_SHAPE::SetIsProxyItem( bool aIsProxy )
 
 double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = std::numeric_limits<double>::max();
-    constexpr double SHOW = 0.0;
-
     KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
 
@@ -581,26 +578,26 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     {
         // Hide shadow if the main layer is not shown
         if( !aView->IsLayerVisible( m_layer ) )
-            return HIDE;
+            return LOD_HIDE;
 
         // Hide shadow on dimmed tracks
         if( renderSettings->GetHighContrast() )
         {
             if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
-                return HIDE;
+                return LOD_HIDE;
         }
     }
 
     if( FOOTPRINT* parent = GetParentFootprint() )
     {
         if( parent->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
-            return HIDE;
+            return LOD_HIDE;
 
         if( parent->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-            return HIDE;
+            return LOD_HIDE;
     }
 
-    return SHOW;
+    return LOD_SHOW;
 }
 
 

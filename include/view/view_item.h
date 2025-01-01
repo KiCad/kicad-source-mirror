@@ -24,12 +24,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __VIEW_ITEM_H
-#define __VIEW_ITEM_H
+#pragma once
+
+#include <bitset>
+#include <vector>
+#include <limits>
 
 #include <gal/gal.h>
-#include <vector>
-#include <bitset>
 #include <math/box2.h>
 #include <inspectable.h>
 
@@ -134,15 +135,20 @@ public:
      * A level of detail is the minimal #VIEW scale that is sufficient for an item to be shown
      * on a given layer.
      *
+     * Use @ref LOD_HIDE and @ref LOD_SHOW constants to hide or show the item unconditionally.
+     *
+     * Use @ref lodScaleForThreshold() to calculate the LOD scale for when the item
+     * passes a certain threshold size on screen.
+     *
      * @param aLayer is the current drawing layer.
      * @param aView is a pointer to the #VIEW device we are drawing on.
-     * @return the level of detail. 0 always show the item, because the actual zoom level
+     * @return the level of detail. 0 always shows the item, because the actual zoom level
      *         (or VIEW scale) is always > 0
      */
     virtual double ViewGetLOD( int aLayer, VIEW* aView ) const
     {
         // By default always show the item
-        return 0.0;
+        return LOD_SHOW;
     }
 
     VIEW_ITEM_DATA* viewPrivData() const
@@ -160,6 +166,40 @@ public:
         return m_forcedTransparency;
     }
 
+protected:
+    /**
+     * Return this constant from ViewGetLOD() to hide the item unconditionally.
+     */
+    static constexpr double LOD_HIDE = std::numeric_limits<double>::max();
+
+    /**
+     * Return this constant from ViewGetLOD() to show the item unconditionally.
+     */
+    static constexpr double LOD_SHOW = 0.0;
+
+    /**
+     * Get the scale at which aWhatIu would be drawn at the same size as
+     * aThresholdIu on screen.
+     *
+     * This is useful when a level-of-detail is defined in terms of a threshold
+     * size (i.e. 'only draw X when it will be bigger than Y size on screen').
+     *
+     * E.g. if aWhatIu is 1000 and aThresholdIu is 100, then the item will be
+     * the same size as the threshold at 0.1 scale. Returning that 0.1 as the LoD
+     * will hide the item when the scale is less than 0.1 - i.e. smaller than the
+     * threshold.
+     *
+     * Because even at zoom 1.0, 1mm in KiCad may not be exactly 1mm on a physical
+     * screen, the threshold may not be exact in practice.
+     */
+    static constexpr double lodScaleForThreshold( int aWhatIu, int aThresholdIu )
+    {
+        if( aWhatIu == 0 )
+            return LOD_HIDE;
+
+        return double( aThresholdIu ) / aWhatIu;
+    }
+
 private:
     friend class VIEW;
 
@@ -173,6 +213,4 @@ private:
 
 #if defined( _MSC_VER )
 #pragma warning( pop )
-#endif
-
 #endif

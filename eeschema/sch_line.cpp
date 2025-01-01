@@ -197,26 +197,23 @@ std::vector<int> SCH_LINE::ViewGetLayers() const
 
 double SCH_LINE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = std::numeric_limits<double>::max();
-    constexpr double SHOW = 0.0;
-
     if( aLayer == LAYER_OP_VOLTAGES )
     {
         if( m_start == m_end )
-            return HIDE;
+            return LOD_HIDE;
 
-        int height = std::abs( m_end.y - m_start.y );
-        int width = std::abs( m_end.x - m_start.x );
+        const int height = std::abs( m_end.y - m_start.y );
 
         // Operating points will be shown only if zoom is appropriate
-        if( height == 0 )
-            return (double) schIUScale.mmToIU( 15 ) / width;
-        else
-            return (double) schIUScale.mmToIU( 5 ) / height;
+        if( height > 0 )
+            return lodScaleForThreshold( height, schIUScale.mmToIU( 5 ) );
+
+        const int width = std::abs( m_end.x - m_start.x );
+        return lodScaleForThreshold( width, schIUScale.mmToIU( 15 ) );
     }
 
     // Other layers are always drawn.
-    return SHOW;
+    return LOD_SHOW;
 }
 
 

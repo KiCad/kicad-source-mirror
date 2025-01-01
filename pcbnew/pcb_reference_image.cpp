@@ -106,24 +106,25 @@ void PCB_REFERENCE_IMAGE::swapData( BOARD_ITEM* aItem )
 
 double PCB_REFERENCE_IMAGE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = std::numeric_limits<double>::max();
-
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
 
     // All bitmaps are drawn on LAYER_DRAW_BITMAPS, but their
     // associated board layer controls their visibility.
     if( !GetBoard()->IsLayerVisible( m_layer ) )
-        return HIDE;
+        return LOD_HIDE;
 
     if( renderSettings->GetHighContrast()
         && renderSettings->m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN
         && !renderSettings->GetLayerIsHighContrast( m_layer ) )
     {
-        return HIDE;
+        return LOD_HIDE;
     }
 
-    return aView->IsLayerVisible( LAYER_DRAW_BITMAPS ) ? 0.0 : HIDE;
+    if( aView->IsLayerVisible( LAYER_DRAW_BITMAPS ) )
+        return LOD_SHOW;
+
+    return LOD_HIDE;
 }
 
 

@@ -1726,31 +1726,29 @@ std::vector<int> PAD::ViewGetLayers() const
 
 double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = std::numeric_limits<double>::max();
-
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
     const BOARD*         board = GetBoard();
 
     // Meta control for hiding all pads
     if( !aView->IsLayerVisible( LAYER_PADS ) )
-        return HIDE;
+        return LOD_HIDE;
 
     // Handle Render tab switches
     const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( aLayer );
 
     if( !IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
-        return HIDE;
+        return LOD_HIDE;
 
     if( IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-        return HIDE;
+        return LOD_HIDE;
 
     LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
     if( IsHoleLayer( aLayer ) )
     {
         if( !( visible & LSET::PhysicalLayersMask() ).any() )
-            return HIDE;
+            return LOD_HIDE;
     }
     else if( IsNetnameLayer( aLayer ) )
     {
@@ -1758,24 +1756,19 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         {
             // Hide netnames unless pad is flashed to a high-contrast layer
             if( !FlashLayer( renderSettings->GetPrimaryHighContrastLayer() ) )
-                return HIDE;
+                return LOD_HIDE;
         }
         else
         {
             // Hide netnames unless pad is flashed to a visible layer
             if( !FlashLayer( visible ) )
-                return HIDE;
+                return LOD_HIDE;
         }
 
         // Netnames will be shown only if zoom is appropriate
-        int divisor = std::min( GetBoundingBox().GetWidth(), GetBoundingBox().GetHeight() );
+        const int minSize = std::min( GetBoundingBox().GetWidth(), GetBoundingBox().GetHeight() );
 
-        // Pad sizes can be zero briefly when someone is typing a number like "0.5" in the pad
-        // properties dialog
-        if( divisor == 0 )
-            return HIDE;
-
-        return ( double ) pcbIUScale.mmToIU( 5 ) / divisor;
+        return lodScaleForThreshold( minSize, pcbIUScale.mmToIU( 0.5 ) );
     }
 
     VECTOR2L padSize = GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM
@@ -1785,8 +1778,8 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     if( minSide > 0 )
         return std::min( (double) pcbIUScale.mmToIU( 0.2 ) / minSide, 3.5 );
-    else
-        return 0;
+
+    return LOD_SHOW;
 }
 
 

@@ -949,9 +949,11 @@ struct VIEW::DRAW_ITEM_VISITOR
             return true;
         }
 
+        const double itemLOD = aItem->ViewGetLOD( layer, view );
+
         // Conditions that have to be fulfilled for an item to be drawn
-        bool drawCondition = aItem->viewPrivData()->isRenderable()
-                                    && aItem->ViewGetLOD( layer, view ) < view->m_scale;
+        bool drawCondition = aItem->viewPrivData()->isRenderable() && itemLOD < view->m_scale;
+
         if( !drawCondition )
             return true;
 

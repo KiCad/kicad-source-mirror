@@ -538,13 +538,11 @@ std::vector<int> ZONE::ViewGetLayers() const
 
 double ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = std::numeric_limits<double>::max();
-
     if( !aView )
-        return 0;
+        return LOD_SHOW;
 
     if( !aView->IsLayerVisible( LAYER_ZONES ) )
-        return HIDE;
+        return LOD_HIDE;
 
     if( FOOTPRINT* parentFP = GetParentFootprint() )
     {
@@ -552,14 +550,14 @@ double ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
         // Handle Render tab switches
         if( !flipped && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
-            return HIDE;
+            return LOD_HIDE;
 
         if( flipped && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-            return HIDE;
+            return LOD_HIDE;
     }
 
     // Other layers are shown without any conditions
-    return 0.0;
+    return LOD_SHOW;
 }
 
 

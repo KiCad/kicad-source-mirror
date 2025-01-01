@@ -2263,24 +2263,24 @@ double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     {
         // The locked shadow shape is shown only if the footprint itself is visible
         if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
-            return 0.0;
+            return LOD_SHOW;
 
         if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-            return 0.0;
+            return LOD_SHOW;
 
-        return std::numeric_limits<double>::max();
+        return LOD_HIDE;
     }
 
     if( aLayer == LAYER_CONFLICTS_SHADOW && IsConflicting() )
     {
         // The locked shadow shape is shown only if the footprint itself is visible
         if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
-            return 0.0;
+            return LOD_SHOW;
 
         if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-            return 0.0;
+            return LOD_SHOW;
 
-        return std::numeric_limits<double>::max();
+        return LOD_HIDE;
     }
 
     int layer = ( m_layer == F_Cu ) ? LAYER_FOOTPRINTS_FR :
@@ -2289,12 +2289,12 @@ double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // Currently this is only pertinent for the anchor layer; everything else is drawn from the
     // children.
     // The "good" value is experimentally chosen.
-    #define MINIMAL_ZOOM_LEVEL_FOR_VISIBILITY 1.5
+    constexpr double MINIMAL_ZOOM_LEVEL_FOR_VISIBILITY = 1.5;
 
     if( aView->IsLayerVisible( layer ) )
         return MINIMAL_ZOOM_LEVEL_FOR_VISIBILITY;
 
-    return std::numeric_limits<double>::max();
+    return LOD_HIDE;
 }
 
 

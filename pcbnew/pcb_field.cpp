@@ -169,10 +169,8 @@ wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
 
 double PCB_FIELD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = std::numeric_limits<double>::max();
-
     if( !aView )
-        return 0.0;
+        return LOD_SHOW;
 
     KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
@@ -180,15 +178,15 @@ double PCB_FIELD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( GetParentFootprint() && GetParentFootprint()->IsSelected()
             && renderSettings->m_ForceShowFieldsWhenFPSelected )
     {
-        return 0.0;
+        return LOD_SHOW;
     }
 
     // Handle Render tab switches
     if( IsValue() && !aView->IsLayerVisible( LAYER_FP_VALUES ) )
-        return HIDE;
+        return LOD_HIDE;
 
     if( IsReference() && !aView->IsLayerVisible( LAYER_FP_REFERENCES ) )
-        return HIDE;
+        return LOD_HIDE;
 
     return PCB_TEXT::ViewGetLOD( aLayer, aView );
 }

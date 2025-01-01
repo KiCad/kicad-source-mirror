@@ -1352,24 +1352,22 @@ std::vector<int> PCB_TRACK::ViewGetLayers() const
 
 double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = std::numeric_limits<double>::max();
-
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
 
     if( !aView->IsLayerVisible( LAYER_TRACKS ) )
-        return HIDE;
+        return LOD_HIDE;
 
     if( IsNetnameLayer( aLayer ) )
     {
         if( GetNetCode() <= NETINFO_LIST::UNCONNECTED )
-            return HIDE;
+            return LOD_HIDE;
 
         // Hide netnames on dimmed tracks
         if( renderSettings->GetHighContrast() )
         {
             if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
-                return HIDE;
+                return LOD_HIDE;
         }
 
         VECTOR2I start( GetStart() );
@@ -1379,35 +1377,35 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         SEG::ecoord nameSize = GetDisplayNetname().size() * GetWidth();
 
         if( VECTOR2I( end - start ).SquaredEuclideanNorm() < nameSize * nameSize )
-            return HIDE;
+            return LOD_HIDE;
 
         BOX2I clipBox = BOX2ISafe( aView->GetViewport() );
 
         ClipLine( &clipBox, start.x, start.y, end.x, end.y );
 
         if( VECTOR2I( end - start ).SquaredEuclideanNorm() == 0 )
-            return HIDE;
+            return LOD_HIDE;
 
         // Netnames will be shown only if zoom is appropriate
-        return ( double ) pcbIUScale.mmToIU( 4 ) / ( m_width + 1 );
+        return lodScaleForThreshold( m_width, pcbIUScale.mmToIU( 4.0 ) );
     }
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Hide shadow if the main layer is not shown
         if( !aView->IsLayerVisible( m_layer ) )
-            return HIDE;
+            return LOD_HIDE;
 
         // Hide shadow on dimmed tracks
         if( renderSettings->GetHighContrast() )
         {
             if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
-                return HIDE;
+                return LOD_HIDE;
         }
     }
 
     // Other layers are shown without any conditions
-    return 0.0;
+    return LOD_SHOW;
 }
 
 
@@ -1471,15 +1469,13 @@ std::vector<int> PCB_VIA::ViewGetLayers() const
 
 double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr double HIDE = (double)std::numeric_limits<double>::max();
-
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
     LSET                 visible = LSET::AllLayersMask();
 
     // Meta control for hiding all vias
     if( !aView->IsLayerVisible( LAYER_VIAS ) )
-        return HIDE;
+        return LOD_HIDE;
 
     // Handle board visibility
     if( const BOARD* board = GetBoard() )
@@ -1498,14 +1494,14 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
             highContrastLayer = B_Cu;
 
         if( !IsCopperLayer( highContrastLayer ) )
-            return HIDE;
+            return LOD_HIDE;
 
         if( GetViaType() != VIATYPE::THROUGH )
         {
             if( IsCopperLayerLowerThan( Padstack().Drill().start, highContrastLayer  )
                 || IsCopperLayerLowerThan( highContrastLayer, Padstack().Drill().end ) )
             {
-                return HIDE;
+                return LOD_HIDE;
             }
         }
     }
@@ -1516,13 +1512,13 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         {
             // Show a through via's hole if any physical layer is shown
             if( !( visible & LSET::PhysicalLayersMask() ).any() )
-                return HIDE;
+                return LOD_HIDE;
         }
         else
         {
             // Show a blind or micro via's hole if it crosses a visible layer
             if( !( visible & GetLayerSet() ).any() )
-                return HIDE;
+                return LOD_HIDE;
         }
 
         // The hole won't be visible anyway at this scale
@@ -1534,23 +1530,23 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         {
             // Hide netnames unless via is flashed to a high-contrast layer
             if( !FlashLayer( renderSettings->GetPrimaryHighContrastLayer() ) )
-                return HIDE;
+                return LOD_HIDE;
         }
         else
         {
             // Hide netnames unless pad is flashed to a visible layer
             if( !FlashLayer( visible ) )
-                return HIDE;
+                return LOD_HIDE;
         }
 
         // Netnames will be shown only if zoom is appropriate
-        return width == 0 ? HIDE : ( (double)pcbIUScale.mmToIU( 10 ) / width );
+        return width == 0 ? LOD_HIDE : ( (double) pcbIUScale.mmToIU( 10 ) / width );
     }
 
     if( !IsCopperLayer( aLayer ) )
         return (double) pcbIUScale.mmToIU( 0.6 ) / width;
 
-    return 0.0;
+    return LOD_SHOW;
 }
 
 
