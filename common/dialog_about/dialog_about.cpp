@@ -108,7 +108,6 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo ) 
     m_titleName = aParent->GetAboutTitle();
     m_untranslatedTitleName = aParent->GetUntranslatedAboutTitle();
     m_staticTextAppTitle->SetLabel( m_titleName );
-    m_staticTextCopyright->SetLabel( m_info.GetCopyright() );
     m_staticTextBuildVersion->SetLabel( wxS( "Version: " ) + m_info.GetBuildVersion() );
     m_staticTextLibVersion->SetLabel( m_info.GetLibVersion() );
 

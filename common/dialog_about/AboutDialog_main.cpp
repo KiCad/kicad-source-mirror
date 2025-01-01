@@ -63,9 +63,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     /* Set title */
     aInfo.SetAppName( Pgm().App().GetAppName() );
 
-    /* Copyright information */
-    aInfo.SetCopyright( wxT( "(C) 1992-2024 KiCad Developers Team" ) );
-
     /* KiCad build version */
     wxString version;
     version << ( KIPLATFORM::APP::IsOperatingSystemUnsupported() ? wxString( wxS( "(UNSUPPORTED)" ) )

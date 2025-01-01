@@ -96,9 +96,6 @@ public:
     void SetLicense( const wxString& text ) { license = text; }
     wxString& GetLicense() { return license; }
 
-    void SetCopyright( const wxString& text ) { copyright = text; }
-    wxString GetCopyright() { return copyright; }
-
     void SetAppName( const wxString& name ) { appName = name; }
     wxString& GetAppName() { return appName; }
 
@@ -132,7 +129,6 @@ private:
     wxString     description;
     wxString     license;
 
-    wxString     copyright;
     wxString     appName;
     wxString     buildVersion;
     wxString     buildDate;

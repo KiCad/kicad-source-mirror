@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,7 +37,6 @@ class DIALOG_ABOUT_BASE : public wxDialog
 	protected:
 		wxStaticBitmap* m_bitmapApp;
 		wxStaticText* m_staticTextAppTitle;
-		wxStaticText* m_staticTextCopyright;
 		wxStaticText* m_staticTextBuildVersion;
 		wxStaticText* m_staticTextLibVersion;
 		wxButton* m_btCopyVersionInfo;
