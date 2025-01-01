@@ -19,7 +19,7 @@
 # Karl SCHUH <k.schuh@schuh-tv.at>, 2023, 2024.
 # Julian Daube <julian@daube.xyz>, 2023.
 # Johannes Maibaum <jmaibaum@gmail.com>, 2024.
-# "Pferd O." <frank.0228@ich-war-hier.de>, 2024.
+# "Pferd O." <frank.0228@ich-war-hier.de>, 2024, 2025.
 # tct123 <tct1234@protonmail.com>, 2024.
 # Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
 # Frank Sonnenberg <frasoberg@web.de>, 2024.
@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-31 22:17+0000\n"
+"PO-Revision-Date: 2025-01-01 14:47+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3509,7 +3509,7 @@ msgstr "Seiteneinstellungen..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job.cpp:41 common/tool/actions.cpp:91
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
@@ -3557,7 +3557,7 @@ msgstr "Ausgabedatei"
 
 #: common/dialogs/dialog_rc_job_base.cpp:72
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Wenn Verstöße vorhanden sind Jobfehlschlag melden"
 
 #: common/dialogs/dialog_rc_job_base.cpp:78 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4804,7 +4804,7 @@ msgstr "Eingebettete Referenz kopieren"
 
 #: common/dialogs/panel_embedded_files.cpp:52
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Referenz dieser eingebetteten Datei kopieren"
 
 #: common/dialogs/panel_embedded_files.cpp:190
 msgid "Select a file to embed"
@@ -10493,9 +10493,8 @@ msgid "Footprint '%s' not found."
 msgstr "Footprint \"%s\" nicht gefunden."
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Fehler beim Laden der Schriftart \"%s\"."
+msgstr "Fehler beim Laden des Footprints"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -26732,9 +26731,8 @@ msgid "Select output path"
 msgstr "Ausgangspfad auswählen"
 
 #: kicad/dialogs/panel_jobs.cpp:138
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "Der Netzname darf nicht leer sein."
+msgstr "Der Ausgabepfad darf nicht leer sein"
 
 #: kicad/dialogs/panel_jobs.cpp:205
 msgid "Zip"
@@ -34141,9 +34139,8 @@ msgid "Output File:"
 msgstr "Ausgabedatei:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression Format:"
-msgstr "Kompressionsformat"
+msgstr "Kompressionsformat:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
