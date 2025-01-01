@@ -193,11 +193,7 @@ public:
     PAD_SHAPE GetShape( PCB_LAYER_ID aLayer ) const { return m_padStack.Shape( aLayer ); }
 
     // Used for the properties panel, which does not support padstacks at the moment
-    void SetFrontShape( PAD_SHAPE aShape )
-    {
-        m_padStack.SetShape( aShape, F_Cu );
-        SetDirty();
-    }
+    void SetFrontShape( PAD_SHAPE aShape );
 
     PAD_SHAPE GetFrontShape() const { return m_padStack.Shape( F_Cu ); }
 

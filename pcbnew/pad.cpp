@@ -43,6 +43,7 @@
 #include <footprint.h>
 #include <lset.h>
 #include <pad.h>
+#include <pad_utils.h>
 #include <pcb_shape.h>
 #include <connectivity/connectivity_data.h>
 #include <eda_units.h>
@@ -873,6 +874,25 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
             SetNetCode( NETINFO_LIST::UNCONNECTED );
             break;
         }
+    }
+
+    SetDirty();
+}
+
+
+void PAD::SetFrontShape( PAD_SHAPE aShape )
+{
+    const bool wasRoundable = PAD_UTILS::PadHasMeaningfulRoundingRadius( *this, F_Cu );
+
+    m_padStack.SetShape( aShape, F_Cu );
+
+    const bool isRoundable = PAD_UTILS::PadHasMeaningfulRoundingRadius( *this, F_Cu );
+
+    // If we have become roundable, set a sensible rounding default using the IPC rules.
+    if( !wasRoundable && isRoundable )
+    {
+        const double ipcRadiusRatio = PAD_UTILS::GetDefaultIpcRoundingRatio( *this, F_Cu );
+        m_padStack.SetRoundRectRadiusRatio( ipcRadiusRatio, F_Cu );
     }
 
     SetDirty();
@@ -2619,7 +2639,7 @@ static struct PAD_DESC
                 if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
                     return false;
 
-                return pad->GetShape( F_Cu ) == PAD_SHAPE::ROUNDRECT;
+                return PAD_UTILS::PadHasMeaningfulRoundingRadius( *pad, F_Cu );
             }
 
             return false;

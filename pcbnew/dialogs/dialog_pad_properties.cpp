@@ -40,6 +40,7 @@
 #include <dialogs/html_message_box.h>
 #include <macros.h>
 #include <pad.h>
+#include <pad_utils.h>
 #include <pcb_base_frame.h>
 #include <footprint_edit_frame.h>
 #include <pcb_painter.h>
@@ -104,36 +105,6 @@ static PAD_ATTRIB code_type[] =
 #define CONN_DLG_TYPE 2
 #define NPTH_DLG_TYPE 3
 #define APERTURE_DLG_TYPE 4
-
-
-/**
- * @brief Returns true if the pad's rounding ratio is valid (i.e. the pad
- * has a shape where that is meaningful)
- */
-static bool PadHasMeaningfulRoundingRadius( const PAD& aPad, PCB_LAYER_ID aLayer )
-{
-    const PAD_SHAPE shape = aPad.GetShape( aLayer );
-    return shape == PAD_SHAPE::ROUNDRECT || shape == PAD_SHAPE::CHAMFERED_RECT;
-}
-
-
-/**
- * @brief Get a sensible default for a rounded rectangle pad's rounding ratio
- *
- * According to IPC-7351C, this is 25%, or 0.25mm, whichever is smaller
- */
-static double GetDefaultIpcRoundingRatio( const PAD& aPad, PCB_LAYER_ID aLayer )
-{
-    const double defaultProportion = 0.25;
-    const double minimumSizeIU = pcbIUScale.mmToIU( 0.25 );
-
-    const VECTOR2I& size = aPad.GetSize( aLayer );
-    const int    padMinSizeIU = std::min( size.x, size.y );
-    const double defaultRadiusIU = std::min( minimumSizeIU, padMinSizeIU * defaultProportion );
-
-    // Convert back to a ratio
-    return defaultRadiusIU / padMinSizeIU;
-}
 
 
 void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
@@ -228,7 +199,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_previewPad->Padstack().ForEachUniqueLayer(
         [&]( PCB_LAYER_ID aLayer )
         {
-            if( !PadHasMeaningfulRoundingRadius( *m_previewPad, aLayer ) )
+            if( !PAD_UTILS::PadHasMeaningfulRoundingRadius( *m_previewPad, aLayer ) )
                 m_previewPad->SetRoundRectRadiusRatio( aLayer, 0.0 );
         } );
 
@@ -958,8 +929,9 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         // Reasonable defaults
         if( m_previewPad->GetRoundRectRadiusRatio( m_editLayer ) == 0.0 )
         {
-            m_cornerRatio.ChangeDoubleValue(
-                    GetDefaultIpcRoundingRatio( *m_previewPad, m_editLayer ) * 100 );
+            const double ipcRadiusRatio =
+                    PAD_UTILS::GetDefaultIpcRoundingRatio( *m_previewPad, m_editLayer );
+            m_cornerRatio.ChangeDoubleValue( ipcRadiusRatio * 100 );
         }
 
         break;
@@ -994,8 +966,9 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         if( m_previewPad->GetRoundRectRadiusRatio( m_editLayer ) == 0.0
                 && m_previewPad->GetChamferRectRatio( m_editLayer ) == 0.0 )
         {
-            m_previewPad->SetRoundRectRadiusRatio(
-                    m_editLayer, GetDefaultIpcRoundingRatio( *m_previewPad, m_editLayer ) );
+            const double ipcRadiusRatio =
+                    PAD_UTILS::GetDefaultIpcRoundingRatio( *m_previewPad, m_editLayer );
+            m_previewPad->SetRoundRectRadiusRatio( m_editLayer, ipcRadiusRatio );
             m_previewPad->SetChamferRectRatio( m_editLayer, 0.2 );
         }
 
