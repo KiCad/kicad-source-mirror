@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -391,6 +391,25 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
                            && !aTrack->GetNetname().Matches( m_params.m_NetFilter ) );
 
     int maxError = m_board->GetDesignSettings().m_MaxError;
+
+    if( m_params.m_ExportSoldermask )
+    {
+        if( aTrack->IsOnLayer( F_Mask ) )
+        {
+            SHAPE_POLY_SET poly;
+            aTrack->TransformShapeToPolygon( poly, F_Mask, 0, maxError, ERROR_INSIDE );
+
+            m_poly_shapes[F_Mask].Append( poly );
+        }
+
+        if( aTrack->IsOnLayer( B_Mask ) )
+        {
+            SHAPE_POLY_SET poly;
+            aTrack->TransformShapeToPolygon( poly, B_Mask, 0, maxError, ERROR_INSIDE );
+
+            m_poly_shapes[B_Mask].Append( poly );
+        }
+    }
 
     if( aTrack->Type() == PCB_VIA_T )
     {
