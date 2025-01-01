@@ -81,12 +81,6 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
         fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromRepository );
     }
 
-    if( ADVANCED_CFG::GetCfg().m_EnableJobset )
-    {
-        fileMenu->Add( KICAD_MANAGER_ACTIONS::newJobsetFile );
-        fileMenu->Add( KICAD_MANAGER_ACTIONS::openJobsetFile );
-    }
-
     if( wxDir::Exists( PATHS::GetStockDemosPath() ) )
     {
         fileMenu->Add( KICAD_MANAGER_ACTIONS::openDemoProject );
@@ -95,6 +89,13 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     fileMenu->Add( KICAD_MANAGER_ACTIONS::openProject );
 
     wxMenuItem* item = fileMenu->Add( openRecentMenu->Clone() );
+
+    if( ADVANCED_CFG::GetCfg().m_EnableJobset )
+    {
+        fileMenu->AppendSeparator();
+        fileMenu->Add( KICAD_MANAGER_ACTIONS::newJobsetFile );
+        fileMenu->Add( KICAD_MANAGER_ACTIONS::openJobsetFile );
+    }
 
     // Add the file menu condition here since it needs the item ID for the submenu
     ACTION_CONDITIONS cond;
