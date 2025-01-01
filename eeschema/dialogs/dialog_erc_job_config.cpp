@@ -4,6 +4,8 @@ DIALOG_ERC_JOB_CONFIG::DIALOG_ERC_JOB_CONFIG( wxWindow* parent, JOB_SCH_ERC* aJo
         DIALOG_RC_JOB( parent, aJob, _( "ERC Job Settings" ) ),
         m_ercJob( aJob )
 {
+    SetTitle( m_ercJob->GetOptionsDialogTitle() );
+
     m_cbAllTrackViolations->Hide();
     m_cbSchParity->Hide();
 

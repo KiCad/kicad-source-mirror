@@ -141,25 +141,15 @@ public:
     virtual void ToJson( nlohmann::json& j ) const;
 
     virtual wxString GetDefaultDescription() const;
+    virtual wxString GetOptionsDialogTitle() const;
 
-    const std::vector<JOB_PARAM_BASE*>& GetParams() {
-        return m_params;
-    }
+    const std::vector<JOB_PARAM_BASE*>& GetParams() { return m_params; }
 
-    void ClearExistingOutputs() {
-        m_outputs.clear();
-    }
-
-    const std::vector<JOB_OUTPUT>& GetOutputs() {
-        return m_outputs;
-    }
-
-    void AddOutput( wxString aOutputPath ) {
-        m_outputs.emplace_back( aOutputPath );
-    }
+    void ClearExistingOutputs()                 { m_outputs.clear(); }
+    const std::vector<JOB_OUTPUT>& GetOutputs() { return m_outputs; }
+    void AddOutput( wxString aOutputPath )      { m_outputs.emplace_back( aOutputPath ); }
 
     void SetTempOutputDirectory( const wxString& aBase );
-
 
     void SetOutputPath( const wxString& aPath );
     wxString GetOutputPath() const { return m_outputPath; }

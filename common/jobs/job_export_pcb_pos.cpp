@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -88,7 +88,13 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
 
 wxString JOB_EXPORT_PCB_POS::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Placement data export" ) );
+    return _( "Placement data export" );
+}
+
+
+wxString JOB_EXPORT_PCB_POS::GetOptionsDialogTitle() const
+{
+    return _( "Export Position Data Job Options" );
 }
 
 

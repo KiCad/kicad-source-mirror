@@ -26,6 +26,7 @@
 
 #include <bitmaps.h>
 #include <common.h>     // For ExpandEnvVarSubstitutions
+#include "string_utils.h"
 #include "widgets/wx_html_report_panel.h"
 #include <widgets/std_bitmap_button.h>
 #include <dialog_plot_schematic.h>
@@ -63,18 +64,17 @@ HPGL_PAGE_SIZE DIALOG_PLOT_SCHEMATIC::m_HPGLPaperSizeSelect = HPGL_PAGE_SIZE::DE
 DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame ) :
         DIALOG_PLOT_SCHEMATIC( aEditFrame, aEditFrame )
 {
-
 }
 
 
 DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent,
-                                              JOB_EXPORT_SCH_PLOT* aJob )
-        : DIALOG_PLOT_SCHEMATIC_BASE( aEditFrame ),
-          m_editFrame( aEditFrame ),
-          m_plotFormat( PLOT_FORMAT::UNDEFINED ),
-          m_HPGLPenSize( 1.0 ),
-          m_defaultLineWidth( aEditFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
-          m_penWidth( aEditFrame, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits ), m_job( aJob )
+                                              JOB_EXPORT_SCH_PLOT* aJob ) :
+        DIALOG_PLOT_SCHEMATIC_BASE( aEditFrame ),
+        m_editFrame( aEditFrame ),
+        m_plotFormat( PLOT_FORMAT::UNDEFINED ),
+        m_HPGLPenSize( 1.0 ),
+        m_defaultLineWidth( aEditFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
+        m_penWidth( aEditFrame, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits ), m_job( aJob )
 {
     m_configChanged = false;
 
@@ -88,6 +88,8 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
     }
     else
     {
+        SetTitle( m_job->GetOptionsDialogTitle() );
+
         m_browseButton->Hide();
         m_MessagesBox->Hide();
 
@@ -97,6 +99,10 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
         SetupStandardButtons( { { wxID_OK, _( "Save" ) },
                                 { wxID_CANCEL, _( "Close" ) } } );
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     initDlg();
 

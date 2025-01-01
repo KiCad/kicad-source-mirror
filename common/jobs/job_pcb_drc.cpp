@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,7 +34,13 @@ JOB_PCB_DRC::JOB_PCB_DRC() :
 
 wxString JOB_PCB_DRC::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Perform PCB DRC" ) );
+    return _( "Perform PCB DRC" );
+}
+
+
+wxString JOB_PCB_DRC::GetOptionsDialogTitle() const
+{
+    return _( "DRC Job Options" );
 }
 
 

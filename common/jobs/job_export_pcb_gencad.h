@@ -31,6 +31,8 @@ class KICOMMON_API JOB_EXPORT_PCB_GENCAD : public JOB
 {
 public:
     JOB_EXPORT_PCB_GENCAD();
+    wxString GetOptionsDialogTitle() const override;
+
     wxString m_filename;
 
     bool m_flipBottomPads;

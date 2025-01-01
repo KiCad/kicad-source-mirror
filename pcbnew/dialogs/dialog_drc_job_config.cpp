@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2024 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,6 +24,7 @@ DIALOG_DRC_JOB_CONFIG::DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJo
         DIALOG_RC_JOB( parent, aJob, _( "DRC Job Settings" ) ),
         m_drcJob( aJob )
 {
+    SetTitle( aJob->GetOptionsDialogTitle() );
 }
 
 

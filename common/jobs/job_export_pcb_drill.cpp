@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -120,7 +120,13 @@ JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL() :
 
 wxString JOB_EXPORT_PCB_DRILL::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Drill data export" ), m_format );
+    return _( "Drill data export" );
+}
+
+
+wxString JOB_EXPORT_PCB_DRILL::GetOptionsDialogTitle() const
+{
+    return _( "Export Drill Data Job Options" );
 }
 
 REGISTER_JOB( pcb_export_drill, _HKI( "PCB: Export drill data" ), KIWAY::FACE_PCB,

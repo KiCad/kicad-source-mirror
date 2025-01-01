@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,6 +31,7 @@ class KICOMMON_API JOB_EXPORT_PCB_POS : public JOB
 public:
     JOB_EXPORT_PCB_POS();
     wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
 

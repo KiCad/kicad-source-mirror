@@ -34,6 +34,7 @@ class KICOMMON_API JOB_EXPORT_PCB_PDF : public JOB_EXPORT_PCB_PLOT
 public:
     JOB_EXPORT_PCB_PDF();
     wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
 
     bool m_pdfFrontFPPropertyPopups;
     bool m_pdfBackFPPropertyPopups;

@@ -54,7 +54,13 @@ JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
 
 wxString JOB_EXPORT_PCB_ODB::GetDefaultDescription() const
 {
-    return wxString::Format( _( "ODB++ export" ) );
+    return _( "ODB++ export" );
+}
+
+
+wxString JOB_EXPORT_PCB_ODB::GetOptionsDialogTitle() const
+{
+    return _( "Export ODB++ Job Options" );
 }
 
 

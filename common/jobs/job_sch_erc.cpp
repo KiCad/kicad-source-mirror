@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,7 +30,13 @@ JOB_SCH_ERC::JOB_SCH_ERC() :
 
 wxString JOB_SCH_ERC::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Perform Schematic ERC" ) );
+    return _( "Perform Schematic ERC" );
+}
+
+
+wxString JOB_SCH_ERC::GetOptionsDialogTitle() const
+{
+    return _( "Schematic ERC Job Options" );
 }
 
 

@@ -19,6 +19,7 @@
  */
 
 #include <jobs/job_export_pcb_gencad.h>
+#include <wx/translation.h>
 
 
 JOB_EXPORT_PCB_GENCAD::JOB_EXPORT_PCB_GENCAD() :
@@ -29,4 +30,10 @@ JOB_EXPORT_PCB_GENCAD::JOB_EXPORT_PCB_GENCAD() :
     m_useDrillOrigin( false ),
     m_useUniquePins( false )
 {
+}
+
+
+wxString JOB_EXPORT_PCB_GENCAD::GetOptionsDialogTitle() const
+{
+    return _( "Export GenCAD Job Options" );
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -85,5 +85,12 @@ wxString JOB_EXPORT_SCH_BOM::GetDefaultDescription() const
 {
     return wxString::Format( _( "Schematic BOM export" ) );
 }
+
+
+wxString JOB_EXPORT_SCH_BOM::GetOptionsDialogTitle() const
+{
+    return wxString::Format( _( "Export BOM Job Options" ) );
+}
+
 
 REGISTER_JOB( sch_export_bom, _HKI( "Schematic: Export BOM" ), KIWAY::FACE_SCH, JOB_EXPORT_SCH_BOM );

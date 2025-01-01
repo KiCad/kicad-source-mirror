@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,7 +58,13 @@ JOB_EXPORT_SCH_NETLIST::JOB_EXPORT_SCH_NETLIST() :
 
 wxString JOB_EXPORT_SCH_NETLIST::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Schematic Netlist Export" ) );
+    return _( "Schematic Netlist Export" );
+}
+
+
+wxString JOB_EXPORT_SCH_NETLIST::GetOptionsDialogTitle() const
+{
+    return wxString::Format( _( "Export Netlist Job Options" ) );
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,8 +55,8 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aE
     m_reporter = &m_messagesPanel->Reporter();
     initDialog();
 
-    SetupStandardButtons(
-            { { wxID_OK, _( "Generate Position File" ) }, { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons( { { wxID_OK, _( "Generate Position File" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -74,7 +74,8 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS
     m_messagesPanel->Hide();
     initDialog();
 
-    SetupStandardButtons( { { wxID_OK, _( "Save" ) }, { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -110,6 +111,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     }
     else
     {
+        SetTitle( m_job->GetOptionsDialogTitle() );
+
         m_browseButton->Hide();
 
         m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCHES ? EDA_UNITS::INCHES
@@ -130,6 +133,9 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         m_messagesPanel->Hide();
     }
 
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     GetSizer()->SetSizeHints( this );
 }

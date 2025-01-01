@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -78,7 +78,8 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581(JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_FR
 {
     m_browseButton->Hide();
 
-    SetupStandardButtons( { { wxID_OK, _( "Save" ) }, { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     m_outputFileName->SetValue( m_job->GetOutputPath() );
 
@@ -265,11 +266,17 @@ bool DIALOG_EXPORT_2581::Init()
     }
     else
     {
+        SetTitle( m_job->GetOptionsDialogTitle() );
+
         m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
         m_precision->SetValue( static_cast<int>( m_job->m_precision ) );
         m_versionChoice->SetSelection( m_job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B ? 0 : 1 );
         m_cbCompress->SetValue( m_job->m_compress );
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     wxCommandEvent dummy;
     onCompressCheck( dummy );
@@ -293,18 +300,18 @@ bool DIALOG_EXPORT_2581::Init()
     if( !m_job )
     {
         internalIdCol = prj.m_IP2581Bom.id;
-		mpnCol = prj.m_IP2581Bom.MPN;
-		distPnCol = prj.m_IP2581Bom.distPN;
-		mfgCol = prj.m_IP2581Bom.mfg;
-		distCol = prj.m_IP2581Bom.dist;
-	}
-	else
-	{
-		internalIdCol = m_job->m_colInternalId;
-		mpnCol = m_job->m_colMfgPn;
-		distPnCol = m_job->m_colDistPn;
-		mfgCol = m_job->m_colMfg;
-		distCol = m_job->m_colDist;
+        mpnCol = prj.m_IP2581Bom.MPN;
+        distPnCol = prj.m_IP2581Bom.distPN;
+        mfgCol = prj.m_IP2581Bom.mfg;
+        distCol = prj.m_IP2581Bom.dist;
+    }
+    else
+    {
+        internalIdCol = m_job->m_colInternalId;
+        mpnCol = m_job->m_colMfgPn;
+        distPnCol = m_job->m_colDistPn;
+        mfgCol = m_job->m_colMfg;
+        distCol = m_job->m_colDist;
     }
 
     if( !m_choiceMPN->SetStringSelection( internalIdCol ) )

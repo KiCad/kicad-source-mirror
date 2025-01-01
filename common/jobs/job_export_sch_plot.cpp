@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -125,7 +125,13 @@ JOB_EXPORT_SCH_PLOT_PDF::JOB_EXPORT_SCH_PLOT_PDF() :
 
 wxString JOB_EXPORT_SCH_PLOT_PDF::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Schematic PDF Plot" ) );
+    return _( "Schematic PDF Plot" );
+}
+
+
+wxString JOB_EXPORT_SCH_PLOT_PDF::GetOptionsDialogTitle() const
+{
+    return _( "Export PDF Job Options" );
 }
 
 
@@ -138,7 +144,13 @@ JOB_EXPORT_SCH_PLOT_DXF ::JOB_EXPORT_SCH_PLOT_DXF () :
 
 wxString JOB_EXPORT_SCH_PLOT_DXF::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Schematic DXF Plot" ) );
+    return _( "Schematic DXF Plot" );
+}
+
+
+wxString JOB_EXPORT_SCH_PLOT_DXF::GetOptionsDialogTitle() const
+{
+    return _( "Export DXF Job Options" );
 }
 
 
@@ -151,7 +163,13 @@ JOB_EXPORT_SCH_PLOT_SVG::JOB_EXPORT_SCH_PLOT_SVG() :
 
 wxString JOB_EXPORT_SCH_PLOT_SVG::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Schematic SVG Plot" ) );
+    return _( "Schematic SVG Plot" );
+}
+
+
+wxString JOB_EXPORT_SCH_PLOT_SVG::GetOptionsDialogTitle() const
+{
+    return _( "Export SVG Job Options" );
 }
 
 
@@ -164,7 +182,13 @@ JOB_EXPORT_SCH_PLOT_PS::JOB_EXPORT_SCH_PLOT_PS() :
 
 wxString JOB_EXPORT_SCH_PLOT_PS::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Schematic PS Plot" ) );
+    return _( "Schematic Postscript Plot" );
+}
+
+
+wxString JOB_EXPORT_SCH_PLOT_PS::GetOptionsDialogTitle() const
+{
+    return _( "Export Postscript Job Options" );
 }
 
 
@@ -177,7 +201,13 @@ JOB_EXPORT_SCH_PLOT_HPGL::JOB_EXPORT_SCH_PLOT_HPGL() :
 
 wxString JOB_EXPORT_SCH_PLOT_HPGL::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Schematic HPGL Plot" ) );
+    return _( "Schematic HPGL Plot" );
+}
+
+
+wxString JOB_EXPORT_SCH_PLOT_HPGL::GetOptionsDialogTitle() const
+{
+    return _( "Export HPGL Job Options" );
 }
 
 
@@ -185,7 +215,7 @@ REGISTER_JOB( sch_export_plot_svg, _HKI( "Schematic: Export SVG" ), KIWAY::FACE_
               JOB_EXPORT_SCH_PLOT_SVG );
 REGISTER_JOB( sch_export_plot_hpgl, _HKI( "Schematic: Export HPGL" ), KIWAY::FACE_SCH,
               JOB_EXPORT_SCH_PLOT_HPGL );
-REGISTER_JOB( sch_export_plot_ps, _HKI( "Schematic: Export PS" ), KIWAY::FACE_SCH,
+REGISTER_JOB( sch_export_plot_ps, _HKI( "Schematic: Export Postscript" ), KIWAY::FACE_SCH,
               JOB_EXPORT_SCH_PLOT_PS );
 REGISTER_JOB( sch_export_plot_dxf, _HKI( "Schematic: Export DXF" ), KIWAY::FACE_SCH,
               JOB_EXPORT_SCH_PLOT_DXF );

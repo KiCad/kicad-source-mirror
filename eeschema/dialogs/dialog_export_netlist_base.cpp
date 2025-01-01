@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,12 +10,6 @@
 #include "dialog_export_netlist_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
-
-BEGIN_EVENT_TABLE( DIALOG_EXPORT_NETLIST_BASE, DIALOG_SHIM )
-	EVT_NOTEBOOK_PAGE_CHANGED( ID_CHANGE_NOTEBOOK_PAGE, DIALOG_EXPORT_NETLIST_BASE::_wxFB_OnNetlistTypeSelection )
-	EVT_BUTTON( ID_ADD_PLUGIN, DIALOG_EXPORT_NETLIST_BASE::_wxFB_OnAddGenerator )
-	EVT_BUTTON( ID_DEL_PLUGIN, DIALOG_EXPORT_NETLIST_BASE::_wxFB_OnDelGenerator )
-END_EVENT_TABLE()
 
 DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
@@ -30,9 +24,9 @@ DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextOutputPath = new wxStaticText( this, wxID_ANY, _("Output Path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOutputPath = new wxStaticText( this, wxID_ANY, _("Output path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOutputPath->Wrap( -1 );
-	bSizer8->Add( m_staticTextOutputPath, 0, wxALL, 5 );
+	bSizer8->Add( m_staticTextOutputPath, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_outputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPath->SetMinSize( wxSize( 450,-1 ) );
@@ -46,7 +40,7 @@ DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	m_NoteBook->SetMinSize( wxSize( 540,-1 ) );
 
 
-	bUpperSizer->Add( m_NoteBook, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bUpperSizer->Add( m_NoteBook, 0, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizerMsgPanel;
 	bSizerMsgPanel = new wxBoxSizer( wxVERTICAL );
@@ -55,7 +49,7 @@ DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	bSizerMsgPanel->Add( m_MessagesBox, 1, wxEXPAND|wxTOP, 5 );
 
 
-	bUpperSizer->Add( bSizerMsgPanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bUpperSizer->Add( bSizerMsgPanel, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
@@ -86,15 +80,21 @@ DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_NoteBook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_EXPORT_NETLIST_BASE::OnNetlistTypeSelection ), NULL, this );
+	m_buttonAddGenerator->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_NETLIST_BASE::OnAddGenerator ), NULL, this );
+	m_buttonDelGenerator->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_NETLIST_BASE::OnDelGenerator ), NULL, this );
 }
 
 DIALOG_EXPORT_NETLIST_BASE::~DIALOG_EXPORT_NETLIST_BASE()
 {
-}
+	// Disconnect Events
+	m_NoteBook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_EXPORT_NETLIST_BASE::OnNetlistTypeSelection ), NULL, this );
+	m_buttonAddGenerator->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_NETLIST_BASE::OnAddGenerator ), NULL, this );
+	m_buttonDelGenerator->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_NETLIST_BASE::OnDelGenerator ), NULL, this );
 
-BEGIN_EVENT_TABLE( NETLIST_DIALOG_ADD_GENERATOR_BASE, DIALOG_SHIM )
-	EVT_BUTTON( wxID_BROWSE_PLUGINS, NETLIST_DIALOG_ADD_GENERATOR_BASE::_wxFB_OnBrowseGenerators )
-END_EVENT_TABLE()
+}
 
 NETLIST_DIALOG_ADD_GENERATOR_BASE::NETLIST_DIALOG_ADD_GENERATOR_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
@@ -149,8 +149,14 @@ NETLIST_DIALOG_ADD_GENERATOR_BASE::NETLIST_DIALOG_ADD_GENERATOR_BASE( wxWindow* 
 	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_buttonGenerator->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NETLIST_DIALOG_ADD_GENERATOR_BASE::OnBrowseGenerators ), NULL, this );
 }
 
 NETLIST_DIALOG_ADD_GENERATOR_BASE::~NETLIST_DIALOG_ADD_GENERATOR_BASE()
 {
+	// Disconnect Events
+	m_buttonGenerator->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NETLIST_DIALOG_ADD_GENERATOR_BASE::OnBrowseGenerators ), NULL, this );
+
 }

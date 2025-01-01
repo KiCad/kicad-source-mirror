@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo
- * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_job( aJob ),
         m_boardPath( aBoardPath )
 {
-    if( m_job == nullptr )
+    if( !m_job )
     {
         m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
         SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
@@ -111,10 +111,16 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
     }
     else
     {
+        SetTitle( m_job->GetOptionsDialogTitle() );
+
         m_browseButton->Hide();
         SetupStandardButtons( { { wxID_OK,     _( "Save" ) },
                                 { wxID_CANCEL, _( "Close" )  } } );
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     // Build default output file name
     // (last saved filename in project or built from board filename)

@@ -55,7 +55,14 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
 
 wxString JOB_EXPORT_PCB_DXF::GetDefaultDescription() const
 {
-    return wxString::Format( _( "PCB DXF export" ) );
+    return _( "PCB DXF export" );
 }
+
+
+wxString JOB_EXPORT_PCB_DXF::GetOptionsDialogTitle() const
+{
+    return _( "Export DXF Job Options" );
+}
+
 
 REGISTER_JOB( pcb_export_dxf, _HKI( "PCB: Export DXF" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_DXF );

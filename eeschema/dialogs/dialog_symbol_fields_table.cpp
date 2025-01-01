@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2025, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,8 +272,11 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     SetUserBomPresets( m_schSettings.m_BomPresets );
 
     BOM_PRESET preset = m_schSettings.m_BomSettings;
+
     if( m_job )
     {
+        SetTitle( m_job->GetOptionsDialogTitle() );
+
         preset.name = m_job->m_bomPresetName;
         preset.excludeDNP = m_job->m_excludeDNP;
         preset.includeExcludedFromBOM = m_job->m_includeExcludedFromBOM;
@@ -305,6 +308,11 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
             i++;
         }
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
+
     ApplyBomPreset( preset );
     syncBomPresetSelection();
 

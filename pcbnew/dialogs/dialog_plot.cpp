@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
 
     if( m_job )
     {
-        SetTitle( _( "Plot Job Options" ) );
+        SetTitle( aJob->GetOptionsDialogTitle() );
 
         PCB_PLOTTER::PlotJobToPlotOpts( m_plotOpts, m_job );
         m_messagesPanel->Hide();

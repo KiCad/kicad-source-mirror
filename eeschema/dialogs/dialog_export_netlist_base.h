@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,28 +31,19 @@ class WX_HTML_REPORT_PANEL;
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define ID_CHANGE_NOTEBOOK_PAGE 1000
+#define ID_ADD_PLUGIN 1001
+#define ID_DEL_PLUGIN 1002
+#define wxID_BROWSE_PLUGINS 1003
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EXPORT_NETLIST_BASE
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_EXPORT_NETLIST_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
 
-		// Private event handlers
-		void _wxFB_OnNetlistTypeSelection( wxNotebookEvent& event ){ OnNetlistTypeSelection( event ); }
-		void _wxFB_OnAddGenerator( wxCommandEvent& event ){ OnAddGenerator( event ); }
-		void _wxFB_OnDelGenerator( wxCommandEvent& event ){ OnDelGenerator( event ); }
-
-
 	protected:
-		enum
-		{
-			ID_CHANGE_NOTEBOOK_PAGE = 1000,
-			ID_ADD_PLUGIN,
-			ID_DEL_PLUGIN,
-		};
-
 		wxStaticText* m_staticTextOutputPath;
 		wxTextCtrl* m_outputPath;
 		wxNotebook* m_NoteBook;
@@ -83,19 +74,9 @@ class DIALOG_EXPORT_NETLIST_BASE : public DIALOG_SHIM
 ///////////////////////////////////////////////////////////////////////////////
 class NETLIST_DIALOG_ADD_GENERATOR_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
 
-		// Private event handlers
-		void _wxFB_OnBrowseGenerators( wxCommandEvent& event ){ OnBrowseGenerators( event ); }
-
-
 	protected:
-		enum
-		{
-			wxID_BROWSE_PLUGINS = 1000,
-		};
-
 		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textCtrlName;
 		wxStaticText* m_staticTextCmd;

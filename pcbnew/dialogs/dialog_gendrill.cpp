@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,8 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
     bMainSizer->Remove( bMsgSizer );
     m_messagesBox->Hide();
 
-    SetupStandardButtons( { { wxID_OK, _( "Save" ) }, { wxID_CANCEL, _( "Cancel" ) } } );
+    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
+                            { wxID_CANCEL, _( "Cancel" ) } } );
     m_buttonsSizer->Layout();
 
     SetReturnCode( 1 );
@@ -140,7 +141,11 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
 
 void DIALOG_GENDRILL::initDialog()
 {
-    if( !m_job )
+    if( m_job )
+    {
+        SetTitle( m_job->GetOptionsDialogTitle() );
+    }
+    else
     {
         auto cfg = m_pcbEditFrame->GetPcbNewSettings();
 
@@ -159,6 +164,10 @@ void DIALOG_GENDRILL::initDialog()
         if( m_mapFileType < 0 || m_mapFileType >= (int) m_Choice_Drill_Map->GetCount() )
             m_mapFileType = m_Choice_Drill_Map->GetCount() - 1; // last item in list = default = PDF
 	}
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     m_drillOriginIsAuxAxis = m_plotOpts.GetUseAuxOrigin();
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013-2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 
 #include <pgm_base.h>
 #include <kiface_base.h>
+#include <string_utils.h>
 #include <gestfich.h>
 #include <widgets/wx_html_report_panel.h>
 #include <sch_edit_frame.h>
@@ -45,8 +46,6 @@
 #include <wildcards_and_files_ext.h>
 #include <invoke_sch_dialog.h>
 #include <netlist_exporters/netlist_exporter_spice.h>
-#include <eeschema_settings.h>
-#include <schematic.h>
 #include <paths.h>
 #include <jobs/job_export_sch_netlist.h>
 
@@ -257,6 +256,7 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
     InstallPageSpiceModel();
 
     wxString selectedPageFormatName;
+
     if( !m_job )
     {
         m_outputPath->Hide();
@@ -270,6 +270,8 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
     }
     else
     {
+        SetTitle( m_job->GetOptionsDialogTitle() );
+
         m_MessagesBox->Hide();
         m_outputPath->SetValue( m_job->GetOutputPath() );
 
@@ -285,6 +287,10 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
         m_buttonAddGenerator->Hide();
         m_buttonDelGenerator->Hide();
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     for( int ii = 0; ii < DEFINED_NETLISTS_COUNT + CUSTOMPANEL_COUNTMAX; ++ii )
     {

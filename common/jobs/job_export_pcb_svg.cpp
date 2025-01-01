@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -55,7 +55,13 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
 
 wxString JOB_EXPORT_PCB_SVG::GetDefaultDescription() const
 {
-    return wxString::Format( _( "PCB SVG export" ) );
+    return _( "PCB SVG export" );
+}
+
+
+wxString JOB_EXPORT_PCB_SVG::GetOptionsDialogTitle() const
+{
+    return _( "Export SVG Job Options" );
 }
 
 

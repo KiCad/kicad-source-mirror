@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -107,6 +107,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_PDF : public JOB_EXPORT_SCH_PLOT
 public:
     JOB_EXPORT_SCH_PLOT_PDF();
     wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
 };
 
 
@@ -115,6 +116,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_DXF : public JOB_EXPORT_SCH_PLOT
 public:
     JOB_EXPORT_SCH_PLOT_DXF();
     wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
 };
 
 
@@ -123,6 +125,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_SVG : public JOB_EXPORT_SCH_PLOT
 public:
     JOB_EXPORT_SCH_PLOT_SVG();
     wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
 };
 
 
@@ -131,6 +134,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_PS : public JOB_EXPORT_SCH_PLOT
 public:
     JOB_EXPORT_SCH_PLOT_PS();
     wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
 };
 
 
@@ -139,6 +143,7 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_HPGL : public JOB_EXPORT_SCH_PLOT
 public:
     JOB_EXPORT_SCH_PLOT_HPGL();
     wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
 };
 
 #endif

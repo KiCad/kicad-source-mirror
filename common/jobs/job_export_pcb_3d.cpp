@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -141,7 +141,13 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
 
 wxString JOB_EXPORT_PCB_3D::GetDefaultDescription() const
 {
-    return wxString::Format( _( "3D model export" ) );
+    return _( "3D model export" );
+}
+
+
+wxString JOB_EXPORT_PCB_3D::GetOptionsDialogTitle() const
+{
+    return _( "Export 3D Model Job Options" );
 }
 
 

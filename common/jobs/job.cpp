@@ -74,6 +74,12 @@ wxString JOB::GetDefaultDescription() const
 }
 
 
+wxString JOB::GetOptionsDialogTitle() const
+{
+    return _( "Job Options" );
+}
+
+
 void JOB::SetTempOutputDirectory( const wxString& aBase )
 {
     m_tempOutputDirectory = aBase;

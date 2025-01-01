@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -51,11 +51,14 @@
 static wxString s_oemColumn = wxEmptyString;
 
 DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( PCB_EDIT_FRAME* aParent ) :
-        DIALOG_EXPORT_ODBPP_BASE( aParent ), m_parent( aParent ), m_job( nullptr )
+        DIALOG_EXPORT_ODBPP_BASE( aParent ),
+        m_parent( aParent ),
+        m_job( nullptr )
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    SetupStandardButtons( { { wxID_OK, _( "Export" ) }, { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons( { { wxID_OK, _( "Export" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     wxString path = m_parent->GetLastPath( LAST_PATH_ODBPP );
 
@@ -81,11 +84,14 @@ DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( PCB_EDIT_FRAME* aParent ) :
 
 DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( JOB_EXPORT_PCB_ODB* aJob, PCB_EDIT_FRAME* aEditFrame,
                                           wxWindow* aParent ) :
-        DIALOG_EXPORT_ODBPP_BASE( aParent ), m_parent( aEditFrame ), m_job( aJob )
+        DIALOG_EXPORT_ODBPP_BASE( aParent ),
+        m_parent( aEditFrame ),
+        m_job( aJob )
 {
     m_browseButton->Hide();
 
-    SetupStandardButtons( { { wxID_OK, _( "Save" ) }, { wxID_CANCEL, _( "Close" ) } } );
+    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     m_outputFileName->SetValue( m_job->GetOutputPath() );
 
@@ -240,10 +246,16 @@ bool DIALOG_EXPORT_ODBPP::Init()
     }
     else
     {
+        SetTitle( m_job->GetOptionsDialogTitle() );
+
         m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
         m_precision->SetValue( m_job->m_precision );
         m_choiceCompress->SetSelection( static_cast<int>( m_job->m_compressionMode ) );
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     return true;
 }
