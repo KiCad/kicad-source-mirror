@@ -340,8 +340,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
     plotOpts.m_PDFHierarchicalLinks = aPlotJob->m_PDFHierarchicalLinks;
     plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
-    plotOpts.m_outputDirectory = aPlotJob->m_outputDirectory;
-    plotOpts.m_outputFile = aPlotJob->m_outputFile;
+    plotOpts.m_outputDirectory = aPlotJob->GetFullOutputPath();
+    plotOpts.m_outputFile = aPlotJob->GetFullOutputPath();
     plotOpts.m_pageSizeSelect = pageSizeSelect;
     plotOpts.m_plotAll = aPlotJob->m_plotAll;
     plotOpts.m_plotDrawingSheet = aPlotJob->m_plotDrawingSheet;
@@ -454,7 +454,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         aNetJob->SetOutputPath( fn.GetFullName() );
     }
 
-    bool res = helper->WriteNetlist( aNetJob->GetOutputPath(), netlistOption, *m_reporter );
+    bool res = helper->WriteNetlist( aNetJob->GetFullOutputPath(), netlistOption, *m_reporter );
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -768,7 +768,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
         aNetJob->SetOutputPath( fn.GetFullName() );
     }
 
-    bool res = xmlNetlist->WriteNetlist( aNetJob->GetOutputPath(), GNL_OPT_BOM, *m_reporter );
+    bool res = xmlNetlist->WriteNetlist( aNetJob->GetFullOutputPath(), GNL_OPT_BOM, *m_reporter );
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
