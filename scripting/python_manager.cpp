@@ -120,6 +120,8 @@ wxString PYTHON_MANAGER::FindPythonInterpreter()
 
     if( pythonExe.IsFileExecutable() )
         return pythonExe.GetFullPath();
+#else
+    wxFileName pythonExe;
 #endif
 
     // In case one is forced with cmake
