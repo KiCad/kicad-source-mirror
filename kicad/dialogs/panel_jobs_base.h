@@ -149,13 +149,11 @@ class DIALOG_SPECIAL_EXECUTE_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticText9;
-		wxPanel* m_panel9;
 		wxStaticText* m_textCommand;
 		wxTextCtrl* m_textCtrlCommand;
-		wxCheckBox* m_cbRecordOutput;
 		wxStaticText* m_textOutputPath;
 		wxTextCtrl* m_textCtrlOutputPath;
+		wxCheckBox* m_cbRecordOutput;
 		wxCheckBox* m_cbIgnoreExitCode;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1Save;
@@ -167,7 +165,7 @@ class DIALOG_SPECIAL_EXECUTE_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Execute Command Job Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_SPECIAL_EXECUTE_BASE();
 

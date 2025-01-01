@@ -311,53 +311,43 @@ DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	m_staticText9->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
-	bSizerMain->Add( m_staticText9, 0, wxALL, 5 );
-
-	m_panel9 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 5, 5 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_textCommand = new wxStaticText( m_panel9, wxID_ANY, _("Command"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCommand = new wxStaticText( this, wxID_ANY, _("Command:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCommand->Wrap( -1 );
-	fgSizer1->Add( m_textCommand, 0, wxALL, 5 );
+	fgSizer1->Add( m_textCommand, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textCtrlCommand = new wxTextCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlCommand = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlCommand->SetMinSize( wxSize( 350,-1 ) );
 
-	fgSizer1->Add( m_textCtrlCommand, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer1->Add( m_textCtrlCommand, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbRecordOutput = new wxCheckBox( m_panel9, wxID_ANY, _("Record output messages"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_cbRecordOutput, 0, wxALL, 5 );
-
-	m_textOutputPath = new wxStaticText( m_panel9, wxID_ANY, _("Output Path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Output path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputPath->Wrap( -1 );
-	fgSizer1->Add( m_textOutputPath, 0, wxALL, 5 );
+	fgSizer1->Add( m_textOutputPath, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textCtrlOutputPath = new wxTextCtrl( m_panel9, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlOutputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
 
-	fgSizer1->Add( m_textCtrlOutputPath, 0, wxALL, 5 );
+	fgSizer1->Add( m_textCtrlOutputPath, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerMain->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );
 
-	m_cbIgnoreExitCode = new wxCheckBox( m_panel9, wxID_ANY, _("Ignore non-zero exit code"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_cbIgnoreExitCode, 1, wxALL, 5 );
+	wxBoxSizer* bSizerBottom;
+	bSizerBottom = new wxBoxSizer( wxVERTICAL );
+
+	m_cbRecordOutput = new wxCheckBox( this, wxID_ANY, _("Record output messages"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBottom->Add( m_cbRecordOutput, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_cbIgnoreExitCode = new wxCheckBox( this, wxID_ANY, _("Ignore non-zero exit code"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBottom->Add( m_cbIgnoreExitCode, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 
-	m_panel9->SetSizer( fgSizer1 );
-	m_panel9->Layout();
-	fgSizer1->Fit( m_panel9 );
-	bSizerMain->Add( m_panel9, 1, wxEXPAND | wxALL, 5 );
+	bSizerMain->Add( bSizerBottom, 0, wxALL|wxEXPAND, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
@@ -366,7 +356,7 @@ DIALOG_SPECIAL_EXECUTE_BASE::DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWi
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );

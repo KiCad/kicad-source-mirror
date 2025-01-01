@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,16 +18,18 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
-#include <wx/choice.h>
 #include <wx/checkbox.h>
+#include <wx/gbsizer.h>
+#include <wx/statbox.h>
 #include <wx/radiobox.h>
-#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_RENDER_JOB_BASE
@@ -37,29 +39,26 @@ class DIALOG_RENDER_JOB_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticText9;
-		wxPanel* m_panel9;
 		wxStaticText* m_textOutputPath;
 		wxTextCtrl* m_textCtrlOutputFile;
-		wxStaticText* m_staticText16;
+		wxStaticText* m_formatLabel;
+		wxChoice* m_choiceFormat;
+		wxStaticText* m_dimensionsLabel;
 		wxSpinCtrl* m_spinCtrlWidth;
 		wxStaticText* m_staticText17;
 		wxStaticText* m_staticText19;
 		wxSpinCtrl* m_spinCtrlHeight;
 		wxStaticText* m_staticText182;
-		wxStaticText* m_staticText18;
-		wxChoice* m_choiceFormat;
-		wxStaticText* m_staticText181;
+		wxStaticText* m_qualityLabel;
 		wxChoice* m_choiceQuality;
-		wxStaticText* m_staticText1811;
+		wxStaticText* m_backgroundStyleLabel;
 		wxChoice* m_choiceBgStyle;
-		wxStaticText* m_staticText18111;
-		wxChoice* m_choiceSide;
-		wxCheckBox* m_cbFloor;
-		wxStaticText* m_staticText11;
-		wxRadioBox* m_radioProjection;
 		wxStaticText* m_staticText15;
 		wxSpinCtrlDouble* m_spinCtrlZoom;
+		wxStaticText* m_sideLabel;
+		wxChoice* m_choiceSide;
+		wxCheckBox* m_cbFloor;
+		wxRadioBox* m_radioProjection;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -70,7 +69,7 @@ class DIALOG_RENDER_JOB_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_RENDER_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_RENDER_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Render PCB Job Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_RENDER_JOB_BASE();
 

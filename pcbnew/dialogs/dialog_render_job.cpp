@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2024 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -55,24 +55,16 @@ DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  )
     SetTitle( aJob->GetOptionsDialogTitle() );
 
     for( const auto& [k, name] : outputFormatMap )
-    {
         m_choiceFormat->Append( wxGetTranslation( name ) );
-    }
 
     for( const auto& [k, name] : bgStyleMap )
-    {
         m_choiceBgStyle->Append( wxGetTranslation( name ) );
-    }
 
     for( const auto& [k, name] : qualityMap )
-    {
         m_choiceQuality->Append( wxGetTranslation( name ) );
-    }
 
     for( const auto& [k, name] : sideMap )
-    {
         m_choiceSide->Append( wxGetTranslation( name ) );
-    }
 
     SetupStandardButtons( { { wxID_OK,     _( "Save" ) },
                             { wxID_CANCEL, _( "Close" )  } } );
@@ -91,6 +83,7 @@ JOB_PCB_RENDER::FORMAT DIALOG_RENDER_JOB::getSelectedFormat()
 void DIALOG_RENDER_JOB::setSelectedFormat( JOB_PCB_RENDER::FORMAT aFormat )
 {
     auto it = outputFormatMap.find( aFormat );
+
     if( it != outputFormatMap.end() )
     {
         int idx = std::distance( outputFormatMap.begin(), it );
@@ -111,6 +104,7 @@ JOB_PCB_RENDER::SIDE DIALOG_RENDER_JOB::getSelectedSide()
 void DIALOG_RENDER_JOB::setSelectedSide( JOB_PCB_RENDER::SIDE aSide )
 {
     auto it = sideMap.find( aSide );
+
     if( it != sideMap.end() )
     {
         int idx = std::distance( sideMap.begin(), it );
@@ -131,6 +125,7 @@ JOB_PCB_RENDER::QUALITY DIALOG_RENDER_JOB::getSelectedQuality()
 void DIALOG_RENDER_JOB::setSelectedQuality( JOB_PCB_RENDER::QUALITY aQuality )
 {
     auto it = qualityMap.find( aQuality );
+
     if( it != qualityMap.end() )
     {
         int idx = std::distance( qualityMap.begin(), it );
@@ -151,6 +146,7 @@ JOB_PCB_RENDER::BG_STYLE DIALOG_RENDER_JOB::getSelectedBgStyle()
 void DIALOG_RENDER_JOB::setSelectedBgStyle( JOB_PCB_RENDER::BG_STYLE aBgStyle )
 {
     auto it = bgStyleMap.find( aBgStyle );
+
     if( it != bgStyleMap.end() )
     {
         int idx = std::distance( bgStyleMap.begin(), it );

@@ -48,7 +48,8 @@ class DIALOG_PLOT_SCHEMATIC : public DIALOG_PLOT_SCHEMATIC_BASE
 {
 public:
     DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame );
-    DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXPORT_SCH_PLOT* aJob = nullptr );
+    DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent,
+                           JOB_EXPORT_SCH_PLOT* aJob = nullptr );
 
     /**
      * Return true if the project configuration was modified.

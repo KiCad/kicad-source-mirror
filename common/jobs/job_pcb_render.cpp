@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2024 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -80,9 +80,8 @@ wxString JOB_PCB_RENDER::GetDefaultDescription() const
 
 wxString JOB_PCB_RENDER::GetOptionsDialogTitle() const
 {
-    return wxString::Format( _( "PCB Render Job Options" ) );
+    return _( "Render PCB Job Options" );
 }
-
 
 
 REGISTER_JOB( pcb_render, _HKI( "PCB: Render" ), KIWAY::FACE_PCB, JOB_PCB_RENDER );
