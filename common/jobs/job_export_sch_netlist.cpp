@@ -23,6 +23,19 @@
 #include <i18n_utility.h>
 
 
+std::map<JOB_EXPORT_SCH_NETLIST::FORMAT, wxString> jobNetlistNameLookup =
+{
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR, wxT( "KiCad" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::KICADXML, wxT( "XML" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2, wxT( "OrcadPCB2" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::ALLEGRO, wxT( "Allegro" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::PADS, wxT( "PADS" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::CADSTAR, wxT( "CadStar" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE, wxT( "SPICE" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL, wxT( "SPICE Model" ) }
+};
+
+
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_SCH_NETLIST::FORMAT,
                               {
                                       { JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR, "kicad" },
@@ -56,9 +69,15 @@ JOB_EXPORT_SCH_NETLIST::JOB_EXPORT_SCH_NETLIST() :
 }
 
 
+std::map<JOB_EXPORT_SCH_NETLIST::FORMAT, wxString>& JOB_EXPORT_SCH_NETLIST::GetFormatNameMap()
+{
+    return jobNetlistNameLookup;
+}
+
+
 wxString JOB_EXPORT_SCH_NETLIST::GetDefaultDescription() const
 {
-    return _( "Schematic Netlist Export" );
+    return wxString::Format( _( "Export %s netlist" ), GetFormatNameMap()[format] );
 }
 
 

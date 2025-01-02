@@ -40,7 +40,7 @@ JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
 
 wxString JOB_EXPORT_PCB_GERBERS::GetDefaultDescription() const
 {
-    return _( "PCB Gerbers export" );
+    return _( "Export Gerbers" );
 }
 
 

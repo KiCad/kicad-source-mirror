@@ -55,7 +55,7 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
 
 wxString JOB_EXPORT_PCB_DXF::GetDefaultDescription() const
 {
-    return _( "PCB DXF export" );
+    return _( "Export DXF" );
 }
 
 

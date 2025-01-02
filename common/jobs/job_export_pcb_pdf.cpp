@@ -71,7 +71,7 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
 
 wxString JOB_EXPORT_PCB_PDF::GetDefaultDescription() const
 {
-    return wxString::Format( _( "PCB PDF export" ) );
+    return wxString::Format( _( "Export PDF" ) );
 }
 
 

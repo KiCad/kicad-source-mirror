@@ -81,16 +81,6 @@ enum PANEL_NETLIST_INDEX
 };
 
 
-std::map<JOB_EXPORT_SCH_NETLIST::FORMAT, wxString> jobNetlistNameLookup =
-{
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR, wxT( "KiCad" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2, wxT( "OrcadPCB2" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::ALLEGRO, wxT( "Allegro" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::PADS, wxT( "CadStar" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE, wxT( "SPICE" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL, wxT( "SPICE Model" ) }
-};
-
 /* wxPanels for creating the NoteBook pages for each netlist format: */
 class EXPORT_NETLIST_PAGE : public wxPanel
 {
@@ -278,10 +268,7 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
         SetupStandardButtons();
 
         // custom netlist (external invokes, not supported)
-        auto it = jobNetlistNameLookup.find( m_job->format );
-
-        if( it != jobNetlistNameLookup.end() )
-            selectedPageFormatName = it->second;
+        selectedPageFormatName = JOB_EXPORT_SCH_NETLIST::GetFormatNameMap()[m_job->format];
 
         m_buttonAddGenerator->Hide();
         m_buttonDelGenerator->Hide();
@@ -477,11 +464,11 @@ bool DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
     }
     else
     {
-        for (auto i = jobNetlistNameLookup.begin(); i != jobNetlistNameLookup.end(); ++i)
+        for( const auto& [format, name] : JOB_EXPORT_SCH_NETLIST::GetFormatNameMap() )
         {
-            if( i->second == m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName() )
+            if( name == m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName() )
             {
-                m_job->format = i->first;
+                m_job->format = format;
                 break;
             }
         }

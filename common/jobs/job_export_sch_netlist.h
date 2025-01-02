@@ -28,12 +28,6 @@
 class KICOMMON_API JOB_EXPORT_SCH_NETLIST : public JOB
 {
 public:
-    JOB_EXPORT_SCH_NETLIST();
-    wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
-
-    wxString m_filename;
-
     enum class FORMAT
     {
         KICADXML,
@@ -45,6 +39,15 @@ public:
         PADS,
         ALLEGRO
     };
+
+    static std::map<JOB_EXPORT_SCH_NETLIST::FORMAT, wxString>& GetFormatNameMap();
+
+public:
+    JOB_EXPORT_SCH_NETLIST();
+    wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
+
+    wxString m_filename;
 
     FORMAT format;
 

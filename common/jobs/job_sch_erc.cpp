@@ -30,7 +30,7 @@ JOB_SCH_ERC::JOB_SCH_ERC() :
 
 wxString JOB_SCH_ERC::GetDefaultDescription() const
 {
-    return _( "Perform Schematic ERC" );
+    return _( "Perform ERC" );
 }
 
 

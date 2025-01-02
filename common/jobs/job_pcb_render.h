@@ -31,17 +31,20 @@
 class KICOMMON_API JOB_PCB_RENDER : public JOB
 {
 public:
-    JOB_PCB_RENDER();
-    wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
-
-    wxString m_filename;
-
     enum class FORMAT
     {
         PNG,
         JPEG
     };
+
+    static std::map<JOB_PCB_RENDER::FORMAT, wxString>& GetFormatNameMap();
+
+public:
+    JOB_PCB_RENDER();
+    wxString GetDefaultDescription() const override;
+    wxString GetOptionsDialogTitle() const override;
+
+    wxString m_filename;
 
     enum class QUALITY
     {

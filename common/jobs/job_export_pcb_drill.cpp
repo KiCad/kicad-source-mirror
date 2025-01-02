@@ -120,7 +120,7 @@ JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL() :
 
 wxString JOB_EXPORT_PCB_DRILL::GetDefaultDescription() const
 {
-    return _( "Drill data export" );
+    return _( "Export drill data" );
 }
 
 

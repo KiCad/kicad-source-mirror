@@ -88,7 +88,7 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
 
 wxString JOB_EXPORT_PCB_POS::GetDefaultDescription() const
 {
-    return _( "Placement data export" );
+    return _( "Export position data" );
 }
 
 

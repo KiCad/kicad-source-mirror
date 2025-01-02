@@ -23,11 +23,6 @@
 #include <i18n_utility.h>
 #include <wx/display.h>
 
-static std::map<JOB_PCB_RENDER::FORMAT, wxString> outputFormatMap = {
-    { JOB_PCB_RENDER::FORMAT::JPEG, _HKI( "JPEG" ) },
-    { JOB_PCB_RENDER::FORMAT::PNG, _HKI( "PNG" ) }
-};
-
 static std::map<JOB_PCB_RENDER::BG_STYLE, wxString> bgStyleMap = {
     { JOB_PCB_RENDER::BG_STYLE::BG_DEFAULT, _HKI( "Default" ) },
     { JOB_PCB_RENDER::BG_STYLE::BG_OPAQUE, _HKI( "Opaque" ) },
@@ -54,7 +49,7 @@ DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  )
 {
     SetTitle( aJob->GetOptionsDialogTitle() );
 
-    for( const auto& [k, name] : outputFormatMap )
+    for( const auto& [k, name] : JOB_PCB_RENDER::GetFormatNameMap() )
         m_choiceFormat->Append( wxGetTranslation( name ) );
 
     for( const auto& [k, name] : bgStyleMap )
@@ -73,7 +68,7 @@ DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  )
 JOB_PCB_RENDER::FORMAT DIALOG_RENDER_JOB::getSelectedFormat()
 {
     int  selIndx = m_choiceFormat->GetSelection();
-    auto it = outputFormatMap.begin();
+    auto it = JOB_PCB_RENDER::GetFormatNameMap().begin();
     std::advance( it, selIndx );
     return it->first;
 }
@@ -81,11 +76,11 @@ JOB_PCB_RENDER::FORMAT DIALOG_RENDER_JOB::getSelectedFormat()
 
 void DIALOG_RENDER_JOB::setSelectedFormat( JOB_PCB_RENDER::FORMAT aFormat )
 {
-    auto it = outputFormatMap.find( aFormat );
+    auto it = JOB_PCB_RENDER::GetFormatNameMap().find( aFormat );
 
-    if( it != outputFormatMap.end() )
+    if( it != JOB_PCB_RENDER::GetFormatNameMap().end() )
     {
-        int idx = std::distance( outputFormatMap.begin(), it );
+        int idx = std::distance( JOB_PCB_RENDER::GetFormatNameMap().begin(), it );
         m_choiceFormat->SetSelection( idx );
     }
 }

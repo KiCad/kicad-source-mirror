@@ -34,7 +34,7 @@ JOB_PCB_DRC::JOB_PCB_DRC() :
 
 wxString JOB_PCB_DRC::GetDefaultDescription() const
 {
-    return _( "Perform PCB DRC" );
+    return _( "Perform DRC" );
 }
 
 

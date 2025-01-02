@@ -24,6 +24,12 @@
 #include <i18n_utility.h>
 
 
+std::map<JOB_PCB_RENDER::FORMAT, wxString> outputFormatNameMap = {
+    { JOB_PCB_RENDER::FORMAT::JPEG, wxT( "JPEG" ) },
+    { JOB_PCB_RENDER::FORMAT::PNG, wxT( "PNG" ) }
+};
+
+
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_RENDER::FORMAT,
                               {
                                     { JOB_PCB_RENDER::FORMAT::JPEG, "jpeg" },
@@ -72,9 +78,15 @@ JOB_PCB_RENDER::JOB_PCB_RENDER() :
 }
 
 
+std::map<JOB_PCB_RENDER::FORMAT, wxString>& JOB_PCB_RENDER::GetFormatNameMap()
+{
+    return outputFormatNameMap;
+}
+
+
 wxString JOB_PCB_RENDER::GetDefaultDescription() const
 {
-    return _( "Render PCB" );
+    return wxString::Format( _( "Render %s" ), GetFormatNameMap()[m_format] );
 }
 
 

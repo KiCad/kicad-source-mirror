@@ -83,14 +83,15 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
 
 wxString JOB_EXPORT_SCH_BOM::GetDefaultDescription() const
 {
-    return wxString::Format( _( "Schematic BOM export" ) );
+    return wxString::Format( _( "Generate bill of materials" ) );
 }
 
 
 wxString JOB_EXPORT_SCH_BOM::GetOptionsDialogTitle() const
 {
-    return wxString::Format( _( "Export BOM Job Options" ) );
+    return wxString::Format( _( "Generate Bill of Materials Job Options" ) );
 }
 
 
-REGISTER_JOB( sch_export_bom, _HKI( "Schematic: Export BOM" ), KIWAY::FACE_SCH, JOB_EXPORT_SCH_BOM );
+REGISTER_JOB( sch_export_bom, _HKI( "Schematic: Generate Bill of Materials" ), KIWAY::FACE_SCH,
+              JOB_EXPORT_SCH_BOM );
