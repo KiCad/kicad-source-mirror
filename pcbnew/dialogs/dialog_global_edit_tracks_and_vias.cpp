@@ -35,7 +35,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/global_edit_tool.h>
-#include "dialog_global_edit_tracks_and_vias_base.h"
+#include "dialog_global_edit_tracks_and_vias.h"
 
 
 // Columns of netclasses grid
@@ -67,60 +67,6 @@ static bool         g_filterByViaSize = false;
 static int          g_viaSizeFilter = 0;
 static bool         g_filterSelected = false;
 static bool         g_setToSpecifiedValues = true;
-
-
-class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS : public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
-{
-public:
-    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent );
-    ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() override;
-
-protected:
-    void onActionButtonChange( wxCommandEvent& event ) override;
-
-    void OnNetclassFilterSelect( wxCommandEvent& event ) override
-    {
-        m_netclassFilterOpt->SetValue( true );
-    }
-    void OnLayerFilterSelect( wxCommandEvent& event ) override
-    {
-        m_layerFilterOpt->SetValue( true );
-    }
-    void OnTrackWidthText( wxCommandEvent& aEvent ) override
-    {
-        m_filterByTrackWidth->SetValue( true );
-    }
-    void OnViaSizeText( wxCommandEvent& aEvent ) override
-    {
-        m_filterByViaSize->SetValue( true );
-    }
-
-    void onUnitsChanged( wxCommandEvent& aEvent );
-
-private:
-    void visitItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem );
-    void processItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem );
-
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    void OnNetFilterSelect( wxCommandEvent& event )
-    {
-        m_netFilterOpt->SetValue( true );
-    }
-
-    void buildFilterLists();
-
-private:
-    PCB_EDIT_FRAME* m_parent;
-    BOARD*          m_brd;
-    PCB_SELECTION   m_selection;
-
-    UNIT_BINDER     m_trackWidthFilter;
-    UNIT_BINDER     m_viaSizeFilter;
-
-    std::vector<BOARD_ITEM*>  m_items_changed;        // a list of modified items
-};
 
 
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent ) :
@@ -486,14 +432,4 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
     }
 
     return true;
-}
-
-
-int GLOBAL_EDIT_TOOL::EditTracksAndVias( const TOOL_EVENT& aEvent )
-{
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( editFrame );
-
-    dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
-    return 0;
 }

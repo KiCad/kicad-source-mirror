@@ -29,6 +29,7 @@
 #include <tools/edit_tool.h>
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialogs/dialog_cleanup_tracks_and_vias.h>
+#include <dialogs/dialog_global_edit_tracks_and_vias.h>
 #include <dialogs/dialog_swap_layers.h>
 #include <dialogs/dialog_unused_pad_layers.h>
 #include <tools/global_edit_tool.h>
@@ -183,6 +184,16 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
         frame()->GetCanvas()->Refresh();
     }
 
+    return 0;
+}
+
+
+int GLOBAL_EDIT_TOOL::EditTracksAndVias( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( editFrame );
+
+    dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
     return 0;
 }
 
