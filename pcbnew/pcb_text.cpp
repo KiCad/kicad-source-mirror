@@ -209,13 +209,13 @@ std::vector<int> PCB_TEXT::ViewGetLayers() const
 }
 
 
-double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_TEXT::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     if( !aView )
         return LOD_SHOW;
 
-    KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+    KIGFX::PCB_PAINTER&         painter = static_cast<KIGFX::PCB_PAINTER&>( *aView->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS& renderSettings = *painter.GetSettings();
 
     if( !aView->IsLayerVisible( GetLayer() ) )
         return LOD_HIDE;
@@ -223,9 +223,9 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Hide shadow on dimmed tracks
-        if( renderSettings->GetHighContrast() )
+        if( renderSettings.GetHighContrast() )
         {
-            if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
+            if( m_layer != renderSettings.GetPrimaryHighContrastLayer() )
                 return LOD_HIDE;
         }
     }

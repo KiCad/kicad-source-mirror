@@ -145,7 +145,7 @@ public:
      * @return the level of detail. 0 always shows the item, because the actual zoom level
      *         (or VIEW scale) is always > 0
      */
-    virtual double ViewGetLOD( int aLayer, VIEW* aView ) const
+    virtual double ViewGetLOD( int aLayer, const VIEW* aView ) const
     {
         // By default always show the item
         return LOD_SHOW;

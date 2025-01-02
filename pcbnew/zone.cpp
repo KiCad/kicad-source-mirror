@@ -536,7 +536,7 @@ std::vector<int> ZONE::ViewGetLayers() const
 }
 
 
-double ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double ZONE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     if( !aView )
         return LOD_SHOW;

@@ -167,7 +167,7 @@ wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
 }
 
 
-double PCB_FIELD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_FIELD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     if( !aView )
         return LOD_SHOW;

@@ -175,7 +175,7 @@ public:
     std::vector<int> ViewGetLayers() const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     /// @copydoc BOARD_ITEM::Move
     void Move( const VECTOR2I& aMoveVector ) override;

@@ -157,7 +157,7 @@ public:
     std::vector<int> ViewGetLayers() const override;
 
     ///< @copydoc VIEW_ITEM::ViewGetLOD
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     // Virtual function
     const BOX2I GetBoundingBox() const override;

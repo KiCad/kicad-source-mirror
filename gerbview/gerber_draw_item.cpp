@@ -979,7 +979,7 @@ const BOX2I GERBER_DRAW_ITEM::ViewBBox() const
 }
 
 
-double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     // DCodes will be shown only if zoom is appropriate:
     // Returns the level of detail of the item.

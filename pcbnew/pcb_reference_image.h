@@ -58,7 +58,7 @@ public:
 
     wxString GetClass() const override { return wxT( "PCB_REFERENCE_IMAGE" ); }
 
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     const BOX2I GetBoundingBox() const override;
 

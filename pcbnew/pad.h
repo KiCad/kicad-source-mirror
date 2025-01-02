@@ -872,7 +872,7 @@ public:
 
     virtual std::vector<int> ViewGetLayers() const override;
 
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     virtual const BOX2I ViewBBox() const override;
 

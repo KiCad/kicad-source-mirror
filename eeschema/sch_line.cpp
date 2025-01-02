@@ -195,7 +195,7 @@ std::vector<int> SCH_LINE::ViewGetLayers() const
 }
 
 
-double SCH_LINE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double SCH_LINE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     if( aLayer == LAYER_OP_VOLTAGES )
     {

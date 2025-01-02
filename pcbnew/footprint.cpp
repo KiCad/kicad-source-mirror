@@ -2257,7 +2257,7 @@ std::vector<int> FOOTPRINT::ViewGetLayers() const
 }
 
 
-double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double FOOTPRINT::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {

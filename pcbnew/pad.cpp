@@ -1724,10 +1724,10 @@ std::vector<int> PAD::ViewGetLayers() const
 }
 
 
-double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
-    PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
-    PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+    PCB_PAINTER&         painter = static_cast<PCB_PAINTER&>( *aView->GetPainter() );
+    PCB_RENDER_SETTINGS& renderSettings = *painter.GetSettings();
     const BOARD*         board = GetBoard();
 
     // Meta control for hiding all pads
@@ -1752,10 +1752,10 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     }
     else if( IsNetnameLayer( aLayer ) )
     {
-        if( renderSettings->GetHighContrast() )
+        if( renderSettings.GetHighContrast() )
         {
             // Hide netnames unless pad is flashed to a high-contrast layer
-            if( !FlashLayer( renderSettings->GetPrimaryHighContrastLayer() ) )
+            if( !FlashLayer( renderSettings.GetPrimaryHighContrastLayer() ) )
                 return LOD_HIDE;
         }
         else

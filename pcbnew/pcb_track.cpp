@@ -1350,7 +1350,7 @@ std::vector<int> PCB_TRACK::ViewGetLayers() const
 }
 
 
-double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_TRACK::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
@@ -1467,7 +1467,7 @@ std::vector<int> PCB_VIA::ViewGetLayers() const
 }
 
 
-double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();

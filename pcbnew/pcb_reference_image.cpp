@@ -104,7 +104,7 @@ void PCB_REFERENCE_IMAGE::swapData( BOARD_ITEM* aItem )
 }
 
 
-double PCB_REFERENCE_IMAGE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_REFERENCE_IMAGE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();

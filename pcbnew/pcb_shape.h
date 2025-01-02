@@ -172,7 +172,7 @@ public:
     std::vector<int> ViewGetLayers() const override;
 
     ///< @copydoc VIEW_ITEM::ViewGetLOD
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     double Similarity( const BOARD_ITEM& aBoardItem ) const override;
 

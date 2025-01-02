@@ -147,7 +147,7 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     std::vector<int> ViewGetLayers() const override;
 

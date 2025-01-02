@@ -190,7 +190,7 @@ public:
 
     virtual std::vector<int> ViewGetLayers() const override;
 
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     void SetFillMode( ZONE_FILL_MODE aFillMode ) { m_fillMode = aFillMode; }
     ZONE_FILL_MODE GetFillMode() const { return m_fillMode; }

@@ -214,7 +214,7 @@ public:
     virtual const BOX2I ViewBBox() const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD()
-    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     ///< @copydoc EDA_ITEM::Visit()
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,

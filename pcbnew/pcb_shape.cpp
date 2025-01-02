@@ -569,10 +569,10 @@ void PCB_SHAPE::SetIsProxyItem( bool aIsProxy )
 }
 
 
-double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_SHAPE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
-    KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+    KIGFX::PCB_PAINTER&         painter = static_cast<KIGFX::PCB_PAINTER&>( *aView->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS& renderSettings = *painter.GetSettings();
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
@@ -581,9 +581,9 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
             return LOD_HIDE;
 
         // Hide shadow on dimmed tracks
-        if( renderSettings->GetHighContrast() )
+        if( renderSettings.GetHighContrast() )
         {
-            if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
+            if( m_layer != renderSettings.GetPrimaryHighContrastLayer() )
                 return LOD_HIDE;
         }
     }
