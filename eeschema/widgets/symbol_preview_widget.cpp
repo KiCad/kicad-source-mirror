@@ -231,7 +231,12 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 
         m_previewItem->SetPreviewUnit( settings->m_ShowUnit );
         m_previewItem->SetPreviewBodyStyle( settings->m_ShowBodyStyle );
-        m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTOADDED );
+
+        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+
+        if( cfg->m_AutoplaceFields.enable )
+            m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
 
         view->Add( m_previewItem );
 
@@ -284,7 +289,12 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBo
 
         m_previewItem->SetPreviewUnit( settings->m_ShowUnit );
         m_previewItem->SetPreviewBodyStyle( settings->m_ShowBodyStyle );
-        m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTOADDED );
+
+        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+
+        if( cfg->m_AutoplaceFields.enable )
+            m_previewItem->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
 
         view->Add( m_previewItem );
 

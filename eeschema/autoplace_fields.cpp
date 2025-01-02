@@ -152,9 +152,6 @@ public:
             if( !field->IsVisible() || !field->CanAutoplace() )
                 continue;
 
-            if( aAlgo == AUTOPLACE_AUTOADDED && !field->IsAutoAdded() )
-                continue;
-
             if( m_allow_rejustify )
             {
                 if( sideandpins.pins > 0 )
@@ -738,10 +735,9 @@ void SCH_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 
     switch( aAlgo )
     {
-    case AUTOPLACE_AUTO:        m_fieldsAutoplaced = AUTOPLACE_AUTO;          break;
-    case AUTOPLACE_MANUAL:      m_fieldsAutoplaced = AUTOPLACE_MANUAL;        break;
-    case AUTOPLACE_AUTOADDED:   /* leave m_fieldsAutoplaced as it is */       break;
-    default:                    wxFAIL_MSG( "Unknown autoplace algorithm" );  break;
+    case AUTOPLACE_AUTO:    m_fieldsAutoplaced = AUTOPLACE_AUTO;          break;
+    case AUTOPLACE_MANUAL:  m_fieldsAutoplaced = AUTOPLACE_MANUAL;        break;
+    default:                wxFAIL_MSG( "Unknown autoplace algorithm" );  break;
     }
 }
 
@@ -756,9 +752,8 @@ void LIB_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 
     switch( aAlgo )
     {
-    case AUTOPLACE_AUTO:        m_fieldsAutoplaced = AUTOPLACE_AUTO;          break;
-    case AUTOPLACE_MANUAL:      m_fieldsAutoplaced = AUTOPLACE_MANUAL;        break;
-    case AUTOPLACE_AUTOADDED:   /* leave m_fieldsAutoplaced as it is */       break;
-    default:                    wxFAIL_MSG( "Unknown autoplace algorithm" );  break;
+    case AUTOPLACE_AUTO:    m_fieldsAutoplaced = AUTOPLACE_AUTO;          break;
+    case AUTOPLACE_MANUAL:  m_fieldsAutoplaced = AUTOPLACE_MANUAL;        break;
+    default:                wxFAIL_MSG( "Unknown autoplace algorithm" );  break;
     }
 }

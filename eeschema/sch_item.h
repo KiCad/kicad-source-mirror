@@ -68,9 +68,8 @@ enum AUTOPLACE_ALGO
 {
     AUTOPLACE_NONE,      // No autoplacement
     AUTOPLACE_AUTO,      // A minimalist placement algorithm.
-    AUTOPLACE_MANUAL,    // A more involved routine that can be annoying if done from the get go.
+    AUTOPLACE_MANUAL     // A more involved routine that can be annoying if done from the get go.
                          //   Initiated by a hotkey or menu item.
-    AUTOPLACE_AUTOADDED  // Autoplace only those fields marked as AutoAdded.
 };
 
 
