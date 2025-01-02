@@ -355,6 +355,7 @@ bool RmDirRecursive( const wxString& aFileName, wxString* aErrors )
     return true;
 }
 
+
 bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxString& aErrors )
 {
     wxDir dir( aSourceDir );
@@ -393,6 +394,61 @@ bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxStri
             if( !wxCopyFile( sourcePath, destPath ) )
             {
                 aErrors += wxString::Format( _( "Could not copy file: %s to %s" ), sourcePath, destPath );
+                return false;
+            }
+        }
+
+        cont = dir.GetNext( &filename );
+    }
+
+    return true;
+}
+
+
+bool CopyFilesOrDirectory( const wxString& aSourcePath, const wxString& aDestDir, wxString& aErrors,
+                           int& fileCopiedCount )
+{
+    wxFileName sourceFn( aSourcePath );
+    wxDir      dir( sourceFn.GetPath() );
+
+    if( !dir.IsOpened() )
+    {
+        aErrors +=
+                wxString::Format( _( "Could not open source directory: %s" ), sourceFn.GetPath() );
+        aErrors += wxT( "\n" );
+        return false;
+    }
+
+    if( !wxFileName::Mkdir( aDestDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+    {
+        aErrors += wxString::Format( _( "Could not create destination directory: %s" ), aDestDir );
+        aErrors += wxT( "\n" );
+        return false;
+    }
+
+    wxString filename = sourceFn.GetFullName();
+    bool     cont = dir.GetFirst( &filename, sourceFn.GetFullName(), wxDIR_FILES | wxDIR_DIRS );
+    while( cont )
+    {
+        wxString sourcePath = sourceFn.GetPath() + wxFileName::GetPathSeparator() + filename;
+        wxString destPath = aDestDir + wxFileName::GetPathSeparator() + filename;
+
+        if( wxFileName::DirExists( sourcePath ) )
+        {
+            // Recursively copy subdirectories
+            if( !CopyFilesOrDirectory( sourcePath, destPath, aErrors, fileCopiedCount ) )
+            {
+                return false;
+            }
+        }
+        else
+        {
+            // Copy files
+            if( !wxCopyFile( sourcePath, destPath ) )
+            {
+                aErrors += wxString::Format( _( "Could not copy file: %s to %s" ), sourcePath,
+                                             destPath );
+                fileCopiedCount++;
                 return false;
             }
         }

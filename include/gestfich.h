@@ -117,6 +117,8 @@ KICOMMON_API bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = 
 KICOMMON_API bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir,
                                  wxString& aErrors );
 
+KICOMMON_API bool CopyFilesOrDirectory( const wxString& aSourceDir, const wxString& aDestDir,
+                                 wxString& aErrors, int& fileCopiedCount );
 
 /**
  * Add a directory and its contents to a zip file.

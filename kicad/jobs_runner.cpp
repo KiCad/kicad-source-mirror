@@ -23,6 +23,7 @@
 #include <jobs_runner.h>
 #include <jobs/job_registry.h>
 #include <jobs/jobset.h>
+#include <jobs/job_special_copyfiles.h>
 #include <jobs/job_special_execute.h>
 #include <kiway.h>
 #include <kiway_express.h>
@@ -31,6 +32,7 @@
 #include <wx/txtstrm.h>
 #include <wx/sstream.h>
 #include <wx/wfstream.h>
+#include <gestfich.h>
 
 JOBS_RUNNER::JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
                           REPORTER* aReporter ) :
@@ -62,7 +64,6 @@ bool JOBS_RUNNER::RunJobsAllOutputs( bool aBail )
 int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
 {
     JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( aJob->m_job.get() );
-
 
     wxString             cmd = ExpandEnvVarSubstitutions( specialJob->m_command, m_project );
 
@@ -96,10 +97,34 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
 
     if( specialJob->m_ignoreExitcode )
     {
-        return 0;
+        return CLI::EXIT_CODES::OK;
     }
 
     return result;
+}
+
+
+int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject )
+{
+    JOB_SPECIAL_COPYFILES* job = static_cast<JOB_SPECIAL_COPYFILES*>( aJob->m_job.get() );
+
+    if( job->m_source.IsEmpty() )
+    {
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    wxString errors;
+    int      copyCount = 0;
+    bool     success = CopyFilesOrDirectory( job->m_source, job->GetFullOutputPath(), errors, copyCount );
+
+    if( !success )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( job->m_generateErrorOnNoCopy && copyCount == 0 )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+
+    return CLI::EXIT_CODES::OK;
 }
 
 
@@ -210,8 +235,12 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
             // special jobs
             if( job.m_job->GetType() == "special_execute" )
 			{
-                runSpecialExecute( &job, m_project );
-			}
+                result = runSpecialExecute( &job, m_project );
+            }
+            else if( job.m_job->GetType() == "special_copyfiles" )
+            {
+                result = runSpecialCopyFiles( &job, m_project );
+            }
         }
 
         if( result == 0 )

@@ -45,6 +45,7 @@
 #include <confirm.h>
 
 #include <jobs/job_special_execute.h>
+#include <jobs/job_special_copyfiles.h>
 #include <dialogs/dialog_special_execute.h>
 
 
@@ -302,6 +303,42 @@ public:
 private:
     JOBSET*        m_jobsFile;
     JOBSET_OUTPUT* m_output;
+};
+
+
+class DIALOG_COPYFILES_JOB : public DIALOG_COPYFILES_JOB_BASE
+{
+public:
+    DIALOG_COPYFILES_JOB( wxWindow* aParent, JOB_SPECIAL_COPYFILES* aJob ) :
+            DIALOG_COPYFILES_JOB_BASE( aParent ), m_job( aJob )
+    {
+        SetAffirmativeId( wxID_OK );
+
+        m_textCtrlSource->SetValidator( wxTextValidator( wxFILTER_EMPTY ) );
+    }
+
+
+    bool TransferDataToWindow() override
+    {
+        m_textCtrlSource->SetValue( m_job->m_source );
+        m_textCtrlDest->SetValue( m_job->m_dest );
+        m_cbGenerateError->SetValue( m_job->m_generateErrorOnNoCopy );
+        m_cbOverwrite->SetValue( m_job->m_overwriteDest );
+        return true;
+    }
+
+
+    bool TransferDataFromWindow() override
+    {
+        m_job->m_source = m_textCtrlSource->GetValue();
+        m_job->m_dest = m_textCtrlDest->GetValue();
+        m_job->m_generateErrorOnNoCopy = m_cbGenerateError->GetValue();
+        m_job->m_overwriteDest = m_cbOverwrite->GetValue();
+        return true;
+    }
+
+private:
+    JOB_SPECIAL_COPYFILES* m_job;
 };
 
 
@@ -702,6 +739,18 @@ bool PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
             JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job.get() );
 
             DIALOG_SPECIAL_EXECUTE dialog( m_frame, specialJob );
+            if( dialog.ShowModal() == wxID_OK )
+            {
+                m_jobsFile->SetDirty();
+                UpdateTitle();
+                return true;
+            }
+        }
+        else if( job.m_job->GetType() == "special_copyfiles" )
+        {
+            JOB_SPECIAL_COPYFILES* specialJob =
+                    static_cast<JOB_SPECIAL_COPYFILES*>( job.m_job.get() );
+            DIALOG_COPYFILES_JOB dialog( m_frame, specialJob );
             if( dialog.ShowModal() == wxID_OK )
             {
                 m_jobsFile->SetDirty();

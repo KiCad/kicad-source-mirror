@@ -38,6 +38,7 @@ public:
 
 private:
     int runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject );
+    int runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject );
 
 private:
     KIWAY*          m_kiway;

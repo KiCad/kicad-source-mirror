@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,10 +37,10 @@ class WX_GRID;
 #include <wx/checklst.h>
 #include <wx/dialog.h>
 #include <wx/checkbox.h>
+#include <wx/valtext.h>
 #include <wx/listctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_JOBS_BASE
@@ -126,7 +126,7 @@ class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText10;
 		wxCheckListBox* m_includeJobs;
 		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1Save;
+		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
@@ -168,6 +168,36 @@ class DIALOG_SPECIAL_EXECUTE_BASE : public DIALOG_SHIM
 		DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Execute Command Job Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_SPECIAL_EXECUTE_BASE();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_COPYFILES_JOB_BASE
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_COPYFILES_JOB_BASE : public DIALOG_SHIM
+{
+	private:
+
+	protected:
+		wxStaticText* m_textSource;
+		wxTextCtrl* m_textCtrlSource;
+		wxStaticText* m_textDest;
+		wxTextCtrl* m_textCtrlDest;
+		wxCheckBox* m_cbGenerateError;
+		wxCheckBox* m_cbOverwrite;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnRecordOutputClicked( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		DIALOG_COPYFILES_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Copy Files Job Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+
+		~DIALOG_COPYFILES_JOB_BASE();
 
 };
 

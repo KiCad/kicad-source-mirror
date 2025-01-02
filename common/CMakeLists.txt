@@ -82,6 +82,7 @@ set( KICOMMON_SRCS
     jobs/job_export_sch_netlist.cpp
     jobs/job_export_sch_plot.cpp
     jobs/job_export_sch_pythonbom.cpp
+    jobs/job_special_copyfiles.cpp
     jobs/job_special_execute.cpp
     jobs/jobset.cpp
     jobs/job_fp_export_svg.cpp
