@@ -452,6 +452,7 @@ constexpr VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 }
 
 
+#ifndef SWIG
 template <Integral T, Integral U>
 constexpr VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
@@ -464,6 +465,7 @@ constexpr VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
     return VECTOR2<T>( KiROUND( aLHS.x + aScalar ), KiROUND( aLHS.y + aScalar ) );
 }
+#endif
 
 
 template <class T, class U>
@@ -481,6 +483,7 @@ constexpr VECTOR2<T> operator-( const VECTOR2<T>& aLHS, U aScalar )
 }
 
 
+#ifndef SWIG
 template <Integral T, Integral U>
 constexpr VECTOR2<T> operator-( const VECTOR2<T>& aLHS, U aScalar )
 {
@@ -493,6 +496,7 @@ constexpr VECTOR2<T> operator-( const VECTOR2<T>& aLHS, const U& aScalar )
 {
     return VECTOR2<T>( KiROUND( aLHS.x - aScalar ), KiROUND( aLHS.y - aScalar ) );
 }
+#endif
 
 
 template <class T>
