@@ -132,11 +132,11 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "Rough", _( "Roughness" ),
                                    _( "Conductor roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel S", wxString::Format( wxT( "μ(%s)" ),
+                                   "mu Rel S", wxString::Format( wxT( "μr (%s)" ),
                                                                  _( "substrate" ) ),
                                    _( "Relative permeability (mu) of substrate" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
+                                   "mu Rel C", wxString::Format( wxT( "μr (%s)" ),
                                                                  _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );

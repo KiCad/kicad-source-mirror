@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,7 +39,6 @@ class UNIT_SELECTOR_RESISTOR;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_TRANSLINE_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,6 +58,7 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_Rho_label;
 		wxTextCtrl* m_Value_Rho;
 		wxButton* m_button_Rho;
+		wxStaticText* m_substrate_prm3_labelUnit;
 		wxStaticText* m_substrate_prm4_label;
 		wxTextCtrl* m_Substrate_prm4_Value;
 		UNIT_SELECTOR_LEN* m_SubsPrm4_choiceUnit;

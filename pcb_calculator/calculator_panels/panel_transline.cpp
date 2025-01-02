@@ -53,6 +53,7 @@ PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id, const wxPoint
         m_transline_list.push_back( new TRANSLINE_IDENT( tltype_list[ii] ) );
 
     m_EpsilonR_label->SetLabel( wxT( "εr" ) );
+    m_substrate_prm3_labelUnit->SetLabel( wxT( "Ω ∙ m" ) );
 }
 
 

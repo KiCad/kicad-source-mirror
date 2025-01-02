@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -103,8 +103,9 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	fgSizerSubstPrms->Add( bSizer443, 1, wxEXPAND, 5 );
 
-
-	fgSizerSubstPrms->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_substrate_prm3_labelUnit = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("ohm * m"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_substrate_prm3_labelUnit->Wrap( -1 );
+	fgSizerSubstPrms->Add( m_substrate_prm3_labelUnit, 0, wxALL, 5 );
 
 	m_substrate_prm4_label = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("H:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm4_label->Wrap( -1 );
