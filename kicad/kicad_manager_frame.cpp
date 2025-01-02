@@ -329,6 +329,12 @@ void KICAD_MANAGER_FRAME::onNotebookPageCloseRequest( wxAuiNotebookEvent& evt )
             {
                 evt.Veto();
             }
+
+            CallAfter(
+                    [this]()
+                    {
+                        SaveOpenJobSetsToLocalSettings();
+                    } );
         }
         else
         {
@@ -600,8 +606,7 @@ bool KICAD_MANAGER_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     {
         wxWindow* page = m_notebook->GetPage( i );
 
-        PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page );
-        if( panel )
+        if( PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page ) )
         {
             if( !panel->GetCanClose() )
                 return false;
@@ -649,11 +654,8 @@ void KICAD_MANAGER_FRAME::doCloseWindow()
     {
         wxWindow* page = m_notebook->GetPage( i );
 
-        PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page );
-        if( panel )
-        {
+        if( PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page ) )
             m_notebook->DeletePage( i );
-        }
     }
 
     m_leftWin->Show( false );
@@ -664,6 +666,22 @@ void KICAD_MANAGER_FRAME::doCloseWindow()
 #ifdef _WINDOWS_
     lock_close_event = 0;   // Reenable event management
 #endif
+}
+
+
+void KICAD_MANAGER_FRAME::SaveOpenJobSetsToLocalSettings()
+{
+    PROJECT_LOCAL_SETTINGS& cfg = Prj().GetLocalSettings();
+
+    cfg.m_OpenJobSets.clear();
+
+    for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
+    {
+        if( PANEL_JOBS* jobset = dynamic_cast<PANEL_JOBS*>( m_notebook->GetPage( i ) ) )
+            cfg.m_OpenJobSets.emplace_back( jobset->GetFilePath() );
+    }
+
+    cfg.SaveToFile( Prj().GetProjectPath() );
 }
 
 
@@ -698,8 +716,7 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     {
         wxWindow* page = m_notebook->GetPage( i );
 
-        PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page );
-        if( panel )
+        if( PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page ) )
         {
             if( panel->GetProjectTied() )
             {
@@ -723,10 +740,7 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
 
     for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
-        wxWindow* page = m_notebook->GetPage( i );
-
-        PANEL_JOBS* panel = dynamic_cast<PANEL_JOBS*>( page );
-        if( panel )
+        if( PANEL_JOBS* panel = dynamic_cast<PANEL_JOBS*>( m_notebook->GetPage( i ) ) )
         {
             if( aFileName.GetFullPath() == panel->GetFilePath() )
             {
@@ -746,8 +760,9 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
         PANEL_JOBS* jobPanel = new PANEL_JOBS( m_notebook, this, std::move( jobsFile ) );
         jobPanel->SetProjectTied( true );
         jobPanel->SetClosable( true );
-        m_notebook->AddPage( jobPanel, aFileName.GetFullName(),
-                             true );
+        m_notebook->AddPage( jobPanel, aFileName.GetFullName(), true );
+
+        SaveOpenJobSetsToLocalSettings();
     }
     catch( ... )
     {
@@ -783,6 +798,9 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     settings->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( settings ) );
 
     m_leftWin->ReCreateTreePrj();
+
+    for( const wxString& jobset : Prj().GetLocalSettings().m_OpenJobSets )
+        OpenJobsFile( jobset );
 
     // Rebuild the list of watched paths.
     // however this is possible only when the main loop event handler is running,

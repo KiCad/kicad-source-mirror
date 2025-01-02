@@ -222,6 +222,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     m_params.emplace_back( new PARAM_LIST<wxString>( "net_inspector_panel.expanded_rows",
                                                      &m_NetInspectorPanel.expanded_rows, {} ) );
 
+    m_params.emplace_back( new PARAM_LIST<wxString>( "open_jobsets", &m_OpenJobSets, {} ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "project.files",
             [&]() -> nlohmann::json
             {

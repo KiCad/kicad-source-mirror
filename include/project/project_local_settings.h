@@ -92,6 +92,8 @@ public:
     /// File based state
     std::vector<PROJECT_FILE_STATE> m_files;
 
+    std::vector<wxString>           m_OpenJobSets;
+
     /**
      * Board settings
      */

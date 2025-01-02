@@ -170,6 +170,8 @@ public:
 
     void ReCreateTreePrj();
 
+    void SaveOpenJobSetsToLocalSettings();
+
     wxWindow* GetToolCanvas() const override;
 
     std::shared_ptr<PLUGIN_CONTENT_MANAGER> GetPcm() { return m_pcm; };
