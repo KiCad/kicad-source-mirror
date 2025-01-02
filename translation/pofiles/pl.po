@@ -1,5 +1,5 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020, 2023.
-# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023, 2024.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023, 2024, 2025.
 # Pomian <kontakt@rapiddev.pl>, 2021.
 # Krzysztof Kawa <christophorus72@gmail.com>, 2022.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-31 22:17+0000\n"
+"PO-Revision-Date: 2025-01-03 00:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -26910,9 +26910,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d dostępnych aktualizacji pakietów"
 
 #: kicad/kicad_manager_frame.cpp:752
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Błąd podczas tworzenia pliku SVG"
+msgstr "Błąd podczas otwierania pliku zadań"
 
 #: kicad/kicad_manager_frame.cpp:898
 msgid "Edit File in Text Editor"
@@ -33535,9 +33534,8 @@ msgid "Design Rules Checker"
 msgstr "Sprawdzenie reguł projektowych (DRC)"
 
 #: pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Configuration"
-msgstr "Przeładuj konfigurację"
+msgstr "Konfiguracja zadania DRC"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -33860,14 +33858,12 @@ msgid "Export IDFv3"
 msgstr "Eksport IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:104
-#, fuzzy
 msgid "zip files"
-msgstr "Pliki ZIP"
+msgstr "pliki ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:106
-#, fuzzy
 msgid "tgz files"
-msgstr "Pliki tekstowe"
+msgstr "pliki TGZ"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:118
 msgid "Export ODB++ File"
@@ -33879,9 +33875,8 @@ msgstr ""
 "Zaznaczona nazwa pliku wyjściowego nie jest obsługiwanym formatem archiwum."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:199
-#, fuzzy
 msgid "Output file name cannot be empty."
-msgstr "Nazwa zmiennej nie może być pusta."
+msgstr "Nazwa pliku wyjściowego nie może być pusta."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:218
 msgid "The output file name conflicts with the selected compression format."
@@ -33938,7 +33933,6 @@ msgid "Compressing output"
 msgstr "Kompresuj dane"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:23
-#, fuzzy
 msgid "Output File:"
 msgstr "Plik wyjściowy:"
 
@@ -34078,9 +34072,8 @@ msgid "Export board body"
 msgstr "Eksportuj ciało płytki"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "Eksportuj ciało płytki"
+msgstr "Wytnij przelotki w ciele płytki"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
@@ -34156,9 +34149,8 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "Połącz przecinające się geometrie w jeden kształt."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:142
-#, fuzzy
 msgid "Fill all vias"
-msgstr "Wypełnia wszystkie strefy"
+msgstr "Wypełnij wszystkie przelotki"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Net filter (supports wildcards):"
@@ -35164,9 +35156,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:83
-#, fuzzy
 msgid "Generate Map"
-msgstr "Generuj mapę wierceń"
+msgstr "Generuj mapę"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "PostScript"
@@ -35425,7 +35416,6 @@ msgid "Remove all teardrops"
 msgstr "Usuń wszystkie łezki"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Remove all teardrops, regardless of filtering options"
 msgstr "Usuwa wszystkie łezki, bez uwzględnienia z opcji filtracji"
 
@@ -35473,9 +35463,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
-#, fuzzy
 msgid "Track width limit:"
-msgstr "Szerokość ścieżki:"
+msgstr "Ograniczenie szerokości ścieżki:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
@@ -37586,14 +37575,12 @@ msgid "Transparent"
 msgstr "Przejrzysty"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:39
-#, fuzzy
 msgid "High"
-msgstr "Podświetlenie"
+msgstr "Wysokie"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:40
-#, fuzzy
 msgid "User"
-msgstr "User1"
+msgstr "Użytkownika"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:40
 #: pcbnew/widgets/panel_selection_filter.cpp:202
@@ -37607,33 +37594,29 @@ msgid "px"
 msgstr "px"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:54
-#, fuzzy
 msgid "x"
-msgstr "2x"
+msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:77
 msgid "Quality"
 msgstr "Jakość"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Background Style"
-msgstr "Tło u góry"
+msgstr "Styl tła"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:95
 msgid "Side"
 msgstr "Strona"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:107
-#, fuzzy
 msgid "Show floor"
-msgstr "Pokaż siatkę"
+msgstr "Pokaż podstawę"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:110
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
-#, fuzzy
 msgid "Perspective"
-msgstr "Dyrektywa"
+msgstr "Perspektywa"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
 msgid "Orthogonal"
@@ -38623,9 +38606,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:71
-#, fuzzy
 msgid "Recreate Plugin Environment"
-msgstr "Alternatywne przypisania pinu"
+msgstr "Ponownie utwórz środowisko wtyczek"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 msgid "Show Button"
@@ -38972,7 +38954,6 @@ msgid "Zone fill strategy"
 msgstr "Strategia wypełniania stref"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
 msgstr "Zezwalaj na zaokrąglenia poza obrysem strefy"
 
@@ -41703,9 +41684,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Tekst na warstwie dolnej nie odbity lustrzanie"
 
 #: pcbnew/drc/drc_item.cpp:307
-#, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
-msgstr "Otwory na wylot zbyt blisko siebie"
+msgstr "Otwory na wylot zbyt blisko siebie - przestarzałe"
 
 #: pcbnew/drc/drc_item.cpp:508
 #, c-format
@@ -48539,9 +48519,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Footprint '%s' istnieje już w bibliotece '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:518
-#, fuzzy
 msgid "Error renaming footprint"
-msgstr "Z nadrzędnego footprintu"
+msgstr "Błąd przy zmianie nazwy footprintu"
 
 #: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
