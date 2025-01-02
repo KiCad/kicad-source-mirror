@@ -11,7 +11,7 @@
 # Benedikt Freisen <b.freisen@gmx.net>, 2021, 2022.
 # Mark Hämmerling <dev@markh.de>, 2021, 2022, 2023, 2024.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
-# Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023, 2024.
+# Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023, 2024, 2025.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
 # magical-obama <maschwaerzler@a1.net>, 2022.
 # Luc <some_physics@live.com>, 2023, 2024.
@@ -29,8 +29,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2025-01-01 19:35+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-01-03 00:01+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -26744,9 +26744,8 @@ msgid "Job Description"
 msgstr "Auftragsbeschreibung"
 
 #: kicad/dialogs/panel_jobs.cpp:280
-#, fuzzy
 msgid "No output available"
-msgstr "Keine Paketaktualisierungen verfügbar"
+msgstr "Keine Ausgabe verfügbar"
 
 #: kicad/dialogs/panel_jobs.cpp:334
 msgid "Last run successful"
@@ -26765,24 +26764,20 @@ msgid "View last run results..."
 msgstr "Ergebnisse des letzten Laufs anzeigen ..."
 
 #: kicad/dialogs/panel_jobs.cpp:453
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Auftragsbeschreibung"
+msgstr "Auftragsbeschreibung bearbeiten"
 
 #: kicad/dialogs/panel_jobs.cpp:454
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "Optionen bearbeiten..."
+msgstr "Auftragseinstellungen bearbeiten..."
 
 #: kicad/dialogs/panel_jobs.cpp:459
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Ausgewählte Netze löschen"
+msgstr "Ausgewählte Aufträge löschen"
 
 #: kicad/dialogs/panel_jobs.cpp:461
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Alles auswählen"
+msgstr "Alle Aufträge auswählen"
 
 #: kicad/dialogs/panel_jobs.cpp:701
 msgid "Job Types"
@@ -26797,9 +26792,8 @@ msgid "Select job type:"
 msgstr "Auftragstyp wählen:"
 
 #: kicad/dialogs/panel_jobs.cpp:748
-#, fuzzy
 msgid "Output Types"
-msgstr "Ausgabegröße"
+msgstr "Ausgabetypen"
 
 #: kicad/dialogs/panel_jobs.cpp:757
 msgid "Add New Output"
@@ -26814,43 +26808,36 @@ msgid "No outputs defined"
 msgstr "Keine Ausgaben definiert"
 
 #: kicad/dialogs/panel_jobs_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "Auftragssatz"
+msgstr "Aufträge"
 
 #: kicad/dialogs/panel_jobs_base.cpp:82
-#, fuzzy
 msgid "Outputs"
-msgstr "Ausgang"
+msgstr "Ausgaben"
 
 #: kicad/dialogs/panel_jobs_base.cpp:115
-#, fuzzy
 msgid "Save Jobset"
-msgstr "Auftragssatz"
+msgstr "Auftragssatz speichern"
 
 #: kicad/dialogs/panel_jobs_base.cpp:121
-#, fuzzy
 msgid "Generate All Outputs"
-msgstr "Allgemeine Optionen"
+msgstr "Alle Ausgaben generieren"
 
 #: kicad/dialogs/panel_jobs_base.cpp:175 kicad/dialogs/panel_jobs_base.cpp:409
-#, fuzzy
 msgid "Placeholder"
-msgstr "Anker platzieren"
+msgstr "Platzhalter"
 
 #: kicad/dialogs/panel_jobs_base.cpp:260 kicad/dialogs/panel_jobs_base.cpp:354
 msgid "Output Path"
 msgstr "Ausgabepfad"
 
 #: kicad/dialogs/panel_jobs_base.cpp:278
-#, fuzzy
 msgid "Only Jobs"
-msgstr "Nur %s"
+msgstr "Nur Aufträge"
 
 #: kicad/dialogs/panel_jobs_base.cpp:351
-#, fuzzy
 msgid "Record Output"
-msgstr "Stromausgang"
+msgstr ""
 
 #: kicad/dialogs/panel_jobs_base.cpp:366
 msgid "Ignore non-zero exit code"
@@ -27078,9 +27065,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d Paketaktualisierung(en) verfügbar"
 
 #: kicad/kicad_manager_frame.cpp:752
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Fehler beim Erstellen der SVG-Datei"
+msgstr "Fehler beim Öffnen der Auftragsdatei"
 
 #: kicad/kicad_manager_frame.cpp:898
 msgid "Edit File in Text Editor"
@@ -33729,9 +33715,8 @@ msgid "Design Rules Checker"
 msgstr "Designregeln überprüfen (DRC)"
 
 #: pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Configuration"
-msgstr "Konfiguration neu laden"
+msgstr "DRC-Auftragskonfiguration"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -34052,14 +34037,12 @@ msgid "Export IDFv3"
 msgstr "Exportiere IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:104
-#, fuzzy
 msgid "zip files"
-msgstr "Zip-Dateien"
+msgstr "zip-Dateien"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:106
-#, fuzzy
 msgid "tgz files"
-msgstr "Textdateien"
+msgstr "tgz-Dateien"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:118
 msgid "Export ODB++ File"
@@ -34070,9 +34053,8 @@ msgid "The selected output file name is not a supported archive format."
 msgstr "Die ausgewählte Ausgabedatei ist keine unterstütztes Archivformat."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:199
-#, fuzzy
 msgid "Output file name cannot be empty."
-msgstr "Der Variablenname darf nicht leer sein."
+msgstr "Ausgabedateiname darf nicht leer sein."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:218
 msgid "The output file name conflicts with the selected compression format."
@@ -34132,7 +34114,6 @@ msgid "Compressing output"
 msgstr "Komprimiere Ausgabe"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:23
-#, fuzzy
 msgid "Output File:"
 msgstr "Ausgabedatei:"
 
@@ -35362,9 +35343,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:83
-#, fuzzy
 msgid "Generate Map"
-msgstr "Bohrplan-Datei erzeugen"
+msgstr "Karte generieren"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "PostScript"
@@ -37792,19 +37772,16 @@ msgid "Opaque"
 msgstr "Undurchsichtig"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
-#, fuzzy
 msgid "Transparent"
-msgstr "Transiente"
+msgstr "Transparent"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:39
-#, fuzzy
 msgid "High"
-msgstr "Hervorhebung"
+msgstr "Hoch"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:40
-#, fuzzy
 msgid "User"
-msgstr "Benutzer1"
+msgstr "Benutzer"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:40
 #: pcbnew/widgets/panel_selection_filter.cpp:202
@@ -37818,33 +37795,29 @@ msgid "px"
 msgstr "px"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:54
-#, fuzzy
 msgid "x"
-msgstr "2×"
+msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:77
 msgid "Quality"
 msgstr "Qualität"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Background Style"
-msgstr "Hintergrund Beginn"
+msgstr "Hintergrundstil"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:95
 msgid "Side"
 msgstr "Seite"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:107
-#, fuzzy
 msgid "Show floor"
-msgstr "Cursor anzeigen"
+msgstr "Ebene anzeigen"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:110
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
-#, fuzzy
 msgid "Perspective"
-msgstr "Anweisung"
+msgstr "Perspektive"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
 msgid "Orthogonal"
@@ -38841,9 +38814,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:71
-#, fuzzy
 msgid "Recreate Plugin Environment"
-msgstr "Alternative Pinbelegung"
+msgstr "Plugin-Umgebung neu erstellen"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 msgid "Show Button"
