@@ -30,7 +30,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
 "PO-Revision-Date: 2025-01-03 00:01+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -11900,9 +11900,8 @@ msgid "Electrical Rules Checker"
 msgstr "Elektrische Regeln überprüfen (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:4
-#, fuzzy
 msgid "ERC Job Configuration"
-msgstr "Konfiguration neu laden"
+msgstr "ERC-Auftragskonfiguration"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:232
 msgid "Export netlist in KiCad format"
@@ -14949,9 +14948,8 @@ msgid "Group By"
 msgstr "Gruppieren nach"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:393
-#, fuzzy
 msgid "BOM Export Job"
-msgstr "PCB: DXF exportieren"
+msgstr "BOM Exportauftrag"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 msgid "Qty"
@@ -16982,9 +16980,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Input-Power-Pin wird von keinem Output-Power-Pin angesteuert"
 
 #: eeschema/erc/erc_item.cpp:68
-#, fuzzy
 msgid "Multiple pins with the same pin number"
-msgstr "Mehrere Pins mit denselben Pin-Nummern"
+msgstr "Mehrere Pins mit derselben Pinnummer"
 
 #: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
 msgid "Conflict problem between pins"
@@ -23891,9 +23888,8 @@ msgid "Modify schematic item"
 msgstr "Schaltplanelement ändern"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3327
-#, fuzzy
 msgid "No sub schematic found in the current project"
-msgstr "Das aktuelle Projekt schließen"
+msgstr "Im aktuellen Projekt wurde kein Teilschaltplan gefunden"
 
 #: eeschema/tools/sch_edit_tool.cpp:77
 msgid "Symbol Unit"
