@@ -462,16 +462,17 @@ void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields ) const
             aFields.erase( aFields.begin() + ii );
     }
 
-    SetFieldValue( aFields, SIM_DEVICE_FIELD, m_serializer->GenerateDevice() );
-    SetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, m_serializer->GenerateDeviceSubtype() );
+    SetFieldValue( aFields, SIM_DEVICE_FIELD, m_serializer->GenerateDevice(), false );
+    SetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, m_serializer->GenerateDeviceSubtype(),
+                   false );
 
-    SetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7, m_serializer->GenerateEnable() );
-    SetFieldValue( aFields, SIM_PINS_FIELD, m_serializer->GeneratePins() );
+    SetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7, m_serializer->GenerateEnable(), false );
+    SetFieldValue( aFields, SIM_PINS_FIELD, m_serializer->GeneratePins(), false );
 
-    SetFieldValue( aFields, SIM_PARAMS_FIELD, m_serializer->GenerateParams() );
+    SetFieldValue( aFields, SIM_PARAMS_FIELD, m_serializer->GenerateParams(), false );
 
     if( IsStoredInValue() )
-        SetFieldValue( aFields, SIM_VALUE_FIELD, m_serializer->GenerateValue() );
+        SetFieldValue( aFields, SIM_VALUE_FIELD, m_serializer->GenerateValue(), false );
 
     // New fields have a ID = -1 (undefined). so replace the undefined ID
     // by a degined ID
@@ -671,7 +672,7 @@ std::string SIM_MODEL::GetFieldValue( const std::vector<SCH_FIELD>* aFields,
 
 
 void SIM_MODEL::SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFieldName,
-                               const std::string& aValue )
+                               const std::string& aValue, bool aIsVisible )
 {
     auto fieldIt = std::find_if( aFields.begin(), aFields.end(),
                                  [&]( const SCH_FIELD& f )
@@ -682,9 +683,13 @@ void SIM_MODEL::SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& 
     if( fieldIt != aFields.end() )
     {
         if( aValue == "" )
+        {
             aFields.erase( fieldIt );
+        }
         else
+        {
             fieldIt->SetText( aValue );
+        }
 
         return;
     }
@@ -696,6 +701,7 @@ void SIM_MODEL::SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& 
     aFields.emplace_back( VECTOR2I(), aFields.size(), parent, aFieldName );
 
     aFields.back().SetText( aValue );
+    aFields.back().SetVisible( aIsVisible );
 }
 
 

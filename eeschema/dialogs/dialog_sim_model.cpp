@@ -375,8 +375,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
             name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
     }
 
-    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path );
-    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, name );
+    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path, false );
+    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, name, false );
 
     if( isIbisLoaded() )
     {
