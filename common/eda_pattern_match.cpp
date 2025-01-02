@@ -482,6 +482,12 @@ int EDA_COMBINED_MATCHER::ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms )
         if( !term.Normalized )
         {
             term.Text = term.Text.MakeLower().Trim( false ).Trim( true );
+
+            // Don't cause KiCad to hang if someone accidentally pastes the PCB or schematic
+            // into the search box.
+            if( term.Text.Length() > 5000 )
+                term.Text = term.Text.Left( 5000 );
+
             term.Normalized = true;
         }
 
