@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/algorithm/string.hpp>
 #include <boost/locale.hpp>
 #include <fmt/core.h>
 #include <nanodbc/nanodbc.h>
@@ -236,7 +237,7 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
             {
                 std::string columnKey = toUTF8( columns.column_name() );
 
-                if( aColumns.count( columnKey ) )
+                if( aColumns.count( boost::to_lower_copy( columnKey ) ) )
                     m_columnCache[key][columnKey] = columns.data_type();
             }
 
@@ -627,7 +628,13 @@ bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const st
             }
         }
 
-        wxASSERT( result.count( aKey ) );
+        if( !result.count( aKey ) )
+        {
+            wxLogTrace( traceDatabase,
+                  wxT( "selectAllAndCache: warning: key %s not found in result set" ), aKey );
+            continue;
+        }
+
         std::string keyStr = std::any_cast<std::string>( result.at( aKey ) );
         cacheEntry[keyStr] = result;
     }

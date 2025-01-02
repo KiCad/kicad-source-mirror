@@ -343,19 +343,19 @@ void SCH_IO_DATABASE::connect()
         {
             std::set<std::string> columns;
 
-            columns.insert( tableIter.key_col );
-            columns.insert( tableIter.footprints_col );
-            columns.insert( tableIter.symbols_col );
+            columns.insert( boost::to_lower_copy( tableIter.key_col ) );
+            columns.insert( boost::to_lower_copy( tableIter.footprints_col ) );
+            columns.insert( boost::to_lower_copy( tableIter.symbols_col ) );
 
-            columns.insert( tableIter.properties.description );
-            columns.insert( tableIter.properties.footprint_filters );
-            columns.insert( tableIter.properties.keywords );
-            columns.insert( tableIter.properties.exclude_from_sim );
-            columns.insert( tableIter.properties.exclude_from_bom );
-            columns.insert( tableIter.properties.exclude_from_board );
+            columns.insert( boost::to_lower_copy( tableIter.properties.description ) );
+            columns.insert( boost::to_lower_copy( tableIter.properties.footprint_filters ) );
+            columns.insert( boost::to_lower_copy( tableIter.properties.keywords ) );
+            columns.insert( boost::to_lower_copy( tableIter.properties.exclude_from_sim ) );
+            columns.insert( boost::to_lower_copy( tableIter.properties.exclude_from_bom ) );
+            columns.insert( boost::to_lower_copy( tableIter.properties.exclude_from_board ) );
 
             for( const DATABASE_FIELD_MAPPING& field : tableIter.fields )
-                columns.insert( field.column );
+                columns.insert( boost::to_lower_copy( field.column ) );
 
             m_conn->CacheTableInfo( tableIter.table, columns );
         }
