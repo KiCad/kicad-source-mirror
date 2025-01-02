@@ -103,7 +103,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	fgSizerSubstPrms->Add( bSizer443, 1, wxEXPAND, 5 );
 
-	m_substrate_prm3_labelUnit = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("ohm * m"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_substrate_prm3_labelUnit = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("ohm-meter"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm3_labelUnit->Wrap( -1 );
 	fgSizerSubstPrms->Add( m_substrate_prm3_labelUnit, 0, wxALL, 5 );
 
