@@ -146,7 +146,17 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
                 && i != aLayersToPlot.size() - 1 )
             {
                 wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
-                PCB_LAYER_ID nextLayer = aLayersToPlot[i + 1];
+
+                size_t       nextI = i;
+                PCB_LAYER_ID nextLayer;
+
+                do
+                {
+                    ++nextI;
+                    nextLayer = aLayersToPlot[nextI];
+                } while( copperLayerShouldBeSkipped( nextLayer )
+                         && ( nextI < aLayersToPlot.size() - 1 ) );
+
                 wxString     pageName = m_board->GetLayerName( nextLayer );
                 wxString     sheetName = layerName;
 
