@@ -350,6 +350,14 @@ public:
 
     void EmbedFonts() override;
 
+    /**
+     * Automatically orient all the fields in the symbol.
+     *
+     * @param aScreen is the SCH_SCREEN associated with the current instance of the symbol.
+     *                Required when \a aAlgo is AUTOPLACE_MANUAL; optional otherwise.
+     */
+    void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
+
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
     /**

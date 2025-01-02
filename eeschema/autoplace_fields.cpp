@@ -731,16 +731,34 @@ const AUTOPLACER::SIDE AUTOPLACER::SIDE_RIGHT( 1, 0 );
 void SCH_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
     if( aAlgo == AUTOPLACE_MANUAL )
-        wxASSERT_MSG( aScreen, wxS( "A SCH_SCREEN pointer must be given for manual autoplacement" ) );
+        wxASSERT_MSG( aScreen, wxS( "A SCH_SCREEN ptr must be given for manual autoplacement" ) );
 
     AUTOPLACER autoplacer( this, aScreen );
     autoplacer.DoAutoplace( aAlgo );
 
     switch( aAlgo )
     {
-    case AUTOPLACE_AUTO:        m_fieldsAutoplaced = AUTOPLACE_AUTO;                    break;
-    case AUTOPLACE_MANUAL:      m_fieldsAutoplaced = AUTOPLACE_MANUAL;                  break;
-    case AUTOPLACE_AUTOADDED:   /* leave m_fieldsAutoplaced as it is */                 break;
-    default:                    wxFAIL_MSG( "Unknown autoplace algorithm" );            break;
+    case AUTOPLACE_AUTO:        m_fieldsAutoplaced = AUTOPLACE_AUTO;          break;
+    case AUTOPLACE_MANUAL:      m_fieldsAutoplaced = AUTOPLACE_MANUAL;        break;
+    case AUTOPLACE_AUTOADDED:   /* leave m_fieldsAutoplaced as it is */       break;
+    default:                    wxFAIL_MSG( "Unknown autoplace algorithm" );  break;
+    }
+}
+
+
+void LIB_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
+{
+    if( aAlgo == AUTOPLACE_MANUAL )
+        wxFAIL_MSG( wxS( "Manual autoplacement not supported for LIB_SYMBOLs" ) );
+
+    AUTOPLACER autoplacer( this, aScreen );
+    autoplacer.DoAutoplace( aAlgo );
+
+    switch( aAlgo )
+    {
+    case AUTOPLACE_AUTO:        m_fieldsAutoplaced = AUTOPLACE_AUTO;          break;
+    case AUTOPLACE_MANUAL:      m_fieldsAutoplaced = AUTOPLACE_MANUAL;        break;
+    case AUTOPLACE_AUTOADDED:   /* leave m_fieldsAutoplaced as it is */       break;
+    default:                    wxFAIL_MSG( "Unknown autoplace algorithm" );  break;
     }
 }
