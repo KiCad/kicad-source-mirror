@@ -145,9 +145,6 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_layerCtrl->SetUndefinedLayerName( INDETERMINATE_ACTION );
     m_layerCtrl->Resync();
 
-    m_annularRingsLabel->Show( m_brd->GetCopperLayerCount() > 2 );
-    m_annularRingsCtrl->Show( m_brd->GetCopperLayerCount() > 2 );
-
     if( g_setToSpecifiedValues == true )
         m_setToSpecifiedValues->SetValue( true );
     else
