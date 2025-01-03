@@ -2216,15 +2216,13 @@ void SHOVE::AddHeads( VIA_HANDLE aHead, VECTOR2I aNewPos, int aPolicy )
     m_headLines.push_back( ent );
 }
 
-
-static void nodeStats( PNS::DEBUG_DECORATOR* dbg, NODE* node, wxString s )
+void removeHead( NODE *aNode, LINE& head )
 {
-    std::vector<PNS::ITEM*> added, removed;
-    node->GetUpdatedItems( removed, added );
-
-    wxString msg = wxString::Format( "stats[%s]: added=%d, removed=%d, depth=%d", s, (int) added.size(),
-                                     (int) removed.size(), (int) node->Depth() );
-    PNS_DBG( dbg, Message, msg );
+    for (auto lnk : head.Links() )
+    {
+        if( lnk->BelongsTo( aNode ) )
+            aNode->Remove( lnk );
+    }
 }
 
 void SHOVE::removeHeads()
@@ -2237,7 +2235,7 @@ void SHOVE::removeHeads()
         {
             //nodeStats( Dbg(), m_currentNode, "pre-remove-new" );
             int n_lc = headEntry.newHead->LinkCount();
-            m_currentNode->Remove( *headEntry.newHead );
+            removeHead(m_currentNode, *headEntry.newHead );
             //nodeStats( Dbg(), m_currentNode, "post-remove-new" );
 
 
@@ -2256,7 +2254,7 @@ void SHOVE::removeHeads()
                     headEntry.origHead->OwningNode(), m_currentNode->Depth() );
             PNS_DBG( Dbg(), Message, msg );
 
-            m_currentNode->Remove( *headEntry.origHead );
+            removeHead( m_currentNode, *headEntry.origHead );
 
         }
     }
