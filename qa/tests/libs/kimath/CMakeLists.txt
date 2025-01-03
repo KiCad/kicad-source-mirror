@@ -22,6 +22,8 @@
 #
 # Unit tests for KiCad math routines.
 
+include_directories( AFTER ${INC_AFTER} )
+
 set( QA_KIMATH_SRCS
     kimath_test_module.cpp
 

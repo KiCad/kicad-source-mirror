@@ -23,13 +23,13 @@
 
 #include <board.h>
 #include <board_design_settings.h>
-#include <connectivity/connectivity_data.h>
-#include <zone.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <core/thread_pool.h>
+#include <pgm_base.h>
+#include <zone.h>
 
+#include <connectivity/connectivity_data.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 #include <drc/drc_rule.h>
@@ -272,7 +272,7 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
 
     total_effort = std::max( (size_t) 1, total_effort );
 
-    thread_pool& tp = GetKiCadThreadPool();
+    BS::thread_pool&              tp = Pgm().GetThreadPool();
     std::vector<std::future<int>> returns;
 
     returns.reserve( zoneLayers.size() );

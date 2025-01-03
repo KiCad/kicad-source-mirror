@@ -24,7 +24,7 @@
 #include <common.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <core/thread_pool.h>
+#include <pgm_base.h>
 #include <zone.h>
 #include <connectivity/connectivity_data.h>
 #include <drc/drc_engine.h>
@@ -36,11 +36,11 @@ bool DRC_CACHE_GENERATOR::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-    int&           largestClearance = m_board->m_DRCMaxClearance;
-    int&           largestPhysicalClearance = m_board->m_DRCMaxPhysicalClearance;
-    DRC_CONSTRAINT worstConstraint;
-    LSET           boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
-    thread_pool&   tp = GetKiCadThreadPool();
+    int&             largestClearance = m_board->m_DRCMaxClearance;
+    int&             largestPhysicalClearance = m_board->m_DRCMaxPhysicalClearance;
+    DRC_CONSTRAINT   worstConstraint;
+    LSET             boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
+    BS::thread_pool& tp = Pgm().GetThreadPool();
 
 
     largestClearance = std::max( largestClearance, m_board->GetMaxClearanceValue() );

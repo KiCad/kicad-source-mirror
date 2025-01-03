@@ -39,6 +39,7 @@ add_library( qa_utils STATIC
 )
 
 include_directories( BEFORE ${INC_BEFORE} )
+include_directories( AFTER ${INC_AFTER} )
 
 # for some obscure reason, on mingw/msys2 Boost::unit_test_framework does not work
 # So use the actual lib filename:

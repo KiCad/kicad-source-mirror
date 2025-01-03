@@ -21,12 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <core/thread_pool.h>
-#include <pcb_track.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
+#include <pcb_track.h>
+#include <pgm_base.h>
 
 
 /*
@@ -161,7 +161,7 @@ bool DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH::Run()
     const int progressDelta = 250;
     int       ii = 0;
 
-    thread_pool&                   tp = GetKiCadThreadPool();
+    BS::thread_pool&               tp = Pgm().GetThreadPool();
     std::vector<std::future<bool>> returns;
 
     returns.reserve( m_drcEngine->GetBoard()->Tracks().size() );

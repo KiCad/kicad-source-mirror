@@ -22,18 +22,19 @@
  */
 
 #include <atomic>
+
+#include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <zone.h>
-#include <footprint.h>
-#include <pcb_shape.h>
-#include <geometry/shape_poly_set.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_item.h>
+#include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
-#include <advanced_config.h>
+#include <footprint.h>
+#include <geometry/shape_poly_set.h>
+#include <pcb_shape.h>
+#include <pgm_base.h>
 #include <progress_reporter.h>
-#include <core/thread_pool.h>
+#include <zone.h>
 
 /*
     Checks for slivers in copper layers
@@ -160,7 +161,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                 return 1;
             };
 
-    thread_pool& tp = GetKiCadThreadPool();
+    BS::thread_pool&                 tp = Pgm().GetThreadPool();
     std::vector<std::future<size_t>> returns;
 
     returns.reserve( copperLayers.size() );

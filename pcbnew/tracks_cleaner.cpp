@@ -31,8 +31,8 @@
 #include <cleanup_item.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_data.h>
-#include <core/thread_pool.h>
 #include <lset.h>
+#include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/global_edit_tool.h>
@@ -572,7 +572,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
         // The idea here is to parallelize the loop that does not modify the connectivity
         // and extract all of the pairs of segments that might be merged.  Then, perform
         // the actual merge in the main loop.
-        thread_pool& tp = GetKiCadThreadPool();
+        BS::thread_pool& tp = Pgm().GetThreadPool();
         auto merge_returns = tp.parallelize_loop( 0, m_brd->Tracks().size(), track_loop );
 
         for( size_t ii = 0; ii < merge_returns.size(); ++ii )

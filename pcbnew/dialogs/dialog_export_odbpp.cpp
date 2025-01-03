@@ -37,7 +37,6 @@
 
 #include <set>
 #include <vector>
-#include <core/thread_pool.h>
 #include <io/io_mgr.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <pcb_io/pcb_io_mgr.h>
@@ -467,7 +466,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
         }
     };
 
-    thread_pool& tp = GetKiCadThreadPool();
+    BS::thread_pool& tp = Pgm().GetThreadPool();
     auto         ret = tp.submit( saveFile );
 
     std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );

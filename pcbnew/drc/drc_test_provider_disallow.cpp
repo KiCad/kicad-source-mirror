@@ -31,7 +31,7 @@
 #include <drc/drc_test_provider.h>
 #include <pad.h>
 #include <progress_reporter.h>
-#include <core/thread_pool.h>
+#include <pgm_base.h>
 #include <zone.h>
 #include <mutex>
 
@@ -173,7 +173,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 return 1;
             };
 
-    thread_pool& tp = GetKiCadThreadPool();
+    BS::thread_pool&                 tp = Pgm().GetThreadPool();
     std::vector<std::future<size_t>> returns;
 
     returns.reserve( toCache.size() );

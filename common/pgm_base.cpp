@@ -63,7 +63,6 @@
 #include <settings/settings_manager.h>
 #include <string_utils.h>
 #include <systemdirsappend.h>
-#include <core/thread_pool.h>
 #include <trace_helpers.h>
 
 #include <widgets/wx_splash.h>
@@ -472,6 +471,10 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 #ifdef KICAD_USE_SENTRY
     sentryInit();
 #endif
+
+    // Initialize the singleton instance
+    m_singleton.Init();
+
     wxString pgm_name;
 
     /// Should never happen but boost unit_test isn't playing nicely in some cases

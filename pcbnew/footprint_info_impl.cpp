@@ -29,9 +29,9 @@
 #include <kiway.h>
 #include <locale_io.h>
 #include <lib_id.h>
+#include <pgm_base.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
-#include <core/thread_pool.h>
 #include <wildcards_and_files_ext.h>
 
 #include <kiplatform/io.h>
@@ -178,7 +178,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
 
 void FOOTPRINT_LIST_IMPL::loadLibs()
 {
-    thread_pool& tp = GetKiCadThreadPool();
+    BS::thread_pool& tp = Pgm().GetThreadPool();
     size_t num_returns = m_queue_in.size();
     std::vector<std::future<size_t>> returns( num_returns );
 
@@ -235,7 +235,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
     // TODO: blast LOCALE_IO into the sun
 
     SYNC_QUEUE<std::unique_ptr<FOOTPRINT_INFO>> queue_parsed;
-    thread_pool&                                tp = GetKiCadThreadPool();
+    BS::thread_pool&                            tp = Pgm().GetThreadPool();
     size_t                                      num_elements = m_queue_out.size();
     std::vector<std::future<size_t>>            returns( num_elements );
 

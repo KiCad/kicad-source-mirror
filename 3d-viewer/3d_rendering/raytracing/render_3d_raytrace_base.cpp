@@ -32,7 +32,7 @@
 #include "../color_rgba.h"
 #include "3d_fastmath.h"
 #include "3d_math.h"
-#include <core/thread_pool.h>
+#include <pgm_base.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <wx/log.h>
 
@@ -190,7 +190,7 @@ void RENDER_3D_RAYTRACE_BASE::renderTracing( uint8_t* ptrPBO, REPORTER* aStatusR
     std::atomic<size_t> numBlocksRendered( 0 );
     std::atomic<size_t> currentBlock( 0 );
 
-    thread_pool& tp = GetKiCadThreadPool();
+    BS::thread_pool& tp = Pgm().GetThreadPool();
     const int timeLimit = m_blockPositions.size() > 40000 ? 750 : 400;
 
     auto processBlocks = [&]()
