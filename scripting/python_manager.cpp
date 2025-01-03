@@ -22,8 +22,10 @@
 #include <gestfich.h>
 #include <wx/process.h>
 
+#include <future>
 #include <utility>
 
+#include <api/api_utils.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <python_manager.h>
@@ -40,6 +42,9 @@ public:
 
     void OnTerminate( int aPid, int aStatus ) override
     {
+        // Print stdout trace info from the monitor thread
+        wxLog::GetActiveTarget()->Flush();
+
         if( m_callback )
         {
             wxString output, error;
@@ -86,17 +91,51 @@ PYTHON_MANAGER::PYTHON_MANAGER( const wxString& aInterpreterPath )
 
 void PYTHON_MANAGER::Execute( const wxString& aArgs,
                               const std::function<void( int, const wxString&,
-                                                        const wxString& )>& aCallback,
-                              const wxExecuteEnv* aEnv )
+                                  const wxString& )>& aCallback,
+                              const wxExecuteEnv* aEnv, bool aSaveOutput )
 {
     PYTHON_PROCESS* process = new PYTHON_PROCESS( aCallback );
     process->Redirect();
+
+    auto monitor = 
+        []( PYTHON_PROCESS* aProcess )
+        {
+            wxInputStream* processOut = aProcess->GetInputStream();
+
+            while( aProcess->IsInputOpened() )
+            {
+                if( processOut->CanRead() )
+                {
+                    char buffer[4096];
+                    buffer[processOut->Read( buffer, sizeof( buffer ) - 1 ).LastRead()] = '\0';
+                    wxString stdOut( buffer, processOut->LastRead() );
+                    stdOut = stdOut.BeforeLast( '\n' );
+                    wxLogTrace( traceApi, wxString::Format( "Python: %s", stdOut ) );
+                }
+            }
+        };
 
     wxString cmd = wxString::Format( wxS( "%s %s" ), m_interpreterPath, aArgs );
     long     pid = wxExecute( cmd, wxEXEC_ASYNC, process, aEnv );
 
     if( pid == 0 )
+    {
+        delete process;
         aCallback( -1, wxEmptyString, _( "Process could not be created" ) );
+    }
+    else
+    {
+        // On Windows, if there is a lot of stdout written by the process, this can
+        // hang up the wxProcess such that it will never call OnTerminate.  To work
+        // around this, we use this monitor thread to just dump the stdout to the
+        // trace log, which prevents the hangup.  This flag is provided to keep the
+        // old behavior for commands where we need to read the output directly,
+        // which is currently only used for detecting the interpreter version.
+        // If we need to use the async monitor thread approach and preserve the stdout
+        // contents in the future, a more complicated hack might be necessary.
+        if( !aSaveOutput )
+            auto future = std::async( std::launch::async, monitor, process );
+    }
 }
 
 

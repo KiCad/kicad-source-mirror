@@ -36,7 +36,8 @@ public:
 
     void Execute( const wxString& aArgs,
                   const std::function<void(int, const wxString&, const wxString&)>& aCallback,
-                  const wxExecuteEnv* aEnv = nullptr );
+                  const wxExecuteEnv* aEnv = nullptr,
+                  bool aSaveOutput = false );
 
     wxString GetInterpreterPath() const { return m_interpreterPath; }
     void SetInterpreterPath( const wxString& aPath ) { m_interpreterPath = aPath; }

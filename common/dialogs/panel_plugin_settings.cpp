@@ -153,5 +153,7 @@ void PANEL_PLUGIN_SETTINGS::validatePythonInterpreter()
 
                          m_stPythonStatus->SetLabel( msg );
                          Layout();
-                     } );
+                    },
+                    /* aEnv = */ nullptr,
+                    /* aSaveOutput = */ true );
 }

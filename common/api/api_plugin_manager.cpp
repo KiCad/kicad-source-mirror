@@ -408,7 +408,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                 [this]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi,
-                                wxString::Format( "Manager: venv (%d): %s", aRetVal, aOutput ) );
+                                wxString::Format( "Manager: created venv (python returned %d)", aRetVal ) );
 
                     if( !aError.IsEmpty() )
                         wxLogTrace( traceApi, wxString::Format( "Manager: venv err: %s", aError ) );
@@ -455,8 +455,8 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             manager.Execute( cmd,
                 [this]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
-                    wxLogTrace( traceApi, wxString::Format( "Manager: upgrade pip (%d): %s",
-                                                            aRetVal, aOutput ) );
+                    wxLogTrace( traceApi, wxString::Format( "Manager: upgrade pip returned %d",
+                                                            aRetVal ) );
 
                     if( !aError.IsEmpty() )
                     {
@@ -501,14 +501,14 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             PYTHON_MANAGER manager( *python );
             wxExecuteEnv env;
 
-            if( pythonHome )
-                env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
-
 #ifdef _WIN32
             wxString systemRoot;
             wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
             env.env[wxS( "SYSTEMROOT" )] = systemRoot;
 #endif
+
+            if( pythonHome )
+                env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
             wxString cmd = wxString::Format(
                     wxS( "-m pip install --no-input --isolated --prefer-binary --require-virtualenv "
@@ -520,9 +520,6 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             manager.Execute( cmd,
                 [this, job]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
-                    if( !aOutput.IsEmpty() )
-                        wxLogTrace( traceApi, wxString::Format( "Manager: pip: %s", aOutput ) );
-
                     if( !aError.IsEmpty() )
                         wxLogTrace( traceApi, wxString::Format( "Manager: pip stderr: %s", aError ) );
 
