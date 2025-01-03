@@ -738,11 +738,6 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
 void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreate,
                                         bool aResaveProjectPreferences )
 {
-    if( !ADVANCED_CFG::GetCfg().m_EnableJobset )
-    {
-        return;
-    }
-
     for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
         if( PANEL_JOBS* panel = dynamic_cast<PANEL_JOBS*>( m_notebook->GetPage( i ) ) )

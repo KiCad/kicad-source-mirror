@@ -90,12 +90,9 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
     wxMenuItem* item = fileMenu->Add( openRecentMenu->Clone() );
 
-    if( ADVANCED_CFG::GetCfg().m_EnableJobset )
-    {
-        fileMenu->AppendSeparator();
-        fileMenu->Add( KICAD_MANAGER_ACTIONS::newJobsetFile );
-        fileMenu->Add( KICAD_MANAGER_ACTIONS::openJobsetFile );
-    }
+    fileMenu->AppendSeparator();
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::newJobsetFile );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::openJobsetFile );
 
     // Add the file menu condition here since it needs the item ID for the submenu
     ACTION_CONDITIONS cond;

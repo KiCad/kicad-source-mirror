@@ -253,7 +253,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableDesignBlocks        = true;
     m_EnableGenerators          = false;
     m_EnableGit                 = false;
-    m_EnableJobset              = true;
     m_EnableLibWithText         = false;
     m_EnableLibDir              = false;
 
@@ -487,9 +486,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGit,
                                                 &m_EnableGit, m_EnableGit ) );
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableJobset,
-                                                &m_EnableJobset, m_EnableJobset ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibWithText,
                                                 &m_EnableLibWithText, m_EnableLibWithText ) );
