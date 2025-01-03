@@ -38,6 +38,7 @@
 #include <project_sch.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <sch_marker.h>
 #include <sch_reference_list.h>
@@ -1662,6 +1663,22 @@ int ERC_TESTER::TestOffGridEndpoints()
                     ercItem->SetItems( line );
 
                     markers.emplace_back( new SCH_MARKER( ercItem, line->GetEndPoint() ) );
+                }
+            }
+            if( item->Type() == SCH_BUS_WIRE_ENTRY_T )
+            {
+                SCH_BUS_WIRE_ENTRY* entry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
+
+                for( const VECTOR2I& point : entry->GetConnectionPoints() )
+                {
+                    if( ( point.x % gridSize ) != 0
+                        || ( point.y % gridSize ) != 0 )
+                    {
+                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
+                        ercItem->SetItems( entry );
+
+                        markers.emplace_back( new SCH_MARKER( ercItem, point ) );
+                    }
                 }
             }
             else if( item->Type() == SCH_SYMBOL_T )
