@@ -181,8 +181,14 @@ std::optional<wxString> PYTHON_MANAGER::GetVirtualPython( const wxString& aNames
         return std::nullopt;
 
     wxFileName python( *envPath, wxEmptyString );
+    
+#ifdef _WIN32
+    python.AppendDir( "Scripts" );
+    python.SetFullName( "python.exe" );
+#else
     python.AppendDir( "bin" );
     python.SetFullName( "python" );
+#endif
 
     if( !python.IsFileExecutable() )
         return std::nullopt;

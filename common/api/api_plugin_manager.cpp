@@ -403,7 +403,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
         PYTHON_MANAGER manager( Pgm().GetCommonSettings()->m_Api.python_interpreter );
 
         manager.Execute(
-                wxString::Format( wxS( "-m venv --system-site-packages '%s'" ),
+                wxString::Format( wxS( "-m venv --system-site-packages \"%s\"" ),
                                   job.env_path ),
                 [this]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
@@ -442,6 +442,12 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
             if( pythonHome )
                 env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
+
+#ifdef _WIN32
+            wxString systemRoot;
+            wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
+            env.env[wxS( "SYSTEMROOT" )] = systemRoot;
+#endif
 
             wxString cmd = wxS( "-m pip install --upgrade pip" );
             wxLogTrace( traceApi, "Manager: calling python %s", cmd );
@@ -498,9 +504,15 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             if( pythonHome )
                 env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
+#ifdef _WIN32
+            wxString systemRoot;
+            wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
+            env.env[wxS( "SYSTEMROOT" )] = systemRoot;
+#endif
+
             wxString cmd = wxString::Format(
                     wxS( "-m pip install --no-input --isolated --prefer-binary --require-virtualenv "
-                         "--exists-action i -r '%s'" ),
+                         "--exists-action i -r \"%s\"" ),
                     reqs.GetFullPath() );
 
             wxLogTrace( traceApi, "Manager: calling python %s", cmd );
