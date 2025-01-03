@@ -310,6 +310,9 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
 
     wxArrayString choices;
 
+    // There aren't (yet) any legacy DesignBlock libraries to migrate
+    m_migrate_libs_button->Hide();
+
     for( auto& [fileType, desc] : m_supportedDesignBlockFiles )
         choices.Add( DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
 
