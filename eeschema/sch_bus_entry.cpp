@@ -56,7 +56,7 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const VECTOR2I& pos, bool
     if( aFlipY )
         m_size.y *= -1;
 
-    m_isDanglingStart = m_isDanglingEnd = true;
+    m_isStartDangling = m_isEndDangling = true;
 
     m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
     m_lastResolvedLineStyle = LINE_STYLE::SOLID;
@@ -316,10 +316,10 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
                                               std::vector<DANGLING_END_ITEM>& aItemListByPos,
                                               const SCH_SHEET_PATH*           aPath )
 {
-    bool previousStateStart = m_isDanglingStart;
-    bool previousStateEnd = m_isDanglingEnd;
+    bool previousStateStart = m_isStartDangling;
+    bool previousStateEnd = m_isEndDangling;
 
-    m_isDanglingStart = m_isDanglingEnd = true;
+    m_isStartDangling = m_isEndDangling = true;
 
     // Store the connection type and state for the start (0) and end (1)
     bool has_wire[2] = { false };
@@ -362,13 +362,13 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
     // A bus-wire entry is connected at both ends if it has a bus and a wire on its
     // ends.  Otherwise, we connect only one end (in the case of a wire-wire or bus-bus)
     if( ( has_wire[0] && has_bus[1] ) || ( has_wire[1] && has_bus[0] ) )
-        m_isDanglingEnd = m_isDanglingStart = false;
+        m_isEndDangling = m_isStartDangling = false;
     else if( has_wire[0] || has_bus[0] )
-        m_isDanglingStart = false;
+        m_isStartDangling = false;
     else if( has_wire[1] || has_bus[1] )
-        m_isDanglingEnd = false;
+        m_isEndDangling = false;
 
-    return (previousStateStart != m_isDanglingStart) || (previousStateEnd != m_isDanglingEnd);
+    return (previousStateStart != m_isStartDangling) || (previousStateEnd != m_isEndDangling);
 }
 
 
@@ -376,10 +376,10 @@ bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aIt
                                              std::vector<DANGLING_END_ITEM>& aItemListByPos,
                                              const SCH_SHEET_PATH*           aPath )
 {
-    bool previousStateStart = m_isDanglingStart;
-    bool previousStateEnd = m_isDanglingEnd;
+    bool previousStateStart = m_isStartDangling;
+    bool previousStateEnd = m_isEndDangling;
 
-    m_isDanglingStart = m_isDanglingEnd = true;
+    m_isStartDangling = m_isEndDangling = true;
 
     // TODO: filter using get_lower as we only use one item type
     for( unsigned ii = 0; ii < aItemListByType.size(); ii++ )
@@ -397,9 +397,9 @@ bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aIt
             DANGLING_END_ITEM& nextItem = aItemListByType[++ii];
 
             if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_pos ) )
-                m_isDanglingStart = false;
+                m_isStartDangling = false;
             if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), GetEnd() ) )
-                m_isDanglingEnd = false;
+                m_isEndDangling = false;
         }
             break;
 
@@ -408,13 +408,13 @@ bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aIt
         }
     }
 
-    return (previousStateStart != m_isDanglingStart) || (previousStateEnd != m_isDanglingEnd);
+    return (previousStateStart != m_isStartDangling) || (previousStateEnd != m_isEndDangling);
 }
 
 
 bool SCH_BUS_ENTRY_BASE::IsDangling() const
 {
-    return m_isDanglingStart || m_isDanglingEnd;
+    return m_isStartDangling || m_isEndDangling;
 }
 
 

@@ -2882,13 +2882,13 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
         m_gal->SetStrokeColor( color.Brightened( 0.3 ) );
         m_gal->SetLineWidth( m_schSettings.GetDanglingIndicatorThickness() );
 
-        if( aEntry->IsDanglingStart() )
+        if( aEntry->IsStartDangling() )
         {
             m_gal->DrawCircle( aEntry->GetPosition(),
                                aEntry->GetPenWidth() + KiROUND( TARGET_BUSENTRY_RADIUS / 2.0 ) );
         }
 
-        if( aEntry->IsDanglingEnd() )
+        if( aEntry->IsEndDangling() )
         {
             m_gal->DrawCircle( aEntry->GetEnd(),
                                aEntry->GetPenWidth() + KiROUND( TARGET_BUSENTRY_RADIUS / 2.0 ) );
