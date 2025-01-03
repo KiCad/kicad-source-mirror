@@ -250,22 +250,27 @@ class ScrollWheelWizard(FootprintWizardBase.FootprintWizard):
             shape.Append(self.arc_points(ordered_pairs[i][0], ordered_pairs[i][1], centre, ordered_pairs[i][3]))
             
 
-            
+        offset = int((outer_radius - inner_radius) / 2 + inner_radius)
         pad = pcbnew.PAD(self.module)
         pad.SetShape(pcbnew.PAD_SHAPE_CUSTOM)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
-        pad.SetSize(pcbnew.VECTOR2I(1, 1))
+        pad.SetSize(pcbnew.VECTOR2I(deadzone // 2, deadzone // 2))
+        pad.SetPosition(pcbnew.VECTOR2I(0, -offset))
         fcuSet = pcbnew.LSET()
         fcuSet.AddLayer(pcbnew.F_Cu)
         pad.SetLayerSet(fcuSet)
         poly = pcbnew.SHAPE_POLY_SET(shape)
         poly.Deflate(int(clearance / 2), pcbnew.CORNER_STRATEGY_ROUND_ALL_CORNERS, int(clearance / 10))
+        poly.Move((pcbnew.VECTOR2I(0, offset)))
         pad.AddPrimitive(poly, 0)
         
         for i in range(steps):
+            angle_step = (i * 2 * math.pi / steps)
+            pos = cmath.rect(offset, angle_step + (math.pi / 2))
             step_pad = pad.ClonePad()
             step_pad.SetName(str(i + 1))
-            step_pad.SetOrientation( pcbnew.EDA_ANGLE( i * (360 / steps), pcbnew.DEGREES_T ))
+            step_pad.SetOrientation(pcbnew.EDA_ANGLE(angle_step, pcbnew.RADIANS_T ))
+            step_pad.SetPosition(pcbnew.VECTOR2I(int(pos.real), int(-pos.imag)))
             self.module.Add(step_pad)
         
     def draw_silkscreen_arcs(self, outer_diameter, inner_diameter, deadzone, corner_radius, steps, bands):
