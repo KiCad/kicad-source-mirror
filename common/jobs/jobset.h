@@ -57,7 +57,7 @@ struct KICOMMON_API JOBSET_OUTPUT
 {
     JOBSET_OUTPUT();
 
-    JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type );
+    JOBSET_OUTPUT( const wxString& id, JOBSET_OUTPUT_TYPE type );
 
     ~JOBSET_OUTPUT();
 

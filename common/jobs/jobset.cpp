@@ -84,12 +84,17 @@ KICOMMON_API void to_json( nlohmann::json& j, const JOBSET_OUTPUT& f )
 
 KICOMMON_API void from_json( const nlohmann::json& j, JOBSET_OUTPUT& f )
 {
-    j.at( "id" ).get_to( f.m_id );
+    // During 9.0 development outputs didn't get ids.
+    if( j.contains( "id" ) )
+        j.at( "id" ).get_to( f.m_id );
+    else
+        f.m_id = KIID().AsString();
+
     j.at( "type" ).get_to( f.m_type );
     f.m_only = j.value( "only", std::vector<wxString>() );
     f.m_description = j.value( "description", "" );
 
-    nlohmann::json settings_obj = j.at( "settings" );
+    const nlohmann::json& settings_obj = j.at( "settings" );
 
     f.InitOutputHandler();
 
@@ -109,7 +114,7 @@ JOBSET_OUTPUT::JOBSET_OUTPUT() :
 }
 
 
-JOBSET_OUTPUT::JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type ) :
+JOBSET_OUTPUT::JOBSET_OUTPUT( const wxString& id, JOBSET_OUTPUT_TYPE type ) :
         m_id( id ),
         m_type( type ),
         m_outputHandler( nullptr ),
@@ -122,10 +127,9 @@ JOBSET_OUTPUT::JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type ) :
 
 JOBSET_OUTPUT::~JOBSET_OUTPUT()
 {
-    for( auto& reporter : m_lastRunReporters )
-    {
-        delete reporter.second;
-    }
+    for( auto& [name, reporter] : m_lastRunReporters )
+        delete reporter;
+
     m_lastRunReporters.clear();
 }
 
