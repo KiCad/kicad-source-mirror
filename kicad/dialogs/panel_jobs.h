@@ -52,6 +52,7 @@ protected:
 
 protected:
     PANEL_JOBS* m_parent;
+    int         m_doubleClickRow;
 };
 
 

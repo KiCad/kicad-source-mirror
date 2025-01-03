@@ -575,7 +575,22 @@ bool JOBS_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 
     if( col == 1 && row >= 0 && row < (int) m_parent->GetJobsFile()->GetJobs().size() )
     {
-        m_parent->OpenJobOptionsForListItem( row );
+        m_doubleClickRow = row;
+        m_grid->CancelPendingChanges();
+
+        CallAfter(
+                [this]()
+                {
+                    // Yes, again.  CancelShowEditorOnMouseUp() doesn't appear to be 100%
+                    // reliable.
+                    m_grid->CancelPendingChanges();
+                    int row = m_doubleClickRow;
+                    m_doubleClickRow = -1;
+
+                    if( row >= 0 && row < (int) m_parent->GetJobsFile()->GetJobs().size() )
+                        m_parent->OpenJobOptionsForListItem( row );
+                } );
+
         return true;
     }
 
@@ -594,7 +609,6 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
 
     m_jobsGrid->SetDefaultRowSize( m_jobsGrid->GetDefaultRowSize() + 4 );
     m_jobsGrid->OverrideMinSize( 0.6, 0.3 );
-    m_jobsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // 'm' for margins
     m_jobsGrid->SetColSize( 0, GetTextExtent( wxT( "99m" ) ).x );

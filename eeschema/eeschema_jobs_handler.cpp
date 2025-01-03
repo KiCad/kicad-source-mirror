@@ -152,7 +152,7 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
                   JOB_SCH_ERC* ercJob = dynamic_cast<JOB_SCH_ERC*>( job );
                   DIALOG_ERC_JOB_CONFIG dlg( aParent, ercJob );
 
-                  return dlg.ShowModal() == wxID_SAVE;
+                  return dlg.ShowModal() == wxID_OK;
               } );
 }
 

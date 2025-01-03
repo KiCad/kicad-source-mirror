@@ -235,7 +235,7 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   DIALOG_DRC_JOB_CONFIG dlg( aParent, dynamic_cast<JOB_PCB_DRC*>( job ) );
 
-                  return dlg.ShowModal() == wxID_SAVE;
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "ipc2581",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportIpc2581, this, std::placeholders::_1 ),
