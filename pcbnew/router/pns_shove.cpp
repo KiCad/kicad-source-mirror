@@ -58,8 +58,8 @@ void SHOVE::replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew )
 
     if( aOld->OfKind( ITEM::VIA_T ) )
     {
-        auto vold = static_cast<VIA*>( aOld );
-        auto vnew = static_cast<VIA*>( aNew.get() );
+        VIA* vold = static_cast<VIA*>( aOld );
+        VIA* vnew = static_cast<VIA*>( aNew.get() );
         re = touchRootLine( vold );
         re->newVia = vnew;
         newId = static_cast<VIA*>( aNew.get() )->Uid();
@@ -98,9 +98,13 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aInclud
 
     if( aOld.EndsWithVia() )
     {
-        for( auto lnk : aOld.Links() )
+        for( LINKED_ITEM* lnk : aOld.Links() )
+        {
             if( lnk->OfKind( ITEM::VIA_T ) )
+            {
                 aOld.Unlink( lnk );
+            }
+        }
     }
 
 
@@ -327,7 +331,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                     const SHAPE_LINE_CHAIN& hull =
                             aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
                     int  dist;
-                    auto p = hull.NearestPoint( pref, true );
+                    const VECTOR2I p = hull.NearestPoint( pref, true );
 
                     if( hull.PointInside( pref ) )
                         dist = 0;
@@ -370,7 +374,6 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                 l.Line().SetPoint( -1, p1 );
                 obs = l.CLine();
                 path = l.CLine();
-                //PNS_DBG( Dbg(), AddPoint, p1, LIGHTRED, 200000, wxString::Format( "round-p1 dist %d besthull %d", dist, bestHull ) );
             }
 
             if( minDist0 < c_ENDPOINT_ON_HULL_THRESHOLD )
@@ -378,12 +381,6 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                 l.Line().SetPoint( 0, p0 );
                 obs = l.CLine();
                 path = l.CLine();
-                /*int dist = std::numeric_limits<int>::max();
-                    for (auto& h : hulls ) 
-                    {
-                        dist = std::min(dist, h.Distance( p0, true ));
-                    }
-                    PNS_DBG( Dbg(), AddPoint, p0, LIGHTRED, 200000, wxString::Format( "round-p0 dist %d", dist ) );*/
             }
         }
 
@@ -884,11 +881,11 @@ void SHOVE::pruneRootLines( NODE *aRemovedNode )
     NODE::ITEM_VECTOR added, removed;
     aRemovedNode->GetUpdatedItems( removed, added );
 
-    for( const auto item : added )
+    for( const ITEM* item : added )
     {
             if( item->OfKind( ITEM::LINKED_ITEM_MASK_T ) )
             {
-                auto litem = static_cast<const LINKED_ITEM*>( item );
+                const LINKED_ITEM* litem = static_cast<const LINKED_ITEM*>( item );
 
                 m_rootLineHistory.erase( litem->Uid() );
             }
@@ -972,7 +969,7 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea )
     st.m_draggedVias.resize( m_headLines.size() );
     int n = 0;
 
-    for( auto& head : m_headLines )
+    for( HEAD_LINE_ENTRY& head : m_headLines )
     {
         if ( head.theVia )
         {
@@ -1252,8 +1249,8 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
     if( aCurrent.EndsWithVia() )
     {
-        auto p0 = aCurrent.Via().Pos();
-        auto p1 = aObstacleVia->Pos();
+        const VECTOR2I p0 = aCurrent.Via().Pos();
+        const VECTOR2I p1 = aObstacleVia->Pos();
 
         int layer = aCurrent.Layer();
         int dist = (p0 - p1).EuclideanNorm() - aCurrent.Via().Diameter( layer ) / 2
@@ -1263,7 +1260,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
         SHAPE_LINE_CHAIN hull = aObstacleVia->Hull( clearance, aCurrent.Width(), layer );
 
-        auto epInsideHull = hull.PointInside( p0 );
+        bool epInsideHull = hull.PointInside( p0 );
 
         PNS_DBG( Dbg(), AddShape, &hull, LIGHTYELLOW,   100000, wxT( "obstacle-via-hull" ) );
         PNS_DBG( Dbg(), Message, wxString::Format("via2via coll check dist %d cl %d delta %d pi %d\n", dist, clearance, dist - clearance, epInsideHull ? 1 : 0) );
@@ -1376,27 +1373,32 @@ void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
         if( i->ContainsLink( aSeg ) )
         {
             PNS_DBG(Dbg(), Message, wxString::Format("Unwind lc %d (depth %d/%d)", i->SegmentCount(), d, (int)m_lineStack.size() ) );
-//comment!
-            if( i->EndsWithVia() && !aSeg->OfKind( ITEM::VIA_T) )
+
+// note to my future self: if we have a "tadpole" in the stack, keep track of the via even if the parent line has been deleted.
+// otherwise - the via will be ignored in the case of collisions with tracks on another layer. Can happen pretty often in densely packed PCBs.
+            if( i->EndsWithVia() && !aSeg->OfKind( ITEM::VIA_T ) )
             {
                 i = m_lineStack.erase( i );
             }
             else
             {
-                VIA *via = nullptr;
+                VIA* via = nullptr;
 
-                for( auto l : i->Links() )
-                if( l->OfKind( ITEM::VIA_T ) )
-                    via = static_cast<VIA*>( l );
-                
+                for( LINKED_ITEM* l : i->Links() )
+                {
+                    if( l->OfKind( ITEM::VIA_T ) )
+                    {
+                        via = static_cast<VIA*>( l );
+                    }
+                }
+
                 if( via )
                 {
-                    i->ClearLinks( );
+                    i->ClearLinks();
                     i->LinkVia( via );
                 }
                 i++;
             }
-
         }
         else
         {
@@ -1585,7 +1587,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     NODE::OPT_OBSTACLE nearest;
     SHOVE_STATUS st = SH_NULL;
 
-    auto iface = Router()->GetInterface();
+    ROUTER_IFACE* iface = Router()->GetInterface();
 
     if( Dbg() )
         Dbg()->SetIteration( aIter );
@@ -1606,8 +1608,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
             if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T | ITEM::VIA_T | ITEM::SOLID_T | ITEM::HOLE_T ) )
             {
-                auto litem = static_cast<const LINKED_ITEM*>( item );
-                auto ent = this->findRootLine( litem );
+                const LINKED_ITEM* litem = static_cast<const LINKED_ITEM*>( item );
+                ROOT_LINE_ENTRY* ent = this->findRootLine( litem );
 
                 if( !ent && m_defaultPolicy & SHP_IGNORE )
                     rv = false;
@@ -2026,17 +2028,6 @@ void SHOVE::runOptimizer( NODE* aNode )
     std::set<const ITEM*> itemsChk;
 
     auto iface = Router()->GetInterface();
-
-    for( auto& l : m_optimizerQueue )
-    {
-        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "optimize inspect sc %d lc %d net %s"), (int) l.SegmentCount(), (int) l.PointCount(), iface->GetNetName( l.Net() ) ) );
-
-/*        for( auto lnk : l.Links() )
-        {
-            assert( itemsChk.find(lnk) == itemsChk.end() );
-            itemsChk.insert( lnk );
-        }*/
-    }
 
     for( int pass = 0; pass < n_passes; pass++ )
     {
