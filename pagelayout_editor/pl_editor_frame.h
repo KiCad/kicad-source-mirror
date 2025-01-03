@@ -38,8 +38,12 @@ class PL_DRAW_PANEL_GAL;
 class PROPERTIES_FRAME;
 class DS_DATA_ITEM;
 class wxChoice;
-class NL_PL_EDITOR_PLUGIN;
 
+#ifndef __linux__
+class NL_PL_EDITOR_PLUGIN;
+#else
+class SPNAV_2D_PLUGIN;
+#endif
 
 /**
  * The main window used in the drawing sheet editor.
@@ -270,7 +274,11 @@ private:
                                               // only on page 1, not on page 1
     VECTOR2I          m_grid_origin;
 
+#ifndef __linux__
     std::unique_ptr<NL_PL_EDITOR_PLUGIN> m_spaceMouse;
+#else
+    std::unique_ptr<SPNAV_2D_PLUGIN> m_spaceMouse;
+#endif
 
     wxString m_originChoiceList[5] =
         {

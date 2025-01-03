@@ -62,7 +62,11 @@ class FILENAME_RESOLVER;
 class BOARD;
 class BOARD_ADAPTER;
 class FOOTPRINT;
+#ifndef __linux__
 class NL_FOOTPRINT_PROPERTIES_PLUGIN;
+#else
+class SPNAV_VIEWER_PLUGIN;
+#endif
 
 #define PANEL_PREVIEW_3D_MODEL_ID  wxID_HIGHEST + 1244
 
@@ -226,7 +230,11 @@ private:
     /// The 3d viewer Render initial settings (must be saved and restored)
     EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS          m_initialRender;
 
+#ifndef __linux__
     std::unique_ptr<NL_FOOTPRINT_PROPERTIES_PLUGIN>  m_spaceMouse;
+#else
+    std::unique_ptr<SPNAV_VIEWER_PLUGIN> m_spaceMouse;
+#endif
 };
 
 #endif  // PANEL_PREVIEW_3D_MODEL_H

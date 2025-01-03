@@ -50,6 +50,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_Backup(),
         m_Env(),
         m_Input(),
+        m_SpaceMouse(),
         m_Graphics(),
         m_Session(),
         m_System(),
@@ -289,6 +290,24 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM_ENUM<MOUSE_DRAG_ACTION>( "input.mouse_right",
             &m_Input.drag_right, MOUSE_DRAG_ACTION::PAN, MOUSE_DRAG_ACTION::SELECT,
             MOUSE_DRAG_ACTION::NONE ) );
+
+    m_params.emplace_back( new PARAM<int>( "spacemouse.rotate_speed",
+            &m_SpaceMouse.rotate_speed, 5, 1, 10 ) );
+
+    m_params.emplace_back( new PARAM<int>( "spacemouse.pan_speed",
+            &m_SpaceMouse.pan_speed, 5, 1, 10 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "spacemouse.reverse_rotate",
+            &m_SpaceMouse.reverse_rotate, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "spacemouse.reverse_pan_x",
+            &m_SpaceMouse.reverse_pan_x, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "spacemouse.reverse_pan_y",
+            &m_SpaceMouse.reverse_pan_y, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "spacemouse.reverse_zoom",
+            &m_SpaceMouse.reverse_zoom, false ) );
 
     m_params.emplace_back( new PARAM<int>( "graphics.canvas_type",
             &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );

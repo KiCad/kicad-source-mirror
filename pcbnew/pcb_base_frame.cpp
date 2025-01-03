@@ -67,7 +67,11 @@
 #include <tool/grid_menu.h>
 #include <ratsnest/ratsnest_view_item.h>
 
+#ifdef __linux__
+#include <spacenav/spnav_2d_plugin.h>
+#else
 #include <navlib/nl_pcbnew_plugin.h>
+#endif
 
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::PCB_RENDER_SETTINGS;
@@ -1033,7 +1037,12 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     {
         if( !m_spaceMouse )
         {
+#ifndef __linux__
             m_spaceMouse = std::make_unique<NL_PCBNEW_PLUGIN>( GetCanvas() );
+#else
+            m_spaceMouse = std::make_unique<SPNAV_2D_PLUGIN>( GetCanvas() );
+            m_spaceMouse->SetScale( 0.01 );
+#endif
         }
     }
     catch( const std::system_error& e )

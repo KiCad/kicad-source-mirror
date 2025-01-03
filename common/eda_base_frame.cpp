@@ -34,6 +34,7 @@
 #include <dialogs/git/panel_git_repos.h>
 #include <dialogs/panel_common_settings.h>
 #include <dialogs/panel_mouse_settings.h>
+#include <dialogs/panel_spacemouse.h>
 #include <dialogs/panel_data_collection.h>
 #include <dialogs/panel_plugin_settings.h>
 #include <eda_dde.h>
@@ -1228,6 +1229,12 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                 {
                     return new PANEL_MOUSE_SETTINGS( aParent );
                 }, _( "Mouse and Touchpad" ) );
+
+        book->AddLazyPage(
+                [] ( wxWindow* aParent ) -> wxWindow*
+                {
+                    return new PANEL_SPACEMOUSE( aParent );
+                }, _( "SpaceMouse" ) );
 
         book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 

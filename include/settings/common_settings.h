@@ -106,6 +106,16 @@ public:
         bool reverse_scroll_pan_h;
     };
 
+    struct SPACEMOUSE
+    {
+        int  rotate_speed;
+        int  pan_speed;
+        bool reverse_rotate;
+        bool reverse_pan_x;
+        bool reverse_pan_y;
+        bool reverse_zoom;
+    };
+
     struct GRAPHICS
     {
         int canvas_type; ///< EDA_DRAW_PANEL_GAL::GAL_TYPE_* value, see gal_options_panel.cpp
@@ -219,6 +229,8 @@ public:
     ENVIRONMENT m_Env;
 
     INPUT m_Input;
+
+    SPACEMOUSE m_SpaceMouse;
 
     GRAPHICS m_Graphics;
 

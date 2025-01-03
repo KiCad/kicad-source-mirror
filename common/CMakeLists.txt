@@ -223,6 +223,12 @@ set( KICOMMON_SRCS
     api/api_utils.cpp
     )
 
+if( UNIX AND NOT APPLE )
+    list( APPEND KICOMMON_SRCS
+        spacenav/libspnav_driver.cpp
+    )
+endif()
+
 if( KICAD_IPC_API )
     set( KICOMMON_SRCS
         ${KICOMMON_SRCS}
@@ -270,6 +276,7 @@ target_link_libraries( kicommon
     ${ZSTD_LIBRARY}
     ${wxWidgets_LIBRARIES}
     ${LIBGIT2_LIBRARIES}
+    ${SPNAV_LIBRARIES}
 
     # needed by kiid to allow linking for Boost for the UUID against bcrypt (msys2 only)
     ${EXTRA_LIBS}
@@ -433,6 +440,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_grid_settings_base.cpp
     dialogs/panel_mouse_settings.cpp
     dialogs/panel_mouse_settings_base.cpp
+    dialogs/panel_spacemouse.cpp
+    dialogs/panel_spacemouse_base.cpp
     dialogs/panel_packages_and_updates.cpp
     dialogs/panel_packages_and_updates_base.cpp
     dialogs/panel_plugin_settings.cpp
@@ -745,7 +754,14 @@ set( COMMON_SRCS
     api/api_enums.cpp
     )
 
-if( KICAD_IPC_API )
+# This needs to be in the common library until draw_panel_gal is moved to kicommon
+if( UNIX AND NOT APPLE )
+    list( APPEND COMMON_SRCS
+        spacenav/spnav_2d_plugin.cpp
+    )
+endif()
+
+    if( KICAD_IPC_API )
     set( COMMON_SRCS
         ${COMMON_SRCS}
         api/api_handler_common.cpp
@@ -966,9 +982,12 @@ target_link_libraries( pcbcommon PUBLIC
     nanoflann
 )
 
-message( STATUS "Including 3Dconnexion SpaceMouse navigation support in pcbcommon" )
-add_subdirectory( ../pcbnew/navlib ./navlib)
-target_link_libraries( pcbcommon PUBLIC pcbnew_navlib)
+if( APPLE OR NOT UNIX )
+    # On Windows/MacOS, the SpaceMouse support is provided by the navlib subdirectory
+    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in pcbcommon" )
+    add_subdirectory( ../pcbnew/navlib ./navlib)
+    target_link_libraries( pcbcommon PUBLIC pcbnew_navlib)
+endif()
 
 add_dependencies( pcbcommon delaunator )
 

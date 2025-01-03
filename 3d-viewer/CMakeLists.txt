@@ -124,6 +124,13 @@ target_link_libraries( 3d-viewer
 
 add_subdirectory( 3d_cache )
 
-message( STATUS "Including 3Dconnexion SpaceMouse navigation support in 3d-viewer" )
-add_subdirectory( 3d_navlib )
-target_link_libraries( 3d-viewer PRIVATE 3d-viewer_navlib)
+
+if( UNIX AND NOT APPLE )
+    message( STATUS "Including libspnav support in 3d-viewer" )
+    add_subdirectory( 3d_spacenav )
+    target_link_libraries( 3d-viewer PRIVATE 3d-viewer_spacenav )
+else()
+    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in 3d-viewer" )
+    add_subdirectory( 3d_navlib )
+    target_link_libraries( 3d-viewer PRIVATE 3d-viewer_navlib)
+endif()

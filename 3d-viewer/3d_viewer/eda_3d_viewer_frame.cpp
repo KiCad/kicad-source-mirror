@@ -61,7 +61,12 @@
 #include <project_pcb.h>
 #include <toolbars_3d.h>
 
+#ifdef __linux__
+#include <spacenav/libspnav_driver.h>
+#include <3d_spacenav/spnav_viewer_plugin.h>
+#else
 #include <3d_navlib/nl_3d_viewer_plugin.h>
+#endif
 
 /**
  * Flag to enable 3D viewer main frame window debug tracing.
@@ -192,7 +197,11 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
     try
     {
+#ifdef __linux__
+        m_spaceMouse = std::make_unique<SPNAV_VIEWER_PLUGIN>( m_canvas );
+#else
         m_spaceMouse = std::make_unique<NL_3D_VIEWER_PLUGIN>( m_canvas );
+#endif
     }
     catch( const std::system_error& e )
     {

@@ -65,7 +65,11 @@
 #include <wx/msgdlg.h>
 #include <wx/log.h>
 
+#ifndef __linux__
 #include <navlib/nl_pl_editor_plugin.h>
+#else
+#include <spacenav/spnav_2d_plugin.h>
+#endif
 
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
@@ -235,7 +239,15 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     try
     {
         if( !m_spaceMouse )
+        {
+#ifndef __linux__
             m_spaceMouse = std::make_unique<NL_PL_EDITOR_PLUGIN>();
+#else
+            m_spaceMouse = std::make_unique<SPNAV_2D_PLUGIN>( GetCanvas() );
+            m_spaceMouse->SetScale( drawSheetIUScale.IU_PER_MILS / pcbIUScale.IU_PER_MILS );
+#endif
+        }
+
         m_spaceMouse->SetCanvas( GetCanvas() );
     }
     catch( const std::system_error& e )

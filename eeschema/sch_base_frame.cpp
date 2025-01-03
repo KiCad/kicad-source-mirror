@@ -60,8 +60,12 @@
 #include <wx/log.h>
 #include <wx/msgdlg.h>
 
+#ifndef __linux__
 #include <navlib/nl_schematic_plugin.h>
 #include <wx/fdrepdlg.h>
+#else
+#include <spacenav/spnav_2d_plugin.h>
+#endif
 
 
 LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
@@ -364,7 +368,14 @@ void SCH_BASE_FRAME::ActivateGalCanvas()
     try
     {
         if( !m_spaceMouse )
+        {
+#ifndef __linux__
             m_spaceMouse = std::make_unique<NL_SCHEMATIC_PLUGIN>();
+#else
+            m_spaceMouse = std::make_unique<SPNAV_2D_PLUGIN>( GetCanvas() );
+            m_spaceMouse->SetScale( schIUScale.IU_PER_MILS / pcbIUScale.IU_PER_MILS );
+#endif
+        }
 
         m_spaceMouse->SetCanvas( GetCanvas() );
     }

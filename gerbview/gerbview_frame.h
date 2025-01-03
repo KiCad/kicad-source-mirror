@@ -45,7 +45,12 @@ class LSET;
 class REPORTER;
 class SELECTION;
 class wxStaticText;
+
+#ifndef __linux__
 class NL_GERBVIEW_PLUGIN;
+#else
+class SPNAV_2D_PLUGIN;
+#endif
 
 
 /**
@@ -517,7 +522,11 @@ private:
     wxStaticText*       m_dcodeText;        // a message on the auxiliary toolbar,
                                             // relative to the m_DCodeSelector
 
+#ifndef __linux__
     std::unique_ptr<NL_GERBVIEW_PLUGIN> m_spaceMouse;
+#else
+    std::unique_ptr<SPNAV_2D_PLUGIN> m_spaceMouse;
+#endif
 };
 
 #endif /* WX_GERBER_STRUCT_H */

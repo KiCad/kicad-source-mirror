@@ -44,7 +44,11 @@
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
 
 // Forward declarations
+#ifdef __linux__
+class SPNAV_VIEWER_PLUGIN;
+#else
 class NL_3D_VIEWER_PLUGIN;
+#endif
 class APPEARANCE_CONTROLS_3D;
 
 
@@ -276,7 +280,11 @@ private:
 
     bool                           m_disable_ray_tracing;
 
+#ifdef __linux__
+    std::unique_ptr<SPNAV_VIEWER_PLUGIN> m_spaceMouse;
+#else
     std::unique_ptr<NL_3D_VIEWER_PLUGIN> m_spaceMouse;
+#endif
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

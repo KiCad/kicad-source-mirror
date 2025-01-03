@@ -59,9 +59,14 @@ class PCB_VIEWERS_SETTINGS_BASE;
 class PCBNEW_SETTINGS;
 class FOOTPRINT_EDITOR_SETTINGS;
 struct MAGNETIC_SETTINGS;
-class NL_PCBNEW_PLUGIN;
 class PROGRESS_REPORTER;
 class PCB_LAYER_BOX_SELECTOR;
+
+#ifndef __linux__
+class NL_PCBNEW_PLUGIN;
+#else
+class SPNAV_2D_PLUGIN;
+#endif
 
 #ifdef wxHAS_INOTIFY
 #define wxFileSystemWatcher wxInotifyFileSystemWatcher
@@ -430,7 +435,11 @@ protected:
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
 
 private:
+#ifndef __linux__
     std::unique_ptr<NL_PCBNEW_PLUGIN>    m_spaceMouse;
+#else
+    std::unique_ptr<SPNAV_2D_PLUGIN>    m_spaceMouse;
+#endif
 
     std::unique_ptr<wxFileSystemWatcher> m_watcher;
     wxFileName                           m_watcherFileName;

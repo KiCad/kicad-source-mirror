@@ -780,6 +780,11 @@ find_package(ZSTD REQUIRED)
 #
 find_package( CURL REQUIRED )
 
+if( UNIX AND NOT APPLE )
+    find_package( SPNAV REQUIRED )
+    include_directories( SYSTEM ${SPNAV_INCLUDE_DIR} )
+endif()
+
 #
 # Find Cairo library, required
 #
