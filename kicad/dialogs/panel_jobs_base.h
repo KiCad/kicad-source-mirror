@@ -105,7 +105,7 @@ class PANEL_JOB_OUTPUT_BASE : public wxPanel
 
 	public:
 
-		PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_SIMPLE|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_SUNKEN|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_JOB_OUTPUT_BASE();
 

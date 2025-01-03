@@ -878,7 +878,7 @@
       <property name="two_step_creation">0</property>
       <property name="window_extra_style"></property>
       <property name="window_name"></property>
-      <property name="window_style">wxBORDER_SIMPLE|wxTAB_TRAVERSAL</property>
+      <property name="window_style">wxBORDER_SUNKEN|wxTAB_TRAVERSAL</property>
       <event name="OnRightDown">OnRightDown</event>
       <object class="wxBoxSizer" expanded="true">
         <property name="minimum_size"></property>
