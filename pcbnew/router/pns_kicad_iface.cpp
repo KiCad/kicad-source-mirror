@@ -1209,7 +1209,7 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
             if( aPad->GetDrillSize().x > 0 )
             {
                 solid->SetHole( new PNS::HOLE( aPad->GetEffectiveHoleShape()->Clone() ) );
-                solid->Hole()->SetLayer( GetPNSLayerFromBoardLayer( aLayer ) );
+                solid->Hole()->SetLayers( PNS_LAYER_RANGE( 0, aPad->BoardCopperLayerCount() - 1 ) );
             }
 
             // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and

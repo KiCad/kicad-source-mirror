@@ -122,6 +122,8 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode, int aLayer,
 
     //const SHAPE* shapeH = aHead->Shape();
     const HOLE*  holeH = aHead->Hole();
+    const HOLE*  holeI = Hole();
+
     int          lineWidthH = 0;
     bool         collisionsFound = false;
 
@@ -152,6 +154,10 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode, int aLayer,
     {
         if( Net() != holeH->Net() && collideSimple( holeH, aNode, aLayer, aCtx ) )
             collisionsFound = true;
+    }
+    if( holeI && shouldWeConsiderHoleCollisions( holeI, aHead ) )
+    {
+        collisionsFound |= holeI->collideSimple( aHead, aNode, aLayer, aCtx );
     }
 
     // Sadly collision routines ignore SHAPE_POLY_LINE widths so we have to pass them in as part
