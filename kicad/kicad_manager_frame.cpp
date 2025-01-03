@@ -678,7 +678,11 @@ void KICAD_MANAGER_FRAME::SaveOpenJobSetsToLocalSettings()
     for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
         if( PANEL_JOBS* jobset = dynamic_cast<PANEL_JOBS*>( m_notebook->GetPage( i ) ) )
-            cfg.m_OpenJobSets.emplace_back( jobset->GetFilePath() );
+        {
+            wxFileName jobsetFn( jobset->GetFilePath() );
+            jobsetFn.MakeRelativeTo( Prj().GetProjectPath() );
+            cfg.m_OpenJobSets.emplace_back( jobsetFn.GetFullPath() );
+        }
     }
 
     cfg.SaveToFile( Prj().GetProjectPath() );
@@ -802,7 +806,11 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     m_leftWin->ReCreateTreePrj();
 
     for( const wxString& jobset : Prj().GetLocalSettings().m_OpenJobSets )
-        OpenJobsFile( jobset, false, false );
+    {
+        wxFileName jobsetFn( jobset );
+        jobsetFn.MakeAbsolute( Prj().GetProjectPath() );
+        OpenJobsFile( jobsetFn.GetFullPath(), false, false );
+    }
 
     // Rebuild the list of watched paths.
     // however this is possible only when the main loop event handler is running,
