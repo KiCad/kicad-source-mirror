@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2025-01-03 00:01+0000\n"
+"PO-Revision-Date: 2025-01-04 06:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -25981,9 +25981,8 @@ msgstr "Überlappende Geometrie zusammenfügen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in copper layers."
-msgstr "Warnung: Das SMD-Pad hat keine äußeren Lagen."
+msgstr "Keine Via-Löcher in Kupferlagen einfügen."
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26833,7 +26832,7 @@ msgstr "Nur Aufträge"
 
 #: kicad/dialogs/panel_jobs_base.cpp:351
 msgid "Record Output"
-msgstr ""
+msgstr "Ausgabe aufzeichnen"
 
 #: kicad/dialogs/panel_jobs_base.cpp:366
 msgid "Ignore non-zero exit code"
@@ -34249,9 +34248,8 @@ msgid "Export board body"
 msgstr "Platinenkörper exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "Platinenkörper exportieren"
+msgstr "Vias in Platinenkörper einfügen"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
@@ -34328,9 +34326,8 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "Überlappende Geometrien in eine gemeinsame Form vereinen."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:142
-#, fuzzy
 msgid "Fill all vias"
-msgstr "Fülle alle Flächen"
+msgstr "Alle Vias füllen"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Net filter (supports wildcards):"
@@ -35601,7 +35598,6 @@ msgid "Remove all teardrops"
 msgstr "Alle Teardrops entfernen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Remove all teardrops, regardless of filtering options"
 msgstr "Alle Teardrops entfernen, ungeachtet der Filteroptionen"
 
@@ -35649,9 +35645,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
-#, fuzzy
 msgid "Track width limit:"
-msgstr "Leiterbahnbreite:"
+msgstr "Leiterbahnbreitenbegrenzung:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
@@ -39164,9 +39159,8 @@ msgid "Zone fill strategy"
 msgstr "Zonen-Füllstrategie"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "Verrundungen außerhalb des Zonenumrisses zulassen"
+msgstr "Verrundungen/Fasen außerhalb des Zonenumrisses zulassen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
@@ -41893,9 +41887,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Nicht-gespiegelter Text auf Rückseite"
 
 #: pcbnew/drc/drc_item.cpp:307
-#, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
-msgstr "Bohrloch zu dich an anderem Loch"
+msgstr "Bohrloch zu dich an anderem Loch - veraltet"
 
 #: pcbnew/drc/drc_item.cpp:508
 #, c-format
@@ -48765,9 +48758,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Footprint \"%s\" ist in Bibliothek \"%s\" bereits vorhanden."
 
 #: pcbnew/tools/footprint_editor_control.cpp:518
-#, fuzzy
 msgid "Error renaming footprint"
-msgstr "Vom übergeordneten Footprint übernehmen"
+msgstr "Bei der Umbenennung des Footprints trat ein Fehler auf"
 
 #: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
