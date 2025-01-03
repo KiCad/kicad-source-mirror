@@ -158,10 +158,10 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
 
 	wxBoxSizer* bSizerMain;
-	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 2, 4, 5, 5 );
+	fgSizer3 = new wxFlexGridSizer( 1, 3, 5, 5 );
 	fgSizer3->AddGrowableCol( 1 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -178,23 +178,23 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	m_statusBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_statusBitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_buttonOutputRun = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	fgSizer3->Add( m_buttonOutputRun, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	bSizerMain->Add( fgSizer3, 0, wxEXPAND|wxALL, 5 );
+
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
+
+	m_buttonProperties = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerButtons->Add( m_buttonProperties, 0, wxALL, 5 );
+
+	m_buttonDelete = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerButtons->Add( m_buttonDelete, 0, wxALL, 5 );
+
+	m_buttonGenerate = new wxButton( this, wxID_ANY, _("Generate"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonGenerate, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_buttonOutputOptions = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	fgSizer3->Add( m_buttonOutputOptions, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizerMain->Add( fgSizer3, 1, wxALL, 5 );
+	bSizerMain->Add( bSizerButtons, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
@@ -202,17 +202,21 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerMain->Fit( this );
 
 	// Connect Events
+	this->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PANEL_JOB_OUTPUT_BASE::OnRightDown ) );
 	m_statusBitmap->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_JOB_OUTPUT_BASE::OnLastStatusClick ), NULL, this );
-	m_buttonOutputRun->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputRunClick ), NULL, this );
-	m_buttonOutputOptions->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputOptionsClick ), NULL, this );
+	m_buttonProperties->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnProperties ), NULL, this );
+	m_buttonDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnDelete ), NULL, this );
+	m_buttonGenerate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnGenerate ), NULL, this );
 }
 
 PANEL_JOB_OUTPUT_BASE::~PANEL_JOB_OUTPUT_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PANEL_JOB_OUTPUT_BASE::OnRightDown ) );
 	m_statusBitmap->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_JOB_OUTPUT_BASE::OnLastStatusClick ), NULL, this );
-	m_buttonOutputRun->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputRunClick ), NULL, this );
-	m_buttonOutputOptions->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnOutputOptionsClick ), NULL, this );
+	m_buttonProperties->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnProperties ), NULL, this );
+	m_buttonDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnDelete ), NULL, this );
+	m_buttonGenerate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOB_OUTPUT_BASE::OnGenerate ), NULL, this );
 
 }
 

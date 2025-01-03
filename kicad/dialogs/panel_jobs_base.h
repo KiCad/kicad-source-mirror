@@ -91,13 +91,16 @@ class PANEL_JOB_OUTPUT_BASE : public wxPanel
 		wxStaticBitmap* m_bitmapOutputType;
 		wxStaticText* m_textOutputType;
 		wxStaticBitmap* m_statusBitmap;
-		wxBitmapButton* m_buttonOutputRun;
-		wxBitmapButton* m_buttonOutputOptions;
+		STD_BITMAP_BUTTON* m_buttonProperties;
+		STD_BITMAP_BUTTON* m_buttonDelete;
+		wxButton* m_buttonGenerate;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnRightDown( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnLastStatusClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnOutputRunClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOutputOptionsClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnProperties( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGenerate( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

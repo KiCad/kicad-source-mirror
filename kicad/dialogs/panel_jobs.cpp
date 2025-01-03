@@ -353,11 +353,10 @@ public:
             m_frame( aFrame ),
             m_panelParent( aPanelParent )
     {
-        m_buttonOutputRun->SetBitmap( KiBitmapBundle( BITMAPS::sim_run ) );
-        m_buttonOutputOptions->SetBitmap( KiBitmapBundle( BITMAPS::preference ) );
+        m_buttonProperties->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
+        m_buttonDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
-        m_buttonOutputOptions->Connect( wxEVT_MENU,
-                                        wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
+        Connect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
 
         if( jobTypeInfos.contains( aOutput->m_type ) )
         {
@@ -372,8 +371,7 @@ public:
 
     ~PANEL_JOB_OUTPUT()
     {
-        m_buttonOutputOptions->Disconnect(
-                wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
+        Disconnect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
     }
 
     void UpdateStatus()
@@ -398,11 +396,11 @@ public:
             m_statusBitmap->SetBitmap( wxNullBitmap );
         }
 
-        m_buttonOutputRun->Enable( !m_jobsFile->GetJobsForOutput( m_output ).empty() );
+        m_buttonGenerate->Enable( !m_jobsFile->GetJobsForOutput( m_output ).empty() );
     }
 
 
-    virtual void OnOutputRunClick( wxCommandEvent& event ) override
+    virtual void OnGenerate( wxCommandEvent& event ) override
     {
         CallAfter(
                 [this]()
@@ -425,27 +423,43 @@ public:
                 } );
     }
 
-    virtual void OnLastStatusClick(wxMouseEvent& event) override
+    virtual void OnLastStatusClick( wxMouseEvent& aEvent ) override
     {
         DIALOG_OUTPUT_RUN_RESULTS dialog( m_frame, m_jobsFile, m_output );
         dialog.ShowModal();
     }
 
-    virtual void OnOutputOptionsClick( wxCommandEvent& event ) override
+    void OnRightDown( wxMouseEvent& aEvent ) override
     {
         wxMenu menu;
-        menu.Append( wxID_EDIT, _( "Edit..." ) );
-        menu.Append( wxID_DELETE, _( "Delete" ) );
+        menu.Append( wxID_EDIT, _( "Edit Output Options..." ) );
+        menu.Append( wxID_DELETE, _( "Delete Output" ) );
 
-        if( m_output->m_lastRunSuccess.has_value() )
-        {
-            menu.AppendSeparator();
-            menu.Append( wxID_VIEW_DETAILS, _( "View last run results..." ) );
-        }
+        menu.AppendSeparator();
+        menu.Append( wxID_VIEW_DETAILS, _( "View Last Run Results..." ) );
 
-        m_buttonOutputOptions->PopupMenu( &menu );
+        menu.Enable( wxID_VIEW_DETAILS, m_output->m_lastRunSuccess.has_value() );
+
+        PopupMenu( &menu );
     }
 
+
+    void OnProperties( wxCommandEvent& aEvent ) override
+    {
+        DIALOG_JOB_OUTPUT dialog( m_frame, m_jobsFile, m_output );
+
+        if( dialog.ShowModal() == wxID_OK )
+        {
+            m_textOutputType->SetLabel( m_output->GetDescription() );
+            m_jobsFile->SetDirty();
+            m_panelParent->UpdateTitle();
+        }
+    }
+
+    virtual void OnDelete( wxCommandEvent& aEvent ) override
+    {
+        m_panelParent->RemoveOutput( m_output );
+    }
 
 private:
     void onMenu( wxCommandEvent& aEvent )
@@ -454,32 +468,31 @@ private:
         {
             case wxID_EDIT:
             {
-                DIALOG_JOB_OUTPUT dialog( m_frame, m_jobsFile, m_output );
-                if( dialog.ShowModal() == wxID_OK )
-                {
-                    m_textOutputType->SetLabel( m_output->GetDescription() );
-                    m_jobsFile->SetDirty();
-                    m_panelParent->UpdateTitle();
-                }
+                wxCommandEvent dummy;
+                OnProperties( dummy );
             }
                 break;
 
             case wxID_DELETE:
-                m_panelParent->RemoveOutput( m_output );
+            {
+                wxCommandEvent dummy;
+                OnDelete( dummy );
+            }
                 break;
 
             case wxID_VIEW_DETAILS:
             {
-                DIALOG_OUTPUT_RUN_RESULTS dialog( m_frame, m_jobsFile, m_output );
-                dialog.ShowModal();
+                wxMouseEvent dummy;
+                OnLastStatusClick( dummy );
             }
-            break;
+                break;
 
             default:
                 wxFAIL_MSG( wxT( "Unknown ID in context menu event" ) );
         }
     }
 
+private:
     JOBSET*              m_jobsFile;
     JOBSET_OUTPUT*       m_output;
     KICAD_MANAGER_FRAME* m_frame;
