@@ -873,10 +873,10 @@ void NODE::Replace( ITEM* aOldItem, std::unique_ptr< ITEM > aNewItem )
 }
 
 
-void NODE::Replace( LINE& aOldLine, LINE& aNewLine )
+void NODE::Replace( LINE& aOldLine, LINE& aNewLine, bool aAllowRedundantSegments )
 {
     Remove( aOldLine );
-    Add( aNewLine );
+    Add( aNewLine, aAllowRedundantSegments );
 }
 
 

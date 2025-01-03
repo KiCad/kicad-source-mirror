@@ -168,8 +168,10 @@ private:
         bool m_locked;
     };
 
+    bool pruneLineFromOptimizerQueue( const LINE& aLine );
+
     bool shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
-                                     LINE& aResultLine, const HULL_SET& aHulls );
+                                     LINE& aResultLine, const HULL_SET& aHulls, bool aPermitAdjustingEndpoints = false );
 
     NODE* reduceSpringback( const ITEM_SET& aHeadSet );
 
@@ -186,7 +188,7 @@ private:
     SHOVE_STATUS onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OBSTACLE& aObstacleInfo );
     SHOVE_STATUS onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OBSTACLE& aObstacleInfo, int aNextRank );
     SHOVE_STATUS onReverseCollidingVia( LINE& aCurrent, VIA* aObstacleVia, OBSTACLE& aObstacleInfo );
-    SHOVE_STATUS pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aNextRank );
+    SHOVE_STATUS pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aNextRank, bool aDontUnwindStack = false );
 
     OPT_BOX2I totalAffectedArea() const;
 
@@ -203,6 +205,7 @@ private:
     void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
     ROOT_LINE_ENTRY* replaceLine( LINE& aOld, LINE& aNew,
                     bool aIncludeInChangedArea = true,
+                    bool aAllowRedundantSegments = true,
                       NODE *aNode = nullptr );
 
     ROOT_LINE_ENTRY* findRootLine( const LINE& aLine );

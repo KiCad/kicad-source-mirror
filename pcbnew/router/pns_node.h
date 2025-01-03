@@ -389,7 +389,7 @@ public:
      * @param aNewItem item add instead
      */
     void Replace( ITEM* aOldItem, std::unique_ptr< ITEM > aNewItem );
-    void Replace( LINE& aOldLine, LINE& aNewLine );
+    void Replace( LINE& aOldLine, LINE& aNewLine, bool aAllowRedundantSegments = false );
 
     /**
      * Create a lightweight copy (called branch) of self that tracks the changes (added/removed

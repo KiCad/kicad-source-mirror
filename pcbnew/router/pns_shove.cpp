@@ -77,7 +77,7 @@ void SHOVE::replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew )
 }
 
 
-SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NODE* aNode )
+SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, bool aAllowRedundantSegments, NODE* aNode )
 {
     if( aIncludeInChangedArea )
     {
@@ -142,9 +142,10 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aInclud
 
     // Now update the NODE (calling Replace invalidates the Links() in a LINE)
     if( aNode )
-        aNode->Replace( aOld, aNew );
+        aNode->Replace( aOld, aNew, aAllowRedundantSegments );
     else
-        m_currentNode->Replace( aOld, aNew );
+        m_currentNode->Replace( aOld, aNew, aAllowRedundantSegments );
+
 
     // point the Links() of the new line to its oldest ancestor
     for( LINKED_ITEM* link : aNew.Links() )
@@ -298,12 +299,11 @@ bool SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLin
  * Re-walk aObstacleLine around the given set of hulls, returning the result in aResultLine.
  */
 bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
-                                               LINE& aResultLine, const HULL_SET& aHulls )
+                                               LINE& aResultLine, const HULL_SET& aHulls, bool aPermitAdjustingEndpoints )
 {
-    const SHAPE_LINE_CHAIN& obs = aObstacleLine.CLine();
-
+    const int c_ENDPOINT_ON_HULL_THRESHOLD = 10000;
     int attempt;
-
+    
     PNS_DBG( Dbg(), BeginGroup, "shove-details", 1 );
 
     for( attempt = 0; attempt < 4; attempt++ )
@@ -311,9 +311,84 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
         bool invertTraversal = ( attempt >= 2 );
         bool clockwise = attempt % 2;
         int vFirst = -1, vLast = -1;
-
+        SHAPE_LINE_CHAIN obs = aObstacleLine.CLine();
         LINE l( aObstacleLine );
         SHAPE_LINE_CHAIN path( l.CLine() );
+
+        if( aPermitAdjustingEndpoints )
+        {
+            auto minDistP = [&]( VECTOR2I pref, int& mdist, int& minhull ) -> VECTOR2I
+            {
+                int      min_dist = std::numeric_limits<int>::max();
+                VECTOR2I nearestP;
+
+                for( int i = 0; i < (int) aHulls.size(); i++ )
+                {
+                    const SHAPE_LINE_CHAIN& hull =
+                            aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
+                    int  dist;
+                    auto p = hull.NearestPoint( pref, true );
+
+                    if( hull.PointInside( pref ) )
+                        dist = 0;
+                    else
+                        dist = ( p - pref ).EuclideanNorm();
+
+                    if( dist < c_ENDPOINT_ON_HULL_THRESHOLD && dist < min_dist )
+                    {
+                        bool reject = false;
+
+                        /*for( int j = 0; j < (int) aHulls.size(); j++ )
+                        {
+                            if ( i != j && aHulls[j].PointInside( p ) )
+                            {
+                                reject = true;
+                                break;
+                            }
+                        }*/
+                        
+                        if( !reject )
+                        {
+                            min_dist = dist;
+                            nearestP = p;
+                            minhull = invertTraversal ? aHulls.size() - 1 - i : i;
+                        }
+                    }
+                }
+                mdist = min_dist;
+                return nearestP;
+            };
+
+            int      minDist0, minDist1, minhull0, minhull1 ;
+            VECTOR2I p0 = minDistP( l.CPoint( 0 ), minDist0, minhull0 );
+            VECTOR2I p1 = minDistP( l.CPoint( -1 ), minDist1, minhull1 );
+
+            PNS_DBG( Dbg(), Message, wxString::Format( "mindists : %d %d hulls %d %d\n", minDist0, minDist1, minhull0, minhull1 ) );
+
+            if( minDist1 < c_ENDPOINT_ON_HULL_THRESHOLD )
+            {
+                l.Line().SetPoint( -1, p1 );
+                obs = l.CLine();
+                path = l.CLine();
+                //PNS_DBG( Dbg(), AddPoint, p1, LIGHTRED, 200000, wxString::Format( "round-p1 dist %d besthull %d", dist, bestHull ) );
+            }
+
+            if( minDist0 < c_ENDPOINT_ON_HULL_THRESHOLD )
+            {
+                l.Line().SetPoint( 0, p0 );
+                obs = l.CLine();
+                path = l.CLine();
+                /*int dist = std::numeric_limits<int>::max();
+                    for (auto& h : hulls ) 
+                    {
+                        dist = std::min(dist, h.Distance( p0, true ));
+                    }
+                    PNS_DBG( Dbg(), AddPoint, p0, LIGHTRED, 200000, wxString::Format( "round-p0 dist %d", dist ) );*/
+            }
+        }
+
+
+        bool failWalk = false;
 
         for( int i = 0; i < (int) aHulls.size(); i++ )
         {
@@ -330,13 +405,16 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                                                            l.CLine().Format().c_str(),
                                                            clockwise? 1 : 0) );
 
-                PNS_DBGN( Dbg(), EndGroup );
-                return false;
+                failWalk = true;
+                break;
             }
 
             path.Simplify2();
             l.SetShape( path );
         }
+
+        if( failWalk )
+            continue;
 
         for( int i = 0; i < std::min( path.PointCount(), obs.PointCount() ); i++ )
         {
@@ -358,7 +436,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
             }
         }
 
-        if( ( vFirst < 0 || vLast < 0 ) && !path.CompareGeometry( aObstacleLine.CLine() ) )
+        if( ( vFirst < 0 || vLast < 0 ) && !path.CompareGeometry( obs ) )
         {
             PNS_DBG( Dbg(), Message, wxString::Format( wxT( "attempt %d fail vfirst-last" ),
                                                        attempt ) );
@@ -429,7 +507,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
 bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                                               LINE& aResultLine )
 {
-    const int cHullFailureExpansionFactor = 10;
+    const int cHullFailureExpansionFactor = 1000;
     int extraHullExpansion = 0;
 
 
@@ -469,7 +547,7 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                                                    m_router->GetInterface()->GetNetCode( obstacleLine.Net() ),
                                                    clearance ) );*/
 
-        for( int attempt = 0; attempt < 2; attempt++ )
+        for( int attempt = 0; attempt < 3; attempt++ )
         {
             HULL_SET hulls;
 
@@ -508,7 +586,9 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                 hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth, layer ) );
             }
 
-            if (shoveLineToHullSet( aCurLine, obstacleLine, aResultLine, hulls ) )
+            bool permitMovingEndpoints = (attempt >= 2);
+
+            if (shoveLineToHullSet( aCurLine, obstacleLine, aResultLine, hulls, permitMovingEndpoints ) )
             {
                 if( obsVia )
                     aResultLine.AppendVia( *obsVia );
@@ -572,14 +652,15 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
 
         shovedLine.Line().Simplify2();
 
-        sanityCheck( &obstacleLine, &shovedLine );
-        replaceLine( obstacleLine, shovedLine );
+        replaceLine( obstacleLine, shovedLine, true, false );
 
         if( !pushLineStack( shovedLine ) )
             return SH_INCOMPLETE;
+        
+        return SH_OK;
     }
 
-    return SH_OK;
+    return SH_INCOMPLETE;
 }
 
 
@@ -622,8 +703,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingArc( LINE& aCurrent, ARC* aObstacleArc )
         int rank = aCurrent.Rank();
         shovedLine.SetRank( rank - 1 );
 
-        sanityCheck( &obstacleLine, &shovedLine );
-        replaceLine( obstacleLine, shovedLine );
+        replaceLine( obstacleLine, shovedLine, true, false );
 
         if( !pushLineStack( shovedLine ) )
             return SH_INCOMPLETE;
@@ -657,8 +737,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle, int
             m_newHead = shovedLine;
         }
 #endif
-        sanityCheck( &aObstacle, &shovedLine );
-        replaceLine( aObstacle, shovedLine );
+        replaceLine( aObstacle, shovedLine, true, false );
 
         shovedLine.SetRank( aNextRank );
 
@@ -759,7 +838,6 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
         }
 #endif
 
-    	sanityCheck( &aCurrent, &walkaroundLine );
 
         if( !m_lineStack.empty() )
         {
@@ -786,7 +864,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
     if(!success)
         return SH_INCOMPLETE;
 
-    replaceLine( aCurrent, walkaroundLine );
+    replaceLine( aCurrent, walkaroundLine, true, false );
     walkaroundLine.SetRank( nextRank );
 
 
@@ -941,7 +1019,7 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea )
  * Push or shove a via by at least aForce.  (The via might be pushed or shoved slightly further
  * to keep it from landing on an existing joint.)
  */
-SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aNewRank )
+SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aNewRank, bool aDontUnwindStack )
 {
     LINE_PAIR_VEC draggedLines;
     VECTOR2I p0( aVia->Pos() );
@@ -1015,7 +1093,9 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
 
     VIA *v2 = pushedVia.get();
 
-    unwindLineStack( aVia );
+    if( !aDontUnwindStack )
+        unwindLineStack( aVia );
+
     replaceItems( aVia, std::move( pushedVia ) );
 
     if( draggedLines.empty() ) // stitching via? make sure the router won't forget about it
@@ -1029,7 +1109,8 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     int n = 0;
     for( LINE_PAIR lp : draggedLines )
     {
-        unwindLineStack( &lp.first );
+        if( !aDontUnwindStack )
+            unwindLineStack( &lp.first );
 
         PNS_DBG( Dbg(), Message, wxString::Format("fan %d/%d\n", n, (int) draggedLines.size() ) );
         n++;
@@ -1037,10 +1118,12 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         if( lp.second.SegmentCount() )
         {
             lp.second.ClearLinks();
-            ROOT_LINE_ENTRY* rootEntry = replaceLine( lp.first, lp.second );
+            ROOT_LINE_ENTRY* rootEntry = replaceLine( lp.first, lp.second, true, true );
 
             lp.second.LinkVia( v2 );
-            unwindLineStack( &lp.second );
+
+            if( !aDontUnwindStack )
+                unwindLineStack( &lp.second );
 
             lp.second.SetRank( aNewRank );
 
@@ -1273,7 +1356,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
     PNS_DBGN( Dbg(), EndGroup );
 
     int currentRank = aCurrent.Rank();
-    replaceLine( aCurrent, shoved );
+    replaceLine( aCurrent, shoved, true, false );
 
     if( !pushLineStack( shoved ) )
         return SH_INCOMPLETE;
@@ -1293,7 +1376,27 @@ void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
         if( i->ContainsLink( aSeg ) )
         {
             PNS_DBG(Dbg(), Message, wxString::Format("Unwind lc %d (depth %d/%d)", i->SegmentCount(), d, (int)m_lineStack.size() ) );
-            i = m_lineStack.erase( i );
+//comment!
+            if( i->EndsWithVia() && !aSeg->OfKind( ITEM::VIA_T) )
+            {
+                i = m_lineStack.erase( i );
+            }
+            else
+            {
+                VIA *via = nullptr;
+
+                for( auto l : i->Links() )
+                if( l->OfKind( ITEM::VIA_T ) )
+                    via = static_cast<VIA*>( l );
+                
+                if( via )
+                {
+                    i->ClearLinks( );
+                    i->LinkVia( via );
+                }
+                i++;
+            }
+
         }
         else
         {
@@ -1347,24 +1450,29 @@ bool SHOVE::pushLineStack( const LINE& aL, bool aKeepCurrentOnTop )
         m_lineStack.push_back( aL );
     }
 
+    
+    pruneLineFromOptimizerQueue( aL );
     m_optimizerQueue.push_back( aL );
 
     return true;
 }
 
 
-void SHOVE::popLineStack( )
+bool SHOVE::pruneLineFromOptimizerQueue( const LINE& aLine )
 {
-    LINE& l = m_lineStack.back();
-
+    int pre = m_optimizerQueue.size();
     for( std::vector<LINE>::iterator i = m_optimizerQueue.begin(); i != m_optimizerQueue.end(); )
     {
         bool found = false;
 
-        for( LINKED_ITEM* s : l.Links() )
+        for( LINKED_ITEM* s : aLine.Links() )
         {
-            if( i->ContainsLink( s ) )
+            PNS_DBG( Dbg(), Message,
+                     wxString::Format( "cur lc %d lnk %p cnt %d", i->LinkCount(), s, aLine.LinkCount() ) );
+
+            if( i->ContainsLink( s ) && !s->OfKind( ITEM::VIA_T ) )
             {
+
                 i = m_optimizerQueue.erase( i );
                 found = true;
                 break;
@@ -1375,6 +1483,13 @@ void SHOVE::popLineStack( )
             i++;
     }
 
+    return true;
+}
+
+void SHOVE::popLineStack( )
+{
+    LINE& l = m_lineStack.back();
+    pruneLineFromOptimizerQueue( l );
     m_lineStack.pop_back();
 }
 
@@ -2272,11 +2387,11 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             PNS_DBG( Dbg(), Message, wxString::Format("process head-via [%d %d] node=%p", l.theVia->pos.x, l.theVia->pos.y, m_currentNode ) );
             auto realVia = m_currentNode->FindViaByHandle( *l.theVia );
             assert( realVia != nullptr );
-            headSet.Add( realVia );
+            headSet.Add( realVia->Clone() );
         }
         else
         {
-            headSet.Add( *l.origHead );
+            headSet.Add( *l.origHead->Clone() );
         }
     }
 
@@ -2324,7 +2439,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             viaRoot->oldVia = viaToDrag;
             headLineEntry.draggedVia = viaToDrag;
 
-            st = pushOrShoveVia( viaToDrag, ( headLineEntry.viaNewPos - viaToDrag->Pos() ), 0 );
+            st = pushOrShoveVia( viaToDrag, ( headLineEntry.viaNewPos - viaToDrag->Pos() ), 0, true );
 
             if( st != SH_OK )
                 break;
