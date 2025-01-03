@@ -1,4 +1,4 @@
-# 킴슨김랑기 <korearf@gmail.com>, 2021, 2022, 2023, 2024.
+# 킴슨김랑기 <korearf@gmail.com>, 2021, 2022, 2023, 2024, 2025.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # jeongsuAn <dks9467@gmail.com>, 2021, 2022.
 # 이상수 <kku1818@gmail.com>, 2021, 2022.
@@ -33,16 +33,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-11-01 23:26+0000\n"
+"PO-Revision-Date: 2025-01-04 06:01+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -3452,7 +3452,7 @@ msgstr "페이지 설정..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job.cpp:41 common/tool/actions.cpp:91
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
@@ -3500,7 +3500,7 @@ msgstr "출력 파일"
 
 #: common/dialogs/dialog_rc_job_base.cpp:72
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "위반 사항이 있을 경우 작업 실패 보고"
 
 #: common/dialogs/dialog_rc_job_base.cpp:78 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4705,7 +4705,7 @@ msgstr "내장된 참조번호 복사"
 
 #: common/dialogs/panel_embedded_files.cpp:52
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "이 임베디드 파일에 대한 참조를 복사함"
 
 #: common/dialogs/panel_embedded_files.cpp:190
 msgid "Select a file to embed"
@@ -5558,7 +5558,7 @@ msgstr "OpenGL을 사용할 수 없음"
 
 #: common/draw_panel_gal.cpp:540
 msgid "Error switch GAL backend"
-msgstr ""
+msgstr "스위치 GAL 백엔드 오류"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3390
@@ -6698,9 +6698,9 @@ msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr "KiCad와 함께 설치된 사용자별 스크립트가 포함된 디렉토리"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "더 이상 사용되지 않는 KICAD_SYMBOL_DIR 버전."
+msgstr "사용되지 않는 버전 %s."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -6885,14 +6885,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "원격 '%s'를 조회할 수 없음"
 
 #: common/git/git_pull_handler.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "원격 '%s'에 연결할 수 없음"
+msgstr "원격 '%s'에 연결할 수 없음: %s"
 
 #: common/git/git_pull_handler.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "원격 '%s'에서 데이터를 가져올 수 없음"
+msgstr "원격 '%s'에서 데이터를 가져올 수 없음: %s"
 
 #: common/git/git_pull_handler.cpp:94
 msgid "Could not read 'FETCH_HEAD'"
@@ -6957,9 +6957,9 @@ msgid "Could not connect to remote: %s"
 msgstr "원격 '%s'에 연결할 수 없음"
 
 #: common/git/git_push_handler.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "원격으로 푸시하지 못함"
+msgstr "원격으로 푸시할 수 없음: %s"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
@@ -7287,7 +7287,7 @@ msgstr "가져온 그래픽이 너무 큽니다. 최대 배율은 %f 임"
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr "숫자 제한에 맞게 가져오기 오프셋을 ( %f , %f )로 조정함"
+msgstr "숫자 제한에 맞게 가져오기 오프셋이 (%f, %f)로 조정됨"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:121
 #, c-format
@@ -7585,7 +7585,7 @@ msgstr "PCB에 다시 주석 처리"
 
 #: common/jobs/job_pcb_render.cpp:81
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCB: 렌더링"
 
 #: common/jobs/job_sch_erc.cpp:33
 #, fuzzy
@@ -7599,7 +7599,7 @@ msgstr "PCB에서 회로도 업데이트"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Special: 명령 실행"
 
 #: common/jobs/jobs_output_archive.cpp:97 kicad/dialogs/panel_jobs.cpp:64
 #, fuzzy
@@ -8603,9 +8603,8 @@ msgstr "모두 접기"
 #: common/tool/actions.cpp:341 eeschema/tools/sch_edit_tool.cpp:3065
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1201
 #: pcbnew/tools/edit_tool.cpp:3069
-#, fuzzy
 msgid "Increment"
-msgstr "증가:"
+msgstr "증가"
 
 #: common/tool/actions.cpp:342
 #, fuzzy
@@ -8613,9 +8612,8 @@ msgid "Increment the selected item(s)"
 msgstr "선택한 항목 삭제"
 
 #: common/tool/actions.cpp:347
-#, fuzzy
 msgid "Increment Primary"
-msgstr "증가:"
+msgstr "1차 증가"
 
 #: common/tool/actions.cpp:348
 #, fuzzy
@@ -8623,9 +8621,8 @@ msgid "Increment the primary field of the selected item(s)"
 msgstr "선택 영역에서 그래픽 선 생성"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Decrement Primary"
-msgstr "증가:"
+msgstr "1차 감소"
 
 #: common/tool/actions.cpp:355
 #, fuzzy
@@ -8633,9 +8630,8 @@ msgid "Decrement the primary field of the selected item(s)"
 msgstr "선택한 항목 복제"
 
 #: common/tool/actions.cpp:361
-#, fuzzy
 msgid "Increment Secondary"
-msgstr "증가:"
+msgstr "2차 증가"
 
 #: common/tool/actions.cpp:362
 #, fuzzy
@@ -8644,7 +8640,7 @@ msgstr "선택 영역에서 그래픽 선 생성"
 
 #: common/tool/actions.cpp:368
 msgid "Decrement Secondary"
-msgstr ""
+msgstr "2차 감소"
 
 #: common/tool/actions.cpp:369
 #, fuzzy
@@ -9732,7 +9728,7 @@ msgstr "기본 속성"
 
 #: common/widgets/search_pane.cpp:40
 msgid "Toggle zooming to selections in the search pane"
-msgstr ""
+msgstr "검색창에서 선택 항목으로 확대/축소 전환하기"
 
 #: common/widgets/search_pane.cpp:42
 #, fuzzy
@@ -10376,9 +10372,8 @@ msgid "Footprint '%s' not found."
 msgstr "%s 풋프린트를 찾을 수 없습니다."
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "오류 로딩 글꼴 %s."
+msgstr "풋프린트 로딩 오류"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -13967,9 +13962,9 @@ msgid "Link '%s' to this file?"
 msgstr "'%s'을(를) 이 파일에 연결할까요?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "매개 변수 '%s'를 '%s'로 모델 '%s'에서 설정하지 못함"
+msgstr "회로도 파일 '%s'을(를) 대상 '%s'에 복사하지 못함."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:560
 #, c-format
@@ -16342,9 +16337,9 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
-"이로 인해 필드 이름이 중복된 것처럼 보이지만 실제로는 공백 문자만 다른 고유"
-"한 이름이 될 수 있습니다.  공백 문자를 제거해도 기존 심볼 필드 이름에는 영향"
-"을 미치지 않습니다."
+"이로 인해 필드 이름이 중복된 것처럼 보이지만 실제로는 공백 문자만 다른 "
+"고유한 이름이 될 수 있습니다.  공백 문자를 제거해도 기존 심볼 필드 이름에는 "
+"영향을 미치지 않습니다."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:220
 #, fuzzy
@@ -16550,9 +16545,8 @@ msgstr "연결 없음"
 #: eeschema/erc/erc.cpp:209 eeschema/erc/erc.cpp:228
 #: pcbnew/drc/drc_test_provider_misc.cpp:320
 #: pcbnew/drc/drc_test_provider_misc.cpp:340
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "도면 시트 인쇄"
+msgstr " (도면 시트 내)"
 
 #: eeschema/erc/erc.cpp:422
 msgid "Unresolved text variable in drawing sheet"
@@ -17708,9 +17702,9 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "오류: 시트 이름이 중복됩니다. 계속합니까?"
 
 #: eeschema/picksymbol.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol unit '%s' is already placed (on sheet '%s')"
-msgstr "회로도 '%s'는 이미 '%s'에 의해 '%s'에서 열려 있습니다."
+msgstr "심볼 장치 '%s'가 이미 배치되어 있음(시트 '%s'에)"
 
 #: eeschema/picksymbol.cpp:129
 #, fuzzy
@@ -17723,9 +17717,9 @@ msgid "&Swap '%s' and '%s'"
 msgstr "시트 '%s' 핀 '%s'"
 
 #: eeschema/picksymbol.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "&Duplicate '%s'"
-msgstr "복제"
+msgstr "복제(&D) '%s'"
 
 #: eeschema/picksymbol.cpp:176
 msgid "Change Unit"
@@ -19215,9 +19209,8 @@ msgid "Pin Name"
 msgstr "핀 이름"
 
 #: eeschema/sch_plotter.cpp:140
-#, fuzzy
 msgid "No sheets to plot."
-msgstr "프로젝트로 시트 가져오기"
+msgstr "플롯할 시트 없음."
 
 #: eeschema/sch_plotter.cpp:238 pcbnew/pcbnew_jobs_handler.cpp:968
 #, c-format
@@ -21938,19 +21931,19 @@ msgid "Cannot find %s pin '%s'."
 msgstr "%s 핀 '%s'을(를) 찾을 수 없습니다."
 
 #: eeschema/tools/backannotate.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "필드 '%s' 값을 '%s'로 변경함."
+msgstr "%s 필드 '%s' 값을 '%s'로 변경합니다."
 
 #: eeschema/tools/backannotate.cpp:540
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s field '%s' with value '%s'."
-msgstr "'%s' 필드를 '%s' 값으로 추가합니다."
+msgstr "%s 필드 '%s' 를 '%s' 값으로 추가합니다."
 
 #: eeschema/tools/backannotate.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s field '%s.'"
-msgstr "'%s.' 필드 삭제"
+msgstr "삭제 %s 필드 '%s.'"
 
 #: eeschema/tools/backannotate.cpp:715
 #, c-format
@@ -23413,9 +23406,8 @@ msgid "Select a single symbol to place the next unit."
 msgstr "다음에 새 모서리를 추가할 모서리를 선택하세요."
 
 #: eeschema/tools/sch_drawing_tools.cpp:587
-#, fuzzy
 msgid "This symbol has only one unit."
-msgstr "*** 새 심볼에 단위가 너무 적습니다 ***"
+msgstr "이 심볼은 단 하나의 유닛만 있음."
 
 #: eeschema/tools/sch_drawing_tools.cpp:595
 msgid "All units of this symbol are already placed."
@@ -23556,9 +23548,8 @@ msgid "Symbol Unit"
 msgstr "심볼 단위"
 
 #: eeschema/tools/sch_edit_tool.cpp:111
-#, fuzzy
 msgid " (already placed)"
-msgstr "이미 배치됨"
+msgstr " (이미 배치됨"
 
 #: eeschema/tools/sch_edit_tool.cpp:179
 msgid "Pin Function"
@@ -25607,9 +25598,8 @@ msgstr "겹치는 형상을 하나로 합치기"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in copper layers."
-msgstr "(PTH 패드에는 구리레이어가 없습니다)"
+msgstr "구리층에 구멍을 뚫지 마세요."
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26319,9 +26309,8 @@ msgid "Select output path"
 msgstr "경로 선택"
 
 #: kicad/dialogs/panel_jobs.cpp:138
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "출력 경로는 비워둘 수 없음"
 
 #: kicad/dialogs/panel_jobs.cpp:205
 #, fuzzy
@@ -26441,9 +26430,8 @@ msgid "Placeholder"
 msgstr "노드 설치"
 
 #: kicad/dialogs/panel_jobs_base.cpp:260 kicad/dialogs/panel_jobs_base.cpp:354
-#, fuzzy
 msgid "Output Path"
-msgstr "출력:"
+msgstr "출력 경로"
 
 #: kicad/dialogs/panel_jobs_base.cpp:278
 #, fuzzy
@@ -26814,9 +26802,9 @@ msgid "Plugins (%d)"
 msgstr "플러그인 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Fabrication plugins (%d)"
-msgstr "기판 제조 출력"
+msgstr "제조 플러그인 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
@@ -32758,9 +32746,8 @@ msgid "How many items in the array."
 msgstr "배열의 항목 수."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:388
-#, fuzzy
 msgid "Rotate items"
-msgstr "항목 회전:"
+msgstr "항목 회전"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:390
 msgid ""
@@ -33579,9 +33566,8 @@ msgid "Export ODB++ File"
 msgstr "파일로 내보내기"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:146
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "선택한 파일이 유효하지 않거나 손상되었을 수 있습니다!"
+msgstr "선택한 출력 파일 이름이 지원되는 압축 파일 형식이 아닙니다."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:199
 #, fuzzy
@@ -33598,9 +33584,9 @@ msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr "'%s' 파일이 이미 있습니다. 이 파일을 덮어쓰시겠습니까?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "임시 출력 파일을 제거할 수 없음"
+msgstr "기존 출력 파일 '%s'를 제거할 수 없음."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:363
 #, fuzzy, c-format
@@ -33613,12 +33599,11 @@ msgid "Cannot create temporary output directory."
 msgstr "출력 디렉토리 '%s'을(를) 생성할 수 없습니다."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr ""
-"심볼 '%s'가 라이브러리 '%s'에 이미 있습니다.이 심볼을 덮어쓰시겠습니까?"
+msgstr "출력 디렉터리 '%s'가 이미 존재하며 비어 있지 않습니다. 덮어쓰시겠습니까?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:409
 #, fuzzy, c-format
@@ -33650,9 +33635,8 @@ msgid "Output File:"
 msgstr "출력 파일:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression Format:"
-msgstr "치수 유형"
+msgstr "압축 형식:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
@@ -33979,11 +33963,8 @@ msgid "Success"
 msgstr "성공"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"상대 경로를 사용하시겠습니까\n"
-"'%s'?"
+msgstr "내보내기 과정을 취소하시겠습니까?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
 #, fuzzy
@@ -36537,9 +36518,9 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "경고: 배율 옵션이 매우 큰 값으로 설정됨"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1520
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist."
-msgstr "디렉토리 '%s'가 없음"
+msgstr "디렉토리 '%s'가 없음."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:24
 msgid "Plot format:"
@@ -37283,9 +37264,8 @@ msgid "Background Style"
 msgstr "배경 시작"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:95
-#, fuzzy
 msgid "Side"
-msgstr "면:"
+msgstr "면"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:107
 #, fuzzy
@@ -37342,9 +37322,8 @@ msgid "Reset this value to the original value."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
-#, fuzzy
 msgid "Set a new value for this offset:"
-msgstr "프로젝트에 새로운 폴더 생성"
+msgstr "이 오프셋에 새 값을 설정합니다:"
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:63
 #, fuzzy
@@ -37357,9 +37336,8 @@ msgid "Rectangle cannot be zero-sized."
 msgstr "호의 각도는 0이 될 수 없습니다."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:450
-#, fuzzy
 msgid "Arc angle must be greater than 0"
-msgstr "추적 간격은 0보다 커야 합니다."
+msgstr "호 각은 0보다 커야 함"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
@@ -37371,9 +37349,8 @@ msgid "Invalid Arc with radius %f and angle %f."
 msgstr "반지름이 %f이고 각도가 %f인 잘못된 호."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:586
-#, fuzzy
 msgid "Radius must be greater than 0"
-msgstr "반지름은 0보다 커야 합니다."
+msgstr "반지름은 0보다 커야 함"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:773
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
@@ -37382,7 +37359,7 @@ msgstr "X"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:773
 msgid "Y"
-msgstr " Y"
+msgstr "Y"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:878
 #: pcbnew/dialogs/dialog_shape_properties.cpp:881
@@ -37409,9 +37386,8 @@ msgid "Mid Point"
 msgstr "끝점"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:916
-#, fuzzy
 msgid "Start Angle"
-msgstr "시작 레이어:"
+msgstr "시작 각도"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:933
 #, fuzzy
@@ -37463,9 +37439,8 @@ msgid "By Corners"
 msgstr "모서리 추가"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:53
-#, fuzzy
 msgid "By Corner and Size"
-msgstr "모서리 크기:"
+msgstr "모서리와 크기별"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
@@ -38510,14 +38485,12 @@ msgstr ""
 "다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:160
-#, fuzzy
 msgid "Minimum groove for creepage:"
-msgstr "최소 구리 공간거리"
+msgstr "연면거리의 최소 홈:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
-#, fuzzy
 msgid "The minimum slot width from DRC creepage checks"
-msgstr "연결된 구리 항목의 최소 구리 너비입니다."
+msgstr "DRC 연면거리 검사에서 최소 슬롯 너비"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Holes"
@@ -40711,9 +40684,9 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "패드는 스루홀 패드가 아님; %s가 연결됨."
 
 #: pcbnew/drc/drc_engine.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "%s에 대한 지역 재정의; 공간거리: %s."
+msgstr "%s에서 네트 묶임; 간격: 0."
 
 #: pcbnew/drc/drc_engine.cpp:788
 #, fuzzy
@@ -41659,39 +41632,39 @@ msgid "%s orientation differs."
 msgstr "%s 방향이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s 패드 모양 유형이 다름."
+msgstr "%s 패드 모양 유형이 %s 레이어에서 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs on layer %s."
-msgstr "%s 크기가 다름."
+msgstr "크기 %s가 레이어 %s에서 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s 사다리꼴 델타가 다름."
+msgstr "%s 사다리꼴 델타가 %s 레이어에서 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "%s 둥근 모서리가 다름."
+msgstr "%s 둥근 모서리가 %s 레이어에서 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "%s 모따기된 모서리 크가 다름."
+msgstr "%s 모따기 모서리 크기가 %s 레이어에서 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "%s 모따기된 모서리가 다름."
+msgstr "%s 모따기 모서리가 %s 레이어에서 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "홀의 %s 모양 오프셋이 다름."
+msgstr "홀에서 %s 모양 오프셋이 %s 레이어에서 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:351
 #, c-format
@@ -41704,9 +41677,9 @@ msgid "%s drill size differs."
 msgstr "%s 드릴 크기가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "%s 모양 기본값이 다름."
+msgstr "%s 셰이프 원소가 %s 레이어에서 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 #, c-format
@@ -43198,9 +43171,8 @@ msgid "Footprint '%s' saved."
 msgstr "풋프린트 '%s'이(가) 저장되었습니다."
 
 #: pcbnew/load_select_footprint.cpp:374
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "풋프린트 라이브러리 저장\n"
+msgstr "풋프린트 라이브러리 저장 오류"
 
 #: pcbnew/load_select_footprint.cpp:378
 #, c-format
@@ -44277,9 +44249,8 @@ msgid "Suppress Trailing Zeroes"
 msgstr "뒷자리 0 표시하지 않음"
 
 #: pcbnew/pcb_dimension.cpp:1813
-#, fuzzy
 msgid "Arrow Direction"
-msgstr "방향:"
+msgstr "화살표 방향"
 
 #: pcbnew/pcb_dimension.cpp:1826
 msgid "Keep Aligned with Dimension"
@@ -45527,9 +45498,9 @@ msgstr ""
 "알 수 없는 패드 형상 이름 '%s'이(가) 레이어 '%s', 행 %zu에서 발견되었습니다."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "일치하는 레이어 목록에 선택한 레이어를 추가합니다."
+msgstr "%s 레이어를 넣을 사용자 레이어가 없음"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -45637,9 +45608,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "잘못된 시트 핀 이름"
+msgstr "영역 윤곽선에 잘못된 도형 유형 %d가 있음"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
@@ -46444,9 +46415,8 @@ msgid "Failed to load board\n"
 msgstr "보드 로드 실패\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:356 pcbnew/pcbnew_jobs_handler.cpp:431
-#, fuzzy
 msgid "Unknown export format"
-msgstr "알 수 없는 네트리스트 형식.\n"
+msgstr "내보내기 형식을 알 수 없음"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:396
 #, c-format
@@ -50074,11 +50044,8 @@ msgid "Invalid clipboard contents"
 msgstr "잘못된 클립보드 내용"
 
 #: pcbnew/tools/pcb_control.cpp:1509
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"기판 불러오기 중 오류.\n"
-"%s"
+msgstr "보드 로딩 중 에러 발생."
 
 #: pcbnew/tools/pcb_control.cpp:1543
 msgid "Append Board"
