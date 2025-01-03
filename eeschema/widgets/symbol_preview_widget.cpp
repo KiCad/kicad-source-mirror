@@ -91,6 +91,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, 
     settings->m_ShowHiddenPins = false;
     settings->m_ShowHiddenFields = false;
     settings->m_ShowPinAltIcons = false;
+    settings->m_ShowPinsElectricalType = false;
 
     m_outerSizer = new wxBoxSizer( wxVERTICAL );
 
