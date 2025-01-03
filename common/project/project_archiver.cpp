@@ -178,12 +178,12 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
     wxArrayString files;
 
     for( unsigned ii = 0; ii < arrayDim( extensionList ); ii++ )
-        wxDir::GetAllFiles( sourceDir.GetFullPath(), &files, extensionList[ii] );
+        wxDir::GetAllFiles( sourceDir.GetFullPath(), &files, extensionList[ii], wxDIR_FILES | wxDIR_DIRS );
 
     if( aIncludeExtraFiles )
     {
         for( unsigned ii = 0; ii < arrayDim( extraExtensionList ); ii++ )
-            wxDir::GetAllFiles( sourceDir.GetFullPath(), &files, extraExtensionList[ii] );
+            wxDir::GetAllFiles( sourceDir.GetFullPath(), &files, extraExtensionList[ii], wxDIR_FILES | wxDIR_DIRS );
     }
 
     for( unsigned ii = 0; ii < files.GetCount(); ++ii )
