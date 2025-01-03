@@ -5,7 +5,7 @@
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021, 2022, 2023.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Liu Guang <l.g110@163.com>, 2021.
-# CloverGit <w991593239@163.com>, 2021, 2022, 2023, 2024.
+# CloverGit <w991593239@163.com>, 2021, 2022, 2023, 2024, 2025.
 # Deleted User <noreply+33206@weblate.org>, 2021.
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
@@ -39,8 +39,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-31 22:17+0000\n"
-"Last-Translator: HalfSweet <HalfSweet@halfsweet.cn>\n"
+"PO-Revision-Date: 2025-01-04 06:01+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3469,7 +3469,6 @@ msgstr "警告"
 #: common/dialogs/dialog_rc_job_base.cpp:60
 #: kicad/dialogs/panel_jobs_base.cpp:471
 #: pcbnew/dialogs/dialog_render_job_base.cpp:31
-#, fuzzy
 msgid "Output File"
 msgstr "输出文件"
 
@@ -4265,7 +4264,7 @@ msgstr "自动备份工程"
 #: common/dialogs/panel_common_settings_base.cpp:398
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr "保存文件时自动创建当前工程的备份压缩包"
+msgstr "保存文件时自动创建当前工程的备份归档文件"
 
 #: common/dialogs/panel_common_settings_base.cpp:402
 msgid "Create backups when auto save occurs"
@@ -6656,7 +6655,7 @@ msgstr ""
 "的目录"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
 msgstr "%s 的弃用版本。"
 
@@ -7234,7 +7233,7 @@ msgstr "目前不支持 DXF 中的图像。"
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr "导入的图形过大。最大缩放为 %f"
+msgstr "导入的图形过大。最大缩放比例为 %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
@@ -7341,7 +7340,7 @@ msgstr ""
 #: common/io/easyedapro/easyedapro_import_utils.cpp:210
 #, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "无法读取 ZIP 压缩包 '%s'"
+msgstr "无法读取 ZIP 文件 '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:262
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
@@ -7382,9 +7381,8 @@ msgid "Single gerber export"
 msgstr "单 gerber 导出"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "PCB Gerbers export"
-msgstr "导出 PCB SVG"
+msgstr "导出 PCB Gerbers"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
@@ -7499,9 +7497,8 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: 执行 DRC"
 
 #: common/jobs/job_pcb_render.cpp:77
-#, fuzzy
 msgid "Render PCB"
-msgstr "重新批注 PCB"
+msgstr "渲染 PCB"
 
 #: common/jobs/job_pcb_render.cpp:81
 msgid "PCB: Render"
@@ -8123,11 +8120,11 @@ msgstr "这是默认网络类。"
 #: common/project/project_archiver.cpp:54
 #: common/project/project_archiver.cpp:87 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
-msgstr "无法打开存档文件。"
+msgstr "无法打开归档文件。"
 
 #: common/project/project_archiver.cpp:96 kicad/pcm/pcm_task_manager.cpp:337
 msgid "Invalid archive file format."
-msgstr "无效的存档文件格式。"
+msgstr "无效的归档文件格式。"
 
 #: common/project/project_archiver.cpp:107
 #, c-format
@@ -8170,17 +8167,17 @@ msgstr "创建文件 '%s' 失败。"
 #: common/project/project_archiver.cpp:276
 #, c-format
 msgid "Archived file '%s'."
-msgstr "已存档文件 '%s'。"
+msgstr "已打包文件 '%s'。"
 
 #: common/project/project_archiver.cpp:286
 #, c-format
 msgid "Failed to archive file '%s'."
-msgstr "未能存档文件 '%s'。"
+msgstr "打包文件 '%s' 失败。"
 
 #: common/project/project_archiver.cpp:312
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "已创建 Zip 压缩包 '%s'(%s 未压缩, %s 已压缩)。"
+msgstr "已创建 Zip 文件 '%s'(%s 未压缩, %s 已压缩)。"
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -9840,7 +9837,7 @@ msgstr "KiCad s-expression 原理图文件"
 
 #: common/wildcards_and_files_ext.cpp:278
 msgid "CADSTAR Archive files"
-msgstr "CADSTAR 存档文件"
+msgstr "CADSTAR 归档文件"
 
 #: common/wildcards_and_files_ext.cpp:284
 msgid "Eagle XML files"
@@ -9864,7 +9861,7 @@ msgstr "PADS 网表文件"
 
 #: common/wildcards_and_files_ext.cpp:316
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr "EasyEDA (嘉立创 EDA) 标准版备份压缩"
+msgstr "EasyEDA (嘉立创 EDA) 标准版备份打包"
 
 #: common/wildcards_and_files_ext.cpp:322
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
@@ -10265,9 +10262,8 @@ msgid "Footprint '%s' not found."
 msgstr "找不到封装 '%s'。"
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "加载字体 '%s' 时出错。"
+msgstr "加载封装时出错"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -11618,9 +11614,8 @@ msgid "Electrical Rules Checker"
 msgstr "电气规则检查 (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:4
-#, fuzzy
 msgid "ERC Job Configuration"
-msgstr "重新加载配置"
+msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:232
 msgid "Export netlist in KiCad format"
@@ -14611,9 +14606,8 @@ msgid "Group By"
 msgstr "分组"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:393
-#, fuzzy
 msgid "BOM Export Job"
-msgstr "PCB: 导出 DXF"
+msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 msgid "Qty"
@@ -16583,9 +16577,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "输入电源引脚不受任何输出电源引脚驱动"
 
 #: eeschema/erc/erc_item.cpp:68
-#, fuzzy
 msgid "Multiple pins with the same pin number"
-msgstr "引脚编号相同的多个引脚"
+msgstr "多个引脚使用了相同的引脚编号"
 
 #: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
 msgid "Conflict problem between pins"
@@ -16901,7 +16894,7 @@ msgstr "此文件由较旧版本的 KiCad 创建, 保存文件时将转换为新
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr "原理图中存在包含了尾随空格/前导空格的字段名称的符号。"
+msgstr "该原理图中存在字段名称中包含了尾随/前导空格的符号。"
 
 #: eeschema/files-io.cpp:609
 msgid "Schematic is read only."
@@ -17946,7 +17939,7 @@ msgstr "存储文件没有被完全解析 (%d 字节剩余)。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:737
 #: eeschema/sch_io/altium/sch_io_altium.cpp:835
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "应为 5.0 版本的 Altium 原理图文件"
+msgstr "Altium 原理图文件应当为 5.0 版本"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:942
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -17995,7 +17988,7 @@ msgstr "引脚存在 '意外' 的内边缘类型。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1797
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "贝塞尔曲线有 %d 个控制点。至少应为 2 个。"
+msgstr "贝塞尔曲线存在 %d 个控制点。应当至少为 2 个。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2941
 #, c-format
@@ -18046,7 +18039,7 @@ msgstr "找不到文件 %s。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4598
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr "Altium 原理图库文件应为 5.0 版本"
+msgstr "Altium 原理图库文件应当为 5.0 版本"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:64
 msgid "Altium schematic files"
@@ -18126,7 +18119,7 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
-"设计太大, 无法导入到 KiCad 中。\n"
+"设计过大, 无法导入到 KiCad 中。\n"
 "请导航到以下位置以减小 CADSTAR 中的最大设计尺寸: \n"
 "\"设计 -> 属性 -> 设计选项 -> 最大设计尺寸\"。\n"
 "当前设计大小: %.2f, %.2f 毫米。\n"
@@ -18182,9 +18175,8 @@ msgstr ""
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
-msgstr ""
-"符号标识 '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应为 1 个, 但实际"
-"找到了 %d 个。"
+msgstr "符号标识 '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应当为 1 个, "
+"实际找到了 %d 个。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:998
 #, c-format
@@ -18262,8 +18254,8 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
-"与此 CADSTAR 元件库相关的 CADSTAR 原理图存档 (*.csa)文件的路径。如果没有指定,"
-"则假定它位于相同文件夹中的 'symbol.csa'。"
+"与此 CADSTAR 元件库相关的 CADSTAR 原理图归档 (*.csa)文件的路径。"
+"如果没有指定,则假定它位于相同文件夹中的 'symbol.csa'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
 msgid ""
@@ -18281,7 +18273,7 @@ msgstr "无法找到与 '%s' 库相对应的 .csa 文件。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
-msgstr "CADSTAR 原理图存档文件"
+msgstr "CADSTAR 原理图归档文件"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
 msgid "CADSTAR Parts Library files"
@@ -18490,7 +18482,7 @@ msgstr "文件 '意外' 结束"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1083
 msgid "expected 'Italics' or '~'"
-msgstr "需要 '斜体' 或 '~' 符号"
+msgstr "应当为 '斜体' 或 '~' 符号"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1363
 msgid "symbol field text attributes must be 3 characters wide"
@@ -18514,7 +18506,7 @@ msgstr "KiCad 旧版符号库文件"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:222
 msgid "expected unquoted string"
-msgstr "需要不带括号的字符"
+msgstr "应当为不带括号的字符"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:74
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:55
@@ -20032,7 +20024,7 @@ msgstr "无效的语法。应该是 |_char 或 &_char 等..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1212
 msgid "No extra argument was expected"
-msgstr "不期待附加参数"
+msgstr "没有预期的额外参数"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid "Unknown keyword in "
@@ -23225,9 +23217,8 @@ msgid "Modify schematic item"
 msgstr "修改原理图项目"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3327
-#, fuzzy
 msgid "No sub schematic found in the current project"
-msgstr "关闭当前工程"
+msgstr "在当前工程中找不到子原理图"
 
 #: eeschema/tools/sch_edit_tool.cpp:77
 msgid "Symbol Unit"
@@ -24678,11 +24669,11 @@ msgstr "打开 Gerber 作业文件及其关联的 Gerber 绘制文件"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
-msgstr "打开 Zip 压缩文件..."
+msgstr "打开 Zip 归档文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "打开一个 Zip 压缩 (Gerber 和钻孔) 文件"
+msgstr "打开一个 Zip 归档 (Gerber 和钻孔) 文件"
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show Layers Manager"
@@ -25967,9 +25958,8 @@ msgid "Job Description"
 msgstr "作业描述"
 
 #: kicad/dialogs/panel_jobs.cpp:280
-#, fuzzy
 msgid "No output available"
-msgstr "无可用的包更新"
+msgstr "无可用输出"
 
 #: kicad/dialogs/panel_jobs.cpp:334
 msgid "Last run successful"
@@ -25988,24 +25978,20 @@ msgid "View last run results..."
 msgstr "查看上次运行结果..."
 
 #: kicad/dialogs/panel_jobs.cpp:453
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "作业描述"
+msgstr "编辑作业描述"
 
 #: kicad/dialogs/panel_jobs.cpp:454
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "编辑选项..."
+msgstr "编辑作业设置..."
 
 #: kicad/dialogs/panel_jobs.cpp:459
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "删除选中网络"
+msgstr "删除选中作业"
 
 #: kicad/dialogs/panel_jobs.cpp:461
-#, fuzzy
 msgid "Select all jobs"
-msgstr "全选"
+msgstr "选择所有作业"
 
 #: kicad/dialogs/panel_jobs.cpp:701
 msgid "Job Types"
@@ -26020,9 +26006,8 @@ msgid "Select job type:"
 msgstr "选择作业类型:"
 
 #: kicad/dialogs/panel_jobs.cpp:748
-#, fuzzy
 msgid "Output Types"
-msgstr "输出尺寸"
+msgstr "输出类型"
 
 #: kicad/dialogs/panel_jobs.cpp:757
 msgid "Add New Output"
@@ -26037,44 +26022,36 @@ msgid "No outputs defined"
 msgstr "未定义任何输出"
 
 #: kicad/dialogs/panel_jobs_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "作业集"
+msgstr "作业"
 
 #: kicad/dialogs/panel_jobs_base.cpp:82
-#, fuzzy
 msgid "Outputs"
 msgstr "输出"
 
 #: kicad/dialogs/panel_jobs_base.cpp:115
-#, fuzzy
 msgid "Save Jobset"
-msgstr "作业集"
+msgstr "保存作业集"
 
 #: kicad/dialogs/panel_jobs_base.cpp:121
-#, fuzzy
 msgid "Generate All Outputs"
-msgstr "通用选项"
+msgstr "生成通用选项"
 
 #: kicad/dialogs/panel_jobs_base.cpp:175 kicad/dialogs/panel_jobs_base.cpp:409
-#, fuzzy
 msgid "Placeholder"
-msgstr "放置节点"
+msgstr ""
 
 #: kicad/dialogs/panel_jobs_base.cpp:260 kicad/dialogs/panel_jobs_base.cpp:354
-#, fuzzy
 msgid "Output Path"
-msgstr "输出路径:"
+msgstr "输出路径"
 
 #: kicad/dialogs/panel_jobs_base.cpp:278
-#, fuzzy
 msgid "Only Jobs"
-msgstr "仅 %s"
+msgstr "仅作业"
 
 #: kicad/dialogs/panel_jobs_base.cpp:351
-#, fuzzy
 msgid "Record Output"
-msgstr "电源输出"
+msgstr "记录输出"
 
 #: kicad/dialogs/panel_jobs_base.cpp:366
 msgid "Ignore non-zero exit code"
@@ -26154,7 +26131,7 @@ msgstr "在 '%s' 中解压工程。\n"
 
 #: kicad/files-io.cpp:115
 msgid "Archive Project Files"
-msgstr "压缩工程文件"
+msgstr "打包工程文件"
 
 #: kicad/import_proj.cpp:74
 #, c-format
@@ -26190,7 +26167,7 @@ msgstr "创建新目录时出错。请尝试不同路径。无法导入该工程
 
 #: kicad/import_project.cpp:146
 msgid "Import CADSTAR Archive Project Files"
-msgstr "导入 CADSTAR 存档工程文件"
+msgstr "导入 CADSTAR 归档工程文件"
 
 #: kicad/import_project.cpp:154
 msgid "Import Eagle Project Files"
@@ -26291,9 +26268,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d 扩展内容包可更新"
 
 #: kicad/kicad_manager_frame.cpp:752
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "创建 svg 文件出错"
+msgstr "打开作业文件时出错"
 
 #: kicad/kicad_manager_frame.cpp:898
 msgid "Edit File in Text Editor"
@@ -26331,7 +26307,7 @@ msgstr "CADSTAR 工程..."
 
 #: kicad/menubar.cpp:117
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "导入 CADSTAR 存档架构和 PCB (*.csa, *.cpa)"
+msgstr "导入 CADSTAR 归档原理图和 PCB (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:121
 msgid "EAGLE Project..."
@@ -26363,7 +26339,7 @@ msgstr "打包工程 (&A)..."
 
 #: kicad/menubar.cpp:139
 msgid "Archive all needed project files into zip archive"
-msgstr "把当前工程压缩成 Zip 文件"
+msgstr "把当前工程打包成 Zip 文件"
 
 #: kicad/menubar.cpp:143
 msgid "&Unarchive Project..."
@@ -26371,7 +26347,7 @@ msgstr "解包工程 (&U)..."
 
 #: kicad/menubar.cpp:144 kicad/menubar.cpp:272
 msgid "Unarchive project files from zip archive"
-msgstr "选择一个 Zip 工程文件, 并解压缩"
+msgstr "选择一个 Zip 归档文件, 并解压缩至工程"
 
 #: kicad/menubar.cpp:172
 msgid "Browse Project Files"
@@ -26391,7 +26367,7 @@ msgstr "在文本编辑器中编辑本地文件"
 
 #: kicad/menubar.cpp:265
 msgid "Archive all project files"
-msgstr "压缩全部工程文件"
+msgstr "打包全部工程文件"
 
 #: kicad/menubar.cpp:282
 msgid "Reveal project folder in Finder"
@@ -26810,9 +26786,8 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr ""
-"扩展内容包 %s 的已下载压缩包 HASH 与仓库记录不匹配。这可能表明扩展内容包有问"
-"题, 如果问题仍然存在, 请将此报告给仓库维护者。"
+msgstr "扩展内容包 %s 的已下载文件 HASH 与仓库记录不匹配。"
+"这可能表明扩展内容包有问题, 如果问题仍然存在, 请将此报告给仓库维护者。"
 
 #: kicad/pcm/pcm_task_manager.cpp:206 kicad/pcm/pcm_task_manager.cpp:426
 #, c-format
@@ -26841,11 +26816,11 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:369
 msgid "Archive does not contain a valid metadata.json file"
-msgstr "压缩包不包含有效的 metadata.json 文件"
+msgstr "归档文件中不包含有效的 metadata.json 文件"
 
 #: kicad/pcm/pcm_task_manager.cpp:378
 msgid "Archive metadata must have a single version defined"
-msgstr "压缩包元数据必须定义一个版本"
+msgstr "归档文件的元数据必须定义且仅定义一个版本"
 
 #: kicad/pcm/pcm_task_manager.cpp:405
 #, c-format
@@ -29592,10 +29567,10 @@ msgstr ""
 "电容器通常使用 E12 值。10% 和 5% 电阻器通常使用 E24 值。1%\n"
 "电阻器使用 E96 值。其他系列不常用。\n"
 "\n"
-"要选择一个值, 请从计算出的目标值开始, 然后四舍五入到 2 位有效数字 (E24 或以"
-"下), 或 3 位有效数字 (E48 和以下)。\n"
-"对于 E24 或以下, 四舍五入到两位有效数字；对于 E48 及以上, 四舍五入到三位有效"
-"数字。\n"
+"要选择一个值, 请从计算出的目标值开始, 然后四舍五入到 2 位有效数字 (E24 "
+"或以下), 或 3 位有效数字 (E48 和以下)。\n"
+"对于 E24 或以下, 四舍五入到两位有效数字; 对于 E48 及以上, "
+"四舍五入到三位有效数字。\n"
 "然后从表中找出与剩余有效数字最接近的值, 并用它代替这些数字。\n"
 "然后从表中找出与剩余有效数字最接近的值, 并用它代替这些数字。\n"
 "\n"
@@ -32078,7 +32053,7 @@ msgstr "%s 的值不是有效的数字: %s"
 msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
-msgstr "无法确定从 \"%s\" 开始的编号: 期望值与字母表 \"%s\" 一致。"
+msgstr "无法确定从 \"%s\" 开始的编号: 值应当与字母表 \"%s\" 一致。"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:385
 msgid "step value"
@@ -32791,9 +32766,8 @@ msgid "Design Rules Checker"
 msgstr "设计规则检查"
 
 #: pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Configuration"
-msgstr "重新加载配置"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -33114,28 +33088,24 @@ msgid "Export IDFv3"
 msgstr "导出 IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:104
-#, fuzzy
 msgid "zip files"
-msgstr "Zip 文件"
+msgstr "zip 文件"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:106
-#, fuzzy
 msgid "tgz files"
-msgstr "文本文件"
+msgstr "tgz 文件"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:118
 msgid "Export ODB++ File"
 msgstr "导出 ODB++ 文件"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:146
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "所选文件无效或可能已损坏!"
+msgstr "所选的归档文件名称格式不支持。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:199
-#, fuzzy
 msgid "Output file name cannot be empty."
-msgstr "变量名不能为空。"
+msgstr "输出文件名不能为空。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:218
 msgid "The output file name conflicts with the selected compression format."
@@ -33191,14 +33161,13 @@ msgid "Compressing output"
 msgstr "压缩输出"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:23
-#, fuzzy
 msgid "Output File:"
 msgstr "输出文件:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
 #, fuzzy
 msgid "Compression Format:"
-msgstr "测量标注格式"
+msgstr "压缩格式"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
@@ -33326,9 +33295,8 @@ msgid "Export board body"
 msgstr "导出电路板主体"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "导出电路板主体"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
@@ -33401,9 +33369,8 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "将相交的几何图形组合成一个形状。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:142
-#, fuzzy
 msgid "Fill all vias"
-msgstr "填充所有覆铜"
+msgstr "填充所有过孔"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Net filter (supports wildcards):"
@@ -36717,9 +36684,8 @@ msgid "High"
 msgstr "高亮"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:40
-#, fuzzy
 msgid "User"
-msgstr "用户 1"
+msgstr "用户"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:40
 #: pcbnew/widgets/panel_selection_filter.cpp:202
@@ -36733,18 +36699,16 @@ msgid "px"
 msgstr "像素"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:54
-#, fuzzy
 msgid "x"
-msgstr "2x"
+msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:77
 msgid "Quality"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Background Style"
-msgstr "背景起始色"
+msgstr "背景样式"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:95
 #, fuzzy
@@ -40680,7 +40644,7 @@ msgstr "缺少版本号。"
 #: pcbnew/drc/drc_rule_parser.cpp:147
 #, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "未识别的项目 '%s'. | 预期的版本号。"
+msgstr "未识别的项目 '%s'. | 应当为版本号。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:154 pcbnew/drc/drc_rule_parser.cpp:233
 #: pcbnew/drc/drc_rule_parser.cpp:472 pcbnew/drc/drc_rule_parser.cpp:500
@@ -40701,7 +40665,7 @@ msgstr "声明不完整。"
 #: pcbnew/drc/drc_rule_parser.cpp:687
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr "无法识别的项目 '%s'。| 应为 %s。"
+msgstr "无法识别的项目 '%s'。| 应当为 %s。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:193
 msgid "Missing rule name."
@@ -40714,7 +40678,7 @@ msgstr "缺少条件表达式。"
 #: pcbnew/drc/drc_rule_parser.cpp:226 pcbnew/drc/drc_rule_parser.cpp:466
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr "无法识别的项目 '%s'。| 应为带引号的表达式。"
+msgstr "无法识别的项目 '%s'。| 应当为带引号的表达式。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
@@ -40730,7 +40694,7 @@ msgstr "缺少 ')'。"
 #: pcbnew/drc/drc_rule_parser.cpp:294
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr "缺少约束类型。|  应为 %s。"
+msgstr "缺少约束类型。| 应当为 %s。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:349
 #, c-format
@@ -42000,12 +41964,12 @@ msgstr "封装 %s"
 #: pcbnew/footprint.cpp:3248
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "(应为 '通孔', 实际为 '%s')"
+msgstr "(应当为 '通孔', 实际为 '%s')"
 
 #: pcbnew/footprint.cpp:3251
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(应为 '贴片', 实际为 '%s')"
+msgstr "(应当为 '贴片', 实际为 '%s')"
 
 #: pcbnew/footprint.cpp:3472
 #, c-format
@@ -43951,7 +43915,7 @@ msgstr "正加载多边形..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2122
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr "多边形外框计数为 %d, 预期为 1。"
+msgstr "多边形外框数量为 %d, 应当为 1。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2249
 msgid "Loading rules..."
@@ -44641,7 +44605,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
-msgstr "CADSTAR PCB 存档文件"
+msgstr "CADSTAR PCB 归档文件"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:362
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:221
@@ -44843,17 +44807,17 @@ msgstr "未识别的焊盘形状基元 '%s', 位于行 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "圆在 x 和 y 方向上的半径不等 (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "x 和 y 应当相等, 实际为 x = %f, y = %f。 "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "无效的 token 数量。应为 8, 但实际找到了 %zu。"
+msgstr "无效的 token 数量。应当为 8, 实际为 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1564
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1753
@@ -44882,7 +44846,7 @@ msgstr "ID %d 和序列 %d 的重复项位于行 %zu。"
 msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
-msgstr ""
+msgstr "refdes %2$s 的 %1$zu 行缺少 X, Y 或旋转数据。可能是一个未放置的元件。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
 #, c-format
