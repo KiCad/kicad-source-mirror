@@ -69,6 +69,11 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .help( UTF8STDSTR( _( "Output units, valid options: mm, in" ) ) )
             .metavar( "UNITS" );
 
+    m_argParser.add_argument( ARG_DRILL_SHAPE_OPTION )
+            .help( UTF8STDSTR( _( ARG_DRILL_SHAPE_OPTION_DESC ) ) )
+            .scan<'i', int>()
+            .default_value( 2 );
+
     m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
             .default_value( std::string() )
             .help( UTF8STDSTR(
@@ -114,6 +119,9 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     dxfJob->m_useDrillOrigin = m_argParser.get<bool>( ARG_USE_DRILL_ORIGIN );
     dxfJob->m_plotDrawingSheet = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
     dxfJob->m_plotInvisibleText = m_argParser.get<bool>( ARG_PLOT_INVISIBLE_TEXT );
+
+    int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
+    dxfJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_DXF::DRILL_MARKS>( drillShape );
 
     wxString units = From_UTF8( m_argParser.get<std::string>( ARG_OUTPUT_UNITS ).c_str() );
 
