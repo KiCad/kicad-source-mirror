@@ -804,7 +804,9 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     {
         wxFileName jobsetFn( jobset );
         jobsetFn.MakeAbsolute( Prj().GetProjectPath() );
-        OpenJobsFile( jobsetFn.GetFullPath(), false, false );
+
+        if( jobsetFn.Exists() )
+            OpenJobsFile( jobsetFn.GetFullPath(), false, false );
     }
 
     // Rebuild the list of watched paths.
