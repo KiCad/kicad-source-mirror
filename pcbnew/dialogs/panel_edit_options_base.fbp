@@ -1652,7 +1652,7 @@
                   <property name="border">5</property>
                   <property name="flag">wxEXPAND|wxALL</property>
                   <property name="proportion">1</property>
-                  <object class="wxStaticBoxSizer" expanded="false">
+                  <object class="wxStaticBoxSizer" expanded="true">
                     <property name="id">wxID_ANY</property>
                     <property name="label">Left Click Mouse Commands</property>
                     <property name="minimum_size"></property>
@@ -1781,11 +1781,11 @@
                         <property name="window_style"></property>
                       </object>
                     </object>
-                    <object class="sizeritem" expanded="false">
+                    <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
                       <property name="flag">wxEXPAND|wxTOP</property>
                       <property name="proportion">1</property>
-                      <object class="wxFlexGridSizer" expanded="false">
+                      <object class="wxFlexGridSizer" expanded="true">
                         <property name="cols">2</property>
                         <property name="flexible_direction">wxBOTH</property>
                         <property name="growablecols"></property>
@@ -2424,7 +2424,7 @@
                         </object>
                         <object class="sizeritem" expanded="false">
                           <property name="border">5</property>
-                          <property name="flag">wxRIGHT|wxLEFT</property>
+                          <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
                           <property name="proportion">0</property>
                           <object class="wxStaticText" expanded="false">
                             <property name="BottomDockable">1</property>
@@ -2486,7 +2486,7 @@
                         </object>
                         <object class="sizeritem" expanded="false">
                           <property name="border">5</property>
-                          <property name="flag">wxRIGHT|wxLEFT</property>
+                          <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
                           <property name="proportion">0</property>
                           <object class="wxStaticText" expanded="false">
                             <property name="BottomDockable">1</property>
@@ -2893,7 +2893,7 @@
                             <property name="proportion">1</property>
                             <object class="wxFlexGridSizer" expanded="true">
                               <property name="cols">2</property>
-                              <property name="flexible_direction">wxBOTH</property>
+                              <property name="flexible_direction">wxVERTICAL</property>
                               <property name="growablecols"></property>
                               <property name="growablerows"></property>
                               <property name="hgap">0</property>
@@ -2967,7 +2967,7 @@
                               </object>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxChoice" expanded="false">
                                   <property name="BottomDockable">1</property>

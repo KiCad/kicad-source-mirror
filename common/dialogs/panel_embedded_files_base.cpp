@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,7 +60,7 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	m_browse_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_browse_button->SetToolTip( _("Add embedded file") );
 
-	bButtonsSizer->Add( m_browse_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_browse_button, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -68,16 +68,16 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	m_delete_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_delete_button->SetToolTip( _("Remove embedded file") );
 
-	bButtonsSizer->Add( m_delete_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_delete_button, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	bButtonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_export = new wxButton( this, wxID_ANY, _("&Export"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_export, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bButtonsSizer->Add( m_export, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxALL, 3 );
+	bMainSizer->Add( bButtonsSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 3 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
@@ -88,7 +88,7 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	m_cbEmbedFonts = new wxCheckBox( this, wxID_ANY, _("Embed Fonts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbEmbedFonts->SetToolTip( _("Store a copy of all fonts used") );
 
-	bSizer4->Add( m_cbEmbedFonts, 0, wxALL, 5 );
+	bSizer4->Add( m_cbEmbedFonts, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bMainSizer->Add( bSizer4, 0, wxEXPAND, 5 );

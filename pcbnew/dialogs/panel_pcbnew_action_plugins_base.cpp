@@ -53,7 +53,7 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bGridSizer->Add( m_grid, 1, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
+	bGridSizer->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
 
 
 	bPanelSizer->Add( bGridSizer, 1, wxEXPAND, 0 );
@@ -90,7 +90,7 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	bButtonsSizer->Add( m_showErrorsButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND|wxTOP, 5 );
 
 
 	bSizer4->Add( bPanelSizer, 1, wxEXPAND, 5 );

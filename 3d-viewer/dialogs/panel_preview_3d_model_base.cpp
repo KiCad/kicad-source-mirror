@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,7 +23,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	sbSizerScale = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scale") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerScale;
-	fgSizerScale = new wxFlexGridSizer( 0, 3, 1, 3 );
+	fgSizerScale = new wxFlexGridSizer( 0, 3, 3, 3 );
 	fgSizerScale->AddGrowableCol( 1 );
 	fgSizerScale->SetFlexibleDirection( wxBOTH );
 	fgSizerScale->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -36,7 +36,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerScale->Add( xscale, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
 	m_spinXscale = new wxSpinButton( sbSizerScale->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerScale->Add( m_spinXscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerScale->Add( m_spinXscale, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText2 = new wxStaticText( sbSizerScale->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
@@ -56,7 +56,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerScale->Add( zscale, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
 	m_spinZscale = new wxSpinButton( sbSizerScale->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerScale->Add( m_spinZscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerScale->Add( m_spinZscale, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 
 	sbSizerScale->Add( fgSizerScale, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 2 );
@@ -81,7 +81,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerRotate->Add( xrot, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
 	m_spinXrot = new wxSpinButton( sbSizerRotation->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerRotate->Add( m_spinXrot, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRotate->Add( m_spinXrot, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText21 = new wxStaticText( sbSizerRotation->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
@@ -101,13 +101,13 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerRotate->Add( zrot, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
 	m_spinZrot = new wxSpinButton( sbSizerRotation->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerRotate->Add( m_spinZrot, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRotate->Add( m_spinZrot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 
 	sbSizerRotation->Add( fgSizerRotate, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 2 );
 
 
-	bSizerLeft->Add( sbSizerRotation, 0, wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	bSizerLeft->Add( sbSizerRotation, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizerOffset;
 	sbSizerOffset = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Offset") ), wxVERTICAL );
@@ -126,7 +126,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerOffset->Add( xoff, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
 	m_spinXoffset = new wxSpinButton( sbSizerOffset->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerOffset->Add( m_spinXoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerOffset->Add( m_spinXoffset, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText22 = new wxStaticText( sbSizerOffset->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
@@ -146,13 +146,13 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerOffset->Add( zoff, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
 	m_spinZoffset = new wxSpinButton( sbSizerOffset->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 
 	sbSizerOffset->Add( fgSizerOffset, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 2 );
 
 
-	bSizerLeft->Add( sbSizerOffset, 0, wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	bSizerLeft->Add( sbSizerOffset, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Opacity") ), wxVERTICAL );
@@ -161,7 +161,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	sbSizer4->Add( m_opacity, 0, wxRIGHT|wxLEFT, 2 );
 
 
-	bSizerLeft->Add( sbSizer4, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( sbSizer4, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bSizermain->Add( bSizerLeft, 0, 0, 5 );
@@ -241,7 +241,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	bSizer3DButtons->Add( 0, 10, 0, 0, 5 );
 
 
-	bSizermain->Add( bSizer3DButtons, 0, wxEXPAND|wxTOP, 5 );
+	bSizermain->Add( bSizer3DButtons, 0, wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 
 	this->SetSizer( bSizermain );

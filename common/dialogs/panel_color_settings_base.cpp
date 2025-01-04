@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,12 +66,12 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_colorsListWindow->SetSizer( m_colorsGridSizer );
 	m_colorsListWindow->Layout();
 	m_colorsGridSizer->Fit( m_colorsListWindow );
-	m_colorsMainSizer->Add( m_colorsListWindow, 0, wxEXPAND, 5 );
+	m_colorsMainSizer->Add( m_colorsListWindow, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_previewPanelSizer = new wxBoxSizer( wxVERTICAL );
 
 
-	m_colorsMainSizer->Add( m_previewPanelSizer, 1, wxEXPAND, 5 );
+	m_colorsMainSizer->Add( m_previewPanelSizer, 1, wxEXPAND|wxRIGHT, 5 );
 
 
 	m_panel1->SetSizer( m_colorsMainSizer );

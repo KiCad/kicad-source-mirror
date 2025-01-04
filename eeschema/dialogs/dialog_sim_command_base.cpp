@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -524,7 +524,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizer31->Add( fgSizer12, 0, wxEXPAND|wxALL, 5 );
 
 	m_spDoNoise = new wxCheckBox( m_pgSP, wxID_ANY, _("Compute noise current correlation matrix"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer31->Add( m_spDoNoise, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizer31->Add( m_spDoNoise, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	m_pgSP->SetSizer( bSizer31 );
@@ -618,16 +618,16 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_pzAnalysesLabel = new wxStaticText( m_pgPZ, wxID_ANY, _("Find:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pzAnalysesLabel->Wrap( -1 );
-	bSizer17->Add( m_pzAnalysesLabel, 0, wxALL, 5 );
+	bSizer17->Add( m_pzAnalysesLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_pzAnalysesChoices[] = { _("Poles and Zeros"), _("Poles"), _("Zeros"), wxEmptyString };
 	int m_pzAnalysesNChoices = sizeof( m_pzAnalysesChoices ) / sizeof( wxString );
 	m_pzAnalyses = new wxChoice( m_pgPZ, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pzAnalysesNChoices, m_pzAnalysesChoices, 0 );
 	m_pzAnalyses->SetSelection( 0 );
-	bSizer17->Add( m_pzAnalyses, 0, wxALL, 5 );
+	bSizer17->Add( m_pzAnalyses, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bSizer821->Add( bSizer17, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bSizer821->Add( bSizer17, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
 	m_pgPZ->SetSizer( bSizer821 );

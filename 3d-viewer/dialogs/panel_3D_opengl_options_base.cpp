@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ PANEL_3D_OPENGL_OPTIONS_BASE::PANEL_3D_OPENGL_OPTIONS_BASE( wxWindow* parent, wx
 	bSizerMain->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizerMain->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
@@ -77,7 +77,7 @@ PANEL_3D_OPENGL_OPTIONS_BASE::PANEL_3D_OPENGL_OPTIONS_BASE( wxWindow* parent, wx
 	bSizerMain->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizerMain->Add( m_staticline2, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );

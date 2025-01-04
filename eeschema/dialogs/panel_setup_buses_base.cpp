@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,7 +23,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 
 	m_busesLabel = new wxStaticText( this, wxID_ANY, _("Bus definitions:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_busesLabel->Wrap( -1 );
-	bLeftCol->Add( m_busesLabel, 0, wxTOP|wxLEFT, 8 );
+	bLeftCol->Add( m_busesLabel, 0, wxLEFT|wxTOP, 5 );
 
 
 	bLeftCol->Add( 0, 3, 0, wxEXPAND, 5 );
@@ -56,7 +56,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	m_aliasesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_aliasesGrid->SetMinSize( wxSize( -1,180 ) );
 
-	bLeftCol->Add( m_aliasesGrid, 1, wxEXPAND, 10 );
+	bLeftCol->Add( m_aliasesGrid, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
@@ -93,7 +93,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 
 	m_membersLabel = new wxStaticText( membersPanel, wxID_ANY, _("Members of '%s':"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_membersLabel->Wrap( -1 );
-	bSizer7->Add( m_membersLabel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+	bSizer7->Add( m_membersLabel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer7->Add( 0, 3, 0, wxEXPAND, 5 );

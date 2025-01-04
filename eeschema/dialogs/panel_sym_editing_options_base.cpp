@@ -19,13 +19,10 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 
 	m_defaultsLabel = new wxStaticText( this, wxID_ANY, _("Defaults for New Objects"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_defaultsLabel->Wrap( -1 );
-	leftColumn->Add( m_defaultsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
-
-
-	leftColumn->Add( 0, 3, 0, wxEXPAND, 5 );
+	leftColumn->Add( m_defaultsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	leftColumn->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
+	leftColumn->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 2, 0 );
@@ -93,20 +90,17 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	gbSizer1->Add( m_pinNameSizeUnits, wxGBPosition( 6, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	leftColumn->Add( gbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	leftColumn->Add( gbSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	leftColumn->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	m_repeatLabel = new wxStaticText( this, wxID_ANY, _("Repeated Items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_repeatLabel->Wrap( -1 );
-	leftColumn->Add( m_repeatLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
-
-
-	leftColumn->Add( 0, 3, 0, wxEXPAND, 5 );
+	leftColumn->Add( m_repeatLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	leftColumn->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	leftColumn->Add( m_staticline2, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxGridBagSizer* gbSizer2;
 	gbSizer2 = new wxGridBagSizer( 5, 0 );
@@ -140,21 +134,21 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	wxBoxSizer* rightColumn;
 	rightColumn = new wxBoxSizer( wxVERTICAL );
 
-	m_generalOption1 = new wxStaticText( this, wxID_ANY, _("General editing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_generalOption1 = new wxStaticText( this, wxID_ANY, _("General Editing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_generalOption1->Wrap( -1 );
-	rightColumn->Add( m_generalOption1, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
+	rightColumn->Add( m_generalOption1, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	rightColumn->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
+	rightColumn->Add( m_staticline4, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_dragPinsWithEdges = new wxCheckBox( this, wxID_ANY, _("Keep pins attached when dragging edges"), wxDefaultPosition, wxDefaultSize, 0 );
-	rightColumn->Add( m_dragPinsWithEdges, 0, wxBOTTOM|wxLEFT, 10 );
+	rightColumn->Add( m_dragPinsWithEdges, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	rightColumn->Add( 0, 15, 1, wxEXPAND, 5 );
 
 
-	p1mainSizer->Add( rightColumn, 1, wxEXPAND|wxLEFT, 5 );
+	p1mainSizer->Add( rightColumn, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( p1mainSizer );

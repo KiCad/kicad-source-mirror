@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,11 +18,11 @@ PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* pare
 	m_generalLabel->Wrap( -1 );
 	bSizer1->Add( m_generalLabel, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
 
-
-	bSizer1->Add( 0, 0, 0, wxEXPAND, 5 );
-
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer1->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+
+
+	bSizer1->Add( 0, 0, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer41;
 	bSizer41 = new wxBoxSizer( wxVERTICAL );
@@ -35,17 +35,14 @@ PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* pare
 	bSizer1->Add( bSizer41, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
-	bSizer1->Add( 0, 20, 0, wxEXPAND, 5 );
+	bSizer1->Add( 0, 3, 0, wxALL|wxEXPAND, 5 );
 
 	m_pcmLabel = new wxStaticText( this, wxID_ANY, _("Plugin and Content Manager"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pcmLabel->Wrap( -1 );
 	bSizer1->Add( m_pcmLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
-
-	bSizer1->Add( 0, 3, 0, wxEXPAND, 5 );
-
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizer1->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -60,15 +57,12 @@ PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* pare
 
 	bSizer1->Add( 0, 20, 0, wxEXPAND, 5 );
 
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Library package handling"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Library Package Handling"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	bSizer1->Add( m_staticText4, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
 
-
-	bSizer1->Add( 0, 3, 0, wxEXPAND, 5 );
-
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer1->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizer1->Add( m_staticline2, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );

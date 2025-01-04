@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -176,7 +176,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	bOptionsRight->Add( sbSizer4, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_otherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other options") ), wxVERTICAL );
+	m_otherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other Options") ), wxVERTICAL );
 
 	m_openFileAfterPlot = new wxCheckBox( m_otherOptions->GetStaticBox(), wxID_ANY, _("Open file after plot"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_openFileAfterPlot->SetToolTip( _("Open output file with associated application after successful plot") );

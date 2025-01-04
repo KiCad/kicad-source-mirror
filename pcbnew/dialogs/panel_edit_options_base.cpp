@@ -249,12 +249,12 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxStaticText* staticText102;
 	staticText102 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Option"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText102->Wrap( -1 );
-	fgSizerCmdsOSX->Add( staticText102, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizerCmdsOSX->Add( staticText102, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticText* staticText112;
 	staticText112 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Clarify selection from menu"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText112->Wrap( -1 );
-	fgSizerCmdsOSX->Add( staticText112, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizerCmdsOSX->Add( staticText112, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	m_mouseCmdsOSX->Add( fgSizerCmdsOSX, 1, wxEXPAND|wxTOP, 5 );
@@ -299,7 +299,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 2, 5, 0 );
-	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetFlexibleDirection( wxVERTICAL );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticText2 = new wxStaticText( sbMagnets->GetStaticBox(), wxID_ANY, _("Snap to pads:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -314,7 +314,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_magneticPadChoice->SetSelection( 1 );
 	m_magneticPadChoice->SetToolTip( _("Capture cursor when the mouse enters a pad area") );
 
-	fgSizer2->Add( m_magneticPadChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_magneticPadChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_staticText21 = new wxStaticText( sbMagnets->GetStaticBox(), wxID_ANY, _("Snap to tracks and vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
