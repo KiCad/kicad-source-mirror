@@ -38,6 +38,9 @@ public:
             m_name( aName )
     {}
 
+    virtual ~SEARCH_HANDLER()
+    {}
+
     wxString GetName() const { return m_name; }
 
     std::vector<std::tuple<wxString, int, wxListColumnFormat>> GetColumns() const
