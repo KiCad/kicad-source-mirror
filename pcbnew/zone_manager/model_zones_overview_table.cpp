@@ -143,7 +143,7 @@ void MODEL_ZONES_OVERVIEW_TABLE::GetValueByRow( wxVariant& aVariant, unsigned aR
             layers.Add( m_pcb->GetLayerName( layer ) );
 
         aVariant << wxDataViewIconText( wxJoin( layers, ',' ),
-                                        MakeBitmapForLayers( cur.GetLayerSet().Seq(),
+                                        MakeBitmapForLayers( cur.GetLayerSet().UIOrder(),
                                                              *m_PCB_FRAME->GetColorSettings(),
                                                              bmSize ) );
         break;

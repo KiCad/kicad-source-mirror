@@ -145,7 +145,7 @@ void PANE_ZONE_VIEWER::ActivateSelectedZone( ZONE* aZone )
 
     const PCB_LAYER_ID firstLayer = aZone->GetFirstLayer();
 
-    for( PCB_LAYER_ID layer : aZone->GetLayerSet().Seq() )
+    for( PCB_LAYER_ID layer : aZone->GetLayerSet().UIOrder() )
     {
         wxString layerName =
                 m_pcbFrame->GetBoard()->GetLayerName( static_cast<PCB_LAYER_ID>( layer ) );
