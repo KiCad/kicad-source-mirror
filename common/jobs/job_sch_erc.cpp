@@ -34,9 +34,9 @@ wxString JOB_SCH_ERC::GetDefaultDescription() const
 }
 
 
-wxString JOB_SCH_ERC::GetOptionsDialogTitle() const
+wxString JOB_SCH_ERC::GetSettingsDialogTitle() const
 {
-    return _( "Schematic ERC Job Options" );
+    return _( "Schematic ERC Job Settings" );
 }
 
 

@@ -27,5 +27,5 @@ class KICOMMON_API JOB_SCH_ERC : public JOB_RC
 public:
     JOB_SCH_ERC();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 };

@@ -110,7 +110,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     }
     else
     {
-        SetTitle( m_job->GetOptionsDialogTitle() );
+        SetTitle( m_job->GetSettingsDialogTitle() );
 
         m_browseButton->Hide();
 

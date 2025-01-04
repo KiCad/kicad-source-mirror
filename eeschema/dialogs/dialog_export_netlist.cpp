@@ -260,7 +260,7 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
     }
     else
     {
-        SetTitle( m_job->GetOptionsDialogTitle() );
+        SetTitle( m_job->GetSettingsDialogTitle() );
 
         m_MessagesBox->Hide();
         m_outputPath->SetValue( m_job->GetOutputPath() );

@@ -265,7 +265,7 @@ bool DIALOG_EXPORT_2581::Init()
     }
     else
     {
-        SetTitle( m_job->GetOptionsDialogTitle() );
+        SetTitle( m_job->GetSettingsDialogTitle() );
 
         m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
         m_precision->SetValue( static_cast<int>( m_job->m_precision ) );

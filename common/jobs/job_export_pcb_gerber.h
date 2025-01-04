@@ -33,7 +33,7 @@ public:
     JOB_EXPORT_PCB_GERBER( const std::string& aType );
     JOB_EXPORT_PCB_GERBER();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     bool m_subtractSolderMaskFromSilk;
     bool m_includeNetlistAttributes;

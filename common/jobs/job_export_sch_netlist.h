@@ -45,7 +45,7 @@ public:
 public:
     JOB_EXPORT_SCH_NETLIST();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     wxString m_filename;
 

@@ -31,7 +31,7 @@ class KICOMMON_API JOB_EXPORT_SCH_BOM : public JOB
 public:
     JOB_EXPORT_SCH_BOM();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     // Basic options
     wxString m_filename;

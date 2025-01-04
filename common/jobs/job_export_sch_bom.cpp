@@ -87,9 +87,9 @@ wxString JOB_EXPORT_SCH_BOM::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_SCH_BOM::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_SCH_BOM::GetSettingsDialogTitle() const
 {
-    return wxString::Format( _( "Generate Bill of Materials Job Options" ) );
+    return wxString::Format( _( "Generate Bill of Materials Job Settings" ) );
 }
 
 

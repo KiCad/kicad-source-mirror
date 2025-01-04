@@ -81,9 +81,9 @@ wxString JOB_EXPORT_SCH_NETLIST::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_SCH_NETLIST::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_SCH_NETLIST::GetSettingsDialogTitle() const
 {
-    return wxString::Format( _( "Export Netlist Job Options" ) );
+    return wxString::Format( _( "Export Netlist Job Settings" ) );
 }
 
 

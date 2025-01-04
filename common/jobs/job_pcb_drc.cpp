@@ -38,9 +38,9 @@ wxString JOB_PCB_DRC::GetDefaultDescription() const
 }
 
 
-wxString JOB_PCB_DRC::GetOptionsDialogTitle() const
+wxString JOB_PCB_DRC::GetSettingsDialogTitle() const
 {
-    return _( "DRC Job Options" );
+    return _( "DRC Job Settings" );
 }
 
 

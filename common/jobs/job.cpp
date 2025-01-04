@@ -74,9 +74,9 @@ wxString JOB::GetDefaultDescription() const
 }
 
 
-wxString JOB::GetOptionsDialogTitle() const
+wxString JOB::GetSettingsDialogTitle() const
 {
-    return _( "Job Options" );
+    return _( "Job Settings" );
 }
 
 

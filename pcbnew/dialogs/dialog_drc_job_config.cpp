@@ -24,7 +24,7 @@ DIALOG_DRC_JOB_CONFIG::DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJo
         DIALOG_RC_JOB( parent, aJob, _( "DRC Job Settings" ) ),
         m_drcJob( aJob )
 {
-    SetTitle( aJob->GetOptionsDialogTitle() );
+    SetTitle( aJob->GetSettingsDialogTitle() );
 }
 
 

@@ -90,9 +90,9 @@ wxString JOB_PCB_RENDER::GetDefaultDescription() const
 }
 
 
-wxString JOB_PCB_RENDER::GetOptionsDialogTitle() const
+wxString JOB_PCB_RENDER::GetSettingsDialogTitle() const
 {
-    return _( "Render PCB Job Options" );
+    return _( "Render PCB Job Settings" );
 }
 
 

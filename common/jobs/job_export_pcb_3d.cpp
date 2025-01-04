@@ -145,9 +145,9 @@ wxString JOB_EXPORT_PCB_3D::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_PCB_3D::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_PCB_3D::GetSettingsDialogTitle() const
 {
-    return _( "Export 3D Model Job Options" );
+    return _( "Export 3D Model Job Settings" );
 }
 
 

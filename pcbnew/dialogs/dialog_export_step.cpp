@@ -111,7 +111,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
     }
     else
     {
-        SetTitle( m_job->GetOptionsDialogTitle() );
+        SetTitle( m_job->GetSettingsDialogTitle() );
 
         m_browseButton->Hide();
         SetupStandardButtons();

@@ -92,9 +92,9 @@ wxString JOB_EXPORT_PCB_POS::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_PCB_POS::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_PCB_POS::GetSettingsDialogTitle() const
 {
-    return _( "Export Position Data Job Options" );
+    return _( "Export Position Data Job Settings" );
 }
 
 

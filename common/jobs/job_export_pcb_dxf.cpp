@@ -59,9 +59,9 @@ wxString JOB_EXPORT_PCB_DXF::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_PCB_DXF::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_PCB_DXF::GetSettingsDialogTitle() const
 {
-    return _( "Export DXF Job Options" );
+    return _( "Export DXF Job Settings" );
 }
 
 

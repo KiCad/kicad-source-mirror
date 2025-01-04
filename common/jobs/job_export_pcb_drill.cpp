@@ -124,9 +124,9 @@ wxString JOB_EXPORT_PCB_DRILL::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_PCB_DRILL::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_PCB_DRILL::GetSettingsDialogTitle() const
 {
-    return _( "Export Drill Data Job Options" );
+    return _( "Export Drill Data Job Settings" );
 }
 
 REGISTER_JOB( pcb_export_drill, _HKI( "PCB: Export drill data" ), KIWAY::FACE_PCB,

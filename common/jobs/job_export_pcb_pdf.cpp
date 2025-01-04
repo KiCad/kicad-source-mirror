@@ -75,9 +75,9 @@ wxString JOB_EXPORT_PCB_PDF::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_PCB_PDF::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_PCB_PDF::GetSettingsDialogTitle() const
 {
-    return wxString::Format( _( "Export PDF Job Options" ) );
+    return wxString::Format( _( "Export PDF Job Settings" ) );
 }
 
 

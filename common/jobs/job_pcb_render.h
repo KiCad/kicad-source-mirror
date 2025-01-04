@@ -51,7 +51,7 @@ public:
 public:
     JOB_PCB_RENDER();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     wxString m_filename;
 

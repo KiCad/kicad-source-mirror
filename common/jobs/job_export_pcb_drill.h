@@ -32,7 +32,7 @@ public:
     JOB_EXPORT_PCB_DRILL();
 
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     wxString m_filename;
 

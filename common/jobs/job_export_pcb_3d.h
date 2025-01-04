@@ -107,7 +107,7 @@ class KICOMMON_API JOB_EXPORT_PCB_3D : public JOB
 public:
     JOB_EXPORT_PCB_3D();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     void SetStepFormat( EXPORTER_STEP_PARAMS::FORMAT aFormat );
 

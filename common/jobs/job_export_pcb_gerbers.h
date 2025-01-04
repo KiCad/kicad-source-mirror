@@ -33,7 +33,7 @@ class KICOMMON_API JOB_EXPORT_PCB_GERBERS : public JOB_EXPORT_PCB_GERBER
 public:
     JOB_EXPORT_PCB_GERBERS();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     LSET m_layersIncludeOnAll;
 

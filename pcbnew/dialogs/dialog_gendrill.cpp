@@ -162,7 +162,7 @@ void DIALOG_GENDRILL::initDialog()
 {
     if( m_job )
     {
-        SetTitle( m_job->GetOptionsDialogTitle() );
+        SetTitle( m_job->GetSettingsDialogTitle() );
     }
     else
     {

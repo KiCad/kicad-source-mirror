@@ -59,9 +59,9 @@ wxString JOB_EXPORT_PCB_SVG::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_PCB_SVG::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_PCB_SVG::GetSettingsDialogTitle() const
 {
-    return _( "Export SVG Job Options" );
+    return _( "Export SVG Job Settings" );
 }
 
 

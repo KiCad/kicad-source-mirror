@@ -275,7 +275,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
 
     if( m_job )
     {
-        SetTitle( m_job->GetOptionsDialogTitle() );
+        SetTitle( m_job->GetSettingsDialogTitle() );
 
         preset.name = m_job->m_bomPresetName;
         preset.excludeDNP = m_job->m_excludeDNP;

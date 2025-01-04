@@ -33,7 +33,7 @@ class KICOMMON_API JOB_EXPORT_PCB_SVG : public JOB_EXPORT_PCB_PLOT
 public:
     JOB_EXPORT_PCB_SVG();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     int m_pageSizeMode;
     unsigned int m_precision;

@@ -141,7 +141,7 @@ public:
     virtual void ToJson( nlohmann::json& j ) const;
 
     virtual wxString GetDefaultDescription() const;
-    virtual wxString GetOptionsDialogTitle() const;
+    virtual wxString GetSettingsDialogTitle() const;
 
     const std::vector<JOB_PARAM_BASE*>& GetParams() { return m_params; }
 

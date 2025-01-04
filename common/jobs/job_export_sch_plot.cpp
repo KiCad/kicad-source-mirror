@@ -123,9 +123,9 @@ wxString JOB_EXPORT_SCH_PLOT_PDF::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_PDF::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_SCH_PLOT_PDF::GetSettingsDialogTitle() const
 {
-    return _( "Export PDF Job Options" );
+    return _( "Export PDF Job Settings" );
 }
 
 
@@ -142,9 +142,9 @@ wxString JOB_EXPORT_SCH_PLOT_DXF::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_DXF::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_SCH_PLOT_DXF::GetSettingsDialogTitle() const
 {
-    return _( "Export DXF Job Options" );
+    return _( "Export DXF Job Settings" );
 }
 
 
@@ -161,9 +161,9 @@ wxString JOB_EXPORT_SCH_PLOT_SVG::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_SVG::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_SCH_PLOT_SVG::GetSettingsDialogTitle() const
 {
-    return _( "Export SVG Job Options" );
+    return _( "Export SVG Job Settings" );
 }
 
 
@@ -180,9 +180,9 @@ wxString JOB_EXPORT_SCH_PLOT_PS::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_PS::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_SCH_PLOT_PS::GetSettingsDialogTitle() const
 {
-    return _( "Export Postscript Job Options" );
+    return _( "Export Postscript Job Settings" );
 }
 
 
@@ -199,9 +199,9 @@ wxString JOB_EXPORT_SCH_PLOT_HPGL::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_SCH_PLOT_HPGL::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_SCH_PLOT_HPGL::GetSettingsDialogTitle() const
 {
-    return _( "Export HPGL Job Options" );
+    return _( "Export HPGL Job Settings" );
 }
 
 

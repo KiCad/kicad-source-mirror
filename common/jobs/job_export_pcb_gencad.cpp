@@ -33,7 +33,7 @@ JOB_EXPORT_PCB_GENCAD::JOB_EXPORT_PCB_GENCAD() :
 }
 
 
-wxString JOB_EXPORT_PCB_GENCAD::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_PCB_GENCAD::GetSettingsDialogTitle() const
 {
-    return _( "Export GenCAD Job Options" );
+    return _( "Export GenCAD Job Settings" );
 }

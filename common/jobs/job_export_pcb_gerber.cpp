@@ -72,7 +72,7 @@ wxString JOB_EXPORT_PCB_GERBER::GetDefaultDescription() const
 }
 
 
-wxString JOB_EXPORT_PCB_GERBER::GetOptionsDialogTitle() const
+wxString JOB_EXPORT_PCB_GERBER::GetSettingsDialogTitle() const
 {
-    return _( "Export Single Gerber Job Options" );
+    return _( "Export Single Gerber Job Settings" );
 }

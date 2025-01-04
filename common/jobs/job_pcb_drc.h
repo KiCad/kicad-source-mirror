@@ -27,7 +27,7 @@ class KICOMMON_API JOB_PCB_DRC : public JOB_RC
 public:
     JOB_PCB_DRC();
     wxString GetDefaultDescription() const override;
-    wxString GetOptionsDialogTitle() const override;
+    wxString GetSettingsDialogTitle() const override;
 
     bool m_reportAllTrackErrors;
     bool m_parity;

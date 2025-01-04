@@ -47,7 +47,7 @@ static std::map<JOB_PCB_RENDER::SIDE, wxString> sideMap = {
 DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  ) :
         DIALOG_RENDER_JOB_BASE( aParent ), m_job( aJob )
 {
-    SetTitle( aJob->GetOptionsDialogTitle() );
+    SetTitle( aJob->GetSettingsDialogTitle() );
 
     for( const auto& [k, name] : JOB_PCB_RENDER::GetFormatNameMap() )
         m_choiceFormat->Append( wxGetTranslation( name ) );
