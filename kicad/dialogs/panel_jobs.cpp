@@ -694,7 +694,7 @@ void PANEL_JOBS::addJobOutputPanel( JOBSET_OUTPUT* aOutput )
 #if __OSX__
     m_outputListSizer->Add( outputPanel, 0, wxEXPAND, 5 );
 #else
-    m_outputListSizer->Add( outputPanel, 0, wxEXPAND|wxALL, 3 );
+    m_outputListSizer->Add( outputPanel, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 #endif
 
     m_outputPanelMap[aOutput] = outputPanel;
