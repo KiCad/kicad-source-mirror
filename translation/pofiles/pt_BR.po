@@ -5,7 +5,7 @@
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
-# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023, 2024.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023, 2024, 2025.
 # pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2024.
 # Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-12-21 08:00+0000\n"
+"PO-Revision-Date: 2025-01-04 06:01+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -3487,7 +3487,7 @@ msgstr "Configuração da página..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job.cpp:41 common/tool/actions.cpp:91
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
@@ -3529,13 +3529,12 @@ msgstr "Avisos"
 #: common/dialogs/dialog_rc_job_base.cpp:60
 #: kicad/dialogs/panel_jobs_base.cpp:471
 #: pcbnew/dialogs/dialog_render_job_base.cpp:31
-#, fuzzy
 msgid "Output File"
 msgstr "Arquivo gerado"
 
 #: common/dialogs/dialog_rc_job_base.cpp:72
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Relatar falha na fila quando houver violações"
 
 #: common/dialogs/dialog_rc_job_base.cpp:78 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4779,7 +4778,7 @@ msgstr "Copiar a referência incorporada"
 
 #: common/dialogs/panel_embedded_files.cpp:52
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Copie a referência desse arquivo incorporado"
 
 #: common/dialogs/panel_embedded_files.cpp:190
 msgid "Select a file to embed"
@@ -5649,7 +5648,7 @@ msgstr "Não foi possível usar o OpenGL"
 
 #: common/draw_panel_gal.cpp:540
 msgid "Error switch GAL backend"
-msgstr ""
+msgstr "Erro ao alternar o backend do GAL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3390
@@ -5972,14 +5971,12 @@ msgid "Origins & Axes"
 msgstr "Origens & eixos"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "New Footprint Defaults"
-msgstr "Novo footprint"
+msgstr "Novos padrões de footprint"
 
 #: common/eda_base_frame.cpp:1186
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Limpeza de gráficos"
+msgstr "Padrões gráficos"
 
 #: common/eda_base_frame.cpp:1191 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:129
@@ -6800,9 +6797,9 @@ msgstr ""
 "KiCad"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Versão descontinuada do KICAD_SYMBOL_DIR."
+msgstr "Versão descontinuada do %s."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -7540,9 +7537,8 @@ msgid "Single gerber export"
 msgstr "Exportação simples do gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "PCB Gerbers export"
-msgstr "Exportação do SVG da PCI"
+msgstr "Exportação de gerbers da PCI"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
@@ -7657,13 +7653,12 @@ msgid "PCB: Perform DRC"
 msgstr "PCI: Executar DRC"
 
 #: common/jobs/job_pcb_render.cpp:77
-#, fuzzy
 msgid "Render PCB"
-msgstr "Reanote a PCI"
+msgstr "Renderizar PCI"
 
 #: common/jobs/job_pcb_render.cpp:81
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCI: Renderização"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform Schematic ERC"
@@ -10458,9 +10453,8 @@ msgid "Footprint '%s' not found."
 msgstr "O footprint '%s' não foi encontrado."
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Houve um erro ao carregar a fonte '%s'."
+msgstr "Houve um erro ao carregar o footprint"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -11872,9 +11866,8 @@ msgid "Electrical Rules Checker"
 msgstr "Verificador das regras elétricas (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:4
-#, fuzzy
 msgid "ERC Job Configuration"
-msgstr "Recarregar a configuração"
+msgstr "Configuração de trabalho ERC"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:232
 msgid "Export netlist in KiCad format"
@@ -14915,9 +14908,8 @@ msgid "Group By"
 msgstr "Agrupe por"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:393
-#, fuzzy
 msgid "BOM Export Job"
-msgstr "PCI: Exportar DXF"
+msgstr "BOM: Exportar trabalho"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 msgid "Qty"
@@ -16956,9 +16948,8 @@ msgstr ""
 "saída"
 
 #: eeschema/erc/erc_item.cpp:68
-#, fuzzy
 msgid "Multiple pins with the same pin number"
-msgstr "Vários pinos com a mesma quantidade de pinos"
+msgstr "Vários pinos com o mesmo número de pino"
 
 #: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
 msgid "Conflict problem between pins"
@@ -23851,9 +23842,8 @@ msgid "Modify schematic item"
 msgstr "Alterar o item do esquema"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3327
-#, fuzzy
 msgid "No sub schematic found in the current project"
-msgstr "Feche o projeto atual"
+msgstr "Nenhum subesquema foi encontrado no projeto atual"
 
 #: eeschema/tools/sch_edit_tool.cpp:77
 msgid "Symbol Unit"
@@ -25894,6 +25884,8 @@ msgstr "Gera apenas uma placa sem componentes"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
 msgstr ""
+"Corte os orifícios de passagem no corpo da placa, mesmo que as camadas "
+"condutoras não sejam exportadas."
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 msgid "Exclude board body"
@@ -25945,9 +25937,8 @@ msgstr "Fundir a geometria sobreposta"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in copper layers."
-msgstr "A ilha PTH não possui camadas de cobre"
+msgstr "Não faça furos de passagem nas camadas de cobre."
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26689,9 +26680,8 @@ msgid "Select output path"
 msgstr "Selecione um caminho de saída"
 
 #: kicad/dialogs/panel_jobs.cpp:138
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "O nome da rede não pode estar vazio."
+msgstr "O caminho de saída não pode estar vazio"
 
 #: kicad/dialogs/panel_jobs.cpp:205
 msgid "Zip"
@@ -26706,9 +26696,8 @@ msgid "Job Description"
 msgstr "Descrição do trabalho"
 
 #: kicad/dialogs/panel_jobs.cpp:280
-#, fuzzy
 msgid "No output available"
-msgstr "Nenhuma saída definida"
+msgstr "Nenhuma saída disponível"
 
 #: kicad/dialogs/panel_jobs.cpp:334
 msgid "Last run successful"
@@ -26727,24 +26716,20 @@ msgid "View last run results..."
 msgstr "Ver os resultados da última execução..."
 
 #: kicad/dialogs/panel_jobs.cpp:453
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Descrição do trabalho"
+msgstr "Editar a descrição da tarefa"
 
 #: kicad/dialogs/panel_jobs.cpp:454
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "Editar as opções..."
+msgstr "Editar as opções da tarefa..."
 
 #: kicad/dialogs/panel_jobs.cpp:459
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Excluir a(s) net(s) selecionada(s)"
+msgstr "Excluir o(s) trabalho(s) selecionado(s)"
 
 #: kicad/dialogs/panel_jobs.cpp:461
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Selecione todos"
+msgstr "Selecionar todos os trabalhos"
 
 #: kicad/dialogs/panel_jobs.cpp:701
 msgid "Job Types"
@@ -26759,9 +26744,8 @@ msgid "Select job type:"
 msgstr "Selecione o tipo de trabalho:"
 
 #: kicad/dialogs/panel_jobs.cpp:748
-#, fuzzy
 msgid "Output Types"
-msgstr "Tamanho da saída"
+msgstr "Tipos de saída"
 
 #: kicad/dialogs/panel_jobs.cpp:757
 msgid "Add New Output"
@@ -26776,56 +26760,48 @@ msgid "No outputs defined"
 msgstr "Nenhuma saída definida"
 
 #: kicad/dialogs/panel_jobs_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "Conjunto de tarefas"
+msgstr "Tarefas"
 
 #: kicad/dialogs/panel_jobs_base.cpp:82
-#, fuzzy
 msgid "Outputs"
-msgstr "Saída"
+msgstr "Saídas"
 
 #: kicad/dialogs/panel_jobs_base.cpp:115
-#, fuzzy
 msgid "Save Jobset"
-msgstr "Conjunto de tarefas"
+msgstr "Salvar o conjunto de tarefas"
 
 #: kicad/dialogs/panel_jobs_base.cpp:121
-#, fuzzy
 msgid "Generate All Outputs"
-msgstr "Configurações gerais"
+msgstr "Gerar todas as saídas"
 
 #: kicad/dialogs/panel_jobs_base.cpp:175 kicad/dialogs/panel_jobs_base.cpp:409
-#, fuzzy
 msgid "Placeholder"
-msgstr "Inserir Nó"
+msgstr "Marcador de posição"
 
 #: kicad/dialogs/panel_jobs_base.cpp:260 kicad/dialogs/panel_jobs_base.cpp:354
-#, fuzzy
 msgid "Output Path"
-msgstr "Caminho da saída:"
+msgstr "Caminho da saída"
 
 #: kicad/dialogs/panel_jobs_base.cpp:278
-#, fuzzy
 msgid "Only Jobs"
-msgstr "Apenas %s"
+msgstr "Apenas tarefas"
 
 #: kicad/dialogs/panel_jobs_base.cpp:351
-#, fuzzy
 msgid "Record Output"
-msgstr "Alimentação de saída"
+msgstr "Gravar saída"
 
 #: kicad/dialogs/panel_jobs_base.cpp:366
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Ignorar código de saída diferente de zero"
 
 #: kicad/dialogs/panel_jobs_base.cpp:492
 msgid "Halt output generation on error"
-msgstr ""
+msgstr "Interromper a geração de saída em caso de erro"
 
 #: kicad/dialogs/panel_jobs_base.h:198
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "Registro de execução da saída de trabalho"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -27040,9 +27016,8 @@ msgid "%d package update(s) avaliable"
 msgstr "Há Atualização(ões) do(s) pacote(s) %d disponível(is)"
 
 #: kicad/kicad_manager_frame.cpp:752
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Houve um erro ao criar o arquivo svg"
+msgstr "Houve um erro ao abrir o arquivo de tarefas"
 
 #: kicad/kicad_manager_frame.cpp:898
 msgid "Edit File in Text Editor"
@@ -33672,9 +33647,8 @@ msgid "Design Rules Checker"
 msgstr "Verificador das regras do desenho"
 
 #: pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Configuration"
-msgstr "Recarregar a configuração"
+msgstr "Configuração da tarefa DRC"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -33997,32 +33971,32 @@ msgid "Export IDFv3"
 msgstr "Exportar IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:104
-#, fuzzy
 msgid "zip files"
-msgstr "Arquivo zip"
+msgstr "arquivos zip"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:106
-#, fuzzy
 msgid "tgz files"
-msgstr "Arquivos de texto"
+msgstr "arquivos tgz"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:118
 msgid "Export ODB++ File"
 msgstr "Exportar arquivo ODB++"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:146
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "O arquivo selecionado é inválido ou pode estar corrompido!"
+msgstr ""
+"O nome do arquivo de saída selecionado não é um formato de arquivo "
+"compatível."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:199
-#, fuzzy
 msgid "Output file name cannot be empty."
-msgstr "O nome da variável não pode estar vazio."
+msgstr "O nome do arquivo de saída não pode estar vazio."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:218
 msgid "The output file name conflicts with the selected compression format."
 msgstr ""
+"O nome do arquivo de saída está em conflito com o formato de compactação "
+"selecionado."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:342
 #, c-format
@@ -34075,26 +34049,24 @@ msgid "Compressing output"
 msgstr "Compactando o destino"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:23
-#, fuzzy
 msgid "Output File:"
-msgstr "Arquivo gerado:"
+msgstr "Arquivo de saída:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression Format:"
-msgstr "Formato da dimensão"
+msgstr "Formato de compressão:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "Selecione o formato para compactar os arquivos de saída ODB++"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:66
 msgid "Export ODB++"
@@ -34214,9 +34186,8 @@ msgid "Export board body"
 msgstr "Exportar o corpo da placa"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "Exportar o corpo da placa"
+msgstr "Cortar as vias no corpo da placa"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
@@ -34293,9 +34264,8 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "Combina a geometria de interseção numa única forma."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:142
-#, fuzzy
 msgid "Fill all vias"
-msgstr "Preencher todas as zonas"
+msgstr "Preencher todas as vias"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Net filter (supports wildcards):"
@@ -35305,9 +35275,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:83
-#, fuzzy
 msgid "Generate Map"
-msgstr "Gera um arquivo de mapeamento"
+msgstr "Gerar mapa"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "PostScript"
@@ -35568,10 +35537,10 @@ msgid "Remove all teardrops"
 msgstr "Remover todos os reforços de junção"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Remove all teardrops, regardless of filtering options"
 msgstr ""
-"Remover todos os reforços de junção, independente das opções de filtragem"
+"Remover todos os reforços de junção, independentemente das opções de "
+"filtragem"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -35617,9 +35586,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
-#, fuzzy
 msgid "Track width limit:"
-msgstr "Largura da trilha:"
+msgstr "Limite de largura da trilha:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
@@ -37720,30 +37688,27 @@ msgstr "Propriedades da imagem de referência"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:27
 msgid "JPEG"
-msgstr ""
+msgstr "JPEG"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:33
 msgid "Opaque"
-msgstr ""
+msgstr "Opaco"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
-#, fuzzy
 msgid "Transparent"
-msgstr "Transitório"
+msgstr "Transparente"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:39
-#, fuzzy
 msgid "High"
-msgstr "Realce"
+msgstr "Alto"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:40
-#, fuzzy
 msgid "User"
-msgstr "Usuário1"
+msgstr "Usuário"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:40
 #: pcbnew/widgets/panel_selection_filter.cpp:202
@@ -37757,38 +37722,33 @@ msgid "px"
 msgstr "px"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:54
-#, fuzzy
 msgid "x"
-msgstr "2x"
+msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:77
 msgid "Quality"
-msgstr ""
+msgstr "Qualidade"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Background Style"
-msgstr "Início do fundo"
+msgstr "Estilo do plano de fundo"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:95
-#, fuzzy
 msgid "Side"
-msgstr "Lado:"
+msgstr "Lado"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:107
-#, fuzzy
 msgid "Show floor"
-msgstr "Mostre a grade"
+msgstr "Mostre piso"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:110
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
-#, fuzzy
 msgid "Perspective"
-msgstr "Diretiva"
+msgstr "Perspectiva"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:114
 msgid "Orthogonal"
-msgstr ""
+msgstr "Ortogonal"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:120
 #: pcbnew/tools/board_inspection_tool.cpp:1466
@@ -38777,9 +38737,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:71
-#, fuzzy
 msgid "Recreate Plugin Environment"
-msgstr "As atribuições alternativas do pino"
+msgstr "Recriar o ambiente do plug-in"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 msgid "Show Button"
@@ -39126,9 +39085,8 @@ msgid "Zone fill strategy"
 msgstr "Estratégia do preenchimento da zona"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "Permita filetes fora do contorno da zona"
+msgstr "Permitir filetes/chanfros fora do contorno da região"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
@@ -41840,9 +41798,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Texto não espelhado na camada traseira"
 
 #: pcbnew/drc/drc_item.cpp:307
-#, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
-msgstr "Furo feito muito próximo de outro furo"
+msgstr "Furo perfurado muito próximo de outro furo - obsoleto"
 
 #: pcbnew/drc/drc_item.cpp:508
 #, c-format
@@ -43801,9 +43758,8 @@ msgid "Footprint '%s' saved."
 msgstr "Salvo '%s' footprint."
 
 #: pcbnew/load_select_footprint.cpp:374
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Salvando a biblioteca footprint\n"
+msgstr "Houve um erro ao salvar a biblioteca footprint"
 
 #: pcbnew/load_select_footprint.cpp:378
 #, c-format
@@ -47113,9 +47069,8 @@ msgid "Failed to load board\n"
 msgstr "Houve uma falha ao carregar a placa\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:356 pcbnew/pcbnew_jobs_handler.cpp:431
-#, fuzzy
 msgid "Unknown export format"
-msgstr "Tipo desconhecido do formato da netlist\n"
+msgstr "Formato de exportação desconhecido"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:396
 #, c-format
@@ -48692,9 +48647,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "O footprint '%s' já existe na biblioteca '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:518
-#, fuzzy
 msgid "Error renaming footprint"
-msgstr "Mesmo do footprint pai"
+msgstr "Houve um erro ao renomear o footprint"
 
 #: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
@@ -50832,11 +50786,8 @@ msgid "Invalid clipboard contents"
 msgstr "O conteúdo da área de transferência é inválido"
 
 #: pcbnew/tools/pcb_control.cpp:1509
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"Houve um erro ao carregar placa.\n"
-"%s"
+msgstr "Houve um erro ao carregar placa."
 
 #: pcbnew/tools/pcb_control.cpp:1543
 msgid "Append Board"
