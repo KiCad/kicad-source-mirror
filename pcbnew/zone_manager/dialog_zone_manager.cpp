@@ -213,6 +213,8 @@ void DIALOG_ZONE_MANAGER::onDialogResize( wxSizeEvent& event )
 
 void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
 {
+    Freeze();
+
     for( ZONE_SELECTION_CHANGE_NOTIFIER* i :
          std::list<ZONE_SELECTION_CHANGE_NOTIFIER*>{ m_panelZoneProperties, m_zoneViewer } )
     {
@@ -220,6 +222,7 @@ void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
     }
 
     Layout();
+    Thaw();
 }
 
 
