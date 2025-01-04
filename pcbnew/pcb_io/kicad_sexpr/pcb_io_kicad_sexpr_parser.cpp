@@ -1209,6 +1209,9 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
                 for( BOARD_ITEM* zone : fp->Zones() )
                     visitItem( *zone );
+
+                for( PCB_FIELD* field : fp->GetFields() )
+                    visitItem( *field );
             }
 
             m_undefinedLayers.clear();
