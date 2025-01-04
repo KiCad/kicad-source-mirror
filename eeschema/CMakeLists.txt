@@ -33,7 +33,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/common
     ${CMAKE_SOURCE_DIR}/common/dialogs
     ${CMAKE_SOURCE_DIR}/libs/sexpr/include
-
     ${INC_AFTER}
     ./dialogs
     ./libview
@@ -566,7 +565,6 @@ set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIE
 
 target_link_libraries( eeschema
     kicommon
-    gal
     ${wxWidgets_LIBRARIES}
     )
 
@@ -605,7 +603,6 @@ add_library( eeschema_kiface MODULE
 target_link_libraries( eeschema_kiface
     PRIVATE
         common
-        gal
         eeschema_kiface_objects
         markdown_lib
         scripting

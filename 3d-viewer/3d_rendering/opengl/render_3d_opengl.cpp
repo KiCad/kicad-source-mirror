@@ -26,25 +26,22 @@
 #include <cstdint>
 #include <gal/opengl/kiglew.h>    // Must be included first
 
-#include "opengl_utils.h"
+#include "plugins/3dapi/xv3d_types.h"
 #include "render_3d_opengl.h"
-
-#include <3d_math.h>
-#include <common_ogl/ogl_utils.h>
-#include <plugins/3dapi/xv3d_types.h>
-
-#include <base_units.h>
+#include "opengl_utils.h"
+#include "common_ogl/ogl_utils.h"
 #include <board.h>
 #include <footprint.h>
 #include <gal/opengl/gl_context_mgr.h>
+#include <3d_math.h>
 #include <glm/geometric.hpp>
 #include <lset.h>
-#include <pgm_base.h>
 #include <math/util.h>      // for KiROUND
 #include <utility>
 #include <vector>
 #include <wx/log.h>
 
+#include <base_units.h>
 
 /**
  * Scale conversion from 3d model units to pcb units
@@ -493,7 +490,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         // Careful here!
         // We are in the middle of rendering and the reload method may show
         // a dialog box that requires the opengl context for a redraw
-        Pgm().GetGLContextManager()->RunWithoutCtxLock( [this, aStatusReporter, aWarningReporter]()
+        GL_CONTEXT_MANAGER::Get().RunWithoutCtxLock( [this, aStatusReporter, aWarningReporter]()
         {
             reload( aStatusReporter, aWarningReporter );
         } );

@@ -112,8 +112,6 @@ public:
 
     BS::thread_pool& GetThreadPool() { return *m_singleton.m_ThreadPool; }
 
-    GL_CONTEXT_MANAGER* GetGLContextManager() { return m_singleton.m_GLContextManager; }
-
     /**
      * Specific to MacOSX (not used under Linux or Windows).
      *

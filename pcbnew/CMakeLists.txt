@@ -690,7 +690,6 @@ set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp pcbnew.cp
     )
 target_link_libraries( pcbnew
     kicommon
-    gal
     ${wxWidgets_LIBRARIES}
     )
 

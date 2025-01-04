@@ -43,7 +43,6 @@
 #include <bitmap_base.h>
 #include <bezier_curves.h>
 #include <math/util.h> // for KiROUND
-#include <pgm_base.h>
 #include <trace_helpers.h>
 
 #include <wx/frame.h>
@@ -332,7 +331,7 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
 {
     if( m_glMainContext == nullptr )
     {
-        m_glMainContext = Pgm().GetGLContextManager()->CreateCtx( this );
+        m_glMainContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
 
         if( !m_glMainContext )
             throw std::runtime_error( "Could not create the main OpenGL context" );
@@ -341,7 +340,7 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
     }
     else
     {
-        m_glPrivContext = Pgm().GetGLContextManager()->CreateCtx( this, m_glMainContext );
+        m_glPrivContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this, m_glMainContext );
 
         if( !m_glPrivContext )
             throw std::runtime_error( "Could not create a private OpenGL context" );
@@ -421,7 +420,7 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
 
 OPENGL_GAL::~OPENGL_GAL()
 {
-    Pgm().GetGLContextManager()->LockCtx( m_glPrivContext, this );
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glPrivContext, this );
 
     --m_instanceCounter;
     glFlush();
@@ -438,19 +437,19 @@ OPENGL_GAL::~OPENGL_GAL()
         delete m_tempManager;
     }
 
-    Pgm().GetGLContextManager()->UnlockCtx( m_glPrivContext );
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glPrivContext );
 
     // If it was the main context, then it will be deleted
     // when the last OpenGL GAL instance is destroyed (a few lines below)
     if( m_glPrivContext != m_glMainContext )
-        Pgm().GetGLContextManager()->DestroyCtx( m_glPrivContext );
+        GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glPrivContext );
 
     delete m_shader;
 
     // Are we destroying the last GAL instance?
     if( m_instanceCounter == 0 )
     {
-        Pgm().GetGLContextManager()->LockCtx( m_glMainContext, this );
+        GL_CONTEXT_MANAGER::Get().LockCtx( m_glMainContext, this );
 
         if( m_isBitmapFontLoaded )
         {
@@ -458,8 +457,8 @@ OPENGL_GAL::~OPENGL_GAL()
             m_isBitmapFontLoaded = false;
         }
 
-        Pgm().GetGLContextManager()->UnlockCtx( m_glMainContext );
-        Pgm().GetGLContextManager()->DestroyCtx( m_glMainContext );
+        GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glMainContext );
+        GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glMainContext );
         m_glMainContext = nullptr;
     }
 }
@@ -777,7 +776,7 @@ void OPENGL_GAL::LockContext( int aClientCookie )
     m_isContextLocked = true;
     m_lockClientCookie = aClientCookie;
 
-    Pgm().GetGLContextManager()->LockCtx( m_glPrivContext, this );
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glPrivContext, this );
 }
 
 
@@ -791,7 +790,7 @@ void OPENGL_GAL::UnlockContext( int aClientCookie )
 
     m_isContextLocked = false;
 
-    Pgm().GetGLContextManager()->UnlockCtx( m_glPrivContext );
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glPrivContext );
 }
 
 

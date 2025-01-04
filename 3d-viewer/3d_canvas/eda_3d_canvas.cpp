@@ -187,7 +187,7 @@ void EDA_3D_CANVAS::releaseOpenGL()
 {
     if( m_glRC )
     {
-        Pgm().GetGLContextManager()->LockCtx( m_glRC, this );
+        GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
         delete m_3d_render_raytracing;
         m_3d_render_raytracing = nullptr;
@@ -198,8 +198,8 @@ void EDA_3D_CANVAS::releaseOpenGL()
         // This is just a copy of a pointer, can safely be set to NULL.
         m_3d_render = nullptr;
 
-        Pgm().GetGLContextManager()->UnlockCtx( m_glRC );
-        Pgm().GetGLContextManager()->DestroyCtx( m_glRC );
+        GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+        GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glRC );
         m_glRC = nullptr;
     }
 }
@@ -390,7 +390,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
     // Explicitly create a new rendering context instance for this canvas.
     if( m_glRC == nullptr )
-        m_glRC = Pgm().GetGLContextManager()->CreateCtx( this );
+        m_glRC = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
 
     // CreateCtx could and does fail per sentry crash events, lets be graceful
     if( m_glRC == nullptr )
@@ -401,7 +401,7 @@ void EDA_3D_CANVAS::DoRePaint()
         return;
     }
 
-    Pgm().GetGLContextManager()->LockCtx( m_glRC, this );
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
     // Set the OpenGL viewport according to the client size of this canvas.
     // This is done here rather than in a wxSizeEvent handler because our
@@ -418,7 +418,7 @@ void EDA_3D_CANVAS::DoRePaint()
     {
         if( !initializeOpenGL() )
         {
-            Pgm().GetGLContextManager()->UnlockCtx( m_glRC );
+            GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
             m_is_currently_painting.clear();
 
             return;
@@ -440,7 +440,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
         SwapBuffers();
 
-        Pgm().GetGLContextManager()->UnlockCtx( m_glRC );
+        GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
         m_is_currently_painting.clear();
 
         return;
@@ -528,7 +528,7 @@ void EDA_3D_CANVAS::DoRePaint()
             m_is_opengl_version_supported = false;
             m_opengl_supports_raytracing  = false;
             m_is_opengl_initialized       = false;
-            Pgm().GetGLContextManager()->UnlockCtx( m_glRC );
+            GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
             m_is_currently_painting.clear();
             return;
         }
@@ -553,7 +553,7 @@ void EDA_3D_CANVAS::DoRePaint()
     //  commands is displayed on the window."
     SwapBuffers();
 
-    Pgm().GetGLContextManager()->UnlockCtx( m_glRC );
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
 
     if( m_mouse_was_moved || m_camera_is_moving )
     {

@@ -20,9 +20,8 @@
 #ifndef KICAD_SINGLETON_H
 #define KICAD_SINGLETON_H
 
-#include <advanced_config.h>
 #include <bs_thread_pool.hpp>
-#include <gal/opengl/gl_context_mgr.h>
+#include <advanced_config.h>
 
 class KICAD_SINGLETON
 {
@@ -35,10 +34,6 @@ public:
         delete m_ThreadPool;
 
         m_ThreadPool = nullptr;
-
-        m_GLContextManager->DeleteAll();
-        delete m_GLContextManager;
-        m_GLContextManager = nullptr;
     };
 
 
@@ -46,12 +41,9 @@ public:
     {
         int num_threads = std::max( 0, ADVANCED_CFG::GetCfg().m_MaximumThreads );
         m_ThreadPool = new BS::thread_pool( num_threads );
-        m_GLContextManager = new GL_CONTEXT_MANAGER();
     }
 
     BS::thread_pool* m_ThreadPool;
-    GL_CONTEXT_MANAGER* m_GLContextManager;
-
 };
 
 

@@ -82,7 +82,6 @@ set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIE
     )
 target_link_libraries( pl_editor
     kicommon
-    gal
     ${wxWidgets_LIBRARIES}
     )
 
