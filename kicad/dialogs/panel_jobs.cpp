@@ -72,8 +72,6 @@ public:
     DIALOG_JOB_OUTPUT( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_OUTPUT* aOutput ) :
             DIALOG_JOB_OUTPUT_BASE( aParent ), m_jobsFile( aJobsFile ), m_output( aOutput )
     {
-        SetAffirmativeId( wxID_OK );
-
         // prevent someone from failing to add the type info in the future
         wxASSERT( jobTypeInfos.contains( m_output->m_type ) );
 
@@ -89,6 +87,8 @@ public:
         m_textCtrlOutputPath->SetValue( m_output->m_outputHandler->GetOutputPath() );
         m_buttonOutputPath->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
         m_textCtrlDescription->SetValue( m_output->GetDescription() );
+
+        SetupStandardButtons();
     }
 
 

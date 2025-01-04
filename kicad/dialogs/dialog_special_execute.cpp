@@ -25,7 +25,7 @@ DIALOG_SPECIAL_EXECUTE::DIALOG_SPECIAL_EXECUTE( wxWindow* aParent, JOB_SPECIAL_E
         DIALOG_SPECIAL_EXECUTE_BASE( aParent ),
         m_job( aJob )
 {
-    SetAffirmativeId( wxID_OK );
+    SetupStandardButtons();
 }
 
 
