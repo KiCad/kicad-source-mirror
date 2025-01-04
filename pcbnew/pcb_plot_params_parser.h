@@ -37,7 +37,7 @@ class LINE_READER;
 class PCB_PLOT_PARAMS_PARSER : public PCB_PLOT_PARAMS_LEXER
 {
 public:
-    PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader );
+    PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader, int aBoardFileVersion );
     PCB_PLOT_PARAMS_PARSER( char* aLine, const wxString& aSource );
 
     LINE_READER* GetReader() { return reader; };
@@ -69,6 +69,8 @@ private:
      * Search for the RIGHT parenthesis which closes the current description.
      */
     void skipCurrent();
+
+    int m_boardFileVersion;
 };
 
 #endif // PCB_PLOT_PARAMS_PARSER_H_

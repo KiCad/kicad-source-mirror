@@ -404,15 +404,180 @@ bool PCB_PLOT_PARAMS::SetHPGLPenSpeed( int aValue )
 }
 
 
-PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader ) :
-    PCB_PLOT_PARAMS_LEXER( aReader )
+PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader, int aBoardFileVersion ) :
+    PCB_PLOT_PARAMS_LEXER( aReader ),
+    m_boardFileVersion( aBoardFileVersion )
 {
 }
 
 
 PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( char* aLine, const wxString& aSource ) :
-    PCB_PLOT_PARAMS_LEXER( aLine, aSource )
+    PCB_PLOT_PARAMS_LEXER( aLine, aSource ),
+    m_boardFileVersion( 0 )
 {
+}
+
+
+/**
+ * These are the layer IDs from before 5e0abadb23425765e164f49ee2f893e94ddb97fc,
+ * and are needed for mapping old PCB files to the new layer numbering.
+ */
+enum LEGACY_PCB_LAYER_ID: int
+{
+    LEGACY_UNDEFINED_LAYER = -1,
+    LEGACY_UNSELECTED_LAYER = -2,
+
+    LEGACY_F_Cu = 0,
+    LEGACY_In1_Cu,
+    LEGACY_In2_Cu,
+    LEGACY_In3_Cu,
+    LEGACY_In4_Cu,
+    LEGACY_In5_Cu,
+    LEGACY_In6_Cu,
+    LEGACY_In7_Cu,
+    LEGACY_In8_Cu,
+    LEGACY_In9_Cu,
+    LEGACY_In10_Cu,
+    LEGACY_In11_Cu,
+    LEGACY_In12_Cu,
+    LEGACY_In13_Cu,
+    LEGACY_In14_Cu,
+    LEGACY_In15_Cu,
+    LEGACY_In16_Cu,
+    LEGACY_In17_Cu,
+    LEGACY_In18_Cu,
+    LEGACY_In19_Cu,
+    LEGACY_In20_Cu,
+    LEGACY_In21_Cu,
+    LEGACY_In22_Cu,
+    LEGACY_In23_Cu,
+    LEGACY_In24_Cu,
+    LEGACY_In25_Cu,
+    LEGACY_In26_Cu,
+    LEGACY_In27_Cu,
+    LEGACY_In28_Cu,
+    LEGACY_In29_Cu,
+    LEGACY_In30_Cu,
+    LEGACY_B_Cu,           // 31
+
+    LEGACY_B_Adhes,
+    LEGACY_F_Adhes,
+
+    LEGACY_B_Paste,
+    LEGACY_F_Paste,
+
+    LEGACY_B_SilkS,
+    LEGACY_F_SilkS,
+
+    LEGACY_B_Mask,
+    LEGACY_F_Mask,         // 39
+
+    LEGACY_Dwgs_User,
+    LEGACY_Cmts_User,
+    LEGACY_Eco1_User,
+    LEGACY_Eco2_User,
+    LEGACY_Edge_Cuts,
+    LEGACY_Margin,         // 45
+
+    LEGACY_B_CrtYd,
+    LEGACY_F_CrtYd,
+
+    LEGACY_B_Fab,
+    LEGACY_F_Fab,          // 49
+
+    // User definable layers.
+    LEGACY_User_1,
+    LEGACY_User_2,
+    LEGACY_User_3,
+    LEGACY_User_4,
+    LEGACY_User_5,
+    LEGACY_User_6,
+    LEGACY_User_7,
+    LEGACY_User_8,
+    LEGACY_User_9,
+
+    LEGACY_Rescue,         // 59
+
+    // Four reserved layers (60 - 63) for future expansion within the 64 bit integer limit.
+
+    LEGACY_PCB_LAYER_ID_COUNT
+};
+
+/*
+ * Mapping to translate a legacy layer ID into the new PCB layer IDs.
+ */
+static const std::map<LEGACY_PCB_LAYER_ID, PCB_LAYER_ID> s_legacyLayerIdMap{
+    {LEGACY_F_Cu,      F_Cu},
+    {LEGACY_B_Cu,      B_Cu},
+    {LEGACY_In1_Cu,    In1_Cu},
+    {LEGACY_In2_Cu,    In2_Cu},
+    {LEGACY_In3_Cu,    In3_Cu},
+    {LEGACY_In4_Cu,    In4_Cu},
+    {LEGACY_In5_Cu,    In5_Cu},
+    {LEGACY_In6_Cu,    In6_Cu},
+    {LEGACY_In7_Cu,    In7_Cu},
+    {LEGACY_In8_Cu,    In8_Cu},
+    {LEGACY_In9_Cu,    In9_Cu},
+    {LEGACY_In10_Cu,   In10_Cu},
+    {LEGACY_In11_Cu,   In11_Cu},
+    {LEGACY_In12_Cu,   In12_Cu},
+    {LEGACY_In13_Cu,   In13_Cu},
+    {LEGACY_In14_Cu,   In14_Cu},
+    {LEGACY_In15_Cu,   In15_Cu},
+    {LEGACY_In16_Cu,   In16_Cu},
+    {LEGACY_In17_Cu,   In17_Cu},
+    {LEGACY_In18_Cu,   In18_Cu},
+    {LEGACY_In19_Cu,   In19_Cu},
+    {LEGACY_In20_Cu,   In20_Cu},
+    {LEGACY_In21_Cu,   In21_Cu},
+    {LEGACY_In22_Cu,   In22_Cu},
+    {LEGACY_In23_Cu,   In23_Cu},
+    {LEGACY_In24_Cu,   In24_Cu},
+    {LEGACY_In25_Cu,   In25_Cu},
+    {LEGACY_In26_Cu,   In26_Cu},
+    {LEGACY_In27_Cu,   In27_Cu},
+    {LEGACY_In28_Cu,   In28_Cu},
+    {LEGACY_In29_Cu,   In29_Cu},
+    {LEGACY_In30_Cu,   In30_Cu},
+    {LEGACY_F_Mask,    F_Mask},
+    {LEGACY_B_Mask,    B_Mask},
+    {LEGACY_F_SilkS,   F_SilkS},
+    {LEGACY_B_SilkS,   B_SilkS},
+    {LEGACY_F_Adhes,   F_Adhes},
+    {LEGACY_B_Adhes,   B_Adhes},
+    {LEGACY_F_Paste,   F_Paste},
+    {LEGACY_B_Paste,   B_Paste},
+    {LEGACY_Dwgs_User, Dwgs_User},
+    {LEGACY_Cmts_User, Cmts_User},
+    {LEGACY_Eco1_User, Eco1_User},
+    {LEGACY_Eco2_User, Eco2_User},
+    {LEGACY_Edge_Cuts, Edge_Cuts},
+    {LEGACY_Margin,    Margin},
+    {LEGACY_B_CrtYd,   B_CrtYd},
+    {LEGACY_F_CrtYd,   F_CrtYd},
+    {LEGACY_B_Fab,     B_Fab},
+    {LEGACY_F_Fab,     F_Fab},
+    {LEGACY_User_1,    User_1},
+    {LEGACY_User_2,    User_2},
+    {LEGACY_User_3,    User_3},
+    {LEGACY_User_4,    User_4},
+    {LEGACY_User_5,    User_5},
+    {LEGACY_User_6,    User_6},
+    {LEGACY_User_7,    User_7},
+    {LEGACY_User_8,    User_8},
+    {LEGACY_User_9,    User_9},
+    {LEGACY_Rescue,    Rescue},
+};
+
+
+LSET remapLegacyLayerLSET( const BASE_SET& aLegacyLSET )
+{
+    LSET newLayers;
+
+    for( const auto& [legacyLayer, newLayer] : s_legacyLayerIdMap )
+        newLayers[newLayer] = aLegacyLSET[legacyLayer];
+
+    return newLayers;
 }
 
 
@@ -451,8 +616,21 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             }
             else if( cur.find_first_of( "0x" ) == 0 ) // pretty ver. 4.
             {
-                // skip the leading 2 0x bytes.
-                aPcbPlotParams->m_layerSelection.ParseHex( cur.c_str() + 2, cur.size() - 2 );
+                // The layers were renumbered in 5e0abadb23425765e164f49ee2f893e94ddb97fc, but there wasn't
+                // a board file version change with it, so this value is the one immediately after that happened.
+                if( m_boardFileVersion < 20240819 )
+                {
+                    BASE_SET legacyLSET( LEGACY_PCB_LAYER_ID_COUNT );
+
+                    // skip the leading 2 0x bytes.
+                    legacyLSET.ParseHex( cur.c_str() + 2, cur.size() - 2 );
+                    aPcbPlotParams->SetLayerSelection( remapLegacyLayerLSET( legacyLSET ) );
+                }
+                else
+                {
+                    // skip the leading 2 0x bytes.
+                    aPcbPlotParams->m_layerSelection.ParseHex( cur.c_str() + 2, cur.size() - 2 );
+                }
             }
             else
             {
@@ -470,9 +648,22 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
             if( cur.find_first_of( "0x" ) == 0 )
             {
-                // skip the leading 2 0x bytes.
-                aPcbPlotParams->m_plotOnAllLayersSelection.ParseHex( cur.c_str() + 2,
-                                                                     cur.size() - 2 );
+                // The layers were renumbered in 5e0abadb23425765e164f49ee2f893e94ddb97fc, but there wasn't
+                // a board file version change with it, so this value is the one immediately after that happened.
+                if( m_boardFileVersion < 20240819 )
+                {
+                    BASE_SET legacyLSET( LEGACY_PCB_LAYER_ID_COUNT );
+
+                    // skip the leading 2 0x bytes.
+                    legacyLSET.ParseHex( cur.c_str() + 2, cur.size() - 2 );
+                    aPcbPlotParams->SetPlotOnAllLayersSelection( remapLegacyLayerLSET( legacyLSET ) );
+                }
+                else
+                {
+                    // skip the leading 2 0x bytes.
+                    aPcbPlotParams->m_plotOnAllLayersSelection.ParseHex( cur.c_str() + 2,
+                                                                         cur.size() - 2 );
+                }
             }
             else
             {

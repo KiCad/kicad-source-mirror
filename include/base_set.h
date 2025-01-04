@@ -26,6 +26,7 @@
 #include <stdexcept>
 #include <dynamic_bitset.h>
 
+#include <core/arraydim.h>
 #include <core/kicad_algo.h>
 #include <kicommon.h>
 
@@ -212,6 +213,142 @@ public:
     bool operator<( const BASE_SET& other ) const
     {
         return alg::lexicographical_compare_three_way( begin(), end(), other.begin(), other.end() ) < 0;
+    }
+
+    /**
+     * Return a binary string showing contents of this set.
+     */
+    std::string FmtBin() const
+    {
+        std::string ret;
+
+        int     bit_count = size();
+
+        for( int bit=0;  bit<bit_count;  ++bit )
+        {
+            if( bit )
+            {
+                if( !( bit % 8 ) )
+                    ret += '|';
+                else if( !( bit % 4 ) )
+                    ret += '_';
+            }
+
+            ret += (*this)[bit] ? '1' :  '0';
+        }
+
+        // reverse of string
+        return std::string( ret.rbegin(), ret.rend() );
+    }
+
+    /**
+     * Return a hex string showing contents of this set.
+     */
+    std::string FmtHex() const
+    {
+        std::string ret;
+
+        static const char hex[] = "0123456789abcdef";
+
+        size_t nibble_count = ( size() + 3 ) / 4;
+
+        for( size_t nibble = 0; nibble < nibble_count; ++nibble )
+        {
+            unsigned int ndx = 0;
+
+            // test 4 consecutive bits and set ndx to 0-15
+            for( size_t nibble_bit = 0; nibble_bit < 4; ++nibble_bit )
+            {
+                size_t nibble_pos = nibble_bit + ( nibble * 4 );
+                // make sure it's not extra bits that don't exist in the bitset but need to in the
+                // hex format
+                if( nibble_pos >= size() )
+                    break;
+
+                if( ( *this )[nibble_pos] )
+                    ndx |= ( 1 << nibble_bit );
+            }
+
+            if( nibble && !( nibble % 8 ) )
+                ret += '_';
+
+            assert( ndx < arrayDim( hex ) );
+
+            ret += hex[ndx];
+        }
+
+        // reverse of string
+        return std::string( ret.rbegin(), ret.rend() );
+    }
+
+    /**
+     * Convert the output of FmtHex() and replaces this set's values
+     * with those given in the input string.  Parsing stops at the first
+     * non hex ASCII byte, except that marker bytes output from FmtHex are
+     * not terminators.
+     * @return int - number of bytes consumed
+     */
+    int ParseHex( const std::string& str )
+    {
+        return ParseHex( str.c_str(), str.length() );
+    }
+
+    /**
+     * Convert the output of FmtHex() and replaces this set's values
+     * with those given in the input string.  Parsing stops at the first
+     * non hex ASCII byte, except that marker bytes output from FmtHex are
+     * not terminators.
+     * @return int - number of bytes consumed
+     */
+    int ParseHex( const char* aStart, int aCount )
+    {
+        BASE_SET tmp(size());
+
+        const char* rstart = aStart + aCount - 1;
+        const char* rend   = aStart - 1;
+
+        const int bitcount = size();
+
+        int nibble_ndx = 0;
+
+        while( rstart > rend )
+        {
+            int cc = *rstart--;
+
+            if( cc == '_' )
+                continue;
+
+            int nibble;
+
+            if( cc >= '0' && cc <= '9' )
+                nibble = cc - '0';
+            else if( cc >= 'a' && cc <= 'f' )
+                nibble = cc - 'a' + 10;
+            else if( cc >= 'A' && cc <= 'F' )
+                nibble = cc - 'A' + 10;
+            else
+                break;
+
+            int bit = nibble_ndx * 4;
+
+            for( int ndx=0; bit<bitcount && ndx<4; ++bit, ++ndx )
+                if( nibble & (1<<ndx) )
+                    tmp.set( bit );
+
+            if( bit >= bitcount )
+                break;
+
+            ++nibble_ndx;
+        }
+
+        int byte_count = aStart + aCount - 1 - rstart;
+
+        assert( byte_count >= 0 );
+
+        if( byte_count > 0 )
+            *this = tmp;
+
+        return byte_count;
     }
 
     // Custom iterator to iterate over set bits

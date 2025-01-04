@@ -2482,7 +2482,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
         case T_pcbplotparams:
         {
             PCB_PLOT_PARAMS        plotParams;
-            PCB_PLOT_PARAMS_PARSER parser( reader );
+            PCB_PLOT_PARAMS_PARSER parser( reader, m_requiredVersion );
             // parser must share the same current line as our current PCB parser
             // synchronize it.
             parser.SyncLineReaderWith( *this );

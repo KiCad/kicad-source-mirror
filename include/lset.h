@@ -250,26 +250,6 @@ public:
     }
 
     /**
-     * Return a hex string showing contents of this LSEQ.
-     */
-    std::string FmtHex() const;
-
-    /**
-     * Convert the output of FmtHex() and replaces this set's values
-     * with those given in the input string.  Parsing stops at the first
-     * non hex ASCII byte, except that marker bytes output from FmtHex are
-     * not terminators.
-     * @return int - number of bytes consumed
-     */
-    int ParseHex( const char* aStart, int aCount );
-    int ParseHex( const std::string& str );
-
-    /**
-     * Return a binary string showing contents of this LSEQ.
-     */
-    std::string FmtBin() const;
-
-    /**
      * Find the first set PCB_LAYER_ID. Returns UNDEFINED_LAYER if more
      * than one is set or UNSELECTED_LAYER if none is set.
      */
