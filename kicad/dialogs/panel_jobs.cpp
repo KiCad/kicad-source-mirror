@@ -356,6 +356,15 @@ public:
         m_buttonProperties->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
         m_buttonDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
+#if  _WIN32
+        // BORDER_RAISED/SUNKEN look pretty on every platform but Windows
+        long style = GetWindowStyleFlag();
+        style &= ~wxBORDER_MASK;
+        style |= wxBORDER_SIMPLE;
+        SetWindowStyleFlag( style );
+#endif //  _WIN32
+
+
         Connect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
 
         if( jobTypeInfos.contains( aOutput->m_type ) )
