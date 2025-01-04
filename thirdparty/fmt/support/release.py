@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-"""Manage site and releases.
+"""Make a release.
 
 Usage:
-  manage.py release [<branch>]
-  manage.py site
+  release.py [<branch>]
 
 For the release command $FMT_TOKEN should contain a GitHub personal access token
 obtained from https://github.com/settings/tokens.
@@ -12,9 +11,9 @@ obtained from https://github.com/settings/tokens.
 
 from __future__ import print_function
 import datetime, docopt, errno, fileinput, json, os
-import re, requests, shutil, sys
-from contextlib import contextmanager
+import re, shutil, sys
 from subprocess import check_call
+import urllib.request
 
 
 class Git:
@@ -81,46 +80,15 @@ def create_build_env():
     return env
 
 
-fmt_repo_url = 'git@github.com:fmtlib/fmt'
-
-
-def update_site(env):
-    env.fmt_repo.update(fmt_repo_url)
-
-    doc_repo = Git(os.path.join(env.build_dir, 'fmt.dev'))
-    doc_repo.update('git@github.com:fmtlib/fmt.dev')
-
-    version = '11.0.0'
-    clean_checkout(env.fmt_repo, version)
-    target_doc_dir = os.path.join(env.fmt_repo.dir, 'doc')
-
-    # Build the docs.
-    html_dir = os.path.join(env.build_dir, 'html')
-    if os.path.exists(html_dir):
-        shutil.rmtree(html_dir)
-    include_dir = env.fmt_repo.dir
-    import build
-    build.build_docs(version, doc_dir=target_doc_dir,
-                        include_dir=include_dir, work_dir=env.build_dir)
-    shutil.rmtree(os.path.join(html_dir, '.doctrees'))
-    # Copy docs to the website.
-    version_doc_dir = os.path.join(doc_repo.dir, version)
-    try:
-        shutil.rmtree(version_doc_dir)
-    except OSError as e:
-        if e.errno != errno.ENOENT:
-            raise
-    shutil.move(html_dir, version_doc_dir)
-
-
-def release(args):
+if __name__ == '__main__':
+    args = docopt.docopt(__doc__)
     env = create_build_env()
     fmt_repo = env.fmt_repo
 
     branch = args.get('<branch>')
     if branch is None:
         branch = 'master'
-    if not fmt_repo.update('-b', branch, fmt_repo_url):
+    if not fmt_repo.update('-b', branch, 'git@github.com:fmtlib/fmt'):
         clean_checkout(fmt_repo, branch)
 
     # Update the date in the changelog and extract the version and the first
@@ -191,28 +159,30 @@ def release(args):
     # Create a release on GitHub.
     fmt_repo.push('origin', 'release')
     auth_headers = {'Authorization': 'token ' + os.getenv('FMT_TOKEN')}
-    r = requests.post('https://api.github.com/repos/fmtlib/fmt/releases',
-                      headers=auth_headers,
-                      data=json.dumps({'tag_name': version,
-                                       'target_commitish': 'release',
-                                       'body': changes, 'draft': True}))
-    if r.status_code != 201:
-        raise Exception('Failed to create a release ' + str(r))
-    id = r.json()['id']
+    req = urllib.request.Request(
+        'https://api.github.com/repos/fmtlib/fmt/releases',
+        data=json.dumps({'tag_name': version,
+                         'target_commitish': 'release',
+                         'body': changes, 'draft': True}).encode('utf-8'),
+        headers=auth_headers, method='POST')
+    with urllib.request.urlopen(req) as response:
+        if response.status != 201:
+            raise Exception(f'Failed to create a release ' +
+                            '{response.status} {response.reason}')
+        response_data = json.loads(response.read().decode('utf-8'))
+        id = response_data['id']
+
+    # Upload the package.
     uploads_url = 'https://uploads.github.com/repos/fmtlib/fmt/releases'
     package = 'fmt-{}.zip'.format(version)
-    r = requests.post(
-        '{}/{}/assets?name={}'.format(uploads_url, id, package),
+    req = urllib.request.Request(
+        f'{uploads_url}/{id}/assets?name={package}',
         headers={'Content-Type': 'application/zip'} | auth_headers,
-        data=open('build/fmt/' + package, 'rb'))
-    if r.status_code != 201:
-        raise Exception('Failed to upload an asset ' + str(r))
+        data=open('build/fmt/' + package, 'rb').read(), method='POST')
+    with urllib.request.urlopen(req) as response:
+        if response.status != 201:
+            raise Exception(f'Failed to upload an asset '
+                            '{response.status} {response.reason}')
 
-    update_site(env)
-
-if __name__ == '__main__':
-    args = docopt.docopt(__doc__)
-    if args.get('release'):
-        release(args)
-    elif args.get('site'):
-        update_site(create_build_env())
+    short_version = '.'.join(version.split('.')[:-1])
+    check_call(['./mkdocs', 'deploy', short_version])
