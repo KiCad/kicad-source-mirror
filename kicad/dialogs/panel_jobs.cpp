@@ -929,6 +929,9 @@ void PANEL_JOBS::EnsurePcbSchFramesOpen()
         wxEventBlocker blocker( this );
 
         frame->OpenProjectFiles( std::vector<wxString>( 1, boardfn.GetFullPath() ) );
+
+        if( !frame->IsVisible() )
+            frame->Show( true );
     }
 
     frame = m_frame->Kiway().Player( FRAME_SCH, false );
@@ -948,7 +951,12 @@ void PANEL_JOBS::EnsurePcbSchFramesOpen()
         wxEventBlocker blocker( this );
 
         frame->OpenProjectFiles( std::vector<wxString>( 1, schFn.GetFullPath() ) );
+
+        if( !frame->IsVisible() )
+            frame->Show( true );
     }
+
+    SetFocus();
 }
 
 
