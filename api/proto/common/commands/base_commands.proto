@@ -37,6 +37,19 @@ message Ping
 {
 }
 
+// Returns the full path to the given KiCad binary
+message GetKiCadBinaryPath
+{
+  // The short name of the binary, such as `kicad-cli` or `kicad-cli.exe`.  If on Windows, an `.exe`
+  // extension will be assumed if not present.
+  string binary_name = 1;
+}
+
+message PathResponse
+{
+  string path = 1;
+}
+
 // returns kiapi.common.types.Box2
 message GetTextExtents
 {

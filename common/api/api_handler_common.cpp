@@ -24,6 +24,7 @@
 #include <build_version.h>
 #include <eda_shape.h>
 #include <eda_text.h>
+#include <gestfich.h>
 #include <geometry/shape_compound.h>
 #include <google/protobuf/empty.pb.h>
 #include <paths.h>
@@ -43,7 +44,9 @@ using google::protobuf::Empty;
 API_HANDLER_COMMON::API_HANDLER_COMMON() :
         API_HANDLER()
 {
-    registerHandler<commands::GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
+    registerHandler<GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
+    registerHandler<GetKiCadBinaryPath, PathResponse>(
+            &API_HANDLER_COMMON::handleGetKiCadBinaryPath );
     registerHandler<GetNetClasses, NetClassesResponse>( &API_HANDLER_COMMON::handleGetNetClasses );
     registerHandler<SetNetClasses, Empty>( &API_HANDLER_COMMON::handleSetNetClasses );
     registerHandler<Ping, Empty>( &API_HANDLER_COMMON::handlePing );
@@ -74,6 +77,21 @@ HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion(
     reply.mutable_version()->set_minor( std::get<1>( version ) );
     reply.mutable_version()->set_patch( std::get<2>( version ) );
 
+    return reply;
+}
+
+
+HANDLER_RESULT<PathResponse> API_HANDLER_COMMON::handleGetKiCadBinaryPath(
+        const HANDLER_CONTEXT<GetKiCadBinaryPath>& aCtx )
+{
+    wxFileName fn( wxEmptyString, wxString::FromUTF8( aCtx.Request.binary_name() ) );
+#ifdef _WIN32
+    fn.SetExt( wxT( "exe" ) );
+#endif
+
+    wxString path = FindKicadFile( fn.GetFullName() );
+    PathResponse reply;
+    reply.set_path( path.ToUTF8() );
     return reply;
 }
 

@@ -41,6 +41,9 @@ private:
     HANDLER_RESULT<commands::GetVersionResponse> handleGetVersion(
         const HANDLER_CONTEXT<commands::GetVersion>& aCtx );
 
+    HANDLER_RESULT<commands::PathResponse> handleGetKiCadBinaryPath(
+        const HANDLER_CONTEXT<commands::GetKiCadBinaryPath>& aCtx );
+
     HANDLER_RESULT<commands::NetClassesResponse> handleGetNetClasses(
         const HANDLER_CONTEXT<commands::GetNetClasses>& aCtx );
 
