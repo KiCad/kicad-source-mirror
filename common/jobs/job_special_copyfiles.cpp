@@ -39,7 +39,7 @@ JOB_SPECIAL_COPYFILES::JOB_SPECIAL_COPYFILES() :
 
 wxString JOB_SPECIAL_COPYFILES::GetDefaultDescription() const
 {
-    return wxString( "Copy files: " ) + m_source;
+    return wxString( "Copy files" );
 }
 
 

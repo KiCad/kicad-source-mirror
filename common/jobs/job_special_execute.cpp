@@ -36,7 +36,7 @@ JOB_SPECIAL_EXECUTE::JOB_SPECIAL_EXECUTE() :
 
 wxString JOB_SPECIAL_EXECUTE::GetDefaultDescription() const
 {
-    return wxString( "Execute command: " ) + m_command;
+    return wxString( "Execute command" );
 }
 
 REGISTER_JOB( special_execute, _HKI( "Special: Execute Command" ), KIWAY::KIWAY_FACE_COUNT,
