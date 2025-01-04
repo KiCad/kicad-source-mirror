@@ -82,7 +82,6 @@ public:
 
     FORMAT      m_format = FORMAT::PNG;
     QUALITY     m_quality = QUALITY::BASIC;
-    BG_STYLE    m_bgStyle = BG_STYLE::BG_DEFAULT;
     BG_STYLE    m_bgStyle = BG_STYLE::DEFAULT;
     int         m_width = 0;
     int         m_height = 0;
