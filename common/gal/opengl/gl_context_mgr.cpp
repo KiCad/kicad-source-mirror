@@ -27,14 +27,6 @@
 #include <wx/debug.h>
 
 
-GL_CONTEXT_MANAGER& GL_CONTEXT_MANAGER::Get()
-{
-    static GL_CONTEXT_MANAGER instance;
-
-    return instance;
-}
-
-
 wxGLContext* GL_CONTEXT_MANAGER::CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther )
 {
     wxGLContext* context = new wxGLContext( aCanvas, aOther );

@@ -35,10 +35,8 @@
 class GAL_API GL_CONTEXT_MANAGER
 {
 public:
-    /**
-     * Return the GL_CONTEXT_MANAGER instance (singleton).
-     */
-    static GL_CONTEXT_MANAGER& Get();
+
+    GL_CONTEXT_MANAGER();
 
     /**
      * Create a managed OpenGL context.
@@ -142,11 +140,6 @@ private:
 
     ///< Lock to prevent unexpected GL context switching.
     std::mutex m_glCtxMutex;
-
-    // Singleton
-    GL_CONTEXT_MANAGER();
-    GL_CONTEXT_MANAGER( const GL_CONTEXT_MANAGER& );
-    void operator=( const GL_CONTEXT_MANAGER& );
 };
 
 #endif /* GL_CONTEXT_MANAGER_H */

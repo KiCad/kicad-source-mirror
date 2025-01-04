@@ -96,6 +96,7 @@ set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIE
     )
 target_link_libraries( pcb_calculator
     kicommon
+    gal
     ${wxWidgets_LIBRARIES}
     )
 
