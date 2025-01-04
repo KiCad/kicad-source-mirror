@@ -691,7 +691,12 @@ void PANEL_JOBS::addJobOutputPanel( JOBSET_OUTPUT* aOutput )
 {
     PANEL_JOB_OUTPUT* outputPanel = new PANEL_JOB_OUTPUT( m_outputList, this, m_frame,
                                                           m_jobsFile.get(), aOutput );
+
+#if __OSX__
     m_outputListSizer->Add( outputPanel, 0, wxEXPAND, 5 );
+#else
+    m_outputListSizer->Add( outputPanel, 0, wxEXPAND|wxBOTTOM, 5 );
+#endif
 
     m_outputPanelMap[aOutput] = outputPanel;
 
