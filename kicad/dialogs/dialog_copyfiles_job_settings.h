@@ -18,20 +18,21 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/panel_jobs_base.h>
+#include "dialog_copyfiles_job_settings_base.h"
 
-class JOB_SPECIAL_EXECUTE;
+class JOB_SPECIAL_COPYFILES;
 
-class DIALOG_SPECIAL_EXECUTE: public DIALOG_SPECIAL_EXECUTE_BASE
+class DIALOG_COPYFILES_JOB_SETTINGS : public DIALOG_COPYFILES_JOB_SETTINGS_BASE
 {
 public:
-    DIALOG_SPECIAL_EXECUTE( wxWindow* aParent, JOB_SPECIAL_EXECUTE* aJob );
+    DIALOG_COPYFILES_JOB_SETTINGS( wxWindow* aParent, JOB_SPECIAL_COPYFILES* aJob );
 
-    bool TransferDataFromWindow() override;
+
     bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
 private:
-    JOB_SPECIAL_EXECUTE* m_job;
-
-    void OnRecordOutputClicked( wxCommandEvent& event ) override;
+    JOB_SPECIAL_COPYFILES* m_job;
 };
+
+

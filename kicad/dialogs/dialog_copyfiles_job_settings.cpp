@@ -18,41 +18,36 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/dialog_special_execute.h>
-#include <jobs/job_special_execute.h>
+#include "dialog_copyfiles_job_settings.h"
+#include <jobs/job_special_copyfiles.h>
 
-DIALOG_SPECIAL_EXECUTE::DIALOG_SPECIAL_EXECUTE( wxWindow* aParent, JOB_SPECIAL_EXECUTE* aJob ) :
-        DIALOG_SPECIAL_EXECUTE_BASE( aParent ),
+
+DIALOG_COPYFILES_JOB_SETTINGS::DIALOG_COPYFILES_JOB_SETTINGS( wxWindow* aParent,
+                                                              JOB_SPECIAL_COPYFILES* aJob ) :
+        DIALOG_COPYFILES_JOB_SETTINGS_BASE( aParent ),
         m_job( aJob )
 {
+    m_textCtrlSource->SetValidator( wxTextValidator( wxFILTER_EMPTY ) );
+
     SetupStandardButtons();
 }
 
 
-bool DIALOG_SPECIAL_EXECUTE::TransferDataFromWindow()
+bool DIALOG_COPYFILES_JOB_SETTINGS::TransferDataToWindow()
 {
-    m_job->m_command = m_textCtrlCommand->GetValue();
-    m_job->m_ignoreExitcode = m_cbIgnoreExitCode->GetValue();
-    m_job->m_recordOutput = m_cbRecordOutput->GetValue();
-    m_job->SetOutputPath( m_textCtrlOutputPath->GetValue() );
-
+    m_textCtrlSource->SetValue( m_job->m_source );
+    m_textCtrlDest->SetValue( m_job->m_dest );
+    m_cbGenerateError->SetValue( m_job->m_generateErrorOnNoCopy );
+    m_cbOverwrite->SetValue( m_job->m_overwriteDest );
     return true;
 }
 
 
-bool DIALOG_SPECIAL_EXECUTE::TransferDataToWindow()
+bool DIALOG_COPYFILES_JOB_SETTINGS::TransferDataFromWindow()
 {
-    m_textCtrlCommand->SetValue( m_job->m_command );
-    m_cbIgnoreExitCode->SetValue( m_job->m_ignoreExitcode );
-    m_cbRecordOutput->SetValue( m_job->m_recordOutput );
-
-    m_textCtrlOutputPath->Enable( m_cbRecordOutput->GetValue() );
-
+    m_job->m_source = m_textCtrlSource->GetValue();
+    m_job->m_dest = m_textCtrlDest->GetValue();
+    m_job->m_generateErrorOnNoCopy = m_cbGenerateError->GetValue();
+    m_job->m_overwriteDest = m_cbOverwrite->GetValue();
     return true;
-}
-
-
-void DIALOG_SPECIAL_EXECUTE::OnRecordOutputClicked( wxCommandEvent& aEvent )
-{
-    m_textCtrlOutputPath->Enable( m_cbRecordOutput->GetValue() );
 }

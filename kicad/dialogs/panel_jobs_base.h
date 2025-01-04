@@ -36,8 +36,6 @@ class WX_GRID;
 #include <wx/choice.h>
 #include <wx/checklst.h>
 #include <wx/dialog.h>
-#include <wx/checkbox.h>
-#include <wx/valtext.h>
 #include <wx/listctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -141,66 +139,6 @@ class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
 		DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_JOB_OUTPUT_BASE();
-
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_SPECIAL_EXECUTE_BASE
-///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SPECIAL_EXECUTE_BASE : public DIALOG_SHIM
-{
-	private:
-
-	protected:
-		wxStaticText* m_textCommand;
-		wxTextCtrl* m_textCtrlCommand;
-		wxStaticText* m_textOutputPath;
-		wxTextCtrl* m_textCtrlOutputPath;
-		wxCheckBox* m_cbRecordOutput;
-		wxCheckBox* m_cbIgnoreExitCode;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
-
-		// Virtual event handlers, override them in your derived class
-		virtual void OnRecordOutputClicked( wxCommandEvent& event ) { event.Skip(); }
-
-
-	public:
-
-		DIALOG_SPECIAL_EXECUTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Execute Command Job Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-
-		~DIALOG_SPECIAL_EXECUTE_BASE();
-
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_COPYFILES_JOB_BASE
-///////////////////////////////////////////////////////////////////////////////
-class DIALOG_COPYFILES_JOB_BASE : public DIALOG_SHIM
-{
-	private:
-
-	protected:
-		wxStaticText* m_textSource;
-		wxTextCtrl* m_textCtrlSource;
-		wxStaticText* m_textDest;
-		wxTextCtrl* m_textCtrlDest;
-		wxCheckBox* m_cbGenerateError;
-		wxCheckBox* m_cbOverwrite;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
-
-		// Virtual event handlers, override them in your derived class
-		virtual void OnRecordOutputClicked( wxCommandEvent& event ) { event.Skip(); }
-
-
-	public:
-
-		DIALOG_COPYFILES_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Copy Files Job Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-
-		~DIALOG_COPYFILES_JOB_BASE();
 
 };
 
