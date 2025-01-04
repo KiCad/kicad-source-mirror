@@ -61,14 +61,40 @@ message BoardStackupCopperLayer
 
 }
 
+enum BoardStackupLayerType
+{
+  BSLT_UNKNOWN = 0;
+  BSLT_COPPER = 1;
+  BSLT_DIELECTRIC = 2;
+  BSLT_SILKSCREEN = 3;
+  BSLT_SOLDERMASK = 4;
+  BSLT_SOLDERPASTE = 5;
+  BSLT_UNDEFINED = 7;
+}
+
+message BoardStackupDielectricProperties
+{
+  double epsilon_r = 1;
+  double loss_tangent = 2;
+  string material_name = 3;
+  kiapi.common.types.Distance thickness = 4;
+}
+
+message BoardStackupDielectricLayer
+{
+  // A single dielectric slot (between copper layers) can be made up of multiple physical layers
+  repeated BoardStackupDielectricProperties layer = 1;
+}
+
 message BoardStackupLayer
 {
   kiapi.common.types.Distance thickness = 1;
   kiapi.board.types.BoardLayer layer = 2;
   bool enabled = 3;
-  oneof item {
-    BoardStackupCopperLayer copper = 4;
-  }
+  BoardStackupLayerType type = 4;
+  BoardStackupDielectricLayer dielectric = 5;
+  kiapi.common.types.Color color = 6;
+  string material_name = 7;
 }
 
 message BoardStackup

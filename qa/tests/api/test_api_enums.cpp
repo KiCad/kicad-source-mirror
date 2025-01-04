@@ -34,6 +34,7 @@
 // Board-specific
 #include <api/board/board_types.pb.h>
 #include <api/board/board_commands.pb.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <padstack.h>
 #include <pcb_dimension.h>
 #include <pcb_track.h>
@@ -259,6 +260,11 @@ BOOST_AUTO_TEST_CASE( NetColorDisplayMode )
 BOOST_AUTO_TEST_CASE( RatsnestDisplayMode )
 {
     testEnums<RATSNEST_MODE, kiapi::board::commands::RatsnestDisplayMode>();
+}
+
+BOOST_AUTO_TEST_CASE( BoardStackupLayerType )
+{
+    testEnums<BOARD_STACKUP_ITEM_TYPE, kiapi::board::BoardStackupLayerType>();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

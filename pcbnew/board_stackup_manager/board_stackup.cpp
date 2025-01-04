@@ -425,28 +425,44 @@ bool BOARD_STACKUP::operator==( const BOARD_STACKUP& aOther ) const
 
 void BOARD_STACKUP::Serialize( google::protobuf::Any& aContainer ) const
 {
-    kiapi::board::BoardStackup stackup;
+    using namespace kiapi::board;
+    BoardStackup stackup;
 
     for( const BOARD_STACKUP_ITEM* item : m_list )
     {
-        kiapi::board::BoardStackupLayer* layer = stackup.mutable_layers()->Add();
+        BoardStackupLayer* layer = stackup.mutable_layers()->Add();
 
-        // TODO dielectric sub-layers
         layer->mutable_thickness()->set_value_nm( item->GetThickness() );
-        layer->set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>(
-                item->GetBrdLayerId() ) );
+        layer->set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( item->GetBrdLayerId() ) );
+        layer->set_type(
+                ToProtoEnum<BOARD_STACKUP_ITEM_TYPE, BoardStackupLayerType>( item->GetType() ) );
 
         switch( item->GetType() )
         {
-        case BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER:
+        case BS_ITEM_TYPE_COPPER:
         {
-            layer->mutable_copper()->New();
+            layer->set_material_name( "copper" );
             // (no copper params yet...)
             break;
         }
 
+        case BS_ITEM_TYPE_DIELECTRIC:
+        {
+            BoardStackupDielectricLayer* dielectric = layer->mutable_dielectric()->New();
+
+            for( int i = 0; i < item->GetSublayersCount(); ++i )
+            {
+                BoardStackupDielectricProperties* props = dielectric->mutable_layer()->Add();
+                props->set_epsilon_r( item->GetEpsilonR( i ) );
+                props->set_loss_tangent( item->GetLossTangent( i ) );
+                props->set_material_name( item->GetMaterial( i ).ToUTF8() );
+                props->mutable_thickness()->set_value_nm( item->GetThickness( i ) );
+            }
+
+            break;
+        }
+
         default:
-            // TODO
             break;
         }
     }
@@ -457,7 +473,8 @@ void BOARD_STACKUP::Serialize( google::protobuf::Any& aContainer ) const
 
 bool BOARD_STACKUP::Deserialize( const google::protobuf::Any& aContainer )
 {
-    return true;
+    // Read-only for now
+    return false;
 }
 
 

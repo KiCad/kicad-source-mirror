@@ -24,6 +24,7 @@
 #include <api/board/board_commands.pb.h>
 #include <wx/wx.h>
 
+#include <board_stackup_manager/board_stackup.h>
 #include <padstack.h>
 #include <pcb_dimension.h>
 #include <pcb_track.h>
@@ -763,6 +764,44 @@ RATSNEST_MODE FromProtoEnum( commands::RatsnestDisplayMode aValue )
     default:
         wxCHECK_MSG( false, RATSNEST_MODE::ALL,
                      "Unhandled case in FromProtoEnum<commands::RatsnestDisplayMode>" );
+    }
+}
+
+
+template<>
+BoardStackupLayerType ToProtoEnum( BOARD_STACKUP_ITEM_TYPE aValue )
+{
+    switch( aValue )
+    {
+    case BS_ITEM_TYPE_UNDEFINED:    return BoardStackupLayerType::BSLT_UNDEFINED;
+    case BS_ITEM_TYPE_COPPER:       return BoardStackupLayerType::BSLT_COPPER;
+    case BS_ITEM_TYPE_DIELECTRIC:   return BoardStackupLayerType::BSLT_DIELECTRIC;
+    case BS_ITEM_TYPE_SOLDERPASTE:  return BoardStackupLayerType::BSLT_SOLDERPASTE;
+    case BS_ITEM_TYPE_SOLDERMASK:   return BoardStackupLayerType::BSLT_SOLDERMASK;
+    case BS_ITEM_TYPE_SILKSCREEN:   return BoardStackupLayerType::BSLT_SILKSCREEN;
+
+    default:
+        wxCHECK_MSG( false, BoardStackupLayerType::BSLT_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<BOARD_STACKUP_ITEM_TYPE>");
+    }
+}
+
+
+template<>
+BOARD_STACKUP_ITEM_TYPE FromProtoEnum( BoardStackupLayerType aValue )
+{
+    switch( aValue )
+    {
+    case BoardStackupLayerType::BSLT_UNDEFINED:    return BS_ITEM_TYPE_UNDEFINED;
+    case BoardStackupLayerType::BSLT_COPPER:       return BS_ITEM_TYPE_COPPER;
+    case BoardStackupLayerType::BSLT_DIELECTRIC:   return BS_ITEM_TYPE_DIELECTRIC;
+    case BoardStackupLayerType::BSLT_SOLDERPASTE:  return BS_ITEM_TYPE_SOLDERPASTE;
+    case BoardStackupLayerType::BSLT_SOLDERMASK:   return BS_ITEM_TYPE_SOLDERMASK;
+    case BoardStackupLayerType::BSLT_SILKSCREEN:   return BS_ITEM_TYPE_SILKSCREEN;
+
+    default:
+        wxCHECK_MSG( false, BS_ITEM_TYPE_UNDEFINED,
+                     "Unhandled case in FromProtoEnum<BoardStackupLayerType>" );
     }
 }
 
