@@ -55,9 +55,9 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_RENDER::SIDE,
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_RENDER::BG_STYLE,
                             {
-                                    { JOB_PCB_RENDER::BG_STYLE::BG_DEFAULT, "default" },
-                                    { JOB_PCB_RENDER::BG_STYLE::BG_OPAQUE, "opaque" },
-                                    { JOB_PCB_RENDER::BG_STYLE::BG_TRANSPARENT, "transparent" }
+                                    { JOB_PCB_RENDER::BG_STYLE::DEFAULT, "default" },
+                                    { JOB_PCB_RENDER::BG_STYLE::OPAQUE, "opaque" },
+                                    { JOB_PCB_RENDER::BG_STYLE::TRANSPARENT, "transparent" }
                             } )
 
 JOB_PCB_RENDER::JOB_PCB_RENDER() :

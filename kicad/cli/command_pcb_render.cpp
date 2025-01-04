@@ -187,8 +187,9 @@ CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
 
     m_argParser.add_argument( ARG_BACKGROUND )
             .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "Image background. Options: transparent, opaque. Default: "
-                                  "transparent for PNG, opaque for JPEG" ) ) )
+            .help( UTF8STDSTR( wxString::Format( _( "Image background. Options: %s. Default: "
+                                                    "transparent for PNG, opaque for JPEG" ),
+                                                 enumString<JOB_PCB_RENDER::BG_STYLE>() ) ) )
             .metavar( "BG" );
 
     m_argParser.add_argument( ARG_QUALITY )

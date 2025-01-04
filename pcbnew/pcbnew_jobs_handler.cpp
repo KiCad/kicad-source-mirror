@@ -538,8 +538,8 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     cfg->m_CurrentPreset = aRenderJob->m_colorPreset;
     boardAdapter.m_Cfg = cfg;
 
-    if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::BG_TRANSPARENT
-        || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::BG_DEFAULT
+    if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT
+        || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::DEFAULT
              && aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ) )
     {
         boardAdapter.m_ColorOverrides[LAYER_3D_BACKGROUND_TOP] = COLOR4D( 1.0, 1.0, 1.0, 0.0 );

@@ -24,9 +24,9 @@
 #include <wx/display.h>
 
 static std::map<JOB_PCB_RENDER::BG_STYLE, wxString> bgStyleMap = {
-    { JOB_PCB_RENDER::BG_STYLE::BG_DEFAULT, _HKI( "Default" ) },
-    { JOB_PCB_RENDER::BG_STYLE::BG_OPAQUE, _HKI( "Opaque" ) },
-    { JOB_PCB_RENDER::BG_STYLE::BG_TRANSPARENT, _HKI( "Transparent" ) }
+    { JOB_PCB_RENDER::BG_STYLE::DEFAULT, _HKI( "Default" ) },
+    { JOB_PCB_RENDER::BG_STYLE::OPAQUE, _HKI( "Opaque" ) },
+    { JOB_PCB_RENDER::BG_STYLE::TRANSPARENT, _HKI( "Transparent" ) }
 };
 
 static std::map<JOB_PCB_RENDER::QUALITY, wxString> qualityMap = {

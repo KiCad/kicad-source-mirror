@@ -28,6 +28,15 @@
 #include <optional>
 #include <math/vector3.h>
 
+// Defined in wingdi.h
+#ifdef TRANSPARENT
+#undef TRANSPARENT
+#endif
+
+#ifdef OPAQUE
+#undef OPAQUE
+#endif
+
 class KICOMMON_API JOB_PCB_RENDER : public JOB
 {
 public:
@@ -46,6 +55,7 @@ public:
 
     wxString m_filename;
 
+    // Do not rename enum values as they are used for CLI args
     enum class QUALITY
     {
         BASIC,
@@ -55,9 +65,9 @@ public:
 
     enum class BG_STYLE
     {
-        BG_DEFAULT,
-        BG_TRANSPARENT,
-        BG_OPAQUE
+        DEFAULT,
+        TRANSPARENT,
+        OPAQUE
     };
 
     enum class SIDE
@@ -73,6 +83,7 @@ public:
     FORMAT      m_format = FORMAT::PNG;
     QUALITY     m_quality = QUALITY::BASIC;
     BG_STYLE    m_bgStyle = BG_STYLE::BG_DEFAULT;
+    BG_STYLE    m_bgStyle = BG_STYLE::DEFAULT;
     int         m_width = 0;
     int         m_height = 0;
     std::string m_colorPreset;
