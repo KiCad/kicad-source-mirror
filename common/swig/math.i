@@ -49,6 +49,14 @@
 %template(VECTOR3D) VECTOR3<double>;
 %template(BOX2I) BOX2<VECTOR2I>;
 
+%extend BOX2<VECTOR2I>
+{
+    BOX2I(const VECTOR2I& aPos, const VECTOR2I& aSize)
+    {
+        return new BOX2I(aPos, aSize);
+    }
+}
+
 %extend VECTOR2<int>
 {
     void Set(long x, long y) {  self->x = x;     self->y = y;  }
