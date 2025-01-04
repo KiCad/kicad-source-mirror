@@ -4,21 +4,22 @@
 # Hajdu Norbert <norbert.hajdu.biz@gmail.com>, 2024.
 # Balázs Meskó <meskobalazs@mailbox.org>, 2024.
 # Flórián Fuszkó <florianf47@gmail.com>, 2024.
+# Gergo Kamaras <kamaras.gergo@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2024-10-12 18:15+0000\n"
-"Last-Translator: Flórián Fuszkó <florianf47@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"PO-Revision-Date: 2025-01-05 09:38+0000\n"
+"Last-Translator: Gergo Kamaras <kamaras.gergo@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -93,9 +94,8 @@ msgid "OpenGL context creation error"
 msgstr "Hiba az OpenGL kontextus létrehozásában"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:429
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "OpenGL verzió nem támogatott. Minimum 1.5-ös verzió szükséges"
+msgstr "OpenGL verzió nem támogatott. Minimum 1.5-ös verzió szükséges."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:563
 #, fuzzy, c-format
@@ -108,7 +108,7 @@ msgid "Net %s\tNet class %s"
 msgstr "Vezeték %s\t Vezetékosztály %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
 msgstr "Forrszem %s\t"
 
@@ -9055,14 +9055,14 @@ msgid "%s (Page %s)"
 msgstr "nem réteg"
 
 #: common/plotters/PDF_plotter.cpp:1384
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
 msgstr "%s Lap Megjelenítése"
 
 #: common/plotters/PDF_plotter.cpp:1404
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:928
 #: eeschema/tools/sch_navigate_tool.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
 msgstr "%s megnyitása"
 
@@ -9142,11 +9142,9 @@ msgid "Failed to archive file '%s'."
 msgstr "A(z) \"%s\" fájl biztonsági mentése sikertelen.\n"
 
 #: common/project/project_archiver.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr ""
-"\n"
-"\"%s\" ZIP archívum létrehozva (mérete: %d bájt)"
+msgstr "\"%s\" ZIP archívum létrehozva (%s tömörítetlen, %s tömörített)."
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 #, fuzzy
