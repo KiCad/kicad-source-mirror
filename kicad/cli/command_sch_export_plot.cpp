@@ -163,10 +163,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         plotJob->m_theme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     }
 
-    if( m_outputArgExpectsDir )
-        plotJob->m_outputDirectory = m_argOutput;
-    else
-        plotJob->m_outputFile = m_argOutput;
+    plotJob->SetOutputPath( m_argOutput );
 
     plotJob->m_plotAll = plotJob->m_plotPages.size() == 0;
 

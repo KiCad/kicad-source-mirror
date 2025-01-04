@@ -157,6 +157,7 @@ public:
 
     bool OutputPathFullSpecified() const;
 
+    bool GetOutpathIsDirectory() const { return m_outputPathIsDirectory; }
 
 protected:
     std::string m_type;

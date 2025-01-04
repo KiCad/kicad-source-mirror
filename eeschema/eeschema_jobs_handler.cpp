@@ -340,8 +340,16 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
     plotOpts.m_PDFHierarchicalLinks = aPlotJob->m_PDFHierarchicalLinks;
     plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
-    plotOpts.m_outputDirectory = aPlotJob->GetFullOutputPath();
-    plotOpts.m_outputFile = aPlotJob->GetFullOutputPath();
+    if (aPlotJob->GetOutpathIsDirectory())
+    {
+        plotOpts.m_outputDirectory = aPlotJob->GetFullOutputPath();
+        plotOpts.m_outputFile = wxEmptyString;
+    }
+    else
+    {
+        plotOpts.m_outputDirectory = wxEmptyString;
+        plotOpts.m_outputFile = aPlotJob->GetFullOutputPath();
+    }
     plotOpts.m_pageSizeSelect = pageSizeSelect;
     plotOpts.m_plotAll = aPlotJob->m_plotAll;
     plotOpts.m_plotDrawingSheet = aPlotJob->m_plotDrawingSheet;

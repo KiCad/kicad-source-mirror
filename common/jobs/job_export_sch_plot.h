@@ -95,9 +95,6 @@ public:
     bool                  m_PDFMetadata;
     wxString              m_theme;
 
-    wxString m_outputDirectory;
-    wxString m_outputFile;
-
     JOB_HPGL_PLOT_ORIGIN_AND_UNITS m_HPGLPlotOrigin;
 };
 

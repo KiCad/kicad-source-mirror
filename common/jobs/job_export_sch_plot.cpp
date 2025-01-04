@@ -79,8 +79,6 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT() :
         m_PDFHierarchicalLinks( true ),
         m_PDFMetadata( true ),
         m_theme(),
-        m_outputDirectory(),
-        m_outputFile(),
         m_HPGLPlotOrigin( JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT )
 {
     m_params.emplace_back(
@@ -106,10 +104,6 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT() :
                                                 m_PDFHierarchicalLinks ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "pdf_metadata", &m_PDFMetadata, m_PDFMetadata ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_theme, m_theme ) );
-    m_params.emplace_back(
-            new JOB_PARAM<wxString>( "output_filename", &m_outputFile, m_outputFile ) );
-    m_params.emplace_back(
-            new JOB_PARAM<wxString>( "output_directory", &m_outputDirectory, m_outputDirectory ) );
     m_params.emplace_back( new JOB_PARAM<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>(
             "hpgl_plot_origin", &m_HPGLPlotOrigin, m_HPGLPlotOrigin ) );
 
