@@ -916,6 +916,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
 
+        LOCALE_IO dummy;
         if( !pcbPlotter.Plot( aPdfJob->GetFullOutputPath(), aPdfJob->m_printMaskLayer,
                               aPdfJob->m_printMaskLayersToIncludeOnAllLayers, false ) )
         {
