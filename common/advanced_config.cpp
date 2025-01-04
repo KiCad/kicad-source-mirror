@@ -121,7 +121,6 @@ static const wxChar EnableExtensionSnaps[] = wxT( "EnableExtensionSnaps" );
 static const wxChar ExtensionSnapTimeoutMs[] = wxT( "ExtensionSnapTimeoutMs" );
 static const wxChar ExtensionSnapActivateOnHover[] = wxT( "ExtensionSnapActivateOnHover" );
 static const wxChar EnableSnapAnchorsDebug[] = wxT( "EnableSnapAnchorsDebug" );
-static const wxChar EnableJobset[] = wxT( "EnableJobset" );
 static const wxChar MinParallelAngle[] = wxT( "MinParallelAngle" );
 static const wxChar HoleWallPaintingMultiplier[] = wxT( "HoleWallPaintingMultiplier" );
 
