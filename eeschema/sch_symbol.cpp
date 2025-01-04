@@ -2799,26 +2799,24 @@ void SCH_SYMBOL::ClearBrightenedPins()
  */
 bool SCH_SYMBOL::GetShowPinNames() const
 {
-    wxCHECK( m_part, false );
-    return m_part->GetShowPinNames();
+    return m_part && m_part->GetShowPinNames();
 }
 
 void SCH_SYMBOL::SetShowPinNames( bool aShow )
 {
-    wxCHECK( m_part, /* void */ );
-    m_part->SetShowPinNames( aShow );
+    if( m_part )
+        m_part->SetShowPinNames( aShow );
 }
 
 bool SCH_SYMBOL::GetShowPinNumbers() const
 {
-    wxCHECK( m_part, false );
-    return m_part->GetShowPinNumbers();
+    return m_part && m_part->GetShowPinNumbers();
 }
 
 void SCH_SYMBOL::SetShowPinNumbers( bool aShow )
 {
-    wxCHECK( m_part, /* void */ );
-    m_part->SetShowPinNumbers( aShow );
+    if( m_part )
+        m_part->SetShowPinNumbers( aShow );
 }
 
 
