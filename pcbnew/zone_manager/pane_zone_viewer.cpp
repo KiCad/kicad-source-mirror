@@ -163,8 +163,6 @@ void PANE_ZONE_VIEWER::ActivateSelectedZone( ZONE* aZone )
         }
     }
 
-    SetSelection( FindPage( m_zoneContainers[firstLayer] ) );
-
     if( !m_zoneGAL )
     {
         m_zoneGAL = ( new PANEL_ZONE_GAL( m_pcbFrame->GetBoard(),
@@ -177,6 +175,7 @@ void PANE_ZONE_VIEWER::ActivateSelectedZone( ZONE* aZone )
         m_zoneContainers[firstLayer]->ResetZoneGAL( m_zoneGAL );
     }
 
+    SetSelection( FindPage( m_zoneContainers[firstLayer] ) );
     m_zoneGAL->ActivateSelectedZone( aZone );
 }
 
