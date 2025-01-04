@@ -1122,14 +1122,17 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 }
 
 
-bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject )
+bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless )
 {
     wxFileName pcbFileName( EnsureFileExtension( aFileName, FILEEXT::KiCadPcbFileExtension ) );
 
     if( !IsWritable( pcbFileName ) )
     {
-        DisplayError( this, wxString::Format( _( "Insufficient permissions to write file '%s'." ),
-                                              pcbFileName.GetFullPath() ) );
+        if( !aHeadless )
+        {
+            DisplayError( this, wxString::Format( _( "Insufficient permissions to write file '%s'." ),
+                                                  pcbFileName.GetFullPath() ) );
+        }
         return false;
     }
 
@@ -1149,9 +1152,12 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, wxString::Format( _( "Error saving board file '%s'.\n%s" ),
-                                              pcbFileName.GetFullPath(),
-                                              ioe.What() ) );
+        if( !aHeadless )
+        {
+            DisplayError( this, wxString::Format( _( "Error saving board file '%s'.\n%s" ),
+                                                  pcbFileName.GetFullPath(),
+                                                  ioe.What() ) );
+        }
 
         return false;
     }
@@ -1171,14 +1177,17 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     if( aCreateProject && currentRules.FileExists() && !rulesFile.FileExists() )
         KiCopyFile( currentRules.GetFullPath(), rulesFile.GetFullPath(), msg );
 
-    if( !msg.IsEmpty() )
+    if( !msg.IsEmpty() && !aHeadless )
     {
         DisplayError( this, wxString::Format( _( "Error saving custom rules file '%s'." ),
                                               rulesFile.GetFullPath() ) );
     }
 
-    DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n%s" ),
-                                                pcbFileName.GetFullPath() ) );
+    if( !aHeadless )
+    {
+        DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n%s" ),
+                                                    pcbFileName.GetFullPath() ) );
+    }
 
     return true;
 }

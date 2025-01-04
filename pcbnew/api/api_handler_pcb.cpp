@@ -37,6 +37,7 @@
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
+#include <pcbnew_id.h>
 #include <project.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -58,7 +59,9 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
     registerHandler<RunAction, RunActionResponse>( &API_HANDLER_PCB::handleRunAction );
     registerHandler<GetOpenDocuments, GetOpenDocumentsResponse>(
             &API_HANDLER_PCB::handleGetOpenDocuments );
-
+    registerHandler<SaveDocument, Empty>( &API_HANDLER_PCB::handleSaveDocument );
+    registerHandler<SaveCopyOfDocument, Empty>( &API_HANDLER_PCB::handleSaveCopyOfDocument );
+    registerHandler<RevertDocument, Empty>( &API_HANDLER_PCB::handleRevertDocument );
 
     registerHandler<GetItems, GetItemsResponse>( &API_HANDLER_PCB::handleGetItems );
 
@@ -144,6 +147,103 @@ HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_PCB::handleGetOpenDocuments
 
     response.mutable_documents()->Add( std::move( doc ) );
     return response;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveDocument(
+        const HANDLER_CONTEXT<SaveDocument>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    frame()->Files_io_from_id( ID_SAVE_BOARD );
+    return Empty();
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveCopyOfDocument(
+        const HANDLER_CONTEXT<SaveCopyOfDocument>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    wxFileName boardPath( frame()->Prj().AbsolutePath( wxString::FromUTF8( aCtx.Request.path() ) ) );
+
+    if( !boardPath.IsOk() || !boardPath.IsDirWritable() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "save path '{}' could not be opened",
+                                          boardPath.GetFullPath().ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    if( boardPath.FileExists()
+        && ( !boardPath.IsFileWritable() || !aCtx.Request.options().overwrite() ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "save path '{}' exists and cannot be overwritten",
+                                          boardPath.GetFullPath().ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    if( boardPath.GetExt() != FILEEXT::KiCadPcbFileExtension )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "save path '{}' must have a kicad_pcb extension",
+                                          boardPath.GetFullPath().ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    BOARD* board = frame()->GetBoard();
+
+    if( board->GetFileName().Matches( boardPath.GetFullPath() ) )
+    {
+        frame()->Files_io_from_id( ID_SAVE_BOARD );
+        return Empty();
+    }
+
+    bool includeProject = true;
+
+    if( aCtx.Request.has_options() )
+        includeProject = aCtx.Request.options().include_project();
+
+    frame()->SavePcbCopy( boardPath.GetFullPath(), includeProject, /* aHeadless = */ true );
+
+    return Empty();
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRevertDocument(
+        const HANDLER_CONTEXT<RevertDocument>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    wxFileName fn = frame()->Prj().AbsolutePath( frame()->GetBoard()->GetFileName() );
+
+    frame()->GetScreen()->SetContentModified( false );
+    frame()->ReleaseFile();
+    frame()->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
+
+    return Empty();
 }
 
 

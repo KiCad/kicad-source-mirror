@@ -63,6 +63,14 @@ private:
     HANDLER_RESULT<commands::GetOpenDocumentsResponse> handleGetOpenDocuments(
             const HANDLER_CONTEXT<commands::GetOpenDocuments>& aCtx );
 
+    HANDLER_RESULT<Empty> handleSaveDocument( const HANDLER_CONTEXT<commands::SaveDocument>& aCtx );
+
+    HANDLER_RESULT<Empty> handleSaveCopyOfDocument(
+            const HANDLER_CONTEXT<commands::SaveCopyOfDocument>& aCtx );
+
+    HANDLER_RESULT<Empty> handleRevertDocument(
+            const HANDLER_CONTEXT<commands::RevertDocument>& aCtx );
+
     HANDLER_RESULT<commands::GetItemsResponse> handleGetItems(
             const HANDLER_CONTEXT<commands::GetItems>& aCtx );
 

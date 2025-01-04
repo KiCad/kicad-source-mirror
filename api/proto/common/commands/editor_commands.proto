@@ -47,6 +47,46 @@ message GetOpenDocumentsResponse
   repeated kiapi.common.types.DocumentSpecifier documents = 1;
 }
 
+message SaveDocument
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+// Saves the given document to a new location and opens the new copy
+// Note, this is not going to be implemented anytime soon as we don't currently
+// want to allow API access to changing which project is open
+//message SaveDocumentAs
+//{
+//  kiapi.common.types.DocumentSpecifier document = 1;
+//
+//  string path = 2;
+//}
+
+message SaveOptions
+{
+  // Overwrite destination file(s) if they exist
+  bool overwrite = 1;
+
+  // If the file being saved normally requires a project (for example, a board or schematic),
+  // this flag will cause a new project to be saved alongside the new file
+  bool include_project = 2;
+}
+
+// Saves the given document to a new location and does not open the new copy
+message SaveCopyOfDocument
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string path = 2;
+
+  SaveOptions options = 3;
+}
+
+message RevertDocument
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
 /*
  * Runs a TOOL_ACTION using the TOOL_MANAGER of a given frame.
  * WARNING: The TOOL_ACTIONs are specifically *not* an API.

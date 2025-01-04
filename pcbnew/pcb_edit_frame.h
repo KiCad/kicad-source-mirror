@@ -423,9 +423,11 @@ public:
      *
      * @param aFileName The file name to write.
      * @param aCreateProject will create an empty project alongside the board file
+     * @param aHeadless will suppress informational output (e.g. to be used from the API)
      * @return True if file was saved successfully.
      */
-    bool SavePcbCopy( const wxString& aFileName, bool aCreateProject = false );
+    bool SavePcbCopy( const wxString& aFileName, bool aCreateProject = false,
+                      bool aHeadless = false );
 
     /**
      * Delete all and reinitialize the current board.
