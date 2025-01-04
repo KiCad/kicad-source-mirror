@@ -1095,7 +1095,7 @@
             <property name="permission">none</property>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALL</property>
+              <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -1170,7 +1170,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALL</property>
+              <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="true">
                 <property name="BottomDockable">1</property>

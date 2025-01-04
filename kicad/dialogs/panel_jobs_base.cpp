@@ -185,10 +185,10 @@ PANEL_JOB_OUTPUT_BASE::PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonProperties = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerButtons->Add( m_buttonProperties, 0, wxALL, 5 );
+	bSizerButtons->Add( m_buttonProperties, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_buttonDelete = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerButtons->Add( m_buttonDelete, 0, wxALL, 5 );
+	bSizerButtons->Add( m_buttonDelete, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizerButtons->Add( 0, 0, 1, wxEXPAND, 5 );
