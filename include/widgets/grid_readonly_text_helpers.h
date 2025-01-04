@@ -34,17 +34,13 @@ class GRID_CELL_READONLY_TEXT_EDITOR : public wxGridCellTextEditor
 public:
     GRID_CELL_READONLY_TEXT_EDITOR() {};
 
-    void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler) override
+    void Create( wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler ) override
     {
-        DoCreate(parent, id, evtHandler);
+        DoCreate( parent, id, evtHandler );
         Text()->SetEditable( false );
     }
 
 wxDECLARE_NO_COPY_CLASS( GRID_CELL_READONLY_TEXT_EDITOR );
 };
-
-
-
-
 
 #endif  // GRID_READONLY_TEXT_HELPERS_H

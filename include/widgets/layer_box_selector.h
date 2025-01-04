@@ -41,14 +41,14 @@ public:
     bool SetLayersHotkeys( bool value );
 
 protected:
-    // Return true if the layer id is enabled (i.e. is it should be displayed)
+    /// Return true if the layer id is enabled (i.e. is it should be displayed).
     virtual bool isLayerEnabled( int aLayer ) const = 0;
 
     bool m_layerhotkeys;
 };
 
 
-/*
+/**
  * Display a layer list in a wxBitmapComboBox.
  */
 class LAYER_BOX_SELECTOR : public wxBitmapComboBox, public LAYER_SELECTOR

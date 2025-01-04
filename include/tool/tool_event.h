@@ -85,42 +85,42 @@ enum TOOL_ACTIONS
 
     TA_CHANGE_LAYER         = 0x1000,
 
-    // Tool cancel event. Issued automagically when the user hits escape or selects End Tool from
-    // the context menu.
+    /// Tool cancel event. Issued automagically when the user hits escape or selects End Tool from
+    /// the context menu.
     TA_CANCEL_TOOL          = 0x2000,
 
-    // Context menu update. Issued whenever context menu is open and the user hovers the mouse
-    // over one of choices. Used in dynamic highlighting in disambiguation menu
+    /// Context menu update. Issued whenever context menu is open and the user hovers the mouse
+    /// over one of choices. Used in dynamic highlighting in disambiguation menu.
     TA_CHOICE_MENU_UPDATE   = 0x4000,
 
-    // Context menu choice. Sent if the user picked something from the context menu or
-    // closed it without selecting anything.
+    /// Context menu choice. Sent if the user picked something from the context menu or
+    /// closed it without selecting anything.
     TA_CHOICE_MENU_CHOICE   = 0x8000,
 
-    // Context menu is closed, no matter whether anything has been chosen or not.
+    /// Context menu is closed, no matter whether anything has been chosen or not.
     TA_CHOICE_MENU_CLOSED   = 0x10000,
 
     TA_CHOICE_MENU = TA_CHOICE_MENU_UPDATE | TA_CHOICE_MENU_CHOICE | TA_CHOICE_MENU_CLOSED,
 
-    // This event is sent *before* undo/redo command is performed.
+    /// This event is sent *before* undo/redo command is performed.
     TA_UNDO_REDO_PRE        = 0x20000,
 
-    // This event is sent *after* undo/redo command is performed.
+    /// This event is sent *after* undo/redo command is performed.
     TA_UNDO_REDO_POST       = 0x40000,
 
-    // Tool action (allows one to control tools).
+    /// Tool action (allows one to control tools).
     TA_ACTION               = 0x80000,
 
-    // Tool activation event.
+    /// Tool activation event.
     TA_ACTIVATE             = 0x100000,
 
-    // Tool re-activation event for tools already on the stack
+    /// Tool re-activation event for tools already on the stack.
     TA_REACTIVATE           = 0x200000,
 
-    // Model has changed (partial update).
+    /// Model has changed (partial update).
     TA_MODEL_CHANGE         = 0x400000,
 
-    // Tool priming event (a special mouse click)
+    /// Tool priming event (a special mouse click).
     TA_PRIME                = 0x800001,
 
     TA_ANY = 0xffffffff
@@ -149,9 +149,9 @@ enum TOOL_MODIFIERS
 /// Defines when a context menu is opened.
 enum CONTEXT_MENU_TRIGGER
 {
-    CMENU_BUTTON = 0,   // On the right button
-    CMENU_NOW,          // Right now (after TOOL_INTERACTIVE::SetContextMenu)
-    CMENU_OFF           // Never
+    CMENU_BUTTON = 0,   ///< On the right button.
+    CMENU_NOW,          ///< Right now (after TOOL_INTERACTIVE::SetContextMenu).
+    CMENU_OFF           ///< Never.
 };
 
 enum SYNCRONOUS_TOOL_STATE
@@ -240,61 +240,65 @@ public:
         init();
     }
 
-    ///< Returns the category (eg. mouse/keyboard/action) of an event..
+    /// Return the category (eg. mouse/keyboard/action) of an event.
     TOOL_EVENT_CATEGORY Category() const { return m_category; }
 
-    ///< Returns more specific information about the type of an event.
+    /// Returns more specific information about the type of an event.
     TOOL_ACTIONS Action() const { return m_actions; }
 
-    ///< These give a tool a method of informing the TOOL_MANAGER that a particular event should
-    ///< be passed on to subsequent tools on the stack.  Defaults to true for TC_MESSAGES; false
-    ///< for everything else.
+    /// These give a tool a method of informing the TOOL_MANAGER that a particular event should
+    /// be passed on to subsequent tools on the stack.  Defaults to true for TC_MESSAGES; false
+    /// for everything else.
     bool PassEvent() const { return m_passEvent; }
     void SetPassEvent( bool aPass = true ) { m_passEvent = aPass; }
 
-    ///< Returns if it this event has a valid position (true for mouse events and context-menu
-    ///< or hotkey-based command events)
+    /// Returns if it this event has a valid position (true for mouse events and context-menu
+    /// or hotkey-based command events).
     bool HasPosition() const { return m_hasPosition; }
     void SetHasPosition( bool aHasPosition ) { m_hasPosition = aHasPosition; }
 
-    ///< Returns if the action associated with this event should be treated as immediate regardless
-    ///< of the current immediate action settings.
+    /// Returns if the action associated with this event should be treated as immediate regardless
+    /// of the current immediate action settings.
     bool ForceImmediate() const { return m_forceImmediate; }
     void SetForceImmediate( bool aForceImmediate = true ) { m_forceImmediate = aForceImmediate; }
 
     TOOL_BASE* FirstResponder() const { return m_firstResponder; }
     void SetFirstResponder( TOOL_BASE* aTool ) { m_firstResponder = aTool; }
 
-    ///< Controls whether the tool is first being pushed to the stack or being reactivated after a pause
+    /// Control whether the tool is first being pushed to the stack or being reactivated after
+    /// a pause.
     bool IsReactivate() const { return m_reactivate; }
     void SetReactivate( bool aReactivate = true ) { m_reactivate = aReactivate; }
 
-    void SetSynchronous( std::atomic<SYNCRONOUS_TOOL_STATE>* aState ) { m_synchronousState = aState; }
+    void SetSynchronous( std::atomic<SYNCRONOUS_TOOL_STATE>* aState )
+    {
+        m_synchronousState = aState;
+    }
     std::atomic<SYNCRONOUS_TOOL_STATE>* SynchronousState() const { return m_synchronousState; }
 
     void SetCommit( COMMIT* aCommit ) { m_commit = aCommit; }
     COMMIT* Commit() const { return m_commit; }
 
-    ///< Returns information about difference between current mouse cursor position and the place
-    ///< where dragging has started.
+    /// Return information about difference between current mouse cursor position and the place
+    /// where dragging has started.
     const VECTOR2D Delta() const
     {
         return returnCheckedPosition( m_mouseDelta );
     }
 
-    ///< Returns mouse cursor position in world coordinates.
+    /// Return mouse cursor position in world coordinates.
     const VECTOR2D Position() const
     {
         return returnCheckedPosition( m_mousePos );
     }
 
-    ///< Returns the point where dragging has started.
+    /// Return the point where dragging has started.
     const VECTOR2D DragOrigin() const
     {
         return returnCheckedPosition( m_mouseDragOrigin );
     }
 
-    ///< Returns information about mouse buttons state.
+    /// Return information about mouse buttons state.
     int Buttons() const
     {
         assert( m_category == TC_MOUSE );    // this should be used only with mouse events
@@ -355,7 +359,7 @@ public:
         return m_actions == TA_PRIME;
     }
 
-    ///< Returns information about key modifiers state (Ctrl, Alt, etc.)
+    /// Return information about key modifiers state (Ctrl, Alt, etc.).
     int Modifier( int aMask = MD_MODIFIER_MASK ) const
     {
         return m_modifiers & aMask;
@@ -587,29 +591,28 @@ private:
     bool m_forceImmediate;
 
 
-    ///< Optional group that the parent action for the event belongs to
+    /// Optional group that the parent action for the event belongs to.
     std::optional<TOOL_ACTION_GROUP> m_actionGroup;
 
-    ///< True when the tool is being re-activated from the stack
+    /// True when the tool is being re-activated from the stack.
     bool m_reactivate;
 
-    ///< Difference between mouse cursor position and
-    ///< the point where dragging event has started
+    /// Difference between mouse cursor position and the point where dragging event has started.
     VECTOR2D m_mouseDelta;
 
-    ///< Current mouse cursor position
+    /// Current mouse cursor position.
     VECTOR2D m_mousePos;
 
-    ///< Point where dragging has started
+    /// Point where dragging has started.
     VECTOR2D m_mouseDragOrigin;
 
-    ///< State of mouse buttons
+    /// State of mouse buttons.
     int m_mouseButtons;
 
-    ///< Stores code of pressed/released key
+    /// Stores code of pressed/released key.
     int m_keyCode;
 
-    ///< State of key modifiers (Ctrl/Alt/etc.)
+    /// State of key modifiers (Ctrl/Alt/etc.).
     int m_modifiers;
 
     std::atomic<SYNCRONOUS_TOOL_STATE>* m_synchronousState;
@@ -617,10 +620,10 @@ private:
     /// Commit the tool handling the event should add to
     COMMIT* m_commit;
 
-    ///< Generic parameter used for passing non-standard data.
+    /// Generic parameter used for passing non-standard data.
     ki::any m_param;
 
-    ///< The first tool to receive the event
+    /// The first tool to receive the event.
     TOOL_BASE* m_firstResponder;
 
     std::optional<int> m_commandId;
@@ -640,17 +643,17 @@ public:
     typedef std::deque<TOOL_EVENT>::iterator iterator;
     typedef std::deque<TOOL_EVENT>::const_iterator const_iterator;
 
-    ///< Default constructor. Creates an empty list.
+    /// Default constructor. Creates an empty list.
     TOOL_EVENT_LIST()
     {}
 
-    ///< Constructor for a list containing only one TOOL_EVENT.
+    /// Constructor for a list containing only one TOOL_EVENT.
     TOOL_EVENT_LIST( const TOOL_EVENT& aSingleEvent )
     {
         m_events.push_back( aSingleEvent );
     }
 
-    ///< Copy an existing TOOL_EVENT_LIST
+    /// Copy an existing TOOL_EVENT_LIST
     TOOL_EVENT_LIST( const TOOL_EVENT_LIST& aEventList )
     {
         m_events.clear();
@@ -660,15 +663,14 @@ public:
     }
 
     /**
-     * Function Format()
-     * Returns information about event in form of a human-readable string.
+     * Return information about event in form of a human-readable string.
      *
      * @return Event information.
      */
     const std::string Format() const;
 
     /**
-     * Returns a string containing the names of all the events in this list.
+     * Return a string containing the names of all the events in this list.
      *
      * @return Event names.
      */

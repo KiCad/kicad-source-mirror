@@ -29,10 +29,10 @@
 /**
  * A version of a wxStaticText control that will request a smaller size than the full string.
  *
- * This can be used with the ellipsization styles to ensure that the control will actually ellipsize
- * properly inside sizer elements (since they ask for the best size but GTK reports the best size
- * as being the full string length, even when ellipsization is enabled). This work around is discussed
- * in upstream ticket https://trac.wxwidgets.org/ticket/18992.
+ * This can be used with the ellipsization styles to ensure that the control will actually
+ * ellipsize properly inside sizer elements (since they ask for the best size but GTK reports
+ * the best size as being the full string length, even when ellipsization is enabled). This work
+ * around is discussed in upstream ticket https://trac.wxwidgets.org/ticket/18992.
  */
 class WX_ELLIPSIZED_STATIC_TEXT: public wxStaticText
 {
@@ -43,11 +43,12 @@ public:
                                long aStyle = 0 );
 
     /**
-     * Set the string that is used for determining the requested size of the control. The control
-     * will return this string length from GetBestSize(), regardless of what string the control
-     * is displaying.
+     * Set the string that is used for determining the requested size of the control.
      *
-     * @param aString is the smallest string to display without ellipses
+     * The control will return this string length from GetBestSize(), regardless of what string
+     * the control is displaying.
+     *
+     * @param aString is the smallest string to display without ellipses.
      */
     void SetMinimumStringLength( const wxString& aString )
     {
@@ -58,7 +59,7 @@ protected:
     wxSize DoGetBestSize() const override;
 
 private:
-    wxString m_minimumString;  // The string that is used to set the minimum control width
+    wxString m_minimumString;  ///< The string that is used to set the minimum control width.
 };
 
 

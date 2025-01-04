@@ -66,8 +66,9 @@ public:
     static STROKE_FONT* LoadFont( const wxString& aFontName );
 
     /**
-     * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
-     * the distance between baselines, not the space between line bounding boxes.
+     * Compute the distance (interline) between 2 lines of text (for multiline texts).
+     *
+     * This is the distance between baselines, not the space between line bounding boxes.
      */
     double GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const override;
 

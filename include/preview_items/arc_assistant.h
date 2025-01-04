@@ -30,49 +30,52 @@
 
 namespace KIGFX
 {
+
 namespace PREVIEW
 {
-    /**
-     * Represents an assistant draw when interactively drawing an arc on a canvas.
-     */
-    class ARC_ASSISTANT : public EDA_ITEM
+
+/**
+ * Represents an assistant draw when interactively drawing an arc on a canvas.
+ */
+class ARC_ASSISTANT : public EDA_ITEM
+{
+public:
+    ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager,
+                   const EDA_IU_SCALE& aIuScale,
+                   EDA_UNITS aUnits );
+
+    const BOX2I ViewBBox() const override;
+
+    std::vector<int> ViewGetLayers() const override
     {
-    public:
-        ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager,
-                       const EDA_IU_SCALE& aIuScale,
-                       EDA_UNITS aUnits );
+        return { LAYER_SELECT_OVERLAY,  // Assistant graphics
+            LAYER_GP_OVERLAY };     // Drop shadows
+    }
 
-        const BOX2I ViewBBox() const override;
-
-        std::vector<int> ViewGetLayers() const override
-        {
-            return { LAYER_SELECT_OVERLAY,  // Assistant graphics
-                     LAYER_GP_OVERLAY };     // Drop shadows
-        }
-
-        /**
-         * Draw the assistance (with reference to the construction manager
-         */
-        void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
+    /**
+     * Draw the assistance (with reference to the construction manager
+     */
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
 #if defined( DEBUG )
-        void Show( int x, std::ostream& st ) const override
-        {
-        }
+    void Show( int x, std::ostream& st ) const override
+    {
+    }
 #endif
 
-        wxString GetClass() const override
-        {
-            return "ARC_ASSISTANT";
-        }
+    wxString GetClass() const override
+    {
+        return "ARC_ASSISTANT";
+    }
 
-        void SetUnits( EDA_UNITS aUnits ) { m_units = aUnits; }
+    void SetUnits( EDA_UNITS aUnits ) { m_units = aUnits; }
 
-    private:
-        const ARC_GEOM_MANAGER& m_constructMan;
-        const EDA_IU_SCALE&     m_iuScale;
-        EDA_UNITS               m_units;
-    };
+private:
+    const ARC_GEOM_MANAGER& m_constructMan;
+    const EDA_IU_SCALE&     m_iuScale;
+    EDA_UNITS               m_units;
+};
+
 } // namespace PREVIEW
 } // namespace KIGFX
 

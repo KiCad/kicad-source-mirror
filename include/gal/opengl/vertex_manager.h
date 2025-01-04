@@ -133,7 +133,7 @@ public:
     bool Vertices( const VERTEX aVertices[], unsigned int aSize );
 
     /**
-     * Changes currently used color that will be applied to newly added vertices.
+     * Change currently used color that will be applied to newly added vertices.
      *
      * @param aColor is the new color.
      */
@@ -361,18 +361,23 @@ protected:
 
     /// Container for vertices, may be cached or noncached
     std::shared_ptr<VERTEX_CONTAINER> m_container;
+
     /// GPU manager for data transfers and drawing operations
     std::shared_ptr<GPU_MANAGER>      m_gpu;
 
     /// State machine variables
     /// True in case there is no need to transform vertices
     bool                    m_noTransform;
+
     /// Currently used transform matrix
     glm::mat4               m_transform;
+
     /// Stack of transformation matrices, used for Push/PopMatrix
     std::stack<glm::mat4>   m_transformStack;
+
     /// Currently used color
     GLubyte                 m_color[COLOR_STRIDE];
+
     /// Currently used shader and its parameters
     GLfloat                 m_shader[SHADER_STRIDE];
 

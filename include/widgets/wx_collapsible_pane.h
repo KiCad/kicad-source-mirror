@@ -22,15 +22,17 @@
 
 #include <wx/control.h>
 #include <wx/containr.h>
-#include <wx/statbox.h> // needed to provide a hint that wx libraries instantiated wxNavigationEnabled<wxControl>
+#include <wx/statbox.h> // needed to provide a hint that wx libraries instantiated
+                        // wxNavigationEnabled<wxControl>
 
 
 wxDECLARE_EVENT( WX_COLLAPSIBLE_PANE_HEADER_CHANGED, wxCommandEvent );
 wxDECLARE_EVENT( WX_COLLAPSIBLE_PANE_CHANGED, wxCommandEvent );
 
 /**
- * A header control for WX_COLLAPSIBLE_PANE
- * Looks like a static text with a unicode arrow prepended to show the state
+ * A header control for #WX_COLLAPSIBLE_PANE.
+ *
+ * Looks like a static text with a unicode arrow prepended to show the state.
  * Takes the same space as a static text.  This is similar to the wxCollapsiblePane on GTK.
  */
 class WX_COLLAPSIBLE_PANE_HEADER : public wxControl
@@ -96,9 +98,9 @@ private:
 
 /**
  * A better wxCollapsiblePane that
- * - Looks the same on all platforms
- * - Doesn't have the same sizer bugs
- * - Uses proper window colors
+ * - Looks the same on all platforms.
+ * - Doesn't have the same sizer bugs.
+ * - Uses proper window colors.
  */
 class WX_COLLAPSIBLE_PANE : public wxNavigationEnabled<wxControl>
 {

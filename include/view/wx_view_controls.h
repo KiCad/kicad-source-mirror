@@ -78,50 +78,50 @@ public:
 
     void PinCursorInsideNonAutoscrollArea( bool aWarpMouseCursor ) override;
 
-    ///< @copydoc VIEW_CONTROLS::GetMousePosition()
+    /// @copydoc VIEW_CONTROLS::GetMousePosition()
     VECTOR2D GetMousePosition( bool aWorldCoordinates = true ) const override;
 
     using VIEW_CONTROLS::GetCursorPosition;
 
-    ///< @copydoc VIEW_CONTROLS::GetCursorPosition()
+    /// @copydoc VIEW_CONTROLS::GetCursorPosition()
     VECTOR2D GetCursorPosition( bool aSnappingEnabled ) const override;
 
-    ///< @copydoc VIEW_CONTROLS::GetRawCursorPosition()
+    /// @copydoc VIEW_CONTROLS::GetRawCursorPosition()
     VECTOR2D GetRawCursorPosition( bool aSnappingEnabled = true ) const override;
 
     void SetCursorPosition( const VECTOR2D& aPosition, bool warpView,
                             bool aTriggeredByArrows, long aArrowCommand ) override;
 
-    ///< @copydoc VIEW_CONTROLS::SetCrossHairCursorPosition()
+    /// @copydoc VIEW_CONTROLS::SetCrossHairCursorPosition()
     void SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView ) override;
 
-    ///< @copydoc VIEW_CONTROLS::CursorWarp()
+    /// @copydoc VIEW_CONTROLS::CursorWarp()
     void WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,
                           bool aWarpView = false ) override;
 
-    ///< @copydoc VIEW_CONTROLS::CenterOnCursor()
+    /// @copydoc VIEW_CONTROLS::CenterOnCursor()
     void CenterOnCursor() override;
 
-    ///< Adjusts the scrollbars position to match the current viewport.
+    /// Adjusts the scrollbars position to match the current viewport.
     void UpdateScrollbars();
 
-    ///< End any mouse drag action still in progress
+    /// End any mouse drag action still in progress.
     void CancelDrag();
 
     void ForceCursorPosition( bool aEnabled,
                               const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) ) override;
 
-    ///< Applies VIEW_CONTROLS settings from the program COMMON_SETTINGS
+    /// Applies VIEW_CONTROLS settings from the program #COMMON_SETTINGS.
     void LoadSettings() override;
 
-    ///< Event that forces mouse move event in the dispatcher (eg. used in autopanning, when
-    ///< mouse cursor does not move in screen coordinates, but does in world coordinates)
+    /// Event that forces mouse move event in the dispatcher (eg. used in autopanning, when
+    /// mouse cursor does not move in screen coordinates, but does in world coordinates)
     static const wxEventType EVT_REFRESH_MOUSE;
 
     std::unique_ptr<PROF_COUNTER> m_MotionEventCounter;
 
 private:
-    ///< Possible states for WX_VIEW_CONTROLS.
+    /// Possible states for WX_VIEW_CONTROLS.
     enum STATE
     {
         IDLE = 1,           ///< Nothing is happening.
@@ -131,7 +131,7 @@ private:
     };
 
     /**
-     * Sets the interaction state, simply a internal setter to make it easier to debug changes
+     * Set the interaction state, simply a internal setter to make it easier to debug changes.
      */
     void setState( STATE aNewState );
 
@@ -158,7 +158,9 @@ private:
      * It is mostly used for notifying the tools that the cursor position in the world
      * coordinates has changed, whereas the screen coordinates remained the same (e.g.
      * frame edge autopanning).
-     * @param aSetModifiers If false, don't change the modifiers (they were set using the keyboard motion)
+     *
+     * @param aSetModifiers If false, don't change the modifiers (they were set using the
+     *                      keyboard motion).
      */
     void refreshMouse( bool aSetModifiers);
 
@@ -167,48 +169,48 @@ private:
      */
     wxPoint getMouseScreenPosition() const;
 
-    ///< Current state of VIEW_CONTROLS.
+    /// Current state of VIEW_CONTROLS.
     STATE       m_state;
 
-    ///< Panel that is affected by VIEW_CONTROLS.
+    /// Panel that is affected by VIEW_CONTROLS.
     EDA_DRAW_PANEL_GAL* m_parentPanel;
 
-    ///< Store information about point where dragging has started.
+    /// Store information about point where dragging has started.
     VECTOR2D    m_dragStartPoint;
 
-    ///< Current direction of panning (only autopanning mode).
+    /// Current direction of panning (only autopanning mode).
     VECTOR2D    m_panDirection;
 
-    ///< Timer responsible for handling autopanning.
+    /// Timer responsible for handling autopanning.
     wxTimer     m_panTimer;
 
-    ///< Ratio used for scaling world coordinates to scrollbar position.
+    /// Ratio used for scaling world coordinates to scrollbar position.
     VECTOR2D    m_scrollScale;
 
-    ///< Current scrollbar position.
+    /// Current scrollbar position.
     VECTOR2I    m_scrollPos;
 
-    ///< The mouse position when a drag zoom started.
+    /// The mouse position when a drag zoom started.
     VECTOR2D      m_zoomStartPoint;
 
 #ifdef __WXGTK3__
-    ///< Last event timestamp used to de-bounce mouse wheel.
+    /// Last event timestamp used to de-bounce mouse wheel.
     long int    m_lastTimestamp;
 #endif
 
-    ///< Current cursor position (world coordinates).
+    /// Current cursor position (world coordinates).
     VECTOR2D    m_cursorPos;
 
-    ///< Flag deciding whether the cursor position should be calculated using the mouse position.
+    /// Flag deciding whether the cursor position should be calculated using the mouse position.
     bool        m_updateCursor;
 
-    ///< Flag to indicate if infinite panning works on this platform.
+    /// Flag to indicate if infinite panning works on this platform.
     bool m_infinitePanWorks;
 
-    ///< A #ZOOM_CONTROLLER that determines zoom steps. This is platform-specific.
+    /// A #ZOOM_CONTROLLER that determines zoom steps. This is platform-specific.
     std::unique_ptr<ZOOM_CONTROLLER> m_zoomController;
 
-    ///< Used to track gesture events.
+    /// Used to track gesture events.
     double   m_gestureLastZoomFactor;
     VECTOR2D m_gestureLastPos;
 };

@@ -170,10 +170,10 @@ private:
     wxSize    m_unadjustedMinSize;
     bool      m_isToolbarButton;
 
-    ///< Accept mouse-up as click even if mouse-down happened outside of the control
+    /// Accept mouse-up as click even if mouse-down happened outside of the control.
     bool      m_acceptDraggedInClicks;
 
-    ///< Draws bitmap centered in the control
+    /// Draw bitmap centered in the control.
     bool      m_centerBitmap;
 };
 

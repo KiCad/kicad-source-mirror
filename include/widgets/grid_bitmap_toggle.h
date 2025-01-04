@@ -26,7 +26,7 @@
 
 
 /**
- * A toggle button renderer for a wxGrid, similar to BITMAP_TOGGLE
+ * A toggle button renderer for a wxGrid, similar to #BITMAP_TOGGLE.
  */
 class GRID_BITMAP_TOGGLE_RENDERER : public wxGridCellRenderer
 {
@@ -42,7 +42,7 @@ public:
                int aRow, int aCol, bool aIsSelected ) override;
 
     wxSize GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
-                        int aRow, int aCol) override;
+                        int aRow, int aCol ) override;
 
 private:
     wxBitmapBundle m_bitmapChecked;

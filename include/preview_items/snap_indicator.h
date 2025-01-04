@@ -38,7 +38,7 @@ class SNAP_INDICATOR : public ORIGIN_VIEWITEM
 {
 public:
     SNAP_INDICATOR( const COLOR4D& aColor = COLOR4D::WHITE, int aSize = 16,
-                   const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) );
+                    const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) );
 
     SNAP_INDICATOR( const VECTOR2D& aPosition, EDA_ITEM_FLAGS flags );
 

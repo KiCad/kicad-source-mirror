@@ -26,18 +26,18 @@
 #include <settings/grid_settings.h>
 
 /**
- * Cross-probing behavior
+ * Cross-probing behavior.
  */
 struct KICOMMON_API CROSS_PROBING_SETTINGS
 {
-    bool on_selection;  ///< Synchronize the selection for multiple items too
-    bool center_on_items; ///< Automatically pan to cross-probed items
-    bool zoom_to_fit;     ///< Zoom to fit items (ignored if center_on_items is off)
-    bool auto_highlight;  ///< Automatically turn on highlight mode in the target frame
+    bool on_selection;    ///< Synchronize the selection for multiple items too.
+    bool center_on_items; ///< Automatically pan to cross-probed items.
+    bool zoom_to_fit;     ///< Zoom to fit items (ignored if center_on_items is off).
+    bool auto_highlight;  ///< Automatically turn on highlight mode in the target frame.
 };
 
 /**
- * Common cursor settings, available to every frame
+ * Common cursor settings, available to every frame.
  */
 struct KICOMMON_API CURSOR_SETTINGS
 {
@@ -55,7 +55,7 @@ enum class ARC_EDIT_MODE
 };
 
 /**
-* Stores the window positioning/state
+* Store the window positioning/state.
 */
 struct KICOMMON_API WINDOW_STATE
 {
@@ -68,7 +68,7 @@ struct KICOMMON_API WINDOW_STATE
 };
 
 /**
- * Stores the common settings that are saved and loaded for each window / frame
+ * Store the common settings that are saved and loaded for each window / frame.
  */
 struct KICOMMON_API WINDOW_SETTINGS
 {
@@ -119,8 +119,8 @@ public:
     struct GRAPHICS
     {
         int   canvas_type;
-        float highlight_factor;         ///< How much to brighten highlighted objects by
-        float select_factor;            ///< How much to brighten selected objects by
+        float highlight_factor;         ///< How much to brighten highlighted objects by.
+        float select_factor;            ///< How much to brighten selected objects by.
     };
 
     struct COLOR_PICKER
@@ -130,20 +130,20 @@ public:
 
     struct LIB_TREE
     {
-        std::vector<wxString> columns;         ///< Ordered list of visible columns in the tree
-        std::map<wxString, int> column_widths; ///< Column widths, keyed by header name
-        std::vector<wxString>   open_libs;     ///< list of libraries the user has open in the tree
+        std::vector<wxString> columns;         ///< Ordered list of visible columns in the tree.
+        std::map<wxString, int> column_widths; ///< Column widths, keyed by header name.
+        std::vector<wxString>   open_libs;     ///< list of libraries the user has open in the tree.
     };
 
     struct PRINTING
     {
-        bool             background;    ///< Whether or not to print background color
-        bool             monochrome;    ///< Whether or not to print in monochrome
-        double           scale;         ///< Printout scale
-        bool             use_theme;     ///< If false, display color theme will be used
-        wxString         color_theme;   ///< Color theme to use for printing
-        bool             title_block;   ///< Whether or not to print title block
-        std::vector<int> layers;        ///< List of enabled layers for printing
+        bool             background;    ///< Whether or not to print background color.
+        bool             monochrome;    ///< Whether or not to print in monochrome.
+        double           scale;         ///< Printout scale.
+        bool             use_theme;     ///< If false, display color theme will be used.
+        wxString         color_theme;   ///< Color theme to use for printing.
+        bool             title_block;   ///< Whether or not to print title block.
+        std::vector<int> layers;        ///< List of enabled layers for printing.
     };
 
     struct SYSTEM
@@ -154,13 +154,15 @@ public:
         int                   units;
         int                   last_metric_units;
         int                   last_imperial_units;
-        /// Stored value for "show import issues" when importing non-KiCad designs to this application
+
+        /// Stored value for "show import issues" when importing non-KiCad designs to this
+        /// application.
         bool                  show_import_issues;
     };
 
     struct PLUGINS
     {
-        /// Ordered list of plugin actions mapped to whether or not they are shown in the toolbar
+        /// Ordered list of plugin actions mapped to whether or not they are shown in the toolbar.
         std::vector<std::pair<wxString, bool>> actions;
     };
 
@@ -193,39 +195,41 @@ public:
 
     WINDOW_SETTINGS m_Window;
 
-    /// Active color theme name
+    /// Active color theme name.
     wxString m_ColorTheme;
 
 
-    ///! Local schema version for common app settings
+    ///! Local schema version for common app settings.
     int m_appSettingsSchemaVersion;
 
 protected:
 
     virtual std::string getLegacyFrameName() const { return std::string(); }
 
-    ///! Migrates the find/replace history string lists
+    ///! Migrates the find/replace history string list.s
     void migrateFindReplace( wxConfigBase* aCfg );
 
     /**
-     * Migrates legacy window settings into the JSON document
+     * Migrate legacy window settings into the JSON document.
+     *
      * @param aCfg is the wxConfig object to read from
      * @param aFrameName is the prefix for window settings in the legacy config file
      * @param aJsonPath is the prefix for storing window settings in the JSON file
      * @return true if all settings were migrated
      */
     bool migrateWindowConfig( wxConfigBase* aCfg, const std::string& aFrameName,
-            const std::string& aJsonPath );
+                              const std::string& aJsonPath );
 
     /**
-     * Adds parameters for the given window object
-     * @param aWindow is the target window settings object
-     * @param aJsonPath is the path to read parameters from
+     * Add parameters for the given window object.
+     *
+     * @param aWindow is the target window settings object.
+     * @param aJsonPath is the path to read parameters from.
      */
     void addParamsForWindow( WINDOW_SETTINGS* aWindow, const std::string& aJsonPath );
 
     /**
-     * Migrates the library tree width setting from a single column (Item) to multi-column
+     * Migrate the library tree width setting from a single column (Item) to multi-column.
      */
     bool migrateLibTreeWidth();
 };

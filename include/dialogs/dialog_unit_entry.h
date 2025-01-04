@@ -39,7 +39,7 @@ public:
                           long long int aDefaultValue );
 
     /**
-     * Returns the value in internal units
+     * Return the value in internal units.
      */
     int GetValue();
 
@@ -55,7 +55,7 @@ public:
                         const wxString& aLabelY, const VECTOR2I& aDefaultValue );
 
     /**
-     * Returns the value in internal units
+     * Return the value in internal units.
      */
     VECTOR2I GetValue();
 

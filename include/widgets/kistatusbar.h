@@ -50,39 +50,41 @@ public:
 
     /**
      * Set the text in a field using wxELLIPSIZE_MIDDLE option to adjust the text size
-     * to the field size (unfortunately, setting the wxStatusBar style to wxELLIPSIZE_MIDDLE
-     * does not work fine
+     * to the field size.
+     *
+     * @note Unfortunately, setting the wxStatusBar style to wxELLIPSIZE_MIDDLE does not work.
      */
     void SetEllipsedTextField( const wxString& aText, int aFieldId );
 
     /**
-     * Shows the background progress bar
+     * Show the background progress bar.
      */
     void ShowBackgroundProgressBar( bool aCancellable = false );
 
     /**
-     * Hides the background progress bar
+     * Hide the background progress bar.
      */
     void HideBackgroundProgressBar();
 
     /**
-     * Sets the current progress of the progress bar
+     * Set the current progress of the progress bar.
      */
     void SetBackgroundProgress( int aAmount );
 
     /**
-     * Sets the maX progress of the progress bar
+     * Set the max progress of the progress bar.
      */
     void SetBackgroundProgressMax( int aAmount );
 
     /**
-     * Sets the status text that displays next to the progress bar
+     * Set the status text that displays next to the progress bar.
      */
     void SetBackgroundStatusText( const wxString& aTxt );
 
     /**
-     * Sets the notification count on the notifications button
-     * A value of 0 will hide the count
+     * Set the notification count on the notifications button.
+     *
+     * A value of 0 will hide the count.
      */
     void SetNotificationCount( int aCount );
 

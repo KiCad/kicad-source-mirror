@@ -161,6 +161,9 @@ public:
      * DrawArcSegment() with fill *on* behaves like DrawArc() with fill *off*.
      * DrawArcSegment() with fill *off* draws the outline of what it would have drawn with fill on.
      *
+     * This has meaning only for back ends that can't draw a true arc, and use segments to
+     * approximate.
+     *
      * TODO: Unify Arc routines
      *
      * @param aCenterPoint  is the center point of the arc.
@@ -169,7 +172,6 @@ public:
      * @param aAngle        is the angle of the arc.
      * @param aWidth        is the thickness of the arc (pen size).
      * @param aMaxError     is the max allowed error to create segments to approximate a circle.
-     *  It has meaning only for back ends that can't draw a true arc, and use segments to approximate.
      */
     virtual void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
                                  const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle,
@@ -210,7 +212,8 @@ public:
      */
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) {};
     virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) {};
-    virtual void DrawPolygon( const SHAPE_POLY_SET& aPolySet, bool aStrokeTriangulation = false ) {};
+    virtual void DrawPolygon( const SHAPE_POLY_SET& aPolySet,
+                              bool aStrokeTriangulation = false ) {};
     virtual void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) {};
 
     /**
@@ -386,8 +389,10 @@ public:
      */
     virtual void SetLayerDepth( double aLayerDepth )
     {
-        wxCHECK_MSG( aLayerDepth <= m_depthRange.y, /*void*/, wxT( "SetLayerDepth: below minimum" ) );
-        wxCHECK_MSG( aLayerDepth >= m_depthRange.x, /*void*/, wxT( "SetLayerDepth: above maximum" ) );
+        wxCHECK_MSG( aLayerDepth <= m_depthRange.y, /*void*/,
+                     wxT( "SetLayerDepth: below minimum" ) );
+        wxCHECK_MSG( aLayerDepth >= m_depthRange.x, /*void*/,
+                     wxT( "SetLayerDepth: above maximum" ) );
 
         m_layerDepth = aLayerDepth;
     }
@@ -1007,7 +1012,7 @@ protected:
     }
 
     /**
-     * compute minimum grid spacing from the grid settings
+     * Compute minimum grid spacing from the grid settings.
      *
      * @return the minimum spacing to use for drawing the grid
      */
@@ -1021,7 +1026,7 @@ protected:
     static const int GRID_DEPTH;
 
     /**
-     * Get the actual cursor color to draw
+     * Get the actual cursor color to draw.
      */
     COLOR4D getCursorColor() const;
 
@@ -1044,7 +1049,7 @@ protected:
     virtual bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions );
 
     /**
-     * Ensure that the first element is smaller than the second
+     * Ensure that the first element is smaller than the second.
      */
     template <typename T>
     void normalize( T &a, T &b )
@@ -1207,7 +1212,7 @@ public:
     };
 
     /**
-     * Instantiates a GAL_SCOPED_ATTRS object, saving the current attributes of the GAL.
+     * Instantiate a GAL_SCOPED_ATTRS object, saving the current attributes of the GAL.
      *
      * Specify the flags to save/restore in aFlags.
      */
@@ -1231,13 +1236,16 @@ public:
 
         if( m_flags & STROKE_WIDTH )
             m_gal.SetLineWidth( m_strokeWidth );
+
         if( m_flags & STROKE_COLOR )
             m_gal.SetStrokeColor( m_strokeColor );
+
         if( m_flags & IS_STROKE )
             m_gal.SetIsStroke( m_isStroke );
 
         if( m_flags & FILL_COLOR )
             m_gal.SetFillColor( m_fillColor );
+
         if( m_flags & IS_FILL )
             m_gal.SetIsFill( m_isFill );
 

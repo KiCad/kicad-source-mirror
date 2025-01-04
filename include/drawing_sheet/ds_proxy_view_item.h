@@ -67,12 +67,12 @@ public:
     void SetSheetPath( const std::string& aSheetPath ) { m_sheetPath = aSheetPath; }
 
     /**
-     * Changes the page number displayed in the title block.
+     * Change the page number displayed in the title block.
      */
     void SetPageNumber( const std::string& aPageNumber ) { m_pageNumber = aPageNumber; }
 
     /**
-     * Changes the sheet-count number displayed in the title block.
+     * Change the sheet-count number displayed in the title block.
      */
     void SetSheetCount( int aSheetCount ) { m_sheetCount = aSheetCount; }
 
@@ -91,7 +91,8 @@ public:
     void SetColorLayer( int aLayerId ) { m_colorLayer = aLayerId; }
 
     /**
-     * Overrides the layer used to pick the color of the page border (normally LAYER_GRID)
+     * Override the layer used to pick the color of the page border (normally LAYER_GRID)
+     *
      * @param aLayerId is the layer to use
      */
     void SetPageBorderColorLayer( int aLayerId ) { m_pageBorderColorLayer = aLayerId; }
@@ -113,7 +114,9 @@ public:
     void Show( int x, std::ostream& st ) const override { }
 #endif
 
-    /** Get class name
+    /**
+     * Get class name.
+     *
      * @return  string "DS_PROXY_VIEW_ITEM"
      */
     virtual wxString GetClass() const override
@@ -142,7 +145,10 @@ protected:
 
     const std::map<wxString, wxString>* m_properties;
 
-    /// Layer that is used for drawing sheet color (LAYER_DRAWINGSHEET is always used for visibility)
+    /**
+     * Layer that is used for drawing sheet color (LAYER_DRAWINGSHEET is always used
+     * for visibility).
+     */
     int                 m_colorLayer;
 
     /// Layer that is used for page border color

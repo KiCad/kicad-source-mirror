@@ -36,9 +36,9 @@ class wxStaticBitmap;
 wxDECLARE_EVENT( TOGGLE_CHANGED, wxCommandEvent );
 
 /**
- * A checkbox control except with custom bitmaps for the checked and unchecked states
+ * A checkbox control except with custom bitmaps for the checked and unchecked states.
  *
- * This is useful in space-constrained situations where native toggle button controls are too big
+ * This is useful in space-constrained situations where native toggle button controls are too big.
  */
 
 class BITMAP_TOGGLE : public wxPanel
@@ -49,14 +49,15 @@ public:
     BITMAP_TOGGLE( wxWindow* aParent, wxWindowID aId, const wxBitmapBundle& aCheckedBitmap,
                    const wxBitmapBundle& aUncheckedBitmap, bool aChecked = false );
 
-    ///< Set the checkbox state
+    /// Set the checkbox state
     void SetValue( bool aValue );
 
-    ///< Read the checkbox state
+    /// Read the checkbox state
     bool GetValue() const { return m_checked; }
 
     /**
-     * Updates the window ID of this control and its children
+     * Update the window ID of this control and its children.
+     *
      * @param aId new Window ID to set
      */
     void SetWindowID( wxWindowID aId )
@@ -72,7 +73,7 @@ private:
     wxBitmapBundle  m_unchecked_bitmap;
     wxBitmapBundle  m_checked_bitmap;
 
-    wxLongLong      m_debounce;            // Timestamp for debouncing events
+    wxLongLong      m_debounce;            ///< Timestamp for debouncing events.
 };
 
 #endif

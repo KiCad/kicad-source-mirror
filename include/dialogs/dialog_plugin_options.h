@@ -23,17 +23,16 @@
 
 #include <dialog_plugin_options_base.h>
 #include <core/utf8.h>
+
 /**
- * DIALOG_PLUGIN_OPTIONS
- * is an options editor in the form of a two column name/value
- * spreadsheet like (table) UI.
+ * An options editor in the form of a two column name/value spreadsheet like (table) UI.
  */
 class DIALOG_PLUGIN_OPTIONS : public DIALOG_PLUGIN_OPTIONS_BASE
 {
 public:
     DIALOG_PLUGIN_OPTIONS( wxWindow* aParent, const wxString& aNickname,
-                           const std::map<std::string, UTF8>& aPluginOptions, const wxString& aFormattedOptions,
-                           wxString* aResult );
+                           const std::map<std::string, UTF8>& aPluginOptions,
+                           const wxString& aFormattedOptions, wxString* aResult );
 
     ~DIALOG_PLUGIN_OPTIONS() override;
 

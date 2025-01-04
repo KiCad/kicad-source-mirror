@@ -37,7 +37,7 @@ public:
                int aRow, int aCol, bool aIsSelected ) override;
 
     wxSize GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
-                        int aRow, int aCol) override;
+                        int aRow, int aCol ) override;
 
 private:
     wxButton m_button;

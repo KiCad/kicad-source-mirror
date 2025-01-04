@@ -37,37 +37,43 @@ public:
     ~PROJECT_ARCHIVER() = default;
 
     /**
-     * Compares the crcs of all the files in zip archive to determine whether the archives are identical
-     * @param aZipFileA is the full path to the first zip
-     * @param aZipFileB is the full path to the second zip
-     * @param aReporter is used to report status
-     * @return true if the archives are identical
+     * Compare the CRCs of all the files in zip archive to determine whether the archives are
+     * identical.
+     *
+     * @param aZipFileA is the full path to the first zip.
+     * @param aZipFileB is the full path to the second zip.
+     * @param aReporter is used to report status.
+     * @return true if the archives are identical.
      */
     static bool AreZipArchivesIdentical( const wxString& aZipFileA, const wxString& aZipFileB,
-                                        REPORTER& aReporter );
+                                         REPORTER& aReporter );
 
     /**
-     * Creates an archive of the project
-     * @param aSrcFile is the full path to the project to be archived
-     * @param aDestFile is the full path to the zip file to be created
-     * @param aReporter is used to report status
-     * @param aVerbose controls the verbosity of reported status messages
-     * @param aIncludeExtraFiles if true will archive legacy and output files
-     * @return true if the archive was created successfully
+     * Create an archive of the project.
+     *
+     * @param aSrcFile is the full path to the project to be archived.
+     * @param aDestFile is the full path to the zip file to be created.
+     * @param aReporter is used to report status.
+     * @param aVerbose controls the verbosity of reported status messages.
+     * @param aIncludeExtraFiles if true will archive legacy and output files.
+     * @return true if the archive was created successfully.
      */
     static bool Archive( const wxString& aSrcDir, const wxString& aDestFile, REPORTER& aReporter,
                          bool aVerbose = true, bool aIncludeExtraFiles = false );
 
     /**
-     * Extracts an archive of the current project over existing files
-     * Warning: this will overwrite files in the project directory.  Use with care.  The caller is
+     * Extract an archive of the current project over existing files.
+     *
+     * @warning This will overwrite files in the project directory.  Use with care.  The caller is
      * responsible for doing any reloading of state after taking this action.
-     * @param aSrcFile is the full path to the archive to extract
-     * @param aDestDir is the target directory to unarchive to
-     * @param aReporter is used to report status
-     * @return true if the archive was created successfully
+     *
+     * @param aSrcFile is the full path to the archive to extract.
+     * @param aDestDir is the target directory to unarchive to.
+     * @param aReporter is used to report status.
+     * @return true if the archive was created successfully.
      */
-    static bool Unarchive( const wxString& aSrcFile, const wxString& aDestDir, REPORTER& aReporter );
+    static bool Unarchive( const wxString& aSrcFile, const wxString& aDestDir,
+                           REPORTER& aReporter );
 };
 
 #endif // KICAD_PROJECT_ARCHIVER_H

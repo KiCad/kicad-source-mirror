@@ -47,7 +47,7 @@ public:
     std::vector<wxString> GetFileList();
 protected:
 
-    ///< @copydoc TOOL_INTERACTIVE::setTransitions();
+    /// @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
 private:

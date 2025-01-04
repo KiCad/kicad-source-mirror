@@ -26,19 +26,6 @@
  * defines the wrapper of the base class SG_NODE
  */
 
-/*
- * NOTES:
- * 1. The IFSG wrapper classes shall be aimed at creating a VRML-like
- *    intermediate scenegraph representation. Although objects are
- *    readily created and added to the structure, no provision shall
- *    be made to inspect the structures in detail. For example the
- *    SCENEGRAPH class may contain various SGSHAPE and SCENEGRAPH
- *    nodes but there shall be no provision to extract those nodes.
- *    This was done because in principle all the detailed data shall
- *    only be handled within the SG* classes and only data processed
- *    via GetRenderData() shall be available via the wrappers.
- */
-
 #ifndef IFSG_NODE_H
 #define IFSG_NODE_H
 
@@ -48,8 +35,15 @@
 class SGNODE;
 
 /**
- * IFSG_NODE
- * represents the base class of all DLL-safe Scene Graph nodes
+ * The base class of all DLL-safe Scene Graph nodes.
+ *
+ * @note The IFSG wrapper classes shall be aimed at creating a VRML-like intermediate scenegraph
+ *       representation. Although objects are readily created and added to the structure, no
+ *       provision shall be made to inspect the structures in detail. For example the #SCENEGRAPH
+ *       class may contain various #SGSHAPE and #SCENEGRAPH nodes but there shall be no provision
+ *       to extract those nodes.  This was done because in principle all the detailed data shall
+ *       only be handled within the SG* classes and only data processed via GetRenderData() shall
+ *       be available via the wrappers.
  */
 class SGLIB_API IFSG_NODE
 {
@@ -65,101 +59,89 @@ public:
     IFSG_NODE& operator= ( const IFSG_NODE& ) = delete;
 
     /**
-     * Function Destroy
-     * deletes the object held by this wrapper
+     * Delete the object held by this wrapper.
      */
     void Destroy( void );
 
     /**
-     * Function Attach
-     * associates a given SGNODE* with this wrapper
+     * Associate a given SGNODE* with this wrapper.
      */
     virtual bool Attach( SGNODE* aNode ) = 0;
 
     /**
-     * Function NewNode
-     * creates a new node to associate with this wrapper
+     * Create a new node to associate with this wrapper.
      */
     virtual bool NewNode( SGNODE* aParent ) = 0;
     virtual bool NewNode( IFSG_NODE& aParent ) = 0;
 
     /**
-     * Function GetRawPtr()
-     * returns the raw internal SGNODE pointer
+     * Return the raw internal SGNODE pointer.
      */
     SGNODE* GetRawPtr( void ) noexcept;
 
     /**
-     * Function GetNodeType
-     * returns the type of this node instance
+     * Return the type of this node instance.
      */
     S3D::SGTYPES GetNodeType( void ) const;
 
     /**
-     * Function GetParent
-     * returns a pointer to the parent SGNODE of this object
-     * or NULL if the object has no parent (ie. top level transform).
+     * Return a pointer to the parent SGNODE of this object or NULL if the object has no
+     * parent (ie. top level transform).
      */
     SGNODE* GetParent( void ) const;
 
     /**
-     * Function SetParent
-     * sets the parent SGNODE of this object.
+     * Set the parent SGNODE of this object.
      *
-     * @param aParent [in] is the desired parent node
-     * @return true if the operation succeeds; false if
-     * the given node is not allowed to be a parent to
-     * the derived object
+     * @param aParent [in] is the desired parent node.
+     * @return true if the operation succeeds; false if the given node is not allowed to be a
+     *              parent to the derived object.
      */
     bool SetParent( SGNODE* aParent );
 
     /**
-     * Function GetName
-     * returns a pointer to the node name (NULL if no name assigned)
+     * Return a pointer to the node name (NULL if no name assigned).
      */
     const char* GetName( void );
 
     /**
-     * Function SetName
-     * sets the node's name; if the pointer passed is NULL
-     * then the node's name is erased
+     * Set the node's name.
      *
-     * @return true on success
+     * If the pointer passed is NULL, the node's name is erased.
+     *
+     * @return true on success.
      */
     bool SetName( const char *aName );
 
     /**
-     * Function GetNodeTypeName
-     * returns the text representation of the node type
-     * or NULL if the node somehow has an invalid type
+     * Return the text representation of the node type or NULL if the node somehow has an
+     * invalid type.
      */
     const char * GetNodeTypeName( S3D::SGTYPES aNodeType ) const;
 
     /**
-     * Function FindNode searches the tree of linked nodes and returns a
-     * reference to the first node found with the given name. The reference
-     * is then typically added to another node via AddRefNode().
+     * Search the tree of linked nodes and returns a reference to the first node found with
+     * the given name.
      *
-     * @param aNodeName is the name of the node to search for
-     * @return is a valid node pointer on success, otherwise NULL
+     * The reference is then typically added to another node via AddRefNode().
+     *
+     * @param aNodeName is the name of the node to search for.
+     * @return is a valid node pointer on success, otherwise NULL.
      */
     SGNODE* FindNode( const char *aNodeName );
 
     /**
-     * Function AddRefNode
-     * adds a reference to an existing node which is not owned by
-     * (not a child of) this node.
+     * Add a reference to an existing node which is not owned by (not a child of) this node.
      *
-     * @return true on success
+     * @return true on success.
      */
     bool AddRefNode( SGNODE* aNode );
     bool AddRefNode( IFSG_NODE& aNode );
 
     /**
-     * Function AddChildNode
-     * adds a node as a child owned by this node.
+     * Add a node as a child owned by this node.
      *
-     * @return true on success
+     * @return true on success.
      */
     bool AddChildNode( SGNODE* aNode );
     bool AddChildNode( IFSG_NODE& aNode );

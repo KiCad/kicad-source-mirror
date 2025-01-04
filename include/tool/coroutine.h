@@ -94,6 +94,7 @@ private:
             CONTINUE_AFTER_ROOT // a function sent a request to invoke a function on the main
                                 // stack context
         } type; // invocation type
+
         COROUTINE*    destination;  // stores the coroutine pointer for the stub OR the coroutine
                                     // ptr for the coroutine to be resumed if a
                                     // root(main-stack)-call-was initiated.
@@ -104,6 +105,7 @@ private:
     struct CONTEXT_T
     {
         libcontext::fcontext_t ctx;    // The context itself
+
 #ifdef KICAD_SANITIZE_THREADS
         void* tsan_fiber;               // The TSAN fiber for this context
         bool  own_tsan_fiber;           // Do we own this TSAN fiber? (we only delete fibers we own)
@@ -302,8 +304,8 @@ public:
         wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::Call (from routine)" ) );
 
         doCall( &args, aArg );
-        // we will not be asked to continue
 
+        // we will not be asked to continue
         return Running();
     }
 
@@ -348,8 +350,8 @@ public:
         wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::Resume (from routine)" ) );
 
         doResume( &args );
-        // we will not be asked to continue
 
+        // we will not be asked to continue
         return Running();
     }
 
@@ -424,7 +426,7 @@ private:
     }
 
 #ifndef LIBCONTEXT_HAS_OWN_STACK
-    ///< A functor that frees the stack
+    /// A functor that frees the stack.
     struct STACK_DELETER
     {
 #ifdef _WIN32
@@ -438,10 +440,11 @@ private:
 #endif
     };
 
-    ///< The size of the mappable memory page size
+    /// The size of the mappable memory page size.
     static inline size_t SystemPageSize()
     {
         static std::optional<size_t> systemPageSize;
+
         if( !systemPageSize.has_value() )
         {
 #ifdef _WIN32
@@ -453,10 +456,11 @@ private:
             systemPageSize = static_cast<size_t>( size );
 #endif
         }
+
         return systemPageSize.value();
     }
 
-    ///< Map a page-aligned memory region into our address space.
+    /// Map a page-aligned memory region into our address space.
     static inline void* MapMemory( size_t aAllocSize )
     {
 #ifdef _WIN32
@@ -473,7 +477,7 @@ private:
         return mem;
     }
 
-    ///< Change protection of memory page(s) to act as stack guards.
+    /// Change protection of memory page(s) to act as stack guards.
     static inline void GuardMemory( void* aAddress, size_t aGuardSize )
     {
 #ifdef _WIN32
@@ -493,7 +497,7 @@ private:
         return jumpIn( args );
     }
 
-    /* real entry point of the coroutine */
+    // real entry point of the coroutine
     static void callerStub( intptr_t aData )
     {
         INVOCATION_ARGS& args = *reinterpret_cast<INVOCATION_ARGS*>( aData );
@@ -556,7 +560,7 @@ private:
     }
 
 #ifndef LIBCONTEXT_HAS_OWN_STACK
-    ///< coroutine stack
+    /// Coroutine stack.
     std::unique_ptr<char[], struct STACK_DELETER> m_stack;
 #endif
 
@@ -566,17 +570,16 @@ private:
 
     bool m_running;
 
-    ///< pointer to coroutine entry arguments. Stripped of references
-    ///< to avoid compiler errors.
+    /// Pointer to coroutine entry arguments stripped of references to avoid compiler errors.
     typename std::remove_reference<ArgType>::type* m_args;
 
-    ///< saved caller context
+    /// Saved caller context.
     CONTEXT_T m_caller;
 
-    ///< main stack information
+    /// Main stack information.
     CALL_CONTEXT* m_callContext;
 
-    ///< saved coroutine context
+    /// Saved coroutine context.
     CONTEXT_T m_callee;
 
     ReturnType m_retVal;
@@ -584,6 +587,7 @@ private:
 #ifdef KICAD_USE_VALGRIND
     uint32_t m_valgrind_stack;
 #endif
+
 #ifdef KICAD_SANITIZE_ADDRESS
     void* asan_stack;
 #endif

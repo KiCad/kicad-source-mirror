@@ -30,8 +30,7 @@
 class wxStaticBitmap;
 
 /**
- * representing a row indicator icon for use in
- * places like the layer widget
+ * Represent a row indicator icon for use in places like the layer widget.
  */
 class INDICATOR_ICON : public wxPanel
 {
@@ -46,8 +45,7 @@ public:
     using ICON_ID = int;
 
     /**
-     * A simple object that can provide fixed bitmaps for use as row
-     * indicators
+     * A simple object that can provide fixed bitmaps for use as row indicators.
      */
     class ICON_PROVIDER
     {
@@ -58,8 +56,7 @@ public:
         /**
          * Get a reference to the row icon in the given mode.
          *
-         * @param aIconId the id of the icon to get (depends on the
-         * provider).
+         * @param aIconId the id of the icon to get (depends on the provider).
          */
         virtual const wxBitmap& GetIndicatorIcon( ICON_ID aIconId ) const = 0;
     };
@@ -68,21 +65,20 @@ public:
      * Accessor for the default icon providers, which take
      * true and false for IDs, meaning on/off.
      *
-     * @param aAlternative false for blue arrow/blank, true for the
-     * green diamond
+     * @param aAlternative false for blue arrow/blank, true for the green diamond.
      */
     static ICON_PROVIDER& GetDefaultRowIconProvider( bool aAlternative );
 
     /**
-     * @param aParent the owning window
-     * @param aIconProvider the icon provider to get icons from
+     * @param aParent the owning window.
+     * @param aIconProvider the icon provider to get icons from.
      * @param aInitialIcon is the initial state of the icon (the meaning
-     * depends on what is the purpose of the icon)
+     * depends on what is the purpose of the icon).
      * @param aID the ID to use for the widgets - events will have
      * this ID.
      */
     INDICATOR_ICON( wxWindow* aParent, ICON_PROVIDER& aIconProvider,
-                   ICON_ID aInitialIcon, int aID );
+                    ICON_ID aInitialIcon, int aID );
 
     /**
      * Set the row indicator to the given state.
@@ -93,13 +89,14 @@ public:
 
 
     /**
-     * @return the current state of the indicator
+     * @return the current state of the indicator.
      */
     ICON_ID GetIndicatorState() const;
 
     /**
-     * Updates the window ID of this control and its children
-     * @param aId new Window ID to set
+     * Update the window ID of this control and its children.
+     *
+     * @param aId new Window ID to set.
      */
     void SetWindowID( wxWindowID aId )
     {
@@ -109,14 +106,13 @@ public:
 
 private:
 
-    ///< An class that delivers icons for the indicator (currently just
-    ///< uses a default implementation).
+    /// Object that delivers icons for the indicator (currently uses a default implementation).
     ICON_PROVIDER& m_iconProvider;
 
-    ///< Handle on the bitmap widget
+    /// Handle on the bitmap widget.
     wxStaticBitmap* m_bitmap;
 
-    ///< Is the icon currently "on"
+    /// Is the icon currently "on".
     ICON_ID m_currentId;
 };
 
@@ -128,7 +124,7 @@ class ROW_ICON_PROVIDER: public INDICATOR_ICON::ICON_PROVIDER
 {
 public:
 
-    ///< State constants to select the right icons
+    /// State constants to select the right icons
     enum STATE
     {
         OFF,    ///< Row "off" or "deselected"
@@ -140,11 +136,11 @@ public:
 
     /**
      * @param aAlt false: normal icons (blue arrow/blank), true:
-     * alternative icons (blue arrow/green diamond)
+     * alternative icons (blue arrow/green diamond).
      */
     ROW_ICON_PROVIDER( int aSizeDIP, wxWindow* aWindow );
 
-    ///< @copydoc INDICATOR_ICON::ICON_PROVIDER::GetIndicatorIcon()
+    /// @copydoc INDICATOR_ICON::ICON_PROVIDER::GetIndicatorIcon()
     const wxBitmap& GetIndicatorIcon( INDICATOR_ICON::ICON_ID aIconId ) const override;
 
 private:

@@ -36,7 +36,7 @@ class EDA_DRAW_FRAME;
 class PICKER_TOOL_BASE
 {
 public:
-    ///< Event handler types.
+    /// Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
     typedef std::function<void(const VECTOR2D&)> MOTION_HANDLER;
     typedef std::function<void(void)> CANCEL_HANDLER;
@@ -110,7 +110,7 @@ public:
     int CurrentModifiers() const { return m_modifiers; }
 
 protected:
-    ///< Reinitializes tool to its initial state.
+    /// Reinitializes tool to its initial state.
     virtual void reset();
 
     EDA_DRAW_FRAME* m_frame;
@@ -142,14 +142,14 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override { }
 
-    ///< Main event loop.
+    /// Main event loop.
     int Main( const TOOL_EVENT& aEvent );
 
 protected:
-    ///< Applies the requested VIEW_CONTROLS settings.
+    /// Applies the requested VIEW_CONTROLS settings.
     void setControls();
 
-    ///< @copydoc TOOL_INTERACTIVE::setTransitions();
+    /// @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 };
 

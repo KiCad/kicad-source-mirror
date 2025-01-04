@@ -36,8 +36,7 @@
 
 
 /**
- * IFSG_COLORS
- * is the wrapper for SGCOLORS
+ * The wrapper for #SGCOLORS.
  */
 class SGLIB_API IFSG_COLORS : public IFSG_NODE
 {

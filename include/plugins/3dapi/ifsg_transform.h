@@ -34,17 +34,18 @@
 
 
 /**
- * IFSG_TRANSFORM
- * is the wrapper for the VRML compatible TRANSFORM block class SCENEGRAPH
+ * The wrapper for the VRML compatible #TRANSFORM block class #SCENEGRAPH.
  */
 class SGLIB_API IFSG_TRANSFORM : public IFSG_NODE
 {
 public:
+    /**
+     * @note IFSG_TRANSFORM( IFSG_NODE& aParent ) does not exist since a transform may own
+     *       another transform and that construct invites accidental misuse of the copy
+     *       constructor./
+     */
     IFSG_TRANSFORM( bool create );
     IFSG_TRANSFORM( SGNODE* aParent );
-    // note: IFSG_TRANSFORM( IFSG_NODE& aParent ) does not exist
-    // since a transform may own another transform and that construct
-    // invites accidental misuse of the copy constructor
 
     bool Attach( SGNODE* aNode ) override;
     bool NewNode( SGNODE* aParent ) override;

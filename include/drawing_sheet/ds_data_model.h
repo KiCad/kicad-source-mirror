@@ -46,7 +46,7 @@ public:
     }
 
     /**
-     * static function: returns the instance of DS_DATA_MODEL used in the application
+     * Return the instance of DS_DATA_MODEL used in the application.
      */
     static DS_DATA_MODEL& GetTheInstance();
 
@@ -143,7 +143,7 @@ public:
     static wxString DefaultLayout();
 
     /**
-     * Populates the list with a custom layout or the default layout if no custom layout
+     * Populate the list with a custom layout or the default layout if no custom layout
      * is  available.
      *
      * @param aFullFileName is the custom drawing sheet file. If empty, load the file defined by

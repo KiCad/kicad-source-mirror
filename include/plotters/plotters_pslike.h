@@ -288,7 +288,8 @@ public:
     /**
      * Start a new page in the PDF document.
      */
-    virtual void StartPage( const wxString& aPageNumber, const wxString& aPageName = wxEmptyString );
+    virtual void StartPage( const wxString& aPageNumber,
+                            const wxString& aPageName = wxEmptyString );
 
     /**
      * Close the current page in the PDF document (and emit its compressed stream).
@@ -371,7 +372,8 @@ public:
 
     void HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>& aDestURLs ) override;
 
-    void Bookmark( const BOX2I& aBox, const wxString& aName, const wxString& aGroupName = wxEmptyString ) override;
+    void Bookmark( const BOX2I& aBox, const wxString& aName,
+                   const wxString& aGroupName = wxEmptyString ) override;
 
     /**
      * PDF images are handles as inline, not XObject streams...
@@ -411,12 +413,13 @@ protected:
     };
 
     /**
-     * Adds a new outline node entry
+     * Add a new outline node entry.
      *
-     * The PDF object handle is automacially allocated
+     * The PDF object handle is automatically allocated.
      *
-     * @param aParent Parent node to append the new node to
-     * @param aActionHandle The handle of an action that may be performed on click, set to -1 for no action
+     * @param aParent Parent node to append the new node to.
+     * @param aActionHandle The handle of an action that may be performed on click, set to -1
+     *                      for no action.
      * @param aTitle Title of node to display
      */
     OUTLINE_NODE* addOutlineNode( OUTLINE_NODE* aParent, int aActionHandle,
@@ -438,8 +441,9 @@ protected:
     virtual void emitSetRGBColor( double r, double g, double b, double a ) override;
 
     /**
-     * Allocate a new handle in the table of the PDF object. The
-     * handle must be completed using startPdfObject. It's an in-RAM operation
+     * Allocate a new handle in the table of the PDF object.
+     *
+     * The handle must be completed using startPdfObject. It's an in-RAM operation
      * only, no output is done.
      */
     int allocPdfObject();
@@ -448,7 +452,7 @@ protected:
      * Open a new PDF object and returns the handle if the parameter is -1.
      * Otherwise fill in the xref entry for the passed object
      */
-    int startPdfObject(int handle = -1);
+    int startPdfObject( int handle = -1 );
 
     /**
      * Close the current PDF object
@@ -456,56 +460,57 @@ protected:
     void closePdfObject();
 
     /**
-     * Starts a PDF stream (for the page). Returns the object handle opened
-     * Pass -1 (default) for a fresh object. Especially from PDF 1.5 streams
-     * can contain a lot of things, but for the moment we only handle page
-     * content.
+     * Start a PDF stream (for the page).
+     *
+     * @param handle -1 (default) for a new object. Especially from PDF 1.5 streams can contain
+     *               a lot of things, but for the moment we only handle page content.
+     * @eturn The object handle opened
      */
-    int startPdfStream(int handle = -1);
+    int startPdfStream( int handle = -1 );
 
     /**
-     * Finish the current PDF stream (writes the deferred length, too)
+     * Finish the current PDF stream (writes the deferred length, too).
      */
     void closePdfStream();
 
     /**
-     * Starts emitting the outline object
+     * Starts emitting the outline object.
      */
     int emitOutline();
 
     /**
-     * Emits a outline item object and recurses into any children
+     * Emits a outline item object and recurses into any children.
      */
     void emitOutlineNode( OUTLINE_NODE* aNode, int aParentHandle, int aNextNode, int aPrevNode );
 
     /**
-     * Emits an action object that instructs a goto coordinates on a page
+     * Emit an action object that instructs a goto coordinates on a page.
      *
-     * @return Generated action handle
+     * @return Generated action handle.
      */
     int emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft, const VECTOR2I& aTopRight );
     int emitGoToAction( int aPageHandle );
 
-    int m_pageTreeHandle;           ///< Handle to the root of the page tree object
-    int m_fontResDictHandle;        ///< Font resource dictionary
-    int m_imgResDictHandle;         ///< Image resource dictionary
-    int m_jsNamesHandle;            ///< Handle for Names dictionary with JS
-    std::vector<int> m_pageHandles; ///< Handles to the page objects
-    int m_pageStreamHandle;         ///< Handle of the page content object
-    int m_streamLengthHandle;       ///< Handle to the deferred stream length
+    int m_pageTreeHandle;           ///< Handle to the root of the page tree object.
+    int m_fontResDictHandle;        ///< Font resource dictionary.
+    int m_imgResDictHandle;         ///< Image resource dictionary.
+    int m_jsNamesHandle;            ///< Handle for Names dictionary with JS.
+    std::vector<int> m_pageHandles; ///< Handles to the page objects.
+    int m_pageStreamHandle;         ///< Handle of the page content object.
+    int m_streamLengthHandle;       ///< Handle to the deferred stream length.
     wxString m_workFilename;
     wxString m_pageName;
-    FILE* m_workFile;               ///< Temporary file to construct the stream before zipping
-    std::vector<long> m_xrefTable;  ///< The PDF xref offset table
+    FILE* m_workFile;               ///< Temporary file to construct the stream before zipping.
+    std::vector<long> m_xrefTable;  ///< The PDF xref offset table.
 
-    ///< List of user-space page numbers for resolving internal hyperlinks
+    /// List of user-space page numbers for resolving internal hyperlinks.
     std::vector<wxString>                                  m_pageNumbers;
 
-    ///< List of loaded hyperlinks in current page
+    /// List of loaded hyperlinks in current page.
     std::vector<std::pair<BOX2I, wxString>>                m_hyperlinksInPage;
     std::vector<std::pair<BOX2I, std::vector<wxString>>>   m_hyperlinkMenusInPage;
 
-    ///< Handles for all the hyperlink objects that will be deferred
+    /// Handles for all the hyperlink objects that will be deferred.
     std::map<int, std::pair<BOX2D, wxString>>              m_hyperlinkHandles;
     std::map<int, std::pair<BOX2D, std::vector<wxString>>> m_hyperlinkMenuHandles;
 
@@ -513,8 +518,8 @@ protected:
 
     std::map<int, wxImage> m_imageHandles;
 
-    std::unique_ptr<OUTLINE_NODE> m_outlineRoot;    ///< Root outline node
-    int                           m_totalOutlineNodes;  ///< Total number of outline nodes
+    std::unique_ptr<OUTLINE_NODE> m_outlineRoot;        ///< Root outline node.
+    int                           m_totalOutlineNodes;  ///< Total number of outline nodes.
 };
 
 

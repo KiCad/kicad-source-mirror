@@ -39,7 +39,7 @@ public:
     PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRAW_FRAME* aFrame,
                             std::shared_ptr<NET_SETTINGS> aSettings,
                             const std::set<wxString>& aNetNames, bool isEEschema );
-    ~PANEL_SETUP_NETCLASSES( ) override;
+    ~PANEL_SETUP_NETCLASSES() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

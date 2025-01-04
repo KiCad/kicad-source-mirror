@@ -89,7 +89,8 @@ public:
      * Cache the triangulation for the glyph from a known set of triangle indexes.
      * (See GetTriangulationData() above for more info.)
      */
-    void CacheTriangulation( std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>>& aHintData );
+    void CacheTriangulation(
+            std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>>& aHintData );
 };
 
 

@@ -57,22 +57,26 @@ struct SMATERIAL
 };
 
 
-/// Per-vertex normal/color/texcoors structure.
-/// CONDITIONS:
-///     m_Positions size == m_Normals size == m_Texcoords size == m_Color size
-///     m_Texcoords can be NULL, textures will not be applied in that case
-///     m_Color can be NULL, it will use the m_Diffuse color for every triangle
-///     any m_FaceIdx must be an index of a the element lists
-///     m_MaterialIdx must be an existent material index stored in the parent model
-/// SCALES:
-/// m_Positions units are in mm, example:
-///  0.1 unit ==  0.1 mm
-///  1.0 unit ==  1.0 mm
-/// 10.0 unit == 10.0 mm
-///
-/// To convert this units to pcbunits, use the conversion facto UNITS3D_TO_UNITSPCB
-///
-/// m_Normals, m_Color and m_Texcoords are between 0.0f and 1.0f
+/**
+ * Per-vertex normal/color/texcoors structure.
+ *
+ * CONDITIONS:
+ *     m_Positions size == m_Normals size == m_Texcoords size == m_Color size
+ *     m_Texcoords can be NULL, textures will not be applied in that case
+ *     m_Color can be NULL, it will use the m_Diffuse color for every triangle
+ *     any m_FaceIdx must be an index of a the element lists
+ *     m_MaterialIdx must be an existent material index stored in the parent model
+ *
+ * SCALES:
+ *     m_Positions units are in mm, example:
+ *          0.1 unit ==  0.1 mm
+ *          1.0 unit ==  1.0 mm
+ *          10.0 unit == 10.0 mm
+ *
+ * To convert this units to pcbunits, use the conversion factor #UNITS3D_TO_UNITSPCB.
+ *
+ * m_Normals, m_Color and m_Texcoords are between 0.0f and 1.0f.
+ */
 struct SMESH
 {
     unsigned int    m_VertexSize;   ///< Number of vertex in the arrays

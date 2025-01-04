@@ -282,10 +282,10 @@ public:
     void DrawCursor( const VECTOR2D& aCursorPosition ) override;
 
     /**
-     * @brief Function PostPaint
-     * posts an event to m_paint_listener.  A post is used so that the actual drawing
-     * function can use a device context type that is not specific to the wxEVT_PAINT event,
-     * just by changing the PostPaint code.
+     * Post an event to #m_paint_listener.
+     *
+     * A post is used so that the actual drawing function can use a device context type that
+     * is not specific to the wxEVT_PAINT event, just by changing the PostPaint code.
      */
     void PostPaint( wxPaintEvent& aEvent );
 
@@ -349,7 +349,9 @@ private:
     VERTEX_MANAGER*         m_cachedManager;    ///< Container for storing cached VERTEX_ITEMs
     VERTEX_MANAGER*         m_nonCachedManager; ///< Container for storing non-cached VERTEX_ITEMs
     VERTEX_MANAGER*         m_overlayManager;   ///< Container for storing overlaid VERTEX_ITEMs
-    VERTEX_MANAGER*         m_tempManager;      ///< Container for storing temp (diff mode) VERTEX_ITEMs
+
+    /// Container for storing temp (diff mode) VERTEX_ITEMs
+    VERTEX_MANAGER*         m_tempManager;
 
     // Framebuffer & compositing
     OPENGL_COMPOSITOR*      m_compositor;       ///< Handles multiple rendering targets
@@ -359,8 +361,8 @@ private:
     RENDER_TARGET           m_currentTarget;    ///< Current rendering target
 
     // Shader
-    SHADER*                 m_shader;           ///< There is only one shader used for different
-                                                ///< objects.
+    /// There is only one shader used for different objects.
+    SHADER*                 m_shader;
 
     // Internal flags
     bool                    m_isFramebufferInitialized; ///< Are the framebuffers initialized?
@@ -376,7 +378,8 @@ private:
     GLint                   ufm_pixelSizeMultiplier;
     GLint                   ufm_antialiasingOffset;
 
-    wxCursor                m_currentwxCursor;          ///< wxCursor showing the current native cursor
+    /// wxCursor showing the current native cursor.
+    wxCursor                m_currentwxCursor;
 
     std::unique_ptr<GL_BITMAP_CACHE>            m_bitmapCache;
 
@@ -394,7 +397,7 @@ private:
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
     /**
-     * @brief Draw a quad for the line.
+     * Draw a quad for the line.
      *
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
@@ -405,7 +408,7 @@ private:
                        bool aReserve = true );
 
     /**
-     * @brief Reserves specified number of line quads.
+     * Reserve specified number of line quads.
      *
      * @param aLineCount the number of line quads to reserve.
      */

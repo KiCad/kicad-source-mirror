@@ -30,7 +30,6 @@
 namespace KIGFX {
 namespace PREVIEW {
 
-
 /**
  * Manage the construction of a circular arc though sequential setting of critical points:
  * center, arc start and arc end. The manager is driven by setting cursor points, which
@@ -133,6 +132,7 @@ private:
     bool m_angleSnap = false;
     bool m_directionLocked = false;
 };
+
 }       // PREVIEW
 }       // KIGFX
 

@@ -33,7 +33,7 @@
 
 class SELECTION;
 
-///< Functor type that checks a specific condition for selected items.
+/// Functor type that checks a specific condition for selected items.
 typedef std::function<bool (const SELECTION&)> SELECTION_CONDITION;
 
 SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
@@ -153,52 +153,52 @@ public:
     static SELECTION_CONDITION LessThan( int aNumber );
 
 private:
-    ///< Helper function used by HasType()
+    /// Helper function used by HasType().
     static bool hasTypeFunc( const SELECTION& aSelection, KICAD_T aType );
 
-    ///< Helper function used by HasTypes()
+    /// Helper function used by HasTypes().
     static bool hasTypesFunc( const SELECTION& aSelection, std::vector<KICAD_T> aTypes );
 
-    ///< Helper function used by OnlyTypes()
+    /// Helper function used by OnlyTypes().
     static bool onlyTypesFunc( const SELECTION& aSelection, std::vector<KICAD_T> aTypes );
 
-    ///< Helper function used by Count()
+    /// Helper function used by Count().
     static bool countFunc( const SELECTION& aSelection, int aNumber );
 
-    ///< Helper function used by MoreThan()
+    /// Helper function used by MoreThan().
     static bool moreThanFunc( const SELECTION& aSelection, int aNumber );
 
-    ///< Helper function used by LessThan()
+    /// Helper function used by LessThan().
     static bool lessThanFunc( const SELECTION& aSelection, int aNumber );
 
-    ///< Helper function used by operator||
+    /// Helper function used by operator ||.
     static bool orFunc( const SELECTION_CONDITION& aConditionA,
                         const SELECTION_CONDITION& aConditionB, const SELECTION& aSelection )
     {
         return aConditionA( aSelection ) || aConditionB( aSelection );
     }
 
-    ///< Helper function used by operator&&
+    /// Helper function used by operator &&.
     static bool andFunc( const SELECTION_CONDITION& aConditionA,
                          const SELECTION_CONDITION& aConditionB, const SELECTION& aSelection )
     {
         return aConditionA( aSelection ) && aConditionB( aSelection );
     }
 
-    ///< Helper function used by operator!
+    /// Helper function used by operator !.
     static bool notFunc( const SELECTION_CONDITION& aCondition, const SELECTION& aSelection )
     {
         return !aCondition( aSelection );
     }
 
-    ///< Helper function used by operator||
+    /// Helper function used by operator ||.
     static bool orBoolFunc( const SELECTION_CONDITION& aConditionA,
                             SELECTION_BOOL& aConditionB, const SELECTION& aSelection )
     {
         return aConditionA( aSelection ) || aConditionB( aSelection );
     }
 
-    ///< Helper function used by operator&&
+    /// Helper function used by operator &&.
     static bool andBoolFunc( const SELECTION_CONDITION& aConditionA,
                              SELECTION_BOOL& aConditionB, const SELECTION& aSelection )
     {

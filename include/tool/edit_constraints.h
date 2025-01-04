@@ -104,7 +104,7 @@ public:
             m_constrainer( aConstrainer )
     {}
 
-    ///< @copydoc EDIT_CONSTRAINT::Apply()
+    /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
@@ -127,7 +127,7 @@ public:
             m_constrainer( aConstrainer )
     {}
 
-    ///< @copydoc EDIT_CONSTRAINT::Apply()
+    /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
@@ -151,7 +151,7 @@ public:
             m_constrainer( aConstrainer )
     {}
 
-    ///< @copydoc EDIT_CONSTRAINT::Apply()
+    /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
@@ -168,7 +168,7 @@ class EC_LINE : public EDIT_CONSTRAINT<EDIT_POINT>
 public:
     EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer );
 
-    ///< @copydoc EDIT_CONSTRAINT::Apply()
+    /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
@@ -194,14 +194,14 @@ public:
             m_end( aEnd )
     {}
 
-    ///< @copydoc EDIT_CONSTRAINT::Apply()
+    /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
-    ///< Point that imposes the constraint (center of the circle).
+    /// Point that imposes the constraint (center of the circle).
     const EDIT_POINT& m_center;
 
-    ///< Point that imposes the constraint (decides on the radius of the circle).
+    /// Point that imposes the constraint (decides on the radius of the circle).
     const EDIT_POINT& m_end;
 };
 
@@ -217,27 +217,27 @@ public:
 
     virtual ~EC_CONVERGING();
 
-    ///< @copydoc EDIT_CONSTRAINT::Apply()
+    /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
-    ///< Constraint for origin side segment.
+    /// Constraint for origin side segment.
     EDIT_CONSTRAINT<EDIT_POINT>* m_originSideConstraint;
 
-    ///< Constraint for end side segment.
+    /// Constraint for end side segment.
     EDIT_CONSTRAINT<EDIT_POINT>* m_endSideConstraint;
 
-    ///< Additional constraint, applied when at least two points are collinear. It is a pointer to
-    ///< m_[origin/end]SideConstraint, so it should not be freed.
+    /// Additional constraint, applied when at least two points are collinear. It is a pointer to
+    /// m_[origin/end]SideConstraint, so it should not be freed.
     EDIT_CONSTRAINT<EDIT_POINT>* m_colinearConstraint;
 
-    ///< EDIT_POINTS instance that stores currently modified lines.
+    /// EDIT_POINTS instance that stores currently modified lines.
     EDIT_POINTS& m_editPoints;
 
-    ///< Vector that represents the initial direction of the dragged segment.
+    /// Vector that represents the initial direction of the dragged segment.
     VECTOR2I m_draggedVector;
 
-    ///< Flags to indicate when dragged and neighbouring lines are (almost) collinear.
+    /// Flags to indicate when dragged and neighbouring lines are (almost) collinear.
     bool m_originCollinear;
     bool m_endCollinear;
 };
@@ -256,7 +256,7 @@ public:
     virtual ~EC_PERPLINE()
     {}
 
-    ///< @copydoc EDIT_CONSTRAINT::Apply()
+    /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:

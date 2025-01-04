@@ -36,13 +36,14 @@
 
 namespace KIGFX
 {
+
 /**
-* Draw a cross at a given position.
-*
-* @param aGal The graphics abstraction layer to draw with.
-* @param aPosition The position to draw the cross at.
-* @param aSize The size of the cross.
-*/
+ * Draw a cross at a given position.
+ *
+ * @param aGal The graphics abstraction layer to draw with.
+ * @param aPosition The position to draw the cross at.
+ * @param aSize The size of the cross.
+ */
 void DrawCross( GAL& aGal, const VECTOR2I& aPosition, int aSize );
 
 /**

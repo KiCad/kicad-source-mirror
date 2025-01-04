@@ -43,12 +43,12 @@ class TOOL_MANAGER;
 enum class BITMAPS : unsigned int;
 
 /**
- * Defines the structure of a menu based on ACTIONs.
+ * Define the structure of a menu based on ACTIONs.
  */
 class ACTION_MENU : public wxMenu
 {
 public:
-    ///< Default constructor
+    /// Default constructor
     ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool = nullptr );
 
     ~ACTION_MENU() override;
@@ -107,8 +107,8 @@ public:
      * The difference between this function and wxMenu::AppendSubMenu() is the capability to
      * handle icons.
      *
-     * @param aMenu is the submenu to be added. This should be a new instance (use Clone()) if required
-     * as the menu is destructed after use.
+     * @param aMenu is the submenu to be added. This should be a new instance (use Clone()) if
+     *        required as the menu is destructed after use.
      */
     wxMenuItem* Add( ACTION_MENU* aMenu );
 
@@ -148,7 +148,7 @@ public:
     void Clear();
 
     /**
-     * Returns true if the menu has any enabled items
+     * Return true if the menu has any enabled items.
      */
     bool HasEnabledItems() const;
 
@@ -201,10 +201,10 @@ public:
     static constexpr bool CHECK  = true;
 
 protected:
-    ///< Return an instance of this class. It has to be overridden in inheriting classes.
+    /// Return an instance of this class. It has to be overridden in inheriting classes.
     virtual ACTION_MENU* create() const;
 
-    ///< Returns an instance of TOOL_MANAGER class.
+    /// Return an instance of TOOL_MANAGER class.
     TOOL_MANAGER* getToolManager() const;
 
     /**
@@ -241,20 +241,20 @@ protected:
      */
     wxMenuItem* appendCopy( const wxMenuItem* aSource );
 
-    ///< Initialize handlers for events.
+    /// Initialize handlers for events.
     void setupEvents();
 
-    ///< Update hot key settings for TOOL_ACTIONs in this menu.
+    /// Update hot key settings for TOOL_ACTIONs in this menu.
     void updateHotKeys();
 
-    ///< Traverse the submenus tree looking for a submenu capable of handling a particular menu
-    ///< event. In case it is handled, it is returned the aToolEvent parameter.
+    /// Traverse the submenus tree looking for a submenu capable of handling a particular menu
+    /// event. In case it is handled, it is returned the aToolEvent parameter.
     void runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVENT& aToolEvent );
 
-    ///< Run a function on the menu and all its submenus.
+    /// Run a function on the menu and all its submenus.
     void runOnSubmenus( std::function<void(ACTION_MENU*)> aFunction );
 
-    ///< Check if any of submenus contains a TOOL_ACTION with a specific ID.
+    /// Check if any of submenus contains a TOOL_ACTION with a specific ID.
     OPT_TOOL_EVENT findToolAction( int aId );
 
     bool    m_isForcedPosition;
@@ -265,22 +265,22 @@ protected:
     bool m_titleDisplayed;
     bool m_isContextMenu;
 
-    ///< Menu title
+    /// Menu title.
     wxString m_title;
 
-    ///< Optional icon
+    /// Optional icon.
     BITMAPS m_icon;
 
-    ///< Stores the id number of selected item.
+    /// Store the id number of selected item.
     int m_selected;
 
-    ///< Creator of the menu
+    /// Creator of the menu.
     TOOL_INTERACTIVE* m_tool;
 
-    ///< Associates tool actions with menu item IDs. Non-owning.
+    /// Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;
 
-    ///< List of submenus.
+    /// List of submenus.
     std::list<ACTION_MENU*> m_submenus;
 
     friend class TOOL_INTERACTIVE;

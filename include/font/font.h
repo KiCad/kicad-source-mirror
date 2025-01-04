@@ -211,7 +211,7 @@ public:
 
 protected:
     /**
-     * Returns number of lines for a given text.
+     * Return number of lines for a given text.
      *
      * @param aText is the text to be checked.
      * @return unsigned - The number of lines in aText.
@@ -226,7 +226,7 @@ protected:
     }
 
     /**
-     * Draws a single line of text. Multiline texts should be split before using the
+     * Draw a single line of text. Multiline texts should be split before using the
      * function.
      *
      * @param aGal is a pointer to the graphics abstraction layer, or nullptr (nothing is drawn)
@@ -245,7 +245,8 @@ protected:
                              bool aItalic, bool aUnderline, const METRICS& aFontMetrics ) const;
 
     /**
-     * Computes the bounding box for a single line of text.
+     * Compute the bounding box for a single line of text.
+     *
      * Multiline texts should be split before using the function.
      *
      * @param aBBox is an optional pointer to be filled with the bounding box.
@@ -255,7 +256,8 @@ protected:
      * @return new cursor position
      */
     VECTOR2I boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText, const VECTOR2I& aPosition,
-                                    const VECTOR2I& aSize, bool aItalic, const METRICS& aFontMetrics ) const;
+                                    const VECTOR2I& aSize, bool aItalic,
+                                    const METRICS& aFontMetrics ) const;
 
     void getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
                            wxArrayString& aTextLines, std::vector<VECTOR2I>& aPositions,

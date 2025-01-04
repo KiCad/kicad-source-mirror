@@ -34,8 +34,7 @@
 
 
 /**
- * IFSG_NORMALS
- * is the wrapper for the SGNORMALS class
+ * The wrapper for the #SGNORMALS class.
  */
 class SGLIB_API IFSG_NORMALS : public IFSG_NODE
 {

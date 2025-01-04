@@ -41,8 +41,7 @@ struct S3D_POINT;
 namespace S3D
 {
     /**
-     * Function GetLibVersion retrieves version information of the
-     * kicad_3dsg library
+     * Retrieve version information of the kicad_3dsg library.
      */
     SGLIB_API void GetLibVersion( unsigned char* Major, unsigned char* Minor,
                                   unsigned char* Patch, unsigned char* Revision ) noexcept;
@@ -55,14 +54,12 @@ namespace S3D
     SGLIB_API void AssociateSGNodeWrapper( SGNODE* aObject, SGNODE** aRefPtr );
 
     /**
-     * Function CalcTriNorm
-     * returns the normal vector of a triangle described by vertices p1, p2, p3
+     * Return the normal vector of a triangle described by vertices p1, p2, p3.
      */
     SGLIB_API SGVECTOR CalcTriNorm( const SGPOINT& p1, const SGPOINT& p2, const SGPOINT& p3 );
 
     /**
-     * Function WriteCache
-     * writes the SGNODE tree to a binary cache file
+     * Write the SGNODE tree to a binary cache file.
      *
      * @param aFileName is the name of the file to write
      * @param overwrite must be set to true to overwrite an existing file
@@ -73,8 +70,7 @@ namespace S3D
         const char* aPluginInfo );
 
     /**
-     * Function ReadCache
-     * reads a binary cache file and creates an SGNODE tree
+     * Read a binary cache file and creates an SGNODE tree.
      *
      * @param aFileName is the name of the binary cache file to be read
      * @return NULL on failure, on success a pointer to the top level SCENEGRAPH node;
@@ -85,8 +81,7 @@ namespace S3D
         bool (*aTagCheck)( const char*, void* ) );
 
     /**
-     * Function WriteVRML
-     * writes out the given node and its subnodes to a VRML2 file
+     * Write out the given node and its subnodes to a VRML2 file.
      *
      * @param filename is the name of the output file
      * @param overwrite should be set to true to overwrite an existing VRML file
@@ -122,27 +117,25 @@ namespace S3D
     //    classes which have been created solely for the assembly output
 
     /**
-     * Function ResetNodeIndex
-     * resets the global SG* class indices
+     * Reset the global SG* class indices.
      *
      * @param aNode may be any valid SGNODE
      */
     SGLIB_API void ResetNodeIndex( SGNODE* aNode );
 
     /**
-     * Function RenameNodes
-     * renames a node and all children nodes based on the current
-     * values of the global SG* class indices
+     * Rename a node and all children nodes based on the current values of the global SG*
+     * class indices.
      *
      * @param aNode is a top level node
      */
     SGLIB_API void RenameNodes( SGNODE* aNode );
 
     /**
-     * Function DestroyNode
-     * deletes the given SG* class node. This function makes it possible
-     * to safely delete an SG* node without associating the node with
-     * its corresponding IFSG* wrapper.
+     * Delete the given SG* class node.
+     *
+     * This function makes it possible to safely delete an SG* node without associating the
+     * node with its corresponding IFSG* wrapper.
      */
     SGLIB_API void DestroyNode( SGNODE* aNode ) noexcept;
 
@@ -150,48 +143,40 @@ namespace S3D
     // of data structures for rendering
 
     /**
-     * Function GetModel
-     * creates an S3DMODEL representation of aNode (raw data, no transforms)
+     * Create an #S3DMODEL representation of \a aNode (raw data, no transforms).
      *
-     * @param aNode is the node to be transcribed into an S3DMODEL representation
-     * @return an S3DMODEL representation of aNode on success, otherwise NULL
+     * @param aNode is the node to be transcribed into an #S3DMODEL representation
+     * @return an #S3DMODEL representation of aNode on success, otherwise NULL
      */
     SGLIB_API S3DMODEL* GetModel( SCENEGRAPH* aNode );
 
     /**
-     * Function Destroy3DModel
-     * frees memory used by an S3DMODEL structure and sets the pointer to
-     * the structure to NULL
+     * Free memory used by an S3DMODEL structure and sets the pointer to the structure to NULL.
      */
     SGLIB_API void Destroy3DModel( S3DMODEL** aModel );
 
     /**
-     * Function Free3DModel
-     * frees memory used internally by an S3DMODEL structure
+     * Free memory used internally by an #S3DMODEL structure.
      */
     SGLIB_API void Free3DModel( S3DMODEL& aModel );
 
     /**
-     * Function Free3DMesh
-     * frees memory used internally by an SMESH structure
+     * Free memory used internally by an #SMESH structure.
      */
     SGLIB_API void Free3DMesh( SMESH& aMesh );
 
     /**
-     * Function New3DModel
-     * creates and initializes an S3DMODEL struct
+     * Create and initialize an #S3DMODEL structure.
      */
     SGLIB_API S3DMODEL* New3DModel( void );
 
     /**
-     * Function Init3DMaterial
-     * initializes an SMATERIAL struct
+     * Initializes an #SMATERIAL structure.
      */
     SGLIB_API void Init3DMaterial( SMATERIAL& aMat );
 
     /**
-     * Function Init3DMesh
-     * creates and initializes an SMESH struct
+     * Create and initialize an #SMESH structure.
      */
     SGLIB_API void Init3DMesh( SMESH& aMesh );
 }

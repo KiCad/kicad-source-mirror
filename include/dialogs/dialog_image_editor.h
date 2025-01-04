@@ -44,8 +44,7 @@ public:
 
 public:
     /**
-     * Function TransferToImage
-     * copy edited image to aItem
+     * Copy edited image to \a aItem.
      */
     void TransferToImage( BITMAP_BASE* aItem );
 

@@ -139,44 +139,44 @@ public:
     SELECTION_CONDITION ScriptingConsoleVisible();
 
 protected:
-    ///< Helper function used by ContentModified().
+    /// Helper function used by ContentModified().
     static bool contentModifiedFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
-    ///< Helper function used by UndoAvailable().
+    /// Helper function used by UndoAvailable().
     static bool undoFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
-    ///< Helper function used by RedoAvailable().
+    /// Helper function used by RedoAvailable().
     static bool redoFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
-    ///< Helper function used by Units().
+    /// Helper function used by Units().
     static bool unitsFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame, EDA_UNITS aUnits );
 
-    ///< Helper function used by CurrentTool().
+    /// Helper function used by CurrentTool().
     static bool toolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame,
                           const TOOL_ACTION& aTool );
 
-    ///< Helper function used by NoActiveTool().
+    /// Helper function used by NoActiveTool().
     static bool noToolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
-    ///< Helper function used by GridVisible().
+    /// Helper function used by GridVisible().
     static bool gridFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///< Helper function used by GridOverrides().
+    /// Helper function used by GridOverrides().
     static bool gridOverridesFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///< Helper function used by PolarCoordinates().
+    /// Helper function used by PolarCoordinates().
     static bool polarCoordFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///< Helper function used by FullscreenCursor().
+    /// Helper function used by FullscreenCursor().
     static bool cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///< Helper function used by DrawBoundingBoxes().
+    /// Helper function used by DrawBoundingBoxes().
     static bool bboxesFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///< Helper function used by ScriptingConsoleVisible().
+    /// Helper function used by ScriptingConsoleVisible().
     static bool consoleVisibleFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///< The frame to apply the conditions to.
+    /// The frame to apply the conditions to.
     EDA_BASE_FRAME* m_frame;
 };
 

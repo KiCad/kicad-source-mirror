@@ -69,8 +69,9 @@ public:
     auto& getCachedParts() { return m_cache; }
 
 private:
-    // This is clunky but at the moment the only way to free the pointer after use without KiCad crashing.
-    // at this point we can't use smart pointers as there is a problem with the order of how things are deleted/freed
+    // This is clunky but at the moment the only way to free the pointer after use without
+    // KiCad crashing.  At this point we can't use smart pointers as there is a problem with
+    // the order of how things are deleted/freed
     std::unique_ptr<KICAD_CURL_EASY> createCurlEasyObject()
     {
         std::unique_ptr<KICAD_CURL_EASY> aCurl( new KICAD_CURL_EASY() );

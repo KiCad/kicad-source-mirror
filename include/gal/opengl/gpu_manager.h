@@ -106,10 +106,12 @@ public:
     struct VRANGE
     {
         VRANGE( int aStart, int aEnd, bool aContinuous ) :
-        m_start( aStart ),
-        m_end( aEnd ),
-        m_isContinuous ( aContinuous )
-        {}
+                m_start( aStart ),
+                m_end( aEnd ),
+                m_isContinuous( aContinuous )
+        {
+        }
+
         unsigned int m_start, m_end;
         bool m_isContinuous;
     };
@@ -180,5 +182,7 @@ public:
     ///< @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing() override;
 };
+
 } // namespace KIGFX
+
 #endif /* GPU_MANAGER_H_ */

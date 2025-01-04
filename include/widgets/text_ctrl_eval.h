@@ -31,7 +31,8 @@
 #include <libeval/numeric_evaluator.h>
 
 /**
- * @brief wxTextCtrl wrapper to handle math expression evaluation.
+ * wxTextCtrl wrapper to handle math expression evaluation.
+ *
  * Expressions are evaluated after the text control loses the focus. If user decides to modify
  * the expression, he will get the original expression to modify.
  */
@@ -49,7 +50,7 @@ public:
     }
 
     /**
-     * Set a new value in evaluator buffer, and display it in the wxTextCtrl.
+     * Set a new value in evaluator buffer and display it in the wxTextCtrl.
      *
      * @param aValue is the new value to store and display
      * if aValue is empty, the value "0" is stored and displayed
@@ -57,7 +58,7 @@ public:
     void SetValue( const wxString& aValue ) override;
 
 protected:
-    ///< Numeric expression evaluator
+    /// Numeric expression evaluator.
     NUMERIC_EVALUATOR m_eval;
 
     void onTextFocusGet( wxFocusEvent& aEvent );

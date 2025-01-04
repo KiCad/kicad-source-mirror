@@ -45,10 +45,10 @@ class VIEW_CONTROLS;
 
 enum TOOL_TYPE
 {
-    ///< Tool that interacts with the user
+    /// Tool that interacts with the user
     INTERACTIVE = 0x01,
 
-    ///< Tool that runs in the background without any user intervention
+    /// Tool that runs in the background without any user intervention
     BATCH       = 0x02
 };
 
@@ -73,7 +73,7 @@ public:
 
     virtual ~TOOL_BASE() {};
 
-    ///< Determine the reason of reset for a tool.
+    /// Determine the reason of reset for a tool.
     enum RESET_REASON
     {
         RUN,                ///< Tool is invoked after being inactive
@@ -213,8 +213,10 @@ private:
 protected:
     TOOL_TYPE     m_type;
     TOOL_ID       m_toolId;       ///< Unique id, assigned by a TOOL_MANAGER instance.
-    std::string   m_toolName;     ///< Names are expected to obey the format application.ToolName
-                                  ///<   (eg. pcbnew.InteractiveSelection).
+
+    /// Names are expected to obey the format application.ToolName (eg.
+    /// pcbnew.InteractiveSelection).
+    std::string   m_toolName;
     TOOL_MANAGER* m_toolMgr;
 };
 

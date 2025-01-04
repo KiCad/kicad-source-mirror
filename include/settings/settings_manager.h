@@ -62,9 +62,10 @@ public:
     void SetKiway( KIWAY* aKiway ) { m_kiway = aKiway; }
 
     /**
-     * Takes ownership of the pointer passed in
-     * @param aSettings is a settings object to register
-     * @return a handle to the owned pointer
+     * Take ownership of the pointer passed in.
+     *
+     * @param aSettings is a settings object to register.
+     * @return a handle to the owned pointer.
      */
     template<typename T>
     T* RegisterSettings( T* aSettings, bool aLoadNow = true )
@@ -81,21 +82,23 @@ public:
     void Save( JSON_SETTINGS* aSettings );
 
     /**
-     * If the given settings object is registered, save it to disk and unregister it
+     * If the given settings object is registered, save it to disk and unregister it.
+     *
      * @param aSettings is the object to release
      */
     void FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave = true );
 
     /**
-     * Returns a handle to the a given settings by type
+     * Return a handle to the a given settings by type.
+     *
      * If the settings have already been loaded, returns the existing pointer.
      * If the settings have not been loaded, creates a new object owned by the
      * settings manager and returns a pointer to it.
      *
-     * @tparam T is a type derived from APP_SETTINGS_BASE
+     * @tparam T is a type derived from APP_SETTINGS_BASE.
      * @param aFilename is used to find the correct settings under clang (where
-     *                  RTTI doesn't work across compile boundaries)
-     * @return a pointer to a loaded settings object
+     *                  RTTI doesn't work across compile boundaries).
+     * @return a pointer to a loaded settings object.
      */
     template<typename T>
     T* GetAppSettings( const wxString& aFilename )
@@ -138,11 +141,12 @@ public:
     }
 
     /**
-     * Retrieves a color settings object that applications can read colors from.
+     * Retrieve a color settings object that applications can read colors from.
+     *
      * If the given settings file cannot be found, returns the default settings.
      *
-     * @param aName is the name of the color scheme to load
-     * @return a loaded COLOR_SETTINGS object
+     * @param aName is the name of the color scheme to load.
+     * @return a loaded COLOR_SETTINGS object.
      */
     COLOR_SETTINGS* GetColorSettings( const wxString& aName = "user" );
 
@@ -162,45 +166,51 @@ public:
     }
 
     /**
-     * Safely saves a COLOR_SETTINGS to disk, preserving any changes outside the given namespace.
+     * Safely save a #COLOR_SETTINGS to disk, preserving any changes outside the given namespace.
      *
      * A color settings namespace is one of the top-level JSON objects like "board", etc.
      * This will perform a read-modify-write
      *
-     * @param aSettings is a pointer to a valid COLOR_SETTINGS object managed by SETTINGS_MANAGER
-     * @param aNamespace is the namespace of settings to save
+     * @param aSettings is a pointer to a valid COLOR_SETTINGS object managed by SETTINGS_MANAGER.
+     * @param aNamespace is the namespace of settings to save.
      */
     void SaveColorSettings( COLOR_SETTINGS* aSettings, const std::string& aNamespace = "" );
 
     /**
-     * Registers a new color settings object with the given filename
-     * @param aFilename is the location to store the new settings object
-     * @return a pointer to the new object
+     * Register a new color settings object with the given filename.
+     *
+     * @param aFilename is the location to store the new settings object.
+     * @return a pointer to the new object.
      */
     COLOR_SETTINGS* AddNewColorSettings( const wxString& aFilename );
 
     /**
-     * Returns a color theme for storing colors migrated from legacy (5.x and earlier) settings,
-     * creating the theme if necessary.  This theme will be called "user.json" / "User".
-     * @return the color settings to be used for migrating legacy settings
+     * Return a color theme for storing colors migrated from legacy (5.x and earlier) settings,
+     * creating the theme if necessary.
+     *
+     * This theme will be called "user.json" / "User".
+     *
+     * @return the color settings to be used for migrating legacy settings.
      */
     COLOR_SETTINGS* GetMigratedColorSettings();
 
     /**
-     * Retrieves the common settings shared by all applications
-     * @return a pointer to a loaded COMMON_SETTINGS
+     * Retrieve the common settings shared by all applications.
+     *
+     * @return a pointer to a loaded #COMMON_SETTINGS.
      */
     COMMON_SETTINGS* GetCommonSettings() const { return m_common_settings; }
 
     /**
-     * Returns the path a given settings file should be loaded from / stored to.
-     * @param aSettings is the settings object
-     * @return a path based on aSettings->m_location
+     * Return the path a given settings file should be loaded from / stored to.
+     *
+     * @param aSettings is the settings object.
+     * @return a path based on aSettings->m_location.
      */
     wxString GetPathForSettingsFile( JSON_SETTINGS* aSettings );
 
     /**
-     * Handles the initialization of the user settings directory and migration from previous
+     * Handle the initialization of the user settings directory and migration from previous
      * KiCad versions as needed.
      *
      * This method will check for the existence of the user settings path for this KiCad version.
@@ -208,179 +218,201 @@ public:
      *
      * If that directory is empty or does not exist, the migration wizard will be launched, which
      * will give users the option to migrate settings from a previous KiCad version (if one is
-     * found), manually specify a directory to migrate fromm, or start with default settings.
+     * found), manually specify a directory to migrate from, or start with default settings.
      *
-     * @return true if migration was successful or not necessary, false otherwise
+     * @return true if migration was successful or not necessary, false otherwise.
      */
     bool MigrateIfNeeded();
 
     /**
-     * Helper for DIALOG_MIGRATE_SETTINGS to specify a source for migration
-     * @param aSource is a directory containing settings files to migrate from (can be empty)
+     * Helper for #DIALOG_MIGRATE_SETTINGS to specify a source for migration.
+     *
+     * @param aSource is a directory containing settings files to migrate from (can be empty).
      */
     void SetMigrationSource( const wxString& aSource ) { m_migration_source = aSource; }
 
     void SetMigrateLibraryTables( bool aMigrate = true ) { m_migrateLibraryTables = aMigrate; }
 
     /**
-     * Retrieves the name of the most recent previous KiCad version that can be found in the
-     * user settings directory.  For legacy versions (5.x, and 5.99 builds before this code was
-     * written), this will return "5.x"
+     * Retrieve the name of the most recent previous KiCad version that can be found in the
+     * user settings directory.
      *
-     * @param aName is filled with the name of the previous version, if one exists
-     * @return true if a previous version to migrate from exists
+     * For legacy versions (5.x, and 5.99 builds before this code was written), this will return
+     * "5.x".
+     *
+     * @param aName is filled with the name of the previous version, if one exists.
+     * @return true if a previous version to migrate from exists.
      */
     bool GetPreviousVersionPaths( std::vector<wxString>* aName = nullptr );
 
     /**
-     * Re-scans the color themes directory, reloading any changes it finds.
+     * Re-scan the color themes directory, reloading any changes it finds.
      */
     void ReloadColorSettings();
 
     /**
-     * Loads a project or sets up a new project with a specified path
-     * @param aFullPath is the full path to the project
-     * @param aSetActive if true will set the loaded project as the active project
-     * @return true if the PROJECT_FILE was successfully loaded from disk
+     * Load a project or sets up a new project with a specified path.
+     *
+     * @param aFullPath is the full path to the project.
+     * @param aSetActive if true will set the loaded project as the active project.
+     * @return true if the #PROJECT_FILE was successfully loaded from disk.
      */
     bool LoadProject( const wxString& aFullPath, bool aSetActive = true );
 
     /**
-     * Saves, unloads and unregisters the given PROJECT
-     * @param aProject is the project object to unload
-     * @param aSave if true will save the project before unloading
-     * @return true if the PROJECT file was successfully saved
+     * Save, unload and unregister the given #PROJECT.
+     *
+     * @param aProject is the project object to unload.
+     * @param aSave if true will save the project before unloading.
+     * @return true if the #PROJECT file was successfully saved.
      */
     bool UnloadProject( PROJECT* aProject, bool aSave = true );
 
     /**
-     * Helper for checking if we have a project open
-     * TODO: This should be deprecated along with Prj() once we support multiple projects fully
-     * @return true if a call to Prj() will succeed
+     * Helper for checking if we have a project open.
+     *
+     * @todo This should be deprecated along with Prj() once we support multiple projects fully.
+     *
+     * @return true if a call to Prj() will succeed.
      */
     bool IsProjectOpen() const;
 
     /**
-     * Helper for checking if we have a project open that is not a dummy project
-     * @return true if a call to Prj() will succeed and the project is not a dummy project
+     * Helper for checking if we have a project open that is not a dummy project.
+     *
+     * @return true if a call to Prj() will succeed and the project is not a dummy project.
      */
     bool IsProjectOpenNotDummy() const;
 
     /**
-     * A helper while we are not MDI-capable -- return the one and only project
-     * @return the loaded project
+     * A helper while we are not MDI-capable -- return the one and only project.
+     *
+     * @return the loaded project.
      */
     PROJECT& Prj() const;
 
     /**
-     * Retrieves a loaded project by name
-     * @param aFullPath is the full path including name and extension to the project file
-     * @return a pointer to the project if loaded, or nullptr
+     * Retrieve a loaded project by name.
+     *
+     * @param aFullPath is the full path including name and extension to the project file.
+     * @return a pointer to the project if loaded, or nullptr.
      */
     PROJECT* GetProject( const wxString& aFullPath ) const;
 
     /**
-     * @return a list of open projects
+     * @return a list of open projects.
      */
     std::vector<wxString> GetOpenProjects() const;
 
     /**
-     * Saves a loaded project.
+     * Save a loaded project.
+     *
      * @param aFullPath is the project name to save.  If empty, will save the first loaded project.
-     * @param aProject is the project to save, or nullptr to save the active project (Prj() return)
-     * @return true if save was successful
+     * @param aProject is the project to save, or nullptr to save the active project (Prj() return).
+     * @return true if save was successful.
      */
     bool SaveProject( const wxString& aFullPath = wxEmptyString, PROJECT* aProject = nullptr );
 
     /**
-     * Sets the currently loaded project path and saves it (pointers remain valid)
-     * Note that this will not modify the read-only state of the project, so it will have no effect
+     * Set the currently loaded project path and saves it (pointers remain valid).
+     *
+     * @note that this will not modify the read-only state of the project, so it will have no effect
      * if the project is marked as read-only!
-     * @param aFullPath is the full filename to set for the project
-     * @param aProject is the project to save, or nullptr to save the active project (Prj() return)
+     *
+     * @param aFullPath is the full filename to set for the project.
+     * @param aProject is the project to save, or nullptr to save the active project (Prj() return).
      */
     void SaveProjectAs( const wxString& aFullPath, PROJECT* aProject = nullptr );
 
     /**
-     * Saves a copy of the current project under the given path.  Will save the copy even if the
-     * current project is marked as read-only.
-     * @param aFullPath is the full filename to set for the project
-     * @param aProject is the project to save, or nullptr to save the active project (Prj() return)
+     * Save a copy of the current project under the given path.
+     *
+     * @warning This will save the copy even if the current project is marked as read-only.
+     *
+     * @param aFullPath is the full filename to set for the project.
+     * @param aProject is the project to save, or nullptr to save the active project (Prj() return).
      */
     void SaveProjectCopy( const wxString& aFullPath, PROJECT* aProject = nullptr );
 
     /**
-     * @return the full path to where project backups should be stored
+     * @return the full path to where project backups should be stored.
      */
     wxString GetProjectBackupsPath() const;
 
     /**
-     * Creates a backup archive of the current project
-     * @param aReporter is used for progress reporting
+     * Create a backup archive of the current project.
+     *
+     * @param aReporter is used for progress reporting.
      * @param aTarget is the full path to the backup file.  If empty, will generate and return the
      * full path to the backup file.
-     * @return true if everything succeeded
+     * @return true if everything succeeded.
      */
     bool BackupProject( REPORTER& aReporter, wxFileName& aTarget ) const;
 
     /**
-     * Calls BackupProject if a new backup is needed according to the current backup policy.
-     * @param aReporter is used for progress reporting
-     * @return if everything succeeded
+     * Call BackupProject() if a new backup is needed according to the current backup policy.
+     *
+     * @param aReporter is used for progress reporting.
+     * @return if everything succeeded.
      */
     bool TriggerBackupIfNeeded( REPORTER& aReporter ) const;
 
     /**
-     * Checks if a given path is probably a valid KiCad configuration directory.
+     * Check if a given path is probably a valid KiCad configuration directory.
+     *
      * Actually it just checks if a file called "kicad_common" exists, because that's probably
      * good enough for now.
      *
-     * @param aPath is the path to check
-     * @return true if the path contains KiCad settings
+     * @param aPath is the path to check.
+     * @return true if the path contains KiCad settings.
      */
     static bool IsSettingsPathValid( const wxString& aPath );
 
     /**
-     * Returns the path where color scheme files are stored; creating it if missing
-     * (normally ./colors/ under the user settings path)
+     * Return the path where color scheme files are stored; creating it if missing
+     * (normally ./colors/ under the user settings path).
      */
     static wxString GetColorSettingsPath();
 
     /**
-     * Parses the current KiCad build version and extracts the major and minor revision to use
+     * Parse the current KiCad build version and extracts the major and minor revision to use
      * as the name of the settings directory for this KiCad version.
      *
-     * @return a string such as "5.1"
+     * @return a string such as "5.1".
      */
     static std::string GetSettingsVersion();
 
     /**
-     * A proxy for PATHS::GetUserSettingsPath rather than fighting swig
+     * A proxy for PATHS::GetUserSettingsPath() rather than fighting swig.
      */
     static wxString GetUserSettingsPath();
+
 private:
     JSON_SETTINGS* registerSettings( JSON_SETTINGS* aSettings, bool aLoadNow = true );
 
     /**
-     * Compares two settings versions, like "5.99" and "6.0"
-     * @return -1 if aFirst is older than aSecond, 1 if aFirst is newer than aSecond, 0 otherwise
+     * Compare two settings versions, like "5.99" and "6.0".
+     *
+     * @return -1 if aFirst is older than aSecond, 1 if aFirst is newer than aSecond, 0 otherwise.
      */
     static int compareVersions( const std::string& aFirst, const std::string& aSecond );
 
     /**
-     * Extracts the numeric version from a given settings string
-     * @param aVersionString is the string to split at the "."
-     * @param aMajor will store the first part
-     * @param aMinor will store the second part
-     * @return true if extraction succeeded
+     * Extract the numeric version from a given settings string.
+     *
+     * @param aVersionString is the string to split at the ".".
+     * @param aMajor will store the first part.
+     * @param aMinor will store the second part.
+     * @return true if extraction succeeded.
      */
     static bool extractVersion( const std::string& aVersionString, int* aMajor = nullptr,
                                 int* aMinor = nullptr );
 
     /**
-     * Attempts to load a color theme by name (the color theme directory and .json ext are assumed)
-     * @param aName is the filename of the color theme (without the extension or path)
-     * @return the loaded settings, or nullptr if load failed
+     * Attempt to load a color theme by name (the color theme directory and .json ext are assumed).
+     *
+     * @param aName is the filename of the color theme (without the extension or path).
+     * @return the loaded settings, or nullptr if load failed.
      */
     COLOR_SETTINGS* loadColorSettingsByName( const wxString& aName );
 
@@ -389,29 +421,31 @@ private:
     void loadAllColorSettings();
 
     /**
-     * Registers a PROJECT_FILE and attempts to load it from disk
-     * @param aProject is the project object to load the file for
-     * @return true if the PROJECT_FILE was successfully loaded
+     * Register a #PROJECT_FILE and attempt to load it from disk.
+     *
+     * @param aProject is the project object to load the file for.
+     * @return true if the #PROJECT_FILE was successfully loaded.
      */
     bool loadProjectFile( PROJECT& aProject );
 
     /**
-     * Optionally saves, and then unloads and unregisters the given PROJECT_FILE
-     * @param aProject is the project object to unload the file for
-     * @param aSave if true will save the project file before unloading
-     * @return true if the PROJECT file was successfully saved
+     * Optionally save, unload and unregister the given #PROJECT_FILE.
+     *
+     * @param aProject is the project object to unload the file for.
+     * @param aSave if true will save the project file before unloading.
+     * @return true if the #PROJECT file was successfully saved.
      */
     bool unloadProjectFile( PROJECT* aProject, bool aSave );
 
-    // Helper to create built-in colors and register them
+    ///< Helper to create built-in colors and register them.
     void registerBuiltinColorSettings();
 
 private:
 
-    /// True if running outside a UI context
+    /// True if running outside a UI context.
     bool m_headless;
 
-    /// The kiway this settings manager interacts with
+    /// The kiway this settings manager interacts with.
     KIWAY* m_kiway;
 
     std::vector<std::unique_ptr<JSON_SETTINGS>> m_settings;
@@ -426,22 +460,22 @@ private:
 
     wxString m_migration_source;
 
-    /// If true, the symbol and footprint library tables will be migrated from the previous version
+    /// If true, the symbol and footprint library tables will be migrated from the previous version.
     bool m_migrateLibraryTables;
 
-    /// True if settings loaded successfully at construction
+    /// True if settings loaded successfully at construction.
     bool m_ok;
 
-    /// Loaded projects (ownership here)
+    /// Loaded projects (ownership here).
     std::vector<std::unique_ptr<PROJECT>> m_projects_list;
 
-    /// Loaded projects, mapped according to project full name
+    /// Loaded projects, mapped according to project full name.
     std::map<wxString, PROJECT*> m_projects;
 
-    /// Loaded project files, mapped according to project full name
+    /// Loaded project files, mapped according to project full name.
     std::map<wxString, PROJECT_FILE*> m_project_files;
 
-    /// Lock for loaded project (expand to multiple once we support MDI)
+    /// Lock for loaded project (expand to multiple once we support MDI).
     std::unique_ptr<LOCKFILE> m_project_lock;
 
     static wxString backupDateTimeFormat;

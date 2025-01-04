@@ -92,6 +92,7 @@ public:
 
     /**
      * Load an outline font. TrueType (.ttf) and OpenType (.otf) are supported.
+     *
      * @param aFontFileName is the (platform-specific) fully qualified name of the font file
      */
     static OUTLINE_FONT* LoadFont( const wxString& aFontFileName, bool aBold, bool aItalic,
@@ -99,8 +100,9 @@ public:
                                    bool aForDrawingSheet );
 
     /**
-     * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
-     * the distance between baselines, not the space between line bounding boxes.
+     * Compute the distance (interline) between 2 lines of text (for multiline texts).
+     *
+     * This is the distance between baselines, not the space between line bounding boxes.
      */
     double GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const override;
 
@@ -182,6 +184,7 @@ private:
     {
         return aSize * m_charSizeScaler * m_outlineFontSizeCompensation;
     };
+
     int faceSize() const { return faceSize( m_faceSize ); }
 
     // also for superscripts

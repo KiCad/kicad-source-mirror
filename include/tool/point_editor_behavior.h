@@ -37,7 +37,7 @@ class SHAPE_POLY_SET;
  * updated.
  *
  * For the moment this is implemented such that it mutates an external
- * EDIT_POINTS object, but it might be able to also own the points.
+ * #EDIT_POINTS object, but it might be able to also own the points.
  */
 class POINT_EDIT_BEHAVIOR
 {
@@ -112,8 +112,10 @@ protected:
 
 // Helper macros to check the number of points in the edit points object
 // Still a bug, but at least it won't segfault if the number of points is wrong
-#define CHECK_POINT_COUNT(aPoints, aExpected) wxCHECK( aPoints.PointsSize() == aExpected, /* void */ )
-#define CHECK_POINT_COUNT_GE(aPoints, aExpected) wxCHECK( aPoints.PointsSize() >= aExpected, /* void */ )
+#define CHECK_POINT_COUNT( aPoints, aExpected ) \
+    wxCHECK( aPoints.PointsSize() == aExpected, /* void */ )
+#define CHECK_POINT_COUNT_GE( aPoints, aExpected ) \
+    wxCHECK( aPoints.PointsSize() >= aExpected, /* void */ )
 
 
 /**
@@ -292,7 +294,7 @@ private:
 /**
  * "Standard" table-cell editing behavior.
  *
- * This works over the EDA_SHAPE basis of a SCH/PCB_TABLECELL.
+ * This works over the #EDA_SHAPE basis of a SCH/PCB_TABLECELL.
  * The cells and tables themselves aren't (yet) polymorphic, so the implmentation
  * has to provide UpdateItem() to handle the actual update.
  */

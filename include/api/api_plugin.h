@@ -137,7 +137,8 @@ private:
  */
 struct CompareApiPluginIdentifiers
 {
-    bool operator()( const std::unique_ptr<API_PLUGIN>& item1, const std::unique_ptr<API_PLUGIN>& item2 ) const
+    bool operator()( const std::unique_ptr<API_PLUGIN>& item1,
+                     const std::unique_ptr<API_PLUGIN>& item2 ) const
     {
         return item1->Identifier() < item2->Identifier();
     }

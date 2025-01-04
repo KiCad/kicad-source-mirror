@@ -113,7 +113,7 @@ public:
     virtual ~PLOTTER();
 
     /**
-     * Returns the effective plot engine in use. It's not very OO but for
+     * Return the effective plot engine in use. It's not very OO but for
      * now is required since some things are only done with some output devices
      * (like drill marks, emitted only for postscript
      */
@@ -222,9 +222,9 @@ public:
                       int aWidth = USE_DEFAULT_LINE_WIDTH );
 
     /**
-     * Generic fallback: Cubic Bezier curve rendered as a polyline
-     * In KiCad the bezier curves have 4 control points:
-     * start ctrl1 ctrl2 end
+     * Generic fallback: Cubic Bezier curve rendered as a polyline.
+     *
+     * In KiCad the bezier curves have 4 control points: start ctrl1 ctrl2 end
      */
     virtual void BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
                               const VECTOR2I& aControl2, const VECTOR2I& aEnd,
@@ -276,6 +276,7 @@ public:
 
     /**
      * Draw a polygon ( filled or not ).
+     *
      * @param aCornerList is the corners list (a SHAPE_LINE_CHAIN).
      *        must be closed (IsClosed() == true) for a polygon. Otherwise this is a polyline.
      * @param aFill is the type of fill.
@@ -308,8 +309,8 @@ public:
                            const EDA_ANGLE& aAngle, double aRadius, int aWidth,
                            OUTLINE_MODE aTraceMode, void* aData );
 
-    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, OUTLINE_MODE tracemode,
-                            void* aData );
+    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
+                            OUTLINE_MODE tracemode, void* aData );
 
     virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, OUTLINE_MODE tracemode,
                               void* aData );
@@ -418,7 +419,8 @@ public:
      * @param aV_justify is the vertical justification (bottom, center, top).
      * @param aPenWidth is the line width (if = 0, use plot default line width).
      * @param aItalic is the true to simulate an italic font.
-     * @param aBold use true to use a bold font Useful only with default width value (aPenWidth = 0).
+     * @param aBold use true to use a bold font Useful only with default width value
+     *              (aPenWidth = 0).
      * @param aMultilineAllowed use true to plot text as multiline, otherwise single line.
      * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
      *              not directly used here.
@@ -508,8 +510,9 @@ public:
     }
 
     /**
-     * Change the current text mode. See the PlotTextMode
-     * explanation at the beginning of the file.
+     * Change the current text mode.
+     *
+     * See the PlotTextMode explanation at the beginning of the file.
      */
     virtual void SetTextMode( PLOT_TEXT_MODE mode )
     {
@@ -546,8 +549,7 @@ public:
     virtual void EndBlock( void* aData ) {}
 
     /**
-     * @return the plot offset in IUs, set by SetViewport() and used
-     * to plot items.
+     * @return the plot offset in IUs, set by SetViewport() and used to plot items.
      */
     VECTOR2I GetPlotOffsetUserUnits() {return m_plotOffset; }
 
@@ -641,6 +643,7 @@ protected:
 
 
 protected:      // variables used in most of plotters:
+
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')
     double           m_plotScale;
 
@@ -692,8 +695,9 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                        const wxString& aSheetPath, const wxString& aFilename,
                        COLOR4D aColor = COLOR4D::UNSPECIFIED, bool aIsFirstPage = true );
 
-/** Returns the default plot extension for a format
-  */
+/**
+ * Return the default plot extension for a format.
+ */
 wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat );
 
 

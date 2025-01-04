@@ -37,8 +37,8 @@ class EDA_ITEM;
 
 
 /**
- * Interface wrapper for the construction geometry preview,
- * with a callback to signal the view owner that the view needs to be updated.
+ * Interface wrapper for the construction geometry preview with a callback to signal the
+ * view owner that the view needs to be updated.
  */
 class CONSTRUCTION_VIEW_HANDLER
 {
@@ -69,11 +69,13 @@ class SNAP_LINE_MANAGER
 {
 public:
     SNAP_LINE_MANAGER( CONSTRUCTION_VIEW_HANDLER& aViewHandler );
+
     /**
      * The snap point is a special point that is located at the last point the cursor
-     * snapped to. If it is set, the construction manager may add extra construction
-     * geometry to the helper extending from the snap point origin to the cursor,
-     * which is the 'snap line'.
+     * snapped to.
+     *
+     * If it is set, the construction manager may add extra construction geometry to the helper
+     * extending from the snap point origin to the cursor, which is the 'snap line'.
      */
     void SetSnapLineOrigin( const VECTOR2I& aOrigin );
 
@@ -101,19 +103,19 @@ public:
     void SetSnappedAnchor( const VECTOR2I& aAnchorPos );
 
     /**
-     * If the snap line is active, return the best snap point that is closest to the cursor
+     * If the snap line is active, return the best snap point that is closest to the cursor.
      *
      * If there's no active snap line, return std::nullopt.
      *
      * If there's a snap very near, use that otherwise, use the grid point.
      * With this point, snap to it on an H/V axis.
      *
-     * Then, if there's a grid point near, snap to it on an H/V axis
+     * Then, if there's a grid point near, snap to it on an H/V axis.
      *
-     * @param aCursor The cursor position
-     * @param aNearestGrid The nearest grid point to the cursor
-     * @param aDistToNearest The distance to the nearest non-grid snap point, if any
-     * @param snapRange The snap range
+     * @param aCursor The cursor position.
+     * @param aNearestGrid The nearest grid point to the cursor.
+     * @param aDistToNearest The distance to the nearest non-grid snap point, if any.
+     * @param snapRange The snap range.
      */
     OPT_VECTOR2I GetNearestSnapLinePoint( const VECTOR2I& aCursor, const VECTOR2I& aNearestGrid,
                                           std::optional<int> aDistToNearest, int snapRange ) const;
@@ -130,7 +132,8 @@ private:
 
 
 /**
- * A class that mananges "construction" objects and geometry.
+ * A class that manages "construction" objects and geometry.
+ *
  * These are things like line extensions, arc centers, etc.
  */
 class CONSTRUCTION_MANAGER
@@ -149,7 +152,8 @@ public:
      * Items to be used for the construction of "virtual" anchors, for example, when snapping to
      * a point involving an _extension_ of an existing line or arc.
      *
-     * One item can have multiple construction items (e.g. an arc can have a circle and centre point).
+     * One item can have multiple construction items (e.g. an arc can have a circle and centre
+     * point).
      */
     struct CONSTRUCTION_ITEM
     {
@@ -185,7 +189,9 @@ public:
      */
     bool InvolvesAllGivenRealItems( const std::vector<EDA_ITEM*>& aItems ) const;
 
-    // Get the list of additional geometry items that should be considered
+    /**
+     * Get the list of additional geometry items that should be considered.
+     */
     void GetConstructionItems( std::vector<CONSTRUCTION_ITEM_BATCH>& aToExtend ) const;
 
     bool HasActiveConstruction() const;
@@ -197,20 +203,20 @@ private:
 
     CONSTRUCTION_VIEW_HANDLER& m_viewHandler;
 
-    // Within one "operation", there is one set of construction items that are
-    // "persistent", and are always shown. Usually the original item and any
-    // extensions.
+    /// Within one "operation", there is one set of construction items that are
+    /// "persistent", and are always shown. Usually the original item and any
+    /// extensions.
     std::optional<CONSTRUCTION_ITEM_BATCH> m_persistentConstructionBatch;
 
-    // Temporary construction items are added and removed as needed
+    /// Temporary construction items are added and removed as needed.
     std::deque<CONSTRUCTION_ITEM_BATCH> m_temporaryConstructionBatches;
 
-    // Set of all items for which construction geometry has been added
+    /// Set of all items for which construction geometry has been added.
     std::set<EDA_ITEM*> m_involvedItems;
 
     std::unique_ptr<ACTIVATION_HELPER<std::unique_ptr<PENDING_BATCH>>> m_activationHelper;
 
-    // Protects the persistent and temporary construction batches
+    /// Protects the persistent and temporary construction batches.
     mutable std::mutex m_batchesMutex;
 };
 

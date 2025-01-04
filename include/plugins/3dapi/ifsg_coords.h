@@ -34,8 +34,7 @@
 
 
 /**
- * IFSG_COORDS
- * is the wrapper for SGCOORDS
+ * The wrapper for #SGCOORDS.
  */
 class SGLIB_API IFSG_COORDS : public IFSG_NODE
 {

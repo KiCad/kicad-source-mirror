@@ -86,12 +86,12 @@ public:
     virtual GRID_HELPER_GRIDS GetSelectionGrid( const SELECTION& aSelection ) const;
 
     /**
-     * Gets the coarsest grid that applies to an item.
+     * Get the coarsest grid that applies to an item.
      */
     virtual GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const { return GRID_CURRENT; }
 
     /**
-     * Return the size of the specified grid
+     * Return the size of the specified grid.
      */
     virtual VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const;
 
@@ -101,7 +101,7 @@ public:
     }
 
     /**
-     * We clear the skip point by setting it to an unreachable position, thereby preventing matching
+     * Clear the skip point by setting it to an unreachable position, thereby preventing matching.
      */
     void ClearSkipPoint()
     {
@@ -130,6 +130,7 @@ public:
         ORIGIN = 8,
         VERTICAL = 16,
         HORIZONTAL = 32,
+
         // This anchor comes from 'constructed' geometry (e.g. an intersection
         // with something else), and not from some intrinsic point of an item
         // (e.g. an endpoint)
@@ -142,13 +143,12 @@ protected:
     struct ANCHOR
     {
         /**
-         *
-         * @param aPos The position of the anchor
+         * @param aPos The position of the anchor.
          * @param aFlags The flags for the anchor - this is a bitfield of ANCHOR_FLAGS,
          *               specifying the type of anchor (which may be used to filter out
-         *               unwanted anchors per the settings)
-         * @param aPointTypes The point types that this anchor represents in geometric terms
-         * @param aItem The item to which the anchor belongs
+         *               unwanted anchors per the settings).
+         * @param aPointTypes The point types that this anchor represents in geometric terms.
+         * @param aItem The item to which the anchor belongs.
          */
         ANCHOR( const VECTOR2I& aPos, int aFlags, int aPointTypes, std::vector<EDA_ITEM*> aItems ) :
                 pos( aPos ), flags( aFlags ), pointTypes( aPointTypes ),
@@ -159,7 +159,9 @@ protected:
         VECTOR2I  pos;
         int       flags;
         int       pointTypes;
-        // Items that are associated with this anchor (can be more than one, e.g. for an intersection)
+
+        /// Items that are associated with this anchor (can be more than one, e.g. for an
+        /// intersection).
         std::vector<EDA_ITEM*> items;
 
         double Distance( const VECTOR2I& aP ) const
@@ -232,15 +234,13 @@ protected:
     KIGFX::ORIGIN_VIEWITEM  m_viewAxis;
 
 private:
-    // Construction helper - this is what actually shows construction geometry
-    // (if any) on the canvas.
+    /// Show construction geometry (if any) on the canvas.
     KIGFX::CONSTRUCTION_GEOM m_constructionGeomPreview;
 
-    // Snap manager - this is what manages the construction geometry,
-    // snap lines, reference points, etc.
+    /// Manage the construction geometry, snap lines, reference points, etc.
     SNAP_MANAGER m_snapManager;
 
-    /// @brief  VIEW_ITEM for visualising anchor points, if enabled
+    /// #VIEW_ITEM for visualising anchor points, if enabled.
     std::unique_ptr<KIGFX::ANCHOR_DEBUG> m_anchorDebug;
 };
 

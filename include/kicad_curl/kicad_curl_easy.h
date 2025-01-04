@@ -101,7 +101,8 @@ public:
     bool SetPostFields( const std::vector<std::pair<std::string, std::string>>& aFields );
 
     /**
-     * Set the post content body to the string, usually used for json rather than the typical key/value pair
+     * Set the post content body to the string, usually used for json rather than the typical
+     * key/value pair.
      *
      * @param aField is the string body to send
      * @return True if successful, false if not.

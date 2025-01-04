@@ -42,8 +42,12 @@ public:
     struct KICOMMON_API IO_FILE_DESC
     {
         wxString                 m_Description;    ///< Description shown in the file picker dialog
-        std::vector<std::string> m_FileExtensions; ///< Filter used for file pickers if m_IsFile is true
-        std::vector<std::string> m_ExtensionsInDir; ///< In case of folders: extensions of files inside
+
+        /// Filter used for file pickers if m_IsFile is true.
+        std::vector<std::string> m_FileExtensions;
+
+        ///< In case of folders: extensions of files inside.
+        std::vector<std::string> m_ExtensionsInDir;
         bool                     m_IsFile;          ///< Whether the library is a folder or a file
         bool                     m_CanRead;         ///< Whether the IO can read this file type
         bool                     m_CanWrite;        ///< Whether the IO can write this file type
@@ -82,8 +86,10 @@ public:
     /**
      * Set an optional progress reporter.
      */
-    virtual void SetProgressReporter( PROGRESS_REPORTER* aReporter ) { m_progressReporter = aReporter; }
-
+    virtual void SetProgressReporter( PROGRESS_REPORTER* aReporter )
+    {
+        m_progressReporter = aReporter;
+    }
 
     ////////////////////////////////////////////////////
     // Library-related functions
@@ -98,8 +104,8 @@ public:
 
     /**
      * Get the descriptor for the individual library elements that this IO plugin operates on.
-     * For libraries where all the elements are in a single container (e.g. all elements in a single file),
-     * then this will return the descriptor from #IO_BASE::GetLibraryDesc().
+     * For libraries where all the elements are in a single container (e.g. all elements in a
+     * single file), then this will return the descriptor from #IO_BASE::GetLibraryDesc().
      *
      * @return File descriptor for the library elements
      */
@@ -107,7 +113,7 @@ public:
 
     /**
      * Checks if this IO object can read the specified library file/directory.
-     * If not overriden, extension check is used.
+     * If not overridden, extension check is used.
      *
      * @note This is not a check that the file system object is readable by the user,
      *       but a check that this IO object can parse the given library.
@@ -186,8 +192,8 @@ public:
      *  In the future perhaps \a aListToAppendTo evolves to something capable of also
      *  holding a wxValidator for the cells in said dialog:
      *  http://forums.wxwidgets.org/viewtopic.php?t=23277&p=104180.
-     *   This would require a 3 column list, and introducing wx GUI knowledge to
-     *   #SCH_IO, which has been avoided to date.
+     *  This would require a 3 column list, and introducing wx GUI knowledge to
+     *  #SCH_IO, which has been avoided to date.
      */
     virtual void GetLibraryOptions( std::map<std::string, UTF8>* aListToAppendTo ) const;
 
@@ -200,7 +206,6 @@ protected:
     IO_BASE() = delete;
 
     /**
-     *
      * @param aName is the user-visible name for the IO loader
      */
     IO_BASE( const wxString& aName ) :

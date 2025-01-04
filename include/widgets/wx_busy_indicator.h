@@ -31,21 +31,22 @@ class wxBusyCursor;
 
 
 /**
- * Simple wrapper around wxBusyCursor for used with the generic BUSY_INDICATOR
- * interface. Can be used to provide a WX busy cursor (spinner) to generic code
- * that otherwise has no concept of wx cursors.
+ * Simple wrapper around wxBusyCursor for used with the generic BUSY_INDICATOR interface.
+ *
+ * Can be used to provide a WX busy cursor (spinner) to generic code that otherwise has no
+ * concept of wx cursors.
  */
 class WX_BUSY_INDICATOR : public BUSY_INDICATOR
 {
 public:
     /**
-     * Constructs a busy indicator represented by a wxBusyCursor, which will be
+     * Construct a busy indicator represented by a wxBusyCursor, which will be
      * active as long as this object exists (just like wxBustCursor itself).
      */
     WX_BUSY_INDICATOR();
 
 private:
-    ///< This is the actual WX cursor that is the indicator.
+    /// This is the actual WX cursor that is the indicator.
     std::unique_ptr<wxBusyCursor> m_cursor;
 };
 

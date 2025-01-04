@@ -55,7 +55,8 @@ public:
 
     void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
-    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row, int col ) override;
+    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row,
+                        int col ) override;
 
 private:
     std::vector<BITMAPS> m_icons;
@@ -77,7 +78,8 @@ public:
 
     void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
-    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row, int col ) override;
+    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row,
+                        int col ) override;
     wxGridCellRenderer* Clone() const override;
 
 private:
@@ -95,7 +97,8 @@ public:
 
     void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
-    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row, int col ) override;
+    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row,
+                        int col ) override;
     wxGridCellRenderer* Clone() const override;
 
 private:

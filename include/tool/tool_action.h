@@ -273,7 +273,7 @@ public:
                  int aDefaultHotKey = 0, const std::string& aLegacyHotKeyName = "",
                  const wxString& aMenuText = wxEmptyString,
                  const wxString& aTooltip = wxEmptyString,
-                 BITMAPS aIcon = static_cast<BITMAPS>( 0 ), TOOL_ACTION_FLAGS aFlags = AF_NONE);
+                 BITMAPS aIcon = static_cast<BITMAPS>( 0 ), TOOL_ACTION_FLAGS aFlags = AF_NONE );
 
     ~TOOL_ACTION();
 
@@ -328,7 +328,7 @@ public:
      */
     bool HasCustomUIId() const { return m_uiid.has_value(); }
 
-    /*
+    /**
      * Get the unique ID for this action in the user interface system.
      *
      * This can be either set to a specific ID during creation or computed
@@ -338,7 +338,7 @@ public:
      */
     int GetUIId() const { return m_uiid.value_or( m_id + ACTION_BASE_UI_ID ); }
 
-    /*
+    /**
      * Get the base value used to offset the user interface IDs for the actions.
      */
     static int GetBaseUIId() { return ACTION_BASE_UI_ID; }
@@ -371,7 +371,8 @@ public:
     template<typename T>
     T GetParam() const
     {
-        wxASSERT_MSG( m_param.has_value(), "Attempted to get a parameter from an action with no parameter." );
+        wxASSERT_MSG( m_param.has_value(),
+                      "Attempted to get a parameter from an action with no parameter." );
 
         T param;
 
@@ -382,7 +383,8 @@ public:
         catch( const ki::bad_any_cast& e )
         {
             wxASSERT_MSG( false,
-                          wxString::Format( "Requested parameter type %s from action with parameter type %s.",
+                          wxString::Format( "Requested parameter type %s from action with "
+                                            "parameter type %s.",
                                             typeid(T).name(), m_param.type().name() ) );
         }
 
@@ -429,33 +431,35 @@ protected:
 
     friend class ACTION_MANAGER;
 
-    ///< Base ID to use inside the user interface system to offset the action IDs.
+    /// Base ID to use inside the user interface system to offset the action IDs.
     static constexpr int ACTION_BASE_UI_ID = 20000;
 
-    ///< Name of the action (convention is "app.tool.actionName")
+    /// Name of the action (convention is "app.tool.actionName")
     std::string          m_name;
     TOOL_ACTION_SCOPE    m_scope;
 
-    std::optional<TOOL_ACTION_GROUP>    m_group;    // Optional group for the action to belong to
+    std::optional<TOOL_ACTION_GROUP> m_group; ///< Optional group for the action to belong to.
 
-    const int            m_defaultHotKey;    // Default hot key
-    const int            m_defaultHotKeyAlt; // Default hot key alternate
-    int                  m_hotKey;         // The current hotkey (post-user-settings-application)
-    int                  m_hotKeyAlt;      // The alternate hotkey (post-user-settings-application)
-    const std::string    m_legacyName;     // Name for reading legacy hotkey settings
+    const int         m_defaultHotKey;    ///< Default hot key.
+    const int         m_defaultHotKeyAlt; ///< Default hot key alternate.
+    int               m_hotKey;           ///< The current hotkey (post-user-settings-application).
 
-    wxString                m_friendlyName; // User-friendly name
-    std::optional<wxString> m_menuLabel;    // Menu label
-    wxString                m_tooltip;      // User-facing tooltip help text
-    std::optional<wxString> m_description;  // Description of the action
+    /// The alternate hotkey (post-user-settings-application).
+    int               m_hotKeyAlt;
+    const std::string m_legacyName;       ///< Name for reading legacy hotkey settings.
 
-    BITMAPS              m_icon;           // Icon for the menu entry
+    wxString                m_friendlyName; ///< User-friendly name.
+    std::optional<wxString> m_menuLabel;    ///< Menu label.
+    wxString                m_tooltip;      ///< User facing tooltip help text.
+    std::optional<wxString> m_description;  ///< Description of the action.
 
-    int                  m_id;             // Unique ID for maps. Assigned by ACTION_MANAGER.
-    std::optional<int>   m_uiid;           // ID to use when interacting with the UI (if empty, generate one)
+    BITMAPS m_icon; ///< Icon for the menu entry
 
-    TOOL_ACTION_FLAGS    m_flags;
-    ki::any              m_param; // Generic parameter
+    int                m_id;   ///< Unique ID for maps. Assigned by #ACTION_MANAGER.
+    std::optional<int> m_uiid; ///< ID to use when interacting with the UI (if empty, generate one).
+
+    TOOL_ACTION_FLAGS m_flags;
+    ki::any           m_param; ///< Generic parameter.
 };
 
 #endif

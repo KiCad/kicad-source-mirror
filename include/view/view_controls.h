@@ -38,7 +38,7 @@ namespace KIGFX
 class VIEW;
 
 
-///< Structure to keep VIEW_CONTROLS settings for easy store/restore operations
+/// Structure to keep VIEW_CONTROLS settings for easy store/restore operations.
 struct GAL_API VC_SETTINGS
 {
     VC_SETTINGS()
@@ -46,87 +46,87 @@ struct GAL_API VC_SETTINGS
         Reset();
     }
 
-    ///< Restore the default settings.
+    /// Restore the default settings.
     void Reset();
 
-    ///< Flag determining the cursor visibility.
+    /// Flag determining the cursor visibility.
     bool m_showCursor;
 
-    ///< Forced cursor position (world coordinates).
+    /// Forced cursor position (world coordinates).
     VECTOR2D m_forcedPosition;
 
-    ///< Is the forced cursor position enabled.
+    /// Is the forced cursor position enabled.
     bool m_forceCursorPosition;
 
-    ///< Should the cursor be locked within the parent window area.
+    /// Should the cursor be locked within the parent window area.
     bool m_cursorCaptured;
 
-    ///< Should the cursor snap to grid or move freely.
+    /// Should the cursor snap to grid or move freely.
     bool m_snappingEnabled;
 
-    ///< Flag for grabbing the mouse cursor.
+    /// Flag for grabbing the mouse cursor.
     bool m_grabMouse;
 
-    ///< Flag for automatic focus switching between Schematic and PCB editors.
+    /// Flag for automatic focus switching between Schematic and PCB editors.
     bool m_focusFollowSchPcb;
 
-    ///< Flag for turning on autopanning.
+    /// Flag for turning on autopanning.
     bool m_autoPanEnabled;
 
-    ///< Flag for turning on autopanning.
+    /// Flag for turning on autopanning.
     bool m_autoPanSettingEnabled;
 
-    ///< Distance from cursor to VIEW edge when panning is active.
+    /// Distance from cursor to VIEW edge when panning is active.
     float m_autoPanMargin;
 
-    ///< How fast is panning when in auto mode.
+    /// How fast is panning when in auto mode.
     float m_autoPanSpeed;
 
-    ///< How fast does panning accelerate when approaching the window boundary.
+    /// How fast does panning accelerate when approaching the window boundary.
     float m_autoPanAcceleration;
 
-    ///< If the cursor is allowed to be warped.
+    /// If the cursor is allowed to be warped.
     bool m_warpCursor;
 
-    ///< Enable horizontal panning with the horizontal scroll/trackpad input.
+    /// Enable horizontal panning with the horizontal scroll/trackpad input.
     bool m_horizontalPan;
 
-    ///< Enable the accelerating zoom controller.
+    /// Enable the accelerating zoom controller.
     bool m_zoomAcceleration;
 
-    ///< Zoom speed for the non-accelerating zoom controller.
+    /// Zoom speed for the non-accelerating zoom controller.
     int m_zoomSpeed;
 
-    ///< When true, ignore zoom_speed and pick a platform-specific default.
+    /// When true, ignore zoom_speed and pick a platform-specific default.
     bool m_zoomSpeedAuto;
 
-    ///< What modifier key to enable zoom with the (vertical) scroll wheel.
+    /// What modifier key to enable zoom with the (vertical) scroll wheel.
     int m_scrollModifierZoom;
 
-    ///< What modifier key to enable horizontal pan with the (vertical) scroll wheel.
+    /// What modifier key to enable horizontal pan with the (vertical) scroll wheel.
     int m_scrollModifierPanH;
 
-    ///< What modifier key to enable vertical with the (vertical) scroll wheel.
+    /// What modifier key to enable vertical with the (vertical) scroll wheel.
     int m_scrollModifierPanV;
 
     MOUSE_DRAG_ACTION m_dragLeft;
     MOUSE_DRAG_ACTION m_dragMiddle;
     MOUSE_DRAG_ACTION m_dragRight;
 
-    ///< Is last cursor motion event coming from keyboard arrow cursor motion action.
+    /// Is last cursor motion event coming from keyboard arrow cursor motion action.
     bool m_lastKeyboardCursorPositionValid;
 
-    ///< ACTIONS::CURSOR_UP, ACTIONS::CURSOR_DOWN, etc.
+    /// ACTIONS::CURSOR_UP, ACTIONS::CURSOR_DOWN, etc.
     long m_lastKeyboardCursorCommand;
 
-    ///< Position of the above event.
+    /// Position of the above event.
     VECTOR2D m_lastKeyboardCursorPosition;
 
 
-    ///< Whether to invert the scroll wheel movement for zoom
+    /// Whether to invert the scroll wheel movement for zoom.
     bool m_scrollReverseZoom;
 
-    ///< Whether to invert the scroll wheel movement for horizontal pan
+    /// Whether to invert the scroll wheel movement for horizontal pan.
     bool m_scrollReversePanH;
 };
 
@@ -370,26 +370,26 @@ public:
      */
     virtual void Reset();
 
-    ///< Return the current VIEW_CONTROLS settings.
+    /// Return the current VIEW_CONTROLS settings.
     const VC_SETTINGS& GetSettings() const
     {
         return m_settings;
     }
 
-    ///< Apply VIEW_CONTROLS settings from an object.
+    /// Apply VIEW_CONTROLS settings from an object.
     void ApplySettings( const VC_SETTINGS& aSettings );
 
-    ///< Load new settings from program common settings.
+    /// Load new settings from program common settings.
     virtual void LoadSettings() {}
 
 protected:
-    ///< Pointer to controlled VIEW.
+    /// Pointer to controlled VIEW.
     VIEW* m_view;
 
-    ///< Application warped the cursor, not the user (keyboard).
+    /// Application warped the cursor, not the user (keyboard).
     bool m_cursorWarped;
 
-    ///< Current VIEW_CONTROLS settings.
+    /// Current VIEW_CONTROLS settings.
     VC_SETTINGS m_settings;
 };
 } // namespace KIGFX

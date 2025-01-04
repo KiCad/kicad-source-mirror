@@ -44,8 +44,8 @@ class TWO_POINT_GEOMETRY_MANAGER;
 class RULER_ITEM : public EDA_ITEM
 {
 public:
-    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, const EDA_IU_SCALE& aIuScale, EDA_UNITS userUnits, bool aFlipX,
-            bool aFlipY );
+    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, const EDA_IU_SCALE& aIuScale,
+                EDA_UNITS userUnits, bool aFlipX, bool aFlipY );
 
     ///< @copydoc EDA_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
@@ -63,7 +63,7 @@ public:
     void SetShowEndArrowHead( bool aShow ) { m_showEndArrowHead = aShow; }
 
     /**
-     * Get the strings for the dimensions of the ruler
+     * Get the strings for the dimensions of the ruler.
      */
     wxArrayString GetDimensionStrings() const;
 
@@ -74,8 +74,9 @@ public:
 #endif
 
     /**
-     * Get class name
-     * @return  string "RULER_ITEM"
+     * Get class name.
+     *
+     * @return  string "RULER_ITEM".
      */
     wxString GetClass() const override
     {
@@ -83,9 +84,9 @@ public:
     }
 
     /**
-     * Switch the ruler units
+     * Switch the ruler units.
      *
-     * @param aUnits is the new unit system the ruler should use
+     * @param aUnits is the new unit system the ruler should use.
      */
     void SwitchUnits( EDA_UNITS aUnits ) { m_userUnits = aUnits; }
 

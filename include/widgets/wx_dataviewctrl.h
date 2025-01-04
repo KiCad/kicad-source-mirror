@@ -24,6 +24,7 @@
 
 /**
  * Extension of the wxDataViewCtrl to include some helper functions for working with items.
+ *
  * These should probably be sent upstream, since they may be useful to others, but for now
  * just extend the class with them ourselves.
  */
@@ -36,7 +37,7 @@ public:
     /**
      * Get the previous item in list order.
      *
-     * @param aItem a valid item in the control's model
+     * @param aItem a valid item in the control's model.
      * @return the item before aItem, or an invalid item if aItem is at the top.
      */
     wxDataViewItem GetPrevItem( wxDataViewItem const& aItem );
@@ -44,7 +45,7 @@ public:
     /**
      * Get the next item in list order.
      *
-     * @param aItem a valid item in the control's model
+     * @param aItem a valid item in the control's model.
      * @return the item after aItem, or an invalid item if aItem is at the bottom.
      */
     wxDataViewItem GetNextItem( wxDataViewItem const& aItem );
@@ -52,7 +53,7 @@ public:
     /**
      * Get the previous sibling of an item.
      *
-     * @param aItem a valid item in the control's model
+     * @param aItem a valid item in the control's model.
      * @return the sibling before aItem, or an invalid item if aItem has no siblings before it.
      */
     wxDataViewItem GetPrevSibling( wxDataViewItem const& aItem );
@@ -60,7 +61,7 @@ public:
     /**
      * Get the next sibling of an item.
      *
-     * @param aItem a valid item in the control's model
+     * @param aItem a valid item in the control's model.
      * @return the sibling after aItem, or an invalid item if aItem has no siblings after it.
      */
     wxDataViewItem GetNextSibling( wxDataViewItem const& aItem );

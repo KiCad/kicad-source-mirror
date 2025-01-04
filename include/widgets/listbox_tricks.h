@@ -80,6 +80,7 @@ private:
     void listBoxPaste();
 
     wxArrayString listBoxGetSelected() const;
+
     /**
      * Delete the selected filters.
      *

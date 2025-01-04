@@ -82,13 +82,13 @@ public:
     virtual ~SHADER();
 
     /**
-    * Add a shader and compile the shader sources.
-    *
-    * @param aArgs is the list of strings (std::string or convertible to const char*) which
-    *              are concatenated and compiled as a single shader source code.
-    * @param aShaderType is the type of the shader.
-    * @return True in case of success, false otherwise.
-    */
+     * Add a shader and compile the shader sources.
+     *
+     * @param aArgs is the list of strings (std::string or convertible to const char*) which
+     *              are concatenated and compiled as a single shader source code.
+     * @param aShaderType is the type of the shader.
+     * @return True in case of success, false otherwise.
+     */
     template< typename... Args >
     bool LoadShaderFromStrings( SHADER_TYPE aShaderType, Args&&... aArgs )
     {
@@ -190,11 +190,11 @@ public:
     int GetAttribute( const std::string& aAttributeName ) const;
 
     /**
-    * Read the shader source file
-    *
-    * @param aShaderSourceName is the shader source file name.
-    * @return the source as string
-    */
+     * Read the shader source file
+     *
+     * @param aShaderSourceName is the shader source file name.
+     * @return the source as string
+     */
     static std::string ReadSource( const std::string& aShaderSourceName );
 
 private:

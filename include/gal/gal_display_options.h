@@ -41,7 +41,7 @@ class wxWindow;
 namespace KIGFX
 {
     /**
-     * GRID_STYLE: Type definition of the grid style
+     * Type definition of the grid style.
      */
     enum class GRID_STYLE
     {
@@ -77,6 +77,7 @@ namespace KIGFX
     {
     public:
         virtual void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& ) = 0;
+
     protected:
         // Observer lifetimes aren't handled by base class pointer
         virtual ~GAL_DISPLAY_OPTIONS_OBSERVER() {}

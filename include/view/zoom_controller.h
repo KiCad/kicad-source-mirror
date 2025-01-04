@@ -62,19 +62,19 @@ public:
 class GAL_API ACCELERATING_ZOOM_CONTROLLER : public ZOOM_CONTROLLER
 {
 public:
-    ///< The type of the acceleration timeout.
+    /// The type of the acceleration timeout.
     using TIMEOUT = std::chrono::milliseconds;
 
-    ///< The clock used for the timestamp (guaranteed to be monotonic).
+    /// The clock used for the timestamp (guaranteed to be monotonic).
     using CLOCK = std::chrono::steady_clock;
 
-    ///< The type of the time stamps.
+    /// The type of the time stamps.
     using TIME_PT = std::chrono::time_point<CLOCK>;
 
-    ///< The default timeout, after which a another scroll will not be accelerated.
+    /// The default timeout, after which a another scroll will not be accelerated.
     static constexpr TIMEOUT DEFAULT_TIMEOUT = std::chrono::milliseconds( 500 );
 
-    ///< The default minimum step factor for accelerating controller.
+    /// The default minimum step factor for accelerating controller.
     static constexpr double DEFAULT_ACCELERATION_SCALE = 5.0;
 
     /*
@@ -85,7 +85,7 @@ public:
     public:
         virtual ~TIMESTAMP_PROVIDER() = default;
 
-        /*
+        /**
          * @return the timestamp at the current time.
          */
         virtual TIME_PT GetTimestamp() = 0;
@@ -93,10 +93,10 @@ public:
 
     /**
      * @param aAccTimeout the timeout - if a scroll happens within this timeframe,
-     *                    the zoom will be faster
+     *                    the zoom will be faster.
      * @param aTimestampProv a provider for timestamps. If null, a default will be provided,
      *                       which is the main steady_clock (this is probably what you want
-     *                       for real usage)
+     *                       for real usage).
      */
     ACCELERATING_ZOOM_CONTROLLER( double aScale = DEFAULT_ACCELERATION_SCALE,
                                   const TIMEOUT& aAccTimeout = DEFAULT_TIMEOUT,
@@ -115,16 +115,16 @@ public:
     }
 
 private:
-    ///< The timestamp provider to use (might be provided externally).
+    /// The timestamp provider to use (might be provided externally).
     TIMESTAMP_PROVIDER* m_timestampProv;
 
-    ///< Any provider owned by this class (the default one, if used).
+    /// Any provider owned by this class (the default one, if used).
     std::unique_ptr<TIMESTAMP_PROVIDER> m_ownTimestampProv;
 
-    ///< The timestamp of the previous event.
+    /// The timestamp of the previous event.
     TIME_PT m_prevTimestamp;
 
-    ///< The timeout value.
+    /// The timeout value.
     TIMEOUT m_accTimeout;
 
     /// Previous rotation was positive.
@@ -150,20 +150,20 @@ public:
 
     double GetScaleForRotation( int aRotation ) override;
 
-    ///< A suitable (magic) scale factor for GTK3 systems.
+    /// A suitable (magic) scale factor for GTK3 systems.
     static constexpr double GTK3_SCALE = 0.002;
 
-    ///< A suitable (magic) scale factor for Mac systems.
+    /// A suitable (magic) scale factor for Mac systems.
     static constexpr double MAC_SCALE = 0.01;
 
     /// A suitable (magic) scale factor for Windows systems.
     static constexpr double MSW_SCALE = 0.005;
 
-    ///< Multiplier for manual scale ssetting.
+    /// Multiplier for manual scale ssetting.
     static constexpr double MANUAL_SCALE_FACTOR = 0.001;
 
 private:
-    ///< The scale factor set by the constructor.
+    /// The scale factor set by the constructor.
     double m_scale;
 };
 

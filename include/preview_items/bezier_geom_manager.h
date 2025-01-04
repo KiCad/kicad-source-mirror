@@ -32,8 +32,7 @@ namespace KIGFX
 namespace PREVIEW
 {
 
-
-    /**
+/**
  * Manage the construction of a bezier through a series of steps.
  *
  * See also @ref KIGFX::PREVIEW::ARC_GEOM_MANAGER.
@@ -41,62 +40,63 @@ namespace PREVIEW
  * Interfaces are provided to return both arc geometry (can be used to set up real beziers on
  * PCBs, for example) as well as important control points for informational overlays.
  */
-    class BEZIER_GEOM_MANAGER : public MULTISTEP_GEOM_MANAGER
+class BEZIER_GEOM_MANAGER : public MULTISTEP_GEOM_MANAGER
+{
+public:
+    BEZIER_GEOM_MANAGER() {}
+
+    enum BEZIER_STEPS
     {
-    public:
-        BEZIER_GEOM_MANAGER() {}
+        SET_START = 0, ///< Waiting to lock in the start point
+        SET_CONTROL1,  ///< Waiting to lock in the first control point
+        SET_END,       ///< Waiting to lock in the end point
+        SET_CONTROL2,  ///< Waiting to lock in the second control point
+        COMPLETE
+    };
 
-        enum BEZIER_STEPS
-        {
-            SET_START = 0, ///< Waiting to lock in the start point
-            SET_CONTROL1,  ///< Waiting to lock in the first control point
-            SET_END,       ///< Waiting to lock in the end point
-            SET_CONTROL2,  ///< Waiting to lock in the second control point
-            COMPLETE
-        };
+    int getMaxStep() const override { return COMPLETE; }
 
-        int getMaxStep() const override { return COMPLETE; }
-
-        /**
+    /**
      * Get the current step the manager is on (useful when drawing
      * something depends on the current state)
      */
-        BEZIER_STEPS GetStep() const { return static_cast<BEZIER_STEPS>( getStep() ); }
+    BEZIER_STEPS GetStep() const { return static_cast<BEZIER_STEPS>( getStep() ); }
 
-        bool acceptPoint( const VECTOR2I& aPt ) override;
+    bool acceptPoint( const VECTOR2I& aPt ) override;
 
-        /*
+    /*
      * Geometry query interface - used by clients of the manager
      */
 
-        ///< Get the center point of the arc (valid when state > SET_ORIGIN)
-        VECTOR2I GetStart() const;
+    ///< Get the center point of the arc (valid when state > SET_ORIGIN)
+    VECTOR2I GetStart() const;
 
-        ///< Get the coordinates of the arc start
-        VECTOR2I GetControlC1() const;
-        VECTOR2I GetControlC2() const;
+    ///< Get the coordinates of the arc start
+    VECTOR2I GetControlC1() const;
+    VECTOR2I GetControlC2() const;
 
-        ///< Get the coordinates of the arc end point
-        VECTOR2I GetEnd() const;
+    ///< Get the coordinates of the arc end point
+    VECTOR2I GetEnd() const;
 
-    private:
-        /*
+private:
+    /*
      * Point acceptor functions
      */
 
-        ///< Set the center point of the arc
-        bool setStart( const VECTOR2I& aOrigin );
-        bool setControlC1( const VECTOR2I& aControl );
-        bool setEnd( const VECTOR2I& aCursor );
-        bool setControlC2( const VECTOR2I& aControl );
+    ///< Set the center point of the arc
+    bool setStart( const VECTOR2I& aOrigin );
+    bool setControlC1( const VECTOR2I& aControl );
+    bool setEnd( const VECTOR2I& aCursor );
+    bool setControlC2( const VECTOR2I& aControl );
 
-        /*
+    /*
      * Bezier geometry
      */
-        VECTOR2I m_start;
-        VECTOR2I m_controlC1;
-        VECTOR2I m_end;
-        VECTOR2I m_controlC2;
-    };
+    VECTOR2I m_start;
+    VECTOR2I m_controlC1;
+    VECTOR2I m_end;
+    VECTOR2I m_controlC2;
+};
+
 } // namespace PREVIEW
 } // namespace KIGFX

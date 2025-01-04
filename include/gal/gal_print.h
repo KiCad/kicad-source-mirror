@@ -39,7 +39,7 @@ public:
 
 
 /**
- * @brief Wrapper around GAL to provide information needed for printing.
+ * Wrapper around GAL to provide information needed for printing.
  */
 class GAL_API GAL_PRINT
 {
