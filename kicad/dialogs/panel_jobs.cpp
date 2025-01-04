@@ -319,7 +319,7 @@ public:
             m_frame( aFrame ),
             m_panelParent( aPanelParent )
     {
-        m_buttonProperties->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
+        m_buttonProperties->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
         m_buttonDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
 #if  _WIN32
