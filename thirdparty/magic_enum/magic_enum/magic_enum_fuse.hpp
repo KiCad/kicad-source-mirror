@@ -5,11 +5,11 @@
 // | |  | | (_| | (_| | | (__  | |____| | | | |_| | | | | | | | |____|_|   |_|
 // |_|  |_|\__,_|\__, |_|\___| |______|_| |_|\__,_|_| |_| |_|  \_____|
 //                __/ | https://github.com/Neargye/magic_enum
-//               |___/  version 0.8.2
+//               |___/  version 0.9.7
 //
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>.
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2019 - 2022 Daniil Goncharov <neargye@gmail.com>.
+// Copyright (c) 2019 - 2024 Daniil Goncharov <neargye@gmail.com>.
 //
 // Permission is hereby  granted, free of charge, to any  person obtaining a copy
 // of this software and associated  documentation files (the "Software"), to deal
@@ -42,7 +42,7 @@ template <typename E>
 constexpr optional<std::uintmax_t> fuse_one_enum(optional<std::uintmax_t> hash, E value) noexcept {
   if (hash) {
     if (const auto index = enum_index(value)) {
-      return (*hash << log2(enum_count<E>() + 1)) | *index;
+      return (*hash << log2((enum_count<E>() << 1) - 1)) | *index;
     }
   }
   return {};
@@ -81,7 +81,7 @@ template <typename... Es>
 #else
   const auto fuse = detail::typesafe_fuse_enum<std::decay_t<Es>...>(values...);
 #endif
-  return assert(fuse), fuse;
+  return MAGIC_ENUM_ASSERT(fuse), fuse;
 }
 
 } // namespace magic_enum

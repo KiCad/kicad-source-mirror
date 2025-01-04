@@ -18,6 +18,7 @@
  */
 
 #include <magic_enum.hpp>
+#include <magic_enum_iostream.hpp>
 #include <boost/test/unit_test.hpp>
 #include <mmh3_hash.h>
 #include <embedded_files.h>
