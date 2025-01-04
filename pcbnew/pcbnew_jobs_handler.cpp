@@ -1660,7 +1660,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( drcJob->m_outputFile.IsEmpty() )
+    if( drcJob->GetOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() + wxS( "-drc" ) );

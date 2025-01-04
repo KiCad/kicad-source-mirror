@@ -31,7 +31,6 @@ public:
     JOB_RC( const std::string& aType );
 
     wxString m_filename;
-    wxString m_outputFile;
 
     enum class UNITS
     {

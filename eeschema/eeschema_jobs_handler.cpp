@@ -1073,7 +1073,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
-    if( ercJob->m_outputFile.IsEmpty() )
+    if( ercJob->GetOutputPath().IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() + wxS( "-erc" ) );
