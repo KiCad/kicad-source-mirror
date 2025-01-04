@@ -47,6 +47,7 @@ bool DIALOG_EXECUTECOMMAND_JOB_SETTINGS::TransferDataToWindow()
     m_cbIgnoreExitCode->SetValue( m_job->m_ignoreExitcode );
     m_cbRecordOutput->SetValue( m_job->m_recordOutput );
 
+    m_textCtrlOutputPath->SetValue( m_job->GetOutputPath() );
     m_textCtrlOutputPath->Enable( m_cbRecordOutput->GetValue() );
 
     return true;
