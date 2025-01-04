@@ -433,6 +433,10 @@ bool CopyFilesOrDirectory( const wxString& aSourcePath, const wxString& aDestDir
         wxString sourcePath = sourceFn.GetPath() + wxFileName::GetPathSeparator() + filename;
         wxString destPath = aDestDir + wxFileName::GetPathSeparator() + filename;
 
+        // Avoid infinite recursion on "*"
+        if( sourcePath == aSourcePath )
+            break;
+
         if( wxFileName::DirExists( sourcePath ) )
         {
             // Recursively copy subdirectories

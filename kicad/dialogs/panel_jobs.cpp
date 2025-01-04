@@ -238,7 +238,8 @@ public:
         m_jobsFile( aJobsFile ),
         m_output( aOutput )
     {
-        m_staticTextOutputName->SetLabel( aOutput->m_outputHandler->GetOutputPath() );
+        m_staticTextOutputName->SetLabel( wxString::Format( _( "Output: %s" ),
+                                                            aOutput->GetDescription() ) );
 
         int jobBmpColId = m_jobList->AppendColumn( wxT( "" ) );
         int jobNoColId = m_jobList->AppendColumn( _( "No." ) );
@@ -269,6 +270,8 @@ public:
             m_jobList->SetItem( itemIndex, jobNoColId, wxString::Format( "%d", num++ ) );
             m_jobList->SetItem( itemIndex, jobDescColId, job.GetDescription() );
         }
+
+        SetupStandardButtons( { { wxID_OK, _( "Close" ) } } );
     }
 
 

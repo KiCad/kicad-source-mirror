@@ -48,7 +48,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	// Label Appearance
 
 	// Cell Defaults
-	m_jobsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+	m_jobsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	sbJobs->Add( m_jobsGrid, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 3 );
 
 	wxBoxSizer* bJobsButtons;

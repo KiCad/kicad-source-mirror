@@ -109,13 +109,15 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
     JOB_SPECIAL_COPYFILES* job = static_cast<JOB_SPECIAL_COPYFILES*>( aJob->m_job.get() );
 
     if( job->m_source.IsEmpty() )
-    {
         return CLI::EXIT_CODES::ERR_ARGS;
-    }
+
+    wxFileName source( job->m_source );
+    source.MakeAbsolute( aProject->GetProjectPath() );
 
     wxString errors;
     int      copyCount = 0;
-    bool     success = CopyFilesOrDirectory( job->m_source, job->GetFullOutputPath(), errors, copyCount );
+    bool     success = CopyFilesOrDirectory( source.GetFullPath(), job->GetFullOutputPath(),
+                                             errors, copyCount );
 
     if( !success )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
