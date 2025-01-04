@@ -34,6 +34,8 @@
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_plot.h>
 #include <jobs/job_export_pcb_svg.h>
+#include <pgm_base.h>
+#include <pcbnew_settings.h>
 
 
 PCB_PLOTTER::PCB_PLOTTER( BOARD* aBoard, REPORTER* aReporter, PCB_PLOT_PARAMS& aParams ) :
@@ -358,4 +360,13 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aPlotOpts, JOB_EXPORT_PCB_
         aPlotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
         break;
     }
+
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    wxString          theme = aJob->m_colorTheme;
+    if( theme.IsEmpty() )
+        theme = wxT( "pcbnew" );
+
+    PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( theme );
+    aPlotOpts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
 }
