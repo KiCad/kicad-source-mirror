@@ -48,8 +48,10 @@
 #include <wx/notifmsg.h>
 
 #include <background_jobs_monitor.h>
+
+#include <core/thread_pool.h>
+
 #include <build_version.h>
-#include <pgm_base.h>
 
 
 struct UPDATE_REQUEST
@@ -259,6 +261,6 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
         m_working = false;
     };
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
     tp.push_task( update_check );
 }

@@ -39,8 +39,8 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 #include <ratsnest/ratsnest_data.h>
-#include <pgm_base.h>
 #include <progress_reporter.h>
+#include <core/thread_pool.h>
 #include <trigo.h>
 #include <drc/drc_rtree.h>
 
@@ -190,7 +190,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
                 return aNet->IsDirty() && aNet->GetNodeCount() > 0;
             } );
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
 
     tp.push_loop( dirty_nets.size(),
             [&]( const int a, const int b )
@@ -371,7 +371,7 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
         }
     };
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
     size_t num_nets = std::min( m_nets.size(), aDynamicData->m_nets.size() );
 
     tp.push_loop( 1, num_nets,

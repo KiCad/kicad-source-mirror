@@ -49,6 +49,7 @@
 
 #include <macros.h>
 #include <geometry/geometry_utils.h>
+#include <core/thread_pool.h>
 
 #include <core/profile.h>
 #include <trace_helpers.h>

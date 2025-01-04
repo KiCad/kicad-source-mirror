@@ -20,8 +20,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 
-include_directories( AFTER ${INC_AFTER} )
-
 set( QA_GERBVIEW_SRCS
     # The main test entry points
     test_module.cpp

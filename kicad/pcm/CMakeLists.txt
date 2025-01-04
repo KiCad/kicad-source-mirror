@@ -5,7 +5,6 @@ if( COMPILER_SUPPORTS_WARNINGS )
 endif()
 
 include_directories( BEFORE ${INC_BEFORE} )
-include_directories( AFTER ${INC_AFTER} )
 
 add_compile_definitions( PCM )
 

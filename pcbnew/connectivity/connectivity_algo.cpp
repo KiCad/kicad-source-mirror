@@ -33,8 +33,8 @@
 #include <progress_reporter.h>
 #include <geometry/geometry_utils.h>
 #include <board_commit.h>
+#include <core/thread_pool.h>
 #include <pcb_shape.h>
-#include <pgm_base.h>
 
 #include <wx/log.h>
 
@@ -249,7 +249,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     PROF_TIMER search_basic( "search-basic" );
 #endif
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
     std::vector<CN_ITEM*> dirtyItems;
     std::copy_if( m_itemList.begin(), m_itemList.end(), std::back_inserter( dirtyItems ),
                   [] ( CN_ITEM* aItem )
@@ -495,7 +495,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     // Generate RTrees for CN_ZONE_LAYER items (in parallel)
     //
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns( zitems.size() );
 
     auto cache_zones =

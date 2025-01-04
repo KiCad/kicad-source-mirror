@@ -40,7 +40,6 @@ set_source_files_properties( kicad_scripting_main.cpp PROPERTIES
     )
 
 target_include_directories( scripting_kiface PRIVATE
-    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     ${PROJECT_SOURCE_DIR}/resources/bitmaps_png/include
     ${PROJECT_SOURCE_DIR}/include
     ${wxWidgets_LIBRARIES}

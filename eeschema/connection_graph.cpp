@@ -30,7 +30,6 @@
 #include <core/kicad_algo.h>
 #include <erc/erc.h>
 #include <pin_type.h>
-#include <pgm_base.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
@@ -48,6 +47,7 @@
 #include <project/net_settings.h>
 #include <widgets/ui_common.h>
 #include <string_utils.h>
+#include <core/thread_pool.h>
 #include <wx/log.h>
 
 #include <advanced_config.h> // for realtime connectivity switch in release builds
@@ -1344,7 +1344,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
             return 1;
         };
 
-        BS::thread_pool& tp = Pgm().GetThreadPool();
+        thread_pool& tp = GetKiCadThreadPool();
 
         tp.push_loop( connection_vec.size(),
                 [&]( const int a, const int b)
@@ -1500,7 +1500,7 @@ void CONNECTION_GRAPH::resolveAllDrivers()
         return 1;
     };
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
 
     tp.push_loop( dirty_graphs.size(),
             [&]( const int a, const int b)
@@ -2136,7 +2136,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
         m_sheet_to_subgraphs_map[ subgraph->m_sheet ].emplace_back( subgraph );
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
 
     tp.push_loop( m_driver_subgraphs.size(),
             [&]( const int a, const int b)

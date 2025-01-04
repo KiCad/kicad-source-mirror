@@ -29,6 +29,7 @@
 #include <confirm.h>
 #include <kidialog.h>
 #include <core/arraydim.h>
+#include <core/thread_pool.h>
 #include <dialog_HTML_reporter_base.h>
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
@@ -1343,7 +1344,7 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
                 }
             };
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
     auto ret = tp.submit( saveFile );
 
 

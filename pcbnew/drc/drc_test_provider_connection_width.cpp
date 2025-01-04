@@ -45,9 +45,9 @@
 #include <math/vector2d.h>
 #include <pcb_shape.h>
 #include <progress_reporter.h>
+#include <core/thread_pool.h>
 #include <pcb_track.h>
 #include <pad.h>
-#include <pgm_base.h>
 #include <zone.h>
 
 /*
@@ -520,7 +520,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
         }
     }
 
-    BS::thread_pool&                 tp = Pgm().GetThreadPool();
+    thread_pool&                     tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;
     size_t                           total_effort = 0;
 

@@ -38,7 +38,6 @@
 #include <pcb_tablecell.h>
 #include <pcb_table.h>
 #include <pcb_dimension.h>
-#include <pgm_base.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
@@ -48,6 +47,7 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/vertex_set.h>
 #include <kidialog.h>
+#include <core/thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
 
@@ -592,7 +592,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     size_t finished = 0;
     bool cancelled = false;
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
 
     for( const std::pair<ZONE*, PCB_LAYER_ID>& fillItem : toFill )
         returns.emplace_back( std::make_pair( tp.submit( fill_lambda, fillItem ), 0 ) );

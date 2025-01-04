@@ -63,6 +63,7 @@
 #include <tool/tool_manager.h>
 #include <tool/selection_conditions.h>
 #include <string_utils.h>
+#include <core/thread_pool.h>
 #include <zone.h>
 #include <mutex>
 
@@ -981,7 +982,7 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
     if( aReporter )
         aReporter->Report( _( "Tessellating copper zones..." ) );
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;
 
     returns.reserve( zones.size() );

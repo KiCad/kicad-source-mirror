@@ -21,16 +21,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <core/thread_pool.h>
+#include "geometry/eda_angle.h"
 #include <numbers>
-
-#include <connectivity/connectivity_data.h>
+#include <pcb_track.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
-#include <geometry/eda_angle.h>
-#include <pcb_track.h>
-#include <pgm_base.h>
+#include <connectivity/connectivity_data.h>
 
 
 /*
@@ -205,7 +204,7 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
     const int progressDelta = 250;
     int       ii = 0;
 
-    BS::thread_pool&               tp = Pgm().GetThreadPool();
+    thread_pool&                   tp = GetKiCadThreadPool();
     std::vector<std::future<bool>> returns;
 
     returns.reserve( m_drcEngine->GetBoard()->Tracks().size() );

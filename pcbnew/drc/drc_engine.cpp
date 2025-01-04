@@ -41,6 +41,7 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <core/profile.h>
+#include <core/thread_pool.h>
 #include <zone.h>
 
 

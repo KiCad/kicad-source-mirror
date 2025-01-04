@@ -26,7 +26,7 @@
 
 #include <utility>
 
-#include <pgm_base.h>
+#include <core/thread_pool.h>
 #include <ki_exception.h>
 #include <sim/sim_library_spice.h>
 #include <sim/spice_grammar.h>
@@ -138,7 +138,7 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aRepor
             };
 
     // Read all self-contained models in parallel
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
 
     tp.push_loop( modelQueue.size(),
             [&]( const int a, const int b )

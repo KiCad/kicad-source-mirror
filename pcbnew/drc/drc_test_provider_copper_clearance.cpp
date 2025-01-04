@@ -29,7 +29,7 @@
 #include <pcb_shape.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <pgm_base.h>
+#include <core/thread_pool.h>
 #include <zone.h>
 
 #include <geometry/seg.h>
@@ -724,7 +724,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
         }
     };
 
-    BS::thread_pool& tp = Pgm().GetThreadPool();
+    thread_pool& tp = GetKiCadThreadPool();
 
     tp.push_loop( m_board->Tracks().size(), testTrack );
 
@@ -978,7 +978,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 {
-    BS::thread_pool&    tp = Pgm().GetThreadPool();
+    thread_pool&        tp = GetKiCadThreadPool();
     size_t              count = 0;
     std::atomic<size_t> done( 1 );
 
@@ -1062,7 +1062,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
 {
-    BS::thread_pool&    tp = Pgm().GetThreadPool();
+    thread_pool&        tp = GetKiCadThreadPool();
     size_t              count = m_board->Drawings().size();
     std::atomic<size_t> done( 1 );
 
@@ -1226,7 +1226,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
     using report_data = std::tuple<int, int, VECTOR2I, int, int, PCB_LAYER_ID>;
 
     std::vector<std::future<report_data>> futures;
-    BS::thread_pool&                      tp = Pgm().GetThreadPool();
+    thread_pool&                          tp = GetKiCadThreadPool();
     std::atomic<size_t>                   done( 1 );
 
     auto checkZones =
