@@ -327,7 +327,6 @@ public:
         SetWindowStyleFlag( style );
 #endif //  _WIN32
 
-
         Connect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
 
         if( jobTypeInfos.contains( aOutput->m_type ) )
@@ -695,7 +694,7 @@ void PANEL_JOBS::addJobOutputPanel( JOBSET_OUTPUT* aOutput )
 #if __OSX__
     m_outputListSizer->Add( outputPanel, 0, wxEXPAND, 5 );
 #else
-    m_outputListSizer->Add( outputPanel, 0, wxEXPAND|wxBOTTOM, 5 );
+    m_outputListSizer->Add( outputPanel, 0, wxEXPAND|wxALL, 3 );
 #endif
 
     m_outputPanelMap[aOutput] = outputPanel;

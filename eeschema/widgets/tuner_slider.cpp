@@ -51,6 +51,14 @@ TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME_UI* aFrame, wxWindow* aParent,
         m_value( 0.0 ),
         m_frame( aFrame )
 {
+#if  _WIN32
+        // BORDER_RAISED/SUNKEN look pretty on every platform but Windows
+        long style = GetWindowStyleFlag();
+        style &= ~wxBORDER_MASK;
+        style |= wxBORDER_SIMPLE;
+        SetWindowStyleFlag( style );
+#endif //  _WIN32
+
     const SPICE_ITEM* item = m_frame->GetExporter()->FindItem( m_ref );
 
     if( !item )
