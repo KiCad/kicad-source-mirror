@@ -22,6 +22,7 @@
 #include <sch_plotter.h>
 #include "command_sch_export_plot.h"
 #include <cli/exit_codes.h>
+#include "font/kicad_font_name.h"
 #include "jobs/job_export_sch_plot.h"
 #include <layer_ids.h>
 #include <wx/crt.h>
@@ -38,6 +39,7 @@
 #define ARG_EXCLUDE_PDF_PROPERTY_POPUPS "--exclude-pdf-property-popups"
 #define ARG_EXCLUDE_PDF_HIERARCHICAL_LINKS "--exclude-pdf-hierarchical-links"
 #define ARG_EXCLUDE_PDF_METADATA "--exclude-pdf-metadata"
+#define ARG_FONT_NAME "--default-font"
 
 const JOB_HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
     JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT,
@@ -75,6 +77,10 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
             .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
             .implicit_value( true )
             .default_value( false );
+
+    m_argParser.add_argument( ARG_FONT_NAME )
+            .help( UTF8STDSTR( _( "Default font name" ) ) )
+            .default_value( wxString( KICAD_FONT_NAME ).ToStdString() );
 
     if( aPlotFormat == SCH_PLOT_FORMAT::PDF )
     {
@@ -149,6 +155,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     plotJob->m_plotPages = pages;
     plotJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
     plotJob->m_pageSizeSelect = JOB_PAGE_SIZE::PAGE_SIZE_AUTO;
+    plotJob->m_defaultFont = m_argParser.get( ARG_FONT_NAME );
 
     if( m_plotFormat == SCH_PLOT_FORMAT::PDF
             || m_plotFormat == SCH_PLOT_FORMAT::POST

@@ -80,6 +80,7 @@ public:
     SCH_PLOT_FORMAT       m_plotFormat;
     wxString              m_filename;
     wxString              m_drawingSheet;
+    wxString              m_defaultFont;
 
     bool                  m_plotAll;
     bool                  m_plotDrawingSheet;
