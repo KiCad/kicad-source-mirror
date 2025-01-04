@@ -1430,14 +1430,14 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     }
     else if( aLayer == LAYER_PAD_HOLEWALLS )
     {
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
         double widthFactor = ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
-        m_gal->SetLineWidth( widthFactor * m_holePlatingThickness );
-        m_gal->SetStrokeColor( color );
+        double lineWidth = widthFactor * m_holePlatingThickness;
+        m_gal->SetFillColor( color );
 
         std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
-        int holeSize = slot->GetWidth() + ( widthFactor * m_holePlatingThickness );
+        int holeSize = slot->GetWidth() + ( 2 * lineWidth );
 
         if( slot->GetSeg().A == slot->GetSeg().B )    // Circular hole
             m_gal->DrawCircle( slot->GetSeg().A, KiROUND( holeSize / 2.0 ) );
