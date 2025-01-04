@@ -21,7 +21,6 @@
 #define KICAD_SINGLETON_H
 
 #include <bs_thread_pool.hpp>
-#include <advanced_config.h>
 
 class KICAD_SINGLETON
 {
@@ -39,8 +38,7 @@ public:
 
     void Init()
     {
-        int num_threads = std::max( 0, ADVANCED_CFG::GetCfg().m_MaximumThreads );
-        m_ThreadPool = new BS::thread_pool( num_threads );
+        m_ThreadPool = new BS::thread_pool();
     }
 
     BS::thread_pool* m_ThreadPool;

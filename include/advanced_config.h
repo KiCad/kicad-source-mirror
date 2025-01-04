@@ -707,15 +707,6 @@ public:
      */
     double m_HoleWallPaintingMultiplier;
 
-    /**
-     * Default value for the maximum number of threads to use for parallel processing.
-     * Setting this value to 0 or less will mean that we use the number of cores available
-     *
-     * Setting name: "MaximumThreads"
-     * Default value: 0
-     */
-    int m_MaximumThreads;
-
 ///@}
 
 private:
