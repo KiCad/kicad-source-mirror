@@ -27,12 +27,13 @@
 #ifndef GL_CONTEXT_MANAGER_H
 #define GL_CONTEXT_MANAGER_H
 
+#include <import_export.h>
 #include <gal/gal.h>
 #include <wx/glcanvas.h>
 #include <mutex>
 #include <map>
 
-class GAL_API GL_CONTEXT_MANAGER
+class APIEXPORT GL_CONTEXT_MANAGER
 {
 public:
     /**
@@ -48,7 +49,7 @@ public:
      *
      * @return Created OpenGL context.
      */
-    wxGLContext* CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther = nullptr );
+    APIEXPORT wxGLContext* CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther = nullptr );
 
     /**
      * Destroy a managed OpenGL context.
@@ -57,14 +58,14 @@ public:
      *
      * @param aContext is the OpenGL context to be destroyed. It will not be managed anymore.
      */
-    void DestroyCtx( wxGLContext* aContext );
+    APIEXPORT void DestroyCtx( wxGLContext* aContext );
 
     /**
      * Destroy all managed OpenGL contexts.
      *
      * This method should be called in the final deinitialization routine.
      */
-    void DeleteAll();
+    APIEXPORT void DeleteAll();
 
     /**
      * Set a context as current and prevents other canvases from switching it.
@@ -76,7 +77,7 @@ public:
      * @param aCanvas (optional) allows caller to bind the context to a non-parent canvas
      *                (e.g. when a few canvases share a single GL context).
      */
-    void LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas );
+    APIEXPORT void LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas );
 
     /**
      * Allow other canvases to bind an OpenGL context.
@@ -84,14 +85,14 @@ public:
      * @param aContext is the currently bound context. It is only a check to assure the right
      *                 canvas wants to unlock GL context.
      */
-    void UnlockCtx( wxGLContext* aContext );
+    APIEXPORT void UnlockCtx( wxGLContext* aContext );
 
     /**
      * Get the currently bound GL context.
      *
      * @return the currently bound GL context.
      */
-    wxGLContext* GetCurrentCtx() const
+    APIEXPORT wxGLContext* GetCurrentCtx() const
     {
         return m_glCtx;
     }
@@ -101,7 +102,7 @@ public:
      *
      * @return the currently bound GL canvas.
      */
-    wxGLCanvas* GetCurrentCanvas() const
+    APIEXPORT wxGLCanvas* GetCurrentCanvas() const
     {
         auto it = m_glContexts.find( m_glCtx );
         return it != m_glContexts.end() ? it->second : nullptr;
@@ -113,7 +114,7 @@ public:
      * @param aFunction is the function to be executed.
      */
     template<typename Func, typename... Args>
-    auto RunWithoutCtxLock( Func&& aFunction, Args&&... args )
+    APIEXPORT auto RunWithoutCtxLock( Func&& aFunction, Args&&... args )
     {
         wxGLContext* currentCtx = GetCurrentCtx();
         wxGLCanvas* currentCanvas = GetCurrentCanvas();

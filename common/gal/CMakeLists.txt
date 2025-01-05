@@ -34,7 +34,6 @@ set( GAL_SRCS
     opengl/opengl_gal.cpp
     opengl/gl_resources.cpp
 
-    opengl/gl_context_mgr.cpp
     opengl/shader.cpp
     opengl/vertex_item.cpp
     opengl/vertex_container.cpp

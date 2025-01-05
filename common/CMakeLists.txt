@@ -60,6 +60,7 @@ set( KICOMMON_SRCS
 
     # Gal
     gal/color4d.cpp
+    gal/opengl/gl_context_mgr.cpp
     # Jobs
     jobs/job.cpp
     jobs/job_dispatcher.cpp
