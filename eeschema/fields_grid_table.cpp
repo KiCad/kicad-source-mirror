@@ -402,6 +402,51 @@ void FIELDS_GRID_TABLE::onUnitsChanged( wxCommandEvent& aEvent )
 }
 
 
+int FIELDS_GRID_TABLE::getVisibleRowCount() const
+{
+    if( m_frame->GetFrameType() == FRAME_SCH
+        || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
+    {
+        int visibleRows = 0;
+
+        for( const SCH_FIELD& field : *this )
+        {
+            if( !field.IsPrivate() )
+                visibleRows++;
+        }
+
+        return visibleRows;
+    }
+
+    return (int) this->size();
+}
+
+
+SCH_FIELD& FIELDS_GRID_TABLE::getField( int aRow )
+{
+    if( m_frame->GetFrameType() == FRAME_SCH
+        || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
+    {
+        int visibleRow = 0;
+
+        for( SCH_FIELD& field : *this )
+        {
+            if( field.IsPrivate() )
+                continue;
+
+            if( visibleRow == aRow )
+                return field;
+
+            ++visibleRow;
+        }
+
+        wxFAIL_MSG( wxT( "Row index off end of visible row count" ) );
+    }
+
+    return this->at( aRow );
+}
+
+
 wxString FIELDS_GRID_TABLE::GetColLabelValue( int aCol )
 {
     switch( aCol )
@@ -595,7 +640,7 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
     wxCHECK( aRow < GetNumberRows(), wxEmptyString );
 
     wxGrid*          grid = GetView();
-    const SCH_FIELD& field = this->at( (size_t) aRow );
+    const SCH_FIELD& field = getField( aRow );
 
     if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
             && grid->IsCellEditControlShown() )
@@ -712,7 +757,7 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
 bool FIELDS_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 {
     wxCHECK( aRow < GetNumberRows(), false );
-    const SCH_FIELD& field = this->at( (size_t) aRow );
+    const SCH_FIELD& field = getField( aRow );
 
     switch( aCol )
     {
@@ -731,7 +776,7 @@ bool FIELDS_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
     wxCHECK( aRow < GetNumberRows(), /*void*/ );
-    SCH_FIELD& field = this->at( (size_t) aRow );
+    SCH_FIELD& field = getField( aRow );
     VECTOR2I   pos;
     wxString   value = aValue;
 
@@ -899,7 +944,7 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 void FIELDS_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
     wxCHECK( aRow < GetNumberRows(), /*void*/ );
-    SCH_FIELD& field = this->at( (size_t) aRow );
+    SCH_FIELD& field = getField( aRow );
 
     switch( aCol )
     {
@@ -929,6 +974,34 @@ void FIELDS_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
     }
 
     m_dialog->OnModify();
+}
+
+
+wxString FIELDS_GRID_TABLE::StringFromBool( bool aValue ) const
+{
+    if( aValue )
+        return wxT( "1" );
+    else
+        return wxT( "0" );
+}
+
+
+bool FIELDS_GRID_TABLE::BoolFromString( const wxString& aValue ) const
+{
+    if( aValue == wxS( "1" ) )
+    {
+        return true;
+    }
+    else if( aValue == wxS( "0" ) )
+    {
+        return false;
+    }
+    else
+    {
+        wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean correctly and "
+                                      "will be perceived as FALSE", aValue ) );
+        return false;
+    }
 }
 
 
@@ -982,29 +1055,3 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 }
 
 
-wxString FIELDS_GRID_TABLE::StringFromBool( bool aValue ) const
-{
-    if( aValue )
-        return wxT( "1" );
-    else
-        return wxT( "0" );
-}
-
-
-bool FIELDS_GRID_TABLE::BoolFromString( const wxString& aValue ) const
-{
-    if( aValue == wxS( "1" ) )
-    {
-        return true;
-    }
-    else if( aValue == wxS( "0" ) )
-    {
-        return false;
-    }
-    else
-    {
-        wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean correctly and "
-                                      "will be perceived as FALSE", aValue ) );
-        return false;
-    }
-}

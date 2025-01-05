@@ -49,7 +49,7 @@ protected:
     void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
     void doPopupSelection( wxCommandEvent& event ) override;
 
-protected::
+protected:
     DIALOG_SHIM*    m_dlg;
     EMBEDDED_FILES* m_files;
 };
@@ -90,7 +90,7 @@ public:
                        SCH_LABEL_BASE* aLabel );
     ~FIELDS_GRID_TABLE() override;
 
-    int GetNumberRows() override { return (int) this->size(); }
+    int GetNumberRows() override { return getVisibleRowCount(); }
     int GetNumberCols() override { return FDC_COUNT; }
 
     wxString GetColLabelValue( int aCol ) override;
@@ -117,6 +117,10 @@ protected:
     void initGrid( WX_GRID* aGrid );
 
     void onUnitsChanged( wxCommandEvent& aEvent );
+
+    int getVisibleRowCount() const;
+
+    SCH_FIELD& getField( int aRow );
 
 private:
     SCH_BASE_FRAME*   m_frame;

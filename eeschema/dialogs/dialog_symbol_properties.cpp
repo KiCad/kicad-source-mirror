@@ -471,7 +471,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     }
 
     // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->size() );
+    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
     m_fieldsGrid->ProcessTableMessage( msg );
     AdjustFieldsGridColumns();
 
