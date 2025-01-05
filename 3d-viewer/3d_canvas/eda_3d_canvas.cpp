@@ -187,7 +187,8 @@ void EDA_3D_CANVAS::releaseOpenGL()
 {
     if( m_glRC )
     {
-        GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
+        GL_CONTEXT_MANAGER* gl_mgr = Pgm().GetGLContextManager();
+        gl_mgr->LockCtx( m_glRC, this );
 
         delete m_3d_render_raytracing;
         m_3d_render_raytracing = nullptr;
@@ -198,8 +199,8 @@ void EDA_3D_CANVAS::releaseOpenGL()
         // This is just a copy of a pointer, can safely be set to NULL.
         m_3d_render = nullptr;
 
-        GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
-        GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glRC );
+        gl_mgr->UnlockCtx( m_glRC );
+        gl_mgr->DestroyCtx( m_glRC );
         m_glRC = nullptr;
     }
 }
@@ -379,10 +380,11 @@ void EDA_3D_CANVAS::DoRePaint()
     if( !GetParent()->GetParent()->IsShownOnScreen() )
         return; // The parent board editor frame is no more alive
 
-    wxString           err_messages;
-    INFOBAR_REPORTER   warningReporter( m_parentInfoBar );
-    STATUSBAR_REPORTER activityReporter( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
-    int64_t            start_time = GetRunningMicroSecs();
+    wxString            err_messages;
+    INFOBAR_REPORTER    warningReporter( m_parentInfoBar );
+    STATUSBAR_REPORTER  activityReporter( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
+    int64_t             start_time = GetRunningMicroSecs();
+    GL_CONTEXT_MANAGER* gl_mgr = Pgm().GetGLContextManager();
 
     // "Makes the OpenGL state that is represented by the OpenGL rendering
     //  context context current, i.e. it will be used by all subsequent OpenGL calls.
@@ -390,7 +392,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
     // Explicitly create a new rendering context instance for this canvas.
     if( m_glRC == nullptr )
-        m_glRC = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
+        m_glRC = gl_mgr->CreateCtx( this );
 
     // CreateCtx could and does fail per sentry crash events, lets be graceful
     if( m_glRC == nullptr )
@@ -401,7 +403,7 @@ void EDA_3D_CANVAS::DoRePaint()
         return;
     }
 
-    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
+    gl_mgr->LockCtx( m_glRC, this );
 
     // Set the OpenGL viewport according to the client size of this canvas.
     // This is done here rather than in a wxSizeEvent handler because our
@@ -418,7 +420,7 @@ void EDA_3D_CANVAS::DoRePaint()
     {
         if( !initializeOpenGL() )
         {
-            GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+            gl_mgr->UnlockCtx( m_glRC );
             m_is_currently_painting.clear();
 
             return;
@@ -440,7 +442,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
         SwapBuffers();
 
-        GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+        gl_mgr->UnlockCtx( m_glRC );
         m_is_currently_painting.clear();
 
         return;
@@ -528,7 +530,7 @@ void EDA_3D_CANVAS::DoRePaint()
             m_is_opengl_version_supported = false;
             m_opengl_supports_raytracing  = false;
             m_is_opengl_initialized       = false;
-            GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+            gl_mgr->UnlockCtx( m_glRC );
             m_is_currently_painting.clear();
             return;
         }
@@ -553,7 +555,7 @@ void EDA_3D_CANVAS::DoRePaint()
     //  commands is displayed on the window."
     SwapBuffers();
 
-    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+    gl_mgr->UnlockCtx( m_glRC );
 
     if( m_mouse_was_moved || m_camera_is_moving )
     {

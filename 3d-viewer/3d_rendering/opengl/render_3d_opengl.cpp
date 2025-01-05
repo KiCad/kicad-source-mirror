@@ -36,6 +36,7 @@
 #include <3d_math.h>
 #include <glm/geometric.hpp>
 #include <lset.h>
+#include <pgm_base.h>
 #include <math/util.h>      // for KiROUND
 #include <utility>
 #include <vector>
@@ -490,7 +491,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         // Careful here!
         // We are in the middle of rendering and the reload method may show
         // a dialog box that requires the opengl context for a redraw
-        GL_CONTEXT_MANAGER::Get().RunWithoutCtxLock( [this, aStatusReporter, aWarningReporter]()
+        Pgm().GetGLContextManager()->RunWithoutCtxLock( [this, aStatusReporter, aWarningReporter]()
         {
             reload( aStatusReporter, aWarningReporter );
         } );

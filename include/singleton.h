@@ -35,6 +35,10 @@ public:
         delete m_ThreadPool;
 
         m_ThreadPool = nullptr;
+
+        m_GLContextManager->DeleteAll();
+        delete m_GLContextManager;
+        m_GLContextManager = nullptr;
     };
 
 
@@ -42,9 +46,12 @@ public:
     {
         int num_threads = std::max( 0, ADVANCED_CFG::GetCfg().m_MaximumThreads );
         m_ThreadPool = new BS::thread_pool( num_threads );
+        m_GLContextManager = new GL_CONTEXT_MANAGER();
     }
 
     BS::thread_pool* m_ThreadPool;
+    GL_CONTEXT_MANAGER* m_GLContextManager;
+
 };
 
 

@@ -27,14 +27,6 @@
 #include <wx/debug.h>
 
 
-GL_CONTEXT_MANAGER& GL_CONTEXT_MANAGER::Get()
-{
-    static GL_CONTEXT_MANAGER instance;
-
-    return instance;
-}
-
-
 wxGLContext* GL_CONTEXT_MANAGER::CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther )
 {
     wxGLContext* context = new wxGLContext( aCanvas, aOther );
@@ -122,11 +114,5 @@ void GL_CONTEXT_MANAGER::UnlockCtx( wxGLContext* aContext )
         wxFAIL_MSG( wxString::Format( wxS( "Trying to unlock GL context mutex from "
                     "a wrong context: aContext %p m_glCtx %p" ), aContext, m_glCtx ) );
     }
-}
-
-
-GL_CONTEXT_MANAGER::GL_CONTEXT_MANAGER()
-    : m_glCtx( nullptr )
-{
 }
 

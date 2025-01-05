@@ -27,19 +27,17 @@
 #ifndef GL_CONTEXT_MANAGER_H
 #define GL_CONTEXT_MANAGER_H
 
-#include <import_export.h>
+#include <kicommon.h>
 #include <gal/gal.h>
 #include <wx/glcanvas.h>
 #include <mutex>
 #include <map>
 
-class APIEXPORT GL_CONTEXT_MANAGER
+class KICOMMON_API GL_CONTEXT_MANAGER
 {
 public:
-    /**
-     * Return the GL_CONTEXT_MANAGER instance (singleton).
-     */
-    static GL_CONTEXT_MANAGER& Get();
+
+    GL_CONTEXT_MANAGER() : m_glCtx( nullptr ) {}
 
     /**
      * Create a managed OpenGL context.
@@ -49,7 +47,7 @@ public:
      *
      * @return Created OpenGL context.
      */
-    APIEXPORT wxGLContext* CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther = nullptr );
+    wxGLContext* CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther = nullptr );
 
     /**
      * Destroy a managed OpenGL context.
@@ -58,14 +56,14 @@ public:
      *
      * @param aContext is the OpenGL context to be destroyed. It will not be managed anymore.
      */
-    APIEXPORT void DestroyCtx( wxGLContext* aContext );
+    void DestroyCtx( wxGLContext* aContext );
 
     /**
      * Destroy all managed OpenGL contexts.
      *
      * This method should be called in the final deinitialization routine.
      */
-    APIEXPORT void DeleteAll();
+    void DeleteAll();
 
     /**
      * Set a context as current and prevents other canvases from switching it.
@@ -77,7 +75,7 @@ public:
      * @param aCanvas (optional) allows caller to bind the context to a non-parent canvas
      *                (e.g. when a few canvases share a single GL context).
      */
-    APIEXPORT void LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas );
+    void LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas );
 
     /**
      * Allow other canvases to bind an OpenGL context.
@@ -85,14 +83,14 @@ public:
      * @param aContext is the currently bound context. It is only a check to assure the right
      *                 canvas wants to unlock GL context.
      */
-    APIEXPORT void UnlockCtx( wxGLContext* aContext );
+    void UnlockCtx( wxGLContext* aContext );
 
     /**
      * Get the currently bound GL context.
      *
      * @return the currently bound GL context.
      */
-    APIEXPORT wxGLContext* GetCurrentCtx() const
+    wxGLContext* GetCurrentCtx() const
     {
         return m_glCtx;
     }
@@ -102,7 +100,7 @@ public:
      *
      * @return the currently bound GL canvas.
      */
-    APIEXPORT wxGLCanvas* GetCurrentCanvas() const
+    wxGLCanvas* GetCurrentCanvas() const
     {
         auto it = m_glContexts.find( m_glCtx );
         return it != m_glContexts.end() ? it->second : nullptr;
@@ -114,7 +112,7 @@ public:
      * @param aFunction is the function to be executed.
      */
     template<typename Func, typename... Args>
-    APIEXPORT auto RunWithoutCtxLock( Func&& aFunction, Args&&... args )
+    auto RunWithoutCtxLock( Func&& aFunction, Args&&... args )
     {
         wxGLContext* currentCtx = GetCurrentCtx();
         wxGLCanvas* currentCanvas = GetCurrentCanvas();
@@ -143,11 +141,6 @@ private:
 
     ///< Lock to prevent unexpected GL context switching.
     std::mutex m_glCtxMutex;
-
-    // Singleton
-    GL_CONTEXT_MANAGER();
-    GL_CONTEXT_MANAGER( const GL_CONTEXT_MANAGER& );
-    void operator=( const GL_CONTEXT_MANAGER& );
 };
 
 #endif /* GL_CONTEXT_MANAGER_H */
