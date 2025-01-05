@@ -3400,10 +3400,17 @@ void SPECCTRA_DB::doSESSION( SESSION* growth )
         )
     */
 
+    // The path can be defined by multiple tokens if there are spaces in it (e.g. by TopoR).
     NeedSYMBOL();
-    growth->session_id = CurText();
+    std::stringstream fullPath;
+    fullPath << CurText();
 
-    while( ( tok = NextTok() ) != T_RIGHT )
+    while( ( tok = NextTok() ) != T_LEFT )
+        fullPath << " " << CurText();
+
+    growth->session_id = fullPath.str();
+
+    do
     {
         if( tok != T_LEFT )
             Expecting( T_LEFT );
@@ -3461,7 +3468,7 @@ void SPECCTRA_DB::doSESSION( SESSION* growth )
         default:
             Unexpected( CurText() );
         }
-    }
+    } while( ( tok = NextTok() ) != T_RIGHT );
 }
 
 
