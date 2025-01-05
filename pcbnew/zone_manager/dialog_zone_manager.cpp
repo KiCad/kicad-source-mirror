@@ -407,8 +407,11 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
         gal->GetView()->UpdateItems();
         gal->Refresh();
         int layer = gal->GetLayer();
-        gal->ActivateSelectedZone(
-                m_modelZoneOverviewTable->GetZone( m_viewZonesOverview->GetSelection() ) );
+
+        // rebuild the currently displayed zone and refresh display
+        ZONE* curr_zone = gal->GetZone();
+        gal->ActivateSelectedZone( curr_zone );
+
         gal->OnLayerSelected( layer );
     }
 
