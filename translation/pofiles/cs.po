@@ -7,7 +7,7 @@
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
 # Jan Vykydal <vvykys@gmail.com>, 2020, 2021.
-# Jan Straka <bach@email.cz>, 2020, 2021, 2022, 2023, 2024.
+# Jan Straka <bach@email.cz>, 2020, 2021, 2022, 2023, 2024, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022, 2023.
 # Ondřej Čertík <ondrej@certik.us>, 2022.
@@ -21,16 +21,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 12:45+0300\n"
-"PO-Revision-Date: 2024-11-18 11:09+0000\n"
+"PO-Revision-Date: 2025-01-05 16:29+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -1906,9 +1906,8 @@ msgid "&No"
 msgstr "&Ne"
 
 #: common/design_block_info_impl.cpp:116
-#, fuzzy
 msgid "Fetching design_block libraries..."
-msgstr "Načítání knihoven pouzder..."
+msgstr "Načítání knihovny návrhových bloků..."
 
 #: common/design_block_info_impl.cpp:147
 msgid "Loading design_blocks..."
@@ -1964,14 +1963,14 @@ msgid "Unexpected folder '%s' found in library path '%s'."
 msgstr "Neočekávaný složka '%s' nalezena v cestě knihovny '%s'."
 
 #: common/design_block_io.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "Knihovnu symbolů '%s' nelze odstranit."
+msgstr "Knihovnu návrhových bloků '%s' nelze odstranit."
 
 #: common/design_block_io.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Soubor '%s' nelze vytvořit."
+msgstr "Soubor s metadaty návrhových bloků '%s' nelze přečíst."
 
 #: common/design_block_io.cpp:351
 msgid "Design block does not have a valid library ID."
@@ -1983,9 +1982,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Zdrojový soubor schématu '%s' neexistuje."
 
 #: common/design_block_io.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Soubor '%s' nelze vytvořit."
+msgstr "Složka návrhových bloků '%s' nemohla být vytvořena."
 
 #: common/design_block_io.cpp:387
 #, c-format
@@ -1993,9 +1992,9 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "Soubor schématu '%s' nelze uložit jako blok návrhu na '%s'."
 
 #: common/design_block_io.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Soubor '%s' nelze vytvořit."
+msgstr "Soubor metadat návrhových bloků '%s' nelze uložit."
 
 #: common/design_block_io.cpp:435
 #, c-format
@@ -2003,9 +2002,9 @@ msgid "Design block '%s' does not exist."
 msgstr "Návrhový blok '%s' neexistuje."
 
 #: common/design_block_io.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Soubor '%s' nelze vytvořit."
+msgstr "Složka '%s' návrhových bloků nelze odstranit."
 
 #: common/design_block_lib_table.cpp:230
 #, c-format
@@ -2791,9 +2790,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "Výběr obsahuje %d uzamčených položek."
+msgstr "Výběr obsahuje %lu uzamčených položek."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3428,7 +3427,7 @@ msgstr "Nastavení stránky..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: kicad/dialogs/panel_jobs_base.cpp:247
@@ -4437,28 +4436,23 @@ msgstr "Více knihoven nemůže sdílet stejnou přezdívku („%s“)."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:811
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:841
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
-"Vyberte jeden nebo více řádků obsahujících knihovny ve formátu Legacy (* ."
-"lib), které chcete uložit jako aktuální formát KiCad (* .kicad_sym)."
+"Vyberte jeden nebo více řádků obsahujících knihovny pro uložení jako "
+"aktuální formát KiCadu."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:819
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
-msgstr ""
-"Uložit '%s' jako aktuální formát (*.kicad_sym) a nahradit starší položku v "
-"tabulce?"
+msgstr "Uložit '%s' jako aktuální formát a nahradit položku v tabulce?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:825
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
-msgstr ""
-"Uložit %d starší verze knihoven jako aktuální formát KiCad (*.kicad_sym) a "
-"nahradit starší položky v tabulce?"
+msgstr "Uložit %d jako aktuální formát KiCadu a nahradit položky v tabulce?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:843
 #: eeschema/dialogs/dialog_symbol_remap.cpp:225
@@ -4469,10 +4463,11 @@ msgid "Library '%s' not found."
 msgstr "Knihovna '%s' nenalezena."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
-msgstr "Soubor '%s' již existuje. Chcete tento soubor přepsat?"
+msgstr ""
+"Soubor '%s' již existuje.Chcete přepsat všechny existující návrhové bloky?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:859
 #: eeschema/dialogs/panel_sym_lib_table.cpp:980
@@ -4481,9 +4476,9 @@ msgid "Migrate Library"
 msgstr "Migrovat knihovnu"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:888
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Selhalo uložení souboru knihovny symbolů '%s'."
+msgstr "Selhalo uložení souboru knihovny návrhového bloku '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:927
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:959
@@ -6690,9 +6685,9 @@ msgstr ""
 "Adresář obsahující skripty specifické pro uživatele nainstalované s KiCadem"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Zastaralá verze KICAD_SYMBOL_DIR."
+msgstr "Zastaralá verze %s."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -6843,24 +6838,24 @@ msgid "Error removing directory '%s': %s"
 msgstr "Chyba při odstraňování složky '%s': %s"
 
 #: common/gestfich.cpp:364 common/gestfich.cpp:417 common/gestfich.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Nelze vytvořit adresář '%s'"
+msgstr "Nelze otevřít zdrojový adresář: %s"
 
 #: common/gestfich.cpp:371 common/gestfich.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Nelze vytvořit adresář '%s'"
+msgstr "Nelze vytvořit cílový adresář: %s"
 
 #: common/gestfich.cpp:396 common/gestfich.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Nemohu se připojit k '%s'"
+msgstr "Nelze zkopírovat soubor: %s do %s"
 
 #: common/gestfich.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Nepodařilo se přečíst soubor"
+msgstr "Nelze přečíst soubor: %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -6878,14 +6873,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Nelze vyhledat vzdálené '%s'"
 
 #: common/git/git_pull_handler.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Nelze se připojit ke vzdálenému '%s'"
+msgstr "Nelze se připojit ke vzdálenému '%s': %s"
 
 #: common/git/git_pull_handler.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Nelze obnovit data ze vzdáleného úložiště '%s'"
+msgstr "Nelze obnovit data ze vzdáleného úložiště '%s': %s"
 
 #: common/git/git_pull_handler.cpp:94
 msgid "Could not read 'FETCH_HEAD'"
@@ -6945,14 +6940,14 @@ msgid "Could not lookup remote"
 msgstr "Nelze vyhledat vzdálený vklad"
 
 #: common/git/git_push_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "Nelze se připojit ke vzdálenému '%s'"
+msgstr "Nelze se připojit ke vzdálenému: %s"
 
 #: common/git/git_push_handler.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Nelze odeslat na vzdálený repozitář"
+msgstr "Nelze odeslat na vzdálený: %s"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
@@ -7680,9 +7675,8 @@ msgid "Archive"
 msgstr "Rozbalit"
 
 #: common/jobs/jobs_output_folder.cpp:84 kicad/dialogs/panel_jobs.cpp:62
-#, fuzzy
 msgid "Folder"
-msgstr "Složka:"
+msgstr "Složka"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -10480,9 +10474,8 @@ msgid "Footprint '%s' not found."
 msgstr "Pouzdro '%s' nenalezeno."
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Chyba načítání písma '%s'."
+msgstr "Chyba načítání pouzdra"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -10554,7 +10547,6 @@ msgid "Footprint Filters:"
 msgstr "Filtry pouzdra:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
 msgstr "Zobrazit vybrané pouzdro"
 
@@ -10612,12 +10604,10 @@ msgid "Select previous symbol with no footprint assignment"
 msgstr "Vyberte předchozí symbol bez přiřazení pouzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:125
-#, fuzzy
 msgid "Assign Footprint"
-msgstr "Přiřadit pouzdra"
+msgstr "Přiřadit pouzdro"
 
 #: cvpcb/tools/cvpcb_actions.cpp:131
-#, fuzzy
 msgid "Automatically Assign Footprints"
 msgstr "Automaticky přiřadit pouzdra"
 
@@ -10626,9 +10616,8 @@ msgid "Assign footprints automatically using a footprint association file"
 msgstr "Přiřadit pouzdra automaticky pomocí souboru pouzder"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Přiřazení pouzdra"
+msgstr "Smazat přiřazení pouzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:145
 #, fuzzy
@@ -10850,7 +10839,6 @@ msgstr "Upravit možnosti této položky knihovny:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3025
 #: pcbnew/footprint.cpp:4064 pcbnew/plot_board_layers.cpp:129
-#, fuzzy
 msgid "Library Description"
 msgstr "Popis knihovny"
 
@@ -15474,9 +15462,8 @@ msgstr "Okraje buněk:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:305
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:229
-#, fuzzy
 msgid "Edit Table..."
-msgstr "Upravit hodnotu..."
+msgstr "Upravit tabulku..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:230
@@ -17746,7 +17733,7 @@ msgstr "Symboly do nové knihovny..."
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:120
 #: pcbnew/menubar_footprint_editor.cpp:124 pcbnew/menubar_pcb_editor.cpp:232
 msgid "Panels"
-msgstr ""
+msgstr "Panely"
 
 #: eeschema/menubar.cpp:366
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
@@ -20974,9 +20961,8 @@ msgid ""
 msgstr "Tato simulace neposkytuje grafy. Výsledky najdete v okně konzoly."
 
 #: eeschema/sim/simulator_frame.cpp:346
-#, fuzzy
 msgid "SPICE Simulator"
-msgstr "Simulátor"
+msgstr "SPICE simulátor"
 
 #: eeschema/sim/simulator_frame.cpp:370 eeschema/tools/simulator_control.cpp:84
 msgid "Errors during netlist generation."
@@ -21567,9 +21553,9 @@ msgid "Manage symbol libraries"
 msgstr "Správa knihoven symbolů"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
-msgstr "Symbol %s je odvozený symbol.  Grafika symbolu nebude upravitelná."
+msgstr "Symbol %s je odvozený symbol. Grafika symbolu nebude upravitelná."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:947
 #, fuzzy
@@ -21593,14 +21579,12 @@ msgid "Select type of item to save"
 msgstr "Vybrat vrstvu pro odstranění:"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
-#, fuzzy
 msgid "Copy symbol"
 msgstr "Kopírovat symbol"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:963
-#, fuzzy
 msgid "Copy library"
-msgstr "knihovna"
+msgstr "Kopírovat knihovnu"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
@@ -21766,14 +21750,12 @@ msgid ""
 msgstr "Opravdu chcete přepsat soubory v cílové složce?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
-#, fuzzy
 msgid "Overwrite All"
-msgstr "Přepsat"
+msgstr "Přepsat vše"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
-#, fuzzy
 msgid "Rename All"
-msgstr "Přejmenovat soubor"
+msgstr "Přejmenovat vše"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1098
 #, c-format
@@ -21972,33 +21954,28 @@ msgid "Synchronize sheet pins and hierarchical labels"
 msgstr "Změnit existující položku na hierarchické označení"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
-#, fuzzy
 msgid "Symbol name"
-msgstr "Název symbolu:"
+msgstr "Název symbolu"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:34
-#, fuzzy
 msgid "Add Hierarchical Labels"
-msgstr "Přidat hierarchické označení"
+msgstr "Přidat hierarchická označení"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:37
-#, fuzzy
 msgid "Delete Sheet Pins"
-msgstr "Smazat vývod listu"
+msgstr "Smazat vývody listu"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:59
 msgid "Sheet name"
 msgstr "Název listu"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:69
-#, fuzzy
 msgid "Add Sheet Pins"
-msgstr "Přidat vývod listu"
+msgstr "Přidat vývody listu"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:72
-#, fuzzy
 msgid "Delete Hierarchical Labels"
-msgstr "Smazat hierarchické označení"
+msgstr "Smazat hierarchická označení"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
 #, fuzzy
@@ -22140,19 +22117,19 @@ msgid "Cannot find %s pin '%s'."
 msgstr "Nelze najít %s vývod '%s'."
 
 #: eeschema/tools/backannotate.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "Změnit hodnotu pole '%s' na '%s'."
+msgstr "Změnit %s pole '%s' hodnota na '%s'."
 
 #: eeschema/tools/backannotate.cpp:540
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s field '%s' with value '%s'."
-msgstr "Přidat pole '%s' s hodnotou '%s'."
+msgstr "Přidat %s pole '%s' s hodnotou '%s'."
 
 #: eeschema/tools/backannotate.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s field '%s.'"
-msgstr "Smazat pole '%s.'"
+msgstr "Smazat %s pole '%s.'"
 
 #: eeschema/tools/backannotate.cpp:715
 #, c-format
@@ -22270,27 +22247,24 @@ msgid "Save Library As..."
 msgstr "Uložit knihovnu jako..."
 
 #: eeschema/tools/ee_actions.cpp:189
-#, fuzzy
 msgid "Save the current library to a new file"
-msgstr "Uložit aktuální knihovnu do nového souboru."
+msgstr "Uložit aktuální knihovnu do nového souboru"
 
 #: eeschema/tools/ee_actions.cpp:195
 msgid "New Symbol..."
 msgstr "Nový symbol..."
 
 #: eeschema/tools/ee_actions.cpp:196
-#, fuzzy
 msgid "Create a new symbol in an existing library"
-msgstr "Odvozeno od stávajícího symbolu:"
+msgstr "Vytvořit nový symbol v existující knihovně"
 
 #: eeschema/tools/ee_actions.cpp:202
 msgid "Derive from Existing Symbol"
 msgstr "Odvozeno od existujícího symbolu"
 
 #: eeschema/tools/ee_actions.cpp:203
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "Odvozeno od stávajícího symbolu:"
+msgstr "Vytvořit nový symbol, odvozený od existujícího symbolu"
 
 #: eeschema/tools/ee_actions.cpp:209
 msgid "Edit Symbol"
@@ -22309,18 +22283,16 @@ msgid "Rename Symbol..."
 msgstr "Přejmenovat symbol..."
 
 #: eeschema/tools/ee_actions.cpp:229
-#, fuzzy
 msgid "Save the current symbol to a different library or name"
-msgstr "Uložit aktuální symbol na jiný knihovny."
+msgstr "Uložit aktuální symbol do jiné knihovny nebo názvu"
 
 #: eeschema/tools/ee_actions.cpp:235
 msgid "Save Copy As..."
 msgstr "Uložit kopii jako..."
 
 #: eeschema/tools/ee_actions.cpp:236
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library or name"
-msgstr "Uložit aktuální symbol na jiný knihovny."
+msgstr "Uložit kopii aktuálního symbolu do jiné knihovny nebo názvu"
 
 #: eeschema/tools/ee_actions.cpp:243
 msgid "Remove the selected symbol from its library"
@@ -22351,9 +22323,9 @@ msgid "Set Unit Display Name..."
 msgstr "Nastavit zobrazovaný název jednotky..."
 
 #: eeschema/tools/ee_actions.cpp:282
-#, fuzzy
 msgid "Set the display name for a particular unit in a multi-unit symbol"
-msgstr "Nastavit název zobrazení pro jednotku"
+msgstr ""
+"Nastavit zobrazovaný název konkrétní jednotky ve vícejednotkovém symbolu"
 
 #: eeschema/tools/ee_actions.cpp:287
 msgid "Add Symbol to Schematic"
@@ -22419,39 +22391,33 @@ msgid "Show Hidden Fields"
 msgstr "Zobrazit skrytá pole"
 
 #: eeschema/tools/ee_actions.cpp:348
-#, fuzzy
 msgid "Draw Pins"
-msgstr "Kresby"
+msgstr "Kreslit vývody"
 
 #: eeschema/tools/ee_actions.cpp:356 eeschema/tools/ee_actions.cpp:588
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:300
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:1043
 #: pcbnew/tools/pcb_actions.cpp:185
-#, fuzzy
 msgid "Draw Text"
-msgstr "Kreslit čáru"
+msgstr "Kreslit text"
 
 #: eeschema/tools/ee_actions.cpp:364 eeschema/tools/ee_actions.cpp:595
 #: pcbnew/tools/pcb_actions.cpp:192
-#, fuzzy
 msgid "Draw Text Boxes"
-msgstr "Kreslit čáru"
+msgstr "Kreslit textová pole"
 
 #: eeschema/tools/ee_actions.cpp:371 eeschema/tools/ee_actions.cpp:1433
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:108
-#, fuzzy
 msgid "Draw Lines"
-msgstr "Kreslit čáru"
+msgstr "Kreslit čáry"
 
 #: eeschema/tools/ee_actions.cpp:372
-#, fuzzy
 msgid "Draw connected graphic lines"
-msgstr "Přidat připojené grafické čáry"
+msgstr "Nakreslit připojené grafické čáry"
 
 #: eeschema/tools/ee_actions.cpp:380 pcbnew/tools/pcb_actions.cpp:117
-#, fuzzy
 msgid "Draw Polygons"
-msgstr "Grafická Kři&vka"
+msgstr "Kreslit mnohoúhelníky"
 
 #: eeschema/tools/ee_actions.cpp:388
 msgid "Move Symbol Anchor"
@@ -22482,54 +22448,45 @@ msgid "Copy pin number size to other pins in symbol"
 msgstr "Kopírovat velikost čísla vývodu do ostatních vývodů v symbolu"
 
 #: eeschema/tools/ee_actions.cpp:423
-#, fuzzy
 msgid "Place Symbols"
-msgstr "Vložit symbol"
+msgstr "Umístit symboly"
 
 #: eeschema/tools/ee_actions.cpp:431
-#, fuzzy
 msgid "Place Next Symbol Unit"
-msgstr "Jednotka symbolu"
+msgstr "Umístit další jednotku symbolu"
 
 #: eeschema/tools/ee_actions.cpp:432
-#, fuzzy
 msgid ""
 "Place the next unit of the current symbol that is missing from the schematic"
-msgstr "Přidat aktuální symbol do schématu"
+msgstr "Umístit další jednotku aktuálního symbolu, která ve schématu chybí"
 
 #: eeschema/tools/ee_actions.cpp:442
-#, fuzzy
 msgid "Place Power Symbols"
-msgstr "Symbol napájení"
+msgstr "Umístit symboly napájení"
 
 #: eeschema/tools/ee_actions.cpp:451
-#, fuzzy
 msgid "Place Design Block"
-msgstr "Zrušit blok"
+msgstr "Umístit návrhový blok"
 
 #: eeschema/tools/ee_actions.cpp:452
 msgid "Add selected design block to current sheet"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "Place No Connect Flags"
-msgstr "Přidat označení nezapojeno"
+msgstr "Umístit označení nezapojeno"
 
 #: eeschema/tools/ee_actions.cpp:473
-#, fuzzy
 msgid "Place Junctions"
-msgstr "Přidat propojení"
+msgstr "Umístit propojení"
 
 #: eeschema/tools/ee_actions.cpp:483
-#, fuzzy
 msgid "Place Wire to Bus Entries"
-msgstr "Umístit vodič do sběrnice"
+msgstr "Umístit vstup do sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Place Net Labels"
-msgstr "Umístit popisku sítě"
+msgstr "Umístit označení sítě"
 
 #: eeschema/tools/ee_actions.cpp:501
 #, fuzzy
@@ -22537,19 +22494,16 @@ msgid "Place Directive Labels"
 msgstr "Označení směrnice"
 
 #: eeschema/tools/ee_actions.cpp:510
-#, fuzzy
 msgid "Place Hierarchical Labels"
-msgstr "Hierarchická označení"
+msgstr "Umístit hierarchická označení"
 
 #: eeschema/tools/ee_actions.cpp:519
-#, fuzzy
 msgid "Draw Hierarchical Sheets"
-msgstr "Přidat hierarchický list"
+msgstr "Kreslit hierarchické listy"
 
 #: eeschema/tools/ee_actions.cpp:527
-#, fuzzy
 msgid "Draw Sheet from File"
-msgstr "Soubor výkresového listu"
+msgstr "Kreslit list ze souboru"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Copy sheet into project and draw on current sheet"
@@ -22566,65 +22520,53 @@ msgid "Copy design block into project as a sheet on current sheet"
 msgstr "Vytvoří soubor PNG z aktuálního pohledu"
 
 #: eeschema/tools/ee_actions.cpp:545
-#, fuzzy
 msgid "Place Sheet Pins"
-msgstr "Umístit list"
+msgstr "Umístit vývody listu"
 
 #: eeschema/tools/ee_actions.cpp:552 eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Sync Sheet Pins"
-msgstr "Vývod listu"
+msgstr "Synchronizovat vývody listu"
 
 #: eeschema/tools/ee_actions.cpp:568
-#, fuzzy
 msgid "Import Sheet"
-msgstr "Importovat vývod listu"
+msgstr "Importovat list"
 
 #: eeschema/tools/ee_actions.cpp:569
-#, fuzzy
 msgid "Import sheet into project"
-msgstr "Importovat vývod listu"
+msgstr "Importovat list do projektu"
 
 #: eeschema/tools/ee_actions.cpp:579
-#, fuzzy
 msgid "Place Global Labels"
-msgstr "Otočit globální označení"
+msgstr "Umístit globální označení"
 
 #: eeschema/tools/ee_actions.cpp:603 pcbnew/tools/pcb_actions.cpp:199
-#, fuzzy
 msgid "Draw Tables"
-msgstr "Kreslit čáru"
+msgstr "Kreslit tabulky"
 
 #: eeschema/tools/ee_actions.cpp:610 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:125
-#, fuzzy
 msgid "Draw Rectangles"
-msgstr "Kreslit obdélník"
+msgstr "Kreslit obdélníky"
 
 #: eeschema/tools/ee_actions.cpp:618 pcbnew/tools/pcb_actions.cpp:134
-#, fuzzy
 msgid "Draw Circles"
-msgstr "Kreslit kružnici"
+msgstr "Kreslit kružnice"
 
 #: eeschema/tools/ee_actions.cpp:626 pcbnew/tools/pcb_actions.cpp:143
-#, fuzzy
 msgid "Draw Arcs"
-msgstr "Kreslit oblouk"
+msgstr "Kreslit oblouky"
 
 #: eeschema/tools/ee_actions.cpp:634 pcbnew/tools/pcb_actions.cpp:151
-#, fuzzy
 msgid "Draw Bezier Curve"
-msgstr "Bezierova křivka"
+msgstr "Kreslit Bezierovu křivku"
 
 #: eeschema/tools/ee_actions.cpp:642
-#, fuzzy
 msgid "Place Images"
-msgstr "Umístit obrázek"
+msgstr "Umístit obrázky"
 
 #: eeschema/tools/ee_actions.cpp:650 pcbnew/tools/pcb_actions.cpp:306
-#, fuzzy
 msgid "Draw Rule Areas"
-msgstr "Pravidla oblasti"
+msgstr "Kreslit oblasti pravidel"
 
 #: eeschema/tools/ee_actions.cpp:658 pcbnew/tools/pcb_actions.cpp:404
 msgid "Delete Last Point"
@@ -22703,10 +22645,9 @@ msgid "Autoplace Fields"
 msgstr "Automaticky umístit pole"
 
 #: eeschema/tools/ee_actions.cpp:762
-#, fuzzy
 msgid ""
 "Runs the automatic placement algorithm on the symbol's (or sheet's) fields"
-msgstr "Provádí algoritmus automatického umístění na polích symbolu nebo listu"
+msgstr "Provádí algoritmus automatického umístění na polích symbolu nebo listů"
 
 #: eeschema/tools/ee_actions.cpp:768
 msgid "Change Symbols..."
@@ -22899,9 +22840,8 @@ msgid "Exclude from Bill of Materials"
 msgstr "Vyloučit z rozpisky materiálů"
 
 #: eeschema/tools/ee_actions.cpp:967
-#, fuzzy
 msgid "Set the exclude from bill of materials attribute"
-msgstr "Vyloučit z rozpisky materiálu"
+msgstr "Nastavit atribut vyloučení z rozpisky materiálu"
 
 #: eeschema/tools/ee_actions.cpp:972
 msgid "Include in Bill of Materials"
@@ -22923,88 +22863,76 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Vyloučit z rozpisky materiálu"
 
 #: eeschema/tools/ee_actions.cpp:984
-#, fuzzy
 msgid "Exclude from Simulation"
 msgstr "Vyloučit ze simulace"
 
 #: eeschema/tools/ee_actions.cpp:985
-#, fuzzy
 msgid "Set the exclude from simulation attribute"
-msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
+msgstr "Nastavit atribut vyloučení ze simulace"
 
 #: eeschema/tools/ee_actions.cpp:990
 msgid "Include in Simulation"
 msgstr "Zahrnout do simulace"
 
 #: eeschema/tools/ee_actions.cpp:991
-#, fuzzy
 msgid "Clear the exclude from simulation attribute"
-msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
+msgstr "Vymazat atribut vyloučení ze simulace"
 
 #: eeschema/tools/ee_actions.cpp:996
 msgid "Toggle Exclude from Simulation"
 msgstr "Přepnout Vyloučit ze simulace"
 
 #: eeschema/tools/ee_actions.cpp:997
-#, fuzzy
 msgid "Toggle the exclude from simulation attribute"
-msgstr "Smazat %s 'vyloučit z BOM' atribut výrobní."
+msgstr "Přepnout atribut vyloučení ze simulace"
 
 #: eeschema/tools/ee_actions.cpp:1002
 msgid "Exclude from Board"
 msgstr "Vyloučit z desky"
 
 #: eeschema/tools/ee_actions.cpp:1003
-#, fuzzy
 msgid "Set the exclude from board attribute"
-msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
+msgstr "Nastavit atribut vyloučení z desky"
 
 #: eeschema/tools/ee_actions.cpp:1008
 msgid "Include on Board"
 msgstr "Zahrnout do desky"
 
 #: eeschema/tools/ee_actions.cpp:1009
-#, fuzzy
 msgid "Clear the exclude from board attribute"
-msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
+msgstr "Vymazat atribut vyloučení z desky"
 
 #: eeschema/tools/ee_actions.cpp:1014
-#, fuzzy
 msgid "Toggle Exclude from Board"
-msgstr "Vyloučit z desky"
+msgstr "Přepnout vyloučení z desky"
 
 #: eeschema/tools/ee_actions.cpp:1015
-#, fuzzy
 msgid "Toggle the exclude from board attribute"
-msgstr "Smazat %s 'vyloučit z BOM' atribut výrobní."
+msgstr "Přepnout atribut vyloučení z desky"
 
 #: eeschema/tools/ee_actions.cpp:1020
-#, fuzzy
 msgid "Set Do Not Populate"
-msgstr "Není osazeno (DNP)"
+msgstr "Nastavit Není osazeno"
 
 #: eeschema/tools/ee_actions.cpp:1021
 msgid "Set the do not populate attribute"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1026
-#, fuzzy
 msgid "Unset Do Not Populate"
-msgstr "Není osazeno (DNP)"
+msgstr "Zrušit Není osazeno"
 
 #: eeschema/tools/ee_actions.cpp:1027
 msgid "Clear the do not populate attribute"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1033
-#, fuzzy
 msgid "Toggle Do Not Populate"
-msgstr "Není osazeno (DNP)"
+msgstr "Přepnout Není osazeno"
 
 #: eeschema/tools/ee_actions.cpp:1034
-#, fuzzy
 msgid "Toggle the do not populate attribute"
-msgstr "Povolit pro viditelnost"
+msgstr "Přepnout atribut Není osazeno"
 
 #: eeschema/tools/ee_actions.cpp:1041
 msgid "Open the library symbol in the Symbol Editor"
@@ -23394,25 +23322,21 @@ msgid "Move to next sheet by number"
 msgstr "Přesunout na následující list podle čísla"
 
 #: eeschema/tools/ee_actions.cpp:1387
-#, fuzzy
 msgid "Hierarchy Navigator"
-msgstr "Hierarchická navigace"
+msgstr "Hierarchická navigátor"
 
 #: eeschema/tools/ee_actions.cpp:1388
-#, fuzzy
 msgid "Show/hide the schematic sheet hierarchy navigator"
-msgstr "Zobrazit nebo skrýt navigátor hierarchie listů schématu"
+msgstr "Zobrazit/skrýt navigátor hierarchie listů schématu"
 
 #: eeschema/tools/ee_actions.cpp:1400
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1274
-#, fuzzy
 msgid "Draw Wires"
-msgstr "Uchopit spoj"
+msgstr "Kreslit dráty"
 
 #: eeschema/tools/ee_actions.cpp:1411
-#, fuzzy
 msgid "Draw Buses"
-msgstr "Kreslit %s"
+msgstr "Kreslit sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:1421
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:80
@@ -23595,9 +23519,9 @@ msgstr "Zobrazit SPICE Netlist"
 
 #: eeschema/tools/ee_inspection_tool.cpp:224
 #: pcbnew/tools/board_inspection_tool.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Run %s > %s"
-msgstr "%s a %s"
+msgstr "Spustit %s > %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:231
 #: pcbnew/tools/board_inspection_tool.cpp:298
