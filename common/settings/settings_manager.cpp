@@ -946,7 +946,8 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         wxFileName projectPath( fullPath );
         wxSetEnv( PROJECT_VAR_NAME, projectPath.GetPath() );
 
-        if( !projectPath.GetPath().IsEmpty() )
+        // set the cwd but don't impact kicad-cli
+        if( !projectPath.GetPath().IsEmpty() && Pgm().IsGUI() )
             wxSetWorkingDirectory( projectPath.GetPath() );
     }
 
