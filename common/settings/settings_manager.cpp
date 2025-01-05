@@ -945,6 +945,9 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         // the project pointer.
         wxFileName projectPath( fullPath );
         wxSetEnv( PROJECT_VAR_NAME, projectPath.GetPath() );
+
+        if( !projectPath.GetPath().IsEmpty() )
+            wxSetWorkingDirectory( projectPath.GetPath() );
     }
 
     bool success = loadProjectFile( *project );
