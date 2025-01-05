@@ -81,9 +81,15 @@ public:
     };
 
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aSymbolsList ) :
-            m_symbolsList( aSymbolsList ), m_edited( false ), m_sortColumn( 0 ),
-            m_sortAscending( false ), m_scope( SCOPE_ALL ), m_groupingEnabled( false ),
-            m_excludeDNP( false ), m_includeExcluded( false ), m_rebuildsEnabled( true )
+            m_symbolsList( aSymbolsList ),
+            m_edited( false ),
+            m_sortColumn( 0 ),
+            m_sortAscending( false ),
+            m_scope( SCOPE_ALL ),
+            m_groupingEnabled( false ),
+            m_excludeDNP( false ),
+            m_includeExcluded( false ),
+            m_rebuildsEnabled( true )
     {
         m_symbolsList.SplitReferences();
     }
@@ -100,13 +106,19 @@ public:
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
 
         if( aCol == aNewPos )
+        {
             return;
+        }
         else if( aCol < aNewPos )
+        {
             std::rotate( std::begin( m_cols ) + aCol, std::begin( m_cols ) + aCol + 1,
                          std::begin( m_cols ) + aNewPos + 1 );
+        }
         else
+        {
             std::rotate( std::begin( m_cols ) + aNewPos, std::begin( m_cols ) + aCol,
                          std::begin( m_cols ) + aCol + 1 );
+        }
     }
 
     int GetNumberRows() override { return (int) m_rows.size(); }

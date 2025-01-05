@@ -54,15 +54,23 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL
                                                                 const wxString&   aFieldName )
 {
     if( isAttribute( aFieldName ) )
+    {
         m_dataStore[aSymbol.m_Uuid][aFieldName] = getAttributeValue( aSymbol, aFieldName );
+    }
     else if( const SCH_FIELD* field = aSymbol.GetFieldByName( aFieldName ) )
+    {
         m_dataStore[aSymbol.m_Uuid][aFieldName] = field->GetText();
-    // Handle fields with variables as names that are not present in the symbol
-    // by giving them the correct value
+    }
     else if( IsTextVar( aFieldName ) )
+    {
+        // Handle fields with variables as names that are not present in the symbol
+        // by giving them the correct value
         m_dataStore[aSymbol.m_Uuid][aFieldName] = aFieldName;
+    }
     else
+    {
         m_dataStore[aSymbol.m_Uuid][aFieldName] = wxEmptyString;
+    }
 }
 
 
@@ -194,7 +202,9 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
                 refFieldValue = getFieldShownText( ref, m_cols[aCol].m_fieldName );
             }
             else
+            {
                 refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
+            }
 
             if( &ref == &group.m_Refs.front() )
                 fieldValue = refFieldValue;
@@ -427,7 +437,9 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
             lh = getFieldShownText( lhRef, m_cols[i].m_fieldName );
         }
         else
+        {
             lh = m_dataStore[lhRefID][m_cols[i].m_fieldName];
+        }
 
         if( IsTextVar( m_cols[i].m_fieldName )
             || IsTextVar( m_dataStore[rhRefID][m_cols[i].m_fieldName] ) )
@@ -435,7 +447,9 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
             rh = getFieldShownText( rhRef, m_cols[i].m_fieldName );
         }
         else
+        {
             rh = m_dataStore[rhRefID][m_cols[i].m_fieldName];
+        }
 
         wxString fieldName = m_cols[i].m_fieldName;
 
@@ -910,26 +924,27 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
     if( last_col == -1 )
         return out;
 
-    auto formatField = [&]( wxString field, bool last ) -> wxString
-        {
-            if( !settings.keepLineBreaks )
+    auto formatField =
+            [&]( wxString field, bool last ) -> wxString
             {
-                field.Replace( wxS( "\r" ), wxS( "" ) );
-                field.Replace( wxS( "\n" ), wxS( "" ) );
-            }
+                if( !settings.keepLineBreaks )
+                {
+                    field.Replace( wxS( "\r" ), wxS( "" ) );
+                    field.Replace( wxS( "\n" ), wxS( "" ) );
+                }
 
-            if( !settings.keepTabs )
-            {
-                field.Replace( wxS( "\t" ), wxS( "" ) );
-            }
+                if( !settings.keepTabs )
+                {
+                    field.Replace( wxS( "\t" ), wxS( "" ) );
+                }
 
-            if( !settings.stringDelimiter.IsEmpty() )
-                field.Replace( settings.stringDelimiter,
-                               settings.stringDelimiter + settings.stringDelimiter );
+                if( !settings.stringDelimiter.IsEmpty() )
+                    field.Replace( settings.stringDelimiter,
+                                   settings.stringDelimiter + settings.stringDelimiter );
 
-            return settings.stringDelimiter + field + settings.stringDelimiter
-                   + ( last ? wxString( wxS( "\n" ) ) : settings.fieldDelimiter );
-        };
+                return settings.stringDelimiter + field + settings.stringDelimiter
+                       + ( last ? wxString( wxS( "\n" ) ) : settings.fieldDelimiter );
+            };
 
     // Column names
     for( size_t col = 0; col < m_cols.size(); col++ )
