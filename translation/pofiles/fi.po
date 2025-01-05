@@ -11,7 +11,7 @@
 # Vesa Solonen <vesa.solonen@vli.fi>, 2021.
 # Petri Niemelä <petrinm@gmail.com>, 2022, 2023.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
-# Toni Laiho <apelegeos@gmail.com>, 2022, 2023, 2024.
+# Toni Laiho <apelegeos@gmail.com>, 2022, 2023, 2024, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2024.
 msgid ""
@@ -19,16 +19,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 12:45+0300\n"
-"PO-Revision-Date: 2024-12-18 11:00+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2025-01-05 16:29+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -3446,7 +3446,7 @@ msgstr "Sivuasetukset..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: kicad/dialogs/panel_jobs_base.cpp:247
@@ -3456,9 +3456,8 @@ msgid "Format:"
 msgstr "muoto:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:34
-#, fuzzy
 msgid "Include:"
-msgstr "Sisällytä &läpiviennit"
+msgstr "Sisällytä:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:47
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -3476,7 +3475,7 @@ msgstr "Tulostustiedosto:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Ilmoita työn epäonnistumisesta, jos rikkomuksia esiintyy"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4710,7 +4709,7 @@ msgstr "Kopioi upotettu viite"
 
 #: common/dialogs/panel_embedded_files.cpp:52
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Kopioi tämän upotetun tiedoston viite"
 
 #: common/dialogs/panel_embedded_files.cpp:190
 msgid "Select a file to embed"
@@ -5180,7 +5179,6 @@ msgid "Check for package updates on startup"
 msgstr "Tarkista pakettipäivitykset käynnistyksen yhteydessä"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
 msgstr "Kirjastopakettien käsittely"
 
@@ -5573,7 +5571,7 @@ msgstr "OpenGL: ää ei voitu käyttää"
 
 #: common/draw_panel_gal.cpp:540
 msgid "Error switching GAL backend"
-msgstr ""
+msgstr "Virhe vaihdettaessa GAL-taustajärjestelmää"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3391
@@ -5896,14 +5894,12 @@ msgid "Origins & Axes"
 msgstr "Aloituspisteet & Akselit"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Uusi jalanjälki"
+msgstr "Jalanjälkioletukset"
 
 #: common/eda_base_frame.cpp:1186
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Grafiikan puhdistus"
+msgstr "Grafiikkaoletukset"
 
 #: common/eda_base_frame.cpp:1191 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
@@ -6720,9 +6716,9 @@ msgstr ""
 "komentotiedostot"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "KICAD_SYMBOL_DIR-muuttujan vanhentunut versio."
+msgstr "%s käytöstä poistettu versio."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -7002,7 +6998,7 @@ msgstr "* [uusi] %s %s"
 #: common/git/kicad_git_common.cpp:471
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr "Kirjoitetaan objektit: %d %% (%d/%d), %d tavua"
+msgstr "Kirjoitetaan objektit: %d%% (%d/%d), %d tavua"
 
 #: common/git/kicad_git_common.cpp:486
 #, c-format
@@ -7428,32 +7424,28 @@ msgid "Loading file canceled by user."
 msgstr "Käyttäjä peruutti tiedoston lataamisen."
 
 #: common/jobs/job.cpp:79
-#, fuzzy
 msgid "Job Settings"
-msgstr "Asetukset"
+msgstr "Työasetukset"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 msgid "3D model export"
 msgstr "3D-mallin vienti"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Vie 3D-malli"
+msgstr "Vie 3D-mallin työasetukset"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
 msgstr "PCB:Vie 3D-malli"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "PCB: Poratietojen vienti"
+msgstr "Vie poratiedot"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Vie poratietojen työasetukset"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7466,52 +7458,44 @@ msgstr "Vie DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:147
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Vie DXF työasetukset"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
 msgstr "PCB: Vie DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Vie GenCAD-asetuksiin"
+msgstr "Vie GenCAD työasetukset"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "PCB: Vie Gerberit"
+msgstr "Vie yksittäinen Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Vie GenCAD-asetuksiin"
+msgstr "Vie yksittäisen Gerber:in työasetukset"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "PCB: Vie Gerberit"
+msgstr "Vie Gerberit"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Vie GenCAD-asetuksiin"
+msgstr "Vie Gerberien työasetukset"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:53
 msgid "PCB: Export Gerbers"
 msgstr "PCB: Vie Gerberit"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
-msgstr "Vie IPC-2581"
+msgstr "Vie IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "Vie IPC-2581-tiedosto"
+msgstr "Vie IPC-2581 työasetukset"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
@@ -7523,14 +7507,12 @@ msgid "Export ODB++"
 msgstr "Vie ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Vie ODB++ työasetukset"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "Vie ODB++"
+msgstr "PCB: Vie ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:74
 #: common/jobs/job_export_sch_plot.cpp:122 kicad/kicad_cli.cpp:143
@@ -7539,23 +7521,20 @@ msgstr "Vie PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:128
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Vie PDF työasetukset"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
 msgid "PCB: Export PDF"
 msgstr "PCB: Vie PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Export position data"
-msgstr "PCB: Vie sijaintitiedot"
+msgstr "Vie sijaintitiedot"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "PCB: Vie sijaintitiedot"
+msgstr "Vie sijaintitietojen työasetukset"
 
 #: common/jobs/job_export_pcb_pos.cpp:115
 msgid "PCB: Export Position Data"
@@ -7568,61 +7547,53 @@ msgstr "Vie SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:166
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Vie SVG työasetukset"
 
 #: common/jobs/job_export_pcb_svg.cpp:68
 msgid "PCB: Export SVG"
 msgstr "PCB: Vie SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Luo materiaaliluettelo..."
+msgstr "Luo materiaaliluettelo"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Luo materiaaliluettelo..."
+msgstr "Luo materiaaliluettelon työasetukset"
 
 #: common/jobs/job_export_sch_bom.cpp:96
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Luo materiaaliluettelo..."
+msgstr "Kytkentäkaavio: Luo materiaaliluettelo"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Vie verkkolista"
+msgstr "Vie %s verkkolista"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Vie Netlist"
+msgstr "Vie Netlist työasetukset"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
 msgstr "Kytkentäkaavio: Vie verkkolista"
 
 #: common/jobs/job_export_sch_plot.cpp:179
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Piirrä PostScript"
+msgstr "Vie PostScript"
 
 #: common/jobs/job_export_sch_plot.cpp:185
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Vie Postscript työasetukset"
 
 #: common/jobs/job_export_sch_plot.cpp:198 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "Vie HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:204
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Vie HPGL työasetukset"
 
 #: common/jobs/job_export_sch_plot.cpp:208
 msgid "Schematic: Export SVG"
@@ -7633,9 +7604,8 @@ msgid "Schematic: Export HPGL"
 msgstr "Kytkentäkaavio: Vie HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:212
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Kytkentäkaavio: Vie verkkolista"
+msgstr "Kytkentäkaavio: Vie postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:214
 msgid "Schematic: Export DXF"
@@ -7650,51 +7620,45 @@ msgid "Schematic PythonBOM export"
 msgstr "Kytkentäkaavio PythonBOM vienti"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Suorita piirilevyn DRC"
+msgstr "Suorita DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D-asetukset"
+msgstr "DRC työasetukset"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
 msgstr "PCB: Suorita DRC"
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Merkitse piirilevy uudelleen"
+msgstr "Renderöi %s"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Renderöi PCB työasetukset"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCB:Renderöi"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Suorita piirilevyn DRC"
+msgstr "Suorita ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Kytkentäkaavio: Vie verkkolista"
+msgstr "Kytkentäkaavio ERC työasetukset"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
 msgstr "Kytkentäkaavio: Suorita ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "Erikoistyökalut"
+msgstr "Erikois: Kopio tiedostot"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -7831,9 +7795,8 @@ msgid "Symbol body fills"
 msgstr "Symbolirungon täytöt"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "Arkkitiedosto"
+msgstr "Muotojen täyttö"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -9062,9 +9025,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Älä enää pidä kirjastoa listan yläpäässä"
 
 #: common/tool/actions.cpp:804
-#, fuzzy
 msgid "Library Tree"
-msgstr "Näytä kirjastopuu"
+msgstr "Kirjastopuu"
 
 #: common/tool/actions.cpp:810
 msgid "Hide Library Tree"
@@ -10477,9 +10439,8 @@ msgid "Footprint '%s' not found."
 msgstr "Jalanjälkeä '%s' ei löydy."
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Virhe ladattaessa kirjasinta '%s'."
+msgstr "Virhe ladattaessa jalanjälkeä"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -10738,9 +10699,8 @@ msgid "Unconnected wire endpoint"
 msgstr "Kytkemätön johdon päätepiste"
 
 #: eeschema/connection_graph.cpp:3819
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Kytkemätön johdon päätepiste"
+msgstr "Kytkemätön johto väyläliitäntään"
 
 #: eeschema/connection_graph.cpp:4194
 #, c-format
@@ -11885,9 +11845,8 @@ msgid "Electrical Rules Checker"
 msgstr "Sähkösääntöjen tarkistaja"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "ERC työasetukset"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 msgid "Export netlist in KiCad format"
@@ -12045,9 +12004,8 @@ msgstr "Sinun täytyy antaa verkkolistagenerattorille otsikko"
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
 #: kicad/dialogs/panel_jobs_base.cpp:258
-#, fuzzy
 msgid "Output path:"
-msgstr "Lähtöpolku:"
+msgstr "Kohdehakemisto:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
 msgid "Add Exporter..."
@@ -13681,9 +13639,8 @@ msgstr ""
 "jälkeen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "Tulosta kytkentäkaavio"
+msgstr "Piirrä kytkentäkaavio"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -14118,10 +14075,9 @@ msgid "Link '%s' to this file?"
 msgstr "Linkitetäänkö '%s' tähän tiedostoon?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr ""
-"Parametrin \"%s\" asettaminen arvoksi \"%s\" epäonnistui mallissa \"%s\""
+msgstr "Kytkentäkaaviotiedoston '%s' kopiointi kohteeseen '%s' epäonnistui."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:560
 #, c-format
@@ -14924,9 +14880,8 @@ msgid "Group By"
 msgstr "Ryhmittele mukaan"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:400
-#, fuzzy
 msgid "BOM Export Job"
-msgstr "PCB: Vie DXF"
+msgstr "BOM Vie työ"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
 msgid "Qty"
@@ -16379,9 +16334,8 @@ msgid "&Pitch of repeated pins:"
 msgstr "&Toistuvien nastojen väli:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
-#, fuzzy
 msgid "General Editing"
-msgstr "Yleinen muokkaus"
+msgstr "Yleismuokkaus"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:144
 msgid "Keep pins attached when dragging edges"
@@ -16713,9 +16667,8 @@ msgstr "Liittämätön"
 #: eeschema/erc/erc.cpp:210 eeschema/erc/erc.cpp:229
 #: pcbnew/drc/drc_test_provider_misc.cpp:320
 #: pcbnew/drc/drc_test_provider_misc.cpp:340
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Tulosta piirustusarkki"
+msgstr " (piirustusarkissa)"
 
 #: eeschema/erc/erc.cpp:423
 msgid "Unresolved text variable in drawing sheet"
@@ -16937,9 +16890,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Syöttöteho nasta, jota ei ohjaa mikään Lähtöteho nastoista"
 
 #: eeschema/erc/erc_item.cpp:68
-#, fuzzy
 msgid "Multiple pins with the same pin number"
-msgstr "Useita nastoja samoilla nastanumeroilla"
+msgstr "Useita nastoja samalla nastanumerolla"
 
 #: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
 msgid "Conflict problem between pins"
@@ -18126,12 +18078,10 @@ msgid "Position Y"
 msgstr "Sijainti Y"
 
 #: eeschema/sch_bitmap.cpp:326 pcbnew/pcb_reference_image.cpp:354
-#, fuzzy
 msgid "Transform Offset X"
 msgstr "Muunna Offset X"
 
 #: eeschema/sch_bitmap.cpp:333 pcbnew/pcb_reference_image.cpp:361
-#, fuzzy
 msgid "Transform Offset Y"
 msgstr "Muunna Offset Y"
 
@@ -20170,9 +20120,8 @@ msgstr ""
 " Haluatko sinä jatkaa?"
 
 #: eeschema/sheet.cpp:695
-#, fuzzy
 msgid "Cannot create the schematic image"
-msgstr "Lisää selitteet"
+msgstr "Kytkentäkaaviokuvaa ei voi luoda"
 
 #: eeschema/sheet.cpp:772
 #, c-format
@@ -23747,9 +23696,8 @@ msgid "Modify schematic item"
 msgstr "Muokkaa kytkentäkaavion kohdetta"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3327
-#, fuzzy
 msgid "No sub schematic found in the current project"
-msgstr "Sulje nykyinen projekti"
+msgstr "Nykyisestä projektista ei löytynyt alikaaviota"
 
 #: eeschema/tools/sch_edit_tool.cpp:77
 msgid "Symbol Unit"
@@ -25732,11 +25680,11 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "Vie apuohjelmat (Gerberit, poraus, sijaintitiedostot, jne.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:79
-#, fuzzy
 msgid ""
 "Output file format, options: step, brep, xao, glb (binary glTF), ply, stl"
 msgstr ""
-"Tulostustiedostomuoto, vaihtoehdot: step, brep, xao, glb (binääri glTF)"
+"Tulostustiedostomuoto, asetukset: step, brep, xao, glb (binääri glTF), ply, "
+"stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -25773,7 +25721,7 @@ msgstr "Luo vain piirilevy ilman komponentteja"
 #: kicad/cli/command_pcb_export_3d.cpp:118
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
-msgstr ""
+msgstr "Leikkaa levyn runkoon reikiä, vaikka johdinkerroksia ei viedä."
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 msgid "Exclude board body"
@@ -25824,9 +25772,8 @@ msgstr "Sulauta päällekkäinen geometria yhteen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in conductor layers."
-msgstr "PTH-anturalla ei ole kuparikerroksia"
+msgstr "Älä leikkaa läpivientireikiä johdinkerroksiin."
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26025,6 +25972,9 @@ msgid ""
 "Opt into the new behavior which means output path is a directory, a file per "
 "layer is generated and the common layers arg becomes available. "
 msgstr ""
+"Ota käyttöön uusi toimintatapa, mikä tarkoittaa, että tulostuspolku on "
+"hakemisto, jokaista kerrosta kohti luodaan tiedosto ja yleiset kerrokset arg "
+"tulevat saataville. "
 
 #: kicad/cli/command_pcb_export_dxf.cpp:107
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -26044,11 +25994,13 @@ msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 msgstr ""
+"Tämän komennon toiminta on vanhentunut KiCad 9.0:sta lähtien, tämän komennon "
+"oletuskäyttäytyminen muuttuu tulevassa julkaisussa."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:152
 #: kicad/cli/command_pcb_export_svg.cpp:167
 msgid "The new behavior will match --mode-new"
-msgstr ""
+msgstr "Uusi toimintatapa vastaa --mode-new"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -26120,6 +26072,8 @@ msgstr "Käytä KiCad gerber tiedostolaajennusta"
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
+"Tämä komento on vanhentunut KiCad 9.0:sta lähtien. Käytä sen sijaan "
+"\"gerbers\"-komentoa\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -26140,14 +26094,12 @@ msgid "Generate PDF from a list of layers"
 msgstr "Luo PDF kerrosluettelosta"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:43
-#, fuzzy
 msgid "Plot the layers to individual PDF files"
-msgstr "Piirrä annetut kerrokset yhteen gerber-tiedostoon"
+msgstr "Piirrä kerrokset yksittäisiin PDF-tiedostoihin"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:47
-#, fuzzy
 msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "Piirrä annetut kerrokset yhteen gerber-tiedostoon"
+msgstr "Piirrä tasot yhdeksi PDF-tiedostoksi, jossa on useita sivuja"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:51
 #: kicad/cli/command_pcb_export_svg.cpp:46
@@ -26160,17 +26112,16 @@ msgstr ""
 "Käytettävä väriteema (Asettaa teeman piirilevyeditorin vakioasetuksiin)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:160
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "Nimiö yhdistää useamman kuin yhden johdon"
+msgstr "Ei voi käyttää useampaa kuin yhtä tilalippua\n"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:184
 msgid "The new behavior will match --mode-separate"
-msgstr ""
+msgstr "Uusi toimintatapa vastaa --mode-separate"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:187
 msgid "The behavior with neither --mode flags will no longer exist"
-msgstr ""
+msgstr "Toimintatapaa, jossa ei ole kumpaakaan --mode-lippua, ei enää ole"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -26278,12 +26229,11 @@ msgid "Render from side. Options: %s"
 msgstr "Renderöi sivulta. Vaihtoehdot: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
 msgstr ""
-"Kuvan tausta. Vaihtoehdot: läpinäkyvä, läpinäkymätön. Oletus: läpinäkyvä "
-"PNG, läpinäkymätön JPEG"
+"Kuvan tausta. Vaihtoehdot: %s. Oletus: läpinäkyvä PNG, läpinäkymätön JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:251
 #, c-format
@@ -26329,23 +26279,24 @@ msgstr "Käännä levy, muoto 'X,Y,Z' esim.: '-45,0,45' isometriselle näkymäll
 
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "Ylävalon voimakkuus, muoto 'R,G,B' tai yksittäinen numero, alue: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "Pohjavalon voimakkuus, muoto 'R,G,B' tai yksittäinen numero, alue: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "Sivuvalojen voimakkuus, muoto 'R,G,B' tai yksittäinen numero, alue: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Kameran valon voimakkuus, muoto 'R,G,B' tai yksittäinen numero, alue: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "Sivuvalojen korkeuskulma asteina, alue: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 msgid "Invalid background\n"
@@ -26364,24 +26315,20 @@ msgid "Invalid pivot format\n"
 msgstr "Virheellinen pivot-muoto\n"
 
 #: kicad/cli/command_pcb_render.cpp:367
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "Virheellinen pivot-muoto\n"
+msgstr "Yläosan valon virheellinen voimakkuuden muoto\n"
 
 #: kicad/cli/command_pcb_render.cpp:374
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "Virheellinen kiertomuoto\n"
+msgstr "Alaosan valon virheellinen voimakkuuden muoto\n"
 
 #: kicad/cli/command_pcb_render.cpp:381
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "Virheellinen kuvamuoto\n"
+msgstr "Sivuosan valon virheellinen voimakkuudenmuoto\n"
 
 #: kicad/cli/command_pcb_render.cpp:388
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "Virheellinen kuvamuoto\n"
+msgstr "Kameravalon virheellinen voimakkuusmuoto\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid image format\n"
@@ -26466,9 +26413,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "Käytettävä väriteema (oletuksena kytkentäkaavion asetukset)"
 
 #: kicad/cli/command_sch_export_plot.cpp:82
-#, fuzzy
 msgid "Default font name"
-msgstr "Oletuskirjasin:"
+msgstr "Oletuskirjasimen nimi"
 
 #: kicad/cli/command_sch_export_plot.cpp:88
 msgid "Do not generate property popups in PDF"
@@ -26565,38 +26511,32 @@ msgid "version info format (plain, commit, about)"
 msgstr "versiotietoformaatti (plain, commit, about)"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
-msgstr "Merkintä"
+msgstr "Kohde:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
-#, fuzzy
 msgid "Generate error if no files copied"
-msgstr "Luo Gerber-työtiedosto"
+msgstr "Luo virhe, jos tiedostoja ei kopioida"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
-#, fuzzy
 msgid "Overwrite files in destination"
-msgstr "Korvataanko olemassa oleva suunnittelulohko?"
+msgstr "Korvaa tiedostot kohteessa"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
-#, fuzzy
 msgid "Copy Files Job Settings"
-msgstr "Suodatusasetukset"
+msgstr "Kopioi tiedostot -työasetukset"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
-#, fuzzy
 msgid "Record output messages"
-msgstr "Lähtevät Viestit"
+msgstr "Tallenna lähtöviestit"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Ohita nollasta poikkeava poistumiskoodi"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "Muokkaa asetuksia..."
+msgstr "Suorita Komento- työasetukset"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
@@ -26685,27 +26625,25 @@ msgid "%s Output Options"
 msgstr "%s Tulostusasetukset"
 
 #: kicad/dialogs/panel_jobs.cpp:108
-#, fuzzy
 msgid "Select output directory"
-msgstr "Valitse Tulostushakemisto"
+msgstr "Valitse kohdehakemisto"
 
 #: kicad/dialogs/panel_jobs.cpp:122
 msgid "Select output path"
 msgstr "Valitse lähtöpolku"
 
 #: kicad/dialogs/panel_jobs.cpp:140
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Lähtöpolku ei voi olla tyhjä"
 
 #: kicad/dialogs/panel_jobs.cpp:217
 msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
-msgstr "Lähtö:"
+msgstr "Lähtö: %s"
 
 #: kicad/dialogs/panel_jobs.cpp:245
 msgid "No."
@@ -26727,16 +26665,15 @@ msgstr "Tehtävä onnistui"
 
 #: kicad/dialogs/panel_jobs.cpp:365
 msgid "Last run failed"
-msgstr ""
+msgstr "Viimeinen ajo epäonnistui"
 
 #: kicad/dialogs/panel_jobs.cpp:391 kicad/dialogs/panel_jobs.cpp:1065
 msgid "Running jobs"
 msgstr "Käynnissä olevat työt"
 
 #: kicad/dialogs/panel_jobs.cpp:409
-#, fuzzy
 msgid "Edit Output Options..."
-msgstr "%s Tulostusasetukset"
+msgstr "Muokkaa tulostusasetuksia..."
 
 #: kicad/dialogs/panel_jobs.cpp:410
 #, fuzzy
@@ -26745,7 +26682,7 @@ msgstr "Poista avanne"
 
 #: kicad/dialogs/panel_jobs.cpp:413
 msgid "View Last Run Results..."
-msgstr ""
+msgstr "Näytä viimeisen ajon tulokset..."
 
 #: kicad/dialogs/panel_jobs.cpp:493
 #, fuzzy
@@ -26823,13 +26760,12 @@ msgid "Description:"
 msgstr "Selite:"
 
 #: kicad/dialogs/panel_jobs_base.cpp:276
-#, fuzzy
 msgid "Include jobs:"
-msgstr "Sisällytä &vyöhykkeet"
+msgstr "Sisällytä työt:"
 
 #: kicad/dialogs/panel_jobs_base.h:166
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "Työn tulosten ajoloki"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -27164,9 +27100,9 @@ msgid "Plugins (%d)"
 msgstr "Lisäosat (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Fabrication plugins (%d)"
-msgstr "Valmistusmuodot"
+msgstr "Valmistuslaajennukset (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
@@ -33973,9 +33909,8 @@ msgid "Export ODB++ File"
 msgstr "Vie ODB++ tiedosto"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:150
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "Valittu komponentti ei ole työkirjastossa"
+msgstr "Valittu tulostetiedoston nimi ei ole tuettu arkistomuoto."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:203
 #, fuzzy
@@ -33984,7 +33919,7 @@ msgstr "Muuttujan nimi ei voi olla tyhjä."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:222
 msgid "The output file name conflicts with the selected compression format."
-msgstr ""
+msgstr "Tulostiedoston nimi on ristiriidassa valitun pakkausmuodon kanssa."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:352
 #, fuzzy, c-format
@@ -33992,9 +33927,9 @@ msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr "Tiedosto %s on jo olemassa. Haluatko korvata tämän tiedoston?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "Väliaikaista tulostustiedostoa ei voi poistaa"
+msgstr "Olemassa olevaa tulostiedostoa '%s' ei voi poistaa."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:373
 #, fuzzy, c-format
@@ -34007,11 +33942,12 @@ msgid "Cannot create temporary output directory."
 msgstr "Kohdehakemistoa '%s'. ei voi luoda."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr "Symboli '%s' on jo kirjastossa '%s'. Haluatko korvata sen?"
+msgstr ""
+"Tuloshakemisto '%s' on jo olemassa, eikä se ole tyhjä. Haluatko korvata sen?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:419
 #, fuzzy, c-format
@@ -34043,21 +33979,20 @@ msgid "Output File:"
 msgstr "Tulostustiedosto:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression Format:"
-msgstr "Mittamuodot"
+msgstr "Pakkausmuoto:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "Valitse ODB++-tulostustiedostojen pakkausmuoto"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:274
 msgid "Non-unity scaled models:"
@@ -34148,7 +34083,7 @@ msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
-msgstr ""
+msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 #, fuzzy
@@ -34318,7 +34253,7 @@ msgstr "Korvaa vanha tiedosto"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:258
 msgid "Don't write P-curves to STEP file"
-msgstr ""
+msgstr "Älä kirjoita P-käyriä STEP-tiedostoon"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:259
 msgid ""
@@ -35511,7 +35446,7 @@ msgstr "Poista kupariviisteet"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:115
 msgid "Remove teardrops according to filtering options"
-msgstr ""
+msgstr "Poista pisaravahvikkeet suodatusvaihtoehtojen mukaan"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:119
 #, fuzzy
@@ -35520,7 +35455,7 @@ msgstr "Poista kupariviisteet"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Remove all teardrops, regardless of filtering options"
-msgstr ""
+msgstr "Poista kaikki pisaravahvikkeet suodatusvaihtoehdoista riippumatta"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -36273,6 +36208,8 @@ msgstr "Muut kohteet"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
 msgstr ""
+"Kopioi tekstiä, muotoja, vyöhykkeitä ja muita kohteita lähdesääntöalueen "
+"sisällä"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:91
 msgid "Include locked components"
@@ -37386,6 +37323,8 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Jos uudella johdinraidalla on sama yhteys jo olemassa olevan johdinraidan "
+"kanssa, vanha johdinraita poistetaan."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
@@ -37656,7 +37595,7 @@ msgstr "Viitekuvan ominaisuudet"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "Opaque"
-msgstr ""
+msgstr "Läpinäkymätön"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
 #, fuzzy
@@ -37674,9 +37613,8 @@ msgid "User"
 msgstr "Käyttäjä1"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
-#, fuzzy
 msgid "Dimensions:"
-msgstr "Mitat"
+msgstr "Mitat:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
@@ -37694,9 +37632,8 @@ msgid "Quality preset:"
 msgstr "Valitse esiasetus:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
-#, fuzzy
 msgid "Background style:"
-msgstr "Taustan alku"
+msgstr "Taustan tyyli:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:103
 msgid "View"
@@ -37714,7 +37651,7 @@ msgstr "Direktiivi"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
-msgstr ""
+msgstr "Ortogonaalinen"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
 #, fuzzy
@@ -37742,18 +37679,17 @@ msgid "Z"
 msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
-#, fuzzy
 msgid "Pivot:"
-msgstr "Aseta kääntö"
+msgstr "Kääntö:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "Panorointi:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
 #, fuzzy
@@ -37761,9 +37697,8 @@ msgid "Lights intensity"
 msgstr "Intensiteetti"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
-#, fuzzy
 msgid "Camera:"
-msgstr "Kameran zoomaus"
+msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
 #, fuzzy
@@ -37771,9 +37706,8 @@ msgid "Lights position"
 msgstr "Valaistusasetukset"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
-#, fuzzy
 msgid "Side lights elevation:"
-msgstr "Liitostiedoston luonti"
+msgstr "Sivuvalojen korkeus:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
 #, fuzzy
@@ -39870,30 +39804,29 @@ msgstr "Juotosmaski kupariin välys:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:92
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
-#, fuzzy
 msgid ""
 "Minimum distance between a solder mask opening and a copper item with a "
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
-"DRC-testejä varten:\n"
-"suurin etäisyys juotosmaskin aukon ja kuparikappaleen välillä, jolla on eri "
-"verkko kuin alkuperäisen juotosmaskin aukon, DRC-virheen luomiseksi"
+"Minimietäisyys juotosmaskin aukon ja kuparikappaleen välillä, jossa on eri "
+"verkko kuin juotosmaskin aukon kantaverkko.\n"
+"\n"
+"Tätä minimiä pienemmät etäisyydet aiheuttavat DRC-virheen."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:104
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints."
-msgstr "Sallii sillatun juotosmaskiaukon anturan ja jalanjäljen välillä"
+msgstr ""
+"Salli silloitettujen juotosmaskin aukot anturoiden välissä jalanjälkien "
+"sisällä."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
 msgstr ""
-"DRC-testejä varten:\n"
-"Poista käytöstä DRC-virhetyypin juotosmaskin aukkosilta saman jalanjäljen "
-"anturoiden välillä (hyödyllinen verkkositeille)"
+"Poista käytöstä DRC-virheentarkistus juotosmaskin aukon silloituksessa "
+"samassa jalanjäljessä olevien anturoiden välillä."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:112
 msgid "Tent vias:"
@@ -39901,14 +39834,13 @@ msgstr "Peitetyt läpiviennit:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
-#, fuzzy
 msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"Päällystetyt läpiviennit: ei piirretty juotosmaskikerrokselle\n"
-"Ei päälystetyt: läpiviennit on piirretty juotosmaskikerrokselle\n"
-"(Juotemaski on negatiivinen kerros)"
+"Päällystetty: läpiviennit on peitetty juotosmaskilla.\n"
+"\n"
+"Ei päällystetty: läpivientejä ei ole peitetty juotosmaskilla."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 msgid "Solder paste settings:"
@@ -39986,6 +39918,11 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://docs.kicad."
 "org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### Dokumentaatio\n"
+"\n"
+"Täydelliset asiakirjat ovat osoitteessa [https://docs.kicad.org](https://"
+"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40273,6 +40210,21 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Huomautuksia\n"
+"\n"
+"Versiolausekkeen on oltava ensimmäinen lauseke.  Se ilmaisee tiedoston "
+"syntaksiversion niin, että \n"
+"tulevat sääntöjen jäsentimet voivat suorittaa automaattisia päivityksiä.  "
+"Sen pitäisi olla\n"
+"aseta \"1\".\n"
+"\n"
+"Säännöt on järjestettävä tarkkuuden mukaan.  Myöhemmin säännöt vaativat\n"
+"etusija aikaisempiin sääntöihin nähden; kun vastaava sääntö löytyy\n"
+"muita sääntöjä ei tarkasteta.\n"
+"\n"
+"Käytä Ctrl+/ kommentoidaksesi tai poistaaksesi kommentteja rivejä.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -40285,6 +40237,14 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Ominaisuudet\n"
+"\n"
+"Monet objektien ominaisuudet ovat testattavissa mukautetuissa "
+"sääntölausekkeissa. Katso täydellinen luettelo osoitteesta "
+"[https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/"
+"pcbnew/pcbnew.html#custom_design_rules).\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
 msgid ""
@@ -40718,9 +40678,9 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Antura ei ole läpireikäantura; yhteys tulee olemaan: %s."
 
 #: pcbnew/drc/drc_engine.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Paikallinen ohitus %s; välys: %s."
+msgstr "Verkkosidonta kohteessa %s; välys: 0."
 
 #: pcbnew/drc/drc_engine.cpp:788
 #, fuzzy
@@ -41252,11 +41212,11 @@ msgstr "Läpireikäanturassa ei ole reikää"
 
 #: pcbnew/drc/drc_item.cpp:296
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Peilattu teksti etukerroksessa"
 
 #: pcbnew/drc/drc_item.cpp:300
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "Peilaamaton teksti takakerroksessa"
 
 #: pcbnew/drc/drc_item.cpp:307
 #, fuzzy
@@ -41664,39 +41624,39 @@ msgid "%s orientation differs."
 msgstr "%s suunta eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s anturan muototyyppi eroaa."
+msgstr "%s anturan muototyyppi eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs on layer %s."
-msgstr "%s koko eroaa."
+msgstr "%s koko eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s puolisuunnikkaan delta eroaa."
+msgstr "%s puolisuunnikkaan delta eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "%s pyöristetyt kulmat eroaa."
+msgstr "%s pyöristetyt kulmat eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "%s viistetyt kulmat eroaa."
+msgstr "%s viistetyt kulmat eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "%s viistetyt kulmat eroaa."
+msgstr "%s viistetyt kulmat eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "%s muodon offset reiästä eroaa."
+msgstr "%s muodon offset reiästä eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:351
 #, c-format
@@ -41709,9 +41669,9 @@ msgid "%s drill size differs."
 msgstr "%s porauksen koko eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "%s muotoprimitiivit eroaa."
+msgstr "%s muotoprimitiivit eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 #, c-format
@@ -43208,9 +43168,8 @@ msgid "Footprint '%s' saved."
 msgstr "Jalanjälki '%s' tallennettu."
 
 #: pcbnew/load_select_footprint.cpp:374
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Jalanjälkikirjastoa tallennetaan\n"
+msgstr "Virhe tallennettaessa jalanjälkikirjastoa"
 
 #: pcbnew/load_select_footprint.cpp:378
 #, c-format
@@ -45563,9 +45522,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Tuntematon anturamuodon nimi \"%s\" kerroksessa \"%s\" rivillä %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Lisää valitut kerrokset vastaavien kerrosten luetteloon."
+msgstr "Ei käyttäjäkerrosta lisättävälle kerrokselle %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -45586,12 +45545,12 @@ msgstr "Tunnistamaton anturamuotoprimitiivi '%s' rivillä %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Ympyrä, jonka x- ja y-säteet eivät ole yhtä suuret (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "Odotettiin x:n ja y:n olevan samat, saatiin x = %f ja y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -45628,6 +45587,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
+"Puuttuvat X-, Y- tai kiertotiedot riviltä %zu päivitykselle %s. Tämä voi "
+"olla sijoittamaton komponentti."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
 #, c-format
@@ -45655,11 +45616,12 @@ msgstr ""
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
 msgstr ""
+"Käsittelemätön muototyyppi %d polygonissa kerroksessa %s, peräkkäinen %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3427
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "Virheellinen reikä %d pisteen vyöhykkeellä kerroksessa %s, verkko %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3469
 #, c-format
@@ -45667,11 +45629,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Ääriviivat näyttävät epäjatkuvilta: viimeinen piste oli %s, seuraavan "
+"segmentin aloituspiste on %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Virheellinen lehden nastan nimi"
+msgstr "Virheellinen muototyyppi %d vyöhykkeen ääriviivassa"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
@@ -46476,9 +46440,8 @@ msgstr "Piirilevyn lataus epäonnistui.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:357 pcbnew/pcbnew_jobs_handler.cpp:432
 #: pcbnew/pcbnew_jobs_handler.cpp:479
-#, fuzzy
 msgid "Unknown export format"
-msgstr "Tuntematon verkkolista formaatti.\n"
+msgstr "Tuntematon vientimuoto"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:397
 #, c-format
@@ -50168,11 +50131,8 @@ msgid "Invalid clipboard contents"
 msgstr "Leikepöydän sisältö on virheellinen"
 
 #: pcbnew/tools/pcb_control.cpp:1509
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"Virhe avatessa piirilevyä.\n"
-"%s"
+msgstr "Virhe ladattaessa piirilevyä."
 
 #: pcbnew/tools/pcb_control.cpp:1543
 msgid "Append Board"
