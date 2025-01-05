@@ -174,8 +174,8 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 {
 
 #define EXT( ext )              "\\." + ext + "|"
-#define NAME( name )            name "|"
-#define EXT_NO_PIPE( ext )      "\\." ext
+#define NAME( name )            name + "|"
+#define EXT_NO_PIPE( ext )      "\\." + ext
 #define NAME_NO_PIPE( name )    name
 
     // List of file extensions that are always archived
@@ -190,10 +190,10 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             EXT( FILEEXT::DrawingSheetFileExtension )
             EXT( FILEEXT::KiCadJobSetFileExtension )
             EXT( FILEEXT::JsonFileExtension )                  // for design blocks
-            EXT( FILEEXT::WorkbookFileExtension )
-            NAME( "fp-lib-table" )
-            NAME( "sym-lib-table" )
-            NAME_NO_PIPE( "design-block-lib-table" );
+            EXT( FILEEXT::WorkbookFileExtension ) +
+            NAME( FILEEXT::FootprintLibraryTableFileName ) +
+            NAME( FILEEXT::SymbolLibraryTableFileName ) +
+            NAME_NO_PIPE( FILEEXT::DesignBlockLibraryTableFileName );
 
     // List of additional file extensions that are only archived when aIncludeExtraFiles is true
     if( aIncludeExtraFiles )
@@ -217,14 +217,14 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             EXT( "xnc" )                                            // Fab drill files
             EXT( FILEEXT::IpcD356FileExtension )
             EXT( FILEEXT::ReportFileExtension )
-            EXT( "net" )
-            EXT( "py" )
+            EXT( FILEEXT::NetlistFileExtension )
+            EXT( FILEEXT::PythonFileExtension )
             EXT( FILEEXT::PdfFileExtension )
             EXT( FILEEXT::TextFileExtension )
             EXT( FILEEXT::SpiceFileExtension )                      // SPICE files
-            EXT( "sub" )                                            // SPICE files
-            EXT( "model" )                                          // SPICE files
-            EXT_NO_PIPE( "ibs" );
+            EXT( FILEEXT::SpiceSubcircuitFileExtension )            // SPICE files
+            EXT( FILEEXT::SpiceModelFileExtension )                 // SPICE files
+            EXT_NO_PIPE( FILEEXT::IbisFileExtension );
     }
 
     fileExtensionRegex += ")";
@@ -276,7 +276,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 
     for( unsigned ii = 0; ii < files.GetCount(); ++ii )
     {
-        if( files[ii].EndsWith( wxS( ".ibs" ) ) )
+        if( files[ii].EndsWith( FILEEXT::IbisFileExtension ) )
         {
             wxFileName package( files[ ii ] );
             package.MakeRelativeTo( aSrcDir );

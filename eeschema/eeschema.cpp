@@ -643,7 +643,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             aErrors += msg;
         }
     }
-    else if( destFile.GetName() == wxS( "sym-lib-table" ) )
+    else if( destFile.GetName() == FILEEXT::SymbolLibraryTableFileName )
     {
         SYMBOL_LIB_TABLE symbolLibTable;
         symbolLibTable.Load( aSrcFilePath );

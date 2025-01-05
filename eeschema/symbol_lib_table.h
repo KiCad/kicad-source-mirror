@@ -319,7 +319,7 @@ public:
 
     static SYMBOL_LIB_TABLE& GetGlobalLibTable();
 
-    static const wxString& GetSymbolLibTableFileName();
+    static const wxString GetSymbolLibTableFileName();
 
    /**
      * Compares this table against another.

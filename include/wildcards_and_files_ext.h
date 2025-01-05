@@ -131,7 +131,10 @@ public:
     static const std::string CadstarSchematicFileExtension;
     static const std::string CadstarPartsLibraryFileExtension;
     static const std::string KiCadSchematicFileExtension;
+    static const std::string IbisFileExtension;
     static const std::string SpiceFileExtension;
+    static const std::string SpiceModelFileExtension;
+    static const std::string SpiceSubcircuitFileExtension;
     static const std::string CadstarNetlistFileExtension;
     static const std::string OrCadPcb2NetlistFileExtension;
     static const std::string NetlistFileExtension;
@@ -186,6 +189,7 @@ public:
     static const std::string CsvFileExtension;
     static const std::string XmlFileExtension;
     static const std::string JsonFileExtension;
+    static const std::string PythonFileExtension;
 
     static const std::string StepFileExtension;
     static const std::string StepFileAbrvExtension;
@@ -198,6 +202,10 @@ public:
     static const std::string KiCadJobSetFileExtension;
 
     static const wxString GerberFileExtensionsRegex;
+
+    static const std::string FootprintLibraryTableFileName;
+    static const std::string SymbolLibraryTableFileName;
+    static const std::string DesignBlockLibraryTableFileName;
 
     static const std::string KiCadUriPrefix;
 

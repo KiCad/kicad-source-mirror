@@ -533,7 +533,7 @@ public:
                  || ext == FILEEXT::LegacySymbolDocumentFileExtension
                  || ext == FILEEXT::KiCadSymbolLibFileExtension
                  || ext == FILEEXT::NetlistFileExtension
-               || destFile.GetName() == "sym-lib-table" )
+               || destFile.GetName() == FILEEXT::SymbolLibraryTableFileName )
         {
             KIFACE* eeschema = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
             eeschema->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -545,7 +545,7 @@ public:
                  || ext == FILEEXT::KiCadFootprintFileExtension
                  || ext == FILEEXT::LegacyFootprintLibPathExtension
                  || ext == FILEEXT::FootprintAssignmentFileExtension
-               || destFile.GetName() == "fp-lib-table" )
+               || destFile.GetName() == FILEEXT::FootprintLibraryTableFileName )
         {
             KIFACE* pcbnew = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
             pcbnew->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,

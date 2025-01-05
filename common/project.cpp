@@ -158,19 +158,19 @@ bool PROJECT::IsNullProject() const
 
 const wxString PROJECT::SymbolLibTableName() const
 {
-    return libTableName( wxS( "sym-lib-table" ) );
+    return libTableName( FILEEXT::SymbolLibraryTableFileName );
 }
 
 
 const wxString PROJECT::FootprintLibTblName() const
 {
-    return libTableName( wxS( "fp-lib-table" ) );
+    return libTableName( FILEEXT::FootprintLibraryTableFileName );
 }
 
 
 const wxString PROJECT::DesignBlockLibTblName() const
 {
-    return libTableName( wxS( "design-block-lib-table" ) );
+    return libTableName( FILEEXT::DesignBlockLibraryTableFileName );
 }
 
 

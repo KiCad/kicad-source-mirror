@@ -56,9 +56,6 @@ DESIGN_BLOCK_LIST_IMPL GDesignBlockList;
 using namespace LIB_TABLE_T;
 
 
-static const wxChar global_tbl_name[] = wxT( "design-block-lib-table" );
-
-
 bool DESIGN_BLOCK_LIB_TABLE_ROW::operator==( const DESIGN_BLOCK_LIB_TABLE_ROW& aRow ) const
 {
     return LIB_TABLE_ROW::operator==( aRow ) && type == aRow.type;
@@ -612,7 +609,7 @@ bool DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE& aTable )
         if( v && !v->IsEmpty() )
             ss.AddPaths( *v, 0 );
 
-        wxString fileName = ss.FindValidPath( global_tbl_name );
+        wxString fileName = ss.FindValidPath( FILEEXT::DesignBlockLibraryTableFileName );
 
         // The fallback is to create an empty global design block table for the user to populate.
         if( fileName.IsEmpty() || !::wxCopyFile( fileName, fn.GetFullPath(), false ) )
@@ -691,7 +688,7 @@ wxString DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName()
     wxFileName fn;
 
     fn.SetPath( PATHS::GetUserSettingsPath() );
-    fn.SetName( global_tbl_name );
+    fn.SetName( FILEEXT::DesignBlockLibraryTableFileName );
 
     return fn.GetFullPath();
 }

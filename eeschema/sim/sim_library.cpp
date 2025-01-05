@@ -26,6 +26,7 @@
 #include <sim/sim_library.h>
 #include <sim/sim_library_spice.h>
 #include <boost/algorithm/string/case_conv.hpp>
+#include <wildcards_and_files_ext.h>
 #include <macros.h>
 
 
@@ -35,7 +36,7 @@ SIM_LIBRARY::Create( const wxString& aFilePath, bool aForceFullParse, REPORTER& 
 {
     std::unique_ptr<SIM_LIBRARY> library;
 
-    if( aFilePath.EndsWith( ".ibs" ) )
+    if( aFilePath.EndsWith( FILEEXT::IbisFileExtension ) )
         library = std::make_unique<SIM_LIBRARY_IBIS>();
     else
         library = std::make_unique<SIM_LIBRARY_SPICE>( aForceFullParse );

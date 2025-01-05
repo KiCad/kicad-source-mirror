@@ -484,8 +484,8 @@ public:
     {
         wxFileName file( aSrcFilePath );
 
-        if( !m_migrateTables && ( file.GetName() == wxT( "sym-lib-table" ) ||
-                                  file.GetName() == wxT( "fp-lib-table" ) ) )
+        if( !m_migrateTables && ( file.GetName() == FILEEXT::SymbolLibraryTableFileName ||
+                                  file.GetName() == FILEEXT::FootprintLibraryTableFileName ) )
         {
             return wxDIR_CONTINUE;
         }

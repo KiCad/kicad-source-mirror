@@ -142,6 +142,9 @@ const std::string FILEEXT::CadstarSchematicFileExtension( "csa" );
 const std::string FILEEXT::CadstarPartsLibraryFileExtension( "lib" );
 const std::string FILEEXT::KiCadSchematicFileExtension( "kicad_sch" );
 const std::string FILEEXT::SpiceFileExtension( "cir" );
+const std::string FILEEXT::SpiceModelFileExtension( "model" );
+const std::string FILEEXT::SpiceSubcircuitFileExtension( "sub" );
+const std::string FILEEXT::IbisFileExtension( "ibs" );
 const std::string FILEEXT::CadstarNetlistFileExtension( "frp" );
 const std::string FILEEXT::OrCadPcb2NetlistFileExtension( "net" );
 const std::string FILEEXT::NetlistFileExtension( "net" );
@@ -197,6 +200,7 @@ const std::string FILEEXT::MarkdownFileExtension( "md" );
 const std::string FILEEXT::CsvFileExtension( "csv" );
 const std::string FILEEXT::XmlFileExtension( "xml" );
 const std::string FILEEXT::JsonFileExtension( "json" );
+const std::string FILEEXT::PythonFileExtension( "py" );
 
 const std::string FILEEXT::StepFileExtension( "step" );
 const std::string FILEEXT::StepFileAbrvExtension( "stp" );
@@ -207,6 +211,10 @@ const std::string FILEEXT::PlyFileExtension( "ply" );
 const std::string FILEEXT::StlFileExtension( "stl" );
 
 const wxString FILEEXT::GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
+
+const std::string FILEEXT::FootprintLibraryTableFileName( "fp-lib-table" );
+const std::string FILEEXT::SymbolLibraryTableFileName( "sym-lib-table" );
+const std::string FILEEXT::DesignBlockLibraryTableFileName( "design-block-lib-table" );
 
 const std::string FILEEXT::KiCadUriPrefix( "kicad-embed" );
 
