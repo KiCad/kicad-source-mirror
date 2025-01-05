@@ -5,7 +5,7 @@
 # Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>, 2020, 2021, 2022.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Дмитрий Дёмин <dmitrodem@gmail.com>, 2021.
-# dsa-t <dudesuchamazing@gmail.com>, 2022, 2023, 2024.
+# dsa-t <dudesuchamazing@gmail.com>, 2022, 2023, 2024, 2025.
 # Andrey Fedorushkov <andrf@mail.ru>, 2022, 2023.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
@@ -20,10 +20,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 12:45+0300\n"
-"PO-Revision-Date: 2024-12-31 22:17+0000\n"
+"PO-Revision-Date: 2025-01-05 16:29+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3483,9 +3483,8 @@ msgid "Format:"
 msgstr "Формат:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:34
-#, fuzzy
 msgid "Include:"
-msgstr "Включить перех. отв."
+msgstr "Включить:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:47
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -5206,7 +5205,6 @@ msgid "Check for package updates on startup"
 msgstr "Проверять наличие обновлений пакетов при запуске"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
 msgstr "Работа с пакетами библиотек"
 
@@ -5600,7 +5598,6 @@ msgid "Could not use OpenGL"
 msgstr "Не удаётся использовать OpenGL"
 
 #: common/draw_panel_gal.cpp:540
-#, fuzzy
 msgid "Error switching GAL backend"
 msgstr "Ошибка переключения GAL бэкенда"
 
@@ -5928,9 +5925,8 @@ msgid "Origins & Axes"
 msgstr "Начало координат и оси"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "По умолчанию для новых посад. мест"
+msgstr "По умолчанию для посад. мест"
 
 #: common/eda_base_frame.cpp:1186
 msgid "Graphics Defaults"
@@ -7456,32 +7452,28 @@ msgid "Loading file canceled by user."
 msgstr "Загрузка файла отменена пользователем."
 
 #: common/jobs/job.cpp:79
-#, fuzzy
 msgid "Job Settings"
-msgstr "Настройки"
+msgstr "Параметры задания"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 msgid "3D model export"
 msgstr "Экспорт 3D модели"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Экспорт 3D модели"
+msgstr "Параметры задания экспорта 3D модели"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
 msgstr "PCB: Экспорт 3D модели"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "PCB: Экспорт данных сверловки"
+msgstr "Экспорт данных сверловки"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания экспорта данных сверловки"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7494,52 +7486,44 @@ msgstr "Экспорт DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:147
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания экспорта DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
 msgstr "PCB: Экспорт DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Параметры экспорта в формате GenCAD"
+msgstr "Параметры задания экспорта GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "PCB: Экспорт Gerber"
+msgstr "Экспорт одного Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Параметры экспорта в формате GenCAD"
+msgstr "Параметры задания экспорта одного Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "PCB: Экспорт Gerber"
+msgstr "Экспорт Gerber-файлов"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Параметры экспорта в формате GenCAD"
+msgstr "Параметры задания экспорта Gerber-файлов"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:53
 msgid "PCB: Export Gerbers"
 msgstr "PCB: Экспорт Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
 msgstr "Экспорт IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "Экспорт файла IPC-2581"
+msgstr "Параметры задания экспорта IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
@@ -7551,9 +7535,8 @@ msgid "Export ODB++"
 msgstr "Экспорт ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания экспорта ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 msgid "PCB: Export ODB++"
@@ -7566,23 +7549,20 @@ msgstr "Экспорт PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:128
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания экспорта PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
 msgid "PCB: Export PDF"
 msgstr "PCB: Экспорт PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Export position data"
-msgstr "PCB: Экспорт данных о размещении"
+msgstr "Экспорт данных о размещении"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "PCB: Экспорт данных о размещении"
+msgstr "Параметры задания экспорта данных о размещении"
 
 #: common/jobs/job_export_pcb_pos.cpp:115
 msgid "PCB: Export Position Data"
@@ -7595,61 +7575,53 @@ msgstr "Экспорт SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:166
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания экспорта SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:68
 msgid "PCB: Export SVG"
 msgstr "PCB: Экспорт SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Сформировать перечень элементов (BOM)..."
+msgstr "Сформировать перечень элементов (BOM)"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Сформировать перечень элементов (BOM)..."
+msgstr "Параметры задания экспорта перечня элементов (BOM)"
 
 #: common/jobs/job_export_sch_bom.cpp:96
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Сформировать перечень элементов (BOM)..."
+msgstr "Схема: Сформировать перечень элементов (BOM)"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Экспорт списка цепей"
+msgstr "Экспорт списка цепей %s"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Экспорт списка цепей"
+msgstr "Параметры задания экспорта списка цепей"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
 msgstr "Схема: Экспорт Netlist"
 
 #: common/jobs/job_export_sch_plot.cpp:179
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "Экспорт Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:185
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания экспорта Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:198 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "Экспорт HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:204
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания экспорта HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:208
 msgid "Schematic: Export SVG"
@@ -7660,9 +7632,8 @@ msgid "Schematic: Export HPGL"
 msgstr "Схема: Экспорт HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:212
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Схема: Экспорт Netlist"
+msgstr "Схема: Экспорт Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:214
 msgid "Schematic: Export DXF"
@@ -7677,55 +7648,49 @@ msgid "Schematic PythonBOM export"
 msgstr "Экспорт PythonBOM схемы"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Выполнить DRC печатной платы"
+msgstr "Выполнить DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "Настройки 3D"
+msgstr "Параметры задания DRC"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
 msgstr "PCB: Выполнить DRC"
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Рендер печатной платы"
+msgstr "Рендер %s"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания рендера PCB"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
 msgstr "PCB: Рендер"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Выполнить DRC печатной платы"
+msgstr "Выполнить ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Схема: Экспорт Netlist"
+msgstr "Параметры задания проверки ERC"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
 msgstr "Схема: Выполнить ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "Спец.инструменты"
+msgstr "Особое: Скопировать файлы"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr "Специальная: Выполнить команду"
+msgstr "Особое: Выполнить команду"
 
 #: common/jobs/jobs_output_archive.cpp:97 kicad/dialogs/panel_jobs.cpp:64
 msgid "Archive"
@@ -7859,9 +7824,8 @@ msgid "Symbol body fills"
 msgstr "Заливки символов"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "Файл листа"
+msgstr "Заливки фигур"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -10818,7 +10782,7 @@ msgstr "Блок проектирования '%s' уже существует �
 
 #: eeschema/design_block_utils.cpp:50
 msgid "Overwrite existing design block?"
-msgstr "Переписать существующий блок дизайна?"
+msgstr "Перезаписать существующий блок дизайна?"
 
 #: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:287
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -11906,9 +11870,8 @@ msgid "Electrical Rules Checker"
 msgstr "Проверка электрических правил"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания проверки ERC"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 msgid "Export netlist in KiCad format"
@@ -12066,9 +12029,8 @@ msgstr "Нужно указать наименование"
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
 #: kicad/dialogs/panel_jobs_base.cpp:258
-#, fuzzy
 msgid "Output path:"
-msgstr "Выходной тракт:"
+msgstr "Выходной путь:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
 msgid "Add Exporter..."
@@ -13700,9 +13662,8 @@ msgid "Open output file with associated application after successful plot"
 msgstr "Открыть выходной файл подходящим приложением после успешного черчения"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "Печать схемы"
+msgstr "Чертить схему"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -16390,9 +16351,8 @@ msgid "&Pitch of repeated pins:"
 msgstr "Шаг повторения выводов:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
-#, fuzzy
 msgid "General Editing"
-msgstr "Общее редактирование"
+msgstr "Общие параметры редактирования"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:144
 msgid "Keep pins attached when dragging edges"
@@ -25838,7 +25798,6 @@ msgstr "Объединить пересекающиеся геометричес
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in conductor layers."
 msgstr "Не вырезать переходные отверстия в слоях меди."
 
@@ -26034,6 +25993,9 @@ msgid ""
 "Opt into the new behavior which means output path is a directory, a file per "
 "layer is generated and the common layers arg becomes available. "
 msgstr ""
+"Использовать новое поведение, при котором выходной путь - это каталог, файл "
+"генерируется для каждого слоя, а также становится доступным аргумент общих "
+"слоев. "
 
 #: kicad/cli/command_pcb_export_dxf.cpp:107
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -26053,11 +26015,13 @@ msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 msgstr ""
+"Эта команда устарела с версии KiCad 9.0, в будущем ее поведение по умолчанию "
+"изменится."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:152
 #: kicad/cli/command_pcb_export_svg.cpp:167
 msgid "The new behavior will match --mode-new"
-msgstr ""
+msgstr "Новое поведение будет соответствовать --mode-new"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -26129,6 +26093,8 @@ msgstr "Использовать расширение .gbr для Gerber-фай�
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
+"Эта команда устарела с версии KiCad 9.0, вместо нее используйте \"gerbers\"."
+"\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -26147,14 +26113,12 @@ msgid "Generate PDF from a list of layers"
 msgstr "Создать PDF из списка слоев"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:43
-#, fuzzy
 msgid "Plot the layers to individual PDF files"
-msgstr "Чертить указанные слои в одном файле Gerber"
+msgstr "Чертить слои на отдельных файлах PDF"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:47
-#, fuzzy
 msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "Чертить указанные слои в одном файле Gerber"
+msgstr "Чертить слои на одном файле PDF с несколькими страницами"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:51
 #: kicad/cli/command_pcb_export_svg.cpp:46
@@ -26166,17 +26130,16 @@ msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Цветовая тема (по умолчанию берется из редактора плат)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:160
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "Наклейка соединяет более одного провода"
+msgstr "Нельзя использовать более одного флага режима\n"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:184
 msgid "The new behavior will match --mode-separate"
-msgstr ""
+msgstr "Новое поведение будет соответствовать --mode-separate"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:187
 msgid "The behavior with neither --mode flags will no longer exist"
-msgstr ""
+msgstr "Поведение без флагов --mode больше не будет действовать."
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -26285,12 +26248,12 @@ msgid "Render from side. Options: %s"
 msgstr "Визуализация со стороны. Параметры: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
 msgstr ""
-"Фон изображения. Варианты: transparent, opaque. По умолчанию: transparent "
-"для PNG, opaque для JPEG"
+"Фон изображения. Варианты: %s. По умолчанию: transparent для PNG, opaque для "
+"JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:251
 #, c-format
@@ -26339,22 +26302,24 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Яркость верхнего освещения, формат 'R,G,B' или одно число, диапазон: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "Яркость нижнего освещения, формат 'R,G,B' или одно число, диапазон: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Яркость бокового освещения, формат 'R,G,B' или одно число, диапазон: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "Яркость освещения камеры, формат 'R,G,B' или одно число, диапазон: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "Угол возвышения бокового освещения в градусах, диапазон: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 msgid "Invalid background\n"
@@ -26373,24 +26338,20 @@ msgid "Invalid pivot format\n"
 msgstr "Недопустимый формат точки поворота\n"
 
 #: kicad/cli/command_pcb_render.cpp:367
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "Недопустимый формат точки поворота\n"
+msgstr "Неверный формат яркости верхнего освещения\n"
 
 #: kicad/cli/command_pcb_render.cpp:374
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "Недопустимый формат поворота\n"
+msgstr "Неверный формат яркости нижнего освещения\n"
 
 #: kicad/cli/command_pcb_render.cpp:381
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "Недопустимый формат изображения\n"
+msgstr "Неверный формат яркости бокового освещения\n"
 
 #: kicad/cli/command_pcb_render.cpp:388
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "Недопустимый формат изображения\n"
+msgstr "Неверный формат яркости освещения камеры\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid image format\n"
@@ -26473,9 +26434,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "Цветовая тема (по умолчанию берется из редактора схем)"
 
 #: kicad/cli/command_sch_export_plot.cpp:82
-#, fuzzy
 msgid "Default font name"
-msgstr "Шрифт по умолчанию:"
+msgstr "Имя шрифта по умолчанию"
 
 #: kicad/cli/command_sch_export_plot.cpp:88
 msgid "Do not generate property popups in PDF"
@@ -26572,38 +26532,32 @@ msgid "version info format (plain, commit, about)"
 msgstr "формат информации о версии (plain, commit, about)"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
-msgstr "Обозначение:"
+msgstr "Цель:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
-#, fuzzy
 msgid "Generate error if no files copied"
-msgstr "Генерировать файл задания Gerber"
+msgstr "Выдать ошибку, если ни один файл не был скопирован"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
-#, fuzzy
 msgid "Overwrite files in destination"
-msgstr "Переписать существующий блок дизайна?"
+msgstr "Перезаписывать файлы в целевом пути"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
-#, fuzzy
 msgid "Copy Files Job Settings"
-msgstr "Настройки фильтра"
+msgstr "Параметры задания копирования файлов"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
-#, fuzzy
 msgid "Record output messages"
-msgstr "Информация о выполнении"
+msgstr "Записывать выходные сообщения"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
 msgstr "Игнорировать ненулевой код выхода"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "Править параметры задания..."
+msgstr "Параметры задания выполнения команды"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
@@ -26706,9 +26660,9 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
-msgstr "Выход:"
+msgstr "Выход: %s"
 
 #: kicad/dialogs/panel_jobs.cpp:245
 msgid "No."
@@ -26719,9 +26673,8 @@ msgid "Job Description"
 msgstr "Описание задания"
 
 #: kicad/dialogs/panel_jobs.cpp:299
-#, fuzzy
 msgid "No output messages"
-msgstr "Информация о выполнении"
+msgstr "Нет выходных сообщений"
 
 #: kicad/dialogs/panel_jobs.cpp:359
 msgid "Last run successful"
@@ -26736,17 +26689,14 @@ msgid "Running jobs"
 msgstr "Выполнение заданий"
 
 #: kicad/dialogs/panel_jobs.cpp:409
-#, fuzzy
 msgid "Edit Output Options..."
-msgstr "%s Параметры вывода"
+msgstr "Править параметры выхода..."
 
 #: kicad/dialogs/panel_jobs.cpp:410
-#, fuzzy
 msgid "Delete Output"
-msgstr "Сгенерировать все выходные файлы"
+msgstr "Удалить выход"
 
 #: kicad/dialogs/panel_jobs.cpp:413
-#, fuzzy
 msgid "View Last Run Results..."
 msgstr "Просмотр результатов последнего запуска..."
 
@@ -26816,9 +26766,8 @@ msgid "Description:"
 msgstr "Описание:"
 
 #: kicad/dialogs/panel_jobs_base.cpp:276
-#, fuzzy
 msgid "Include jobs:"
-msgstr "Включить зоны"
+msgstr "Включить задания:"
 
 #: kicad/dialogs/panel_jobs_base.h:166
 msgid "Job Output Run Log"
@@ -27989,9 +27938,8 @@ msgid "Open Project..."
 msgstr "Открыть проект..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "Новый файл списка заданий..."
+msgstr "Открыть файл списка заданий..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -28116,9 +28064,8 @@ msgid "Open Existing Project"
 msgstr "Открыть существующий проект"
 
 #: kicad/tools/kicad_manager_control.cpp:428
-#, fuzzy
 msgid "Open Jobset"
-msgstr "Сохранить список заданий"
+msgstr "Открыть список заданий"
 
 #: kicad/tools/kicad_manager_control.cpp:635
 #, c-format
@@ -37272,9 +37219,8 @@ msgid "Generate property popups for back footprints"
 msgstr "Добавить всплывающие окна с информацией для нижних посад. мест"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:425
-#, fuzzy
 msgid "Single document"
-msgstr "Открыть существующий документ"
+msgstr "Один документ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:453
 msgid "Run DRC..."
@@ -37668,9 +37614,8 @@ msgid "User"
 msgstr "Пользовательское"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
-#, fuzzy
 msgid "Dimensions:"
-msgstr "Размеры"
+msgstr "Размеры:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
@@ -37682,14 +37627,12 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
-#, fuzzy
 msgid "Quality preset:"
-msgstr "Выбор набора:"
+msgstr "Пресет качества:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
-#, fuzzy
 msgid "Background style:"
-msgstr "Стиль фона"
+msgstr "Стиль фона:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:103
 msgid "View"
@@ -37709,14 +37652,12 @@ msgid "Orthogonal"
 msgstr "Ортогональная"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
-#, fuzzy
 msgid "Projection"
-msgstr "Проект"
+msgstr "Проекция"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:138
-#, fuzzy
 msgid "Positioning"
-msgstr "Позиция"
+msgstr "Расположение"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:148
 #: pcbnew/dialogs/dialog_shape_properties.cpp:773
@@ -37734,42 +37675,37 @@ msgid "Z"
 msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
-#, fuzzy
 msgid "Pivot:"
-msgstr "Задать точку вращения"
+msgstr "Точка вращения:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "Панорамирование:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
-#, fuzzy
 msgid "Lights intensity"
-msgstr "Интенсивность"
+msgstr "Яркость освещения"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
-#, fuzzy
 msgid "Camera:"
-msgstr "Масштабирование камеры"
+msgstr "Камера:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
-#, fuzzy
 msgid "Lights position"
-msgstr "Параметры освещения"
+msgstr "Расположение освещения"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
-msgstr ""
+msgstr "Угол бокового освещения:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
-#, fuzzy
 msgid "Render PCB Job Options"
-msgstr "Параметры визуализации"
+msgstr "Параметры задания рендера PCB"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1466
@@ -39828,7 +39764,6 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
@@ -39838,8 +39773,8 @@ msgstr ""
 "Глобальный зазор между конт. пл. и паяльной пастой.\n"
 "Это значение может быть заменено локальными значениями для посад. места или "
 "конт. пл.\n"
-"Окончательное значение зазора — это сумма данного значения и значения "
-"относительного зазора."
+"Положительный зазор означает, что вырез в паяльной маске больше, чем конт. "
+"пл. (типично для зазора в паяльной маске)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
 msgid "Solder mask settings:"
@@ -39851,13 +39786,13 @@ msgstr "Мин. ширина паяльной маски:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"Минимальное расстояние между вырезами в паяльной маске. Вырезы конт. пл., "
-"которые расположены ближе указанного значения, будут объединены в один."
+"Минимальное расстояние между вырезами в паяльной маске.\n"
+"Вырезы конт. пл., расположенные ближе указанного значения, будут объединены "
+"в один."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -39878,11 +39813,10 @@ msgstr ""
 "ошибки DRC"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:104
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints."
 msgstr ""
-"Разрешить объединение апертур паяльной маски между конт. площадками внутри "
-"посадочного места"
+"Разрешить объединение апертур паяльной маски между конт. пл. внутри "
+"посадочных мест."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
 #, fuzzy
@@ -39901,14 +39835,12 @@ msgstr "Закрыть перех. отв. маской:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
-#, fuzzy
 msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"Тентированные перех. отв. не чертятся на слое паяльной маски\n"
-"Не тентированные перех. отв. чертятся на слое паяльной маски\n"
-"(Паяльная маска является негативным слоем)"
+"Тентированные перех. отв. покрываются паяльной маской\n"
+"Не тентированные перех. отв. не покрываются паяльной маской"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 msgid "Solder paste settings:"
@@ -41396,7 +41328,7 @@ msgstr "Чистый галстук на %s; зазор: 0."
 
 #: pcbnew/drc/drc_engine.cpp:788
 msgid "net tie"
-msgstr "сетевой галстук"
+msgstr "связка цепей"
 
 #: pcbnew/drc/drc_engine.cpp:815 pcbnew/drc/drc_engine.cpp:825
 #, c-format
@@ -43721,9 +43653,8 @@ msgid "Length Constraints: %s"
 msgstr "Ограничения длины: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2238
-#, fuzzy
 msgid "Tune Skew"
-msgstr "Настроен: перекос "
+msgstr "Настроить перекос"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2449
 msgid "Unable to tune segments inside other tuning patterns."
@@ -44908,9 +44839,8 @@ msgid "Corner Radius Ratio"
 msgstr "Относительный радиус скругления"
 
 #: pcbnew/pad.cpp:2646
-#, fuzzy
 msgid "Corner Radius Size"
-msgstr "Радиус скругления %"
+msgstr "Размер радиуса скругления"
 
 #: pcbnew/pad.cpp:2652
 msgid "Hole Shape"
@@ -47189,9 +47119,8 @@ msgid "Error exporting VRML"
 msgstr "Ошибка экспорта VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:458
-#, fuzzy
 msgid "Invalid image dimensions"
-msgstr "Неверное определение имён вывода"
+msgstr "Неверные размеры изображения"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:674
 #, c-format
