@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 12:49+0300\n"
-"PO-Revision-Date: 2025-01-05 16:30+0000\n"
+"PO-Revision-Date: 2025-01-05 19:11+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -28336,7 +28336,7 @@ msgstr "Параметры диэлектриков"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr "Метал. полуотверстия"
+msgstr "Имеет периферийные полу-отверстия"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
@@ -40771,13 +40771,13 @@ msgstr "(контактная площадка не имеет слоя)"
 
 #: pcbnew/pad.cpp:2011
 msgid "(PTH pad has no copper layers)"
-msgstr "(переходное отверстие не имеет медных слоёв)"
+msgstr "(PTH конт. пл. не имеет медных слоёв)"
 
 #: pcbnew/pad.cpp:2017
 msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr ""
-"(переходные отверстия обычно имеют медную контактную площадку хотя бы на "
-"одном слое)"
+"(металл. отверстия обычно имеют медную контактную площадку хотя бы на одном "
+"слое)"
 
 #: pcbnew/pad.cpp:2036
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -40825,7 +40825,8 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2100
 msgid "('castellated' property is for PTH pads)"
-msgstr "(только площадки переходных отверстий могут быть зубчатыми)"
+msgstr ""
+"(только PTH конт. пл. могут иметь свойство 'периферийное полу-отверстие')"
 
 #: pcbnew/pad.cpp:2103
 msgid "('BGA' property is for SMD pads)"
@@ -40869,7 +40870,7 @@ msgstr "Трапециевидная"
 
 #: pcbnew/pad.cpp:2348
 msgid "Castellated pad"
-msgstr "Зубчатая конактная площадка"
+msgstr "Периферийное полу-отверстие"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
