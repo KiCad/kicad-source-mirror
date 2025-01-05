@@ -123,3 +123,5 @@ target_compile_definitions( qa_eeschema
 )
 
 kicad_add_boost_test( qa_eeschema qa_eeschema )
+
+setup_qa_env( qa_eeschema )

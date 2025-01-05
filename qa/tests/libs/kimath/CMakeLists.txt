@@ -89,3 +89,5 @@ target_include_directories( qa_kimath PRIVATE
 )
 
 kicad_add_boost_test( qa_kimath qa_kimath )
+
+setup_qa_env( qa_kimath )

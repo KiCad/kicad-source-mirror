@@ -57,15 +57,19 @@ ${NEW_PATHS};" )
     get_filename_component( CAIRO_LIB_BASE "${CAIRO_LIBRARY}" DIRECTORY )
     set( EXTRA_PYTEST_ENVIRONMENT "DYLD_FALLBACK_LIBRARY_PATH=${CAIRO_LIB_BASE}" )
 elseif ( MSVC )
+
+
     if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
         set( NEW_PATHS
         "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin;\
-        ${NEW_PATHS};" )
+${NEW_PATHS};" )
     else()
         set( NEW_PATHS
         "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin;\
-        ${NEW_PATHS};" )
+${NEW_PATHS};" )
     endif()
+
+    set( EXTRA_PYTEST_ENVIRONMENT "FONTCONFIG_PATH=${CMAKE_SOURCE_DIR}/qa/resources/windows/fonts/" )
 endif()
 
 set( QA_PATH_REPLACEMENT "PATH=${NEW_PATHS};$ENV{PATH}" )
@@ -94,7 +98,16 @@ add_test(NAME qa_cli
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set_tests_properties( qa_cli
-    PROPERTIES
-        ENVIRONMENT "${QA_PATH_REPLACEMENT};KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
-)
+if( NOT MSVC )
+    set_tests_properties( qa_cli
+        PROPERTIES
+            ENVIRONMENT "${QA_PATH_REPLACEMENT};KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
+    )
+else()
+    set_tests_properties( qa_cli
+        PROPERTIES
+            ENVIRONMENT "KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
+    )
+
+    setup_qa_env( qa_cli )
+endif()

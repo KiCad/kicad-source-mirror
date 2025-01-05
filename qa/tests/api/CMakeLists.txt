@@ -57,3 +57,5 @@ target_include_directories( qa_api PRIVATE
     )
 
 kicad_add_boost_test( qa_api qa_api )
+
+setup_qa_env( qa_api )

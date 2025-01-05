@@ -75,3 +75,5 @@ target_link_libraries( qa_gerbview
 )
 
 kicad_add_boost_test( qa_gerbview qa_gerbview )
+
+setup_qa_env( qa_gerbview )

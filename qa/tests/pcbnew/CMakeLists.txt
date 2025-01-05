@@ -150,3 +150,5 @@ if( WIN32 )
 endif()
 
 kicad_add_boost_test( qa_pcbnew qa_pcbnew )
+
+setup_qa_env( qa_pcbnew )

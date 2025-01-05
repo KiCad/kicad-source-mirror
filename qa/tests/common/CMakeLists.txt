@@ -116,3 +116,5 @@ if( KICAD_TEST_DATABASE_LIBRARIES )
 endif()
 
 kicad_add_boost_test( qa_common qa_common )
+
+setup_qa_env( qa_common )

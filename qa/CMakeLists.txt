@@ -21,6 +21,25 @@
 
 include( KiCadQABuildUtils )
 
+macro(setup_qa_env target_name)
+if( MSVC )
+    # Once we move the cmake minimum to 3.22, we can use this for all platforms and not just MSVC
+    # the old method only worked on MSVC due to a bug in cmake which was later fixed after ENVIRONMENT_MODIFICATION was added
+    set( PATH_MODIFICATION
+      "PATH=path_list_prepend:${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin"
+      "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/kicad/"
+      "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/common/"
+      "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/api/"
+      "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/common/gal/"
+      "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/pcbnew/"
+      "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/eeschema/" )
+    set_tests_properties( ${target_name}
+        PROPERTIES
+            ENVIRONMENT_MODIFICATION "${PATH_MODIFICATION}"
+    )
+endif()
+endmacro()
+
 # Shared QA helper libraries
 add_subdirectory( qa_utils )
 add_subdirectory( pcbnew_utils )
