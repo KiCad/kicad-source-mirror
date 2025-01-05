@@ -109,8 +109,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
             jobfile_writer->AddGbrFile( layer, fullname );
         }
 
-        if( m_plotOpts.GetFormat() != PLOT_FORMAT::PDF || !m_plotOpts.m_PDFSingle
-            || ( i == 0 && m_plotOpts.GetFormat() == PLOT_FORMAT::PDF
+        if( m_plotOpts.GetFormat() != PLOT_FORMAT::PDF
+            || !m_plotOpts.m_PDFSingle
+            || ( pageNum == 1 && m_plotOpts.GetFormat() == PLOT_FORMAT::PDF
                     && m_plotOpts.m_PDFSingle ) )
         {
             // this will only be used by pdf
@@ -171,8 +172,10 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
 
 
             // last page
-            if( m_plotOpts.GetFormat() != PLOT_FORMAT::PDF || !m_plotOpts.m_PDFSingle
-                || i == aLayersToPlot.size() - 1 )
+            if( m_plotOpts.GetFormat() != PLOT_FORMAT::PDF
+                || !m_plotOpts.m_PDFSingle
+                || i == aLayersToPlot.size() - 1
+                || pageNum == finalPageCount )
             {
                 plotter->EndPlot();
                 delete plotter->RenderSettings();
