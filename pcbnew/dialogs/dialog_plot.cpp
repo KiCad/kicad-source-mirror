@@ -593,6 +593,8 @@ void DIALOG_PLOT::arrangeAllLayersList( const LSEQ& aSeq )
             m_plotAllLayersList->MoveCurrentUp();
             currentPos--;
         }
+
+        idx++;
     }
 }
 
