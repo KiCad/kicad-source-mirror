@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 12:45+0300\n"
+"POT-Creation-Date: 2025-01-05 22:15+0300\n"
 "PO-Revision-Date: 2024-09-25 17:21+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
@@ -8406,7 +8406,7 @@ msgstr "Houve um erro na extração do arquivo!"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:345
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:105
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:143 pcbnew/pcb_plotter.cpp:188
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:143 pcbnew/pcb_plotter.cpp:191
 #: pcbnew/pcbnew_jobs_handler.cpp:925
 #, c-format
 msgid "Failed to create file '%s'."
@@ -16569,7 +16569,7 @@ msgstr ""
 "entradas herdadas na tabela?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:977
-#: pcbnew/dialogs/dialog_export_step.cpp:596
+#: pcbnew/dialogs/dialog_export_step.cpp:599
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Ficheiro '%s' já existe. Deseja sobrescrever este ficheiro?"
@@ -19578,13 +19578,13 @@ msgstr "Traçado para '%s'.\n"
 #: eeschema/sch_plotter.cpp:240 eeschema/sch_plotter.cpp:426
 #: eeschema/sch_plotter.cpp:773 eeschema/sch_plotter.cpp:940
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:129 pcbnew/pcb_plotter.cpp:213
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129 pcbnew/pcb_plotter.cpp:216
 msgid "Done."
 msgstr "Feito."
 
 #: eeschema/sch_plotter.cpp:400 eeschema/sch_plotter.cpp:557
 #: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:911
-#: pcbnew/pcb_plotter.cpp:182
+#: pcbnew/pcb_plotter.cpp:185
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Traçado para '%s'."
@@ -25956,7 +25956,7 @@ msgstr "Retorna um código de saída diferente de zero se houver violações DRC
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:293
 #: kicad/cli/command_pcb_export_drill.cpp:150
-#: kicad/cli/command_pcb_export_dxf.cpp:130
+#: kicad/cli/command_pcb_export_dxf.cpp:138
 #: kicad/cli/command_pcb_export_pos.cpp:148 kicad/cli/command_sch_erc.cpp:133
 msgid "Invalid units specified\n"
 msgstr "Unidades inválidas foram definidas\n"
@@ -26245,7 +26245,7 @@ msgstr "Incluir a borda e o título do bloco"
 msgid "Output units, valid options: mm, in"
 msgstr "Unidades de saída, opções válidas: mm, pol"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:75
+#: kicad/cli/command_pcb_export_dxf.cpp:80
 #: kicad/cli/command_pcb_export_gerbers.cpp:48
 #: kicad/cli/command_pcb_export_pdf.cpp:103
 #: kicad/cli/command_pcb_export_svg.cpp:98
@@ -26256,14 +26256,14 @@ msgstr ""
 "Camadas para incluir em cada gráfico, lista não traduzida dos nomes que "
 "serão inclusos nas camadas separadas por vírgula como F.Cu,B.Cu"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:82
+#: kicad/cli/command_pcb_export_dxf.cpp:87
 #: kicad/cli/command_pcb_export_svg.cpp:105
 msgid ""
 "Opt into the new behavior which means output path is a directory, a file per "
 "layer is generated and the common layers arg becomes available. "
 msgstr ""
 
-#: kicad/cli/command_pcb_export_dxf.cpp:107
+#: kicad/cli/command_pcb_export_dxf.cpp:112
 #: kicad/cli/command_pcb_export_gencad.cpp:91
 #: kicad/cli/command_pcb_export_gerber.cpp:121
 #: kicad/cli/command_pcb_export_ipc2581.cpp:119
@@ -26274,7 +26274,7 @@ msgstr ""
 msgid "Board file does not exist or is not accessible\n"
 msgstr "O ficheiro da placa não existe ou não está acessível\n"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:148
+#: kicad/cli/command_pcb_export_dxf.cpp:156
 #: kicad/cli/command_pcb_export_pdf.cpp:181
 #: kicad/cli/command_pcb_export_svg.cpp:163
 msgid ""
@@ -26282,7 +26282,7 @@ msgid ""
 "of this command will change in a future release."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_dxf.cpp:152
+#: kicad/cli/command_pcb_export_dxf.cpp:160
 #: kicad/cli/command_pcb_export_svg.cpp:167
 msgid "The new behavior will match --mode-new"
 msgstr ""
@@ -34383,45 +34383,45 @@ msgstr ""
 msgid "Model Scale Warning"
 msgstr "Aviso da escala do modelo"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:391
+#: pcbnew/dialogs/dialog_export_step.cpp:394
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "Falha na exportação do STEP! Por favor salve a PCI e tente novamente"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:440
+#: pcbnew/dialogs/dialog_export_step.cpp:443
 msgid "STEP files"
 msgstr "Arquivos STEP"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:442
+#: pcbnew/dialogs/dialog_export_step.cpp:445
 msgid "Binary glTF files"
 msgstr "Ficheiros binários glTF"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:444
+#: pcbnew/dialogs/dialog_export_step.cpp:447
 msgid "XAO files"
 msgstr "Ficheiros XAO"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:446
+#: pcbnew/dialogs/dialog_export_step.cpp:449
 msgid "BREP (OCCT) files"
 msgstr "Ficheiros BREP (OCCT)"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:448
+#: pcbnew/dialogs/dialog_export_step.cpp:451
 #, fuzzy
 msgid "PLY files"
 msgstr "Ficheiros HTML"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:450
+#: pcbnew/dialogs/dialog_export_step.cpp:453
 #, fuzzy
 msgid "STL files"
 msgstr "Ficheiros HTML"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:458
+#: pcbnew/dialogs/dialog_export_step.cpp:461
 msgid "3D Model Output File"
 msgstr "Ficheiro de saída do modelo 3D"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:535
+#: pcbnew/dialogs/dialog_export_step.cpp:538
 msgid "No filename for output file"
 msgstr "Nenhum nome para o ficheiro de saída"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:587
+#: pcbnew/dialogs/dialog_export_step.cpp:590
 #, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -34431,7 +34431,7 @@ msgstr ""
 "%.3f mm.\n"
 "Execute o DRC para realizar uma análise completa."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:599
+#: pcbnew/dialogs/dialog_export_step.cpp:602
 msgid "STEP/GLTF Export"
 msgstr "Exportar STEP/GLTF"
 
@@ -47531,7 +47531,7 @@ msgstr "O footprint com o valor de '%s' tem um designador de referência vazio."
 msgid "Multiple footprints have the reference designator '%s'."
 msgstr "Vários footprints têm o designador de referência '%s'."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:72
+#: pcbnew/specctra_import_export/specctra_import.cpp:71
 msgid ""
 "Board may be corrupted, do not save it.\n"
 " Fix problem and try again"
@@ -47539,53 +47539,54 @@ msgstr ""
 "A placa pode estar corrompida, não a salve.\n"
 "Corrija o problema e tente novamente"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:91
+#: pcbnew/specctra_import_export/specctra_import.cpp:90
 msgid "Session file imported and merged OK."
 msgstr "Ficheiro Session importado e agregado OK."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:151
+#: pcbnew/specctra_import_export/specctra_import.cpp:150
+#: pcbnew/specctra_import_export/specctra_import.cpp:180
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
 msgstr "O arquivo da sessão atual usa identificador de camada inválido: '%s'."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:211
+#: pcbnew/specctra_import_export/specctra_import.cpp:242
 msgid "Session via padstack has no shapes"
 msgstr "Pilha de ilhas da via da seção não tem formas"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:220
+#: pcbnew/specctra_import_export/specctra_import.cpp:251
 #, c-format
 msgid "Unsupported via shape: %s."
 msgstr "Sem suporte para o formato da via: %s."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:241
-#: pcbnew/specctra_import_export/specctra_import.cpp:269
+#: pcbnew/specctra_import_export/specctra_import.cpp:272
+#: pcbnew/specctra_import_export/specctra_import.cpp:300
 #, c-format
 msgid "Unsupported via shape: %s"
 msgstr "Forma de via não suportada: %s"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:279
+#: pcbnew/specctra_import_export/specctra_import.cpp:311
 #, c-format
 msgid "Session file uses invalid layer id '%s'"
 msgstr "O ficheiro de sessão usa uma ID inválida de camada '%s'"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:335
+#: pcbnew/specctra_import_export/specctra_import.cpp:369
 msgid "Session file is missing the \"session\" section"
 msgstr "Está faltando a seção \"session\" no ficheiro de seção"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:338
+#: pcbnew/specctra_import_export/specctra_import.cpp:372
 msgid "Session file is missing the \"routes\" section"
 msgstr "Está faltando a seção \"routes\" no ficheiro de seção"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:341
+#: pcbnew/specctra_import_export/specctra_import.cpp:375
 msgid "Session file is missing the \"library_out\" section"
 msgstr "Está faltando a seção \"library_out\" no ficheiro de seção"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:391
+#: pcbnew/specctra_import_export/specctra_import.cpp:426
 #, c-format
 msgid "Reference '%s' not found."
 msgstr "A referência '%s' não foi encontrada."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:520
+#: pcbnew/specctra_import_export/specctra_import.cpp:566
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Um wire_via refere-se ao empilhamento ausente da ilha '%s'."
