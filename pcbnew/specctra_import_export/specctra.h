@@ -27,7 +27,6 @@
 
 
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
-#include "pcb_track.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
@@ -41,6 +40,7 @@
 // all outside the DSN namespace:
 class BOARD;
 class PCB_TRACK;
+class PCB_ARC;
 class PCB_VIA;
 class NETCLASS;
 class FOOTPRINT;

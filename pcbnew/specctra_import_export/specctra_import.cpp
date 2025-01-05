@@ -66,7 +66,6 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
     {
         DSN::ImportSpecctraSession( GetBoard(), fullFileName );
     }
-
     catch( const IO_ERROR& ioe )
     {
         wxString msg = _( "Board may be corrupted, do not save it.\n Fix problem and try again" );
@@ -84,7 +83,7 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
         // Update footprint positions
 
         // add imported tracks (previous tracks are removed, therefore all are new)
-        for( auto track : GetBoard()->Tracks() )
+        for( PCB_TRACK* track : GetBoard()->Tracks() )
             GetCanvas()->GetView()->Add( track );
     }
 
@@ -154,8 +153,8 @@ PCB_TRACK* SPECCTRA_DB::makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int
 
     PCB_TRACK* track = new PCB_TRACK( m_sessionBoard );
 
-    track->SetStart( mapPt( aPath->points[aPointIndex+0], m_routeResolution ) );
-    track->SetEnd( mapPt( aPath->points[aPointIndex+1], m_routeResolution ) );
+    track->SetStart( mapPt( aPath->points[aPointIndex + 0], m_routeResolution ) );
+    track->SetEnd( mapPt( aPath->points[aPointIndex + 1], m_routeResolution ) );
     track->SetLayer( m_pcbLayer2kicad[layerNdx] );
     track->SetWidth( scale( aPath->aperture_width, m_routeResolution ) );
     track->SetNetCode( aNetcode );
@@ -186,7 +185,8 @@ PCB_ARC* SPECCTRA_DB::makeARC( WIRE* wire, QARC* aQarc, int aNetcode )
 
     arc->SetStart( mapPt( aQarc->vertex[0], m_routeResolution ) );
     arc->SetEnd( mapPt( aQarc->vertex[1], m_routeResolution ) );
-    arc->SetMid( CalcArcMid(arc->GetStart(), arc->GetEnd(), mapPt( aQarc->vertex[2], m_routeResolution )) );
+    arc->SetMid( CalcArcMid(arc->GetStart(), arc->GetEnd(),
+                 mapPt( aQarc->vertex[2], m_routeResolution ) ) );
     arc->SetLayer( m_pcbLayer2kicad[layerNdx] );
     arc->SetWidth( scale( aQarc->aperture_width, m_routeResolution ) );
     arc->SetNetCode( aNetcode );
@@ -203,8 +203,8 @@ PCB_ARC* SPECCTRA_DB::makeARC( WIRE* wire, QARC* aQarc, int aNetcode )
 }
 
 
-PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& aPoint, int aNetCode,
-                               int aViaDrillDefault )
+PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT& aPoint,
+                               int aNetCode, int aViaDrillDefault )
 {
     PCB_VIA* via = nullptr;
     SHAPE*   shape;
@@ -230,7 +230,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
 
             double drill_um = strtod( diam_txt.c_str(), nullptr );
 
-            drill_diam_iu = int( drill_um * ( pcbIUScale.IU_PER_MM / 1000.0 ) );
+            drill_diam_iu = static_cast<int>( drill_um * ( pcbIUScale.IU_PER_MM / 1000.0 ) );
 
             if( drill_diam_iu == aViaDrillDefault )
                 drill_diam_iu = UNDEFINED_DRILL_DIAMETER;
@@ -243,7 +243,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
     }
     else if( shapeCount == 1 )
     {
-        shape = (SHAPE*) (*aPadstack)[0];
+        shape = static_cast<SHAPE*>( ( *aPadstack )[0] );
         DSN_T type = shape->shape->Type();
 
         if( type != T_circle )
@@ -252,7 +252,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
                                               GetTokenString( type ) ) );
         }
 
-        CIRCLE* circle = (CIRCLE*) shape->shape;
+        CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
         int viaDiam = scale( circle->diameter, m_routeResolution );
 
         via = new PCB_VIA( m_sessionBoard );
@@ -264,7 +264,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
     }
     else if( shapeCount == copperLayerCount )
     {
-        shape = (SHAPE*) (*aPadstack)[0];
+        shape = static_cast<SHAPE*>( ( *aPadstack )[0] );
         DSN_T type = shape->shape->Type();
 
         if( type != T_circle )
@@ -273,7 +273,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
                                               GetTokenString( type ) ) );
         }
 
-        CIRCLE* circle = (CIRCLE*) shape->shape;
+        CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
         int viaDiam = scale( circle->diameter, m_routeResolution );
 
         via = new PCB_VIA( m_sessionBoard );
@@ -290,9 +290,9 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
 
         int viaDiam = -1;
 
-        for( int i=0; i<shapeCount;  ++i )
+        for( int i = 0; i < shapeCount; ++i )
         {
-            shape = (SHAPE*) (*aPadstack)[i];
+            shape = static_cast<SHAPE*>( ( *aPadstack )[i] );
             DSN_T type = shape->shape->Type();
 
             if( type != T_circle )
@@ -301,9 +301,10 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
                                                   GetTokenString( type ) ) );
             }
 
-            CIRCLE* circle = (CIRCLE*) shape->shape;
+            CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
 
             int layerNdx = findLayerName( circle->layer_id );
+
             if( layerNdx == -1 )
             {
                 wxString layerName = From_UTF8( circle->layer_id.c_str() );
@@ -326,7 +327,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
         via->SetDrill( drill_diam_iu );
 
         if( ( topLayerNdx == 0 && botLayerNdx == 1 )
-                || ( topLayerNdx == copperLayerCount-2 && botLayerNdx == copperLayerCount-1 ) )
+            || ( topLayerNdx == copperLayerCount - 2 && botLayerNdx == copperLayerCount - 1 ) )
         {
             via->SetViaType( VIATYPE::MICROVIA );
         }
@@ -334,6 +335,8 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
         {
             via->SetViaType( VIATYPE::BLIND_BURIED );
         }
+
+        wxCHECK2( topLayerNdx >= 0, topLayerNdx = 0 );
 
         via->SetWidth( ::PADSTACK::ALL_LAYERS, viaDiam );
         via->SetLayerPair( m_pcbLayer2kicad[ topLayerNdx ], m_pcbLayer2kicad[ botLayerNdx ] );
@@ -407,10 +410,11 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         // correct side of the board.
         COMPONENTS& components = m_session->placement->m_components;
 
-        for( COMPONENTS::iterator comp=components.begin();  comp!=components.end();  ++comp )
+        for( COMPONENTS::iterator comp = components.begin(); comp != components.end(); ++comp )
         {
             PLACES& places = comp->m_places;
-            for( unsigned i=0; i<places.size();  ++i )
+
+            for( unsigned i = 0; i < places.size(); ++i )
             {
                 PLACE* place = &places[i];  // '&' even though places[] holds a pointer!
 
@@ -470,6 +474,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
     // Walk the NET_OUTs and create tracks and vias anew.
     NET_OUTS& net_outs = m_session->route->net_outs;
+
     for( NET_OUTS::iterator net = net_outs.begin(); net!=net_outs.end(); ++net )
     {
         int netoutCode = 0;
@@ -485,6 +490,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         }
 
         WIRES& wires = net->wires;
+
         for( unsigned i = 0; i<wires.size(); ++i )
         {
             WIRE*   wire  = &wires[i];
@@ -492,9 +498,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
             if( shape == T_path )
             {
-                PATH*   path = (PATH*) wire->m_shape;
+                PATH* path = static_cast<PATH*>( wire->m_shape );
 
-                for( unsigned pt=0; pt < path->points.size()-1; ++pt )
+                for( unsigned pt = 0; pt < path->points.size() - 1; ++pt )
                 {
                     PCB_TRACK* track;
                     track = makeTRACK( wire, path, pt, netoutCode );
@@ -503,7 +509,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             }
             else if ( shape == T_qarc )
             {
-                QARC*   qarc = (QARC*) wire->m_shape;
+                QARC* qarc = static_cast<QARC*>( wire->m_shape );
 
                 PCB_ARC* arc = makeARC( wire, qarc, netoutCode );
                 aBoard->Add( arc );
@@ -527,9 +533,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         WIRE_VIAS& wire_vias = net->wire_vias;
         LIBRARY& library = *m_session->route->library;
 
-        for( unsigned i=0;  i<wire_vias.size();  ++i )
+        for( unsigned i = 0; i < wire_vias.size(); ++i )
         {
-            int         netCode = 0;
+            int netCode = 0;
 
             // page 144 of spec says wire_via's net_id is optional
             if( net->net_id.size() )
@@ -546,6 +552,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             // example: (via Via_15:8_mil 149000 -71000 )
 
             PADSTACK* padstack = library.FindPADSTACK( wire_via->GetPadstackId() );
+
             if( !padstack )
             {
                 // Dick  Feb 29, 2008:
