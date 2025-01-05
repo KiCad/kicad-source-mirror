@@ -62,7 +62,7 @@
     },
     {
       "name": "ngspice",
-      "version": "44"
+      "version": "44#1"
     },
     {
       "name": "vcpkg-get-python-packages",
