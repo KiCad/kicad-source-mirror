@@ -712,7 +712,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol();
 
         for( int j = MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
-            userFieldNames.insert( symbol->GetFields()[j].GetName() );
+        {
+            if( !symbol->GetFields()[j].IsPrivate() )
+                userFieldNames.insert( symbol->GetFields()[j].GetName() );
+        }
     }
 
     for( const wxString& fieldName : userFieldNames )

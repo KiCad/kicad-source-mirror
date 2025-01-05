@@ -59,7 +59,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL
     }
     else if( const SCH_FIELD* field = aSymbol.GetFieldByName( aFieldName ) )
     {
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = field->GetText();
+        if( field->IsPrivate() )
+            m_dataStore[aSymbol.m_Uuid][aFieldName] = wxEmptyString;
+        else
+            m_dataStore[aSymbol.m_Uuid][aFieldName] = field->GetText();
     }
     else if( IsTextVar( aFieldName ) )
     {
@@ -469,7 +472,12 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& 
     SCH_FIELD* field = aRef.GetSymbol()->GetFieldByName( aFieldName );
 
     if( field )
-        return field->GetShownText( &aRef.GetSheetPath(), false );
+    {
+        if( field->IsPrivate() )
+            return wxEmptyString;
+        else
+            return field->GetShownText( &aRef.GetSheetPath(), false );
+    }
 
     // Handle fields with variables as names that are not present in the symbol
     // by giving them the correct value by resolving against the symbol
@@ -758,9 +766,18 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             if( IsTextVar( srcName ) )
                 continue;
 
-            SCH_FIELD*      destField = symbol.FindField( srcName );
-            int             col = GetFieldNameCol( srcName );
-            bool            userAdded = ( col != -1 && m_cols[col].m_userAdded );
+            SCH_FIELD* destField = symbol.FindField( srcName );
+
+            if( destField && destField->IsPrivate() )
+            {
+                if( srcValue.IsEmpty() )
+                    continue;
+                else
+                    destField->SetPrivate( false );
+            }
+
+            int  col = GetFieldNameCol( srcName );
+            bool userAdded = ( col != -1 && m_cols[col].m_userAdded );
 
             // Add a not existing field if it has a value for this symbol
             bool createField = !destField && ( !srcValue.IsEmpty() || userAdded );
@@ -797,7 +814,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
         for( int ii = symbol.GetFields().size() - 1; ii >= MANDATORY_FIELDS; ii-- )
         {
             if( fieldStore.count( symbol.GetFields()[ii].GetName() ) == 0 )
-                symbol.GetFields().erase( symbol.GetFields().begin() + ii );
+            {
+                if( !symbol.GetFields()[ii].IsPrivate() )
+                    symbol.GetFields().erase( symbol.GetFields().begin() + ii );
+            }
         }
     }
 
@@ -988,7 +1008,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRe
 
             // Update the fields of every reference
             for( const SCH_FIELD& field : ref.GetSymbol()->GetFields() )
-                m_dataStore[ref.GetSymbol()->m_Uuid][field.GetCanonicalName()] = field.GetText();
+            {
+                if( !field.IsPrivate() )
+                    m_dataStore[ref.GetSymbol()->m_Uuid][field.GetCanonicalName()] = field.GetText();
+            }
         }
     }
 }
