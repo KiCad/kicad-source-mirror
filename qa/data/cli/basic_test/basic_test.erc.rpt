@@ -1,0 +1,77 @@
+ERC report (2025-01-04T22:22:42-0500, Encoding UTF8)
+
+***** Sheet /
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(140.97 mm, 71.12 mm): Symbol U1 Pin 5 [V+, Power input, Line]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Device'
+    ; warning
+    @(127.00 mm, 93.98 mm): Symbol R1 [R_US]
+[footprint_link_issues]: The current configuration does not include the footprint library 'Resistor_SMD'.
+    ; warning
+    @(127.00 mm, 93.98 mm): Symbol R1 [R_US]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Device'
+    ; warning
+    @(149.86 mm, 93.98 mm): Symbol R2 [R_US]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'power'
+    ; warning
+    @(140.97 mm, 87.63 mm): Symbol #PWR02 [GND]
+[footprint_link_issues]: The current configuration does not include the footprint library 'Resistor_SMD'.
+    ; warning
+    @(149.86 mm, 93.98 mm): Symbol R2 [R_US]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'power'
+    ; warning
+    @(121.92 mm, 83.82 mm): Symbol #PWR03 [GND]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Device'
+    ; warning
+    @(121.92 mm, 80.01 mm): Symbol C1 [C_Small]
+[footprint_link_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'.
+    ; warning
+    @(121.92 mm, 80.01 mm): Symbol C1 [C_Small]
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(140.97 mm, 86.36 mm): Symbol U1 Pin 2 [V-, Power input, Line]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'
+    ; warning
+    @(177.80 mm, 78.74 mm): Symbol J3 [Conn_01x01_Pin]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Amplifier_Operational'
+    ; warning
+    @(143.51 mm, 78.74 mm): Symbol U1 [TLV2371DBV]
+[footprint_link_issues]: The current configuration does not include the footprint library 'Package_TO_SOT_SMD'.
+    ; warning
+    @(143.51 mm, 78.74 mm): Symbol U1 [TLV2371DBV]
+[footprint_link_issues]: The current configuration does not include the footprint library 'TestPoint'.
+    ; warning
+    @(177.80 mm, 78.74 mm): Symbol J3 [Conn_01x01_Pin]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'
+    ; warning
+    @(105.41 mm, 76.20 mm): Symbol J2 [Conn_01x01_Pin]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'
+    ; warning
+    @(105.41 mm, 63.50 mm): Symbol J1 [Conn_01x01_Pin]
+[footprint_link_issues]: The current configuration does not include the footprint library 'TestPoint'.
+    ; warning
+    @(105.41 mm, 63.50 mm): Symbol J1 [Conn_01x01_Pin]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Device'
+    ; warning
+    @(115.57 mm, 76.20 mm): Symbol R3 [R_US]
+[footprint_link_issues]: The current configuration does not include the footprint library 'Resistor_SMD'.
+    ; warning
+    @(115.57 mm, 76.20 mm): Symbol R3 [R_US]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'power'
+    ; warning
+    @(119.38 mm, 96.52 mm): Symbol #PWR01 [GND]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'power'
+    ; warning
+    @(111.76 mm, 100.33 mm): Symbol #PWR04 [GND]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'
+    ; warning
+    @(105.41 mm, 99.06 mm): Symbol J4 [Conn_01x01_Pin]
+[footprint_link_issues]: The current configuration does not include the footprint library 'TestPoint'.
+    ; warning
+    @(105.41 mm, 76.20 mm): Symbol J2 [Conn_01x01_Pin]
+[footprint_link_issues]: The current configuration does not include the footprint library 'TestPoint'.
+    ; warning
+    @(105.41 mm, 99.06 mm): Symbol J4 [Conn_01x01_Pin]
+
+ ** ERC messages: 24  Errors 2  Warnings 22
