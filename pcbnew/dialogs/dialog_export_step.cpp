@@ -315,48 +315,51 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
         wxFAIL_MSG( e.what() );
     }
 
-    if( cfg )
+    if( !m_job ) // dont save mru if its a job dialog
     {
-        cfg->m_ExportStep.origin_mode = static_cast<int>( m_origin );
-        cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
-        cfg->m_ExportStep.replace_models = m_cbSubstModels->GetValue();
-        cfg->m_ExportStep.overwrite_file = m_cbOverwriteFile->GetValue();
+        if( cfg )
+        {
+            cfg->m_ExportStep.origin_mode = static_cast<int>( m_origin );
+            cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
+            cfg->m_ExportStep.replace_models = m_cbSubstModels->GetValue();
+            cfg->m_ExportStep.overwrite_file = m_cbOverwriteFile->GetValue();
 
-        double val = 0.0;
+            double val = 0.0;
 
-        m_STEP_Xorg->GetValue().ToDouble( &val );
-        cfg->m_ExportStep.origin_x = val;
+            m_STEP_Xorg->GetValue().ToDouble( &val );
+            cfg->m_ExportStep.origin_x = val;
 
-        m_STEP_Yorg->GetValue().ToDouble( &val );
-        cfg->m_ExportStep.origin_y = val;
+            m_STEP_Yorg->GetValue().ToDouble( &val );
+            cfg->m_ExportStep.origin_y = val;
 
-        cfg->m_ExportStep.no_unspecified = m_cbRemoveUnspecified->GetValue();
-        cfg->m_ExportStep.no_dnp = m_cbRemoveDNP->GetValue();
+            cfg->m_ExportStep.no_unspecified = m_cbRemoveUnspecified->GetValue();
+            cfg->m_ExportStep.no_dnp = m_cbRemoveDNP->GetValue();
+        }
+
+        m_netFilter = m_txtNetFilter->GetValue();
+        m_toleranceLastChoice = m_choiceTolerance->GetSelection();
+        m_formatLastChoice = m_choiceFormat->GetSelection();
+        m_optimizeStep = m_cbOptimizeStep->GetValue();
+        m_exportBoardBody = m_cbExportBody->GetValue();
+        m_exportComponents = m_cbExportComponents->GetValue();
+        m_exportTracks = m_cbExportTracks->GetValue();
+        m_exportPads = m_cbExportPads->GetValue();
+        m_exportZones = m_cbExportZones->GetValue();
+        m_exportInnerCopper = m_cbExportInnerCopper->GetValue();
+        m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
+        m_exportSoldermask = m_cbExportSoldermask->GetValue();
+        m_fuseShapes = m_cbFuseShapes->GetValue();
+        m_cutViasInBody = m_cbCutViasInBody->GetValue();
+        m_fillAllVias = m_cbFillAllVias->GetValue();
+        m_componentFilter = m_txtComponentFilter->GetValue();
+
+        if( m_rbAllComponents->GetValue() )
+            m_componentMode = COMPONENT_MODE::EXPORT_ALL;
+        else if( m_rbOnlySelected->GetValue() )
+            m_componentMode = COMPONENT_MODE::EXPORT_SELECTED;
+        else
+            m_componentMode = COMPONENT_MODE::CUSTOM_FILTER;
     }
-
-    m_netFilter = m_txtNetFilter->GetValue();
-    m_toleranceLastChoice = m_choiceTolerance->GetSelection();
-    m_formatLastChoice = m_choiceFormat->GetSelection();
-    m_optimizeStep = m_cbOptimizeStep->GetValue();
-    m_exportBoardBody = m_cbExportBody->GetValue();
-    m_exportComponents = m_cbExportComponents->GetValue();
-    m_exportTracks = m_cbExportTracks->GetValue();
-    m_exportPads = m_cbExportPads->GetValue();
-    m_exportZones = m_cbExportZones->GetValue();
-    m_exportInnerCopper = m_cbExportInnerCopper->GetValue();
-    m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
-    m_exportSoldermask = m_cbExportSoldermask->GetValue();
-    m_fuseShapes = m_cbFuseShapes->GetValue();
-    m_cutViasInBody = m_cbCutViasInBody->GetValue();
-    m_fillAllVias = m_cbFillAllVias->GetValue();
-    m_componentFilter = m_txtComponentFilter->GetValue();
-
-    if( m_rbAllComponents->GetValue() )
-        m_componentMode = COMPONENT_MODE::EXPORT_ALL;
-    else if( m_rbOnlySelected->GetValue() )
-        m_componentMode = COMPONENT_MODE::EXPORT_SELECTED;
-    else
-        m_componentMode = COMPONENT_MODE::CUSTOM_FILTER;
 }
 
 
