@@ -26,6 +26,7 @@
 #define INCLUDE_THREAD_POOL_H_
 
 #include <bs_thread_pool.hpp>
+#include <import_export.h>
 
 using thread_pool = BS::thread_pool;
 
@@ -36,7 +37,7 @@ using thread_pool = BS::thread_pool;
  *
  * @return Reference to the current (potentially newly constructed) thread pool
  */
-thread_pool& GetKiCadThreadPool();
+APIEXPORT thread_pool& GetKiCadThreadPool();
 
 
 #endif /* INCLUDE_THREAD_POOL_H_ */

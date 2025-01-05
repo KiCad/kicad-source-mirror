@@ -187,6 +187,7 @@ set( KICOMMON_SRCS
     searchhelpfilefullpath.cpp
     string_utils.cpp
     systemdirsappend.cpp
+    thread_pool.cpp
     ui_events.cpp
     trace_helpers.cpp
     wildcards_and_files_ext.cpp
@@ -308,6 +309,7 @@ target_include_directories( kicommon
         $<TARGET_PROPERTY:kiapi,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:picosha2,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:nlohmann_json_schema_validator,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 add_dependencies( kicommon pegtl version_header )

@@ -63,7 +63,7 @@
 #include <tool/tool_manager.h>
 #include <tool/selection_conditions.h>
 #include <string_utils.h>
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 #include <zone.h>
 #include <mutex>
 

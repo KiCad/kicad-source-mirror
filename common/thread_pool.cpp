@@ -21,21 +21,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
+#include <pgm_base.h>
+#include <thread_pool.h>
 
-#include <core/thread_pool.h>
-
-// Under mingw, there is a problem with the destructor when creating a static instance
-// of a thread_pool: probably the DTOR is called too late, and the application hangs.
-// so we create it on the heap.
 static thread_pool* tp = nullptr;
 
 thread_pool& GetKiCadThreadPool()
 {
-#if 0   // Turn this on to disable multi-threading for debugging
-    if( !tp ) tp = new thread_pool( 1 );
-#else
-    if( !tp ) tp = new thread_pool;
-#endif
+    if( tp )
+        return *tp;
+
+    // If we have a PGM_BASE, use its thread pool
+    if( PGM_BASE* pgm = PgmOrNull() )
+    {
+        tp = &pgm->GetThreadPool();
+        return *tp;
+    }
+
+    // Otherwise, we are running in scripting or some other context where we don't have a PGM_BASE
+    // so we need to create our own thread pool
+    int num_threads = std::max( 0, ADVANCED_CFG::GetCfg().m_MaximumThreads );
+    tp = new thread_pool( num_threads );
 
     return *tp;
 }

@@ -26,7 +26,7 @@
 
 #include <utility>
 
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 #include <ki_exception.h>
 #include <sim/sim_library_spice.h>
 #include <sim/spice_grammar.h>

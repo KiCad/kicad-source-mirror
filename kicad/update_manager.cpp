@@ -49,7 +49,7 @@
 
 #include <background_jobs_monitor.h>
 
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 
 #include <build_version.h>
 

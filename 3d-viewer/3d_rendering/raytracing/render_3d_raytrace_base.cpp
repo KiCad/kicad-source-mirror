@@ -32,7 +32,7 @@
 #include "../color_rgba.h"
 #include "3d_fastmath.h"
 #include "3d_math.h"
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <wx/log.h>
 

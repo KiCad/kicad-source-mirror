@@ -27,6 +27,8 @@
 #include <boost/test/unit_test.hpp>
 #include <kiplatform/app.h>
 #include <mock_pgm_base.h>
+#include <settings/settings_manager.h>
+#include <pcbnew_settings.h>
 
 #include <wx/image.h>
 #include <wx/init.h>
@@ -38,12 +40,18 @@ bool init_unit_test()
     KIPLATFORM::APP::Init();
     boost::unit_test::framework::master_test_suite().p_name.value = "Pcbnew module tests";
 
-    bool ok = wxInitialize();
+    wxApp::SetInstance( new wxAppConsole );
+
+    bool ok = wxInitialize( boost::unit_test::framework::master_test_suite().argc,
+                            boost::unit_test::framework::master_test_suite().argv );
 
     if( ok )
     {
-        // need these for library image functions
-        wxInitAllImageHandlers();
+        wxSetAssertHandler( &KI_TEST::wxAssertThrower );
+
+        Pgm().InitPgm( true, true, true );
+        Pgm().GetSettingsManager().RegisterSettings( new PCBNEW_SETTINGS, false );
+        Pgm().GetSettingsManager().Load();
     }
 
     return ok;

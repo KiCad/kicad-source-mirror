@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 #include <pcb_track.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>

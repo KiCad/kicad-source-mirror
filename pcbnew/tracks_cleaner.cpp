@@ -31,7 +31,7 @@
 #include <cleanup_item.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_data.h>
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 #include <lset.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

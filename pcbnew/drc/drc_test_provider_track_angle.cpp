@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 #include "geometry/eda_angle.h"
 #include <numbers>
 #include <pcb_track.h>

@@ -17,37 +17,35 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/test/unit_test.hpp>
-#include <wx/app.h>
+#ifndef KICAD_SINGLETON_H
+#define KICAD_SINGLETON_H
 
-#include <mock_pgm_base.h>
-#include <pgm_base.h>
-#include <qa_utils/wx_utils/wx_assert.h>
+#include <advanced_config.h>
+#include <bs_thread_pool.hpp>
+#include <gal/opengl/gl_context_mgr.h>
 
-
-bool init_unit_test()
+class KICAD_SINGLETON
 {
-    SetPgm( new MOCK_PGM_BASE() );
+public:
+    KICAD_SINGLETON(){};
 
-    boost::unit_test::framework::master_test_suite().p_name.value = "IPC API tests";
-
-    wxApp::SetInstance( new wxAppConsole );
-
-    bool ok = wxInitialize( boost::unit_test::framework::master_test_suite().argc,
-                            boost::unit_test::framework::master_test_suite().argv );
-
-    if( ok )
+    ~KICAD_SINGLETON()
     {
-        wxSetAssertHandler( &KI_TEST::wxAssertThrower );
+        // This will wait for all threads to finish and then join them to the main thread
+        delete m_ThreadPool;
 
-        Pgm().InitPgm( true, true, true );
+        m_ThreadPool = nullptr;
+    };
+
+
+    void Init()
+    {
+        int num_threads = std::max( 0, ADVANCED_CFG::GetCfg().m_MaximumThreads );
+        m_ThreadPool = new BS::thread_pool( num_threads );
     }
 
-    return ok;
-}
+    BS::thread_pool* m_ThreadPool;
+};
 
 
-int main( int argc, char* argv[] )
-{
-    return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
-}
+#endif // KICAD_SINGLETON_H

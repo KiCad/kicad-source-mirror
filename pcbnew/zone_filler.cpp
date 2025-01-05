@@ -47,7 +47,7 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/vertex_set.h>
 #include <kidialog.h>
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
 

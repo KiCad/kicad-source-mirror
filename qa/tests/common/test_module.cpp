@@ -38,10 +38,7 @@ bool init_unit_test()
     bool ok = wxInitialize();
 
     if( ok )
-    {
-        // need these for library image functions
-        wxInitAllImageHandlers();
-    }
+        Pgm().InitPgm( true, true, true );
 
     return ok;
 }

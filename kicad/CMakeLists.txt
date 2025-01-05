@@ -167,6 +167,7 @@ else()
         common
         gal
         common      #repeated due to a circular dependency between gal and common
+        kicommon
         core
         ${wxWidgets_LIBRARIES}
         )
@@ -176,6 +177,7 @@ else()
         common
         gal
         common      #repeated due to a circular dependency between gal and common
+        kicommon
         core
         ${wxWidgets_LIBRARIES}
         )

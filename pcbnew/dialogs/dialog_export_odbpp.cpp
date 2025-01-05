@@ -37,7 +37,7 @@
 
 #include <set>
 #include <vector>
-#include <core/thread_pool.h>
+#include <thread_pool.h>
 #include <io/io_mgr.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <pcb_io/pcb_io_mgr.h>

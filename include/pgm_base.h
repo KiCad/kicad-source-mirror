@@ -32,6 +32,7 @@
 #define  PGM_BASE_H_
 
 #include <kicommon.h>
+#include <singleton.h>
 #include <exception>
 #include <map>
 #include <vector>
@@ -104,32 +105,12 @@ public:
     PGM_BASE();
     virtual ~PGM_BASE();
 
-#if 0
-    /*
-
-    Derived classes must implement these two functions: OnPgmInit() and
-    OnPgmExit(), and since they are only called from same source file as their
-    implementation, these need not be virtual here. In fact, in the case of
-    python project manager's class PGM_PYTHON, these functions are actually
-    written in python. In total there are three implementations, corresponding
-    to the three defines given by kiface.h's KFCTL_* #defines.
-
-    */
-
-    /**
-     * This is the first executed function (like main() ).
-     *
-     * @return true if the application can be started.
-     */
-    virtual bool OnPgmInit() = 0;           // call this from wxApp::OnInit()
-
-    virtual void OnPgmExit() = 0;           // call this from wxApp::OnExit()
-#endif
-
     /**
      * Builds the UTF8 based argv variable
      */
     void BuildArgvUtf8();
+
+    BS::thread_pool& GetThreadPool() { return *m_singleton.m_ThreadPool; }
 
     /**
      * Specific to MacOSX (not used under Linux or Windows).
@@ -428,6 +409,8 @@ protected:
     wxString        m_pdf_browser;            /// Filename of the app selected for browsing PDFs
 
     wxString        m_text_editor;
+
+    KICAD_SINGLETON m_singleton;
 
 #ifdef KICAD_USE_SENTRY
     wxFileName      m_sentry_optin_fn;

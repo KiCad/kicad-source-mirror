@@ -105,6 +105,7 @@ target_link_libraries( qa_eeschema
 PRIVATE
     eeschema_kiface_objects
     common
+    kicommon
     pcbcommon
     3d-viewer
     scripting
