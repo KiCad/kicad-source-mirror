@@ -27,6 +27,7 @@
 
 
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
+#include "pcb_track.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
@@ -3960,6 +3961,11 @@ private:
      * Create a #TRACK form the #PATH and #BOARD info.
      */
     PCB_TRACK* makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int aNetcode );
+
+    /**
+     * Create an #ARC form the #PATH and #BOARD info.
+     */
+    PCB_ARC* makeARC( WIRE* wire, QARC* aQarc, int aNetcode );
 
     /**
      * Instantiate a KiCad #VIA on the heap and initializes it with internal

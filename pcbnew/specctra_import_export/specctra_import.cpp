@@ -172,6 +172,37 @@ PCB_TRACK* SPECCTRA_DB::makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int
 }
 
 
+PCB_ARC* SPECCTRA_DB::makeARC( WIRE* wire, QARC* aQarc, int aNetcode )
+{
+    int layerNdx = findLayerName( aQarc->layer_id );
+
+    if( layerNdx == -1 )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'." ),
+                                          From_UTF8( aQarc->layer_id.c_str() ) ) );
+    }
+
+    PCB_ARC* arc = new PCB_ARC( m_sessionBoard );
+
+    arc->SetStart( mapPt( aQarc->vertex[0], m_routeResolution ) );
+    arc->SetEnd( mapPt( aQarc->vertex[1], m_routeResolution ) );
+    arc->SetMid( CalcArcMid(arc->GetStart(), arc->GetEnd(), mapPt( aQarc->vertex[2], m_routeResolution )) );
+    arc->SetLayer( m_pcbLayer2kicad[layerNdx] );
+    arc->SetWidth( scale( aQarc->aperture_width, m_routeResolution ) );
+    arc->SetNetCode( aNetcode );
+
+    // a track can be locked.
+    // However specctra as 4 types, none is exactly the same as our locked option
+    // wire->wire_type = T_fix, T_route, T_normal or T_protect
+    // fix and protect could be used as lock option
+    // but protect is returned for all tracks having initially the route or protect property
+    if( wire->m_wire_type == T_fix )
+        arc->SetLocked( true );
+
+    return arc;
+}
+
+
 PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& aPoint, int aNetCode,
                                int aViaDrillDefault )
 {
@@ -459,7 +490,25 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             WIRE*   wire  = &wires[i];
             DSN_T   shape = wire->m_shape->Type();
 
-            if( shape != T_path )
+            if( shape == T_path )
+            {
+                PATH*   path = (PATH*) wire->m_shape;
+
+                for( unsigned pt=0; pt < path->points.size()-1; ++pt )
+                {
+                    PCB_TRACK* track;
+                    track = makeTRACK( wire, path, pt, netoutCode );
+                    aBoard->Add( track );
+                }
+            }
+            else if ( shape == T_qarc )
+            {
+                QARC*   qarc = (QARC*) wire->m_shape;
+
+                PCB_ARC* arc = makeARC( wire, qarc, netoutCode );
+                aBoard->Add( arc );
+            }
+            else
             {
                 /*
                  * shape == T_polygon is expected from freerouter if you have a zone on a non-
@@ -472,16 +521,6 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                                                     DLEX::GetTokenString(shape).GetData(),
                                                     netId.GetData() ) );
                 */
-            }
-            else
-            {
-                PATH*   path = (PATH*) wire->m_shape;
-
-                for( unsigned pt=0; pt < path->points.size()-1; ++pt )
-                {
-                    PCB_TRACK* track = makeTRACK( wire, path, pt, netoutCode );
-                    aBoard->Add( track );
-                }
             }
         }
 
