@@ -250,13 +250,18 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
     EMBEDDED_FILES* files = nullptr;
 
     if( m_frame->GetFrameType() == FRAME_SCH )
+    {
         files = m_frame->GetScreen()->Schematic();
-    else if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
+    }
+    else if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR
+          || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
+    {
         files = m_part;
+    }
 
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor =
-            new GRID_CELL_URL_EDITOR( m_dialog, PROJECT_SCH::SchSearchS( &m_frame->Prj() ), files );
+    SEARCH_STACK* prjSearchStack = PROJECT_SCH::SchSearchS( &m_frame->Prj() );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, prjSearchStack, files );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
@@ -323,24 +328,24 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
         for( const auto& [name, netclass] : settings->GetNetclasses() )
             existingNetclasses.push_back( name );
 
-        // We don't need to re-cache the embedded fonts when looking at symbols in the schematic editor
-        // because the fonts are all available in the schematic.
+        // We don't need to re-cache the embedded fonts when looking at symbols in the schematic
+        // editor because the fonts are all available in the schematic.
         const std::vector<wxString>* fontFiles = nullptr;
 
         if( m_frame->GetScreen() && m_frame->GetScreen()->Schematic() )
             fontFiles = m_frame->GetScreen()->Schematic()->GetEmbeddedFiles()->GetFontFiles();
 
         Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
-                                fontFiles, false );
+                                 fontFiles, false );
     }
     else
     {
         const std::vector<wxString>* fontFiles = m_part->GetEmbeddedFiles()->UpdateFontFiles();
 
-        // If there are font files embedded, we want to re-cache our fonts for each symbol that we
-        // are looking at in the symbol editor.
+        // If there are font files embedded, we want to re-cache our fonts for each symbol that
+        // we are looking at in the symbol editor.
         Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
-                                fontFiles, !fontFiles->empty() );
+                                 fontFiles, !fontFiles->empty() );
     }
 
     m_netclassAttr = new wxGridCellAttr;
@@ -986,7 +991,7 @@ wxString FIELDS_GRID_TABLE::StringFromBool( bool aValue ) const
 }
 
 
-bool FIELDS_GRID_TABLE::BoolFromString( wxString aValue ) const
+bool FIELDS_GRID_TABLE::BoolFromString( const wxString& aValue ) const
 {
     if( aValue == wxS( "1" ) )
     {

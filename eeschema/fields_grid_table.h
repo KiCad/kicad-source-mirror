@@ -48,7 +48,9 @@ public:
 protected:
     void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
     void doPopupSelection( wxCommandEvent& event ) override;
-    DIALOG_SHIM* m_dlg;
+
+protected::
+    DIALOG_SHIM*    m_dlg;
     EMBEDDED_FILES* m_files;
 };
 
@@ -109,7 +111,7 @@ public:
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
 
     wxString StringFromBool( bool aValue ) const;
-    bool BoolFromString( wxString aValue ) const;
+    bool BoolFromString( const wxString& aValue ) const;
 
 protected:
     void initGrid( WX_GRID* aGrid );
@@ -117,13 +119,13 @@ protected:
     void onUnitsChanged( wxCommandEvent& aEvent );
 
 private:
-    SCH_BASE_FRAME* m_frame;
-    DIALOG_SHIM*    m_dialog;
-    KICAD_T         m_parentType;
-    int             m_mandatoryFieldCount;
-    LIB_SYMBOL*     m_part;
-    wxString        m_symbolNetlist;
-    wxString        m_curdir;
+    SCH_BASE_FRAME*   m_frame;
+    DIALOG_SHIM*      m_dialog;
+    KICAD_T           m_parentType;
+    int               m_mandatoryFieldCount;
+    LIB_SYMBOL*       m_part;
+    wxString          m_symbolNetlist;
+    wxString          m_curdir;
 
     FIELD_VALIDATOR   m_fieldNameValidator;
     FIELD_VALIDATOR   m_referenceValidator;
@@ -132,21 +134,21 @@ private:
     FIELD_VALIDATOR   m_nonUrlValidator;
     FIELD_VALIDATOR   m_filepathValidator;
 
-    wxGridCellAttr*       m_readOnlyAttr;
-    wxGridCellAttr*       m_fieldNameAttr;
-    wxGridCellAttr*       m_referenceAttr;
-    wxGridCellAttr*       m_valueAttr;
-    wxGridCellAttr*       m_footprintAttr;
-    wxGridCellAttr*       m_urlAttr;
-    wxGridCellAttr*       m_nonUrlAttr;
-    wxGridCellAttr*       m_filepathAttr;
-    wxGridCellAttr*       m_boolAttr;
-    wxGridCellAttr*       m_vAlignAttr;
-    wxGridCellAttr*       m_hAlignAttr;
-    wxGridCellAttr*       m_orientationAttr;
-    wxGridCellAttr*       m_netclassAttr;
-    wxGridCellAttr*       m_fontAttr;
-    wxGridCellAttr*       m_colorAttr;
+    wxGridCellAttr*   m_readOnlyAttr;
+    wxGridCellAttr*   m_fieldNameAttr;
+    wxGridCellAttr*   m_referenceAttr;
+    wxGridCellAttr*   m_valueAttr;
+    wxGridCellAttr*   m_footprintAttr;
+    wxGridCellAttr*   m_urlAttr;
+    wxGridCellAttr*   m_nonUrlAttr;
+    wxGridCellAttr*   m_filepathAttr;
+    wxGridCellAttr*   m_boolAttr;
+    wxGridCellAttr*   m_vAlignAttr;
+    wxGridCellAttr*   m_hAlignAttr;
+    wxGridCellAttr*   m_orientationAttr;
+    wxGridCellAttr*   m_netclassAttr;
+    wxGridCellAttr*   m_fontAttr;
+    wxGridCellAttr*   m_colorAttr;
 
     std::unique_ptr<NUMERIC_EVALUATOR>        m_eval;
     std::map< std::pair<int, int>, wxString > m_evalOriginal;
