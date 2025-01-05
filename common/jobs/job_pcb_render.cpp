@@ -24,6 +24,26 @@
 #include <i18n_utility.h>
 
 
+namespace nlohmann
+{
+template <>
+struct adl_serializer<VECTOR3D>
+{
+    static void from_json( const json& j, VECTOR3D& s )
+    {
+        if( !j.is_array() || j.size() != 3 )
+            throw std::invalid_argument( "JSON array size should be 3 for VECTOR3D" );
+
+        s.x = j[0];
+        s.y = j[1];
+        s.z = j[2];
+    }
+
+    static void to_json( json& j, const VECTOR3D& s ) { j = json::array( { s.x, s.y, s.z } ); }
+};
+} // namespace nlohmann
+
+
 std::map<JOB_PCB_RENDER::FORMAT, wxString> outputFormatNameMap = {
     { JOB_PCB_RENDER::FORMAT::JPEG, wxT( "JPEG" ) },
     { JOB_PCB_RENDER::FORMAT::PNG, wxT( "PNG" ) }
@@ -75,6 +95,24 @@ JOB_PCB_RENDER::JOB_PCB_RENDER() :
     m_params.emplace_back( new JOB_PARAM<int>( "width", &m_width, m_width ) );
     m_params.emplace_back( new JOB_PARAM<int>( "height", &m_height, m_height ) );
 
+    m_params.emplace_back( new JOB_PARAM<double>( "pivot_x", &m_pivot.x, m_pivot.x ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "pivot_y", &m_pivot.y, m_pivot.y ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "pivot_z", &m_pivot.z, m_pivot.z ) );
+
+    m_params.emplace_back( new JOB_PARAM<double>( "pan_x", &m_pan.x, m_pan.x ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "pan_y", &m_pan.y, m_pan.y ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "pan_z", &m_pan.z, m_pan.z ) );
+
+    m_params.emplace_back( new JOB_PARAM<double>( "rotation_x", &m_rotation.x, m_rotation.x ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "rotation_y", &m_rotation.y, m_rotation.y ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "rotation_z", &m_rotation.z, m_rotation.z ) );
+
+    m_params.emplace_back( new JOB_PARAM<VECTOR3D>( "light_top_intensity", &m_lightTopIntensity, m_lightTopIntensity ) );
+    m_params.emplace_back( new JOB_PARAM<VECTOR3D>( "light_bottom_intensity", &m_lightBottomIntensity, m_lightBottomIntensity ) );
+    m_params.emplace_back( new JOB_PARAM<VECTOR3D>( "light_side_intensity", &m_lightSideIntensity, m_lightSideIntensity ) );
+    m_params.emplace_back( new JOB_PARAM<VECTOR3D>( "light_camera_intensity", &m_lightCameraIntensity, m_lightCameraIntensity ) );
+
+    m_params.emplace_back( new JOB_PARAM<int>( "light_side_elevation", &m_lightSideElevation, m_lightSideElevation ) );
 }
 
 

@@ -535,6 +535,38 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         cfg->m_Render.raytrace_post_processing = true;
     }
 
+    cfg->m_Render.raytrace_lightColorTop = COLOR4D(aRenderJob->m_lightTopIntensity.x,
+                                                  aRenderJob->m_lightTopIntensity.y,
+                                                  aRenderJob->m_lightTopIntensity.z, 1.0);
+
+    cfg->m_Render.raytrace_lightColorBottom = COLOR4D(aRenderJob->m_lightBottomIntensity.x,
+                                                     aRenderJob->m_lightBottomIntensity.y,
+                                                     aRenderJob->m_lightBottomIntensity.z, 1.0);
+
+    cfg->m_Render.raytrace_lightColorCamera = COLOR4D( aRenderJob->m_lightCameraIntensity.x,
+                                                      aRenderJob->m_lightCameraIntensity.y,
+                                                      aRenderJob->m_lightCameraIntensity.z, 1.0 );
+
+    COLOR4D lightColor( aRenderJob->m_lightSideIntensity.x,
+                             aRenderJob->m_lightSideIntensity.y,
+                             aRenderJob->m_lightSideIntensity.z, 1.0 );
+
+    cfg->m_Render.raytrace_lightColor = {
+        lightColor, lightColor, lightColor, lightColor,
+        lightColor, lightColor, lightColor, lightColor,
+    };
+
+    int sideElevation = aRenderJob->m_lightSideElevation;
+
+    cfg->m_Render.raytrace_lightElevation = {
+        sideElevation,  sideElevation,  sideElevation,  sideElevation,
+        -sideElevation, -sideElevation, -sideElevation, -sideElevation,
+    };
+
+    cfg->m_Render.raytrace_lightAzimuth = {
+        45, 135, 225, 315, 45, 135, 225, 315,
+    };
+
     cfg->m_CurrentPreset = aRenderJob->m_colorPreset;
     boardAdapter.m_Cfg = cfg;
 

@@ -99,6 +99,11 @@ public:
      */
     VECTOR3<T> Normalize();
 
+    /**
+     * Set all elements to \a val
+     */
+    VECTOR3<T> SetAll( T val );
+
     /// Equality operator
     bool operator==( const VECTOR3<T>& aVector ) const;
 
@@ -161,6 +166,17 @@ VECTOR3<T> VECTOR3<T>::Normalize()
     x /= norm;
     y /= norm;
     z /= norm;
+
+    return *this;
+}
+
+
+template <class T>
+VECTOR3<T> VECTOR3<T>::SetAll( T val )
+{
+    x = val;
+    y = val;
+    z = val;
 
     return *this;
 }

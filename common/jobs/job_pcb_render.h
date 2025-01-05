@@ -93,6 +93,11 @@ public:
     VECTOR3D    m_pan;
     VECTOR3D    m_pivot;
     bool        m_floor = false;
+    VECTOR3D    m_lightTopIntensity;
+    VECTOR3D    m_lightBottomIntensity;
+    VECTOR3D    m_lightCameraIntensity;
+    VECTOR3D    m_lightSideIntensity = VECTOR3D( 0.5, 0.5, 0.5 );
+    int         m_lightSideElevation = 60;
 };
 
 #endif

@@ -163,6 +163,25 @@ bool DIALOG_RENDER_JOB::TransferDataFromWindow()
     m_job->m_width = m_spinCtrlWidth->GetValue();
     m_job->m_height = m_spinCtrlHeight->GetValue();
 
+    m_job->m_pivot.x = m_spinCtrlPivotX->GetValue();
+    m_job->m_pivot.y = m_spinCtrlPivotY->GetValue();
+    m_job->m_pivot.z = m_spinCtrlPivotZ->GetValue();
+
+    m_job->m_pan.x = m_spinCtrlPanX->GetValue();
+    m_job->m_pan.y = m_spinCtrlPanY->GetValue();
+    m_job->m_pan.z = m_spinCtrlPanZ->GetValue();
+
+    m_job->m_rotation.x = m_spinCtrlRotX->GetValue();
+    m_job->m_rotation.y = m_spinCtrlRotY->GetValue();
+    m_job->m_rotation.z = m_spinCtrlRotZ->GetValue();
+
+    m_job->m_lightTopIntensity.SetAll( m_spinCtrlLightsTop->GetValue() );
+    m_job->m_lightBottomIntensity.SetAll( m_spinCtrlLightsBottom->GetValue() );
+    m_job->m_lightSideIntensity.SetAll( m_spinCtrlLightsSides->GetValue() );
+    m_job->m_lightCameraIntensity.SetAll( m_spinCtrlLightsCamera->GetValue() );
+
+    m_job->m_lightSideElevation = m_spinCtrlLightsSideElevation->GetValue();
+
     m_radioProjection->GetSelection() == 0 ? m_job->m_perspective = true
                                            : m_job->m_perspective = false;
 
@@ -201,6 +220,25 @@ bool DIALOG_RENDER_JOB::TransferDataToWindow()
 
     m_spinCtrlWidth->SetValue( width );
     m_spinCtrlHeight->SetValue( height );
+
+    m_spinCtrlPivotX->SetValue( m_job->m_pivot.x );
+    m_spinCtrlPivotY->SetValue( m_job->m_pivot.y );
+    m_spinCtrlPivotZ->SetValue( m_job->m_pivot.z );
+
+    m_spinCtrlPanX->SetValue( m_job->m_pan.x );
+    m_spinCtrlPanY->SetValue( m_job->m_pan.y );
+    m_spinCtrlPanZ->SetValue( m_job->m_pan.z );
+
+    m_spinCtrlRotX->SetValue( m_job->m_rotation.x );
+    m_spinCtrlRotY->SetValue( m_job->m_rotation.y );
+    m_spinCtrlRotZ->SetValue( m_job->m_rotation.z );
+
+    m_spinCtrlLightsTop->SetValue( m_job->m_lightTopIntensity.x );
+    m_spinCtrlLightsBottom->SetValue( m_job->m_lightBottomIntensity.x );
+    m_spinCtrlLightsSides->SetValue( m_job->m_lightSideIntensity.x );
+    m_spinCtrlLightsCamera->SetValue( m_job->m_lightCameraIntensity.x );
+
+    m_spinCtrlLightsSideElevation->SetValue( m_job->m_lightSideElevation );
 
     return true;
 }

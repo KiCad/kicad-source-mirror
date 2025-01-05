@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,7 +30,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_RENDER_JOB_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,6 +58,35 @@ class DIALOG_RENDER_JOB_BASE : public DIALOG_SHIM
 		wxChoice* m_choiceSide;
 		wxCheckBox* m_cbFloor;
 		wxRadioBox* m_radioProjection;
+		wxStaticText* m_labelX;
+		wxStaticText* m_labelY;
+		wxStaticText* m_labelZ;
+		wxStaticText* m_labelxx;
+		wxSpinCtrlDouble* m_spinCtrlPivotX;
+		wxSpinCtrlDouble* m_spinCtrlPivotY;
+		wxSpinCtrlDouble* m_spinCtrlPivotZ;
+		wxStaticText* m_labelMM1;
+		wxStaticText* m_labelxx2;
+		wxSpinCtrlDouble* m_spinCtrlPanX;
+		wxSpinCtrlDouble* m_spinCtrlPanY;
+		wxSpinCtrlDouble* m_spinCtrlPanZ;
+		wxStaticText* m_labelMM2;
+		wxStaticText* m_labelxx21;
+		wxSpinCtrlDouble* m_spinCtrlRotX;
+		wxSpinCtrlDouble* m_spinCtrlRotY;
+		wxSpinCtrlDouble* m_spinCtrlRotZ;
+		wxStaticText* m_labelDeg1;
+		wxStaticText* m_TopLabel;
+		wxSpinCtrlDouble* m_spinCtrlLightsTop;
+		wxStaticText* m_bottomLabel;
+		wxSpinCtrlDouble* m_spinCtrlLightsBottom;
+		wxStaticText* m_sidesLabel;
+		wxSpinCtrlDouble* m_spinCtrlLightsSides;
+		wxStaticText* m_cameraLabel;
+		wxSpinCtrlDouble* m_spinCtrlLightsCamera;
+		wxStaticText* m_labelSideLightsElevation;
+		wxSpinCtrl* m_spinCtrlLightsSideElevation;
+		wxStaticText* m_labelDegrees;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

@@ -51,6 +51,13 @@
 #define ARG_PERSPECTIVE "--perspective"
 #define ARG_FLOOR "--floor"
 
+#define ARG_LIGHT_TOP "--light-top"
+#define ARG_LIGHT_BOTTOM "--light-bottom"
+#define ARG_LIGHT_SIDE "--light-side"
+#define ARG_LIGHT_CAMERA "--light-camera"
+
+#define ARG_LIGHT_SIDE_ELEVATION "--light-side-elevation"
+
 
 template <typename T>
 static wxString enumString()
@@ -158,6 +165,51 @@ static bool getToVector3( const std::string& aInput, VECTOR3D& aOutput )
 }
 
 
+static bool getColorOrIntensity( const std::string& aInput, VECTOR3D& aOutput )
+{
+    // If not specified, leave at default
+    if( aInput.empty() )
+        return true;
+
+    // Remove potential quotes
+    wxString wxStr = From_UTF8( aInput );
+
+    if( wxStr[0] == '\'' )
+        wxStr = wxStr.AfterFirst( '\'' );
+
+    if( wxStr[wxStr.length() - 1] == '\'' )
+        wxStr = wxStr.BeforeLast( '\'' );
+
+    wxArrayString arr = wxSplit( wxStr, ',', 0 );
+
+    if( arr.size() == 3 )
+    {
+        VECTOR3D vec;
+        bool     success = true;
+        success &= arr[0].Trim().ToCDouble( &vec.x );
+        success &= arr[1].Trim().ToCDouble( &vec.y );
+        success &= arr[2].Trim().ToCDouble( &vec.z );
+
+        if( !success )
+            return false;
+
+        aOutput = vec;
+        return true;
+    }
+    else if( arr.size() == 1 )
+    {
+        double val;
+        if( arr[0].Trim().ToCDouble( &val ) )
+        {
+            aOutput = VECTOR3D( val, val, val );
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
 {
     addCommonArgs( true, true, false, false );
@@ -237,6 +289,32 @@ CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
             .metavar( "ANGLES" )
             .help( UTF8STDSTR(
                     _( "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view" ) ) );
+
+    m_argParser.add_argument( ARG_LIGHT_TOP )
+            .default_value( std::string( "" ) )
+            .metavar( "COLOR" )
+            .help( UTF8STDSTR( _( "Top light intensity, format 'R,G,B' or a single number, range: 0-1" ) ) );
+
+    m_argParser.add_argument( ARG_LIGHT_BOTTOM )
+            .default_value( std::string( "" ) )
+            .metavar( "COLOR" )
+            .help( UTF8STDSTR( _( "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1" ) ) );
+    
+    m_argParser.add_argument( ARG_LIGHT_SIDE )
+            .default_value( std::string( "" ) )
+            .metavar( "COLOR" )
+            .help( UTF8STDSTR( _( "Side lights intensity, format 'R,G,B' or a single number, range: 0-1" ) ) );
+    
+    m_argParser.add_argument( ARG_LIGHT_CAMERA )
+            .default_value( std::string( "" ) )
+            .metavar( "COLOR" )
+            .help( UTF8STDSTR( _( "Camera light intensity, format 'R,G,B' or a single number, range: 0-1" ) ) );
+
+    m_argParser.add_argument( ARG_LIGHT_SIDE_ELEVATION )
+            .default_value( 60 )
+            .scan<'i', int>()
+            .metavar( "ANGLE" )
+            .help( UTF8STDSTR( _( "Side lights elevation angle in degrees, range: 0-90" ) ) );
 }
 
 
@@ -254,6 +332,7 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
     renderJob->m_zoom = m_argParser.get<double>( ARG_ZOOM );
     renderJob->m_perspective = m_argParser.get<bool>( ARG_PERSPECTIVE );
     renderJob->m_floor = m_argParser.get<bool>( ARG_FLOOR );
+    renderJob->m_lightSideElevation = m_argParser.get<double>( ARG_LIGHT_SIDE_ELEVATION );
 
     getToEnum( m_argParser.get<std::string>( ARG_QUALITY ), renderJob->m_quality );
     getToEnum( m_argParser.get<std::string>( ARG_SIDE ), renderJob->m_side );
@@ -279,6 +358,34 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
     if( !getToVector3( m_argParser.get<std::string>( ARG_PIVOT ), renderJob->m_pivot ) )
     {
         wxFprintf( stderr, _( "Invalid pivot format\n" ) );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
+    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_TOP ),
+                              renderJob->m_lightTopIntensity ) )
+    {
+        wxFprintf( stderr, _( "Invalid light top intensity format\n" ) );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
+    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_BOTTOM ),
+                              renderJob->m_lightBottomIntensity ) )
+    {
+        wxFprintf( stderr, _( "Invalid light bottom intensity format\n" ) );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
+    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_SIDE ),
+                              renderJob->m_lightSideIntensity ) )
+    {
+        wxFprintf( stderr, _( "Invalid light side intensity format\n" ) );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
+    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_CAMERA ),
+                              renderJob->m_lightCameraIntensity ) )
+    {
+        wxFprintf( stderr, _( "Invalid light camera intensity format\n" ) );
         return EXIT_CODES::ERR_ARGS;
     }
 
