@@ -1841,13 +1841,19 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     // using case insensitive comparisons)
     if( m_settings.IsTestEnabled( ERCE_SIMILAR_LABELS )
         || m_settings.IsTestEnabled( ERCE_SIMILAR_POWER )
-        || m_settings.IsTestEnabled( ERCE_SIMILAR_LABEL_AND_POWER )
-        || m_settings.IsTestEnabled( ERCE_SAME_LOCAL_GLOBAL_LABEL ) )
+        || m_settings.IsTestEnabled( ERCE_SIMILAR_LABEL_AND_POWER ) )
     {
         if( aProgressReporter )
-            aProgressReporter->AdvancePhase( _( "Checking labels..." ) );
+            aProgressReporter->AdvancePhase( _( "Checking similar labels..." ) );
 
         TestSimilarLabels();
+    }
+
+    if( m_settings.IsTestEnabled( ERCE_SAME_LOCAL_GLOBAL_LABEL ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking local and global labels..." ) );
+
         TestSameLocalGlobalLabel();
     }
 
