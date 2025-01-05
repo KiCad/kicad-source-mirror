@@ -132,3 +132,19 @@ if( APPLE )
             "@executable_path/../Frameworks" )
     set_target_properties( kiapi PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
 endif()
+
+if( NOT (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR} ) )
+    file( GLOB SCHEMA_FILES ${CMAKE_CURRENT_SOURCE_DIR}/schemas/*.json )
+
+    add_custom_target( api_schema_build_copy ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/schemas ${CMAKE_BINARY_DIR}/schemas
+        DEPENDS ${SCHEMA_FILES}
+        COMMENT "Copying API schema files into build directory"
+        )
+endif()
+
+INSTALL( DIRECTORY
+    schemas
+    DESTINATION ${KICAD_DATA}
+    COMPONENT Runtime
+)

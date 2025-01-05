@@ -29,6 +29,28 @@
 #include <api/api_plugin_manager.h>
 #include <api/api_utils.h>
 #include <json_conversions.h>
+#include <json_schema_validator.h>
+
+
+class LOGGING_ERROR_HANDLER : public nlohmann::json_schema::error_handler
+{
+public:
+    LOGGING_ERROR_HANDLER() : m_hasError( false ) {}
+
+    bool HasError() const { return m_hasError; }
+
+    void error( const nlohmann::json::json_pointer& ptr, const nlohmann::json& instance,
+                const std::string& message ) override
+    {
+        m_hasError = true;
+        wxLogTrace( traceApi,
+                    wxString::Format( wxS( "JSON error: at %s, value:\n%s\n%s" ),
+                                      ptr.to_string(), instance.dump(), message ) );
+    }
+
+private:
+    bool m_hasError;
+};
 
 
 bool PLUGIN_RUNTIME::FromJson( const nlohmann::json& aJson )
@@ -54,7 +76,8 @@ bool PLUGIN_RUNTIME::FromJson( const nlohmann::json& aJson )
 
 struct API_PLUGIN_CONFIG
 {
-    API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aConfigFile );
+    API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aConfigFile,
+                       const JSON_SCHEMA_VALIDATOR& aValidator );
 
     bool valid;
     wxString identifier;
@@ -67,7 +90,8 @@ struct API_PLUGIN_CONFIG
 };
 
 
-API_PLUGIN_CONFIG::API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aConfigFile ) :
+API_PLUGIN_CONFIG::API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aConfigFile,
+                                      const JSON_SCHEMA_VALIDATOR& aValidator ) :
         parent( aParent )
 {
     valid = false;
@@ -94,7 +118,11 @@ API_PLUGIN_CONFIG::API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aCo
         return;
     }
 
-    // TODO add schema and validate
+    LOGGING_ERROR_HANDLER handler;
+    aValidator.Validate( js, handler, nlohmann::json_uri( "#/definitions/Plugin" ) );
+
+    if( !handler.HasError() )
+        wxLogTrace( traceApi, "Plugin: schema validation successful" );
 
     // All of these are required; any exceptions here leave us with valid == false
     try
@@ -151,9 +179,9 @@ API_PLUGIN_CONFIG::API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aCo
 }
 
 
-API_PLUGIN::API_PLUGIN( const wxFileName& aConfigFile ) :
+API_PLUGIN::API_PLUGIN( const wxFileName& aConfigFile, const JSON_SCHEMA_VALIDATOR& aValidator ) :
         m_configFile( aConfigFile ),
-        m_config( std::make_unique<API_PLUGIN_CONFIG>( *this, aConfigFile ) )
+        m_config( std::make_unique<API_PLUGIN_CONFIG>( *this, aConfigFile, aValidator ) )
 {
 }
 

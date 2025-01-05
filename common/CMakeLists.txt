@@ -161,6 +161,7 @@ set( KICOMMON_SRCS
     gestfich.cpp
     increment.cpp
     json_conversions.cpp
+    json_schema_validator.cpp
     kidialog.cpp
     kiid.cpp
     kiway.cpp
@@ -226,6 +227,7 @@ target_link_libraries( kicommon
     kimath
     kiplatform
     nlohmann_json
+    nlohmann_json_schema_validator
     fmt::fmt
     CURL::libcurl
     picosha2
@@ -304,6 +306,7 @@ target_include_directories( kicommon
         $<TARGET_PROPERTY:expected,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:kiapi,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:picosha2,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:nlohmann_json_schema_validator,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 add_dependencies( kicommon pegtl version_header )

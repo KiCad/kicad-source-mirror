@@ -34,6 +34,7 @@
 
 struct API_PLUGIN_CONFIG;
 class API_PLUGIN;
+class JSON_SCHEMA_VALIDATOR;
 
 
 struct PLUGIN_DEPENDENCY
@@ -104,7 +105,7 @@ struct PLUGIN_ACTION
 class KICOMMON_API API_PLUGIN
 {
 public:
-    API_PLUGIN( const wxFileName& aConfigFile );
+    API_PLUGIN( const wxFileName& aConfigFile, const JSON_SCHEMA_VALIDATOR& aValidator );
 
     ~API_PLUGIN();
 

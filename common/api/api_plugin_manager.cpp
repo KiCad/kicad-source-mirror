@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fstream>
+
 #include <env_vars.h>
 #include <fmt/format.h>
 #include <wx/dir.h>
@@ -42,6 +44,13 @@ API_PLUGIN_MANAGER::API_PLUGIN_MANAGER( wxEvtHandler* aEvtHandler ) :
         wxEvtHandler(),
         m_parent( aEvtHandler )
 {
+    // Read and store pcm schema
+    wxFileName schemaFile( PATHS::GetStockDataPath( true ), wxS( "api.v1.schema.json" ) );
+    schemaFile.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+    schemaFile.AppendDir( wxS( "schemas" ) );
+
+    m_schema_validator = std::make_unique<JSON_SCHEMA_VALIDATOR>( schemaFile );
+
     Bind( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, &API_PLUGIN_MANAGER::processNextJob, this );
 }
 
@@ -90,7 +99,7 @@ void API_PLUGIN_MANAGER::ReloadPlugins()
                 wxLogTrace( traceApi, wxString::Format( "Manager: loading plugin from %s",
                                                         aFile.GetFullPath() ) );
 
-                auto plugin = std::make_unique<API_PLUGIN>( aFile );
+                auto plugin = std::make_unique<API_PLUGIN>( aFile, *m_schema_validator );
 
                 if( plugin->IsOk() )
                 {

@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://go.kicad.org/api/schemas/v1",
+  "title": "KiCad API Plugin Schema",
+  "description": "KiCad IPC API Plugin and Action schema",
+  "$ref": "#/definitions/Plugin",
+  "definitions": {
+    "Plugin": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "description": "Plugin identifier",
+          "pattern": "^[a-zA-Z][-_a-zA-Z0-9.]{0,98}[a-zA-Z0-9]$"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "runtime": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "python",
+                "exec"
+              ],
+              "description": "How KiCad should launch the plugin"
+            },
+            "min_version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "show-button": {
+                "type": "boolean"
+              },
+              "scopes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "pcb",
+                    "schematic",
+                    "footprint",
+                    "symbol",
+                    "project_manager"
+                  ]
+                }
+              },
+              "entrypoint": {
+                "type": "string"
+              },
+              "icons-light": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "icons-dark": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "identifier",
+              "name",
+              "description",
+              "show-button",
+              "entrypoint"
+            ]
+          }
+        }
+      },
+      "required": [
+        "identifier",
+        "name",
+        "description",
+        "runtime",
+        "actions"
+      ]
+    }
+  }
+}

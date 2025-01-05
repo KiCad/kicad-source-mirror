@@ -40,7 +40,6 @@ target_link_libraries( pcm
     ${wxWidgets_LIBRARIES}
     common
     picosha2
-    nlohmann_json_schema_validator
 )
 
 # Copy the schema to the build directory when building outside the source tree

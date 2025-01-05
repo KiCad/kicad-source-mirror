@@ -23,12 +23,12 @@
 
 #include "core/wx_stl_compat.h"
 #include "pcm_data.h"
+#include <json_schema_validator.h>
 #include "widgets/wx_progress_reporters.h"
 #include <functional>
 #include <iostream>
 #include <map>
-#include <json_common.h>
-#include <nlohmann/json-schema.hpp>
+
 #include <thread>
 #include <tuple>
 #include <unordered_map>
@@ -393,7 +393,7 @@ private:
     time_t getCurrentTimestamp() const;
 
     wxWindow*                                    m_dialog;
-    nlohmann::json_schema::json_validator        m_schema_validator;
+    std::unique_ptr<JSON_SCHEMA_VALIDATOR>       m_schema_validator;
     wxString                                     m_3rdparty_path;
     wxString                                     m_cache_path;
     std::unordered_map<wxString, PCM_REPOSITORY> m_repository_cache;

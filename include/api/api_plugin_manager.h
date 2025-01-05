@@ -25,6 +25,7 @@
 #include <wx/event.h>
 
 #include <api/api_plugin.h>
+#include <json_schema_validator.h>
 #include <kicommon.h>
 
 /// Internal event used for handling async tasks
@@ -98,4 +99,6 @@ private:
     };
 
     std::deque<JOB> m_jobs;
+
+    std::unique_ptr<JSON_SCHEMA_VALIDATOR> m_schema_validator;
 };

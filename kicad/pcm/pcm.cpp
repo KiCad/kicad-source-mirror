@@ -26,6 +26,7 @@
 #include "core/wx_stl_compat.h"
 #include <env_vars.h>
 #include <background_jobs_monitor.h>
+#include <json_schema_validator.h>
 #include "build_version.h"
 #include "paths.h"
 #include "pcm.h"
@@ -81,32 +82,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
     schema_file.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     schema_file.AppendDir( wxS( "schemas" ) );
 
-    std::ifstream  schema_stream( schema_file.GetFullPath().fn_str() );
-    nlohmann::json schema;
-
-    try
-    {
-        // For some obscure reason on MINGW, using UCRT option,
-        // m_schema_validator.set_root_schema() hangs without switching to locale "C"
-        #if defined(__MINGW32__) && defined(_UCRT)
-        LOCALE_IO dummy;
-        #endif
-
-        schema_stream >> schema;
-        m_schema_validator.set_root_schema( schema );
-    }
-    catch( std::exception& e )
-    {
-        if( !schema_file.FileExists() )
-        {
-            wxLogError( wxString::Format( _( "schema file '%s' not found" ),
-                                          schema_file.GetFullPath() ) );
-        }
-        else
-        {
-            wxLogError( wxString::Format( _( "Error loading schema: %s" ), e.what() ) );
-        }
-    }
+    m_schema_validator = std::make_unique<JSON_SCHEMA_VALIDATOR>( schema_file );
 
     // Load currently installed packages
     wxFileName f( PATHS::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
@@ -314,7 +290,7 @@ void PLUGIN_CONTENT_MANAGER::ValidateJson( const nlohmann::json&     aJson,
                                            const nlohmann::json_uri& aUri ) const
 {
     THROWING_ERROR_HANDLER error_handler;
-    m_schema_validator.validate( aJson, error_handler, aUri );
+    m_schema_validator->Validate( aJson, error_handler, aUri );
 }
 
 
