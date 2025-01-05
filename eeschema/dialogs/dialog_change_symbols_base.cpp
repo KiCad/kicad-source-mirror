@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -84,7 +84,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	bSizer1->Add( m_newIdBrowserButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 
-	m_newIdSizer->Add( bSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+	m_newIdSizer->Add( bSizer1, 0, wxEXPAND|wxTOP, 2 );
 
 
 	m_mainSizer->Add( m_newIdSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -113,7 +113,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_updateFieldsSizer->Add( m_selBtnSizer, 0, wxEXPAND, 5 );
 
 
-	bSizerUpdate->Add( m_updateFieldsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+	bSizerUpdate->Add( m_updateFieldsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update Options") ), wxVERTICAL );
 
@@ -170,7 +170,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_updateOptionsSizer->Add( m_resetCustomPower, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizerUpdate->Add( m_updateOptionsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+	bSizerUpdate->Add( m_updateOptionsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	m_mainSizer->Add( bSizerUpdate, 0, wxEXPAND, 5 );

@@ -308,7 +308,10 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             symbol->GetFields( fields, false );
 
             for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
-                fieldNames.insert( fields[i]->GetName() );
+            {
+                if( !fields[i]->IsPrivate() )
+                    fieldNames.insert( fields[i]->GetName() );
+            }
 
             if( m_mode == MODE::UPDATE && symbol->GetLibId().IsValid() )
             {
@@ -321,7 +324,10 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
                     flattenedSymbol->GetFields( libFields );
 
                     for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
-                        fieldNames.insert( libFields[i]->GetName() );
+                    {
+                        if( !libFields[i]->IsPrivate() )
+                            fieldNames.insert( libFields[i]->GetName() );
+                    }
 
                     libFields.clear();  // flattenedSymbol is about to go out of scope...
                 }
@@ -347,7 +353,10 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
                 flattenedSymbol->GetFields( libFields );
 
                 for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
-                    fieldNames.insert( libFields[i]->GetName() );
+                {
+                    if( !libFields[i]->IsPrivate() )
+                        fieldNames.insert( libFields[i]->GetName() );
+                }
 
                 libFields.clear();  // flattenedSymbol is about to go out of scope...
             }
@@ -654,10 +663,13 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         {
             SCH_FIELD& field = symbol->GetFields()[i];
             SCH_FIELD* libField = nullptr;
+            bool       doUpdate = field.IsPrivate();
 
             // Mandatory fields always exist in m_updateFields, but these names can be translated.
             // so use GetCanonicalName().
-            if( !alg::contains( m_updateFields, field.GetCanonicalName() ) )
+            doUpdate |= alg::contains( m_updateFields, field.GetCanonicalName() );
+
+            if( !doUpdate )
                 continue;
 
             if( i < MANDATORY_FIELDS )
