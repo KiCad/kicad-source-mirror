@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 12:49+0300\n"
-"PO-Revision-Date: 2024-12-22 21:25+0000\n"
+"PO-Revision-Date: 2025-01-05 16:29+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -31512,16 +31512,12 @@ msgid "Success"
 msgstr "Erfolg"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Soll ein Pfad relativ zu \"%s\" verwendet\n"
-"werden?"
+msgstr "Soll der Exportprozess abgebrochen werden?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Freiraum-Bericht"
+msgstr "Export abbrechen"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -37934,14 +37930,13 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Pad ist kein Durchlochpad; Verbindung wird sein: %s."
 
 #: pcbnew/drc/drc_engine.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Lokale Überschreibung auf %s; Freiraum: %s."
+msgstr "Netzverbinder auf %s; Freiraum: 0."
 
 #: pcbnew/drc/drc_engine.cpp:787
-#, fuzzy
 msgid "net tie"
-msgstr "Schaltplan-Titel"
+msgstr "Netzverbinder"
 
 #: pcbnew/drc/drc_engine.cpp:814 pcbnew/drc/drc_engine.cpp:824
 #, c-format
