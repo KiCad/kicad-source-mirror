@@ -57,7 +57,7 @@ protected:
 
 enum FIELDS_DATA_COL_ORDER
 {
-    FDC_NAME,
+    FDC_NAME = 0,
     FDC_VALUE,
     FDC_SHOWN,
     FDC_SHOW_NAME,
@@ -73,7 +73,11 @@ enum FIELDS_DATA_COL_ORDER
     FDC_COLOR,
     FDC_ALLOW_AUTOPLACE,
 
-    FDC_COUNT       // keep as last
+    FDC_SCH_EDIT_COUNT,
+
+    FDC_PRIVATE = FDC_SCH_EDIT_COUNT,
+
+    FDC_SYMBOL_EDITOR_COUNT
 };
 
 
@@ -91,7 +95,7 @@ public:
     ~FIELDS_GRID_TABLE() override;
 
     int GetNumberRows() override { return getVisibleRowCount(); }
-    int GetNumberCols() override { return FDC_COUNT; }
+    int GetNumberCols() override { return getColumnCount(); }
 
     wxString GetColLabelValue( int aCol ) override;
 
@@ -118,6 +122,7 @@ protected:
 
     void onUnitsChanged( wxCommandEvent& aEvent );
 
+    int getColumnCount() const;
     int getVisibleRowCount() const;
 
     SCH_FIELD& getField( int aRow );

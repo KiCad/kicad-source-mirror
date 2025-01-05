@@ -402,6 +402,20 @@ void FIELDS_GRID_TABLE::onUnitsChanged( wxCommandEvent& aEvent )
 }
 
 
+int FIELDS_GRID_TABLE::getColumnCount() const
+{
+    if( m_frame->GetFrameType() == FRAME_SCH
+        || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
+    {
+        return FDC_SCH_EDIT_COUNT;
+    }
+    else
+    {
+        return FDC_SYMBOL_EDITOR_COUNT;
+    }
+}
+
+
 int FIELDS_GRID_TABLE::getVisibleRowCount() const
 {
     if( m_frame->GetFrameType() == FRAME_SCH
@@ -466,6 +480,7 @@ wxString FIELDS_GRID_TABLE::GetColLabelValue( int aCol )
     case FDC_FONT:            return _( "Font" );
     case FDC_COLOR:           return _( "Color" );
     case FDC_ALLOW_AUTOPLACE: return _( "Allow Autoplacement" );
+    case FDC_PRIVATE:         return _( "Private" );
     default:      wxFAIL;     return wxEmptyString;
     }
 }
@@ -492,6 +507,7 @@ bool FIELDS_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aType
     case FDC_ITALIC:
     case FDC_BOLD:
     case FDC_ALLOW_AUTOPLACE:
+    case FDC_PRIVATE:
         return aTypeName == wxGRID_VALUE_BOOL;
 
     default:
@@ -617,6 +633,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
     case FDC_ITALIC:
     case FDC_BOLD:
     case FDC_ALLOW_AUTOPLACE:
+    case FDC_PRIVATE:
         m_boolAttr->IncRef();
         return enhanceAttr( m_boolAttr, aRow, aCol, aKind );
 
@@ -744,6 +761,9 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
     case FDC_ALLOW_AUTOPLACE:
         return StringFromBool( field.CanAutoplace() );
 
+    case FDC_PRIVATE:
+        return StringFromBool( field.IsPrivate() );
+
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
         // the column type when trying to see if there's an overflow
@@ -766,6 +786,7 @@ bool FIELDS_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
     case FDC_ITALIC:          return field.IsItalic();
     case FDC_BOLD:            return field.IsBold();
     case FDC_ALLOW_AUTOPLACE: return field.CanAutoplace();
+    case FDC_PRIVATE:         return field.IsPrivate();
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
         return false;
@@ -930,6 +951,10 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         field.SetCanAutoplace( BoolFromString( value ) );
         break;
 
+    case FDC_PRIVATE:
+        field.SetPrivate( BoolFromString( value ) );
+        break;
+
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a string value" ), aCol ) );
         break;
@@ -966,6 +991,10 @@ void FIELDS_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 
     case FDC_ALLOW_AUTOPLACE:
         field.SetCanAutoplace( aValue );
+        break;
+
+    case FDC_PRIVATE:
+        field.SetPrivate( aValue );
         break;
 
     default:
