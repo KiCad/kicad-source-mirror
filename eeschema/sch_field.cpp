@@ -1772,6 +1772,19 @@ static struct SCH_FIELD_DESC
 
         propMgr.OverrideWriteability( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ),
                                       isNotNamedVariable );
+
+
+        auto isNonMandatoryField =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( aItem ) )
+                        return !field->IsMandatory();
+
+                    return false;
+                };
+
+        propMgr.OverrideAvailability( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ), _HKI( "Private" ),
+                                      isNonMandatoryField );
     }
 } _SCH_FIELD_DESC;
 

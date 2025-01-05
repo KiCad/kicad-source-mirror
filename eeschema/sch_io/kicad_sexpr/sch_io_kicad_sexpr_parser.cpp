@@ -2227,6 +2227,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             if( name == GetCanonicalFieldName( ii ) )
             {
                 field->SetId( ii );
+                field->SetPrivate( false );
                 break;
             }
         }
@@ -2238,6 +2239,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             if( name == SCH_SHEET::GetDefaultFieldName( ii,  false ) )
             {
                 field->SetId( ii );
+                field->SetPrivate( false );
                 break;
             }
             // Legacy support for old field names

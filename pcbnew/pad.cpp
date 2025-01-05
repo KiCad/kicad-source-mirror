@@ -2565,7 +2565,7 @@ static struct PAD_DESC
                 };
 
         auto hasNormalPadstack =
-                [=]( INSPECTABLE* aItem ) -> bool
+                []( INSPECTABLE* aItem ) -> bool
                 {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
                         return pad->Padstack().Mode() == PADSTACK::MODE::NORMAL;
