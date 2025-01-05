@@ -1,140 +1,149 @@
+# தமிழ்நேரம் <anishprabu.t@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 13:30-0800\n"
-"PO-Revision-Date: 2018-07-15 17:07+0200\n"
+"PO-Revision-Date: 2025-01-05 09:38+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/"
+"master-source/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr ""
+msgstr "அனைத்து கோப்புகள்"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:325
 msgid "Build board outline"
-msgstr ""
+msgstr "போர்டு அவுட்லைன் உருவாக்கு"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:552
 msgid "Create layers"
-msgstr ""
+msgstr "அடுக்குகளை உருவாக்கவும்"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:939
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr ""
+msgstr "தடம் ஏற்றப்படவில்லை."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:954
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"தடம் அவுட்லைன் காணவில்லை அல்லது தவறாக உள்ளது. முழு பகுப்பாய்விற்கு தடம் சரிபார்ப்பை "
+"இயக்கவும்."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:963
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
+"போர்டு அவுட்லைன் காணவில்லை அல்லது தவறாக உள்ளது. முழு பகுப்பாய்விற்கு டி.ஆர்.சி."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:259
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "தடங்கள் மற்றும் வழிமம் களை உருவாக்கவும்"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:708
 msgid "Create zones"
-msgstr ""
+msgstr "மண்டலங்களை உருவாக்கவும்"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:792
 msgid "Build Tech layers"
-msgstr ""
+msgstr "தொழில்நுட்ப அடுக்குகளை உருவாக்குங்கள்"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:824
 #, c-format
 msgid "Build Tech layer %d"
-msgstr ""
+msgstr "தொழில்நுட்ப அடுக்கு %d ஐ உருவாக்குங்கள்"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Simplifying copper layer polygons"
-msgstr ""
+msgstr "செப்பு அடுக்கு பலகோணங்களை எளிதாக்குதல்"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1059
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "பூசப்பட்ட தாமிரத்தை கணக்கிடுதல்"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1143
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr ""
+msgstr "%d செப்பு அடுக்குகளை எளிதாக்குதல்"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1186
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "துளைகள் வரையறைகளை எளிதாக்குங்கள்"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1206
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "துளைகள் மற்றும் வழிமம் களுக்கு BVH ஐ உருவாக்குங்கள்"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:398
 msgid "OpenGL context creation error"
-msgstr ""
+msgstr "OpenGL சூழல் உருவாக்கும் பிழை"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:429
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr ""
+msgstr "உங்கள் ஓபன்சிஎல் பதிப்பு ஆதரிக்கப்படவில்லை. குறைந்தபட்சம் தேவை 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:563
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr ""
+msgstr "கடைசியாக வழங்கும் நேரம் %.0f எம்.எச்"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:739
 #, c-format
 msgid "Net %s\tNet class %s"
-msgstr ""
+msgstr "நிகர %s நிகர வகுப்பு %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:763
 #, c-format
 msgid "Pad %s\t"
-msgstr ""
+msgstr "திண்டு %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:794
 #, c-format
 msgid "Rule area %s\t"
-msgstr ""
+msgstr "விதி பகுதி %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:796
 #, c-format
 msgid "Zone %s\t"
-msgstr ""
+msgstr "மண்டலம் %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "OPENGL ஐ ஏற்றவும்: போர்டு"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "OPENGL ஐ ஏற்றவும்: துளைகள் மற்றும் வழிமம் கள்"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:546
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "OpenGL ஐ ஏற்றவும்: அடுக்குகள்"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:560
 #, c-format
 msgid "Load OpenGL layer %s"
-msgstr ""
+msgstr "Opengl அடுக்கு %s ஐ ஏற்றவும்"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1995
 msgid "Loading 3D models..."
-msgstr ""
+msgstr "3D மாடல்களை ஏற்றுகிறது ..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "நேரத்தை மீண்டும் ஏற்றவும் %.3f கள்"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:958
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:355
@@ -149,43 +158,43 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2701
 #, c-format
 msgid "Loading %s..."
-msgstr ""
+msgstr "%s ஏற்றுகிறது ..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:488
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:106
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
-msgstr ""
+msgstr "ஏற்றுகிறது ..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
 msgid "Load Raytracing: board"
-msgstr ""
+msgstr "சுமை கதிர்வீச்சு: போர்டு"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
 msgid "Load Raytracing: layers"
-msgstr ""
+msgstr "சுமை கதிர்வீச்சு: அடுக்குகள்"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:180
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "வழங்கும் நேரம் %.3f கள்"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:225
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "ரெண்டரிங்: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:683
 msgid "Rendering: Post processing shader"
-msgstr ""
+msgstr "ரெண்டரிங்: பிந்தைய செயலாக்க சேடர்"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:51
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "தற்போதைய பார்வையை png என ஏற்றுமதி செய்யுங்கள் ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:56
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "தற்போதைய பார்வையை jpeg ஆக ஏற்றுமதி செய்யுங்கள் ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
@@ -193,23 +202,23 @@ msgstr ""
 #: common/tool/actions.cpp:1073 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:686
 msgid "3D Viewer"
-msgstr ""
+msgstr "3 டி பார்வையாளர்"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:70
 msgid "Copy 3D Image"
-msgstr ""
+msgstr "3D படத்தை நகலெடுக்கவும்"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:87
 msgid "3D Grid"
-msgstr ""
+msgstr "3 டி கட்டம்"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:125
 msgid "Raytracing"
-msgstr ""
+msgstr "ரேட்ரேசிங்"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "இயல்புநிலை அமைப்புகளுக்கு மீட்டமைக்கவும்"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:308 cvpcb/menubar.cpp:78
@@ -221,7 +230,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:243 pcbnew/menubar_pcb_editor.cpp:476
 #: pcbnew/toolbars_footprint_viewer.cpp:193
 msgid "&File"
-msgstr ""
+msgstr "கோப்பு (&f)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:79
 #: eeschema/menubar.cpp:364
@@ -229,7 +238,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:244
 #: pcbnew/menubar_pcb_editor.cpp:477
 msgid "&Edit"
-msgstr ""
+msgstr "திருத்து (&e)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:365
 #: eeschema/sim/toolbars_simulator_frame.cpp:172
@@ -239,31 +248,31 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:245 pcbnew/menubar_pcb_editor.cpp:478
 #: pcbnew/toolbars_footprint_viewer.cpp:194
 msgid "&View"
-msgstr ""
+msgstr "காண்க (&v)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142
 #: bitmap2component/bitmap2cmp_frame.cpp:309 cvpcb/menubar.cpp:80
 #: eeschema/sim/toolbars_simulator_frame.cpp:174 gerbview/menubar.cpp:234
 #: kicad/menubar.cpp:232 pcb_calculator/pcb_calculator_frame.cpp:230
 msgid "&Preferences"
-msgstr ""
+msgstr "&விருப்பத்தேர்வுகள்"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:58
 msgid "Reload board"
-msgstr ""
+msgstr "பலகை மீண்டும் ஏற்றவும்"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "3D படத்தை இடைநிலைப்பலகைக்கு நகலெடுக்கவும்"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "ரேட்ரேசிங்கைப் பயன்படுத்தி தற்போதைய பார்வையை வழங்கவும்"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:103
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 msgid "KiCad 3D Viewer"
-msgstr ""
+msgstr "கிகாட் 3D பார்வையாளர்"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:165
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
@@ -273,29 +282,29 @@ msgstr ""
 #: pcbnew/pcb_edit_frame.cpp:324 pcbnew/pcb_edit_frame.cpp:1691
 #: pcbnew/tools/pcb_actions.cpp:1327
 msgid "Appearance"
-msgstr ""
+msgstr "தோற்றம்"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:329
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:634
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Editor"
-msgstr ""
+msgstr "பிசிபி எடிட்டரைப் பின்தொடரவும்"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:331
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:635
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
-msgstr ""
+msgstr "பிசிபி சூழ்ச்சி அமைப்புகளைப் பின்பற்றவும்"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:588
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:848
 msgid "legacy colors"
-msgstr ""
+msgstr "மரபு வண்ணங்கள்"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:725
 msgid "3D Image File Name"
-msgstr ""
+msgstr "3D பட கோப்பு பெயர்"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:746
 #: common/eda_base_frame.cpp:1348 common/eda_base_frame.cpp:1352
@@ -303,7 +312,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:323
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
+msgstr "கோப்பை '%s' சேமிக்க போதுமான அனுமதிகள் இல்லை."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
@@ -338,345 +347,347 @@ msgstr ""
 #: pcbnew/drc/drc_item.cpp:231 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2729
 msgid "Error"
-msgstr ""
+msgstr "பிழை"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:787
 msgid "Failed to copy image to clipboard"
-msgstr ""
+msgstr "இடைநிலைப்பலகைக்கு படத்தை நகலெடுப்பதில் தோல்வி"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:798
 msgid "Can't save file"
-msgstr ""
+msgstr "கோப்பைச் சேமிக்க முடியாது"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 msgid "Set Pivot"
-msgstr ""
+msgstr "பிவோட் அமைக்கவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr ""
+msgstr "பலகை சுழற்றப்படும் இடம் புள்ளி (நடுத்தர சுட்டி கிளிக்)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 msgid "Rotate X Clockwise"
-msgstr ""
+msgstr "ஃச் கடிகார திசையில் சுழற்றுங்கள்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate X Counterclockwise"
-msgstr ""
+msgstr "ஃச் எதிரெதிர் திசையில் சுழற்றுங்கள்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Rotate Y Clockwise"
-msgstr ""
+msgstr "ஒய் கடிகார திசையில் சுழற்றுங்கள்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Rotate Y Counterclockwise"
-msgstr ""
+msgstr "ஒய் எதிரெதிர் திசையில் சுழற்றுங்கள்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:87
 msgid "Rotate Z Clockwise"
-msgstr ""
+msgstr "சட் கடிகார திசையில் சுழற்றுங்கள்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:95
 msgid "Rotate Z Counterclockwise"
-msgstr ""
+msgstr "சட் எதிரெதிர் திசையில் சுழற்றுங்கள்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
 msgid "Move Board Left"
-msgstr ""
+msgstr "வாரியத்தை நகர்த்தவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:113
 msgid "Move Board Right"
-msgstr ""
+msgstr "பலகையை நகர்த்தவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:122
 msgid "Move Board Up"
-msgstr ""
+msgstr "பலகையை நகர்த்தவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:131
 msgid "Move Board Down"
-msgstr ""
+msgstr "பலகையை கீழே நகர்த்தவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
 msgid "Home View"
-msgstr ""
+msgstr "வீட்டு பார்வை"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "வீட்டு நிலையில் மீண்டும் வரையவும், பெரிதாக்கவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
-msgstr ""
+msgstr "ஃபிளிப் போர்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "Flip the board view"
-msgstr ""
+msgstr "போர்டு காட்சியை புரட்டவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:158
 msgid "Toggle Orthographic Projection"
-msgstr ""
+msgstr "ஆர்த்தோகிராஃபிக் திட்டத்தை மாற்றவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:159
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:199
 msgid "Enable/disable orthographic projection"
-msgstr ""
+msgstr "ஆர்த்தோகிராஃபிக் திட்டத்தை இயக்கவும்/முடக்கவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "View Front"
-msgstr ""
+msgstr "முன் காண்க"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:175
 msgid "View Back"
-msgstr ""
+msgstr "மீண்டும் காண்க"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:184
 msgid "View Left"
-msgstr ""
+msgstr "இடதுபுறம் காண்க"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
 msgid "View Right"
-msgstr ""
+msgstr "சரியாகக் காண்க"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "View Top"
-msgstr ""
+msgstr "மேலே காண்க"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:211
 msgid "View Bottom"
-msgstr ""
+msgstr "கீழே காண்க"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "No 3D Grid"
-msgstr ""
+msgstr "இல்லை 3D கட்டம்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:226
 msgid "3D Grid 10mm"
-msgstr ""
+msgstr "3D கட்டம் 10 மிமீ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "3D Grid 5mm"
-msgstr ""
+msgstr "3D கட்டம் 5 மிமீ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "3D Grid 2.5mm"
-msgstr ""
+msgstr "3D கட்டம் 2.5 மிமீ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:247
 msgid "3D Grid 1mm"
-msgstr ""
+msgstr "3D கட்டம் 1 மிமீ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:254
 msgid "Render Realistic Materials"
-msgstr ""
+msgstr "யதார்த்தமான பொருட்களை வழங்கவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
 msgstr ""
+"ஒவ்வொரு 3D மாதிரி கோப்பிலிருந்தும் அனைத்து பொருள் பண்புகளையும் பயன்படுத்தவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
 msgid "Render Solid Colors"
-msgstr ""
+msgstr "திட வண்ணங்களை வழங்கவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Use only the diffuse color property from 3D model file"
-msgstr ""
+msgstr "3D மாதிரி கோப்பிலிருந்து பரவக்கூடிய வண்ண சொத்தை மட்டுமே பயன்படுத்தவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Render CAD Colors"
-msgstr ""
+msgstr "கேட் வண்ணங்களை வழங்கவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr ""
+"பொருளின் பரவலான நிறத்தின் அடிப்படையில் கேட் வண்ண பாணியைப் பயன்படுத்தவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:279
 msgid "Show Through Hole 3D Models"
-msgstr ""
+msgstr "துளை 3D மாதிரிகள் மூலம் காண்பி"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr ""
+msgstr "'துளை' வகை கால்தடங்களுக்கான 3D மாடல்களைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:288
 msgid "Show SMD 3D Models"
-msgstr ""
+msgstr "SMD 3D மாடல்களைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:289
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr ""
+msgstr "'மேற்பரப்பு மவுண்ட்' வகை கால்தடங்களுக்கான 3D மாதிரிகளைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:297
 msgid "Show Unspecified 3D Models"
-msgstr ""
+msgstr "குறிப்பிடப்படாத 3D மாடல்களைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:298
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr ""
+msgstr "'குறிப்பிடப்படாத' வகை கால்தடங்களுக்கான 3D மாடல்களைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:306
 msgid "Show 3D Models not in POS File"
-msgstr ""
+msgstr "POS கோப்பில் இல்லாத 3D மாதிரிகளைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:307
 msgid "Show 3D models even if not found in .pos file"
-msgstr ""
+msgstr ".Pos கோப்பில் காணப்படாவிட்டாலும் 3D மாடல்களைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
 msgid "Show 3D Models marked DNP"
-msgstr ""
+msgstr "டி.என்.பி குறிக்கப்பட்ட 3 டி மாடல்களைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr ""
+msgstr "'வைக்க வேண்டாம்' என்று குறிக்கப்பட்டாலும் 3D மாடல்களைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Model Bounding Boxes"
-msgstr ""
+msgstr "மாதிரி எல்லை பெட்டிகளைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr ""
+msgstr "நிகழ்நேர ரெண்டரரில் 3D மாதிரி எல்லை பெட்டிகளைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
-msgstr ""
+msgstr "3D அச்சைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:338
 msgid "Show Appearance Manager"
-msgstr ""
+msgstr "தோற்ற மேலாளரைக் காட்டு"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 #: pcbnew/tools/pcb_actions.cpp:1328
 msgid "Show/hide the appearance manager"
-msgstr ""
+msgstr "தோற்ற மேலாளரைக் காட்டவும்/மறைக்கவும்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Board Body"
-msgstr ""
+msgstr "போர்டு அமைப்பு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show board body"
-msgstr ""
+msgstr "பலகை அமைப்பைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show front copper / surface finish color"
-msgstr ""
+msgstr "முன் செம்பு / மேற்பரப்பு பூச்சு வண்ணத்தைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show back copper / surface finish color"
-msgstr ""
+msgstr "காப்பர் / மேற்பரப்பு பூச்சு வண்ணத்தை மீண்டும் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr ""
+msgstr "பசை"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
-msgstr ""
+msgstr "பிசின் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
-msgstr ""
+msgstr "சூட்டிணைப் பசை"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show solder paste"
-msgstr ""
+msgstr "சாலிடர் பேச்டைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "F.Silkscreen"
-msgstr ""
+msgstr "F.silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
-msgstr ""
+msgstr "முன் சில்க்ச்கிரீனைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "B.Silkscreen"
-msgstr ""
+msgstr "பி.சில்க்ச்கிரீன்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
-msgstr ""
+msgstr "சில்க்ச்கிரீனைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "F.Mask"
-msgstr ""
+msgstr "எஃப். மாச்க்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show front solder mask"
-msgstr ""
+msgstr "முன் சாலிடர் முகமூடியைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "B.Mask"
-msgstr ""
+msgstr "பி. மாச்க்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show back solder mask"
-msgstr ""
+msgstr "சாலிடர் முகமூடியை மீண்டும் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Drawings"
-msgstr ""
+msgstr "பயனர்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user drawings layer"
-msgstr ""
+msgstr "பயனர் வரைபடங்களைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Comments"
-msgstr ""
+msgstr "User.comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "Show user comments layer"
-msgstr ""
+msgstr "பயனர் கருத்துகள் அடுக்கைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "User.Eco1"
-msgstr ""
+msgstr "USER.ECO1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "Show user ECO1 layer"
-msgstr ""
+msgstr "பயனர் ECO1 லேயரைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "User.Eco2"
-msgstr ""
+msgstr "USER.ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "Show user ECO2 layer"
-msgstr ""
+msgstr "பயனர் ECO2 லேயரைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "Through-hole Models"
-msgstr ""
+msgstr "மூலம் துளை மாதிரிகள்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "SMD Models"
-msgstr ""
+msgstr "SMD மாதிரிகள்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "Virtual Models"
-msgstr ""
+msgstr "மெய்நிகர் மாதிரிகள்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Models not in POS File"
-msgstr ""
+msgstr "மாதிரிகள் பிஓஎச் கோப்பில் இல்லை"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Models marked DNP"
-msgstr ""
+msgstr "மாதிரிகள் டி.என்.பி குறிக்கப்பட்டன"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "Model Bounding Boxes"
-msgstr ""
+msgstr "மாதிரி எல்லை பெட்டிகள்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76 common/layer_id.cpp:169
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -685,73 +696,73 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Values"
-msgstr ""
+msgstr "மதிப்புகள்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprint values"
-msgstr ""
+msgstr "தடம் மதிப்புகளைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "References"
-msgstr ""
+msgstr "குறிப்புகள்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprint references"
-msgstr ""
+msgstr "தடம் குறிப்புகளைக் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Footprint Text"
-msgstr ""
+msgstr "தடம் உரை"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show all footprint text"
-msgstr ""
+msgstr "அனைத்து தடம் உரையையும் காட்டு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Off-board Silkscreen"
-msgstr ""
+msgstr "ஆஃப்-போர்டு சில்க்ச்கிரீன்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "போர்டு அவுட்லைன் செய்ய பட்டு அடுக்குகளை கிளிப் செய்ய வேண்டாம்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "3D Axis"
-msgstr ""
+msgstr "3 டி அச்சு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 msgid "Background Start"
-msgstr ""
+msgstr "பின்னணி தொடக்க"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 msgid "Background gradient start color"
-msgstr ""
+msgstr "பின்னணி சாய்வு தொடக்க நிறம்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "Background End"
-msgstr ""
+msgstr "பின்னணி முடிவு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "Background gradient end color"
-msgstr ""
+msgstr "பின்னணி சாய்வு இறுதி நிறம்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:228
 msgid "Use board stackup colors"
-msgstr ""
+msgstr "போர்டு ச்டேக்அப் வண்ணங்களைப் பயன்படுத்தவும்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
 msgid "Use board editor copper colors"
-msgstr ""
+msgstr "போர்டு எடிட்டர் செப்பு வண்ணங்களைப் பயன்படுத்தவும்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
 msgid "Use the board editor copper colors (openGL only)"
-msgstr ""
+msgstr "போர்டு எடிட்டர் செப்பு வண்ணங்களைப் பயன்படுத்தவும் (Opengl மட்டும்)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
 #, c-format
@@ -761,6 +772,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"வண்ணம் மற்றும் தெரிவுநிலை சேர்க்கைகளை சேமித்து மீட்டமைக்கவும்.\n"
+" தேர்வாளரை செயல்படுத்த %s+தாவலைப் பயன்படுத்தவும்.\n"
+" %s கீழே வைத்திருக்கும் போது அடுத்தடுத்த தாவல்கள் பாப்அப்பில் முன்னமைவுகள் மூலம் சுழற்சி "
+"செய்யும்."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:167
 #, c-format
@@ -770,129 +785,135 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"கேமரா நிலையை சேமித்து மீட்டெடுங்கள்.\n"
+" தேர்வாளரை செயல்படுத்த %s+தாவலைப் பயன்படுத்தவும்.\n"
+" %s கீழே வைத்திருக்கும் போது அடுத்தடுத்த தாவல்கள் பாப்அப்பில் காட்சிகள் மூலம் சுழற்சி "
+"செய்யும்."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:498
 msgid "Left double click or middle click to change color"
-msgstr ""
+msgstr "வண்ணத்தை மாற்ற இடது இரட்டை சொடுக்கு அல்லது நடுத்தர சொடுக்கு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:508
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"வண்ண திருத்துதல் அனுமதிக்க 'போர்டு ச்டேக்அப் வண்ணங்களைப் பயன்படுத்துங்கள்' என்பதைத் "
+"தேர்வுநீக்கவும்."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:557
 #: pcbnew/widgets/appearance_controls.cpp:2198
 #, c-format
 msgid "Show or hide %s"
-msgstr ""
+msgstr "%s ஐக் காட்டுங்கள் அல்லது மறைக்கவும்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
 #: pcbnew/widgets/appearance_controls.cpp:2571
 #, c-format
 msgid "Presets (%s+Tab):"
-msgstr ""
+msgstr "முன்னமைவுகள் (%s+தாவல்):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1642
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2596
 msgid "Save preset..."
-msgstr ""
+msgstr "முன்னமைவை சேமிக்கவும் ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:642
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1643
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2075
 #: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "Delete preset..."
-msgstr ""
+msgstr "முன்னமைவை நீக்கு ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:748
 #: pcbnew/widgets/appearance_controls.cpp:2702
 msgid "Layer preset name:"
-msgstr ""
+msgstr "அடுக்கு முன்னமைக்கப்பட்ட பெயர்:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:749
 #: pcbnew/widgets/appearance_controls.cpp:2703
 msgid "Save Layer Preset"
-msgstr ""
+msgstr "அடுக்கு முன்னமைவை சேமிக்கவும்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1815
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2217
 #: pcbnew/widgets/appearance_controls.cpp:2736
 msgid "Overwrite existing preset?"
-msgstr ""
+msgstr "இருக்கும் முன்னமைவை மேலெழுதவா?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1840
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2242
 #: pcbnew/widgets/appearance_controls.cpp:2762
 msgid "Presets"
-msgstr ""
+msgstr "முன்னமைவுகள்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:799
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2774
 msgid "Delete Preset"
-msgstr ""
+msgstr "முன்னமைவை நீக்கு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:800
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1853
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2255
 #: pcbnew/widgets/appearance_controls.cpp:2775
 msgid "Select preset:"
-msgstr ""
+msgstr "முன்னமைவைத் தேர்ந்தெடுக்கவும்:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:858
 #: pcbnew/widgets/appearance_controls.cpp:2875
 #, c-format
 msgid "Viewports (%s+Tab):"
-msgstr ""
+msgstr "வியாபோர்ட்ச் (%s+தாவல்):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
 #: pcbnew/widgets/appearance_controls.cpp:2884
 msgid "Save viewport..."
-msgstr ""
+msgstr "வியூபோர்ட்டைச் சேமிக்கவும் ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
 #: pcbnew/widgets/appearance_controls.cpp:2885
 msgid "Delete viewport..."
-msgstr ""
+msgstr "வியூபோர்ட்டை நீக்கு ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:899
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Viewport name:"
-msgstr ""
+msgstr "ViewPort பெயர்:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:900
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Save Viewport"
-msgstr ""
+msgstr "வியூபோர்ட்டைச் சேமிக்கவும்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:939
 #: pcbnew/widgets/appearance_controls.cpp:2973
 msgid "Viewports"
-msgstr ""
+msgstr "வியூபோர்ட்ச்"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:948
 #: pcbnew/widgets/appearance_controls.cpp:2982
 msgid "Delete Viewport"
-msgstr ""
+msgstr "வியூபோர்ட்டை நீக்கு"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:949
 #: pcbnew/widgets/appearance_controls.cpp:2983
 msgid "Select viewport:"
-msgstr ""
+msgstr "ViewPort ஐத் தேர்ந்தெடுக்கவும்:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
-msgstr ""
+msgstr "முன்னமைவுகள் (Ctrl+தாவல்):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "Viewports (Alt+Tab):"
-msgstr ""
+msgstr "காட்சியகங்கள் (alt+தாவல்):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
@@ -900,77 +921,79 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/widgets/appearance_controls_base.cpp:184
 msgid "(unsaved)"
-msgstr ""
+msgstr "(சேமிக்கப்படாதது)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "அனைத்து உதவி கோப்புகள் (%s)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:64
 msgid "Available paths:"
-msgstr ""
+msgstr "கிடைக்கும் பாதைகள்:"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:73
 #: common/dialogs/dialog_configure_paths_base.h:60
 msgid "Configure Paths"
-msgstr ""
+msgstr "பாதைகளை உள்ளமைக்கவும்"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
 msgid "Embed Model"
-msgstr ""
+msgstr "மாதிரி"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
-msgstr ""
+msgstr "3D மாதிரியைத் தேர்ந்தெடுக்கவும்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
-msgstr ""
+msgstr "விருப்பங்களை வழங்கவும்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
 msgid "Clip silkscreen at via annuli"
-msgstr ""
+msgstr "சாலையில் சில்க்ச்கிரீன் கிளிப்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Clip silkscreen at solder mask edges"
-msgstr ""
+msgstr "சாலிடர் மாச்க் விளிம்புகளில் சில்க்ச்கிரீன் கிளிப்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "மண்டலங்களில் நிரப்பப்பட்ட பகுதிகளைக் காட்டு"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Use bare copper color for unplated copper (slow)"
 msgstr ""
+"கட்டப்படாத தாமிரத்திற்கு வெற்று செப்பு நிறத்தைப் பயன்படுத்தவும் (மெதுவாக)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr ""
+"பூசப்பட்ட மற்றும் பூசப்படாத தாமிரத்திற்கு வெவ்வேறு வண்ணங்களைப் பயன்படுத்துங்கள். (மெதுவாக)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
-msgstr ""
+msgstr "பொருள் பண்புகள்:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Realistic"
-msgstr ""
+msgstr "யதார்த்தமான"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Solid colors"
-msgstr ""
+msgstr "திட வண்ணங்கள்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "CAD colors"
-msgstr ""
+msgstr "கேட் வண்ணங்கள்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Camera Options"
-msgstr ""
+msgstr "கேமரா விருப்பங்கள்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:84
 msgid "Rotation increment:"
-msgstr ""
+msgstr "சுழற்சி அதிகரிப்பு:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:92
 #: pcb_calculator/widgets/unit_selector.cpp:130
@@ -982,218 +1005,225 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:45
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:228
 msgid "deg"
-msgstr ""
+msgstr "டெக்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
 msgid "Redraw while moving"
-msgstr ""
+msgstr "நகரும் போது மீண்டும் வரையவும்"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
-msgstr ""
+msgstr "வேகத்தை மறுவடிவமைக்கவும்:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
 msgid "Rendering Options"
-msgstr ""
+msgstr "விருப்பங்களை வழங்குதல்"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr ""
+msgstr "மாதிரி எல்லை பெட்டிகளைக் காட்டு"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (very slow)"
 msgstr ""
+"தாமிரம் மற்றும் தொழில்நுட்ப அடுக்குகளின் தடிமன் (மிகவும் மெதுவாக) காட்டு"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
-msgstr ""
+msgstr "ரோல்ஓவரில் உள்ள உருப்படிகளை முன்னிலைப்படுத்தவும்"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
-msgstr ""
+msgstr "எதிர்ப்பு மாற்றுப்பெயர்:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
-msgstr ""
+msgstr "முடக்கப்பட்டது"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "2x"
-msgstr ""
+msgstr "ஃச்"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "4x"
-msgstr ""
+msgstr "hch"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "8x"
-msgstr ""
+msgstr "8x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"இந்த அமைப்பைப் பயன்படுத்த 3D-பார்வையாளர் மூடப்பட்டு மீண்டும் திறக்கப்பட வேண்டும்"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
-msgstr ""
+msgstr "தேர்வு நிறம்:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
-msgstr ""
+msgstr "நகரும் போது"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "எதிர்ப்பு மாற்றுப்பெயரை முடக்கு"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
-msgstr ""
+msgstr "தடிமன் முடக்கு"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable vias"
-msgstr ""
+msgstr "வழிமம் களை முடக்கு"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 msgid "Disable holes"
-msgstr ""
+msgstr "துளைகளை முடக்கு"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
-msgstr ""
+msgstr "நடைமுறை அமைப்புகள் (மெதுவாக)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
-msgstr ""
+msgstr "தரை சேர்க்கவும் (மெதுவாக)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 msgid "Anti-aliasing (slow)"
-msgstr ""
+msgstr "எதிர்ப்பு மாற்றுப்பெயர்ச்சி (மெதுவாக)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
+"திரை விண்வெளி சுற்றுப்புற மறுப்பு மற்றும் உலகளாவிய வெளிச்சம் பிரதிபலிப்பு (மெதுவாக)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
-msgstr ""
+msgstr "மாதிரிகளின் எண்ணிக்கை"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
-msgstr ""
+msgstr "பரவல் காரணி %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
-msgstr ""
+msgstr "மறுநிகழ்வு நிலை"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
 msgid "Shadows:"
-msgstr ""
+msgstr "நிழல்கள்:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:71
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
+"நிழல் புள்ளியை மதிப்பிடுவதற்கு, ஒளி திசையில் செலுத்தப்படும் கதிர்களின் எண்ணிக்கை"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
 msgid "Reflections:"
-msgstr ""
+msgstr "பிரதிபலிப்புகள்:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
 msgstr ""
+"ஒரு பிரதிபலிப்பு புள்ளியை மதிப்பிடுவதற்கு நடிக்கும் கதிர்களின் எண்ணிக்கை"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:94
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
+"ஒரு கதிர் பொருள்களின் வழியாக பயணிக்கக்கூடிய இடைவினை எண். (அதிக எண்ணிக்கையிலான நிலைகள் "
+"முடிவுகளை மேம்படுத்துகின்றன, குறிப்பாக மிகவும் வெளிப்படையான பலகைகளில்)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
-msgstr ""
+msgstr "ஒளிவிலகல்கள்:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:103
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr ""
+msgstr "ஒளிவிலகல் புள்ளியை மதிப்பிடுவதற்கு நடிக்கும் கதிர்களின் எண்ணிக்கை"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:111
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "ஒரு கதிர் பிரதிபலிப்பு பொருள்களைத் தாக்கும் பவுன்களின் எண்ணிக்கை"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
 msgid "Lights Configuration"
-msgstr ""
+msgstr "விளக்குகள் உள்ளமைவு"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
-msgstr ""
+msgstr "சுற்றுப்புற கேமரா ஒளி:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:146
 msgid "Top light:"
-msgstr ""
+msgstr "மேல் ஒளி:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:158
 msgid "Bottom light:"
-msgstr ""
+msgstr "கீழே ஒளி:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:184
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:201
 msgid "Elevation (deg)"
-msgstr ""
+msgstr "உயர்வு"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:188
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:205
 msgid "Azimuth (deg)"
-msgstr ""
+msgstr "அசிமுத் (டிகிரி)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
 msgid "Light 1:"
-msgstr ""
+msgstr "ஒளி 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:227
 msgid "Light 5:"
-msgstr ""
+msgstr "ஒளி 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:242
 msgid "Light 2:"
-msgstr ""
+msgstr "ஒளி 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:260
 msgid "Light 6:"
-msgstr ""
+msgstr "ஒளி 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:275
 msgid "Light 3:"
-msgstr ""
+msgstr "ஒளி 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
 msgid "Light 7:"
-msgstr ""
+msgstr "ஒளி 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:308
 msgid "Light 4:"
-msgstr ""
+msgstr "ஒளி 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:326
 msgid "Light 8:"
-msgstr ""
+msgstr "ஒளி 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
 msgid "3D Preview Options"
-msgstr ""
+msgstr "3D முன்னோட்ட விருப்பங்கள்"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
 msgid "Board thickness:"
-msgstr ""
+msgstr "பலகை தடிமன்:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:23
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:198
 #: eeschema/sch_bitmap.cpp:320 pcbnew/pcb_reference_image.cpp:211
 #: pcbnew/pcb_reference_image.cpp:347
 msgid "Scale"
-msgstr ""
+msgstr "அளவு"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:31
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:76
@@ -1211,7 +1241,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:144
 #: pcbnew/tools/pcb_point_editor.cpp:2460
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:41
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:86
@@ -1235,7 +1265,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:153
 #: pcbnew/tools/pcb_point_editor.cpp:2460
 msgid "Y:"
-msgstr ""
+msgstr "ஒய்:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:51
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:96
@@ -1243,82 +1273,84 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:328
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:340
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1693
 #: pcbnew/pad.cpp:1318
 msgid "Rotation"
-msgstr ""
+msgstr "சுழற்சி"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:113
 msgid "Offset"
-msgstr ""
+msgstr "ஈடுசெய்யும்"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:158
 msgid "Opacity"
-msgstr ""
+msgstr "ஒளிபுகாநிலை"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:175
 #: common/dialogs/dialog_page_settings_base.cpp:123
 #: eeschema/printing/dialog_print_using_printer.cpp:269
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:253
 msgid "Preview"
-msgstr ""
+msgstr "முன்னோட்டம்"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:204
 msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"போர்டு உடலைக் காட்டவும் அல்லது மறைக்கவும்\n"
+" மறைக்கப்பட்டால், செம்பு மற்றும் சில்க்ச்கிரீன் அடுக்குகளை மட்டுமே காட்டுங்கள்."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:233
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "பலகை மற்றும் 3D மாதிரிகள் மீண்டும் ஏற்றவும்"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:151
 #: bitmap2component/bitmap2cmp_frame.cpp:294
 #: bitmap2component/bitmap2cmp_frame.cpp:357
 #: kicad/tools/kicad_manager_actions.cpp:161
 msgid "Image Converter"
-msgstr ""
+msgstr "பட மாற்றி"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
-msgstr ""
+msgstr "கிகாட் பட மாற்றி"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:233
 msgid "Image files"
-msgstr ""
+msgstr "படக் கோப்புகள்"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:71
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
 #: pcbnew/menubar_pcb_editor.cpp:73
 msgid "Open Recent"
-msgstr ""
+msgstr "அண்மைக் கால திறப்பு"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:284 eeschema/menubar.cpp:72
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
 msgid "Clear Recent Files"
-msgstr ""
+msgstr "அண்மைக் கால கோப்புகளை அழிக்கவும்"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:401
 #: eeschema/tools/sch_drawing_tools.cpp:1031
 #: pagelayout_editor/pl_editor_frame.cpp:878 pcbnew/tools/drawing_tool.cpp:750
 msgid "Choose Image"
-msgstr ""
+msgstr "படத்தைத் தேர்வுசெய்க"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:402
 #: eeschema/tools/sch_drawing_tools.cpp:1032
 #: pagelayout_editor/pl_editor_frame.cpp:879 pcbnew/tools/drawing_tool.cpp:751
 msgid "Image Files"
-msgstr ""
+msgstr "படக் கோப்புகள்"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:445
 msgid "Create Drawing Sheet File"
-msgstr ""
+msgstr "வரைதல் தாள் கோப்பை உருவாக்கவும்"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:462
 #: bitmap2component/bitmap2cmp_frame.cpp:498
@@ -1326,19 +1358,19 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_frame.cpp:568
 #, c-format
 msgid "File '%s' could not be created."
-msgstr ""
+msgstr "கோப்பை '%s' உருவாக்க முடியவில்லை."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:482
 msgid "Create PostScript File"
-msgstr ""
+msgstr "போச்ட்ச்கிரிப்ட் கோப்பை உருவாக்கவும்"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:518
 msgid "Create Symbol Library"
-msgstr ""
+msgstr "குறியீட்டு நூலகத்தை உருவாக்கவும்"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:553
 msgid "Create Footprint Library"
-msgstr ""
+msgstr "தடம் நூலகத்தை உருவாக்கவும்"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:649
 #: eeschema/dialogs/dialog_field_properties_base.cpp:229
@@ -1501,24 +1533,24 @@ msgstr ""
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:250
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:300
 msgid "mm"
-msgstr ""
+msgstr "மிமீ"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
-msgstr ""
+msgstr "அங்குலம்"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50
 msgid "DPI"
-msgstr ""
+msgstr "டிபிஐ"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:513
 msgid "Unable to export to the Clipboard"
-msgstr ""
+msgstr "இடைநிலைப்பலகைக்கு ஏற்றுமதி செய்ய முடியவில்லை"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:540
 msgid "Error allocating memory for potrace bitmap"
-msgstr ""
+msgstr "போட்ரேச் பிட்மேப்பிற்கு நினைவகத்தை ஒதுக்குவதில் பிழை"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:567
 #: common/dialogs/dialog_rc_job_base.cpp:48
@@ -1529,27 +1561,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:186
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
-msgstr ""
+msgstr "பிழைகள்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
-msgstr ""
+msgstr "அசல் படம்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:25
 msgid "Greyscale Picture"
-msgstr ""
+msgstr "கிரேச்கேல் படம்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
 msgid "Black && White Picture"
-msgstr ""
+msgstr "கருப்பு & வெள்ளை படம்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:36
 msgid "Image Information"
-msgstr ""
+msgstr "பட செய்தி"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:45
 msgid "Image size:"
-msgstr ""
+msgstr "பட அளவு:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:49
 #: bitmap2component/bitmap2cmp_panel_base.cpp:53
@@ -1557,54 +1589,54 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_panel_base.cpp:69
 #: bitmap2component/bitmap2cmp_panel_base.cpp:81
 msgid "0000"
-msgstr ""
+msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:57
 #: common/widgets/gal_options_panel_base.cpp:87
 #: common/widgets/gal_options_panel_base.cpp:98
 msgid "pixels"
-msgstr ""
+msgstr "படப்புள்ளிகள்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
 msgid "Image PPI:"
-msgstr ""
+msgstr "படம் பிபிஐ:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:196
 #: pcbnew/pcb_reference_image.cpp:209
 msgid "PPI"
-msgstr ""
+msgstr "பிபிஐ"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:77
 msgid "BPP:"
-msgstr ""
+msgstr "பிபிபி:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:85
 msgid "bits"
-msgstr ""
+msgstr "பிட்கள்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
 msgid "Load Source Image"
-msgstr ""
+msgstr "மூல படத்தை ஏற்றவும்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 msgid "Output Size"
-msgstr ""
+msgstr "வெளியீட்டு அளவு"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:107
 msgid "Lock height / width ratio"
-msgstr ""
+msgstr "பூட்டு உயரம் / அகல விகிதம்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:113
 #: common/dialogs/dialog_page_settings_base.cpp:37
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:135
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
 msgid "Size:"
-msgstr ""
+msgstr "அளவு:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:117
 #: bitmap2component/bitmap2cmp_panel_base.cpp:122
 msgid "300"
-msgstr ""
+msgstr "300"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:141
 #: common/dialogs/dialog_print_generic_base.cpp:24
@@ -1626,150 +1658,154 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:49
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
 msgid "Options"
-msgstr ""
+msgstr "விருப்பங்கள்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 msgid "Black / white threshold:"
-msgstr ""
+msgstr "கருப்பு / வெள்ளை வாசல்:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:148
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr ""
+msgstr "கிரேச்கேல் படத்தை கருப்பு மற்றும் வெள்ளை படமாக மாற்ற அளவை சரிசெய்கிறது."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
 #: gerbview/gerber_file_image.cpp:357
 msgid "Negative"
-msgstr ""
+msgstr "எதிர்மம்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
 msgid "Pcb Layer for Graphics"
-msgstr ""
+msgstr "கிராபிக்ச் பிசிபி அடுக்கு"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:550
 msgid "Front silk screen"
-msgstr ""
+msgstr "முன் பட்டுத் திரை"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:556
 msgid "Front solder mask"
-msgstr ""
+msgstr "முன் சாலிடர் மாச்க்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "Front Fab layer"
-msgstr ""
+msgstr "முன் ஃபேப் லேயர்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer drawings"
-msgstr ""
+msgstr "பயனர் அடுக்கு வரைபடங்கள்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer comments"
-msgstr ""
+msgstr "பயனர் அடுக்கு கருத்துகள்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
-msgstr ""
+msgstr "பயனர் அடுக்கு ECO1"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco2"
-msgstr ""
+msgstr "பயனர் அடுக்கு ECO2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Symbol (.kicad_sym file)"
-msgstr ""
+msgstr "அடையாளம் (.kicad_sym கோப்பு)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
-msgstr ""
+msgstr "தடம் (.kicad_mod கோப்பு)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Postscript (.ps file)"
-msgstr ""
+msgstr "போச்ட்ச்கிரிப்ட் (.ps கோப்பு)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr ""
+msgstr "வரைதல் தாள் (.kicad_wks கோப்பு)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:171
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
 msgid "Output Format"
-msgstr ""
+msgstr "வெளியீட்டு வடிவம்"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 msgid "Export to File"
-msgstr ""
+msgstr "கோப்புக்கு ஏற்றுமதி"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:178
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
 msgid "Export to Clipboard"
-msgstr ""
+msgstr "இடைநிலைப்பலகைக்கு ஏற்றுமதி"
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
-msgstr ""
+msgstr "பநிஇ இலிருந்து மாற்றம்"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
-msgstr ""
+msgstr "பின்னணி வேலைகள்"
 
 #: common/common.cpp:301
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
+"சுற்றுச்சூழல் மாறிகள் விரிவாக்கம் தோல்வியடைந்தது: '%s' இல் '%c' ஐக் காணவில்லை."
 
 #: common/common.cpp:382
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr ""
+msgstr "'%s' தொடர்பாக பாதையை '%s' முழுமையானதாக மாற்ற முடியாது."
 
 #: common/common.cpp:401
 #, c-format
 msgid "Output directory '%s' created."
-msgstr ""
+msgstr "வெளியீட்டு அடைவு '%s' உருவாக்கப்பட்டது."
 
 #: common/common.cpp:410 pcbnew/dialogs/dialog_export_odbpp.cpp:304
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr ""
+msgstr "வெளியீட்டு கோப்பகத்தை '%s' உருவாக்க முடியாது."
 
 #: common/common.cpp:701
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
+"இந்த இயக்க முறைமை கிகாட் மற்றும் அதன் சார்புநிலைகளால் ஆதரிக்கப்படவில்லை."
 
 #: common/common.cpp:703
 msgid "Unsupported Operating System"
-msgstr ""
+msgstr "ஆதரிக்கப்படாத இயக்க முறைமை"
 
 #: common/common.cpp:706
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"இந்த அமைப்பில் கிகாட் உடனான ஏதேனும் சிக்கல்களை அதிகாரப்பூர்வ பிழைத்திருத்தத்திற்கு தெரிவிக்"
+"க முடியாது."
 
 #: common/confirm.cpp:50 common/confirm.cpp:56
 msgid "File Open Warning"
-msgstr ""
+msgstr "திறந்த எச்சரிக்கையை கோப்பு"
 
 #: common/confirm.cpp:52 common/confirm.cpp:58
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "இன்டர்லீவ் சேமிப்புகள் மிகவும் எதிர்பாராத முடிவுகளைத் தரக்கூடும்."
 
 #: common/confirm.cpp:54 common/confirm.cpp:59 common/confirm.cpp:124
 #: common/confirm.cpp:151 common/dialog_shim.cpp:767
 msgid "&Cancel"
-msgstr ""
+msgstr "ரத்துசெய் (&c)"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
 msgid "&Open Anyway"
-msgstr ""
+msgstr "& எப்படியும் திறக்கவும்"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
-msgstr ""
+msgstr "மாற்றங்களைச் சேமிக்கவா?"
 
 #: common/confirm.cpp:72 common/confirm.cpp:110
 msgid "If you don't save, all your changes will be permanently lost."
