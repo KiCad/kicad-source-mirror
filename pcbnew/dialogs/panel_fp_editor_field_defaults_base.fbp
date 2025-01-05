@@ -102,7 +102,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Default field properties for new footprints:</property>
+                <property name="label">Default Field Properties for New Footprints</property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
                 <property name="maximize_button">0</property>
@@ -285,7 +285,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Default text items for new footprints:</property>
+                <property name="label">Default Text Items for New Footprints</property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
                 <property name="maximize_button">0</property>

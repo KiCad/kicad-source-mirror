@@ -98,6 +98,9 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow*       aP
 
     GetSizer()->Add( m_dimensionsPanel.get(), 0, wxEXPAND | wxALL, 5 );
 
+	Layout();
+	m_mainSizer->Fit( this );
+
     m_Frame->Bind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
 }
 

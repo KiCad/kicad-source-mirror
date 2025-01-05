@@ -62,7 +62,7 @@
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag"></property>
+          <property name="flag">wxEXPAND</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -1878,7 +1878,7 @@
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
               <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
-              <property name="proportion">1</property>
+              <property name="proportion">0</property>
               <object class="wxStaticBoxSizer" expanded="true">
                 <property name="id">wxID_ANY</property>
                 <property name="label">Opacity</property>
@@ -1956,11 +1956,21 @@
                 </object>
               </object>
             </object>
+            <object class="sizeritem" expanded="true">
+              <property name="border">5</property>
+              <property name="flag">wxEXPAND</property>
+              <property name="proportion">1</property>
+              <object class="spacer" expanded="true">
+                <property name="height">0</property>
+                <property name="permission">protected</property>
+                <property name="width">0</property>
+              </object>
+            </object>
           </object>
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
+          <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
           <property name="proportion">1</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -2042,7 +2052,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxBOTTOM</property>
+              <property name="flag">wxBOTTOM|wxEXPAND</property>
               <property name="proportion">1</property>
               <object class="wxBoxSizer" expanded="true">
                 <property name="minimum_size">-1,-1</property>
@@ -2055,7 +2065,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND|wxRIGHT|wxTOP</property>
+          <property name="flag">wxEXPAND|wxRIGHT</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -2064,10 +2074,10 @@
             <property name="permission">none</property>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag"></property>
-              <property name="proportion">0</property>
+              <property name="flag">wxEXPAND</property>
+              <property name="proportion">1</property>
               <object class="spacer" expanded="true">
-                <property name="height">10</property>
+                <property name="height">0</property>
                 <property name="permission">protected</property>
                 <property name="width">0</property>
               </object>
@@ -2844,8 +2854,8 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag"></property>
-              <property name="proportion">0</property>
+              <property name="flag">wxEXPAND</property>
+              <property name="proportion">1</property>
               <object class="spacer" expanded="true">
                 <property name="height">10</property>
                 <property name="permission">protected</property>

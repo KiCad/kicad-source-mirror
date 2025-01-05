@@ -33,6 +33,7 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS_BASE : public wxPanel
 	private:
 
 	protected:
+		wxBoxSizer* m_mainSizer;
 		wxBoxSizer* m_gridSizer;
 		wxStaticText* m_staticTextDefProp;
 		wxStaticLine* m_staticline11;

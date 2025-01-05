@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,18 +39,16 @@ class WX_GRID;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_NOTEBOOK 1000
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FOOTPRINT_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
-		wxBoxSizer* m_GeneralBoxSizer;
 		wxBoxSizer* bSizerLeft;
 
 	protected:
+		wxBoxSizer* m_GeneralBoxSizer;
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelGeneral;
 		WX_GRID* m_itemsGrid;

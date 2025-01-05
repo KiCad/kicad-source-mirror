@@ -80,8 +80,8 @@
             <property name="rows">2</property>
             <property name="vgap">0</property>
             <object class="sizeritem" expanded="false">
-              <property name="border">2</property>
-              <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+              <property name="border">5</property>
+              <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
               <property name="proportion">1</property>
               <object class="wxHtmlWindow" expanded="false">
                 <property name="BottomDockable">1</property>

@@ -13,14 +13,13 @@
 
 PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	wxBoxSizer* mainSizer;
-	mainSizer = new wxBoxSizer( wxVERTICAL );
+	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_gridSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextDefProp = new wxStaticText( this, wxID_ANY, _("Default properties for new graphics and text:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDefProp = new wxStaticText( this, wxID_ANY, _("Default Properties for New Graphics and Text"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDefProp->Wrap( -1 );
-	m_gridSizer->Add( m_staticTextDefProp, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+	m_gridSizer->Add( m_staticTextDefProp, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 
 	m_staticline11 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_gridSizer->Add( m_staticline11, 0, wxEXPAND | wxALL, 5 );
@@ -76,12 +75,12 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_gridSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	mainSizer->Add( m_gridSizer, 0, wxLEFT, 5 );
+	m_mainSizer->Add( m_gridSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	this->SetSizer( mainSizer );
+	this->SetSizer( m_mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
+	m_mainSizer->Fit( this );
 }
 
 PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::~PANEL_SETUP_TEXT_AND_GRAPHICS_BASE()

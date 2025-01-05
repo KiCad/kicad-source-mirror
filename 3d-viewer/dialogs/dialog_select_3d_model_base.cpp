@@ -80,7 +80,7 @@ DIALOG_SELECT_3D_MODEL_BASE::DIALOG_SELECT_3D_MODEL_BASE( wxWindow* parent, wxWi
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_EmbedModelCb = new wxCheckBox( this, wxID_ANY, _("Embed Model"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_EmbedModelCb, 0, wxALL, 5 );
+	bSizer6->Add( m_EmbedModelCb, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -92,7 +92,7 @@ DIALOG_SELECT_3D_MODEL_BASE::DIALOG_SELECT_3D_MODEL_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizer6->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizer6->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	bSizerMain->Add( bSizer6, 0, wxEXPAND, 5 );

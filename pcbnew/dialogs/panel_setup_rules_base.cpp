@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_title = new wxStaticText( this, wxID_ANY, _("DRC rules:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_title = new wxStaticText( this, wxID_ANY, _("DRC Rules"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
 	bSizer4->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 
@@ -37,7 +37,7 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 
 	m_topMargin = new wxBoxSizer( wxVERTICAL );
 
-	m_textEditor = new wxStyledTextCtrl( this, ID_RULES_EDITOR, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
+	m_textEditor = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
 	m_textEditor->SetUseTabs( true );
 	m_textEditor->SetTabWidth( 4 );
 	m_textEditor->SetIndent( 4 );

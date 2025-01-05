@@ -173,6 +173,12 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
     SetupStandardButtons();
 
+    // The 3D model tab was added after the base dtor.  The final dialog size needs to be set
+    // accordingly.
+	SetSizer( m_GeneralBoxSizer );
+	Layout();
+	m_GeneralBoxSizer->Fit( this );
+
     finishDialogSettings();
 }
 

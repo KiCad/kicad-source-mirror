@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,7 +30,7 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 	wxBoxSizer* bScrollSizerLeft;
 	bScrollSizerLeft = new wxBoxSizer( wxVERTICAL );
 
-	m_lblVScrollMovement = new wxStaticText( this, wxID_ANY, _("Vertical touchpad or scroll wheel movement:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblVScrollMovement = new wxStaticText( this, wxID_ANY, _("Vertical Touchpad or Scroll Wheel Movement"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblVScrollMovement->Wrap( -1 );
 	bScrollSizerLeft->Add( m_lblVScrollMovement, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -93,7 +93,7 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 
 	bScrollSizerLeft->Add( 0, 20, 0, wxEXPAND, 5 );
 
-	m_lblHScrollMovement = new wxStaticText( this, wxID_ANY, _("Horizontal touchpad movement:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblHScrollMovement = new wxStaticText( this, wxID_ANY, _("Horizontal Touchpad Movement"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblHScrollMovement->Wrap( -1 );
 	bScrollSizerLeft->Add( m_lblHScrollMovement, 0, wxALL, 5 );
 

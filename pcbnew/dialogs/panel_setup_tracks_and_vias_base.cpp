@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizerTracks = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticText* stTracksLabel;
-	stTracksLabel = new wxStaticText( this, wxID_ANY, _("Tracks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stTracksLabel = new wxStaticText( this, wxID_ANY, _("Tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	stTracksLabel->Wrap( -1 );
 	bSizerTracks->Add( stTracksLabel, 0, wxALL, 5 );
 
@@ -85,7 +85,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizerVias = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticText* stViasLabel;
-	stViasLabel = new wxStaticText( this, wxID_ANY, _("Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stViasLabel = new wxStaticText( this, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	stViasLabel->Wrap( -1 );
 	bSizerVias->Add( stViasLabel, 0, wxALL, 5 );
 
@@ -150,7 +150,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizerDiffPairs = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticText* stDiffPairsLabel;
-	stDiffPairsLabel = new wxStaticText( this, wxID_ANY, _("Differential pairs:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stDiffPairsLabel = new wxStaticText( this, wxID_ANY, _("Differential Pairs"), wxDefaultPosition, wxDefaultSize, 0 );
 	stDiffPairsLabel->Wrap( -1 );
 	bSizerDiffPairs->Add( stDiffPairsLabel, 0, wxALL, 5 );
 

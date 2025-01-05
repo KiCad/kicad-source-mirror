@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,7 +17,7 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	wxBoxSizer* bPanelSizer;
 	bPanelSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_title = new wxStaticText( this, wxID_ANY, _("Field name templates:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_title = new wxStaticText( this, wxID_ANY, _("Field Name Templates"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
 	bPanelSizer->Add( m_title, 0, wxTOP|wxLEFT|wxEXPAND, 8 );
 

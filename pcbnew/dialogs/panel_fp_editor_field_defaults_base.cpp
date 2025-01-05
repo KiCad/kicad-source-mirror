@@ -20,7 +20,7 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( wxWind
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
 
-	defaultFieldPropertiesLabel = new wxStaticText( this, wxID_ANY, _("Default field properties for new footprints:"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaultFieldPropertiesLabel = new wxStaticText( this, wxID_ANY, _("Default Field Properties for New Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	defaultFieldPropertiesLabel->Wrap( -1 );
 	bSizerMargins->Add( defaultFieldPropertiesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
 
@@ -70,7 +70,7 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( wxWind
 
 	bSizerMargins->Add( 5, 25, 0, wxEXPAND, 5 );
 
-	defaultTextItemsLabel = new wxStaticText( this, wxID_ANY, _("Default text items for new footprints:"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaultTextItemsLabel = new wxStaticText( this, wxID_ANY, _("Default Text Items for New Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	defaultTextItemsLabel->Wrap( -1 );
 	bSizerMargins->Add( defaultTextItemsLabel, 0, wxTOP|wxLEFT|wxEXPAND, 8 );
 

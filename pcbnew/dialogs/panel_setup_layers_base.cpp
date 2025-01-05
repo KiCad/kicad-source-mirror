@@ -30,7 +30,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	bSizerMargins->Add( bSizerLayerCnt, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMargins->Add( m_staticline2, 0, wxEXPAND|wxTOP, 5 );
+	bSizerMargins->Add( m_staticline2, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_LayersListPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL|wxVSCROLL );
 	m_LayersListPanel->SetScrollRate( 0, 5 );

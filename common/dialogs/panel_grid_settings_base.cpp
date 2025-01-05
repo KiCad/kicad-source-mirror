@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,7 +22,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizerLeftCol;
 	bSizerLeftCol = new wxBoxSizer( wxVERTICAL );
 
-	m_gridsLabel = new wxStaticText( this, wxID_ANY, _("Grids:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_gridsLabel = new wxStaticText( this, wxID_ANY, _("Grids"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_gridsLabel->Wrap( -1 );
 	bSizerLeftCol->Add( m_gridsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 

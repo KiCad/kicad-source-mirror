@@ -42,13 +42,13 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
 {
     if( aProjectTemplateMgr )
     {
-        m_title->SetLabel( _( "Project field name templates:" ) );
+        m_title->SetLabel( _( "Project Field Name Templates" ) );
         m_global = false;
         m_templateMgr = aProjectTemplateMgr;
     }
     else
     {
-        m_title->SetLabel( _( "Global field name templates:" ) );
+        m_title->SetLabel( _( "Global Field Name Templates" ) );
         m_global = true;
         m_templateMgr = &m_templateMgrInstance;
 

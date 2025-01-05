@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -155,7 +155,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	fgFeatureConstraints->Add( m_EdgeClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_bitmapMinGrooveWidth = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_bitmapMinGrooveWidth, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_bitmapMinGrooveWidth, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_minGrooveWidthLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum groove for creepage:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_minGrooveWidthLabel->Wrap( -1 );
@@ -368,7 +368,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerArcToPoly;
 	bSizerArcToPoly = new wxBoxSizer( wxVERTICAL );
 
-	m_stCircleToPolyOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Arc/circle approximated by segments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stCircleToPolyOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Arc/Circle Approximated by Segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stCircleToPolyOpt->Wrap( -1 );
 	bSizerArcToPoly->Add( m_stCircleToPolyOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -411,7 +411,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_staticline1 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_bSizerPolygonFillOption->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
 
-	m_stZoneFilledPolysOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Zone fill strategy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stZoneFilledPolysOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Zone Fill Strategy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stZoneFilledPolysOpt->Wrap( -1 );
 	m_bSizerPolygonFillOption->Add( m_stZoneFilledPolysOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -452,7 +452,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_staticline15 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer11->Add( m_staticline15, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
 
-	m_staticText33 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Length tuning"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText33 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Length Tuning"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText33->Wrap( -1 );
 	bSizer11->Add( m_staticText33, 0, wxALL, 5 );
 

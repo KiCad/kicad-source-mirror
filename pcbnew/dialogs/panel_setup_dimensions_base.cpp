@@ -14,17 +14,17 @@ PANEL_SETUP_DIMENSIONS_BASE::PANEL_SETUP_DIMENSIONS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextDefPropDim = new wxStaticText( this, wxID_ANY, _("Default properties for new dimension objects:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDefPropDim = new wxStaticText( this, wxID_ANY, _("Default Properties for New Dimension Objects"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDefPropDim->Wrap( -1 );
 	mainSizer->Add( m_staticTextDefPropDim, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 8 );
+	mainSizer->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 5 );
 	gbSizer1->SetFlexibleDirection( wxVERTICAL );
-	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_lblDimensionUnits = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblDimensionUnits->Wrap( -1 );
@@ -66,7 +66,7 @@ PANEL_SETUP_DIMENSIONS_BASE::PANEL_SETUP_DIMENSIONS_BASE( wxWindow* parent, wxWi
 	m_dimensionTextKeepAligned = new wxCheckBox( this, wxID_ANY, _("Keep text aligned"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dimensionTextKeepAligned->SetToolTip( _("When checked, dimension text will be kept aligned with dimension lines") );
 
-	gbSizer1->Add( m_dimensionTextKeepAligned, wxGBPosition( 1, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	gbSizer1->Add( m_dimensionTextKeepAligned, wxGBPosition( 1, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
 
 	m_lblDimensionPrecision = new wxStaticText( this, wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblDimensionPrecision->Wrap( -1 );

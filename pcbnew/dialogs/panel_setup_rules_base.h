@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,8 +31,6 @@ class WX_HTML_REPORT_BOX;
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
-#define ID_RULES_EDITOR 2240
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_RULES_BASE

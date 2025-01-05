@@ -29,7 +29,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText3 = new wxStaticText( m_netclassesPane, wxID_ANY, _("Netclasses:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( m_netclassesPane, wxID_ANY, _("Netclasses"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
 	bUpperSizer->Add( m_staticText3, 0, wxTOP|wxLEFT|wxEXPAND, 8 );
 
@@ -125,7 +125,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	bLowerSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
-	m_staticText5 = new wxStaticText( m_membershipPane, wxID_ANY, _("Netclass assignments:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5 = new wxStaticText( m_membershipPane, wxID_ANY, _("Netclass Assignments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
 	bLowerSizer->Add( m_staticText5, 0, wxEXPAND|wxTOP|wxLEFT, 8 );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,7 @@ APPEARANCE_CONTROLS_3D_BASE::APPEARANCE_CONTROLS_3D_BASE( wxWindow* parent, wxWi
 	m_panelLayersSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_windowLayers = new wxScrolledCanvas( m_panelLayers, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
-	m_panelLayersSizer->Add( m_windowLayers, 1, wxEXPAND, 5 );
+	m_panelLayersSizer->Add( m_windowLayers, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	m_panelLayers->SetSizer( m_panelLayersSizer );
@@ -31,20 +31,20 @@ APPEARANCE_CONTROLS_3D_BASE::APPEARANCE_CONTROLS_3D_BASE( wxWindow* parent, wxWi
 	bBottomMargin = new wxBoxSizer( wxVERTICAL );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bBottomMargin->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 3 );
+	bBottomMargin->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 3 );
 
 	wxBoxSizer* bPresets;
 	bPresets = new wxBoxSizer( wxVERTICAL );
 
 	m_presetsLabel = new wxStaticText( this, wxID_ANY, _("Presets (Ctrl+Tab):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_presetsLabel->Wrap( -1 );
-	bPresets->Add( m_presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
+	bPresets->Add( m_presetsLabel, 1, 0, 5 );
 
 	wxString m_cbLayerPresetsChoices[] = { _("Follow PCB Editor"), _("Follow PCB Plot Settings") };
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
 	m_cbLayerPresets = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbLayerPresetsNChoices, m_cbLayerPresetsChoices, 0 );
 	m_cbLayerPresets->SetSelection( 1 );
-	bPresets->Add( m_cbLayerPresets, 0, wxALL|wxEXPAND, 2 );
+	bPresets->Add( m_cbLayerPresets, 0, wxEXPAND|wxTOP, 5 );
 
 
 	bBottomMargin->Add( bPresets, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -57,13 +57,13 @@ APPEARANCE_CONTROLS_3D_BASE::APPEARANCE_CONTROLS_3D_BASE( wxWindow* parent, wxWi
 
 	m_viewportsLabel = new wxStaticText( this, wxID_ANY, _("Viewports (Alt+Tab):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viewportsLabel->Wrap( -1 );
-	bViewports->Add( m_viewportsLabel, 1, wxRIGHT|wxLEFT, 2 );
+	bViewports->Add( m_viewportsLabel, 1, wxTOP, 5 );
 
 	wxString m_cbViewportsChoices[] = { _("(unsaved)") };
 	int m_cbViewportsNChoices = sizeof( m_cbViewportsChoices ) / sizeof( wxString );
 	m_cbViewports = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbViewportsNChoices, m_cbViewportsChoices, 0 );
 	m_cbViewports->SetSelection( 1 );
-	bViewports->Add( m_cbViewports, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 2 );
+	bViewports->Add( m_cbViewports, 0, wxEXPAND|wxTOP, 5 );
 
 
 	bBottomMargin->Add( bViewports, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

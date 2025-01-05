@@ -341,7 +341,7 @@
           <property name="border">5</property>
           <property name="flag">wxEXPAND</property>
           <property name="proportion">0</property>
-          <object class="wxBoxSizer" expanded="false">
+          <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
             <property name="name">bSizerLower</property>
             <property name="orient">wxHORIZONTAL</property>
@@ -562,7 +562,7 @@
             <property name="permission">none</property>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
               <property name="proportion">0</property>
               <object class="wxCheckBox" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -637,7 +637,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxALL</property>
+              <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxStdDialogButtonSizer" expanded="true">
                 <property name="Apply">0</property>

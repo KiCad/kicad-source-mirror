@@ -85,7 +85,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	wxString m_boardItemsFlipChoices[] = { _("Left/right"), _("Top/bottom") };
 	int m_boardItemsFlipNChoices = sizeof( m_boardItemsFlipChoices ) / sizeof( wxString );
-	m_boardItemsFlip = new wxRadioBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Board items flip"), wxDefaultPosition, wxDefaultSize, m_boardItemsFlipNChoices, m_boardItemsFlipChoices, 1, wxRA_SPECIFY_ROWS );
+	m_boardItemsFlip = new wxRadioBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Board Items Flip"), wxDefaultPosition, wxDefaultSize, m_boardItemsFlipNChoices, m_boardItemsFlipChoices, 1, wxRA_SPECIFY_ROWS );
 	m_boardItemsFlip->SetSelection( 0 );
 	m_sizerBoardEdit->Add( m_boardItemsFlip, 0, wxALL|wxEXPAND, 5 );
 

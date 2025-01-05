@@ -23,7 +23,7 @@ PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE::PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE( 
 	defaultPropertiesSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticText* defaultPropertiesLabel;
-	defaultPropertiesLabel = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaultPropertiesLabel = new wxStaticText( this, wxID_ANY, _("Default Properties for New Graphic Items"), wxDefaultPosition, wxDefaultSize, 0 );
 	defaultPropertiesLabel->Wrap( -1 );
 	defaultPropertiesSizer->Add( defaultPropertiesLabel, 0, wxEXPAND|wxRIGHT|wxLEFT, 8 );
 
