@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 12:45+0300\n"
-"PO-Revision-Date: 2025-01-05 16:29+0000\n"
+"PO-Revision-Date: 2025-01-05 19:11+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -26654,14 +26654,12 @@ msgid "Job Description"
 msgstr "Työkuvaus"
 
 #: kicad/dialogs/panel_jobs.cpp:299
-#, fuzzy
 msgid "No output messages"
-msgstr "Lähtevät Viestit"
+msgstr "Ei lähtöviestejä"
 
 #: kicad/dialogs/panel_jobs.cpp:359
-#, fuzzy
 msgid "Last run successful"
-msgstr "Tehtävä onnistui"
+msgstr "Viimeinen ajo onnistui"
 
 #: kicad/dialogs/panel_jobs.cpp:365
 msgid "Last run failed"
@@ -26676,33 +26674,28 @@ msgid "Edit Output Options..."
 msgstr "Muokkaa tulostusasetuksia..."
 
 #: kicad/dialogs/panel_jobs.cpp:410
-#, fuzzy
 msgid "Delete Output"
-msgstr "Poista avanne"
+msgstr "Poista tulostus"
 
 #: kicad/dialogs/panel_jobs.cpp:413
 msgid "View Last Run Results..."
 msgstr "Näytä viimeisen ajon tulokset..."
 
 #: kicad/dialogs/panel_jobs.cpp:493
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Työkuvaus"
+msgstr "Muokkaa työkuvausta"
 
 #: kicad/dialogs/panel_jobs.cpp:494
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "Muokkaa asetuksia..."
+msgstr "Muokkaa työasetuksia..."
 
 #: kicad/dialogs/panel_jobs.cpp:499
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Poista valitut verkot"
+msgstr "Poista valitut työt"
 
 #: kicad/dialogs/panel_jobs.cpp:501
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Valitse kaikki"
+msgstr "Valitse kaikki työt"
 
 #: kicad/dialogs/panel_jobs.cpp:787
 msgid "Job Types"
@@ -26717,9 +26710,8 @@ msgid "Select job type:"
 msgstr "Valitse työtyyppi:"
 
 #: kicad/dialogs/panel_jobs.cpp:848
-#, fuzzy
 msgid "Output Types"
-msgstr "Lähtökoko"
+msgstr "Tulostustyypit"
 
 #: kicad/dialogs/panel_jobs.cpp:857
 msgid "Add New Output"
@@ -26730,14 +26722,12 @@ msgid "Select output type:"
 msgstr "Valitse tulostustyyppi:"
 
 #: kicad/dialogs/panel_jobs.cpp:1049
-#, fuzzy
 msgid "No outputs defined"
-msgstr "<Ei määritelty>"
+msgstr "Lähtöjä ei ole määritetty"
 
 #: kicad/dialogs/panel_jobs_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "Työsarja"
+msgstr "Työt"
 
 #: kicad/dialogs/panel_jobs_base.cpp:82
 #, fuzzy
@@ -26745,14 +26735,12 @@ msgid "Outputs"
 msgstr "Lähtö"
 
 #: kicad/dialogs/panel_jobs_base.cpp:115
-#, fuzzy
 msgid "Save Jobset"
-msgstr "Työsarja"
+msgstr "Tallenna työsarja"
 
 #: kicad/dialogs/panel_jobs_base.cpp:121
-#, fuzzy
 msgid "Generate All Outputs"
-msgstr "Yleiset Asetukset"
+msgstr "Generoi kaikki tulosteet"
 
 #: kicad/dialogs/panel_jobs_base.cpp:240
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
@@ -26928,14 +26916,12 @@ msgid "Export VRML"
 msgstr "Vie VRML"
 
 #: kicad/kicad_cli.cpp:124
-#, fuzzy
 msgid "Export PLY"
-msgstr "Vie HPGL"
+msgstr "Vie PLY"
 
 #: kicad/kicad_cli.cpp:125
-#, fuzzy
 msgid "Export STL"
-msgstr "Vie STEP"
+msgstr "Vie STL"
 
 #: kicad/kicad_cli.cpp:144
 msgid "Export PS"
@@ -26963,9 +26949,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d Pakettipäivityksiä ei ole saatavilla"
 
 #: kicad/kicad_manager_frame.cpp:770
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Virhe luotaessa svg-tiedostoa"
+msgstr "Virhe avattaessa työtiedostoa"
 
 #: kicad/kicad_manager_frame.cpp:925
 msgid "Edit File in Text Editor"
@@ -27819,9 +27804,8 @@ msgid "Fetching Remote"
 msgstr "Noudetaan etätietovarastosta"
 
 #: kicad/project_tree_pane.cpp:1744
-#, fuzzy
 msgid "Failed to pull project"
-msgstr "Projektin työntäminen epäonnistui"
+msgstr "Projektin paikallinen päivittäminen epäonnistui"
 
 #: kicad/project_tree_pane.cpp:1771
 msgid "Failed to push project"
@@ -27941,9 +27925,8 @@ msgid "Open Project..."
 msgstr "Avaa Projekti..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "Uusi työsarjatiedosto..."
+msgstr "Avaa työsarjatiedosto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -28068,9 +28051,8 @@ msgid "Open Existing Project"
 msgstr "Avaa olemassa oleva projekti"
 
 #: kicad/tools/kicad_manager_control.cpp:428
-#, fuzzy
 msgid "Open Jobset"
-msgstr "Työsarja"
+msgstr "Avaa työsarja"
 
 #: kicad/tools/kicad_manager_control.cpp:635
 #, c-format
@@ -29909,21 +29891,18 @@ msgid "Copper resistivity:"
 msgstr "Kuparin resistiivisyys:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
-#, fuzzy
 msgid "External Layer Tracks"
-msgstr "Ulkoisen kerroksen jäljet"
+msgstr "Ulkoisen kerroksen johdinliuskat"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
-#, fuzzy
 msgid "Track width (W):"
-msgstr "Johtimen leveys (W):"
+msgstr "Johdinliuskan leveys (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
-#, fuzzy
 msgid "Track thickness (H):"
-msgstr "Johtimen paksuus (H):"
+msgstr "Johdinliuskan paksuus (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:234
@@ -29955,9 +29934,8 @@ msgid "W"
 msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
-#, fuzzy
 msgid "Internal Layer Tracks"
-msgstr "Sisäisen Kerroksen Johtimet"
+msgstr "Sisäisen kerroksen johdinliuskat"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
@@ -30535,7 +30513,6 @@ msgstr ""
 "R1 + (R2|R3)... mikä tahansa edellä mainittujen yhdistelmä\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the track widths will be calculated "
 "to suit.\n"
@@ -30560,27 +30537,27 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal tracks or 0.048 for external tracks\n"
 msgstr ""
-"Jos määrität maksimivirran, johtimien leveydet lasketaan sopiviksi.\n"
+"Jos määrität maksimivirran, johdinleveydet lasketaan sopivaksi.\n"
 "\n"
-"Jos määrität yhden johtimen leveyden, lasketaan suurin sen käsittelemä "
-"virta. Toisen johtimen leveys asetetaan tämän virran mukaiseksi.\n"
+"Jos määrität jonkin johdinraidan leveyksistä, suurin virta, jonka se pystyy "
+"käsittelemään, lasketaan. Sitten lasketaan leveys, jolla myös toinen "
+"johdinraita käsittelee tätä virtaa.\n"
 "\n"
-"Määräävä arvo näytetään lihavoituna.\n"
+"Ohjausarvo näkyy lihavoituna.\n"
 "\n"
-"Laskelmat pätevät enintään 35 A (ulkoinen johdin) tai 17,5 A (sisäinen "
-"johdin) virroille, enintään 100 °C lämpotilanousulle, ja enintään 400 mil "
-"(10 mm) leveyksille.\n"
+"Laskelmat pätevät virroille 35 A (ulkoinen) tai 17,5 A (sisäinen), "
+"lämpötilan nousulle 100 °C asti ja leveyksille 400 mil (10 mm) asti.\n"
 "\n"
-"IPC 2221 -kaava on\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
-"missä:\n"
-"___I___ = suurin virta ampeereina (yksikkö A)\n"
-"___&Delta;T___ = lämpötilan nousu ympäristön yläpuolelle (yksikkö °C)\n"
-"___W___ = leveys (yksikkö mil = 1\"/1000)\n"
-"___H___ = paksuus (korkeus) (yksikkö mil = 1\"/1000)\n"
-"___K___ &Delta;= 0,024 sisäisille johtimille tai 0,048 ulkoisille "
-"johtimille\n"
+"IPC 2221:n kaava on\n"
+"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (L & keskipiste; "
+"K)<sup>0,725</sup>___</center>\n"
+"missä:<br>\n"
+"___I___ on suurin virta A<br>\n"
+"___&Delta;T___ on lämpötilan nousu ympäristön lämpötilan yläpuolelle "
+"&deg;C<br>\n"
+"___W___ on leveys mil<br>\n"
+"___H___ on paksuus (korkeus) mil<br>\n"
+"___K___ on 0,024 sisäisille kappaleille tai 0,048 ulkoisille kappaleille\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 msgid "Dielectric Loss Factor"
@@ -33895,14 +33872,12 @@ msgid "Export IDFv3"
 msgstr "Vie IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:108
-#, fuzzy
 msgid "zip files"
-msgstr "Zip-tiedostot"
+msgstr "zip-tiedostot"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:110
-#, fuzzy
 msgid "tgz files"
-msgstr "Tekstitiedostot"
+msgstr "tgz-tiedostot"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:122
 msgid "Export ODB++ File"
@@ -34302,11 +34277,8 @@ msgid "Success"
 msgstr "Onnistui"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Haluatko käyttää polkua suhteessa\n"
-"'%s'?"
+msgstr "Haluatko peruuttaa vientiprosessin?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
 #, fuzzy
@@ -39790,13 +39762,12 @@ msgstr "Pienimmän juotosmaskipalan leveys:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"Pienin etäisyys juotosmaskissa olevien aukkojen välillä. Tätä etäisyyttä "
-"lähemmät antura-aukot piirretään yhtenä aukkona."
+"Minimietäisyys juotosmaskin aukkojen välillä.\n"
+"Tätä etäisyyttä lähempänä olevat antura-aukot piirretään yhtenä aukkoina."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -39811,7 +39782,6 @@ msgid ""
 msgstr ""
 "Minimietäisyys juotosmaskin aukon ja kuparikappaleen välillä, jossa on eri "
 "verkko kuin juotosmaskin aukon kantaverkko.\n"
-"\n"
 "Tätä minimiä pienemmät etäisyydet aiheuttavat DRC-virheen."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:104
@@ -39839,7 +39809,6 @@ msgid ""
 "Not tented: vias are not covered with solder mask."
 msgstr ""
 "Päällystetty: läpiviennit on peitetty juotosmaskilla.\n"
-"\n"
 "Ei päällystetty: läpivientejä ei ole peitetty juotosmaskilla."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
