@@ -34,10 +34,37 @@
 #include <wx/log.h>
 #include <kiplatform/io.h>
 
+#include <regex>
 #include <set>
 
 
 #define ZipFileExtension wxT( "zip" )
+
+class PROJECT_ARCHIVER_DIR_TRAVERSER : public wxDirTraverser
+{
+public:
+    PROJECT_ARCHIVER_DIR_TRAVERSER( const std::string& aExtRegex, wxArrayString& aFiles ) :
+        m_files( aFiles ),
+        m_fileExtRegex( aExtRegex, std::regex_constants::ECMAScript | std::regex_constants::icase )
+    {}
+
+    virtual wxDirTraverseResult OnFile( const wxString& aFilename ) override
+    {
+        if( std::regex_search( aFilename.ToStdString(), m_fileExtRegex ) )
+            m_files.Add( aFilename );
+
+        return wxDIR_CONTINUE;
+    }
+
+    virtual wxDirTraverseResult OnDir( const wxString& aDirname ) override
+    {
+        return wxDIR_CONTINUE;
+    }
+
+private:
+    wxArrayString& m_files;
+    std::regex     m_fileExtRegex;
+};
 
 PROJECT_ARCHIVER::PROJECT_ARCHIVER()
 {
@@ -145,48 +172,67 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
 bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFile,
                                 REPORTER& aReporter, bool aVerbose, bool aIncludeExtraFiles )
 {
+
+#define EXT( ext )              "\\." + ext + "|"
+#define NAME( name )            name "|"
+#define EXT_NO_PIPE( ext )      "\\." ext
+#define NAME_NO_PIPE( name )    name
+
     // List of file extensions that are always archived
-    static const wxChar* extensionList[] = {
-            wxT( "*.kicad_pro" ),
-            wxT( "*.kicad_prl" ),
-            wxT( "*.kicad_sch" ),
-            wxT( "*.kicad_sym" ),
-            wxT( "*.kicad_pcb" ),
-            wxT( "*.kicad_mod" ),
-            wxT( "*.kicad_dru" ),
-            wxT( "*.kicad_wks" ),
-            wxT( "*.kicad_jobset" ),
-            wxT( "*.json" ), // for design blocks
-            wxT( "*.wbk" ),
-            wxT( "fp-lib-table" ),
-            wxT( "sym-lib-table" ),
-            wxT( "design-block-lib-table" )
-        };
+    std::string fileExtensionRegex = "("
+            EXT( FILEEXT::ProjectFileExtension )
+            EXT( FILEEXT::ProjectLocalSettingsFileExtension )
+            EXT( FILEEXT::KiCadSchematicFileExtension )
+            EXT( FILEEXT::KiCadSymbolLibFileExtension )
+            EXT( FILEEXT::KiCadPcbFileExtension )
+            EXT( FILEEXT::KiCadFootprintFileExtension )
+            EXT( FILEEXT::DesignRulesFileExtension )
+            EXT( FILEEXT::DrawingSheetFileExtension )
+            EXT( FILEEXT::KiCadJobSetFileExtension )
+            EXT( FILEEXT::JsonFileExtension )                  // for design blocks
+            EXT( FILEEXT::WorkbookFileExtension )
+            NAME( "fp-lib-table" )
+            NAME( "sym-lib-table" )
+            NAME_NO_PIPE( "design-block-lib-table" );
 
     // List of additional file extensions that are only archived when aIncludeExtraFiles is true
-    static const wxChar* extraExtensionList[] = {
-            wxT( "*.pro" ),                         // Legacy project files
-            wxT( "*.sch" ),                         // Legacy schematic files
-            wxT( "*.lib" ), wxT( "*.dcm" ),         // Legacy schematic library files
-            wxT( "*.cmp" ),
-            wxT( "*.brd" ),                         // Legacy PCB files
-            wxT( "*.mod" ),                         // Legacy footprint library files
-            wxT( "*.stp" ), wxT( "*.step" ),        // 3d files
-            wxT( "*.wrl" ),
-            wxT( "*.g?" ), wxT( "*.g??" ),          // Gerber files
-            wxT( "*.gm??"),                         // Some gerbers like .gm12 (from protel export)
-            wxT( "*.gbrjob" ),                      // Gerber job files
-            wxT( "*.pos" ),                         // our position files
-            wxT( "*.drl" ), wxT( "*.nc" ), wxT( "*.xnc" ),  // Fab drill files
-            wxT( "*.d356" ),
-            wxT( "*.rpt" ),
-            wxT( "*.net" ),
-            wxT( "*.py" ),
-            wxT( "*.pdf" ),
-            wxT( "*.txt" ),
-            wxT( "*.cir" ), wxT( "*.sub" ), wxT( "*.model" ),    // SPICE files
-            wxT( "*.ibs" )
-        };
+    if( aIncludeExtraFiles )
+    {
+        fileExtensionRegex += "|"
+            EXT( FILEEXT::LegacyProjectFileExtension )
+            EXT( FILEEXT::LegacySchematicFileExtension )
+            EXT( FILEEXT::LegacySymbolLibFileExtension )
+            EXT( FILEEXT::LegacySymbolDocumentFileExtension )
+            EXT( FILEEXT::FootprintAssignmentFileExtension )
+            EXT( FILEEXT::LegacyPcbFileExtension )
+            EXT( FILEEXT::LegacyFootprintLibPathExtension )
+            EXT( FILEEXT::StepFileAbrvExtension )                   // 3d files
+            EXT( FILEEXT::StepFileExtension )                       // 3d files
+            EXT( FILEEXT::VrmlFileExtension )                       // 3d files
+            EXT( FILEEXT::GerberFileExtensionsRegex )               // Gerber files (g?, g??, .gm12 (from protel export))
+            EXT( FILEEXT::GerberJobFileExtension )                  // Gerber job files
+            EXT( FILEEXT::FootprintPlaceFileExtension )             // Our position files
+            EXT( FILEEXT::DrillFileExtension )                      // Fab drill files
+            EXT( "nc" )                                             // Fab drill files
+            EXT( "xnc" )                                            // Fab drill files
+            EXT( FILEEXT::IpcD356FileExtension )
+            EXT( FILEEXT::ReportFileExtension )
+            EXT( "net" )
+            EXT( "py" )
+            EXT( FILEEXT::PdfFileExtension )
+            EXT( FILEEXT::TextFileExtension )
+            EXT( FILEEXT::SpiceFileExtension )                      // SPICE files
+            EXT( "sub" )                                            // SPICE files
+            EXT( "model" )                                          // SPICE files
+            EXT_NO_PIPE( "ibs" );
+    }
+
+    fileExtensionRegex += ")";
+
+#undef EXT
+#undef NAME
+#undef EXT_NO_PIPE
+#undef NAME_NO_PIPE
 
     bool     success = true;
     wxString msg;
@@ -210,16 +256,22 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 
     // Build list of filenames to put in zip archive
     wxString currFilename;
-
     wxArrayString files;
+    wxDir projectDir( aSrcDir );
 
-    for( unsigned ii = 0; ii < arrayDim( extensionList ); ii++ )
-        wxDir::GetAllFiles( sourceDir.GetFullPath(), &files, extensionList[ii], wxDIR_FILES | wxDIR_DIRS );
-
-    if( aIncludeExtraFiles )
+    if ( projectDir.IsOpened() )
     {
-        for( unsigned ii = 0; ii < arrayDim( extraExtensionList ); ii++ )
-            wxDir::GetAllFiles( sourceDir.GetFullPath(), &files, extraExtensionList[ii], wxDIR_FILES | wxDIR_DIRS );
+        try
+        {
+            PROJECT_ARCHIVER_DIR_TRAVERSER traverser( fileExtensionRegex, files );
+            projectDir.Traverse(traverser);
+        }
+        catch( const std::regex_error& e )
+        {
+            // Something bad happened here with the regex
+            wxASSERT_MSG( false, e.what() );
+            return false;
+        }
     }
 
     for( unsigned ii = 0; ii < files.GetCount(); ++ii )
