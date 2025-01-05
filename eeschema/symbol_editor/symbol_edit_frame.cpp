@@ -1743,11 +1743,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
         VECTOR2I         pos = field.GetPosition() - aSymbol->GetPosition();
         SCH_FIELD        libField( symbol.get(), field.GetId() );
 
-        if( i >= MANDATORY_FIELDS && !field.GetName( false ).IsEmpty() )
-            libField.SetName( field.GetName( false ) );
-
-        libField.SetText( field.GetText() );
-        libField.SetAttributes( field );
+        libField = field;
 
         // The inverse transform is mirroring before, rotate after
         switch( mirror )
