@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 15:00-0800\n"
+"POT-Creation-Date: 2025-01-05 12:49+0300\n"
 "PO-Revision-Date: 2022-12-07 22:47+0000\n"
 "Last-Translator: Sašo Domadenik <saso.doma@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
@@ -186,7 +186,7 @@ msgstr "Čas polnjenja %.3f s"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:117
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2442
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2447
 #, fuzzy, c-format
 msgid "Loading %s..."
 msgstr "Nalaganje %s..."
@@ -1476,8 +1476,8 @@ msgstr "Y:"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:49
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:94
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:139
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:328
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:340
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:329
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:341
 #, fuzzy
 msgid "Z:"
 msgstr "Z:"
@@ -2145,7 +2145,7 @@ msgstr "Potrditev"
 #: pcbnew/footprint_libraries_utils.cpp:1148
 #: pcbnew/footprint_libraries_utils.cpp:1288 pcbnew/router/router_tool.cpp:1895
 #: pcbnew/router/router_tool.cpp:2578
-#: pcbnew/tools/footprint_editor_control.cpp:453 pcbnew/zone_filler.cpp:731
+#: pcbnew/tools/footprint_editor_control.cpp:453 pcbnew/zone_filler.cpp:734
 #, fuzzy
 msgid "Confirmation"
 msgstr "Potrditev"
@@ -2178,7 +2178,7 @@ msgstr "Ne"
 #: common/dialog_about/AboutDialog_main.cpp:115
 #: common/lib_tree_model_adapter.cpp:140 common/lib_tree_model_adapter.cpp:142
 #: common/lib_tree_model_adapter.cpp:152
-#: common/widgets/widget_hotkey_list.cpp:529
+#: common/widgets/widget_hotkey_list.cpp:517
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
 #: eeschema/sch_symbol.cpp:2017 eeschema/symbol_editor/symbol_editor.cpp:579
@@ -2769,25 +2769,25 @@ msgstr "Izberite datoteko tabele globalne knjižnice %s:"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:250
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:262
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:274
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:241
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:256
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:271
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:379
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:383
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:387
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:391
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:395
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:399
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:403
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:407
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:411
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:415
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:419
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:423
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:427
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:431
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:435
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:439
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:242
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:257
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:272
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:380
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:384
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:388
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:392
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:396
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:400
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:404
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:408
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:412
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:416
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:420
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:424
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:428
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:432
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:436
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:440
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:230
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:242
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:254
@@ -2946,15 +2946,13 @@ msgstr ""
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1078
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 #, fuzzy
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1252 eeschema/sch_plotter.cpp:1011
+#: eeschema/sch_edit_frame.cpp:1253 eeschema/sch_plotter.cpp:1011
 #: eeschema/widgets/symbol_diff_widget.cpp:38
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 #, fuzzy
 msgid "Schematic"
 msgstr "Shema"
@@ -3476,7 +3474,7 @@ msgstr "Možnost"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:433 pcbnew/footprint.cpp:3493
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:433 pcbnew/footprint.cpp:3560
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:405 pcbnew/plot_board_layers.cpp:105
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -3611,7 +3609,7 @@ msgstr "Vrsta izpisa:"
 #: eeschema/fields_grid_table.cpp:395
 #: eeschema/printing/dialog_print_using_printer_base.cpp:35
 #: eeschema/sch_bus_entry.cpp:679 eeschema/sch_junction.cpp:384
-#: eeschema/sch_line.cpp:1108 eeschema/sim/simulator_frame_ui.cpp:609
+#: eeschema/sch_line.cpp:1067 eeschema/sim/simulator_frame_ui.cpp:609
 #: eeschema/sim/simulator_frame_ui_base.cpp:113
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:98
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
@@ -4896,7 +4894,7 @@ msgstr "Povečaj"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:930
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
-#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3452
+#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3519
 #: pcbnew/pad.cpp:2342 pcbnew/pad.cpp:2360 pcbnew/pcb_dimension.cpp:1630
 #: pcbnew/widgets/appearance_controls.cpp:730
 #: pcbnew/widgets/appearance_controls.cpp:772
@@ -5053,51 +5051,51 @@ msgstr "Samodejno preusmerjene skladbe"
 msgid "Library nickname prefix:"
 msgstr "Napaka knjižničnega vzdevka"
 
-#: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1946
+#: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1972
 #: common/stroke_params.cpp:36
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:660 eeschema/sch_line.cpp:1089
+#: eeschema/sch_bus_entry.cpp:660 eeschema/sch_line.cpp:1048
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3454
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3521
 #: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:644
 #: pcbnew/zone.cpp:1566
 #, fuzzy
 msgid "Solid"
 msgstr "Polno"
 
-#: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1947
+#: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1973
 #: common/stroke_params.cpp:37
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1090
+#: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1049
 #: pcbnew/pcb_textbox.cpp:666
 #, fuzzy
 msgid "Dashed"
 msgstr "Črtkano"
 
-#: common/dialogs/panel_setup_netclasses.cpp:94 common/eda_shape.cpp:1948
+#: common/dialogs/panel_setup_netclasses.cpp:94 common/eda_shape.cpp:1974
 #: common/stroke_params.cpp:38
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1091
+#: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1050
 #: pcbnew/pcb_textbox.cpp:667
 #, fuzzy
 msgid "Dotted"
 msgstr "Pikčasto"
 
-#: common/dialogs/panel_setup_netclasses.cpp:96 common/eda_shape.cpp:1949
+#: common/dialogs/panel_setup_netclasses.cpp:96 common/eda_shape.cpp:1975
 #: common/stroke_params.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1092
+#: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1051
 #: pcbnew/pcb_textbox.cpp:668
 #, fuzzy
 msgid "Dash-Dot"
 msgstr "Črta - pika"
 
-#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1950
+#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1976
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1093
+#: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1052
 #: pcbnew/pcb_textbox.cpp:669
 #, fuzzy
 msgid "Dash-Dot-Dot"
@@ -5248,15 +5246,15 @@ msgstr "Debelina žice"
 msgid "Bus Thickness"
 msgstr "Debelina vodila"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2026
+#: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2073
 #: common/stroke_params.cpp:219 eeschema/sch_bus_entry.cpp:672
-#: eeschema/sch_line.cpp:977 eeschema/sch_line.cpp:1102
+#: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1061
 #: pcbnew/pcb_textbox.cpp:685
 #, fuzzy
 msgid "Line Style"
 msgstr "Slog črte"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1945
+#: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1971
 #: common/pgm_base.cpp:90 common/stroke_params.cpp:208
 #: common/widgets/footprint_select_widget.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
@@ -5270,7 +5268,7 @@ msgstr "Slog črte"
 #: eeschema/lib_field.cpp:550 eeschema/lib_text.cpp:417
 #: eeschema/lib_textbox.cpp:486 eeschema/sch_bus_entry.cpp:659
 #: eeschema/sch_field.cpp:937 eeschema/sch_label.cpp:1269
-#: eeschema/sch_line.cpp:1088 eeschema/sch_text.cpp:409
+#: eeschema/sch_line.cpp:1047 eeschema/sch_text.cpp:409
 #: eeschema/sch_textbox.cpp:450 include/stroke_params.h:73
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2540 pcbnew/pcb_dimension.cpp:428
 #: pcbnew/pcb_text.cpp:244 pcbnew/pcb_textbox.cpp:377
@@ -5359,7 +5357,7 @@ msgstr "OpenGL ni bilo mogoče uporabiti"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3217
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3115
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3127
 #, fuzzy
 msgid "Failed to read image data."
 msgstr "Nalaganja \"%s\" ni uspelo"
@@ -5417,8 +5415,8 @@ msgid "Line"
 msgstr "Črta"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
-#: common/drawing_sheet/ds_draw_item.cpp:125 common/eda_shape.cpp:716
-#: common/eda_shape.cpp:1935
+#: common/drawing_sheet/ds_draw_item.cpp:125 common/eda_shape.cpp:742
+#: common/eda_shape.cpp:1961
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2213
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2334
@@ -5679,7 +5677,7 @@ msgstr "Barve"
 
 #: common/eda_base_frame.cpp:1139 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:561 eeschema/menubar.cpp:143
-#: eeschema/sch_edit_frame.cpp:1659 kicad/tools/kicad_manager_actions.cpp:104
+#: eeschema/sch_edit_frame.cpp:1661 kicad/tools/kicad_manager_actions.cpp:104
 #, fuzzy
 msgid "Schematic Editor"
 msgstr "Oštevilči shemo"
@@ -6122,13 +6120,13 @@ msgstr "Številka"
 msgid "Rect"
 msgstr "Kvader"
 
-#: common/eda_shape.cpp:77 common/eda_shape.cpp:713 common/eda_shape.cpp:1936
+#: common/eda_shape.cpp:77 common/eda_shape.cpp:739 common/eda_shape.cpp:1962
 #: gerbview/gerber_draw_item.cpp:230
 #, fuzzy
 msgid "Arc"
 msgstr "Lok"
 
-#: common/eda_shape.cpp:78 common/eda_shape.cpp:712 common/eda_shape.cpp:1937
+#: common/eda_shape.cpp:78 common/eda_shape.cpp:738 common/eda_shape.cpp:1963
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2211 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1289
@@ -6142,37 +6140,37 @@ msgstr "Krog"
 msgid "Bezier Curve"
 msgstr "Krivulja &Bezier"
 
-#: common/eda_shape.cpp:80 common/eda_shape.cpp:715 common/eda_shape.cpp:1938
+#: common/eda_shape.cpp:80 common/eda_shape.cpp:741 common/eda_shape.cpp:1964
 #, fuzzy
 msgid "Polygon"
 msgstr "Večkotnik"
 
-#: common/eda_shape.cpp:703
+#: common/eda_shape.cpp:729
 #, fuzzy
 msgid "Pad Number Box"
 msgstr "Številka blazinice"
 
-#: common/eda_shape.cpp:704 pcbnew/pcb_shape.cpp:785
+#: common/eda_shape.cpp:730 pcbnew/pcb_shape.cpp:785
 #, fuzzy
 msgid "Thermal Spoke Template"
 msgstr "Širina toplotne napere"
 
-#: common/eda_shape.cpp:705 common/eda_shape.cpp:718
+#: common/eda_shape.cpp:731 common/eda_shape.cpp:744
 #, fuzzy
 msgid "Unrecognized"
 msgstr "Neprepoznano"
 
-#: common/eda_shape.cpp:714
+#: common/eda_shape.cpp:740
 #, fuzzy
 msgid "Curve"
 msgstr "Krivulja"
 
-#: common/eda_shape.cpp:717 common/eda_shape.cpp:1934
+#: common/eda_shape.cpp:743 common/eda_shape.cpp:1960
 #, fuzzy
 msgid "Segment"
 msgstr "Segment"
 
-#: common/eda_shape.cpp:728 common/eda_shape.cpp:1976
+#: common/eda_shape.cpp:754 common/eda_shape.cpp:2011
 #: eeschema/dialogs/dialog_label_properties_base.cpp:152
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/lib_textbox.cpp:556 eeschema/sch_label.cpp:2193
@@ -6186,19 +6184,19 @@ msgstr "Segment"
 msgid "Shape"
 msgstr "Oblika"
 
-#: common/eda_shape.cpp:734 common/eda_shape.cpp:741 common/eda_shape.cpp:2003
+#: common/eda_shape.cpp:760 common/eda_shape.cpp:767 common/eda_shape.cpp:2038
 #: pcbnew/dialogs/dialog_shape_properties.cpp:212 pcbnew/pcb_track.cpp:1076
 #, fuzzy
 msgid "Radius"
 msgstr "Polmer"
 
-#: common/eda_shape.cpp:739 common/eda_shape.cpp:769 common/eda_shape.cpp:2035
+#: common/eda_shape.cpp:765 common/eda_shape.cpp:795 common/eda_shape.cpp:2082
 #: pcbnew/pcb_text.cpp:242 pcbnew/pcb_textbox.cpp:375
 #, fuzzy
 msgid "Angle"
 msgstr "Kot"
 
-#: common/eda_shape.cpp:745 common/eda_shape.cpp:763
+#: common/eda_shape.cpp:771 common/eda_shape.cpp:789
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 #: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1690 eeschema/sch_pin.cpp:267
@@ -6207,16 +6205,16 @@ msgstr "Kot"
 msgid "Length"
 msgstr "Dolžina"
 
-#: common/eda_shape.cpp:750
+#: common/eda_shape.cpp:776
 #, fuzzy
 msgid "Points"
 msgstr "Točke"
 
-#: common/eda_shape.cpp:754 common/eda_text.cpp:1276 eeschema/lib_field.cpp:664
-#: eeschema/lib_text.cpp:532 eeschema/lib_textbox.cpp:559
-#: eeschema/sch_bitmap.cpp:231 eeschema/sch_field.cpp:1436
-#: eeschema/sch_text.cpp:495 eeschema/sch_textbox.cpp:517
-#: pcbnew/dialogs/dialog_board_statistics.cpp:685
+#: common/eda_shape.cpp:780 common/eda_shape.cpp:2056 common/eda_text.cpp:1276
+#: eeschema/lib_field.cpp:664 eeschema/lib_text.cpp:532
+#: eeschema/lib_textbox.cpp:559 eeschema/sch_bitmap.cpp:231
+#: eeschema/sch_field.cpp:1436 eeschema/sch_text.cpp:495
+#: eeschema/sch_textbox.cpp:517 pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
@@ -6231,11 +6229,11 @@ msgstr "Točke"
 msgid "Width"
 msgstr "Širina"
 
-#: common/eda_shape.cpp:757 common/eda_text.cpp:1281 eeschema/lib_field.cpp:665
-#: eeschema/lib_text.cpp:533 eeschema/lib_textbox.cpp:560
-#: eeschema/sch_bitmap.cpp:232 eeschema/sch_field.cpp:1437
-#: eeschema/sch_text.cpp:496 eeschema/sch_textbox.cpp:518
-#: pcbnew/dialogs/dialog_board_statistics.cpp:687
+#: common/eda_shape.cpp:783 common/eda_shape.cpp:2062 common/eda_text.cpp:1281
+#: eeschema/lib_field.cpp:665 eeschema/lib_text.cpp:533
+#: eeschema/lib_textbox.cpp:560 eeschema/sch_bitmap.cpp:232
+#: eeschema/sch_field.cpp:1437 eeschema/sch_text.cpp:496
+#: eeschema/sch_textbox.cpp:518 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
@@ -6246,71 +6244,71 @@ msgstr "Širina"
 msgid "Height"
 msgstr "Višina"
 
-#: common/eda_shape.cpp:1939
+#: common/eda_shape.cpp:1965
 #, fuzzy
 msgid "Bezier"
 msgstr "Bezier"
 
-#: common/eda_shape.cpp:1974 eeschema/lib_shape.cpp:604
+#: common/eda_shape.cpp:2009 eeschema/lib_shape.cpp:604
 #: eeschema/sch_shape.cpp:614
 #, fuzzy
 msgid "Shape Properties"
 msgstr "Lastnosti lista"
 
-#: common/eda_shape.cpp:1980 pcbnew/pcb_textbox.cpp:680
+#: common/eda_shape.cpp:2015 pcbnew/pcb_textbox.cpp:680
 #: pcbnew/pcb_track.cpp:1495
 #, fuzzy
 msgid "Start X"
 msgstr "Začni sloj"
 
-#: common/eda_shape.cpp:1985 pcbnew/pcb_textbox.cpp:681
+#: common/eda_shape.cpp:2020 pcbnew/pcb_textbox.cpp:681
 #: pcbnew/pcb_track.cpp:1499
 #, fuzzy
 msgid "Start Y"
 msgstr "Začni sloj"
 
-#: common/eda_shape.cpp:1991
+#: common/eda_shape.cpp:2026
 #, fuzzy
 msgid "Center X"
 msgstr "Center"
 
-#: common/eda_shape.cpp:1997
+#: common/eda_shape.cpp:2032
 #, fuzzy
 msgid "Center Y"
 msgstr "Center"
 
-#: common/eda_shape.cpp:2009 pcbnew/generators/pcb_tuning_pattern.cpp:2552
+#: common/eda_shape.cpp:2044 pcbnew/generators/pcb_tuning_pattern.cpp:2552
 #: pcbnew/pcb_textbox.cpp:682 pcbnew/pcb_track.cpp:1502
 #, fuzzy
 msgid "End X"
 msgstr "Konec X"
 
-#: common/eda_shape.cpp:2015 pcbnew/generators/pcb_tuning_pattern.cpp:2558
+#: common/eda_shape.cpp:2050 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_textbox.cpp:683 pcbnew/pcb_track.cpp:1505
 #, fuzzy
 msgid "End Y"
 msgstr "Konec Y"
 
-#: common/eda_shape.cpp:2021 common/stroke_params.cpp:223
-#: eeschema/sch_bus_entry.cpp:675 eeschema/sch_line.cpp:1105
+#: common/eda_shape.cpp:2068 common/stroke_params.cpp:223
+#: eeschema/sch_bus_entry.cpp:675 eeschema/sch_line.cpp:1064
 #: pcbnew/pcb_textbox.cpp:684
 #, fuzzy
 msgid "Line Width"
 msgstr "Debelina črte"
 
-#: common/eda_shape.cpp:2030 pcbnew/pcb_shape.cpp:719
+#: common/eda_shape.cpp:2077 pcbnew/pcb_shape.cpp:719
 #, fuzzy
 msgid "Line Color"
 msgstr "Barva črte:"
 
-#: common/eda_shape.cpp:2068 eeschema/lib_shape.cpp:587
+#: common/eda_shape.cpp:2115 eeschema/lib_shape.cpp:587
 #: eeschema/sch_shape.cpp:604 pcbnew/dialogs/dialog_plot_base.cpp:134
 #: pcbnew/pcb_textbox.cpp:686
 #, fuzzy
 msgid "Filled"
 msgstr "Polno"
 
-#: common/eda_shape.cpp:2073 eeschema/sch_shape.cpp:607
+#: common/eda_shape.cpp:2120 eeschema/sch_shape.cpp:607
 #: pcbnew/pcb_shape.cpp:720
 #, fuzzy
 msgid "Fill Color"
@@ -6441,7 +6439,7 @@ msgstr "Spodnja stran"
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:3484 pcbnew/fp_text_grid_table.cpp:145
+#: pcbnew/footprint.cpp:3551 pcbnew/fp_text_grid_table.cpp:145
 #: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1663
 #, fuzzy
 msgid "Orientation"
@@ -6782,28 +6780,28 @@ msgstr ""
 "Težava pri zagonu pregledovalnika PDF\n"
 "Ukaz je \"%s\""
 
-#: common/gestfich.cpp:306 eeschema/eeschema.cpp:608 eeschema/eeschema.cpp:643
+#: common/gestfich.cpp:287 eeschema/eeschema.cpp:608 eeschema/eeschema.cpp:643
 #: gerbview/gerbview.cpp:261 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:581
 #, fuzzy, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Datoteke \"%s\" ni mogoče kopirati."
 
-#: common/gestfich.cpp:327
+#: common/gestfich.cpp:308
 msgid "Invalid directory name, cannot remove root"
 msgstr ""
 
-#: common/gestfich.cpp:335
+#: common/gestfich.cpp:316
 #, fuzzy, c-format
 msgid "Directory '%s' does not exist"
 msgstr "Enota \"%s\" se ne konča z \"mil\"."
 
-#: common/gestfich.cpp:345
+#: common/gestfich.cpp:326
 #, fuzzy, c-format
 msgid "'%s' is not a directory"
 msgstr "Bakreno območje (%s) nima povezanih blazinic."
 
-#: common/gestfich.cpp:357
+#: common/gestfich.cpp:338
 #, fuzzy, c-format
 msgid "Error removing directory '%s': %s"
 msgstr "Ciljni imenik"
@@ -7465,8 +7463,8 @@ msgstr "Napaka pri nalaganju urejevalnika"
 msgid "Unable to switch language to %s"
 msgstr "Ni mogoče preklopiti jezika na %s"
 
-#: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:982
-#: pcbnew/drc/drc_engine.cpp:983 pcbnew/drc/drc_engine.cpp:984
+#: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:1015
+#: pcbnew/drc/drc_engine.cpp:1016 pcbnew/drc/drc_engine.cpp:1017
 #: pcbnew/tools/board_inspection_tool.cpp:250
 #: pcbnew/tools/board_inspection_tool.cpp:259
 #: pcbnew/tools/board_inspection_tool.cpp:268
@@ -8174,7 +8172,7 @@ msgstr "Razvrsti po imenu"
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
 #: eeschema/dialogs/dialog_sim_model_base.cpp:262 eeschema/sch_symbol.cpp:1972
 #: eeschema/sch_symbol.cpp:2024 eeschema/sch_symbol.cpp:2826
-#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3490
+#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3557
 #: pcbnew/widgets/search_handlers.cpp:82
 #, fuzzy
 msgid "Reference"
@@ -8192,7 +8190,7 @@ msgstr "Pridobite in premaknite odtis"
 #: eeschema/sch_symbol.cpp:2842 eeschema/tools/sch_edit_tool.cpp:478
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:3507
+#: pcbnew/footprint.cpp:3574
 #, fuzzy
 msgid "Attributes"
 msgstr "Atributi"
@@ -9514,7 +9512,7 @@ msgstr "Filter:"
 #: eeschema/dialogs/dialog_bom_base.cpp:114
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:236
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:288
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:455
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:456
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:365
 #, fuzzy
 msgid "Reset to Defaults"
@@ -9586,42 +9584,42 @@ msgstr "Počisti dodeljeno bližnjično tipko"
 msgid "Set Hotkey"
 msgstr "Nastavite bližnjično tipko"
 
-#: common/widgets/widget_hotkey_list.cpp:390
+#: common/widgets/widget_hotkey_list.cpp:378
 #, fuzzy, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
 msgstr "Ime %s je rezervirano in ga tukaj ni mogoče uporabiti"
 
-#: common/widgets/widget_hotkey_list.cpp:450
+#: common/widgets/widget_hotkey_list.cpp:438
 #, fuzzy
 msgid "Edit..."
 msgstr "Uredi ..."
 
-#: common/widgets/widget_hotkey_list.cpp:451
+#: common/widgets/widget_hotkey_list.cpp:439
 #, fuzzy
 msgid "Edit Alternate..."
 msgstr "Uredi odtis ..."
 
-#: common/widgets/widget_hotkey_list.cpp:452
+#: common/widgets/widget_hotkey_list.cpp:440
 #, fuzzy
 msgid "Undo Changes"
 msgstr "Razveljavi spremembe"
 
-#: common/widgets/widget_hotkey_list.cpp:453
+#: common/widgets/widget_hotkey_list.cpp:441
 #, fuzzy
 msgid "Clear Assigned Hotkey"
 msgstr "Počisti dodeljeno bližnjično tipko"
 
-#: common/widgets/widget_hotkey_list.cpp:454
+#: common/widgets/widget_hotkey_list.cpp:442
 #, fuzzy
 msgid "Clear Assigned Alternate"
 msgstr "Počisti dodeljeno bližnjično tipko"
 
-#: common/widgets/widget_hotkey_list.cpp:455
+#: common/widgets/widget_hotkey_list.cpp:443
 #, fuzzy
 msgid "Restore Defaults"
 msgstr "Obnovi privzeto"
 
-#: common/widgets/widget_hotkey_list.cpp:495
+#: common/widgets/widget_hotkey_list.cpp:483
 #, fuzzy, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
@@ -9630,27 +9628,27 @@ msgstr ""
 "\"%s\" je že dodeljen \"%s\" v odseku \"%s\". Ali ste prepričani, da želite "
 "spremeniti njegovo nalogo?"
 
-#: common/widgets/widget_hotkey_list.cpp:501
+#: common/widgets/widget_hotkey_list.cpp:489
 #, fuzzy
 msgid "Confirm change"
 msgstr "Potrdite spremembo"
 
-#: common/widgets/widget_hotkey_list.cpp:521
+#: common/widgets/widget_hotkey_list.cpp:509
 #, fuzzy
 msgid "Command"
 msgstr "Ukaz"
 
-#: common/widgets/widget_hotkey_list.cpp:524
+#: common/widgets/widget_hotkey_list.cpp:512
 #, fuzzy
 msgid "(double-click to edit)"
 msgstr "(dvoklik za urejanje)"
 
-#: common/widgets/widget_hotkey_list.cpp:527
+#: common/widgets/widget_hotkey_list.cpp:515
 #, fuzzy
 msgid "Hotkey"
 msgstr "Bližnjica"
 
-#: common/widgets/widget_hotkey_list.cpp:528
+#: common/widgets/widget_hotkey_list.cpp:516
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47 eeschema/lib_item.cpp:61
 #: eeschema/symbol_editor/symbol_editor.cpp:1281
 #, fuzzy
@@ -10107,7 +10105,7 @@ msgstr "\"%s\" ni veljaven odtis."
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:2019 eeschema/sch_symbol.cpp:2577
 #: eeschema/sch_symbol.cpp:2838 eeschema/symbol_editor/symbol_editor.cpp:1296
-#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3503
+#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3570
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 #, fuzzy
 msgid "Keywords"
@@ -12303,7 +12301,7 @@ msgstr "Prikaži okno konzole"
 #: eeschema/sch_symbol.cpp:2824
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:3488
+#: pcbnew/footprint.cpp:3555
 #, fuzzy
 msgid "Fields"
 msgstr "Polja"
@@ -15268,7 +15266,7 @@ msgstr ""
 "Za vrata je to \"De Morganova\" pretvorba"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:149
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:352
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:353
 #: pcbnew/dialogs/dialog_create_array_base.cpp:426
 #: pcbnew/dialogs/dialog_move_exact.cpp:207
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:333
@@ -18626,13 +18624,13 @@ msgid "Bus to Bus Entry"
 msgstr "Vhod vodila na vodilo"
 
 #: eeschema/sch_bus_entry.cpp:527 eeschema/sch_line.cpp:97
-#: eeschema/sch_line.cpp:967 eeschema/tools/sch_edit_tool.cpp:203
+#: eeschema/sch_line.cpp:926 eeschema/tools/sch_edit_tool.cpp:203
 #, fuzzy
 msgid "Wire"
 msgstr "Žica"
 
 #: eeschema/sch_bus_entry.cpp:528 eeschema/sch_line.cpp:98
-#: eeschema/sch_line.cpp:968
+#: eeschema/sch_line.cpp:927
 #, fuzzy
 msgid "Bus"
 msgstr "Vodilo"
@@ -18642,7 +18640,7 @@ msgid "Bus Entry Type"
 msgstr "Vrsta vhoda vodila"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:320
-#: eeschema/sch_label.cpp:1299 eeschema/sch_line.cpp:992
+#: eeschema/sch_label.cpp:1299 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2075 pcbnew/pad.cpp:1053
 #: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1693
 #: pcbnew/zone.cpp:594
@@ -18666,7 +18664,7 @@ msgstr "Bus Alias %s Člani"
 msgid "KiCad Schematic Editor"
 msgstr "Oštevilči shemo"
 
-#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1961
+#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1963
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Shematska parnost"
@@ -18698,65 +18696,65 @@ msgstr ""
 "in ustvarite projekt."
 
 # ##########test
-#: eeschema/sch_edit_frame.cpp:1273
+#: eeschema/sch_edit_frame.cpp:1274
 #, fuzzy
 msgid "New Schematic"
 msgstr "Nova shema"
 
-#: eeschema/sch_edit_frame.cpp:1285
+#: eeschema/sch_edit_frame.cpp:1286
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Shematska datoteka \"%s\" že obstaja."
 
-#: eeschema/sch_edit_frame.cpp:1310
+#: eeschema/sch_edit_frame.cpp:1311
 #, fuzzy
 msgid "Open Schematic"
 msgstr "Odprite shemo"
 
-#: eeschema/sch_edit_frame.cpp:1379
+#: eeschema/sch_edit_frame.cpp:1381
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Izvoz netlista zahteva popolnoma označeno shemo."
 
-#: eeschema/sch_edit_frame.cpp:1406
+#: eeschema/sch_edit_frame.cpp:1408
 #, fuzzy
 msgid "Could not open CvPcb"
 msgstr "CvPcb ni bilo mogoče odpreti"
 
-#: eeschema/sch_edit_frame.cpp:1649 eeschema/sim/simulator_frame.cpp:331
+#: eeschema/sch_edit_frame.cpp:1651 eeschema/sim/simulator_frame.cpp:331
 #: kicad/kicad_manager_frame.cpp:840 pcbnew/footprint_edit_frame.cpp:974
 #: pcbnew/pcb_edit_frame.cpp:1662
 #, fuzzy
 msgid "[Read Only]"
 msgstr "[Le za branje]"
 
-#: eeschema/sch_edit_frame.cpp:1652 eeschema/sim/simulator_frame.cpp:334
+#: eeschema/sch_edit_frame.cpp:1654 eeschema/sim/simulator_frame.cpp:334
 #: pcbnew/footprint_edit_frame.cpp:983 pcbnew/pcb_edit_frame.cpp:1665
 #, fuzzy
 msgid "[Unsaved]"
 msgstr "[Neshranjeno]"
 
-#: eeschema/sch_edit_frame.cpp:1656
+#: eeschema/sch_edit_frame.cpp:1658
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Shema shranjena"
 
-#: eeschema/sch_edit_frame.cpp:1873
+#: eeschema/sch_edit_frame.cpp:1875
 #, fuzzy
 msgid "Schematic Cleanup"
 msgstr "Nastavitev sheme"
 
-#: eeschema/sch_edit_frame.cpp:1986
+#: eeschema/sch_edit_frame.cpp:1988
 #, fuzzy, c-format
 msgid "Highlighted net: %s"
 msgstr "Poudarjeno vozlišče: %s"
 
-#: eeschema/sch_edit_frame.cpp:2163
+#: eeschema/sch_edit_frame.cpp:2165
 #, fuzzy
 msgid "Save Symbol to Schematic"
 msgstr "Shemi dodajte simbol"
 
-#: eeschema/sch_edit_frame.cpp:2268 eeschema/tools/ee_actions.cpp:60
+#: eeschema/sch_edit_frame.cpp:2270 eeschema/tools/ee_actions.cpp:60
 #, fuzzy
 msgid "Compare Symbol with Library"
 msgstr "Posodobi simbole iz knjižnice ..."
@@ -19327,7 +19325,7 @@ msgstr "Datoteke knjižnice simbolov KiCad"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:221
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:505
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2445
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2450
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:148
 #, fuzzy
 msgid "Open cancelled by user."
@@ -19425,7 +19423,7 @@ msgstr ""
 msgid "symbol document library file is empty"
 msgstr "Datoteka knjižnice dokumentov simbolov je prazna"
 
-#: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:1916
+#: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:1921
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:528
 #, fuzzy, c-format
 msgid "library %s does not contain a symbol named %s"
@@ -19677,7 +19675,7 @@ msgstr "Neznana vrednost SCH_FILE_T: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:57
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
-#: pcbnew/footprint.cpp:3479 pcbnew/footprint.cpp:3482
+#: pcbnew/footprint.cpp:3546 pcbnew/footprint.cpp:3549
 #: pcbnew/fp_text_grid_table.cpp:144
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2077 pcbnew/pad.cpp:1061
 #: pcbnew/pad.cpp:2370 pcbnew/pcb_dimension.cpp:461
@@ -19747,7 +19745,7 @@ msgstr "Hierarhični priključek"
 msgid "Justification"
 msgstr "Utemeljitev:"
 
-#: eeschema/sch_label.cpp:1375 eeschema/sch_line.cpp:930
+#: eeschema/sch_label.cpp:1375 eeschema/sch_line.cpp:889
 #: pcbnew/board_connected_item.cpp:186
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:984
@@ -19762,7 +19760,7 @@ msgstr "Utemeljitev:"
 msgid "Net"
 msgstr "Povezava"
 
-#: eeschema/sch_label.cpp:1379 eeschema/sch_line.cpp:934
+#: eeschema/sch_label.cpp:1379 eeschema/sch_line.cpp:893
 #, fuzzy
 msgid "Resolved netclass"
 msgstr "Dodeljeni Netclass"
@@ -19801,62 +19799,62 @@ msgstr "& Dolžina zatiča:"
 msgid "Graphic Line"
 msgstr "Grafična črta"
 
-#: eeschema/sch_line.cpp:775
+#: eeschema/sch_line.cpp:734
 #, fuzzy, c-format
 msgid "Vertical Wire, length %s"
 msgstr "Navpična žica, dolžina %s"
 
-#: eeschema/sch_line.cpp:776
+#: eeschema/sch_line.cpp:735
 #, fuzzy, c-format
 msgid "Vertical Bus, length %s"
 msgstr "Navpična vodila, dolžina %s"
 
-#: eeschema/sch_line.cpp:777
+#: eeschema/sch_line.cpp:736
 #, fuzzy, c-format
 msgid "Vertical Graphic Line, length %s"
 msgstr "Navpična grafična črta, dolžina %s"
 
-#: eeschema/sch_line.cpp:784
+#: eeschema/sch_line.cpp:743
 #, fuzzy, c-format
 msgid "Horizontal Wire, length %s"
 msgstr "Vodoravna žica, dolžina %s"
 
-#: eeschema/sch_line.cpp:785
+#: eeschema/sch_line.cpp:744
 #, fuzzy, c-format
 msgid "Horizontal Bus, length %s"
 msgstr "Vodoravna vodila, dolžina %s"
 
-#: eeschema/sch_line.cpp:786
+#: eeschema/sch_line.cpp:745
 #, fuzzy, c-format
 msgid "Horizontal Graphic Line, length %s"
 msgstr "Vodoravna grafična črta, dolžina %s"
 
-#: eeschema/sch_line.cpp:793
+#: eeschema/sch_line.cpp:752
 #, fuzzy, c-format
 msgid "Wire, length %s"
 msgstr "Žica, dolžina %s"
 
-#: eeschema/sch_line.cpp:794
+#: eeschema/sch_line.cpp:753
 #, c-format
 msgid "Bus, length %s"
 msgstr "Vodilo, dolžina %s"
 
-#: eeschema/sch_line.cpp:795
+#: eeschema/sch_line.cpp:754
 #, fuzzy, c-format
 msgid "Graphic Line, length %s"
 msgstr "Grafična črta, dolžina %s"
 
-#: eeschema/sch_line.cpp:969
+#: eeschema/sch_line.cpp:928
 #, fuzzy
 msgid "Graphical"
 msgstr "Grafično"
 
-#: eeschema/sch_line.cpp:972
+#: eeschema/sch_line.cpp:931
 #, fuzzy
 msgid "Line Type"
 msgstr "Vrsta vrstice"
 
-#: eeschema/sch_line.cpp:977
+#: eeschema/sch_line.cpp:936
 #, fuzzy
 msgid "from netclass"
 msgstr "iz razreda vozlišč"
@@ -20130,12 +20128,12 @@ msgstr "Zrcali |"
 msgid "Mirror Y"
 msgstr "Zrcali |"
 
-#: eeschema/sch_symbol.cpp:2832 pcbnew/footprint.cpp:3497
+#: eeschema/sch_symbol.cpp:2832 pcbnew/footprint.cpp:3564
 #, fuzzy
 msgid "Library Link"
 msgstr "Povezava do knjižnice:"
 
-#: eeschema/sch_symbol.cpp:2835 pcbnew/footprint.cpp:3500
+#: eeschema/sch_symbol.cpp:2835 pcbnew/footprint.cpp:3567
 #: pcbnew/plot_board_layers.cpp:129
 #, fuzzy
 msgid "Library Description"
@@ -20151,12 +20149,12 @@ msgstr "Izključi iz sveta"
 msgid "Exclude From Simulation"
 msgstr "Onemogoči simbol za simulacijo"
 
-#: eeschema/sch_symbol.cpp:2850 pcbnew/footprint.cpp:3514
+#: eeschema/sch_symbol.cpp:2850 pcbnew/footprint.cpp:3581
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Izključi iz kosovnice (BOM)"
 
-#: eeschema/sch_symbol.cpp:2853 pcbnew/footprint.cpp:3517
+#: eeschema/sch_symbol.cpp:2853 pcbnew/footprint.cpp:3584
 #, fuzzy
 msgid "Do not Populate"
 msgstr "Ne izvažajte"
@@ -23031,7 +23029,7 @@ msgid "Add a pin"
 msgstr "Dodajte priključek"
 
 #: eeschema/tools/ee_actions.cpp:341 eeschema/tools/ee_actions.cpp:524
-#: eeschema/tools/sch_drawing_tools.cpp:1532
+#: eeschema/tools/sch_drawing_tools.cpp:1550
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:298
 #: pagelayout_editor/tools/pl_actions.cpp:63 pcbnew/tools/pcb_actions.cpp:174
 #, fuzzy
@@ -23045,7 +23043,7 @@ msgid "Add a text item"
 msgstr "Dodajte besedilno postavko"
 
 #: eeschema/tools/ee_actions.cpp:350 eeschema/tools/ee_actions.cpp:532
-#: eeschema/tools/sch_drawing_tools.cpp:1876
+#: eeschema/tools/sch_drawing_tools.cpp:1894
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:481
 #: pcbnew/tools/pcb_actions.cpp:182
 #, fuzzy
@@ -23165,9 +23163,9 @@ msgstr "Dodajte vhod na vodilo"
 msgid "Add a wire entry to a bus"
 msgstr "Vodilu dodajte žični vhod"
 
-#: eeschema/tools/ee_actions.cpp:467 eeschema/tools/sch_drawing_tools.cpp:1542
-#: eeschema/tools/sch_drawing_tools.cpp:1547
-#: eeschema/tools/sch_drawing_tools.cpp:1552
+#: eeschema/tools/ee_actions.cpp:467 eeschema/tools/sch_drawing_tools.cpp:1560
+#: eeschema/tools/sch_drawing_tools.cpp:1565
+#: eeschema/tools/sch_drawing_tools.cpp:1570
 #, fuzzy
 msgid "Add Label"
 msgstr "Dodaj oznako"
@@ -23187,7 +23185,7 @@ msgstr "Neto razred"
 msgid "Add net class directive labels"
 msgstr "Dodajte oznako mreže"
 
-#: eeschema/tools/ee_actions.cpp:485 eeschema/tools/sch_drawing_tools.cpp:1537
+#: eeschema/tools/ee_actions.cpp:485 eeschema/tools/sch_drawing_tools.cpp:1555
 #, fuzzy
 msgid "Add Hierarchical Label"
 msgstr "Dodajte hierarhično oznako"
@@ -24507,38 +24505,38 @@ msgstr ""
 "Lokacija spoja ne vsebuje povezav in/ali priključkov, ki bi jih bilo mogoče "
 "spojiti."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1502
+#: eeschema/tools/sch_drawing_tools.cpp:1520
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:182
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1565
+#: eeschema/tools/sch_drawing_tools.cpp:1583
 #, fuzzy
 msgid "Click over a sheet."
 msgstr "Kliknite na list."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1578
-#: eeschema/tools/sch_drawing_tools.cpp:1664
+#: eeschema/tools/sch_drawing_tools.cpp:1596
+#: eeschema/tools/sch_drawing_tools.cpp:1682
 #, fuzzy
 msgid "No new hierarchical labels found."
 msgstr "Najdenih ni bilo novih hierarhičnih oznak."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1591
+#: eeschema/tools/sch_drawing_tools.cpp:1609
 msgid "Add Sheet Pin"
 msgstr "Dodajte zatič lista"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1885
+#: eeschema/tools/sch_drawing_tools.cpp:1903
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:486
 #, fuzzy, c-format
 msgid "Add %s"
 msgstr "Dodaj vodilo"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1940
+#: eeschema/tools/sch_drawing_tools.cpp:1958
 #, fuzzy, c-format
 msgid "Draw %s"
 msgstr "Risbe"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2086
+#: eeschema/tools/sch_drawing_tools.cpp:2104
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
@@ -29631,6 +29629,7 @@ msgstr "..."
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:89
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:75
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:106
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:142
 #, fuzzy
 msgid "ohm-meter"
@@ -30831,68 +30830,68 @@ msgstr "Rho:"
 msgid "Specific resistance in ohms * meters"
 msgstr "Specifični upor v ohmih * metrov"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:109
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:110
 #, fuzzy
 msgid "H:"
 msgstr "H (O):"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:121
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:122
 #, fuzzy
 msgid "H_t:"
 msgstr "H_t:"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:133
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:134
 #, fuzzy
 msgid "T:"
 msgstr "T:"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:145
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:146
 #, fuzzy
 msgid "Rough:"
 msgstr "Grobo:"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:157
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:158
 #, fuzzy
 msgid "Insulator mu:"
 msgstr "Prevajalci"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:169
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:170
 #, fuzzy
 msgid "Conductor mu:"
 msgstr "Dolžina vodnika:"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:188
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:189
 #, fuzzy
 msgid "Component Parameters"
 msgstr "Parametri komponente"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:196
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:197
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
 #, fuzzy
 msgid "Frequency:"
 msgstr "Frekvenca:"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:233
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:234
 #, fuzzy
 msgid "Physical Parameters"
 msgstr "Fizični parametri"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:298
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:299
 #, fuzzy
 msgid "Analyze"
 msgstr "Analiziraj"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:307
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:308
 #, fuzzy
 msgid "Synthesize"
 msgstr "Sintetizirajte"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:320
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:321
 #, fuzzy
 msgid "Electrical Parameters"
 msgstr "Električni parametri"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:371
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:372
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:218
 #, fuzzy
 msgid "Results"
@@ -32611,7 +32610,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr ""
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:195
-#: pcbnew/dialogs/dialog_drc.cpp:257 pcbnew/pcb_edit_frame.cpp:2411
+#: pcbnew/dialogs/dialog_drc.cpp:257 pcbnew/pcb_edit_frame.cpp:2415
 #, fuzzy
 msgid "Custom Rules"
 msgstr "Nabor slojev po meri"
@@ -33840,7 +33839,7 @@ msgstr ""
 "Privzeta vrsta povezave blazinice na območje.\n"
 "To nastavitev lahko preglasijo lokalne nastavitve blazinice"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3453
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3520
 #: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1565
 #, fuzzy
 msgid "Thermal reliefs"
@@ -35424,17 +35423,29 @@ msgstr ""
 msgid "Export STEP / GLTF"
 msgstr "Izvozi KORAK"
 
-#: pcbnew/dialogs/dialog_export_step_process.cpp:183
+#: pcbnew/dialogs/dialog_export_step_process.cpp:184
 #, c-format
 msgid "Process failed with exit code %d"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step_process.cpp:191
+#: pcbnew/dialogs/dialog_export_step_process.cpp:192
 #, fuzzy
 msgid "Success"
 msgstr "Uspešno"
 
-#: pcbnew/dialogs/dialog_export_step_process.cpp:246
+#: pcbnew/dialogs/dialog_export_step_process.cpp:213
+#, fuzzy
+msgid "Do you want to cancel the export process?"
+msgstr ""
+"Ali želite uporabiti pot glede na\n"
+"\"%s\""
+
+#: pcbnew/dialogs/dialog_export_step_process.cpp:214
+#, fuzzy
+msgid "Cancel Export"
+msgstr "Poročilo o potrditvi"
+
+#: pcbnew/dialogs/dialog_export_step_process.cpp:257
 #, fuzzy
 msgid "Command line:\n"
 msgstr "Ukaz:"
@@ -37254,7 +37265,7 @@ msgid "Set Track and Via Properties"
 msgstr "Nastavi lastnosti povezav in skoznikov"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
-#: pcbnew/drc/drc_engine.cpp:1450
+#: pcbnew/drc/drc_engine.cpp:1483
 #, fuzzy
 msgid "footprint"
 msgstr "odtis"
@@ -38466,7 +38477,6 @@ msgid "Plot format:"
 msgstr "Oblika ploskve:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 #, fuzzy
 msgid "Gerber"
 msgstr "Gerber"
@@ -42151,292 +42161,302 @@ msgstr "Območna vrsta povezave: %s."
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Blazinica ni PTH blazinica; povezava bo: %s."
 
-#: pcbnew/drc/drc_engine.cpp:781 pcbnew/drc/drc_engine.cpp:791
+#: pcbnew/drc/drc_engine.cpp:784
+#, fuzzy, c-format
+msgid "Net tie on %s; clearance: 0."
+msgstr "Lokalno razveljavitev %s; zračnost: %s."
+
+#: pcbnew/drc/drc_engine.cpp:787
+#, fuzzy
+msgid "net tie"
+msgstr "Naslovi listov"
+
+#: pcbnew/drc/drc_engine.cpp:814 pcbnew/drc/drc_engine.cpp:824
 #, fuzzy, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "Lokalno razveljavitev %s; zračnost: %s."
 
-#: pcbnew/drc/drc_engine.cpp:806 pcbnew/drc/drc_engine.cpp:1414
-#: pcbnew/drc/drc_engine.cpp:1430
+#: pcbnew/drc/drc_engine.cpp:839 pcbnew/drc/drc_engine.cpp:1447
+#: pcbnew/drc/drc_engine.cpp:1463
 #, fuzzy
 msgid "board minimum"
 msgstr "Najmanjša širina:"
 
-#: pcbnew/drc/drc_engine.cpp:809 pcbnew/drc/drc_engine.cpp:1408
-#: pcbnew/drc/drc_engine.cpp:1424
+#: pcbnew/drc/drc_engine.cpp:842 pcbnew/drc/drc_engine.cpp:1441
+#: pcbnew/drc/drc_engine.cpp:1457
 #, fuzzy, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Najmanjša razdalja:"
 
-#: pcbnew/drc/drc_engine.cpp:818
+#: pcbnew/drc/drc_engine.cpp:851
 #, fuzzy
 msgid "board minimum hole"
 msgstr "Najmanjša širina:"
 
-#: pcbnew/drc/drc_engine.cpp:821
+#: pcbnew/drc/drc_engine.cpp:854
 #, fuzzy, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "Najmanjša razdalja:"
 
-#: pcbnew/drc/drc_engine.cpp:840
+#: pcbnew/drc/drc_engine.cpp:873
 #, fuzzy, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr "Lokalno razveljavitev %s; zračnost: %s."
 
-#: pcbnew/drc/drc_engine.cpp:857
+#: pcbnew/drc/drc_engine.cpp:890
 #, fuzzy, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr "Preglasil %s; toplotni relief: %s."
 
-#: pcbnew/drc/drc_engine.cpp:874
+#: pcbnew/drc/drc_engine.cpp:907
 #, fuzzy, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Lokalno razveljavitev %s; zračnost: %s."
 
-#: pcbnew/drc/drc_engine.cpp:883
+#: pcbnew/drc/drc_engine.cpp:916
 #, fuzzy, c-format
 msgid "%s min thickness: %s."
 msgstr "Debelina črte:"
 
-#: pcbnew/drc/drc_engine.cpp:897
+#: pcbnew/drc/drc_engine.cpp:930
 #, fuzzy, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "Preverjanje stanja pravila \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:903 pcbnew/drc/drc_engine.cpp:1534
+#: pcbnew/drc/drc_engine.cpp:936 pcbnew/drc/drc_engine.cpp:1567
 #, fuzzy
 msgid "Assertion passed."
 msgstr "Dejanja"
 
-#: pcbnew/drc/drc_engine.cpp:907 pcbnew/drc/drc_engine.cpp:1538
+#: pcbnew/drc/drc_engine.cpp:940 pcbnew/drc/drc_engine.cpp:1571
 #, fuzzy
 msgid "--> Assertion failed. <--"
 msgstr "Območje preseka:"
 
-#: pcbnew/drc/drc_engine.cpp:927
+#: pcbnew/drc/drc_engine.cpp:960
 #, fuzzy, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Preverjanje %s; zračnost: %s."
 
-#: pcbnew/drc/drc_engine.cpp:933
+#: pcbnew/drc/drc_engine.cpp:966
 #, fuzzy, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "Preverjanje %s; odprtina luknje: %s."
 
-#: pcbnew/drc/drc_engine.cpp:939
+#: pcbnew/drc/drc_engine.cpp:972
 #, fuzzy, c-format
 msgid "Checking %s max skew: %s."
 msgstr "Preverjanje %s %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:945
+#: pcbnew/drc/drc_engine.cpp:978
 #, fuzzy, c-format
 msgid "Checking %s gap: %s."
 msgstr "Preverjanje %s %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:951
+#: pcbnew/drc/drc_engine.cpp:984
 #, fuzzy, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "Širina termične napere:"
 
-#: pcbnew/drc/drc_engine.cpp:957
+#: pcbnew/drc/drc_engine.cpp:990
 #, fuzzy, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "Preverjanje %s %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:964
+#: pcbnew/drc/drc_engine.cpp:997
 #, fuzzy, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "Preverjanje omrežnih povezav ..."
 
-#: pcbnew/drc/drc_engine.cpp:996
+#: pcbnew/drc/drc_engine.cpp:1029
 #, fuzzy, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "Preverjanje širine proge ..."
 
-#: pcbnew/drc/drc_engine.cpp:1002
+#: pcbnew/drc/drc_engine.cpp:1035
 #, fuzzy, c-format
 msgid "Checking %s track width: min %s."
 msgstr "Preverjanje širine proge ..."
 
-#: pcbnew/drc/drc_engine.cpp:1010
+#: pcbnew/drc/drc_engine.cpp:1043
 #, fuzzy, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "Preverjanje prek obročastih obročev ..."
 
-#: pcbnew/drc/drc_engine.cpp:1018
+#: pcbnew/drc/drc_engine.cpp:1051
 #, fuzzy, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "Preverjanje po premerih ..."
 
-#: pcbnew/drc/drc_engine.cpp:1024
+#: pcbnew/drc/drc_engine.cpp:1057
 #, fuzzy, c-format
 msgid "Checking %s via diameter: min %s."
 msgstr "Preverjanje po premerih ..."
 
-#: pcbnew/drc/drc_engine.cpp:1033
+#: pcbnew/drc/drc_engine.cpp:1066
 #, fuzzy, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "Preverjanje %s; odprtina luknje: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1039
+#: pcbnew/drc/drc_engine.cpp:1072
 #, fuzzy, c-format
 msgid "Checking %s hole size: min %s."
 msgstr "Preverjanje %s; odprtina luknje: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1049
+#: pcbnew/drc/drc_engine.cpp:1082
 #, fuzzy, c-format
 msgid "Checking %s: min %s."
 msgstr "Preverjanje %s %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1057
+#: pcbnew/drc/drc_engine.cpp:1090
 #, fuzzy, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "Preverjanje %s; zračnost: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1063
+#: pcbnew/drc/drc_engine.cpp:1096
 #, fuzzy, c-format
 msgid "Checking %s clearance: min %s."
 msgstr "Preverjanje %s; zračnost: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1071
+#: pcbnew/drc/drc_engine.cpp:1104
 #, fuzzy, c-format
 msgid "Checking %s hole to hole: min %s."
 msgstr "Preverjanje %s; odprtina luknje: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1077 pcbnew/drc/drc_engine.cpp:1103
-#: pcbnew/drc/drc_engine.cpp:1547
+#: pcbnew/drc/drc_engine.cpp:1110 pcbnew/drc/drc_engine.cpp:1136
+#: pcbnew/drc/drc_engine.cpp:1580
 #, fuzzy, c-format
 msgid "Checking %s."
 msgstr "Preverjanje %s."
 
-#: pcbnew/drc/drc_engine.cpp:1092
+#: pcbnew/drc/drc_engine.cpp:1125
 #, fuzzy, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Znova priključite %s zatič %s s %s na %s."
 
-#: pcbnew/drc/drc_engine.cpp:1113
+#: pcbnew/drc/drc_engine.cpp:1146
 #, fuzzy
 msgid "Netclass clearances apply only between copper items."
 msgstr "Razmiki med ploščami in mrežami veljajo samo za bakrene predmete."
 
-#: pcbnew/drc/drc_engine.cpp:1117 pcbnew/drc/drc_engine.cpp:1122
+#: pcbnew/drc/drc_engine.cpp:1150 pcbnew/drc/drc_engine.cpp:1155
 #, fuzzy, c-format
 msgid "%s contains no copper.  Rule ignored."
 msgstr "Pogoj ni izpolnjen; pravilo prezrto."
 
-#: pcbnew/drc/drc_engine.cpp:1178
+#: pcbnew/drc/drc_engine.cpp:1211
 #, fuzzy
 msgid "Keepout constraint not met."
 msgstr "Omejitev hrambe ni izpolnjena."
 
-#: pcbnew/drc/drc_engine.cpp:1180
+#: pcbnew/drc/drc_engine.cpp:1213
 #, fuzzy
 msgid "Disallow constraint not met."
 msgstr "Omejitev prepovedi ni izpolnjena."
 
-#: pcbnew/drc/drc_engine.cpp:1202
+#: pcbnew/drc/drc_engine.cpp:1235
 #, fuzzy
 msgid "Keepout layer(s) not matched."
 msgstr "Nadzorni sloji se ne ujemajo."
 
-#: pcbnew/drc/drc_engine.cpp:1206 pcbnew/drc/drc_engine.cpp:1227
-#: pcbnew/drc/drc_engine.cpp:1551
+#: pcbnew/drc/drc_engine.cpp:1239 pcbnew/drc/drc_engine.cpp:1260
+#: pcbnew/drc/drc_engine.cpp:1584
 #, fuzzy, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "Sloj pravila \"%s\" se ne ujema."
 
-#: pcbnew/drc/drc_engine.cpp:1211 pcbnew/drc/drc_engine.cpp:1232
+#: pcbnew/drc/drc_engine.cpp:1244 pcbnew/drc/drc_engine.cpp:1265
 #, fuzzy
 msgid "Rule layer not matched; rule ignored."
 msgstr "Sloj pravila se ne ujema."
 
-#: pcbnew/drc/drc_engine.cpp:1223
+#: pcbnew/drc/drc_engine.cpp:1256
 #, fuzzy
 msgid "Constraint layer not matched."
 msgstr "Nadzorni sloji se ne ujemajo."
 
-#: pcbnew/drc/drc_engine.cpp:1243
+#: pcbnew/drc/drc_engine.cpp:1276
 #, fuzzy, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr "Pogoj ni izpolnjen; pravilo prezrto."
 
-#: pcbnew/drc/drc_engine.cpp:1253
+#: pcbnew/drc/drc_engine.cpp:1286
 #, fuzzy
 msgid "Unconditional constraint applied."
 msgstr "Uporabljena brezpogojna omejitev."
 
-#: pcbnew/drc/drc_engine.cpp:1257 pcbnew/drc/drc_engine.cpp:1557
+#: pcbnew/drc/drc_engine.cpp:1290 pcbnew/drc/drc_engine.cpp:1590
 #, fuzzy
 msgid "Unconditional rule applied."
 msgstr "Uporabljeno brezpogojno pravilo."
 
-#: pcbnew/drc/drc_engine.cpp:1262
+#: pcbnew/drc/drc_engine.cpp:1295
 #, fuzzy
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Uporabljeno pravilo; preglasi prejšnje omejitve."
 
-#: pcbnew/drc/drc_engine.cpp:1276 pcbnew/drc/drc_engine.cpp:1562
+#: pcbnew/drc/drc_engine.cpp:1309 pcbnew/drc/drc_engine.cpp:1595
 #, fuzzy, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Preverjanje stanja pravila \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:1286
+#: pcbnew/drc/drc_engine.cpp:1319
 #, fuzzy
 msgid "Constraint applied."
 msgstr "Omejitev uporabljena."
 
-#: pcbnew/drc/drc_engine.cpp:1290 pcbnew/drc/drc_engine.cpp:1568
+#: pcbnew/drc/drc_engine.cpp:1323 pcbnew/drc/drc_engine.cpp:1601
 #, fuzzy
 msgid "Rule applied."
 msgstr "Uporabljeno brezpogojno pravilo."
 
-#: pcbnew/drc/drc_engine.cpp:1295
+#: pcbnew/drc/drc_engine.cpp:1328
 #, fuzzy
 msgid "Rule applied; overrides previous constraints."
 msgstr "Uporabljeno pravilo; preglasi prejšnje omejitve."
 
-#: pcbnew/drc/drc_engine.cpp:1303
+#: pcbnew/drc/drc_engine.cpp:1336
 #, fuzzy
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Članstvo ni zadovoljeno; omejitev prezrta."
 
-#: pcbnew/drc/drc_engine.cpp:1304 pcbnew/drc/drc_engine.cpp:1573
+#: pcbnew/drc/drc_engine.cpp:1337 pcbnew/drc/drc_engine.cpp:1606
 #, fuzzy
 msgid "Condition not satisfied; rule ignored."
 msgstr "Pogoj ni izpolnjen; pravilo prezrto."
 
-#: pcbnew/drc/drc_engine.cpp:1364 pcbnew/drc/drc_engine.cpp:1386
+#: pcbnew/drc/drc_engine.cpp:1397 pcbnew/drc/drc_engine.cpp:1419
 #, fuzzy, c-format
 msgid "Local clearance on %s: %s."
 msgstr "Lokalno dovoljenje dne %s; zračnost: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1445
+#: pcbnew/drc/drc_engine.cpp:1478
 #, fuzzy, c-format
 msgid "%s zone connection: %s."
 msgstr "Preverjanje omrežnih povezav ..."
 
-#: pcbnew/drc/drc_engine.cpp:1461
+#: pcbnew/drc/drc_engine.cpp:1494
 #, fuzzy, c-format
 msgid "%s pad connection: %s."
 msgstr "Območna vrsta povezave: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1466 pcbnew/drc/drc_engine.cpp:1483
-#: pcbnew/drc/drc_engine.cpp:1500 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
+#: pcbnew/drc/drc_engine.cpp:1499 pcbnew/drc/drc_engine.cpp:1516
+#: pcbnew/drc/drc_engine.cpp:1533 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
 #, fuzzy
 msgid "zone"
 msgstr "območju"
 
-#: pcbnew/drc/drc_engine.cpp:1478
+#: pcbnew/drc/drc_engine.cpp:1511
 #, fuzzy, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "Območni toplotni razbremenitev: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1495
+#: pcbnew/drc/drc_engine.cpp:1528
 #, fuzzy, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "Širina termične napere:"
 
-#: pcbnew/drc/drc_engine.cpp:1528
+#: pcbnew/drc/drc_engine.cpp:1561
 #, fuzzy, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "Preverjanje stanja pravila \"%s\"."
@@ -43341,7 +43361,7 @@ msgid "'%s' settings differ."
 msgstr "Cu otoček"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:543
-#: pcbnew/footprint.cpp:3524
+#: pcbnew/footprint.cpp:3591
 msgid "Exempt From Courtyard Requirement"
 msgstr ""
 
@@ -44118,67 +44138,67 @@ msgstr "<ni referenčnega označevalca>"
 msgid "Footprint %s"
 msgstr "Odtis %s"
 
-#: pcbnew/footprint.cpp:2809
+#: pcbnew/footprint.cpp:2876
 #, fuzzy, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "Blazinice skozi luknje"
 
-#: pcbnew/footprint.cpp:2812
+#: pcbnew/footprint.cpp:2879
 #, fuzzy, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(%s največji premer %s; dejanski %s)"
 
-#: pcbnew/footprint.cpp:3010
+#: pcbnew/footprint.cpp:3077
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3015
+#: pcbnew/footprint.cpp:3082
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3451 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1563
+#: pcbnew/footprint.cpp:3518 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1563
 #, fuzzy
 msgid "Inherited"
 msgstr "Podedovano"
 
-#: pcbnew/footprint.cpp:3455 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1567
+#: pcbnew/footprint.cpp:3522 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1567
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Toplotni reliefi"
 
-#: pcbnew/footprint.cpp:3509
+#: pcbnew/footprint.cpp:3576
 #, fuzzy
 msgid "Not in Schematic"
 msgstr "Ni shematično"
 
-#: pcbnew/footprint.cpp:3511
+#: pcbnew/footprint.cpp:3578
 #, fuzzy
 msgid "Exclude From Position Files"
 msgstr "Izključi iz datotek položaja"
 
-#: pcbnew/footprint.cpp:3521 pcbnew/pad.cpp:2486
+#: pcbnew/footprint.cpp:3588 pcbnew/pad.cpp:2486
 #, fuzzy
 msgid "Overrides"
 msgstr "Prepiši"
 
-#: pcbnew/footprint.cpp:3527 pcbnew/pad.cpp:2488
+#: pcbnew/footprint.cpp:3594 pcbnew/pad.cpp:2488
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Obrisi za potrditev"
 
-#: pcbnew/footprint.cpp:3531 pcbnew/pad.cpp:2496
+#: pcbnew/footprint.cpp:3598 pcbnew/pad.cpp:2496
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Lokalna marža paste za spajkanje"
 
-#: pcbnew/footprint.cpp:3536 pcbnew/pad.cpp:2500
+#: pcbnew/footprint.cpp:3603 pcbnew/pad.cpp:2500
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Lokalno razmerje marže pri pasti"
 
-#: pcbnew/footprint.cpp:3541 pcbnew/pad.cpp:2505
+#: pcbnew/footprint.cpp:3608 pcbnew/pad.cpp:2505
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "Ni povezave"
@@ -44350,8 +44370,8 @@ msgstr "Knjižnica %s že obstaja."
 
 #: pcbnew/footprint_libraries_utils.cpp:544
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:956
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2678
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2756
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2683
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2761
 #, fuzzy, c-format
 msgid "Library '%s' is read only."
 msgstr "Knjižnica '%s' je samo za branje."
@@ -45983,12 +46003,12 @@ msgstr "Samo območje plošče"
 msgid "PCB file changes are unsaved"
 msgstr "Spremembe datotek PCB niso shranjene"
 
-#: pcbnew/pcb_edit_frame.cpp:1836
+#: pcbnew/pcb_edit_frame.cpp:1837
 #, fuzzy
 msgid "The schematic for this board cannot be found."
 msgstr "Sheme za to ploščo ni mogoče najti."
 
-#: pcbnew/pcb_edit_frame.cpp:1862
+#: pcbnew/pcb_edit_frame.cpp:1863
 #, fuzzy
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
@@ -45999,58 +46019,58 @@ msgstr ""
 "želite iz shem ustvariti ali posodobiti PCB, morate zagnati vodjo projekta "
 "KiCad in ustvariti projekt."
 
-#: pcbnew/pcb_edit_frame.cpp:1887 pcbnew/pcbnew_jobs_handler.cpp:1154
+#: pcbnew/pcb_edit_frame.cpp:1888 pcbnew/pcbnew_jobs_handler.cpp:1154
 #, fuzzy
 msgid "Eeschema netlist"
 msgstr "Eeschema netlist"
 
-#: pcbnew/pcb_edit_frame.cpp:1898
+#: pcbnew/pcb_edit_frame.cpp:1899
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1925
+#: pcbnew/pcb_edit_frame.cpp:1926
 #, fuzzy, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Shematske datoteke \"%s\" ni mogoče najti."
 
-#: pcbnew/pcb_edit_frame.cpp:1955
+#: pcbnew/pcb_edit_frame.cpp:1957
 #, fuzzy
 msgid "Eeschema failed to load."
 msgstr "Eescheme ni uspelo naložiti:\n"
 
-#: pcbnew/pcb_edit_frame.cpp:2405
+#: pcbnew/pcb_edit_frame.cpp:2409
 #, fuzzy
 msgid "Edit design rules"
 msgstr "Pravila oblikovanja"
 
-#: pcbnew/pcb_edit_frame.cpp:2417
+#: pcbnew/pcb_edit_frame.cpp:2421
 #, fuzzy
 msgid "Could not compile custom design rules."
 msgstr "DRK nepopoln: pravil oblikovanja ni bilo mogoče sestaviti.  "
 
-#: pcbnew/pcb_edit_frame.cpp:2455
+#: pcbnew/pcb_edit_frame.cpp:2459
 #, fuzzy
 msgid "Export Hyperlynx Layout"
 msgstr "Izvozi postavitev Hyperlynx"
 
-#: pcbnew/pcb_edit_frame.cpp:2507
+#: pcbnew/pcb_edit_frame.cpp:2511
 #, fuzzy
 msgid "Violation Report"
 msgstr "Resnost kršitve"
 
-#: pcbnew/pcb_edit_frame.cpp:2517
+#: pcbnew/pcb_edit_frame.cpp:2521
 #, fuzzy
 msgid "Clearance Report"
 msgstr "Poročilo o potrditvi"
 
-#: pcbnew/pcb_edit_frame.cpp:2527
+#: pcbnew/pcb_edit_frame.cpp:2531
 #, fuzzy
 msgid "Constraints Report"
 msgstr "Poročilo o omejitvah"
 
-#: pcbnew/pcb_edit_frame.cpp:2537 pcbnew/tools/pcb_actions.cpp:1841
+#: pcbnew/pcb_edit_frame.cpp:2541 pcbnew/tools/pcb_actions.cpp:1841
 #, fuzzy
 msgid "Compare Footprint with Library"
 msgstr "Izvozi odtise v knjižnico ..."
@@ -47382,13 +47402,13 @@ msgid "Element token contains %d parameters."
 msgstr "Žeton elementa vsebuje parametre %d."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:975
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2800
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2805
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Nezadostna dovoljenja za izbris mape \"%s\"."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:983
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2808
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2813
 #, fuzzy, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "V knjižničnem imeniku \"%s\" so nepričakovani podimeniki."
@@ -47400,7 +47420,7 @@ msgstr "Nepričakovana datoteka \"%s\" je bila najdena v poti knjižnice \"%s\".
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1021
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3258
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2845
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2850
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Odtisa knjižnice \"%s\" ni mogoče izbrisati."
@@ -47497,7 +47517,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Slabo glajenje ZS za CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6166
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6178
 #, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
@@ -47598,17 +47618,17 @@ msgstr "neznana vrsta blazinice: %d"
 msgid "unknown via type %d"
 msgstr "neznano po tipu %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2337
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2342
 #, fuzzy, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "neznano območje glajenja vogalov %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2491
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2496
 #, fuzzy
 msgid "This file does not contain a PCB."
 msgstr "ta datoteka ne vsebuje PCB-ja"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2664
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2669
 #, fuzzy, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -47617,29 +47637,29 @@ msgstr ""
 "Knjižnica \"%s\" ne obstaja.\n"
 "Bi ga radi ustvarili?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2669
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2674
 #, fuzzy
 msgid "Library Not Found"
 msgstr "Knjižnice ni mogoče najti"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2697
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2702
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Ime datoteke odtisa \"%s\" ni veljavno."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2703
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2708
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr ""
 "Za shranjevanje datoteke potrebujete nezadostna dovoljenja\n"
 "%s"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2775
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2780
 #, fuzzy, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Ne morem prepisati poti knjižnice \"%s\"."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2827
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2832
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Nepričakovana datoteka \"%s\" je bila najdena v poti knjižnice \"%s\"."
@@ -47670,33 +47690,33 @@ msgstr ""
 msgid "Undefined Layers Warning"
 msgstr "Nedoločene plasti:"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1224
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1236
 #, fuzzy, c-format
 msgid "Cannot create generated object of type '%s'"
 msgstr "Izhodnega imenika \"%s\" ni mogoče ustvariti.\n"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1361
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1373
 #, fuzzy, c-format
 msgid "Page type '%s' is not valid."
 msgstr "Tip strani \"%s\" ni veljaven "
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1915
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1927
 #, fuzzy, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr "Sloj \"%s\" v datoteki \"%s\" v vrstici %d ni v zgoščeni fiksni plasti"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1952
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1964
 #, fuzzy, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d ni veljavno število slojev"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2626
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2638
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Podvojeno ime NETCLASS \"%s\" v datoteki \"%s\" v vrstici %d, odmik %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3006
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5391
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3018
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5403
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47709,12 +47729,12 @@ msgstr ""
 "vrstica: %d\n"
 "odmik: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3174
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3186
 #, fuzzy, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Ne morem obvladati vrste besedila odtisa %s"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3948
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3960
 #, fuzzy, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -47727,7 +47747,7 @@ msgstr ""
 "vrstica: %d\n"
 "odmik: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4635
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4647
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47739,7 +47759,7 @@ msgstr ""
 "vrstica: %d\n"
 "odmik: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4654
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4666
 #, fuzzy, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -47751,7 +47771,7 @@ msgstr ""
 "vrstica: %d\n"
 "odmik: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4955
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4967
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -47764,7 +47784,7 @@ msgstr ""
 "vrstica: %d\n"
 "odmik: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5306
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5318
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47777,7 +47797,7 @@ msgstr ""
 "vrstica: %d\n"
 "odmik: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5492
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5504
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47790,7 +47810,7 @@ msgstr ""
 "vrstica: %d\n"
 "odmik: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5622
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5634
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47803,7 +47823,7 @@ msgstr ""
 "vrstica: %d\n"
 "odmik: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6135
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6147
 #, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
@@ -53507,17 +53527,17 @@ msgstr "Gradbena cona zapolnjuje ..."
 msgid "Removing isolated copper islands..."
 msgstr "Odstranjevanje izoliranih bakrenih otokov ..."
 
-#: pcbnew/zone_filler.cpp:730
+#: pcbnew/zone_filler.cpp:733
 #, fuzzy
 msgid "Zone fills are out-of-date. Refill?"
 msgstr "Območna polnila so zastarela. Napolniti?"
 
-#: pcbnew/zone_filler.cpp:732
+#: pcbnew/zone_filler.cpp:735
 #, fuzzy
 msgid "Refill"
 msgstr "Napolnite"
 
-#: pcbnew/zone_filler.cpp:732
+#: pcbnew/zone_filler.cpp:735
 #, fuzzy
 msgid "Continue without Refill"
 msgstr "Nadaljujte brez ponovnega polnjenja"
@@ -53649,15 +53669,6 @@ msgstr ""
 msgid "An EDA suite for schematic and circuit board design"
 msgstr ""
 
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
-msgid "EDA"
-msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
-msgid "Circuit board"
-msgstr "Natisni ploščo"
-
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -53717,6 +53728,10 @@ msgstr "Uredi shematske simbole"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Urejevalnik knjižnic"
+
+#, fuzzy
+#~ msgid "Circuit board"
+#~ msgstr "Natisni ploščo"
 
 #, fuzzy
 #~ msgid "Footprint descriptions differ."

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 15:00-0800\n"
+"POT-Creation-Date: 2025-01-05 12:49+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -21640,6 +21640,12 @@ msgstr "Process failed with exit code %d"
 msgid "Success"
 msgstr "Success"
 
+msgid "Do you want to cancel the export process?"
+msgstr "Do you want to cancel the export process?"
+
+msgid "Cancel Export"
+msgstr "Cancel Export"
+
 msgid "Command line:\n"
 msgstr "Command line:\n"
 
@@ -26331,6 +26337,13 @@ msgstr "Resolved zone connection type: %s."
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Pad is not a through hole pad; connection will be: %s."
+
+#, c-format
+msgid "Net tie on %s; clearance: 0."
+msgstr "Net tie on %s; clearance: 0."
+
+msgid "net tie"
+msgstr "net tie"
 
 #, c-format
 msgid "Local override on %s; clearance: %s."
@@ -34058,12 +34071,6 @@ msgstr "Standalone circuit board editor for KiCad boards"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
-msgid "EDA"
-msgstr "EDA"
-
-msgid "Circuit board"
-msgstr "Circuit board"
-
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -34108,6 +34115,12 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit board"
 
 #~ msgid ""
 #~ "### Top-level Clauses\n"
