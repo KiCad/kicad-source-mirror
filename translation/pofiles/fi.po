@@ -18,15 +18,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:16+0300\n"
-"PO-Revision-Date: 2024-11-10 17:00+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2025-01-06 10:25+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -208,7 +208,7 @@ msgstr "Renderointiaika %.3f s"
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:393
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Renderoidään: %.0f %%"
+msgstr "Hahmonnus: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:841
 msgid "Rendering: Post processing shader"
@@ -6098,7 +6098,7 @@ msgstr "* [uusi] %s %s"
 #: common/git/kicad_git_common.cpp:470
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr "Kirjoitetaan objektit: %d%% (%d/%d), %d tavua"
+msgstr "Kirjoitetaan objektit: %d %% (%d/%d), %d tavua"
 
 #: common/git/kicad_git_common.cpp:485
 #, c-format
@@ -30427,7 +30427,7 @@ msgstr "Valitse, kuinka monta tarkkuutta näytetään"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:136
 #: pcbnew/pcb_dimension.cpp:1417
 msgid "0.0"
-msgstr "0.0"
+msgstr "0,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:136
@@ -31216,11 +31216,8 @@ msgid "Success"
 msgstr "Onnistui"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Haluatko käyttää polkua suhteessa\n"
-"'%s'?"
+msgstr "Haluatko peruuttaa vientiprosessin?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
 #, fuzzy
@@ -37114,9 +37111,9 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Antura ei ole läpireikäantura; yhteys tulee olemaan: %s."
 
 #: pcbnew/drc/drc_engine.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Paikallinen ohitus %s; välys: %s."
+msgstr "Verkkosidonta kohteessa %s; välys: 0."
 
 #: pcbnew/drc/drc_engine.cpp:787
 #, fuzzy
@@ -41776,9 +41773,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Tuntematon anturamuodon nimi \"%s\" kerroksessa \"%s\" rivillä %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Lisää valitut kerrokset vastaavien kerrosten luetteloon."
+msgstr "Ei käyttäjäkerrosta lisättävälle kerrokselle %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -41799,12 +41796,12 @@ msgstr "Tunnistamaton anturamuotoprimitiivi '%s' rivillä %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Ympyrä, jonka x- ja y-säteet eivät ole yhtä suuret (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "Odotettiin x:n ja y:n olevan samat, saatiin x = %f ja y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
@@ -41841,6 +41838,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
+"Puuttuvat X-, Y- tai kiertotiedot riviltä %zu päivitykselle %s. Tämä voi "
+"olla sijoittamaton komponentti."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2627
 #, c-format
@@ -41868,11 +41867,12 @@ msgstr ""
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
 msgstr ""
+"Käsittelemätön muototyyppi %d polygonissa kerroksessa %s, peräkkäinen %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "Virheellinen reikä %d pisteen vyöhykkeellä kerroksessa %s, verkko %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3438
 #, c-format
@@ -41880,11 +41880,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Ääriviivat näyttävät epäjatkuvilta: viimeinen piste oli %s, seuraavan "
+"segmentin aloituspiste on %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Virheellinen lehden nastan nimi"
+msgstr "Virheellinen muototyyppi %d vyöhykkeen ääriviivassa"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
