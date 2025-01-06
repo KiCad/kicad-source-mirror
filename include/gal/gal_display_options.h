@@ -88,6 +88,9 @@ namespace KIGFX
     public:
         GAL_DISPLAY_OPTIONS();
 
+        virtual ~GAL_DISPLAY_OPTIONS()
+        {}
+
         OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
 
         CAIRO_ANTIALIASING_MODE cairo_antialiasing_mode;
