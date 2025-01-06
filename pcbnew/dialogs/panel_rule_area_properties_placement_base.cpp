@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,8 +17,12 @@ PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE::PANEL_RULE_AREA_PROPERTIES_PLACEMENT_
 	wxBoxSizer* bMarginsSizer;
 	bMarginsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_SheetCb = new wxCheckBox( this, wxID_ANY, _("Place items from sheet:"), wxDefaultPosition, wxDefaultSize, 0 );
-	bMarginsSizer->Add( m_SheetCb, 0, wxALL, 5 );
+	m_DisabedlRb = new wxRadioButton( this, wxID_ANY, _("No placement"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DisabedlRb->SetValue( true );
+	bMarginsSizer->Add( m_DisabedlRb, 0, wxALL, 5 );
+
+	m_SheetRb = new wxRadioButton( this, wxID_ANY, _("Place items from sheet:"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMarginsSizer->Add( m_SheetRb, 0, wxALL, 5 );
 
 	m_sheetCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	bMarginsSizer->Add( m_sheetCombo, 0, wxLEFT|wxEXPAND, 25 );
@@ -26,8 +30,8 @@ PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE::PANEL_RULE_AREA_PROPERTIES_PLACEMENT_
 
 	bMarginsSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
-	m_ComponentsCb = new wxCheckBox( this, wxID_ANY, _("Place items matching component class:"), wxDefaultPosition, wxDefaultSize, 0 );
-	bMarginsSizer->Add( m_ComponentsCb, 0, wxALL, 5 );
+	m_ComponentsRb = new wxRadioButton( this, wxID_ANY, _("Place items matching component class:"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMarginsSizer->Add( m_ComponentsRb, 0, wxALL, 5 );
 
 	m_componentClassCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	bMarginsSizer->Add( m_componentClassCombo, 0, wxLEFT|wxEXPAND, 25 );

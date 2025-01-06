@@ -128,11 +128,11 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME*   aPar
     m_placementProperties = new PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE( m_areaPropertiesNb );
     m_areaPropertiesNb->AddPage( m_placementProperties, _( "Placement" ) );
 
-    m_placementProperties->m_SheetCb->Connect(
+    m_placementProperties->m_SheetRb->Connect(
             wxEVT_CHECKBOX,
             wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnSheetNameClicked ), nullptr,
             this );
-    m_placementProperties->m_ComponentsCb->Connect(
+    m_placementProperties->m_ComponentsRb->Connect(
             wxEVT_CHECKBOX,
             wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnComponentClassClicked ), nullptr,
             this );
@@ -192,11 +192,11 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME*   aPar
 
 DIALOG_RULE_AREA_PROPERTIES::~DIALOG_RULE_AREA_PROPERTIES()
 {
-    m_placementProperties->m_SheetCb->Disconnect(
+    m_placementProperties->m_SheetRb->Disconnect(
             wxEVT_CHECKBOX,
             wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnSheetNameClicked ), nullptr,
             this );
-    m_placementProperties->m_ComponentsCb->Disconnect(
+    m_placementProperties->m_ComponentsRb->Disconnect(
             wxEVT_CHECKBOX,
             wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnComponentClassClicked ), nullptr,
             this );
@@ -205,14 +205,12 @@ DIALOG_RULE_AREA_PROPERTIES::~DIALOG_RULE_AREA_PROPERTIES()
 
 void DIALOG_RULE_AREA_PROPERTIES::OnSheetNameClicked( wxCommandEvent& event )
 {
-    m_placementProperties->m_ComponentsCb->SetValue( false );
     m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
 }
 
 
 void DIALOG_RULE_AREA_PROPERTIES::OnComponentClassClicked( wxCommandEvent& event )
 {
-    m_placementProperties->m_SheetCb->SetValue( false );
     m_lastPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
 }
 
@@ -237,10 +235,11 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     m_keepoutProperties->m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
 
     // Init placement parameters:
-    m_placementProperties->m_SheetCb->SetValue( false );
+    m_placementProperties->m_DisabedlRb->SetValue( true );
+    m_placementProperties->m_SheetRb->SetValue( false );
     m_placementProperties->m_sheetCombo->Clear();
 
-    m_placementProperties->m_ComponentsCb->SetValue( false );
+    m_placementProperties->m_ComponentsRb->SetValue( false );
     m_placementProperties->m_componentClassCombo->Clear();
 
     wxString curSourceName = m_zonesettings.GetRuleAreaPlacementSource();
@@ -257,6 +256,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         for( const wxString& sourceName : classNames )
             m_placementProperties->m_componentClassCombo->Append( sourceName );
 
+        m_placementProperties->m_componentClassCombo->Select( 0 );
+
         // Fetch sheet names
         std::set<wxString> sheetNames;
 
@@ -265,6 +266,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
 
         for( const wxString& sourceName : sheetNames )
             m_placementProperties->m_sheetCombo->Append( sourceName );
+
+        m_placementProperties->m_sheetCombo->Select( 0 );
     }
 
     auto setupCurrentSourceSelection = [&]( wxComboBox* cb )
@@ -286,7 +289,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
     {
         if( m_zonesettings.GetRuleAreaPlacementEnabled() )
-            m_placementProperties->m_SheetCb->SetValue( true );
+            m_placementProperties->m_SheetRb->SetValue( true );
 
         setupCurrentSourceSelection( m_placementProperties->m_sheetCombo );
         m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
@@ -295,7 +298,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     else
     {
         if( m_zonesettings.GetRuleAreaPlacementEnabled() )
-            m_placementProperties->m_ComponentsCb->SetValue( true );
+            m_placementProperties->m_ComponentsRb->SetValue( true );
 
         setupCurrentSourceSelection( m_placementProperties->m_componentClassCombo );
         m_originalPlacementSourceType = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
@@ -414,12 +417,12 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
         }
     };
 
-    if( m_placementProperties->m_SheetCb->GetValue() )
+    if( m_placementProperties->m_SheetRb->GetValue() )
     {
         m_zonesettings.SetRuleAreaPlacementEnabled( true );
         setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
     }
-    else if( m_placementProperties->m_ComponentsCb->GetValue() )
+    else if( m_placementProperties->m_ComponentsRb->GetValue() )
     {
         m_zonesettings.SetRuleAreaPlacementEnabled( true );
         setPlacementSource( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
