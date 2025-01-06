@@ -147,10 +147,14 @@ public:
     bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
     {
         if( const PCBEXPR_NETCLASS_VALUE* bValue = dynamic_cast<const PCBEXPR_NETCLASS_VALUE*>( b ) )
+        {
             return *( m_item->GetEffectiveNetClass() )
                    == *( bValue->m_item->GetEffectiveNetClass() );
+        }
         else
+        {
             return LIBEVAL::VALUE::EqualTo( aCtx, b );
+        }
     }
 
     bool NotEqualTo( LIBEVAL::CONTEXT* aCtx, const LIBEVAL::VALUE* b ) const override
@@ -179,9 +183,7 @@ public:
             return LIBEVAL::VALUE::AsString();
 
         if( const COMPONENT_CLASS* compClass = m_item->GetComponentClass() )
-        {
             const_cast<PCBEXPR_COMPONENT_CLASS_VALUE*>( this )->Set( compClass->GetFullName() );
-        }
 
         return LIBEVAL::VALUE::AsString();
     }
@@ -463,9 +465,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
         return nullptr;
 
     if( aField.length() == 0 ) // return reference to base object
-    {
         return vref;
-    }
 
     wxString field( aField );
     field.Replace( wxT( "_" ),  wxT( " " ) );
@@ -504,7 +504,10 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                 }
                 else
                 {
-                    wxString msg = wxString::Format( wxT( "PCBEXPR_UCODE::createVarRef: Unknown property type %s from %s." ), cls.name, field );
+                    wxString msg = wxString::Format( wxT( "PCBEXPR_UCODE::createVarRef: Unknown "
+                                                          "property type %s from %s." ),
+                                                     cls.name,
+                                                     field );
                     wxFAIL_MSG( msg );
                 }
             }
