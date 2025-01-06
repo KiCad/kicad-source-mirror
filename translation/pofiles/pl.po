@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:16+0300\n"
-"PO-Revision-Date: 2025-01-05 16:30+0000\n"
+"PO-Revision-Date: 2025-01-06 10:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
@@ -6403,12 +6403,14 @@ msgstr "Obrazy DXF nie są aktualnie nieobsługiwane."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr "Importowana grafika jest zbyt duża. Maksymalna skala to %f"
+msgstr "Zaimportowana grafika jest zbyt duża. Maksymalna skala to %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Przesunięcie podczas importu skorygowane do (%f, %f) by zmieścić się w "
+"dopuszczalnym zakresie"
 
 #: common/io/altium/altium_binary_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -14770,11 +14772,14 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"Może to skutkować tym, iż nazwy pól będą wyglądać na zduplikowane, choć w "
+"rzeczywistości będą to unikalne nazwy różniące się tylko \"białymi\" "
+"znakami.  Usunięcie \"białych\" znaków nie będzie miało wpływu na istniejące "
+"nazwy pól symboli."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
-#, fuzzy
 msgid "Remove White Space"
-msgstr "Usuń zdublowane ścieżki"
+msgstr "Usuń białe znaki"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
 #, fuzzy
@@ -42434,9 +42439,9 @@ msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Nieznany kształt pola o nazwie '%s' na warstwie '%s' w linii %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Dodaje zaznaczone warstwy do listy pasujących warstw."
+msgstr "Brak warstwy użytkownika by umieścić warstwę %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -42458,12 +42463,14 @@ msgstr "Nierozpoznany prymityw w kształcie pola '%s' w linii %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Okrąg o różnych promieniach w kierunku x i y (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
 msgstr ""
+"Spodziewano się równych promieni w kierunkach x i y, natomiast x = %f i y = "
+"%f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
@@ -42528,11 +42535,14 @@ msgstr ""
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
 msgstr ""
+"Nieobsługiwany kształt typu %d w linii łamanej na warstwie %s, segment %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
 msgstr ""
+"Nieprawidłowy otwór złożony z %d punktów w strefie na warstwie %s należącej "
+"do sieci %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3438
 #, c-format
@@ -42540,11 +42550,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Obrys wydaje się być nieciągły: ostatni punkt to %s, punkt początkowy "
+"następnego segmentu to %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Nieprawidłowa nazwa pinu hierarchicznego"
+msgstr "Nieprawidłowy kształt typu %d na obrysie strefy"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
