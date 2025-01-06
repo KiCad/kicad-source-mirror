@@ -24,7 +24,7 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 
 	m_staticText18 = new wxStaticText( this, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
-	fgSizer1->Add( m_staticText18, 0, 0, 5 );
+	fgSizer1->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxArrayString m_choiceFormatChoices;
 	m_choiceFormat = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceFormatChoices, 0 );
@@ -81,7 +81,7 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizerBottom->Add( m_cbSchParity, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

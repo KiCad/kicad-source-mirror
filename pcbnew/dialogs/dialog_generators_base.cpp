@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,7 @@ DIALOG_GENERATORS_BASE::DIALOG_GENERATORS_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
 
-	m_Notebook = new wxNotebook( this, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Notebook->SetMinSize( wxSize( 640,-1 ) );
 
 	m_panelPage1 = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -48,7 +48,7 @@ DIALOG_GENERATORS_BASE::DIALOG_GENERATORS_BASE( wxWindow* parent, wxWindowID id,
 
 	m_sizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_rebuildSelected = new wxButton( this, wxID_ANY, _("Rebuild selected"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rebuildSelected = new wxButton( this, wxID_ANY, _("Rebuild Selected"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizerButtons->Add( m_rebuildSelected, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_rebuildThisType = new wxButton( this, wxID_ANY, _("Rebuild this type"), wxDefaultPosition, wxDefaultSize, 0 );

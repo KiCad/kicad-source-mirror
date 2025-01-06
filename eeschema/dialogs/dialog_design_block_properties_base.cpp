@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -88,7 +88,7 @@ DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWind
 	bMainSizer->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgProperties;
-	fgProperties = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgProperties = new wxFlexGridSizer( 0, 2, 5, 0 );
 	fgProperties->AddGrowableCol( 1 );
 	fgProperties->AddGrowableRow( 2 );
 	fgProperties->SetFlexibleDirection( wxBOTH );
@@ -96,27 +96,27 @@ DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWind
 
 	m_staticTextName = new wxStaticText( this, wxID_ANY, wxT("Name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextName->Wrap( -1 );
-	fgProperties->Add( m_staticTextName, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgProperties->Add( m_staticTextName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgProperties->Add( m_textName, 0, wxEXPAND|wxBOTTOM, 5 );
+	fgProperties->Add( m_textName, 0, wxEXPAND, 5 );
 
 	m_staticTextKeywords = new wxStaticText( this, wxID_ANY, wxT("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextKeywords->Wrap( -1 );
-	fgProperties->Add( m_staticTextKeywords, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgProperties->Add( m_staticTextKeywords, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_textKeywords = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgProperties->Add( m_textKeywords, 0, wxEXPAND|wxBOTTOM, 5 );
+	fgProperties->Add( m_textKeywords, 0, wxEXPAND, 5 );
 
 	m_staticTextDescription = new wxStaticText( this, wxID_ANY, wxT("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDescription->Wrap( -1 );
-	fgProperties->Add( m_staticTextDescription, 1, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgProperties->Add( m_staticTextDescription, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_textDescription = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	fgProperties->Add( m_textDescription, 0, wxEXPAND|wxBOTTOM, 5 );
+	fgProperties->Add( m_textDescription, 0, wxEXPAND, 5 );
 
 
-	bMainSizer->Add( fgProperties, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( fgProperties, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );

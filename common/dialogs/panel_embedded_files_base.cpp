@@ -85,7 +85,7 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	m_cbEmbedFonts = new wxCheckBox( this, wxID_ANY, _("Embed Fonts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbEmbedFonts = new wxCheckBox( this, wxID_ANY, _("Embed fonts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbEmbedFonts->SetToolTip( _("Store a copy of all fonts used") );
 
 	bSizer4->Add( m_cbEmbedFonts, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );

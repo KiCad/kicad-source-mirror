@@ -106,7 +106,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Output File:</property>
+                <property name="label">Output file:</property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
                 <property name="maximize_button">0</property>
@@ -286,11 +286,11 @@
             <property name="name">bSizer3</property>
             <property name="orient">wxHORIZONTAL</property>
             <property name="permission">none</property>
-            <object class="sizeritem" expanded="false">
+            <object class="sizeritem" expanded="true">
               <property name="border">10</property>
               <property name="flag">wxEXPAND|wxALL</property>
               <property name="proportion">1</property>
-              <object class="wxStaticBoxSizer" expanded="false">
+              <object class="wxStaticBoxSizer" expanded="true">
                 <property name="id">wxID_ANY</property>
                 <property name="label">File Format</property>
                 <property name="minimum_size"></property>
@@ -298,11 +298,11 @@
                 <property name="orient">wxVERTICAL</property>
                 <property name="parent">1</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="false">
+                <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
                   <property name="flag">wxEXPAND|wxLEFT</property>
                   <property name="proportion">3</property>
-                  <object class="wxFlexGridSizer" expanded="false">
+                  <object class="wxFlexGridSizer" expanded="true">
                     <property name="cols">2</property>
                     <property name="flexible_direction">wxBOTH</property>
                     <property name="growablecols">0,1</property>
@@ -599,7 +599,7 @@
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="label">Compression Format:</property>
+                        <property name="label">Compression format:</property>
                         <property name="markup">0</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>

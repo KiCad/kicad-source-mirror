@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,9 +31,6 @@ class WX_GRID;
 #include <wx/statbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
-#define ID_LEFT_LIST 1000
-#define ID_RIGHT_LIST 1001
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_LAYER_SELECTION_BASE
@@ -82,7 +79,7 @@ class DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Copper Layer Pair"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 744,217 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Copper Layer Pair"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE();
 

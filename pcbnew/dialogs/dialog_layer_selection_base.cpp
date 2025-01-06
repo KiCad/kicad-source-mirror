@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,7 +22,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerUpper;
 	bSizerUpper = new wxBoxSizer( wxHORIZONTAL );
 
-	m_leftGridLayers = new wxGrid( this, ID_LEFT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
+	m_leftGridLayers = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_leftGridLayers->CreateGrid( 1, 3 );
@@ -51,7 +51,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	m_leftGridLayers->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerUpper->Add( m_leftGridLayers, 1, wxALL|wxEXPAND, 5 );
 
-	m_rightGridLayers = new wxGrid( this, ID_RIGHT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
+	m_rightGridLayers = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_rightGridLayers->CreateGrid( 1, 3 );
@@ -126,7 +126,7 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_staticTextTopLayer->Wrap( -1 );
 	bSizerLeft->Add( m_staticTextTopLayer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_leftGridLayers = new wxGrid( this, ID_LEFT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
+	m_leftGridLayers = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_leftGridLayers->CreateGrid( 1, 3 );
@@ -165,7 +165,7 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_staticTextBottomLayer->Wrap( -1 );
 	bSizerRight->Add( m_staticTextBottomLayer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_rightGridLayers = new wxGrid( this, ID_RIGHT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
+	m_rightGridLayers = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_rightGridLayers->CreateGrid( 1, 3 );
@@ -207,9 +207,9 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	bSizerUpper->Add( bSizer7, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxStaticBoxSizer* m_presetsSizer;
-	m_presetsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Copper layer pair presets") ), wxVERTICAL );
+	m_presetsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Copper Layer Pair Presets") ), wxVERTICAL );
 
-	m_presetsGrid = new WX_GRID( m_presetsSizer->GetStaticBox(), ID_LEFT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
+	m_presetsGrid = new WX_GRID( m_presetsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_presetsGrid->CreateGrid( 0, 4 );
@@ -241,13 +241,13 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 
 	// Cell Defaults
 	m_presetsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_presetsSizer->Add( m_presetsGrid, 1, wxALL|wxEXPAND, 0 );
+	m_presetsSizer->Add( m_presetsGrid, 1, wxALL|wxEXPAND, 5 );
 
 	m_deleteRowButton = new STD_BITMAP_BUTTON( m_presetsSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_presetsSizer->Add( m_deleteRowButton, 0, wxTOP, 5 );
+	m_presetsSizer->Add( m_deleteRowButton, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
 
 
-	bSizerUpper->Add( m_presetsSizer, 1, wxEXPAND|wxLEFT, 10 );
+	bSizerUpper->Add( m_presetsSizer, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerMain->Add( bSizerUpper, 1, wxALL|wxEXPAND, 5 );
@@ -264,6 +264,7 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 }

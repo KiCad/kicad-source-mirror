@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,13 +25,13 @@ DIALOG_PASTE_SPECIAL_BASE::DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindow
 	m_pasteOptions->SetSelection( 1 );
 	optionsSizer->Add( m_pasteOptions, 0, wxALL, 5 );
 
-	m_clearNetsCB = new wxCheckBox( this, wxID_ANY, _("Clear Net Assignments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearNetsCB = new wxCheckBox( this, wxID_ANY, _("Clear net assignments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearNetsCB->SetToolTip( _("Remove the net information from all connected items before pasting") );
 
 	optionsSizer->Add( m_clearNetsCB, 0, wxALL, 5 );
 
 
-	m_mainSizer->Add( optionsSizer, 1, wxALL|wxEXPAND, 10 );
+	m_mainSizer->Add( optionsSizer, 1, wxALL|wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -40,7 +40,7 @@ DIALOG_PASTE_SPECIAL_BASE::DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindow
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	m_mainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 6 );
+	m_mainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( m_mainSizer );

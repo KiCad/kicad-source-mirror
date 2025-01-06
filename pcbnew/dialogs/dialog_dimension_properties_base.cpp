@@ -169,7 +169,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	gbSizerFormat->Add( m_lblPrecision, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_lblArrowDirection = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Arrow Direction:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblArrowDirection = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Arrow direction:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblArrowDirection->Wrap( -1 );
 	gbSizerFormat->Add( m_lblArrowDirection, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 

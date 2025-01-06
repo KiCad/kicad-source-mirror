@@ -1032,7 +1032,7 @@
               <property name="proportion">1</property>
               <object class="wxStaticBoxSizer" expanded="true">
                 <property name="id">wxID_ANY</property>
-                <property name="label">Update/reset Fields</property>
+                <property name="label">Update/Reset Fields</property>
                 <property name="minimum_size"></property>
                 <property name="name">m_updateFieldsSizer</property>
                 <property name="orient">wxVERTICAL</property>

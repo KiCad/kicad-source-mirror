@@ -544,7 +544,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	bSizer2->Add( m_customTxt, 1, wxALL|wxEXPAND, 5 );
 
-	m_loadDirectives = new wxButton( m_pgCustom, wxID_ANY, _("Load directives from schematic"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_loadDirectives = new wxButton( m_pgCustom, wxID_ANY, _("Load Directives from Schematic"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_loadDirectives, 0, wxALL|wxEXPAND, 5 );
 
 

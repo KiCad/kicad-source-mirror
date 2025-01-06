@@ -20,7 +20,7 @@ DIALOG_EXPORT_ODBPP_BASE::DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID
 
 	bSizerTop = new wxBoxSizer( wxHORIZONTAL );
 
-	m_lblBrdFile = new wxStaticText( this, wxID_ANY, _("Output File:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblBrdFile = new wxStaticText( this, wxID_ANY, _("Output file:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblBrdFile->Wrap( -1 );
 	bSizerTop->Add( m_lblBrdFile, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -70,7 +70,7 @@ DIALOG_EXPORT_ODBPP_BASE::DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID
 
 	fgSizer->Add( m_precision, 0, wxALL|wxEXPAND, 5 );
 
-	m_lblCompress = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Compression Format:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblCompress = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Compression format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblCompress->Wrap( -1 );
 	m_lblCompress->SetToolTip( _("Select the format to compress the output ODB++ files") );
 

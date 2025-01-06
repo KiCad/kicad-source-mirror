@@ -334,7 +334,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">&amp;Skip this version</property>
+                <property name="label">&amp;Skip This Version</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -419,7 +419,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">&amp;Remind me later</property>
+                <property name="label">&amp;Remind Me Later</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>

@@ -92,7 +92,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerUpdate;
 	bSizerUpdate = new wxBoxSizer( wxHORIZONTAL );
 
-	m_updateFieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update/reset Fields") ), wxVERTICAL );
+	m_updateFieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update/Reset Fields") ), wxVERTICAL );
 
 	wxArrayString m_fieldsBoxChoices;
 	m_fieldsBox = new wxCheckListBox( m_updateFieldsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fieldsBoxChoices, wxLB_NEEDED_SB );

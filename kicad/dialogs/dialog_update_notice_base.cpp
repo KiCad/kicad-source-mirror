@@ -49,7 +49,7 @@ DIALOG_UPDATE_NOTICE_BASE::DIALOG_UPDATE_NOTICE_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_skipBtn = new wxButton( this, wxID_ANY, _("&Skip this version"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_skipBtn = new wxButton( this, wxID_ANY, _("&Skip This Version"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_skipBtn->SetToolTip( _("Ignores the update notice for the announced new version. Additional update notes will be displayed for newer versions.") );
 
 	bButtonSizer->Add( m_skipBtn, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
@@ -57,7 +57,7 @@ DIALOG_UPDATE_NOTICE_BASE::DIALOG_UPDATE_NOTICE_BASE( wxWindow* parent, wxWindow
 
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_btnRemind = new wxButton( this, wxID_ANY, _("&Remind me later"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnRemind = new wxButton( this, wxID_ANY, _("&Remind Me Later"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnRemind->SetToolTip( _("Close this update notice. The update notice will be shown again when you relaunch KiCad.") );
 
 	bButtonSizer->Add( m_btnRemind, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );

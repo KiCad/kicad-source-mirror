@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,9 +57,8 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_colorTheme = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_colorThemeChoices, 0 );
 	m_colorTheme->SetSelection( 0 );
 	m_colorTheme->Enable( false );
-	m_colorTheme->SetMinSize( wxSize( 200,-1 ) );
 
-	bSizer4->Add( m_colorTheme, 0, wxLEFT, 25 );
+	bSizer4->Add( m_colorTheme, 1, wxEXPAND|wxLEFT|wxRIGHT, 25 );
 
 
 	bleftSizer->Add( bSizer4, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -93,6 +92,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnCloseWindow ) );
