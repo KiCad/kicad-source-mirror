@@ -289,7 +289,8 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
     env.env[ wxS( "KICAD_API_TOKEN" ) ] = Pgm().GetApiServer().Token();
     env.cwd = pluginFile.GetPath();
 
-    long p = wxExecute( const_cast<wchar_t**>( args.data() ), wxEXEC_ASYNC, nullptr, &env );
+    long p = wxExecute( const_cast<wchar_t**>( args.data() ), wxEXEC_ASYNC | wxEXEC_HIDE_CONSOLE,
+                        nullptr, &env );
 
     if( !p )
     {
