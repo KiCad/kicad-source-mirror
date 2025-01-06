@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-03 00:01+0000\n"
+"PO-Revision-Date: 2025-01-06 10:27+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3457,9 +3457,8 @@ msgid "Format:"
 msgstr "Format:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:34
-#, fuzzy
 msgid "Include:"
-msgstr "Uwzględnij przelotki"
+msgstr "Uwzględnij:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:47
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -5193,7 +5192,6 @@ msgid "Check for package updates on startup"
 msgstr "Sprawdza aktualizacje pakietów przy uruchamianiu"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
 msgstr "Obsługa pakietów bibliotecznych"
 
@@ -5588,7 +5586,6 @@ msgid "Could not use OpenGL"
 msgstr "Nie można wykorzystać OpenGL"
 
 #: common/draw_panel_gal.cpp:540
-#, fuzzy
 msgid "Error switching GAL backend"
 msgstr "Błąd podczas przełączenia na tryb GAL"
 
@@ -5913,9 +5910,8 @@ msgid "Origins & Axes"
 msgstr "Punkty bazowe oraz osie"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Domyślne ustawienia nowych footprintów"
+msgstr "Domyślne ustawienia footprintów"
 
 #: common/eda_base_frame.cpp:1186
 msgid "Graphics Defaults"
@@ -7445,27 +7441,24 @@ msgid "Loading file canceled by user."
 msgstr "Wczytywanie zostało anulowane przez użytkownika."
 
 #: common/jobs/job.cpp:79
-#, fuzzy
 msgid "Job Settings"
-msgstr "Ustawienia"
+msgstr "Ustawienia zadania"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 msgid "3D model export"
 msgstr "Eksport modelu 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Eksportuj model 3D"
+msgstr "Ustawienia zadania rksportu modelu 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
 msgstr "PCB: Eksport modelu 3D"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "PCB: Eksport danych o wierceniach"
+msgstr "Eksport danych o wierceniach"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
 #, fuzzy
