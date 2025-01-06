@@ -15,11 +15,13 @@
         },
         "name": {
           "type": "string",
-          "maxLength": 200
+          "maxLength": 200,
+          "description": "A human-readable name for your plugin"
         },
         "description": {
           "type": "string",
-          "maxLength": 500
+          "maxLength": 500,
+          "description": "A longer-form description for your plugin (not currently displayed in KiCad)"
         },
         "runtime": {
           "type": "object",
@@ -33,7 +35,8 @@
               "description": "How KiCad should launch the plugin"
             },
             "min_version": {
-              "type": "string"
+              "type": "string",
+              "description": "Minimum required Python version if runtime is 'python'.  Optional; not yet used by KiCad"
             }
           },
           "required": [
@@ -42,23 +45,30 @@
         },
         "actions": {
           "type": "array",
+          "description": "A list of actions your plugin provides, each of which can appear on the toolbar as a button",
           "items": {
             "type": "object",
             "properties": {
               "identifier": {
-                "type": "string"
+                "type": "string",
+                "description": "An identifier for the action, must be unique within a plugin",
+                "pattern": "^[a-zA-Z][-_a-zA-Z0-9.]{0,48}[a-zA-Z0-9]$"
               },
               "name": {
-                "type": "string"
+                "type": "string",
+                "description": "A human-readable name for the action (normally a verb or verb phrase)"
               },
               "description": {
-                "type": "string"
+                "type": "string",
+                "description": "A human-readable description for the action"
               },
               "show-button": {
-                "type": "boolean"
+                "type": "boolean",
+                "description": "Whether or not to show the action in the toolbar by default"
               },
               "scopes": {
                 "type": "array",
+                "description": "Which areas within KiCad this action is valid for",
                 "items": {
                   "type": "string",
                   "enum": [
@@ -71,16 +81,19 @@
                 }
               },
               "entrypoint": {
-                "type": "string"
+                "type": "string",
+                "description": "The way KiCad should launch this action (for example, the name of a Python script)"
               },
               "icons-light": {
                 "type": "array",
+                "description": "A list of one or more paths to PNG files (use multiple files for high DPI support) to be shown in light mode",
                 "items": {
                   "type": "string"
                 }
               },
               "icons-dark": {
                 "type": "array",
+                "description": "A list of one or more paths to PNG files (use multiple files for high DPI support) to be shown in dark mode",
                 "items": {
                   "type": "string"
                 }
@@ -90,7 +103,6 @@
               "identifier",
               "name",
               "description",
-              "show-button",
               "entrypoint"
             ]
           }
