@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:16+0300\n"
-"PO-Revision-Date: 2025-01-05 19:11+0000\n"
+"PO-Revision-Date: 2025-01-06 10:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -15382,9 +15382,7 @@ msgstr ""
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr ""
-"Эта схема содержит символы, в названиях которых есть пробелы в начале и/или "
-"конце."
+msgstr "Эта схема содержит символы с пробелами в начале и/или конце имен полей."
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
@@ -21779,7 +21777,7 @@ msgstr "Достигнут конец листа."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:328
 msgid "Find again to wrap around to the start."
-msgstr "Дальнейший поиск будет производиться сначала."
+msgstr "Дальнейший поиск будет производиться с начала."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:102
 msgid "No bus selected"
@@ -31172,7 +31170,7 @@ msgstr "Экспорт графики на паяльной пасте."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:188
 msgid "Board outline chaining tolerance:"
-msgstr "Допуск образования контура платы:"
+msgstr "Допуск формирования контура платы:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:192
 msgid "Tight (0.001 mm)"
@@ -37576,9 +37574,8 @@ msgid "Net tie on %s; clearance: 0."
 msgstr "Связка цепей на %s; зазор: 0."
 
 #: pcbnew/drc/drc_engine.cpp:787
-#, fuzzy
 msgid "net tie"
-msgstr "Названия листов"
+msgstr "связка цепей"
 
 #: pcbnew/drc/drc_engine.cpp:814 pcbnew/drc/drc_engine.cpp:824
 #, c-format
@@ -38363,13 +38360,13 @@ msgstr "Проверка отверстий перех.микроотв..."
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
 #, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s мин. отв. %s; текущий %s)"
+msgstr "(%s мин. отв. %s; текущее %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
 #, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s макс. отв. %s; текущая %s)"
+msgstr "(%s макс. отв. %s; текущее %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -42247,7 +42244,7 @@ msgstr "Неизвестное имя формы конт. пл. '%s' на сл�
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
 #, c-format
 msgid "No user layer to put layer %s"
-msgstr "Нет пользовательского слоя для размещения слоя %s"
+msgstr "Нет пользовательского слоя для размещения %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -42269,12 +42266,12 @@ msgstr "Неопознанная форма примитива конт. пл. '
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr "Окружность с неравными радиусами x и y (x=%d, y=%d)"
+msgstr "Круг с разными радиусами по осям x и y (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr "Ожидал, что x и y будут одинаковыми, а получил x = %f и y = %f "
+msgstr "Ожидалось, что x и y будут одинаковыми, а получили x = %f и y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
@@ -42310,8 +42307,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
-"Отсутствуют данные по X, Y или вращению в строке %zu для поправок %s. Это "
-"может быть неразмещенный компонент."
+"Отсутствуют данные X, Y или поворота в строке %zu для refdes %s. Это может "
+"быть неразмещенным компонентом."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2627
 #, c-format
@@ -42340,12 +42337,13 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3238
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr "Не обработанный тип фигуры %d в полигоне на слое %s, seq %d %d"
+msgstr ""
+"Необработанный тип фигуры %d в полигоне на слое %s, последовательность %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr "Недопустимое отверстие с %d точками в зоне на слое %s с сеткой %s"
+msgstr "Недопустимое отверстие с %d точками в зоне на слое %s с цепью %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3438
 #, c-format
@@ -42354,12 +42352,12 @@ msgid ""
 "is %s"
 msgstr ""
 "Контур кажется прерывистым: последняя точка была %s, начальная точка "
-"следующего сегмента - %s"
+"следующего сегмента %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
 #, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Недопустимый тип формы %d в контуре зоны"
+msgstr "Недопустимый тип фигуры %d в контуре зоны"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
