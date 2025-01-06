@@ -2057,8 +2057,8 @@ static struct ZONE_DESC
                     PROPERTY_DISPLAY::PT_SIZE );
         minWidth->SetAvailableFunc( isCopperZone );
         constexpr int minMinWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
-        clearanceOverride->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth,
-                                                                                INT_MAX> );
+        minWidth->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth,
+                                                                       INT_MAX> );
 
         auto padConnections = new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
                     &ZONE::SetPadConnection, &ZONE::GetPadConnection );
