@@ -977,6 +977,8 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         break;
 
     case SHAPE_T::ARC:
+        aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength() ) );
+        
         msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( GetArcAngle() );
         aList.emplace_back( _( "Angle" ), msg );
 

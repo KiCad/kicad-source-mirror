@@ -1834,9 +1834,9 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( msgItems.empty() )
+    if( selection.GetSize() )
     {
-        if( selection.GetSize() )
+        if( msgItems.empty() )
         {
             msgItems.emplace_back( _( "Selected Items" ),
                                    wxString::Format( wxT( "%d" ), selection.GetSize() ) );
@@ -1851,7 +1851,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                     if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
                     {
                         netNames.insert( UnescapeString( bci->GetNetname() ) );
-                        netClasses.insert( UnescapeString( bci->GetEffectiveNetClass()->GetName() ) );
+                        netClasses.insert(
+                                UnescapeString( bci->GetEffectiveNetClass()->GetName() ) );
 
                         if( netNames.size() > 1 && netClasses.size() > 1 )
                             break;
@@ -1865,10 +1866,40 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                     msgItems.emplace_back( _( "Resolved Netclass" ), *netClasses.begin() );
             }
         }
-        else
+
+        if( selection.GetSize() >= 2 )
         {
-            m_frame->GetBoard()->GetMsgPanelInfo( m_frame, msgItems );
+            bool   lengthValid = true;
+            double selectedLength = 0;
+
+            // Lambda to accumulate track length if item is a track or arc, otherwise mark invalid
+            std::function<void( EDA_ITEM* )> accumulateTrackLength;
+
+            accumulateTrackLength = [&]( EDA_ITEM* aItem )
+            {
+                if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
+                    selectedLength += track->GetLength();
+                else if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                    selectedLength += shape->GetLength();
+                else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
+                    group->RunOnChildren( accumulateTrackLength );
+                else
+                    lengthValid = false;
+            };
+
+            for( EDA_ITEM* item : selection )
+                accumulateTrackLength( item );
+
+            if( lengthValid )
+            {
+                msgItems.emplace_back( _( "Selected 2D Length" ),
+                                       m_frame->MessageTextFromValue( selectedLength ) );
+            }
         }
+    }
+    else
+    {
+        m_frame->GetBoard()->GetMsgPanelInfo( m_frame, msgItems );
     }
 
     m_frame->SetMsgPanel( msgItems );
