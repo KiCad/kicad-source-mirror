@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -294,7 +294,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bEditingSizer;
 	bEditingSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_warpMouseOnMove = new wxCheckBox( this, wxID_ANY, _("Warp mouse to origin of moved object"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_warpMouseOnMove = new wxCheckBox( this, wxID_ANY, _("Warp mouse to anchor of moved object"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_warpMouseOnMove->SetValue(true);
 	bEditingSizer->Add( m_warpMouseOnMove, 0, wxALL, 5 );
 

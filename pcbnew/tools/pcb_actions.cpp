@@ -346,7 +346,7 @@ TOOL_ACTION PCB_ACTIONS::setAnchor( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_SHIFT + MD_CTRL + 'N' )
         .LegacyHotkeyName( "Place the Footprint Anchor" )
         .FriendlyName( _( "Place the Footprint Anchor" ) )
-        .Tooltip( _( "Set the coordinate origin point (anchor) of the footprint" ) )
+        .Tooltip( _( "Set the anchor point of the footprint" ) )
         .Icon( BITMAPS::anchor )
         .Flags( AF_ACTIVATE ) );
 
