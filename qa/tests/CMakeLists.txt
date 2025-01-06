@@ -45,6 +45,7 @@ ${CMAKE_BINARY_DIR}/api/;\
 ${CMAKE_BINARY_DIR}/common/gal/;\
 ${CMAKE_BINARY_DIR}/pcbnew/;\
 ${CMAKE_BINARY_DIR}/eeschema/;\
+${CMAKE_BINARY_DIR}/cvpcb/;\
 " )
 
 set( EXTRA_PYTEST_ENVIRONMENT "" )
