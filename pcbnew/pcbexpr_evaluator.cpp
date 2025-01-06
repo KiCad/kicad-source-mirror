@@ -108,21 +108,36 @@ public:
         const wxString& thisStr = AsString();
         const wxString& otherStr = b->AsString();
 
+        // Case insensitive
         if( thisStr.IsSameAs( otherStr, false ) )
             return true;
 
+        // Wildcards
+        if( thisStr.Matches( otherStr ) )
+            return true;
+
         // Handle cases where the netlist token is different from the EEschema token
+        wxString altStr;
+
         if( thisStr == wxT( "tri_state" ) )
-            return otherStr.IsSameAs( wxT( "Tri-state" ), false );
+            altStr = wxT( "Tri-state" );
+        else if( thisStr == wxT( "power_in" ) )
+            altStr = wxT( "Power input" );
+        else if( thisStr == wxT( "power_out" ) )
+            altStr = wxT( "Power output" );
+        else if( thisStr == wxT( "no_connect" ) )
+            altStr = wxT( "Unconnected" );
 
-        if( thisStr == wxT( "power_in" ) )
-            return otherStr.IsSameAs( wxT( "Power input" ), false );
+        if( !altStr.IsEmpty() )
+        {
+            // Case insensitive
+            if( altStr.IsSameAs( otherStr, false ) )
+                return true;
 
-        if( thisStr == wxT( "power_out" ) )
-            return otherStr.IsSameAs( wxT( "Power output" ), false );
-
-        if( thisStr == wxT( "no_connect" ) )
-            return otherStr.IsSameAs( wxT( "Unconnected" ), false );
+            // Wildcards
+            if( altStr.Matches( otherStr ) )
+                return true;
+        }
 
         return false;
     }
