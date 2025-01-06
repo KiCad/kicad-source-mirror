@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:16+0300\n"
-"PO-Revision-Date: 2025-01-05 16:30+0000\n"
+"PO-Revision-Date: 2025-01-06 10:26+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -328,7 +328,7 @@ msgstr "遵循 PCB 编辑器"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:604
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
-msgstr "遵循 PCB 绘图设置"
+msgstr "遵循 PCB 绘制设置"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:585
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:629
@@ -1725,7 +1725,7 @@ msgstr "导出到剪贴板"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
-msgstr "后台任务"
+msgstr "后台作业"
 
 #: common/common.cpp:290
 #, c-format
@@ -1818,7 +1818,7 @@ msgstr "仍要打开"
 
 #: common/confirm.cpp:181 common/confirm.cpp:218
 msgid "Save Changes?"
-msgstr "保存变更吗?"
+msgstr "保存变更?"
 
 #: common/confirm.cpp:183 common/confirm.cpp:220
 msgid "If you don't save, all your changes will be permanently lost."
@@ -2331,7 +2331,7 @@ msgstr "路径"
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "配置全局 %s 库表"
+msgstr "配置全局%s库表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:44
 #, c-format
@@ -2342,37 +2342,37 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad 第一次使用新的 %s 库表来访问库文件。\n"
-"为了使 KiCad 能够保存 %s 库信息以供下次访问, 您需要配置全局 %s 库表。\n"
-"请从以下选项中选择一个, 如果您不确定要选择哪个选项, 请使用默认选项。"
+"KiCad 第一次运行时, 使用了新的 %s 库表来访问库文件。  \n"
+"为了让 KiCad 能正常访问 %s 库文件, 您需要配置全局%s库表。  \n"
+"请从以下选项中选择一项。如果您不确定选择哪一项, 请使用默认选项。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "复制默认的全局 %s 库表 (推荐)"
+msgstr "复制默认的全局%s库表 (推荐)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:53
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
-msgstr "如果你不确定如何配置全局 %s 库表, 请选择此选项"
+msgstr "如果你不确定如何配置全局%s库表, 请选择此选项"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "复制自定义全局 %s 库表"
+msgstr "复制自定义全局%s库表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:59
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
-msgstr "选择此选项可复制除默认值以外的 %s 库表文件"
+msgstr "选择此选项以复制一个非默认的 %s 库表文件"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "创建一个空的全局 %s 库表"
+msgstr "创建一个空的全局%s库表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:65
 #, c-format
@@ -2383,7 +2383,7 @@ msgstr "选择此选项可在工程专用库表中定义 %s 库"
 #: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "选择全局 %s 库表文件:"
+msgstr "选择全局%s库表文件:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -3121,7 +3121,7 @@ msgstr "没有可打印的内容"
 #: common/dialogs/dialog_print_generic.cpp:284
 #: eeschema/printing/dialog_print_using_printer.cpp:307
 msgid "Previous print job not yet complete."
-msgstr "上一个打印任务尚未完成。"
+msgstr "上一个打印作业尚未完成。"
 
 #: common/dialogs/dialog_print_generic.cpp:309
 msgid "There was a problem printing."
@@ -3191,7 +3191,7 @@ msgstr "自定义:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "调整 X 比例,使输出绘图比例更加精确"
+msgstr "调整 X 比例使输出的绘图比例更加精确"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
@@ -3909,7 +3909,7 @@ msgstr "自动备份工程"
 #: common/dialogs/panel_common_settings_base.cpp:381
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr "保存文件时自动创建当前工程的备份压缩包"
+msgstr "保存文件时自动创建当前工程的备份归档文件"
 
 #: common/dialogs/panel_common_settings_base.cpp:385
 msgid "Create backups when auto save occurs"
@@ -3982,18 +3982,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据，以便更有效地识别用户群中的关"
-"键错误, 并帮助分析功能以指导改进工作。\n"
+"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, "
+"从而更有效地识别用户群体中存在的关键问题, 并帮助分析功能以指导改进工作。\n"
 "\n"
-"为了将来自同一 KiCad 安装的自动报告关联起来, 系统会生成一个完全随机的唯一标识"
-"符, 仅用于崩溃报告的目的。不会存储或连接任何个人可识别信息 (PII), 包括IP地"
-"址。\n"
+"为了将来自同一 KiCad 安装的自动报告关联起来, "
+"系统会生成一个完全随机的唯一标识符, 仅用于崩溃报告的目的, "
+"不会存储或关联任何个人可识别信息 (PII), 包括 IP 地址。\n"
 "您可以随时通过提供的按钮重置该标识符。\n"
 "\n"
-"如果您选择自愿参与, 那么发生崩溃或特殊事件时, KiCad 会自动处理并发送这些报"
-"告。\n"
+"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad "
+"会自动处理并发送这些报告。\n"
 "\n"
-"在此过程中, 您的设计文件 (如原理图或PCB) 绝对不会被共享。"
+"在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -4430,7 +4430,7 @@ msgid ""
 "Do you wish to reload them?"
 msgstr ""
 "网络类在配置对话框外已被更改。\n"
-"要重新加载吗?"
+"是否重新加载?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:464
 msgid "Netclass must have a name."
@@ -6317,12 +6317,12 @@ msgstr "目前不支持 DXF 中的图像。"
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr "导入的图形太大。最大缩放比例是 %f"
+msgstr "导入的图形过大。最大缩放比例为 %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr ""
+msgstr "已将导入偏移调整为 (%f, %f), 以符合数值限制"
 
 #: common/io/altium/altium_binary_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -6440,7 +6440,7 @@ msgstr ""
 #: common/io/easyedapro/easyedapro_import_utils.cpp:210
 #, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "无法读取 ZIP 压缩包 '%s'"
+msgstr "无法读取 ZIP 文件 '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:262
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
@@ -6957,12 +6957,12 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
-"为了更有效地帮助开发人员识别用户群体中的关键错误并改进功能, KiCad 可以匿名地"
-"向开发人员\n"
-"报告崩溃和特殊事件数据, 并协助进行分析。如果您选择自愿参与, KiCad 将在发生崩"
-"溃或特殊事件时\n"
-"自动处理并发送这些报告。在此过程中, 您的设计文件, 如原理图或 PCB 文件, 不会被"
-"上传。"
+"为了更有效地帮助开发人员识别在用户群体中出现的重点程序问题并改进功能, KiCad "
+"可以匿名地向开发人员\n"
+"报告崩溃和特殊事件数据, 并协助进行分析。如果您选择自愿参与, KiCad "
+"将在发生崩溃或特殊事件时\n"
+"自动处理并发送这些报告。在此过程中, 您的设计文件, 如原理图或 PCB 文件, "
+"不会被上传。"
 
 #: common/pgm_base.cpp:384
 msgid "Data collection opt in request"
@@ -7012,11 +7012,11 @@ msgstr "这是默认网络类。"
 
 #: common/project/project_archiver.cpp:54 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
-msgstr "无法打开存档文件。"
+msgstr "无法打开归档文件。"
 
 #: common/project/project_archiver.cpp:63 kicad/pcm/pcm_task_manager.cpp:337
 msgid "Invalid archive file format."
-msgstr "无效的存档文件格式。"
+msgstr "无效的归档文件格式。"
 
 #: common/project/project_archiver.cpp:74
 #, c-format
@@ -7059,17 +7059,17 @@ msgstr "创建文件 '%s' 失败。"
 #: common/project/project_archiver.cpp:240
 #, c-format
 msgid "Archived file '%s'."
-msgstr "已存档文件 '%s'。"
+msgstr "已打包文件 '%s'。"
 
 #: common/project/project_archiver.cpp:250
 #, c-format
 msgid "Failed to archive file '%s'."
-msgstr "未能存档文件 '%s'。"
+msgstr "打包文件 '%s' 失败。"
 
 #: common/project/project_archiver.cpp:276
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "已创建 Zip 压缩包 '%s'(%s 未压缩, %s 已压缩)。"
+msgstr "已创建 Zip 文件 '%s'(%s 未压缩, %s 已压缩)。"
 
 #: common/rc_item.cpp:411 eeschema/erc_item.cpp:333
 msgid "Excluded warning: "
@@ -8188,11 +8188,11 @@ msgstr "选择列"
 
 #: common/widgets/mathplot.cpp:1452
 msgid "Zoom in plot view."
-msgstr "在绘制视图中进行放大。"
+msgstr "放大绘制视图。"
 
 #: common/widgets/mathplot.cpp:1453
 msgid "Zoom out plot view."
-msgstr "在绘制视图中进行缩小。"
+msgstr "缩小绘制视图。"
 
 #: common/widgets/mathplot.cpp:1454
 msgid "Center plot view to this position"
@@ -8463,7 +8463,7 @@ msgstr "KiCad s-expression 原理图文件"
 
 #: common/wildcards_and_files_ext.cpp:267
 msgid "CADSTAR Archive files"
-msgstr "CADSTAR 存档文件"
+msgstr "CADSTAR 归档文件"
 
 #: common/wildcards_and_files_ext.cpp:273
 msgid "Eagle XML files"
@@ -8483,7 +8483,7 @@ msgstr "Allegro 网表文件"
 
 #: common/wildcards_and_files_ext.cpp:299
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr "EasyEDA (嘉立创 EDA) 标准版备份压缩"
+msgstr "EasyEDA (嘉立创 EDA) 标准版备份打包"
 
 #: common/wildcards_and_files_ext.cpp:305
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
@@ -8601,7 +8601,7 @@ msgstr "DXF 文件"
 #: common/wildcards_and_files_ext.cpp:474
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
-msgstr "Gerber job 文件"
+msgstr "Gerber 作业文件"
 
 #: common/wildcards_and_files_ext.cpp:480
 msgid "Specctra DSN file"
@@ -8710,7 +8710,7 @@ msgstr "封装发生变更的符号未保存"
 
 #: cvpcb/cvpcb_mainframe.cpp:398
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "符号和封装关联已经被修改。要保存修改吗?"
+msgstr "符号和封装关联已经被修改。是否保存修改?"
 
 #: cvpcb/cvpcb_mainframe.cpp:626 cvpcb/tools/cvpcb_association_tool.cpp:208
 #, c-format
@@ -10904,7 +10904,7 @@ msgstr "只读"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1217
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
 msgid "Save changes?"
-msgstr "保存变更吗?"
+msgstr "保存变更?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:26
 msgid "Pin numbers:"
@@ -11502,9 +11502,9 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"此引脚不在 %d mils 栅格上 (未与栅格对齐), 这可能会导致此引脚在在原理图中难以"
-"连接。\n"
-"确定继续吗?"
+"此引脚不在 %d mils 栅格上 (未与栅格对齐), "
+"这可能会导致此引脚在在原理图中难以连接。\n"
+"确定继续?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:440
 msgid "Synchronized Pins Mode."
@@ -11835,7 +11835,7 @@ msgstr "绘制成功后用关联应用打开输出文件"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:90
 msgid "Plot Schematic Options"
-msgstr "绘制原理图选项"
+msgstr "原理图绘制选项"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -12668,7 +12668,7 @@ msgstr "右:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:889
 msgid "Plot Setup"
-msgstr "绘图配置"
+msgstr "绘制配置"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
 msgid "Simulation Analysis"
@@ -12828,7 +12828,7 @@ msgstr "浏览模型"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr "来自文件的 SPICE 模型 (*.lib、 *.sub 或 *.ibs)"
+msgstr "来自文件的 SPICE 模型 (*.lib, *.sub 或 *.ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:74
 msgid "Pin:"
@@ -12992,7 +12992,7 @@ msgstr "字段名称 '%s' 已经被占用。"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "确定要移除字段 '%s'吗?"
+msgstr "确定移除字段 '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:743
 msgid "Rename Field"
@@ -14362,7 +14362,7 @@ msgstr "将 %d 个库另存为当前 KiCad 版本格式 (*.kicad_sym) 并替换�
 #: pcbnew/dialogs/dialog_export_step.cpp:436
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "文件 '%s' 已存在, 要覆盖它吗?"
+msgstr "文件 '%s' 已存在, 是否覆盖?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:914
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:881
@@ -14504,16 +14504,17 @@ msgid ""
 "This may result in what appears to be duplicate field names but are actually "
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
-msgstr ""
+msgstr "这可能会导致字段名称看起来重复, "
+"但实际上它们是仅通过空白字符区分的唯一名称。移除空白字符不会影响现有符号字段"
+"名称。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
 msgid "Remove White Space"
 msgstr "移除空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
-#, fuzzy
 msgid "Keep White Space"
-msgstr "禁止放置焊盘"
+msgstr "保留空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
@@ -15028,7 +15029,7 @@ msgstr "原理图 '%s' 已由 '%s' 在 '%s' 中打开。"
 #: eeschema/files-io.cpp:136
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "原理图 '%s' 不存在。要创建它吗?"
+msgstr "原理图 '%s' 不存在。是否创建?"
 
 #: eeschema/files-io.cpp:158
 msgid "Creating Schematic"
@@ -15146,7 +15147,7 @@ msgstr "此文件由较旧版本的 KiCad 创建, 保存文件时将转换为新
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr "该原理图包含的符号，其字段名称前后带有空格。"
+msgstr "该原理图中存在字段名称中包含了尾随/前导空格的符号。"
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
@@ -15911,7 +15912,7 @@ msgstr "成功。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:207
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "错误: 重复的图纸名称。要继续吗?"
+msgstr "错误: 重复的图纸名称。是否继续?"
 
 #: eeschema/picksymbol.cpp:121
 msgid "Change Unit"
@@ -16071,7 +16072,7 @@ msgid ""
 "Do you want to reload the library?"
 msgstr ""
 "包含当前符号的库已修改。\n"
-"要重新加载库吗?"
+"是否重新加载该库?"
 
 #: eeschema/sch_bus_entry.cpp:448
 msgid "Bus to Wire Entry"
@@ -16225,7 +16226,7 @@ msgstr "存储文件没有被完全解析 (%d 字节剩余)。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:677
 #: eeschema/sch_io/altium/sch_io_altium.cpp:772
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "应为 5.0 版本的 Altium 原理图文件"
+msgstr "Altium 原理图文件应当为 5.0 版本"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:876
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -16274,7 +16275,7 @@ msgstr "引脚存在 '意外' 的内边缘类型。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1732
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "贝塞尔曲线有 %d 个控制点。至少应为 2 个。"
+msgstr "贝塞尔曲线存在 %d 个控制点。应当至少为 2 个。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2878
 #, c-format
@@ -16325,7 +16326,7 @@ msgstr "找不到文件 %s。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4480
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr "Altium 原理图库文件应为 5.0 版本"
+msgstr "Altium 原理图库文件应当为 5.0 版本"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:63
 msgid "Altium schematic files"
@@ -16405,7 +16406,7 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
-"设计太大, 无法导入到 KiCad 中。\n"
+"设计过大, 无法导入到 KiCad 中。\n"
 "请导航到以下位置以减小 CADSTAR 中的最大设计尺寸: \n"
 "\"设计 -> 属性 -> 设计选项 -> 最大设计尺寸\"。\n"
 "当前设计大小: %.2f, %.2f 毫米。\n"
@@ -16461,9 +16462,8 @@ msgstr ""
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
-msgstr ""
-"符号标识 '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应为 1 个, 但实际"
-"找到了 %d 个。"
+msgstr "符号标识 '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应当为 1 个, "
+"实际找到了 %d 个。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:997
 #, c-format
@@ -16541,8 +16541,8 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
-"与此 CADSTAR 元件库相关的 CADSTAR 原理图存档 (*.csa)文件的路径。如果没有指定,"
-"则假定它位于相同文件夹中的 'symbol.csa'。"
+"与此 CADSTAR 元件库相关的 CADSTAR 原理图归档 (*.csa)文件的路径。"
+"如果没有指定,则假定它位于相同文件夹中的 'symbol.csa'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
 msgid ""
@@ -16560,7 +16560,7 @@ msgstr "无法找到与 '%s' 库相对应的 .csa 文件。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
-msgstr "CADSTAR 原理图存档文件"
+msgstr "CADSTAR 原理图归档文件"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
 msgid "CADSTAR Parts Library files"
@@ -16760,7 +16760,7 @@ msgstr "文件 '意外' 结束"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1080
 msgid "expected 'Italics' or '~'"
-msgstr "需要 '斜体' 或 '~' 符号"
+msgstr "应当为 '斜体' 或 '~' 符号"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1356
 msgid "symbol field text attributes must be 3 characters wide"
@@ -16784,7 +16784,7 @@ msgstr "KiCad 旧版符号库文件"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:222
 msgid "expected unquoted string"
-msgstr "需要不带括号的字符"
+msgstr "应当为不带括号的字符"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:71
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:55
@@ -17235,7 +17235,7 @@ msgstr "完成"
 #: eeschema/sch_plotter.cpp:1019
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "无法写入绘制文件到文件夹 '%s'。"
+msgstr "无法将绘制文件写入到文件夹 '%s'。"
 
 #: eeschema/sch_reference_list.cpp:674
 #, c-format
@@ -18138,7 +18138,7 @@ msgstr "无法打开文件 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:832
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "文件 '意外' 结束。缺少 [END] 吗?"
+msgstr "文件 '意外' 结束。是否缺少 [END]?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:844
 msgid "Error on line "
@@ -18176,7 +18176,7 @@ msgstr "无效的语法。应该是 |_char 或 &_char 等..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1212
 msgid "No extra argument was expected"
-msgstr "不期待附加参数"
+msgstr "没有预期的额外参数"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid "Unknown keyword in "
@@ -18656,7 +18656,7 @@ msgstr " (相位)"
 #: eeschema/sim/sim_tab.cpp:87 eeschema/sim/sim_tab.cpp:104
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr "仿真没有提供任何绘图。请参考控制台窗口的结果。"
+msgstr "仿真没有提供任何绘图结果。请参考控制台窗口的结果。"
 
 #: eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:107
@@ -18690,7 +18690,7 @@ msgstr "必须先运行 TRAN 仿真; 其结果将用于快速傅立叶变换。"
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
-msgstr "原理图表仿真命令指令已更改。你要更新仿真命令吗?"
+msgstr "原理图表的仿真命令指令已更改。是否更新仿真命令?"
 
 #: eeschema/sim/simulator_frame.cpp:479 eeschema/sim/simulator_frame.cpp:822
 msgid "Another simulation is already running."
@@ -21019,11 +21019,11 @@ msgstr "将当前分析选项卡和设置保存到其他位置"
 
 #: eeschema/tools/ee_actions.cpp:1420
 msgid "Export Current Plot as PNG..."
-msgstr "导出当前绘图为 PNG..."
+msgstr "将当前绘制结果导出为 PNG..."
 
 #: eeschema/tools/ee_actions.cpp:1426
 msgid "Export Current Plot as CSV..."
-msgstr "导出当前绘图为 CSV..."
+msgstr "将当前绘制结果导出为 CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1432
 msgid "Show Legend"
@@ -21039,11 +21039,11 @@ msgstr "用虚线绘制辅助信号线(电流或相位)"
 
 #: eeschema/tools/ee_actions.cpp:1444
 msgid "Dark Mode Plots"
-msgstr "暗色模式"
+msgstr "暗色模式绘制"
 
 #: eeschema/tools/ee_actions.cpp:1445
 msgid "Draw plots with a black background"
-msgstr "用黑色背景绘图"
+msgstr "用黑色背景进行绘制"
 
 #: eeschema/tools/ee_actions.cpp:1450
 msgid "Edit Analysis Tab..."
@@ -22163,7 +22163,7 @@ msgstr "找不到文件:"
 #: gerbview/files.cpp:289
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>Gerber job 文件无法作为绘制文件加载</b><i>%s</i>"
+msgstr "<b>Gerber 作业文件无法作为绘制文件加载</b><i>%s</i>"
 
 #: gerbview/files.cpp:302
 msgid "Loading files..."
@@ -22182,7 +22182,7 @@ msgstr "无法打开 Zip 文件 '%s'。"
 #: gerbview/files.cpp:485
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "已跳过文件 '%s'(Gerber job 文件)。"
+msgstr "已跳过文件 '%s'(Gerber 作业文件)。"
 
 #: gerbview/files.cpp:530
 #, c-format
@@ -22342,7 +22342,7 @@ msgstr "X2 属性"
 
 #: gerbview/job_file_reader.cpp:156
 msgid "This job file uses an outdated format. Please recreate it."
-msgstr "此 job 文件使用了过时的格式, 请重新创建。"
+msgstr "此作业文件使用了过时的格式, 请重新创建。"
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
@@ -22473,15 +22473,15 @@ msgstr "打开 Gerber Job 文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr "打开 Gerber job 文件及其关联的 Gerber 绘制文件"
+msgstr "打开 Gerber 作业文件及其关联的 Gerber 绘制文件"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
-msgstr "打开 Zip 压缩文件..."
+msgstr "打开 Zip 归档文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "打开一个 Zip 压缩 (Gerber 和钻孔) 文件"
+msgstr "打开一个 Zip 归档 (Gerber 和钻孔) 文件"
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show Layers Manager"
@@ -23068,7 +23068,7 @@ msgstr "有效的选项 excellon, gerber。"
 
 #: kicad/cli/command_pcb_export_drill.cpp:57
 msgid "Valid options are: absolute,plot"
-msgstr "有效的选项是: absolute、plot"
+msgstr "有效选项: absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:63
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
@@ -23222,11 +23222,11 @@ msgstr "为单个 PCB 绘制多个 Gerber, 并将电路板绘制设置参数包�
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
-msgstr "要包含在每张图上的层, 要包含的原始层名称, 用英文逗号分隔, 如 F.Cu,B.Cu"
+msgstr "要包含在所有绘制结果中的层, 要包含的原始层名称, 用英文逗号分隔, 如 F.Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:55
 msgid "Use the Gerber plot settings already configured in the board file"
-msgstr "使用已经在电路板文件中配置的 Gerber 图设置"
+msgstr "使用电路板文件中已配置的 Gerber 绘制设置"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:39
 msgid "Generate PDF from a list of layers"
@@ -23622,7 +23622,7 @@ msgstr "在 '%s' 中解压工程。\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
-msgstr "压缩工程文件"
+msgstr "打包工程文件"
 
 #: kicad/import_proj.cpp:74
 #, c-format
@@ -23646,9 +23646,9 @@ msgid ""
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
-"您选择的不是空目录。建议在空目录中创建工程。\n"
+"所选的目录非空, 建议在空目录中创建工程。\n"
 "\n"
-"您要创建一个与工程同名的新目录吗?"
+"是否为工程创建一个新建的空目录?"
 
 #: kicad/import_project.cpp:119
 msgid ""
@@ -23658,7 +23658,7 @@ msgstr "创建新目录时出错。请尝试不同路径。无法导入该工程
 
 #: kicad/import_project.cpp:145
 msgid "Import CADSTAR Archive Project Files"
-msgstr "导入 CADSTAR 存档工程文件"
+msgstr "导入 CADSTAR 归档工程文件"
 
 #: kicad/import_project.cpp:153
 msgid "Import Eagle Project Files"
@@ -23770,7 +23770,7 @@ msgstr "CADSTAR 工程..."
 
 #: kicad/menubar.cpp:112
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "导入 CADSTAR 存档架构和 PCB (*.csa, *.cpa)"
+msgstr "导入 CADSTAR 归档原理图和 PCB (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:116
 msgid "EAGLE Project..."
@@ -23802,7 +23802,7 @@ msgstr "打包工程 (&A)..."
 
 #: kicad/menubar.cpp:134
 msgid "Archive all needed project files into zip archive"
-msgstr "把当前工程压缩成 Zip 文件"
+msgstr "把当前工程打包成 Zip 文件"
 
 #: kicad/menubar.cpp:138
 msgid "&Unarchive Project..."
@@ -23810,7 +23810,7 @@ msgstr "解包工程 (&U)..."
 
 #: kicad/menubar.cpp:139 kicad/menubar.cpp:265
 msgid "Unarchive project files from zip archive"
-msgstr "选择一个 Zip 工程文件, 并解压缩"
+msgstr "选择一个 Zip 归档文件, 并解压缩至工程"
 
 #: kicad/menubar.cpp:167
 msgid "Browse Project Files"
@@ -23830,7 +23830,7 @@ msgstr "在文本编辑器中编辑本地文件"
 
 #: kicad/menubar.cpp:258
 msgid "Archive all project files"
-msgstr "压缩全部工程文件"
+msgstr "打包全部工程文件"
 
 #: kicad/menubar.cpp:275
 msgid "Reveal project folder in Finder"
@@ -23885,7 +23885,7 @@ msgstr "配色主题 (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:80
 #, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "你确定要将固定扩展内容包从版本 %s 更新到 %s 吗?"
+msgstr "确定要将已固定的扩展内容包从版本 %s 更新到 %s 吗?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:83
 msgid "Confirm update"
@@ -23925,7 +23925,7 @@ msgstr "放弃挂起的更改"
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "您确定要关闭扩展内容包管理器并放弃挂起的变更吗?"
+msgstr "确定关闭扩展内容包管理器并放弃挂起的变更?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:292
 msgid "Install Package"
@@ -24077,7 +24077,7 @@ msgstr "正在下载扩展内容包"
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
-msgstr "无法验证下载的扩展内容包的完整性, HASH 值不匹配。您确定要保留此文件吗?"
+msgstr "无法验证下载的扩展内容包的完整性, HASH 值不匹配。确定保留此文件?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:563
 msgid "Keep downloaded file"
@@ -24088,7 +24088,7 @@ msgstr "保留已下载文件"
 msgid ""
 "This package version is incompatible with your KiCad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr "此扩展内容包版本与您的 KiCad 版本或操作系统不兼容。您确定要安装它吗?"
+msgstr "此扩展内容包版本与您的 KiCad 版本或操作系统不兼容。仍要继续安装?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:615
 #: kicad/pcm/pcm_task_manager.cpp:385
@@ -24257,9 +24257,8 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr ""
-"扩展内容包 %s 的已下载压缩包 HASH 与仓库记录不匹配。这可能表明扩展内容包有问"
-"题, 如果问题仍然存在, 请将此报告给仓库维护者。"
+msgstr "扩展内容包 %s 的已下载文件 HASH 与仓库记录不匹配。"
+"这可能表明扩展内容包有问题, 如果问题仍然存在, 请将此报告给仓库维护者。"
 
 #: kicad/pcm/pcm_task_manager.cpp:206 kicad/pcm/pcm_task_manager.cpp:426
 #, c-format
@@ -24288,11 +24287,11 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:369
 msgid "Archive does not contain a valid metadata.json file"
-msgstr "压缩包不包含有效的 metadata.json 文件"
+msgstr "归档文件中不包含有效的 metadata.json 文件"
 
 #: kicad/pcm/pcm_task_manager.cpp:378
 msgid "Archive metadata must have a single version defined"
-msgstr "压缩包元数据必须定义一个版本"
+msgstr "归档文件的元数据必须定义且仅定义一个版本"
 
 #: kicad/pcm/pcm_task_manager.cpp:405
 #, c-format
@@ -24356,8 +24355,8 @@ msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
-"修改文件扩展名可能会导致文件不可用。\n"
-"你确定要修改吗?"
+"修改文件扩展名将更改文件类型。\n"
+"是否继续?"
 
 #: kicad/project_tree_item.cpp:133
 msgid "Rename File"
@@ -26410,7 +26409,7 @@ msgstr "选择 PCB 计算器数据文件"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:174
 msgid "Do you want to load this file and replace current regulator list?"
-msgstr "你要加载该文件, 并替换稳流器列表吗?"
+msgstr "是否要加载该文件并替换当前的稳压器列表?"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:191
 #, c-format
@@ -27015,10 +27014,10 @@ msgstr ""
 "电容器通常使用 E12 值。10% 和 5% 电阻器通常使用 E24 值。1%\n"
 "电阻器使用 E96 值。其他系列不常用。\n"
 "\n"
-"要选择一个值, 请从计算出的目标值开始, 然后四舍五入到 2 位有效数字 (E24 或以"
-"下), 或 3 位有效数字 (E48 和以下)。\n"
-"对于 E24 或以下, 四舍五入到两位有效数字；对于 E48 及以上, 四舍五入到三位有效"
-"数字。\n"
+"要选择一个值, 请从计算出的目标值开始, 然后四舍五入到 2 位有效数字 (E24 "
+"或以下), 或 3 位有效数字 (E48 和以下)。\n"
+"对于 E24 或以下, 四舍五入到两位有效数字; 对于 E48 及以上, "
+"四舍五入到三位有效数字。\n"
 "然后从表中找出与剩余有效数字最接近的值, 并用它代替这些数字。\n"
 "然后从表中找出与剩余有效数字最接近的值, 并用它代替这些数字。\n"
 "\n"
@@ -28506,7 +28505,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:622
 msgid "Reannotate anyway?"
-msgstr "无论如何都要重新批注吗?"
+msgstr "仍要重新批注?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:804
 #, c-format
@@ -28875,7 +28874,7 @@ msgstr "圆角"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:492
 msgid "Slot"
-msgstr "插槽"
+msgstr "槽"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:493
 msgid "???"
@@ -29440,7 +29439,7 @@ msgstr "%s 的值不是有效的数字: %s"
 msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
-msgstr "无法确定从 \"%s\" 开始的编号: 期望值与字母表 \"%s\" 一致。"
+msgstr "无法确定从 \"%s\" 开始的编号: 值应当与字母表 \"%s\" 一致。"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:365
 msgid "step value"
@@ -30729,7 +30728,7 @@ msgstr "导出 SVG 文件"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:193
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr "你确定要覆盖现有的文件吗?"
+msgstr "确定覆盖现有文件?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:268
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1798
@@ -31493,7 +31492,7 @@ msgstr "选择 GenCAD 导出文件名"
 # Padstack  焊盘槽/孔
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Flip bottom footprint padstacks"
-msgstr "翻转底层封装焊盘"
+msgstr "翻转底层封装 padstack"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Generate unique pin names"
@@ -32559,7 +32558,7 @@ msgstr "网络名称变量名不能为空。"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2226
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "网络 '%s' 正在使用中。仍要删除吗?"
+msgstr "网络 '%s' 正在使用中。仍要删除?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2267
 #, c-format
@@ -33219,11 +33218,11 @@ msgstr "制造层上的草图焊盘"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr "绘图时在 F.Fab 和 B.Fab 层上包括焊盘外框"
+msgstr "绘制时在 F.Fab 和 B.Fab 层上包括焊盘外框"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Check zone fills before plotting"
-msgstr "绘图前检查域填充"
+msgstr "绘制前检查域填充"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
@@ -33323,14 +33322,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid "Generate Gerber job file"
-msgstr "生成 Gerber job 文件"
+msgstr "生成 Gerber 作业文件"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"生成一个 Gerber job 文件, 其中包含有关于电路板的信息, \n"
+"生成一个 Gerber 作业文件, 其中包含有关于电路板的信息, \n"
 "及生成的 Gerber 绘制文件列表"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:213
@@ -33405,7 +33404,7 @@ msgstr "X 比例因子:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:284
 msgid "Set global X scale adjust for exact scale PostScript output."
-msgstr "将全局 X 比例调整设置为精确缩放 PostScript 输出。"
+msgstr "调整全局 X 比例使 PostScript 输出更加精确。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:291
 msgid "Y scale factor:"
@@ -33413,7 +33412,7 @@ msgstr "Y 比例因子:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:296
 msgid "Set global Y scale adjust for exact scale PostScript output."
-msgstr "将全局 Y 比例调整设置为精确缩放 PostScript 输出。"
+msgstr "调整全局 Y 比例使 PostScript 输出更加精确。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:303
 msgid "Track width correction:"
@@ -35620,10 +35619,10 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"两个焊盘区域之间最小距离。\n"
-"如两个焊盘之间的间距小于此值, 焊盘区域绘制时会被合并(没有阻焊桥)。\n"
-"这个参数仅用来绘制阻焊层。\n"
-"除非您知道自己在做什么, 请将其设置为0。"
+"两个焊盘区之间的最小距离。\n"
+"如果两个焊盘之间的间距小于此值, 则焊盘区在绘制时会被合并 (没有阻焊桥)。\n"
+"该参数仅用于绘制阻焊层。\n"
+"除非您非常清楚其用途, 请将其设置为0。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:76
 msgid ""
@@ -35679,7 +35678,7 @@ msgstr "注意: 最终的间距由锡膏的绝对与相对间距相加得到。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:105
 msgid "Cancel Changes?"
-msgstr "取消变更吗?"
+msgstr "取消变更?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:644
 msgid "DRC rules"
@@ -37173,7 +37172,7 @@ msgstr "过孔直径"
 # Padstack 焊盘槽/孔
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Padstack is not valid"
-msgstr "焊盘叠层(Padstack)无效"
+msgstr "Padstack 无效"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Micro via hole size out of range"
@@ -37349,7 +37348,7 @@ msgstr "缺少版本号。"
 #: pcbnew/drc/drc_rule_parser.cpp:147
 #, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "未识别的项目 '%s'. | 预期的版本号。"
+msgstr "未识别的项目 '%s'. | 应当为版本号。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:154 pcbnew/drc/drc_rule_parser.cpp:233
 #: pcbnew/drc/drc_rule_parser.cpp:466 pcbnew/drc/drc_rule_parser.cpp:497
@@ -37370,7 +37369,7 @@ msgstr "声明不完整。"
 #: pcbnew/drc/drc_rule_parser.cpp:665
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr "无法识别的项目 '%s'。| 应为 %s。"
+msgstr "无法识别的项目 '%s'。| 应当为 %s。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:193
 msgid "Missing rule name."
@@ -37383,7 +37382,7 @@ msgstr "缺少条件表达式。"
 #: pcbnew/drc/drc_rule_parser.cpp:226 pcbnew/drc/drc_rule_parser.cpp:460
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr "无法识别的项目 '%s'。| 应为带引号的表达式。"
+msgstr "无法识别的项目 '%s'。| 应当为带引号的表达式。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:261 pcbnew/drc/drc_rule_parser.cpp:372
 #: pcbnew/drc/drc_rule_parser.cpp:385 pcbnew/drc/drc_rule_parser.cpp:404
@@ -37395,7 +37394,7 @@ msgstr "缺少 ')'。"
 #: pcbnew/drc/drc_rule_parser.cpp:292
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr "缺少约束类型。|  应为 %s。"
+msgstr "缺少约束类型。| 应当为 %s。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:344
 #, c-format
@@ -37433,7 +37432,7 @@ msgstr "无法识别的层 '%s'。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:653
 msgid "Missing severity name."
-msgstr "缺少严重性名称。"
+msgstr "缺少严重级别名称。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:89
 msgid "Checking pad & via annular rings..."
@@ -37926,7 +37925,7 @@ msgstr "正在加载封装库表..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:727
 msgid "Checking board footprints against library..."
-msgstr "正在根据库检查电路板封装..."
+msgstr "正在对照库内容检查电路板封装..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:765
 #, c-format
@@ -38239,7 +38238,7 @@ msgstr "创建文件 '%s'。"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:149
 #, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "已创建 Gerber job 文件 '%s'。"
+msgstr "已创建 Gerber 作业文件 '%s'。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:582
 msgid "Board stackup settings not up to date."
@@ -38378,7 +38377,7 @@ msgstr "找不到备份文件 '%s'。"
 #: pcbnew/files.cpp:317
 #, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "确定加载恢复文件 '%s' 吗?"
+msgstr "确定加载恢复文件 '%s'?"
 
 #: pcbnew/files.cpp:360
 #, c-format
@@ -38413,7 +38412,7 @@ msgstr "当前 PCB 已被修改。是否保存变更?"
 #: pcbnew/files.cpp:568
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "PCB '%s' 不存在, 要创建它吗?"
+msgstr "PCB '%s' 不存在, 是否创建?"
 
 #: pcbnew/files.cpp:577
 msgid "Creating PCB"
@@ -38577,22 +38576,22 @@ msgstr "封装 %s"
 #: pcbnew/footprint.cpp:2876
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "(应为 '通孔', 实际为 '%s')"
+msgstr "(应当为 '通孔', 实际为 '%s')"
 
 #: pcbnew/footprint.cpp:2879
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(应为 '贴片', 实际为 '%s')"
+msgstr "(应当为 '贴片', 实际为 '%s')"
 
 #: pcbnew/footprint.cpp:3077
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr "(网络结点焊盘组包含未知的焊盘编号 %s)"
+msgstr "(net-tie 焊盘组包含未知的焊盘编号 %s)"
 
 #: pcbnew/footprint.cpp:3082
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr "(焊盘 %s 出现在超过一个网络结点焊盘组中)"
+msgstr "(焊盘 %s 出现在一个以上的 net-tie 焊盘组中)"
 
 #: pcbnew/footprint.cpp:3518 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1563
 msgid "Inherited"
@@ -39133,7 +39132,7 @@ msgstr "修剪/延伸未闭合的图形或添加线段, 使图形闭合"
 #: pcbnew/initpcb.cpp:48
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
-msgstr "当前电路板将丢失, 此操作无法撤消。继续吗?"
+msgstr "当前电路板将丢失, 此操作无法撤消。是否继续?"
 
 #: pcbnew/initpcb.cpp:116 pcbnew/tools/footprint_editor_control.cpp:200
 msgid "The current footprint has been modified.  Save changes?"
@@ -40105,7 +40104,7 @@ msgid ""
 "Do you want to reload the footprint?"
 msgstr ""
 "包含当前封装的库已更改。\n"
-"要重新加载封装吗?"
+"是否重新加载封装?"
 
 #: pcbnew/pcb_dimension.cpp:397 pcbnew/pcb_dimension.cpp:1461
 msgid "Prefix"
@@ -40461,7 +40460,7 @@ msgstr "正加载多边形..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1946
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr "多边形外框计数为 %d, 预期为 1。"
+msgstr "多边形外框数量为 %d, 应当为 1。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2072
 msgid "Loading rules..."
@@ -40842,9 +40841,8 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr ""
-"脚印定义'%s'在多个层上的元件铜与焊盘相关联。KiCad 不支持自定义焊盘栈。该铜项"
-"已作为图形元素导入。"
+msgstr "封装定义 '%s' 中有与多个图层上的焊盘关联的元件铜箔层。KiCad 不支持自定义 "
+"pinstack。这些铜箔元素已作为图形元素导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -41165,7 +41163,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
-msgstr "CADSTAR PCB 存档文件"
+msgstr "CADSTAR PCB 归档文件"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:362
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:211
@@ -41347,7 +41345,7 @@ msgstr "未知的焊盘形状名 '%s', 位于层 '%s' 的行 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
 #, c-format
 msgid "No user layer to put layer %s"
-msgstr "没有可用于放置图层 %s 的用户图层"
+msgstr "没有用户图层 %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -41357,7 +41355,7 @@ msgstr "格式无效的 ID 字符串 '%s', 位于自定义焊盘行 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1054
 #, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
-msgstr "无法将图形项目 %d 插入焊盘压层 '%s'。"
+msgstr "无法将图形项目 %d 插入到 padstack '%s' 中。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1061
 #, c-format
@@ -41367,17 +41365,17 @@ msgstr "未识别的焊盘形状基元 '%s', 位于行 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr "圆的x和y半径不相等（x=%d，y=%d）"
+msgstr "圆在 x 和 y 方向上的半径不等 (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr "预期x和y相同，但得到x=%f和y=%f。 "
+msgstr "x 和 y 应当相等, 实际为 x = %f, y = %f。 "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "无效的 token 数量。应为 8, 但实际找到了 %zu。"
+msgstr "无效的 token 数量。应当为 8, 实际为 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1553
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1742
@@ -41406,12 +41404,12 @@ msgstr "ID %d 和序列 %d 的重复项位于行 %zu。"
 msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
-msgstr "在第%zu行的 refdes %s中缺少X、Y或旋转数据。这可能是一个未放置的组件。"
+msgstr "refdes %2$s 的 %1$zu 行缺少 X, Y 或旋转数据。可能是一个未放置的元件。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2627
 #, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "无法定位 %s 文件 %s 内的焊盘叠\n"
+msgstr "无法定位 %s 文件 %s 内的 padstack\n"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2698
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2727
@@ -41670,9 +41668,9 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
-"请报告此错误。验证分组结构时出错: %s。\n"
+"请报告此程序问题。Error validating group structure: %s\n"
 "\n"
-"还是要保存吗?"
+"仍要保存?"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:312
 msgid "Save Anyway"
@@ -41967,7 +41965,7 @@ msgstr "违规"
 #: pcbnew/pcb_marker.cpp:200 pcbnew/pcb_marker.cpp:203
 #: pcbnew/pcb_marker.cpp:206
 msgid "Severity"
-msgstr "严重性"
+msgstr "严重级别"
 
 #: pcbnew/pcb_marker.cpp:264
 #, c-format
@@ -42610,7 +42608,7 @@ msgstr "仍然拖动"
 #: pcbnew/router/router_tool.cpp:1955 pcbnew/router/router_tool.cpp:2438
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr "(无论如何都提交 %s)"
+msgstr "(仍要提交 %s)"
 
 #: pcbnew/router/router_tool.cpp:1959 pcbnew/router/router_tool.cpp:2442
 msgid "Track violates DRC."
@@ -42724,7 +42722,7 @@ msgstr "会话文件使用了无效的层 ID '%s'。"
 # Padstack 焊盘槽/孔
 #: pcbnew/specctra_import_export/specctra_import.cpp:211
 msgid "Session via padstack has no shapes"
-msgstr "过孔的焊盘槽/孔会话没有形状"
+msgstr "会话 padstack 中没有形状"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:220
 #, c-format
