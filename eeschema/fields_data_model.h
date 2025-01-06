@@ -157,12 +157,13 @@ public:
     wxString GetValue( const DATA_MODEL_ROW& group, int aCol,
                        const wxString& refDelimiter = wxT( ", " ),
                        const wxString& refRangDelimiter = wxT( "-" ),
-                       bool resolveVars = false );
+                       bool resolveVars = false,
+                       bool listMixedValues = false );
 
     wxString GetExportValue( int aRow, int aCol, const wxString& refDelimiter,
                              const wxString& refRangeDelimiter )
     {
-        return GetValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true );
+        return GetValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true, true );
     }
 
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;

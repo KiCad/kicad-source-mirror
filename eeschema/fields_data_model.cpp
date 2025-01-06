@@ -173,9 +173,11 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, int aCol,
                                                   const wxString& refDelimiter,
                                                   const wxString& refRangeDelimiter,
-                                                  bool            resolveVars )
+                                                  bool            resolveVars,
+                                                  bool            listMixedValues )
 {
     std::vector<SCH_REFERENCE> references;
+    std::set<wxString>         mixedValues;
     wxString                   fieldValue;
 
     for( const SCH_REFERENCE& ref : group.m_Refs )
@@ -209,10 +211,27 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
                 refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
             }
 
-            if( &ref == &group.m_Refs.front() )
+            if( listMixedValues )
+                mixedValues.insert( refFieldValue );
+            else if( &ref == &group.m_Refs.front() )
                 fieldValue = refFieldValue;
             else if( fieldValue != refFieldValue )
                 return INDETERMINATE_STATE;
+        }
+    }
+
+    if( listMixedValues && mixedValues.size() > 1 )
+    {
+        fieldValue = wxEmptyString;
+
+        for( const wxString& value : mixedValues )
+        {
+            if( value.IsEmpty() )
+                continue;
+            else if( fieldValue.IsEmpty() )
+                fieldValue = value;
+            else
+                fieldValue += "," + value;
         }
     }
 
