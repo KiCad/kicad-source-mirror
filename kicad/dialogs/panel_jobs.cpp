@@ -487,9 +487,6 @@ void JOBS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
     wxArrayInt selectedRows = m_grid->GetSelectedRows();
 
-    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_grid->GetGridCursorRow() );
-
     menu.Append( JOB_DESCRIPTION, _( "Edit Job Description" ) );
     menu.Append( JOB_PROPERTIES, _( "Edit Job Settings..." ) );
     menu.AppendSeparator();
@@ -511,9 +508,6 @@ void JOBS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 void JOBS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
     wxArrayInt selectedRows = m_grid->GetSelectedRows();
-
-    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_grid->GetGridCursorRow() );
 
     if( event.GetId() == JOB_DESCRIPTION )
     {
@@ -584,6 +578,7 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
 
     m_jobsGrid->SetDefaultRowSize( m_jobsGrid->GetDefaultRowSize() + 4 );
     m_jobsGrid->OverrideMinSize( 0.6, 0.3 );
+    m_jobsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // 'm' for margins
     m_jobsGrid->SetColSize( 0, GetTextExtent( wxT( "99m" ) ).x );
@@ -1014,9 +1009,6 @@ void PANEL_JOBS::OnJobButtonDown( wxCommandEvent& aEvent )
 void PANEL_JOBS::OnJobButtonDelete( wxCommandEvent& aEvent )
 {
     wxArrayInt selectedRows = m_jobsGrid->GetSelectedRows();
-
-    if( selectedRows.empty() && m_jobsGrid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_jobsGrid->GetGridCursorRow() );
 
     if( selectedRows.empty() )
         return;
