@@ -40,18 +40,37 @@
 
 #define ZipFileExtension wxT( "zip" )
 
-class PROJECT_ARCHIVER_DIR_TRAVERSER : public wxDirTraverser
+class PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER : public wxDirTraverser
 {
 public:
-    PROJECT_ARCHIVER_DIR_TRAVERSER( const std::string& aExtRegex, wxArrayString& aFiles ) :
-        m_files( aFiles ),
-        m_fileExtRegex( aExtRegex, std::regex_constants::ECMAScript | std::regex_constants::icase )
+    PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER( const std::string& aExtRegex, const wxString& aPrjDir, wxZipOutputStream& aZipFileOutput,
+                                        REPORTER& aReporter, bool aVerbose ) :
+        m_zipFile( aZipFileOutput ),
+        m_prjDir( aPrjDir ),
+        m_fileExtRegex( aExtRegex, std::regex_constants::ECMAScript | std::regex_constants::icase ),
+        m_reporter( aReporter ),
+        m_errorOccurred( false ),
+        m_verbose( aVerbose )
     {}
 
     virtual wxDirTraverseResult OnFile( const wxString& aFilename ) override
     {
         if( std::regex_search( aFilename.ToStdString(), m_fileExtRegex ) )
-            m_files.Add( aFilename );
+        {
+            addFileToZip( aFilename );
+
+            // Special processing for IBIS files to include the corresponding pkg file
+            if( aFilename.EndsWith( FILEEXT::IbisFileExtension ) )
+            {
+                wxFileName package( aFilename );
+                package.MakeRelativeTo( m_prjDir );
+                package.SetExt( wxS( "pkg" ) );
+                KIPLATFORM::IO::LongPathAdjustment( package );
+
+                if( package.Exists() )
+                    addFileToZip( package.GetFullPath() );
+            }
+        }
 
         return wxDIR_CONTINUE;
     }
@@ -61,9 +80,71 @@ public:
         return wxDIR_CONTINUE;
     }
 
+    unsigned long GetUncompressedBytes() const
+    {
+        return m_uncompressedBytes;
+    }
+
+    bool GetErrorOccurred() const
+    {
+        return m_errorOccurred;
+    }
+
 private:
-    wxArrayString& m_files;
+    void addFileToZip( const wxString& aFilename)
+    {
+        wxString msg;
+        wxFileSystem fsfile;
+
+        wxFileName curr_fn( aFilename );
+        KIPLATFORM::IO::LongPathAdjustment( curr_fn );
+        curr_fn.MakeRelativeTo( m_prjDir );
+
+        wxString currFilename = curr_fn.GetFullPath();
+
+        // Read input file and add it to the zip file:
+        wxFSFile* infile = fsfile.OpenFile( currFilename );
+
+        if( infile )
+        {
+            m_zipFile.PutNextEntry( currFilename, infile->GetModificationTime() );
+            infile->GetStream()->Read( m_zipFile );
+            m_zipFile.CloseEntry();
+
+            m_uncompressedBytes += infile->GetStream()->GetSize();
+
+            if( m_verbose )
+            {
+                msg.Printf( _( "Archived file '%s'." ), currFilename );
+                m_reporter.Report( msg, RPT_SEVERITY_INFO );
+            }
+
+            delete infile;
+        }
+        else
+        {
+            if( m_verbose )
+            {
+                msg.Printf( _( "Failed to archive file '%s'." ), currFilename );
+                m_reporter.Report( msg, RPT_SEVERITY_ERROR );
+            }
+
+            m_errorOccurred = true;
+        }
+    }
+
+private:
+    wxZipOutputStream& m_zipFile;
+
+    wxString       m_prjDir;
     std::regex     m_fileExtRegex;
+    REPORTER&      m_reporter;
+
+    bool           m_errorOccurred;     // True if an error archiving the file
+    bool           m_verbose;           // True to enable verbose logging
+
+    // Keep track of how many bytes would have been used without compression
+    unsigned long m_uncompressedBytes = 0;
 };
 
 PROJECT_ARCHIVER::PROJECT_ARCHIVER()
@@ -254,123 +335,74 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 
     wxZipOutputStream zipstream( ostream, -1, wxConvUTF8 );
 
-    // Build list of filenames to put in zip archive
-    wxString currFilename;
+    wxDir         projectDir( aSrcDir );
+    wxString      currFilename;
     wxArrayString files;
-    wxDir projectDir( aSrcDir );
 
-    if ( projectDir.IsOpened() )
+    if( !projectDir.IsOpened() )
     {
-        try
+        if( aVerbose )
         {
-            PROJECT_ARCHIVER_DIR_TRAVERSER traverser( fileExtensionRegex, files );
-            projectDir.Traverse(traverser);
+            msg.Printf( _( "Error opening directory: '%s'." ), aSrcDir );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
         }
-        catch( const std::regex_error& e )
-        {
-            // Something bad happened here with the regex
-            wxASSERT_MSG( false, e.what() );
-            return false;
-        }
+
+        wxSetWorkingDirectory( oldCwd );
+        return false;
     }
 
-    for( unsigned ii = 0; ii < files.GetCount(); ++ii )
+    try
     {
-        if( files[ii].EndsWith( FILEEXT::IbisFileExtension ) )
+        PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER traverser( fileExtensionRegex, aSrcDir, zipstream,
+                                                        aReporter, aVerbose );
+
+        projectDir.Traverse( traverser );
+
+        success = !traverser.GetErrorOccurred();
+
+        auto reportSize =
+                []( unsigned long aSize ) -> wxString
+                {
+                    constexpr float KB = 1024.0;
+                    constexpr float MB = KB * 1024.0;
+
+                    if( aSize >= MB )
+                        return wxString::Format( wxT( "%0.2f MB" ), aSize / MB );
+                    else if( aSize >= KB )
+                        return wxString::Format( wxT( "%0.2f KB" ), aSize / KB );
+                    else
+                        return wxString::Format( wxT( "%lu bytes" ), aSize );
+                };
+
+        size_t        zipBytesCnt       = ostream.GetSize();
+        unsigned long uncompressedBytes = traverser.GetUncompressedBytes();
+
+        if( zipstream.Close() )
         {
-            wxFileName package( files[ ii ] );
-            package.MakeRelativeTo( aSrcDir );
-            package.SetExt( wxS( "pkg" ) );
-            KIPLATFORM::IO::LongPathAdjustment( package );
-
-            if( package.Exists() )
-                files.push_back( package.GetFullName() );
-        }
-    }
-
-    files.Sort();
-
-    unsigned long uncompressedBytes = 0;
-
-    // Our filename collector can store duplicate filenames. for instance *.gm2
-    // matches both *.g?? and *.gm??.
-    // So skip duplicate filenames (they are sorted, so it is easy.
-    wxString lastStoredFile;
-
-    for( unsigned ii = 0; ii < files.GetCount(); ii++ )
-    {
-        if( lastStoredFile == files[ii] )   // duplicate name: already stored
-            continue;
-
-        lastStoredFile = files[ii];
-
-        wxFileSystem fsfile;
-
-        wxFileName curr_fn( files[ii] );
-        KIPLATFORM::IO::LongPathAdjustment( curr_fn );
-        curr_fn.MakeRelativeTo( sourceDir.GetFullPath() );
-
-        currFilename = curr_fn.GetFullPath();
-
-        // Read input file and add it to the zip file:
-        wxFSFile* infile = fsfile.OpenFile( currFilename );
-
-        if( infile )
-        {
-            zipstream.PutNextEntry( currFilename, infile->GetModificationTime() );
-            infile->GetStream()->Read( zipstream );
-            zipstream.CloseEntry();
-
-            uncompressedBytes += infile->GetStream()->GetSize();
-
-            if( aVerbose )
-            {
-                msg.Printf( _( "Archived file '%s'." ), currFilename );
-                aReporter.Report( msg, RPT_SEVERITY_INFO );
-            }
-
-            delete infile;
+            msg.Printf( _( "Zip archive '%s' created (%s uncompressed, %s compressed)." ),
+                        aDestFile,
+                        reportSize( uncompressedBytes ),
+                        reportSize( zipBytesCnt ) );
+            aReporter.Report( msg, RPT_SEVERITY_INFO );
         }
         else
         {
-            if( aVerbose )
-            {
-                msg.Printf( _( "Failed to archive file '%s'." ), currFilename );
-                aReporter.Report( msg, RPT_SEVERITY_ERROR );
-            }
-
+            msg.Printf( wxT( "Failed to create file '%s'." ), aDestFile );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
             success = false;
         }
     }
-
-    auto reportSize =
-            []( unsigned long aSize ) -> wxString
-            {
-                constexpr float KB = 1024.0;
-                constexpr float MB = KB * 1024.0;
-
-                if( aSize >= MB )
-                    return wxString::Format( wxT( "%0.2f MB" ), aSize / MB );
-                else if( aSize >= KB )
-                    return wxString::Format( wxT( "%0.2f KB" ), aSize / KB );
-                else
-                    return wxString::Format( wxT( "%lu bytes" ), aSize );
-            };
-
-    size_t zipBytesCnt = ostream.GetSize();
-
-    if( zipstream.Close() )
+    catch( const std::regex_error& e )
     {
-        msg.Printf( _( "Zip archive '%s' created (%s uncompressed, %s compressed)." ),
-                    aDestFile,
-                    reportSize( uncompressedBytes ),
-                    reportSize( zipBytesCnt ) );
-        aReporter.Report( msg, RPT_SEVERITY_INFO );
-    }
-    else
-    {
-        msg.Printf( wxT( "Failed to create file '%s'." ), aDestFile );
-        aReporter.Report( msg, RPT_SEVERITY_ERROR );
+        // Something bad happened here with the regex
+        wxASSERT_MSG( false, e.what() );
+
+        if( aVerbose )
+        {
+            msg.Printf( _( "Error: '%s'." ), e.what() );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
+        }
+
         success = false;
     }
 
