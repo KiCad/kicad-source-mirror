@@ -113,20 +113,36 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
     if( source.IsEmpty() )
         return CLI::EXIT_CODES::ERR_ARGS;
 
+    wxString   projectPath = aProject->GetProjectPath();
     wxFileName sourceFn( source );
-    sourceFn.MakeAbsolute( aProject->GetProjectPath() );
+    sourceFn.MakeAbsolute( projectPath );
+
+    wxFileName destFn( job->GetFullOutputPath() );
+
+    if( !job->m_dest.IsEmpty() )
+        destFn.AppendDir( job->m_dest );
+
+    std::vector<wxString> exclusions;
+
+    for( const JOBSET_OUTPUT& output : m_jobsFile->GetOutputs() )
+        exclusions.push_back( projectPath + output.m_outputHandler->GetOutputPath() );
+
+    exclusions.push_back( projectPath + aProject->GetProjectName() + wxT( "-backups" ) );
+    exclusions.push_back( projectPath + aProject->GetProjectName() + wxT( ".kicad_prl" ) );
+    exclusions.push_back( projectPath + wxT( "fp-info-cache" ) );
+    exclusions.push_back( projectPath + wxT( "*.bak" ) );
+    exclusions.push_back( projectPath + wxT( "_autosave-*" ) );
 
     wxString errors;
     int      copyCount = 0;
-    bool     success = CopyFilesOrDirectory( sourceFn.GetFullPath(), job->GetFullOutputPath(),
-                                             errors, copyCount );
+    bool     success = CopyFilesOrDirectory( sourceFn.GetFullPath(), destFn.GetFullPath(),
+                                             errors, copyCount, exclusions );
 
     if( !success )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     if( job->m_generateErrorOnNoCopy && copyCount == 0 )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
-
 
     return CLI::EXIT_CODES::OK;
 }

@@ -118,7 +118,8 @@ KICOMMON_API bool CopyDirectory( const wxString& aSourceDir, const wxString& aDe
                                  wxString& aErrors );
 
 KICOMMON_API bool CopyFilesOrDirectory( const wxString& aSourceDir, const wxString& aDestDir,
-                                 wxString& aErrors, int& fileCopiedCount );
+                                        wxString& aErrors, int& fileCopiedCount,
+                                        const std::vector<wxString>& aExclusions );
 
 /**
  * Add a directory and its contents to a zip file.
