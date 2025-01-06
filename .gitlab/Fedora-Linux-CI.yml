@@ -50,6 +50,7 @@
       - build/linux/pcbnew/_pcbnew.kiface
       - build/linux/pcbnew/_pcbnew.so
       - build/linux/qa/
+      - build/linux/schemas/
       - build/linux/compilation_log.txt
     exclude:
       - build/linux/**/*.o
