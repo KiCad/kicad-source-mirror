@@ -1172,7 +1172,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
 
         if( refs.size() > 0 )
         {
-            // Use of full path based on UUID allows select of not yet annotated or duplicated symbols
+            // Use of full path based on UUID allows select of not yet annotated or duplicated
+            // symbols
             wxString symbol_path = refs.begin()->GetFullPath();
 
             // Focus only handles one item at this time
@@ -1408,40 +1409,29 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 void DIALOG_SYMBOL_FIELDS_TABLE::OnCancel( wxCommandEvent& aEvent )
 {
     if( m_job )
-    {
         EndModal( wxID_CANCEL );
-    }
     else
-    {
         Close();
-    }
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
 {
     TransferDataFromWindow();
+
     if( m_job )
     {
         m_job->SetOutputPath( m_outputFileName->GetValue() );
 
         if( m_currentBomFmtPreset )
-        {
             m_job->m_bomFmtPresetName = m_currentBomFmtPreset->name;
-        }
         else
-        {
             m_job->m_bomFmtPresetName = wxEmptyString;
-        }
 
         if( m_currentBomPreset )
-        {
             m_job->m_bomPresetName = m_currentBomPreset->name;
-        }
         else
-        {
             m_job->m_bomPresetName = wxEmptyString;
-        }
 
         BOM_FMT_PRESET fmtSettings = GetCurrentBomFmtSettings();
         m_job->m_fieldDelimiter = fmtSettings.fieldDelimiter;
@@ -1461,6 +1451,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
         m_job->m_fieldsOrdered.clear();
         m_job->m_fieldsLabels.clear();
         m_job->m_fieldsGroupBy.clear();
+
         for( const BOM_FIELD& modelField : m_dataModel->GetFieldsOrdered() )
         {
             if( modelField.show )
@@ -1469,9 +1460,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
                 m_job->m_fieldsLabels.emplace_back( modelField.label );
 
                 if( modelField.groupBy )
-                {
                     m_job->m_fieldsGroupBy.emplace_back( modelField.name );
-                }
             }
         }
 
