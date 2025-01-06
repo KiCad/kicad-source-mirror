@@ -30,15 +30,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:16+0300\n"
-"PO-Revision-Date: 2024-09-08 17:09+0000\n"
-"Last-Translator: jeong-sangwon <drone5023@gmail.com>\n"
+"PO-Revision-Date: 2025-01-06 10:25+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -6356,7 +6356,7 @@ msgstr ""
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr ""
+msgstr "숫자 제한에 맞게 가져오기 오프셋이 (%f, %f)로 조정됨"
 
 #: common/io/altium/altium_binary_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -14609,6 +14609,9 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"이로 인해 필드 이름이 중복된 것처럼 보이지만 실제로는 공백 문자만 다른 "
+"고유한 이름이 될 수 있습니다.  공백 문자를 제거해도 기존 심볼 필드 이름에는 "
+"영향을 미치지 않습니다."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
 #, fuzzy
@@ -41828,9 +41831,9 @@ msgstr ""
 "알 수 없는 패드 형상 이름 '%s'이(가) 레이어 '%s', 행 %zu에서 발견되었습니다."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "일치하는 레이어 목록에 선택한 레이어를 추가합니다."
+msgstr "%s 레이어를 넣을 사용자 레이어가 없음"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -41938,9 +41941,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "잘못된 시트 핀 이름"
+msgstr "영역 윤곽선에 잘못된 도형 유형 %d가 있음"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
