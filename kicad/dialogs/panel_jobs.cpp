@@ -544,12 +544,13 @@ bool JOBS_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 {
     m_grid->CancelShowEditorOnMouseUp();
 
-    int col = aEvent.GetCol();
-    int row = aEvent.GetRow();
+    int curr_col = aEvent.GetCol();
+    int curr_row = aEvent.GetRow();
 
-    if( col == 1 && row >= 0 && row < (int) m_parent->GetJobsFile()->GetJobs().size() )
+    if( ( curr_col == 0 || curr_col == 1 )
+        && curr_row >= 0 && curr_row < (int) m_parent->GetJobsFile()->GetJobs().size() )
     {
-        m_doubleClickRow = row;
+        m_doubleClickRow = curr_row;
         m_grid->CancelPendingChanges();
 
         CallAfter(
@@ -897,7 +898,7 @@ bool PANEL_JOBS::GetCanClose()
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]() -> bool
                                    {
-                                        return m_jobsFile->SaveToFile();
+                                       return m_jobsFile->SaveToFile(wxEmptyString, true);
                                    } ) )
         {
             return false;
