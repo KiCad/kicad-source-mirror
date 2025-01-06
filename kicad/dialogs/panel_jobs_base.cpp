@@ -129,6 +129,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 	this->Layout();
 
 	// Connect Events
+	m_jobsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_JOBS_BASE::OnGridCellChange ), NULL, this );
 	m_jobsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_JOBS_BASE::OnSizeGrid ), NULL, this );
 	m_buttonAddJob->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnAddJobClick ), NULL, this );
 	m_buttonUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnJobButtonUp ), NULL, this );
@@ -142,6 +143,7 @@ PANEL_JOBS_BASE::PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id, const wxPoint
 PANEL_JOBS_BASE::~PANEL_JOBS_BASE()
 {
 	// Disconnect Events
+	m_jobsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_JOBS_BASE::OnGridCellChange ), NULL, this );
 	m_jobsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_JOBS_BASE::OnSizeGrid ), NULL, this );
 	m_buttonAddJob->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnAddJobClick ), NULL, this );
 	m_buttonUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBS_BASE::OnJobButtonUp ), NULL, this );

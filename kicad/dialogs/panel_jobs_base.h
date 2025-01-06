@@ -60,6 +60,7 @@ class PANEL_JOBS_BASE : public PANEL_NOTEBOOK_BASE
 		wxButton* m_buttonRunAllOutputs;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddJobClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnJobButtonUp( wxCommandEvent& event ) { event.Skip(); }

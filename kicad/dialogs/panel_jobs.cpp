@@ -648,19 +648,6 @@ void PANEL_JOBS::rebuildJobList()
 
     UpdateTitle();
 
-    if( m_jobsFile->GetJobs().empty() )
-    {
-        m_buttonUp->Disable();
-        m_buttonDown->Disable();
-        m_buttonRunAllOutputs->Disable();
-    }
-    else
-    {
-        m_buttonUp->Enable();
-        m_buttonDown->Enable();
-        m_buttonRunAllOutputs->Enable();
-    }
-
     // Ensure the outputs get their Run-ability status updated
     for( JOBSET_OUTPUT& output : m_jobsFile->GetOutputs() )
     {
@@ -768,8 +755,21 @@ bool PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
 }
 
 
+void PANEL_JOBS::OnGridCellChange( wxGridEvent& aEvent )
+{
+    int row = aEvent.GetRow();
+    int col = aEvent.GetCol();
+
+    if( col == 1 )
+        m_jobsFile->GetJobs()[row].SetDescription( m_jobsGrid->GetCellValue( row, col ) );
+}
+
+
 void PANEL_JOBS::OnSaveButtonClick( wxCommandEvent& aEvent )
 {
+    if( !m_jobsGrid->CommitPendingChanges() )
+        return;
+
     m_jobsFile->SaveToFile( wxEmptyString, true );
     UpdateTitle();
 }
@@ -777,6 +777,9 @@ void PANEL_JOBS::OnSaveButtonClick( wxCommandEvent& aEvent )
 
 void PANEL_JOBS::OnAddJobClick( wxCommandEvent& aEvent )
 {
+    if( !m_jobsGrid->CommitPendingChanges() )
+        return;
+
     wxArrayString              headers;
     std::vector<wxArrayString> items;
 
@@ -832,6 +835,37 @@ void PANEL_JOBS::OnAddJobClick( wxCommandEvent& aEvent )
                 m_jobsFile->SetDirty( wasDirty );
             }
         }
+    }
+}
+
+
+void PANEL_JOBS::OnJobButtonDelete( wxCommandEvent& aEvent )
+{
+    if( !m_jobsGrid->CommitPendingChanges() )
+        return;
+
+    wxArrayInt selectedRows = m_jobsGrid->GetSelectedRows();
+
+    if( selectedRows.empty() )
+        return;
+
+    m_jobsGrid->CommitPendingChanges( true /* quiet mode */ );
+    m_jobsGrid->ClearSelection();
+
+    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
+    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
+
+    int select = selectedRows[0];
+
+    for( int row : selectedRows )
+        m_jobsFile->RemoveJob( row );
+
+    rebuildJobList();
+
+    if( m_jobsGrid->GetNumberRows() )
+    {
+        m_jobsGrid->MakeCellVisible( std::max( 0, select-1 ), m_jobsGrid->GetGridCursorCol() );
+        m_jobsGrid->SetGridCursor( std::max( 0, select-1 ), m_jobsGrid->GetGridCursorCol() );
     }
 }
 
@@ -1006,36 +1040,11 @@ void PANEL_JOBS::OnJobButtonDown( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_JOBS::OnJobButtonDelete( wxCommandEvent& aEvent )
-{
-    wxArrayInt selectedRows = m_jobsGrid->GetSelectedRows();
-
-    if( selectedRows.empty() )
-        return;
-
-    m_jobsGrid->CommitPendingChanges( true /* quiet mode */ );
-    m_jobsGrid->ClearSelection();
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
-
-    int select = selectedRows[0];
-
-    for( int row : selectedRows )
-        m_jobsFile->RemoveJob( row );
-
-    rebuildJobList();
-
-    if( m_jobsGrid->GetNumberRows() )
-    {
-        m_jobsGrid->MakeCellVisible( std::max( 0, select-1 ), m_jobsGrid->GetGridCursorCol() );
-        m_jobsGrid->SetGridCursor( std::max( 0, select-1 ), m_jobsGrid->GetGridCursorCol() );
-    }
-}
-
-
 void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
 {
+    if( !m_jobsGrid->CommitPendingChanges() )
+        return;
+
     // sanity
     if( m_jobsFile->GetOutputs().empty() )
 	{
