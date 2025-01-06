@@ -29,10 +29,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-05 16:29+0000\n"
+"PO-Revision-Date: 2025-01-06 18:38+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5238,9 +5238,8 @@ msgid "Check for package updates on startup"
 msgstr "Beim Starten auf Paketaktualisierungen prüfen"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
-msgstr "Behandlung von Bibliothekspaketen"
+msgstr "Handhabung von Bibliothekspaketen"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
@@ -5635,7 +5634,6 @@ msgid "Could not use OpenGL"
 msgstr "OpenGL kann nicht verwendet werden"
 
 #: common/draw_panel_gal.cpp:540
-#, fuzzy
 msgid "Error switching GAL backend"
 msgstr "Fehler beim Welchseln des GAL-Backends"
 
@@ -5960,9 +5958,8 @@ msgid "Origins & Axes"
 msgstr "Ursprünge & Achsen"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Standardeinstellungen für neuen Footprint"
+msgstr "Standardeinstellungen für neue Footprints"
 
 #: common/eda_base_frame.cpp:1186
 msgid "Graphics Defaults"
@@ -7503,18 +7500,16 @@ msgid "Loading file canceled by user."
 msgstr "Laden der Datei durch Benutzer abgebrochen."
 
 #: common/jobs/job.cpp:79
-#, fuzzy
 msgid "Job Settings"
-msgstr "Einstellungen"
+msgstr "Auftragseinstellungen"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 msgid "3D model export"
 msgstr "3D-Modellexport"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "3D-Modell exportieren"
+msgstr "3D-Modellexport-Auftragseinstellungen"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
@@ -7547,43 +7542,36 @@ msgid "PCB: Export DXF"
 msgstr "PCB: DXF exportieren"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Im GenCAD Format exportieren"
+msgstr "GenCAD-Export-Auftragseinstellungen"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "PCB: Gerber exportieren"
+msgstr "Einzelne Gerberdatei exportieren"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Im GenCAD Format exportieren"
+msgstr "Gerber-Einzelexport-Auftragseinstellungen"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "PCB: Gerber exportieren"
+msgstr "Gerberdateien exportieren"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Im GenCAD Format exportieren"
+msgstr "Gerberdateien-Export-Auftragseinstellungen"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:53
 msgid "PCB: Export Gerbers"
 msgstr "PCB: Gerber exportieren"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
 msgstr "IPC-2581 exportieren"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "IPC-2581 Datei exportieren"
+msgstr "IPC-2581-Export-Auftragseinstellungen"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
@@ -7617,14 +7605,12 @@ msgid "PCB: Export PDF"
 msgstr "PCB: PDF exportieren"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Export position data"
-msgstr "PCB: Platzierungsdaten exportieren"
+msgstr "Platzierungsdaten exportieren"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "PCB: Platzierungsdaten exportieren"
+msgstr "Platzierungsdaten-Export-Auftragseinstellungen"
 
 #: common/jobs/job_export_pcb_pos.cpp:115
 msgid "PCB: Export Position Data"
@@ -7662,18 +7648,16 @@ msgid "Export %s netlist"
 msgstr "Netzliste %s exportieren"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Netzliste exportieren"
+msgstr "Netzlisten-Export-Auftragseinstellungen"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
 msgstr "Schaltplan: Netzliste exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:179
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "Postscript exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:185
 msgid "Export Postscript Job Settings"
@@ -7696,9 +7680,8 @@ msgid "Schematic: Export HPGL"
 msgstr "Schaltplan: HPGL exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:212
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Schaltplan: Netzliste exportieren"
+msgstr "Schaltplan: Postscript exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:214
 msgid "Schematic: Export DXF"
@@ -7713,14 +7696,12 @@ msgid "Schematic PythonBOM export"
 msgstr "Schaltplan: Pythonstücklistenexport"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "PCB-DRC ausführen"
+msgstr "DRC ausführen"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D-Einstellungen"
+msgstr "DRC-Auftragseinstellungen"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
@@ -7740,23 +7721,20 @@ msgid "PCB: Render"
 msgstr "PCB: Rendern"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "PCB-DRC ausführen"
+msgstr "ERC ausführen"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Schaltplan: Netzliste exportieren"
+msgstr "Schaltplan-ERC-Auftragseinstellungen"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
 msgstr "Schaltplan: ERC ausführen"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "Spezialwerkzeuge"
+msgstr "Spezial: Dateien kopieren"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -7895,9 +7873,8 @@ msgid "Symbol body fills"
 msgstr "Symbolkörper-Füllungen"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "Dateiname Blatt"
+msgstr "Formfüllungen"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -10821,9 +10798,8 @@ msgid "Unconnected wire endpoint"
 msgstr "Unverbundenes Verbindungsende"
 
 #: eeschema/connection_graph.cpp:3819
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Elektr. Verbindung an Buseingang führen"
+msgstr "Unverbundener Buseingang"
 
 #: eeschema/connection_graph.cpp:4194
 #, c-format
@@ -12140,9 +12116,8 @@ msgstr "Sie müssen einen Netzlistengenerator-Titel angeben"
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
 #: kicad/dialogs/panel_jobs_base.cpp:258
-#, fuzzy
 msgid "Output path:"
-msgstr "Ausgangspfad:"
+msgstr "Ausgabepfad:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
 msgid "Add Exporter..."
@@ -13787,9 +13762,8 @@ msgstr ""
 "Ausgabedatei nach erfolgreichem Plotten mit zugehöriger Anwendung öffnen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "Schaltplan drucken"
+msgstr "Schaltplan plotten"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -16501,7 +16475,6 @@ msgid "&Pitch of repeated pins:"
 msgstr "&Abstand von wiederholten Pins:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
-#, fuzzy
 msgid "General Editing"
 msgstr "Allgemeine Bearbeitung"
 
@@ -26068,7 +26041,6 @@ msgstr "Überlappende Geometrie zusammenfügen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in conductor layers."
 msgstr "Keine Via-Löcher in Kupferlagen einfügen."
 
@@ -26266,6 +26238,9 @@ msgid ""
 "Opt into the new behavior which means output path is a directory, a file per "
 "layer is generated and the common layers arg becomes available. "
 msgstr ""
+"Neues Verhalten aktivieren, bei dem der Ausgabepfad ein Verzeichnis ist "
+"worin eine Datei je Lage erzeugt wird und das \"common layers\"-Argument "
+"verfügbar ist. "
 
 #: kicad/cli/command_pcb_export_dxf.cpp:112
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -26285,11 +26260,13 @@ msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 msgstr ""
+"Das Verhalten dieses Befehls ist ab KiCad 9.0 als veraltet gekennzeichnet. "
+"Das Standardverhalten wird sich in einer zuk. Version verändern."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:160
 #: kicad/cli/command_pcb_export_svg.cpp:167
 msgid "The new behavior will match --mode-new"
-msgstr ""
+msgstr "Das neue Verhalten wird identisch zu \"--mode-new\" sein"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -26361,6 +26338,8 @@ msgstr "Gerber-Dateinamen-Endungen von KiCad verwenden"
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
+"Das Verhalten dieses Befehls ist ab KiCad 9.0 als veraltet gekennzeichnet. "
+"Stattdessen bitte \"gerber\" verwenden\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -26379,14 +26358,12 @@ msgid "Generate PDF from a list of layers"
 msgstr "PDF von einer Liste von Lagen erstellen"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:43
-#, fuzzy
 msgid "Plot the layers to individual PDF files"
-msgstr "Lagen in gemeinsamer Gerber-Datei ausgeben"
+msgstr "Lagen in separate PDF-Dateien plotten"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:47
-#, fuzzy
 msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "Lagen in gemeinsamer Gerber-Datei ausgeben"
+msgstr "Lagen in gemeinsame PDF-Datei mit mehreren Seiten plotten"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:51
 #: kicad/cli/command_pcb_export_svg.cpp:46
@@ -26404,11 +26381,13 @@ msgstr "Kann nicht mehr als eine \"mode\"-Kennzeichnung nutzen\n"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:184
 msgid "The new behavior will match --mode-separate"
-msgstr ""
+msgstr "Das neue Verhalten wird identisch zu \"--mode-seperate\" sein"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:187
 msgid "The behavior with neither --mode flags will no longer exist"
 msgstr ""
+"Das Verhalten ohne jegliche \"--mode\" Parameter wird zukünftig nicht "
+"verfügbar sein"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -26568,22 +26547,28 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Oberlichtintensität, Format \"R,G,B\" oder eine einzelne Zahl im Bereich 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Unterlichtintensität, Format \"R,G,B\" oder eine einzelne Zahl im Bereich 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Seitenlichtintensität, Format \"R,G,B\" oder eine einzelne Zahl im Bereich "
+"0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Kameralichtintensität, Format \"R,G,B\" oder eine einzelne Zahl im Bereich "
+"0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "Seitenlichthöhen-Winkel in Grad, Bereich: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 msgid "Invalid background\n"
@@ -26602,24 +26587,20 @@ msgid "Invalid pivot format\n"
 msgstr "Unzulässiges Drehpunktformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:367
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "Unzulässiges Drehpunktformat\n"
+msgstr "Unzulässiges Oberlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:374
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "Unzulässiges Rotationsformat\n"
+msgstr "Unzulässiges Unterlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:381
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "Unzulässiges Grafikformat\n"
+msgstr "Unzulässiges Seitenlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:388
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "Unzulässiges Grafikformat\n"
+msgstr "Unzulässiges Kameralichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid image format\n"
@@ -26811,23 +26792,20 @@ msgid "Destination:"
 msgstr "Ziel:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
-#, fuzzy
 msgid "Generate error if no files copied"
-msgstr "Gerber-Job-Datei erstellen"
+msgstr "Fehler erzeugen wenn keine Dateien kopiert wurden"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
 msgid "Overwrite files in destination"
 msgstr "Dateien am Zielort überschreiben"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
-#, fuzzy
 msgid "Copy Files Job Settings"
-msgstr "Filtereinstellungen"
+msgstr "Dateien kopieren-Auftragseinstellungen"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
-#, fuzzy
 msgid "Record output messages"
-msgstr "Ausgabemeldungen"
+msgstr "Ausgegebene Meldungen aufzeichnen"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
@@ -26954,9 +26932,8 @@ msgid "Job Description"
 msgstr "Auftragsbeschreibung"
 
 #: kicad/dialogs/panel_jobs.cpp:299
-#, fuzzy
 msgid "No output messages"
-msgstr "Ausgabemeldungen"
+msgstr "Keine Meldungen"
 
 #: kicad/dialogs/panel_jobs.cpp:359
 msgid "Last run successful"
@@ -26975,12 +26952,10 @@ msgid "Edit Output Options..."
 msgstr "Ausgabeoptionen bearbeiten..."
 
 #: kicad/dialogs/panel_jobs.cpp:410
-#, fuzzy
 msgid "Delete Output"
-msgstr "Alle Ausgaben generieren"
+msgstr "Ausgabe löschen"
 
 #: kicad/dialogs/panel_jobs.cpp:413
-#, fuzzy
 msgid "View Last Run Results..."
 msgstr "Ergebnisse des letzten Laufs anzeigen ..."
 
@@ -28236,9 +28211,8 @@ msgid "Open Project..."
 msgstr "Projekt öffnen..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "Neue Auftragssatzdatei..."
+msgstr "Auftragssatzdatei öffnen..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -28367,9 +28341,8 @@ msgid "Open Existing Project"
 msgstr "Vorhandenes Projekt öffnen"
 
 #: kicad/tools/kicad_manager_control.cpp:428
-#, fuzzy
 msgid "Open Jobset"
-msgstr "Auftragssatz speichern"
+msgstr "Auftragssatz öffnen"
 
 #: kicad/tools/kicad_manager_control.cpp:635
 #, c-format
@@ -37561,9 +37534,8 @@ msgid "Generate property popups for back footprints"
 msgstr "Erzeuge Popups mit Footprint-Eigenschaften für Rückseite"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:425
-#, fuzzy
 msgid "Single document"
-msgstr "Öffnet ein vorhandenes Dokument"
+msgstr "Einzeldokument"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:453
 msgid "Run DRC..."
@@ -37972,9 +37944,8 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
-#, fuzzy
 msgid "Quality preset:"
-msgstr "Voreinstellung wählen:"
+msgstr "Qualitätsvoreinstellung:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
 msgid "Background style:"
@@ -37985,9 +37956,8 @@ msgid "View"
 msgstr "Ansicht"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:119
-#, fuzzy
 msgid "Add floor"
-msgstr "Hinzufügen einer Ebene"
+msgstr "Boden hinzufügen"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Perspective"
@@ -37998,14 +37968,12 @@ msgid "Orthogonal"
 msgstr "Orthogonal"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
-#, fuzzy
 msgid "Projection"
-msgstr "Projekt"
+msgstr "Projektion"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:138
-#, fuzzy
 msgid "Positioning"
-msgstr "Position"
+msgstr "Positionierung"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:148
 #: pcbnew/dialogs/dialog_shape_properties.cpp:773
@@ -38028,35 +37996,32 @@ msgstr "Drehpunkt:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "Schwenk:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
-#, fuzzy
 msgid "Lights intensity"
-msgstr "Intensität"
+msgstr "Lichtintensität"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
 msgid "Camera:"
 msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
-#, fuzzy
 msgid "Lights position"
-msgstr "Beleuchtungseinstellungen"
+msgstr "Lichtposition"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
-msgstr ""
+msgstr "Seitenlichthöhe:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
-#, fuzzy
 msgid "Render PCB Job Options"
-msgstr "Render-Optionen"
+msgstr "PCB rendern-Auftragseinstellungen"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1466
@@ -40135,18 +40100,17 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Positive clearance means a solder mask opening bigger than the pad (typical "
 "for solder mask clearance)."
 msgstr ""
-"Globaler Freiraum zwischen Pads und der Lötpaste.\n"
+"Globaler Freiraum zwischen Pads und Lötpaste.\n"
 "Dieser Wert kann durch lokale Werte eines Footprints oder Pads überschrieben "
 "werden.\n"
-"Der endgültige Freiraum ist die Summe aus diesem Wert und dem "
-"Freiraumverhältnis."
+"Positiver Freiraum bedeutet, dass die Lötstoppmaskenöffnung größer als das "
+"Pad ist (typisch für Lötstoffmaskenfreiraum)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
 msgid "Solder mask settings:"
@@ -45097,9 +45061,8 @@ msgid "Corner Radius Ratio"
 msgstr "Eckradius-Verhältnis"
 
 #: pcbnew/pad.cpp:2646
-#, fuzzy
 msgid "Corner Radius Size"
-msgstr "Eckradius %"
+msgstr "Eckradiusgröße"
 
 #: pcbnew/pad.cpp:2652
 msgid "Hole Shape"
@@ -47404,9 +47367,8 @@ msgid "Error exporting VRML"
 msgstr "Fehler beim Exportieren von VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:458
-#, fuzzy
 msgid "Invalid image dimensions"
-msgstr "Ungültige Pinnamen-Definition"
+msgstr "Ungültige Bildabmessungen"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:674
 #, c-format
