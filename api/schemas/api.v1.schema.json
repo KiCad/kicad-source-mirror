@@ -56,10 +56,12 @@
               },
               "name": {
                 "type": "string",
+                "maxLength": 200,
                 "description": "A human-readable name for the action (normally a verb or verb phrase)"
               },
               "description": {
                 "type": "string",
+                "maxLength": 500,
                 "description": "A human-readable description for the action"
               },
               "show-button": {
@@ -88,14 +90,16 @@
                 "type": "array",
                 "description": "A list of one or more paths to PNG files (use multiple files for high DPI support) to be shown in light mode",
                 "items": {
-                  "type": "string"
+                  "type": "string",
+                  "pattern": "^.*\\.png$"
                 }
               },
               "icons-dark": {
                 "type": "array",
                 "description": "A list of one or more paths to PNG files (use multiple files for high DPI support) to be shown in dark mode",
                 "items": {
-                  "type": "string"
+                  "type": "string",
+                  "pattern": "^.*\\.png$"
                 }
               }
             },
