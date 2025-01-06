@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:16+0300\n"
-"PO-Revision-Date: 2024-10-18 02:15+0000\n"
-"Last-Translator: 109247019824 <stoyan@gmx.com>\n"
+"PO-Revision-Date: 2025-01-06 10:25+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/v8/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: C:\\kicad\\trunk\n"
 "X-Poedit-Language: Bulgarian\n"
@@ -2026,9 +2026,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:608
 #: eeschema/widgets/tuner_slider_base.cpp:117
 #: pcbnew/footprint_libraries_utils.cpp:1036
-#, fuzzy
 msgid "Save"
-msgstr "Съхрани"
+msgstr "Запазване"
 
 #: common/confirm.cpp:185 common/confirm.cpp:221
 #, fuzzy
@@ -9252,9 +9251,8 @@ msgstr "Всичко"
 #: eeschema/dialogs/dialog_erc_base.cpp:142
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:49
-#, fuzzy
 msgid "Warnings"
-msgstr "Предупреждение"
+msgstr "Предупреждения"
 
 #: common/widgets/wx_html_report_panel_base.cpp:59
 #, fuzzy
@@ -12708,7 +12706,7 @@ msgstr "Изтрий текущия маркер"
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:556
 #: pcbnew/dialogs/dialog_gendrill.cpp:301 pcbnew/dialogs/dialog_plot.cpp:639
 msgid "Select Output Directory"
-msgstr "Избор на Изходна Директория"
+msgstr "Изберете изходна папка"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:197
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1219
@@ -20493,9 +20491,8 @@ msgstr "Съпротивление"
 #: eeschema/sim/simulator_frame_ui_base.cpp:223
 #: gerbview/gerber_file_image.cpp:340
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:51
-#, fuzzy
 msgid "Format"
-msgstr "Формула"
+msgstr "Формат"
 
 #: eeschema/sim/spice_library_parser.cpp:163
 #, fuzzy, c-format
@@ -24990,9 +24987,8 @@ msgid "Output directory"
 msgstr "Изходна директория:"
 
 #: kicad/cli/command.cpp:150
-#, fuzzy
 msgid "Output file"
-msgstr "Негативен изход"
+msgstr "Изходен файл"
 
 #: kicad/cli/command.cpp:163
 msgid ""
@@ -35470,21 +35466,18 @@ msgstr "Начало на коорд.за разпробиване"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:206
 #: pcbnew/dialogs/dialog_position_relative.cpp:159
-#, fuzzy
 msgid "Distance:"
-msgstr "Съпротивление"
+msgstr "Разстояние:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:212
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:24
-#, fuzzy
 msgid "Move X:"
-msgstr "Премести"
+msgstr "Преместване по X:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:213
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:38
-#, fuzzy
 msgid "Move Y:"
-msgstr "Премести"
+msgstr "Преместване по Y:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:286
 msgid ""
@@ -35493,9 +35486,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
-#, fuzzy
 msgid "Rotate:"
-msgstr "Завърти"
+msgstr "Завъртане:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 #, fuzzy
