@@ -2137,6 +2137,26 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             if( thermalPoly.OutlineCount() )
                 thermalOutline = thermalPoly.Outline( 0 );
 
+            SHAPE_LINE_CHAIN padOutline = pad->GetEffectivePolygon( aLayer, ERROR_OUTSIDE )->Outline( 0 );
+
+            auto trimToOutline = [&]( SEG& aSegment )
+            {
+                SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+
+                if( padOutline.Intersect( aSegment, intersections ) )
+                {
+                    intersections.clear();
+
+                    // Trim the segment to the thermal outline
+                    if( thermalOutline.Intersect( aSegment, intersections ) )
+                    {
+                        aSegment.B = intersections.front().p;
+                        return true;
+                    }
+                }
+                return false;
+            };
+
             for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives( aLayer ) )
             {
                 if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::SEGMENT )
@@ -2151,24 +2171,42 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
                     // Make sure seg.A is the origin
                     if( !pad->GetEffectivePolygon( aLayer, ERROR_OUTSIDE )->Contains( seg.A ) )
-                        seg.Reverse();
-
-                    // Trim seg.B to the thermal outline
-                    if( thermalOutline.Intersect( seg, intersections ) )
                     {
-                        seg.B = intersections.front().p;
+                        // Do not create this spoke if neither point is in the pad.
+                        if( !pad->GetEffectivePolygon( aLayer, ERROR_OUTSIDE )->Contains( seg.B ) )
+                        {
+                            continue;
+                        }
+                        seg.Reverse();
+                    }
 
-                        VECTOR2I offset = ( seg.B - seg.A ).Perpendicular().Resize( spoke_half_w );
-                        SHAPE_LINE_CHAIN spoke;
+                    // Trim segment to pad and thermal outline polygon.
+                    // If there is no intersection with the pad, don't create the spoke.
+                    if( trimToOutline( seg ) )
+                    {
+                        VECTOR2I direction = ( seg.B - seg.A ).Resize( spoke_half_w );
+                        VECTOR2I offset = direction.Perpendicular().Resize( spoke_half_w );
+                        // Extend the spoke edges by half the spoke width to capture convex pad shapes with a maximum of 45 degrees.
+                        SEG segL( seg.A - direction - offset, seg.B + direction - offset );
+                        SEG segR( seg.A - direction + offset, seg.B + direction + offset );
+                        // Only create this spoke if both edges intersect the pad and thermal outline
+                        if( trimToOutline( segL ) && trimToOutline( segR ) )
+                        {
+                            // Extend the spoke by the minimum thickness for the zone to ensure full connection width
+                            direction = direction.Resize( aZone->GetMinThickness() );
 
-                        spoke.Append( seg.A + offset );
-                        spoke.Append( seg.A - offset );
-                        spoke.Append( seg.B - offset );
-                        spoke.Append( seg.B          );  // test pt
-                        spoke.Append( seg.B + offset );
+                            SHAPE_LINE_CHAIN spoke;
 
-                        spoke.SetClosed( true );
-                        aSpokesList.push_back( std::move( spoke ) );
+                            spoke.Append( seg.A + offset );
+                            spoke.Append( seg.A - offset );
+
+                            spoke.Append( segL.B + direction );
+                            spoke.Append( seg.B + direction ); // test pt at index 3.
+                            spoke.Append( segR.B + direction );
+
+                            spoke.SetClosed( true );
+                            aSpokesList.push_back( std::move( spoke ) );
+                        }
                     }
                 }
             }
