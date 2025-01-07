@@ -39,8 +39,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 10:11+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2025-01-07 10:18+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -43564,7 +43564,7 @@ msgstr "%s 上的焊盘"
 #: pcbnew/pad.cpp:1583
 #, c-format
 msgid "PTH pad %s of %s"
-msgstr "%2$s 的非金属化焊盘 %1$s"
+msgstr "%2$s 的金属化焊盘 %1$s"
 
 #: pcbnew/pad.cpp:1589
 msgid "PTH pad"
@@ -43583,7 +43583,7 @@ msgstr "%2$s 上的焊盘 %1$s"
 #: pcbnew/pad.cpp:1616
 #, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "%3$s 的金属化孔 %1$s %2$s"
+msgstr "%3$s 的金属化焊盘 %1$s %2$s"
 
 #: pcbnew/pad.cpp:1623
 #, c-format
