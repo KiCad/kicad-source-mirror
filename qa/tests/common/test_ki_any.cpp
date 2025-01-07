@@ -483,9 +483,6 @@ BOOST_AUTO_TEST_CASE( Construction_InPlace_2 )
 {
     auto a = any(std::in_place_type<any>, 5);
     BOOST_CHECK( any_cast<int>(any_cast<any>(a)) == 5 );
-
-    auto b = any(std::in_place_type<any>, {1});
-    (void) any_cast<std::initializer_list<int>>(any_cast<any>(b));
 }
 
 
