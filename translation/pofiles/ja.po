@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-03 00:01+0000\n"
+"PO-Revision-Date: 2025-01-07 10:11+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3443,9 +3443,8 @@ msgid "Format:"
 msgstr "フォーマット:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:34
-#, fuzzy
 msgid "Include:"
-msgstr "ビアを含む(&v)"
+msgstr "含む:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:47
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -5154,7 +5153,6 @@ msgid "Check for package updates on startup"
 msgstr "起動時にパッケージの更新を確認"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
 msgstr "ライブラリ パッケージの取り扱い"
 
@@ -6695,9 +6693,9 @@ msgstr ""
 "KiCadと一緒にインストールしたユーザー固有のスクリプトを含むディレクトリ"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "KICAD_SYMBOL_DIR の推奨されないバージョン。"
+msgstr "%s 推奨されないバージョン。"
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -7426,9 +7424,8 @@ msgid "Export drill data"
 msgstr "PCB: ドリルデータとしてエクスポート"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "編集オプション..."
+msgstr "ドリルデータのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7441,9 +7438,8 @@ msgstr "DXFとしてエクスポート"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:147
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "編集オプション..."
+msgstr "DXFのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
@@ -7498,9 +7494,8 @@ msgid "Export ODB++"
 msgstr "ODB++をエクスポート"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "編集オプション..."
+msgstr "ODB++のエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 msgid "PCB: Export ODB++"
@@ -7513,9 +7508,8 @@ msgstr "PDFとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:128
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "編集オプション..."
+msgstr "PDFのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
 msgid "PCB: Export PDF"
@@ -7542,9 +7536,8 @@ msgstr "SVGとしてエクスポート"
 
 #: common/jobs/job_export_pcb_svg.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:166
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "編集オプション..."
+msgstr "SVGのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_svg.cpp:68
 msgid "PCB: Export SVG"
@@ -7555,19 +7548,17 @@ msgid "Generate bill of materials"
 msgstr "部品表 (BOM) を生成"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "部品表を生成..."
+msgstr "部品表 (BOM) 生成ジョブ設定"
 
 #: common/jobs/job_export_sch_bom.cpp:96
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "部品表を生成..."
+msgstr "回路図:部品表 (BOM) を生成"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "ネットリストをエクスポート"
+msgstr "ネットリスト%sをエクスポート"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
 #, fuzzy
@@ -7584,18 +7575,16 @@ msgid "Export Postscript"
 msgstr "PostScript"
 
 #: common/jobs/job_export_sch_plot.cpp:185
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "編集オプション..."
+msgstr "Postscriptのエクスポートジョブ設定"
 
 #: common/jobs/job_export_sch_plot.cpp:198 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "HPGLとしてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:204
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "編集オプション..."
+msgstr "HPGLのエクスポートジョブ設定"
 
 #: common/jobs/job_export_sch_plot.cpp:208
 msgid "Schematic: Export SVG"
@@ -7637,14 +7626,13 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: DRC を実行"
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "表示"
+msgstr "レンダリング %s"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "編集オプション..."
+msgstr "レンダリング PCB ジョブ設定"
 
 #: common/jobs/job_pcb_render.cpp:137
 #, fuzzy
@@ -10455,9 +10443,8 @@ msgid "Footprint '%s' not found."
 msgstr "フットプリント '%s' が見つかりません。"
 
 #: cvpcb/display_footprints_frame.cpp:444
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "フォント '%s' のロード中のエラー。"
+msgstr "フットプリントの読み込みエラー"
 
 #: cvpcb/display_footprints_frame.cpp:507 pcbnew/footprint.cpp:1701
 #, c-format
@@ -11859,9 +11846,8 @@ msgid "Electrical Rules Checker"
 msgstr "エレクトリカル ルール チェッカー(ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "編集オプション..."
+msgstr "ERCジョブ設定"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 msgid "Export netlist in KiCad format"
@@ -25773,9 +25759,8 @@ msgstr "重なり合うジオメトリを融合する"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in conductor layers."
-msgstr "(PTHパッドには導体レイヤーがありません）"
+msgstr "導体レイヤーでビアホールを切らないでください。"
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26092,9 +26077,8 @@ msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "カラー テーマを使用する (PCBエディターのデフォルト設定)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:160
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "ラベルは複数のワイヤを接続します"
+msgstr "複数のモード フラグは使用できません\n"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:184
 msgid "The new behavior will match --mode-separate"
@@ -26205,12 +26189,10 @@ msgid "Render from side. Options: %s"
 msgstr "側面からレンダリングします。オプション: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
-msgstr ""
-"画像の背景。オプション: 透明、不透明。デフォルト: PNG の場合は透明、JPEG の場"
-"合は不透明"
+msgstr "画像の背景。オプション: %s。デフォルト: PNG の場合は透明、JPEG の場合は不透明"
 
 #: kicad/cli/command_pcb_render.cpp:251
 #, c-format
@@ -26487,9 +26469,8 @@ msgid "version info format (plain, commit, about)"
 msgstr "バージョン情報フォーマット (plain, commit, about)"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
-msgstr "名称"
+msgstr "宛先:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
 #, fuzzy
@@ -26497,9 +26478,8 @@ msgid "Generate error if no files copied"
 msgstr "ガーバー ジョブ ファイルを生成"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
-#, fuzzy
 msgid "Overwrite files in destination"
-msgstr "既存のデザインブロックを上書きしますか?"
+msgstr "宛先のファイルを上書きする"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
 #, fuzzy
@@ -26516,9 +26496,8 @@ msgid "Ignore non-zero exit code"
 msgstr ""
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "編集オプション..."
+msgstr "実行コマンドジョブ設定"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
@@ -26615,18 +26594,17 @@ msgid "Select output path"
 msgstr "出力パスを選択"
 
 #: kicad/dialogs/panel_jobs.cpp:140
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "ネット名は空にできません。"
+msgstr "出力先は空にできません"
 
 #: kicad/dialogs/panel_jobs.cpp:217
 msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
-msgstr "出力:"
+msgstr "出力: %s"
 
 #: kicad/dialogs/panel_jobs.cpp:245
 msgid "No."
@@ -26654,9 +26632,8 @@ msgid "Running jobs"
 msgstr "実行中のジョブ"
 
 #: kicad/dialogs/panel_jobs.cpp:409
-#, fuzzy
 msgid "Edit Output Options..."
-msgstr "%s 出力オプション"
+msgstr "出力オプションを編集..."
 
 #: kicad/dialogs/panel_jobs.cpp:410
 #, fuzzy
@@ -26743,9 +26720,8 @@ msgid "Description:"
 msgstr "説明:"
 
 #: kicad/dialogs/panel_jobs_base.cpp:276
-#, fuzzy
 msgid "Include jobs:"
-msgstr "ゾーンを含む (&z)"
+msgstr "インクルード JOBs:"
 
 #: kicad/dialogs/panel_jobs_base.h:166
 msgid "Job Output Run Log"
@@ -27916,7 +27892,7 @@ msgstr "リポジトリからプロジェクトをクローン..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
 msgid "New Jobset File..."
-msgstr "新しいジョブセットファイル..."
+msgstr "新規ジョブセットファイル..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -27927,9 +27903,8 @@ msgid "Open Project..."
 msgstr "プロジェクトを開く..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "新しいジョブセットファイル..."
+msgstr "ジョブセットファイルを開く..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -33855,9 +33830,8 @@ msgid "Export ODB++ File"
 msgstr "ODB++ファイルにエクスポート"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:150
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "選択したファイルは不正であるか、壊れています!"
+msgstr "選択した出力ファイル名はサポートされているアーカイブ形式ではありません。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:203
 #, fuzzy
@@ -33924,9 +33898,8 @@ msgid "Output File:"
 msgstr "出力ファイル:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression Format:"
-msgstr "寸法線のフォーマット"
+msgstr "圧縮形式:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
@@ -37520,9 +37493,8 @@ msgid "User"
 msgstr "User1"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
-#, fuzzy
 msgid "Dimensions:"
-msgstr "寸法"
+msgstr "寸法:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
@@ -37540,9 +37512,8 @@ msgid "Quality preset:"
 msgstr "プリセットを選択:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
-#, fuzzy
 msgid "Background style:"
-msgstr "背景の開始色"
+msgstr "背景のスタイル:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:103
 msgid "View"
@@ -37588,9 +37559,8 @@ msgid "Z"
 msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
-#, fuzzy
 msgid "Pivot:"
-msgstr "ピボットを設定"
+msgstr "ピボット:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
@@ -37607,9 +37577,8 @@ msgid "Lights intensity"
 msgstr "強度"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
-#, fuzzy
 msgid "Camera:"
-msgstr "カメラズーム"
+msgstr "カメラ:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
 #, fuzzy
@@ -39690,13 +39659,12 @@ msgstr "ハンダマスクの最小ウェブ幅:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"ハンダマスクの開口部間の最小距離。この値より近い パッドの開口部は、一つの開口"
-"部としてプロットされます。"
+"ハンダマスクの開口部間の最小距離。\n"
+"この値より近い パッドの開口部は、一つの開口部としてプロットされます。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -39704,32 +39672,25 @@ msgstr "ハンダマスクと導体間のクリアランス:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:92
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
-#, fuzzy
 msgid ""
 "Minimum distance between a solder mask opening and a copper item with a "
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
-"DRC テストの場合:\n"
-"DRC エラーを発生させる、ハンダマスク開口部と、親ハンダマスク開口部とは異なる"
-"ネットを持つ銅アイテムとの間の最大距離"
+"ハンダマスク開口部と、親ハンダマスク開口部とは異なるネットを持つ銅アイテムと"
+"の間の最小距離。\n"
+"この最小値より短い距離では、DRC エラーが発生させる。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:104
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints."
-msgstr ""
-"ハンダマスク アパーチャ（開口部）がフットプリント内のパッド間を接続することを"
-"許容する"
+msgstr "フットプリント内のパッド間のブリッジされたハンダマスク開口部を許容する。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
-msgstr ""
-"DRC テストの場合:\n"
-"同じフットプリントのパッド間の DRC エラー タイプのハンダマスクアパーチャ ブ"
-"リッジを無効にする (ネット タイに便利)"
+msgstr "同じフットプリント内のパッド間のハンダマスク アパーチャ ブリッジの DRC "
+"エラー チェックを無効にする。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:112
 msgid "Tent vias:"
@@ -39737,14 +39698,12 @@ msgstr "ビアのテンティング:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
-#, fuzzy
 msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"テンティングされたビア: ハンダマスク層にプロットされません\n"
-"テンティングされていないビア: ハンダマスク層上にプロットされます\n"
-"(ハンダマスクはネガティブレイヤーです)"
+"テンティングされたビア: ビアはソルダーマスクで覆います。\n"
+"テンティングされていないビア:ビアはソルダーマスクで覆いません。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 msgid "Solder paste settings:"
@@ -43318,9 +43277,8 @@ msgid "Footprint '%s' saved."
 msgstr "フットプリント '%s' を保存しました。"
 
 #: pcbnew/load_select_footprint.cpp:374
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "フットプリント ライブラリを保存\n"
+msgstr "フットプリントライブラリの保存中にエラーが発生"
 
 #: pcbnew/load_select_footprint.cpp:378
 #, c-format
@@ -46609,9 +46567,8 @@ msgstr "基板の読み取りに失敗しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:357 pcbnew/pcbnew_jobs_handler.cpp:432
 #: pcbnew/pcbnew_jobs_handler.cpp:479
-#, fuzzy
 msgid "Unknown export format"
-msgstr "未知のフォーマットのネットリストです。\n"
+msgstr "不明なエクスポート形式"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:397
 #, c-format
@@ -50248,11 +50205,8 @@ msgid "Invalid clipboard contents"
 msgstr "不正なクリップボードのデータ"
 
 #: pcbnew/tools/pcb_control.cpp:1509
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"基板ロード中のエラー \n"
-"%s"
+msgstr "基板ロード中のエラー。"
 
 #: pcbnew/tools/pcb_control.cpp:1543
 msgid "Append Board"
