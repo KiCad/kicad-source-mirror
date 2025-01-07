@@ -99,26 +99,20 @@ public:
     static bool      m_GenerateMap;
     DRILL_PRECISION  m_Precision;                // Precision for drill files, in non decimal format
     VECTOR2I         m_DrillFileOffset;          // Drill offset: 0,0 for absolute coordinates,
-                                                 // or origin of the auxiliary axis
+                                                 //   or origin of the auxiliary axis
     static bool      m_UseRouteModeForOvalHoles; // True to use a G00 route command for oval holes
                                                  // False to use a G85 canned mode for oval holes
 
 private:
-    PCB_EDIT_FRAME*  m_pcbEditFrame;
-    BOARD*           m_board;
-    PCB_PLOT_PARAMS  m_plotOpts;
+    PCB_EDIT_FRAME*       m_pcbEditFrame;
+    BOARD*                m_board;
+    PCB_PLOT_PARAMS       m_plotOpts;
     JOB_EXPORT_PCB_DRILL* m_job;
 
-    bool             m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
-                                                 // for drill origin coordinates
-    int              m_platedPadsHoleCount;
-    int              m_notplatedPadsHoleCount;
-    int              m_throughViasCount;
-    int              m_microViasCount;
-    int              m_blindOrBuriedViasCount;
-
-    static int       m_mapFileType;              // format of map file: HPGL, PS ...
-    static int       m_drillFileType;            // for Excellon, Gerber
+    bool                  m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
+                                                      //   for drill origin coordinates
+    static int            m_mapFileType;              // format of map file: HPGL, PS ...
+    static int            m_drillFileType;            // for Excellon, Gerber
 };
 
 #endif      // DIALOG_GENDRILL_H_

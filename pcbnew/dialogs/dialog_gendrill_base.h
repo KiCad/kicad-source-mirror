@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,14 +26,14 @@ class STD_BITMAP_BUTTON;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/radiobut.h>
 #include <wx/checkbox.h>
-#include <wx/radiobox.h>
+#include <wx/choice.h>
 #include <wx/statbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GENDRILL_BASE
@@ -47,29 +47,26 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxStaticText* staticTextOutputDir;
 		wxTextCtrl* m_outputDirectoryName;
 		STD_BITMAP_BUTTON* m_browseButton;
+		wxStaticText* m_formatLabel;
+		wxStaticLine* m_staticline1;
 		wxRadioButton* m_rbExcellon;
 		wxCheckBox* m_Check_Mirror;
 		wxCheckBox* m_Check_Minimal;
 		wxCheckBox* m_Check_Merge_PTH_NPTH;
-		wxRadioBox* m_radioBoxOvalHoleMode;
+		wxCheckBox* m_altDrillMode;
 		wxRadioButton* m_rbGerberX2;
 		wxCheckBox* m_cbGenerateMap;
-		wxRadioBox* m_Choice_Drill_Map;
-		wxRadioBox* m_Choice_Drill_Offset;
-		wxRadioBox* m_Choice_Unit;
-		wxRadioBox* m_Choice_Zeros_Format;
-		wxStaticText* m_staticTextTitle;
+		wxChoice* m_choiceDrillMap;
+		wxStaticText* m_optionsLabel;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_originLabel;
+		wxChoice* m_origin;
+		wxStaticText* m_unitsLabel;
+		wxChoice* m_units;
+		wxStaticText* m_zerosLabel;
+		wxChoice* m_zeros;
+		wxStaticText* m_precisionLabel;
 		wxStaticText* m_staticTextPrecision;
-		wxStaticText* staticTextPlatedPads;
-		wxStaticText* m_PlatedPadsCountInfoMsg;
-		wxStaticText* staticTextNonPlatedPads;
-		wxStaticText* m_NotPlatedPadsCountInfoMsg;
-		wxStaticText* staticTextThroughVias;
-		wxStaticText* m_ThroughViasInfoMsg;
-		wxStaticText* staticTextMicroVias;
-		wxStaticText* m_MicroViasInfoMsg;
-		wxStaticText* staticTextBuriedVias;
-		wxStaticText* m_BuriedViasInfoMsg;
 		wxStaticBoxSizer* bMsgSizer;
 		wxTextCtrl* m_messagesBox;
 		wxBoxSizer* m_buttonsSizer;
