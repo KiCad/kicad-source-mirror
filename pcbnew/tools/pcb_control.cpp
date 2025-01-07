@@ -1878,13 +1878,30 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             accumulateTrackLength = [&]( EDA_ITEM* aItem )
             {
                 if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
+                {
                     selectedLength += track->GetLength();
+                }
                 else if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
-                    selectedLength += shape->GetLength();
+                {
+                    const SHAPE_T shapeType = shape->GetShape();
+                    if( shapeType == SHAPE_T::SEGMENT || shapeType == SHAPE_T::ARC
+                        || shapeType == SHAPE_T::BEZIER )
+                    {
+                        selectedLength += shape->GetLength();
+                    }
+                    else
+                    {
+                        lengthValid = false;
+                    }
+                }
                 else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
+                {
                     group->RunOnChildren( accumulateTrackLength );
+                }
                 else
+                {
                     lengthValid = false;
+                }
             };
 
             for( EDA_ITEM* item : selection )
