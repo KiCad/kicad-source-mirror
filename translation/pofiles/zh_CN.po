@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 12:39+0000\n"
+"PO-Revision-Date: 2025-01-07 12:49+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -47774,7 +47774,7 @@ msgstr "绘制引线"
 
 #: pcbnew/tools/pcb_actions.cpp:286
 msgid "Draw Filled Zones"
-msgstr "绘制填充域"
+msgstr "绘制填充域 (铺铜/其他层上的实体填充)"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Place Vias"
