@@ -455,6 +455,9 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
 
         screen->SetFileName( aFileName );
         rootSheet->SetScreen( screen );
+        
+        // Virtual root sheet UUID must be the same as the schematic file UUID.
+        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
     SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
