@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20241004)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "355450fd-59b6-470a-8171-8a3bc70c71a0")
 	(paper "A3")
 	(title_block
@@ -9541,8 +9541,12 @@
 		)
 		(symbol "power:GND"
 			(power)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
+				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -9618,8 +9622,7 @@
 				(pin power_in line
 					(at 0 0 270)
 					(length 0)
-					(hide yes)
-					(name "GND"
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -9639,8 +9642,12 @@
 		)
 		(symbol "power:VCC"
 			(power)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
+				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -9655,7 +9662,7 @@
 				)
 			)
 			(property "Value" "VCC"
-				(at 0 3.81 0)
+				(at 0 3.556 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -9740,8 +9747,7 @@
 				(pin power_in line
 					(at 0 0 90)
 					(length 0)
-					(hide yes)
-					(name "VCC"
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -16471,7 +16477,6 @@
 	)
 	(label "TVRAM1"
 		(at 111.76 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16482,7 +16487,6 @@
 	)
 	(label "TVRAM11"
 		(at 185.42 179.07 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16493,7 +16497,6 @@
 	)
 	(label "TVRAM21"
 		(at 328.93 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16504,7 +16507,6 @@
 	)
 	(label "MXA8"
 		(at 207.01 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16515,7 +16517,6 @@
 	)
 	(label "TVRAM29"
 		(at 185.42 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16526,7 +16527,6 @@
 	)
 	(label "MXA8"
 		(at 62.23 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16537,7 +16537,6 @@
 	)
 	(label "TVRAM16"
 		(at 257.81 194.31 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16548,7 +16547,6 @@
 	)
 	(label "TVRAM23"
 		(at 111.76 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16559,7 +16557,6 @@
 	)
 	(label "TVRAM0"
 		(at 111.76 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16570,7 +16567,6 @@
 	)
 	(label "MXA3"
 		(at 62.23 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16581,7 +16577,6 @@
 	)
 	(label "TVRAM10"
 		(at 328.93 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16592,7 +16587,6 @@
 	)
 	(label "MXA4"
 		(at 278.13 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16603,7 +16597,6 @@
 	)
 	(label "TVRAM25"
 		(at 111.76 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16614,7 +16607,6 @@
 	)
 	(label "TVRAM4"
 		(at 328.93 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16625,7 +16617,6 @@
 	)
 	(label "CAS1-"
 		(at 62.23 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16636,7 +16627,6 @@
 	)
 	(label "TVRAM6"
 		(at 185.42 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16647,7 +16637,6 @@
 	)
 	(label "TVRAM27"
 		(at 111.76 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16658,7 +16647,6 @@
 	)
 	(label "TVRAM8"
 		(at 111.76 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16669,7 +16657,6 @@
 	)
 	(label "MXA10"
 		(at 62.23 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16680,7 +16667,6 @@
 	)
 	(label "MXA5"
 		(at 207.01 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16691,7 +16677,6 @@
 	)
 	(label "WRAM-"
 		(at 278.13 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16702,7 +16687,6 @@
 	)
 	(label "TVRAM10"
 		(at 111.76 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16713,7 +16697,6 @@
 	)
 	(label "TVRAM6"
 		(at 328.93 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16724,7 +16707,6 @@
 	)
 	(label "TVRAM29"
 		(at 257.81 229.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16735,7 +16717,6 @@
 	)
 	(label "TVRAM9"
 		(at 185.42 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16746,7 +16727,6 @@
 	)
 	(label "TVRAM17"
 		(at 111.76 196.85 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16757,7 +16737,6 @@
 	)
 	(label "MXA3"
 		(at 207.01 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16768,7 +16747,6 @@
 	)
 	(label "CAS3-"
 		(at 62.23 207.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16779,7 +16757,6 @@
 	)
 	(label "TVRAM22"
 		(at 111.76 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16790,7 +16767,6 @@
 	)
 	(label "TVRAM29"
 		(at 111.76 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16801,7 +16777,6 @@
 	)
 	(label "TVRAM13"
 		(at 185.42 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16812,7 +16787,6 @@
 	)
 	(label "CAS2-"
 		(at 207.01 204.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16823,7 +16797,6 @@
 	)
 	(label "TVRAM11"
 		(at 328.93 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16834,7 +16807,6 @@
 	)
 	(label "MXA2"
 		(at 207.01 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16845,7 +16817,6 @@
 	)
 	(label "MXA6"
 		(at 134.62 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16856,7 +16827,6 @@
 	)
 	(label "TVRAM24"
 		(at 257.81 217.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16867,7 +16837,6 @@
 	)
 	(label "CAS2-"
 		(at 134.62 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16878,7 +16847,6 @@
 	)
 	(label "TVRAM28"
 		(at 111.76 227.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16889,7 +16857,6 @@
 	)
 	(label "TVRAM0"
 		(at 111.76 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16900,7 +16867,6 @@
 	)
 	(label "TVRAM7"
 		(at 111.76 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16911,7 +16877,6 @@
 	)
 	(label "TVRAM11"
 		(at 111.76 179.07 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16922,7 +16887,6 @@
 	)
 	(label "TVRAM7"
 		(at 328.93 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16933,7 +16897,6 @@
 	)
 	(label "MXA4"
 		(at 134.62 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16944,7 +16907,6 @@
 	)
 	(label "TVRAM27"
 		(at 257.81 224.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16955,7 +16917,6 @@
 	)
 	(label "TVRAM9"
 		(at 185.42 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16966,7 +16927,6 @@
 	)
 	(label "TVRAM28"
 		(at 257.81 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16977,7 +16937,6 @@
 	)
 	(label "MXA7"
 		(at 278.13 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16988,7 +16947,6 @@
 	)
 	(label "TVRAM13"
 		(at 257.81 184.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -16999,7 +16957,6 @@
 	)
 	(label "MXA5"
 		(at 278.13 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17010,7 +16967,6 @@
 	)
 	(label "TVRAM30"
 		(at 111.76 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17021,7 +16977,6 @@
 	)
 	(label "CAS0-"
 		(at 62.23 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17032,7 +16987,6 @@
 	)
 	(label "TVRAM3"
 		(at 257.81 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17043,7 +16997,6 @@
 	)
 	(label "MXA9"
 		(at 62.23 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17054,7 +17007,6 @@
 	)
 	(label "TVRAM30"
 		(at 328.93 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17065,7 +17017,6 @@
 	)
 	(label "TVRAM4"
 		(at 185.42 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17076,7 +17027,6 @@
 	)
 	(label "TVRAM24"
 		(at 111.76 217.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17087,7 +17037,6 @@
 	)
 	(label "WRAM-"
 		(at 134.62 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17098,7 +17047,6 @@
 	)
 	(label "TVRAM19"
 		(at 185.42 201.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17109,7 +17057,6 @@
 	)
 	(label "TVRAM19"
 		(at 328.93 201.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17120,7 +17067,6 @@
 	)
 	(label "TVRAM0"
 		(at 185.42 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17131,7 +17077,6 @@
 	)
 	(label "TVRAM22"
 		(at 257.81 209.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17142,7 +17087,6 @@
 	)
 	(label "TVRAM3"
 		(at 111.76 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17153,7 +17097,6 @@
 	)
 	(label "MXA7"
 		(at 207.01 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17164,7 +17107,6 @@
 	)
 	(label "TVRAM17"
 		(at 257.81 196.85 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17175,7 +17117,6 @@
 	)
 	(label "CAS2-"
 		(at 207.01 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17186,7 +17127,6 @@
 	)
 	(label "TVRAM3"
 		(at 111.76 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17197,7 +17137,6 @@
 	)
 	(label "MXA7"
 		(at 134.62 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17208,7 +17147,6 @@
 	)
 	(label "TVRAM17"
 		(at 185.42 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17219,7 +17157,6 @@
 	)
 	(label "MXA10"
 		(at 62.23 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17230,7 +17167,6 @@
 	)
 	(label "TVRAM14"
 		(at 328.93 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17241,7 +17177,6 @@
 	)
 	(label "TVRAM20"
 		(at 328.93 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17252,7 +17187,6 @@
 	)
 	(label "TVRAM9"
 		(at 111.76 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17263,7 +17197,6 @@
 	)
 	(label "TVRAM4"
 		(at 111.76 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17274,7 +17207,6 @@
 	)
 	(label "TVRAM22"
 		(at 328.93 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17285,7 +17217,6 @@
 	)
 	(label "TVRAM26"
 		(at 328.93 222.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17296,7 +17227,6 @@
 	)
 	(label "TVRAM8"
 		(at 185.42 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17307,7 +17237,6 @@
 	)
 	(label "MXA6"
 		(at 62.23 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17318,7 +17247,6 @@
 	)
 	(label "TVRAM7"
 		(at 257.81 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17329,7 +17257,6 @@
 	)
 	(label "TVRAM9"
 		(at 328.93 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17340,7 +17267,6 @@
 	)
 	(label "TVRAM21"
 		(at 257.81 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17351,7 +17277,6 @@
 	)
 	(label "MXA8"
 		(at 278.13 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17362,7 +17287,6 @@
 	)
 	(label "TVRAM3"
 		(at 328.93 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17373,7 +17297,6 @@
 	)
 	(label "MXA10"
 		(at 134.62 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17384,7 +17307,6 @@
 	)
 	(label "MXA1"
 		(at 278.13 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17395,7 +17317,6 @@
 	)
 	(label "TVRAM18"
 		(at 257.81 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17406,7 +17327,6 @@
 	)
 	(label "TVRAM27"
 		(at 111.76 224.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17417,7 +17337,6 @@
 	)
 	(label "TVRAM26"
 		(at 328.93 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17428,7 +17347,6 @@
 	)
 	(label "TVRAM11"
 		(at 257.81 179.07 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17439,7 +17357,6 @@
 	)
 	(label "TVRAM7"
 		(at 185.42 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17450,7 +17367,6 @@
 	)
 	(label "TVRAM17"
 		(at 328.93 196.85 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17461,7 +17377,6 @@
 	)
 	(label "TVRAM30"
 		(at 185.42 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17472,7 +17387,6 @@
 	)
 	(label "TVRAM6"
 		(at 111.76 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17483,7 +17397,6 @@
 	)
 	(label "TVRAM8"
 		(at 328.93 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17494,7 +17407,6 @@
 	)
 	(label "TVRAM28"
 		(at 328.93 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17505,7 +17417,6 @@
 	)
 	(label "TVRAM19"
 		(at 185.42 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17516,7 +17427,6 @@
 	)
 	(label "TVRAM0"
 		(at 328.93 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17527,7 +17437,6 @@
 	)
 	(label "TVRAM15"
 		(at 257.81 189.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17538,7 +17447,6 @@
 	)
 	(label "TVRAM3"
 		(at 185.42 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17549,7 +17457,6 @@
 	)
 	(label "MXA6"
 		(at 207.01 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17560,7 +17467,6 @@
 	)
 	(label "TVRAM1"
 		(at 185.42 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17571,7 +17477,6 @@
 	)
 	(label "TVRAM22"
 		(at 111.76 209.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17582,7 +17487,6 @@
 	)
 	(label "MXA6"
 		(at 134.62 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17593,7 +17497,6 @@
 	)
 	(label "TVRAM16"
 		(at 328.93 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17604,7 +17507,6 @@
 	)
 	(label "TVRAM15"
 		(at 328.93 189.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17615,7 +17517,6 @@
 	)
 	(label "TVRAM17"
 		(at 257.81 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17626,7 +17527,6 @@
 	)
 	(label "TVRAM5"
 		(at 111.76 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17637,7 +17537,6 @@
 	)
 	(label "CAS1-"
 		(at 278.13 201.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17648,7 +17547,6 @@
 	)
 	(label "TVRAM6"
 		(at 328.93 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17659,7 +17557,6 @@
 	)
 	(label "TVRAM7"
 		(at 111.76 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17670,7 +17567,6 @@
 	)
 	(label "TVRAM18"
 		(at 111.76 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17681,7 +17577,6 @@
 	)
 	(label "TVRAM14"
 		(at 111.76 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17692,7 +17587,6 @@
 	)
 	(label "TVRAM19"
 		(at 257.81 201.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17703,7 +17597,6 @@
 	)
 	(label "CAS1-"
 		(at 134.62 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17714,7 +17607,6 @@
 	)
 	(label "TVRAM23"
 		(at 185.42 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17725,7 +17617,6 @@
 	)
 	(label "MXA7"
 		(at 207.01 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17736,7 +17627,6 @@
 	)
 	(label "TVRAM26"
 		(at 185.42 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17747,7 +17637,6 @@
 	)
 	(label "MXA7"
 		(at 134.62 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17758,7 +17647,6 @@
 	)
 	(label "MXA8"
 		(at 278.13 168.91 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17769,7 +17657,6 @@
 	)
 	(label "CAS0-"
 		(at 278.13 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17780,7 +17667,6 @@
 	)
 	(label "TVRAM31"
 		(at 257.81 234.95 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17791,7 +17677,6 @@
 	)
 	(label "MXA9"
 		(at 278.13 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17802,7 +17687,6 @@
 	)
 	(label "TVRAM0"
 		(at 185.42 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17813,7 +17697,6 @@
 	)
 	(label "CAS3-"
 		(at 62.23 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17824,7 +17707,6 @@
 	)
 	(label "TVRAM15"
 		(at 328.93 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17835,7 +17717,6 @@
 	)
 	(label "TVRAM22"
 		(at 257.81 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17846,7 +17727,6 @@
 	)
 	(label "TVRAM23"
 		(at 328.93 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17857,7 +17737,6 @@
 	)
 	(label "TVRAM31"
 		(at 185.42 234.95 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17868,7 +17747,6 @@
 	)
 	(label "TVRAM16"
 		(at 111.76 194.31 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17879,7 +17757,6 @@
 	)
 	(label "CAS1-"
 		(at 134.62 201.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17890,7 +17767,6 @@
 	)
 	(label "TVRAM18"
 		(at 328.93 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17901,7 +17777,6 @@
 	)
 	(label "TVRAM18"
 		(at 185.42 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17912,7 +17787,6 @@
 	)
 	(label "TVRAM4"
 		(at 257.81 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17923,7 +17797,6 @@
 	)
 	(label "TVRAM13"
 		(at 185.42 184.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17934,7 +17807,6 @@
 	)
 	(label "TVRAM1"
 		(at 185.42 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17945,7 +17817,6 @@
 	)
 	(label "TVRAM22"
 		(at 185.42 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17956,7 +17827,6 @@
 	)
 	(label "TVRAM16"
 		(at 185.42 194.31 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17967,7 +17837,6 @@
 	)
 	(label "MXA0"
 		(at 278.13 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17978,7 +17847,6 @@
 	)
 	(label "TVRAM14"
 		(at 257.81 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -17989,7 +17857,6 @@
 	)
 	(label "MXA0"
 		(at 207.01 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18000,7 +17867,6 @@
 	)
 	(label "MXA9"
 		(at 134.62 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18011,7 +17877,6 @@
 	)
 	(label "TVRAM27"
 		(at 185.42 224.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18022,7 +17887,6 @@
 	)
 	(label "TVRAM13"
 		(at 257.81 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18033,7 +17897,6 @@
 	)
 	(label "WRAM-"
 		(at 207.01 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18044,7 +17907,6 @@
 	)
 	(label "TVRAM18"
 		(at 111.76 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18055,7 +17917,6 @@
 	)
 	(label "TVRAM28"
 		(at 185.42 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18066,7 +17927,6 @@
 	)
 	(label "TVRAM22"
 		(at 185.42 209.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18077,7 +17937,6 @@
 	)
 	(label "TVRAM26"
 		(at 111.76 222.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18088,7 +17947,6 @@
 	)
 	(label "TVRAM21"
 		(at 111.76 207.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18099,7 +17957,6 @@
 	)
 	(label "MXA1"
 		(at 134.62 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18110,7 +17967,6 @@
 	)
 	(label "WRAM-"
 		(at 278.13 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18121,7 +17977,6 @@
 	)
 	(label "CAS0-"
 		(at 62.23 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18132,7 +17987,6 @@
 	)
 	(label "TVRAM26"
 		(at 257.81 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18143,7 +17997,6 @@
 	)
 	(label "CAS1-"
 		(at 207.01 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18154,7 +18007,6 @@
 	)
 	(label "TVRAM6"
 		(at 111.76 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18165,7 +18017,6 @@
 	)
 	(label "MXA5"
 		(at 62.23 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18176,7 +18027,6 @@
 	)
 	(label "MXA4"
 		(at 207.01 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18187,7 +18037,6 @@
 	)
 	(label "TVRAM27"
 		(at 185.42 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18198,7 +18047,6 @@
 	)
 	(label "TVRAM2"
 		(at 328.93 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18209,7 +18057,6 @@
 	)
 	(label "TVRAM25"
 		(at 257.81 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18220,7 +18067,6 @@
 	)
 	(label "TVRAM7"
 		(at 185.42 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18231,7 +18077,6 @@
 	)
 	(label "MXA0"
 		(at 134.62 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18242,7 +18087,6 @@
 	)
 	(label "TVRAM21"
 		(at 111.76 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18253,7 +18097,6 @@
 	)
 	(label "MXA0"
 		(at 207.01 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18264,7 +18107,6 @@
 	)
 	(label "TVRAM9"
 		(at 111.76 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18275,7 +18117,6 @@
 	)
 	(label "TVRAM16"
 		(at 257.81 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18286,7 +18127,6 @@
 	)
 	(label "TVRAM15"
 		(at 185.42 189.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18297,7 +18137,6 @@
 	)
 	(label "TVRAM30"
 		(at 257.81 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18308,7 +18147,6 @@
 	)
 	(label "MXA5"
 		(at 62.23 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18319,7 +18157,6 @@
 	)
 	(label "MXA2"
 		(at 62.23 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18330,7 +18167,6 @@
 	)
 	(label "TVRAM24"
 		(at 257.81 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18341,7 +18177,6 @@
 	)
 	(label "CAS3-"
 		(at 134.62 207.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18352,7 +18187,6 @@
 	)
 	(label "TVRAM25"
 		(at 185.42 219.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18363,7 +18197,6 @@
 	)
 	(label "TVRAM9"
 		(at 257.81 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18374,7 +18207,6 @@
 	)
 	(label "MXA10"
 		(at 207.01 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18385,7 +18217,6 @@
 	)
 	(label "TVRAM13"
 		(at 328.93 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18396,7 +18227,6 @@
 	)
 	(label "TVRAM9"
 		(at 328.93 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18407,7 +18237,6 @@
 	)
 	(label "TVRAM5"
 		(at 328.93 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18418,7 +18247,6 @@
 	)
 	(label "TVRAM22"
 		(at 328.93 209.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18429,7 +18257,6 @@
 	)
 	(label "CAS0-"
 		(at 134.62 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18440,7 +18267,6 @@
 	)
 	(label "TVRAM11"
 		(at 185.42 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18451,7 +18277,6 @@
 	)
 	(label "MXA6"
 		(at 278.13 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18462,7 +18287,6 @@
 	)
 	(label "MXA3"
 		(at 278.13 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18473,7 +18297,6 @@
 	)
 	(label "TVRAM30"
 		(at 328.93 232.41 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18484,7 +18307,6 @@
 	)
 	(label "TVRAM25"
 		(at 257.81 219.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18495,7 +18317,6 @@
 	)
 	(label "TVRAM27"
 		(at 257.81 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18506,7 +18327,6 @@
 	)
 	(label "TVRAM16"
 		(at 185.42 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18517,7 +18337,6 @@
 	)
 	(label "TVRAM4"
 		(at 257.81 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18528,7 +18347,6 @@
 	)
 	(label "MXA2"
 		(at 134.62 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18539,7 +18357,6 @@
 	)
 	(label "TVRAM7"
 		(at 328.93 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18550,7 +18367,6 @@
 	)
 	(label "TVRAM12"
 		(at 111.76 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18561,7 +18377,6 @@
 	)
 	(label "MXA9"
 		(at 207.01 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18572,7 +18387,6 @@
 	)
 	(label "TVRAM2"
 		(at 185.42 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18583,7 +18397,6 @@
 	)
 	(label "TVRAM14"
 		(at 185.42 186.69 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18594,7 +18407,6 @@
 	)
 	(label "CAS2-"
 		(at 62.23 204.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18605,7 +18417,6 @@
 	)
 	(label "TVRAM19"
 		(at 328.93 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18616,7 +18427,6 @@
 	)
 	(label "MXA0"
 		(at 134.62 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18627,7 +18437,6 @@
 	)
 	(label "MXA1"
 		(at 62.23 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18638,7 +18447,6 @@
 	)
 	(label "TVRAM20"
 		(at 111.76 204.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18649,7 +18457,6 @@
 	)
 	(label "TVRAM1"
 		(at 328.93 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18660,7 +18467,6 @@
 	)
 	(label "TVRAM29"
 		(at 111.76 229.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18671,7 +18477,6 @@
 	)
 	(label "MXA2"
 		(at 278.13 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18682,7 +18487,6 @@
 	)
 	(label "TVRAM20"
 		(at 185.42 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18693,7 +18497,6 @@
 	)
 	(label "TVRAM17"
 		(at 185.42 196.85 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18704,7 +18507,6 @@
 	)
 	(label "TVRAM15"
 		(at 111.76 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18715,7 +18517,6 @@
 	)
 	(label "MXA10"
 		(at 278.13 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18726,7 +18527,6 @@
 	)
 	(label "TVRAM19"
 		(at 111.76 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18737,7 +18537,6 @@
 	)
 	(label "MXA10"
 		(at 134.62 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18748,7 +18547,6 @@
 	)
 	(label "TVRAM9"
 		(at 257.81 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18759,7 +18557,6 @@
 	)
 	(label "TVRAM5"
 		(at 257.81 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18770,7 +18567,6 @@
 	)
 	(label "CAS3-"
 		(at 207.01 207.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18781,7 +18577,6 @@
 	)
 	(label "TVRAM1"
 		(at 257.81 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18792,7 +18587,6 @@
 	)
 	(label "TVRAM21"
 		(at 257.81 207.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18803,7 +18597,6 @@
 	)
 	(label "TVRAM8"
 		(at 257.81 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18814,7 +18607,6 @@
 	)
 	(label "MXA4"
 		(at 278.13 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18825,7 +18617,6 @@
 	)
 	(label "TVRAM12"
 		(at 257.81 181.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18836,7 +18627,6 @@
 	)
 	(label "TVRAM6"
 		(at 257.81 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18847,7 +18637,6 @@
 	)
 	(label "TVRAM25"
 		(at 328.93 219.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18858,7 +18647,6 @@
 	)
 	(label "TVRAM29"
 		(at 185.42 229.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18869,7 +18657,6 @@
 	)
 	(label "TVRAM30"
 		(at 185.42 232.41 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18880,7 +18667,6 @@
 	)
 	(label "MXA4"
 		(at 134.62 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18891,7 +18677,6 @@
 	)
 	(label "TVRAM30"
 		(at 257.81 232.41 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18902,7 +18687,6 @@
 	)
 	(label "TVRAM13"
 		(at 111.76 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18913,7 +18697,6 @@
 	)
 	(label "TVRAM31"
 		(at 257.81 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18924,7 +18707,6 @@
 	)
 	(label "TVRAM12"
 		(at 185.42 181.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18935,7 +18717,6 @@
 	)
 	(label "MXA6"
 		(at 207.01 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18946,7 +18727,6 @@
 	)
 	(label "TVRAM15"
 		(at 111.76 189.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18957,7 +18737,6 @@
 	)
 	(label "TVRAM5"
 		(at 185.42 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18968,7 +18747,6 @@
 	)
 	(label "WRAM-"
 		(at 62.23 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18979,7 +18757,6 @@
 	)
 	(label "TVRAM31"
 		(at 328.93 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -18990,7 +18767,6 @@
 	)
 	(label "MXA5"
 		(at 134.62 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19001,7 +18777,6 @@
 	)
 	(label "TVRAM2"
 		(at 111.76 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19012,7 +18787,6 @@
 	)
 	(label "MXA5"
 		(at 134.62 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19023,7 +18797,6 @@
 	)
 	(label "MXA3"
 		(at 134.62 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19034,7 +18807,6 @@
 	)
 	(label "TVRAM0"
 		(at 257.81 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19045,7 +18817,6 @@
 	)
 	(label "TVRAM24"
 		(at 328.93 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19056,7 +18827,6 @@
 	)
 	(label "TVRAM10"
 		(at 257.81 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19067,7 +18837,6 @@
 	)
 	(label "TVRAM4"
 		(at 185.42 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19078,7 +18847,6 @@
 	)
 	(label "MXA3"
 		(at 207.01 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19089,7 +18857,6 @@
 	)
 	(label "TVRAM25"
 		(at 185.42 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19100,7 +18867,6 @@
 	)
 	(label "TVRAM20"
 		(at 328.93 204.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19111,7 +18877,6 @@
 	)
 	(label "TVRAM28"
 		(at 111.76 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19122,7 +18887,6 @@
 	)
 	(label "TVRAM23"
 		(at 185.42 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19133,7 +18897,6 @@
 	)
 	(label "TVRAM28"
 		(at 328.93 227.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19144,7 +18907,6 @@
 	)
 	(label "MXA2"
 		(at 207.01 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19155,7 +18917,6 @@
 	)
 	(label "TVRAM29"
 		(at 328.93 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19166,7 +18927,6 @@
 	)
 	(label "CAS0-"
 		(at 207.01 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19177,7 +18937,6 @@
 	)
 	(label "MXA4"
 		(at 62.23 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19188,7 +18947,6 @@
 	)
 	(label "TVRAM15"
 		(at 185.42 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19199,7 +18957,6 @@
 	)
 	(label "TVRAM15"
 		(at 257.81 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19210,7 +18967,6 @@
 	)
 	(label "CAS2-"
 		(at 278.13 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19221,7 +18977,6 @@
 	)
 	(label "TVRAM17"
 		(at 111.76 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19232,7 +18987,6 @@
 	)
 	(label "TVRAM2"
 		(at 328.93 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19243,7 +18997,6 @@
 	)
 	(label "TVRAM18"
 		(at 328.93 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19254,7 +19007,6 @@
 	)
 	(label "TVRAM5"
 		(at 111.76 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19265,7 +19017,6 @@
 	)
 	(label "CAS0-"
 		(at 134.62 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19276,7 +19027,6 @@
 	)
 	(label "MXA8"
 		(at 134.62 168.91 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19287,7 +19037,6 @@
 	)
 	(label "TVRAM16"
 		(at 328.93 194.31 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19298,7 +19047,6 @@
 	)
 	(label "TVRAM0"
 		(at 328.93 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19309,7 +19057,6 @@
 	)
 	(label "TVRAM24"
 		(at 185.42 217.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19320,7 +19067,6 @@
 	)
 	(label "TVRAM4"
 		(at 111.76 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19331,7 +19077,6 @@
 	)
 	(label "MXA1"
 		(at 207.01 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19342,7 +19087,6 @@
 	)
 	(label "TVRAM8"
 		(at 328.93 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19353,7 +19097,6 @@
 	)
 	(label "TVRAM3"
 		(at 185.42 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19364,7 +19107,6 @@
 	)
 	(label "MXA10"
 		(at 278.13 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19375,7 +19117,6 @@
 	)
 	(label "TVRAM1"
 		(at 328.93 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19386,7 +19127,6 @@
 	)
 	(label "TVRAM8"
 		(at 257.81 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19397,7 +19137,6 @@
 	)
 	(label "MXA8"
 		(at 207.01 168.91 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19408,7 +19147,6 @@
 	)
 	(label "TVRAM24"
 		(at 111.76 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19419,7 +19157,6 @@
 	)
 	(label "TVRAM30"
 		(at 111.76 232.41 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19430,7 +19167,6 @@
 	)
 	(label "TVRAM12"
 		(at 328.93 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19441,7 +19177,6 @@
 	)
 	(label "TVRAM31"
 		(at 111.76 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19452,7 +19187,6 @@
 	)
 	(label "TVRAM10"
 		(at 111.76 176.53 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19463,7 +19197,6 @@
 	)
 	(label "TVRAM21"
 		(at 185.42 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19474,7 +19207,6 @@
 	)
 	(label "MXA4"
 		(at 207.01 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19485,7 +19217,6 @@
 	)
 	(label "CAS1-"
 		(at 62.23 201.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19496,7 +19227,6 @@
 	)
 	(label "TVRAM14"
 		(at 257.81 186.69 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19507,7 +19237,6 @@
 	)
 	(label "TVRAM12"
 		(at 257.81 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19518,7 +19247,6 @@
 	)
 	(label "TVRAM28"
 		(at 185.42 227.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19529,7 +19257,6 @@
 	)
 	(label "TVRAM8"
 		(at 111.76 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19540,7 +19267,6 @@
 	)
 	(label "TVRAM28"
 		(at 257.81 227.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19551,7 +19277,6 @@
 	)
 	(label "TVRAM20"
 		(at 185.42 204.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19562,7 +19287,6 @@
 	)
 	(label "MXA2"
 		(at 134.62 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19573,7 +19297,6 @@
 	)
 	(label "MXA1"
 		(at 62.23 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19584,7 +19307,6 @@
 	)
 	(label "TVRAM10"
 		(at 185.42 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19595,7 +19317,6 @@
 	)
 	(label "TVRAM21"
 		(at 328.93 207.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19606,7 +19327,6 @@
 	)
 	(label "TVRAM1"
 		(at 111.76 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19617,7 +19337,6 @@
 	)
 	(label "CAS0-"
 		(at 207.01 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19628,7 +19347,6 @@
 	)
 	(label "TVRAM5"
 		(at 328.93 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19639,7 +19357,6 @@
 	)
 	(label "MXA9"
 		(at 278.13 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19650,7 +19367,6 @@
 	)
 	(label "MXA4"
 		(at 62.23 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19661,7 +19377,6 @@
 	)
 	(label "TVRAM14"
 		(at 328.93 186.69 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19672,7 +19387,6 @@
 	)
 	(label "TVRAM25"
 		(at 328.93 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19683,7 +19397,6 @@
 	)
 	(label "MXA3"
 		(at 62.23 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19694,7 +19407,6 @@
 	)
 	(label "TVRAM4"
 		(at 328.93 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19705,7 +19417,6 @@
 	)
 	(label "TVRAM5"
 		(at 257.81 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19716,7 +19427,6 @@
 	)
 	(label "TVRAM12"
 		(at 185.42 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19727,7 +19437,6 @@
 	)
 	(label "MXA6"
 		(at 278.13 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19738,7 +19447,6 @@
 	)
 	(label "TVRAM14"
 		(at 111.76 186.69 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19749,7 +19457,6 @@
 	)
 	(label "MXA7"
 		(at 62.23 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19760,7 +19467,6 @@
 	)
 	(label "TVRAM27"
 		(at 328.93 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19771,7 +19477,6 @@
 	)
 	(label "TVRAM16"
 		(at 111.76 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19782,7 +19487,6 @@
 	)
 	(label "MXA2"
 		(at 278.13 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19793,7 +19497,6 @@
 	)
 	(label "CAS1-"
 		(at 278.13 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19804,7 +19507,6 @@
 	)
 	(label "TVRAM6"
 		(at 257.81 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19815,7 +19517,6 @@
 	)
 	(label "TVRAM18"
 		(at 257.81 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19826,7 +19527,6 @@
 	)
 	(label "TVRAM2"
 		(at 111.76 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19837,7 +19537,6 @@
 	)
 	(label "MXA7"
 		(at 278.13 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19848,7 +19547,6 @@
 	)
 	(label "TVRAM11"
 		(at 111.76 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19859,7 +19557,6 @@
 	)
 	(label "TVRAM3"
 		(at 257.81 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19870,7 +19567,6 @@
 	)
 	(label "TVRAM12"
 		(at 328.93 181.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19881,7 +19577,6 @@
 	)
 	(label "TVRAM18"
 		(at 185.42 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19892,7 +19587,6 @@
 	)
 	(label "TVRAM2"
 		(at 257.81 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19903,7 +19597,6 @@
 	)
 	(label "MXA10"
 		(at 207.01 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19914,7 +19607,6 @@
 	)
 	(label "TVRAM23"
 		(at 257.81 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19925,7 +19617,6 @@
 	)
 	(label "MXA0"
 		(at 62.23 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19936,7 +19627,6 @@
 	)
 	(label "TVRAM10"
 		(at 185.42 176.53 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19947,7 +19637,6 @@
 	)
 	(label "TVRAM21"
 		(at 185.42 207.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19958,7 +19647,6 @@
 	)
 	(label "MXA3"
 		(at 134.62 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19969,7 +19657,6 @@
 	)
 	(label "TVRAM23"
 		(at 257.81 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19980,7 +19667,6 @@
 	)
 	(label "TVRAM29"
 		(at 257.81 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -19991,7 +19677,6 @@
 	)
 	(label "MXA9"
 		(at 207.01 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20002,7 +19687,6 @@
 	)
 	(label "CAS2-"
 		(at 62.23 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20013,7 +19697,6 @@
 	)
 	(label "MXA9"
 		(at 134.62 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20024,7 +19707,6 @@
 	)
 	(label "TVRAM11"
 		(at 328.93 179.07 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20035,7 +19717,6 @@
 	)
 	(label "MXA1"
 		(at 207.01 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20046,7 +19727,6 @@
 	)
 	(label "CAS0-"
 		(at 278.13 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20057,7 +19737,6 @@
 	)
 	(label "MXA0"
 		(at 62.23 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20068,7 +19747,6 @@
 	)
 	(label "TVRAM0"
 		(at 257.81 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20079,7 +19757,6 @@
 	)
 	(label "WRAM-"
 		(at 134.62 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20090,7 +19767,6 @@
 	)
 	(label "TVRAM27"
 		(at 328.93 224.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20101,7 +19777,6 @@
 	)
 	(label "TVRAM31"
 		(at 328.93 234.95 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20112,7 +19787,6 @@
 	)
 	(label "TVRAM10"
 		(at 328.93 176.53 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20123,7 +19797,6 @@
 	)
 	(label "TVRAM26"
 		(at 185.42 222.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20134,7 +19807,6 @@
 	)
 	(label "TVRAM3"
 		(at 328.93 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20145,7 +19817,6 @@
 	)
 	(label "TVRAM31"
 		(at 111.76 234.95 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20156,7 +19827,6 @@
 	)
 	(label "TVRAM29"
 		(at 328.93 229.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20167,7 +19837,6 @@
 	)
 	(label "TVRAM14"
 		(at 185.42 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20178,7 +19847,6 @@
 	)
 	(label "WRAM-"
 		(at 207.01 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20189,7 +19857,6 @@
 	)
 	(label "TVRAM19"
 		(at 111.76 201.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20200,7 +19867,6 @@
 	)
 	(label "TVRAM26"
 		(at 257.81 222.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20211,7 +19877,6 @@
 	)
 	(label "TVRAM5"
 		(at 185.42 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20222,7 +19887,6 @@
 	)
 	(label "TVRAM23"
 		(at 328.93 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20233,7 +19897,6 @@
 	)
 	(label "TVRAM24"
 		(at 328.93 217.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20244,7 +19907,6 @@
 	)
 	(label "TVRAM13"
 		(at 328.93 184.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20255,7 +19917,6 @@
 	)
 	(label "TVRAM20"
 		(at 111.76 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20266,7 +19927,6 @@
 	)
 	(label "MXA8"
 		(at 134.62 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20277,7 +19937,6 @@
 	)
 	(label "MXA1"
 		(at 134.62 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20288,7 +19947,6 @@
 	)
 	(label "TVRAM11"
 		(at 257.81 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20299,7 +19957,6 @@
 	)
 	(label "TVRAM31"
 		(at 185.42 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20310,7 +19967,6 @@
 	)
 	(label "TVRAM17"
 		(at 328.93 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20321,7 +19977,6 @@
 	)
 	(label "TVRAM7"
 		(at 257.81 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20332,7 +19987,6 @@
 	)
 	(label "TVRAM26"
 		(at 111.76 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20343,7 +19997,6 @@
 	)
 	(label "MXA2"
 		(at 62.23 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20354,7 +20007,6 @@
 	)
 	(label "TVRAM1"
 		(at 257.81 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20365,7 +20017,6 @@
 	)
 	(label "TVRAM20"
 		(at 257.81 204.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20376,7 +20027,6 @@
 	)
 	(label "MXA6"
 		(at 62.23 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20387,7 +20037,6 @@
 	)
 	(label "CAS2-"
 		(at 278.13 204.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20398,7 +20047,6 @@
 	)
 	(label "TVRAM19"
 		(at 257.81 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20409,7 +20057,6 @@
 	)
 	(label "MXA7"
 		(at 62.23 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20420,7 +20067,6 @@
 	)
 	(label "MXA0"
 		(at 278.13 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20431,7 +20077,6 @@
 	)
 	(label "TVRAM13"
 		(at 111.76 184.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20442,7 +20087,6 @@
 	)
 	(label "TVRAM8"
 		(at 185.42 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20453,7 +20097,6 @@
 	)
 	(label "CAS2-"
 		(at 134.62 204.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20464,7 +20107,6 @@
 	)
 	(label "CAS3-"
 		(at 134.62 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20475,7 +20117,6 @@
 	)
 	(label "TVRAM6"
 		(at 185.42 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20486,7 +20127,6 @@
 	)
 	(label "TVRAM24"
 		(at 185.42 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20497,7 +20137,6 @@
 	)
 	(label "TVRAM20"
 		(at 257.81 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20508,7 +20147,6 @@
 	)
 	(label "TVRAM25"
 		(at 111.76 219.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20519,7 +20157,6 @@
 	)
 	(label "CAS3-"
 		(at 278.13 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20530,7 +20167,6 @@
 	)
 	(label "TVRAM10"
 		(at 257.81 176.53 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20541,7 +20177,6 @@
 	)
 	(label "TVRAM2"
 		(at 257.81 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20552,7 +20187,6 @@
 	)
 	(label "MXA5"
 		(at 207.01 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20563,7 +20197,6 @@
 	)
 	(label "CAS3-"
 		(at 278.13 207.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20574,7 +20207,6 @@
 	)
 	(label "CAS3-"
 		(at 207.01 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20585,7 +20217,6 @@
 	)
 	(label "TVRAM12"
 		(at 111.76 181.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20596,7 +20227,6 @@
 	)
 	(label "WRAM-"
 		(at 62.23 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20607,7 +20237,6 @@
 	)
 	(label "MXA1"
 		(at 278.13 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20618,7 +20247,6 @@
 	)
 	(label "TVRAM2"
 		(at 185.42 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20629,7 +20257,6 @@
 	)
 	(label "MXA9"
 		(at 62.23 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20640,7 +20267,6 @@
 	)
 	(label "CAS1-"
 		(at 207.01 201.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20651,7 +20277,6 @@
 	)
 	(label "MXA8"
 		(at 62.23 168.91 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20662,7 +20287,6 @@
 	)
 	(label "TVRAM23"
 		(at 111.76 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20673,7 +20297,6 @@
 	)
 	(label "MXA3"
 		(at 278.13 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20684,7 +20307,6 @@
 	)
 	(label "MXA5"
 		(at 278.13 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20696,7 +20318,6 @@
 	(hierarchical_label "RAS3-"
 		(shape input)
 		(at 284.48 68.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20708,7 +20329,6 @@
 	(hierarchical_label "RAS2-"
 		(shape input)
 		(at 213.36 68.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20720,7 +20340,6 @@
 	(hierarchical_label "RAS6-"
 		(shape input)
 		(at 212.09 186.69 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20732,7 +20351,6 @@
 	(hierarchical_label "RAS1-"
 		(shape input)
 		(at 140.97 68.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20744,7 +20362,6 @@
 	(hierarchical_label "CAS0-"
 		(shape input)
 		(at 60.96 81.28 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20756,7 +20373,6 @@
 	(hierarchical_label "CAS1-"
 		(shape input)
 		(at 60.96 83.82 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20768,7 +20384,6 @@
 	(hierarchical_label "MXA[0..10]"
 		(shape input)
 		(at 33.02 16.51 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20780,7 +20395,6 @@
 	(hierarchical_label "RAS7-"
 		(shape input)
 		(at 284.48 186.69 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20792,7 +20406,6 @@
 	(hierarchical_label "RAS0-"
 		(shape input)
 		(at 68.58 68.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20804,7 +20417,6 @@
 	(hierarchical_label "RAS5-"
 		(shape input)
 		(at 140.97 186.69 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20816,7 +20428,6 @@
 	(hierarchical_label "RAS4-"
 		(shape input)
 		(at 67.31 186.69 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20828,7 +20439,6 @@
 	(hierarchical_label "WRAM-"
 		(shape input)
 		(at 60.96 93.98 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20840,7 +20450,6 @@
 	(hierarchical_label "TVRAM[0..31]"
 		(shape tri_state)
 		(at 378.46 25.4 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20852,7 +20461,6 @@
 	(hierarchical_label "CAS3-"
 		(shape input)
 		(at 60.96 88.9 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -20864,7 +20472,6 @@
 	(hierarchical_label "CAS2-"
 		(shape input)
 		(at 60.96 86.36 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)

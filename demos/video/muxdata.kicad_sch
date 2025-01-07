@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20241004)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "39bf5ddc-d073-496b-8d93-14dacb63ae69")
 	(paper "A4")
 	(title_block
@@ -1381,8 +1381,12 @@
 		)
 		(symbol "power:GND"
 			(power)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
+				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1458,8 +1462,7 @@
 				(pin power_in line
 					(at 0 0 270)
 					(length 0)
-					(hide yes)
-					(name "GND"
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5877,7 +5880,6 @@
 	)
 	(label "DPC1"
 		(at 53.34 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5888,7 +5890,6 @@
 	)
 	(label "VRAM10"
 		(at 144.78 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5899,7 +5900,6 @@
 	)
 	(label "TVR2"
 		(at 205.74 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5910,7 +5910,6 @@
 	)
 	(label "VRAM30"
 		(at 104.14 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5921,7 +5920,6 @@
 	)
 	(label "TVB4"
 		(at 205.74 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5932,7 +5930,6 @@
 	)
 	(label "VRAM24"
 		(at 204.47 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5943,7 +5940,6 @@
 	)
 	(label "VRAM8"
 		(at 104.14 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5954,7 +5950,6 @@
 	)
 	(label "DPC27"
 		(at 53.34 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5965,7 +5960,6 @@
 	)
 	(label "TVR0"
 		(at 205.74 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5976,7 +5970,6 @@
 	)
 	(label "VRAM5"
 		(at 104.14 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5987,7 +5980,6 @@
 	)
 	(label "TVB0"
 		(at 205.74 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -5998,7 +5990,6 @@
 	)
 	(label "DPC17"
 		(at 53.34 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6009,7 +6000,6 @@
 	)
 	(label "DPC3"
 		(at 53.34 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6020,7 +6010,6 @@
 	)
 	(label "VRAM8"
 		(at 144.78 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6031,7 +6020,6 @@
 	)
 	(label "VRAM27"
 		(at 204.47 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6042,7 +6030,6 @@
 	)
 	(label "VRAM11"
 		(at 144.78 144.78 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6053,7 +6040,6 @@
 	)
 	(label "VRAM21"
 		(at 104.14 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6064,7 +6050,6 @@
 	)
 	(label "VRAM14"
 		(at 207.01 154.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6075,7 +6060,6 @@
 	)
 	(label "VRAM11"
 		(at 104.14 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6086,7 +6070,6 @@
 	)
 	(label "VRAM20"
 		(at 104.14 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6097,7 +6080,6 @@
 	)
 	(label "VRAM24"
 		(at 104.14 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6108,7 +6090,6 @@
 	)
 	(label "DPC16"
 		(at 53.34 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6119,7 +6100,6 @@
 	)
 	(label "VRAM9"
 		(at 104.14 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6130,7 +6110,6 @@
 	)
 	(label "VRAM22"
 		(at 207.01 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6141,7 +6120,6 @@
 	)
 	(label "VRAM5"
 		(at 144.78 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6152,7 +6130,6 @@
 	)
 	(label "VRAM19"
 		(at 204.47 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6163,7 +6140,6 @@
 	)
 	(label "TVG2"
 		(at 205.74 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6174,7 +6150,6 @@
 	)
 	(label "VRAM17"
 		(at 204.47 147.32 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6185,7 +6160,6 @@
 	)
 	(label "TVB7"
 		(at 207.01 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6196,7 +6170,6 @@
 	)
 	(label "DPC18"
 		(at 53.34 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6207,7 +6180,6 @@
 	)
 	(label "VRAM12"
 		(at 144.78 149.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6218,7 +6190,6 @@
 	)
 	(label "VRAM3"
 		(at 144.78 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6229,7 +6200,6 @@
 	)
 	(label "VRAM25"
 		(at 104.14 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6240,7 +6210,6 @@
 	)
 	(label "VRAM30"
 		(at 207.01 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6251,7 +6220,6 @@
 	)
 	(label "TVR4"
 		(at 205.74 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6262,7 +6230,6 @@
 	)
 	(label "TVR5"
 		(at 205.74 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6273,7 +6240,6 @@
 	)
 	(label "TVG4"
 		(at 205.74 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6284,7 +6250,6 @@
 	)
 	(label "DPC20"
 		(at 53.34 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6295,7 +6260,6 @@
 	)
 	(label "VRAM22"
 		(at 104.14 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6306,7 +6270,6 @@
 	)
 	(label "DPC25"
 		(at 53.34 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6317,7 +6280,6 @@
 	)
 	(label "VRAM12"
 		(at 104.14 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6328,7 +6290,6 @@
 	)
 	(label "DPC6"
 		(at 53.34 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6339,7 +6300,6 @@
 	)
 	(label "VRAM0"
 		(at 144.78 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6350,7 +6310,6 @@
 	)
 	(label "TVB1"
 		(at 205.74 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6361,7 +6320,6 @@
 	)
 	(label "DPC24"
 		(at 53.34 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6372,7 +6330,6 @@
 	)
 	(label "VRAM27"
 		(at 104.14 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6383,7 +6340,6 @@
 	)
 	(label "VRAM4"
 		(at 104.14 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6394,7 +6350,6 @@
 	)
 	(label "VRAM23"
 		(at 205.74 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6405,7 +6360,6 @@
 	)
 	(label "DPC10"
 		(at 53.34 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6416,7 +6370,6 @@
 	)
 	(label "DPC12"
 		(at 53.34 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6427,7 +6380,6 @@
 	)
 	(label "TVG5"
 		(at 205.74 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6438,7 +6390,6 @@
 	)
 	(label "VRAM9"
 		(at 144.78 139.7 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6449,7 +6400,6 @@
 	)
 	(label "VRAM31"
 		(at 205.74 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6460,7 +6410,6 @@
 	)
 	(label "DPC0"
 		(at 53.34 27.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6471,7 +6420,6 @@
 	)
 	(label "VRAM20"
 		(at 204.47 139.7 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6482,7 +6430,6 @@
 	)
 	(label "DPC15"
 		(at 53.34 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6493,7 +6440,6 @@
 	)
 	(label "TVB3"
 		(at 205.74 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6504,7 +6450,6 @@
 	)
 	(label "DPC5"
 		(at 53.34 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6515,7 +6460,6 @@
 	)
 	(label "VRAM0"
 		(at 104.14 27.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6526,7 +6470,6 @@
 	)
 	(label "DPC29"
 		(at 53.34 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6537,7 +6480,6 @@
 	)
 	(label "VRAM6"
 		(at 143.51 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6548,7 +6490,6 @@
 	)
 	(label "VRAM16"
 		(at 204.47 149.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6559,7 +6500,6 @@
 	)
 	(label "VRAM1"
 		(at 104.14 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6570,7 +6510,6 @@
 	)
 	(label "VRAM18"
 		(at 204.47 144.78 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6581,7 +6520,6 @@
 	)
 	(label "VRAM29"
 		(at 104.14 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6592,7 +6530,6 @@
 	)
 	(label "VRAM18"
 		(at 104.14 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6603,7 +6540,6 @@
 	)
 	(label "VRAM26"
 		(at 104.14 124.46 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6614,7 +6550,6 @@
 	)
 	(label "TVG7"
 		(at 207.01 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6625,7 +6560,6 @@
 	)
 	(label "VRAM6"
 		(at 104.14 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6636,7 +6570,6 @@
 	)
 	(label "DPC28"
 		(at 53.34 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6647,7 +6580,6 @@
 	)
 	(label "VRAM7"
 		(at 104.14 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6658,7 +6590,6 @@
 	)
 	(label "VRAM7"
 		(at 143.51 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6669,7 +6600,6 @@
 	)
 	(label "VRAM2"
 		(at 144.78 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6680,7 +6610,6 @@
 	)
 	(label "VRAM14"
 		(at 104.14 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6691,7 +6620,6 @@
 	)
 	(label "TVR3"
 		(at 205.74 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6702,7 +6630,6 @@
 	)
 	(label "VRAM29"
 		(at 207.01 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6713,7 +6640,6 @@
 	)
 	(label "DPC11"
 		(at 53.34 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6724,7 +6650,6 @@
 	)
 	(label "VRAM2"
 		(at 104.14 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6735,7 +6660,6 @@
 	)
 	(label "DPC8"
 		(at 53.34 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6746,7 +6670,6 @@
 	)
 	(label "DPC7"
 		(at 53.34 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6757,7 +6680,6 @@
 	)
 	(label "TVB6"
 		(at 207.01 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6768,7 +6690,6 @@
 	)
 	(label "DPC19"
 		(at 53.34 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6779,7 +6700,6 @@
 	)
 	(label "DPC14"
 		(at 53.34 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6790,7 +6710,6 @@
 	)
 	(label "DPC31"
 		(at 53.34 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6801,7 +6720,6 @@
 	)
 	(label "VRAM13"
 		(at 104.14 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6812,7 +6730,6 @@
 	)
 	(label "TVB5"
 		(at 205.74 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6823,7 +6740,6 @@
 	)
 	(label "VRAM28"
 		(at 204.47 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6834,7 +6750,6 @@
 	)
 	(label "TVR6"
 		(at 207.01 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6845,7 +6760,6 @@
 	)
 	(label "DPC23"
 		(at 53.34 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6856,7 +6770,6 @@
 	)
 	(label "DPC21"
 		(at 53.34 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6867,7 +6780,6 @@
 	)
 	(label "VRAM1"
 		(at 144.78 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6878,7 +6790,6 @@
 	)
 	(label "VRAM28"
 		(at 104.14 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6889,7 +6800,6 @@
 	)
 	(label "TVR1"
 		(at 205.74 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6900,7 +6810,6 @@
 	)
 	(label "VRAM15"
 		(at 104.14 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6911,7 +6820,6 @@
 	)
 	(label "DPC26"
 		(at 53.34 124.46 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6922,7 +6830,6 @@
 	)
 	(label "TVG0"
 		(at 205.74 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6933,7 +6840,6 @@
 	)
 	(label "VRAM4"
 		(at 144.78 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6944,7 +6850,6 @@
 	)
 	(label "TVR7"
 		(at 207.01 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6955,7 +6860,6 @@
 	)
 	(label "TVG6"
 		(at 207.01 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6966,7 +6870,6 @@
 	)
 	(label "VRAM3"
 		(at 104.14 35.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6977,7 +6880,6 @@
 	)
 	(label "DPC2"
 		(at 53.34 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6988,7 +6890,6 @@
 	)
 	(label "DPC13"
 		(at 53.34 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6999,7 +6900,6 @@
 	)
 	(label "VRAM31"
 		(at 104.14 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7010,7 +6910,6 @@
 	)
 	(label "ACCES_RAM-"
 		(at 135.89 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7021,7 +6920,6 @@
 	)
 	(label "TVB2"
 		(at 205.74 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7032,7 +6930,6 @@
 	)
 	(label "VRAM16"
 		(at 104.14 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7043,7 +6940,6 @@
 	)
 	(label "DPC30"
 		(at 53.34 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7054,7 +6950,6 @@
 	)
 	(label "TVG1"
 		(at 205.74 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7065,7 +6960,6 @@
 	)
 	(label "VRAM26"
 		(at 204.47 124.46 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7076,7 +6970,6 @@
 	)
 	(label "DPC4"
 		(at 53.34 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7087,7 +6980,6 @@
 	)
 	(label "VRAM17"
 		(at 104.14 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7098,7 +6990,6 @@
 	)
 	(label "VRAM23"
 		(at 104.14 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7109,7 +7000,6 @@
 	)
 	(label "VRAM15"
 		(at 205.74 152.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7120,7 +7010,6 @@
 	)
 	(label "VRAM13"
 		(at 144.78 152.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7131,7 +7020,6 @@
 	)
 	(label "VRAM21"
 		(at 204.47 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7142,7 +7030,6 @@
 	)
 	(label "TVG3"
 		(at 205.74 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7153,7 +7040,6 @@
 	)
 	(label "DPC9"
 		(at 53.34 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7164,7 +7050,6 @@
 	)
 	(label "VRAM19"
 		(at 104.14 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7175,7 +7060,6 @@
 	)
 	(label "VRAM25"
 		(at 204.47 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7186,7 +7070,6 @@
 	)
 	(label "VRAM10"
 		(at 104.14 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7197,7 +7080,6 @@
 	)
 	(label "DPC22"
 		(at 53.34 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7209,7 +7091,6 @@
 	(hierarchical_label "X_CLK"
 		(shape input)
 		(at 142.24 60.96 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7221,7 +7102,6 @@
 	(hierarchical_label "CSYNC-OUT"
 		(shape input)
 		(at 154.94 86.36 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7233,7 +7113,6 @@
 	(hierarchical_label "CLAMP"
 		(shape input)
 		(at 154.94 81.28 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7245,7 +7124,6 @@
 	(hierarchical_label "TVG[0..7]"
 		(shape bidirectional)
 		(at 241.3 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7257,7 +7135,6 @@
 	(hierarchical_label "TVR[0..7]"
 		(shape bidirectional)
 		(at 241.3 27.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7269,7 +7146,6 @@
 	(hierarchical_label "X_PROG-"
 		(shape input)
 		(at 154.94 50.8 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7281,7 +7157,6 @@
 	(hierarchical_label "TVB[0..7]"
 		(shape bidirectional)
 		(at 241.3 33.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7293,7 +7168,6 @@
 	(hierarchical_label "CLKCAD"
 		(shape input)
 		(at 154.94 68.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7305,7 +7179,6 @@
 	(hierarchical_label "X_DONE"
 		(shape output)
 		(at 154.94 53.34 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7317,7 +7190,6 @@
 	(hierarchical_label "ACQ_ON"
 		(shape input)
 		(at 154.94 93.98 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7329,7 +7201,6 @@
 	(hierarchical_label "X_DIN"
 		(shape input)
 		(at 154.94 55.88 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7341,7 +7212,6 @@
 	(hierarchical_label "DPC[0..31]"
 		(shape bidirectional)
 		(at 38.1 24.13 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7353,7 +7223,6 @@
 	(hierarchical_label "DATA_WR"
 		(shape input)
 		(at 60.96 142.24 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7365,7 +7234,6 @@
 	(hierarchical_label "VRAM[0..31]"
 		(shape bidirectional)
 		(at 241.3 25.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7377,7 +7245,6 @@
 	(hierarchical_label "ACCES_RAM-"
 		(shape input)
 		(at 60.96 144.78 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7389,7 +7256,6 @@
 	(hierarchical_label "CLKCDA"
 		(shape input)
 		(at 215.9 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7401,7 +7267,6 @@
 	(hierarchical_label "BLANK-"
 		(shape input)
 		(at 154.94 83.82 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)

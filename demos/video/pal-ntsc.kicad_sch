@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20241004)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "729930f1-b9a5-4502-a5bf-e1c5c07e00cc")
 	(paper "A3")
 	(title_block
@@ -7348,7 +7348,6 @@
 	)
 	(label "VAF"
 		(at 257.81 60.96 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7359,7 +7358,6 @@
 	)
 	(label "PC_D5"
 		(at 138.43 198.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7370,7 +7368,6 @@
 	)
 	(label "TVG1"
 		(at 257.81 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7381,7 +7378,6 @@
 	)
 	(label "TVR1"
 		(at 257.81 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7392,7 +7388,6 @@
 	)
 	(label "TVB6"
 		(at 257.81 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7403,7 +7398,6 @@
 	)
 	(label "TVB5"
 		(at 257.81 139.7 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7414,7 +7408,6 @@
 	)
 	(label "TVB3"
 		(at 257.81 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7425,7 +7418,6 @@
 	)
 	(label "TVR7"
 		(at 257.81 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7436,7 +7428,6 @@
 	)
 	(label "TVR3"
 		(at 257.81 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7447,7 +7438,6 @@
 	)
 	(label "TVG4"
 		(at 257.81 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7458,7 +7448,6 @@
 	)
 	(label "TVB0"
 		(at 257.81 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7469,7 +7458,6 @@
 	)
 	(label "Y_SYNC"
 		(at 257.81 154.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7480,7 +7468,6 @@
 	)
 	(label "TVG6"
 		(at 257.81 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7491,7 +7478,6 @@
 	)
 	(label "VAF"
 		(at 288.29 45.72 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7502,7 +7488,6 @@
 	)
 	(label "TVR0"
 		(at 257.81 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7513,7 +7498,6 @@
 	)
 	(label "TVB4"
 		(at 257.81 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7524,7 +7508,6 @@
 	)
 	(label "PC_D2"
 		(at 138.43 190.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7535,7 +7518,6 @@
 	)
 	(label "TVR6"
 		(at 257.81 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7546,7 +7528,6 @@
 	)
 	(label "TVG7"
 		(at 257.81 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7557,7 +7538,6 @@
 	)
 	(label "TVG0"
 		(at 257.81 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7568,7 +7548,6 @@
 	)
 	(label "TVR2"
 		(at 257.81 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7579,7 +7558,6 @@
 	)
 	(label "PC_A1"
 		(at 138.43 210.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7590,7 +7568,6 @@
 	)
 	(label "TVR5"
 		(at 257.81 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7601,7 +7578,6 @@
 	)
 	(label "VAF"
 		(at 293.37 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7612,7 +7588,6 @@
 	)
 	(label "VAF"
 		(at 118.11 180.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7623,7 +7598,6 @@
 	)
 	(label "PC_A0"
 		(at 138.43 208.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7634,7 +7608,6 @@
 	)
 	(label "TVB7"
 		(at 257.81 144.78 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7645,7 +7618,6 @@
 	)
 	(label "Y-VIDEO"
 		(at 128.27 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7656,7 +7628,6 @@
 	)
 	(label "C-VIDEO"
 		(at 128.27 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7667,7 +7638,6 @@
 	)
 	(label "TVB2"
 		(at 257.81 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7678,7 +7648,6 @@
 	)
 	(label "TVR4"
 		(at 257.81 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7689,7 +7658,6 @@
 	)
 	(label "PC_D0"
 		(at 138.43 185.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7700,7 +7668,6 @@
 	)
 	(label "TVG5"
 		(at 257.81 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7711,7 +7678,6 @@
 	)
 	(label "TVG2"
 		(at 257.81 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7722,7 +7688,6 @@
 	)
 	(label "TVG3"
 		(at 257.81 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7733,7 +7698,6 @@
 	)
 	(label "PC_D3"
 		(at 138.43 193.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7744,7 +7708,6 @@
 	)
 	(label "PC_D6"
 		(at 138.43 200.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7755,7 +7718,6 @@
 	)
 	(label "PC_D4"
 		(at 138.43 195.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7766,7 +7728,6 @@
 	)
 	(label "PC_D7"
 		(at 138.43 203.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7777,7 +7738,6 @@
 	)
 	(label "PC_D1"
 		(at 138.43 187.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7788,7 +7748,6 @@
 	)
 	(label "TVB1"
 		(at 257.81 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7799,7 +7758,6 @@
 	)
 	(label "Y_SYNC"
 		(at 52.07 165.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7811,7 +7769,6 @@
 	(hierarchical_label "TVB[0..7]"
 		(shape bidirectional)
 		(at 274.32 124.46 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7823,7 +7780,6 @@
 	(hierarchical_label "BT812_RD-"
 		(shape input)
 		(at 151.13 215.9 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7835,7 +7791,6 @@
 	(hierarchical_label "BT812_WR-"
 		(shape input)
 		(at 151.13 218.44 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7847,7 +7802,6 @@
 	(hierarchical_label "OE_PAL-"
 		(shape input)
 		(at 147.32 96.52 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7859,7 +7813,6 @@
 	(hierarchical_label "PC_A[0..1]"
 		(shape input)
 		(at 64.77 40.64 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7871,7 +7824,6 @@
 	(hierarchical_label "VD_PAL-"
 		(shape output)
 		(at 257.81 193.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7883,7 +7835,6 @@
 	(hierarchical_label "TVR[0..7]"
 		(shape bidirectional)
 		(at 274.32 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7895,7 +7846,6 @@
 	(hierarchical_label "PC_D[0..7]"
 		(shape bidirectional)
 		(at 64.77 38.1 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7907,7 +7857,6 @@
 	(hierarchical_label "F_PALIN"
 		(shape output)
 		(at 257.81 215.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7919,7 +7868,6 @@
 	(hierarchical_label "HD_PAL-"
 		(shape output)
 		(at 257.81 190.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7931,7 +7879,6 @@
 	(hierarchical_label "TVG[0..7]"
 		(shape bidirectional)
 		(at 274.32 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7943,7 +7890,6 @@
 	(hierarchical_label "GREEN_IN"
 		(shape input)
 		(at 72.39 106.68 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7955,7 +7901,6 @@
 	(hierarchical_label "RESET-"
 		(shape input)
 		(at 151.13 223.52 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7967,7 +7912,6 @@
 	(hierarchical_label "RED_IN"
 		(shape input)
 		(at 72.39 129.54 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)

@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20241004)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "6f41a160-ad0f-4de8-8141-29fd7bc791ff")
 	(paper "A3")
 	(title_block
@@ -6206,7 +6206,6 @@
 	)
 	(label "TVI0"
 		(at 228.6 189.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6217,7 +6216,6 @@
 	)
 	(label "TVR5"
 		(at 228.6 92.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6228,7 +6226,6 @@
 	)
 	(label "PCA0"
 		(at 104.14 177.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6239,7 +6236,6 @@
 	)
 	(label "TVR3"
 		(at 168.91 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6250,7 +6246,6 @@
 	)
 	(label "DPC2"
 		(at 227.33 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6261,7 +6256,6 @@
 	)
 	(label "TVG7"
 		(at 168.91 167.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6272,7 +6266,6 @@
 	)
 	(label "TVR3"
 		(at 228.6 87.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6283,7 +6276,6 @@
 	)
 	(label "TVG2"
 		(at 168.91 154.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6294,7 +6286,6 @@
 	)
 	(label "DPC0"
 		(at 102.87 147.32 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6305,7 +6296,6 @@
 	)
 	(label "TVR2"
 		(at 228.6 85.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6316,7 +6306,6 @@
 	)
 	(label "DPC5"
 		(at 227.33 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6327,7 +6316,6 @@
 	)
 	(label "OE_RVB-"
 		(at 290.83 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6338,7 +6326,6 @@
 	)
 	(label "TVG5"
 		(at 168.91 162.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6349,7 +6336,6 @@
 	)
 	(label "TVG3"
 		(at 228.6 110.49 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6360,7 +6346,6 @@
 	)
 	(label "TVG1"
 		(at 228.6 105.41 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6371,7 +6356,6 @@
 	)
 	(label "DPC7"
 		(at 227.33 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6382,7 +6366,6 @@
 	)
 	(label "TVB4"
 		(at 228.6 135.89 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6393,7 +6376,6 @@
 	)
 	(label "TVB1"
 		(at 168.91 175.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6404,7 +6386,6 @@
 	)
 	(label "TVB0"
 		(at 168.91 172.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6415,7 +6396,6 @@
 	)
 	(label "PCA1"
 		(at 104.14 180.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6426,7 +6406,6 @@
 	)
 	(label "TVB5"
 		(at 228.6 138.43 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6437,7 +6416,6 @@
 	)
 	(label "DPC4"
 		(at 227.33 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6448,7 +6426,6 @@
 	)
 	(label "DPC5"
 		(at 102.87 160.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6459,7 +6436,6 @@
 	)
 	(label "DPC6"
 		(at 102.87 162.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6470,7 +6446,6 @@
 	)
 	(label "TVR6"
 		(at 168.91 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6481,7 +6456,6 @@
 	)
 	(label "PCA0"
 		(at 227.33 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6492,7 +6466,6 @@
 	)
 	(label "VAA"
 		(at 144.78 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6503,7 +6476,6 @@
 	)
 	(label "TVB1"
 		(at 228.6 128.27 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6514,7 +6486,6 @@
 	)
 	(label "TVB6"
 		(at 168.91 187.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6525,7 +6496,6 @@
 	)
 	(label "VAA"
 		(at 267.97 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6536,7 +6506,6 @@
 	)
 	(label "OE_RVB-"
 		(at 168.91 195.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6547,7 +6516,6 @@
 	)
 	(label "PCA1"
 		(at 227.33 173.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6558,7 +6526,6 @@
 	)
 	(label "TVG5"
 		(at 228.6 115.57 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6569,7 +6536,6 @@
 	)
 	(label "TVB4"
 		(at 168.91 182.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6580,7 +6546,6 @@
 	)
 	(label "TVR7"
 		(at 228.6 97.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6591,7 +6556,6 @@
 	)
 	(label "TVR1"
 		(at 168.91 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6602,7 +6566,6 @@
 	)
 	(label "TVR4"
 		(at 228.6 90.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6613,7 +6576,6 @@
 	)
 	(label "TVG4"
 		(at 228.6 113.03 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6624,7 +6586,6 @@
 	)
 	(label "TVI1"
 		(at 228.6 191.77 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6635,7 +6596,6 @@
 	)
 	(label "TVG2"
 		(at 228.6 107.95 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6646,7 +6606,6 @@
 	)
 	(label "TVR0"
 		(at 168.91 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6657,7 +6616,6 @@
 	)
 	(label "TVR6"
 		(at 228.6 95.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6668,7 +6626,6 @@
 	)
 	(label "TVB5"
 		(at 168.91 185.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6679,7 +6636,6 @@
 	)
 	(label "TVR7"
 		(at 168.91 144.78 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6690,7 +6646,6 @@
 	)
 	(label "TVR4"
 		(at 168.91 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6701,7 +6656,6 @@
 	)
 	(label "DPC4"
 		(at 102.87 157.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6712,7 +6666,6 @@
 	)
 	(label "TVG4"
 		(at 168.91 160.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6723,7 +6676,6 @@
 	)
 	(label "PCA2"
 		(at 227.33 176.53 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6734,7 +6686,6 @@
 	)
 	(label "TVG3"
 		(at 168.91 157.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6745,7 +6696,6 @@
 	)
 	(label "TVB3"
 		(at 228.6 133.35 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6756,7 +6706,6 @@
 	)
 	(label "DPC3"
 		(at 227.33 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6767,7 +6716,6 @@
 	)
 	(label "TVG6"
 		(at 228.6 118.11 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6778,7 +6726,6 @@
 	)
 	(label "TVG6"
 		(at 168.91 165.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6789,7 +6736,6 @@
 	)
 	(label "TVG0"
 		(at 168.91 149.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6800,7 +6746,6 @@
 	)
 	(label "TVR0"
 		(at 228.6 80.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6811,7 +6756,6 @@
 	)
 	(label "TVB6"
 		(at 228.6 140.97 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6822,7 +6766,6 @@
 	)
 	(label "TVB2"
 		(at 168.91 177.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6833,7 +6776,6 @@
 	)
 	(label "TVR2"
 		(at 168.91 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6844,7 +6786,6 @@
 	)
 	(label "PCA2"
 		(at 104.14 182.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6855,7 +6796,6 @@
 	)
 	(label "DPC1"
 		(at 102.87 149.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6866,7 +6806,6 @@
 	)
 	(label "REF+"
 		(at 101.6 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6877,7 +6816,6 @@
 	)
 	(label "TVB3"
 		(at 168.91 180.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6888,7 +6826,6 @@
 	)
 	(label "TVG0"
 		(at 228.6 102.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6899,7 +6836,6 @@
 	)
 	(label "DPC7"
 		(at 102.87 165.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6910,7 +6846,6 @@
 	)
 	(label "DPC1"
 		(at 227.33 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6921,7 +6856,6 @@
 	)
 	(label "TVR5"
 		(at 168.91 139.7 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6932,7 +6866,6 @@
 	)
 	(label "TVB2"
 		(at 228.6 130.81 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6943,7 +6876,6 @@
 	)
 	(label "TVG1"
 		(at 168.91 152.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6954,7 +6886,6 @@
 	)
 	(label "TVB7"
 		(at 228.6 143.51 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6965,7 +6896,6 @@
 	)
 	(label "TVG7"
 		(at 228.6 120.65 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6976,7 +6906,6 @@
 	)
 	(label "DPC3"
 		(at 102.87 154.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6987,7 +6916,6 @@
 	)
 	(label "DPC2"
 		(at 102.87 152.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -6998,7 +6926,6 @@
 	)
 	(label "TVB7"
 		(at 168.91 190.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7009,7 +6936,6 @@
 	)
 	(label "TVB0"
 		(at 228.6 125.73 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7020,7 +6946,6 @@
 	)
 	(label "DPC0"
 		(at 227.33 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7031,7 +6956,6 @@
 	)
 	(label "TVR1"
 		(at 228.6 82.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7042,7 +6966,6 @@
 	)
 	(label "DPC6"
 		(at 227.33 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7054,7 +6977,6 @@
 	(hierarchical_label "OE_PAL-"
 		(shape output)
 		(at 304.8 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7066,7 +6988,6 @@
 	(hierarchical_label "CLKCAD"
 		(shape input)
 		(at 168.91 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7078,7 +6999,6 @@
 	(hierarchical_label "TVR[0..7]"
 		(shape tri_state)
 		(at 38.1 21.59 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7090,7 +7010,6 @@
 	(hierarchical_label "CLKCDA"
 		(shape input)
 		(at 289.56 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7102,7 +7021,6 @@
 	(hierarchical_label "DPC[0..7]"
 		(shape tri_state)
 		(at 38.1 31.75 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7114,7 +7032,6 @@
 	(hierarchical_label "GREEN_IN"
 		(shape input)
 		(at 43.18 137.16 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7126,7 +7043,6 @@
 	(hierarchical_label "BLANK-"
 		(shape input)
 		(at 289.56 143.51 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7138,7 +7054,6 @@
 	(hierarchical_label "GREEN"
 		(shape output)
 		(at 341.63 92.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7150,7 +7065,6 @@
 	(hierarchical_label "TVB[0..7]"
 		(shape tri_state)
 		(at 38.1 26.67 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7162,7 +7076,6 @@
 	(hierarchical_label "BLUE"
 		(shape output)
 		(at 341.63 97.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7174,7 +7087,6 @@
 	(hierarchical_label "RED_IN"
 		(shape input)
 		(at 43.18 116.84 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7186,7 +7098,6 @@
 	(hierarchical_label "WRCDA-"
 		(shape input)
 		(at 236.22 184.15 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7198,7 +7109,6 @@
 	(hierarchical_label "RED"
 		(shape output)
 		(at 341.63 87.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7210,7 +7120,6 @@
 	(hierarchical_label "TVG[0..7]"
 		(shape tri_state)
 		(at 38.1 24.13 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7222,7 +7131,6 @@
 	(hierarchical_label "RDCDA-"
 		(shape input)
 		(at 236.22 181.61 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7234,7 +7142,6 @@
 	(hierarchical_label "BLUE_IN"
 		(shape input)
 		(at 43.18 157.48 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7246,7 +7153,6 @@
 	(hierarchical_label "TVI[0..1]"
 		(shape input)
 		(at 38.1 19.05 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7258,7 +7164,6 @@
 	(hierarchical_label "CSYNCOUT-"
 		(shape input)
 		(at 289.56 138.43 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7270,7 +7175,6 @@
 	(hierarchical_label "CLAMP"
 		(shape input)
 		(at 168.91 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7282,7 +7186,6 @@
 	(hierarchical_label "WRCAD-"
 		(shape input)
 		(at 113.03 172.72 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7294,7 +7197,6 @@
 	(hierarchical_label "CSYNCIN-"
 		(shape output)
 		(at 166.37 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7306,7 +7208,6 @@
 	(hierarchical_label "PCA[0..2]"
 		(shape input)
 		(at 38.1 34.29 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -7318,7 +7219,6 @@
 	(hierarchical_label "RDCAD-"
 		(shape input)
 		(at 113.03 170.18 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)

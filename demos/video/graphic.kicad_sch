@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20241004)
+	(version 20241209)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "47a0ee66-f3ee-4544-b8e9-d2702f7d3f94")
 	(paper "A3")
 	(title_block
@@ -11112,7 +11112,6 @@
 	)
 	(label "X_CLK"
 		(at 143.51 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11123,7 +11122,6 @@
 	)
 	(label "TVI0"
 		(at 360.68 160.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11134,7 +11132,6 @@
 	)
 	(label "DQ1"
 		(at 80.01 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11145,7 +11142,6 @@
 	)
 	(label "CSIO-"
 		(at 146.05 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11156,7 +11152,6 @@
 	)
 	(label "BE-0"
 		(at 360.68 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11167,7 +11162,6 @@
 	)
 	(label "IA9"
 		(at 213.36 226.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11178,7 +11172,6 @@
 	)
 	(label "IA3"
 		(at 360.68 200.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11189,7 +11182,6 @@
 	)
 	(label "BE-3"
 		(at 78.74 124.46 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11200,7 +11192,6 @@
 	)
 	(label "RESERV1"
 		(at 143.51 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11211,7 +11202,6 @@
 	)
 	(label "DQ11"
 		(at 146.05 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11222,7 +11212,6 @@
 	)
 	(label "DQ0"
 		(at 80.01 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11233,7 +11222,6 @@
 	)
 	(label "ID2"
 		(at 255.27 208.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11244,7 +11232,6 @@
 	)
 	(label "MXA8"
 		(at 360.68 152.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11255,7 +11242,6 @@
 	)
 	(label "MXA2"
 		(at 360.68 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11266,7 +11252,6 @@
 	)
 	(label "DONE"
 		(at 78.74 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11277,7 +11262,6 @@
 	)
 	(label "ADR5"
 		(at 78.74 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11288,7 +11272,6 @@
 	)
 	(label "MXA1"
 		(at 360.68 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11299,7 +11282,6 @@
 	)
 	(label "PTBE-2"
 		(at 360.68 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11310,7 +11292,6 @@
 	)
 	(label "BE-0"
 		(at 78.74 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11321,7 +11302,6 @@
 	)
 	(label "14MHZOUT"
 		(at 115.57 214.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11332,7 +11312,6 @@
 	)
 	(label "DQ5"
 		(at 80.01 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11343,7 +11322,6 @@
 	)
 	(label "PTBE-1"
 		(at 76.2 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11354,7 +11332,6 @@
 	)
 	(label "IRAS-"
 		(at 359.41 182.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11365,7 +11342,6 @@
 	)
 	(label "HDOUT"
 		(at 288.29 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11376,7 +11352,6 @@
 	)
 	(label "ADR6"
 		(at 360.68 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11387,7 +11362,6 @@
 	)
 	(label "X_PROG-"
 		(at 289.56 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11398,7 +11372,6 @@
 	)
 	(label "DQ1"
 		(at 292.1 144.78 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11409,7 +11382,6 @@
 	)
 	(label "ADR2"
 		(at 142.24 149.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11420,7 +11392,6 @@
 	)
 	(label "PTBE-3"
 		(at 360.68 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11431,7 +11402,6 @@
 	)
 	(label "PCA1"
 		(at 143.51 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11442,7 +11412,6 @@
 	)
 	(label "IA4"
 		(at 213.36 213.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11453,7 +11422,6 @@
 	)
 	(label "DQ4"
 		(at 292.1 152.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11464,7 +11432,6 @@
 	)
 	(label "ADR3"
 		(at 360.68 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11475,7 +11442,6 @@
 	)
 	(label "MXA6"
 		(at 360.68 147.32 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11486,7 +11452,6 @@
 	)
 	(label "DIN"
 		(at 77.47 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11497,7 +11462,6 @@
 	)
 	(label "MXA4"
 		(at 360.68 139.7 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11508,7 +11472,6 @@
 	)
 	(label "IA7"
 		(at 360.68 213.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11519,7 +11482,6 @@
 	)
 	(label "DQ11"
 		(at 294.64 170.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11530,7 +11492,6 @@
 	)
 	(label "DQ2"
 		(at 80.01 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11541,7 +11502,6 @@
 	)
 	(label "DQ9"
 		(at 294.64 165.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11552,7 +11512,6 @@
 	)
 	(label "X_DONE"
 		(at 289.56 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11563,7 +11522,6 @@
 	)
 	(label "PTADR-"
 		(at 290.83 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11574,7 +11532,6 @@
 	)
 	(label "HDREFOUT"
 		(at 44.45 209.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11585,7 +11542,6 @@
 	)
 	(label "IA8"
 		(at 213.36 223.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11596,7 +11552,6 @@
 	)
 	(label "IA2"
 		(at 360.68 198.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11607,7 +11562,6 @@
 	)
 	(label "ADR4"
 		(at 360.68 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11618,7 +11572,6 @@
 	)
 	(label "BE-1"
 		(at 360.68 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11629,7 +11582,6 @@
 	)
 	(label "DQ7"
 		(at 80.01 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11640,7 +11592,6 @@
 	)
 	(label "PTNUM0"
 		(at 360.68 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11651,7 +11602,6 @@
 	)
 	(label "ID1"
 		(at 255.27 205.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11662,7 +11612,6 @@
 	)
 	(label "HDOUT"
 		(at 49.53 214.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11673,7 +11622,6 @@
 	)
 	(label "X_DIN"
 		(at 289.56 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11684,7 +11632,6 @@
 	)
 	(label "IA1"
 		(at 360.68 195.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11695,7 +11642,6 @@
 	)
 	(label "MXA5"
 		(at 360.68 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11706,7 +11652,6 @@
 	)
 	(label "DQ9"
 		(at 146.05 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11717,7 +11662,6 @@
 	)
 	(label "IA8"
 		(at 360.68 193.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11728,7 +11672,6 @@
 	)
 	(label "DQ0"
 		(at 292.1 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11739,7 +11682,6 @@
 	)
 	(label "MXA0"
 		(at 360.68 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11750,7 +11692,6 @@
 	)
 	(label "RESERV1"
 		(at 289.56 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11761,7 +11702,6 @@
 	)
 	(label "DQ5"
 		(at 294.64 154.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11772,7 +11712,6 @@
 	)
 	(label "PTBE-3"
 		(at 76.2 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11783,7 +11722,6 @@
 	)
 	(label "ICAS-"
 		(at 359.41 170.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11794,7 +11732,6 @@
 	)
 	(label "VOSC"
 		(at 52.07 224.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11805,7 +11742,6 @@
 	)
 	(label "TVI1"
 		(at 359.41 162.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11816,7 +11752,6 @@
 	)
 	(label "ADR5"
 		(at 360.68 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11827,7 +11762,6 @@
 	)
 	(label "ADR2"
 		(at 360.68 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11838,7 +11772,6 @@
 	)
 	(label "DQ14"
 		(at 146.05 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11849,7 +11782,6 @@
 	)
 	(label "IA7"
 		(at 213.36 220.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11860,7 +11792,6 @@
 	)
 	(label "LED"
 		(at 142.24 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11871,7 +11802,6 @@
 	)
 	(label "DQ15"
 		(at 146.05 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11882,7 +11812,6 @@
 	)
 	(label "ICAS-"
 		(at 212.09 233.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11893,7 +11822,6 @@
 	)
 	(label "MXA7"
 		(at 360.68 149.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11904,7 +11832,6 @@
 	)
 	(label "MXA9"
 		(at 360.68 154.94 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11915,7 +11842,6 @@
 	)
 	(label "PCA0"
 		(at 143.51 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11926,7 +11852,6 @@
 	)
 	(label "VOSC"
 		(at 85.09 185.42 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11937,7 +11862,6 @@
 	)
 	(label "CLK10MHz"
 		(at 288.29 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11948,7 +11872,6 @@
 	)
 	(label "X_DOUT"
 		(at 289.56 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11959,7 +11882,6 @@
 	)
 	(label "IA5"
 		(at 213.36 215.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11970,7 +11892,6 @@
 	)
 	(label "PCA2"
 		(at 143.51 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11981,7 +11902,6 @@
 	)
 	(label "MXA3"
 		(at 360.68 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -11992,7 +11912,6 @@
 	)
 	(label "DQ8"
 		(at 146.05 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12003,7 +11922,6 @@
 	)
 	(label "PTWR"
 		(at 292.1 124.46 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12014,7 +11932,6 @@
 	)
 	(label "IA6"
 		(at 213.36 218.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12025,7 +11942,6 @@
 	)
 	(label "IA4"
 		(at 360.68 203.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12036,7 +11952,6 @@
 	)
 	(label "X_PROG-"
 		(at 143.51 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12047,7 +11962,6 @@
 	)
 	(label "SYSRST-"
 		(at 360.68 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12058,7 +11972,6 @@
 	)
 	(label "BE-3"
 		(at 360.68 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12069,7 +11982,6 @@
 	)
 	(label "DQ13"
 		(at 146.05 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12080,7 +11992,6 @@
 	)
 	(label "XTAL_I"
 		(at 143.51 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12091,7 +12002,6 @@
 	)
 	(label "DQ12"
 		(at 146.05 60.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12102,7 +12012,6 @@
 	)
 	(label "CCLK"
 		(at 76.2 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12113,7 +12022,6 @@
 	)
 	(label "ADR4"
 		(at 78.74 139.7 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12124,7 +12032,6 @@
 	)
 	(label "PROG*"
 		(at 60.96 57.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12135,7 +12042,6 @@
 	)
 	(label "DQ3"
 		(at 292.1 149.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12146,7 +12052,6 @@
 	)
 	(label "ID1"
 		(at 359.41 177.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12157,7 +12062,6 @@
 	)
 	(label "PTATN-"
 		(at 288.29 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12168,7 +12072,6 @@
 	)
 	(label "IWR-"
 		(at 212.09 236.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12179,7 +12082,6 @@
 	)
 	(label "IWR-"
 		(at 359.41 180.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12190,7 +12092,6 @@
 	)
 	(label "ID3"
 		(at 359.41 165.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12201,7 +12102,6 @@
 	)
 	(label "IA2"
 		(at 213.36 208.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12212,7 +12112,6 @@
 	)
 	(label "IA1"
 		(at 213.36 205.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12223,7 +12122,6 @@
 	)
 	(label "PTNUM1"
 		(at 360.68 86.36 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12234,7 +12132,6 @@
 	)
 	(label "DQ6"
 		(at 294.64 157.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12245,7 +12142,6 @@
 	)
 	(label "IOE-"
 		(at 359.41 172.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12256,7 +12152,6 @@
 	)
 	(label "PTRDY-"
 		(at 288.29 109.22 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12267,7 +12162,6 @@
 	)
 	(label "DQ13"
 		(at 294.64 180.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12278,7 +12172,6 @@
 	)
 	(label "IA3"
 		(at 213.36 210.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12289,7 +12182,6 @@
 	)
 	(label "DQ12"
 		(at 294.64 172.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12300,7 +12192,6 @@
 	)
 	(label "ID3"
 		(at 255.27 210.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12311,7 +12202,6 @@
 	)
 	(label "X_DONE"
 		(at 143.51 81.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12322,7 +12212,6 @@
 	)
 	(label "PTBE-0"
 		(at 76.2 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12333,7 +12222,6 @@
 	)
 	(label "X_DIN"
 		(at 143.51 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12344,7 +12232,6 @@
 	)
 	(label "BE-2"
 		(at 78.74 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12355,7 +12242,6 @@
 	)
 	(label "IA0"
 		(at 360.68 190.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12366,7 +12252,6 @@
 	)
 	(label "ADR6"
 		(at 78.74 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12377,7 +12262,6 @@
 	)
 	(label "PTBE-0"
 		(at 360.68 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12388,7 +12272,6 @@
 	)
 	(label "PTBE-2"
 		(at 76.2 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12399,7 +12282,6 @@
 	)
 	(label "DQ4"
 		(at 80.01 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12410,7 +12292,6 @@
 	)
 	(label "HDREFOUT"
 		(at 288.29 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12421,7 +12302,6 @@
 	)
 	(label "BE-2"
 		(at 360.68 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12432,7 +12312,6 @@
 	)
 	(label "DQ3"
 		(at 80.01 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12443,7 +12322,6 @@
 	)
 	(label "IOE-"
 		(at 212.09 238.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12454,7 +12332,6 @@
 	)
 	(label "IA5"
 		(at 360.68 205.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12465,7 +12342,6 @@
 	)
 	(label "DQ14"
 		(at 294.64 182.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12476,7 +12352,6 @@
 	)
 	(label "14MHZOUT"
 		(at 360.68 187.96 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12487,7 +12362,6 @@
 	)
 	(label "IA6"
 		(at 360.68 210.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12498,7 +12372,6 @@
 	)
 	(label "IRAS-"
 		(at 212.09 231.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12509,7 +12382,6 @@
 	)
 	(label "IA0"
 		(at 213.36 203.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12520,7 +12392,6 @@
 	)
 	(label "PTBURST-"
 		(at 288.29 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12531,7 +12402,6 @@
 	)
 	(label "PTBE-1"
 		(at 360.68 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12542,7 +12412,6 @@
 	)
 	(label "ID0"
 		(at 255.27 203.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12553,7 +12422,6 @@
 	)
 	(label "ID0"
 		(at 359.41 175.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12564,7 +12432,6 @@
 	)
 	(label "X_CLK"
 		(at 289.56 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12575,7 +12442,6 @@
 	)
 	(label "CLK10MHz"
 		(at 142.24 134.62 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12586,7 +12452,6 @@
 	)
 	(label "MXA10"
 		(at 360.68 157.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12597,7 +12462,6 @@
 	)
 	(label "ID2"
 		(at 359.41 167.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12608,7 +12472,6 @@
 	)
 	(label "ADR3"
 		(at 78.74 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12619,7 +12482,6 @@
 	)
 	(label "DQ8"
 		(at 294.64 162.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12630,7 +12492,6 @@
 	)
 	(label "LED"
 		(at 184.15 72.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12641,7 +12502,6 @@
 	)
 	(label "DQ10"
 		(at 146.05 55.88 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12652,7 +12512,6 @@
 	)
 	(label "DQ2"
 		(at 292.1 147.32 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12663,7 +12522,6 @@
 	)
 	(label "IA9"
 		(at 360.68 185.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12674,7 +12532,6 @@
 	)
 	(label "DQ6"
 		(at 80.01 71.12 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12685,7 +12542,6 @@
 	)
 	(label "DQ7"
 		(at 294.64 160.02 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12696,7 +12552,6 @@
 	)
 	(label "DQ10"
 		(at 294.64 167.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12707,7 +12562,6 @@
 	)
 	(label "CSIO-"
 		(at 363.22 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12718,7 +12572,6 @@
 	)
 	(label "DQ15"
 		(at 294.64 185.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12729,7 +12582,6 @@
 	)
 	(label "BE-1"
 		(at 78.74 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12740,7 +12592,6 @@
 	)
 	(label "SELECT-"
 		(at 360.68 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12752,7 +12603,6 @@
 	(hierarchical_label "RAS7-"
 		(shape output)
 		(at 287.02 213.36 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12764,7 +12614,6 @@
 	(hierarchical_label "RDEMPTY"
 		(shape output)
 		(at 290.83 132.08 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12776,7 +12625,6 @@
 	(hierarchical_label "X_DOUT"
 		(shape output)
 		(at 287.02 91.44 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12788,7 +12636,6 @@
 	(hierarchical_label "PCA[0..2]"
 		(shape output)
 		(at 382.27 54.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12800,7 +12647,6 @@
 	(hierarchical_label "RDFIFO-"
 		(shape output)
 		(at 290.83 134.62 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12812,7 +12658,6 @@
 	(hierarchical_label "PTNUM1"
 		(shape input)
 		(at 85.09 119.38 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12824,7 +12669,6 @@
 	(hierarchical_label "X_IRQ"
 		(shape bidirectional)
 		(at 290.83 121.92 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12836,7 +12680,6 @@
 	(hierarchical_label "CSYNC-OUT"
 		(shape output)
 		(at 285.75 127 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12848,7 +12691,6 @@
 	(hierarchical_label "RAS4-"
 		(shape output)
 		(at 287.02 220.98 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12860,7 +12702,6 @@
 	(hierarchical_label "PTATN-"
 		(shape input)
 		(at 80.01 93.98 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12872,7 +12713,6 @@
 	(hierarchical_label "WRITE_RAM"
 		(shape output)
 		(at 287.02 195.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12884,7 +12724,6 @@
 	(hierarchical_label "ACQ_ON"
 		(shape output)
 		(at 285.75 101.6 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12896,7 +12735,6 @@
 	(hierarchical_label "X_PROG-"
 		(shape output)
 		(at 287.02 83.82 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12908,7 +12746,6 @@
 	(hierarchical_label "WR-"
 		(shape input)
 		(at 369.57 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12920,7 +12757,6 @@
 	(hierarchical_label "CSYNCIN-"
 		(shape input)
 		(at 287.02 193.04 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12932,7 +12768,6 @@
 	(hierarchical_label "CAS1-"
 		(shape output)
 		(at 287.02 203.2 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12944,7 +12779,6 @@
 	(hierarchical_label "HD_PAL-"
 		(shape input)
 		(at 285.75 187.96 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12956,7 +12790,6 @@
 	(hierarchical_label "PTWR"
 		(shape input)
 		(at 80.01 88.9 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12968,7 +12801,6 @@
 	(hierarchical_label "BE-[0..3]"
 		(shape output)
 		(at 20.32 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12980,7 +12812,6 @@
 	(hierarchical_label "PTRDY-"
 		(shape output)
 		(at 72.39 96.52 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -12992,7 +12823,6 @@
 	(hierarchical_label "ADR[2..6]"
 		(shape output)
 		(at 20.32 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13004,7 +12834,6 @@
 	(hierarchical_label "WRCAD-"
 		(shape output)
 		(at 146.05 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13016,7 +12845,6 @@
 	(hierarchical_label "PTBURST-"
 		(shape input)
 		(at 80.01 91.44 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13028,7 +12856,6 @@
 	(hierarchical_label "BPCLK"
 		(shape input)
 		(at 73.66 114.3 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13040,7 +12867,6 @@
 	(hierarchical_label "RAS0-"
 		(shape output)
 		(at 373.38 223.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13052,7 +12878,6 @@
 	(hierarchical_label "IRQ-"
 		(shape input)
 		(at 373.38 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13064,7 +12889,6 @@
 	(hierarchical_label "SELECT-"
 		(shape output)
 		(at 85.09 144.78 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13076,7 +12900,6 @@
 	(hierarchical_label "MXA[0..10]"
 		(shape output)
 		(at 382.27 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13088,7 +12911,6 @@
 	(hierarchical_label "RD-"
 		(shape output)
 		(at 85.09 147.32 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13100,7 +12922,6 @@
 	(hierarchical_label "CLAMP"
 		(shape output)
 		(at 374.65 220.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13112,7 +12933,6 @@
 	(hierarchical_label "SYSRST-"
 		(shape input)
 		(at 151.13 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13124,7 +12944,6 @@
 	(hierarchical_label "WRAM-"
 		(shape output)
 		(at 287.02 210.82 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13136,7 +12955,6 @@
 	(hierarchical_label "ACCES_RAM-"
 		(shape output)
 		(at 287.02 198.12 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13148,7 +12966,6 @@
 	(hierarchical_label "X_DONE"
 		(shape output)
 		(at 287.02 86.36 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13160,7 +12977,6 @@
 	(hierarchical_label "TVI[0..1]"
 		(shape output)
 		(at 382.27 58.42 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13172,7 +12988,6 @@
 	(hierarchical_label "RDCAD-"
 		(shape output)
 		(at 146.05 93.98 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13184,7 +12999,6 @@
 	(hierarchical_label "X_CLK"
 		(shape output)
 		(at 287.02 93.98 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13196,7 +13010,6 @@
 	(hierarchical_label "RAS6-"
 		(shape output)
 		(at 287.02 215.9 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13208,7 +13021,6 @@
 	(hierarchical_label "BLANK-"
 		(shape output)
 		(at 285.75 190.5 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13220,7 +13032,6 @@
 	(hierarchical_label "BT812_WR-"
 		(shape output)
 		(at 146.05 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13232,7 +13043,6 @@
 	(hierarchical_label "CAS2-"
 		(shape output)
 		(at 287.02 205.74 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13244,7 +13054,6 @@
 	(hierarchical_label "PTBE-[0..3]"
 		(shape input)
 		(at 35.56 68.58 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13256,7 +13065,6 @@
 	(hierarchical_label "RAS3-"
 		(shape output)
 		(at 287.02 223.52 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13268,7 +13076,6 @@
 	(hierarchical_label "RAS2-"
 		(shape output)
 		(at 287.02 226.06 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13280,7 +13087,6 @@
 	(hierarchical_label "WRFIFO-"
 		(shape output)
 		(at 290.83 139.7 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13292,7 +13098,6 @@
 	(hierarchical_label "CADCLK"
 		(shape output)
 		(at 374.65 215.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13304,7 +13109,6 @@
 	(hierarchical_label "RD-"
 		(shape input)
 		(at 369.57 124.46 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13316,7 +13120,6 @@
 	(hierarchical_label "CAS0-"
 		(shape output)
 		(at 287.02 200.66 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13328,7 +13131,6 @@
 	(hierarchical_label "RAS1-"
 		(shape output)
 		(at 373.38 226.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13340,7 +13142,6 @@
 	(hierarchical_label "RDCDA-"
 		(shape output)
 		(at 146.05 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13352,7 +13153,6 @@
 	(hierarchical_label "PTNUM0"
 		(shape input)
 		(at 85.09 121.92 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13364,7 +13164,6 @@
 	(hierarchical_label "IRQ_SLR"
 		(shape bidirectional)
 		(at 373.38 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13376,7 +13175,6 @@
 	(hierarchical_label "DQ[0..15]"
 		(shape tri_state)
 		(at 33.02 60.96 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13388,7 +13186,6 @@
 	(hierarchical_label "WRCDA-"
 		(shape output)
 		(at 146.05 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13400,7 +13197,6 @@
 	(hierarchical_label "CAS3-"
 		(shape output)
 		(at 287.02 208.28 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13412,7 +13208,6 @@
 	(hierarchical_label "BT812_RD-"
 		(shape output)
 		(at 146.05 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13424,7 +13219,6 @@
 	(hierarchical_label "PTADR-"
 		(shape output)
 		(at 80.01 111.76 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13436,7 +13230,6 @@
 	(hierarchical_label "CDACLK"
 		(shape output)
 		(at 374.65 218.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13448,7 +13241,6 @@
 	(hierarchical_label "F_PALIN"
 		(shape input)
 		(at 285.75 177.8 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13460,7 +13252,6 @@
 	(hierarchical_label "VD_PAL-"
 		(shape input)
 		(at 285.75 175.26 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13472,7 +13263,6 @@
 	(hierarchical_label "RAS5-"
 		(shape output)
 		(at 287.02 218.44 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13484,7 +13274,6 @@
 	(hierarchical_label "WR-"
 		(shape output)
 		(at 85.09 149.86 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
@@ -13496,7 +13285,6 @@
 	(hierarchical_label "WRFULL"
 		(shape output)
 		(at 290.83 137.16 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.524 1.524)
