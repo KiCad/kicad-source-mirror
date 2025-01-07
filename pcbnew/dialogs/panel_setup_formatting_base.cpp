@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,58 +17,66 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizer6;
-	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dashed Lines") ), wxVERTICAL );
+	m_dashedLinesLabel = new wxStaticText( this, wxID_ANY, _("Dashed Lines"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dashedLinesLabel->Wrap( -1 );
+	bMargins->Add( m_dashedLinesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMargins->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 	wxFlexGridSizer* fgSizer41;
 	fgSizer41 = new wxFlexGridSizer( 0, 2, 5, 0 );
 	fgSizer41->SetFlexibleDirection( wxBOTH );
 	fgSizer41->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	dashLengthLabel = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, _("Dash length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	dashLengthLabel = new wxStaticText( this, wxID_ANY, _("Dash length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	dashLengthLabel->Wrap( -1 );
 	fgSizer41->Add( dashLengthLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_dashLengthCtrl = new wxTextCtrl( sbSizer6->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_dashLengthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer41->Add( m_dashLengthCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	gapLengthLabel = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, _("Gap length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	gapLengthLabel = new wxStaticText( this, wxID_ANY, _("Gap length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	gapLengthLabel->Wrap( -1 );
 	fgSizer41->Add( gapLengthLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_gapLengthCtrl = new wxTextCtrl( sbSizer6->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_gapLengthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer41->Add( m_gapLengthCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer6->Add( fgSizer41, 0, wxEXPAND|wxBOTTOM, 5 );
+	bMargins->Add( fgSizer41, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_dashedLineHelp = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, _("Dash and dot lengths are ratios of the line width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dashedLineHelp = new wxStaticText( this, wxID_ANY, _("Dash and dot lengths are ratios of the line width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dashedLineHelp->Wrap( -1 );
-	sbSizer6->Add( m_dashedLineHelp, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-
-	bMargins->Add( sbSizer6, 0, wxEXPAND|wxALL, 5 );
+	bMargins->Add( m_dashedLineHelp, 0, wxALL, 10 );
 
 
 	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("When Adding Footprints to Board") ), wxVERTICAL );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, _("When Adding Footprints to Board"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	bMargins->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
 
-	m_styleFields = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_styleFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMargins->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	m_styleText = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to footprint text"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_styleText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
-	m_styleShapes = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to non-copper footprint shapes"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_styleShapes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_styleFields = new wxCheckBox( this, wxID_ANY, _("Apply board defaults to footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_styleFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_styleText = new wxCheckBox( this, wxID_ANY, _("Apply board defaults to footprint text"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_styleText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_styleShapes = new wxCheckBox( this, wxID_ANY, _("Apply board defaults to non-copper footprint shapes"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_styleShapes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );
+	bMargins->Add( bSizer3, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bMainSizer->Add( bMargins, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	bMainSizer->Add( bMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bMainSizer );
