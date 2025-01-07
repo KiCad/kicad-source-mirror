@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 13:07+0000\n"
+"PO-Revision-Date: 2025-01-07 13:24+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -763,7 +763,7 @@ msgstr "显示所有封装文本"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Off-board Silkscreen"
-msgstr "板外丝印层"
+msgstr "板外丝印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Do not clip silk layers to board outline"
@@ -15144,7 +15144,7 @@ msgstr "行线"
 #: eeschema/dialogs/dialog_table_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:102
 msgid "Column lines"
-msgstr "行线"
+msgstr "栏线"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:632 pcbnew/dialogs/dialog_table_properties_base.h:72
@@ -30552,7 +30552,7 @@ msgstr "板边倒角处理:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
-msgstr "是"
+msgstr "是, 并进行倒斜边处理"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
@@ -37104,7 +37104,7 @@ msgstr "技术层:"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:254
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
 msgid "Solder mask"
-msgstr "Solder mask"
+msgstr "阻焊"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
