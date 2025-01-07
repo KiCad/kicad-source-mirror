@@ -28,12 +28,12 @@ win64_build:
     - cmake `
       -G "Ninja" `
       -DCMAKE_TOOLCHAIN_FILE=C:\builder\vcpkg\scripts\buildsystems\vcpkg.cmake `
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo `
+      -DCMAKE_BUILD_TYPE=Debug `
       -DKICAD_SCRIPTING_WXPYTHON=OFF `
       -DKICAD_USE_OCC=ON `
       -DKICAD_BUILD_PNS_DEBUG_TOOL=ON `
       -DKICAD_USE_3DCONNEXION=ON `
-      -DVCPKG_BUILD_TYPE=release `
+      -DVCPKG_BUILD_TYPE=debug `
       ../../
     - cmake --build . 2>&1 | tee compilation_log.txt
     - cd ../../
