@@ -95,6 +95,10 @@ message BoardStackupLayer
   BoardStackupDielectricLayer dielectric = 5;
   kiapi.common.types.Color color = 6;
   string material_name = 7;
+
+  // The name of the layer shown in the KiCad GUI, which may be a default value like "F.Cu" or may
+  // have been customized by the user.  This field does not apply to dielectric layers.
+  string user_name = 8;
 }
 
 message BoardStackup

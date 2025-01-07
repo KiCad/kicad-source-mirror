@@ -675,6 +675,18 @@ HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup(
 
     any.UnpackTo( response.mutable_stackup() );
 
+    // User-settable layer names are not stored in BOARD_STACKUP at the moment
+    for( board::BoardStackupLayer& layer : *response.mutable_stackup()->mutable_layers() )
+    {
+        if( layer.type() == board::BoardStackupLayerType::BSLT_DIELECTRIC )
+            continue;
+
+        PCB_LAYER_ID id = FromProtoEnum<PCB_LAYER_ID>( layer.layer() );
+        wxCHECK2( id != UNDEFINED_LAYER, continue );
+
+        layer.set_user_name( frame()->GetBoard()->GetLayerName( id ) );
+    }
+
     return response;
 }
 
