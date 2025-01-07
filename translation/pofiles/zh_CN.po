@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 13:06+0000\n"
+"PO-Revision-Date: 2025-01-07 13:07+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -48562,7 +48562,7 @@ msgstr "显示/隐藏 网络检查器"
 #: pcbnew/tools/pcb_actions.cpp:1340
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:78
 msgid "Zone Manager"
-msgstr "域管理器"
+msgstr "填充域管理器"
 
 #: pcbnew/tools/pcb_actions.cpp:1341
 msgid "Show the zone manager dialog"
