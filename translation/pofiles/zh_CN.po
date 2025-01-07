@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 11:57+0000\n"
+"PO-Revision-Date: 2025-01-07 12:39+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -38202,7 +38202,7 @@ msgstr "域填充策略"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "允许圆角/倒角超出域轮廓"
+msgstr "允许圆角/倒角超出域外框"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
@@ -40219,7 +40219,7 @@ msgstr "焊盘不是通孔焊盘; 连接将是: %s。"
 #: pcbnew/drc/drc_engine.cpp:785
 #, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "%s 上的 net-tie; 间距: 0。"
+msgstr "%s 上的 Net tie; 间距: 0。"
 
 #: pcbnew/drc/drc_engine.cpp:788
 msgid "net tie"
@@ -45061,7 +45061,7 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
 #, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "域轮廓中的形状类型 %d 无效"
+msgstr "域外框中的形状类型 %d 无效"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
