@@ -28,7 +28,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bupperSizer->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 0 );
 
 	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	bupperSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL, 7 );
+	bupperSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bMainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -109,7 +109,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bmiddlerSizer->Add( bLeftCol, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bmiddlerSizer->Add( 10, 0, 0, 0, 5 );
+	bmiddlerSizer->Add( 15, 0, 0, 0, 5 );
 
 	wxBoxSizer* bRightCol;
 	bRightCol = new wxBoxSizer( wxVERTICAL );
@@ -216,23 +216,23 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GENDRILL_BASE::onCloseDlg ) );
-	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onOutputDirectoryBrowseClicked ), NULL, this );
 	m_rbExcellon->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
 	m_rbGerberX2->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
-	m_units->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );
-	m_zeros->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
-	m_buttonReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenReportFile ), NULL, this );
+	m_units->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onSelDrillUnitsSelected ), NULL, this );
+	m_zeros->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onSelZerosFmtSelected ), NULL, this );
+	m_buttonReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onGenReportFile ), NULL, this );
 }
 
 DIALOG_GENDRILL_BASE::~DIALOG_GENDRILL_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GENDRILL_BASE::onCloseDlg ) );
-	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onOutputDirectoryBrowseClicked ), NULL, this );
 	m_rbExcellon->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
 	m_rbGerberX2->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
-	m_units->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );
-	m_zeros->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
-	m_buttonReport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenReportFile ), NULL, this );
+	m_units->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onSelDrillUnitsSelected ), NULL, this );
+	m_zeros->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onSelZerosFmtSelected ), NULL, this );
+	m_buttonReport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onGenReportFile ), NULL, this );
 
 }

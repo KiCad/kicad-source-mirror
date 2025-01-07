@@ -77,11 +77,11 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onCloseDlg( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFileFormatSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSelDrillUnitsSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSelZerosFmtSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnGenReportFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSelDrillUnitsSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSelZerosFmtSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onGenReportFile( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

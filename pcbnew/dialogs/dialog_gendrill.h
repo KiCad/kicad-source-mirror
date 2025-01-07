@@ -51,11 +51,10 @@ public:
 
 private:
     void initDialog();
-    void InitDisplayParams();
 
     // event functions
-    void OnSelDrillUnitsSelected( wxCommandEvent& event ) override;
-    void OnSelZerosFmtSelected( wxCommandEvent& event ) override;
+    void onSelDrillUnitsSelected( wxCommandEvent& event ) override;
+    void onSelZerosFmtSelected( wxCommandEvent& event ) override;
 	void onFileFormatSelection( wxCommandEvent& event ) override;
 
     // Called when closing the dialog: Update config.
@@ -63,7 +62,7 @@ private:
     // could happen too late for the caller.
 	void onCloseDlg( wxCloseEvent& event ) override
     {
-        UpdateConfig();
+        updateConfig();
         event.Skip();
     }
 
@@ -72,9 +71,9 @@ private:
      *  for through holes, oblong holes, and for buried vias,
      *  drill values and drill count per layer pair
      */
-    void OnGenReportFile( wxCommandEvent& event ) override;
+    void onGenReportFile( wxCommandEvent& event ) override;
 
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+    void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
 
     // Specific functions:
     /**
@@ -85,23 +84,25 @@ private:
      * plated through holes, and one file per layer pair, which have one or more holes, excluding
      * through holes, already in the first file.  One file for all Not Plated through holes.
      */
-    void GenDrillAndMapFiles( bool aGenDrill, bool aGenMap );
+    void genDrillAndMapFiles( bool aGenDrill, bool aGenMap );
 
-    void UpdatePrecisionOptions();
-    void UpdateConfig();
+    void updatePrecisionOptions();
+    void updateConfig();
 
-public:
-    static int       m_UnitDrillIsInch;
-    static int       m_ZerosFormat;
-    static bool      m_MinimalHeader;
-    static bool      m_Mirror;
-    static bool      m_Merge_PTH_NPTH;
-    static bool      m_GenerateMap;
-    DRILL_PRECISION  m_Precision;                // Precision for drill files, in non decimal format
-    VECTOR2I         m_DrillFileOffset;          // Drill offset: 0,0 for absolute coordinates,
-                                                 //   or origin of the auxiliary axis
-    static bool      m_UseRouteModeForOvalHoles; // True to use a G00 route command for oval holes
-                                                 // False to use a G85 canned mode for oval holes
+private:
+    static int              g_unitDrillIsInch;
+    static int              g_zerosFormat;
+    static bool             g_minimalHeader;
+    static bool             g_mirror;
+    static bool             g_merge_PTH_NPTH;
+    static bool             g_generateMap;
+    static DRILL_PRECISION  g_precision;                // Precision for drill files in non-decimal
+                                                        //   format
+    static VECTOR2I         g_drillFileOffset;          // Drill offset: 0,0 for absolute
+                                                        //   coordinates, or aux origin
+    static bool             g_useRouteModeForOvalHoles; // True to use a G00 route command for
+                                                        //   oval holes; false to use a G85 canned
+                                                        //   mode for oval holes
 
 private:
     PCB_EDIT_FRAME*       m_pcbEditFrame;
@@ -111,8 +112,8 @@ private:
 
     bool                  m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
                                                       //   for drill origin coordinates
-    static int            m_mapFileType;              // format of map file: HPGL, PS ...
-    static int            m_drillFileType;            // for Excellon, Gerber
+    static int            g_mapFileType;              // format of map file: HPGL, PS ...
+    static int            g_drillFileType;            // for Excellon, Gerber
 };
 
 #endif      // DIALOG_GENDRILL_H_

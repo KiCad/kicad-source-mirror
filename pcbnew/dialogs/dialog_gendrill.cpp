@@ -32,13 +32,10 @@
 #include <gendrill_gerber_writer.h>
 #include <bitmaps.h>
 #include <tools/board_editor_control.h>
-#include <board.h>
-#include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <paths.h>
-#include <project.h>
 #include <dialog_gendrill.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
@@ -55,6 +52,22 @@ static DRILL_PRECISION precisionListForInches( 2, 4 );
 static DRILL_PRECISION precisionListForMetric( 3, 3 );
 
 
+// Static members of DIALOG_GENDRILL
+int  DIALOG_GENDRILL::g_unitDrillIsInch  = false;     // Only for Excellon format
+int  DIALOG_GENDRILL::g_zerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
+bool DIALOG_GENDRILL::g_minimalHeader    = false;    // Only for Excellon format
+bool DIALOG_GENDRILL::g_mirror           = false;    // Only for Excellon format
+bool DIALOG_GENDRILL::g_merge_PTH_NPTH   = false;    // Only for Excellon format
+bool DIALOG_GENDRILL::g_generateMap      = false;
+int  DIALOG_GENDRILL::g_mapFileType      = 4;        // The last choice in m_Choice_Drill_Map
+int  DIALOG_GENDRILL::g_drillFileType    = 0;
+
+bool DIALOG_GENDRILL::g_useRouteModeForOvalHoles = true;    // Use G00 route mode to "drill" oval
+                                                            // holes
+DRILL_PRECISION  DIALOG_GENDRILL::g_precision;
+VECTOR2I         DIALOG_GENDRILL::g_drillFileOffset;
+
+
 /* This function displays the dialog frame for drill tools
  */
 int BOARD_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
@@ -68,31 +81,32 @@ int BOARD_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
 
 
 DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aParent  ) :
-    DIALOG_GENDRILL_BASE( aParent )
+        DIALOG_GENDRILL_BASE( aParent )
 {
     m_pcbEditFrame = aPcbEditFrame;
     m_board  = m_pcbEditFrame->GetBoard();
     m_job = nullptr;
     m_plotOpts = m_pcbEditFrame->GetPlotSettings();
 
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+
     SetupStandardButtons( { { wxID_OK,     _( "Generate" ) },
                             { wxID_CANCEL, _( "Close" ) } } );
-
-    m_buttonsSizer->Layout();
 
     initDialog();
     finishDialogSettings();
 }
 
 
-
 DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_DRILL* aJob,
                                   wxWindow* aParent ) :
-    DIALOG_GENDRILL_BASE( aParent )
+        DIALOG_GENDRILL_BASE( aParent )
 {
     m_pcbEditFrame = aPcbEditFrame;
     m_board = m_pcbEditFrame->GetBoard();
     m_job = aJob;
+
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     // hide ui elements that dont belong for job config
     m_buttonReport->Hide();
@@ -100,23 +114,11 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
     m_messagesBox->Hide();
 
     SetupStandardButtons();
-    m_buttonsSizer->Layout();
 
     initDialog();
     finishDialogSettings();
 }
 
-
-// Static members of DIALOG_GENDRILL
-int  DIALOG_GENDRILL::m_UnitDrillIsInch  = false;     // Only for Excellon format
-int  DIALOG_GENDRILL::m_ZerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
-bool DIALOG_GENDRILL::m_MinimalHeader    = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::m_Mirror           = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::m_Merge_PTH_NPTH   = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::m_GenerateMap      = false;
-int  DIALOG_GENDRILL::m_mapFileType      = 4;        // The last choice in m_Choice_Drill_Map
-int  DIALOG_GENDRILL::m_drillFileType    = 0;
-bool DIALOG_GENDRILL::m_UseRouteModeForOvalHoles = true;    // Use G00 route mode to "drill" oval holes
 
 DIALOG_GENDRILL::~DIALOG_GENDRILL()
 {
@@ -127,7 +129,7 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
 {
     if( !m_job )
     {
-        GenDrillAndMapFiles( true, m_cbGenerateMap->GetValue() );
+        genDrillAndMapFiles( true, m_cbGenerateMap->GetValue() );
     }
     else
     {
@@ -135,8 +137,8 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
         m_job->m_format = m_rbExcellon->GetValue() ? JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON
 												   : JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER;
         m_job->m_drillUnits = m_units->GetSelection() == 0
-							? JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS
-							: JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES;
+                                                   ? JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS
+                                                   : JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES;
         m_job->m_drillOrigin = static_cast<JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN>( m_origin->GetSelection() );
         m_job->m_excellonCombinePTHNPTH = m_Check_Merge_PTH_NPTH->IsChecked();
         m_job->m_excellonMinimalHeader = m_Check_Minimal->IsChecked();
@@ -153,7 +155,49 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
 
 bool DIALOG_GENDRILL::TransferDataToWindow()
 {
-	initDialog();
+    if( !m_job )
+    {
+        m_rbExcellon->SetValue( g_drillFileType == 0 );
+        m_rbGerberX2->SetValue( g_drillFileType == 1 );
+        m_units->SetSelection( g_unitDrillIsInch ? 1 : 0 );
+        m_zeros->SetSelection( g_zerosFormat );
+        updatePrecisionOptions();
+        m_Check_Minimal->SetValue( g_minimalHeader );
+
+        m_origin->SetSelection( m_drillOriginIsAuxAxis ? 1 : 0 );
+
+        m_Check_Mirror->SetValue( g_mirror );
+        m_Check_Merge_PTH_NPTH->SetValue( g_merge_PTH_NPTH );
+        m_choiceDrillMap->SetSelection( g_mapFileType );
+        m_altDrillMode->SetValue( !g_useRouteModeForOvalHoles );
+        m_cbGenerateMap->SetValue( g_generateMap );
+
+        // Output directory
+        m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
+    }
+    else
+    {
+        m_browseButton->Hide();
+        m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
+
+        m_rbExcellon->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON );
+        m_rbGerberX2->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER );
+        m_units->SetSelection( m_job->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES );
+        m_zeros->SetSelection( static_cast<int>( m_job->m_zeroFormat ) );
+        updatePrecisionOptions();
+        m_Check_Minimal->SetValue( m_job->m_excellonMinimalHeader );
+
+        m_origin->SetSelection( m_job->m_drillOrigin == JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::PLOT );
+
+        m_Check_Mirror->SetValue( m_job->m_excellonMirrorY );
+        m_Check_Merge_PTH_NPTH->SetValue( m_job->m_excellonCombinePTHNPTH );
+        m_choiceDrillMap->SetSelection( static_cast<int>( m_job->m_mapFormat ) );
+        m_altDrillMode->SetValue( !m_job->m_excellonOvalDrillRoute );
+        m_cbGenerateMap->SetValue( m_job->m_generateMap );
+    }
+
+    wxCommandEvent dummy;
+    onFileFormatSelection( dummy );
 	return true;
 }
 
@@ -168,19 +212,19 @@ void DIALOG_GENDRILL::initDialog()
     {
         auto cfg = m_pcbEditFrame->GetPcbNewSettings();
 
-        m_Merge_PTH_NPTH = cfg->m_GenDrill.merge_pth_npth;
-        m_MinimalHeader = cfg->m_GenDrill.minimal_header;
-        m_Mirror = cfg->m_GenDrill.mirror;
-        m_UnitDrillIsInch = cfg->m_GenDrill.unit_drill_is_inch;
-        m_UseRouteModeForOvalHoles = cfg->m_GenDrill.use_route_for_oval_holes;
-        m_drillFileType = cfg->m_GenDrill.drill_file_type;
-        m_mapFileType = cfg->m_GenDrill.map_file_type;
-        m_ZerosFormat = cfg->m_GenDrill.zeros_format;
-        m_GenerateMap = cfg->m_GenDrill.generate_map;
+        g_merge_PTH_NPTH = cfg->m_GenDrill.merge_pth_npth;
+        g_minimalHeader = cfg->m_GenDrill.minimal_header;
+        g_mirror = cfg->m_GenDrill.mirror;
+        g_unitDrillIsInch = cfg->m_GenDrill.unit_drill_is_inch;
+        g_useRouteModeForOvalHoles = cfg->m_GenDrill.use_route_for_oval_holes;
+        g_drillFileType = cfg->m_GenDrill.drill_file_type;
+        g_mapFileType = cfg->m_GenDrill.map_file_type;
+        g_zerosFormat = cfg->m_GenDrill.zeros_format;
+        g_generateMap = cfg->m_GenDrill.generate_map;
 
-        // Ensure validity of m_mapFileType
-        if( m_mapFileType < 0 || m_mapFileType >= (int) m_choiceDrillMap->GetCount() )
-            m_mapFileType = m_choiceDrillMap->GetCount() - 1; // last item in list = default = PDF
+        // Ensure validity of g_mapFileType
+        if( g_mapFileType < 0 || g_mapFileType >= (int) m_choiceDrillMap->GetCount() )
+            g_mapFileType = m_choiceDrillMap->GetCount() - 1; // last item in list = default = PDF
 	}
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
@@ -188,58 +232,6 @@ void DIALOG_GENDRILL::initDialog()
     m_hash_key = TO_UTF8( GetTitle() );
 
     m_drillOriginIsAuxAxis = m_plotOpts.GetUseAuxOrigin();
-
-    InitDisplayParams();
-}
-
-
-void DIALOG_GENDRILL::InitDisplayParams()
-{
-    if( !m_job )
-    {
-        m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
-
-        m_rbExcellon->SetValue( m_drillFileType == 0 );
-        m_rbGerberX2->SetValue( m_drillFileType == 1 );
-        m_units->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
-        m_zeros->SetSelection( m_ZerosFormat );
-        UpdatePrecisionOptions();
-        m_Check_Minimal->SetValue( m_MinimalHeader );
-
-        m_origin->SetSelection( m_drillOriginIsAuxAxis ? 1 : 0 );
-
-        m_Check_Mirror->SetValue( m_Mirror );
-        m_Check_Merge_PTH_NPTH->SetValue( m_Merge_PTH_NPTH );
-        m_choiceDrillMap->SetSelection( m_mapFileType );
-        m_altDrillMode->SetValue( !m_UseRouteModeForOvalHoles );
-        m_cbGenerateMap->SetValue( m_GenerateMap );
-
-        // Output directory
-        m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
-    }
-    else
-    {
-        m_browseButton->Hide();
-        m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
-
-        m_rbExcellon->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON );
-        m_rbGerberX2->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER );
-        m_units->SetSelection( m_job->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES );
-        m_zeros->SetSelection( static_cast<int>( m_job->m_zeroFormat ) );
-        UpdatePrecisionOptions();
-        m_Check_Minimal->SetValue( m_job->m_excellonMinimalHeader );
-
-        m_origin->SetSelection( m_job->m_drillOrigin == JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::PLOT );
-
-        m_Check_Mirror->SetValue( m_job->m_excellonMirrorY );
-        m_Check_Merge_PTH_NPTH->SetValue( m_job->m_excellonCombinePTHNPTH );
-        m_choiceDrillMap->SetSelection( static_cast<int>( m_job->m_mapFormat ) );
-        m_altDrillMode->SetValue( !m_job->m_excellonOvalDrillRoute );
-        m_cbGenerateMap->SetValue( m_job->m_generateMap );
-    }
-
-    wxCommandEvent dummy;
-    onFileFormatSelection( dummy );
 }
 
 
@@ -247,7 +239,7 @@ void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
 {
     bool enbl_Excellon = m_rbExcellon->GetValue();
 
-    m_drillFileType = enbl_Excellon ? 0 : 1;
+    g_drillFileType = enbl_Excellon ? 0 : 1;
 
     m_unitsLabel->Enable( enbl_Excellon );
     m_units->Enable( enbl_Excellon );
@@ -260,7 +252,7 @@ void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
 
     if( enbl_Excellon )
     {
-        UpdatePrecisionOptions();
+        updatePrecisionOptions();
     }
     else
     {
@@ -272,37 +264,37 @@ void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
 }
 
 
-void DIALOG_GENDRILL::UpdateConfig()
+void DIALOG_GENDRILL::updateConfig()
 {
     UpdateDrillParams();
 
-    auto cfg = m_pcbEditFrame->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings();
 
-    cfg->m_GenDrill.merge_pth_npth           = m_Merge_PTH_NPTH;
-    cfg->m_GenDrill.minimal_header           = m_MinimalHeader;
-    cfg->m_GenDrill.mirror                   = m_Mirror;
-    cfg->m_GenDrill.unit_drill_is_inch       = m_UnitDrillIsInch;
-    cfg->m_GenDrill.use_route_for_oval_holes = m_UseRouteModeForOvalHoles;
-    cfg->m_GenDrill.drill_file_type          = m_drillFileType;
-    cfg->m_GenDrill.map_file_type            = m_mapFileType;
-    cfg->m_GenDrill.zeros_format             = m_ZerosFormat;
-    cfg->m_GenDrill.generate_map             = m_GenerateMap;
+    cfg->m_GenDrill.merge_pth_npth           = g_merge_PTH_NPTH;
+    cfg->m_GenDrill.minimal_header           = g_minimalHeader;
+    cfg->m_GenDrill.mirror                   = g_mirror;
+    cfg->m_GenDrill.unit_drill_is_inch       = g_unitDrillIsInch;
+    cfg->m_GenDrill.use_route_for_oval_holes = g_useRouteModeForOvalHoles;
+    cfg->m_GenDrill.drill_file_type          = g_drillFileType;
+    cfg->m_GenDrill.map_file_type            = g_mapFileType;
+    cfg->m_GenDrill.zeros_format             = g_zerosFormat;
+    cfg->m_GenDrill.generate_map             = g_generateMap;
 }
 
 
-void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
+void DIALOG_GENDRILL::onSelDrillUnitsSelected( wxCommandEvent& event )
 {
-    UpdatePrecisionOptions();
+    updatePrecisionOptions();
 }
 
 
-void DIALOG_GENDRILL::OnSelZerosFmtSelected( wxCommandEvent& event )
+void DIALOG_GENDRILL::onSelZerosFmtSelected( wxCommandEvent& event )
 {
-    UpdatePrecisionOptions();
+    updatePrecisionOptions();
 }
 
 
-void DIALOG_GENDRILL::UpdatePrecisionOptions()
+void DIALOG_GENDRILL::updatePrecisionOptions()
 {
     if( m_units->GetSelection() == 1 )
     {
@@ -328,7 +320,7 @@ void DIALOG_GENDRILL::UpdatePrecisionOptions()
 }
 
 
-void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+void DIALOG_GENDRILL::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
     wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
@@ -372,25 +364,25 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     m_drillOriginIsAuxAxis = m_origin->GetSelection() == 1;
     m_plotOpts.SetUseAuxOrigin( m_drillOriginIsAuxAxis );
 
-    m_mapFileType = m_choiceDrillMap->GetSelection();
+    g_mapFileType = m_choiceDrillMap->GetSelection();
 
-    m_UnitDrillIsInch = ( m_units->GetSelection() == 0 ) ? false : true;
-    m_MinimalHeader = m_Check_Minimal->IsChecked();
-    m_Mirror = m_Check_Mirror->IsChecked();
-    m_Merge_PTH_NPTH = m_Check_Merge_PTH_NPTH->IsChecked();
-    m_ZerosFormat = m_zeros->GetSelection();
-    m_UseRouteModeForOvalHoles = !m_altDrillMode->GetValue();
-    m_GenerateMap = m_cbGenerateMap->IsChecked();
+    g_unitDrillIsInch = ( m_units->GetSelection() == 0 ) ? false : true;
+    g_minimalHeader = m_Check_Minimal->IsChecked();
+    g_mirror = m_Check_Mirror->IsChecked();
+    g_merge_PTH_NPTH = m_Check_Merge_PTH_NPTH->IsChecked();
+    g_zerosFormat = m_zeros->GetSelection();
+    g_useRouteModeForOvalHoles = !m_altDrillMode->GetValue();
+    g_generateMap = m_cbGenerateMap->IsChecked();
 
     if( m_origin->GetSelection() == 0 )
-        m_DrillFileOffset = VECTOR2I( 0, 0 );
+        g_drillFileOffset = VECTOR2I( 0, 0 );
     else
-        m_DrillFileOffset = m_board->GetDesignSettings().GetAuxOrigin();
+        g_drillFileOffset = m_board->GetDesignSettings().GetAuxOrigin();
 
-    if( m_UnitDrillIsInch )
-        m_Precision = precisionListForInches;
+    if( g_unitDrillIsInch )
+        g_precision = precisionListForInches;
     else
-        m_Precision = precisionListForMetric;
+        g_precision = precisionListForMetric;
 
     if( !m_plotOpts.IsSameAs( m_board->GetPlotOptions() ) )
     {
@@ -400,9 +392,9 @@ void DIALOG_GENDRILL::UpdateDrillParams()
 }
 
 
-void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
+void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap )
 {
-    UpdateConfig();     // set params and Save drill options
+    updateConfig();     // set params and Save drill options
 
     m_pcbEditFrame->ClearMsgPanel();
     WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
@@ -447,13 +439,13 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         return;
     }
 
-    if( m_drillFileType == 0 )
+    if( g_drillFileType == 0 )
     {
         EXCELLON_WRITER excellonWriter( m_board );
-        excellonWriter.SetFormat( !m_UnitDrillIsInch, (EXCELLON_WRITER::ZEROS_FMT) m_ZerosFormat,
-                                  m_Precision.m_Lhs, m_Precision.m_Rhs );
-        excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_DrillFileOffset, m_Merge_PTH_NPTH );
-        excellonWriter.SetRouteModeForOvalHoles( m_UseRouteModeForOvalHoles );
+        excellonWriter.SetFormat( !g_unitDrillIsInch, (EXCELLON_WRITER::ZEROS_FMT) g_zerosFormat,
+                                  g_precision.m_Lhs, g_precision.m_Rhs );
+        excellonWriter.SetOptions( g_mirror, g_minimalHeader, g_drillFileOffset, g_merge_PTH_NPTH );
+        excellonWriter.SetRouteModeForOvalHoles( g_useRouteModeForOvalHoles );
         excellonWriter.SetMapFileFormat( filefmt[choice] );
 
         excellonWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
@@ -466,7 +458,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         // (SetFormat() accept 5 or 6, and any other value set the precision to 5)
         // the integer part precision is always 4, and units always mm
         gerberWriter.SetFormat( m_plotOpts.GetGerberPrecision() );
-        gerberWriter.SetOptions( m_DrillFileOffset );
+        gerberWriter.SetOptions( g_drillFileOffset );
         gerberWriter.SetMapFileFormat( filefmt[choice] );
 
         gerberWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
@@ -475,9 +467,9 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
 }
 
 
-void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
+void DIALOG_GENDRILL::onGenReportFile( wxCommandEvent& event )
 {
-    UpdateConfig(); // set params and Save drill options
+    updateConfig(); // set params and Save drill options
 
     wxFileName fn = m_board->GetFileName();
 
@@ -500,10 +492,10 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
 
     // Info is slightly different between Excellon and Gerber
     // (file ext, Merge PTH/NPTH option)
-    if( m_drillFileType == 0 )
+    if( g_drillFileType == 0 )
     {
         EXCELLON_WRITER excellonWriter( m_board );
-        excellonWriter.SetMergeOption( m_Merge_PTH_NPTH );
+        excellonWriter.SetMergeOption( g_merge_PTH_NPTH );
         success = excellonWriter.GenDrillReportFile( dlg.GetPath() );
     }
     else

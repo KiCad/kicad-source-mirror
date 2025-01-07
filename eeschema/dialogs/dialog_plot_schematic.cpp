@@ -232,7 +232,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 
 
 /**
- * @todo Copy of DIALOG_PLOT::OnOutputDirectoryBrowseClicked in dialog_plot.cpp, maybe merge to
+ * @todo Copy of DIALOG_PLOT::onOutputDirectoryBrowseClicked in dialog_plot.cpp, maybe merge to
  *       a common method.
  */
 void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
