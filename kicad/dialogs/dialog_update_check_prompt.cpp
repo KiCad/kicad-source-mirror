@@ -33,6 +33,8 @@ DIALOG_UPDATE_CHECK_PROMPT::DIALOG_UPDATE_CHECK_PROMPT( wxWindow* aWindow ) :
 #ifndef KICAD_UPDATE_CHECK
     m_cbKiCadUpdates->Hide();
 #endif
+
+    m_sdbSizerOK->SetFocus();
 }
 
 
