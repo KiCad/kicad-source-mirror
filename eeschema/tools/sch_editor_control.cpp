@@ -1706,8 +1706,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
     int annotateStartNum = m_frame->Schematic().Settings().m_AnnotateStartNum;
 
-    PASTE_MODE pasteMode = annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS
-                                              : PASTE_MODE::REMOVE_ANNOTATIONS;
+    PASTE_MODE pasteMode = PASTE_MODE::UNIQUE_ANNOTATIONS;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
@@ -1749,6 +1748,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     SCH_REFERENCE_LIST existingRefs;
     hierarchy.GetSymbols( existingRefs );
     existingRefs.SortByReferenceOnly();
+
+    std::set<wxString> existingRefsSet;
+
+    for( const SCH_REFERENCE& ref : existingRefs )
+        existingRefsSet.insert( ref.GetRef() );
 
     // Build UUID map for fetching last-resolved-properties
     std::map<KIID, EDA_ITEM*> itemMap;
@@ -1850,14 +1854,33 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
                 updatePastedSymbol( symbol, sheetPath, clipPath, forceKeepAnnotations );
 
-            // Assign a new KIID
-            const_cast<KIID&>( item->m_Uuid ) = KIID();
+            // Most modes will need new KIIDs for the symbol and its pins
+            // However, if we are pasting unique annotations, we need to check if the symbol
+            // is not already in the hierarchy.  If we don't already have a copy of the
+            // symbol, we just keep the existing KIID data as it is likely the same symbol
+            // being moved around the schematic
+            bool needsNewKiid = ( pasteMode != PASTE_MODE::UNIQUE_ANNOTATIONS );
 
-            // Make sure pins get a new UUID
-            for( SCH_PIN* pin : symbol->GetPins() )
+            for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
             {
-                const_cast<KIID&>( pin->m_Uuid ) = KIID();
-                pin->SetConnectivityDirty();
+                if( existingRefsSet.contains( instance.m_Reference ) )
+                {
+                    needsNewKiid = true;
+                    break;
+                }
+            }
+
+            if( needsNewKiid )
+            {
+                // Assign a new KIID
+                const_cast<KIID&>( item->m_Uuid ) = KIID();
+
+                // Make sure pins get a new UUID
+                for( SCH_PIN* pin : symbol->GetPins() )
+                {
+                    const_cast<KIID&>( pin->m_Uuid ) = KIID();
+                    pin->SetConnectivityDirty();
+                }
             }
 
             for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
