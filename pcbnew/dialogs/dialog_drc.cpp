@@ -1084,6 +1084,7 @@ void DIALOG_DRC::ExcludeMarker()
 void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
 {
     // Clear current selection list to avoid selection of deleted items
+    Freeze();
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     m_markersTreeModel->DeleteItems( false, aIncludeExclusions, false );
@@ -1091,6 +1092,7 @@ void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
     m_fpWarningsTreeModel->DeleteItems( false, aIncludeExclusions, false );
 
     m_frame->GetBoard()->DeleteMARKERs( true, aIncludeExclusions );
+    Thaw();
 }
 
 
