@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 13:24+0000\n"
+"PO-Revision-Date: 2025-01-07 13:44+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -5094,9 +5094,8 @@ msgid "Check for package updates on startup"
 msgstr "启动时检查 扩展内容包 是否可更新"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
-msgstr "库包处理"
+msgstr "处理来自扩展内容包的库"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
@@ -5963,7 +5962,7 @@ msgstr "英寸 (Inches)"
 #: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:328
 #: pcbnew/tools/pcb_actions.cpp:1169
 msgid "Constrain to H, V, 45"
-msgstr "将绘制操作约束为水平方向, 垂直方向或斜 45 度方向"
+msgstr "将操作约束为水平、垂直或45度斜向"
 
 #: common/eda_draw_frame.cpp:1116 pcbnew/footprint_libraries_utils.cpp:1368
 msgid "Select Library"
@@ -30552,7 +30551,7 @@ msgstr "板边倒角处理:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
-msgstr "是, 并进行倒斜边处理"
+msgstr "是, 倒角斜边处理"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
@@ -36176,7 +36175,7 @@ msgstr "画叉显示"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Force plotting of invisible values / refs"
-msgstr "强制绘制隐藏的值或参考"
+msgstr "强制绘制隐藏的值或参考位号"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Force plot invisible footprint values and reference designators"
@@ -37527,7 +37526,7 @@ msgstr "从原理图更新 PCB"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "将操作约束为水平方向, 垂直方向或斜 45 度方向"
+msgstr "将操作约束为水平、垂直或45度斜向"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:35
 msgid "Step for &rotate commands:"
@@ -48457,7 +48456,7 @@ msgstr "锁定或解锁选中项目"
 #: pcbnew/tools/pcb_actions.cpp:1170
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "将操作限制为从起点开始的水平方向, 垂直方向或斜 45 度方向"
+msgstr "将操作约束为水平、垂直或45度斜向"
 
 #: pcbnew/tools/pcb_actions.cpp:1177
 msgid "Prevent items from being moved and/or resized on the canvas"
