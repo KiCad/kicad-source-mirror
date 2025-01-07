@@ -73,22 +73,22 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 
 	bButtonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_export = new wxButton( this, wxID_ANY, _("&Export"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbEmbedFonts = new wxCheckBox( this, wxID_ANY, _("Embed fonts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbEmbedFonts->SetToolTip( _("Store a copy of all fonts used") );
+
+	bButtonsSizer->Add( m_cbEmbedFonts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bButtonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_export = new wxButton( this, wxID_ANY, _("&Export..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_export, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	bMainSizer->Add( bButtonsSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 3 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
-
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
-
-	m_cbEmbedFonts = new wxCheckBox( this, wxID_ANY, _("Embed fonts"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbEmbedFonts->SetToolTip( _("Store a copy of all fonts used") );
-
-	bSizer4->Add( m_cbEmbedFonts, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bMainSizer->Add( bSizer4, 0, wxEXPAND, 5 );

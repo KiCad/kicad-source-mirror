@@ -25,7 +25,6 @@ class WX_GRID;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 
@@ -42,9 +41,8 @@ class PANEL_EMBEDDED_FILES_BASE : public wxPanel
 		WX_GRID* m_files_grid;
 		STD_BITMAP_BUTTON* m_browse_button;
 		STD_BITMAP_BUTTON* m_delete_button;
-		wxButton* m_export;
-		wxStaticLine* m_staticline1;
 		wxCheckBox* m_cbEmbedFonts;
+		wxButton* m_export;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onSize( wxSizeEvent& event ) { event.Skip(); }
