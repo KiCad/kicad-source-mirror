@@ -178,7 +178,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
 #ifdef __WXGTK__
     // The GTK renderer seems to calculate row height incorrectly sometimes; but can be overridden
-    int rowHeight = FromDIP( 8 ) + GetTextExtent( wxS( "pdI" ) ).y;
+    int rowHeight = FromDIP( 6 ) + GetTextExtent( wxS( "pdI" ) ).y;
     m_tree_ctrl->SetRowHeight( rowHeight );
 #endif
 
