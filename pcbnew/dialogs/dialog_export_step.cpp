@@ -108,6 +108,20 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
         SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
                                 { wxID_CANCEL, _( "Close" )  } } );
+
+
+        // Build default output file name
+        // (last saved filename in project or built from board filename)
+        wxString path = m_editFrame->GetLastPath( LAST_PATH_STEP );
+
+        if( path.IsEmpty() )
+        {
+            wxFileName brdFile( m_editFrame->GetBoard()->GetFileName() );
+            brdFile.SetExt( wxT( "step" ) );
+            path = brdFile.GetFullPath();
+        }
+
+        m_outputFileName->SetValue( path );
     }
     else
     {
@@ -120,19 +134,6 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
     // non-job versions (which have different sizes).
     m_hash_key = TO_UTF8( GetTitle() );
-
-    // Build default output file name
-    // (last saved filename in project or built from board filename)
-    wxString path = m_editFrame->GetLastPath( LAST_PATH_STEP );
-
-    if( path.IsEmpty() )
-    {
-        wxFileName brdFile( m_editFrame->GetBoard()->GetFileName() );
-        brdFile.SetExt( wxT( "step" ) );
-        path = brdFile.GetFullPath();
-    }
-
-    m_outputFileName->SetValue( path );
 
     Layout();
     bSizerSTEPFile->Fit( this );
@@ -235,6 +236,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_cbOverwriteFile->SetValue( m_job->m_3dparams.m_Overwrite );
 
         m_txtComponentFilter->SetValue( m_job->m_3dparams.m_ComponentFilter );
+        m_outputFileName->SetValue( m_job->GetOutputPath() );
 
         wxCommandEvent dummy;
         DIALOG_EXPORT_STEP::onCbExportComponents( dummy );
