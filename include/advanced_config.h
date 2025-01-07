@@ -397,6 +397,21 @@ public:
     bool m_ShowEventCounters;
 
     /**
+     * Show UUIDs of items in the message panel.
+     *
+     * Can be useful when debugging against a specific item
+     * saved in a file.
+     *
+     * 0: do not show (default)
+     * 1: show full UUID
+     * 2: show only first 8 characters of UUID
+     *
+     * Setting name: "MsgPanelShowUuids"
+     * Default value: 0
+     */
+    int m_MsgPanelShowUuids;
+
+    /**
      * Allow manual scaling of canvas.
      *
      * Setting name: "AllowManualCanvasScale"

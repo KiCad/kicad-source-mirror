@@ -567,9 +567,12 @@ int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     {
         if( selection.GetSize() == 1 )
         {
-            EDA_ITEM* item = (EDA_ITEM*) selection.Front();
-
+            EDA_ITEM*                   item = (EDA_ITEM*) selection.Front();
             std::vector<MSG_PANEL_ITEM> msgItems;
+
+            if( std::optional<wxString> uuid = GetMsgPanelDisplayUuid( item->m_Uuid ) )
+                msgItems.emplace_back( _( "UUID" ), *uuid );
+
             item->GetMsgPanelInfo( m_frame, msgItems );
             m_frame->SetMsgPanel( msgItems );
         }

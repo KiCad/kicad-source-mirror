@@ -23,13 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "pcb_control.h"
+
 #include <kiplatform/ui.h>
 #include <tools/edit_tool.h>
 #include <tools/board_inspection_tool.h>
 #include <router/router_tool.h>
 #include <pgm_base.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcb_control.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/board_reannotate_tool.h>
@@ -1655,6 +1656,9 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     else if( selection.GetSize() == 1 )
     {
         EDA_ITEM* item = selection.Front();
+
+        if( std::optional<wxString> uuid = GetMsgPanelDisplayUuid( item->m_Uuid ) )
+            msgItems.emplace_back( _( "UUID" ), *uuid );
 
         item->GetMsgPanelInfo( m_frame, msgItems );
 

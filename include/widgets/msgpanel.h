@@ -28,16 +28,15 @@
  * @brief Message panel definition file.
  */
 
-#ifndef  _MSGPANEL_H_
-#define  _MSGPANEL_H_
+#pragma once
 
+#include <optional>
+#include <vector>
 
 #include <gal/color4d.h>
 
 #include <wx/window.h>
 #include <wx/panel.h>
-
-#include <vector>
 
 using KIGFX::COLOR4D;
 
@@ -45,6 +44,7 @@ using KIGFX::COLOR4D;
 
 
 class EDA_MSG_PANEL;
+class KIID;
 
 
 /**
@@ -164,4 +164,10 @@ protected:
 };
 
 
-#endif    // _MSGPANEL_H_
+/**
+ * Get a formatted UUID string for display in the message panel,
+ * according to the current advanced configuration setting.
+ *
+ * This will be std::nullopt if the configuration setting disables UUID display.
+ */
+std::optional<wxString> GetMsgPanelDisplayUuid( const KIID& aKiid );

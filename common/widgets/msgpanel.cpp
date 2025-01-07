@@ -30,6 +30,9 @@
 #include <wx/settings.h>
 #include <wx/toplevel.h>
 
+#include <advanced_config.h>
+#include <kiid.h>
+
 #include <widgets/ui_common.h>
 
 
@@ -236,4 +239,21 @@ void EDA_MSG_PANEL::erase( wxDC* aDC )
     aDC->SetPen( pen );
     aDC->SetBrush( brush );
     aDC->DrawRectangle( 0, 0, size.x, size.y );
+}
+
+
+std::optional<wxString> GetMsgPanelDisplayUuid( const KIID& aKiid )
+{
+    const static int        showUuids = ADVANCED_CFG::GetCfg().m_MsgPanelShowUuids;
+    std::optional<wxString> uuid;
+
+    if( showUuids > 0 )
+    {
+        uuid = aKiid.AsString();
+
+        if( showUuids == 2 )
+            uuid = uuid->SubString( 0, 7 );
+    }
+
+    return uuid;
 }
