@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 12:49+0000\n"
+"PO-Revision-Date: 2025-01-07 13:06+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -31941,7 +31941,7 @@ msgstr "域名称:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:31
 msgid "A unique name for this zone to identify it for DRC"
-msgstr "该域的唯一名称, 用于在 DRC 中对其进行标识"
+msgstr "为该域设置一个唯一的名称, 以便在 DRC 中对其进行标识"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104
 msgid "Zone priority level:"
@@ -36919,7 +36919,7 @@ msgstr "渲染 PCB 作业选项"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1466
 msgid "Keepouts"
-msgstr "Keepouts"
+msgstr "Keepout 规则"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:177
 msgid "Convert to Rule Area"
@@ -36945,7 +36945,7 @@ msgstr "区名称:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:51
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "此规则区的唯一名称, 用于 DRC 规则"
+msgstr "为规则区设置一个唯一的名称, 以便在 DRC 规则中使用"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -47421,7 +47421,7 @@ msgstr "重新生成项目"
 
 #: pcbnew/tools/global_edit_tool.cpp:269
 msgid "Modify zones properties with zone manager"
-msgstr "通过规则域管理器修改规则域属性"
+msgstr "通过填充域管理器修改填充域属性"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -48566,7 +48566,7 @@ msgstr "域管理器"
 
 #: pcbnew/tools/pcb_actions.cpp:1341
 msgid "Show the zone manager dialog"
-msgstr "显示 规则域管理器 窗口"
+msgstr "显示 填充域管理器 窗口"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
 msgid "Flip Board View"
@@ -50623,9 +50623,8 @@ msgstr "取消覆铜"
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
-msgstr ""
-"顶部规则域的优先级最高。当某一规则域位于另一规则域内时, 如果其优先级更高, 则"
-"其外框会被从另一规则域中移除。"
+msgstr "顶部填充域的优先级最高。当某一填充域位于另一填充域内时, 如果其优先级更高, "
+"则其外框会被从另一填充域中移除。"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:82
 msgid "Refill zones"
