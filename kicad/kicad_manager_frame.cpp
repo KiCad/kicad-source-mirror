@@ -716,16 +716,15 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
 
     SetStatusText( "" );
 
-    for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
+    // Traverse pages in reverse order so deleting them doesn't mess up our iterator.
+    for( int i = (int) m_notebook->GetPageCount() - 1; i >= 0; i-- )
     {
         wxWindow* page = m_notebook->GetPage( i );
 
         if( PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page ) )
         {
             if( panel->GetProjectTied() )
-            {
                 m_notebook->DeletePage( i );
-            }
         }
     }
 
