@@ -98,7 +98,13 @@ bool SCRIPTING::IsWxAvailable()
     pybind11::dict locals;
 
     pybind11::exec( R"(
+import traceback
+import sys
+
+sys_version = sys.version
 wx_version = ""
+exception_output = ""
+
 try:
     from wx import version
     wx_version = version()
@@ -108,19 +114,34 @@ try:
     # mutating those globals.
     import wx.adv, wx.html, wx.richtext
 
-except:
-    pass
+except Exception as e:
+    exception_output = "".join(traceback.format_exception(e))
     )", pybind11::globals(), locals );
 
-    // e.g. "4.0.7 gtk3 (phoenix) wxWidgets 3.0.4"
-    wxString version( locals["wx_version"].cast<std::string>().c_str(), wxConvUTF8 );
+    const auto getLocal = [&]( const wxString& aName ) -> wxString
+    {
+        return wxString( locals[aName.ToStdString().c_str()].cast<std::string>().c_str(),
+                         wxConvUTF8 );
+    };
 
-    int idx = version.Find( wxT( "wxWidgets " ) );
+    // e.g. "4.0.7 gtk3 (phoenix) wxWidgets 3.0.4"
+    wxString version = getLocal( "wx_version" );
+    int      idx = version.Find( wxT( "wxWidgets " ) );
 
     if( idx == wxNOT_FOUND || version.IsEmpty() )
     {
-        wxLogError( wxT( "Could not determine wxPython version. "
-                         "Python plugins will not be available." ) );
+        wxString msg = wxString::Format( wxT( "Could not determine wxWidgets version. "
+                                              "Python plugins will not be available." ),
+                                         version );
+
+        msg << wxString::Format( wxT( "\n\nsys.version: '%s'" ), getLocal( "sys_version" ) );
+        msg << wxString::Format( wxT( "\nwx.version(): '%s'" ), getLocal( "wx_version" ) );
+
+        const wxString exception_output = getLocal( "exception_output" );
+        if( !exception_output.IsEmpty() )
+            msg << wxT( "\n\n" ) << exception_output;
+
+        wxLogError( msg );
         available = false;
     }
     else
