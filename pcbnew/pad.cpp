@@ -2159,14 +2159,15 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
 }
 
 
-void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
+void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
                     const std::function<void( int aErrorCode,
                                               const wxString& aMsg )>& aErrorHandler ) const
 {
-    Padstack().ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer )
-                                  {
-                                      doCheckPad( aLayer, aUnitsProvider, aErrorHandler );
-                                  } );
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                doCheckPad( aLayer, aUnitsProvider, aForPadProperties, aErrorHandler );
+            } );
 
     LSET padlayers_mask = GetLayerSet();
     VECTOR2I drill_size = GetDrillSize();
@@ -2274,7 +2275,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
 }
 
 
-void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider,
+void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
                       const std::function<void( int aErrorCode,
                                                 const wxString& aMsg )>& aErrorHandler ) const
 {
@@ -2322,13 +2323,15 @@ void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider,
             {
                 aErrorHandler( DRCE_PADSTACK, _( "(PTH pad hole leaves no copper)" ) );
             }
-            else
+            else if( aForPadProperties )
             {
-                // Test if the pad hole is fully inside the copper area
+                // Test if the pad hole is fully inside the copper area.  Note that we only run
+                // this check for pad properties because we run the more complete annular ring
+                // checker on the board (which handles multiple pads with the same name).
                 holeOutline.BooleanSubtract( padOutline );
 
                 if( !holeOutline.IsEmpty() )
-                    aErrorHandler( DRCE_PADSTACK, _( "(PTH pad hole non fully inside copper)" ) );
+                    aErrorHandler( DRCE_PADSTACK, _( "(PTH pad hole not fully inside copper)" ) );
             }
         }
         else

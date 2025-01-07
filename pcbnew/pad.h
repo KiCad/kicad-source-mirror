@@ -882,7 +882,7 @@ public:
 
     void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride );
 
-    void CheckPad( UNITS_PROVIDER* aUnitsProvider,
+    void CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
                    const std::function<void( int aErrorCode,
                                              const wxString& aMsg )>& aErrorHandler ) const;
 
@@ -904,7 +904,7 @@ private:
     void addPadPrimitivesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon, int aError,
                                     ERROR_LOC aErrorLoc ) const;
 
-    void doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider,
+    void doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
                      const std::function<void( int aErrorCode,
                                                const wxString& aMsg )>& aErrorHandler ) const;
 

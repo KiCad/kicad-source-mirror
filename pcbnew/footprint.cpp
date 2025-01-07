@@ -3278,7 +3278,7 @@ void FOOTPRINT::CheckPads( UNITS_PROVIDER* aUnitsProvider,
 
     for( PAD* pad: Pads() )
     {
-        pad->CheckPad( aUnitsProvider,
+        pad->CheckPad( aUnitsProvider, false,
                 [&]( int errorCode, const wxString& msg )
                 {
                     aErrorHandler( pad, errorCode, msg );

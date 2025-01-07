@@ -1400,7 +1400,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     wxArrayString error_msgs;
     wxArrayString warning_msgs;
 
-    m_previewPad->CheckPad( m_parentFrame,
+    m_previewPad->CheckPad( m_parentFrame, true,
             [&]( int errorCode, const wxString& msg )
             {
                 if( errorCode == DRCE_PADSTACK_INVALID )
