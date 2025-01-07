@@ -1010,6 +1010,7 @@ void PANEL_JOBS::OnJobButtonUp( wxCommandEvent& aEvent )
         rebuildJobList();
 
         m_jobsGrid->SelectRow( item - 1 );
+        m_jobsGrid->SetGridCursor( item - 1, m_jobsGrid->GetGridCursorCol() );
     }
     else
     {
@@ -1032,6 +1033,7 @@ void PANEL_JOBS::OnJobButtonDown( wxCommandEvent& aEvent )
         rebuildJobList();
 
         m_jobsGrid->SelectRow( item + 1 );
+        m_jobsGrid->SetGridCursor( item + 1, m_jobsGrid->GetGridCursorCol() );
     }
     else
     {
