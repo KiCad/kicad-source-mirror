@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 13:44+0000\n"
+"PO-Revision-Date: 2025-01-07 20:22+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -22917,7 +22917,7 @@ msgstr "移动项目, 同时保持连接"
 #: eeschema/tools/ee_actions.cpp:1479 eeschema/tools/sch_move_tool.cpp:1818
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
 msgid "Align Items to Grid"
-msgstr "将项目与栅格对齐"
+msgstr "将项目对齐到栅格"
 
 #: eeschema/tools/ee_actions.cpp:1487
 msgid "Save Current Sheet Copy As..."
@@ -48456,7 +48456,7 @@ msgstr "锁定或解锁选中项目"
 #: pcbnew/tools/pcb_actions.cpp:1170
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "将操作约束为水平、垂直或45度斜向"
+msgstr "将操作限制为从起点开始的水平方向, 垂直方向或斜 45 度方向"
 
 #: pcbnew/tools/pcb_actions.cpp:1177
 msgid "Prevent items from being moved and/or resized on the canvas"
