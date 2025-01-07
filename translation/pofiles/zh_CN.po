@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-07 10:18+0000\n"
+"PO-Revision-Date: 2025-01-07 11:57+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -3419,9 +3419,8 @@ msgid "Format:"
 msgstr "格式:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:34
-#, fuzzy
 msgid "Include:"
-msgstr "包含过孔 (&V)"
+msgstr "包含:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:47
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -5097,7 +5096,7 @@ msgstr "启动时检查 扩展内容包 是否可更新"
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
 #, fuzzy
 msgid "Library Package Handling"
-msgstr "处理扩展内容包库"
+msgstr "库包处理"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
@@ -5480,9 +5479,8 @@ msgid "Could not use OpenGL"
 msgstr "无法使用 OpenGL"
 
 #: common/draw_panel_gal.cpp:540
-#, fuzzy
 msgid "Error switching GAL backend"
-msgstr "切换GAL后端错误"
+msgstr "切换 GAL 后端出错"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3391
@@ -5805,14 +5803,12 @@ msgid "Origins & Axes"
 msgstr "原点和轴"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "新建封装"
+msgstr "封装默认值"
 
 #: common/eda_base_frame.cpp:1186
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "清理图形"
+msgstr "图形默认值"
 
 #: common/eda_base_frame.cpp:1191 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
@@ -7319,32 +7315,28 @@ msgid "Loading file canceled by user."
 msgstr "用户取消了加载文件操作。"
 
 #: common/jobs/job.cpp:79
-#, fuzzy
 msgid "Job Settings"
-msgstr "设置"
+msgstr "作业设置"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 msgid "3D model export"
 msgstr "导出 3D 模型"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "导出 3D 模型"
+msgstr "导出 3D 模型作业设置"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
 msgstr "PCB: 导出 3D 模型"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "PCB: 导出钻孔数据文件"
+msgstr "导出钻孔数据"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "编辑作业设置..."
+msgstr "导出钻孔数据作业设置"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7357,52 +7349,46 @@ msgstr "导出 DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:147
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "编辑作业设置..."
+msgstr "导出 DXF 作业设置"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
 msgstr "PCB: 导出 DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "导出 GenCAD 设置"
+msgstr "导出 GenCAD 作业设置"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
 #, fuzzy
 msgid "Export single Gerber"
-msgstr "PCB: 导出 Gerber"
+msgstr "导出独立 Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
 #, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "导出 GenCAD 设置"
+msgstr "导出独立 Gerber 作业设置"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "PCB: 导出 Gerber"
+msgstr "导出 Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "导出 GenCAD 设置"
+msgstr "导出 Gerber 作业设置"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:53
 msgid "PCB: Export Gerbers"
 msgstr "PCB: 导出 Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
-msgstr "导出 IPC-2581"
+msgstr "导出 IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "导出 IPC-2581 文件"
+msgstr "导出 IPC2581 作业设置"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
@@ -7414,9 +7400,8 @@ msgid "Export ODB++"
 msgstr "导出 ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "编辑作业设置..."
+msgstr "导出 ODB++ 作业设置"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 msgid "PCB: Export ODB++"
@@ -7429,23 +7414,20 @@ msgstr "导出 PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:128
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "编辑作业设置..."
+msgstr "导出 PDF 作业设置"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
 msgid "PCB: Export PDF"
 msgstr "PCB: 导出 PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Export position data"
-msgstr "PCB: 导出位置数据"
+msgstr "导出位置数据"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "PCB: 导出位置数据"
+msgstr "导出位置数据作业设置"
 
 #: common/jobs/job_export_pcb_pos.cpp:115
 msgid "PCB: Export Position Data"
@@ -7458,61 +7440,53 @@ msgstr "导出 SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:166
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "编辑作业设置..."
+msgstr "导出 SVG 作业设置"
 
 #: common/jobs/job_export_pcb_svg.cpp:68
 msgid "PCB: Export SVG"
 msgstr "PCB: 导出 SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "生成物料清单..."
+msgstr "生成物料清单"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "生成物料清单..."
+msgstr "生成物料清单作业设置"
 
 #: common/jobs/job_export_sch_bom.cpp:96
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "生成物料清单..."
+msgstr "原理图: 生成物料清单"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "导出网表"
+msgstr "导出 %s 网表"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "导出网表"
+msgstr "导出网表作业设置"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
 msgstr "原理图: 导出网表"
 
 #: common/jobs/job_export_sch_plot.cpp:179
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "导出 Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:185
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "编辑作业设置..."
+msgstr "导出 Postscript 作业设置"
 
 #: common/jobs/job_export_sch_plot.cpp:198 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "导出 HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:204
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "编辑作业设置..."
+msgstr "导出 HPGL 作业设置"
 
 #: common/jobs/job_export_sch_plot.cpp:208
 msgid "Schematic: Export SVG"
@@ -7523,9 +7497,8 @@ msgid "Schematic: Export HPGL"
 msgstr "原理图: 导出HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:212
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "原理图: 导出网表"
+msgstr "原理图: 导出 Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:214
 msgid "Schematic: Export DXF"
@@ -7540,51 +7513,45 @@ msgid "Schematic PythonBOM export"
 msgstr "导出原理图 PythonBOM"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "执行 PCB DRC"
+msgstr "执行 DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D 设置"
+msgstr "DRC 作业设置"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
 msgstr "PCB: 执行 DRC"
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "渲染 PCB"
+msgstr "渲染 %s"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "编辑作业设置..."
+msgstr "渲染 PCB 作业设置"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
 msgstr "PCB: 渲染"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "执行 PCB DRC"
+msgstr "执行 ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "原理图: 导出网表"
+msgstr "原理图 ERC 作业设置"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
 msgstr "原理图: 执行 ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "特殊工具"
+msgstr "特殊: 复制文件"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -7721,9 +7688,8 @@ msgid "Symbol body fills"
 msgstr "符号主体填充"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "图框文件"
+msgstr "图形填充"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -10590,9 +10556,8 @@ msgid "Unconnected wire endpoint"
 msgstr "未连接的连线端点"
 
 #: eeschema/connection_graph.cpp:3819
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "添加连线到总线入口"
+msgstr "导线没有连到总线入口"
 
 #: eeschema/connection_graph.cpp:4194
 #, c-format
@@ -11706,9 +11671,8 @@ msgid "Electrical Rules Checker"
 msgstr "电气规则检查 (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "编辑作业设置..."
+msgstr "ERC 作业设置"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 msgid "Export netlist in KiCad format"
@@ -11861,7 +11825,6 @@ msgstr "必须提供网表生成器的标题内容"
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
 #: kicad/dialogs/panel_jobs_base.cpp:258
-#, fuzzy
 msgid "Output path:"
 msgstr "输出路径:"
 
@@ -13474,9 +13437,8 @@ msgid "Open output file with associated application after successful plot"
 msgstr "绘制成功后用关联应用打开输出文件"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "打印原理图"
+msgstr "绘制原理图"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -14709,7 +14671,7 @@ msgstr "分组"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:400
 msgid "BOM Export Job"
-msgstr ""
+msgstr "BOM 导出作业"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
 msgid "Qty"
@@ -16135,7 +16097,6 @@ msgid "&Pitch of repeated pins:"
 msgstr "复刻引脚的间距 (&P):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
-#, fuzzy
 msgid "General Editing"
 msgstr "通用编辑"
 
@@ -16252,9 +16213,9 @@ msgid ""
 "This may result in what appears to be duplicate field names but are actually "
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
-msgstr ""
-"这可能会导致字段名称看起来重复, 但实际上它们是仅通过空白字符区分的唯一名称。"
-"移除空白字符不会影响现有符号字段名称。"
+msgstr "这可能会导致字段名称看起来重复, 但实际上它们是唯一的, "
+"仅仅是因为包含了空白字符的差异。去掉这些空白字符不会对现有的字段名称产生任何"
+"影响。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:220
 msgid "Remove White Space"
@@ -21343,7 +21304,7 @@ msgstr "库 \"%s\" 是只读的，请选择其他库来保存符号 '%s' 。"
 #: eeschema/symbol_editor/symbol_editor.cpp:972
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
-msgstr "符号 '%s' 无法替换其派生自的另一个符号 '%s', 后者是它的派生符号。"
+msgstr "符号 '%s' 无法替换其派生自的另一个符号 '%s', 后者是它的派生符号"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:981
 #, c-format
@@ -25355,9 +25316,8 @@ msgstr "融合重叠的图形"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in conductor layers."
-msgstr " (金属化焊盘没有铜层)"
+msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -25652,14 +25612,12 @@ msgid "Generate PDF from a list of layers"
 msgstr "从层列表生成 PDF"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:43
-#, fuzzy
 msgid "Plot the layers to individual PDF files"
-msgstr "为指定层绘制独立的 Gerber 文件"
+msgstr "把每一层导出为单独的 PDF 文件"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:47
-#, fuzzy
 msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "为指定层绘制独立的 Gerber 文件"
+msgstr "把所有层导出到一个 PDF 文件"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:51
 #: kicad/cli/command_pcb_export_svg.cpp:46
@@ -25671,9 +25629,8 @@ msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "要使用的配色主题 (默认使用PCB编辑器设置)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:160
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "标签连接了不止一条连线"
+msgstr "不能同时使用多个模式\n"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:184
 msgid "The new behavior will match --mode-separate"
@@ -25781,10 +25738,10 @@ msgid "Render from side. Options: %s"
 msgstr "从侧面渲染。选项: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
-msgstr "图像背景。选项: 透明, 不透明。默认: PNG 为透明, JPEG 为不透明"
+msgstr "图像背景。选项: %s。默认: PNG 为透明, JPEG 为不透明"
 
 #: kicad/cli/command_pcb_render.cpp:251
 #, c-format
@@ -25862,24 +25819,20 @@ msgid "Invalid pivot format\n"
 msgstr "无效的 Pivot 格式\n"
 
 #: kicad/cli/command_pcb_render.cpp:367
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "无效的 Pivot 格式\n"
+msgstr "顶部光强格式无效\n"
 
 #: kicad/cli/command_pcb_render.cpp:374
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "无效旋转格式\n"
+msgstr "底部光强格式无效\n"
 
 #: kicad/cli/command_pcb_render.cpp:381
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "无效的图像格式\n"
+msgstr "侧面光强格式无效\n"
 
 #: kicad/cli/command_pcb_render.cpp:388
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "无效的图像格式\n"
+msgstr "相机光强格式无效\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid image format\n"
@@ -25954,9 +25907,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "使用的配色主题 (默认为原理图设置)"
 
 #: kicad/cli/command_sch_export_plot.cpp:82
-#, fuzzy
 msgid "Default font name"
-msgstr "默认字体:"
+msgstr "默认字体名称"
 
 #: kicad/cli/command_sch_export_plot.cpp:88
 msgid "Do not generate property popups in PDF"
@@ -26047,38 +25999,32 @@ msgid "version info format (plain, commit, about)"
 msgstr "版本信息格式 (简明提交、关于)"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
-msgstr "名称"
+msgstr "目标:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
-#, fuzzy
 msgid "Generate error if no files copied"
-msgstr "生成 Gerber 作业文件"
+msgstr "如果没有复制文件, 则产生错误"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
-#, fuzzy
 msgid "Overwrite files in destination"
-msgstr "覆盖已有设计图块?"
+msgstr "覆盖目标文件"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
-#, fuzzy
 msgid "Copy Files Job Settings"
-msgstr "筛选设置"
+msgstr "复制文件作业设置"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
-#, fuzzy
 msgid "Record output messages"
-msgstr "输出信息"
+msgstr "记录输出信息"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
 msgstr "忽略非零退出代码"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "编辑作业设置..."
+msgstr "执行命令作业设置"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
@@ -26169,18 +26115,17 @@ msgid "Select output path"
 msgstr "选择输出路径"
 
 #: kicad/dialogs/panel_jobs.cpp:140
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "网络名称变量名不能为空。"
+msgstr "输出路径不能为空"
 
 #: kicad/dialogs/panel_jobs.cpp:217
 msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
-msgstr "输出:"
+msgstr "输出: %s"
 
 #: kicad/dialogs/panel_jobs.cpp:245
 msgid "No."
@@ -26191,9 +26136,8 @@ msgid "Job Description"
 msgstr "作业描述"
 
 #: kicad/dialogs/panel_jobs.cpp:299
-#, fuzzy
 msgid "No output messages"
-msgstr "输出信息"
+msgstr "没有输出信息"
 
 #: kicad/dialogs/panel_jobs.cpp:359
 msgid "Last run successful"
@@ -26208,17 +26152,14 @@ msgid "Running jobs"
 msgstr "正在运行中的作业"
 
 #: kicad/dialogs/panel_jobs.cpp:409
-#, fuzzy
 msgid "Edit Output Options..."
-msgstr "%s 个输出选项"
+msgstr "编辑输出选项..."
 
 #: kicad/dialogs/panel_jobs.cpp:410
-#, fuzzy
 msgid "Delete Output"
-msgstr "删除挖空区域"
+msgstr "删除输出"
 
 #: kicad/dialogs/panel_jobs.cpp:413
-#, fuzzy
 msgid "View Last Run Results..."
 msgstr "查看上次运行结果..."
 
@@ -26288,9 +26229,8 @@ msgid "Description:"
 msgstr "描述:"
 
 #: kicad/dialogs/panel_jobs_base.cpp:276
-#, fuzzy
 msgid "Include jobs:"
-msgstr "包含域 (&Z)"
+msgstr "包含作业:"
 
 #: kicad/dialogs/panel_jobs_base.h:166
 msgid "Job Output Run Log"
@@ -27441,9 +27381,8 @@ msgid "Open Project..."
 msgstr "打开工程..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "新建作业集文件..."
+msgstr "打开作业集文件..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -27567,9 +27506,8 @@ msgid "Open Existing Project"
 msgstr "打开已有工程"
 
 #: kicad/tools/kicad_manager_control.cpp:428
-#, fuzzy
 msgid "Open Jobset"
-msgstr "保存作业集"
+msgstr "打开作业集"
 
 #: kicad/tools/kicad_manager_control.cpp:635
 #, c-format
@@ -33384,9 +33322,8 @@ msgid "Output File:"
 msgstr "输出文件:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression Format:"
-msgstr "压缩格式"
+msgstr "压缩格式:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
@@ -34104,8 +34041,8 @@ msgid ""
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
 "这是此封装的焊盘和锡膏之间的局部间距。\n"
-"此值可由焊盘局部值替代。\n"
-"最终的间距值是该值与间距值比率之和。\n"
+"该值可由焊盘中设置的局部值覆盖。\n"
+"最终间距值为该值与间距值比率之和。\n"
 "负值表示阻焊尺寸小于焊盘尺寸。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:320
@@ -34543,9 +34480,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:83
-#, fuzzy
 msgid "Generate Map"
-msgstr "生成映射文件"
+msgstr "生成映射"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "PostScript"
@@ -34802,7 +34738,6 @@ msgid "Remove all teardrops"
 msgstr "移除所有泪滴"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Remove all teardrops, regardless of filtering options"
 msgstr "移除所有泪滴, 不考虑过滤选项"
 
@@ -34846,9 +34781,8 @@ msgstr "如果首个走线段过短, 无法满足最佳长度, 则允许泪滴�
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
-#, fuzzy
 msgid "Track width limit:"
-msgstr "走线宽度:"
+msgstr "走线宽度限制:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
@@ -35784,7 +35718,7 @@ msgstr "自定义 (基于矩形)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:139
 msgid "Trapezoid delta:"
-msgstr "梯形增量:"
+msgstr "Trapezoid delta:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:150
 msgid "Trapezoid axis:"
@@ -36509,9 +36443,8 @@ msgid "Generate property popups for back footprints"
 msgstr "为底层封装生成属性弹窗"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:425
-#, fuzzy
 msgid "Single document"
-msgstr "打开现有文件"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:453
 msgid "Run DRC..."
@@ -36777,7 +36710,7 @@ msgstr "实际钻孔尺寸"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
 msgid "Print one page per layer"
-msgstr "每层打印一页"
+msgstr "为每一层单独打印一页"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:266
 msgid "Print board edges on all pages"
@@ -36879,23 +36812,20 @@ msgid "Opaque"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
-#, fuzzy
 msgid "Transparent"
-msgstr "瞬态"
+msgstr "透明"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
-#, fuzzy
 msgid "High"
-msgstr "高亮"
+msgstr "高"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:35
 msgid "User"
 msgstr "用户"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
-#, fuzzy
 msgid "Dimensions:"
-msgstr "测量标注"
+msgstr "尺寸:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
@@ -36907,42 +36837,36 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
-#, fuzzy
 msgid "Quality preset:"
-msgstr "选择预设:"
+msgstr "质量预设:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
-#, fuzzy
 msgid "Background style:"
-msgstr "背景样式"
+msgstr "背景样式:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:103
 msgid "View"
 msgstr "视图"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:119
-#, fuzzy
 msgid "Add floor"
-msgstr "添加层"
+msgstr "添加地面"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
-#, fuzzy
 msgid "Perspective"
-msgstr "指令"
+msgstr "透视"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
-#, fuzzy
 msgid "Projection"
-msgstr "工程"
+msgstr "投影"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:138
-#, fuzzy
 msgid "Positioning"
-msgstr "坐标"
+msgstr "定位"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:148
 #: pcbnew/dialogs/dialog_shape_properties.cpp:773
@@ -36960,9 +36884,8 @@ msgid "Z"
 msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
-#, fuzzy
 msgid "Pivot:"
-msgstr "设置 Pivot"
+msgstr "Pivot:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
@@ -36974,28 +36897,24 @@ msgid "°"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
-#, fuzzy
 msgid "Lights intensity"
-msgstr "强度"
+msgstr "光强"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
-#, fuzzy
 msgid "Camera:"
-msgstr "相机缩放"
+msgstr "相机:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
-#, fuzzy
 msgid "Lights position"
-msgstr "光源配置"
+msgstr "光源位置"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
-#, fuzzy
 msgid "Render PCB Job Options"
-msgstr "渲染选项"
+msgstr "渲染 PCB 作业选项"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1466
@@ -37030,11 +36949,11 @@ msgstr "此规则区的唯一名称, 用于 DRC 规则"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
-msgstr "将此值重置为零。"
+msgstr "将该值重置为零。"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:76
 msgid "Reset this value to the original value."
-msgstr "将此值重置为初始值。"
+msgstr "将该值重置为初始值。"
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 msgid "Set a new value for this offset:"
@@ -37949,9 +37868,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:71
-#, fuzzy
 msgid "Recreate Plugin Environment"
-msgstr "备用引脚关联"
+msgstr "重新创建插件环境"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 msgid "Show Button"
@@ -38283,9 +38201,8 @@ msgid "Zone fill strategy"
 msgstr "域填充策略"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "允许圆角超出域的外框"
+msgstr "允许圆角/倒角超出域轮廓"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
@@ -39000,7 +38917,6 @@ msgstr "如果板厂没有提供, 建议将这些值设置为 0。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
@@ -39008,8 +38924,8 @@ msgid ""
 "for solder mask clearance)."
 msgstr ""
 "焊盘和锡膏之间的全局间距。\n"
-"该值可以被封装和焊盘中设置的局部值覆盖。\n"
-"最终间距值是该值与间距值比率之和。"
+"该值可以被封装或焊盘中设置的局部值覆盖。\n"
+"正间距表示阻焊开窗大于焊盘 (实际设计中的常用设置)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
 msgid "Solder mask settings:"
@@ -39022,11 +38938,12 @@ msgstr "阻焊桥(绿油桥)最小宽度:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
-msgstr "阻焊层开窗之间的最小距离。小于此距离的焊盘开窗将绘制为一个整体的开窗。"
+msgstr ""
+"阻焊开窗之间的最小距离。\n"
+"小于此距离的焊盘阻焊开窗将会被合并为一个整体。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -39041,18 +38958,14 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:104
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints."
-msgstr "允许封装内的焊盘之间存在阻焊桥"
+msgstr "允许封装内的焊盘之间存在阻焊桥。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
-msgstr ""
-"用于 DRC 测试:\n"
-"在同一封装中, 禁用焊盘的阻焊开窗桥 DRC 错误 (对于 net ties 非常有用)"
+msgstr "禁用对同一封装内焊盘之间的阻焊桥进行 DRC 检查。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:112
 msgid "Tent vias:"
@@ -39060,14 +38973,12 @@ msgstr "过孔盖油:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
-#, fuzzy
 msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"过孔盖油: 不在阻焊层上绘制\n"
-"过孔开窗: 通孔绘制在阻焊层上\n"
-"(阻焊层为负片)"
+"过孔盖油: 使用阻焊覆盖过孔。\n"
+"过孔开窗: 不使用阻焊覆盖过孔。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 msgid "Solder paste settings:"
@@ -39075,7 +38986,6 @@ msgstr "锡膏设置:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:137
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:142
-#, fuzzy
 msgid ""
 "Global absolute clearance between pads and the solder paste.\n"
 "Negative clearance means solder paste area smaller than the pad (typical for "
@@ -39084,14 +38994,13 @@ msgid ""
 "Final clearance value is the sum of this value and the relative clearance "
 "value."
 msgstr ""
-"焊盘和锡膏之间的全局间距比(以百分比表示)。\n"
-"值为 10 表示间距值是焊盘大小的 10%。\n"
-"此值可以被封装或焊盘局部值所取代。\n"
-"最终间距值是该值与间距值之和。"
+"焊盘和锡膏之间的全局绝对间距。\n"
+"负间距表示锡膏区小于焊盘区 (实际设计中的常用设置）。\n"
+"该值可以被封装或焊盘中设置的局部值覆盖。\n"
+"最终间距值为该值与相对间距值之和。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:152
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
-#, fuzzy
 msgid ""
 "Global clearance ratio between pads and the solder paste as a percentage of "
 "the pad size.\n"
@@ -39101,9 +39010,9 @@ msgid ""
 "value."
 msgstr ""
 "焊盘和锡膏之间的全局间距比(以百分比表示)。\n"
-"值为 10 表示间距值是焊盘大小的 10%。\n"
-"此值可以被封装或焊盘局部值所取代。\n"
-"最终间距值是该值与间距值之和。"
+"值为 10 表示间距值为焊盘大小的 10%。\n"
+"该值可以被封装或焊盘中设置的局部值所覆盖。\n"
+"最终间距值是该值与绝对间距值之和。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:168
 msgid ""
@@ -39174,7 +39083,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -39381,39 +39289,43 @@ msgstr ""
 "\n"
 "### Constraints (约束) \n"
 "\n"
-"| 约束类型           | 变量类"
-"型                                                                                "
-"| 描"
-"述                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"| 约束类型           | "
+"变量类型                                                                     "
+"           | "
+"描述                                                                         "
+"                                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                            "
-"| 检查过孔的孔环宽度"
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"| "
+"检查过孔的孔环宽度<br>                                                       "
+"                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                     "
 "| 检查给定的表达式。"
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                    "
-"| 定义不同网络铜箔对象的 **电气** 间隙。  (如果您想定义不考虑网络的对象的间"
-"隙，请查看 `physical_clearance` 约束类型。<br><br>如果允许铜箔对象重叠(碰"
-"撞)，可以创建一个 `clearance` 约束，并将 `min` 值设为小于零  (例如, `-1`)。"
+"| 定义不同网络铜箔对象的 **电气** 间隙。  "
+"(如果您想定义不考虑网络的对象的间隙，请查看 `physical_clearance` "
+"约束类型。<br><br>如果允许铜箔对象重叠(碰撞)，可以创建一个 `clearance` 约束，"
+"并将 `min` 值设为小于零  (例如, `-1`)。"
 "<br>                                                                                                                      "
 "|\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                    "
-"| 检查封装 Courtyard 之间的间隙，如果任何两个封装之间的距离小于 `min` 的值，"
-"则会产生错误。如果封装没有 Courtyard，则该约束不会产生错误。"
+"| 检查封装 Courtyard 之间的间隙，如果任何两个封装之间的距离小于 `min` "
+"的值，则会产生错误。如果封装没有 Courtyard，则该约束不会产生错误。"
 "<br>                                                                                                                                                                                                               "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                            "
-"| 检查差分对中耦合走线之间的间隙。 耦合走线是相互平行的线段。 差分对间隙约束"
-"不对差分对的非耦合部分 (例如，元件的扇出部分) 进行测试。"
+"| 检查差分对中耦合走线之间的间隙。 耦合走线是相互平行的线段。 "
+"差分对间隙约束不对差分对的非耦合部分 (例如，元件的扇出部分) 进行测试。"
 "<br>                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_uncoupled`     | "
@@ -39423,43 +39335,43 @@ msgstr ""
 "<br>                                                                                                                                                                                                         "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| 指定一个或多个对象类型不被允许, 使用空格分割。  例如, `(constraint "
-"disallow track)` 或 `(constraint disallow track via pad)`。  如果这个类型的对"
-"象满足规则条件，就会产生一个 DRC 错误。<br><br>该约束类型与 keepout 规则区域"
-"基本相同，但可以创建更具体的 keepout 约束。"
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | 指定一个或多个对象类型不被允许, 使用空格分割。  例如, `(constraint "
+"disallow track)` 或 `(constraint disallow track via pad)`。  "
+"如果这个类型的对象满足规则条件，就会产生一个 DRC 错误。<br><br>该约束类型与 "
+"keepout 规则区域基本相同，但可以创建更具体的 keepout 约束。"
 "<br>                                                                   |\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                            "
-"| 检查对象与板边的间隙。<br><br>这也可以看作是 \"铣削公差\"，因为电路板边缘将"
-"包括 `Edge.Cuts` 层上的所有图形对象以及任何 *椭圆* 焊盘孔。  (钻孔公差请查看 "
-"`physical_hole_clearance` 约束类"
-"型)<br>                                                                                                                                                    "
+"| 检查对象与板边的间隙。<br><br>这也可以看作是 \"铣削公差\"，"
+"因为电路板边缘将包括 `Edge.Cuts` 层上的所有图形对象以及任何 *椭圆* 焊盘孔。  "
+"(钻孔公差请查看 `physical_hole_clearance` 约束类型)"
+"<br>                                                                                                                                                    "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                                "
-"| 检查符合规则条件的网络的总走线长度，如果网络的长度低于限制条件的 `min` 最小"
-"值 (如果指定) 或高于 `max` 最大值 (如果指定) ，则生成错误。"
+"| 检查符合规则条件的网络的总走线长度，如果网络的长度低于限制条件的 `min` "
+"最小值 (如果指定) 或高于 `max` 最大值 (如果指定) ，则生成错误。"
 "<br>                                                                                                                                                                                                                               "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                                "
-"| 检查焊盘或过孔中钻孔的大小 (直径) 。 对于椭圆形孔，较小的直径将与 `min` 最"
-"小值 (如果指定) 对比，较大的直径将与 `max` 最大值 (如果指定) 对比。"
+"| 检查焊盘或过孔中钻孔的大小 (直径) 。 对于椭圆形孔，较小的直径将与 `min` "
+"最小值 (如果指定) 对比，较大的直径将与 `max` 最大值 (如果指定) 对比。"
 "<br>                                                                                                                                                                                            "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                    "
-"| 检查焊盘或过孔中的钻孔与不同网络的铜箔对象之间的间隙。 间隙是从孔的直径而不"
-"是孔的中心测量的。"
+"| 检查焊盘或过孔中的钻孔与不同网络的铜箔对象之间的间隙。 "
+"间隙是从孔的直径而不是孔的中心测量的。"
 "<br>                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                    "
-"| 检查焊盘和过孔中机械钻孔之间的间隙。 间隙在孔边缘之间测量，而不是从孔的中心"
-"测量。<br><br>该约束类型完全是为了保护钻头。 不检查 **激光钻孔** (微孔) 与其"
-"他非机械钻孔之间的间隙，也不检查 **铣削孔** (椭圆形) 与其他非机械钻孔之间的间"
-"隙。<br> |\n"
+"| 检查焊盘和过孔中机械钻孔之间的间隙。 "
+"间隙在孔边缘之间测量，而不是从孔的中心测量。<br><br>该约束类型完全是为了保护"
+"钻头。 不检查 **激光钻孔** (微孔) 与其他非机械钻孔之间的间隙，也不检查 "
+"**铣削孔** (椭圆形) 与其他非机械钻孔之间的间隙。<br> |\n"
 "| `physical_clearance`      | "
 "min                                                                                                                    "
 "| 检查给定层 (包括非铜层) 上两个对象之间的间隙。<br><br>虽然这可以执行比 "
@@ -39468,9 +39380,9 @@ msgstr ""
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                    "
-"| 检查焊盘或过孔中的钻孔与另一个对象之间的间隙，无论它们是否属于同一网络。 间"
-"隙是从孔的边缘而不是中心测量的。<br><br>这也可以被认为是“钻孔公差”，因为它只"
-"包括 **圆** 孔 (有关铣削公差，请参阅 `edge_clearance`) 。"
+"| 检查焊盘或过孔中的钻孔与另一个对象之间的间隙，无论它们是否属于同一网络。 "
+"间隙是从孔的边缘而不是中心测量的。<br><br>这也可以被认为是“钻孔公差”，"
+"因为它只包括 **圆** 孔 (有关铣削公差，请参阅 `edge_clearance`) 。"
 "<br>                                                                                                                    "
 "|\n"
 "| `silk_clearance`          | min/opt/"
@@ -39480,9 +39392,10 @@ msgstr ""
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                    "
-"| 检查所有符合规则条件的网络的 skew，即符合规则的每个网络的长度与网络总长的平"
-"均值之间的差值。 如果该平均值与任何一个网络的长度之间的差的绝对值高于约束 "
-"`max` 最大值，则会产生错误。"
+"| 检查所有符合规则条件的网络的 "
+"skew，即符合规则的每个网络的长度与网络总长的平均值之间的差值。 "
+"如果该平均值与任何一个网络的长度之间的差的绝对值高于约束 `max` "
+"最大值，则会产生错误。"
 "<br>                                                                                   "
 "|\n"
 "| `thermal_relief_gap`      | "
@@ -39507,8 +39420,8 @@ msgstr ""
 "`max` 最大值，则将为该网络生成错误。"
 "<br>                                                                                                                                                                                                                                                               "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                 "
 "| 指定焊盘与敷铜区域之间的连接方式。"
 "<br>                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
@@ -39533,7 +39446,7 @@ msgstr ""
 "\n"
 "### 示例\n"
 "\n"
-"    (version 1)\n"
+"    (versoutsetion 1)\n"
 "\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
@@ -39565,8 +39478,8 @@ msgstr ""
 "### Notes (注意事项) \n"
 "\n"
 "版本语句必须是第一个语句。 \n"
-"它表示文件的语法版本，以便未来的规则解析器可以执行自动更新。 它应该设置"
-"为“1”。\n"
+"它表示文件的语法版本，以便未来的规则解析器可以执行自动更新。 "
+"它应该设置为“1”。\n"
 "\n"
 "规则应按具体情况排序。 \n"
 "后面的规则优先于前面的规则； 一旦找到后面匹配的规则，就不会检查之前的规则。\n"
@@ -39598,8 +39511,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "若 `A` 完全落在指定区域的边框内，则为 True。\n"
 "\n"
-"注意: 调用该函数比 `intersectsArea()`更费时。尽可能使用 "
-"`intersectsArea()`。\n"
+"注意: 调用该函数比 `intersectsArea()`更费时。尽可能使用 `intersectsArea()`。"
+"\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
@@ -39611,10 +39524,11 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"若 `A` 含有指定差分对的网络，则为 True。 <网络名> 是指定差分对的基础名称。例"
-"如， inDiffPair('CLK') matches items in the CLK_P and CLK_N nets. True \n"
-"`<net_name>` 是差分对的基准名称。 例如, `inDiffPair('/CLK')` 可以匹配网络对"
-"象 `/CLK_P` 及 `/CLK_N`。\n"
+"若 `A` 含有指定差分对的网络，则为 True。 <网络名> "
+"是指定差分对的基础名称。例如， inDiffPair('CLK') matches items in the CLK_P "
+"and CLK_N nets. True \n"
+"`<net_name>` 是差分对的基准名称。 例如, `inDiffPair('/CLK')` "
+"可以匹配网络对象 `/CLK_P` 及 `/CLK_N`。\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -39627,8 +39541,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_reference>|<footprint_id>')\n"
-"若 `A` 是给定参考位号或封装 ID 匹配的封装的成员，则为 True。参数可以包含通配"
-"符。\n"
+"若 `A` 是给定参考位号或封装 ID 匹配的封装的成员，则为 "
+"True。参数可以包含通配符。\n"
 "\n"
 "注意：如果需要与封装ID 匹配，参数中必须包含 ':'。\n"
 "\n"
@@ -39668,13 +39582,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -39770,7 +39684,9 @@ msgstr ""
 "### Documentation (文档) \n"
 "\n"
 "更完整的文档请查看 [https://docs.kicad.org](https://docs.kicad.org/"
-"GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules).\n"
+"\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_3items.h:2
 msgid ""
@@ -40839,9 +40755,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "底层上的非镜像文本"
 
 #: pcbnew/drc/drc_item.cpp:307
-#, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
-msgstr "钻孔太靠近其他孔"
+msgstr "钻孔太靠近其他孔 (已弃用)"
 
 #: pcbnew/drc/drc_item.cpp:508
 #, c-format
@@ -41246,37 +41161,37 @@ msgstr "%s 个 '方向' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:320
 #, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr ""
+msgstr "层 %2$s 上的 %1$s 个焊盘形状类型差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:324
 #, c-format
 msgid "%s size differs on layer %s."
-msgstr ""
+msgstr "层 %2$s 上的 %1$s 个尺寸差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:327
 #, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr ""
+msgstr "层 %2$s 上的 %1$s 个 trapezoid delta 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:332
 #, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr ""
+msgstr "层 %2$s 上的 %1$s 个圆角差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:337
 #, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr ""
+msgstr "层 %2$s 上的 %1$s 个倒角尺寸差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
 #, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr ""
+msgstr "层 %2$s 上的 %1$s 个倒角差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:346
 #, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr ""
+msgstr "层 %2$s 上的 %1$s 个形状与孔偏移差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:351
 #, c-format
@@ -41291,7 +41206,7 @@ msgstr "%s 个 '钻孔大小' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:404
 #, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr ""
+msgstr "层 %2$s 上的 %1$s 个形状原型差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
 #, c-format
@@ -42619,9 +42534,8 @@ msgid "Length Constraints: %s"
 msgstr "长度约束: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2238
-#, fuzzy
 msgid "Tune Skew"
-msgstr "调整：偏移 "
+msgstr "调整偏移"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2449
 msgid "Unable to tune segments inside other tuning patterns."
@@ -43068,32 +42982,32 @@ msgstr "添加了 %s (封装 '%s')。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:235
 #, c-format
 msgid "Change %s component class to '%s'."
-msgstr ""
+msgstr "将 %s 的元件类修改为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
 #, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr ""
+msgstr "移除 %s 的元件类 ('%s')。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:247
 #, c-format
 msgid "Change %s component class from '%s' to '%s'."
-msgstr ""
+msgstr "将 %s 的元件类从 '%s' 修改为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:261
 #, c-format
 msgid "Changed %s component class to '%s'."
-msgstr ""
+msgstr "已将 %s 的元件类修改为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:267
 #, c-format
 msgid "Removed %s component class (was '%s')."
-msgstr ""
+msgstr "已移除 %s 的元件类 ('%s')。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:273
 #, c-format
 msgid "Changed %s component class from '%s' to '%s'."
-msgstr ""
+msgstr "已将 %s 的元件类从 '%s' 修改为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
@@ -43679,7 +43593,7 @@ msgstr "(负局部间距值无效)"
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
-msgstr "(负阻焊间距大于某些形状图元; 可能产生意料之外的结果)"
+msgstr "(负阻焊间距大于某些形状原型; 可能产生意料之外的结果)"
 
 #: pcbnew/pad.cpp:2372
 msgid ""
@@ -43766,9 +43680,8 @@ msgid "Corner Radius Ratio"
 msgstr "边角半径比"
 
 #: pcbnew/pad.cpp:2646
-#, fuzzy
 msgid "Corner Radius Size"
-msgstr "圆角半径 %"
+msgstr "圆角半径"
 
 #: pcbnew/pad.cpp:2652
 msgid "Hole Shape"
@@ -45938,7 +45851,7 @@ msgstr "电路板加载失败\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:357 pcbnew/pcbnew_jobs_handler.cpp:432
 #: pcbnew/pcbnew_jobs_handler.cpp:479
 msgid "Unknown export format"
-msgstr "未知的网表格式。"
+msgstr "未知的导出格式"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:397
 #, c-format
@@ -45950,9 +45863,8 @@ msgid "Error exporting VRML"
 msgstr "导出 VRML 出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:458
-#, fuzzy
 msgid "Invalid image dimensions"
-msgstr "无效的引脚名定义"
+msgstr "图片尺寸无效"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:674
 #, c-format
@@ -47479,9 +47391,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "封装 '%s' 已存在于库 '%s' 中。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:518
-#, fuzzy
 msgid "Error renaming footprint"
-msgstr "来自父级封装"
+msgstr "重命名封装出错"
 
 #: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
@@ -49525,11 +49436,8 @@ msgid "Invalid clipboard contents"
 msgstr "无效的剪贴板内容"
 
 #: pcbnew/tools/pcb_control.cpp:1509
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"电路板加载错误。\n"
-"%s"
+msgstr "电路板加载出错。"
 
 #: pcbnew/tools/pcb_control.cpp:1543
 msgid "Append Board"
