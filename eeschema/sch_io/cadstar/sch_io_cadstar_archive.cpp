@@ -92,6 +92,9 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
         SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
         screen->SetFileName( aFileName );
         rootSheet->SetScreen( screen );
+
+        // Virtual root sheet UUID must be the same as the schematic file UUID.
+        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
     CADSTAR_SCH_ARCHIVE_LOADER csaLoader( aFileName, m_reporter, m_progressReporter );
