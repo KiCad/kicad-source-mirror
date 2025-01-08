@@ -361,6 +361,10 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
 
     Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectLocalSettingsFileExtension );
 
+    // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
+    // should be cleared at this point
+    m_wasMigrated = false;
+
     return JSON_SETTINGS::SaveToFile( aDirectory, aForce );
 }
 
@@ -369,6 +373,10 @@ bool PROJECT_LOCAL_SETTINGS::SaveAs( const wxString& aDirectory, const wxString&
 {
     Set( "meta.filename", aFile + "." + FILEEXT::ProjectLocalSettingsFileExtension );
     SetFilename( aFile );
+
+    // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
+    // should be cleared at this point
+    m_wasMigrated = false;
 
     return JSON_SETTINGS::SaveToFile( aDirectory, true );
 }

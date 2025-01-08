@@ -808,7 +808,8 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 
     // Save window state to disk now.  Don't wait around for a crash.
     if( Pgm().GetCommonSettings()->m_Session.remember_open_files
-            && !player->GetCurrentFileName().IsEmpty() )
+            && !player->GetCurrentFileName().IsEmpty()
+            && !Prj().GetLocalSettings().WasMigrated() )
     {
         wxFileName rfn( player->GetCurrentFileName() );
         rfn.MakeRelativeTo( Prj().GetProjectPath() );

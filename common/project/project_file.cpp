@@ -41,7 +41,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
         m_BoardSettings(),
         m_sheets(),
         m_boards(),
-        m_project( nullptr )
+        m_project( nullptr ),
+        m_wasMigrated( false )
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
