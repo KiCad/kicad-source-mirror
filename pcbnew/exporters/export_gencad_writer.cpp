@@ -554,14 +554,16 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         LSET mask = via->GetLayerSet() & master_layermask;
 
         fprintf( m_file, "PADSTACK VIA%d.%d.%s %g\n",
-                 via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
+                 via->GetWidth( PADSTACK::ALL_LAYERS ),
+                 via->GetDrillValue(),
                  fmt_mask( mask ).c_str(),
                  via->GetDrillValue() / SCALE_FACTOR );
 
         for( PCB_LAYER_ID layer : mask.Seq( gc_seq ) )
         {
             fprintf( m_file, "PAD V%d.%d.%s %s 0 0\n",
-                    via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
+                    via->GetWidth( PADSTACK::ALL_LAYERS ),
+                    via->GetDrillValue(),
                     fmt_mask( mask ).c_str(),
                     GenCADLayerName( cu_count, layer ).c_str() );
         }

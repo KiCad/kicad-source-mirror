@@ -92,8 +92,8 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
     }
 
 
-    m_params.emplace_back(
-            new PARAM<int>( "meta.version", &m_schemaVersion, m_schemaVersion, true ) );
+    m_params.emplace_back( new PARAM<int>( "meta.version", &m_schemaVersion, m_schemaVersion,
+                                           true ) );
 }
 
 
@@ -242,8 +242,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     }
     else
     {
-        wxString dir( aDirectory );
-        path.Assign( dir, m_filename, getFileExt() );
+        path.Assign( aDirectory, m_filename, getFileExt() );
     }
 
     if( !path.Exists() )
@@ -306,7 +305,9 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 {
                     wxLogTrace( traceSettings, wxT( "%s: attempting migration from version "
                                                     "%d to %d" ),
-                                GetFullFilename(), filever, m_schemaVersion );
+                                GetFullFilename(),
+                                filever,
+                                m_schemaVersion );
 
                     if( Migrate() )
                     {
@@ -322,7 +323,9 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 {
                     wxLogTrace( traceSettings,
                                 wxT( "%s: warning: file version %d is newer than latest (%d)" ),
-                                GetFullFilename(), filever, m_schemaVersion );
+                                GetFullFilename(),
+                                filever,
+                                m_schemaVersion );
                 }
             }
             else
@@ -349,7 +352,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     for( NESTED_SETTINGS* settings : m_nested_settings )
         settings->LoadFromFile();
 
-    wxLogTrace( traceSettings, wxT( "Loaded <%s> with schema %d" ), GetFullFilename(),
+    wxLogTrace( traceSettings, wxT( "Loaded <%s> with schema %d" ),
+                GetFullFilename(),
                 m_schemaVersion );
 
     m_modified = false;
@@ -685,7 +689,8 @@ bool JSON_SETTINGS::Migrate()
         if( !m_migrators.count( filever ) )
         {
             wxLogTrace( traceSettings, wxT( "Migrator missing for %s version %d!" ),
-                        typeid( *this ).name(), filever );
+                        typeid( *this ).name(),
+                        filever );
             return false;
         }
 
@@ -693,15 +698,19 @@ bool JSON_SETTINGS::Migrate()
 
         if( pair.second() )
         {
-            wxLogTrace( traceSettings, wxT( "Migrated %s from %d to %d" ), typeid( *this ).name(),
-                        filever, pair.first );
+            wxLogTrace( traceSettings, wxT( "Migrated %s from %d to %d" ),
+                        typeid( *this ).name(),
+                        filever,
+                        pair.first );
             filever = pair.first;
             m_internals->At( "meta.version" ) = filever;
         }
         else
         {
             wxLogTrace( traceSettings, wxT( "Migration failed for %s from %d to %d" ),
-                        typeid( *this ).name(), filever, pair.first );
+                        typeid( *this ).name(),
+                        filever,
+                        pair.first );
             return false;
         }
     }
@@ -712,8 +721,8 @@ bool JSON_SETTINGS::Migrate()
 
 bool JSON_SETTINGS::MigrateFromLegacy( wxConfigBase* aLegacyConfig )
 {
-    wxLogTrace( traceSettings,
-            wxT( "MigrateFromLegacy() not implemented for %s" ), typeid( *this ).name() );
+    wxLogTrace( traceSettings, wxT( "MigrateFromLegacy() not implemented for %s" ),
+                typeid( *this ).name() );
     return false;
 }
 
@@ -805,14 +814,17 @@ bool JSON_SETTINGS::fromLegacy( wxConfigBase* aConfig, const std::string& aKey,
 
 // Explicitly declare these because we only support a few types anyway, and it means we can keep
 // wxConfig detail out of the header file
-template KICOMMON_API bool JSON_SETTINGS::fromLegacy<int>( wxConfigBase*, const std::string&,
-                                              const std::string& );
+template
+KICOMMON_API bool JSON_SETTINGS::fromLegacy<int>( wxConfigBase*, const std::string&,
+                                                  const std::string& );
 
-template KICOMMON_API bool JSON_SETTINGS::fromLegacy<double>( wxConfigBase*, const std::string&,
-                                                 const std::string& );
+template
+KICOMMON_API bool JSON_SETTINGS::fromLegacy<double>( wxConfigBase*, const std::string&,
+                                                     const std::string& );
 
-template KICOMMON_API bool JSON_SETTINGS::fromLegacy<bool>( wxConfigBase*, const std::string&,
-                                               const std::string& );
+template
+KICOMMON_API bool JSON_SETTINGS::fromLegacy<bool>( wxConfigBase*, const std::string&,
+                                                   const std::string& );
 
 
 bool JSON_SETTINGS::fromLegacyString( wxConfigBase* aConfig, const std::string& aKey,
@@ -897,7 +909,8 @@ void JSON_SETTINGS::ReleaseNestedSettings( NESTED_SETTINGS* aSettings )
 
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API
-template<> std::optional<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const
+template<>
+std::optional<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const
 {
     if( std::optional<nlohmann::json> opt_json = GetJson( aPath ) )
         return wxString( opt_json->get<std::string>().c_str(), wxConvUTF8 );
@@ -906,7 +919,8 @@ template<> std::optional<wxString> JSON_SETTINGS::Get( const std::string& aPath 
 }
 
 
-template<> void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString aVal )
+template<>
+void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString aVal )
 {
     ( *m_internals )[aPath] = aVal.ToUTF8();
 }
@@ -931,10 +945,12 @@ ResultType JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std
 }
 
 
-template KICOMMON_API std::string JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
-                                                    const std::string& aKey, std::string aDefault );
+template
+KICOMMON_API std::string JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
+                                                        const std::string& aKey,
+                                                        std::string aDefault );
 
 
-template KICOMMON_API bool JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
-                                                         const std::string& aKey,
-                                             bool aDefault );
+template
+KICOMMON_API bool JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
+                                                 const std::string& aKey, bool aDefault );

@@ -186,17 +186,13 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                            ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_FILLED,
                            ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "git.repo_username",
-            &m_GitRepoUsername, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "git.repo_username", &m_GitRepoUsername, "" ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "git.repo_password",
-            &m_GitRepoPassword, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "git.repo_password", &m_GitRepoPassword, "" ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "git.repo_type",
-            &m_GitRepoType, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "git.repo_type", &m_GitRepoType, "" ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "git.ssh_key",
-            &m_GitSSHKey, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "git.ssh_key", &m_GitSSHKey, "" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "net_inspector_panel.filter_text",
                                                 &m_NetInspectorPanel.filter_text, "" ) );
@@ -259,9 +255,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
             [&]( const nlohmann::json& aVal )
             {
                 if( !aVal.is_array() || aVal.empty() )
-                {
                     return;
-                }
 
                 m_files.clear();
 
@@ -490,7 +484,8 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
 {
     wxASSERT( m_project );
 
-    Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectLocalSettingsFileExtension );
+    Set( "meta.filename",
+         m_project->GetProjectName() + "." + FILEEXT::ProjectLocalSettingsFileExtension );
 
     return JSON_SETTINGS::SaveToFile( aDirectory, aForce );
 }
