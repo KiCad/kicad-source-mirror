@@ -347,7 +347,10 @@ void PNS_LOG_VIEWER_FRAME::LoadLogFile( const wxString& aFile )
 {
     std::unique_ptr<PNS_LOG_FILE> logFile( new PNS_LOG_FILE );
 
-    if( logFile->Load( wxFileName( aFile ), m_reporter.get() ) )
+    wxFileName logFn( aFile );
+    logFn.MakeAbsolute();
+
+    if( logFile->Load( logFn, m_reporter.get() ) )
         SetLogFile( logFile.release() );
 }
 
