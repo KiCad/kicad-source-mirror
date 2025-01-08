@@ -29,10 +29,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-08 14:32+0300\n"
-"PO-Revision-Date: 2025-01-07 11:57+0000\n"
+"PO-Revision-Date: 2025-01-09 08:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -990,7 +990,6 @@ msgid "Configure Paths"
 msgstr "Pfade konfigurieren"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
 msgstr "Modell einbetten"
 
@@ -3253,9 +3252,8 @@ msgid "Reference Designators"
 msgstr "Referenzbezeichner"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear net assignments"
-msgstr "Netzzuordnung zurücksetzen"
+msgstr "Netzzuordnungen zurücksetzen"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
@@ -4254,9 +4252,8 @@ msgid "Editing"
 msgstr "Bearbeitung"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "Maus zum Ursprung des verschobenen Objekts bewegen"
+msgstr "Maus zum Ursprung eines verschobenen Objekts bewegen"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -4852,7 +4849,6 @@ msgid "Remove embedded file"
 msgstr "Eingebettete Datei entfernen"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
 msgstr "Schriftarten einbetten"
 
@@ -4861,9 +4857,8 @@ msgid "Store a copy of all fonts used"
 msgstr "Eine Kopie aller benutzten Schriftarten speichern"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "Exportieren..."
+msgstr "&Exportieren ..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
@@ -5480,9 +5475,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Auf \"%s\" passende Netze:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Netzklassen:"
+msgstr "Netzklassen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:640
@@ -5575,9 +5569,8 @@ msgid "Import colors from schematic"
 msgstr "Farben aus Schaltplan importieren"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Netzklassen-Zuweisungen:"
+msgstr "Netzklassenzuweisungen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -8424,9 +8417,9 @@ msgid "Failed to create file '%s'."
 msgstr "Konnte Datei \"%s\" nicht erstellen."
 
 #: common/project/project_archiver.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "Fehler beim Entfernen von Verzeichnis \"%s\": %s"
+msgstr "Fehler beim Öffnen von Verzeichnis: \"%s\"."
 
 #: common/project/project_archiver.cpp:382
 #, c-format
@@ -8434,9 +8427,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip-Archiv \"%s\" erstellt (%s unkomprimiert, %s komprimiert)."
 
 #: common/project/project_archiver.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "Fehler: %s"
+msgstr "Fehler: \"%s\"."
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -11496,7 +11489,6 @@ msgid "New library identifier:"
 msgstr "Neue Bibliotheks-ID:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
-#, fuzzy
 msgid "Update/Reset Fields"
 msgstr "Felder aktualisieren/zurücksetzen"
 
@@ -14571,7 +14563,6 @@ msgid "SPICE directives:"
 msgstr "Spice-Anweisungen:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
-#, fuzzy
 msgid "Load Directives from Schematic"
 msgstr "Anweisungen aus Schaltplan laden"
 
@@ -16418,9 +16409,8 @@ msgid "Zoom vertically"
 msgstr "Vertikal zoomen"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
-#, fuzzy
 msgid "Vertical Touchpad or Scroll Wheel Movement"
-msgstr "Vertikale Touchpad- oder Scrollradbewegung:"
+msgstr "Vertikale Touchpad- oder Scrollradbewegung"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
@@ -16454,9 +16444,8 @@ msgid "Alt:"
 msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal Touchpad Movement"
-msgstr "Horizontale Bewegung auf Touchpad:"
+msgstr "Horizontale Bewegung auf Touchpad"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
@@ -16615,14 +16604,12 @@ msgid "Reset Libraries"
 msgstr "Bibliotheken zurücksetzen"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "Projektspezifische Feldnamenvorlagen:"
+msgstr "Projektspezifische Feldnamenvorlagen"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "Globale Feldnamenvorlagen:"
+msgstr "Globale Feldnamenvorlagen"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:208
 #, c-format
@@ -17003,14 +16990,12 @@ msgid "Checking pins..."
 msgstr "Prüfe Pins ..."
 
 #: eeschema/erc/erc.cpp:1847
-#, fuzzy
 msgid "Checking similar labels..."
-msgstr "Prüfe Bezeichner ..."
+msgstr "Prüfe ähnliche Bezeichner ..."
 
 #: eeschema/erc/erc.cpp:1855
-#, fuzzy
 msgid "Checking local and global labels..."
-msgstr "Prüfe Bezeichner ..."
+msgstr "Prüfe lokale und globale Bezeichner ..."
 
 #: eeschema/erc/erc.cpp:1863
 msgid "Checking for unresolved variables..."
@@ -26906,7 +26891,6 @@ msgid "A new version of KiCad is available!"
 msgstr "Eine neue Version von KiCad ist verfügbar!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip This Version"
 msgstr "Diese Version über&springen"
 
@@ -26919,7 +26903,6 @@ msgstr ""
 "neuere Versionen werden zusätzliche Aktualisierungshinweise angezeigt."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
-#, fuzzy
 msgid "&Remind Me Later"
 msgstr "Später e&rinnern"
 
@@ -33618,7 +33601,6 @@ msgid "Choose how many digits of precision to display"
 msgstr "Wählen Sie aus, wie viele Stellen genau angezeigt werden sollen"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "Arrow direction:"
 msgstr "Pfeilrichtung:"
 
@@ -34325,7 +34307,6 @@ msgid "Compressing output"
 msgstr "Komprimiere Ausgabe"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression format:"
 msgstr "Kompressionsformat:"
 
@@ -35503,9 +35484,8 @@ msgstr ""
 "gemeinsamen Datei erwarten."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:75
-#, fuzzy
 msgid "Use alternate drill mode for oval holes"
-msgstr "Alternativen Bohrmodus verwenden"
+msgstr "Alternativen Bohrmodus für ovale Löcher verwenden"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -35513,23 +35493,20 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
-msgstr "Karte generieren"
+msgstr "Karte generieren:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
-#, fuzzy
 msgid "Origin:"
-msgstr "Ursprungspunkt"
+msgstr "Ursprung:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:134
 msgid "Absolute"
 msgstr "Absolut"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "Nullstellen"
+msgstr "Nullstellen:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -35558,9 +35535,8 @@ msgid "Generators A (%s)"
 msgstr "Generatoren A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild Selected"
-msgstr "Ausgewählte erneuern"
+msgstr "Ausgewählte neu aufbauen"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
 msgid "Rebuild this type"
@@ -38794,14 +38770,12 @@ msgid "Internal Layers"
 msgstr "Interne Lagen"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
-#, fuzzy
 msgid "Default Field Properties for New Footprints"
-msgstr "Standard-Feldeigenschaften für neue Footprints:"
+msgstr "Standard-Feldeigenschaften neuer Footprints"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:73
-#, fuzzy
 msgid "Default Text Items for New Footprints"
-msgstr "Standard-Textelemente für neue Footprints:"
+msgstr "Standard-Textelemente neuer Footprints"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:210
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:217
@@ -38849,9 +38823,8 @@ msgid "Parameter error"
 msgstr "Parameter-Fehler"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:26
-#, fuzzy
 msgid "Default Properties for New Graphic Items"
-msgstr "Standardeigenschaften für neue grafische Elemente:"
+msgstr "Standardeigenschaften neuer Grafikelemente"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:309
 msgid "Hidden footprint libraries are not yet supported."
@@ -39376,9 +39349,8 @@ msgstr ""
 "deaktiviert, wird die Höhe des Lagenaufbaus ignoriert."
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
-#, fuzzy
 msgid "Default Properties for New Dimension Objects"
-msgstr "Standardeigenschaften für neue Bemaßungsobjekte:"
+msgstr "Standardeigenschaften neuer Bemaßungsobjekte"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:37
 msgid ""
@@ -40090,9 +40062,8 @@ msgstr ""
 "Falls nichts vorgegeben ist, wird empfohlen, die Werte auf Null zu setzen."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
-#, fuzzy
 msgid "Solder Mask Settings"
-msgstr "Lötstoppmaskeneinstellungen:"
+msgstr "Lötstoppmaskeneinstellungen"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
@@ -40137,10 +40108,10 @@ msgstr ""
 "Kleinere Abstände erzeugen einen DRC-Fehler."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
-"Gebrückte Lötstoppöffnungen zwischen Pads innerhalb von Footprints erlauben."
+"Verbundene Lötstoppmaskenöffnungen zwischen Pads innerhalb von Footprints "
+"erlauben"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
 msgid ""
@@ -40164,9 +40135,8 @@ msgstr ""
 "Not tented: Vias werden nicht mit Lötstopp abgedeckt."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
-#, fuzzy
 msgid "Solder Paste Settings"
-msgstr "Lötpasteneinstellungen:"
+msgstr "Lötpasteneinstellungen"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:149
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:154
@@ -41358,18 +41328,16 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Round Shapes"
-msgstr "Standardeigenschaften für runde Formen:"
+msgstr "Standardeigenschaften runder Formen"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 msgid "Allow teardrop to span two track segments"
 msgstr "Teardrop darf zwei Leiterbahnsegmente überbrücken"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:189
-#, fuzzy
 msgid "Default Properties for Rectangular Shapes"
-msgstr "Standardeigenschaften für rechteckige Formen:"
+msgstr "Standardeigenschaften rechteckiger Formen"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
@@ -41377,9 +41345,8 @@ msgid "Allow teardrop to span track segments"
 msgstr "Teardrops können Leiterbahnsegmente überspannen"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:359
-#, fuzzy
 msgid "Properties for Track-to-Track Teardrops"
-msgstr "Eigenschaften von Leiterbahn-zu-Leiterbahn Teardrops:"
+msgstr "Eigenschaften von Leiterbahn-zu-Leiterbahn Teardrops"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:473
 msgid ""
@@ -41395,9 +41362,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr "Leiterbahnen ähnlicher Größe benötigen keine Teardrops."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:20
-#, fuzzy
 msgid "Default Properties for New Graphics and Text"
-msgstr "Standardeigenschaften für neue Grafik- und Textelemente:"
+msgstr "Standardeigenschaften neuer Grafik- und Textelemente"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -41433,19 +41399,16 @@ msgid "Via Gap"
 msgstr "Via-Abstand"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Single Track Tuning"
-msgstr "Standardeigenschaften für Einzelleitung-Abstimmung:"
+msgstr "Standardeigenschaften für Einzelleitung-Abstimmung"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default Properties for Differential Pairs"
-msgstr "Standardeigenschaften für Differenzialpaare:"
+msgstr "Standardeigenschaften für Differenzialpaare"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
-#, fuzzy
 msgid "Default Properties for Differential Pair Skews"
-msgstr "Standardeigenschaften für Differenzialpaar-Versätze:"
+msgstr "Standardeigenschaften für Differenzialpaar-Versätze"
 
 #: pcbnew/drc/drc_cache_generator.cpp:124
 msgid "Gathering copper items..."
@@ -51162,9 +51125,8 @@ msgid "Selected Items"
 msgstr "Ausgewählte Elemente"
 
 #: pcbnew/tools/pcb_control.cpp:1916
-#, fuzzy
 msgid "Selected 2D Length"
-msgstr "Ausgewähltes Netz:"
+msgstr "Gewählte 2D-Länge"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
