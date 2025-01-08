@@ -76,19 +76,19 @@ public:
     COMMIT();
     virtual ~COMMIT();
 
-    /// Add a new item to the model.
+    ///< Add a new item to the model
     COMMIT& Add( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
         return Stage( aItem, CHT_ADD, aScreen );
     }
 
-    /// Notify observers that aItem has been added.
+    ///< Notify observers that aItem has been added
     COMMIT& Added( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
         return Stage( aItem, CHT_ADD | CHT_DONE, aScreen );
     }
 
-    /// Remove a new item from the model.
+    ///< Remove a new item from the model
     COMMIT& Remove( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
         return Stage( aItem, CHT_REMOVE, aScreen );
@@ -100,21 +100,15 @@ public:
         return Stage( aItem, CHT_REMOVE | CHT_DONE, aScreen );
     }
 
-    /**
-     * Modify a given item in the model.
-     *
-     * @note Must be called before modification is performed.
-     */
+    ///< Modify a given item in the model.
+    ///< Must be called before modification is performed.
     COMMIT& Modify( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
         return Stage( aItem, CHT_MODIFY, aScreen );
     }
 
-    /**
-     * Create an undo entry for an item that has been already modified.
-     *
-     * @note Requires a copy done before the modification.
-     */
+    ///< Create an undo entry for an item that has been already modified. Requires a copy done
+    ///< before the modification.
     COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy, BASE_SCREEN *aScreen = nullptr )
     {
         return createModified( aItem, aCopy, 0, aScreen );
@@ -130,7 +124,7 @@ public:
         return *this;
     }
 
-    /// Add a change of the item aItem of type aChangeType to the change list.
+    ///< Add a change of the item aItem of type aChangeType to the change list.
     virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType,
                            BASE_SCREEN *aScreen = nullptr );
 
@@ -141,10 +135,10 @@ public:
                            UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
                            BASE_SCREEN *aScreen = nullptr );
 
-    /// Execute the changes.
+    ///< Execute the changes.
     virtual void Push( const wxString& aMessage = wxT( "A commit" ), int aFlags = 0 ) = 0;
 
-    /// Revert the commit by restoring the modified items state.
+    ///< Revert the commit by restoring the modified items state.
     virtual void Revert() = 0;
 
     bool Empty() const
@@ -152,7 +146,7 @@ public:
         return m_changes.empty();
     }
 
-    /// Returns status of an item.
+    ///< Returns status of an item.
     int GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr );
 
     EDA_ITEM* GetFirst() const { return m_changes.empty() ? nullptr : m_changes[0].m_item; }
@@ -167,7 +161,7 @@ protected:
         BASE_SCREEN* m_screen;
     };
 
-    /// Should be called in Push() & Revert() methods
+    // Should be called in Push() & Revert() methods
     void clear()
     {
         m_changedItems.clear();

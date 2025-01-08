@@ -528,17 +528,17 @@ protected:
         return parseDouble( GetTokenText( aToken ) );
     }
 
-    bool                iOwnReaders;            ///< On readerStack, should I delete them?
+    bool                iOwnReaders;            ///< on readerStack, should I delete them?
     const char*         start;
     const char*         next;
     const char*         limit;
-    char                dummy[1];               ///< When there is no reader.
+    char                dummy[1];               ///< when there is no reader.
 
     typedef std::vector<LINE_READER*>  READER_STACK;
 
     READER_STACK        readerStack;            ///< all the LINE_READERs by pointer.
 
-    /// No ownership. ownership is via readerStack, maybe, if #iOwnReaders.
+    ///< no ownership. ownership is via readerStack, maybe, if iOwnReaders
     LINE_READER*        reader;
 
     bool                specctraMode;           ///< if true, then:
@@ -548,19 +548,19 @@ protected:
                                                 ///< else not.
 
     char                stringDelimiter;
-    bool                space_in_quoted_tokens; ///< Blank spaces within quoted strings.
+    bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
 
-    bool                commentsAreTokens;      ///< True if should return comments as tokens.
+    bool                commentsAreTokens;      ///< true if should return comments as tokens
 
-    int                 prevTok;                ///< #curTok from previous NextTok() call.
-    int                 curOffset;              ///< Offset within current line of the current token
+    int                 prevTok;                ///< curTok from previous NextTok() call.
+    int                 curOffset;              ///< offset within current line of the current token
 
-    int                 curTok;                 ///< The current token obtained on last NextTok().
-    std::string         curText;                ///< The text of the current token.
+    int                 curTok;                 ///< the current token obtained on last NextTok()
+    std::string         curText;                ///< the text of the current token
 
-    const KEYWORD*      keywords;               ///< Table sorted by CMake for bsearch().
-    unsigned            keywordCount;           ///< Count of keywords table.
-    const KEYWORD_MAP*  keywordsLookup;         ///< Fast, specialized "C string" hashtable.
+    const KEYWORD*      keywords;               ///< table sorted by CMake for bsearch()
+    unsigned            keywordCount;           ///< count of keywords table
+    const KEYWORD_MAP*  keywordsLookup;         ///< fast, specialized "C string" hashtable
 #endif // SWIG
 };
 

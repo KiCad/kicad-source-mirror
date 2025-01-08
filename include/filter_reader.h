@@ -69,7 +69,7 @@ class WHITESPACE_FILTER_READER : public LINE_READER
 {
 public:
     /**
-     * Do not take ownership over @a aReader, so will not destroy it.
+     * Doe not take ownership over @a aReader, so will not destroy it.
      */
     WHITESPACE_FILTER_READER( LINE_READER& aReader );
 

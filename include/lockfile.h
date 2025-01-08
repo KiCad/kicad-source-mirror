@@ -133,14 +133,13 @@ public:
     }
 
     /**
-     * Unlock and remove the file from the filesystem as long as we still own it.
+     * Unlocks and removes the file from the filesystem as long as we still own it.
      */
     void UnlockFile()
     {
         wxLogTrace( LCK, "Unlocking %s", m_lockFilename );
 
-        // Delete lock file only if the file was created in the constructor and if the file
-        // contains the correct user and host names.
+        // Delete lock file only if the file was created in the constructor and if the file contains the correct user and host names
         if( m_fileCreated && checkUserAndHost() )
         {
             if( m_removeOnRelease )
@@ -153,8 +152,7 @@ public:
     }
 
     /**
-     * Force the lock, overwriting the data that existed already.
-     *
+     * Forces the lock, overwriting the data that existed already
      * @return True if we successfully overrode the lock
      */
     bool OverrideLock( bool aRemoveOnRelease = true )
@@ -216,19 +214,17 @@ public:
     }
 
     /**
-     * @return Current username.  If we own the lock, this is us.  Otherwise, this is the user
-     *         that does own it.
+     * @return Current username.  If we own the lock, this is us.  Otherwise, this is the user that does own it
      */
     wxString GetUsername(){ return m_username; }
 
     /**
-     * @return Current hostname.  If we own the lock this is our computer.  Otherwise, this is
-     *         the computer that does.
+     * @return Current hostname.  If we own the lock this is our computer.  Otherwise, this is the computer that does
      */
     wxString GetHostname(){ return m_hostname; }
 
     /**
-     * @return Last error message generated.
+     * @return Last error message generated
      */
     wxString GetErrorMsg(){ return m_errorMsg; }
 
@@ -268,7 +264,6 @@ private:
         }
 
         wxFile file;
-
         try
         {
             if( file.Open( m_lockFilename, wxFile::read ) )

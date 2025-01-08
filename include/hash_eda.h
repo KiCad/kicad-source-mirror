@@ -28,7 +28,6 @@
 #define HASH_EDA_H_
 
 /**
- * @file hash_eda.h
  * @brief Hashing functions for EDA_ITEMs.
  */
 
@@ -37,19 +36,15 @@
 
 class EDA_ITEM;
 
-/**
- * Enable/disable properties that will be used for calculating the hash.
- *
- * The properties might be combined using the bitwise 'or' operator.
- */
+///< Enables/disables properties that will be used for calculating the hash.
+///< The properties might be combined using the bitwise 'or' operator.
 enum HASH_FLAGS
 {
     HASH_POS    = 0x01,
 
-    /// Use coordinates relative to the parent object.
+    ///< use coordinates relative to the parent object
     REL_COORD   = 0x02,
-
-    /// Use coordinates relative to the shape position.
+    ///< use coordinates relative to the shape position
     REL_POS     = 0x04,
     HASH_ROT    = 0x08,
     HASH_LAYER  = 0x10,

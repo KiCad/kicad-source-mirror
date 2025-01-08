@@ -212,8 +212,7 @@ public:
     // Define less-than operator for comparison
     bool operator<( const BASE_SET& other ) const
     {
-        return alg::lexicographical_compare_three_way( begin(), end(), other.begin(),
-                                                       other.end() ) < 0;
+        return alg::lexicographical_compare_three_way( begin(), end(), other.begin(), other.end() ) < 0;
     }
 
     /**
@@ -284,12 +283,10 @@ public:
 
     /**
      * Convert the output of FmtHex() and replaces this set's values
-     * with those given in the input string.
-     *
-     * Parsing stops at the first non hex ASCII byte, except that marker bytes output from
-     * FmtHex() are not terminators.
-     *
-     * @return the number of bytes consumed.
+     * with those given in the input string.  Parsing stops at the first
+     * non hex ASCII byte, except that marker bytes output from FmtHex are
+     * not terminators.
+     * @return int - number of bytes consumed
      */
     int ParseHex( const std::string& str )
     {
@@ -298,12 +295,10 @@ public:
 
     /**
      * Convert the output of FmtHex() and replaces this set's values
-     * with those given in the input string.
-     *
-     * Parsing stops at the first non hex ASCII byte, except that marker bytes output from
-     * FmtHex() are not terminators.
-     *
-     * @return number of bytes consumed.
+     * with those given in the input string.  Parsing stops at the first
+     * non hex ASCII byte, except that marker bytes output from FmtHex are
+     * not terminators.
+     * @return int - number of bytes consumed
      */
     int ParseHex( const char* aStart, int aCount )
     {

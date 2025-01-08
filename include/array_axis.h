@@ -43,14 +43,12 @@ public:
     {
         NUMBERING_NUMERIC = 0, ///< Arabic numerals: 0,1,2,3,4,5,6,7,8,9,10,11...
         NUMBERING_HEX,
-
-        /**
-         * Alphabet, excluding IOSQXZ
-         *
-         * Per ASME Y14.35M-1997 sec. 5.2 (previously MIL-STD-100 sec. 406.5) as these can be
-         * confused with numerals and are often not used for pin numbering on BGAs, etc.
-         */
-        NUMBERING_ALPHA_NO_IOSQXZ,
+        NUMBERING_ALPHA_NO_IOSQXZ, /*!< Alphabet, excluding IOSQXZ
+                                     *
+                                     * Per ASME Y14.35M-1997 sec. 5.2 (previously MIL-STD-100 sec. 406.5)
+                                     * as these can be confused with numerals and are often not used
+                                     * for pin numbering on BGAs, etc
+                                     */
         NUMBERING_ALPHA_FULL,      ///< Full 26-character alphabet
     };
 
@@ -58,19 +56,19 @@ public:
 
     /**
      * Get the alphabet for the current numbering scheme.
-     * @param  type the numbering scheme.
-     * @return the alphabet (as a string).
+     * @param  type the numbering scheme
+     * @return      the alphabet (as a string)
      */
     const wxString& GetAlphabet() const;
 
     /**
-     * Set the axis numbering type.
+     * Set the axis numbering type
      */
     void SetAxisType( NUMBERING_TYPE aType );
 
     /**
      * Set the axis start (as a string, which should decode to a valid index
-     * in the alphabet),
+     * in the alphabet)
      */
     bool SetOffset( const wxString& aOffsetName );
 
@@ -78,28 +76,28 @@ public:
      * Set the start offset for the series (e.g. 0 to start at 0/A, 4 to start
      * at 4/E).
      *
-     * @param aOffset offset of the first item in the.
+     * @param aOffset offset of the first item in the
      */
     void SetOffset( int aOffset );
 
     /**
      * Get the numbering offset for the axis
      *
-     * @return the current offset.
+     * @return       the current offset
      */
     int GetOffset() const;
 
     /**
      * Set the skip between consecutive numbers (useful when doing a partial
-     * array, e.g. only one side of a connector).
+     * array, e.g. only one side of a connector)
      */
     void SetStep( int aStep );
 
     /**
      * Get the position number (name) for the n'th axis point
      *
-     * @param  n array point index, from 0.
-     * @return the point's name.
+     * @param  n array point index, from 0
+     * @return   the point's name
      */
     wxString GetItemNumber( int n ) const;
 
@@ -107,15 +105,15 @@ private:
     /**
      * Get the numbering offset for a given numbering string
      *
-     * @param  str is a numbering string, say "B" or "5".
-     * @return the offset, if found, else empty.
+     * @param  str   a numbering string, say "B" or "5"
+     * @return       the offset, if found, else empty
      */
     std::optional<int> getNumberingOffset( const wxString& str ) const;
 
     NUMBERING_TYPE m_type;
     int            m_offset;
 
-    /// Skip every 'n' numbers.
+    ///< Skip every 'n' numbers
     int m_step;
 };
 

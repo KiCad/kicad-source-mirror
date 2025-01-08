@@ -53,7 +53,7 @@ public:
     bool operator!=( const DESIGN_BLOCK_LIB_TABLE_ROW& aRow ) const { return !( *this == aRow ); }
 
     /**
-     * Return the type of design block library table represented by this row.
+     * return the type of design block library table represented by this row.
      */
     const wxString GetType() const override { return DESIGN_BLOCK_IO_MGR::ShowType( type ); }
 
@@ -110,14 +110,14 @@ public:
     bool operator!=( const DESIGN_BLOCK_LIB_TABLE& r ) const { return !( *this == r ); }
 
     /**
-     * Return an #DESIGN_BLOCK_LIB_TABLE_ROW if \a aNickName is found in this table or in any
-     * chained fall back table fragment.
+     * Return an #DESIGN_BLOCK_LIB_TABLE_ROW if \a aNickName is found in this table or in any chained
+     * fall back table fragment.
      *
      * If \a aCheckIfEnabled is true, the library will be ignored even if it is disabled.
      * Otherwise, the row found will be returned even if entry is disabled.
      *
-     * The #PLUGIN is loaded and attached to the "plugin" field of the #DESIGN_BLOCK_LIB_TABLE_ROW
-     * if not already loaded.
+     * The #PLUGIN is loaded and attached to the "plugin" field of the #DESIGN_BLOCK_LIB_TABLE_ROW if
+     * not already loaded.
      *
      * @param aNickName is the name of library nickname to find.
      * @param aCheckIfEnabled is the flag to check if the library found is enabled.
@@ -130,8 +130,7 @@ public:
     /**
      * Return a list of design block names contained within the library given by @a aNickname.
      *
-     * @param aDesignBlockNames is the list to fill with the design block names found in
-     *                          \a aNickname.
+     * @param aDesignBlockNames is the list to fill with the design block names found in \a aNickname
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
      * @param aBestEfforts if true, don't throw on errors.
      *
@@ -219,8 +218,7 @@ public:
      * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW.
      * @param aDesignBlockName is the name of a design block to delete from the specified library.
      *
-     * @throw IO_ERROR if there is a problem finding the design block or the library, or deleting
-     *        it.
+     * @throw IO_ERROR if there is a problem finding the design block or the library, or deleting it.
      */
     void DesignBlockDelete( const wxString& aNickname, const wxString& aDesignBlockName );
 
@@ -281,7 +279,7 @@ public:
      * Return the name of the environment variable used to hold the directory of
      * locally installed "KiCad sponsored" system design block libraries.
      *
-     * These can be either legacy or pretty format.  The only thing special about this
+     *These can be either legacy or pretty format.  The only thing special about this
      * particular environment variable is that it is set automatically by KiCad on
      * program start up, <b>if</b> it is not set already in the environment.
      */

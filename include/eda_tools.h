@@ -35,7 +35,7 @@
 #include <wx/filename.h>
 
 /**
- * Enumeration of tools.
+ * Enumeration of tools
  */
 enum class EDA_TOOLS
 {
@@ -43,13 +43,12 @@ enum class EDA_TOOLS
 };
 
 /**
- * Check if \a aFileName is a \a aTool file.
- *
- * As an example, can be used to check if a .sch file is an EAGLE file (may be a legacy KICAD file).
- *
- * @param aFileName name of file to check. Must be given with full path.
- * @param aTool EDA tool.
- * @return true if the file is an EDA_TOOL file type, false if not or file does not exist.
+ * Check if aFileName is a aTool file
+ * As an example, can be used to check if a .sch file is an EAGLE file
+ * (may be a legacy KICAD file)
+ * @param aFileName name of file to check. Must be given with full path
+ * @param aTool EDA tool
+ * @return true if the file is an EDA_TOOL file type, false if not or file does not exist
  */
 bool IsFileFromEDATool( const wxFileName& aFileName, const EDA_TOOLS aTool );
 

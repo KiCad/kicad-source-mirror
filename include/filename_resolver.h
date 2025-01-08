@@ -40,10 +40,10 @@ class EMBEDDED_FILES;
 
 struct SEARCH_PATH
 {
-    wxString m_Alias;           ///< Alias to the base path.
-    wxString m_Pathvar;         ///< Base path as stored in the configuration file.
-    wxString m_Pathexp;         ///< Expanded base path.
-    wxString m_Description;     ///< Description of the aliased path.
+    wxString m_Alias;           // alias to the base path
+    wxString m_Pathvar;         // base path as stored in the config file
+    wxString m_Pathexp;         // expanded base path
+    wxString m_Description;     // description of the aliased path
 };
 
 
@@ -70,10 +70,10 @@ public:
     /**
      * Set the current KiCad project directory as the first entry in the model path list.
      *
-     * @param[in]   aProjDir    current project directory.
-     * @param[out]  flgChanged  optional, set to true if directory was changed.
-     * @retval      true        success.
-     * @retval      false       failure.
+     * @param[in]   aProjDir    current project directory
+     * @param[out]  flgChanged  optional, set to true if directory was changed
+     * @retval      true        success
+     * @retval      false       failure
      */
     bool SetProject( PROJECT* aProject, bool* flgChanged = nullptr );
 
@@ -92,15 +92,15 @@ public:
     bool UpdatePathList( const std::vector<SEARCH_PATH>& aPathList );
 
     /**
-     * Determine the full path of the given file name.
+     * Determines the full path of the given file name.
      *
      * In the future remote files may be supported, in which case it is best to require a full
      * URI in which case ResolvePath should check that the URI conforms to RFC-2396 and related
      * documents and copies \a aFileName into aResolvedName if the URI is valid.
      *
-     * @param aFileName The configured file path to resolve.
-     * @param aWorkingPath The current working path for relative path resolutions.
-     * @param aFiles The embedded files object to use for embedded file resolution.
+     * @param aFileName The configured file path to resolve
+     * @param aWorkingPath The current working path for relative path resolutions
+     * @param aFiles The embedded files object to use for embedded file resolution
      */
     wxString ResolvePath( const wxString& aFileName, const wxString& aWorkingPath,
                           const EMBEDDED_FILES* aFiles );
@@ -130,7 +130,7 @@ public:
     bool SplitAlias( const wxString& aFileName, wxString& anAlias, wxString& aRelPath ) const;
 
     /**
-     * Return true if the given path is a valid aliased relative path.
+     * Returns true if the given path is a valid aliased relative path.
      *
      * If the path contains an alias then hasAlias is set true.
      */
@@ -145,8 +145,8 @@ public:
 
 private:
     /**
-     * Build the path list using available information such as KICAD7_3DMODEL_DIR and the
-     * 3d_path_list configuration file.
+     * Build the path list using available information such as KICAD7_3DMODEL_DIR and the 3d_path_list
+     * configuration file.
      *
      * @warning Invalid paths are silently discarded and removed from the configuration file.
      *
@@ -168,8 +168,8 @@ private:
      */
     void checkEnvVarPath( const wxString& aPath );
 
-    wxString               m_configDir;     ///< 3D configuration directory.
-    std::list<SEARCH_PATH> m_paths;         ///< List of base paths to search from.
+    wxString               m_configDir;     // 3D configuration directory
+    std::list<SEARCH_PATH> m_paths;         // list of base paths to search from
     int                    m_errflags;
     PGM_BASE*              m_pgm;
     PROJECT*               m_project;

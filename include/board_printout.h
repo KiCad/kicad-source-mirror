@@ -93,31 +93,31 @@ public:
                            int aPageNum = 1, int aPageCount = 1 );
 
 protected:
-    /// Convert mils to internal units.
+    ///< Convert mils to internal units
     virtual int milsToIU( double aMils ) const = 0;
 
-    /// Enable layers visibility for a printout.
+    ///< Enables layers visibility for a printout
     virtual void setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet );
 
-    /// Configure #PAINTER object for a printout.
+    ///< Configures PAINTER object for a printout
     virtual void setupPainter( KIGFX::PAINTER& aPainter );
 
-    /// Configure #GAL object for a printout.
+    ///< Configures GAL object for a printout
     virtual void setupGal( KIGFX::GAL* aGal );
 
-    /// Return bounding box of the printed objects (excluding drawing-sheet frame).
+    ///< Returns bounding box of the printed objects (excluding drawing-sheet frame)
     virtual BOX2I getBoundingBox() = 0;
 
-    /// Return the #PAINTER instance used to draw the items.
+    ///< Returns a PAINTER instance used to draw the items.
     virtual std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) = 0;
 
-    /// Source VIEW object (note that actual printing only refers to this object).
+    ///< Source VIEW object (note that actual printing only refers to this object)
     const KIGFX::VIEW* m_view;
 
-    /// Printout parameters.
+    ///< Printout parameters
     BOARD_PRINTOUT_SETTINGS m_settings;
 
-    /// True if the caller is Gerbview, false for Pcbnew.
+    /// True if the caller is Gerbview, false for Pcbnew
     bool  m_gerbviewPrint;
 };
 

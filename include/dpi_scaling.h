@@ -58,44 +58,41 @@ public:
 
     /**
      * Get the content scale factor, which may be different from the scale
-     * factor on some platforms.
-     *
-     * This value should be used for scaling user interface elements (fonts, icons, etc) whereas
-     * the scale factor should be used for scaling canvases.
+     * factor on some platforms.  This value should be used for scaling
+     * user interface elements (fonts, icons, etc) whereas the scale
+     * factor should be used for scaling canvases.
      */
     virtual double GetContentScaleFactor() const = 0;
 
     /**
-     * Is the current value auto scaled or is it user-set in the config.
+     * Is the current value auto scaled, or is it user-set in the config
      */
     virtual bool GetCanvasIsAutoScaled() const = 0;
 
     /**
-     * Set the common DPI config in a given config object.
+     * Set the common DPI config in a given config object
      *
      * The encoding of the automatic/manual nature of the config is handled internally.
      *
-     * @param aAuto   store a value meaning "no user-set scale".
-     * @param aValue  the value to store (ignored if aAuto set).
+     * @param aAuto   store a value meaning "no user-set scale"
+     * @param aValue  the value to store (ignored if aAuto set)
      */
     virtual void SetDpiConfig( bool aAuto, double aValue ) = 0;
 
-    /**
+    /*
      * Get the maximum scaling factor that should be presented to the user.
-     *
      * This is only advisory, it has no real technical use other than for validation.
      */
     static double GetMaxScaleFactor();
 
-    /**
+    /*
      * Get the minimum scaling factor that should be presented to the user.
-     *
      * This is only advisory, it has no real technical use other than for validation.
      */
     static double GetMinScaleFactor();
 
     /**
-     * Get the "default" scaling factor to use if not other config is available.
+     * Get the "default" scaling factor to use if not other config is available
      */
     static double GetDefaultScaleFactor();
 };

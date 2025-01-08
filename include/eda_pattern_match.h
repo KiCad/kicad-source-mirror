@@ -38,10 +38,10 @@
 
 static const int EDA_PATTERN_NOT_FOUND = wxNOT_FOUND;
 
-/**
+/*
  * A structure for storing weighted search terms.
  *
- * @note An exact match is scored at 8 * Score while a match at the start of the text is scored
+ * NOTE: an exact match is scored at 8 * Score while a match at the start of the text is scored
  * at 2 * Score.
  */
 struct KICOMMON_API SEARCH_TERM
@@ -58,8 +58,8 @@ struct KICOMMON_API SEARCH_TERM
 };
 
 
-/**
- * Interface for a pattern matcher for which there are several implementations.
+/*
+ * Interface for a pattern matcher, for which there are several implementations
  */
 class KICOMMON_API EDA_PATTERN_MATCH
 {
@@ -83,9 +83,8 @@ public:
     virtual ~EDA_PATTERN_MATCH() {}
 
     /**
-     * Set the pattern against which candidates will be matched.
-     *
-     * @return false if the pattern not be processed.
+     * Set the pattern against which candidates will be matched. If the pattern
+     * can not be processed, returns false.
      */
     virtual bool SetPattern( const wxString& aPattern ) = 0;
 
@@ -95,17 +94,16 @@ public:
     virtual wxString const& GetPattern() const = 0;
 
     /**
-     * Return the location and possibly length of a match if a given candidate
+     * Return the location and possibly length of a match iff a given candidate
      * string matches the set pattern.
-     *
-     * Otherwise, return an invalid #FIND_RESULT.
+     * Otherwise, return an invalid FIND_RESULT.
      */
     virtual FIND_RESULT Find( const wxString& aCandidate ) const = 0;
 };
 
 
-/**
- * Match simple substring.
+/*
+ * Match simple substring
  */
 class KICOMMON_API EDA_PATTERN_MATCH_SUBSTR : public EDA_PATTERN_MATCH
 {
@@ -120,8 +118,8 @@ protected:
 };
 
 
-/**
- * Match regular expression.
+/*
+ * Match regular expression
  */
 class KICOMMON_API EDA_PATTERN_MATCH_REGEX : public EDA_PATTERN_MATCH
 {
@@ -213,24 +211,25 @@ class KICOMMON_API EDA_COMBINED_MATCHER
 public:
     EDA_COMBINED_MATCHER( const wxString& aPattern, COMBINED_MATCHER_CONTEXT aContext );
 
-    /**
+    /*
      * Deleted copy or else we have to implement copy constructors for all EDA_PATTERN_MATCH classes
-     * due to this class' m_matchers member being copied.
+     * due to this class' m_matchers member being copied
      */
     EDA_COMBINED_MATCHER( EDA_COMBINED_MATCHER const& ) = delete;
 
-    /**
+    /*
      * Deleted copy or else we have to implement copy constructors for all EDA_PATTERN_MATCH classes
      * due to this class' m_matchers member being copied
      */
     EDA_COMBINED_MATCHER& operator=( EDA_COMBINED_MATCHER const& ) = delete;
 
-    /**
-     * Look in all existing matchers, return the earliest match of any of the existing.
+    /*
+     * Look in all existing matchers, return the earliest match of any of
+     * the existing.
      *
-     * @param aTerm                 term to look for.
-     * @param aMatchersTriggered    out: number of matcher that found the term.
-     * @param aPostion              out: where the term was found, or #EDA_PATTERN_NOT_FOUND.
+     * @param aTerm                 term to look for
+     * @param aMatchersTriggered    out: number of matcher that found the term
+     * @param aPostion              out: where the term was found, or EDA_PATTERN_NOT_FOUND
      *
      * @return true if any matchers found the term
      */
@@ -245,7 +244,7 @@ public:
     int ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms );
 
 private:
-    /// Add matcher if it can compile the pattern.
+    // Add matcher if it can compile the pattern.
     void AddMatcher( const wxString& aPattern, std::unique_ptr<EDA_PATTERN_MATCH> aMatcher );
 
     std::vector<std::unique_ptr<EDA_PATTERN_MATCH>> m_matchers;

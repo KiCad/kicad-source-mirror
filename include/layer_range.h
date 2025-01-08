@@ -43,8 +43,7 @@ private:
             if( m_reverse )
             {
                 if( aLayer == B_Cu )
-                    aLayer = m_layer_count == 2 ? F_Cu :
-                             static_cast<int>( F_Cu ) + 2 * ( m_layer_count - 2 ) + 2;
+                    aLayer = m_layer_count == 2 ? F_Cu : static_cast<int>( F_Cu ) + 2 * ( m_layer_count - 2 ) + 2;
                 else if( aLayer == m_stop || aLayer == UNDEFINED_LAYER )
                     aLayer = UNDEFINED_LAYER;
                 else if( aLayer == In1_Cu )
@@ -121,9 +120,7 @@ public:
                 throw std::invalid_argument( "Only works for copper layers" );
     }
 
-    LAYER_RANGE_ITERATOR begin() const { return LAYER_RANGE_ITERATOR( m_start, m_stop,
-                                                                      m_layer_count ); }
-
+    LAYER_RANGE_ITERATOR begin() const { return LAYER_RANGE_ITERATOR( m_start, m_stop, m_layer_count ); }
     LAYER_RANGE_ITERATOR end() const
     {
         auto it = LAYER_RANGE_ITERATOR( m_stop, m_stop, m_layer_count );

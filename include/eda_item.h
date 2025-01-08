@@ -78,7 +78,7 @@ namespace google { namespace protobuf { class Any; } }
  */
 typedef std::function< INSPECT_RESULT ( EDA_ITEM* aItem, void* aTestData ) > INSPECTOR_FUNC;
 
-/// std::function passed to nested users by ref, avoids copying std::function.
+///< std::function passed to nested users by ref, avoids copying std::function.
 typedef const INSPECTOR_FUNC& INSPECTOR;
 
 
@@ -197,7 +197,6 @@ public:
     /**
      * Populate \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
      * purposes.
-     *
      * @param aFrame is the EDA_DRAW_FRAME that displays the message panel
      * @param aList is the list to populate.
      */
@@ -245,7 +244,7 @@ public:
     virtual void     SetPosition( const VECTOR2I& aPos ){};
 
     /**
-     * Similar to GetPosition() but allows items to return their visual center rather
+     * Similar to GetPosition, but allows items to return their visual center rather
      * than their anchor.
      */
     virtual const VECTOR2I GetFocusPosition() const { return GetPosition(); }
@@ -491,15 +490,14 @@ public:
 
 private:
     /**
-     * Run time identification, _keep private_ so it can never be changed after a ctor sets it.
-     *
-     * See comment near SetType() regarding virtual functions.
+     * Run time identification, _keep private_ so it can never be changed after a ctor
+     * sets it.  See comment near SetType() regarding virtual functions.
      */
     KICAD_T        m_structType;
 
 protected:
     EDA_ITEM_FLAGS m_flags;
-    EDA_ITEM*      m_parent; ///< Linked list: Link (parent struct).
+    EDA_ITEM*      m_parent; ///< Linked list: Link (parent struct)
     bool           m_forceVisible;
 };
 

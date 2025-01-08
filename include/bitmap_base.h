@@ -251,7 +251,7 @@ public:
     void UpdateImageDataBuffer();
 
 private:
-    /**
+    /*
      * Rebuild the internal bitmap used to draw/plot image.
      *
      * This must be called after a #m_image change.
@@ -262,18 +262,19 @@ private:
 
     void updatePPI();
 
-    double    m_scale;              ///< The scaling factor of the bitmap
-                                    ///< with #m_pixelSizeIu, controls the actual draw size.
-    wxMemoryBuffer m_imageData;     ///< The original image data in its original format.
-    wxBitmapType   m_imageType;     ///< The image type (png, jpeg, etc.).
+    double    m_scale;              // The scaling factor of the bitmap
+                                    // With m_pixelSizeIu, controls the actual draw size
+    wxMemoryBuffer m_imageData;     // The original image data, in its original format
+    wxBitmapType   m_imageType;     // the image type (png, jpeg, etc.)
 
-    wxImage*  m_image;              ///< The raw, uncompressed image data.
-    wxImage*  m_originalImage;      ///< Raw image data, not transformed by rotate/mirror.
-    wxBitmap* m_bitmap;             ///< The bitmap used to draw/plot image.
-    double    m_pixelSizeIu;        ///< The scaling factor of the bitmap to convert the bitmap
-                                    ///< size (in pixels) to internal KiCad units.  This usually
-                                    ///< does not change.
-    int       m_ppi;                ///< The bitmap definition. The default is 300PPI.
+    wxImage*  m_image;              // the raw, uncompressed image data
+    wxImage*  m_originalImage;      // Raw image data, not transformed by rotate/mirror
+    wxBitmap* m_bitmap;             // the bitmap used to draw/plot image
+    double    m_pixelSizeIu;        // The scaling factor of the bitmap
+                                    // to convert the bitmap size (in pixels)
+                                    // to internal KiCad units
+                                    // Usually does not change
+    int       m_ppi;                // the bitmap definition. the default is 300PPI
     KIID      m_imageId;
     bool      m_isMirroredX;        // Used for OpenGL rendering only
     bool      m_isMirroredY;        // Used for OpenGL rendering only

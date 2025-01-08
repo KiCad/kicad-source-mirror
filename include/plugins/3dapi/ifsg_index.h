@@ -52,7 +52,7 @@ public:
      * Set the number of indices and creates a copy of the given index data.
      *
      * @param nIndices is the number of indices to be stored.
-     * @param[in] aIndexList is the index data.
+     * @param aIndexList [in] is the index data.
      */
     bool SetIndices( size_t nIndices, int* aIndexList );
 

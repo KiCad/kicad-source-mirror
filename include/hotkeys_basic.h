@@ -65,10 +65,9 @@ int KeyCodeFromKeyName( const wxString& keyname );
 wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound = nullptr );
 
 /**
- * In menus we can add a hot key, or an accelerator, or sometimes just a comment.
- *
- * Hot keys can perform actions using the current mouse cursor position and accelerators perform
- * the same action as the associated menu.
+ * In menus we can add a hot key, or an accelerator, or sometimes just a comment.   Hot keys
+ * can perform actions using the current mouse cursor position and accelerators perform the
+ * same action as the associated menu.
  *
  * A comment is used in tool tips for some tools (zoom ..) to show the hot key that performs
  * this action
@@ -85,7 +84,8 @@ enum HOTKEY_ACTION_TYPE
  * @param aStyle #IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys).
  *               #IS_COMMENT to add <spaces><(keyname)> mainly in tool tips.
  */
-wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE aStyle = IS_HOTKEY );
+wxString AddHotkeyName(  const wxString& aText, int aHotKey,
+                         HOTKEY_ACTION_TYPE aStyle = IS_HOTKEY);
 
 /**
  * Display the current hotkey list.
@@ -97,7 +97,7 @@ wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE a
 void DisplayHotkeyList( EDA_BASE_FRAME* aFrame );
 
 /**
- * Read a hotkey config file into a map.
+ * Reads a hotkey config file into a map.
  *
  * If \a aFileName is empty it will read in the default hotkeys file.
  */
@@ -105,7 +105,7 @@ void ReadHotKeyConfig( const wxString&                             aFileName,
                        std::map<std::string, std::pair<int, int>>& aHotKeys );
 
 /**
- * Read a hotkey config file into a list of actions.
+ * Reads a hotkey config file into a list of actions
  *
  * If \a aFileName is empty it will read in the default hotkeys file.
  */

@@ -84,12 +84,12 @@ public:
 
     enum class RETURN_CODE : int
     {
-        OK,                  ///< Success.
-        FILE_NOT_FOUND,      ///< File not found on disk.
-        PERMISSIONS_ERROR,   ///< Could not read/write file.
-        FILE_ALREADY_EXISTS, ///< File already exists in the collection.
-        OUT_OF_MEMORY,       ///< Could not allocate memory.
-        CHECKSUM_ERROR,      ///< Checksum in file does not match data.
+        OK,                  // Success
+        FILE_NOT_FOUND,      // File not found on disk
+        PERMISSIONS_ERROR,   // Could not read/write file
+        FILE_ALREADY_EXISTS, // File already exists in the collection
+        OUT_OF_MEMORY,       // Could not allocate memory
+        CHECKSUM_ERROR,      // Checksum in file does not match data
     };
 
     EMBEDDED_FILES() = default;
@@ -101,41 +101,37 @@ public:
     }
 
     /**
-     * Load a file from disk and adds it to the collection.
-     *
+     * Loads a file from disk and adds it to the collection.
      * @param aName is the name of the file to load.
      * @param aOverwrite is true if the file should be overwritten if it already exists.
     */
     EMBEDDED_FILE* AddFile( const wxFileName& aName, bool aOverwrite );
 
     /**
-     * Append a file to the collection.
-     */
+     * Appends a file to the collection.
+    */
     void AddFile( EMBEDDED_FILE* aFile );
 
     /**
-     * Remove a file from the collection and frees the memory.
-     *
+     * Removes a file from the collection and frees the memory.
      * @param aName is the name of the file to remove.
-     */
+    */
     void RemoveFile( const wxString& name, bool aErase = true );
 
     /**
      * Output formatter for the embedded files.
-     *
      * @param aOut is the output formatter.
      * @param aWriteData is true if the actual data should be written.  This is false when writing
      *                   an element that is already embedded in a file that itself has embedded
-     *                   files (boards, schematics, etc.).
-     */
+     *                   files (boards, schematics, etc.)
+    */
     void WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, bool aWriteData ) const;
 
     /**
-     * Return the link for an embedded file.
-     *
+     * Returns the link for an embedded file.
      * @param aFile is the file to get the link for.
      * @return the link for the file to be used in a hyperlink.
-     */
+    */
     wxString GetEmbeddedFileLink( const EMBEDDED_FILE& aFile ) const
     {
         return aFile.GetLink();
@@ -156,43 +152,42 @@ public:
     /**
      * Helper function to get a list of fonts for fontconfig to add to the library.
      *
-     * This is necessary because EMBEDDED_FILES lives in common at the moment and
+     * This is neccesary because EMBEDDED_FILES lives in common at the moment and
      * fontconfig is in libkicommon.  This will create the cache files in the KiCad
      * cache directory (if they do not already exist) and return the temp files names
-     */
+    */
     const std::vector<wxString>* UpdateFontFiles();
 
     /**
      * If we just need the cached version of the font files, we can use this function which
      * is const and will not update the font files.
-     */
+    */
     const std::vector<wxString>* GetFontFiles() const;
 
     /**
-     * Remove all embedded fonts from the collection.
-     */
+     * Removes all embedded fonts from the collection
+    */
     void ClearEmbeddedFonts();
 
     /**
-     * Take data from the #decompressedData buffer and compresses it using ZSTD
-     * into the #compressedEncodedData buffer.
+     * Takes data from the #decompressedData buffer and compresses it using ZSTD
+     * into the #compressedEncodedData buffer. The data is then Base64 encoded.
      *
-     * The data is then Base64 encoded.  This call is used when adding a new file to the
-     * collection from disk.
-     */
+     * This call is used when adding a new file to the collection from disk
+    */
     static RETURN_CODE  CompressAndEncode( EMBEDDED_FILE& aFile );
 
     /**
      * Takes data from the #compressedEncodedData buffer and Base64 decodes it.
-     *
      * The data is then decompressed using ZSTD and stored in the #decompressedData buffer.
+     *
      * This call is used when loading the embedded files using the parsers.
-     */
+    */
     static RETURN_CODE  DecompressAndDecode( EMBEDDED_FILE& aFile );
 
     /**
      * Returns the embedded file with the given name or nullptr if it does not exist.
-     */
+    */
     EMBEDDED_FILE* GetEmbeddedFile( const wxString& aName ) const
     {
         auto it = m_files.find( aName );
@@ -242,7 +237,7 @@ private:
     std::vector<wxString>              m_fontFiles;
 
 protected:
-    bool m_embedFonts = false; ///< If set, fonts will be embedded in the element on save.
-                               ///< Otherwise, font files embedded in the element will be
-                               ///< removed on save.
+    bool m_embedFonts = false; // If set, fonts will be embedded in the element on save
+                               // Otherwise, font files embedded in the element will be
+                               // removed on save
 };
