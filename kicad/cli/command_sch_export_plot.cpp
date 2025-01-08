@@ -148,8 +148,18 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         pages.push_back( tokenizer.GetNextToken().Trim() );
     }
 
-    std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob =
-            std::make_unique<JOB_EXPORT_SCH_PLOT>();
+    std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob;
+
+    switch( m_plotFormat )
+    {
+    case SCH_PLOT_FORMAT::PDF: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PDF>(); break;
+    case SCH_PLOT_FORMAT::DXF: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_DXF>(); break;
+    case SCH_PLOT_FORMAT::SVG: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_SVG>(); break;
+    case SCH_PLOT_FORMAT::POST: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PS>(); break;
+    case SCH_PLOT_FORMAT::HPGL: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_HPGL>(); break;
+    }
+
+
     plotJob->m_filename = filename;
     plotJob->m_plotFormat = m_plotFormat;
     plotJob->m_plotPages = pages;

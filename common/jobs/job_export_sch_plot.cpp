@@ -63,8 +63,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( SCH_PLOT_FORMAT,
                                       { SCH_PLOT_FORMAT::DXF, "dxf" },
                               } )
 
-JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT() :
-        JOB( "plot", false ),
+JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
+        JOB( "plot", aOutputIsDirectory ),
         m_plotFormat( SCH_PLOT_FORMAT::PDF ),
         m_filename(),
         m_drawingSheet(),
@@ -111,7 +111,7 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT() :
 
 
 JOB_EXPORT_SCH_PLOT_PDF::JOB_EXPORT_SCH_PLOT_PDF() :
-		JOB_EXPORT_SCH_PLOT()
+		JOB_EXPORT_SCH_PLOT( false )
 {
     m_plotFormat = SCH_PLOT_FORMAT::PDF;
 }
@@ -130,7 +130,7 @@ wxString JOB_EXPORT_SCH_PLOT_PDF::GetSettingsDialogTitle() const
 
 
 JOB_EXPORT_SCH_PLOT_DXF ::JOB_EXPORT_SCH_PLOT_DXF () :
-		JOB_EXPORT_SCH_PLOT()
+		JOB_EXPORT_SCH_PLOT( true )
 {
 	m_plotFormat = SCH_PLOT_FORMAT::DXF;
 }
@@ -149,7 +149,7 @@ wxString JOB_EXPORT_SCH_PLOT_DXF::GetSettingsDialogTitle() const
 
 
 JOB_EXPORT_SCH_PLOT_SVG::JOB_EXPORT_SCH_PLOT_SVG() :
-		JOB_EXPORT_SCH_PLOT()
+		JOB_EXPORT_SCH_PLOT( true )
 {
 	m_plotFormat = SCH_PLOT_FORMAT::SVG;
 }
@@ -168,7 +168,7 @@ wxString JOB_EXPORT_SCH_PLOT_SVG::GetSettingsDialogTitle() const
 
 
 JOB_EXPORT_SCH_PLOT_PS::JOB_EXPORT_SCH_PLOT_PS() :
-		JOB_EXPORT_SCH_PLOT()
+		JOB_EXPORT_SCH_PLOT( true )
 {
 	m_plotFormat = SCH_PLOT_FORMAT::POST;
 }
@@ -187,7 +187,7 @@ wxString JOB_EXPORT_SCH_PLOT_PS::GetSettingsDialogTitle() const
 
 
 JOB_EXPORT_SCH_PLOT_HPGL::JOB_EXPORT_SCH_PLOT_HPGL() :
-		JOB_EXPORT_SCH_PLOT()
+		JOB_EXPORT_SCH_PLOT( true )
 {
 	m_plotFormat = SCH_PLOT_FORMAT::HPGL;
 }

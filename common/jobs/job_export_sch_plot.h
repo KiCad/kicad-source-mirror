@@ -75,7 +75,7 @@ enum class SCH_PLOT_FORMAT
 class KICOMMON_API JOB_EXPORT_SCH_PLOT : public JOB
 {
 public:
-    JOB_EXPORT_SCH_PLOT();
+    JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory );
 
     SCH_PLOT_FORMAT       m_plotFormat;
     wxString              m_filename;
