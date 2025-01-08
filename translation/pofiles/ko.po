@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2025-01-06 10:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
@@ -14609,9 +14609,9 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
-"이로 인해 필드 이름이 중복된 것처럼 보이지만 실제로는 공백 문자만 다른 "
-"고유한 이름이 될 수 있습니다.  공백 문자를 제거해도 기존 심볼 필드 이름에는 "
-"영향을 미치지 않습니다."
+"이로 인해 필드 이름이 중복된 것처럼 보이지만 실제로는 공백 문자만 다른 고유"
+"한 이름이 될 수 있습니다.  공백 문자를 제거해도 기존 심볼 필드 이름에는 영향"
+"을 미치지 않습니다."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
 #, fuzzy
@@ -16683,7 +16683,7 @@ msgstr ""
 "CADSTAR 회로도가 손상되었을 가능성이 있습니다: 블록 %s은(는) 하위 시트를 참조"
 "하지만 정의된 형상이 없습니다."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
@@ -16693,7 +16693,7 @@ msgstr ""
 "로입니다. 아무것도 지정하지 않으면 동일한 폴더에 있는 'symbol.csa'로 간주됩니"
 "다."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
@@ -16703,7 +16703,7 @@ msgstr ""
 "브러리 테이블에 CADSTAR PCB Archive(*.cpa) 파일에 대한 별도의 항목을 만들어"
 "야 합니다. 지정하지 않은 경우 'cadstarpcblib'으로 간주합니다."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "라이브러리 '%s'에 해당하는 .csa 파일을 찾을 수 없습니다."
@@ -24465,19 +24465,19 @@ msgstr ""
 msgid "Local file"
 msgstr "로컬 파일"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 msgid "PCM Update"
 msgstr "PCM 업데이트"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 msgid "Preparing to fetch repositories"
 msgstr "저장소 가져오기 준비하기"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 msgid "Fetching repository..."
 msgstr "저장소 가져오기..."
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 msgid "Reviewing packages..."
 msgstr "패키지 검토하기..."
 
@@ -42616,7 +42616,7 @@ msgstr "레이어 하단"
 msgid "Via Type"
 msgstr "비아 유형"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "mm, in 또는 mil이어야 합니다"
 

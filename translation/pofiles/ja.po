@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2025-01-07 10:11+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
@@ -16769,7 +16769,7 @@ msgstr ""
 "CADSTAR の回路図が壊れている可能性があります: ブロック %s は子シートを参照し"
 "ていますが、図は定義されていません。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
@@ -16779,7 +16779,7 @@ msgstr ""
 "ルへのパスを指定します。 何も指定されていない場合は、同じフォルダー内の"
 "「symbol.csa」であるとみなされます。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
@@ -16790,7 +16790,7 @@ msgstr ""
 "エントリを作成する必要があります。 何も指定されていない場合"
 "は、'cadstarpcblib'が使われます。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "ライブラリ '%s' に対応する .csa ファイルが見つかりません。"
@@ -24615,19 +24615,19 @@ msgstr ""
 msgid "Local file"
 msgstr "ローカル ファイル"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 msgid "PCM Update"
 msgstr "PCMの更新"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 msgid "Preparing to fetch repositories"
 msgstr "リポジトリのフェッチの準備"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 msgid "Fetching repository..."
 msgstr "リポジトリを取得..."
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 msgid "Reviewing packages..."
 msgstr "パッケージをレビュー…"
 
@@ -42180,8 +42180,9 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3238
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr "未処理のシェイプ タイプ %dが、レイヤー %s のシーケンス %d %d "
-"ポリゴン内にあります"
+msgstr ""
+"未処理のシェイプ タイプ %dが、レイヤー %s のシーケンス %d %d ポリゴン内にあり"
+"ます"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
@@ -42873,7 +42874,7 @@ msgstr "レイヤー底面"
 msgid "Via Type"
 msgstr "ビア タイプ"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "mm、in、または mil でなければなりません"
 

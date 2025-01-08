@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2025-01-01 16:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -16982,7 +16982,7 @@ msgstr ""
 "Le schéma CADSTAR peut être endommagé : Le bloc %s fait référence à une "
 "feuille fille mais n’a pas défini de dessin."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
@@ -16992,7 +16992,7 @@ msgstr ""
 "librairie CADSTAR. S'il n'est pas spécifié, il est supposé être 'symbol.csa' "
 "dans le même dossier."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
@@ -17003,7 +17003,7 @@ msgstr ""
 "cpa) dans les tables de librairie d'empreintes. Si aucun nom n'est spécifié, "
 "'cadstarpcblib' est supposé être utilisé."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr ""
@@ -24959,19 +24959,19 @@ msgstr ""
 msgid "Local file"
 msgstr "Fichier local"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 msgid "PCM Update"
 msgstr "Mise à jour PCM"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 msgid "Preparing to fetch repositories"
 msgstr "Préparation de la recherche des dépôts"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 msgid "Fetching repository..."
 msgstr "Recherche du dépot..."
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 msgid "Reviewing packages..."
 msgstr "Examen des paquets..."
 
@@ -43457,7 +43457,7 @@ msgstr "Couche Dessous"
 msgid "Via Type"
 msgstr "Type Via"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "doit être mm, in, ou mil"
 

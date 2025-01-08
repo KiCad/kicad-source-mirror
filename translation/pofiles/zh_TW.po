@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2025-01-05 16:30+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -16511,7 +16511,7 @@ msgid ""
 "but has no Figure defined."
 msgstr "CADSTAR 原理圖可能已損壞: 塊 %s 引用子圖紙, 但沒有定義圖。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
@@ -16520,7 +16520,7 @@ msgstr ""
 "與此 CADSTAR 零件庫相關的 CADSTAR 原理圖存檔 (*.csa)檔案的路徑。如果沒有指定,"
 "則假定它位於相同資料夾中的 'symbol.csa'。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
@@ -16529,7 +16529,7 @@ msgstr ""
 "與此庫中符號相關的封裝庫的名稱。您應該在封裝庫表中為 CADSTAR PCB Archive (*."
 "cpa) 檔案建立一個單獨的條目。如果沒有指定, 則假定它為 'cadstarpcblib'。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "無法找到與 '%s' 庫相對應的 .csa 檔案。"
@@ -24194,19 +24194,19 @@ msgstr "資源檔案 HASH 不匹配, 將不會被使用。倉庫可能已損壞�
 msgid "Local file"
 msgstr "本地檔案"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 msgid "PCM Update"
 msgstr "擴展內容包更新"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 msgid "Preparing to fetch repositories"
 msgstr "準備提取倉庫"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 msgid "Fetching repository..."
 msgstr "提取倉庫中..."
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 msgid "Reviewing packages..."
 msgstr "檢查擴展內容包..."
 
@@ -42143,7 +42143,7 @@ msgstr "層底部"
 msgid "Via Type"
 msgstr "貫孔類型"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "單位必須為 mm, in 或 mil"
 

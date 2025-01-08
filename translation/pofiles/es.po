@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2025-01-06 10:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v8/es/>\n"
@@ -16924,7 +16924,7 @@ msgstr ""
 "El esquema CADSTAR puede estar dañado: el Bloque %s hace referencia a una "
 "hoja secundaria, pero no tiene ninguna figura definida."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
@@ -16934,7 +16934,7 @@ msgstr ""
 "biblioteca de partes de CADSTAR. Si no se especifica ninguna, se asume que "
 "es 'symbol.csa' en la misma carpeta."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
@@ -16945,7 +16945,7 @@ msgstr ""
 "CADSTAR (*.cpa) en la tabla de bibliotecas de huellas. Si no se especifica "
 "ninguna, se asume que es 'cadstarpcblib'."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr ""
@@ -24880,19 +24880,19 @@ msgstr ""
 msgid "Local file"
 msgstr "Archivo local"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 msgid "PCM Update"
 msgstr "Actualización PCM"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 msgid "Preparing to fetch repositories"
 msgstr "Preparándose para obtener repositorios"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 msgid "Fetching repository..."
 msgstr "Obteniendo repositorio..."
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 msgid "Reviewing packages..."
 msgstr "Revisando paquetes..."
 
@@ -43396,7 +43396,7 @@ msgstr "Capa inferior"
 msgid "Via Type"
 msgstr "Tipo de vía"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "deber ser mm, in, o mil"
 

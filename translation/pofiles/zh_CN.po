@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2025-01-07 20:22+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -3982,16 +3982,16 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, "
-"从而更有效地识别用户群体中存在的关键问题, 并帮助分析功能以指导改进工作。\n"
+"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, 从而更有效地识别用户群体中存"
+"在的关键问题, 并帮助分析功能以指导改进工作。\n"
 "\n"
-"为了将来自同一 KiCad 安装的自动报告关联起来, "
-"系统会生成一个完全随机的唯一标识符, 仅用于崩溃报告的目的, "
-"不会存储或关联任何个人可识别信息 (PII), 包括 IP 地址。\n"
+"为了将来自同一 KiCad 安装的自动报告关联起来, 系统会生成一个完全随机的唯一标识"
+"符, 仅用于崩溃报告的目的, 不会存储或关联任何个人可识别信息 (PII), 包括 IP 地"
+"址。\n"
 "您可以随时通过提供的按钮重置该标识符。\n"
 "\n"
-"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad "
-"会自动处理并发送这些报告。\n"
+"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad 会自动处理并发送这些报"
+"告。\n"
 "\n"
 "在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被共享。"
 
@@ -6959,10 +6959,10 @@ msgid ""
 msgstr ""
 "为了更有效地帮助开发人员识别在用户群体中出现的重点程序问题并改进功能, KiCad "
 "可以匿名地向开发人员\n"
-"报告崩溃和特殊事件数据, 并协助进行分析。如果您选择自愿参与, KiCad "
-"将在发生崩溃或特殊事件时\n"
-"自动处理并发送这些报告。在此过程中, 您的设计文件, 如原理图或 PCB 文件, "
-"不会被上传。"
+"报告崩溃和特殊事件数据, 并协助进行分析。如果您选择自愿参与, KiCad 将在发生崩"
+"溃或特殊事件时\n"
+"自动处理并发送这些报告。在此过程中, 您的设计文件, 如原理图或 PCB 文件, 不会被"
+"上传。"
 
 #: common/pgm_base.cpp:384
 msgid "Data collection opt in request"
@@ -11502,8 +11502,8 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"此引脚不在 %d mils 栅格上 (未与栅格对齐), "
-"这可能会导致此引脚在在原理图中难以连接。\n"
+"此引脚不在 %d mils 栅格上 (未与栅格对齐), 这可能会导致此引脚在在原理图中难以"
+"连接。\n"
 "确定继续?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:440
@@ -14504,9 +14504,9 @@ msgid ""
 "This may result in what appears to be duplicate field names but are actually "
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
-msgstr "这可能会导致字段名称看起来重复, "
-"但实际上它们是仅通过空白字符区分的唯一名称。移除空白字符不会影响现有符号字段"
-"名称。"
+msgstr ""
+"这可能会导致字段名称看起来重复, 但实际上它们是仅通过空白字符区分的唯一名称。"
+"移除空白字符不会影响现有符号字段名称。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
 msgid "Remove White Space"
@@ -16462,8 +16462,9 @@ msgstr ""
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
-msgstr "符号标识 '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应当为 1 个, "
-"实际找到了 %d 个。"
+msgstr ""
+"符号标识 '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应当为 1 个, 实际"
+"找到了 %d 个。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:997
 #, c-format
@@ -16535,16 +16536,16 @@ msgid ""
 "but has no Figure defined."
 msgstr "CADSTAR 原理图可能已损坏: 块 %s 引用子图纸, 但没有定义图。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
-"与此 CADSTAR 元件库相关的 CADSTAR 原理图归档 (*.csa)文件的路径。"
-"如果没有指定,则假定它位于相同文件夹中的 'symbol.csa'。"
+"与此 CADSTAR 元件库相关的 CADSTAR 原理图归档 (*.csa)文件的路径。如果没有指定,"
+"则假定它位于相同文件夹中的 'symbol.csa'。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
@@ -16553,7 +16554,7 @@ msgstr ""
 "与此库中符号相关的封装库的名称。您应该在封装库表中为 CADSTAR PCB Archive (*."
 "cpa) 文件创建一个单独的条目。如果没有指定, 则假定它为 'cadstarpcblib'。"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "无法找到与 '%s' 库相对应的 .csa 文件。"
@@ -23222,7 +23223,8 @@ msgstr "为单个 PCB 绘制多个 Gerber, 并将电路板绘制设置参数包�
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
-msgstr "要包含在所有绘制结果中的层, 要包含的原始层名称, 用英文逗号分隔, 如 F.Cu,B.Cu"
+msgstr ""
+"要包含在所有绘制结果中的层, 要包含的原始层名称, 用英文逗号分隔, 如 F.Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:55
 msgid "Use the Gerber plot settings already configured in the board file"
@@ -24212,19 +24214,19 @@ msgstr "资源文件 HASH 不匹配, 将不会被使用。仓库可能已损坏�
 msgid "Local file"
 msgstr "本地文件"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 msgid "PCM Update"
 msgstr "扩展内容包更新"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 msgid "Preparing to fetch repositories"
 msgstr "准备提取仓库"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 msgid "Fetching repository..."
 msgstr "提取仓库中..."
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 msgid "Reviewing packages..."
 msgstr "检查扩展内容包..."
 
@@ -24257,8 +24259,9 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr "扩展内容包 %s 的已下载文件 HASH 与仓库记录不匹配。"
-"这可能表明扩展内容包有问题, 如果问题仍然存在, 请将此报告给仓库维护者。"
+msgstr ""
+"扩展内容包 %s 的已下载文件 HASH 与仓库记录不匹配。这可能表明扩展内容包有问"
+"题, 如果问题仍然存在, 请将此报告给仓库维护者。"
 
 #: kicad/pcm/pcm_task_manager.cpp:206 kicad/pcm/pcm_task_manager.cpp:426
 #, c-format
@@ -27014,10 +27017,10 @@ msgstr ""
 "电容器通常使用 E12 值。10% 和 5% 电阻器通常使用 E24 值。1%\n"
 "电阻器使用 E96 值。其他系列不常用。\n"
 "\n"
-"要选择一个值, 请从计算出的目标值开始, 然后四舍五入到 2 位有效数字 (E24 "
-"或以下), 或 3 位有效数字 (E48 和以下)。\n"
-"对于 E24 或以下, 四舍五入到两位有效数字; 对于 E48 及以上, "
-"四舍五入到三位有效数字。\n"
+"要选择一个值, 请从计算出的目标值开始, 然后四舍五入到 2 位有效数字 (E24 或以"
+"下), 或 3 位有效数字 (E48 和以下)。\n"
+"对于 E24 或以下, 四舍五入到两位有效数字; 对于 E48 及以上, 四舍五入到三位有效"
+"数字。\n"
 "然后从表中找出与剩余有效数字最接近的值, 并用它代替这些数字。\n"
 "然后从表中找出与剩余有效数字最接近的值, 并用它代替这些数字。\n"
 "\n"
@@ -40839,7 +40842,8 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr "封装定义 '%s' 中有与多个图层上的焊盘关联的元件铜箔层。KiCad 不支持自定义 "
+msgstr ""
+"封装定义 '%s' 中有与多个图层上的焊盘关联的元件铜箔层。KiCad 不支持自定义 "
 "pinstack。这些铜箔元素已作为图形元素导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
@@ -42110,7 +42114,7 @@ msgstr "层底部"
 msgid "Via Type"
 msgstr "过孔类型"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "单位必须为 mm, in 或 mil"
 

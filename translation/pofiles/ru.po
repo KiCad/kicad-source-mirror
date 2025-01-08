@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2025-01-06 10:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
@@ -15382,7 +15382,8 @@ msgstr ""
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr "Эта схема содержит символы с пробелами в начале и/или конце имен полей."
+msgstr ""
+"Эта схема содержит символы с пробелами в начале и/или конце имен полей."
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
@@ -16809,7 +16810,7 @@ msgstr ""
 "Схема CADSTAR, возможно, повреждена: блок %s ссылается на дочерний лист, "
 "который не определён."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
@@ -16819,7 +16820,7 @@ msgstr ""
 "деталей CADSTAR. Если не указано, предполагается, что это 'symbol.csa' в той "
 "же папке."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
@@ -16830,7 +16831,7 @@ msgstr ""
 "таблице библиотек посад. мест. Если не указано, предполагается "
 "'cadstarpcblib'."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "Не удалось найти файл .csa, соответствующий библиотеке '%s'."
@@ -24664,19 +24665,19 @@ msgstr ""
 msgid "Local file"
 msgstr "Локальный файл"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 msgid "PCM Update"
 msgstr "Обновление PCM"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 msgid "Preparing to fetch repositories"
 msgstr "Подготовка к загрузке репозиториев"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 msgid "Fetching repository..."
 msgstr "Загрузка репозитория..."
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 msgid "Reviewing packages..."
 msgstr "Проверка пакетов..."
 
@@ -43036,7 +43037,7 @@ msgstr "Нижний слой"
 msgid "Via Type"
 msgstr "Тип перех. отв."
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "должно быть mm, in, или mil"
 

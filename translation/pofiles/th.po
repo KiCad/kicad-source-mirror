@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2024-09-28 08:15+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v8/th/>\n"
@@ -16935,21 +16935,21 @@ msgid ""
 "but has no Figure defined."
 msgstr "วงจร CADSTAR อาจเสียหาย: บล็อก %s อ้างอิงไปชีตย่อย แต่ไม่มีการกำหนดตัวเลข"
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, fuzzy, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "ไม่สามารถสร้างไลบรารีฟุ้ทพรินท์ '%s'"
@@ -24987,22 +24987,22 @@ msgstr "เลขแฮชของไฟล์ทรัพยากรไม่
 msgid "Local file"
 msgstr "ไฟล์เฉพาะที่"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 #, fuzzy
 msgid "PCM Update"
 msgstr "ปรับปรุง"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 #, fuzzy
 msgid "Preparing to fetch repositories"
 msgstr "จัดการคลังเก็บไฟล์"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 #, fuzzy
 msgid "Fetching repository..."
 msgstr "กําลังดึงข้อมูลจากคลังเก็บ"
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 #, fuzzy
 msgid "Reviewing packages..."
 msgstr "ลบแทร็กภายในแพ็ด"
@@ -42910,7 +42910,7 @@ msgstr "เลเยอร์ด้านล่าง"
 msgid "Via Type"
 msgstr "ชนิดเวีย"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "ต้องเป็น มม., นิ้ว, หรือ มิล."
 

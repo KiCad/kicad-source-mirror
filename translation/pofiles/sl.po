@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2022-12-07 22:47+0000\n"
 "Last-Translator: Sašo Domadenik <saso.doma@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
@@ -19132,21 +19132,21 @@ msgstr ""
 "Shema CADSTAR je morda poškodovana: blok %s se sklicuje na podrejeni list, "
 "vendar nima definirane slike."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, fuzzy, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "Ne morem ustvariti poti knjižnice odtisa \"%s\""
@@ -27992,22 +27992,22 @@ msgstr ""
 msgid "Local file"
 msgstr "Uredi lokalno datoteko ..."
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 #, fuzzy
 msgid "PCM Update"
 msgstr "Posodobi"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 #, fuzzy
 msgid "Preparing to fetch repositories"
 msgstr "Upravljanje definicij vodila"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 #, fuzzy
 msgid "Fetching repository..."
 msgstr "Dodajte repozitorij"
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 #, fuzzy
 msgid "Reviewing packages..."
 msgstr "Odstranite gosenico znotraj blazinice"
@@ -48087,7 +48087,7 @@ msgstr "Dno sloja"
 msgid "Via Type"
 msgstr "Preko tipa"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 #, fuzzy
 msgid "must be mm, in, or mil"
 msgstr "mora biti mm, in ali mil"

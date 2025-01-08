@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2024-09-14 03:09+0000\n"
 "Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/"
@@ -17252,21 +17252,21 @@ msgid ""
 "but has no Figure defined."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, fuzzy, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "Không thể mở tệp '%s'"
@@ -25492,22 +25492,22 @@ msgstr ""
 msgid "Local file"
 msgstr "Các tập tin thực thi ("
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 #, fuzzy
 msgid "PCM Update"
 msgstr "Cập Nhật"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 #, fuzzy
 msgid "Preparing to fetch repositories"
 msgstr "Báo cáo"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 #, fuzzy
 msgid "Fetching repository..."
 msgstr "Thêm tầng"
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 #, fuzzy
 msgid "Reviewing packages..."
 msgstr "Tạo các đường mạch và vias"
@@ -43982,7 +43982,7 @@ msgstr "Góc nhìn bên dưới"
 msgid "Via Type"
 msgstr "Kiểu Đường dẫn"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:16+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2025-01-06 10:26+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v8/uk/>\n"
@@ -16912,7 +16912,7 @@ msgstr ""
 "Схема CADSTAR може бути пошкоджена: блок %s посилається на дочірній аркуш, "
 "але не має визначеної фігури."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
@@ -16922,7 +16922,7 @@ msgstr ""
 "CADSTAR. Якщо не вказано, то припускається, що файл 'symbol.csa' знаходиться "
 "в тій самій папці."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
@@ -16933,7 +16933,7 @@ msgstr ""
 "файлу у таблицях бібліотеки посадкових символів. Якщо не встановлено, то "
 "припускається значення 'cadstarpcblib'."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, fuzzy, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "Не вдалося створити бібліотеку посадкових місць '%s'."
@@ -24970,22 +24970,22 @@ msgstr ""
 msgid "Local file"
 msgstr "Локальний файл"
 
-#: kicad/pcm/pcm.cpp:1104
+#: kicad/pcm/pcm.cpp:1120
 #, fuzzy
 msgid "PCM Update"
 msgstr "Оновити"
 
-#: kicad/pcm/pcm.cpp:1114
+#: kicad/pcm/pcm.cpp:1132
 #, fuzzy
 msgid "Preparing to fetch repositories"
 msgstr "Керування репозиторіями"
 
-#: kicad/pcm/pcm.cpp:1132
+#: kicad/pcm/pcm.cpp:1150
 #, fuzzy
 msgid "Fetching repository..."
 msgstr "Отримання репозиторію"
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1163
 #, fuzzy
 msgid "Reviewing packages..."
 msgstr "Видалити доріжки в контактних площадках..."
@@ -43043,7 +43043,7 @@ msgstr "Нижній шар"
 msgid "Via Type"
 msgstr "Тип перехідного отвору"
 
-#: pcbnew/pcbexpr_evaluator.cpp:427
+#: pcbnew/pcbexpr_evaluator.cpp:442
 msgid "must be mm, in, or mil"
 msgstr "має бути mm, in, або mil"
 
