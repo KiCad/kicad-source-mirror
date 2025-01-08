@@ -22,10 +22,11 @@
 #include <lset.h>
 #include <project.h>
 #include <project/project_local_settings.h>
+#include <settings/layer_settings_utils.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 
-const int projectLocalSettingsVersion = 4;
+const int projectLocalSettingsVersion = 5;
 
 
 PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename ) :
@@ -65,9 +66,11 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
             {
                 nlohmann::json ret = nlohmann::json::array();
 
-                for( size_t i = 0; i < m_VisibleItems.size(); i++ )
-                    if( m_VisibleItems.test( i ) )
-                        ret.push_back( i );
+                for( GAL_LAYER_ID l : m_VisibleItems.Seq() )
+                {
+                    if( std::optional<VISIBILITY_LAYER> vl = VisibilityLayerFromRenderLayer( l ) )
+                        ret.push_back( VisibilityLayerToString( *vl ) );
+                }
 
                 return ret;
             },
@@ -85,8 +88,10 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 {
                     try
                     {
-                        int i = entry.get<int>();
-                        m_VisibleItems.set( i );
+                        std::string vs = entry.get<std::string>();
+
+                        if( std::optional<GAL_LAYER_ID> l = RenderLayerFromVisbilityString( vs ) )
+                            m_VisibleItems.set( *l );
                     }
                     catch( ... )
                     {
@@ -427,6 +432,35 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                         At( ptr ).push_back( LAYER_SHAPES - GAL_LAYER_ID_START );
                     else
                         At( "board" ).erase( "visible_items" );
+                }
+
+                return true;
+            } );
+
+    registerMigration( 4, 5,
+            [&]()
+            {
+                // Schema version 5: use named render layers
+
+                std::string ptr( "board.visible_items" );
+
+                if( Contains( ptr ) && At( ptr ).is_array() )
+                {
+                    std::vector<std::string> newLayers;
+
+                    for( nlohmann::json& entry : At( ptr ) )
+                    {
+                        if( !entry.is_number_integer() )
+                            continue;
+
+                        if( std::optional<VISIBILITY_LAYER> vl =
+                            VisibilityLayerFromRenderLayer( GAL_LAYER_ID_START + entry.get<int>() ) )
+                        {
+                            newLayers.emplace_back( VisibilityLayerToString( *vl ) );
+                        }
+                    }
+
+                    At( ptr ) = newLayers;
                 }
 
                 return true;
