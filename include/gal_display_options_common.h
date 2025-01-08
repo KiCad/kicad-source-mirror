@@ -39,25 +39,28 @@ public:
     GAL_DISPLAY_OPTIONS_IMPL();
 
     /**
-         * Read GAL config options from application-level config
-         * @param aCfg      the window settings to load from
-         */
+     * Read GAL config options from application-level config.
+     *
+     * @param aCfg      the window settings to load from.
+     */
     void ReadWindowSettings( WINDOW_SETTINGS& aCfg );
 
     /**
-         * Read GAL config options from the common config store
-         * @param aCommonSettings the common config store
-         * @param aWindow         the wx parent window (used for DPI scaling)
-         */
+     * Read GAL config options from the common config store.
+     *
+     * @param aCommonSettings the common config store.
+     * @param aWindow         the wx parent window (used for DPI scaling).
+     */
     void ReadCommonConfig( COMMON_SETTINGS& aCommonSettings, wxWindow* aWindow );
 
     /**
-         * Read application and common configs
-         * @param aCommonConfig the common config store
-         * @param aCfg          the application config base
-         * @param aBaseName     the application's GAL options key prefix
-         * @param aWindow       the wx parent window (used for DPI scaling)
-         */
+     * Read application and common configs.
+     *
+     * @param aCommonConfig the common config store.
+     * @param aCfg          the application config base.
+     * @param aBaseName     the application's GAL options key prefix.
+     * @param aWindow       the wx parent window (used for DPI scaling).
+     */
     void ReadConfig( COMMON_SETTINGS& aCommonConfig, WINDOW_SETTINGS& aWindowConfig,
                      wxWindow* aWindow );
 

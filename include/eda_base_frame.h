@@ -108,7 +108,7 @@ class EDA_BASE_FRAME : public wxFrame, public TOOLS_HOLDER, public KIWAY_HOLDER,
 {
 public:
     /**
-     * Specifies whether we are interacting with the undo or redo stacks
+     * Specify whether we are interacting with the undo or redo stacks.
      */
     enum UNDO_REDO_LIST
     {
@@ -216,7 +216,7 @@ public:
     void OnPreferences( wxCommandEvent& event );
 
     /**
-     * Displays the preferences and settings of all opened editors paged dialog, starting with
+     * Display the preferences and settings of all opened editors paged dialog, starting with
      * a particular page
      */
     void ShowPreferences( wxString aStartPage, wxString aStartParentPage );
@@ -284,12 +284,13 @@ public:
     void ShowInfoBarMsg( const wxString& aMsg, bool aShowCloseButton = false );
 
     /**
-     * Returns the settings object used in SaveSettings(), and is overloaded in
+     * Return the settings object used in SaveSettings(), and is overloaded in
      * #KICAD_MANAGER_FRAME.
      */
     virtual APP_SETTINGS_BASE* config() const;
 
     void LoadWindowState( const wxString& aFileName );
+
     /**
      * Load window settings from the given settings object.
      *
@@ -332,7 +333,7 @@ public:
     virtual WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg );
 
     /**
-     * Load frame state info from a configuration file
+     * Load frame state info from a configuration file.
      */
     virtual void LoadWindowState( const WINDOW_STATE& aState );
 
@@ -353,14 +354,15 @@ public:
     }
 
     /**
-     * Save changes to the project local settings.  These settings are used to save/restore the
-     * view state for a specific project, and should never contain design data.  This method is
-     * normally called automatically at various points in the workflow so that the user's most
-     * recent display settings are automatically persisted.
+     * Save changes to the project local settings.
+     *
+     * These settings are used to save/restore the view state for a specific project, and
+     * should never contain design data.  This method is normally called automatically at
+     * various points in the workflow so that the user's most recent display settings are
+     * automatically persisted.
      *
      * The method is virtual so you can override it to call the suitable save method.
      * The base method does nothing.
-     *
      */
     virtual void SaveProjectLocalSettings() {};
 
@@ -375,7 +377,7 @@ public:
                                      const wxString& aDefaultShortname );
 
     /**
-     * Fetches the file name from the file history list.
+     * Fetch the file name from the file history list.
      *
      * This removes the selected file, if this file does not exist.  The menu is also updated,
      * if #FILE_HISTORY::UseMenu was called at initialization time.
@@ -390,7 +392,7 @@ public:
                                  FILE_HISTORY* aFileHistory = nullptr );
 
     /**
-     * Removes all files from the file history.
+     * Remove all files from the file history.
      *
      * @param aFileHistory The FILE_HISTORY in use. If null, the main application file
      *                     history is used
@@ -432,7 +434,7 @@ public:
     virtual wxString GetCurrentFileName() const { return wxEmptyString; }
 
     /**
-     * Recreates the menu bar.
+     * Recreate the menu bar.
      *
      * Needed when the language or icons are changed
      */
@@ -441,12 +443,12 @@ public:
     void SetMenuBar( wxMenuBar *menu_bar ) override;
 
     /**
-     * Adds the standard KiCad help menu to the menubar.
+     * Add the standard KiCad help menu to the menubar.
      */
     void AddStandardHelpMenu( wxMenuBar* aMenuBar );
 
     /**
-     * Checks if \a aFileName can be written.
+     * Check if \a aFileName can be written.
      *
      * The function performs a number of tests on \a aFileName to verify that it can be saved.
      * If \a aFileName defines a path with no file name, them the path is tested for user write
@@ -601,14 +603,15 @@ public:
     virtual void HandleSystemColorChange();
 
     /**
-     * Checks if this frame is ready to accept API commands.
+     * Check if this frame is ready to accept API commands.
+     *
      * A frame might not accept commands if a long-running process is underway, a dialog is open,
      * the user is interacting with a tool, etc.
      */
     virtual bool CanAcceptApiCommands() { return IsEnabled(); }
 
 protected:
-    ///< Default style flags used for wxAUI toolbars.
+    /// Default style flags used for wxAUI toolbars.
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
 
     virtual void doReCreateMenuBar() {}
@@ -661,7 +664,7 @@ protected:
     virtual void setupUIConditions();
 
     /**
-     * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it
+     * Set the common key-pair for exiting the application (Ctrl-Q) and ties it
      * to the wxID_EXIT event id.
      *
      * This is useful in sub-applications to pass the event up to a non-owning window.
@@ -671,14 +674,16 @@ protected:
     void ensureWindowIsOnScreen();
 
     /**
-     * Saves any design-related project settings associated with this frame.
+     * Save any design-related project settings associated with this frame.
+     *
      * This method should only be called as the result of direct user action, for example from an
      * explicit "Save Project" command or as a consequence of saving a design document.
      */
     virtual void saveProjectSettings() {}
 
     /**
-     * Handles event fired when a file is dropped to the window.
+     * Handle event fired when a file is dropped to the window.
+     *
      * In this base class, stores the path of files accepted.
      * Calls DoWithAcceptedFiles() to execute actions on files.
      */
@@ -689,7 +694,8 @@ protected:
 
     /**
      * Execute action on accepted dropped file.
-     * Called in OnDropFiles and should be populated with
+     *
+     * Called in OnDropFiles() and should be populated with
      * the action to execute in inherited classes.
      */
     virtual void            DoWithAcceptedFiles();
@@ -728,7 +734,7 @@ private:
 
 #ifdef __WXMSW__
     /**
-     * Windows specific override of the wxWidgets message handler for a window
+     * Windows specific override of the wxWidgets message handler for a window.
      */
     WXLRESULT MSWWindowProc( WXUINT message, WXWPARAM wParam, WXLPARAM lParam ) override;
 #endif
@@ -781,7 +787,7 @@ private:
     bool            m_isNonUserClose;
 
     /**
-     * Associates files extensions with action to execute.
+     * Associate file extensions with action to execute.
      */
     std::map<const wxString, TOOL_ACTION*> m_acceptedExts;
 };

@@ -17,7 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This code is a modified version of the GCC standard library implementation (see original licence below):
+// This code is a modified version of the GCC standard library implementation (see original
+// licence below):
 
 // Copyright (C) 2014-2024 Free Software Foundation, Inc.
 //
@@ -42,13 +43,16 @@
 // <http://www.gnu.org/licenses/>.
 
 
-/** An implementation of std::any_cast, which uses type_info::hash_code to check validity of
-  * cast types. This is required as Clang compares types as being equivalent based on their
-  * type_info pointer locations. These are not guaranteed to be the same with identical types
-  * linked in multiple targets from shared libraries. The current Clang implementation of
-  * type_info::hash_code is based on the type names, which should be consistent across translation
-  * units.
-  */
+/**
+ * @file ki_any.h
+ * @brief An implementation of std::any_cast, which uses type_info::hash_code to check validity of
+ *        cast types.
+ *
+ * This is required as Clang compares types as being equivalent based on their type_info pointer
+ * locations. These are not guaranteed to be the same with identical types linked in multiple
+ * targets from shared libraries. The current Clang implementation of type_info::hash_code is
+ * based on the type names, which should be consistent across translation units.
+ */
 #ifndef INCLUDE_KI_ANY_H_
 #define INCLUDE_KI_ANY_H_
 
@@ -71,7 +75,7 @@ template <typename T>
 inline constexpr bool is_in_place_type_v<std::in_place_type_t<T>> = true;
 
 /**
- * @brief Exception class thrown by a failed @c any_cast
+ * Exception class thrown by a failed @c any_cast
  */
 class bad_any_cast final : public std::bad_cast
 {
@@ -80,11 +84,11 @@ public:
 };
 
 /**
-   *  @brief A type-safe container of any type.
-   *
-   *  An `any` object's state is either empty or it stores a contained object
-   *  of CopyConstructible type.
-   */
+ * A type-safe container of any type.
+ *
+ * An `any` object's state is either empty or it stores a contained object
+ * of CopyConstructible type.
+ */
 class any
 {
     // Holds either a pointer to a heap object or the contained object itself
@@ -118,7 +122,7 @@ class any
     template <typename T, typename V = std::decay_t<T>>
     using decay_if_not_any = std::enable_if_t<!std::is_same_v<V, any>, V>;
 
-    /// @brief Emplace with an object created from @p args as the contained object
+    /// Emplace with an object created from @p args as the contained object.
     template <typename T, typename... Args, typename Mgr = Manager<T>>
     void do_emplace( Args&&... args )
     {
@@ -127,7 +131,7 @@ class any
         m_manager = &Mgr::m_manage_fn;
     }
 
-    /// @brief Emplace with an object created from @p il and @p args as the contained object
+    /// Emplace with an object created from @p il and @p args as the contained object.
     template <typename T, typename U, typename... Args, typename Mgr = Manager<T>>
     void do_emplace( std::initializer_list<U> il, Args&&... args )
     {
@@ -148,10 +152,10 @@ class any
     using any_emplace_t = typename any_constructible<V&, V, Args...>::type;
 
 public:
-    /// @brief Default constructor, creates an empty object
+    /// Default constructor, creates an empty object.
     constexpr any() noexcept : m_manager( nullptr ) {}
 
-    /// @brief Copy constructor, copies the state of @p other
+    /// Copy constructor, copies the state of @p other.
     any( const any& other )
     {
         if( !other.has_value() )
@@ -166,7 +170,7 @@ public:
         }
     }
 
-    /// @brief Move constructor, transfer the state from @p other
+    /// Move constructor, transfer the state from @p other.
     any( any&& other ) noexcept
     {
         if( !other.has_value() )
@@ -181,7 +185,7 @@ public:
         }
     }
 
-    /// @brief Construct with a copy of @p value as the contained object
+    /// Construct with a copy of @p value as the contained object.
     template <typename T, typename V = decay_if_not_any<T>, typename Mgr = Manager<V>,
               std::enable_if_t<std::is_copy_constructible_v<V> && !is_in_place_type_v<V>, bool> =
                       true>
@@ -191,7 +195,7 @@ public:
         Mgr::do_create( m_storage, std::forward<T>( value ) );
     }
 
-    /// @brief Construct with an object created from @p args as the contained object
+    /// Construct with an object created from @p args as the contained object.
     template <typename T, typename... Args, typename V = std::decay_t<T>, typename Mgr = Manager<V>,
               any_constructible_t<V, Args&&...> = false>
     explicit any( std::in_place_type_t<T>, Args&&... args ) : m_manager( &Mgr::m_manage_fn )
@@ -199,7 +203,7 @@ public:
         Mgr::do_create( m_storage, std::forward<Args>( args )... );
     }
 
-    /// @brief Construct with an object created from @p il and @p args as the contained object
+    /// Construct with an object created from @p il and @p args as the contained object.
     template <typename T, typename U, typename... Args, typename V = std::decay_t<T>,
               typename Mgr = Manager<V>,
               any_constructible_t<V, std::initializer_list<U>&, Args&&...> = false>
@@ -209,17 +213,17 @@ public:
         Mgr::do_create( m_storage, il, std::forward<Args>( args )... );
     }
 
-    /// @brief Destructor, calls @c reset()
+    /// Destructor, calls @c reset().
     ~any() { reset(); }
 
-    /// @brief Copy the state of another object
+    /// Copy the state of another object.
     any& operator=( const any& rhs )
     {
         *this = any( rhs );
         return *this;
     }
 
-    /// @brief Move assignment operator
+    /// Move assignment operator.
     any& operator=( any&& rhs ) noexcept
     {
         if( !rhs.has_value() )
@@ -237,7 +241,7 @@ public:
         return *this;
     }
 
-    /// Store a copy of @p rhs as the contained object
+    /// Store a copy of @p rhs as the contained object.
     template <typename T>
     std::enable_if_t<std::is_copy_constructible_v<decay_if_not_any<T>>, any&> operator=( T&& rhs )
     {
@@ -245,7 +249,7 @@ public:
         return *this;
     }
 
-    /// Emplace with an object created from @p args as the contained object
+    /// Emplace with an object created from @p args as the contained object.
     template <typename T, typename... Args>
     any_emplace_t<std::decay_t<T>, Args...> emplace( Args&&... args )
     {
@@ -254,7 +258,7 @@ public:
         return *any::Manager<V>::do_access( m_storage );
     }
 
-    /// Emplace with an object created from @p il and @p args as the contained object
+    /// Emplace with an object created from @p il and @p args as the contained object.
     template <typename T, typename U, typename... Args>
     any_emplace_t<std::decay_t<T>, std::initializer_list<U>&, Args&&...>
     emplace( std::initializer_list<U> il, Args&&... args )
@@ -264,7 +268,7 @@ public:
         return *any::Manager<V>::do_access( m_storage );
     }
 
-    /// If not empty, destroys the contained object
+    /// If not empty, destroys the contained object.
     void reset() noexcept
     {
         if( has_value() )
@@ -274,7 +278,7 @@ public:
         }
     }
 
-    /// Exchange state with another object
+    /// Exchange state with another object.
     void swap( any& rhs ) noexcept
     {
         if( !has_value() && !rhs.has_value() )
@@ -304,11 +308,11 @@ public:
         }
     }
 
-    /// Reports whether there is a contained object or not
+    /// Report whether there is a contained object or not.
     bool has_value() const noexcept { return m_manager != nullptr; }
 
 
-    /// The @c typeid of the contained object, or @c typeid(void) if empty
+    /// The @c typeid of the contained object, or @c typeid(void) if empty.
     const std::type_info& type() const noexcept
     {
         if( !has_value() )
@@ -404,13 +408,13 @@ private:
     };
 };
 
-/// Exchange the states of two @c any objects
+/// Exchange the states of two @c any objects.
 inline void swap( any& x, any& y ) noexcept
 {
     x.swap( y );
 }
 
-/// Create a `any` holding a `T` constructed from `args...`
+/// Create a `any` holding a `T` constructed from `args...`.
 template <typename T, typename... Args>
 std::enable_if_t<std::is_constructible_v<any, std::in_place_type_t<T>, Args...>, any>
 make_any( Args&&... args )
@@ -429,15 +433,15 @@ make_any( std::initializer_list<U> il, Args&&... args )
 }
 
 /**
-   * @brief Access the contained object
-   *
-   * @tparam  ValueType  A const-reference or CopyConstructible type.
-   * @param   any        The object to access.
-   * @return  The contained object.
-   * @throw   bad_any_cast If <code>
-   *          any.type() != typeid(remove_reference_t<ValueType>)
-   *          </code>
-   */
+ * Access the contained object.
+ *
+ * @tparam  ValueType  A const-reference or CopyConstructible type.
+ * @param   any        The object to access.
+ * @return  The contained object.
+ * @throw   bad_any_cast If <code>
+ *          any.type() != typeid(remove_reference_t<ValueType>)
+ *          </code>
+ */
 template <typename ValueType>
 ValueType any_cast( const any& any )
 {
@@ -457,16 +461,16 @@ ValueType any_cast( const any& any )
 }
 
 /**
-   * @brief Access the contained object.
-   *
-   * @tparam  ValueType  A reference or CopyConstructible type.
-   * @param   any        The object to access.
-   * @return  The contained object.
-   * @throw   bad_any_cast If <code>
-   *          any.type() != typeid(remove_reference_t<ValueType>)
-   *          </code>
-   * @{
-   */
+ * Access the contained object.
+ *
+ * @tparam  ValueType  A reference or CopyConstructible type.
+ * @param   any        The object to access.
+ * @return  The contained object.
+ * @throw   bad_any_cast If <code>
+ *          any.type() != typeid(remove_reference_t<ValueType>)
+ *          </code>
+ * @{
+ */
 template <typename ValueType>
 ValueType any_cast( any& any )
 {
@@ -535,16 +539,16 @@ void* any_caster( const any* any )
 /// @endcond
 
 /**
-   * @brief Access the contained object.
-   *
-   * @tparam  ValueType  The type of the contained object.
-   * @param   any       A pointer to the object to access.
-   * @return  The address of the contained object if <code>
-   *          any != nullptr && any.type() == typeid(ValueType)
-   *          </code>, otherwise a null pointer.
-   *
-   * @{
-   */
+ * Access the contained object.
+ *
+ * @tparam  ValueType  The type of the contained object.
+ * @param   any       A pointer to the object to access.
+ * @return  The address of the contained object if <code>
+ *          any != nullptr && any.type() == typeid(ValueType)
+ *          </code>, otherwise a null pointer.
+ *
+ * @{
+ */
 template <typename ValueType>
 const ValueType* any_cast( const any* any ) noexcept
 {

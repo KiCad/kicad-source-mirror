@@ -45,29 +45,32 @@ class EDA_LIST_DIALOG;
  * Run the PDF viewer and display a PDF file.
  *
  * @param file the PDF file to open.
- * @return true is success or false if no PDF viewer found.
+ * @retval true if PDF viewer found.
+ * @retval false if no PDF viewer found.
  */
 KICOMMON_API bool OpenPDF( const wxString& file );
 
 /**
  * @param aSrcPath is the full filename of the source.
- * @param aDestPath is the full filename of the target
- * @param aErrors a wxString to *append* any errors to
+ * @param[in] aDestPath is the full filename of the target.
+ * @param[out] aErrors a wxString to *append* any errors to.
  */
 KICOMMON_API void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath,
                               wxString& aErrors );
 
 /**
  * Call the executable file \a aEditorName with the parameter \a aFileName.
- * @param aEditorName is the full filename for the binary.
- * @param aFileName is the full filename of the file to open.
- * @param aCallback a wxProcess* for the call.
+ *
+ * @param[in] aEditorName is the full filename for the binary.
+ * @param[in] aFileName is the full filename of the file to open.
+ * @param[in] aCallback a wxProcess* for the call.
  * @param aFileForKicad a boolean to flag if aFileName runs with a KiCad binary.
  * In this case aFileName is a shortname and FindKicadFile() is called to return the path.
  * In the other case, aFileName is a full file name (passed prefixed with the path).
  */
-KICOMMON_API int ExecuteFile( const wxString& aEditorName, const wxString& aFileName = wxEmptyString,
-                 wxProcess* aCallback = nullptr, bool aFileForKicad = true );
+KICOMMON_API int ExecuteFile( const wxString& aEditorName,
+                              const wxString& aFileName = wxEmptyString,
+                              wxProcess* aCallback = nullptr, bool aFileForKicad = true );
 
 /**
  * Add un " to the start and the end of string (if not already done).
@@ -102,8 +105,8 @@ KICOMMON_API extern wxString QuoteFullPath( wxFileName& fn, wxPathFormat format 
 
 
 /**
- * Removes the directory \a aDirName and all its contents including
- * subdirectories and their files
+ * Remove the directory \a aDirName and all its contents including
+ * subdirectories and their files.
  */
 KICOMMON_API bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = nullptr );
 

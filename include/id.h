@@ -25,16 +25,8 @@
 
 /**
  * @file id.h
- */
-
-
-#ifndef ID_H_
-#define ID_H_
-
-#include <wx/defs.h>
-
-/**
- * Common command IDs shared by more than one of the KiCad applications.
+ *
+ * @brief Common command IDs shared by more than one of the KiCad applications.
  *
  * Only place command IDs used in base window class event tables or shared
  * across multiple applications such as the zoom, grid, and language IDs.
@@ -57,6 +49,12 @@
  * Therefore we reserve room in ID list for each sub application.
  * Please, change these values if needed
  */
+
+
+#ifndef ID_H_
+#define ID_H_
+
+#include <wx/defs.h>
 
 // Define room for IDs, for each sub application
 #define ROOM_FOR_KICADMANAGER 50
@@ -185,9 +183,11 @@ enum main_id
     ID_KICAD_PANEL_PREV_MODEL_START,
     ID_KICAD_PANEL_PREV_MODEL_END = ID_KICAD_PANEL_PREV_MODEL_START + ROOM_FOR_PANEL_PREV_MODEL,
 
-    // Reseve ID for popup menus, when we need to know a menu item is inside a popup menu
+    // Reserve ID for popup menus, when we need to know a menu item is inside a popup menu
     ID_POPUP_MENU_START,
-    // The extra here need to minimum be larger than MAX_BUS_UNFOLD_MENU_ITEMS + MAX_UNIT_COUNT_PER_PACKAGE
+
+    // The extra here need to minimum be larger than MAX_BUS_UNFOLD_MENU_ITEMS +
+    // MAX_UNIT_COUNT_PER_PACKAGE.
     // These values are stored in eeschema_id.h
     ID_POPUP_MENU_END = ID_POPUP_MENU_START + 2048,
 

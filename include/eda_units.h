@@ -71,8 +71,9 @@ namespace EDA_UNIT_UTILS
     KICOMMON_API int Mils2mm( double aVal );
 
     /**
-     * Writes any unit info found in the string to aUnits.
-     * @return true - when unit was found, false - when unit could not be determined
+     * Write any unit info found in the string to \a aUnits.
+     *
+     * @return true  when unit was found or false when unit could not be determined.
      */
     KICOMMON_API bool FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits );
 
@@ -82,10 +83,11 @@ namespace EDA_UNIT_UTILS
      * This version is for appending to a value string.
      *
      * @param aUnits The units requested.
-     * @param aType DISTANCE, AREA, or VOLUME
+     * @param aType DISTANCE, AREA, or VOLUME.
      * @return The human readable units string with appropriate separators.
      */
-    KICOMMON_API wxString GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+    KICOMMON_API wxString GetText( EDA_UNITS aUnits,
+                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
     /**
      * Get the units string for a given units type.
@@ -100,9 +102,9 @@ namespace EDA_UNIT_UTILS
                                     EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
     /**
-     * Converts \a aAngle from board units to a string appropriate for writing to file.
+     * Convert \a aAngle from board units to a string appropriate for writing to file.
      *
-     * This should only be used for writing to files  as it ignores locale
+     * This should only be used for writing to files  as it ignores locale.
      *
      * @note Internal angles for board items can be either degrees or tenths of degree
      *       on how KiCad is built.
@@ -114,7 +116,7 @@ namespace EDA_UNIT_UTILS
     /**
      * Converts \a aValue from internal units to a string appropriate for writing to file.
      *
-     * This should only be used for writing to files as it ignores locale
+     * This should only be used for writing to files as it ignores locale.
      *
      * @note Internal units for board items can be either deci-mils or nanometers depending
      *       on how KiCad is built.
@@ -128,9 +130,9 @@ namespace EDA_UNIT_UTILS
 
 #if 0   // No support for std::from_chars on MacOS yet
     /**
-     * Converts \a aInput string to internal units when reading from a file.
+     * Convert \a aInput string to internal units when reading from a file.
      *
-     * This should only be used for reading from files as it ignores locale
+     * This should only be used for reading from files as it ignores locale.
      *
      * @param aInput is std::string to parse.
      * @param aIuScale is the scale to use.
@@ -163,28 +165,28 @@ namespace EDA_UNIT_UTILS
     namespace UI
     {
         /**
-         * Function To_User_Unit
-         * convert \a aValue in internal units to the appropriate user units defined by \a aUnit.
+         * Convert \a aValue in internal units to the appropriate user units defined by \a aUnit.
          *
-         * @return The converted value, in double
          * @param aUnit The units to convert \a aValue to.
          * @param aValue The value in internal units to convert.
+         * @return The converted value, in double.
          */
         KICOMMON_API double ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
                                         double aValue );
 
         /**
-         * Returns the string from \a aValue according to \a aUnits (inch, mm ...) for display.
+         * Return the string from \a aValue according to \a aUnits (inch, mm ...) for display.
          *
          * For readability, if the mantissa has 3 or more digits then any trailing 0's are removed.
          * This function should be used to display values in dialogs because a value entered in mm
          * (for instance 2.0 mm) could need up to 8 digits mantissa to preserve precision.
          *
-         * @param aUnits Units (INCHES, MILLIMETRE ..)
-         * @param aValue Value in internal units
-         * @param aAddUnitsText Add units text with appropriate separators
-         * @param aType DISTANCE, AREA, or VOLUME
-         * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
+         * @param aUnits Units (INCHES, MILLIMETRE ..).
+         * @param aValue Value in internal units.
+         * @param aAddUnitsText Add units text with appropriate separators.
+         * @param aType DISTANCE, AREA, or VOLUME.
+         * @return A wxString object containing value and optionally the symbol unit
+         *         (like 2.000 mm).
          */
         KICOMMON_API wxString StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                double aValue,
@@ -199,10 +201,10 @@ namespace EDA_UNIT_UTILS
          * because the mantissa of the number displayed has 4 digits max for readability.  The
          * actual internal value could need up to 8 digits to preserve precision.
          *
-         * @param aUnits Units (INCHES, MILLIMETRE ..)
+         * @param aUnits Units (INCHES, MILLIMETRE ..).
          * @param aValue The double value to convert.
-         * @param aAddUnitsText If true, adds the unit label to the end of the string
-         * @param aType DISTANCE, AREA, or VOLUME
+         * @param aAddUnitsText If true, adds the unit label to the end of the string.
+         * @param aType DISTANCE, AREA, or VOLUME.
          * @return The converted string for display in user interface elements.
          */
         KICOMMON_API wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
@@ -225,21 +227,21 @@ namespace EDA_UNIT_UTILS
                                                         const MINOPTMAX<int>& aValue );
         /**
          * Return in internal units the value \a aValue given in a real unit such as "in", "mm",
-         * or "deg"
+         * or "deg".
          */
         KICOMMON_API double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
                                           double aValue );
 
 
         /**
-         * Function DoubleValueFromString
-         * converts \a aTextValue to a double
-         * @warning This utilizes the current locale and will break if decimal formats differ
+         * Convert \a aTextValue to a double.
+         *
+         * @warning This utilizes the current locale and will break if decimal formats differ.
          *
          * @param aIuScale The internal units scale for the current frame/app.
          * @param aUnits The units of \a aTextValue.
          * @param aTextValue A reference to a wxString object containing the string to convert.
-         * @return A double representing that value in internal units
+         * @return A double representing that value in internal units.
          */
         KICOMMON_API double DoubleValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                    const wxString& aTextValue,
@@ -248,14 +250,14 @@ namespace EDA_UNIT_UTILS
         KICOMMON_API double DoubleValueFromString( const wxString& aTextValue );
 
         /**
-         * Function ValueFromString
-         * converts \a aTextValue in \a aUnits to internal units used by the application.
+         * Convert \a aTextValue in \a aUnits to internal units used by the application.
+         *
          * @warning This utilizes the current locale and will break if decimal formats differ
          *
          * @param aIuScale The internal units scale for the current frame/app.
          * @param aUnits The units of \a aTextValue.
          * @param aTextValue A reference to a wxString object containing the string to convert.
-         * @return A long long int representing that value in internal units
+         * @return A long long int representing that value in internal units.
          */
         KICOMMON_API long long int ValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                     const wxString& aTextValue,

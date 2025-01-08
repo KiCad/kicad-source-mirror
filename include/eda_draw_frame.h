@@ -105,12 +105,12 @@ public:
     void ReleaseFile();
 
     /**
-     * Toggles the scripting console visibility
+     * Toggle the scripting console visibility.
      */
     void ScriptingConsoleEnableDisable();
 
     /**
-     * Gets the current visibility of the scripting console window
+     * Get the current visibility of the scripting console window.
      */
     bool IsScriptingConsoleVisible();
 
@@ -316,7 +316,7 @@ public:
     void AddStandardSubMenus( TOOL_MENU& aMenu );
 
     /**
-     * Prints the drawing-sheet (frame and title block).
+     * Print the drawing-sheet (frame and title block).
      *
      * @param aScreen screen to draw.
      * @param aProperties Optional properties for text variable resolution.
@@ -326,7 +326,8 @@ public:
      */
     void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
                             const std::map<wxString, wxString>* aProperties, double aMils2Iu,
-                            const wxString& aFilename, const wxString& aSheetLayer = wxEmptyString );
+                            const wxString& aFilename,
+                            const wxString& aSheetLayer = wxEmptyString );
 
     void DisplayToolMsg( const wxString& msg ) override;
 
@@ -334,6 +335,7 @@ public:
 
     /**
      * Called when modifying the page settings.
+     *
      * In derived classes it can be used to modify parameters like draw area size,
      * and any other local parameter related to the page settings.
      */
@@ -439,7 +441,7 @@ public:
     virtual void ActivateGalCanvas();
 
     /**
-     * Changes the current rendering backend.
+     * Change the current rendering backend.
      */
     virtual void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
@@ -464,7 +466,7 @@ public:
     }
 
     /**
-     * Returns bbox of document with option to not include some items.
+     * Return bounding box of document with option to not include some items.
      *
      * Used most commonly by "Zoom to Fit" and "Zoom to Objects".  In Eeschema for "Zoom to Fit"
      * it's passed "true" to include drawing sheet border, and "false" by "Zoom To Objects" to
@@ -478,12 +480,12 @@ public:
     virtual const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const;
 
     /**
-     * Rebuild all toolbars, and update the checked state of check tools
+     * Rebuild all toolbars and update the checked state of check tools.
      */
     void RecreateToolbars();
 
     /**
-     * Update toolbars if desired toolbar icon changed
+     * Update toolbars if desired toolbar icon changed.
      */
     void OnToolbarSizeChanged();
 
@@ -508,19 +510,22 @@ public:
     bool SaveCanvasImageToFile( const wxString& aFileName, BITMAP_TYPE aBitmapType );
 
     /**
-     * Handler for activating an API plugin (via toolbar or menu)
+     * Handler for activating an API plugin (via toolbar or menu).
      */
     virtual void OnApiPluginInvoke( wxCommandEvent& aEvent );
 
     virtual PLUGIN_ACTION_SCOPE PluginActionScope() const { return PLUGIN_ACTION_SCOPE::INVALID; }
 
-    static bool IsPluginActionButtonVisible( const PLUGIN_ACTION& aAction, APP_SETTINGS_BASE* aCfg );
+    static bool IsPluginActionButtonVisible( const PLUGIN_ACTION& aAction,
+                                             APP_SETTINGS_BASE* aCfg );
 
     /**
-     * Return ordered list of plugin actions for display in the toolbar
+     * Return ordered list of plugin actions for display in the toolbar.
+     *
      * Must be static at the moment because this needs to be called from the preferences dialog,
      * which can exist without the frame in question actually being created.
-     * @param aCfg is the settings to read the plugin ordering from
+     *
+     * @param aCfg is the settings to read the plugin ordering from.
      */
     static std::vector<const PLUGIN_ACTION*> GetOrderedPluginActions( PLUGIN_ACTION_SCOPE aScope,
         APP_SETTINGS_BASE* aCfg );
@@ -539,19 +544,20 @@ protected:
     std::vector<wxWindow*> findDialogs();
 
     /**
-     * Determines the Canvas type to load (with prompt if required) and initializes m_canvasType
+     * Determine the canvas type to load (with prompt if required) and initializes #m_canvasType.
      */
     virtual void resolveCanvasType();
 
     /**
-     * Returns the canvas type stored in the application settings.
+     * Return the canvas type stored in the application settings.
+     *
      * @param aCfg is the APP_SETTINGS_BASE config storing the canvas type.
      * If nullptr (default) the KifaceSettings() will be used
      */
     EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting( APP_SETTINGS_BASE* aCfg = nullptr );
 
     /**
-     * Stores the canvas type in the application settings.
+     * Store the canvas type in the application settings.
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
@@ -579,7 +585,8 @@ protected:
                                               // to screens
     bool                 m_polarCoords;       // For those frames that support polar coordinates
 
-    bool                 m_showBorderAndTitleBlock;  // Show the drawing sheet (border & title block).
+    // Show the drawing sheet (border & title block).
+    bool                 m_showBorderAndTitleBlock;
 
     wxChoice*            m_gridSelectBox;
     wxChoice*            m_zoomSelectBox;
@@ -603,17 +610,17 @@ protected:
 
     HOTKEY_CYCLE_POPUP* m_hotkeyPopup;
 
-    ///< The current canvas type.
+    /// The current canvas type.
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
 
-    static bool m_openGLFailureOccured; ///< Has any failure occured when switching to OpenGL in
+    static bool m_openGLFailureOccured; ///< Has any failure occurred when switching to OpenGL in
                                         ///< any EDA_DRAW_FRAME?
 
 private:
     BASE_SCREEN*                m_currentScreen;      ///< current used SCREEN
     EDA_DRAW_PANEL_GAL*         m_canvas;
 
-    ///< This the frame's interface to setting GAL display options.
+    /// This the frame's interface to setting GAL display options.
     GAL_DISPLAY_OPTIONS_IMPL  m_galDisplayOptions;
 
     int m_lastToolbarIconSize;

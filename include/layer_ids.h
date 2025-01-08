@@ -53,7 +53,7 @@
 /**
  * This is the definition of all layers used in Pcbnew.
  *
- * The PCB layer types are fixed at value 0 through LAYER_ID_COUNT to ensure compatibility
+ * The PCB layer types are fixed at value 0 through #LAYER_ID_COUNT to ensure compatibility
  * with legacy board files.
  */
 enum PCB_LAYER_ID: int
@@ -141,27 +141,25 @@ constexpr PCB_LAYER_ID PCBNEW_LAYER_ID_START = F_Cu;
 
 /**
  * Enum used during connectivity building to ensure we do not query connectivity while building
- * the database
+ * the database.
  */
 enum class FLASHING
 {
-    DEFAULT,                // Flashing follows connectivity
-    ALWAYS_FLASHED,         // Always flashed for connectivity
-    NEVER_FLASHED,          // Never flashed for connectivity
+    DEFAULT,                ///< Flashing follows connectivity.
+    ALWAYS_FLASHED,         ///< Always flashed for connectivity.
+    NEVER_FLASHED,          ///< Never flashed for connectivity.
 };
 
-/// Dedicated layers for net names used in Pcbnew
+/// Dedicated layers for net names used in Pcbnew.
 enum NETNAMES_LAYER_ID: int
 {
 
     NETNAMES_LAYER_ID_START = PCB_LAYER_ID_COUNT,
 
-    /// Reserved space for board layer netnames
-
+    /// Reserved space for board layer netnames.
     NETNAMES_LAYER_ID_RESERVED = NETNAMES_LAYER_ID_START + PCB_LAYER_ID_COUNT,
 
-    /// Additional netnames layers (not associated with a PCB layer)
-
+    /// Additional netnames layers (not associated with a PCB layer).
     LAYER_PAD_FR_NETNAMES,
     LAYER_PAD_BK_NETNAMES,
     LAYER_PAD_NETNAMES,
@@ -177,100 +175,134 @@ enum NETNAMES_LAYER_ID: int
 
 /**
  *  GAL layers are "virtual" layers, i.e. not tied into design data.
+ *
  *  Some layers here are shared between applications.
  *
- *  NOTE: Be very careful where you add new layers here.  Layers up to GAL_LAYER_ID_BITMASK_END
+ *  @note Be very careful where you add new layers here.  Layers up to #GAL_LAYER_ID_BITMASK_END
  *  must never be re-ordered and new layers must always be added after this value, because the
  *  layers before this value are mapped to bit locations in legacy board files.
  *
  *  The values in this enum that are used to store visibility state are explicitly encoded with an
- *  offset from GAL_LAYER_ID_START, which is explicitly encoded itself. The exact value of
- *  GAL_LAYER_ID_START is not that sensitive, but the offsets should never be changed or else any
+ *  offset from #GAL_LAYER_ID_START, which is explicitly encoded itself. The exact value of
+ *  #GAL_LAYER_ID_START is not that sensitive, but the offsets should never be changed or else any
  *  existing visibility settings will be disrupted.
  */
 enum GAL_LAYER_ID: int
 {
     GAL_LAYER_ID_START = NETNAMES_LAYER_ID_END,
 
-    LAYER_VIAS               = GAL_LAYER_ID_START +  0, ///< Meta control for all vias opacity/visibility
-    LAYER_VIA_MICROVIA       = GAL_LAYER_ID_START +  1, ///< to draw micro vias
-    LAYER_VIA_BBLIND         = GAL_LAYER_ID_START +  2, ///< to draw blind/buried vias
-    LAYER_VIA_THROUGH        = GAL_LAYER_ID_START +  3, ///< to draw usual through hole vias
-    LAYER_NON_PLATEDHOLES    = GAL_LAYER_ID_START +  4, ///< handle color for not plated holes (holes, not pads)
+     /// Meta control for all vias opacity/visibility.
+    LAYER_VIAS               = GAL_LAYER_ID_START +  0,
+    LAYER_VIA_MICROVIA       = GAL_LAYER_ID_START +  1, /// Draw micro vias.
+    LAYER_VIA_BBLIND         = GAL_LAYER_ID_START +  2, /// Draw blind/buried vias.
+    LAYER_VIA_THROUGH        = GAL_LAYER_ID_START +  3, /// Draw usual through hole vias.
+
+    /// Handle color for not plated holes (holes, not pads).
+    LAYER_NON_PLATEDHOLES    = GAL_LAYER_ID_START +  4,
     LAYER_FP_TEXT            = GAL_LAYER_ID_START +  5,
+
 //  LAYER_MOD_TEXT_BK deprecated                  +  6,
-//  LAYER_HIDDEN_TEXT        = GAL_LAYER_ID_START +  7, ///< DEPRECATED, UNUSED SINCE 9.0. text marked as invisible
-    LAYER_ANCHOR             = GAL_LAYER_ID_START +  8, ///< anchor of items having an anchor point (texts, footprints)
-//  LAYER_PADS_SMD_FR        = GAL_LAYER_ID_START +  9, ///< Deprecated since 9.0
-//  LAYER_PADS_SMD_BK        = GAL_LAYER_ID_START + 10, ///< Deprecated since 9.0
+
+//  DEPRECATED, UNUSED SINCE 9.0. text marked as invisible.
+//  LAYER_HIDDEN_TEXT        = GAL_LAYER_ID_START +  7,
+
+    /// Anchor of items having an anchor point (texts, footprints).
+    LAYER_ANCHOR             = GAL_LAYER_ID_START +  8,
+
+//  LAYER_PADS_SMD_FR        = GAL_LAYER_ID_START +  9, // Deprecated since 9.0
+//  LAYER_PADS_SMD_BK        = GAL_LAYER_ID_START + 10, // Deprecated since 9.0
+
     LAYER_RATSNEST           = GAL_LAYER_ID_START + 11,
     LAYER_GRID               = GAL_LAYER_ID_START + 12,
     LAYER_GRID_AXES          = GAL_LAYER_ID_START + 13,
-//  LAYER_NO_CONNECTS deprecated                  + 14, ///< show a marker on pads with no nets
-    LAYER_FOOTPRINTS_FR      = GAL_LAYER_ID_START + 15, ///< show footprints on front
-    LAYER_FOOTPRINTS_BK      = GAL_LAYER_ID_START + 16, ///< show footprints on back
-    LAYER_FP_VALUES          = GAL_LAYER_ID_START + 17, ///< show footprints values (when texts are visible)
-    LAYER_FP_REFERENCES      = GAL_LAYER_ID_START + 18, ///< show footprints references (when texts are visible)
+
+//  LAYER_NO_CONNECTS deprecated                  + 14, // show a marker on pads with no nets
+
+    LAYER_FOOTPRINTS_FR      = GAL_LAYER_ID_START + 15, ///< Show footprints on front.
+    LAYER_FOOTPRINTS_BK      = GAL_LAYER_ID_START + 16, ///< Show footprints on back.
+
+    /// Show footprints values (when texts are visible).
+    LAYER_FP_VALUES          = GAL_LAYER_ID_START + 17,
+
+    /// Show footprints references (when texts are visible).
+    LAYER_FP_REFERENCES      = GAL_LAYER_ID_START + 18,
     LAYER_TRACKS             = GAL_LAYER_ID_START + 19,
+
 //  LAYER_PADS_TH            = GAL_LAYER_ID_START + 20, ///< Deprecated since 9.0
+
     LAYER_PAD_PLATEDHOLES    = GAL_LAYER_ID_START + 21, ///< to draw pad holes (plated)
-    LAYER_VIA_HOLES          = GAL_LAYER_ID_START + 22, ///< to draw via holes (pad holes do not use this layer)
-    LAYER_DRC_ERROR          = GAL_LAYER_ID_START + 23, ///< layer for drc markers with SEVERITY_ERROR
-    LAYER_DRAWINGSHEET       = GAL_LAYER_ID_START + 24, ///< drawingsheet frame and titleblock
-    LAYER_GP_OVERLAY         = GAL_LAYER_ID_START + 25, ///< general purpose overlay
-    LAYER_SELECT_OVERLAY     = GAL_LAYER_ID_START + 26, ///< currently selected items overlay
-    LAYER_PCB_BACKGROUND     = GAL_LAYER_ID_START + 27, ///< PCB background color
-    LAYER_CURSOR             = GAL_LAYER_ID_START + 28, ///< PCB cursor
-    LAYER_AUX_ITEMS          = GAL_LAYER_ID_START + 29, ///< Auxiliary items (guides, rule, etc)
-    LAYER_DRAW_BITMAPS       = GAL_LAYER_ID_START + 30, ///< to handle and draw images bitmaps
+
+    /// Draw via holes (pad holes do not use this layer).
+    LAYER_VIA_HOLES          = GAL_LAYER_ID_START + 22,
+
+     /// Layer for DRC markers with #SEVERITY_ERROR.
+    LAYER_DRC_ERROR          = GAL_LAYER_ID_START + 23,
+    LAYER_DRAWINGSHEET       = GAL_LAYER_ID_START + 24, ///< Sheet frame and title block.
+    LAYER_GP_OVERLAY         = GAL_LAYER_ID_START + 25, ///< General purpose overlay.
+    LAYER_SELECT_OVERLAY     = GAL_LAYER_ID_START + 26, ///< Selected items overlay.
+    LAYER_PCB_BACKGROUND     = GAL_LAYER_ID_START + 27, ///< PCB background color.
+    LAYER_CURSOR             = GAL_LAYER_ID_START + 28, ///< PCB cursor.
+    LAYER_AUX_ITEMS          = GAL_LAYER_ID_START + 29, ///< Auxiliary items (guides, rule, etc).
+    LAYER_DRAW_BITMAPS       = GAL_LAYER_ID_START + 30, ///< Draw images.
 
     /// This is the end of the layers used for visibility bit masks in legacy board files
     GAL_LAYER_ID_BITMASK_END = GAL_LAYER_ID_START + 31,
 
     // Layers in this section have visibility controls but were not present in legacy board files.
 
-    LAYER_PADS               = GAL_LAYER_ID_START + 32, ///< Meta control for all pads opacity/visibility (color ignored)
-    LAYER_ZONES              = GAL_LAYER_ID_START + 33, ///< Control for copper zone opacity/visibility (color ignored)
+    /// Meta control for all pads opacity/visibility (color ignored).
+    LAYER_PADS               = GAL_LAYER_ID_START + 32,
+
+    /// Control for copper zone opacity/visibility (color ignored).
+    LAYER_ZONES              = GAL_LAYER_ID_START + 33,
 
     LAYER_PAD_HOLEWALLS      = GAL_LAYER_ID_START + 34,
     LAYER_VIA_HOLEWALLS      = GAL_LAYER_ID_START + 35,
-    LAYER_DRC_WARNING        = GAL_LAYER_ID_START + 36, ///< layer for drc markers with SEVERITY_WARNING
-    LAYER_DRC_EXCLUSION      = GAL_LAYER_ID_START + 37, ///< layer for drc markers which have been individually excluded
-    LAYER_MARKER_SHADOWS     = GAL_LAYER_ID_START + 38, ///< shadows for drc markers
 
-    LAYER_LOCKED_ITEM_SHADOW = GAL_LAYER_ID_START + 39, ///< shadow layer for locked items
+    /// Layer for DRC markers with #SEVERITY_WARNING.
+    LAYER_DRC_WARNING        = GAL_LAYER_ID_START + 36,
 
-    LAYER_CONFLICTS_SHADOW   = GAL_LAYER_ID_START + 40, ///< shadow layer for items flagged conficting
-    LAYER_SHAPES             = GAL_LAYER_ID_START + 41, ///< Copper graphic shape opacity/visibility (color ignored)
+    /// Layer for DRC markers which have been individually excluded.
+    LAYER_DRC_EXCLUSION      = GAL_LAYER_ID_START + 37,
+    LAYER_MARKER_SHADOWS     = GAL_LAYER_ID_START + 38, ///< Shadows for DRC markers.
 
-    LAYER_DRC_SHAPE1         = GAL_LAYER_ID_START + 42,  ///< Custom shape for DRC marker
-    LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Custom shape for DRC marker
+    LAYER_LOCKED_ITEM_SHADOW = GAL_LAYER_ID_START + 39, ///< Shadow layer for locked items.
+
+    /// Shadow layer for items flagged conflicting.
+    LAYER_CONFLICTS_SHADOW   = GAL_LAYER_ID_START + 40,
+
+    /// Copper graphic shape opacity/visibility (color ignored).
+    LAYER_SHAPES             = GAL_LAYER_ID_START + 41,
+
+    LAYER_DRC_SHAPE1         = GAL_LAYER_ID_START + 42,  ///< Custom shape for DRC marker.
+    LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Custom shape for DRC marker.
+
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 
-    LAYER_DRAWINGSHEET_PAGE1,      ///< for drawingsheetEditor previewing
-    LAYER_DRAWINGSHEET_PAGEn,      ///< for drawingsheetEditor previewing
+    LAYER_DRAWINGSHEET_PAGE1,      ///< Sheet Editor previewing first page.
+    LAYER_DRAWINGSHEET_PAGEn,      ///< Sheet Editor previewing pages after first page.
 
-    LAYER_PAGE_LIMITS,             ///< color for drawing the page extents (visibility stored in
-                                   ///<   PCBNEW_SETTINGS::m_ShowPageLimits)
+    LAYER_PAGE_LIMITS,             ///< Color for drawing the page extents (visibility stored in
+                                   ///< PCBNEW_SETTINGS::m_ShowPageLimits)
 
-    /// Virtual layers for stacking zones and tracks on a given copper layer
+    /// Virtual layers for stacking zones and tracks on a given copper layer.
     LAYER_ZONE_START,
     LAYER_ZONE_END = LAYER_ZONE_START + PCB_LAYER_ID_COUNT,
 
-    /// Virtual layers for pad copper on a given copper layer
+    /// Virtual layers for pad copper on a given copper layer.
     LAYER_PAD_COPPER_START,
     LAYER_PAD_COPPER_END = LAYER_PAD_COPPER_START + PCB_LAYER_ID_COUNT,
 
-    /// Virtual layers for via copper on a given copper layer
+    /// Virtual layers for via copper on a given copper layer.
     LAYER_VIA_COPPER_START,
     LAYER_VIA_COPPER_END = LAYER_VIA_COPPER_START + PCB_LAYER_ID_COUNT,
 
-    /// Virtual layers for pad/via/track clearance outlines for a given copper layer
+    /// Virtual layers for pad/via/track clearance outlines for a given copper layer.
     LAYER_CLEARANCE_START,
     LAYER_CLEARANCE_END = LAYER_CLEARANCE_START + PCB_LAYER_ID_COUNT,
 
-    /// Virtual layers for background images per board layer
+    /// Virtual layers for background images per board layer.
     LAYER_BITMAP_START,
     LAYER_BITMAP_END = LAYER_BITMAP_START + PCB_LAYER_ID_COUNT,
 
@@ -281,10 +313,10 @@ enum GAL_LAYER_ID: int
     GAL_LAYER_ID_END
 };
 
-/// Use this macro to convert a GAL layer to a 0-indexed offset from LAYER_VIAS
+/// Use this macro to convert a #GAL layer to a 0-indexed offset from #LAYER_VIAS.
 #define GAL_LAYER_INDEX( x ) ( x - GAL_LAYER_ID_START )
 
-/// Macros for getting the extra layers for a given board layer
+/// Macros for getting the extra layers for a given board layer.
 #define BITMAP_LAYER_FOR( boardLayer ) ( LAYER_BITMAP_START + boardLayer )
 #define ZONE_LAYER_FOR( boardLayer ) ( LAYER_ZONE_START + boardLayer )
 #define PAD_COPPER_LAYER_FOR( boardLayer ) ( LAYER_PAD_COPPER_START + boardLayer )
@@ -305,7 +337,7 @@ inline GAL_LAYER_ID ToGalLayer( int aInteger )
     return static_cast<GAL_LAYER_ID>( aInteger );
 }
 
-/// Used for via types
+/// Used for via types.
 inline GAL_LAYER_ID operator+( const GAL_LAYER_ID& a, int b )
 {
     GAL_LAYER_ID t = GAL_LAYER_ID( int( a ) + b );
@@ -314,11 +346,11 @@ inline GAL_LAYER_ID operator+( const GAL_LAYER_ID& a, int b )
 }
 
 
-/// @brief Wraps a std::bitset
+/// Wraps a std::bitset.
 typedef std::bitset<GAL_LAYER_ID_COUNT> GAL_BASE_SET;
 
 
-/// Helper for storing and iterating over GAL_LAYER_IDs
+/// Helper for storing and iterating over GAL_LAYER_IDs.
 class KICOMMON_API GAL_SET : public GAL_BASE_SET
 {
 
@@ -364,7 +396,7 @@ public:
     static GAL_SET DefaultVisible();
 };
 
-/// Eeschema drawing layers
+/// Eeschema drawing layers.
 enum SCH_LAYER_ID : int
 {
     SCH_LAYER_ID_START = GAL_LAYER_ID_END,
@@ -433,15 +465,15 @@ inline SCH_LAYER_ID operator++( SCH_LAYER_ID& a )
     return a;
 }
 
-// number of draw layers in Gerbview
+/// Number of draw layers in Gerbview.
 #define GERBER_DRAWLAYERS_COUNT static_cast<int>( PCB_LAYER_ID_COUNT )
 
-/// GerbView draw layers
+/// Gerbview draw layers.
 enum GERBVIEW_LAYER_ID: int
 {
     GERBVIEW_LAYER_ID_START = SCH_LAYER_ID_END,
 
-    /// GerbView draw layers and d-code layers
+    /// Gerbview draw layers and d-code layers
     GERBVIEW_LAYER_ID_RESERVED = GERBVIEW_LAYER_ID_START + ( 2 * GERBER_DRAWLAYERS_COUNT ),
 
     LAYER_DCODES,
@@ -494,13 +526,14 @@ enum LAYER_3D_ID : int
         LAYER_3D_END
 };
 
-/// Must update this if you add any enums after GerbView!
+/// Must update this if you add any enums after Gerbview!
 #define LAYER_ID_COUNT LAYER_3D_END
 
 
 /**
- * Returns the string equivalent of a given layer
- * @param aLayer is a valid layer ID
+ * Return the string equivalent of a given layer.
+ *
+ * @param aLayer is a valid layer ID.
  */
 KICOMMON_API wxString LayerName( int aLayer );
 
@@ -518,7 +551,7 @@ KICOMMON_API wxString LayerName( int aLayer );
 
 /**
  * Test whether a given integer is a valid layer index, i.e. can
- * be safely put in a PCB_LAYER_ID
+ * be safely put in a #PCB_LAYER_ID.
  *
  * @param aLayerId = Layer index to test. It can be an int, so its useful during I/O
  * @return true if aLayerIndex is a valid layer index
@@ -540,7 +573,7 @@ inline bool IsPcbLayer( int aLayer )
 }
 
 /**
- * Tests whether a layer is a copper layer.
+ * Test whether a layer is a copper layer.
  *
  * @param aLayerId = Layer  to test
  * @return true if aLayer is a valid copper layer
@@ -551,7 +584,7 @@ inline bool IsCopperLayer( int aLayerId )
 }
 
 /**
- * Tests whether a layer is an external (F_Cu or B_Cu) copper layer.
+ * Test whether a layer is an external (#F_Cu or #B_Cu) copper layer.
  *
  * @param aLayerId = Layer  to test
  * @return true if aLayer is a valid external copper layer
@@ -562,7 +595,7 @@ inline bool IsExternalCopperLayer( int aLayerId )
 }
 
 /**
- * Tests whether a layer is an inner (In1_Cu to In30_Cu) copper layer.
+ * Test whether a layer is an inner (#In1_Cu to #In30_Cu) copper layer.
  *
  * @param aLayerId = Layer  to test
  * @return true if aLayer is a valid inner copper layer
@@ -584,8 +617,8 @@ inline bool IsNonCopperLayer( int aLayerId )
 }
 
 /**
- * Tests whether a layer is a copper layer, optionally including synthetic copper layers such
- * as LAYER_VIA_THROUGH, LAYER_PADS_SMD_FR, etc.
+ * Test whether a layer is a copper layer, optionally including synthetic copper layers such
+ * as #LAYER_VIA_THROUGH, #LAYER_PADS_SMD_FR, etc.
  *
  * @param aLayerId
  * @param aIncludeSyntheticCopperLayers
@@ -644,7 +677,7 @@ inline bool IsUserLayer( PCB_LAYER_ID aLayerId )
  */
 
 /**
- * Layer classification: check if it's a front layer
+ * Layer classification: check if it's a front layer.
  */
 inline bool IsFrontLayer( PCB_LAYER_ID aLayerId )
 {
@@ -667,7 +700,7 @@ inline bool IsFrontLayer( PCB_LAYER_ID aLayerId )
 
 
 /**
- * Layer classification: check if it's a back layer
+ * Layer classification: check if it's a back layer.
  */
 inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
 {
@@ -688,7 +721,7 @@ inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
 
 
 /**
- * Returns true if copper aLayerA is placed lower than aLayerB, false otherwise.
+ * Return true if copper aLayerA is placed lower than aLayerB, false otherwise.
  */
 inline bool IsCopperLayerLowerThan( PCB_LAYER_ID aLayerA, PCB_LAYER_ID aLayerB )
 {
@@ -706,19 +739,19 @@ inline bool IsCopperLayerLowerThan( PCB_LAYER_ID aLayerA, PCB_LAYER_ID aLayerB )
 
 
 /**
+ * @param aLayerId = the PCB_LAYER_ID to flip
+ * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
+ *  internal layers will be not flipped because the layer count is not known
  * @return the layer number after flipping an item
  * some (not all) layers: external copper, and paired layers( Mask, Paste, solder ... )
  * are swapped between front and back sides
  * internal layers are flipped only if the copper layers count is known
- * @param aLayerId = the PCB_LAYER_ID to flip
- * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
- *  internal layers will be not flipped because the layer count is not known
  */
 KICOMMON_API PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount = 0 );
 
 
 /**
- * Returns a netname layer corresponding to the given layer.
+ * Return a netname layer corresponding to the given layer.
  */
 inline int GetNetnameLayer( int aLayer )
 {
@@ -772,7 +805,7 @@ inline bool IsDCodeLayer( int aLayer )
 }
 
 
-///! Converts KiCad copper layer enum to an ordinal between the front and back layers
+/// Converts KiCad copper layer enum to an ordinal between the front and back layers.
 inline size_t CopperLayerToOrdinal( PCB_LAYER_ID aLayer )
 {
     wxCHECK( IsCopperLayer( aLayer ), 0 );
@@ -787,7 +820,7 @@ inline size_t CopperLayerToOrdinal( PCB_LAYER_ID aLayer )
 
 
 /**
- * Retrieves a layer ID from an integer converted from a legacy (pre-V9) enum value
+ * Retrieve a layer ID from an integer converted from a legacy (pre-V9) enum value.
  */
 KICOMMON_API PCB_LAYER_ID BoardLayerFromLegacyId( int aLegacyId );
 

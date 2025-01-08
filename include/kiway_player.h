@@ -178,7 +178,7 @@ public:
 
 protected:
 
-    /// event handler, routes to derivative specific virtual KiwayMailIn()
+    /// Event handler, routes to derivative specific virtual #KiwayMailIn().
     void kiway_express( KIWAY_EXPRESS& aEvent );
 
     /**
@@ -189,14 +189,14 @@ protected:
     // variables for modal behavior support, only used by a few derivatives.
     bool            m_modal;        // true if frame is intended to be modal, not modeless
 
-    ///< Points to nested event_loop. NULL means not modal and dismissed.
+    /// Points to nested event_loop. NULL means not modal and dismissed.
     wxGUIEventLoop* m_modal_loop;
     wxWindow*       m_modal_resultant_parent; // the window caller in modal mode
     wxString        m_modal_string;
     bool            m_modal_ret_val;    // true if a selection was made
 
     wxSocketServer*             m_socketServer;
-    std::vector<wxSocketBase*>  m_sockets;         ///< interprocess communication
+    std::vector<wxSocketBase*>  m_sockets;         /// Interprocess communication.
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()

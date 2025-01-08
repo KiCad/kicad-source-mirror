@@ -27,10 +27,11 @@ class LSEQ;
 class LAYER_RANGE;
 
 /**
- * LSET is a set of PCB_LAYER_IDs.  It can be converted to numerous purpose LSEQs using
- * the various member functions, most of which are based on Seq(). The advantage
- * of converting to LSEQ using purposeful code, is it removes any dependency
- * on order/sequence inherent in this set.
+ * LSET is a set of PCB_LAYER_IDs.
+ *
+ * It can be converted to numerous purpose LSEQs using the various member functions, most of
+ * which are based on Seq(). The advantage of converting to #LSEQ using purposeful code, is it
+ * removes any dependency on order/sequence inherent in this set.
  */
 class KICOMMON_API LSET : public BASE_SET
 {
@@ -56,8 +57,8 @@ public:
     /**
      * See if the layer set contains a PCB layer.
      *
-     * @param aLayer is the layer to check
-     * @return true if the layer is included
+     * @param aLayer is the layer to check.
+     * @return true if the layer is included.
      */
     bool Contains( PCB_LAYER_ID aLayer ) const
     {
@@ -76,7 +77,7 @@ public:
     }
 
     /**
-     * Return the fixed name association with aLayerId.
+     * Return the fixed name association with @a aLayerId.
      */
     static wxString Name( PCB_LAYER_ID aLayerId );
 
@@ -86,24 +87,26 @@ public:
     static int NameToLayer( wxString& aName );
 
     /**
-     * Return true if aLayer is between aStart and aEnd, inclusive. Takes into
-     * account the direction of the layers and the fact that B_Cu comes before In*_Cu
+     * Return true if aLayer is between aStart and aEnd, inclusive.
+     *
+     * This takes into account the direction of the layers and the fact that #B_Cu comes before
+     * In*_Cu.
      */
     static bool IsBetween( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd, PCB_LAYER_ID aLayer );
 
     /**
      * Return a complete set of internal copper layers which is all Cu layers
-     * except F_Cu and B_Cu.
+     * except #F_Cu and #B_Cu.
      */
     static LSET InternalCuMask();
 
     /**
-     * Return a complete set of all top assembly layers which is all F_SilkS and F_Mask
+     * Return a complete set of all top assembly layers which is all #F_SilkS and #F_Mask.
      */
     static LSET FrontAssembly();
 
     /**
-     * Return a complete set of all bottom assembly layers which is all B_SilkS and B_Mask
+     * Return a complete set of all bottom assembly layers which is all #B_SilkS and #B_Mask.
      */
     static LSET BackAssembly();
 
@@ -171,8 +174,9 @@ public:
     static LSET UserMask();
 
     /**
-     * Return a mask holding all layers which are physically realized.  Equivalent to the copper
-     * layers + the board tech mask.
+     * Return a mask holding all layers which are physically realized.
+     *
+     * Equivalent to the copper layers + the board tech mask.
      */
     static LSET PhysicalLayersMask();
 
@@ -182,8 +186,9 @@ public:
     static LSET UserDefinedLayers();
 
     /**
-     * Layers which are not allowed within footprint definitions.  Currently internal
-     * copper layers and Margin.
+     * Layers which are not allowed within footprint definitions.
+     *
+     * Currently internal copper layers and Margin.
      */
 
     static LSET ForbiddenFootprintLayers();
@@ -195,30 +200,31 @@ public:
     LSEQ CuStack() const;
 
     /**
-     * Returns the technical and user layers in the order shown in layer widget
-     *
+     * Return the technical and user layers in the order shown in layer widget.
      */
     LSEQ TechAndUserUIOrder() const;
 
     /**
-     * Returns the copper, technical and user layers in the order shown in layer widget
-     *
+     * Return the copper, technical and user layers in the order shown in layer widget.
      */
     LSEQ UIOrder() const;
 
     /**
-     * Return an LSEQ from the union of this LSET and a desired sequence.  The LSEQ
-     * element will be in the same sequence as aWishListSequence if they are present.
+     * Return an #LSEQ from the union of this #LSET and a desired sequence.
+     *
+     * The #LSEQ element will be in the same sequence as aWishListSequence if they are present.
+     *
      * @param aWishListSequence establishes the order of the returned LSEQ, and the LSEQ will only
-     * contain PCB_LAYER_IDs which are present in this set.
+     *        contain PCB_LAYER_IDs which are present in this set.
      */
     LSEQ Seq( const LSEQ& aSequence ) const;
 
     /**
-     * Return a LSEQ from this LSET in ascending PCB_LAYER_ID order.  Each LSEQ
-     * element will be in the same sequence as in PCB_LAYER_ID and only present
-     * in the resultant LSEQ if present in this set.  Therefore the sequence is
-     * subject to change, use it only when enumeration and not order is important.
+     * Return a #LSEQ from this #LSET in ascending PCB_LAYER_ID order.
+     *
+     * Each #LSEQ element will be in the same sequence as in PCB_LAYER_ID and only present
+     * in the resultant #LSEQ if present in this set.  Therefore the sequence is subject to
+     * change, use it only when enumeration and not order is important.
      */
     LSEQ Seq() const;
 
@@ -226,19 +232,19 @@ public:
      * Generate a sequence of layers that represent a top to bottom stack of this set of layers.
      *
      * @param aSelectedLayer is the layer to put at the top of stack when defined.
-     *
      * @return the top to bottom layer sequence.
      */
     LSEQ SeqStackupTop2Bottom( PCB_LAYER_ID aSelectedLayer = UNDEFINED_LAYER ) const;
 
     /**
      * Return the sequence that is typical for a bottom-to-top stack-up.
+     *
      * For instance, to plot multiple layers in a single image, the top layers output last.
      */
     LSEQ SeqStackupForPlotting() const;
 
     /**
-     * Execute a function on each layer of the LSET.
+     * Execute a function on each layer of the #LSET.
      */
     void RunOnLayers( const std::function<void( PCB_LAYER_ID )>& aFunction ) const
     {
@@ -250,8 +256,9 @@ public:
     }
 
     /**
-     * Find the first set PCB_LAYER_ID. Returns UNDEFINED_LAYER if more
-     * than one is set or UNSELECTED_LAYER if none is set.
+     * Find the first set #PCB_LAYER_ID.
+     *
+     * @return #UNDEFINED_LAYER if more than one is set or #UNSELECTED_LAYER if none is set.
      */
     PCB_LAYER_ID ExtractLayer() const;
 
@@ -260,7 +267,8 @@ public:
      * Flip the layers in this set.
      *
      * BACK and FRONT copper layers, mask, paste, solder layers are swapped
-     * internal layers are flipped only if the copper layers count is known
+     * internal layers are flipped only if the copper layers count is known.
+     *
      * @param aMask = the LSET to flip
      * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
      *  internal layers will be not flipped because the layer count is not known
@@ -282,7 +290,10 @@ public:
         {
         }
 
-        PCB_LAYER_ID operator*() const { return PCB_LAYER_ID( BASE_SET::set_bits_iterator::operator*() ); }
+        PCB_LAYER_ID operator*() const
+        {
+            return PCB_LAYER_ID( BASE_SET::set_bits_iterator::operator*() );
+        }
 
         all_set_layers_iterator& operator++()
         {
@@ -327,3 +338,4 @@ public:
 
 };
 #endif // LSET_H
+
