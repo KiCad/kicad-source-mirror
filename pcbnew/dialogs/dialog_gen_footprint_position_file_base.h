@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/radiobox.h>
+#include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
@@ -46,25 +46,24 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
 		STD_BITMAP_BUTTON* m_browseButton;
-		wxRadioBox* m_rbFormat;
-		wxRadioBox* m_radioBoxUnits;
-		wxRadioBox* m_radioBoxFilesCount;
+		wxStaticText* m_formatLabel;
+		wxChoice* m_format;
+		wxStaticText* m_unitsLabel;
+		wxChoice* m_units;
 		wxCheckBox* m_onlySMD;
 		wxCheckBox* m_excludeTH;
 		wxCheckBox* m_excludeDNP;
 		wxCheckBox* m_cbIncludeBoardEdge;
 		wxCheckBox* m_useDrillPlaceOrigin;
 		wxCheckBox* m_negateXcb;
+		wxCheckBox* m_filesCount;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onSelectFormat( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onUpdateUIUnits( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onUpdateUIFileOpt( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIOnlySMD( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) { event.Skip(); }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -46,25 +46,43 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	wxBoxSizer* bSizerMiddle;
 	bSizerMiddle = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_rbFormatChoices[] = { _("ASCII"), _("CSV"), _("Gerber X3") };
-	int m_rbFormatNChoices = sizeof( m_rbFormatChoices ) / sizeof( wxString );
-	m_rbFormat = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbFormatNChoices, m_rbFormatChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbFormat->SetSelection( 2 );
-	bSizerMiddle->Add( m_rbFormat, 1, wxALL|wxEXPAND, 5 );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 5, 5 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxString m_radioBoxUnitsChoices[] = { _("Inches"), _("Millimeters") };
-	int m_radioBoxUnitsNChoices = sizeof( m_radioBoxUnitsChoices ) / sizeof( wxString );
-	m_radioBoxUnits = new wxRadioBox( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, m_radioBoxUnitsNChoices, m_radioBoxUnitsChoices, 1, wxRA_SPECIFY_COLS );
-	m_radioBoxUnits->SetSelection( 1 );
-	bSizerMiddle->Add( m_radioBoxUnits, 1, wxALL|wxEXPAND, 5 );
+	m_formatLabel = new wxStaticText( this, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_formatLabel->Wrap( -1 );
+	fgSizer1->Add( m_formatLabel, 0, wxRIGHT, 5 );
 
-	wxString m_radioBoxFilesCountChoices[] = { _("Separate files for front, back"), _("Single file for board") };
-	int m_radioBoxFilesCountNChoices = sizeof( m_radioBoxFilesCountChoices ) / sizeof( wxString );
-	m_radioBoxFilesCount = new wxRadioBox( this, wxID_ANY, _("Files"), wxDefaultPosition, wxDefaultSize, m_radioBoxFilesCountNChoices, m_radioBoxFilesCountChoices, 1, wxRA_SPECIFY_COLS );
-	m_radioBoxFilesCount->SetSelection( 0 );
-	m_radioBoxFilesCount->SetToolTip( _("Creates 2 files: one for each board side or\nCreates only one file containing all footprints to place\n") );
+	wxString m_formatChoices[] = { _("ASCII"), _("CSV"), _("Gerber X3") };
+	int m_formatNChoices = sizeof( m_formatChoices ) / sizeof( wxString );
+	m_format = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_formatNChoices, m_formatChoices, 0 );
+	m_format->SetSelection( 0 );
+	fgSizer1->Add( m_format, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	bSizerMiddle->Add( m_radioBoxFilesCount, 1, wxALL|wxEXPAND, 5 );
+	m_unitsLabel = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsLabel->Wrap( -1 );
+	fgSizer1->Add( m_unitsLabel, 0, wxRIGHT, 5 );
+
+	wxString m_unitsChoices[] = { _("Inches"), _("Millimeters") };
+	int m_unitsNChoices = sizeof( m_unitsChoices ) / sizeof( wxString );
+	m_units = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitsNChoices, m_unitsChoices, 0 );
+	m_units->SetSelection( 0 );
+	fgSizer1->Add( m_units, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerMiddle->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+
+
+	bSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizerMiddle->Add( bSizer6, 1, wxEXPAND, 5 );
 
 
 	m_MainSizer->Add( bSizerMiddle, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -79,7 +97,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	bSizerLower->Add( m_excludeTH, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_excludeDNP = new wxCheckBox( this, wxID_ANY, _("Exclude all footprints with the Do Not Populate flag set"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLower->Add( m_excludeDNP, 0, wxALL, 5 );
+	bSizerLower->Add( m_excludeDNP, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbIncludeBoardEdge = new wxCheckBox( this, wxID_ANY, _("Include board edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_cbIncludeBoardEdge, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -90,13 +108,19 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_negateXcb = new wxCheckBox( this, wxID_ANY, _("Use negative X coordinates for footprints on bottom layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_negateXcb, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_filesCount = new wxCheckBox( this, wxID_ANY, _("Generate single file with both front and back positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLower->Add( m_filesCount, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerLower->Add( 0, 5, 0, wxEXPAND, 5 );
+
 	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_messagesPanel->SetMinSize( wxSize( 350,300 ) );
+	m_messagesPanel->SetMinSize( wxSize( 350,120 ) );
 
 	bSizerLower->Add( m_messagesPanel, 1, wxEXPAND|wxTOP, 10 );
 
 
-	m_MainSizer->Add( bSizerLower, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	m_MainSizer->Add( bSizerLower, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -115,10 +139,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
-	m_rbFormat->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onSelectFormat ), NULL, this );
-	m_radioBoxUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIUnits ), NULL, this );
-	m_radioBoxFilesCount->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIFileOpt ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onOutputDirectoryBrowseClicked ), NULL, this );
 	m_onlySMD->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIOnlySMD ), NULL, this );
 	m_excludeTH->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_excludeDNP->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
@@ -130,10 +151,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 DIALOG_GEN_FOOTPRINT_POSITION_BASE::~DIALOG_GEN_FOOTPRINT_POSITION_BASE()
 {
 	// Disconnect Events
-	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
-	m_rbFormat->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onSelectFormat ), NULL, this );
-	m_radioBoxUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIUnits ), NULL, this );
-	m_radioBoxFilesCount->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIFileOpt ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onOutputDirectoryBrowseClicked ), NULL, this );
 	m_onlySMD->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIOnlySMD ), NULL, this );
 	m_excludeTH->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_excludeDNP->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
