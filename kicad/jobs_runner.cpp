@@ -127,12 +127,6 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
     for( const JOBSET_OUTPUT& output : m_jobsFile->GetOutputs() )
         exclusions.push_back( projectPath + output.m_outputHandler->GetOutputPath() );
 
-    exclusions.push_back( projectPath + aProject->GetProjectName() + wxT( "-backups" ) );
-    exclusions.push_back( projectPath + aProject->GetProjectName() + wxT( ".kicad_prl" ) );
-    exclusions.push_back( projectPath + wxT( "fp-info-cache" ) );
-    exclusions.push_back( projectPath + wxT( "*.bak" ) );
-    exclusions.push_back( projectPath + wxT( "_autosave-*" ) );
-
     wxString errors;
     int      copyCount = 0;
     bool     success = CopyFilesOrDirectory( sourceFn.GetFullPath(), destFn.GetFullPath(),
