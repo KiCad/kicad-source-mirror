@@ -1094,6 +1094,22 @@ std::unordered_map<wxString, wxBitmap> PLUGIN_CONTENT_MANAGER::GetInstalledPacka
 }
 
 
+struct UPDATE_CANCELLER
+{
+    UPDATE_CANCELLER( std::shared_ptr<BACKGROUND_JOB>& aJob ) : m_jobToCancel( aJob ) {};
+    ~UPDATE_CANCELLER()
+    {
+        if( m_jobToCancel )
+        {
+            Pgm().GetBackgroundJobMonitor().Remove( m_jobToCancel );
+            m_jobToCancel.reset();
+        }
+    }
+
+    std::shared_ptr<BACKGROUND_JOB>& m_jobToCancel;
+};
+
+
 void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
 {
     // If the thread is already running don't create it again
@@ -1106,6 +1122,8 @@ void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
     m_updateThread = std::thread(
             [this]()
             {
+                UPDATE_CANCELLER canceller( m_updateBackgroundJob );
+
                 if( m_installed.size() == 0 )
                     return;
 
@@ -1161,9 +1179,6 @@ void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
                     if( m_updateBackgroundJob->m_reporter->IsCancelled() )
                         return;
                 }
-
-                Pgm().GetBackgroundJobMonitor().Remove( m_updateBackgroundJob );
-                m_updateBackgroundJob = nullptr;
 
                 // Update the badge on PCM button
                 m_availableUpdateCallback( availableUpdateCount );
