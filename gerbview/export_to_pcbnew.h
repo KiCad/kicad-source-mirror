@@ -89,6 +89,21 @@ private:
     void export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
 
     /**
+     * Write a non copper arc to the board file.
+     *
+     * @param aGbrItem is the Gerber item (line, arc) to export.
+     * @param aLayer is the technical layer to use.
+     */
+    void export_non_copper_arc( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
+
+    /**
+     * Write the stroke info (thickness, line type) to the board file.
+     *
+     * @param aWidth is the line thickness gerber units).
+     */
+    void export_stroke_info( double aWidth );
+
+    /**
      * Write a non-copper polygon to the board file.
      *
      * @param aLayer is the technical layer to use.

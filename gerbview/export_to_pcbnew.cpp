@@ -37,6 +37,7 @@
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
 #include "excellon_image.h"
+#include <wx/log.h>
 
 // Imported function
 extern const wxString GetPCBDefaultLayerName( int aLayerNumber );
@@ -75,7 +76,6 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
     writePcbHeader( aLayerLookUpTable );
 
     // create an image of gerber data
-    const int pcbCopperLayerMax = 31;
     GERBER_FILE_IMAGE_LIST* images = m_gerbview_frame->GetGerberLayout()->GetImagesList();
 
     // First collect all the holes.  We'll use these to generate pads, vias, etc.
@@ -84,6 +84,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
         int pcb_layer_number = aLayerLookUpTable[layer];
         EXCELLON_IMAGE* excellon = dynamic_cast<EXCELLON_IMAGE*>( images->GetGbrImage( layer ) );
         GERBER_FILE_IMAGE* gerb  = dynamic_cast<GERBER_FILE_IMAGE*>( images->GetGbrImage( layer ) );
+
         if( excellon )
         {
             for( GERBER_DRAW_ITEM* gerb_item : excellon->GetItems() )
@@ -114,7 +115,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
         if( !IsPcbLayer( pcb_layer_number ) )
             continue;
 
-        if( pcb_layer_number <= pcbCopperLayerMax ) // copper layer
+        if( IsCopperLayer( pcb_layer_number ) )
             continue;
 
         for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
@@ -131,7 +132,10 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
 
         int pcb_layer_number = aLayerLookUpTable[layer];
 
-        if( pcb_layer_number < 0 || pcb_layer_number > pcbCopperLayerMax )
+        if( !IsCopperLayer( pcb_layer_number ) )
+            continue;
+
+        if( pcb_layer_number > m_pcbCopperLayersCount*2 )
             continue;
 
         for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
@@ -192,45 +196,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
         break;
 
     case GBR_ARC:
-    {
-        double a = atan2( (double) ( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
-                          (double) ( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
-        double b = atan2( (double) ( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
-                          (double) ( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
-
-        double angle = RAD2DEG(b - a);
-        seg_start = aGbrItem->m_ArcCentre;
-
-        // Ensure arc orientation is CCW
-        if( angle < 0 )
-            angle += 360.0;
-
-        // Reverse Y axis:
-        seg_start.y = -seg_start.y;
-        seg_end.y = -seg_end.y;
-
-        if( angle == 360.0 ||  angle == 0 )
-        {
-            fprintf( m_fp, "(gr_circle (center %s %s) (end %s %s) (layer %s) (width %s))\n",
-                     FormatDouble2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
-                     FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
-                     FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
-                     FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                     TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
-                     FormatDouble2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str() );
-        }
-        else
-        {
-            fprintf( m_fp, "(gr_arc (start %s %s) (end %s %s) (angle %s) (layer %s) (width %s))\n",
-                     FormatDouble2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
-                     FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
-                     FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
-                     FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                     FormatDouble2Str( angle ).c_str(),
-                     TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
-                     FormatDouble2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str() );
-        }
-    }
+        export_non_copper_arc( aGbrItem, aLayer );
         break;
 
     case GBR_CIRCLE:
@@ -238,13 +204,14 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
         seg_start.y = -seg_start.y;
         seg_end.y = -seg_end.y;
 
-        fprintf( m_fp, "(gr_circle (start %s %s) (end %s %s) (layer %s) (width %s))\n",
+        fprintf( m_fp, "\t(gr_circle (start %s %s) (end %s %s) (layer %s)\n",
                  FormatDouble2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
-                 FormatDouble2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str() );
+                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+        export_stroke_info( aGbrItem->m_Size.x );
+        fprintf( m_fp, "\t)\n" );
         break;
 
     case GBR_SEGMENT:
@@ -252,14 +219,68 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
         seg_start.y = -seg_start.y;
         seg_end.y = -seg_end.y;
 
-        fprintf( m_fp, "(gr_line (start %s %s) (end %s %s) (layer %s) (width %s))\n",
+        fprintf( m_fp, "\t(gr_line\n\t\t(start %s %s) (end %s %s) (layer %s)\n",
                  FormatDouble2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ),
-                 FormatDouble2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str() );
+                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+        export_stroke_info( aGbrItem->m_Size.x );
+        fprintf( m_fp, "\t)\n" );
         break;
+    }
+}
+
+
+void GBR_TO_PCB_EXPORTER::export_non_copper_arc( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
+{
+    double a = atan2( (double) ( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
+                      (double) ( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
+    double b = atan2( (double) ( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
+                      (double) ( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
+
+    VECTOR2I arc_center = aGbrItem->m_ArcCentre;
+    VECTOR2I seg_start = aGbrItem->m_Start;
+    VECTOR2I seg_end = aGbrItem->m_End;
+
+    if( a > b )
+        b += 2 * M_PI;
+
+    if( seg_start == seg_end )
+    {
+        // Reverse Y axis:
+        arc_center.y = -arc_center.y;
+        seg_end.y = -seg_end.y;
+
+        fprintf( m_fp, "\t(gr_circle\n\t\t(center %s %s) (end %s %s) (layer %s)\n",
+                 FormatDouble2Str( MapToPcbUnits( arc_center.x ) ).c_str(),
+                 FormatDouble2Str( MapToPcbUnits( arc_center.y ) ).c_str(),
+                 FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
+                 FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
+                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+        export_stroke_info( aGbrItem->m_Size.x );
+        fprintf( m_fp, "\t)\n" );
+    }
+    else
+    {
+        VECTOR2I seg_middle = GetRotated( seg_start, arc_center,
+                                          -EDA_ANGLE( (b-a)/2, RADIANS_T ));
+
+        // Reverse Y axis:
+        seg_middle.y = -seg_middle.y;
+        seg_start.y = -seg_start.y;
+        seg_end.y = -seg_end.y;
+
+        fprintf( m_fp, "\t(gr_arc\n\t\t(start %s %s) (mid %s %s) (end %s %s) (layer %s)\n",
+                 FormatDouble2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
+                 FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
+                 FormatDouble2Str( MapToPcbUnits( seg_middle.x ) ).c_str(),
+                 FormatDouble2Str( MapToPcbUnits( seg_middle.y ) ).c_str(),
+                 FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
+                 FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
+                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+        export_stroke_info( aGbrItem->m_Size.x );
+        fprintf( m_fp, "\t)\n" );
     }
 }
 
@@ -364,13 +385,20 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( const GERBER_DRAW_ITEM* aG
 void GBR_TO_PCB_EXPORTER::writeCopperLineItem( const VECTOR2I& aStart, const VECTOR2I& aEnd,
                                                int aWidth, int aLayer )
 {
-  fprintf( m_fp, "(segment (start %s %s) (end %s %s) (width %s) (layer %s) (net 0))\n",
+  fprintf( m_fp, "\t(segment (start %s %s) (end %s %s) (width %s) (layer %s) (net 0))\n",
            FormatDouble2Str( MapToPcbUnits(aStart.x) ).c_str(),
            FormatDouble2Str( MapToPcbUnits(aStart.y) ).c_str(),
            FormatDouble2Str( MapToPcbUnits(aEnd.x) ).c_str(),
            FormatDouble2Str( MapToPcbUnits(aEnd.y) ).c_str(),
            FormatDouble2Str( MapToPcbUnits( aWidth ) ).c_str(),
            TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+}
+
+
+void GBR_TO_PCB_EXPORTER::export_stroke_info( double aWidth )
+{
+    fprintf( m_fp, "\t\t(stroke (width %s) (type solid))\n",
+                FormatDouble2Str( MapToPcbUnits( aWidth ) ).c_str() );
 }
 
 
@@ -381,53 +409,36 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGb
     double  b = atan2( (double) ( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
                        (double) ( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
 
-    VECTOR2I start = aGbrItem->m_Start;
-    VECTOR2I end = aGbrItem->m_End;
-
-    /* Because Pcbnew does not know arcs in tracks,
-     * approximate arc by segments (SEG_COUNT__CIRCLE segment per 360 deg)
-     * The arc is drawn anticlockwise from the start point to the end point.
-     */
-    #define SEG_COUNT_CIRCLE    16
-    #define DELTA_ANGLE         2 * M_PI / SEG_COUNT_CIRCLE
-
-    // calculate the number of segments from a to b.
-    // we want CNT_PER_360 segments fo a circle
     if( a > b )
         b += 2 * M_PI;
 
-    VECTOR2I curr_start = start;
-    VECTOR2I seg_start, seg_end;
+    VECTOR2I arc_center = aGbrItem->m_ArcCentre;
+    VECTOR2I seg_end = aGbrItem->m_End;
+    VECTOR2I seg_start = aGbrItem->m_Start;
 
-    int     ii = 1;
+    VECTOR2I seg_middle = GetRotated( seg_start, arc_center,
+                                      -EDA_ANGLE( (b-a)/2, RADIANS_T ));
 
-    for( double rot = a; rot < (b - DELTA_ANGLE); rot += DELTA_ANGLE, ii++ )
-    {
-        seg_start = curr_start;
-        VECTOR2I curr_end = start;
-        RotatePoint( curr_end, aGbrItem->m_ArcCentre, -EDA_ANGLE( DELTA_ANGLE, RADIANS_T ) * ii );
-        seg_end = curr_end;
+    // Reverse Y axis:
+    seg_end.y = -seg_end.y;
+    seg_start.y = -seg_start.y;
+    seg_middle.y = -seg_middle.y;
 
-        // Reverse Y axis:
-        seg_start.y = -seg_start.y;
-        seg_end.y = -seg_end.y;
-        writeCopperLineItem( seg_start, seg_end, aGbrItem->m_Size.x, aLayer );
-        curr_start = curr_end;
-    }
+    fprintf( m_fp, "\t(arc\n\t\t(start %s %s) (mid %s %s) (end %s %s) (layer %s)\n",
+             FormatDouble2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
+             FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
+             FormatDouble2Str( MapToPcbUnits( seg_middle.x ) ).c_str(),
+             FormatDouble2Str( MapToPcbUnits( seg_middle.y ) ).c_str(),
+             FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
+             FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
+             TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
 
-    if( end != curr_start )
-    {
-        seg_start   = curr_start;
-        seg_end     = end;
-
-        // Reverse Y axis:
-        seg_start.y = -seg_start.y;
-        seg_end.y = -seg_end.y;
-        writeCopperLineItem( seg_start, seg_end, aGbrItem->m_Size.x, aLayer );
-    }
+    fprintf( m_fp, "\t\t(width %s) (net 0 )\n",
+             FormatDouble2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str() );
+    fprintf( m_fp, "\t)\n" );
 }
 
-#include <wx/log.h>
+
 void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     static D_CODE  flashed_item_D_CODE( 0 );
@@ -486,45 +497,58 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
 void GBR_TO_PCB_EXPORTER::writePcbFilledCircle( const VECTOR2I& aCenterPosition, int aRadius,
                                                 int aLayer )
 {
-
-    fprintf( m_fp, "(gr_circle (center %s %s) (end %s %s)",
+    fprintf( m_fp, "\t(gr_circle\n\t\t(center %s %s) (end %s %s)\n",
              FormatDouble2Str( MapToPcbUnits( aCenterPosition.x ) ).c_str(),
              FormatDouble2Str( MapToPcbUnits( aCenterPosition.y ) ).c_str(),
              FormatDouble2Str( MapToPcbUnits( aCenterPosition.x + aRadius ) ).c_str(),
              FormatDouble2Str( MapToPcbUnits( aCenterPosition.y ) ).c_str() );
 
-
-    fprintf( m_fp, "(layer %s) (width 0) (fill solid) )\n",
+    export_stroke_info( 0 );
+    fprintf( m_fp, "\t\t(fill yes) (layer %s)",
              TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+    fprintf( m_fp, "\n\t)\n" );
 }
 
 
 void GBR_TO_PCB_EXPORTER::writePcbHeader( const int* aLayerLookUpTable )
 {
-    fprintf( m_fp, "(kicad_pcb (version 4) (generator \"gerbview\") (generator_version \"%s\")\n\n", GetMajorMinorVersion().c_str().AsChar() );
+    // Note: the .kicad_pcb version used here is after layers_id changes
+    fprintf( m_fp, "(kicad_pcb (version 20240928)\n" );
+    fprintf( m_fp, "\t(generator \"gerbview\")\n\t(generator_version \"%s\")\n\n",
+             GetMajorMinorVersion().c_str().AsChar() );
 
     // Write layers section
-    fprintf( m_fp, "  (layers \n" );
+    fprintf( m_fp, "\t(layers \n" );
 
     for( int ii = 0; ii < m_pcbCopperLayersCount; ii++ )
     {
-        int id = ii;
+        // copper layer IDs are even numbers: F_Cu = 0, B_Cu = 2, Inner = 4,6,8..
+        int ly_id = ii * 2;
+
+        if( ii != 0 )
+            ly_id += B_Cu;
 
         if( ii == m_pcbCopperLayersCount-1)
-            id = B_Cu;
+            ly_id = B_Cu;
 
-        fprintf( m_fp, "    (%d %s signal)\n", id, TO_UTF8( GetPCBDefaultLayerName( id ) ) );
+        fprintf( m_fp, "\t\t(%d %s signal)\n",
+                 ly_id, TO_UTF8( GetPCBDefaultLayerName( ly_id ) ) );
     }
 
-    for( int ii = B_Adhes; ii < PCB_LAYER_ID_COUNT; ii++ )
+    // Non copper layer IDs are odd numbers (starting at F_Mask = 1)
+    // All usuel non copper layers (but not all possible layers) are enabled
+    for( int ii = 1; ii < PCB_LAYER_ID_COUNT; ii += 2 )
     {
-        if( GetPCBDefaultLayerName( ii ).IsEmpty() )    // Layer not available for export
+        // GetPCBDefaultLayerName() return empty name for layers not available
+        // for export (because they have a specific purpose)
+        if( GetPCBDefaultLayerName( ii ).IsEmpty() )
             continue;
 
-        fprintf( m_fp, "    (%d %s user)\n", ii, TO_UTF8( GetPCBDefaultLayerName( ii ) ) );
+        fprintf( m_fp, "\t\t(%d %s user)\n",
+                ii, TO_UTF8( GetPCBDefaultLayerName( ii ) ) );
     }
 
-    fprintf( m_fp, "  )\n\n" );
+    fprintf( m_fp, "\t)\n\n" );
 }
 
 
@@ -539,7 +563,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLa
     // (because it comes from a gerber file or is built from a aperture )
     const SHAPE_LINE_CHAIN& poly = aPolys.COutline( 0 );
 
-    fprintf( m_fp, "(gr_poly (pts " );
+    fprintf( m_fp, "\t(gr_poly\n\t\t(pts\n\t\t\t" );
 
     #define MAX_COORD_CNT 4
     int jj = MAX_COORD_CNT;
@@ -554,7 +578,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLa
         if( --jj == 0 )
         {
             jj = MAX_COORD_CNT;
-            fprintf( m_fp, "\n" );
+            fprintf( m_fp, "\n\t\t\t" );
         }
 
         fprintf( m_fp, " (xy %s %s)",
@@ -564,10 +588,10 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLa
 
     fprintf( m_fp, ")" );
 
-    if( jj != MAX_COORD_CNT )
-        fprintf( m_fp, "\n" );
-
-    fprintf( m_fp, "(layer %s) (width 0) )\n", TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+    fprintf( m_fp, "\n" );
+    export_stroke_info( 0 );
+    fprintf( m_fp, "\t\t(fill yes) (layer %s)", TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+    fprintf( m_fp, "\n\t)\n" );
 }
 
 
@@ -579,7 +603,7 @@ void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, in
     if( polys.OutlineCount() == 0 )
         return;
 
-    fprintf( m_fp, "(zone (net 0) (net_name \"\") (layer %s) (tstamp 0000000) (hatch edge 0.508)\n",
+    fprintf( m_fp, "\t(zone (net 0) (net_name \"\") (layer %s) (tstamp 0000000) (hatch edge 0.508)\n",
              TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
 
     fprintf( m_fp, "  (connect_pads (clearance 0.0))\n" );
