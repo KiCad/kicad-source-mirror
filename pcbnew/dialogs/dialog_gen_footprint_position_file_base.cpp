@@ -56,21 +56,21 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_formatLabel->Wrap( -1 );
 	fgSizer1->Add( m_formatLabel, 0, wxRIGHT, 5 );
 
-	wxString m_formatChoices[] = { _("ASCII"), _("CSV"), _("Gerber X3") };
-	int m_formatNChoices = sizeof( m_formatChoices ) / sizeof( wxString );
-	m_format = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_formatNChoices, m_formatChoices, 0 );
-	m_format->SetSelection( 0 );
-	fgSizer1->Add( m_format, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	wxString m_formatCtrlChoices[] = { _("ASCII"), _("CSV"), _("Gerber X3") };
+	int m_formatCtrlNChoices = sizeof( m_formatCtrlChoices ) / sizeof( wxString );
+	m_formatCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_formatCtrlNChoices, m_formatCtrlChoices, 0 );
+	m_formatCtrl->SetSelection( 0 );
+	fgSizer1->Add( m_formatCtrl, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_unitsLabel = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsLabel->Wrap( -1 );
 	fgSizer1->Add( m_unitsLabel, 0, wxRIGHT, 5 );
 
-	wxString m_unitsChoices[] = { _("Inches"), _("Millimeters") };
-	int m_unitsNChoices = sizeof( m_unitsChoices ) / sizeof( wxString );
-	m_units = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitsNChoices, m_unitsChoices, 0 );
-	m_units->SetSelection( 0 );
-	fgSizer1->Add( m_units, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	wxString m_unitsCtrlChoices[] = { _("Inches"), _("Millimeters") };
+	int m_unitsCtrlNChoices = sizeof( m_unitsCtrlChoices ) / sizeof( wxString );
+	m_unitsCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitsCtrlNChoices, m_unitsCtrlChoices, 0 );
+	m_unitsCtrl->SetSelection( 0 );
+	fgSizer1->Add( m_unitsCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerMiddle->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
@@ -108,8 +108,8 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_negateXcb = new wxCheckBox( this, wxID_ANY, _("Use negative X coordinates for footprints on bottom layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_negateXcb, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_filesCount = new wxCheckBox( this, wxID_ANY, _("Generate single file with both front and back positions"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLower->Add( m_filesCount, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_singleFile = new wxCheckBox( this, wxID_ANY, _("Generate single file with both front and back positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLower->Add( m_singleFile, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerLower->Add( 0, 5, 0, wxEXPAND, 5 );
@@ -140,23 +140,27 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 
 	// Connect Events
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onOutputDirectoryBrowseClicked ), NULL, this );
+	m_formatCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIFileOpt ), NULL, this );
+	m_unitsCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIUnits ), NULL, this );
 	m_onlySMD->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIOnlySMD ), NULL, this );
 	m_excludeTH->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_excludeDNP->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_cbIncludeBoardEdge->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIincludeBoardEdge ), NULL, this );
 	m_negateXcb->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUInegXcoord ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::OnGenerate ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onGenerate ), NULL, this );
 }
 
 DIALOG_GEN_FOOTPRINT_POSITION_BASE::~DIALOG_GEN_FOOTPRINT_POSITION_BASE()
 {
 	// Disconnect Events
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onOutputDirectoryBrowseClicked ), NULL, this );
+	m_formatCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIFileOpt ), NULL, this );
+	m_unitsCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIUnits ), NULL, this );
 	m_onlySMD->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIOnlySMD ), NULL, this );
 	m_excludeTH->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_excludeDNP->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_cbIncludeBoardEdge->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIincludeBoardEdge ), NULL, this );
 	m_negateXcb->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUInegXcoord ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::OnGenerate ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onGenerate ), NULL, this );
 
 }

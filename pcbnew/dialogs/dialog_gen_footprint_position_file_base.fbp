@@ -416,7 +416,7 @@
                     <property name="minimize_button">0</property>
                     <property name="minimum_size"></property>
                     <property name="moveable">1</property>
-                    <property name="name">m_format</property>
+                    <property name="name">m_formatCtrl</property>
                     <property name="pane_border">1</property>
                     <property name="pane_position"></property>
                     <property name="pane_size"></property>
@@ -438,6 +438,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
+                    <event name="OnUpdateUI">onUpdateUIFileOpt</event>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
@@ -543,7 +544,7 @@
                     <property name="minimize_button">0</property>
                     <property name="minimum_size"></property>
                     <property name="moveable">1</property>
-                    <property name="name">m_units</property>
+                    <property name="name">m_unitsCtrl</property>
                     <property name="pane_border">1</property>
                     <property name="pane_position"></property>
                     <property name="pane_size"></property>
@@ -565,6 +566,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
+                    <event name="OnUpdateUI">onUpdateUIUnits</event>
                   </object>
                 </object>
               </object>
@@ -1038,7 +1040,7 @@
                 <property name="minimize_button">0</property>
                 <property name="minimum_size"></property>
                 <property name="moveable">1</property>
-                <property name="name">m_filesCount</property>
+                <property name="name">m_singleFile</property>
                 <property name="pane_border">1</property>
                 <property name="pane_position"></property>
                 <property name="pane_size"></property>
@@ -1147,7 +1149,7 @@
             <property name="minimum_size"></property>
             <property name="name">m_sdbSizer</property>
             <property name="permission">protected</property>
-            <event name="OnOKButtonClick">OnGenerate</event>
+            <event name="OnOKButtonClick">onGenerate</event>
           </object>
         </object>
       </object>

@@ -96,9 +96,9 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[LAST_PATH_POS_FILES] );
 
         // Update Options
-        m_radioBoxUnits->SetSelection( cfg->m_PlaceFile.units );
-        m_radioBoxFilesCount->SetSelection( cfg->m_PlaceFile.file_options );
-        m_rbFormat->SetSelection( cfg->m_PlaceFile.file_format );
+        m_unitsCtrl->SetSelection( cfg->m_PlaceFile.units );
+        m_singleFile->SetValue( cfg->m_PlaceFile.file_options == 1 );
+        m_formatCtrl->SetSelection( cfg->m_PlaceFile.file_format );
         m_cbIncludeBoardEdge->SetValue( cfg->m_PlaceFile.include_board_edge );
         m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
         m_onlySMD->SetValue( cfg->m_PlaceFile.only_SMD );
@@ -117,11 +117,10 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCHES ? EDA_UNITS::INCHES
 																	  : EDA_UNITS::MILLIMETRES;
 
-
         m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
 
-        m_radioBoxUnits->SetSelection( static_cast<int>( m_job->m_units ) );
-        m_rbFormat->SetSelection( static_cast<int>( m_job->m_format ) );
+        m_unitsCtrl->SetSelection( static_cast<int>( m_job->m_units ) );
+        m_formatCtrl->SetSelection( static_cast<int>( m_job->m_format ) );
         m_cbIncludeBoardEdge->SetValue( m_job->m_gerberBoardEdge );
 		m_useDrillPlaceOrigin->SetValue( m_job->m_useDrillPlaceFileOrigin );
         m_onlySMD->SetValue( m_job->m_smdOnly );
@@ -142,19 +141,20 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIUnits( wxUpdateUIEvent& event )
 {
-    m_radioBoxUnits->Enable( m_rbFormat->GetSelection() != 2 );
+    m_unitsLabel->Enable( m_formatCtrl->GetSelection() != 2 );
+    m_unitsCtrl->Enable( m_formatCtrl->GetSelection() != 2 );
 }
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIFileOpt( wxUpdateUIEvent& event )
 {
-    m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
+    m_singleFile->Enable( m_formatCtrl->GetSelection() != 2 );
 }
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIOnlySMD( wxUpdateUIEvent& event )
 {
-    if( m_rbFormat->GetSelection() == 2 )
+    if( m_formatCtrl->GetSelection() == 2 )
     {
         m_onlySMD->SetValue( false );
         m_onlySMD->Enable( false );
@@ -168,7 +168,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIOnlySMD( wxUpdateUIEvent& event )
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUInegXcoord( wxUpdateUIEvent& event )
 {
-    if( m_rbFormat->GetSelection() == 2 )
+    if( m_formatCtrl->GetSelection() == 2 )
     {
         m_negateXcb->SetValue( false );
         m_negateXcb->Enable( false );
@@ -181,7 +181,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUInegXcoord( wxUpdateUIEvent& event 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIExcludeTH( wxUpdateUIEvent& event )
 {
-    if( m_rbFormat->GetSelection() == 2 )
+    if( m_formatCtrl->GetSelection() == 2 )
     {
         m_excludeTH->SetValue( false );
         m_excludeTH->Enable( false );
@@ -195,13 +195,13 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIExcludeTH( wxUpdateUIEvent& event 
 
 bool DIALOG_GEN_FOOTPRINT_POSITION::UnitsMM()
 {
-    return m_radioBoxUnits->GetSelection() == 1;
+    return m_unitsCtrl->GetSelection() == 1;
 }
 
 
 bool DIALOG_GEN_FOOTPRINT_POSITION::OneFileOnly()
 {
-    return m_radioBoxFilesCount->GetSelection() == 1;
+    return m_singleFile->GetValue();
 }
 
 
@@ -225,11 +225,11 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::ExcludeDNP()
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event )
 {
-    m_cbIncludeBoardEdge->Enable( m_rbFormat->GetSelection() == 2 );
+    m_cbIncludeBoardEdge->Enable( m_formatCtrl->GetSelection() == 2 );
 }
 
 
-void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+void DIALOG_GEN_FOOTPRINT_POSITION::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
     wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
@@ -261,11 +261,11 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
 }
 
 
-void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
+void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
 {
     if( !m_job )
     {
-        m_units  = m_radioBoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
+        m_units  = m_unitsCtrl->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
         PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
@@ -276,15 +276,15 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
         m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
         cfg->m_PlaceFile.output_directory   = dirStr;
         cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCHES ? 0 : 1;
-        cfg->m_PlaceFile.file_options       = m_radioBoxFilesCount->GetSelection();
-        cfg->m_PlaceFile.file_format        = m_rbFormat->GetSelection();
+        cfg->m_PlaceFile.file_options       = m_singleFile->GetValue() ? 1 : 0;
+        cfg->m_PlaceFile.file_format        = m_formatCtrl->GetSelection();
         cfg->m_PlaceFile.include_board_edge = m_cbIncludeBoardEdge->GetValue();
         cfg->m_PlaceFile.exclude_TH         = m_excludeTH->GetValue();
         cfg->m_PlaceFile.only_SMD           = m_onlySMD->GetValue();
         cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
         cfg->m_PlaceFile.negate_xcoord      = m_negateXcb->GetValue();
 
-        if( m_rbFormat->GetSelection() == 2 )
+        if( m_formatCtrl->GetSelection() == 2 )
             CreateGerberFiles();
         else
             CreateAsciiFiles();
@@ -292,10 +292,9 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     else
     {
         m_job->SetOutputPath( m_outputDirectoryName->GetValue() );
-        m_job->m_units = m_radioBoxUnits->GetSelection() == 0
-                                 ? JOB_EXPORT_PCB_POS::UNITS::INCHES
-                                 : JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS;
-        m_job->m_format = static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_rbFormat->GetSelection() );
+        m_job->m_units = m_unitsCtrl->GetSelection() == 0 ? JOB_EXPORT_PCB_POS::UNITS::INCHES
+                                                          : JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS;
+        m_job->m_format = static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_formatCtrl->GetSelection() );
         m_job->m_gerberBoardEdge = m_cbIncludeBoardEdge->GetValue();
         m_job->m_excludeFootprintsWithTh = m_excludeTH->GetValue();
         m_job->m_smdOnly = m_onlySMD->GetValue();
@@ -321,7 +320,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
             [&]( wxString* token ) -> bool
             {
                 // Handles board->GetTitleBlock() *and* board->GetProject()
-        return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
+                return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
             };
 
     wxString path = m_editFrame->GetPcbNewSettings()->m_PlaceFile.output_directory;
@@ -401,7 +400,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     BOARD*     brd = m_editFrame->GetBoard();
     wxString   msg;
     bool       singleFile = OneFileOnly();
-    bool       useCSVfmt = m_rbFormat->GetSelection() == 1;
+    bool       useCSVfmt = m_formatCtrl->GetSelection() == 1;
     bool       useAuxOrigin = m_useDrillPlaceOrigin->GetValue();
     int        fullcount = 0;
     int        topSide = true;

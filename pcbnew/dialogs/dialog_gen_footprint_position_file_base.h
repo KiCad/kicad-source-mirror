@@ -47,16 +47,16 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_outputDirectoryName;
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_formatLabel;
-		wxChoice* m_format;
+		wxChoice* m_formatCtrl;
 		wxStaticText* m_unitsLabel;
-		wxChoice* m_units;
+		wxChoice* m_unitsCtrl;
 		wxCheckBox* m_onlySMD;
 		wxCheckBox* m_excludeTH;
 		wxCheckBox* m_excludeDNP;
 		wxCheckBox* m_cbIncludeBoardEdge;
 		wxCheckBox* m_useDrillPlaceOrigin;
 		wxCheckBox* m_negateXcb;
-		wxCheckBox* m_filesCount;
+		wxCheckBox* m_singleFile;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -64,11 +64,13 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateUIFileOpt( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onUpdateUIUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIOnlySMD( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUInegXcoord( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnGenerate( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onGenerate( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

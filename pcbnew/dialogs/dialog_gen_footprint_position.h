@@ -42,8 +42,8 @@ public:
 
 private:
     void initDialog();
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
-    void OnGenerate( wxCommandEvent& event ) override;
+    void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+    void onGenerate( wxCommandEvent& event ) override;
 
     void onUpdateUIUnits( wxUpdateUIEvent& event ) override;
 
