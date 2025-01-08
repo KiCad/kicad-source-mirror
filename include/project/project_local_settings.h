@@ -72,6 +72,11 @@ public:
 
     void ClearFileState();
 
+    /**
+     * @return true if the local settings needed to be migrated, and shouldn't be auto-saved
+     */
+    bool WasMigrated() const { return m_wasMigrated; }
+
 protected:
     wxString getFileExt() const override
     {
@@ -152,6 +157,8 @@ public:
 private:
     /// A link to the owning project
     PROJECT* m_project;
+
+    bool m_wasMigrated;
 };
 
 #endif

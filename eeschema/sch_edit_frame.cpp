@@ -103,6 +103,7 @@
 #include <widgets/panel_sch_selection_filter.h>
 #include <widgets/wx_aui_utils.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+#include <project/project_local_settings.h>
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -1097,7 +1098,8 @@ void SCH_EDIT_FRAME::doCloseWindow()
     }
 
     // Make sure local settings are persisted
-    SaveProjectLocalSettings();
+    if( !Prj().GetLocalSettings().WasMigrated() )
+        SaveProjectLocalSettings();
 
     // Shutdown all running tools
     if( m_toolManager )

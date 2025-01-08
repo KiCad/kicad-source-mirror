@@ -45,7 +45,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_ShapeOpacity( 1.0 ),
         m_ImageOpacity( 0.6 ),
         m_PcbSelectionFilter(),
-        m_project( aProject )
+        m_project( aProject ),
+        m_wasMigrated( false )
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
@@ -356,6 +357,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     {
                         At( "board" ).erase( "visible_items" );
                     }
+
+                    m_wasMigrated = true;
                 }
 
                 return true;
@@ -414,6 +417,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     }
 
                     At( "board" )["visible_items"] = visible;
+                    m_wasMigrated = true;
                 }
 
                 return true;
@@ -432,6 +436,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                         At( ptr ).push_back( LAYER_SHAPES - GAL_LAYER_ID_START );
                     else
                         At( "board" ).erase( "visible_items" );
+
+                    m_wasMigrated = true;
                 }
 
                 return true;
@@ -461,6 +467,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     }
 
                     At( ptr ) = newLayers;
+                    m_wasMigrated = true;
                 }
 
                 return true;

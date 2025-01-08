@@ -1269,7 +1269,10 @@ void PCB_EDIT_FRAME::doCloseWindow()
     }
 
     // Make sure local settings are persisted
-    SaveProjectLocalSettings();
+    if( !Prj().GetLocalSettings().WasMigrated() )
+        SaveProjectLocalSettings();
+    else
+        wxLogTrace( traceAutoSave, wxT( "Skipping auto-save of migrated local settings" ) );
 
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
