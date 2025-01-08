@@ -44,7 +44,7 @@ using google::protobuf::Empty;
 API_HANDLER_COMMON::API_HANDLER_COMMON() :
         API_HANDLER()
 {
-    registerHandler<GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
+    registerHandler<commands::GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
     registerHandler<GetKiCadBinaryPath, PathResponse>(
             &API_HANDLER_COMMON::handleGetKiCadBinaryPath );
     registerHandler<GetNetClasses, NetClassesResponse>( &API_HANDLER_COMMON::handleGetNetClasses );
@@ -66,7 +66,7 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
 
 
 HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion(
-        const HANDLER_CONTEXT<GetVersion>& )
+        const HANDLER_CONTEXT<commands::GetVersion>& )
 {
     GetVersionResponse reply;
 
