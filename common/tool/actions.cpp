@@ -265,8 +265,9 @@ TOOL_ACTION ACTIONS::unselectAll( TOOL_ACTION_ARGS()
 TOOL_ACTION ACTIONS::pasteSpecial( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.pasteSpecial" )
         .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'V' )
         .FriendlyName( _( "Paste Special..." ) )
-        .Tooltip( _( "Paste item(s) from clipboard with annotation options" ) )
+        .Tooltip( _( "Paste item(s) from clipboard with options" ) )
         .Icon( BITMAPS::paste_special ) );
 
 TOOL_ACTION ACTIONS::duplicate( TOOL_ACTION_ARGS()
