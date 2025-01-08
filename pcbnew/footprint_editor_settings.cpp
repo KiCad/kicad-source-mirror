@@ -37,7 +37,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int fpEditSchemaVersion = 3;
+const int fpEditSchemaVersion = 4;
 
 
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
@@ -373,6 +373,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                        } );
 
     registerMigration( 2, 3, std::bind( &FOOTPRINT_EDITOR_SETTINGS::migrateSchema2To3, this ) );
+    registerMigration( 3, 4, std::bind( &FOOTPRINT_EDITOR_SETTINGS::migrateSchema3To4, this ) );
 }
 
 
@@ -543,6 +544,25 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema2To3()
 
     for( nlohmann::json& entry : presets )
         PARAM_LAYER_PRESET::MigrateToV9Layers( entry );
+
+    return true;
+}
+
+
+/**
+ * Schema version 4: move layer presets to use named render layers
+ */
+bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema3To4()
+{
+    auto p( "/pcb_display/layer_presets"_json_pointer );
+
+    if( !m_internals->contains( p ) || !m_internals->at( p ).is_array() )
+        return true;
+
+    nlohmann::json& presets = m_internals->at( p );
+
+    for( nlohmann::json& entry : presets )
+        PARAM_LAYER_PRESET::MigrateToNamedRenderLayers( entry );
 
     return true;
 }

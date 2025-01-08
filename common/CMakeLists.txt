@@ -105,6 +105,7 @@ set( KICOMMON_SRCS
     settings/grid_settings.cpp
     settings/json_settings.cpp
     settings/kicad_settings.cpp
+    settings/layer_settings_utils.cpp
     settings/nested_settings.cpp
     settings/parameters.cpp
     settings/settings_manager.cpp

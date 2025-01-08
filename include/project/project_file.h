@@ -187,6 +187,7 @@ public:
 
 private:
     bool migrateSchema1To2();
+    bool migrateSchema2To3();
 
     /// An list of schematic sheets in this project
     std::vector<FILE_INFO_PAIR> m_sheets;

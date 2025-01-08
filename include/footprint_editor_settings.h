@@ -99,6 +99,8 @@ private:
     bool migrateSchema0to1();
 
     bool migrateSchema2To3();
+
+    bool migrateSchema3To4();
 };
 
 

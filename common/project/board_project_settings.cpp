@@ -22,6 +22,7 @@
 #include <lset.h>
 #include <lseq.h>
 #include <project/board_project_settings.h>
+#include <settings/layer_settings_utils.h>
 
 using namespace std::placeholders;
 
@@ -59,7 +60,10 @@ nlohmann::json PARAM_LAYER_PRESET::presetsToJson()
         nlohmann::json renderLayers = nlohmann::json::array();
 
         for( GAL_LAYER_ID layer : preset.renderLayers.Seq() )
-            renderLayers.push_back( static_cast<int>( layer ) );
+        {
+            if( std::optional<VISIBILITY_LAYER> vl = VisibilityLayerFromRenderLayer( layer ) )
+                renderLayers.push_back( VisibilityLayerToString( *vl ) );
+        }
 
         js["renderLayers"] = renderLayers;
 
@@ -115,13 +119,12 @@ void PARAM_LAYER_PRESET::jsonToPresets( const nlohmann::json& aJson )
 
                 for( const nlohmann::json& layer : preset.at( "renderLayers" ) )
                 {
-                    if( layer.is_number_integer() )
+                    if( layer.is_string() )
                     {
-                        int layerNum = layer.get<int>();
+                        std::string vs = layer.get<std::string>();
 
-                        if( layerNum >= GAL_LAYER_ID_START
-                            && layerNum < GAL_LAYER_ID_END )
-                            p.renderLayers.set( static_cast<GAL_LAYER_ID>( layerNum ) );
+                        if( std::optional<GAL_LAYER_ID> rl = RenderLayerFromVisbilityString( vs ) )
+                            p.renderLayers.set( *rl );
                     }
                 }
             }
@@ -146,6 +149,31 @@ void PARAM_LAYER_PRESET::MigrateToV9Layers( nlohmann::json& aJson )
     }
 
     aJson["layers"] = newLayers;
+
+    if( aJson.contains( "activeLayer" ) )
+        aJson["activeLayer"] = BoardLayerFromLegacyId( aJson.at( "activeLayer" ).get<int>() );
+}
+
+
+void PARAM_LAYER_PRESET::MigrateToNamedRenderLayers( nlohmann::json& aJson )
+{
+    static constexpr int V8_GAL_LAYER_ID_START = 125;
+
+    if( !aJson.is_object() || !aJson.contains( "renderLayers" ) )
+        return;
+
+    std::vector<std::string> newLayers;
+
+    for( const nlohmann::json& layer : aJson.at( "renderLayers" ) )
+    {
+        wxCHECK2( layer.is_number_integer(), continue );
+        GAL_LAYER_ID layerId = GAL_LAYER_ID_START + ( layer.get<int>() - V8_GAL_LAYER_ID_START );
+
+        if( std::optional<VISIBILITY_LAYER> vl = VisibilityLayerFromRenderLayer( layerId ) )
+            newLayers.emplace_back( VisibilityLayerToString( *vl ) );
+    }
+
+    aJson["renderLayers"] = newLayers;
 }
 
 

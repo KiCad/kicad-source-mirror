@@ -31,7 +31,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int projectFileSchemaVersion = 2;
+const int projectFileSchemaVersion = 3;
 
 
 PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
@@ -142,6 +142,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
             &m_IP2581Bom.dist, wxEmptyString ) );
 
     registerMigration( 1, 2, std::bind( &PROJECT_FILE::migrateSchema1To2, this ) );
+    registerMigration( 2, 3, std::bind( &PROJECT_FILE::migrateSchema2To3, this ) );
 }
 
 
@@ -160,6 +161,25 @@ bool PROJECT_FILE::migrateSchema1To2()
 
     for( nlohmann::json& entry : presets )
         PARAM_LAYER_PRESET::MigrateToV9Layers( entry );
+
+    return true;
+}
+
+
+/**
+ * Schema version 3: move layer presets to use named render layers
+ */
+bool PROJECT_FILE::migrateSchema2To3()
+{
+    auto p( "/board/layer_presets"_json_pointer );
+
+    if( !m_internals->contains( p ) || !m_internals->at( p ).is_array() )
+        return true;
+
+    nlohmann::json& presets = m_internals->at( p );
+
+    for( nlohmann::json& entry : presets )
+        PARAM_LAYER_PRESET::MigrateToNamedRenderLayers( entry );
 
     return true;
 }

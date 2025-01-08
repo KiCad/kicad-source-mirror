@@ -192,6 +192,8 @@ public:
 
     static void MigrateToV9Layers( nlohmann::json& aJson );
 
+    static void MigrateToNamedRenderLayers( nlohmann::json& aJson );
+
 private:
     nlohmann::json presetsToJson();
 
