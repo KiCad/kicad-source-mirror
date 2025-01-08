@@ -288,7 +288,6 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case SCH_PLOT_FORMAT::SVG:    format = PLOT_FORMAT::SVG;    break;
     case SCH_PLOT_FORMAT::POST:   format = PLOT_FORMAT::POST;   break;
     case SCH_PLOT_FORMAT::HPGL:   format = PLOT_FORMAT::HPGL;   break;
-    case SCH_PLOT_FORMAT::GERBER: format = PLOT_FORMAT::GERBER; break;
     }
 
     HPGL_PAGE_SIZE hpglPageSize = HPGL_PAGE_SIZE::DEFAULT;

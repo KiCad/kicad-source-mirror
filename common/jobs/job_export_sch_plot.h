@@ -64,7 +64,6 @@ enum class JOB_PAGE_SIZE
 enum class SCH_PLOT_FORMAT
 {
     HPGL,
-    GERBER,
     POST,
     DXF,
     PDF,

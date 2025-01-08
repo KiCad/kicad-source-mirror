@@ -57,7 +57,6 @@ NLOHMANN_JSON_SERIALIZE_ENUM( SCH_PLOT_FORMAT,
                               {
                                       { SCH_PLOT_FORMAT::HPGL, "hpgl" },
                                       { SCH_PLOT_FORMAT::PDF, "pdf" },
-                                      { SCH_PLOT_FORMAT::GERBER, "gerber" },
                                       { SCH_PLOT_FORMAT::POST, "post" },
                                       { SCH_PLOT_FORMAT::SVG, "svg" },
                                       { SCH_PLOT_FORMAT::DXF, "dxf" },
@@ -81,31 +80,47 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
         m_theme(),
         m_HPGLPlotOrigin( JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT )
 {
-    m_params.emplace_back(
-            new JOB_PARAM<SCH_PLOT_FORMAT>( "format", &m_plotFormat, m_plotFormat ) );
-    m_params.emplace_back(
-            new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_all", &m_plotAll, m_plotAll ) );
-    m_params.emplace_back(
-            new JOB_PARAM<bool>( "plot_drawing_sheet", &m_plotDrawingSheet, m_plotDrawingSheet ) );
-    m_params.emplace_back(
-            new JOB_PARAM<bool>( "black_and_white", &m_blackAndWhite, m_blackAndWhite ) );
-    m_params.emplace_back(
-            new JOB_PARAM<JOB_PAGE_SIZE>( "page_size", &m_pageSizeSelect, m_pageSizeSelect ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "use_background_color", &m_useBackgroundColor,
-                                                m_useBackgroundColor ) );
-    m_params.emplace_back(
-            new JOB_PARAM<double>( "hpgl_pen_size", &m_HPGLPenSize, m_HPGLPenSize ) );
-    m_params.emplace_back( new JOB_PARAM<JOB_HPGL_PAGE_SIZE>(
-            "hpgl_page_size", &m_HPGLPaperSizeSelect, m_HPGLPaperSizeSelect ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "pdf_property_popups", &m_PDFPropertyPopups,
-                                                m_PDFPropertyPopups ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "pdf_hierarchical_links", &m_PDFHierarchicalLinks,
-                                                m_PDFHierarchicalLinks ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "pdf_metadata", &m_PDFMetadata, m_PDFMetadata ) );
-    m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_theme, m_theme ) );
-    m_params.emplace_back( new JOB_PARAM<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>(
-            "hpgl_plot_origin", &m_HPGLPlotOrigin, m_HPGLPlotOrigin ) );
+    m_params.emplace_back( new JOB_PARAM<SCH_PLOT_FORMAT>( "format",
+            &m_plotFormat, m_plotFormat ) );
+
+    m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet",
+            &m_drawingSheet, m_drawingSheet ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_all",
+            &m_plotAll, m_plotAll ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_drawing_sheet",
+            &m_plotDrawingSheet, m_plotDrawingSheet ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "black_and_white",
+            &m_blackAndWhite, m_blackAndWhite ) );
+
+    m_params.emplace_back( new JOB_PARAM<JOB_PAGE_SIZE>( "page_size",
+            &m_pageSizeSelect, m_pageSizeSelect ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_background_color",
+            &m_useBackgroundColor, m_useBackgroundColor ) );
+
+    m_params.emplace_back( new JOB_PARAM<double>( "hpgl_pen_size",
+            &m_HPGLPenSize, m_HPGLPenSize ) );
+
+    m_params.emplace_back( new JOB_PARAM<JOB_HPGL_PAGE_SIZE>( "hpgl_page_size",
+            &m_HPGLPaperSizeSelect, m_HPGLPaperSizeSelect ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "pdf_property_popups",
+            &m_PDFPropertyPopups, m_PDFPropertyPopups ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "pdf_hierarchical_links",
+            &m_PDFHierarchicalLinks, m_PDFHierarchicalLinks ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "pdf_metadata",
+            &m_PDFMetadata, m_PDFMetadata ) );
+
+    m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme",
+            &m_theme, m_theme ) );
+
+    m_params.emplace_back( new JOB_PARAM<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>( "hpgl_plot_origin",
+            &m_HPGLPlotOrigin, m_HPGLPlotOrigin ) );
 
 }
 
