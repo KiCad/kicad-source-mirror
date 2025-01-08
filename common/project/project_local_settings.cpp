@@ -42,7 +42,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_ZoneOpacity( 0.6 ),
         m_ImageOpacity( 0.6 ),
         m_SelectionFilter(),
-        m_project( aProject )
+        m_project( aProject ),
+        m_wasMigrated( false )
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
@@ -275,6 +276,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     {
                         At( "board" ).erase( "visible_items" );
                     }
+
+                    m_wasMigrated = true;
                 }
 
                 return true;
@@ -333,6 +336,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     }
 
                     At( "board" )["visible_items"] = visible;
+                    m_wasMigrated = true;
                 }
 
                 return true;
