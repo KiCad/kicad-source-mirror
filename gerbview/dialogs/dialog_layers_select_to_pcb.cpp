@@ -30,13 +30,12 @@
 #include <gerbview_settings.h>
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <lset.h>
 
 #include <dialogs/dialog_layers_select_to_pcb.h>
 
 #include <wx/msgdlg.h>
 #include <gestfich.h>
-
-extern const wxString GetPCBDefaultLayerName( int aLayerNumber );
 
 
 enum swap_layer_id {
@@ -185,7 +184,7 @@ void LAYERS_MAP_DIALOG::initDialog()
 
             for( int jj = 0; jj < GERBER_DRAWLAYERS_COUNT; ++jj )
             {
-                text->SetLabel( GetPCBDefaultLayerName( jj ) );
+                text->SetLabel( LSET::Name( PCB_LAYER_ID( jj ) ) );
 
                 if( goodSize.x < text->GetSize().x )
                     goodSize.x = text->GetSize().x;
@@ -213,15 +212,20 @@ void LAYERS_MAP_DIALOG::initDialog()
     {
         // See if the user wants to map the Altium Gerbers to known KiCad PCB layers
         int returnVal = wxMessageBox(
-                _( "Gerbers with known layers: " + wxString::Format( wxT( "%i" ), numMappedGerbers )
-                        + "\n\nAssign to matching KiCad PCB layers?" ),
+                wxString::Format( _( "Gerbers with known layers: %d" ), numMappedGerbers ) + wxT( "\n\n" )
+                + _( "Assign to matching PCB layers?" ),
                 _( "Automatic Layer Assignment" ), wxOK | wxCANCEL | wxOK_DEFAULT );
 
         if( returnVal == wxOK )
         {
+            int total_copper = 0;
+
             for( int ii = 0; ii < m_gerberActiveLayersCount; ii++ )
             {
                 int currLayer = gerber2KicadMapping[ii];
+
+                if( IsCopperLayer( currLayer ) )
+                    total_copper++;
 
                 // Default to "Do Not Export" for unselected or undefined layer
                 if( currLayer == UNSELECTED_LAYER )
@@ -234,13 +238,17 @@ void LAYERS_MAP_DIALOG::initDialog()
                 }
                 else
                 {
-                    m_layersList[ii]->SetLabel( GetPCBDefaultLayerName( currLayer ) );
+                    m_layersList[ii]->SetLabel( LSET::Name( PCB_LAYER_ID( currLayer ) ) );
                     m_layersList[ii]->SetForegroundColour( wxColour( 255, 0, 128 ) );
 
                     // Set the layer internally to the matching KiCad layer
                     m_layersLookUpTable[ii] = currLayer;
                 }
             }
+
+            // Reset the number of copper layers to the total found
+            m_exportBoardCopperLayersCount = std::max( total_copper, 2 );
+            m_comboCopperLayersCount->SetSelection( ( m_exportBoardCopperLayersCount / 2 ) - 1 );
         }
     }
 }
@@ -334,7 +342,7 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
         }
         else
         {
-            m_layersList[ii]->SetLabel( GetPCBDefaultLayerName( layer ) );
+            m_layersList[ii]->SetLabel( LSET::Name( PCB_LAYER_ID( layer ) ) );
             m_layersList[ii]->SetForegroundColour( wxColour( 255, 0, 128 ) );
         }
     }
@@ -390,7 +398,7 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
         }
         else
         {
-            m_layersList[ii]->SetLabel( GetPCBDefaultLayerName( jj ) );
+            m_layersList[ii]->SetLabel( LSET::Name( PCB_LAYER_ID( jj ) ) );
 
             // Change the text color to fuchsia (to highlight
             // that this layer *is* being exported)
@@ -440,19 +448,17 @@ int LAYERS_MAP_DIALOG::findKnownGerbersLoaded( std::vector<int>& aGerber2KicadMa
 {
     int numKnownGerbers = 0;
 
-    // We can automatically map Gerbers using different techniques.  The first thing we
-    // try is to see if any of the loaded Gerbers were created by or use the
-    // Altium/Protel file extensions
-    numKnownGerbers += findNumAltiumGerbersLoaded( aGerber2KicadMapping );
-
-    // Next we check if any of the loaded Gerbers are X2 Gerbers and if they contain
-
+    // Check if any of the loaded Gerbers are X2 Gerbers and if they contain
     // layer information in "File Functions". For info about X2 Gerbers see
     // http://www.ucamco.com/files/downloads/file/81/the_gerber_file_format_specification.pdf
     numKnownGerbers += findNumX2GerbersLoaded( aGerber2KicadMapping );
 
     // Finally, check if any of the loaded Gerbers use the KiCad naming conventions
     numKnownGerbers += findNumKiCadGerbersLoaded( aGerber2KicadMapping );
+
+    // The last option is to match using just the file extension
+    // This checkes for known Altium/Protel file extensions
+    numKnownGerbers += findNumAltiumGerbersLoaded( aGerber2KicadMapping );
 
     return numKnownGerbers;
 }
@@ -573,51 +579,60 @@ int LAYERS_MAP_DIALOG::findNumKiCadGerbersLoaded( std::vector<int>& aGerber2Kica
     // along with their corresponding KiCad layer
     std::map<wxString, PCB_LAYER_ID> kicadLayers
     {
-        { "-F_Cu",      F_Cu },
-        { "-In1_Cu",    In1_Cu },
-        { "-In2_Cu",    In2_Cu },
-        { "-In3_Cu",    In3_Cu },
-        { "-In4_Cu",    In4_Cu },
-        { "-In5_Cu",    In5_Cu },
-        { "-In6_Cu",    In6_Cu },
-        { "-In7_Cu",    In7_Cu },
-        { "-In8_Cu",    In8_Cu },
-        { "-In9_Cu",    In9_Cu },
-        { "-In10_Cu",   In10_Cu },
-        { "-In11_Cu",   In11_Cu },
-        { "-In12_Cu",   In12_Cu },
-        { "-In13_Cu",   In13_Cu },
-        { "-In14_Cu",   In14_Cu },
-        { "-In15_Cu",   In15_Cu },
-        { "-In16_Cu",   In16_Cu },
-        { "-In17_Cu",   In17_Cu },
-        { "-In18_Cu",   In18_Cu },
-        { "-In19_Cu",   In19_Cu },
-        { "-In20_Cu",   In20_Cu },
-        { "-In21_Cu",   In21_Cu },
-        { "-In22_Cu",   In22_Cu },
-        { "-In23_Cu",   In23_Cu },
-        { "-In24_Cu",   In24_Cu },
-        { "-In25_Cu",   In25_Cu },
-        { "-In26_Cu",   In26_Cu },
-        { "-In27_Cu",   In27_Cu },
-        { "-In28_Cu",   In28_Cu },
-        { "-In29_Cu",   In29_Cu },
-        { "-In30_Cu",   In30_Cu },
-        { "-B_Cu",      B_Cu },
-        { "-B_Adhes",   B_Adhes },
-        { "-F_Adhes",   F_Adhes },
-        { "-B_Paste",   B_Paste },
-        { "-F_Paste",   F_Paste },
-        { "-B_SilkS",   B_SilkS },
-        { "-F_SilkS",   F_SilkS },
-        { "-B_Mask",    B_Mask },
-        { "-F_Mask",    F_Mask },
-        { "-Dwgs_User", Dwgs_User },
-        { "-Cmts_User", Cmts_User },
-        { "-Eco1_User", Eco1_User },
-        { "-Eco2_User", Eco2_User },
-        { "-Edge_Cuts", Edge_Cuts }
+        { "-F_Cu",        F_Cu },
+        { "-In1_Cu",      In1_Cu },
+        { "-In2_Cu",      In2_Cu },
+        { "-In3_Cu",      In3_Cu },
+        { "-In4_Cu",      In4_Cu },
+        { "-In5_Cu",      In5_Cu },
+        { "-In6_Cu",      In6_Cu },
+        { "-In7_Cu",      In7_Cu },
+        { "-In8_Cu",      In8_Cu },
+        { "-In9_Cu",      In9_Cu },
+        { "-In10_Cu",     In10_Cu },
+        { "-In11_Cu",     In11_Cu },
+        { "-In12_Cu",     In12_Cu },
+        { "-In13_Cu",     In13_Cu },
+        { "-In14_Cu",     In14_Cu },
+        { "-In15_Cu",     In15_Cu },
+        { "-In16_Cu",     In16_Cu },
+        { "-In17_Cu",     In17_Cu },
+        { "-In18_Cu",     In18_Cu },
+        { "-In19_Cu",     In19_Cu },
+        { "-In20_Cu",     In20_Cu },
+        { "-In21_Cu",     In21_Cu },
+        { "-In22_Cu",     In22_Cu },
+        { "-In23_Cu",     In23_Cu },
+        { "-In24_Cu",     In24_Cu },
+        { "-In25_Cu",     In25_Cu },
+        { "-In26_Cu",     In26_Cu },
+        { "-In27_Cu",     In27_Cu },
+        { "-In28_Cu",     In28_Cu },
+        { "-In29_Cu",     In29_Cu },
+        { "-In30_Cu",     In30_Cu },
+        { "-B_Cu",        B_Cu },
+        { "-B_Adhes",     B_Adhes },
+        { "-F_Adhes",     F_Adhes },
+        { "-B_Adhesive",  B_Adhes },
+        { "-F_Adhesive",  F_Adhes },
+        { "-B_Paste",     B_Paste },
+        { "-F_Paste",     F_Paste },
+        { "-B_SilkS",     B_SilkS },
+        { "-F_SilkS",     F_SilkS },
+        { "-B_Silkscreen",B_SilkS },
+        { "-F_Silkscreen",F_SilkS },
+        { "-B_Mask",      B_Mask },
+        { "-F_Mask",      F_Mask },
+        { "-F_Fab",       F_Fab },
+        { "-B_Fab",       B_Fab },
+        { "-Dwgs_User",   Dwgs_User },
+        { "-Cmts_User",   Cmts_User },
+        { "-Eco1_User",   Eco1_User },
+        { "-Eco2_User",   Eco2_User },
+        { "-Edge_Cuts",   Edge_Cuts },
+        { "-Margin",      Margin },
+        { "-F_Courtyard", F_CrtYd },
+        { "-B_Courtyard", B_CrtYd },
     };
     // clang-format on
 
@@ -736,8 +751,8 @@ int LAYERS_MAP_DIALOG::findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMa
         { wxT( "TopSoldermask" ),      F_Mask },
         { wxT( "FabricationDrawing" ), Dwgs_User },
         { wxT( "OtherDrawing" ),       Cmts_User },
-        { wxT( "TopAssemblyDrawing" ), Eco1_User },
-        { wxT( "BotAssemblyDrawing" ), Eco2_User },
+        { wxT( "TopAssemblyDrawing" ), F_Fab },
+        { wxT( "BotAssemblyDrawing" ), B_Fab },
         { wxT( "PProfile" ),           Edge_Cuts }, // Plated PCB outline
         { wxT( "NPProfile" ),          Edge_Cuts }  // Non-plated PCB outline
     };

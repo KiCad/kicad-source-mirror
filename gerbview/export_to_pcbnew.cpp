@@ -29,6 +29,7 @@
 #include <confirm.h>
 #include <string_utils.h>
 #include <locale_io.h>
+#include <lset.h>
 #include <macros.h>
 #include <trigo.h>
 #include <gerbview_frame.h>
@@ -38,9 +39,6 @@
 #include <wildcards_and_files_ext.h>
 #include "excellon_image.h"
 #include <wx/log.h>
-
-// Imported function
-extern const wxString GetPCBDefaultLayerName( int aLayerNumber );
 
 
 GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName )
@@ -112,10 +110,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
 
         int pcb_layer_number = aLayerLookUpTable[layer];
 
-        if( !IsPcbLayer( pcb_layer_number ) )
-            continue;
-
-        if( IsCopperLayer( pcb_layer_number ) )
+        if( !IsPcbLayer( pcb_layer_number ) || IsCopperLayer( pcb_layer_number ) )
             continue;
 
         for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
@@ -133,9 +128,6 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
         int pcb_layer_number = aLayerLookUpTable[layer];
 
         if( !IsCopperLayer( pcb_layer_number ) )
-            continue;
-
-        if( pcb_layer_number > m_pcbCopperLayersCount*2 )
             continue;
 
         for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
@@ -209,7 +201,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
                  FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+                 LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
         export_stroke_info( aGbrItem->m_Size.x );
         fprintf( m_fp, "\t)\n" );
         break;
@@ -224,7 +216,8 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
                  FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+                 LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
+
         export_stroke_info( aGbrItem->m_Size.x );
         fprintf( m_fp, "\t)\n" );
         break;
@@ -257,7 +250,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_arc( const GERBER_DRAW_ITEM* aGbrIte
                  FormatDouble2Str( MapToPcbUnits( arc_center.y ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+                 LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
         export_stroke_info( aGbrItem->m_Size.x );
         fprintf( m_fp, "\t)\n" );
     }
@@ -278,7 +271,8 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_arc( const GERBER_DRAW_ITEM* aGbrIte
                  FormatDouble2Str( MapToPcbUnits( seg_middle.y ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
                  FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                 TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+                 LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
+
         export_stroke_info( aGbrItem->m_Size.x );
         fprintf( m_fp, "\t)\n" );
     }
@@ -307,8 +301,8 @@ void GBR_TO_PCB_EXPORTER::export_via( const EXPORT_VIA& aVia )
              FormatDouble2Str( MapToPcbUnits( aVia.m_Drill ) ).c_str() );
 
     fprintf( m_fp, " (layers %s %s))\n",
-             TO_UTF8( GetPCBDefaultLayerName( F_Cu ) ),
-             TO_UTF8( GetPCBDefaultLayerName( B_Cu ) ) );
+             LSET::Name( F_Cu ).ToStdString().c_str(),
+             LSET::Name( B_Cu ).ToStdString().c_str() );
 }
 
 
@@ -391,7 +385,7 @@ void GBR_TO_PCB_EXPORTER::writeCopperLineItem( const VECTOR2I& aStart, const VEC
            FormatDouble2Str( MapToPcbUnits(aEnd.x) ).c_str(),
            FormatDouble2Str( MapToPcbUnits(aEnd.y) ).c_str(),
            FormatDouble2Str( MapToPcbUnits( aWidth ) ).c_str(),
-           TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+           LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
 }
 
 
@@ -431,7 +425,7 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGb
              FormatDouble2Str( MapToPcbUnits( seg_middle.y ) ).c_str(),
              FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
              FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-             TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+             LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
 
     fprintf( m_fp, "\t\t(width %s) (net 0 )\n",
              FormatDouble2Str( MapToPcbUnits( aGbrItem->m_Size.x ) ).c_str() );
@@ -505,7 +499,7 @@ void GBR_TO_PCB_EXPORTER::writePcbFilledCircle( const VECTOR2I& aCenterPosition,
 
     export_stroke_info( 0 );
     fprintf( m_fp, "\t\t(fill yes) (layer %s)",
-             TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+             LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
     fprintf( m_fp, "\n\t)\n" );
 }
 
@@ -520,32 +514,18 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( const int* aLayerLookUpTable )
     // Write layers section
     fprintf( m_fp, "\t(layers \n" );
 
-    for( int ii = 0; ii < m_pcbCopperLayersCount; ii++ )
+    LSET layer_set = LSET::AllCuMask( m_pcbCopperLayersCount ) | LSET::AllTechMask() | LSET::UserMask();
+
+    for( auto cu_it = layer_set.copper_layers_begin(); cu_it != layer_set.copper_layers_end(); ++cu_it )
     {
-        // copper layer IDs are even numbers: F_Cu = 0, B_Cu = 2, Inner = 4,6,8..
-        int ly_id = ii * 2;
-
-        if( ii != 0 )
-            ly_id += B_Cu;
-
-        if( ii == m_pcbCopperLayersCount-1)
-            ly_id = B_Cu;
-
         fprintf( m_fp, "\t\t(%d %s signal)\n",
-                 ly_id, TO_UTF8( GetPCBDefaultLayerName( ly_id ) ) );
+                 *cu_it, LSET::Name( *cu_it ).ToStdString().c_str() );
     }
 
-    // Non copper layer IDs are odd numbers (starting at F_Mask = 1)
-    // All usuel non copper layers (but not all possible layers) are enabled
-    for( int ii = 1; ii < PCB_LAYER_ID_COUNT; ii += 2 )
+    for( auto non_cu_it = layer_set.non_copper_layers_begin(); non_cu_it != layer_set.non_copper_layers_end(); ++non_cu_it )
     {
-        // GetPCBDefaultLayerName() return empty name for layers not available
-        // for export (because they have a specific purpose)
-        if( GetPCBDefaultLayerName( ii ).IsEmpty() )
-            continue;
-
         fprintf( m_fp, "\t\t(%d %s user)\n",
-                ii, TO_UTF8( GetPCBDefaultLayerName( ii ) ) );
+                 *non_cu_it, LSET::Name( *non_cu_it ).ToStdString().c_str() );
     }
 
     fprintf( m_fp, "\t)\n\n" );
@@ -590,7 +570,8 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLa
 
     fprintf( m_fp, "\n" );
     export_stroke_info( 0 );
-    fprintf( m_fp, "\t\t(fill yes) (layer %s)", TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+    fprintf( m_fp, "\t\t(fill yes) (layer %s)",
+             LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
     fprintf( m_fp, "\n\t)\n" );
 }
 
@@ -604,7 +585,7 @@ void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, in
         return;
 
     fprintf( m_fp, "\t(zone (net 0) (net_name \"\") (layer %s) (tstamp 0000000) (hatch edge 0.508)\n",
-             TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+             LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
 
     fprintf( m_fp, "  (connect_pads (clearance 0.0))\n" );
 

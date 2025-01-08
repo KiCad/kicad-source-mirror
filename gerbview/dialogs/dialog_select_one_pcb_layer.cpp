@@ -28,16 +28,11 @@
  */
 
 #include <gerbview_frame.h>
+#include <layer_range.h>
+#include <lset.h>
 #include <dialogs/dialog_layers_select_to_pcb.h>
 
 #include <wx/radiobox.h>
-
-#define NB_PCB_LAYERS PCB_LAYER_ID_COUNT
-#define FIRST_COPPER_LAYER 0
-#define LAST_COPPER_LAYER 31
-
-// Exported function
-const wxString GetPCBDefaultLayerName( int aLayerId );
 
 
 enum layer_sel_id {
@@ -93,7 +88,6 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLa
                    wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxButton* button;
-    int ii;
     wxArrayString  layerList;
     int selected = -1;
 
@@ -101,55 +95,44 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLa
     m_selectedLayer = aDefaultLayer;
 
     // Build the layer list; first build copper layers list
-    int layerCount = 0;
+    LSET layers = LSET::AllCuMask( aCopperLayerCount ) | LSET::AllTechMask() | LSET::UserMask();
 
-    for( ii = FIRST_COPPER_LAYER; ii <= LAST_COPPER_LAYER; ++ii )
+    for( auto copper_it = layers.copper_layers_begin(); copper_it != layers.copper_layers_end(); ++copper_it )
     {
-        if( ii == FIRST_COPPER_LAYER || ii == LAST_COPPER_LAYER || ii < aCopperLayerCount-1 )
-        {
-            layerList.Add( GetPCBDefaultLayerName( ii ) );
+        layerList.Add( LSET::Name( *copper_it ) );
 
-            if( aDefaultLayer == ii )
-                selected = layerCount;
+        if( aDefaultLayer == *copper_it )
+            selected = m_layerId.size();
 
-            m_layerId.push_back( ii );
-            layerCount++;
-        }
+        m_layerId.push_back( *copper_it );
     }
 
-    // Build the layer list; build non copper layers list
-    for( ; ; ++ii )
+    for( auto non_copper_it = layers.non_copper_layers_begin(); non_copper_it != layers.non_copper_layers_end(); ++non_copper_it )
     {
-        if( GetPCBDefaultLayerName( ii ) == "" )    // End of list
-            break;
+        layerList.Add( LSET::Name( *non_copper_it ) );
 
-        layerList.Add( GetPCBDefaultLayerName( ii ) );
+        if( aDefaultLayer == *non_copper_it )
+            selected = m_layerId.size();
 
-        if( aDefaultLayer == ii )
-            selected = layerCount;
-
-        m_layerId.push_back( ii );
-        layerCount++;
+        m_layerId.push_back( *non_copper_it );
     }
 
     layerList.Add( _( "Hole data" ) );
 
     if( aDefaultLayer == UNDEFINED_LAYER )
-        selected = layerCount;
+        selected = m_layerId.size();
 
     m_layerId.push_back( UNDEFINED_LAYER );
-    layerCount++;
 
     layerList.Add( _( "Do not export" ) );
 
     if( aDefaultLayer == UNSELECTED_LAYER )
-        selected = layerCount;
+        selected = m_layerId.size();
 
     m_layerId.push_back( UNSELECTED_LAYER );
-    layerCount++;
 
     m_layerRadioBox = new wxRadioBox( this, ID_LAYER_SELECT, _( "Layer" ), wxDefaultPosition,
-                                      wxDefaultSize, layerList, std::min( layerCount, 12 ),
+                                      wxDefaultSize, layerList, std::min( int( m_layerId.size() ), 12 ),
                                       wxRA_SPECIFY_ROWS );
 
     if( selected >= 0 )
@@ -193,74 +176,4 @@ bool SELECT_LAYER_DIALOG::TransferDataFromWindow()
 
     m_selectedLayer = m_layerId[m_layerRadioBox->GetSelection()];
     return true;
-}
-
-
-// This function is a duplicate of
-// const wxChar* LSET::Name( PCB_LAYER_ID aLayerId )
-// However it avoids a dependency to Pcbnew code.
-const wxString GetPCBDefaultLayerName( int aLayerId )
-{
-    const wxChar* txt;
-
-    // using a switch to explicitly show the mapping more clearly
-    switch( aLayerId )
-    {
-    case F_Cu:              txt = wxT( "F.Cu" );            break;
-    case In1_Cu:            txt = wxT( "In1.Cu" );          break;
-    case In2_Cu:            txt = wxT( "In2.Cu" );          break;
-    case In3_Cu:            txt = wxT( "In3.Cu" );          break;
-    case In4_Cu:            txt = wxT( "In4.Cu" );          break;
-    case In5_Cu:            txt = wxT( "In5.Cu" );          break;
-    case In6_Cu:            txt = wxT( "In6.Cu" );          break;
-    case In7_Cu:            txt = wxT( "In7.Cu" );          break;
-    case In8_Cu:            txt = wxT( "In8.Cu" );          break;
-    case In9_Cu:            txt = wxT( "In9.Cu" );          break;
-    case In10_Cu:           txt = wxT( "In10.Cu" );         break;
-    case In11_Cu:           txt = wxT( "In11.Cu" );         break;
-    case In12_Cu:           txt = wxT( "In12.Cu" );         break;
-    case In13_Cu:           txt = wxT( "In13.Cu" );         break;
-    case In14_Cu:           txt = wxT( "In14.Cu" );         break;
-    case In15_Cu:           txt = wxT( "In15.Cu" );         break;
-    case In16_Cu:           txt = wxT( "In16.Cu" );         break;
-    case In17_Cu:           txt = wxT( "In17.Cu" );         break;
-    case In18_Cu:           txt = wxT( "In18.Cu" );         break;
-    case In19_Cu:           txt = wxT( "In19.Cu" );         break;
-    case In20_Cu:           txt = wxT( "In20.Cu" );         break;
-    case In21_Cu:           txt = wxT( "In21.Cu" );         break;
-    case In22_Cu:           txt = wxT( "In22.Cu" );         break;
-    case In23_Cu:           txt = wxT( "In23.Cu" );         break;
-    case In24_Cu:           txt = wxT( "In24.Cu" );         break;
-    case In25_Cu:           txt = wxT( "In25.Cu" );         break;
-    case In26_Cu:           txt = wxT( "In26.Cu" );         break;
-    case In27_Cu:           txt = wxT( "In27.Cu" );         break;
-    case In28_Cu:           txt = wxT( "In28.Cu" );         break;
-    case In29_Cu:           txt = wxT( "In29.Cu" );         break;
-    case In30_Cu:           txt = wxT( "In30.Cu" );         break;
-    case B_Cu:              txt = wxT( "B.Cu" );            break;
-
-    // Technicals
-    case B_Adhes:           txt = wxT( "B.Adhes" );         break;
-    case F_Adhes:           txt = wxT( "F.Adhes" );         break;
-    case B_Paste:           txt = wxT( "B.Paste" );         break;
-    case F_Paste:           txt = wxT( "F.Paste" );         break;
-    case B_SilkS:           txt = wxT( "B.SilkS" );         break;
-    case F_SilkS:           txt = wxT( "F.SilkS" );         break;
-    case B_Mask:            txt = wxT( "B.Mask" );          break;
-    case F_Mask:            txt = wxT( "F.Mask" );          break;
-
-    // Users
-    case Dwgs_User:         txt = wxT( "Dwgs.User" );       break;
-    case Cmts_User:         txt = wxT( "Cmts.User" );       break;
-    case Eco1_User:         txt = wxT( "Eco1.User" );       break;
-    case Eco2_User:         txt = wxT( "Eco2.User" );       break;
-    case Edge_Cuts:         txt = wxT( "Edge.Cuts" );       break;
-
-    // Pcbnew knows some other layers, but any other layer is not suitable for export.
-
-    default:    // Sentinel
-        txt = wxT( "" ); break;
-    }
-
-    return wxString( txt );
 }
