@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
@@ -155,16 +156,36 @@ wxString PATHS::GetDefaultUserProjectsPath()
  * This is done because not all executable are located at the same
  * depth in the build directory.
  */
-static wxString getCmakeBuildRoot()
+static wxString getBuildDirectoryRoot()
 {
-    wxFileName fn = PATHS::GetExecutablePath();
-    // The build directory will have a CMakeCache.txt file in it
-    while( fn.GetDirCount() > 0 && !wxFileExists( fn.GetPathWithSep() + wxT( "CMakeCache.txt" ) ) )
+    // We don't have a perfect way to spot a build directory (e.g. when archived as artifacts in
+    // CI) but we can assume that the build directory will have a schemas directory that contains
+    // JSON files, as that's one of the things that we use this path for.
+    const auto looksLikeBuildDir = []( const wxFileName& aPath ) -> bool
+    {
+        const wxDir schema_dir( aPath.GetPathWithSep() + wxT( "schemas" ) );
+
+        if( !schema_dir.IsOpened() )
+            return false;
+
+        wxString   filename;
+        const bool found = schema_dir.GetFirst( &filename, wxT( "*.json" ), wxDIR_FILES );
+        return found;
+    };
+
+    const wxString execPath = PATHS::GetExecutablePath();
+    wxFileName     fn = execPath;
+
+    // Climb the directory tree until we find a directory that looks like a build directory
+    // Noprmally we expect to climb one or two levels only.
+    while( fn.GetDirCount() > 0 && !looksLikeBuildDir( fn ) )
     {
         fn.RemoveLastDir();
     }
 
-    wxASSERT_MSG( fn.GetDirCount() > 0, wxT( "Could not find CMake build root directory" ) );
+    wxASSERT_MSG(
+            fn.GetDirCount() > 0,
+            wxString::Format( wxT( "Could not find build root directory above %s" ), execPath ) );
 
     return fn.GetPath();
 }
@@ -188,7 +209,7 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 #elif defined( __WXMSW__ )
         path = getWindowsKiCadRoot();
 #else
-        path = getCmakeBuildRoot();
+        path = getBuildDirectoryRoot();
 #endif
     }
     else if( wxGetEnv( wxT( "KICAD_STOCK_DATA_HOME" ), &path ) && !path.IsEmpty() )
