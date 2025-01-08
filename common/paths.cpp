@@ -428,9 +428,9 @@ bool PATHS::EnsurePathExists( const wxString& aPath )
         return false;
     }
 
-    if( !wxFileName::DirExists( aPath ) )
+    if( !wxFileName::DirExists( path.GetPath() ) )
     {
-        if( !wxFileName::Mkdir( aPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        if( !wxFileName::Mkdir( path.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         {
             return false;
         }

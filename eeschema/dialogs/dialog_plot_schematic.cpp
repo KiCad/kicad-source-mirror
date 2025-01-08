@@ -455,7 +455,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         m_job->m_PDFMetadata = m_plotPDFMetadata->GetValue();
         m_job->m_plotDrawingSheet = m_plotDrawingSheet->GetValue();
         m_job->m_plotAll = true;
-        m_job->m_filename = m_outputDirectoryName->GetValue();
+        m_job->SetOutputPath( m_outputDirectoryName->GetValue() );
 
         m_job->m_HPGLPlotOrigin =
                 static_cast<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>( m_plotOriginOpt->GetSelection() );

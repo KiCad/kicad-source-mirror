@@ -46,6 +46,7 @@
 #include <wildcards_and_files_ext.h>
 #include <plotters/plotters_pslike.h>
 #include <drawing_sheet/ds_data_model.h>
+#include <paths.h>
 #include <reporter.h>
 #include <string_utils.h>
 
@@ -333,6 +334,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
+    if( !PATHS::EnsurePathExists( aPlotJob->GetFullOutputPath() ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     SCH_PLOT_OPTS plotOpts;
     plotOpts.m_blackAndWhite = aPlotJob->m_blackAndWhite;
     plotOpts.m_HPGLPaperSizeSelect = hpglPageSize;
@@ -461,6 +468,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         fn.SetExt( fileExt );
 
         aNetJob->SetOutputPath( fn.GetFullName() );
+    }
+
+    if( !PATHS::EnsurePathExists( aNetJob->GetFullOutputPath() ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
     bool res = helper->WriteNetlist( aNetJob->GetFullOutputPath(), netlistOption, *m_reporter );
@@ -664,6 +677,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         aBomJob->SetOutputPath( fn.GetFullName() );
     }
 
+    if( !PATHS::EnsurePathExists( aBomJob->GetFullOutputPath() ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     wxFile f;
 
     if( !f.Open( aBomJob->GetFullOutputPath(), wxFile::write ) )
@@ -775,6 +794,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
         fn.SetExt( FILEEXT::XmlFileExtension );
 
         aNetJob->SetOutputPath( fn.GetFullName() );
+    }
+
+    if( !PATHS::EnsurePathExists( aNetJob->GetFullOutputPath() ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
     bool res = xmlNetlist->WriteNetlist( aNetJob->GetFullOutputPath(), GNL_OPT_BOM, *m_reporter );
