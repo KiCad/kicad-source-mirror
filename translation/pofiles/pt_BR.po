@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:16+0300\n"
-"PO-Revision-Date: 2025-01-05 04:02+0000\n"
+"PO-Revision-Date: 2025-01-08 11:29+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
@@ -31450,11 +31450,8 @@ msgid "Success"
 msgstr "Sucesso"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Deseja usar um caminho relativo ao\n"
-"'%s'?"
+msgstr "Deseja cancelar o processo de exportação?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
 #, fuzzy
@@ -37841,14 +37838,13 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "A ilha não possui furo passante; a conexão será: %s."
 
 #: pcbnew/drc/drc_engine.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Substituição local no %s; isolamento: %s."
+msgstr "Laço da net em %s; folga: 0."
 
 #: pcbnew/drc/drc_engine.cpp:787
-#, fuzzy
 msgid "net tie"
-msgstr "Títulos da folha"
+msgstr "laço da net"
 
 #: pcbnew/drc/drc_engine.cpp:814 pcbnew/drc/drc_engine.cpp:824
 #, c-format
