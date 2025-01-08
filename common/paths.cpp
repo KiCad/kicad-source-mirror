@@ -148,6 +148,28 @@ wxString PATHS::GetDefaultUserProjectsPath()
 }
 
 
+/**
+ * Get the CMake build root directory for the current executable
+ * (which assumes the executable is in a build directory).
+ *
+ * This is done because not all executable are located at the same
+ * depth in the build directory.
+ */
+static wxString getCmakeBuildRoot()
+{
+    wxFileName fn = PATHS::GetExecutablePath();
+    // The build directory will have a CMakeCache.txt file in it
+    while( fn.GetDirCount() > 0 && !wxFileExists( fn.GetPathWithSep() + wxT( "CMakeCache.txt" ) ) )
+    {
+        fn.RemoveLastDir();
+    }
+
+    wxASSERT_MSG( fn.GetDirCount() > 0, wxT( "Could not find CMake build root directory" ) );
+
+    return fn.GetPath();
+}
+
+
 wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 {
     wxString path;
@@ -166,7 +188,7 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 #elif defined( __WXMSW__ )
         path = getWindowsKiCadRoot();
 #else
-        path = GetExecutablePath() + wxT( ".." );
+        path = getCmakeBuildRoot();
 #endif
     }
     else if( wxGetEnv( wxT( "KICAD_STOCK_DATA_HOME" ), &path ) && !path.IsEmpty() )
