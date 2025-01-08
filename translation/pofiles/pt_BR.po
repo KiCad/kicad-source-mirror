@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-05 22:15+0300\n"
-"PO-Revision-Date: 2025-01-04 06:01+0000\n"
+"PO-Revision-Date: 2025-01-08 11:29+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -3479,9 +3479,8 @@ msgid "Format:"
 msgstr "Formato:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:34
-#, fuzzy
 msgid "Include:"
-msgstr "Inclui as &vias"
+msgstr "Incluir:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:47
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -5214,9 +5213,8 @@ msgid "Check for package updates on startup"
 msgstr "Verifique durante a inicialização se há atualizações dos pacotes"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
-msgstr "Manipulação dos pacotes da biblioteca"
+msgstr "Manuseio de pacotes da biblioteca"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
@@ -5613,9 +5611,8 @@ msgid "Could not use OpenGL"
 msgstr "Não foi possível usar o OpenGL"
 
 #: common/draw_panel_gal.cpp:540
-#, fuzzy
 msgid "Error switching GAL backend"
-msgstr "Erro ao alternar o backend do GAL"
+msgstr "Houve um erro ao alternar o back-end do GAL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3391
@@ -5938,9 +5935,8 @@ msgid "Origins & Axes"
 msgstr "Origens & eixos"
 
 #: common/eda_base_frame.cpp:1185
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Novos padrões de footprint"
+msgstr "Padrões do footprint"
 
 #: common/eda_base_frame.cpp:1186
 msgid "Graphics Defaults"
@@ -7476,32 +7472,28 @@ msgid "Loading file canceled by user."
 msgstr "A leitura do arquivo foi cancelada pelo usuário."
 
 #: common/jobs/job.cpp:79
-#, fuzzy
 msgid "Job Settings"
-msgstr "Configurações"
+msgstr "Configurações de tarefas"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 msgid "3D model export"
 msgstr "Exportação do modelo 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Exportar o modelo 3D"
+msgstr "Exportar configurações de trabalho do modelo 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
 msgstr "PCI: Exportar o modelo 3D"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "PCI: Exportar dados de perfuração"
+msgstr "Exportar dados de perfuração"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Exportar configurações de tarefa dos dados de perfuração"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7514,52 +7506,44 @@ msgstr "Exportar DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:147
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Exportar configurações de tarefa DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
 msgstr "PCI: Exportar DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Configurações de exportação para o GenCAD"
+msgstr "Exportar configurações de tarefa GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "PCI: Exportar Gerbers"
+msgstr "Exportar Gerbers simples"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Configurações de exportação para o GenCAD"
+msgstr "Exportar configurações de tarefa Gerber simples"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "PCI: Exportar Gerbers"
+msgstr "Exportar Gerbers"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Configurações de exportação para o GenCAD"
+msgstr "Exportar configurações de tarefas Gerbers"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:53
 msgid "PCB: Export Gerbers"
 msgstr "PCI: Exportar Gerbers"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
-msgstr "Exportar IPC-2581"
+msgstr "Exportar IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "Exportar o arquivo IPC-2581"
+msgstr "Exportar configurações de tarefa IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
@@ -7571,9 +7555,8 @@ msgid "Export ODB++"
 msgstr "Exportar ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Exportar configurações de tarefa ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 msgid "PCB: Export ODB++"
@@ -7586,23 +7569,20 @@ msgstr "Exportar PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:128
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Exportar configurações de tarefa PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
 msgid "PCB: Export PDF"
 msgstr "PCI: Exportar PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Export position data"
-msgstr "PCI: Exportar dados de posicionamento"
+msgstr "Exportar dados de posicionamento"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "PCI: Exportar dados de posicionamento"
+msgstr "Exportar configurações de tarefa dos dados de posicionamento"
 
 #: common/jobs/job_export_pcb_pos.cpp:115
 msgid "PCB: Export Position Data"
@@ -7615,61 +7595,53 @@ msgstr "Exportar SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:166
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Exportar configurações de tarefa SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:68
 msgid "PCB: Export SVG"
 msgstr "PCI: Exportar SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Gerar a lista de materiais (BOM)..."
+msgstr "Gerar lista de materiais (BOM)"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Gerar a lista de materiais (BOM)..."
+msgstr "Exportar configurações de tarefa lista de materiais (BOM)"
 
 #: common/jobs/job_export_sch_bom.cpp:96
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Gerar a lista de materiais (BOM)..."
+msgstr "Esquemático: Gerar a lista de materiais (BOM)"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Exportar uma netlist"
+msgstr "Exportar %s netlist"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Exporte a Netlist"
+msgstr "Exportar configurações de tarefa netlist"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
 msgstr "Esquemático: Exportar a Netlist"
 
 #: common/jobs/job_export_sch_plot.cpp:179
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "Exportar postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:185
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Exportar configurações de tarefa postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:198 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "Exportar HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:204
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Exportar configurações de tarefa HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:208
 msgid "Schematic: Export SVG"
@@ -7680,9 +7652,8 @@ msgid "Schematic: Export HPGL"
 msgstr "Esquemático: Exportar HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:212
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Esquemático: Exportar a Netlist"
+msgstr "Esquemático: Exportar postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:214
 msgid "Schematic: Export DXF"
@@ -7697,51 +7668,45 @@ msgid "Schematic PythonBOM export"
 msgstr "Exportação PythonBOM do esquemático"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Executar o DRC na PCI"
+msgstr "Executar DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "Configurações"
+msgstr "Configurações de tarefa DRC"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
 msgstr "PCI: Executar DRC"
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Renderizar PCI"
+msgstr "Renderizar %s"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Renderizar as configurações da tarefa PCB"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
 msgstr "PCI: Renderização"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Executar o DRC na PCI"
+msgstr "Executar ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Esquemático: Exportar a Netlist"
+msgstr "Configurações de tarefa do esquema ERC"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
 msgstr "Esquemático: Realizar o ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "Ferramentas especiais"
+msgstr "Especial: copiar arquivos"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -7880,9 +7845,8 @@ msgid "Symbol body fills"
 msgstr "Preenchimento do corpo do símbolo"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "Arquivo da folha"
+msgstr "Preenchimento de formas"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -10804,9 +10768,8 @@ msgid "Unconnected wire endpoint"
 msgstr "Extremidade do fio não conectado"
 
 #: eeschema/connection_graph.cpp:3819
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Extremidade do fio não conectado"
+msgstr "Fio não conectado à entrada do barramento"
 
 #: eeschema/connection_graph.cpp:4194
 #, c-format
@@ -11959,9 +11922,8 @@ msgid "Electrical Rules Checker"
 msgstr "Verificador das regras elétricas (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Configurações de tarefa ERC"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 msgid "Export netlist in KiCad format"
@@ -12119,9 +12081,8 @@ msgstr "Você deve fornecer um título para o gerador de netlist"
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
 #: kicad/dialogs/panel_jobs_base.cpp:258
-#, fuzzy
 msgid "Output path:"
-msgstr "Caminho da saída:"
+msgstr "Caminho de saída:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
 msgid "Add Exporter..."
@@ -13766,9 +13727,8 @@ msgstr ""
 "seja bem-sucedida"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "Imprima o esquema"
+msgstr "Plotar o esquema"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -16476,7 +16436,6 @@ msgid "&Pitch of repeated pins:"
 msgstr "O &espaçamento entre os pinos sequenciais:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
-#, fuzzy
 msgid "General Editing"
 msgstr "Edição geral"
 
@@ -26038,9 +25997,8 @@ msgstr "Fundir a geometria sobreposta"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in conductor layers."
-msgstr "Não faça furos de passagem nas camadas de cobre."
+msgstr "Não faça furos de passagem nas camadas do condutor."
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26234,6 +26192,9 @@ msgid ""
 "Opt into the new behavior which means output path is a directory, a file per "
 "layer is generated and the common layers arg becomes available. "
 msgstr ""
+"Opte pelo novo comportamento, o que significa que o caminho de saída é um "
+"diretório, é gerado um ficheiro por camada e a arg de camadas comuns fica "
+"disponível. "
 
 #: kicad/cli/command_pcb_export_dxf.cpp:112
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -26253,11 +26214,13 @@ msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 msgstr ""
+"Este comando tem um comportamento obsoleto a partir do KiCad 9.0; o "
+"comportamento padrão deste comando será alterado numa versão futura."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:160
 #: kicad/cli/command_pcb_export_svg.cpp:167
 msgid "The new behavior will match --mode-new"
-msgstr ""
+msgstr "O novo comportamento corresponderá a --mode-new"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -26327,6 +26290,7 @@ msgstr "Usar a extensão de arquivo KiCad Gerber"
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
+"Esse comando está obsoleto desde o KiCad 9.0; em vez disso, use “gerbers”\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -26346,14 +26310,12 @@ msgid "Generate PDF from a list of layers"
 msgstr "Gerar um PDF a partir de uma lista de camadas"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:43
-#, fuzzy
 msgid "Plot the layers to individual PDF files"
-msgstr "Plotar determinadas camadas num único arquivo Gerber"
+msgstr "Plotar as camadas em arquivos PDF separados"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:47
-#, fuzzy
 msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "Plotar determinadas camadas num único arquivo Gerber"
+msgstr "Plote as camadas em um único arquivo PDF com várias páginas"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:51
 #: kicad/cli/command_pcb_export_svg.cpp:46
@@ -26367,17 +26329,16 @@ msgstr ""
 "PCI)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:160
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "A etiqueta conecta mais de um fio"
+msgstr "Não é possível usar mais de um sinalizador de modo\n"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:184
 msgid "The new behavior will match --mode-separate"
-msgstr ""
+msgstr "O novo comportamento corresponderá a --mode-separate"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:187
 msgid "The behavior with neither --mode flags will no longer exist"
-msgstr ""
+msgstr "Não existirá mais o comportamento com nenhum dos sinalizadores --mode"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -26485,12 +26446,11 @@ msgid "Render from side. Options: %s"
 msgstr "Renderização lateral. Opções: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
 msgstr ""
-"Fundo da imagem. Opções: transparente, opaco. Padrão: transparente para PNG, "
-"opaco para JPEG"
+"Imagem de fundo. Opções: %s. Padrão: transparente para PNG, opaco para JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:251
 #, c-format
@@ -26539,22 +26499,30 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intensidade da luz superior, formato “R,G,B” ou um único número, intervalo: "
+"0-1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intensidade da luz inferior, formato “R,G,B” ou um único número, intervalo: "
+"0-1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intensidade das luzes laterais, formato “R,G,B” ou um único número, "
+"intervalo: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intensidade da luz da câmera, formato 'R,G,B' ou um único número, intervalo: "
+"0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "Ângulo de elevação das luzes laterais em graus, intervalo: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 msgid "Invalid background\n"
@@ -26573,24 +26541,20 @@ msgid "Invalid pivot format\n"
 msgstr "Formato inválido do pivô\n"
 
 #: kicad/cli/command_pcb_render.cpp:367
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "Formato inválido do pivô\n"
+msgstr "Formato de intensidade de luz superior inválido\n"
 
 #: kicad/cli/command_pcb_render.cpp:374
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "Formato inválido de rotação\n"
+msgstr "Formato de intensidade de luz inferior inválido\n"
 
 #: kicad/cli/command_pcb_render.cpp:381
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "Formato inválido da imagem\n"
+msgstr "Formato de intensidade de luz lateral inválido\n"
 
 #: kicad/cli/command_pcb_render.cpp:388
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "Formato inválido da imagem\n"
+msgstr "Formato de intensidade de luz da câmera inválido\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid image format\n"
@@ -26676,9 +26640,8 @@ msgstr ""
 "Tema das cores que será usado (o padrão será as configurações do esquema)"
 
 #: kicad/cli/command_sch_export_plot.cpp:82
-#, fuzzy
 msgid "Default font name"
-msgstr "Fonte predefinida:"
+msgstr "Nome da fonte padrão"
 
 #: kicad/cli/command_sch_export_plot.cpp:88
 msgid "Do not generate property popups in PDF"
@@ -26780,38 +26743,32 @@ msgid "version info format (plain, commit, about)"
 msgstr "formato de informação da versão (plain, commit, about)"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
-msgstr "Designação"
+msgstr "Destino:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
-#, fuzzy
 msgid "Generate error if no files copied"
-msgstr "Cria arquivo de trabalho Gerber"
+msgstr "Gerar erro se nenhum arquivo for copiado"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
-#, fuzzy
 msgid "Overwrite files in destination"
-msgstr "Substituir o bloco de desenho já existente?"
+msgstr "Substituir os arquivos no destino"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
-#, fuzzy
 msgid "Copy Files Job Settings"
-msgstr "Configurações do filtro"
+msgstr "Copiar as configurações de tarefa dos arquivos"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
-#, fuzzy
 msgid "Record output messages"
-msgstr "Mensagens geradas"
+msgstr "Salvar as mensagens de saída"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
 msgstr "Ignorar código de saída diferente de zero"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "Editar as opções da tarefa..."
+msgstr "Executar as configurações de tarefa do comando"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
@@ -26917,9 +26874,9 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
-msgstr "Saída:"
+msgstr "Saída: %s"
 
 #: kicad/dialogs/panel_jobs.cpp:245
 msgid "No."
@@ -26930,9 +26887,8 @@ msgid "Job Description"
 msgstr "Descrição do trabalho"
 
 #: kicad/dialogs/panel_jobs.cpp:299
-#, fuzzy
 msgid "No output messages"
-msgstr "Mensagens geradas"
+msgstr "Nenhuma mensagem de saída"
 
 #: kicad/dialogs/panel_jobs.cpp:359
 msgid "Last run successful"
@@ -26947,17 +26903,14 @@ msgid "Running jobs"
 msgstr "Tarefas em execução"
 
 #: kicad/dialogs/panel_jobs.cpp:409
-#, fuzzy
 msgid "Edit Output Options..."
-msgstr "%s Opções de saída"
+msgstr "Editar as opções de saída..."
 
 #: kicad/dialogs/panel_jobs.cpp:410
-#, fuzzy
 msgid "Delete Output"
-msgstr "Apagar Recorte"
+msgstr "Excluir a saída"
 
 #: kicad/dialogs/panel_jobs.cpp:413
-#, fuzzy
 msgid "View Last Run Results..."
 msgstr "Ver os resultados da última execução..."
 
@@ -27027,9 +26980,8 @@ msgid "Description:"
 msgstr "Descrição:"
 
 #: kicad/dialogs/panel_jobs_base.cpp:276
-#, fuzzy
 msgid "Include jobs:"
-msgstr "Inclui as &zonas"
+msgstr "Incluir as tarefas:"
 
 #: kicad/dialogs/panel_jobs_base.h:166
 msgid "Job Output Run Log"
@@ -28209,9 +28161,8 @@ msgid "Open Project..."
 msgstr "Abrir o projeto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "Novo arquivo com um conjunto de trabalhos..."
+msgstr "Abrir o arquivo do conjunto de tarefas..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -28338,9 +28289,8 @@ msgid "Open Existing Project"
 msgstr "Abrir um projeto já existente"
 
 #: kicad/tools/kicad_manager_control.cpp:428
-#, fuzzy
 msgid "Open Jobset"
-msgstr "Salvar o conjunto de tarefas"
+msgstr "Abrir o conjunto de tarefas"
 
 #: kicad/tools/kicad_manager_control.cpp:635
 #, c-format
@@ -37518,9 +37468,8 @@ msgid "Generate property popups for back footprints"
 msgstr "Gere pop-ups de propriedade para os foot prints de trás"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:425
-#, fuzzy
 msgid "Single document"
-msgstr "Abrir um documento já existente"
+msgstr "Documento único"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:453
 msgid "Run DRC..."
@@ -37916,9 +37865,8 @@ msgid "User"
 msgstr "Usuário"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
-#, fuzzy
 msgid "Dimensions:"
-msgstr "Dimensões"
+msgstr "Dimensões:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
@@ -37930,23 +37878,20 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
-#, fuzzy
 msgid "Quality preset:"
-msgstr "Selecione a predefinição:"
+msgstr "Qualidade da predefinição:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
-#, fuzzy
 msgid "Background style:"
-msgstr "Estilo do plano de fundo"
+msgstr "Estilo do plano de fundo:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:103
 msgid "View"
 msgstr "Ver"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:119
-#, fuzzy
 msgid "Add floor"
-msgstr "Adicionar Piso"
+msgstr "Adicionar andar"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Perspective"
@@ -37957,14 +37902,12 @@ msgid "Orthogonal"
 msgstr "Ortogonal"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
-#, fuzzy
 msgid "Projection"
-msgstr "Projeto"
+msgstr "Projeção"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:138
-#, fuzzy
 msgid "Positioning"
-msgstr "Posição"
+msgstr "Posicionando"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:148
 #: pcbnew/dialogs/dialog_shape_properties.cpp:773
@@ -37982,42 +37925,37 @@ msgid "Z"
 msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
-#, fuzzy
 msgid "Pivot:"
-msgstr "Definir o pivô"
+msgstr "Pivô:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "Deslocamento:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
-#, fuzzy
 msgid "Lights intensity"
-msgstr "Intensidade"
+msgstr "Intensidade da luz"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
-#, fuzzy
 msgid "Camera:"
-msgstr "Ampliação da câmera"
+msgstr "Câmera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
-#, fuzzy
 msgid "Lights position"
-msgstr "Configuração das luzes"
+msgstr "Posição das luzes"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
-msgstr ""
+msgstr "Elevação das luzes laterais:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
-#, fuzzy
 msgid "Render PCB Job Options"
-msgstr "Opções da renderização"
+msgstr "Renderizar as opções de tarefa da PCI"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1466
@@ -40078,18 +40016,17 @@ msgstr "Caso nenhum seja informado, é sugerido definir os valores para zero."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Positive clearance means a solder mask opening bigger than the pad (typical "
 "for solder mask clearance)."
 msgstr ""
-"Isolamento global entre as ilhas e a pasta de solda.\n"
+"Isolamento global entre as ilhas e a máscara de solda.\n"
 "Este valor pode ser substituído pelos valores locais para um footprint ou "
 "uma ilha.\n"
-"O valor do isolamento final é a soma desse valor e a relação do valor do "
-"isolamento."
+"O isolamento positivo significa uma abertura da máscara de solda maior do "
+"que a ilha (típico do isolamento da máscara de solda)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
 msgid "Solder mask settings:"
@@ -40101,14 +40038,13 @@ msgstr "Largura mínima da tela da máscara de solda:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"A distância mínima entre as aberturas na máscara de solda.  As aberturas das "
-"ilhas mais próximas do que essa distância serão plotadas como uma abertura "
-"única."
+"A distância mínima entre as aberturas na máscara de solda.\n"
+"Aberturas das ilhas mais próximas do que essa distância serão plotadas como "
+"uma abertura única."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -40116,33 +40052,28 @@ msgstr "Relação de isolamento entre a máscara de solda e o cobre:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:92
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
-#, fuzzy
 msgid ""
 "Minimum distance between a solder mask opening and a copper item with a "
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
-"Para testes de DRC:\n"
-"Distância máxima entre uma abertura da máscara de solda e um item de cobre "
-"com uma rede diferente da abertura da máscara de solda principal para criar "
-"um erro de DRC"
+"Distância mínima entre uma abertura de máscara de solda e um item de cobre "
+"com uma net diferente da net principal da abertura da máscara de solda.\n"
+"Distâncias menores que esse mínimo gera um erro de DRC."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:104
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints."
 msgstr ""
-"Dentro dos footprints, permita aberturas entre as ilhas da malha da máscara "
-"de solda"
+"Permitir aberturas de máscara de solda em ponte entre as ilhas dentro dos "
+"footprints."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
 msgstr ""
-"Para testes de DRC:\n"
-"Desativar ponte de abertura de máscara de solda do tipo de erro DRC entre "
-"pads do mesmo footprint (útil para laços das nets)"
+"Desativar a verificação de erros de DRC para a ponte de abertura da máscara "
+"de solda entre ilhas na mesma região de cobertura."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:112
 msgid "Tent vias:"
@@ -40150,14 +40081,12 @@ msgstr "Cobrir vias:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
-#, fuzzy
 msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"Vias cobertas: não são plotadas na camada de máscara de solda\n"
-"Não cobertas: as vias são plotadas na camada da máscara de solda\n"
-"(A máscara de solda é uma camada negativa)"
+"Com cobertura: as vias são cobertas por uma máscara de solda.\n"
+"Não coberto: as vias não são cobertas com máscara de solda."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 msgid "Solder paste settings:"
@@ -40165,7 +40094,6 @@ msgstr "Configurações da pasta de solda:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:137
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:142
-#, fuzzy
 msgid ""
 "Global absolute clearance between pads and the solder paste.\n"
 "Negative clearance means solder paste area smaller than the pad (typical for "
@@ -40174,17 +40102,15 @@ msgid ""
 "Final clearance value is the sum of this value and the relative clearance "
 "value."
 msgstr ""
-"Porcentagem da relação do isolamento global entre as ilhas e a pasta de "
-"solda.\n"
-"Um valor 10 significa que o valor do isolamento é 10 por cento do tamanho da "
-"ilha.\n"
-"Este valor pode ser substituído pelos valores locais para um footprint ou "
-"uma ilha.\n"
-"O valor do isolamento final é a soma desse valor e o valor do isolamento."
+"Isolamento absoluto global entre as ilhas e a pasta de solda.\n"
+"O isolamento negativo significa que a área da pasta de solda é menor do que "
+"a ilha (típico do isolamento da pasta de solda).\n"
+"Esse valor pode ser substituído por valores locais para uma área de "
+"cobertura ou uma ilha.\n"
+"O valor final da folga é a soma desse valor com o valor relativo da folga."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:152
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
-#, fuzzy
 msgid ""
 "Global clearance ratio between pads and the solder paste as a percentage of "
 "the pad size.\n"
@@ -40193,13 +40119,14 @@ msgid ""
 "Final clearance value is the sum of this value and the absolute clearance "
 "value."
 msgstr ""
-"Porcentagem da relação do isolamento global entre as ilhas e a pasta de "
-"solda.\n"
-"Um valor 10 significa que o valor do isolamento é 10 por cento do tamanho da "
+"Índice de isolamento global entre as ilhas e a pasta de solda como uma "
+"porcentagem do tamanho da ilha.\n"
+"Um valor de 10 significa que o valor do isolamento é de 10% do tamanho da "
 "ilha.\n"
-"Este valor pode ser substituído pelos valores locais para um footprint ou "
-"uma ilha.\n"
-"O valor do isolamento final é a soma desse valor e o valor do isolamento."
+"Esse valor pode ser substituído por valores locais para uma área de "
+"cobertura ou uma ilha.\n"
+"O valor final do isolamento é a soma desse valor e do valor absoluto do "
+"isolamento."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:168
 msgid ""
@@ -40294,7 +40221,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -40484,16 +40410,17 @@ msgstr ""
 "| "
 "Description                                                                                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                           "
-"| Checks the width of annular rings on vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
+"| Checks the width of annular rings on "
+"vias.<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
-"| Checks the given expression."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                     "
+"| Checks the given "
+"expression.<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                   "
@@ -40501,75 +40428,75 @@ msgstr ""
 "nets.  (See `physical_clearance` if you wish to specify clearance between "
 "objects regardless of net.)<br><br>To allow copper objects to overlap "
 "(collide), create a `clearance` constraint with the `min` value less than "
-"zero (for example, `-1`)."
-"<br>                                                                                                                     "
+"zero (for example, `-1`)"
+".<br>                                                                                                                     "
 "|\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                   "
 "| Checks the clearance between footprint courtyards and generates an error "
 "if any two courtyards are closer than the `min` distance.  If a footprint "
 "does not have a courtyard shape, no errors will be generated from this "
-"constraint."
-"<br>                                                                                                                                                                                                              "
+"constraint.<br>                                                                                                                                                                                                              "
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                   "
-"| Specifies the creepage distance between copper objects of different nets."
-"<br>                                                                                                                                                                                                                                                                                                                                                                    "
+"| Specifies the creepage distance between copper objects of different "
+"nets.<br>                                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                           "
 "| Checks the gap between coupled tracks in a differential pair.  Coupled "
 "tracks are segments that are parallel to each other.  Differential pair gap "
 "is not tested on uncoupled portions of a differential pair (for example, the "
-"fanout from a component)."
-"<br>                                                                                                                                                                                          "
+"fanout from a component)"
+".<br>                                                                                                                                                                                          "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                   "
 "| Checks the distance that a differential pair track is routed uncoupled "
 "from the other polarity track in the pair (for example, where the pair fans "
 "out from a component, or becomes uncoupled to pass around another object "
-"such as a via)."
-"<br>                                                                                                                                                                                                        "
+"such as a via)"
+".<br>                                                                                                                                                                                                        "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Specify one or more object types to disallow, separated by spaces.  For "
-"example, `(constraint disallow track)` or `(constraint disallow track via "
-"pad)`.  If an object of this type matches the rule condition, a DRC error "
-"will be created.<br><br>This constraint is essentially the same as a keepout "
-"rule area, but can be used to create more specific keepout restrictions."
-"<br>                                                                  |\n"
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | Specify one or more object types to disallow, separated by spaces.  "
+"For example, `(constraint disallow track)` or `(constraint disallow track "
+"via pad)`.  If an object of this type matches the rule condition, a DRC "
+"error will be created.<br><br>This constraint is essentially the same as a "
+"keepout rule area, but can be used to create more specific keepout "
+"restrictions.<br>                                                                  "
+"|\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Checks the clearance between objects and the board edge.<br><br>This can "
 "also be thought of as the \"milling tolerance\" as the board edge will "
 "include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
-"pad holes.  (See `physical_hole_clearance` for the drilling "
-"tolerance.)<br>                                                                                                                                                   "
+"pad holes.  (See `physical_hole_clearance` for the drilling tolerance.)"
+"<br>                                                                                                                                                   "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                               "
 "| Checks the total routed length for the nets that match the rule condition "
 "and generates an error for each net that is below the `min` value (if "
-"specified) or above the `max` value (if specified) of the constraint."
-"<br>                                                                                                                                                                                                                              "
+"specified) or above the `max` value (if specified) of the "
+"constraint.<br>                                                                                                                                                                                                                              "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                               "
 "| Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
-"holes, the smaller (minor) diameter will be tested against the `min` value "
-"(if specified) and the larger (major) diameter will be tested against the "
-"`max` value (if specified)."
-"<br>                                                                                                                                                                                           "
+"holes, the smaller (minor) diameter will be tested against the `min` value ("
+"if specified) and the larger (major) diameter will be tested against the "
+"`max` value (if specified)"
+".<br>                                                                                                                                                                                           "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                   "
 "| Checks the clearance between a drilled hole in a pad or via and copper "
 "objects on a different net.  The clearance is measured from the diameter of "
-"the hole, not its center."
-"<br>                                                                                                                                                                                                                                                                       "
+"the hole, not its "
+"center.<br>                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                   "
@@ -40583,8 +40510,8 @@ msgstr ""
 "min                                                                                                                   "
 "| Checks the clearance between two objects on a given layer (including non-"
 "copper layers).<br><br>While this can perform more general-purpose checks "
-"than `clearance`, it is much slower.  Use `clearance` where possible."
-"<br>                                                                                                                                                                                                                           "
+"than `clearance`, it is much slower.  Use `clearance` where "
+"possible.<br>                                                                                                                                                                                                                           "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                   "
@@ -40592,14 +40519,13 @@ msgstr ""
 "object, regardless of net. The clearance is measured from the diameter of "
 "the hole, not its center.<br><br>This can also be thought of as the "
 "\"drilling tolerance\" as it only includes **round** holes (see "
-"`edge_clearance` for the milling tolerance)."
-"<br>                                                                                                                   "
+"`edge_clearance` for the milling tolerance)"
+".<br>                                                                                                                   "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Checks the clearance between objects on silkscreen layers and other "
-"objects."
-"<br>                                                                                                                                                                                                                                                                                                                                                                       "
+"objects.<br>                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                   "
@@ -40607,53 +40533,53 @@ msgstr ""
 "the difference between the length of each net and the average of all the "
 "lengths of each net that is matched by the rule.  If the absolute value of "
 "the difference between that average and the length of any one net is above "
-"the constraint `max` value, an error will be generated."
-"<br>                                                                                  "
+"the constraint `max` value, an error will be "
+"generated.<br>                                                                                  "
 "|\n"
 "| `thermal_relief_gap`      | "
 "min                                                                                                                   "
 "| Specifies the width of the gap between a pad and a zone with a thermal-"
-"relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                          "
+"relief "
+"connection.<br>                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                   "
 "| Specifies the width of the spokes connecting a pad to a zone with a "
-"thermal-relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                     "
+"thermal-relief "
+"connection.<br>                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                           "
 "| Checks the width of track and arc segments.  An error will be generated "
 "for each segment that has a width below the `min` value (if specified) or "
-"above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                            "
+"above the `max` value (if specified)"
+".<br>                                                                                                                                                                                                                                                            "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                           "
 "| Checks the angle between two connected track segments.  An error will be "
 "generated for each connected pair with an angle below the `min` value (if "
-"specified) or above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                             "
+"specified) or above the `max` value (if specified)"
+".<br>                                                                                                                                                                                                                                             "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                               "
 "| Checks the length of track and arc segments.  An error will be generated "
-"for each segment that has a width below the `min` value (if specified) or "
-"above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                            "
+"for each segment that has a length below the `min` value (if specified) or "
+"above the `max` value (if specified)"
+".<br>                                                                                                                                                                                                                                                          "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                   "
 "| Counts the number of vias on every net matched by the rule condition.  If "
 "that number exceeds the constraint `max` value on any matched net, an error "
-"will be generated for that net."
-"<br>                                                                                                                                                                                                                                                              "
+"will be generated for that "
+"net.<br>                                                                                                                                                                                                                                                              "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Specifies the connection to be made between a zone and a pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                "
+"| Specifies the connection to be made between a zone and a "
+"pad.<br>                                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "\n"
 "\n"
@@ -45046,9 +44972,8 @@ msgid "Corner Radius Ratio"
 msgstr "Proporção de curva do canto"
 
 #: pcbnew/pad.cpp:2646
-#, fuzzy
 msgid "Corner Radius Size"
-msgstr "Raio do canto %"
+msgstr "Tamanho do raio do canto"
 
 #: pcbnew/pad.cpp:2652
 msgid "Hole Shape"
@@ -47342,9 +47267,8 @@ msgid "Error exporting VRML"
 msgstr "Houve um erro ao exportar o VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:458
-#, fuzzy
 msgid "Invalid image dimensions"
-msgstr "A definição dos nomes do pin é inválido"
+msgstr "Dimensões inválidas da imagem"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:674
 #, c-format
