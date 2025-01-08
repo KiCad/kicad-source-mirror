@@ -28,7 +28,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
-#include <wx/statbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
