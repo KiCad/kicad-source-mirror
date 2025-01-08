@@ -105,6 +105,11 @@ public:
         return m_NetSettings;
     }
 
+    /**
+     * @return true if the local settings needed to be migrated, and shouldn't be auto-saved
+     */
+    bool WasMigrated() const { return m_wasMigrated; }
+
 protected:
     wxString getFileExt() const override;
 
@@ -197,6 +202,8 @@ private:
 
     /// A link to the owning PROJECT
     PROJECT* m_project;
+
+    bool m_wasMigrated;
 };
 
 // Specializations to allow directly reading/writing FILE_INFO_PAIRs from JSON

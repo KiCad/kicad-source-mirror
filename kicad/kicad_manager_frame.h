@@ -171,7 +171,14 @@ public:
 
     void ReCreateTreePrj();
 
-    void SaveOpenJobSetsToLocalSettings();
+    /**
+     * @param aIsExplicitUserSave is true to indicate the user ran a Save Project action explicitly
+     *        Note that this parameter should currently *always* be false, because there is no
+     *        explicit Save Project action in the project manager.  This means that anytime the
+     *        project manager saves project local settings, it is an implicit save (and should not
+     *        actually save the file if it was migrated)
+     */
+    void SaveOpenJobSetsToLocalSettings( bool aIsExplicitUserSave = false );
 
     wxWindow* GetToolCanvas() const override;
 

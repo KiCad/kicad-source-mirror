@@ -82,6 +82,8 @@
 #include "kicad_manager_frame.h"
 #include "settings/kicad_settings.h"
 
+#include <project/project_file.h>
+
 
 #define EDITORS_CAPTION _( "Editors" )
 #define PROJECT_FILES_CAPTION _( "Project Files" )
@@ -669,9 +671,12 @@ void KICAD_MANAGER_FRAME::doCloseWindow()
 }
 
 
-void KICAD_MANAGER_FRAME::SaveOpenJobSetsToLocalSettings()
+void KICAD_MANAGER_FRAME::SaveOpenJobSetsToLocalSettings( bool aIsExplicitUserSave )
 {
     PROJECT_LOCAL_SETTINGS& cfg = Prj().GetLocalSettings();
+
+    if( !aIsExplicitUserSave && cfg.WasMigrated() )
+        return;
 
     cfg.m_OpenJobSets.clear();
 
@@ -700,15 +705,21 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     if( !Kiway().PlayersClose( false ) )
         return false;
 
+    bool shouldSaveProject = !Prj().GetLocalSettings().WasMigrated()
+                             && !Prj().GetProjectFile().WasMigrated();
+
     // Save the project file for the currently loaded project.
     if( m_active_project )
     {
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
-        mgr.TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
+        if( shouldSaveProject )
+        {
+            mgr.TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
 
-        if( aSave )
-            mgr.SaveProject();
+            if( aSave )
+                mgr.SaveProject();
+        }
 
         m_active_project = false;
         mgr.UnloadProject( &Prj() );

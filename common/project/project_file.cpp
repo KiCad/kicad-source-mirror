@@ -41,7 +41,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
         m_BoardSettings(),
         m_sheets(),
         m_boards(),
-        m_project( nullptr )
+        m_project( nullptr ),
+        m_wasMigrated( false )
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
@@ -162,6 +163,8 @@ bool PROJECT_FILE::migrateSchema1To2()
     for( nlohmann::json& entry : presets )
         PARAM_LAYER_PRESET::MigrateToV9Layers( entry );
 
+    m_wasMigrated = true;
+
     return true;
 }
 
@@ -180,6 +183,8 @@ bool PROJECT_FILE::migrateSchema2To3()
 
     for( nlohmann::json& entry : presets )
         PARAM_LAYER_PRESET::MigrateToNamedRenderLayers( entry );
+
+    m_wasMigrated = true;
 
     return true;
 }
