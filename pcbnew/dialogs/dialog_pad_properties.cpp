@@ -430,6 +430,11 @@ void DIALOG_PAD_PROPERTIES::OnEditLayerChanged( wxCommandEvent& aEvent )
 
     // Load controls with the current layer
     initPadstackLayerValues();
+
+    wxCommandEvent cmd_event;
+    OnPadShapeSelection( cmd_event );
+    OnOffsetCheckbox( cmd_event );
+
     redraw();
 }
 
