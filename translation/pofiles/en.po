@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-05 22:15+0300\n"
+"POT-Creation-Date: 2025-01-08 14:32+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -607,8 +607,8 @@ msgstr "Available paths:"
 msgid "Configure Paths"
 msgstr "Configure Paths"
 
-msgid "Embed Model"
-msgstr "Embed Model"
+msgid "Embed model"
+msgstr "Embed model"
 
 msgid "Select 3D Model"
 msgstr "Select 3D Model"
@@ -1883,8 +1883,8 @@ msgstr "Clear reference designators on all pasted symbols"
 msgid "Reference Designators"
 msgstr "Reference Designators"
 
-msgid "Clear Net Assignments"
-msgstr "Clear Net Assignments"
+msgid "Clear net assignments"
+msgstr "Clear net assignments"
 
 msgid "Remove the net information from all connected items before pasting"
 msgstr "Remove the net information from all connected items before pasting"
@@ -2466,8 +2466,8 @@ msgstr "%"
 msgid "Editing"
 msgstr "Editing"
 
-msgid "Warp mouse to origin of moved object"
-msgstr "Warp mouse to origin of moved object"
+msgid "Warp mouse to anchor of moved object"
+msgstr "Warp mouse to anchor of moved object"
 
 msgid "First hotkey selects tool"
 msgstr "First hotkey selects tool"
@@ -2823,14 +2823,14 @@ msgstr "Add embedded file"
 msgid "Remove embedded file"
 msgstr "Remove embedded file"
 
-msgid "&Export"
-msgstr "&Export"
-
-msgid "Embed Fonts"
-msgstr "Embed Fonts"
+msgid "Embed fonts"
+msgstr "Embed fonts"
 
 msgid "Store a copy of all fonts used"
 msgstr "Store a copy of all fonts used"
+
+msgid "&Export..."
+msgstr "&Export..."
 
 msgid "Footprints/pads:"
 msgstr "Footprints/pads:"
@@ -2846,8 +2846,8 @@ msgstr "%s%s (%s)"
 msgid "Grid size '%s' already exists."
 msgstr "Grid size '%s' already exists."
 
-msgid "Grids:"
-msgstr "Grids:"
+msgid "Grids"
+msgstr "Grids"
 
 msgid "Fast Grid Switching"
 msgstr "Fast Grid Switching"
@@ -3223,8 +3223,8 @@ msgstr "The default net class is required."
 msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Nets matching '%s':</b>"
 
-msgid "Netclasses:"
-msgstr "Netclasses:"
+msgid "Netclasses"
+msgstr "Netclasses"
 
 msgid "Clearance"
 msgstr "Clearance"
@@ -3271,8 +3271,8 @@ msgstr "Set color to transparent to use KiCad default color."
 msgid "Import colors from schematic"
 msgstr "Import colors from schematic"
 
-msgid "Netclass assignments:"
-msgstr "Netclass assignments:"
+msgid "Netclass Assignments"
+msgstr "Netclass Assignments"
 
 msgid "Pattern"
 msgstr "Pattern"
@@ -3486,9 +3486,6 @@ msgstr "Symbol Editor"
 
 msgid "Display Options"
 msgstr "Display Options"
-
-msgid "Grids"
-msgstr "Grids"
 
 msgid "Editing Options"
 msgstr "Editing Options"
@@ -3778,11 +3775,11 @@ msgstr "Shape"
 msgid "Radius"
 msgstr "Radius"
 
-msgid "Angle"
-msgstr "Angle"
-
 msgid "Length"
 msgstr "Length"
+
+msgid "Angle"
+msgstr "Angle"
 
 msgid "Points"
 msgstr "Points"
@@ -4617,6 +4614,14 @@ msgstr "Archive"
 msgid "Folder"
 msgstr "Folder"
 
+#, c-format
+msgid "schema file '%s' not found"
+msgstr "schema file '%s' not found"
+
+#, c-format
+msgid "Error loading schema: %s"
+msgstr "Error loading schema: %s"
+
 msgid "Do not show again"
 msgstr "Do not show again"
 
@@ -5034,6 +5039,14 @@ msgstr "Error loading project design block library table."
 msgid "This is the default net class."
 msgstr "This is the default net class."
 
+#, c-format
+msgid "Archived file '%s'."
+msgstr "Archived file '%s'."
+
+#, c-format
+msgid "Failed to archive file '%s'."
+msgstr "Failed to archive file '%s'."
+
 msgid "Could not open archive file."
 msgstr "Could not open archive file."
 
@@ -5052,16 +5065,16 @@ msgid "Failed to create file '%s'."
 msgstr "Failed to create file '%s'."
 
 #, c-format
-msgid "Archived file '%s'."
-msgstr "Archived file '%s'."
-
-#, c-format
-msgid "Failed to archive file '%s'."
-msgstr "Failed to archive file '%s'."
+msgid "Error opening directory: '%s'."
+msgstr "Error opening directory: '%s'."
 
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip archive '%s' created (%s uncompressed, %s compressed)."
+
+#, c-format
+msgid "Error: '%s'."
+msgstr "Error: '%s'."
 
 msgid "Excluded warning: "
 msgstr "Excluded warning: "
@@ -7257,8 +7270,8 @@ msgstr "Update symbols matching library identifier:"
 msgid "New library identifier:"
 msgstr "New library identifier:"
 
-msgid "Update/reset Fields"
-msgstr "Update/reset Fields"
+msgid "Update/Reset Fields"
+msgstr "Update/Reset Fields"
 
 msgid "Select None"
 msgstr "Select None"
@@ -9172,8 +9185,8 @@ msgstr "Compute noise current correlation matrix"
 msgid "SPICE directives:"
 msgstr "SPICE directives:"
 
-msgid "Load directives from schematic"
-msgstr "Load directives from schematic"
+msgid "Load Directives from Schematic"
+msgstr "Load Directives from Schematic"
 
 msgid "Transfer function:"
 msgstr "Transfer function:"
@@ -9941,6 +9954,9 @@ msgstr "Update Symbol Fields"
 msgid "Parent symbol:"
 msgstr "Parent symbol:"
 
+msgid "Update/reset Fields"
+msgstr "Update/reset Fields"
+
 msgid "Remove fields if not in parent symbol"
 msgstr "Remove fields if not in parent symbol"
 
@@ -10426,6 +10442,9 @@ msgstr "Zoom horizontally"
 msgid "Zoom vertically"
 msgstr "Zoom vertically"
 
+msgid "Vertical Touchpad or Scroll Wheel Movement"
+msgstr "Vertical Touchpad or Scroll Wheel Movement"
+
 msgid "Modifier"
 msgstr "Modifier"
 
@@ -10444,8 +10463,8 @@ msgstr "Shift:"
 msgid "Alt:"
 msgstr "Alt:"
 
-msgid "Horizontal touchpad movement:"
-msgstr "Horizontal touchpad movement:"
+msgid "Horizontal Touchpad Movement"
+msgstr "Horizontal Touchpad Movement"
 
 msgid "Any:"
 msgstr "Any:"
@@ -10566,11 +10585,11 @@ msgstr "Add existing library to table"
 msgid "Reset Libraries"
 msgstr "Reset Libraries"
 
-msgid "Project field name templates:"
-msgstr "Project field name templates:"
+msgid "Project Field Name Templates"
+msgstr "Project Field Name Templates"
 
-msgid "Global field name templates:"
-msgstr "Global field name templates:"
+msgid "Global Field Name Templates"
+msgstr "Global Field Name Templates"
 
 #, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
@@ -10590,9 +10609,6 @@ msgstr "Remove White Space"
 
 msgid "Keep White Space"
 msgstr "Keep White Space"
-
-msgid "Field name templates:"
-msgstr "Field name templates:"
 
 msgid "URL"
 msgstr "URL"
@@ -10622,6 +10638,9 @@ msgstr "Loading schematic\n"
 
 msgid "Failed to load schematic\n"
 msgstr "Failed to load schematic\n"
+
+msgid "Failed to create output directory\n"
+msgstr "Failed to create output directory\n"
 
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
@@ -10844,8 +10863,11 @@ msgstr "Checking footprints..."
 msgid "Checking pins..."
 msgstr "Checking pins..."
 
-msgid "Checking labels..."
-msgstr "Checking labels..."
+msgid "Checking similar labels..."
+msgstr "Checking similar labels..."
+
+msgid "Checking local and global labels..."
+msgstr "Checking local and global labels..."
 
 msgid "Checking for unresolved variables..."
 msgstr "Checking for unresolved variables..."
@@ -11043,6 +11065,9 @@ msgstr "Vertical"
 
 msgid "Allow Autoplacement"
 msgstr "Allow Autoplacement"
+
+msgid "Private"
+msgstr "Private"
 
 #, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
@@ -12543,9 +12568,6 @@ msgstr "Unknown SCH_FILE_T value: %d"
 
 msgid "Body Style"
 msgstr "Body Style"
-
-msgid "Private"
-msgstr "Private"
 
 msgid "Locked"
 msgstr "Locked"
@@ -15900,6 +15922,9 @@ msgstr "Visual"
 msgid "No datasheet defined."
 msgstr "No datasheet defined."
 
+msgid "UUID"
+msgstr "UUID"
+
 msgid "Move Point"
 msgstr "Move Point"
 
@@ -18022,8 +18047,8 @@ msgstr ""
 msgid "A new version of KiCad is available!"
 msgstr "A new version of KiCad is available!"
 
-msgid "&Skip this version"
-msgstr "&Skip this version"
+msgid "&Skip This Version"
+msgstr "&Skip This Version"
 
 msgid ""
 "Ignores the update notice for the announced new version. Additional update "
@@ -18032,8 +18057,8 @@ msgstr ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 
-msgid "&Remind me later"
-msgstr "&Remind me later"
+msgid "&Remind Me Later"
+msgstr "&Remind Me Later"
 
 msgid ""
 "Close this update notice. The update notice will be shown again when you "
@@ -18600,14 +18625,6 @@ msgstr "Show all versions"
 
 msgid "Download"
 msgstr "Download"
-
-#, c-format
-msgid "schema file '%s' not found"
-msgstr "schema file '%s' not found"
-
-#, c-format
-msgid "Error loading schema: %s"
-msgstr "Error loading schema: %s"
 
 #, c-format
 msgid "Error loading installed packages list: %s"
@@ -22894,8 +22911,8 @@ msgstr "Precision:"
 msgid "Choose how many digits of precision to display"
 msgstr "Choose how many digits of precision to display"
 
-msgid "Arrow Direction:"
-msgstr "Arrow Direction:"
+msgid "Arrow direction:"
+msgstr "Arrow direction:"
 
 msgid "0.0"
 msgstr "0.0"
@@ -23383,11 +23400,8 @@ msgstr ""
 msgid "Compressing output"
 msgstr "Compressing output"
 
-msgid "Output File:"
-msgstr "Output File:"
-
-msgid "Compression Format:"
-msgstr "Compression Format:"
+msgid "Compression format:"
+msgstr "Compression format:"
 
 msgid "Select the format to compress the output ODB++ files"
 msgstr "Select the format to compress the output ODB++ files"
@@ -24212,9 +24226,6 @@ msgstr "Save Drill Report File"
 msgid "Output folder:"
 msgstr "Output folder:"
 
-msgid "Drill File Format"
-msgstr "Drill File Format"
-
 msgid "Excellon"
 msgstr "Excellon"
 
@@ -24244,56 +24255,23 @@ msgstr ""
 "Only use for board houses which ask for merged PTH and NPTH into a single "
 "file."
 
-msgid "Use route command (recommended)"
-msgstr "Use route command (recommended)"
-
-msgid "Use alternate drill mode"
-msgstr "Use alternate drill mode"
-
-msgid "Oval Holes Drill Mode"
-msgstr "Oval Holes Drill Mode"
-
-msgid ""
-"Oval holes frequently create problems for board houses.\n"
-"\"Use route command\" uses the usual G00 route command (recommended)\n"
-" \"Use alternate mode\" uses another drill/ route command (G85)\n"
-"(Use it only if the recommended command does not work)"
-msgstr ""
-"Oval holes frequently create problems for board houses.\n"
-"\"Use route command\" uses the usual G00 route command (recommended)\n"
-" \"Use alternate mode\" uses another drill/ route command (G85)\n"
-"(Use it only if the recommended command does not work)"
+msgid "Use alternate drill mode for oval holes"
+msgstr "Use alternate drill mode for oval holes"
 
 msgid "Gerber X2"
 msgstr "Gerber X2"
 
-msgid "Generate Map"
-msgstr "Generate Map"
+msgid "Generate map:"
+msgstr "Generate map:"
 
-msgid "PostScript"
-msgstr "PostScript"
-
-msgid "Map File Format"
-msgstr "Map File Format"
-
-msgid "Creates a drill map in PDF or other formats"
-msgstr "Creates a drill map in PDF or other formats"
+msgid "Origin:"
+msgstr "Origin:"
 
 msgid "Absolute"
 msgstr "Absolute"
 
-msgid "Drill Origin"
-msgstr "Drill Origin"
-
-msgid ""
-"Choose the coordinate origin: absolute or relative to the drill/place file "
-"origin"
-msgstr ""
-"Choose the coordinate origin: absolute or relative to the drill/place file "
-"origin"
-
-msgid "Drill Units"
-msgstr "Drill Units"
+msgid "Zeros:"
+msgstr "Zeros:"
 
 msgid "Decimal format (recommended)"
 msgstr "Decimal format (recommended)"
@@ -24307,33 +24285,15 @@ msgstr "Suppress trailing zeros"
 msgid "Keep zeros"
 msgstr "Keep zeros"
 
-msgid "Zeros Format"
-msgstr "Zeros Format"
-
-msgid "Choose EXCELLON numbers notation"
-msgstr "Choose EXCELLON numbers notation"
-
 msgid "Precision"
 msgstr "Precision"
-
-msgid "Hole Counts"
-msgstr "Hole Counts"
-
-msgid "Plated pads:"
-msgstr "Plated pads:"
-
-msgid "Non-plated pads:"
-msgstr "Non-plated pads:"
-
-msgid "Buried vias:"
-msgstr "Buried vias:"
 
 #, c-format
 msgid "Generators A (%s)"
 msgstr "Generators A (%s)"
 
-msgid "Rebuild selected"
-msgstr "Rebuild selected"
+msgid "Rebuild Selected"
+msgstr "Rebuild Selected"
 
 msgid "Rebuild this type"
 msgstr "Rebuild this type"
@@ -24818,8 +24778,8 @@ msgstr "Top/Front layer:"
 msgid "Bottom/Back layer:"
 msgstr "Bottom/Back layer:"
 
-msgid "Copper layer pair presets"
-msgstr "Copper layer pair presets"
+msgid "Copper Layer Pair Presets"
+msgstr "Copper Layer Pair Presets"
 
 msgid "Enabled"
 msgstr "Enabled"
@@ -26217,8 +26177,8 @@ msgstr "Keep text upright"
 msgid "Parent footprint description"
 msgstr "Parent footprint description"
 
-msgid "Update thickness according to text size"
-msgstr "Update thickness according to text size"
+msgid "Update Thickness According to Text Size"
+msgstr "Update Thickness According to Text Size"
 
 msgid ""
 "Set the best text thickness from the text width and height\n"
@@ -26483,8 +26443,8 @@ msgstr "Left/right"
 msgid "Top/bottom"
 msgstr "Top/bottom"
 
-msgid "Board items flip"
-msgstr "Board items flip"
+msgid "Board Items Flip"
+msgstr "Board Items Flip"
 
 msgid "Allow free pads"
 msgstr "Allow free pads"
@@ -26564,11 +26524,11 @@ msgstr "If checked, zones will be re-filled after each edit operation"
 msgid "Internal Layers"
 msgstr "Internal Layers"
 
-msgid "Default field properties for new footprints:"
-msgstr "Default field properties for new footprints:"
+msgid "Default Field Properties for New Footprints"
+msgstr "Default Field Properties for New Footprints"
 
-msgid "Default text items for new footprints:"
-msgstr "Default text items for new footprints:"
+msgid "Default Text Items for New Footprints"
+msgstr "Default Text Items for New Footprints"
 
 #, c-format
 msgid ""
@@ -26605,8 +26565,8 @@ msgstr ""
 msgid "Parameter error"
 msgstr "Parameter error"
 
-msgid "Default properties for new graphic items:"
-msgstr "Default properties for new graphic items:"
+msgid "Default Properties for New Graphic Items"
+msgstr "Default Properties for New Graphic Items"
 
 msgid "Hidden footprint libraries are not yet supported."
 msgstr "Hidden footprint libraries are not yet supported."
@@ -26795,6 +26755,9 @@ msgstr "Keep out footprints"
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr "Raise a DRC error if a footprint courtyard overlaps this area"
 
+msgid "No placement"
+msgstr "No placement"
+
 msgid "Place items from sheet:"
 msgstr "Place items from sheet:"
 
@@ -26948,8 +26911,8 @@ msgstr "Minimum text height:"
 msgid "Minimum text thickness:"
 msgstr "Minimum text thickness:"
 
-msgid "Arc/circle approximated by segments"
-msgstr "Arc/circle approximated by segments"
+msgid "Arc/Circle Approximated by Segments"
+msgstr "Arc/Circle Approximated by Segments"
 
 msgid "Maximum allowed deviation:"
 msgstr "Maximum allowed deviation:"
@@ -26976,8 +26939,8 @@ msgstr ""
 msgid "Note: zone filling can be slow when < %s."
 msgstr "Note: zone filling can be slow when < %s."
 
-msgid "Zone fill strategy"
-msgstr "Zone fill strategy"
+msgid "Zone Fill Strategy"
+msgstr "Zone Fill Strategy"
 
 msgid "Allow fillets/chamfers outside zone outline"
 msgstr "Allow fillets/chamfers outside zone outline"
@@ -26985,8 +26948,8 @@ msgstr "Allow fillets/chamfers outside zone outline"
 msgid "Minimum thermal relief spoke count:"
 msgstr "Minimum thermal relief spoke count:"
 
-msgid "Length tuning"
-msgstr "Length tuning"
+msgid "Length Tuning"
+msgstr "Length Tuning"
 
 msgid "Include stackup height in track length calculations"
 msgstr "Include stackup height in track length calculations"
@@ -27000,8 +26963,8 @@ msgstr ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 
-msgid "Default properties for new dimension objects:"
-msgstr "Default properties for new dimension objects:"
+msgid "Default Properties for New Dimension Objects"
+msgstr "Default Properties for New Dimension Objects"
 
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
@@ -27384,6 +27347,9 @@ msgstr ""
 msgid "If none are provided, setting the values to zero is suggested."
 msgstr "If none are provided, setting the values to zero is suggested."
 
+msgid "Solder Mask Settings"
+msgstr "Solder Mask Settings"
+
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
@@ -27394,9 +27360,6 @@ msgstr ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Positive clearance means a solder mask opening bigger than the pad (typical "
 "for solder mask clearance)."
-
-msgid "Solder mask settings:"
-msgstr "Solder mask settings:"
 
 msgid "Solder mask minimum web width:"
 msgstr "Solder mask minimum web width:"
@@ -27420,8 +27383,8 @@ msgstr ""
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 
-msgid "Allow bridged solder mask apertures between pads within footprints."
-msgstr "Allow bridged solder mask apertures between pads within footprints."
+msgid "Allow bridged solder mask apertures between pads within footprints"
+msgstr "Allow bridged solder mask apertures between pads within footprints"
 
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
@@ -27440,8 +27403,8 @@ msgstr ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 
-msgid "Solder paste settings:"
-msgstr "Solder paste settings:"
+msgid "Solder Paste Settings"
+msgstr "Solder Paste Settings"
 
 msgid ""
 "Global absolute clearance between pads and the solder paste.\n"
@@ -27492,8 +27455,8 @@ msgstr "ERROR:"
 msgid "Design rules cannot be added without a project"
 msgstr "Design rules cannot be added without a project"
 
-msgid "DRC rules:"
-msgstr "DRC rules:"
+msgid "DRC Rules"
+msgstr "DRC Rules"
 
 msgid "Check rule syntax"
 msgstr "Check rule syntax"
@@ -28596,20 +28559,20 @@ msgstr ""
 "        (severity ignore))\n"
 "\n"
 
-msgid "Default properties for round shapes:"
-msgstr "Default properties for round shapes:"
+msgid "Default Properties for Round Shapes"
+msgstr "Default Properties for Round Shapes"
 
 msgid "Allow teardrop to span two track segments"
 msgstr "Allow teardrop to span two track segments"
 
-msgid "Default properties for rectangular shapes:"
-msgstr "Default properties for rectangular shapes:"
+msgid "Default Properties for Rectangular Shapes"
+msgstr "Default Properties for Rectangular Shapes"
 
 msgid "Allow teardrop to span track segments"
 msgstr "Allow teardrop to span track segments"
 
-msgid "Properties for track-to-track teardrops:"
-msgstr "Properties for track-to-track teardrops:"
+msgid "Properties for Track-to-Track Teardrops"
+msgstr "Properties for Track-to-Track Teardrops"
 
 msgid ""
 "Max track width ratio to create a teardrop.\n"
@@ -28621,8 +28584,8 @@ msgstr ""
 msgid "Tracks which are similar in size do not need teardrops."
 msgstr "Tracks which are similar in size do not need teardrops."
 
-msgid "Default properties for new graphics and text:"
-msgstr "Default properties for new graphics and text:"
+msgid "Default Properties for New Graphics and Text"
+msgstr "Default Properties for New Graphics and Text"
 
 msgid "No via hole size defined."
 msgstr "No via hole size defined."
@@ -28636,8 +28599,8 @@ msgstr "7"
 msgid "Hole"
 msgstr "Hole"
 
-msgid "Differential pairs:"
-msgstr "Differential pairs:"
+msgid "Differential Pairs"
+msgstr "Differential Pairs"
 
 msgid "Gap"
 msgstr "Gap"
@@ -28645,14 +28608,14 @@ msgstr "Gap"
 msgid "Via Gap"
 msgstr "Via Gap"
 
-msgid "Default properties for single-track tuning:"
-msgstr "Default properties for single-track tuning:"
+msgid "Default Properties for Single Track Tuning"
+msgstr "Default Properties for Single Track Tuning"
 
-msgid "Default properties for differential-pairs:"
-msgstr "Default properties for differential-pairs:"
+msgid "Default Properties for Differential Pairs"
+msgstr "Default Properties for Differential Pairs"
 
-msgid "Default properties for differential-pair skews:"
-msgstr "Default properties for differential-pair skews:"
+msgid "Default Properties for Differential Pair Skews"
+msgstr "Default Properties for Differential Pair Skews"
 
 msgid "Gathering copper items..."
 msgstr "Gathering copper items..."
@@ -31277,8 +31240,8 @@ msgstr "(PTH pad hole size must be larger than %s)"
 msgid "(PTH pad hole leaves no copper)"
 msgstr "(PTH pad hole leaves no copper)"
 
-msgid "(PTH pad hole non fully inside copper)"
-msgstr "(PTH pad hole non fully inside copper)"
+msgid "(PTH pad hole not fully inside copper)"
+msgstr "(PTH pad hole not fully inside copper)"
 
 msgid "(pad hole not inside pad shape)"
 msgstr "(pad hole not inside pad shape)"
@@ -33186,9 +33149,6 @@ msgstr "Successfully created svg file"
 msgid "Error creating svg file"
 msgstr "Error creating svg file"
 
-msgid "Failed to create output directory\n"
-msgstr "Failed to create output directory\n"
-
 #, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "Failed to plot to '%s'.\n"
@@ -34639,8 +34599,8 @@ msgstr "Add a zone with the same settings as an existing zone"
 msgid "Place the Footprint Anchor"
 msgstr "Place the Footprint Anchor"
 
-msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr "Set the coordinate origin point (anchor) of the footprint"
+msgid "Set the anchor point of the footprint"
+msgstr "Set the anchor point of the footprint"
 
 msgid "Increase Line Width"
 msgstr "Increase Line Width"
@@ -35947,6 +35907,9 @@ msgstr "Resolved margin clearance"
 msgid "Selected Items"
 msgstr "Selected Items"
 
+msgid "Selected 2D Length"
+msgstr "Selected 2D Length"
+
 msgid "Resize Table Cells"
 msgstr "Resize Table Cells"
 
@@ -36904,9 +36867,6 @@ msgstr ""
 msgid "KiCad PCB Layout Editor"
 msgstr "KiCad PCB Layout Editor"
 
-msgid "The KiCad Developers"
-msgstr "The KiCad Developers"
-
 msgid "Gerber file"
 msgstr "Gerber file"
 
@@ -36930,6 +36890,207 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Embed Model"
+#~ msgstr "Embed Model"
+
+#~ msgid "Clear Net Assignments"
+#~ msgstr "Clear Net Assignments"
+
+#~ msgid "Warp mouse to origin of moved object"
+#~ msgstr "Warp mouse to origin of moved object"
+
+#~ msgid "&Export"
+#~ msgstr "&Export"
+
+#~ msgid "Embed Fonts"
+#~ msgstr "Embed Fonts"
+
+#~ msgid "Grids:"
+#~ msgstr "Grids:"
+
+#~ msgid "Netclasses:"
+#~ msgstr "Netclasses:"
+
+#~ msgid "Netclass assignments:"
+#~ msgstr "Netclass assignments:"
+
+#~ msgid "Load directives from schematic"
+#~ msgstr "Load directives from schematic"
+
+#~ msgid "Horizontal touchpad movement:"
+#~ msgstr "Horizontal touchpad movement:"
+
+#~ msgid "Project field name templates:"
+#~ msgstr "Project field name templates:"
+
+#~ msgid "Global field name templates:"
+#~ msgstr "Global field name templates:"
+
+#~ msgid "Field name templates:"
+#~ msgstr "Field name templates:"
+
+#~ msgid "Checking labels..."
+#~ msgstr "Checking labels..."
+
+#~ msgid "&Skip this version"
+#~ msgstr "&Skip this version"
+
+#~ msgid "&Remind me later"
+#~ msgstr "&Remind me later"
+
+#~ msgid "Arrow Direction:"
+#~ msgstr "Arrow Direction:"
+
+#~ msgid "Output File:"
+#~ msgstr "Output File:"
+
+#~ msgid "Compression Format:"
+#~ msgstr "Compression Format:"
+
+#~ msgid "Drill File Format"
+#~ msgstr "Drill File Format"
+
+#~ msgid "Use route command (recommended)"
+#~ msgstr "Use route command (recommended)"
+
+#~ msgid "Use alternate drill mode"
+#~ msgstr "Use alternate drill mode"
+
+#~ msgid "Oval Holes Drill Mode"
+#~ msgstr "Oval Holes Drill Mode"
+
+#~ msgid ""
+#~ "Oval holes frequently create problems for board houses.\n"
+#~ "\"Use route command\" uses the usual G00 route command (recommended)\n"
+#~ " \"Use alternate mode\" uses another drill/ route command (G85)\n"
+#~ "(Use it only if the recommended command does not work)"
+#~ msgstr ""
+#~ "Oval holes frequently create problems for board houses.\n"
+#~ "\"Use route command\" uses the usual G00 route command (recommended)\n"
+#~ " \"Use alternate mode\" uses another drill/ route command (G85)\n"
+#~ "(Use it only if the recommended command does not work)"
+
+#~ msgid "Generate Map"
+#~ msgstr "Generate Map"
+
+#~ msgid "PostScript"
+#~ msgstr "PostScript"
+
+#~ msgid "Map File Format"
+#~ msgstr "Map File Format"
+
+#~ msgid "Creates a drill map in PDF or other formats"
+#~ msgstr "Creates a drill map in PDF or other formats"
+
+#~ msgid "Drill Origin"
+#~ msgstr "Drill Origin"
+
+#~ msgid ""
+#~ "Choose the coordinate origin: absolute or relative to the drill/place "
+#~ "file origin"
+#~ msgstr ""
+#~ "Choose the coordinate origin: absolute or relative to the drill/place "
+#~ "file origin"
+
+#~ msgid "Drill Units"
+#~ msgstr "Drill Units"
+
+#~ msgid "Zeros Format"
+#~ msgstr "Zeros Format"
+
+#~ msgid "Choose EXCELLON numbers notation"
+#~ msgstr "Choose EXCELLON numbers notation"
+
+#~ msgid "Hole Counts"
+#~ msgstr "Hole Counts"
+
+#~ msgid "Plated pads:"
+#~ msgstr "Plated pads:"
+
+#~ msgid "Non-plated pads:"
+#~ msgstr "Non-plated pads:"
+
+#~ msgid "Buried vias:"
+#~ msgstr "Buried vias:"
+
+#~ msgid "Rebuild selected"
+#~ msgstr "Rebuild selected"
+
+#~ msgid "Copper layer pair presets"
+#~ msgstr "Copper layer pair presets"
+
+#~ msgid "Update thickness according to text size"
+#~ msgstr "Update thickness according to text size"
+
+#~ msgid "Board items flip"
+#~ msgstr "Board items flip"
+
+#~ msgid "Default field properties for new footprints:"
+#~ msgstr "Default field properties for new footprints:"
+
+#~ msgid "Default text items for new footprints:"
+#~ msgstr "Default text items for new footprints:"
+
+#~ msgid "Default properties for new graphic items:"
+#~ msgstr "Default properties for new graphic items:"
+
+#~ msgid "Arc/circle approximated by segments"
+#~ msgstr "Arc/circle approximated by segments"
+
+#~ msgid "Zone fill strategy"
+#~ msgstr "Zone fill strategy"
+
+#~ msgid "Length tuning"
+#~ msgstr "Length tuning"
+
+#~ msgid "Default properties for new dimension objects:"
+#~ msgstr "Default properties for new dimension objects:"
+
+#~ msgid "Solder mask settings:"
+#~ msgstr "Solder mask settings:"
+
+#~ msgid "Allow bridged solder mask apertures between pads within footprints."
+#~ msgstr "Allow bridged solder mask apertures between pads within footprints."
+
+#~ msgid "Solder paste settings:"
+#~ msgstr "Solder paste settings:"
+
+#~ msgid "DRC rules:"
+#~ msgstr "DRC rules:"
+
+#~ msgid "Default properties for round shapes:"
+#~ msgstr "Default properties for round shapes:"
+
+#~ msgid "Default properties for rectangular shapes:"
+#~ msgstr "Default properties for rectangular shapes:"
+
+#~ msgid "Properties for track-to-track teardrops:"
+#~ msgstr "Properties for track-to-track teardrops:"
+
+#~ msgid "Default properties for new graphics and text:"
+#~ msgstr "Default properties for new graphics and text:"
+
+#~ msgid "Differential pairs:"
+#~ msgstr "Differential pairs:"
+
+#~ msgid "Default properties for single-track tuning:"
+#~ msgstr "Default properties for single-track tuning:"
+
+#~ msgid "Default properties for differential-pairs:"
+#~ msgstr "Default properties for differential-pairs:"
+
+#~ msgid "Default properties for differential-pair skews:"
+#~ msgstr "Default properties for differential-pair skews:"
+
+#~ msgid "(PTH pad hole non fully inside copper)"
+#~ msgstr "(PTH pad hole non fully inside copper)"
+
+#~ msgid "Set the coordinate origin point (anchor) of the footprint"
+#~ msgstr "Set the coordinate origin point (anchor) of the footprint"
+
+#~ msgid "The KiCad Developers"
+#~ msgstr "The KiCad Developers"
 
 #~ msgid "Copyright Info"
 #~ msgstr "Copyright Info"
@@ -37125,9 +37286,6 @@ msgstr "KiCad Drawing Sheet"
 #~ "For DRC tests:\n"
 #~ "max distance between a solder mask opening and a copper item having a "
 #~ "different net than the parent solder mask opening to create a DRC error"
-
-#~ msgid "Allow bridged solder mask apertures between pads within footprints"
-#~ msgstr "Allow bridged solder mask apertures between pads within footprints"
 
 #~ msgid ""
 #~ "For DRC tests:\n"
@@ -54200,9 +54358,6 @@ msgstr "KiCad Drawing Sheet"
 #~ "        (constraint connection_width (min 0.8mm))\n"
 #~ "        (condition \"A.NetClass == 'Power'\"))"
 
-#~ msgid "Differential Pairs"
-#~ msgstr "Differential Pairs"
-
 #~ msgid "Reading file "
 #~ msgstr "Reading file "
 
@@ -57709,9 +57864,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Missing floating point number"
 #~ msgstr "Missing floating point number"
-
-#~ msgid "Netclasses"
-#~ msgstr "Netclasses"
 
 #~ msgid "Assign Netclass"
 #~ msgstr "Assign Netclass"
@@ -73614,9 +73766,6 @@ msgstr "KiCad Drawing Sheet"
 #~ msgid "Rename to %s"
 #~ msgstr "Rename to %s"
 
-#~ msgid "UUID"
-#~ msgstr "UUID"
-
 #~ msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 #~ msgstr "<b>Off grid pin %s</b> “%s” at location <b>(%.3f, %.3f)</b>"
 
@@ -77501,9 +77650,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Start Y:"
 #~ msgstr "Start Y:"
-
-#~ msgid "Origin:"
-#~ msgstr "Origin:"
 
 #~ msgid "End Y:"
 #~ msgstr "End Y:"
