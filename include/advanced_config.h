@@ -728,12 +728,12 @@ private:
     ADVANCED_CFG();
 
     /**
-     * Load the config from the normal config file
+     * Load the config from the normal configuration file.
      */
     void loadFromConfigFile();
 
-    /*
-     * Load config from the given config base
+    /**
+     * Load config from the given configuration base.
      */
     void loadSettings( wxConfigBase& aCfg );
 };

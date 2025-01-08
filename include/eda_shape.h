@@ -43,7 +43,7 @@ enum class SHAPE_T : int
 {
     UNDEFINED = -1,
     SEGMENT = 0,
-    RECTANGLE,      /// use RECTANGLE instead of RECT to avoid collision in a Windows header
+    RECTANGLE,      ///< Use RECTANGLE instead of RECT to avoid collision in a Windows header.
     ARC,
     CIRCLE,
     POLY,
@@ -55,13 +55,13 @@ enum class SHAPE_T : int
 enum class FILL_T : int
 {
     NO_FILL = 1,
-    FILLED_SHAPE,               // Fill with object color
-    FILLED_WITH_BG_BODYCOLOR,   // Fill with background body color
-    FILLED_WITH_COLOR           // Fill with a separate color
+    FILLED_SHAPE,               ///< Fill with object color.
+    FILLED_WITH_BG_BODYCOLOR,   //< Fill with background body color.
+    FILLED_WITH_COLOR           //< Fill with a separate color.
 };
 
 
-// Holding struct to keep originating midpoint
+/// Holding struct to keep originating midpoint
 struct ARC_MID
 {
     VECTOR2I mid;
@@ -75,7 +75,7 @@ class EDA_SHAPE : public SERIALIZABLE
 public:
     EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill );
 
-    // Construct an EDA_SHAPE from an abstract SHAPE geometry
+    /// Construct an EDA_SHAPE from an abstract SHAPE geometry.
     EDA_SHAPE( const SHAPE& aShape );
 
     // Do not create a copy constructor & operator=.
@@ -217,6 +217,7 @@ public:
 
     /**
      * Set the end point from the angle center and start.
+     *
      * aAngle is:
      * - clockwise in right-down coordinate system
      * - counter-clockwise in right-up (libedit) coordinate system.
@@ -229,8 +230,9 @@ public:
 
     /**
      * Have the start and end points been swapped since they were set?
-     * @return true if they have
-    */
+     *
+     * @return true if they have.
+     */
     bool EndsSwapped() const { return m_endsSwapped; }
 
     // Some attributes are read only, since they are derived from m_Start, m_End, and m_Angle.
@@ -256,29 +258,32 @@ public:
     void SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 
     /**
-     * Set the data used for mid point caching.  If the controlling points remain constant, then
-     * we keep the midpoint the same as it was when read in.  This minimizes VCS churn
+     * Set the data used for mid point caching.
      *
-     * @param aStart Cached start point
-     * @param aMid Cached mid point
-     * @param aEnd Cached end point
-     * @param aCenter Calculated center point using the preceeding three
+     * If the controlling points remain constant, then we keep the midpoint the same as it was
+     * when read in.  This minimizes VCS churn.
+     *
+     * @param aStart Cached start point.
+     * @param aMid Cached mid point.
+     * @param aEnd Cached end point.
+     * @param aCenter Calculated center point using the preceeding three.
      */
-    void SetCachedArcData( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd, const VECTOR2I& aCenter );
+    void SetCachedArcData( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd,
+                           const VECTOR2I& aCenter );
 
     const std::vector<VECTOR2I>& GetBezierPoints() const { return m_bezierPoints; }
 
     /**
-     * Duplicate the list of corners in a std::vector<VECTOR2I>
+     * Duplicate the list of corners in a std::vector<VECTOR2I>.
      *
      * It must be used only to convert the SHAPE_POLY_SET internal corner buffer
      * to a list of VECTOR2Is, and nothing else, because it duplicates the buffer,
-     * that is inefficient to know for instance the corner count
+     * that is inefficient to know for instance the corner count.
      */
     void DupPolyPointsList( std::vector<VECTOR2I>& aBuffer ) const;
 
     /**
-     * @return the number of corners of the polygonal shape
+     * @return the number of corners of the polygonal shape.
      */
     int GetPointCount() const;
 
@@ -287,7 +292,7 @@ public:
     const SHAPE_POLY_SET& GetPolyShape() const { return m_poly; }
 
     /**
-     * @return true if the polygonal shape is valid (has more than 2 points)
+     * @return true if the polygonal shape is valid (has more than 2 points).
      */
     bool IsPolyShapeValid() const;
 
@@ -311,14 +316,16 @@ public:
      * Rebuild the m_bezierPoints vertex list that approximate the Bezier curve by a list of
      * segments.
      *
-     * Has meaning only for BEZIER shape.
+     * Has meaning only for #BEZIER shape.
      *
-     * @param aMinSegLen is the max deviation between the polyline and the curve
+     * @param aMinSegLen is the max deviation between the polyline and the curve.
      */
     void RebuildBezierToSegmentsPointsList( int aMaxError );
 
     /**
-     * Make a set of SHAPE objects representing the EDA_SHAPE.  Caller owns the objects.
+     * Make a set of SHAPE objects representing the #EDA_SHAPE.
+     *
+     * Caller owns the objects.
      *
      * @param aEdgeOnly indicates only edges should be generated (even if 0 width), and no fill
      *                  shapes.
@@ -351,12 +358,14 @@ public:
     int GetRectangleWidth() const;
 
     /**
-     * Convert the shape to a closed polygon.  Circles and arcs are approximated by segments.
+     * Convert the shape to a closed polygon.
+     *
+     * Circles and arcs are approximated by segments.
      *
      * @param aBuffer is a buffer to store the polygon.
      * @param aClearance is the clearance around the pad.
      * @param aError is the maximum deviation from a true arc.
-     * @param aErrorLoc whether any approximation error shoule be placed inside or outside
+     * @param aErrorLoc whether any approximation error should be placed inside or outside
      * @param ignoreLineWidth is used for edge cut items where the line width is only for
      *                        visualization
      */
@@ -399,19 +408,22 @@ protected:
     void calcEdit( const VECTOR2I& aPosition );
 
     /**
-     * Finishes editing the shape.
-     * @param aClosed Should polygon shapes be closed (yes for pcbnew/fpeditor, no for libedit)
+     * Finish editing the shape.
+     *
+     * @param aClosed Should polygon shapes be closed (yes for pcbnew/fpeditor, no for libedit).
      */
     void endEdit( bool aClosed = true );
     void setEditState( int aState ) { m_editState = aState; }
 
     /**
-     * Make a set of SHAPE objects representing the EDA_SHAPE.  Caller owns the objects.
+     * Make a set of #SHAPE objects representing the #EDA_SHAPE.
+     *
+     * Caller owns the objects.
      *
      * @param aEdgeOnly indicates only edges should be generated (even if 0 width), and no fill
      *                  shapes.
-     * @param aLineChainOnly indicates SHAPE_POLY_SET is being abused slightly to represent a
-     *                       lineChain rather than a closed polygon
+     * @param aLineChainOnly indicates #SHAPE_POLY_SET is being abused slightly to represent a
+     *                       lineChain rather than a closed polygon.
      */
     // fixme: move to shape_compound
     std::vector<SHAPE*> makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly = false ) const;

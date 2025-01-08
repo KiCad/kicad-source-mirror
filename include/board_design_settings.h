@@ -105,9 +105,9 @@
 #define MINIMUM_LINE_WIDTH_MM         0.005   // minimal line width entered in a dialog
 #define MAXIMUM_LINE_WIDTH_MM         100.0   // max line width entered in a dialog
 
-// Default pad properies
+// Default pad properties
 #define DEFAULT_PAD_WIDTH_MM 2.54         // master pad width
-#define DEFAULT_PAD_HEIGTH_MM 1.27        // master pad heigth
+#define DEFAULT_PAD_HEIGTH_MM 1.27        // master pad height
 #define DEFAULT_PAD_DRILL_DIAMETER_MM 0.8 // master pad drill diameter for PTH
 #define DEFAULT_PAD_REACT_RADIUS 15       // master pad corner radius in percent
 
@@ -476,7 +476,7 @@ public:
      * Sets custom track width for differential pairs (i.e. not available in netclasses or
      * preset list).
      *
-     * @param aDrill is the new track wdith.
+     * @param aDrill is the new track width.
      */
     inline void SetCustomDiffPairWidth( int aWidth )
     {
@@ -619,7 +619,7 @@ public:
     inline int GetBoardThickness() const { return m_boardThickness; }
     inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
 
-    /*
+    /**
      * Return an epsilon which accounts for rounding errors, etc.
      *
      * While currently an advanced cfg, going through this API allows us to easily change
@@ -673,8 +673,10 @@ public:
     std::vector<VIA_DIMENSION>       m_ViasDimensionsList;
     std::vector<DIFF_PAIR_DIMENSION> m_DiffPairDimensionsList;
 
-    /** The parameters of teardrops for the different teardrop targets (via/pad, track end)
-     *  3 set of parameters always exist: for round shapes, for rect shapes, for track ends
+    /**
+     * The parameters of teardrops for the different teardrop targets (via/pad, track end).
+     *
+     * 3 set of parameters always exist: for round shapes, for rect shapes, for track ends.
      */
     TEARDROP_PARAMETERS_LIST         m_TeardropParamsList;
 
@@ -799,13 +801,15 @@ private:
     /// This is also the last used netclass after starting a track.
     wxString   m_currentNetClassName;
 
-    /** the description of layers stackup, for board fabrication
-     * only physical layers are in layers stackup.
-     * It includes not only layers enabled for the board edition, but also dielectric layers
+    /**
+     * The description of layers stackup, for board fabrication only physical layers are in
+     * layers stackup.
+     *
+     * It includes not only layers enabled for the board edition, but also dielectric layers.
      */
     BOARD_STACKUP m_stackup;
 
-    /// The default settings that will be used for new zones
+    /// The default settings that will be used for new zones.
     ZONE_SETTINGS m_defaultZoneSettings;
 };
 

@@ -56,10 +56,10 @@ public:
         return wxRichMessageDialog::SetOKCancelLabels( ok, cancel );
     }
 
-    ///< Shows the 'do not show again' checkbox
+    /// Shows the 'do not show again' checkbox.
     void DoNotShowCheckbox( wxString file, int line );
 
-    ///< Checks the 'do not show again' setting for the dialog
+    /// Checks the 'do not show again' setting for the dialog.
     bool DoNotShowAgain() const;
     void ForceShowAgain();
 

@@ -140,7 +140,7 @@ public:
      * object.  The scale runs from 0.0 (definitely different objects) to 1.0 (same)
      *
      * This is a pure virtual function.  Derived classes must implement this.
-    */
+     */
     virtual double Similarity( const BOARD_ITEM& aItem ) const = 0;
     virtual bool operator==( const BOARD_ITEM& aItem ) const = 0;
 
@@ -201,12 +201,14 @@ public:
 
     /**
      * Invoke a function on all children.
+     *
      * @note This function should not add or remove items to the parent.
      */
     virtual void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const { }
 
     /**
      * Invoke a function on all descendants.
+     *
      * @note This function should not add or remove items.
      */
     virtual void RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFunction,
