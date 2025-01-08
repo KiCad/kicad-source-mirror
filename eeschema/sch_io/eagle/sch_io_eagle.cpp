@@ -2903,7 +2903,7 @@ bool SCH_IO_EAGLE::checkHeader( const wxString& aFileName ) const
 
     wxTextInputStream text( input );
 
-    for( int i = 0; i < 4; i++ )
+    for( int i = 0; i < 8; i++ )
     {
         if( input.Eof() )
             return false;
