@@ -23,7 +23,6 @@ BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: AfterColon
-BreakConstructorInitializersBeforeComma: false
 BreakStringLiterals: true
 ColumnLimit: 100
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
