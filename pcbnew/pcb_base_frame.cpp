@@ -365,15 +365,11 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
                 break;
 
             case PCB_PAD_T:
+            case PCB_MARKER_T:
             case PCB_VIA_T:
                 FocusOnLocation( item->GetFocusPosition() );
                 GetCanvas()->Refresh();
                 return;
-
-            case PCB_MARKER_T:
-                FocusOnLocation( item->GetFocusPosition() );
-                GetCanvas()->Refresh();
-                break;
 
             case PCB_SHAPE_T:
             case PCB_FIELD_T:

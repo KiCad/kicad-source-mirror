@@ -401,38 +401,6 @@ void DIALOG_DRC::UpdateData()
 }
 
 
-/**
- * @brief Checks if two board items are overlapping.
- * 
- * This function determines if the selected marker item and the unselected marker item
- * are overlapping based on their positions. Overlapping is defined by their positions being
- * equal or by the distance between them being less than a specified minimum difference.
- *
- * @param aSelectedMarkerItem Pointer to the selected board item.
- * @param aUnSelectedMarkerItem Pointer to the unselected board item.
- * @return true if the items are overlapping, false otherwise.
- */
-bool IsOverlapping( BOARD_ITEM* aSelectedMarkerItem, BOARD_ITEM* aUnSelectedMarkerItem )
-{
-    double selectedItemX = (double) aSelectedMarkerItem->GetX() / PCB_IU_PER_MM;
-    double selectedItemY = (double) aSelectedMarkerItem->GetY() / PCB_IU_PER_MM;
-    double unSelectedItemX = (double) aUnSelectedMarkerItem->GetX() / PCB_IU_PER_MM;
-    double unSelectedItemY = (double) aUnSelectedMarkerItem->GetY() / PCB_IU_PER_MM;
-
-    double xDiff = selectedItemX > unSelectedItemX ? selectedItemX - unSelectedItemX
-                                                   : unSelectedItemX - selectedItemX;
-    double yDiff = selectedItemY > unSelectedItemY ? selectedItemY - unSelectedItemY
-                                                   : unSelectedItemY - selectedItemY;
-    double minimumMarkerSeparationDistance =
-            ADVANCED_CFG::GetCfg().m_MinimumMarkerSeparationDistance;
-
-    return ( selectedItemX == unSelectedItemX && selectedItemY == unSelectedItemY )
-           || ( xDiff < minimumMarkerSeparationDistance && yDiff < minimumMarkerSeparationDistance )
-           || ( xDiff < minimumMarkerSeparationDistance && selectedItemY == unSelectedItemY )
-           || ( yDiff < minimumMarkerSeparationDistance && selectedItemX == unSelectedItemX );
-}
-
-
 void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 {
     BOARD*        board = m_frame->GetBoard();
@@ -458,6 +426,20 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                 {
                     return aItem->GetLayerSet();
                 }
+            };
+
+    auto isOverlapping =
+            []( BOARD_ITEM* aSelectedMarkerItem, BOARD_ITEM* aUnSelectedMarkerItem ) -> bool
+            {
+                VECTOR2D selectedItemPos = aSelectedMarkerItem->GetPosition() / PCB_IU_PER_MM;
+                VECTOR2D unSelectedItemPos = aUnSelectedMarkerItem->GetPosition() / PCB_IU_PER_MM;
+
+                double dist = selectedItemPos.Distance( unSelectedItemPos );
+
+                double minimumMarkerSeparationDistance =
+                        ADVANCED_CFG::GetCfg().m_MinimumMarkerSeparationDistance;
+
+                return dist <= minimumMarkerSeparationDistance;
             };
 
     if( !node )
@@ -635,7 +617,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
             for( BOARD_ITEM* boardMarkerItem : board->Markers() )
             {
-                if( item->m_Uuid != boardMarkerItem->m_Uuid && IsOverlapping( item, boardMarkerItem ) )
+                if( item->m_Uuid != boardMarkerItem->m_Uuid && isOverlapping( item, boardMarkerItem ) )
                 {
                     items.push_back( boardMarkerItem );
                 }
