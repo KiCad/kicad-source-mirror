@@ -228,15 +228,16 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                                     wxAUI_NB_TOP | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_TAB_MOVE
                                             | wxAUI_NB_SCROLL_BUTTONS | wxNO_BORDER );
 
-    m_notebook->Connect(
-            wxEVT_AUINOTEBOOK_PAGE_CLOSE,
-            wxAuiNotebookEventHandler( KICAD_MANAGER_FRAME::onNotebookPageCloseRequest ), nullptr,
-            this );
+    m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSE,
+                      &KICAD_MANAGER_FRAME::onNotebookPageCloseRequest, this );
+    m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSED,
+                      &KICAD_MANAGER_FRAME::onNotebookPageCountChanged, this );
     m_launcher = new PANEL_KICAD_LAUNCHER( m_notebook );
 
     m_notebook->Freeze();
     m_launcher->SetClosable( false );
     m_notebook->AddPage( m_launcher, EDITORS_CAPTION, false );
+    m_notebook->SetTabCtrlHeight( 0 );
     m_notebook->Thaw();
 
     m_auimgr.AddPane( m_notebook, EDA_PANE()
@@ -251,6 +252,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Now the actual m_leftWin size is set, give it a reasonable min width
     m_auimgr.GetPane( m_leftWin ).MinSize( defaultLeftWinWidth, -1 );
+
 
     wxSizer* mainSizer = GetSizer();
 
@@ -292,10 +294,10 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     Unbind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
     Unbind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
 
-    m_notebook->Disconnect(
-            wxEVT_AUINOTEBOOK_PAGE_CLOSE,
-            wxAuiNotebookEventHandler( KICAD_MANAGER_FRAME::onNotebookPageCloseRequest ), nullptr,
-            this );
+    m_notebook->Unbind( wxEVT_AUINOTEBOOK_PAGE_CLOSE,
+                        &KICAD_MANAGER_FRAME::onNotebookPageCloseRequest, this );
+    m_notebook->Unbind( wxEVT_AUINOTEBOOK_PAGE_CLOSED,
+                        &KICAD_MANAGER_FRAME::onNotebookPageCountChanged, this );
 
     Pgm().GetBackgroundJobMonitor().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().GetNotificationsManager().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
@@ -312,6 +314,20 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     delete m_toolDispatcher;
 
     m_auimgr.UnInit();
+}
+
+void KICAD_MANAGER_FRAME::HideTabsIfNeeded()
+{
+    if( m_notebook->GetPageCount() == 1 )
+        m_notebook->SetTabCtrlHeight( 0 );
+    else
+        m_notebook->SetTabCtrlHeight( -1 );
+}
+
+
+void KICAD_MANAGER_FRAME::onNotebookPageCountChanged( wxAuiNotebookEvent& evt )
+{
+    HideTabsIfNeeded();
 }
 
 
@@ -740,6 +756,7 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     }
 
     m_leftWin->EmptyTreePrj();
+    HideTabsIfNeeded();
 
     return true;
 }
@@ -771,6 +788,7 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
         jobPanel->SetProjectTied( true );
         jobPanel->SetClosable( true );
         m_notebook->AddPage( jobPanel, aFileName.GetFullName(), true );
+        HideTabsIfNeeded();
 
         if( aResaveProjectPreferences )
             SaveOpenJobSetsToLocalSettings();

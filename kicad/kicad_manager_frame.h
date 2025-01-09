@@ -72,6 +72,11 @@ public:
                                     const wxString& name ) override;
 
     /**
+     * Hides the tabs for Editor notebook if there is only 1 page
+     */
+    void HideTabsIfNeeded();
+
+    /**
      * (Re)Create the left vertical toolbar
      */
     void RecreateBaseLeftToolbar();
@@ -201,6 +206,8 @@ protected:
     void onToolbarSizeChanged();
 
     void onNotebookPageCloseRequest( wxAuiNotebookEvent& evt );
+
+    void onNotebookPageCountChanged( wxAuiNotebookEvent& evt );
 
 private:
     void setupTools();
