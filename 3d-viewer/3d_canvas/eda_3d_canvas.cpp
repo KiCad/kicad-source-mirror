@@ -149,8 +149,10 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttrib
     wxASSERT( a3DCachePointer != nullptr );
     m_boardAdapter.Set3dCacheManager( a3DCachePointer );
 
-#ifdef __WXMSW__
-    EnableTouchEvents( wxTOUCH_ZOOM_GESTURE | wxTOUCH_PAN_GESTURES | wxTOUCH_ROTATE_GESTURE );
+#if defined( __WXMSW__ )
+    EnableTouchEvents( wxTOUCH_ZOOM_GESTURE | wxTOUCH_ROTATE_GESTURE | wxTOUCH_PAN_GESTURES );
+#elif defined( __WXGTK__ )
+    EnableTouchEvents( wxTOUCH_ZOOM_GESTURE | wxTOUCH_ROTATE_GESTURE );
 #endif
 
     const wxEventType events[] =

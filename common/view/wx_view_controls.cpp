@@ -73,17 +73,9 @@ static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform( bool aAcce
 
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPanel ) :
-        VIEW_CONTROLS( aView ),
-        m_state( IDLE ),
-        m_parentPanel( aParentPanel ),
-        m_scrollScale( 1.0, 1.0 ),
-#ifdef __WXGTK3__
-        m_lastTimestamp( 0 ),
-#endif
-        m_cursorPos( 0, 0 ),
-        m_updateCursor( true ),
-        m_infinitePanWorks( false ),
-        m_gestureLastZoomFactor( 1.0 )
+        VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ),
+        m_scrollScale( 1.0, 1.0 ), m_cursorPos( 0, 0 ), m_updateCursor( true ),
+        m_infinitePanWorks( false ), m_gestureLastZoomFactor( 1.0 )
 {
     LoadSettings();
 
@@ -133,7 +125,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onCaptureLost ), nullptr, this );
 #endif
 
-#ifdef __WXMSW__
+#ifndef __WXOSX__
     if( m_parentPanel->EnableTouchEvents( wxTOUCH_ZOOM_GESTURE | wxTOUCH_PAN_GESTURES ) )
     {
         m_parentPanel->Connect( wxEVT_GESTURE_ZOOM,
@@ -360,16 +352,6 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
-#ifdef __WXGTK3__
-    if( aEvent.GetTimestamp() == m_lastTimestamp )
-    {
-        aEvent.Skip( false );
-        return;
-    }
-
-    m_lastTimestamp = aEvent.GetTimestamp();
-#endif
-
     const double wheelPanSpeed = 0.001;
     const int    axis = aEvent.GetWheelAxis();
 

@@ -193,11 +193,6 @@ private:
     /// The mouse position when a drag zoom started.
     VECTOR2D      m_zoomStartPoint;
 
-#ifdef __WXGTK3__
-    /// Last event timestamp used to de-bounce mouse wheel.
-    long int    m_lastTimestamp;
-#endif
-
     /// Current cursor position (world coordinates).
     VECTOR2D    m_cursorPos;
 
