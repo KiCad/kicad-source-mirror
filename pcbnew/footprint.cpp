@@ -2443,9 +2443,8 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     m_cachedHull.Mirror( m_pos, aFlipDirection );
 
-    // Re-use cached geometry, just update the hashes. See SetPosition().
-    std::swap( m_courtyard_cache_front, m_courtyard_cache_back );
-    std::swap( m_courtyard_cache_back_hash, m_courtyard_cache_front_hash );
+    // The courtyard caches must be rebuilt after geometry change
+    BuildCourtyardCaches();
 }
 
 
@@ -2562,8 +2561,9 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     m_boundingBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
     m_hullCacheTimeStamp = 0;
-    m_courtyard_cache_front_hash.Clear();
-    m_courtyard_cache_back_hash.Clear();
+
+    // The courtyard caches need to be rebuilt, as the geometry has changed
+    BuildCourtyardCaches();
 }
 
 
