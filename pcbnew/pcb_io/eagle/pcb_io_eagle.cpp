@@ -1744,22 +1744,24 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
 
         if( degrees == 90 || degrees == 0 || spin )
         {
-            aFPText->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
+            degrees *= sign;
         }
         else if( degrees == 180 )
         {
-            aFPText->SetTextAngle( EDA_ANGLE( sign * 0, DEGREES_T ) );
+            degrees = 0;
             align = -align;
         }
         else if( degrees == 270 )
         {
             align = -align;
-            aFPText->SetTextAngle( EDA_ANGLE( sign * 90, DEGREES_T ) );
+            degrees = sign * 90;
         }
         else
         {
-            aFPText->SetTextAngle( EDA_ANGLE( sign * 90 - degrees, DEGREES_T ) );
+            degrees = 90 - (sign * degrees);
         }
+
+        aFPText->SetTextAngle( EDA_ANGLE( degrees, DEGREES_T ) );
 
         switch( align )
         {
@@ -1811,6 +1813,22 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
         default:
             ;
         }
+
+        // Refine justification and rotation for mirrored texts
+        if( aFPText->IsMirrored() && degrees < -90 && degrees >= -270 )
+        {
+            aFPText->SetTextAngle( EDA_ANGLE( 180+degrees, DEGREES_T ) );
+
+            if( aFPText->GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+                aFPText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            else if( aFPText->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                aFPText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+            if( aFPText->GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+                aFPText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            else if( aFPText->GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+                aFPText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+       }
     }
     else
     {
@@ -1819,11 +1837,12 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
         double degrees = aFPText->GetTextAngle().AsDegrees()
                             + aFootprint->GetOrientation().AsDegrees();
 
-        // @todo there are a few more cases than these to contend with:
-        if( ( !aFPText->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ) )
-         || ( aFPText->IsMirrored() && ( degrees == 360 ) ) )
+        // bottom-left is eagle default
+        aFPText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aFPText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+
+        if( !aFPText->IsMirrored() && abs( degrees ) <= -180 )
         {
-            // ETEXT::TOP_RIGHT:
             aFPText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
             aFPText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         }
@@ -2123,20 +2142,7 @@ void PCB_IO_EAGLE::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         textItem->SetMirrored( t.rot->mirror );
 
         double degrees = t.rot->degrees;
-
-        if( degrees == 90 || t.rot->spin )
-        {
-            textItem->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
-        }
-        else if( degrees == 180 )
-        {
-            align = ETEXT::TOP_RIGHT;
-        }
-        else if( degrees == 270 )
-        {
-            align = ETEXT::TOP_RIGHT;
-            textItem->SetTextAngle( EDA_ANGLE( sign * 90, DEGREES_T ) );
-        }
+        textItem->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
     }
 
     switch( align )
