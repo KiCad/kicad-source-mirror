@@ -207,19 +207,33 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
         break;
 
     case GBR_SEGMENT:
-        // Reverse Y axis:
-        seg_start.y = -seg_start.y;
-        seg_end.y = -seg_end.y;
+        if( d_codeDescr->m_ApertType == APT_RECT )
+        {
+            // Using a rectangular aperture to draw a line is deprecated since 2020
+            // However old gerber file can use it (rare case) and can generate
+            // strange shapes, because the rect aperture is not rotated to match the
+            // line orientation.
+            // So draw this line as polygon
+            SHAPE_POLY_SET polyshape;
+            aGbrItem->ConvertSegmentToPolygon( &polyshape );
+            writePcbPolygon( polyshape, aLayer );
+        }
+        else
+        {
+            // Reverse Y axis:
+            seg_start.y = -seg_start.y;
+            seg_end.y = -seg_end.y;
 
-        fprintf( m_fp, "\t(gr_line\n\t\t(start %s %s) (end %s %s) (layer %s)\n",
-                 FormatDouble2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
-                 FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
-                 FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
-                 FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
-                 LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
+            fprintf( m_fp, "\t(gr_line\n\t\t(start %s %s) (end %s %s) (layer %s)\n",
+                     FormatDouble2Str( MapToPcbUnits( seg_start.x ) ).c_str(),
+                     FormatDouble2Str( MapToPcbUnits( seg_start.y ) ).c_str(),
+                     FormatDouble2Str( MapToPcbUnits( seg_end.x ) ).c_str(),
+                     FormatDouble2Str( MapToPcbUnits( seg_end.y ) ).c_str(),
+                     LSET::Name( PCB_LAYER_ID( aLayer ) ).ToStdString().c_str() );
 
-        export_stroke_info( aGbrItem->m_Size.x );
-        fprintf( m_fp, "\t)\n" );
+            export_stroke_info( aGbrItem->m_Size.x );
+            fprintf( m_fp, "\t)\n" );
+        }
         break;
     }
 }
