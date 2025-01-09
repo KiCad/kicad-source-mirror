@@ -1567,12 +1567,12 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
         else if( TESTLINE( ".ThermalWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalWidth" ) );
-            pad->SetThermalSpokeWidth( tmp );
+            pad->SetLocalThermalSpokeWidthOverride( tmp );
         }
         else if( TESTLINE( ".ThermalGap" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalGap" ) );
-            pad->SetThermalGap( tmp );
+            pad->SetLocalThermalGapOverride( tmp );
         }
         else if( TESTLINE( "$EndPAD" ) )
         {

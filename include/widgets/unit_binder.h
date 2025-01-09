@@ -157,6 +157,7 @@ public:
      * Return true if the control holds no value (ie: empty string, **not** 0).
      */
     bool IsNull() const;
+    void SetNull();
 
     /**
      * Validate the control against the given range, informing the user of any errors found.

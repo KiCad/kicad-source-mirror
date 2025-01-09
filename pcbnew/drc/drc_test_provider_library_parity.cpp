@@ -233,13 +233,15 @@ bool padHasOverrides( const PAD* a, const PAD* b, REPORTER& aReporter )
         REPORT_MSG( _( "%s has zone connection override." ), PAD_DESC( a ) );
     }
 
-    if( a->GetThermalGap() != b->GetThermalGap() )
+    if( a->GetLocalThermalGapOverride().has_value()
+            && a->GetThermalGap() != b->GetThermalGap() )
     {
         diff = true;
         REPORT_MSG( _( "%s has thermal relief gap override." ), PAD_DESC( a ) );
     }
 
-    if( a->GetThermalSpokeWidth() != b->GetThermalSpokeWidth() )
+    if( a->GetLocalThermalSpokeWidthOverride().has_value()
+            && a->GetLocalThermalSpokeWidthOverride() != b->GetLocalThermalSpokeWidthOverride() )
     {
         diff = true;
         REPORT_MSG( _( "%s has thermal relief spoke width override." ), PAD_DESC( a ) );

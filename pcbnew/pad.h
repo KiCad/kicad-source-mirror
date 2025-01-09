@@ -594,8 +594,14 @@ public:
      * Set the width of the thermal spokes connecting the pad to a zone.  If != 0 this will
      * override similar settings in the parent footprint and zone.
      */
-    void SetThermalSpokeWidth( int aWidth ) { m_padStack.ThermalSpokeWidth() = aWidth; }
-    int GetThermalSpokeWidth() const { return m_padStack.ThermalSpokeWidth().value_or( 0 ); }
+    void SetLocalThermalSpokeWidthOverride( std::optional<int> aWidth )
+    {
+        m_padStack.ThermalSpokeWidth() = aWidth;
+    }
+    std::optional<int> GetLocalThermalSpokeWidthOverride() const
+    {
+        return m_padStack.ThermalSpokeWidth();
+    }
 
     int GetLocalSpokeWidthOverride( wxString* aSource = nullptr ) const;
 
@@ -626,7 +632,16 @@ public:
     void SetThermalGap( int aGap ) { m_padStack.ThermalGap() = aGap; }
     int GetThermalGap() const { return m_padStack.ThermalGap().value_or( 0 ); }
 
-    int GetLocalThermalGapOverride( wxString* aSource = nullptr ) const;
+    int GetLocalThermalGapOverride( wxString* aSource ) const;
+
+    std::optional<int> GetLocalThermalGapOverride() const
+    {
+        return m_padStack.ThermalGap();
+    }
+    void SetLocalThermalGapOverride( const std::optional<int>& aOverride )
+    {
+        m_padStack.ThermalGap() = aOverride;
+    }
 
     /**
      * Has meaning only for rounded rectangle pads.

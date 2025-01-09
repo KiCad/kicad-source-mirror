@@ -367,7 +367,8 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
         BOOST_CHECK_EQUAL( expected->GetLocalClearance().value_or( 0 ),
                            pad->GetLocalClearance().value_or( 0 ) );
         CHECK_ENUM_CLASS_EQUAL( expected->GetLocalZoneConnection(), pad->GetLocalZoneConnection() );
-        BOOST_CHECK_EQUAL( expected->GetThermalSpokeWidth(), pad->GetThermalSpokeWidth() );
+        BOOST_CHECK_EQUAL( expected->GetLocalThermalSpokeWidthOverride().value_or( 0 ),
+                           pad->GetLocalThermalSpokeWidthOverride().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetThermalSpokeAngle(), pad->GetThermalSpokeAngle() );
         BOOST_CHECK_EQUAL( expected->GetThermalGap(), pad->GetThermalGap() );
         BOOST_CHECK_EQUAL( expected->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS ),

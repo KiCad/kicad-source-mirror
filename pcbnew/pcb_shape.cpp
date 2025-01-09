@@ -550,8 +550,8 @@ void PCB_SHAPE::SetIsProxyItem( bool aIsProxy )
     {
         if( GetShape() == SHAPE_T::SEGMENT )
         {
-            if( parentPad && parentPad->GetThermalSpokeWidth() )
-                SetWidth( parentPad->GetThermalSpokeWidth() );
+            if( parentPad && parentPad->GetLocalThermalSpokeWidthOverride().has_value() )
+                SetWidth( parentPad->GetLocalThermalSpokeWidthOverride().value() );
             else
                 SetWidth( pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM ) );
         }

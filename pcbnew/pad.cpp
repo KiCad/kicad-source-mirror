@@ -1265,7 +1265,7 @@ int PAD::GetLocalThermalGapOverride( wxString* aSource ) const
     if( m_padStack.ThermalGap().has_value() && aSource )
         *aSource = _( "pad" );
 
-    return m_padStack.ThermalGap().value_or( 0 );
+    return GetLocalThermalGapOverride().value_or( 0 );
 }
 
 
@@ -1877,9 +1877,9 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     SetLocalSolderPasteMarginRatio( aMasterPad.GetLocalSolderPasteMarginRatio() );
 
     SetLocalZoneConnection( aMasterPad.GetLocalZoneConnection() );
-    SetThermalSpokeWidth( aMasterPad.GetThermalSpokeWidth() );
+    SetLocalThermalSpokeWidthOverride( aMasterPad.GetLocalThermalSpokeWidthOverride() );
     SetThermalSpokeAngle( aMasterPad.GetThermalSpokeAngle() );
-    SetThermalGap( aMasterPad.GetThermalGap() );
+    SetLocalThermalGapOverride( aMasterPad.GetLocalThermalGapOverride() );
 
     SetCustomShapeInZoneOpt( aMasterPad.GetCustomShapeInZoneOpt() );
 
@@ -2720,17 +2720,20 @@ static struct PAD_DESC
 
         constexpr int minZoneWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
 
-        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Spoke Width" ),
-                    &PAD::SetThermalSpokeWidth, &PAD::GetThermalSpokeWidth,
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
+                    _HKI( "Thermal Relief Spoke Width" ),
+                    &PAD::SetLocalThermalSpokeWidthOverride, &PAD::GetLocalThermalSpokeWidthOverride,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides )
                 .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minZoneWidth, INT_MAX> );
 
-        propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
+        propMgr.AddProperty( new PROPERTY<PAD, double>(
+                    _HKI( "Thermal Relief Spoke Angle" ),
                     &PAD::SetThermalSpokeAngleDegrees, &PAD::GetThermalSpokeAngleDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ), groupOverrides );
 
-        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Gap" ),
-                    &PAD::SetThermalGap, &PAD::GetThermalGap,
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
+                    _HKI( "Thermal Relief Gap" ),
+                    &PAD::SetLocalThermalGapOverride, &PAD::GetLocalThermalGapOverride,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 

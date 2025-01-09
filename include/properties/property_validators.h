@@ -112,9 +112,16 @@ public:
         int val = 0;
 
         if( aValue.CheckType<int>() )
+        {
             val = aValue.As<int>();
+        }
         else if( aValue.CheckType<std::optional<int>>() )
-            val = aValue.As<std::optional<int>>().value_or( 0 );
+        {
+            if( aValue.As<std::optional<int>>().has_value() )
+                val = aValue.As<std::optional<int>>().value();
+            else
+                return std::nullopt;     // no value for a std::optional is always valid
+        }
 
         if( val > Max )
             return std::make_unique<VALIDATION_ERROR_TOO_LARGE<int>>( val, Max );
@@ -132,9 +139,16 @@ public:
         int val = 0;
 
         if( aValue.CheckType<int>() )
+        {
             val = aValue.As<int>();
+        }
         else if( aValue.CheckType<std::optional<int>>() )
-            val = aValue.As<std::optional<int>>().value_or( 0 );
+        {
+            if( aValue.As<std::optional<int>>().has_value() )
+                val = aValue.As<std::optional<int>>().value();
+            else
+                return std::nullopt;     // no value for a std::optional is always valid
+        }
 
         if( val < 0 )
             return std::make_unique<VALIDATION_ERROR_TOO_SMALL<int>>( val, 0 );

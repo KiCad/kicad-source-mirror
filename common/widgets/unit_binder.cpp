@@ -655,12 +655,17 @@ bool UNIT_BINDER::IsIndeterminate() const
 
 bool UNIT_BINDER::IsNull() const
 {
-    wxTextEntry* te = dynamic_cast<wxTextEntry*>( m_valueCtrl );
-
-    if( te )
+    if( wxTextEntry* te = dynamic_cast<wxTextEntry*>( m_valueCtrl ) )
         return te->GetValue().IsEmpty();
 
     return false;
+}
+
+
+void UNIT_BINDER::SetNull()
+{
+    if( wxTextEntry* te = dynamic_cast<wxTextEntry*>( m_valueCtrl ) )
+        return te->SetValue( wxEmptyString );
 }
 
 

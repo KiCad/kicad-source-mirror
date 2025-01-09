@@ -555,9 +555,17 @@ wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant,
 wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) const
 #endif
 {
-    if( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
+    if( aVariant.GetType() == wxT( "std::optional<double>" ) )
     {
-        // TODO(JE) Is this still needed?
+        auto* variantData = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( aVariant.GetData() );
+
+        if( variantData->Value().has_value() )
+            return wxString::Format( wxS( "%g\u00B0" ), variantData->Value().value() / m_scale );
+        else
+            return wxEmptyString;
+    }
+    else if( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
+    {
         return wxString::Format( wxS( "%g\u00B0" ), aVariant.GetDouble() / m_scale );
     }
     else if( aVariant.GetType() == wxS( "EDA_ANGLE" ) )

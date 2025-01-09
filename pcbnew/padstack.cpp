@@ -40,9 +40,9 @@ PADSTACK::PADSTACK( BOARD_ITEM* aParent ) :
 {
     m_copperProps[PADSTACK::ALL_LAYERS].shape = SHAPE_PROPS();
     m_copperProps[PADSTACK::ALL_LAYERS].zone_connection = ZONE_CONNECTION::INHERITED;
-    m_copperProps[PADSTACK::ALL_LAYERS].thermal_spoke_width = 0;
+    m_copperProps[PADSTACK::ALL_LAYERS].thermal_spoke_width = std::nullopt;
     m_copperProps[PADSTACK::ALL_LAYERS].thermal_spoke_angle = ANGLE_45;
-    m_copperProps[PADSTACK::ALL_LAYERS].thermal_gap = 0;
+    m_copperProps[PADSTACK::ALL_LAYERS].thermal_gap = std::nullopt;
 
     m_drill.shape = PAD_DRILL_SHAPE::CIRCLE;
     m_drill.start = F_Cu;
@@ -247,8 +247,8 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
     else
     {
         CopperLayer( ALL_LAYERS ).zone_connection = ZONE_CONNECTION::INHERITED;
-        CopperLayer( ALL_LAYERS ).thermal_gap = 0;
-        CopperLayer( ALL_LAYERS ).thermal_spoke_width = 0;
+        CopperLayer( ALL_LAYERS ).thermal_gap = std::nullopt;
+        CopperLayer( ALL_LAYERS ).thermal_spoke_width = std::nullopt;
         CopperLayer( ALL_LAYERS ).thermal_spoke_angle = DefaultThermalSpokeAngleForShape( F_Cu );
     }
 

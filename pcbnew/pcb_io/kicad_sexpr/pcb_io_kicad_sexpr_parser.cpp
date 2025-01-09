@@ -5235,7 +5235,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
 
         case T_thermal_width:       // legacy token
         case T_thermal_bridge_width:
-            pad->SetThermalSpokeWidth( parseBoardUnits( token ) );
+            pad->SetLocalThermalSpokeWidthOverride( parseBoardUnits( token ) );
             NeedRIGHT();
             break;
 

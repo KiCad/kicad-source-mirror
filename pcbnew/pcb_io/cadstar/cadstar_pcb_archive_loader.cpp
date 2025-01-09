@@ -1236,7 +1236,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         pad->SetThermalGap( getKiCadLength( csPadcode.ReliefClearance ) );
 
     if( csPadcode.ReliefWidth != UNDEFINED_VALUE )
-        pad->SetThermalSpokeWidth( getKiCadLength( csPadcode.ReliefWidth ) );
+        pad->SetLocalThermalSpokeWidthOverride( getKiCadLength( csPadcode.ReliefWidth ) );
 
     if( csPadcode.DrillDiameter != UNDEFINED_VALUE )
     {

@@ -672,9 +672,17 @@ void DIALOG_PAD_PROPERTIES::initValues()
     else
         m_pasteMarginRatio.ChangeValue( wxEmptyString );
 
-    m_spokeWidth.ChangeValue( m_previewPad->GetThermalSpokeWidth() );
+    if( m_previewPad->GetLocalThermalSpokeWidthOverride().has_value() )
+        m_spokeWidth.ChangeValue( m_previewPad->GetLocalThermalSpokeWidthOverride().value() );
+    else
+        m_spokeWidth.SetNull();
+
+    if( m_previewPad->GetLocalThermalGapOverride().has_value() )
+        m_thermalGap.ChangeValue( m_previewPad->GetLocalThermalGapOverride().value() );
+    else
+        m_thermalGap.SetNull();
+
     m_spokeAngle.ChangeAngleValue( m_previewPad->GetThermalSpokeAngle() );
-    m_thermalGap.ChangeValue( m_previewPad->GetThermalGap() );
     m_pad_orientation.ChangeAngleValue( m_previewPad->GetOrientation() );
 
     m_cbTeardrops->SetValue( m_previewPad->GetTeardropParams().m_Enabled );
@@ -1734,9 +1742,13 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     else
         aPad->SetLocalSolderPasteMarginRatio( m_pasteMarginRatio.GetDoubleValue() / 100.0 );
 
-    aPad->SetThermalSpokeWidth( m_spokeWidth.GetIntValue() );
+    if( !m_spokeWidth.IsNull() )
+        aPad->SetLocalThermalSpokeWidthOverride( m_spokeWidth.GetIntValue() );
+
+    if( !m_thermalGap.IsNull() )
+        aPad->SetLocalThermalGapOverride( m_thermalGap.GetIntValue() );
+
     aPad->SetThermalSpokeAngle( m_spokeAngle.GetAngleValue() );
-    aPad->SetThermalGap( m_thermalGap.GetIntValue() );
 
     // And rotation
     aPad->SetOrientation( m_pad_orientation.GetAngleValue() );

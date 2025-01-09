@@ -896,8 +896,8 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommi
 
             if( shape->IsProxyItem() && shape->GetShape() == SHAPE_T::SEGMENT )
             {
-                if( aPad->GetThermalSpokeWidth() )
-                    shape->SetWidth( aPad->GetThermalSpokeWidth() );
+                if( aPad->GetLocalThermalSpokeWidthOverride().has_value() )
+                    shape->SetWidth( aPad->GetLocalThermalSpokeWidthOverride().value() );
                 else
                     shape->SetWidth( pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM ) );
             }
