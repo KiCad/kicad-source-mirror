@@ -32,7 +32,7 @@
 
 #include <wx/image.h>
 #include <wx/init.h>
-
+#include <wx/app.h>
 
 bool init_unit_test()
 {

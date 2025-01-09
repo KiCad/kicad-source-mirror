@@ -194,6 +194,7 @@ set( KICOMMON_SRCS
     wildcards_and_files_ext.cpp
     wx_filename.cpp
 
+    singleton.cpp
     pgm_base.cpp
 
     ../scripting/python_scripting.cpp

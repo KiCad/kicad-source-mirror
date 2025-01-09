@@ -17,30 +17,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_SINGLETON_H
-#define KICAD_SINGLETON_H
+#include <singleton.h>
+#include <bs_thread_pool.hpp>
+#include <gal/opengl/gl_context_mgr.h>
 
-#include <advanced_config.h>
 
-class GL_CONTEXT_MANAGER;
-namespace BS
+KICAD_SINGLETON::~KICAD_SINGLETON()
 {
-class thread_pool;
+    // This will wait for all threads to finish and then join them to the main thread
+    delete m_ThreadPool;
+
+    m_ThreadPool = nullptr;
+
+    m_GLContextManager->DeleteAll();
+    delete m_GLContextManager;
+    m_GLContextManager = nullptr;
 }
 
-class KICAD_SINGLETON
+
+void KICAD_SINGLETON::Init()
 {
-public:
-    KICAD_SINGLETON(){};
-
-    ~KICAD_SINGLETON();
-
-
-    void Init();
-
-    BS::thread_pool* m_ThreadPool;
-    GL_CONTEXT_MANAGER* m_GLContextManager;
-};
-
-
-#endif // KICAD_SINGLETON_H
+    int num_threads = std::max( 0, ADVANCED_CFG::GetCfg().m_MaximumThreads );
+    m_ThreadPool = new BS::thread_pool( num_threads );
+    m_GLContextManager = new GL_CONTEXT_MANAGER();
+}
