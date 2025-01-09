@@ -110,7 +110,7 @@ private:
      * @param aTrack is the track to test.
      * @param aTstStart = true ot test the start point of the track or false for end point
      */
-    bool testTrackEndpointIsNode( PCB_TRACK* aTrack, bool aTstStart );
+    bool testTrackEndpointIsNode( PCB_TRACK* aTrack, bool aTstStart, bool aTstEnd );
 
     void removeItems( std::set<BOARD_ITEM*>& aItems );
 
