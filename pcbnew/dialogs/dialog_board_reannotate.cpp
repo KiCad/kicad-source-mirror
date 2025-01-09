@@ -327,7 +327,7 @@ void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
 void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
 {
     aMessage.Printf( _( "\n%s footprints will be reannotated." ),
-                     _( AnnotateString[m_annotationScope] ) );
+                     wxGetTranslation( AnnotateString[m_annotationScope] ) );
 
     if( !m_ExcludeList->GetValue().empty() )
     {

@@ -20,6 +20,7 @@
 
 #include <string_utils.h>
 #include <wx/stc/stc.h>
+#include <wx/dc.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/wx_grid.h>
 #include <scintilla_tricks.h>

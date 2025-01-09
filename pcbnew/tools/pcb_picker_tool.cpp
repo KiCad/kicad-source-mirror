@@ -249,7 +249,7 @@ int PCB_PICKER_TOOL::SelectPointInteractively( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    statusPopup.SetText( _( params.m_Prompt ) );
+    statusPopup.SetText( wxGetTranslation( params.m_Prompt ) );
 
     const auto sendPoint = [&]( const std::optional<VECTOR2I>& aPoint )
     {
@@ -308,7 +308,7 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    statusPopup.SetText( _( params.m_Prompt ) );
+    statusPopup.SetText( wxGetTranslation( params.m_Prompt ) );
 
     const auto sendItem = [&]( const EDA_ITEM* aItem )
     {

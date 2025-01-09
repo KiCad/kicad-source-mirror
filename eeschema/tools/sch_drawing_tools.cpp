@@ -3044,8 +3044,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             else
             {
                 sheet->GetFields()[SHEETNAME].SetText( wxT( "Untitled Sheet" ) );
-                sheet->GetFields()[SHEETFILENAME].SetText( wxT( "untitled." )
-                                                           + FILEEXT::KiCadSchematicFileExtension );
+                sheet->GetFields()[SHEETFILENAME].SetText(
+                    wxString::Format( wxT( "untitled.%s" ), FILEEXT::KiCadSchematicFileExtension ) );
             }
 
             sheet->SetFlags( IS_NEW | IS_MOVING );

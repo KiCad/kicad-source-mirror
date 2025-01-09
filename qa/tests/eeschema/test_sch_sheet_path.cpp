@@ -138,7 +138,8 @@ BOOST_AUTO_TEST_CASE( SheetListGetOrdinalPath )
     // The "complex_hierarchy" test project has a root sheet with two sheets that reference the
     // same file.
     std::unique_ptr<SCHEMATIC> schematic;
-    wxFileName fn( KI_TEST::GetEeschemaTestDataDir() + wxS( "netlists/complex_hierarchy" ),
+    wxFileName fn( wxString::Format( wxS( "%snetlists/complex_hierarchy" ),
+                                     KI_TEST::GetEeschemaTestDataDir() ),
                    wxS( "complex_hierarchy" ), FILEEXT::ProjectFileExtension );
 
     schematic.reset( EESCHEMA_HELPERS::LoadSchematic( fn.GetFullPath(), false, false, nullptr ) );

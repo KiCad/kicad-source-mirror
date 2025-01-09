@@ -291,7 +291,7 @@ void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
 
     if( aProperties && aProperties->contains( "fplib" ) )
     {
-        fplibname = aProperties->at( "fplib" );
+        fplibname = wxString::FromUTF8( aProperties->at( "fplib" ) );
     }
 
     // Get timestamp

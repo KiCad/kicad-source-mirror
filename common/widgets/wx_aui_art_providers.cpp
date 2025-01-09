@@ -28,9 +28,13 @@
 #include <settings/common_settings.h>
 #include <widgets/wx_aui_art_providers.h>
 
-
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxSize WX_AUI_TOOLBAR_ART::GetToolSize( wxReadOnlyDC& aDc, wxWindow* aWindow,
+                                        const wxAuiToolBarItem& aItem )
+#else
 wxSize WX_AUI_TOOLBAR_ART::GetToolSize( wxDC& aDc, wxWindow* aWindow,
                                         const wxAuiToolBarItem& aItem )
+#endif
 {
     // Based on the upstream wxWidgets implementation, but simplified for our application
     int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;

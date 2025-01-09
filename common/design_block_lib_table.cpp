@@ -536,7 +536,8 @@ public:
 
         // consider a directory to be a lib if it's name ends with the design block lib dir extension
         // it is under $KICADn_3RD_PARTY/design_blocks/<pkgid>/ i.e. has nested level of at least +3
-        if( dirPath.EndsWith( wxS( "." ) + FILEEXT::KiCadDesignBlockLibPathExtension )
+        if( dirPath.EndsWith( wxString::Format( wxS( ".%s" ),
+                                                FILEEXT::KiCadDesignBlockLibPathExtension ) )
             && dir.GetDirCount() >= m_prefix_dir_count + 3 )
         {
             wxString versionedPath = wxString::Format(
