@@ -32,7 +32,8 @@
 
 #define ARG_EXCLUDE_DRAWING_SHEET "--exclude-drawing-sheet"
 #define ARG_PAGE_SIZE "--page-size-mode"
-#define ARG_MODE_NEW "--mode-new"
+#define ARG_MODE_SINGLE "--mode-single"
+#define ARG_MODE_MULTI "--mode-multi"
 
 CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
 {
@@ -100,10 +101,18 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
                        "F.Cu,B.Cu" ) ) )
             .metavar( "COMMON_LAYER_LIST" );
 
-    m_argParser.add_argument( ARG_MODE_NEW )
+
+    m_argParser.add_argument( ARG_MODE_SINGLE )
             .help( UTF8STDSTR(
-                    _( "Opt into the new behavior which means output path is a directory, a file "
-                       "per layer is generated and the common layers arg becomes available. " ) ) )
+                    _( "Generates a single file with the output arg path acting as the complete "
+                       "directory and filename path. COMMON_LAYER_LIST does not function in this "
+                       "mode. Instead LAYER_LIST controls all layers plotted." ) ) )
+            .flag();
+
+    m_argParser.add_argument( ARG_MODE_MULTI )
+            .help( UTF8STDSTR( _( "Generates one or more files with behavior similar to the KiCad "
+                                  "GUI plotting. The given output path specifies a directory in "
+                                  "which files may be output." ) ) )
             .flag();
 
 
@@ -152,19 +161,19 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 
     svgJob->m_printMaskLayer = m_selectedLayers;
 
-    if( m_argParser.get<bool>( ARG_MODE_NEW ) )
-        svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::NEW;
+    if( m_argParser.get<bool>( ARG_MODE_MULTI ) )
+        svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::MULTI;
     else
-        svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::DEPRECATED;
+        svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE;
 
-    if( svgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::DEPRECATED )
+    if( svgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
     {
         wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
                    _( "This command has deprecated behavior as of KiCad 9.0, the default behavior "
                       "of this command will change in a future release." ) );
 
         wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
-                   _( "The new behavior will match --mode-new" ) );
+                   _( "The new behavior will match --mode-multi" ) );
     }
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );

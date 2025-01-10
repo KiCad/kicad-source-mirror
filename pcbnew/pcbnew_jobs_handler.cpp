@@ -702,60 +702,35 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::DEPRECATED )
+    PCB_PLOT_PARAMS plotOpts;
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob );
+
+    PCB_PLOTTER     plotter( brd, m_reporter, plotOpts );
+
+    std::optional<wxString> layerName;
+    std::optional<wxString> sheetName;
+    std::optional<wxString> sheetPath;
+
+    if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
     {
-        PCB_PLOT_SVG_OPTIONS svgPlotOptions;
-        svgPlotOptions.m_blackAndWhite = aSvgJob->m_blackAndWhite;
-        svgPlotOptions.m_colorTheme = aSvgJob->m_colorTheme;
-        svgPlotOptions.m_outputFile = aSvgJob->GetFullOutputPath();
-        svgPlotOptions.m_mirror = aSvgJob->m_mirror;
-        svgPlotOptions.m_negative = aSvgJob->m_negative;
-        svgPlotOptions.m_pageSizeMode = aSvgJob->m_pageSizeMode;
-        svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
-        svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
-        svgPlotOptions.m_sketchPadsOnFabLayers = aSvgJob->m_sketchPadsOnFabLayers;
-        svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
-        svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
-        svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
-        svgPlotOptions.m_precision = aSvgJob->m_precision;
+        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+            layerName = aSvgJob->GetVarOverrides().at( wxT( "LAYER" ) );
 
-        switch( aSvgJob->m_drillShapeOption )
-        {
-        default:
-        case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
-            svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::NO_DRILL_SHAPE );
-            break;
-        case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
-            svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::SMALL_DRILL_SHAPE );
-            break;
-        case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
-            svgPlotOptions.m_drillShapeOption = static_cast<int>( DRILL_MARKS::FULL_DRILL_SHAPE );
-            break;
-        }
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+            sheetName = aSvgJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
 
-        if( EXPORT_SVG::Plot( brd, svgPlotOptions ) )
-        {
-            m_reporter->Report( _( "Successfully created svg file" ) + wxS( "\n" ),
-                                RPT_SEVERITY_INFO );
-            return CLI::EXIT_CODES::OK;
-        }
-        else
-        {
-            m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
-            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
-        }
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+            sheetPath = aSvgJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
-    else
-    {
-        PCB_PLOT_PARAMS plotOpts;
-        PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob );
 
-        PCB_PLOTTER     plotter( brd, m_reporter, plotOpts );
-        if( !plotter.Plot( aSvgJob->GetFullOutputPath(), aSvgJob->m_printMaskLayer,
-                          aSvgJob->m_printMaskLayersToIncludeOnAllLayers, false ) )
-        {
-            return CLI::EXIT_CODES::ERR_UNKNOWN;
-        }
+    if( !plotter.Plot( aSvgJob->GetFullOutputPath(), aSvgJob->m_printMaskLayer,
+                       aSvgJob->m_printMaskLayersToIncludeOnAllLayers, false,
+                       aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE,
+                       layerName,
+                       sheetName,
+                       sheetPath ) )
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
     return CLI::EXIT_CODES::OK;

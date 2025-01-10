@@ -24,15 +24,15 @@
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_SVG::GEN_MODE,
                               {
-                                { JOB_EXPORT_PCB_SVG::GEN_MODE::DEPRECATED, "deprecated" },
-                                { JOB_EXPORT_PCB_SVG::GEN_MODE::NEW, "new" },
+                                { JOB_EXPORT_PCB_SVG::GEN_MODE::MULTI, "multi" },   // intended gui behavior, first as default
+                                { JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE, "single" },
                               } )
 
 JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
     JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG, "svg", false ),
     m_pageSizeMode( 0 ),
     m_precision( 4 ),
-    m_genMode( GEN_MODE::NEW )
+    m_genMode( GEN_MODE::SINGLE )
 {
     m_plotDrawingSheet = true;
 
@@ -48,7 +48,6 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
     m_params.emplace_back(
             new JOB_PARAM<DRILL_MARKS>( "drill_shape", &m_drillShapeOption, m_drillShapeOption ) );
     m_params.emplace_back( new JOB_PARAM<unsigned int>( "precision", &m_precision, m_precision ) );
-
     m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
 }
 

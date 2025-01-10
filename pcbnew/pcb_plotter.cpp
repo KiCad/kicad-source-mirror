@@ -44,8 +44,14 @@ PCB_PLOTTER::PCB_PLOTTER( BOARD* aBoard, REPORTER* aReporter, PCB_PLOT_PARAMS& a
 }
 
 
-bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
-                        const LSEQ& aCommonLayers, bool aUseGerberFileExtensions )
+bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
+                        const LSEQ& aLayersToPlot,
+                        const LSEQ& aCommonLayers,
+                        bool aUseGerberFileExtensions,
+                        bool aOutputPathIsSingle,
+                        std::optional<wxString> aLayerName,
+                        std::optional<wxString> aSheetName,
+                        std::optional<wxString> aSheetPath )
 {
     std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
     {
@@ -53,10 +59,34 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         return m_board->ResolveTextVar( token, 0 );
     };
 
-    size_t finalPageCount = 0;
-    for( size_t i = 0; i < aLayersToPlot.size(); i++ )
+    // sanity, ensure one layer to print
+    if( aLayersToPlot.size() < 1 )
     {
-        PCB_LAYER_ID layer = aLayersToPlot[i];
+        m_reporter->Report( _( "No layers selected for plotting." ), RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    // To reuse logic, in single plot mode, we want to kick any extra layers from the main list to commonLayers
+    LSEQ layersToPlot;
+    LSEQ commonLayers;
+    if( aOutputPathIsSingle )
+    {
+        layersToPlot.push_back( aLayersToPlot[0] );
+
+        if( aLayersToPlot.size() > 1 )
+            commonLayers.insert( commonLayers.end(), aLayersToPlot.begin() + 1,
+                                 aLayersToPlot.end() );
+    }
+    else
+    {
+        layersToPlot = aLayersToPlot;
+        commonLayers = aCommonLayers;
+    }
+
+    size_t finalPageCount = 0;
+    for( size_t i = 0; i < layersToPlot.size(); i++ )
+    {
+        PCB_LAYER_ID layer = layersToPlot[i];
         if( copperLayerShouldBeSkipped( layer ) )
             continue;
 
@@ -65,45 +95,53 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
 
     std::unique_ptr<GERBER_JOBFILE_WRITER> jobfile_writer;
 
-    if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER )
+    if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && !aOutputPathIsSingle )
     {
         jobfile_writer = std::make_unique<GERBER_JOBFILE_WRITER>( m_board, m_reporter );
     }
 
     wxString fileExt( GetDefaultPlotExtension( m_plotOpts.GetFormat() ) );
     wxString sheetPath;
+    wxString msg;
     PLOTTER* plotter = nullptr;
-    for( size_t i = 0, pageNum = 1; i < aLayersToPlot.size(); i++ )
+    for( size_t i = 0, pageNum = 1; i < layersToPlot.size(); i++ )
     {
-        PCB_LAYER_ID layer = aLayersToPlot[i];
+        PCB_LAYER_ID layer = layersToPlot[i];
 
         if( copperLayerShouldBeSkipped( layer ) )
             continue;
 
-        LSEQ plotSequence = getPlotSequence( layer, aCommonLayers );
+        LSEQ plotSequence = getPlotSequence( layer, commonLayers );
 
         wxString layerName = m_board->GetLayerName( layer );
 
         wxFileName fn;
-        wxFileName brdFn = m_board->GetFileName();
-        wxString   msg;
-        fn.Assign( aOutputPath, brdFn.GetName() );
 
-        // Use Gerber Extensions based on layer number
-        // (See http://en.wikipedia.org/wiki/Gerber_File)
-        if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && aUseGerberFileExtensions )
-            fileExt = GetGerberProtelExtension( layer );
-
-        if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle )
+        if( aOutputPathIsSingle )
         {
-            fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
+            fn = wxFileName( aOutputPath );
         }
         else
         {
-            BuildPlotFileName( &fn, aOutputPath, layerName, fileExt );
+            wxFileName brdFn = m_board->GetFileName();
+            fn.Assign( aOutputPath, brdFn.GetName() );
+
+            // Use Gerber Extensions based on layer number
+            // (See http://en.wikipedia.org/wiki/Gerber_File)
+            if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && aUseGerberFileExtensions )
+                fileExt = GetGerberProtelExtension( layer );
+
+            if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle )
+            {
+                fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
+            }
+            else
+            {
+                BuildPlotFileName( &fn, aOutputPath, layerName, fileExt );
+            }
         }
 
-        if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER )
+        if( jobfile_writer )
         {
             wxString fullname = fn.GetFullName();
             jobfile_writer->AddGbrFile( layer, fullname );
@@ -118,6 +156,18 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
             wxString pageNumber = wxString::Format( "%zu", pageNum );
             wxString pageName = layerName;
             wxString sheetName = layerName;
+
+            if( aLayerName.has_value() )
+            {
+                layerName = aLayerName.value();
+                pageName = aLayerName.value();
+            }
+
+            if( aSheetName.has_value() )
+                sheetName = aSheetName.value();
+
+            if( aSheetPath.has_value() )
+                sheetPath = aSheetPath.value();
 
             plotter = StartPlotBoard( m_board, &m_plotOpts, layer, layerName, fn.GetFullPath(),
                                       sheetName,
@@ -146,7 +196,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
 
 
             if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle
-                && i != aLayersToPlot.size() - 1 )
+                && i != layersToPlot.size() - 1 )
             {
                 wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
 
@@ -156,9 +206,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
                 do
                 {
                     ++nextI;
-                    nextLayer = aLayersToPlot[nextI];
+                    nextLayer = layersToPlot[nextI];
                 } while( copperLayerShouldBeSkipped( nextLayer )
-                         && ( nextI < aLayersToPlot.size() - 1 ) );
+                         && ( nextI < layersToPlot.size() - 1 ) );
 
                 wxString     pageName = m_board->GetLayerName( nextLayer );
                 wxString     sheetName = layerName;
@@ -202,7 +252,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         wxSafeYield(); // displays report message.
     }
 
-    if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && m_plotOpts.GetCreateGerberJobFile() )
+    if( jobfile_writer && m_plotOpts.GetCreateGerberJobFile() )
     {
         // Pick the basename from the board file
         wxFileName fn( m_board->GetFileName() );

@@ -40,8 +40,8 @@ public:
 
     enum class GEN_MODE
     {
-        DEPRECATED,
-        NEW
+        SINGLE,
+        MULTI
     };
 
     GEN_MODE m_genMode;

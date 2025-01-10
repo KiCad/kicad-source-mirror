@@ -36,7 +36,11 @@ public:
     PCB_PLOTTER( BOARD* aBoard, REPORTER* aReporter, PCB_PLOT_PARAMS& aParams );
 
     bool Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot, const LSEQ& aCommonLayers,
-               bool aUseGerberFileExtensions );
+               bool aUseGerberFileExtensions,
+                bool aOutputPathIsSingle = false,
+                std::optional<wxString> aLayerName = std::nullopt,
+                std::optional<wxString> aSheetName = std::nullopt,
+                std::optional<wxString> aSheetPath = std::nullopt );
 
     /**
      * All copper layers that are disabled are actually selected
