@@ -883,6 +883,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 continue;
             }
 
+            // Ignore footprints outside of the rule area
+            if( !refFP->GetEffectiveShape( refFP->GetLayer() )->Collide( &refPoly, 0 ) )
+                continue;
+
             if( targetFP->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
 
