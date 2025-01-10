@@ -1913,7 +1913,8 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 
     // And now we can proceed with assembling the final line and optimizing it.
 
-    LINE l = aNode->AssembleLine( aLatest );
+    LINE l_orig = aNode->AssembleLine( aLatest );
+    LINE l( l_orig );
 
     bool optimized = OPTIMIZER::Optimize( &l, OPTIMIZER::MERGE_COLINEAR, aNode );
 
@@ -1923,9 +1924,10 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 
     if( optimized || simplified.PointCount() != l.PointCount() )
     {
-        aNode->Remove( l );
+        aNode->Remove( l_orig );
         l.SetShape( simplified );
         aNode->Add( l );
+        PNS_DBG( Dbg(), AddItem, &l, RED, 100000, wxT("simplified"));
     }
 }
 
