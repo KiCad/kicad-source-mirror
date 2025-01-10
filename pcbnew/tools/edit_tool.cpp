@@ -562,11 +562,9 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                     }
                 }
 
-                if( footprints.size() )
+                if( !sTool->GetSelection().IsHover() && footprints.size() )
                 {
-                    /*
-                     * Remove non-footprints
-                     */
+                    // Remove non-footprints so box-selection will drag footprints.
                     for( int ii = aCollector.GetCount() - 1; ii >= 0; --ii )
                     {
                         if( aCollector[ii]->Type() != PCB_FOOTPRINT_T )
