@@ -2569,17 +2569,6 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed )
         return;
     }
 
-    if( m_schematic )
-    {
-        SCH_CONNECTION* conn = nullptr;
-
-        if( !aLabel->IsConnectivityDirty() )
-            conn = aLabel->Connection();
-
-        if( conn && conn->IsBus() )
-            color = getRenderColor( aLabel, LAYER_BUS, drawingShadows, aDimmed );
-    }
-
     std::vector<VECTOR2I> pts;
     std::deque<VECTOR2D> pts2;
 
