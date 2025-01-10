@@ -32,7 +32,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE::DIALOG_MULTICHANNEL_GENERATE_RULE_
 	m_cbReplaceExisting = new wxCheckBox( this, wxID_ANY, _("Replace existing placement rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbReplaceExisting, 0, wxALL, 5 );
 
-	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group components with their placement rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group footprints with their placement rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbGroupItems, 0, wxALL, 5 );
 
 
