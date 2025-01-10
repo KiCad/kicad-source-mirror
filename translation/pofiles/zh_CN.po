@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-08 14:32+0300\n"
-"PO-Revision-Date: 2025-01-07 20:22+0000\n"
+"PO-Revision-Date: 2025-01-10 20:39+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -972,7 +972,6 @@ msgid "Configure Paths"
 msgstr "配置路径"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
 msgstr "嵌入模型"
 
@@ -3174,7 +3173,6 @@ msgid "Reference Designators"
 msgstr "位号"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear net assignments"
 msgstr "清除网络分配"
 
@@ -4720,7 +4718,6 @@ msgid "Remove embedded file"
 msgstr "移除嵌入文件"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
 msgstr "嵌入字体"
 
@@ -4729,9 +4726,8 @@ msgid "Store a copy of all fonts used"
 msgstr "嵌入所有使用到的字体"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "导出..."
+msgstr "导出 (&E)..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
@@ -5327,9 +5323,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>满足匹配规则 '%s' 的网络: </b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "网络类:"
+msgstr "网络类"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:640
@@ -5421,9 +5416,8 @@ msgid "Import colors from schematic"
 msgstr "从原理图中导入颜色"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "网络类分配:"
+msgstr "网络类分配"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -8235,9 +8229,9 @@ msgid "Failed to create file '%s'."
 msgstr "创建文件 '%s' 失败。"
 
 #: common/project/project_archiver.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "移除目录 '%s' 时出错: %s"
+msgstr "打开目录时出错: '%s'。"
 
 #: common/project/project_archiver.cpp:382
 #, c-format
@@ -8245,9 +8239,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "已创建 Zip 文件 '%s'(%s 未压缩, %s 已压缩)。"
 
 #: common/project/project_archiver.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "错误: %s"
+msgstr "错误: '%s'。"
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -11218,7 +11212,6 @@ msgid "New library identifier:"
 msgstr "新的库标识:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
-#, fuzzy
 msgid "Update/Reset Fields"
 msgstr "更新/重置字段"
 
@@ -16227,14 +16220,12 @@ msgid "Reset Libraries"
 msgstr "重置库"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "工程字段名称模板:"
+msgstr "工程字段名称模板"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "全局字段名称模板:"
+msgstr "全局字段名称模板"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:208
 #, c-format
@@ -21900,7 +21891,7 @@ msgstr "将当前符号重命名或另存到其他库中"
 
 #: eeschema/tools/ee_actions.cpp:235
 msgid "Save Copy As..."
-msgstr "另存为..."
+msgstr "另存副本为..."
 
 #: eeschema/tools/ee_actions.cpp:236
 msgid "Save a copy of the current symbol to a different library or name"
@@ -26113,7 +26104,6 @@ msgid "A new version of KiCad is available!"
 msgstr "KiCad 新版本已发布!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip This Version"
 msgstr "跳过此版本 (&S)"
 
@@ -26124,7 +26114,6 @@ msgid ""
 msgstr "忽略新版本发布的更新通知。 将显示额外的更新说明。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
-#, fuzzy
 msgid "&Remind Me Later"
 msgstr "稍后提醒我 (&R)"
 
@@ -32671,7 +32660,6 @@ msgid "Choose how many digits of precision to display"
 msgstr "选择要显示的精度位数"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "Arrow direction:"
 msgstr "箭头方向:"
 
@@ -33362,7 +33350,6 @@ msgid "Compressing output"
 msgstr "压缩输出"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:73
-#, fuzzy
 msgid "Compression format:"
 msgstr "压缩格式:"
 
@@ -34498,9 +34485,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
-msgstr "生成映射"
+msgstr "生成映射:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 msgid "Origin:"
@@ -34511,9 +34497,8 @@ msgid "Absolute"
 msgstr "绝对"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "零点"
+msgstr "零点:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -34542,7 +34527,6 @@ msgid "Generators A (%s)"
 msgstr "生成一个 (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild Selected"
 msgstr "重建已选"
 
@@ -35318,7 +35302,6 @@ msgid "Bottom/Back layer:"
 msgstr "底层:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:210
-#, fuzzy
 msgid "Copper Layer Pair Presets"
 msgstr "铜层对预设"
 
@@ -36874,7 +36857,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
 msgid "Lights intensity"
@@ -37665,14 +37648,12 @@ msgid "Internal Layers"
 msgstr "内层"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
-#, fuzzy
 msgid "Default Field Properties for New Footprints"
-msgstr "新封装的默认字段属性:"
+msgstr "新建封装的默认字段属性"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:73
-#, fuzzy
 msgid "Default Text Items for New Footprints"
-msgstr "新封装的默认文本项目:"
+msgstr "新建封装的默认文本项目"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:210
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:217
@@ -37720,9 +37701,8 @@ msgid "Parameter error"
 msgstr "参数错误"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:26
-#, fuzzy
 msgid "Default Properties for New Graphic Items"
-msgstr "新建图形项目的默认属性:"
+msgstr "新建图形项目的默认属性"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:309
 msgid "Hidden footprint libraries are not yet supported."
@@ -38188,7 +38168,6 @@ msgid "Note: zone filling can be slow when < %s."
 msgstr "注: < %s 时覆铜填充可能会变慢。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:414
-#, fuzzy
 msgid "Zone Fill Strategy"
 msgstr "域填充策略"
 
@@ -38201,7 +38180,6 @@ msgid "Minimum thermal relief spoke count:"
 msgstr "最小散热引线数量:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:455
-#, fuzzy
 msgid "Length Tuning"
 msgstr "长度调整"
 
@@ -38219,9 +38197,8 @@ msgstr ""
 "忽略。"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
-#, fuzzy
 msgid "Default Properties for New Dimension Objects"
-msgstr "新的测量标注对象的默认属性:"
+msgstr "新建测量标注对象的默认属性"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:37
 msgid ""
@@ -38910,9 +38887,8 @@ msgid "If none are provided, setting the values to zero is suggested."
 msgstr "如果板厂没有提供, 建议将这些值设置为 0。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
-#, fuzzy
 msgid "Solder Mask Settings"
-msgstr "阻焊设置:"
+msgstr "阻焊设置"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
@@ -38977,9 +38953,8 @@ msgstr ""
 "过孔开窗: 不使用阻焊覆盖过孔。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
-#, fuzzy
 msgid "Solder Paste Settings"
-msgstr "锡膏设置:"
+msgstr "锡膏设置"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:149
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:154
@@ -39035,7 +39010,6 @@ msgid "Design rules cannot be added without a project"
 msgstr "如果没有工程, 无法添加设计规则"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
-#, fuzzy
 msgid "DRC Rules"
 msgstr "DRC 规则"
 
@@ -40047,18 +40021,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Round Shapes"
-msgstr "圆形的默认属性:"
+msgstr "圆形默认属性"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 msgid "Allow teardrop to span two track segments"
 msgstr "允许泪滴跨越两个走线段"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:189
-#, fuzzy
 msgid "Default Properties for Rectangular Shapes"
-msgstr "矩形形状的默认属性:"
+msgstr "矩形默认属性"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
@@ -40066,9 +40038,8 @@ msgid "Allow teardrop to span track segments"
 msgstr "允许泪滴跨越走线段"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:359
-#, fuzzy
 msgid "Properties for Track-to-Track Teardrops"
-msgstr "走线到走线泪滴的属性:"
+msgstr "走线到走线的泪滴属性"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:473
 msgid ""
@@ -40083,9 +40054,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr "尺寸接近的走线无需泪滴。"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:20
-#, fuzzy
 msgid "Default Properties for New Graphics and Text"
-msgstr "新建图形或文本对象的默认属性:"
+msgstr "新建图形或文本对象的默认属性"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -40109,9 +40079,8 @@ msgid "Hole"
 msgstr "孔径"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential Pairs"
-msgstr "差分对布线 (&D)"
+msgstr "差分对"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -40122,19 +40091,16 @@ msgid "Via Gap"
 msgstr "过孔间隙"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Single Track Tuning"
-msgstr "单端走线长度调整默认属性:"
+msgstr "单端走线长度调整默认属性"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default Properties for Differential Pairs"
-msgstr "差分对走线默认属性:"
+msgstr "差分对默认属性"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
-#, fuzzy
 msgid "Default Properties for Differential Pair Skews"
-msgstr "差分对走线偏移默认属性:"
+msgstr "差分对偏移默认属性"
 
 #: pcbnew/drc/drc_cache_generator.cpp:124
 msgid "Gathering copper items..."
