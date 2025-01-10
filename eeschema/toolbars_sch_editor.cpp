@@ -135,9 +135,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     {
         m_mainToolBar->AddScaledSeparator( this );
 
-        if( scriptingAvailable )
-            m_mainToolBar->Add( EE_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
-
         if( haveApiPlugins )
             addApiPluginTools();
     }

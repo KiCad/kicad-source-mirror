@@ -1307,14 +1307,6 @@ TOOL_ACTION EE_ACTIONS::nextUnit( TOOL_ACTION_ARGS()
         .Tooltip( _( "Open the next unit of the symbol" ) )
         .Parameter<int>( 1 ) );
 
-// Python Console
-TOOL_ACTION EE_ACTIONS::showPythonConsole( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.showPythonConsole" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Scripting Console" ) )
-        .Tooltip( _( "Show the Python scripting console" ) )
-        .Icon( BITMAPS::py_script ) );
-
 // SCH_NAVIGATE_TOOL
 //
 TOOL_ACTION EE_ACTIONS::changeSheet( TOOL_ACTION_ARGS()

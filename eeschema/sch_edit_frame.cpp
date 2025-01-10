@@ -659,12 +659,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::selectionTool,
                         CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
-    if( SCRIPTING::IsWxAvailable() )
-    {
-        mgr->SetConditions( EE_ACTIONS::showPythonConsole,
-                            CHECK( cond.ScriptingConsoleVisible() ) );
-    }
-
     auto showHiddenPinsCond =
             [this]( const SELECTION& )
             {
