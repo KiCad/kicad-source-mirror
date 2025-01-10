@@ -324,7 +324,9 @@ void PCB_TEXT::KeepUpright()
     {
         SetHorizJustify( static_cast<GR_TEXT_H_ALIGN_T>( -GetHorizJustify() ) );
         SetVertJustify( static_cast<GR_TEXT_V_ALIGN_T>( -GetVertJustify() ) );
-        SetTextAngle( GetTextAngle() + ANGLE_180 );
+        newAngle += ANGLE_180;
+        newAngle.Normalize();
+        SetTextAngle( newAngle );
     }
 }
 
@@ -375,7 +377,7 @@ void PCB_TEXT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     SetTextPos( pt );
 
     EDA_ANGLE new_angle = GetTextAngle() + aAngle;
-    new_angle.Normalize180();
+    new_angle.Normalize();
     SetTextAngle( new_angle );
 }
 
