@@ -1103,7 +1103,7 @@ OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HE
                 newEvt = EE_ACTIONS::drawLines.MakeEvent();
         }
         else if( aItem->Type() == SCH_LABEL_T || aItem->Type() == SCH_HIER_LABEL_T
-                 || aItem->Type() == SCH_SHEET_PIN_T )
+                 || aItem->Type() == SCH_SHEET_PIN_T || aItem->Type() == SCH_GLOBAL_LABEL_T )
         {
             SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
             SCH_CONNECTION  possibleConnection( label->Schematic()->ConnectionGraph() );
