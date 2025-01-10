@@ -36,7 +36,6 @@
 #include <cursors/cursor-line-bus.xpm>
 #include <cursors/cursor-line-graphic.xpm>
 #include <cursors/cursor-line-wire.xpm>
-#include <cursors/cursor-line-wire-add.xpm>
 #include <cursors/cursor-measure.xpm>
 #include <cursors/cursor-pencil.xpm>
 #include <cursors/cursor-select-lasso.xpm>
@@ -60,7 +59,6 @@
 #include <cursors/cursor-line-bus64.xpm>
 #include <cursors/cursor-line-graphic64.xpm>
 #include <cursors/cursor-line-wire64.xpm>
-#include <cursors/cursor-line-wire-add64.xpm>
 #include <cursors/cursor-measure64.xpm>
 #include <cursors/cursor-pencil64.xpm>
 #include <cursors/cursor-select-lasso64.xpm>
@@ -258,14 +256,6 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         { 5, 26 },
     },
     {
-        KICURSOR::LINE_WIRE_ADD,
-        nullptr,
-        nullptr,
-        cursor_line_wire_add_xpm,
-        { 32, 32 },
-        { 5, 26 },
-    },
-    {
         KICURSOR::LINE_GRAPHIC,
         nullptr,
         nullptr,
@@ -458,14 +448,6 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> hidpi_cursors = {
         nullptr,
         nullptr,
         cursor_line_wire64_xpm,
-        { 64, 64 },
-        { 10, 52 },
-    },
-    {
-        KICURSOR::LINE_WIRE_ADD,
-        nullptr,
-        nullptr,
-        cursor_line_wire_add64_xpm,
         { 64, 64 },
         { 10, 52 },
     },

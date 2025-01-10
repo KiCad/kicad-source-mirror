@@ -1034,7 +1034,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( displayWireCursor )
             {
-                m_nonModifiedCursor = KICURSOR::LINE_WIRE_ADD;
+                m_nonModifiedCursor = KICURSOR::LINE_WIRE;
             }
             else if( displayBusCursor )
             {
