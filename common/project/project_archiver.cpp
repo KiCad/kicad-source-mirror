@@ -97,8 +97,15 @@ private:
         wxFileSystem fsfile;
 
         wxFileName curr_fn( aFilename );
+        wxFileName curr_prjdir;
+        curr_prjdir.AssignDir( m_prjDir );
+
         KIPLATFORM::IO::LongPathAdjustment( curr_fn );
-        curr_fn.MakeRelativeTo( m_prjDir );
+        KIPLATFORM::IO::LongPathAdjustment( curr_prjdir );
+
+        // Note: MakeRelativeTo() works only if curr_fn and curr_prjdir use the same
+        // long path adjustement (no long path of both use long path)
+        curr_fn.MakeRelativeTo( curr_prjdir.GetFullPath() );
 
         wxString currFilename = curr_fn.GetFullPath();
 
@@ -321,7 +328,6 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 
     wxFileName sourceDir( aSrcDir );
     KIPLATFORM::IO::LongPathAdjustment( sourceDir );
-
     wxSetWorkingDirectory( sourceDir.GetFullPath() );
 
     wxFFileOutputStream ostream( aDestFile );
