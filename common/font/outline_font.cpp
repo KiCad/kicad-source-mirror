@@ -294,7 +294,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 struct GLYPH_CACHE_KEY {
     FT_Face        face;
     hb_codepoint_t codepoint;
-    double         scaler;
+    VECTOR2D       scale;
     bool           forDrawingSheet;
     bool           fakeItalic;
     bool           fakeBold;
@@ -305,7 +305,7 @@ struct GLYPH_CACHE_KEY {
     {
         return face == rhs.face
                 && codepoint == rhs.codepoint
-                && scaler == rhs.scaler
+                && scale == rhs.scale
                 && forDrawingSheet == rhs.forDrawingSheet
                 && fakeItalic == rhs.fakeItalic
                 && fakeBold == rhs.fakeBold
@@ -321,14 +321,8 @@ namespace std
     {
         std::size_t operator()( const GLYPH_CACHE_KEY& k ) const
         {
-            return hash<const void*>()( k.face )
-                        ^ hash<unsigned>()( k.codepoint )
-                        ^ hash<double>()( k.scaler )
-                        ^ hash<double>()( k.forDrawingSheet )
-                        ^ hash<int>()( k.fakeItalic )
-                        ^ hash<int>()( k.fakeBold )
-                        ^ hash<int>()( k.mirror )
-                        ^ hash<int>()( k.angle.AsTenthsOfADegree() );
+            return hash_val( k.face, k.codepoint, k.scale.x, k.scale.y, k.forDrawingSheet,
+                             k.fakeItalic, k.fakeBold, k.mirror, k.angle.AsDegrees() );
         }
     };
 }
@@ -386,7 +380,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
         if( aGlyphs )
         {
-            GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, scaler, m_forDrawingSheet,
+            GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, scaleFactor, m_forDrawingSheet,
                                     m_fakeItal, m_fakeBold, aMirror, aAngle };
             GLYPH_DATA&     glyphData = s_glyphCache[ key ];
 
