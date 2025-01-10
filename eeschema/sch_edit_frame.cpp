@@ -915,6 +915,9 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_schematic->RootScreen()->SetPageNumber( wxT( "1" ) );
     rootSheetPath.SetPageNumber( wxT( "1" ) );
 
+    // Rehash sheetpaths in heirarchy since we changed the uuid.
+    m_schematic->RefreshHierarchy();
+
     if( GetScreen() == nullptr )
     {
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );

@@ -2821,6 +2821,9 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
     {
         errors += duplicates;
         details += wxString::Format( _( "%d duplicate IDs replaced.\n" ), duplicates );
+
+        // Rehash sheetpaths as we may have changed their uuids.
+        m_frame->Schematic().RefreshHierarchy();
     }
 
     if( errors )
