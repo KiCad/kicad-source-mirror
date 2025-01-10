@@ -2569,20 +2569,20 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed )
         return;
     }
 
-    std::vector<VECTOR2I> pts;
-    std::deque<VECTOR2D> pts2;
+    std::vector<VECTOR2I> i_pts;
+    std::deque<VECTOR2D>  d_pts;
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, (VECTOR2I)aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, i_pts, (VECTOR2I)aLabel->GetTextPos() );
 
-    for( const VECTOR2I& p : pts )
-        pts2.emplace_back( VECTOR2D( p.x, p.y ) );
+    for( const VECTOR2I& i_pt : i_pts )
+        d_pts.emplace_back( VECTOR2D( i_pt.x, i_pt.y ) );
 
     m_gal->SetIsFill( true );
     m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( getLineWidth( aLabel, drawingShadows ) );
     m_gal->SetStrokeColor( color );
-    m_gal->DrawPolyline( pts2 );
+    m_gal->DrawPolyline( d_pts );
 
     draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer, false );
 }
