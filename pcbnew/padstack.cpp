@@ -243,10 +243,10 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
             const ThermalSpokeSettings& thermals = padstack.zone_settings().thermal_spokes();
 
             if( thermals.has_gap() )
-                CopperLayer( ALL_LAYERS ).thermal_gap = thermals.gap();
+                CopperLayer( ALL_LAYERS ).thermal_gap = thermals.gap().value_nm();
 
             if( thermals.has_width() )
-                CopperLayer( ALL_LAYERS ).thermal_spoke_width = thermals.width();
+                CopperLayer( ALL_LAYERS ).thermal_spoke_width = thermals.width().value_nm();
 
             SetThermalSpokeAngle( thermals.angle().value_degrees(), F_Cu );
         }
@@ -452,11 +452,11 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
             *CopperLayer( ALL_LAYERS ).zone_connection ) );
     }
 
-    if( CopperLayer( ALL_LAYERS ).thermal_spoke_width.has_value() )
-        thermalSettings->set_width( *CopperLayer( ALL_LAYERS ).thermal_spoke_width );
+    if( std::optional<int> width = CopperLayer( ALL_LAYERS ).thermal_spoke_width )
+        thermalSettings->mutable_width()->set_value_nm( *width );
 
-    if( CopperLayer( ALL_LAYERS ).thermal_gap.has_value() )
-        thermalSettings->set_gap( *CopperLayer( ALL_LAYERS ).thermal_gap );
+    if( std::optional<int> gap = CopperLayer( ALL_LAYERS ).thermal_gap )
+        thermalSettings->mutable_gap()->set_value_nm( *gap );
 
     thermalSettings->mutable_angle()->set_value_degrees( ThermalSpokeAngle( F_Cu ).AsDegrees() );
 

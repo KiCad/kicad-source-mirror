@@ -255,8 +255,8 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
                 ToProtoEnum<ZONE_CONNECTION, types::ZoneConnectionStyle>( m_PadConnection ) );
 
         types::ThermalSpokeSettings* thermals = cu->mutable_connection()->mutable_thermal_spokes();
-        thermals->set_width( m_thermalReliefSpokeWidth );
-        thermals->set_gap( m_thermalReliefGap );
+        thermals->mutable_width()->set_value_nm( m_thermalReliefSpokeWidth );
+        thermals->mutable_gap()->set_value_nm( m_thermalReliefGap );
         // n.b. zones don't currently have an overall thermal angle override
 
         cu->mutable_clearance()->set_value_nm( m_ZoneClearance );
@@ -343,8 +343,8 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
     {
         const types::CopperZoneSettings& cu = zone.copper_settings();
         m_PadConnection = FromProtoEnum<ZONE_CONNECTION>( cu.connection().zone_connection() );
-        m_thermalReliefSpokeWidth = cu.connection().thermal_spokes().width();
-        m_thermalReliefGap = cu.connection().thermal_spokes().gap();
+        m_thermalReliefSpokeWidth = cu.connection().thermal_spokes().width().value_nm();
+        m_thermalReliefGap = cu.connection().thermal_spokes().gap().value_nm();
         m_ZoneClearance = cu.clearance().value_nm();
         m_ZoneMinThickness = cu.min_thickness().value_nm();
         m_islandRemovalMode = FromProtoEnum<ISLAND_REMOVAL_MODE>( cu.island_mode() );
