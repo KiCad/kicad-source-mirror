@@ -1406,6 +1406,8 @@ void SCH_SCREEN::FixupEmbeddedData()
                 } );
     }
 
+    std::vector<SCH_ITEM*> items_to_update;
+
     for( SCH_ITEM* item : Items() )
     {
         bool update = false;
@@ -1421,8 +1423,11 @@ void SCH_SCREEN::FixupEmbeddedData()
                 } );
 
         if( update )
-            Update( item, false );
+            items_to_update.push_back( item );
     }
+
+    for( SCH_ITEM* item : items_to_update )
+        Update( item );
 }
 
 
