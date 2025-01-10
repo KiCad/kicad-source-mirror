@@ -53,6 +53,11 @@ enum class VISIBILITY_LAYER
     GRID
 };
 
+/**
+ * The set of GAL_LAYER_IDs that correspond to VISIBILITY_LAYERS
+ */
+GAL_SET UserVisbilityLayers();
+
 GAL_LAYER_ID RenderLayerFromVisibilityLayer( VISIBILITY_LAYER aLayer );
 std::optional<VISIBILITY_LAYER> VisibilityLayerFromRenderLayer( GAL_LAYER_ID aLayerId );
 

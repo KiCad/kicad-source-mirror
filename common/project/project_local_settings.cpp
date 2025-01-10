@@ -83,7 +83,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     return;
                 }
 
-                m_VisibleItems.reset();
+                m_VisibleItems &= ~UserVisbilityLayers();
+                GAL_SET visible;
 
                 for( const nlohmann::json& entry : aVal )
                 {
@@ -92,13 +93,15 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                         std::string vs = entry.get<std::string>();
 
                         if( std::optional<GAL_LAYER_ID> l = RenderLayerFromVisbilityString( vs ) )
-                            m_VisibleItems.set( *l );
+                            visible.set( *l );
                     }
                     catch( ... )
                     {
                         // Non-integer or out of range entry in the array; ignore
                     }
                 }
+
+                m_VisibleItems |= UserVisbilityLayers() & visible;
             },
             {} ) );
 
