@@ -150,13 +150,13 @@ void HTML_MESSAGE_BOX::OnHTMLLinkClicked( wxHtmlLinkEvent& event )
 {
     wxString href = event.GetLinkInfo().GetHref();
 
-    if( href.StartsWith( wxS( "https://docs.kicad.org/" ) ) )
+    if( href.StartsWith( wxS( "https://go.kicad.org/docs" ) ) )
     {
         href.Replace( wxS( "GetMajorMinorVersion" ), GetMajorMinorVersion() );
-
-        wxURI uri( href );
-        wxLaunchDefaultBrowser( uri.BuildURI() );
     }
+
+    wxURI uri( href );
+    wxLaunchDefaultBrowser( uri.BuildURI() );
 }
 
 

@@ -43,9 +43,9 @@
 #include <eda_doc.h>
 #include <wx/msgdlg.h>
 
-#define URL_GET_INVOLVED wxS( "https://kicad.org/contribute/" )
+#define URL_GET_INVOLVED wxS( "https://go.kicad.org/contribute/" )
 #define URL_DONATE wxS( "https://go.kicad.org/app-donate" )
-#define URL_DOCUMENTATION wxS( "https://docs.kicad.org/" )
+#define URL_DOCUMENTATION wxS( "https://go.kicad.org/docs/" )
 
 
 /// URL to launch a new issue with pre-populated description
@@ -210,7 +210,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
     wxString helpFile;
     wxString msg;
 
-    // the URL of help files is "https://docs.kicad.org/<version>/<language>/<name>/"
+    // the URL of help files is "https://go.kicad.org/docs/<version>/<language>/<name>/"
     const wxString baseUrl = URL_DOCUMENTATION + GetMajorMinorVersion() + wxT( "/" )
                              + Pgm().GetLocale()->GetName().BeforeLast( '_' ) + wxT( "/" );
 
