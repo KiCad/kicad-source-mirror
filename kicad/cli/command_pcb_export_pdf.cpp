@@ -30,6 +30,7 @@
 
 #define ARG_MODE_SEPARATE "--mode-separate"
 #define ARG_MODE_MULTIPAGE "--mode-multipage"
+#define ARG_MODE_SINGLE "--mode-single"
 
 CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "pdf" )
 {
@@ -38,14 +39,6 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
     addLayerArg( true );
     addDrawingSheetArg();
     addDefineArg();
-
-    m_argParser.add_argument( ARG_MODE_SEPARATE )
-            .help( UTF8STDSTR( _( "Plot the layers to individual PDF files" ) ) )
-            .flag();
-
-    m_argParser.add_argument( ARG_MODE_MULTIPAGE )
-            .help( UTF8STDSTR( _( "Plot the layers to a single PDF file with multiple pages" ) ) )
-            .flag();
 
     m_argParser.add_argument( "-m", ARG_MIRROR )
             .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
@@ -108,6 +101,21 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
     m_argParser.add_argument( ARG_PLOT_INVISIBLE_TEXT )
             .help( UTF8STDSTR( _( ARG_PLOT_INVISIBLE_TEXT_DESC ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_MODE_SINGLE )
+            .help( UTF8STDSTR(
+                    _( "Generates a single file with the output arg path acting as the complete "
+                       "directory and filename path. COMMON_LAYER_LIST does not function in this "
+                       "mode. Instead LAYER_LIST controls all layers plotted." ) ) )
+            .flag();
+
+    m_argParser.add_argument( ARG_MODE_SEPARATE )
+            .help( UTF8STDSTR( _( "Plot the layers to individual PDF files" ) ) )
+            .flag();
+
+    m_argParser.add_argument( ARG_MODE_MULTIPAGE )
+            .help( UTF8STDSTR( _( "Plot the layers to a single PDF file with multiple pages" ) ) )
+            .flag();
 }
 
 
@@ -154,6 +162,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
 
     bool argModeMulti = m_argParser.get<bool>( ARG_MODE_MULTIPAGE );
     bool argModeSeparate = m_argParser.get<bool>( ARG_MODE_SEPARATE );
+    bool argModeSingle = m_argParser.get<bool>( ARG_MODE_SINGLE );
 
     if( argModeMulti && argModeSeparate )
     {
@@ -166,26 +175,11 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_printMaskLayersToIncludeOnAllLayers = convertLayerStringList( layers, blah );
 
     if( argModeMulti )
-    {
         pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE;
-    }
     else if( argModeSeparate )
-    {
         pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_SEPARATE_FILE;
-    }
-
-    if( pdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
-    {
-        wxFprintf( stdout,
-                wxT( "\033[33;1m%s\033[0m\n" ),
-                _( "This command has deprecated behavior as of KiCad 9.0, the default behavior of this command will change in a future release." ) );
-
-        wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
-                _( "The new behavior will match --mode-separate" ) );
-
-        wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
-                   _( "The behavior with neither --mode flags will no longer exist" ) );
-    }
+    else if( argModeSingle )
+        pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE;
 
     LOCALE_IO dummy;    // Switch to "C" locale
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, pdfJob.get() );

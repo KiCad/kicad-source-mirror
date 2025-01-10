@@ -87,6 +87,7 @@
 #include <dialogs/dialog_plot.h>
 #include <dialogs/dialog_drc_job_config.h>
 #include <dialogs/dialog_render_job.h>
+#include <paths.h>
 
 #include "pcbnew_scripting_helpers.h"
 #include <locale_io.h>
@@ -842,20 +843,25 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     int returnCode = CLI::EXIT_CODES::OK;
 
-    // DEPRECATED CLI BEHAVIOR AS OF KICAD 9.0, TO BE REMOVED
+    // ensure this is set for this one gen mode
+    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE )
+    {
+        plotOpts.m_PDFSingle = true;
+    }
+
+    PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
+
+    if( !PATHS::EnsurePathExists( aPdfJob->GetFullOutputPath() ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    std::optional<wxString> layerName;
+    std::optional<wxString> sheetName;
+    std::optional<wxString> sheetPath;
     if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
     {
-        PCB_LAYER_ID layer = UNDEFINED_LAYER;
-        wxString     layerName;
-        wxString     sheetName;
-        wxString     sheetPath;
-
-        if( aPdfJob->m_printMaskLayer.size() == 1 )
-        {
-            layer = aPdfJob->m_printMaskLayer.front();
-            layerName = brd->GetLayerName( layer );
-        }
-
         if( aPdfJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
             layerName = aPdfJob->GetVarOverrides().at( wxT( "LAYER" ) );
 
@@ -864,53 +870,19 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
         if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
             sheetPath = aPdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-
-        LOCALE_IO dummy;
-        PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
-                                                              aPdfJob->GetFullOutputPath(),
-                                                              sheetName, sheetPath );
-
-        if( plotter )
-        {
-            PlotBoardLayers( brd, plotter, aPdfJob->m_printMaskLayer, plotOpts );
-            PlotInteractiveLayer( brd, plotter, plotOpts );
-            plotter->EndPlot();
-        }
-        else
-        {
-            wxString msg;
-            msg.Printf( _( "Failed to create file '%s'." ), aPdfJob->GetFullOutputPath() );
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-
-            returnCode = CLI::EXIT_CODES::ERR_UNKNOWN;
-        }
-
-        delete plotter;
     }
-    else
+
+
+    LOCALE_IO dummy;
+    if( !pcbPlotter.Plot( aPdfJob->GetFullOutputPath(), aPdfJob->m_printMaskLayer,
+                            aPdfJob->m_printMaskLayersToIncludeOnAllLayers,
+                            false,
+                            aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE,
+                            layerName,
+                            sheetName,
+                            sheetPath ) )
     {
-        // ensure this is set for this one gen mode
-        if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE )
-        {
-            plotOpts.m_PDFSingle = true;
-        }
-
-        PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
-        // ensure output dir exists
-        wxFileName fnOut( aPdfJob->GetFullOutputPath() + wxT( "/" ) );
-
-        if( !fnOut.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        {
-            m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
-            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
-        }
-
-        LOCALE_IO dummy;
-        if( !pcbPlotter.Plot( aPdfJob->GetFullOutputPath(), aPdfJob->m_printMaskLayer,
-                              aPdfJob->m_printMaskLayersToIncludeOnAllLayers, false ) )
-        {
-            returnCode = CLI::EXIT_CODES::ERR_UNKNOWN;
-        }
+        returnCode = CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
     return returnCode;
