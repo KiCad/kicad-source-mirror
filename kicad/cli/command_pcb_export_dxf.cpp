@@ -34,7 +34,8 @@
 #define ARG_USE_CONTOURS "--use-contours"
 #define ARG_OUTPUT_UNITS "--output-units"
 #define ARG_USE_DRILL_ORIGIN "--use-drill-origin"
-#define ARG_MODE_NEW "--mode-new"
+#define ARG_MODE_SINGLE "--mode-single"
+#define ARG_MODE_MULTI "--mode-multi"
 
 CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "dxf" )
 {
@@ -82,10 +83,17 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
                        "F.Cu,B.Cu" ) ) )
             .metavar( "COMMON_LAYER_LIST" );
 
-    m_argParser.add_argument( ARG_MODE_NEW )
+    m_argParser.add_argument( ARG_MODE_SINGLE )
             .help( UTF8STDSTR(
-                    _( "Opt into the new behavior which means output path is a directory, a file "
-                       "per layer is generated and the common layers arg becomes available. " ) ) )
+                    _( "Generates a single file with the output arg path acting as the complete "
+                       "directory and filename path. COMMON_LAYER_LIST does not function in this "
+                       "mode. Instead LAYER_LIST controls all layers plotted." ) ) )
+            .flag();
+
+    m_argParser.add_argument( ARG_MODE_MULTI )
+            .help( UTF8STDSTR( _( "Generates one or more files with behavior similar to the KiCad "
+                                  "GUI plotting. The given output path specifies a directory in "
+                                  "which files may be output." ) ) )
             .flag();
 
     m_argParser.add_argument( ARG_PLOT_INVISIBLE_TEXT )
@@ -145,19 +153,18 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     bool     blah = false;
     dxfJob->m_printMaskLayersToIncludeOnAllLayers = convertLayerStringList( layers, blah );
 
-    if( m_argParser.get<bool>( ARG_MODE_NEW ) )
-        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::NEW;
+    if( m_argParser.get<bool>( ARG_MODE_MULTI ) )
+        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;
+    else if( m_argParser.get<bool>( ARG_MODE_SINGLE ) )
+        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE;
     else
-        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::DEPRECATED;
-
-    if( dxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::DEPRECATED )
     {
         wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
                    _( "This command has deprecated behavior as of KiCad 9.0, the default behavior "
                       "of this command will change in a future release." ) );
 
         wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
-                   _( "The new behavior will match --mode-new" ) );
+                   _( "The new behavior will match --mode-multi" ) );
     }
 
 

@@ -464,7 +464,7 @@ void DIALOG_PLOT::transferPlotParamsToJob()
                                      : JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS;
         dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
         dxfJob->m_polygonMode = m_plotOpts.GetDXFPlotPolygonMode();
-        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::NEW;
+        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF )

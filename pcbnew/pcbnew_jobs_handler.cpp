@@ -698,6 +698,18 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
+    {
+        if( aSvgJob->GetOutputPath().IsEmpty() )
+        {
+            wxFileName fn = brd->GetFileName();
+            fn.SetName( fn.GetName() );
+            fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::SVG ) );
+
+            aSvgJob->SetOutputPath( fn.GetFullName() );
+        }
+    }
+
     loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
@@ -753,7 +765,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::DEPRECATED )
+
+    if( aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE )
     {
         if( aDxfJob->GetOutputPath().IsEmpty() )
         {
@@ -763,66 +776,35 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
             aDxfJob->SetOutputPath( fn.GetFullName() );
         }
+    }
 
-        PCB_PLOT_PARAMS plotOpts;
-        plotOpts.SetFormat( PLOT_FORMAT::DXF );
+    PCB_PLOT_PARAMS plotOpts;
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob );
 
-        plotOpts.SetDXFPlotPolygonMode( aDxfJob->m_polygonMode );
-        plotOpts.SetUseAuxOrigin( aDxfJob->m_useDrillOrigin );
+    PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
-        if( aDxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS )
-            plotOpts.SetDXFPlotUnits( DXF_UNITS::MILLIMETERS );
-        else
-            plotOpts.SetDXFPlotUnits( DXF_UNITS::INCHES );
+    std::optional<wxString> layerName;
+    std::optional<wxString> sheetName;
+    std::optional<wxString> sheetPath;
 
-        plotOpts.SetPlotFrameRef( aDxfJob->m_plotDrawingSheet );
-        plotOpts.SetPlotValue( aDxfJob->m_plotFootprintValues );
-        plotOpts.SetPlotReference( aDxfJob->m_plotRefDes );
-        plotOpts.SetLayerSelection( aDxfJob->m_printMaskLayer );
-        plotOpts.SetPlotOnAllLayersSelection( aDxfJob->m_printMaskLayersToIncludeOnAllLayers );
-
-        PCB_LAYER_ID layer = UNDEFINED_LAYER;
-        wxString     layerName;
-        wxString     sheetName;
-        wxString     sheetPath;
-
-        if( aDxfJob->m_printMaskLayer.size() == 1 )
-        {
-            layer = aDxfJob->m_printMaskLayer.front();
-            layerName = brd->GetLayerName( layer );
-        }
-
+    if( aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE )
+    {
         if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-            layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
+            layerName = aDxfJob->GetVarOverrides().at( wxT( "LAYER" ) );
 
         if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-            sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+            sheetName = aDxfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
 
         if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-            sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-
-        DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard(
-                brd, &plotOpts, layer, layerName, aDxfJob->GetFullOutputPath(), sheetName, sheetPath );
-
-        if( plotter )
-        {
-            PlotBoardLayers( brd, plotter, aDxfJob->m_printMaskLayer, plotOpts );
-            plotter->EndPlot();
-        }
-
-        delete plotter;
+            sheetPath = aDxfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
-    else
-    {
-        PCB_PLOT_PARAMS plotOpts;
-        PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob );
 
-        PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
-        if( !plotter.Plot( aDxfJob->GetFullOutputPath(), aDxfJob->m_printMaskLayer,
-                          aDxfJob->m_printMaskLayersToIncludeOnAllLayers, false ) )
-        {
-            return CLI::EXIT_CODES::ERR_UNKNOWN;
-        }
+    if( !plotter.Plot( aDxfJob->GetFullOutputPath(), aDxfJob->m_printMaskLayer,
+                       aDxfJob->m_printMaskLayersToIncludeOnAllLayers, false,
+                       aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE, layerName,
+                       sheetName, sheetPath ) )
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
     return CLI::EXIT_CODES::OK;

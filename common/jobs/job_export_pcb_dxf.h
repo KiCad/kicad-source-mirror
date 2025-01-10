@@ -43,8 +43,8 @@ public:
 
     enum class GEN_MODE
     {
-        DEPRECATED,
-        NEW
+        SINGLE,
+        MULTI
     };
 
     bool      m_plotGraphicItemsUsingContours;
