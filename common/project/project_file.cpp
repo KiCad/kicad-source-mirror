@@ -637,7 +637,14 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 
     Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectFileExtension );
 
-    return JSON_SETTINGS::SaveToFile( aDirectory, aForce );
+    // Even if parameters were not modified, we should resave after migration
+    bool force = aForce || m_wasMigrated;
+
+    // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
+    // should be cleared at this
+    m_wasMigrated = false;
+
+    return JSON_SETTINGS::SaveToFile( aDirectory, force );
 }
 
 

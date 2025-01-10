@@ -1223,8 +1223,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     }
     else
     {
-        saveProjectSettings();
         SaveProjectLocalSettings();
+        saveProjectSettings();
     }
 
     if( !Kiface().IsSingle() )
