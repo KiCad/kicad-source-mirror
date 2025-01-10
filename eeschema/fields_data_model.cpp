@@ -220,7 +220,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
         }
     }
 
-    if( listMixedValues && mixedValues.size() > 1 )
+    if( listMixedValues )
     {
         fieldValue = wxEmptyString;
 
