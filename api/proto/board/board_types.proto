@@ -423,9 +423,9 @@ enum CustomPadShapeZoneFillStrategy
 
 message ThermalSpokeSettings
 {
-  int64 width = 1;
+  optional int64 width = 1;
   kiapi.common.types.Angle angle = 2;
-  int64 gap = 3;
+  optional int64 gap = 3;
 }
 
 message Pad

@@ -230,6 +230,9 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
             return false;
     }
 
+    CopperLayer( ALL_LAYERS ).thermal_gap = std::nullopt;
+    CopperLayer( ALL_LAYERS ).thermal_spoke_width = std::nullopt;
+
     if( padstack.has_zone_settings() )
     {
         CopperLayer( ALL_LAYERS ).zone_connection =
@@ -239,16 +242,18 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
         {
             const ThermalSpokeSettings& thermals = padstack.zone_settings().thermal_spokes();
 
-            CopperLayer( ALL_LAYERS ).thermal_gap = thermals.gap();
-            CopperLayer( ALL_LAYERS ).thermal_spoke_width = thermals.width();
+            if( thermals.has_gap() )
+                CopperLayer( ALL_LAYERS ).thermal_gap = thermals.gap();
+
+            if( thermals.has_width() )
+                CopperLayer( ALL_LAYERS ).thermal_spoke_width = thermals.width();
+
             SetThermalSpokeAngle( thermals.angle().value_degrees(), F_Cu );
         }
     }
     else
     {
         CopperLayer( ALL_LAYERS ).zone_connection = ZONE_CONNECTION::INHERITED;
-        CopperLayer( ALL_LAYERS ).thermal_gap = std::nullopt;
-        CopperLayer( ALL_LAYERS ).thermal_spoke_width = std::nullopt;
         CopperLayer( ALL_LAYERS ).thermal_spoke_angle = DefaultThermalSpokeAngleForShape( F_Cu );
     }
 
@@ -447,8 +452,12 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
             *CopperLayer( ALL_LAYERS ).zone_connection ) );
     }
 
-    thermalSettings->set_width( CopperLayer( ALL_LAYERS ).thermal_spoke_width.value_or( 0 ) );
-    thermalSettings->set_gap( CopperLayer( ALL_LAYERS ).thermal_gap.value_or( 0 ) );
+    if( CopperLayer( ALL_LAYERS ).thermal_spoke_width.has_value() )
+        thermalSettings->set_width( *CopperLayer( ALL_LAYERS ).thermal_spoke_width );
+
+    if( CopperLayer( ALL_LAYERS ).thermal_gap.has_value() )
+        thermalSettings->set_gap( *CopperLayer( ALL_LAYERS ).thermal_gap );
+
     thermalSettings->mutable_angle()->set_value_degrees( ThermalSpokeAngle( F_Cu ).AsDegrees() );
 
     padstack.set_unconnected_layer_removal(
