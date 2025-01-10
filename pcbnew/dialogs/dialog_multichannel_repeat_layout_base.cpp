@@ -85,13 +85,15 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 
 	bSizer13->Add( m_cbCopyOtherItems, 0, wxALL, 5 );
 
-	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group components with their placement rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group items with their placement rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbGroupItems, 0, wxALL, 5 );
 
-	m_cbIncludeLockedComponents = new wxCheckBox( this, wxID_ANY, _("Include locked components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbIncludeLockedComponents = new wxCheckBox( this, wxID_ANY, _("Remove locked items from target rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbIncludeLockedComponents, 0, wxALL, 5 );
 
 	m_cbIncludeOffRAComponents = new wxCheckBox( this, wxID_ANY, _("Include components outside the target area"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbIncludeOffRAComponents->Hide();
+
 	bSizer13->Add( m_cbIncludeOffRAComponents, 0, wxALL, 5 );
 
 
