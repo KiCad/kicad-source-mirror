@@ -127,7 +127,7 @@ public:
      * be edited so a check for this symbol must be performed before attempting to edit the
      * library symbol with the library editor or it will crash KiCad.
      *
-     * @see dummy()
+     * @see LIB_SYMBOL::GetDummy()
      *
      * @return true if the library symbol is missing or false if it is valid.
      */

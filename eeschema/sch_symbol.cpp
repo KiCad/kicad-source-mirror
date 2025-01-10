@@ -67,35 +67,6 @@ std::string toUTFTildaText( const wxString& txt )
 }
 
 
-/**
- * Used to draw a dummy shape when a LIB_SYMBOL is not found in library
- *
- * This symbol is a 400 mils square with the text "??"
- */
-static LIB_SYMBOL* dummy()
-{
-    static LIB_SYMBOL* symbol;
-
-    if( !symbol )
-    {
-        symbol = new LIB_SYMBOL( wxEmptyString );
-
-        SCH_SHAPE* square = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
-
-        square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
-        square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
-        symbol->AddDrawItem( square );
-
-        SCH_TEXT* text = new SCH_TEXT( { 0, 0 }, wxT( "??"), LAYER_DEVICE );
-
-        text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
-        symbol->AddDrawItem( text );
-    }
-
-    return symbol;
-}
-
-
 SCH_SYMBOL::SCH_SYMBOL() :
         SYMBOL( nullptr, SCH_SYMBOL_T )
 {
@@ -543,9 +514,10 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
         tempSymbol.Print( &localRenderSettings, m_unit, m_bodyStyle, m_pos + aOffset, false,
                           aDimmed );
     }
-    else    // Use dummy() part if the actual cannot be found.
+    else // Use a dummy part if the actual cannot be found.
     {
-        dummy()->Print( &localRenderSettings, 0, 0, m_pos + aOffset, aForceNoFill, aDimmed );
+        LIB_SYMBOL::GetDummy()->Print( &localRenderSettings, 0, 0, m_pos + aOffset, aForceNoFill,
+                                       aDimmed );
     }
 
     for( SCH_FIELD& field : m_fields )
@@ -1999,7 +1971,8 @@ BOX2I SCH_SYMBOL::doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) con
     if( m_part )
         bBox = m_part->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
     else
-        bBox = dummy()->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
+        bBox = LIB_SYMBOL::GetDummy()->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins,
+                                                           false );
 
     bBox = m_transform.TransformCoordinate( bBox );
     bBox.Normalize();
@@ -2079,7 +2052,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     // part and alias can differ if alias is not the root
     if( m_part )
     {
-        if( m_part.get() != dummy() )
+        if( m_part.get() != LIB_SYMBOL::GetDummy() )
         {
             if( m_part->IsPower() )
             {

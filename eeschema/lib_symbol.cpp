@@ -219,6 +219,35 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 }
 
 
+/**
+ * Used as a dummy LIB_SYMBOL when one is not found in library or imported schematic
+ *
+ * This symbol is a 400 mils square with the text "??"
+ */
+LIB_SYMBOL* LIB_SYMBOL::GetDummy()
+{
+    static LIB_SYMBOL* symbol;
+
+    if( !symbol )
+    {
+        symbol = new LIB_SYMBOL( wxEmptyString );
+
+        SCH_SHAPE* square = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
+
+        square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
+        square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
+        symbol->AddDrawItem( square );
+
+        SCH_TEXT* text = new SCH_TEXT( { 0, 0 }, wxT( "??" ), LAYER_DEVICE );
+
+        text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
+        symbol->AddDrawItem( text );
+    }
+
+    return symbol;
+}
+
+
 unsigned LIB_SYMBOL::GetInheritanceDepth() const
 {
     unsigned depth = 0;

@@ -102,6 +102,11 @@ public:
         return dupe;
     }
 
+    /**
+     * Returns a dummy LIB_SYMBOL, used when one is missing in the schematic
+     */
+    static LIB_SYMBOL* GetDummy();
+
     void SetParent( LIB_SYMBOL* aParent = nullptr );
     LIB_SYMBOL_REF& GetParent() { return m_parent; }
     const LIB_SYMBOL_REF& GetParent() const { return m_parent; }
