@@ -23472,7 +23472,7 @@ msgstr ""
 
 #: include/widgets/ui_common.h:44
 msgid "-- mixed values --"
-msgstr "-- valeurs mixtées --"
+msgstr "-- valeurs mixées --"
 
 #: include/widgets/wx_infobar.h:118
 msgid "Hide this message."
