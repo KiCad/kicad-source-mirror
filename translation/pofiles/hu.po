@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:57+0300\n"
+"POT-Creation-Date: 2025-01-11 20:07+0300\n"
 "PO-Revision-Date: 2025-01-05 09:38+0000\n"
 "Last-Translator: Gergo Kamaras <kamaras.gergo@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
@@ -29,16 +29,16 @@ msgstr "Összes fájl"
 msgid "Build board outline"
 msgstr "Panel körvonala"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:552
+#: 3d-viewer/3d_canvas/board_adapter.cpp:558
 msgid "Create layers"
 msgstr "Rétegek létrehozása"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:940
+#: 3d-viewer/3d_canvas/board_adapter.cpp:947
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
 msgstr "Nincs betöltve lábkiosztás."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:955
+#: 3d-viewer/3d_canvas/board_adapter.cpp:962
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -46,7 +46,7 @@ msgstr ""
 "A lábkiosztás körvonala hiányzik vagy hibás. Futtassa a lábkiosztás-"
 "ellenőrzést a teljes elemzéshez."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:964
+#: 3d-viewer/3d_canvas/board_adapter.cpp:971
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "A panel körvonala hiányzik vagy hibás. Futtassa a DRC-t a teljes elemzéshez."
@@ -89,35 +89,35 @@ msgstr "Furatkontúrok egyszerűsítése"
 msgid "Build BVH for holes and vias"
 msgstr "BVH építése furatokhoz és viákhoz"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:402
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
 msgstr "Hiba az OpenGL kontextus létrehozásában"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:433
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "OpenGL verzió nem támogatott. Minimum 1.5-ös verzió szükséges."
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:567
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, fuzzy, c-format
 msgid "Last render time %.0f ms"
 msgstr "Renderelési idő %.0f ms"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:744
 #, fuzzy, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Vezeték %s\t Vezetékosztály %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:767
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:768
 #, c-format
 msgid "Pad %s\t"
 msgstr "Forrszem %s\t"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, fuzzy, c-format
 msgid "Rule area %s\t"
 msgstr "%s terület szabály\t"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:800
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:801
 #, c-format
 msgid "Zone %s\t"
 msgstr "Zóna %s\t"
@@ -139,19 +139,19 @@ msgstr "OpenGL betöltés: rétegek"
 msgid "Load OpenGL layer %s"
 msgstr "%s OpenGL réteg betöltése"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:656
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:786
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1995
 msgid "Loading 3D models..."
 msgstr "3D modellek betöltése..."
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:665
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:967
 #, c-format
 msgid "Reload time %.3f s"
 msgstr "Újratöltési idő %.3f sec"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:958
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:961
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:355
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:541
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:287
@@ -167,16 +167,16 @@ msgid "Loading %s..."
 msgstr "%s betöltése..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:489
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:106
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
 msgstr "Betöltés..."
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
 msgstr "Sugárkövetés betöltése: panel"
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
 msgstr "Sugárkövetés betöltése: rétegek"
 
@@ -190,7 +190,7 @@ msgstr "Renderelési idő: %.3f mp"
 msgid "Rendering: %.0f %%"
 msgstr "Renderelés: %.0f%%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:683
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:685
 msgid "Rendering: Post processing shader"
 msgstr "Renderelés: árnyaló utófeldolgozása"
 
@@ -203,7 +203,7 @@ msgid "Export Current View as JPEG..."
 msgstr "Aktuális nézet exportálása JPEG-ként…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:658
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
 #: common/eda_base_frame.cpp:1202 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1074 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
@@ -263,15 +263,15 @@ msgstr "Nézet"
 msgid "&Preferences"
 msgstr "Beállítások"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:58
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 msgid "Reload board"
 msgstr "Panel újratöltése"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
 msgstr "3D kép vágólapra másolása"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
 msgstr "A jelenlegi nézet renderelése sugárkövetéssel"
 
@@ -281,7 +281,7 @@ msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D megjelenítő"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:664
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:955
@@ -290,29 +290,29 @@ msgstr "KiCad 3D megjelenítő"
 msgid "Appearance"
 msgstr "Megjelenés"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:634
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:640
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Editor"
 msgstr "NYÁK-tervező követése"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:635
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
 msgstr "NYÁK-tervező beállításainak követése"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:585
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:848
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:666
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:854
 msgid "legacy colors"
 msgstr "örökölt színek"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:722
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
 msgstr "3D-s képfájl neve"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:743
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
 #: common/eda_base_frame.cpp:1348 common/eda_base_frame.cpp:1352
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:329
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:333
@@ -320,7 +320,7 @@ msgstr "3D-s képfájl neve"
 msgid "Insufficient permissions to save file '%s'."
 msgstr "A(z) „%s” fájl mentéséhez írási jogosultságokra van szükség."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:744 common/confirm.cpp:211
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
 #: common/dialogs/panel_embedded_files.cpp:227
@@ -355,11 +355,11 @@ msgstr "A(z) „%s” fájl mentéséhez írási jogosultságokra van szükség.
 msgid "Error"
 msgstr "Hiba"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:788
 msgid "Failed to copy image to clipboard"
 msgstr "Nem sikerült a képet a vágólapra másolni"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:795
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:799
 msgid "Can't save file"
 msgstr "A fájlt nem lehet menteni"
 
@@ -692,15 +692,15 @@ msgstr "Virtuális modellek"
 msgid "Models not in POS File"
 msgstr "POS-fájlban nem található modellek"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "Models marked DNP"
 msgstr "DNP jelölésű modellek"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "Model Bounding Boxes"
 msgstr "Modell határolódobozai"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76 common/layer_id.cpp:170
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77 common/layer_id.cpp:170
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:111
@@ -709,76 +709,76 @@ msgstr "Modell határolódobozai"
 msgid "Values"
 msgstr "Értékek"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprint values"
 msgstr "Alkatrészrajzolat értékeinek megjelenítése"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "References"
 msgstr "Referenciák"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprint references"
 msgstr "Alkatrészrajzolat referenciáinak megjelenítése"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Footprint Text"
 msgstr "Alkatrészrajzolat szövegei"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show all footprint text"
 msgstr "Az összes alkatrészrajzolat-szöveg megjelenítése"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "Off-board Silkscreen"
 msgstr "Panelen kívüli szitanyomat"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Do not clip silk layers to board outline"
 msgstr "Ne vágja a szitanyomatot a panel körvonalához"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "3D Axis"
 msgstr "3D tengely"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 msgid "Background Start"
 msgstr "Háttér kezdete"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 msgid "Background gradient start color"
 msgstr "Színátmenetes háttér kezdőszíne"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 msgid "Background End"
 msgstr "Háttér vége"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 msgid "Background gradient end color"
 msgstr "Színátmenetes háttér zárószíne"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:228
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:233
 #, fuzzy
 msgid "Use board stackup colors"
 msgstr "X méretezés kényszerítve."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
 #, fuzzy
 msgid "Use board editor copper colors"
 msgstr "X méretezés kényszerítve."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:146
 #, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
 msgstr "Csupasz rézszín használata a bevonat nélküli rézhez (lassú)"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:164
 #, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
@@ -791,7 +791,7 @@ msgstr ""
 "Miközben lenyomva tartja a %s+Tab billentyűket, a felugró ablak "
 "előbeállításai között lépkedhet."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:167
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:172
 #, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
@@ -804,116 +804,116 @@ msgstr ""
 "Miközben lenyomva tartja a %s+Tab billentyűket,a felugró ablak "
 "előbeállításai között lépkedhet."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:498
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:503
 msgid "Left double click or middle click to change color"
 msgstr ""
 "Bal egérgombbal kattintson duplán (vagy középső gomb) a szín választáshoz"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:508
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:513
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:557
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:563
 #: pcbnew/widgets/appearance_controls.cpp:2198
 #, c-format
 msgid "Show or hide %s"
 msgstr "%s megjelenítése/elrejtése"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:633
 #: pcbnew/widgets/appearance_controls.cpp:2571
 #, c-format
 msgid "Presets (%s+Tab):"
 msgstr "Előbeállítások (%s+Tab):"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:647
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2073
 #: pcbnew/widgets/appearance_controls.cpp:2596
 msgid "Save preset..."
 msgstr "Előbeállítás mentése…"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:642
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1642
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "Delete preset..."
 msgstr "Előbeállítás törlése…"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:748
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
 #: pcbnew/widgets/appearance_controls.cpp:2702
 msgid "Layer preset name:"
 msgstr "Rétegelőbeállítás neve:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:749
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:755
 #: pcbnew/widgets/appearance_controls.cpp:2703
 msgid "Save Layer Preset"
 msgstr "Rétegelőbeállítás mentése"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:770
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1814
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2216
 #: pcbnew/widgets/appearance_controls.cpp:2736
 msgid "Overwrite existing preset?"
 msgstr "Felülírja a meglévő előbeállítást?"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1839
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2241
 #: pcbnew/widgets/appearance_controls.cpp:2762
 msgid "Presets"
 msgstr "Előbeállítások"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:799
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:805
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
 #: pcbnew/widgets/appearance_controls.cpp:2774
 msgid "Delete Preset"
 msgstr "Előbeállítás törlése"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:800
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:806
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2775
 msgid "Select preset:"
 msgstr "Előbeállítás kiválasztása:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:858
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:864
 #: pcbnew/widgets/appearance_controls.cpp:2875
 #, c-format
 msgid "Viewports (%s+Tab):"
 msgstr "Nézőpontok (%s+Tab):"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:873
 #: pcbnew/widgets/appearance_controls.cpp:2884
 msgid "Save viewport..."
 msgstr "Nézőpont mentése…"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:874
 #: pcbnew/widgets/appearance_controls.cpp:2885
 msgid "Delete viewport..."
 msgstr "Nézőpont törlése…"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:899
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:905
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Viewport name:"
 msgstr "Nézőpont neve:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:900
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:906
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Save Viewport"
 msgstr "Nézőpont mentése"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:939
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
 #: pcbnew/widgets/appearance_controls.cpp:2973
 msgid "Viewports"
 msgstr "Nézőpontok"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:948
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
 #: pcbnew/widgets/appearance_controls.cpp:2982
 msgid "Delete Viewport"
 msgstr "Nézőpont törlése"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:949
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
 #: pcbnew/widgets/appearance_controls.cpp:2983
 msgid "Select viewport:"
 msgstr "Nézőpont kiválasztása:"
@@ -936,7 +936,7 @@ msgstr "Nézőpontok (Alt+Tab):"
 msgid "(unsaved)"
 msgstr "(nincs mentve)"
 
-#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
+#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
 msgstr "Összes támogatott fájl (%s)"
@@ -1246,12 +1246,12 @@ msgstr "Jobbra"
 msgid "Light 8:"
 msgstr "Jobbra"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 #, fuzzy
 msgid "3D Preview Options"
 msgstr "Gerbview beállítások"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 #, fuzzy
 msgid "Board thickness:"
 msgstr "Rácsvastagság:"
@@ -8213,17 +8213,17 @@ msgstr "Felső szitanyomat"
 msgid "Export Single Gerber Job Settings"
 msgstr "Exportálás a GenCAD beállításaihoz"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:43
+#: common/jobs/job_export_pcb_gerbers.cpp:42
 #, fuzzy
 msgid "Export Gerbers"
 msgstr "Fájlok exportálása"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:49
+#: common/jobs/job_export_pcb_gerbers.cpp:48
 #, fuzzy
 msgid "Export Gerbers Job Settings"
 msgstr "Exportálás a GenCAD beállításaihoz"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:53
+#: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
 msgstr ""
 
@@ -8707,7 +8707,7 @@ msgid "Helper items"
 msgstr "Elemek törlése"
 
 #: common/layer_id.cpp:152 common/layer_id.cpp:194 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2866
+#: eeschema/tools/sch_editor_control.cpp:2867
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -9105,12 +9105,12 @@ msgstr "Forrszem csatlakozások:"
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "A \"%s\" környezeti változót nem lehet átnevezni."
 
-#: common/pgm_base.cpp:735
+#: common/pgm_base.cpp:736
 #, fuzzy
 msgid "This language is not supported by the operating system."
 msgstr "Nem támogatott via alakzat: %s"
 
-#: common/pgm_base.cpp:786 common/pgm_base.cpp:827
+#: common/pgm_base.cpp:787 common/pgm_base.cpp:828
 msgid "The KiCad language file for this language is not installed."
 msgstr ""
 
@@ -26667,21 +26667,21 @@ msgstr "a(z) \"%s\" könyvtár nem törölhető"
 msgid "Increment Annotations"
 msgstr "Sorszámozások törlése"
 
-#: eeschema/tools/sch_editor_control.cpp:2823
+#: eeschema/tools/sch_editor_control.cpp:2824
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:885
 #, fuzzy, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d azonos időbélyeget talált majd cserélt le."
 
-#: eeschema/tools/sch_editor_control.cpp:2833
+#: eeschema/tools/sch_editor_control.cpp:2834
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:892
 #, c-format
 msgid "%d potential problems repaired."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2840
+#: eeschema/tools/sch_editor_control.cpp:2841
 #: pcbnew/drc/drc_rule_parser.cpp:179
 #, fuzzy
 msgid "No errors found."
@@ -42064,12 +42064,12 @@ msgstr "Kizárt"
 msgid "Convert to Rule Area"
 msgstr "Átalakít"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:282
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:284
 #, fuzzy
 msgid "Not found on board: "
 msgstr "A panelnak nincsenek szélei, ismeretlen a panel mérete!"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:437
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:439
 #, fuzzy
 msgid "No layers selected."
 msgstr "Nincs réteg kiválasztva."

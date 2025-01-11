@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:57+0300\n"
+"POT-Creation-Date: 2025-01-11 20:07+0300\n"
 "PO-Revision-Date: 2024-09-28 08:15+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -25,22 +25,22 @@ msgstr "ไฟล์ทั้งหมด"
 msgid "Build board outline"
 msgstr "สร้างเค้าโครงบอร์ด"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:552
+#: 3d-viewer/3d_canvas/board_adapter.cpp:558
 msgid "Create layers"
 msgstr "สร้างเลเยอร์"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:940
+#: 3d-viewer/3d_canvas/board_adapter.cpp:947
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
 msgstr "ไม่มีฟุ้ทพรินท์"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:955
+#: 3d-viewer/3d_canvas/board_adapter.cpp:962
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr "ขาดเค้าโครงฟุ้ทพรินท์หรือบิดเบี้ยว. สั่งงานตรวจสอบฟุ้ทพรินท์เพื่อวิเคราะห์ละเอียด."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:964
+#: 3d-viewer/3d_canvas/board_adapter.cpp:971
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr "ขาดเค้าโครงบอร์ดหรือบิดเบี้ยว. สั่งทำงาน DRC เพื่อวิเคราะห์ละเอียด."
 
@@ -83,35 +83,35 @@ msgstr "ทำเส้นรอบโฮลให้ง่าย"
 msgid "Build BVH for holes and vias"
 msgstr "สร้าง BVH สำหรับโฮลและเวีย"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:402
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
 msgstr "ข้อผิดพลาดในการสร้างบริบท OpenGL"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:433
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "เราไม่สนับสนุน OpenGL ของคุณ ต้องการอย่างต่ำรุ่น 1.5"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:567
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
 msgid "Last render time %.0f ms"
 msgstr "เวลาเรนเดอร์ล่าสุด %.0f ms"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:744
 #, c-format
 msgid "Net %s\tNet class %s"
 msgstr "เน็ต %s\tเน็ตคลาส %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:767
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:768
 #, c-format
 msgid "Pad %s\t"
 msgstr "แพ็ด %s\t"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, c-format
 msgid "Rule area %s\t"
 msgstr "กฎพื้นที่ %s\t"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:800
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:801
 #, c-format
 msgid "Zone %s\t"
 msgstr "โซน %s\t"
@@ -133,19 +133,19 @@ msgstr "อ่าน OpenGL: เลเยอร์"
 msgid "Load OpenGL layer %s"
 msgstr "อ่าน OpenGL เลเยอร์ %s"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:656
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:786
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1995
 msgid "Loading 3D models..."
 msgstr "กำลังอ่านโมเดล3มิติ…"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:665
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:967
 #, c-format
 msgid "Reload time %.3f s"
 msgstr "เวลาอ่านอีกครั้ง %.3f s"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:958
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:961
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:355
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:541
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:287
@@ -161,16 +161,16 @@ msgid "Loading %s..."
 msgstr "กำลังอ่าน %s…"
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:489
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:106
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
 msgstr "กำลังอ่าน…"
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
 msgstr "อ่านเรย์เทรสซิ่ง: บอร์ด"
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
 msgstr "อ่านเรย์เทรสซิ่ง: เลเยอร์"
 
@@ -184,7 +184,7 @@ msgstr "เวลาเรนเดอร์ %.3f s"
 msgid "Rendering: %.0f %%"
 msgstr "กำลังเรนเดอร์: %.0f %%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:683
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:685
 msgid "Rendering: Post processing shader"
 msgstr "กำลังเรนเดอร์: Post processing shader"
 
@@ -197,7 +197,7 @@ msgid "Export Current View as JPEG..."
 msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:658
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
 #: common/eda_base_frame.cpp:1202 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1074 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
@@ -257,15 +257,15 @@ msgstr "มุมมอง(&V)"
 msgid "&Preferences"
 msgstr "ตั้งความชอบ(&P)"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:58
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 msgid "Reload board"
 msgstr "อ่านบอร์ดอีกครั้ง"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
 msgstr "สำเนาภาพ3มิติใส่คลิปบอร์ด"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
 msgstr "เรนเดอร์มุมมองปัจจุบันใช้เรย์เทรสซิ่ง"
 
@@ -275,7 +275,7 @@ msgid "KiCad 3D Viewer"
 msgstr "เครื่องมือแสดง3มิติของ KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:664
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:955
@@ -284,31 +284,31 @@ msgstr "เครื่องมือแสดง3มิติของ KiCad"
 msgid "Appearance"
 msgstr "ภาพปรากฏ"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:634
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:640
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #, fuzzy
 msgid "Follow PCB Editor"
 msgstr "เครื่องมือแก้ไขพีซีบอร์ด"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:635
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #, fuzzy
 msgid "Follow PCB Plot Settings"
 msgstr "การตั้งค่าตัวกรอง"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:585
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:848
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:666
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:854
 msgid "legacy colors"
 msgstr "สีในรูปแบบเดิม"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:722
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
 msgstr "ชื่อไฟล์ภาพ3มิติ"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:743
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
 #: common/eda_base_frame.cpp:1348 common/eda_base_frame.cpp:1352
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:329
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:333
@@ -316,7 +316,7 @@ msgstr "ชื่อไฟล์ภาพ3มิติ"
 msgid "Insufficient permissions to save file '%s'."
 msgstr "ไม่มีสิทธิเพียงพอเพื่อบันทึกไฟล์ '%s'."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:744 common/confirm.cpp:211
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
 #: common/dialogs/panel_embedded_files.cpp:227
@@ -351,11 +351,11 @@ msgstr "ไม่มีสิทธิเพียงพอเพื่อบั
 msgid "Error"
 msgstr "ผิดพลาด"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:788
 msgid "Failed to copy image to clipboard"
 msgstr "สำเนาภาพไปคลิปบอร์ดล้มเหลว"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:795
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:799
 msgid "Can't save file"
 msgstr "ไม่สามารถบันทึกไฟล์"
 
@@ -718,17 +718,17 @@ msgstr "สลับเปิดปิดโมเดล3มิติเสม�
 msgid "Models not in POS File"
 msgstr "สลับเปิดปิดโมเดล3มิติ ที่ไม่อยู่ในไฟล์pos"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 #, fuzzy
 msgid "Models marked DNP"
 msgstr "สลับเปิดปิดโมเดล3มิติSMD"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 #, fuzzy
 msgid "Model Bounding Boxes"
 msgstr "แสดงกรอบรอบรูปโมเดล"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76 common/layer_id.cpp:170
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77 common/layer_id.cpp:170
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:111
@@ -737,81 +737,81 @@ msgstr "แสดงกรอบรอบรูปโมเดล"
 msgid "Values"
 msgstr "ค่า"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprint values"
 msgstr "แสดงค่าฟุ้ทพรินท์"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "References"
 msgstr "อ้างอิง"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprint references"
 msgstr "แสดงอ้างอิงฟุ้ทพรินท์"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Footprint Text"
 msgstr "ข้อความบนฟุ้ทพรินท์"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show all footprint text"
 msgstr "แสดงข้อความของฟุ้ทพรินท์ทั้งหมด"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 #, fuzzy
 msgid "Off-board Silkscreen"
 msgstr "ซิลค์สกรีน"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Do not clip silk layers to board outline"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 #, fuzzy
 msgid "3D Axis"
 msgstr "แกน X"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 #, fuzzy
 msgid "Background Start"
 msgstr "พื้นหลัง"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 #, fuzzy
 msgid "Background gradient start color"
 msgstr "เริ่มต้นไล่ระดับสีพื้นหลัง:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 #, fuzzy
 msgid "Background End"
 msgstr "พื้นหลัง"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 #, fuzzy
 msgid "Background gradient end color"
 msgstr "สิ้นสุดไล่ระดับสีพื้นหลัง:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:228
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:233
 msgid "Use board stackup colors"
 msgstr "ใช้สีจากสแต็กอัพของบอร์ด"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
 #, fuzzy
 msgid "Use board editor copper colors"
 msgstr "ใช้สีจากสแต็กอัพของบอร์ด"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:146
 #, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
 msgstr "ใช้สีทองแดงเปลือยสำหรับทองแดงไม่เคลือบ"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:164
 #, fuzzy, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
@@ -823,7 +823,7 @@ msgstr ""
 "ใช้ %s+Tab สำหรับกระตุ้นการเลือก\n"
 "กด Tab ต่อเนื่องระหว่างกด %s ค้าง จะหมุนวนไปในมุมมองทั้งหมดบนป้อปอัพ"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:167
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:172
 #, fuzzy, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
@@ -835,52 +835,52 @@ msgstr ""
 "ใช้ %s+Tab สำหรับกระตุ้นการเลือก\n"
 "กด Tab ต่อเนื่องระหว่างกด %s ค้าง จะหมุนวนไปในมุมมองทั้งหมดบนป้อปอัพ"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:498
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:503
 #, fuzzy
 msgid "Left double click or middle click to change color"
 msgstr "คลิกสองครั้งซ้ายหรือคลิกกลางเพื่อเปลี่ยนสี"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:508
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:513
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:557
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:563
 #: pcbnew/widgets/appearance_controls.cpp:2198
 #, c-format
 msgid "Show or hide %s"
 msgstr "แสดงหรือซ่อน %s"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:633
 #: pcbnew/widgets/appearance_controls.cpp:2571
 #, c-format
 msgid "Presets (%s+Tab):"
 msgstr "ตั้งค่า (%s+Tab):"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:647
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2073
 #: pcbnew/widgets/appearance_controls.cpp:2596
 msgid "Save preset..."
 msgstr "บันทึกค่าที่ตั้งไว้..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:642
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1642
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "Delete preset..."
 msgstr "ลบค่าที่ตั้งไว้..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:748
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
 #: pcbnew/widgets/appearance_controls.cpp:2702
 msgid "Layer preset name:"
 msgstr "ชื่อเลเยอร์ตั้งล่วงหน้า:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:749
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:755
 #: pcbnew/widgets/appearance_controls.cpp:2703
 msgid "Save Layer Preset"
 msgstr "บันทึกเลเยอร์ที่ตั้งไว้ล่วงหน้า"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:770
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1814
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2216
 #: pcbnew/widgets/appearance_controls.cpp:2736
@@ -888,64 +888,64 @@ msgstr "บันทึกเลเยอร์ที่ตั้งไว้ล
 msgid "Overwrite existing preset?"
 msgstr "เปิดโครงการที่มี"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1839
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2241
 #: pcbnew/widgets/appearance_controls.cpp:2762
 msgid "Presets"
 msgstr "ค่าที่ตั้งไว้"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:799
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:805
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
 #: pcbnew/widgets/appearance_controls.cpp:2774
 msgid "Delete Preset"
 msgstr "ลบที่ตั้งไว้ล่วงหน้า"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:800
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:806
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2775
 msgid "Select preset:"
 msgstr "เลือกค่าที่ตั้งไว้ล่วงหน้า:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:858
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:864
 #: pcbnew/widgets/appearance_controls.cpp:2875
 #, c-format
 msgid "Viewports (%s+Tab):"
 msgstr "ช่องมอง (%s+Tab):"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:873
 #: pcbnew/widgets/appearance_controls.cpp:2884
 msgid "Save viewport..."
 msgstr "บันทึกช่องมอง..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:874
 #: pcbnew/widgets/appearance_controls.cpp:2885
 msgid "Delete viewport..."
 msgstr "ลบช่องมอง..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:899
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:905
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Viewport name:"
 msgstr "ชื่อช่องมอง:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:900
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:906
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Save Viewport"
 msgstr "บันทึกช่องมอง"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:939
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
 #: pcbnew/widgets/appearance_controls.cpp:2973
 msgid "Viewports"
 msgstr "ช่องมอง"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:948
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
 #: pcbnew/widgets/appearance_controls.cpp:2982
 msgid "Delete Viewport"
 msgstr "ลบช่องมอง"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:949
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
 #: pcbnew/widgets/appearance_controls.cpp:2983
 msgid "Select viewport:"
 msgstr "เลือกช่องมอง:"
@@ -968,7 +968,7 @@ msgstr "ช่องมอง (Alt+Tab):"
 msgid "(unsaved)"
 msgstr "(ยังไม่บันทึก)"
 
-#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
+#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
 msgstr "ไฟล์สนับสนุนทั้งหมด (%s)"
@@ -1251,12 +1251,12 @@ msgstr "แสง 4:"
 msgid "Light 8:"
 msgstr "แสง 8:"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 #, fuzzy
 msgid "3D Preview Options"
 msgstr "การตั้งค่าพรีวิว"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 #, fuzzy
 msgid "Board thickness:"
 msgstr "ความหนาบอร์ด: "
@@ -7548,17 +7548,17 @@ msgstr "ซิลค์สกรีนด้านหน้า"
 msgid "Export Single Gerber Job Settings"
 msgstr "ส่งออกการตั้งค่าไปยัง GenCAD"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:43
+#: common/jobs/job_export_pcb_gerbers.cpp:42
 #, fuzzy
 msgid "Export Gerbers"
 msgstr "หน่วยส่งออก:"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:49
+#: common/jobs/job_export_pcb_gerbers.cpp:48
 #, fuzzy
 msgid "Export Gerbers Job Settings"
 msgstr "ส่งออกการตั้งค่าไปยัง GenCAD"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:53
+#: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
 msgstr ""
 
@@ -7999,7 +7999,7 @@ msgid "Helper items"
 msgstr "ชิ้นส่วนผู้ช่วย"
 
 #: common/layer_id.cpp:152 common/layer_id.cpp:194 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2866
+#: eeschema/tools/sch_editor_control.cpp:2867
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -8364,11 +8364,11 @@ msgstr "ต้องการคำขอรับรวบรวมข้อม
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "ตัวแปรสภาพแวดล้อมชื่อ HOME ว่างเปล่า   ไม่สามารถทำงานต่อ"
 
-#: common/pgm_base.cpp:735
+#: common/pgm_base.cpp:736
 msgid "This language is not supported by the operating system."
 msgstr "ระบบปฏิบัติการไม่สนับสนุนภาษานี้"
 
-#: common/pgm_base.cpp:786 common/pgm_base.cpp:827
+#: common/pgm_base.cpp:787 common/pgm_base.cpp:828
 msgid "The KiCad language file for this language is not installed."
 msgstr "ไฟล์ภาษาของ KiCad ไม่ได้ติดตั้ง"
 
@@ -24493,21 +24493,21 @@ msgstr "ไลบรารีสัญลักษณ์ ' %s' ไม่สา�
 msgid "Increment Annotations"
 msgstr "ล้างคำอธิบายประกอบ"
 
-#: eeschema/tools/sch_editor_control.cpp:2823
+#: eeschema/tools/sch_editor_control.cpp:2824
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:885
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d แทนที่ไอดีซ้ำกัน\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2833
+#: eeschema/tools/sch_editor_control.cpp:2834
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:892
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d ปัญหาที่อาจเกิดขึ้นได้รับการแก้ไขแล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2840
+#: eeschema/tools/sch_editor_control.cpp:2841
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "ไม่พบข้อผิดพลาด"
@@ -38418,11 +38418,11 @@ msgstr "ปิดกั้น"
 msgid "Convert to Rule Area"
 msgstr "แปลงเป็นพื้นที่กฎ"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:282
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:284
 msgid "Not found on board: "
 msgstr ""
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:437
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:439
 msgid "No layers selected."
 msgstr "ไม่ได้เลือกเลเยอร์"
 

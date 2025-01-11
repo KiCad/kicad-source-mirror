@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:57+0300\n"
+"POT-Creation-Date: 2025-01-11 20:07+0300\n"
 "PO-Revision-Date: 2025-01-05 19:11+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
@@ -51,16 +51,16 @@ msgstr "Kaikki Tiedostot"
 msgid "Build board outline"
 msgstr "Rakenna piirilevyn ääriviivat"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:552
+#: 3d-viewer/3d_canvas/board_adapter.cpp:558
 msgid "Create layers"
 msgstr "Luo kerrokset"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:940
+#: 3d-viewer/3d_canvas/board_adapter.cpp:947
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
 msgstr "Jalanjälkeä ei ladattu."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:955
+#: 3d-viewer/3d_canvas/board_adapter.cpp:962
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -68,7 +68,7 @@ msgstr ""
 "Jalanjäljen ääriviivat puuttuvat tai ovat epämuodostuneet. Suorita "
 "\"Tarkista jalanjälki\" tehdäksesi täydellisen analyysin."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:964
+#: 3d-viewer/3d_canvas/board_adapter.cpp:971
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "Piirilevyn ääriviiva puuttuu tai on epämuodostunut. Suorita "
@@ -112,35 +112,35 @@ msgstr "Yksinkertaista reikien muotoja"
 msgid "Build BVH for holes and vias"
 msgstr "Rakenna BVH reikiä ja läpivientejä varten"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:402
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
 msgstr "OpenGL-kontekstin luontivirhe"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:433
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "Sinun OpenGL-versio ei ole tuettu. Vaaditaan vähintään versio 1.5."
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:567
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
 msgid "Last render time %.0f ms"
 msgstr "Viimeisin renderointiaika %.0f ms"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:744
 #, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Verkko %s Verkkoluokka %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:767
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:768
 #, c-format
 msgid "Pad %s\t"
 msgstr "Antura %s\t"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, c-format
 msgid "Rule area %s\t"
 msgstr "Sääntöalue %s\t"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:800
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:801
 #, c-format
 msgid "Zone %s\t"
 msgstr "Vyöhyke %s\t"
@@ -162,19 +162,19 @@ msgstr "Lataa OpenGL: kerrokset"
 msgid "Load OpenGL layer %s"
 msgstr "Lataa OpenGL-kerros %s"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:656
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:786
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1995
 msgid "Loading 3D models..."
 msgstr "Ladataan 3D-malleja..."
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:665
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:967
 #, c-format
 msgid "Reload time %.3f s"
 msgstr "Latausaika %.3f s"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:958
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:961
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:355
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:541
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:287
@@ -190,16 +190,16 @@ msgid "Loading %s..."
 msgstr "Ladataan %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:489
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:106
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
 msgstr "Ladataan…"
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
 msgstr "Lataa Säteenseuranta: piirilevy"
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
 msgstr "Lataa Säteenseuranta: kerrokset"
 
@@ -213,7 +213,7 @@ msgstr "Renderointiaika %.3f s"
 msgid "Rendering: %.0f %%"
 msgstr "Hahmonnus: %.0f %%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:683
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:685
 msgid "Rendering: Post processing shader"
 msgstr "Renderoidään: Jälkikäsittelyvarjostin"
 
@@ -226,7 +226,7 @@ msgid "Export Current View as JPEG..."
 msgstr "Vie Nykyinen Näkymä JPEG-muodossa ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:658
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
 #: common/eda_base_frame.cpp:1202 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1074 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
@@ -286,15 +286,15 @@ msgstr "&Näytä"
 msgid "&Preferences"
 msgstr "&Asetukset"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:58
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 msgid "Reload board"
 msgstr "Lataa piirilevy uudestaan"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
 msgstr "Kopioi 3D-kuva leikepöydälle"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
 msgstr "Renderöi nykyinen näkymä käyttämällä säteenseurantaa"
 
@@ -304,7 +304,7 @@ msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D-Katselin"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:664
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:955
@@ -313,29 +313,29 @@ msgstr "KiCad 3D-Katselin"
 msgid "Appearance"
 msgstr "Ulkoasu"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:634
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:640
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Editor"
 msgstr "Seuraa PCB muokkainta"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:635
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
 msgstr "Seuraa PCB Piirustusasetuksia"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:585
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:848
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:666
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:854
 msgid "legacy colors"
 msgstr "vanhat värit"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:722
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
 msgstr "3D-kuvatiedoston nimi"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:743
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
 #: common/eda_base_frame.cpp:1348 common/eda_base_frame.cpp:1352
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:329
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:333
@@ -343,7 +343,7 @@ msgstr "3D-kuvatiedoston nimi"
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Ei riittäviä käyttöoikeuksia tiedoston '%s' tallentamiseen."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:744 common/confirm.cpp:211
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
 #: common/dialogs/panel_embedded_files.cpp:227
@@ -378,11 +378,11 @@ msgstr "Ei riittäviä käyttöoikeuksia tiedoston '%s' tallentamiseen."
 msgid "Error"
 msgstr "Virhe"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:788
 msgid "Failed to copy image to clipboard"
 msgstr "Kuvan kopioiminen leikepöydälle ei onnistunut"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:795
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:799
 msgid "Can't save file"
 msgstr "Tiedostoa ei voitu tallentaa"
 
@@ -709,15 +709,15 @@ msgstr "Virtuaalimallit"
 msgid "Models not in POS File"
 msgstr "Mallit, jotka eivät ole POS-tiedostossa"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "Models marked DNP"
 msgstr "Mallit, joissa on DNP"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "Model Bounding Boxes"
 msgstr "Mallin rajoituslaatikot"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76 common/layer_id.cpp:170
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77 common/layer_id.cpp:170
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:111
@@ -726,73 +726,73 @@ msgstr "Mallin rajoituslaatikot"
 msgid "Values"
 msgstr "Arvot"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprint values"
 msgstr "Näytä jalanjäljen arvot"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "References"
 msgstr "Viitteet"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprint references"
 msgstr "Näytä jalanjäljeviitteet"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Footprint Text"
 msgstr "Jalanjälkiteksti"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show all footprint text"
 msgstr "Näytä kaikki jalanjälkitekstit"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "Off-board Silkscreen"
 msgstr "Ulkopuolinen silkkipaino"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Do not clip silk layers to board outline"
 msgstr "Älä leikkaa silkkikerroksia piirilevyn ääriviivoihin"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "3D Axis"
 msgstr "3D-akseli"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 msgid "Background Start"
 msgstr "Taustan alku"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 msgid "Background gradient start color"
 msgstr "Taustagradientin aloitusväri"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 msgid "Background End"
 msgstr "Taustan loppu"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 msgid "Background gradient end color"
 msgstr "Taustagradientin lopetusväri"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:228
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:233
 msgid "Use board stackup colors"
 msgstr "Käytä piirilevyn kerrospinon värejä"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
 msgid "Use board editor copper colors"
 msgstr "Käytä piirilevyeditorin kuparivärejä"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:146
 msgid "Use the board editor copper colors (openGL only)"
 msgstr "Käytä piirilevyeditorin kuparivärejä (vain openGL)"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:164
 #, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
@@ -805,7 +805,7 @@ msgstr ""
 "Peräkkäiset välilehdet pitämällä %s painettuna vaihtuu esiasetuksien läpi "
 "ponnahdusikkunassa."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:167
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:172
 #, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
@@ -818,117 +818,117 @@ msgstr ""
 "Peräkkäiset välilehdet, kun pidät %s painettuna, näkymät vaihtuvat "
 "ponnahdusikkunassa."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:498
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:503
 msgid "Left double click or middle click to change color"
 msgstr ""
 "Vaihda väriä hiiren vasemmalla kaksoisnapsauttamalla tai keskipainikkeella"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:508
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:513
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
 "Poista valinta 'Käytä piirilevynpinon värejä' sallii värien muokkaamisen."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:557
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:563
 #: pcbnew/widgets/appearance_controls.cpp:2198
 #, c-format
 msgid "Show or hide %s"
 msgstr "Näytä tai piilota %s"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:633
 #: pcbnew/widgets/appearance_controls.cpp:2571
 #, c-format
 msgid "Presets (%s+Tab):"
 msgstr "Esiasetukset (%s+Sarkain):"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:647
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2073
 #: pcbnew/widgets/appearance_controls.cpp:2596
 msgid "Save preset..."
 msgstr "Tallenna esiasetus ..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:642
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1642
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "Delete preset..."
 msgstr "Poista esiasetus ..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:748
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
 #: pcbnew/widgets/appearance_controls.cpp:2702
 msgid "Layer preset name:"
 msgstr "Tason esiasetettu nimi:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:749
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:755
 #: pcbnew/widgets/appearance_controls.cpp:2703
 msgid "Save Layer Preset"
 msgstr "Tallenna Kerroksen Esiasetus"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:770
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1814
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2216
 #: pcbnew/widgets/appearance_controls.cpp:2736
 msgid "Overwrite existing preset?"
 msgstr "Korvataanko olemassa oleva esiasetus?"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1839
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2241
 #: pcbnew/widgets/appearance_controls.cpp:2762
 msgid "Presets"
 msgstr "Esiasetukset"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:799
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:805
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
 #: pcbnew/widgets/appearance_controls.cpp:2774
 msgid "Delete Preset"
 msgstr "Poista Esiasetus"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:800
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:806
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2775
 msgid "Select preset:"
 msgstr "Valitse esiasetus:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:858
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:864
 #: pcbnew/widgets/appearance_controls.cpp:2875
 #, c-format
 msgid "Viewports (%s+Tab):"
 msgstr "Näkymät (%s+Sarkain):"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:873
 #: pcbnew/widgets/appearance_controls.cpp:2884
 msgid "Save viewport..."
 msgstr "Tallenna näkymä..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:874
 #: pcbnew/widgets/appearance_controls.cpp:2885
 msgid "Delete viewport..."
 msgstr "Poista näkymä..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:899
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:905
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Viewport name:"
 msgstr "Näkymän nimi:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:900
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:906
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Save Viewport"
 msgstr "Tallenna Näkymä"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:939
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
 #: pcbnew/widgets/appearance_controls.cpp:2973
 msgid "Viewports"
 msgstr "Näkymät"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:948
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
 #: pcbnew/widgets/appearance_controls.cpp:2982
 msgid "Delete Viewport"
 msgstr "Poista Näkymä"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:949
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
 #: pcbnew/widgets/appearance_controls.cpp:2983
 msgid "Select viewport:"
 msgstr "Valitse näkymä:"
@@ -951,7 +951,7 @@ msgstr "Näkymät (Alt+Sarkain):"
 msgid "(unsaved)"
 msgstr "(tallentamaton)"
 
-#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
+#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
 msgstr "Kaikki tuetut tiedostot (%s)"
@@ -1239,11 +1239,11 @@ msgstr "Valo 4:"
 msgid "Light 8:"
 msgstr "Valo 8:"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 msgid "3D Preview Options"
 msgstr "3D-Esikatselun Valinnat"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 msgid "Board thickness:"
 msgstr "Piirilevyn paksuus:"
 
@@ -7481,15 +7481,15 @@ msgstr "Vie yksittäinen Gerber"
 msgid "Export Single Gerber Job Settings"
 msgstr "Vie yksittäisen Gerber:in työasetukset"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:43
+#: common/jobs/job_export_pcb_gerbers.cpp:42
 msgid "Export Gerbers"
 msgstr "Vie Gerberit"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:49
+#: common/jobs/job_export_pcb_gerbers.cpp:48
 msgid "Export Gerbers Job Settings"
 msgstr "Vie Gerberien työasetukset"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:53
+#: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
 msgstr "PCB: Vie Gerberit"
 
@@ -7889,7 +7889,7 @@ msgid "Helper items"
 msgstr "Avustajakohteet"
 
 #: common/layer_id.cpp:152 common/layer_id.cpp:194 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2866
+#: eeschema/tools/sch_editor_control.cpp:2867
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -8244,11 +8244,11 @@ msgstr "Tiedonkeruun valintapyyntö"
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Ympäristömuuttuja HOME on tyhjä.  Ei voi jatkaa."
 
-#: common/pgm_base.cpp:735
+#: common/pgm_base.cpp:736
 msgid "This language is not supported by the operating system."
 msgstr "Käyttöjärjestelmä ei tue tätä kieltä."
 
-#: common/pgm_base.cpp:786 common/pgm_base.cpp:827
+#: common/pgm_base.cpp:787 common/pgm_base.cpp:828
 msgid "The KiCad language file for this language is not installed."
 msgstr "Tämän kielen KiCad-kielitiedostoa ei ole asennettu."
 
@@ -23900,21 +23900,21 @@ msgstr ""
 msgid "Increment Annotations"
 msgstr "Lisää huomautuksia"
 
-#: eeschema/tools/sch_editor_control.cpp:2823
+#: eeschema/tools/sch_editor_control.cpp:2824
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:885
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d kaksoiskappaleet vaihdettu.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2833
+#: eeschema/tools/sch_editor_control.cpp:2834
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:892
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d mahdolliset ongelmat korjattu."
 
-#: eeschema/tools/sch_editor_control.cpp:2840
+#: eeschema/tools/sch_editor_control.cpp:2841
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Ei virheitä."
@@ -37659,11 +37659,11 @@ msgstr "Säilytykset"
 msgid "Convert to Rule Area"
 msgstr "Muunna säännön alueeksi"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:282
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:284
 msgid "Not found on board: "
 msgstr "Ei löytynyt piirilevyltä: "
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:437
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:439
 msgid "No layers selected."
 msgstr "Kerroksia ei ole valittu."
 

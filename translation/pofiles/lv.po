@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:57+0300\n"
+"POT-Creation-Date: 2025-01-11 20:07+0300\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
@@ -26,16 +26,16 @@ msgstr "Visi faili (*.*)|*.*"
 msgid "Build board outline"
 msgstr "Būvēt plates kontūru"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:552
+#: 3d-viewer/3d_canvas/board_adapter.cpp:558
 msgid "Create layers"
 msgstr "Izveidot slāņus"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:940
+#: 3d-viewer/3d_canvas/board_adapter.cpp:947
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
 msgstr "Nospiedums nav ielādēts."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:955
+#: 3d-viewer/3d_canvas/board_adapter.cpp:962
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -43,7 +43,7 @@ msgstr ""
 "Trūkst nospieduma kontūra vai arī tā ir izkropļota. Palaidiet nospiedumu "
 "pārbaudītāju pilnai analīzei."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:964
+#: 3d-viewer/3d_canvas/board_adapter.cpp:971
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "Trūkst plates kontūra vai arī tā ir izkropļota. Palaidiet DRC pilnai "
@@ -88,37 +88,37 @@ msgstr "Vienkāršo caurumu kontūras"
 msgid "Build BVH for holes and vias"
 msgstr "Būvēt BVH caurumiem un tiltiem"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:402
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 #, fuzzy
 msgid "OpenGL context creation error"
 msgstr "Izveidot slāņus"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:433
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 #, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "Jūsu OpenGL versija nav atbalstīta. Zemākā versija ir 1.5"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:567
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, fuzzy, c-format
 msgid "Last render time %.0f ms"
 msgstr "Atainošanas laiks %.3f s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:744
 #, fuzzy, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Tīkls %s\tTīklaKlase %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:767
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:768
 #, c-format
 msgid "Pad %s\t"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, c-format
 msgid "Rule area %s\t"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:800
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:801
 #, c-format
 msgid "Zone %s\t"
 msgstr ""
@@ -140,20 +140,20 @@ msgstr "Ielādēt OpenGL: slāņi"
 msgid "Load OpenGL layer %s"
 msgstr "Ielādēt OpenGL: slāņi"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:656
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:786
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1995
 #, fuzzy
 msgid "Loading 3D models..."
 msgstr "Ielādē 3D modeļus"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:665
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:967
 #, c-format
 msgid "Reload time %.3f s"
 msgstr "Pārlādes laiks %.3f s"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:958
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:961
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:355
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:541
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:287
@@ -169,16 +169,16 @@ msgid "Loading %s..."
 msgstr "Ielādē %s"
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:489
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:106
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
 msgstr "Ielādē..."
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
 msgstr "Ielādēt staru trasēšanu: plate"
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
 msgstr "Ielādēt staru trasēšanu: slāņi"
 
@@ -192,7 +192,7 @@ msgstr "Atainošanas laiks %.3f s"
 msgid "Rendering: %.0f %%"
 msgstr "Atainošana: %.0f %%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:683
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:685
 msgid "Rendering: Post processing shader"
 msgstr "Atainošana: pēcapstrādes ēnotājs"
 
@@ -205,7 +205,7 @@ msgid "Export Current View as JPEG..."
 msgstr "Eksportēt pašreizējo skatu kā JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:658
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
 #: common/eda_base_frame.cpp:1202 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1074 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
@@ -265,15 +265,15 @@ msgstr "&Skatīt"
 msgid "&Preferences"
 msgstr "&Iestatījumi"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:58
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 msgid "Reload board"
 msgstr "Pārlādēt plati"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
 msgstr "Kopēt 3D attēlu starpliktuvē"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
 msgstr "Atainot pašreizējo skatu ar staru trasēšanu"
 
@@ -284,7 +284,7 @@ msgid "KiCad 3D Viewer"
 msgstr "3D skatītājs"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:664
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:955
@@ -293,32 +293,32 @@ msgstr "3D skatītājs"
 msgid "Appearance"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:634
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:640
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #, fuzzy
 msgid "Follow PCB Editor"
 msgstr "&Labot"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:635
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #, fuzzy
 msgid "Follow PCB Plot Settings"
 msgstr "Ielādē..."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:585
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:848
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:666
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:854
 #, fuzzy
 msgid "legacy colors"
 msgstr "Izvēlēties krāsas"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:722
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:743
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
 #: common/eda_base_frame.cpp:1348 common/eda_base_frame.cpp:1352
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:329
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:333
@@ -326,7 +326,7 @@ msgstr ""
 msgid "Insufficient permissions to save file '%s'."
 msgstr ""
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:744 common/confirm.cpp:211
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
 #: common/dialogs/panel_embedded_files.cpp:227
@@ -361,12 +361,12 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:788
 #, fuzzy
 msgid "Failed to copy image to clipboard"
 msgstr "Kopēt 3D attēlu starpliktuvē"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:795
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:799
 #, fuzzy
 msgid "Can't save file"
 msgstr "Rādīt vara biezumu"
@@ -737,17 +737,17 @@ msgstr "Izvēlēties 3D modeli"
 msgid "Models not in POS File"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 #, fuzzy
 msgid "Models marked DNP"
 msgstr "Rādīt SMD 3D modeļus"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 #, fuzzy
 msgid "Model Bounding Boxes"
 msgstr "Rādīt modeļu ietvarus"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76 common/layer_id.cpp:170
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77 common/layer_id.cpp:170
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:111
@@ -756,87 +756,87 @@ msgstr "Rādīt modeļu ietvarus"
 msgid "Values"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 #, fuzzy
 msgid "Show footprint values"
 msgstr "Nospiedums nav ielādēts."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 #, fuzzy
 msgid "References"
 msgstr "&Iestatījumi"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 #, fuzzy
 msgid "Show footprint references"
 msgstr "&Iestatījumi"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 #, fuzzy
 msgid "Footprint Text"
 msgstr "Nospiedums nav ielādēts."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 #, fuzzy
 msgid "Show all footprint text"
 msgstr "Nospiedums nav ielādēts."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 #, fuzzy
 msgid "Off-board Silkscreen"
 msgstr "Virsmas apdrukas krāsa..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Do not clip silk layers to board outline"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 #, fuzzy
 msgid "3D Axis"
 msgstr "Rādīt SMD 3D modeļus"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 #, fuzzy
 msgid "Background Start"
 msgstr "Augšpuses fona krāsa..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 #, fuzzy
 msgid "Background gradient start color"
 msgstr "Apakšpuses fona krāsa..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 #, fuzzy
 msgid "Background End"
 msgstr "Augšpuses fona krāsa..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 #, fuzzy
 msgid "Background gradient end color"
 msgstr "Augšpuses fona krāsa..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:228
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:233
 #, fuzzy
 msgid "Use board stackup colors"
 msgstr "Iegūt krāsas no fiziskās grēdas"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
 #, fuzzy
 msgid "Use board editor copper colors"
 msgstr "Iegūt krāsas no fiziskās grēdas"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:146
 #, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
 msgstr "Izmantot parastu vara krāsu priekš nepārklāta vara"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:164
 #, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
@@ -845,7 +845,7 @@ msgid ""
 "popup."
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:167
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:172
 #, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
@@ -854,51 +854,51 @@ msgid ""
 "popup."
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:498
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:503
 msgid "Left double click or middle click to change color"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:508
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:513
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:557
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:563
 #: pcbnew/widgets/appearance_controls.cpp:2198
 #, fuzzy, c-format
 msgid "Show or hide %s"
 msgstr "Rādīt lodalvas maskas slāņus"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:633
 #: pcbnew/widgets/appearance_controls.cpp:2571
 #, c-format
 msgid "Presets (%s+Tab):"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:647
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2073
 #: pcbnew/widgets/appearance_controls.cpp:2596
 msgid "Save preset..."
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:642
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1642
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "Delete preset..."
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:748
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
 #: pcbnew/widgets/appearance_controls.cpp:2702
 msgid "Layer preset name:"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:749
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:755
 #: pcbnew/widgets/appearance_controls.cpp:2703
 msgid "Save Layer Preset"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:770
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1814
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2216
 #: pcbnew/widgets/appearance_controls.cpp:2736
@@ -906,21 +906,21 @@ msgstr ""
 msgid "Overwrite existing preset?"
 msgstr "Ielādē..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1839
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2241
 #: pcbnew/widgets/appearance_controls.cpp:2762
 msgid "Presets"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:799
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:805
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
 #: pcbnew/widgets/appearance_controls.cpp:2774
 msgid "Delete Preset"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:800
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:806
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2775
@@ -928,47 +928,47 @@ msgstr ""
 msgid "Select preset:"
 msgstr "Atlases krāsa:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:858
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:864
 #: pcbnew/widgets/appearance_controls.cpp:2875
 #, c-format
 msgid "Viewports (%s+Tab):"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:873
 #: pcbnew/widgets/appearance_controls.cpp:2884
 #, fuzzy
 msgid "Save viewport..."
 msgstr "Atlases krāsa:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:874
 #: pcbnew/widgets/appearance_controls.cpp:2885
 #, fuzzy
 msgid "Delete viewport..."
 msgstr "Atlases krāsa:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:899
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:905
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Viewport name:"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:900
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:906
 #: pcbnew/widgets/appearance_controls.cpp:2934
 #, fuzzy
 msgid "Save Viewport"
 msgstr "Atlases krāsa:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:939
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
 #: pcbnew/widgets/appearance_controls.cpp:2973
 msgid "Viewports"
 msgstr ""
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:948
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
 #: pcbnew/widgets/appearance_controls.cpp:2982
 #, fuzzy
 msgid "Delete Viewport"
 msgstr "Atlases krāsa:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:949
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
 #: pcbnew/widgets/appearance_controls.cpp:2983
 #, fuzzy
 msgid "Select viewport:"
@@ -992,7 +992,7 @@ msgstr ""
 msgid "(unsaved)"
 msgstr ""
 
-#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
+#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
 msgstr "Visi atbalstītie faili (%s)"
@@ -1287,12 +1287,12 @@ msgstr ""
 msgid "Light 8:"
 msgstr ""
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 #, fuzzy
 msgid "3D Preview Options"
 msgstr "Ielādē..."
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 #, fuzzy
 msgid "Board thickness:"
 msgstr "Atslēgt biezumu"
@@ -7582,17 +7582,17 @@ msgstr "Rādīt virsmas apdrukas slāņus"
 msgid "Export Single Gerber Job Settings"
 msgstr ""
 
-#: common/jobs/job_export_pcb_gerbers.cpp:43
+#: common/jobs/job_export_pcb_gerbers.cpp:42
 #, fuzzy
 msgid "Export Gerbers"
 msgstr "Nospiedums nav ielādēts."
 
-#: common/jobs/job_export_pcb_gerbers.cpp:49
+#: common/jobs/job_export_pcb_gerbers.cpp:48
 #, fuzzy
 msgid "Export Gerbers Job Settings"
 msgstr "Citas opcijas"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:53
+#: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
 msgstr ""
 
@@ -8052,7 +8052,7 @@ msgid "Helper items"
 msgstr "Citas opcijas"
 
 #: common/layer_id.cpp:152 common/layer_id.cpp:194 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2866
+#: eeschema/tools/sch_editor_control.cpp:2867
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -8432,11 +8432,11 @@ msgstr ""
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr ""
 
-#: common/pgm_base.cpp:735
+#: common/pgm_base.cpp:736
 msgid "This language is not supported by the operating system."
 msgstr ""
 
-#: common/pgm_base.cpp:786 common/pgm_base.cpp:827
+#: common/pgm_base.cpp:787 common/pgm_base.cpp:828
 msgid "The KiCad language file for this language is not installed."
 msgstr ""
 
@@ -24159,21 +24159,21 @@ msgstr ""
 msgid "Increment Annotations"
 msgstr "Nospiedums nav ielādēts."
 
-#: eeschema/tools/sch_editor_control.cpp:2823
+#: eeschema/tools/sch_editor_control.cpp:2824
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:885
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2833
+#: eeschema/tools/sch_editor_control.cpp:2834
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:892
 #, c-format
 msgid "%d potential problems repaired."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2840
+#: eeschema/tools/sch_editor_control.cpp:2841
 #: pcbnew/drc/drc_rule_parser.cpp:179
 #, fuzzy
 msgid "No errors found."
@@ -37926,11 +37926,11 @@ msgstr ""
 msgid "Convert to Rule Area"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:282
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:284
 msgid "Not found on board: "
 msgstr ""
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:437
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:439
 msgid "No layers selected."
 msgstr ""
 

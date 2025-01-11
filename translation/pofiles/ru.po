@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:57+0300\n"
+"POT-Creation-Date: 2025-01-11 20:07+0300\n"
 "PO-Revision-Date: 2025-01-05 16:29+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
@@ -57,16 +57,16 @@ msgstr "Все файлы"
 msgid "Build board outline"
 msgstr "Построение контура платы"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:552
+#: 3d-viewer/3d_canvas/board_adapter.cpp:558
 msgid "Create layers"
 msgstr "Создание слоёв"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:940
+#: 3d-viewer/3d_canvas/board_adapter.cpp:947
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
 msgstr "Нет загруженных посад. мест."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:955
+#: 3d-viewer/3d_canvas/board_adapter.cpp:962
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -74,7 +74,7 @@ msgstr ""
 "Контур посад. места отсутствует или имеет неудачную форму. Выполните "
 "проверку посад. места для получения полной информации."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:964
+#: 3d-viewer/3d_canvas/board_adapter.cpp:971
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "Контур платы отсутствует или деформирован. Выполните проверку правил DRC для "
@@ -118,35 +118,35 @@ msgstr "Оптимизация контуров отверстий"
 msgid "Build BVH for holes and vias"
 msgstr "Построение глухих/внутр. перех. отв."
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:402
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
 msgstr "Ошибка создания контекста OpenGL"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:433
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "Текущая версия OpenGL не поддерживается. Требуется минимум 1.5."
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:567
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
 msgid "Last render time %.0f ms"
 msgstr "Время последней визуализации %.0f мс"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:744
 #, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Цепь %s\tКласс %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:767
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:768
 #, c-format
 msgid "Pad %s\t"
 msgstr "Конт. пл. %s\t"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, c-format
 msgid "Rule area %s\t"
 msgstr "Область запрета %s\t"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:800
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:801
 #, c-format
 msgid "Zone %s\t"
 msgstr "Зона %s\t"
@@ -168,19 +168,19 @@ msgstr "Загрузка OpenGL: слои"
 msgid "Load OpenGL layer %s"
 msgstr "Загрузка слоя OpenGL %s"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:653
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:656
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:786
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1995
 msgid "Loading 3D models..."
 msgstr "Загрузка 3D моделей..."
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:662
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:665
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:967
 #, c-format
 msgid "Reload time %.3f s"
 msgstr "Время обновления %.3f с"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:958
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:961
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:355
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:541
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:287
@@ -196,16 +196,16 @@ msgid "Loading %s..."
 msgstr "Загрузка %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:489
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:106
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
 msgstr "Загрузка..."
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
 msgstr "Трассировка лучей: загрузка платы"
 
-#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
+#: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
 msgid "Load Raytracing: layers"
 msgstr "OpenGL: загрузка слоёв"
 
@@ -219,7 +219,7 @@ msgstr "Время визуализации %.3f с"
 msgid "Rendering: %.0f %%"
 msgstr "Визуализация: %.0f %%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:683
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:685
 msgid "Rendering: Post processing shader"
 msgstr "Визуализация: шейдеры пост-обработки"
 
@@ -232,7 +232,7 @@ msgid "Export Current View as JPEG..."
 msgstr "Экспорт в JPEG-файл..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:658
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
 #: common/eda_base_frame.cpp:1202 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1074 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
@@ -292,15 +292,15 @@ msgstr "Вид"
 msgid "&Preferences"
 msgstr "Настройки"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:58
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 msgid "Reload board"
 msgstr "Перезагрузить плату"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
 msgstr "Копировать 3D изображение в буфер обмена"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
 msgstr "Визуализация текущего вида используя трассировку лучей"
 
@@ -310,7 +310,7 @@ msgid "KiCad 3D Viewer"
 msgstr "Просмотрщик 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:664
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:955
@@ -319,29 +319,29 @@ msgstr "Просмотрщик 3D"
 msgid "Appearance"
 msgstr "Внешний вид"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:634
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:640
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Editor"
 msgstr "Как в редакторе плат"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:635
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
 msgstr "Как в настройках черчения"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:585
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:848
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:666
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:854
 msgid "legacy colors"
 msgstr "Унаследованные цвета"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:722
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
 msgstr "Имя файла 3D-изображения"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:743
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
 #: common/eda_base_frame.cpp:1348 common/eda_base_frame.cpp:1352
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:329
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:333
@@ -349,7 +349,7 @@ msgstr "Имя файла 3D-изображения"
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Недостаточно прав для сохранения файла '%s'."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:744 common/confirm.cpp:211
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
 #: common/dialogs/panel_embedded_files.cpp:227
@@ -384,11 +384,11 @@ msgstr "Недостаточно прав для сохранения файла
 msgid "Error"
 msgstr "Ошибка"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:788
 msgid "Failed to copy image to clipboard"
 msgstr "Не удалось скопировать изображение в буфер обмена"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:795
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:799
 msgid "Can't save file"
 msgstr "Не удалось сохранить файл"
 
@@ -717,15 +717,15 @@ msgstr "Виртуальные модели"
 msgid "Models not in POS File"
 msgstr "Модели не в POS файле"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "Models marked DNP"
 msgstr "Модели с меткой DNP"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "Model Bounding Boxes"
 msgstr "Габариты моделей"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76 common/layer_id.cpp:170
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77 common/layer_id.cpp:170
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:111
@@ -734,73 +734,73 @@ msgstr "Габариты моделей"
 msgid "Values"
 msgstr "Значения"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprint values"
 msgstr "Показать значения посад. мест"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "References"
 msgstr "Обозначения"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprint references"
 msgstr "Показать обозначения посад. мест"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Footprint Text"
 msgstr "Текст посад. места"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show all footprint text"
 msgstr "Показать все надписи посад. места"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "Off-board Silkscreen"
 msgstr "Шёлкография вне платы"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Do not clip silk layers to board outline"
 msgstr "Не обрезать шёлкографию по границам платы"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "3D Axis"
 msgstr "3D оси"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 msgid "Background Start"
 msgstr "Начало фона"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 msgid "Background gradient start color"
 msgstr "Цвет начала градиента фона"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 msgid "Background End"
 msgstr "Конец фона"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 msgid "Background gradient end color"
 msgstr "Цвет конца градиента фона"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:228
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:233
 msgid "Use board stackup colors"
 msgstr "Исп. цвета из структуры платы"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
 msgid "Use board editor copper colors"
 msgstr "Используйте редактор платы медных цветов"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:146
 msgid "Use the board editor copper colors (openGL only)"
 msgstr "Используйте медные цвета редактора плат (только для openGL)"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:164
 #, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
@@ -813,7 +813,7 @@ msgstr ""
 "Последующие нажатия Tab при удержании %s приводят к циклическому переходу по "
 "пресетам во всплывающем окне."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:167
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:172
 #, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
@@ -826,119 +826,119 @@ msgstr ""
 "Последующие нажатия Tab при зажатой кнопке %s будут переключать виды во "
 "всплывающем окне."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:498
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:503
 msgid "Left double click or middle click to change color"
 msgstr ""
 "Дважды кликните левой кнопкой или кликните средней кнопкой для изменения "
 "цвета"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:508
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:513
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
 "Снимите флажок 'Исп. цвета из структуры платы' чтобы можно было править "
 "цвета."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:557
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:563
 #: pcbnew/widgets/appearance_controls.cpp:2198
 #, c-format
 msgid "Show or hide %s"
 msgstr "Показать или скрыть %s"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:633
 #: pcbnew/widgets/appearance_controls.cpp:2571
 #, c-format
 msgid "Presets (%s+Tab):"
 msgstr "Наборы слоёв (%s+Tab):"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:647
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2073
 #: pcbnew/widgets/appearance_controls.cpp:2596
 msgid "Save preset..."
 msgstr "Сохранить набор слоёв..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:642
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1642
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "Delete preset..."
 msgstr "Удалить набор слоёв..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:748
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
 #: pcbnew/widgets/appearance_controls.cpp:2702
 msgid "Layer preset name:"
 msgstr "Имя нового набора слоёв:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:749
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:755
 #: pcbnew/widgets/appearance_controls.cpp:2703
 msgid "Save Layer Preset"
 msgstr "Сохранить набор слоёв"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:770
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1814
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2216
 #: pcbnew/widgets/appearance_controls.cpp:2736
 msgid "Overwrite existing preset?"
 msgstr "Перезаписать пресет?"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1839
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2241
 #: pcbnew/widgets/appearance_controls.cpp:2762
 msgid "Presets"
 msgstr "Наборы слоёв"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:799
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:805
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
 #: pcbnew/widgets/appearance_controls.cpp:2774
 msgid "Delete Preset"
 msgstr "Удалить набор"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:800
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:806
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2775
 msgid "Select preset:"
 msgstr "Выбор набора:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:858
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:864
 #: pcbnew/widgets/appearance_controls.cpp:2875
 #, c-format
 msgid "Viewports (%s+Tab):"
 msgstr "Виды (%s+Tab):"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:873
 #: pcbnew/widgets/appearance_controls.cpp:2884
 msgid "Save viewport..."
 msgstr "Сохранить вид..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:874
 #: pcbnew/widgets/appearance_controls.cpp:2885
 msgid "Delete viewport..."
 msgstr "Удалить вид..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:899
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:905
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Viewport name:"
 msgstr "Имя вида:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:900
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:906
 #: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Save Viewport"
 msgstr "Сохранить вид"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:939
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
 #: pcbnew/widgets/appearance_controls.cpp:2973
 msgid "Viewports"
 msgstr "Виды"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:948
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
 #: pcbnew/widgets/appearance_controls.cpp:2982
 msgid "Delete Viewport"
 msgstr "Удалить вид"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:949
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
 #: pcbnew/widgets/appearance_controls.cpp:2983
 msgid "Select viewport:"
 msgstr "Выбор вида:"
@@ -961,7 +961,7 @@ msgstr "Виды (Alt+Tab):"
 msgid "(unsaved)"
 msgstr "(изменено)"
 
-#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
+#: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
 msgstr "Все поддерживаемые форматы (%s)"
@@ -1251,11 +1251,11 @@ msgstr "Свет 4:"
 msgid "Light 8:"
 msgstr "Свет 8:"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 msgid "3D Preview Options"
 msgstr "Настройки предпросмотра 3D"
 
-#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:423
+#: 3d-viewer/dialogs/panel_preview_3d_model.cpp:426
 msgid "Board thickness:"
 msgstr "Толщина платы:"
 
@@ -7509,15 +7509,15 @@ msgstr "Экспорт одного Gerber"
 msgid "Export Single Gerber Job Settings"
 msgstr "Параметры задания экспорта одного Gerber"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:43
+#: common/jobs/job_export_pcb_gerbers.cpp:42
 msgid "Export Gerbers"
 msgstr "Экспорт Gerber-файлов"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:49
+#: common/jobs/job_export_pcb_gerbers.cpp:48
 msgid "Export Gerbers Job Settings"
 msgstr "Параметры задания экспорта Gerber-файлов"
 
-#: common/jobs/job_export_pcb_gerbers.cpp:53
+#: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
 msgstr "PCB: Экспорт Gerber"
 
@@ -7918,7 +7918,7 @@ msgid "Helper items"
 msgstr "Вспомогательные элементы"
 
 #: common/layer_id.cpp:152 common/layer_id.cpp:194 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2866
+#: eeschema/tools/sch_editor_control.cpp:2867
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -8273,11 +8273,11 @@ msgstr "Запрос на сбор данных"
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Переменная окружения HOME пуста. Дальнейшая работа невозможна."
 
-#: common/pgm_base.cpp:735
+#: common/pgm_base.cpp:736
 msgid "This language is not supported by the operating system."
 msgstr "Этот язык не поддерживается операционной системой."
 
-#: common/pgm_base.cpp:786 common/pgm_base.cpp:827
+#: common/pgm_base.cpp:787 common/pgm_base.cpp:828
 msgid "The KiCad language file for this language is not installed."
 msgstr "Файл перевода для этого языка не установлен с KiCad."
 
@@ -23927,21 +23927,21 @@ msgstr ""
 msgid "Increment Annotations"
 msgstr "Инкрементные аннотации"
 
-#: eeschema/tools/sch_editor_control.cpp:2823
+#: eeschema/tools/sch_editor_control.cpp:2824
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:885
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d дубликаты идентификаторов заменены.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2833
+#: eeschema/tools/sch_editor_control.cpp:2834
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:892
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d потенциальных проблем решено."
 
-#: eeschema/tools/sch_editor_control.cpp:2840
+#: eeschema/tools/sch_editor_control.cpp:2841
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Ошибки не найдены."
@@ -37679,11 +37679,11 @@ msgstr "Области запрета"
 msgid "Convert to Rule Area"
 msgstr "Преобразовать в область запрета"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:282
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:284
 msgid "Not found on board: "
 msgstr "На борту не обнаружено: "
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:437
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:439
 msgid "No layers selected."
 msgstr "Слой не выбран."
 
