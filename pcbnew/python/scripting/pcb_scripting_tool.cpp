@@ -113,7 +113,8 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
 
 #ifdef KICAD_IPC_API
     // TODO move this elsewhere when SWIG plugins are removed
-    Pgm().GetPluginManager().ReloadPlugins();
+    if( Pgm().GetCommonSettings()->m_Api.enable_server )
+        Pgm().GetPluginManager().ReloadPlugins();
 #endif
 
     if( !m_isFootprintEditor )

@@ -2745,7 +2745,8 @@ int SCH_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::ReloadPlugins( const TOOL_EVENT& aEvent )
 {
 #ifdef KICAD_IPC_API
-    Pgm().GetPluginManager().ReloadPlugins();
+    if( Pgm().GetCommonSettings()->m_Api.enable_server )
+        Pgm().GetPluginManager().ReloadPlugins();
 #endif
     return 0;
 }

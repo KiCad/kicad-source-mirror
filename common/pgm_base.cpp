@@ -626,7 +626,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     GetSettingsManager().LoadProject( "" );
 
 #ifdef KICAD_IPC_API
-    m_plugin_manager->ReloadPlugins();
+    if( commonSettings->m_Api.enable_server )
+        m_plugin_manager->ReloadPlugins();
 #endif
 
     // This sets the maximum tooltip display duration to 10s (up from 5) but only affects
