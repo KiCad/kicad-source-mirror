@@ -115,7 +115,7 @@ try:
     import wx.adv, wx.html, wx.richtext
 
 except Exception as e:
-    exception_output = "".join(traceback.format_exception(e))
+    exception_output = "".join(traceback.format_exc())
     )", pybind11::globals(), locals );
 
     const auto getLocal = [&]( const wxString& aName ) -> wxString
