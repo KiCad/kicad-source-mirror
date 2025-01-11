@@ -1715,7 +1715,9 @@ bool DRC_ENGINE::ReportPhase( const wxString& aMessage )
         return true;
 
     m_progressReporter->AdvancePhase( aMessage );
-    return m_progressReporter->KeepRefreshing( false );
+    bool retval = m_progressReporter->KeepRefreshing( false );
+    wxSafeYield( nullptr, true ); // Force an update for the message
+    return retval;
 }
 
 
