@@ -253,15 +253,27 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
             return;
         }
 
+        std::optional<wxString> pythonHome =
+                PYTHON_MANAGER::GetPythonEnvironment( plugin.Identifier() );
+
         PYTHON_MANAGER manager( *py );
         wxExecuteEnv   env;
+        wxGetEnvMap( &env.env );
+        env.env[wxS( "KICAD_API_SOCKET" )] = Pgm().GetApiServer().SocketPath();
+        env.env[wxS( "KICAD_API_TOKEN" )] = Pgm().GetApiServer().Token();
+        env.cwd = pluginFile.GetPath();
 
+#ifdef _WIN32
         wxString systemRoot;
         wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
         env.env[wxS( "SYSTEMROOT" )] = systemRoot;
 
         env.env.erase( "PYTHONHOME" );
         env.env.erase( "PYTHONPATH" );
+#endif
+
+        if( pythonHome )
+            env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
         manager.Execute( pluginFile.GetFullPath(),
                 []( int aRetVal, const wxString& aOutput, const wxString& aError )
