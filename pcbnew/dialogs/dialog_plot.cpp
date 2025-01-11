@@ -519,6 +519,8 @@ void DIALOG_PLOT::transferPlotParamsToJob()
             break;
         }
     }
+
+    m_job->SetOutputPath( m_plotOpts.GetOutputDirectory() );
 }
 
 

@@ -422,4 +422,6 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aPlotOpts, JOB_EXPORT_PCB_
 
     PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( theme );
     aPlotOpts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
+
+    aPlotOpts.SetOutputDirectory( aJob->GetOutputPath() );
 }
