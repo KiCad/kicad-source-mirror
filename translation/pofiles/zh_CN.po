@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:57+0300\n"
-"PO-Revision-Date: 2025-01-10 20:39+0000\n"
+"PO-Revision-Date: 2025-01-11 10:05+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -4154,9 +4154,8 @@ msgid "Editing"
 msgstr "编辑"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "将鼠标移动到被移动的对象的原点"
+msgstr "将鼠标移动到被移动对象的锚点"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -7358,14 +7357,12 @@ msgid "Export GenCAD Job Settings"
 msgstr "导出 GenCAD 作业设置"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "导出独立 Gerber"
+msgstr "导出单个 Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "导出独立 Gerber 作业设置"
+msgstr "导出单个 Gerber 作业设置"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
 msgid "Export Gerbers"
@@ -8518,9 +8515,8 @@ msgid "Paste Special..."
 msgstr "特殊粘贴..."
 
 #: common/tool/actions.cpp:270
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "使用特殊粘贴选项进行粘贴"
+msgstr "使用特殊粘贴选项粘贴项目"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -14224,7 +14220,6 @@ msgid "SPICE directives:"
 msgstr "SPICE 指令:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
-#, fuzzy
 msgid "Load Directives from Schematic"
 msgstr "从原理图加载指令"
 
@@ -16034,9 +16029,8 @@ msgid "Zoom vertically"
 msgstr "垂直缩放"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
-#, fuzzy
 msgid "Vertical Touchpad or Scroll Wheel Movement"
-msgstr "触控板滚动手势或鼠标滚轮动作:"
+msgstr "触控板垂直移动手势或鼠标滚轮动作"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
@@ -16070,9 +16064,8 @@ msgid "Alt:"
 msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal Touchpad Movement"
-msgstr "触摸板水平移动:"
+msgstr "触摸板水平移动手势"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
@@ -16591,14 +16584,12 @@ msgid "Checking pins..."
 msgstr "正在检查引脚..."
 
 #: eeschema/erc/erc.cpp:1850
-#, fuzzy
 msgid "Checking similar labels..."
-msgstr "正在检查标签..."
+msgstr "正在检查相似标签..."
 
 #: eeschema/erc/erc.cpp:1858
-#, fuzzy
 msgid "Checking local and global labels..."
-msgstr "正在检查标签..."
+msgstr "正在检查本地标签和全局标签..."
 
 #: eeschema/erc/erc.cpp:1866
 msgid "Checking for unresolved variables..."
@@ -23921,14 +23912,13 @@ msgid "Do not export"
 msgstr "不导出"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "已知层的 Gerbers: "
+msgstr "层已知的 Gerbers: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "为匹配模式的网络分配一个网络类"
+msgstr "分配到匹配的 PCB 层?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
@@ -25571,7 +25561,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_dxf.cpp:167
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
-msgstr ""
+msgstr "新行为将与 --mode-multi 相匹配"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -25641,7 +25631,7 @@ msgstr "使用 KiCad Gerber 文件扩展名"
 #: kicad/cli/command_pcb_export_gerber.cpp:138
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
-msgstr ""
+msgstr "此命令在 KiCad 9.0 中已被弃用, 请改用 \"gerbers\"。\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -25822,23 +25812,23 @@ msgstr "旋转电路板, 格式为 'X,Y,Z', 例如: '-45,0,45' (isometic 视图)
 
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "顶部光强, 格式为 'R,G,B' 或单个数字, 取值范围: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "底部光强, 格式为 'R,G,B' 或单个数字, 取值范围: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "侧光光强, 格式为 'R,G,B' 或单个数字, 取值范围: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "摄像机光强, 格式为 'R,G,B' 或单个数字, 取值范围: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "侧光仰角, 单位为度, 取值范围: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 msgid "Invalid background\n"
@@ -34046,8 +34036,9 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:615
+#, fuzzy
 msgid "Allow bridged solder mask apertures between pads"
-msgstr "允许焊盘之间有桥接的阻焊开窗"
+msgstr "允许焊盘之间存在桥接的阻焊开窗"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:276
@@ -34456,9 +34447,8 @@ msgstr ""
 "仅用于要求将金属化孔 (PTH) 和非金属化孔 (NPTH) 合并到单个文件的电路板厂。"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:75
-#, fuzzy
 msgid "Use alternate drill mode for oval holes"
-msgstr "使用备选钻孔模式"
+msgstr "对椭圆孔使用备选钻孔模式"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -35385,9 +35375,8 @@ msgid "Replace existing placement rule areas"
 msgstr "替换现有的布置规则区"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:35
-#, fuzzy
 msgid "Group footprints with their placement rule areas"
-msgstr "根据布置规则区对元件进行分组"
+msgstr "根据布置规则区对封装进行分组"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:50
 msgid "Generate Multichannel Rule Areas"
@@ -35418,19 +35407,16 @@ msgid "Copy text, shapes, zones, and other items inside the source rule area"
 msgstr "复制源规则区内的文本, 形状, 域和其他项目"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
-#, fuzzy
 msgid "Include footprints outside the reference rule area"
-msgstr "包含目标区以外的元件"
+msgstr "包含参考规则区以外的封装"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:93
-#, fuzzy
 msgid "Group items with their target rule areas"
-msgstr "根据布置规则区对元件进行分组"
+msgstr "根据目标规则区进行分组"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:96
-#, fuzzy
 msgid "Remove locked items from target rule areas"
-msgstr "从组合中移除项目"
+msgstr "从目标规则区中移除锁定项目"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
@@ -36394,7 +36380,7 @@ msgstr "为底层封装生成属性弹窗"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:425
 msgid "Single document"
-msgstr ""
+msgstr "单个文档"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:453
 msgid "Run DRC..."
@@ -36496,7 +36482,7 @@ msgstr "移除冗余走线"
 msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
-msgstr ""
+msgstr "如果新走线与现有走线的连接相同, 旧的走线将被移除。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
@@ -36759,7 +36745,7 @@ msgstr "参考图像属性"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "Opaque"
-msgstr ""
+msgstr "不透明"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
 msgid "Transparent"
@@ -36808,7 +36794,7 @@ msgstr "透视"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
-msgstr ""
+msgstr "正交"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
 msgid "Projection"
@@ -36839,7 +36825,7 @@ msgstr "Pivot:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "平移:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
@@ -36860,7 +36846,7 @@ msgstr "光源位置"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
-msgstr ""
+msgstr "侧光仰角:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
 msgid "Render PCB Job Options"
@@ -37140,7 +37126,6 @@ msgid "Parent footprint description"
 msgstr "父级封装描述"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
-#, fuzzy
 msgid "Update Thickness According to Text Size"
 msgstr "根据文本大小更新文本线宽"
 
@@ -37521,9 +37506,8 @@ msgid "Top/bottom"
 msgstr "上/下"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:88
-#, fuzzy
 msgid "Board Items Flip"
-msgstr "翻转项目"
+msgstr "翻转板项目"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:95
 msgid "Allow free pads"
@@ -37937,9 +37921,8 @@ msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr "如果封装外框与该区重叠, 会导致 DRC 错误"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:20
-#, fuzzy
 msgid "No placement"
-msgstr "布置"
+msgstr "不进行布置"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
 msgid "Place items from sheet:"
@@ -38123,9 +38106,8 @@ msgid "Minimum text thickness:"
 msgstr "最小文本线宽:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:371
-#, fuzzy
 msgid "Arc/Circle Approximated by Segments"
-msgstr "弧线/圆 由线段逼近"
+msgstr "使用由线段逼近的 弧/圆"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:384
 msgid "Maximum allowed deviation:"
@@ -38918,7 +38900,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
 #, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints"
-msgstr "允许封装内的焊盘之间存在阻焊桥。"
+msgstr "允许封装内的焊盘之间存在桥接的阻焊开窗"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
 msgid ""
@@ -39005,7 +38987,6 @@ msgid "Check rule syntax"
 msgstr "检查规则语法"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
-#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
@@ -39014,8 +38995,8 @@ msgid ""
 msgstr ""
 "### 文档\n"
 "\n"
-"完整文档请参阅 [https://docs.kicad.org](https://docs.kicad.org/"
-"GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)。"
+"完整文档请参阅 [https://docs.kicad.org](https://go.kicad.org/docs/"
+"GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -39730,7 +39711,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
-#, fuzzy
 msgid ""
 "### Properties\n"
 "\n"
@@ -39741,10 +39721,14 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
-"### 文档\n"
+"### 属性\n"
 "\n"
-"完整文档请参阅 [https://docs.kicad.org](https://docs.kicad.org/"
-"GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)。"
+"在自定义规则表达式中, 可以测试对象的许多属性。完整属性列表请参阅文档: "
+"[https://docs.kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/en/"
+"pcbnew/pcbnew.html#custom_design_rules) for the complete list.\n"
+"\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
 msgid ""
@@ -43537,9 +43521,8 @@ msgid "(PTH pad hole leaves no copper)"
 msgstr "(PTH 焊盘孔缺少铜箔)"
 
 #: pcbnew/pad.cpp:2334
-#, fuzzy
 msgid "(PTH pad hole not fully inside copper)"
-msgstr "(PTH 焊盘孔没有完全处在铜箔内)"
+msgstr "(PTH 焊盘孔未完全位于铜箔内)"
 
 #: pcbnew/pad.cpp:2341
 msgid "(pad hole not inside pad shape)"
@@ -45562,9 +45545,8 @@ msgid "Marker (%s)"
 msgstr "标记 (%s)"
 
 #: pcbnew/pcb_plotter.cpp:65
-#, fuzzy
 msgid "No layers selected for plotting."
-msgstr "没有选择层。"
+msgstr "未选择要绘制的层。"
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -47766,9 +47748,8 @@ msgid "Place the Footprint Anchor"
 msgstr "放置封装锚点"
 
 #: pcbnew/tools/pcb_actions.cpp:349
-#, fuzzy
 msgid "Set the anchor point of the footprint"
-msgstr "设置封装的坐标原点 (锚点)"
+msgstr "设置封装的坐标锚点"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Increase Line Width"
@@ -49157,14 +49138,12 @@ msgid "Performs automatic placement of components outside board area"
 msgstr "自动布置板外元件"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
-#, fuzzy
 msgid "Generate Placement Rule Areas..."
-msgstr "生成布置规则区"
+msgstr "生成布置规则区..."
 
 #: pcbnew/tools/pcb_actions.cpp:2236
-#, fuzzy
 msgid "Repeat Layout..."
-msgstr "复刻布局"
+msgstr "复刻布局..."
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
@@ -49462,9 +49441,8 @@ msgid "Selected Items"
 msgstr "选中项"
 
 #: pcbnew/tools/pcb_control.cpp:1916
-#, fuzzy
 msgid "Selected 2D Length"
-msgstr "选择的网络:"
+msgstr "选中的二维长度"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
