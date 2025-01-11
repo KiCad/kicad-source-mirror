@@ -24,11 +24,35 @@
 
 void to_json( nlohmann::json& aJson, const LSET& aLset )
 {
-    aJson = nlohmann::json( aLset.FmtHex() );
+    nlohmann::json layers = nlohmann::json::array();
+
+    for( PCB_LAYER_ID layer : aLset.Seq() )
+        layers.push_back( LSET::Name( layer ) );
+
+    aJson = layers;
 }
 
 
 void from_json( const nlohmann::json& aJson, LSET& aLset )
 {
-    aLset.ParseHex( aJson.get<std::string>() );
+    if( aJson.is_array() )
+    {
+        aLset.clear();
+
+        for( const nlohmann::json& layer : aJson )
+        {
+            if( layer.is_string() )
+            {
+                wxString name = layer.get<wxString>();
+                int      layerId = LSET::NameToLayer( name );
+                if( layerId != UNDEFINED_LAYER )
+                    aLset.set( layerId );
+            }
+        }
+    }
+    else if( aJson.is_string() )
+    {
+        // Allow hex strings to be parsed into LSETs
+        aLset.ParseHex( aJson.get<std::string>() );
+    }
 }

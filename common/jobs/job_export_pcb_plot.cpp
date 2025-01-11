@@ -43,8 +43,8 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
     m_drillShapeOption( DRILL_MARKS::FULL_DRILL_SHAPE ),
     m_useDrillOrigin( false )
 {
-    m_params.emplace_back( new JOB_PARAM<LSEQ>( "layers", &m_printMaskLayer, m_printMaskLayer ) );
-    m_params.emplace_back( new JOB_PARAM<LSEQ>( "layers_to_include_on_all_layers",
+    m_params.emplace_back( new JOB_PARAM_LSEQ( "layers", &m_printMaskLayer, m_printMaskLayer ) );
+    m_params.emplace_back( new JOB_PARAM_LSEQ( "layers_to_include_on_all_layers",
                                                 &m_printMaskLayersToIncludeOnAllLayers,
                                                 m_printMaskLayersToIncludeOnAllLayers ) );
 

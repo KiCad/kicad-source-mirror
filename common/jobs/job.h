@@ -24,6 +24,8 @@
 #include <map>
 #include <wx/string.h>
 #include <settings/json_settings.h>
+#include <lseq.h>
+#include <lset.h>
 
 class KICOMMON_API JOB_PARAM_BASE
 {
@@ -107,6 +109,58 @@ public:
 protected:
     std::vector<ListElementType>* m_ptr;
     std::vector<ListElementType>  m_default;
+};
+
+
+class JOB_PARAM_LSEQ : public JOB_PARAM<LSEQ>
+{
+public:
+    JOB_PARAM_LSEQ( const std::string& aJsonPath, LSEQ* aPtr, LSEQ aDefault ) :
+            JOB_PARAM<LSEQ>( aJsonPath, aPtr, aDefault )
+    {
+    }
+
+    virtual void FromJson( const nlohmann::json& j ) const override
+    {
+        if( j.contains( m_jsonPath ) )
+        {
+            auto js = j.at( m_jsonPath );
+
+            LSEQ layers;
+            if( js.is_array() )
+            {
+                for( const nlohmann::json& layer : js )
+                {
+                    if( layer.is_string() )
+                    {
+                        wxString name = layer.get<wxString>();
+                        int      layerId = LSET::NameToLayer( name );
+                        if( layerId != UNDEFINED_LAYER )
+                            layers.push_back( static_cast<PCB_LAYER_ID>( layerId ) );
+                    }
+                    else
+                    {
+                        int layerId = layer.get<int>();
+                        if( layerId != UNDEFINED_LAYER )
+                            layers.push_back( static_cast<PCB_LAYER_ID>( layerId ) );
+                    }
+                }
+            }
+            *m_ptr = layers;
+        }
+        else
+            *m_ptr = m_default;
+    }
+
+    void ToJson( nlohmann::json& j ) override
+    {
+        nlohmann::json js = nlohmann::json::array();
+
+        for( PCB_LAYER_ID layer : ( *m_ptr ) )
+            js.push_back( LSET::Name( layer ) );
+
+        j[m_jsonPath] = js;
+    }
 };
 
 struct KICOMMON_API JOB_OUTPUT
