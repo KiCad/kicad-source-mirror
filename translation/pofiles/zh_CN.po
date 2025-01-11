@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:58+0300\n"
-"PO-Revision-Date: 2025-01-11 00:56+0000\n"
+"PO-Revision-Date: 2025-01-11 10:05+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -19858,7 +19858,7 @@ msgstr "重命名所选符号"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Save Copy As..."
-msgstr "另存为..."
+msgstr "另存副本为..."
 
 #: eeschema/tools/ee_actions.cpp:199
 msgid "Save a copy of the current symbol to a different library."
