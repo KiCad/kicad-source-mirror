@@ -364,7 +364,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
     wxString outPath = aStepJob->GetFullOutputPath( brd->GetProject() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -494,6 +494,14 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         fn.SetName( wxString::Format( "%s-%d", fn.GetName(), static_cast<int>( aRenderJob->m_side ) ) );
 
         aRenderJob->SetOutputPath( fn.GetFullName() );
+    }
+
+    wxString outPath = aRenderJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
     BOARD_ADAPTER boardAdapter;
@@ -674,7 +682,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         image = image.Mirror( false );
 
         image.SetOption( wxIMAGE_OPTION_QUALITY, 90 );
-        image.SaveFile( aRenderJob->GetFullOutputPath( brd->GetProject() ),
+        image.SaveFile( outPath,
                         aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG
                                                                             : wxBITMAP_TYPE_JPEG );
     }
@@ -718,6 +726,14 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
         }
     }
 
+    wxString outPath = aSvgJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath, aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
@@ -743,7 +759,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
             sheetPath = aSvgJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
-    if( !plotter.Plot( aSvgJob->GetFullOutputPath( brd->GetProject() ), aSvgJob->m_printMaskLayer,
+    if( !plotter.Plot( outPath, aSvgJob->m_printMaskLayer,
                        aSvgJob->m_printMaskLayersToIncludeOnAllLayers, false,
                        aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE,
                        layerName,
@@ -786,6 +802,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
         }
     }
 
+    wxString outPath = aDxfJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath, aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob );
 
@@ -807,7 +831,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
             sheetPath = aDxfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
-    if( !plotter.Plot( aDxfJob->GetFullOutputPath( brd->GetProject() ), aDxfJob->m_printMaskLayer,
+    if( !plotter.Plot( outPath, aDxfJob->m_printMaskLayer,
                        aDxfJob->m_printMaskLayersToIncludeOnAllLayers, false,
                        aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE, layerName,
                        sheetName, sheetPath ) )
@@ -860,7 +884,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     wxString outPath = aPdfJob->GetFullOutputPath( brd->GetProject() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1060,19 +1084,18 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
-        fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::DXF ) );
+        fn.SetExt( FILEEXT::GencadFileExtension );
 
         aGencadJob->SetOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = aGencadJob->GetFullOutputPath( brd->GetProject() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
-
 
     if( !exporter.WriteFile( outPath ) )
     {
@@ -1204,7 +1227,6 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-
 
     wxString outPath = aDrillJob->GetFullOutputPath( brd->GetProject() );
 
@@ -1343,7 +1365,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
 
     wxString outPath = aPosJob->GetFullOutputPath( brd->GetProject() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1663,7 +1685,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     wxString outPath = drcJob->GetFullOutputPath( brd->GetProject() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1832,7 +1854,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
 
     wxString outPath = job->GetFullOutputPath( brd->GetProject() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;

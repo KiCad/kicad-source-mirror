@@ -199,6 +199,8 @@ public:
     static const std::string PlyFileExtension;
     static const std::string StlFileExtension;
 
+    static const std::string GencadFileExtension;
+
     static const std::string KiCadJobSetFileExtension;
 
     static const wxString GerberFileExtensionsRegex;

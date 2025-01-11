@@ -471,7 +471,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     wxString outPath = aNetJob->GetFullOutputPath( &sch->Prj() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -681,7 +681,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     wxString outPath = aBomJob->GetFullOutputPath( &sch->Prj() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -801,7 +801,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 
     wxString outPath = aNetJob->GetFullOutputPath( &sch->Prj() );
 
-    if( !PATHS::EnsurePathExists( outPath ) )
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1117,6 +1117,14 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         ercJob->SetOutputPath( fn.GetFullName() );
     }
 
+    wxString outPath = ercJob->GetFullOutputPath( &sch->Prj() );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     EDA_UNITS units;
 
     switch( ercJob->m_units )
@@ -1147,8 +1155,6 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     ERC_REPORT reportWriter( sch, units );
 
     bool wroteReport = false;
-
-    wxString outPath = ercJob->GetFullOutputPath( &sch->Prj() );
 
     if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )
         wroteReport = reportWriter.WriteJsonReport( outPath );

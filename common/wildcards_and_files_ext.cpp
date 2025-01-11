@@ -210,6 +210,8 @@ const std::string FILEEXT::XaoFileExtension( "xao" );
 const std::string FILEEXT::PlyFileExtension( "ply" );
 const std::string FILEEXT::StlFileExtension( "stl" );
 
+const std::string FILEEXT::GencadFileExtension( "cad" );
+
 const wxString FILEEXT::GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
 
 const std::string FILEEXT::FootprintLibraryTableFileName( "fp-lib-table" );
@@ -498,7 +500,7 @@ wxString FILEEXT::ZipFileWildcard()
 
 wxString FILEEXT::GencadFileWildcard()
 {
-    return _( "GenCAD 1.4 board files" ) + AddFileExtListToFilter( { "cad" } );
+    return _( "GenCAD 1.4 board files" ) + AddFileExtListToFilter( { GencadFileExtension } );
 }
 
 

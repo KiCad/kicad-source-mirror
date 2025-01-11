@@ -166,7 +166,7 @@ public:
     /**
      * Attempts to create a given path if it does not exist
      */
-    static bool EnsurePathExists( const wxString& aPath );
+    static bool EnsurePathExists( const wxString& aPath, bool aPathToFile = false );
 
     /**
      * Ensures/creates user default paths

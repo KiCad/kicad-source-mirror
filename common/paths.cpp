@@ -463,9 +463,16 @@ wxString PATHS::GetLogsPath()
 }
 
 
-bool PATHS::EnsurePathExists( const wxString& aPath )
+bool PATHS::EnsurePathExists( const wxString& aPath, bool aPathToFile )
 {
-    wxFileName path( aPath );
+    wxString   pathString = aPath;
+    if( !aPathToFile )
+    {
+        // ensures the path is treated fully as directory
+        pathString += wxFileName::GetPathSeparator();
+    }
+
+    wxFileName path( pathString );
     if( !path.MakeAbsolute() )
     {
         return false;

@@ -103,6 +103,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
     wxString fileExt( GetDefaultPlotExtension( m_plotOpts.GetFormat() ) );
     wxString sheetPath;
     wxString msg;
+    bool     success = true;
     PLOTTER* plotter = nullptr;
     for( size_t i = 0, pageNum = 1; i < layersToPlot.size(); i++ )
     {
@@ -241,10 +242,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
             msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
 
-            if( m_plotOpts.m_PDFSingle )
-            {
-                return false;
-            }
+            success = false;
         }
 
         pageNum++;
@@ -265,7 +263,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
 
     m_reporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 
-    return true;
+    return success;
 }
 
 
