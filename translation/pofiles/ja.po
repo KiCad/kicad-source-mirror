@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:57+0300\n"
-"PO-Revision-Date: 2025-01-11 00:56+0000\n"
+"PO-Revision-Date: 2025-01-11 10:05+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8337,9 +8337,9 @@ msgid "Failed to create file '%s'."
 msgstr "ファイル '%s' の作成に失敗しました。"
 
 #: common/project/project_archiver.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "ディレクトリ '%s' を削除中にエラー: %s"
+msgstr "ディレクトリを開く際のエラー: '%s'。"
 
 #: common/project/project_archiver.cpp:388
 #, c-format
@@ -8347,9 +8347,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip アーカイブ '%s' を作成しました (%s 未圧縮, %s 圧縮済)."
 
 #: common/project/project_archiver.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "エラー: %s"
+msgstr "エラー: '%s'。"
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -24333,18 +24333,17 @@ msgid "Do not export"
 msgstr "エクスポートできません"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "既知レイヤーのガーバー: "
+msgstr "ガーバーをKiCadの既存のレイア : %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "パターンにマッチしたネットにネットクラスを割り当て"
+msgstr "一致する PCB レイヤーに割り当てますか?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
-msgstr "自動的にレイヤーを配置"
+msgstr "自動的にレイヤーを割当て"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:340
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:393
@@ -25989,13 +25988,17 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
+"完全なディレクトリとファイル名のパスとして機能する単一のファイルを生成します"
+"。このモードではCOMMON_LAYER_LIST は機能しません。 代わりに、LAYER_LIST "
+"がプロットされるすべてのレイヤーを制御します。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:94
 #: kicad/cli/command_pcb_export_svg.cpp:113
 msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
-msgstr ""
+msgstr "KiCad GUI プロットに似た 1 つ以上のファイルを生成します。output "
+"pathは、ファイルが出力されるディレクトリを指定します。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -26020,7 +26023,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_dxf.cpp:167
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
-msgstr ""
+msgstr "新しい動作は --mode-multi と同じ動きです"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -34253,9 +34256,8 @@ msgid "Do you want to cancel the export process?"
 msgstr "エクスポート処理をキャンセルしますか?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "クリアランス レポート"
+msgstr "エクスポートをキャンセル"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -35089,9 +35091,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
-msgstr "マップ ファイルを生成"
+msgstr "マップ ファイルを生成:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 msgid "Origin:"
@@ -35102,9 +35103,8 @@ msgid "Absolute"
 msgstr "絶対位置"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "零点"
+msgstr "ゼロの取り扱い:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -36135,7 +36135,7 @@ msgstr "アイテムの幅をコピー(可能な場合)"
 msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
-msgstr ""
+msgstr "これはパッドのようなアイテムには不可能で、引き続き以下の値が使用される。"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
 msgid "Layer default"
@@ -37168,7 +37168,7 @@ msgstr "余分な配線を削除"
 msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
-msgstr ""
+msgstr "新しい配線が既存の配線と同じ接続を持つ場合、古い配線は削除されます。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
@@ -37439,22 +37439,19 @@ msgstr "参照画像のプロパティ"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "Opaque"
-msgstr ""
+msgstr "不透明"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
-#, fuzzy
 msgid "Transparent"
-msgstr "過渡応答"
+msgstr "透明"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
-#, fuzzy
 msgid "High"
-msgstr "ハイライト"
+msgstr "高品質"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:35
-#, fuzzy
 msgid "User"
-msgstr "User1"
+msgstr "ユーザー指定"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
 msgid "Dimensions:"
@@ -37463,12 +37460,11 @@ msgstr "寸法:"
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
 msgid "px"
-msgstr "px"
+msgstr "ピクセル(px)"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:56
-#, fuzzy
 msgid "x"
-msgstr "2x"
+msgstr "かける(x)"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
 #, fuzzy
@@ -37489,21 +37485,18 @@ msgid "Add floor"
 msgstr "床面を追加"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
-#, fuzzy
 msgid "Perspective"
-msgstr "指示"
+msgstr "遠近法"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
-msgstr ""
+msgstr "直交"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
-#, fuzzy
 msgid "Projection"
-msgstr "プロジェクト"
+msgstr "投影"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:138
-#, fuzzy
 msgid "Positioning"
 msgstr "位置"
 
@@ -37528,40 +37521,37 @@ msgstr "ピボット:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "パン:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
-#, fuzzy
 msgid "Lights intensity"
-msgstr "強度"
+msgstr "光源の強さ"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
 msgid "Camera:"
 msgstr "カメラ:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
-#, fuzzy
 msgid "Lights position"
-msgstr "光源の設定"
+msgstr "光源の位置"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
-msgstr ""
+msgstr "面光源の高さ:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
-#, fuzzy
 msgid "Render PCB Job Options"
-msgstr "レンダリング オプション"
+msgstr "レンダPCB ジョブ オプション"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1466
 msgid "Keepouts"
-msgstr "キープアウト(禁止)"
+msgstr "キープアウト"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:177
 msgid "Convert to Rule Area"
@@ -39661,10 +39651,9 @@ msgstr ""
 "この最小値より短い距離では、DRC エラーが発生させる。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints"
-msgstr ""
-"フットプリント内のパッド間のブリッジされたハンダマスク開口部を許容する。"
+msgstr "ハンダマスク "
+"アパーチャ（開口部）がフットプリント内のパッド間を接続することを許容する"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
 msgid ""
@@ -49956,14 +49945,12 @@ msgid "Performs automatic placement of components outside board area"
 msgstr "基板エリアの外にあるコンポーネントの自動配置を実行"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
-#, fuzzy
 msgid "Generate Placement Rule Areas..."
-msgstr "配置ルールエリアを生成"
+msgstr "配置ルールエリアを生成..."
 
 #: pcbnew/tools/pcb_actions.cpp:2236
-#, fuzzy
 msgid "Repeat Layout..."
-msgstr "配置を繰り返す"
+msgstr "配置を繰り返す..."
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
