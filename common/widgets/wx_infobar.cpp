@@ -43,6 +43,7 @@ BEGIN_EVENT_TABLE( WX_INFOBAR, wxInfoBarGeneric )
     EVT_COMMAND( wxID_ANY, KIEVT_SHOW_INFOBAR,    WX_INFOBAR::onShowInfoBar )
     EVT_COMMAND( wxID_ANY, KIEVT_DISMISS_INFOBAR, WX_INFOBAR::onDismissInfoBar )
 
+    EVT_SYS_COLOUR_CHANGED( WX_INFOBAR::onThemeChange )
     EVT_BUTTON( ID_CLOSE_INFOBAR, WX_INFOBAR::onCloseButton )
     EVT_TIMER(  ID_CLOSE_INFOBAR, WX_INFOBAR::onTimer )
 END_EVENT_TABLE()
@@ -206,6 +207,15 @@ void WX_INFOBAR::Dismiss()
         (*m_callback)();
 
     m_updateLock = false;
+}
+
+
+void WX_INFOBAR::onThemeChange( wxSysColourChangedEvent& aEvent )
+{
+    wxColour fg, bg;
+    KIPLATFORM::UI::GetInfoBarColours( fg, bg );
+    SetBackgroundColour( bg );
+    SetForegroundColour( fg );
 }
 
 

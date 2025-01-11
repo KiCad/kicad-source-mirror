@@ -236,6 +236,11 @@ protected:
     void onCloseButton( wxCommandEvent& aEvent );
 
     /**
+     * Event handler for the color theme change event.
+     */
+    void onThemeChange( wxSysColourChangedEvent& aEvent );
+
+    /**
      * Event handler for the automatic closing timer.
      */
     void onTimer( wxTimerEvent& aEvent );
