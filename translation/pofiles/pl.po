@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:57+0300\n"
-"PO-Revision-Date: 2025-01-10 20:39+0000\n"
+"PO-Revision-Date: 2025-01-11 10:05+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8645,9 +8645,8 @@ msgid "Paste Special..."
 msgstr "Wklej specjalnie..."
 
 #: common/tool/actions.cpp:270
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "Wklej element(y) ze schowka z opcjami numerowania"
+msgstr "Wklej element(y) ze schowka z opcjami"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -24463,14 +24462,13 @@ msgid "Do not export"
 msgstr "Nie eksportuj"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "Pliki Gerber ze znanymi warstwami: "
+msgstr "Pliki Gerber ze znanymi warstwami: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "Przypisz klasę sieci do sieci na podstawie dopasowania do wzorca"
+msgstr "Przypisać do pasujących warstw PCB?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
@@ -26135,6 +26133,10 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
+"Generuje pojedynczy plik w ścieżce argumentu wyjściowego, jako kompletna "
+"ścieżka prowadząca do katalogu i pliku. W tym trybie nie działa "
+"COMMON_LAYER_LIST. Zamiast tego, LAYER_LIST kontroluje wszystkie kreślone "
+"warstwy."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:94
 #: kicad/cli/command_pcb_export_svg.cpp:113
@@ -26142,6 +26144,9 @@ msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
 msgstr ""
+"Generuje jeden lub więcej plików o wyglądzie podobnym do kreślenia "
+"interfejsu użytkownika programu KiCad. Podana ścieżka wyjściowa określa "
+"folder, w którym pliki mogą zostać umieszczone."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -26165,9 +26170,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:167
 #: kicad/cli/command_pcb_export_svg.cpp:176
-#, fuzzy
 msgid "The new behavior will match --mode-multi"
-msgstr "Nowe zachowanie będą odpowiadać --mode-new"
+msgstr "Nowy wygląd będzie odpowiadać --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -35222,7 +35226,7 @@ msgstr "Użyj ujemnych koordynatów X dla footprintów na stronie dolnej"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
 msgid "Generate single file with both front and back positions"
-msgstr ""
+msgstr "Generuj pojedynczy plik zawierający pozycje dla obu stron"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 msgid "Generate Placement Files"
@@ -36228,9 +36232,8 @@ msgid "Replace existing placement rule areas"
 msgstr "Zamień istniejące strefy z regułami"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:35
-#, fuzzy
 msgid "Group footprints with their placement rule areas"
-msgstr "Grupuje komponenty według ich reguł stref układania"
+msgstr "Grupuj footprinty według ich reguł stref układania"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:50
 msgid "Generate Multichannel Rule Areas"
@@ -36263,19 +36266,16 @@ msgstr ""
 "źródłowego"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
-#, fuzzy
 msgid "Include footprints outside the reference rule area"
-msgstr "Uwzględnij komponenty na zewnątrz strefy docelowej"
+msgstr "Uwzględnij footprinty na zewnątrz strefy docelowej"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:93
-#, fuzzy
 msgid "Group items with their target rule areas"
-msgstr "Grupuje komponenty według ich reguł stref układania"
+msgstr "Grupuj komponenty według ich reguł stref układania"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:96
-#, fuzzy
 msgid "Remove locked items from target rule areas"
-msgstr "Usuwa elementy z grupy"
+msgstr "Usuń zablokowane elementy z docelowych stref z regułami"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
@@ -39975,7 +39975,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
-#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
@@ -39984,8 +39983,9 @@ msgid ""
 msgstr ""
 "### Dokumentacja\n"
 "\n"
-"Pełną dokumentację można pobrać z [https://docs.kicad.org](https://docs."
-"kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"Pełną dokumentację można pobrać z [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40548,7 +40548,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
-#, fuzzy
 msgid ""
 "### Properties\n"
 "\n"
@@ -40562,9 +40561,9 @@ msgstr ""
 "### Właściwości\n"
 "\n"
 "Wiele właściwości obiektów jest dostępnych do testowania we własnych "
-"regułach. Pełna dokumentacja znajduje się pod adresem [https://docs.kicad."
-"org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules).\n"
+"regułach. Przejrzyj dokumentację znajdującą się pod adresem "
+"[https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/"
+"pcbnew/pcbnew.html#custom_design_rules) by poznać pełną ich listę.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -46817,9 +46816,8 @@ msgid "Marker (%s)"
 msgstr "Znacznik (%s)"
 
 #: pcbnew/pcb_plotter.cpp:65
-#, fuzzy
 msgid "No layers selected for plotting."
-msgstr "Nie wybrano warstw."
+msgstr "Nie wybrano żadnych warstw do rysowania."
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -50540,14 +50538,12 @@ msgstr ""
 "się poza obszarem płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
-#, fuzzy
 msgid "Generate Placement Rule Areas..."
-msgstr "Generuj obszary z regułami rozmieszczenia elementów"
+msgstr "Generuj obszary z regułami rozmieszczenia elementów..."
 
 #: pcbnew/tools/pcb_actions.cpp:2236
-#, fuzzy
 msgid "Repeat Layout..."
-msgstr "Powiel układ ścieżek"
+msgstr "Powiel układ ścieżek..."
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
