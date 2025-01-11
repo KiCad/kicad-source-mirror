@@ -521,7 +521,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                 env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
             wxString cmd = wxString::Format(
-                    wxS( "-m pip install --no-input --isolated --prefer-binary --require-virtualenv "
+                    wxS( "-m pip install --no-input --isolated --only-binary :all: --require-virtualenv "
                          "--exists-action i -r \"%s\"" ),
                     reqs.GetFullPath() );
 
