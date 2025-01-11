@@ -1,4 +1,4 @@
-# aris-kimi <aris_kimi@hotmail.com>, 2020, 2021, 2022, 2023, 2024.
+# aris-kimi <aris_kimi@hotmail.com>, 2020, 2021, 2022, 2023, 2024, 2025.
 # fresh <fresh190@protonmail.com>, 2021.
 # Michalis <michalisntovas@yahoo.gr>, 2021.
 # Michael Misirlis <MMISIRLIS@gmail.com>, 2021, 2022, 2023.
@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:57+0300\n"
-"PO-Revision-Date: 2024-07-09 07:35+0000\n"
+"PO-Revision-Date: 2025-01-11 15:44+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -6946,14 +6946,14 @@ msgid "Could not create destination directory: %s"
 msgstr "Αδυναμία δημιουργίας καταλόγου '%s'"
 
 #: common/gestfich.cpp:396 common/gestfich.cpp:469
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Αδυναμία σύνδεσης σε '%s' "
+msgstr "Αδυναμία αντιγραφής αρχείου: %s σε %s"
 
 #: common/gestfich.cpp:520
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Αδυναμία ανάγνωσης αρχείου "
+msgstr "Αδυναμία ανάγνωσης αρχείου: %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -21957,11 +21957,9 @@ msgid "Manage symbol libraries"
 msgstr "Διαχείριση βιβλιοθηκών συμβόλων"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
-msgstr ""
-"Το σύμβολο %s είναι παράγωγο σύμβολο.   Τα γραφικά εικονίδια του συμβόλου "
-"δεν επεξεργάζονται."
+msgstr "Το %s είναι παράγωγο σύμβολο. Τα γραφικά δεν επεξεργάζονται."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:947
 #, fuzzy
@@ -23833,9 +23831,8 @@ msgid "Drag"
 msgstr "Σύρσιμο"
 
 #: eeschema/tools/ee_actions.cpp:1464
-#, fuzzy
 msgid "Move items while keeping their connections"
-msgstr "Επιλέγει  όλη τη σύνδεση χαλκού."
+msgstr "Μετακίνηση αντικειμένων διατηρώντας τις συνδέσεις"
 
 #: eeschema/tools/ee_actions.cpp:1471 eeschema/tools/sch_move_tool.cpp:1818
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
@@ -24856,9 +24853,9 @@ msgid "Do not export"
 msgstr "Να μη γίνει εξαγωγή"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "Gerbers με γνωστά επίπεδα: "
+msgstr "Gerbers με γνωστά επίπεδα: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
 #, fuzzy
@@ -36435,9 +36432,8 @@ msgid "Filter vias by size:"
 msgstr "Φιλτράρισμα διελεύσεων με βάση το μέγεθος:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:150
-#, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "-- να παραμείνει αμετάβλητο --"
+msgstr "-- να παραμείνει αμετάβλητο --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:162
 msgid "Via size:"
@@ -36947,9 +36943,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer default"
-msgstr "προκαθορισμένο "
+msgstr "Προκαθορισμένο επίπεδο"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 #, fuzzy
@@ -38423,9 +38418,8 @@ msgid "Convert to Rule Area"
 msgstr "Μετατροπή σε περιοχή κανόνα"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:282
-#, fuzzy
 msgid "Not found on board: "
-msgstr "Δεν βρέθηκαν όρια PCB , άγνωστο μέγεθος πλακέτας!"
+msgstr "Δεν βρέθηκε στην πλακέτα: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:437
 msgid "No layers selected."
