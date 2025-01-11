@@ -1,14 +1,16 @@
 # Michał Radziejewicz <radziejewiczmichal@gmail.com>, 2023.
 # 109247019824 <stoyan@gmx.com>, 2024, 2025.
+# 109247019824 <109247019824@users.noreply.hosted.weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:57+0300\n"
-"PO-Revision-Date: 2025-01-01 14:47+0000\n"
-"Last-Translator: 109247019824 <stoyan@gmx.com>\n"
-"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/bg/>\n"
+"PO-Revision-Date: 2025-01-11 10:05+0000\n"
+"Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
+"\n"
+"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,28 +41,27 @@ msgid "Build board outline"
 msgstr "Създаване на контур на платката"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:552
-#, fuzzy
 msgid "Create layers"
-msgstr "Draft layer"
+msgstr "Създаване на слоеве"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:940
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
-#, fuzzy
 msgid "No footprint loaded."
-msgstr "Не са намерени компонентни отпечатъци"
+msgstr "Не са заредени цокли."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:955
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Контурът на цокъла липсва или е повреден. Пуснете проверка на цокли за "
-"цялостен анализ."
+"Контурът на цокъла липсва или е повреден. Извършете проверка на цокли, за да "
+"получите по-пълна информация."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:964
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Контурът на платката липсва или е повреден. Пуснете DRC за цялостен анализ."
+"Контурът на платката липсва или е повреден. Извършете проверка на правилата "
+"DRC, за да получите по-пълна информация."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:259
 #, fuzzy
@@ -10862,9 +10863,8 @@ msgid "Save..."
 msgstr "Съхрани като"
 
 #: common/wildcards_and_files_ext.cpp:232
-#, fuzzy
 msgid "All files"
-msgstr "Drill файлове (за разпробиване)"
+msgstr "Всички файлове"
 
 #: common/wildcards_and_files_ext.cpp:238
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:81
