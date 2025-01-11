@@ -120,6 +120,11 @@ namespace KIPLATFORM
         double GetContentScaleFactor( const wxWindow* aWindow );
 
         /**
+         * Return the background and foreground colors for info bars in the current scheme
+         */
+        void GetInfoBarColours( wxColour& aFGColour, wxColour& aBGColour );
+
+        /**
          * Tries to determine the size of the viewport of a scrollable widget (wxDataViewCtrl, wxGrid)
          * that won't be obscured by scrollbars.
          * @param aWindow pointer to the scrollable widget to check

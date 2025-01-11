@@ -73,6 +73,13 @@ wxColour KIPLATFORM::UI::GetDialogBGColour()
 }
 
 
+wxColour KIPLATFORM::UI::GetInfoBarColours( wxColour& aFGColour, wxColour& aBGColour )
+{
+    aBGColour = wxSystemSettings::GetColour( wxSYS_COLOUR_INFOBK );
+    aFGColour = wxSystemSettings::GetColour( wxSYS_COLOUR_INFOTEXT );
+}
+
+
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
     aWindow->SetFocus();

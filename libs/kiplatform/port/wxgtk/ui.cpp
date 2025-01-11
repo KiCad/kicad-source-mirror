@@ -64,6 +64,45 @@ wxColour KIPLATFORM::UI::GetDialogBGColour()
 }
 
 
+void KIPLATFORM::UI::GetInfoBarColours( wxColour& aBgColour, wxColour& aFgColour )
+{
+    // The GTK3.24 way of getting the colours is to use the style context
+    // Earlier GTKs should be able to use the system settings
+#if( GTK_CHECK_VERSION( 3, 24, 0 ) )
+    GdkRGBA* rgba;
+    GtkWidgetPath*   path = gtk_widget_path_new();
+    GtkStyleContext* sc = gtk_style_context_new();
+    gtk_widget_path_append_type( path, GTK_TYPE_WINDOW );
+    gtk_widget_path_iter_set_object_name( path, -1, "infobar" );
+    gtk_widget_path_iter_add_class( path, -1, "background" );
+    gtk_widget_path_iter_add_class( path, -1, "info" );
+    gtk_widget_path_append_type( path, G_TYPE_NONE );
+    gtk_widget_path_iter_set_object_name( path, -1, "revealer" );
+    gtk_widget_path_append_type( path, G_TYPE_NONE );
+    gtk_widget_path_iter_set_object_name( path, -1, "box" );
+
+    gtk_style_context_set_path( sc, path );
+    gtk_style_context_set_state( sc, GTK_STATE_FLAG_NORMAL );
+
+    gtk_style_context_get( sc, GTK_STATE_FLAG_NORMAL, "background-color", &rgba, NULL );
+    aBgColour = wxColour(*rgba);
+    gdk_rgba_free(rgba);
+
+    gtk_style_context_get( sc, GTK_STATE_FLAG_NORMAL, "color", &rgba, NULL );
+    aFgColour = wxColour(*rgba);
+    gdk_rgba_free(rgba);
+
+    gtk_widget_path_free( path );
+    g_object_unref( sc );
+
+#else
+    aBgColour = wxSystemSettings::GetColour( wxSYS_COLOUR_INFOBK );
+    aFgColour = wxSystemSettings::GetColour( wxSYS_COLOUR_INFOTEXT );
+#endif
+
+}
+
+
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
     aWindow->SetFocus();
