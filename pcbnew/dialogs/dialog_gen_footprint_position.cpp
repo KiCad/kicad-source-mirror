@@ -302,7 +302,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
         m_job->m_negateBottomX = m_negateXcb->GetValue();
         m_job->m_excludeDNP = m_excludeDNP->GetValue();
 
-        Close();
+        event.Skip();   // Allow normal close action
     }
 }
 
