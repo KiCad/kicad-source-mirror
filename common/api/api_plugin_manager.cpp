@@ -29,6 +29,7 @@
 #include <api/api_plugin_manager.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
+#include <gestfich.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <python_manager.h>
@@ -268,8 +269,13 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
         wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
         env.env[wxS( "SYSTEMROOT" )] = systemRoot;
 
-        env.env.erase( "PYTHONHOME" );
-        env.env.erase( "PYTHONPATH" );
+        if( Pgm().GetCommonSettings()->m_Api.python_interpreter == FindKicadFile( "pythonw.exe" )
+            || wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+        {
+            wxLogTrace( traceApi, "Configured Python is the KiCad one; erasing path overrides..." );
+            env.env.erase( "PYTHONHOME" );
+            env.env.erase( "PYTHONPATH" );
+        }
 #endif
 
         if( pythonHome )
@@ -443,12 +449,19 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
         PYTHON_MANAGER manager( Pgm().GetCommonSettings()->m_Api.python_interpreter );
         wxExecuteEnv   env;
 
+#ifdef _WIN32
         wxString systemRoot;
         wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
         env.env[wxS( "SYSTEMROOT" )] = systemRoot;
 
-        env.env.erase( "PYTHONHOME" );
-        env.env.erase( "PYTHONPATH" );
+        if( Pgm().GetCommonSettings()->m_Api.python_interpreter == FindKicadFile( "pythonw.exe" )
+            || wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+        {
+            wxLogTrace( traceApi, "Configured Python is the KiCad one; erasing path overrides..." );
+            env.env.erase( "PYTHONHOME" );
+            env.env.erase( "PYTHONPATH" );
+        }
+#endif
 
         manager.Execute(
                 wxString::Format( wxS( "-m venv --system-site-packages \"%s\"" ),
@@ -496,8 +509,15 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
             env.env[wxS( "SYSTEMROOT" )] = systemRoot;
 
-            env.env.erase( "PYTHONHOME" );
-            env.env.erase( "PYTHONPATH" );
+            if( Pgm().GetCommonSettings()->m_Api.python_interpreter
+                        == FindKicadFile( "pythonw.exe" )
+                || wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+            {
+                wxLogTrace( traceApi,
+                            "Configured Python is the KiCad one; erasing path overrides..." );
+                env.env.erase( "PYTHONHOME" );
+                env.env.erase( "PYTHONPATH" );
+            }
 #endif
 
             wxString cmd = wxS( "-m pip install --upgrade pip" );
