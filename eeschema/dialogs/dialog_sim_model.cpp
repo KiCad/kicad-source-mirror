@@ -845,16 +845,26 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     m_modelListBoxEntryToLibraryIdx.clear();
     wxArrayString modelNames;
 
+    bool modelNameExists = false;
     for( const auto& [name, model] : library()->GetModels() )
     {
         modelNames.Add( name );
         m_modelListBoxEntryToLibraryIdx[name] = m_modelListBoxEntryToLibraryIdx.size();
+        if( name == modelName )
+            modelNameExists = true;
     }
 
     modelNames.Sort();
 
     m_modelListBox->Clear();
     m_modelListBox->Append( modelNames );
+
+    if( !modelNameExists )
+    {
+        m_infoBar->ShowMessage(
+                wxString::Format( _( "No model named '%s' in '%s'." ), modelName, aLibraryPath ) );
+        return false;
+    }
 
     if( isIbisLoaded() )
     {
