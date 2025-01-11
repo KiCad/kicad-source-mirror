@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:58+0300\n"
+"POT-Creation-Date: 2025-01-11 20:08+0300\n"
 "PO-Revision-Date: 2024-08-28 06:09+0000\n"
 "Last-Translator: Peter B <sleepyghostshark@users.noreply.hosted.weblate."
 "org>\n"
@@ -7323,25 +7323,25 @@ msgstr "Eroare la încărcarea tabelului de bibliotecă a amprentei proiectului.
 msgid "This is the default net class."
 msgstr "Este necesară Netclass-ul predefinit."
 
-#: common/project/project_archiver.cpp:54 kicad/pcm/pcm_task_manager.cpp:329
+#: common/project/project_archiver.cpp:53 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
 msgstr "Nu s-a putut deschide fișierul de arhivă."
 
-#: common/project/project_archiver.cpp:63 kicad/pcm/pcm_task_manager.cpp:337
+#: common/project/project_archiver.cpp:62 kicad/pcm/pcm_task_manager.cpp:337
 msgid "Invalid archive file format."
 msgstr "Format de fișier de arhivă nevalabil."
 
-#: common/project/project_archiver.cpp:74
+#: common/project/project_archiver.cpp:73
 #, c-format
 msgid "Extracting file '%s'."
 msgstr "Extragerea fișierului \"%s\"."
 
-#: common/project/project_archiver.cpp:97 kicad/pcm/pcm_task_manager.cpp:251
+#: common/project/project_archiver.cpp:96 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
 msgid "Error extracting file!"
 msgstr "Eroare la extragerea fișierului!"
 
-#: common/project/project_archiver.cpp:168 eeschema/dialogs/dialog_erc.cpp:934
+#: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -7369,17 +7369,17 @@ msgstr "Eroare la extragerea fișierului!"
 msgid "Failed to create file '%s'."
 msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
 
-#: common/project/project_archiver.cpp:240
+#: common/project/project_archiver.cpp:233
 #, c-format
 msgid "Archived file '%s'."
 msgstr "Fișier arhivat '%s'."
 
-#: common/project/project_archiver.cpp:250
+#: common/project/project_archiver.cpp:243
 #, c-format
 msgid "Failed to archive file '%s'."
 msgstr "Nu s-a reușit arhivarea fișierului '%s'."
 
-#: common/project/project_archiver.cpp:276
+#: common/project/project_archiver.cpp:269
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Arhiva Zip \"%s\" creată (%s necomprimată, %s comprimată)."

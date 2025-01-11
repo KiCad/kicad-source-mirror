@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:58+0300\n"
+"POT-Creation-Date: 2025-01-11 20:08+0300\n"
 "PO-Revision-Date: 2025-01-11 10:05+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -7010,25 +7010,25 @@ msgstr "加载工程封装库表时出错。"
 msgid "This is the default net class."
 msgstr "这是默认网络类。"
 
-#: common/project/project_archiver.cpp:54 kicad/pcm/pcm_task_manager.cpp:329
+#: common/project/project_archiver.cpp:53 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
 msgstr "无法打开归档文件。"
 
-#: common/project/project_archiver.cpp:63 kicad/pcm/pcm_task_manager.cpp:337
+#: common/project/project_archiver.cpp:62 kicad/pcm/pcm_task_manager.cpp:337
 msgid "Invalid archive file format."
 msgstr "无效的归档文件格式。"
 
-#: common/project/project_archiver.cpp:74
+#: common/project/project_archiver.cpp:73
 #, c-format
 msgid "Extracting file '%s'."
 msgstr "正在提取文件 '%s'。"
 
-#: common/project/project_archiver.cpp:97 kicad/pcm/pcm_task_manager.cpp:251
+#: common/project/project_archiver.cpp:96 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
 msgid "Error extracting file!"
 msgstr "提取文件时出错!"
 
-#: common/project/project_archiver.cpp:168 eeschema/dialogs/dialog_erc.cpp:934
+#: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -7056,17 +7056,17 @@ msgstr "提取文件时出错!"
 msgid "Failed to create file '%s'."
 msgstr "创建文件 '%s' 失败。"
 
-#: common/project/project_archiver.cpp:240
+#: common/project/project_archiver.cpp:233
 #, c-format
 msgid "Archived file '%s'."
 msgstr "已打包文件 '%s'。"
 
-#: common/project/project_archiver.cpp:250
+#: common/project/project_archiver.cpp:243
 #, c-format
 msgid "Failed to archive file '%s'."
 msgstr "打包文件 '%s' 失败。"
 
-#: common/project/project_archiver.cpp:276
+#: common/project/project_archiver.cpp:269
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "已创建 Zip 文件 '%s'(%s 未压缩, %s 已压缩)。"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:58+0300\n"
+"POT-Creation-Date: 2025-01-11 20:08+0300\n"
 "PO-Revision-Date: 2024-09-14 03:09+0000\n"
 "Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/"
@@ -7147,25 +7147,25 @@ msgstr "Lỗi tải bảng thư viện footprint trong dự án."
 msgid "This is the default net class."
 msgstr "Đây là lớp net mặc định."
 
-#: common/project/project_archiver.cpp:54 kicad/pcm/pcm_task_manager.cpp:329
+#: common/project/project_archiver.cpp:53 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
 msgstr "Không thể mở tệp lưu trữ."
 
-#: common/project/project_archiver.cpp:63 kicad/pcm/pcm_task_manager.cpp:337
+#: common/project/project_archiver.cpp:62 kicad/pcm/pcm_task_manager.cpp:337
 msgid "Invalid archive file format."
 msgstr "Định dạng tệp lưu trữ không hợp lệ."
 
-#: common/project/project_archiver.cpp:74
+#: common/project/project_archiver.cpp:73
 #, c-format
 msgid "Extracting file '%s'."
 msgstr "Đang giải nén tệp '%s'."
 
-#: common/project/project_archiver.cpp:97 kicad/pcm/pcm_task_manager.cpp:251
+#: common/project/project_archiver.cpp:96 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
 msgid "Error extracting file!"
 msgstr "Lỗi khi giải nén tập tin!"
 
-#: common/project/project_archiver.cpp:168 eeschema/dialogs/dialog_erc.cpp:934
+#: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -7193,17 +7193,17 @@ msgstr "Lỗi khi giải nén tập tin!"
 msgid "Failed to create file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: common/project/project_archiver.cpp:240
+#: common/project/project_archiver.cpp:233
 #, c-format
 msgid "Archived file '%s'."
 msgstr "Đã lưu trữ tệp '%s'."
 
-#: common/project/project_archiver.cpp:250
+#: common/project/project_archiver.cpp:243
 #, c-format
 msgid "Failed to archive file '%s'."
 msgstr "Không thể lưu trữ tệp '%s'."
 
-#: common/project/project_archiver.cpp:276
+#: common/project/project_archiver.cpp:269
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Kho lưu trữ zip '%s' được tạo (%s không nén, %s nén)."

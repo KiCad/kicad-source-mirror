@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 03:58+0300\n"
+"POT-Creation-Date: 2025-01-11 20:08+0300\n"
 "PO-Revision-Date: 2025-01-11 00:56+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v8/es/>\n"
@@ -7110,25 +7110,25 @@ msgstr "Error al cargar la tabla de bibliotecas de huellas del proyecto."
 msgid "This is the default net class."
 msgstr "Esta es la clase de red por defecto."
 
-#: common/project/project_archiver.cpp:54 kicad/pcm/pcm_task_manager.cpp:329
+#: common/project/project_archiver.cpp:53 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
 msgstr "No se puede abrir el fichero archivo."
 
-#: common/project/project_archiver.cpp:63 kicad/pcm/pcm_task_manager.cpp:337
+#: common/project/project_archiver.cpp:62 kicad/pcm/pcm_task_manager.cpp:337
 msgid "Invalid archive file format."
 msgstr "Formato de fichero archivo inválido."
 
-#: common/project/project_archiver.cpp:74
+#: common/project/project_archiver.cpp:73
 #, c-format
 msgid "Extracting file '%s'."
 msgstr "Extrayendo el archivo '%s'."
 
-#: common/project/project_archiver.cpp:97 kicad/pcm/pcm_task_manager.cpp:251
+#: common/project/project_archiver.cpp:96 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
 msgid "Error extracting file!"
 msgstr "¡Error al extraer el archivo!"
 
-#: common/project/project_archiver.cpp:168 eeschema/dialogs/dialog_erc.cpp:934
+#: common/project/project_archiver.cpp:164 eeschema/dialogs/dialog_erc.cpp:934
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -7156,17 +7156,17 @@ msgstr "¡Error al extraer el archivo!"
 msgid "Failed to create file '%s'."
 msgstr "No puede crearse el archivo '%s'."
 
-#: common/project/project_archiver.cpp:240
+#: common/project/project_archiver.cpp:233
 #, c-format
 msgid "Archived file '%s'."
 msgstr "Fichero archivo '%s'."
 
-#: common/project/project_archiver.cpp:250
+#: common/project/project_archiver.cpp:243
 #, c-format
 msgid "Failed to archive file '%s'."
 msgstr "No se ha podido archivar el fichero '%s'."
 
-#: common/project/project_archiver.cpp:276
+#: common/project/project_archiver.cpp:269
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Se ha creado archivo Zip '%s' (%s sin comprimir, %s comprimido)."
