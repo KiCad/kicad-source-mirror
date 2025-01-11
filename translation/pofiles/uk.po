@@ -1,5 +1,5 @@
 # Kuzemko Alexsandr <alexandrkuzemko@gmail.com>, 2022.
-# Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023, 2024.
+# Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023, 2024, 2025.
 # Artem <artem@molotov.work>, 2022.
 # Andrii Shelestov <streamx3@gmail.com>, 2022.
 # Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022, 2024.
@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:57+0300\n"
-"PO-Revision-Date: 2024-12-27 15:43+0000\n"
+"PO-Revision-Date: 2025-01-11 15:44+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -944,7 +944,6 @@ msgid "Configure Paths"
 msgstr "Налаштування шляхів"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
 msgstr "Вбудована модель"
 
@@ -2279,9 +2278,8 @@ msgstr ""
 "Налаштування схеми > Проєкт."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Додати відповідність класу зв'язків:"
+msgstr "Додати відповідність класу зв'язків"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -2464,18 +2462,17 @@ msgid "design block"
 msgstr "блок дизайну"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Помилка створення бібліотеки символів '%s'.\n"
+"Помилка створення блоку бібліотеки таблиці '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "Будь ласка, виберіть файл таблиці бібліотеки символів."
+msgstr "Будь ласка, виберіть дизайн файлу таблиці бібліотеки блоків."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
