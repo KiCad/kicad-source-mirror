@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:08+0300\n"
-"PO-Revision-Date: 2025-01-06 10:25+0000\n"
+"PO-Revision-Date: 2025-01-11 17:15+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/v8/bg/>\n"
 "Language: bg\n"
@@ -37,28 +37,27 @@ msgid "Build board outline"
 msgstr "Създаване на контур на платката"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:542
-#, fuzzy
 msgid "Create layers"
-msgstr "Draft layer"
+msgstr "Създаване на слоеве"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:907
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
-#, fuzzy
 msgid "No footprint loaded."
-msgstr "Не са намерени компонентни отпечатъци"
+msgstr "Не са заредени цокли."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:924
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Контурът на цокъла липсва или е повреден. Пуснете проверка на цокли за "
-"цялостен анализ."
+"Контурът на цокъла липсва или е повреден. Извършете проверка на цокли, за да "
+"получите по-пълна информация."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:933
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Контурът на платката липсва или е повреден. Пуснете DRC за цялостен анализ."
+"Контурът на платката липсва или е повреден. Извършете проверка на правилата "
+"DRC, за да получите по-пълна информация."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:264
 #, fuzzy
@@ -9272,9 +9271,8 @@ msgid "Save..."
 msgstr "Съхрани като"
 
 #: common/wildcards_and_files_ext.cpp:213
-#, fuzzy
 msgid "All files"
-msgstr "Drill файлове (за разпробиване)"
+msgstr "Всички файлове"
 
 #: common/wildcards_and_files_ext.cpp:219
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:80
@@ -25697,9 +25695,8 @@ msgstr ""
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "Изход от KiCad"
+msgstr "KiCad"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
 #, fuzzy
