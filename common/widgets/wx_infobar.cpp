@@ -58,12 +58,11 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
 {
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
 
+    wxColour fg, bg;
+    KIPLATFORM::UI::GetInfoBarColours( bg, fg );
+    SetBackgroundColour( bg );
+    SetForegroundColour( fg );
 #ifdef __WXMAC__
-    // wxWidgets hard-codes wxSYS_COLOUR_INFOBK to { 0xFF, 0xFF, 0xD3 } on Mac.
-    if( KIPLATFORM::UI::IsDarkTheme() )
-        SetBackgroundColour( wxColour( 28, 27, 20 ) );
-    else
-        SetBackgroundColour( wxColour( 255, 249, 189 ) );
 
     // Infobar is broken on Mac without the effects
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );

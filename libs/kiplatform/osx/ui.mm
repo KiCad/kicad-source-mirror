@@ -62,6 +62,18 @@ wxColour KIPLATFORM::UI::GetDialogBGColour()
 }
 
 
+void KIPLATFORM::UI::GetInfoBarColours( wxColour& aFGColour, wxColour& aBGColour )
+{
+    aFGColour = wxSystemSettings::GetColour( wxSYS_COLOUR_INFOTEXT );
+
+    // wxWidgets hard-codes wxSYS_COLOUR_INFOBK to { 0xFF, 0xFF, 0xD3 } on Mac.
+    if( KIPLATFORM::UI::IsDarkTheme() )
+        aBGColour = wxColour( 28, 27, 20 );
+    else
+        aBGColour = wxColour( 255, 249, 189 );
+}
+
+
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
     // On OSX we need to forcefully give the focus to the window
