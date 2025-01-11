@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-11 17:38+0000\n"
+"PO-Revision-Date: 2025-01-11 18:27+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -25532,13 +25532,16 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
+"生成单个文件, 输出参数路径作为完整的目录和文件名路径。在此模式下, "
+"COMMON_LAYER_LIST 无法使用, 而是由 LAYER_LIST 控制所有绘图的图层。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:94
 #: kicad/cli/command_pcb_export_svg.cpp:113
 msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
-msgstr ""
+msgstr "生成一个或多个文件, 其行为类似于通过 KiCad "
+"图形化界面进行绘制。指定的输出路径用于指定文件输出的目录。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -25556,7 +25559,7 @@ msgstr "电路板文件不存在或无法访问\n"
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
-msgstr ""
+msgstr "此命令的行为在 KiCad 9.0 中已被弃用, 未来版本中此命令的默认行为将发生更改。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:167
 #: kicad/cli/command_pcb_export_svg.cpp:176
@@ -33374,7 +33377,7 @@ msgstr "STEP 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:447
 msgid "Binary glTF files"
-msgstr "二进制 glTF 文件"
+msgstr "Binary glTF 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:449
 msgid "XAO files"
@@ -34035,7 +34038,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:615
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads"
 msgstr "允许焊盘之间存在桥接的阻焊开窗"
 
@@ -37940,9 +37942,8 @@ msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
-msgstr ""
-"不属于同一网络的铜对象之间的最小间距。一旦设置, 这是一个绝对的最小值, 不能通"
-"过网络类、自定义规则或其他设置减少。"
+msgstr "不属于同一网络的铜箔项目之间的最小间距。一旦设置, 这是一个绝对的最小值, "
+"不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -38897,7 +38898,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr "允许封装内的焊盘之间存在桥接的阻焊开窗"
 
@@ -39639,6 +39639,14 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### Items\n"
+"\n"
+" * `A` &nbsp;&nbsp; _第一个 (或唯一的) 测试项目_\n"
+" * `B` &nbsp;&nbsp; _第二个测试项目 (binary 测试)_\n"
+" * `L` &nbsp;&nbsp; _当前测试的层_\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_4severity_names.h:2
 msgid ""
@@ -40086,7 +40094,7 @@ msgstr "差分对偏移默认属性"
 
 #: pcbnew/drc/drc_cache_generator.cpp:124
 msgid "Gathering copper items..."
-msgstr "正在收集铜项目..."
+msgstr "正在收集铜箔项目..."
 
 #: pcbnew/drc/drc_engine.cpp:161 pcbnew/drc/drc_test_provider_hole_size.cpp:160
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:233
@@ -40387,7 +40395,7 @@ msgstr "无条件应用的规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1296
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "无条件应用的规则; 覆盖之前的约束。"
+msgstr "已应用无条件规则; 覆盖之前的约束。"
 
 #: pcbnew/drc/drc_engine.cpp:1310 pcbnew/drc/drc_engine.cpp:1598
 #, c-format
@@ -40404,7 +40412,7 @@ msgstr "应用的规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1329
 msgid "Rule applied; overrides previous constraints."
-msgstr "应用的规则; 覆盖之前的约束。"
+msgstr "已应用规则; 覆盖之前的约束。"
 
 #: pcbnew/drc/drc_engine.cpp:1337
 msgid "Membership not satisfied; constraint ignored."
@@ -40592,7 +40600,7 @@ msgstr "NPTH 在元件外框内"
 
 #: pcbnew/drc/drc_item.cpp:179
 msgid "Item on a disabled copper layer"
-msgstr "禁用铜层上的对象"
+msgstr "已禁用铜层上的项目"
 
 #: pcbnew/drc/drc_item.cpp:183
 msgid "Board has malformed outline"
@@ -43649,7 +43657,7 @@ msgstr "制造属性"
 
 #: pcbnew/pad.cpp:2702 pcbnew/pcb_shape.cpp:1001 pcbnew/pcb_track.cpp:2097
 msgid "Soldermask Margin Override"
-msgstr "阻焊层边界覆盖"
+msgstr "阻焊边界重写"
 
 #: pcbnew/pad.cpp:2724 pcbnew/zone.cpp:2073
 msgid "Thermal Relief Spoke Width"
@@ -44401,9 +44409,8 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr ""
-"封装定义 '%s' 中有与多个图层上的焊盘关联的元件铜箔层。KiCad 不支持自定义 "
-"pinstack。这些铜箔元素已作为图形元素导入。"
+msgstr "封装定义 '%s' 中有与多个图层上的焊盘关联的元件铜箔层。KiCad 不支持自定义 "
+"pinstack。这些铜箔项目已作为图形元素导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:994
 #, c-format
@@ -44990,19 +44997,19 @@ msgstr "期望蚀刻数据在铜层上。在层 '%s' 上找到行"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3268
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "层 %2$s 的多边形中存在无法处理的形状类型 %1$d, seq %3$d %4$d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3427
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "在层 %2$s 中, 网络为 %3$s 的填充区内, 存在一个包含 %1$d 个点的无效孔"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3469
 #, c-format
 msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
-msgstr ""
+msgstr "外框似乎不连续: 上一点是 %s, 下一段的起点是 %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
 #, c-format
@@ -45243,7 +45250,7 @@ msgstr "未知过孔类型 %d"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2601
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr "未知填充区转角平滑类型 %d"
+msgstr "未知填充区拐角平滑类型 %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2750
 msgid "This file does not contain a PCB."
@@ -45593,7 +45600,7 @@ msgstr "技术层"
 
 #: pcbnew/pcb_shape.cpp:994 pcbnew/pcb_track.cpp:2094
 msgid "Soldermask"
-msgstr "Soldermask"
+msgstr "阻焊"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -46123,7 +46130,7 @@ msgstr "切换当前交互式布线的模式。"
 
 #: pcbnew/router/router_tool.cpp:199
 msgid "Track Corner Mode"
-msgstr "走线转角模式"
+msgstr "走线拐角模式"
 
 #: pcbnew/router/router_tool.cpp:200
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
@@ -46631,12 +46638,12 @@ msgstr "走线角度"
 
 #: pcbnew/tools/board_inspection_tool.cpp:448
 msgid "Track Angle resolution for:"
-msgstr ""
+msgstr "走线角度解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:456
 #, c-format
 msgid "Resolved angle constraints: min %s; max %s."
-msgstr ""
+msgstr "已解析的角度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:462
 msgid "Track Segment Length"
@@ -47317,7 +47324,7 @@ msgstr "选择要移动的参考点..."
 msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
-msgstr ""
+msgstr "封装无法添加到选定的库 ('%s')。该库是只读的。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:405
 msgid "_copy"
@@ -47850,7 +47857,7 @@ msgstr "精确移动所选项目"
 
 #: pcbnew/tools/pcb_actions.cpp:510
 msgid "Move Corner To..."
-msgstr "移动转角至..."
+msgstr "移动拐角至..."
 
 #: pcbnew/tools/pcb_actions.cpp:511
 msgid "Move the active corner to an exact location"
@@ -48467,7 +48474,7 @@ msgstr "切换网络高亮"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "高亮选定网络中的所有铜项目"
+msgstr "高亮选定网络中的所有铜箔项目"
 
 #: pcbnew/tools/pcb_actions.cpp:1276
 msgid "Hide Net in Ratsnest"
@@ -49469,7 +49476,7 @@ msgstr "移动拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2804
 msgid "Add Zone Corner"
-msgstr "添加填充区转角"
+msgstr "添加填充区拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2828
 msgid "Split Segment"
@@ -49481,19 +49488,19 @@ msgstr "切分弧线"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2927
 msgid "Remove Zone Corner"
-msgstr "移除填充区转角"
+msgstr "移除填充区拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2929
 msgid "Remove Polygon Corner"
-msgstr "移除多边形转角"
+msgstr "移除多边形拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3027
 msgid "Break Zone Corner"
-msgstr "打破填充区转角"
+msgstr "打破填充区拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3029
 msgid "Break Polygon Corner"
-msgstr "打破多边形转角"
+msgstr "打破多边形拐角"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1427
 msgid "Select/Expand Connection..."
@@ -49862,7 +49869,7 @@ msgstr "选择何时显示网络和网络类颜色"
 #: pcbnew/widgets/appearance_controls.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:2535
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "在所有铜项目上显示网络和网络类颜色"
+msgstr "在所有铜箔项目上显示网络和网络类颜色"
 
 #: pcbnew/widgets/appearance_controls.cpp:724
 #: pcbnew/widgets/appearance_controls.cpp:2538
