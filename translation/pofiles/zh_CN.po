@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:57+0300\n"
-"PO-Revision-Date: 2025-01-11 10:05+0000\n"
+"PO-Revision-Date: 2025-01-11 15:44+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -25295,7 +25295,7 @@ msgstr "仅生成没有元件的电路板"
 #: kicad/cli/command_pcb_export_3d.cpp:118
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
-msgstr ""
+msgstr "即使未导出导体 (铜层), 也在电路板主体中切割过孔。"
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 msgid "Exclude board body"
@@ -25345,7 +25345,7 @@ msgstr "融合重叠的图形"
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
 msgid "Don't cut via holes in conductor layers."
-msgstr ""
+msgstr "不在导体 (铜层) 中切割过孔。"
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -33459,7 +33459,7 @@ msgstr "导出电路板主体"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
 msgid "Cut vias in board body"
-msgstr ""
+msgstr "在电路板主体中切割过孔"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
@@ -33509,19 +33509,19 @@ msgstr "用逗号选择的要导出的位号列表 (支持通配符)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:119
 msgid "Conductor Options"
-msgstr "铜层选项"
+msgstr "导体 (铜层) 选项"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:122
 msgid "Export tracks and vias on external conductor layers."
-msgstr "导出外部铜层上走线和过孔。"
+msgstr "导出外部导体 (铜层) 上走线和过孔。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:130
 msgid "Export zones on external conductor layers."
-msgstr "导出外部铜层上的域。"
+msgstr "导出外部导体 (铜层) 上的域。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:134
 msgid "Export inner conductor layers"
-msgstr "导出内部铜层"
+msgstr "导出内部导体 (铜层)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Fuse shapes (time consuming)"
@@ -34386,7 +34386,7 @@ msgstr "对底层的封装使用负 X 坐标"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
 msgid "Generate single file with both front and back positions"
-msgstr ""
+msgstr "生成包含正面和背面定位的单个文件"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 msgid "Generate Placement Files"
