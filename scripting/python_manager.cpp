@@ -29,6 +29,7 @@
 #include <paths.h>
 #include <pgm_base.h>
 #include <python_manager.h>
+#include <thread_pool.h>
 #include <wx_filename.h>
 
 
@@ -134,7 +135,10 @@ void PYTHON_MANAGER::Execute( const wxString& aArgs,
         // If we need to use the async monitor thread approach and preserve the stdout
         // contents in the future, a more complicated hack might be necessary.
         if( !aSaveOutput )
-            auto future = std::async( std::launch::async, monitor, process );
+        {
+            thread_pool& tp = GetKiCadThreadPool();
+            auto ret = tp.submit( monitor, process );
+        }
     }
 }
 
@@ -143,7 +147,7 @@ wxString PYTHON_MANAGER::FindPythonInterpreter()
 {
     // First, attempt to use a Python we distribute with KiCad
 #if defined( __WINDOWS__ )
-    wxFileName pythonExe = FindKicadFile( "python.exe" );
+    wxFileName pythonExe = FindKicadFile( "pythonw.exe" );
 
     if( pythonExe.IsFileExecutable() )
         return pythonExe.GetFullPath();
@@ -174,7 +178,7 @@ wxString PYTHON_MANAGER::FindPythonInterpreter()
 #ifdef _WIN32
     wxArrayString output;
 
-    if( 0 == wxExecute( wxS( "where python.exe" ), output, wxEXEC_SYNC ) )
+    if( 0 == wxExecute( wxS( "where pythonw.exe" ), output, wxEXEC_SYNC ) )
     {
         if( !output.IsEmpty() )
             return output[0];
