@@ -256,7 +256,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         for( const wxString& sourceName : classNames )
             m_placementProperties->m_componentClassCombo->Append( sourceName );
 
-        m_placementProperties->m_componentClassCombo->Select( 0 );
+        if( !classNames.empty() )
+            m_placementProperties->m_componentClassCombo->Select( 0 );
 
         // Fetch sheet names
         std::set<wxString> sheetNames;
@@ -267,7 +268,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         for( const wxString& sourceName : sheetNames )
             m_placementProperties->m_sheetCombo->Append( sourceName );
 
-        m_placementProperties->m_sheetCombo->Select( 0 );
+        if( !sheetNames.empty() )
+            m_placementProperties->m_sheetCombo->Select( 0 );
     }
 
     auto setupCurrentSourceSelection = [&]( wxComboBox* cb )
