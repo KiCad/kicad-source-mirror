@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-11 18:41+0000\n"
+"PO-Revision-Date: 2025-01-11 18:44+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -5959,7 +5959,7 @@ msgstr "英寸 (Inches)"
 #: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:328
 #: pcbnew/tools/pcb_actions.cpp:1169
 msgid "Constrain to H, V, 45"
-msgstr "将操作约束为水平、垂直或45度斜向"
+msgstr "约束操作为水平/垂直/45度"
 
 #: common/eda_draw_frame.cpp:1116 pcbnew/footprint_libraries_utils.cpp:1368
 msgid "Select Library"
@@ -37464,7 +37464,7 @@ msgstr "从原理图更新 PCB"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "将操作约束为水平、垂直或45度斜向"
+msgstr "约束操作为水平/垂直/45度"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:35
 msgid "Step for &rotate commands:"
