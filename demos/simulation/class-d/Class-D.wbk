@@ -6,8 +6,7 @@
       "commands": [
         ".tran 10n 3m",
         ".kicad adjustpaths",
-        ".save all",
-        ".probe alli"
+        ".save all"
       ],
       "dottedSecondary": true,
       "margins": {
