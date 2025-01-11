@@ -921,7 +921,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         LSET plotLayers = ( boardPlotOptions.GetLayerSelection() & LSET::AllNonCuMask() )
                           | ( brd->GetEnabledLayers() & LSET::AllCuMask() );
         aGerberJob->m_printMaskLayer = plotLayers.SeqStackupForPlotting();
-        aGerberJob->m_layersIncludeOnAll = boardPlotOptions.GetPlotOnAllLayersSelection();
+        aGerberJob->m_layersIncludeOnAll = boardPlotOptions.GetPlotOnAllLayersSelection().UIOrder();
     }
     else
     {
@@ -930,7 +930,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
             aGerberJob->m_printMaskLayer = brd->GetEnabledLayers().SeqStackupForPlotting();
 
         if( aGerberJob->m_layersIncludeOnAllSet )
-            aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection;
+            aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection.UIOrder();
     }
 
     // Ensure layers to plot are restricted to enabled layers of the board to plot
@@ -944,7 +944,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         plotSequence.push_back( layer );
 
         // Now all the "include on all" layers
-        for( PCB_LAYER_ID layer_all : aGerberJob->m_layersIncludeOnAll.UIOrder() )
+        for( PCB_LAYER_ID layer_all : aGerberJob->m_layersIncludeOnAll )
         {
             // Don't plot the same layer more than once;
             if( find( plotSequence.begin(), plotSequence.end(), layer_all ) != plotSequence.end() )

@@ -19,7 +19,6 @@
  */
 
 #include <jobs/job_export_pcb_gerbers.h>
-#include <jobs/lset_json.h>
 #include <jobs/job_registry.h>
 #include <i18n_utility.h>
 
@@ -33,7 +32,7 @@ JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
     m_params.emplace_back( new JOB_PARAM<bool>( "layers_include_on_all_set", &m_layersIncludeOnAllSet,
                                                 m_layersIncludeOnAllSet ) );
 
-    m_params.emplace_back( new JOB_PARAM<LSET>( "layers_include_on_all", &m_layersIncludeOnAll,
+    m_params.emplace_back( new JOB_PARAM_LSEQ( "layers_include_on_all", &m_layersIncludeOnAll,
                                                 m_layersIncludeOnAll ) );
 }
 

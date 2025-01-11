@@ -35,7 +35,7 @@ public:
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
 
-    LSET m_layersIncludeOnAll;
+    LSEQ m_layersIncludeOnAll;
 
     bool m_layersIncludeOnAllSet;
     bool m_useBoardPlotParams;
