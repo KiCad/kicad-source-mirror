@@ -29,10 +29,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 03:57+0300\n"
-"PO-Revision-Date: 2025-01-09 08:02+0000\n"
+"PO-Revision-Date: 2025-01-11 10:05+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24599,9 +24599,9 @@ msgid "Do not export"
 msgstr "Nicht exportieren"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "Gerber mit bekannten Lagen: "
+msgstr "Gerber mit bekannten Lagen: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
 #, fuzzy
