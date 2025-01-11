@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 14:32+0300\n"
+"POT-Creation-Date: 2025-01-11 03:57+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5266,8 +5266,8 @@ msgstr "Unselect all items on screen"
 msgid "Paste Special..."
 msgstr "Paste Special..."
 
-msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Paste item(s) from clipboard with annotation options"
+msgid "Paste item(s) from clipboard with options"
+msgstr "Paste item(s) from clipboard with options"
 
 msgid "Duplicate"
 msgstr "Duplicate"
@@ -15681,12 +15681,6 @@ msgstr "Next Symbol Unit"
 msgid "Open the next unit of the symbol"
 msgstr "Open the next unit of the symbol"
 
-msgid "Scripting Console"
-msgstr "Scripting Console"
-
-msgid "Show the Python scripting console"
-msgstr "Show the Python scripting console"
-
 msgid "Change Sheet"
 msgstr "Change Sheet"
 
@@ -16452,8 +16446,12 @@ msgstr "Layer %d"
 msgid "Do not export"
 msgstr "Do not export"
 
-msgid "Gerbers with known layers: "
-msgstr "Gerbers with known layers: "
+#, c-format
+msgid "Gerbers with known layers: %d"
+msgstr "Gerbers with known layers: %d"
+
+msgid "Assign to matching PCB layers?"
+msgstr "Assign to matching PCB layers?"
 
 msgid "Automatic Layer Assignment"
 msgstr "Automatic Layer Assignment"
@@ -17606,11 +17604,20 @@ msgstr ""
 "names to include such as F.Cu,B.Cu"
 
 msgid ""
-"Opt into the new behavior which means output path is a directory, a file per "
-"layer is generated and the common layers arg becomes available. "
+"Generates a single file with the output arg path acting as the complete "
+"directory and filename path. COMMON_LAYER_LIST does not function in this "
+"mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
-"Opt into the new behavior which means output path is a directory, a file per "
-"layer is generated and the common layers arg becomes available. "
+"Generates a single file with the output arg path acting as the complete "
+"directory and filename path. COMMON_LAYER_LIST does not function in this "
+"mode. Instead LAYER_LIST controls all layers plotted."
+
+msgid ""
+"Generates one or more files with behavior similar to the KiCad GUI plotting. "
+"The given output path specifies a directory in which files may be output."
+msgstr ""
+"Generates one or more files with behavior similar to the KiCad GUI plotting. "
+"The given output path specifies a directory in which files may be output."
 
 msgid "Board file does not exist or is not accessible\n"
 msgstr "Board file does not exist or is not accessible\n"
@@ -17622,8 +17629,8 @@ msgstr ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 
-msgid "The new behavior will match --mode-new"
-msgstr "The new behavior will match --mode-new"
+msgid "The new behavior will match --mode-multi"
+msgstr "The new behavior will match --mode-multi"
 
 msgid "Generate Gencad from a list of layers"
 msgstr "Generate Gencad from a list of layers"
@@ -17685,26 +17692,20 @@ msgstr "Use the Gerber plot settings already configured in the board file"
 msgid "Generate PDF from a list of layers"
 msgstr "Generate PDF from a list of layers"
 
-msgid "Plot the layers to individual PDF files"
-msgstr "Plot the layers to individual PDF files"
-
-msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "Plot the layers to a single PDF file with multiple pages"
-
 msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Mirror the board (useful for trying to show bottom layers)"
 
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Color theme to use (will default to PCB Editor settings)"
 
+msgid "Plot the layers to individual PDF files"
+msgstr "Plot the layers to individual PDF files"
+
+msgid "Plot the layers to a single PDF file with multiple pages"
+msgstr "Plot the layers to a single PDF file with multiple pages"
+
 msgid "Cannot use more than one mode flag\n"
 msgstr "Cannot use more than one mode flag\n"
-
-msgid "The new behavior will match --mode-separate"
-msgstr "The new behavior will match --mode-separate"
-
-msgid "The behavior with neither --mode flags will no longer exist"
-msgstr "The behavior with neither --mode flags will no longer exist"
 
 msgid "Generate Position File"
 msgstr "Generate Position File"
@@ -24179,22 +24180,6 @@ msgstr "ASCII"
 msgid "Gerber X3"
 msgstr "Gerber X3"
 
-msgid "Separate files for front, back"
-msgstr "Separate files for front, back"
-
-msgid "Single file for board"
-msgstr "Single file for board"
-
-msgid "Files"
-msgstr "Files"
-
-msgid ""
-"Creates 2 files: one for each board side or\n"
-"Creates only one file containing all footprints to place\n"
-msgstr ""
-"Creates 2 files: one for each board side or\n"
-"Creates only one file containing all footprints to place\n"
-
 msgid "Include only SMD footprints"
 msgstr "Include only SMD footprints"
 
@@ -24206,6 +24191,9 @@ msgstr "Include board edge layer"
 
 msgid "Use negative X coordinates for footprints on bottom layer"
 msgstr "Use negative X coordinates for footprints on bottom layer"
+
+msgid "Generate single file with both front and back positions"
+msgstr "Generate single file with both front and back positions"
 
 msgid "Generate Placement Files"
 msgstr "Generate Placement Files"
@@ -24852,8 +24840,8 @@ msgstr "Component Classes"
 msgid "Replace existing placement rule areas"
 msgstr "Replace existing placement rule areas"
 
-msgid "Group components with their placement rule areas"
-msgstr "Group components with their placement rule areas"
+msgid "Group footprints with their placement rule areas"
+msgstr "Group footprints with their placement rule areas"
 
 msgid "Generate Multichannel Rule Areas"
 msgstr "Generate Multichannel Rule Areas"
@@ -24876,11 +24864,14 @@ msgstr "Copy other items"
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
 msgstr "Copy text, shapes, zones, and other items inside the source rule area"
 
-msgid "Include locked components"
-msgstr "Include locked components"
+msgid "Include footprints outside the reference rule area"
+msgstr "Include footprints outside the reference rule area"
 
-msgid "Include components outside the target area"
-msgstr "Include components outside the target area"
+msgid "Group items with their target rule areas"
+msgstr "Group items with their target rule areas"
+
+msgid "Remove locked items from target rule areas"
+msgstr "Remove locked items from target rule areas"
 
 msgid "Repeat Multichannel Layout"
 msgstr "Repeat Multichannel Layout"
@@ -27464,13 +27455,13 @@ msgstr "Check rule syntax"
 msgid ""
 "### Documentation\n"
 "\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad."
-"org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
+"docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
 "### Documentation\n"
 "\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad."
-"org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
+"docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 msgid ""
 "### Top-level Clauses\n"
@@ -28021,7 +28012,7 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
 "html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
@@ -28030,7 +28021,7 @@ msgstr ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
 "html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
@@ -32928,6 +32919,9 @@ msgstr "(not activated)"
 msgid "Marker (%s)"
 msgstr "Marker (%s)"
 
+msgid "No layers selected for plotting."
+msgstr "No layers selected for plotting."
+
 msgid "Associated Layer"
 msgstr "Associated Layer"
 
@@ -33143,12 +33137,6 @@ msgstr "Successfully created 3D render image"
 msgid "Error creating 3D render image"
 msgstr "Error creating 3D render image"
 
-msgid "Successfully created svg file"
-msgstr "Successfully created svg file"
-
-msgid "Error creating svg file"
-msgstr "Error creating svg file"
-
 #, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "Failed to plot to '%s'.\n"
@@ -33177,6 +33165,9 @@ msgstr "The given footprint could not be found to export."
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Plotting footprint '%s' to '%s'\n"
+
+msgid "Error creating svg file"
+msgstr "Error creating svg file"
 
 msgid "Running DRC...\n"
 msgstr "Running DRC...\n"
@@ -34441,6 +34432,9 @@ msgstr ""
 msgid "Auto-generate placement rule areas"
 msgstr "Auto-generate placement rule areas"
 
+msgid "Group components with their placement rule areas"
+msgstr "Group components with their placement rule areas"
+
 msgid "Paste Pad Properties"
 msgstr "Paste Pad Properties"
 
@@ -35172,6 +35166,12 @@ msgstr "Local Ratsnest"
 msgid "Toggle ratsnest display of selected item(s)"
 msgstr "Toggle ratsnest display of selected item(s)"
 
+msgid "Scripting Console"
+msgstr "Scripting Console"
+
+msgid "Show the Python scripting console"
+msgstr "Show the Python scripting console"
+
 msgid "Show/hide the net inspector"
 msgstr "Show/hide the net inspector"
 
@@ -35673,11 +35673,11 @@ msgstr "Place Off-Board Footprints"
 msgid "Performs automatic placement of components outside board area"
 msgstr "Performs automatic placement of components outside board area"
 
-msgid "Generate Placement Rule Areas"
-msgstr "Generate Placement Rule Areas"
+msgid "Generate Placement Rule Areas..."
+msgstr "Generate Placement Rule Areas..."
 
-msgid "Repeat Layout"
-msgstr "Repeat Layout"
+msgid "Repeat Layout..."
+msgstr "Repeat Layout..."
 
 msgid "Route Single Track"
 msgstr "Route Single Track"
@@ -36890,6 +36890,89 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Paste item(s) from clipboard with annotation options"
+#~ msgstr "Paste item(s) from clipboard with annotation options"
+
+#~ msgid "Gerbers with known layers: "
+#~ msgstr "Gerbers with known layers: "
+
+#~ msgid ""
+#~ "Opt into the new behavior which means output path is a directory, a file "
+#~ "per layer is generated and the common layers arg becomes available. "
+#~ msgstr ""
+#~ "Opt into the new behavior which means output path is a directory, a file "
+#~ "per layer is generated and the common layers arg becomes available. "
+
+#~ msgid "The new behavior will match --mode-new"
+#~ msgstr "The new behavior will match --mode-new"
+
+#~ msgid "The new behavior will match --mode-separate"
+#~ msgstr "The new behavior will match --mode-separate"
+
+#~ msgid "The behavior with neither --mode flags will no longer exist"
+#~ msgstr "The behavior with neither --mode flags will no longer exist"
+
+#~ msgid "Separate files for front, back"
+#~ msgstr "Separate files for front, back"
+
+#~ msgid "Single file for board"
+#~ msgstr "Single file for board"
+
+#~ msgid "Files"
+#~ msgstr "Files"
+
+#~ msgid ""
+#~ "Creates 2 files: one for each board side or\n"
+#~ "Creates only one file containing all footprints to place\n"
+#~ msgstr ""
+#~ "Creates 2 files: one for each board side or\n"
+#~ "Creates only one file containing all footprints to place\n"
+
+#~ msgid "Include locked components"
+#~ msgstr "Include locked components"
+
+#~ msgid "Include components outside the target area"
+#~ msgstr "Include components outside the target area"
+
+#~ msgid ""
+#~ "### Documentation\n"
+#~ "\n"
+#~ "For the full documentation see [https://docs.kicad.org](https://docs."
+#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+#~ msgstr ""
+#~ "### Documentation\n"
+#~ "\n"
+#~ "For the full documentation see [https://docs.kicad.org](https://docs."
+#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+
+#~ msgid ""
+#~ "### Properties\n"
+#~ "\n"
+#~ "Many properties of objects are available for testing in custom rule "
+#~ "expressions. See the full documentation at [https://docs.kicad.org]"
+#~ "(https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+#~ "html#custom_design_rules) for the complete list.\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ msgstr ""
+#~ "### Properties\n"
+#~ "\n"
+#~ "Many properties of objects are available for testing in custom rule "
+#~ "expressions. See the full documentation at [https://docs.kicad.org]"
+#~ "(https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+#~ "html#custom_design_rules) for the complete list.\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+
+#~ msgid "Successfully created svg file"
+#~ msgstr "Successfully created svg file"
+
+#~ msgid "Generate Placement Rule Areas"
+#~ msgstr "Generate Placement Rule Areas"
+
+#~ msgid "Repeat Layout"
+#~ msgstr "Repeat Layout"
 
 #~ msgid "Embed Model"
 #~ msgstr "Embed Model"
@@ -59101,9 +59184,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "User.9"
 #~ msgstr "User.9"
-
-#~ msgid "Paste item(s) from clipboard with options"
-#~ msgstr "Paste item(s) from clipboard with options"
 
 #, c-format
 #~ msgid "Violations (%d)"
