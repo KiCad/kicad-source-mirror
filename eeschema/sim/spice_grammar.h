@@ -178,7 +178,8 @@ namespace SPICE_GRAMMAR
                                   opt<sep>,
                                   newline>> {};
 
-    struct dotSubcktParamValuePair : seq<param,
+    struct dotSubcktParamValuePair : seq<not_at<eolfComment>,
+                                         param,
                                          // TODO: Check if these `star<space>`s match Ngspice's
                                          // behavior.
                                          star<space>,
@@ -192,6 +193,7 @@ namespace SPICE_GRAMMAR
                                      opt<sep>>,
                                  dotSubcktParamValuePairs> {};
     struct dotSubcktPinName : seq<not_at<dotSubcktParams>,
+                                  not_at<eolfComment>,
                                   plus<not_at<space>, any>> {};
     struct dotSubcktPinSequence : list<dotSubcktPinName, sep> {};
     struct dotSubcktEnd : seq<opt<sep>,
