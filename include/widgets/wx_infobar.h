@@ -150,6 +150,8 @@ public:
 
     bool HasCloseButton() const;
 
+    wxBitmapButton* GetCloseButton() const;
+
     /**
      * Provide a callback to be called when the infobar is dismissed (either by user action
      * or timer).

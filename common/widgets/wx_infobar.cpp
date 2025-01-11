@@ -216,6 +216,13 @@ void WX_INFOBAR::onThemeChange( wxSysColourChangedEvent& aEvent )
     KIPLATFORM::UI::GetInfoBarColours( fg, bg );
     SetBackgroundColour( bg );
     SetForegroundColour( fg );
+
+    if( wxBitmapButton* btn = GetCloseButton() )
+    {
+        wxString tooltip = btn->GetToolTipText();
+        RemoveAllButtons();
+        AddCloseButton( tooltip );
+    }
 }
 
 
@@ -336,17 +343,26 @@ void WX_INFOBAR::RemoveAllButtons()
 
 bool WX_INFOBAR::HasCloseButton() const
 {
+    return GetCloseButton();
+}
+
+
+wxBitmapButton* WX_INFOBAR::GetCloseButton() const
+{
     wxSizer* sizer = GetSizer();
 
     if( sizer->GetItemCount() == 0 )
-        return false;
+        return nullptr;
 
     if( sizer->GetItem( sizer->GetItemCount() - 1 )->IsSpacer() )
-        return false;
+        return nullptr;
 
     wxSizerItem* item = sizer->GetItem( sizer->GetItemCount() - 1 );
 
-    return ( item->GetWindow()->GetId() == ID_CLOSE_INFOBAR );
+    if( item->GetWindow()->GetId() == ID_CLOSE_INFOBAR )
+        return static_cast<wxBitmapButton*>( item->GetWindow() );
+
+    return nullptr;
 }
 
 
