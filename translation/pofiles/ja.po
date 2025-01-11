@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-08 14:32+0300\n"
-"PO-Revision-Date: 2025-01-08 11:29+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-01-11 00:56+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5557,7 +5557,7 @@ msgstr "OpenGL を使用できません"
 
 #: common/draw_panel_gal.cpp:540
 msgid "Error switching GAL backend"
-msgstr ""
+msgstr "GAL バックエンドの切り替えエラー"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3393
@@ -25750,7 +25750,7 @@ msgstr "部品なしのボードのみを生成する"
 #: kicad/cli/command_pcb_export_3d.cpp:118
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
-msgstr ""
+msgstr "導体層がエクスポートされない場合でも、基板ボディにビア穴を切り抜きます。"
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 msgid "Exclude board body"
@@ -26008,7 +26008,9 @@ msgstr "基板ファイルは存在しないかアクセス不可です\n"
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
-msgstr ""
+msgstr "このコマンドは KiCad 9.0 "
+"以降では非推奨の動作になっており、このコマンドの動作は将来のリリースで変更さ"
+"れる予定です。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:160
 #: kicad/cli/command_pcb_export_svg.cpp:167
@@ -26083,7 +26085,8 @@ msgstr "KiCadのガーバーファイル拡張子を使用"
 #: kicad/cli/command_pcb_export_gerber.cpp:138
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
-msgstr ""
+msgstr "このコマンドは KiCad 9.0 "
+"では非推奨になっています。代わりに「gerbers」を使用してください。\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -26280,23 +26283,23 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "トップライトの強度、形式は 'R,G,B' または単一の数値、範囲: 0 ～ 1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "ボトムライトの強度、形式は 'R,G,B' または単一の数値、範囲: 0 ～ 1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "サイドライトの強度、形式は 'R,G,B' または単一の数値、範囲: 0 ～ 1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "カメラライトの強度、形式は 'R,G,B' または単一の数値、範囲: 0 ～ 1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "サイドライトの角度、範囲：0～90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 msgid "Invalid background\n"
@@ -26536,7 +26539,7 @@ msgstr "出力メッセージ:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "ゼロ以外の終了コードを無視する"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
 msgid "Execute Command Job Settings"
@@ -26770,7 +26773,7 @@ msgstr "インクルード JOBs:"
 
 #: kicad/dialogs/panel_jobs_base.h:167
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "ジョブの実行ログ"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -33877,7 +33880,7 @@ msgstr "変数名は空欄にできません。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:222
 msgid "The output file name conflicts with the selected compression format."
-msgstr ""
+msgstr "出力ファイル名が選択した圧縮形式と競合しています。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:352
 #, c-format
@@ -33936,15 +33939,15 @@ msgstr "圧縮形式:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "ODB++ファイルを圧縮する形式を選択します"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:79
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:276
 msgid "Non-unity scaled models:"
