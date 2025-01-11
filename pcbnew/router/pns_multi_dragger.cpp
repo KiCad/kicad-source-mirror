@@ -424,7 +424,7 @@ void MULTI_DRAGGER::restoreLeaderSegments( std::vector<MDRAG_LINE>& aCompletedLi
             else
             {
                 int newLeaderIdx = findNewLeaderSegment( l );
-                if( newLeaderIdx >= 0 )
+                if( newLeaderIdx >= 0 && newLeaderIdx < l.draggedLine.LinkCount() )
                 {
                     m_leaderSegments.push_back(
                         static_cast<PNS::ITEM*>( l.draggedLine.GetLink( newLeaderIdx ) ) );
