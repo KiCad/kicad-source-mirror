@@ -63,7 +63,7 @@ public:
     }
 
     /**
-     * Sets the configuration directory to be used by the model manager for storing 3D
+     * Set the configuration directory to be used by the model manager for storing 3D
      * model manager configuration data and the model cache.
      *
      * The config directory may only be set once in the lifetime of the object.
@@ -98,7 +98,8 @@ public:
      * @param aEmbeddedFiles is a pointer to the embedded files list.
      * @return true if the model was successfully loaded, otherwise false.
      */
-    SCENEGRAPH* Load( const wxString& aModelFile, const wxString& aBasePath, const EMBEDDED_FILES* aEmbeddedFiles );
+    SCENEGRAPH* Load( const wxString& aModelFile, const wxString& aBasePath,
+                      const EMBEDDED_FILES* aEmbeddedFiles );
 
     FILENAME_RESOLVER* GetResolver() noexcept;
 
@@ -130,7 +131,8 @@ public:
      * @param aEmbeddedFiles is a pointer to the embedded files list.
      * @return is a pointer to the render data or NULL if not available.
      */
-    S3DMODEL* GetModel( const wxString& aModelFileName, const wxString& aBasePath, const EMBEDDED_FILES* aEmbeddedFiles );
+    S3DMODEL* GetModel( const wxString& aModelFileName, const wxString& aBasePath,
+                        const EMBEDDED_FILES* aEmbeddedFiles );
 
     /**
      * Delete up old cache files in cache directory.
@@ -172,12 +174,12 @@ private:
     // the real load function (can supply a cache entry pointer to member functions)
     SCENEGRAPH* load( const wxString& aModelFile, const wxString& aBasePath,
                       S3D_CACHE_ENTRY** aCachePtr = nullptr,
-                      const EMBEDDED_FILES*   aEmbeddedFiles = nullptr );
+                      const EMBEDDED_FILES* aEmbeddedFiles = nullptr );
 
-    /// cache entries
+    /// Cache entries.
     std::list< S3D_CACHE_ENTRY* > m_CacheList;
 
-    /// mapping of file names to cache names and data
+    /// Mapping of file names to cache names and data.
     std::map< wxString, S3D_CACHE_ENTRY*, rsort_wxString > m_CacheMap;
 
     FILENAME_RESOLVER*  m_FNResolver;
@@ -186,7 +188,7 @@ private:
 
     PROJECT*            m_project;
     wxString            m_CacheDir;
-    wxString            m_ConfigDir;       /// base configuration path for 3D items
+    wxString            m_ConfigDir;       ///< base configuration path for 3D items.
 };
 
 #endif  // CACHE_3D_H

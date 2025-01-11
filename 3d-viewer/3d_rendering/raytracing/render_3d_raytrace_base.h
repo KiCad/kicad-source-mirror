@@ -35,10 +35,10 @@
 
 #include <map>
 
-/// Vector of materials
+/// Vector of materials.
 typedef std::vector< BLINN_PHONG_MATERIAL > MODEL_MATERIALS;
 
-/// Maps a S3DMODEL pointer with a created BLINN_PHONG_MATERIAL vector
+/// Maps a #S3DMODEL pointer with a created BLINN_PHONG_MATERIAL vector.
 typedef std::map< const S3DMODEL* , MODEL_MATERIALS > MAP_MODEL_MATERIALS;
 
 typedef enum
@@ -167,7 +167,7 @@ protected:
 
     CONTAINER_3D m_objectContainer;
 
-    ///< Store the list of created objects special for RT that will be clear in the end.
+    /// Store the list of created objects special for RT that will be clear in the end.
     CONTAINER_2D m_containerWithObjectsToDelete;
 
     CONTAINER_2D* m_outlineBoard2dObjects;
@@ -178,16 +178,16 @@ protected:
     SFVEC4F m_backgroundColorTop;
     SFVEC4F m_backgroundColorBottom;
 
-    ///< Used to see if the windows size changed.
+    /// Used to see if the windows size changed.
     wxSize m_oldWindowsSize;
 
-    ///< Encode Morton code positions.
+    /// Encode Morton code positions.
     std::vector< SFVEC2UI > m_blockPositions;
 
-    ///< Flag if a position was already processed (cleared each new render).
+    /// Flag if a position was already processed (cleared each new render).
     std::vector< int > m_blockPositionsWasProcessed;
 
-    ///< Encode the Morton code positions (on fast preview mode).
+    /// Encode the Morton code positions (on fast preview mode).
     std::vector< SFVEC2UI > m_blockPositionsFast;
 
     SFVEC2UI m_realBufferSize;

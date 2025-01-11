@@ -109,16 +109,16 @@ public:
     void RenderRaytracingRequest();
 
     /**
-     *  Request a screenshot and output it to the \a aDstImage
+     *  Request a screenshot and output it to the \a aDstImage.
      *
-     *  @param aDstImage - Screenshot destination image
+     *  @param aDstImage - Screenshot destination image.
      */
     void GetScreenshot( wxImage& aDstImage );
 
     /**
-     * Select a specific 3D view or operation
+     * Select a specific 3D view or operation.
      *
-     * @param aRequestedView the view to move to
+     * @param aRequestedView the view to move to.
      * @return true if the view request was handled, false if no command found for this view.
      */
     bool SetView3D( VIEW3D_TYPE aRequestedView );
@@ -331,7 +331,7 @@ private:
     bool    m_render3dmousePivot = false; // Render the 3dmouse pivot
     SFVEC3F m_3dmousePivotPos;            // The position of the 3dmouse pivot
 
-    ///< Used to track gesture events.
+    /// Used to track gesture events.
     double   m_gestureLastZoomFactor = 1.0;
     double   m_gestureLastAngle = 0.0;
 

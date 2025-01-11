@@ -51,10 +51,12 @@
 
 
 /**
- * This class provides a custom wxValidator object for limiting the allowable characters when
- * defining footprint names.  Since the introduction of the PRETTY footprint library format,
- * footprint names cannot have any characters that would prevent file creation on any platform.
- * The characters \/:*?|"<> are illegal and filtered by the validator.
+ * Provide a custom wxValidator object for limiting the allowable characters when
+ * defining footprint names.
+ *
+ * Since the introduction of the PRETTY footprint library format, footprint names cannot have
+ * any characters that would prevent file creation on any platform.  The characters \/:*?|"<>
+ * are illegal and filtered by the validator.
  */
 class FOOTPRINT_NAME_VALIDATOR : public wxTextValidator
 {
@@ -64,8 +66,9 @@ public:
 
 
 /**
- * This class provides a custom wxValidator object for limiting the allowable characters when
+ * Provide a custom wxValidator object for limiting the allowable characters when
  * defining file names with path, for instance in schematic sheet file names.
+ *
  * The characters *?|"<> are illegal and filtered by the validator,
  * but /\: are valid (\ and : only on Windows.)
  */
@@ -77,10 +80,11 @@ public:
 
 
 /**
- * This class provides a custom wxValidator object for limiting the allowable characters
- * when defining an environment variable name in a text edit control.  Only uppercase,
- * numbers, and underscore (_) characters are valid and the first character of the name
- * cannot start with a number.  This is according to IEEE Std 1003.1-2001.  Even though
+ * Provide a custom wxValidator object for limiting the allowable characters when defining an
+ * environment variable name in a text edit control.
+ *
+ * Only uppercase, numbers, and underscore (_) characters are valid and the first character of
+ * the name cannot start with a number.  This is according to IEEE Std 1003.1-2001.  Even though
  * most systems support other characters, these characters guarantee compatibility for
  * all shells.
  */
@@ -106,8 +110,7 @@ public:
 
 
 /**
- * Custom validator that checks verifies that a string *exactly* matches a
- * regular expression.
+ * Custom validator that checks verifies that a string *exactly* matches a regular expression.
  */
 class REGEX_VALIDATOR : public wxTextValidator
 {
@@ -151,16 +154,16 @@ public:
     }
 
 protected:
-    ///< Compiles and stores a regular expression
+    /// Compiles and stores a regular expression.
     void compileRegEx( const wxString& aRegEx, int aFlags );
 
-    ///< Original regular expression (for copy constructor)
+    /// Original regular expression (for copy constructor).
     wxString m_regExString;
 
-    ///< Original compilation flags (for copy constructor)
+    /// Original compilation flags (for copy constructor).
     int m_regExFlags;
 
-    ///< Compiled regex
+    /// Compiled regular expression.
     wxRegEx m_regEx;
 };
 
@@ -182,7 +185,7 @@ public:
     virtual bool Validate( wxWindow *aParent ) override;
 
 protected:
-    // returns the error message if the contents of 'val' are invalid
+    /// @return the error message if the contents of @a aVal are invalid.
     wxString IsValid( const wxString& aVal ) const override;
 
 private:

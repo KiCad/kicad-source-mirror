@@ -146,7 +146,8 @@ private:
         unsigned int m_render_idx_buffer_offset = 0;
         unsigned int m_render_idx_count = 0;
 
-        BBOX_3D m_bbox; ///< bounding box for this material group, used for transparent material ordering
+        BBOX_3D m_bbox; ///< bounding box for this material group, used for transparent
+                        ///< material ordering.
 
         MATERIAL( const SMATERIAL& aOther ) : SMATERIAL( aOther ) { }
         bool IsTransparent() const { return m_Transparency > FLT_EPSILON; }

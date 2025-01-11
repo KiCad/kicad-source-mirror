@@ -211,7 +211,8 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, const wxString& aBasePa
 }
 
 
-SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile, const wxString& aBasePath, const EMBEDDED_FILES* aEmbeddedFiles )
+SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile, const wxString& aBasePath,
+                             const EMBEDDED_FILES* aEmbeddedFiles )
 {
     return load( aModelFile, aBasePath, nullptr, aEmbeddedFiles );
 }

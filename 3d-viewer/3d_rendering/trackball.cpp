@@ -72,12 +72,14 @@
 static double tb_project_to_sphere( double, double, double );
 static void normalize_quat( double [4] );
 
+
 void vzero( double *v )
 {
     v[0] = 0.0;
     v[1] = 0.0;
     v[2] = 0.0;
 }
+
 
 void vset( double *v, double x, double y, double z )
 {
@@ -86,12 +88,14 @@ void vset( double *v, double x, double y, double z )
     v[2] = z;
 }
 
+
 void vsub( const double *src1, const double *src2, double *dst )
 {
     dst[0] = src1[0] - src2[0];
     dst[1] = src1[1] - src2[1];
     dst[2] = src1[2] - src2[2];
 }
+
 
 void vcopy( const double *v1, double *v2 )
 {
@@ -100,6 +104,7 @@ void vcopy( const double *v1, double *v2 )
     for( i = 0 ; i < 3 ; i++ )
         v2[i] = v1[i];
 }
+
 
 void vcross( const double *v1, const double *v2, double *cross )
 {
@@ -111,10 +116,12 @@ void vcross( const double *v1, const double *v2, double *cross )
     vcopy(temp, cross);
 }
 
+
 double vlength( const double *v )
 {
     return (double) sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
 }
+
 
 void vscale( double *v, double div )
 {
@@ -123,15 +130,18 @@ void vscale( double *v, double div )
     v[2] *= div;
 }
 
+
 void vnormal( double *v )
 {
     vscale( v, 1.0f / vlength( v ) );
 }
 
+
 double vdot( const double *v1, const double *v2 )
 {
     return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
 }
+
 
 void vadd( const double *src1, const double *src2, double *dst )
 {
@@ -139,6 +149,7 @@ void vadd( const double *src1, const double *src2, double *dst )
     dst[1] = src1[1] + src2[1];
     dst[2] = src1[2] + src2[2];
 }
+
 
 /*
  * Ok, simulate a track-ball.  Project the points onto the virtual
@@ -177,13 +188,13 @@ void trackball( double q[4], double p1x, double p1y, double p2x, double p2y )
     /*
      *  Now, we want the cross product of P1 and P2
      */
-    vcross(p2,p1,a);
+    vcross( p2, p1, a );
 
     /*
      *  Figure out how much to rotate around that axis.
      */
     vsub( p1, p2, d );
-    t = vlength( d ) / (2.0f * TRACKBALLSIZE);
+    t = vlength( d ) / ( 2.0f * TRACKBALLSIZE );
 
     /*
      * Avoid problems with out-of-control values...
@@ -199,6 +210,7 @@ void trackball( double q[4], double p1x, double p1y, double p2x, double p2y )
     axis_to_quat( a, phi, q );
 }
 
+
 /*
  *  Given an axis and angle, compute quaternion.
  */
@@ -209,6 +221,7 @@ void axis_to_quat( double a[3], double phi, double q[4] )
     vscale( q, (double) sin( phi / 2.0) );
     q[3] = (double) cos( phi / 2.0 );
 }
+
 
 /*
  * Project an x,y pair onto a sphere of radius r OR a hyperbolic sheet
@@ -233,6 +246,7 @@ static double tb_project_to_sphere( double r, double x, double y )
     return z;
 }
 
+
 /*
  * Given two rotations, e1 and e2, expressed as quaternion rotations,
  * figure out the equivalent single rotation and stuff it into dest.
@@ -248,7 +262,7 @@ static double tb_project_to_sphere( double r, double x, double y )
 
 void add_quats( double q1[4], double q2[4], double dest[4] )
 {
-    static int count=0;
+    static int count = 0;
     double t1[4], t2[4], t3[4];
     double tf[4];
 
@@ -276,6 +290,7 @@ void add_quats( double q1[4], double q2[4], double dest[4] )
     }
 }
 
+
 /*
  * Quaternions always obey:  a^2 + b^2 + c^2 + d^2 = 1.0
  * If they don't add up to 1.0, dividing by their magnitued will
@@ -293,31 +308,31 @@ static void normalize_quat( double q[4] )
     int i;
     double mag;
 
-    mag = (q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3]);
+    mag = ( q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3] );
 
     for( i = 0; i < 4; i++ )
         q[i] /= mag;
 }
 
+
 /*
  * Build a rotation matrix, given a quaternion rotation.
- *
  */
 void build_rotmatrix( float m[4][4], double q[4] )
 {
-    m[0][0] = (float)(1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2]));
-    m[0][1] = (float)(2.0 * (q[0] * q[1] - q[2] * q[3]));
-    m[0][2] = (float)(2.0 * (q[2] * q[0] + q[1] * q[3]));
+    m[0][0] = (float) ( 1.0 - 2.0 * ( q[1] * q[1] + q[2] * q[2] ) );
+    m[0][1] = (float) ( 2.0 * ( q[0] * q[1] - q[2] * q[3] ) );
+    m[0][2] = (float) ( 2.0 * ( q[2] * q[0] + q[1] * q[3] ) );
     m[0][3] = 0.0f;
 
-    m[1][0] = (float)(2.0 * (q[0] * q[1] + q[2] * q[3]));
-    m[1][1] = (float)(1.0 - 2.0f * (q[2] * q[2] + q[0] * q[0]));
-    m[1][2] = (float)(2.0 * (q[1] * q[2] - q[0] * q[3]));
+    m[1][0] = (float) ( 2.0 * ( q[0] * q[1] + q[2] * q[3] ) );
+    m[1][1] = (float) ( 1.0 - 2.0f * ( q[2] * q[2] + q[0] * q[0] ) );
+    m[1][2] = (float) ( 2.0 * ( q[1] * q[2] - q[0] * q[3] ) );
     m[1][3] = 0.0f;
 
-    m[2][0] = (float)(2.0 * (q[2] * q[0] - q[1] * q[3]));
-    m[2][1] = (float)(2.0 * (q[1] * q[2] + q[0] * q[3]));
-    m[2][2] = (float)(1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]));
+    m[2][0] = (float) ( 2.0 * ( q[2] * q[0] - q[1] * q[3] ) );
+    m[2][1] = (float) ( 2.0 * ( q[1] * q[2] + q[0] * q[3] ) );
+    m[2][2] = (float) ( 1.0 - 2.0 * ( q[1] * q[1] + q[0] * q[0] ) );
     m[2][3] = 0.0f;
 
     m[3][0] = 0.0f;

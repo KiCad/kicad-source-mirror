@@ -74,7 +74,8 @@ bool PANEL_3D_OPENGL_OPTIONS::TransferDataFromWindow()
     cfg->m_Render.show_model_bbox = m_checkBoxBoundingBoxes->GetValue();
     cfg->m_Render.highlight_on_rollover = m_checkBoxHighlightOnRollOver->GetValue();
 
-    cfg->m_Render.opengl_AA_mode = static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() );
+    cfg->m_Render.opengl_AA_mode =
+            static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() );
     cfg->m_Render.opengl_selection_color = m_selectionColorSwatch->GetSwatchColor();
 
     cfg->m_Render.opengl_AA_disableOnMove = m_checkBoxDisableAAMove->GetValue();

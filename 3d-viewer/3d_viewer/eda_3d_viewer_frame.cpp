@@ -272,25 +272,27 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
                 return m_boardAdapter.m_Cfg->m_AuiPanels.show_layer_manager;
             };
 
-    RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,       ACTION_CONDITIONS().Check( raytracing ) );
+    RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW, ACTION_CONDITIONS().Check( raytracing ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::showTHT,           ACTION_CONDITIONS().Check( showTH ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showSMD,           ACTION_CONDITIONS().Check( showSMD ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showVirtual,       ACTION_CONDITIONS().Check( showVirtual ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showNotInPosFile,  ACTION_CONDITIONS().Check( show_NotInPosfile ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showDNP,           ACTION_CONDITIONS().Check( show_DNP ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showTHT, ACTION_CONDITIONS().Check( showTH ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showSMD, ACTION_CONDITIONS().Check( showSMD ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showVirtual, ACTION_CONDITIONS().Check( showVirtual ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showNotInPosFile,
+                        ACTION_CONDITIONS().Check( show_NotInPosfile ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showDNP, ACTION_CONDITIONS().Check( show_DNP ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes,        ACTION_CONDITIONS().Check( showBBoxes ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showAxis,          ACTION_CONDITIONS().Check( showAxes ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes, ACTION_CONDITIONS().Check( showBBoxes ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showAxis, ACTION_CONDITIONS().Check( showAxes ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::noGrid,            GridSizeCheck( GRID3D_TYPE::NONE ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::show10mmGrid,      GridSizeCheck( GRID3D_TYPE::GRID_10MM ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::show5mmGrid,       GridSizeCheck( GRID3D_TYPE::GRID_5MM ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::show2_5mmGrid,     GridSizeCheck( GRID3D_TYPE::GRID_2P5MM ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::show1mmGrid,       GridSizeCheck( GRID3D_TYPE::GRID_1MM ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho,       ACTION_CONDITIONS().Check( ortho ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::noGrid, GridSizeCheck( GRID3D_TYPE::NONE ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show10mmGrid, GridSizeCheck( GRID3D_TYPE::GRID_10MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show5mmGrid, GridSizeCheck( GRID3D_TYPE::GRID_5MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show2_5mmGrid, GridSizeCheck( GRID3D_TYPE::GRID_2P5MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show1mmGrid, GridSizeCheck( GRID3D_TYPE::GRID_1MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho, ACTION_CONDITIONS().Check( ortho ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::showLayersManager, ACTION_CONDITIONS().Check( appearances ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showLayersManager,
+                        ACTION_CONDITIONS().Check( appearances ) );
 
 #undef GridSizeCheck
 }
@@ -643,7 +645,8 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
     ReCreateMainToolbar();
 
     loadCommonSettings();
-    applySettings( Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
+    applySettings(
+            Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
 
     m_appearancePanel->CommonSettingsChanged();
 
@@ -710,7 +713,8 @@ void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
     if( event.GetId() != ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
         // Remember path between saves during this session only.
-        const wxString wildcard = fmt_is_jpeg ? FILEEXT::JpegFileWildcard() : FILEEXT::PngFileWildcard();
+        const wxString wildcard =
+                fmt_is_jpeg ? FILEEXT::JpegFileWildcard() : FILEEXT::PngFileWildcard();
         const wxString ext = fmt_is_jpeg ? FILEEXT::JpegFileExtension : FILEEXT::PngFileExtension;
 
         // First time path is set to the project path.

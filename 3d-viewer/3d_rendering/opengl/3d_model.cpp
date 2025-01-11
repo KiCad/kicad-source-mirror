@@ -98,8 +98,8 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
 
     /**
      * WARNING: Horrible hack here!
-     * Somehow, buffer values are being shared between pcbnew and the 3d viewer, which then frees
-     * the buffer, resulting in errors in pcbnew.  To resolve this temporarily, we generate
+     * Somehow, buffer values are being shared between Pcbnew and the 3d viewer, which then frees
+     * the buffer, resulting in errors in Pcbnew.  To resolve this temporarily, we generate
      * extra buffers in 3dviewer and use the higher numbers.  These are freed on close.
      * todo: Correctly separate the OpenGL contexts to prevent overlapping buffer vals
      */
@@ -332,7 +332,8 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
 
     // temporary index buffer which will contain either GLushort or GLuint
     // type indices.  allocate with a bit of meadow at the end.
-    auto tmp_idx = std::make_unique<GLuint[]>( ( idx_size * total_index_count + 8 ) / sizeof( GLuint ) );
+    auto tmp_idx =
+            std::make_unique<GLuint[]>( ( idx_size * total_index_count + 8 ) / sizeof( GLuint ) );
 
     unsigned int prev_vtx_count = 0;
     unsigned int idx_offset = 0;
@@ -507,9 +508,9 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
     {
         for( const MODEL_3D::MATERIAL& mat : m_materials )
         {
-            // There is at least one default material created in case a mesh has no declared materials.
-            // Most meshes have a material, so usually the first material will have nothing to render and is skip.
-            // See S3D::GetModel for more details.
+            // There is at least one default material created in case a mesh has no declared
+            // materials.  Most meshes have a material, so usually the first material will have
+            // nothing to render and is skip.  See S3D::GetModel for more details.
             if( mat.m_render_idx_count == 0 )
             {
                 continue;
@@ -535,7 +536,8 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
             break;
 
         case MATERIAL_MODE::DIFFUSE_ONLY:
-            OglSetDiffuseMaterial( mat->m_Diffuse, aOpacity, aUseSelectedMaterial, aSelectionColor );
+            OglSetDiffuseMaterial( mat->m_Diffuse, aOpacity, aUseSelectedMaterial,
+                                   aSelectionColor );
             break;
 
         case MATERIAL_MODE::CAD_MODE:

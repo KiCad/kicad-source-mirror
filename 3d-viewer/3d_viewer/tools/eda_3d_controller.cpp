@@ -182,6 +182,7 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
     {
     case ROTATION_DIR::X_CW:  m_camera->RotateX( -rotIncrement ); break;
     case ROTATION_DIR::X_CCW: m_camera->RotateX( rotIncrement );  break;
+
     /// Y rotations are backward b/c the RHR has Y pointing into the screen
     case ROTATION_DIR::Y_CW:  m_camera->RotateY( rotIncrement );  break;
     case ROTATION_DIR::Y_CCW: m_camera->RotateY( -rotIncrement ); break;
@@ -234,7 +235,8 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
     auto flipLayer =
             [&]( int layer )
             {
-                appearanceManager->OnLayerVisibilityChanged( layer, !visibilityFlags.test( layer ) );
+                appearanceManager->OnLayerVisibilityChanged( layer,
+                                                             !visibilityFlags.test( layer ) );
             };
 
     EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
@@ -311,7 +313,8 @@ int EDA_3D_CONTROLLER::doZoomInOut( bool aDirection, bool aCenterOnCursor )
 {
     if( m_canvas )
     {
-        m_canvas->SetView3D( aDirection ? VIEW3D_TYPE::VIEW3D_ZOOM_IN : VIEW3D_TYPE::VIEW3D_ZOOM_OUT );
+        m_canvas->SetView3D( aDirection ? VIEW3D_TYPE::VIEW3D_ZOOM_IN
+                                        : VIEW3D_TYPE::VIEW3D_ZOOM_OUT );
         m_canvas->DisplayStatus();
     }
 

@@ -48,7 +48,8 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
+                                            wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 

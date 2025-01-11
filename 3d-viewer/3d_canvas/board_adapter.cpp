@@ -374,7 +374,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     m_nonCopperLayerThickness3DU   = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
     m_solderPasteLayerThickness3DU = SOLDERPASTE_LAYER_THICKNESS  * m_biuTo3Dunits;
 
-    g_BevelThickness3DU = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_3DRT_BevelHeight_um / 1000.0 ) * m_biuTo3Dunits;
+    g_BevelThickness3DU = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_3DRT_BevelHeight_um / 1000.0 )
+                          * m_biuTo3Dunits;
 
     if( m_board )
     {
@@ -395,9 +396,10 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
                 case BS_ITEM_TYPE_COPPER:
                 {
-                    // The copper thickness must be > 0 to avoid draw issues (divide by 0 for instance)
-                    // We use a minimal arbitrary value = 1 micrometer here:
-                    int copper_thickness = std::max( item->GetThickness(), pcbIUScale.mmToIU( 0.001 ) );
+                    // The copper thickness must be > 0 to avoid draw issues (divide by 0 for
+                    // instance).   We use a minimal arbitrary value = 1 micrometer here:
+                    int copper_thickness = std::max( item->GetThickness(),
+                                                     pcbIUScale.mmToIU( 0.001 ) );
 
                     if( item->GetBrdLayerId() == F_Cu )
                         m_frontCopperThickness3DU = copper_thickness * m_biuTo3Dunits;
@@ -419,8 +421,10 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     // Init  Z position of each layer
     // calculate z position for each copper layer
-    // Zstart = -m_epoxyThickness / 2.0 is the z position of the back (bottom layer) (layer id = B_Cu)
-    // Zstart = +m_epoxyThickness / 2.0 is the z position of the front (top layer) (layer id = F_Cu)
+    // Zstart = -m_epoxyThickness / 2.0 is the z position of the back (bottom layer)
+    // (layer id = B_Cu)
+    // Zstart = +m_epoxyThickness / 2.0 is the z position of the front (top layer)
+    // (layer id = F_Cu)
 
     //  ____==__________==________==______ <- Bottom = +m_epoxyThickness / 2.0,
     // |                                  |   Top = Bottom + m_copperThickness
@@ -470,12 +474,14 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
             continue;
 
         m_layerZcoordBottom[(PCB_LAYER_ID)layer_id] = zpos_copperTop_back - 2.0f * zpos_offset;
-        m_layerZcoordTop[(PCB_LAYER_ID)layer_id]    = m_layerZcoordBottom[(PCB_LAYER_ID)layer_id] - m_backCopperThickness3DU;
+        m_layerZcoordTop[(PCB_LAYER_ID) layer_id] =
+                m_layerZcoordBottom[(PCB_LAYER_ID) layer_id] - m_backCopperThickness3DU;
     }
 
     // calculate z position for each technical layer
     // Solder mask and Solder paste have the same Z position
-    for( PCB_LAYER_ID layer_id : { B_Adhes, B_Mask, B_Paste, F_Adhes, F_Mask, F_Paste, B_SilkS, F_SilkS } )
+    for( PCB_LAYER_ID layer_id :
+         { B_Adhes, B_Mask, B_Paste, F_Adhes, F_Mask, F_Paste, B_SilkS, F_SilkS } )
     {
         float zposTop = 0.0;
         float zposBottom = 0.0;
@@ -641,7 +647,8 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
 
         // Can't do a const KIGFX::COLOR4D& return type here because there are temporary variables
         auto findColor =
-                []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet ) -> const KIGFX::COLOR4D
+                []( const wxString& aColorName,
+                    const CUSTOM_COLORS_LIST& aColorSet ) -> const KIGFX::COLOR4D
                 {
                     if( aColorName.StartsWith( wxT( "#" ) ) )
                     {

@@ -219,9 +219,11 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
             {
                 if( !aVisibilityFlags.test( LAYER_FP_TEXT ) )
                     continue;
-                else if( text->GetText() == wxT( "${REFERENCE}" ) && !aVisibilityFlags.test( LAYER_FP_REFERENCES ) )
+                else if( text->GetText() == wxT( "${REFERENCE}" )
+                         && !aVisibilityFlags.test( LAYER_FP_REFERENCES ) )
                     continue;
-                else if( text->GetText() == wxT( "${VALUE}" ) && !aVisibilityFlags.test( LAYER_FP_VALUES ) )
+                else if( text->GetText() == wxT( "${VALUE}" )
+                         && !aVisibilityFlags.test( LAYER_FP_VALUES ) )
                     continue;
 
                 addText( text, aContainer, text );
@@ -396,7 +398,8 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
     }
     else
     {
-        auto padShapes = std::static_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape( aLayer ) );
+        auto padShapes =
+                std::static_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape( aLayer ) );
 
         for( const SHAPE* shape : padShapes->Shapes() )
         {
@@ -483,7 +486,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
 
 
 void BOARD_ADAPTER::createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
-                                             int aInflateValue )
+                                       int aInflateValue )
 {
     if( !aPad->HasHole() )
     {
@@ -706,7 +709,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
                                              ERROR_INSIDE );
 
             // Some polygons can be a bit complex (especially when coming from a
-            // picture ot a text converted to a polygon
+            // picture of a text converted to a polygon
             // So call Simplify before calling ConvertPolygonToTriangles, just in case.
             polyList.Simplify();
 

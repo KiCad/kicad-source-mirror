@@ -67,18 +67,22 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
 }
 
 /**
-  * Scale conversion from 3d model units to pcb units
-  */
+ * Scale conversion from 3d model units to pcb units
+ */
 #define UNITS3D_TO_UNITSPCB ( pcbIUScale.IU_PER_MM )
 
 
 void RENDER_3D_RAYTRACE_BASE::setupMaterials()
 {
-    MATERIAL::SetDefaultRefractionRayCount( m_boardAdapter.m_Cfg->m_Render.raytrace_nrsamples_refractions );
-    MATERIAL::SetDefaultReflectionRayCount( m_boardAdapter.m_Cfg->m_Render.raytrace_nrsamples_reflections );
+    MATERIAL::SetDefaultRefractionRayCount(
+            m_boardAdapter.m_Cfg->m_Render.raytrace_nrsamples_refractions );
+    MATERIAL::SetDefaultReflectionRayCount(
+            m_boardAdapter.m_Cfg->m_Render.raytrace_nrsamples_reflections );
 
-    MATERIAL::SetDefaultRefractionRecursionCount( m_boardAdapter.m_Cfg->m_Render.raytrace_recursivelevel_refractions );
-    MATERIAL::SetDefaultReflectionRecursionCount( m_boardAdapter.m_Cfg->m_Render.raytrace_recursivelevel_reflections );
+    MATERIAL::SetDefaultRefractionRecursionCount(
+            m_boardAdapter.m_Cfg->m_Render.raytrace_recursivelevel_refractions );
+    MATERIAL::SetDefaultReflectionRecursionCount(
+            m_boardAdapter.m_Cfg->m_Render.raytrace_recursivelevel_reflections );
 
     double mmTo3Dunits = pcbIUScale.IU_PER_MM * m_boardAdapter.BiuTo3dUnits();
 
@@ -177,8 +181,8 @@ void RENDER_3D_RAYTRACE_BASE::setupMaterials()
 
 
 void RENDER_3D_RAYTRACE_BASE::createObject( CONTAINER_3D& aDstContainer, const OBJECT_2D* aObject2D,
-                                       float aZMin, float aZMax, const MATERIAL* aMaterial,
-                                       const SFVEC3F& aObjColor )
+                                            float aZMin, float aZMax, const MATERIAL* aMaterial,
+                                            const SFVEC3F& aObjColor )
 {
     switch( aObject2D->GetObjectType() )
     {
@@ -541,7 +545,8 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
                                     radius );
 
                             objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                            objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.m_BoardBodyColor ) );
+                            objPtr->SetColor(
+                                    ConvertSRGBToLinear( m_boardAdapter.m_BoardBodyColor ) );
 
                             m_objectContainer.Add( objPtr );
                         }
@@ -560,7 +565,8 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
         aStatusReporter->Report( _( "Load Raytracing: layers" ) );
 
     // Add layers maps (except B_Mask and F_Mask)
-    for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& entry : m_boardAdapter.GetLayerMap() )
+    for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& entry :
+         m_boardAdapter.GetLayerMap() )
     {
         const PCB_LAYER_ID      layer_id = entry.first;
         const BVH_CONTAINER_2D* container2d = entry.second;
@@ -667,7 +673,8 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
         {
             const MATERIAL* materialLayer = &m_materials.m_SolderMask;
 
-            for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& entry : m_boardAdapter.GetLayerMap() )
+            for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& entry :
+                 m_boardAdapter.GetLayerMap() )
             {
                 const PCB_LAYER_ID      layer_id = entry.first;
                 const BVH_CONTAINER_2D* container2d = entry.second;
@@ -1193,7 +1200,8 @@ void RENDER_3D_RAYTRACE_BASE::addPadsAndVias()
 }
 
 
-void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation )
+void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer,
+                                            bool aSkipMaterialInformation )
 {
     if( !m_boardAdapter.GetBoard() )
         return;
@@ -1249,6 +1257,7 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
             wxString                libraryName = fp->GetFPID().GetLibNickname();
 
             wxString                footprintBasePath = wxEmptyString;
+
             if( m_boardAdapter.GetBoard()->GetProject() )
             {
                 try
@@ -1409,8 +1418,8 @@ MODEL_MATERIALS* RENDER_3D_RAYTRACE_BASE::getModelMaterial( const S3DMODEL* a3DM
 
 
 void RENDER_3D_RAYTRACE_BASE::addModels( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
-                                    const glm::mat4& aModelMatrix, float aFPOpacity,
-                                    bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem )
+                                         const glm::mat4& aModelMatrix, float aFPOpacity,
+                                         bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem )
 {
     // Validate a3DModel pointers
     wxASSERT( a3DModel != nullptr );

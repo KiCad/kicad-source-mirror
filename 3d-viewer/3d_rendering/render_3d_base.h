@@ -98,18 +98,18 @@ protected:
      */
     std::unique_ptr<BUSY_INDICATOR> CreateBusyIndicator() const;
 
-    ///< Settings reference in use for this render.
+    /// Settings reference in use for this render.
     BOARD_ADAPTER& m_boardAdapter;
 
     CAMERA&        m_camera;
 
-    ///< Flag if the canvas specific for this render was already initialized.
+    /// Flag if the canvas specific for this render was already initialized.
     bool m_canvasInitialized;
 
-    ///< @todo This must be reviewed in order to flag change types.
+    /// @todo This must be reviewed in order to flag change types.
     bool m_reloadRequested;
 
-    ///< The window size that this camera is working.
+    /// The window size that this camera is working.
     wxSize m_windowSize;
 
     /**
@@ -121,7 +121,7 @@ protected:
     static const wxChar* m_logTrace;
 
 private:
-    ///< Factory that returns a suitable busy indicator for the context.
+    /// Factory that returns a suitable busy indicator for the context.
     BUSY_INDICATOR::FACTORY m_busyIndicatorFactory;
 };
 

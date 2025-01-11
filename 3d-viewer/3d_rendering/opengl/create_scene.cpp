@@ -607,8 +607,10 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     if( m_boardAdapter.m_Cfg->m_Render.DifferentiatePlatedCopper() )
     {
-        const SHAPE_POLY_SET* frontPlatedPadAndGraphicPolys = m_boardAdapter.GetFrontPlatedPadAndGraphicPolys();
-        const SHAPE_POLY_SET* backPlatedPadAndGraphicPolys = m_boardAdapter.GetBackPlatedPadAndGraphicPolys();
+        const SHAPE_POLY_SET* frontPlatedPadAndGraphicPolys =
+                m_boardAdapter.GetFrontPlatedPadAndGraphicPolys();
+        const SHAPE_POLY_SET* backPlatedPadAndGraphicPolys =
+                m_boardAdapter.GetBackPlatedPadAndGraphicPolys();
 
         if( frontPlatedPadAndGraphicPolys )
         {
@@ -617,7 +619,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             poly.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
 
-            m_platedPadsFront = generateLayerList( m_boardAdapter.GetPlatedPadsFront(), &poly, F_Cu );
+            m_platedPadsFront = generateLayerList( m_boardAdapter.GetPlatedPadsFront(), &poly,
+                                                   F_Cu );
 
             // An entry for F_Cu must exist in m_layers or we'll never look at m_platedPadsFront
             if( m_layers.count( F_Cu ) == 0 )
@@ -965,7 +968,9 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
                 {
                     // It is not present, try get it from cache
                     const S3DMODEL* modelPtr =
-                            m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename, footprintBasePath, footprint );
+                            m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename,
+                                                                          footprintBasePath,
+                                                                          footprint );
 
                     // only add it if the return is not NULL
                     if( modelPtr )

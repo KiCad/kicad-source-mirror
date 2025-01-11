@@ -29,7 +29,7 @@
 // TDxWare SDK.
 #include <SpaceMouse/CNavigation3D.hpp>
 
-// KiCAD
+// KiCad
 #include <include/plugins/3dapi/xv3d_types.h>
 
 // wx
@@ -45,6 +45,15 @@ class TRACK_BALL;
 // temporary store for the categories
 typedef std::map<std::string, TDx::CCommandTreeNode*> CATEGORY_STORE;
 
+/**
+ * Add a category to the store.
+ *
+ * The function adds category paths of the format "A.B" where B is a sub-category of A.
+ *
+ * @param aCategoryPath is the std::string representation of the category.
+ * @param aCategoryStore is the CATEGORY_STORE instance to add to.
+ * @return a CATEGORY_STORE::iterator where the category was added.
+ */
 CATEGORY_STORE::iterator add_category( std::string aCategoryPath, CATEGORY_STORE& aCategoryStore );
 
 // Convenience typedef.

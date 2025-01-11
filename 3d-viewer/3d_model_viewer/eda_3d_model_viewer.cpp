@@ -44,8 +44,8 @@
 #include <macros.h>
 
 /**
-  * Scale conversion from 3d model units to pcb units
-  */
+ * Scale conversion from 3d model units to pcb units
+ */
 #define UNITS3D_TO_UNITSPCB ( pcbIUScale.IU_PER_MM )
 
 /**

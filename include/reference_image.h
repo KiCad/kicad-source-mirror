@@ -140,8 +140,9 @@ private:
 
     const EDA_IU_SCALE& m_iuScale;
 
-    VECTOR2I m_pos; // XY coordinates of center of the bitmap
-    ///< Center of scaling, etc, relative to the image center
+    VECTOR2I m_pos; ///< XY coordinates of center of the bitmap.
+
+    /// Center of scaling, etc, relative to the image center.
     VECTOR2I m_transformOriginOffset;
 
     std::unique_ptr<BITMAP_BASE> m_bitmapBase;

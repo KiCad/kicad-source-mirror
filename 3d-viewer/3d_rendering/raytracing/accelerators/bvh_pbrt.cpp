@@ -848,7 +848,7 @@ BVHBuildNode *BVH_PBRT::emitLBVH( BVHBuildNode* &buildNodes,
 
         while( searchStart + 1 != searchEnd )
         {
-            wxASSERT(searchStart != searchEnd);
+            wxASSERT( searchStart != searchEnd );
 
             const int mid = ( searchStart + searchEnd ) / 2;
 

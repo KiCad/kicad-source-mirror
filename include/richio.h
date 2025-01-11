@@ -72,7 +72,7 @@ KICOMMON_API std::string
 
 /**
  * Nominally opens a file and reads it into a string.  But unlike other facilities, this handles
- * mis-encded Wine-written files on macOS.
+ * mis-encoded Wine-written files on macOS.
  *
  * @param aFilePath
  * @param aReadType
@@ -297,7 +297,7 @@ public:
     char* ReadLine() override;
 
 protected:
-    wxInputStream* m_stream;   //< The input stream to read.  No ownership of this pointer.
+    wxInputStream* m_stream;        ///< The input stream to read.  No ownership of this pointer.
 };
 
 

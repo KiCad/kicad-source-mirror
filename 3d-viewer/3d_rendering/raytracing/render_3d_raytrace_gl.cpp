@@ -36,7 +36,8 @@
 #include <wx/log.h>
 
 
-RENDER_3D_RAYTRACE_GL::RENDER_3D_RAYTRACE_GL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
+RENDER_3D_RAYTRACE_GL::RENDER_3D_RAYTRACE_GL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter,
+                                              CAMERA& aCamera ) :
     RENDER_3D_RAYTRACE_BASE( aAdapter, aCamera )
 {
     wxLogTrace( m_logTrace, wxT( "RENDER_3D_RAYTRACE_GL::RENDER_3D_RAYTRACE_GL" ) );
@@ -79,7 +80,7 @@ void RENDER_3D_RAYTRACE_GL::SetCurWindowSize( const wxSize& aSize )
 
 
 bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
-                                 REPORTER* aWarningReporter )
+                                    REPORTER* aWarningReporter )
 {
     bool requestRedraw = false;
 

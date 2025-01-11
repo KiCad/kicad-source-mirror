@@ -348,7 +348,8 @@ void EDA_3D_CANVAS::DisplayStatus()
         m_parentStatusBar->SetStatusText( msg, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::Y_POS ) );
 
         msg.Printf( wxT( "zoom %3.2f" ), 1 / m_camera.GetZoom() );
-        m_parentStatusBar->SetStatusText( msg, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::ZOOM_LEVEL ) );
+        m_parentStatusBar->SetStatusText( msg,
+                                          static_cast<int>( EDA_3D_VIEWER_STATUSBAR::ZOOM_LEVEL ) );
     }
 }
 
@@ -479,7 +480,7 @@ void EDA_3D_CANVAS::DoRePaint()
     if( m_camera_is_moving )
     {
         const int64_t curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
-        curtime_delta_s = (curtime_delta / 1e6) * m_camera_moving_speed;
+        curtime_delta_s = ( curtime_delta / 1e6 ) * m_camera_moving_speed;
         m_camera.Interpolate( curtime_delta_s );
 
         if( curtime_delta_s > 1.0f )

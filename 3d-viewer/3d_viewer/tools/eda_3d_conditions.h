@@ -54,11 +54,11 @@ public:
     SELECTION_CONDITION GridSize( GRID3D_TYPE aGridSize );
 
 private:
-    ///< Helper function used by GridDize()
+    /// Helper function used by GridDize().
     static bool gridSizeFunction( const SELECTION& aSelection, BOARD_ADAPTER* aAdapter,
                                   GRID3D_TYPE aGridSize );
 
-    ///< The board adapter to read the 3D viewer state from
+    /// The board adapter to read the 3D viewer state from.
     BOARD_ADAPTER* m_adapter;
 };
 

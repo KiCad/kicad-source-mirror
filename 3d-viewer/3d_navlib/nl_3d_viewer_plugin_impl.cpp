@@ -24,7 +24,7 @@
 #include <3d-viewer/3d_rendering/track_ball.h>
 #include <3d-viewer/3d_canvas/eda_3d_canvas.h>
 
-// KiCAD includes
+// KiCad includes
 #include <tool/action_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tools_holder.h>
@@ -73,7 +73,8 @@ bool equals( glm::mat<L, C, T, Q> const& aFirst, glm::mat<L, C, T, Q> const& aSe
 }
 
 
-NL_3D_VIEWER_PLUGIN_IMPL::NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas, const std::string& aProfileHint ) :
+NL_3D_VIEWER_PLUGIN_IMPL::NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas,
+                                                    const std::string& aProfileHint ) :
         NAV_3D( false, false ),
         m_canvas( aCanvas ),
         m_capIsMoving( false ),
@@ -111,15 +112,7 @@ void NL_3D_VIEWER_PLUGIN_IMPL::Connect()
    exportCommandsAndImages();
 }
 
-/**
- * Add a category to the store.
- *
- * The function adds category paths of the format "A.B" where B is a sub-category of A.
- *
- * @param aCategoryPath is the std::string representation of the category.
- * @param aCategoryStore is the CATEGORY_STORE instance to add to.
- * @return a CATEGORY_STORE::iterator where the category was added.
- */
+
 CATEGORY_STORE::iterator add_category( std::string aCategoryPath, CATEGORY_STORE& aCategoryStore )
 {
     using TDx::SpaceMouse::CCategory;
@@ -192,7 +185,7 @@ void NL_3D_VIEWER_PLUGIN_IMPL::exportCommandsAndImages()
 
         std::string name = action->GetName();
 
-        // Do no export commands for the pcbnew app.
+        // Do no export commands for the Pcbnew app.
         if( name.rfind( "pcbnew.", 0 ) == 0 )
         {
             continue;

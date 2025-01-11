@@ -605,7 +605,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( layerFlags.test( LAYER_3D_BOARD ) && m_boardAdapter.m_BoardBodyColor.a > opacity_min )
         {
-            // generating internal copper layers is time consumming. so skip them
+            // generating internal copper layers is time consuming. so skip them
             // if the board body is masking them (i.e. if the opacity is near 1.0)
             // B_Cu is layer 2 and all inner layers are higher values
             if( layer > B_Cu && IsCopperLayer( layer ) )
@@ -716,7 +716,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         renderBoardBody( skipRenderHoles );
 
     // Display transparent mask layers
-    if( layerFlags.test( LAYER_3D_SOLDERMASK_TOP ) || layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
+    if( layerFlags.test( LAYER_3D_SOLDERMASK_TOP )
+      || layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
     {
         // add a depth buffer offset, it will help to hide some artifacts
         // on silkscreen where the SolderMask is removed
@@ -766,7 +767,9 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     // Enables Texture Env so it can combine model transparency with each footprint opacity
     glEnable( GL_TEXTURE_2D );
     glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, m_circleTexture ); // Uses an existent texture so the glTexEnv operations will work
+
+    // Uses an existent texture so the glTexEnv operations will work.
+    glBindTexture( GL_TEXTURE_2D, m_circleTexture );
 
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE );
     glTexEnvf( GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_INTERPOLATE );
@@ -985,7 +988,8 @@ void RENDER_3D_OPENGL::get3dModelsSelected( std::list<MODELTORENDER> &aDstRender
                 const bool isFlipped = fp->IsFlipped();
 
                 if( aGetTop == !isFlipped || aGetBot == isFlipped )
-                    get3dModelsFromFootprint( aDstRenderList, fp, aRenderTransparentOnly, highlight );
+                    get3dModelsFromFootprint( aDstRenderList, fp, aRenderTransparentOnly,
+                                              highlight );
             }
         }
     }
@@ -1046,7 +1050,8 @@ void RENDER_3D_OPENGL::get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstR
                     glm::mat4 modelworldMatrix = fpMatrix;
 
                     const SFVEC3F offset = SFVEC3F( sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z );
-                    const SFVEC3F rotation = SFVEC3F( sM.m_Rotation.x, sM.m_Rotation.y, sM.m_Rotation.z );
+                    const SFVEC3F rotation = SFVEC3F( sM.m_Rotation.x, sM.m_Rotation.y,
+                                                      sM.m_Rotation.z );
                     const SFVEC3F scale = SFVEC3F( sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z );
 
                     std::vector<float> key = { offset.x, offset.y, offset.z,

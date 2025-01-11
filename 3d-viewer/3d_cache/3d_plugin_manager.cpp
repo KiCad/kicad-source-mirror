@@ -444,7 +444,8 @@ SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName, std::str
     ext_to_find.MakeLower();
 #endif
 
-    // .gz files are compressed versions that may have additional information in the previous extension
+    // .gz files are compressed versions that may have additional information in the previous
+    // extension.
     if( ext_to_find == wxT( "gz" ) )
     {
         wxFileName second( raw.GetName() );
@@ -518,8 +519,7 @@ bool S3D_PLUGIN_MANAGER::CheckTag( const char* aTag )
         ptag.clear();
         (*pS)->GetPluginInfo( ptag );
 
-        // if the plugin name matches then the version
-        // must also match
+        // if the plugin name matches then the version must also match
         if( !ptag.compare( 0, pname.size(), pname ) )
         {
             if( ptag.compare( tname ) )

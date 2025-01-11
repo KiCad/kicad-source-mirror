@@ -41,7 +41,6 @@ class EDA_DRAW_FRAME;
  * A tiny, headerless popup window used to display useful status (e.g. line length
  * tuning info) next to the mouse cursor.
  */
-
 class STATUS_POPUP: public wxPopupWindow
 {
 public:
@@ -67,7 +66,7 @@ protected:
 
     void onCharHook( wxKeyEvent& aEvent );
 
-    ///< Expire timer even handler
+    /// Expire timer even handler.
     void onExpire( wxTimerEvent& aEvent );
 
 protected:

@@ -62,8 +62,8 @@ struct LINE_STYLE_DESC
 };
 
 
-/*
- * Conversion map between LINE_STYLE values and style names displayed
+/**
+ * Conversion map between LINE_STYLE values and style names displayed.
  */
 extern const std::map<LINE_STYLE, struct LINE_STYLE_DESC> lineTypeNames;
 
@@ -113,7 +113,8 @@ public:
 
     static void Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWidth,
                         const KIGFX::RENDER_SETTINGS* aRenderSettings,
-                        const std::function<void( const VECTOR2I& a, const VECTOR2I& b )>& aStroker );
+                        const std::function<void( const VECTOR2I& a,
+                                                  const VECTOR2I& b )>& aStroker );
 
 private:
     int            m_width;

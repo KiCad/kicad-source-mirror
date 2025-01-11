@@ -255,12 +255,15 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
                         }
 
                         // For items that are > than g_BevelThickness3DU
-                        // (eg on board vias / plated holeS) use a factor based on m_bbox.GetExtent().z
-                        const float bevelThickness = glm::max( g_BevelThickness3DU,
-                                                               m_bbox.GetExtent().z *
-                                                               (float)ADVANCED_CFG::GetCfg().m_3DRT_BevelExtentFactor );
+                        // (eg on board vias / plated holeS) use a factor based on
+                        // m_bbox.GetExtent().z
+                        const float bevelThickness = glm::max(
+                                g_BevelThickness3DU,
+                                m_bbox.GetExtent().z
+                                        * (float) ADVANCED_CFG::GetCfg().m_3DRT_BevelExtentFactor );
 
-                        if( ( zDistanceToTopOrBot > 0.0f ) && ( zDistanceToTopOrBot < bevelThickness ) )
+                        if( ( zDistanceToTopOrBot > 0.0f )
+                          && ( zDistanceToTopOrBot < bevelThickness ) )
                         {
                             // Invert and Normalize the distance 0..1
                             zBend = ( bevelThickness - zDistanceToTopOrBot ) / bevelThickness;
@@ -304,8 +307,8 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
         SFVEC2F outNormal;
         RAYSEG2D raySeg( boxHitPointStart2D, boxHitPointEnd2D );
 
-        if( ( m_object2d->IsPointInside( boxHitPointStart2D ) &&
-              m_object2d->IsPointInside( boxHitPointEnd2D ) ) )
+        if( ( m_object2d->IsPointInside( boxHitPointStart2D )
+            && m_object2d->IsPointInside( boxHitPointEnd2D ) ) )
         {
             if( tBBoxEnd < aHitInfo.m_tHit )
             {

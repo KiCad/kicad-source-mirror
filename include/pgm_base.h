@@ -126,9 +126,15 @@ public:
 
     virtual COMMON_SETTINGS*  GetCommonSettings() const;
 
-    virtual BACKGROUND_JOBS_MONITOR& GetBackgroundJobMonitor() const { return *m_background_jobs_monitor; }
+    virtual BACKGROUND_JOBS_MONITOR& GetBackgroundJobMonitor() const
+    {
+        return *m_background_jobs_monitor;
+    }
 
-    virtual NOTIFICATIONS_MANAGER& GetNotificationsManager() const { return *m_notifications_manager; }
+    virtual NOTIFICATIONS_MANAGER& GetNotificationsManager() const
+    {
+        return *m_notifications_manager;
+    }
 
 #ifdef KICAD_IPC_API
     virtual API_PLUGIN_MANAGER& GetPluginManager() const { return *m_plugin_manager; }
@@ -150,11 +156,11 @@ public:
     virtual const wxString& GetTextEditor( bool aCanShowFileChooser = true );
 
     /**
-     * Shows a dialog that instructs the user to select a new preferred editor.
+     * Show a dialog that instructs the user to select a new preferred editor.
+     *
      * @param   aDefaultEditor Default full path for the default editor this dialog should
      *          show by default.
-     * @return  Returns the full path of the editor, or an empty string if no editor was
-     *          chosen.
+     * @return  the full path of the editor, or an empty string if no editor was chosen.
      */
     virtual const wxString AskUserForPreferredEditor(
             const wxString& aDefaultEditor = wxEmptyString );
@@ -199,10 +205,12 @@ public:
     virtual bool SetLanguage( wxString& aErrMsg, bool first_time = false );
 
     /**
-     * Set the default language without reference to any preferences.  Can be used to set
-     * the language for dialogs that show before preferences are loaded
-     * @param aErrMsg String to return the error message(s) in
-     * @return false if the language could not be set
+     * Set the default language without reference to any preferences.
+     *
+     * Can be used to set the language for dialogs that show before preferences are loaded.
+     *
+     * @param aErrMsg String to return the error message(s) in.
+     * @return false if the language could not be set.
      */
     bool SetDefaultLanguage( wxString& aErrMsg );
 
@@ -238,7 +246,7 @@ public:
     virtual void WritePdfBrowserInfos();
 
     /**
-     * Sets the environment variable \a aName to \a aValue.
+     * Set the environment variable \a aName to \a aValue.
      *
      * This function first checks to see if the environment variable \a aName is already
      * defined.  If it is not defined, then the environment variable \a aName is set to
@@ -252,8 +260,9 @@ public:
     virtual bool SetLocalEnvVariable( const wxString& aName, const wxString& aValue );
 
     /**
-     * Updates the local environment with the contents of the current ENV_VAR_MAP stored in the
-     * COMMON_SETTINGS
+     * Update the local environment with the contents of the current #ENV_VAR_MAP stored in the
+     * #COMMON_SETTINGS.
+     *
      * @see GetLocalEnvVariables()
      */
     virtual void SetLocalEnvVariables();
@@ -261,7 +270,7 @@ public:
     virtual ENV_VAR_MAP& GetLocalEnvVariables() const;
 
     /**
-     * Returns a bare naked wxApp which may come from wxPython, SINGLE_TOP, or kicad.exe.
+     * Return a bare naked wxApp which may come from wxPython, SINGLE_TOP, or kicad.exe.
      *
      * This should return what wxGetApp() returns.
      */
@@ -303,51 +312,51 @@ public:
     bool IsSentryOptedIn();
 
     /**
-     * Sets the Sentry opt in state, this will also terminate sentry
-     * immediately if needed, however it will not init sentry if opted in
+     * Set the Sentry opt in state, this will also terminate sentry
+     * immediately if needed, however it will not init sentry if opted in.
      *
-     * @param aOptIn True/false to agreeing to the use of sentry
+     * @param aOptIn True/false to agreeing to the use of sentry.
      */
     void SetSentryOptIn( bool aOptIn );
 
     /**
-     * Generates and stores a new sentry id at random using the boost uuid generator
+     * Generate and stores a new sentry id at random using the boost uuid generator.
      */
     void ResetSentryId();
 
     /**
-     * Gets the current id string being used as "user id" in sentry reports
+     * Get the current id string being used as "user id" in sentry reports.
      */
     const wxString& GetSentryId();
 #endif
 
     /**
-     * A exception handler to be used at the top level if exceptions bubble up that for
+     * A exception handler to be used at the top level if exceptions bubble up that for.
      *
-     * The purpose is to have a central place to log a wxWidgets error message and/or sentry report
+     * The purpose is to have a central place to log a wxWidgets error message and/or sentry report.
      *
-     * @param aPtr Pass the std::current_exception() from within the catch block
+     * @param aPtr Pass the std::current_exception() from within the catch block.
      */
     void HandleException( std::exception_ptr aPtr );
 
     /**
-     * A common assert handler to be used between single_top and kicad
+     * A common assert handler to be used between single_top and kicad.
      *
-     * This lets us have a common set of assert handling, including triggering sentry reports
+     * This lets us have a common set of assert handling, including triggering sentry reports.
      *
-     * @param aFile the file path of the assert
-     * @param aLine the line number of the assert
-     * @param aFunc the function name the assert is within
-     * @param aCond the condition of the assert
-     * @param aMsg the attached assert message (can be empty)
+     * @param aFile the file path of the assert.
+     * @param aLine the line number of the assert.
+     * @param aFunc the function name the assert is within.
+     * @param aCond the condition of the assert.
+     * @param aMsg the attached assert message (can be empty).
      */
     void HandleAssert( const wxString& aFile, int aLine, const wxString& aFunc,
                        const wxString& aCond, const wxString& aMsg );
 
     /**
-     * Determine if the application is running with a GUI
+     * Determine if the application is running with a GUI.
      *
-     * @return true if there is a GUI and false otherwise
+     * @return true if there is a GUI and false otherwise.
      */
     bool IsGUI();
 
@@ -356,8 +365,8 @@ public:
     void HideSplash();
 
     /**
-     * Allows access to the wxSingleInstanceChecker to test for other running KiCads
-    */
+     * Allow access to the wxSingleInstanceChecker to test for other running KiCads.
+     */
     std::unique_ptr<wxSingleInstanceChecker>& SingleInstance()
     {
         return m_pgm_checker;
@@ -375,10 +384,10 @@ public:
     bool m_PropertyGridInitialized;
 
 protected:
-    /// Loads internal settings from COMMON_SETTINGS
+    /// Load internal settings from #COMMON_SETTINGS.
     void loadCommonSettings();
 
-    /// Trap all changes in here, simplifies debugging
+    /// Trap all changes in here, simplifies debugging.
     void setLanguageId( int aId )       { m_language_id = aId; }
 
 #ifdef KICAD_USE_SENTRY
@@ -394,7 +403,7 @@ protected:
 
     std::unique_ptr<SCRIPTING> m_python_scripting;
 
-    /// Checks if there is another copy of Kicad running at the same time
+    /// Check if there is another copy of Kicad running at the same time.
     std::unique_ptr<wxSingleInstanceChecker> m_pgm_checker;
 
 #ifdef KICAD_IPC_API
@@ -402,13 +411,13 @@ protected:
     std::unique_ptr<KICAD_API_SERVER> m_api_server;
 #endif
 
-    wxString        m_kicad_env;              /// The KICAD system environment variable.
+    wxString        m_kicad_env;              ///< The KICAD system environment variable.
 
     wxLocale*       m_locale;
     int             m_language_id;
 
     bool            m_use_system_pdf_browser;
-    wxString        m_pdf_browser;            /// Filename of the app selected for browsing PDFs
+    wxString        m_pdf_browser;            ///< Filename of the app selected for browsing PDFs.
 
     wxString        m_text_editor;
 
@@ -420,8 +429,12 @@ protected:
     wxString        m_sentryUid;
 #endif
 
-    char** m_argvUtf8;                      /// argv parameters converted to utf8 form, because wxwidgets has opinions
-                                            /// and will return argv as either force converted to ascii in char* or wchar_t only
+    /**
+     * argv parameters converted to utf8 form because wxWidgets has opinions.
+     *
+     * This will return argv as either force converted to ASCII in char* or wchar_t only.
+     */
+    char** m_argvUtf8;
 
     int m_argcUtf8;
 
@@ -429,12 +442,18 @@ protected:
 };
 
 
-/// The global Program "get" accessor.
-/// Implemented in: 1) common/single_top.cpp,  2) kicad/kicad.cpp, and 3) scripting/kiway.i
+/**
+ * The global program "get" accessor.
+ *
+ * Implemented in:
+ *    1. common/single_top.cpp
+ *    2. kicad/kicad.cpp
+ *    3. scripting/kiway.i
+ */
 KICOMMON_API extern PGM_BASE& Pgm();
 
-/// similar to PGM_BASE& Pgm(), but return a reference that can be nullptr
-/// when running a shared lib from a script, not from a kicad appl
+/// Return a reference that can be nullptr when running a shared lib from a script, not from
+/// a kicad app.
 KICOMMON_API extern PGM_BASE* PgmOrNull();
 
 KICOMMON_API extern void SetPgm( PGM_BASE* pgm );

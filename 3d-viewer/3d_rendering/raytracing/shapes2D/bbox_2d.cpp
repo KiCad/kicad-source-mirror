@@ -268,20 +268,20 @@ bool BBOX_2D::Intersect( const RAY2D& aRay, float* t ) const
     else
         *t = tmax;
 
-    return (tmax >= 0.0f) && (tmax >= tmin);
+    return ( tmax >= 0.0f ) && ( tmax >= tmin );
 }
 
 
 bool BBOX_2D::Intersect( const RAYSEG2D& aRaySeg ) const
 {
-    const float tx1 = (m_min.x - aRaySeg.m_Start.x) * aRaySeg.m_InvDir.x;
-    const float tx2 = (m_max.x - aRaySeg.m_Start.x) * aRaySeg.m_InvDir.x;
+    const float tx1 = ( m_min.x - aRaySeg.m_Start.x ) * aRaySeg.m_InvDir.x;
+    const float tx2 = ( m_max.x - aRaySeg.m_Start.x ) * aRaySeg.m_InvDir.x;
 
     float tmin = glm::min( tx1, tx2 );
     float tmax = glm::max( tx1, tx2 );
 
-    const float ty1 = (m_min.y - aRaySeg.m_Start.y) * aRaySeg.m_InvDir.y;
-    const float ty2 = (m_max.y - aRaySeg.m_Start.y) * aRaySeg.m_InvDir.y;
+    const float ty1 = ( m_min.y - aRaySeg.m_Start.y ) * aRaySeg.m_InvDir.y;
+    const float ty2 = ( m_max.y - aRaySeg.m_Start.y ) * aRaySeg.m_InvDir.y;
 
     tmin = glm::max( tmin, glm::min( ty1, ty2 ) );
     tmax = glm::min( tmax, glm::max( ty1, ty2 ) );

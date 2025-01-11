@@ -291,10 +291,10 @@ bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) c
     if( ( tmin > tzmax ) || ( tzmin > tmax ) )
         return false;
 
-    tmin = (tzmin > tmin)? tzmin : tmin;
-    tmin = ( tmin < 0.0f)? 0.0f  : tmin;
+    tmin = ( tzmin > tmin ) ? tzmin : tmin;
+    tmin = ( tmin < 0.0f ) ? 0.0f : tmin;
 
-    tmax = (tzmax < tmax)? tzmax : tmax;
+    tmax = ( tzmax < tmax ) ? tzmax : tmax;
 
     *aOutHitt0 = tmin;
     *aOutHitt1 = tmax;

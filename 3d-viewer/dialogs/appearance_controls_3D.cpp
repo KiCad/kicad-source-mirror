@@ -45,42 +45,46 @@
 
 #include <../3d_rendering/opengl/render_3d_opengl.h>
 
-
-#define RR  APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D   // Render Row abbreviation to reduce source width
+/// Render Row abbreviation to reduce source width.
+#define RR  APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D
 
 /// Template for object appearance settings
 const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_layerSettings[] = {
 
     //     text                              id                           tooltip
-    RR( _HKI( "Board Body" ),             LAYER_3D_BOARD,             _HKI( "Show board body" ) ),
-    RR( _HKI( "F.Cu" ),                   LAYER_3D_COPPER_TOP,        _HKI( "Show front copper / surface finish color" ) ),
-    RR( _HKI( "B.Cu" ),                   LAYER_3D_COPPER_BOTTOM,     _HKI( "Show back copper / surface finish color" ) ),
-    RR( _HKI( "Adhesive" ),               LAYER_3D_ADHESIVE,          _HKI( "Show adhesive" ) ),
-    RR( _HKI( "Solder Paste" ),           LAYER_3D_SOLDERPASTE,       _HKI( "Show solder paste" ) ),
-    RR( _HKI( "F.Silkscreen" ),           LAYER_3D_SILKSCREEN_TOP,    _HKI( "Show front silkscreen" ) ),
-    RR( _HKI( "B.Silkscreen" ),           LAYER_3D_SILKSCREEN_BOTTOM, _HKI( "Show back silkscreen" ) ),
-    RR( _HKI( "F.Mask" ),                 LAYER_3D_SOLDERMASK_TOP,    _HKI( "Show front solder mask" ) ),
-    RR( _HKI( "B.Mask" ),                 LAYER_3D_SOLDERMASK_BOTTOM, _HKI( "Show back solder mask" ) ),
-    RR( _HKI( "User.Drawings" ),          LAYER_3D_USER_DRAWINGS,     _HKI( "Show user drawings layer" ) ),
-    RR( _HKI( "User.Comments" ),          LAYER_3D_USER_COMMENTS,     _HKI( "Show user comments layer" ) ),
-    RR( _HKI( "User.Eco1" ),              LAYER_3D_USER_ECO1,         _HKI( "Show user ECO1 layer" ) ),
-    RR( _HKI( "User.Eco2" ),              LAYER_3D_USER_ECO2,         _HKI( "Show user ECO2 layer" ) ),
+    RR( _HKI( "Board Body" ), LAYER_3D_BOARD, _HKI( "Show board body" ) ),
+    RR( _HKI( "F.Cu" ), LAYER_3D_COPPER_TOP, _HKI( "Show front copper / surface finish color" ) ),
+    RR( _HKI( "B.Cu" ), LAYER_3D_COPPER_BOTTOM, _HKI( "Show back copper / surface finish color" ) ),
+    RR( _HKI( "Adhesive" ), LAYER_3D_ADHESIVE, _HKI( "Show adhesive" ) ),
+    RR( _HKI( "Solder Paste" ), LAYER_3D_SOLDERPASTE, _HKI( "Show solder paste" ) ),
+    RR( _HKI( "F.Silkscreen" ), LAYER_3D_SILKSCREEN_TOP, _HKI( "Show front silkscreen" ) ),
+    RR( _HKI( "B.Silkscreen" ), LAYER_3D_SILKSCREEN_BOTTOM, _HKI( "Show back silkscreen" ) ),
+    RR( _HKI( "F.Mask" ), LAYER_3D_SOLDERMASK_TOP, _HKI( "Show front solder mask" ) ),
+    RR( _HKI( "B.Mask" ), LAYER_3D_SOLDERMASK_BOTTOM, _HKI( "Show back solder mask" ) ),
+    RR( _HKI( "User.Drawings" ), LAYER_3D_USER_DRAWINGS, _HKI( "Show user drawings layer" ) ),
+    RR( _HKI( "User.Comments" ), LAYER_3D_USER_COMMENTS, _HKI( "Show user comments layer" ) ),
+    RR( _HKI( "User.Eco1" ), LAYER_3D_USER_ECO1, _HKI( "Show user ECO1 layer" ) ),
+    RR( _HKI( "User.Eco2" ), LAYER_3D_USER_ECO2, _HKI( "Show user ECO2 layer" ) ),
     RR(),
-    RR( _HKI( "Through-hole Models" ),    LAYER_3D_TH_MODELS,         EDA_3D_ACTIONS::showTHT ),
-    RR( _HKI( "SMD Models" ),             LAYER_3D_SMD_MODELS,        EDA_3D_ACTIONS::showSMD ),
-    RR( _HKI( "Virtual Models" ),         LAYER_3D_VIRTUAL_MODELS,    EDA_3D_ACTIONS::showVirtual ),
-    RR( _HKI( "Models not in POS File" ), LAYER_3D_MODELS_NOT_IN_POS, EDA_3D_ACTIONS::showNotInPosFile ),
-    RR( _HKI( "Models marked DNP" ),      LAYER_3D_MODELS_MARKED_DNP, EDA_3D_ACTIONS::showDNP  ),
-    RR( _HKI( "Model Bounding Boxes" ),   LAYER_3D_BOUNDING_BOXES,    EDA_3D_ACTIONS::showBBoxes ),
+    RR( _HKI( "Through-hole Models" ), LAYER_3D_TH_MODELS, EDA_3D_ACTIONS::showTHT ),
+    RR( _HKI( "SMD Models" ), LAYER_3D_SMD_MODELS, EDA_3D_ACTIONS::showSMD ),
+    RR( _HKI( "Virtual Models" ), LAYER_3D_VIRTUAL_MODELS, EDA_3D_ACTIONS::showVirtual ),
+    RR( _HKI( "Models not in POS File" ), LAYER_3D_MODELS_NOT_IN_POS,
+        EDA_3D_ACTIONS::showNotInPosFile ),
+    RR( _HKI( "Models marked DNP" ), LAYER_3D_MODELS_MARKED_DNP, EDA_3D_ACTIONS::showDNP ),
+    RR( _HKI( "Model Bounding Boxes" ), LAYER_3D_BOUNDING_BOXES, EDA_3D_ACTIONS::showBBoxes ),
     RR(),
-    RR( _HKI( "Values" ),                 LAYER_FP_VALUES,            _HKI( "Show footprint values" ) ),
-    RR( _HKI( "References" ),             LAYER_FP_REFERENCES,        _HKI( "Show footprint references" ) ),
-    RR( _HKI( "Footprint Text" ),         LAYER_FP_TEXT,              _HKI( "Show all footprint text" ) ),
-    RR( _HKI( "Off-board Silkscreen" ),   LAYER_3D_OFF_BOARD_SILK,    _HKI( "Do not clip silk layers to board outline" ) ),
+    RR( _HKI( "Values" ), LAYER_FP_VALUES, _HKI( "Show footprint values" ) ),
+    RR( _HKI( "References" ), LAYER_FP_REFERENCES, _HKI( "Show footprint references" ) ),
+    RR( _HKI( "Footprint Text" ), LAYER_FP_TEXT, _HKI( "Show all footprint text" ) ),
+    RR( _HKI( "Off-board Silkscreen" ), LAYER_3D_OFF_BOARD_SILK,
+        _HKI( "Do not clip silk layers to board outline" ) ),
     RR(),
-    RR( _HKI( "3D Axis" ),                LAYER_3D_AXES,              EDA_3D_ACTIONS::showAxis ),
-    RR( _HKI( "Background Start" ),       LAYER_3D_BACKGROUND_TOP,    _HKI( "Background gradient start color" ) ),
-    RR( _HKI( "Background End" ),         LAYER_3D_BACKGROUND_BOTTOM, _HKI( "Background gradient end color" ) ),
+    RR( _HKI( "3D Axis" ), LAYER_3D_AXES, EDA_3D_ACTIONS::showAxis ),
+    RR( _HKI( "Background Start" ), LAYER_3D_BACKGROUND_TOP,
+        _HKI( "Background gradient start color" ) ),
+    RR( _HKI( "Background End" ), LAYER_3D_BACKGROUND_BOTTOM,
+        _HKI( "Background gradient end color" ) ),
 };
 
 // The list of IDs that can have colors coming from the board stackup, and cannot be
@@ -136,7 +140,7 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
             } );
 
     m_cbUseBoardEditorCopperColors = new wxCheckBox( m_panelLayers, wxID_ANY,
-                                                _( "Use board editor copper colors" ) );
+                                                     _( "Use board editor copper colors" ) );
     m_cbUseBoardEditorCopperColors->SetFont( infoFont );
     m_cbUseBoardEditorCopperColors->SetToolTip(
                 _( "Use the board editor copper colors (openGL only)" ) );
@@ -154,7 +158,8 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
 
 
     m_panelLayersSizer->Add( m_cbUseBoardStackupColors, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 7 );
-    m_panelLayersSizer->Add( m_cbUseBoardEditorCopperColors, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 7 );
+    m_panelLayersSizer->Add( m_cbUseBoardEditorCopperColors, 0,
+                             wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 7 );
 
     m_cbLayerPresets->SetToolTip( wxString::Format( _( "Save and restore color and visibility "
                                                        "combinations.\n"
@@ -529,7 +534,8 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
 
                 sizer->AddSpacer( 5 );
 
-                wxStaticText* label = new wxStaticText( m_windowLayers, layer, aSetting->GetLabel() );
+                wxStaticText* label = new wxStaticText( m_windowLayers, layer,
+                                                        aSetting->GetLabel() );
                 label->Wrap( -1 );
                 label->SetToolTip( aSetting->GetTooltip() );
 
@@ -916,7 +922,8 @@ void APPEARANCE_CONTROLS_3D::onViewportChanged( wxCommandEvent& aEvent )
         {
             m_viewports[name] = VIEWPORT3D( name, m_frame->GetCurrentCamera().GetViewMatrix() );
 
-            index = m_cbViewports->Insert( name, index-1, static_cast<void*>( &m_viewports[name] ) );
+            index = m_cbViewports->Insert( name, index-1,
+                                           static_cast<void*>( &m_viewports[name] ) );
         }
         else
         {

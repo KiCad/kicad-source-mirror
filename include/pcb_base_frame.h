@@ -137,7 +137,7 @@ public:
     const VECTOR2I GetUserOrigin() const;
 
     /**
-     * Return a reference to the default ORIGIN_TRANSFORMS object
+     * Return a reference to the default #ORIGIN_TRANSFORMS object.
      */
     ORIGIN_TRANSFORMS& GetOriginTransforms() override;
 
@@ -150,7 +150,7 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
     /**
-     * Returns the BOARD_DESIGN_SETTINGS for the open project.
+     * Return the BOARD_DESIGN_SETTINGS for the open project.
      */
     virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
 
@@ -159,7 +159,8 @@ public:
      */
     virtual COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override
     {
-        wxFAIL_MSG( wxT( "Color settings requested for a PCB_BASE_FRAME that does not override!" ) );
+        wxFAIL_MSG( wxT( "Color settings requested for a PCB_BASE_FRAME that does not "
+                         "override!" ) );
         return nullptr;
     }
 
@@ -172,9 +173,10 @@ public:
     const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_displayOptions; }
 
     /**
-     * Updates the current display options from the given options struct
-     * @param aOptions is the options struct to apply
-     * @param aRefresh will refresh the view after updating
+     * Update the current display options.
+     *
+     * @param aOptions is the options struct to apply.
+     * @param aRefresh will refresh the view after updating.
      */
     void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aRefresh = true );
 
@@ -186,11 +188,13 @@ public:
 
     /**
      * Reload the footprint from the library.
+     *
      * @param aFootprint is the footprint to reload.
      */
     virtual void ReloadFootprint( FOOTPRINT* aFootprint )
     {
-        wxFAIL_MSG( wxT( "Attempted to reload a footprint for PCB_BASE_FRAME that does not override!" ) );
+        wxFAIL_MSG( wxT( "Attempted to reload a footprint for PCB_BASE_FRAME that does not "
+                         "override!" ) );
     }
 
     /**
@@ -224,7 +228,7 @@ public:
     PCB_SCREEN* GetScreen() const override { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
     /**
-     * Shows the 3D view frame.
+     * Show the 3D view frame.
      *
      * If it does not exist, it is created.  If it exists, it is brought to the foreground.
      */
@@ -250,13 +254,13 @@ public:
     void OnModify() override;
 
     /**
-     * Creates a new footprint, at position 0,0.
+     * Create a new footprint at position 0,0.
      *
      * The new footprint contains only 2 texts: a reference and a value:
      *  Reference = REF**
      *  Value = "VAL**" or Footprint name in lib
      *
-     * @note They are dummy texts, which will be replaced by the actual texts when the
+     * @note They are dummy texts which will be replaced by the actual texts when the
      *       footprint is placed on a board and a netlist is read.
      *
      * @param aFootprintName is the name of the new footprint in library.
@@ -265,7 +269,7 @@ public:
     FOOTPRINT* CreateNewFootprint( wxString aFootprintName, const wxString& aLibName );
 
     /**
-     * Places \a aFootprint at the current cursor position and updates footprint coordinates
+     * Place \a aFootprint at the current cursor position and updates footprint coordinates
      * with the new position.
      *
      * @param aRecreateRatsnest A bool true redraws the footprint ratsnest.
@@ -307,7 +311,7 @@ public:
     virtual void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand ) {};
 
     /**
-     * Creates a new entry in undo list of commands.
+     * Create a new entry in undo list of commands.
      *
      * @param aItemsList is the list of items modified by the command to undo.
      * @param aTypeCommand is the command type (see enum #UNDO_REDO)
@@ -336,9 +340,9 @@ public:
                                  wxPoint aDlgPosition = wxDefaultPosition );
 
     /**
-     * Change the active layer in the frame
+     * Change the active layer in the frame.
      *
-     * @param aLayer New layer to make active
+     * @param aLayer New layer to make active.
      */
     virtual void SwitchLayer( PCB_LAYER_ID aLayer );
 
@@ -369,7 +373,7 @@ public:
     /**
      * Add \a aListener to post #EDA_EVT_BOARD_CHANGED command events to.
      *
-     * @warning The caller is reponsible for removing any listeners that are no long valid.
+     * @warning The caller is responsible for removing any listeners that are no long valid.
      *
      * @note This only gets called when the board editor is in stand alone mode.  Changing
      *       projects in the project manager closes the board editor when a new project is
@@ -402,7 +406,7 @@ protected:
     virtual void doReCreateMenuBar() override;
 
     /**
-     * Attempts to load \a aFootprintId from the footprint library table.
+     * Attempt to load \a aFootprintId from the footprint library table.
      *
      * @param aFootprintId is the #LIB_ID of component footprint to load.
      * @return the #FOOTPRINT if found or NULL if \a aFootprintId not found in any of the
@@ -417,7 +421,8 @@ protected:
     void rebuildConnectivity();
 
     /**
-     * Creates (or removes) a watcher on the specified footprint
+     * Create or removes a watcher on the specified footprint.
+     *
      * @param aFootprint If nullptr, the watcher is removed.  Otherwise, set a change watcher
      */
     void setFPWatcher( FOOTPRINT* aFootprint );

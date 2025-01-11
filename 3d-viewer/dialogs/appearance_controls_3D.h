@@ -125,10 +125,10 @@ public:
 
     const wxArrayString& GetLayerPresetsMRU() { return m_presetMRU; }
 
-    ///< Return a list of viewports created by the user.
+    /// Return a list of viewports created by the user.
     std::vector<VIEWPORT3D> GetUserViewports() const;
 
-    ///< Update the current viewports from those saved in the project file.
+    /// Update the current viewports from those saved in the project file.
     void SetUserViewports( std::vector<VIEWPORT3D>& aPresetList );
 
     void ApplyViewport( const wxString& aPresetName );

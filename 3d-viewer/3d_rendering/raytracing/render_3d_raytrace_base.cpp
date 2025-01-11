@@ -256,6 +256,7 @@ static SFVEC3F convertLinearToSRGB( const SFVEC3F& aRGBcolor )
                      glm::lessThan( clampedColor, SFVEC3F(0.0031308f) ) );
 }
 
+
 static SFVEC4F convertLinearToSRGBA( const SFVEC4F& aRGBAcolor )
 {
     return SFVEC4F( convertLinearToSRGB( SFVEC3F( aRGBAcolor ) ), aRGBAcolor.a );
@@ -274,6 +275,7 @@ SFVEC3F ConvertSRGBToLinear( const SFVEC3F& aSRGBcolor )
                      aSRGBcolor * SFVEC3F( 0.07739938080495356037151702786378f ),
                      glm::lessThanEqual( aSRGBcolor, SFVEC3F( 0.04045f ) ) );
 }
+
 
 SFVEC4F ConvertSRGBAToLinear( const SFVEC4F& aSRGBAcolor )
 {
@@ -319,8 +321,8 @@ static void HITINFO_PACKET_init( HITINFO_PACKET* aHitPacket )
 
 
 void RENDER_3D_RAYTRACE_BASE::renderRayPackets( const SFVEC4F* bgColorY, const RAY* aRayPkt,
-                                           HITINFO_PACKET* aHitPacket, bool is_testShadow,
-                                           SFVEC4F* aOutHitColor )
+                                                HITINFO_PACKET* aHitPacket, bool is_testShadow,
+                                                SFVEC4F* aOutHitColor )
 {
     for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
     {
@@ -341,9 +343,9 @@ void RENDER_3D_RAYTRACE_BASE::renderRayPackets( const SFVEC4F* bgColorY, const R
 
 
 void RENDER_3D_RAYTRACE_BASE::renderAntiAliasPackets( const SFVEC4F* aBgColorY,
-                                                 const HITINFO_PACKET* aHitPck_X0Y0,
-                                                 const HITINFO_PACKET* aHitPck_AA_X1Y1,
-                                                 const RAY* aRayPck, SFVEC4F* aOutHitColor )
+                                                      const HITINFO_PACKET* aHitPck_X0Y0,
+                                                      const HITINFO_PACKET* aHitPck_AA_X1Y1,
+                                                      const RAY* aRayPck, SFVEC4F* aOutHitColor )
 {
     const bool is_testShadow =  m_boardAdapter.m_Cfg->m_Render.raytrace_shadows;
 
@@ -368,8 +370,8 @@ void RENDER_3D_RAYTRACE_BASE::renderAntiAliasPackets( const SFVEC4F* aBgColorY,
 
             unsigned int nodex1y0 = 0;
 
-            if( x < (RAYPACKET_DIM - 1) )
-                nodex1y0 = aHitPck_X0Y0[ i + 1 ].m_HitInfo.m_acc_node_info;
+            if( x < ( RAYPACKET_DIM - 1 ) )
+                nodex1y0 = aHitPck_X0Y0[i + 1].m_HitInfo.m_acc_node_info;
 
             unsigned int nodex0y1 = 0;
 
@@ -503,9 +505,9 @@ void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( uint8_t* ptrPBO, signed int iB
 
                 for( unsigned int x = 0; x < RAYPACKET_DIM; ++x )
                 {
-                        m_postShaderSsao.SetPixelData( blockPos.x + x, yBlockPos,
-                                                       SFVEC3F( 0.0f ), outColor,
-                                                       SFVEC3F( 0.0f ), 0, 1.0f );
+                    m_postShaderSsao.SetPixelData( blockPos.x + x, yBlockPos,
+                                                   SFVEC3F( 0.0f ), outColor,
+                                                   SFVEC3F( 0.0f ), 0, 1.0f );
                 }
             }
         }
@@ -727,7 +729,8 @@ void RENDER_3D_RAYTRACE_BASE::postProcessShading( uint8_t* /* ptrPBO */, REPORTE
 }
 
 
-void RENDER_3D_RAYTRACE_BASE::postProcessBlurFinish( uint8_t* ptrPBO, REPORTER* /* aStatusReporter */ )
+void RENDER_3D_RAYTRACE_BASE::postProcessBlurFinish( uint8_t* ptrPBO,
+                                                     REPORTER* /* aStatusReporter */ )
 {
     if( m_boardAdapter.m_Cfg->m_Render.raytrace_post_processing )
     {
@@ -854,9 +857,9 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                         hitColorShading[i] = bhColorY;
                 }
 
-                COLOR_RGBA cLRB_old[(RAYPACKET_DIM - 1)];
+                COLOR_RGBA cLRB_old[( RAYPACKET_DIM - 1 )];
 
-                for( unsigned int y = 0; y < (RAYPACKET_DIM - 1); ++y )
+                for( unsigned int y = 0; y < ( RAYPACKET_DIM - 1 ); ++y )
                 {
                     const SFVEC4F    bgColorY = bgColor[y];
                     const COLOR_RGBA bgColorYRGB = COLOR_RGBA( bgColorY );
@@ -981,11 +984,12 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                                 hitInfoLRT.m_tHit = ( hitPacket[ iLT ].m_HitInfo.m_tHit +
                                                       hitPacket[ iRT ].m_HitInfo.m_tHit ) * 0.5f;
                                 hitInfoLRT.m_HitNormal =
-                                        glm::normalize( ( hitPacket[ iLT ].m_HitInfo.m_HitNormal +
-                                                          hitPacket[ iRT ].m_HitInfo.m_HitNormal ) * 0.5f );
+                                        glm::normalize( ( hitPacket[iLT].m_HitInfo.m_HitNormal
+                                                          + hitPacket[iRT].m_HitInfo.m_HitNormal )
+                                                        * 0.5f );
 
                                 cLRT = COLOR_RGBA( shadeHit( bgColorY, rayLRT, hitInfoLRT, false,
-                                                            0, false ) );
+                                                             0, false ) );
                                 cLRT = BlendColor( cLRT, BlendColor( cLT, cRT ) );
                             }
                             else
@@ -1017,8 +1021,8 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
 
                                         if( m_accelerator->Intersect( rayLRT,hitInfoLRT ) )
                                             cLRT = COLOR_RGBA( shadeHit( bgColorY, rayLRT,
-                                                                        hitInfoLRT, false,
-                                                                        0, false ) );
+                                                                         hitInfoLRT, false,
+                                                                         0, false ) );
                                     }
                                 }
                             }
@@ -1039,7 +1043,7 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                             // Trace the center ray
                             RAY rayLTB;
                             rayLTB.Init( ( oriLT + oriLB ) * 0.5f,
-                                            glm::normalize( ( dirLT + dirLB ) * 0.5f ) );
+                                         glm::normalize( ( dirLT + dirLB ) * 0.5f ) );
 
                             HITINFO hitInfoLTB;
                             hitInfoLTB.m_tHit = std::numeric_limits<float>::infinity();
@@ -1052,10 +1056,11 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                                 hitInfoLTB.m_tHit = ( hitPacket[ iLT ].m_HitInfo.m_tHit +
                                                       hitPacket[ iLB ].m_HitInfo.m_tHit ) * 0.5f;
                                 hitInfoLTB.m_HitNormal =
-                                        glm::normalize( ( hitPacket[ iLT ].m_HitInfo.m_HitNormal +
-                                                          hitPacket[ iLB ].m_HitInfo.m_HitNormal ) * 0.5f );
-                                cLTB = COLOR_RGBA( shadeHit( bgColorY, rayLTB, hitInfoLTB, false,
-                                                            0, false ) );
+                                        glm::normalize( ( hitPacket[iLT].m_HitInfo.m_HitNormal
+                                                          + hitPacket[iLB].m_HitInfo.m_HitNormal )
+                                                        * 0.5f );
+                                cLTB = COLOR_RGBA(
+                                        shadeHit( bgColorY, rayLTB, hitInfoLTB, false, 0, false ) );
                                 cLTB = BlendColor( cLTB, BlendColor( cLT, cLB) );
                             }
                             else
@@ -1080,15 +1085,15 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
 
                                     if( hittedLTB )
                                         cLTB = COLOR_RGBA( shadeHit( bgColorY, rayLTB, hitInfoLTB,
-                                                                    false, 0, false ) );
+                                                                     false, 0, false ) );
                                     else
                                     {
                                         hitInfoLTB.m_tHit = std::numeric_limits<float>::infinity();
 
                                         if( m_accelerator->Intersect( rayLTB, hitInfoLTB ) )
                                             cLTB = COLOR_RGBA( shadeHit( bgColorY, rayLTB,
-                                                                        hitInfoLTB, false,
-                                                                        0, false ) );
+                                                                         hitInfoLTB, false,
+                                                                         0, false ) );
                                     }
                                 }
                             }
@@ -1119,11 +1124,12 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                                                   hitPacket[ iRB ].m_HitInfo.m_tHit ) * 0.5f;
 
                             hitInfoRTB.m_HitNormal =
-                                    glm::normalize( ( hitPacket[ iRT ].m_HitInfo.m_HitNormal +
-                                                      hitPacket[ iRB ].m_HitInfo.m_HitNormal ) * 0.5f );
+                                    glm::normalize( ( hitPacket[iRT].m_HitInfo.m_HitNormal
+                                                      + hitPacket[iRB].m_HitInfo.m_HitNormal )
+                                                    * 0.5f );
 
                             cRTB = COLOR_RGBA( shadeHit( bgColorY, rayRTB, hitInfoRTB, false, 0,
-                                                        false ) );
+                                                         false ) );
                             cRTB = BlendColor( cRTB, BlendColor( cRT, cRB ) );
                         }
                         else
@@ -1149,7 +1155,7 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                                 if( hittedRTB )
                                 {
                                     cRTB = COLOR_RGBA( shadeHit( bgColorY, rayRTB, hitInfoRTB,
-                                                                false, 0, false) );
+                                                                 false, 0, false) );
                                 }
                                 else
                                 {
@@ -1157,7 +1163,7 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
 
                                     if( m_accelerator->Intersect( rayRTB, hitInfoRTB ) )
                                         cRTB = COLOR_RGBA( shadeHit( bgColorY, rayRTB, hitInfoRTB,
-                                                                    false, 0, false ) );
+                                                                     false, 0, false ) );
                                 }
                             }
                         }
@@ -1188,11 +1194,12 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                                                   hitPacket[ iRB ].m_HitInfo.m_tHit ) * 0.5f;
 
                             hitInfoLRB.m_HitNormal =
-                                    glm::normalize( ( hitPacket[ iLB ].m_HitInfo.m_HitNormal +
-                                                      hitPacket[ iRB ].m_HitInfo.m_HitNormal ) * 0.5f );
+                                    glm::normalize( ( hitPacket[iLB].m_HitInfo.m_HitNormal
+                                                      + hitPacket[iRB].m_HitInfo.m_HitNormal )
+                                                    * 0.5f );
 
                             cLRB = COLOR_RGBA( shadeHit( bgColorY, rayLRB, hitInfoLRB, false, 0,
-                                                        false ) );
+                                                         false ) );
                             cLRB = BlendColor( cLRB, BlendColor( cLB, cRB ) );
                         }
                         else
@@ -1218,7 +1225,7 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                                 if( hittedLRB )
                                 {
                                     cLRB = COLOR_RGBA( shadeHit( bgColorY, rayLRB, hitInfoLRB,
-                                                                false, 0, false ) );
+                                                                 false, 0, false ) );
                                 }
                                 else
                                 {
@@ -1226,7 +1233,7 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
 
                                     if( m_accelerator->Intersect( rayLRB, hitInfoLRB ) )
                                         cLRB = COLOR_RGBA( shadeHit( bgColorY, rayLRB, hitInfoLRB,
-                                                                    false, 0, false ) );
+                                                                     false, 0, false ) );
                                 }
                             }
                         }
@@ -1257,7 +1264,7 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
 
                             if( hitted )
                                 cLTC = COLOR_RGBA( shadeHit( bgColorY, rayLTC, hitInfoLTC, false,
-                                                            0, false ) );
+                                                             0, false ) );
                         }
 
                         // Trace and shade cRTC
@@ -1278,12 +1285,12 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                             if( hittedC )
                                 hitted = centerHitInfo.pHitObject->Intersect( rayRTC, hitInfoRTC );
                             else if( hitPacket[ iRT ].m_hitresult )
-                                hitted = hitPacket[ iRT ].m_HitInfo.pHitObject->Intersect( rayRTC,
-                                                                                           hitInfoRTC );
+                                hitted = hitPacket[iRT].m_HitInfo.pHitObject->Intersect(
+                                        rayRTC, hitInfoRTC );
 
                             if( hitted )
                                 cRTC = COLOR_RGBA( shadeHit( bgColorY, rayRTC, hitInfoRTC, false,
-                                                            0, false ) );
+                                                             0, false ) );
                         }
 
                         // Trace and shade cLBC
@@ -1304,12 +1311,12 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                             if( hittedC )
                                 hitted = centerHitInfo.pHitObject->Intersect( rayLBC, hitInfoLBC );
                             else if( hitPacket[ iLB ].m_hitresult )
-                                hitted = hitPacket[ iLB ].m_HitInfo.pHitObject->Intersect( rayLBC,
-                                                                                           hitInfoLBC );
+                                hitted = hitPacket[iLB].m_HitInfo.pHitObject->Intersect(
+                                        rayLBC, hitInfoLBC );
 
                             if( hitted )
                                 cLBC = COLOR_RGBA( shadeHit( bgColorY, rayLBC, hitInfoLBC, false,
-                                                            0, false ) );
+                                                             0, false ) );
                         }
 
                         // Trace and shade cRBC
@@ -1330,12 +1337,12 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
                             if( hittedC )
                                 hitted = centerHitInfo.pHitObject->Intersect( rayRBC, hitInfoRBC );
                             else if( hitPacket[ iRB ].m_hitresult )
-                                hitted = hitPacket[ iRB ].m_HitInfo.pHitObject->Intersect( rayRBC,
-                                                                                           hitInfoRBC );
+                                hitted = hitPacket[iRB].m_HitInfo.pHitObject->Intersect(
+                                        rayRBC, hitInfoRBC );
 
                             if( hitted )
                                 cRBC = COLOR_RGBA( shadeHit( bgColorY, rayRBC, hitInfoRBC, false,
-                                                            0, false ) );
+                                                             0, false ) );
                         }
 
                         // Set pixel colors
@@ -1382,9 +1389,9 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
 
 #define USE_EXPERIMENTAL_SOFT_SHADOWS 1
 
-SFVEC4F RENDER_3D_RAYTRACE_BASE::shadeHit( const SFVEC4F& aBgColor, const RAY& aRay, HITINFO& aHitInfo,
-                                      bool aIsInsideObject, unsigned int aRecursiveLevel,
-                                      bool is_testShadow ) const
+SFVEC4F RENDER_3D_RAYTRACE_BASE::shadeHit( const SFVEC4F& aBgColor, const RAY& aRay,
+                                           HITINFO& aHitInfo, bool aIsInsideObject,
+                                           unsigned int aRecursiveLevel, bool is_testShadow ) const
 {
     const MATERIAL* objMaterial = aHitInfo.pHitObject->GetMaterial();
     wxASSERT( objMaterial != nullptr );
@@ -1536,9 +1543,10 @@ SFVEC4F RENDER_3D_RAYTRACE_BASE::shadeHit( const SFVEC4F& aBgColor, const RAY& a
                 {
                     // Apply some randomize to the reflected vector
                     const SFVEC3F random_reflectVector =
-                            glm::normalize( reflectVector +
-                                            UniformRandomHemisphereDirection() *
-                                            m_boardAdapter.m_Cfg->m_Render.raytrace_spread_reflections );
+                            glm::normalize( reflectVector
+                                            + UniformRandomHemisphereDirection()
+                                                      * m_boardAdapter.m_Cfg->m_Render
+                                                                .raytrace_spread_reflections );
 
                     reflectedRay.Init( hitPoint, random_reflectVector );
                 }
@@ -1548,13 +1556,14 @@ SFVEC4F RENDER_3D_RAYTRACE_BASE::shadeHit( const SFVEC4F& aBgColor, const RAY& a
 
                 if( m_accelerator->Intersect( reflectedRay, reflectedHit ) )
                 {
-                    SFVEC4F add = ( diffuseColorObj + SFVEC4F( objMaterial->GetSpecularColor(), 1.0f ) ) *
-                                 shadeHit( aBgColor, reflectedRay, reflectedHit, false,
-                                           aRecursiveLevel + 1, is_testShadow ) *
-                                 SFVEC4F( objMaterial->GetReflection() *
-                                          // Falloff factor
-                                          (1.0f / ( 1.0f + 0.75f * reflectedHit.m_tHit *
-                                                    reflectedHit.m_tHit) ) );
+                    SFVEC4F add = ( diffuseColorObj + SFVEC4F( objMaterial->GetSpecularColor(),
+                                                               1.0f ) ) *
+                                  shadeHit( aBgColor, reflectedRay, reflectedHit, false,
+                                            aRecursiveLevel + 1, is_testShadow ) *
+                                  SFVEC4F( objMaterial->GetReflection() *
+                                           // Falloff factor
+                                           (1.0f / ( 1.0f + 0.75f * reflectedHit.m_tHit *
+                                                     reflectedHit.m_tHit) ) );
 
                     sum_color += add;
                 }

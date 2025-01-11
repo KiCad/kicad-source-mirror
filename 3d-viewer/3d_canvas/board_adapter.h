@@ -140,7 +140,7 @@ public:
     double BiuTo3dUnits() const noexcept { return m_biuTo3Dunits; }
 
     /**
-     * Get the board outling bounding box.
+     * Get the board outline bounding box.
      *
      * @return the board bounding box in 3D units.
      */
@@ -352,8 +352,16 @@ public:
      */
     const MAP_POLY& GetPolyMap() const noexcept { return m_layers_poly; }
 
-    const SHAPE_POLY_SET* GetFrontPlatedPadAndGraphicPolys() { return m_frontPlatedPadAndGraphicPolys;  }
-    const SHAPE_POLY_SET* GetBackPlatedPadAndGraphicPolys() { return m_backPlatedPadAndGraphicPolys; }
+    const SHAPE_POLY_SET* GetFrontPlatedPadAndGraphicPolys()
+    {
+        return m_frontPlatedPadAndGraphicPolys;
+    }
+
+    const SHAPE_POLY_SET* GetBackPlatedPadAndGraphicPolys()
+    {
+        return m_backPlatedPadAndGraphicPolys;
+    }
+
     const MAP_POLY& GetHoleIdPolysMap() const noexcept { return m_layerHoleIdPolys; }
     const MAP_POLY& GetHoleOdPolysMap() const noexcept { return m_layerHoleOdPolys; }
 
@@ -403,8 +411,8 @@ private:
                               PCB_LAYER_ID aLayerId );
 
     void createArcSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
-                                 const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount, int aWidth,
-                                 CONTAINER_2D_BASE* aContainer, const BOARD_ITEM& aOwner );
+                            const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount, int aWidth,
+                            CONTAINER_2D_BASE* aContainer, const BOARD_ITEM& aOwner );
 
     void buildPadOutlineAsSegments( const PAD* aPad, PCB_LAYER_ID aLayer,
                                     CONTAINER_2D_BASE* aDstContainer, int aWidth );

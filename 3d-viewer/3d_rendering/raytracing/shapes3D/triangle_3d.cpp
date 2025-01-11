@@ -74,7 +74,7 @@ void TRIANGLE::pre_calc_const()
     m_nd = glm::dot( m_n, A ) * krec;
 
     // first line equation
-    float reci = 1.0f / (b[u] * c[v] - b[v] * c[u]);
+    float reci = 1.0f / ( b[u] * c[v] - b[v] * c[u] );
 
     m_bnu =  b[u] * reci;
     m_bnv = -b[v] * reci;
@@ -209,7 +209,7 @@ bool TRIANGLE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
     const SFVEC3F& D = aRay.m_Dir;
     const SFVEC3F& A = m_vertex[0];
 
-    const float lnd = 1.0f / (D[m_k] + m_nu * D[ku] + m_nv * D[kv]);
+    const float lnd = 1.0f / ( D[m_k] + m_nu * D[ku] + m_nv * D[kv] );
     const float t = ( m_nd - O[m_k] - m_nu * O[ku] - m_nv * O[kv] ) * lnd;
 
     if( !( ( aHitInfo.m_tHit > t ) && ( t > 0.0f ) ) )
@@ -230,7 +230,7 @@ bool TRIANGLE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
     const float v = gamma;
     const float u = beta;
 
-    if( (u + v) > 1.0f )
+    if( ( u + v ) > 1.0f )
         return false;
 
     if( glm::dot( D, m_n ) > 0.0f )
@@ -263,7 +263,7 @@ bool TRIANGLE::IntersectP( const RAY& aRay, float aMaxDistance ) const
     const SFVEC3F D = aRay.m_Dir;
     const SFVEC3F A = m_vertex[0];
 
-    const float lnd = 1.0f / (D[m_k] + m_nu * D[ku] + m_nv * D[kv]);
+    const float lnd = 1.0f / ( D[m_k] + m_nu * D[ku] + m_nv * D[kv] );
     const float t = ( m_nd - O[m_k] - m_nu * O[ku] - m_nv * O[kv] ) * lnd;
 
     if( !( ( aMaxDistance > t ) && ( t > 0.0f ) ) )
@@ -284,7 +284,7 @@ bool TRIANGLE::IntersectP( const RAY& aRay, float aMaxDistance ) const
     const float v = gamma;
     const float u = beta;
 
-    if( (u + v) > 1.0f )
+    if( ( u + v ) > 1.0f )
         return false;
 
     if( glm::dot( D, m_n ) > 0.0f )

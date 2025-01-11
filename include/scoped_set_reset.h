@@ -46,9 +46,7 @@ template <typename VAL_TYPE>
 class SCOPED_SET_RESET
 {
 public:
-
-    SCOPED_SET_RESET( VAL_TYPE& target, VAL_TYPE value ):
-            m_target( target )
+    SCOPED_SET_RESET( VAL_TYPE& target, VAL_TYPE value ) : m_target( target )
     {
         m_original = target;
         m_target = value;
@@ -57,13 +55,10 @@ public:
     /**
      * Destruct the class, and return the target to its original value.
      */
-    ~SCOPED_SET_RESET()
-    {
-        m_target = m_original;
-    }
+    ~SCOPED_SET_RESET() { m_target = m_original; }
 
 private:
-    VAL_TYPE m_original;
+    VAL_TYPE  m_original;
     VAL_TYPE& m_target;
 };
 
@@ -72,21 +67,18 @@ private:
  * RAII class that executes a function at construction and another at destruction.
  *
  * Useful to ensure cleanup code is executed even if an exception is thrown.
-*/
+ */
 template <typename Func>
 class SCOPED_EXECUTION
 {
 public:
-    SCOPED_EXECUTION(Func initFunc, Func destroyFunc) :
-            m_initFunc(initFunc), m_destroyFunc(destroyFunc)
+    SCOPED_EXECUTION( Func initFunc, Func destroyFunc ) :
+            m_initFunc( initFunc ), m_destroyFunc( destroyFunc )
     {
         m_initFunc();
     }
 
-    ~SCOPED_EXECUTION()
-    {
-        m_destroyFunc();
-    }
+    ~SCOPED_EXECUTION() { m_destroyFunc(); }
 
 private:
     Func m_initFunc;

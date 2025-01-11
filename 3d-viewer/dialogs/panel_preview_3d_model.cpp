@@ -142,7 +142,9 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
     m_boardAdapter.SetBoard( m_dummyBoard );
     m_boardAdapter.m_IsBoardView = false;
-    m_boardAdapter.m_IsPreviewer = true;   // Force display 3D models, regardless the 3D viewer options
+
+    // Force display 3D models, regardless the 3D viewer options.
+    m_boardAdapter.m_IsPreviewer = true;
 
     loadSettings();
 
@@ -244,7 +246,8 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
  */
 static double rotationFromString( const wxString& aValue )
 {
-    double rotation = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::DEGREES, aValue );
+    double rotation = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::DEGREES,
+                                                                 aValue );
 
     if( rotation > MAX_ROTATION )
     {
@@ -307,7 +310,7 @@ void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
         yscale->ChangeValue( formatScaleValue( modelInfo.m_Scale.y ) );
         zscale->ChangeValue( formatScaleValue( modelInfo.m_Scale.z ) );
 
-        // Rotation is stored in the file as postive-is-CW, but we use postive-is-CCW in the GUI
+        // Rotation is stored in the file as positive-is-CW, but we use positive-is-CCW in the GUI
         // to match the rest of KiCad
         xrot->ChangeValue( formatRotationValue( -modelInfo.m_Rotation.x ) );
         yrot->ChangeValue( formatRotationValue( -modelInfo.m_Rotation.y ) );
@@ -354,7 +357,7 @@ void PANEL_PREVIEW_3D_MODEL::updateOrientation( wxCommandEvent &event )
         modelInfo->m_Scale.z = EDA_UNIT_UTILS::UI::DoubleValueFromString(
                 pcbIUScale, EDA_UNITS::UNSCALED, zscale->GetValue() );
 
-        // Rotation is stored in the file as postive-is-CW, but we use postive-is-CCW in the GUI
+        // Rotation is stored in the file as positive-is-CW, but we use positive-is-CCW in the GUI
         // to match the rest of KiCad
         modelInfo->m_Rotation.x = -rotationFromString( xrot->GetValue() );
         modelInfo->m_Rotation.y = -rotationFromString( yrot->GetValue() );
@@ -395,7 +398,7 @@ void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
 
 void PANEL_PREVIEW_3D_MODEL::setBodyStyleView( wxCommandEvent& event )
 {
-    // turn ON or OFF options to show the board body if OFF, soder paste, soldermask
+    // turn ON or OFF options to show the board body if OFF, solder paste, soldermask
     // and board body are hidden, to allows a good view of the 3D model and its pads.
     EDA_3D_VIEWER_SETTINGS* cfg = m_boardAdapter.m_Cfg;
 

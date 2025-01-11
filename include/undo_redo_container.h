@@ -52,7 +52,7 @@ class BASE_SCREEN;
 
 
 /**
- * Type of undo/redo operations
+ * Type of undo/redo operations.
  *
  * Each type must be redo/undone by a specific operation.
  */
@@ -122,7 +122,8 @@ private:
                                         * duplicate) m_Item points the duplicate (i.e the old
                                         * copy of an active item) and m_Link points the active
                                         * item in schematic */
-    KIID           m_groupId;           /* Id of the group of items in case this is a group/ungroup command */
+    KIID           m_groupId;           /* Id of the group of items in case this is a
+                                         * group/ungroup command */
 
     BASE_SCREEN*   m_screen;           /* For new and deleted items the screen the item should
                                         * be added to/removed from. */

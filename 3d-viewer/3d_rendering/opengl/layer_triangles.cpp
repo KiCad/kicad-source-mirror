@@ -129,7 +129,7 @@ void TRIANGLE_DISPLAY_LIST::AddToMiddleContourns( const std::vector< SFVEC2F >& 
 {
     if( aContournPoints.size() >= 4 )
     {
-        // Calculate normals of each segment of the contourn
+        // Calculate normals of each segment of the contour
         std::vector< SFVEC2F > contournNormals;
 
         contournNormals.clear();
@@ -245,7 +245,7 @@ void TRIANGLE_DISPLAY_LIST::AddToMiddleContourns( const SHAPE_LINE_CHAIN& outlin
         }
     }
 
-    // Add first position fo the list to close the path
+    // Add first position of the list to close the path.
     if( lastV != contournPoints[0] )
         contournPoints.push_back( contournPoints[0] );
 
@@ -472,10 +472,10 @@ void OPENGL_RENDER_LIST::DrawAll( bool aDrawMiddle ) const
 
 
 void OPENGL_RENDER_LIST::DrawCulled( bool aDrawMiddle,
-                                        const OPENGL_RENDER_LIST* aSubtractList,
-                                        const OPENGL_RENDER_LIST* bSubtractList,
-                                        const OPENGL_RENDER_LIST* cSubtractList,
-                                        const OPENGL_RENDER_LIST* dSubtractList ) const
+                                     const OPENGL_RENDER_LIST* aSubtractList,
+                                     const OPENGL_RENDER_LIST* bSubtractList,
+                                     const OPENGL_RENDER_LIST* cSubtractList,
+                                     const OPENGL_RENDER_LIST* dSubtractList ) const
 {
     glClearStencil( 0x00 );
     glClear( GL_STENCIL_BUFFER_BIT );
@@ -502,8 +502,8 @@ void OPENGL_RENDER_LIST::DrawCulled( bool aDrawMiddle,
     if( dSubtractList )
         dSubtractList->DrawBot();
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
+    glEnable( GL_DEPTH_TEST );
+    glDepthMask( GL_TRUE );
 
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
     glStencilFunc( GL_EQUAL, 0, 1 );
@@ -529,8 +529,8 @@ void OPENGL_RENDER_LIST::DrawCulled( bool aDrawMiddle,
     if( dSubtractList )
         dSubtractList->DrawTop();
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
+    glEnable( GL_DEPTH_TEST );
+    glDepthMask( GL_TRUE );
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
     glStencilFunc( GL_NOTEQUAL, 2, 0x03 );
     glStencilOp( GL_KEEP, GL_KEEP, GL_INCR );
@@ -584,11 +584,11 @@ void OPENGL_RENDER_LIST::SetItIsTransparent( bool aSetTransparent )
 GLuint OPENGL_RENDER_LIST::generate_top_or_bot_seg_ends(
         const TRIANGLE_LIST* aTriangleContainer, bool aIsNormalUp, GLuint aTextureId ) const
 {
-    wxASSERT( aTriangleContainer != nullptr );
+    wxCHECK( aTriangleContainer != nullptr, 0 );
 
     wxASSERT( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 );
 
-    // Top and Bot dont have normals array stored in container
+    // Top and Bot don't have normals array stored in container
     wxASSERT( aTriangleContainer->GetNormalsSize() == 0 );
 
     if( ( aTriangleContainer->GetVertexSize() > 0 )
@@ -651,11 +651,11 @@ GLuint OPENGL_RENDER_LIST::generate_top_or_bot_seg_ends(
 GLuint OPENGL_RENDER_LIST::generate_top_or_bot_triangles( const TRIANGLE_LIST* aTriangleContainer,
                                                           bool aIsNormalUp ) const
 {
-    wxASSERT( aTriangleContainer != nullptr );
+    wxCHECK( aTriangleContainer != nullptr, 0 );
 
     wxASSERT( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 );
 
-    // Top and Bot dont have normals array stored in container
+    // Top and Bot dint have normals array stored in container
     wxASSERT( aTriangleContainer->GetNormalsSize() == 0 );
 
     if( ( aTriangleContainer->GetVertexSize() > 0 )
@@ -695,7 +695,7 @@ GLuint OPENGL_RENDER_LIST::generate_top_or_bot_triangles( const TRIANGLE_LIST* a
 GLuint OPENGL_RENDER_LIST::generate_middle_triangles(
         const TRIANGLE_LIST* aTriangleContainer ) const
 {
-    wxASSERT( aTriangleContainer != nullptr );
+    wxCHECK( aTriangleContainer != nullptr, 0 );
 
     // We expect that it is a multiple of 3 vertex
     wxASSERT( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 );
@@ -767,3 +767,5 @@ void OPENGL_RENDER_LIST::beginTransformation() const
         glScalef( 1.0f, 1.0f, m_zScaleTransformation );
     }
 }
+
+//  LocalWords:  EDA Luzeiro txt MERCHANTABILITY wxASSERT normals fo

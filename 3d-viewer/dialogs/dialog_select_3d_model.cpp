@@ -51,9 +51,8 @@ DIALOG_SELECT_3DMODEL::DIALOG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCac
         m_previousDir( prevModelSelectDir ),
         m_modelViewer( nullptr )
 {
-    m_modelViewer = new EDA_3D_MODEL_VIEWER( m_pane3Dviewer,
-                                             OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
-                                             m_cache );
+    m_modelViewer = new EDA_3D_MODEL_VIEWER(
+            m_pane3Dviewer, OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ), m_cache );
     m_modelViewer->SetMinSize( wxSize( 400, -1 ) );
     m_Sizer3Dviewer->Add( m_modelViewer, 1, wxEXPAND|wxRIGHT, 5 );
 
