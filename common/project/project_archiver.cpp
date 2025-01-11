@@ -32,7 +32,6 @@
 #include <wildcards_and_files_ext.h>
 #include <wxstream_helper.h>
 #include <wx/log.h>
-#include <kiplatform/io.h>
 
 
 #define ZipFileExtension wxT( "zip" )
@@ -156,10 +155,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
     wxString msg;
     wxString oldCwd = wxGetCwd();
 
-    wxFileName sourceDir( aSrcDir );
-    KIPLATFORM::IO::LongPathAdjustment( sourceDir );
-
-    wxSetWorkingDirectory( sourceDir.GetFullPath() );
+    wxSetWorkingDirectory( aSrcDir );
 
     wxFFileOutputStream ostream( aDestFile );
 
@@ -178,12 +174,12 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
     wxArrayString files;
 
     for( unsigned ii = 0; ii < arrayDim( extensionList ); ii++ )
-        wxDir::GetAllFiles( sourceDir.GetFullPath(), &files, extensionList[ii], wxDIR_FILES | wxDIR_DIRS );
+        wxDir::GetAllFiles( aSrcDir, &files, extensionList[ii], wxDIR_FILES | wxDIR_DIRS );
 
     if( aIncludeExtraFiles )
     {
         for( unsigned ii = 0; ii < arrayDim( extraExtensionList ); ii++ )
-            wxDir::GetAllFiles( sourceDir.GetFullPath(), &files, extraExtensionList[ii], wxDIR_FILES | wxDIR_DIRS );
+            wxDir::GetAllFiles( aSrcDir, &files, extraExtensionList[ii], wxDIR_FILES | wxDIR_DIRS );
     }
 
     for( unsigned ii = 0; ii < files.GetCount(); ++ii )
@@ -193,7 +189,6 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxFileName package( files[ ii ] );
             package.MakeRelativeTo( aSrcDir );
             package.SetExt( wxS( "pkg" ) );
-            KIPLATFORM::IO::LongPathAdjustment( package );
 
             if( package.Exists() )
                 files.push_back( package.GetFullName() );
@@ -219,13 +214,11 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
         wxFileSystem fsfile;
 
         wxFileName curr_fn( files[ii] );
-        KIPLATFORM::IO::LongPathAdjustment( curr_fn );
-        curr_fn.MakeRelativeTo( sourceDir.GetFullPath() );
-
+        curr_fn.MakeRelativeTo( aSrcDir );
         currFilename = curr_fn.GetFullPath();
 
         // Read input file and add it to the zip file:
-        wxFSFile* infile = fsfile.OpenFile( currFilename );
+        wxFSFile* infile = fsfile.OpenFile( wxFileSystem::FileNameToURL( curr_fn ) );
 
         if( infile )
         {
