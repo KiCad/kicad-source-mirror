@@ -10,7 +10,7 @@
 a0  [upd]  clk    n_zero   [b2 b1 b0]   state2
 
 * This needs to be edited: enter the absolute path of file state-3bit-count.in
-.model state2 d_state(state_file = "D:\Spice_general\KiCad-799\up-down-counter\state-3bit-count.in")
+.model state2 d_state(state_file = "state-3bit-count.in")
 *.model state2 d_state(state_file = "state-3bit-count.in")
 
 * Digital "one" and "zero"
