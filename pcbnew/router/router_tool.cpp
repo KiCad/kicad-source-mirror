@@ -2228,6 +2228,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         {
             PNS::ITEM* pitem = m_router->GetWorld()->FindItemByParent( static_cast<const BOARD_ITEM*>( bitem ) );
 
+            if( !pitem )
+                continue;
+
             if( pitem->OfKind( PNS::ITEM::SEGMENT_T ) || pitem->OfKind( PNS::ITEM::VIA_T ) || pitem->OfKind( PNS::ITEM::ARC_T ) )
             {
                 itemsToDrag.Add( pitem );

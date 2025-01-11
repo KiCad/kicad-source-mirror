@@ -1741,12 +1741,12 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         if( type == PCB_TRACE_T )
         {
             if( std::unique_ptr<PNS::SEGMENT> segment = syncTrack( t ) )
-                aWorld->Add( std::move( segment ) );
+                aWorld->Add( std::move( segment ), true );
         }
         else if( type == PCB_ARC_T )
         {
             if( std::unique_ptr<PNS::ARC> arc = syncArc( static_cast<PCB_ARC*>( t ) ) )
-                aWorld->Add( std::move( arc ) );
+                aWorld->Add( std::move( arc ), true );
         }
         else if( type == PCB_VIA_T )
         {
