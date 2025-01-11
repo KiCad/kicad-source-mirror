@@ -64,7 +64,7 @@ wxColour KIPLATFORM::UI::GetDialogBGColour()
 }
 
 
-void KIPLATFORM::UI::GetInfoBarColours( wxColour& aBgColour, wxColour& aFgColour )
+void KIPLATFORM::UI::GetInfoBarColours( wxColour& aFgColour, wxColour& aBgColour )
 {
     // The GTK3.24 way of getting the colours is to use the style context
     // Earlier GTKs should be able to use the system settings
