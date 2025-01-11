@@ -92,9 +92,9 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
         std::shared_ptr<DRC_ITEM>& aDrce, const VECTOR2I& aMarkerPos, int aMarkerLayer,
         const BOARD_ITEM* aItem1, const BOARD_ITEM* aItem2, PCB_LAYER_ID layer, int aDistance )
 {
-    CreepageGraph graph( *m_board );
-    std::shared_ptr<GraphNode> NetA = graph.AddNodeVirtual();
-    std::shared_ptr<GraphNode> NetB = graph.AddNodeVirtual();
+    CREEPAGE_GRAPH graph( *m_board );
+    std::shared_ptr<GRAPH_NODE> NetA = graph.AddNodeVirtual();
+    std::shared_ptr<GRAPH_NODE> NetB = graph.AddNodeVirtual();
 
     // They need to be different or the algorithm won't compute the path.
     NetA->m_net = 1;
@@ -103,12 +103,12 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
     graph.Addshape( *( aItem1->GetEffectiveShape( layer ) ), NetA, nullptr );
     graph.Addshape( *( aItem2->GetEffectiveShape( layer ) ), NetB, nullptr );
 
-    graph.GeneratePaths( aDistance * 2, layer );
+    graph.GeneratePaths( aDistance * 2, layer, true );
 
     double           minValue = aDistance * 2;
-    GraphConnection* minGc = nullptr;
+    GRAPH_CONNECTION* minGc = nullptr;
 
-    for( std::shared_ptr<GraphConnection> gc : graph.m_connections )
+    for( std::shared_ptr<GRAPH_CONNECTION> gc : graph.m_connections )
     {
         if( ( gc->m_path.weight < minValue ) && ( gc->m_path.weight > 0 ) )
         {
@@ -119,7 +119,7 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu(
 
     if( minGc )
     {
-        PATH_CONNECTION pc = minGc->m_path;
+        PATH_CONNECTION           pc = minGc->m_path;
         DRC_CUSTOM_MARKER_HANDLER handler =
                 GetGraphicsHandler( minGc->GetShapes(), pc.a1, pc.a2, aDistance );
         reportViolation( aDrce, aMarkerPos, aMarkerLayer, &handler );

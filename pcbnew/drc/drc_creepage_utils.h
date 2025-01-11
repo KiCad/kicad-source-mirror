@@ -1,4 +1,3 @@
-
 /*
     * Copyright The KiCad Developers.
     * Copyright (C) 2024 Fabien Corona f.corona<at>laposte.net
@@ -24,6 +23,8 @@
 
 #ifndef _DRC_CREEPAGE_UTILS_H
 #define _DRC_CREEPAGE_UTILS_H
+
+#include <unordered_set>
 
 #include <common.h>
 #include <macros.h>
@@ -141,9 +142,9 @@ struct PATH_CONNECTION
 };
 
 
-class GraphConnection;
-class GraphNode;
-class CreepageGraph;
+class GRAPH_CONNECTION;
+class GRAPH_NODE;
+class CREEPAGE_GRAPH;
 class CREEP_SHAPE;
 class BE_SHAPE;
 class BE_SHAPE_POINT;
@@ -168,7 +169,14 @@ public:
         CIRCLE,
         ARC
     };
-    CREEP_SHAPE() {};
+
+    CREEP_SHAPE()
+    {
+        m_conductive = false;
+        m_parent = nullptr;
+        m_pos = VECTOR2I( 0, 0 );
+        m_type = CREEP_SHAPE::TYPE::UNDEFINED;
+    };
 
     virtual ~CREEP_SHAPE() {}
 
@@ -183,8 +191,8 @@ public:
     const BOARD_ITEM* GetParent() const { return m_parent; };
     void              SetParent( BOARD_ITEM* aParent ) { m_parent = aParent; };
 
-    virtual void ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
-                                  CreepageGraph& aG ) const;
+    virtual void ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared_ptr<GRAPH_NODE>& a2,
+                                  CREEPAGE_GRAPH& aG ) const;
 
     std::vector<PATH_CONNECTION> ReversePaths( const std::vector<PATH_CONNECTION>& aV ) const
     {
@@ -206,36 +214,42 @@ public:
         std::vector<PATH_CONNECTION> a;
         return a;
     };
+
     virtual std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
         std::vector<PATH_CONNECTION> a;
         return a;
     };
+
     virtual std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
         std::vector<PATH_CONNECTION> a;
         return a;
     };
+
     virtual std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
         std::vector<PATH_CONNECTION> a;
         return a;
     };
+
     virtual std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
         std::vector<PATH_CONNECTION> a;
         return a;
     };
+
     virtual std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
         std::vector<PATH_CONNECTION> a;
         return a;
     };
+
     virtual std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                                 double aMaxSquaredWeight ) const
     {
@@ -248,10 +262,10 @@ public:
 
 
 protected:
-    bool              m_conductive = false;
-    BOARD_ITEM*       m_parent = nullptr;
-    VECTOR2I          m_pos = VECTOR2I( 0, 0 );
-    CREEP_SHAPE::TYPE m_type = CREEP_SHAPE::TYPE::UNDEFINED;
+    bool              m_conductive;
+    BOARD_ITEM*       m_parent;
+    VECTOR2I          m_pos;
+    CREEP_SHAPE::TYPE m_type;
 };
 
 
@@ -346,7 +360,7 @@ public:
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
 
-private:
+protected:
     VECTOR2I m_pos = VECTOR2I( 0, 0 );
     double   m_radius = 1;
 };
@@ -359,33 +373,36 @@ class CU_SHAPE_ARC : public CU_SHAPE_CIRCLE
 {
 public:
     CU_SHAPE_ARC( VECTOR2I aPos, double aRadius, EDA_ANGLE aStartAngle, EDA_ANGLE aEndAngle,
-                  VECTOR2D aStartPoint, VECTOR2D aEndPoint ) : CU_SHAPE_CIRCLE( aPos, aRadius )
+                  VECTOR2D aStartPoint, VECTOR2D aEndPoint ) :
+            CU_SHAPE_CIRCLE( aPos, aRadius ),
+            m_startAngle( aStartAngle ), m_endAngle( aEndAngle ),
+            m_startPoint( aStartPoint ), m_endPoint( aEndPoint )
     {
-        m_pos = aPos;
         m_type = CREEP_SHAPE::TYPE::ARC;
-        m_startAngle = aStartAngle;
-        m_endAngle = aEndAngle;
-        m_startPoint = aStartPoint;
-        m_endPoint = aEndPoint;
-        m_radius = aRadius;
+        m_width = 0;
     }
 
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
+
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
+
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
+
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
+
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
+
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
 
@@ -397,34 +414,36 @@ public:
 
     VECTOR2I  GetStartPoint() const override { return m_startPoint; }
     VECTOR2I  GetEndPoint() const override { return m_endPoint; }
+
     EDA_ANGLE AngleBetweenStartAndEnd( const VECTOR2I aPoint ) const
     {
         EDA_ANGLE angle( aPoint - m_pos );
+
         while( angle < GetStartAngle() )
             angle += ANGLE_360;
+
         while( angle > GetEndAngle() + ANGLE_360 )
             angle -= ANGLE_360;
 
         return angle;
     }
+
     double GetWidth() const { return m_width; };
     void   SetWidth( double aW ) { m_width = aW; };
 
 private:
-    int       m_width = 0;
-    VECTOR2I  m_pos = VECTOR2I( 0, 0 );
-    double    m_radius = 1;
-    EDA_ANGLE m_startAngle = EDA_ANGLE( 0 );
-    EDA_ANGLE m_endAngle = EDA_ANGLE( 180 );
-    VECTOR2I  m_startPoint = VECTOR2I( 1, 0 );
-    VECTOR2I  m_endPoint = VECTOR2I( -1, 0 );
+    int       m_width;
+    EDA_ANGLE m_startAngle;
+    EDA_ANGLE m_endAngle;
+    VECTOR2I  m_startPoint;
+    VECTOR2I  m_endPoint;
 };
 
 /** @class Graphnode
  *
  *  @brief a node in a @class CreepageGraph
  */
-class GraphNode
+class GRAPH_NODE
 {
 public:
     enum TYPE
@@ -437,48 +456,50 @@ public:
         VIRTUAL
     };
 
-    GraphNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent, VECTOR2I aPos = VECTOR2I() )
+    GRAPH_NODE( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent, VECTOR2I aPos = VECTOR2I() )
+    : m_parent( aParent ), m_pos( aPos ), m_type( aType )
     {
-        m_parent = aParent;
-        m_pos = aPos;
-        m_type = aType;
+        m_node_conns = {};
+        m_virtual = false;
         m_connectDirectly = true;
-        m_connections = {};
+        m_net = -1;
     };
 
-    ~GraphNode() {};
+    ~GRAPH_NODE() {};
 
 
-    CREEP_SHAPE*                  m_parent = nullptr;
-    std::vector<std::shared_ptr<GraphConnection>> m_connections = {};
-    VECTOR2I                      m_pos = VECTOR2I( 0, 0 );
+    CREEP_SHAPE*                                m_parent;
+    std::set<std::shared_ptr<GRAPH_CONNECTION>> m_node_conns;
+    VECTOR2I                                    m_pos;
+
     // Virtual nodes are connected with a 0 weight connection to equivalent net ( same net or netclass )
-    bool m_virtual = false;
-    bool m_connectDirectly = true;
-    int  m_net = -1;
+    bool m_virtual ;
+    bool m_connectDirectly;
+    int  m_net;
 
-    GraphNode::TYPE m_type;
+    GRAPH_NODE::TYPE m_type;
 };
 
 /** @class GraphConnection
  *
  *  @brief a connection in a @class CreepageGraph
  */
-class GraphConnection
+class GRAPH_CONNECTION
 {
 public:
-    GraphConnection( std::shared_ptr<GraphNode>& aN1, std::shared_ptr<GraphNode>& aN2,
-                     const PATH_CONNECTION& aPc ) : n1( aN1 ), n2( aN2 )
+    GRAPH_CONNECTION( std::shared_ptr<GRAPH_NODE>& aN1, std::shared_ptr<GRAPH_NODE>& aN2,
+                      const PATH_CONNECTION& aPc ) : n1( aN1 ), n2( aN2 )
     {
         m_path = aPc;
+        m_forceStraightLine = false;
     };
 
-    std::shared_ptr<GraphNode> n1 = nullptr;
-    std::shared_ptr<GraphNode> n2 = nullptr;
-    PATH_CONNECTION            m_path;
-
     std::vector<PCB_SHAPE> GetShapes();
-    bool                   forceStraightLigne = false;
+
+    std::shared_ptr<GRAPH_NODE> n1;
+    std::shared_ptr<GRAPH_NODE> n2;
+    PATH_CONNECTION             m_path;
+    bool                        m_forceStraightLine;
 };
 
 
@@ -497,20 +518,25 @@ public:
 
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
+
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
+
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
+
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
+
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     }
+
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
@@ -518,8 +544,8 @@ public:
     };
 
 
-    void ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
-                          CreepageGraph& aG ) const override;
+    void ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared_ptr<GRAPH_NODE>& a2,
+                          CREEPAGE_GRAPH& aG ) const override;
 };
 
 /** @class BE_SHAPE_CIRCLE
@@ -541,15 +567,19 @@ public:
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
+
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
+
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
+
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_SEGMENT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
+
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_CIRCLE& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override
     {
@@ -558,10 +588,12 @@ public:
 
 
     int  GetRadius() const override { return m_radius; }
-    void ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
-                          CreepageGraph& aG ) const override;
-    void ShortenChildDueToGV( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
-                              CreepageGraph& aG, double aNormalWeight ) const;
+
+    void ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared_ptr<GRAPH_NODE>& a2,
+                          CREEPAGE_GRAPH& aG ) const override;
+
+    void ShortenChildDueToGV( std::shared_ptr<GRAPH_NODE>& a1, std::shared_ptr<GRAPH_NODE>& a2,
+                              CREEPAGE_GRAPH& aG, double aNormalWeight ) const;
 
 
 protected:
@@ -576,18 +608,16 @@ class BE_SHAPE_ARC : public BE_SHAPE_CIRCLE
 {
 public:
     BE_SHAPE_ARC( VECTOR2I aPos, int aRadius, EDA_ANGLE aStartAngle, EDA_ANGLE aEndAngle,
-                  VECTOR2D aStartPoint, VECTOR2D aEndPoint ) : BE_SHAPE_CIRCLE( aPos, aRadius )
+                  VECTOR2D aStartPoint, VECTOR2D aEndPoint ) :
+            BE_SHAPE_CIRCLE( aPos, aRadius ),
+            m_startAngle( aStartAngle ), m_endAngle( aEndAngle ),
+            m_startPoint( aStartPoint ), m_endPoint( aEndPoint )
     {
         m_type = CREEP_SHAPE::TYPE::ARC;
-        m_startAngle = aStartAngle;
-        m_endAngle = aEndAngle;
-        m_startPoint = aStartPoint;
-        m_endPoint = aEndPoint;
-        m_radius = aRadius;
     }
 
-    void ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
-                          CreepageGraph& aG ) const override;
+    void ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared_ptr<GRAPH_NODE>& a2,
+                          CREEPAGE_GRAPH& aG ) const override;
 
 
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
@@ -642,7 +672,6 @@ public:
     std::pair<bool, bool> IsThereATangentPassingThroughPoint( const BE_SHAPE_POINT aPoint ) const;
 
 protected:
-    int       m_radius;
     EDA_ANGLE m_startAngle;
     EDA_ANGLE m_endAngle;
     VECTOR2I  m_startPoint;
@@ -654,16 +683,18 @@ protected:
  *
  *  @brief A graph with nodes and connections for creepage calculation
  */
-class CreepageGraph
+class CREEPAGE_GRAPH
 {
 public:
-    CreepageGraph( BOARD& aBoard ) : m_board( aBoard )
+    CREEPAGE_GRAPH( BOARD& aBoard ) : m_board( aBoard )
     {
         m_boardOutline = nullptr;
+        m_minGrooveWidth = 0;
         m_creepageTarget = -1;
         m_creepageTargetSquared = -1;
     };
-    ~CreepageGraph()
+
+    ~CREEPAGE_GRAPH()
     {
         for( CREEP_SHAPE* cs : m_shapeCollection )
             if( cs )
@@ -673,46 +704,73 @@ public:
             }
     };
 
-    BOARD&                   m_board;
-    std::vector<BOARD_ITEM*> m_boardEdge;
-    SHAPE_POLY_SET*          m_boardOutline;
-
-    std::vector<std::shared_ptr<GraphNode>>       m_nodes;
-    std::vector<std::shared_ptr<GraphConnection>> m_connections;
-
 
     void TransformEdgeToCreepShapes();
-    void TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aShapes );
+    void TransformCreepShapesToNodes(std::vector<CREEP_SHAPE*>& aShapes);
     void RemoveDuplicatedShapes();
+
     // Add a node to the graph. If an equivalent node exists, returns the pointer of the existing node instead
-    std::shared_ptr<GraphNode>       AddNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent = nullptr,
+    std::shared_ptr<GRAPH_NODE>       AddNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent = nullptr,
                                               VECTOR2I aPos = VECTOR2I() );
-    std::shared_ptr<GraphNode>       AddNodeVirtual();
-    std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode>& aN1,
-                                                    std::shared_ptr<GraphNode>& aN2,
+
+    std::shared_ptr<GRAPH_NODE>       AddNodeVirtual();
+
+    std::shared_ptr<GRAPH_CONNECTION> AddConnection( std::shared_ptr<GRAPH_NODE>& aN1,
+                                                    std::shared_ptr<GRAPH_NODE>& aN2,
                                                     const PATH_CONNECTION&      aPc );
-    std::shared_ptr<GraphConnection> AddConnection( std::shared_ptr<GraphNode>& aN1,
-                                                    std::shared_ptr<GraphNode>& aN2 );
-    std::shared_ptr<GraphNode>       FindNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent,
+
+    std::shared_ptr<GRAPH_CONNECTION> AddConnection( std::shared_ptr<GRAPH_NODE>& aN1,
+                                                    std::shared_ptr<GRAPH_NODE>& aN2 );
+
+    std::shared_ptr<GRAPH_NODE>       FindNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent,
                                                VECTOR2I aPos );
 
-    void RemoveConnection( std::shared_ptr<GraphConnection>, bool aDelete = false );
+    void RemoveConnection( std::shared_ptr<GRAPH_CONNECTION>, bool aDelete = false );
+
     void Trim( double aWeightLimit );
-    void Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode>& aConnectTo,
+
+    void Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>& aConnectTo,
                    BOARD_ITEM* aParent = nullptr );
 
-    double Solve( std::shared_ptr<GraphNode>& aFrom, std::shared_ptr<GraphNode>& aTo,
-                  std::vector<std::shared_ptr<GraphConnection>>& aResult );
+    double Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_ptr<GRAPH_NODE>& aTo,
+                  std::vector<std::shared_ptr<GRAPH_CONNECTION>>& aResult );
 
-    void GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool aGenerateBoardEdges = true );
-    std::shared_ptr<GraphNode> AddNetElements( int aNetCode, PCB_LAYER_ID aLayer,
+    void GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool aClearance );
+
+    std::shared_ptr<GRAPH_NODE> AddNetElements( int aNetCode, PCB_LAYER_ID aLayer,
                                                int aMaxCreepage );
 
     void   SetTarget( double aTarget );
     double GetTarget() { return m_creepageTarget; };
-    int    m_minGrooveWidth = 0;
 
-    std::vector<CREEP_SHAPE*> m_shapeCollection;
+
+    struct GraphNodeHash
+    {
+        std::size_t operator()(const std::shared_ptr<GRAPH_NODE>& node) const
+        {
+            return hash_val(node->m_type, node->m_parent, node->m_pos.x, node->m_pos.y);
+        }
+    };
+
+    struct GraphNodeEqual
+    {
+        bool operator()(const std::shared_ptr<GRAPH_NODE>& lhs, const std::shared_ptr<GRAPH_NODE>& rhs) const
+        {
+            return lhs->m_type == rhs->m_type && lhs->m_parent == rhs->m_parent && lhs->m_pos == rhs->m_pos;
+        }
+    };
+
+    BOARD&                                         m_board;
+    std::vector<BOARD_ITEM*>                       m_boardEdge;
+    SHAPE_POLY_SET*                                m_boardOutline;
+    std::vector<std::shared_ptr<GRAPH_NODE>>       m_nodes;
+    std::vector<std::shared_ptr<GRAPH_CONNECTION>> m_connections;
+    std::vector<CREEP_SHAPE*>                      m_shapeCollection;
+
+    // This is a duplicate of m_nodes, but it is used to quickly find a node rather than iterating through m_nodes
+    std::unordered_set<std::shared_ptr<GRAPH_NODE>, GraphNodeHash, GraphNodeEqual> m_nodeset;
+
+    int m_minGrooveWidth;
 
 private:
     double m_creepageTarget;

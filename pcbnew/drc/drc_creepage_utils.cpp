@@ -23,6 +23,7 @@
 
 #include <drc/drc_creepage_utils.h>
 #include <geometry/intersection.h>
+#include <thread_pool.h>
 
 
 extern bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2I& center,
@@ -467,7 +468,7 @@ std::vector<PATH_CONNECTION> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
 }
 
 
-void CreepageGraph::TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aShapes )
+void CREEPAGE_GRAPH::TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aShapes )
 {
     for( CREEP_SHAPE* p1 : aShapes )
     {
@@ -476,15 +477,15 @@ void CreepageGraph::TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aSha
 
         switch( p1->GetType() )
         {
-        case CREEP_SHAPE::TYPE::POINT: AddNode( GraphNode::TYPE::POINT, p1, p1->GetPos() ); break;
-        case CREEP_SHAPE::TYPE::CIRCLE: AddNode( GraphNode::TYPE::CIRCLE, p1, p1->GetPos() ); break;
-        case CREEP_SHAPE::TYPE::ARC: AddNode( GraphNode::TYPE::ARC, p1, p1->GetPos() ); break;
+        case CREEP_SHAPE::TYPE::POINT: AddNode( GRAPH_NODE::TYPE::POINT, p1, p1->GetPos() ); break;
+        case CREEP_SHAPE::TYPE::CIRCLE: AddNode( GRAPH_NODE::TYPE::CIRCLE, p1, p1->GetPos() ); break;
+        case CREEP_SHAPE::TYPE::ARC: AddNode( GRAPH_NODE::TYPE::ARC, p1, p1->GetPos() ); break;
         default: break;
         }
     }
 }
 
-void CreepageGraph::RemoveDuplicatedShapes()
+void CREEPAGE_GRAPH::RemoveDuplicatedShapes()
 {
     // Sort the vector
     sort( m_shapeCollection.begin(), m_shapeCollection.end(), compareShapes );
@@ -514,7 +515,7 @@ void CreepageGraph::RemoveDuplicatedShapes()
     std::swap( m_shapeCollection, newVector );
 }
 
-void CreepageGraph::TransformEdgeToCreepShapes()
+void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
 {
     for( BOARD_ITEM* drawing : m_boardEdge )
     {
@@ -589,7 +590,7 @@ void CreepageGraph::TransformEdgeToCreepShapes()
 }
 
 
-std::vector<PCB_SHAPE> GraphConnection::GetShapes()
+std::vector<PCB_SHAPE> GRAPH_CONNECTION::GetShapes()
 {
     std::vector<PCB_SHAPE> shapes = std::vector<PCB_SHAPE>();
     int                    lineWidth = 0;
@@ -600,12 +601,12 @@ std::vector<PCB_SHAPE> GraphConnection::GetShapes()
     if( !n1 || !n2 )
         return shapes;
 
-    if( n1->m_type == GraphNode::TYPE::VIRTUAL || n2->m_type == GraphNode::TYPE::VIRTUAL )
+    if( n1->m_type == GRAPH_NODE::TYPE::VIRTUAL || n2->m_type == GRAPH_NODE::TYPE::VIRTUAL )
     {
         return shapes;
     }
 
-    if( !forceStraightLigne && n1->m_parent && ( n1->m_parent == n2->m_parent )
+    if( !m_forceStraightLine && n1->m_parent && ( n1->m_parent == n2->m_parent )
         && ( n1->m_parent->GetType() == CREEP_SHAPE::TYPE::CIRCLE ) )
     {
         VECTOR2I  center = n1->m_parent->GetPos();
@@ -633,7 +634,7 @@ std::vector<PCB_SHAPE> GraphConnection::GetShapes()
         return shapes;
     }
 
-    else if( !forceStraightLigne && n1->m_parent && ( n1->m_parent == n2->m_parent )
+    else if( !m_forceStraightLine && n1->m_parent && ( n1->m_parent == n2->m_parent )
              && n1->m_parent->GetType() == CREEP_SHAPE::TYPE::ARC )
     {
         BE_SHAPE_ARC* arc = dynamic_cast<BE_SHAPE_ARC*>( n1->m_parent );
@@ -701,19 +702,19 @@ std::vector<PCB_SHAPE> GraphConnection::GetShapes()
     return shapes;
 }
 
-void CREEP_SHAPE::ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>&,
-                                   CreepageGraph&              aG ) const
+void CREEP_SHAPE::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared_ptr<GRAPH_NODE>&,
+                                   CREEPAGE_GRAPH&              aG ) const
 {
 }
 
 
-void BE_SHAPE_POINT::ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>&,
-                                      CreepageGraph&              aG ) const
+void BE_SHAPE_POINT::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared_ptr<GRAPH_NODE>&,
+                                      CREEPAGE_GRAPH&              aG ) const
 {
 }
 
-void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GraphNode>& a1,
-                                           std::shared_ptr<GraphNode>& a2, CreepageGraph& aG,
+void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GRAPH_NODE>& a1,
+                                           std::shared_ptr<GRAPH_NODE>& a2, CREEPAGE_GRAPH& aG,
                                            double aNormalWeight ) const
 {
     EDA_ANGLE angle1 = EDA_ANGLE( a1->m_pos - m_pos );
@@ -740,7 +741,7 @@ void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GraphNode>& a1,
     skipPoint.y += m_radius * sin( pointAngle.AsRadians() );
 
 
-    std::shared_ptr<GraphNode> gnt = aG.AddNode( GraphNode::POINT, a1->m_parent, skipPoint );
+    std::shared_ptr<GRAPH_NODE> gnt = aG.AddNode( GRAPH_NODE::POINT, a1->m_parent, skipPoint );
 
     PATH_CONNECTION pc;
 
@@ -753,15 +754,15 @@ void BE_SHAPE_CIRCLE::ShortenChildDueToGV( std::shared_ptr<GraphNode>& a1,
     pc.a2 = maxAngle == angle2 ? a2->m_pos : a1->m_pos;
     pc.weight = aG.m_minGrooveWidth;
 
-    std::shared_ptr<GraphConnection> gc = aG.AddConnection( gnt, maxAngle == angle2 ? a2 : a1, pc );
+    std::shared_ptr<GRAPH_CONNECTION> gc = aG.AddConnection( gnt, maxAngle == angle2 ? a2 : a1, pc );
 
     if( gc )
-        gc->forceStraightLigne = true;
+        gc->m_forceStraightLine = true;
     return;
 }
 
-void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GraphNode>& a1,
-                                       std::shared_ptr<GraphNode>& a2, CreepageGraph& aG ) const
+void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1,
+                                       std::shared_ptr<GRAPH_NODE>& a2, CREEPAGE_GRAPH& aG ) const
 {
     if( !a1 || !a2 )
         return;
@@ -797,8 +798,8 @@ void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GraphNode>& a1,
 }
 
 
-void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_ptr<GraphNode>& a2,
-                                    CreepageGraph& aG ) const
+void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared_ptr<GRAPH_NODE>& a2,
+                                    CREEPAGE_GRAPH& aG ) const
 {
     if( !a1 || !a2 )
         return;
@@ -828,7 +829,7 @@ void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GraphNode>& a1, std::shared_
     }
 }
 
-void CreepageGraph::SetTarget( double aTarget )
+void CREEPAGE_GRAPH::SetTarget( double aTarget )
 {
     m_creepageTarget = aTarget;
     m_creepageTargetSquared = aTarget * aTarget;
@@ -2030,9 +2031,9 @@ std::vector<PATH_CONNECTION> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, doubl
     return result;
 }
 
-double CreepageGraph::Solve(
-        std::shared_ptr<GraphNode>& aFrom, std::shared_ptr<GraphNode>& aTo,
-        std::vector<std::shared_ptr<GraphConnection>>& aResult ) // Change to vector of pointers
+double CREEPAGE_GRAPH::Solve(
+        std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_ptr<GRAPH_NODE>& aTo,
+        std::vector<std::shared_ptr<GRAPH_CONNECTION>>& aResult ) // Change to vector of pointers
 {
     if( !aFrom || !aTo )
         return 0;
@@ -2041,19 +2042,19 @@ double CreepageGraph::Solve(
         return 0;
 
     // Dijkstra's algorithm for shortest path
-    std::unordered_map<GraphNode*, double>     distances;
-    std::unordered_map<GraphNode*, GraphNode*> previous;
+    std::unordered_map<GRAPH_NODE*, double>     distances;
+    std::unordered_map<GRAPH_NODE*, GRAPH_NODE*> previous;
 
-    auto cmp = [&distances]( GraphNode* left, GraphNode* right )
+    auto cmp = [&distances]( GRAPH_NODE* left, GRAPH_NODE* right )
     {
         if( distances[left] == distances[right] )
             return left > right; // Compare addresses to avoid ties.
         return distances[left] > distances[right];
     };
-    std::priority_queue<GraphNode*, std::vector<GraphNode*>, decltype( cmp )> pq( cmp );
+    std::priority_queue<GRAPH_NODE*, std::vector<GRAPH_NODE*>, decltype( cmp )> pq( cmp );
 
     // Initialize distances to infinity for all nodes except the starting node
-    for( std::shared_ptr<GraphNode> node : m_nodes )
+    for( std::shared_ptr<GRAPH_NODE> node : m_nodes )
     {
         if( node != nullptr )
             distances[node.get()] = std::numeric_limits<double>::infinity(); // Set to infinity
@@ -2065,7 +2066,7 @@ double CreepageGraph::Solve(
     // Dijkstra's main loop
     while( !pq.empty() )
     {
-        GraphNode* current = pq.top();
+        GRAPH_NODE* current = pq.top();
         pq.pop();
 
         if( current == aTo.get() )
@@ -2074,9 +2075,9 @@ double CreepageGraph::Solve(
         }
 
         // Traverse neighbors
-        for( std::shared_ptr<GraphConnection> connection : current->m_connections )
+        for( std::shared_ptr<GRAPH_CONNECTION> connection : current->m_node_conns )
         {
-            GraphNode* neighbor = ( connection->n1 ).get() == current ? ( connection->n2 ).get()
+            GRAPH_NODE* neighbor = ( connection->n1 ).get() == current ? ( connection->n2 ).get()
                                                                       : ( connection->n1 ).get();
 
             if( !neighbor )
@@ -2103,17 +2104,18 @@ double CreepageGraph::Solve(
     }
 
     // Trace back the path from aTo to aFrom
-    GraphNode* step = aTo.get();
+    GRAPH_NODE* step = aTo.get();
 
     while( step != aFrom.get() )
     {
-        GraphNode* prevNode = previous[step];
-        for( std::shared_ptr<GraphConnection> connection : step->m_connections )
+        GRAPH_NODE* prevNode = previous[step];
+
+        for( std::shared_ptr<GRAPH_CONNECTION> node_conn : step->m_node_conns )
         {
-            if( ( ( connection->n1 ).get() == prevNode && ( connection->n2 ).get() == step )
-                || ( ( connection->n1 ).get() == step && ( connection->n2 ).get() == prevNode ) )
+            if( ( ( node_conn->n1 ).get() == prevNode && ( node_conn->n2 ).get() == step )
+                || ( ( node_conn->n1 ).get() == step && ( node_conn->n2 ).get() == prevNode ) )
             {
-                aResult.push_back( connection );
+                aResult.push_back( node_conn );
                 break;
             }
         }
@@ -2123,7 +2125,7 @@ double CreepageGraph::Solve(
     return pathWeight;
 }
 
-void CreepageGraph::Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode>& aConnectTo,
+void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>& aConnectTo,
                               BOARD_ITEM* aParent )
 {
     CREEP_SHAPE* newshape = nullptr;
@@ -2238,15 +2240,15 @@ void CreepageGraph::Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode>& a
     if( !newshape )
         return;
 
-    std::shared_ptr<GraphNode> gnShape = nullptr;
+    std::shared_ptr<GRAPH_NODE> gnShape = nullptr;
 
     newshape->SetParent( aParent );
 
     switch( aShape.Type() )
     {
-    case SH_SEGMENT: gnShape = AddNode( GraphNode::SEGMENT, newshape, newshape->GetPos() ); break;
-    case SH_CIRCLE: gnShape = AddNode( GraphNode::CIRCLE, newshape, newshape->GetPos() ); break;
-    case SH_ARC: gnShape = AddNode( GraphNode::ARC, newshape, newshape->GetPos() ); break;
+    case SH_SEGMENT: gnShape = AddNode( GRAPH_NODE::SEGMENT, newshape, newshape->GetPos() ); break;
+    case SH_CIRCLE: gnShape = AddNode( GRAPH_NODE::CIRCLE, newshape, newshape->GetPos() ); break;
+    case SH_ARC: gnShape = AddNode( GRAPH_NODE::ARC, newshape, newshape->GetPos() ); break;
     default: break;
     }
 
@@ -2254,7 +2256,7 @@ void CreepageGraph::Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode>& a
     {
         m_shapeCollection.push_back( newshape );
         gnShape->m_net = aConnectTo->m_net;
-        std::shared_ptr<GraphConnection> gc = AddConnection( gnShape, aConnectTo );
+        std::shared_ptr<GRAPH_CONNECTION> gc = AddConnection( gnShape, aConnectTo );
 
         if( gc )
             gc->m_path.m_show = false;
@@ -2266,113 +2268,121 @@ void CreepageGraph::Addshape( const SHAPE& aShape, std::shared_ptr<GraphNode>& a
     }
 }
 
-void CreepageGraph::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
-                                   bool aGenerateBoardEdges )
+void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool aClearance )
 {
-    std::vector<std::shared_ptr<GraphNode>> nodes1 = m_nodes;
-    std::vector<std::shared_ptr<GraphNode>> nodes2 = m_nodes;
+    std::vector<std::shared_ptr<GRAPH_NODE>> nodes;
+    std::mutex                               nodes_lock;
+    thread_pool&                             tp = GetKiCadThreadPool();
 
+    std::copy_if( m_nodes.begin(), m_nodes.end(), std::back_inserter( nodes ),
+                  [&]( std::shared_ptr<GRAPH_NODE> gn )
+                  {
+                      return !!gn && gn->m_parent && gn->m_connectDirectly
+                             && ( gn->m_type != GRAPH_NODE::TYPE::VIRTUAL );
+                  } );
 
-    for( std::shared_ptr<GraphNode> gn1 : nodes1 )
+    auto processNodes = [&]( size_t i, size_t j ) -> bool
     {
-        nodes2.erase( nodes2.begin() );
-
-        if( !gn1 )
-            continue;
-
-        if( !gn1->m_parent )
-            continue;
-
-        if( !gn1->m_connectDirectly )
-            continue;
-
-        if( gn1->m_type == GraphNode::TYPE::VIRTUAL )
-            continue;
-
-
-        for( std::shared_ptr<GraphNode> gn2 : nodes2 )
-        {
-            if( !gn2 )
-                continue;
-
-            if( !gn2->m_parent )
-                continue;
-
-            if( gn1->m_parent == gn2->m_parent )
-                continue;
-
-            if( !gn2->m_connectDirectly )
-                continue;
-
-            if( gn2->m_type == GraphNode::TYPE::VIRTUAL )
-                continue;
-
-            if( !aGenerateBoardEdges && !gn1->m_parent->IsConductive()
-                && !gn2->m_parent->IsConductive() )
-                continue;
-
-            if( ( gn1->m_net == gn2->m_net ) && ( gn1->m_parent->IsConductive() )
-                && ( gn2->m_parent->IsConductive() ) )
-                continue;
-
-            for( PATH_CONNECTION pc : GetPaths( gn1->m_parent, gn2->m_parent, aMaxWeight ) )
+            for( size_t ii = i; ii < j; ii++ )
             {
-                std::vector<const BOARD_ITEM*> IgnoreForTest;
-                IgnoreForTest.push_back( gn1->m_parent->GetParent() );
-                IgnoreForTest.push_back( gn2->m_parent->GetParent() );
+                std::shared_ptr<GRAPH_NODE> gn1 = nodes[ii];
 
-                if( !pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
-                                 { false, true }, m_minGrooveWidth ) )
-                    continue;
-
-                std::shared_ptr<GraphNode>* connect1 = &gn1;
-                std::shared_ptr<GraphNode>* connect2 = &gn2;
-                std::shared_ptr<GraphNode> gnt1 = nullptr;
-                std::shared_ptr<GraphNode> gnt2 = nullptr;
-
-                if ( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+                for( size_t jj = ii + 1; jj < nodes.size(); jj++ )
                 {
-                    gnt1 = AddNode( GraphNode::POINT, gn1->m_parent, pc.a1 );
-                    gnt1->m_connectDirectly = false;
+                    std::shared_ptr<GRAPH_NODE> gn2 = nodes[jj];
 
-                    if( gn1->m_parent->IsConductive() )
+                    if( gn1->m_parent->GetParent() == gn2->m_parent->GetParent() )
+                        continue;
+
+                    if( ( gn1->m_net == gn2->m_net ) && ( gn1->m_parent->IsConductive() )
+                        && ( gn2->m_parent->IsConductive() ) )
+                        continue;
+
+                    for( PATH_CONNECTION pc : GetPaths( gn1->m_parent, gn2->m_parent, aMaxWeight ) )
                     {
-                        std::shared_ptr<GraphConnection> gc = AddConnection( gn1, gnt1 );
+                        std::vector<const BOARD_ITEM*> IgnoreForTest;
+                        IgnoreForTest.push_back( gn1->m_parent->GetParent() );
+                        IgnoreForTest.push_back( gn2->m_parent->GetParent() );
 
-                        if( gc )
-                            gc->m_path.m_show = false;
+                        if( !pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
+                                        { false, true }, m_minGrooveWidth ) )
+                            continue;
+
+                        std::shared_ptr<GRAPH_NODE>* connect1 = &gn1;
+                        std::shared_ptr<GRAPH_NODE>* connect2 = &gn2;
+                        std::shared_ptr<GRAPH_NODE>  gnt1 = nullptr;
+                        std::shared_ptr<GRAPH_NODE>  gnt2 = nullptr;
+                        std::lock_guard<std::mutex> lock( nodes_lock );
+
+                        if( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+                        {
+                            gnt1 = AddNode( GRAPH_NODE::POINT, gn1->m_parent, pc.a1 );
+                            gnt1->m_connectDirectly = false;
+
+                            if( gn1->m_parent->IsConductive() )
+                            {
+                                std::shared_ptr<GRAPH_CONNECTION> gc = AddConnection( gn1, gnt1 );
+
+                                if( gc )
+                                    gc->m_path.m_show = false;
+                            }
+                            connect1 = &gnt1;
+                        }
+
+                        if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+                        {
+                            gnt2 = AddNode( GRAPH_NODE::POINT, gn2->m_parent, pc.a2 );
+                            gnt2->m_connectDirectly = false;
+
+                            if( gn2->m_parent->IsConductive() )
+                            {
+                                std::shared_ptr<GRAPH_CONNECTION> gc = AddConnection( gn2, gnt2 );
+
+                                if( gc )
+                                    gc->m_path.m_show = false;
+                            }
+                            connect2 = &gnt2;
+                        }
+
+                        AddConnection( *connect1, *connect2, pc );
                     }
-                    connect1 = &gnt1;
-                }
+                } // for jj
+            } // for ii
 
-                if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+            return true;
+        };
+
+    // Running in the clearance test, we are already in a parallelized loop, so parallelizing again
+    // will run into deadlock as all threads start waiting
+    if( aClearance )
+        processNodes( 0, nodes.size() );
+    else
+    {
+        auto ret = tp.parallelize_loop( nodes.size(), processNodes );
+
+        for( size_t ii = 0; ii < ret.size(); ii++ )
+        {
+            std::future<bool>& r = ret[ii];
+
+            if( r.valid() )
+            {
+                std::future_status status = r.wait_for( std::chrono::seconds( 0 ) );
+
+                while( status != std::future_status::ready )
                 {
-                    gnt2 = AddNode( GraphNode::POINT, gn2->m_parent, pc.a2 );
-                    gnt2->m_connectDirectly = false;
-
-                    if( gn2->m_parent->IsConductive() )
-                    {
-                        std::shared_ptr<GraphConnection> gc = AddConnection( gn2, gnt2 );
-
-                        if( gc )
-                            gc->m_path.m_show = false;
-                    }
-                    connect2 = &gnt2;
+                    status = r.wait_for( std::chrono::milliseconds( 100 ) );
                 }
-
-                AddConnection( *connect1, *connect2, pc );
             }
         }
     }
 }
 
-
-void CreepageGraph::Trim( double aWeightLimit )
+void CREEPAGE_GRAPH::Trim( double aWeightLimit )
 {
-    std::vector<std::shared_ptr<GraphConnection>> toRemove;
+    std::vector<std::shared_ptr<GRAPH_CONNECTION>> toRemove;
 
     // Collect connections to remove
-    for( std::shared_ptr<GraphConnection>& gc : m_connections )
+    for( std::shared_ptr<GRAPH_CONNECTION>& gc : m_connections )
     {
         if( gc && ( gc->m_path.weight > aWeightLimit ) )
         {
@@ -2381,35 +2391,35 @@ void CreepageGraph::Trim( double aWeightLimit )
     }
 
     // Remove collected connections
-    for( const std::shared_ptr<GraphConnection>& gc : toRemove )
+    for( const std::shared_ptr<GRAPH_CONNECTION>& gc : toRemove )
     {
         RemoveConnection( gc );
     }
 }
 
-void CreepageGraph::RemoveConnection( std::shared_ptr<GraphConnection> aGc, bool aDelete )
+void CREEPAGE_GRAPH::RemoveConnection( std::shared_ptr<GRAPH_CONNECTION> aGc, bool aDelete )
 {
     if( !aGc )
         return;
 
-    for( std::shared_ptr<GraphNode> gn : { aGc->n1, aGc->n2 } )
+    for( std::shared_ptr<GRAPH_NODE> gn : { aGc->n1, aGc->n2 } )
     {
         if( gn )
         {
-            auto& nConns = gn->m_connections;
-            nConns.erase( std::remove( nConns.begin(), nConns.end(), aGc ), nConns.end() );
+            gn->m_node_conns.erase( aGc );
 
-            if( nConns.empty() && aDelete )
+            if( gn->m_node_conns.empty() && aDelete )
             {
                 auto it = std::find_if( m_nodes.begin(), m_nodes.end(),
-                                        [&gn]( const std::shared_ptr<GraphNode> node )
+                                        [&gn]( const std::shared_ptr<GRAPH_NODE> node )
                                         {
                                             return node.get() == gn.get();
                                         } );
+
                 if( it != m_nodes.end() )
-                {
                     m_nodes.erase( it );
-                }
+
+                m_nodeset.erase( gn );
             }
         }
     }
@@ -2423,30 +2433,32 @@ void CreepageGraph::RemoveConnection( std::shared_ptr<GraphConnection> aGc, bool
 }
 
 
-std::shared_ptr<GraphNode> CreepageGraph::AddNode( GraphNode::TYPE aType, CREEP_SHAPE* parent,
+std::shared_ptr<GRAPH_NODE> CREEPAGE_GRAPH::AddNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* parent,
                                                    VECTOR2I pos )
 {
-    std::shared_ptr<GraphNode> gn = FindNode( aType, parent, pos );
+    std::shared_ptr<GRAPH_NODE> gn = FindNode( aType, parent, pos );
     if( gn )
         return gn;
 
-    gn = std::make_shared<GraphNode>( aType, parent, pos );
+    gn = std::make_shared<GRAPH_NODE>( aType, parent, pos );
     m_nodes.push_back( gn );
+    m_nodeset.insert( gn );
     return gn;
 }
 
-std::shared_ptr<GraphNode> CreepageGraph::AddNodeVirtual()
+std::shared_ptr<GRAPH_NODE> CREEPAGE_GRAPH::AddNodeVirtual()
 {
     //Virtual nodes are always unique, do not try to find them
-    std::shared_ptr<GraphNode> gn =
-            std::make_shared<GraphNode>( GraphNode::TYPE::VIRTUAL, nullptr );
+    std::shared_ptr<GRAPH_NODE> gn =
+            std::make_shared<GRAPH_NODE>( GRAPH_NODE::TYPE::VIRTUAL, nullptr );
     m_nodes.push_back( gn );
+    m_nodeset.insert( gn );
     return gn;
 }
 
 
-std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<GraphNode>& aN1,
-                                                               std::shared_ptr<GraphNode>& aN2,
+std::shared_ptr<GRAPH_CONNECTION> CREEPAGE_GRAPH::AddConnection( std::shared_ptr<GRAPH_NODE>& aN1,
+                                                               std::shared_ptr<GRAPH_NODE>& aN2,
                                                                const PATH_CONNECTION&      aPc )
 {
     if( !aN1 || !aN2 )
@@ -2454,16 +2466,16 @@ std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<G
 
     wxASSERT_MSG( ( aN1 != aN2 ), "Creepage: a connection connects a node to itself" );
 
-    std::shared_ptr<GraphConnection> gc = std::make_shared<GraphConnection>( aN1, aN2, aPc );
+    std::shared_ptr<GRAPH_CONNECTION> gc = std::make_shared<GRAPH_CONNECTION>( aN1, aN2, aPc );
     m_connections.push_back( gc );
-    aN1->m_connections.push_back( gc );
-    aN2->m_connections.push_back( gc );
+    aN1->m_node_conns.insert( gc );
+    aN2->m_node_conns.insert( gc );
 
     return gc;
 }
 
-std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<GraphNode>& aN1,
-                                                               std::shared_ptr<GraphNode>& aN2 )
+std::shared_ptr<GRAPH_CONNECTION> CREEPAGE_GRAPH::AddConnection( std::shared_ptr<GRAPH_NODE>& aN1,
+                                                               std::shared_ptr<GRAPH_NODE>& aN2 )
 {
     if( !aN1 || !aN2 )
         return nullptr;
@@ -2476,24 +2488,22 @@ std::shared_ptr<GraphConnection> CreepageGraph::AddConnection( std::shared_ptr<G
     return AddConnection( aN1, aN2, pc );
 }
 
-std::shared_ptr<GraphNode> CreepageGraph::FindNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent,
+std::shared_ptr<GRAPH_NODE> CREEPAGE_GRAPH::FindNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent,
                                                     VECTOR2I aPos )
 {
-    for( std::shared_ptr<GraphNode> gn : m_nodes )
-    {
-        if( aPos == gn->m_pos && aParent == gn->m_parent && aType == gn->m_type )
-        {
-            return gn;
-        }
-    }
+    auto it = m_nodeset.find( std::make_shared<GRAPH_NODE>( aType, aParent, aPos ) );
+
+    if( it != m_nodeset.end() )
+        return *it;
+
     return nullptr;
 }
 
 
-std::shared_ptr<GraphNode> CreepageGraph::AddNetElements( int aNetCode, PCB_LAYER_ID aLayer,
+std::shared_ptr<GRAPH_NODE> CREEPAGE_GRAPH::AddNetElements( int aNetCode, PCB_LAYER_ID aLayer,
                                                           int aMaxCreepage )
 {
-    std::shared_ptr<GraphNode> virtualNode = AddNodeVirtual();
+    std::shared_ptr<GRAPH_NODE> virtualNode = AddNodeVirtual();
     virtualNode->m_net = aNetCode;
 
     for( FOOTPRINT* footprint : m_board.Footprints() )

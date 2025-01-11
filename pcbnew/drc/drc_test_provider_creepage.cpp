@@ -64,18 +64,18 @@ public:
 
 private:
     int testCreepage();
-    int testCreepage( CreepageGraph& aGraph, int aNetCodeA, int aNetCodeB, PCB_LAYER_ID aLayer );
+    int testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCodeA, int aNetCodeB, PCB_LAYER_ID aLayer );
 
     void CollectBoardEdges( std::vector<BOARD_ITEM*>& aVector );
     void CollectNetCodes( std::vector<int>& aVector );
+
+    std::set<std::pair<const BOARD_ITEM*, const BOARD_ITEM*>> m_reportedPairs;
 };
 
 
 bool DRC_TEST_PROVIDER_CREEPAGE::Run()
 {
     m_board = m_drcEngine->GetBoard();
-
-    //int errorMax = m_board->GetDesignSettings().m_MaxError;
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CREEPAGE ) )
     {
@@ -88,13 +88,13 @@ bool DRC_TEST_PROVIDER_CREEPAGE::Run()
 }
 
 
-std::shared_ptr<GraphNode> FindInGraphNodes( std::shared_ptr<GraphNode>               aNode,
-                                             std::vector<std::shared_ptr<GraphNode>>& aGraph )
+std::shared_ptr<GRAPH_NODE> FindInGraphNodes( std::shared_ptr<GRAPH_NODE>               aNode,
+                                             std::vector<std::shared_ptr<GRAPH_NODE>>& aGraph )
 {
     if( !aNode )
         return nullptr;
 
-    for( std::shared_ptr<GraphNode> gn : aGraph )
+    for( std::shared_ptr<GRAPH_NODE> gn : aGraph )
     {
         if( aNode->m_pos == gn->m_pos )
         {
@@ -105,7 +105,7 @@ std::shared_ptr<GraphNode> FindInGraphNodes( std::shared_ptr<GraphNode>         
 }
 
 
-int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCodeA, int aNetCodeB,
+int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCodeA, int aNetCodeB,
                                               PCB_LAYER_ID aLayer )
 {
     PCB_TRACK bci1( m_board );
@@ -134,17 +134,23 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
     if ( netA->GetBoundingBox().Distance( netB->GetBoundingBox() ) > creepageValue )
         return 0;
 
-    std::shared_ptr<GraphNode> NetA = aGraph.AddNetElements( aNetCodeA, aLayer, creepageValue );
-    std::shared_ptr<GraphNode> NetB = aGraph.AddNetElements( aNetCodeB, aLayer, creepageValue );
+    std::shared_ptr<GRAPH_NODE> NetA = aGraph.AddNetElements( aNetCodeA, aLayer, creepageValue );
+    std::shared_ptr<GRAPH_NODE> NetB = aGraph.AddNetElements( aNetCodeB, aLayer, creepageValue );
 
 
-    aGraph.GeneratePaths( creepageValue, aLayer );
+    aGraph.GeneratePaths( creepageValue, aLayer, false );
 
-    std::vector<std::shared_ptr<GraphNode>> nodes1 = aGraph.m_nodes;
-    std::vector<std::shared_ptr<GraphNode>> nodes2 = aGraph.m_nodes;
+    std::vector<std::shared_ptr<GRAPH_NODE>> temp_nodes;
 
-    alg::for_all_pairs( aGraph.m_nodes.begin(), aGraph.m_nodes.end(),
-                        [&]( std::shared_ptr<GraphNode> aN1, std::shared_ptr<GraphNode> aN2 )
+    std::copy_if( aGraph.m_nodes.begin(), aGraph.m_nodes.end(), std::back_inserter( temp_nodes ),
+                  []( std::shared_ptr<GRAPH_NODE> aNode )
+                  {
+                      return !!aNode && aNode->m_parent && aNode->m_parent->IsConductive()
+                             && aNode->m_connectDirectly && aNode->m_type == GRAPH_NODE::POINT;
+                  } );
+
+    alg::for_all_pairs( temp_nodes.begin(), temp_nodes.end(),
+                        [&]( std::shared_ptr<GRAPH_NODE> aN1, std::shared_ptr<GRAPH_NODE> aN2 )
                         {
                             if( aN1 == aN2 )
                                 return;
@@ -167,21 +173,20 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
 
                             // We are only looking for points on circles and arcs
 
-                            if( aN1->m_type != GraphNode::POINT )
+                            if( aN1->m_type != GRAPH_NODE::POINT )
                                 return;
 
-                            if( aN2->m_type != GraphNode::POINT )
+                            if( aN2->m_type != GRAPH_NODE::POINT )
                                 return;
 
                             aN1->m_parent->ConnectChildren( aN1, aN2, aGraph );
                         } );
 
-    std::vector<std::shared_ptr<GraphConnection>> shortestPath;
+    std::vector<std::shared_ptr<GRAPH_CONNECTION>> shortestPath;
     shortestPath.clear();
     double distance = aGraph.Solve( NetA, NetB, shortestPath );
 
-
-    if( ( shortestPath.size() > 0 ) && ( distance - creepageValue < 0 ) )
+    if( !shortestPath.empty() && ( shortestPath.size() >= 4 ) && ( distance - creepageValue < 0 ) )
     {
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CREEPAGE );
         wxString msg = formatMsg( _( "(%s creepage %s; actual %s)" ), constraint.GetName(),
@@ -189,22 +194,27 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
         drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
         drce->SetViolatingRule( constraint.GetParentRule() );
 
-        if( shortestPath.size() >= 4 && shortestPath[1]->n1 && shortestPath[1]->n2 )
-            drce->SetItems( shortestPath[1]->n1->m_parent->GetParent(),
-                            shortestPath[shortestPath.size() - 2]->n2->m_parent->GetParent() );
+        std::shared_ptr<GRAPH_CONNECTION> gc1 = shortestPath[1];
+        std::shared_ptr<GRAPH_CONNECTION> gc2 = shortestPath[shortestPath.size() - 2];
+
+        if( gc1->n1 && gc2->n2 )
+        {
+            const BOARD_ITEM* item1 = gc1->n1->m_parent->GetParent();
+            const BOARD_ITEM* item2 = gc2->n2->m_parent->GetParent();
+
+            if( m_reportedPairs.insert( std::make_pair( item1, item2 ) ).second )
+                drce->SetItems( item1, item2 );
+            else
+                return 1;
+        }
 
         std::vector<PCB_SHAPE> shortestPathShapes1, shortestPathShapes2;
 
-        VECTOR2I startPoint = shortestPath[1]->m_path.a2;
-        VECTOR2I endPoint = shortestPath[shortestPath.size() - 2]->m_path.a2;
-
-        PCB_SHAPE s;
-        s.SetStart( startPoint );
-        s.SetEnd( endPoint );
-
-
+        VECTOR2I               startPoint = gc1->m_path.a2;
+        VECTOR2I               endPoint = gc2->m_path.a2;
         std::vector<PCB_SHAPE> path;
-        for( std::shared_ptr<GraphConnection> gc : shortestPath )
+
+        for( std::shared_ptr<GRAPH_CONNECTION> gc : shortestPath )
         {
             if( !gc )
                 continue;
@@ -217,11 +227,10 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
             }
         }
 
-        DRC_CUSTOM_MARKER_HANDLER graphicsHandler =
-                GetGraphicsHandler( path, startPoint, endPoint, distance );
-        reportViolation( drce, shortestPath[1]->m_path.a2, aLayer, &graphicsHandler );
+        DRC_CUSTOM_MARKER_HANDLER handler = GetGraphicsHandler( path, startPoint, endPoint, distance );
+        reportViolation( drce, gc1->m_path.a2, aLayer, &handler );
+
     }
-    shortestPath.clear();
 
     return 1;
 }
@@ -336,7 +345,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
         return -1;
 
     const DRAWINGS drawings = m_board->Drawings();
-    CreepageGraph  graph( *m_board );
+    CREEPAGE_GRAPH  graph( *m_board );
 
 
     if( ADVANCED_CFG::GetCfg().m_EnableCreepageSlot )
@@ -355,12 +364,16 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
     graph.RemoveDuplicatedShapes();
     graph.TransformCreepShapesToNodes( graph.m_shapeCollection );
 
-    graph.GeneratePaths( maxConstraint, Edge_Cuts );
+    graph.GeneratePaths( maxConstraint, Edge_Cuts, false );
 
 
-    int    beNodeSize = graph.m_nodes.size();
-    int    beConnectionsSize = graph.m_connections.size();
+    int  beNodeSize = graph.m_nodes.size();
+    int  beConnectionsSize = graph.m_connections.size();
     bool prevTestChangedGraph = false;
+
+    size_t current = 0;
+    size_t total =
+            ( netcodes.size() * ( netcodes.size() - 1 ) ) / 2 * m_board->GetCopperLayerCount();
 
     alg::for_all_pairs( netcodes.begin(), netcodes.end(),
                         [&]( int aNet1, int aNet2 )
@@ -368,10 +381,13 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
                             if( aNet1 == aNet2 )
                                 return;
 
-                            for( PCB_LAYER_ID layer : LSET::AllCuMask().CuStack() )
+                            for( auto it = m_board->GetLayerSet().copper_layers_begin();
+                                      it != m_board->GetLayerSet().copper_layers_end();
+                                      ++it )
                             {
-                                if( !m_board->IsLayerEnabled( layer ) )
-                                    continue;
+                                PCB_LAYER_ID layer = *it;
+
+                                reportProgress( current++, total );
 
                                 if ( prevTestChangedGraph )
                                 {
