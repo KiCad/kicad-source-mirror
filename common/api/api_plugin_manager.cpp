@@ -246,14 +246,33 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
             return;
         }
 
-        args.push_back( py->wc_str() );
-
         if( !pluginFile.IsFileReadable() )
         {
             wxLogTrace( traceApi, wxString::Format( "Manager: Python entrypoint %s is not readable",
                                                     pluginFile.GetFullPath() ) );
             return;
         }
+
+        PYTHON_MANAGER manager( *py );
+        wxExecuteEnv   env;
+
+        wxString systemRoot;
+        wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
+        env.env[wxS( "SYSTEMROOT" )] = systemRoot;
+
+        env.env.erase( "PYTHONHOME" );
+        env.env.erase( "PYTHONPATH" );
+
+        manager.Execute( pluginFile.GetFullPath(),
+                []( int aRetVal, const wxString& aOutput, const wxString& aError )
+                {
+                    wxLogTrace( traceApi,
+                                wxString::Format( "Manager: action exited with code %d", aRetVal ) );
+
+                    if( !aError.IsEmpty() )
+                        wxLogTrace( traceApi, wxString::Format( "Manager: action stderr: %s", aError ) );
+                },
+                &env );
 
         break;
     }
@@ -267,40 +286,39 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
             return;
         }
 
+        args.emplace_back( pluginPath.wc_str() );
+
+        for( const wxString& arg : action->args )
+            args.emplace_back( arg.wc_str() );
+
+        args.emplace_back( nullptr );
+
+        wxExecuteEnv env;
+        wxGetEnvMap( &env.env );
+        env.env[wxS( "KICAD_API_SOCKET" )] = Pgm().GetApiServer().SocketPath();
+        env.env[wxS( "KICAD_API_TOKEN" )] = Pgm().GetApiServer().Token();
+        env.cwd = pluginFile.GetPath();
+
+        long p = wxExecute( const_cast<wchar_t**>( args.data() ),
+                            wxEXEC_ASYNC | wxEXEC_HIDE_CONSOLE, nullptr, &env );
+
+        if( !p )
+        {
+            wxLogTrace( traceApi, wxString::Format( "Manager: launching action %s failed",
+                                                    action->identifier ) );
+        }
+        else
+        {
+            wxLogTrace( traceApi, wxString::Format( "Manager: launching action %s -> pid %ld",
+                                                    action->identifier, p ) );
+        }
         break;
-    };
+    }
 
     default:
         wxLogTrace( traceApi, wxString::Format( "Manager: unhandled runtime for action %s",
                                                 action->identifier ) );
         return;
-    }
-
-    args.emplace_back( pluginPath.wc_str() );
-
-    for( const wxString& arg : action->args )
-        args.emplace_back( arg.wc_str() );
-
-    args.emplace_back( nullptr );
-
-    wxExecuteEnv env;
-    wxGetEnvMap( &env.env );
-    env.env[ wxS( "KICAD_API_SOCKET" ) ] = Pgm().GetApiServer().SocketPath();
-    env.env[ wxS( "KICAD_API_TOKEN" ) ] = Pgm().GetApiServer().Token();
-    env.cwd = pluginFile.GetPath();
-
-    long p = wxExecute( const_cast<wchar_t**>( args.data() ), wxEXEC_ASYNC | wxEXEC_HIDE_CONSOLE,
-                        nullptr, &env );
-
-    if( !p )
-    {
-        wxLogTrace( traceApi, wxString::Format( "Manager: launching action %s failed",
-                                                action->identifier ) );
-    }
-    else
-    {
-        wxLogTrace( traceApi, wxString::Format( "Manager: launching action %s -> pid %ld",
-                                                action->identifier, p ) );
     }
 }
 
@@ -411,6 +429,14 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
         wxLogTrace( traceApi, wxString::Format( "Manager: creating Python env at %s",
                                                 job.env_path ) );
         PYTHON_MANAGER manager( Pgm().GetCommonSettings()->m_Api.python_interpreter );
+        wxExecuteEnv   env;
+
+        wxString systemRoot;
+        wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
+        env.env[wxS( "SYSTEMROOT" )] = systemRoot;
+
+        env.env.erase( "PYTHONHOME" );
+        env.env.erase( "PYTHONPATH" );
 
         manager.Execute(
                 wxString::Format( wxS( "-m venv --system-site-packages \"%s\"" ),
@@ -426,7 +452,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                     wxCommandEvent* evt =
                             new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
                     QueueEvent( evt );
-                } );
+                }, &env );
 
         JOB nextJob( job );
         nextJob.type = JOB_TYPE::SETUP_ENV;
@@ -457,6 +483,9 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             wxString systemRoot;
             wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
             env.env[wxS( "SYSTEMROOT" )] = systemRoot;
+
+            env.env.erase( "PYTHONHOME" );
+            env.env.erase( "PYTHONPATH" );
 #endif
 
             wxString cmd = wxS( "-m pip install --upgrade pip" );
@@ -515,6 +544,10 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             wxString systemRoot;
             wxGetEnv( wxS( "SYSTEMROOT" ), &systemRoot );
             env.env[wxS( "SYSTEMROOT" )] = systemRoot;
+
+            // If we are using the KiCad-shipped Python interpreter we have to do hacks
+            env.env.erase( "PYTHONHOME" );
+            env.env.erase( "PYTHONPATH" );
 #endif
 
             if( pythonHome )

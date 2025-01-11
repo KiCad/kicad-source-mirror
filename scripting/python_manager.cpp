@@ -91,9 +91,8 @@ PYTHON_MANAGER::PYTHON_MANAGER( const wxString& aInterpreterPath )
 
 
 void PYTHON_MANAGER::Execute( const wxString& aArgs,
-                              const std::function<void( int, const wxString&,
-                                  const wxString& )>& aCallback,
-                              const wxExecuteEnv* aEnv, bool aSaveOutput )
+        const std::function<void(int, const wxString&, const wxString&)>& aCallback,
+        const wxExecuteEnv* aEnv, bool aSaveOutput )
 {
     PYTHON_PROCESS* process = new PYTHON_PROCESS( aCallback );
     process->Redirect();
@@ -227,7 +226,7 @@ std::optional<wxString> PYTHON_MANAGER::GetVirtualPython( const wxString& aNames
     
 #ifdef _WIN32
     python.AppendDir( "Scripts" );
-    python.SetFullName( "python.exe" );
+    python.SetFullName( "pythonw.exe" );
 #else
     python.AppendDir( "bin" );
     python.SetFullName( "python" );
