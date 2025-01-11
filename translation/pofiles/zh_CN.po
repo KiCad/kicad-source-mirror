@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-11 17:36+0000\n"
+"PO-Revision-Date: 2025-01-11 17:38+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -17225,7 +17225,7 @@ msgstr "只导入矢量图。位图和字体将被忽略。"
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:43
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:129 pcbnew/zone.cpp:1949
 msgid "Placement"
-msgstr "布置"
+msgstr "布置规则"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:48
 msgid "Interactive placement"
@@ -36854,7 +36854,7 @@ msgstr "渲染 PCB 作业选项"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1466
 msgid "Keepouts"
-msgstr "Keepout 规则"
+msgstr "禁布规则"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:177
 msgid "Convert to Rule Area"
