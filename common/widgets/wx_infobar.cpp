@@ -59,7 +59,7 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
 
     wxColour fg, bg;
-    KIPLATFORM::UI::GetInfoBarColours( bg, fg );
+    KIPLATFORM::UI::GetInfoBarColours( fg, bg );
     SetBackgroundColour( bg );
     SetForegroundColour( fg );
 #ifdef __WXMAC__
