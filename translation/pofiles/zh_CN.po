@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-11 18:27+0000\n"
+"PO-Revision-Date: 2025-01-11 18:41+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -31974,9 +31974,9 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
-"域按优先级填充, 级别 3 优先级高于级别 2。\n"
-"当一个域位于另一个域内时: \n"
-"* 如果优先级较高, 则其外框将从其他域中移除。\n"
+"填充区按优先级填充, 级别 3 优先级高于级别 2。\n"
+"当一个填充区位于另一个填充区内时:\n"
+"* 如果优先级较高, 则其外框将从其他填充区中移除。\n"
 "* 如果其优先级相等, 则产生一个 DRC 错误。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
@@ -32064,7 +32064,7 @@ msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
-"焊盘与域的默认连接类型。\n"
+"焊盘与填充区的默认连接类型。\n"
 "该设置可被局部焊盘设置覆盖"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4017
@@ -37200,7 +37200,7 @@ msgstr "通过网自动更新"
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
-msgstr "将当前过孔的网络绑定到其接触的焊盘或域的网络"
+msgstr "自动将当前过孔的网络绑定到其接触到的焊盘或填充区的网络"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:76
 msgid "Start X:"
@@ -39023,6 +39023,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
+#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -41895,10 +41896,10 @@ msgid ""
 " This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果重新填充此电路板上的域, 则将应用铜边缘间距设置 (参见电路板配置 -> 设计规"
-"则 -> 约束)。\n"
-"老版本的 KiCad 会将电路板边缘 (Edge Cuts 层) 的线宽作为铜间距, 因此新的填充结"
-"果可能与老版本的填充结果不同。"
+"如果重新填充此电路板上的填充区, 则将应用铜边缘间距设置 (参见电路板配置 -> "
+"设计规则 -> 约束)。\n"
+"旧版本的 KiCad 会将电路板边缘 (Edge Cuts 层) 的线宽作为铜间距, "
+"因此新的填充结果可能与老版本的填充结果不同。"
 
 #: pcbnew/files.cpp:541
 #, c-format
@@ -44590,9 +44591,9 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR 模板\"%s\"在原始设计中具有散热片, 但引线宽度 (%.2f mm)比域的最小厚度 "
-"(%.2f mm) 更薄。KiCad 要求保留域的最小厚度。因此, "
-"已将最小厚度用作新的引线宽度, 并将在下次填充区时应用。"
+"CADSTAR 模板\"%s\"在原始设计中具有散热片, 但引线宽度 (%.2f mm)"
+"比填充区的最小厚度 (%.2f mm) 更薄。KiCad 要求保留填充区的最小厚度。因此, "
+"已将最小厚度用作新的引线宽度, 并将在下次填充填充区时应用。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2105
 #, c-format
@@ -44610,9 +44611,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。如果填充的是实体"
-"或图案填充, 则它们已导入为 KiCad 域; 如果形状是未填充的外框(开放或闭合), 则它"
-"们将导入为 KiCad 走线。"
+"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。"
+"如果填充的是实体或图案填充, 则它们已导入为 KiCad 填充区; "
+"如果形状是未填充的外框(开放或闭合), 则它们将导入为 KiCad 走线。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2309
 #, c-format
@@ -45304,7 +45305,7 @@ msgstr ""
 "在未定义的层 (%s) 上发现项目。\n"
 "要将其复制到 %s 层上吗?\n"
 "\n"
-"域需要重新填充。"
+"填充区需要重新填充。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1148
 msgid "Undefined Layers Warning"
@@ -46010,7 +46011,7 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"布线工具无法处理此域。\n"
+"布线工具无法处理此填充区。\n"
 "请确认这不是一个自相交的多边形。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:2161
@@ -47739,11 +47740,11 @@ msgstr "放置独立过孔"
 
 #: pcbnew/tools/pcb_actions.cpp:316
 msgid "Add a Zone Cutout"
-msgstr "添加挖空区域"
+msgstr "添加填充区挖空"
 
 #: pcbnew/tools/pcb_actions.cpp:317
 msgid "Add a cutout to an existing zone or rule area"
-msgstr "在现有的填充区或规则域中添加一个挖空区域"
+msgstr "在现有的填充区或规则域中添加一个挖空"
 
 #: pcbnew/tools/pcb_actions.cpp:327
 msgid "Add a Similar Zone"
@@ -49104,7 +49105,7 @@ msgstr "对所选填充区进行实验性填充"
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
-msgstr "更新所选域的覆铜填充, 而不考虑其他相交域"
+msgstr "更新所选填充区的覆铜填充, 而不考虑其他相交填充区"
 
 #: pcbnew/tools/pcb_actions.cpp:2186 pcbnew/tools/zone_filler_tool.cpp:166
 #: pcbnew/zone_manager/dialog_zone_manager.cpp:390
@@ -49355,9 +49356,8 @@ msgstr "不再显示"
 msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
-msgstr ""
-"存在没有被填充的域。如你希望所有的域都被填充, 请使用 \"编辑 -> 填充所有的域 "
-"(%s)\"。"
+msgstr "存在未被填充的填充区。如你希望所有的填充区都被填充, 请使用 "
+"\"编辑 -> 填充所有填充区 (%s)\"。"
 
 #: pcbnew/tools/pcb_control.cpp:349
 msgid "Dimmed"
@@ -49536,7 +49536,7 @@ msgstr "相对位置"
 
 #: pcbnew/tools/zone_create_helper.cpp:198
 msgid "Add Zone Cutout"
-msgstr "添加挖空区域"
+msgstr "添加填充区挖空"
 
 #: pcbnew/tools/zone_create_helper.cpp:230
 msgid "Draw Zone"
@@ -49585,7 +49585,7 @@ msgstr "打开偏好设置"
 msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
-msgstr "如果自动重填所有域运行速度过慢, 可以在偏好选项中关闭该功能。"
+msgstr "如果自动重填所有填充区运行速度过慢, 可以在偏好选项中关闭该功能。"
 
 #: pcbnew/tools/zone_filler_tool.cpp:350
 msgid "Fill Zone"
@@ -50471,7 +50471,7 @@ msgstr "规则域挖空 %s"
 #: pcbnew/zone.cpp:1090
 #, c-format
 msgid "Zone Cutout %s"
-msgstr "挖空区域 %s"
+msgstr "填充区挖空 %s"
 
 #: pcbnew/zone.cpp:1095
 #, c-format
