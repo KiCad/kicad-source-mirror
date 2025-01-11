@@ -2447,6 +2447,10 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
             pin->SetLength( schIUScale.MilsToIU( 0 ) );
     }
 
+    // Pin names and numbers are fixed size in Eagle.
+    pin->SetNumberTextSize( schIUScale.MilsToIU( 60 ) );
+    pin->SetNameTextSize( schIUScale.MilsToIU( 60 ) );
+
     // emulate the visibility of pin elements
     if( aPin->visible )
     {
