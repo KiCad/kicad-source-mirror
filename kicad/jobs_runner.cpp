@@ -82,7 +82,7 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
             specialJob->SetOutputPath( fn.GetFullPath() );
         }
 
-        wxFFileOutputStream procOutput( specialJob->GetFullOutputPath() );
+        wxFFileOutputStream procOutput( specialJob->GetFullOutputPath( aProject ) );
 
         if( !procOutput.IsOk() )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -117,7 +117,7 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
     wxFileName sourceFn( source );
     sourceFn.MakeAbsolute( projectPath );
 
-    wxFileName destFn( job->GetFullOutputPath() );
+    wxFileName destFn( job->GetFullOutputPath( aProject ) );
 
     if( !job->m_dest.IsEmpty() )
         destFn.AppendDir( job->m_dest );

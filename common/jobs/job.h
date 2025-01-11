@@ -27,6 +27,8 @@
 #include <lseq.h>
 #include <lset.h>
 
+class PROJECT;
+
 class KICOMMON_API JOB_PARAM_BASE
 {
 public:
@@ -207,7 +209,7 @@ public:
 
     void SetOutputPath( const wxString& aPath );
     wxString GetOutputPath() const { return m_outputPath; }
-    wxString GetFullOutputPath() const;
+    wxString GetFullOutputPath( PROJECT* aProject ) const;
 
     bool OutputPathFullSpecified() const;
 

@@ -20,6 +20,7 @@
 
 #include <jobs/job.h>
 #include <wx/filename.h>
+#include <common.h>
 
 JOB::JOB( const std::string& aType, bool aOutputIsDirectory ) :
         m_type( aType ),
@@ -94,14 +95,15 @@ void PrependDirectoryToPath( wxFileName& aFileName, const wxString aDirPath )
 }
 
 
-wxString JOB::GetFullOutputPath() const
+wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
 {
+    wxString outPath = ExpandTextVars( m_outputPath, aProject );
     if( !m_tempOutputDirectory.IsEmpty() )
     {
         if( m_outputPathIsDirectory )
         {
-            wxFileName fn( m_outputPath );
-            if( fn.IsAbsolute() || m_outputPath.IsEmpty() )
+            wxFileName fn( outPath );
+            if( fn.IsAbsolute() || outPath.IsEmpty() )
             {
                 fn.AssignDir( m_tempOutputDirectory );
             }
@@ -115,7 +117,7 @@ wxString JOB::GetFullOutputPath() const
         }
         else
         {
-            wxFileName fn( m_outputPath );
+            wxFileName fn( outPath );
             if( fn.IsAbsolute() )
             {
                 // uhhh, do nothing

@@ -333,7 +333,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
-    if( !PATHS::EnsurePathExists( aPlotJob->GetFullOutputPath() ) )
+    if( !PATHS::EnsurePathExists( aPlotJob->GetFullOutputPath( &sch->Prj() ) ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -349,13 +349,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
     if (aPlotJob->GetOutpathIsDirectory())
     {
-        plotOpts.m_outputDirectory = aPlotJob->GetFullOutputPath();
+        plotOpts.m_outputDirectory = aPlotJob->GetFullOutputPath( &sch->Prj() );
         plotOpts.m_outputFile = wxEmptyString;
     }
     else
     {
         plotOpts.m_outputDirectory = wxEmptyString;
-        plotOpts.m_outputFile = aPlotJob->GetFullOutputPath();
+        plotOpts.m_outputFile = aPlotJob->GetFullOutputPath( &sch->Prj() );
     }
     plotOpts.m_pageSizeSelect = pageSizeSelect;
     plotOpts.m_plotAll = aPlotJob->m_plotAll;
@@ -469,13 +469,16 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         aNetJob->SetOutputPath( fn.GetFullName() );
     }
 
-    if( !PATHS::EnsurePathExists( aNetJob->GetFullOutputPath() ) )
+    wxString outPath = aNetJob->GetFullOutputPath( &sch->Prj() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    bool res = helper->WriteNetlist( aNetJob->GetFullOutputPath(), netlistOption, *m_reporter );
+    bool res = helper->WriteNetlist( outPath, netlistOption,
+                                     *m_reporter );
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -676,7 +679,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         aBomJob->SetOutputPath( fn.GetFullName() );
     }
 
-    if( !PATHS::EnsurePathExists( aBomJob->GetFullOutputPath() ) )
+    wxString outPath = aBomJob->GetFullOutputPath( &sch->Prj() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -684,10 +689,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     wxFile f;
 
-    if( !f.Open( aBomJob->GetFullOutputPath(), wxFile::write ) )
+    if( !f.Open( outPath, wxFile::write ) )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ),
-                                              aBomJob->GetFullOutputPath() ),
+        m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ), outPath ),
                             RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
@@ -795,13 +799,15 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
         aNetJob->SetOutputPath( fn.GetFullName() );
     }
 
-    if( !PATHS::EnsurePathExists( aNetJob->GetFullOutputPath() ) )
+    wxString outPath = aNetJob->GetFullOutputPath( &sch->Prj() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    bool res = xmlNetlist->WriteNetlist( aNetJob->GetFullOutputPath(), GNL_OPT_BOM, *m_reporter );
+    bool res = xmlNetlist->WriteNetlist( outPath, GNL_OPT_BOM, *m_reporter );
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -1142,21 +1148,21 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     bool wroteReport = false;
 
+    wxString outPath = ercJob->GetFullOutputPath( &sch->Prj() );
+
     if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )
-        wroteReport = reportWriter.WriteJsonReport( ercJob->GetFullOutputPath() );
+        wroteReport = reportWriter.WriteJsonReport( outPath );
     else
-        wroteReport = reportWriter.WriteTextReport( ercJob->GetFullOutputPath() );
+        wroteReport = reportWriter.WriteTextReport( outPath );
 
     if( !wroteReport )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to save ERC report to %s\n" ),
-                                              ercJob->GetFullOutputPath() ),
+        m_reporter->Report( wxString::Format( _( "Unable to save ERC report to %s\n" ), outPath ),
                             RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    m_reporter->Report(
-            wxString::Format( _( "Saved ERC Report to %s\n" ), ercJob->GetFullOutputPath() ),
+    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), outPath ),
                         RPT_SEVERITY_INFO );
 
     if( ercJob->m_exitCodeViolations )

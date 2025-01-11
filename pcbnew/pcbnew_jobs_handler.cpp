@@ -362,6 +362,14 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         aStepJob->SetOutputPath( fn.GetFullName() );
     }
 
+    wxString outPath = aStepJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     if( aStepJob->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
     {
 
@@ -388,15 +396,14 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         }
 
         bool success = vrmlExporter.ExportVRML_File(
-                brd->GetProject(), &messages, aStepJob->GetFullOutputPath(), scale,
+                brd->GetProject(), &messages, outPath, scale,
                 aStepJob->m_3dparams.m_IncludeUnspecified, aStepJob->m_3dparams.m_IncludeDNP,
                 !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
                 aStepJob->m_vrmlModelDir, originX, originY );
 
         if ( success )
         {
-            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
-                                                  aStepJob->GetFullOutputPath() ),
+            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ), outPath ),
                                 RPT_SEVERITY_INFO );
         }
         else
@@ -435,7 +442,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         }
 
         EXPORTER_STEP stepExporter( brd, params );
-        stepExporter.m_outputFile = aStepJob->GetFullOutputPath();
+        stepExporter.m_outputFile = aStepJob->GetFullOutputPath( brd->GetProject() );
 
         if( !stepExporter.Export() )
             return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -667,7 +674,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         image = image.Mirror( false );
 
         image.SetOption( wxIMAGE_OPTION_QUALITY, 90 );
-        image.SaveFile( aRenderJob->GetFullOutputPath(),
+        image.SaveFile( aRenderJob->GetFullOutputPath( brd->GetProject() ),
                         aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG
                                                                             : wxBITMAP_TYPE_JPEG );
     }
@@ -736,7 +743,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
             sheetPath = aSvgJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
-    if( !plotter.Plot( aSvgJob->GetFullOutputPath(), aSvgJob->m_printMaskLayer,
+    if( !plotter.Plot( aSvgJob->GetFullOutputPath( brd->GetProject() ), aSvgJob->m_printMaskLayer,
                        aSvgJob->m_printMaskLayersToIncludeOnAllLayers, false,
                        aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE,
                        layerName,
@@ -800,7 +807,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
             sheetPath = aDxfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
-    if( !plotter.Plot( aDxfJob->GetFullOutputPath(), aDxfJob->m_printMaskLayer,
+    if( !plotter.Plot( aDxfJob->GetFullOutputPath( brd->GetProject() ), aDxfJob->m_printMaskLayer,
                        aDxfJob->m_printMaskLayersToIncludeOnAllLayers, false,
                        aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE, layerName,
                        sheetName, sheetPath ) )
@@ -851,7 +858,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
-    if( !PATHS::EnsurePathExists( aPdfJob->GetFullOutputPath() ) )
+    wxString outPath = aPdfJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -874,7 +883,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
 
     LOCALE_IO dummy;
-    if( !pcbPlotter.Plot( aPdfJob->GetFullOutputPath(), aPdfJob->m_printMaskLayer,
+    if( !pcbPlotter.Plot( outPath, aPdfJob->m_printMaskLayer,
                             aPdfJob->m_printMaskLayersToIncludeOnAllLayers,
                             false,
                             aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE,
@@ -970,7 +979,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         else
             fileExt = FILEEXT::GerberFileExtension;
 
-        BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath(), layerName, fileExt );
+        BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath( brd->GetProject() ), layerName, fileExt );
         wxString fullname = fn.GetFullName();
 
         jobfile_writer.AddGbrFile( layer, fullname );
@@ -1015,7 +1024,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     wxFileName fn( brd->GetFileName() );
 
     // Build gerber job file from basename
-    BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath(), wxT( "job" ),
+    BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath( brd->GetProject() ), wxT( "job" ),
                        FILEEXT::GerberJobFileExtension );
     jobfile_writer.CreateJobFile( fn.GetFullPath() );
 
@@ -1029,15 +1038,15 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
     if( aGencadJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    BOARD* aBoard = LoadBoard( aGencadJob->m_filename, true ); // Ensure m_board is of type BOARD*
+    BOARD* brd = LoadBoard( aGencadJob->m_filename, true ); // Ensure m_board is of type BOARD*
 
-    if( aBoard == nullptr )
+    if( brd == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    GENCAD_EXPORTER exporter( aBoard );
+    GENCAD_EXPORTER exporter( brd );
 
     VECTOR2I GencadOffset;
-    VECTOR2I auxOrigin = aBoard->GetDesignSettings().GetAuxOrigin();
+    VECTOR2I auxOrigin = brd->GetDesignSettings().GetAuxOrigin();
     GencadOffset.x = aGencadJob->m_useDrillOrigin ? auxOrigin.x : 0;
     GencadOffset.y = aGencadJob->m_useDrillOrigin ? auxOrigin.y : 0;
 
@@ -1049,17 +1058,26 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
 
     if( aGencadJob->GetOutputPath().IsEmpty() )
     {
-        wxFileName fn = aBoard->GetFileName();
+        wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::DXF ) );
 
         aGencadJob->SetOutputPath( fn.GetFullName() );
     }
 
-    if( !exporter.WriteFile( aGencadJob->GetFullOutputPath() ) )
+    wxString outPath = aGencadJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+
+    if( !exporter.WriteFile( outPath ) )
     {
         wxString msg;
-        msg.Printf( _( "Failed to create file '%s'.\n" ), aGencadJob->GetFullOutputPath() );
+        msg.Printf( _( "Failed to create file '%s'.\n" ), outPath );
 
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
 
@@ -1150,7 +1168,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 
     // We are feeding it one layer at the start here to silence a logic check
     GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
-                                                                aGerberJob->GetFullOutputPath(),
+                                                                aGerberJob->GetFullOutputPath( brd->GetProject() ),
                                                                 sheetName, sheetPath );
 
     if( plotter )
@@ -1161,7 +1179,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     else
     {
         m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
-                                              aGerberJob->GetFullOutputPath() ),
+                                              aGerberJob->GetFullOutputPath( brd->GetProject() ) ),
                 RPT_SEVERITY_ERROR );
         exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
@@ -1187,10 +1205,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    // ensure output dir exists
-    wxFileName fn( aDrillJob->GetFullOutputPath() + wxT( "/" ) );
 
-    if( !fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+    wxString outPath = aDrillJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1263,7 +1281,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         excellonWriter->SetRouteModeForOvalHoles( aDrillJob->m_excellonOvalDrillRoute );
         excellonWriter->SetMapFileFormat( mapFormat );
 
-        if( !excellonWriter->CreateDrillandMapFilesSet( aDrillJob->GetFullOutputPath(), true,
+        if( !excellonWriter->CreateDrillandMapFilesSet( outPath, true,
                                                         aDrillJob->m_generateMap, m_reporter ) )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1283,7 +1301,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         gerberWriter->SetOptions( offset );
         gerberWriter->SetMapFileFormat( mapFormat );
 
-        if( !gerberWriter->CreateDrillandMapFilesSet( aDrillJob->GetFullOutputPath(), true,
+        if( !gerberWriter->CreateDrillandMapFilesSet( outPath, true,
                                                       aDrillJob->m_generateMap, m_reporter ) )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1323,11 +1341,19 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         aPosJob->SetOutputPath( fn.GetFullName() );
     }
 
+    wxString outPath = aPosJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII
         || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
     {
         FILE* file = nullptr;
-        file = wxFopen( aPosJob->GetFullOutputPath(), wxS( "wt" ) );
+        file = wxFopen( outPath, wxS( "wt" ) );
 
         if( file == nullptr )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1353,7 +1379,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         fputs( data.c_str(), file );
         fclose( file );
 
-        aPosJob->AddOutput( aPosJob->GetFullOutputPath() );
+        aPosJob->AddOutput( outPath );
     }
     else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
     {
@@ -1364,10 +1390,10 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK )
             gbrLayer = B_Cu;
 
-        if( exporter.CreatePlaceFile( aPosJob->GetFullOutputPath(), gbrLayer, aPosJob->m_gerberBoardEdge )
+        if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge )
             >= 0 )
         {
-            aPosJob->AddOutput( aPosJob->GetFullOutputPath() );
+            aPosJob->AddOutput( outPath );
         }
         else
         {
@@ -1635,6 +1661,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         drcJob->SetOutputPath( fn.GetFullName() );
     }
 
+    wxString outPath = drcJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     EDA_UNITS units;
 
     switch( drcJob->m_units )
@@ -1748,19 +1782,18 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     bool wroteReport = false;
 
     if( drcJob->m_format == JOB_PCB_DRC::OUTPUT_FORMAT::JSON )
-        wroteReport = reportWriter.WriteJsonReport( drcJob->GetFullOutputPath() );
+        wroteReport = reportWriter.WriteJsonReport( outPath );
     else
-        wroteReport = reportWriter.WriteTextReport( drcJob->GetFullOutputPath() );
+        wroteReport = reportWriter.WriteTextReport( outPath );
 
     if( !wroteReport )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ),
-                                              drcJob->GetFullOutputPath() ),
+        m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ), outPath ),
                 RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), drcJob->GetFullOutputPath() ),
+    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), outPath ),
                         RPT_SEVERITY_INFO );
 
     if( drcJob->m_exitCodeViolations )
@@ -1797,6 +1830,15 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
         job->SetOutputPath( fn.GetName() );
     }
 
+    wxString outPath = job->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+
     std::map<std::string, UTF8> props;
     props["units"] = job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? "mm"
                                                                                         : "inch";
@@ -1828,7 +1870,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
 
     if( job->m_compress )
     {
-        wxFileName tempfn = job->GetFullOutputPath();
+        wxFileName tempfn = outPath;
         tempfn.SetExt( FILEEXT::Ipc2581FileExtension );
         wxFileName zipfn = tempFile;
         zipfn.SetExt( "zip" );
@@ -1847,12 +1889,12 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     }
 
     // If save succeeded, replace the original with what we just wrote
-    if( !wxRenameFile( tempFile, job->GetFullOutputPath() ) )
+    if( !wxRenameFile( tempFile, outPath ) )
     {
         m_reporter->Report( wxString::Format( _( "Error generating IPC2581 file '%s'.\n"
                                                  "Failed to rename temporary file '%s." )
                                                       + wxS( "\n" ),
-                                              job->GetFullOutputPath(), tempFile ),
+                                              outPath, tempFile ),
                             RPT_SEVERITY_ERROR );
     }
 
