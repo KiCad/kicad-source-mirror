@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-11 15:44+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-01-12 14:09+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -952,7 +952,6 @@ msgid "Configure Paths"
 msgstr "パスを設定"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
 msgstr "埋め込みモデル"
 
@@ -4194,9 +4193,8 @@ msgid "Editing"
 msgstr "編集"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "移動されたオブジェクトの原点にマウス カーソルを移動"
+msgstr "移動されたオブジェクトのアンカーにマウス カーソルを移動"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -4776,18 +4774,16 @@ msgid "Remove embedded file"
 msgstr "埋め込まれたファイルを削除する"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "フォントを埋め込む"
+msgstr "埋め込みフォント"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
 msgstr "使用されているすべてのフォントのコピーを保存する"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "エクスポート..."
+msgstr "エクスポート(&e)..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
@@ -7474,9 +7470,8 @@ msgid "Export IPC2581"
 msgstr "IPC-2581にエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "IPC-2581ファイルにエクスポート"
+msgstr "IPC-2581のエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
@@ -7515,9 +7510,8 @@ msgid "Export position data"
 msgstr "PCB: 位置データとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "PCB: 位置データとしてエクスポート"
+msgstr "位置データのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_pos.cpp:115
 msgid "PCB: Export Position Data"
@@ -7555,9 +7549,8 @@ msgid "Export %s netlist"
 msgstr "ネットリスト%sをエクスポート"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "ネットリストをエクスポート"
+msgstr "ネットリストのエクスポートジョブ設定"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
@@ -7611,9 +7604,8 @@ msgid "Perform DRC"
 msgstr "PCB の DRC を実行"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D 設定"
+msgstr "DRCのジョブ設定"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
@@ -7629,28 +7621,24 @@ msgid "Render PCB Job Settings"
 msgstr "レンダリング PCB ジョブ設定"
 
 #: common/jobs/job_pcb_render.cpp:137
-#, fuzzy
 msgid "PCB: Render"
-msgstr "表示"
+msgstr "PCB:描画"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "PCB の DRC を実行"
+msgstr "ERC を実行"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "回路図: ネットリストとしてエクスポート"
+msgstr "回路図のERCジョブ設定"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
 msgstr "回路図: ERC を実行"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "特殊ツール"
+msgstr "特別:ファイルのコピー"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -7799,9 +7787,8 @@ msgid "Symbol body fills"
 msgstr "シンボルの塗りつぶし"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "シート ファイル"
+msgstr "形状の塗りつぶし"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8627,10 +8614,8 @@ msgid "Paste Special..."
 msgstr "特殊な貼り付け..."
 
 #: common/tool/actions.cpp:270
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr ""
-"アノテーションのオプションを指定してクリップボードからアイテムを貼り付ける"
+msgstr "オプションを指定してクリップボードからアイテムを貼り付ける"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -10720,9 +10705,8 @@ msgid "Unconnected wire endpoint"
 msgstr "未接続の配線終端"
 
 #: eeschema/connection_graph.cpp:3819
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "バス エントリーに配線を追加"
+msgstr "バス エントリーまでの未接続の配線"
 
 #: eeschema/connection_graph.cpp:4194
 #, c-format
@@ -11381,9 +11365,8 @@ msgid "New library identifier:"
 msgstr "新しいライブラリ識別子:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
-#, fuzzy
 msgid "Update/Reset Fields"
-msgstr "フィールドを更新"
+msgstr "フィールドを更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:109
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
@@ -12017,7 +12000,6 @@ msgstr "ネットリスト ジェネレーターのタイトルを指定する�
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
 #: kicad/dialogs/panel_jobs_base.cpp:260
-#, fuzzy
 msgid "Output path:"
 msgstr "出力パス:"
 
@@ -13644,9 +13626,8 @@ msgid "Open output file with associated application after successful plot"
 msgstr "プロットが成功した後、関連するアプリケーションで出力ファイルを開く"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "回路図を印刷"
+msgstr "回路図をプロット"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -14424,7 +14405,6 @@ msgid "SPICE directives:"
 msgstr "SPICE 指令:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
-#, fuzzy
 msgid "Load Directives from Schematic"
 msgstr "回路図から指令をロード"
 
@@ -14884,9 +14864,8 @@ msgid "Group By"
 msgstr "グループ化"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:400
-#, fuzzy
 msgid "BOM Export Job"
-msgstr "PCB: DXFとしてエクスポート"
+msgstr "BOMをエクスポートするジョブ"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
 msgid "Qty"
@@ -16255,9 +16234,8 @@ msgid "Zoom vertically"
 msgstr "垂直方向に拡大"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
-#, fuzzy
 msgid "Vertical Touchpad or Scroll Wheel Movement"
-msgstr "垂直方向タッチパッドまたはスクロール ホイールの移動:"
+msgstr "垂直方向タッチパッドまたはスクロール ホイールの移動"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
@@ -16291,9 +16269,8 @@ msgid "Alt:"
 msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal Touchpad Movement"
-msgstr "タッチパッドの水平移動:"
+msgstr "タッチパッドの水平移動"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
@@ -16344,7 +16321,6 @@ msgid "&Pitch of repeated pins:"
 msgstr "繰り返しピンのピッチ (&P):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
-#, fuzzy
 msgid "General Editing"
 msgstr "一般編集"
 
@@ -16452,14 +16428,12 @@ msgid "Reset Libraries"
 msgstr "ライブラリをリセット"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "プロジェクト フィールド名テンプレート:"
+msgstr "プロジェクト フィールド名テンプレート"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "グローバル フィールド名テンプレート:"
+msgstr "グローバル フィールド名テンプレート"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:208
 #, c-format
@@ -16840,14 +16814,12 @@ msgid "Checking pins..."
 msgstr "ピンをチェック中..."
 
 #: eeschema/erc/erc.cpp:1850
-#, fuzzy
 msgid "Checking similar labels..."
-msgstr "ラベルをチェック中..."
+msgstr "同様のラベルをチェック中..."
 
 #: eeschema/erc/erc.cpp:1858
-#, fuzzy
 msgid "Checking local and global labels..."
-msgstr "ラベルをチェック中..."
+msgstr "ローカルラベルとグローバルラベルをチェック中..."
 
 #: eeschema/erc/erc.cpp:1866
 msgid "Checking for unresolved variables..."
@@ -16919,7 +16891,6 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "電源入力ピンが電源出力ピンによって駆動されていない"
 
 #: eeschema/erc/erc_item.cpp:68
-#, fuzzy
 msgid "Multiple pins with the same pin number"
 msgstr "同じピン番号の複数のピン"
 
@@ -22448,10 +22419,9 @@ msgid "Place Next Symbol Unit"
 msgstr "次のシンボル ユニットを配置"
 
 #: eeschema/tools/ee_actions.cpp:432
-#, fuzzy
 msgid ""
 "Place the next unit of the current symbol that is missing from the schematic"
-msgstr "回路図に現在のシンボルを追加"
+msgstr "回路図から欠落している現在のシンボルの次のユニットを配置"
 
 #: eeschema/tools/ee_actions.cpp:442
 msgid "Place Power Symbols"
@@ -23718,9 +23688,8 @@ msgid "Modify schematic item"
 msgstr "回路図アイテムを変更"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3327
-#, fuzzy
 msgid "No sub schematic found in the current project"
-msgstr "現在のプロジェクトを閉じる"
+msgstr "現在のプロジェクトにはサブ回路図が見つかりません"
 
 #: eeschema/tools/sch_edit_tool.cpp:77
 msgid "Symbol Unit"
@@ -26122,14 +26091,12 @@ msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "カラー テーマを使用する (PCBエディターのデフォルト設定)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:113
-#, fuzzy
 msgid "Plot the layers to individual PDF files"
-msgstr "指定されたレイヤーを単一のガーバーファイルにプロット"
+msgstr "レイヤーをそれぞれのPDFファイルにプロット"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:117
-#, fuzzy
 msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "指定されたレイヤーを単一のガーバーファイルにプロット"
+msgstr "レイヤーを単一のPDFファイルの複数ページとしてプロット"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:169
 msgid "Cannot use more than one mode flag\n"
@@ -26320,24 +26287,20 @@ msgid "Invalid pivot format\n"
 msgstr "ピボットの形式が無効です\n"
 
 #: kicad/cli/command_pcb_render.cpp:367
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "ピボットの形式が無効です\n"
+msgstr "トップライト強度フォーマットが無効です\n"
 
 #: kicad/cli/command_pcb_render.cpp:374
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "回転形式が無効です\n"
+msgstr "ボトムライト強度フォーマットが無効です\n"
 
 #: kicad/cli/command_pcb_render.cpp:381
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "画像の形式が無効です\n"
+msgstr "サイドライト強度フォーマットが無効です\n"
 
 #: kicad/cli/command_pcb_render.cpp:388
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "画像の形式が無効です\n"
+msgstr "カメラライト強度フォーマットが無効です\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid image format\n"
@@ -26420,9 +26383,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "カラー テーマを使用する (回路図エディターの設定でのデフォルト)"
 
 #: kicad/cli/command_sch_export_plot.cpp:82
-#, fuzzy
 msgid "Default font name"
-msgstr "デフォルトのフォント:"
+msgstr "デフォルトのフォント名"
 
 #: kicad/cli/command_sch_export_plot.cpp:88
 msgid "Do not generate property popups in PDF"
@@ -26521,23 +26483,20 @@ msgid "Destination:"
 msgstr "宛先:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
-#, fuzzy
 msgid "Generate error if no files copied"
-msgstr "ガーバー ジョブ ファイルを生成"
+msgstr "ファイルがコピーされなかった場合にエラーとします"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
 msgid "Overwrite files in destination"
 msgstr "宛先のファイルを上書きする"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
-#, fuzzy
 msgid "Copy Files Job Settings"
-msgstr "パッドの設定をコピー"
+msgstr "ジョブの設定ファイルをコピー"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
-#, fuzzy
 msgid "Record output messages"
-msgstr "出力メッセージ:"
+msgstr "出力メッセージを記録する"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
@@ -26585,7 +26544,6 @@ msgid "A new version of KiCad is available!"
 msgstr "KiCad の新しいバージョンが利用可能です!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip This Version"
 msgstr "このバージョンをスキップ(&s)"
 
@@ -26598,7 +26556,6 @@ msgstr ""
 "情報が表示されます。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
-#, fuzzy
 msgid "&Remind Me Later"
 msgstr "あとで通知(&r)"
 
@@ -26665,9 +26622,8 @@ msgid "Job Description"
 msgstr "ジョブの説明"
 
 #: kicad/dialogs/panel_jobs.cpp:299
-#, fuzzy
 msgid "No output messages"
-msgstr "出力メッセージ:"
+msgstr "出力メッセージがありません"
 
 #: kicad/dialogs/panel_jobs.cpp:359
 msgid "Last run successful"
@@ -26686,34 +26642,28 @@ msgid "Edit Output Options..."
 msgstr "出力オプションを編集..."
 
 #: kicad/dialogs/panel_jobs.cpp:410
-#, fuzzy
 msgid "Delete Output"
-msgstr "切り抜きを削除"
+msgstr "出力を削除"
 
 #: kicad/dialogs/panel_jobs.cpp:413
-#, fuzzy
 msgid "View Last Run Results..."
-msgstr "ジョブの実行結果を表示。"
+msgstr "最後の実行結果を表示…"
 
 #: kicad/dialogs/panel_jobs.cpp:490
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "ジョブの説明"
+msgstr "ジョブの説明を編集"
 
 #: kicad/dialogs/panel_jobs.cpp:491
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "編集オプション..."
+msgstr "ジョブの設定を編集..."
 
 #: kicad/dialogs/panel_jobs.cpp:496
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "選択したネットを削除"
+msgstr "選択したジョブを削除"
 
 #: kicad/dialogs/panel_jobs.cpp:498
-#, fuzzy
 msgid "Select all jobs"
-msgstr "すべて選択"
+msgstr "すべてのジョブを選択"
 
 #: kicad/dialogs/panel_jobs.cpp:786
 msgid "Job Types"
@@ -26745,24 +26695,20 @@ msgid "No outputs defined"
 msgstr "出力が定義されていません"
 
 #: kicad/dialogs/panel_jobs_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "ジョブセット"
+msgstr "ジョブ"
 
 #: kicad/dialogs/panel_jobs_base.cpp:82
-#, fuzzy
 msgid "Outputs"
 msgstr "出力"
 
 #: kicad/dialogs/panel_jobs_base.cpp:115
-#, fuzzy
 msgid "Save Jobset"
-msgstr "ジョブセット"
+msgstr "ジョブセットを保存"
 
 #: kicad/dialogs/panel_jobs_base.cpp:121
-#, fuzzy
 msgid "Generate All Outputs"
-msgstr "全般 オプション"
+msgstr "全ての出力を生成"
 
 #: kicad/dialogs/panel_jobs_base.cpp:242
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
@@ -26973,9 +26919,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d 個のパッケージの更新があります"
 
 #: kicad/kicad_manager_frame.cpp:798
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "svg ファイルの作成中にエラーが発生しました"
+msgstr "ジョブファイルを開く際のエラー"
 
 #: kicad/kicad_manager_frame.cpp:953
 msgid "Edit File in Text Editor"
@@ -28071,9 +28016,8 @@ msgid "Open Existing Project"
 msgstr "既存プロジェクトを開く"
 
 #: kicad/tools/kicad_manager_control.cpp:428
-#, fuzzy
 msgid "Open Jobset"
-msgstr "ジョブセット"
+msgstr "ジョブセットを開く"
 
 #: kicad/tools/kicad_manager_control.cpp:635
 #, c-format
@@ -33235,7 +33179,6 @@ msgid "Choose how many digits of precision to display"
 msgstr "表示する精度の桁数を選択"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "Arrow direction:"
 msgstr "矢印の向き:"
 
@@ -33858,14 +33801,12 @@ msgid "Export IDFv3"
 msgstr "IDFv3のエクスポート"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:108
-#, fuzzy
 msgid "zip files"
-msgstr "Zip ファイル"
+msgstr "zip ファイル"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:110
-#, fuzzy
 msgid "tgz files"
-msgstr "テキスト ファイル"
+msgstr "tgz ファイル"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:122
 msgid "Export ODB++ File"
@@ -33877,9 +33818,8 @@ msgstr ""
 "選択した出力ファイル名はサポートされているアーカイブ形式ではありません。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:203
-#, fuzzy
 msgid "Output file name cannot be empty."
-msgstr "変数名は空欄にできません。"
+msgstr "出力ファイル名は空欄にできません。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:222
 msgid "The output file name conflicts with the selected compression format."
@@ -33896,9 +33836,9 @@ msgid "Cannot remove existing output file '%s'."
 msgstr "出力の一時ファイル%sを削除できません。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Output file '%s' already exists."
-msgstr "ファイル '%s' はすでに存在します。"
+msgstr "出力ファイル '%s' はすでに存在します。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:389
 msgid "Cannot create temporary output directory."
@@ -33918,9 +33858,9 @@ msgid "Cannot remove existing output directory '%s'."
 msgstr "出力ディレクトリ '%s' を削除できませんでした。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' already exists."
-msgstr "出力ディレクトリ '%s' を作成しました。"
+msgstr "出力ディレクトリ '%s' はすでに存在します。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:459
 #, c-format
@@ -33936,7 +33876,6 @@ msgid "Compressing output"
 msgstr "出力を圧縮"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:69
-#, fuzzy
 msgid "Compression format:"
 msgstr "圧縮形式:"
 
@@ -34061,9 +34000,8 @@ msgid "Export board body"
 msgstr "基板ボディをエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "基板ボディをエクスポート"
+msgstr "基板ボディのビアを切断"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
@@ -34138,9 +34076,8 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "交差する形状を 1 つに結合します。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:142
-#, fuzzy
 msgid "Fill all vias"
-msgstr "全ゾーンを塗り潰し"
+msgstr "全ビアを塗り潰し"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Net filter (supports wildcards):"
@@ -35018,9 +34955,8 @@ msgid "Use negative X coordinates for footprints on bottom layer"
 msgstr "最下層のフットプリントに負のX座標を使用する"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
-#, fuzzy
 msgid "Generate single file with both front and back positions"
-msgstr "前面と裏面で別ファイル"
+msgstr "前面と裏面を両方1つのファイルで生成"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 msgid "Generate Placement Files"
@@ -35134,7 +35070,6 @@ msgid "Generators A (%s)"
 msgstr "ジェネレーター A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild Selected"
 msgstr "選択対象を再構築"
 
@@ -35357,9 +35292,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
-#, fuzzy
 msgid "Track width limit:"
-msgstr "配線幅:"
+msgstr "配線幅の制限:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
@@ -36050,9 +35984,8 @@ msgid "Copy routing"
 msgstr "配線をコピー"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
-#, fuzzy
 msgid "Copy other items"
-msgstr "その他のアイテム"
+msgstr "その他のアイテムをコピー"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
@@ -50334,9 +50267,8 @@ msgid "Select the reference point on the item to move."
 msgstr "移動するアイテム上で参照点を選択..."
 
 #: pcbnew/tools/position_relative_tool.cpp:242
-#, fuzzy
 msgid "Select the point to define the new offset from."
-msgstr "新しい角を追加する前に角を選択する。"
+msgstr "新しいオフセットを定義するポイントを選択する。"
 
 #: pcbnew/tools/position_relative_tool.cpp:406
 msgid "Position Relative"
@@ -51314,7 +51246,6 @@ msgid "Keep Out Pads"
 msgstr "パッドの配置を禁止"
 
 #: pcbnew/zone.cpp:1936
-#, fuzzy
 msgid "Keep Out Copper Pours"
 msgstr "銅箔塗りつぶし禁止"
 
