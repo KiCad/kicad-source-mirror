@@ -90,6 +90,7 @@ class PANEL_ZONE_PROPERTIES_BASE : public wxPanel
 		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnZoneNameChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPadInZoneSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStyleSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveIslandsSelection( wxCommandEvent& event ) { event.Skip(); }
 

@@ -168,6 +168,7 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     // Enable/Disable some widgets
     wxCommandEvent aEvent;
     OnStyleSelection( aEvent );
+    OnPadInZoneSelection( aEvent );
     Fit();
 
     return true;
@@ -193,6 +194,14 @@ void PANEL_ZONE_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& )
 void PANEL_ZONE_PROPERTIES::OnRemoveIslandsSelection( wxCommandEvent& aEvent )
 {
     m_islandThreshold.Enable( m_cbRemoveIslands->GetSelection() == 2 );
+}
+
+void PANEL_ZONE_PROPERTIES::OnPadInZoneSelection( wxCommandEvent& event )
+{
+    int  selection = m_PadInZoneOpt->GetSelection();
+    bool enabled = selection == 1 || selection == 2;
+    m_antipadClearance.Enable( enabled );
+    m_spokeWidth.Enable( enabled );
 }
 
 void PANEL_ZONE_PROPERTIES::OnZoneNameChanged( wxCommandEvent& aEvent )

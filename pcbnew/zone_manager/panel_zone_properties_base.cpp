@@ -319,6 +319,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnUpdateUI ) );
 	m_tcZoneName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnZoneNameChanged ), NULL, this );
+	m_PadInZoneOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnPadInZoneSelection ), NULL, this );
 	m_GridStyleCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnStyleSelection ), NULL, this );
 	m_cbRemoveIslands->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnRemoveIslandsSelection ), NULL, this );
 }
@@ -328,6 +329,7 @@ PANEL_ZONE_PROPERTIES_BASE::~PANEL_ZONE_PROPERTIES_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnUpdateUI ) );
 	m_tcZoneName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnZoneNameChanged ), NULL, this );
+	m_PadInZoneOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnPadInZoneSelection ), NULL, this );
 	m_GridStyleCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnStyleSelection ), NULL, this );
 	m_cbRemoveIslands->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnRemoveIslandsSelection ), NULL, this );
 

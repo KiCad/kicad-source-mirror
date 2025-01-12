@@ -77,6 +77,7 @@ private:
     void OnStyleSelection( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& ) override;
     void OnRemoveIslandsSelection( wxCommandEvent& event ) override;
+    void OnPadInZoneSelection( wxCommandEvent& event ) override;
     void OnZoneNameChanged( wxCommandEvent& event ) override;
 
 
