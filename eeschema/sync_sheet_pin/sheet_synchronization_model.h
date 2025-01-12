@@ -112,6 +112,9 @@ public:
 
     std::optional<unsigned int> GetSelectedIndex() const { return m_selectedIndex; }
 
+    unsigned int GetCount() const override;
+
+
 private:
     SHEET_SYNCHRONIZATION_ITEM_LIST                            m_items;
     std::optional<unsigned>                                    m_selectedIndex;

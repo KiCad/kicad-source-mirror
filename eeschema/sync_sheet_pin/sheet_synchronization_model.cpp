@@ -107,7 +107,7 @@ void SHEET_SYNCHRONIZATION_MODEL::RemoveItems( wxDataViewItemArray const& aItems
 bool SHEET_SYNCHRONIZATION_MODEL::AppendNewItem( std::shared_ptr<SHEET_SYNCHRONIZATION_ITEM> aItem )
 {
     m_items.push_back( std::move( aItem ) );
-    RowAppended();
+    Reset( GetCount() );
     DoNotify();
     return true;
 }
@@ -116,7 +116,7 @@ bool SHEET_SYNCHRONIZATION_MODEL::AppendNewItem( std::shared_ptr<SHEET_SYNCHRONI
 bool SHEET_SYNCHRONIZATION_MODEL::AppendItem( std::shared_ptr<SHEET_SYNCHRONIZATION_ITEM> aItem )
 {
     m_items.push_back( std::move( aItem ) );
-    RowAppended();
+    Reset( GetCount() );
     return true;
 }
 
@@ -168,7 +168,7 @@ SHEET_SYNCHRONIZATION_ITE_PTR SHEET_SYNCHRONIZATION_MODEL::TakeItem( wxDataViewI
     std::shared_ptr<SHEET_SYNCHRONIZATION_ITEM> item = m_items[row];
     m_items.erase( m_items.begin() + row );
     OnRowSelected( {} );
-    RowDeleted( row );
+    Reset( GetCount() );
     return item;
 }
 
@@ -205,7 +205,7 @@ void SHEET_SYNCHRONIZATION_MODEL::OnRowSelected( std::optional<unsigned> aRow )
 void SHEET_SYNCHRONIZATION_MODEL::UpdateItems( SHEET_SYNCHRONIZATION_ITEM_LIST aItems )
 {
     m_items = std::move( aItems );
-    Reset( m_items.size() );
+    Reset( GetCount() );
 }
 
 
@@ -220,4 +220,9 @@ void SHEET_SYNCHRONIZATION_MODEL::DoNotify()
 {
     for( const auto& notifier : m_notifiers )
         notifier->Notify();
+}
+
+unsigned int SHEET_SYNCHRONIZATION_MODEL::GetCount() const
+{
+    return m_items.size();
 }
