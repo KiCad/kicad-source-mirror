@@ -315,7 +315,7 @@ public:
                      JOBSET* aFile, JOBSET_OUTPUT* aOutput ) :
             PANEL_JOB_OUTPUT_BASE( aParent ),
             m_jobsFile( aFile ),
-            m_output( aOutput ),
+            m_outputId( aOutput->m_id ),
             m_frame( aFrame ),
             m_panelParent( aPanelParent )
     {
@@ -350,9 +350,12 @@ public:
 
     void UpdateStatus()
     {
-        if( m_output->m_lastRunSuccess.has_value() )
+        JOBSET_OUTPUT* output = GetOutput();
+        wxCHECK( output, /*void*/ );
+
+        if( output->m_lastRunSuccess.has_value() )
         {
-            if( m_output->m_lastRunSuccess.value() )
+            if( output->m_lastRunSuccess.value() )
             {
                 m_statusBitmap->SetBitmap( KiBitmapBundle( BITMAPS::checked_ok ) );
                 m_statusBitmap->Show();
@@ -370,9 +373,8 @@ public:
             m_statusBitmap->SetBitmap( wxNullBitmap );
         }
 
-        m_buttonGenerate->Enable( !m_jobsFile->GetJobsForOutput( m_output ).empty() );
+        m_buttonGenerate->Enable( !m_jobsFile->GetJobsForOutput( output ).empty() );
     }
-
 
     virtual void OnGenerate( wxCommandEvent& event ) override
     {
@@ -390,7 +392,9 @@ public:
                     WX_PROGRESS_REPORTER* progressReporter =
                             new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );
 
-                    jobRunner.RunJobsForOutput( m_output );
+                    if( JOBSET_OUTPUT* output = GetOutput() )
+                        jobRunner.RunJobsForOutput( output );
+
                     UpdateStatus();
 
                     delete progressReporter;
@@ -399,12 +403,18 @@ public:
 
     virtual void OnLastStatusClick( wxMouseEvent& aEvent ) override
     {
-        DIALOG_OUTPUT_RUN_RESULTS dialog( m_frame, m_jobsFile, m_output );
+        JOBSET_OUTPUT* output = GetOutput();
+        wxCHECK( output, /*void*/ );
+
+        DIALOG_OUTPUT_RUN_RESULTS dialog( m_frame, m_jobsFile, output );
         dialog.ShowModal();
     }
 
     void OnRightDown( wxMouseEvent& aEvent ) override
     {
+        JOBSET_OUTPUT* output = GetOutput();
+        wxCHECK( output, /*void*/ );
+
         wxMenu menu;
         menu.Append( wxID_EDIT, _( "Edit Output Options..." ) );
         menu.Append( wxID_DELETE, _( "Delete Output" ) );
@@ -412,19 +422,21 @@ public:
         menu.AppendSeparator();
         menu.Append( wxID_VIEW_DETAILS, _( "View Last Run Results..." ) );
 
-        menu.Enable( wxID_VIEW_DETAILS, m_output->m_lastRunSuccess.has_value() );
+        menu.Enable( wxID_VIEW_DETAILS, output->m_lastRunSuccess.has_value() );
 
         PopupMenu( &menu );
     }
 
-
     void OnProperties( wxCommandEvent& aEvent ) override
     {
-        DIALOG_JOB_OUTPUT dialog( m_frame, m_jobsFile, m_output );
+        JOBSET_OUTPUT* output = GetOutput();
+        wxCHECK( output, /*void*/ );
+
+        DIALOG_JOB_OUTPUT_OPTIONS dialog( m_frame, m_jobsFile, output );
 
         if( dialog.ShowModal() == wxID_OK )
         {
-            m_textOutputType->SetLabel( m_output->GetDescription() );
+            m_textOutputType->SetLabel( output->GetDescription() );
             m_jobsFile->SetDirty();
             m_panelParent->UpdateTitle();
         }
@@ -432,7 +444,18 @@ public:
 
     virtual void OnDelete( wxCommandEvent& aEvent ) override
     {
-        m_panelParent->RemoveOutput( m_output );
+        m_panelParent->RemoveOutput( this );
+    }
+
+    JOBSET_OUTPUT* GetOutput()
+    {
+        for( JOBSET_OUTPUT& jobset : m_jobsFile->GetOutputs() )
+        {
+            if( jobset.m_id == m_outputId )
+                return &jobset;
+        }
+
+        return nullptr;
     }
 
 private:
@@ -468,7 +491,7 @@ private:
 
 private:
     JOBSET*              m_jobsFile;
-    JOBSET_OUTPUT*       m_output;
+    wxString             m_outputId;
     KICAD_MANAGER_FRAME* m_frame;
     PANEL_JOBS*          m_panelParent;
 };
@@ -604,24 +627,18 @@ PANEL_JOBS::~PANEL_JOBS()
 }
 
 
-void PANEL_JOBS::RemoveOutput( JOBSET_OUTPUT* aOutput )
+void PANEL_JOBS::RemoveOutput( PANEL_JOB_OUTPUT* aPanel )
 {
-    auto it = m_outputPanelMap.find( aOutput );
+    JOBSET_OUTPUT* output = aPanel->GetOutput();
 
-    if( it != m_outputPanelMap.end() )
-    {
-        PANEL_JOB_OUTPUT* panel = m_outputPanelMap[aOutput];
-        m_outputListSizer->Detach( panel );
-        panel->Destroy();
+    m_outputListSizer->Detach( aPanel );
+    aPanel->Destroy();
 
-        m_outputPanelMap.erase( it );
+    // ensure the window contents get shifted as needed
+    m_outputList->Layout();
+    Layout();
 
-        // ensure the window contents get shifted as needed
-        m_outputList->Layout();
-        Layout();
-    }
-
-    m_jobsFile->RemoveOutput( aOutput );
+    m_jobsFile->RemoveOutput( output );
 
     m_buttonRunAllOutputs->Enable( !m_jobsFile->GetOutputs().empty() );
 }
@@ -649,14 +666,8 @@ void PANEL_JOBS::rebuildJobList()
     UpdateTitle();
 
     // Ensure the outputs get their Run-ability status updated
-    for( JOBSET_OUTPUT& output : m_jobsFile->GetOutputs() )
-    {
-        if( m_outputPanelMap.contains( &output ) )
-        {
-            PANEL_JOB_OUTPUT* panel = m_outputPanelMap[&output];
-            panel->UpdateStatus();
-        }
-    }
+    for( PANEL_JOB_OUTPUT* panel : GetOutputPanels() )
+        panel->UpdateStatus();
 }
 
 
@@ -683,16 +694,27 @@ void PANEL_JOBS::addJobOutputPanel( JOBSET_OUTPUT* aOutput )
     m_outputListSizer->Add( outputPanel, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 #endif
 
-    m_outputPanelMap[aOutput] = outputPanel;
-
     m_outputList->Layout();
+}
+
+
+std::vector<PANEL_JOB_OUTPUT*> PANEL_JOBS::GetOutputPanels()
+{
+    std::vector<PANEL_JOB_OUTPUT*> panels;
+
+    for( const wxSizerItem* item : m_outputListSizer->GetChildren() )
+    {
+        if( PANEL_JOB_OUTPUT* panel = dynamic_cast<PANEL_JOB_OUTPUT*>( item->GetWindow() ) )
+            panels.push_back( panel );
+    }
+
+    return panels;
 }
 
 
 void PANEL_JOBS::buildOutputList()
 {
     Freeze();
-    m_outputPanelMap.clear();
 
     for( JOBSET_OUTPUT& job : m_jobsFile->GetOutputs() )
         addJobOutputPanel( &job );
@@ -1070,11 +1092,8 @@ void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
 
 				jobRunner.RunJobsAllOutputs();
 
-                for( auto& output : m_jobsFile->GetOutputs() )
-                {
-                    PANEL_JOB_OUTPUT* panel = m_outputPanelMap[&output];
+                for( PANEL_JOB_OUTPUT* panel : GetOutputPanels() )
                     panel->UpdateStatus();
-                }
 
 				delete progressReporter;
 			} );

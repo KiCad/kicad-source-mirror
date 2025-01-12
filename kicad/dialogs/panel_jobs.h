@@ -64,7 +64,7 @@ public:
 
     ~PANEL_JOBS();
 
-    void RemoveOutput( JOBSET_OUTPUT* aOutput );
+    void RemoveOutput( PANEL_JOB_OUTPUT* aPanel );
 
     void EnsurePcbSchFramesOpen();
 
@@ -75,6 +75,8 @@ public:
 
     bool OpenJobOptionsForListItem( size_t aItemIndex );
     void OnJobButtonDelete( wxCommandEvent& aEvent ) override;
+
+    std::vector<PANEL_JOB_OUTPUT*> GetOutputPanels();
 
 protected:
     virtual void OnSizeGrid( wxSizeEvent& aEvent ) override;
@@ -97,6 +99,4 @@ private:
     wxAuiNotebook*          m_parentBook;
     KICAD_MANAGER_FRAME*    m_frame;
     std::unique_ptr<JOBSET> m_jobsFile;
-
-    std::unordered_map<JOBSET_OUTPUT*, PANEL_JOB_OUTPUT*> m_outputPanelMap;
 };
