@@ -215,6 +215,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_pdf_back_fp_property_popups ),
                               m_PDFBackFPPropertyPopups );
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_pdf_metadata ), m_PDFMetadata );
+    KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_pdf_single_document ), m_PDFSingle );
 
     // DXF options
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_dxfpolygonmode ), m_DXFPolygonMode );
@@ -762,11 +763,15 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_pdf_back_fp_property_popups:
-            aPcbPlotParams->m_PDFFrontFPPropertyPopups = parseBool();
+            aPcbPlotParams->m_PDFBackFPPropertyPopups = parseBool();
             break;
 
         case T_pdf_metadata:
             aPcbPlotParams->m_PDFMetadata = parseBool();
+            break;
+
+        case T_pdf_single_document:
+            aPcbPlotParams->m_PDFSingle = parseBool();
             break;
 
         case T_dxfpolygonmode:

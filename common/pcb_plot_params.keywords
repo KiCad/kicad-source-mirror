@@ -27,6 +27,7 @@ pcbplotparams
 pdf_back_fp_property_popups
 pdf_front_fp_property_popups
 pdf_metadata
+pdf_single_document
 plotframeref
 plotfptext
 plotinvisibletext
