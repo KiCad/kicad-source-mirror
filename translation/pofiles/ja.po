@@ -5,7 +5,7 @@
 # Keisuke Nakao <chome@argv.org>, 2022, 2023.
 # Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
-# "Tokita, Hiroshi" <tokita.hiroshi@fujitsu.com>, 2023, 2024.
+# "Tokita, Hiroshi" <tokita.hiroshi@fujitsu.com>, 2023, 2024, 2025.
 # 2tama3 <2tama3@gmail.com>, 2023, 2024, 2025.
 # SubaruArai <subaruletian.arai@minebea.com>, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
 "PO-Revision-Date: 2025-01-12 14:09+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -3196,9 +3196,8 @@ msgid "Reference Designators"
 msgstr "リファレンス指定子"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear net assignments"
-msgstr "クリアネット割り当て"
+msgstr "ネットの割り当てをクリア"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
@@ -5392,9 +5391,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>%s' に一致するネット:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "ネットクラス:"
+msgstr "ネットクラス"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:640
@@ -5486,9 +5484,8 @@ msgid "Import colors from schematic"
 msgstr "回路図から色をインポートする"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "ネットクラスの割り当て:"
+msgstr "ネットクラスの割り当て"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -7465,9 +7462,8 @@ msgid "PCB: Export Gerbers"
 msgstr "PCB: ガーバーとしてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
-msgstr "IPC-2581にエクスポート"
+msgstr "IPC-2581としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
 msgid "Export IPC2581 Job Settings"
@@ -7505,9 +7501,8 @@ msgid "PCB: Export PDF"
 msgstr "PCB: PDFとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Export position data"
-msgstr "PCB: 位置データとしてエクスポート"
+msgstr "位置データとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
 msgid "Export Position Data Job Settings"
@@ -7557,9 +7552,8 @@ msgid "Schematic: Export Netlist"
 msgstr "回路図: ネットリストとしてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:194
-#, fuzzy
 msgid "Export Postscript"
-msgstr "PostScript"
+msgstr "PostScriptとしてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:200
 msgid "Export Postscript Job Settings"
@@ -7582,9 +7576,8 @@ msgid "Schematic: Export HPGL"
 msgstr "回路図: HPGL としてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "回路図: ネットリストとしてエクスポート"
+msgstr "回路図: PostScriptとしてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:229
 msgid "Schematic: Export DXF"
@@ -7599,9 +7592,8 @@ msgid "Schematic PythonBOM export"
 msgstr "回路図 PythonBOM としてエクスポート"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "PCB の DRC を実行"
+msgstr "DRC を実行"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 msgid "DRC Job Settings"
@@ -26678,9 +26670,8 @@ msgid "Select job type:"
 msgstr "ジョブのタイプを選択:"
 
 #: kicad/dialogs/panel_jobs.cpp:878
-#, fuzzy
 msgid "Output Types"
-msgstr "出力サイズ"
+msgstr "出力タイプ"
 
 #: kicad/dialogs/panel_jobs.cpp:887
 msgid "Add New Output"
