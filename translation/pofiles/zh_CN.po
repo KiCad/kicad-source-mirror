@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-11 18:44+0000\n"
+"PO-Revision-Date: 2025-01-12 14:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -5959,7 +5959,7 @@ msgstr "英寸 (Inches)"
 #: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:328
 #: pcbnew/tools/pcb_actions.cpp:1169
 msgid "Constrain to H, V, 45"
-msgstr "约束操作为水平/垂直/45度"
+msgstr "约束操作于水平/垂直/45度"
 
 #: common/eda_draw_frame.cpp:1116 pcbnew/footprint_libraries_utils.cpp:1368
 msgid "Select Library"
@@ -35343,7 +35343,7 @@ msgstr "移动 Y:"
 msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
-msgstr "无效移动值。移动会将所选内容离开板区。"
+msgstr "无效移动值。移动会使所选内容离开板区。"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
 msgid "Rotate:"
@@ -35441,7 +35441,7 @@ msgstr "非覆铜区属性"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
-msgstr ""
+msgstr "外扩:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -35493,7 +35493,7 @@ msgstr "转换后删除源项目"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
 msgid "Outset Items"
-msgstr ""
+msgstr "外扩项目"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
 #: pcbnew/dialogs/dialog_pad_properties_base.h:288 pcbnew/pad.cpp:2584
@@ -36991,15 +36991,15 @@ msgstr "错误列表"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:37
 msgid "By Corners"
-msgstr "根据边角"
+msgstr "根据拐角"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:53
 msgid "By Corner and Size"
-msgstr "根据边角和大小"
+msgstr "根据拐角和尺寸"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr "根据中心和大小"
+msgstr "根据中点和尺寸"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 msgid "By Endpoints"
@@ -37391,7 +37391,7 @@ msgstr "相邻调整段之间的最小间距。根据设计规则, 产生的间�
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:238
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:367
 msgid "Corner style:"
-msgstr "边角样式:"
+msgstr "拐角样式:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:94
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
@@ -37464,7 +37464,7 @@ msgstr "从原理图更新 PCB"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "约束操作为水平/垂直/45度"
+msgstr "约束操作于水平/垂直/45度"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:35
 msgid "Step for &rotate commands:"
@@ -41168,12 +41168,12 @@ msgstr "层 %2$s 上的 %1$s 个形状原型差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:491
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr "%s 个 '边角平滑设置' 差异。"
+msgstr "%s 个 '拐角平滑设置' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:493
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr "%s 个 '边角平滑半径' 差异。"
+msgstr "%s 个 '拐角平滑半径' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:495
 #, c-format
@@ -41288,12 +41288,12 @@ msgstr "%s 个 '网格孔设置' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:551
 #, c-format
 msgid "%s outline corner count differs."
-msgstr "%s 个 '外框边角数量' 差异。"
+msgstr "%s 个 '外框拐角数量' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:566
 #, c-format
 msgid "%s corners differ."
-msgstr "%s 个 '边角' 差异。"
+msgstr "%s 个 '拐角' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:611
 msgid "Footprint types differ."
@@ -43634,7 +43634,7 @@ msgstr "Y 尺寸"
 
 #: pcbnew/pad.cpp:2644
 msgid "Corner Radius Ratio"
-msgstr "边角半径比"
+msgstr "拐角半径比"
 
 #: pcbnew/pad.cpp:2649
 msgid "Corner Radius Size"
@@ -46997,7 +46997,7 @@ msgstr "复制第一个对象的行宽"
 
 #: pcbnew/tools/convert_tool.cpp:262
 msgid "Create from Selection"
-msgstr "根据选区创建"
+msgstr "从选区创建..."
 
 #: pcbnew/tools/convert_tool.cpp:453
 msgid "Resulting polygon would be empty"
@@ -47490,15 +47490,15 @@ msgstr "部分多边形无法相交。"
 
 #: pcbnew/tools/item_modification_routine.cpp:661
 msgid "Outset items."
-msgstr ""
+msgstr "外扩项目。"
 
 #: pcbnew/tools/item_modification_routine.cpp:668
 msgid "Unable to outset the selected items."
-msgstr ""
+msgstr "无法对选定项目进行外扩。"
 
 #: pcbnew/tools/item_modification_routine.cpp:672
 msgid "Some of the items could not be outset."
-msgstr ""
+msgstr "部分项目无法进行外扩。"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
@@ -47593,39 +47593,39 @@ msgstr "焊盘编辑模式。按 %s 退出。"
 
 #: pcbnew/tools/pcb_actions.cpp:54
 msgid "Create Polygon from Selection..."
-msgstr "从所选内容创建多边形..."
+msgstr "从选区创建多边形..."
 
 #: pcbnew/tools/pcb_actions.cpp:55
 msgid "Creates a graphic polygon from the selection"
-msgstr "从所选内容创建图形多边形"
+msgstr "从选区创建图形多边形"
 
 #: pcbnew/tools/pcb_actions.cpp:61
 msgid "Create Zone from Selection..."
-msgstr "根据选区创建填充区..."
+msgstr "从选区创建填充区..."
 
 #: pcbnew/tools/pcb_actions.cpp:62
 msgid "Creates a copper zone from the selection"
-msgstr "从所选内容创建覆铜区"
+msgstr "从选区创建覆铜区"
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Create Rule Area from Selection..."
-msgstr "从所选内容创建规则域..."
+msgstr "从选区创建规则域..."
 
 #: pcbnew/tools/pcb_actions.cpp:69
 msgid "Creates a rule area from the selection"
-msgstr "从所选内容创建规则域"
+msgstr "从选区创建规则域"
 
 #: pcbnew/tools/pcb_actions.cpp:75
 msgid "Create Lines from Selection..."
-msgstr "从所选内容创建图线..."
+msgstr "从选区创建图线..."
 
 #: pcbnew/tools/pcb_actions.cpp:76
 msgid "Creates graphic lines from the selection"
-msgstr "从所选内容创建图线"
+msgstr "从选区创建图线"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Create Arc from Selection"
-msgstr "根据选区创建弧线"
+msgstr "从选区创建弧线"
 
 #: pcbnew/tools/pcb_actions.cpp:83
 msgid "Creates an arc from the selected line segment"
@@ -47633,7 +47633,7 @@ msgstr "根据所选线段创建弧线"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 msgid "Create Tracks from Selection"
-msgstr "从所选内容创建线路"
+msgstr "从选区创建走线"
 
 #: pcbnew/tools/pcb_actions.cpp:90
 msgid "Creates tracks from the selected graphic lines"
@@ -47641,11 +47641,11 @@ msgstr "将选中的图线转换为走线"
 
 #: pcbnew/tools/pcb_actions.cpp:96
 msgid "Create Outsets from Selection"
-msgstr ""
+msgstr "从选区创建外扩形状"
 
 #: pcbnew/tools/pcb_actions.cpp:97
 msgid "Create outset lines from the selected item"
-msgstr ""
+msgstr "从选区生成外扩形状线条"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add Board Characteristics"
