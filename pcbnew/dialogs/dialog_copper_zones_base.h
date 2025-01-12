@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,7 +52,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 			ID_CORNER_SMOOTHING,
 			ID_M_PADINZONEOPT,
 			wxID_ANTIPAD_SIZE,
-			wxID_COPPER_BRIDGE_VALUE
+			wxID_COPPER_BRIDGE_VALUE,
 		};
 
 		wxBoxSizer* m_MainBoxSizer;
@@ -125,6 +125,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		virtual void OnShowNetNameFilterChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNetSelectionUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPadInZoneSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStyleSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveIslandsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }

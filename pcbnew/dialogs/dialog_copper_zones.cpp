@@ -75,6 +75,7 @@ private:
     void OnUpdateUI( wxUpdateUIEvent& ) override;
     void OnNetSelectionUpdated( wxCommandEvent& event ) override;
     void OnRemoveIslandsSelection( wxCommandEvent& event ) override;
+    void OnPadInZoneSelection( wxCommandEvent& event ) override;
 
     void          readNetInformation();
     void          readFilteringAndSortingCriteria();
@@ -384,6 +385,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     wxCommandEvent event;
     OnStyleSelection( event );
     OnNetSelectionUpdated( event );
+    OnPadInZoneSelection( event );
 
     Fit();
 
@@ -473,6 +475,15 @@ void DIALOG_COPPER_ZONE::OnNetSelectionUpdated( wxCommandEvent& event )
 void DIALOG_COPPER_ZONE::OnRemoveIslandsSelection( wxCommandEvent& event )
 {
     m_islandThreshold.Enable( m_cbRemoveIslands->GetSelection() == 2 );
+}
+
+
+void DIALOG_COPPER_ZONE::OnPadInZoneSelection( wxCommandEvent& event )
+{
+    int  selection = m_PadInZoneOpt->GetSelection();
+    bool enabled = selection == 1 || selection == 2;
+    m_antipadClearance.Enable( enabled );
+    m_spokeWidth.Enable( enabled );
 }
 
 
