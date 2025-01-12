@@ -97,7 +97,14 @@ void PrependDirectoryToPath( wxFileName& aFileName, const wxString aDirPath )
 
 wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
 {
-    wxString outPath = ExpandTextVars( m_outputPath, aProject );
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return m_titleBlock.TextVarResolver( token, aProject );
+            };
+
+    wxString outPath = ExpandTextVars( m_outputPath, &textResolver );
+
     if( !m_tempOutputDirectory.IsEmpty() )
     {
         if( m_outputPathIsDirectory )

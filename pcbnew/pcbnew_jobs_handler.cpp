@@ -273,8 +273,7 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
 {
     BOARD* brd = nullptr;
 
-    if( !Pgm().IsGUI() &&
-        Pgm().GetSettingsManager().IsProjectOpen() )
+    if( !Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpen() )
     {
         wxString pcbPath = aPath;
 
@@ -309,7 +308,7 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
         brd = LoadBoard( aPath, true );
     }
 
-    if ( !brd )
+    if( !brd )
     {
         m_reporter->Report( _( "Failed to load board\n" ), RPT_SEVERITY_ERROR );
     }
@@ -330,6 +329,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
@@ -472,6 +472,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
@@ -714,6 +715,8 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
+
     if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
     {
         if( aSvgJob->GetOutputPath().IsEmpty() )
@@ -785,6 +788,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
     loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
@@ -855,6 +859,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
     loadOverrideDrawingSheet( brd, aPdfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
@@ -935,6 +940,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
     loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
@@ -1149,6 +1155,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
@@ -1227,6 +1234,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
 
     wxString outPath = aDrillJob->GetFullOutputPath( brd->GetProject() );
 
@@ -1344,9 +1353,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     BOARD* brd = getBoard( aPosJob->m_filename );
 
     if( !brd )
-    {
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-    }
+
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
 
     if( aPosJob->GetOutputPath().IsEmpty() )
     {
@@ -1667,6 +1676,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
@@ -1843,6 +1853,8 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
+
     if( job->OutputPathFullSpecified() )
     {
         wxFileName fn = brd->GetFileName();
@@ -1935,6 +1947,8 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    aJob->SetTitleBlock( brd->GetTitleBlock() );
 
     wxFileName fn( brd->GetFileName() );
     wxString   path = job->GetOutputPath();

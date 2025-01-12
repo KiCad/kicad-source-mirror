@@ -157,6 +157,7 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
               } );
 }
 
+
 SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
 {
     SCHEMATIC* sch = nullptr;
@@ -272,6 +273,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     std::unique_ptr<SCH_RENDER_SETTINGS> renderSettings = std::make_unique<SCH_RENDER_SETTINGS>();
@@ -383,6 +385,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
+    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -501,6 +506,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     // Annotation warning check
@@ -762,6 +768,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 
     if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
+    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -1104,6 +1113,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( ercJob->GetOutputPath().IsEmpty() )

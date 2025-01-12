@@ -26,6 +26,7 @@
 #include <settings/json_settings.h>
 #include <lseq.h>
 #include <lset.h>
+#include <title_block.h>
 
 class PROJECT;
 
@@ -193,6 +194,8 @@ public:
         m_varOverrides = aVarOverrides;
     }
 
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) { m_titleBlock = aTitleBlock; }
+
     virtual void FromJson( const nlohmann::json& j );
     virtual void ToJson( nlohmann::json& j ) const;
 
@@ -216,8 +219,9 @@ public:
     bool GetOutpathIsDirectory() const { return m_outputPathIsDirectory; }
 
 protected:
-    std::string m_type;
+    std::string                  m_type;
     std::map<wxString, wxString> m_varOverrides;
+    TITLE_BLOCK                  m_titleBlock;
 
     wxString m_tempOutputDirectory;
 

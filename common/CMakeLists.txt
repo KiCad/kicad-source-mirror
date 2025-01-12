@@ -190,6 +190,7 @@ set( KICOMMON_SRCS
     systemdirsappend.cpp
     thread_pool.cpp
     ui_events.cpp
+    title_block.cpp
     trace_helpers.cpp
     wildcards_and_files_ext.cpp
     wx_filename.cpp
@@ -619,7 +620,6 @@ set( COMMON_SRCS
     stroke_params.cpp
     template_fieldnames.cpp
     textentry_tricks.cpp
-    title_block.cpp
     undo_redo_container.cpp
     validators.cpp
     drawing_sheet/ds_painter.cpp

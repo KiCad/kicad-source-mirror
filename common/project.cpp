@@ -71,15 +71,6 @@ PROJECT::~PROJECT()
 
 bool PROJECT::TextVarResolver( wxString* aToken ) const
 {
-    // Special case because the resolution of PROJECTNAME is usually tied to title blocks
-    // but we want this for jobs
-    // Future todo is to rework vars entirely
-    if( aToken->IsSameAs( wxT( "PROJECTNAME" ) )  )
-    {
-        *aToken = GetProjectName();
-        return true;
-    }
-
     if( GetTextVars().count( *aToken ) > 0 )
     {
         *aToken = GetTextVars().at( *aToken );

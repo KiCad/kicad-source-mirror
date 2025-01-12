@@ -37,7 +37,7 @@ class PROJECT;
  * Hold the information shown in the lower right corner of a plot, printout, or
  * editing view.
  */
-class TITLE_BLOCK
+class KICOMMON_API TITLE_BLOCK
 {
     // Texts are stored in wxArraystring.
     // TEXTS_IDX gives the index of known texts in this array
