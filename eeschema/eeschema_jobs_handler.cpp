@@ -333,8 +333,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
-    if( !PATHS::EnsurePathExists( aPlotJob->GetFullOutputPath( &sch->Prj() ),
-                                  aPlotJob->GetOutpathIsDirectory() ) )
+    wxString outPath = aPlotJob->GetFullOutputPath( &sch->Prj() );
+    if( !PATHS::EnsurePathExists( outPath,
+                                  !aPlotJob->GetOutpathIsDirectory() ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -350,13 +351,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
     if( aPlotJob->GetOutpathIsDirectory() )
     {
-        plotOpts.m_outputDirectory = aPlotJob->GetFullOutputPath( &sch->Prj() );
+        plotOpts.m_outputDirectory = outPath;
         plotOpts.m_outputFile = wxEmptyString;
     }
     else
     {
         plotOpts.m_outputDirectory = wxEmptyString;
-        plotOpts.m_outputFile = aPlotJob->GetFullOutputPath( &sch->Prj() );
+        plotOpts.m_outputFile = outPath;
     }
     plotOpts.m_pageSizeSelect = pageSizeSelect;
     plotOpts.m_plotAll = aPlotJob->m_plotAll;
