@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "4xxx")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/4xxx.kicad_sym")(options "")(descr "4xxx series symbols"))
+  (lib (name "Grandchild")(type "Table")(uri "cycle-grandchild")(options "")(descr "A nested library"))
+)

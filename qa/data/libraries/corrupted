@@ -1,0 +1,12 @@
+(sym_lib_table
+  (lib (name "4xxx")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/4xxx.kicad_sym")(options "")(descr "4xxx series symbols"))
+  (lib (name "4xxx_IEEE")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/4xxx_IEEE.kicad_sym")(options "")(descr "4xxx series IEEE symbols"))
+  (lib (name "74xGxx")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/74xGxx.kicad_sym")(options "")(descr "74xGxx symbols"))
+  (lib (name "74xx")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/74xx.kicad_sym")(options "")(descr "74xx symbols"))
+  (lib (  (lib (name "Amplifier_Audio")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/Amplifier_Audio.kicad_sym")(options "")(descr "Amplifier for audio applications"))
+name "74xx_IEEE")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/74xx_IEEE.kicad_sym")(options "")(descr "74xx series IEEE symbols"))
+  (lib (name "Amplifier_Audio")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/Amplifier_Audio.kicad_sym")(options "")(descr "Amplifier for audio applications"))
+  (lib (name "Amplifier_Buffer")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/Amplifier_Buffer.kicad_sym")(options "")(descr "Buffer amplifiers"))
+  (lib (name "Amplifier_Current")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/Amplifier_Current.kicad_sym")(options "")(descr "Amplifiers for current sensors (shunt)"))
+  (lib (name "Amplifier_Difference")(type "KiCad")(uri "${KICAD8_SYMBOL_DIR}/Amplifier_Difference.kicad_sym")(options "")(descr "Amplifiers for analog differential signals"))
+)

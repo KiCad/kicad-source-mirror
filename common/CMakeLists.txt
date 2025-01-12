@@ -134,6 +134,9 @@ set( KICOMMON_SRCS
     kicad_curl/kicad_curl.cpp
     kicad_curl/kicad_curl_easy.cpp
 
+    libraries/library_table.cpp
+    libraries/library_table_parser.cpp
+
     settings/app_settings.cpp
     settings/aui_settings.cpp
     settings/bom_settings.cpp
