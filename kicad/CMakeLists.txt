@@ -17,8 +17,8 @@ include_directories(
     )
 
 set( KICAD_SRCS
-    dialogs/dialog_job_output_options.cpp
-    dialogs/dialog_job_output_options_base.cpp
+    dialogs/dialog_jobset_output_options.cpp
+    dialogs/dialog_jobset_output_options_base.cpp
     dialogs/dialog_copyfiles_job_settings.cpp
     dialogs/dialog_copyfiles_job_settings_base.cpp
     dialogs/dialog_executecommand_job_settings.cpp
@@ -31,8 +31,8 @@ set( KICAD_SRCS
     dialogs/dialog_template_selector.cpp
     dialogs/panel_kicad_launcher_base.cpp
     dialogs/panel_kicad_launcher.cpp
-    dialogs/panel_jobs_base.cpp
-    dialogs/panel_jobs.cpp
+    dialogs/panel_jobset_base.cpp
+    dialogs/panel_jobset.cpp
     files-io.cpp
     jobs_runner.cpp
     import_proj.cpp

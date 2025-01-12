@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dialog_job_output_options.h"
+#include "dialog_jobset_output_options.h"
 #include "dialog_copyfiles_job_settings.h"
 #include <wx/aui/auibook.h>
 #include <jobs/jobset.h>
@@ -42,9 +42,9 @@
 extern KICOMMON_API std::map<JOBSET_OUTPUT_TYPE, JOBSET_OUTPUT_TYPE_INFO> JobsetOutputTypeInfos;
 
 
-DIALOG_JOB_OUTPUT_OPTIONS::DIALOG_JOB_OUTPUT_OPTIONS( wxWindow* aParent, JOBSET* aJobsFile,
-                                                      JOBSET_OUTPUT* aOutput ) :
-        DIALOG_JOB_OUTPUT_OPTIONS_BASE( aParent ),
+DIALOG_JOBSET_OUTPUT_OPTIONS::DIALOG_JOBSET_OUTPUT_OPTIONS( wxWindow* aParent, JOBSET* aJobsFile,
+                                                            JOBSET_OUTPUT* aOutput ) :
+        DIALOG_JOBSET_OUTPUT_OPTIONS_BASE( aParent ),
         m_jobsFile( aJobsFile ),
         m_output( aOutput )
 {
@@ -68,7 +68,7 @@ DIALOG_JOB_OUTPUT_OPTIONS::DIALOG_JOB_OUTPUT_OPTIONS( wxWindow* aParent, JOBSET*
 }
 
 
-void DIALOG_JOB_OUTPUT_OPTIONS::onOutputPathBrowseClicked(wxCommandEvent& event)
+void DIALOG_JOBSET_OUTPUT_OPTIONS::onOutputPathBrowseClicked(wxCommandEvent& event)
 {
     bool isFolder = false;
     wxString fileWildcard = "";
@@ -108,7 +108,7 @@ void DIALOG_JOB_OUTPUT_OPTIONS::onOutputPathBrowseClicked(wxCommandEvent& event)
 
 }
 
-bool DIALOG_JOB_OUTPUT_OPTIONS::TransferDataFromWindow()
+bool DIALOG_JOBSET_OUTPUT_OPTIONS::TransferDataFromWindow()
 {
     wxString outputPath = m_textCtrlOutputPath->GetValue().Trim().Trim( false );
 
@@ -149,7 +149,7 @@ bool DIALOG_JOB_OUTPUT_OPTIONS::TransferDataFromWindow()
 }
 
 
-bool DIALOG_JOB_OUTPUT_OPTIONS::TransferDataToWindow()
+bool DIALOG_JOBSET_OUTPUT_OPTIONS::TransferDataToWindow()
 {
     wxArrayString    arrayStr;
     std::vector<int> selectedList;

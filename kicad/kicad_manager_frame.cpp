@@ -36,7 +36,7 @@
 #include <confirm.h>
 #include <dialogs/panel_kicad_launcher.h>
 #include <dialogs/dialog_update_check_prompt.h>
-#include <dialogs/panel_jobs.h>
+#include <dialogs/panel_jobset.h>
 #include <eda_base_frame.h>
 #include <executable_names.h>
 #include <file_history.h>
@@ -698,7 +698,7 @@ void KICAD_MANAGER_FRAME::SaveOpenJobSetsToLocalSettings( bool aIsExplicitUserSa
 
     for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
-        if( PANEL_JOBS* jobset = dynamic_cast<PANEL_JOBS*>( m_notebook->GetPage( i ) ) )
+        if( PANEL_JOBSET* jobset = dynamic_cast<PANEL_JOBSET*>( m_notebook->GetPage( i ) ) )
         {
             wxFileName jobsetFn( jobset->GetFilePath() );
             jobsetFn.MakeRelativeTo( Prj().GetProjectPath() );
@@ -767,7 +767,7 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
 {
     for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
-        if( PANEL_JOBS* panel = dynamic_cast<PANEL_JOBS*>( m_notebook->GetPage( i ) ) )
+        if( PANEL_JOBSET* panel = dynamic_cast<PANEL_JOBSET*>( m_notebook->GetPage( i ) ) )
         {
             if( aFileName.GetFullPath() == panel->GetFilePath() )
             {
@@ -784,7 +784,7 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
 
         jobsFile->LoadFromFile();
 
-        PANEL_JOBS* jobPanel = new PANEL_JOBS( m_notebook, this, std::move( jobsFile ) );
+        PANEL_JOBSET* jobPanel = new PANEL_JOBSET( m_notebook, this, std::move( jobsFile ) );
         jobPanel->SetProjectTied( true );
         jobPanel->SetClosable( true );
         m_notebook->AddPage( jobPanel, aFileName.GetFullName(), true );

@@ -20,15 +20,15 @@
 
 #pragma once
 
-#include "dialog_job_output_options_base.h"
+#include "dialog_jobset_output_options_base.h"
 
 class JOBSET;
 struct JOBSET_OUTPUT;
 
-class DIALOG_JOB_OUTPUT_OPTIONS : public DIALOG_JOB_OUTPUT_OPTIONS_BASE
+class DIALOG_JOBSET_OUTPUT_OPTIONS : public DIALOG_JOBSET_OUTPUT_OPTIONS_BASE
 {
 public:
-    DIALOG_JOB_OUTPUT_OPTIONS( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_OUTPUT* aOutput );
+    DIALOG_JOBSET_OUTPUT_OPTIONS( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_OUTPUT* aOutput );
 
 private:
     virtual void onOutputPathBrowseClicked(wxCommandEvent& event) override;

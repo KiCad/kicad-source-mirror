@@ -7,11 +7,11 @@
 
 #include "widgets/std_bitmap_button.h"
 
-#include "dialog_job_output_options_base.h"
+#include "dialog_jobset_output_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_JOB_OUTPUT_OPTIONS_BASE::DIALOG_JOB_OUTPUT_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::DIALOG_JOBSET_OUTPUT_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -91,12 +91,12 @@ DIALOG_JOB_OUTPUT_OPTIONS_BASE::DIALOG_JOB_OUTPUT_OPTIONS_BASE( wxWindow* parent
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_buttonOutputPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JOB_OUTPUT_OPTIONS_BASE::onOutputPathBrowseClicked ), NULL, this );
+	m_buttonOutputPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::onOutputPathBrowseClicked ), NULL, this );
 }
 
-DIALOG_JOB_OUTPUT_OPTIONS_BASE::~DIALOG_JOB_OUTPUT_OPTIONS_BASE()
+DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::~DIALOG_JOBSET_OUTPUT_OPTIONS_BASE()
 {
 	// Disconnect Events
-	m_buttonOutputPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JOB_OUTPUT_OPTIONS_BASE::onOutputPathBrowseClicked ), NULL, this );
+	m_buttonOutputPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::onOutputPathBrowseClicked ), NULL, this );
 
 }

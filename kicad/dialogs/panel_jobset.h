@@ -20,15 +20,15 @@
 
 #pragma once
 
-#include "panel_jobs_base.h"
+#include "panel_jobset_base.h"
 #include <memory>
 #include <grid_tricks.h>
 
 class wxAuiNotebook;
 class JOBSET;
 class KICAD_MANAGER_FRAME;
-class PANEL_JOBS;
-class PANEL_JOB_OUTPUT;
+class PANEL_JOBSET;
+class PANEL_JOBSET_OUTPUT;
 struct JOBSET_OUTPUT;
 
 class JOBS_GRID_TRICKS : public GRID_TRICKS
@@ -40,7 +40,7 @@ class JOBS_GRID_TRICKS : public GRID_TRICKS
     };
 
 public:
-    explicit JOBS_GRID_TRICKS( PANEL_JOBS* aParent, WX_GRID* aGrid );
+    explicit JOBS_GRID_TRICKS( PANEL_JOBSET* aParent, WX_GRID* aGrid );
 
     ~JOBS_GRID_TRICKS() override = default;
 
@@ -51,20 +51,20 @@ protected:
     bool handleDoubleClick( wxGridEvent& aEvent ) override;
 
 protected:
-    PANEL_JOBS* m_parent;
-    int         m_doubleClickRow;
+    PANEL_JOBSET* m_parent;
+    int           m_doubleClickRow;
 };
 
 
-class PANEL_JOBS : public PANEL_JOBS_BASE
+class PANEL_JOBSET : public PANEL_JOBSET_BASE
 {
 public:
-    PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
-                std::unique_ptr<JOBSET> aJobsFile );
+    PANEL_JOBSET( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
+                  std::unique_ptr<JOBSET> aJobsFile );
 
-    ~PANEL_JOBS();
+    ~PANEL_JOBSET();
 
-    void RemoveOutput( PANEL_JOB_OUTPUT* aPanel );
+    void RemoveOutput( PANEL_JOBSET_OUTPUT* aPanel );
 
     void EnsurePcbSchFramesOpen();
 
@@ -76,7 +76,7 @@ public:
     bool OpenJobOptionsForListItem( size_t aItemIndex );
     void OnJobButtonDelete( wxCommandEvent& aEvent ) override;
 
-    std::vector<PANEL_JOB_OUTPUT*> GetOutputPanels();
+    std::vector<PANEL_JOBSET_OUTPUT*> GetOutputPanels();
 
 protected:
     virtual void OnSizeGrid( wxSizeEvent& aEvent ) override;

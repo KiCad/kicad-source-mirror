@@ -39,9 +39,9 @@ class WX_GRID;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_JOBS_BASE
+/// Class PANEL_JOBSET_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_JOBS_BASE : public PANEL_NOTEBOOK_BASE
+class PANEL_JOBSET_BASE : public PANEL_NOTEBOOK_BASE
 {
 	private:
 
@@ -71,16 +71,16 @@ class PANEL_JOBS_BASE : public PANEL_NOTEBOOK_BASE
 
 	public:
 
-		PANEL_JOBS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,400 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,400 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_JOBS_BASE();
+		~PANEL_JOBSET_BASE();
 
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_JOB_OUTPUT_BASE
+/// Class PANEL_JOBSET_OUTPUT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_JOB_OUTPUT_BASE : public wxPanel
+class PANEL_JOBSET_OUTPUT_BASE : public wxPanel
 {
 	private:
 
@@ -102,9 +102,9 @@ class PANEL_JOB_OUTPUT_BASE : public wxPanel
 
 	public:
 
-		PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_SUNKEN|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_JOBSET_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_SUNKEN|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_JOB_OUTPUT_BASE();
+		~PANEL_JOBSET_OUTPUT_BASE();
 
 };
 

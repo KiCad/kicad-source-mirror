@@ -18,8 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "panel_jobs.h"
-#include "dialog_job_output_options.h"
+#include "panel_jobset.h"
+#include "dialog_jobset_output_options.h"
 #include "dialog_copyfiles_job_settings.h"
 #include <wx/aui/auibook.h>
 #include <jobs/jobset.h>
@@ -129,12 +129,12 @@ private:
 };
 
 
-class PANEL_JOB_OUTPUT : public PANEL_JOB_OUTPUT_BASE
+class PANEL_JOBSET_OUTPUT : public PANEL_JOBSET_OUTPUT_BASE
 {
 public:
-    PANEL_JOB_OUTPUT( wxWindow* aParent, PANEL_JOBS* aPanelParent, KICAD_MANAGER_FRAME* aFrame,
-                     JOBSET* aFile, JOBSET_OUTPUT* aOutput ) :
-            PANEL_JOB_OUTPUT_BASE( aParent ),
+    PANEL_JOBSET_OUTPUT( wxWindow* aParent, PANEL_JOBSET* aPanelParent, KICAD_MANAGER_FRAME* aFrame,
+                         JOBSET* aFile, JOBSET_OUTPUT* aOutput ) :
+            PANEL_JOBSET_OUTPUT_BASE( aParent ),
             m_jobsFile( aFile ),
             m_outputId( aOutput->m_id ),
             m_frame( aFrame ),
@@ -151,7 +151,7 @@ public:
         SetWindowStyleFlag( style );
 #endif //  _WIN32
 
-        Connect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
+        Connect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOBSET_OUTPUT::onMenu ), nullptr, this );
 
         if( JobsetOutputTypeInfos.contains( aOutput->m_type ) )
         {
@@ -164,9 +164,9 @@ public:
     }
 
 
-    ~PANEL_JOB_OUTPUT()
+    ~PANEL_JOBSET_OUTPUT()
     {
-        Disconnect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
+        Disconnect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOBSET_OUTPUT::onMenu ), nullptr, this );
     }
 
     void UpdateStatus()
@@ -256,7 +256,7 @@ public:
         JOBSET_OUTPUT* output = GetOutput();
         wxCHECK( output, /*void*/ );
 
-        DIALOG_JOB_OUTPUT_OPTIONS dialog( m_frame, m_jobsFile, output );
+        DIALOG_JOBSET_OUTPUT_OPTIONS dialog( m_frame, m_jobsFile, output );
 
         if( dialog.ShowModal() == wxID_OK )
         {
@@ -317,11 +317,11 @@ private:
     JOBSET*              m_jobsFile;
     wxString             m_outputId;
     KICAD_MANAGER_FRAME* m_frame;
-    PANEL_JOBS*          m_panelParent;
+    PANEL_JOBSET*        m_panelParent;
 };
 
 
-JOBS_GRID_TRICKS::JOBS_GRID_TRICKS( PANEL_JOBS* aParent, WX_GRID* aGrid ) :
+JOBS_GRID_TRICKS::JOBS_GRID_TRICKS( PANEL_JOBSET* aParent, WX_GRID* aGrid ) :
         GRID_TRICKS( aGrid ),
         m_parent( aParent )
 {
@@ -414,12 +414,12 @@ bool JOBS_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 }
 
 
-PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
-                        std::unique_ptr<JOBSET> aJobsFile ) :
-	PANEL_JOBS_BASE( aParent ),
-	m_parentBook( aParent ),
-    m_frame( aFrame ),
-	m_jobsFile( std::move( aJobsFile ) )
+PANEL_JOBSET::PANEL_JOBSET( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
+                            std::unique_ptr<JOBSET> aJobsFile ) :
+        PANEL_JOBSET_BASE( aParent ),
+        m_parentBook( aParent ),
+        m_frame( aFrame ),
+        m_jobsFile( std::move( aJobsFile ) )
 {
     m_jobsGrid->PushEventHandler( new JOBS_GRID_TRICKS( this, m_jobsGrid ) );
 
@@ -444,14 +444,14 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
 }
 
 
-PANEL_JOBS::~PANEL_JOBS()
+PANEL_JOBSET::~PANEL_JOBSET()
 {
     // Delete the GRID_TRICKS.
     m_jobsGrid->PopEventHandler( true );
 }
 
 
-void PANEL_JOBS::RemoveOutput( PANEL_JOB_OUTPUT* aPanel )
+void PANEL_JOBSET::RemoveOutput( PANEL_JOBSET_OUTPUT* aPanel )
 {
     JOBSET_OUTPUT* output = aPanel->GetOutput();
 
@@ -468,7 +468,7 @@ void PANEL_JOBS::RemoveOutput( PANEL_JOB_OUTPUT* aPanel )
 }
 
 
-void PANEL_JOBS::rebuildJobList()
+void PANEL_JOBSET::rebuildJobList()
 {
     if( m_jobsGrid->GetNumberRows() )
         m_jobsGrid->DeleteRows( 0, m_jobsGrid->GetNumberRows() );
@@ -490,12 +490,12 @@ void PANEL_JOBS::rebuildJobList()
     UpdateTitle();
 
     // Ensure the outputs get their Run-ability status updated
-    for( PANEL_JOB_OUTPUT* panel : GetOutputPanels() )
+    for( PANEL_JOBSET_OUTPUT* panel : GetOutputPanels() )
         panel->UpdateStatus();
 }
 
 
-void PANEL_JOBS::UpdateTitle()
+void PANEL_JOBSET::UpdateTitle()
 {
     wxString tabName = m_jobsFile->GetFullName();
 
@@ -507,10 +507,10 @@ void PANEL_JOBS::UpdateTitle()
 }
 
 
-void PANEL_JOBS::addJobOutputPanel( JOBSET_OUTPUT* aOutput )
+void PANEL_JOBSET::addJobOutputPanel( JOBSET_OUTPUT* aOutput )
 {
-    PANEL_JOB_OUTPUT* outputPanel = new PANEL_JOB_OUTPUT( m_outputList, this, m_frame,
-                                                          m_jobsFile.get(), aOutput );
+    PANEL_JOBSET_OUTPUT* outputPanel = new PANEL_JOBSET_OUTPUT( m_outputList, this, m_frame,
+                                                                m_jobsFile.get(), aOutput );
 
 #if __OSX__
     m_outputListSizer->Add( outputPanel, 0, wxEXPAND, 5 );
@@ -522,13 +522,13 @@ void PANEL_JOBS::addJobOutputPanel( JOBSET_OUTPUT* aOutput )
 }
 
 
-std::vector<PANEL_JOB_OUTPUT*> PANEL_JOBS::GetOutputPanels()
+std::vector<PANEL_JOBSET_OUTPUT*> PANEL_JOBSET::GetOutputPanels()
 {
-    std::vector<PANEL_JOB_OUTPUT*> panels;
+    std::vector<PANEL_JOBSET_OUTPUT*> panels;
 
     for( const wxSizerItem* item : m_outputListSizer->GetChildren() )
     {
-        if( PANEL_JOB_OUTPUT* panel = dynamic_cast<PANEL_JOB_OUTPUT*>( item->GetWindow() ) )
+        if( PANEL_JOBSET_OUTPUT* panel = dynamic_cast<PANEL_JOBSET_OUTPUT*>( item->GetWindow() ) )
             panels.push_back( panel );
     }
 
@@ -536,7 +536,7 @@ std::vector<PANEL_JOB_OUTPUT*> PANEL_JOBS::GetOutputPanels()
 }
 
 
-void PANEL_JOBS::buildOutputList()
+void PANEL_JOBSET::buildOutputList()
 {
     Freeze();
 
@@ -549,7 +549,7 @@ void PANEL_JOBS::buildOutputList()
 }
 
 
-bool PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
+bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
 {
     JOBSET_JOB& job = m_jobsFile->GetJobs()[aItemIndex];
 
@@ -601,7 +601,7 @@ bool PANEL_JOBS::OpenJobOptionsForListItem( size_t aItemIndex )
 }
 
 
-void PANEL_JOBS::OnGridCellChange( wxGridEvent& aEvent )
+void PANEL_JOBSET::OnGridCellChange( wxGridEvent& aEvent )
 {
     int row = aEvent.GetRow();
     int col = aEvent.GetCol();
@@ -611,7 +611,7 @@ void PANEL_JOBS::OnGridCellChange( wxGridEvent& aEvent )
 }
 
 
-void PANEL_JOBS::OnSaveButtonClick( wxCommandEvent& aEvent )
+void PANEL_JOBSET::OnSaveButtonClick( wxCommandEvent& aEvent )
 {
     if( !m_jobsGrid->CommitPendingChanges() )
         return;
@@ -621,7 +621,7 @@ void PANEL_JOBS::OnSaveButtonClick( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_JOBS::OnAddJobClick( wxCommandEvent& aEvent )
+void PANEL_JOBSET::OnAddJobClick( wxCommandEvent& aEvent )
 {
     if( !m_jobsGrid->CommitPendingChanges() )
         return;
@@ -685,7 +685,7 @@ void PANEL_JOBS::OnAddJobClick( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_JOBS::OnJobButtonDelete( wxCommandEvent& aEvent )
+void PANEL_JOBSET::OnJobButtonDelete( wxCommandEvent& aEvent )
 {
     if( !m_jobsGrid->CommitPendingChanges() )
         return;
@@ -716,7 +716,7 @@ void PANEL_JOBS::OnJobButtonDelete( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
+void PANEL_JOBSET::OnAddOutputClick( wxCommandEvent& aEvent )
 {
     wxArrayString              headers;
     std::vector<wxArrayString> items;
@@ -744,7 +744,7 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
             {
                 JOBSET_OUTPUT* output = m_jobsFile->AddNewJobOutput( jobType.first );
 
-                DIALOG_JOB_OUTPUT_OPTIONS dialog( m_frame, m_jobsFile.get(), output );
+                DIALOG_JOBSET_OUTPUT_OPTIONS dialog( m_frame, m_jobsFile.get(), output );
                 if (dialog.ShowModal() == wxID_OK)
                 {
                     Freeze();
@@ -763,7 +763,7 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
 }
 
 
-bool PANEL_JOBS::GetCanClose()
+bool PANEL_JOBSET::GetCanClose()
 {
     if( m_jobsFile->GetDirty() )
     {
@@ -784,7 +784,7 @@ bool PANEL_JOBS::GetCanClose()
 }
 
 
-void PANEL_JOBS::EnsurePcbSchFramesOpen()
+void PANEL_JOBSET::EnsurePcbSchFramesOpen()
 {
     PROJECT&      project = m_frame->Kiway().Prj();
     KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_PCB_EDITOR, false );
@@ -836,13 +836,13 @@ void PANEL_JOBS::EnsurePcbSchFramesOpen()
 }
 
 
-wxString PANEL_JOBS::GetFilePath() const
+wxString PANEL_JOBSET::GetFilePath() const
 {
     return m_jobsFile->GetFullFilename();
 }
 
 
-void PANEL_JOBS::OnJobButtonUp( wxCommandEvent& aEvent )
+void PANEL_JOBSET::OnJobButtonUp( wxCommandEvent& aEvent )
 {
     if( !m_jobsGrid->CommitPendingChanges() )
         return;
@@ -865,7 +865,7 @@ void PANEL_JOBS::OnJobButtonUp( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_JOBS::OnJobButtonDown( wxCommandEvent& aEvent )
+void PANEL_JOBSET::OnJobButtonDown( wxCommandEvent& aEvent )
 {
     if( !m_jobsGrid->CommitPendingChanges() )
         return;
@@ -888,7 +888,7 @@ void PANEL_JOBS::OnJobButtonDown( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
+void PANEL_JOBSET::OnRunAllJobsClick( wxCommandEvent& event )
 {
     if( !m_jobsGrid->CommitPendingChanges() )
         return;
@@ -916,7 +916,7 @@ void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
 
 				jobRunner.RunJobsAllOutputs();
 
-                for( PANEL_JOB_OUTPUT* panel : GetOutputPanels() )
+                for( PANEL_JOBSET_OUTPUT* panel : GetOutputPanels() )
                     panel->UpdateStatus();
 
 				delete progressReporter;
@@ -927,7 +927,7 @@ void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
 }
 
 
-void PANEL_JOBS::OnSizeGrid( wxSizeEvent& aEvent )
+void PANEL_JOBSET::OnSizeGrid( wxSizeEvent& aEvent )
 {
     m_jobsGrid->SetColSize( 1, m_jobsGrid->GetSize().x - m_jobsGrid->GetColSize( 0 ) );
 
