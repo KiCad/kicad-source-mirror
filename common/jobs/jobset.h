@@ -55,13 +55,13 @@ struct KICOMMON_API JOBSET_JOB
 };
 
 
-enum class JOBSET_OUTPUT_TYPE
+enum class KICOMMON_API JOBSET_OUTPUT_TYPE
 {
     FOLDER,
     ARCHIVE
 };
 
-struct JOBSET_OUTPUT_TYPE_INFO
+struct KICOMMON_API JOBSET_OUTPUT_TYPE_INFO
 {
     wxString    name;
     BITMAPS     bitmap;
