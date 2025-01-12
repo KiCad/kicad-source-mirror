@@ -174,12 +174,22 @@ void SCH_IO_EAGLE::loadLayerDefs( const std::vector<std::unique_ptr<ELAYER>>& aL
          * </layers>
          */
 
-        if( elayer->name == wxT( "Nets" ) )
+        switch ( elayer->number)
+        {
+        case 91:
             m_layerMap[elayer->number] = LAYER_WIRE;
-        else if( elayer->name == wxT( "Info" ) || elayer->name == wxT( "Guide" ) )
-            m_layerMap[elayer->number] = LAYER_NOTES;
-        else if( elayer->name == wxT( "Busses" ) )
+            break;
+        case 92:
             m_layerMap[elayer->number] = LAYER_BUS;
+            break;
+        case 97:
+        case 98:
+            m_layerMap[elayer->number] = LAYER_NOTES;
+            break;
+
+        default:
+            break;
+        }
     }
 }
 
