@@ -398,6 +398,9 @@ public:
                     UpdateStatus();
 
                     delete progressReporter;
+
+                    // Bring the Kicad manager frame back to the front
+                    m_frame->Raise();
                 } );
     }
 
@@ -1096,6 +1099,9 @@ void PANEL_JOBS::OnRunAllJobsClick( wxCommandEvent& event )
                     panel->UpdateStatus();
 
 				delete progressReporter;
+
+                // Bring the Kicad manager frame back to the front
+                m_frame->Raise();
 			} );
 }
 
