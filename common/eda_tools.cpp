@@ -42,10 +42,12 @@ bool IsFileFromEDATool( const wxFileName& aFileName, const EDA_TOOLS aTool )
                 textFile.Close();
                 return true;
             }
+
             break;
 
         default: break;
         }
+
         textFile.Close();
     }
 

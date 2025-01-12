@@ -86,7 +86,8 @@ bool DIALOG_GLOBAL_DESIGN_BLOCK_LIB_TABLE_CONFIG::TransferDataFromWindow()
             return false;
         }
 
-        // Make sure the design block library table to copy is a valid design block library table file.
+        // Make sure the design block library table to copy is a valid design block library
+        // table file.
         DESIGN_BLOCK_LIB_TABLE tmpTable;
 
         try

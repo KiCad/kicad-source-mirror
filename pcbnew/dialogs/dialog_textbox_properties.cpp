@@ -337,7 +337,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     m_textBox->SetTextThickness( m_thickness.GetValue() );
 
     // Test for acceptable values for thickness and size and clamp if fails
-    int maxPenWidth = Clamp_Text_PenSize( m_textBox->GetTextThickness(), m_textBox->GetTextSize() );
+    int maxPenWidth = ClampTextPenSize( m_textBox->GetTextThickness(), m_textBox->GetTextSize() );
 
     if( m_textBox->GetTextThickness() > maxPenWidth )
     {

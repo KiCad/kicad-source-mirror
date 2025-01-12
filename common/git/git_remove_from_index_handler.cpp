@@ -32,9 +32,11 @@ GIT_REMOVE_FROM_INDEX_HANDLER::GIT_REMOVE_FROM_INDEX_HANDLER( git_repository* aR
     m_filesToRemove.clear();
 }
 
+
 GIT_REMOVE_FROM_INDEX_HANDLER::~GIT_REMOVE_FROM_INDEX_HANDLER()
 {
 }
+
 
 bool GIT_REMOVE_FROM_INDEX_HANDLER::RemoveFromIndex( const wxString& aFilePath )
 {
@@ -61,6 +63,7 @@ bool GIT_REMOVE_FROM_INDEX_HANDLER::RemoveFromIndex( const wxString& aFilePath )
     m_filesToRemove.push_back( aFilePath );
     return true;
 }
+
 
 void GIT_REMOVE_FROM_INDEX_HANDLER::PerformRemoveFromIndex()
 {

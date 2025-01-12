@@ -31,6 +31,7 @@
 GIT_CLONE_HANDLER::GIT_CLONE_HANDLER() :  KIGIT_COMMON( nullptr )
 {}
 
+
 GIT_CLONE_HANDLER::~GIT_CLONE_HANDLER()
 {
     if( m_repo )
@@ -46,7 +47,8 @@ bool GIT_CLONE_HANDLER::PerformClone()
     {
         if( !clonePath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         {
-            AddErrorString( wxString::Format( _( "Could not create directory '%s'" ), m_clonePath ) );
+            AddErrorString( wxString::Format( _( "Could not create directory '%s'" ),
+                                              m_clonePath ) );
             return false;
         }
     }
@@ -62,7 +64,8 @@ bool GIT_CLONE_HANDLER::PerformClone()
 
     m_testedTypes = 0;
 
-    if( git_clone( &m_repo, m_URL.ToStdString().c_str(), m_clonePath.ToStdString().c_str(), &cloneOptions ) != 0 )
+    if( git_clone( &m_repo, m_URL.ToStdString().c_str(), m_clonePath.ToStdString().c_str(),
+                   &cloneOptions ) != 0 )
     {
         AddErrorString( wxString::Format( _( "Could not clone repository '%s'" ), m_URL ) );
         return false;

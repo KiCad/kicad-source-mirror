@@ -28,12 +28,14 @@ GIT_RESOLVE_CONFLICT_HANDLER::GIT_RESOLVE_CONFLICT_HANDLER( git_repository* aRep
     m_repository = aRepository;
 }
 
+
 GIT_RESOLVE_CONFLICT_HANDLER::~GIT_RESOLVE_CONFLICT_HANDLER()
 {
 }
 
+
 bool GIT_RESOLVE_CONFLICT_HANDLER::PerformResolveConflict()
 {
-        return true;
+    return true;
 }
 

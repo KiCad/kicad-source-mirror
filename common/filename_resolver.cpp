@@ -220,7 +220,7 @@ bool FILENAME_RESOLVER::createPathList()
     while( sPL != m_paths.end() )
     {
         wxLogTrace( MASK_3D_RESOLVER, wxS( "   + %s : '%s'\n" ), (*sPL).m_Alias.GetData(),
-            (*sPL).m_Pathexp.GetData() );
+                    (*sPL).m_Pathexp.GetData() );
         ++sPL;
     }
 #endif
@@ -313,7 +313,8 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
         if( !( m_errflags & ERRFLG_ENVPATH ) )
         {
             m_errflags |= ERRFLG_ENVPATH;
-            wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is defined";
+            wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is "
+                              "defined";
             errmsg.append( "\n" );
             errmsg.append( tname );
             errmsg.append( "\n" );
@@ -472,8 +473,9 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
                                        ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
 
         if( aPath.m_Pathvar == versionedPath
-                || aPath.m_Pathvar == wxS( "${KIPRJMOD}" ) || aPath.m_Pathvar == wxS( "$(KIPRJMOD)" )
-                || aPath.m_Pathvar == wxS( "${KISYS3DMOD}" ) || aPath.m_Pathvar == wxS( "$(KISYS3DMOD)" ) )
+          || aPath.m_Pathvar == wxS( "${KIPRJMOD}" ) || aPath.m_Pathvar == wxS( "$(KIPRJMOD)" )
+          || aPath.m_Pathvar == wxS( "${KISYS3DMOD}" )
+          || aPath.m_Pathvar == wxS( "$(KISYS3DMOD)" ) )
         {
             // suppress the message if the missing pathvar is a system variable
         }
@@ -493,7 +495,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
 #ifdef _WIN32
         while( tpath.m_Pathexp.EndsWith( wxT( "\\" ) ) )
-        tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
+            tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
 #else
         while( tpath.m_Pathexp.EndsWith( wxT( "/" ) ) && tpath.m_Pathexp.length() > 1 )
             tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
@@ -677,7 +679,6 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
 }
 
 
-
 const std::list< SEARCH_PATH >* FILENAME_RESOLVER::GetPaths() const
 {
     return &m_paths;
@@ -801,6 +802,7 @@ bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAl
     // '\'and '/' used here because lpath can be a full path.
     // So remove separators
     wxString lpath_no_sep = lpath;
+
 #ifdef __WINDOWS__
     lpath_no_sep.Replace( "/", " " );
     lpath_no_sep.Replace( "\\", " " );

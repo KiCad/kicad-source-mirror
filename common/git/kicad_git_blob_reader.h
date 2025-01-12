@@ -31,67 +31,68 @@
 
 class BLOB_BUFFER_STREAM : public std::streambuf
 {
-    public:
-        BLOB_BUFFER_STREAM( git_blob* aBlob )
-        {
-            // Yay C++
-            setg( const_cast<char*>( static_cast<const char*>( git_blob_rawcontent( aBlob ) ) ),
-                  const_cast<char*>( static_cast<const char*>( git_blob_rawcontent( aBlob ) ) ),
-                  const_cast<char*>( static_cast<const char*>( git_blob_rawcontent( aBlob ) ) ) + git_blob_rawsize( aBlob ) );
-        }
+public:
+    BLOB_BUFFER_STREAM( git_blob* aBlob )
+    {
+        // Yay C++
+        setg( const_cast<char*>( static_cast<const char*>( git_blob_rawcontent( aBlob ) ) ),
+              const_cast<char*>( static_cast<const char*>( git_blob_rawcontent( aBlob ) ) ),
+              const_cast<char*>( static_cast<const char*>( git_blob_rawcontent( aBlob ) ) ) +
+              git_blob_rawsize( aBlob ) );
+    }
 
-        ~BLOB_BUFFER_STREAM() override
-        {
-        }
+    ~BLOB_BUFFER_STREAM() override
+    {
+    }
 
-        int overflow( int c ) override
-        {
-            return traits_type::eof();
-        }
+    int overflow( int c ) override
+    {
+        return traits_type::eof();
+    }
 
-        std::streamsize xsputn( const char* s, std::streamsize n ) override
-        {
-            return 0;
-        }
+    std::streamsize xsputn( const char* s, std::streamsize n ) override
+    {
+        return 0;
+    }
 };
 
 // Build a class that implements LINE_READER for git_blobs
 class BLOB_READER : public LINE_READER
 {
-    public:
-        BLOB_READER( git_blob* aBlob ) : m_blob( aBlob )
-        {
-            m_stream = new BLOB_BUFFER_STREAM( m_blob );
-            m_istream = new std::istream( m_stream );
-            m_line = nullptr;
-            m_lineNum = 0;
-        }
+public:
+    BLOB_READER( git_blob* aBlob ) : m_blob( aBlob )
+    {
+        m_stream = new BLOB_BUFFER_STREAM( m_blob );
+        m_istream = new std::istream( m_stream );
+        m_line = nullptr;
+        m_lineNum = 0;
+    }
 
-        ~BLOB_READER() override
-        {
-            delete m_istream;
-            delete m_stream;
-        }
+    ~BLOB_READER() override
+    {
+        delete m_istream;
+        delete m_stream;
+    }
 
-        char* ReadLine() override
-        {
-            getline( *m_istream, m_buffer );
+    char* ReadLine() override
+    {
+        getline( *m_istream, m_buffer );
 
-            m_buffer.append( 1, '\n' );
+        m_buffer.append( 1, '\n' );
 
-            m_length = m_buffer.size();
-            m_line = (char*) m_buffer.data(); //ew why no const??
+        m_length = m_buffer.size();
+        m_line = (char*) m_buffer.data(); //ew why no const??
 
-            // lineNum is incremented even if there was no line read, because this
-            // leads to better error reporting when we hit an end of file.
-            ++m_lineNum;
+        // lineNum is incremented even if there was no line read, because this
+        // leads to better error reporting when we hit an end of file.
+        ++m_lineNum;
 
-            return m_istream->eof() ? nullptr : m_line;
-        }
+        return m_istream->eof() ? nullptr : m_line;
+    }
 
-    private:
-        git_blob* m_blob;
-        BLOB_BUFFER_STREAM* m_stream;
-        std::istream* m_istream;
-        std::string   m_buffer;
+private:
+    git_blob* m_blob;
+    BLOB_BUFFER_STREAM* m_stream;
+    std::istream* m_istream;
+    std::string   m_buffer;
 };

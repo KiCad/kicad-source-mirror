@@ -29,7 +29,9 @@
 #include <algorithm>
 
 // Helper to make the code cleaner when we want this operation
-#define CLAMPED_VAL_INT_MAX( x ) std::min( x, static_cast<size_t>( std::numeric_limits<int>::max() ) )
+#define CLAMPED_VAL_INT_MAX( x )                                                      \
+    std::min( x, static_cast<size_t>( std::numeric_limits<int>::max() ) )
+
 
 bool EDA_PATTERN_MATCH_SUBSTR::SetPattern( const wxString& aPattern )
 {
@@ -396,6 +398,7 @@ EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern,
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX>() );
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD>() );
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_RELATIONAL>() );
+
         // If any of the above matchers couldn't be created because the pattern
         // syntax does not match, the substring will try its best.
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_SUBSTR>() );

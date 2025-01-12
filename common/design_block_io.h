@@ -47,8 +47,9 @@ public:
     static DESIGN_BLOCK_IO*    FindPlugin( DESIGN_BLOCK_FILE_T aFileType );
     static DESIGN_BLOCK_FILE_T EnumFromStr( const wxString& aFileType );
     static DESIGN_BLOCK_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl = 0 );
+
     /**
-     * Convert a design block library to the latest KiCad format
+     * Convert a design block library to the latest KiCad format.
      */
     static bool ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps,
                                 const wxString& aOldFilePath, const wxString& aNewFilePath );

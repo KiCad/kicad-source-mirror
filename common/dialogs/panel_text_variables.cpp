@@ -260,6 +260,7 @@ void PANEL_TEXT_VARIABLES::ImportSettingsFrom( const PROJECT* aOtherProject )
 {
     // Fetch from other project...
     m_lastLoaded = aOtherProject->GetTextVars();
+
     // ... but use ticker from current project:
     m_lastCheckedTicker = m_project->GetTextVarsTicker();
 

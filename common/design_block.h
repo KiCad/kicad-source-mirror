@@ -45,17 +45,19 @@ public:
     {
         m_fields = std::move( aFields );
     }
+
     const nlohmann::ordered_map<wxString, wxString>& GetFields() const { return m_fields; }
 
     DESIGN_BLOCK() = default;
-    ///< This is the only way to get m_fields to compile as a class member
+
+    /// This is the only way to get m_fields to compile as a class member.
     DESIGN_BLOCK( DESIGN_BLOCK&& aOther ) = delete;
 
 private:
     LIB_ID m_lib_id;
-    wxString m_schematicFile;  // File name and path for schematic symbol.
-    wxString m_libDescription; // File name and path for documentation file.
-    wxString m_keywords;       // Search keywords to find footprint in library.
+    wxString m_schematicFile;  ///< File name and path for schematic symbol.
+    wxString m_libDescription; ///< File name and path for documentation file.
+    wxString m_keywords;       ///< Search keywords to find footprint in library.
 
     nlohmann::ordered_map<wxString, wxString> m_fields;
 };

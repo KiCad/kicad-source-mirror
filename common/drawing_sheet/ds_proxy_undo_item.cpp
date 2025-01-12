@@ -83,7 +83,8 @@ void DS_PROXY_UNDO_ITEM::Restore( EDA_DRAW_FRAME* aFrame, KIGFX::VIEW* aView )
 
             dataItem->SyncDrawItems( nullptr, aView );
 
-            if( ii == m_selectedDataItem && m_selectedDrawItem < (int)dataItem->GetDrawItems().size() )
+            if( ii == m_selectedDataItem
+              && m_selectedDrawItem < (int)dataItem->GetDrawItems().size() )
             {
                 DS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ m_selectedDrawItem ];
                 drawItem->SetSelected();

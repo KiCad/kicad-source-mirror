@@ -72,6 +72,9 @@ public:
     void ClearData();           // Clear all strings
 
     /**
+     * One line by non empty data the orientation (.CRot) and mount type (.CMnt) are always
+     * generated.
+     *
      * @return a string containing the formatted metadata in X2 syntax.
      */
     wxString FormatCmpPnPMetadata();

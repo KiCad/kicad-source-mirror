@@ -135,7 +135,8 @@ int COMMIT::GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen )
 }
 
 
-COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags, BASE_SCREEN* aScreen )
+COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags,
+                                BASE_SCREEN* aScreen )
 {
     EDA_ITEM* parent = parentObject( aItem );
 
@@ -163,8 +164,8 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy, BAS
     ent.m_copy = aCopy;
     ent.m_screen = aScreen;
 
-    // N.B. Do not throw an assertion for multiple changed items.  An item can be changed multiple times
-    // in a single commit such as when importing graphics and grouping them.
+    // N.B. Do not throw an assertion for multiple changed items.  An item can be changed
+    // multiple times in a single commit such as when importing graphics and grouping them.
 
     m_changedItems.insert( aItem );
     m_changes.push_back( ent );

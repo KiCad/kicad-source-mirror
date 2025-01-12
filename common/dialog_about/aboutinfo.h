@@ -111,7 +111,7 @@ public:
     void SetAppIcon( const wxIcon& aIcon ) { m_appIcon = aIcon; }
     wxIcon& GetAppIcon() { return m_appIcon; }
 
-    ///< Wrapper to manage memory allocation for bitmaps
+    /// Wrapper to manage memory allocation for bitmaps.
     wxBitmap* CreateKiBitmap( BITMAPS aBitmap )
     {
         m_bitmaps.emplace_back( KiBitmapNew( aBitmap ) );
@@ -136,7 +136,7 @@ private:
 
     wxIcon       m_appIcon;
 
-    ///< Bitmaps to be freed when the dialog is closed
+    /// Bitmaps to be freed when the dialog is closed.
     std::vector<std::unique_ptr<wxBitmap>> m_bitmaps;
 };
 

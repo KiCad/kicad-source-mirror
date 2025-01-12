@@ -35,14 +35,15 @@ static constexpr double MAX_SCALE = 100.0;
 
 /**
  * Custom print preview frame.
- * This derived preview frame remembers its size and position during a session
+ *
+ * This derived preview frame remembers its size and position during a session.
  */
 class KI_PREVIEW_FRAME : public wxPreviewFrame
 {
 public:
     KI_PREVIEW_FRAME( wxPrintPreview* aPreview, wxWindow* aParent,
-                       const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
-                       const wxSize& aSize = wxDefaultSize ) :
+                      const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
+                      const wxSize& aSize = wxDefaultSize ) :
         wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
     {
     }
@@ -271,7 +272,7 @@ void DIALOG_PRINT_GENERIC::onPrintPreview( wxCommandEvent& event )
     // Must be called after InitializeWithModality because otherwise in some wxWidget
     // versions it is not always taken in account
     frame->SetMinSize( wxSize( 650, 500 ) );
-    frame->SetSize( (m_parent->GetSize() * 3) / 4 );
+    frame->SetSize( ( m_parent->GetSize() * 3 ) / 4 );
 
     frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );

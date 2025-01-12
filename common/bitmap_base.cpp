@@ -195,8 +195,10 @@ bool BITMAP_BASE::SaveImageData( wxOutputStream& aOutStream ) const
 {
     if( m_imageData.IsEmpty() )
     {
-        // If m_imageData is empty, use wxImage::Save() method to write m_image contents to the stream.
-        wxBitmapType type = m_imageType == wxBITMAP_TYPE_JPEG ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG;
+        // If m_imageData is empty, use wxImage::Save() method to write m_image contents to
+        // the stream.
+        wxBitmapType type = m_imageType == wxBITMAP_TYPE_JPEG ? wxBITMAP_TYPE_JPEG
+                                                              : wxBITMAP_TYPE_PNG;
 
         if( !m_image->SaveFile( aOutStream, type ) )
         {
@@ -222,7 +224,7 @@ bool BITMAP_BASE::LoadLegacyData( LINE_READER& aLine, wxString& aErrorMsg )
     {
         if( !aLine.ReadLine() )
         {
-            aErrorMsg = wxT("Unexpected end of data");
+            aErrorMsg = wxT( "Unexpected end of data" );
             return false;
         }
 
@@ -298,16 +300,16 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
     // Now we have an issue on wxWidgets 3.1.6 to fix the clip area
     // and the bitmap position when using TransformMatrix
     // So for version == 3.1.6  do not use it
-    // Be carefull before changing the code.
+    // Be careful before changing the code.
     bool useTransform = aDC->CanUseTransformMatrix();
 
     wxAffineMatrix2D init_matrix = aDC->GetTransformMatrix();
 
     // Note: clipping bitmap area was made to fix a minor issue in old versions of
-    // Kicad/wxWidgets (5.1 / wx 3.0)
+    // KiCad/wxWidgets (5.1 / wx 3.0)
     // However SetClippingRegion creates a lot of issues (different ways to fix the
-    // position and size of the area, depending on wxWidget version)because it changes with
-    // each versions of wxWigets, so it is now disabled
+    // position and size of the area, depending on wxWidgets version)because it changes with
+    // each versions of wxWidgets, so it is now disabled
     // However the code is still here, just in case
     // #define USE_CLIP_AREA
 
@@ -319,6 +321,7 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
         matrix.Translate( pos.x, pos.y );
         matrix.Scale( GetScalingFactor(), GetScalingFactor() );
         aDC->SetTransformMatrix( matrix );
+
         // Needed on wx <= 3.1.5, and this is strange...
         // Nevertheless, this code has problem (the bitmap is not seen)
         // with wx version > 3.1.5
@@ -341,10 +344,10 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
         clipAreaPos.y = pos.y;
     }
 
-    #ifdef USE_CLIP_AREA
+#ifdef USE_CLIP_AREA
     aDC->DestroyClippingRegion();
     aDC->SetClippingRegion( clipAreaPos, wxSize( size.x, size.y ) );
-    #endif
+#endif
 
     if( aBackgroundColor != COLOR4D::UNSPECIFIED && m_bitmap->HasAlpha() )
     {
@@ -383,9 +386,9 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
         aDC->SetLogicalOrigin( logicalOriginX, logicalOriginY );
     }
 
-    #ifdef USE_CLIP_AREA
+#ifdef USE_CLIP_AREA
     aDC->DestroyClippingRegion();
-    #endif
+#endif
 }
 
 
@@ -413,7 +416,7 @@ void BITMAP_BASE::Mirror( FLIP_DIRECTION aFlipDirection )
         // wxImage::Mirror() clear some parameters of the original image.
         // We need to restore them, especially resolution and unit, to be
         // sure image parameters saved in file are the right parameters, not
-        // the defualt values
+        // the default values
         int resX = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
         int resY = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
         int unit = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT );
@@ -442,16 +445,16 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
         // wxImage::Rotate90() clear some parameters of the original image.
         // We need to restore them, especially resolution and unit, to be
         // sure image parameters saved in file are the right parameters, not
-        // the defualt values
+        // the default values
         int resX = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
         int resY = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
         int unit = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT );
 
         *m_image = m_image->Rotate90( aRotateCCW );
 
-        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONUNIT , unit);
-        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX);
-        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY);
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONUNIT, unit );
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX );
+        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY );
 
         m_rotation += ( aRotateCCW ? ANGLE_90 : -ANGLE_90 );
         rebuildBitmap( false );
@@ -492,7 +495,8 @@ void BITMAP_BASE::UpdateImageDataBuffer()
     if( m_image )
     {
         wxMemoryOutputStream stream;
-        wxBitmapType type = m_imageType == wxBITMAP_TYPE_JPEG ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG;
+        wxBitmapType type = m_imageType == wxBITMAP_TYPE_JPEG ? wxBITMAP_TYPE_JPEG
+                                                              : wxBITMAP_TYPE_PNG;
 
         if( !m_image->SaveFile( stream, type ) )
             return;

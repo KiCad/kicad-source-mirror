@@ -56,10 +56,10 @@ DS_RENDER_SETTINGS::DS_RENDER_SETTINGS()
 
 void DS_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 {
-    for( int layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; layer ++)
+    for( int layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; layer++ )
         m_layerColors[ layer ] = aSettings->GetColor( layer );
 
-    for( int layer = GAL_LAYER_ID_START; layer < GAL_LAYER_ID_END; layer ++)
+    for( int layer = GAL_LAYER_ID_START; layer < GAL_LAYER_ID_END; layer++ )
         m_layerColors[ layer ] = aSettings->GetColor( layer );
 
     m_backgroundColor = aSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
@@ -110,8 +110,6 @@ void DS_DRAW_ITEM_LIST::GetTextVars( wxArrayString* aVars )
 }
 
 
-// Returns the full text corresponding to the aTextbase, after replacing any text variable
-// references.
 wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 {
     std::function<bool( wxString* )> wsResolver =
@@ -375,6 +373,7 @@ void KIGFX::DS_PAINTER::DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor
                              aPageInfo->GetHeightMils() * aScaleFactor );
 
     m_gal->SetIsStroke( true );
+
     // Use a gray color for the border color
     m_gal->SetStrokeColor( m_renderSettings.m_pageBorderColor );
     m_gal->SetIsFill( false );

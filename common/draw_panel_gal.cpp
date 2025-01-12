@@ -515,10 +515,13 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
                     DisplayInfoMessage( m_parent, _( "Could not use OpenGL" ), errormsg );
                 }
             }
+
             break;
         }
 
-        case GAL_TYPE_CAIRO: new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this ); break;
+        case GAL_TYPE_CAIRO:
+            new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
+            break;
 
         default:
             wxASSERT( false );

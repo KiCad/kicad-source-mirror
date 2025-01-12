@@ -282,6 +282,7 @@ void GRFilledSegment( wxDC* aDC, const VECTOR2I& aStart, const VECTOR2I& aEnd, i
     winDrawLine( aDC, aStart.x, aStart.y, aEnd.x, aEnd.y, aWidth );
 }
 
+
 /**
  * Draw a new polyline and fill it if Fill, in screen space.
  */

@@ -32,6 +32,7 @@
 GIT_PULL_HANDLER::GIT_PULL_HANDLER( git_repository* aRepo ) :  KIGIT_COMMON( aRepo )
 {}
 
+
 GIT_PULL_HANDLER::~GIT_PULL_HANDLER()
 {}
 
@@ -148,9 +149,12 @@ PullResult GIT_PULL_HANDLER::PerformPull()
     return result;
 }
 
-const std::vector<std::pair<std::string, std::vector<CommitDetails>>>& GIT_PULL_HANDLER::GetFetchResults() const {
+const std::vector<std::pair<std::string, std::vector<CommitDetails>>>&
+GIT_PULL_HANDLER::GetFetchResults() const
+{
     return m_fetchResults;
 }
+
 
 std::string GIT_PULL_HANDLER::getFirstLineFromCommitMessage( const std::string& aMessage )
 {
@@ -161,6 +165,7 @@ std::string GIT_PULL_HANDLER::getFirstLineFromCommitMessage( const std::string& 
 
     return aMessage;
 }
+
 
 std::string GIT_PULL_HANDLER::getFormattedCommitDate( const git_time& aTime )
 {
@@ -186,9 +191,11 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
         git_reference_free( updatedRef );
 
         git_oid     updatedRefOid;
+
         if( git_reference_name_to_id( &updatedRefOid, m_repo, updatedRefName ) )
         {
-            AddErrorString( wxString::Format( _( "Could not get reference OID for reference '%s'" ), updatedRefName ) );
+            AddErrorString( wxString::Format( _( "Could not get reference OID for reference '%s'" ),
+                                              updatedRefName ) );
             return PullResult::Error;
         }
 
@@ -208,13 +215,15 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
         git_revwalk_push_glob( revWalker, updatedRefName );
 
         git_oid commitOid;
+
         while( git_revwalk_next( &commitOid, revWalker ) == 0 )
         {
             git_commit* commit = nullptr;
 
             if( git_commit_lookup( &commit, m_repo, &commitOid ) )
             {
-                AddErrorString( wxString::Format( _( "Could not lookup commit '{}'" ), git_oid_tostr_s( &commitOid ) ) );
+                AddErrorString( wxString::Format( _( "Could not lookup commit '{}'" ),
+                                                  git_oid_tostr_s( &commitOid ) ) );
                 git_revwalk_free( revWalker );
                 return PullResult::Error;
             }
@@ -260,6 +269,7 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
 
     // Get the repository index
     git_index* index = nullptr;
+
     if( git_repository_index( &index, m_repo ) )
     {
         AddErrorString( _( "Could not get repository index" ) );
@@ -268,6 +278,7 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
 
     // Check for conflicts
     git_index_conflict_iterator* conflicts = nullptr;
+
     if( git_index_conflict_iterator_new( &conflicts, index ) )
     {
         AddErrorString( _( "Could not get conflict iterator" ) );

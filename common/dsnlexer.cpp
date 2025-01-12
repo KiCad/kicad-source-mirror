@@ -461,7 +461,7 @@ inline bool isDigit( char cc )
 }
 
 
-///< @return true if @a cc is an s-expression separator character.
+/// @return true if @a cc is an s-expression separator character.
 inline bool isSep( char cc )
 {
     return isSpace( cc ) || cc == '(' || cc == ')' || cc == '|';
@@ -873,12 +873,14 @@ double DSNLEXER::parseDouble()
 
     return fval;
 #else
-    // Use std::from_chars which is designed to be locale independent and performance oriented for data interchange
+    // Use std::from_chars which is designed to be locale independent and performance oriented
+    // for data interchange
 
     const std::string& str = CurStr();
 
     // Offset any leading whitespace, this is one thing from_chars does not handle
     size_t woff = 0;
+
     while( std::isspace( str[woff] ) && woff < str.length() )
     {
         woff++;

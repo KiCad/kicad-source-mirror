@@ -53,8 +53,10 @@ DIALOG_ASSIGN_NETCLASS::DIALOG_ASSIGN_NETCLASS( EDA_BASE_FRAME* aParent, const w
     m_matchingNets->SetFont( KIUI::GetInfoFont( this ) );
     m_info->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
+    // @translate the string below.
     if( aParent->GetFrameType() == FRAME_PCB_EDITOR )
-        m_info->SetLabel( wxT( "Note: complete netclass assignments can be edited in Board Setup > Project." ) );
+        m_info->SetLabel( wxT( "Note: complete netclass assignments can be edited in Board "
+                               "Setup > Project." ) );
 
     SetupStandardButtons();
 

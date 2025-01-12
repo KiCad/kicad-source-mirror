@@ -55,16 +55,17 @@ public:
         m_stName = new wxStaticText( this, wxID_ANY, aJob->m_name );
         m_stName->Wrap( -1 );
         m_stName->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT,
-                                        wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+                                   wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false,
+                                   wxEmptyString ) );
         mainSizer->Add( m_stName, 0, wxALL | wxEXPAND, 1 );
 
         m_stStatus = new wxStaticText( this, wxID_ANY, aJob->m_status, wxDefaultPosition,
-                                          wxDefaultSize, 0 );
+                                       wxDefaultSize, 0 );
         m_stStatus->Wrap( -1 );
         mainSizer->Add( m_stStatus, 0, wxALL | wxEXPAND, 1 );
 
-        m_progress = new wxGauge( this, wxID_ANY, aJob->m_maxProgress, wxDefaultPosition, wxDefaultSize,
-                                wxGA_HORIZONTAL );
+        m_progress = new wxGauge( this, wxID_ANY, aJob->m_maxProgress, wxDefaultPosition,
+                                  wxDefaultSize, wxGA_HORIZONTAL );
         m_progress->SetValue( 0 );
         mainSizer->Add( m_progress, 0, wxALL | wxEXPAND, 1 );
 
@@ -134,7 +135,7 @@ public:
         m_scrolledWindow->Layout();
         m_contentSizer->Fit( m_scrolledWindow );
 
-        // call this at this window otherwise the child panels dont resize width properly
+        // call this at this window otherwise the child panels don't resize width properly
         Layout();
 
         m_jobPanels[aJob] = panel;
@@ -261,9 +262,9 @@ void BACKGROUND_JOBS_MONITOR::Remove( std::shared_ptr<BACKGROUND_JOB> aJob )
     std::lock_guard<std::shared_mutex> lock( m_mutex );
     m_jobs.erase( std::remove_if( m_jobs.begin(), m_jobs.end(),
                                   [&]( std::shared_ptr<BACKGROUND_JOB> job )
-                               {
+                                  {
                                       return job == aJob;
-                               } ) );
+                                  } ) );
 
     if( m_jobs.size() == 0 )
     {

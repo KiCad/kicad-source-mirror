@@ -29,12 +29,11 @@
 
 using STRING_MAP = std::map<wxString, wxString>;
 
-/*
- * List of pre-defined environment variables
+/**
+ * List of pre-defined environment variables.
  *
- * TODO - Instead of defining these values here,
- * extract them from elsewhere in the program
- * (where they are originally defined)
+ * @todo Instead of defining these values here, extract them from elsewhere in the program
+ * (where they are originally defined).
  */
 static const ENV_VAR::ENV_VAR_LIST predefinedEnvVars = {
     wxS( "KIPRJMOD" ),
@@ -46,6 +45,7 @@ static const ENV_VAR::ENV_VAR_LIST predefinedEnvVars = {
     wxS( "KICAD_PTEMPLATES" ),
     ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ),
 };
+
 
 const wxRegEx versionedEnvVarRegex( wxS( "KICAD[0-9]+_[A-Z0-9_]+(_DIR)?" ) );
 
@@ -133,7 +133,8 @@ static void initialiseEnvVarHelp( STRING_MAP& aMap )
     // Deprecated vars
 #define DEP( var ) wxString::Format( _( "Deprecated version of %s." ), var )
 
-    aMap[wxS( "KICAD_PTEMPLATES" )] = DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ) );
+    aMap[wxS( "KICAD_PTEMPLATES" )] =
+            DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ) );
     aMap[wxS( "KISYS3DMOD" )] = DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
     aMap[wxS( "KISYSMOD" )] = DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ) );
     aMap[wxS( "KICAD_SYMBOL_DIR" )] = DEP( ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ) );

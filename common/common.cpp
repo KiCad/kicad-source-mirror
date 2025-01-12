@@ -139,7 +139,8 @@ bool IsTextVar( const wxString& aSource )
 //
 // Stolen from wxExpandEnvVars and then heavily optimized
 //
-wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::set<wxString>* aSet = nullptr )
+wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject,
+                            std::set<wxString>* aSet = nullptr )
 {
     // If the same string is inserted twice, we have a loop
     if( aSet )
@@ -254,7 +255,8 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
             // If the user has the older location defined, that will be matched
             // first above.  But if they do not, this will ensure that their board still
             // displays correctly
-            else if( strVarName.Contains( "KISYS3DMOD") || strVarName.Matches( "KICAD*_3DMODEL_DIR" ) )
+            else if( strVarName.Contains( "KISYS3DMOD")
+                   || strVarName.Matches( "KICAD*_3DMODEL_DIR" ) )
             {
                 if( getVersionedEnvVar( "KICAD*_3DMODEL_DIR", strResult ) )
                     expanded = true;
@@ -320,13 +322,14 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
 
         case wxT( '\\' ):
             // backslash can be used to suppress special meaning of % and $
-            if( n < strlen - 1 && (str[n + 1] == wxT( '%' ) || str[n + 1] == wxT( '$' )) )
+            if( n < strlen - 1 && (str[n + 1] == wxT( '%' ) || str[n + 1] == wxT( '$' ) ) )
             {
                 str_n = str[++n];
                 strResult += str_n;
 
                 break;
             }
+
             KI_FALLTHROUGH;
 
         default:
@@ -475,7 +478,7 @@ bool matchWild( const char* pat, const char* text, bool dot_special )
         return false;
     }
 
-    for(;;)
+    for( ;; )
     {
         if( *m == '*' )
         {
@@ -565,13 +568,13 @@ bool matchWild( const char* pat, const char* text, bool dot_special )
  * A copy of ConvertFileTimeToWx() because wxWidgets left it as a static function
  * private to src/common/filename.cpp.
  */
-#if wxUSE_DATETIME && defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if wxUSE_DATETIME && defined( __WIN32__ ) && !defined( __WXMICROWIN__ )
 
 // Convert between wxDateTime and FILETIME which is a 64-bit value representing
 // the number of 100-nanosecond intervals since January 1, 1601 UTC.
 //
 // This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
-static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
+static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL( 11644473600000 );
 
 
 static void ConvertFileTimeToWx( wxDateTime* dt, const FILETIME& ft )

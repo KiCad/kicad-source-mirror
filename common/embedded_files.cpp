@@ -112,6 +112,7 @@ void EMBEDDED_FILES::AddFile( EMBEDDED_FILE* aFile )
     m_files.insert( { aFile->name, aFile } );
 }
 
+
 // Remove a file from the collection
 void EMBEDDED_FILES::RemoveFile( const wxString& name, bool aErase )
 {
@@ -187,6 +188,7 @@ void EMBEDDED_FILES::WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, bool aWriteData 
                             remaining == length ? "|" : "" );
                 first += MIME_BASE64_LENGTH;
             }
+
             aOut.Print( ")" ); // Close data
         }
 
@@ -196,6 +198,7 @@ void EMBEDDED_FILES::WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, bool aWriteData 
 
     aOut.Print( ")" ); // Close embedded_files
 }
+
 
 // Compress and Base64 encode data
 EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::CompressAndEncode( EMBEDDED_FILE& aFile )
@@ -217,6 +220,7 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::CompressAndEncode( EMBEDDED_FILE& aF
     aFile.compressedEncodedData.resize( dstLen );
     size_t retval = wxBase64Encode( aFile.compressedEncodedData.data(), dstLen,
                                           compressedData.data(), compressedSize );
+
     if( retval != dstLen )
     {
         aFile.compressedEncodedData.clear();
@@ -230,6 +234,7 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::CompressAndEncode( EMBEDDED_FILE& aF
     return RETURN_CODE::OK;
 }
 
+
 // Decompress and Base64 decode data
 EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& aFile )
 {
@@ -240,7 +245,8 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
     {
         wxLogTrace( wxT( "KICAD_EMBED" ),
                     wxT( "%s:%s:%d\n * Base64DecodedSize failed for file '%s' with size %zu" ),
-                    __FILE__, __FUNCTION__, __LINE__, aFile.name, aFile.compressedEncodedData.size() );
+                    __FILE__, __FUNCTION__, __LINE__, aFile.name,
+                    aFile.compressedEncodedData.size() );
         return RETURN_CODE::OUT_OF_MEMORY;
     }
 
@@ -304,6 +310,7 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
     return RETURN_CODE::OK;
 }
 
+
 // Parsing method
 void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
 {
@@ -340,7 +347,6 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
         }
 
         file = std::unique_ptr<EMBEDDED_FILES::EMBEDDED_FILE>( nullptr );
-
 
         for( token = NextTok(); token != T_RIGHT; token = NextTok() )
         {

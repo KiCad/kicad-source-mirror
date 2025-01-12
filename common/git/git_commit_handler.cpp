@@ -27,20 +27,23 @@ GIT_COMMIT_HANDLER::GIT_COMMIT_HANDLER( git_repository* aRepo ) :
     KIGIT_COMMON( aRepo )
 {}
 
+
 GIT_COMMIT_HANDLER::~GIT_COMMIT_HANDLER()
 {}
 
 
-GIT_COMMIT_HANDLER::CommitResult GIT_COMMIT_HANDLER::PerformCommit( const std::vector<std::string>& aFilesToCommit )
+GIT_COMMIT_HANDLER::CommitResult
+GIT_COMMIT_HANDLER::PerformCommit( const std::vector<std::string>& aFilesToCommit )
 {
-
     return CommitResult::Success;
 }
+
 
 std::string GIT_COMMIT_HANDLER::GetErrorString() const
 {
     return m_errorString;
 }
+
 
 void GIT_COMMIT_HANDLER::AddErrorString( const std::string& aErrorString )
 {

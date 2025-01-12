@@ -41,15 +41,20 @@
 
 using namespace DRAWINGSHEET_T;
 
+
 // A helper function to write tokens:
 static const char* getTokenName( T aTok )
 {
     return DRAWING_SHEET_LEXER::TokenName( aTok );
 }
 
-// A basic helper class to write a drawing sheet file
-// Not used alone, a file writer or a string writer should be derived to use it.
-// Therefore the constructor is protected.
+
+/**
+ * A basic helper class to write a drawing sheet file.
+ *
+ * Not used alone, a file writer or a string writer should be derived to use it.
+ * Therefore the constructor is protected.
+ */
 class DS_DATA_MODEL_IO
 {
 public:
@@ -76,7 +81,9 @@ protected:
 };
 
 
-// A helper class to write a drawing sheet to a file
+/**
+ * A helper class to write a drawing sheet to a file.
+ */
 class DS_DATA_MODEL_FILEIO : public DS_DATA_MODEL_IO
 {
 public:
@@ -105,7 +112,9 @@ private:
 };
 
 
-// A helper class to write a drawing sheet to a string
+/**
+ * A helper class to write a drawing sheet to a string.
+ */
 class DS_DATA_MODEL_STRINGIO : public DS_DATA_MODEL_IO
 {
 public:
@@ -215,7 +224,8 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aSheet ) const
                   FormatDouble2Str( aSheet->m_DefaultTextSize.x ).c_str(),
                   FormatDouble2Str( aSheet->m_DefaultTextSize.y ).c_str() );
     m_out->Print( "(linewidth %s)", FormatDouble2Str( aSheet->m_DefaultLineWidth ).c_str() );
-    m_out->Print( "(textlinewidth %s)", FormatDouble2Str( aSheet->m_DefaultTextThickness ).c_str() );
+    m_out->Print( "(textlinewidth %s)",
+                  FormatDouble2Str( aSheet->m_DefaultTextThickness ).c_str() );
 
     // Write margin values
     m_out->Print( "(left_margin %s)", FormatDouble2Str( aSheet->GetLeftMargin() ).c_str() );

@@ -158,6 +158,7 @@ void DESIGN_BLOCK_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
             case T_uri:
                 if( sawUri )
                     in->Duplicate( tok );
+
                 sawUri = true;
                 in->NeedSYMBOLorNUMBER();
                 row->SetFullURI( in->FromUTF8() );
@@ -166,6 +167,7 @@ void DESIGN_BLOCK_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
             case T_type:
                 if( sawType )
                     in->Duplicate( tok );
+
                 sawType = true;
                 in->NeedSYMBOLorNUMBER();
                 row->SetType( in->FromUTF8() );
@@ -174,6 +176,7 @@ void DESIGN_BLOCK_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
             case T_options:
                 if( sawOpts )
                     in->Duplicate( tok );
+
                 sawOpts = true;
                 in->NeedSYMBOLorNUMBER();
                 row->SetOptions( in->FromUTF8() );
@@ -182,6 +185,7 @@ void DESIGN_BLOCK_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
             case T_descr:
                 if( sawDesc )
                     in->Duplicate( tok );
+
                 sawDesc = true;
                 in->NeedSYMBOLorNUMBER();
                 row->SetDescr( in->FromUTF8() );
@@ -190,13 +194,14 @@ void DESIGN_BLOCK_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
             case T_disabled:
                 if( sawDisabled )
                     in->Duplicate( tok );
+
                 sawDisabled = true;
                 row->SetEnabled( false );
                 break;
 
             case T_hidden:
-                // Hiding design block libraries is not yet supported.  Unclear what path can set this
-                // attribute, but clear it on load.
+                // Hiding design block libraries is not yet supported.  Unclear what path can
+                // set this attribute, but clear it on load.
                 row->SetVisible();
                 break;
 
@@ -358,7 +363,8 @@ static void setLibNickname( DESIGN_BLOCK* aModule, const wxString& aNickname,
         // having to copy the LIB_ID and its two strings, twice each.
         LIB_ID& dbid = (LIB_ID&) aModule->GetLibId();
 
-        // Catch any misbehaving plugin, which should be setting internal design block name properly:
+        // Catch any misbehaving plugin, which should be setting internal design block name
+        // properly:
         wxASSERT( aDesignBlockName == dbid.GetLibItemName().wx_str() );
 
         // and clearing nickname
@@ -534,8 +540,9 @@ public:
     {
         wxFileName dir = wxFileName::DirName( dirPath );
 
-        // consider a directory to be a lib if it's name ends with the design block lib dir extension
-        // it is under $KICADn_3RD_PARTY/design_blocks/<pkgid>/ i.e. has nested level of at least +3
+        // consider a directory to be a lib if it's name ends with the design block lib dir
+        // extension it is under $KICADn_3RD_PARTY/design_blocks/<pkgid>/ i.e. has nested
+        // level of at least +3.
         if( dirPath.EndsWith( wxString::Format( wxS( ".%s" ),
                                                 FILEEXT::KiCadDesignBlockLibPathExtension ) )
             && dir.GetDirCount() >= m_prefix_dir_count + 3 )

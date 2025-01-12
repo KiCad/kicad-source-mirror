@@ -41,10 +41,10 @@
 using namespace KIFONT;
 
 
-///< Scale factor for a glyph
+/// Scale factor for a glyph.
 static constexpr double STROKE_FONT_SCALE = 1.0 / 21.0;
 
-///< Offset (in stroke font units) to move the origin to the baseline.
+/// Offset (in stroke font units) to move the origin to the baseline.
 static constexpr int FONT_OFFSET = -8;
 
 

@@ -306,19 +306,23 @@ void PANEL_SETUP_NETCLASSES::loadNetclasses()
                 }
                 else
                 {
-                    m_netclassGrid->SetCellValue(
-                            aRow, GRID_LINESTYLE,
-                            g_lineStyleNames[0] ); // <Not defined> line style in list
+                    // <Not defined> line style in list.
+                    m_netclassGrid->SetCellValue( aRow, GRID_LINESTYLE,
+                                                  g_lineStyleNames[0] );
                 }
 
                 m_netclassGrid->SetOptionalUnitValue( aRow, GRID_CLEARANCE, nc->GetClearanceOpt() );
-                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_TRACKSIZE, nc->GetTrackWidthOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_TRACKSIZE,
+                                                      nc->GetTrackWidthOpt() );
                 m_netclassGrid->SetOptionalUnitValue( aRow, GRID_VIASIZE, nc->GetViaDiameterOpt() );
                 m_netclassGrid->SetOptionalUnitValue( aRow, GRID_VIADRILL, nc->GetViaDrillOpt() );
-                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_uVIASIZE, nc->GetuViaDiameterOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_uVIASIZE,
+                                                      nc->GetuViaDiameterOpt() );
                 m_netclassGrid->SetOptionalUnitValue( aRow, GRID_uVIADRILL, nc->GetuViaDrillOpt() );
-                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_DIFF_PAIR_WIDTH, nc->GetDiffPairWidthOpt() );
-                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_DIFF_PAIR_GAP, nc->GetDiffPairGapOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_DIFF_PAIR_WIDTH,
+                                                      nc->GetDiffPairWidthOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_DIFF_PAIR_GAP,
+                                                      nc->GetDiffPairGapOpt() );
 
                 colorAsString = nc->GetPcbColor().ToCSSString();
                 m_netclassGrid->SetCellValue( aRow, GRID_PCB_COLOR, colorAsString );
@@ -506,8 +510,10 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
                 nc->SetViaDrill( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_VIADRILL ) );
                 nc->SetuViaDiameter( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_uVIASIZE ) );
                 nc->SetuViaDrill( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_uVIADRILL ) );
-                nc->SetDiffPairWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_DIFF_PAIR_WIDTH ) );
-                nc->SetDiffPairGap( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_DIFF_PAIR_GAP ) );
+                nc->SetDiffPairWidth(
+                        m_netclassGrid->GetOptionalUnitValue( aRow, GRID_DIFF_PAIR_WIDTH ) );
+                nc->SetDiffPairGap( m_netclassGrid->GetOptionalUnitValue( aRow,
+                                                                          GRID_DIFF_PAIR_GAP ) );
 
                 if( !nc->IsDefault() )
                 {

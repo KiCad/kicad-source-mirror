@@ -397,7 +397,8 @@ void DIALOG_SHIM::SelectAllInTextCtrls( wxWindowList& children )
         else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
         {
             m_beforeEditValues[ scintilla ] = scintilla->GetText();
-            scintilla->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+            scintilla->Connect( wxEVT_SET_FOCUS,
+                                wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
                                 nullptr, this );
 
             if( !scintilla->GetSelectedText().IsEmpty() )

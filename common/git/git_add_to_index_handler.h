@@ -40,11 +40,10 @@ public:
     bool PerformAddToIndex();
 
 private:
+    git_repository* m_repository;
 
-        git_repository* m_repository;
-
-        std::vector<wxString> m_filesToAdd;
-        std::vector<wxString> m_filesFailedToAdd;
-    };
+    std::vector<wxString> m_filesToAdd;
+    std::vector<wxString> m_filesFailedToAdd;
+};
 
 #endif /* GIT_ADD_TO_INDEX_HANDLER_H_ */

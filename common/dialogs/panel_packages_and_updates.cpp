@@ -50,6 +50,8 @@ bool PANEL_PACKAGES_AND_UPDATES::TransferDataToWindow()
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
+    wxCHECK( cfg, false );
+
     m_cbKicadUpdate->SetValue( cfg->m_KiCadUpdateCheck );
     m_cbPcmUpdate->SetValue( cfg->m_PcmUpdateCheck );
     m_libAutoAdd->SetValue( cfg->m_PcmLibAutoAdd );
@@ -64,6 +66,8 @@ bool PANEL_PACKAGES_AND_UPDATES::TransferDataFromWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   cfg = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+
+    wxCHECK( cfg, false );
 
     cfg->m_KiCadUpdateCheck = m_cbKicadUpdate->GetValue();
     cfg->m_PcmUpdateCheck = m_cbPcmUpdate->GetValue();

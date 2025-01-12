@@ -63,7 +63,7 @@ public:
      * Return a pair of sets of files that differ locally from the remote repository
      * The first set is files that have been committed locally but not pushed
      * The second set is files that have been committed remotely but not pulled
-    */
+     */
     std::pair<std::set<wxString>,std::set<wxString>> GetDifferentFiles() const;
 
     enum class GIT_STATUS
@@ -140,6 +140,6 @@ extern "C" int push_update_reference_cb( const char* aRefname, const char* aStat
 extern "C" int fetchhead_foreach_cb( const char*, const char*,
                                      const git_oid* aOID, unsigned int aIsMerge, void* aPayload );
 extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
-                                unsigned int aAllowedTypes, void* aPayload );
+                               unsigned int aAllowedTypes, void* aPayload );
 
 #endif // _GIT_COMMON_H_

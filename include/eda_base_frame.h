@@ -689,7 +689,12 @@ protected:
      */
     virtual void OnDropFiles( wxDropFilesEvent& aEvent );
 
-
+    /**
+     * Create a menu list for language choice, and add it as submenu to \a MasterMenu.
+     *
+     * @param aMasterMenu is the main menu.
+     * @param aControlTool is the tool to associate with the menu.
+     */
     void AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool );
 
     /**
@@ -776,14 +781,14 @@ private:
 
     ORIGIN_TRANSFORMS       m_originTransforms;  // Default display origin transforms object.
 
-    ///< Map containing the UI update handlers registered with wx for each action.
+    /// Map containing the UI update handlers registered with wx for each action.
     std::map<int, UIUpdateHandler> m_uiUpdateMap;
 
-    ///< Set by the close window event handler after frames are asked if they can close.
-    ///< Allows other functions when called to know our state is cleanup.
+    /// Set by the close window event handler after frames are asked if they can close.
+    /// Allows other functions when called to know our state is cleanup.
     bool            m_isClosing;
 
-    ///< Set by #NonUserClose() to indicate that the user did not request the current close.
+    /// Set by #NonUserClose() to indicate that the user did not request the current close.
     bool            m_isNonUserClose;
 
     /**

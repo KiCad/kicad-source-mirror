@@ -155,18 +155,18 @@ void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 
     switch( GetLineStyle() )
     {
-    case LINE_STYLE::DEFAULT:    stroke->set_style( types::SLS_DEFAULT ); break;
-    case LINE_STYLE::SOLID:      stroke->set_style( types::SLS_SOLID ); break;
-    case LINE_STYLE::DASH:       stroke->set_style( types::SLS_DASH ); break;
-    case LINE_STYLE::DOT:        stroke->set_style( types::SLS_DOT ); break;
-    case LINE_STYLE::DASHDOT:    stroke->set_style( types::SLS_DASHDOT ); break;
+    case LINE_STYLE::DEFAULT:    stroke->set_style( types::SLS_DEFAULT );    break;
+    case LINE_STYLE::SOLID:      stroke->set_style( types::SLS_SOLID );      break;
+    case LINE_STYLE::DASH:       stroke->set_style( types::SLS_DASH );       break;
+    case LINE_STYLE::DOT:        stroke->set_style( types::SLS_DOT );        break;
+    case LINE_STYLE::DASHDOT:    stroke->set_style( types::SLS_DASHDOT );    break;
     case LINE_STYLE::DASHDOTDOT: stroke->set_style( types::SLS_DASHDOTDOT ); break;
     default: break;
     }
 
     switch( GetFillMode() )
     {
-    case FILL_T::FILLED_SHAPE: fill->set_fill_type( types::GFT_FILLED ); break;
+    case FILL_T::FILLED_SHAPE: fill->set_fill_type( types::GFT_FILLED );   break;
     default:                   fill->set_fill_type( types::GFT_UNFILLED ); break;
     }
 
@@ -401,6 +401,7 @@ double EDA_SHAPE::GetLength() const
     }
 }
 
+
 int EDA_SHAPE::GetRectangleHeight() const
 {
     switch( m_shape )
@@ -413,6 +414,7 @@ int EDA_SHAPE::GetRectangleHeight() const
         return 0;
     }
 }
+
 
 int EDA_SHAPE::GetRectangleWidth() const
 {
@@ -427,6 +429,7 @@ int EDA_SHAPE::GetRectangleWidth() const
     }
 }
 
+
 void EDA_SHAPE::SetLength( const double& aLength )
 {
     switch( m_shape )
@@ -438,6 +441,7 @@ void EDA_SHAPE::SetLength( const double& aLength )
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
+
 
 void EDA_SHAPE::SetRectangleHeight( const int& aHeight )
 {
@@ -453,6 +457,7 @@ void EDA_SHAPE::SetRectangleHeight( const int& aHeight )
     }
 }
 
+
 void EDA_SHAPE::SetRectangleWidth( const int& aWidth )
 {
     switch ( m_shape )
@@ -466,6 +471,7 @@ void EDA_SHAPE::SetRectangleWidth( const int& aWidth )
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
+
 
 void EDA_SHAPE::SetRectangle( const long long int& aHeight, const long long int& aWidth )
 {
@@ -494,6 +500,7 @@ void EDA_SHAPE::SetSegmentAngle( const EDA_ANGLE& aAngle )
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
+
 
 bool EDA_SHAPE::IsClosed() const
 {
@@ -524,7 +531,6 @@ bool EDA_SHAPE::IsClosed() const
         return false;
     }
 }
-
 
 
 void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
@@ -846,7 +852,8 @@ int EDA_SHAPE::GetRadius() const
 }
 
 
-void EDA_SHAPE::SetCachedArcData( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd, const VECTOR2I& aCenter )
+void EDA_SHAPE::SetCachedArcData( const VECTOR2I& aStart, const VECTOR2I& aMid,
+                                  const VECTOR2I& aEnd, const VECTOR2I& aCenter )
 {
     m_arcMidData.start = aStart;
     m_arcMidData.end = aEnd;
@@ -883,6 +890,7 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
         m_endsSwapped = true;
     }
 }
+
 
 EDA_ANGLE EDA_SHAPE::GetSegmentAngle() const
 {
@@ -978,7 +986,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     case SHAPE_T::ARC:
         aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength() ) );
-        
+
         msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( GetArcAngle() );
         aList.emplace_back( _( "Angle" ), msg );
 
@@ -1498,7 +1506,8 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
             effectiveShapes.emplace_back( new SHAPE_CIRCLE( getCenter(), GetRadius() ) );
 
         if( width > 0 || !IsFilled() || aEdgeOnly )
-            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), ANGLE_360, width ) );
+            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), ANGLE_360,
+                                                         width ) );
 
         break;
     }
@@ -1961,7 +1970,8 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
     }
 
     case SHAPE_T::ARC:
-        TransformArcToPolygon( aBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError, aErrorLoc );
+        TransformArcToPolygon( aBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError,
+                               aErrorLoc );
         break;
 
     case SHAPE_T::SEGMENT:

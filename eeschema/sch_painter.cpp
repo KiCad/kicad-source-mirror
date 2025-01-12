@@ -1057,8 +1057,8 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     float         nameStrokeWidth = getLineWidth( aPin, false );
     float         numStrokeWidth = getLineWidth( aPin, false );
 
-    nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), true );
-    numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), true );
+    nameStrokeWidth = ClampTextPenSize( nameStrokeWidth, aPin->GetNameTextSize(), true );
+    numStrokeWidth = ClampTextPenSize( numStrokeWidth, aPin->GetNumberTextSize(), true );
 
     float shadowWidth = 0.0f;
 

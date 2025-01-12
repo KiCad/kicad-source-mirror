@@ -169,7 +169,8 @@ wxString dumpParamCfg( const PARAM_CFG& aParam )
         s << *static_cast<const PARAM_CFG_FILENAME&>( aParam ).m_Pt_param;
         break;
     case paramcfg_id::PARAM_BOOL:
-        s << ( *static_cast<const PARAM_CFG_BOOL&>( aParam ).m_Pt_param ? wxS( "true" ) : wxS( "false" ) );
+        s << ( *static_cast<const PARAM_CFG_BOOL&>( aParam ).m_Pt_param ? wxS( "true" )
+                                                                        : wxS( "false" ) );
         break;
     default: s << wxS( "Unsupported PARAM_CFG variant: " ) << aParam.m_Type;
     }
@@ -195,7 +196,7 @@ static void dumpCfg( const std::vector<PARAM_CFG*>& aArray )
 
 
 /**
- * Get the filename for the advanced config file
+ * Get the filename for the advanced config file.
  *
  * The user must check the file exists if they care.
  */
@@ -349,7 +350,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                   m_ExtraClearance, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableCreepageSlot,
-                                                  &m_EnableCreepageSlot, m_EnableCreepageSlot ) );
+                                                &m_EnableCreepageSlot, m_EnableCreepageSlot ) );
 
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
@@ -444,7 +445,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_Skip3DModelFileCache, m_Skip3DModelFileCache ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DModelMemoryCache,
-                                                &m_Skip3DModelMemoryCache, m_Skip3DModelMemoryCache ) );
+                                                &m_Skip3DModelMemoryCache,
+                                                m_Skip3DModelMemoryCache ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HideVersionFromTitle,
                                                 &m_HideVersionFromTitle, m_HideVersionFromTitle ) );
@@ -540,12 +542,13 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                   0, 2147483647 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MinorSchematicGraphSize,
-                                                  &m_MinorSchematicGraphSize, m_MinorSchematicGraphSize,
-                                                  0, 2147483647 ) );
+                                               &m_MinorSchematicGraphSize,
+                                               m_MinorSchematicGraphSize,
+                                               0, 2147483647 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ResolveTextRecursionDepth,
-                                                  &m_ResolveTextRecursionDepth,
-                                                  m_ResolveTextRecursionDepth, 0, 10 ) );
+                                               &m_ResolveTextRecursionDepth,
+                                               m_ResolveTextRecursionDepth, 0, 10 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableExtensionSnaps,
                                                 &m_EnableExtensionSnaps,
@@ -568,7 +571,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                   0.0, 45.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallPaintingMultiplier,
-                                                  &m_HoleWallPaintingMultiplier, m_HoleWallPaintingMultiplier,
+                                                  &m_HoleWallPaintingMultiplier,
+                                                  m_HoleWallPaintingMultiplier,
                                                   0.1, 100.0 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MsgPanelShowUuids,
@@ -602,7 +606,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     for( PARAM_CFG* param : configParams )
         delete param;
 
-    wxLogTrace( kicadTraceCoroutineStack, wxT( "Using coroutine stack size %d" ), m_CoroutineStackSize );
+    wxLogTrace( kicadTraceCoroutineStack, wxT( "Using coroutine stack size %d" ),
+                m_CoroutineStackSize );
 }
 
 

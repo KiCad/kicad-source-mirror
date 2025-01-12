@@ -510,7 +510,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     m_item->SetFPRelativePosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
 
     // Test for acceptable values for thickness and size and clamp if fails
-    int maxPenWidth = Clamp_Text_PenSize( m_item->GetTextThickness(), m_item->GetTextSize() );
+    int maxPenWidth = ClampTextPenSize( m_item->GetTextThickness(), m_item->GetTextSize() );
 
     if( m_item->GetTextThickness() > maxPenWidth )
     {

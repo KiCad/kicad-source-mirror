@@ -34,7 +34,8 @@
 
 
 #define INITIAL_HELP    \
-    _(  "Select an <b>Option Choice</b> in the listbox above, and then click the <b>Append Selected Option</b> button." )
+    _(  "Select an <b>Option Choice</b> in the listbox above, and then click the " \
+        "<b>Append Selected Option</b> button." )
 
 
 DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
@@ -64,8 +65,8 @@ DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
     {
         unsigned int row = 0;
 
-        for( std::map<std::string, UTF8>::const_iterator it = m_choices.begin(); it != m_choices.end();
-                ++it, ++row )
+        for( std::map<std::string, UTF8>::const_iterator it = m_choices.begin();
+             it != m_choices.end(); ++it, ++row )
         {
             wxString item = From_UTF8( it->first.c_str() );
 

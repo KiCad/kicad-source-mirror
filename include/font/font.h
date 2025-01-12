@@ -179,6 +179,16 @@ public:
 
     /**
      * Insert \n characters into text to ensure that no lines are wider than \a aColumnWidth.
+     *
+     * This is a highly simplified line-breaker.  KiCad is an EDA tool, not a word processor.
+     *
+     * -# It breaks only on spaces.  If you type a word wider than the column width then you get
+     *    overflow.
+     * -# It treats runs of formatted text (superscript, subscript, overbar) as single words.
+     * -# It does not perform justification.
+     *
+     * The results of the linebreaking are the addition of \n in the text.  It is presumed that this
+     * function is called on m_shownText (or equivalent) rather than the original source text.
      */
     void LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aGlyphSize,
                         int aThickness, bool aBold, bool aItalic ) const;

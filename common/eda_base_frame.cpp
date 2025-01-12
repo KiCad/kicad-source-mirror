@@ -272,7 +272,7 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
     Disconnect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
-             wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
+                wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
     Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
 
     delete m_autoSaveTimer;
@@ -296,6 +296,7 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     if( !IsEnabled() && IsActive() )
     {
         wxWindow* dlg = findQuasiModalDialog();
+
         if( dlg )
             dlg->Raise();
     }
@@ -648,6 +649,7 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
 
     // Ensure minimum size is set if the stored config was zero-initialized
     wxSize minSize = minSizeLookup( m_ident, this );
+
     if( m_frameSize.x < minSize.x || m_frameSize.y < minSize.y )
     {
         m_frameSize = defaultSize( m_ident, this );
@@ -1114,19 +1116,19 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                     }, _( "Version Control" ) );
         }
 
-    #ifdef KICAD_USE_SENTRY
+#ifdef KICAD_USE_SENTRY
         book->AddLazyPage(
                 []( wxWindow* aParent ) -> wxWindow*
                 {
                     return new PANEL_DATA_COLLECTION( aParent );
                 }, _( "Data Collection" ) );
-    #endif
+#endif
 
-    #define LAZY_CTOR( key )                                                \
-            [this, kiface]( wxWindow* aParent )                             \
-            {                                                               \
-                return kiface->CreateKiWindow( aParent, key, &Kiway() );    \
-            }
+#define LAZY_CTOR( key )                                                \
+        [this, kiface]( wxWindow* aParent )                             \
+        {                                                               \
+            return kiface->CreateKiWindow( aParent, key, &Kiway() );    \
+        }
 
         // If a dll is not loaded, the loader will show an error message.
 
@@ -1157,7 +1159,8 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_FIELD_NAME_TEMPLATES ),
+                                  _( "Field Name Templates" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_SIMULATOR ), _( "Simulator" ) );
         }
         catch( ... )
@@ -1183,7 +1186,8 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_FIELDS ), _( "Footprint Defaults" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_GRAPHICS_VALUES ), _( "Graphics Defaults" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_GRAPHICS_VALUES ),
+                                  _( "Graphics Defaults" ) );
 
             if( GetFrameType() ==  FRAME_PCB_EDITOR )
                 expand.push_back( (int) book->GetPageCount() );
@@ -1224,7 +1228,8 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_COLORS ), _( "Colors" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_GRIDS ), _( "Grids" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ),
+                                  _( "Excellon Options" ) );
         }
         catch( ... )
         {
@@ -1398,7 +1403,8 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
     if( response == wxYES )
     {
         // Preserve the permissions of the current file
-        KIPLATFORM::IO::DuplicatePermissions( aFileName.GetFullPath(), autoSaveFileName.GetFullPath() );
+        KIPLATFORM::IO::DuplicatePermissions( aFileName.GetFullPath(),
+                                              autoSaveFileName.GetFullPath() );
 
         if( !wxRenameFile( autoSaveFileName.GetFullPath(), aFileName.GetFullPath() ) )
         {
@@ -1632,13 +1638,6 @@ WXLRESULT EDA_BASE_FRAME::MSWWindowProc( WXUINT message, WXWPARAM wParam, WXLPAR
 #endif
 
 
-/**
- * Function AddMenuLanguageList
- * creates a menu list for language choice, and add it as submenu to \a MasterMenu.
- *
- * @param aMasterMenu is the main menu.
- * @param aControlTool is the tool to associate with the menu
- */
 void EDA_BASE_FRAME::AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool )
 {
     ACTION_MENU* langsMenu = new ACTION_MENU( false, aControlTool );

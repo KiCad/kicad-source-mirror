@@ -157,7 +157,8 @@ FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic,
         font = s_fontMap[key];
 
     if( !font )
-        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic, aEmbeddedFiles, aForDrawingSheet );
+        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic, aEmbeddedFiles,
+                                       aForDrawingSheet );
 
     if( !font )
         font = getDefaultFont();
@@ -245,16 +246,6 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
 }
 
 
-/**
- * Draw a string.
- *
- * @param aGal
- * @param aText is the text to be drawn.
- * @param aPosition is the text object position in world coordinates.
- * @param aCursor is the current text position (for multiple text blocks within a single text
- *                object, such as a run of superscript characters)
- * @param aAttrs are the styling attributes of the text, including its rotation
- */
 void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosition,
                  const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttrs,
                  const METRICS& aFontMetrics ) const
@@ -283,7 +274,7 @@ void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosit
 
 
 /**
- * @return position of cursor for drawing next substring
+ * @return position of cursor for drawing next substring.
  */
 VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                      const MARKUP::NODE* aNode, const VECTOR2I& aPosition,
@@ -478,9 +469,11 @@ VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
 }
 
 
-/*
- * Break marked-up text into "words".  In this context, a "word" is EITHER a run of marked-up
- * text (subscript, superscript or overbar), OR a run of non-marked-up text separated by spaces.
+/**
+ * Break marked-up text into "words".
+ *
+ * In this context, a "word" is EITHER a run of marked-up text (subscript, superscript or
+ * overbar), OR a run of non-marked-up text separated by spaces.
  */
 void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
                       const std::unique_ptr<MARKUP::NODE>& aNode, const KIFONT::FONT* aFont,
@@ -575,17 +568,6 @@ void FONT::wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords, const
 }
 
 
-/*
- * This is a highly simplified line-breaker.  KiCad is an EDA tool, not a word processor.
- *
- * 1) It breaks only on spaces.  If you type a word wider than the column width then you get
- *    overflow.
- * 2) It treats runs of formatted text (superscript, subscript, overbar) as single words.
- * 3) It does not perform justification.
- *
- * The results of the linebreaking are the addition of \n in the text.  It is presumed that this
- * function is called on m_shownText (or equivalent) rather than the original source text.
- */
 void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSize, int aThickness,
                           bool aBold, bool aItalic ) const
 {

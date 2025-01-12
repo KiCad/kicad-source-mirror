@@ -306,7 +306,8 @@ uniform vec4 SMAA_RT_METRICS;
                                           BUILTIN_SHADERS::glsl_smaa_base,
                                           BUILTIN_SHADERS::glsl_smaa_pass_1_vert );
     pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
-                                          quality_string, BUILTIN_SHADERS::glsl_smaa_base, edge_detect_shader );
+                                          quality_string, BUILTIN_SHADERS::glsl_smaa_base,
+                                          edge_detect_shader );
     pass_1_shader->Link();
     checkGlError( "linking pass 1 shader", __FILE__, __LINE__ );
 

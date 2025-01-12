@@ -389,6 +389,7 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
     Connect( wxEVT_AUX2_DCLICK, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_MAGNIFY, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+
 #if defined _WIN32 || defined _WIN64
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
@@ -701,7 +702,7 @@ void OPENGL_GAL::BeginDrawing()
     m_shader->SetParameter( ufm_antialiasingOffset, renderingOffset );
     m_shader->Deactivate();
 
-    // Something betreen BeginDrawing and EndDrawing seems to depend on
+    // Something between BeginDrawing and EndDrawing seems to depend on
     // this texture unit being active, but it does not assure it itself.
     glActiveTexture( GL_TEXTURE0 );
 
@@ -720,14 +721,15 @@ void OPENGL_GAL::EndDrawing()
 {
     wxASSERT_MSG( m_isContextLocked, "What happened to the context lock?" );
 
-    PROF_TIMER cntTotal("gl-end-total");
-    PROF_TIMER cntEndCached("gl-end-cached");
-    PROF_TIMER cntEndNoncached("gl-end-noncached");
-    PROF_TIMER cntEndOverlay("gl-end-overlay");
-    PROF_TIMER cntComposite("gl-composite");
-    PROF_TIMER cntSwap("gl-swap");
+    PROF_TIMER cntTotal( "gl-end-total" );
+    PROF_TIMER cntEndCached( "gl-end-cached" );
+    PROF_TIMER cntEndNoncached( "gl-end-noncached" );
+    PROF_TIMER cntEndOverlay( "gl-end-overlay" );
+    PROF_TIMER cntComposite( "gl-composite" );
+    PROF_TIMER cntSwap( "gl-swap" );
 
     cntTotal.Start();
+
     // Cached & non-cached containers are rendered to the same buffer
     m_compositor->SetBuffer( m_mainBuffer );
 
@@ -748,6 +750,7 @@ void OPENGL_GAL::EndDrawing()
     cntEndOverlay.Stop();
 
     cntComposite.Start();
+
     // Be sure that the framebuffer is not colorized (happens on specific GPU&drivers combinations)
     glColor4d( 1.0, 1.0, 1.0, 1.0 );
 
@@ -789,8 +792,9 @@ void OPENGL_GAL::UnlockContext( int aClientCookie )
     wxASSERT_MSG( m_isContextLocked, "Context not locked.  A GAL_CONTEXT_LOCKER RAII object must "
                                      "be stacked rather than making separate lock/unlock calls." );
 
-    wxASSERT_MSG( m_lockClientCookie == aClientCookie, "Context was locked by a different client. "
-                                                       "Should not be possible with RAII objects." );
+    wxASSERT_MSG( m_lockClientCookie == aClientCookie,
+                  "Context was locked by a different client. "
+                  "Should not be possible with RAII objects." );
 
     m_isContextLocked = false;
 
@@ -868,8 +872,8 @@ void OPENGL_GAL::drawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     else
     {
         EDA_ANGLE lineAngle( startEndVector );
-        // Outlined tracks
 
+        // Outlined tracks
         SetLineWidth( 1.0 );
         m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b,
                                  m_strokeColor.a );
@@ -930,6 +934,7 @@ void OPENGL_GAL::drawCircle( const VECTOR2D& aCenterPoint, double aRadius, bool 
         m_currentManager->Shader( SHADER_FILLED_CIRCLE, 3.0, aRadius );
         m_currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, m_layerDepth );
     }
+
     if( m_isStrokeEnabled )
     {
         if( aReserve )
@@ -1216,7 +1221,9 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
         // DrawLine (and DrawPolyline )
         // has problem with 0 length lines so enforce minimum
         if( aStartPoint == aEndPoint )
+        {
             DrawLine( aStartPoint + VECTOR2D( 1.0, 0.0 ), aEndPoint );
+        }
         else
         {
             std::deque<VECTOR2D> pointList;
@@ -2117,6 +2124,7 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
 void OPENGL_GAL::StartDiffLayer()
 {
     m_currentManager->EndDrawing();
+
     if( m_tempBuffer )
     {
         SetTarget( TARGET_TEMP );
@@ -2821,6 +2829,7 @@ static void InitTesselatorCallbacks( GLUtesselator* aTesselator )
     gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG, (void( CALLBACK* )()) EdgeCallback );
     gluTessCallback( aTesselator, GLU_TESS_ERROR, (void( CALLBACK* )()) ErrorCallback );
 }
+
 
 void OPENGL_GAL::EnableDepthTest( bool aEnabled )
 {

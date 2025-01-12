@@ -211,6 +211,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
                 icnt++;
             }
         }
+
         n++;
     }
 

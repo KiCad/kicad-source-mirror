@@ -22,8 +22,8 @@
  */
 
 /*
- * Functions to read design block libraries and fill m_design_blocks by available design blocks names
- * and their documentation (comments and keywords)
+ * Functions to read design block libraries and fill m_design_blocks by available design blocks
+ * names and their documentation (comments and keywords).
  */
 
 #include <design_block_info.h>

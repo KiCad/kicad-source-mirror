@@ -90,6 +90,7 @@ void CACHED_CONTAINER::FinishItem()
 
         // Add the not used memory back to the pool
         addFreeChunk( itemOffset + itemSize, m_chunkSize - itemSize );
+
         // mergeFreeChunks();   // veery slow and buggy
 
         m_maxIndex = std::max( itemOffset + itemSize, m_maxIndex );
@@ -284,7 +285,7 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
 #ifdef __WIN32__
     #ifdef __MINGW32__
         // currently, because SEH (Structured Exception Handling) is not documented on msys
-        // (for intance __try or __try1 exists without doc) or is not supported, do nothing
+        // (for instance __try or __try1 exists without doc) or is not supported, do nothing
     #else
         __try
     #endif
@@ -317,7 +318,7 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
 #ifdef __WIN32__
     #ifdef __MINGW32__
         // currently, because SEH (Structured Exception Handling) is not documented on msys
-        // (for intance __except1 exists without doc) or is not supported, do nothing
+        // (for instance __except1 exists without doc) or is not supported, do nothing
     #else
         __except( GetExceptionCode() == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER
                                                                 : EXCEPTION_CONTINUE_SEARCH )
@@ -373,6 +374,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
             // These chunks cannot be merged
             // So store the previous one
             m_freeChunks.insert( std::make_pair( size, offset ) );
+
             // and let's check the next chunk
             offset = itf->first;
             size = itf->second;

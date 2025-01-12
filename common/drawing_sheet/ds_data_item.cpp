@@ -688,7 +688,9 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
         // but this function uses integers
         // So, to avoid truncations with our unit in mm, use microns.
         VECTOR2I size_micron;
-        #define FSCALE 1000.0
+
+#define FSCALE 1000.0
+
         int linewidth = 0;
         size_micron.x = KiROUND( m_ConstrainedTextSize.x * FSCALE );
         size_micron.y = KiROUND( m_ConstrainedTextSize.y * FSCALE );

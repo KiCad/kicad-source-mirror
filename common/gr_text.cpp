@@ -33,10 +33,6 @@
 #include <callback_gal.h>
 
 
-/**
- * @param aTextSize is the char size (height or width).
- * @return the "best" value for a pen size to draw/plot a bold text.
- */
 int GetPenSizeForBold( int aTextSize )
 {
     return KiROUND( aTextSize / 5.0 );
@@ -73,18 +69,7 @@ int GetPenSizeForNormal( const wxSize& aTextSize )
 }
 
 
-/**
- * Pen width should not allow characters to become cluttered up in their own fatness.  Normal
- * text is normally around 15% the fontsize, and bold text around 20%.  So we set a hard limit
- * at 25%, and a secondary limit for non-decorative text that must be readable at small sizes
- * at 18%.
- *
- * @param aPenSize is the pen size to clamp.
- * @param aSize is the character size (height or width).
- * @param aBold use true if text accept bold pen size.
- * @return the max pen size allowed.
- */
-int Clamp_Text_PenSize( int aPenSize, int aSize, bool aStrict )
+int ClampTextPenSize( int aPenSize, int aSize, bool aStrict )
 {
     double scale    = aStrict ? 0.18 : 0.25;
     int    maxWidth = KiROUND( (double) aSize * scale );
@@ -93,7 +78,7 @@ int Clamp_Text_PenSize( int aPenSize, int aSize, bool aStrict )
 }
 
 
-float Clamp_Text_PenSize( float aPenSize, int aSize, bool aStrict )
+float ClampTextPenSize( float aPenSize, int aSize, bool aStrict )
 {
     double scale    = aStrict ? 0.18 : 0.25;
     float maxWidth = (float) aSize * scale;
@@ -102,11 +87,11 @@ float Clamp_Text_PenSize( float aPenSize, int aSize, bool aStrict )
 }
 
 
-int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aStrict )
+int ClampTextPenSize( int aPenSize, const VECTOR2I& aSize, bool aStrict )
 {
     int size = std::min( std::abs( aSize.x ), std::abs( aSize.y ) );
 
-    return Clamp_Text_PenSize( aPenSize, size, aStrict );
+    return ClampTextPenSize( aPenSize, size, aStrict );
 }
 
 
@@ -121,24 +106,6 @@ int GRTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSi
 }
 
 
-/**
- * Print a graphic text through wxDC.
- *
- *  @param aDC is the current Device Context.
- *  @param aPos is the text position (according to h_justify, v_justify).
- *  @param aColor is the text color.
- *  @param aText is the text to draw.
- *  @param aOrient is the angle.
- *  @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
- *  @param aH_justify is the horizontal justification (Left, center, right).
- *  @param aV_justify is the vertical justification (bottom, center, top).
- *  @param aWidth is the line width (pen width) (use default width if aWidth = 0).
- *      if width < 0 : draw segments in sketch mode, width = abs(width)
- *      Use a value min(aSize.x, aSize.y) / 5 for a bold text.
- *  @param aItalic is the true to simulate an italic font.
- *  @param aBold use true to use a bold font. Useful only with default width value (aWidth = 0).
- *  @param aFont is the font to use, or nullptr for the KiCad stroke font
- */
 void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const wxString& aText,
                   const EDA_ANGLE& aOrient, const VECTOR2I& aSize,
                   enum GR_TEXT_H_ALIGN_T aH_justify, enum GR_TEXT_V_ALIGN_T aV_justify,

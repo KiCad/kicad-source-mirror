@@ -25,7 +25,8 @@
 #include <bitmaps.h>
 
 
-DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, std::size_t aLockedItemCount,
+DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent,
+                                                      std::size_t aLockedItemCount,
                                                       PCBNEW_SETTINGS::LOCKING_OPTIONS& aLockingOptions ) :
     DIALOG_LOCKED_ITEMS_QUERY_BASE( aParent ),
     m_lockingOptions( aLockingOptions )

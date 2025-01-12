@@ -110,7 +110,8 @@ DIALOG_COLOR_PICKER::~DIALOG_COLOR_PICKER()
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
     wxASSERT( cfg );
 
-    cfg->m_ColorPicker.default_tab = m_notebook->GetSelection();
+    if( cfg )
+        cfg->m_ColorPicker.default_tab = m_notebook->GetSelection();
 
     delete m_bitmapRGB;
     delete m_bitmapHSV;
@@ -393,7 +394,7 @@ void DIALOG_COLOR_PICKER::createHSVBitmap()
 
             color.FromHSV( hue, sat, 1.0 );
 
-            img.SetRGB( MAPX( xx ), MAPY( yy ), color.r*255, color.g*255, color.b*255 );
+            img.SetRGB( MAPX( xx ), MAPY( yy ), color.r * 255, color.g * 255, color.b * 255 );
         }
     }
 
@@ -421,7 +422,8 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
 
     // Use Y axis from bottom to top and origin to center
     bitmapDC.SetAxisOrientation( true, true );
-#if defined( __WXMSW__)
+
+#if defined( __WXMSW__ )
     // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
     bitmapDC.SetDeviceOrigin( half_size, -half_size );
 #else
@@ -429,7 +431,7 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
 #endif
 
     // Reserve room to draw cursors inside the bitmap
-    half_size -= m_cursorsSize/2;
+    half_size -= m_cursorsSize / 2;
 
     // Draw the 3 RGB cursors, using white color to make them always visible:
     wxPen pen( wxColor( 255, 255, 255 ), 2 );       // use 2 pixels for pen size
@@ -638,7 +640,7 @@ void DIALOG_COLOR_PICKER::onRGBMouseClick( wxMouseEvent& event )
 
     dist = m_cursorBitmapGreen - mousePos;
 
-    if( std::abs( dist.x ) <= m_cursorsSize/2 && std::abs( dist.y ) <= m_cursorsSize/2 )
+    if( std::abs( dist.x ) <= m_cursorsSize / 2 && std::abs( dist.y ) <= m_cursorsSize / 2 )
     {
         m_selectedCursor = &m_cursorBitmapGreen;
         return;
@@ -646,7 +648,7 @@ void DIALOG_COLOR_PICKER::onRGBMouseClick( wxMouseEvent& event )
 
     dist = m_cursorBitmapBlue - mousePos;
 
-    if( std::abs( dist.x ) <= m_cursorsSize/2 && std::abs( dist.y ) <= m_cursorsSize/2 )
+    if( std::abs( dist.x ) <= m_cursorsSize / 2 && std::abs( dist.y ) <= m_cursorsSize / 2 )
     {
         m_selectedCursor = &m_cursorBitmapBlue;
         return;

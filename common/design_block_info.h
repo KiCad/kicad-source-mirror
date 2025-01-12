@@ -49,7 +49,7 @@ class KIWAY;
 class wxTextFile;
 
 
-/*
+/**
  * Helper class to handle the list of design blocks available in libraries. It stores
  * design block names, doc and keywords.
  *

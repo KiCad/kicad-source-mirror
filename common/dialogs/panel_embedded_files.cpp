@@ -170,7 +170,8 @@ bool PANEL_EMBEDDED_FILES::TransferDataFromWindow()
 
     std::vector<EMBEDDED_FILES::EMBEDDED_FILE*> files;
 
-    for( auto it = m_localFiles->EmbeddedFileMap().begin(); it != m_localFiles->EmbeddedFileMap().end(); it++ )
+    for( auto it = m_localFiles->EmbeddedFileMap().begin();
+         it != m_localFiles->EmbeddedFileMap().end(); it++ )
         files.push_back( it->second );
 
     for( auto& file : files )
@@ -197,8 +198,7 @@ void PANEL_EMBEDDED_FILES::onAddEmbeddedFile( wxCommandEvent& event )
 
         if( m_localFiles->HasFile( name ) )
         {
-            wxString msg = wxString::Format( _( "File '%s' already exists." ),
-                        name );
+            wxString msg = wxString::Format( _( "File '%s' already exists." ), name );
 
             KIDIALOG errorDlg( m_parent, msg, _( "Confirmation" ),
                                 wxOK | wxCANCEL | wxICON_WARNING );

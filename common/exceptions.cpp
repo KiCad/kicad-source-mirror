@@ -55,7 +55,7 @@ void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
 {
     problem = aProblem;
 
-    // The throwers filename is a full filename, depending on Kicad source location.
+    // The throwers filename is a full filename, depending on KiCad source location.
     // a short filename will be printed (it is better for user, the full filename has no meaning).
     wxString srcname = aThrowersFile;
 
@@ -85,7 +85,7 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
     lineNumber = aLineNumber;
     byteIndex  = aByteIndex;
 
-    // The throwers filename is a full filename, depending on Kicad source location.
+    // The throwers filename is a full filename, depending on KiCad source location.
     // a short filename will be printed (it is better for user, the full filename has no meaning).
     wxString srcname = aThrowersFile;
 
@@ -150,7 +150,8 @@ FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError,
         init( aRequiredVersion, aRequiredGenerator );
 
         if( !aParseError.Problem().IsEmpty() )
-            problem += wxS( "\n\n" ) + _( "Full error text:" ) + wxS( "\n" ) + aParseError.Problem();
+            problem += wxS( "\n\n" ) + _( "Full error text:" ) + wxS( "\n" ) +
+                       aParseError.Problem();
     }
 
     lineNumber = aParseError.lineNumber;

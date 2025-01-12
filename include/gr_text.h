@@ -54,9 +54,9 @@ class PLOTTER;
  * @param aBold true if text accept bold pen size.
  * @return the max pen size allowed.
  */
-int Clamp_Text_PenSize( int aPenSize, int aSize, bool aStrict = false );
-float Clamp_Text_PenSize( float aPenSize, int aSize, bool aStrict = false );
-int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aStrict = false );
+int ClampTextPenSize( int aPenSize, int aSize, bool aStrict = false );
+float ClampTextPenSize( float aPenSize, int aSize, bool aStrict = false );
+int ClampTextPenSize( int aPenSize, const VECTOR2I& aSize, bool aStrict = false );
 
 /**
  * @param aTextSize the char size (height or width).
@@ -90,7 +90,7 @@ inline void InferBold( TEXT_ATTRIBUTES* aAttrs )
 
 
 /**
- * Returns the margin for knocking out text.
+ * Return the margin for knocking out text.
  */
 inline int GetKnockoutTextMargin( const VECTOR2I& aSize, int aThickness )
 {

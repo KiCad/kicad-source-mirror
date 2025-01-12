@@ -303,7 +303,8 @@ void PANEL_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent, int aLaye
         KIUI::AddMenuItem( &menu, ID_PASTE, _( "Paste color" ), KiBitmap( BITMAPS::paste ) );
 
     if( !readOnly && current != saved )
-        KIUI::AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ), KiBitmap( BITMAPS::undo ) );
+        KIUI::AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ),
+                           KiBitmap( BITMAPS::undo ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
             [&]( wxCommandEvent& aCmd )

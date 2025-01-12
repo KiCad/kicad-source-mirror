@@ -66,16 +66,20 @@ OUTLINE_FONT::EMBEDDING_PERMISSION OUTLINE_FONT::GetEmbeddingPermission() const
     if( !os2 )
         return EMBEDDING_PERMISSION::RESTRICTED;
 
-    if( os2->fsType == FT_FSTYPE_INSTALLABLE_EMBEDDING ) // This allows the font to be exported from KiCad
+    // This allows the font to be exported from KiCad
+    if( os2->fsType == FT_FSTYPE_INSTALLABLE_EMBEDDING )
         return EMBEDDING_PERMISSION::INSTALLABLE;
 
-    if( os2->fsType & FT_FSTYPE_BITMAP_EMBEDDING_ONLY ) // We don't support bitmap fonts, so this disables embedding
+    // We don't support bitmap fonts, so this disables embedding
+    if( os2->fsType & FT_FSTYPE_BITMAP_EMBEDDING_ONLY )
         return EMBEDDING_PERMISSION::RESTRICTED;
 
-    if( os2->fsType & FT_FSTYPE_EDITABLE_EMBEDDING ) // This allows us to use the font in KiCad but not export
+    // This allows us to use the font in KiCad but not export
+    if( os2->fsType & FT_FSTYPE_EDITABLE_EMBEDDING )
         return EMBEDDING_PERMISSION::EDITABLE;
 
-    if( os2->fsType & FT_FSTYPE_PREVIEW_AND_PRINT_EMBEDDING ) // This is not actually supported by KiCad ATM(2024)
+    // This is not actually supported by KiCad ATM(2024)
+    if( os2->fsType & FT_FSTYPE_PREVIEW_AND_PRINT_EMBEDDING )
         return EMBEDDING_PERMISSION::PRINT_PREVIEW_ONLY;
 
     // Anything else that is not explicitly enabled we treat as restricted.
@@ -139,10 +143,6 @@ FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName, int aFaceIndex )
 }
 
 
-/**
- * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
- * the distance between baselines, not the space between line bounding boxes.
- */
 double OUTLINE_FONT::GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const
 {
     double glyphToFontHeight = 1.0;
@@ -313,6 +313,7 @@ struct GLYPH_CACHE_KEY {
                 && angle == rhs.angle;
     }
 };
+
 
 namespace std
 {
@@ -493,7 +494,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                     }
 
                     // Some lovely TTF fonts decided that winding didn't matter for outlines that
-                    // don't have holes, so holes that don't fit in any outline are added as outlines
+                    // don't have holes, so holes that don't fit in any outline are added as
+                    // outlines.
                     if( !added_hole )
                         glyph->AddOutline( std::move( hole ) );
                 }
@@ -536,7 +538,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 #undef OUTLINEFONT_RENDER_AS_PIXELS
 #ifdef OUTLINEFONT_RENDER_AS_PIXELS
 /*
- * WIP: eeschema (and PDF output?) should use pixel rendering instead of linear segmentation
+ * WIP: Eeschema (and PDF output?) should use pixel rendering instead of linear segmentation
  */
 void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString& aString,
                                          const VECTOR2D& aGlyphSize, const VECTOR2I& aPosition,
@@ -544,7 +546,9 @@ void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString
 {
     hb_buffer_t* buf = hb_buffer_create();
     hb_buffer_add_utf8( buf, UTF8( aString ).c_str(), -1, 0, -1 );
-    hb_buffer_guess_segment_properties( buf ); // guess direction, script, and language based on contents
+
+    // guess direction, script, and language based on contents
+    hb_buffer_guess_segment_properties( buf );
 
     unsigned int         glyphCount;
     hb_glyph_info_t*     glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
@@ -586,4 +590,5 @@ void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString
 
     hb_buffer_destroy( buf );
 }
+
 #endif //OUTLINEFONT_RENDER_AS_PIXELS

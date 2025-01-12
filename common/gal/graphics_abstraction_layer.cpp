@@ -39,6 +39,7 @@ using namespace KIGFX;
 
 GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
         m_options( aDisplayOptions ),
+
         // m_currentNativeCursor is initialized with KICURSOR::DEFAULT value to avoid
         // if comparison with uninitialized value on SetNativeCursorStyle method.
         // Some classes inheriting from GAL has different SetNativeCursorStyle method
@@ -54,9 +55,11 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetLookAtPoint( VECTOR2D( 0, 0 ) );
     SetZoomFactor( 1.0 );
     SetRotation( 0.0 );
+
     // this value for SetWorldUnitLength is only suitable for Pcbnew.
     // Other editors/viewer must call SetWorldUnitLength with their internal units
     SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+
     // wxDC::GetPPI() reports 96 DPI, but somehow this value
     // is the closest match to the legacy renderer
     SetScreenDPI( 91 );
@@ -223,18 +226,23 @@ VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
 #if 0
     // This old code expects a non zero grid size, which can be wrong here.
-    return VECTOR2D( KiROUND( ( aPoint.x - m_gridOffset.x ) / m_gridSize.x ) * m_gridSize.x + m_gridOffset.x,
-                     KiROUND( ( aPoint.y - m_gridOffset.y ) / m_gridSize.y ) * m_gridSize.y + m_gridOffset.y );
+    return VECTOR2D( KiROUND( ( aPoint.x - m_gridOffset.x ) / m_gridSize.x ) *
+                     m_gridSize.x + m_gridOffset.x,
+                     KiROUND( ( aPoint.y - m_gridOffset.y ) / m_gridSize.y ) *
+                     m_gridSize.y + m_gridOffset.y );
 #else
     // if grid size == 0.0 there is no grid, so use aPoint as grid reference position
-    double cx = m_gridSize.x > 0.0 ? KiROUND( ( aPoint.x - m_gridOffset.x ) / m_gridSize.x ) * m_gridSize.x + m_gridOffset.x
+    double cx = m_gridSize.x > 0.0 ? KiROUND( ( aPoint.x - m_gridOffset.x ) / m_gridSize.x ) *
+                m_gridSize.x + m_gridOffset.x
                                    : aPoint.x;
-    double cy = m_gridSize.y > 0.0 ? KiROUND( ( aPoint.y - m_gridOffset.y ) / m_gridSize.y ) * m_gridSize.y + m_gridOffset.y
+    double cy = m_gridSize.y > 0.0 ? KiROUND( ( aPoint.y - m_gridOffset.y ) / m_gridSize.y ) *
+                                     m_gridSize.y + m_gridOffset.y
                                    : aPoint.y;
 
     return VECTOR2D( cx, cy );
 #endif
 }
+
 
 // MIN_DEPTH must be set to be - (VIEW::VIEW_MAX_LAYERS + abs(VIEW::TOP_LAYER_MODIFIER))
 // MAX_DEPTH must be set to be VIEW::VIEW_MAX_LAYERS + abs(VIEW::TOP_LAYER_MODIFIER) -1
@@ -259,9 +267,6 @@ COLOR4D GAL::getCursorColor() const
 }
 
 
-/*
- * Fallback for implementations that don't implement bitmap text: use stroke font
- */
 void GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition, const EDA_ANGLE& aAngle )
 {
     KIFONT::FONT* font = KIFONT::FONT::GetFont();

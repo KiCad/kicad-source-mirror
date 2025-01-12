@@ -51,9 +51,9 @@ public:
     static DS_DATA_MODEL& GetTheInstance();
 
     /**
-     * Set an alternate instance of DS_DATA_MODEL.
+     * Set an alternate instance of #DS_DATA_MODEL.
      *
-     * @param aLayout the alternate drawing sheet; if null restore the default drawing sheet
+     * @param aLayout the alternate drawing sheet; if null restore the default drawing sheet.
      */
     static void SetAltInstance( DS_DATA_MODEL* aLayout = nullptr );
 
@@ -144,7 +144,7 @@ public:
 
     /**
      * Populate the list with a custom layout or the default layout if no custom layout
-     * is  available.
+     * is available.
      *
      * @param aFullFileName is the custom drawing sheet file. If empty, load the file defined by
      *                      KICAD_WKSFILE and if its not defined, the default internal drawing

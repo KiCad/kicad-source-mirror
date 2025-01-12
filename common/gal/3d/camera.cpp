@@ -287,7 +287,8 @@ void CAMERA::rebuildProjection()
 
     case PROJECTION_TYPE::ORTHO:
 
-        // Keep the viewed plane at (m_camera_pos_init * m_zoom) the same dimensions in both projections.
+        // Keep the viewed plane at (m_camera_pos_init * m_zoom) the same dimensions in both
+        // projections.
         m_frustum.angle = 45.0f;
         m_frustum.tang = glm::tan( glm::radians( m_frustum.angle ) * 0.5f );
 

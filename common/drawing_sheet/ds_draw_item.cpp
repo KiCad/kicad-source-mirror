@@ -90,7 +90,6 @@ std::vector<int> DS_DRAW_ITEM_BASE::ViewGetLayers() const
 }
 
 
-// A generic HitTest that can be used by some, but not all, sub-classes.
 bool DS_DRAW_ITEM_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     BOX2I sel = aRect;
@@ -128,6 +127,7 @@ void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     case DS_DATA_ITEM::DS_TEXT:
     {
         DS_DRAW_ITEM_TEXT* textItem = static_cast<DS_DRAW_ITEM_TEXT*>( this );
+
         // Don't use GetShownText(); we want to see the variable references here
         aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, textItem->GetText() ) );
         break;
@@ -333,7 +333,8 @@ bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const BOX2I& aRect, bool aContained, in
 }
 
 
-wxString DS_DRAW_ITEM_POLYPOLYGONS::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
+wxString DS_DRAW_ITEM_POLYPOLYGONS::GetItemDescription( UNITS_PROVIDER* aUnitsProvider,
+                                                        bool aFull ) const
 {
     return _( "Imported Shape" );
 }
@@ -434,9 +435,10 @@ bool DS_DRAW_ITEM_RECT::HitTest( const BOX2I& aRect, bool aContained, int aAccur
 
 wxString DS_DRAW_ITEM_RECT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Rectangle, width %s height %s" ),
-                             aUnitsProvider->MessageTextFromValue( std::abs( GetStart().x - GetEnd().x ) ),
-                             aUnitsProvider->MessageTextFromValue( std::abs( GetStart().y - GetEnd().y ) ) );
+    return wxString::Format(
+            _( "Rectangle, width %s height %s" ),
+            aUnitsProvider->MessageTextFromValue( std::abs( GetStart().x - GetEnd().x ) ),
+            aUnitsProvider->MessageTextFromValue( std::abs( GetStart().y - GetEnd().y ) ) );
 }
 
 
@@ -570,12 +572,6 @@ void DS_DRAW_ITEM_LIST::BuildDrawItemsList( const PAGE_INFO& aPageInfo,
 }
 
 
-/* Print the item list created by BuildDrawItemsList
- * aDC = the current Device Context
- * The not selected items are drawn first (most of items)
- * The selected items are drawn after (usually 0 or 1)
- * to be sure they are seen, even for overlapping items
- */
 void DS_DRAW_ITEM_LIST::Print( const RENDER_SETTINGS* aSettings )
 {
     std::vector<DS_DRAW_ITEM_BASE*> second_items;

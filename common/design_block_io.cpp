@@ -73,7 +73,8 @@ DESIGN_BLOCK_IO* DESIGN_BLOCK_IO_MGR::FindPlugin( DESIGN_BLOCK_FILE_T aFileType 
 DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T
 DESIGN_BLOCK_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl )
 {
-    if( IO_RELEASER<DESIGN_BLOCK_IO>( FindPlugin( KICAD_SEXP ) )->CanReadLibrary( aLibPath ) && aCtl != KICTL_NONKICAD_ONLY )
+    if( IO_RELEASER<DESIGN_BLOCK_IO>( FindPlugin( KICAD_SEXP ) )->CanReadLibrary( aLibPath )
+      && aCtl != KICTL_NONKICAD_ONLY )
         return KICAD_SEXP;
 
     return DESIGN_BLOCK_IO_MGR::FILE_TYPE_NONE;
@@ -152,8 +153,8 @@ long long DESIGN_BLOCK_IO::GetLibraryTimestamp( const wxString& aLibraryPath ) c
     {
         wxFileName blockDir( aLibraryPath, filename );
 
+        // Check if the directory ends with ".kicad_block", if so hash all the files in it.
         if( blockDir.GetFullName().EndsWith( FILEEXT::KiCadDesignBlockPathExtension ) )
-        // Check if the directory ends with ".kicad_block", if so hash all the files in it
             ts += TimestampDir( blockDir.GetFullPath(), wxT( "*" ) );
 
         hasMoreFiles = libDir.GetNext( &filename );
@@ -282,10 +283,11 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
                                                 const wxString& aDesignBlockName, bool aKeepUUID,
                                                 const std::map<std::string, UTF8>* aProperties )
 {
-    wxString      dbPath = aLibraryPath + wxFileName::GetPathSeparator() +
-                           aDesignBlockName + wxT( "." ) + FILEEXT::KiCadDesignBlockPathExtension + wxFileName::GetPathSeparator();
-    wxString      dbSchPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
-    wxString      dbMetadataPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::JsonFileExtension;
+    wxString dbPath = aLibraryPath + wxFileName::GetPathSeparator() + aDesignBlockName + wxT( "." )
+                      + FILEEXT::KiCadDesignBlockPathExtension + wxFileName::GetPathSeparator();
+    wxString dbSchPath = dbPath + aDesignBlockName + wxT( "." )
+                         + FILEEXT::KiCadSchematicFileExtension;
+    wxString dbMetadataPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::JsonFileExtension;
 
     if( !wxFileExists( dbSchPath ) )
         return nullptr;

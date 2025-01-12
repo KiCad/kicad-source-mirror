@@ -32,8 +32,10 @@ KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
         m_repo( aRepo ), m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ), m_testedTypes( 0 )
 {}
 
+
 KIGIT_COMMON::~KIGIT_COMMON()
 {}
+
 
 git_repository* KIGIT_COMMON::GetRepo() const
 {
@@ -414,16 +416,19 @@ extern "C" int progress_cb( const char* str, int len, void* data )
     return 0;
 }
 
+
 extern "C" int transfer_progress_cb( const git_transfer_progress* aStats, void* aPayload )
 {
     KIGIT_COMMON* parent = (KIGIT_COMMON*) aPayload;
     wxString      progressMessage = wxString::Format( _( "Received %u of %u objects" ),
-                                                      aStats->received_objects, aStats->total_objects );
+                                                      aStats->received_objects,
+                                                      aStats->total_objects );
 
     parent->UpdateProgress( aStats->received_objects, aStats->total_objects, progressMessage );
 
     return 0;
 }
+
 
 extern "C" int update_cb( const char* aRefname, const git_oid* aFirst, const git_oid* aSecond,
                           void* aPayload )
@@ -497,7 +502,7 @@ extern "C" int push_update_reference_cb( const char* aRefname, const char* aStat
 
 
 extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
-                                unsigned int aAllowedTypes, void* aPayload )
+                               unsigned int aAllowedTypes, void* aPayload )
 {
     KIGIT_COMMON* parent = static_cast<KIGIT_COMMON*>( aPayload );
 
@@ -533,9 +538,9 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         wxString password = parent->GetPassword().Trim().Trim( false );
 
         git_cred_ssh_key_new( aOut, username.ToStdString().c_str(),
-                                sshPubKey.ToStdString().c_str(),
-                                sshKey.ToStdString().c_str(),
-                                password.ToStdString().c_str() );
+                              sshPubKey.ToStdString().c_str(),
+                              sshKey.ToStdString().c_str(),
+                              password.ToStdString().c_str() );
         parent->TestedTypes() |= GIT_CREDTYPE_SSH_KEY;
     }
     else

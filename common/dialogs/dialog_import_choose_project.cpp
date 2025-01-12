@@ -49,7 +49,8 @@ DIALOG_IMPORT_CHOOSE_PROJECT::DIALOG_IMPORT_CHOOSE_PROJECT( wxWindow* aParent,
     {
         m_listCtrl->InsertItem( row, convertName( desc.ComboName, desc.ComboId ) );
         m_listCtrl->SetItem( row, pcbNameColId, convertName( desc.PCBName, desc.PCBId ) );
-        m_listCtrl->SetItem( row, schNameColId, convertName( desc.SchematicName, desc.SchematicId ) );
+        m_listCtrl->SetItem( row, schNameColId, convertName( desc.SchematicName,
+                                                             desc.SchematicId ) );
 
         ++row;
     }

@@ -78,7 +78,8 @@ static const wxString pageFmts[] =
                                     // to be recognized in code
 };
 
-DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, EMBEDDED_FILES* aEmbeddedFiles, double aIuPerMils,
+DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent,
+                                              EMBEDDED_FILES* aEmbeddedFiles, double aIuPerMils,
                                               const VECTOR2D& aMaxUserSizeMils ) :
         DIALOG_PAGES_SETTINGS_BASE( aParent ),
         m_parent( aParent ),
@@ -602,8 +603,10 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
 {
     int lyWidth, lyHeight;
 
-    VECTOR2D clamped_layout_size( std::clamp( m_layout_size.x, (double)MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.x ),
-                                  std::clamp( m_layout_size.y, (double)MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.y ) );
+    VECTOR2D clamped_layout_size( std::clamp( m_layout_size.x, (double) MIN_PAGE_SIZE_MILS,
+                                              m_maxPageSizeMils.x ),
+                                  std::clamp( m_layout_size.y, (double) MIN_PAGE_SIZE_MILS,
+                                              m_maxPageSizeMils.y ) );
 
     double lyRatio = clamped_layout_size.x < clamped_layout_size.y ?
                         (double) clamped_layout_size.y / clamped_layout_size.x :

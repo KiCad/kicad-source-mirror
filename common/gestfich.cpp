@@ -98,7 +98,7 @@ wxString FindKicadFile( const wxString& shortname )
     }
 
 #if defined( __WINDOWS__ )
-    // kicad can be installed highly portably on Windows, anywhere and concurrently
+    // KiCad can be installed highly portably on Windows, anywhere and concurrently
     // either the "kicad file" is immediately adjacent to the exe or it's not a valid install
     return shortname;
 #else
@@ -347,7 +347,8 @@ bool RmDirRecursive( const wxString& aFileName, wxString* aErrors )
     catch( const fs::filesystem_error& e )
     {
         if( aErrors )
-            *aErrors = wxString::Format( _( "Error removing directory '%s': %s" ), aFileName, e.what() );
+            *aErrors = wxString::Format( _( "Error removing directory '%s': %s" ),
+                                         aFileName, e.what() );
 
         return false;
     }

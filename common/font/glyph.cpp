@@ -162,7 +162,8 @@ void OUTLINE_GLYPH::CacheTriangulation( bool aPartition, bool aSimplify )
 }
 
 
-std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> OUTLINE_GLYPH::GetTriangulationData() const
+std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>>
+OUTLINE_GLYPH::GetTriangulationData() const
 {
     std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> data;
 
@@ -173,7 +174,8 @@ std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> OUTLINE_GLYPH
 }
 
 
-void OUTLINE_GLYPH::CacheTriangulation( std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>>& aHintData )
+void OUTLINE_GLYPH::CacheTriangulation(
+        std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>>& aHintData )
 {
     cacheTriangulation( false, false, &aHintData );
 }

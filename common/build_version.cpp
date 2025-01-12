@@ -125,6 +125,7 @@ wxString GetMajorMinorPatchVersion()
     return msg;
 }
 
+
 const std::tuple<int,int,int>& GetMajorMinorPatchTuple()
 {
     static std::tuple<int, int, int> retval = KICAD_MAJOR_MINOR_PATCH_TUPLE;

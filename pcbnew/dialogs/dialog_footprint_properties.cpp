@@ -466,7 +466,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         }
 
         // Test for acceptable values for thickness and size and clamp if fails
-        int maxPenWidth = Clamp_Text_PenSize( field.GetTextThickness(), field.GetTextSize() );
+        int maxPenWidth = ClampTextPenSize( field.GetTextThickness(), field.GetTextSize() );
 
         if( field.GetTextThickness() > maxPenWidth )
         {

@@ -1368,6 +1368,7 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     Connect( wxEVT_AUX2_UP, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
     Connect( wxEVT_AUX2_DCLICK, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
     Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+
 #if defined _WIN32 || defined _WIN64
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 #endif
@@ -1438,6 +1439,7 @@ void CAIRO_GAL::EndDrawing()
             dst[1] = src[1];
             dst[2] = src[0];
 #endif
+
             dst += 3;
         }
 
@@ -1839,7 +1841,7 @@ void CAIRO_GAL_BASE::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTota
         for( const std::vector<VECTOR2D>& pointList : glyph )
             drawPoly( pointList );
     }
-else if( aGlyph.IsOutline() )
+    else if( aGlyph.IsOutline() )
     {
         const KIFONT::OUTLINE_GLYPH& glyph = static_cast<const KIFONT::OUTLINE_GLYPH&>( aGlyph );
 

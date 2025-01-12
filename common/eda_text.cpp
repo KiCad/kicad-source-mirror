@@ -346,15 +346,16 @@ void EDA_TEXT::SetBold( bool aBold )
             }
             else
             {
-                // Restore the original stroke width from `m_StoredStrokeWidth` if it was previously stored,
-                // resetting the width after unbolding.
+                // Restore the original stroke width from `m_StoredStrokeWidth` if it was
+                // previously stored, resetting the width after unbolding.
                 if( m_attributes.m_StoredStrokeWidth )
                     m_attributes.m_StrokeWidth = m_attributes.m_StoredStrokeWidth;
                 else
                 {
                     m_attributes.m_StrokeWidth = GetPenSizeForNormal( size );
-                    // Sets `m_StrokeWidth` to the normal pen size and stores it in `m_StoredStrokeWidth`
-                    // as the default, but only if the bold option was applied before this feature was implemented.
+                    // Sets `m_StrokeWidth` to the normal pen size and stores it in
+                    // `m_StoredStrokeWidth` as the default, but only if the bold option was
+                    // applied before this feature was implemented.
                     m_attributes.m_StoredStrokeWidth = m_attributes.m_StrokeWidth;
                 }
             }
@@ -472,7 +473,7 @@ int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultPenWidth ) const
     }
 
     // Clip pen size for small texts:
-    penWidth = Clamp_Text_PenSize( penWidth, GetTextSize() );
+    penWidth = ClampTextPenSize( penWidth, GetTextSize() );
 
     return penWidth;
 }
@@ -790,8 +791,8 @@ BOX2I EDA_TEXT::GetTextBox( int aLine ) const
 
         // interline spacing is only *between* lines, so total height is the height of the first
         // line plus the interline distance (with interline spacing) for all subsequent lines
-        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y,
-                                                                                getFontMetrics() ) );
+        textsize.y += KiROUND( ( strings.GetCount() - 1 )
+                               * font->GetInterline( fontSize.y, getFontMetrics() ) );
     }
 
     textsize.y += overbarOffset;
@@ -809,6 +810,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine ) const
     case GR_TEXT_H_ALIGN_LEFT:
         if( IsMirrored() )
             bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) );
+
         break;
 
     case GR_TEXT_H_ALIGN_CENTER:

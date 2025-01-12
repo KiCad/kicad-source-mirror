@@ -34,6 +34,7 @@ GIT_ADD_TO_INDEX_HANDLER::GIT_ADD_TO_INDEX_HANDLER( git_repository* aRepository 
     m_filesToAdd.clear();
 }
 
+
 GIT_ADD_TO_INDEX_HANDLER::~GIT_ADD_TO_INDEX_HANDLER()
 {
 }
@@ -96,7 +97,8 @@ bool GIT_ADD_TO_INDEX_HANDLER::PerformAddToIndex()
     {
         wxLogError( "Failed to write index" );
         m_filesFailedToAdd.clear();
-        std::copy( m_filesToAdd.begin(), m_filesToAdd.end(), std::back_inserter( m_filesFailedToAdd ) );
+        std::copy( m_filesToAdd.begin(), m_filesToAdd.end(),
+                   std::back_inserter( m_filesFailedToAdd ) );
         git_index_free( index );
         return false;
     }

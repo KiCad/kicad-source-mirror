@@ -426,8 +426,9 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
         if( rel_error < last_approx )
         {
             last_approx = rel_error;
+
             // zoom IDs in m_zoomSelectBox start with 1 (leaving 0 for auto-zoom choice)
-            new_selection = jj+1;
+            new_selection = jj + 1;
         }
     }
 
@@ -435,9 +436,10 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
         m_zoomSelectBox->SetSelection( new_selection );
 }
 
+
 void EDA_DRAW_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
-    DisplayErrorMessage( this, wxT("EDA_DRAW_FRAME::PrintPage() error") );
+    DisplayErrorMessage( this, wxT( "EDA_DRAW_FRAME::PrintPage() error" ) );
 }
 
 
@@ -474,6 +476,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     UpdateStatusBar();
     m_canvas->Refresh();
+
     // Needed on Windows because clicking on m_gridSelectBox remove the focus from m_canvas
     // (Windows specific
     m_canvas->SetFocus();
@@ -569,6 +572,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     m_toolManager->RunAction( ACTIONS::zoomPreset, id );
     UpdateStatusBar();
     m_canvas->Refresh();
+
     // Needed on Windows because clicking on m_zoomSelectBox remove the focus from m_canvas
     // (Windows specific
     m_canvas->SetFocus();
@@ -792,8 +796,9 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         if( COMMON_TOOLS* cmnTool = m_toolManager->GetTool<COMMON_TOOLS>() )
         {
-            aCfg->m_System.last_imperial_units = static_cast<int>( cmnTool->GetLastImperialUnits() );
-            aCfg->m_System.last_metric_units   = static_cast<int>( cmnTool->GetLastMetricUnits() );
+            aCfg->m_System.last_imperial_units =
+                    static_cast<int>( cmnTool->GetLastImperialUnits() );
+            aCfg->m_System.last_metric_units = static_cast<int>( cmnTool->GetLastMetricUnits() );
         }
     }
 }
@@ -973,7 +978,6 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 }
 
 
-// Find the first child dialog.
 std::vector<wxWindow*> EDA_DRAW_FRAME::findDialogs()
 {
     std::vector<wxWindow*> dialogs;
@@ -1003,8 +1007,9 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
 
     for( wxWindow* dialog : findDialogs() )
     {
-        dialogScreenRects.emplace_back( ToVECTOR2D( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ) ),
-                                        ToVECTOR2D( dialog->GetSize() ) );
+        dialogScreenRects.emplace_back(
+                ToVECTOR2D( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ) ),
+                ToVECTOR2D( dialog->GetSize() ) );
     }
 
     // Center if we're behind an obscuring dialog, or within 10% of its edge

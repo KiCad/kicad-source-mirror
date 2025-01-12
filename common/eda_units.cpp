@@ -119,6 +119,7 @@ bool EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS
         aUnits = EDA_UNITS::DEGREES;
     else
         return false;
+
     return true;
 }
 
@@ -256,6 +257,7 @@ bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU
 #define IN_TO_IU( x, scale ) ( x * scale.IU_PER_MILS * 1000 )
 #define MILS_TO_IU( x, scale ) ( x * scale.IU_PER_MILS )
 
+
 double EDA_UNIT_UTILS::UI::ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
                                        double aValue )
 {
@@ -285,18 +287,6 @@ double EDA_UNIT_UTILS::UI::ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS a
 }
 
 
-/**
- * Convert a value to a string using double notation.
- *
- * For readability, the mantissa has 3 or more digits,
- * the trailing 0 are removed if the mantissa has more than 3 digits
- * and some trailing 0
- * This function should be used to display values in dialogs because a value
- * entered in mm (for instance 2.0 mm) could need up to 8 digits mantissa
- * if displayed in inch to avoid truncation or rounding made just by the printf function.
- * otherwise the actual value is rounded when read from dialog and converted
- * in internal units, and therefore modified.
- */
 wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                               double aValue, bool aAddUnitsText,
                                               EDA_DATA_TYPE aType )
@@ -360,19 +350,6 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
     return text;
 }
 
-
-
-/**
- * Convert a value to a string using double notation.
- *
- * For readability, the mantissa has 0, 1, 3 or 4 digits, depending on units
- * for unit = inch the mantissa has 3 digits (Eeschema) or 4 digits
- * for unit = mil the mantissa has 0 digits (Eeschema) or 1 digits
- * for unit = mm the mantissa has 3 digits (Eeschema) or 4 digits
- * Should be used only to display info in status,
- * but not in dialogs, because 4 digits only
- * could truncate the actual value
- */
 
 
 // A lower-precision (for readability) version of StringFromValue()

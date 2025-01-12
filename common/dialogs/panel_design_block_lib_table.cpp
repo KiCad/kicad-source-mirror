@@ -72,10 +72,11 @@
  */
 struct SUPPORTED_FILE_TYPE
 {
-    wxString m_Description;            ///< Description shown in the file picker dialog
-    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true
-    wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files stored inside
-    bool     m_IsFile;                 ///< Whether the library is a folder or a file
+    wxString m_Description;            ///< Description shown in the file picker dialog.
+    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true.
+    wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files
+                                       ///< stored inside.
+    bool     m_IsFile;                 ///< Whether the library is a folder or a file.
     DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T m_Plugin;
 };
 
@@ -249,8 +250,8 @@ protected:
 
         if( ndx != std::string::npos )
         {
-            // paste the DESIGN_BLOCK_LIB_TABLE_ROWs of s-expression (design_block_lib_table), starting
-            // at column 0 regardless of current cursor column.
+            // paste the DESIGN_BLOCK_LIB_TABLE_ROWs of s-expression (design_block_lib_table),
+            // starting at column 0 regardless of current cursor column.
 
             STRING_LINE_READER     slr( TO_UTF8( cb_text ), wxT( "Clipboard" ) );
             LIB_TABLE_LEXER        lexer( &slr );
@@ -438,6 +439,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     auto joinExts = []( const std::vector<std::string>& aExts )
     {
         wxString joined;
+
         for( const std::string& ext : aExts )
         {
             if( !joined.empty() )
@@ -482,6 +484,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
 PANEL_DESIGN_BLOCK_LIB_TABLE::~PANEL_DESIGN_BLOCK_LIB_TABLE()
 {
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
+
     for( auto& [type, desc] : m_supportedDesignBlockFiles )
     {
         browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED,
@@ -1175,7 +1178,8 @@ void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
     if( aKiway->Prj().IsNullProject() )
         projectTable = nullptr;
 
-    dlg.InstallPanel( new PANEL_DESIGN_BLOCK_LIB_TABLE( &dlg, &aKiway->Prj(), globalTable, globalTablePath,
+    dlg.InstallPanel( new PANEL_DESIGN_BLOCK_LIB_TABLE( &dlg, &aKiway->Prj(), globalTable,
+                                                        globalTablePath,
                                                         projectTable, projectTablePath,
                                                         aKiway->Prj().GetProjectPath() ) );
 

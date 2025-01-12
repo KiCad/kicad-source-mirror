@@ -26,6 +26,7 @@
 
 #include <git/kicad_git_common.h>
 #include <git/git_progress.h>
+
 class GIT_CLONE_HANDLER : public KIGIT_COMMON, public GIT_PROGRESS
 {
 public:
@@ -46,7 +47,6 @@ public:
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 
 private:
-
     wxString m_URL;
     wxString m_branch;
     wxString m_clonePath;

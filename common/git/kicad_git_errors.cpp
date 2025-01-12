@@ -30,48 +30,49 @@
     _Pragma( "GCC diagnostic push" ) \
     _Pragma( "GCC diagnostic ignored \"-Wunused-const-variable\"" )
 #endif
+
 namespace KIGIT_ERROR
 {
-    #undef _
-    #define _(a) a
+#undef _
+#define _(a) a
 
-        // General errors
-    const char* const kInvalidRepository = _("Invalid repository.");
-    const char* const kCommitFailed = _("Failed to commit changes.");
-    const char* const kMergeFailed = _("Failed to merge branches.");
+// General errors
+const char* const kInvalidRepository = _( "Invalid repository." );
+const char* const kCommitFailed = _( "Failed to commit changes." );
+const char* const kMergeFailed = _( "Failed to merge branches." );
 
-    // Clone errors
-    const char* const kCloneFailed = _("Failed to clone repository.");
-    const char* const kRemoteNotFound = _("Remote repository not found.");
-    const char* const kAuthenticationFailed = _("Authentication failed for remote repository.");
+// Clone errors
+const char* const kCloneFailed = _( "Failed to clone repository." );
+const char* const kRemoteNotFound = _( "Remote repository not found." );
+const char* const kAuthenticationFailed = _( "Authentication failed for remote repository." );
 
-    // Branch errors
-    const char* const kBranchNotFound = _("Branch not found.");
-    const char* const kBranchCreationFailed = _("Failed to create branch.");
-    const char* const kBranchDeletionFailed = _("Failed to delete branch.");
+// Branch errors
+const char* const kBranchNotFound = _( "Branch not found." );
+const char* const kBranchCreationFailed = _( "Failed to create branch." );
+const char* const kBranchDeletionFailed = _( "Failed to delete branch." );
 
-    // Checkout errors
-    const char* const kCheckoutFailed = _("Failed to perform checkout operation.");
-    const char* const kFileNotFoundInCheckout = _("File not found during checkout operation.");
+// Checkout errors
+const char* const kCheckoutFailed = _( "Failed to perform checkout operation." );
+const char* const kFileNotFoundInCheckout =  _( "File not found during checkout operation." );
 
-    // Conflict errors
-    const char* const kMergeConflict = _("Merge conflict encountered.");
-    const char* const kRebaseConflict = _("Rebase conflict encountered.");
+// Conflict errors
+const char* const kMergeConflict = _( "Merge conflict encountered." );
+const char* const kRebaseConflict = _( "Rebase conflict encountered." );
 
-    // Pull/Push errors
-    const char* const kPullFailed = _("Failed to pull changes from remote repository.");
-    const char* const kPushFailed = _("Failed to push changes to remote repository.");
-    const char* const kNoUpstreamBranch = _("No upstream branch configured.");
-    const char* const kRemoteConnectionError = _("Failed to establish connection with remote repository.");
+// Pull/Push errors
+const char* const kPullFailed = _( "Failed to pull changes from remote repository." );
+const char* const kPushFailed = _( "Failed to push changes to remote repository." );
+const char* const kNoUpstreamBranch = _( "No upstream branch configured." );
+const char* const kRemoteConnectionError =
+        _( "Failed to establish connection with remote repository." );
 
-    // Tag errors
-    const char* const kTagNotFound = _("Tag not found.");
-    const char* const kTagCreationFailed = _("Failed to create tag.");
-    const char* const kTagDeletionFailed = _("Failed to delete tag.");
+// Tag errors
+const char* const kTagNotFound = _( "Tag not found." );
+const char* const kTagCreationFailed = _( "Failed to create tag." );
+const char* const kTagDeletionFailed = _( "Failed to delete tag." );
 
-    const char* const kUnknownError = _("Unknown error.");
-    const char* const kNoError = _("No error.");
-
+const char* const kUnknownError = _( "Unknown error." );
+const char* const kNoError = _( "No error." );
 }
 
 #ifdef HAVE_WUNUSED_CONST_VARIABLE

@@ -42,9 +42,7 @@
 using namespace DRAWINGSHEET_T;
 
 /**
- * DRAWING_SHEET_PARSER
- * holds data and functions pertinent to parsing a S-expression file
- * for a DS_DATA_MODEL.
+ * Hold data and functions pertinent to parsing a S-expression file for a #DS_DATA_MODEL.
  */
 class DRAWING_SHEET_PARSER : public DRAWING_SHEET_LEXER
 {
@@ -296,6 +294,7 @@ void DRAWING_SHEET_PARSER::Parse( DS_DATA_MODEL* aLayout )
     }
 }
 
+
 void DRAWING_SHEET_PARSER::parseHeader( T aHeaderType )
 {
     // The older files had no versioning and their first token after the initial left parenthesis
@@ -327,6 +326,7 @@ void DRAWING_SHEET_PARSER::parseHeader( T aHeaderType )
         m_requiredVersion = 0;
     }
 }
+
 
 void DRAWING_SHEET_PARSER::parseSetup( DS_DATA_MODEL* aLayout )
 {
@@ -453,6 +453,7 @@ void DRAWING_SHEET_PARSER::parsePolygon( DS_DATA_ITEM_POLYGONS * aItem )
     aItem->SetBoundingBox();
 }
 
+
 void DRAWING_SHEET_PARSER::parsePolyOutline( DS_DATA_ITEM_POLYGONS * aItem )
 {
     VECTOR2D corner;
@@ -573,6 +574,7 @@ void DRAWING_SHEET_PARSER::parseBitmap( DS_DATA_ITEM_BITMAP * aItem )
         }
     }
 }
+
 
 void DRAWING_SHEET_PARSER::readPngdata( DS_DATA_ITEM_BITMAP * aItem )
 {
@@ -858,7 +860,7 @@ void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
     }
 }
 
-// parse an expression like " 25 1 ltcorner)"
+
 void DRAWING_SHEET_PARSER::parseCoordinate( POINT_COORD& aCoord)
 {
     aCoord.m_Pos.x = parseDouble();
@@ -877,6 +879,7 @@ void DRAWING_SHEET_PARSER::parseCoordinate( POINT_COORD& aCoord)
     }
 }
 
+
 int DRAWING_SHEET_PARSER::parseInt()
 {
     T token = NextTok();
@@ -886,6 +889,7 @@ int DRAWING_SHEET_PARSER::parseInt()
 
     return atoi( CurText() );
 }
+
 
 int DRAWING_SHEET_PARSER::parseInt( int aMin, int aMax )
 {
@@ -911,23 +915,27 @@ double DRAWING_SHEET_PARSER::parseDouble()
     return DSNLEXER::parseDouble();
 }
 
+
 // defaultDrawingSheet is the default drawing sheet using the S expr.
 extern const char defaultDrawingSheet[];
+
 
 void DS_DATA_MODEL::SetDefaultLayout()
 {
     SetPageLayout( defaultDrawingSheet, false, wxT( "default page" ) );
 }
 
-// Returns defaultDrawingSheet as a string;
+
 wxString DS_DATA_MODEL::DefaultLayout()
 {
     return wxString( defaultDrawingSheet );
 }
 
+
 // emptyDrawingSheet is a "empty" drawing sheet using the S expr.
 // there is a 0 length line to fool something somewhere.
 extern const char emptyDrawingSheet[];
+
 
 void DS_DATA_MODEL::SetEmptyLayout()
 {

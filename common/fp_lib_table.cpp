@@ -77,7 +77,7 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
     wxString errMsg;    // to collect error messages
 
     // This table may be nested within a larger s-expression, or not.
-    // Allow for parser of that optional containing s-epression to have looked ahead.
+    // Allow for parser of that optional containing s-expression to have looked ahead.
     if( in->CurTok() != T_fp_lib_table )
     {
         in->NeedLEFT();
@@ -204,7 +204,7 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
         // All nickNames within this table fragment must be unique, so we do not use doReplace
         // in doInsertRow().  (However a fallBack table can have a conflicting nickName and ours
-        // will supercede that one since in FindLib() we search this table before any fall back.)
+        // will supersede that one since in FindLib() we search this table before any fall back.)
         wxString       nickname = row->GetNickName();   // store it to be able to used it
                                                         // after row deletion if an error occurs
         bool           doReplace = false;
@@ -536,8 +536,8 @@ public:
         // it is under $KICADn_3RD_PARTY/footprints/<pkgid>/ i.e. has nested level of at least +3
         if( dirPath.EndsWith( wxS( ".pretty" ) ) && dir.GetDirCount() >= m_prefix_dir_count + 3 )
         {
-            wxString versionedPath = wxString::Format( wxS( "${%s}" ),
-                                       ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
+            wxString versionedPath = wxString::Format(
+                    wxS( "${%s}" ), ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
 
             wxArrayString parts = dir.GetDirs();
             parts.RemoveAt( 0, m_prefix_dir_count );
@@ -555,7 +555,8 @@ public:
                     int increment = 1;
                     do
                     {
-                        nickname = wxString::Format( wxS( "%s%s_%d" ), m_lib_prefix, name, increment );
+                        nickname = wxString::Format( wxS( "%s%s_%d" ), m_lib_prefix, name,
+                                                     increment );
                         increment++;
                     } while( m_lib_table.HasLibrary( nickname ) );
                 }
