@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <i18n_utility.h>
 #include <nlohmann/json.hpp>
 
 #include <settings/parameters.h>
@@ -33,6 +34,15 @@
 #include <algorithm>
 
 const int jobsFileSchemaVersion = 1;
+
+
+KICOMMON_API std::map<JOBSET_OUTPUT_TYPE, JOBSET_OUTPUT_TYPE_INFO> JobsetOutputTypeInfos = {
+    { JOBSET_OUTPUT_TYPE::FOLDER,
+        { _HKI( "Folder" ), BITMAPS::small_folder, true, "" } },
+    { JOBSET_OUTPUT_TYPE::ARCHIVE,
+        { _HKI( "Archive" ), BITMAPS::zip, false, FILEEXT::ZipFileWildcard() } },
+};
+
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOBSET_OUTPUT_TYPE,
                               {

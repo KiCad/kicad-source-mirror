@@ -21,6 +21,7 @@
 #ifndef JOBS_FILE_H
 #define JOBS_FILE_H
 
+#include <bitmaps/bitmaps_list.h>
 #include <jobs/job.h>
 #include <jobs/jobs_output.h>
 #include <settings/json_settings.h>
@@ -32,9 +33,15 @@ class REPORTER;
 
 struct KICOMMON_API JOBSET_JOB
 {
-    JOBSET_JOB() : m_job( nullptr ) {}
+    JOBSET_JOB() :
+            m_job( nullptr )
+    {}
 
-    JOBSET_JOB( wxString id, wxString type, JOB* job ) : m_id( id ), m_type( type ), m_job( job ) {}
+    JOBSET_JOB( const wxString& id, const wxString& type, JOB* job ) :
+            m_id( id ),
+            m_type( type ),
+            m_job( job )
+    {}
 
     wxString             m_id;
     wxString             m_type;
@@ -47,11 +54,23 @@ struct KICOMMON_API JOBSET_JOB
     bool operator==( const JOBSET_JOB& rhs ) const;
 };
 
+
 enum class JOBSET_OUTPUT_TYPE
 {
     FOLDER,
     ARCHIVE
 };
+
+struct JOBSET_OUTPUT_TYPE_INFO
+{
+    wxString    name;
+    BITMAPS     bitmap;
+    bool        outputPathIsFolder;
+    wxString    fileWildcard;
+};
+
+extern KICOMMON_API std::map<JOBSET_OUTPUT_TYPE, JOBSET_OUTPUT_TYPE_INFO> JobsetOutputTypeInfos;
+
 
 struct KICOMMON_API JOBSET_OUTPUT
 {
@@ -80,6 +99,7 @@ struct KICOMMON_API JOBSET_OUTPUT
     bool operator==( const JOBSET_OUTPUT& rhs ) const;
 
 };
+
 
 class KICOMMON_API JOBSET : public JSON_SETTINGS
 {

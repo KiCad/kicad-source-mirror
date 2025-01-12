@@ -19,6 +19,7 @@
  */
 
 #include "panel_jobs.h"
+#include "dialog_job_output_options.h"
 #include "dialog_copyfiles_job_settings.h"
 #include <wx/aui/auibook.h>
 #include <jobs/jobset.h>
@@ -30,12 +31,9 @@
 #include <i18n_utility.h>
 #include <jobs_runner.h>
 #include <widgets/wx_progress_reporters.h>
-#include <jobs/jobs_output_archive.h>
 #include <kicad_manager_frame.h>
 #include <vector>
 
-#include <wx/dirdlg.h>
-#include <wx/filedlg.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
@@ -48,184 +46,7 @@
 #include <dialogs/dialog_executecommand_job_settings.h>
 
 
-struct JOB_TYPE_INFO
-{
-    wxString    name;
-    BITMAPS     bitmap;
-    bool        outputPathIsFolder;
-    wxString    fileWildcard;
-};
-
-
-static std::map<JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO> jobTypeInfos = {
-    { JOBSET_OUTPUT_TYPE::FOLDER,
-        { _HKI( "Folder" ), BITMAPS::small_folder, true, "" } },
-    { JOBSET_OUTPUT_TYPE::ARCHIVE,
-        { _HKI( "Archive" ), BITMAPS::zip, false, FILEEXT::ZipFileWildcard() } },
-};
-
-
-class DIALOG_JOB_OUTPUT : public DIALOG_JOB_OUTPUT_BASE
-{
-public:
-    DIALOG_JOB_OUTPUT( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_OUTPUT* aOutput ) :
-            DIALOG_JOB_OUTPUT_BASE( aParent ), m_jobsFile( aJobsFile ), m_output( aOutput )
-    {
-        // prevent someone from failing to add the type info in the future
-        wxASSERT( jobTypeInfos.contains( m_output->m_type ) );
-
-        SetTitle( wxString::Format( _( "%s Output Options" ),
-                                    m_output->m_outputHandler->GetDefaultDescription() ) );
-
-        if( m_output->m_type != JOBSET_OUTPUT_TYPE::ARCHIVE )
-        {
-            m_textArchiveFormat->Hide();
-            m_choiceArchiveformat->Hide();
-        }
-
-        m_textCtrlOutputPath->SetValue( m_output->m_outputHandler->GetOutputPath() );
-        m_buttonOutputPath->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
-        m_textCtrlDescription->SetValue( m_output->GetDescription() );
-
-        SetupStandardButtons();
-    }
-
-
-    virtual void onOutputPathBrowseClicked(wxCommandEvent& event) override
-    {
-        bool isFolder = false;
-        wxString fileWildcard = "";
-        isFolder = jobTypeInfos[m_output->m_type].outputPathIsFolder;
-        fileWildcard = jobTypeInfos[m_output->m_type].fileWildcard;
-
-        if( isFolder )
-        {
-            wxFileName fn;
-            fn.AssignDir( m_textCtrlOutputPath->GetValue() );
-            fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-            wxString currPath = fn.GetFullPath();
-
-            wxDirDialog dirDialog( this, _( "Select output directory" ), currPath,
-                                   wxDD_DEFAULT_STYLE );
-
-            if( dirDialog.ShowModal() != wxID_OK )
-                return;
-
-            wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
-
-            m_textCtrlOutputPath->SetValue( dirName.GetFullPath() );
-        }
-        else
-        {
-            wxFileName fname( m_textCtrlOutputPath->GetValue() );
-
-            wxFileDialog dlg( this, _( "Select output path" ), fname.GetPath(), fname.GetFullName(),
-                              fileWildcard,
-                              wxFD_OVERWRITE_PROMPT | wxFD_SAVE );
-
-            if( dlg.ShowModal() != wxID_OK )
-                return;
-
-            m_textCtrlOutputPath->SetValue( dlg.GetPath() );
-        }
-
-    }
-
-    bool TransferDataFromWindow() override
-    {
-        wxString outputPath = m_textCtrlOutputPath->GetValue().Trim().Trim( false );
-
-        if( outputPath.IsEmpty() )
-        {
-            DisplayErrorMessage( this, _( "Output path cannot be empty" ) );
-            return false;
-        }
-
-        wxArrayInt selectedItems;
-        m_includeJobs->GetCheckedItems( selectedItems );
-
-        // Update the only job map
-        m_output->m_only.clear();
-
-        if( selectedItems.size() < m_includeJobs->GetCount() )
-        {
-            for( int i : selectedItems )
-            {
-                if( m_onlyMap.contains( i ) )
-                    m_output->m_only.emplace_back( m_onlyMap[i] );
-            }
-        }
-
-        m_output->m_outputHandler->SetOutputPath( outputPath );
-
-        if( m_output->m_type == JOBSET_OUTPUT_TYPE::ARCHIVE )
-        {
-            JOBS_OUTPUT_ARCHIVE* archive =
-                    static_cast<JOBS_OUTPUT_ARCHIVE*>( m_output->m_outputHandler );
-
-            archive->SetFormat( JOBS_OUTPUT_ARCHIVE::FORMAT::ZIP );
-        }
-
-        m_output->SetDescription( m_textCtrlDescription->GetValue() );
-
-        return true;
-    }
-
-
-    bool TransferDataToWindow() override
-    {
-        wxArrayString    arrayStr;
-        std::vector<int> selectedList;
-
-        for( JOBSET_JOB& job : m_jobsFile->GetJobs() )
-        {
-            arrayStr.Add( wxString::Format( wxT( "%d.  %s" ),
-                                            (int) arrayStr.size() + 1,
-                                            job.GetDescription() ) );
-
-            auto it = std::find_if( m_output->m_only.begin(), m_output->m_only.end(),
-                                    [&]( const wxString& only )
-                                    {
-                                        if( only == job.m_id )
-                                            return true;
-
-                                        return false;
-                                    } );
-
-            if( it != m_output->m_only.end() )
-                selectedList.emplace_back( arrayStr.size() - 1 );
-
-            m_onlyMap.emplace( arrayStr.size() - 1, job.m_id );
-        }
-
-        if( arrayStr.size() != 0 )
-        {
-            m_includeJobs->InsertItems( arrayStr, 0 );
-
-            if( selectedList.size() )
-            {
-                for( int idx : selectedList )
-                    m_includeJobs->Check( idx );
-            }
-            else
-            {
-                for( size_t idx = 0; idx < m_includeJobs->GetCount(); ++idx )
-                    m_includeJobs->Check( idx );
-            }
-        }
-
-        m_choiceArchiveformat->AppendString( _( "Zip" ) );
-        m_choiceArchiveformat->SetSelection( 0 );
-
-        return true;
-    }
-
-
-private:
-    JOBSET*                 m_jobsFile;
-    JOBSET_OUTPUT*          m_output;
-    std::map<int, wxString> m_onlyMap;
-};
+extern std::map<JOBSET_OUTPUT_TYPE, JOBSET_OUTPUT_TYPE_INFO> JobsetOutputTypeInfos;
 
 
 class DIALOG_OUTPUT_RUN_RESULTS : public DIALOG_OUTPUT_RUN_RESULTS_BASE
@@ -332,9 +153,9 @@ public:
 
         Connect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOB_OUTPUT::onMenu ), nullptr, this );
 
-        if( jobTypeInfos.contains( aOutput->m_type ) )
+        if( JobsetOutputTypeInfos.contains( aOutput->m_type ) )
         {
-            JOB_TYPE_INFO& jobTypeInfo = jobTypeInfos[aOutput->m_type];
+            JOBSET_OUTPUT_TYPE_INFO& jobTypeInfo = JobsetOutputTypeInfos[aOutput->m_type];
             m_textOutputType->SetLabel( aOutput->GetDescription() );
             m_bitmapOutputType->SetBitmap( KiBitmapBundle( jobTypeInfo.bitmap ) );
         }
@@ -902,7 +723,7 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
 
     headers.Add( _( "Output Types" ) );
 
-    for( const std::pair<const JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO>& outputType : jobTypeInfos )
+    for( const std::pair<const JOBSET_OUTPUT_TYPE, JOBSET_OUTPUT_TYPE_INFO>& outputType : JobsetOutputTypeInfos )
     {
         wxArrayString item;
         item.Add( wxGetTranslation( outputType.second.name ) );
@@ -917,13 +738,13 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
     {
         wxString selectedString = dlg.GetTextSelection();
 
-        for( const std::pair<const JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO>& jobType : jobTypeInfos )
+        for( const std::pair<const JOBSET_OUTPUT_TYPE, JOBSET_OUTPUT_TYPE_INFO>& jobType : JobsetOutputTypeInfos )
         {
             if( wxGetTranslation( jobType.second.name ) == selectedString )
             {
                 JOBSET_OUTPUT* output = m_jobsFile->AddNewJobOutput( jobType.first );
 
-                DIALOG_JOB_OUTPUT dialog( m_frame, m_jobsFile.get(), output );
+                DIALOG_JOB_OUTPUT_OPTIONS dialog( m_frame, m_jobsFile.get(), output );
                 if (dialog.ShowModal() == wxID_OK)
                 {
                     Freeze();
