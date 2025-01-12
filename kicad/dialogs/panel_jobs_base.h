@@ -32,11 +32,9 @@ class WX_GRID;
 #include <wx/panel.h>
 #include <wx/statbmp.h>
 #include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/choice.h>
-#include <wx/checklst.h>
-#include <wx/dialog.h>
 #include <wx/listctrl.h>
+#include <wx/textctrl.h>
+#include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -107,39 +105,6 @@ class PANEL_JOB_OUTPUT_BASE : public wxPanel
 		PANEL_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_SUNKEN|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_JOB_OUTPUT_BASE();
-
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_JOB_OUTPUT_BASE
-///////////////////////////////////////////////////////////////////////////////
-class DIALOG_JOB_OUTPUT_BASE : public DIALOG_SHIM
-{
-	private:
-
-	protected:
-		wxStaticText* m_textArchiveDesc;
-		wxTextCtrl* m_textCtrlDescription;
-		wxStaticText* m_textArchiveFormat;
-		wxChoice* m_choiceArchiveformat;
-		wxStaticText* m_textOutputPath;
-		wxTextCtrl* m_textCtrlOutputPath;
-		STD_BITMAP_BUTTON* m_buttonOutputPath;
-		wxStaticText* m_staticText10;
-		wxCheckListBox* m_includeJobs;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
-
-		// Virtual event handlers, override them in your derived class
-		virtual void onOutputPathBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-
-
-	public:
-
-		DIALOG_JOB_OUTPUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-
-		~DIALOG_JOB_OUTPUT_BASE();
 
 };
 
