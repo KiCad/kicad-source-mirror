@@ -77,8 +77,6 @@ public:
      */
     std::optional<TOOL_EVENT> GetToolEvent( wxKeyEvent* aKeyEvent, bool* aSpecialKeyFlag );
 
-    ACTION_MENU* GetCurrentMenu() const { return m_currentMenu; }
-
 private:
     /// Handles mouse related events (click, motion, dragging).
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
@@ -125,9 +123,6 @@ private:
 
     /// Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;
-
-    /// The menu from the main menubar currently shown (if any; nullptr otherwise)
-    ACTION_MENU*  m_currentMenu;
 };
 
 #endif  // TOOL_DISPATCHER_H

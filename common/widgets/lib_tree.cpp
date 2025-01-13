@@ -808,10 +808,7 @@ void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
 {
     hidePreview();
 
-    TOOL_DISPATCHER* toolDispatcher = m_adapter->GetToolDispatcher();
-
-    if( !m_tree_ctrl->IsShownOnScreen() || m_previewDisabled
-        || ( toolDispatcher && toolDispatcher->GetCurrentMenu() ) )
+    if( !m_tree_ctrl->IsShownOnScreen() || m_previewDisabled )
         return;
 
     wxDataViewItem    item;

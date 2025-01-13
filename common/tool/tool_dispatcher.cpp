@@ -129,8 +129,7 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 
 
 TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
-        m_toolMgr( aToolMgr ),
-        m_currentMenu( nullptr )
+    m_toolMgr( aToolMgr )
 {
     m_sysDragMinX = wxSystemSettings::GetMetric( wxSYS_DRAG_X );
     m_sysDragMinY = wxSystemSettings::GetMetric( wxSYS_DRAG_Y );
@@ -593,24 +592,26 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         //    hotkey.  So we keep track of menu highlighting so we can differentiate.
         //
 
+        static ACTION_MENU* currentMenu;
+
         if( type == wxEVT_MENU_OPEN )
         {
-            m_currentMenu = dynamic_cast<ACTION_MENU*>( menuEvent.GetMenu() );
+            currentMenu = dynamic_cast<ACTION_MENU*>( menuEvent.GetMenu() );
 
-            if( m_currentMenu )
-                m_currentMenu->OnMenuEvent( menuEvent );
+            if( currentMenu )
+                currentMenu->OnMenuEvent( menuEvent );
         }
         else if( type == wxEVT_MENU_HIGHLIGHT )
         {
-            if( m_currentMenu )
-                m_currentMenu->OnMenuEvent( menuEvent );
+            if( currentMenu )
+                currentMenu->OnMenuEvent( menuEvent );
         }
         else if( type == wxEVT_MENU_CLOSE )
         {
-            if( m_currentMenu )
-                m_currentMenu->OnMenuEvent( menuEvent );
+            if( currentMenu )
+                currentMenu->OnMenuEvent( menuEvent );
 
-            m_currentMenu = nullptr;
+            currentMenu = nullptr;
         }
 #endif
 
