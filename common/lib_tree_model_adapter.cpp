@@ -285,17 +285,21 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
 
         m_tree.ResetScore();
 
-        wxStringTokenizer tokenizer( aSearch );
-        bool              firstTerm = true;
+        // Don't cause KiCad to hang if someone accidentally pastes the PCB or schematic into
+        // the search box.
+        constexpr int MAX_TERMS = 100;
 
-        while( tokenizer.HasMoreTokens() )
+        wxStringTokenizer tokenizer( aSearch );
+        int               termCount = 0;
+
+        while( tokenizer.HasMoreTokens() && termCount < MAX_TERMS )
         {
             // First search for the full token, in case it appears in a search string
             wxString             term = tokenizer.GetNextToken().Lower();
             EDA_COMBINED_MATCHER termMatcher( term, CTX_LIBITEM );
 
             m_tree.UpdateScore( &termMatcher, wxEmptyString, m_filter );
-            firstTerm = false;
+            termCount++;
 
             if( term.Contains( ":" ) )
             {
@@ -308,7 +312,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
             }
         }
 
-        if( firstTerm )
+        if( termCount == 0 )
         {
             // No terms processed; just run the filter
             m_tree.UpdateScore( nullptr, wxEmptyString, m_filter );
