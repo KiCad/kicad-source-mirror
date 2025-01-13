@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-13 15:01+0000\n"
+"PO-Revision-Date: 2025-01-14 11:37+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -48454,7 +48454,7 @@ msgstr "패드 편집 모드.  %s을(를) 눌러 종료하세요."
 
 #: pcbnew/tools/pcb_actions.cpp:54
 msgid "Create Polygon from Selection..."
-msgstr "선택에서 다각형 만들기..."
+msgstr "선택으로 다각형 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:55
 msgid "Creates a graphic polygon from the selection"
@@ -48462,7 +48462,7 @@ msgstr "다각형 그래픽 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:61
 msgid "Create Zone from Selection..."
-msgstr "선택 범위에서 영역 만들기..."
+msgstr "선택으로 영역 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:62
 msgid "Creates a copper zone from the selection"
@@ -48470,7 +48470,7 @@ msgstr "구리 영역 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Create Rule Area from Selection..."
-msgstr "선택 범위에서 규칙 영역 만들기..."
+msgstr "선택으로 규칙 영역 만들기..."
 
 #: pcbnew/tools/pcb_actions.cpp:69
 msgid "Creates a rule area from the selection"
@@ -48486,7 +48486,7 @@ msgstr "선택 영역에서 그래픽 선 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Create Arc from Selection"
-msgstr "선택 범위에서 호 생성"
+msgstr "선택된 호 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:83
 msgid "Creates an arc from the selected line segment"
@@ -48494,14 +48494,13 @@ msgstr "선택한 선 세그먼트에서 호 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 msgid "Create Tracks from Selection"
-msgstr "선택 범위에서 배선 생성"
+msgstr "선택된 배선 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:90
 msgid "Creates tracks from the selected graphic lines"
 msgstr "선택한 그래픽 선으로부터 배선 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:96
-#, fuzzy
 msgid "Create Outsets from Selection"
 msgstr "선택 항목 생성"
 
