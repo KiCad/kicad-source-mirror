@@ -268,7 +268,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_buttonUpdateTh = new wxButton( this, wxID_ANY, _("Update Thickness According to Text Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonUpdateTh->SetToolTip( _("Set the best text thickness from the text width and height\nNormal text: thickness is size/8\nBold text: thickness is size/5") );
 
-	bSizerBottom->Add( m_buttonUpdateTh, 0, wxALL, 5 );
+	bSizerBottom->Add( m_buttonUpdateTh, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 
 	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
