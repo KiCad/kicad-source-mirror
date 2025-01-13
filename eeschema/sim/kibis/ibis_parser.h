@@ -42,7 +42,6 @@
 #include <wx/string.h>
 #include <reporter.h>
 #include "widgets/wx_html_report_panel.h"
-//#include "common.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -50,24 +49,29 @@
 #include <cstring>
 
 
-class IBIS_ANY
+class IBIS_BASE
 {
 public:
-    IBIS_ANY( REPORTER* aReporter ) { m_reporter = aReporter; };
-    REPORTER* m_reporter;
+    IBIS_BASE( REPORTER* aReporter )
+    {
+        m_Reporter = aReporter;
+    };
 
     /** @brief Print a message
      *
-     * Call m_reporter->Report if m_reporter exists.
+     * Call m_Reporter->Report if m_Reporter exists.
      *
      * @param aMsg Message
      * @param aSeverity Message sevirity
      */
-    void Report( std::string aMsg, SEVERITY aSeverity = RPT_SEVERITY_INFO ) const
+    void Report( const std::string& aMsg, SEVERITY aSeverity = RPT_SEVERITY_INFO ) const
     {
-        if( m_reporter )
-            m_reporter->Report( aMsg, aSeverity );
+        if( m_Reporter )
+            m_Reporter->Report( aMsg, aSeverity );
     };
+
+public:
+    REPORTER* m_Reporter;
 
 protected:
     /** @brief Convert a double to string using scientific notation
@@ -79,10 +83,13 @@ protected:
 };
 
 
-class IBIS_INPUT : public IBIS_ANY
+class IBIS_INPUT : public IBIS_BASE
 {
 public:
-    IBIS_INPUT( REPORTER* aReporter ) : IBIS_ANY( aReporter ){};
+    IBIS_INPUT( REPORTER* aReporter ) :
+            IBIS_BASE( aReporter )
+    {};
+
     /** @brief Check if the data held by the object is valid.
      *
      * @return true in case of success
@@ -108,10 +115,14 @@ enum class IBIS_MATRIX_TYPE
     FULL,   // Give the whole upper triangle.
 };
 
+
 class IBIS_MATRIX : public IBIS_INPUT
 {
 public:
-    IBIS_MATRIX( REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IBIS_MATRIX( REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
     virtual ~IBIS_MATRIX(){};
 
     IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::UNDEFINED;
@@ -119,24 +130,32 @@ public:
     std::vector<double> m_data;
 };
 
+
 class IBIS_MATRIX_BANDED : public IBIS_MATRIX
 {
 public:
-    IBIS_MATRIX_BANDED( REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
-    IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::BANDED;
-    int              m_dim = -2;
-    int              m_bandwidth = 0;
+    IBIS_MATRIX_BANDED( REPORTER* aReporter ) :
+            IBIS_MATRIX( aReporter )
+    {};
+
+    IBIS_MATRIX_TYPE    m_type = IBIS_MATRIX_TYPE::BANDED;
+    int                 m_dim = -2;
+    int                 m_bandwidth = 0;
     std::vector<double> m_data;
 
     bool Check() override;
 };
 
+
 class IBIS_MATRIX_SPARSE : public IBIS_MATRIX
 {
 public:
-    IBIS_MATRIX_SPARSE( REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
-    IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::BANDED;
-    int              m_dim = -3;
+    IBIS_MATRIX_SPARSE( REPORTER* aReporter ) :
+            IBIS_MATRIX( aReporter )
+    {};
+
+    IBIS_MATRIX_TYPE    m_type = IBIS_MATRIX_TYPE::BANDED;
+    int                 m_dim = -3;
     std::vector<double> m_data;
 
     bool Check() override;
@@ -146,9 +165,12 @@ public:
 class IBIS_MATRIX_FULL : public IBIS_MATRIX
 {
 public:
-    IBIS_MATRIX_FULL( REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
-    IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::FULL;
-    int              m_dim = -4;
+    IBIS_MATRIX_FULL( REPORTER* aReporter ) :
+            IBIS_MATRIX( aReporter )
+    {};
+
+    IBIS_MATRIX_TYPE    m_type = IBIS_MATRIX_TYPE::FULL;
+    int                 m_dim = -4;
     std::vector<double> m_data;
 
     bool Check() override;
@@ -158,16 +180,21 @@ public:
 class IBIS_SECTION : public IBIS_INPUT
 {
 public:
-    IBIS_SECTION( REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IBIS_SECTION( REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
 };
 
 
 class IbisHeader : IBIS_SECTION
 {
 public:
-    IbisHeader( REPORTER* aReporter ) : IBIS_SECTION( aReporter ){};
-    double   m_ibisVersion = -1;
-    double   m_fileRevision = -1;
+    IbisHeader( REPORTER* aReporter ) :
+            IBIS_SECTION( aReporter )
+    {};
+
+    double      m_ibisVersion = -1;
+    double      m_fileRevision = -1;
     std::string m_fileName;
     std::string m_source;
     std::string m_date;
@@ -182,7 +209,10 @@ public:
 class TypMinMaxValue : public IBIS_INPUT
 {
 public:
-    TypMinMaxValue( REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    TypMinMaxValue( REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
     double value[3] = { -1, -1, -1 };
 
     bool Check() override;
@@ -193,11 +223,11 @@ class IbisComponentPackage : public IBIS_INPUT
 {
 public:
     IbisComponentPackage( REPORTER* aReporter ) :
-        IBIS_INPUT( aReporter ),
-        m_Rpkg( aReporter ),
-        m_Lpkg( aReporter ),
-        m_Cpkg( aReporter )
-        {};
+            IBIS_INPUT( aReporter ),
+            m_Rpkg( aReporter ),
+            m_Lpkg( aReporter ),
+            m_Cpkg( aReporter )
+    {};
 
     TypMinMaxValue m_Rpkg;
     TypMinMaxValue m_Lpkg;
@@ -250,8 +280,6 @@ public:
     std::string m_GNDClampRef;
     std::string m_POWERClampRef;
     std::string m_extRef;
-
-    bool m_virtual = false;
 };
 
 
@@ -404,6 +432,7 @@ public:
     TypMinMaxValue V = 0;
 };
 
+
 class VTtable : public IBIS_INPUT
 {
 public:
@@ -450,12 +479,14 @@ enum class IBIS_MODEL_ENABLE
     ACTIVE_LOW
 };
 
+
 class dvdt
 {
 public:
     double m_dv = 1;
     double m_dt = 1;
 };
+
 
 class dvdtTypMinMax : public IBIS_INPUT
 {
@@ -471,10 +502,10 @@ class IbisRamp : public IBIS_INPUT
 {
 public:
     IbisRamp( REPORTER* aReporter ) :
-        IBIS_INPUT( aReporter ),
-        m_falling( aReporter ),
-        m_rising( aReporter )
-        {};
+            IBIS_INPUT( aReporter ),
+            m_falling( aReporter ),
+            m_rising( aReporter )
+    {};
 
     dvdtTypMinMax m_falling;
     dvdtTypMinMax m_rising;
@@ -483,16 +514,21 @@ public:
     bool Check() override;
 };
 
+
 enum class IBIS_WAVEFORM_TYPE
 {
     RISING,
     FALLING
 };
 
+
 class IbisWaveform : public IBIS_INPUT
 {
 public:
-    IbisWaveform( REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_table( aReporter ){};
+    IbisWaveform( REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            m_table( aReporter )
+    {};
 
     VTtable            m_table;
     IBIS_WAVEFORM_TYPE m_type = IBIS_WAVEFORM_TYPE::RISING;
@@ -507,12 +543,14 @@ public:
     double             m_V_fixture_max = 0;
 };
 
+
 enum class IBIS_MODEL_POLARITY
 {
     UNDEFINED,
     INVERTING,
     NON_INVERTING
 };
+
 
 class IbisModel : IBIS_INPUT
 {
@@ -601,6 +639,7 @@ public:
     bool Check() override;
 };
 
+
 class IbisFile : public IBIS_INPUT
 {
 public:
@@ -651,10 +690,14 @@ enum class IBIS_PARSER_CONTEXT
     END
 };
 
+
 class IbisParser : public IBIS_INPUT
 {
 public:
-    IbisParser( REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_ibisFile( aReporter ){};
+    IbisParser( REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            m_ibisFile( aReporter )
+    {};
 
     bool m_parrot = true; // Write back all lines.
 
@@ -706,36 +749,42 @@ private:
      * @return True in case of success
      */
     bool parseHeader( std::string& aKeyword );
+
     /** @brief Parse a single keyword in the component context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseComponent( std::string& aKeyword );
+
     /** @brief Parse a single keyword in the component context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseModelSelector( std::string& aKeyword );
+
     /** @brief Parse a single keyword in the model selector context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseModel( std::string& aKeyword );
+
     /** @brief Parse a single keyword in the model context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parsePackageModel( std::string& aKeyword );
+
     /** @brief Parse a single keyword in the package model context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parsePackageModelModelData( std::string& );
+
     /** @brief Parse a double according to the ibis standard
      *
      * @param aDest Where the double should be stored
@@ -750,11 +799,13 @@ private:
      * @return True in case of success
      */
     bool onNewLine(); // Gets rid of comments ( except on a comment character change command...)
+
     /** @brief Load the next line
      *
      * @return True in case of success
      */
     bool getNextLine();
+
     /** @brief Print the current line */
     void printLine();
 

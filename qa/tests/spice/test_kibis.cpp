@@ -46,9 +46,9 @@ BOOST_AUTO_TEST_CASE( Null )
 
     BOOST_TEST( !kibis.m_valid );
 
-    // IBIS_ANY interface
+    // IBIS_BASE interface
     // If this isn't null, it's uninited and access will crash
-    BOOST_REQUIRE( !kibis.m_reporter );
+    BOOST_REQUIRE( !kibis.m_Reporter );
 
     // Doesn't crash (also doesn't do anything)
     kibis.Report( "Dummy", RPT_SEVERITY_INFO );

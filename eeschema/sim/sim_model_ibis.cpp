@@ -69,7 +69,7 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PRO
 
     KIBIS kibis( std::string( path.c_str() ) );
     kibis.m_cacheDir = std::string( aCacheDir.c_str() );
-    kibis.m_reporter = &aReporter;
+    kibis.m_Reporter = &aReporter;
 
     if( !kibis.m_valid )
         THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS file '%s'" ), ibisLibFilename ) );

@@ -41,16 +41,16 @@ class KIBIS_MODEL;
 class KIBIS_COMPONENT;
 class KIBIS;
 
-class KIBIS_ANY : public IBIS_ANY
+class KIBIS_BASE : public IBIS_BASE
 {
 protected:
-    KIBIS_ANY( KIBIS* aTopLevel );
+    KIBIS_BASE( KIBIS* aTopLevel );
 
     /**
      * Ctor for when a reporter is not available in the top level object
      * (e.g. when the top level object itself is under construction)
      */
-    KIBIS_ANY( KIBIS* aTopLevel, REPORTER* aReporter );
+    KIBIS_BASE( KIBIS* aTopLevel, REPORTER* aReporter );
 
 public:
     KIBIS* m_topLevel;
@@ -68,10 +68,15 @@ enum class KIBIS_WAVEFORM_TYPE
 };
 
 
-class KIBIS_WAVEFORM : public KIBIS_ANY
+class KIBIS_WAVEFORM : public KIBIS_BASE
 {
 public:
-    KIBIS_WAVEFORM( KIBIS& aTopLevel ) : KIBIS_ANY{ &aTopLevel } { m_valid = true; };
+    KIBIS_WAVEFORM( KIBIS& aTopLevel ) :
+            KIBIS_BASE{ &aTopLevel }
+    {
+        m_valid = true;
+    };
+
     KIBIS_WAVEFORM_TYPE GetType() const { return m_type; };
     virtual double      GetDuration() const { return 1; };
     bool                inverted = false; // Used for differential drivers
@@ -101,10 +106,12 @@ protected:
 class KIBIS_WAVEFORM_RECTANGULAR : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_RECTANGULAR( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_RECTANGULAR( KIBIS& aTopLevel ) :
+            KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::RECTANGULAR;
     };
+
     double m_ton = 100e-9;
     double m_toff = 100e-9;
     double m_delay = 0;
@@ -122,10 +129,12 @@ public:
 class KIBIS_WAVEFORM_PRBS : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_PRBS( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_PRBS( KIBIS& aTopLevel ) :
+            KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::PRBS;
     };
+
     double m_bitrate = 10e6;
     double m_delay = 0;
     int m_bits = 10;
@@ -142,30 +151,36 @@ public:
 class KIBIS_WAVEFORM_STUCK_HIGH : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_STUCK_HIGH( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_STUCK_HIGH( KIBIS& aTopLevel ) :
+            KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::STUCK_HIGH;
     };
+
     std::vector<std::pair<int, double>> GenerateBitSequence() const override;
 };
 
 class KIBIS_WAVEFORM_STUCK_LOW : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_STUCK_LOW( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_STUCK_LOW( KIBIS& aTopLevel ) :
+            KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::STUCK_LOW;
     };
+
     std::vector<std::pair<int, double>> GenerateBitSequence() const override;
 };
 
 class KIBIS_WAVEFORM_HIGH_Z : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_HIGH_Z( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_HIGH_Z( KIBIS& aTopLevel ) :
+            KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::HIGH_Z;
     };
+
     std::vector<std::pair<int, double>> GenerateBitSequence() const override;
 };
 
@@ -210,7 +225,7 @@ public:
 };
 
 
-class KIBIS_FILE : KIBIS_ANY
+class KIBIS_FILE : KIBIS_BASE
 {
 public:
     KIBIS_FILE( KIBIS& aTopLevel );
@@ -227,7 +242,7 @@ public:
     bool Init( const IbisParser& aParser );
 };
 
-class KIBIS_MODEL : public KIBIS_ANY
+class KIBIS_MODEL : public KIBIS_BASE
 {
 public:
     KIBIS_MODEL( KIBIS& aTopLevel, const IbisModel& aSource, IbisParser& aParser );
@@ -322,7 +337,7 @@ public:
     IbisWaveform TrimWaveform( const IbisWaveform& aIn ) const;
 };
 
-class KIBIS_PIN : public KIBIS_ANY
+class KIBIS_PIN : public KIBIS_BASE
 {
 public:
     KIBIS_PIN( KIBIS& aTopLevel, const IbisComponentPin& aPin, const IbisComponentPackage& aPackage,
@@ -429,7 +444,7 @@ public:
     bool isDiffPin() const { return m_complementaryPin != nullptr; };
 };
 
-class KIBIS_COMPONENT : public KIBIS_ANY
+class KIBIS_COMPONENT : public KIBIS_BASE
 {
 public:
     KIBIS_COMPONENT( KIBIS& aToplevel, const IbisComponent& aSource, IbisParser& aParser );
@@ -448,11 +463,14 @@ public:
     KIBIS_PIN* GetPin( const std::string& aPinNumber );
 };
 
-class KIBIS : public KIBIS_ANY
+class KIBIS : public KIBIS_BASE
 {
 public:
     /** @brief Constructor for unitialized KIBIS members */
-    KIBIS() : KIBIS_ANY( this, nullptr ), m_file( *this ) {};
+    KIBIS() :
+            KIBIS_BASE( this, nullptr ),
+            m_file( *this )
+    {};
 
     KIBIS( const std::string& aFileName, REPORTER* aReporter = nullptr );
 
