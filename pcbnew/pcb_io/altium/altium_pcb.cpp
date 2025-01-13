@@ -1290,7 +1290,7 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumP
 }
 
 
-void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPcbFile,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -1307,7 +1307,13 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAlti
 
         std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
-        LIB_ID fpID = AltiumToKiCadLibID( elem.sourcefootprintlibrary, elem.pattern );
+        // Altium stores the footprint library information needed to find the footprint in the
+        // source library in the sourcefootprintlibrary field.  Since Altium is a Windows-only
+        // program, the path separator is always a backslash.  We need strip the extra path information
+        // here to prevent overly-long LIB_IDs because KiCad doesn't store the full path to the
+        // footprint library in the design file, only in a library table.
+        wxFileName libName( elem.sourcefootprintlibrary, wxPATH_WIN );
+        LIB_ID fpID = AltiumToKiCadLibID( libName.GetName(), elem.pattern );
 
         footprint->SetFPID( fpID );
 
