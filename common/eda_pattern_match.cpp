@@ -479,8 +479,8 @@ int EDA_COMBINED_MATCHER::ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms )
 
             // Don't cause KiCad to hang if someone accidentally pastes the PCB or schematic
             // into the search box.
-            if( term.Text.Length() > 5000 )
-                term.Text = term.Text.Left( 5000 );
+            if( term.Text.Length() > 1000 )
+                term.Text = term.Text.Left( 1000 );
 
             term.Normalized = true;
         }
