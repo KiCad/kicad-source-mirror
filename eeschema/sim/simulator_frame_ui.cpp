@@ -1690,6 +1690,12 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
                                       SIM_PLOT_TAB* aPlotTab, std::vector<double>* aDataX,
                                       bool aClearData )
 {
+    if( !m_simulatorFrame->SimFinished() )
+    {
+        aPlotTab->GetOrAddTrace( aVectorName, aTraceType );
+        return;
+    }
+
     SIM_TYPE simType = SPICE_CIRCUIT_MODEL::CommandToSimType( aPlotTab->GetSimCommand() );
 
     aTraceType &= aTraceType & SPT_Y_AXIS_MASK;
@@ -1715,7 +1721,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
         aDataX = &data_x;
 
     // First, handle the x axis
-    if( aDataX->empty() && !aClearData )
+    if( aDataX->empty() && !aClearData && m_simulatorFrame->SimFinished() )
     {
         wxString xAxisName( simulator()->GetXAxis( simType ) );
 
