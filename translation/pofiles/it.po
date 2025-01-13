@@ -114,7 +114,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-12 14:09+0000\n"
+"PO-Revision-Date: 2025-01-13 15:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -26637,6 +26637,9 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
+"Genera un singolo file con il percorso dell'argomento di uscita che funge da "
+"percorso completo del nome file e cartella. COMMON_LAYER_LIST non funziona "
+"in questa modalità. Invece LAYER_LIST controlla tutti gli strati tracciati."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:94
 #: kicad/cli/command_pcb_export_svg.cpp:113
@@ -26644,6 +26647,9 @@ msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
 msgstr ""
+"Genera uno o più file con un comportamento simile al tracciamento GUI di "
+"KiCad. Il percorso di uscita specificato indica una cartella nella quale i "
+"file possono venire emessi."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -26662,11 +26668,13 @@ msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 msgstr ""
+"Questo comando ha un comportamento sconsigliato a partire da KiCad 9.0; il "
+"comportamento predefinito di questo comando cambierà in una versione futura."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:167
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
-msgstr ""
+msgstr "Il nuovo comportamento corrisponderà a --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 #, fuzzy
@@ -26738,6 +26746,8 @@ msgstr "Usa estensioni file Gerber KiCad"
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
+"Questo comando è sconsigliato a partire da KiCad 9.0, si prega di utilizzare "
+"\"gerbers\" al suo posto\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -26939,22 +26949,29 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intensità della luce superiore, formato 'R,G,B' o un singolo numero, "
+"intervallo: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intensità della luce inferiore, formato 'R, G, B' o un singolo numero, "
+"intervallo: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intensità luci laterali, formato 'R,G,B' o un singolo numero, intervallo: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intensità della luce della telecamera, formato 'R,G,B' o un singolo numero, "
+"intervallo: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "Angolo di elevazione delle luci laterali in gradi, intervallo: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 #, fuzzy
@@ -27208,7 +27225,7 @@ msgstr "Messaggi d'uscita"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Ignora il codice di uscita diverso da zero"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
 #, fuzzy
@@ -27349,7 +27366,7 @@ msgstr "Connessione riuscita"
 
 #: kicad/dialogs/panel_jobs.cpp:365
 msgid "Last run failed"
-msgstr ""
+msgstr "Ultima esecuzione non riuscita"
 
 #: kicad/dialogs/panel_jobs.cpp:391 kicad/dialogs/panel_jobs.cpp:1069
 #, fuzzy
@@ -27368,7 +27385,7 @@ msgstr "Opzioni generali"
 
 #: kicad/dialogs/panel_jobs.cpp:413
 msgid "View Last Run Results..."
-msgstr ""
+msgstr "Mostra i risultati dell'ultima esecuzione..."
 
 #: kicad/dialogs/panel_jobs.cpp:490
 #, fuzzy
@@ -27457,7 +27474,7 @@ msgstr "Includi &zone"
 
 #: kicad/dialogs/panel_jobs_base.h:167
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "Registro di esecuzione di uscita del lavoro"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -34681,6 +34698,8 @@ msgstr "Il nome variabile non può essere vuoto."
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:222
 msgid "The output file name conflicts with the selected compression format."
 msgstr ""
+"Il nome del file in uscita è in conflitto con il formato di compressione "
+"selezionato."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:352
 #, fuzzy, c-format
@@ -34740,15 +34759,15 @@ msgstr "Formato dimensione"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:71
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "Seleziona il formato di compressione dei file ODB++ in uscita"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:276
 msgid "Non-unity scaled models:"
@@ -34843,7 +34862,7 @@ msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
-msgstr ""
+msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 #, fuzzy
@@ -35023,7 +35042,7 @@ msgstr "Sovrascrivi vecchio file"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:258
 msgid "Don't write P-curves to STEP file"
-msgstr ""
+msgstr "Non scrivere curve P nel file STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:259
 msgid ""
@@ -35862,7 +35881,7 @@ msgstr "Usa coordinate X negative per le impronte sullo strato inferiore"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
 msgid "Generate single file with both front and back positions"
-msgstr ""
+msgstr "Genera un singolo file con entrambe le posizioni fronte e retro"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 msgid "Generate Placement Files"
@@ -36930,6 +36949,8 @@ msgstr "Altri elementi"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
 msgstr ""
+"Copia testo, forme, zone e altri elementi all'interno dell'area della regola "
+"di origine"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
 #, fuzzy
@@ -38086,6 +38107,8 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Se la nuova pista ha la stessa connessione di una pista già esistente, la "
+"vecchia pista viene rimossa."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
@@ -38359,7 +38382,7 @@ msgstr "Proprietà immagine riferimento"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "Opaque"
-msgstr ""
+msgstr "Opaco"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
 #, fuzzy
@@ -38419,7 +38442,7 @@ msgstr "Direttiva"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
-msgstr ""
+msgstr "Ortogonale"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
 #, fuzzy
@@ -38455,12 +38478,12 @@ msgstr "Imposta perno"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "Scostamento:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
 #, fuzzy
@@ -38479,7 +38502,7 @@ msgstr "Configurazione luci"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
-msgstr ""
+msgstr "Elevazione luci laterali:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
 #, fuzzy
@@ -40768,6 +40791,11 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### Documentazione\n"
+"\n"
+"Per la documentazione completa, vedere [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
