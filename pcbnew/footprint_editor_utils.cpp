@@ -170,7 +170,7 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( FOOTPRINT* aFootprint )
     LIB_ID oldFPID = aFootprint->GetFPID();
 
     DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR dialog( this, aFootprint );
-    dialog.ShowModal();
+    dialog.ShowQuasiModal();
 
     // Update library tree and title in case of a name change
     wxDataViewItem treeItem = m_adapter->FindItem( oldFPID );

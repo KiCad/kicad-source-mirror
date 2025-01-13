@@ -2164,7 +2164,7 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
     {
         DIALOG_FOOTPRINT_PROPERTIES dlg( this, aFootprint );
 
-        dlg.ShowModal();
+        dlg.ShowQuasiModal();
         retvalue = dlg.GetReturnValue();
     }
 
