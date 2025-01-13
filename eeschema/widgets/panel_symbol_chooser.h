@@ -112,6 +112,12 @@ protected:
     void onSymbolSelected( wxCommandEvent& aEvent );
 
     /**
+     * Handle parent frame menu events to block tree preview
+     */
+    void onMenuOpen( wxMenuEvent& aEvent );
+    void onMenuClose( wxMenuEvent& aEvent );
+
+    /**
      * Handle the selection of an item. This is called when either the search box or the tree
      * receive an Enter, or the tree receives a double click.
      * If the item selected is a category, it is expanded or collapsed; if it is a symbol, the

@@ -47,6 +47,8 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     // Event handlers
     Bind( EVT_LIBITEM_CHOSEN, &FOOTPRINT_TREE_PANE::onComponentSelected, this );
     m_tree->Bind( wxEVT_UPDATE_UI, &FOOTPRINT_TREE_PANE::onUpdateUI, this );
+    m_frame->Bind( wxEVT_MENU_OPEN, &FOOTPRINT_TREE_PANE::onMenuOpen, this );
+    m_frame->Bind( wxEVT_MENU_CLOSE, &FOOTPRINT_TREE_PANE::onMenuClose, this );
 }
 
 
@@ -61,7 +63,25 @@ void FOOTPRINT_TREE_PANE::FocusSearchFieldIfExists()
 
 FOOTPRINT_TREE_PANE::~FOOTPRINT_TREE_PANE()
 {
+    m_frame->Unbind( wxEVT_MENU_OPEN, &FOOTPRINT_TREE_PANE::onMenuOpen, this );
+    m_frame->Unbind( wxEVT_MENU_CLOSE, &FOOTPRINT_TREE_PANE::onMenuClose, this );
+    m_tree->Unbind( wxEVT_UPDATE_UI, &FOOTPRINT_TREE_PANE::onUpdateUI, this );
+    Unbind( EVT_LIBITEM_CHOSEN, &FOOTPRINT_TREE_PANE::onComponentSelected, this );
     m_tree->Destroy();
+}
+
+
+void FOOTPRINT_TREE_PANE::onMenuOpen( wxMenuEvent& aEvent )
+{
+    m_tree->BlockPreview( true );
+    aEvent.Skip();
+}
+
+
+void FOOTPRINT_TREE_PANE::onMenuClose( wxMenuEvent& aEvent )
+{
+    m_tree->BlockPreview( false );
+    aEvent.Skip();
 }
 
 

@@ -53,6 +53,12 @@ protected:
     void onSymbolSelected( wxCommandEvent& aEvent );
     void onUpdateUI( wxUpdateUIEvent& aEvent );
 
+    /**
+     * Handle parent menu events to block preview updates while the menu is open.
+     */
+    void onMenuOpen( wxMenuEvent& aEvent );
+    void onMenuClose( wxMenuEvent& aEvent );
+
     SYMBOL_EDIT_FRAME*          m_symbolEditFrame;
     LIB_TREE*                   m_tree;             ///< symbol search tree widget
     LIB_SYMBOL_LIBRARY_MANAGER* m_libMgr;

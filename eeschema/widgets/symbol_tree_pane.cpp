@@ -53,12 +53,32 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent,
     // Event handlers
     Bind( EVT_LIBITEM_CHOSEN, &SYMBOL_TREE_PANE::onSymbolSelected, this );
     m_tree->Bind( wxEVT_UPDATE_UI, &SYMBOL_TREE_PANE::onUpdateUI, this );
+    m_symbolEditFrame->Bind( wxEVT_MENU_OPEN, &SYMBOL_TREE_PANE::onMenuOpen, this );
+    m_symbolEditFrame->Bind( wxEVT_MENU_CLOSE, &SYMBOL_TREE_PANE::onMenuClose, this );
 }
 
 
 SYMBOL_TREE_PANE::~SYMBOL_TREE_PANE()
 {
+    m_symbolEditFrame->Unbind( wxEVT_MENU_OPEN, &SYMBOL_TREE_PANE::onMenuOpen, this );
+    m_symbolEditFrame->Unbind( wxEVT_MENU_CLOSE, &SYMBOL_TREE_PANE::onMenuClose, this );
+    m_tree->Unbind( wxEVT_UPDATE_UI, &SYMBOL_TREE_PANE::onUpdateUI, this );
+    Unbind( EVT_LIBITEM_CHOSEN, &SYMBOL_TREE_PANE::onSymbolSelected, this );
     m_tree->Destroy();
+}
+
+
+void SYMBOL_TREE_PANE::onMenuOpen( wxMenuEvent& aEvent )
+{
+    m_tree->BlockPreview( true );
+    aEvent.Skip();
+}
+
+
+void SYMBOL_TREE_PANE::onMenuClose( wxMenuEvent& aEvent )
+{
+    m_tree->BlockPreview( false );
+    aEvent.Skip();
 }
 
 

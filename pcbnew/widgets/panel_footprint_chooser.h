@@ -86,6 +86,12 @@ protected:
     void onCloseTimer( wxTimerEvent& aEvent );
     void onOpenLibsTimer( wxTimerEvent& aEvent );
 
+    /**
+     * Handle parent frame menu events to block tree preview
+     */
+    void onMenuOpen( wxMenuEvent& aEvent );
+    void onMenuClose( wxMenuEvent& aEvent );
+
     void onFootprintSelected( wxCommandEvent& aEvent );
 
     /**

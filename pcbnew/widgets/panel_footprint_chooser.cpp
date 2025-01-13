@@ -164,6 +164,8 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     Bind( wxEVT_TIMER, &PANEL_FOOTPRINT_CHOOSER::onOpenLibsTimer, this, m_open_libs_timer->GetId() );
     Bind( EVT_LIBITEM_SELECTED, &PANEL_FOOTPRINT_CHOOSER::onFootprintSelected, this );
     Bind( EVT_LIBITEM_CHOSEN, &PANEL_FOOTPRINT_CHOOSER::onFootprintChosen, this );
+    m_frame->Bind( wxEVT_MENU_OPEN, &PANEL_FOOTPRINT_CHOOSER::onMenuOpen, this );
+    m_frame->Bind( wxEVT_MENU_CLOSE, &PANEL_FOOTPRINT_CHOOSER::onMenuClose, this );
 
     m_details->Connect( wxEVT_CHAR_HOOK,
                         wxKeyEventHandler( PANEL_FOOTPRINT_CHOOSER::OnDetailsCharHook ),
@@ -211,6 +213,8 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
 PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
 {
+    m_frame->Unbind( wxEVT_MENU_OPEN, &PANEL_FOOTPRINT_CHOOSER::onMenuOpen, this );
+    m_frame->Unbind( wxEVT_MENU_CLOSE, &PANEL_FOOTPRINT_CHOOSER::onMenuClose, this );
     Unbind( wxEVT_TIMER, &PANEL_FOOTPRINT_CHOOSER::onCloseTimer, this );
     Unbind( EVT_LIBITEM_SELECTED, &PANEL_FOOTPRINT_CHOOSER::onFootprintSelected, this );
     Unbind( EVT_LIBITEM_CHOSEN, &PANEL_FOOTPRINT_CHOOSER::onFootprintChosen, this );
@@ -249,6 +253,20 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
 
         cfg->m_FootprintChooser.sort_mode = m_tree->GetSortMode();
     }
+}
+
+
+void PANEL_FOOTPRINT_CHOOSER::onMenuOpen( wxMenuEvent& aEvent )
+{
+    m_tree->BlockPreview( true );
+    aEvent.Skip();
+}
+
+
+void PANEL_FOOTPRINT_CHOOSER::onMenuClose( wxMenuEvent& aEvent )
+{
+    m_tree->BlockPreview( false );
+    aEvent.Skip();
 }
 
 
