@@ -227,8 +227,12 @@ void SCH_PLOTTER::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
     if( aPlotSettings.m_useBackgroundColor && aPlotter->GetColorMode() )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetBackgroundColor() );
-        VECTOR2I end( aPlotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
-                      aPlotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
+
+        // Use page size selected in schematic to know the schematic bg area
+        const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
+        VECTOR2I end( actualPage.GetWidthIU( schIUScale.IU_PER_MILS ),
+                      actualPage.GetHeightIU( schIUScale.IU_PER_MILS ) );
+
         aPlotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
@@ -437,8 +441,11 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
 
-        VECTOR2I end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
-                      plotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
+        // Use page size selected in schematic to know the schematic bg area
+        const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
+        VECTOR2I end( actualPage.GetWidthIU( schIUScale.IU_PER_MILS ),
+                      actualPage.GetHeightIU( schIUScale.IU_PER_MILS ) );
+
         plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
@@ -612,8 +619,11 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
     if( aPlotSettings.m_useBackgroundColor && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-        VECTOR2I end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
-                      plotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
+
+        // Use page size selected in schematic to know the schematic bg area
+        VECTOR2I end( actualPage.GetWidthIU( schIUScale.IU_PER_MILS ),
+                      actualPage.GetHeightIU( schIUScale.IU_PER_MILS ) );
+
         plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
