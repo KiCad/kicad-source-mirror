@@ -335,13 +335,13 @@ private:
     MATRIX3x3D getArbitraryAxis( DL_Extrusion* aData );
 
     /**
-     * Converts a given world coordinate point to object coordinate using the given arbitrary
+     * Convert a given world coordinate point to object coordinate using the given arbitrary
      * axis vectors.
      */
     VECTOR3D wcsToOcs( const MATRIX3x3D& arbitraryAxis, VECTOR3D point );
 
     /**
-     * Converts a given object coordinate point to world coordinate using the given arbitrary
+     * Convert a given object coordinate point to world coordinate using the given arbitrary
      * axis vectors.
      */
     VECTOR3D ocsToWcs( const MATRIX3x3D& arbitraryAxis, VECTOR3D point );
@@ -436,7 +436,7 @@ private:
 
     /**
      * Called for every spline.
-     * */
+     */
     virtual void addSpline( const DL_SplineData& aData ) override;
 
     /**
@@ -459,6 +459,7 @@ private:
     {
         ReportMsg( _( "DXF construction lines not currently supported." ) );
     }
+
     virtual void addRay( const DL_RayData& ) override
     {
         ReportMsg( _( "DXF construction lines not currently supported." ) );
@@ -473,30 +474,37 @@ private:
     {
         ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
+
     virtual void addDimLinear( const DL_DimensionData&, const DL_DimLinearData& ) override
     {
         ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
+
     virtual void addDimRadial( const DL_DimensionData&, const DL_DimRadialData& ) override
     {
         ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
+
     virtual void addDimDiametric( const DL_DimensionData&, const DL_DimDiametricData& ) override
     {
         ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
+
     virtual void addDimAngular( const DL_DimensionData&, const DL_DimAngular2LData& ) override
     {
         ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
+
     virtual void addDimAngular3P( const DL_DimensionData&, const DL_DimAngular3PData& ) override
     {
         ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
+
     virtual void addDimOrdinate( const DL_DimensionData&, const DL_DimOrdinateData& ) override
     {
         ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
+
     virtual void addLeader( const DL_LeaderData& ) override
     {
         ReportMsg( _( "DXF dimensions not currently supported." ) );
@@ -507,6 +515,7 @@ private:
     {
         ReportMsg( _( "DXF hatches not currently supported." ) );
     }
+
     virtual void addHatchLoop( const DL_HatchLoopData& ) override { }
     virtual void addHatchEdge( const DL_HatchEdgeData& ) override { }
 

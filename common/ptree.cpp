@@ -35,22 +35,20 @@
 typedef PTREE::const_iterator           CITER;
 typedef PTREE::iterator                 ITER;
 
-#if defined(DEBUG)
- #define D(x)   x
+#if defined( DEBUG )
+#define D( x ) x
 #else
- #define D(x)
+#define D( x )
 #endif
 
-#define CTL_OMIT_NL                     (1<<0)
-#define CTL_IN_ATTRS                    (1<<1)
+#define CTL_OMIT_NL ( 1 << 0 )
+#define CTL_IN_ATTRS ( 1 << 1 )
 
 
 //-----<Scan>------------------------------------------------------------------
 
 /**
- * Function scanList
- * reads a sexpr list from the input stream into a new node with key
- * aLexer->CurText().
+ * Read a sexpr list from the input stream into a new node with key aLexer->CurText().
  */
 inline void scanList( PTREE* aTree, DSNLEXER* aLexer )
 {
@@ -175,14 +173,14 @@ static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
         if( aTree.size() && !isAtom( aTree.begin()->second ) && !aTree.data().size() )
             ctl = 0;
 
-        out->Print( aNestLevel, "(%s%s", out->Quotes( aKey ).c_str(), ctl & CTL_OMIT_NL ? "" : "\n" );
+        out->Print( aNestLevel, "(%s%s", out->Quotes( aKey ).c_str(),
+                    ctl & CTL_OMIT_NL ? "" : "\n" );
 
         if( aTree.data().size() )       // sexpr format does not use data()
         {
             out->Print( 0, " %s%s",
-                out->Quotes( aTree.data() ).c_str(),
-                aTree.size() ? "\n" : ""
-                );
+                        out->Quotes( aTree.data() ).c_str(),
+                        aTree.size() ? "\n" : "" );
         }
 
         formatList( out, aNestLevel, aCtl, aTree );

@@ -94,8 +94,10 @@ std::map<wxString, wxString> ALTIUM_ASCII_PARSER::ReadProperties()
         // convert the strings to wxStrings, since we use them everywhere
         // value can have non-ASCII characters, so we convert them from LATIN1/ISO8859-1
         wxString key( keyS.c_str(), wxConvISO8859_1 );
+
         // Altium stores keys either in Upper, or in CamelCase. Lets unify it.
         wxString canonicalKey = key.Trim( false ).Trim( true ).MakeUpper();
+
         // If the key starts with '%UTF8%' we have to parse the value using UTF8
         wxString value;
 

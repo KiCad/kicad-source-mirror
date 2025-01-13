@@ -118,6 +118,7 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal.SetIsFill( false );
     gal.DrawRectangle( m_origin, m_end );
     gal.SetIsFill( true );
+
     // draw the fill as the second object so that Z test will not clamp
     // the single-pixel-wide rectangle sides
     gal.DrawRectangle( m_origin, m_end );

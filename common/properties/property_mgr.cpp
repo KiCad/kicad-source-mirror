@@ -301,6 +301,7 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
     PROPERTY_SET masked;
     m_allProperties.clear();
     collectPropsRecur( m_allProperties, replaced, m_displayOrder, masked );
+
     // We need to keep properties sorted to be able to use std::set_* functions
     sort( m_allProperties.begin(), m_allProperties.end() );
 

@@ -35,7 +35,9 @@
 const char NETCLASS::Default[] = "Default";
 
 // Initial values for netclass initialization
-const int DEFAULT_CLEARANCE        = pcbIUScale.mmToIU( 0.2 ); // track to track and track to pads clearance
+
+// track to track and track to pads clearance.
+const int DEFAULT_CLEARANCE        = pcbIUScale.mmToIU( 0.2 );
 const int DEFAULT_VIA_DIAMETER     = pcbIUScale.mmToIU( 0.6 );
 const int DEFAULT_VIA_DRILL        = pcbIUScale.mmToIU( 0.3 );
 const int DEFAULT_UVIA_DIAMETER    = pcbIUScale.mmToIU( 0.3 );

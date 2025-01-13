@@ -334,9 +334,9 @@ void PGM_BASE::sentryInit()
 
         sentry_options_t* options = sentry_options_new();
 
-        #ifndef KICAD_SENTRY_DSN
-        #   error "Project configuration error, missing KICAD_SENTRY_DSN"
-        #endif
+#ifndef KICAD_SENTRY_DSN
+#   error "Project configuration error, missing KICAD_SENTRY_DSN"
+#endif
 
         sentry_options_set_dsn( options, KICAD_SENTRY_DSN );
 
@@ -509,9 +509,10 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     // their own lock files.
     wxString instanceCheckerDir = PATHS::GetInstanceCheckerPath();
     PATHS::EnsurePathExists( instanceCheckerDir );
-    wxChmod( instanceCheckerDir, wxPOSIX_USER_READ | wxPOSIX_USER_WRITE | wxPOSIX_USER_EXECUTE |
-                                 wxPOSIX_GROUP_READ | wxPOSIX_GROUP_WRITE | wxPOSIX_GROUP_EXECUTE |
-                                 wxPOSIX_OTHERS_READ | wxPOSIX_OTHERS_WRITE | wxPOSIX_OTHERS_EXECUTE );
+    wxChmod( instanceCheckerDir,
+             wxPOSIX_USER_READ | wxPOSIX_USER_WRITE | wxPOSIX_USER_EXECUTE |
+             wxPOSIX_GROUP_READ | wxPOSIX_GROUP_WRITE | wxPOSIX_GROUP_EXECUTE |
+             wxPOSIX_OTHERS_READ | wxPOSIX_OTHERS_WRITE | wxPOSIX_OTHERS_EXECUTE );
 
     wxString instanceCheckerName = wxString::Format( wxS( "%s-%s" ), pgm_name,
                                                      GetMajorMinorVersion() );
@@ -617,7 +618,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     GetNotificationsManager().Load();
 
     // Create the python scripting stuff
-    // Skip it fot applications that do not use it
+    // Skip it for applications that do not use it
     if( !aSkipPyInit )
         m_python_scripting = std::make_unique<SCRIPTING>();
 
@@ -854,7 +855,9 @@ wxString PGM_BASE::GetLanguageTag()
     const wxLanguageInfo* langInfo = wxLocale::GetLanguageInfo( m_language_id );
 
     if( !langInfo )
+    {
         return "";
+    }
     else
     {
         wxString str = langInfo->GetCanonicalWithRegion();
@@ -868,8 +871,7 @@ wxString PGM_BASE::GetLanguageTag()
 void PGM_BASE::SetLanguagePath()
 {
 #ifdef _MSC_VER
-    wxLocale::AddCatalogLookupPathPrefix( PATHS::GetWindowsBaseSharePath()
-                                                  + wxT( "locale" ) );
+    wxLocale::AddCatalogLookupPathPrefix( PATHS::GetWindowsBaseSharePath() + wxT( "locale" ) );
 #endif
     wxLocale::AddCatalogLookupPathPrefix( PATHS::GetLocaleDataPath() );
 
@@ -1064,7 +1066,9 @@ void PGM_BASE::WritePdfBrowserInfos()
     GetCommonSettings()->m_System.use_system_pdf_viewer = m_use_system_pdf_browser;
 }
 
+
 static PGM_BASE* process;
+
 
 PGM_BASE& Pgm()
 {
@@ -1072,13 +1076,15 @@ PGM_BASE& Pgm()
     return *process;
 }
 
+
 // Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
 PGM_BASE* PgmOrNull()
 {
     return process;
 }
 
-void SetPgm(PGM_BASE* pgm)
+
+void SetPgm( PGM_BASE* pgm )
 {
     process = pgm;
 }

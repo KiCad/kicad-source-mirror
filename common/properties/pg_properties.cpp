@@ -70,9 +70,13 @@ private:
 };
 
 
-wxAnyValueTypeScopedPtr wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<std::optional<int>>() );
+wxAnyValueTypeScopedPtr wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl::s_instance(
+        new wxAnyValueTypeImpl<std::optional<int>>() );
 
-static wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl s_wxAnyToSTD_OPTIONAL_INT_VARIANTRegistration( &STD_OPTIONAL_INT_VARIANT_DATA::VariantDataFactory );
+
+static wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl
+        s_wxAnyToSTD_OPTIONAL_INT_VARIANTRegistration(
+                &STD_OPTIONAL_INT_VARIANT_DATA::VariantDataFactory );
 
 
 class wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
@@ -108,9 +112,13 @@ private:
 };
 
 
-wxAnyValueTypeScopedPtr wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<std::optional<double>>() );
+wxAnyValueTypeScopedPtr wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl::s_instance(
+        new wxAnyValueTypeImpl<std::optional<double>>() );
 
-static wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl s_wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistration( &STD_OPTIONAL_DOUBLE_VARIANT_DATA::VariantDataFactory );
+
+static wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl
+        s_wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistration(
+                &STD_OPTIONAL_DOUBLE_VARIANT_DATA::VariantDataFactory );
 
 
 class wxAnyToEDA_ANGLE_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
@@ -146,9 +154,12 @@ private:
 };
 
 
-wxAnyValueTypeScopedPtr wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<EDA_ANGLE>() );
+wxAnyValueTypeScopedPtr
+        wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<EDA_ANGLE>() );
 
-static wxAnyToEDA_ANGLE_VARIANTRegistrationImpl s_wxAnyToEDA_ANGLE_VARIANTRegistration( &EDA_ANGLE_VARIANT_DATA::VariantDataFactory );
+
+static wxAnyToEDA_ANGLE_VARIANTRegistrationImpl
+        s_wxAnyToEDA_ANGLE_VARIANTRegistration( &EDA_ANGLE_VARIANT_DATA::VariantDataFactory );
 
 
 class wxAnyToCOLOR4D_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
@@ -183,9 +194,13 @@ private:
     static wxAnyValueTypeScopedPtr s_instance;
 };
 
-wxAnyValueTypeScopedPtr wxAnyToCOLOR4D_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<KIGFX::COLOR4D>() );
 
-static wxAnyToCOLOR4D_VARIANTRegistrationImpl s_wxAnyToCOLOR4D_VARIANTRegistration( &COLOR4D_VARIANT_DATA::VariantDataFactory );
+wxAnyValueTypeScopedPtr wxAnyToCOLOR4D_VARIANTRegistrationImpl::s_instance(
+        new wxAnyValueTypeImpl<KIGFX::COLOR4D>() );
+
+
+static wxAnyToCOLOR4D_VARIANTRegistrationImpl
+        s_wxAnyToCOLOR4D_VARIANTRegistration( &COLOR4D_VARIANT_DATA::VariantDataFactory );
 
 
 wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME* aFrame )
@@ -274,6 +289,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
             ret = new wxPropertyCategory();
             ret->Enable( false );
         }
+
         break;
     }
     }

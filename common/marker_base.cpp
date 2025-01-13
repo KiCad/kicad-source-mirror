@@ -38,10 +38,12 @@
 #include "dialogs/dialog_display_html_text_base.h"
 
 
-/* The graphic shape of markers is a polygon.
+/**
+ * The graphic shape of markers is a polygon.
+ *
  * MarkerShapeCorners contains the coordinates of corners of the polygonal default shape
  * they are arbitrary units to make coding shape easy.
- * internal units coordinates are these values scaled by .m_ScalingFactor
+ * Internal units coordinates are these values scaled by .m_ScalingFactor
  */
 static const VECTOR2I MarkerShapeCorners[] =
 {
@@ -55,6 +57,7 @@ static const VECTOR2I MarkerShapeCorners[] =
     VECTOR2I( 1,  8 ),
     VECTOR2I( 0,  0 )
 };
+
 const unsigned CORNERS_COUNT = arrayDim( MarkerShapeCorners );
 
 

@@ -191,7 +191,8 @@ ALTIUM_COMPOUND_FILE::GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) co
 
     std::map<wxString, ALTIUM_SYMBOL_DATA> folders;
 
-    m_reader->EnumFiles( root, 1, [&]( const CFB::COMPOUND_FILE_ENTRY* tentry, const CFB::utf16string&, int ) -> int
+    m_reader->EnumFiles( root, 1, [&]( const CFB::COMPOUND_FILE_ENTRY* tentry,
+                                       const CFB::utf16string&, int ) -> int
     {
         wxString dirName = UTF16ToWstring( tentry->name, tentry->nameLen );
 
@@ -199,7 +200,8 @@ ALTIUM_COMPOUND_FILE::GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) co
             return 0;
 
         m_reader->EnumFiles( tentry, 1,
-                    [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string&, int ) -> int
+                    [&]( const CFB::COMPOUND_FILE_ENTRY* entry,
+                         const CFB::utf16string&, int ) -> int
                     {
                         std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
 
@@ -361,8 +363,8 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
 
     if( !hasNullByte && !isBinary )
     {
-        wxLogTrace( "ALTIUM", wxT( "Missing null byte at end of property list. Imported data might be "
-                       "malformed or missing." ) );
+        wxLogTrace( "ALTIUM", wxT( "Missing null byte at end of property list. Imported data "
+                                   "might be  malformed or missing." ) );
     }
 
     // we use std::string because std::string can handle NULL-bytes
@@ -411,8 +413,10 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
         // convert the strings to wxStrings, since we use them everywhere
         // value can have non-ASCII characters, so we convert them from LATIN1/ISO8859-1
         wxString key( keyS.c_str(), wxConvISO8859_1 );
+
         // Altium stores keys either in Upper, or in CamelCase. Lets unify it.
         wxString canonicalKey = key.Trim( false ).Trim( true ).MakeUpper();
+
         // If the key starts with '%UTF8%' we have to parse the value using UTF8
         wxString value;
 

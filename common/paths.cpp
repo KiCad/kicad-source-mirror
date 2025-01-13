@@ -128,6 +128,7 @@ wxString PATHS::GetDefaultUser3DModelsPath()
     return tmp.GetPath();
 }
 
+
 wxString PATHS::GetDefault3rdPartyPath()
 {
     wxFileName tmp;
@@ -137,6 +138,7 @@ wxString PATHS::GetDefault3rdPartyPath()
 
     return tmp.GetPath();
 }
+
 
 wxString PATHS::GetDefaultUserProjectsPath()
 {
@@ -177,7 +179,7 @@ static wxString getBuildDirectoryRoot()
     wxFileName     fn = execPath;
 
     // Climb the directory tree until we find a directory that looks like a build directory
-    // Noprmally we expect to climb one or two levels only.
+    // Normally we expect to climb one or two levels only.
     while( fn.GetDirCount() > 0 && !looksLikeBuildDir( fn ) )
     {
         fn.RemoveLastDir();
@@ -232,13 +234,12 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 
 
 #ifdef _WIN32
-/**
- * Gets the stock (install) data path, which is the base path for things like scripting, etc
- */
+
 wxString PATHS::GetWindowsBaseSharePath()
 {
     return getWindowsKiCadRoot() + wxT( "share\\" );
 }
+
 #endif
 
 

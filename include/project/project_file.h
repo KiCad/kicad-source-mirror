@@ -191,7 +191,16 @@ public:
     struct IP2581_BOM             m_IP2581Bom;      /// IPC-2581 BOM settings
 
 private:
+    /**
+     * Schema version 2: Bump for KiCad 9 layer numbering changes.
+     *
+     * Migrate layer presets to use new enum values for copper layers.
+     */
     bool migrateSchema1To2();
+
+    /**
+     * Schema version 3: move layer presets to use named render layers.
+     */
     bool migrateSchema2To3();
 
     /// An list of schematic sheets in this project

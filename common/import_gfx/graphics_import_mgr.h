@@ -39,23 +39,23 @@ class wxString;
 class GRAPHICS_IMPORT_MGR
 {
 public:
-    ///< List of handled file types.
+    /// List of handled file types.
     enum GFX_FILE_T
     {
         DXF,
         SVG
     };
 
-    ///< Vector containing all GFX_FILE_T values that can be imported.
+    /// Vector containing all GFX_FILE_T values that can be imported.
     std::vector<GFX_FILE_T> GetImportableFileTypes() const
     {
         return { DXF, SVG };
     }
 
-    ///< Returns a plugin that handles a specific file extension.
+    /// Return a plugin that handles a specific file extension.
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPluginByExt( const wxString& aExtension ) const;
 
-    ///< Returns a plugin instance for a specific file type.
+    /// Return a plugin instance for a specific file type.
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPlugin( GFX_FILE_T aType ) const;
 };
 

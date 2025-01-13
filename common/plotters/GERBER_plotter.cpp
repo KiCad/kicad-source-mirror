@@ -158,6 +158,7 @@ void GERBER_PLOTTER::emitDcode( const VECTOR2D& pt, int dcode )
     fprintf( m_outputFile, "X%dY%dD%02d*\n", KiROUND( pt.x ), KiROUND( pt.y ), dcode );
 }
 
+
 void GERBER_PLOTTER::ClearAllAttributes()
 {
     // Remove all attributes from object attributes dictionary (TO. and TA commands)
@@ -569,6 +570,7 @@ void GERBER_PLOTTER::selectAperture( int aDiameter, const EDA_ANGLE& aPolygonRot
     selectAperture( VECTOR2I( 0, 0 ), aDiameter / 2, aPolygonRotation, aType, aApertureAttribute );
 }
 
+
 void GERBER_PLOTTER::writeApertureList()
 {
     wxASSERT( m_outputFile );
@@ -709,7 +711,6 @@ void GERBER_PLOTTER::writeApertureList()
                 break;
             }
 
-
             // Output all corners (should be 4 to 8 corners)
             // Remember: the Y coordinate must be negated, due to the fact in Pcbnew
             // the Y axis is from top to bottom
@@ -730,8 +731,10 @@ void GERBER_PLOTTER::writeApertureList()
         {
                 // the seg_len is the distance between the 2 circle centers
                 int seg_len = tool.m_Size.x - tool.m_Size.y;
+
                 // Center of the circle on the segment start point:
                 VECTOR2I start( seg_len/2, 0 );
+
                 // Center of the circle on the segment end point:
                 VECTOR2I end( - seg_len/2, 0 );
 
@@ -904,6 +907,7 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
     end.x = KiROUND( aCenter.x + aRadius * aEndAngle.Cos() );
     end.y = KiROUND( aCenter.y + aRadius * aEndAngle.Sin() );
     VECTOR2D devEnd = userToDeviceCoordinates( end );
+
     // devRelCenter is the position on arc center relative to the arc start, in Gerber coord.
     VECTOR2D devRelCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
@@ -1093,6 +1097,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
     }
 }
 
+
 void GERBER_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                                void * aData )
 {
@@ -1245,7 +1250,7 @@ void GERBER_PLOTTER::ThickCircle( const VECTOR2I& pos, int diametre, int width,
 
 
 void GERBER_PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre,
-                              OUTLINE_MODE tracemode, void* aData )
+                                   OUTLINE_MODE tracemode, void* aData )
 {
     // A filled circle is a graphic item, not a pad.
     // So it is drawn, not flashed.
@@ -1356,6 +1361,7 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
                 emitDcode( pos_device, 3 );
                 return;
             }
+
             // Draw the oval as round rect pad with a radius = 50% min size)
             // In gerber file, it will be drawn as a region with arcs, and can be
             // detected as pads (similar to a flashed pad)
@@ -1393,8 +1399,8 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
     // so use it for rotation n*90 deg
     if( aOrient.IsCardinal() )
     {
+        // Build the not rotated equivalent shape:
         if( aOrient.IsCardinal90() )
-            // Build the not rotated equivalent shape:
             std::swap( size.x, size.y );
 
         if( aTraceMode == SKETCH )
@@ -1440,11 +1446,11 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
         {
             // plot pad shape as Gerber region
             VECTOR2I coord[4];
+
             // coord[0] is assumed the lower left
             // coord[1] is assumed the upper left
             // coord[2] is assumed the upper right
             // coord[3] is assumed the lower right
-
             coord[0].x = -size.x/2;   // lower left
             coord[0].y = size.y/2;
             coord[1].x = -size.x/2;   // upper left
@@ -1459,9 +1465,10 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
     }
 }
 
+
 void GERBER_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                     int aCornerRadius, const EDA_ANGLE& aOrient,
-                                     OUTLINE_MODE aTraceMode, void* aData )
+                                        int aCornerRadius, const EDA_ANGLE& aOrient,
+                                        OUTLINE_MODE aTraceMode, void* aData )
 
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
@@ -1475,6 +1482,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
 
         std::vector<VECTOR2I> cornerList;
+
         // TransformRoundRectToPolygon creates only one convex polygon
         SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
         cornerList.reserve( poly.PointCount() + 1 );
@@ -1714,7 +1722,7 @@ void GERBER_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
             }
             else
             {
-               // An AM will be created. the shape must be in position 0,0 and orientation 0
+                // An AM will be created. the shape must be in position 0,0 and orientation 0
                 // to be able to reuse the same AM for pads having the same shape
                 for( size_t ii = 0; ii < cornerList.size(); ii++ )
                 {
@@ -1773,7 +1781,9 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const 
         cornerList.push_back( cornerList[0] );
 
         if( aPlotMode == SKETCH )
+        {
             PlotPoly( cornerList, FILL_T::NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
+        }
         else
         {
 #ifdef GBR_USE_MACROS_FOR_CHAMFERED_ROUND_RECT
@@ -1783,7 +1793,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const 
             }
             else
             {
-               // An AM will be created. the shape must be in position 0,0 and orientation 0
+                // An AM will be created. the shape must be in position 0,0 and orientation 0
                 // to be able to reuse the same AM for pads having the same shape
                 for( size_t ii = 0; ii < cornerList.size(); ii++ )
                 {
@@ -1898,6 +1908,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
     {
         m_hasApertureOutline4P = true;
         VECTOR2D pos_dev = userToDeviceCoordinates( aPadPos );
+
         // polygon corners list
         std::vector<VECTOR2I> corners = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
         int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
@@ -2003,6 +2014,7 @@ void GERBER_PLOTTER::PlotText( const VECTOR2I&        aPos,
 
     PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aFontMetrics, aData );
 }
+
 
 void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )
 {

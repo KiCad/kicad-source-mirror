@@ -51,10 +51,12 @@ const BOX2I ANCHOR_DEBUG::ViewBBox() const
     return bbox;
 }
 
+
 std::vector<int> ANCHOR_DEBUG::ViewGetLayers() const
 {
     return { LAYER_GP_OVERLAY };
 }
+
 
 void ANCHOR_DEBUG::ClearAnchors()
 {
@@ -62,15 +64,18 @@ void ANCHOR_DEBUG::ClearAnchors()
     m_anchors.clear();
 }
 
+
 void ANCHOR_DEBUG::AddAnchor( const VECTOR2I& aAnchor )
 {
     m_anchors[aAnchor]++;
 }
 
+
 void ANCHOR_DEBUG::SetNearest( const OPT_VECTOR2I& aNearest )
 {
     m_nearest = aNearest;
 }
+
 
 void ANCHOR_DEBUG::ViewDraw( int, VIEW* aView ) const
 {
@@ -99,6 +104,7 @@ void ANCHOR_DEBUG::ViewDraw( int, VIEW* aView ) const
     const KIFONT::FONT&    font = *KIFONT::FONT::GetFont();
 
     std::size_t total = 0;
+
     for( const auto& [anchor, count] : m_anchors )
     {
         if( m_nearest && *m_nearest == anchor )

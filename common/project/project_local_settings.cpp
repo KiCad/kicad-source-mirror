@@ -493,8 +493,8 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
     // Even if parameters were not modified, we should resave after migration
     bool force = aForce || m_wasMigrated;
 
-    // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
-    // should be cleared at this point
+    // If we're actually going ahead and doing the save, the flag that keeps code from doing the
+    // save should be cleared at this point.
     m_wasMigrated = false;
 
     return JSON_SETTINGS::SaveToFile( aDirectory, force );
@@ -506,8 +506,8 @@ bool PROJECT_LOCAL_SETTINGS::SaveAs( const wxString& aDirectory, const wxString&
     Set( "meta.filename", aFile + "." + FILEEXT::ProjectLocalSettingsFileExtension );
     SetFilename( aFile );
 
-    // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
-    // should be cleared at this point
+    // If we're actually going ahead and doing the save, the flag that keeps code from doing the
+    // save should be cleared at this point.
     m_wasMigrated = false;
 
     return JSON_SETTINGS::SaveToFile( aDirectory, true );

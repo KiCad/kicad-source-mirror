@@ -96,7 +96,8 @@ public:
 
     const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::vector<std::string>& aStreamPath ) const;
 
-    const CFB::COMPOUND_FILE_ENTRY* FindStream( const CFB::COMPOUND_FILE_ENTRY* aStart, const std::vector<std::string>& aStreamPath ) const;
+    const CFB::COMPOUND_FILE_ENTRY* FindStream( const CFB::COMPOUND_FILE_ENTRY* aStart,
+                                                const std::vector<std::string>& aStreamPath ) const;
 
     const CFB::COMPOUND_FILE_ENTRY* FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEntry,
                                                            const std::string               aName,
@@ -116,7 +117,8 @@ private:
 class ALTIUM_BINARY_PARSER
 {
 public:
-    ALTIUM_BINARY_PARSER( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    ALTIUM_BINARY_PARSER( const ALTIUM_COMPOUND_FILE& aFile,
+                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
     ALTIUM_BINARY_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize );
     ~ALTIUM_BINARY_PARSER() = default;
 
@@ -124,6 +126,7 @@ public:
     Type Read()
     {
         const size_t remainingBytes = GetRemainingBytes();
+
         if( remainingBytes >= sizeof( Type ) )
         {
             Type val = *(Type*) ( m_pos );
@@ -188,7 +191,9 @@ public:
             remaining -= 8;
 
             if( length <= 2 )
+            {
                 length = 0; // for empty strings, not even the null bytes are present
+            }
             else
             {
                 if( length > remaining )
@@ -405,6 +410,7 @@ public:
         int id = -1;
 
         uint8_t byte = ReadByte();
+
         if( byte != 0xD0 )
             throw std::runtime_error( "ALTIUM_COMPRESSED_READER: invalid compressed string" );
 

@@ -46,15 +46,18 @@ VECTOR2I BEZIER_GEOM_MANAGER::GetStart() const
     return m_start;
 }
 
+
 VECTOR2I BEZIER_GEOM_MANAGER::GetControlC1() const
 {
     return m_controlC1;
 }
 
+
 VECTOR2I BEZIER_GEOM_MANAGER::GetEnd() const
 {
     return m_end;
 }
+
 
 VECTOR2I BEZIER_GEOM_MANAGER::GetControlC2() const
 {
@@ -63,10 +66,12 @@ VECTOR2I BEZIER_GEOM_MANAGER::GetControlC2() const
     return m_end - ( m_controlC2 - m_end );
 }
 
+
 bool BEZIER_GEOM_MANAGER::setStart( const VECTOR2I& aStart )
 {
     m_start = aStart;
-    // Prevents wierd-looking loops if the control points aren't initialized
+
+    // Prevents weird-looking loops if the control points aren't initialized
     m_end = aStart;
     m_controlC1 = aStart;
     m_controlC2 = aStart;
@@ -83,6 +88,7 @@ bool BEZIER_GEOM_MANAGER::setControlC1( const VECTOR2I& aControlC1 )
     return true;
 }
 
+
 bool BEZIER_GEOM_MANAGER::setEnd( const VECTOR2I& aEnd )
 {
     m_end = aEnd;
@@ -90,9 +96,11 @@ bool BEZIER_GEOM_MANAGER::setEnd( const VECTOR2I& aEnd )
     return m_end != m_start;
 }
 
+
 bool BEZIER_GEOM_MANAGER::setControlC2( const VECTOR2I& aControlC2 )
 {
     m_controlC2 = aControlC2;
+
     // It's possible to set the control 2 point to the same as the end point
     return true;
 }

@@ -76,7 +76,7 @@
  *    6. Blocks are virtual groups, blocks must be placed by a INSERT entity
  *    7. Blocks may be repeated multiple times
  *    8. There is no sane way to make text look perfect like the original CAD.
- *       DXF simply does mpt secifying text/font enough to make it portable.
+ *       DXF simply does mpt specifying text/font enough to make it portable.
  *       We however make do try to get it somewhat close/visually appealing.
  *    9. We silently drop the z coordinate on 3d polylines
  */
@@ -464,7 +464,8 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
     if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
         insertLine( m_curr_entity.m_LastCoordinate, seg_end, lineWidth );
     else
-        insertArc( m_curr_entity.m_LastCoordinate, seg_end, m_curr_entity.m_BulgeVertex, lineWidth );
+        insertArc( m_curr_entity.m_LastCoordinate, seg_end, m_curr_entity.m_BulgeVertex,
+                   lineWidth );
 
     m_curr_entity.m_LastCoordinate = seg_end;
     m_curr_entity.m_BulgeVertex = vertex->bulge;
@@ -691,9 +692,10 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 {
     MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D refPointCoords    = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
-    VECTOR3D secPointCoords    = ocsToWcs( arbAxis, VECTOR3D( std::isnan( aData.apx ) ? 0 : aData.apx,
-                                                              std::isnan( aData.apy ) ? 0 : aData.apy,
-                                                              std::isnan( aData.apz ) ? 0 : aData.apz ) );
+    VECTOR3D   secPointCoords =
+            ocsToWcs( arbAxis, VECTOR3D( std::isnan( aData.apx ) ? 0 : aData.apx,
+                                         std::isnan( aData.apy ) ? 0 : aData.apy,
+                                         std::isnan( aData.apz ) ? 0 : aData.apz ) );
 
     VECTOR2D refPoint( mapX( refPointCoords.x ), mapY( refPointCoords.y ) );
     VECTOR2D secPoint( mapX( secPointCoords.x ), mapY( secPointCoords.y ) );
@@ -713,6 +715,7 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     DXF_IMPORT_STYLE* style = getImportStyle( aData.style.c_str() );
 
     double textHeight = mapDim( aData.height );
+
     // The 0.9 factor gives a better height/width base ratio with our font
     double charWidth = textHeight * 0.9;
 
@@ -720,12 +723,12 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
         charWidth *= style->m_widthFactor;
 
     double textWidth = charWidth * text.length();   // Rough approximation
-    double textThickness = textHeight/8.0;          // Use a reasonable line thickness for this text
+    double textThickness = textHeight / 8.0;        // Use a reasonable line thickness for this text
 
-    VECTOR2D bottomLeft(0.0, 0.0);
-    VECTOR2D bottomRight(0.0, 0.0);
-    VECTOR2D topLeft(0.0, 0.0);
-    VECTOR2D topRight(0.0, 0.0);
+    VECTOR2D bottomLeft( 0.0, 0.0 );
+    VECTOR2D bottomRight( 0.0, 0.0 );
+    VECTOR2D topLeft( 0.0, 0.0 );
+    VECTOR2D topRight( 0.0, 0.0 );
 
     GR_TEXT_H_ALIGN_T hJustify = GR_TEXT_H_ALIGN_LEFT;
     GR_TEXT_V_ALIGN_T vJustify = GR_TEXT_V_ALIGN_BOTTOM;
@@ -804,6 +807,7 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     // dxf_lib imports text angle in radians (although there are no comment about that.
     // So, for the moment, convert this angle to degrees
     double angle_degree = aData.angle * 180 / M_PI;
+
     // We also need the angle in radians. so convert angle_degree to radians
     // regardless the aData.angle unit
     double angleInRads = angle_degree * M_PI / 180.0;
@@ -957,6 +961,7 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     // dxf_lib imports text angle in radians (although there are no comment about that.
     // So, for the moment, convert this angle to degrees
     double angle_degree = aData.angle * 180/M_PI;
+
     // We also need the angle in radians. so convert angle_degree to radians
     // regardless the aData.angle unit
     double angleInRads = angle_degree * M_PI / 180.0;
@@ -1030,7 +1035,6 @@ double DXF_IMPORT_PLUGIN::getCurrentUnitScale()
 
     return scale;
 }
-
 
 
 void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int code )
@@ -1334,6 +1338,7 @@ wxString DXF_IMPORT_PLUGIN::toNativeString( const wxString& aData )
     // degree:
     regexp.Compile( wxT( "%%[dD]" ) );
     regexp.Replace( &res, wxChar( 0x00B0 ) );
+
     // plus/minus
     regexp.Compile( wxT( "%%[pP]" ) );
     regexp.Replace( &res, wxChar( 0x00B1 ) );
@@ -1410,10 +1415,13 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
     // reflect the Y values to put everything in a RHCS
     VECTOR2D sp( aSegStart.x, -aSegStart.y );
     VECTOR2D ep( aSegEnd.x, -aSegEnd.y );
+
     // angle from end->start
     double offAng = atan2( ep.y - sp.y, ep.x - sp.x );
+
     // length of subtended segment = 1/2 distance between the 2 points
-    double d = 0.5 * sqrt( (sp.x - ep.x) * (sp.x - ep.x) + (sp.y - ep.y) * (sp.y - ep.y) );
+    double d = 0.5 * sqrt( ( sp.x - ep.x ) * ( sp.x - ep.x ) + ( sp.y - ep.y ) * ( sp.y - ep.y ) );
+
     // midpoint of the subtended segment
     double xm   = ( sp.x + ep.x ) * 0.5;
     double ym   = ( sp.y + ep.y ) * 0.5;
@@ -1477,11 +1485,11 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
 void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 {
 #if 0   // Debug only
-    wxLogMessage("spl deg %d kn %d ctr %d fit %d",
-         m_curr_entity.m_SplineDegree,
-         m_curr_entity.m_SplineKnotsList.size(),
-         m_curr_entity.m_SplineControlPointList.size(),
-         m_curr_entity.m_SplineFitPointList.size() );
+    wxLogMessage( "spl deg %d kn %d ctr %d fit %d",
+                  m_curr_entity.m_SplineDegree,
+                  m_curr_entity.m_SplineKnotsList.size(),
+                  m_curr_entity.m_SplineControlPointList.size(),
+                  m_curr_entity.m_SplineFitPointList.size() );
 #endif
 
     unsigned imax = m_curr_entity.m_SplineControlPointList.size();

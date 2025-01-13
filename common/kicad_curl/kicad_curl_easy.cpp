@@ -108,10 +108,12 @@ static int xferinfo( void* aProgress, curl_off_t aDLtotal, curl_off_t aDLnow, cu
 
 #else
 
-static int progressinfo( void* aProgress, double aDLtotal, double aDLnow, double aULtotal, double aULnow )
+static int progressinfo( void* aProgress, double aDLtotal, double aDLnow, double aULtotal,
+                         double aULnow )
 {
-    return xferinfo( aProgress, static_cast<curl_off_t>( aDLtotal ), static_cast<curl_off_t>( aDLnow ),
-                     static_cast<curl_off_t>( aULtotal ), static_cast<curl_off_t>( aULnow ) );
+    return xferinfo( aProgress, static_cast<curl_off_t>( aDLtotal ),
+                     static_cast<curl_off_t>( aDLnow ), static_cast<curl_off_t>( aULtotal ),
+                     static_cast<curl_off_t>( aULnow ) );
 }
 
 #endif
@@ -138,7 +140,9 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
 #ifdef _WIN32
     long sslOpts = CURLSSLOPT_NATIVE_CA;
 
-    POLICY_CURL_SSL_REVOKE policyState = KIPLATFORM::POLICY::GetPolicyEnum<POLICY_CURL_SSL_REVOKE>( POLICY_KEY_REQUESTS_CURL_REVOKE );
+    POLICY_CURL_SSL_REVOKE policyState = KIPLATFORM::POLICY::GetPolicyEnum<POLICY_CURL_SSL_REVOKE>(
+            POLICY_KEY_REQUESTS_CURL_REVOKE );
+
     if( policyState == POLICY_CURL_SSL_REVOKE::BEST_EFFORT )
     {
         sslOpts |= CURLSSLOPT_REVOKE_BEST_EFFORT;
@@ -161,7 +165,8 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
     wxPlatformInfo platformInfo;
     wxString application( wxS( "KiCad" ) );
     wxString version( GetBuildVersion() );
-    wxString platform = wxS( "(" ) + wxGetOsDescription() + wxS( ";" ) + GetPlatformGetBitnessName();
+    wxString platform = wxS( "(" ) + wxGetOsDescription() + wxS( ";" ) +
+                        GetPlatformGetBitnessName();
 
 #if defined( KICAD_BUILD_ARCH_X64 )
     platform << wxS( ";64-bit" );
@@ -175,7 +180,8 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
 
     platform << wxS( ")" );
 
-    wxString user_agent = wxS( "KiCad/" ) + version + wxS( " " ) + platform + wxS( " " ) + application;
+    wxString user_agent = wxS( "KiCad/" ) + version + wxS( " " ) + platform + wxS( " " ) +
+                          application;
 
     user_agent << wxS( "/" ) << GetBuildDate();
     setOption<const char*>( CURLOPT_USERAGENT, user_agent.ToStdString().c_str() );
@@ -333,6 +339,7 @@ bool KICAD_CURL_EASY::SetTransferCallback( const TRANSFER_CALLBACK& aCallback, s
     setOption( CURLOPT_PROGRESSFUNCTION, progressinfo );
     setOption( CURLOPT_PROGRESSDATA, progress.get() );
 #endif
+
     setOption( CURLOPT_NOPROGRESS, 0L );
     return true;
 }
@@ -357,6 +364,7 @@ int KICAD_CURL_EASY::GetTransferTotal( uint64_t& aDownloadedBytes ) const
     int    result = curl_easy_getinfo( m_CURL, CURLINFO_SIZE_DOWNLOAD, &dl );
     aDownloadedBytes = static_cast<uint64_t>( dl );
 #endif
+
     return result;
 }
 

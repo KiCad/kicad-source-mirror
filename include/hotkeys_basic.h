@@ -57,10 +57,13 @@ class EDA_BASE_FRAME;
 int KeyCodeFromKeyName( const wxString& keyname );
 
 /**
- * Return the user friendly key name (ie: "Ctrl+M") from the key code.
+ * Return the key name from the key code.
+ *
+ * Only some wxWidgets key values are handled for function key ( see hotkeyNameList[] )
  *
  * @param aKeycode key code (ASCII value, or wxWidgets value for function keys).
- * @param aIsFound a pointer to a bool to return true if found, or false.
+ * @param aIsFound a pointer to a bool to return true if found, or false. an be nullptr default).
+ * @return the key name in a wxString.
  */
 wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound = nullptr );
 

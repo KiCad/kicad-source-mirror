@@ -110,8 +110,8 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
 
 
 /**
- * Draw labelled ticks on a line. Ticks are spaced according to a
- * maximum density. Minor ticks are not labelled.
+ * Draw labeled ticks on a line. Ticks are spaced according to a
+ * maximum density. Minor ticks are not labeled.
  *
  * @param aGal the GAL to draw on
  * @param aOrigin start of line to draw ticks on
@@ -119,7 +119,8 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
  * @param aMinorTickLen length of minor ticks in IU
  */
 void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
-                         double aMinorTickLen, const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, bool aDrawingDropShadows )
+                         double aMinorTickLen, const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                         bool aDrawingDropShadows )
 {
     KIGFX::GAL*   gal = aView->GetGAL();
     KIFONT::FONT* font = KIFONT::FONT::GetFont();
@@ -146,6 +147,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
     {
         labelDims.StrokeWidth += 2 * labelDims.ShadowWidth;
         shadowXoffset = labelDims.ShadowWidth;
+
         // Due to the fact a shadow text is drawn left or right aligned,
         // it needs an offset = shadowXoffset to be drawn at the same place as normal text
         // But for some reason we need to slightly modify this offset
@@ -266,8 +268,8 @@ void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTO
 }
 
 
-RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, const EDA_IU_SCALE& aIuScale, EDA_UNITS userUnits,
-        bool aFlipX, bool aFlipY )
+RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, const EDA_IU_SCALE& aIuScale,
+                        EDA_UNITS userUnits, bool aFlipX, bool aFlipY )
         : EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
           m_geomMgr( aGeomMgr ),
           m_userUnits( userUnits ),

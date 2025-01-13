@@ -146,7 +146,7 @@ double PLOTTER::GetDashGapLenIU( int aLineWidth ) const
     return userToDeviceSize( m_renderSettings->GetGapLength( aLineWidth ) );
 }
 
-#include <wx/log.h>
+
 void PLOTTER::Arc( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd, FILL_T aFill,
                    int aWidth )
 {
@@ -232,7 +232,6 @@ void PLOTTER::BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
                            int aTolerance, int aLineThickness )
 {
     // Generic fallback: Quadratic Bezier curve plotted as a polyline
-
     std::vector<VECTOR2I> ctrlPoints;
     ctrlPoints.reserve( 4 );
 
@@ -631,9 +630,9 @@ void PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
     {
         SetCurrentLineWidth( -1 );
         VECTOR2I offsetp1( p1.x - ( width - m_currentPenWidth ) / 2,
-                           p1.y - (width - m_currentPenWidth) / 2 );
+                           p1.y - ( width - m_currentPenWidth ) / 2 );
         VECTOR2I offsetp2( p2.x + ( width - m_currentPenWidth ) / 2,
-                           p2.y + (width - m_currentPenWidth) / 2 );
+                           p2.y + ( width - m_currentPenWidth ) / 2 );
         Rect( offsetp1, offsetp2, FILL_T::NO_FILL, -1 );
         offsetp1.x += ( width - m_currentPenWidth );
         offsetp1.y += ( width - m_currentPenWidth );
@@ -750,6 +749,7 @@ void PLOTTER::Text( const VECTOR2I&       aPos,
 
     aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
 }
+
 
 void PLOTTER::PlotText( const VECTOR2I&        aPos,
                         const COLOR4D&         aColor,

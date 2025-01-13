@@ -42,6 +42,7 @@ void KIGFX::DrawDashedLine( GAL& aGal, const SEG& aSeg, double aDashSize )
 {
     const std::array<double, 2> strokes = { aDashSize, aDashSize / 2 };
     const double                dashCycleLen = strokes[0] + strokes[1];
+
     // The dash cycle length must be at least 1 pixel.
     wxASSERT( dashCycleLen * aGal.GetWorldScale() > 1 );
 
@@ -53,12 +54,14 @@ void KIGFX::DrawDashedLine( GAL& aGal, const SEG& aSeg, double aDashSize )
         dashCycleLen * cos( theta ),
         dashCycleLen * sin( theta ),
     };
+
     const VECTOR2D dashVec{
         strokes[0] * cos( theta ),
         strokes[0] * sin( theta ),
     };
 
     unsigned cyclei = 0;
+
     while( true )
     {
         const VECTOR2D dashStart = aSeg.A + cycleVec * cyclei;

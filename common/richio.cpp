@@ -39,7 +39,9 @@
 // Fall back to getc() when getc_unlocked() is not available on the target platform.
 #if !defined( HAVE_FGETC_NOLOCK )
 #ifdef _MSC_VER
-//getc is not a macro on windows and adds a tiny overhead for the indirection to eventually calling fgetc
+
+// getc is not a macro on windows and adds a tiny overhead for the indirection to eventually
+// calling fgetc
 #define getc_unlocked _fgetc_nolock
 #else
 #define getc_unlocked getc
@@ -448,7 +450,7 @@ int OUTPUTFORMATTER::sprint( const char* fmt, ... )
     va_list args;
 
     va_start( args, fmt );
-    int ret = vprint( fmt, args);
+    int ret = vprint( fmt, args );
     va_end( args );
 
     return ret;
@@ -557,6 +559,7 @@ void STRING_FORMATTER::write( const char* aOutBuf, int aCount )
 {
     m_mystring.append( aOutBuf, aCount );
 }
+
 
 void STRING_FORMATTER::StripUseless()
 {

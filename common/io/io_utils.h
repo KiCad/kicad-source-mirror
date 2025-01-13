@@ -36,17 +36,20 @@ namespace IO_UTILS
 extern KICOMMON_API const std::vector<uint8_t> COMPOUND_FILE_HEADER;
 
 /**
- * Check if a file starts with a defined string
- * @param aFilePath path to the file where we want to check the prefix
- * @param aPrefix prefix string which should match with the initial characters in the file
- * @param aIgnoreWhitespace true if whitespace characters should be ignored before the prefix
+ * Check if a file starts with a defined string.
+ *
+ * @param aFilePath path to the file where we want to check the prefix.
+ * @param aPrefix prefix string which should match with the initial characters in the file.
+ * @param aIgnoreWhitespace true if whitespace characters should be ignored before the prefix.
  */
-KICOMMON_API bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix, bool aIgnoreWhitespace );
+KICOMMON_API bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
+                                        bool aIgnoreWhitespace );
 
 /**
- * Check if a file starts with a defined binary header
- * @param aFilePath path to the file where we want to check the prefix
- * @param aHeader vector of bytes which need to match with the start of the file
+ * Check if a file starts with a defined binary header.
+ *
+ * @param aFilePath path to the file where we want to check the prefix.
+ * @param aHeader vector of bytes which need to match with the start of the file.
  */
 KICOMMON_API bool fileStartsWithBinaryHeader( const wxString&             aFilePath,
                                               const std::vector<uint8_t>& aHeader );

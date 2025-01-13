@@ -50,6 +50,7 @@
         d.name = j.at( #name ).get<double>();                                                      \
     }
 
+
 void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOC_TYPE& d )
 {
     if( j.is_string() )
@@ -66,6 +67,7 @@ void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOC_TYPE& d )
     }
 }
 
+
 void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::HEAD& d )
 {
     PARSE_VALUE( docType );
@@ -81,6 +83,7 @@ void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::HEAD& d )
     PARSE_TO_DOUBLE( y, 0 );
 }
 
+
 void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT& d )
 {
     PARSE_VALUE( docType );
@@ -92,6 +95,7 @@ void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT& d )
     PARSE_VALUE( dataStr );
 }
 
+
 void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_PCB& d )
 {
     PARSE_VALUE( c_para );
@@ -101,15 +105,18 @@ void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_PCB& d )
         d.DRCRULE = j.at( "DRCRULE" );
 }
 
+
 void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_SYM& d )
 {
     PARSE_VALUE( c_para );
 }
 
+
 void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_SCHEMATICS& d )
 {
     PARSE_VALUE( schematics );
 }
+
 
 void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::C_PARA& d )
 {

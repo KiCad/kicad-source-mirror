@@ -61,6 +61,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::SCH_ATTR& d )
         d.fontStyle = j.at( 10 ).get<wxString>();
 }
 
+
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PCB_ATTR& d )
 {
     d.id = j.at( 1 ).get<wxString>();
@@ -159,6 +160,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::SYM_PIN& d )
         d.inverted = j.at( 9 ).get<int>() == 2;
 }
 
+
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::SYM_HEAD& d )
 {
     if( !j.at( 1 ).is_object() )
@@ -174,6 +176,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::SYM_HEAD& d )
 
 }
 
+
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SHEET& d )
 {
     d.name = j.value( "name", "" );
@@ -181,17 +184,20 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SHEET& d )
     d.id = j.value( "id", 0 );
 }
 
+
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SCHEMATIC& d )
 {
     d.name = j.value( "name", "" );
     d.sheets = j.value( "sheets", std::vector<PRJ_SHEET>{} );
 }
 
+
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_BOARD& d )
 {
     d.schematic = j.value( "schematic", "" );
     d.pcb = j.value( "pcb", "" );
 }
+
 
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SYMBOL& d )
 {
@@ -221,6 +227,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SYMBOL& d )
         d.custom_tags = j.at( "custom_tags" );
 }
 
+
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_FOOTPRINT& d )
 {
     if( j.at( "source" ).is_string() )
@@ -248,6 +255,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_FOOTPRINT& 
     if( j.find( "custom_tags" ) != j.end() && j.at( "custom_tags" ).is_object() )
         d.custom_tags = j.at( "custom_tags" );
 }
+
 
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_DEVICE& d )
 {
@@ -277,11 +285,13 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_DEVICE& d )
         d.attributes = AnyMapToStringMap( j.at( "attributes" ) );
 }
 
+
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::BLOB& d )
 {
     d.objectId = j.at( 1 ).get<wxString>();
     d.url = j.at( 3 ).get<wxString>();
 }
+
 
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::POURED& d )
 {

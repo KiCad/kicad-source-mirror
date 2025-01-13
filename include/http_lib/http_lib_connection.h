@@ -42,15 +42,17 @@ public:
     bool IsValidEndpoint() const;
 
     /**
-     * Retrieves a single part with full details from the HTTP library.
+     * Retrieve a single part with full details from the HTTP library.
+     *
      * @param aPk is the primary key of the part
-     * @param aResult will conatain the part if one was found
+     * @param aResult will contain the part if one was found
      * @return true if aResult was filled; false otherwise
      */
     bool SelectOne( const std::string& aPartID, HTTP_LIB_PART& aFetchedPart );
 
     /**
-     * Retrieves all parts from a specific category from the HTTP library.
+     * Retrieve all parts from a specific category from the HTTP library.
+     *
      * @param aPk is the primary key of the category
      * @param aResults will be filled with all parts in that category
      * @return true if the query succeeded and at least one part was found, false otherwise
@@ -91,6 +93,19 @@ private:
 
     bool boolFromString( const std::any& aVal, bool aDefaultValue = false );
 
+    /**
+     * HTTP response status codes indicate whether a specific HTTP request has been
+     * successfully completed.
+     *
+     * Responses are grouped in five classes:
+     *  -  Informational responses (100 ? 199)
+     *  -  Successful responses (200 ? 299)
+     *  -  Redirection messages (300 ? 399)
+     *  -  Client error responses (400 ? 499)
+     *  -  Server error responses (500 ? 599)
+     *
+     *    see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+     */
     wxString httpErrorCodeDescription( uint16_t aHttpCode );
 
     HTTP_LIB_SOURCE m_source;

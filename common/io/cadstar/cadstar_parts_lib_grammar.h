@@ -48,13 +48,15 @@ struct WHITESPACE_OR_CONTINUATION : sor<WHITESPACE, LINE_CONTINUATION> {};
  * String segment( no line continuation ), with exclusion rules
  */
 template <typename... EXCLUSION_RULES>
-struct STR_SEGMENT_EXCLUDING : plus<not_at<sor<eolf, LINE_CONTINUATION, EXCLUSION_RULES...>>, any>{};
+struct STR_SEGMENT_EXCLUDING : plus<not_at<sor<eolf, LINE_CONTINUATION,
+                                               EXCLUSION_RULES...>>, any>{};
 
 /**
  * String with optional line continuation and exclusion rules
  */
 template <typename... EXCLUSION_RULES>
-struct STRING_EXCLUDING : plus<STR_SEGMENT_EXCLUDING<EXCLUSION_RULES...>, opt<LINE_CONTINUATION>> {};
+struct STRING_EXCLUDING : plus<STR_SEGMENT_EXCLUDING<EXCLUSION_RULES...>,
+                               opt<LINE_CONTINUATION>> {};
 
 
 /**
@@ -122,7 +124,7 @@ struct FORMAT : seq
                     CURRENT_FORMAT_NUMBER,
                     opt<eol>
                 >
- {};
+{};
 
 
 // Newer Parts files have possibility of specifying a tree-like structure to show hierarchy
@@ -150,7 +152,7 @@ struct HIERARCHY_NODE_ENTRY :
                     star<HIERARCHY_PART_NAME, star<WHITESPACE_OR_CONTINUATION>>, // 'part1' 'part2'
                     opt<eol>
                 >
- {};
+{};
 
 // **************
 // * PART ENTRY *
@@ -166,7 +168,7 @@ struct PART_NAME_FILTER : sor<spaced_ch<'('>, spaced_ch<':'>, spaced_ch<';'>>{};
 struct PART_NUMBER_FILTER : one<')'>{};
 struct PART_VERSION_FILTER : spaced_ch<';'>{};
 
-    // part header elements:
+// part header elements:
 struct PART_NAME : STRING_EXCLUDING<PART_NAME_FILTER> {};
 struct PART_NUMBER : STRING_IN_BRACKETS {};
 struct PART_VERSION : STRING_EXCLUDING<PART_VERSION_FILTER> {};
@@ -189,11 +191,11 @@ struct PART_HEADER :
 // --------------------
 //<PCB Component Refname>[_(<PCB Alternate Refname>)]
 
-    // string filters:
+// string filters:
 struct PCB_COMPONENT_FILTER : spaced_ch<'('>{};
 struct PCB_ALTERNATE_FILTER : one<')'>{};
 
-    // pcb component elements
+// pcb component elements
 struct PCB_COMPONENT : STRING_EXCLUDING<PCB_COMPONENT_FILTER> {};
 struct PCB_ALTERNATE : STRING_IN_BRACKETS {};
 
@@ -370,7 +372,7 @@ struct EXTERNAL_SWAP_GROUP :
 
 // Part Definition
 // -----------
-//[*DFN_<Definition name>]
+// [*DFN_<Definition name>]
 struct DEFINITION_NAME : STRING_EXCLUDING<> {};
 struct DFN_LINE :
                 seq
@@ -383,7 +385,7 @@ struct DFN_LINE :
                 >
 {};
 
-//[*NGS]
+// [*NGS]
 struct NGS_LINE :
                 seq
                 <
@@ -393,7 +395,7 @@ struct NGS_LINE :
                 >
 {};
 
-//[*NPV]
+// [*NPV]
 struct NPV_LINE :
                 seq
                 <
@@ -403,7 +405,7 @@ struct NPV_LINE :
                 >
 {};
 
-//[*STM_<Component name stem>]
+// [*STM_<Component name stem>]
 struct STEM : STRING_EXCLUDING<> {};
 struct STM_LINE :
                 seq
@@ -416,7 +418,7 @@ struct STM_LINE :
                 >
 {};
 
-//[*MXP <Maximum number of connector pins>]
+// [*MXP <Maximum number of connector pins>]
 struct MAX_PIN_COUNT : plus<digit> {};
 struct MXP_LINE :
                 seq
@@ -429,7 +431,7 @@ struct MXP_LINE :
                 >
 {};
 
-//[*SPI_[(<Part name>)]_[<Model>]_<Component Value>]
+// [*SPI_[(<Part name>)]_[<Model>]_<Component Value>]
 struct SPICE_PART_NAME : STRING_IN_BRACKETS {};
 struct SPICE_MODEL : sor<QUOTED_STRING, STRING_EXCLUDING<>> {};
 struct SPI_LINE :
@@ -446,7 +448,7 @@ struct SPI_LINE :
 {};
 
 
-//[*PAC_(<Part name>)_<Acceptance Text>]
+// [*PAC_(<Part name>)_<Acceptance Text>]
 struct ACCEPTANCE_PART_NAME : STRING_IN_BRACKETS {};
 struct ACCEPTANCE_TEXT : STRING_EXCLUDING<> {};
 struct PAC_LINE :
@@ -464,7 +466,7 @@ struct PAC_LINE :
 
 // User defined part attributes
 // -----------
-//[*<User-defined name>_<Value>]
+// [*<User-defined name>_<Value>]
 struct USER_PART_ATTRIBUTE_NAME : sor<QUOTED_STRING, STRING_EXCLUDING<WHITESPACE>> {};
 struct USER_PART_ATTRIBUTE_VALUE : STRING_EXCLUDING<> {};
 struct USER_PART_ATTRIBUTE :
@@ -499,28 +501,28 @@ struct GENERIC_ATTRIBUTE :
                 >
 {};
 
-//[$[!]<SCM Attribute name>(<Attribute value>)]
+// [$[!]<SCM Attribute name>(<Attribute value>)]
 struct SCM_ATTRIBUTE : GENERIC_ATTRIBUTE<'$'>{};
 
 
-//[%[!]<PCB Attribute name>(<Attribute value>)]
+// [%[!]<PCB Attribute name>(<Attribute value>)]
 struct PCB_ATTRIBUTE : GENERIC_ATTRIBUTE<'%'>{};
 
 
-//[~[!]<Parts Library Attribute Name>(<Attribute Value>)]
+// [~[!]<Parts Library Attribute Name>(<Attribute Value>)]
 struct PART_ATTRIBUTE : GENERIC_ATTRIBUTE<'~'>{};
 
 
-//[@[!]<SCM/PCB Attribute name>(<Attribute value>)]
+// [@[!]<SCM/PCB Attribute name>(<Attribute value>)]
 struct SCH_PCB_ATTRIBUTE : GENERIC_ATTRIBUTE<'@'>{};
 
 
-//[<SCM Symbol Refname>][_(<SCM Alternate Refname>)]
+// [<SCM Symbol Refname>][_(<SCM Alternate Refname>)]
 struct SCH_NAME : sor<QUOTED_STRING, STRING_EXCLUDING<spaced_ch<'('>>> {};
 struct SCH_ALTERNATE : STRING_IN_BRACKETS {};
 struct SCH_SYMBOL_LINE : seq<SCH_NAME, opt<SCH_ALTERNATE>, opt<eol>>{};
 
-//[<PinIdentifier>[.<Position>] [!<Pintype>] [:<Loading>]]
+// [<PinIdentifier>[.<Position>] [!<Pintype>] [:<Loading>]]
 struct PIN_IDENTIFIER : plus<digit>{};
 struct PIN_POSITION : range<'0', '3'>{};
 struct PIN_TYPE : star<alpha>{};
@@ -553,41 +555,42 @@ struct HIDDEN_PIN_ENTRY : seq<PIN_SIGNAL_NAME, plus<WHITESPACE>, PIN_LIST, opt<e
 struct PART_ENTRY :
                 seq
                 <
-                    PART_HEADER,               //.<Part name>[ (1234): 1 ;<Description>]
-                    PART_PCB_COMPONENT,        //<PCB Component Refname> [(Alternate)]
+                    PART_HEADER,               // .<Part name>[ (1234): 1 ;<Description>]
+                    PART_PCB_COMPONENT,        // <PCB Component Refname> [(Alternate)]
 
                     // In any order:
                     star<sor<
-                        PART_VALUE,            //[*VALUE <Value>]
-                        PIN_NAMES_LIST,        //[*PNM <ID><Name>[ <ID><Name>] ...]
-                        PIN_LABELS_LIST,       //[*PLB <ID><Label>[ <ID><Label>] ...]
-                        PIN_EQUIVALENCES,      //[*EQU_<ID>=<ID>[=<ID>=<ID>_etc ...]]
-                        INTERNAL_SWAP_GROUP,   //[*SYM SYM1  |*INT 2 3 |*INT 4 5]
-                        EXTERNAL_SWAP_GROUP,   //[*SYM SYM1  |*EXT 2 3 |*EXT 4 5]
-                        DFN_LINE,              //[*DFN_<Definition name>]
-                        NGS_LINE,              //[*NGS]
-                        NPV_LINE,              //[*NPV]
-                        STM_LINE,              //[*STM_<Component name stem>]
-                        MXP_LINE,              //[*MXP <Maximum number of connector pins>]
-                        SPI_LINE,              //[*SPI_[(<Part name>)]_[<Model>]_<Component Value>]
-                        PAC_LINE,              //[*PAC_(<Part name>)_<Acceptance Text>]
-                        USER_PART_ATTRIBUTE,   //[*<User-defined name>_<Value>]
-                        SCM_ATTRIBUTE,         //[$[!]<SCM Attribute name>(<Attribute value>)]
-                        PCB_ATTRIBUTE,         //[%[!]<PCB Attribute name>(<Attribute value>)]
-                        PART_ATTRIBUTE,        //[~[!]<Parts Library Attribute Name>(<Attribute Value>)]
-                        SCH_PCB_ATTRIBUTE      //[@[!]<SCM/PCB Attribute name>(<Attribute value>)]
+                        PART_VALUE,            // [*VALUE <Value>]
+                        PIN_NAMES_LIST,        // [*PNM <ID><Name>[ <ID><Name>] ...]
+                        PIN_LABELS_LIST,       // [*PLB <ID><Label>[ <ID><Label>] ...]
+                        PIN_EQUIVALENCES,      // [*EQU_<ID>=<ID>[=<ID>=<ID>_etc ...]]
+                        INTERNAL_SWAP_GROUP,   // [*SYM SYM1  |*INT 2 3 |*INT 4 5]
+                        EXTERNAL_SWAP_GROUP,   // [*SYM SYM1  |*EXT 2 3 |*EXT 4 5]
+                        DFN_LINE,              // [*DFN_<Definition name>]
+                        NGS_LINE,              // [*NGS]
+                        NPV_LINE,              // [*NPV]
+                        STM_LINE,              // [*STM_<Component name stem>]
+                        MXP_LINE,              // [*MXP <Maximum number of connector pins>]
+                        SPI_LINE,              // [*SPI_[(<Part name>)]_[<Model>]_<Component Value>]
+                        PAC_LINE,              // [*PAC_(<Part name>)_<Acceptance Text>]
+                        USER_PART_ATTRIBUTE,   // [*<User-defined name>_<Value>]
+                        SCM_ATTRIBUTE,         // [$[!]<SCM Attribute name>(<Attribute value>)]
+                        PCB_ATTRIBUTE,         // [%[!]<PCB Attribute name>(<Attribute value>)]
+                        PART_ATTRIBUTE,        // [~[!]<Parts Library Attribute Name>(<Attribute
+                                               // Value>)]
+                        SCH_PCB_ATTRIBUTE      // [@[!]<SCM/PCB Attribute name>(<Attribute value>)]
                     >>,
-                    star<SYMBOL_ENTRY>,        //[<SCM Symbol Refname>][_(<SCM Alternate Refname>)]
-                                               //[Pin entry] [Pin entry] ...
+                    star<SYMBOL_ENTRY>,        // [<SCM Symbol Refname>][_(<SCM Alternate Refname>)]
+                                               // [Pin entry] [Pin entry] ...
 
-                    star<HIDDEN_PIN_ENTRY>     //[/<Signame>_<Pin entry>]
+                    star<HIDDEN_PIN_ENTRY>     // [/<Signame>_<Pin entry>]
 
                 >
 {};
 
 
 /**
- * Grammar for CADSTAR Parts Library file format (*.lib)
+ * Grammar for CADSTAR Parts Library file format (*.lib).
  */
 struct GRAMMAR :
                 must<
@@ -611,8 +614,9 @@ struct GRAMMAR :
 
 /**
  * Grammar to parse the file header only.
+ *
  * In general a valid file should have `#FORMAT 32` in the first line but there appear to be some
- * files that ommit the format specifier and start straight away with the part definitions. Just
+ * files that omit the format specifier and start straight away with the part definitions. Just
  * in case, we will also allow the first part to be up to 5 lines into the file (arbitrary number
  * just to limit the time spent in reading a file header to determine whether it is valid).
  */

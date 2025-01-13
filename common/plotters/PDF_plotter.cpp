@@ -482,9 +482,10 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
             if( image.HasAlpha() != aCurrImage.HasAlpha() )
                 continue;
 
-            if( image.HasMask() != aCurrImage.HasMask() || image.GetMaskRed() != aCurrImage.GetMaskRed()
-                || image.GetMaskGreen() != aCurrImage.GetMaskGreen()
-                || image.GetMaskBlue() != aCurrImage.GetMaskBlue() )
+            if( image.HasMask() != aCurrImage.HasMask()
+              || image.GetMaskRed() != aCurrImage.GetMaskRed()
+              || image.GetMaskGreen() != aCurrImage.GetMaskGreen()
+              || image.GetMaskBlue() != aCurrImage.GetMaskBlue() )
                 continue;
 
             int pixCount = image.GetWidth() * image.GetHeight();
@@ -492,7 +493,8 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
             if( memcmp( image.GetData(), aCurrImage.GetData(), pixCount * 3 ) != 0 )
                 continue;
 
-            if( image.HasAlpha() && memcmp( image.GetAlpha(), aCurrImage.GetAlpha(), pixCount ) != 0 )
+            if( image.HasAlpha()
+              && memcmp( image.GetAlpha(), aCurrImage.GetAlpha(), pixCount ) != 0 )
                 continue;
 
             return imgHandle;
@@ -885,7 +887,6 @@ void PDF_PLOTTER::ClosePage()
     {
         pageOutlineName = wxString::Format( _( "%s (Page %s)" ), m_pageName, m_pageNumbers.back() );
     }
-
 
     int           actionHandle = emitGoToAction( pageHandle );
     OUTLINE_NODE* pageOutlineNode =
@@ -1476,7 +1477,6 @@ function ShM(aEntries) {
             "/Count %ld\n"
             ">>\n", (long) m_pageHandles.size() );
     closePdfObject();
-
 
     // The info dictionary
     int infoDictHandle = startPdfObject();

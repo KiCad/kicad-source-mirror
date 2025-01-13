@@ -69,7 +69,8 @@ struct CADSTAR_PART_ENTRY
     bool m_PinsVisible = true;
 
     /**
-     * Map of pin identifiers to alphanumeric pin names
+     * Map of pin identifiers to alphanumeric pin names.
+     *
      * Pin names can be a maximum of 10 characters
      * (Typically used for naming of BGA pads - equivalent to KiCad Pin Numbers)
      *
@@ -78,39 +79,41 @@ struct CADSTAR_PART_ENTRY
     std::map<long, std::string> m_PinNamesMap;
 
     /**
-     * Map of pin identifiers to alphanumeric pin labels. Equivalent to KiCad Pin Names
+     * Map of pin identifiers to alphanumeric pin labels.
+     *
+     * Equivalent to KiCad Pin Names
      *
      * E.g: *PLB 1=STROBE 2=OFFSET 3=OFFSET 5=+ 6=+v
      */
     std::map<long, std::string> m_PinLabelsMap;
 
     /**
-     * Groups of pins that are interchangeable with each other
+     * Groups of pins that are interchangeable with each other.
      *
      * E.g: *EQU 2=1, 6=5, 8=9=10, 12=13
      */
     std::vector<std::vector<long>> m_PinEquivalences;
 
     /**
-     * Groups of INTERNAL gates that are interchangeable with each other
+     * Groups of INTERNAL gates that are interchangeable with each other.
      *
      * E.g: *SYM SYM1
      *      *INT 1 3
      *      *INT 2 5
      *
-     * The gate described by pins 1 and 3 above, can be swapped internally with the gate decribed
+     * The gate described by pins 1 and 3 above, can be swapped internally with the gate described
      * by pins 2 and 5 but they CANNOT be swapped with gates in another part
      */
     std::vector<CADSTAR_SWAP_GROUP> m_InternalSwapGroup;
 
     /**
-     * Groups of EXTERNAL gates that are interchangeable with each other
+     * Groups of EXTERNAL gates that are interchangeable with each other.
      *
      * E.g: *SYM SYM2
      *      *EXT 1 3
      *      *EXT 2 5
      *
-     * The gate described by pins 1 and 3 above, can be swapped internally with the gate decribed
+     * The gate described by pins 1 and 3 above, can be swapped internally with the gate described
      * by pins 2 and 5 AND they can be swapped with same gates in another part
      */
     std::vector<CADSTAR_SWAP_GROUP> m_ExternalSwapGroup;
@@ -119,7 +122,8 @@ struct CADSTAR_PART_ENTRY
      * Star (*) line
      * *<User-defined name> <Value>
      * This line is ignored by CADSTAR. Usually they are used by third party tools.
-     * These lines are treated as attributes of the Parts library (i.e. Attribute Type = Parts Library).
+     * These lines are treated as attributes of the Parts library (i.e. Attribute Type =
+     * Parts Library).
      */
     std::map<std::string, std::string> m_UserAttributes;
 
@@ -158,7 +162,7 @@ struct CADSTAR_PART_ENTRY
     std::map<std::string, CADSTAR_ATTRIBUTE_VALUE> m_PartAttributes;
 
     /**
-     * Symbols that form this part
+     * Symbols that form this part.
      */
     std::vector<CADSTAR_PART_SYMBOL_ENTRY> m_Symbols;
 
@@ -226,8 +230,9 @@ struct CADSTAR_SWAP_GROUP
     std::optional<std::string> m_Name;
 
     /**
-     * Each gate is a list of pin identifiers. The order of the pins is important
-     * as it defines the equivalence between gates
+     * Each gate is a list of pin identifiers.
+     *
+     * The order of the pins is important as it defines the equivalence between gates.
      */
     std::vector<std::vector<long>> m_Gates;
 };
@@ -237,7 +242,7 @@ struct CADSTAR_PART_NODE
 {
     std::optional<long>      m_ParentNodeIdx;
     std::string              m_Name;
-    std::vector<std::string> m_PartNames; ///< Part names belonging to this hierarchy
+    std::vector<std::string> m_PartNames; ///< Part names belonging to this hierarchy.
 };
 
 #endif //CADSTAR_PARTS_LIB_MODEL_H

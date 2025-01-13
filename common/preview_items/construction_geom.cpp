@@ -44,19 +44,22 @@ void CONSTRUCTION_GEOM::AddDrawable( const DRAWABLE& aItem, bool aPersistent )
     m_drawables.push_back( { aItem, aPersistent } );
 }
 
+
 void CONSTRUCTION_GEOM::ClearDrawables()
 {
     m_drawables.clear();
 }
 
+
 const BOX2I CONSTRUCTION_GEOM::ViewBBox() const
 {
     // We could be a bit more circumspect here, but much of the time the
-    // enxtended lines go across the whole screen anyway
+    // extended lines go across the whole screen anyway
     BOX2I bbox;
     bbox.SetMaximum();
     return bbox;
 }
+
 
 void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
 {
@@ -142,6 +145,7 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
 
         const int dashSizeBasis = aView->ToWorld( 12 );
         const int snapOriginMarkerSize = aView->ToWorld( 16 );
+
         // Avoid clash with the snap marker if very close
         const int omitStartMarkerIfWithinLength = aView->ToWorld( 8 );
 
@@ -156,6 +160,7 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
         }
     }
 }
+
 
 std::vector<int> CONSTRUCTION_GEOM::ViewGetLayers() const
 {

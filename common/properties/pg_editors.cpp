@@ -450,6 +450,7 @@ void PG_RATIO_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) 
     }
     else if( !aProperty->IsValueUnspecified() )
     {
-        wxFAIL_MSG( wxT( "PG_RATIO_EDITOR should only be used with scale-free numeric properties!" ) );
+        wxFAIL_MSG( wxT( "PG_RATIO_EDITOR should only be used with scale-free numeric "
+                         "properties!" ) );
     }
 }

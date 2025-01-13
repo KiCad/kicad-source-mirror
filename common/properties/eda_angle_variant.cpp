@@ -66,7 +66,7 @@ bool EDA_ANGLE_VARIANT_DATA::Read( wxString& aString )
 
 bool EDA_ANGLE_VARIANT_DATA::Write( wxString& aString ) const
 {
-    aString = wxString::Format( wxT("%g\u00B0"), m_angle.AsDegrees() );
+    aString = wxString::Format( wxT( "%g\u00B0" ), m_angle.AsDegrees() );
     return true;
 }
 

@@ -273,7 +273,9 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                     }
 
                     ch = m_token.input[++m_token.pos];
-                    // the below static cast is to avoid partial unicode chars triggering an assert in isdigit on msvc
+
+                    // the below static cast is to avoid partial unicode chars triggering an
+                    // assert in isdigit on msvc
                 } while( isdigit( static_cast<unsigned char>( ch ) ) || isDecimalSeparator( ch ) );
 
                 m_token.token[ idx ] = 0;
@@ -305,7 +307,8 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
 
                 // Ideally we should also handle the unicode characters that can be used for micro,
                 // but unicode handling in this tokenizer doesn't work.
-                // (e.g. add support for μm (µ is MICRO SIGN), µm (µ is GREEK SMALL LETTER MU) later)
+                // (e.g. add support for μm (µ is MICRO SIGN), µm (µ is GREEK SMALL LETTER MU)
+                // later)
                 if( sizeLeft >= 2 && ch == 'u' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
                 {
                     m_token.pos += 2;
@@ -376,7 +379,8 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     }
     else if( isdigit( static_cast<unsigned char>( ch ) ) || isDecimalSeparator( ch ) )
     {
-        // the above static cast is to avoid partial unicode chars triggering an assert in isdigit on msvc
+        // the above static cast is to avoid partial unicode chars triggering an assert in
+        // isdigit on msvc
         // VALUE
         extractNumber( &siScaler );
         retval.token = VALUE;
@@ -484,10 +488,12 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     return retval;
 }
 
+
 void NUMERIC_EVALUATOR::SetVar( const wxString& aString, double aValue )
 {
     m_varMap[ aString ] = aValue;
 }
+
 
 double NUMERIC_EVALUATOR::GetVar( const wxString& aString )
 {

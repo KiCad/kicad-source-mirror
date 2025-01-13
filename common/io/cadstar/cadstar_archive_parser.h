@@ -87,7 +87,7 @@ class SHAPE_POLY_SET;
 class SHAPE_ARC;
 
 /**
- * @brief Helper functions and common structures for CADSTAR PCB and Schematic archive files.
+ * Helper functions and common structures for CADSTAR PCB and Schematic archive files.
  */
 class CADSTAR_ARCHIVE_PARSER
 {
@@ -206,11 +206,12 @@ public:
     };
 
     /**
-     * @brief Replaces CADSTAR fields for the equivalent in KiCad and stores the field values
-     * in aParserContext
-     * @param aTextString Text string to parse
-     * @param aParserContext PARSER_CONTEXT in which to store the values of the found fields
-     * @return
+     * Replaces CADSTAR fields for the equivalent in KiCad and stores the field values
+     * in \a aParserContext.
+     *
+     * @param aTextString Text string to parse.
+     * @param aParserContext #PARSER_CONTEXT in which to store the values of the found fields.
+     * @return the parsed field.
      */
     static wxString ParseTextFields( const wxString& aTextString, PARSER_CONTEXT* aParserContext );
 
@@ -335,10 +336,10 @@ public:
         wxString Name  = wxT( "CADSTAR" );
         long Modifier1 = FONT_NORMAL; ///< It seems this is related to weight. 400=Normal, 700=Bold.
         long Modifier2 = 0;           ///< It seems this is always 0 regardless of settings
-        bool KerningPairs =
-                false; ///< From CADSTAR Help: "Kerning Pairs is for causing the system to
-                       ///< automatically reduce the spacing between certain pairs of
-                       ///< characters in order to improve the appearance of the text"
+        bool KerningPairs = false;    ///< From CADSTAR Help: "Kerning Pairs is for causing the
+                                      ///< system to automatically reduce the spacing between
+                                      ///< certain pairs of characters in order to improve the
+                                      ///< appearance of the text".
         bool Italic = false;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
@@ -388,7 +389,7 @@ public:
 
 
     /**
-     * @brief Represents a floating value in E notation
+     * Represent a floating value in E notation.
      */
     struct EVALUE : PARSER
     {
@@ -400,7 +401,7 @@ public:
     };
 
     /**
-     * @brief Represents a point in x,y coordinates
+     * Represent a point in x,y coordinates.
      */
     struct POINT : VECTOR2I, PARSER
     {
@@ -436,12 +437,13 @@ public:
     };
 
     /**
-     * @brief Represents a vertex in a shape. E.g. A circle is made by two semicircles with the same
+     * Represents a vertex in a shape. E.g. A circle is made by two semicircles with the same
      * center point.
      */
     struct VERTEX : PARSER
     {
-        VERTEX( VERTEX_TYPE aType = VERTEX_TYPE::POINT, POINT aEnd = POINT(), POINT aCenter = POINT() ) :
+        VERTEX( VERTEX_TYPE aType = VERTEX_TYPE::POINT, POINT aEnd = POINT(),
+                POINT aCenter = POINT() ) :
                 Type( aType ), End( aEnd ), Center( aCenter )
         {}
 
@@ -462,7 +464,7 @@ public:
     };
 
     /**
-     * @brief Represents a cutout in a closed shape (e.g. OUTLINE)
+     * Represent a cutout in a closed shape (e.g. OUTLINE).
      */
     struct CUTOUT : PARSER
     {
@@ -593,21 +595,20 @@ public:
 
 
     /**
-     * @brief From CADSTAR Help: "Text Alignment enables you to define the position of an alignment
-     * origin for all text items in CADSTAR. The alignment origin is a point on or within the text
-     * boundary and defines how the text is displayed.
+     * From CADSTAR Help: "Text Alignment enables you to define the position of an alignment
+     * origin for all text items in CADSTAR.
      *
-     * For example, with an alignment of bottom-right the origin will be positioned at the bottom
-     * right of the text boundary. This makes it easier to right-align several text items
-     * regardless of the length of text displayed.
+     * The alignment origin is a point on or within the text boundary and defines how the text
+     * is displayed.  For example, with an alignment of bottom-right the origin will be positioned
+     * at the bottom right of the text boundary. This makes it easier to right-align several text
+     * items regardless of the length of text displayed.  Text Alignment applies to all CADSTAR
+     * text. [...]
      *
-     * Text Alignment applies to all CADSTAR text. [...]
-     *
-     * Note: Unaligned text operates in the way CADSTAR text always has. In most cases this behaves
+     * @note Unaligned text operates in the way CADSTAR text always has. In most cases this behaves
      * as Bottom Left alignment, but there are a few exceptions, e.g. pin names. Also unaligned
      * multiline text has an origin Bottom Left of the first line."
      *
-     * See also JUSTIFICATION
+     * @see JUSTIFICATION
      */
     enum class ALIGNMENT
     {
@@ -627,13 +628,12 @@ public:
     static ALIGNMENT ParseAlignment( XNODE* aNode );
 
     /**
-     * @brief From CADSTAR Help: "Multi Line Text can also be justified as Left, Centre or Right.
+     * From CADSTAR Help: "Multi Line Text can also be justified as Left, Centre or Right.
+     *
      * This does not affect the text alignment. Note: Justification of single line text has no
-     * effect."
+     * effect."  This only affects multiline text
      *
-     * This only affects multiline text
-     *
-     * See also ALIGNMENT
+     * @see ALIGNMENT
      */
     enum class JUSTIFICATION
     {
@@ -646,12 +646,12 @@ public:
     static JUSTIFICATION ParseJustification( XNODE* aNode );
 
     /**
-     * @brief Sets the readability direction of text. From CADSTAR Help: "Horizontal text will
-     * always be displayed from left to right (i.e. never upside down). Vertical text can be set as
-     * readable from either the left or right edge of the design."
+     * Sets the readability direction of text. From CADSTAR Help: "Horizontal text will
+     * always be displayed from left to right (i.e. never upside down).
      *
-     * I.e. Vertical text can either be rotated 90 degrees clockwise or 90 degrees anticlockwise from
-     * horizontal. This does not impact vertical text
+     * Vertical text can be set as readable from either the left or right edge of the design."
+     * I.e. Vertical text can either be rotated 90 degrees clockwise or 90 degrees counterclockwise
+     * from horizontal. This does not impact vertical text.
      */
     enum class READABILITY
     {
@@ -725,7 +725,7 @@ public:
 
 
     /**
-     * @brief NOTE from CADSTAR help: To convert a Part Definition Attribute into a hyperlink, prefix
+     * NOTE from CADSTAR help: To convert a Part Definition Attribute into a hyperlink, prefix
      * the attribute name with "Link "
      */
     struct ATTRNAME : PARSER
@@ -783,7 +783,7 @@ public:
 
 
     /**
-     * @brief Corresponds to CADSTAR "origin". This is used for setting a location of an attribute
+     * Corresponds to CADSTAR "origin". This is used for setting a location of an attribute
      * e.g. Designator (called Component Name in CADSTAR), Part Name (name of component in the
      * library), etc. The atom identifier is "TEXTLOC"
      */
@@ -792,7 +792,7 @@ public:
         TEXT_LOCATION()
         {
             // The default alignment for TEXT_LOCATION (when "NO_ALIGNMENT" is selected) is
-            // Bottom left, matching CADSTAR's default behaviour
+            // Bottom left, matching CADSTAR's default behavior
             Alignment = ALIGNMENT::BOTTOMLEFT;
         }
         ATTRIBUTE_ID AttributeID;
@@ -834,14 +834,12 @@ public:
     };
 
     /**
-     * @brief Corresponds to "Display when" Item property. From CADSTAR
-     *        Help: "This parameter enables you to make the visibility of
-     *        a component outline/area (or an area of component copper, or
-     *        a string of component text) dependent on the current mirror
-     *        status of the component.
+     * Corresponds to "Display when" Item property.
      *
-     *        For example, you may require a string of component text to
-     *        be displayed only when the component is mirrored."
+     * From CADSTAR Help: "This parameter enables you to make the visibility of a component
+     * outline/area (or an area of component copper, or a string of component text) dependent
+     * on the current mirror status of the component.  For example, you may require a string
+     * of component text to be displayed only when the component is mirrored."
      */
     enum class SWAP_RULE
     {
@@ -867,7 +865,7 @@ public:
 
 
     /**
-     * @brief References an element from a design reuse block
+     * References an element from a design reuse block.
      */
     struct REUSEBLOCKREF : PARSER
     {
@@ -994,9 +992,9 @@ public:
 
                 wxString Identifier = wxEmptyString;      ///< This should match a pad identifier
                                                           ///< in the component footprint
-                                                          ///< subnode="PINIDENTIFIER". It is assumed
-                                                          ///< that this could be empty in earlier
-                                                          ///< versions of CADSTAR
+                                                          ///< subnode="PINIDENTIFIER". It is
+                                                          ///< assumed that this could be empty in
+                                                          ///< earlier versions of CADSTAR
                 wxString Name = wxEmptyString;            ///< Can be empty. If empty the pin name
                                                           ///< displayed will be Identifier
                                                           ///< (subnode="PINNAME")
@@ -1028,7 +1026,6 @@ public:
                                                           ///< the pin (It is unclear what the units
                                                           ///< are, but only accepted values are
                                                           ///< integers) subnode ="PINLOAD"
-                                                          ///
                 CADSTAR_PIN_POSITION Position =
                     CADSTAR_PIN_POSITION::TOP_RIGHT; ///< The pin names will use these positions
                                                      ///< when the symbol is added to a design
@@ -1157,7 +1154,7 @@ public:
             NETELEMENT_ID ID; ///< First character is "J"
             LAYER_ID      LayerID;
             POINT         Location;
-            GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this JUCTION is part of a
+            GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this JUNCTION is part of a
                                                    ///< group
             REUSEBLOCKREF ReuseBlockRef;
             bool          Fixed = false;
@@ -1289,7 +1286,8 @@ public:
     static void InsertAttributeAtEnd( XNODE* aNode, wxString aValue );
 
     /**
-     * @brief Reads a CADSTAR Archive file (S-parameter format)
+     * Reads a CADSTAR Archive file (S-parameter format).
+     *
      * @param aFileName
      * @param aFileTypeIdentifier Identifier of the first node in the file to check against.
               E.g. "CADSTARPCB"
@@ -1303,25 +1301,22 @@ public:
                                    PROGRESS_REPORTER* aProgressReporter = nullptr );
 
     /**
-     * @brief
      * @param aAttribute
      * @return
      */
     static bool IsValidAttribute( wxXmlAttribute* aAttribute );
 
     /**
-     * @brief
      * @param aNode
      * @param aID
      * @param aIsRequired Prevents exception throwing if false.
      * @return returns the value (wxString) of attribute "attrX" in aNode where 'X' is aID
      * @throws IO_ERROR if attribute does not exist
      */
-    static wxString GetXmlAttributeIDString(
-            XNODE* aNode, unsigned int aID, bool aIsRequired = true );
+    static wxString GetXmlAttributeIDString( XNODE* aNode, unsigned int aID,
+                                             bool aIsRequired = true );
 
     /**
-     * @brief
      * @param aNode
      * @param aID
      * @param aIsRequired Prevents exception throwing if false.
@@ -1331,21 +1326,18 @@ public:
     static long GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID, bool aIsRequired = true );
 
     /**
-     * @brief
      * @param aNode
      * @throw IO_ERROR if a child node was found
      */
     static void CheckNoChildNodes( XNODE* aNode );
 
     /**
-     * @brief
      * @param aNode
      * @throw IO_ERROR if a node adjacent to aNode was found
      */
     static void CheckNoNextNodes( XNODE* aNode );
 
     /**
-     * @brief
      * @param aNode with a child node containing an EVALUE
      * @param aValueToParse
      * @throw IO_ERROR if unable to parse or node is not an EVALUE
@@ -1353,8 +1345,8 @@ public:
     static void ParseChildEValue( XNODE* aNode, PARSER_CONTEXT* aContext, EVALUE& aValueToParse );
 
     /**
-     * @brief if no children are present, it just returns an empty
-     *        vector (without throwing an exception)
+     * If no children are present, it just returns an empty vector (without throwing an exception).
+     *
      * @param aNode containing a series of POINT objects
      * @param aTestAllChildNodes
      * @param aExpectedNumPoints if UNDEFINED_VALUE (i.e. -1), this is check is disabled
@@ -1362,14 +1354,16 @@ public:
      * @throw IO_ERROR if one of the following:
      *         - Unable to parse a POINT object
      *         - aTestAllChildNodes is true and one of the child nodes is not a valid POINT object
-     *         - aExpectedNumPoints is non-negative and the number of POINT objects found is different
+     *         - aExpectedNumPoints is non-negative and the number of POINT objects found is
+     *           different
      */
     static std::vector<POINT> ParseAllChildPoints( XNODE* aNode, PARSER_CONTEXT* aContext,
-            bool aTestAllChildNodes = false, int aExpectedNumPoints = UNDEFINED_VALUE );
+                                                   bool aTestAllChildNodes = false,
+                                                   int aExpectedNumPoints = UNDEFINED_VALUE );
 
     /**
-     * @brief if no children are present, it just returns an empty
-     *        vector (without throwing an exception)
+     * If no children are present, it just returns an empty vector (without throwing an exception).
+     *
      * @param aNode containing a series of VERTEX objects
      * @param aTestAllChildNodes
      * @param aExpectedNumPoints if -1, this is check is disabled
@@ -1378,12 +1372,12 @@ public:
      *         - Unable to parse a VERTEX object
      *         - aTestAllChildNodes is true and one of the child nodes is not a valid VERTEX object
      */
-    static std::vector<VERTEX> ParseAllChildVertices(
-            XNODE* aNode, PARSER_CONTEXT* aContext, bool aTestAllChildNodes = false );
+    static std::vector<VERTEX> ParseAllChildVertices( XNODE* aNode, PARSER_CONTEXT* aContext,
+                                                      bool aTestAllChildNodes = false );
 
     /**
-     * @brief if no children are present, it just returns an empty
-     *        vector (without throwing an exception)
+     * If no children are present, it just returns an empty vector (without throwing an exception).
+     *
      * @param aNode containing a series of CUTOUT objects
      * @param aTestAllChildNodes
      * @param aExpectedNumPoints if -1, this is check is disabled
@@ -1392,8 +1386,8 @@ public:
      *         - Unable to parse a CUTOUT object
      *         - aTestAllChildNodes is true and one of the child nodes is not a valid CUTOUT object
      */
-    static std::vector<CUTOUT> ParseAllChildCutouts(
-            XNODE* aNode, PARSER_CONTEXT* aContext, bool aTestAllChildNodes = false );
+    static std::vector<CUTOUT> ParseAllChildCutouts( XNODE* aNode, PARSER_CONTEXT* aContext,
+                                                     bool aTestAllChildNodes = false );
 
     static long GetNumberOfChildNodes( XNODE* aNode );
 
@@ -1412,16 +1406,19 @@ public:
     }
 
     /**
-     * @brief Convert a string with CADSTAR overbar characters to equivalent in KiCad
+     * Convert a string with CADSTAR overbar characters to equivalent in KiCad.
+     *
      * @param aCadstarString Input string
      * @return KiCad string with overbar characters
-    */
+     */
     static wxString HandleTextOverbar( wxString aCadstarString );
 
     /**
-     * Corrects the position of a text element that had NO_ALIGNMENT in CADSTAR. Assumes that the
-     * provided text element has been initialised with a position and orientation.
-     * @param aKiCadTextItem a Kicad item to correct
+     * Correct the position of a text element that had NO_ALIGNMENT in CADSTAR.
+     *
+     * Assumes that the provided text element has been initialised with a position and orientation.
+     *
+     * @param aKiCadTextItem a KiCad item to correct
      */
     static void FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem );
 
@@ -1429,7 +1426,7 @@ public:
 
 
 protected:
-    void checkPoint(); ///< Updates m_progressReporter or throws if user cancelled
+    void checkPoint(); ///< Updates m_progressReporter or throws if user canceled
 
     PARSER_CONTEXT     m_context;
     PROGRESS_REPORTER* m_progressReporter; // optional; may be nullptr

@@ -73,7 +73,8 @@ public:
         m_stTitle = new wxStaticText( this, wxID_ANY, aNoti->title );
         m_stTitle->Wrap( -1 );
         m_stTitle->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT,
-                                        wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+                                    wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false,
+                                    wxEmptyString ) );
         mainSizer->Add( m_stTitle, 0, wxALL | wxEXPAND, 1 );
 
         m_stDescription = new wxStaticText( this, wxID_ANY, aNoti->description, wxDefaultPosition,
@@ -206,7 +207,7 @@ public:
         m_scrolledWindow->Layout();
         m_contentSizer->Fit( m_scrolledWindow );
 
-        // call this at this window otherwise the child panels dont resize width properly
+        // call this at this window otherwise the child panels don't resize width properly
         Layout();
 
         m_panelMap[aNoti] = panel;
@@ -216,6 +217,7 @@ public:
     void Remove( NOTIFICATION* aNoti )
     {
         auto it = m_panelMap.find( aNoti );
+
         if( it != m_panelMap.end() )
         {
             NOTIFICATION_PANEL* panel = m_panelMap[aNoti];
@@ -237,11 +239,14 @@ public:
 
 private:
     wxScrolledWindow*                                      m_scrolledWindow;
-    ///< Inner content of the scrolled window, add panels here
+
+    /// Inner content of the scrolled window, add panels here.
     wxBoxSizer*                                            m_contentSizer;
     std::unordered_map<NOTIFICATION*, NOTIFICATION_PANEL*> m_panelMap;
     NOTIFICATIONS_MANAGER*                                 m_manager;
-    ///< Text to be displayed when no notifications are present, this gets a Show/Hide call as needed
+
+    /// Text to be displayed when no notifications are present, this gets a Show/Hide call as
+    /// needed.
     wxStaticText*                                          m_noNotificationsText;
 };
 
@@ -266,7 +271,7 @@ void NOTIFICATIONS_MANAGER::Load()
     }
     catch( std::exception& )
     {
-        // failed to load the json, which is fine, default to no notificaitons
+        // failed to load the json, which is fine, default to no notifications
     }
 
     if( wxGetEnv( wxT( "KICAD_TEST_NOTI" ), nullptr ) )
@@ -289,9 +294,9 @@ void NOTIFICATIONS_MANAGER::Save()
 
 
 void NOTIFICATIONS_MANAGER::CreateOrUpdate( const wxString& aKey,
-                                    const wxString& aTitle,
-                                    const wxString& aDescription,
-                                    const wxString& aHref )
+                                            const wxString& aTitle,
+                                            const wxString& aDescription,
+                                            const wxString& aHref )
 {
     wxCHECK_RET( !aKey.IsEmpty(), wxS( "Notification key must not be empty" ) );
 

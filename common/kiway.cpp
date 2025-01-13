@@ -150,7 +150,6 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
     // To speed up development, it's sometimes nice to run kicad from inside
     // the build path.  In that case, each program will be in a subdirectory.
     // To find the DSOs, we need to go up one directory and then enter a subdirectory.
-
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
 #ifdef __WXMAC__
@@ -317,7 +316,8 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             {
                 // OnKiFaceStart may generate an exception
                 // Before we continue and ultimately unload our module to retry we need
-                // to process the exception before we delete the free the memory space the exception resides in
+                // to process the exception before we delete the free the memory space the
+                // exception resides in
                 Pgm().HandleException( std::current_exception() );
             }
 
@@ -327,7 +327,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             }
             else
             {
-                // Usually means cancelled initial global library setup
+                // Usually means canceled initial global library setup
                 // But it could have been an exception/failure
                 // Let the module go out of scope to unload
                 dso.Attach( dsoHandle );
@@ -666,10 +666,12 @@ void KIWAY::ProjectChanged()
     }
 }
 
+
 wxWindow* KIWAY::GetBlockingDialog()
 {
     return wxWindow::FindWindowById( m_blockingDialog );
 }
+
 
 void KIWAY::SetBlockingDialog( wxWindow* aWin )
 {

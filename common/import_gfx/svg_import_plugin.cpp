@@ -191,16 +191,17 @@ bool SVG_IMPORT_PLUGIN::Import()
         {
             if( filled && !path->closed )
             {
-                // KiCad doesn't support a single object representing a filled shape that is *not* closed
-                // so create a filled, closed shape for the fill, and an unfilled, open shape for the outline
+                // KiCad doesn't support a single object representing a filled shape that is
+                // *not* closed so create a filled, closed shape for the fill, and an unfilled,
+                // open shape for the outline
                 static IMPORTED_STROKE noStroke( -1, LINE_STYLE::SOLID, COLOR4D::UNSPECIFIED );
                 DrawPath( path->pts, path->npts, true, noStroke, true, fillColor );
                 DrawPath( path->pts, path->npts, false, stroke, false, COLOR4D::UNSPECIFIED );
             }
             else
             {
-                // Either the shape has fill and no stroke, so we implicitly close it (for no difference),
-                // or it's really closed
+                // Either the shape has fill and no stroke, so we implicitly close it (for no
+                // difference), or it's really closed.
                 // We could choose to import a not-filled, closed outline as splines to keep the
                 // original editability and control points, but currently we don't.
                 const bool closed = path->closed || filled;
@@ -310,6 +311,7 @@ void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aCl
     {
         // Closed paths are always polygons, which mean they need to be interpolated
         std::vector<VECTOR2D> collectedPathPoints;
+
         if( aNumPoints > 0 )
             GatherInterpolatedCubicBezierPath( aPoints, aNumPoints, collectedPathPoints );
 

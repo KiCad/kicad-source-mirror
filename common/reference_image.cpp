@@ -229,6 +229,7 @@ void REFERENCE_IMAGE::scaleBy( double aRatio )
 
     m_bitmapBase->SetScale( m_bitmapBase->GetScale() * aRatio );
     SetTransformOriginOffset( KiROUND( newOffset ) );
+
     // Don't need to recheck the box, we just did that
     m_pos = KiROUND( newCenter );
 }

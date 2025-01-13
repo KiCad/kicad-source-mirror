@@ -102,7 +102,7 @@
 // During tests, we (JPC) found issues when the coordinates used 6 digits in mantissa
 // especially for stroke-width using very small (but not null) values < 0.00001 mm
 // So to avoid this king of issue, we are using 4 digits in mantissa
-// The resolution (m_precision ) is 0.1 micron, that looks enougt for a SVG file
+// The resolution (m_precision ) is 0.1 micron, that looks enough for a SVG file
 
 /**
  * Translates '<' to "&lt;", '>' to "&gt;" and so on, according to the spec:
@@ -251,11 +251,11 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
     }
     else
     {
-        // Fix a strange issue found in Inkscape: aWidth < 100 nm create issues on degrouping objects
+        // Fix a strange issue found in Inkscape: aWidth < 100 nm create issues on degrouping
+        // objects.
         // So we use only 4 digits in mantissa for stroke-width.
         // TODO: perhaps used only 3 or 4 digits in mantissa for all values in mm, because some
         // issues were previously reported reported when using nm as integer units
-
         fprintf( m_outputFile, "\nstroke:#%6.6lX; stroke-width:%.*f; stroke-opacity:1; \n",
                  m_pen_rgb_color, m_precision, pen_w );
         fputs( "stroke-linecap:round; stroke-linejoin:round;", m_outputFile );
@@ -317,7 +317,6 @@ void SVG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
         aWidth = m_renderSettings->GetDefaultPenWidth();
 
     // Note: aWidth == 0 is fine: used for filled shapes with no outline thickness
-
     wxASSERT_MSG( aWidth >= 0, "Plotter called to set negative pen width" );
 
     if( aWidth != m_currentPenWidth )
@@ -346,7 +345,7 @@ void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
     int red     = (int) ( 255.0 * r );
     int green   = (int) ( 255.0 * g );
     int blue    = (int) ( 255.0 * b );
-    long rgb_color = (red << 16) | (green << 8) | blue;
+    long rgb_color = ( red << 16 ) | ( green << 8 ) | blue;
 
     if( m_pen_rgb_color != rgb_color || m_brush_alpha != a )
     {
@@ -452,7 +451,6 @@ void SVG_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
      *
      *  The arc is drawn in an anticlockwise direction from the start point to the end point.
      */
-
     if( aRadius <= 0 )
     {
         Circle( aCenter, aWidth, FILL_T::FILLED_SHAPE, 0 );
@@ -528,7 +526,8 @@ void SVG_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
         if( m_graphics_changed )
             setSVGPlotStyle( GetCurrentLineWidth() );
 
-        fprintf( m_outputFile, "<path d=\"M%.*f %.*f A%.*f %.*f 0.0 %d %d %.*f %.*f L %.*f %.*f Z\" />\n",
+        fprintf( m_outputFile,
+                 "<path d=\"M%.*f %.*f A%.*f %.*f 0.0 %d %d %.*f %.*f L %.*f %.*f Z\" />\n",
                  m_precision, start.x,
                  m_precision, start.y,
                  m_precision, radius_device,
@@ -780,7 +779,8 @@ bool SVG_PLOTTER::StartPlot( const wxString& aPageNumber )
 
     // Write viewport pos and size
     VECTOR2D origin;    // TODO set to actual value
-    fprintf( m_outputFile, "  width=\"%.*fmm\" height=\"%.*fmm\" viewBox=\"%.*f %.*f %.*f %.*f\">\n",
+    fprintf( m_outputFile,
+             "  width=\"%.*fmm\" height=\"%.*fmm\" viewBox=\"%.*f %.*f %.*f %.*f\">\n",
              m_precision, (double) m_paperSize.x / m_IUsPerDecimil * 2.54 / 1000,
              m_precision, (double) m_paperSize.y / m_IUsPerDecimil * 2.54 / 1000,
              m_precision, origin.x, m_precision, origin.y,
@@ -879,7 +879,8 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
 
     // aSize.x or aSize.y is < 0 for mirrored texts.
     // The actual text size value is the absolute value
-    text_size.x = std::abs( GRTextWidth( aText, aFont, aSize, aWidth, aBold, aItalic, aFontMetrics ) );
+    text_size.x = std::abs( GRTextWidth( aText, aFont, aSize, aWidth, aBold, aItalic,
+                                         aFontMetrics ) );
     text_size.y = std::abs( aSize.x * 4/3 ); // Hershey font height to em size conversion
     VECTOR2D anchor_pos_dev = userToDeviceCoordinates( aPos );
     VECTOR2D text_pos_dev = userToDeviceCoordinates( text_pos );

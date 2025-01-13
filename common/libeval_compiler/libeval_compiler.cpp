@@ -236,6 +236,7 @@ wxString TOKENIZER::GetChars( const std::function<bool( wxUniChar )>& cond ) con
     return rv;
 }
 
+
 bool TOKENIZER::MatchAhead( const wxString& match,
                             const std::function<bool( wxUniChar )>& stopCond ) const
 {
@@ -770,6 +771,7 @@ static void prepareTree( LIBEVAL::TREE_NODE *node )
     if ( node->leaf[1] )
         prepareTree( node->leaf[1] );
 }
+
 
 static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
 {

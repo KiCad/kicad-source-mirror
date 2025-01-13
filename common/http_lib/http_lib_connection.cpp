@@ -420,17 +420,7 @@ bool HTTP_LIB_CONNECTION::boolFromString( const std::any& aVal, bool aDefaultVal
     return aDefaultValue;
 }
 
-/*
-* HTTP response status codes indicate whether a specific HTTP request has been successfully completed.
-* Responses are grouped in five classes:
-*    Informational responses (100 ? 199)
-*    Successful responses (200 ? 299)
-*    Redirection messages (300 ? 399)
-*    Client error responses (400 ? 499)
-*    Server error responses (500 ? 599)
-*
-*    see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-*/
+
 wxString HTTP_LIB_CONNECTION::httpErrorCodeDescription( uint16_t aHttpCode )
 {
     auto codeDescription =
@@ -450,7 +440,7 @@ wxString HTTP_LIB_CONNECTION::httpErrorCodeDescription( uint16_t aHttpCode )
                 case 205: return wxS( "Reset Content" );
                 case 206: return wxS( "Partial Content" );
                 case 207: return wxS( "Multi-Status" );
-                case 208: return wxS( "Already Reporte" );
+                case 208: return wxS( "Already Reported" );
                 case 226: return wxS( "IM Used" );
 
                 case 300: return wxS( "Multiple Choices" );
@@ -482,7 +472,7 @@ wxString HTTP_LIB_CONNECTION::httpErrorCodeDescription( uint16_t aHttpCode )
                 case 417: return wxS( "Expectation Failed" );
                 case 418: return wxS( "I'm a teapot" );
                 case 421: return wxS( "Misdirected Request" );
-                case 422: return wxS( "Unprocessable Conten" );
+                case 422: return wxS( "Unprocessable Content" );
                 case 423: return wxS( "Locked" );
                 case 424: return wxS( "Failed Dependency" );
                 case 425: return wxS( "Too Early (Experimental)" );
@@ -499,8 +489,8 @@ wxString HTTP_LIB_CONNECTION::httpErrorCodeDescription( uint16_t aHttpCode )
                 case 504: return wxS( "Gateway Timeout" );
                 case 505: return wxS( "HTTP Version Not Supported" );
                 case 506: return wxS( "Variant Also Negotiates" );
-                case 507: return wxS( "Insufficient Storag" );
-                case 508: return wxS( "Loop Detecte" );
+                case 507: return wxS( "Insufficient Storage" );
+                case 508: return wxS( "Loop Detected" );
                 case 510: return wxS( "Not Extended" );
                 case 511: return wxS( "Network Authentication Required" );
                 default:  return wxS( "Unknown" );

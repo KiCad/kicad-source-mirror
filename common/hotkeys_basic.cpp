@@ -161,15 +161,6 @@ static struct hotkey_name_descr hotkeyNameList[] =
 #define MODIFIER_SHIFT      wxT( "Shift+" )
 
 
-/**
- * Return the key name from the key code.
- *
- * Only some wxWidgets key values are handled for function key ( see hotkeyNameList[] )
- *
- * @param aKeycode key code (ASCII value, or wxWidgets value for function keys).
- * @param aIsFound a pointer to a bool to return true if found, or false. an be nullptr default).
- * @return the key name in a wxString.
- */
 wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 {
     wxString keyname, modifier, fullkeyname;
@@ -229,12 +220,6 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 }
 
 
-/**
- * @param aText the base text on which to append the hotkey.
- * @param aHotKey the hotkey keycode.
- * @param aStyle IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys).
- *               IS_COMMENT to add <spaces><(keyname)> mainly in tool tips.
- */
 wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE aStyle )
 {
     wxString msg = aText;
@@ -273,9 +258,6 @@ wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE a
 }
 
 
-/**
- * Return the key code from its user-friendly key name (ie: "Ctrl+M").
- */
 int KeyCodeFromKeyName( const wxString& keyname )
 {
     int ii, keycode = KEY_NON_FOUND;
@@ -339,9 +321,6 @@ int KeyCodeFromKeyName( const wxString& keyname )
 }
 
 
-/*
- * Displays the hotkeys registered with the given tool manager.
- */
 void DisplayHotkeyList( EDA_BASE_FRAME* aParent )
 {
     DIALOG_LIST_HOTKEYS dlg( aParent );
@@ -399,11 +378,13 @@ void ReadHotKeyConfigIntoActions( const wxString& aFileName, std::vector<TOOL_AC
 
     // Set each tool action hotkey to the config file hotkey if present
     for( TOOL_ACTION* action : aActions )
+    {
         if( hotkeys.find( action->GetName() ) != hotkeys.end() )
         {
             std::pair<int, int> keys = hotkeys[action->GetName()];
             action->SetHotKey( keys.first, keys.second );
         }
+    }
 }
 
 
@@ -420,7 +401,8 @@ int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions )
 
     // Overlay the current app's hotkey definitions onto the map
     for( const TOOL_ACTION* action : aActions )
-        hotkeys[ action->GetName() ] = std::pair<int, int>( action->GetHotKey(), action->GetHotKeyAlt() );
+        hotkeys[ action->GetName() ] = std::pair<int, int>( action->GetHotKey(),
+                                                            action->GetHotKeyAlt() );
 
     // Write entire hotkey set
     wxFFileOutputStream outStream( fn.GetFullPath() );

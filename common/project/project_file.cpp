@@ -147,10 +147,6 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 }
 
 
-/**
- * Schema version 2: Bump for KiCad 9 layer numbering changes
- * Migrate layer presets to use new enum values for copper layers
- */
 bool PROJECT_FILE::migrateSchema1To2()
 {
     auto p( "/board/layer_presets"_json_pointer );
@@ -169,9 +165,6 @@ bool PROJECT_FILE::migrateSchema1To2()
 }
 
 
-/**
- * Schema version 3: move layer presets to use named render layers
- */
 bool PROJECT_FILE::migrateSchema2To3()
 {
     auto p( "/board/layer_presets"_json_pointer );
@@ -326,7 +319,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
     fromLegacy<int>( aCfg, "JunctionSize",             "schematic.drawing.default_junction_size" );
 
-    fromLegacyString(   aCfg, "FieldNameTemplates",    "schematic.drawing.field_names" );
+    fromLegacyString( aCfg, "FieldNameTemplates",    "schematic.drawing.field_names" );
 
     if( !fromLegacy<double>( aCfg, "TextOffsetRatio",  "schematic.drawing.text_offset_ratio" ) )
     {
@@ -418,7 +411,8 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
     fromLegacy<bool>( aCfg, "CopperTextUpright",  bp + "defaults.copper_text_upright" );
 
     if( !fromLegacy<double>( aCfg, "EdgeCutLineWidth", bp + "defaults.board_outline_line_width" ) )
-        fromLegacy<double>( aCfg, "BoardOutlineThickness", bp + "defaults.board_outline_line_width" );
+        fromLegacy<double>( aCfg, "BoardOutlineThickness",
+                            bp + "defaults.board_outline_line_width" );
 
     fromLegacy<double>( aCfg, "CourtyardLineWidth",   bp + "defaults.courtyard_line_width" );
 
@@ -640,8 +634,8 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
     // Even if parameters were not modified, we should resave after migration
     bool force = aForce || m_wasMigrated;
 
-    // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
-    // should be cleared at this
+    // If we're actually going ahead and doing the save, the flag that keeps code from doing the
+    // save should be cleared at this.
     m_wasMigrated = false;
 
     return JSON_SETTINGS::SaveToFile( aDirectory, force );

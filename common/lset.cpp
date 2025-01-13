@@ -185,11 +185,6 @@ bool LSET::IsBetween( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd, PCB_LAYER_ID aLaye
 }
 
 
-/**
- * NOTE: These names must not be translated or changed.  They are used as tokens in the board
- * file format because the ordinal value of the PCB_LAYER_ID enum was not stable over time.
- * @see LayerName() for what should be used to display the default name of a layer in the GUI.
- */
 wxString LSET::Name( PCB_LAYER_ID aLayerId )
 {
     wxString txt;
@@ -370,7 +365,8 @@ LSEQ LSET::SeqStackupTop2Bottom( PCB_LAYER_ID aSelectedLayer ) const
     for( auto it = copper_layers_begin(); it != copper_layers_end(); ++it )
         seq.push_back( *it );
 
-    std::copy( bottom_tech_sequence.begin(), bottom_tech_sequence.end(), std::back_inserter( seq ) );
+    std::copy( bottom_tech_sequence.begin(), bottom_tech_sequence.end(),
+               std::back_inserter( seq ) );
 
     if( aSelectedLayer != UNDEFINED_LAYER )
     {
@@ -601,11 +597,13 @@ LSET LSET::BackTechMask()
     return saved;
 }
 
+
 LSET LSET::BackBoardTechMask()
 {
     static const LSET saved( { B_SilkS, B_Mask, B_Adhes, B_Paste } );
     return saved;
 }
+
 
 LSET LSET::FrontTechMask()
 {
@@ -671,6 +669,7 @@ LSET LSET::BackMask()
     static const LSET saved = BackTechMask().set( B_Cu );
     return saved;
 }
+
 
 LSET LSET::SideSpecificMask()
 {
@@ -775,6 +774,7 @@ GAL_SET GAL_SET::DefaultVisible()
     return saved;
 }
 
+
 #ifndef SWIG // Skip SWIG generators for the iterators because it requires a default constructor
 // Custom iterators for Copper and Non-Copper layers
 
@@ -785,10 +785,12 @@ LSET::copper_layers_iterator::copper_layers_iterator( const BASE_SET& set, size_
     advance_to_next_set_copper_bit();
 }
 
+
 PCB_LAYER_ID LSET::copper_layers_iterator::operator*() const
 {
     return static_cast<PCB_LAYER_ID>( m_index );
 }
+
 
 LSET::copper_layers_iterator& LSET::copper_layers_iterator::operator++()
 {
@@ -796,6 +798,7 @@ LSET::copper_layers_iterator& LSET::copper_layers_iterator::operator++()
     advance_to_next_set_copper_bit();
     return *this;
 }
+
 
 void LSET::copper_layers_iterator::next_copper_layer()
 {
@@ -817,11 +820,13 @@ void LSET::copper_layers_iterator::next_copper_layer()
     }
 }
 
+
 void LSET::copper_layers_iterator::advance_to_next_set_copper_bit()
 {
     while( m_index < m_baseSet.size() && !m_baseSet.test( m_index ) )
         next_copper_layer();
 }
+
 
 LSET::non_copper_layers_iterator::non_copper_layers_iterator( const BASE_SET& set, size_t index ) :
         BASE_SET::set_bits_iterator( set, index )
@@ -829,10 +834,12 @@ LSET::non_copper_layers_iterator::non_copper_layers_iterator( const BASE_SET& se
     advance_to_next_set_non_copper_bit();
 }
 
+
 PCB_LAYER_ID LSET::non_copper_layers_iterator::operator*() const
 {
     return static_cast<PCB_LAYER_ID>( m_index );
 }
+
 
 LSET::non_copper_layers_iterator& LSET::non_copper_layers_iterator::operator++()
 {
@@ -840,6 +847,7 @@ LSET::non_copper_layers_iterator& LSET::non_copper_layers_iterator::operator++()
     advance_to_next_set_non_copper_bit();
     return *this;
 }
+
 
 void LSET::non_copper_layers_iterator::advance_to_next_set_non_copper_bit()
 {
@@ -849,20 +857,24 @@ void LSET::non_copper_layers_iterator::advance_to_next_set_non_copper_bit()
     }
 }
 
+
 LSET::copper_layers_iterator LSET::copper_layers_begin() const
 {
     return copper_layers_iterator( *this, 0 );
 }
+
 
 LSET::copper_layers_iterator LSET::copper_layers_end() const
 {
     return copper_layers_iterator( *this, size() );
 }
 
+
 LSET::non_copper_layers_iterator LSET::non_copper_layers_begin() const
 {
     return non_copper_layers_iterator( *this, 0 );
 }
+
 
 LSET::non_copper_layers_iterator LSET::non_copper_layers_end() const
 {

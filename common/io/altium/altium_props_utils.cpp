@@ -54,8 +54,8 @@ int ALTIUM_PROPS_UTILS::ReadInt( const std::map<wxString, wxString>& aProps, con
 }
 
 
-double ALTIUM_PROPS_UTILS::ReadDouble( const std::map<wxString, wxString>& aProps, const wxString& aKey,
-                                  double aDefault )
+double ALTIUM_PROPS_UTILS::ReadDouble( const std::map<wxString, wxString>& aProps,
+                                       const wxString& aKey, double aDefault )
 {
     const std::map<wxString, wxString>::const_iterator& value = aProps.find( aKey );
 
@@ -73,7 +73,7 @@ double ALTIUM_PROPS_UTILS::ReadDouble( const std::map<wxString, wxString>& aProp
 
 
 bool ALTIUM_PROPS_UTILS::ReadBool( const std::map<wxString, wxString>& aProps, const wxString& aKey,
-                              bool aDefault )
+                                   bool aDefault )
 {
     const std::map<wxString, wxString>::const_iterator& value = aProps.find( aKey );
 
@@ -85,7 +85,7 @@ bool ALTIUM_PROPS_UTILS::ReadBool( const std::map<wxString, wxString>& aProps, c
 
 
 int32_t ALTIUM_PROPS_UTILS::ReadKicadUnit( const std::map<wxString, wxString>& aProps,
-                                      const wxString& aKey, const wxString& aDefault )
+                                           const wxString& aKey, const wxString& aDefault )
 {
     const wxString& value = ReadString( aProps, aKey, aDefault );
 
@@ -112,7 +112,7 @@ int32_t ALTIUM_PROPS_UTILS::ReadKicadUnit( const std::map<wxString, wxString>& a
 
 
 wxString ALTIUM_PROPS_UTILS::ReadString( const std::map<wxString, wxString>& aProps,
-                                    const wxString& aKey, const wxString& aDefault )
+                                         const wxString& aKey, const wxString& aDefault )
 {
     const auto& utf8Value = aProps.find( wxString( "%UTF8%" ) + aKey );
 
@@ -129,7 +129,7 @@ wxString ALTIUM_PROPS_UTILS::ReadString( const std::map<wxString, wxString>& aPr
 
 
 wxString ALTIUM_PROPS_UTILS::ReadUnicodeString( const std::map<wxString, wxString>& aProps,
-                                           const wxString& aKey, const wxString& aDefault )
+                                                const wxString& aKey, const wxString& aDefault )
 {
     const auto& unicodeFlag = aProps.find( wxS( "UNICODE" ) );
 

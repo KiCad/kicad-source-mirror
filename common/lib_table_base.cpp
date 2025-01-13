@@ -51,6 +51,7 @@ std::unique_ptr<LINE_READER> FILE_LIB_TABLE_IO::GetReader( const wxString& aURI 
     return std::make_unique<FILE_LINE_READER>( aURI );
 }
 
+
 bool FILE_LIB_TABLE_IO::CanSaveToUri( const wxString& aURI ) const
 {
     const wxFileName fn( aURI );
@@ -60,6 +61,7 @@ bool FILE_LIB_TABLE_IO::CanSaveToUri( const wxString& aURI ) const
 
     return fn.IsFileWritable();
 }
+
 
 bool FILE_LIB_TABLE_IO::UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 ) const
 {
@@ -82,6 +84,7 @@ bool FILE_LIB_TABLE_IO::UrisAreEquivalent( const wxString& aURI1, const wxString
         return fn1 == fn2;
     }
 }
+
 
 std::unique_ptr<OUTPUTFORMATTER> FILE_LIB_TABLE_IO::GetWriter( const wxString& aURI ) const
 {
@@ -121,7 +124,7 @@ const wxString LIB_TABLE_ROW::GetFullURI( bool aSubstituted ) const
 
 void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 {
-    // In Kicad, we save path and file names using the Unix notation (separator = '/')
+    // In KiCad, we save path and file names using the Unix notation (separator = '/')
     // So ensure separator is always '/' is saved URI string
     wxString uri = GetFullURI();
     uri.Replace( '\\', '/' );
@@ -269,7 +272,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
         }
 
         // Repeat, this time looking for names that were "fixed" by legacy versions because
-        // the old eeschema file format didn't support spaces in tokens.
+        // the old Eeschema file format didn't support spaces in tokens.
         for( const std::pair<const wxString, LIB_TABLE_ROWS_ITER>& entry : cur->m_rowsMap )
         {
             wxString legacyLibName = entry.first;
@@ -618,7 +621,8 @@ UTF8 LIB_TABLE::FormatOptions( const std::map<std::string, UTF8>* aProperties )
 
     if( aProperties )
     {
-        for( std::map<std::string, UTF8>::const_iterator it = aProperties->begin(); it != aProperties->end(); ++it )
+        for( std::map<std::string, UTF8>::const_iterator it = aProperties->begin();
+             it != aProperties->end(); ++it )
         {
             const std::string& name = it->first;
 

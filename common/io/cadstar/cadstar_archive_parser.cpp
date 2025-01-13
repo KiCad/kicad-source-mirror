@@ -221,7 +221,7 @@ void CADSTAR_ARCHIVE_PARSER::LINECODE::Parse( XNODE* aNode, PARSER_CONTEXT* aCon
     else
     {
         THROW_UNKNOWN_PARAMETER_IO_ERROR( wxString::Format( "STYLE %s", styleStr ),
-                wxString::Format( "LINECODE -> %s", Name ) );
+                                          wxString::Format( "LINECODE -> %s", Name ) );
     }
 }
 
@@ -396,8 +396,8 @@ void CADSTAR_ARCHIVE_PARSER::EVALUE::Parse( XNODE* aNode, PARSER_CONTEXT* aConte
             || ( !GetXmlAttributeIDString( aNode, 1 ).ToLong( &Exponent ) ) )
     {
         THROW_PARSING_IO_ERROR( wxT( "Base and Exponent" ),
-                wxString::Format(
-                        "%s->%s", aNode->GetParent()->GetName(), aNode->GetParent()->GetName() ) );
+                                wxString::Format( "%s->%s", aNode->GetParent()->GetName(),
+                                                  aNode->GetParent()->GetName() ) );
     }
 }
 
@@ -495,7 +495,8 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::AppendToChain( SHAPE_LINE_CHAIN* aChainToAp
     wxCHECK_MSG( aChainToAppendTo->PointCount() > 0, /*void*/,
                  "Can't append an arc to vertex to an empty chain" );
 
-    aChainToAppendTo->Append( BuildArc( aChainToAppendTo->GetPoint( -1 ), aCadstarToKicadPointCallback),
+    aChainToAppendTo->Append( BuildArc( aChainToAppendTo->GetPoint( -1 ),
+                                        aCadstarToKicadPointCallback ),
                               aAccuracy );
 }
 
@@ -625,7 +626,8 @@ SHAPE_POLY_SET CADSTAR_ARCHIVE_PARSER::SHAPE::ConvertToPolySet(
 {
     SHAPE_POLY_SET polyset;
 
-    wxCHECK( Type != SHAPE_TYPE::OPENSHAPE, polyset ); // We shouldn't convert openshapes to polyset!
+    // We shouldn't convert openshapes to polyset!
+    wxCHECK( Type != SHAPE_TYPE::OPENSHAPE, polyset );
 
     polyset.AddOutline( OutlineAsChain( aCadstarToKicadPointCallback, aAccuracy ) );
 
@@ -885,7 +887,7 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( const wxString& aTextString,
 
     while( remainingStr.size() > 0 )
     {
-        //Find the start token
+        // Find the start token
         size_t startpos = remainingStr.Find( wxT( "<@" ) );
 
         if( static_cast<int>( startpos ) == wxNOT_FOUND )
@@ -2449,7 +2451,8 @@ void CADSTAR_ARCHIVE_PARSER::InsertAttributeAtEnd( XNODE* aNode, wxString aValue
 
 
 XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
-                                                const wxString& aFileTypeIdentifier, PROGRESS_REPORTER* aProgressReporter )
+                                                const wxString& aFileTypeIdentifier,
+                                                PROGRESS_REPORTER* aProgressReporter )
 {
     KEYWORD   emptyKeywords[1] = {};
     XNODE*    rootNode = nullptr;
@@ -2488,6 +2491,8 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
             if( !aProgressReporter->KeepRefreshing() )
             {
                 delete rootNode;
+
+                // @spellingerror
                 THROW_IO_ERROR( _( "File import cancelled by user." ) );
             }
 
@@ -2745,7 +2750,8 @@ long CADSTAR_ARCHIVE_PARSER::GetNumberOfChildNodes( XNODE* aNode )
 }
 
 
-long CADSTAR_ARCHIVE_PARSER::GetNumberOfStepsForReporting( XNODE* aRootNode, std::vector<wxString> aSubNodeChildrenToCount )
+long CADSTAR_ARCHIVE_PARSER::GetNumberOfStepsForReporting(
+        XNODE* aRootNode, std::vector<wxString> aSubNodeChildrenToCount )
 {
     XNODE* level1Node = aRootNode->GetChildren();
     long   retval = 0;

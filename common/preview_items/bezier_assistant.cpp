@@ -49,7 +49,7 @@ const BOX2I BEZIER_ASSISTANT::ViewBBox() const
     if( m_constructMan.IsReset() )
         return tmp;
 
-    // this is an edit-time artefact; no reason to try and be smart with the bounding box
+    // this is an edit-time artifact; no reason to try and be smart with the bounding box
     // (besides, we can't tell the text extents without a view to know what the scale is)
     tmp.SetMaximum();
     return tmp;
@@ -83,8 +83,9 @@ void BEZIER_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     if( step >= BEZIER_GEOM_MANAGER::BEZIER_STEPS::SET_CONTROL2 )
     {
         const VECTOR2I c2vec = m_constructMan.GetControlC2() - m_constructMan.GetEnd();
+
         // Draw the second control point control line as a double length line
-        // centred on the end point
+        // centered on the end point
         preview_ctx.DrawLineDashed( m_constructMan.GetEnd() - c2vec, m_constructMan.GetControlC2(),
                                     dashSize, dashSize / 2, false );
     }

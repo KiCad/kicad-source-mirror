@@ -129,7 +129,8 @@ wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&               
         }
         else
         {
-            wxString specialString = aString.substr( start, delimiter - start ).Trim().Trim( false );
+            wxString specialString =
+                    aString.substr( start, delimiter - start ).Trim().Trim( false );
 
             if( specialString.StartsWith( "\"" ) && specialString.EndsWith( "\"" ) )
                 specialString = specialString.Mid( 1, specialString.Length() - 2 );
@@ -154,6 +155,7 @@ wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&               
 
     return result;
 }
+
 
 // https://www.altium.com/documentation/altium-designer/text-objects-pcb
 wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                     aString,
@@ -182,6 +184,7 @@ wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                 
     return aString;
 }
 
+
 wxString AltiumPinNamesToKiCad( wxString& aString )
 {
     if( aString.IsEmpty() )
@@ -195,6 +198,7 @@ wxString AltiumPinNamesToKiCad( wxString& aString )
     return AltiumPropertyToKiCadString( aString );
 }
 
+
 VECTOR2I AltiumGetEllipticalPos( double aMajor, double aMinor, double aAngleRadians )
 {
     if( aMajor == 0 || aMinor == 0 )
@@ -207,7 +211,8 @@ VECTOR2I AltiumGetEllipticalPos( double aMajor, double aMinor, double aAngleRadi
 
     double radius = numerator / denominator;
 
-    VECTOR2I retval( KiROUND( radius * cos( aAngleRadians ) ), KiROUND( radius * sin( aAngleRadians ) ) );
+    VECTOR2I retval( KiROUND( radius * cos( aAngleRadians ) ),
+                     KiROUND( radius * sin( aAngleRadians ) ) );
 
     return retval;
 

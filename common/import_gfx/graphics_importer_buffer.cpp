@@ -114,18 +114,22 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
                          boundingBox.GetSize().y * aImporter.GetScale().y );
 
     // Check that the scaled graphics fit in the KiCad numeric limits
-    if( boundingBox.GetSize().x * aImporter.GetMillimeterToIuFactor() > std::numeric_limits<int>::max() ||
-        boundingBox.GetSize().y * aImporter.GetMillimeterToIuFactor() > std::numeric_limits<int>::max() )
+    if( boundingBox.GetSize().x * aImporter.GetMillimeterToIuFactor()
+                > std::numeric_limits<int>::max()
+      || boundingBox.GetSize().y * aImporter.GetMillimeterToIuFactor()
+                > std::numeric_limits<int>::max() )
     {
-        double scale_factor = std::numeric_limits<int>::max() / ( aImporter.GetMillimeterToIuFactor() + 100 );
+        double scale_factor = std::numeric_limits<int>::max() /
+                              ( aImporter.GetMillimeterToIuFactor() + 100 );
         double max_scale = std::max( scale_factor / boundingBox.GetSize().x,
                                      scale_factor / boundingBox.GetSize().y );
-        aImporter.ReportMsg( wxString::Format( _( "Imported graphic is too large. Maximum scale is %f" ),
-                                             max_scale ) );
+        aImporter.ReportMsg( wxString::Format( _( "Imported graphic is too large. Maximum scale "
+                                                  "is %f" ),
+                                               max_scale ) );
         return;
     }
-    // They haven't set the import offset, so we set it to the bounding box origin to keep the graphics
-    // in the KiCad drawing area
+    // They haven't set the import offset, so we set it to the bounding box origin to keep
+    // the graphics in the KiCad drawing area.
     else if( aImporter.GetImportOffsetMM() == VECTOR2D( 0, 0 ) )
     {
         if( boundingBox.GetRight() > std::numeric_limits<int>::max()
@@ -156,7 +160,8 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 
         if( max_offset_x >= std::numeric_limits<int>::max() )
         {
-            newOffset.x -= ( max_offset_x - std::numeric_limits<int>::max() + 100.0 ) / total_scale_x;
+            newOffset.x -= ( max_offset_x - std::numeric_limits<int>::max() + 100.0 ) /
+                           total_scale_x;
             needsAdjustment = true;
         }
         else if( min_offset_x <= std::numeric_limits<int>::min() )
@@ -178,7 +183,8 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 
         if( needsAdjustment )
         {
-            aImporter.ReportMsg( wxString::Format( _( "Import offset adjusted to (%f, %f) to fit within numeric limits" ),
+            aImporter.ReportMsg( wxString::Format( _( "Import offset adjusted to (%f, %f) to fit "
+                                                      "within numeric limits" ),
                                                    newOffset.x, newOffset.y ) );
             aImporter.SetImportOffsetMM( newOffset );
         }
@@ -188,7 +194,8 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
         shape->ImportTo( aImporter );
 }
 
-// converts a single SVG-style polygon (multiple outlines, hole detection based on orientation, custom fill rule) to a format that can be digested by KiCad (single outline, fractured)
+// converts a single SVG-style polygon (multiple outlines, hole detection based on orientation,
+// custom fill rule) to a format that can be digested by KiCad (single outline, fractured).
 static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
                             std::vector<IMPORTED_POLYGON*>&             aPaths,
                             GRAPHICS_IMPORTER::POLY_FILL_RULE           aFillRule,
@@ -200,8 +207,8 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
     double maxX = std::numeric_limits<double>::min();
     double maxY = maxX;
 
-    // as Clipper/SHAPE_POLY_SET uses ints we first need to upscale to a reasonably large size (in integer coordinates)
-    // to avoid losing accuracy
+    // as Clipper/SHAPE_POLY_SET uses ints we first need to upscale to a reasonably large size
+    // (in integer coordinates) to avoid losing accuracy.
     const double convert_scale = 1000000000.0;
 
     for( IMPORTED_POLYGON* path : aPaths )
@@ -254,13 +261,15 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
     }
 
     SHAPE_POLY_SET result;
-    result.BuildPolysetFromOrientedPaths( upscaledPaths, aFillRule == GRAPHICS_IMPORTER::PF_EVEN_ODD );
+    result.BuildPolysetFromOrientedPaths( upscaledPaths,
+                                          aFillRule == GRAPHICS_IMPORTER::PF_EVEN_ODD );
     result.Fracture();
 
     for( int outl = 0; outl < result.OutlineCount(); outl++ )
     {
         const SHAPE_LINE_CHAIN& ro = result.COutline( outl );
         std::vector<VECTOR2D>   pts;
+
         for( int i = 0; i < ro.PointCount(); i++ )
         {
             double xp = (double) ro.CPoint( i ).x * ( origW / upscaledW ) + minX;

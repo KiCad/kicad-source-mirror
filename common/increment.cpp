@@ -65,12 +65,13 @@ KICOMMON_API bool IncrementString( wxString& name, int aIncrement )
         number += aIncrement;
 
         // Don't let result go below zero
-
         if( number > -1 )
         {
             name.Remove( ii + 1 );
+
             //write out a format string with correct number of leading zeroes
             outputFormat.Printf( wxS( "%%0%dld" ), dCount );
+
             //write out the number using the format string
             outputNumber.Printf( outputFormat, number );
             name << outputNumber << suffix;
@@ -96,13 +97,16 @@ std::optional<wxString> STRING_INCREMENTER::Increment( const wxString& aStr, int
     while( goodParts < ( aRightIndex + 1 ) && !remaining.IsEmpty() )
     {
         static const std::regex integerRegex( R"(\d+$)" );
+
         // ABC or abc but not Abc
         static const std::regex sameCaseAlphabetRegex( R"(([a-z]+|[A-Z]+)$)" );
+
         // Skippables - for now anything that isn't a letter or number
         static const std::regex skipRegex( R"([^a-zA-Z0-9]+$)" );
 
         std::string remainingStr = remaining.ToStdString();
         std::smatch match;
+
         if( std::regex_search( remainingStr, match, integerRegex ) )
         {
             parts.push_back( { match.str(), STRING_PART_TYPE::INTEGER } );
@@ -139,10 +143,12 @@ std::optional<wxString> STRING_INCREMENTER::Increment( const wxString& aStr, int
 
     // Reassemble the string - the left-over part, then parts in reverse
     wxString result = remaining;
+
     for( auto it = parts.rbegin(); it != parts.rend(); ++it )
     {
         result << it->first;
     }
+
     return result;
 }
 
@@ -150,11 +156,13 @@ std::optional<wxString> STRING_INCREMENTER::Increment( const wxString& aStr, int
 static bool containsIOSQXZ( const wxString& aStr )
 {
     static const wxString iosqxz = "IOSQXZ";
+
     for( const wxUniChar& c : aStr )
     {
         if( iosqxz.Contains( c ) )
             return true;
     }
+
     return false;
 }
 
@@ -185,6 +193,7 @@ bool STRING_INCREMENTER::incrementPart( wxString& aPart, STRING_PART_TYPE aType,
             {
                 aPart = wxString( "0", oldLen - aPart.Len() ) + aPart;
             }
+
             return true;
         }
 

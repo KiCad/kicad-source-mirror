@@ -78,6 +78,10 @@ public:
 
     /**
      * Return the fixed name association with @a aLayerId.
+     *
+     * @note These names must not be translated or changed.  They are used as tokens in the board
+     * file format because the ordinal value of the PCB_LAYER_ID enum was not stable over time.
+     * @see LayerName() for what should be used to display the default name of a layer in the GUI.
      */
     static wxString Name( PCB_LAYER_ID aLayerId );
 

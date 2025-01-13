@@ -55,16 +55,16 @@ typedef std::unordered_map<wxString, wxXmlNode*> NODE_MAP;
 typedef std::map<wxString, EINSTANCE*> EINSTANCE_MAP;
 typedef std::map<wxString, std::unique_ptr<EPART>> EPART_MAP;
 
-///< Translates Eagle special characters to their counterparts in KiCad.
+/// Translates Eagle special characters to their counterparts in KiCad.
 wxString escapeName( const wxString& aNetName );
 
-///< Interprets special characters in Eagle text and converts them to KiCAD notation.
+/// Interprets special characters in Eagle text and converts them to KiCAD notation.
 wxString interpretText( const wxString& aText );
 
-///< Translates Eagle special text reference to a KiCad variable reference
+/// Translates Eagle special text reference to a KiCad variable reference.
 bool substituteVariable( wxString* aText );
 
-///< Converts Eagle's HTML description into KiCad description format
+/// Converts Eagle's HTML description into KiCad description format.
 wxString convertDescription( wxString aDescr );
 
 static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const wxString& aName )
@@ -140,13 +140,13 @@ public:
         p.back().value = aValue;
     }
 
-    /// modify the last path node's attribute
+    /// Modify the last path node's attribute.
     void Attribute( const char* aAttribute )
     {
         p.back().attribute = aAttribute;
     }
 
-    /// return the contents of the XPATH as a single string
+    /// Return the contents of the XPATH as a single string.
     wxString Contents()
     {
         typedef std::vector<TRIPLET>::const_iterator CITER_TRIPLET;
@@ -178,7 +178,7 @@ public:
 /**
  * Convert a wxString to a generic type T.
  *
- * @param  aValue is a wxString containing the value that will be converted to type T.
+ * @param aValue is a wxString containing the value that will be converted to type T.
  * @throw XML_PARSER_ERROR - an exception is thrown if the parsing fails or if the conversion to
  *        type T is unknown.
  */
@@ -217,9 +217,9 @@ public:
     {}
 
     /**
-     * @param  aData is a wxString containing the value that should be converted to type T. If
-     *               aData is empty, the attribute is understood as unavailable; otherwise, the
-     *               conversion to T is tried.
+     * @param aData is a wxString containing the value that should be converted to type T. If
+     *              aData is empty, the attribute is understood as unavailable; otherwise, the
+     *              conversion to T is tried.
      */
     OPTIONAL_XML_ATTRIBUTE( const wxString& aData )
     {
@@ -231,8 +231,8 @@ public:
     }
 
     /**
-     * @param  aData is the value of the XML attribute. If this constructor is called, the
-     *               attribute is available.
+     * @param aData is the value of the XML attribute. If this constructor is called, the
+     *              attribute is available.
      */
     template<typename V = T>
     OPTIONAL_XML_ATTRIBUTE( T aData ) :
@@ -380,7 +380,7 @@ size_t GetNodeCount( const wxXmlNode* aNode );
  */
 NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
 
-///< Convert an Eagle curve end to a KiCad center for S_ARC
+/// Convert an Eagle curve end to a KiCad center for S_ARC.
 VECTOR2I ConvertArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle );
 
 // Pre-declare for typedefs
@@ -402,7 +402,7 @@ struct EAGLE_BASE
 
     IO_BASE* io;
 
-    /*
+    /**
      * Send a message to the #IO_BASE #REPORTER object if one exists.
      *
      * @param aMsg is the message to send to the #REPORTER object.
@@ -447,10 +447,10 @@ struct ECOORD : public EAGLE_BASE
         EU_MIL,    ///< mils/thous
     };
 
-    ///< Value expressed in nanometers
+    /// Value expressed in nanometers.
     long long int value;
 
-    ///< Unit used for the value field
+    /// Unit used for the value field.
     static constexpr EAGLE_UNIT ECOORD_UNIT = EU_NM;
 
     ECOORD()
@@ -503,7 +503,7 @@ struct ECOORD : public EAGLE_BASE
         return value == aOther.value;
     }
 
-    ///< Converts a size expressed in a certain unit to nanometers.
+    /// Converts a size expressed in a certain unit to nanometers.
     static long long int ConvertToNm( int aValue, enum EAGLE_UNIT aUnit );
 };
 

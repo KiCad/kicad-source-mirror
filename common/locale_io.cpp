@@ -52,9 +52,10 @@
 // So we disable alerts during the time a file is read or written
 #if !USE_WXLOCALE
 #if defined( _WIN32 ) && defined( DEBUG )
+
 // a wxAssertHandler_t function to filter wxWidgets alert messages when reading/writing a file
 // when switching the locale to LC_NUMERIC, "C"
-// It is used in class LOCALE_IO to hide a useless (in kicad) wxWidgets alert message
+// It is used in class LOCALE_IO to hide a useless (in KiCad) wxWidgets alert message
 void KiAssertFilter( const wxString &file, int line,
                      const wxString &func, const wxString &cond,
                      const wxString &msg)

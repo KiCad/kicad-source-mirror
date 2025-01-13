@@ -43,13 +43,15 @@ wxString IO_BASE::IO_FILE_DESC::FileFilter() const
 }
 
 
-void IO_BASE::CreateLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties )
+void IO_BASE::CreateLibrary( const wxString& aLibraryPath,
+                             const std::map<std::string, UTF8>* aProperties )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
-bool IO_BASE::DeleteLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties )
+bool IO_BASE::DeleteLibrary( const wxString& aLibraryPath,
+                             const std::map<std::string, UTF8>* aProperties )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
 }

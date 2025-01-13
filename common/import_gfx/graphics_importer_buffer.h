@@ -385,7 +385,7 @@ public:
     void PostprocessNestedPolygons();
 
 protected:
-    ///< List of imported shapes
+    /// List of imported shapes.
     std::list<std::unique_ptr<IMPORTED_SHAPE>> m_shapes;
 };
 

@@ -38,19 +38,21 @@
  */
 static const double DXF_OBLIQUE_ANGLE = 15;
 
-/* The layer/colors palette. The acad/DXF palette is divided in 3 zones:
+/**
+ * The layer/colors palette.
+ *
+ * The acad/DXF palette is divided in 3 zones:
+ *
+ *  - The primary colors (1 - 9)
+ *  - An HSV zone (10-250, 5 values x 2 saturations x 10 hues
+ *  - Greys (251 - 255)
 
-   - The primary colors (1 - 9)
-   - An HSV zone (10-250, 5 values x 2 saturations x 10 hues
-   - Greys (251 - 255)
-
-   There is *no* black... the white does it on paper, usually, and
-   anyway it depends on the plotter configuration, since DXF colors
-   are meant to be logical only (they represent *both* line color and
-   width); later version with plot styles only complicate the matter!
-
-   As usual, brown and magenta/purple are difficult to place since
-   they are actually variations of other colors.
+ * There is *no* black... the white does it on paper, usually, and anyway it depends on the
+ * plotter configuration, since DXF colors are meant to be logical only (they represent *both*
+ * line color and width); later version with plot styles only complicate the matter!
+ *
+ * As usual, brown and magenta/purple are difficult to place since they are actually variations
+ * of other colors.
  */
 static const struct
 {
@@ -321,6 +323,7 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
            "4\n", m_outputFile );
 
     static const char *style_name[4] = {"KICAD", "KICADB", "KICADI", "KICADBI"};
+
     for(int i = 0; i < 4; i++ )
     {
         fprintf( m_outputFile,
@@ -625,6 +628,7 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     {
         wxASSERT( m_currentLineType >= LINE_STYLE::FIRST_TYPE
                   && m_currentLineType <= LINE_STYLE::LAST_TYPE );
+
         // DXF LINE
         wxString    cname = getDXFColorName( m_currentColor );
         const char* lname = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
@@ -816,6 +820,7 @@ void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aS
     FinishTo( VECTOR2I( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
 }
 
+
 void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                   const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
                                   OUTLINE_MODE aTraceMode, void* aData )
@@ -940,6 +945,7 @@ void DXF_PLOTTER::PlotText( const VECTOR2I&        aPos,
                             void*                  aData )
 {
     TEXT_ATTRIBUTES attrs = aAttributes;
+
     // Fix me: see how to use DXF text mode for multiline texts
     if( attrs.m_Multiline && !aText.Contains( wxT( "\n" ) ) )
         attrs.m_Multiline = false;  // the text has only one line.
@@ -958,6 +964,7 @@ void DXF_PLOTTER::PlotText( const VECTOR2I&        aPos,
         plotOneLineOfText( aPos, aColor, aText, attrs );
     }
 }
+
 
 void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor,
                                      const wxString& aText, const TEXT_ATTRIBUTES& aAttributes )
@@ -1027,7 +1034,8 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
              TO_UTF8( cname ),
              formatCoord( origin_dev.x ).c_str(), formatCoord( origin_dev.x ).c_str(),
              formatCoord( origin_dev.y ).c_str(), formatCoord( origin_dev.y ).c_str(),
-             formatCoord( size_dev.y ).c_str(), formatCoord( fabs( size_dev.x / size_dev.y ) ).c_str(),
+             formatCoord( size_dev.y ).c_str(),
+             formatCoord( fabs( size_dev.x / size_dev.y ) ).c_str(),
              aAttributes.m_Angle.AsDegrees(),
              aAttributes.m_Italic ? DXF_OBLIQUE_ANGLE : 0,
              aAttributes.m_Mirrored ? 2 : 0, // X mirror flag

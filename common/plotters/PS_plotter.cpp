@@ -558,6 +558,7 @@ void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
              radius_device, startAngle.AsDegrees(), endAngle.AsDegrees(), getFillId( aFill ) );
 }
 
+
 void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                            void* aData )
 {
@@ -898,7 +899,6 @@ bool PS_PLOTTER::EndPlot()
 
     return true;
 }
-
 
 
 void PS_PLOTTER::Text( const VECTOR2I&        aPos,

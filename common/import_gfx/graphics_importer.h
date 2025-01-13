@@ -233,7 +233,7 @@ public:
         m_items.clear();
     }
 
-    ///< Default line thickness (in mm)
+    /// Default line thickness (in mm).
     static constexpr unsigned int DEFAULT_LINE_WIDTH_DFX = 1;
 
     virtual void NewShape( POLY_FILL_RULE aFillRule = PF_NONZERO );
@@ -313,45 +313,46 @@ public:
                             const IMPORTED_STROKE& aStroke ) = 0;
 
 protected:
-    ///< Add an item to the imported shapes list.
+    /// Add an item to the imported shapes list.
     void addItem( std::unique_ptr<EDA_ITEM> aItem );
 
-    /*
+    /**
      * Configure a shape as a spline or a line segment if it's degenerate.
      *
      * @return false if the shape is near-zero length and should be ignored.
      */
     bool setupSplineOrLine( EDA_SHAPE& aShape, int aAccuracy );
 
-    ///< factor to convert millimeters to Internal Units
+    /// Factor to convert millimeters to Internal Units.
     double m_millimeterToIu;
 
-    ///< Offset (in mm) for imported coordinates
+    /// Offset (in mm) for imported coordinates.
     VECTOR2D m_offsetCoordmm;
 
     std::vector<POLY_FILL_RULE> m_shapeFillRules;
 
 private:
-    ///< List of imported items
+    /// List of imported items.
     std::list<std::unique_ptr<EDA_ITEM>> m_items;
 
-    ///< Plugin used to load a file
+    /// Plugin used to load a file.
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> m_plugin;
 
-    ///< Total image width
+    /// Total image width.
     double m_originalWidth;
 
-    ///< Total image Height;
+    /// Total image Height.
     double m_originalHeight;
 
     /**
      * Scale factor applied to the imported graphics.
+     *
      * 1.0 does not change the size of imported items
      * scale < 1.0 reduce the size of imported items
      */
     VECTOR2D m_scale;
 
-    ///< Default line thickness for the imported graphics
+    /// Default line thickness for the imported graphics.
     double m_lineWidth;
 };
 

@@ -68,6 +68,7 @@ static void DrawCornerIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
     DrawSnapNode( aGal, corner, nodeRad );
 }
 
+
 static void DrawLineEndpointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
 {
     const int      nodeRadius = aSize / 8;
@@ -77,6 +78,7 @@ static void DrawLineEndpointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSiz
     aGal.DrawLine( lineStart, lineStart + VECTOR2I( aSize - nodeRadius, 0 ) );
 }
 
+
 static void DrawMidpointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
 {
     const int nodeRadius = aSize / 8;
@@ -84,6 +86,7 @@ static void DrawMidpointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
     DrawSnapNode( aGal, aPosition, nodeRadius );
     aGal.DrawLine( aPosition - VECTOR2I( aSize / 2, 0 ), aPosition + VECTOR2I( aSize / 2, 0 ) );
 }
+
 
 static void DrawCentrePointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
 {
@@ -94,6 +97,7 @@ static void DrawCentrePointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize
     aGal.DrawLine( aPosition - VECTOR2I( aSize / 2, 0 ), aPosition + VECTOR2I( aSize / 2, 0 ) );
     aGal.DrawLine( aPosition - VECTOR2I( 0, aSize / 2 ), aPosition + VECTOR2I( 0, aSize / 2 ) );
 }
+
 
 static void DrawQuadrantPointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
 {
@@ -110,6 +114,7 @@ static void DrawQuadrantPointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSi
                   EDA_ANGLE( 140, EDA_ANGLE_T::DEGREES_T ) );
 }
 
+
 static void DrawIntersectionIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
 {
     const int nodeRadius = aSize / 8;
@@ -123,6 +128,7 @@ static void DrawIntersectionIcon( GAL& aGal, const VECTOR2I& aPosition, int aSiz
     xLeg.y = -xLeg.y;
     aGal.DrawLine( aPosition - xLeg, aPosition + xLeg );
 }
+
 
 static void DrawOnElementIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
 {
