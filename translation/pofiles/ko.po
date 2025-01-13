@@ -33,10 +33,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-04 06:01+0000\n"
+"PO-Revision-Date: 2025-01-13 15:01+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9828,7 +9828,7 @@ msgstr "선택 항목에 추가"
 
 #: common/widgets/search_pane.cpp:42
 msgid "Toggle panning to selections in the search pane"
-msgstr ""
+msgstr "검색창에서 선택 항목으로 전환하기"
 
 #: common/widgets/unit_binder.cpp:359
 #, c-format
@@ -13599,7 +13599,7 @@ msgstr "속성 팝업 생성"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 msgid "Generate clickable links for hierarchical elements"
-msgstr ""
+msgstr "계층적 요소에 클릭 가능한 링크 생성하기"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
@@ -19133,7 +19133,7 @@ msgstr "본체 유형"
 #: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:819
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:52
 msgid "Locked"
-msgstr "잠김"
+msgstr "잠금"
 
 #: eeschema/sch_junction.cpp:306 pcbnew/dialogs/dialog_shape_properties.cpp:882
 #: pcbnew/dialogs/dialog_shape_properties.cpp:885
@@ -23501,7 +23501,7 @@ msgstr "정의된 데이터시트가 없습니다."
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
 #: pcbnew/tools/pcb_control.cpp:1661
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: eeschema/tools/ee_point_editor.cpp:1129
 #: pcbnew/tools/pcb_point_editor.cpp:2370
@@ -23535,7 +23535,7 @@ msgstr "이 심볼은 단 하나의 유닛만 있음."
 
 #: eeschema/tools/sch_drawing_tools.cpp:595
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "이 심볼의 모든 유닛은 이미 배치되었습니다."
 
 #: eeschema/tools/sch_drawing_tools.cpp:753
 msgid "Add design block"
@@ -25672,7 +25672,7 @@ msgstr "부품 없이 보드만 생성"
 #: kicad/cli/command_pcb_export_3d.cpp:118
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
-msgstr ""
+msgstr "배선층을 내보내지 않더라도 보드 본체에 구멍을 뚫습니다."
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 msgid "Exclude board body"
@@ -25913,6 +25913,9 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
+"출력 인자 경로가 전체 디렉토리 및 파일명 경로 역할을 하는 단일 파일을 "
+"생성합니다. 이 모드에서는 COMMON_LAYER_LIST가 작동하지 않습니다. 대신 "
+"LAYER_LIST가 플롯된 모든 레이어를 제어합니다."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:94
 #: kicad/cli/command_pcb_export_svg.cpp:113
@@ -25920,6 +25923,8 @@ msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
 msgstr ""
+"KiCad GUI 그림과 유사한 동작으로 하나 이상의 파일을 생성합니다. 지정된 출력 "
+"경로는 파일이 출력될 수 있는 디렉터리를 지정합니다."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -25937,12 +25942,13 @@ msgstr "보드 파일이 존재하지 않거나 액세스할 수 없습니다.\n
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
-msgstr ""
+msgstr "이 명령은 KiCad 9.0부터 더 이상 사용되지 않으며, 향후 릴리스에서 이 명령의 "
+"기본 동작이 변경될 예정입니다."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:167
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
-msgstr ""
+msgstr "새로운 동작은 --mode-multi와 일치함"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 #, fuzzy
@@ -26012,7 +26018,8 @@ msgstr "KiCad 거버 파일 확장자 사용"
 #: kicad/cli/command_pcb_export_gerber.cpp:138
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
-msgstr ""
+msgstr "이 명령은 KiCad 9.0부터 더 이상 사용되지 않으니 대신 “gerbers”를 "
+"사용하십시오.\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -26203,23 +26210,23 @@ msgstr "보드 회전, 'X,Y,Z' 형식(예: 등각 투영 뷰의 경우 '-45,0,45
 
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "최고 조명밝기, 'R,G,B' 형식 또는 단일 숫자, 범위: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "최저 조명밝기, 'R,G,B' 형식 또는 단일 숫자, 범위: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "측면 조명밝기, 'R,G,B' 형식 또는 단일 숫자, 범위: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "카메라 조명밝기, 'R,G,B' 형식 또는 단일 숫자, 범위: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "측면 조명 고도각(도, 범위): 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 msgid "Invalid background\n"
@@ -26342,7 +26349,7 @@ msgstr "PDF에서 속성 팝업 생성 안 함"
 
 #: kicad/cli/command_sch_export_plot.cpp:92
 msgid "Do not generate clickable links for hierarchical elements in PDF"
-msgstr ""
+msgstr "PDF에서 계층적 요소에 대한 클릭 가능한 링크를 생략하기"
 
 #: kicad/cli/command_sch_export_plot.cpp:97
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
@@ -26455,7 +26462,7 @@ msgstr "출력 메시지"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "종료 코드가 0이 아닌 경우 무시"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
 #, fuzzy
@@ -26597,7 +26604,7 @@ msgstr "연결 성공"
 
 #: kicad/dialogs/panel_jobs.cpp:365
 msgid "Last run failed"
-msgstr ""
+msgstr "마지막 실행 실패"
 
 #: kicad/dialogs/panel_jobs.cpp:391 kicad/dialogs/panel_jobs.cpp:1069
 #, fuzzy
