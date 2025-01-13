@@ -43,7 +43,9 @@
 #include <algorithm>
 
 PCB_NET_INSPECTOR_PANEL::PCB_NET_INSPECTOR_PANEL( wxWindow* parent, PCB_EDIT_FRAME* aFrame ) :
-        NET_INSPECTOR_PANEL( parent, aFrame ), m_zero_netitem( nullptr ), m_frame( aFrame )
+        NET_INSPECTOR_PANEL( parent, aFrame ),
+        m_zero_netitem( nullptr ),
+        m_frame( aFrame )
 {
     m_brd = m_frame->GetBoard();
 
@@ -311,17 +313,18 @@ void PCB_NET_INSPECTOR_PANEL::adjustListColumnSizes( PANEL_NET_INSPECTOR_SETTING
         const int margins = 15;
         const int extra_width = 30;
 
-        auto getTargetWidth = [&]( int columnID )
-        {
-            switch( columnID )
-            {
-            case COLUMN_NAME: return minNameWidth + extra_width;
-            case COLUMN_NETCLASS: return minNameWidth + margins;
-            case COLUMN_VIA_COUNT: return minNumberWidth + margins;
-            case COLUMN_PAD_COUNT: return minNumberWidth + margins;
-            default: return minValueWidth + margins;
-            }
-        };
+        auto getTargetWidth =
+                [&]( int columnID )
+                {
+                    switch( columnID )
+                    {
+                    case COLUMN_NAME:      return minNameWidth + extra_width;
+                    case COLUMN_NETCLASS:  return minNameWidth + margins;
+                    case COLUMN_VIA_COUNT: return minNumberWidth + margins;
+                    case COLUMN_PAD_COUNT: return minNumberWidth + margins;
+                    default:               return minValueWidth + margins;
+                    }
+                };
 
         wxASSERT( m_columns.size() == cfg->col_order.size() );
 
