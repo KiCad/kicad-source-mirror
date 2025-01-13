@@ -29,10 +29,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-11 10:05+0000\n"
+"PO-Revision-Date: 2025-01-13 15:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8707,9 +8707,8 @@ msgid "Paste Special..."
 msgstr "Spezielles Einfügen..."
 
 #: common/tool/actions.cpp:270
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "Element(e) aus der Zwischenablage mit Annotierungsoptionen einfügen"
+msgstr "Element(e) aus Zwischenablage mit Optionen einfügen"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -24604,9 +24603,8 @@ msgid "Gerbers with known layers: %d"
 msgstr "Gerber mit bekannten Lagen: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "Weist Netzen, die einem Muster entsprechen, eine Netzklasse zu"
+msgstr "Zu passenden Platinenlagen zuweisen?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
@@ -26273,6 +26271,9 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
+"Erzeugt eine einzelne Datei mit dem Ausgabepfadargument als vollständiger "
+"Pfad inkl. Dateiname. COMMON_LAYER_LIST funktioniert in diesem Modus nicht. "
+"Stattdessen steuert LAYER_LIST die geplotteten Lagen."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:94
 #: kicad/cli/command_pcb_export_svg.cpp:113
@@ -26280,6 +26281,9 @@ msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
 msgstr ""
+"Erzeugt eine oder mehrere Dateien mit einem Verhalten ähnlich dem der KiCad "
+"Plot-GUI. Der Ausgabepfad bestimmt das Verzeichnis in dem Ausgabedateien "
+"abgelegt werden."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -26303,9 +26307,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:167
 #: kicad/cli/command_pcb_export_svg.cpp:176
-#, fuzzy
 msgid "The new behavior will match --mode-multi"
-msgstr "Das neue Verhalten wird identisch zu \"--mode-new\" sein"
+msgstr "Das neue Verhalten wird identisch zu \"--mode-multi\" sein"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -35396,7 +35399,7 @@ msgstr "Negative X-Koordinaten für Footprints auf Unterseite verwenden"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
 msgid "Generate single file with both front and back positions"
-msgstr ""
+msgstr "Erzeuge gemeinsame Datei mit Positionsdaten der Vorder- und Rückseite"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 msgid "Generate Placement Files"
@@ -36310,7 +36313,6 @@ msgid "Bottom/Back layer:"
 msgstr "Unter-/Rückseite:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:210
-#, fuzzy
 msgid "Copper Layer Pair Presets"
 msgstr "Kupferlagenpaar-Voreinstellungen"
 
@@ -36417,9 +36419,8 @@ msgid "Replace existing placement rule areas"
 msgstr "Bestehender Platzierungs-Regelbereiche ersetzen"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:35
-#, fuzzy
 msgid "Group footprints with their placement rule areas"
-msgstr "Komponenten mit Platzierungsregelbereichen gruppieren"
+msgstr "Footprints mit Platzierungsregelbereichen gruppieren"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:50
 msgid "Generate Multichannel Rule Areas"
@@ -36452,19 +36453,16 @@ msgstr ""
 "kopieren"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
-#, fuzzy
 msgid "Include footprints outside the reference rule area"
-msgstr "Bauteile außerhalb der Zielfläche einbeziehen"
+msgstr "Bauteile außerhalb des Referenzregelbereichs einbeziehen"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:93
-#, fuzzy
 msgid "Group items with their target rule areas"
-msgstr "Komponenten mit Platzierungsregelbereichen gruppieren"
+msgstr "Komponenten mit Zielregelbereichen gruppieren"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:96
-#, fuzzy
 msgid "Remove locked items from target rule areas"
-msgstr "Elemente aus der Gruppe heraus lösen"
+msgstr "Gesperrte Elemente aus Zielregelbereichen entfernen"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
@@ -38235,9 +38233,8 @@ msgid "Parent footprint description"
 msgstr "Beschreibung Footprint Elternelement"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
-#, fuzzy
 msgid "Update Thickness According to Text Size"
-msgstr "Dicke der Textgröße entsprechend aktualisieren"
+msgstr "Textstärke entsprechend der -größe aktualisieren"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -38632,7 +38629,6 @@ msgid "Top/bottom"
 msgstr "Oben/unten"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:88
-#, fuzzy
 msgid "Board Items Flip"
 msgstr "Platinenelemente umdrehen"
 
@@ -39066,9 +39062,8 @@ msgstr ""
 "überlappt"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:20
-#, fuzzy
 msgid "No placement"
-msgstr "Platzierung"
+msgstr "Nicht platzieren"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
 msgid "Place items from sheet:"
@@ -39265,9 +39260,8 @@ msgid "Minimum text thickness:"
 msgstr "Minimale Schriftstärke:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:371
-#, fuzzy
 msgid "Arc/Circle Approximated by Segments"
-msgstr "Bogen / Kreis durch Segmente angenähert"
+msgstr "Durch Segmente angenäherter Bogen/Kreis"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:384
 msgid "Maximum allowed deviation:"
@@ -39299,7 +39293,6 @@ msgid "Note: zone filling can be slow when < %s."
 msgstr "Hinweis: Zonenfüllung kann langsam sein, wenn < %s."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:414
-#, fuzzy
 msgid "Zone Fill Strategy"
 msgstr "Zonen-Füllstrategie"
 
@@ -39312,7 +39305,6 @@ msgid "Minimum thermal relief spoke count:"
 msgstr "Mindestanzahl für thermische Entlastungsspeichen:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:455
-#, fuzzy
 msgid "Length Tuning"
 msgstr "Längenabstimmung"
 
@@ -40183,7 +40175,6 @@ msgid "Design rules cannot be added without a project"
 msgstr "Designregeln können ohne Projekt nicht hinzugefügt werden"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
-#, fuzzy
 msgid "DRC Rules"
 msgstr "DRC-Regeln"
 
@@ -40192,7 +40183,6 @@ msgid "Check rule syntax"
 msgstr "Regelsyntax überprüfen"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
-#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
@@ -40202,8 +40192,8 @@ msgstr ""
 "### Dokumentation\n"
 "\n"
 "Die vollständige Dokumentation finden Sie unter [https://docs.kicad.org]"
-"(https://docs.kicad.org/GetMajorMinorVersion/de/pcbnew/pcbnew."
-"html#custom_design_rules)."
+"(https://docs.kicad.org/GetMajorMinorVersion/de/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40762,7 +40752,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
-#, fuzzy
 msgid ""
 "### Properties\n"
 "\n"
@@ -40776,9 +40765,9 @@ msgstr ""
 "### Eigenschaften\n"
 "\n"
 "Viele Objekteigenschaften lassen sich in benutzerdefinierten Regeln nutzen. "
-"Die vollständige Liste finden Sie in der Dokumentation unter [https://docs."
-"kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules).\n"
+"Die vollständige Liste finden Sie in der Dokumentation unter "
+"[https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/"
+"pcbnew/pcbnew.html#custom_design_rules).\n"
 "<br><br><br>\n"
 "\n"
 
@@ -44901,7 +44890,6 @@ msgid "(PTH pad hole leaves no copper)"
 msgstr "(Loch des Durchsteckpads lässt kein Kupfer zurück)"
 
 #: pcbnew/pad.cpp:2334
-#, fuzzy
 msgid "(PTH pad hole not fully inside copper)"
 msgstr "(Durchsteckpadloch nicht vollständig innerhalb von Kupfer)"
 
@@ -47049,9 +47037,8 @@ msgid "Marker (%s)"
 msgstr "Markierung (%s)"
 
 #: pcbnew/pcb_plotter.cpp:65
-#, fuzzy
 msgid "No layers selected for plotting."
-msgstr "Keine Lage ausgewählt."
+msgstr "Keine Lage fürs Plotten ausgewählt."
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -49327,9 +49314,8 @@ msgid "Place the Footprint Anchor"
 msgstr "Footprint-Anker platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:349
-#, fuzzy
 msgid "Set the anchor point of the footprint"
-msgstr "Legt den Ursprungspunkt (Anker) des Footprints fest"
+msgstr "Ursprungspunkt des Footprints festlegen"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Increase Line Width"
@@ -50803,14 +50789,12 @@ msgstr ""
 "Platinenbereichs aus"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
-#, fuzzy
 msgid "Generate Placement Rule Areas..."
-msgstr "Platzierungregelflächen erzeugen"
+msgstr "Platzierungregelflächen erzeugen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2236
-#, fuzzy
 msgid "Repeat Layout..."
-msgstr "Layout wiederholen"
+msgstr "Layout wiederholen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
