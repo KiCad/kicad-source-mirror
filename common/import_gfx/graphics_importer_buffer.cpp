@@ -128,16 +128,19 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
     // in the KiCad drawing area
     else if( aImporter.GetImportOffsetMM() == VECTOR2D( 0, 0 ) )
     {
-        VECTOR2D offset = boundingBox.GetOrigin();
-        aImporter.SetImportOffsetMM( -offset );
+        if( boundingBox.GetRight() > std::numeric_limits<int>::max()
+            || boundingBox.GetBottom() > std::numeric_limits<int>::max()
+            || boundingBox.GetLeft() < std::numeric_limits<int>::min()
+            || boundingBox.GetTop() < std::numeric_limits<int>::min() )
+        {
+            VECTOR2D offset = boundingBox.GetOrigin();
+            aImporter.SetImportOffsetMM( -offset );
+        }
     }
     else
     {
-        VECTOR2D bbox_origin = boundingBox.GetOrigin();
-        aImporter.SetImportOffsetMM( -bbox_origin + aImporter.GetImportOffsetMM() );
-
-        double total_scale_x = aImporter.GetScale().x * aImporter.GetMillimeterToIuFactor();
-        double total_scale_y = aImporter.GetScale().y * aImporter.GetMillimeterToIuFactor();
+        double   total_scale_x = aImporter.GetScale().x * aImporter.GetMillimeterToIuFactor();
+        double   total_scale_y = aImporter.GetScale().y * aImporter.GetMillimeterToIuFactor();
 
         double max_offset_x =
                 ( aImporter.GetImportOffsetMM().x + boundingBox.GetRight() ) * total_scale_x;
