@@ -25,7 +25,8 @@
 #include <gestfich.h>
 #include <common.h>
 
-JOBS_OUTPUT_ARCHIVE::JOBS_OUTPUT_ARCHIVE() : JOBS_OUTPUT_HANDLER(),
+JOBS_OUTPUT_ARCHIVE::JOBS_OUTPUT_ARCHIVE() :
+    JOBS_OUTPUT_HANDLER(),
     m_format( FORMAT::ZIP )
 {
 }
@@ -42,15 +43,16 @@ bool JOBS_OUTPUT_ARCHIVE::OutputPrecheck()
 }
 
 
-bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTempPath,
-                                         PROJECT* aProject,
+bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString& baseTempPath, PROJECT* aProject,
                                          const std::vector<JOB_OUTPUT>& aOutputsToHandle )
 {
     bool success = true;
 
-    wxString outputPath = ExpandEnvVarSubstitutions( m_outputPath, aProject );
+    wxString outputPath = ExpandTextVars( m_outputPath, aProject );
+    outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
 
     wxFFileOutputStream ostream( outputPath );
+
     if( !ostream.IsOk() ) // issue to create the file. Perhaps not writable dir
     {
         //msg.Printf( _( "Failed to create file '%s'." ), aDestFile );
@@ -61,18 +63,15 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTemp
     wxZipOutputStream zipstream( ostream, -1, wxConvUTF8 );
     wxString          errors;
 
-
     if( !AddDirectoryToZip( zipstream, baseTempPath, errors ) )
     {
         success = false;
     }
 
-
     if( !zipstream.Close() )
     {
         success = false;
     }
-
 
     return success;
 }

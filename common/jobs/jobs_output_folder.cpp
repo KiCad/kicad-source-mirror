@@ -30,11 +30,11 @@ JOBS_OUTPUT_FOLDER::JOBS_OUTPUT_FOLDER() :
 }
 
 
-bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempPath,
-                                        PROJECT* aProject,
+bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString& baseTempPath, PROJECT* aProject,
                                         const std::vector<JOB_OUTPUT>& aOutputsToHandle )
 {
-    wxString outputPath = ExpandEnvVarSubstitutions( m_outputPath, aProject );
+    wxString outputPath = ExpandTextVars( m_outputPath, aProject );
+    outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
 
     if( !wxFileName::DirExists( outputPath ) )
     {
@@ -47,6 +47,7 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
     bool success = true;
 
     wxString errors;
+
     if( !CopyDirectory( baseTempPath, outputPath, errors ) )
     {
         success = false;
