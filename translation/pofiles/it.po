@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:16+0300\n"
-"PO-Revision-Date: 2025-01-12 20:00+0000\n"
+"PO-Revision-Date: 2025-01-14 08:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
@@ -6525,6 +6525,8 @@ msgstr "La grafica importata è troppo grande. La scala massima è %f"
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Scostamento importazione regolato su (%f, %f) per rientrare nei limiti "
+"numerici"
 
 #: common/io/altium/altium_binary_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -14856,7 +14858,7 @@ msgstr "Campo senza titolo"
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
 #, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr ""
+msgstr "Il nome del campo \"%s\" contiene spazi iniziali e/o finali."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -14864,16 +14866,18 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"Ciò potrebbe dare origine a nomi di campo apparentemente duplicati, ma in "
+"realtà sono nomi univoci che differiscono solo per i caratteri di spazio "
+"vuoto. La rimozione dei caratteri di spazio vuoto non avrà alcun effetto sui "
+"nomi di campo simbolo esistenti."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
-#, fuzzy
 msgid "Remove White Space"
-msgstr "Rimuovi piste duplicate"
+msgstr "Rimuovi spazio bianco"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
-#, fuzzy
 msgid "Keep White Space"
-msgstr "Piazzole proibite"
+msgstr "Mantieni spazio bianco"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
@@ -15532,6 +15536,8 @@ msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
+"Questo schema contiene simboli che hanno nomi di campi con spazi vuoti "
+"iniziali e/o finali."
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
@@ -31407,16 +31413,12 @@ msgid "Success"
 msgstr "Successo"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Usare un percorso relativo a\n"
-"\"%s\"?"
+msgstr "Annullare il processo di esportazione?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Rapporto distanza"
+msgstr "Annulla esportazione"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -37768,14 +37770,13 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "La piazzola non è una piazzola foro passante; la connessione sarà: %s."
 
 #: pcbnew/drc/drc_engine.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Superamento locale su %s; distanza: %s"
+msgstr "Punto di connessione su %s; distanza: 0."
 
 #: pcbnew/drc/drc_engine.cpp:787
-#, fuzzy
 msgid "net tie"
-msgstr "Titoli fogli"
+msgstr "punto di connessione"
 
 #: pcbnew/drc/drc_engine.cpp:814 pcbnew/drc/drc_engine.cpp:824
 #, c-format
@@ -42464,9 +42465,9 @@ msgstr ""
 "Nome tipo forma piazzola '%s' sconosciuto sullo strato '%s' alla riga %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Aggiungi strati selezionati all'elenco strati corrispondenti."
+msgstr "Nessuno strato utente dove posizionare lo strato %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
@@ -42488,12 +42489,12 @@ msgstr "Primitiva forma piazzola non riconosciuta '%s' alla riga %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Cerchio con raggi x e y diversi (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "Era atteso che x e y fossero uguali, mentre x = %f e y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
@@ -42530,6 +42531,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
+"Dati X, Y o di rotazione mancanti nella riga %zu per riferimento %s. "
+"Potrebbe trattarsi di un componente non posizionato."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2627
 #, c-format
@@ -42558,12 +42561,13 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3238
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "Tipo di forma non gestito %d nel poligono sullo strato %s, seq %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
 msgstr ""
+"Foro non valido con %d punti nella zona sullo strato %s con collegamento %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3438
 #, c-format
@@ -42571,11 +42575,13 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Il contorno sembra discontinuo: l'ultimo punto era %s, il punto di inizio "
+"del segmento successivo è %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Nome pin foglio non valido"
+msgstr "Tipo di forma non valido %d nel contorno zona"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
