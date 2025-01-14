@@ -65,6 +65,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue15280",   // Very wide spokes mis-counted as being single spoke
         "issue14008",   // Net-tie clearance error
         "issue19521/issue19521", // oval annular ring size
+        "issue17967/issue17967",   // Arc dp coupling
         "unconnected-netnames/unconnected-netnames", // Raised false schematic partity error
     };
 
@@ -128,7 +129,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
     {
         { "issue1358", 2 },
         { "issue2512", 5 },
-        { "issue2528", 1 },
+         { "issue2528", 1 },
         { "issue5750", 4 }, // Shorting zone fills pass DRC in some cases
         { "issue5854", 3 },
         { "issue6879", 6 },
@@ -144,6 +145,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "reverse_via", 3 },           // Via/track ordering
         { "intersectingzones", 1 },     // zones are too close to each other
         { "fill_bad", 1 },              // zone max BBox was too small
+        { "issue18878", 9 },
         { "issue19325/issue19325", 4 }, // Overlapping pad annular ring calculation
     };
 

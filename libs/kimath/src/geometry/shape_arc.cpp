@@ -395,6 +395,77 @@ VECTOR2I SHAPE_ARC::NearestPoint( const VECTOR2I& aP ) const
 }
 
 
+bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& aPtB,
+                               int64_t& aDistSq ) const
+{
+    aDistSq = std::numeric_limits<int64_t>::max();
+
+    VECTOR2I center1 = GetCenter();
+    VECTOR2I center2 = aArc.GetCenter();
+
+    int64_t dist = center1.SquaredDistance( center2 );
+
+    // Start by checking endpoints
+    std::vector<VECTOR2I> pts1 = { m_start, m_end };
+    std::vector<VECTOR2I> pts2 = { aArc.GetP0(), aArc.GetP1() };
+
+    for( const VECTOR2I& pt1 : pts1 )
+    {
+        for( const VECTOR2I& pt2 : pts2 )
+        {
+            int64_t distSq = pt1.SquaredDistance( pt2 );
+
+            if( distSq < aDistSq )
+            {
+                aDistSq = distSq;
+                aPtA = pt1;
+                aPtB = pt2;
+            }
+        }
+    }
+
+    // If the centers are the same, the end points are always the closest
+    // or at least equidistant
+    if( dist > 0 )
+    {
+        CIRCLE circle1( center1, GetRadius() );
+        CIRCLE circle2( center2, aArc.GetRadius() );
+
+        // First check for intersections on the circles
+        std::vector<VECTOR2I> pts = circle1.Intersect( circle2 );
+
+        for( const VECTOR2I& pt : pts )
+        {
+            if( sliceContainsPoint( pt ) && aArc.sliceContainsPoint( pt ) )
+            {
+                aPtA = pt;
+                aPtB = pt;
+                aDistSq = 0;
+                return true;
+            }
+        }
+
+        // Check for the closest points on the circles
+        VECTOR2I pt1 = circle1.NearestPoint( center2 );
+        VECTOR2I pt2 = circle2.NearestPoint( center1 );
+
+        if( sliceContainsPoint( pt1 ) && aArc.sliceContainsPoint( pt2 ) )
+        {
+            int64_t distSq = pt1.SquaredDistance( pt2 );
+
+            if( distSq < aDistSq )
+            {
+                aDistSq = distSq;
+                aPtA = pt1;
+                aPtB = pt2;
+            }
+        }
+    }
+
+    return true;
+}
+
+
 bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
                          VECTOR2I* aLocation ) const
 {
