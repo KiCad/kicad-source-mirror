@@ -265,6 +265,13 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
         m_Parent->GetLibManager().GetSymbolNames( libName, symbolNames );
 
+        // Sort the list of symbols for easier search
+        symbolNames.Sort(
+                []( const wxString& a, const wxString& b ) -> int
+                {
+                    return StrNumCmp( a, b, true );
+                } );
+
         // Do allow an inherited symbol to be derived from itself.
         symbolNames.Remove( m_libEntry->GetName() );
         m_inheritanceSelectCombo->Append( symbolNames );
