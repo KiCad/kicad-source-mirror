@@ -124,10 +124,9 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
     }
     else
     {
-        m_triangulationValid = false;
         m_hash.Clear();
         m_hashValid = false;
-        m_triangulatedPolys.clear();
+        m_triangulationValid = false;
     }
 }
 
@@ -136,10 +135,9 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, DROP_TRIANGULATION
     SHAPE( aOther ),
     m_polys( aOther.m_polys )
 {
-    m_triangulationValid = false;
     m_hash.Clear();
     m_hashValid = false;
-    m_triangulatedPolys.clear();
+    m_triangulationValid = false;
 }
 
 
@@ -2887,20 +2885,31 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
 
 SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
 {
-    static_cast<SHAPE&>(*this) = aOther;
+    SHAPE::operator=( aOther );
     m_polys = aOther.m_polys;
 
     m_triangulatedPolys.clear();
 
-    for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
+    if( aOther.IsTriangulationUpToDate() )
     {
-        const TRIANGULATED_POLYGON* poly = aOther.TriangulatedPolygon( i );
-        m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>( *poly ) );
-    }
+        m_triangulatedPolys.reserve( aOther.TriangulatedPolyCount() );
 
-    m_hash = aOther.m_hash;
-    m_hashValid = aOther.m_hashValid;
-    m_triangulationValid = aOther.m_triangulationValid.load();
+        for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
+        {
+            const TRIANGULATED_POLYGON* poly = aOther.TriangulatedPolygon( i );
+            m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>( *poly ) );
+        }
+
+        m_hash = aOther.m_hash;
+        m_hashValid = aOther.m_hashValid;
+        m_triangulationValid = aOther.m_triangulationValid.load();
+    }
+    else
+    {
+        m_hash.Clear();
+        m_hashValid = false;
+        m_triangulationValid = false;
+    }
 
     return *this;
 }
