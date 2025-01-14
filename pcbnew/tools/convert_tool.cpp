@@ -262,7 +262,8 @@ bool CONVERT_TOOL::Init()
     m_menu->SetTitle( _( "Create from Selection" ) );
 
     static const std::vector<KICAD_T> padTypes =     { PCB_PAD_T };
-    static const std::vector<KICAD_T> segmentTypes = { PCB_TRACE_T,
+    static const std::vector<KICAD_T> toArcTypes =   { PCB_ARC_T,
+                                                       PCB_TRACE_T,
                                                        PCB_SHAPE_LOCATE_SEGMENT_T };
     static const std::vector<KICAD_T> shapeTypes =   { PCB_SHAPE_LOCATE_SEGMENT_T,
                                                        PCB_SHAPE_LOCATE_RECT_T,
@@ -287,7 +288,7 @@ bool CONVERT_TOOL::Init()
     auto anyPolys        = S_C::OnlyTypes( polyTypes );
     auto anyPads         = S_C::OnlyTypes( padTypes );
 
-    auto canCreateArcs   = S_C::Count( 1 ) && S_C::OnlyTypes( segmentTypes );
+    auto canCreateArcs   = S_C::Count( 1 ) && S_C::OnlyTypes( toArcTypes );
     auto canCreateArray  = S_C::MoreThan( 0 );
     auto canCreatePoly   = shapes || anyPolys || anyTracks;
 
@@ -1179,14 +1180,15 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
                     BOARD_ITEM* item = aCollector[i];
 
                     if( !( item->Type() == PCB_SHAPE_T ||
-                           item->Type() == PCB_TRACE_T ) )
+                           item->Type() == PCB_TRACE_T ||
+                           item->Type() == PCB_ARC_T ) )
                     {
                         aCollector.Remove( item );
                     }
                 }
             } );
 
-    if( !selection.Front()->IsBOARD_ITEM() )
+    if( selection.Empty() || !selection.Front()->IsBOARD_ITEM() )
         return -1;
 
     BOARD_ITEM* source = static_cast<BOARD_ITEM*>( selection.Front() );
@@ -1213,7 +1215,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
     PCB_LAYER_ID          layer = source->GetLayer();
     BOARD_COMMIT          commit( m_frame );
 
-    if( source->Type() == PCB_SHAPE_T )
+    if( source->Type() == PCB_SHAPE_T && static_cast<PCB_SHAPE*>( source )->GetShape() == SHAPE_T::SEGMENT )
     {
         PCB_SHAPE* line = static_cast<PCB_SHAPE*>( source );
         PCB_SHAPE* arc  = new PCB_SHAPE( parent, SHAPE_T::ARC );
@@ -1224,24 +1226,48 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
         arc->SetLayer( layer );
         arc->SetStroke( line->GetStroke() );
 
-        arc->SetCenter( VECTOR2I( center ) );
-        arc->SetStart( VECTOR2I( start ) );
-        arc->SetEnd( VECTOR2I( end ) );
+        arc->SetCenter( center );
+        arc->SetStart( start );
+        arc->SetEnd( end );
 
         commit.Add( arc );
     }
-    else
+    else if( source->Type() == PCB_SHAPE_T && static_cast<PCB_SHAPE*>( source )->GetShape() == SHAPE_T::ARC )
     {
-        wxASSERT( source->Type() == PCB_TRACE_T );
+        PCB_SHAPE* source_arc = static_cast<PCB_SHAPE*>( source );
+        PCB_ARC*   arc  = new PCB_ARC( parent );
+
+        arc->SetLayer( layer );
+        arc->SetWidth( source_arc->GetWidth() );
+        arc->SetStart( start );
+        arc->SetMid( source_arc->GetArcMid() );
+        arc->SetEnd( end );
+
+        commit.Add( arc );
+    }
+    else if( source->Type() == PCB_TRACE_T )
+    {
         PCB_TRACK* line = static_cast<PCB_TRACK*>( source );
         PCB_ARC*   arc  = new PCB_ARC( parent );
 
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );
-        arc->SetStart( VECTOR2I( start ) );
-        arc->SetMid( VECTOR2I( mid ) );
-        arc->SetEnd( VECTOR2I( end ) );
+        arc->SetStart( start );
+        arc->SetMid( mid );
+        arc->SetEnd( end );
 
+        commit.Add( arc );
+    }
+    else if( source->Type() == PCB_ARC_T )
+    {
+        PCB_ARC* source_arc = static_cast<PCB_ARC*>( source );
+        PCB_SHAPE* arc  = new PCB_SHAPE( parent, SHAPE_T::ARC );
+
+        arc->SetFilled( false );
+        arc->SetLayer( layer );
+        arc->SetWidth( source_arc->GetWidth() );
+
+        arc->SetArcGeometry( source_arc->GetStart(), source_arc->GetMid(), source_arc->GetEnd() );
         commit.Add( arc );
     }
 
