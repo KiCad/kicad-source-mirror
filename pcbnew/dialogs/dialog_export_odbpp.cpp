@@ -24,6 +24,7 @@
 #include <footprint.h>
 #include <kidialog.h>
 #include <kiway_holder.h>
+#include <paths.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
@@ -249,6 +250,7 @@ bool DIALOG_EXPORT_ODBPP::Init()
         m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
         m_precision->SetValue( m_job->m_precision );
         m_choiceCompress->SetSelection( static_cast<int>( m_job->m_compressionMode ) );
+        m_outputFileName->SetValue( m_job->GetOutputPath() );
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
@@ -291,46 +293,42 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
                                               REPORTER*          aReporter )
 {
     wxCHECK( aBoard, /* void */ );
-    wxString outputPath = aJob.GetOutputPath();
+    wxString outputPath = aJob.GetFullOutputPath( NULL );
 
     if( outputPath.IsEmpty() )
         outputPath = wxFileName( aJob.m_filename ).GetPath();
 
-    wxFileName pcbFileName( outputPath );
+    wxFileName outputFn( outputPath );
 
     // Write through symlinks, don't replace them
-    WX_FILENAME::ResolvePossibleSymlinks( pcbFileName );
+    WX_FILENAME::ResolvePossibleSymlinks( outputFn );
 
-    if( pcbFileName.GetPath().IsEmpty() && pcbFileName.HasName() )
-        pcbFileName.MakeAbsolute();
+    if( outputFn.GetPath().IsEmpty() && outputFn.HasName() )
+        outputFn.MakeAbsolute();
 
     wxString msg;
 
-    if( !wxFileName::DirExists( pcbFileName.GetPath() ) )
+    if( !PATHS::EnsurePathExists( outputFn.GetPath(),
+                                   aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE ) )
     {
-        // Make every directory provided when the provided path doesn't exist
-        if( !wxFileName::Mkdir( pcbFileName.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        {
-            msg.Printf( _( "Cannot create output directory '%s'." ), pcbFileName.GetFullPath() );
+        msg.Printf( _( "Cannot create output directory '%s'." ), outputFn.GetFullPath() );
 
-            if( aReporter )
-                aReporter->Report( msg, RPT_SEVERITY_ERROR );
-
-            return;
-        }
+        if( aReporter )
+            aReporter->Report( msg, RPT_SEVERITY_ERROR );
+        return;
     }
 
-    if( pcbFileName.IsDir() && !pcbFileName.IsDirWritable() )
+    if( outputFn.IsDir() && !outputFn.IsDirWritable() )
     {
-        msg.Printf( _( "Insufficient permissions to folder '%s'." ), pcbFileName.GetPath() );
+        msg.Printf( _( "Insufficient permissions to folder '%s'." ), outputFn.GetPath() );
     }
-    else if( !pcbFileName.FileExists() && !pcbFileName.IsDirWritable() )
+    else if( !outputFn.FileExists() && !outputFn.IsDirWritable() )
     {
-        msg.Printf( _( "Insufficient permissions to save file '%s'." ), pcbFileName.GetFullPath() );
+        msg.Printf( _( "Insufficient permissions to save file '%s'." ), outputFn.GetFullPath() );
     }
-    else if( pcbFileName.FileExists() && !pcbFileName.IsFileWritable() )
+    else if( outputFn.FileExists() && !outputFn.IsFileWritable() )
     {
-        msg.Printf( _( "Insufficient permissions to save file '%s'." ), pcbFileName.GetFullPath() );
+        msg.Printf( _( "Insufficient permissions to save file '%s'." ), outputFn.GetFullPath() );
     }
 
     if( !msg.IsEmpty() )
@@ -341,17 +339,17 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
         return;
     }
 
-    wxFileName tempFile( pcbFileName.GetFullPath() );
+    wxFileName tempFile( outputFn.GetFullPath() );
 
     if( aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE )
     {
-        if( pcbFileName.Exists() )
+        if( outputFn.Exists() )
         {
             if( aParentFrame )
             {
                 msg = wxString::Format( _( "Output files '%s' already exists. "
                                            "Do you want to overwrite it?" ),
-                                        pcbFileName.GetFullPath() );
+                                        outputFn.GetFullPath() );
 
                 KIDIALOG errorDlg( aParentFrame, msg, _( "Confirmation" ),
                                    wxOK | wxCANCEL | wxICON_WARNING );
@@ -360,10 +358,10 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
                 if( errorDlg.ShowModal() != wxID_OK )
                     return;
 
-                if( !wxRemoveFile( pcbFileName.GetFullPath() ) )
+                if( !wxRemoveFile( outputFn.GetFullPath() ) )
                 {
                     msg.Printf( _( "Cannot remove existing output file '%s'." ),
-                                pcbFileName.GetFullPath() );
+                                outputFn.GetFullPath() );
                     DisplayErrorMessage( aParentFrame, msg );
                     return;
                 }
@@ -371,7 +369,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
             else
             {
                 msg = wxString::Format( _( "Output file '%s' already exists." ),
-                                        pcbFileName.GetFullPath() );
+                                        outputFn.GetFullPath() );
 
                 if( aReporter )
                     aReporter->Report( msg, RPT_SEVERITY_ERROR );
@@ -501,7 +499,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Compressing output" ) );
 
-        wxFFileOutputStream fnout( pcbFileName.GetFullPath() );
+        wxFFileOutputStream fnout( outputFn.GetFullPath() );
         wxZipOutputStream   zipStream( fnout );
 
         std::function<void( const wxString&, const wxString& )> addDirToZip =
@@ -545,7 +543,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
     }
     else if( aJob.m_compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ )
     {
-        wxFFileOutputStream fnout( pcbFileName.GetFullPath() );
+        wxFFileOutputStream fnout( outputFn.GetFullPath() );
         wxZlibOutputStream  zlibStream( fnout, -1, wxZLIB_GZIP );
         wxTarOutputStream   tarStream( zlibStream );
 
