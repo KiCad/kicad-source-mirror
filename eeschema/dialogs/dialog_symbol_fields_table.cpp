@@ -288,11 +288,12 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
         preset.fieldsOrdered.clear();
 
         size_t i = 0;
-        for( wxString fieldName : m_job->m_fieldsOrdered )
+
+        for( const wxString& fieldName : m_job->m_fieldsOrdered )
         {
             BOM_FIELD field;
             field.name = fieldName;
-            field.show = true;
+            field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
             field.groupBy = std::find( m_job->m_fieldsGroupBy.begin(), m_job->m_fieldsGroupBy.end(),
                                        field.name )
                             != m_job->m_fieldsGroupBy.end();
@@ -319,6 +320,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     // Load BOM export format presets
     SetUserBomFmtPresets( m_schSettings.m_BomFmtPresets );
     BOM_FMT_PRESET fmtPreset = m_schSettings.m_BomFmtSettings;
+
     if( m_job )
     {
         fmtPreset.name = m_job->m_bomFmtPresetName;
@@ -329,6 +331,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
         fmtPreset.refRangeDelimiter = m_job->m_refRangeDelimiter;
         fmtPreset.stringDelimiter = m_job->m_stringDelimiter;
     }
+
     ApplyBomFmtPreset( fmtPreset );
     syncBomFmtPresetSelection();
 
@@ -396,8 +399,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
         m_buttonExport->Hide();
 
         SetupStandardButtons();
-
-        SetTitle( _( "BOM Export Job" ) );
     }
 }
 
@@ -1455,13 +1456,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
         for( const BOM_FIELD& modelField : m_dataModel->GetFieldsOrdered() )
         {
             if( modelField.show )
-            {
                 m_job->m_fieldsOrdered.emplace_back( modelField.name );
-                m_job->m_fieldsLabels.emplace_back( modelField.label );
+            else
+                m_job->m_fieldsOrdered.emplace_back( wxT( "__" ) + modelField.name );
 
-                if( modelField.groupBy )
-                    m_job->m_fieldsGroupBy.emplace_back( modelField.name );
-            }
+            m_job->m_fieldsLabels.emplace_back( modelField.label );
+
+            if( modelField.groupBy )
+                m_job->m_fieldsGroupBy.emplace_back( modelField.name );
         }
 
         EndModal( wxID_OK );

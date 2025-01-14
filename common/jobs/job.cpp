@@ -30,18 +30,18 @@ JOB::JOB( const std::string& aType, bool aOutputIsDirectory ) :
         m_outputPathIsDirectory( aOutputIsDirectory ),
         m_description()
 {
-    m_params.emplace_back(
-            new JOB_PARAM<wxString>( "description", &m_description, m_description ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "description",
+                                                    &m_description, m_description ) );
 
     if( m_outputPathIsDirectory )
     {
-        m_params.emplace_back(
-                new JOB_PARAM<wxString>( "output_dir", &m_outputPath, m_outputPath ) );
+        m_params.emplace_back( new JOB_PARAM<wxString>( "output_dir",
+                                                        &m_outputPath, m_outputPath ) );
     }
     else
     {
-        m_params.emplace_back(
-                new JOB_PARAM<wxString>( "output_filename", &m_outputPath, m_outputPath ) );
+        m_params.emplace_back( new JOB_PARAM<wxString>( "output_filename",
+                                                        &m_outputPath, m_outputPath ) );
     }
 }
 
@@ -110,15 +110,11 @@ wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
         if( m_outputPathIsDirectory )
         {
             wxFileName fn( outPath );
-            if( fn.IsAbsolute() || outPath.IsEmpty() )
-            {
-                fn.AssignDir( m_tempOutputDirectory );
-            }
-            else
-            {
-                PrependDirectoryToPath( fn, m_tempOutputDirectory );
-            }
 
+            if( fn.IsAbsolute() || outPath.IsEmpty() )
+                fn.AssignDir( m_tempOutputDirectory );
+            else
+                PrependDirectoryToPath( fn, m_tempOutputDirectory );
 
             return fn.GetFullPath();
         }
@@ -153,19 +149,14 @@ void JOB::SetOutputPath( const wxString& aPath )
 bool JOB::OutputPathFullSpecified() const
 {
     if( m_outputPath.IsEmpty() )
-    {
         return false;
-    }
 
     wxFileName fn( m_outputPath );
+
     if( m_outputPathIsDirectory )
-    {
         return fn.IsDir();
-    }
     else
-    {
         return !fn.IsDir();
-    }
 }
 
 

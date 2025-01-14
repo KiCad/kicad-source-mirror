@@ -551,20 +551,14 @@ void PANEL_JOBSET::buildOutputList()
 
 bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
 {
-    JOBSET_JOB& job = m_jobsFile->GetJobs()[aItemIndex];
-
+    bool          success = false;
+    JOBSET_JOB&   job = m_jobsFile->GetJobs()[aItemIndex];
     KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
 
     if( iface < KIWAY::KIWAY_FACE_COUNT )
     {
         EnsurePcbSchFramesOpen();
-
-        if( m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job.get(), m_frame ) )
-        {
-            m_jobsFile->SetDirty();
-            UpdateTitle();
-            return true;
-        }
+        success = m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job.get(), m_frame );
     }
     else
     {
@@ -576,11 +570,7 @@ bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
             DIALOG_EXECUTECOMMAND_JOB_SETTINGS dialog( m_frame, specialJob );
 
             if( dialog.ShowModal() == wxID_OK )
-            {
-                m_jobsFile->SetDirty();
-                UpdateTitle();
-                return true;
-            }
+                success = true;
         }
         else if( job.m_job->GetType() == "special_copyfiles" )
         {
@@ -589,15 +579,20 @@ bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
             DIALOG_COPYFILES_JOB_SETTINGS dialog( m_frame, specialJob );
 
             if( dialog.ShowModal() == wxID_OK )
-            {
-                m_jobsFile->SetDirty();
-                UpdateTitle();
-                return true;
-            }
+                success = true;
         }
     }
 
-    return false;
+    if( success )
+    {
+        m_jobsFile->SetDirty();
+        UpdateTitle();
+    }
+
+    // Bring the Kicad manager frame back to the front
+    m_frame->Raise();
+
+    return success;
 }
 
 
