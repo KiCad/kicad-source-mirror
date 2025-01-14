@@ -1665,7 +1665,7 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
     aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
     aList.emplace_back( _( "Resolved Netclass" ),
-                        UnescapeString( GetEffectiveNetClass()->GetName() ) );
+                        UnescapeString( GetEffectiveNetClass()->GetHumanReadableName() ) );
 
 #if 0   // Enable for debugging
     if( GetBoard() )

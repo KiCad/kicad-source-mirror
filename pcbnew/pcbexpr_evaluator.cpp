@@ -155,7 +155,7 @@ public:
     const wxString& AsString() const override
     {
         const_cast<PCBEXPR_NETCLASS_VALUE*>( this )->Set(
-                m_item->GetEffectiveNetClass()->GetVariableSubstitutionName() );
+                m_item->GetEffectiveNetClass()->GetName() );
         return LIBEVAL::VALUE::AsString();
     }
 

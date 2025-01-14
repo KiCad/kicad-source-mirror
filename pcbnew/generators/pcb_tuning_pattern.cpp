@@ -2131,7 +2131,8 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     }
 
     if( netclass )
-        aList.emplace_back( _( "Resolved Netclass" ), UnescapeString( netclass->GetName() ) );
+        aList.emplace_back( _( "Resolved Netclass" ),
+                            UnescapeString( netclass->GetHumanReadableName() ) );
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 

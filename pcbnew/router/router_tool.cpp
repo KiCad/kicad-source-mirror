@@ -2685,9 +2685,10 @@ void ROUTER_TOOL::UpdateMessagePanel()
             NETCLASS* netclassB = netB->GetNetClass();
 
             if( *netclassA == *netclassB )
-                netclass = netclassA->GetName();
+                netclass = netclassA->GetHumanReadableName();
             else
-                netclass = netclassA->GetName() + wxT( ", " ) + netclassB->GetName();
+                netclass = netclassA->GetHumanReadableName() + wxT( ", " )
+                           + netclassB->GetHumanReadableName();
 
             secondary = wxString::Format( _( "Resolved Netclass: %s" ),
                                           UnescapeString( netclass ) );
@@ -2699,8 +2700,9 @@ void ROUTER_TOOL::UpdateMessagePanel()
             description = wxString::Format( _( "Routing Track: %s" ),
                                             net->GetNetname() );
 
-            secondary = wxString::Format( _( "Resolved Netclass: %s" ),
-                                          UnescapeString( net->GetNetClass()->GetName() ) );
+            secondary = wxString::Format(
+                    _( "Resolved Netclass: %s" ),
+                    UnescapeString( net->GetNetClass()->GetHumanReadableName() ) );
         }
         else
         {

@@ -1855,8 +1855,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                     if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
                     {
                         netNames.insert( UnescapeString( bci->GetNetname() ) );
-                        netClasses.insert(
-                                UnescapeString( bci->GetEffectiveNetClass()->GetName() ) );
+                        netClasses.insert( UnescapeString(
+                                bci->GetEffectiveNetClass()->GetHumanReadableName() ) );
 
                         if( netNames.size() > 1 && netClasses.size() > 1 )
                             break;

@@ -1737,7 +1737,7 @@ void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BO
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
     {
-        if( net->GetNetClass()->GetVariableSubstitutionName() == clazz->m_class_id )
+        if( net->GetNetClass()->GetName() == clazz->m_class_id )
             clazz->m_net_ids.push_back( TO_UTF8( net->GetNetname() ) );
     }
 

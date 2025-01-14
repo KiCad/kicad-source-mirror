@@ -80,10 +80,6 @@ public:
     /// @brief Sets the netclasses which make up this netclass
     void SetConstituentNetclasses( std::vector<NETCLASS*>&& constituents );
 
-    /// @brief Gets the name of this (maybe aggregate) netclass in a format for label variable
-    ///        substitutions
-    const wxString GetVariableSubstitutionName() const;
-
     /// @brief Determines if the given netclass name is a constituent of this (maybe aggregate)
     /// netclass
     bool ContainsNetclassWithName( const wxString& netclass ) const;
@@ -91,15 +87,25 @@ public:
     /// @ brief Determines if this is marked as the default netclass
     bool IsDefault() const { return m_isDefault; }
 
-    /// @brief Gets the consolidated name of this netclass (which may be an aggregate)
-    const wxString GetName() const;
-    void           SetName( const wxString& aName )
+    /// @brief Set the name of this netclass. Only relevant for root netclasses (i.e. those which
+    /// are not an aggregate)
+    void SetName( const wxString& aName )
     {
         m_Name = aName;
 
         if( aName == Default )
             m_isDefault = true;
     }
+
+    /// @brief Gets the name of this (maybe aggregate) netclass in a format for internal usage or
+    /// for export to external tools / netlists. WARNING: Do not use this to display a netclass
+    /// name to a user. Use GetHumanReadableName instead.
+    const wxString GetName() const;
+
+    /// @brief Gets the consolidated name of this netclass (which may be an aggregate). This is
+    /// intended for display to users (e.g. in infobars or messages). WARNING: Do not use this
+    /// to compare equivalence, or to export to other tools)
+    const wxString GetHumanReadableName() const;
 
     const wxString& GetDescription() const  { return m_Description; }
     void  SetDescription( const wxString& aDesc ) { m_Description = aDesc; }

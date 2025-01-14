@@ -53,7 +53,7 @@ public:
     {
         wxASSERT( aNet );
         m_net_name = UnescapeString( aNet->GetNetname() );
-        m_net_class = UnescapeString( aNet->GetNetClass()->GetName() );
+        m_net_class = UnescapeString( aNet->GetNetClass()->GetHumanReadableName() );
         m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + 2, 0 );
     }
 

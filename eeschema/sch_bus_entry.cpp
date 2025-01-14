@@ -539,7 +539,8 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         conn->AppendInfoToMsgPanel( aList );
 
         if( !conn->IsBus() )
-            aList.emplace_back( _( "Resolved Netclass" ), GetEffectiveNetClass()->GetName() );
+            aList.emplace_back( _( "Resolved Netclass" ),
+                                GetEffectiveNetClass()->GetHumanReadableName() );
     }
 }
 

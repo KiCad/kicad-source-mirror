@@ -754,7 +754,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         *token = wxEmptyString;
 
         if( connection )
-            *token = GetEffectiveNetClass()->GetVariableSubstitutionName();
+            *token = GetEffectiveNetClass()->GetName();
 
         return true;
     }
@@ -1218,7 +1218,7 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         if( !conn->IsBus() )
         {
             aList.emplace_back( _( "Resolved Netclass" ),
-                                UnescapeString( GetEffectiveNetClass()->GetName() ) );
+                                UnescapeString( GetEffectiveNetClass()->GetHumanReadableName() ) );
         }
     }
 }
@@ -1324,9 +1324,9 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
                 properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Net" ),
                                                            connection->Name() ) );
 
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                           _( "Resolved netclass" ),
-                                                           GetEffectiveNetClass()->GetName() ) );
+                properties.emplace_back(
+                        wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
+                                          GetEffectiveNetClass()->GetHumanReadableName() ) );
             }
 
             for( const SCH_FIELD& field : GetFields() )

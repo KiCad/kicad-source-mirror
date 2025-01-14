@@ -198,8 +198,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     }
     else if( item )
     {
-        m_netclassFilter->SetStringSelection(
-                item->GetNet()->GetNetClass()->GetVariableSubstitutionName() );
+        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClass()->GetName() );
     }
 
     if( g_filterByNet && m_brd->FindNet( g_netFilter ) != nullptr )

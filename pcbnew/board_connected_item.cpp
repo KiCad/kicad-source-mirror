@@ -113,7 +113,7 @@ wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 
 wxString BOARD_CONNECTED_ITEM::GetNetClassVariableSubstitutionName() const
 {
-    return GetEffectiveNetClass()->GetVariableSubstitutionName();
+    return GetEffectiveNetClass()->GetName();
 }
 
 

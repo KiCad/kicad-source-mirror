@@ -600,8 +600,7 @@ void NET_SETTINGS::ClearCacheForNet( const wxString& netName )
 {
     if( m_effectiveNetclassCache.count( netName ) )
     {
-        wxString compositeNetclassName =
-                m_effectiveNetclassCache[netName]->GetVariableSubstitutionName();
+        wxString compositeNetclassName = m_effectiveNetclassCache[netName]->GetName();
         m_compositeNetClasses.erase( compositeNetclassName );
         m_effectiveNetclassCache.erase( netName );
     }
@@ -764,7 +763,7 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
     {
         effectiveNetclass->SetConstituentNetclasses( std::move( netclassPtrs ) );
 
-        m_compositeNetClasses[effectiveNetclass->GetVariableSubstitutionName()] = effectiveNetclass;
+        m_compositeNetClasses[effectiveNetclass->GetName()] = effectiveNetclass;
         m_effectiveNetclassCache[aNetName] = effectiveNetclass;
 
         return effectiveNetclass;

@@ -805,7 +805,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
             aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
             aList.emplace_back( _( "Resolved Netclass" ),
-                                UnescapeString( GetEffectiveNetClass()->GetName() ) );
+                                UnescapeString( GetEffectiveNetClass()->GetHumanReadableName() ) );
         }
 
         // Display priority level

@@ -895,9 +895,9 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
                                                            _( "Net" ),
                                                            connection->Name() ) );
 
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                           _( "Resolved netclass" ),
-                                                           GetEffectiveNetClass()->GetName() ) );
+                properties.emplace_back(
+                        wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
+                                          GetEffectiveNetClass()->GetHumanReadableName() ) );
             }
         }
         else if( GetLayer() == LAYER_BUS )
@@ -955,7 +955,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
         if( !conn->IsBus() )
         {
             aList.emplace_back( _( "Resolved Netclass" ),
-                                UnescapeString( GetEffectiveNetClass()->GetName() ) );
+                                UnescapeString( GetEffectiveNetClass()->GetHumanReadableName() ) );
         }
     }
 }

@@ -317,7 +317,7 @@ void SCH_JUNCTION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
         if( !conn->IsBus() )
         {
             aList.emplace_back( _( "Resolved Netclass" ),
-                                UnescapeString( GetEffectiveNetClass()->GetName() ) );
+                                UnescapeString( GetEffectiveNetClass()->GetHumanReadableName() ) );
         }
     }
 }

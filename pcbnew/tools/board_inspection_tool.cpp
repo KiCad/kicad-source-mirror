@@ -197,8 +197,9 @@ wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
     {
         BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
 
-        msg += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
-                                              cItem->GetEffectiveNetClass()->GetName() );
+        msg += wxS( " " )
+               + wxString::Format( _( "[netclass %s]" ),
+                                   cItem->GetEffectiveNetClass()->GetHumanReadableName() );
     }
 
     return msg;

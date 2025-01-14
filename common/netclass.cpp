@@ -283,7 +283,7 @@ bool NETCLASS::ContainsNetclassWithName( const wxString& netclass ) const
 }
 
 
-const wxString NETCLASS::GetName() const
+const wxString NETCLASS::GetHumanReadableName() const
 {
     if( m_constituents.size() == 1 )
         return m_Name;
@@ -311,19 +311,19 @@ const wxString NETCLASS::GetName() const
 }
 
 
-const wxString NETCLASS::GetVariableSubstitutionName() const
+const wxString NETCLASS::GetName() const
 {
     if( m_constituents.size() == 1 )
         return m_Name;
 
     wxASSERT( m_constituents.size() >= 2 );
 
-    wxString name = m_constituents[0]->GetName();
+    wxString name = m_constituents[0]->m_Name;
 
     for( std::size_t i = 1; i < m_constituents.size(); ++i )
     {
         name += ",";
-        name += m_constituents[i]->GetName();
+        name += m_constituents[i]->m_Name;
     }
 
     return name;

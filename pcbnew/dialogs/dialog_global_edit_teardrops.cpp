@@ -264,8 +264,7 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataToWindow()
     if( g_filterByNetclass && m_netclassFilter->SetStringSelection( g_netclassFilter ) )
         m_netclassFilterOpt->SetValue( true );
     else if( item )
-        m_netclassFilter->SetStringSelection(
-                item->GetNet()->GetNetClass()->GetVariableSubstitutionName() );
+        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClass()->GetName() );
 
     if( g_filterByNet && m_brd->FindNet( g_netFilter ) != nullptr )
     {
