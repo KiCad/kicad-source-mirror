@@ -65,6 +65,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue14412",   // Solder mask bridge between pads in a net-tie pad group
         "issue15280",   // Very wide spokes mis-counted as being single spoke
         "issue14008",   // Net-tie clearance error
+        "issue17967/issue17967",   // Arc dp coupling
         "unconnected-netnames/unconnected-netnames", // Raised false schematic partity error
     };
 
@@ -149,7 +150,6 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "reverse_via", 3, {} },       // Via/track ordering
         { "intersectingzones", 1, {} }, // zones are too close to each other
         { "fill_bad",   1, {} },        // zone max BBox was too small
-        { "issue17967/issue17967", 1, {}}, // Arc dp coupling
         { "issue18878", 9, {} },
         { "issue19325/issue19325", 4, issue19325_ignore }, // Overlapping pad annular ring calculation
     };

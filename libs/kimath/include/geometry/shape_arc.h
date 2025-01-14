@@ -120,6 +120,17 @@ public:
 
     VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
 
+
+    /**
+      * Compute closest points between this arc and \a aArc.
+      *
+      * @param aPtA point on this arc (output)
+      * @param aPtB point on the other arc (output)
+      * @param aDistSq squared distance between points (output)
+      * @return true if the operation was successful
+      */
+    bool NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_t& aDistSq ) const;
+
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override;
     bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
