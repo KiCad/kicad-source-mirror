@@ -734,22 +734,25 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.TypeName(),
-                                           aB.TypeName() ) );
-
     VECTOR2I ptA, ptB;
     int64_t  dist_sq = std::numeric_limits<int64_t>::max();
     aA.NearestPoints( aB, ptA, ptB, dist_sq );
     int dual_width = ( aA.GetWidth() + aB.GetWidth() ) / 2;
+    int min_dist = aClearance + dual_width;
 
-    if( dist_sq < SEG::Square( aClearance + dual_width ) )
+    if( dist_sq < SEG::Square( min_dist ) )
     {
         if( aLocation )
             *aLocation = ( ptA + ptB ) / 2;
 
         if( aActual )
             *aActual = std::max( 0, KiROUND( std::sqrt( dist_sq ) - dual_width ) );
+
+        if( aMTV )
+        {
+            const VECTOR2I delta = ptB - ptA;
+            *aMTV = delta.Resize( min_dist - std::sqrt( dist_sq ) + 3 );
+        }
 
         return true;
     }
