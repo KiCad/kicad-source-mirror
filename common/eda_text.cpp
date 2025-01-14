@@ -95,9 +95,7 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
         m_text( aText ),
         m_IuScale( aIuScale ),
-        m_render_cache_font( nullptr ),
-        m_bounding_box_cache_valid( false ),
-        m_bounding_box_cache_line( -1 )
+        m_render_cache_font( nullptr )
 {
     SetTextSize( VECTOR2I( EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ),
                            EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ) ) );
@@ -140,9 +138,7 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
             m_render_cache.emplace_back( std::make_unique<KIFONT::STROKE_GLYPH>( *stroke ) );
     }
 
-    m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
-    m_bounding_box_cache = aText.m_bounding_box_cache;
-    m_bounding_box_cache_line = aText.m_bounding_box_cache_line;
+    m_bbox_cache = aText.m_bbox_cache;
 
     m_unresolvedFontName = aText.m_unresolvedFontName;
 }
@@ -177,8 +173,7 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
             m_render_cache.emplace_back( std::make_unique<KIFONT::STROKE_GLYPH>( *stroke ) );
     }
 
-    m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
-    m_bounding_box_cache = aText.m_bounding_box_cache;
+    m_bbox_cache = aText.m_bbox_cache;
 
     m_unresolvedFontName = aText.m_unresolvedFontName;
 
@@ -288,7 +283,7 @@ void EDA_TEXT::SetTextThickness( int aWidth )
 {
     m_attributes.m_StrokeWidth = aWidth;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -296,7 +291,7 @@ void EDA_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
 {
     m_attributes.m_Angle = aAngle;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -324,7 +319,7 @@ void EDA_TEXT::SetItalicFlag( bool aItalic )
 {
     m_attributes.m_Italic = aItalic;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -375,7 +370,7 @@ void EDA_TEXT::SetBoldFlag( bool aBold )
 {
     m_attributes.m_Bold = aBold;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -390,7 +385,7 @@ void EDA_TEXT::SetMirrored( bool isMirrored )
 {
     m_attributes.m_Mirrored = isMirrored;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -398,7 +393,7 @@ void EDA_TEXT::SetMultilineAllowed( bool aAllow )
 {
     m_attributes.m_Multiline = aAllow;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -406,7 +401,7 @@ void EDA_TEXT::SetHorizJustify( GR_TEXT_H_ALIGN_T aType )
 {
     m_attributes.m_Halign = aType;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -414,7 +409,7 @@ void EDA_TEXT::SetVertJustify( GR_TEXT_V_ALIGN_T aType )
 {
     m_attributes.m_Valign = aType;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -422,7 +417,7 @@ void EDA_TEXT::SetKeepUpright( bool aKeepUpright )
 {
     m_attributes.m_KeepUpright = aKeepUpright;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -434,7 +429,7 @@ void EDA_TEXT::SetAttributes( const EDA_TEXT& aSrc, bool aSetPosition )
         m_pos = aSrc.m_pos;
 
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -453,8 +448,8 @@ void EDA_TEXT::SwapAttributes( EDA_TEXT& aTradingPartner )
     ClearRenderCache();
     aTradingPartner.ClearRenderCache();
 
-    m_bounding_box_cache_valid = false;
-    aTradingPartner.m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
+    aTradingPartner.ClearBoundingBoxCache();
 }
 
 
@@ -486,7 +481,7 @@ bool EDA_TEXT::Replace( const EDA_SEARCH_DATA& aSearchData )
     cacheShownText();
 
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 
     return retval;
 }
@@ -496,7 +491,7 @@ void EDA_TEXT::SetFont( KIFONT::FONT* aFont )
 {
     m_attributes.m_Font = aFont;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -522,7 +517,7 @@ void EDA_TEXT::SetLineSpacing( double aLineSpacing )
 {
     m_attributes.m_LineSpacing = aLineSpacing;
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -545,7 +540,7 @@ void EDA_TEXT::SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize )
     m_attributes.m_Size = aNewSize;
 
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -556,7 +551,7 @@ void EDA_TEXT::SetTextWidth( int aWidth )
 
     m_attributes.m_Size.x = std::clamp( aWidth, min, max );
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -567,7 +562,7 @@ void EDA_TEXT::SetTextHeight( int aHeight )
 
     m_attributes.m_Size.y = std::clamp( aHeight, min, max );
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -604,7 +599,7 @@ void EDA_TEXT::Offset( const VECTOR2I& aOffset )
             glyph = stroke->Transform( { 1.0, 1.0 }, aOffset, 0, ANGLE_0, false, { 0, 0 } );
     }
 
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -612,7 +607,7 @@ void EDA_TEXT::Empty()
 {
     m_text.Empty();
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -630,7 +625,7 @@ void EDA_TEXT::cacheShownText()
     }
 
     ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    ClearBoundingBoxCache();
 }
 
 
@@ -659,7 +654,7 @@ void EDA_TEXT::ClearRenderCache()
 
 void EDA_TEXT::ClearBoundingBoxCache()
 {
-    m_bounding_box_cache_valid = false;
+    m_bbox_cache.clear();
 }
 
 
@@ -727,12 +722,10 @@ BOX2I EDA_TEXT::GetTextBox( int aLine ) const
 {
     VECTOR2I drawPos = GetDrawPos();
 
-    if( m_bounding_box_cache_valid
-            && m_bounding_box_cache_pos == drawPos
-            && m_bounding_box_cache_line == aLine )
-    {
-        return m_bounding_box_cache;
-    }
+    auto cache_it = m_bbox_cache.find( aLine );
+
+    if( cache_it != m_bbox_cache.end() && cache_it->second.m_pos == drawPos )
+        return cache_it->second.m_bbox;
 
     BOX2I          bbox;
     wxArrayString  strings;
@@ -849,10 +842,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine ) const
 
     bbox.Normalize();       // Make h and v sizes always >= 0
 
-    m_bounding_box_cache_valid = true;
-    m_bounding_box_cache_pos = drawPos;
-    m_bounding_box_cache_line = aLine;
-    m_bounding_box_cache = bbox;
+    m_bbox_cache[ aLine ] = { drawPos, bbox };
 
     return bbox;
 }

@@ -453,10 +453,13 @@ private:
     mutable VECTOR2I                                    m_render_cache_offset;
     mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_render_cache;
 
-    mutable bool     m_bounding_box_cache_valid;
-    mutable VECTOR2I m_bounding_box_cache_pos;
-    mutable int      m_bounding_box_cache_line;
-    mutable BOX2I    m_bounding_box_cache;
+    struct BBOX_CACHE_ENTRY
+    {
+        VECTOR2I m_pos;
+        BOX2I    m_bbox;
+    };
+
+    mutable std::map<int, BBOX_CACHE_ENTRY> m_bbox_cache;
 
     TEXT_ATTRIBUTES  m_attributes;
     wxString         m_unresolvedFontName;
