@@ -66,6 +66,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue15280",   // Very wide spokes mis-counted as being single spoke
         "issue14008",   // Net-tie clearance error
         "issue17967/issue17967",   // Arc dp coupling
+        "issue18203",   // DRC error due to colliding arc and circle
         "unconnected-netnames/unconnected-netnames", // Raised false schematic partity error
     };
 

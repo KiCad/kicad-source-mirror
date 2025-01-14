@@ -119,31 +119,31 @@ BOOST_AUTO_TEST_CASE( test_closest_point_to, *boost::unit_test::tolerance( 0.000
     // check all quadrants
 
     // top left
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 0, 0 ) ) == VECTOR2D( 1, 2 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 0, 0 ) ) == VECTOR2D( 1, 2 ) );
 
     // top
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 2, 0 ) ) == VECTOR2D( 2, 2 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 2, 0 ) ) == VECTOR2D( 2, 2 ) );
 
     // top right
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 6, 0 ) ) == VECTOR2D( 4, 2 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 6, 0 ) ) == VECTOR2D( 4, 2 ) );
 
     // right
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 6, 5 ) ) == VECTOR2D( 4, 5 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 6, 5 ) ) == VECTOR2D( 4, 5 ) );
 
     // bottom right
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 6, 7 ) ) == VECTOR2D( 4, 6 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 6, 7 ) ) == VECTOR2D( 4, 6 ) );
 
     // bottom
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 3, 7 ) ) == VECTOR2D( 3, 6 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 3, 7 ) ) == VECTOR2D( 3, 6 ) );
 
     // bottom left
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 0, 7 ) ) == VECTOR2D( 1, 6 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 0, 7 ) ) == VECTOR2D( 1, 6 ) );
 
     // left
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 0, 3 ) ) == VECTOR2D( 1, 3 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 0, 3 ) ) == VECTOR2D( 1, 3 ) );
 
     // inside
-    BOOST_TEST( box.ClosestPointTo( VECTOR2D( 2, 4 ) ) == VECTOR2D( 2, 4 ) );
+    BOOST_TEST( box.NearestPoint( VECTOR2D( 2, 4 ) ) == VECTOR2D( 2, 4 ) );
 }
 
 BOOST_AUTO_TEST_CASE( test_farthest_point_to, *boost::unit_test::tolerance( 0.000001 ) )

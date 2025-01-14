@@ -29,6 +29,7 @@
 #include <geometry/shape_arc.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
+#include <geometry/shape_rect.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 
@@ -443,6 +444,185 @@ VECTOR2I SHAPE_ARC::NearestPoint( const VECTOR2I& aP ) const
         return m_start;
     else
         return m_end;
+}
+
+
+bool SHAPE_ARC::NearestPoints( const SHAPE_CIRCLE& aCircle, VECTOR2I& aPtA, VECTOR2I& aPtB,
+                               int64_t& aDistSq ) const
+{
+    if( GetCenter() == aCircle.GetCenter() && GetRadius() == aCircle.GetRadius() )
+    {
+        aPtA = aPtB = GetP0();
+        aDistSq = 0;
+        return true;
+    }
+
+    aDistSq = std::numeric_limits<int64_t>::max();
+
+    CIRCLE circle1( GetCenter(), GetRadius() );
+    CIRCLE circle2( aCircle.GetCircle() );
+    std::vector<VECTOR2I> intersections = circle1.Intersect( circle2 );
+
+    for( const VECTOR2I& pt : intersections )
+    {
+        if( sliceContainsPoint( pt ) )
+        {
+            aPtA = aPtB = pt;
+            aDistSq = 0;
+            return true;
+        }
+    }
+
+    std::vector<VECTOR2I> pts = { m_start, m_end, circle1.NearestPoint( GetCenter() ) };
+
+    for( const VECTOR2I& pt : pts )
+    {
+        if( sliceContainsPoint( pt ) )
+        {
+            VECTOR2I nearestPt2 = circle2.NearestPoint( pt );
+            int64_t distSq = pt.SquaredDistance( nearestPt2 );
+
+            if( distSq < aDistSq )
+            {
+                aDistSq = distSq;
+                aPtA = pt;
+                aPtB = nearestPt2;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+bool SHAPE_ARC::NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB,
+                               int64_t& aDistSq ) const
+{
+    aDistSq = std::numeric_limits<int64_t>::max();
+    CIRCLE circle( GetCenter(), GetRadius() );
+
+    // First check for intersections on the circle
+    std::vector<VECTOR2I> intersections = circle.Intersect( aSeg );
+
+    for( const VECTOR2I& pt : intersections )
+    {
+        if( sliceContainsPoint( pt ) )
+        {
+            aPtA = aPtB = pt;
+            aDistSq = 0;
+            return true;
+        }
+    }
+
+    // Check the endpoints of the segment against the nearest point on the arc
+    for( const VECTOR2I& pt : { aSeg.A, aSeg.B } )
+    {
+        if( sliceContainsPoint( pt ) )
+        {
+            VECTOR2I nearestPt = circle.NearestPoint( pt );
+            int64_t distSq = pt.SquaredDistance( nearestPt );
+
+            if( distSq < aDistSq )
+            {
+                aDistSq = distSq;
+                aPtA = nearestPt;
+                aPtB = pt;
+            }
+        }
+    }
+
+    // Check the endpoints of the arc against the nearest point on the segment
+    for( const VECTOR2I& pt : { m_start, m_end } )
+    {
+        VECTOR2I nearestPt = aSeg.NearestPoint( pt );
+        int64_t distSq = pt.SquaredDistance( nearestPt );
+
+        if( distSq < aDistSq )
+        {
+            aDistSq = distSq;
+            aPtA = pt;
+            aPtB = nearestPt;
+        }
+    }
+
+    // Check the closest points on the segment to the circle
+    VECTOR2I segNearestPt = aSeg.NearestPoint( GetCenter() );
+
+    if( sliceContainsPoint( segNearestPt ) )
+    {
+        VECTOR2I circleNearestPt = circle.NearestPoint( segNearestPt );
+        int64_t distSq = segNearestPt.SquaredDistance( circleNearestPt );
+
+        if( distSq < aDistSq )
+        {
+            aDistSq = distSq;
+            aPtA = segNearestPt;
+            aPtB = circleNearestPt;
+        }
+    }
+
+    return true;
+}
+
+
+bool SHAPE_ARC::NearestPoints( const SHAPE_RECT& aRect, VECTOR2I& aPtA, VECTOR2I& aPtB,
+                               int64_t& aDistSq ) const
+{
+    BOX2I  bbox = aRect.BBox();
+    CIRCLE circle( GetCenter(), GetRadius() );
+    aDistSq = std::numeric_limits<int64_t>::max();
+
+    // First check for intersections
+    SHAPE_LINE_CHAIN lineChain( aRect.Outline() );
+
+    for( int i = 0; i < 4; ++i )
+    {
+        SEG seg( lineChain.CPoint( i ), lineChain.CPoint( i + 1 ) );
+
+        std::vector<VECTOR2I> intersections = circle.Intersect( seg );
+
+        for( const VECTOR2I& pt : intersections )
+        {
+            if( sliceContainsPoint( pt ) )
+            {
+                aPtA = aPtB = pt;
+                aDistSq = 0;
+                return true;
+            }
+        }
+    }
+
+    // Check the endpoints of the arc against the nearest point on the rectangle
+    for( const VECTOR2I& pt : { m_start, m_end } )
+    {
+        VECTOR2I nearestPt = bbox.NearestPoint( pt );
+        int64_t distSq = pt.SquaredDistance( nearestPt );
+
+        if( distSq < aDistSq )
+        {
+            aDistSq = distSq;
+            aPtA = pt;
+            aPtB = nearestPt;
+        }
+    }
+
+    // Check the closest points on the rectangle to the circle
+    VECTOR2I rectNearestPt = bbox.NearestPoint( GetCenter() );
+
+    if( sliceContainsPoint( rectNearestPt ) )
+    {
+        VECTOR2I circleNearestPt = circle.NearestPoint( rectNearestPt );
+        int64_t distSq = rectNearestPt.SquaredDistance( circleNearestPt );
+
+        if( distSq < aDistSq )
+        {
+            aDistSq = distSq;
+            aPtA = rectNearestPt;
+            aPtB = circleNearestPt;
+        }
+    }
+
+    return true;
 }
 
 

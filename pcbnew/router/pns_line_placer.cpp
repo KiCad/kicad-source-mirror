@@ -831,7 +831,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead, LINE& aNe
         DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
 
         if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
-            nearest = hull.BBox().ClosestPointTo( aP );
+            nearest = hull.BBox().NearestPoint( aP );
         else
             nearest = hull.NearestPoint( aP );
 

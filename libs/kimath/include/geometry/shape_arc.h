@@ -32,7 +32,9 @@
 #include <geometry/eda_angle.h>
 
 class CIRCLE;
+class SHAPE_CIRCLE;
 class SHAPE_LINE_CHAIN;
+class SHAPE_RECT;
 
 class SHAPE_ARC : public SHAPE
 {
@@ -120,7 +122,6 @@ public:
 
     VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
 
-
     /**
       * Compute closest points between this arc and \a aArc.
       *
@@ -130,6 +131,36 @@ public:
       * @return true if the operation was successful
       */
     bool NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_t& aDistSq ) const;
+
+    /**
+      * Compute closest points between this arc and \a aCircle.
+      *
+      * @param aPtA point on this arc (output)
+      * @param aPtB point on the circle (output)
+      * @param aDistSq squared distance between points (output)
+      * @return true if the operation was successful
+      */
+    bool NearestPoints( const SHAPE_CIRCLE& aCircle, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_t& aDistSq ) const;
+
+    /**
+      * Compute closest points between this arc and \a aSeg.
+      *
+      * @param aPtA point on this arc (output)
+      * @param aPtB point on the segment (output)
+      * @param aDistSq squared distance between points (output)
+      * @return true if the operation was successful
+      */
+    bool NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_t& aDistSq ) const;
+
+    /**
+      * Compute closest points between this arc and \a aRect.
+      *
+      * @param aPtA point on this arc (output)
+      * @param aPtB point on the rectangle (output)
+      * @param aDistSq squared distance between points (output)
+      * @return true if the operation was successful
+      */
+    bool NearestPoints( const SHAPE_RECT& aRect, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_t& aDistSq ) const;
 
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override;

@@ -506,7 +506,7 @@ public:
         if( !m_init )
             return false;
 
-        Vec closest = ClosestPointTo( aCenter );
+        Vec closest = NearestPoint( aCenter );
 
         double dx = static_cast<double>( aCenter.x ) - closest.x;
         double dy = static_cast<double>( aCenter.y ) - closest.y;
@@ -848,7 +848,7 @@ public:
     /**
      * Return the point in this rect that is closest to the provided point
      */
-    constexpr Vec ClosestPointTo( const Vec& aPoint ) const
+    constexpr Vec NearestPoint( const Vec& aPoint ) const
     {
         BOX2<Vec> me( *this );
 
