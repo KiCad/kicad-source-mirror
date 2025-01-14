@@ -767,8 +767,11 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
     {
-        wxString    net_name = UnescapeString( key.Name );
+        wxString    net_name = key.Name;
         NET_RECORD* net_record = nullptr;
+
+        if( !( aCtl & GNL_OPT_KICAD ) )
+            net_name = UnescapeString( net_name );
 
         if( subgraphs.empty() )
             continue;
