@@ -374,6 +374,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
     size_t current = 0;
     size_t total =
             ( netcodes.size() * ( netcodes.size() - 1 ) ) / 2 * m_board->GetCopperLayerCount();
+    LSET layers = m_board->GetLayerSet();
 
     alg::for_all_pairs( netcodes.begin(), netcodes.end(),
                         [&]( int aNet1, int aNet2 )
@@ -381,8 +382,10 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
                             if( aNet1 == aNet2 )
                                 return;
 
-                            for( auto it = m_board->GetLayerSet().copper_layers_begin();
-                                      it != m_board->GetLayerSet().copper_layers_end();
+
+
+                            for( auto it = layers.copper_layers_begin();
+                                      it != layers.copper_layers_end();
                                       ++it )
                             {
                                 PCB_LAYER_ID layer = *it;
