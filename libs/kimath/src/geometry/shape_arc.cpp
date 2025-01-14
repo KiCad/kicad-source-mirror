@@ -454,7 +454,7 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& 
     VECTOR2I center1 = GetCenter();
     VECTOR2I center2 = aArc.GetCenter();
 
-    int64_t dist = center1.SquaredDistance( center2 );
+    int64_t center_dist_sq = center1.SquaredDistance( center2 );
 
     // Start by checking endpoints
     std::vector<VECTOR2I> pts1 = { m_start, m_end };
@@ -471,44 +471,110 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& 
                 aDistSq = distSq;
                 aPtA = pt1;
                 aPtB = pt2;
+
+                if( aDistSq == 0 )
+                    return true;
             }
         }
     }
 
-    // If the centers are the same, the end points are always the closest
-    // or at least equidistant
-    if( dist > 0 )
+    for( const VECTOR2I& pt : pts1 )
     {
-        CIRCLE circle1( center1, GetRadius() );
-        CIRCLE circle2( center2, aArc.GetRadius() );
-
-        // First check for intersections on the circles
-        std::vector<VECTOR2I> pts = circle1.Intersect( circle2 );
-
-        for( const VECTOR2I& pt : pts )
+        if( aArc.sliceContainsPoint( pt ) )
         {
-            if( sliceContainsPoint( pt ) && aArc.sliceContainsPoint( pt ) )
-            {
-                aPtA = pt;
-                aPtB = pt;
-                aDistSq = 0;
+            CIRCLE circle( center2, aArc.GetRadius() );
+            aPtA = circle.NearestPoint( pt );
+            aPtB = pt;
+            aDistSq = aPtA.SquaredDistance( aPtB );
+
+            if( center_dist_sq == 0 || aDistSq == 0 )
                 return true;
-            }
+        }
+    }
+
+    for( const VECTOR2I& pt : pts2 )
+    {
+        if( sliceContainsPoint( pt ) )
+        {
+            CIRCLE circle( center1, GetRadius() );
+            aPtA = pt;
+            aPtB = circle.NearestPoint( pt );
+            aDistSq = aPtA.SquaredDistance( aPtB );
+
+            if( center_dist_sq == 0 || aDistSq == 0 )
+                return true;
+        }
+    }
+
+    // The remaining checks are require the arcs to be on non-concentric circles
+    if( center_dist_sq == 0 )
+        return true;
+
+    CIRCLE circle1( center1, GetRadius() );
+    CIRCLE circle2( center2, aArc.GetRadius() );
+
+    // First check for intersections on the circles
+    std::vector<VECTOR2I> intersections = circle1.Intersect( circle2 );
+
+    for( const VECTOR2I& pt : intersections )
+    {
+        if( sliceContainsPoint( pt ) && aArc.sliceContainsPoint( pt ) )
+        {
+            aPtA = pt;
+            aPtB = pt;
+            aDistSq = 0;
+            return true;
+        }
+    }
+
+    // Check for the closest points on the circles
+    VECTOR2I pt1 = circle1.NearestPoint( center2 );
+    VECTOR2I pt2 = circle2.NearestPoint( center1 );
+    bool     pt1InSlice = sliceContainsPoint( pt1 );
+    bool     pt2InSlice = aArc.sliceContainsPoint( pt2 );
+
+    if( pt1InSlice && pt2InSlice )
+    {
+        int64_t distSq = pt1.SquaredDistance( pt2 );
+
+        if( distSq < aDistSq )
+        {
+            aDistSq = distSq;
+            aPtA = pt1;
+            aPtB = pt2;
         }
 
-        // Check for the closest points on the circles
-        VECTOR2I pt1 = circle1.NearestPoint( center2 );
-        VECTOR2I pt2 = circle2.NearestPoint( center1 );
+        return true;
+    }
 
-        if( sliceContainsPoint( pt1 ) && aArc.sliceContainsPoint( pt2 ) )
+    // Check the endpoints of arc 1 against the nearest point on arc 2
+    if( pt2InSlice )
+    {
+        for( const VECTOR2I& pt : pts1 )
         {
-            int64_t distSq = pt1.SquaredDistance( pt2 );
+            int64_t distSq = pt.SquaredDistance( pt2 );
+
+            if( distSq < aDistSq )
+            {
+                aDistSq = distSq;
+                aPtA = pt;
+                aPtB = pt2;
+            }
+        }
+    }
+
+    // Check the endpoints of arc 2 against the nearest point on arc 1
+    if( pt1InSlice )
+    {
+        for( const VECTOR2I& pt : pts2 )
+        {
+            int64_t distSq = pt.SquaredDistance( pt1 );
 
             if( distSq < aDistSq )
             {
                 aDistSq = distSq;
                 aPtA = pt1;
-                aPtB = pt2;
+                aPtB = pt;
             }
         }
     }

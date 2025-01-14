@@ -771,8 +771,8 @@ static const std::vector<ARC_ARC_COLLIDE_CASE> arc_arc_collide_cases = {
       0,
       false },
     { "case 6: Coincident centers, colliding due to arc thickness",
-      { 79.279991, 80.67988, 80.3749, 81.394518, -255.5, 0.2 },
-      { 79.279991, 80.67988, 80.3749, 81.694518, -255.5, 0.2 },
+      { 79.279991, 80.67988, 80.3749, 81.394518, -255.5, 0.3 },
+      { 79.279991, 80.67988, 80.3749, 81.694518, -255.5, 0.3 },
       0,
       true },
     { "case 7: Single intersection",
@@ -815,6 +815,11 @@ static const std::vector<ARC_ARC_COLLIDE_CASE> arc_arc_collide_cases = {
       { 79.87532, 93.413654, 81.86532, 93.393054, 90.0, 0.3 },
       0,
       true },
+    { "case 15: Arcs separated by clearance",
+        { 303.7615, 149.9252, 303.695968, 149.925237, 90.0262, 0.065 },
+        { 303.6345, 149.2637, 303.634523, 148.85619, 89.9957, 0.065 },
+      0.15,
+      false },
 };
 
 
