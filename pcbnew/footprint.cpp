@@ -1046,7 +1046,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
                 else if( token->StartsWith( wxT( "NET_NAME" ) ) )
                     *token = pad->GetNetname();
                 else if( token->StartsWith( wxT( "NET_CLASS" ) ) )
-                    *token = pad->GetNetClassVariableSubstitutionName();
+                    *token = pad->GetNetClassName();
                 else
                     *token = pad->GetPinFunction();
 

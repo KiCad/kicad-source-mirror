@@ -111,12 +111,6 @@ wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 }
 
 
-wxString BOARD_CONNECTED_ITEM::GetNetClassVariableSubstitutionName() const
-{
-    return GetEffectiveNetClass()->GetName();
-}
-
-
 wxString BOARD_CONNECTED_ITEM::GetNetname() const
 {
     return m_netinfo ? m_netinfo->GetNetname() : wxString();
