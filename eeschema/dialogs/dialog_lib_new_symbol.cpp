@@ -30,6 +30,12 @@
 #include <template_fieldnames.h>
 
 
+static wxString getDerivativeName( const wxString& aParentName )
+{
+    return wxString::Format( "%s_1", aParentName );
+}
+
+
 DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
                                               const wxArrayString& aSymbolNames,
                                               const wxString&      aInheritFromSymbolName,
@@ -37,7 +43,8 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
         DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
         m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
                            m_staticPinTextPositionUnits, true ),
-        m_validator( std::move( aValidator ) )
+        m_validator( std::move( aValidator ) ),
+        m_nameIsDefaulted( true )
 {
     if( aSymbolNames.GetCount() )
     {
@@ -61,11 +68,23 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
     m_textName->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
     m_textReference->SetValidator( FIELD_VALIDATOR( REFERENCE_FIELD ) );
 
+    if( !aInheritFromSymbolName.IsEmpty() )
+    {
+        m_textName->ChangeValue( getDerivativeName( aInheritFromSymbolName ) );
+        m_nameIsDefaulted = true;
+    }
+
     m_pinTextPosition.SetValue( schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) );
 
     m_comboInheritanceSelect->Connect(
             FILTERED_ITEM_SELECTED,
             wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect ), nullptr, this );
+
+    m_textName->Bind( wxEVT_TEXT,
+                      [this]( wxCommandEvent& aEvent )
+                      {
+                          m_nameIsDefaulted = false;
+                      } );
 
     // initial focus should be on first editable field.
     m_textName->SetFocus();
@@ -104,6 +123,13 @@ void DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect( wxCommandEvent& aEvent )
     else
     {
         m_infoBar->Dismiss();
+    }
+
+    if( m_textName->IsEmpty() || m_nameIsDefaulted )
+    {
+        m_textName->SetValue( getDerivativeName( parent ) );
+        m_textName->SetInsertionPointEnd();
+        m_nameIsDefaulted = true;
     }
 
     syncControls( !parent.IsEmpty() );

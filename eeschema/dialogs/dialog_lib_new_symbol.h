@@ -106,4 +106,5 @@ private:
 private:
     UNIT_BINDER                             m_pinTextPosition;
     std::function<bool( wxString newName )> m_validator;
+    bool                                    m_nameIsDefaulted;
 };
