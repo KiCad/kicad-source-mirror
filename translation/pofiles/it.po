@@ -114,7 +114,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-11 20:07+0300\n"
-"PO-Revision-Date: 2025-01-13 15:01+0000\n"
+"PO-Revision-Date: 2025-01-14 11:37+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -40821,6 +40821,27 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### Comandi di primo livello\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule <nome_regola> <comando_regola> ...)\n"
+"\n"
+"<br>\n"
+"\n"
+"### Comandi regole\n"
+"\n"
+"    (constraint <tipo_vincolo> ...)\n"
+"\n"
+"    (condition \"<espressione>\")\n"
+"\n"
+"    (layer \"<nome_strato>\")\n"
+"\n"
+"    (severity <nome_gravità>)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
 #, fuzzy
@@ -41459,6 +41480,14 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### Elementi\n"
+"\n"
+" * `A` &nbsp;&nbsp; _il primo (o l'unico) elemento sotto test_\n"
+" * `B` &nbsp;&nbsp; _il secondo elemento sotto test (per test binari)_\n"
+" * `L` &nbsp;&nbsp; _lo strato correntemente sotto test_\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_4severity_names.h:2
 msgid ""
@@ -41472,6 +41501,15 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### Nomi gravità\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_5examples.h:2
 msgid ""
@@ -41507,6 +41545,37 @@ msgid ""
 "<br><br>\n"
 "\n"
 msgstr ""
+"### Esempi\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.hasNetclass('HV') && B.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.hasNetclass('HV') && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"<br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
 msgid ""
@@ -41525,6 +41594,23 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Note\n"
+"\n"
+"Il comando Version deve essere il primo comando.  Esso indica la versione "
+"della sintassi del file in modo tale che \n"
+"futuri analizzatori di regole possano effettuare degli aggiornamenti "
+"automatici (della sintassi).   Dovrebbe essere \n"
+"impostata a \"1\".\n"
+"\n"
+"Le regole devono essere ordinate in base alla specificità.  Le regole "
+"successive \n"
+"hanno la precedenza sulle regole precedenti; una volta trovata una regola "
+"corrispondente\n"
+"non verranno controllate ulteriori regole.\n"
+"\n"
+"Usare Ctrl+/ per commentare o decommentare le righe.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -41537,6 +41623,14 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Proprietà\n"
+"\n"
+"Molte proprietà degli oggetti sono disponibili a essere controllate nelle "
+"espressioni di regole personalizzate. Consultare la documentazione completa "
+"su [https://docs.kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/"
+"en/pcbnew/pcbnew.html#custom_design_rules) per l'elenco completo.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
 msgid ""
@@ -42518,11 +42612,11 @@ msgstr "Piazzola passante senza foro"
 
 #: pcbnew/drc/drc_item.cpp:296
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Testo specchiato sullo strato fronte"
 
 #: pcbnew/drc/drc_item.cpp:300
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "Testo non specchiato sullo strato retro"
 
 #: pcbnew/drc/drc_item.cpp:307
 #, fuzzy
@@ -45965,7 +46059,7 @@ msgstr "Caricamento poligoni..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2122
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Il conteggio dei contorni dei poligoni è %d, era previsto 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2249
 msgid "Loading rules..."
@@ -46200,7 +46294,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4435
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr ""
+msgstr "Giustificazione della casella di testo sconosciuta %d, aText %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4591
 msgid "Loading rectangles..."
@@ -47725,7 +47819,7 @@ msgstr "Prefisso fronte:"
 
 #: pcbnew/pcb_track.cpp:2127
 msgid "Back tenting"
-msgstr ""
+msgstr "Tenting posteriore"
 
 #: pcbnew/pcbexpr_evaluator.cpp:562
 msgid "must be mm, in, or mil"
@@ -49053,7 +49147,7 @@ msgstr "Crea dalla selezione"
 
 #: pcbnew/tools/convert_tool.cpp:453
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Il poligono risultante sarebbe vuoto"
 
 #: pcbnew/tools/convert_tool.cpp:455
 msgid "Objects must form a closed shape"
@@ -49285,6 +49379,8 @@ msgstr "Aggiungi vertice zona"
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
 msgstr ""
+"Aggiungere fessure negli angoli acuti per consentire l'accesso a una fresa "
+"del raggio specificato"
 
 #: pcbnew/tools/edit_tool.cpp:1299
 #, fuzzy
@@ -49341,6 +49437,7 @@ msgstr "Cambia lato / ribalta"
 #: pcbnew/tools/edit_tool.cpp:2642
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr ""
+"Utilizzare la finestra di dialogo Proprietà impronta per rimuovere i campi."
 
 #: pcbnew/tools/edit_tool.cpp:2801
 #, fuzzy
@@ -49393,6 +49490,8 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
+"Impossibile aggiungere l'impronta alla libreria selezionata ('%s'). Questa "
+"libreria è di sola lettura."
 
 #: pcbnew/tools/footprint_editor_control.cpp:405
 msgid "_copy"
@@ -49504,14 +49603,18 @@ msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
 msgstr ""
+"Alcuni angoli del dogbone sono troppo stretti per adattarsi a una fresa con "
+"il raggio specificato."
 
 #: pcbnew/tools/item_modification_routine.cpp:290
+#, fuzzy
 msgid " Consider enabling the 'Add Slots' option."
-msgstr ""
+msgstr " Si consiglia di abilitare l'opzione 'Aggiungi slot'."
 
 #: pcbnew/tools/item_modification_routine.cpp:292
+#, fuzzy
 msgid " Slots were added."
-msgstr ""
+msgstr " Sono stati aggiunti degli slot."
 
 #: pcbnew/tools/item_modification_routine.cpp:383
 #: pcbnew/tools/pcb_actions.cpp:637
@@ -49585,12 +49688,14 @@ msgstr "Selezionare il punto di riferimento per la copia..."
 
 #: pcbnew/tools/multichannel_tool.cpp:439
 msgid "No Rule Areas to repeat layout to have been found."
-msgstr ""
+msgstr "Non sono state trovate aree regole da ripetere nel layout."
 
 #: pcbnew/tools/multichannel_tool.cpp:512
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
+"Errore nella copia del contenuto dell'area regole tra le aree regole '%s' e "
+"'%s'."
 
 #: pcbnew/tools/multichannel_tool.cpp:543
 #, fuzzy
@@ -49604,7 +49709,7 @@ msgstr "Converti in area regole"
 
 #: pcbnew/tools/multichannel_tool.cpp:976
 msgid "One or both of the areas has no components assigned."
-msgstr ""
+msgstr "A una o entrambe le aree non sono assegnati componenti."
 
 #: pcbnew/tools/multichannel_tool.cpp:980
 #, fuzzy
@@ -49613,17 +49718,19 @@ msgstr "Conteggio componenti: %d."
 
 #: pcbnew/tools/multichannel_tool.cpp:984
 msgid "Iteration count exceeded (timeout)"
-msgstr ""
+msgstr "Conteggio delle iterazioni superato (timeout)"
 
 #: pcbnew/tools/multichannel_tool.cpp:988
 msgid "Topology mismatch"
-msgstr ""
+msgstr "Mancata corrispondenza della topologia"
 
 #: pcbnew/tools/multichannel_tool.cpp:1039
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
 msgstr ""
+"Impossibile generare automaticamente aree di posizionamento perché lo schema "
+"ha solo uno o nessuno foglio gerarchico o classe di componenti."
 
 #: pcbnew/tools/multichannel_tool.cpp:1157
 #, fuzzy
@@ -50046,7 +50153,7 @@ msgstr "Taglia gli spigoli tra le linee selezionate"
 
 #: pcbnew/tools/pcb_actions.cpp:625
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "Semplifica i contorni dei poligoni, rimuovendo i punti superflui"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid ""
@@ -50691,6 +50798,7 @@ msgstr "Mostra ratsnest"
 #: pcbnew/tools/pcb_actions.cpp:1356
 msgid "Show lines/arcs representing missing connections on the board"
 msgstr ""
+"Mostra linee/archi che rappresentano le connessioni mancanti sulla scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:1362
 msgid "Curved Ratsnest Lines"
@@ -51705,7 +51813,7 @@ msgstr "Dividi segmento"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2850
 msgid "Split Arc"
-msgstr ""
+msgstr "Dividi arco"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2927
 msgid "Remove Zone Corner"
@@ -52536,7 +52644,7 @@ msgstr "Gruppo"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1256
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr ""
+msgstr "(Usare /.../ per indicare un'espressione regolare.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1329
 #, fuzzy
@@ -52877,7 +52985,7 @@ msgstr "Ri-riempi %d zone"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
 msgid "Refill zones after changes made on board"
-msgstr ""
+msgstr "Ri-riempi le zone dopo i cambiamenti effettuati sulla scheda"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:90
 #, fuzzy
@@ -52888,6 +52996,8 @@ msgstr "Opzioni di visualizzazione strati"
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
 msgstr ""
+"Aggiorna le aree riempite mostrate nella finestra di dialogo, in base alle "
+"nuove impostazioni correnti"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
