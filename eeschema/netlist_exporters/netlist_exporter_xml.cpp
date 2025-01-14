@@ -767,7 +767,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
     {
-        wxString    net_name  = key.Name;
+        wxString    net_name = UnescapeString( key.Name );
         NET_RECORD* net_record = nullptr;
 
         if( subgraphs.empty() )
@@ -784,7 +784,10 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             if( net_record->m_Class.IsEmpty() && subgraph->GetDriver() )
             {
                 if( subgraph->GetDriver()->GetEffectiveNetClass() )
+                {
                     net_record->m_Class = subgraph->GetDriver()->GetEffectiveNetClass()->GetName();
+                    net_record->m_Class = UnescapeString( net_record->m_Class );
+                }
             }
 
             if( nc )
