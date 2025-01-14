@@ -350,9 +350,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
             // there's nothing, assume they are really coupled.
 
             if( !tree->CheckColliding( &checkSeg, sp->GetLayer(), 0, excludeSelf ) )
-            {
                 aDp.coupled.push_back( *coupled );
-            }
         }
     }
 
@@ -427,9 +425,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
             // there's nothing, assume they are really coupled.
 
             if( !tree->CheckColliding( &checkArcMid, sp->GetLayer(), 0, excludeSelf ) )
-            {
                 aDp.coupled.push_back( *coupled );
-            }
         }
     }
 }
@@ -455,26 +451,22 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 {
                     drc_dbg( 10, wxT( "eval dp %p\n" ), item );
 
-                    const DRC_CONSTRAINT_T constraintsToCheck[] = {
-                            DIFF_PAIR_GAP_CONSTRAINT,
-                            MAX_UNCOUPLED_CONSTRAINT
-                    };
-
-                    for( int i = 0; i < 2; i++ )
+                    for( DRC_CONSTRAINT_T constraintType : { DIFF_PAIR_GAP_CONSTRAINT,
+                                                             MAX_UNCOUPLED_CONSTRAINT } )
                     {
-                        DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( constraintsToCheck[ i ],
+                        DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( constraintType,
                                                                             item, nullptr,
                                                                             item->GetLayer() );
 
                         if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                             continue;
 
-                        drc_dbg( 10, wxT( "cns %d item %p\n" ), constraintsToCheck[i], item );
+                        drc_dbg( 10, wxT( "cns %d item %p\n" ), (int) constraintType, item );
 
                         DRC_RULE* parentRule = constraint.GetParentRule();
                         wxString ruleName = parentRule ? parentRule->m_Name : constraint.GetName();
 
-                        switch( constraintsToCheck[i] )
+                        switch( constraintType )
                         {
                         case DIFF_PAIR_GAP_CONSTRAINT:
                             key.gapConstraint = constraint.GetValue();
@@ -574,7 +566,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             drc_dbg( 10, wxT( "               len %d gap %ld l %d\n" ),
                      length,
                      dp.computedGap,
-                     dp.parentP->GetLayer() );
+                     (int) dp.parentP->GetLayer() );
 
             if( key.gapConstraint )
             {
