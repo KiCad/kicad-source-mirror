@@ -24,16 +24,23 @@
  */
 
 #include <drc/drc_test_provider_clearance_base.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 DRC_CUSTOM_MARKER_HANDLER
 DRC_TEST_PROVIDER_CLEARANCE_BASE::GetGraphicsHandler( const std::vector<PCB_SHAPE>& aShapes,
                                                       const VECTOR2I& aStart, const VECTOR2I& aEnd,
                                                       int aLength )
 {
-    COLOR_SETTINGS* colorSettings = new COLOR_SETTINGS( COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT );
-    COLOR_SETTINGS* defaultSettings = colorSettings->CreateBuiltinColorSettings()[0];
-    COLOR4D         errorColor = defaultSettings->GetColor( LAYER_DRC_ERROR );
-    delete colorSettings;
+    // todo: Move this to a board-level object instead of getting it from the DRC Engine
+    PGM_BASE* pgm = PgmOrNull();
+    COLOR4D   errorColor = COLOR4D( RED );
+
+    if( pgm )
+    {
+        COLOR_SETTINGS* colorSettings = pgm->GetSettingsManager().GetColorSettings();
+        errorColor = colorSettings->GetColor( LAYER_DRC_ERROR );
+    }
 
     std::vector<PCB_SHAPE> shortestPathShapes1, shortestPathShapes2;
 
