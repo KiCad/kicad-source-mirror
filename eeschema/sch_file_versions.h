@@ -113,4 +113,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240812  // Netclass color highlighting
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240819  // Embedded Files - Update hash algorithm to Murmur3
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20241004  // Use booleans for 'hide' in symbols
-#define SEXPR_SCHEMATIC_FILE_VERSION 20241209    // Private flags for SCH_FIELDs
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20241209  // Private flags for SCH_FIELDs
+#define SEXPR_SCHEMATIC_FILE_VERSION 20250114    // Full paths for text variable cross references

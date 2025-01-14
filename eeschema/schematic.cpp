@@ -443,8 +443,16 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
 {
     wxString       remainder;
     wxString       ref = token->BeforeFirst( ':', &remainder );
+    KIID_PATH      path( ref );
+    KIID           uuid = path.back();
     SCH_SHEET_PATH sheetPath;
-    SCH_ITEM*      refItem = GetItem( KIID( ref ), &sheetPath );
+    SCH_ITEM*      refItem = GetItem( KIID( uuid ), &sheetPath );
+
+    if( path.size() > 1 )
+    {
+        path.pop_back();
+        sheetPath = Hierarchy().GetSheetPathByKIIDPath( path ).value_or( sheetPath );
+    }
 
     if( refItem && refItem->Type() == SCH_SYMBOL_T )
     {
@@ -549,7 +557,10 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
 
                     if( ref == refSymbol->GetRef( &references[ jj ].GetSheetPath(), true ) )
                     {
-                        token = refSymbol->m_Uuid.AsString() + wxS( ":" ) + remainder;
+                        KIID_PATH path = references[ jj ].GetSheetPath().Path();
+                        path.push_back( refSymbol->m_Uuid );
+
+                        token = path.AsString() + wxS( ":" ) + remainder;
                         break;
                     }
                 }
@@ -592,16 +603,23 @@ wxString SCHEMATIC::ConvertKIIDsToRefs( const wxString& aSource ) const
 
             if( isCrossRef )
             {
-                wxString remainder;
-                wxString ref = token.BeforeFirst( ':', &remainder );
+                wxString       remainder;
+                wxString       ref = token.BeforeFirst( ':', &remainder );
+                KIID_PATH      path( ref );
+                KIID           uuid = path.back();
+                SCH_SHEET_PATH sheetPath;
+                SCH_ITEM*      refItem = GetItem( uuid, &sheetPath );
 
-                SCH_SHEET_PATH refSheetPath;
-                SCH_ITEM* refItem = GetItem( KIID( ref ), &refSheetPath );
+                if( path.size() > 1 )
+                {
+                    path.pop_back();
+                    sheetPath = Hierarchy().GetSheetPathByKIIDPath( path ).value_or( sheetPath );
+                }
 
                 if( refItem && refItem->Type() == SCH_SYMBOL_T )
                 {
                     SCH_SYMBOL* refSymbol = static_cast<SCH_SYMBOL*>( refItem );
-                    token = refSymbol->GetRef( &refSheetPath, true ) + wxS( ":" ) + remainder;
+                    token = refSymbol->GetRef( &sheetPath, true ) + wxS( ":" ) + remainder;
                 }
             }
 
