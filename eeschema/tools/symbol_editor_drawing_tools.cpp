@@ -141,6 +141,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         ignorePrimePosition = true;
     }
 
+    SCH_COMMIT commit( m_toolMgr );
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -271,7 +273,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                     item->SetFlags( IS_NEW | IS_MOVING );
                     m_view->ClearPreview();
-                    m_view->AddToPreview( item->Clone() );
+                    m_view->AddToPreview( item, false );
                     m_selectionTool->AddItemToSel( item );
 
                     // update the cursor so it looks correct before another event
@@ -283,7 +285,6 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             // ... and second click places:
             else
             {
-                SCH_COMMIT commit( m_toolMgr );
                 commit.Modify( symbol, m_frame->GetScreen() );
 
                 switch( item->Type() )
@@ -317,11 +318,16 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
+        else if( evt->IsAction( &ACTIONS::increment ) )
+        {
+            m_toolMgr->RunSynchronousAction( ACTIONS::increment, &commit,
+                                             evt->Parameter<ACTIONS::INCREMENT>() );
+        }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             item->SetPosition( VECTOR2I( cursorPos.x, cursorPos.y ) );
             m_view->ClearPreview();
-            m_view->AddToPreview( item->Clone() );
+            m_view->AddToPreview( item, false );
         }
         else
         {

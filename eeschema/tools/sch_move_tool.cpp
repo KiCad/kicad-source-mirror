@@ -866,6 +866,11 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         {
             m_toolMgr->RunSynchronousAction( EE_ACTIONS::rotateCCW, aCommit );
         }
+        else if( evt->IsAction( &ACTIONS::increment ) )
+        {
+            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit,
+                                             evt->Parameter<ACTIONS::INCREMENT>() );
+        }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT

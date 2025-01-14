@@ -762,6 +762,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             displayConstraintsMessage( hv45Mode );
             evt->SetPassEvent( false );
         }
+        else if( evt->IsAction( &ACTIONS::increment ) )
+        {
+            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit,
+                                             evt->Parameter<ACTIONS::INCREMENT>() );
+        }
         else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt )
                  || evt->IsAction( &PCB_ACTIONS::moveExact )
                  || evt->IsAction( &PCB_ACTIONS::moveWithReference )

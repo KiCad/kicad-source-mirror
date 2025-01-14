@@ -3031,10 +3031,23 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
     STRING_INCREMENTER incrementer;
     // In schematics, it's probably less common to be operating
-    // on pin numbers which are uusally IOSQXZ-skippy.
+    // on pin numbers which are usually IOSQXZ-skippy.
     incrementer.SetSkipIOSQXZ( false );
 
-    SCH_COMMIT commit( m_frame );
+    // If we're coming via another action like 'Move', use that commit
+    SCH_COMMIT  localCommit( m_toolMgr );
+    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
+    const auto modifyItem = [&]( EDA_ITEM& aItem )
+    {
+        if( aItem.IsNew() )
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
+        else
+            commit->Modify( &aItem, m_frame->GetScreen() );
+    };
 
     for( EDA_ITEM* item : selection )
     {
@@ -3051,7 +3064,7 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                     incrementer.Increment( label.GetText(), incParam.Delta, incParam.Index );
             if( newLabel )
             {
-                commit.Modify( &label, m_frame->GetScreen() );
+                modifyItem( label );
                 label.SetText( *newLabel );
             }
             break;
@@ -3062,7 +3075,7 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Increment" ) );
+    commit->Push( _( "Increment" ) );
 
     return 0;
 }

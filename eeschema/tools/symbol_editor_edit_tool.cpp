@@ -1135,7 +1135,20 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     STRING_INCREMENTER incrementer;
     incrementer.SetSkipIOSQXZ( true );
 
-    SCH_COMMIT commit( m_frame );
+    // If we're coming via another action like 'Move', use that commit
+    SCH_COMMIT  localCommit( m_toolMgr );
+    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
+    const auto modifyItem = [&]( EDA_ITEM& aItem )
+    {
+        if( aItem.IsNew() )
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
+        else
+            commit->Modify( &aItem, m_frame->GetScreen() );
+    };
 
     for( EDA_ITEM* item : selection )
     {
@@ -1155,7 +1168,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                         incrementer.Increment( pin.GetNumber(), incParam.Delta, incParam.Index );
                 if( nextNumber )
                 {
-                    commit.Modify( &pin );
+                    modifyItem( pin );
                     pin.SetNumber( *nextNumber );
                 }
                 found = true;
@@ -1171,7 +1184,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                             incrementer.Increment( pin.GetName(), incParam.Delta, incParam.Index );
                     if( nextName )
                     {
-                        commit.Modify( &pin );
+                        modifyItem( pin );
                         pin.SetName( *nextName );
                     }
                     found = true;
@@ -1187,7 +1200,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                     incrementer.Increment( label.GetText(), incParam.Delta, incParam.Index );
             if( newLabel )
             {
-                commit.Modify( &label, m_frame->GetScreen() );
+                modifyItem( label );
                 label.SetText( *newLabel );
             }
             break;
@@ -1198,7 +1211,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Increment" ) );
+    commit->Push( _( "Increment" ) );
 
     return 0;
 }

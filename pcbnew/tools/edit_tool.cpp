@@ -3015,7 +3015,20 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     STRING_INCREMENTER incrementer;
     incrementer.SetSkipIOSQXZ( true );
 
-    BOARD_COMMIT commit( this );
+    // If we're coming via another action like 'Move', use that commit
+    BOARD_COMMIT  localCommit( m_toolMgr );
+    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
+    const auto modifyItem = [&]( EDA_ITEM& aItem )
+    {
+        if( aItem.IsNew() )
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
+        else
+            commit->Modify( &aItem );
+    };
 
     for( EDA_ITEM* item : selection )
     {
@@ -3038,7 +3051,7 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
             if( newNumber )
             {
-                commit.Modify( &pad );
+                modifyItem( pad );
                 pad.SetNumber( *newNumber );
             }
 
@@ -3053,7 +3066,7 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
             if( newText )
             {
-                commit.Modify( &text );
+                modifyItem( text );
                 text.SetText( *newText );
             }
 
@@ -3064,7 +3077,7 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Increment" ) );
+    commit->Push( _( "Increment" ) );
 
     return 0;
 }
