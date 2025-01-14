@@ -733,7 +733,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
     XNODE*      xnet = nullptr;
 
     /*  output:
-        <net code="123" name="/cfcard.sch/WAIT#">
+        <net code="123" name="/cfcard.sch/WAIT#" class="signal">
             <node ref="R23" pin="1"/>
             <node ref="U18" pin="12"/>
         </net>
@@ -758,6 +758,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         {};
 
         wxString              m_Name;
+        wxString              m_Class;
         bool                  m_HasNoConnect;
         std::vector<NET_NODE> m_Nodes;
     };
@@ -779,6 +780,12 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         {
             bool nc = subgraph->GetNoConnect() && subgraph->GetNoConnect()->Type() == SCH_NO_CONNECT_T;
             const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
+
+            if( net_record->m_Class.IsEmpty() && subgraph->GetDriver() )
+            {
+                if( subgraph->GetDriver()->GetEffectiveNetClass() )
+                    net_record->m_Class = subgraph->GetDriver()->GetEffectiveNetClass()->GetName();
+            }
 
             if( nc )
                 net_record->m_HasNoConnect = true;
@@ -878,6 +885,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                 xnets->AddChild( xnet = node( wxT( "net" ) ) );
                 xnet->AddAttribute( wxT( "code" ), netCodeTxt );
                 xnet->AddAttribute( wxT( "name" ), net_record->m_Name );
+                xnet->AddAttribute( wxT( "class" ), net_record->m_Class );
 
                 added = true;
             }
