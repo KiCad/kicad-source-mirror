@@ -875,7 +875,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
 
             fn.SetName( filename );
             m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ),
-                                                  symbol->GetName(), unit, fn.GetFullPath() ),
+                                                  symbol->GetName(), unit, fn.GetFullName() ),
                                 RPT_SEVERITY_ACTION );
 
             // Get the symbol bounding box to fit the plot page to it
@@ -1030,7 +1030,8 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     }
     else if( fileType != SCH_IO_MGR::SCH_KICAD )
     {
-        m_reporter->Report( _( "Output path must be specified to convert legacy and non-KiCad libraries\n" ),
+        m_reporter->Report( _( "Output path must be specified to convert legacy and non-KiCad "
+                               "libraries\n" ),
                             RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1173,7 +1174,8 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), outPath ),
+    wxFileName outFile( outPath );
+    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), outFile.GetFullName() ),
                         RPT_SEVERITY_INFO );
 
     if( ercJob->m_exitCodeViolations )

@@ -404,8 +404,9 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         if ( success )
         {
+            wxFileName outFile( outPath );
             m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
-                                                  outPath ),
+                                                  outFile.GetFullName() ),
                                 RPT_SEVERITY_INFO );
         }
         else
@@ -1040,7 +1041,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
         if( plotter )
         {
-            m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullPath() ),
+            m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullName() ),
                                 RPT_SEVERITY_ACTION );
             LOCALE_IO dummy;
             PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
@@ -1111,10 +1112,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
 
     if( !exporter.WriteFile( outPath ) )
     {
-        wxString msg;
-        msg.Printf( _( "Failed to create file '%s'.\n" ), outPath );
-
-        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        m_reporter->Report( wxString::Format( _( "Failed to create file '%s'.\n" ), outPath ),
+                            RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -1639,7 +1638,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
 
     m_reporter->Report( wxString::Format( _( "Plotting footprint '%s' to '%s'\n" ),
                                           aFootprint->GetFPID().GetLibItemName().wx_str(),
-                                          outputFile.GetFullPath() ),
+                                          outputFile.GetFullName() ),
                         RPT_SEVERITY_ACTION );
 
 
@@ -1826,7 +1825,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), outPath ),
+    wxFileName outFile( outPath );
+    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), outFile.GetFullName() ),
                         RPT_SEVERITY_INFO );
 
     if( drcJob->m_exitCodeViolations )
@@ -1873,7 +1873,6 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-
     std::map<std::string, UTF8> props;
     props["units"] = job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? "mm"
                                                                                         : "inch";
@@ -1895,7 +1894,8 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     catch( const IO_ERROR& ioe )
     {
         m_reporter->Report( wxString::Format( _( "Error generating IPC2581 file '%s'.\n%s" ),
-                                              job->m_filename, ioe.What() ),
+                                              job->m_filename,
+                                              ioe.What() ),
                             RPT_SEVERITY_ERROR );
 
         wxRemoveFile( tempFile );
