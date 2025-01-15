@@ -267,7 +267,7 @@ bool DIALOG_EXPORT_2581::Init()
     {
         SetTitle( m_job->GetSettingsDialogTitle() );
 
-        m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
+        m_choiceUnits->SetSelection( m_job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? 0 : 1 );
         m_precision->SetValue( static_cast<int>( m_job->m_precision ) );
         m_versionChoice->SetSelection( m_job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B ? 0 : 1 );
         m_cbCompress->SetValue( m_job->m_compress );
