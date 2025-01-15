@@ -79,62 +79,50 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
         m_cliSchematic( nullptr )
 {
     Register( "bom",
-                std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
-                [aKiway]( JOB* job, wxWindow* aParent ) -> bool
-                {
-	                JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+	              JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
 
-	                if( !bomJob )
-		                return false;
+                  SCH_EDIT_FRAME* editFrame = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
 
-                    SCH_EDIT_FRAME* editFrame =
-                            dynamic_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+                  wxCHECK( bomJob && editFrame, false );
 
-                    DIALOG_SYMBOL_FIELDS_TABLE dlg( editFrame, bomJob );
-
-                    return dlg.ShowModal() == wxID_OK;
-                } );
+                  DIALOG_SYMBOL_FIELDS_TABLE dlg( editFrame, bomJob );
+                  return dlg.ShowModal() == wxID_OK;
+              } );
     Register( "pythonbom",
-                std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ),
-                []( JOB* job, wxWindow* aParent ) -> bool
-                {
-                    return true;
-                });
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
     Register( "netlist",
-                std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ),
-                [aKiway]( JOB* job, wxWindow* aParent ) -> bool
-                {
-                    JOB_EXPORT_SCH_NETLIST* netJob =
-                            dynamic_cast < JOB_EXPORT_SCH_NETLIST*>( job );
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_SCH_NETLIST* netJob = dynamic_cast<JOB_EXPORT_SCH_NETLIST*>( job );
 
-                    if( !netJob )
-                        return false;
+                  SCH_EDIT_FRAME* editFrame = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
 
-                    SCH_EDIT_FRAME* editFrame =
-                            dynamic_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+                  wxCHECK( netJob && editFrame, false );
 
-                    DIALOG_EXPORT_NETLIST dlg( editFrame, aParent, netJob );
-                    dlg.ShowModal();
-
-                    return dlg.GetReturnCode() == wxID_OK;
-                } );
+                  DIALOG_EXPORT_NETLIST dlg( editFrame, aParent, netJob );
+                  return dlg.ShowModal() == wxID_OK;
+              } );
     Register( "plot",
-                std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPlot, this, std::placeholders::_1 ),
-                [aKiway]( JOB* job, wxWindow* aParent ) -> bool
-                {
-                    JOB_EXPORT_SCH_PLOT* plotJob = dynamic_cast<JOB_EXPORT_SCH_PLOT*>( job );
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPlot, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_SCH_PLOT* plotJob = dynamic_cast<JOB_EXPORT_SCH_PLOT*>( job );
 
-                    if( !plotJob )
-						return false;
+                  SCH_EDIT_FRAME* editFrame = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
 
-                    SCH_EDIT_FRAME* editFrame =
-                            dynamic_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+                  wxCHECK( plotJob && editFrame, false );
 
-                    DIALOG_PLOT_SCHEMATIC dlg( editFrame, aParent, plotJob );
-                    dlg.ShowModal();
-
-                    return true;
-                } );
+                  DIALOG_PLOT_SCHEMATIC dlg( editFrame, aParent, plotJob );
+                  return dlg.ShowModal() == wxID_OK;
+              } );
     Register( "symupgrade",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
@@ -151,8 +139,10 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_SCH_ERC* ercJob = dynamic_cast<JOB_SCH_ERC*>( job );
-                  DIALOG_ERC_JOB_CONFIG dlg( aParent, ercJob );
 
+                  wxCHECK( ercJob, false );
+
+                  DIALOG_ERC_JOB_CONFIG dlg( aParent, ercJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
 }
@@ -484,8 +474,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    bool res = helper->WriteNetlist( outPath, netlistOption,
-                                     *m_reporter );
+    bool res = helper->WriteNetlist( outPath, netlistOption, *m_reporter );
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -543,8 +532,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     // Mandatory fields + quantity virtual field first
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    {
         dataModel.AddColumn( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ),
                              TEMPLATE_FIELDNAME::GetDefaultFieldName( i, true ), false );
+    }
 
     // User field names in symbols second
     std::set<wxString> userFieldNames;
@@ -596,7 +587,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         {
             m_reporter->Report( wxString::Format( _( "BOM preset '%s' not found" ) + wxS( "\n" ),
                                                   aBomJob->m_bomPresetName ),
-                    RPT_SEVERITY_ERROR );
+                                RPT_SEVERITY_ERROR );
 
             return CLI::EXIT_CODES::ERR_UNKNOWN;
         }
@@ -607,7 +598,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     {
         size_t i = 0;
 
-        for( wxString fieldName : aBomJob->m_fieldsOrdered )
+        for( const wxString& fieldName : aBomJob->m_fieldsOrdered )
         {
             // Handle wildcard. We allow the wildcard anywhere in the list, but it needs to respect
             // fields that come before and after the wildcard.
@@ -623,6 +614,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
                     field.label = field.name;
 
                     bool fieldAlreadyPresent = false;
+
                     for( BOM_FIELD& presetField : preset.fieldsOrdered )
                     {
                         if( presetField.name == field.name )
@@ -633,6 +625,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
                     }
 
                     bool fieldLaterInList = false;
+
                     for( const wxString& fieldInList : aBomJob->m_fieldsOrdered )
                     {
                         if( fieldInList == field.name )
@@ -728,8 +721,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
         if( !schFmtPreset )
         {
-            m_reporter->Report(
-                    wxString::Format( _( "BOM format preset '%s' not found" ) + wxS( "\n" ),
+            m_reporter->Report( wxString::Format( _( "BOM format preset '%s' not found" )
+                                                  + wxS( "\n" ),
                                                   aBomJob->m_bomFmtPresetName ),
                                 RPT_SEVERITY_ERROR );
 
@@ -906,8 +899,8 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
 
             if( !plotter->OpenFile( fn.GetFullPath() ) )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ),
+                m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" )
+                                                      + wxS( "\n" ),
                                                       fn.GetFullPath() ),
                                     RPT_SEVERITY_ERROR );
 

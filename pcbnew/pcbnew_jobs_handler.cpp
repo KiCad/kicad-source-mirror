@@ -111,19 +111,18 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
                           aKiway->Player( FRAME_PCB_EDITOR, false ) );
-                  DIALOG_EXPORT_STEP dlg( editFrame, aParent, "", svgJob );
-                  dlg.ShowModal();
 
-                  return dlg.GetReturnCode() == wxID_OK;
+                  wxCHECK( svgJob && editFrame, false );
+
+                  DIALOG_EXPORT_STEP dlg( editFrame, aParent, "", svgJob );
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "render",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportRender, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   DIALOG_RENDER_JOB dlg( aParent, dynamic_cast<JOB_PCB_RENDER*>( job ) );
-                  dlg.ShowModal();
-
-                  return dlg.GetReturnCode() == wxID_OK;
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "svg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
@@ -133,10 +132,10 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
                           aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
-                  DIALOG_PLOT dlg( editFrame, aParent, svgJob );
-                  dlg.ShowModal();
+                  wxCHECK( svgJob && editFrame, false );
 
-                  return dlg.GetReturnCode() == wxID_OK;
+                  DIALOG_PLOT dlg( editFrame, aParent, svgJob );
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "gencad",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportGencad, this, std::placeholders::_1 ),
@@ -152,10 +151,10 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
                           aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
-                  DIALOG_PLOT dlg( editFrame, aParent, dxfJob );
-                  dlg.ShowModal();
+                  wxCHECK( dxfJob && editFrame, false );
 
-                  return dlg.GetReturnCode() == wxID_OK;
+                  DIALOG_PLOT dlg( editFrame, aParent, dxfJob );
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "pdf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPdf, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
@@ -165,10 +164,10 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
                           aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
-                  DIALOG_PLOT dlg( editFrame, aParent, pdfJob );
-                  dlg.ShowModal();
+                  wxCHECK( pdfJob && editFrame, false );
 
-                  return dlg.GetReturnCode() == wxID_OK;
+                  DIALOG_PLOT dlg( editFrame, aParent, pdfJob );
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "gerber",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerber, this, std::placeholders::_1 ),
@@ -179,10 +178,10 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
                           aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
-                  DIALOG_PLOT dlg( editFrame, aParent, gJob );
-                  dlg.ShowModal();
+                  wxCHECK( gJob && editFrame, false );
 
-                  return dlg.GetReturnCode() == wxID_OK;
+                  DIALOG_PLOT dlg( editFrame, aParent, gJob );
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "gerbers",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerbers, this, std::placeholders::_1 ),
@@ -193,10 +192,10 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
                           aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
-                  DIALOG_PLOT dlg( editFrame, aParent, gJob );
-                  dlg.ShowModal();
+                  wxCHECK( gJob && editFrame, false );
 
-                  return dlg.GetReturnCode() == wxID_OK;
+                  DIALOG_PLOT dlg( editFrame, aParent, gJob );
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "drill",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrill, this, std::placeholders::_1 ),
@@ -204,20 +203,26 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_DRILL* drillJob = dynamic_cast<JOB_EXPORT_PCB_DRILL*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
+                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( drillJob && editFrame, false );
+
                   DIALOG_GENDRILL dlg( editFrame, drillJob, aParent );
-                  dlg.ShowModal();
-                  return dlg.GetReturnCode() == wxID_OK;
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "pos", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPos, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
 			  {
 				  JOB_EXPORT_PCB_POS* posJob = dynamic_cast<JOB_EXPORT_PCB_POS*>( job );
 
-				  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+				  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
+                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( posJob && editFrame, false );
+
 				  DIALOG_GEN_FOOTPRINT_POSITION dlg( posJob, editFrame, aParent );
-                  dlg.ShowModal();
-                  return dlg.GetReturnCode() == wxID_OK;
+                  return dlg.ShowModal() == wxID_OK;
 			  } );
     Register( "fpupgrade",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ),
@@ -244,27 +249,27 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_IPC2581* ipcJob = dynamic_cast<JOB_EXPORT_PCB_IPC2581*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
+                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
                   wxCHECK( ipcJob && editFrame, false );
 
                   DIALOG_EXPORT_2581 dlg( ipcJob, editFrame, aParent );
-                  dlg.ShowModal();
-
-                  return dlg.GetReturnCode() == wxID_OK;
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "odb",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportOdb, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_PCB_ODB* odbJob = dynamic_cast<JOB_EXPORT_PCB_ODB*>( job );
-                  wxCHECK( odbJob, false );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
+                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( odbJob && editFrame, false );
 
                   DIALOG_EXPORT_ODBPP dlg( odbJob, editFrame, aParent );
-                  dlg.ShowModal();
-
-                  return dlg.GetReturnCode() == wxID_OK;
+                  return dlg.ShowModal() == wxID_OK;
               } );
 }
 
@@ -295,12 +300,10 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
     }
     else if( Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpen() )
     {
-        PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_kiway->Player( FRAME_PCB_EDITOR, false ) );
+        PCB_EDIT_FRAME* editFrame = (PCB_EDIT_FRAME*) m_kiway->Player( FRAME_PCB_EDITOR, false );
 
         if( editFrame )
-        {
             brd = editFrame->GetBoard();
-        }
     }
     else
     {
@@ -309,9 +312,7 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
     }
 
     if( !brd )
-    {
         m_reporter->Report( _( "Failed to load board\n" ), RPT_SEVERITY_ERROR );
-    }
 
     return brd;
 }
@@ -403,7 +404,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         if ( success )
         {
-            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ), outPath ),
+            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
+                                                  outPath ),
                                 RPT_SEVERITY_INFO );
         }
         else
@@ -483,7 +485,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         switch( aRenderJob->m_format )
         {
         case JOB_PCB_RENDER::FORMAT::JPEG: fn.SetExt( FILEEXT::JpegFileExtension ); break;
-        case JOB_PCB_RENDER::FORMAT::PNG: fn.SetExt( FILEEXT::PngFileExtension ); break;
+        case JOB_PCB_RENDER::FORMAT::PNG:  fn.SetExt( FILEEXT::PngFileExtension );  break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
@@ -553,20 +555,20 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     }
 
     cfg->m_Render.raytrace_lightColorTop = COLOR4D(aRenderJob->m_lightTopIntensity.x,
-                                                  aRenderJob->m_lightTopIntensity.y,
-                                                  aRenderJob->m_lightTopIntensity.z, 1.0);
+                                                   aRenderJob->m_lightTopIntensity.y,
+                                                   aRenderJob->m_lightTopIntensity.z, 1.0);
 
     cfg->m_Render.raytrace_lightColorBottom = COLOR4D(aRenderJob->m_lightBottomIntensity.x,
-                                                     aRenderJob->m_lightBottomIntensity.y,
-                                                     aRenderJob->m_lightBottomIntensity.z, 1.0);
+                                                      aRenderJob->m_lightBottomIntensity.y,
+                                                      aRenderJob->m_lightBottomIntensity.z, 1.0);
 
     cfg->m_Render.raytrace_lightColorCamera = COLOR4D( aRenderJob->m_lightCameraIntensity.x,
-                                                      aRenderJob->m_lightCameraIntensity.y,
-                                                      aRenderJob->m_lightCameraIntensity.z, 1.0 );
+                                                       aRenderJob->m_lightCameraIntensity.y,
+                                                       aRenderJob->m_lightCameraIntensity.z, 1.0 );
 
     COLOR4D lightColor( aRenderJob->m_lightSideIntensity.x,
-                             aRenderJob->m_lightSideIntensity.y,
-                             aRenderJob->m_lightSideIntensity.z, 1.0 );
+                        aRenderJob->m_lightSideIntensity.y,
+                        aRenderJob->m_lightSideIntensity.z, 1.0 );
 
     cfg->m_Render.raytrace_lightColor = {
         lightColor, lightColor, lightColor, lightColor,
@@ -606,8 +608,8 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         { JOB_PCB_RENDER::SIDE::BACK, VIEW3D_TYPE::VIEW3D_BACK },
     };
 
-    PROJECTION_TYPE projection =
-            aRenderJob->m_perspective ? PROJECTION_TYPE::PERSPECTIVE : PROJECTION_TYPE::ORTHO;
+    PROJECTION_TYPE projection =  aRenderJob->m_perspective ? PROJECTION_TYPE::PERSPECTIVE
+                                                            : PROJECTION_TYPE::ORTHO;
 
     wxSize     windowSize( aRenderJob->m_width, aRenderJob->m_height );
     TRACK_BALL camera( 2 * RANGE_SCALE_3D );
@@ -693,11 +695,15 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
                         RPT_SEVERITY_INFO );
 
     if( success )
+    {
         m_reporter->Report( _( "Successfully created 3D render image" ) + wxS( "\n" ),
                             RPT_SEVERITY_INFO );
+    }
     else
+    {
         m_reporter->Report( _( "Error creating 3D render image" ) + wxS( "\n" ),
                             RPT_SEVERITY_ERROR );
+    }
 
     return CLI::EXIT_CODES::OK;
 }
@@ -1009,7 +1015,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         else
             fileExt = FILEEXT::GerberFileExtension;
 
-        BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath( brd->GetProject() ), layerName, fileExt );
+        BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath( brd->GetProject() ), layerName,
+                           fileExt );
         wxString fullname = fn.GetFullName();
 
         jobfile_writer.AddGbrFile( layer, fullname );
@@ -1027,9 +1034,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         GERBER_PLOTTER* plotter;
         {
             LOCALE_IO dummy;
-            plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer,
-                                                        layerName, fn.GetFullPath(),
-                                                        sheetName, sheetPath );
+            plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
+                                                        fn.GetFullPath(), sheetName, sheetPath );
         }
 
         if( plotter )
@@ -1044,7 +1050,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         {
             m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
                                                   fn.GetFullPath() ),
-                    RPT_SEVERITY_ERROR );
+                                RPT_SEVERITY_ERROR );
             exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
 
@@ -1210,7 +1216,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     {
         m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
                                               aGerberJob->GetFullOutputPath( brd->GetProject() ) ),
-                RPT_SEVERITY_ERROR );
+                            RPT_SEVERITY_ERROR );
         exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
@@ -1312,8 +1318,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         excellonWriter->SetRouteModeForOvalHoles( aDrillJob->m_excellonOvalDrillRoute );
         excellonWriter->SetMapFileFormat( mapFormat );
 
-        if( !excellonWriter->CreateDrillandMapFilesSet( outPath, true,
-                                                        aDrillJob->m_generateMap, m_reporter ) )
+        if( !excellonWriter->CreateDrillandMapFilesSet( outPath, true, aDrillJob->m_generateMap,
+                                                        m_reporter ) )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
@@ -1332,8 +1338,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         gerberWriter->SetOptions( offset );
         gerberWriter->SetMapFileFormat( mapFormat );
 
-        if( !gerberWriter->CreateDrillandMapFilesSet( outPath, true,
-                                                      aDrillJob->m_generateMap, m_reporter ) )
+        if( !gerberWriter->CreateDrillandMapFilesSet( outPath, true, aDrillJob->m_generateMap,
+                                                      m_reporter ) )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
@@ -1402,7 +1408,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
                                       aPosJob->m_smdOnly, aPosJob->m_excludeFootprintsWithTh,
                                       aPosJob->m_excludeDNP,
                                       frontSide, backSide,
-                aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
+                                      aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
                                       aPosJob->m_useDrillPlaceFileOrigin,
                                       aPosJob->m_negateBottomX );
         data = exporter.GenPositionData();
@@ -1421,15 +1427,10 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK )
             gbrLayer = B_Cu;
 
-        if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge )
-            >= 0 )
-        {
+        if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge ) >= 0 )
             aPosJob->AddOutput( outPath );
-        }
         else
-        {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
-        }
     }
 
     return CLI::EXIT_CODES::OK;
@@ -1450,8 +1451,8 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
 
     if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
     {
-        if( wxFile::Exists( upgradeJob->m_outputLibraryPath ) ||
-            wxDir::Exists( upgradeJob->m_outputLibraryPath) )
+        if( wxFile::Exists( upgradeJob->m_outputLibraryPath )
+            || wxDir::Exists( upgradeJob->m_outputLibraryPath) )
         {
             m_reporter->Report( _( "Output path must not conflict with existing path\n" ),
                                 RPT_SEVERITY_ERROR );
@@ -1461,7 +1462,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
     else if( fileType != PCB_IO_MGR::KICAD_SEXP )
     {
         m_reporter->Report( _( "Output path must be specified to convert legacy and non-KiCad libraries\n" ),
-                RPT_SEVERITY_ERROR );
+                            RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
@@ -1508,9 +1509,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
             try
             {
                 if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
-                {
                     fpLib.SetPath( upgradeJob->m_outputLibraryPath );
-                }
 
                 fpLib.Save();
             }
@@ -1749,8 +1748,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
             try
             {
-                auto lineReader = new STRING_LINE_READER( netlist_str, _( "Eeschema netlist" ) );
+                STRING_LINE_READER* lineReader = new STRING_LINE_READER( netlist_str,
+                                                                         _( "Eeschema netlist" ) );
                 KICAD_NETLIST_READER netlistReader( lineReader, netlist.get() );
+
                 netlistReader.LoadNetlist();
             }
             catch( const IO_ERROR& )
@@ -1797,10 +1798,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
                                           markersProvider->GetCount() ),
-            RPT_SEVERITY_INFO );
+                        RPT_SEVERITY_INFO );
     m_reporter->Report( wxString::Format( _( "Found %d unconnected items\n" ),
                                           ratsnestProvider->GetCount() ),
-            RPT_SEVERITY_INFO );
+                        RPT_SEVERITY_INFO );
 
     if( drcJob->m_parity )
     {
@@ -1821,7 +1822,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     if( !wroteReport )
     {
         m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ), outPath ),
-                RPT_SEVERITY_INFO );
+                            RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
@@ -2027,7 +2028,7 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
             m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
                                                     path )
                                 + wxS( "\n" ) + msg + wxS( "\n" ),
-                        RPT_SEVERITY_ERROR );
+                                RPT_SEVERITY_ERROR );
             return false;
         }
 
