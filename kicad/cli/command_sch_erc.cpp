@@ -85,7 +85,7 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_SCH_ERC> ercJob( new JOB_SCH_ERC() );
 
-    ercJob->SetOutputPath( m_argOutput );
+    ercJob->SetConfiguredOutputPath( m_argOutput );
     ercJob->m_filename = m_argInput;
     ercJob->m_exitCodeViolations = m_argParser.get<bool>( ARG_EXIT_CODE_VIOLATIONS );
     ercJob->SetVarOverrides( m_argDefineVars );

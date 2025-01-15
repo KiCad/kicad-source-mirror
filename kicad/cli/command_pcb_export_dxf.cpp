@@ -111,7 +111,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_PCB_DXF> dxfJob( new JOB_EXPORT_PCB_DXF() );
 
     dxfJob->m_filename = m_argInput;
-    dxfJob->SetOutputPath( m_argOutput );
+    dxfJob->SetConfiguredOutputPath( m_argOutput );
     dxfJob->m_drawingSheet = m_argDrawingSheet;
     dxfJob->SetVarOverrides( m_argDefineVars );
 

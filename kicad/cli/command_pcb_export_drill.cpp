@@ -106,11 +106,11 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_PCB_DRILL> drillJob( new JOB_EXPORT_PCB_DRILL() );
 
     drillJob->m_filename = m_argInput;
-    drillJob->SetOutputPath( m_argOutput );
+    drillJob->SetConfiguredOutputPath( m_argOutput );
 
-    if( !drillJob->GetOutputPath().IsEmpty() )
+    if( !drillJob->GetConfiguredOutputPath().IsEmpty() )
     {
-        wxFileName fn( drillJob->GetOutputPath(), wxEmptyString );
+        wxFileName fn( drillJob->GetConfiguredOutputPath(), wxEmptyString );
 
         if( !fn.IsDir() )
         {

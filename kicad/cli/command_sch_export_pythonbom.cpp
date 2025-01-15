@@ -44,7 +44,7 @@ int CLI::SCH_EXPORT_PYTHONBOM_COMMAND::doPerform( KIWAY& aKiway )
             std::make_unique<JOB_EXPORT_SCH_PYTHONBOM>();
 
     bomJob->m_filename = m_argInput;
-    bomJob->SetOutputPath( m_argOutput );
+    bomJob->SetConfiguredOutputPath( m_argOutput );
 
     if( !wxFile::Exists( bomJob->m_filename ) )
     {

@@ -247,7 +247,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
     params.m_IncludeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
     params.m_IncludeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
     params.m_Overwrite = m_argParser.get<bool>( ARG_FORCE );
-    step->SetOutputPath( m_argOutput );
+    step->SetConfiguredOutputPath( m_argOutput );
 
     step->m_filename = m_argInput;
     step->m_format = m_format;

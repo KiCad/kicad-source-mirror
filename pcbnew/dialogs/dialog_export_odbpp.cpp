@@ -92,7 +92,7 @@ DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( JOB_EXPORT_PCB_ODB* aJob, PCB_EDIT_FRA
 
     SetupStandardButtons();
 
-    m_outputFileName->SetValue( m_job->GetOutputPath() );
+    m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
 
     // Fill wxChoice (and others) items with data before calling finishDialogSettings()
     // to calculate suitable widgets sizes
@@ -250,7 +250,7 @@ bool DIALOG_EXPORT_ODBPP::Init()
         m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
         m_precision->SetValue( m_job->m_precision );
         m_choiceCompress->SetSelection( static_cast<int>( m_job->m_compressionMode ) );
-        m_outputFileName->SetValue( m_job->GetOutputPath() );
+        m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
@@ -274,7 +274,7 @@ bool DIALOG_EXPORT_ODBPP::TransferDataFromWindow()
     }
     else
     {
-        m_job->SetOutputPath( m_outputFileName->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
 
         m_job->m_precision = m_precision->GetValue();
         m_job->m_units =

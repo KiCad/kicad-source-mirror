@@ -337,7 +337,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     wxString outPath = aPlotJob->GetFullOutputPath( &sch->Prj() );
     if( !PATHS::EnsurePathExists( outPath,
-                                  !aPlotJob->GetOutpathIsDirectory() ) )
+                                  !aPlotJob->GetOutputPathIsDirectory() ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -351,7 +351,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
     plotOpts.m_PDFHierarchicalLinks = aPlotJob->m_PDFHierarchicalLinks;
     plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
-    if( aPlotJob->GetOutpathIsDirectory() )
+    if( aPlotJob->GetOutputPathIsDirectory() )
     {
         plotOpts.m_outputDirectory = outPath;
         plotOpts.m_outputFile = wxEmptyString;
@@ -467,13 +467,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-    if( aNetJob->GetOutputPath().IsEmpty() )
+    if( aNetJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( fileExt );
 
-        aNetJob->SetOutputPath( fn.GetFullName() );
+        aNetJob->SetConfiguredOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = aNetJob->GetFullOutputPath( &sch->Prj() );
@@ -678,13 +678,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     dataModel.ApplyBomPreset( preset );
 
-    if( aBomJob->GetOutputPath().IsEmpty() )
+    if( aBomJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( FILEEXT::CsvFileExtension );
 
-        aBomJob->SetOutputPath( fn.GetFullName() );
+        aBomJob->SetConfiguredOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = aBomJob->GetFullOutputPath( &sch->Prj() );
@@ -801,13 +801,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist =
             std::make_unique<NETLIST_EXPORTER_XML>( sch );
 
-    if( aNetJob->GetOutputPath().IsEmpty() )
+    if( aNetJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() + "-bom" );
         fn.SetExt( FILEEXT::XmlFileExtension );
 
-        aNetJob->SetOutputPath( fn.GetFullName() );
+        aNetJob->SetConfiguredOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = aNetJob->GetFullOutputPath( &sch->Prj() );
@@ -1116,7 +1116,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
-    if( ercJob->GetOutputPath().IsEmpty() )
+    if( ercJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() + wxS( "-erc" ) );
@@ -1126,7 +1126,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         else
             fn.SetExt( FILEEXT::ReportFileExtension );
 
-        ercJob->SetOutputPath( fn.GetFullName() );
+        ercJob->SetConfiguredOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = ercJob->GetFullOutputPath( &sch->Prj() );

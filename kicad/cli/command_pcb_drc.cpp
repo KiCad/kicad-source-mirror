@@ -95,7 +95,7 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_PCB_DRC> drcJob( new JOB_PCB_DRC() );
 
-    drcJob->SetOutputPath( m_argOutput );
+    drcJob->SetConfiguredOutputPath( m_argOutput );
     drcJob->m_filename = m_argInput;
     drcJob->SetVarOverrides( m_argDefineVars );
     drcJob->m_reportAllTrackErrors = m_argParser.get<bool>( ARG_ALL_TRACK_ERRORS );

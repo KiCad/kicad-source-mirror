@@ -28,7 +28,8 @@ JOB::JOB( const std::string& aType, bool aOutputIsDirectory ) :
         m_tempOutputDirectory(),
         m_outputPath(),
         m_outputPathIsDirectory( aOutputIsDirectory ),
-        m_description()
+        m_description(),
+        m_workingOutputPath()
 {
     m_params.emplace_back( new JOB_PARAM<wxString>( "description",
                                                     &m_description, m_description ) );
@@ -103,7 +104,9 @@ wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
                 return m_titleBlock.TextVarResolver( token, aProject );
             };
 
-    wxString outPath = ExpandTextVars( m_outputPath, &textResolver );
+    // use the working output path (nonsaved) over the configured path if its not empty
+    wxString outPath = m_workingOutputPath.IsEmpty() ? m_outputPath : m_workingOutputPath;
+    outPath = ExpandTextVars( outPath, &textResolver );
 
     if( !m_tempOutputDirectory.IsEmpty() )
     {
@@ -140,7 +143,7 @@ wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
 }
 
 
-void JOB::SetOutputPath( const wxString& aPath )
+void JOB::SetConfiguredOutputPath( const wxString& aPath )
 {
     m_outputPath = aPath;
 }

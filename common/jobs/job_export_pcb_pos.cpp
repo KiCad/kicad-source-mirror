@@ -109,7 +109,7 @@ void JOB_EXPORT_PCB_POS::SetDefaultOutputPath( const wxString& aReferenceName )
     else if( m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
         fn.SetExt( FILEEXT::GerberFileExtension );
 
-    SetOutputPath( fn.GetFullName() );
+    SetConfiguredOutputPath( fn.GetFullName() );
 }
 
 REGISTER_JOB( pcb_export_pos, _HKI( "PCB: Export Position Data" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_POS );

@@ -151,7 +151,7 @@ void DIALOG_RENDER_JOB::setSelectedBgStyle( JOB_PCB_RENDER::BG_STYLE aBgStyle )
 
 bool DIALOG_RENDER_JOB::TransferDataFromWindow()
 {
-    m_job->SetOutputPath( m_textCtrlOutputFile->GetValue() );
+    m_job->SetConfiguredOutputPath( m_textCtrlOutputFile->GetValue() );
 
     m_job->m_format = getSelectedFormat();
     m_job->m_quality = getSelectedQuality();
@@ -191,7 +191,7 @@ bool DIALOG_RENDER_JOB::TransferDataFromWindow()
 
 bool DIALOG_RENDER_JOB::TransferDataToWindow()
 {
-    m_textCtrlOutputFile->SetValue( m_job->GetOutputPath() );
+    m_textCtrlOutputFile->SetValue( m_job->GetConfiguredOutputPath() );
 
     setSelectedFormat( m_job->m_format );
     setSelectedBgStyle( m_job->m_bgStyle );

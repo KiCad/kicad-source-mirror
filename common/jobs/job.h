@@ -208,15 +208,45 @@ public:
     const std::vector<JOB_OUTPUT>& GetOutputs() { return m_outputs; }
     void AddOutput( wxString aOutputPath )      { m_outputs.emplace_back( aOutputPath ); }
 
+    /**
+     * Sets the temporary output directory for the job, this is used to prefix with a given
+     * output path when GetFullOutputPath is called. This is intended for use with running jobsets
+     * and otherwise has no impact on individual job runs outside jobsets.
+     */
     void SetTempOutputDirectory( const wxString& aBase );
 
-    void SetOutputPath( const wxString& aPath );
-    wxString GetOutputPath() const { return m_outputPath; }
+    /**
+     * Sets the configured output path for the job, this path is always saved to file
+     */
+    void SetConfiguredOutputPath( const wxString& aPath );
+
+    /**
+     * Returns the configured output path for the job
+     */
+    wxString GetConfiguredOutputPath() const { return m_outputPath; }
+
+    /**
+     * Sets a transient output path for the job, it takes priority over the configured output path
+     * when GetFullOutputPath is called.
+     */
+    void     SetWorkingOutputPath( const wxString& aPath ) { m_workingOutputPath = aPath; }
+
+    /**
+     * Returns the working output path for the job, if one has been set
+     */
+    wxString GetWorkingOutputPath() const { return m_workingOutputPath; }
+
+    /**
+     * Returns the full output path for the job, taking into account the configured output path,
+     * any configured working path and the temporary output directory.
+     *
+     * Additionally variable resolution will take place
+     */
     wxString GetFullOutputPath( PROJECT* aProject ) const;
 
     bool OutputPathFullSpecified() const;
 
-    bool GetOutpathIsDirectory() const { return m_outputPathIsDirectory; }
+    bool GetOutputPathIsDirectory() const { return m_outputPathIsDirectory; }
 
 protected:
     std::string                  m_type;
@@ -228,6 +258,7 @@ protected:
     wxString m_outputPath;
     bool     m_outputPathIsDirectory;
     wxString m_description;
+    wxString m_workingOutputPath;
 
     std::vector<JOB_PARAM_BASE*> m_params;
 

@@ -333,7 +333,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aStepJob->GetOutputPath().IsEmpty() )
+    if( aStepJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
@@ -359,7 +359,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
-        aStepJob->SetOutputPath( fn.GetFullName() );
+        aStepJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = aStepJob->GetFullOutputPath( brd->GetProject() );
@@ -476,7 +476,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aRenderJob->GetOutputPath().IsEmpty() )
+    if( aRenderJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
 
@@ -494,7 +494,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         // or we do a hash based on all the options
         fn.SetName( wxString::Format( "%s-%d", fn.GetName(), static_cast<int>( aRenderJob->m_side ) ) );
 
-        aRenderJob->SetOutputPath( fn.GetFullName() );
+        aRenderJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = aRenderJob->GetFullOutputPath( brd->GetProject() );
@@ -719,13 +719,13 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 
     if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
     {
-        if( aSvgJob->GetOutputPath().IsEmpty() )
+        if( aSvgJob->GetConfiguredOutputPath().IsEmpty() )
         {
             wxFileName fn = brd->GetFileName();
             fn.SetName( fn.GetName() );
             fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::SVG ) );
 
-            aSvgJob->SetOutputPath( fn.GetFullName() );
+            aSvgJob->SetWorkingOutputPath( fn.GetFullName() );
         }
     }
 
@@ -796,13 +796,13 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     if( aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE )
     {
-        if( aDxfJob->GetOutputPath().IsEmpty() )
+        if( aDxfJob->GetConfiguredOutputPath().IsEmpty() )
         {
             wxFileName fn = brd->GetFileName();
             fn.SetName( fn.GetName() );
             fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::DXF ) );
 
-            aDxfJob->SetOutputPath( fn.GetFullName() );
+            aDxfJob->SetWorkingOutputPath( fn.GetFullName() );
         }
     }
 
@@ -865,13 +865,13 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     brd->SynchronizeProperties();
 
     if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE
-        && aPdfJob->GetOutputPath().IsEmpty() )
+        && aPdfJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
 
-        aPdfJob->SetOutputPath( fn.GetFullName() );
+        aPdfJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     PCB_PLOT_PARAMS plotOpts;
@@ -1086,13 +1086,13 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
     exporter.SetPlotOffet( GencadOffset );
     exporter.StoreOriginCoordsInFile( aGencadJob->m_storeOriginCoords );
 
-    if( aGencadJob->GetOutputPath().IsEmpty() )
+    if( aGencadJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( FILEEXT::GencadFileExtension );
 
-        aGencadJob->SetOutputPath( fn.GetFullName() );
+        aGencadJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = aGencadJob->GetFullOutputPath( brd->GetProject() );
@@ -1159,13 +1159,13 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aGerberJob->GetOutputPath().IsEmpty() )
+    if( aGerberJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::GERBER ) );
 
-        aGerberJob->SetOutputPath( fn.GetFullName() );
+        aGerberJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     PCB_PLOT_PARAMS plotOpts;
@@ -1357,7 +1357,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
 
     aJob->SetTitleBlock( brd->GetTitleBlock() );
 
-    if( aPosJob->GetOutputPath().IsEmpty() )
+    if( aPosJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
@@ -1369,7 +1369,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
             fn.SetExt( FILEEXT::GerberFileExtension );
 
-        aPosJob->SetOutputPath( fn.GetFullName() );
+        aPosJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = aPosJob->GetFullOutputPath( brd->GetProject() );
@@ -1680,7 +1680,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( drcJob->GetOutputPath().IsEmpty() )
+    if( drcJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() + wxS( "-drc" ) );
@@ -1690,7 +1690,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         else
             fn.SetExt( FILEEXT::ReportFileExtension );
 
-        drcJob->SetOutputPath( fn.GetFullName() );
+        drcJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = drcJob->GetFullOutputPath( brd->GetProject() );
@@ -1861,7 +1861,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
         fn.SetName( fn.GetName() );
         fn.SetExt( FILEEXT::Ipc2581FileExtension );
 
-        job->SetOutputPath( fn.GetName() );
+        job->SetWorkingOutputPath( fn.GetName() );
     }
 
     wxString outPath = job->GetFullOutputPath( brd->GetProject() );
@@ -1950,14 +1950,14 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
 
     aJob->SetTitleBlock( brd->GetTitleBlock() );
 
-    wxString   path = job->GetOutputPath();
+    wxString   path = job->GetConfiguredOutputPath();
 
     if( !job->OutputPathFullSpecified() )
     {
         if( job->m_compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE )
         {
             // just basic folder name
-            job->SetOutputPath( "odb" );
+            job->SetWorkingOutputPath( "odb" );
         }
         else
         {
@@ -1975,7 +1975,7 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
             default: break;
             };
 
-            job->SetOutputPath( fn.GetFullName() );
+            job->SetWorkingOutputPath( fn.GetFullName() );
         }
     }
 

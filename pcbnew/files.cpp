@@ -1427,7 +1427,7 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
 
     JOB_EXPORT_PCB_ODB job;
 
-    job.SetOutputPath( dlg.GetOutputPath() );
+    job.SetConfiguredOutputPath( dlg.GetOutputPath() );
     job.m_filename = GetBoard()->GetFileName();
     job.m_compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( dlg.GetCompressFormat() );
 

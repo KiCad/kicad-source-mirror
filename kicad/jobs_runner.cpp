@@ -75,11 +75,11 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
 
     if( specialJob->m_recordOutput )
     {
-        if( specialJob->GetOutputPath().IsEmpty() )
+        if( specialJob->GetConfiguredOutputPath().IsEmpty() )
         {
             wxFileName fn( aJob->m_id );
             fn.SetExt( wxT( "log" ) );
-            specialJob->SetOutputPath( fn.GetFullPath() );
+            specialJob->SetConfiguredOutputPath( fn.GetFullPath() );
         }
 
         wxFFileOutputStream procOutput( specialJob->GetFullOutputPath( aProject ) );

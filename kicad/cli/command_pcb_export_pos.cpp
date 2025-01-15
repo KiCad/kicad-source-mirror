@@ -99,7 +99,7 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_PCB_POS> aPosJob( new JOB_EXPORT_PCB_POS() );
 
     aPosJob->m_filename = m_argInput;
-    aPosJob->SetOutputPath( m_argOutput );
+    aPosJob->SetConfiguredOutputPath( m_argOutput );
 
     if( !wxFile::Exists( aPosJob->m_filename ) )
     {

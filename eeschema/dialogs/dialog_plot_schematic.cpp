@@ -226,7 +226,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         // And then hide it
         m_plotFormatOpt->Hide();
 
-        m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
+        m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
     }
 }
 
@@ -455,7 +455,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         m_job->m_PDFMetadata = m_plotPDFMetadata->GetValue();
         m_job->m_plotDrawingSheet = m_plotDrawingSheet->GetValue();
         m_job->m_plotAll = true;
-        m_job->SetOutputPath( m_outputDirectoryName->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputDirectoryName->GetValue() );
 
         m_job->m_HPGLPlotOrigin =
                 static_cast<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>( m_plotOriginOpt->GetSelection() );

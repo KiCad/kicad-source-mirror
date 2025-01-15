@@ -49,7 +49,7 @@ int CLI::SCH_EXPORT_NETLIST_COMMAND::doPerform( KIWAY& aKiway )
             std::make_unique<JOB_EXPORT_SCH_NETLIST>();
 
     netJob->m_filename = m_argInput;
-    netJob->SetOutputPath( m_argOutput );
+    netJob->SetConfiguredOutputPath( m_argOutput );
 
     if( !wxFile::Exists( netJob->m_filename ) )
     {

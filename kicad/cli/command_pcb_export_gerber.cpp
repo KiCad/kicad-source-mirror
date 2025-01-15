@@ -99,7 +99,7 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND() : PCB_EXPORT_GERBER_
 int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 {
     aJob->m_filename = m_argInput;
-    aJob->SetOutputPath( m_argOutput );
+    aJob->SetConfiguredOutputPath( m_argOutput );
     aJob->m_drawingSheet = m_argDrawingSheet;
     aJob->SetVarOverrides( m_argDefineVars );
 

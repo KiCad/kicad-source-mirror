@@ -68,7 +68,7 @@ int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_PCB_ODB> job( new JOB_EXPORT_PCB_ODB() );
 
     job->m_filename = m_argInput;
-    job->SetOutputPath( m_argOutput );
+    job->SetConfiguredOutputPath( m_argOutput );
     job->m_drawingSheet = m_argDrawingSheet;
     job->SetVarOverrides( m_argDefineVars );
 

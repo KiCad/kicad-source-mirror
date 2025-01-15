@@ -263,7 +263,7 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
         SetTitle( m_job->GetSettingsDialogTitle() );
 
         m_MessagesBox->Hide();
-        m_outputPath->SetValue( m_job->GetOutputPath() );
+        m_outputPath->SetValue( m_job->GetConfiguredOutputPath() );
 
         SetupStandardButtons();
 
@@ -473,7 +473,7 @@ bool DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
             }
         }
 
-        m_job->SetOutputPath( m_outputPath->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputPath->GetValue() );
         m_job->m_spiceSaveAllVoltages = saveAllVoltages;
         m_job->m_spiceSaveAllCurrents = saveAllCurrents;
         m_job->m_spiceSaveAllDissipations = saveAllDissipations;

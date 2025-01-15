@@ -129,7 +129,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_PCB_PDF> pdfJob( new JOB_EXPORT_PCB_PDF() );
 
     pdfJob->m_filename = m_argInput;
-    pdfJob->SetOutputPath( m_argOutput );
+    pdfJob->SetConfiguredOutputPath( m_argOutput );
     pdfJob->m_drawingSheet = m_argDrawingSheet;
     pdfJob->SetVarOverrides( m_argDefineVars );
 

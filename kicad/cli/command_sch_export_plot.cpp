@@ -180,7 +180,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         plotJob->m_theme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     }
 
-    plotJob->SetOutputPath( m_argOutput );
+    plotJob->SetConfiguredOutputPath( m_argOutput );
 
     plotJob->m_plotAll = plotJob->m_plotPages.size() == 0;
 

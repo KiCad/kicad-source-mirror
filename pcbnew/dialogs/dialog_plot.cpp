@@ -520,7 +520,7 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         }
     }
 
-    m_job->SetOutputPath( m_plotOpts.GetOutputDirectory() );
+    m_job->SetConfiguredOutputPath( m_plotOpts.GetOutputDirectory() );
 }
 
 

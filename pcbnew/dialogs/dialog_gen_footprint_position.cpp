@@ -117,7 +117,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCHES ? EDA_UNITS::INCHES
 																	  : EDA_UNITS::MILLIMETRES;
 
-        m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
+        m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
 
         m_unitsCtrl->SetSelection( static_cast<int>( m_job->m_units ) );
         m_formatCtrl->SetSelection( static_cast<int>( m_job->m_format ) );
@@ -291,7 +291,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
     }
     else
     {
-        m_job->SetOutputPath( m_outputDirectoryName->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputDirectoryName->GetValue() );
         m_job->m_units = m_unitsCtrl->GetSelection() == 0 ? JOB_EXPORT_PCB_POS::UNITS::INCHES
                                                           : JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS;
         m_job->m_format = static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_formatCtrl->GetSelection() );

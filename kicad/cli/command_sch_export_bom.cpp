@@ -138,7 +138,7 @@ int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
 
     // Basic options
     bomJob->m_filename = m_argInput;
-    bomJob->SetOutputPath( m_argOutput );
+    bomJob->SetConfiguredOutputPath( m_argOutput );
 
     bomJob->m_bomPresetName = From_UTF8( m_argParser.get<std::string>( ARG_PRESET ).c_str() );
     bomJob->m_bomFmtPresetName =

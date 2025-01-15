@@ -80,7 +80,7 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_F
 
     SetupStandardButtons();
 
-    m_outputFileName->SetValue( m_job->GetOutputPath() );
+    m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
 
     m_textDistributor->SetSize( m_choiceDistPN->GetSize() );
 
@@ -380,7 +380,7 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
     }
     else
     {
-        m_job->SetOutputPath( m_outputFileName->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
 
         m_job->m_colInternalId = GetOEM();
         m_job->m_colDist = GetDist();

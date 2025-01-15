@@ -367,7 +367,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
 
     if( m_job )
     {
-        m_outputFileName->SetValue( m_job->GetOutputPath() );
+        m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
     }
     else
     {
@@ -1422,7 +1422,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
 
     if( m_job )
     {
-        m_job->SetOutputPath( m_outputFileName->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
 
         if( m_currentBomFmtPreset )
             m_job->m_bomFmtPresetName = m_currentBomFmtPreset->name;

@@ -133,7 +133,7 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
     }
     else
     {
-        m_job->SetOutputPath( m_outputDirectoryName->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputDirectoryName->GetValue() );
         m_job->m_format = m_rbExcellon->GetValue() ? JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON
 												   : JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER;
         m_job->m_drillUnits = m_units->GetSelection() == 0
@@ -178,7 +178,7 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
     else
     {
         m_browseButton->Hide();
-        m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
+        m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
 
         m_rbExcellon->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON );
         m_rbGerberX2->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER );

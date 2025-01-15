@@ -236,7 +236,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_cbOverwriteFile->SetValue( m_job->m_3dparams.m_Overwrite );
 
         m_txtComponentFilter->SetValue( m_job->m_3dparams.m_ComponentFilter );
-        m_outputFileName->SetValue( m_job->GetOutputPath() );
+        m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
 
         wxCommandEvent dummy;
         DIALOG_EXPORT_STEP::onCbExportComponents( dummy );
@@ -787,7 +787,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     }
     else
     {
-        m_job->SetOutputPath( m_outputFileName->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
         m_job->m_3dparams.m_NetFilter = m_txtNetFilter->GetValue();
         m_job->m_3dparams.m_ComponentFilter = m_txtComponentFilter->GetValue();
         m_job->m_3dparams.m_ExportBoardBody = m_cbExportBody->GetValue();
