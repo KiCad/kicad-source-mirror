@@ -2267,8 +2267,18 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
             m_frame->FocusOnLocation( aItem->GetPosition() );
         }
 
+        BOX2I bbox;
+
+        // Hidden text can wildly inflate the bounding box for footprints in bad cases.
+        // For the purpose of zoom to fit, we want to ignore hidden text (there is no
+        // hidden text at in v9 - this is a v8 issue only).
+        if( aItem->Type() == PCB_FOOTPRINT_T )
+            bbox = static_cast<const FOOTPRINT*>( aItem )->GetBoundingBox( true, false );
+        else
+            bbox = aItem->GetBoundingBox();
+
         // If the item has a bounding box, then zoom out if needed
-        if( aItem->GetBoundingBox().GetHeight() > 0 && aItem->GetBoundingBox().GetWidth() > 0 )
+        if( bbox.GetHeight() > 0 && bbox.GetWidth() > 0 )
         {
             // This adds some margin
             double marginFactor = 2;
@@ -2278,12 +2288,10 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
             VECTOR2I         screenSize = screenBox.GetSize();
             BOX2I            screenRect( screenBox.GetOrigin(), screenSize / marginFactor );
 
-            if( !screenRect.Contains( aItem->GetBoundingBox() ) )
+            if( !screenRect.Contains( bbox ) )
             {
-                double scaleX = screenSize.x /
-                                static_cast<double>( aItem->GetBoundingBox().GetWidth() );
-                double scaleY = screenSize.y /
-                                static_cast<double>( aItem->GetBoundingBox().GetHeight() );
+                double scaleX = screenSize.x / static_cast<double>( bbox.GetWidth() );
+                double scaleY = screenSize.y / static_cast<double>( bbox.GetHeight() );
 
                 scaleX /= marginFactor;
                 scaleY /= marginFactor;
@@ -2292,7 +2300,8 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
 
                 if( scale < 1 ) // Don't zoom in, only zoom out
                 {
-                    pcbView->SetScale( pcbView->GetScale() * ( scale ) );
+                    double oldScale = pcbView->GetScale();
+                    pcbView->SetScale( oldScale * scale );
 
                     //Let's refocus because there is an algorithm to avoid dialogs in there.
                     m_frame->FocusOnLocation( aItem->GetCenter() );
