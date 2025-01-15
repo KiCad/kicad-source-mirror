@@ -222,6 +222,7 @@ public:
 
                     // Bring the Kicad manager frame back to the front
                     m_frame->Raise();
+                    m_frame->RefreshProjectTree();
                 } );
     }
 
@@ -883,7 +884,7 @@ void PANEL_JOBSET::OnJobButtonDown( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_JOBSET::OnRunAllJobsClick( wxCommandEvent& event )
+void PANEL_JOBSET::OnGenerateAllOutputsClick( wxCommandEvent& event )
 {
     if( !m_jobsGrid->CommitPendingChanges() )
         return;
@@ -918,6 +919,7 @@ void PANEL_JOBSET::OnRunAllJobsClick( wxCommandEvent& event )
 
                 // Bring the Kicad manager frame back to the front
                 m_frame->Raise();
+                m_frame->RefreshProjectTree();
 			} );
 }
 

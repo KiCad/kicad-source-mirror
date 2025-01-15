@@ -85,7 +85,7 @@ protected:
     virtual void OnSaveButtonClick( wxCommandEvent& aEvent ) override;
     virtual void OnJobButtonUp( wxCommandEvent& aEvent ) override;
     virtual void OnJobButtonDown( wxCommandEvent& aEvent ) override;
-    virtual void OnRunAllJobsClick( wxCommandEvent& event ) override;
+    virtual void OnGenerateAllOutputsClick( wxCommandEvent& event ) override;
     virtual void OnGridCellChange( wxGridEvent& aEvent ) override;
 
     bool GetCanClose() override;

@@ -66,7 +66,7 @@ class PANEL_JOBSET_BASE : public PANEL_NOTEBOOK_BASE
 		virtual void OnJobButtonDelete( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddOutputClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRunAllJobsClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGenerateAllOutputsClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -137,7 +137,7 @@ PANEL_JOBSET_BASE::PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id, const wxP
 	m_buttonDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnJobButtonDelete ), NULL, this );
 	m_buttonOutputAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnAddOutputClick ), NULL, this );
 	m_buttonSave->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnSaveButtonClick ), NULL, this );
-	m_buttonRunAllOutputs->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnRunAllJobsClick ), NULL, this );
+	m_buttonRunAllOutputs->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnGenerateAllOutputsClick ), NULL, this );
 }
 
 PANEL_JOBSET_BASE::~PANEL_JOBSET_BASE()
@@ -151,7 +151,7 @@ PANEL_JOBSET_BASE::~PANEL_JOBSET_BASE()
 	m_buttonDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnJobButtonDelete ), NULL, this );
 	m_buttonOutputAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnAddOutputClick ), NULL, this );
 	m_buttonSave->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnSaveButtonClick ), NULL, this );
-	m_buttonRunAllOutputs->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnRunAllJobsClick ), NULL, this );
+	m_buttonRunAllOutputs->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_JOBSET_BASE::OnGenerateAllOutputsClick ), NULL, this );
 
 }
 
