@@ -280,23 +280,22 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     // and labels recurse, text that is none of those types such as text
     // boxes and labels do not.  This only loops if there is still a
     // variable to resolve.
-    for( int ii = 0; ii < 10 && text.Contains( wxT( "${" ) ); ++ii )
+    for( int ii = aDepth;
+         ii < ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth && text.Contains( wxT( "${" ) );
+         ++ii )
     {
-        if( aDepth < ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
+        if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
+            text = ExpandTextVars( text, &libSymbolResolver );
+        else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+            text = ExpandTextVars( text, &symbolResolver );
+        else if( m_parent && m_parent->Type() == SCH_SHEET_T )
+            text = ExpandTextVars( text, &sheetResolver );
+        else if( m_parent && m_parent->IsType( labelTypes ) )
+            text = ExpandTextVars( text, &labelResolver );
+        else if( Schematic() )
         {
-            if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
-                text = ExpandTextVars( text, &libSymbolResolver );
-            else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
-                text = ExpandTextVars( text, &symbolResolver );
-            else if( m_parent && m_parent->Type() == SCH_SHEET_T )
-                text = ExpandTextVars( text, &sheetResolver );
-            else if( m_parent && m_parent->IsType( labelTypes ) )
-                text = ExpandTextVars( text, &labelResolver );
-            else if( Schematic() )
-            {
-                text = ExpandTextVars( text, &Schematic()->Prj() );
-                text = ExpandTextVars( text, &schematicResolver );
-            }
+            text = ExpandTextVars( text, &Schematic()->Prj() );
+            text = ExpandTextVars( text, &schematicResolver );
         }
     }
 
