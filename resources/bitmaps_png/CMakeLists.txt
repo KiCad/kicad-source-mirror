@@ -901,14 +901,25 @@ set( TARFLAGS cfz )
 if( DEFINED ENV{SOURCE_DATE_EPOCH} )
     set( TARFLAGS --sort=name --mtime=@$ENV{SOURCE_DATE_EPOCH} --clamp-mtime --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime -czf )
 endif()
-add_custom_target( bitmap_archive ALL
+
+# This is a dummy target to bind the custom command to something we can reuse in other calls
+# i.e. we want to dynamically make bitmap_archive depend on generate_pngs target after wards
+add_custom_target( bitmap_archive_bundle ALL )
+
+# We use a custom command here because it will avoid running the command
+# on every cmake build if there are no depends changes
+add_custom_command(
+    OUTPUT ${BITMAP_ARCHIVE_PATH}
     COMMAND ${TAR} ${TARFLAGS} "${TAR_OUTPUT_FILE}" .
-    DEPENDS ${ALL_PNGS}
-    BYPRODUCTS ${BITMAP_ARCHIVE_PATH}
+    DEPENDS bitmap_archive_bundle ${ALL_PNGS}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/png
     COMMENT "Creating image archive ${TAR_OUTPUT_FILE}"
     VERBATIM
     )
+
+# This is the second target we need to require the custom_command to generate and potentially run
+add_custom_target( bitmap_archive_build ALL
+                DEPENDS ${BITMAP_ARCHIVE_PATH})
 
 install( FILES ${BITMAP_ARCHIVE_PATH}
     DESTINATION ${KICAD_DATA}/resources
@@ -991,6 +1002,6 @@ if( MAINTAIN_PNGS )
         COMMENT "Creating PNGs from SVGs"
         )
 
-    add_dependencies( bitmap_archive generate_pngs )
+    add_dependencies( bitmap_archive_pre generate_pngs )
 
 endif( MAINTAIN_PNGS )
