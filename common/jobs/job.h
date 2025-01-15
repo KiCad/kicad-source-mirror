@@ -244,8 +244,6 @@ public:
      */
     wxString GetFullOutputPath( PROJECT* aProject ) const;
 
-    bool OutputPathFullSpecified() const;
-
     bool GetOutputPathIsDirectory() const { return m_outputPathIsDirectory; }
 
 protected:

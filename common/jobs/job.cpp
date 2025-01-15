@@ -149,20 +149,6 @@ void JOB::SetConfiguredOutputPath( const wxString& aPath )
 }
 
 
-bool JOB::OutputPathFullSpecified() const
-{
-    if( m_outputPath.IsEmpty() )
-        return false;
-
-    wxFileName fn( m_outputPath );
-
-    if( m_outputPathIsDirectory )
-        return fn.IsDir();
-    else
-        return !fn.IsDir();
-}
-
-
 KICOMMON_API void to_json( nlohmann::json& j, const JOB& f )
 {
     f.ToJson( j );

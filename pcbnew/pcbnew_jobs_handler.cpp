@@ -1855,7 +1855,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
 
     aJob->SetTitleBlock( brd->GetTitleBlock() );
 
-    if( !job->OutputPathFullSpecified() )
+    if( job->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
@@ -1952,7 +1952,7 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
 
     wxString   path = job->GetConfiguredOutputPath();
 
-    if( !job->OutputPathFullSpecified() )
+    if( job->GetConfiguredOutputPath().IsEmpty() )
     {
         if( job->m_compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE )
         {
