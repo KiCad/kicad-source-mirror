@@ -155,9 +155,8 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
     aOutput->m_lastRunSuccessMap.clear();
 
     for( auto& reporter : aOutput->m_lastRunReporters )
-    {
         delete reporter.second;
-    }
+
     aOutput->m_lastRunReporters.clear();
 
     wxString tempDirPath = tmp.GetFullPath();
@@ -183,6 +182,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
             msg = wxString::Format( wxT( "Output precheck failed for output %s" ), aOutput->m_id );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         }
+
         aOutput->m_lastRunSuccess = false;
         return false;
     }
@@ -198,12 +198,13 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         msg += wxString::Format( wxT( "|%-5s | %-50s\n" ), wxT( "No." ), wxT( "Description" ) );
 
         int jobNum = 1;
+
         for( const JOBSET_JOB& job : jobsForOutput )
         {
-            msg += wxString::Format( wxT( "|%-5d | %-50s\n" ), jobNum,
-                                               job.GetDescription() );
+            msg += wxString::Format( wxT( "|%-5d | %-50s\n" ), jobNum, job.GetDescription() );
             jobNum++;
         }
+
         msg += wxT( "|--------------------------------\n" );
         msg += wxT( "\n" );
         msg += wxT( "\n" );
@@ -216,6 +217,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
     int jobNum = 1;
     int failCount = 0;
     int successCount = 0;
+
     for( const JOBSET_JOB& job : jobsForOutput )
     {
         if( m_reporter != nullptr )
@@ -233,6 +235,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         job.m_job->SetTempOutputDirectory( tempDirPath );
 
         REPORTER* reporterToUse = m_reporter;
+
         if( !reporterToUse || reporterToUse == &NULL_REPORTER::GetInstance() )
         {
             reporterToUse = new WX_STRING_REPORTER;
@@ -240,6 +243,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         }
 
         int result = 0;
+
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
             result = m_kiway->ProcessJob( iface, job.m_job.get(), reporterToUse );
@@ -257,14 +261,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
             }
         }
 
-        if( result == 0 )
-        {
-            aOutput->m_lastRunSuccessMap[job.m_id] = true;
-        }
-        else
-        {
-            aOutput->m_lastRunSuccessMap[job.m_id] = false;
-        }
+        aOutput->m_lastRunSuccessMap[job.m_id] = result == 0;
 
         if( m_reporter )
         {
@@ -290,20 +287,14 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         if( result != 0 )
         {
             if( aBail )
-            {
                 return result;
-            }
             else
-            {
                 success = false;
-            }
         }
     }
 
     if( success )
-    {
         success = aOutput->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
-    }
 
     aOutput->m_lastRunSuccess = success;
 

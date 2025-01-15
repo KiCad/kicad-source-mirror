@@ -69,13 +69,16 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
     // To reuse logic, in single plot mode, we want to kick any extra layers from the main list to commonLayers
     LSEQ layersToPlot;
     LSEQ commonLayers;
+
     if( aOutputPathIsSingle )
     {
         layersToPlot.push_back( aLayersToPlot[0] );
 
         if( aLayersToPlot.size() > 1 )
+        {
             commonLayers.insert( commonLayers.end(), aLayersToPlot.begin() + 1,
                                  aLayersToPlot.end() );
+        }
     }
     else
     {
@@ -84,9 +87,11 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
     }
 
     size_t finalPageCount = 0;
+
     for( size_t i = 0; i < layersToPlot.size(); i++ )
     {
         PCB_LAYER_ID layer = layersToPlot[i];
+
         if( copperLayerShouldBeSkipped( layer ) )
             continue;
 
@@ -96,15 +101,14 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
     std::unique_ptr<GERBER_JOBFILE_WRITER> jobfile_writer;
 
     if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && !aOutputPathIsSingle )
-    {
         jobfile_writer = std::make_unique<GERBER_JOBFILE_WRITER>( m_board, m_reporter );
-    }
 
     wxString fileExt( GetDefaultPlotExtension( m_plotOpts.GetFormat() ) );
     wxString sheetPath;
     wxString msg;
     bool     success = true;
     PLOTTER* plotter = nullptr;
+
     for( size_t i = 0, pageNum = 1; i < layersToPlot.size(); i++ )
     {
         PCB_LAYER_ID layer = layersToPlot[i];
@@ -171,8 +175,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                 sheetPath = aSheetPath.value();
 
             plotter = StartPlotBoard( m_board, &m_plotOpts, layer, layerName, fn.GetFullPath(),
-                                      sheetName,
-                                      sheetPath, pageName, pageNumber, finalPageCount );
+                                      sheetName, sheetPath, pageName, pageNumber, finalPageCount );
         }
 
         if( plotter )
@@ -200,7 +203,6 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                 && i != layersToPlot.size() - 1 )
             {
                 wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
-
                 size_t       nextI = i;
                 PCB_LAYER_ID nextLayer;
 
@@ -217,8 +219,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                 static_cast<PDF_PLOTTER*>( plotter )->ClosePage();
                 static_cast<PDF_PLOTTER*>( plotter )->StartPage( pageNumber, pageName );
                 setupPlotterNewPDFPage( plotter, m_board, &m_plotOpts, sheetName, sheetPath,
-                                        pageNumber,
-                                        finalPageCount );
+                                        pageNumber, finalPageCount );
             }
 
 
