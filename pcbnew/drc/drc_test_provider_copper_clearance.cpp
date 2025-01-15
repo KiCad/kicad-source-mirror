@@ -283,7 +283,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 wxString msg;
 
-                msg.Printf( _( "(nets %s and %s)" ), net->GetNetname(), otherNet->GetNetname() );
+                msg.Printf( _( "(nets %s and %s)" ),
+                            net ? net->GetNetname() : _( "<no net>" ),
+                            otherNet ? otherNet->GetNetname() : _( "<no net>" ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( item, other );
