@@ -84,7 +84,8 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
               {
 	              JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
 
-                  SCH_EDIT_FRAME* editFrame = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
+                  SCH_EDIT_FRAME* editFrame =
+                          static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
 
                   wxCHECK( bomJob && editFrame, false );
 
@@ -103,7 +104,8 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_SCH_NETLIST* netJob = dynamic_cast<JOB_EXPORT_SCH_NETLIST*>( job );
 
-                  SCH_EDIT_FRAME* editFrame = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
+                  SCH_EDIT_FRAME* editFrame =
+                          static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
 
                   wxCHECK( netJob && editFrame, false );
 
@@ -116,7 +118,8 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_SCH_PLOT* plotJob = dynamic_cast<JOB_EXPORT_SCH_PLOT*>( job );
 
-                  SCH_EDIT_FRAME* editFrame = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
+                  SCH_EDIT_FRAME* editFrame =
+                          static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
 
                   wxCHECK( plotJob && editFrame, false );
 
