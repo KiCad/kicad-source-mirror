@@ -58,10 +58,13 @@ public:
 
 private:
     // Event callbacks
-    void OnParameterChanged( wxCommandEvent& event ) override;
+    void OnParameterChanged( wxCommandEvent& aEvent ) override;
 
     // Center select buttons
-    void OnSelectCenterButton( wxCommandEvent& event ) override;
+    void OnSelectCenterButton( wxCommandEvent& aEvent ) override;
+
+    // Axis numbering alphabet
+    void OnAxisNumberingChange( wxCommandEvent& aEvent ) override;
 
     // Internal callback handlers
     void setControlEnablement();

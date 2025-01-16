@@ -54,6 +54,14 @@ public:
         NUMBERING_ALPHA_FULL,      ///< Full 26-character alphabet
     };
 
+    /**
+     * Check if a numbering type is a numeric type.
+     */
+    static bool TypeIsNumeric( NUMBERING_TYPE type )
+    {
+        return type == NUMBERING_NUMERIC || type == NUMBERING_HEX;
+    };
+
     ARRAY_AXIS();
 
     /**

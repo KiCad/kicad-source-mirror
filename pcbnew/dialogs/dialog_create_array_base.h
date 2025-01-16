@@ -121,6 +121,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnParameterChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAxisNumberingChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectCenterButton( wxCommandEvent& event ) { event.Skip(); }
 
 

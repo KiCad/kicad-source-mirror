@@ -262,6 +262,44 @@ void DIALOG_CREATE_ARRAY::OnSelectCenterButton( wxCommandEvent& event )
 }
 
 
+void DIALOG_CREATE_ARRAY::OnAxisNumberingChange( wxCommandEvent& aEvent )
+{
+    // On an alphabet change, make sure the offset control is valid by default.
+
+    const unsigned newAlphabet = aEvent.GetSelection();
+
+    wxCHECK( newAlphabet >= 0 && newAlphabet < numberingTypeData.size(), /* void */ );
+
+    const ARRAY_AXIS::NUMBERING_TYPE numberingType =
+            numberingTypeData[newAlphabet].m_numbering_type;
+
+    wxTextCtrl* matchingTextCtrl = nullptr;
+
+    if( aEvent.GetEventObject() == m_choicePriAxisNumbering )
+        matchingTextCtrl = m_entryGridPriNumberingOffset;
+    else if( aEvent.GetEventObject() == m_choiceSecAxisNumbering )
+        matchingTextCtrl = m_entryGridSecNumberingOffset;
+    else if( aEvent.GetEventObject() == m_choiceCircNumbering )
+        matchingTextCtrl = m_entryCircNumberingStart;
+
+    wxCHECK( matchingTextCtrl, /* void */ );
+
+    ARRAY_AXIS dummyAxis;
+    dummyAxis.SetAxisType( numberingType );
+
+    // If the text control has a valid value for the new alphabet, keep it
+    // else reset to the first value in the new alphabet.
+
+    const bool isAlreadyOK = dummyAxis.SetOffset( matchingTextCtrl->GetValue() );
+
+    if( !isAlreadyOK )
+    {
+        dummyAxis.SetOffset( ARRAY_AXIS::TypeIsNumeric( numberingType ) ? 1 : 0 );
+        matchingTextCtrl->SetValue( dummyAxis.GetItemNumber( 0 ) );
+    }
+}
+
+
 // Implement the RECEIVER interface for the callback from the TOOL
 void DIALOG_CREATE_ARRAY::UpdatePickedItem( const EDA_ITEM* aItem )
 {
