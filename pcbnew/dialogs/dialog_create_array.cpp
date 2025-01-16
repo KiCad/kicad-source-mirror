@@ -492,8 +492,10 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         ret = false;
     }
 
-    // This dialog is not modal, so close it now
-    Close();
+    // This dialog is not modal, so close it now if successful
+    if( ret )
+        Close();
+
     return ret;
 }
 
