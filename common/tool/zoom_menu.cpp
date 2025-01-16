@@ -74,6 +74,7 @@ void ZOOM_MENU::update()
     {
         // Search for a value near the current zoom setting:
         double rel_error = std::fabs( zoomList[jj] - zoom ) / zoom;
+
         // IDs start with 1 (leaving 0 for auto-zoom)
         Check( ID_POPUP_ZOOM_LEVEL_START + jj + 1, rel_error < 0.1 );
     }

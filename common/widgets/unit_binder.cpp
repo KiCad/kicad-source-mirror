@@ -561,6 +561,7 @@ double UNIT_BINDER::setPrecision( double aValue, bool aValueUsesUserUnits ) cons
     {
         int scale = pow( 10, m_precision );
         int64_t tmp = aValue;
+
         if( !aValueUsesUserUnits )
         {
             tmp = EDA_UNIT_UTILS::UI::ToUserUnit( *m_iuScale, m_units, aValue ) * scale;

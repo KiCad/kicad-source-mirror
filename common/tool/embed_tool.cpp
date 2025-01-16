@@ -56,6 +56,7 @@ void EMBED_TOOL::Reset( RESET_REASON aReason )
     m_files = getModel<EDA_ITEM>()->GetEmbeddedFiles();
 }
 
+
 int EMBED_TOOL::AddFile( const TOOL_EVENT& aEvent )
 {
     wxString name = aEvent.Parameter<wxString>();
@@ -64,6 +65,7 @@ int EMBED_TOOL::AddFile( const TOOL_EVENT& aEvent )
     return 1;
 }
 
+
 int EMBED_TOOL::RemoveFile( const TOOL_EVENT& aEvent )
 {
     wxString name = aEvent.Parameter<wxString>();
@@ -71,6 +73,7 @@ int EMBED_TOOL::RemoveFile( const TOOL_EVENT& aEvent )
 
     return 1;
 }
+
 
 std::vector<wxString> EMBED_TOOL::GetFileList()
 {
@@ -83,6 +86,7 @@ std::vector<wxString> EMBED_TOOL::GetFileList()
 
     return list;
 }
+
 
 void EMBED_TOOL::setTransitions()
 {

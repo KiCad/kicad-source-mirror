@@ -42,7 +42,7 @@
 #include <string_utils.h>
 
 
-const wxString KIUI::s_FocusStealableInputName = wxS( "KI_NOFOCUS");
+const wxString KIUI::s_FocusStealableInputName = wxS( "KI_NOFOCUS" );
 
 
 int KIUI::GetStdMargin()
@@ -118,6 +118,7 @@ wxFont getGUIFont( wxWindow* aWindow, int aRelativeSize )
     // https://trac.wxwidgets.org/ticket/19210
     if( font.GetFaceName().IsEmpty() )
         font.SetFaceName( wxS( "San Francisco" ) );
+
     // OSX 10.1 .. 10.9: Lucida Grande
     // OSX 10.10:        Helvetica Neue
     // OSX 10.11 .. :    San Francisco
@@ -310,7 +311,8 @@ bool KIUI::IsInputControlEditable( wxWindow* aFocus )
     else if( searchCtrl )
         return searchCtrl->IsEditable();
 
-    return true;    // Must return true if we can't determine the state, intentionally true for non inputs as well
+    // Must return true if we can't determine the state, intentionally true for non inputs as well.
+    return true;
 }
 
 

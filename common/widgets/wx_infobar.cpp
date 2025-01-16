@@ -63,8 +63,8 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
     KIPLATFORM::UI::GetInfoBarColours( fg, bg );
     SetBackgroundColour( bg );
     SetForegroundColour( fg );
-#ifdef __WXMAC__
 
+#ifdef __WXMAC__
     // Infobar is broken on Mac without the effects
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
     SetEffectDuration( 200 );
@@ -72,7 +72,6 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
     // Infobar freezes canvas on Windows with the effect, and GTK looks bad with it
     SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
 #endif
-
 
     // The infobar seems to start too small, so increase its height
     int sx, sy;
@@ -287,6 +286,7 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
     // smaller buttons look better in the (narrow) info bar under OS X
     aButton->SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 #endif // __WXMAC__
+
     sizer->Add( aButton, wxSizerFlags().Centre().Border( wxRIGHT ) );
 
     if( IsShownOnScreen() )

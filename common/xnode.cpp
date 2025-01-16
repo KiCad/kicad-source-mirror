@@ -39,10 +39,12 @@ void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel )
     case wxXML_ELEMENT_NODE:
         out->Print( nestLevel, "(%s", TO_UTF8( GetName() ) );
         FormatContents( out, nestLevel );
+
         if( GetNext() )
             out->Print( 0, ")\n" );
         else
             out->Print( 0, ")" );
+
         break;
 
     default:
@@ -73,6 +75,7 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
             {
                 if( kid == GetChildren() )
                     out->Print( 0, "\n" );
+
                 kid->Format( out, nestLevel+1 );
             }
             else
@@ -80,6 +83,7 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
                 kid->Format( out, 0 );
             }
         }
+
         break;
 
     case wxXML_TEXT_NODE:

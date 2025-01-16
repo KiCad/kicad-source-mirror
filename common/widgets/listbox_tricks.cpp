@@ -64,7 +64,8 @@ LISTBOX_TRICKS::LISTBOX_TRICKS( wxWindow& aParent, wxListBox& aListBox ) :
     Connect( EDA_EVT_LISTBOX_COPY, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxCopy ) );
     Connect( EDA_EVT_LISTBOX_CUT, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxCut ) );
     Connect( EDA_EVT_LISTBOX_PASTE, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxPaste ) );
-    Connect( EDA_EVT_LISTBOX_DUPLICATE, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxDuplicate ) );
+    Connect( EDA_EVT_LISTBOX_DUPLICATE,
+             wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxDuplicate ) );
 }
 
 
@@ -79,7 +80,8 @@ LISTBOX_TRICKS::~LISTBOX_TRICKS()
     Disconnect( EDA_EVT_LISTBOX_COPY, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxCopy ) );
     Disconnect( EDA_EVT_LISTBOX_CUT, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxCut ) );
     Disconnect( EDA_EVT_LISTBOX_PASTE, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxPaste ) );
-    Disconnect( EDA_EVT_LISTBOX_DUPLICATE, wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxDuplicate ) );
+    Disconnect( EDA_EVT_LISTBOX_DUPLICATE,
+                wxCommandEventHandler( LISTBOX_TRICKS::OnListBoxDuplicate ) );
 }
 
 
@@ -103,6 +105,7 @@ wxArrayInt LISTBOX_TRICKS::listBoxDeleteSelected()
         m_listBox.Delete( selections[ii] );
 
     m_listBox.SetSelection( wxNOT_FOUND );
+
     if( m_listBox.GetCount() > 0 )
         m_listBox.SetSelection( std::max( 0, selections[0] - 1 ) );
 
@@ -117,6 +120,7 @@ wxArrayString LISTBOX_TRICKS::listBoxGetSelected() const
     m_listBox.GetSelections( selections );
 
     wxArrayString result;
+
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
         result.Add( m_listBox.GetString( selections[ii] ) );
 
@@ -150,6 +154,7 @@ void LISTBOX_TRICKS::listBoxCopy()
     wxArrayString filters = listBoxGetSelected();
 
     wxString result;
+
     for( const wxString& filter : filters )
     {
         result += filter + wxT( "\n" );
@@ -166,6 +171,7 @@ void LISTBOX_TRICKS::listBoxCopy()
 void LISTBOX_TRICKS::listBoxPaste()
 {
     wxArrayString lines;
+
     if( wxTheClipboard->Open() )
     {
         wxTextDataObject data;
@@ -192,6 +198,7 @@ void LISTBOX_TRICKS::listBoxPaste()
     m_listBox.InsertItems( lines, insertAt );
 
     m_listBox.SetSelection( wxNOT_FOUND );
+
     for( size_t ii = insertAt; ii < insertAt + lines.GetCount(); ii++ )
         m_listBox.SetSelection( ii );
 
@@ -276,7 +283,9 @@ void LISTBOX_TRICKS::OnListBoxKeyDown( wxKeyEvent& aEvent )
             }
         }
         else
+        {
             aEvent.Skip();
+        }
     }
 }
 

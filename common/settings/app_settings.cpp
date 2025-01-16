@@ -325,8 +325,10 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
     ret &= fromLegacy<int>(  aCfg, aFrame + "Pos_x",                aJsonPath + ".pos_x" );
     ret &= fromLegacy<int>(  aCfg, aFrame + "Pos_y",                aJsonPath + ".pos_y" );
 
-    ret &= fromLegacy<bool>( aCfg, frameGDO + "ForceDisplayCursor", cursorPath + ".always_show_cursor" );
-    ret &= fromLegacy<bool>( aCfg, frameGDO + "CursorFullscreen",   cursorPath + ".fullscreen_cursor" );
+    ret &= fromLegacy<bool>( aCfg, frameGDO + "ForceDisplayCursor",
+                             cursorPath + ".always_show_cursor" );
+    ret &= fromLegacy<bool>( aCfg, frameGDO + "CursorFullscreen",
+                             cursorPath + ".fullscreen_cursor" );
 
     ret &= fromLegacy<int>(  aCfg, aFrame + "_LastGridSize",        gridPath + ".last_size" );
 

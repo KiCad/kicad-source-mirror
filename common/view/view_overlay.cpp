@@ -261,6 +261,7 @@ struct VIEW_OVERLAY::COMMAND_BITMAP_TEXT : public VIEW_OVERLAY::COMMAND
     EDA_ANGLE m_angle;
 };
 
+
 VIEW_OVERLAY::VIEW_OVERLAY()
 {
 }
@@ -418,10 +419,12 @@ void VIEW_OVERLAY::SetStrokeColor( const COLOR4D& aColor )
     m_commands.push_back( new COMMAND_SET_COLOR( true, aColor ) );
 }
 
+
 void VIEW_OVERLAY::SetLineWidth( double aLineWidth )
 {
     m_commands.push_back( new COMMAND_SET_WIDTH( aLineWidth ) );
 }
+
 
 void VIEW_OVERLAY::Cross( const VECTOR2D& aP, int aSize )
 {

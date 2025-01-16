@@ -33,6 +33,7 @@
 #include <hotkeys_basic.h>
 #include <cctype>
 
+
 ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
     m_toolMgr( aToolManager )
 {
@@ -56,7 +57,8 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
         }
 
         wxLogTrace( kicadTraceToolStack,
-                    "ACTION_MANAGER::ACTION_MANAGER: Registering action %s with ID %d, UI ID %d, and group %s(%d)",
+                    "ACTION_MANAGER::ACTION_MANAGER: Registering action %s with ID %d, UI ID %d, "
+                    "and group %s(%d)",
                     action->m_name, action->m_id, action->GetUIId(), groupName, groupID );
 
         RegisterAction( action );

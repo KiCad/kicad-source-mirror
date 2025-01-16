@@ -55,11 +55,10 @@ private:
 };
 
 /**
- * A widget for browsing a rich text error/status report. Used in numerous
- * dialogs in eeschema and pcbnew. Provides error filtering functionality
- * and saving report files.
+ * A widget for browsing a rich text error/status report.
  *
- * The messages are reported through a REPORTER object
+ * Used in numerous dialogs in Eeschema and Pcbnew. Provides error filtering functionality
+ * and saving report files.  The messages are reported through a #REPORTER object
  */
 class KICOMMON_API WX_HTML_REPORT_PANEL : public WX_HTML_REPORT_PANEL_BASE
 {
@@ -69,55 +68,56 @@ public:
             const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
     ~WX_HTML_REPORT_PANEL();
 
-    ///< Set the min size of the area which displays html messages:
+    /// Set the min size of the area which displays html messages.
     void MsgPanelSetMinSize( const wxSize& aMinSize );
 
-    ///< returns the reporter object that reports to this panel
+    /// Return the reporter object that reports to this panel.
     REPORTER& Reporter();
 
     /**
-     * Reports the string
-     * @param aText string message to report
-     * @param aSeverity string classification level bitfield
-     * @param aLocation REPORTER::LOCATION enum for placement of message
+     * Report the string.
+     *
+     * @param aText string message to report.
+     * @param aSeverity string classification level bitfield.
+     * @param aLocation REPORTER::LOCATION enum for placement of message.
      */
     void Report( const wxString& aText, SEVERITY aSeverity,
                  REPORTER::LOCATION aLocation = REPORTER::LOC_BODY );
 
-    ///< clears the report panel
+    /// Clears the report panel.
     void Clear();
 
-    ///< return the number of messages matching the given severity mask.
+    /// Return the number of messages matching the given severity mask.
     int Count( int severityMask );
 
-    ///< sets the frame label
+    /// Set the frame label.
     void SetLabel( const wxString& aLabel ) override;
 
-    ///< Sets the lazy update. If this mode is on, messages are stored but the display
-    ///< is not updated (Updating display can be very time consuming if there are many messages)
-    ///< A call to Flush() will be needed after build the report
+    /// Set the lazy update. If this mode is on, messages are stored but the display
+    /// is not updated (Updating display can be very time consuming if there are many messages)
+    /// A call to Flush() will be needed after build the report
     void SetLazyUpdate( bool aLazyUpdate );
 
-    ///< Forces updating the HTML page, after the report is built in lazy mode
-    ///< If aSort = true, the body messages will be ordered by severity
+    /// Force updating the HTML page, after the report is built in lazy mode
+    /// If aSort = true, the body messages will be ordered by severity
     void Flush( bool aSort = false );
 
-    ///< Set the visible severity filter.
-    ///< if aSeverities < 0 the m_showAll option is set
+    /// Set the visible severity filter.
+    /// if aSeverities < 0 the m_showAll option is set
     void SetVisibleSeverities( int aSeverities );
 
-    ///< @return the visible severity filter.
-    ///< If the m_showAll option is set, the mask is < 0
+    /// @return the visible severity filter.
+    /// If the m_showAll option is set, the mask is < 0
     int GetVisibleSeverities() const;
 
-    ///< @return the visible severity filter.
-    ///< If the m_showAll option is set, the mask is < 0
+    /// @return the visible severity filter.
+    /// If the m_showAll option is set, the mask is < 0
     void SetShowSeverity( SEVERITY aSeverity, bool aValue );
 
-    ///< Set the report full file name to the string
+    /// Set the report full file name to the string.
     void SetFileName( const wxString& aReportFileName );
 
-    ///< @return reference to the current report fill file name string.
+    /// @return reference to the current report fill file name string.
     wxString& GetFileName( void );
 
 

@@ -35,6 +35,7 @@
 
 #include <wx/log.h>
 
+
 TOOL_INTERACTIVE::TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName ) :
     TOOL_BASE( INTERACTIVE, aId, aName )
 {
@@ -47,7 +48,7 @@ TOOL_INTERACTIVE::TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName ) :
 
 TOOL_INTERACTIVE::TOOL_INTERACTIVE( const std::string& aName ) :
     TOOL_BASE( INTERACTIVE, TOOL_MANAGER::MakeToolId( aName ), aName )
-    
+
 {
     if( Pgm().IsGUI() )
     {
@@ -83,7 +84,8 @@ void TOOL_INTERACTIVE::resetTransitions()
 void TOOL_INTERACTIVE::goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions )
 {
     wxLogTrace( kicadTraceToolStack,
-                wxS( "TOOL_INTERACTIVE::goInternal: Tool '%s', Registering handler for actions '%s'" ),
+                wxS( "TOOL_INTERACTIVE::goInternal: Tool '%s', Registering handler for "
+                     "actions '%s'" ),
                 GetName(), aConditions.Names() );
 
     m_toolMgr->ScheduleNextState( this, aState, aConditions );

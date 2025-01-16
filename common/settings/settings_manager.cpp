@@ -83,6 +83,7 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
     }
 }
 
+
 SETTINGS_MANAGER::~SETTINGS_MANAGER()
 {
     for( std::unique_ptr<PROJECT>& project : m_projects_list )
@@ -120,7 +121,6 @@ void SETTINGS_MANAGER::Load()
 {
     // TODO(JE) We should check for dirty settings here and write them if so, because
     // Load() could be called late in the application lifecycle
-
     std::vector<JSON_SETTINGS*> toLoad;
 
     // Cache a copy of raw pointers; m_settings may be modified during the load loop
@@ -192,7 +192,7 @@ void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave )
         if( aSave )
             ( *it )->SaveToFile( GetPathForSettingsFile( it->get() ) );
 
-        JSON_SETTINGS* tmp = it->get(); // We use a temporary to surpress a Clang warning
+        JSON_SETTINGS* tmp = it->get(); // We use a temporary to suppress a Clang warning
         size_t         typeHash = typeid( *tmp ).hash_code();
 
         if( m_app_settings_cache.count( typeHash ) )
@@ -903,8 +903,8 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     wxString fullPath = path.GetFullPath();
 
     // If already loaded, we are all set.  This might be called more than once over a project's
-    // lifetime in case the project is first loaded by the KiCad manager and then eeschema or
-    // pcbnew try to load it again when they are launched.
+    // lifetime in case the project is first loaded by the KiCad manager and then Eeschema or
+    // Pcbnew try to load it again when they are launched.
     if( m_projects.count( fullPath ) )
         return true;
 
@@ -1044,7 +1044,8 @@ bool SETTINGS_MANAGER::IsProjectOpen() const
 
 bool SETTINGS_MANAGER::IsProjectOpenNotDummy() const
 {
-    return m_projects.size() > 1 || ( m_projects.size() == 1 && !m_projects.begin()->second->GetProjectFullName().IsEmpty() );
+    return m_projects.size() > 1 || ( m_projects.size() == 1
+        && !m_projects.begin()->second->GetProjectFullName().IsEmpty() );
 }
 
 
@@ -1119,7 +1120,7 @@ void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath, PROJECT* aProje
 
     PROJECT_FILE* project = m_project_files.at( oldName );
 
-    // Ensure read-only flags are copied; this allows doing a "Save As" on a standalong board/sch
+    // Ensure read-only flags are copied; this allows doing a "Save As" on a standalone board/sch
     // without creating project files if the checkbox is turned off
     project->SetReadOnly( aProject->IsReadOnly() );
     aProject->GetLocalSettings().SetReadOnly( aProject->IsReadOnly() );
@@ -1254,7 +1255,8 @@ bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter, wxFileName& aTarget )
 
     if( !aTarget.IsDirWritable() )
     {
-        wxLogTrace( traceSettings, wxT( "Backup directory %s is not writable" ), aTarget.GetPath() );
+        wxLogTrace( traceSettings, wxT( "Backup directory %s is not writable" ),
+                    aTarget.GetPath() );
         return false;
     }
 

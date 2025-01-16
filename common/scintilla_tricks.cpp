@@ -150,16 +150,16 @@ bool isCtrlSlash( wxKeyEvent& aEvent )
     // OK, now the wxWidgets hacks start.
     // (We should abandon these if https://trac.wxwidgets.org/ticket/18911 gets resolved.)
 
-    // Many Latin America and European keyboars have have the / over the 7.  We know that
+    // Many Latin America and European keyboards have have the / over the 7.  We know that
     // wxWidgets messes this up and returns Shift+7 through GetUnicodeKey().  However, other
     // keyboards (such as France and Belgium) have 7 in the shifted position, so a Shift+7
     // *could* be legitimate.
 
     // However, we *are* checking Ctrl, so to assume any Shift+7 is a Ctrl-/ really only
     // disallows Ctrl+Shift+7 from doing something else, which is probably OK.  (This routine
-    // is only used in the Scintilla editor, not in the rest of Kicad.)
+    // is only used in the Scintilla editor, not in the rest of KiCad.)
 
-    // The other main shifted loation of / is over : (France and Belgium), so we'll sacrifice
+    // The other main shifted location of / is over : (France and Belgium), so we'll sacrifice
     // Ctrl+Shift+: too.
 
     if( aEvent.ShiftDown() && ( aEvent.GetUnicodeKey() == '7' || aEvent.GetUnicodeKey() == ':' ) )
@@ -576,7 +576,8 @@ void SCINTILLA_TRICKS::DoTextVarAutocomplete(
     auto textVarRef =
             [&]( int pos )
             {
-                return pos >= 2 && m_te->GetCharAt( pos-2 ) == '$' && m_te->GetCharAt( pos-1 ) == '{';
+                return pos >= 2 && m_te->GetCharAt( pos-2 ) == '$'
+                                && m_te->GetCharAt( pos-1 ) == '{';
             };
 
     // Check for cross-reference

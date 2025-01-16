@@ -27,6 +27,7 @@
 #include <title_block.h>
 #include <core/kicad_algo.h>
 
+
 void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter ) const
 {
     // Don't write the title block information if there is nothing to write.
@@ -69,6 +70,7 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter ) const
         aFormatter->Print( ")" );
     }
 }
+
 
 void TITLE_BLOCK::GetContextualTextVars( wxArrayString* aVars )
 {

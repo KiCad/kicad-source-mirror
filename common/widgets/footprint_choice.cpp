@@ -49,7 +49,8 @@ void FOOTPRINT_CHOICE::DoSetPopupControl( wxComboPopup* aPopup )
     GetVListBoxComboPopup()->Bind( wxEVT_LEFT_DOWN, &FOOTPRINT_CHOICE::TryVetoMouse, this );
     GetVListBoxComboPopup()->Bind( wxEVT_LEFT_UP, &FOOTPRINT_CHOICE::TryVetoMouse, this );
     GetVListBoxComboPopup()->Bind( wxEVT_LEFT_DCLICK, &FOOTPRINT_CHOICE::TryVetoMouse, this );
-    GetVListBoxComboPopup()->Bind( wxEVT_LISTBOX, std::bind( &FOOTPRINT_CHOICE::TryVetoSelect, this, _1, true ) );
+    GetVListBoxComboPopup()->Bind( wxEVT_LISTBOX, std::bind( &FOOTPRINT_CHOICE::TryVetoSelect,
+                                                             this, _1, true ) );
     Bind( wxEVT_COMBOBOX, std::bind( &FOOTPRINT_CHOICE::TryVetoSelect, this, _1, false ) );
 }
 
@@ -83,7 +84,6 @@ void FOOTPRINT_CHOICE::OnDrawItem( wxDC& aDC, wxRect const& aRect, int aItem, in
 
         // If this item has a footprint and that footprint has a ":" delimiter, find the
         // library component, then find that in the display string and grey it out.
-
         size_t start_grey = 0;
         size_t end_grey = 0;
 
@@ -120,6 +120,7 @@ void FOOTPRINT_CHOICE::OnDrawItem( wxDC& aDC, wxRect const& aRect, int aItem, in
         }
     }
 }
+
 
 wxCoord FOOTPRINT_CHOICE::OnMeasureItem( size_t aItem ) const
 {

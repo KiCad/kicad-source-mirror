@@ -361,6 +361,7 @@ bool FIELD_VALIDATOR::Validate( wxWindow* aParent )
     return DoValidate( val, aParent );
 }
 
+
 bool FIELD_VALIDATOR::DoValidate( const wxString& aValue, wxWindow* aParent )
 {
     wxString msg;

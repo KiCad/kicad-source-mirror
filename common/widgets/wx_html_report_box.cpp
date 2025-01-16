@@ -103,6 +103,7 @@ REPORTER& WX_HTML_REPORT_BOX::Report( const wxString& aText, SEVERITY aSeverity 
     return *this;
 }
 
+
 void WX_HTML_REPORT_BOX::Flush()
 {
     wxString html;

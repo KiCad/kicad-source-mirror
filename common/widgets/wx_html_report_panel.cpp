@@ -193,7 +193,8 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
                    wxS( "<font size=3>" ) + aLine.message + wxS( "</font><br>" );
             break;
         case RPT_SEVERITY_WARNING:
-            retv = wxS( "<font size=3>" ) + _( "Warning:" ) + wxS( " " ) + aLine.message + wxS( "</font><br>" );
+            retv = wxS( "<font size=3>" ) + _( "Warning:" ) + wxS( " " ) + aLine.message
+                   + wxS( "</font><br>" );
             break;
         case RPT_SEVERITY_INFO:
             retv = wxS( "<font color=#909090 size=3>" ) + aLine.message + wxS( "</font><br>" );
@@ -214,7 +215,8 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
                    wxS( "<font size=3>" ) + aLine.message + wxS( "</font><br>" );
             break;
         case RPT_SEVERITY_WARNING:
-            retv = wxS( "<font size=3>" ) + _( "Warning:" ) + wxS( " " ) + aLine.message + wxS( "</font><br>" );
+            retv = wxS( "<font size=3>" ) + _( "Warning:" ) + wxS( " " ) + aLine.message
+                   + wxS( "</font><br>" );
             break;
         case RPT_SEVERITY_INFO:
             retv = wxS( "<font color=#808080 size=3>" ) + aLine.message + wxS(  "</font><br>" );

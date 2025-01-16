@@ -121,8 +121,10 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_grid->CenterSplitter();
 
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PROPERTIES_PANEL::onCharHook ), nullptr, this );
-    Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ), nullptr, this );
-    Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanging ), nullptr, this );
+    Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ),
+             nullptr, this );
+    Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanging ),
+             nullptr, this );
     Connect( wxEVT_SHOW, wxShowEventHandler( PROPERTIES_PANEL::onShow ), nullptr, this );
 
     Bind( wxEVT_PG_COL_END_DRAG,
@@ -205,7 +207,8 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     std::set<PROPERTY_BASE*> commonProps;
     const PROPERTY_LIST&     allProperties = propMgr.GetProperties( *types.begin() );
 
-    copy( allProperties.begin(), allProperties.end(), inserter( commonProps, commonProps.begin() ) );
+    copy( allProperties.begin(), allProperties.end(),
+          inserter( commonProps, commonProps.begin() ) );
 
     PROPERTY_DISPLAY_ORDER displayOrder = propMgr.GetDisplayOrder( *types.begin() );
 

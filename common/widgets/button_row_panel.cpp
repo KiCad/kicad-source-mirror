@@ -50,6 +50,7 @@ BUTTON_ROW_PANEL::BUTTON_ROW_PANEL( wxWindow* aWindow,
 void BUTTON_ROW_PANEL::addButtons( bool aLeft, const BTN_DEF_LIST& aDefs )
 {
     const int btn_margin = KIUI::GetStdMargin();
+
     // No button expands to fill horizontally
     const int btn_proportion = 0;
 

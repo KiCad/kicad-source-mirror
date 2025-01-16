@@ -34,10 +34,12 @@ WX_GRID_AUTOSIZER::WX_GRID_AUTOSIZER( wxGrid& aGrid, COL_MIN_WIDTHS aAutosizedCo
         m_flexibleCol( aFlexibleCol )
 {
     const int colCount = m_grid.GetNumberCols();
+
     for( const auto& [colIndex, width] : m_autosizedCols )
     {
         wxASSERT_MSG( colIndex < colCount, "Autosized column does not exist in grid" );
     }
+
     wxASSERT_MSG( m_flexibleCol < colCount, "Flexible column index does not exist in grid" );
 
     m_grid.Bind( wxEVT_UPDATE_UI,
@@ -62,6 +64,7 @@ WX_GRID_AUTOSIZER::WX_GRID_AUTOSIZER( wxGrid& aGrid, COL_MIN_WIDTHS aAutosizedCo
                  } );
 }
 
+
 void WX_GRID_AUTOSIZER::recomputeGridWidths()
 {
     if( m_gridWidthsDirty )
@@ -70,6 +73,7 @@ void WX_GRID_AUTOSIZER::recomputeGridWidths()
                 m_grid.GetClientRect().GetWidth() - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
 
         std::optional<int> flexibleMinWidth;
+
         for( const auto& [colIndex, minWidth] : m_autosizedCols )
         {
             m_grid.AutoSizeColumn( colIndex );
@@ -102,12 +106,15 @@ void WX_GRID_AUTOSIZER::recomputeGridWidths()
     }
 }
 
+
 void WX_GRID_AUTOSIZER::onSizeEvent( wxSizeEvent& aEvent )
 {
     const int width = aEvent.GetSize().GetX();
+
     if( width != m_gridWidth )
     {
         m_gridWidthsDirty = true;
     }
+
     aEvent.Skip();
 }

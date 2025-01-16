@@ -212,7 +212,8 @@ const std::string FILEEXT::StlFileExtension( "stl" );
 
 const std::string FILEEXT::GencadFileExtension( "cad" );
 
-const wxString FILEEXT::GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
+const wxString
+        FILEEXT::GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
 
 const std::string FILEEXT::FootprintLibraryTableFileName( "fp-lib-table" );
 const std::string FILEEXT::SymbolLibraryTableFileName( "sym-lib-table" );

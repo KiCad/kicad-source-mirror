@@ -196,7 +196,7 @@ void TEMPLATES::parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal )
 }
 
 
-/*
+/**
  * Flatten project and global templates into a single list.  (Project templates take
  * precedence.)
  */

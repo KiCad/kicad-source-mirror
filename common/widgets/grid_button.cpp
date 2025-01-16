@@ -37,7 +37,7 @@ GRID_BUTTON_RENDERER* GRID_BUTTON_RENDERER::Clone() const
 
 
 void GRID_BUTTON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
-                                        const wxRect& aRect, int aRow, int aCol, bool aIsSelected )
+                                 const wxRect& aRect, int aRow, int aCol, bool aIsSelected )
 {
     // erase background
     wxGridCellRenderer::Draw( aGrid, aAttr, aDc, aRect, aRow, aCol, aIsSelected );
@@ -47,7 +47,7 @@ void GRID_BUTTON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc
 
 
 wxSize GRID_BUTTON_RENDERER::GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
-                                                 int aRow, int aCol)
+                                          int aRow, int aCol)
 {
     return m_button.GetSize();
 }

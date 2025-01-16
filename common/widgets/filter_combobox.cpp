@@ -244,7 +244,6 @@ void FILTER_COMBOPOPUP::onMouseClick( wxMouseEvent& aEvent )
 {
     // Accept a click event from anywhere.  Different platform implementations have
     // different foibles with regard to transient popups and their children.
-
     if( aEvent.GetEventObject() == m_listBox )
     {
         m_listBox->SetSelection( m_listBox->HitTest( aEvent.GetPosition() ) );
@@ -294,7 +293,8 @@ void FILTER_COMBOPOPUP::onKeyDown( wxKeyEvent& aEvent )
     case WXK_DOWN:
     case WXK_NUMPAD_DOWN:
         doSetFocus( m_listBox );
-        m_listBox->SetSelection( std::min( m_listBox->GetSelection() + 1, (int) m_listBox->GetCount() - 1 ) );
+        m_listBox->SetSelection( std::min( m_listBox->GetSelection() + 1,
+                                           (int) m_listBox->GetCount() - 1 ) );
         break;
 
     case WXK_UP:
@@ -387,7 +387,7 @@ void FILTER_COMBOPOPUP::doSetFocus( wxWindow* aWindow )
 
 
 FILTER_COMBOBOX::FILTER_COMBOBOX( wxWindow *parent, wxWindowID id, const wxPoint &pos,
-                            const wxSize &size, long style ) :
+                                  const wxSize &size, long style ) :
         wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY|wxTE_PROCESS_ENTER ),
         m_filterPopup( nullptr )
 {
@@ -421,27 +421,23 @@ void FILTER_COMBOBOX::onKeyDown( wxKeyEvent& aEvt )
         // even get to us.  But just to be safe, we go ahead and skip.
         aEvt.Skip();
     }
-
     // Shift-return accepts dialog
     else if( ( key == WXK_RETURN || key == WXK_NUMPAD_ENTER ) && aEvt.ShiftDown() )
     {
         wxPostEvent( m_parent, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
-
     // Return, arrow-down and space-bar all open popup
     else if( key == WXK_RETURN || key == WXK_NUMPAD_ENTER || key == WXK_DOWN
              || key == WXK_NUMPAD_DOWN || key == WXK_SPACE )
     {
         Popup();
     }
-
     // Non-control characters go to filterbox in popup
     else if( key > WXK_SPACE && key < WXK_START )
     {
         Popup();
         m_filterPopup->OnStartingKey( aEvt );
     }
-
     else
     {
         aEvt.Skip();

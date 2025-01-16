@@ -55,6 +55,7 @@ COMMON_TOOLS::COMMON_TOOLS() :
 {
 }
 
+
 void COMMON_TOOLS::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<EDA_DRAW_FRAME>();
@@ -102,7 +103,6 @@ int COMMON_TOOLS::SelectionTool( const TOOL_EVENT& aEvent )
 }
 
 
-// Cursor control
 int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 {
     ACTIONS::CURSOR_EVENT_TYPE   type = aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>();
@@ -405,6 +405,7 @@ int COMMON_TOOLS::CenterSelection( const TOOL_EVENT& aEvent )
     return doCenter( CENTER_TYPE::CENTER_SELECTION );
 }
 
+
 int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
 {
     return doCenter( CENTER_TYPE::CENTER_CONTENTS );
@@ -489,7 +490,6 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
 }
 
 
-// Grid control
 int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;

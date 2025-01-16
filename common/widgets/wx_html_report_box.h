@@ -46,13 +46,15 @@ public:
 
     /**
      * In immediate mode, messages are flushed as they are added.
+     *
      * Required for progress-related reports, but can be very slow for larger reports.
      */
     void SetImmediateMode() { m_immediateMode = true; }
 
     /**
      * Build the HTML messages page.
-     * Call it if the immediate mode is not activated to be able to display them
+     *
+     * Call it if the immediate mode is not activated to be able to display them.
      */
     void Flush();
 
@@ -71,11 +73,11 @@ private:
 private:
     EDA_UNITS             m_units;
 
-    ///< Indicates messages should be flushed as they are added.  Required for progress-related
-    ///< reports, but can be very slow for larger reports.
+    /// Indicates messages should be flushed as they are added.  Required for progress-related
+    /// reports, but can be very slow for larger reports.
     bool                  m_immediateMode;
 
-    ///< copy of the report, stored for filtering
+    /// copy of the report, stored for filtering.
     std::vector<wxString> m_messages;
 };
 

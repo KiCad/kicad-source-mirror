@@ -156,11 +156,13 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
 
     m_scintillaTricks = new SCINTILLA_TRICKS(
             stc_ctrl(), wxEmptyString, true,
+
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
             {
                 HandleReturn( aEvent );
             },
+
             // onCharFn
             [this]( wxStyledTextEvent& aEvent )
             {
@@ -234,8 +236,7 @@ void GRID_CELL_STC_EDITOR::Show( bool aShow, wxGridCellAttr* aAttr )
 
 void GRID_CELL_STC_EDITOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 {
-    auto evtHandler = static_cast<wxGridCellEditorEvtHandler*>( m_control->GetEventHandler()
-                                                                );
+    auto evtHandler = static_cast<wxGridCellEditorEvtHandler*>( m_control->GetEventHandler() );
 
     // Don't immediately end if we get a kill focus event within BeginEdit
     evtHandler->SetInSetFocus( true );

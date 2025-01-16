@@ -141,7 +141,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
     m_cursorWarped = false;
 
     m_panTimer.SetOwner( this );
-    this->Connect( wxEVT_TIMER, wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), nullptr, this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), nullptr, this );
 
     m_settings.m_lastKeyboardCursorPositionValid = false;
     m_settings.m_lastKeyboardCursorPosition = { 0.0, 0.0 };
@@ -292,10 +292,14 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
                     }
                 }
                 else
+                {
                     justWarped = false;
+                }
             }
             else
+            {
                 justWarped = false;
+            }
         }
         else if( m_state == DRAG_ZOOMING )
         {
@@ -337,7 +341,9 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
                     justWarped = false;
             }
             else
+            {
                 justWarped = false;
+            }
         }
     }
 
@@ -361,16 +367,19 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     // Pick the modifier, if any.  Shift beats control beats alt, we don't support more than one.
     int nMods = 0;
     int modifiers = 0;
+
     if( aEvent.ShiftDown() )
     {
         nMods += 1;
         modifiers = WXK_SHIFT;
     }
+
     if( aEvent.ControlDown() )
     {
         nMods += 1;
         modifiers = modifiers == 0 ? WXK_CONTROL : modifiers;
     }
+
     if( aEvent.AltDown() )
     {
         nMods += 1;
@@ -440,7 +449,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     }
     else
     {
-        // When we have muliple mods, forward it for tool handling
+        // When we have multiple mods, forward it for tool handling
         aEvent.Skip();
     }
 }
@@ -460,6 +469,7 @@ void WX_VIEW_CONTROLS::setState( STATE aNewState )
 {
     m_state = aNewState;
 }
+
 
 void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 {
@@ -528,9 +538,9 @@ void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
     }
 
 #if defined( _WIN32 ) || defined( __WXGTK__ )
-    // Win32 and some *nix WMs transmit mouse move and wheel events to all controls below the mouse regardless
-    // of focus.  Forcing the focus here will cause the EDA FRAMES to immediately become the
-    // top level active window.
+    // Win32 and some *nix WMs transmit mouse move and wheel events to all controls below the
+    // mouse regardless of focus.  Forcing the focus here will cause the EDA FRAMES to immediately
+    // become the top level active window.
     if( m_parentPanel->GetParent() != nullptr )
     {
         // this assumes the parent panel's parent is the eda window
@@ -551,6 +561,7 @@ void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
     onMotion( aEvent );
 #endif
 }
+
 
 void WX_VIEW_CONTROLS::onCaptureLost( wxMouseEvent& aEvent )
 {
@@ -575,7 +586,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             return;
         }
 
-        #ifdef __WXMSW__
+#ifdef __WXMSW__
         // Hackfix: It's possible for the mouse to leave the canvas
         // without triggering any leave events on windows
         // Use a MSW only wx function
@@ -585,7 +596,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             setState( IDLE );
             return;
         }
-        #endif
+#endif
 
         if( !m_parentPanel->HasFocus() && !m_parentPanel->StatusPopupHasFocus() )
         {
@@ -776,6 +787,7 @@ void WX_VIEW_CONTROLS::CancelDrag()
     if( m_state == DRAG_PANNING || m_state == DRAG_ZOOMING )
     {
         setState( IDLE );
+
 #if defined USE_MOUSE_CAPTURE
         if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )
             m_parentPanel->ReleaseMouse();
@@ -894,8 +906,8 @@ void WX_VIEW_CONTROLS::WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCo
         KIPLATFORM::UI::WarpPointer( m_parentPanel, aPosition.x, aPosition.y );
     }
 
-    // If we are not refreshing because of mouse movement, don't set the modifiers
-    // because we are refreshing for keyboard movement, which uses the same modifiers for other actions
+    // If we are not refreshing because of mouse movement, don't set the modifiers because we
+    // are refreshing for keyboard movement, which uses the same modifiers for other actions
     refreshMouse( m_updateCursor );
 }
 
@@ -1128,6 +1140,7 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
 #endif
     }
 }
+
 
 void WX_VIEW_CONTROLS::ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition )
 {

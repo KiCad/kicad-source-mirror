@@ -54,10 +54,12 @@ void GRID_CELL_COMBOBOX::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler
     wxGridCellEditor::Create(aParent, aId, aEventHandler);
 }
 
+
 wxString GRID_CELL_COMBOBOX::GetValue() const
 {
     return Combo()->GetValue();
 }
+
 
 void GRID_CELL_COMBOBOX::SetSize( const wxRect& aRect )
 {

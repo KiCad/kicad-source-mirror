@@ -122,6 +122,7 @@ void NUMBER_BADGE::SetTextSize( int aSize )
 #define PLATFORM_FUDGE_Y 1.0
 #endif
 
+
 void NUMBER_BADGE::computeSize()
 {
     wxClientDC dc( this );
@@ -182,5 +183,6 @@ void NUMBER_BADGE::onPaint( wxPaintEvent& aEvt )
 
     dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, BADGE_FONTWEIGHT ) );
     dc.SetTextForeground( m_textColour );
-    dc.DrawLabel( text, wxRect( wxPoint( 0, 0 ), clientSize ), wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL );
+    dc.DrawLabel( text, wxRect( wxPoint( 0, 0 ), clientSize ),
+                  wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL );
 }

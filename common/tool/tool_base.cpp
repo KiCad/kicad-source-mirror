@@ -28,10 +28,12 @@
 #include <eda_draw_frame.h>
 #include <eda_base_frame.h>
 
+
 bool TOOL_BASE::IsToolActive() const
 {
     return m_toolMgr->IsToolActive( m_toolId );
 }
+
 
 KIGFX::VIEW* TOOL_BASE::getView() const
 {

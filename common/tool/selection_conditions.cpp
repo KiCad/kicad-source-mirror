@@ -183,6 +183,7 @@ SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
     return std::bind( &SELECTION_CONDITIONS::orBoolFunc, aConditionA, std::ref( aConditionB ), _1 );
 }
 
+
 SELECTION_CONDITION operator||( SELECTION_BOOL aConditionA,
                                 const SELECTION_CONDITION& aConditionB )
 {
@@ -193,8 +194,10 @@ SELECTION_CONDITION operator||( SELECTION_BOOL aConditionA,
 SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
                                 SELECTION_BOOL aConditionB )
 {
-    return std::bind( &SELECTION_CONDITIONS::andBoolFunc, aConditionA, std::ref( aConditionB ), _1 );
+    return std::bind( &SELECTION_CONDITIONS::andBoolFunc, aConditionA,
+                      std::ref( aConditionB ), _1 );
 }
+
 
 SELECTION_CONDITION operator&&( SELECTION_BOOL aConditionA,
                                 const SELECTION_CONDITION& aConditionB )

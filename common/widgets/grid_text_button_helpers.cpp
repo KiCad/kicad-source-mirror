@@ -114,6 +114,7 @@ void GRID_CELL_TEXT_BUTTON::StartingKey( wxKeyEvent& event )
     default:
         if( isPrintable )
             textEntry->WriteText( static_cast<wxChar>( ch ) );
+
         break;
     }
 }
@@ -276,7 +277,8 @@ protected:
         {
             if( !m_symbolNetlist.empty() )
             {
-                KIWAY_EXPRESS event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, m_symbolNetlist );
+                KIWAY_EXPRESS event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST,
+                                     m_symbolNetlist );
                 frame->KiwayMailIn( event );
             }
 
@@ -292,10 +294,12 @@ protected:
 protected:
     DIALOG_SHIM* m_dlg;
     wxString     m_preselect;
+
     // Lock flag to lock the button to show the FP chooser
     // true when the button is busy, waiting all footprints loaded to
     // avoid running more than once the FP chooser
     bool         m_buttonFpChooserLock;
+
     /*
      * Symbol netlist format:
      *   pinNumber pinName <tab> pinNumber pinName...
@@ -326,7 +330,8 @@ void GRID_CELL_FPID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 class TEXT_BUTTON_URL : public wxComboCtrl
 {
 public:
-    TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg, SEARCH_STACK* aSearchStack, EMBEDDED_FILES* aFiles ) :
+    TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg, SEARCH_STACK* aSearchStack,
+                     EMBEDDED_FILES* aFiles ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
@@ -339,12 +344,12 @@ public:
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
 
         // Bind event to handle text changes
-        Bind(wxEVT_TEXT, &TEXT_BUTTON_URL::OnTextChange, this);
+        Bind( wxEVT_TEXT, &TEXT_BUTTON_URL::OnTextChange, this );
     }
 
     ~TEXT_BUTTON_URL()
     {
-        Unbind(wxEVT_TEXT, &TEXT_BUTTON_URL::OnTextChange, this);
+        Unbind( wxEVT_TEXT, &TEXT_BUTTON_URL::OnTextChange, this );
     }
 
 protected:
@@ -357,7 +362,7 @@ protected:
     {
         wxString filename = GetValue();
 
-        if (filename.IsEmpty() || filename == wxT("~"))
+        if( filename.IsEmpty() || filename == wxT( "~" ) )
         {
             FILEDLG_OPEN_EMBED_FILE customize;
             wxFileDialog openFileDialog( this, _( "Open file" ), "", "", "All files (*.*)|*.*",
@@ -382,7 +387,7 @@ protected:
         }
         else
         {
-            GetAssociatedDocument(m_dlg, GetValue(), &m_dlg->Prj(), m_searchStack, m_files);
+            GetAssociatedDocument( m_dlg, GetValue(), &m_dlg->Prj(), m_searchStack, m_files );
         }
     }
 
@@ -394,10 +399,10 @@ protected:
 
     void UpdateButtonBitmaps()
     {
-        if (GetValue().IsEmpty())
-            SetButtonBitmaps(KiBitmapBundle(BITMAPS::small_folder));
+        if( GetValue().IsEmpty() )
+            SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_folder ) );
         else
-            SetButtonBitmaps(KiBitmapBundle(BITMAPS::www));
+            SetButtonBitmaps( KiBitmapBundle( BITMAPS::www ) );
     }
 
     DIALOG_SHIM* m_dlg;
@@ -406,8 +411,7 @@ protected:
 };
 
 
-void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
-                                   wxEvtHandler* aEventHandler )
+void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler )
 {
     m_control = new TEXT_BUTTON_URL( aParent, m_dlg, m_searchStack, m_files );
     WX_GRID::CellEditorSetMargins( Combo() );
@@ -562,11 +566,12 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
     if( m_fileFilterFn )
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, m_fileFilterFn,
-                                                  m_normalize, m_normalizeBasePath );
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir,
+                                                  m_fileFilterFn, m_normalize,
+                                                  m_normalizeBasePath );
     else
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, m_fileFilter,
-                                                  m_normalize, m_normalizeBasePath );
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir,
+                                                  m_fileFilter, m_normalize, m_normalizeBasePath );
 
     WX_GRID::CellEditorSetMargins( Combo() );
 

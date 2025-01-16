@@ -42,6 +42,7 @@ STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
     if( aSize == wxDefaultSize )
     {
         wxSize defaultSize = wxButton::GetDefaultSize( aParent );
+
 #ifndef __WXMSW__
         defaultSize.IncBy( 1 );
 #endif
@@ -153,7 +154,7 @@ void STD_BITMAP_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
     Refresh();
 
     wxEvtHandler* pEventHandler = GetEventHandler();
-    wxASSERT( pEventHandler );
+    wxCHECK( pEventHandler, /* void */ );
 
     pEventHandler->CallAfter(
             [this]()
@@ -225,9 +226,10 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     // wxRendereNative doesn't handle dark mode on OSX.
     drawBackground( r1 );
 #else
-    #ifdef __WXMSW__
-        r1.width += 1;
-    #endif
+
+#ifdef __WXMSW__
+    r1.width += 1;
+#endif
 
     wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 #endif

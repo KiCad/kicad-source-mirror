@@ -69,7 +69,6 @@ wxString WX_FILENAME::GetFullPath() const
 }
 
 
-// Write locally-cached values to the wxFileName.  MUST be called before using m_fn.
 void WX_FILENAME::resolve()
 {
     size_t dot = m_fullName.find_last_of( wxT( '.' ) );
@@ -88,7 +87,7 @@ long long WX_FILENAME::GetTimestamp()
     return 0;
 }
 
-// Resolve possible symlink(s) in aFileName to an absolute path
+
 void WX_FILENAME::ResolvePossibleSymlinks( wxFileName& aFilename )
 {
 #ifndef __WINDOWS__

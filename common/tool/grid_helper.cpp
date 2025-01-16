@@ -85,6 +85,7 @@ GRID_HELPER::~GRID_HELPER()
 KIGFX::ANCHOR_DEBUG* GRID_HELPER::enableAndGetAnchorDebug()
 {
     static bool permitted = ADVANCED_CFG::GetCfg().m_EnableSnapAnchorsDebug;
+
     if( permitted && !m_anchorDebug )
     {
         KIGFX::VIEW& view = *m_toolMgr->GetView();
@@ -92,6 +93,7 @@ KIGFX::ANCHOR_DEBUG* GRID_HELPER::enableAndGetAnchorDebug()
         view.Add( m_anchorDebug.get() );
         view.SetVisible( m_anchorDebug.get(), true );
     }
+
     return m_anchorDebug.get();
 }
 

@@ -79,11 +79,14 @@ void STEPPED_SLIDER::OnScroll( wxScrollEvent& aEvent )
     if( aEvent.GetEventType() == wxEVT_SCROLL_CHANGED )
     {
 #endif // __WXMSW__
+
         const int value = GetValue();
         const int rounded = value - value % m_step;
         SetValue( rounded );
+
 #ifdef __WXMSW__
     }
 #endif // __WXMSW__
+
     aEvent.Skip();
 }

@@ -63,7 +63,6 @@ void POLYGON_POINT_EDIT_BEHAVIOR::UpdatePointsFromOutline( const SHAPE_POLY_SET&
                                                            EDIT_POINTS&          aPoints )
 {
     // No size check here, as we can and will rebuild if that fails
-
     if( aPoints.PointsSize() != (unsigned) aOutline.TotalVertices() )
     {
         // Rebuild the points list
@@ -107,6 +106,7 @@ void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
     aPoints.AddPoint( m_segment.GetEnd() );
 }
 
+
 void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 {
     CHECK_POINT_COUNT( aPoints, SEGMENT_MAX_POINTS );
@@ -114,6 +114,7 @@ void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
     aPoints.Point( SEGMENT_START ) = m_segment.GetStart();
     aPoints.Point( SEGMENT_END ) = m_segment.GetEnd();
 }
+
 
 void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint,
                                                   EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -192,6 +193,7 @@ void EDA_BEZIER_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
     aPoints.AddIndicatorLine( aPoints.Point( BEZIER_CTRL_PT2 ), aPoints.Point( BEZIER_END ) );
 }
 
+
 void EDA_BEZIER_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 {
     CHECK_POINT_COUNT( aPoints, BEZIER_MAX_POINTS );
@@ -201,6 +203,7 @@ void EDA_BEZIER_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
     aPoints.Point( BEZIER_CTRL_PT2 ).SetPosition( m_bezier.GetBezierC2() );
     aPoints.Point( BEZIER_END ).SetPosition( m_bezier.GetEnd() );
 }
+
 
 void EDA_BEZIER_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint,
                                                  EDIT_POINTS& aPoints, COMMIT& aCommit,

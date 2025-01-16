@@ -241,7 +241,8 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool aIsCancellable )
 {
     wxASSERT( GetParent() );
-    wxASSERT_MSG( !( aIsCancellable && !aIsToggleEntry ), wxS( "aIsCancellable requires aIsToggleEntry" ) );
+    wxASSERT_MSG( !( aIsCancellable && !aIsToggleEntry ),
+                  wxS( "aIsCancellable requires aIsToggleEntry" ) );
 
     int toolId = aAction.GetUIId();
 
@@ -371,7 +372,8 @@ void ACTION_TOOLBAR::UpdateControlWidth( int aID )
 
     // The control on the toolbar is stored inside the window field of the item
     wxControl* control = dynamic_cast<wxControl*>( item->GetWindow() );
-    wxASSERT_MSG( control, wxString::Format( "No control located in toolbar item with ID %d", aID ) );
+    wxASSERT_MSG( control,
+                  wxString::Format( "No control located in toolbar item with ID %d", aID ) );
 
     // Update the size the item has stored using the best size of the control
     control->InvalidateBestSize();
@@ -525,6 +527,7 @@ void ACTION_TOOLBAR::onToolRightClick( wxAuiToolBarEvent& aEvent )
     // mouse is not on the toolbar
     SetHoverItem( nullptr );
 }
+
 
 // The time (in milliseconds) between pressing the left mouse button and opening the palette
 #define PALETTE_OPEN_DELAY 500

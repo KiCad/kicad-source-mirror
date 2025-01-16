@@ -35,7 +35,8 @@
 
 SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
                             const wxPoint& aPos, const wxSize& aSize ) :
-        wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, wxS( "DropDownButton" ) ),
+        wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL,
+                 wxS( "DropDownButton" ) ),
         m_label( aLabel )
 {
     m_arrowButtonWidth = FromDIP( 20 ); // just a fixed eyeballed constant width
@@ -274,9 +275,10 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     // wxRendereNative doesn't handle dark mode on OSX.
     drawBackground( r1 );
 #else
-    #ifdef _WXMSW_
-        r1.width += 2;
-    #endif
+
+#ifdef _WXMSW_
+    r1.width += 2;
+#endif
 
     wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 #endif

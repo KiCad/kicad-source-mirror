@@ -34,7 +34,7 @@
  * A helper class to manage the activation of a "proposal" after a timeout.
  *
  * When a proposal is made, a timer starts. If no new proposal is made and the proposal
- * is not cancelled before the timer expires, the proposal is "accepted" via a callback.
+ * is not canceled before the timer expires, the proposal is "accepted" via a callback.
  *
  * Propos
  *
@@ -102,6 +102,7 @@ public:
         while( !m_stop )
         {
             std::unique_lock<std::mutex> lock( m_mutex );
+
             if( !m_stop && !m_pendingProposalTag.has_value() )
             {
                 // No active proposal - wait for one (unlocks while waiting)
@@ -117,6 +118,7 @@ public:
                 {
                     // See if the timeout was extended for a new proposal
                     now = std::chrono::steady_clock::now();
+
                     if( now < m_proposalDeadline )
                     {
                         // Extended - wait for the new deadline
@@ -124,7 +126,7 @@ public:
                     }
 
                     // See if there is still a proposal to accept
-                    // (could have been cancelled in the meantime)
+                    // (could have been canceled in the meantime)
                     if( m_pendingProposalTag )
                     {
                         m_lastAcceptedProposalTag = m_pendingProposalTag;
@@ -132,6 +134,7 @@ public:
 
                         T proposalToAccept = std::move( m_lastProposal );
                         lock.unlock();
+
                         // Call the callback (outside the lock)
                         m_callback( std::move( proposalToAccept ) );
                     }
@@ -143,25 +146,26 @@ public:
 private:
     mutable std::mutex m_mutex;
 
-    // Activation timeout in milliseconds
+    /// Activation timeout in milliseconds.
     std::chrono::milliseconds m_timeout;
 
     std::chrono::time_point<std::chrono::steady_clock> m_proposalDeadline;
 
-    ///< The last proposal tag that was made
+    /// The last proposal tag that was made.
     std::optional<std::size_t> m_pendingProposalTag;
 
-    ///< The last proposal that was accepted
+    /// The last proposal that was accepted.
     std::optional<std::size_t> m_lastAcceptedProposalTag;
 
-    // The most recently-proposed item
+    /// The most recently-proposed item.
     T m_lastProposal;
 
-    ///< Callback to call when the proposal is accepted
+    /// Callback to call when the proposal is accepted.
     ACTIVATION_CALLBACK     m_callback;
     std::condition_variable m_cv;
     std::atomic<bool>       m_stop;
-    // The thread must be constructed last, as it starts running immediately
+
+    /// The thread must be constructed last, as it starts running immediately.
     std::thread             m_thread;
 };
 
@@ -329,6 +333,7 @@ void CONSTRUCTION_MANAGER::acceptConstructionItems( std::unique_ptr<PENDING_BATC
     m_viewHandler.updateView();
 }
 
+
 bool CONSTRUCTION_MANAGER::InvolvesAllGivenRealItems( const std::vector<EDA_ITEM*>& aItems ) const
 {
     for( EDA_ITEM* item : aItems )
@@ -342,6 +347,7 @@ bool CONSTRUCTION_MANAGER::InvolvesAllGivenRealItems( const std::vector<EDA_ITEM
 
     return true;
 }
+
 
 void CONSTRUCTION_MANAGER::GetConstructionItems(
         std::vector<CONSTRUCTION_ITEM_BATCH>& aToExtend ) const
@@ -358,16 +364,19 @@ void CONSTRUCTION_MANAGER::GetConstructionItems(
     }
 }
 
+
 bool CONSTRUCTION_MANAGER::HasActiveConstruction() const
 {
     std::lock_guard<std::mutex> lock( m_batchesMutex );
     return m_persistentConstructionBatch.has_value() || !m_temporaryConstructionBatches.empty();
 }
 
+
 SNAP_LINE_MANAGER::SNAP_LINE_MANAGER( CONSTRUCTION_VIEW_HANDLER& aViewHandler ) :
         m_viewHandler( aViewHandler )
 {
 }
+
 
 void SNAP_LINE_MANAGER::SetSnapLineOrigin( const VECTOR2I& aOrigin )
 {
@@ -375,6 +384,7 @@ void SNAP_LINE_MANAGER::SetSnapLineOrigin( const VECTOR2I& aOrigin )
     ClearSnapLine();
     m_snapLineOrigin = aOrigin;
 }
+
 
 void SNAP_LINE_MANAGER::SetSnapLineEnd( const OPT_VECTOR2I& aSnapEnd )
 {
@@ -391,6 +401,7 @@ void SNAP_LINE_MANAGER::SetSnapLineEnd( const OPT_VECTOR2I& aSnapEnd )
     }
 }
 
+
 void SNAP_LINE_MANAGER::ClearSnapLine()
 {
     m_snapLineOrigin.reset();
@@ -398,6 +409,7 @@ void SNAP_LINE_MANAGER::ClearSnapLine()
     m_viewHandler.GetViewItem().ClearSnapLine();
     m_viewHandler.updateView();
 }
+
 
 void SNAP_LINE_MANAGER::SetSnappedAnchor( const VECTOR2I& aAnchorPos )
 {
@@ -439,6 +451,7 @@ static bool pointHasEscapedSnapLineX( const VECTOR2I& aCursor, const VECTOR2I& a
     EDA_ANGLE angle = EDA_ANGLE( aCursor - aSnapLineOrigin ) + EDA_ANGLE( 90, DEGREES_T );
     return std::abs( angle.Normalize90() ) > aLongRangeEscapeAngle;
 }
+
 
 /**
  * As above, but for the Y direction.

@@ -50,7 +50,8 @@
 
 /// URL to launch a new issue with pre-populated description
 wxString COMMON_CONTROL::m_bugReportUrl =
-        wxS( "https://gitlab.com/kicad/code/kicad/-/issues/new?issuable_template=bare&issue[description]=%s" );
+        wxS( "https://gitlab.com/kicad/code/kicad/-/issues/new?issuable_template=bare&issue"
+             "[description]=%s" );
 
 
 /// Issue template to use for reporting bugs (this should not be translated)
@@ -136,7 +137,8 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
         try     // Kicad frame was not available, try to start it
         {
             if( KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH ) )
-                kiface->CreateKiWindow( m_frame, DIALOG_DESIGN_BLOCK_LIBRARY_TABLE, &m_frame->Kiway() );
+                kiface->CreateKiWindow( m_frame, DIALOG_DESIGN_BLOCK_LIBRARY_TABLE,
+                                        &m_frame->Kiway() );
         }
         catch( ... )
         {

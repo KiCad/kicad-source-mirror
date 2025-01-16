@@ -76,7 +76,8 @@ wxGridCellAttr* WX_GRID_TABLE_BASE::enhanceAttr( wxGridCellAttr* aInputAttr, int
 
 void WX_GRID::CellEditorSetMargins( wxTextEntryBase* aEntry )
 {
-    // This is consistent with wxGridCellTextEditor. But works differently across platforms or course.
+    // This is consistent with wxGridCellTextEditor. But works differently across platforms or
+    // course.
     aEntry->SetMargins( 0, 0 );
 }
 
@@ -150,8 +151,8 @@ public:
 
 
 /**
- * Attribute provider that provides attributes (or modifies the existing attribute) to alternate a row color
- * between the odd and even rows.
+ * Attribute provider that provides attributes (or modifies the existing attribute) to alternate
+ * a row color between the odd and even rows.
  */
 class WX_GRID_ALT_ROW_COLOR_PROVIDER : public wxGridCellAttrProvider
 {
@@ -177,7 +178,8 @@ public:
     {
         wxGridCellAttrPtr cellAttr( wxGridCellAttrProvider::GetAttr( row, col, kind ) );
 
-        // Just pass through the cell attribute on odd rows (start normal to allow for the header row)
+        // Just pass through the cell attribute on odd rows (start normal to allow for the
+        // header row)
         if( !( row % 2 ) )
             return cellAttr.release();
 
@@ -214,8 +216,10 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     SetLabelFont( KIUI::GetControlFont( this ) );
 
     Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
-    Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
-    Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
+    Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr,
+             this );
+    Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr,
+             this );
 }
 
 
@@ -224,9 +228,12 @@ WX_GRID::~WX_GRID()
     if( m_weOwnTable )
         DestroyTable( GetTable() );
 
-    Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
-    Disconnect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
-    Disconnect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
+    Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr,
+                this );
+    Disconnect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ),
+                nullptr, this );
+    Disconnect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr,
+                this );
 }
 
 
@@ -238,8 +245,8 @@ void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
                 wxGrid::SetColLabelSize( wxGRID_AUTOSIZE );
             } );
 
-    /// This terrible hack is a way to avoid the incredibly disruptive resizing of grids that happens on Macs
-    /// when moving a window between monitors of different DPIs.
+    /// This terrible hack is a way to avoid the incredibly disruptive resizing of grids that
+    /// happens on Macs when moving a window between monitors of different DPIs.
 #ifndef __WXMAC__
     aEvt.Skip();
 #endif
@@ -296,7 +303,8 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
     EnableAlternateRowColors( Pgm().GetCommonSettings()->m_Appearance.grid_striping );
 
     Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
-    Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
+    Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr,
+             this );
 
     m_weOwnTable = aTakeOwnership;
 }
@@ -447,7 +455,8 @@ void WX_GRID::DestroyTable( wxGridTableBase* aTable )
     CommitPendingChanges( true /* quiet mode */ );
 
     Disconnect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
-    Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
+    Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr,
+                this );
 
     wxGrid::SetTable( nullptr );
     delete aTable;
@@ -576,7 +585,7 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
 
 void WX_GRID::DrawRowLabel( wxDC& dc, int row )
 {
-    if ( GetRowHeight( row ) <= 0 || m_rowLabelWidth <= 0 )
+    if( GetRowHeight( row ) <= 0 || m_rowLabelWidth <= 0 )
         return;
 
     wxRect rect( 0, GetRowTop( row ), m_rowLabelWidth, GetRowHeight( row ) );
@@ -789,7 +798,8 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         {
             EnsureColLabelsVisible();
 
-            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + wxS( "M" ) ).x ) );
+            size = std::max( size,
+                             int( GetTextExtent( GetColLabelValue( aCol ) + wxS( "M" ) ).x ) );
         }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )

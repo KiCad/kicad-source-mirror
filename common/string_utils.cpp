@@ -462,7 +462,7 @@ int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
     char*       limit = aDest + aDestSize - 1;
     char        cc;
 
-    while( (cc = *aSource++) != 0 && aDest < limit )
+    while( ( cc = *aSource++ ) != 0 && aDest < limit )
     {
         if( cc == '"' )
         {
@@ -471,7 +471,6 @@ int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
 
             inside = true;      // first delimiter found, make note, do not copy
         }
-
         else if( inside )
         {
             if( cc == '\\' )
@@ -664,10 +663,6 @@ bool NoPrintableChars( const wxString& aString )
 }
 
 
-/**
- * Return the number of printable (ie: non-formatting) chars.  Used to approximate rendered
- * text size when speed is more important than accuracy.
- */
 int PrintableCharCount( const wxString& aString )
 {
     int char_count = 0;
@@ -997,7 +992,7 @@ bool ApplyModifier( double& value, const wxString& aString )
 
 bool convertSeparators( wxString* value )
 {
-    // Note: fetching the decimal separtor from the current locale isn't a silver bullet because
+    // Note: fetching the decimal separator from the current locale isn't a silver bullet because
     // it assumes the current computer's locale is the same as the locale the schematic was
     // authored in -- something that isn't true, for instance, when sharing designs through
     // DIYAudio.com.
@@ -1072,7 +1067,7 @@ bool convertSeparators( wxString* value )
             {
                 // This is the first separator...
 
-                // If it's preceeded by a '0' (only), or if it's followed by some number of
+                // If it's preceded by a '0' (only), or if it's followed by some number of
                 // digits not equal to 3, then it -must- be a decimal separator.
                 //
                 // In all other cases we don't really know what it is yet.
@@ -1097,7 +1092,7 @@ bool convertSeparators( wxString* value )
         }
     }
 
-    // If we found nothing difinitive then we have to look at the current locale
+    // If we found nothing definitive then we have to look at the current locale
     if( decimalSeparator == '?' && thousandsSeparator == '?' )
     {
         const struct lconv* lc = localeconv();
@@ -1406,7 +1401,7 @@ std::string UIDouble2Str( double aValue )
     {
         // For these small values, %f works fine,
         // and %g gives an exponent
-        len = snprintf( buf, sizeof(buf), "%.16f", aValue );
+        len = snprintf( buf, sizeof( buf ), "%.16f", aValue );
 
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
@@ -1420,7 +1415,7 @@ std::string UIDouble2Str( double aValue )
     {
         // For these values, %g works fine, and sometimes %f
         // gives a bad value (try aValue = 1.222222222222, with %.16f format!)
-        len = snprintf( buf, sizeof(buf), "%.10g", aValue );
+        len = snprintf( buf, sizeof( buf ), "%.10g", aValue );
     }
 
     return std::string( buf, len );

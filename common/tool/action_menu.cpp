@@ -108,6 +108,7 @@ void ACTION_MENU::DisplayTitle( bool aDisplay )
         wxMenuItem* item = FindItemByPosition( 0 );
         wxASSERT( item->GetItemLabelText() == GetTitle() );
         Destroy( item );
+
         // ..and separator
         item = FindItemByPosition( 0 );
         wxASSERT( item->IsSeparator() );
@@ -168,7 +169,7 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, 
 wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry,
                               const wxString& aOverrideLabel )
 {
-    /// ID numbers for tool actions are assigned above ACTION_BASE_UI_ID inside TOOL_EVENT
+    // ID numbers for tool actions are assigned above ACTION_BASE_UI_ID inside TOOL_EVENT
     BITMAPS icon = aAction.GetIcon();
 
     // Allow the label to be overridden at point of use
@@ -190,7 +191,8 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 {
     m_submenus.push_back( aMenu );
 
-    wxASSERT_MSG( !aMenu->m_title.IsEmpty(), wxS( "Set a title for ACTION_MENU using SetTitle()" ) );
+    wxASSERT_MSG( !aMenu->m_title.IsEmpty(),
+                  wxS( "Set a title for ACTION_MENU using SetTitle()" ) );
 
     if( !!aMenu->m_icon )
     {
@@ -653,9 +655,10 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
     // On Windows, for Checkable Menu items, adding a bitmap adds also
     // our predefined checked alternate bitmap
     // On other OS, wxITEM_CHECK and wxITEM_RADIO Menu items do not use custom bitmaps.
+
 #if defined( __WXMSW__ )
     // On Windows, AddBitmapToMenuItem() uses the unchecked bitmap for wxITEM_CHECK and
-    // wxITEM_RADIO menuitems and autoamtically adds a checked bitmap.
+    // wxITEM_RADIO menuitems and automatically adds a checked bitmap.
     // For other menuitrms, use the "checked" bitmap.
     bool use_checked_bm = ( aSource->GetKind() == wxITEM_CHECK ||
                             aSource->GetKind() == wxITEM_RADIO ) ? false : true;

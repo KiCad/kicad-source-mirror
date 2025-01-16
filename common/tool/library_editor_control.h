@@ -46,7 +46,7 @@ public:
                         std::function<bool( const wxString& aNewName )> aValidator );
 
 private:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     void regenerateLibraryTree();

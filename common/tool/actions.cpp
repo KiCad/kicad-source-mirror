@@ -1263,25 +1263,32 @@ TOOL_ACTION ACTIONS::extractFile( TOOL_ACTION_ARGS()
 
 // System-wide selection Events
 
-const TOOL_EVENT EVENTS::PointSelectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.pointSelected" );
+const TOOL_EVENT EVENTS::PointSelectedEvent( TC_MESSAGE, TA_ACTION,
+                                             "common.Interactive.pointSelected" );
 const TOOL_EVENT EVENTS::SelectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.selected" );
 const TOOL_EVENT EVENTS::UnselectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.unselected" );
 const TOOL_EVENT EVENTS::ClearedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.cleared" );
 
-const TOOL_EVENT EVENTS::ConnectivityChangedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.connectivityChanged" );
+const TOOL_EVENT EVENTS::ConnectivityChangedEvent( TC_MESSAGE, TA_ACTION,
+                                                   "common.Interactive.connectivityChanged" );
 
-const TOOL_EVENT EVENTS::SelectedItemsModified( TC_MESSAGE, TA_ACTION, "common.Interactive.modified" );
+const TOOL_EVENT EVENTS::SelectedItemsModified( TC_MESSAGE, TA_ACTION,
+                                                "common.Interactive.modified" );
 const TOOL_EVENT EVENTS::SelectedItemsMoved( TC_MESSAGE, TA_ACTION, "common.Interactive.moved" );
-const TOOL_EVENT EVENTS::InhibitSelectionEditing( TC_MESSAGE, TA_ACTION, "common.Interactive.inhibit" );
-const TOOL_EVENT EVENTS::UninhibitSelectionEditing( TC_MESSAGE, TA_ACTION, "common.Interactive.uninhibit" );
+const TOOL_EVENT EVENTS::InhibitSelectionEditing( TC_MESSAGE, TA_ACTION,
+                                                  "common.Interactive.inhibit" );
+const TOOL_EVENT EVENTS::UninhibitSelectionEditing( TC_MESSAGE, TA_ACTION,
+                                                    "common.Interactive.uninhibit" );
 
-const TOOL_EVENT EVENTS::DisambiguatePoint( TC_MESSAGE, TA_ACTION, "common.Interactive.disambiguate" );
+const TOOL_EVENT EVENTS::DisambiguatePoint( TC_MESSAGE, TA_ACTION,
+                                            "common.Interactive.disambiguate" );
 
 const TOOL_EVENT EVENTS::GridChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
                                                 "common.Interactive.gridChangedByKey" );
 
-const TOOL_EVENT EVENTS::ContrastModeChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
-                                                        "common.Interactive.contrastModeChangedByKeyEvent" );
+const TOOL_EVENT
+        EVENTS::ContrastModeChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
+                                               "common.Interactive.contrastModeChangedByKeyEvent" );
 
 // System-wide undo/redo Events
 

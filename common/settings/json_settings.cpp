@@ -599,7 +599,8 @@ std::optional<ValueType> JSON_SETTINGS::Get( const std::string& aPath ) const
 
 
 // Instantiate all required templates here to allow reducing scope of json.hpp
-template KICOMMON_API std::optional<bool> JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<bool>
+                      JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
 template KICOMMON_API std::optional<double>
                       JSON_SETTINGS::Get<double>( const std::string& aPath ) const;
 template KICOMMON_API std::optional<float>
@@ -621,7 +622,8 @@ template KICOMMON_API std::optional<BOM_PRESET>
                       JSON_SETTINGS::Get<BOM_PRESET>( const std::string& aPath ) const;
 template KICOMMON_API std::optional<BOM_FMT_PRESET>
                       JSON_SETTINGS::Get<BOM_FMT_PRESET>( const std::string& aPath ) const;
-template KICOMMON_API std::optional<GRID> JSON_SETTINGS::Get<GRID>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<GRID>
+                      JSON_SETTINGS::Get<GRID>( const std::string& aPath ) const;
 template KICOMMON_API std::optional<wxPoint>
                       JSON_SETTINGS::Get<wxPoint>( const std::string& aPath ) const;
 template KICOMMON_API std::optional<wxSize>

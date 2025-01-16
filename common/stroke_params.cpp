@@ -47,7 +47,8 @@ const std::map<LINE_STYLE, struct LINE_STYLE_DESC> lineTypeNames = {
 
 void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWidth,
                             const KIGFX::RENDER_SETTINGS* aRenderSettings,
-                            const std::function<void( const VECTOR2I& a, const VECTOR2I& b )>& aStroker )
+                            const std::function<void( const VECTOR2I& a,
+                                                      const VECTOR2I& b )>& aStroker )
 {
     double strokes[6] = { aWidth * 1.0, aWidth * 1.0, aWidth * 1.0, aWidth * 1.0, aWidth * 1.0,
                           aWidth * 1.0 };

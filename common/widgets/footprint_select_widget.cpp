@@ -135,7 +135,6 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
 
     // Be careful adding items! "Default" must occupy POS_DEFAULT,
     // "Other" must occupy POS_OTHER, and the separator must occupy POS_SEPARATOR.
-
     m_fp_sel_ctrl->Append( m_default_footprint.IsEmpty() ?
                                    _( "No default footprint" ) :
                                    wxS( "[" ) + _( "Default" ) + wxS( "] " ) + m_default_footprint,
@@ -145,7 +144,8 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
     {
         for( FOOTPRINT_INFO& fpinfo : m_fp_filter )
         {
-            wxString display_name( fpinfo.GetLibNickname() + wxS( ":" ) + fpinfo.GetFootprintName() );
+            wxString display_name( fpinfo.GetLibNickname() + wxS( ":" ) +
+                                   fpinfo.GetFootprintName() );
 
             m_fp_sel_ctrl->Append( display_name, new wxStringClientData( display_name ) );
             ++n_items;

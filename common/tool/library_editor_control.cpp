@@ -45,14 +45,17 @@ void LIBRARY_EDITOR_CONTROL::AddContextMenuItems( CONDITIONAL_MENU* aMenu )
             {
                 LIB_TREE*      libTree = m_frame->GetLibTree();
                 LIB_TREE_NODE* current = libTree ? libTree->GetCurrentTreeNode() : nullptr;
-                return current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY && current->m_Pinned;
+                return current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY
+                    && current->m_Pinned;
             };
+
     auto unpinnedLibSelectedCondition =
             [this](const SELECTION& aSel )
             {
                 LIB_TREE*      libTree = m_frame->GetLibTree();
                 LIB_TREE_NODE* current = libTree ? libTree->GetCurrentTreeNode() : nullptr;
-                return current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY && !current->m_Pinned;
+                return current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY
+                    && !current->m_Pinned;
             };
 
     aMenu->AddItem( ACTIONS::pinLibrary,        unpinnedLibSelectedCondition, 1 );
@@ -89,11 +92,15 @@ int LIBRARY_EDITOR_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
             m_frame->Prj().PinLibrary( current->m_LibId.GetLibNickname(),
                                        PROJECT::LIB_TYPE_T::SYMBOL_LIB );
             break;
+
         case KIWAY::FACE_PCB:
             m_frame->Prj().PinLibrary( current->m_LibId.GetLibNickname(),
                                        PROJECT::LIB_TYPE_T::FOOTPRINT_LIB );
             break;
-        default: wxFAIL_MSG( wxT( "Unsupported frame type for library pinning." ) ); break;
+
+        default:
+            wxFAIL_MSG( wxT( "Unsupported frame type for library pinning." ) );
+            break;
         }
 
         current->m_Pinned = true;
@@ -117,11 +124,15 @@ int LIBRARY_EDITOR_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
             m_frame->Prj().UnpinLibrary( current->m_LibId.GetLibNickname(),
                                          PROJECT::LIB_TYPE_T::SYMBOL_LIB );
             break;
+
         case KIWAY::FACE_PCB:
             m_frame->Prj().UnpinLibrary( current->m_LibId.GetLibNickname(),
                                          PROJECT::LIB_TYPE_T::FOOTPRINT_LIB );
             break;
-        default: wxFAIL_MSG( wxT( "Unsupported frame type for library pinning." ) ); break;
+
+        default:
+            wxFAIL_MSG( wxT( "Unsupported frame type for library pinning." ) );
+            break;
         }
 
         current->m_Pinned = false;

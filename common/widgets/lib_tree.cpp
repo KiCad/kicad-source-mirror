@@ -635,7 +635,8 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     if( !sel.IsOk() )
         sel = m_adapter->GetCurrentDataViewItem();
 
-    LIB_TREE_NODE::TYPE type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::TYPE::INVALID;
+    LIB_TREE_NODE::TYPE type = sel.IsOk() ? m_adapter->GetTypeFor( sel )
+                                          : LIB_TREE_NODE::TYPE::INVALID;
 
     switch( aKeyStroke.GetKeyCode() )
     {

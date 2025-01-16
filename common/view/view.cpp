@@ -133,7 +133,6 @@ private:
         m_groupsSize = 0;
     }
 
-
     /**
      * Return information if the item uses at least one group id (ie. if it is cached at all).
      *
@@ -143,7 +142,6 @@ private:
     {
         return m_groupsSize > 0;
     }
-
 
     /**
      * Reorder the stored groups (to facilitate reordering of layers).
@@ -970,18 +968,20 @@ struct VIEW::DRAW_ITEM_VISITOR
         if( reverseDrawOrder )
         {
             std::sort( drawItems.begin(), drawItems.end(),
-                    []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool
-                    {
-                        return b->viewPrivData()->m_drawPriority < a->viewPrivData()->m_drawPriority;
-                    } );
+                       []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool
+                       {
+                           return b->viewPrivData()->m_drawPriority
+                                  < a->viewPrivData()->m_drawPriority;
+                       } );
         }
         else
         {
             std::sort( drawItems.begin(), drawItems.end(),
-                    []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool
-                    {
-                        return a->viewPrivData()->m_drawPriority < b->viewPrivData()->m_drawPriority;
-                    } );
+                       []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool
+                       {
+                           return a->viewPrivData()->m_drawPriority
+                                  < b->viewPrivData()->m_drawPriority;
+                       } );
         }
 
         for( VIEW_ITEM* item : drawItems )
@@ -1089,7 +1089,7 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
 
 void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate )
 {
-    for( unsigned int i = 0; i < aGroup->GetSize(); i++)
+    for( unsigned int i = 0; i < aGroup->GetSize(); i++ )
         draw( aGroup->GetItem(i), aImmediate );
 }
 
@@ -1541,8 +1541,8 @@ void VIEW::UpdateItems()
         }
     }
 
-    KI_TRACE( traceGalProfile, wxS( "View update: total items %u, geom %u anyUpdated %u\n" ), cntTotal,
-              cntGeomUpdate, (unsigned) anyUpdated );
+    KI_TRACE( traceGalProfile, wxS( "View update: total items %u, geom %u anyUpdated %u\n" ),
+              cntTotal, cntGeomUpdate, (unsigned) anyUpdated );
 }
 
 

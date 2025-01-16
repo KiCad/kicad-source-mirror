@@ -45,8 +45,9 @@ std::map<wxString, wxString> g_lastPage;
 std::map<wxString, wxString> g_lastParentPage;
 
 
-PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset, bool aShowOpenFolder,
-                            const wxString& aAuxiliaryAction, const wxSize& aInitialSize ) :
+PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset,
+                            bool aShowOpenFolder, const wxString& aAuxiliaryAction,
+                            const wxSize& aInitialSize ) :
         DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, aInitialSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
         m_auxiliaryButton( nullptr ),
@@ -92,7 +93,8 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 #else
         m_openPrefsDirButton = new wxButton( this, wxID_ANY, _( "Open Preferences Directory" ) );
 #endif
-        m_buttonsSizer->Add( m_openPrefsDirButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+        m_buttonsSizer->Add( m_openPrefsDirButton, 0,
+                             wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
     }
 
 
@@ -134,7 +136,8 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 
     if( m_openPrefsDirButton )
     {
-        m_openPrefsDirButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onOpenPreferencesButton, this );
+        m_openPrefsDirButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
+                                    &PAGED_DIALOG::onOpenPreferencesButton, this );
     }
 
     m_treebook->Bind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onCharHook, this );
@@ -204,7 +207,8 @@ PAGED_DIALOG::~PAGED_DIALOG()
 
     if( m_openPrefsDirButton )
     {
-        m_openPrefsDirButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onOpenPreferencesButton, this );
+        m_openPrefsDirButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED,
+                                      &PAGED_DIALOG::onOpenPreferencesButton, this );
     }
 
     m_treebook->Unbind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onCharHook, this );

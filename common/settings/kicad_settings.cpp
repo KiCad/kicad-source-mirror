@@ -60,7 +60,8 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
     m_params.emplace_back( new PARAM<wxPoint>( "template.window.pos", &m_TemplateWindowPos,
                                                wxDefaultPosition ) );
 
-    m_params.emplace_back( new PARAM<wxSize>( "template.window.size", &m_TemplateWindowSize, wxDefaultSize ) );
+    m_params.emplace_back( new PARAM<wxSize>( "template.window.size", &m_TemplateWindowSize,
+                                              wxDefaultSize ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "pcm.repositories",

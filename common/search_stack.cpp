@@ -58,7 +58,8 @@ static wxString base_dir( const wxString& aRelativePath, const wxString& aBaseDi
 
     if( !fn.IsAbsolute() && !!aBaseDir )
     {
-        wxASSERT_MSG( wxFileName( aBaseDir ).IsAbsolute(), wxT( "Must pass absolute path in aBaseDir" ) );
+        wxASSERT_MSG( wxFileName( aBaseDir ).IsAbsolute(),
+                      wxT( "Must pass absolute path in aBaseDir" ) );
         fn.MakeRelativeTo( aBaseDir );
     }
 
@@ -82,7 +83,7 @@ wxString SEARCH_STACK::FilenameWithRelativePathInSearchList(
         // Search for the shortest subpath within 'this':
         if( fn.MakeRelativeTo( base_dir( (*this)[kk], aBaseDir ) ) )
         {
-            if( fn.GetPathWithSep().StartsWith( wxT("..") ) )  // Path outside kicad libs paths
+            if( fn.GetPathWithSep().StartsWith( wxT("..") ) )  // Path outside KiCad libs paths
                 continue;
 
             if( pathlen > fn.GetPath().Len() )    // A better (shortest) subpath is found
@@ -199,14 +200,14 @@ const wxString SEARCH_STACK::LastVisitedPath( const wxString& aSubPathToSearch )
 #endif
 
 
-#if defined(DEBUG)
+#if defined( DEBUG )
 void SEARCH_STACK::Show( const wxString& aPrefix ) const
 {
     wxLogTrace( tracePathsAndFiles, "%s SEARCH_STACK:", aPrefix );
 
-    for( unsigned i=0;  i<GetCount();  ++i )
+    for( unsigned i = 0; i < GetCount(); ++i )
     {
-        wxLogTrace( tracePathsAndFiles, "  [%2u]:%s", i, TO_UTF8( (*this)[i] ) );
+        wxLogTrace( tracePathsAndFiles, "  [%2u]:%s", i, TO_UTF8( ( *this )[i] ) );
     }
 }
 #endif

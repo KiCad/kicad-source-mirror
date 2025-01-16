@@ -208,8 +208,8 @@ GRID_CELL_STATUS_ICON_RENDERER::GRID_CELL_STATUS_ICON_RENDERER( int aStatus ) :
     else
     {
         // Dummy bitmap for size
-        m_bitmap = wxArtProvider::GetBitmap( wxArtProvider::GetMessageBoxIconId( wxICON_INFORMATION ),
-                                             wxART_BUTTON );
+        m_bitmap = wxArtProvider::GetBitmap(
+                wxArtProvider::GetMessageBoxIconId( wxICON_INFORMATION ), wxART_BUTTON );
     }
 }
 
@@ -267,7 +267,8 @@ void GRID_CELL_ICON_TEXT_POPUP::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new wxBitmapComboBox( aParent, aId, wxEmptyString, wxDefaultPosition,
                                       wxDefaultSize, 0, nullptr,
-                                      wxCB_READONLY | wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxBORDER_NONE );
+                                      wxCB_READONLY | wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB |
+                                      wxBORDER_NONE );
 
     for( unsigned i = 0; i < m_names.size(); ++i )
     {

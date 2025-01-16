@@ -450,24 +450,29 @@ bool COMMON_SETTINGS::migrateSchema0to1()
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 0->1: mousewheel_pan not found" ) );
+        wxLogTrace( traceSettings,
+                    wxT( "COMMON_SETTINGS::Migrate 0->1: mousewheel_pan not found" ) );
     }
 
     if( mwp )
     {
         ( *m_internals )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = true;
 
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_SHIFT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] =
+                WXK_SHIFT;
         ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = 0;
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = WXK_CONTROL;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )] =
+                WXK_CONTROL;
     }
     else
     {
         ( *m_internals )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = false;
 
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_CONTROL;
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = WXK_SHIFT;
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = 0;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] =
+                WXK_CONTROL;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] =
+                WXK_SHIFT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )] = 0;
     }
 
     return true;
@@ -483,17 +488,21 @@ bool COMMON_SETTINGS::migrateSchema1to2()
     try
     {
         prefer_selection = m_internals->at( v1_pointer );
-        m_internals->at( nlohmann::json::json_pointer( "/input"_json_pointer ) ).erase( "prefer_select_to_drag" );
+        m_internals->at( nlohmann::json::json_pointer( "/input"_json_pointer ) )
+                .erase( "prefer_select_to_drag" );
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 1->2: prefer_select_to_drag not found" ) );
+        wxLogTrace( traceSettings,
+                    wxT( "COMMON_SETTINGS::Migrate 1->2: prefer_select_to_drag not found" ) );
     }
 
     if( prefer_selection )
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::SELECT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] =
+                MOUSE_DRAG_ACTION::SELECT;
     else
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::DRAG_ANY;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] =
+                MOUSE_DRAG_ACTION::DRAG_ANY;
 
     return true;
 }
@@ -518,11 +527,12 @@ bool COMMON_SETTINGS::migrateSchema2to3()
         wxString key = path.m_Alias;
         const wxString& val = path.m_Pathvar;
 
-        // The 3d alias config didnt use the same naming restrictions as real env variables
+        // The 3d alias config didn't use the same naming restrictions as real env variables
         // We need to sanitize them
 
         // upper case only
         key.MakeUpper();
+
         // logically swap - with _
         key.Replace( wxS( "-" ), wxS( "_" ) );
 
@@ -559,7 +569,8 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             {
                 wxString key, value;
                 long index = 0;
-                nlohmann::json::json_pointer ptr = m_internals->PointerFromString( "environment.vars" );
+                nlohmann::json::json_pointer ptr =
+                        m_internals->PointerFromString( "environment.vars" );
 
                 aCfg->SetPath( "EnvironmentVariables" );
                 ( *m_internals )[ptr] = nlohmann::json( {} );

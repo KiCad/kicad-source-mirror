@@ -163,6 +163,7 @@ void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
         if( wxTheClipboard->Open() )
         {
             wxString txt;
+
             for( int row = 0; row < GetItemCount(); row++ )
             {
                 if( GetItemState( row, wxLIST_STATE_SELECTED ) == wxLIST_STATE_SELECTED )
@@ -172,10 +173,12 @@ void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
                         if( GetColumnWidth( col ) > 0 )
                         {
                             txt += GetItemText( row, col );
+
                             if( row <= GetItemCount() - 1 )
                                 txt += wxT( "\t" );
                         }
                     }
+
                     txt += wxT( "\n" );
                 }
             }

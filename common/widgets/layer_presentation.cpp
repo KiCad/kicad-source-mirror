@@ -33,7 +33,7 @@ using namespace KIGFX;
 
 
 void LAYER_PRESENTATION::DrawColorSwatch( wxBitmap& aLayerbmp, const COLOR4D& aBackground,
-                                      const COLOR4D& aColor )
+                                          const COLOR4D& aColor )
 {
     wxMemoryDC bmpDC;
     wxBrush    brush;
@@ -105,8 +105,10 @@ static COLOR4D ICON_WHITE{ 0.86, 0.86, 0.86, 1.0 };
 static COLOR4D ICON_BLACK{ 0.28, 0.28, 0.28, 1.0 };
 
 
-std::unique_ptr<wxBitmap> LAYER_PRESENTATION::CreateLayerPairIcon( const COLOR4D& aBgColor, const COLOR4D& aTopColor,
-                                               const COLOR4D& aBottomColor, int aScale )
+std::unique_ptr<wxBitmap> LAYER_PRESENTATION::CreateLayerPairIcon( const COLOR4D& aBgColor,
+                                                                   const COLOR4D& aTopColor,
+                                                                   const COLOR4D& aBottomColor,
+                                                                   int aScale )
 {
     auto layerPairBitmap = std::make_unique<wxBitmap>( BM_LAYERICON_SIZE, BM_LAYERICON_SIZE );
 
