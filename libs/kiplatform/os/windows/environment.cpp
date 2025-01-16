@@ -30,7 +30,11 @@
 #include <Windows.h>
 #include <shellapi.h>
 #include <shlwapi.h>
-#include <shobjidl_core.h>
+#if defined( __MINGW32__ )
+    #include <shobjidl.h>
+#else
+    #include <shobjidl_core.h>
+#endif
 #include <winhttp.h>
 
 #include <Softpub.h>
