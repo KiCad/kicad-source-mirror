@@ -142,9 +142,22 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
 }
 
 
+class JOBSET_OUTPUT_REPORTER : public WX_STRING_REPORTER
+{
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity ) override
+    {
+        if( aSeverity == RPT_SEVERITY_ERROR || aSeverity == RPT_SEVERITY_WARNING )
+            WX_STRING_REPORTER::Report( aText, aSeverity );
+
+        return *this;
+    }
+};
+
+
 bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 {
-    bool                       success = true;
+    bool                    genOutputs = true;
+    bool                    success = true;
     std::vector<JOBSET_JOB> jobsForOutput = m_jobsFile->GetJobsForOutput( aOutput );
     wxString msg;
 
@@ -238,11 +251,11 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
         if( !reporterToUse || reporterToUse == &NULL_REPORTER::GetInstance() )
         {
-            reporterToUse = new WX_STRING_REPORTER;
+            reporterToUse = new JOBSET_OUTPUT_REPORTER;
             aOutput->m_lastRunReporters[job.m_id] = reporterToUse;
         }
 
-        int result = 0;
+        int result = CLI::EXIT_CODES::SUCCESS;
 
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
@@ -261,11 +274,11 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
             }
         }
 
-        aOutput->m_lastRunSuccessMap[job.m_id] = result == 0;
+        aOutput->m_lastRunSuccessMap[job.m_id] = ( result == CLI::EXIT_CODES::SUCCESS );
 
         if( m_reporter )
         {
-            if( result == 0 )
+            if( result == CLI::EXIT_CODES::SUCCESS )
             {
                 wxString msg_fmt = wxT( "\033[32;1m%s\033[0m\n" );
                 msg = wxString::Format( msg_fmt, _( "Job successful" ) );
@@ -284,17 +297,25 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
             m_reporter->Report( msg, RPT_SEVERITY_INFO );
         }
 
-        if( result != 0 )
+        if( result == CLI::EXIT_CODES::ERR_RC_VIOLATIONS )
         {
+            success = false;
+
             if( aBail )
-                return result;
-            else
-                success = false;
+                break;
+        }
+        else if( result != CLI::EXIT_CODES::SUCCESS )
+        {
+            genOutputs = false;
+            success = false;
+
+            if( aBail )
+                break;
         }
     }
 
-    if( success )
-        success = aOutput->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
+    if( genOutputs )
+        success &= aOutput->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
 
     aOutput->m_lastRunSuccess = success;
 

@@ -291,10 +291,7 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
         }
 
         if( !m_cliBoard )
-        {
-            m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
             m_cliBoard = LoadBoard( pcbPath, true );
-        }
 
         brd = m_cliBoard;
     }
@@ -307,7 +304,6 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
     }
     else
     {
-        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
         brd = LoadBoard( aPath, true );
     }
 
@@ -402,14 +398,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
                 !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
                 aStepJob->m_vrmlModelDir, originX, originY );
 
-        if ( success )
-        {
-            wxFileName outFile( outPath );
-            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
-                                                  outFile.GetFullName() ),
-                                RPT_SEVERITY_INFO );
-        }
-        else
+        if( !success )
         {
             m_reporter->Report( _( "Error exporting VRML" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -691,16 +680,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
                                                                             : wxBITMAP_TYPE_JPEG );
     }
 
-    m_reporter->Report( wxString::Format( _( "Actual image size: %dx%d" ), realSize.x, realSize.y )
-                                + wxS( "\n" ),
-                        RPT_SEVERITY_INFO );
-
-    if( success )
-    {
-        m_reporter->Report( _( "Successfully created 3D render image" ) + wxS( "\n" ),
-                            RPT_SEVERITY_INFO );
-    }
-    else
+    if( !success )
     {
         m_reporter->Report( _( "Error creating 3D render image" ) + wxS( "\n" ),
                             RPT_SEVERITY_ERROR );
@@ -1118,8 +1098,6 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-    m_reporter->Report( _( "Successfully created genCAD file\n" ), RPT_SEVERITY_INFO );
-
     return CLI::EXIT_CODES::OK;
 }
 
@@ -1471,11 +1449,9 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
         if( !wxDir::Exists( upgradeJob->m_libraryPath ) )
         {
             m_reporter->Report( _( "Footprint library path does not exist or is not accessible\n" ),
-                                RPT_SEVERITY_INFO );
+                                RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
-
-        m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
 
         PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
         FP_CACHE           fpLib( &pcb_io, upgradeJob->m_libraryPath );
@@ -1503,8 +1479,6 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
 
         if( shouldSave )
         {
-            m_reporter->Report( _( "Saving footprint library\n" ), RPT_SEVERITY_INFO );
-
             try
             {
                 if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
@@ -1520,7 +1494,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
         }
         else
         {
-            m_reporter->Report( _( "Footprint library was not updated\n" ), RPT_SEVERITY_INFO );
+            m_reporter->Report( _( "Footprint library was not updated\n" ), RPT_SEVERITY_ERROR );
         }
     }
     else
@@ -1543,8 +1517,6 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
 
     if( svgJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
-
-    m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
 
     PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
     FP_CACHE   fpLib( &pcb_io, svgJob->m_libraryPath );
@@ -1719,48 +1691,41 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     toolManager->SetEnvironment( brd, nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
 
     BOARD_COMMIT commit( toolManager );
+    bool         checkParity = drcJob->m_parity;
+    std::string  netlist_str;
 
-    m_reporter->Report( _( "Running DRC...\n" ), RPT_SEVERITY_INFO );
-
-    if( drcJob->m_parity )
+    if( checkParity )
     {
-        typedef bool (*NETLIST_FN_PTR)( const wxString&, std::string& );
+        wxString annotateMsg = _( "Schematic parity tests require a fully annotated schematic." );
+        netlist_str = annotateMsg;
 
-        KIFACE*        eeschema = m_kiway->KiFACE( KIWAY::FACE_SCH );
-        wxFileName     schematicPath( drcJob->m_filename );
-        NETLIST_FN_PTR netlister = (NETLIST_FN_PTR) eeschema->IfaceOrAddress( KIFACE_NETLIST_SCHEMATIC );
-        std::string    netlist_str;
+        m_kiway->ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, netlist_str );
 
-        schematicPath.SetExt( FILEEXT::KiCadSchematicFileExtension );
-
-        if( !schematicPath.Exists() )
-            schematicPath.SetExt( FILEEXT::LegacySchematicFileExtension );
-
-        if( !schematicPath.Exists() )
+        if( netlist_str == annotateMsg )
         {
-            m_reporter->Report( _( "Failed to find schematic for parity tests.\n" ),
-                                RPT_SEVERITY_INFO );
+            m_reporter->Report( netlist_str + wxT( "\n" ), RPT_SEVERITY_ERROR );
+            checkParity = false;
         }
-        else
+    }
+
+    if( checkParity )
+    {
+        try
         {
-            (*netlister)( schematicPath.GetFullPath(), netlist_str );
+            STRING_LINE_READER* lineReader = new STRING_LINE_READER( netlist_str,
+                                                                     _( "Eeschema netlist" ) );
+            KICAD_NETLIST_READER netlistReader( lineReader, netlist.get() );
 
-            try
-            {
-                STRING_LINE_READER* lineReader = new STRING_LINE_READER( netlist_str,
-                                                                         _( "Eeschema netlist" ) );
-                KICAD_NETLIST_READER netlistReader( lineReader, netlist.get() );
-
-                netlistReader.LoadNetlist();
-            }
-            catch( const IO_ERROR& )
-            {
-                m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ),
-                                    RPT_SEVERITY_INFO );
-            }
-
-            drcEngine->SetSchematicNetlist( netlist.get() );
+            netlistReader.LoadNetlist();
         }
+        catch( const IO_ERROR& )
+        {
+            m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ),
+                                RPT_SEVERITY_ERROR );
+            checkParity = false;
+        }
+
+        drcEngine->SetSchematicNetlist( netlist.get() );
     }
 
     drcEngine->SetProgressReporter( nullptr );
@@ -1774,7 +1739,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     brd->RecordDRCExclusions();
     brd->DeleteMARKERs( true, true );
-    drcEngine->RunTests( units, drcJob->m_reportAllTrackErrors, drcJob->m_parity );
+    drcEngine->RunTests( units, drcJob->m_reportAllTrackErrors, checkParity );
     drcEngine->ClearViolationHandler();
 
     commit.Push( _( "DRC" ), SKIP_UNDO | SKIP_SET_DIRTY );
@@ -1797,16 +1762,16 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
                                           markersProvider->GetCount() ),
-                        RPT_SEVERITY_INFO );
+                        RPT_SEVERITY_ERROR );
     m_reporter->Report( wxString::Format( _( "Found %d unconnected items\n" ),
                                           ratsnestProvider->GetCount() ),
-                        RPT_SEVERITY_INFO );
+                        RPT_SEVERITY_ERROR );
 
-    if( drcJob->m_parity )
+    if( checkParity )
     {
         m_reporter->Report( wxString::Format( _( "Found %d schematic parity issues\n" ),
                                               fpWarningsProvider->GetCount() ),
-                            RPT_SEVERITY_INFO );
+                            RPT_SEVERITY_ERROR );
     }
 
     DRC_REPORT reportWriter( brd, units, markersProvider, ratsnestProvider, fpWarningsProvider );
@@ -1821,13 +1786,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     if( !wroteReport )
     {
         m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ), outPath ),
-                            RPT_SEVERITY_INFO );
+                            RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
-
-    wxFileName outFile( outPath );
-    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), outFile.GetFullName() ),
-                        RPT_SEVERITY_INFO );
 
     if( drcJob->m_exitCodeViolations )
     {

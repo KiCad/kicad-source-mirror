@@ -166,10 +166,7 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
         }
 
         if( !m_cliSchematic )
-        {
-            m_reporter->Report( _( "Loading schematic\n" ), RPT_SEVERITY_INFO );
             m_cliSchematic = EESCHEMA_HELPERS::LoadSchematic( schPath, true, false, &project );
-        }
 
         sch = m_cliSchematic;
     }
@@ -179,20 +176,15 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
                 dynamic_cast<SCH_EDIT_FRAME*>( m_kiway->Player( FRAME_SCH, false ) );
 
         if( editFrame )
-        {
             sch = &editFrame->Schematic();
-        }
     }
     else if( !aPath.IsEmpty() )
     {
-        m_reporter->Report( _( "Loading schematic\n" ), RPT_SEVERITY_INFO );
         sch = EESCHEMA_HELPERS::LoadSchematic( aPath, true, false );
     }
 
     if( !sch )
-    {
         m_reporter->Report( _( "Failed to load schematic\n" ), RPT_SEVERITY_ERROR );
-    }
 
     return sch;
 }
@@ -1078,7 +1070,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
         }
         else
         {
-            m_reporter->Report( _( "Symbol library was not updated\n" ), RPT_SEVERITY_INFO );
+            m_reporter->Report( _( "Symbol library was not updated\n" ), RPT_SEVERITY_ERROR );
         }
     }
     else
@@ -1146,8 +1138,6 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     ERC_TESTER ercTester( sch );
 
-    m_reporter->Report( _( "Running ERC...\n" ), RPT_SEVERITY_INFO );
-
     std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet( getDrawingSheetProxyView( sch ) );
     ercTester.RunTests( drawingSheet.get(), nullptr, m_kiway->KiFACE( KIWAY::FACE_CVPCB ),
                         &sch->Prj(), m_progressReporter );
@@ -1156,7 +1146,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
                                           markersProvider->GetCount() ),
-                        RPT_SEVERITY_INFO );
+                        RPT_SEVERITY_ERROR );
 
     ERC_REPORT reportWriter( sch, units );
 
@@ -1170,13 +1160,9 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     if( !wroteReport )
     {
         m_reporter->Report( wxString::Format( _( "Unable to save ERC report to %s\n" ), outPath ),
-                            RPT_SEVERITY_INFO );
+                            RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
-
-    wxFileName outFile( outPath );
-    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), outFile.GetFullName() ),
-                        RPT_SEVERITY_INFO );
 
     if( ercJob->m_exitCodeViolations )
     {
