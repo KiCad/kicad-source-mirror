@@ -3,7 +3,11 @@
 <!-- Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors. -->
 <component type="desktop-application">
     <id>@KICAD_APP_NAME@</id>
+
+    <!-- One of the validators requires that we localize the name.  Silly but here we are-->
     <name>KiCad</name>
+    <name xml:lang="de">KiCad</name>
+    <name xml:lang="zh">KiCad</name>
 
     <launchable type="desktop-id">@KICAD_APP_NAME@.desktop</launchable>
 
@@ -11,6 +15,8 @@
     <metadata_license>CC-BY-SA-4.0</metadata_license>
 
     <summary>An EDA suite for schematic and circuit board design</summary>
+    <summary xml:lang="de">Eine EDA-Suite für Schaltplan- und Leiterplattendesign</summary>
+    <summary xml:lang="zh">用于原理图和电路板设计的 EDA 套件</summary>
 
     <provides>
         <binary>kicad</binary>
@@ -49,6 +55,12 @@
         <p>
         KiCad is a free and open-source electronics design automation (EDA) suite. It features schematic capture, integrated circuit simulation, printed circuit board (PCB) layout, 3D rendering, and plotting/data export to numerous formats. KiCad also includes a high-quality component library featuring thousands of symbols, footprints, and 3D models. KiCad has minimal system requirements and runs on Linux, Windows, and macOS.
         </p>
+        <p xml:lang="zh">
+        KiCad 是一个免费和开源的电子设计自动化（EDA）套件。它具有原理图捕获、集成电路模拟、印刷电路板（PCB）布局、3D 渲染和绘图/数据导出等多种格式。KiCad 还包括一个高质量的元件库，其中有成千上万的符号、封装和 3D 模型。KiCad 对系统要求最低，可在 Linux、Windows 和 macOS 上运行。
+        </p>
+        <p xml:lang="de">
+        KiCad ist eine freie und quelloffene EDA-Suite (Electronic Design Automation). Sie bietet die Schaltplanerfassung, die Simulation integrierter Schaltungen, Leiterplattenlayout (PCB), 3D-Rendering und Plotten/Datenexport in zahlreiche Formate. KiCad enthält auch eine hochwertige Bauteilbibliothek mit Tausenden von Symbolen, Footprints und 3D-Modellen. KiCad hat minimale Systemanforderungen und läuft unter Linux, Windows und macOS.
+        </p>
     </description>
 
     <screenshots>
@@ -78,9 +90,7 @@
 
     <update_contact>devlist@kicad.org</update_contact>
 
-    <developer id="org.kicad">
-        <name>KiCad Developers</name>
-    </developer>
+    <developer_name>The KiCad Developers</developer_name>
 
 
     <!-- This is actually a valid tag, but the utilities don't think so -->
@@ -95,11 +105,9 @@
         <release version="@KICAD_VERSION_FULL@" date="@KICAD_CONFIG_TIMESTAMP@" />
     </releases>
 
-    <requires>
-        <display_length compare="ge">1280</display_length>
-        <memory compare="ge">1024</memory>
-    </requires>
-
+    <!-- The supports/recommends tags are not recognized by older appstream-util
+         but they are valid.  Unfortunately, freedesktop does not publish a DTD
+         or version their metainfo files -->
     <recommends>
         <display_length compare="ge">1920</display_length>
         <memory compare="ge">2048</memory>
