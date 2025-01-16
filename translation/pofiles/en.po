@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 20:07+0300\n"
+"POT-Creation-Date: 2025-01-16 23:16+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1997,6 +1997,9 @@ msgstr "Page Setup…"
 msgid "JSON"
 msgstr "JSON"
 
+msgid "Output file:"
+msgstr "Output file:"
+
 msgid "Format:"
 msgstr "Format:"
 
@@ -2005,9 +2008,6 @@ msgstr "Include:"
 
 msgid "Warnings"
 msgstr "Warnings"
-
-msgid "Output file:"
-msgstr "Output file:"
 
 msgid "Report job failure when violations present"
 msgstr "Report job failure when violations present"
@@ -7686,9 +7686,6 @@ msgstr "This plugin already exists."
 msgid "Maximum number of plugins already added to dialog."
 msgstr "Maximum number of plugins already added to dialog."
 
-msgid "You must provide a netlist generator command string"
-msgstr "You must provide a netlist generator command string"
-
 msgid "You must provide a netlist generator title"
 msgstr "You must provide a netlist generator title"
 
@@ -9384,6 +9381,10 @@ msgstr "Type"
 msgid "Not Connected"
 msgstr "Not Connected"
 
+#, c-format
+msgid "No model named '%s' in '%s'."
+msgstr "No model named '%s' in '%s'."
+
 msgid "Browse Models"
 msgstr "Browse Models"
 
@@ -9486,9 +9487,6 @@ msgstr "Label"
 
 msgid "Group By"
 msgstr "Group By"
-
-msgid "BOM Export Job"
-msgstr "BOM Export Job"
 
 msgid "Qty"
 msgstr "Qty"
@@ -10633,9 +10631,6 @@ msgid ""
 msgstr ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 
-msgid "Loading schematic\n"
-msgstr "Loading schematic\n"
-
 msgid "Failed to load schematic\n"
 msgstr "Failed to load schematic\n"
 
@@ -10691,9 +10686,6 @@ msgstr "Saving symbol library in updated format\n"
 msgid "Symbol library was not updated\n"
 msgstr "Symbol library was not updated\n"
 
-msgid "Running ERC...\n"
-msgstr "Running ERC...\n"
-
 #, c-format
 msgid "Found %d violations\n"
 msgstr "Found %d violations\n"
@@ -10701,10 +10693,6 @@ msgstr "Found %d violations\n"
 #, c-format
 msgid "Unable to save ERC report to %s\n"
 msgstr "Unable to save ERC report to %s\n"
-
-#, c-format
-msgid "Saved ERC Report to %s\n"
-msgstr "Saved ERC Report to %s\n"
 
 msgid "Net Navigator"
 msgstr "Net Navigator"
@@ -18021,6 +18009,28 @@ msgstr "Ignore non-zero exit code"
 msgid "Execute Command Job Settings"
 msgstr "Execute Command Job Settings"
 
+#, c-format
+msgid "%s Output Options"
+msgstr "%s Output Options"
+
+msgid "Select output directory"
+msgstr "Select output directory"
+
+msgid "Select output path"
+msgstr "Select output path"
+
+msgid "Output path cannot be empty"
+msgstr "Output path cannot be empty"
+
+msgid "Zip"
+msgstr "Zip"
+
+msgid "Description:"
+msgstr "Description:"
+
+msgid "Include jobs:"
+msgstr "Include jobs:"
+
 msgid "Project Template Selector"
 msgstr "Project Template Selector"
 
@@ -18082,22 +18092,6 @@ msgstr "Go to the platform appropriate downloads page."
 
 msgid "Update Available"
 msgstr "Update Available"
-
-#, c-format
-msgid "%s Output Options"
-msgstr "%s Output Options"
-
-msgid "Select output directory"
-msgstr "Select output directory"
-
-msgid "Select output path"
-msgstr "Select output path"
-
-msgid "Output path cannot be empty"
-msgstr "Output path cannot be empty"
-
-msgid "Zip"
-msgstr "Zip"
 
 #, c-format
 msgid "Output: %s"
@@ -18174,12 +18168,6 @@ msgstr "Save Jobset"
 
 msgid "Generate All Outputs"
 msgstr "Generate All Outputs"
-
-msgid "Description:"
-msgstr "Description:"
-
-msgid "Include jobs:"
-msgstr "Include jobs:"
 
 msgid "Job Output Run Log"
 msgstr "Job Output Run Log"
@@ -33108,31 +33096,17 @@ msgstr ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 
-msgid "Loading board\n"
-msgstr "Loading board\n"
-
 msgid "Failed to load board\n"
 msgstr "Failed to load board\n"
 
 msgid "Unknown export format"
 msgstr "Unknown export format"
 
-#, c-format
-msgid "Successfully exported VRML to %s"
-msgstr "Successfully exported VRML to %s"
-
 msgid "Error exporting VRML"
 msgstr "Error exporting VRML"
 
 msgid "Invalid image dimensions"
 msgstr "Invalid image dimensions"
-
-#, c-format
-msgid "Actual image size: %dx%d"
-msgstr "Actual image size: %dx%d"
-
-msgid "Successfully created 3D render image"
-msgstr "Successfully created 3D render image"
 
 msgid "Error creating 3D render image"
 msgstr "Error creating 3D render image"
@@ -33141,17 +33115,8 @@ msgstr "Error creating 3D render image"
 msgid "Failed to plot to '%s'.\n"
 msgstr "Failed to plot to '%s'.\n"
 
-msgid "Successfully created genCAD file\n"
-msgstr "Successfully created genCAD file\n"
-
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "Footprint library path does not exist or is not accessible\n"
-
-msgid "Loading footprint library\n"
-msgstr "Loading footprint library\n"
-
-msgid "Saving footprint library\n"
-msgstr "Saving footprint library\n"
 
 msgid "Unable to save library\n"
 msgstr "Unable to save library\n"
@@ -33169,11 +33134,8 @@ msgstr "Plotting footprint '%s' to '%s'\n"
 msgid "Error creating svg file"
 msgstr "Error creating svg file"
 
-msgid "Running DRC...\n"
-msgstr "Running DRC...\n"
-
-msgid "Failed to find schematic for parity tests.\n"
-msgstr "Failed to find schematic for parity tests.\n"
+msgid "Schematic parity tests require a fully annotated schematic."
+msgstr "Schematic parity tests require a fully annotated schematic."
 
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Failed to fetch schematic netlist for parity tests.\n"
@@ -33192,10 +33154,6 @@ msgstr "Found %d schematic parity issues\n"
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "Unable to save DRC report to %s\n"
-
-#, c-format
-msgid "Saved DRC Report to %s\n"
-msgstr "Saved DRC Report to %s\n"
 
 msgid "Multiple Layers"
 msgstr "Multiple Layers"
@@ -34137,9 +34095,6 @@ msgstr "Via location violates DRC."
 
 msgid "Place via"
 msgstr "Place via"
-
-msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "Schematic parity tests require a fully annotated schematic."
 
 msgid "Positioning Tools"
 msgstr "Positioning Tools"
@@ -36890,6 +36845,55 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "You must provide a netlist generator command string"
+#~ msgstr "You must provide a netlist generator command string"
+
+#~ msgid "BOM Export Job"
+#~ msgstr "BOM Export Job"
+
+#~ msgid "Loading schematic\n"
+#~ msgstr "Loading schematic\n"
+
+#~ msgid "Running ERC...\n"
+#~ msgstr "Running ERC...\n"
+
+#, c-format
+#~ msgid "Saved ERC Report to %s\n"
+#~ msgstr "Saved ERC Report to %s\n"
+
+#~ msgid "Loading board\n"
+#~ msgstr "Loading board\n"
+
+#, c-format
+#~ msgid "Successfully exported VRML to %s"
+#~ msgstr "Successfully exported VRML to %s"
+
+#, c-format
+#~ msgid "Actual image size: %dx%d"
+#~ msgstr "Actual image size: %dx%d"
+
+#~ msgid "Successfully created 3D render image"
+#~ msgstr "Successfully created 3D render image"
+
+#~ msgid "Successfully created genCAD file\n"
+#~ msgstr "Successfully created genCAD file\n"
+
+#~ msgid "Loading footprint library\n"
+#~ msgstr "Loading footprint library\n"
+
+#~ msgid "Saving footprint library\n"
+#~ msgstr "Saving footprint library\n"
+
+#~ msgid "Running DRC...\n"
+#~ msgstr "Running DRC...\n"
+
+#~ msgid "Failed to find schematic for parity tests.\n"
+#~ msgstr "Failed to find schematic for parity tests.\n"
+
+#, c-format
+#~ msgid "Saved DRC Report to %s\n"
+#~ msgstr "Saved DRC Report to %s\n"
 
 #~ msgid "Paste item(s) from clipboard with annotation options"
 #~ msgstr "Paste item(s) from clipboard with annotation options"
