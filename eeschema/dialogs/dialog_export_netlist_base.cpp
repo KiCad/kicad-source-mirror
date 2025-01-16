@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,7 +31,7 @@ DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	m_outputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPath->SetMinSize( wxSize( 450,-1 ) );
 
-	bSizer8->Add( m_outputPath, 0, wxALL, 5 );
+	bSizer8->Add( m_outputPath, 1, wxALL, 5 );
 
 
 	bUpperSizer->Add( bSizer8, 1, wxEXPAND, 5 );
@@ -49,15 +49,15 @@ DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	bSizerMsgPanel->Add( m_MessagesBox, 1, wxEXPAND|wxTOP, 5 );
 
 
-	bUpperSizer->Add( bSizerMsgPanel, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bUpperSizer->Add( bSizerMsgPanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bUpperSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_buttonSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonAddGenerator = new wxButton( this, ID_ADD_PLUGIN, _("Add Exporter..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonSizer->Add( m_buttonAddGenerator, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_buttonSizer->Add( m_buttonAddGenerator, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_buttonDelGenerator = new wxButton( this, ID_DEL_PLUGIN, _("Remove Exporter"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonSizer->Add( m_buttonDelGenerator, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );

@@ -22,6 +22,15 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Output file:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputPath->Wrap( -1 );
+	fgSizer1->Add( m_textOutputPath, 0, wxALIGN_CENTER, 5 );
+
+	m_textCtrlOutputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
+
+	fgSizer1->Add( m_textCtrlOutputPath, 1, wxALIGN_CENTER_VERTICAL, 5 );
+
 	m_staticText18 = new wxStaticText( this, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
 	fgSizer1->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -50,15 +59,6 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 
 	fgSizer1->Add( bSizer2, 1, wxEXPAND|wxTOP|wxBOTTOM, 4 );
 
-	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Output file:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textOutputPath->Wrap( -1 );
-	fgSizer1->Add( m_textOutputPath, 0, wxALIGN_CENTER, 5 );
-
-	m_textCtrlOutputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
-
-	fgSizer1->Add( m_textCtrlOutputPath, 1, wxALIGN_CENTER_VERTICAL, 5 );
-
 
 	bSizerMain->Add( fgSizer1, 1, wxALL|wxEXPAND, 10 );
 
@@ -81,7 +81,7 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizerBottom->Add( m_cbSchParity, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxRIGHT, 5 );
+	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

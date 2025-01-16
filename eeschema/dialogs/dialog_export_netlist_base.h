@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,10 +31,10 @@ class WX_HTML_REPORT_PANEL;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_CHANGE_NOTEBOOK_PAGE 1000
-#define ID_ADD_PLUGIN 1001
-#define ID_DEL_PLUGIN 1002
-#define wxID_BROWSE_PLUGINS 1003
+#define ID_CHANGE_NOTEBOOK_PAGE 6000
+#define ID_ADD_PLUGIN 6001
+#define ID_DEL_PLUGIN 6002
+#define wxID_BROWSE_PLUGINS 6003
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EXPORT_NETLIST_BASE

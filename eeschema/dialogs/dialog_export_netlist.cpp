@@ -162,19 +162,19 @@ enum id_netlist {
 
 EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& aTitle,
                                           NETLIST_TYPE_ID aIdNetType, bool aCustom ) :
-        wxPanel( aParent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
+        wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
 {
-    m_IdNetType           = aIdNetType;
-    m_pageNetFmtName      = aTitle;
-    m_CommandStringCtrl   = nullptr;
-    m_CurSheetAsRoot      = nullptr;
-    m_TitleStringCtrl     = nullptr;
-    m_SaveAllVoltages     = nullptr;
-    m_SaveAllCurrents     = nullptr;
-    m_SaveAllDissipations = nullptr;
-    m_SaveAllEvents       = nullptr;
+    m_IdNetType               = aIdNetType;
+    m_pageNetFmtName          = aTitle;
+    m_CommandStringCtrl       = nullptr;
+    m_CurSheetAsRoot          = nullptr;
+    m_TitleStringCtrl         = nullptr;
+    m_SaveAllVoltages         = nullptr;
+    m_SaveAllCurrents         = nullptr;
+    m_SaveAllDissipations     = nullptr;
+    m_SaveAllEvents           = nullptr;
     m_RunExternalSpiceCommand = nullptr;
-    m_custom              = aCustom;
+    m_custom                  = aCustom;
 
     aParent->AddPage( this, aTitle, false );
 
@@ -182,13 +182,13 @@ EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& a
     SetSizer( MainBoxSizer );
     wxBoxSizer* UpperBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     m_LowBoxSizer = new wxBoxSizer( wxVERTICAL );
-    MainBoxSizer->Add( UpperBoxSizer, 0, wxGROW | wxALL, 5 );
-    MainBoxSizer->Add( m_LowBoxSizer, 0, wxGROW | wxALL, 5 );
+    MainBoxSizer->Add( UpperBoxSizer, 0, wxEXPAND | wxALL, 5 );
+    MainBoxSizer->Add( m_LowBoxSizer, 0, wxEXPAND | wxALL, 5 );
 
     m_LeftBoxSizer  = new wxBoxSizer( wxVERTICAL );
     m_RightBoxSizer = new wxBoxSizer( wxVERTICAL );
     m_RightOptionsBoxSizer = new wxBoxSizer( wxVERTICAL );
-    UpperBoxSizer->Add( m_LeftBoxSizer, 0, wxGROW | wxALL, 5 );
+    UpperBoxSizer->Add( m_LeftBoxSizer, 0, wxEXPAND | wxALL, 5 );
     UpperBoxSizer->Add( m_RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
     UpperBoxSizer->Add( m_RightOptionsBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 }
@@ -197,7 +197,6 @@ EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& a
 DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame ) :
         DIALOG_EXPORT_NETLIST( aEditFrame, aEditFrame )
 {
-
 }
 
 
@@ -299,78 +298,80 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
 
 void DIALOG_EXPORT_NETLIST::InstallPageSpice()
 {
-    EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICE] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "SPICE" ), NET_TYPE_SPICE, false );
+    auto* pg = m_PanelNetType[PANELSPICE] = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "SPICE" ),
+                                                                     NET_TYPE_SPICE, false );
 
     SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
 
-    wxStaticText* label = new wxStaticText( page, wxID_ANY, _( "Export netlist in SPICE format" ) );
-    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
+    wxStaticText* label = new wxStaticText( pg, wxID_ANY, _( "Export netlist in SPICE format" ) );
+    pg->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
 
-    page->m_CurSheetAsRoot = new wxCheckBox( page, ID_CUR_SHEET_AS_ROOT,
-                                             _( "Use current sheet as root" ) );
-    page->m_CurSheetAsRoot->SetToolTip( _( "Export netlist only for the current sheet" ) );
-    page->m_CurSheetAsRoot->SetValue( settings.m_SpiceCurSheetAsRoot );
-    page->m_LeftBoxSizer->Add( page->m_CurSheetAsRoot, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
+    pg->m_CurSheetAsRoot = new wxCheckBox( pg, ID_CUR_SHEET_AS_ROOT,
+                                           _( "Use current sheet as root" ) );
+    pg->m_CurSheetAsRoot->SetToolTip( _( "Export netlist only for the current sheet" ) );
+    pg->m_CurSheetAsRoot->SetValue( settings.m_SpiceCurSheetAsRoot );
+    pg->m_LeftBoxSizer->Add( pg->m_CurSheetAsRoot, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
 
-    page->m_SaveAllVoltages = new wxCheckBox( page, ID_SAVE_ALL_VOLTAGES,
-                                              _( "Save all voltages" ) );
-    page->m_SaveAllVoltages->SetToolTip( _( "Write a directive to save all voltages (.save all)" ) );
-    page->m_SaveAllVoltages->SetValue( settings.m_SpiceSaveAllVoltages );
-    page->m_LeftBoxSizer->Add( page->m_SaveAllVoltages, 0, wxBOTTOM | wxRIGHT, 5 );
+    pg->m_SaveAllVoltages = new wxCheckBox( pg, ID_SAVE_ALL_VOLTAGES, _( "Save all voltages" ) );
+    pg->m_SaveAllVoltages->SetToolTip( _( "Write a directive to save all voltages (.save all)" ) );
+    pg->m_SaveAllVoltages->SetValue( settings.m_SpiceSaveAllVoltages );
+    pg->m_LeftBoxSizer->Add( pg->m_SaveAllVoltages, 0, wxBOTTOM | wxRIGHT, 5 );
 
-    page->m_SaveAllCurrents = new wxCheckBox( page, ID_SAVE_ALL_CURRENTS,
-                                              _( "Save all currents" ) );
-    page->m_SaveAllCurrents->SetToolTip( _( "Write a directive to save all currents (.probe alli)" ) );
-    page->m_SaveAllCurrents->SetValue( settings.m_SpiceSaveAllCurrents );
-    page->m_LeftBoxSizer->Add( page->m_SaveAllCurrents, 0, wxBOTTOM | wxRIGHT, 5 );
+    pg->m_SaveAllCurrents = new wxCheckBox( pg, ID_SAVE_ALL_CURRENTS, _( "Save all currents" ) );
+    pg->m_SaveAllCurrents->SetToolTip( _( "Write a directive to save all currents (.probe alli)" ) );
+    pg->m_SaveAllCurrents->SetValue( settings.m_SpiceSaveAllCurrents );
+    pg->m_LeftBoxSizer->Add( pg->m_SaveAllCurrents, 0, wxBOTTOM | wxRIGHT, 5 );
 
-    page->m_SaveAllDissipations = new wxCheckBox( page, ID_SAVE_ALL_DISSIPATIONS,
-                                                  _( "Save all power dissipations" ) );
-    page->m_SaveAllDissipations->SetToolTip( _( "Write directives to save power dissipation of all items (.probe p(<item>))" ) );
-    page->m_SaveAllDissipations->SetValue( settings.m_SpiceSaveAllDissipations );
-    page->m_LeftBoxSizer->Add( page->m_SaveAllDissipations, 0, wxBOTTOM | wxRIGHT, 5 );
+    pg->m_SaveAllDissipations = new wxCheckBox( pg, ID_SAVE_ALL_DISSIPATIONS,
+                                                _( "Save all power dissipations" ) );
+    pg->m_SaveAllDissipations->SetToolTip( _( "Write directives to save power dissipation of all "
+                                              "items (.probe p(<item>))" ) );
+    pg->m_SaveAllDissipations->SetValue( settings.m_SpiceSaveAllDissipations );
+    pg->m_LeftBoxSizer->Add( pg->m_SaveAllDissipations, 0, wxBOTTOM | wxRIGHT, 5 );
 
-    page->m_SaveAllEvents = new wxCheckBox( page, ID_SAVE_ALL_EVENTS,
-                                            _( "Save all digital event data" ) );
-    page->m_SaveAllEvents->SetToolTip( _( "If not set, write a directive to prevent the saving of digital event data (esave none)" ) );
-    page->m_SaveAllEvents->SetValue( settings.m_SpiceSaveAllEvents );
-    page->m_LeftBoxSizer->Add( page->m_SaveAllEvents, 0, wxBOTTOM | wxRIGHT, 5 );
+    pg->m_SaveAllEvents = new wxCheckBox( pg, ID_SAVE_ALL_EVENTS,
+                                          _( "Save all digital event data" ) );
+    pg->m_SaveAllEvents->SetToolTip( _( "If not set, write a directive to prevent the saving of "
+                                        "digital event data (esave none)" ) );
+    pg->m_SaveAllEvents->SetValue( settings.m_SpiceSaveAllEvents );
+    pg->m_LeftBoxSizer->Add( pg->m_SaveAllEvents, 0, wxBOTTOM | wxRIGHT, 5 );
 
 
-    page->m_RunExternalSpiceCommand = new wxCheckBox( page, ID_RUN_SIMULATOR,
-                                                      _( "Run external simulator command:" ) );
+    pg->m_RunExternalSpiceCommand = new wxCheckBox( pg, ID_RUN_SIMULATOR,
+                                                    _( "Run external simulator command:" ) );
     wxString simulatorCommand = settings.m_SpiceCommandString;
-    page->m_RunExternalSpiceCommand->SetToolTip( _( "Enter the command line to run SPICE\n"
-                                                    "Usually '<path to SPICE binary> \"%I\"'\n"
-                                                    "%I will be replaced by the netlist filepath" ) );
-    page->m_LowBoxSizer->Add( page->m_RunExternalSpiceCommand, 0,
-                              wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+    pg->m_RunExternalSpiceCommand->SetToolTip( _( "Enter the command line to run SPICE\n"
+                                                  "Usually '<path to SPICE binary> \"%I\"'\n"
+                                                  "%I will be replaced by the netlist filepath" ) );
+    pg->m_LowBoxSizer->Add( pg->m_RunExternalSpiceCommand, 0,
+                            wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    page->m_CommandStringCtrl = new wxTextCtrl( page, -1, simulatorCommand,
-                                                wxDefaultPosition, wxDefaultSize );
+    pg->m_CommandStringCtrl = new wxTextCtrl( pg, -1, simulatorCommand,
+                                              wxDefaultPosition, wxDefaultSize );
 
-    page->m_CommandStringCtrl->SetInsertionPoint( 1 );
-    page->m_LowBoxSizer->Add( page->m_CommandStringCtrl, 0,
-                              wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+    pg->m_CommandStringCtrl->SetInsertionPoint( 1 );
+    pg->m_LowBoxSizer->Add( pg->m_CommandStringCtrl, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 }
 
 
 void DIALOG_EXPORT_NETLIST::InstallPageSpiceModel()
 {
-    EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICEMODEL] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "SPICE Model" ), NET_TYPE_SPICE_MODEL, false );
+    auto* pg = m_PanelNetType[PANELSPICEMODEL] = new EXPORT_NETLIST_PAGE( m_NoteBook,
+                                                                          wxT( "SPICE Model" ),
+                                                                          NET_TYPE_SPICE_MODEL,
+                                                                          false );
 
     SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
 
-    wxStaticText* label = new wxStaticText( page, wxID_ANY, _( "Export netlist as a SPICE .subckt model" ) );
-    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
+    wxStaticText* label = new wxStaticText( pg, wxID_ANY,
+                                            _( "Export netlist as a SPICE .subckt model" ) );
+    pg->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
 
-    page->m_CurSheetAsRoot = new wxCheckBox( page, ID_CUR_SHEET_AS_ROOT,
-                                             _( "Use current sheet as root" ) );
-    page->m_CurSheetAsRoot->SetToolTip( _( "Export netlist only for the current sheet" ) );
-    page->m_CurSheetAsRoot->SetValue( settings.m_SpiceModelCurSheetAsRoot );
-    page->m_LeftBoxSizer->Add( page->m_CurSheetAsRoot, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
+    pg->m_CurSheetAsRoot = new wxCheckBox( pg, ID_CUR_SHEET_AS_ROOT,
+                                           _( "Use current sheet as root" ) );
+    pg->m_CurSheetAsRoot->SetToolTip( _( "Export netlist only for the current sheet" ) );
+    pg->m_CurSheetAsRoot->SetValue( settings.m_SpiceModelCurSheetAsRoot );
+    pg->m_LeftBoxSizer->Add( pg->m_CurSheetAsRoot, 0, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
 }
 
 
@@ -396,29 +397,31 @@ EXPORT_NETLIST_PAGE* DIALOG_EXPORT_NETLIST::AddOneCustomPage( const wxString& aT
                                                               const wxString& aCommandString,
                                                               NETLIST_TYPE_ID aNetTypeId )
 {
-    EXPORT_NETLIST_PAGE* currPage = new EXPORT_NETLIST_PAGE( m_NoteBook, aTitle, aNetTypeId, true );
+    EXPORT_NETLIST_PAGE* pg = new EXPORT_NETLIST_PAGE( m_NoteBook, aTitle, aNetTypeId, true );
 
-    currPage->m_LowBoxSizer->Add( new wxStaticText( currPage, -1, _( "Title:" ) ), 0,
-                                  wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+    pg->m_LowBoxSizer->Add( new wxStaticText( pg, wxID_ANY, _( "Title:" ) ), 0,
+                            wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    currPage->m_TitleStringCtrl = new wxTextCtrl( currPage, -1, aTitle,
-                                                  wxDefaultPosition, wxDefaultSize );
+    pg->m_LowBoxSizer->AddSpacer( 2 );
 
-    currPage->m_TitleStringCtrl->SetInsertionPoint( 1 );
-    currPage->m_LowBoxSizer->Add( currPage->m_TitleStringCtrl, 0,
-                                  wxGROW | wxTOP | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+    pg->m_TitleStringCtrl = new wxTextCtrl( pg, wxID_ANY, aTitle );
 
-    currPage->m_LowBoxSizer->Add( new wxStaticText( currPage, -1, _( "Netlist command:" ) ), 0,
-                                                    wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+    pg->m_TitleStringCtrl->SetInsertionPoint( 1 );
+    pg->m_LowBoxSizer->Add( pg->m_TitleStringCtrl, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
 
-    currPage->m_CommandStringCtrl = new wxTextCtrl( currPage, -1, aCommandString,
-                                                    wxDefaultPosition, wxDefaultSize );
+    pg->m_LowBoxSizer->AddSpacer( 10 );
 
-    currPage->m_CommandStringCtrl->SetInsertionPoint( 1 );
-    currPage->m_LowBoxSizer->Add( currPage->m_CommandStringCtrl, 0,
-                                  wxGROW | wxTOP | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+    pg->m_LowBoxSizer->Add( new wxStaticText( pg, wxID_ANY, _( "Netlist command:" ) ), 0,
+                            wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    return currPage;
+    pg->m_LowBoxSizer->AddSpacer( 2 );
+
+    pg->m_CommandStringCtrl = new wxTextCtrl( pg, wxID_ANY, aCommandString );
+
+    pg->m_CommandStringCtrl->SetInsertionPoint( 1 );
+    pg->m_LowBoxSizer->Add( pg->m_CommandStringCtrl, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
+
+    return pg;
 }
 
 
@@ -491,7 +494,6 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     wxString    fileExt;
     wxString    title = _( "Save Netlist File" );
 
-
     if (m_job)
     {
         NetlistUpdateOpt();
@@ -502,7 +504,6 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
         if( NetlistUpdateOpt() )
             m_editFrame->OnModify();
     }
-
 
     EXPORT_NETLIST_PAGE* currPage;
     currPage = (EXPORT_NETLIST_PAGE*) m_NoteBook->GetCurrentPage();
@@ -561,10 +562,8 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
         break;
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
-    {
         title.Printf( _( "%s Export" ), currPage->m_TitleStringCtrl->GetValue() );
         break;
-    }
     }
 
     wxString fullpath;
@@ -781,6 +780,10 @@ void DIALOG_EXPORT_NETLIST::OnDelGenerator( wxCommandEvent& event )
 
     WriteCurrentNetlistSetup();
 
+    // Override m_NetFormatName written in WriteCurrentNetlistSetup()
+    SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
+    settings.m_NetFormatName = m_NoteBook->GetPageText( m_NoteBook->GetSelection() - 1 );
+
     if( IsQuasiModal() )
         EndQuasiModal( NET_PLUGIN_CHANGE );
     else
@@ -823,7 +826,12 @@ void DIALOG_EXPORT_NETLIST::OnAddGenerator( wxCommandEvent& event )
     }
 
     m_PanelNetType[netTypeId] = AddOneCustomPage( title, cmd, (NETLIST_TYPE_ID)netTypeId );
+
     WriteCurrentNetlistSetup();
+
+    // Override m_NetFormatName written in WriteCurrentNetlistSetup()
+    SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
+    settings.m_NetFormatName = title;
 
     if( IsQuasiModal() )
         EndQuasiModal( NET_PLUGIN_CHANGE );
@@ -836,8 +844,10 @@ NETLIST_DIALOG_ADD_GENERATOR::NETLIST_DIALOG_ADD_GENERATOR( DIALOG_EXPORT_NETLIS
     NETLIST_DIALOG_ADD_GENERATOR_BASE( parent )
 {
     m_Parent = parent;
+    m_initialFocusTarget = m_textCtrlName;
+
     SetupStandardButtons();
-    GetSizer()->SetSizeHints( this );
+    finishDialogSettings();
 }
 
 
@@ -845,12 +855,6 @@ bool NETLIST_DIALOG_ADD_GENERATOR::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
-
-    if( m_textCtrlCommand->GetValue() == wxEmptyString )
-    {
-        wxMessageBox( _( "You must provide a netlist generator command string" ) );
-        return false;
-    }
 
     if( m_textCtrlName->GetValue() == wxEmptyString )
     {

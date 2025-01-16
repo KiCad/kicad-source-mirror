@@ -17,10 +17,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -36,13 +36,13 @@ class KICOMMON_API DIALOG_RC_JOB_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxStaticText* m_textOutputPath;
+		wxTextCtrl* m_textCtrlOutputPath;
 		wxStaticText* m_staticText18;
 		wxChoice* m_choiceFormat;
 		wxStaticText* m_staticText10;
 		wxCheckBox* m_cbViolationErrors;
 		wxCheckBox* m_cbViolationWarnings;
-		wxStaticText* m_textOutputPath;
-		wxTextCtrl* m_textCtrlOutputPath;
 		wxCheckBox* m_cbHaltOutput;
 		wxCheckBox* m_cbAllTrackViolations;
 		wxCheckBox* m_cbSchParity;
