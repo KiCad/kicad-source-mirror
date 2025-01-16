@@ -222,7 +222,6 @@ public:
 
                     // Bring the Kicad manager frame back to the front
                     m_frame->Raise();
-                    m_frame->RefreshProjectTree();
                 } );
     }
 
@@ -919,7 +918,6 @@ void PANEL_JOBSET::OnGenerateAllOutputsClick( wxCommandEvent& event )
 
                 // Bring the Kicad manager frame back to the front
                 m_frame->Raise();
-                m_frame->RefreshProjectTree();
 			} );
 }
 

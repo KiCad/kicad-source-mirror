@@ -1286,6 +1286,13 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
     wxString subdir = pathModified.GetPath();
     wxString fn = pathModified.GetFullPath();
 
+    // Adjust directories to look like a file item (path and name).
+    if( pathModified.GetFullName().IsEmpty() )
+    {
+        subdir = subdir.BeforeLast( '/' );
+        fn = fn.BeforeLast( '/' );
+    }
+
     switch( event.GetChangeType() )
     {
     case wxFSW_EVENT_DELETE:
@@ -1314,8 +1321,7 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
     {
     case wxFSW_EVENT_CREATE:
     {
-        wxTreeItemId newitem =
-                addItemToProjectTree( pathModified.GetFullPath(), root_id, nullptr, true );
+        wxTreeItemId newitem = addItemToProjectTree( fn, root_id, nullptr, true );
 
         // If we are in the process of renaming a file, select the new one
         // This is needed for MSW and OSX, since we don't get RENAME events from them, just a
