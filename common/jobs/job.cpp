@@ -21,6 +21,7 @@
 #include <jobs/job.h>
 #include <wx/filename.h>
 #include <common.h>
+#include <project.h>
 
 JOB::JOB( const std::string& aType, bool aOutputIsDirectory ) :
         m_type( aType ),
@@ -101,7 +102,13 @@ wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                return m_titleBlock.TextVarResolver( token, aProject );
+                if( m_titleBlock.TextVarResolver( token, aProject ) )
+                    return true;
+
+                if( aProject )
+                    return aProject->TextVarResolver( token );
+
+                return false;
             };
 
     // use the working output path (nonsaved) over the configured path if its not empty
