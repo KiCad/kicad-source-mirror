@@ -359,7 +359,6 @@ static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& 
 
 bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 {
-    std::cout << "DIALOG_CREATE_ARRAY::TransferDataFromWindow()" << std::endl;
     std::unique_ptr<ARRAY_OPTIONS> newSettings;
 
     wxArrayString   errors;

@@ -89,7 +89,6 @@ ARRAY_OPTIONS::TRANSFORM ARRAY_GRID_OPTIONS::GetTransform( int n, const VECTOR2I
         const int arrayExtentX = ( m_nx - 1 ) * m_delta.x + ( m_ny - 1 ) * m_offset.x;
         const int arrayExtentY = ( m_ny - 1 ) * m_delta.y + ( m_nx - 1 ) * m_offset.y;
 
-        std::cout << "Subtracting " << VECTOR2I( arrayExtentX, arrayExtentY ) / 2 << std::endl;
         point -= VECTOR2I( arrayExtentX, arrayExtentY ) / 2;
     }
 

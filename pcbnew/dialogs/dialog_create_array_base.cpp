@@ -65,7 +65,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	sbSizerGridSize->Add( fgSizerGridSize, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerGridLeft->Add( sbSizerGridSize, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	bSizerGridLeft->Add( sbSizerGridSize, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 	wxStaticBoxSizer* sbSizerItemsSpacing;
 	sbSizerItemsSpacing = new wxStaticBoxSizer( new wxStaticBox( m_gridPanel, wxID_ANY, _("Items Spacing") ), wxVERTICAL );
@@ -345,7 +345,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	sbSizerInfo->Add( bSizer12, 1, wxEXPAND, 5 );
 
 
-	bSizerCircLeft->Add( sbSizerInfo, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizerCircLeft->Add( sbSizerInfo, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 	wxStaticBoxSizer* sbSizerDupPrms;
 	sbSizerDupPrms = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Duplication Settings") ), wxVERTICAL );
@@ -480,7 +480,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	sbSizerFootprintAnnotation->Add( m_radioBtnUniqueRefs, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizer8->Add( sbSizerFootprintAnnotation, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer8->Add( sbSizerFootprintAnnotation, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	m_footprintReannotatePanel->SetSizer( bSizer8 );

@@ -204,7 +204,7 @@
                           <property name="permission">none</property>
                           <object class="sizeritem" expanded="false">
                             <property name="border">10</property>
-                            <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
+                            <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="false">
                               <property name="id">wxID_ANY</property>
@@ -2815,7 +2815,7 @@
                           <property name="permission">none</property>
                           <object class="sizeritem" expanded="true">
                             <property name="border">10</property>
-                            <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="true">
                               <property name="id">wxID_ANY</property>
@@ -4502,7 +4502,7 @@
                   <property name="permission">none</property>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticBoxSizer" expanded="true">
                       <property name="id">wxID_ANY</property>
