@@ -299,6 +299,9 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
         // second click or mouse up after drag ends
         else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
         {
+            // Hide the popup text so it doesn't get in the way
+            statusPopup.Hide();
+
             // This is the forward vector from the ruler item
             const VECTOR2I    origVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
             VECTOR2I          offsetVector = origVector;
@@ -325,6 +328,8 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
 
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
+
+            statusPopup.Popup();
         }
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
