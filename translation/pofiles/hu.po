@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-11 20:16+0300\n"
+"POT-Creation-Date: 2025-01-16 23:16+0300\n"
 "PO-Revision-Date: 2025-01-06 10:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v8/hu/>\n"
@@ -2772,7 +2772,7 @@ msgid "PCB"
 msgstr "NYÁK"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1253 eeschema/sch_plotter.cpp:1011
+#: eeschema/sch_edit_frame.cpp:1253 eeschema/sch_plotter.cpp:1021
 #: eeschema/widgets/symbol_diff_widget.cpp:38
 #, fuzzy
 msgid "Schematic"
@@ -7900,9 +7900,9 @@ msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:65
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
-#: eeschema/sch_plotter.cpp:174 eeschema/sch_plotter.cpp:386
-#: eeschema/sch_plotter.cpp:526 eeschema/sch_plotter.cpp:733
-#: eeschema/sch_plotter.cpp:901 gerbview/export_to_pcbnew.cpp:68
+#: eeschema/sch_plotter.cpp:174 eeschema/sch_plotter.cpp:390
+#: eeschema/sch_plotter.cpp:533 eeschema/sch_plotter.cpp:743
+#: eeschema/sch_plotter.cpp:911 gerbview/export_to_pcbnew.cpp:68
 #: pagelayout_editor/files.cpp:214 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
 #: pcbnew/dialogs/dialog_drc.cpp:951 pcbnew/dialogs/dialog_export_idf.cpp:235
@@ -14559,7 +14559,12 @@ msgstr "Típus"
 msgid "Not Connected"
 msgstr "Nincs csatlakoztatva"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1219
+#: eeschema/dialogs/dialog_sim_model.cpp:855
+#, fuzzy, c-format
+msgid "No model named '%s' in '%s'."
+msgstr "Már létezik egy \"%s\" nevű réteg."
+
+#: eeschema/dialogs/dialog_sim_model.cpp:1233
 #, fuzzy
 msgid "Browse Models"
 msgstr "Adatlap hozzáadása"
@@ -19521,8 +19526,8 @@ msgstr "Nincs csatlakozás"
 msgid "Plotted to '%s'.\n"
 msgstr "\"%s\" betöltése sikertelen"
 
-#: eeschema/sch_plotter.cpp:217 eeschema/sch_plotter.cpp:403
-#: eeschema/sch_plotter.cpp:750 eeschema/sch_plotter.cpp:922
+#: eeschema/sch_plotter.cpp:217 eeschema/sch_plotter.cpp:407
+#: eeschema/sch_plotter.cpp:760 eeschema/sch_plotter.cpp:932
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:174
 #: pcbnew/dialogs/dialog_plot.cpp:1270
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
@@ -19530,19 +19535,19 @@ msgstr "\"%s\" betöltése sikertelen"
 msgid "Done."
 msgstr ""
 
-#: eeschema/sch_plotter.cpp:377 eeschema/sch_plotter.cpp:534
-#: eeschema/sch_plotter.cpp:725 eeschema/sch_plotter.cpp:893
+#: eeschema/sch_plotter.cpp:381 eeschema/sch_plotter.cpp:541
+#: eeschema/sch_plotter.cpp:735 eeschema/sch_plotter.cpp:903
 #: pcbnew/dialogs/dialog_plot.cpp:1247
 #, fuzzy, c-format
 msgid "Plotted to '%s'."
 msgstr "\"%s\" betöltése sikertelen"
 
-#: eeschema/sch_plotter.cpp:553
+#: eeschema/sch_plotter.cpp:560
 #, fuzzy
 msgid "Done"
 msgstr "Rendben"
 
-#: eeschema/sch_plotter.cpp:1019
+#: eeschema/sch_plotter.cpp:1029
 #, fuzzy, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Nem írhatóak a kimeneti fájlok a(z) \"%s\" mappában."
