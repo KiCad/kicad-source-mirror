@@ -131,3 +131,9 @@ if( APPLE )
             ${SECURITY_LIBRARY}
     )
 endif()
+
+if( MSVC )
+add_dependencies( kiplatform
+    version_header
+    )
+endif()
