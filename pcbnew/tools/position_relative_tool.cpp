@@ -84,7 +84,8 @@ static void positionRelativeClientSelectionFilter( const VECTOR2I&     aPt,
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
     PCB_TOOL_BASE( "pcbnew.PositionRelative" ),
     m_dialog( nullptr ),
-    m_selectionTool( nullptr )
+    m_selectionTool( nullptr ),
+    m_inInteractivePosition( false )
 {
 }
 
@@ -158,6 +159,11 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 
 int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEvent )
 {
+    if( m_inInteractivePosition )
+        return false;
+
+    REENTRANCY_GUARD guard( &m_inInteractivePosition );
+
     // First, acquire the selection that we will be moving after
     // we have the new offset vector.
     const auto& selection = m_selectionTool->RequestSelection(

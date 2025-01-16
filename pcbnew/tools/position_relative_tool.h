@@ -82,6 +82,7 @@ private:
     PCB_SELECTION_TOOL*           m_selectionTool;
     PCB_SELECTION                 m_selection;
     VECTOR2I                      m_selectionAnchor;
+    bool                          m_inInteractivePosition; // Re-entrancy guard
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
 };
