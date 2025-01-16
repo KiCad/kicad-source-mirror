@@ -88,7 +88,7 @@ public:
         m_screen->Append( m_parent_symbol );
     }
 
-    wxFileName GetSchematicPath( const wxString& aRelativePath ) override
+    wxFileName SchematicQAPath( const wxString& aRelativePath ) override
     {
         wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
 
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE( CreateGroup )
 
 BOOST_AUTO_TEST_CASE( LoadSchGroups )
 {
-    LoadSchematic( "groups_load_save" );
+    LoadSchematic( SchematicQAPath( "groups_load_save" ) );
 
     EE_RTREE::EE_TYPE groups = m_schematic->RootScreen()->Items().OfType( SCH_GROUP_T );
 

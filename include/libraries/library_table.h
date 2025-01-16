@@ -21,10 +21,12 @@
 #ifndef LIBRARY_TABLE_H
 #define LIBRARY_TABLE_H
 
+#include <map>
 #include <optional>
 #include <wx/filename.h>
 
 #include <kicommon.h>
+#include <core/utf8.h>
 
 
 enum class LIBRARY_TABLE_TYPE
@@ -32,6 +34,14 @@ enum class LIBRARY_TABLE_TYPE
     SYMBOL,
     FOOTPRINT,
     DESIGN_BLOCK
+};
+
+enum class LIBRARY_TABLE_SCOPE
+{
+    UNINITIALIZED,
+    GLOBAL,
+    PROJECT,
+    BOTH
 };
 
 struct LIBRARY_TABLE_IR;
@@ -51,6 +61,9 @@ public:
     const wxString& Type() const { return m_type; }
     const wxString& Options() const { return m_options; }
     const wxString& Description() const { return m_description; }
+    LIBRARY_TABLE_SCOPE Scope() const { return m_scope; }
+
+    std::unique_ptr<std::map<std::string, UTF8>> OptionsMap() const;
 
     bool IsOk() const { return m_ok; }
     const wxString& ErrorDescription() const { return m_errorDescription; }
@@ -62,8 +75,9 @@ private:
     wxString m_options;
     wxString m_description;
 
-    bool m_ok;
+    bool m_ok = false;
     wxString m_errorDescription;
+    LIBRARY_TABLE_SCOPE m_scope = LIBRARY_TABLE_SCOPE::UNINITIALIZED;
 };
 
 
@@ -73,14 +87,16 @@ public:
     /**
      * Creates a library table from a file on disk
      * @param aPath is the path to a library table file to parse
+     * @param aScope is the scope of this table (is it global or part of a project)
      */
-    LIBRARY_TABLE( const wxFileName &aPath );
+    LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScope );
 
     /**
      * Creates a library table from parsed text
      * @param aBuffer is a string containing data to parse
+     * @param aScope is the scope of this table (is it global or part of a project)
      */
-    LIBRARY_TABLE( const wxString &aBuffer );
+    LIBRARY_TABLE( const wxString &aBuffer, LIBRARY_TABLE_SCOPE aScope );
 
     ~LIBRARY_TABLE() = default;
 
@@ -102,12 +118,16 @@ public:
     const std::vector<LIBRARY_TABLE_ROW>& Rows() const { return m_rows; }
     std::vector<LIBRARY_TABLE_ROW>& Rows() { return m_rows; }
 
+    const std::map<wxString, std::unique_ptr<LIBRARY_TABLE>>& Children() { return m_children; }
+
 private:
     bool initFromIR( const LIBRARY_TABLE_IR& aIR );
     bool addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR );
 
     /// The full path to the file this table was parsed from, if any
     wxString m_path;
+
+    LIBRARY_TABLE_SCOPE m_scope;
 
     /// What type of content this table contains (footprint, symbol, design block, etc)
     LIBRARY_TABLE_TYPE m_type;
@@ -120,7 +140,7 @@ private:
 
     std::vector<LIBRARY_TABLE_ROW> m_rows;
 
-    std::vector<std::unique_ptr<LIBRARY_TABLE>> m_children;
+    std::map<wxString, std::unique_ptr<LIBRARY_TABLE>> m_children;
 };
 
 #endif //LIBRARY_TABLE_H

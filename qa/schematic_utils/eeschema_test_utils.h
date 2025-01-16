@@ -54,8 +54,9 @@ public:
     ~SCHEMATIC_TEST_FIXTURE();
 
 protected:
-    virtual void LoadSchematic( const wxString& aRelativePath );
-    virtual wxFileName GetSchematicPath( const wxString& aBaseName );
+    virtual void LoadSchematic( const wxFileName& aFn );
+    virtual wxFileName SchematicQAPath( const wxString& aBaseName );
+    SETTINGS_MANAGER& SettingsManager() { return m_manager; }
 
     std::unique_ptr<SCHEMATIC>    m_schematic;
     IO_RELEASER<SCH_IO> m_pi;

@@ -54,6 +54,7 @@
 #include <id.h>
 #include <kicad_curl/kicad_curl.h>
 #include <kiplatform/policy.h>
+#include <libraries/library_manager.h>
 #include <macros.h>
 #include <notifications_manager.h>
 #include <paths.h>
@@ -453,6 +454,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 #endif
 
     m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
+    m_library_manager = std::make_unique<LIBRARY_MANAGER>();
     m_background_jobs_monitor = std::make_unique<BACKGROUND_JOBS_MONITOR>();
     m_notifications_manager = std::make_unique<NOTIFICATIONS_MANAGER>();
 

@@ -27,6 +27,7 @@ class SYMBOL_LIB_TABLE;
 class PROJECT;
 class SEARCH_STACK;
 class SYMBOL_LIBS;
+class SYMBOL_LIBRARY_MANAGER_ADAPTER;
 
 class PROJECT_SCH
 {
@@ -39,6 +40,8 @@ public:
 
     /// Accessor for project symbol library table.
     static SYMBOL_LIB_TABLE* SchSymbolLibTable( PROJECT* aProject );
+
+    static SYMBOL_LIBRARY_MANAGER_ADAPTER*  SymbolLibManager( PROJECT* aProject );
 
 private:
     PROJECT_SCH() {}

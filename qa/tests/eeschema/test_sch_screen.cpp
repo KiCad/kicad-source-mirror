@@ -37,11 +37,11 @@
 class TEST_SCH_SCREEN_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
 protected:
-    wxFileName GetSchematicPath( const wxString& aRelativePath ) override;
+    wxFileName SchematicQAPath( const wxString& aRelativePath ) override;
 };
 
 
-wxFileName TEST_SCH_SCREEN_FIXTURE::GetSchematicPath( const wxString& aRelativePath )
+wxFileName TEST_SCH_SCREEN_FIXTURE::SchematicQAPath( const wxString& aRelativePath )
 {
     wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
 
@@ -63,8 +63,8 @@ BOOST_FIXTURE_TEST_SUITE( SchScreen, TEST_SCH_SCREEN_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( TestInProjectPath )
 {
-    LoadSchematic( "schematic_object_tests/not_shared_by_multiple_projects/"
-                   "not_shared_by_multiple_projects" );
+    LoadSchematic( SchematicQAPath( "schematic_object_tests/not_shared_by_multiple_projects/"
+                                    "not_shared_by_multiple_projects" ) );
 
     SCH_SCREEN testScreen( m_schematic.get() );
     wxFileName testFn( m_schematic->RootScreen()->GetFileName() );
@@ -111,8 +111,8 @@ BOOST_AUTO_TEST_CASE( TestInProjectPath )
  */
 BOOST_AUTO_TEST_CASE( TestSharedByMultipleProjects )
 {
-    LoadSchematic( "schematic_object_tests/not_shared_by_multiple_projects/"
-                   "not_shared_by_multiple_projects" );
+    LoadSchematic( SchematicQAPath( "schematic_object_tests/not_shared_by_multiple_projects/"
+                                    "not_shared_by_multiple_projects" ) );
 
     const SCH_SCREEN* rootScreen = m_schematic->RootScreen();
     BOOST_CHECK( !rootScreen->HasInstanceDataFromOtherProjects() );

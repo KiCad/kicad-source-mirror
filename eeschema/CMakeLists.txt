@@ -434,6 +434,8 @@ set( EESCHEMA_SRCS
 
     api/api_sch_utils.cpp
 
+    libraries/symbol_library_manager_adapter.cpp
+
     netlist_exporters/netlist_exporter_allegro.cpp
     netlist_exporters/netlist_exporter_base.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp

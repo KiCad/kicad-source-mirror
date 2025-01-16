@@ -43,7 +43,7 @@ class SAVEAS_SUBSHEET_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 public:
     SAVEAS_SUBSHEET_FIXTURE();
 
-    wxFileName GetSchematicPath( const wxString& aRelativePath ) override;
+    wxFileName GetSchematicPath( const wxString& aRelativePath );
 
     wxFileName m_baseDir;
     wxFileName m_srcDir;
@@ -105,7 +105,7 @@ BOOST_FIXTURE_TEST_SUITE( SaveAsSubsheetCopy, SAVEAS_SUBSHEET_FIXTURE )
 
 BOOST_AUTO_TEST_CASE( CopyInternalReferenceExternal )
 {
-    LoadSchematic( wxS( "issue13212" ) );
+    LoadSchematic( GetSchematicPath( wxS( "issue13212" ) ) );
 
     SCH_SCREENS screens( m_schematic->Root() );
     wxFileName srcRoot = GetSchematicPath( wxS( "issue13212" ) );
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_CASE( CopyInternalReferenceExternal )
 
 BOOST_AUTO_TEST_CASE( CopyIncludingExternal )
 {
-    LoadSchematic( wxS( "issue13212" ) );
+    LoadSchematic( GetSchematicPath( wxS( "issue13212" ) ) );
 
     SCH_SCREENS screens( m_schematic->Root() );
     wxFileName srcRoot = GetSchematicPath( wxS( "issue13212" ) );
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE( CopyIncludingExternal )
 
 BOOST_AUTO_TEST_CASE( NoCopyKeepsOriginalPaths )
 {
-    LoadSchematic( wxS( "issue13212" ) );
+    LoadSchematic( GetSchematicPath( wxS( "issue13212" ) ) );
 
     SCH_SCREENS screens( m_schematic->Root() );
     wxFileName srcRoot = GetSchematicPath( wxS( "issue13212" ) );

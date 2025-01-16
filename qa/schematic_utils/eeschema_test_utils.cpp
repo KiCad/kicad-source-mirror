@@ -51,9 +51,9 @@ KI_TEST::SCHEMATIC_TEST_FIXTURE::~SCHEMATIC_TEST_FIXTURE()
 }
 
 
-void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
+void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxFileName& aFn )
 {
-    wxFileName fn = GetSchematicPath( aBaseName );
+    wxFileName fn( aFn );
 
     BOOST_TEST_CHECKPOINT( "Loading schematic " << fn.GetFullPath() );
 
@@ -116,7 +116,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
 }
 
 
-wxFileName KI_TEST::SCHEMATIC_TEST_FIXTURE::GetSchematicPath( const wxString& aBaseName )
+wxFileName KI_TEST::SCHEMATIC_TEST_FIXTURE::SchematicQAPath( const wxString& aBaseName )
 {
     wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
     fn.AppendDir( "netlists" );
@@ -172,7 +172,7 @@ void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::Cleanup()
 template <typename Exporter>
 void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::TestNetlist( const wxString& aBaseName )
 {
-    LoadSchematic( aBaseName );
+    LoadSchematic( SchematicQAPath( aBaseName ) );
     WriteNetlist();
     CompareNetlists();
     Cleanup();

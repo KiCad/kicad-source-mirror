@@ -51,6 +51,7 @@ class BACKGROUND_JOBS_MONITOR;
 class NOTIFICATIONS_MANAGER;
 class COMMON_SETTINGS;
 class SETTINGS_MANAGER;
+class LIBRARY_MANAGER;
 class SCRIPTING;
 
 #ifdef KICAD_IPC_API
@@ -123,6 +124,8 @@ public:
     virtual void MacOpenFile( const wxString& aFileName ) = 0;
 
     virtual SETTINGS_MANAGER& GetSettingsManager() const { return *m_settings_manager; }
+
+    virtual LIBRARY_MANAGER& GetLibraryManager() const { return *m_library_manager; }
 
     virtual COMMON_SETTINGS*  GetCommonSettings() const;
 
@@ -373,6 +376,7 @@ protected:
 
 protected:
     std::unique_ptr<SETTINGS_MANAGER> m_settings_manager;
+    std::unique_ptr<LIBRARY_MANAGER> m_library_manager;
     std::unique_ptr<BACKGROUND_JOBS_MONITOR> m_background_jobs_monitor;
     std::unique_ptr<NOTIFICATIONS_MANAGER> m_notifications_manager;
 

@@ -27,11 +27,11 @@
 class TEST_SCH_SHEET_LIST_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
 protected:
-    wxFileName GetSchematicPath( const wxString& aRelativePath ) override;
+    wxFileName SchematicQAPath( const wxString& aRelativePath ) override;
 };
 
 
-wxFileName TEST_SCH_SHEET_LIST_FIXTURE::GetSchematicPath( const wxString& aRelativePath )
+wxFileName TEST_SCH_SHEET_LIST_FIXTURE::SchematicQAPath( const wxString& aRelativePath )
 {
     wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
     fn.AppendDir( "netlists" );
@@ -48,7 +48,7 @@ BOOST_FIXTURE_TEST_SUITE( SchSheetList, TEST_SCH_SHEET_LIST_FIXTURE )
 
 BOOST_AUTO_TEST_CASE( TestSheetListPageProperties )
 {
-    LoadSchematic( "complex_hierarchy/complex_hierarchy" );
+    LoadSchematic( SchematicQAPath( "complex_hierarchy/complex_hierarchy" ) );
 
     SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
     BOOST_TEST_CONTEXT( "Read Sub-Sheet, prior to modification" )
     {
         // Check the Sub Sheet has the expected page numbers
-        LoadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
+        LoadSchematic( SchematicQAPath( "complex_hierarchy_shared/ampli_ht/ampli_ht" ) );
 
         SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
     BOOST_TEST_CONTEXT( "Read Root Sheet, prior to modification" )
     {
         // Check the parent sheet has the expected page numbers
-        LoadSchematic( "complex_hierarchy_shared/complex_hierarchy" );
+        LoadSchematic( SchematicQAPath( "complex_hierarchy_shared/complex_hierarchy" ) );
 
         SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         sheets.at( 4 ).SetPageNumber( "E" );
 
         // Save and reload
-        wxFileName rootFn = GetSchematicPath( "complex_hierarchy_shared/complex_hierarchy" );
+        wxFileName rootFn = SchematicQAPath( "complex_hierarchy_shared/complex_hierarchy" );
         wxFileName prjFn = rootFn;
 
         prjFn.SetExt( FILEEXT::ProjectFileExtension );
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         subSheetFn.SetName( "filter" );
         m_pi->SaveSchematicFile( subSheetFn.GetFullPath(), sheets.at( 2 ).Last(), m_schematic.get() );
 
-        LoadSchematic( "complex_hierarchy_shared/temp/complex_hierarchy" );
+        LoadSchematic( SchematicQAPath( "complex_hierarchy_shared/temp/complex_hierarchy" ) );
 
         sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
     {
         // Check the Sub Sheet has the expected page numbers
         // (This should not have been modified after editing the root sheet)
-        LoadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
+        LoadSchematic( SchematicQAPath( "complex_hierarchy_shared/ampli_ht/ampli_ht" ) );
 
         SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 

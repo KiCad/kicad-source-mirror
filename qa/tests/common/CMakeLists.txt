@@ -45,7 +45,9 @@ set( QA_COMMON_SRCS
     test_hotkey_store.cpp
     test_increment.cpp
     test_ki_any.cpp
-    test_library_table_parser.cpp
+    test_lib_table.cpp
+    test_library_tables.cpp
+    test_markup_parser.cpp
     test_kicad_string.cpp
     test_kicad_stroke_font.cpp
     test_pdf_unicode_plot.cpp

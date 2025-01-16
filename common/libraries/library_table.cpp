@@ -19,16 +19,29 @@
  */
 
 #include <unordered_set>
-#include <trace_helpers.h>
-#include <wx_filename.h>
+
 #include <boost/lexical_cast.hpp>
 
+#include <lib_table_base.h>
 #include <libraries/library_table.h>
 #include <libraries/library_table_parser.h>
+#include <string_utils.h>
+#include <trace_helpers.h>
+#include <wx_filename.h>
 
 
+std::unique_ptr<std::map<std::string, UTF8>> LIBRARY_TABLE_ROW::OptionsMap() const
+{
+    // TODO(JE) why does this return a pointer?
+    std::unique_ptr<std::map<std::string, UTF8>> mapPtr(
+            LIB_TABLE::ParseOptions( TO_UTF8( m_options ) ) );
 
-LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath )
+    return mapPtr;
+}
+
+
+LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScope ) :
+        m_scope( aScope )
 {
     LIBRARY_TABLE_PARSER parser;
 
@@ -51,7 +64,8 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath )
 }
 
 
-LIBRARY_TABLE::LIBRARY_TABLE( const wxString &aBuffer )
+LIBRARY_TABLE::LIBRARY_TABLE( const wxString &aBuffer, LIBRARY_TABLE_SCOPE aScope ) :
+        m_scope( aScope )
 {
     m_ok = false;
     // TODO
@@ -88,6 +102,7 @@ bool LIBRARY_TABLE::addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR )
     row.m_options = wxString::FromUTF8( aIR.options );
     row.m_description = wxString::FromUTF8( aIR.description );
     row.m_ok = true;
+    row.m_scope = m_scope;
 
     m_rows.emplace_back( row );
     return true;
@@ -127,11 +142,11 @@ void LIBRARY_TABLE::LoadNestedTables()
                         continue;
                     }
 
-                    auto child = std::make_unique<LIBRARY_TABLE>( file );
+                    auto child = std::make_unique<LIBRARY_TABLE>( file, m_scope );
 
                     processOneTable( *child );
 
-                    aTable.m_children.emplace_back( std::move( child ) );
+                    aTable.m_children.insert( { row.m_nickname, std::move( child ) } );
                 }
             }
         };

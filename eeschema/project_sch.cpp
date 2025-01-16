@@ -26,6 +26,7 @@
 #include <core/utf8.h>
 #include <symbol_lib_table.h>
 #include <project_sch.h>
+#include <libraries/symbol_library_manager_adapter.h>
 
 static std::mutex s_symbolTableMutex;
 
@@ -173,4 +174,21 @@ SYMBOL_LIB_TABLE* PROJECT_SCH::SchSymbolLibTable( PROJECT* aProject )
     }
 
     return tbl;
+}
+
+
+SYMBOL_LIBRARY_MANAGER_ADAPTER* PROJECT_SCH::SymbolLibManager( PROJECT* aProject )
+{
+    auto adapter = static_cast<SYMBOL_LIBRARY_MANAGER_ADAPTER*>(
+            aProject->GetElem( PROJECT::ELEM::SYM_LIB_ADAPTER ) );
+
+    wxASSERT( !adapter || adapter->ProjectElementType() == PROJECT::ELEM::SYM_LIB_ADAPTER );
+
+    if( !adapter )
+    {
+        adapter = new SYMBOL_LIBRARY_MANAGER_ADAPTER( Pgm().GetLibraryManager(), *aProject );
+        aProject->SetElem( PROJECT::ELEM::SYM_LIB_ADAPTER, adapter );
+    }
+
+    return adapter;
 }

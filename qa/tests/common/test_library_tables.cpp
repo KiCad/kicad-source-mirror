@@ -21,12 +21,13 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pegtl/contrib/analyze.hpp>
 
+#include <libraries/library_manager.h>
 #include <libraries/library_table.h>
 #include <libraries/library_table_parser.h>
 #include <libraries/library_table_grammar.h>
 
 
-BOOST_AUTO_TEST_SUITE( LibraryTableParser )
+BOOST_AUTO_TEST_SUITE( LibraryTables )
 
 
 BOOST_AUTO_TEST_CASE( Grammar )
@@ -85,7 +86,7 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
         BOOST_TEST_CONTEXT( filename )
         {
             fn.SetName( filename );
-            LIBRARY_TABLE table( fn );
+            LIBRARY_TABLE table( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
 
             BOOST_REQUIRE( table.IsOk() == ( expected_error.IsEmpty() ) );
 
@@ -101,6 +102,15 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
             table.LoadNestedTables();
         }
     }
+}
+
+BOOST_AUTO_TEST_CASE( Manager )
+{
+    LIBRARY_MANAGER manager;
+    manager.LoadGlobalTables();
+
+    BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ).size() == 2 );
+    BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::FOOTPRINT ).size() == 146 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

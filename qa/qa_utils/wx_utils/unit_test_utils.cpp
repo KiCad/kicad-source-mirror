@@ -41,7 +41,7 @@ std::string KI_TEST::GetEeschemaTestDataDir()
         // Use the compiled-in location of the data dir
         // (i.e. where the files were at build time)
         fn = GetTestDataRootDir();
-        fn += "/eeschema";
+        fn += "eeschema";
     }
     else
     {
@@ -91,5 +91,6 @@ void KI_TEST::SetMockConfigDir()
         wxString path( GetTestDataRootDir() );
         path += wxT( "/config/" );
         wxSetEnv( wxT( "KICAD_CONFIG_HOME" ), path );
+        wxSetEnv( wxT( "KICAD_CONFIG_HOME_IS_QA" ), wxT( "1" ) );
     }
 }

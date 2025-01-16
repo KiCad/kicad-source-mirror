@@ -86,7 +86,7 @@ public:
         }
     }
 
-    wxFileName GetSchematicPath( const wxString& aBaseName ) override
+    wxFileName SchematicQAPath( const wxString& aBaseName ) override
     {
         wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
         fn.AppendDir( "spice_netlists" );

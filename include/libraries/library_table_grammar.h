@@ -91,7 +91,13 @@ struct LIB_PROPERTY : seq<
         > {};
 
 // (version %d)
-struct TABLE_VERSION : seq< LPAREN, KEYWORDS::VERSION, PROPERTY_VALUE, RPAREN > {};
+struct TABLE_VERSION : seq<
+        LPAREN,
+        KEYWORDS::VERSION,
+        plus< space >,
+        PROPERTY_VALUE,
+        RPAREN
+        > {};
 
 // (lib (name ...)(type ...)...)
 struct LIB_ROW : if_must<
