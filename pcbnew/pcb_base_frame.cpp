@@ -946,6 +946,9 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     settings->LoadDisplayOptions( GetDisplayOptions() );
     settings->m_ForceShowFieldsWhenFPSelected = GetPcbNewSettings()->m_Display.m_ForceShowFieldsWhenFPSelected;
 
+    if( aTextVarsChanged )
+        GetBoard()->SynchronizeProperties();
+
     // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
     // they won't be found in the view layer's itemset for re-painting.
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
@@ -962,6 +965,15 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
                 else if( dynamic_cast<PAD*>( aItem ) )
                 {
                     return KIGFX::REPAINT;    // pad clearance display
+                }
+                else if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
+                {
+                    if( text->HasTextVars() )
+                    {
+                        text->ClearRenderCache();
+                        text->ClearBoundingBoxCache();
+                        return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    }
                 }
 
                 return 0;

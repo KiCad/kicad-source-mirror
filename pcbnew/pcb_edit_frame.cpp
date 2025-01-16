@@ -1387,13 +1387,14 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
                             flags |= KIGFX::REPAINT;
                     }
 
-                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
-
-                    if( text && text->HasTextVars() )
+                    if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
                     {
-                        text->ClearRenderCache();
-                        text->ClearBoundingBoxCache();
-                        flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                        if( text->HasTextVars() )
+                        {
+                            text->ClearRenderCache();
+                            text->ClearBoundingBoxCache();
+                            flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                        }
                     }
 
                     return flags;
