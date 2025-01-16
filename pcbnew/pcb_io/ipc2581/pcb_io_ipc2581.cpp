@@ -1372,9 +1372,105 @@ wxXmlNode* PCB_IO_IPC2581::generateEcadSection()
     wxXmlNode* cadDataNode = appendNode( ecadNode, "CadData" );
     generateCadLayers( cadDataNode );
     generateDrillLayers( cadDataNode);
+    generateStackup( cadDataNode );
     generateStepSection( cadDataNode );
 
     return ecadNode;
+}
+
+
+void PCB_IO_IPC2581::generateCadSpecs( wxXmlNode* aCadLayerNode )
+{
+    BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
+    BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
+    stackup.SynchronizeWithBoard( &dsnSettings );
+
+    std::vector<BOARD_STACKUP_ITEM*> layers = stackup.GetList();
+    std::set<PCB_LAYER_ID> added_layers;
+
+    for( int i = 0; i < stackup.GetCount(); i++ )
+    {
+        BOARD_STACKUP_ITEM* stackup_item = layers.at( i );
+
+        for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
+        {
+            wxString ly_name = stackup_item->GetLayerName();
+
+            if( ly_name.IsEmpty() )
+            {
+                if( IsValidLayer( stackup_item->GetBrdLayerId() ) )
+                    ly_name = m_board->GetLayerName( stackup_item->GetBrdLayerId() );
+
+                if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+                {
+                    ly_name = wxString::Format( "DIELECTRIC_%d", stackup_item->GetDielectricLayerId() );
+
+                    if( sublayer_id > 0 )
+                        ly_name += wxString::Format( "_%d", sublayer_id );
+                }
+            }
+
+            ly_name = genString( ly_name, "SPEC_LAYER" );
+
+            wxXmlNode* specNode = appendNode( aCadLayerNode, "Spec" );
+            addAttribute( specNode,  "name", ly_name );
+            wxXmlNode* generalNode = appendNode( specNode, "General" );
+            addAttribute( generalNode,  "type", "MATERIAL" );
+            wxXmlNode* propertyNode = appendNode( generalNode, "Property" );
+
+            switch ( stackup_item->GetType() )
+            {
+                case BS_ITEM_TYPE_COPPER:
+                {
+                    addAttribute( propertyNode, "text", "COPPER" );
+                    wxXmlNode* conductorNode = appendNode( specNode, "Conductor" );
+                    addAttribute( conductorNode, "type", "CONDUCTIVITY" );
+                    propertyNode = appendNode( conductorNode, "Property" );
+                    addAttribute( propertyNode, "unit", wxT( "SIEMENS/M" ) );
+                    addAttribute( propertyNode, "value", wxT( "5.959E7" ) );
+                    break;
+                }
+                case BS_ITEM_TYPE_DIELECTRIC:
+                {
+                    addAttribute( propertyNode, "text", stackup_item->GetMaterial() );
+                    propertyNode = appendNode( generalNode, "Property" );
+                    addAttribute( propertyNode,  "text", wxString::Format( "Type : %s",
+                                                                        stackup_item->GetTypeName() ) );
+                    wxXmlNode* dielectricNode = appendNode( specNode, "Dielectric" );
+                    addAttribute( dielectricNode, "type", "DIELECTRIC_CONSTANT" );
+                    propertyNode = appendNode( dielectricNode, "Property" );
+                    addAttribute( propertyNode, "value",
+                                  floatVal( stackup_item->GetEpsilonR( sublayer_id ) ) );
+                    dielectricNode = appendNode( specNode, "Dielectric" );
+                    addAttribute( dielectricNode, "type", "LOSS_TANGENT" );
+                    propertyNode = appendNode( dielectricNode, "Property" );
+                    addAttribute( propertyNode, "value",
+                                  floatVal( stackup_item->GetLossTangent( sublayer_id ) ) );
+                    break;
+                }
+                case BS_ITEM_TYPE_SILKSCREEN:
+                    addAttribute( propertyNode,  "text", stackup_item->GetTypeName() );
+                    propertyNode = appendNode( generalNode, "Property" );
+                    addAttribute( propertyNode,  "text", wxString::Format( "Color : %s",
+                                                                        stackup_item->GetColor() ) );
+                    propertyNode = appendNode( generalNode, "Property" );
+                    addAttribute( propertyNode,  "text", wxString::Format( "Type : %s",
+                                                                        stackup_item->GetTypeName() ) );
+                    break;
+                case BS_ITEM_TYPE_SOLDERMASK:
+                    addAttribute( propertyNode,  "text", "SOLDERMASK" );
+                    propertyNode = appendNode( generalNode, "Property" );
+                    addAttribute( propertyNode,  "text", wxString::Format( "Color : %s",
+                                                                        stackup_item->GetColor() ) );
+                    propertyNode = appendNode( generalNode, "Property" );
+                    addAttribute( propertyNode,  "text", wxString::Format( "Type : %s",
+                                                                        stackup_item->GetTypeName() ) );
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 
@@ -1382,6 +1478,8 @@ void PCB_IO_IPC2581::addCadHeader( wxXmlNode* aEcadNode )
 {
     wxXmlNode* cadHeaderNode = appendNode( aEcadNode, "CadHeader" );
     addAttribute( cadHeaderNode,  "units", m_units_str );
+
+    generateCadSpecs( cadHeaderNode );
 }
 
 
@@ -1471,6 +1569,70 @@ void PCB_IO_IPC2581::addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer )
 }
 
 
+void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
+{
+    BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
+    BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
+    stackup.SynchronizeWithBoard( &dsnSettings );
+
+    wxXmlNode* stackupNode = appendNode( aCadLayerNode, "Stackup" );
+    addAttribute( stackupNode, "name", "Primary_Stackup" );
+    addAttribute( stackupNode, "overallThickness", floatVal( m_scale * stackup.BuildBoardThicknessFromStackup() ) );
+    addAttribute( stackupNode, "tolPlus", "0.0" );
+    addAttribute( stackupNode, "tolMinus", "0.0" );
+    addAttribute( stackupNode, "whereMeasured", "MASK" );
+
+    if( m_version > 'B' )
+        addAttribute( stackupNode, "stackupStatus", "PROPOSED" );
+
+    wxXmlNode* stackupGroup = appendNode( stackupNode, "StackupGroup" );
+    addAttribute( stackupGroup, "name", "Primary_Stackup_Group" );
+    addAttribute( stackupGroup, "thickness", floatVal( m_scale * stackup.BuildBoardThicknessFromStackup() ) );
+    addAttribute( stackupGroup, "tolPlus", "0.0" );
+    addAttribute( stackupGroup, "tolMinus", "0.0" );
+
+    std::vector<BOARD_STACKUP_ITEM*> layers = stackup.GetList();
+    std::set<PCB_LAYER_ID> added_layers;
+
+    for( int i = 0; i < stackup.GetCount(); i++ )
+    {
+        BOARD_STACKUP_ITEM* stackup_item = layers.at( i );
+
+        for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
+        {
+
+            wxXmlNode* stackupLayer = appendNode( stackupGroup, "StackupLayer" );
+            wxString ly_name = stackup_item->GetLayerName();
+
+            if( ly_name.IsEmpty() )
+            {
+                if( IsValidLayer( stackup_item->GetBrdLayerId() ) )
+                    ly_name = m_board->GetLayerName( stackup_item->GetBrdLayerId() );
+
+                if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+                {
+                    ly_name = wxString::Format( "DIELECTRIC_%d", stackup_item->GetDielectricLayerId() );
+
+                    if( sublayer_id > 0 )
+                        ly_name += wxString::Format( "_%d", sublayer_id );
+                }
+            }
+
+            ly_name = genString( ly_name, "LAYER" );
+
+            addAttribute( stackupLayer,  "layerOrGroupRef", ly_name );
+            addAttribute( stackupLayer,  "thickness", floatVal( m_scale * stackup_item->GetThickness() ) );
+            addAttribute( stackupLayer,  "tolPlus", "0.0" );
+            addAttribute( stackupLayer,  "tolMinus", "0.0" );
+            addAttribute( stackupLayer,  "sequence", wxString::Format( "%d", i ) );
+
+            wxXmlNode* specLayerNode = appendNode( stackupLayer, "SpecRef" );
+            addAttribute( specLayerNode,  "id", wxString::Format( "SPEC_%s", ly_name ) );
+        }
+    }
+}
+
+
 void PCB_IO_IPC2581::generateCadLayers( wxXmlNode* aCadLayerNode )
 {
 
@@ -1501,8 +1663,10 @@ void PCB_IO_IPC2581::generateCadLayers( wxXmlNode* aCadLayerNode )
 
                 if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
                 {
-                    ly_name = wxString::Format( "DIELECTRIC_%d",
-                                                stackup_item->GetDielectricLayerId() );
+                    ly_name = wxString::Format( "DIELECTRIC_%d", stackup_item->GetDielectricLayerId() );
+
+                    if( sublayer_id > 0 )
+                        ly_name += wxString::Format( "_%d", sublayer_id );
                 }
             }
 
@@ -1693,6 +1857,12 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
     addAttribute( padStackDefNode,  "name", name );
     m_padstacks.push_back( padStackDefNode );
 
+    if( m_last_padstack )
+    {
+        insertNodeAfter( m_last_padstack, padStackDefNode );
+        m_last_padstack = padStackDefNode;
+    }
+
     // Only handle round holes here because IPC2581 does not support non-round holes
     // These will be handled in a slot layer
     if( aPad->HasDrilledHole() )
@@ -1789,12 +1959,12 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 
 
 bool PCB_IO_IPC2581::addPolygonNode( wxXmlNode* aParentNode,
-                                     const SHAPE_POLY_SET::POLYGON& aPolygon, FILL_T aFillType,
+                                     const SHAPE_LINE_CHAIN& aPolygon, FILL_T aFillType,
                                      int aWidth, LINE_STYLE aDashType )
 {
     wxXmlNode* polygonNode = nullptr;
 
-    if( aPolygon.empty() || aPolygon[0].PointCount() < 3 )
+    if( aPolygon.PointCount() < 3 )
         return false;
 
     auto make_node =
@@ -1803,7 +1973,7 @@ bool PCB_IO_IPC2581::addPolygonNode( wxXmlNode* aParentNode,
         polygonNode = appendNode( aParentNode, "Polygon" );
         wxXmlNode* polybeginNode = appendNode( polygonNode, "PolyBegin" );
 
-        const std::vector<VECTOR2I>& pts = aPolygon[0].CPoints();
+        const std::vector<VECTOR2I>& pts = aPolygon.CPoints();
         addXY( polybeginNode, pts[0] );
 
         for( size_t ii = 1; ii < pts.size(); ++ii )
@@ -1873,13 +2043,30 @@ bool PCB_IO_IPC2581::addOutlineNode( wxXmlNode* aParentNode, const SHAPE_POLY_SE
 
     wxXmlNode* outlineNode = appendNode( aParentNode, "Outline" );
 
-    for( int ii = 0; ii < aPolySet.OutlineCount(); ++ii )
-    {
-        wxCHECK2( aPolySet.Outline( ii ).PointCount() >= 3, continue );
+    // Outlines can only have one polygon according to the IPC-2581 spec, so
+    // if there are more than one, we need to combine them into a single polygon
+    const SHAPE_LINE_CHAIN* outline = &aPolySet.Outline( 0 );
+    SHAPE_LINE_CHAIN        bbox_outline;
+    BOX2I                   bbox = outline->BBox();
 
-        if( !addPolygonNode( outlineNode, aPolySet.Polygon( ii ) ) )
-            wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to outline" ) );
+    if( aPolySet.OutlineCount() > 1 )
+    {
+        for( int ii = 1; ii < aPolySet.OutlineCount(); ++ii )
+        {
+            wxCHECK2( aPolySet.Outline( ii ).PointCount() >= 3, continue );
+            bbox.Merge( aPolySet.Outline( ii ).BBox() );
+        }
+
+        bbox_outline.Append( bbox.GetLeft(), bbox.GetTop() );
+        bbox_outline.Append( bbox.GetRight(), bbox.GetTop() );
+        bbox_outline.Append( bbox.GetRight(), bbox.GetBottom() );
+        bbox_outline.Append( bbox.GetLeft(), bbox.GetBottom() );
+        outline = &bbox_outline;
     }
+
+
+    if( !addPolygonNode( outlineNode, *outline ) )
+        wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to outline" ) );
 
     if( !outlineNode->GetChildren() )
     {
@@ -1903,7 +2090,7 @@ bool PCB_IO_IPC2581::addContourNode( wxXmlNode* aParentNode, const SHAPE_POLY_SE
 
     wxXmlNode* contourNode = appendNode( aParentNode, "Contour" );
 
-    if( addPolygonNode( contourNode, aPolySet.Polygon( aOutline ), aFillType, aWidth, aDashType ) )
+    if( addPolygonNode( contourNode, aPolySet.Outline( aOutline ), aFillType, aWidth, aDashType ) )
     {
         // Do not attempt to add cutouts to shapes that are already hollow
         if( aFillType != FILL_T::NO_FILL )
@@ -1932,7 +2119,7 @@ void PCB_IO_IPC2581::generateProfile( wxXmlNode* aStepNode )
 
     wxXmlNode* profileNode = appendNode( aStepNode, "Profile" );
 
-    if( !addPolygonNode( profileNode, board_outline.Polygon( 0 ) ) )
+    if( !addPolygonNode( profileNode, board_outline.Outline( 0 ) ) )
     {
         wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to profile" ) );
         aStepNode->RemoveChild( profileNode );
@@ -2178,7 +2365,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         {
             wxXmlNode* outlineNode = insertNode( layer_nodes[layer], "Outline" );
 
-            SHAPE_POLY_SET::POLYGON outline( 1 );
+            SHAPE_LINE_CHAIN outline;
             std::vector<VECTOR2I> points( 4 );
             points[0] = bbox.GetPosition();
             points[2] = bbox.GetEnd();
@@ -2187,7 +2374,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
             points[3].x = points[2].x;
             points[3].y = points[0].y;
 
-            outline[0].Append( points );
+            outline.Append( points );
             addPolygonNode( outlineNode, outline, FILL_T::NO_FILL, 0 );
             addLineDesc( outlineNode, 0, LINE_STYLE::SOLID );
         }

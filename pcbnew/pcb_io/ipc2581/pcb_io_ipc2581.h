@@ -166,6 +166,10 @@ private:
 
     void generateCadLayers( wxXmlNode* aCadLayerNode );
 
+    void generateCadSpecs( wxXmlNode* aCadLayerNode );
+
+    void generateStackup( wxXmlNode* aCadLayerNode );
+
     void generateDrillLayers( wxXmlNode* aCadLayerNode );
 
     void generateStepSection( wxXmlNode* aCadNode );
@@ -218,7 +222,7 @@ private:
 
     void addFillDesc( wxXmlNode* aNode, FILL_T aFillType, bool aForce = false );
 
-    bool addPolygonNode( wxXmlNode* aParentNode, const SHAPE_POLY_SET::POLYGON& aPolygon,
+    bool addPolygonNode( wxXmlNode* aParentNode, const SHAPE_LINE_CHAIN& aPolygon,
                          FILL_T aFillType = FILL_T::FILLED_SHAPE, int aWidth = 0,
                          LINE_STYLE aDashType = LINE_STYLE::SOLID );
 
