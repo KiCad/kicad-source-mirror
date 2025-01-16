@@ -47,6 +47,12 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
 
     initDialog( aItemHeaders, aItemList, aPreselectText );
 
+    if( aItemList.size() > 16 )
+    {
+        m_listBox->SetMinSize( wxSize( m_listBox->GetMinWidth(),
+                                       KiROUND( m_listBox->GetMinHeight() * 1.66 ) ) );
+    }
+
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because so many dialogs share this same class, with different numbers of
     // columns, different column names, and column widths.
