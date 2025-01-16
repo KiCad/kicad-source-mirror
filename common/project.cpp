@@ -40,6 +40,7 @@
 #include <wildcards_and_files_ext.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <title_block.h>
 
 PROJECT::PROJECT() :
         m_readOnly( false ),
@@ -71,7 +72,17 @@ PROJECT::~PROJECT()
 
 bool PROJECT::TextVarResolver( wxString* aToken ) const
 {
-    if( GetTextVars().count( *aToken ) > 0 )
+    if( aToken->IsSameAs( wxT( "PROJECTNAME" ) )  )
+    {
+        *aToken = GetProjectName();
+        return true;
+    }
+    else if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) )  )
+    {
+        *aToken = TITLE_BLOCK::GetCurrentDate();
+        return true;
+    }
+    else if( GetTextVars().count( *aToken ) > 0 )
     {
         *aToken = GetTextVars().at( *aToken );
         return true;

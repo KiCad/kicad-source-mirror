@@ -92,22 +92,22 @@ void TITLE_BLOCK::GetContextualTextVars( wxArrayString* aVars )
 }
 
 
+wxString TITLE_BLOCK::GetCurrentDate()
+{
+    // We can choose different formats. Should probably be kept in sync with ISSUE_DATE
+    // formatting in DIALOG_PAGES_SETTINGS.
+    //
+    //  return wxDateTime::Now().Format( wxLocale::GetInfo( wxLOCALE_SHORT_DATE_FMT ) );
+    //  return wxDateTime::Now().Format( wxLocale::GetInfo( wxLOCALE_LONG_DATE_FMT ) );
+    //  return wxDateTime::Now().Format( wxT("%Y-%b-%d") );
+    return wxDateTime::Now().FormatISODate();
+};
+
+
 bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject, int aFlags ) const
 {
     bool tokenUpdated = false;
     wxString originalToken = *aToken;
-
-    auto getCurrentDate =
-            []() -> wxString
-            {
-                // We can choose different formats. Should probably be kept in sync with ISSUE_DATE
-                // formatting in DIALOG_PAGES_SETTINGS.
-                //
-                //  return wxDateTime::Now().Format( wxLocale::GetInfo( wxLOCALE_SHORT_DATE_FMT ) );
-                //  return wxDateTime::Now().Format( wxLocale::GetInfo( wxLOCALE_LONG_DATE_FMT ) );
-                //  return wxDateTime::Now().Format( wxT("%Y-%b-%d") );
-                return wxDateTime::Now().FormatISODate();
-            };
 
     if( aToken->IsSameAs( wxT( "ISSUE_DATE" ) ) )
     {
@@ -116,7 +116,7 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject, in
     }
     else if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) ) )
     {
-        *aToken = getCurrentDate();
+        *aToken = GetCurrentDate();
         tokenUpdated = true;
     }
     else if( aToken->IsSameAs( wxT( "REVISION" ) ) )
@@ -157,7 +157,7 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject, in
     if( tokenUpdated )
     {
         if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) ) )
-            *aToken = getCurrentDate();
+            *aToken = GetCurrentDate();
         else if( aProject )
             *aToken = ExpandTextVars( *aToken, aProject, aFlags );
 

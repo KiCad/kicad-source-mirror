@@ -154,11 +154,6 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                     *token = fn.GetFullPath();
                     return true;
                 }
-                else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) && m_project )
-                {
-                    *token = m_project->GetProjectName();
-                    return true;
-                }
                 else if( token->IsSameAs( wxT( "PAPER" ) ) )
                 {
                     *token = m_paperFormat;
