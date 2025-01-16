@@ -379,6 +379,16 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
             PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
             picker->GetToolMenu().ShowContextMenu( dummy );
         }
+        else if( !evt->IsMouseAction() )
+        {
+            // Often this will end up changing the items we just moved, so the ruler will be
+            // in the wrong place. Clear it away and the user can restart
+            twoPtMgr.Reset();
+            view.SetVisible( &ruler, false );
+            view.Update( &ruler, KIGFX::GEOMETRY );
+
+            evt->SetPassEvent();
+        }
         else
         {
             evt->SetPassEvent();
