@@ -287,6 +287,12 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
             all_added_items.push_back( item );
     }
 
+    // Make sure original items are selected (e.g. interactive point select may clear it)
+    for( int i = 0; i < m_selection->Size(); ++i )
+    {
+        all_added_items.push_back( selection[i] );
+    }
+
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
     m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &all_added_items );
 
