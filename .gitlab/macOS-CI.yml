@@ -15,7 +15,7 @@ macos_build:
     - cd build/macos
     - cmake
       -G Ninja
-      -DCMAKE_TOOLCHAIN_FILE=/Users/ci/kicad-mac-builder/toolchain/kicad-mac-builder.cmake
+      -DCMAKE_TOOLCHAIN_FILE=/Users/$USER/kicad-mac-builder/toolchain/kicad-mac-builder.cmake
       ../../
     - cmake --build . 2>&1 | tee compilation_log.txt
     - cd ../../
