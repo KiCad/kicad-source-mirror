@@ -494,7 +494,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     wxString    fileExt;
     wxString    title = _( "Save Netlist File" );
 
-    if (m_job)
+    if( m_job )
     {
         NetlistUpdateOpt();
         return true;

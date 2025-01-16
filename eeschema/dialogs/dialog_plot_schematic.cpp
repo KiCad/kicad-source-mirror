@@ -439,7 +439,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotCurrent( wxCommandEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
 {
-    if (!m_job)
+    if( !m_job )
     {
         plotSchematic( true );
     }
@@ -463,8 +463,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         COLOR_SETTINGS* colors = getColorSettings();
         m_job->m_theme = colors->GetName();
 
-
-        Close();
+        event.Skip();   // Allow normal close action
     }
 }
 
