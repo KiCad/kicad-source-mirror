@@ -578,6 +578,16 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
     symbol->GetDrawItems().sort();
     m_symbolName.clear();
 
+    const std::vector<wxString>* embeddedFonts =
+            symbol->GetEmbeddedFiles()->UpdateFontFiles();
+
+    symbol->RunOnChildren(
+            [&]( SCH_ITEM* aChild )
+            {
+                if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
+                    textItem->ResolveFont( embeddedFonts );
+            } );
+
     return symbol.release();
 }
 
