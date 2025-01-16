@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2016-2017 Lubomir Rintel <lkundrak@v3.sk> -->
 <!-- Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors. -->
-<component type="desktop">
+<component type="desktop-application">
     <id>@KICAD_APP_NAME@</id>
     <name>KiCad</name>
 
@@ -73,6 +73,8 @@
     <url type="help">https://go.kicad.org/docs/9</url>
     <url type="donation">https://go.kicad.org/donate</url>
     <url type="translate">https://go.kicad.org/translate</url>
+    <url type="contribute">https://go.kicad.org/contribute</url>
+    <url type="vcs-browser">https://gitlab.com/kicad/code/kicad</url>
 
     <update_contact>devlist@kicad.org</update_contact>
 
@@ -92,4 +94,19 @@
     <releases>
         <release version="@KICAD_VERSION_FULL@" date="@KICAD_CONFIG_TIMESTAMP@" />
     </releases>
+
+    <requires>
+        <display_length compare="ge">1280</display_length>
+        <memory compare="ge">1024</memory>
+    </requires>
+
+    <recommends>
+        <display_length compare="ge">1920</display_length>
+        <memory compare="ge">2048</memory>
+    </recommends>
+
+    <!-- KiCad supports running offline (but has online features available) -->
+    <supports>
+        <internet>offline-only</internet>
+    </supports>
 </component>
