@@ -30,16 +30,20 @@
 #include <Windows.h>
 #include <shellapi.h>
 #include <shlwapi.h>
+#include <shobjidl_core.h>
 #include <winhttp.h>
 
 #include <Softpub.h>
 #include <wincrypt.h>
 #include <wintrust.h>
 
+#define INCLUDE_KICAD_VERSION // fight me
+#include <kicad_build_version.h>
+
 
 void KIPLATFORM::ENV::Init()
 {
-    // No tasks for this platform
+    ::SetCurrentProcessExplicitAppUserModelID( GetAppUserModelId().wc_str() );
 }
 
 
@@ -380,4 +384,32 @@ bool KIPLATFORM::ENV::VerifyFileSignature( const wxString& aPath )
     WinVerifyTrust( NULL, &policy, &trustData );
 
     return verified;
+}
+
+
+wxString KIPLATFORM::ENV::GetAppUserModelId()
+{
+    // The application model id allows for taskbar grouping
+    // However, be warned, this cannot be too unique like per-process
+    // Because longer scope Windows features, such as "Pin to Taskbar"
+    // on a running application, depend on this being consistent.
+    std::vector<wxString> modelIdComponents;
+    modelIdComponents.push_back( wxS( "Kicad" ) );
+    modelIdComponents.push_back( wxS( "Kicad" ) );
+    modelIdComponents.push_back( wxTheApp->GetAppName() );
+    modelIdComponents.push_back( KICAD_MAJOR_MINOR_VERSION );
+
+    wxString modelId;
+    for( const auto& str : modelIdComponents )
+    {
+        modelId += str;
+        modelId += wxS( "." );
+    }
+
+    modelId.RemoveLast();                      // remove trailing dot
+    modelId.Replace( wxS( " " ), wxS( "_" ) ); // remove spaces sanity
+
+    // the other limitation is 127 characters but we arent trying to hit that limit yet
+
+    return modelId;
 }

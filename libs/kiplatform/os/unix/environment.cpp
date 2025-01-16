@@ -127,3 +127,9 @@ bool KIPLATFORM::ENV::VerifyFileSignature( const wxString& aPath )
 {
     return true;
 }
+
+
+wxString KIPLATFORM::ENV::GetAppUserModelId()
+{
+    return wxEmptyString;
+}

@@ -110,5 +110,13 @@ namespace KIPLATFORM
          * @return True if file signature passes
          */
         bool VerifyFileSignature( const wxString& aPath );
+
+        /**
+         * Retrieves the app user model id, a special string used for taskbar grouping
+         * on Windows 7 and later
+         *
+         * @returns The app user model id on Windows, empty on all other platforms
+         */
+        wxString GetAppUserModelId();
     }
 }
