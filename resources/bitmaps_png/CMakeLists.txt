@@ -1002,6 +1002,6 @@ if( MAINTAIN_PNGS )
         COMMENT "Creating PNGs from SVGs"
         )
 
-    add_dependencies( bitmap_archive_pre generate_pngs )
+    add_dependencies( bitmap_archive_bundle  generate_pngs )
 
 endif( MAINTAIN_PNGS )
