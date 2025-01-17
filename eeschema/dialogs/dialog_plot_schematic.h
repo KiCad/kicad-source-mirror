@@ -24,9 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_plot_schematic.h
- */
 
 #ifndef __DIALOG_PLOT_SCHEMATIC__
 #define __DIALOG_PLOT_SCHEMATIC__
@@ -37,7 +34,6 @@
 #include <sch_plotter.h>
 
 class PDF_PLOTTER;
-class SCH_REPORTER;
 class SCH_EDIT_FRAME;
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
@@ -76,7 +72,7 @@ private:
     /**
      * Set the m_outputDirectoryName variable to the selected directory from directory dialog.
      */
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+    void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
 
     PLOT_FORMAT GetPlotFileFormat();
 
@@ -84,48 +80,9 @@ private:
     void setPlotDrawingSheet( bool aPlot) { m_plotDrawingSheet->SetValue( aPlot ); }
 
     bool getOpenFileAfterPlot() { return m_openFileAfterPlot->GetValue(); }
-    void setOpenFileAfterPlot( bool aOpenFileAfterPlot ) { m_openFileAfterPlot->SetValue( aOpenFileAfterPlot ); }
-
-    void setHpglPenWidth();
+    void setOpenFileAfterPlot( bool aOpen ) { m_openFileAfterPlot->SetValue( aOpen ); }
 
     void plotSchematic( bool aPlotAll );
-
-    // HPGLGetPlotOriginAndUnits
-    HPGL_PLOT_ORIGIN_AND_UNITS getPlotOriginAndUnits()
-    {
-        switch( m_plotOriginOpt->GetSelection() )
-        {
-        case 0:
-        default: return HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT;
-        case 1:  return HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER;
-        case 2:  return HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
-        case 3:  return HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT;
-        }
-    }
-
-    void setPlotOriginAndUnits( HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits )
-    {
-        switch( aOriginAndUnits )
-        {
-        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
-        default:
-            m_plotOriginOpt->SetSelection( 0 );
-            break;
-
-        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
-            m_plotOriginOpt->SetSelection( 1 );
-            break;
-
-        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:
-            m_plotOriginOpt->SetSelection( 2 );
-            break;
-
-        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT:
-            m_plotOriginOpt->SetSelection( 3 );
-            break;
-        }
-    }
-
 
     /**
      * Determine the best absolute path to plot files given the contents of the path
@@ -145,14 +102,15 @@ private:
      */
     wxString getOutputPath();
 
-    SCH_EDIT_FRAME* m_editFrame;
-    bool            m_configChanged;        // true if a project config param has changed
-    PLOT_FORMAT     m_plotFormat;
-    static int      m_pageSizeSelect;       // Static to keep last option for some format
+private:
+    SCH_EDIT_FRAME*       m_editFrame;
+    bool                  m_configChanged;        // true if a project config param has changed
+    PLOT_FORMAT           m_plotFormat;
+    static int            m_pageSizeSelect;       // Static to keep last option for some format
     static HPGL_PAGE_SIZE m_HPGLPaperSizeSelect; // for HPGL format only: last selected paper size
-    double             m_HPGLPenSize;
-    UNIT_BINDER     m_defaultLineWidth;
-    UNIT_BINDER     m_penWidth;
+    double                m_HPGLPenSize;
+    UNIT_BINDER           m_defaultLineWidth;
+    UNIT_BINDER           m_penWidth;
     JOB_EXPORT_SCH_PLOT*  m_job;
 };
 

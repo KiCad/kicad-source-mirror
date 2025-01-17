@@ -118,8 +118,8 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         {
             for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
             {
-                int idx =
-                        m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+                int idx = m_colorTheme->Append( settings->GetName(),
+                                                static_cast<void*>( settings ) );
 
                 if( settings->GetFilename() == cfg->m_PlotPanel.color_theme )
                     m_colorTheme->SetSelection( idx );
@@ -181,7 +181,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 #ifdef __WINDOWS__
         path.Replace( '/', '\\' );
 #endif
-        m_outputDirectoryName->SetValue( path );
+        m_outputPath->SetValue( path );
     }
     else if( m_job )
     {
@@ -223,7 +223,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         // And then hide it
         m_plotFormatOpt->Hide();
 
-        m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
+        m_outputPath->SetValue( m_job->GetConfiguredOutputPath() );
     }
 }
 
@@ -232,10 +232,10 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
  * @todo Copy of DIALOG_PLOT::onOutputDirectoryBrowseClicked in dialog_plot.cpp, maybe merge to
  *       a common method.
  */
-void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+void DIALOG_PLOT_SCHEMATIC::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
-    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    wxString path = ExpandEnvVarSubstitutions( m_outputPath->GetValue(), &Prj() );
 
     // When editing a schematic that is not part of a project in the stand alone mode, the
     // project path is not defined so point to the users document path to save the plot files.
@@ -246,7 +246,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
     else
     {
         // Build the absolute path of current output directory to preselect it in the file browser.
-        path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+        path = ExpandEnvVarSubstitutions( m_outputPath->GetValue(), &Prj() );
         path = Prj().AbsolutePath( path );
     }
 
@@ -276,7 +276,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
             dirName.MakeRelativeTo( defaultPath );
     }
 
-    m_outputDirectoryName->SetValue( dirName.GetFullPath() );
+    m_outputPath->SetValue( dirName.GetFullPath() );
 }
 
 
@@ -402,7 +402,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
         aSettings->SetBackgroundColor( COLOR4D::UNSPECIFIED );
 
     // Plot directory
-    wxString path = m_outputDirectoryName->GetValue();
+    wxString path = m_outputPath->GetValue();
     path.Replace( '\\', '/' );
 
     SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
@@ -452,7 +452,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         m_job->m_PDFMetadata = m_plotPDFMetadata->GetValue();
         m_job->m_plotDrawingSheet = m_plotDrawingSheet->GetValue();
         m_job->m_plotAll = true;
-        m_job->SetConfiguredOutputPath( m_outputDirectoryName->GetValue() );
+        m_job->SetConfiguredOutputPath( m_outputPath->GetValue() );
 
         m_job->m_HPGLPlotOrigin =
                 static_cast<JOB_HPGL_PLOT_ORIGIN_AND_UNITS>( m_plotOriginOpt->GetSelection() );
@@ -502,18 +502,6 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::setHpglPenWidth()
-{
-    m_HPGLPenSize = m_penWidth.GetDoubleValue();
-
-    if( m_HPGLPenSize > schIUScale.mmToIU( 2 ) )
-        m_HPGLPenSize = schIUScale.mmToIU( 2 );
-
-    if( m_HPGLPenSize < schIUScale.mmToIU( 0.01 ) )
-        m_HPGLPenSize = schIUScale.mmToIU( 0.01 );
-}
-
-
 wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
 {
     wxString msg;
@@ -530,7 +518,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
                 return schematic.ResolveTextVar( &schematic.CurrentSheet(), token, 0 );
             };
 
-    wxString path = m_outputDirectoryName->GetValue();
+    wxString path = m_outputPath->GetValue();
     path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
 

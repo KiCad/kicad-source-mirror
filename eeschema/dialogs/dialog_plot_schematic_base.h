@@ -46,7 +46,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticText* m_outputPathLabel;
-		wxTextCtrl* m_outputDirectoryName;
+		wxTextCtrl* m_outputPath;
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxBoxSizer* m_optionsSizer;
 		wxRadioBox* m_plotFormatOpt;
