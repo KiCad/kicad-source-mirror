@@ -175,6 +175,15 @@ public:
         Disconnect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOBSET_OUTPUT::onMenu ), nullptr, this );
     }
 
+    void ClearStatus()
+    {
+        JOBSET_OUTPUT* output = GetOutput();
+        wxCHECK( output, /*void*/ );
+
+        output->m_lastRunSuccess = std::nullopt;
+        m_statusBitmap->SetBitmap( wxNullBitmap );
+    }
+
     void UpdateStatus()
     {
         JOBSET_OUTPUT* output = GetOutput();
@@ -205,10 +214,13 @@ public:
 
     virtual void OnGenerate( wxCommandEvent& event ) override
     {
+        ClearStatus();
+        Refresh();
+
         CallAfter(
                 [this]()
                 {
-                    PROJECT&      project = m_frame->Kiway().Prj();
+                    PROJECT& project = m_frame->Kiway().Prj();
                     m_panelParent->EnsurePcbSchFramesOpen();
 
                     wxFileName fn = project.GetProjectFullName();
@@ -900,6 +912,11 @@ void PANEL_JOBSET::OnGenerateAllOutputsClick( wxCommandEvent& event )
 		DisplayError( this, _( "No outputs defined" ) );
 		return;
 	}
+
+    for( PANEL_JOBSET_OUTPUT* panel : GetOutputPanels() )
+        panel->ClearStatus();
+
+    Refresh();
 
 	CallAfter(
 			[this]()
