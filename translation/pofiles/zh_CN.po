@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-11 10:05+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2025-01-17 22:18+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12823,9 +12823,9 @@ msgid "Not Connected"
 msgstr "没有连接"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "库中没有名为 '%s' 的模型。"
+msgstr "库 '%2$s' 中没有名为 '%1$s' 的模型。"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1233
 msgid "Browse Models"
