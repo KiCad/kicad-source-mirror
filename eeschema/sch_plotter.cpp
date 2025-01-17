@@ -580,7 +580,7 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_OPTS& aPlotOpts,
 
     if( aReporter )
     {
-        aReporter->ReportTail( _( "Done" ), RPT_SEVERITY_INFO );
+        aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
     }
 
     restoreEnvironment( nullptr, oldsheetpath );

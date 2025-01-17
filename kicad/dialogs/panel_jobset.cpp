@@ -52,12 +52,10 @@ extern KICOMMON_API std::map<JOBSET_OUTPUT_TYPE, JOBSET_OUTPUT_TYPE_INFO> Jobset
 class DIALOG_OUTPUT_RUN_RESULTS : public DIALOG_OUTPUT_RUN_RESULTS_BASE
 {
 public:
-    DIALOG_OUTPUT_RUN_RESULTS( wxWindow* aParent,
-                                JOBSET* aJobsFile,
-                                JOBSET_OUTPUT* aOutput ) :
-        DIALOG_OUTPUT_RUN_RESULTS_BASE( aParent ),
-        m_jobsFile( aJobsFile ),
-        m_output( aOutput )
+    DIALOG_OUTPUT_RUN_RESULTS( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_OUTPUT* aOutput ) :
+            DIALOG_OUTPUT_RUN_RESULTS_BASE( aParent ),
+            m_jobsFile( aJobsFile ),
+            m_output( aOutput )
     {
         m_staticTextOutputName->SetLabel( wxString::Format( _( "Output: %s" ),
                                                             aOutput->GetDescription() ) );
@@ -93,10 +91,19 @@ public:
         }
 
         SetupStandardButtons( { { wxID_OK, _( "Close" ) } } );
+        finishDialogSettings();
     }
 
+    void onJobListSize( wxSizeEvent& event ) override
+    {
+        int width = m_jobList->GetSize().x;
+        width -= m_jobList->GetColumnWidth( 0 );
+        width -= m_jobList->GetColumnWidth( 1 );
 
-    virtual void OnJobListItemSelected( wxListEvent& event ) override
+        m_jobList->SetColumnWidth( 2, width );
+    }
+
+    void OnJobListItemSelected( wxListEvent& event ) override
     {
         int itemIndex = event.GetIndex();
 
@@ -120,7 +127,6 @@ public:
                 m_textCtrlOutput->SetValue( _( "No output messages" ) );
             }
         }
-
     }
 
 private:

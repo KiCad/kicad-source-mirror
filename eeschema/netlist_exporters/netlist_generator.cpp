@@ -161,7 +161,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
             }
             else
             {
-                aReporter->ReportTail( _( "Success." ), RPT_SEVERITY_INFO );
+                aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
             }
 
             if( output.GetCount() )

@@ -741,6 +741,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
+    m_reporter->Report( wxString::Format( _( "Wrote bill of materials to '%s'." ), outPath ),
+                        RPT_SEVERITY_ACTION );
+
     return CLI::EXIT_CODES::OK;
 }
 
@@ -810,6 +813,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    m_reporter->Report( wxString::Format( _( "Wrote bill of materials to '%s'." ), outPath ),
+                        RPT_SEVERITY_ACTION );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -1166,6 +1172,9 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
                             RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
+
+    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), outPath ),
+                        RPT_SEVERITY_ACTION );
 
     if( ercJob->m_exitCodeViolations )
     {

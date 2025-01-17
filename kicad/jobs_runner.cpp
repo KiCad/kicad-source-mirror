@@ -144,13 +144,24 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
 
 class JOBSET_OUTPUT_REPORTER : public WX_STRING_REPORTER
 {
+public:
+    JOBSET_OUTPUT_REPORTER( const wxString& aTempDirPath ) :
+            m_tempDirPath( aTempDirPath )
+    {
+    }
+
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity ) override
     {
-        if( aSeverity == RPT_SEVERITY_ERROR || aSeverity == RPT_SEVERITY_WARNING )
-            WX_STRING_REPORTER::Report( aText, aSeverity );
+        wxString text( aText );
 
-        return *this;
+        if( aSeverity == RPT_SEVERITY_ACTION )
+            text.Replace( m_tempDirPath, wxEmptyString );
+
+        return WX_STRING_REPORTER::Report( text, aSeverity );
     }
+
+private:
+    wxString m_tempDirPath;
 };
 
 
@@ -173,6 +184,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
     aOutput->m_lastRunReporters.clear();
 
     wxString tempDirPath = tmp.GetFullPath();
+
     if( !wxFileName::Mkdir( tempDirPath, wxS_DIR_DEFAULT ) )
     {
 		if( m_reporter )
@@ -251,7 +263,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
         if( !reporterToUse || reporterToUse == &NULL_REPORTER::GetInstance() )
         {
-            reporterToUse = new JOBSET_OUTPUT_REPORTER;
+            reporterToUse = new JOBSET_OUTPUT_REPORTER( tempDirPath );
             aOutput->m_lastRunReporters[job.m_id] = reporterToUse;
         }
 

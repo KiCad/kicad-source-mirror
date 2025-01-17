@@ -358,7 +358,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     }
 
     msg.Printf( _( "Front (top side) placement file: '%s'." ), filename );
-    m_reporter->Report( msg, RPT_SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
@@ -380,7 +380,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
     // Display results
     msg.Printf( _( "Back (bottom side) placement file: '%s'." ), filename );
-    m_reporter->Report( msg, RPT_SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
@@ -389,7 +389,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     msg.Printf( _( "Full component count: %d." ), fullcount );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
-    m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_INFO );
+    m_reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
 
     return true;
 }
@@ -491,14 +491,14 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     else
         msg.Printf( _( "Front (top side) placement file: '%s'." ), fn.GetFullPath() );
 
-    m_reporter->Report( msg, RPT_SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     if( singleFile  )
     {
-        m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_INFO );
+        m_reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
         return true;
     }
 
@@ -537,7 +537,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     if( !singleFile )
     {
         msg.Printf( _( "Back (bottom side) placement file: '%s'." ), fn.GetFullPath() );
-        m_reporter->Report( msg, RPT_SEVERITY_INFO );
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
         msg.Printf( _( "Component count: %d." ), fpcount );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
@@ -550,7 +550,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
     }
 
-    m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_INFO );
+    m_reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
     return true;
 }
 

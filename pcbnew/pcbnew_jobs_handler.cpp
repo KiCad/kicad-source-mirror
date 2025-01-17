@@ -398,7 +398,13 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
                 !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
                 aStepJob->m_vrmlModelDir, originX, originY );
 
-        if( !success )
+        if ( success )
+        {
+            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
+                                                  outPath ),
+                                RPT_SEVERITY_INFO );
+        }
+        else
         {
             m_reporter->Report( _( "Error exporting VRML" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -680,7 +686,12 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
                                                                             : wxBITMAP_TYPE_JPEG );
     }
 
-    if( !success )
+    if( success )
+    {
+        m_reporter->Report( _( "Successfully created 3D render image" ) + wxS( "\n" ),
+                            RPT_SEVERITY_INFO );
+    }
+    else
     {
         m_reporter->Report( _( "Error creating 3D render image" ) + wxS( "\n" ),
                             RPT_SEVERITY_ERROR );
@@ -1103,6 +1114,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
 
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
+
+    m_reporter->Report( _( "Successfully created genCAD file\n" ), RPT_SEVERITY_INFO );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -1795,6 +1808,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
                             RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
+
+    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), outPath ),
+                        RPT_SEVERITY_ACTION );
 
     if( drcJob->m_exitCodeViolations )
     {
