@@ -2099,7 +2099,7 @@ msgstr "KiCad в Интернете"
 
 #: common/dialog_about/AboutDialog_main.cpp:130
 msgid "The official KiCad website - "
-msgstr "Официальный вебсайт KiCad - "
+msgstr "Официальный веб-сайт KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "Developer website - "
