@@ -44341,7 +44341,7 @@ msgstr "Переподключить зону меди '%s' от %s к %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1085
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
-msgstr "Переподключено зону меди от %s к %s."
+msgstr "Переподключить зону меди от %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1108
 #, c-format
