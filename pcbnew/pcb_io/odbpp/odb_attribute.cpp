@@ -58,7 +58,7 @@ void ATTR_RECORD_WRITER::WriteAttributes( std::ostream& ost ) const
 {
     ODB::CHECK_ONCE once;
 
-    for( const auto& attr : attributes )
+    for( const auto& attr : m_ODBattributes )
     {
         if( once() )
             ost << ";";

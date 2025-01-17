@@ -71,6 +71,24 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
         comp.m_prp[key] = wxString::Format( "'%s'", field->GetText() );
     }
 
+    if( aFp->IsDNP() )
+    {
+        AddSystemAttribute( comp, ODB_ATTR::NO_POP{ true } );
+    }
+
+    if( aFp->GetAttributes() & FP_SMD )
+    {
+        AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::SMD );
+    }
+    else if( aFp->GetAttributes() & FP_THROUGH_HOLE )
+    {
+        AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::THT );
+    }
+    else
+    {
+        AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::OTHER );
+    }
+
     return comp;
 }
 

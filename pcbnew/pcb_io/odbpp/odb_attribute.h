@@ -197,6 +197,12 @@ struct IsSymbol : std::false_type
     {                                                                                              \
     };
 
+#define USED_BY_CMP_ENTITY( NAME )                                                                 \
+    template <>                                                                                    \
+    struct IsComp<NAME> : std::true_type                                                            \
+    {                                                                                              \
+    };
+
 // Attribute definitions
 // BOOLEAN ATTRIBUTES
 DEFINE_BOOLEAN_ATTR( SMD )
@@ -276,6 +282,18 @@ enum class VIA_TYPE
 DEFINE_OPTION_ATTR( VIA_TYPE )
 USED_BY_FEATURE_ENTITY( VIA_TYPE )
 
+enum class COMP_MOUNT_TYPE
+{
+    OTHER,
+    SMD,
+    THT,
+    PRESSFIT
+};
+DEFINE_OPTION_ATTR( COMP_MOUNT_TYPE )
+USED_BY_CMP_ENTITY( COMP_MOUNT_TYPE )
+
+DEFINE_BOOLEAN_ATTR( NO_POP )
+USED_BY_CMP_ENTITY( NO_POP )
 } // namespace ODB_ATTR
 
 
@@ -286,14 +304,26 @@ public:
     virtual ~ATTR_MANAGER() = default;
 
     template <typename Tr, typename Ta>
-    void AddFeatureAttribute( Tr& r, Ta v )
+    void AddSystemAttribute( Tr& r, Ta v )
+    {
+        std::string name = std::string( "." ) + std::string( ODB_ATTR::AttributeName<Ta>::name );
+        const auto id = GetAttrNameNumber( name );
+
+        if constexpr( std::is_enum_v<Ta> )
+            r.m_ODBattributes.emplace( id, std::to_string( static_cast<int>( v ) ) );
+        else
+            r.m_ODBattributes.emplace( id, AttrValue2String( v ) );
+    }
+
+    template <typename Tr, typename Ta>
+    void AddUserDefAttribute( Tr& r, Ta v )
     {
         const auto id = GetAttrNameNumber( ODB_ATTR::AttributeName<Ta>::name );
 
         if constexpr( std::is_enum_v<Ta> )
-            r.attributes.emplace( id, std::to_string( static_cast<int>( v ) ) );
+            r.m_ODBattributes.emplace( id, std::to_string( static_cast<int>( v ) ) );
         else
-            r.attributes.emplace( id, AttrValue2String( v ) );
+            r.m_ODBattributes.emplace( id, AttrValue2String( v ) );
     }
 
 protected:
@@ -345,7 +375,7 @@ public:
     void WriteAttributes( std::ostream& ost ) const;
 
 public:
-    std::map<unsigned int, std::string> attributes;
+    std::map<unsigned int, std::string> m_ODBattributes;
 };
 
 

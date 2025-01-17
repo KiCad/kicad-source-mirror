@@ -424,8 +424,8 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
 
                 if( !m_featuresList.empty() )
                 {
-                    AddFeatureAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::VIA );
-                    AddFeatureAttribute(
+                    AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::VIA );
+                    AddSystemAttribute(
                             *m_featuresList.back(),
                             ODB_ATTR::GEOMETRY{ "VIA_RoundD"
                                                 + std::to_string( via->GetWidth( aLayer ) ) } );
@@ -442,12 +442,12 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                                           m_featuresList.size() - 1 );
 
                     // TODO: confirm TOOLING_HOLE
-                    // AddFeatureAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::TOOLING_HOLE );
+                    // AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::TOOLING_HOLE );
 
                     if( !m_featuresList.empty() )
                     {
-                        AddFeatureAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::VIA );
-                        AddFeatureAttribute(
+                        AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::VIA );
+                        AddSystemAttribute(
                                 *m_featuresList.back(),
                                 ODB_ATTR::GEOMETRY{ "VIA_RoundD"
                                                     + std::to_string( via->GetWidth( aLayer ) ) } );
@@ -477,7 +477,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                                         m_featuresList.size() - 1 );
 
             if( zone->IsTeardropArea() && !m_featuresList.empty() )
-                AddFeatureAttribute( *m_featuresList.back(), ODB_ATTR::TEAR_DROP{ true } );
+                AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::TEAR_DROP{ true } );
         }
     };
 
@@ -529,7 +529,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                     shape.SetWidth( attributes.m_StrokeWidth );
 
                     AddShape( shape );
-                    AddFeatureAttribute( *m_featuresList.back(),
+                    AddSystemAttribute( *m_featuresList.back(),
                                          ODB_ATTR::STRING{ aTextString.ToStdString() } );
                 }
                 else
@@ -543,7 +543,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                         shape.SetWidth( attributes.m_StrokeWidth );
                         AddShape( shape );
                         if( !m_featuresList.empty() )
-                            AddFeatureAttribute( *m_featuresList.back(),
+                            AddSystemAttribute( *m_featuresList.back(),
                                                  ODB_ATTR::STRING{ aTextString.ToStdString() } );
                     }
                 }
@@ -593,7 +593,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                             AddContour( poly_set, ii, FILL_T::FILLED_SHAPE );
 
                             if( !m_featuresList.empty() )
-                                AddFeatureAttribute(
+                                AddSystemAttribute(
                                         *m_featuresList.back(),
                                         ODB_ATTR::STRING{ aTextString.ToStdString() } );
                         }
@@ -650,7 +650,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                 AddContour( finalpolyset, ii, FILL_T::FILLED_SHAPE );
 
                 if( !m_featuresList.empty() )
-                    AddFeatureAttribute( *m_featuresList.back(),
+                    AddSystemAttribute( *m_featuresList.back(),
                                          ODB_ATTR::STRING{ shownText.ToStdString() } );
             }
         }
@@ -701,10 +701,10 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName,
                                         m_featuresList.size() - 1 );
             if( !m_featuresList.empty() )
-                AddFeatureAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::TOEPRINT );
+                AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::TOEPRINT );
 
             if( !pad->HasHole() && !m_featuresList.empty() )
-                AddFeatureAttribute( *m_featuresList.back(), ODB_ATTR::SMD{ true } );
+                AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::SMD{ true } );
         }
         else
         {
@@ -733,16 +733,16 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                                                 m_featuresList.size() - 1 );
 
                     if( !m_featuresList.empty() )
-                        AddFeatureAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::PLATED );
+                        AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::PLATED );
                 }
                 else
                 {
                     if( !m_featuresList.empty() )
-                        AddFeatureAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::NON_PLATED );
+                        AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::NON_PLATED );
                 }
             }
         }
-        // AddFeatureAttribute( *m_featuresList.back(),
+        // AddSystemAttribute( *m_featuresList.back(),
         //         ODB_ATTR::GEOMETRY{ "PAD_xxxx" } );
     };
 
