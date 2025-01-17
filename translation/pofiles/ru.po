@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-17 21:51+0000\n"
+"PO-Revision-Date: 2025-01-17 22:09+0000\n"
 "Last-Translator: Дмитрий Михирев <bizdelnick@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -44351,7 +44351,7 @@ msgstr "Переподключена зона меди '%s' от %s к %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1115
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Переподключено зону меди от %s к %s."
+msgstr "Переподключена зона меди от %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1128
 #, c-format
