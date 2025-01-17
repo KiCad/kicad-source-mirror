@@ -654,7 +654,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
                             reporter.Report( _( "external simulator not found" ), RPT_SEVERITY_ERROR );
                             reporter.Report( _( "Note: command line is usually: "
                                                 "<tt>&lt;path to SPICE binary&gt; \"%I\"</tt>" ),
-                                            RPT_SEVERITY_INFO );
+                                             RPT_SEVERITY_INFO );
                         }
                         else if( line.EndsWith( wxS( "failed with error 8!" ) ) ) // ENOEXEC
                         {
