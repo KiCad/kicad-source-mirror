@@ -437,3 +437,16 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     return buffer;
 }
+
+
+wxString PLACE_FILE_EXPORTER::DecorateFilename( const wxString& aBaseName, bool aFront, bool aBack )
+{
+    if( aFront && aBack )
+        return aBaseName + wxT( "-" ) + wxT( "all" );
+    else if( aFront )
+        return aBaseName + wxT( "-" ) + GetFrontSideName();
+    else if( aBack )
+        return aBaseName + wxT( "-" ) + GetBackSideName();
+    else
+        return aBaseName;
+}

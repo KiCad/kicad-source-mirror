@@ -92,6 +92,8 @@ public:
     static std::string GetFrontSideName() { return std::string( "top" ); }
     static std::string GetBackSideName() { return std::string( "bottom" ); }
 
+    static wxString DecorateFilename( const wxString& aBaseName, bool aFront, bool aBack );
+
 private:
     BOARD*   m_board;
     bool     m_unitsMM;         // true for mm, false for inches

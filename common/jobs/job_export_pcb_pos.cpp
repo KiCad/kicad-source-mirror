@@ -52,6 +52,8 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
     m_excludeDNP( false ),
     m_negateBottomX( false ),
     m_side( SIDE::BOTH ),
+    m_singleFile( false ),
+    m_nakedFilename( false ),
     m_units( UNITS::MILLIMETERS ),
     m_format( FORMAT::ASCII ),
     m_gerberBoardEdge( true )
@@ -75,6 +77,10 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
     m_params.emplace_back( new JOB_PARAM<bool>( "negate_bottom_x",
                                                 &m_negateBottomX,
                                                 m_negateBottomX ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "single_file",
+                                                &m_singleFile,
+                                                m_singleFile ) );
 
     m_params.emplace_back( new JOB_PARAM<bool>( "gerber_board_edge",
                                                 &m_gerberBoardEdge,

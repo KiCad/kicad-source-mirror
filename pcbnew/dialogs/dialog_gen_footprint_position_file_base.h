@@ -48,8 +48,6 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_formatLabel;
 		wxChoice* m_formatCtrl;
-		wxStaticText* m_sideLabel;
-		wxChoice* m_sideCtrl;
 		wxStaticText* m_unitsLabel;
 		wxChoice* m_unitsCtrl;
 		wxCheckBox* m_onlySMD;

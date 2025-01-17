@@ -95,9 +95,6 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         // Output directory
         m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[LAST_PATH_POS_FILES] );
 
-        m_sideLabel->Hide();
-        m_sideCtrl->Hide();
-
         // Update Options
         m_unitsCtrl->SetSelection( cfg->m_PlaceFile.units );
         m_singleFile->SetValue( cfg->m_PlaceFile.file_options == 1 );
@@ -123,16 +120,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         m_staticTextDir->SetLabel( _( "Output file:" ) );
         m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
 
-        switch( m_job->m_side )
-        {
-        case JOB_EXPORT_PCB_POS::SIDE::FRONT: m_sideCtrl->SetSelection( 0 ); break;
-        case JOB_EXPORT_PCB_POS::SIDE::BACK:  m_sideCtrl->SetSelection( 1 ); break;
-        default:                              m_sideCtrl->SetSelection( 2 ); break;
-        }
-
-        m_singleFile->Hide();
-
         m_unitsCtrl->SetSelection( static_cast<int>( m_job->m_units ) );
+        m_singleFile->SetValue( m_job->m_singleFile );
         m_formatCtrl->SetSelection( static_cast<int>( m_job->m_format ) );
         m_cbIncludeBoardEdge->SetValue( m_job->m_gerberBoardEdge );
 		m_useDrillPlaceOrigin->SetValue( m_job->m_useDrillPlaceFileOrigin );
@@ -162,8 +151,6 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIUnits( wxUpdateUIEvent& event )
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIFileOpt( wxUpdateUIEvent& event )
 {
     m_singleFile->Enable( m_formatCtrl->GetSelection() != 2 );
-    m_sideLabel->Enable( m_formatCtrl->GetSelection() != 2 );
-    m_sideCtrl->Enable( m_formatCtrl->GetSelection() != 2 );
 }
 
 
@@ -310,14 +297,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
         m_job->m_units = m_unitsCtrl->GetSelection() == 0 ? JOB_EXPORT_PCB_POS::UNITS::INCHES
                                                           : JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS;
         m_job->m_format = static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_formatCtrl->GetSelection() );
-
-        switch( m_sideCtrl->GetSelection() )
-        {
-        case 0:  m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::FRONT; break;
-        case 1:  m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::BACK;  break;
-        default: m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::BOTH;  break;
-        }
-
+        m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::BOTH;
+        m_job->m_singleFile = m_singleFile->GetValue();
         m_job->m_gerberBoardEdge = m_cbIncludeBoardEdge->GetValue();
         m_job->m_excludeFootprintsWithTh = m_excludeTH->GetValue();
         m_job->m_smdOnly = m_onlySMD->GetValue();
@@ -450,14 +431,14 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
             [&]( wxString* token ) -> bool
             {
                 // Handles board->GetTitleBlock() *and* board->GetProject()
-        return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
+                return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
             };
 
     wxString path = m_editFrame->GetPcbNewSettings()->m_PlaceFile.output_directory;
     path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
-    wxFileName  outputDir = wxFileName::DirName( path );
+    wxFileName outputDir = wxFileName::DirName( path );
     wxString   boardFilename = m_editFrame->GetBoard()->GetFileName();
 
     m_reporter = &m_messagesPanel->Reporter();
@@ -474,27 +455,15 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     // Create the Front or Top side placement file, or a single file
     topSide = true;
-    bottomSide = false;
+    bottomSide = singleFile;
 
-    if( singleFile )
-    {
-        bottomSide = true;
-        fn.SetName( fn.GetName() + wxT( "-" ) + wxT( "all" ) );
-    }
-    else
-    {
-        fn.SetName( fn.GetName() + wxT( "-" ) + PLACE_FILE_EXPORTER::GetFrontSideName().c_str() );
-    }
-
+    fn.SetName( PLACE_FILE_EXPORTER::DecorateFilename( fn.GetName(), topSide, bottomSide ) );
+    fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
 
     if( useCSVfmt )
     {
         fn.SetName( fn.GetName() + wxT( "-" ) + FILEEXT::FootprintPlaceFileExtension );
         fn.SetExt( wxT( "csv" ) );
-    }
-    else
-    {
-        fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
     }
 
     int fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
@@ -531,16 +500,13 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     bottomSide = true;
     fn = brd->GetFileName();
     fn.SetPath( outputDir.GetPath() );
-    fn.SetName( fn.GetName() + wxT( "-" ) + PLACE_FILE_EXPORTER::GetBackSideName().c_str() );
+    fn.SetName( PLACE_FILE_EXPORTER::DecorateFilename( fn.GetName(), topSide, bottomSide ) );
+    fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
 
     if( useCSVfmt )
     {
         fn.SetName( fn.GetName() + wxT( "-" ) + FILEEXT::FootprintPlaceFileExtension );
         fn.SetExt( wxT( "csv" ) );
-    }
-    else
-    {
-        fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
     }
 
     fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),

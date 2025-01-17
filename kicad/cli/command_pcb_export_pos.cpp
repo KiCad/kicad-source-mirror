@@ -108,6 +108,8 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     aPosJob->m_negateBottomX = m_argParser.get<bool>( ARG_NEGATE_BOTTOM_X );
+    aPosJob->m_singleFile = true;
+    aPosJob->m_nakedFilename = true;
     aPosJob->m_smdOnly = m_argParser.get<bool>( ARG_SMD_ONLY );
     aPosJob->m_excludeFootprintsWithTh = m_argParser.get<bool>( ARG_EXCLUDE_FOOTPRINTS_TH );
     aPosJob->m_useDrillPlaceFileOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );

@@ -42,6 +42,8 @@ public:
     bool m_excludeFootprintsWithTh;
     bool m_excludeDNP;
     bool m_negateBottomX;
+    bool m_singleFile;
+    bool m_nakedFilename;
 
     enum class SIDE
     {

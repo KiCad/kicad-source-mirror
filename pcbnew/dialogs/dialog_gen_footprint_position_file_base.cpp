@@ -62,16 +62,6 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_formatCtrl->SetSelection( 0 );
 	fgSizer1->Add( m_formatCtrl, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_sideLabel = new wxStaticText( this, wxID_ANY, _("Side:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sideLabel->Wrap( -1 );
-	fgSizer1->Add( m_sideLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxString m_sideCtrlChoices[] = { _("Front"), _("Back"), _("Both") };
-	int m_sideCtrlNChoices = sizeof( m_sideCtrlChoices ) / sizeof( wxString );
-	m_sideCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_sideCtrlNChoices, m_sideCtrlChoices, 0 );
-	m_sideCtrl->SetSelection( 0 );
-	fgSizer1->Add( m_sideCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
 	m_unitsLabel = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsLabel->Wrap( -1 );
 	fgSizer1->Add( m_unitsLabel, 0, wxRIGHT, 5 );

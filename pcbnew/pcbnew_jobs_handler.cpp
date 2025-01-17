@@ -1385,56 +1385,146 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII
         || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
     {
-        FILE* file = nullptr;
-        file = wxFopen( outPath, wxS( "wt" ) );
+        wxFileName fn( outPath );
+        wxString   baseName = fn.GetName();
 
-        if( file == nullptr )
-            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        auto exportPlaceFile =
+                [&]( bool frontSide, bool backSide, const wxString& outPath ) -> bool
+                {
+                    FILE* file = wxFopen( outPath, wxS( "wt" ) );
+                    wxCHECK( file, false );
 
-        std::string data;
+                    PLACE_FILE_EXPORTER exporter( brd,
+                                  aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS,
+                                  aPosJob->m_smdOnly,
+                                  aPosJob->m_excludeFootprintsWithTh,
+                                  aPosJob->m_excludeDNP,
+                                  frontSide,
+                                  backSide,
+                                  aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
+                                  aPosJob->m_useDrillPlaceFileOrigin,
+                                  aPosJob->m_negateBottomX );
 
-        bool frontSide = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
-                         || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+                    std::string data = exporter.GenPositionData();
+                    fputs( data.c_str(), file );
+                    fclose( file );
 
-        bool backSide = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK
-                        || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+                    return true;
+                };
 
-        PLACE_FILE_EXPORTER exporter( brd,
-                                      aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS,
-                                      aPosJob->m_smdOnly, aPosJob->m_excludeFootprintsWithTh,
-                                      aPosJob->m_excludeDNP,
-                                      frontSide, backSide,
-                                      aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
-                                      aPosJob->m_useDrillPlaceFileOrigin,
-                                      aPosJob->m_negateBottomX );
-        data = exporter.GenPositionData();
+        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH && !aPosJob->m_singleFile )
+        {
+            fn.SetName( PLACE_FILE_EXPORTER::DecorateFilename( baseName, true, false ) );
 
-        fputs( data.c_str(), file );
-        fclose( file );
+            if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV && !aPosJob->m_nakedFilename )
+                fn.SetName( fn.GetName() + wxT( "-" ) + FILEEXT::FootprintPlaceFileExtension );
 
-        m_reporter->Report( wxString::Format( _( "Wrote position data to '%s'.\n" ), outPath ),
-                            RPT_SEVERITY_ACTION );
+            if( exportPlaceFile( true, false, fn.GetFullPath() ) )
+            {
+                m_reporter->Report( wxString::Format( _( "Wrote front position data to '%s'.\n" ),
+                                                      fn.GetFullPath() ),
+                                    RPT_SEVERITY_ACTION );
 
-        aPosJob->AddOutput( outPath );
+                aPosJob->AddOutput( fn.GetFullPath() );
+            }
+            else
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+
+            fn.SetName( PLACE_FILE_EXPORTER::DecorateFilename( baseName, false, true ) );
+
+            if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV && !aPosJob->m_nakedFilename )
+                fn.SetName( fn.GetName() + wxT( "-" ) + FILEEXT::FootprintPlaceFileExtension );
+
+            if( exportPlaceFile( false, true, fn.GetFullPath() ) )
+            {
+                m_reporter->Report( wxString::Format( _( "Wrote back position data to '%s'.\n" ),
+                                                      fn.GetFullPath() ),
+                                    RPT_SEVERITY_ACTION );
+
+                aPosJob->AddOutput( fn.GetFullPath() );
+            }
+            else
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
+        else
+        {
+            bool front = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
+                             || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+
+            bool back = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK
+                            || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+
+            if( !aPosJob->m_nakedFilename )
+            {
+                fn.SetName( PLACE_FILE_EXPORTER::DecorateFilename( fn.GetName(), front, back ) );
+
+                if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
+                    fn.SetName( fn.GetName() + wxT( "-" ) + FILEEXT::FootprintPlaceFileExtension );
+            }
+
+            if( exportPlaceFile( front, back, fn.GetFullPath() ) )
+            {
+                m_reporter->Report( wxString::Format( _( "Wrote position data to '%s'.\n" ),
+                                                      fn.GetFullPath() ),
+                                    RPT_SEVERITY_ACTION );
+
+                aPosJob->AddOutput( fn.GetFullPath() );
+            }
+            else
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
     }
     else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
     {
         PLACEFILE_GERBER_WRITER exporter( brd );
         PCB_LAYER_ID            gbrLayer = F_Cu;
 
-        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK )
+        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
+                || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
+        {
+            if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
+                outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
+
+            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge ) >= 0 )
+            {
+                m_reporter->Report( wxString::Format( _( "Wrote front position data to '%s'.\n" ),
+                                                      outPath ),
+                                    RPT_SEVERITY_ACTION );
+
+                aPosJob->AddOutput( outPath );
+            }
+            else
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
+
+        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK
+                || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
+        {
             gbrLayer = B_Cu;
 
-        if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge ) >= 0 )
-        {
-            m_reporter->Report( wxString::Format( _( "Wrote position data to '%s'.\n" ), outPath ),
-                                RPT_SEVERITY_ACTION );
+            if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
+                outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
 
-            aPosJob->AddOutput( outPath );
-        }
-        else
-        {
-            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge ) >= 0 )
+            {
+                m_reporter->Report( wxString::Format( _( "Wrote back position data to '%s'.\n" ),
+                                                      outPath ),
+                                    RPT_SEVERITY_ACTION );
+
+                aPosJob->AddOutput( outPath );
+            }
+            else
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
         }
     }
 
