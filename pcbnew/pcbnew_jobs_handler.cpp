@@ -1391,7 +1391,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         if( file == nullptr )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
 
-        std::string         data;
+        std::string data;
 
         bool frontSide = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
                          || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
@@ -1412,21 +1412,30 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         fputs( data.c_str(), file );
         fclose( file );
 
+        m_reporter->Report( wxString::Format( _( "Wrote position data to '%s'.\n" ), outPath ),
+                            RPT_SEVERITY_ACTION );
+
         aPosJob->AddOutput( outPath );
     }
     else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
     {
         PLACEFILE_GERBER_WRITER exporter( brd );
-
-        PCB_LAYER_ID gbrLayer = F_Cu;
+        PCB_LAYER_ID            gbrLayer = F_Cu;
 
         if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK )
             gbrLayer = B_Cu;
 
         if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge ) >= 0 )
+        {
+            m_reporter->Report( wxString::Format( _( "Wrote position data to '%s'.\n" ), outPath ),
+                                RPT_SEVERITY_ACTION );
+
             aPosJob->AddOutput( outPath );
+        }
         else
+        {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
     }
 
     return CLI::EXIT_CODES::OK;

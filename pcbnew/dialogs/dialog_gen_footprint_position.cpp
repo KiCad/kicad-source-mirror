@@ -95,6 +95,9 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         // Output directory
         m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[LAST_PATH_POS_FILES] );
 
+        m_sideLabel->Hide();
+        m_sideCtrl->Hide();
+
         // Update Options
         m_unitsCtrl->SetSelection( cfg->m_PlaceFile.units );
         m_singleFile->SetValue( cfg->m_PlaceFile.file_options == 1 );
@@ -117,7 +120,17 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCHES ? EDA_UNITS::INCHES
 																	  : EDA_UNITS::MILLIMETRES;
 
+        m_staticTextDir->SetLabel( _( "Output file:" ) );
         m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
+
+        switch( m_job->m_side )
+        {
+        case JOB_EXPORT_PCB_POS::SIDE::FRONT: m_sideCtrl->SetSelection( 0 ); break;
+        case JOB_EXPORT_PCB_POS::SIDE::BACK:  m_sideCtrl->SetSelection( 1 ); break;
+        default:                              m_sideCtrl->SetSelection( 2 ); break;
+        }
+
+        m_singleFile->Hide();
 
         m_unitsCtrl->SetSelection( static_cast<int>( m_job->m_units ) );
         m_formatCtrl->SetSelection( static_cast<int>( m_job->m_format ) );
@@ -149,6 +162,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIUnits( wxUpdateUIEvent& event )
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIFileOpt( wxUpdateUIEvent& event )
 {
     m_singleFile->Enable( m_formatCtrl->GetSelection() != 2 );
+    m_sideLabel->Enable( m_formatCtrl->GetSelection() != 2 );
+    m_sideCtrl->Enable( m_formatCtrl->GetSelection() != 2 );
 }
 
 
@@ -295,6 +310,14 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
         m_job->m_units = m_unitsCtrl->GetSelection() == 0 ? JOB_EXPORT_PCB_POS::UNITS::INCHES
                                                           : JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS;
         m_job->m_format = static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_formatCtrl->GetSelection() );
+
+        switch( m_sideCtrl->GetSelection() )
+        {
+        case 0:  m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::FRONT; break;
+        case 1:  m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::BACK;  break;
+        default: m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::BOTH;  break;
+        }
+
         m_job->m_gerberBoardEdge = m_cbIncludeBoardEdge->GetValue();
         m_job->m_excludeFootprintsWithTh = m_excludeTH->GetValue();
         m_job->m_smdOnly = m_onlySMD->GetValue();
