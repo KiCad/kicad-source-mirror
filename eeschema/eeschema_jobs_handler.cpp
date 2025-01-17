@@ -876,7 +876,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
 
             fn.SetName( filename );
             m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ),
-                                                  symbol->GetName(), unit, fn.GetFullName() ),
+                                                  symbol->GetName(), unit, fn.GetFullPath() ),
                                 RPT_SEVERITY_ACTION );
 
             // Get the symbol bounding box to fit the plot page to it

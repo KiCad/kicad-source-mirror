@@ -1039,7 +1039,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
         if( plotter )
         {
-            m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullName() ),
+            m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullPath() ),
                                 RPT_SEVERITY_ACTION );
             LOCALE_IO dummy;
             PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
@@ -1638,7 +1638,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
 
     m_reporter->Report( wxString::Format( _( "Plotting footprint '%s' to '%s'\n" ),
                                           aFootprint->GetFPID().GetLibItemName().wx_str(),
-                                          outputFile.GetFullName() ),
+                                          outputFile.GetFullPath() ),
                         RPT_SEVERITY_ACTION );
 
 
