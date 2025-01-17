@@ -33,20 +33,15 @@
 #include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <locale_io.h>
-#include <plotters/plotter_hpgl.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotters_pslike.h>
 #include <reporter.h>
 #include <trace_helpers.h>
 #include <settings/settings_manager.h>
-#include <drawing_sheet/ds_painter.h>
 #include <wx_filename.h>
 #include <pgm_base.h>
-
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
-#include <schematic.h>
-#include <sch_screen.h>
 
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
@@ -89,6 +84,8 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
     else
     {
         SetTitle( m_job->GetSettingsDialogTitle() );
+
+        m_outputPathLabel->SetLabel( _( "Output file:" ) );
 
         m_browseButton->Hide();
         m_MessagesBox->Hide();
@@ -176,7 +173,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         }
 
         // Initialize HPGL specific widgets
-        m_penWidth.SetValue( m_HPGLPenSize );
+        m_penWidth.SetDoubleValue( m_HPGLPenSize );
 
         // Plot directory
         SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
@@ -200,7 +197,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
             m_colorTheme->SetSelection( 0 );
 
         m_plotBackgroundColor->SetValue( m_job->m_useBackgroundColor );
-        m_penWidth.SetValue( m_job->m_HPGLPenSize );
+        m_penWidth.SetDoubleValue( m_job->m_HPGLPenSize );
         m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_job->m_HPGLPaperSizeSelect );
         m_plotPDFPropertyPopups->SetValue( m_job->m_PDFPropertyPopups );
         m_plotPDFHierarchicalLinks->SetValue( m_job->m_PDFHierarchicalLinks );
@@ -369,7 +366,7 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
 {
-    m_HPGLPenSize = m_penWidth.GetValue();
+    m_HPGLPenSize = m_penWidth.GetDoubleValue();
 
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
@@ -447,7 +444,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
     {
         m_job->m_blackAndWhite = !getModeColor();
         m_job->m_useBackgroundColor = m_plotBackgroundColor->GetValue();
-        m_job->m_HPGLPenSize = m_penWidth.GetValue();
+        m_job->m_HPGLPenSize = m_penWidth.GetDoubleValue();
       //  m_job->m_HPGLPaperSizeSelect = m_HPGLPaperSizeSelect;
         m_job->m_pageSizeSelect = static_cast<JOB_PAGE_SIZE>( m_pageSizeSelect );
         m_job->m_PDFPropertyPopups = m_plotPDFPropertyPopups->GetValue();
@@ -507,7 +504,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
 
 void DIALOG_PLOT_SCHEMATIC::setHpglPenWidth()
 {
-    m_HPGLPenSize = m_penWidth.GetValue();
+    m_HPGLPenSize = m_penWidth.GetDoubleValue();
 
     if( m_HPGLPenSize > schIUScale.mmToIU( 2 ) )
         m_HPGLPenSize = schIUScale.mmToIU( 2 );

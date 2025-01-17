@@ -45,7 +45,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticTextOutputDirectory;
+		wxStaticText* m_outputPathLabel;
 		wxTextCtrl* m_outputDirectoryName;
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxBoxSizer* m_optionsSizer;
@@ -80,7 +80,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotFormatSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageSizeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotCurrent( wxCommandEvent& event ) { event.Skip(); }
