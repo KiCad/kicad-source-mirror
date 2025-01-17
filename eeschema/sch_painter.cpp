@@ -1505,16 +1505,18 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             else
                 m_gal->SetIsFill( true );
 
-            m_gal->SetIsStroke( false );
             m_gal->SetFillColor( color );
         }
         else
         {
-            m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
-            m_gal->SetLineWidth( getLineWidth( aShape, true ) );
-            m_gal->SetStrokeColor( color );
         }
+
+        // We still always draw the stroke, as otherwise single-segment shapes
+        // (like a line) don't get a shadow, and special-casing them looks inconsistent.
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( getLineWidth( aShape, true ) );
+        m_gal->SetStrokeColor( color );
 
         drawShape( aShape );
     }
