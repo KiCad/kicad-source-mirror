@@ -429,7 +429,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
 
             boardPolyCopy.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-            for( int ii = 0; ii < outlineCount; ii++ )
+            for( int ii = 0; ii < boardPolyCopy.OutlineCount(); ii++ )
             {
                 ConvertPolygonToBlocks( boardPolyCopy, *m_outlineBoard2dObjects,
                                         m_boardAdapter.BiuTo3dUnits(), divFactor,
