@@ -565,7 +565,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
             drc_dbg( 10, wxT( "               len %d gap %ld l %d\n" ),
                      length,
-                     dp.computedGap,
+                     (long int) dp.computedGap,
                      (int) dp.parentP->GetLayer() );
 
             if( key.gapConstraint )
