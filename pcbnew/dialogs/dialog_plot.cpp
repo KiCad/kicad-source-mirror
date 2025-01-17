@@ -272,7 +272,7 @@ void DIALOG_PLOT::init_Dialog()
 
     PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
-    if( !projectFile.m_PcbLastPath[ LAST_PATH_PLOT ].IsEmpty() )
+    if( !m_job && !projectFile.m_PcbLastPath[ LAST_PATH_PLOT ].IsEmpty() )
         m_plotOpts.SetOutputDirectory( projectFile.m_PcbLastPath[ LAST_PATH_PLOT ] );
 
     m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
