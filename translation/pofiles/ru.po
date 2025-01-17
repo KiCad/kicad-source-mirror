@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-17 22:09+0000\n"
+"PO-Revision-Date: 2025-01-17 22:11+0000\n"
 "Last-Translator: Дмитрий Михирев <bizdelnick@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -44665,7 +44665,8 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2203
 msgid "('castellated' property is for PTH pads)"
-msgstr "(только площадки переходных отверстий могут быть зубчатыми)"
+msgstr ""
+"(только PTH конт. пл. могут иметь свойство 'периферийное полуотверстие')"
 
 #: pcbnew/pad.cpp:2206
 msgid "('BGA' property is for SMD pads)"
