@@ -51,9 +51,9 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
     m_excludeFootprintsWithTh( false ),
     m_excludeDNP( false ),
     m_negateBottomX( false ),
-    m_side( SIDE::BOTH ),
     m_singleFile( false ),
     m_nakedFilename( false ),
+    m_side( SIDE::BOTH ),
     m_units( UNITS::MILLIMETERS ),
     m_format( FORMAT::ASCII ),
     m_gerberBoardEdge( true )
