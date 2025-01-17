@@ -927,6 +927,14 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    wxString outPath = aGerberJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath, false ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     aJob->SetTitleBlock( brd->GetTitleBlock() );
     loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
@@ -996,8 +1004,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         else
             fileExt = FILEEXT::GerberFileExtension;
 
-        BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath( brd->GetProject() ), layerName,
-                           fileExt );
+        BuildPlotFileName( &fn, outPath, layerName, fileExt );
         wxString fullname = fn.GetFullName();
 
         jobfile_writer.AddGbrFile( layer, fullname );
@@ -1041,8 +1048,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     wxFileName fn( brd->GetFileName() );
 
     // Build gerber job file from basename
-    BuildPlotFileName( &fn, aGerberJob->GetFullOutputPath( brd->GetProject() ), wxT( "job" ),
-                       FILEEXT::GerberJobFileExtension );
+    BuildPlotFileName( &fn, outPath, wxT( "job" ), FILEEXT::GerberJobFileExtension );
     jobfile_writer.CreateJobFile( fn.GetFullPath() );
 
     return exitCode;
