@@ -219,11 +219,15 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
                 // Good practice of oblong pad holes (slots) is to use a specific aperture for
                 // routing, not used in drill commands.
                 if( hole_descr.m_Hole_Shape )
+                {
                     gbr_metadata.SetApertureAttrib(
                             GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL );
+                }
                 else
+                {
                     gbr_metadata.SetApertureAttrib(
                             GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_DRILL );
+                }
             }
 
             // Add object attribute: component reference to pads (mainly useful for users)

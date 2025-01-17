@@ -39,7 +39,9 @@
 
 
 PCB_PLOTTER::PCB_PLOTTER( BOARD* aBoard, REPORTER* aReporter, PCB_PLOT_PARAMS& aParams ) :
-        m_board( aBoard ), m_plotOpts( aParams ), m_reporter( aReporter )
+        m_board( aBoard ),
+        m_plotOpts( aParams ),
+        m_reporter( aReporter )
 {
 }
 
@@ -88,10 +90,8 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
 
     size_t finalPageCount = 0;
 
-    for( size_t i = 0; i < layersToPlot.size(); i++ )
+    for( PCB_LAYER_ID layer : layersToPlot )
     {
-        PCB_LAYER_ID layer = layersToPlot[i];
-
         if( copperLayerShouldBeSkipped( layer ) )
             continue;
 
@@ -257,8 +257,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
         wxFileName fn( m_board->GetFileName() );
 
         // Build gerber job file from basename
-        BuildPlotFileName( &fn, aOutputPath, wxT( "job" ),
-                           FILEEXT::GerberJobFileExtension );
+        BuildPlotFileName( &fn, aOutputPath, wxT( "job" ), FILEEXT::GerberJobFileExtension );
         jobfile_writer->CreateJobFile( fn.GetFullPath() );
     }
 
@@ -313,10 +312,8 @@ LSEQ PCB_PLOTTER::getPlotSequence( PCB_LAYER_ID aLayerToPlot, LSEQ aPlotWithAllL
     // Base layer always gets plotted first.
     plotSequence.push_back( aLayerToPlot );
 
-    for( size_t i = 0; i < aPlotWithAllLayersSeq.size(); i++ )
+    for( PCB_LAYER_ID layer : aPlotWithAllLayersSeq )
     {
-        PCB_LAYER_ID layer = aPlotWithAllLayersSeq[i];
-
         // Don't plot the same layer more than once;
         if( find( plotSequence.begin(), plotSequence.end(), layer ) != plotSequence.end() )
             continue;
@@ -328,99 +325,98 @@ LSEQ PCB_PLOTTER::getPlotSequence( PCB_LAYER_ID aLayerToPlot, LSEQ aPlotWithAllL
 }
 
 
-void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aPlotOpts, JOB_EXPORT_PCB_PLOT* aJob )
+void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT* aJob )
 {
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER )
     {
         JOB_EXPORT_PCB_GERBERS* gJob = static_cast<JOB_EXPORT_PCB_GERBERS*>( aJob );
-        aPlotOpts.SetDisableGerberMacros( gJob->m_disableApertureMacros );
-        aPlotOpts.SetUseGerberProtelExtensions( gJob->m_useProtelFileExtension );
-        aPlotOpts.SetUseGerberX2format( gJob->m_useX2Format );
-        aPlotOpts.SetIncludeGerberNetlistInfo( gJob->m_includeNetlistAttributes );
-        aPlotOpts.SetCreateGerberJobFile( gJob->m_createJobsFile );
-        aPlotOpts.SetGerberPrecision( gJob->m_precision );
-        aPlotOpts.SetSubtractMaskFromSilk( gJob->m_subtractSolderMaskFromSilk );
+        aOpts.SetDisableGerberMacros( gJob->m_disableApertureMacros );
+        aOpts.SetUseGerberProtelExtensions( gJob->m_useProtelFileExtension );
+        aOpts.SetUseGerberX2format( gJob->m_useX2Format );
+        aOpts.SetIncludeGerberNetlistInfo( gJob->m_includeNetlistAttributes );
+        aOpts.SetCreateGerberJobFile( gJob->m_createJobsFile );
+        aOpts.SetGerberPrecision( gJob->m_precision );
+        aOpts.SetSubtractMaskFromSilk( gJob->m_subtractSolderMaskFromSilk );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
     {
         JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( aJob );
-        aPlotOpts.SetSvgPrecision( svgJob->m_precision );
+        aOpts.SetSvgPrecision( svgJob->m_precision );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
     {
         JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( aJob );
-        aPlotOpts.SetDXFPlotUnits( dxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES
+        aOpts.SetDXFPlotUnits( dxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES
                                             ? DXF_UNITS::INCHES
                                             : DXF_UNITS::MILLIMETERS );
 
-        aPlotOpts.SetPlotMode( dxfJob->m_plotGraphicItemsUsingContours ? OUTLINE_MODE::SKETCH
-                                                                        : OUTLINE_MODE::FILLED );
+        aOpts.SetPlotMode( dxfJob->m_plotGraphicItemsUsingContours ? OUTLINE_MODE::SKETCH
+                                                                   : OUTLINE_MODE::FILLED );
 
-        aPlotOpts.SetDXFPlotPolygonMode( dxfJob->m_polygonMode );
+        aOpts.SetDXFPlotPolygonMode( dxfJob->m_polygonMode );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF )
     {
         JOB_EXPORT_PCB_PDF* pdfJob = static_cast<JOB_EXPORT_PCB_PDF*>( aJob );
-        aPlotOpts.m_PDFFrontFPPropertyPopups = pdfJob->m_pdfFrontFPPropertyPopups;
-        aPlotOpts.m_PDFBackFPPropertyPopups = pdfJob->m_pdfBackFPPropertyPopups;
-        aPlotOpts.m_PDFMetadata = pdfJob->m_pdfMetadata;
-        aPlotOpts.m_PDFSingle = pdfJob->m_pdfSingle;
+        aOpts.m_PDFFrontFPPropertyPopups = pdfJob->m_pdfFrontFPPropertyPopups;
+        aOpts.m_PDFBackFPPropertyPopups = pdfJob->m_pdfBackFPPropertyPopups;
+        aOpts.m_PDFMetadata = pdfJob->m_pdfMetadata;
+        aOpts.m_PDFSingle = pdfJob->m_pdfSingle;
     }
 
-    aPlotOpts.SetUseAuxOrigin( aJob->m_useDrillOrigin );
-    aPlotOpts.SetPlotFrameRef( aJob->m_plotDrawingSheet );
-    aPlotOpts.SetPlotInvisibleText( aJob->m_plotInvisibleText );
-    aPlotOpts.SetSketchPadsOnFabLayers( aJob->m_sketchPadsOnFabLayers );
-    aPlotOpts.SetHideDNPFPsOnFabLayers( aJob->m_hideDNPFPsOnFabLayers );
-    aPlotOpts.SetSketchDNPFPsOnFabLayers( aJob->m_sketchDNPFPsOnFabLayers );
-    aPlotOpts.SetCrossoutDNPFPsOnFabLayers( aJob->m_crossoutDNPFPsOnFabLayers );
-    aPlotOpts.SetPlotPadNumbers( aJob->m_plotPadNumbers );
+    aOpts.SetUseAuxOrigin( aJob->m_useDrillOrigin );
+    aOpts.SetPlotFrameRef( aJob->m_plotDrawingSheet );
+    aOpts.SetPlotInvisibleText( aJob->m_plotInvisibleText );
+    aOpts.SetSketchPadsOnFabLayers( aJob->m_sketchPadsOnFabLayers );
+    aOpts.SetHideDNPFPsOnFabLayers( aJob->m_hideDNPFPsOnFabLayers );
+    aOpts.SetSketchDNPFPsOnFabLayers( aJob->m_sketchDNPFPsOnFabLayers );
+    aOpts.SetCrossoutDNPFPsOnFabLayers( aJob->m_crossoutDNPFPsOnFabLayers );
+    aOpts.SetPlotPadNumbers( aJob->m_plotPadNumbers );
 
-    aPlotOpts.SetBlackAndWhite( aJob->m_blackAndWhite );
-    aPlotOpts.SetMirror( aJob->m_mirror );
-    aPlotOpts.SetNegative( aJob->m_negative );
+    aOpts.SetBlackAndWhite( aJob->m_blackAndWhite );
+    aOpts.SetMirror( aJob->m_mirror );
+    aOpts.SetNegative( aJob->m_negative );
 
-    aPlotOpts.SetLayerSelection( aJob->m_printMaskLayer );
-    aPlotOpts.SetPlotOnAllLayersSelection( aJob->m_printMaskLayersToIncludeOnAllLayers );
+    aOpts.SetLayerSelection( aJob->m_printMaskLayer );
+    aOpts.SetPlotOnAllLayersSelection( aJob->m_printMaskLayersToIncludeOnAllLayers );
 
     switch( aJob->m_plotFormat )
     {
     default:
-    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER:
-        aPlotOpts.SetFormat( PLOT_FORMAT::GERBER );
-        break;
-    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST: aPlotOpts.SetFormat( PLOT_FORMAT::POST ); break;
-    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG: aPlotOpts.SetFormat( PLOT_FORMAT::SVG ); break;
-    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF: aPlotOpts.SetFormat( PLOT_FORMAT::DXF ); break;
-    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL: aPlotOpts.SetFormat( PLOT_FORMAT::HPGL ); break;
-    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF: aPlotOpts.SetFormat( PLOT_FORMAT::PDF ); break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER: aOpts.SetFormat( PLOT_FORMAT::GERBER ); break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST:   aOpts.SetFormat( PLOT_FORMAT::POST );   break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG:    aOpts.SetFormat( PLOT_FORMAT::SVG );    break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF:    aOpts.SetFormat( PLOT_FORMAT::DXF );    break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL:   aOpts.SetFormat( PLOT_FORMAT::HPGL );   break;
+    case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF:    aOpts.SetFormat( PLOT_FORMAT::PDF );    break;
     }
 
     switch( aJob->m_drillShapeOption )
     {
     case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
-        aPlotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+        aOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
         break;
     case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
-        aPlotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE );
+        aOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE );
         break;
     default:
     case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
-        aPlotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
+        aOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
         break;
     }
 
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     wxString          theme = aJob->m_colorTheme;
+
     if( theme.IsEmpty() )
         theme = wxT( "pcbnew" );
 
     PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( theme );
-    aPlotOpts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
+    aOpts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
 
-    aPlotOpts.SetOutputDirectory( aJob->GetConfiguredOutputPath() );
+    aOpts.SetOutputDirectory( aJob->GetConfiguredOutputPath() );
 }

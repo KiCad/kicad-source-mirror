@@ -70,7 +70,7 @@ public:
     /**
      * Translate a JOB to PCB_PLOT_PARAMS
      */
-    static void PlotJobToPlotOpts( PCB_PLOT_PARAMS& aPlotOpts, JOB_EXPORT_PCB_PLOT* aJob );
+    static void PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT* aJob );
 
 protected:
     BOARD*          m_board;

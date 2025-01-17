@@ -510,9 +510,9 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
-                                                     ExcludeAllTH(), ExcludeDNP(), topSide,
-                                                     bottomSide, useCSVfmt,
-                                                     useAuxOrigin, negateBottomX );
+                                                        ExcludeAllTH(), ExcludeDNP(), topSide,
+                                                        bottomSide, useCSVfmt,
+                                                        useAuxOrigin, negateBottomX );
 
     if( fpcount < 0 )
     {

@@ -57,8 +57,8 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( ARG_UNITS )
             .default_value( std::string( "in" ) )
-            .help( UTF8STDSTR(
-                    _( "Output units; ascii or csv format only; valid options: in,mm" ) ) )
+            .help( UTF8STDSTR( _( "Output units; ascii or csv format only; valid options: "
+                                  "in,mm" ) ) )
             .metavar( "UNITS" );
 
     m_argParser.add_argument( ARG_NEGATE_BOTTOM_X )
@@ -80,8 +80,7 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .flag();
 
     m_argParser.add_argument( ARG_EXCLUDE_DNP )
-            .help( UTF8STDSTR(
-                    _( "Exclude all footprints with the Do Not Populate flag set" ) ) )
+            .help( UTF8STDSTR( _( "Exclude all footprints with the Do Not Populate flag set" ) ) )
             .flag();
 
     m_argParser.add_argument( ARG_GERBER_BOARD_EDGE )
@@ -93,6 +92,7 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
 {
     int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
+
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 
@@ -117,6 +117,7 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
     aPosJob->m_gerberBoardEdge = m_argParser.get<bool>( ARG_GERBER_BOARD_EDGE );
 
     wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+
     if( format == wxS( "ascii" ) )
     {
         aPosJob->m_format = JOB_EXPORT_PCB_POS::FORMAT::ASCII;

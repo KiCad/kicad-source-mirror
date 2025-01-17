@@ -71,12 +71,12 @@ enum ONSIDE GERBER_JOBFILE_WRITER::hasSilkLayers()
 {
     int flag = SIDE_NONE;
 
-    for( unsigned ii = 0; ii < m_params.m_LayerId.size(); ii++ )
+    for( PCB_LAYER_ID layer : m_params.m_LayerId )
     {
-        if( m_params.m_LayerId[ii] == B_SilkS )
+        if( layer == B_SilkS )
             flag |= SIDE_BOTTOM;
 
-        if( m_params.m_LayerId[ii] == F_SilkS )
+        if( layer == F_SilkS )
             flag |= SIDE_TOP;
     }
 
@@ -88,12 +88,12 @@ enum ONSIDE GERBER_JOBFILE_WRITER::hasSolderMasks()
 {
     int flag = SIDE_NONE;
 
-    for( unsigned ii = 0; ii < m_params.m_LayerId.size(); ii++ )
+    for( PCB_LAYER_ID layer : m_params.m_LayerId )
     {
-        if( m_params.m_LayerId[ii] == B_Mask )
+        if( layer == B_Mask )
             flag |= SIDE_BOTTOM;
 
-        if( m_params.m_LayerId[ii] == F_Mask )
+        if( layer == F_Mask )
             flag |= SIDE_TOP;
     }
 
@@ -108,21 +108,10 @@ const char* GERBER_JOBFILE_WRITER::sideKeyValue( enum ONSIDE aValue )
 
     switch( aValue )
     {
-    case SIDE_NONE:
-        value = "No";
-        break;
-
-    case SIDE_TOP:
-        value = "TopOnly";
-        break;
-
-    case SIDE_BOTTOM:
-        value = "BotOnly";
-        break;
-
-    case SIDE_BOTH:
-        value = "Both";
-        break;
+    case SIDE_NONE:   value = "No";      break;
+    case SIDE_TOP:    value = "TopOnly"; break;
+    case SIDE_BOTTOM: value = "BotOnly"; break;
+    case SIDE_BOTH:   value = "Both";    break;
     }
 
     return value;
@@ -731,9 +720,9 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                     subLayerName.Printf( wxT( " (%d/%d)" ), sub_idx + 1, sub_layer_count );
 
                 wxString name = wxString::Format( wxT( "%s/%s%s" ),
-                        formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
-                        formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ),
-                        subLayerName );
+                                                  formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
+                                                  formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ),
+                                                  subLayerName );
 
                 layer_json["Name"] = name;
 
@@ -743,8 +732,8 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 note << wxString::Format( wxT( "Type: %s" ), layer_name.c_str() );
 
                 note << wxString::Format( wxT( " (from %s to %s)" ),
-                        formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
-                        formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
+                                          formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
+                                          formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
 
                 layer_json["Notes"] = note;
             }

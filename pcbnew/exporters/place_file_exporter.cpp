@@ -216,7 +216,8 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     else
     {
         // Write file header
-        snprintf( line, sizeof(line), "### Footprint positions - created on %s ###\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
+        snprintf( line, sizeof(line), "### Footprint positions - created on %s ###\n",
+                  TO_UTF8( GetISO8601CurrentDateTime() ) );
 
         buffer += line;
 
@@ -298,11 +299,13 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     // Generate header file comments.)
     char line[1024];
-    snprintf( line, sizeof(line), "## Footprint report - date %s\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
+    snprintf( line, sizeof(line), "## Footprint report - date %s\n",
+              TO_UTF8( GetISO8601CurrentDateTime() ) );
     buffer += line;
 
     wxString Title = GetBuildVersion();
-    snprintf( line, sizeof(line), "## Created by KiCad version %s\n", TO_UTF8( Title ) );
+    snprintf( line, sizeof(line), "## Created by KiCad version %s\n",
+              TO_UTF8( Title ) );
     buffer += line;
 
     buffer += unit_text;
@@ -314,11 +317,13 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
     buffer += "\n$BOARD\n";
 
     snprintf( line, sizeof(line), "upper_left_corner %9.6f %9.6f\n",
-              bbbox.GetX() * conv_unit, bbbox.GetY() * conv_unit );
+              bbbox.GetX() * conv_unit,
+              bbbox.GetY() * conv_unit );
     buffer += line;
 
     snprintf( line, sizeof(line), "lower_right_corner %9.6f %9.6f\n",
-              bbbox.GetRight()  * conv_unit, bbbox.GetBottom() * conv_unit );
+              bbbox.GetRight()  * conv_unit,
+              bbbox.GetBottom() * conv_unit );
     buffer += line;
 
     buffer += "$EndBOARD\n\n";
