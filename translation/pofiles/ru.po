@@ -9409,7 +9409,8 @@ msgstr "Принять участие"
 
 #: common/tool/actions.cpp:1215
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Открыть в вэб-браузере страницу с информацией о том как помочь KiCad"
+msgstr ""
+"Открыть в браузере страницу с информацией о том, как внести вклад в KiCad"
 
 #: common/tool/actions.cpp:1222
 msgid "Open \"Donate to KiCad\" in a web browser"
