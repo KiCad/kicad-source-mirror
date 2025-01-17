@@ -1762,16 +1762,16 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
                                           markersProvider->GetCount() ),
-                        RPT_SEVERITY_ERROR );
+                        RPT_SEVERITY_INFO );
     m_reporter->Report( wxString::Format( _( "Found %d unconnected items\n" ),
                                           ratsnestProvider->GetCount() ),
-                        RPT_SEVERITY_ERROR );
+                        RPT_SEVERITY_INFO );
 
     if( checkParity )
     {
         m_reporter->Report( wxString::Format( _( "Found %d schematic parity issues\n" ),
                                               fpWarningsProvider->GetCount() ),
-                            RPT_SEVERITY_ERROR );
+                            RPT_SEVERITY_INFO );
     }
 
     DRC_REPORT reportWriter( brd, units, markersProvider, ratsnestProvider, fpWarningsProvider );
