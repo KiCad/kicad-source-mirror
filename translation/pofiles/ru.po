@@ -44311,7 +44311,7 @@ msgstr "Переподключено %s вывод %s от %s к %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:915
 #, c-format
 msgid "Connect %s pin %s to %s."
-msgstr "Подключено %s вывод %s к %s."
+msgstr "Подключить вывод %s %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:922
 #, c-format
