@@ -30,10 +30,14 @@
 #include <wx/image.h>
 #include <wx/init.h>
 
-
+#include <locale_io.h>
 bool init_unit_test()
 {
     SetPgm( new MOCK_PGM_BASE() );
+
+    // Ensure the "C" locale is used in tests
+    LOCALE_IO dummy;
+
     boost::unit_test::framework::master_test_suite().p_name.value = "Common library module tests";
     bool ok = wxInitialize();
 
