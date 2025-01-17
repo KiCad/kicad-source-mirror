@@ -10,14 +10,14 @@
 # Ulices <ulicesah@gmail.com>, 2021, 2022.
 # Ulices <dev.n47os@aleeas.com>, 2022, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
-# Ulices <hasecilu@tuta.io>, 2023, 2024.
+# Ulices <hasecilu@tuta.io>, 2023, 2024, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2024-08-27 05:59+0000\n"
+"PO-Revision-Date: 2025-01-17 21:43+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -21978,10 +21978,10 @@ msgid "Manage symbol libraries"
 msgstr "Gestionar bibliotecas de símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
 msgstr ""
-"El símbolo %s es un símbolo derivado.  Los gráficos de símbolos no serán "
+"El símbolo %s es un símbolo derivado. Los gráficos del símbolo no serán "
 "editables."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:947
@@ -22173,13 +22173,13 @@ msgid ""
 msgstr "El símbolo '%s' ya existe en la biblioteca '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1016
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
-"¿Está seguro de que desea sobreescribir los archivos en la carpeta de "
-"destinoi?"
+"\n"
+"¿Está seguro de que desea sobreescribirlos todos, o renombrar los nuevos "
+"símbolos?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
 #, fuzzy
@@ -38456,10 +38456,8 @@ msgid "Convert to Rule Area"
 msgstr "Convertir a área de reglas"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:284
-#, fuzzy
 msgid "Not found on board: "
-msgstr ""
-"No se han encontrado el contorno de la placa, ¡tamaño de placa desconocido!"
+msgstr "No encontrado en la placa: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:439
 msgid "No layers selected."
