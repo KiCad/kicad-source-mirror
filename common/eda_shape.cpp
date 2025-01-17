@@ -539,6 +539,10 @@ void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
     {
     case SHAPE_T::ARC:
         m_arcCenter += aMoveVector;
+        m_arcMidData.center += aMoveVector;
+        m_arcMidData.start += aMoveVector;
+        m_arcMidData.end += aMoveVector;
+        m_arcMidData.mid += aMoveVector;
         KI_FALLTHROUGH;
 
     case SHAPE_T::SEGMENT:
@@ -642,6 +646,10 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         RotatePoint( m_start, aRotCentre, aAngle );
         RotatePoint( m_end, aRotCentre, aAngle );
         RotatePoint( m_arcCenter, aRotCentre, aAngle );
+        RotatePoint( m_arcMidData.start, aRotCentre, aAngle );
+        RotatePoint( m_arcMidData.end, aRotCentre, aAngle );
+        RotatePoint( m_arcMidData.mid, aRotCentre, aAngle );
+        RotatePoint( m_arcMidData.center, aRotCentre, aAngle );
         break;
 
     case SHAPE_T::RECTANGLE:
