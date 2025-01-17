@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-17 22:14+0000\n"
+"PO-Revision-Date: 2025-01-18 16:02+0000\n"
 "Last-Translator: Дмитрий Михирев <bizdelnick@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -644,7 +644,7 @@ msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
-msgstr "Показать переднюю шёлкографию"
+msgstr "Показать переднюю шелкографию"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "B.Silkscreen"
@@ -652,7 +652,7 @@ msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
-msgstr "Показать заднюю шёлкографию"
+msgstr "Показать заднюю шелкографию"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "F.Mask"
@@ -762,11 +762,11 @@ msgstr "Показать все надписи посад. места"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "Off-board Silkscreen"
-msgstr "Шёлкография вне платы"
+msgstr "Шелкография вне платы"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Do not clip silk layers to board outline"
-msgstr "Не обрезать шёлкографию по границам платы"
+msgstr "Не обрезать шелкографию по границам платы"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "3D Axis"
@@ -991,11 +991,11 @@ msgstr "Параметры визуализации"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
 msgid "Clip silkscreen at via annuli"
-msgstr "Убирать шёлкографию над перех. отв."
+msgstr "Убирать шелкографию над перех. отв."
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Обрезать шёлкографию по краям паяльной маски"
+msgstr "Обрезать шелкографию по краям паяльной маски"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
@@ -1724,7 +1724,7 @@ msgstr "Слой печатной платы для изображения"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:550
 msgid "Front silk screen"
-msgstr "Верхняя шёлкография"
+msgstr "Верхняя шелкография"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:556
@@ -9389,7 +9389,7 @@ msgstr "Руководство пользователя"
 
 #: common/tool/actions.cpp:1192
 msgid "Open product documentation in a web browser"
-msgstr "Открыть справочное руководство в вэб-браузере"
+msgstr "Открыть справочное руководство в веб-браузере"
 
 #: common/tool/actions.cpp:1198
 msgid "About KiCad"
@@ -24866,11 +24866,11 @@ msgstr "Паяльная маска сверху"
 
 #: gerbview/files.cpp:215
 msgid "Bottom overlay"
-msgstr "Шёлкография снизу"
+msgstr "Шелкография снизу"
 
 #: gerbview/files.cpp:216
 msgid "Top overlay"
-msgstr "Шёлкография сверху"
+msgstr "Шелкография сверху"
 
 #: gerbview/files.cpp:217
 msgid "Bottom paste"
@@ -26118,7 +26118,7 @@ msgstr "Не генерировать атрибуты списка цепей"
 #: kicad/cli/command_pcb_export_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "Вычесть паяльную маску из шёлкографии"
+msgstr "Вычесть паяльную маску из шелкографии"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:69
 msgid "Disable aperture macros"
@@ -31112,7 +31112,7 @@ msgstr "Диэлектрик %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:652
 msgid "Top Silk Screen"
-msgstr "Шёлкография сверху"
+msgstr "Шелкография сверху"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:660
 msgid "Top Solder Paste"
@@ -31132,7 +31132,7 @@ msgstr "Паяльная паста снизу"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:725
 msgid "Bottom Silk Screen"
-msgstr "Шёлкография снизу"
+msgstr "Шелкография снизу"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:45
 msgid "Incorrect value for Epsilon R"
@@ -34153,7 +34153,7 @@ msgstr "Вырезать перех. отв. в теле платы"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
-msgstr "Экспорт шёлкографии"
+msgstr "Экспорт шелкографии"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
 msgid "Export silkscreen graphics as a set of flat faces."
@@ -35604,7 +35604,7 @@ msgstr "Размерные линии"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:63
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 msgid "Silk Layers"
-msgstr "Слои шёлкографии"
+msgstr "Слои шелкографии"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:273
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
@@ -36551,7 +36551,7 @@ msgstr "Нижняя паяльная паста"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:553
 msgid "Back silk screen"
-msgstr "Нижняя шёлкография"
+msgstr "Нижняя шелкография"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559
 msgid "Back solder mask"
@@ -37018,7 +37018,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "Убрать шёлкографию из областей, не покрытых паяльной маской"
+msgstr "Убрать шелкографию из областей, не покрытых паяльной маской"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -38943,7 +38943,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:299
 msgid "Silkscreen"
-msgstr "Шёлкография"
+msgstr "Шелкография"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
 msgid "Minimum item clearance:"
@@ -38955,7 +38955,7 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Минимальный зазор между двумя элементами на одном и том же слое шёлкографии. "
+"Минимальный зазор между двумя элементами на одном и том же слое шелкографии. "
 "Если задано, это может улучшить чёткость. (Примечание: не задавайте разные "
 "значения для частей одного посад. места)"
 
@@ -39214,7 +39214,7 @@ msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:94
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Если нужен слой шёлкографии для верхней стороны платы"
+msgstr "Если нужен слой шелкографии для верхней стороны платы"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
@@ -39557,7 +39557,7 @@ msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "Если нужен слой шёлкографии для нижней стороны платы"
+msgstr "Если нужен слой шелкографии для нижней стороны платы"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
@@ -41787,15 +41787,15 @@ msgstr "Апертура паяльной маски объединяет эле
 
 #: pcbnew/drc/drc_item.cpp:243
 msgid "Silkscreen clipped by solder mask"
-msgstr "Шёлкография обрезана паяльной маской"
+msgstr "Шелкография обрезана паяльной маской"
 
 #: pcbnew/drc/drc_item.cpp:247
 msgid "Silkscreen clipped by board edge"
-msgstr "Шёлкография обрезана контуром платы"
+msgstr "Шелкография обрезана контуром платы"
 
 #: pcbnew/drc/drc_item.cpp:251
 msgid "Silkscreen overlap"
-msgstr "Перекрытие шёлкографии"
+msgstr "Перекрытие шелкографии"
 
 #: pcbnew/drc/drc_item.cpp:255
 msgid "Text height out of range"
@@ -42132,7 +42132,7 @@ msgstr "Проверка зазора между медью и крем плат
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:155
 msgid "Checking silk to board edge clearances..."
-msgstr "Проверка зазора между шёлкографией и краем платы..."
+msgstr "Проверка зазора между шелкографией и краем платы..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
@@ -42643,7 +42643,7 @@ msgstr "Проверка соответствия посад. мест на пл
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:94
 msgid "Checking silkscreen for overlapping items..."
-msgstr "Проверка шёлкографии на наличие перекрывающихся элементов..."
+msgstr "Проверка шелкографии на наличие перекрывающихся элементов..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:84
 msgid "Running sliver detection on copper layers..."
@@ -48178,7 +48178,7 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:1062
 msgid "Silkscreen clearance resolution for:"
-msgstr "Разрешённый зазор шёлкографии для:"
+msgstr "Разрешённый зазор шелкографии для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1090
 msgid "Courtyard clearance resolution for:"
@@ -51350,7 +51350,7 @@ msgstr "Паяльная паста снизу платы"
 
 #: pcbnew/widgets/appearance_controls.cpp:1661
 msgid "Silkscreen on board's front"
-msgstr "Шёлкография сверху платы"
+msgstr "Шелкография сверху платы"
 
 #: pcbnew/widgets/appearance_controls.cpp:1662
 msgid "Silkscreen on board's back"
