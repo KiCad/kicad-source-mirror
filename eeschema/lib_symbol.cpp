@@ -1940,20 +1940,20 @@ const EMBEDDED_FILES* LIB_SYMBOL::GetEmbeddedFiles() const
 }
 
 
-void LIB_SYMBOL::EmbedFonts()
+std::set<KIFONT::OUTLINE_FONT*> LIB_SYMBOL::GetFonts() const
 {
     using OUTLINE_FONT = KIFONT::OUTLINE_FONT;
     using EMBEDDING_PERMISSION = OUTLINE_FONT::EMBEDDING_PERMISSION;
 
     std::set<OUTLINE_FONT*> fonts;
 
-    for( SCH_ITEM& item : m_drawings )
+    for( const SCH_ITEM& item : m_drawings )
     {
         if( item.Type() == SCH_TEXT_T )
         {
-            auto* text = static_cast<SCH_TEXT*>( &item );
+            const SCH_TEXT& text = static_cast<const SCH_TEXT&>( item );
 
-            if( auto* font = text->GetFont(); font && !font->IsStroke() )
+            if( auto* font = text.GetFont(); font && !font->IsStroke() )
             {
                 auto* outline = static_cast<OUTLINE_FONT*>( font );
                 auto permission = outline->GetEmbeddingPermission();
@@ -1967,7 +1967,15 @@ void LIB_SYMBOL::EmbedFonts()
         }
     }
 
-    for( auto* font : fonts )
+    return fonts;
+}
+
+
+void LIB_SYMBOL::EmbedFonts()
+{
+    std::set<KIFONT::OUTLINE_FONT*> fonts = GetFonts();
+
+    for( KIFONT::OUTLINE_FONT* font : fonts )
     {
         auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
         file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;

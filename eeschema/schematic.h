@@ -36,6 +36,11 @@ class SCH_SHEET;
 class SCH_SHEET_LIST;
 class SCH_GLOBALLABEL;
 
+namespace KIFONT
+{
+class OUTLINE_FONT;
+}
+
 
 class SCHEMATIC_IFACE
 {
@@ -320,6 +325,11 @@ public:
      * Embed fonts in the schematic
      */
     void EmbedFonts() override;
+
+    /**
+     * Get a set of fonts used in the schematic
+     */
+    std::set<KIFONT::OUTLINE_FONT*> GetFonts() const override;
 
     /**
      * Return a list of schematic files in the current project that contain instance data for

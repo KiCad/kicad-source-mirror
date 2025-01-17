@@ -65,6 +65,11 @@ class CONNECTIVITY_DATA;
 class COMPONENT;
 class PROJECT;
 class PROGRESS_REPORTER;
+namespace KIFONT
+{
+    class OUTLINE_FONT;
+}
+
 struct ISOLATED_ISLANDS;
 
 // The default value for m_outlinesChainingEpsilon to convert a board outlines to polygons
@@ -1266,6 +1271,11 @@ public:
 
     EMBEDDED_FILES* GetEmbeddedFiles() override;
     const EMBEDDED_FILES* GetEmbeddedFiles() const;
+
+    /**
+     * Get the list of all outline fonts used in the board
+     */
+    std::set<KIFONT::OUTLINE_FONT*> GetFonts() const override;
 
     /**
      * Finds all fonts used in the board and embeds them in the file if permissions allow

@@ -24,6 +24,7 @@
 #include <bitmaps.h>
 #include <dialogs/panel_embedded_files.h>
 #include <embedded_files.h>
+#include <font/outline_font.h>
 #include <kidialog.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
@@ -33,6 +34,7 @@
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/menu.h>
 
 /* ---------- GRID_TRICKS for embedded files grid ---------- */
@@ -183,6 +185,73 @@ bool PANEL_EMBEDDED_FILES::TransferDataFromWindow()
     m_files->SetAreFontsEmbedded( m_cbEmbedFonts->IsChecked() );
 
     return true;
+}
+
+
+void PANEL_EMBEDDED_FILES::onFontEmbedClick( wxCommandEvent& event )
+{
+    Freeze();
+    int row_pos = m_files_grid->GetGridCursorRow();
+    int col_pos = m_files_grid->GetGridCursorCol();
+    wxString row_name;
+
+    if( row_pos >= 0 )
+        row_name = m_files_grid->GetCellValue( row_pos, 0 );
+
+    for( int ii = 0; ii < m_files_grid->GetNumberRows(); ii++ )
+    {
+        wxString name = m_files_grid->GetCellValue( ii, 0 );
+
+        EMBEDDED_FILES::EMBEDDED_FILE* file = m_localFiles->GetEmbeddedFile( name );
+
+        if( file && file->type == EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT )
+        {
+            m_files_grid->DeleteRows( ii );
+            ii--;
+            m_localFiles->RemoveFile( name );
+        }
+    }
+
+    if( m_cbEmbedFonts->IsChecked() )
+    {
+        std::set<KIFONT::OUTLINE_FONT*> fonts = m_files->GetFonts();
+
+        for( KIFONT::OUTLINE_FONT* font : fonts )
+        {
+            EMBEDDED_FILES::EMBEDDED_FILE* result =
+                    m_localFiles->AddFile( font->GetFileName(), true );
+
+            if( !result )
+            {
+                wxLogTrace( wxT( "KICAD_EMBED" ), wxString::Format( "Could not embed font %s",
+                                                                    font->GetFileName() ) );
+                continue;
+            }
+
+            m_files_grid->AppendRows( 1 );
+            int ii = m_files_grid->GetNumberRows() - 1;
+            m_files_grid->SetCellValue( ii, 0, result->name );
+            m_files_grid->SetCellValue( ii, 1, result->GetLink() );
+        }
+    }
+
+    if( row_pos >= 0 )
+    {
+        col_pos = std::max( std::min( col_pos, m_files_grid->GetNumberCols() - 1 ), 0 );
+        row_pos = std::max( std::min( row_pos, m_files_grid->GetNumberRows() - 1 ), 0 );
+        m_files_grid->SetGridCursor( row_pos, col_pos );
+
+        for( int ii = 0; ii < m_files_grid->GetNumberRows(); ++ii )
+        {
+            if( m_files_grid->GetCellValue( ii, 0 ) == row_name )
+            {
+                m_files_grid->SetGridCursor( ii, col_pos );
+                break;
+            }
+        }
+    }
+
+    Thaw();
 }
 
 

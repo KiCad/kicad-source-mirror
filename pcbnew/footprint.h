@@ -59,6 +59,10 @@ namespace KIGFX {
 class VIEW;
 }
 
+namespace KIFONT {
+class OUTLINE_FONT;
+}
+
 enum INCLUDE_NPTH_T
 {
     DO_NOT_INCLUDE_NPTH = false,
@@ -1007,6 +1011,11 @@ public:
     {
         return static_cast<const EMBEDDED_FILES*>( this );
     }
+
+    /**
+     * Get a list of outline fonts referenced in the footprint
+     */
+    std::set<KIFONT::OUTLINE_FONT*> GetFonts() const override;
 
     void EmbedFonts() override;
 

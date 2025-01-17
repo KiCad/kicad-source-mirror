@@ -885,7 +885,7 @@ const EMBEDDED_FILES* SCHEMATIC::GetEmbeddedFiles() const
 }
 
 
-void SCHEMATIC::EmbedFonts()
+std::set<KIFONT::OUTLINE_FONT*> SCHEMATIC::GetFonts() const
 {
     std::set<KIFONT::OUTLINE_FONT*> fonts;
 
@@ -913,6 +913,14 @@ void SCHEMATIC::EmbedFonts()
             }
         }
     }
+
+    return fonts;
+}
+
+
+void SCHEMATIC::EmbedFonts()
+{
+    std::set<KIFONT::OUTLINE_FONT*> fonts = GetFonts();
 
     for( KIFONT::OUTLINE_FONT* font : fonts )
     {

@@ -64,6 +64,7 @@ public:
     bool GetEmbedFonts() const { return m_cbEmbedFonts->GetValue(); }
 
 protected:
+    void onFontEmbedClick( wxCommandEvent& event ) override;
     void onAddEmbeddedFile( wxCommandEvent& event ) override;
     void onDeleteEmbeddedFile( wxCommandEvent& event ) override;
     void onExportFiles( wxCommandEvent& event ) override;

@@ -2604,7 +2604,7 @@ const EMBEDDED_FILES* BOARD::GetEmbeddedFiles() const
 }
 
 
-void BOARD::EmbedFonts()
+std::set<KIFONT::OUTLINE_FONT*> BOARD::GetFonts() const
 {
     std::set<KIFONT::OUTLINE_FONT*> fonts;
 
@@ -2627,6 +2627,14 @@ void BOARD::EmbedFonts()
             }
         }
     }
+
+    return fonts;
+}
+
+
+void BOARD::EmbedFonts()
+{
+    std::set<KIFONT::OUTLINE_FONT*> fonts = GetFonts();
 
     for( KIFONT::OUTLINE_FONT* font : fonts )
     {

@@ -3959,7 +3959,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
 }
 
 
-void FOOTPRINT::EmbedFonts()
+std::set<KIFONT::OUTLINE_FONT*> FOOTPRINT::GetFonts() const
 {
     using OUTLINE_FONT = KIFONT::OUTLINE_FONT;
     using EMBEDDING_PERMISSION = OUTLINE_FONT::EMBEDDING_PERMISSION;
@@ -3983,6 +3983,14 @@ void FOOTPRINT::EmbedFonts()
             }
         }
     }
+
+    return fonts;
+}
+
+
+void FOOTPRINT::EmbedFonts()
+{
+    std::set<KIFONT::OUTLINE_FONT*> fonts = GetFonts();
 
     for( auto* font : fonts )
     {

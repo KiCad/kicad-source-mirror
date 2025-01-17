@@ -20,6 +20,7 @@
 #pragma once
 
 #include <map>
+#include <set>
 
 #include <wx/string.h>
 #include <wx/filename.h>
@@ -29,6 +30,11 @@
 #include <wildcards_and_files_ext.h>
 
 class OUTPUTFORMATTER;
+
+namespace KIFONT
+{
+    class OUTLINE_FONT;
+}
 
 class EMBEDDED_FILES
 {
@@ -221,6 +227,11 @@ public:
     }
 
     virtual void EmbedFonts() {};
+
+    virtual std::set<KIFONT::OUTLINE_FONT*> GetFonts() const
+    {
+        return std::set<KIFONT::OUTLINE_FONT*>();
+    };
 
     void SetAreFontsEmbedded( bool aEmbedFonts )
     {

@@ -40,7 +40,13 @@ class OUTPUTFORMATTER;
 class REPORTER;
 class SYMBOL_LIB;
 class LIB_SYMBOL;
+class OUTLINE_FONT;
 class TEST_LIB_SYMBOL_FIXTURE;
+
+namespace KIFONT
+{
+    class OUTLINE_FONT;
+}
 
 
 typedef std::shared_ptr<LIB_SYMBOL>       LIB_SYMBOL_SPTR;      ///< shared pointer to LIB_SYMBOL
@@ -349,6 +355,8 @@ public:
     {
         return GetValueField().GetText();
     }
+
+    std::set<KIFONT::OUTLINE_FONT*> GetFonts() const override;
 
     EMBEDDED_FILES* GetEmbeddedFiles() override;
     const EMBEDDED_FILES* GetEmbeddedFiles() const;
