@@ -376,10 +376,13 @@ void BACK_ANNOTATE::applyChangelist()
         bool           oldExBOM = ref.GetSymbol()->GetExcludedFromBOM();
         bool           skip = ( ref.GetSymbol()->GetFlags() & SKIP_STRUCT ) > 0;
 
-        auto boolString = []( bool b ) -> wxString
-        {
-            return b ? _( "true" ) : _( "false" );
-        };
+        auto boolString =
+                []( bool b ) -> wxString
+                {
+                    return b ? _( "true" ) : _( "false" );
+                };
+        if( !m_dryRun )
+            commit.Modify( symbol, screen );
 
         if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip )
         {
@@ -389,10 +392,7 @@ void BACK_ANNOTATE::applyChangelist()
                         fpData.m_ref );
 
             if( !m_dryRun )
-            {
-                commit.Modify( symbol, screen );
                 symbol->SetRef( &ref.GetSheetPath(), fpData.m_ref );
-            }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
@@ -406,10 +406,7 @@ void BACK_ANNOTATE::applyChangelist()
                         fpData.m_footprint );
 
             if( !m_dryRun )
-            {
-                commit.Modify( symbol, screen );
                 symbol->SetFootprintFieldText( fpData.m_footprint );
-            }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
@@ -423,10 +420,7 @@ void BACK_ANNOTATE::applyChangelist()
                         fpData.m_value );
 
             if( !m_dryRun )
-            {
-                commit.Modify( symbol, screen );
                 symbol->SetValueFieldText( fpData.m_value );
-            }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
@@ -438,10 +432,7 @@ void BACK_ANNOTATE::applyChangelist()
                         boolString( oldDNP ), boolString( fpData.m_DNP ) );
 
             if( !m_dryRun )
-            {
-                commit.Modify( symbol, screen );
                 symbol->SetDNP( fpData.m_DNP );
-            }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
@@ -454,10 +445,7 @@ void BACK_ANNOTATE::applyChangelist()
                         boolString( fpData.m_excludeFromBOM ) );
 
             if( !m_dryRun )
-            {
-                commit.Modify( symbol, screen );
                 symbol->SetExcludedFromBOM( fpData.m_excludeFromBOM );
-            }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
@@ -519,10 +507,7 @@ void BACK_ANNOTATE::applyChangelist()
                                 symField->GetCanonicalName(), fpFieldValue );
 
                     if( !m_dryRun )
-                    {
-                        commit.Modify( symbol, screen );
                         symField->SetText( fpFieldValue );
-                    }
 
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
                 }
@@ -535,8 +520,6 @@ void BACK_ANNOTATE::applyChangelist()
 
                     if( !m_dryRun )
                     {
-                        commit.Modify( symbol, screen );
-
                         SCH_FIELD newField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
                                             fpFieldName );
                         newField.SetText( fpFieldValue );
@@ -549,24 +532,26 @@ void BACK_ANNOTATE::applyChangelist()
 
             // 3. Existing field has been deleted from footprint and needs to be deleted from symbol
             // Check all symbol fields for existence in the footprint field map
-            for( SCH_FIELD& field : symbol->GetFields() )
+            for( int ii = symbol->GetFieldCount() - 1; ii >= 0; --ii )
             {
-                // Never delete mandatory fields
-                if( field.GetId() < MANDATORY_FIELDS )
+                SCH_FIELD* field = symbol->GetFieldById( ii );
+
+                if( !field )
                     continue;
 
-                if( fpData.m_fieldsMap.find( field.GetCanonicalName() )
+                // Never delete mandatory fields
+                if( field->IsMandatory() )
+                    continue;
+
+                if( fpData.m_fieldsMap.find( field->GetCanonicalName() )
                     == fpData.m_fieldsMap.end() )
                 {
                     // Field not found in footprint field map, delete it
                     m_changesCount++;
-                    msg.Printf( _( "Delete field '%s.'" ), field.GetCanonicalName() );
+                    msg.Printf( _( "Delete field '%s.'" ), field->GetCanonicalName() );
 
                     if( !m_dryRun )
-                    {
-                        commit.Modify( symbol, screen );
-                        symbol->RemoveField( &field );
-                    }
+                        symbol->RemoveField( field );
 
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
                 }
