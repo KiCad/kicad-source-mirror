@@ -332,7 +332,7 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
     renderJob->m_zoom = m_argParser.get<double>( ARG_ZOOM );
     renderJob->m_perspective = m_argParser.get<bool>( ARG_PERSPECTIVE );
     renderJob->m_floor = m_argParser.get<bool>( ARG_FLOOR );
-    renderJob->m_lightSideElevation = m_argParser.get<double>( ARG_LIGHT_SIDE_ELEVATION );
+    renderJob->m_lightSideElevation = m_argParser.get<int>( ARG_LIGHT_SIDE_ELEVATION );
 
     getToEnum( m_argParser.get<std::string>( ARG_QUALITY ), renderJob->m_quality );
     getToEnum( m_argParser.get<std::string>( ARG_SIDE ), renderJob->m_side );
