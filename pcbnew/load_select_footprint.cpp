@@ -44,6 +44,7 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <board_design_settings.h>
+#include <drc/drc_item.h>
 #include <view/view_controls.h>
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
@@ -102,6 +103,9 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 
     if( !Clear_Pcb( true ) )
         return false;
+
+    std::map<int, SEVERITY>& severities = GetBoard()->GetDesignSettings().m_DRCSeverities;
+    severities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_WARNING;
 
     m_boardFootprintUuids.clear();
 

@@ -144,6 +144,14 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
 
     footprint->BuildCourtyardCaches( &outlineErrorHandler );
 
+    if( ( footprint->GetAttributes() & FP_ALLOW_MISSING_COURTYARD ) == 0
+            && footprint->GetCourtyard( F_CrtYd ).OutlineCount() == 0
+            && footprint->GetCourtyard( B_CrtYd ).OutlineCount() == 0 )
+    {
+        errorHandler( footprint, nullptr, nullptr, DRCE_MISSING_COURTYARD, wxEmptyString,
+                      { 0, 0 } );
+    }
+
     footprint->CheckFootprintAttributes(
             [&]( const wxString& aMsg )
             {
