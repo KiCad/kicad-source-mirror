@@ -88,8 +88,8 @@ private:
     BITMAP2CMP_PANEL* m_panel;
     wxStatusBar*      m_statusBar;
 
-    wxString          m_bitmapFileName;
-    wxString          m_convertedFileName;
+    wxString          m_srcFileName;
+    wxString          m_outFileName;
 };
 
 #endif// BITMOP2CMP_GUI_H_

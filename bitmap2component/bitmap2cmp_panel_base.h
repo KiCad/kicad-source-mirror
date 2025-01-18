@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,16 +24,15 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
-#include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/slider.h>
-#include <wx/radiobox.h>
+#include <wx/radiobut.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class BITMAP2CMP_PANEL_BASE
@@ -41,6 +40,7 @@
 class BITMAP2CMP_PANEL_BASE : public wxPanel
 {
 	private:
+		wxStaticText* m_sizeLabel;
 
 	protected:
 		wxNotebook* m_Notebook;
@@ -59,17 +59,19 @@ class BITMAP2CMP_PANEL_BASE : public wxPanel
 		wxStaticText* m_BPPValue;
 		wxStaticText* m_BPPunits;
 		wxButton* m_buttonLoad;
-		wxCheckBox* m_aspectRatioCheckbox;
-		wxStaticText* m_staticTextOSize;
 		wxTextCtrl* m_UnitSizeX;
 		wxTextCtrl* m_UnitSizeY;
 		wxChoice* m_PixelUnit;
+		wxCheckBox* m_aspectRatioCheckbox;
 		wxStaticText* m_ThresholdText;
 		wxSlider* m_sliderThreshold;
 		wxCheckBox* m_checkNegative;
-		wxStaticBoxSizer* m_sizerPcbLayer;
-		wxChoice* m_chPCBLayer;
-		wxRadioBox* m_rbOutputFormat;
+		wxRadioButton* m_rbSymbol;
+		wxRadioButton* m_rbFootprint;
+		wxStaticText* m_layerLabel;
+		wxChoice* m_layerCtrl;
+		wxRadioButton* m_rbPostscript;
+		wxRadioButton* m_rbWorksheet;
 		wxButton* m_buttonExportFile;
 		wxButton* m_buttonExportClipboard;
 
@@ -78,10 +80,10 @@ class BITMAP2CMP_PANEL_BASE : public wxPanel
 		virtual void OnPaintGreyscale( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintBW( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void ToggleAspectRatioLock( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeChangeX( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeChangeY( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeUnitChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void ToggleAspectRatioLock( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnThresholdChange( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnNegativeClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFormatChange( wxCommandEvent& event ) { event.Skip(); }

@@ -35,22 +35,16 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+public:
     wxString m_BitmapFileName;
-
     wxString m_ConvertedFileName;
-
-    int m_Units;
-
-    int m_Threshold;
-
-    bool m_Negative;
-
-    int m_LastFormat;
-
-    int m_LastModLayer;
+    int      m_Units;
+    int      m_Threshold;
+    bool     m_Negative;
+    int      m_LastFormat;
+    int      m_LastLayer;
 
 protected:
-
     virtual std::string getLegacyFrameName() const override { return "Bmconverter_"; }
 };
 

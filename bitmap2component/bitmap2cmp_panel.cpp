@@ -27,11 +27,8 @@
 #include <bitmap2cmp_panel.h>
 #include <bitmap2cmp_settings.h>
 #include <bitmap_io.h>
-#include <bitmaps.h>
 #include <common.h>
-#include <kiface_base.h>
 #include <math/util.h>      // for KiROUND
-#include <pgm_base.h>
 #include <potracelib.h>
 #include <wx/clipbrd.h>
 #include <wx/rawbmp.h>
@@ -44,10 +41,11 @@
 
 BITMAP2CMP_PANEL::BITMAP2CMP_PANEL( BITMAP2CMP_FRAME* aParent ) :
         BITMAP2CMP_PANEL_BASE( aParent ),
-        m_parentFrame( aParent ), m_negative( false ),
+        m_parentFrame( aParent ),
+        m_negative( false ),
         m_aspectRatio( 1.0 )
 {
-    for( wxString unit : { _( "mm" ), _( "Inch" ), _( "DPI" ) } )
+    for( const wxString& unit : { _( "mm" ), _( "Inch" ), _( "DPI" ) } )
         m_PixelUnit->Append( unit );
 
     m_outputSizeX.SetUnit( getUnitFromSelection() );
@@ -55,16 +53,11 @@ BITMAP2CMP_PANEL::BITMAP2CMP_PANEL( BITMAP2CMP_FRAME* aParent ) :
     m_outputSizeX.SetOutputSize( 0, getUnitFromSelection() );
     m_outputSizeY.SetOutputSize( 0, getUnitFromSelection() );
 
-    m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
-    m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
+    m_UnitSizeX->ChangeValue( formatOutputSize( m_outputSizeX.GetOutputSize() ) );
+    m_UnitSizeY->ChangeValue( formatOutputSize( m_outputSizeY.GetOutputSize() ) );
 
     m_buttonExportFile->Enable( false );
     m_buttonExportClipboard->Enable( false );
-}
-
-
-BITMAP2CMP_PANEL::~BITMAP2CMP_PANEL()
-{
 }
 
 
@@ -76,12 +69,8 @@ wxWindow* BITMAP2CMP_PANEL::GetCurrentPage()
 
 void BITMAP2CMP_PANEL::LoadSettings( BITMAP2CMP_SETTINGS* cfg )
 {
-    int u_select = cfg->m_Units;
-
-    if( u_select < 0 || u_select > 2 )  // Validity control
-        u_select = 0;
-
-    m_PixelUnit->SetSelection( u_select );
+    if( cfg->m_Units >= 0 && cfg->m_Units < (int) m_PixelUnit->GetCount() )
+        m_PixelUnit->SetSelection( cfg->m_Units );
 
     m_sliderThreshold->SetValue( cfg->m_Threshold );
 
@@ -91,32 +80,30 @@ void BITMAP2CMP_PANEL::LoadSettings( BITMAP2CMP_SETTINGS* cfg )
     m_aspectRatio = 1.0;
     m_aspectRatioCheckbox->SetValue( true );
 
-    int format = cfg->m_LastFormat;
+    switch( cfg->m_LastFormat )
+    {
+    default:
+    case FOOTPRINT_FMT:     m_rbFootprint->SetValue( true );  break;
+    case SYMBOL_FMT:        m_rbSymbol->SetValue( true );     break;
+    case POSTSCRIPT_FMT:    m_rbPostscript->SetValue( true ); break;
+    case DRAWING_SHEET_FMT: m_rbWorksheet->SetValue( true );  break;
+    }
 
-    if( format < 0 || format > FINAL_FMT )
-        format = PCBNEW_KICAD_MOD;
+    m_layerLabel->Enable( cfg->m_LastFormat == FOOTPRINT_FMT );
+    m_layerCtrl->Enable( cfg->m_LastFormat == FOOTPRINT_FMT );
 
-    m_rbOutputFormat->SetSelection( format );
-
-    bool enable = format == PCBNEW_KICAD_MOD;
-    m_chPCBLayer->Enable( enable );
-
-    int last_layer = cfg->m_LastModLayer;
-
-    if( last_layer < 0 || last_layer > static_cast<int>( MOD_LYR_FINAL ) )   // Out of range
-       last_layer = MOD_LYR_FSILKS;
-
-    m_chPCBLayer->SetSelection( last_layer );
+    if( cfg->m_LastLayer >= 0 && cfg->m_LastLayer < (int) m_layerCtrl->GetCount() )
+        m_layerCtrl->SetSelection( cfg->m_LastLayer );
 }
 
 
 void BITMAP2CMP_PANEL::SaveSettings( BITMAP2CMP_SETTINGS* cfg )
 {
-    cfg->m_Threshold    = m_sliderThreshold->GetValue();
-    cfg->m_Negative     = m_checkNegative->IsChecked();
-    cfg->m_LastFormat   = m_rbOutputFormat->GetSelection();
-    cfg->m_LastModLayer = m_chPCBLayer->GetSelection();
-    cfg->m_Units        = m_PixelUnit->GetSelection();
+    cfg->m_Threshold = m_sliderThreshold->GetValue();
+    cfg->m_Negative = m_checkNegative->IsChecked();
+    cfg->m_LastFormat = getOutputFormat();
+    cfg->m_LastLayer = m_layerCtrl->GetSelection();
+    cfg->m_Units = m_PixelUnit->GetSelection();
 }
 
 
@@ -244,9 +231,9 @@ bool BITMAP2CMP_PANEL::OpenProjectFiles( const std::vector<wxString>& aFileSet, 
         {
             for( int y = 0; y < m_Pict_Bitmap.GetHeight(); y++ )
             {
-                if( m_Pict_Image.GetRed( x, y ) == m_Pict_Image.GetMaskRed() &&
-                    m_Pict_Image.GetGreen( x, y ) == m_Pict_Image.GetMaskGreen() &&
-                    m_Pict_Image.GetBlue( x, y ) == m_Pict_Image.GetMaskBlue() )
+                if( m_Pict_Image.GetRed( x, y ) == m_Pict_Image.GetMaskRed()
+                        && m_Pict_Image.GetGreen( x, y ) == m_Pict_Image.GetMaskGreen()
+                        && m_Pict_Image.GetBlue( x, y ) == m_Pict_Image.GetMaskBlue() )
                 {
                     m_Greyscale_Image.SetRGB( x, y, 255, 255, 255 );
                 }
@@ -255,26 +242,26 @@ bool BITMAP2CMP_PANEL::OpenProjectFiles( const std::vector<wxString>& aFileSet, 
     }
 
     if( m_negative )
-        NegateGreyscaleImage( );
+        negateGreyscaleImage();
 
     m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
     m_NB_Image  = m_Greyscale_Image;
-    Binarize( (double) m_sliderThreshold->GetValue() / m_sliderThreshold->GetMax() );
+    binarize( (double)m_sliderThreshold->GetValue() / m_sliderThreshold->GetMax() );
 
     m_buttonExportFile->Enable( true );
     m_buttonExportClipboard->Enable( true );
 
     m_outputSizeX.SetOutputSizeFromInitialImageSize();
-    m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
+    m_UnitSizeX->ChangeValue( formatOutputSize( m_outputSizeX.GetOutputSize() ) );
     m_outputSizeY.SetOutputSizeFromInitialImageSize();
-    m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
+    m_UnitSizeY->ChangeValue( formatOutputSize( m_outputSizeY.GetOutputSize() ) );
 
     return true;
 }
 
 
 // return a string giving the output size, according to the selected unit
-wxString BITMAP2CMP_PANEL::FormatOutputSize( double aSize )
+wxString BITMAP2CMP_PANEL::formatOutputSize( double aSize )
 {
     wxString text;
 
@@ -295,13 +282,9 @@ void BITMAP2CMP_PANEL::updateImageInfo()
 
     if( m_Pict_Bitmap.IsOk() )
     {
-        int h = m_Pict_Bitmap.GetHeight();
-        int w = m_Pict_Bitmap.GetWidth();
-        int nb = m_Pict_Bitmap.GetDepth();
-
-        m_SizeXValue->SetLabel( wxString::Format( wxT( "%d" ), w ) );
-        m_SizeYValue->SetLabel( wxString::Format( wxT( "%d" ), h ) );
-        m_BPPValue->SetLabel( wxString::Format( wxT( "%d" ), nb ) );
+        m_SizeXValue->SetLabel( wxString::Format( wxT( "%d" ), m_Pict_Bitmap.GetWidth() ) );
+        m_SizeYValue->SetLabel( wxString::Format( wxT( "%d" ), m_Pict_Bitmap.GetHeight() ) );
+        m_BPPValue->SetLabel( wxString::Format( wxT( "%d" ), m_Pict_Bitmap.GetDepth() ) );
     }
 }
 
@@ -338,7 +321,7 @@ void BITMAP2CMP_PANEL::OnSizeChangeX( wxCommandEvent& event )
             }
 
             m_outputSizeY.SetOutputSize( calculatedY, getUnitFromSelection() );
-            m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
+            m_UnitSizeY->ChangeValue( formatOutputSize( m_outputSizeY.GetOutputSize() ) );
         }
 
         m_outputSizeX.SetOutputSize( new_size, getUnitFromSelection() );
@@ -367,7 +350,7 @@ void BITMAP2CMP_PANEL::OnSizeChangeY( wxCommandEvent& event )
             }
 
             m_outputSizeX.SetOutputSize( calculatedX, getUnitFromSelection() );
-            m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
+            m_UnitSizeX->ChangeValue( formatOutputSize( m_outputSizeX.GetOutputSize() ) );
         }
 
         m_outputSizeY.SetOutputSize( new_size, getUnitFromSelection() );
@@ -383,8 +366,8 @@ void BITMAP2CMP_PANEL::OnSizeUnitChange( wxCommandEvent& event )
     m_outputSizeY.SetUnit( getUnitFromSelection() );
     updateImageInfo();
 
-    m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
-    m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
+    m_UnitSizeX->ChangeValue( formatOutputSize( m_outputSizeX.GetOutputSize() ) );
+    m_UnitSizeY->ChangeValue( formatOutputSize( m_outputSizeY.GetOutputSize() ) );
 }
 
 
@@ -394,8 +377,8 @@ void BITMAP2CMP_PANEL::SetOutputSize( const IMAGE_SIZE& aSizeX, const IMAGE_SIZE
     m_outputSizeY = aSizeY;
     updateImageInfo();
 
-    m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
-    m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
+    m_UnitSizeX->ChangeValue( formatOutputSize( m_outputSizeX.GetOutputSize() ) );
+    m_UnitSizeY->ChangeValue( formatOutputSize( m_outputSizeY.GetOutputSize() ) );
 }
 
 
@@ -410,28 +393,25 @@ void BITMAP2CMP_PANEL::ToggleAspectRatioLock( wxCommandEvent& event )
 }
 
 
-void BITMAP2CMP_PANEL::Binarize( double aThreshold )
+void BITMAP2CMP_PANEL::binarize( double aThreshold )
 {
-    int           h = m_Greyscale_Image.GetHeight();
-    int           w = m_Greyscale_Image.GetWidth();
     unsigned char threshold = aThreshold * 255;
     unsigned char alpha_thresh = 0.7 * threshold;
 
-    for( int y = 0; y < h; y++ )
+    for( int y = 0; y < m_Greyscale_Image.GetHeight(); y++ )
     {
-        for( int x = 0; x < w; x++ )
+        for( int x = 0; x < m_Greyscale_Image.GetWidth(); x++ )
         {
-            unsigned char pixout;
-            unsigned char pixin = m_Greyscale_Image.GetGreen( x, y );
+            unsigned char pixel = m_Greyscale_Image.GetGreen( x, y );
             unsigned char alpha = m_Greyscale_Image.HasAlpha() ? m_Greyscale_Image.GetAlpha( x, y )
                                                                : wxALPHA_OPAQUE;
 
-            if( pixin < threshold && alpha > alpha_thresh )
-                pixout = 0;
+            if( pixel < threshold && alpha > alpha_thresh )
+                pixel = 0;
             else
-                pixout = 255;
+                pixel = 255;
 
-            m_NB_Image.SetRGB( x, y, pixout, pixout, pixout );
+            m_NB_Image.SetRGB( x, y, pixel, pixel, pixel );
         }
     }
 
@@ -439,19 +419,15 @@ void BITMAP2CMP_PANEL::Binarize( double aThreshold )
 }
 
 
-void BITMAP2CMP_PANEL::NegateGreyscaleImage( )
+void BITMAP2CMP_PANEL::negateGreyscaleImage( )
 {
-    unsigned char pix;
-    int           h = m_Greyscale_Image.GetHeight();
-    int           w = m_Greyscale_Image.GetWidth();
-
-    for( int y = 0; y < h; y++ )
+    for( int y = 0; y < m_Greyscale_Image.GetHeight(); y++ )
     {
-        for( int x = 0; x < w; x++ )
+        for( int x = 0; x < m_Greyscale_Image.GetWidth(); x++ )
         {
-            pix   = m_Greyscale_Image.GetGreen( x, y );
-            pix = ~pix;
-            m_Greyscale_Image.SetRGB( x, y, pix, pix, pix );
+            unsigned char pixel = m_Greyscale_Image.GetGreen( x, y );
+            pixel = ~pixel;
+            m_Greyscale_Image.SetRGB( x, y, pixel, pixel, pixel );
         }
     }
 }
@@ -461,10 +437,10 @@ void BITMAP2CMP_PANEL::OnNegativeClicked( wxCommandEvent&  )
 {
     if( m_checkNegative->GetValue() != m_negative )
     {
-        NegateGreyscaleImage();
+        negateGreyscaleImage();
 
         m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
-        Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
+        binarize( (double)m_sliderThreshold->GetValue() / m_sliderThreshold->GetMax() );
         m_negative = m_checkNegative->GetValue();
 
         Refresh();
@@ -474,28 +450,40 @@ void BITMAP2CMP_PANEL::OnNegativeClicked( wxCommandEvent&  )
 
 void BITMAP2CMP_PANEL::OnThresholdChange( wxScrollEvent& event )
 {
-    Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
+    binarize( (double)m_sliderThreshold->GetValue() / m_sliderThreshold->GetMax() );
     Refresh();
 }
 
 
 void BITMAP2CMP_PANEL::OnExportToFile( wxCommandEvent& event )
 {
-    // choices of m_rbOutputFormat are expected to be in same order as
-    // OUTPUT_FMT_ID. See bitmap2component.h
-    OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_rbOutputFormat->GetSelection();
-    exportBitmap( format );
+    switch( getOutputFormat() )
+    {
+    case SYMBOL_FMT:        m_parentFrame->ExportEeschemaFormat();     break;
+    case FOOTPRINT_FMT:     m_parentFrame->ExportPcbnewFormat();       break;
+    case POSTSCRIPT_FMT:    m_parentFrame->ExportPostScriptFormat();   break;
+    case DRAWING_SHEET_FMT: m_parentFrame->ExportDrawingSheetFormat(); break;
+    }
+}
+
+
+OUTPUT_FMT_ID BITMAP2CMP_PANEL::getOutputFormat()
+{
+    if( m_rbSymbol->GetValue() )
+        return SYMBOL_FMT;
+    else if( m_rbPostscript->GetValue() )
+        return POSTSCRIPT_FMT;
+    else if( m_rbWorksheet->GetValue() )
+        return DRAWING_SHEET_FMT;
+    else
+        return FOOTPRINT_FMT;
 }
 
 
 void BITMAP2CMP_PANEL::OnExportToClipboard( wxCommandEvent& event )
 {
-    // choices of m_rbOutputFormat are expected to be in same order as
-    // OUTPUT_FMT_ID. See bitmap2component.h
-    OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_rbOutputFormat->GetSelection();
-
     std::string buffer;
-    ExportToBuffer( buffer, format );
+    ExportToBuffer( buffer, getOutputFormat() );
 
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
@@ -515,61 +503,57 @@ void BITMAP2CMP_PANEL::OnExportToClipboard( wxCommandEvent& event )
 }
 
 
-void BITMAP2CMP_PANEL::exportBitmap( OUTPUT_FMT_ID aFormat )
-{
-    switch( aFormat )
-    {
-    case EESCHEMA_FMT:     m_parentFrame->ExportEeschemaFormat();     break;
-    case PCBNEW_KICAD_MOD: m_parentFrame->ExportPcbnewFormat();       break;
-    case POSTSCRIPT_FMT:   m_parentFrame->ExportPostScriptFormat();   break;
-    case KICAD_WKS_LOGO:   m_parentFrame->ExportDrawingSheetFormat(); break;
-    }
-}
-
-
 void BITMAP2CMP_PANEL::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
 {
     // Create a potrace bitmap
-    int h = m_NB_Image.GetHeight();
-    int w = m_NB_Image.GetWidth();
-    potrace_bitmap_t* potrace_bitmap = bm_new( w, h );
+    potrace_bitmap_t* potrace_bitmap = bm_new( m_NB_Image.GetWidth(), m_NB_Image.GetHeight() );
 
     if( !potrace_bitmap )
     {
-        wxString msg;
-        msg.Printf( _( "Error allocating memory for potrace bitmap" ) );
-        wxMessageBox( msg );
+        wxMessageBox( _( "Error allocating memory for potrace bitmap" ) );
         return;
     }
 
     /* fill the bitmap with data */
-    for( int y = 0; y < h; y++ )
+    for( int y = 0; y < m_NB_Image.GetHeight(); y++ )
     {
-        for( int x = 0; x < w; x++ )
+        for( int x = 0; x < m_NB_Image.GetWidth(); x++ )
         {
-            unsigned char pix = m_NB_Image.GetGreen( x, y );
-            BM_PUT( potrace_bitmap, x, y, pix ? 0 : 1 );
+            unsigned char pixel = m_NB_Image.GetGreen( x, y );
+            BM_PUT( potrace_bitmap, x, y, pixel ? 0 : 1 );
         }
     }
 
-    // choices of m_rbPCBLayer are expected to be in same order as
-    // BMP2CMP_MOD_LAYER. See bitmap2component.h
-    BMP2CMP_MOD_LAYER modLayer = MOD_LYR_FSILKS;
+    wxString layer = wxT( "F.SilkS" );
 
-    if( aFormat == PCBNEW_KICAD_MOD )
-        modLayer = (BMP2CMP_MOD_LAYER) m_chPCBLayer->GetSelection();
+    if( aFormat == FOOTPRINT_FMT )
+    {
+        switch( m_layerCtrl->GetSelection() )
+        {
+        case 0: layer = wxT( "F.Cu" );      break;
+        case 1: layer = wxT( "F.SilkS" );   break;
+        case 2: layer = wxT( "F.Mask" );    break;
+        case 3: layer = wxT( "Dwgs.User" ); break;
+        case 4: layer = wxT( "Cmts.User" ); break;
+        case 5: layer = wxT( "Eco1.User" ); break;
+        case 6: layer = wxT( "Eco2.User" ); break;
+        case 7: layer = wxT( "F.Fab" );     break;
+        }
+    }
 
-    BITMAPCONV_INFO converter( aOutput );
+    WX_STRING_REPORTER reporter;
+    BITMAPCONV_INFO    converter( aOutput, reporter );
+
     converter.ConvertBitmap( potrace_bitmap, aFormat, m_outputSizeX.GetOutputDPI(),
-                             m_outputSizeY.GetOutputDPI(), modLayer );
+                             m_outputSizeY.GetOutputDPI(), layer );
 
-    if( !converter.GetErrorMessages().empty() )
-        wxMessageBox( converter.GetErrorMessages().c_str(), _( "Errors" ) );
+    if( reporter.HasMessage() )
+        wxMessageBox( reporter.GetMessages(), _( "Errors" ) );
 }
 
 
 void BITMAP2CMP_PANEL::OnFormatChange( wxCommandEvent& event )
 {
-    bool enable = m_rbOutputFormat->GetSelection() == PCBNEW_KICAD_MOD;
-    m_chPCBLayer->Enable( enable );
+    m_layerLabel->Enable( m_rbFootprint->GetValue() );
+    m_layerCtrl->Enable( m_rbFootprint->GetValue() );
 }

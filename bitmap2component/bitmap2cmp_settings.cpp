@@ -27,28 +27,45 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int bitmap2cmpSchemaVersion = 0;
+const int bitmap2cmpSchemaVersion = 1;
 
 
 BITMAP2CMP_SETTINGS::BITMAP2CMP_SETTINGS() :
         APP_SETTINGS_BASE( "bitmap2component", bitmap2cmpSchemaVersion ),
-        m_BitmapFileName(), m_ConvertedFileName(), m_Units(), m_Threshold(), m_Negative(),
-        m_LastFormat(), m_LastModLayer()
+        m_BitmapFileName(),
+        m_ConvertedFileName(),
+        m_Units(),
+        m_Threshold(),
+        m_Negative(),
+        m_LastFormat(),
+        m_LastLayer()
 {
     m_params.emplace_back( new PARAM<wxString>( "bitmap_file_name", &m_BitmapFileName, "" ) );
-
-    m_params.emplace_back(
-            new PARAM<wxString>( "converted_file_name", &m_ConvertedFileName, "" ) );
-
+    m_params.emplace_back( new PARAM<wxString>( "converted_file_name", &m_ConvertedFileName, "" ) );
     m_params.emplace_back( new PARAM<int>( "units", &m_Units, 0 ) );
-
     m_params.emplace_back( new PARAM<int>( "threshold", &m_Threshold, 50 ) );
-
     m_params.emplace_back( new PARAM<bool>( "negative", &m_Negative, false ) );
-
     m_params.emplace_back( new PARAM<int>( "last_format", &m_LastFormat, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "last_mod_layer", &m_LastLayer, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "last_mod_layer", &m_LastModLayer, 0 ) );
+    registerMigration( 0, 1,
+            [&]() -> bool
+            {
+                // Version 1 introduced a new layer (F.Cu), and changed the ordering to
+                // be consistent with PCBNew.
+                switch( Get<int>( "last_mod_layer" ).value_or( 0 ) )
+                {
+                default:
+                case 0: Set( "last_mod_layer", 1 ); break;
+                case 1: Set( "last_mod_layer", 2 ); break;
+                case 2: Set( "last_mod_layer", 7 ); break;
+                case 3: Set( "last_mod_layer", 3 ); break;
+                case 4: Set( "last_mod_layer", 4 ); break;
+                case 5: Set( "last_mod_layer", 5 ); break;
+                case 6: Set( "last_mod_layer", 6 ); break;
+                }
+                return true;
+            } );
 }
 
 

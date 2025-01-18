@@ -30,14 +30,13 @@
 #include <bitmaps.h>
 #include <common.h>
 #include <id.h>
-#include <kiface_base.h>
-#include <pgm_base.h>
 #include <widgets/wx_menubar.h>
 #include <wildcards_and_files_ext.h>
 #include <file_history.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/common_control.h>
+#include <tool/action_manager.h>
 #include <bitmap2cmp_control.h>
 #include <tool/actions.h>
 
@@ -333,8 +332,8 @@ void BITMAP2CMP_FRAME::ShowChangedLanguage()
     mainSizer->Add( m_panel, 1, wxEXPAND, 5 );
     Layout();
 
-    if( !m_bitmapFileName.IsEmpty() )
-        OpenProjectFiles( std::vector<wxString>( 1, m_bitmapFileName ) );
+    if( !m_srcFileName.IsEmpty() )
+        OpenProjectFiles( std::vector<wxString>( 1, m_srcFileName ) );
 
     LoadSettings( config() );
     m_panel->SetOutputSize( imageSizeX, imageSizeY );
@@ -348,9 +347,9 @@ void BITMAP2CMP_FRAME::UpdateTitle()
 {
     wxString title;
 
-    if( !m_bitmapFileName.IsEmpty() )
+    if( !m_srcFileName.IsEmpty() )
     {
-        wxFileName filename( m_bitmapFileName );
+        wxFileName filename( m_srcFileName );
         title = filename.GetFullName() + wxT( " \u2014 " );
     }
 
@@ -364,12 +363,10 @@ void BITMAP2CMP_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    BITMAP2CMP_SETTINGS* cfg = dynamic_cast<BITMAP2CMP_SETTINGS*>( aCfg );
-
-    if( cfg )
+    if( BITMAP2CMP_SETTINGS* cfg = dynamic_cast<BITMAP2CMP_SETTINGS*>( aCfg ) )
     {
-        m_bitmapFileName = cfg->m_BitmapFileName;
-        m_convertedFileName = cfg->m_ConvertedFileName;
+        m_srcFileName = cfg->m_BitmapFileName;
+        m_outFileName = cfg->m_ConvertedFileName;
         m_panel->LoadSettings( cfg );
     }
 }
@@ -379,12 +376,10 @@ void BITMAP2CMP_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    BITMAP2CMP_SETTINGS* cfg = dynamic_cast<BITMAP2CMP_SETTINGS*>( aCfg );
-
-    if( cfg )
+    if( BITMAP2CMP_SETTINGS* cfg = dynamic_cast<BITMAP2CMP_SETTINGS*>( aCfg ) )
     {
-        cfg->m_BitmapFileName    = m_bitmapFileName;
-        cfg->m_ConvertedFileName = m_convertedFileName;
+        cfg->m_BitmapFileName    = m_srcFileName;
+        cfg->m_ConvertedFileName = m_outFileName;
         m_panel->SaveSettings( cfg );
     }
 }
@@ -392,7 +387,7 @@ void BITMAP2CMP_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 void BITMAP2CMP_FRAME::OnLoadFile()
 {
-    wxFileName  fn( m_bitmapFileName );
+    wxFileName  fn( m_srcFileName );
     wxString    path = fn.GetPath();
 
     if( path.IsEmpty() || !wxDirExists( path ) )
@@ -402,9 +397,7 @@ void BITMAP2CMP_FRAME::OnLoadFile()
                           _( "Image Files" ) + wxS( " " )+ wxImage::GetImageExtWildcard(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-    int diag = fileDlg.ShowModal();
-
-    if( diag != wxID_OK )
+    if( fileDlg.ShowModal() != wxID_OK )
         return;
 
     wxString fullFilename = fileDlg.GetPath();
@@ -422,11 +415,11 @@ void BITMAP2CMP_FRAME::OnLoadFile()
 
 bool BITMAP2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
-    m_bitmapFileName = aFileSet[0];
+    m_srcFileName = aFileSet[0];
 
     if( m_panel->OpenProjectFiles( aFileSet, aCtl ) )
     {
-        UpdateFileHistory( m_bitmapFileName );
+        UpdateFileHistory( m_srcFileName );
         return true;
     }
 
@@ -436,7 +429,7 @@ bool BITMAP2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, 
 
 void BITMAP2CMP_FRAME::ExportDrawingSheetFormat()
 {
-    wxFileName  fn( m_convertedFileName );
+    wxFileName  fn( m_outFileName );
     wxString    path = fn.GetPath();
 
     if( path.IsEmpty() || !wxDirExists(path) )
@@ -444,28 +437,24 @@ void BITMAP2CMP_FRAME::ExportDrawingSheetFormat()
 
     wxFileDialog fileDlg( this, _( "Create Drawing Sheet File" ), path, wxEmptyString,
                           FILEEXT::DrawingSheetFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-    int          diag = fileDlg.ShowModal();
 
-    if( diag != wxID_OK )
+    if( fileDlg.ShowModal() != wxID_OK )
         return;
 
     fn = fileDlg.GetPath();
     fn.SetExt( FILEEXT::DrawingSheetFileExtension );
-    m_convertedFileName = fn.GetFullPath();
+    m_outFileName = fn.GetFullPath();
 
-    FILE*    outfile;
-    outfile = wxFopen( m_convertedFileName, wxT( "w" ) );
+    FILE* outfile = wxFopen( m_outFileName, wxT( "w" ) );
 
-    if( outfile == nullptr )
+    if( !outfile )
     {
-        wxString msg;
-        msg.Printf( _( "File '%s' could not be created." ), m_convertedFileName );
-        wxMessageBox( msg );
+        wxMessageBox( wxString::Format( _( "File '%s' could not be created." ), m_outFileName ) );
         return;
     }
 
     std::string buffer;
-    m_panel->ExportToBuffer( buffer, KICAD_WKS_LOGO );
+    m_panel->ExportToBuffer( buffer, DRAWING_SHEET_FMT );
     fputs( buffer.c_str(), outfile );
     fclose( outfile );
 }
@@ -473,7 +462,7 @@ void BITMAP2CMP_FRAME::ExportDrawingSheetFormat()
 
 void BITMAP2CMP_FRAME::ExportPostScriptFormat()
 {
-    wxFileName  fn( m_convertedFileName );
+    wxFileName  fn( m_outFileName );
     wxString    path = fn.GetPath();
 
     if( path.IsEmpty() || !wxDirExists( path ) )
@@ -487,16 +476,13 @@ void BITMAP2CMP_FRAME::ExportPostScriptFormat()
 
     fn = fileDlg.GetPath();
     fn.SetExt( wxT( "ps" ) );
-    m_convertedFileName = fn.GetFullPath();
+    m_outFileName = fn.GetFullPath();
 
-    FILE*    outfile;
-    outfile = wxFopen( m_convertedFileName, wxT( "w" ) );
+    FILE* outfile = wxFopen( m_outFileName, wxT( "w" ) );
 
-    if( outfile == nullptr )
+    if( !outfile )
     {
-        wxString msg;
-        msg.Printf( _( "File '%s' could not be created." ), m_convertedFileName );
-        wxMessageBox( msg );
+        wxMessageBox( wxString::Format( _( "File '%s' could not be created." ), m_outFileName  ) );
         return;
     }
 
@@ -509,10 +495,10 @@ void BITMAP2CMP_FRAME::ExportPostScriptFormat()
 
 void BITMAP2CMP_FRAME::ExportEeschemaFormat()
 {
-    wxFileName  fn( m_convertedFileName );
+    wxFileName  fn( m_outFileName );
     wxString    path = fn.GetPath();
 
-    if( path.IsEmpty() || !wxDirExists(path) )
+    if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
     wxFileDialog fileDlg( this, _( "Create Symbol Library" ), path, wxEmptyString,
@@ -523,20 +509,18 @@ void BITMAP2CMP_FRAME::ExportEeschemaFormat()
         return;
 
     fn = EnsureFileExtension( fileDlg.GetPath(), FILEEXT::KiCadSymbolLibFileExtension );
-    m_convertedFileName = fn.GetFullPath();
+    m_outFileName = fn.GetFullPath();
 
-    FILE*    outfile = wxFopen( m_convertedFileName, wxT( "w" ) );
+    FILE* outfile = wxFopen( m_outFileName, wxT( "w" ) );
 
-    if( outfile == nullptr )
+    if( !outfile )
     {
-        wxString msg;
-        msg.Printf( _( "File '%s' could not be created." ), m_convertedFileName );
-        wxMessageBox( msg );
+        wxMessageBox( wxString::Format( _( "File '%s' could not be created." ), m_outFileName ) );
         return;
     }
 
     std::string buffer;
-    m_panel->ExportToBuffer( buffer, EESCHEMA_FMT );
+    m_panel->ExportToBuffer( buffer, SYMBOL_FMT );
     fputs( buffer.c_str(), outfile );
     fclose( outfile );
 }
@@ -544,7 +528,7 @@ void BITMAP2CMP_FRAME::ExportEeschemaFormat()
 
 void BITMAP2CMP_FRAME::ExportPcbnewFormat()
 {
-    wxFileName  fn( m_convertedFileName );
+    wxFileName  fn( m_outFileName );
     wxString    path = fn.GetPath();
 
     if( path.IsEmpty() || !wxDirExists( path ) )
@@ -558,20 +542,18 @@ void BITMAP2CMP_FRAME::ExportPcbnewFormat()
         return;
 
     fn = EnsureFileExtension( fileDlg.GetPath(), FILEEXT::KiCadFootprintFileExtension );
-    m_convertedFileName = fn.GetFullPath();
+    m_outFileName = fn.GetFullPath();
 
-    FILE* outfile = wxFopen( m_convertedFileName, wxT( "w" ) );
+    FILE* outfile = wxFopen( m_outFileName, wxT( "w" ) );
 
-    if( outfile == nullptr )
+    if( !outfile )
     {
-        wxString msg;
-        msg.Printf( _( "File '%s' could not be created." ), m_convertedFileName );
-        wxMessageBox( msg );
+        wxMessageBox( wxString::Format( _( "File '%s' could not be created." ), m_outFileName ) );
         return;
     }
 
     std::string buffer;
-    m_panel->ExportToBuffer( buffer, PCBNEW_KICAD_MOD );
+    m_panel->ExportToBuffer( buffer, FOOTPRINT_FMT );
     fputs( buffer.c_str(), outfile );
     fclose( outfile );
     m_mruPath = fn.GetPath();

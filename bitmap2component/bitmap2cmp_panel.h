@@ -40,32 +40,13 @@ public:
     // to the value in new unit
     void SetUnit( EDA_UNITS aUnit );
 
-    // Accessors:
-    void SetOriginalDPI( int aDPI )
-    {
-        m_originalDPI = aDPI;
-    }
+    void SetOriginalDPI( int aDPI ) { m_originalDPI = aDPI; }
 
-    void SetOriginalSizePixels( int aPixels )
-    {
-        m_originalSizePixels = aPixels;
-    }
+    void SetOriginalSizePixels( int aPixels ) { m_originalSizePixels = aPixels; }
+    int  GetOriginalSizePixels() { return m_originalSizePixels; }
 
-    double GetOutputSize()
-    {
-        return m_outputSize;
-    }
-
-    void SetOutputSize( double aSize, EDA_UNITS aUnit )
-    {
-        m_unit = aUnit;
-        m_outputSize = aSize;
-    }
-
-    int  GetOriginalSizePixels()
-    {
-        return m_originalSizePixels;
-    }
+    double GetOutputSize() { return m_outputSize; }
+    void SetOutputSize( double aSize, EDA_UNITS aUnit ) { m_outputSize = aSize; m_unit = aUnit; }
 
     // Set the m_outputSize value from the m_originalSizePixels and the selected unit
     void SetOutputSizeFromInitialImageSize();
@@ -88,7 +69,7 @@ class BITMAP2CMP_PANEL : public BITMAP2CMP_PANEL_BASE
 {
 public:
     BITMAP2CMP_PANEL( BITMAP2CMP_FRAME* aParent );
-    ~BITMAP2CMP_PANEL();
+    ~BITMAP2CMP_PANEL() {}
 
     bool OpenProjectFiles( const std::vector<wxString>& aFilenames, int aCtl = 0 );
 
@@ -117,28 +98,27 @@ private:
     void OnPaintBW( wxPaintEvent& event ) override;
     void OnExportToFile( wxCommandEvent& event ) override;
     void OnExportToClipboard( wxCommandEvent& event ) override;
+    void OnFormatChange( wxCommandEvent& event ) override;
+    void OnNegativeClicked( wxCommandEvent& event ) override;
+    void OnThresholdChange( wxScrollEvent& event ) override;
+    void OnSizeChangeX( wxCommandEvent& event ) override;
+    void OnSizeChangeY( wxCommandEvent& event ) override;
+    void OnSizeUnitChange( wxCommandEvent& event ) override;
+    void ToggleAspectRatioLock( wxCommandEvent& event ) override;
+
+    OUTPUT_FMT_ID getOutputFormat();
 
     ///< @return the EDA_UNITS from the m_PixelUnit choice
     EDA_UNITS getUnitFromSelection();
 
     // return a string giving the output size, according to the selected unit
-    wxString FormatOutputSize( double aSize );
+    wxString formatOutputSize( double aSize );
 
-    void Binarize( double aThreshold ); // aThreshold = 0.0 (black level) to 1.0 (white level)
-    void OnNegativeClicked( wxCommandEvent& event ) override;
-    void OnThresholdChange( wxScrollEvent& event ) override;
+    void binarize( double aThreshold ); // aThreshold = 0.0 (black level) to 1.0 (white level)
 
-    void OnSizeChangeX( wxCommandEvent& event ) override;
-    void OnSizeChangeY( wxCommandEvent& event ) override;
-    void OnSizeUnitChange( wxCommandEvent& event ) override;
-
-    void ToggleAspectRatioLock( wxCommandEvent& event ) override;
-
-    void NegateGreyscaleImage();
+    void negateGreyscaleImage();
 
     void updateImageInfo();
-    void OnFormatChange( wxCommandEvent& event ) override;
-    void exportBitmap( OUTPUT_FMT_ID aFormat );
 
 private:
     BITMAP2CMP_FRAME* m_parentFrame;
