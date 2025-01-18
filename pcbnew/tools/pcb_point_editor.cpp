@@ -739,7 +739,7 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( editFrame );
     commit.Stage( m_editPoints->GetParent(), CHT_MODIFY );
 
-    VECTOR2I pt = editFrame->GetOriginTransforms().ToDisplayAbs( m_editedPoint->GetPosition() );
+    VECTOR2I pt = m_editedPoint->GetPosition();
     wxString title;
     wxString msg;
 
@@ -758,8 +758,7 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        pt = editFrame->GetOriginTransforms().FromDisplayAbs( dlg.GetValue() );
-        m_editedPoint->SetPosition( pt );
+        m_editedPoint->SetPosition( dlg.GetValue() );
         updateItem( &commit );
         commit.Push( msg );
     }
