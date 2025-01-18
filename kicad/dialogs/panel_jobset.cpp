@@ -116,11 +116,14 @@ public:
         if( static_cast<size_t>( itemIndex ) < jobs.size() )
         {
             JOBSET_JOB& job = jobs[itemIndex];
+
             if( m_output->m_lastRunReporters.contains( job.m_id ) )
             {
                 WX_STRING_REPORTER* reporter =
                         static_cast<WX_STRING_REPORTER*>( m_output->m_lastRunReporters[job.m_id] );
-                m_textCtrlOutput->SetValue( reporter->GetMessages() );
+
+                if( reporter )
+                    m_textCtrlOutput->SetValue( reporter->GetMessages() );
             }
             else
             {

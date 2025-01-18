@@ -178,8 +178,8 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
     aOutput->m_lastRunSuccessMap.clear();
 
-    for( auto& reporter : aOutput->m_lastRunReporters )
-        delete reporter.second;
+    for( auto& [name, reporter] : aOutput->m_lastRunReporters )
+        delete reporter;
 
     aOutput->m_lastRunReporters.clear();
 
