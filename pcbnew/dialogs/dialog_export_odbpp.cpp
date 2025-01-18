@@ -242,6 +242,7 @@ bool DIALOG_EXPORT_ODBPP::Init()
         m_choiceUnits->SetSelection( cfg->m_ExportODBPP.units );
         m_precision->SetValue( cfg->m_ExportODBPP.precision );
         m_choiceCompress->SetSelection( cfg->m_ExportODBPP.compressFormat );
+        OnFmtChoiceOptionChanged();
     }
     else
     {
