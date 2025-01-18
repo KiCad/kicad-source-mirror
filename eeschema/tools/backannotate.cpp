@@ -520,9 +520,10 @@ void BACK_ANNOTATE::applyChangelist()
 
                     if( !m_dryRun )
                     {
-                        SCH_FIELD newField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
+                        SCH_FIELD newField( symbol->GetPosition(), symbol->GetFieldCount(), symbol,
                                             fpFieldName );
                         newField.SetText( fpFieldValue );
+                        newField.SetVisible( false ); // Don't clutter up the schematic
                         symbol->AddField( newField );
                     }
 
