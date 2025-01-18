@@ -36,6 +36,7 @@
 
 bool init_unit_test()
 {
+    KI_TEST::SetMockConfigDir();
     SetPgm( new MOCK_PGM_BASE() );
     KIPLATFORM::APP::Init();
     boost::unit_test::framework::master_test_suite().p_name.value = "Pcbnew module tests";

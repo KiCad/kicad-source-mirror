@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aPt )
@@ -29,10 +30,6 @@ std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aPt )
     return os;
 }
 
-
-#ifndef QA_EESCHEMA_DATA_LOCATION
-#define QA_EESCHEMA_DATA_LOCATION "???"
-#endif
 
 std::string KI_TEST::GetEeschemaTestDataDir()
 {
@@ -43,7 +40,8 @@ std::string KI_TEST::GetEeschemaTestDataDir()
     {
         // Use the compiled-in location of the data dir
         // (i.e. where the files were at build time)
-        fn = QA_EESCHEMA_DATA_LOCATION;
+        fn = GetTestDataRootDir();
+        fn += "/eeschema";
     }
     else
     {
@@ -55,4 +53,43 @@ std::string KI_TEST::GetEeschemaTestDataDir()
     fn += "/";
 
     return fn;
+}
+
+
+#ifndef QA_DATA_ROOT
+#define QA_DATA_ROOT "???"
+#endif
+
+std::string KI_TEST::GetTestDataRootDir()
+{
+    const char* env = std::getenv( "QA_DATA_ROOT" );
+    std::string fn;
+
+    if( !env )
+    {
+        // Use the compiled-in location of the data dir
+        // (i.e. where the files were at build time)
+        fn = QA_DATA_ROOT;
+    }
+    else
+    {
+        // Use whatever was given in the env var
+        fn = env;
+    }
+
+    // Ensure the string ends in / to force a directory interpretation
+    fn += "/";
+
+    return fn;
+}
+
+
+void KI_TEST::SetMockConfigDir()
+{
+    if( !wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), nullptr ) )
+    {
+        wxString path( GetTestDataRootDir() );
+        path += wxT( "/config/" );
+        wxSetEnv( wxT( "KICAD_CONFIG_HOME" ), path );
+    }
 }

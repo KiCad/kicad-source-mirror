@@ -57,7 +57,7 @@ target_link_libraries( qa_utils
 
 # Pass in the default data location
 set_source_files_properties( wx_utils/unit_test_utils.cpp PROPERTIES
-    COMPILE_DEFINITIONS "QA_EESCHEMA_DATA_LOCATION=(\"${CMAKE_SOURCE_DIR}/qa/data/eeschema\")"
+    COMPILE_DEFINITIONS "QA_DATA_ROOT=(\"${CMAKE_SOURCE_DIR}/qa/data\")"
 )
 
 target_include_directories( qa_utils PUBLIC

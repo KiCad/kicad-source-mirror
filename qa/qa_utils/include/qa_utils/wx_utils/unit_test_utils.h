@@ -280,6 +280,10 @@ bool CollectionHasNoDuplicates( const T& aCollection )
  */
 std::string GetEeschemaTestDataDir();
 
+std::string GetTestDataRootDir();
+
+void SetMockConfigDir();
+
 } // namespace KI_TEST
 
 #endif // UNIT_TEST_UTILS__H

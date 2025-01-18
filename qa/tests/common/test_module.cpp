@@ -31,8 +31,10 @@
 #include <wx/init.h>
 
 #include <locale_io.h>
+
 bool init_unit_test()
 {
+    KI_TEST::SetMockConfigDir();
     SetPgm( new MOCK_PGM_BASE() );
 
     // Ensure the "C" locale is used in tests
