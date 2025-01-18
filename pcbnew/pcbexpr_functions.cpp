@@ -209,6 +209,36 @@ bool collidesWithCourtyard( BOARD_ITEM* aItem, std::shared_ptr<SHAPE>& aItemShap
 };
 
 
+static bool testFootprintSelector( FOOTPRINT* aFp, const wxString& aSelector )
+{
+    // NOTE: This code may want to be somewhat more generalized, but for now it's implemented
+    // here to support functions like insersectsCourtyard where we want multiple ways to search
+    // for the footprints in question.
+    // If support for text variable replacement is added, it should happen before any other
+    // logic here, so that people can use text variables to contain references or LIBIDs.
+    // (see: https://gitlab.com/kicad/code/kicad/-/issues/11231)
+
+    // First check if we have a known directive
+    if( aSelector.Upper().StartsWith( wxT( "${CLASS:" ) ) && aSelector.EndsWith( '}' ) )
+    {
+        wxString name = aSelector.Mid( 8, aSelector.Length() - 9 );
+
+        if( aFp->GetComponentClass()->ContainsClassName( name ) )
+            return true;
+    }
+    else if( aFp->GetReference().Matches( aSelector ) )
+    {
+        return true;
+    }
+    else if( aSelector.Contains( ':' ) && aFp->GetFPIDAsString().Matches( aSelector ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
 static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
                               const std::function<bool( FOOTPRINT* )>& aFunc )
 {
@@ -228,32 +258,8 @@ static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTE
     }
     else for( FOOTPRINT* fp : aBoard->Footprints() )
     {
-        // NOTE: This code may want to be somewhat more generalized, but for now it's implemented
-        // here to support functions like insersectsCourtyard where we want multiple ways to search
-        // for the footprints in question.
-        // If support for text variable replacement is added, it should happen before any other
-        // logic here, so that people can use text variables to contain references or LIBIDs.
-        // (see: https://gitlab.com/kicad/code/kicad/-/issues/11231)
-
-        // First check if we have a known directive
-        if( aArg.Upper().StartsWith( wxT( "${CLASS:" ) ) && aArg.EndsWith( '}' ) )
-        {
-            wxString name = aArg.Mid( 8, aArg.Length() - 9 );
-
-            if( fp->GetComponentClass()->ContainsClassName( name ) && aFunc( fp ) )
-                return true;
-        }
-        else if( fp->GetReference().Matches( aArg ) )
-        {
-            if( aFunc( fp ) )
-                return true;
-        }
-        else if( aArg.Contains( ':' )
-                 && fp->GetFPIDAsString().Matches( aArg ) )
-        {
-            if( aFunc( fp ) )
-                return true;
-        }
+        if( testFootprintSelector( fp, aArg ) && aFunc( fp ) )
+            return true;
     }
 
     return false;
@@ -1014,18 +1020,10 @@ static void memberOfFootprintFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg]() -> double
             {
-                ;
-
                 if( FOOTPRINT* parentFP = item->GetParentFootprint() )
                 {
-                    if( parentFP->GetReference().Matches( arg->AsString() ) )
+                    if( testFootprintSelector( parentFP, arg->AsString() ) )
                         return 1.0;
-
-                    if( arg->AsString().Contains( ':' )
-                             && parentFP->GetFPIDAsString().Matches( arg->AsString() ) )
-                    {
-                        return 1.0;
-                    }
                 }
 
                 return 0.0;
