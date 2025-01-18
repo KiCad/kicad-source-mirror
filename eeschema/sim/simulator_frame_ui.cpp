@@ -1690,7 +1690,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
                                       SIM_PLOT_TAB* aPlotTab, std::vector<double>* aDataX,
                                       bool aClearData )
 {
-    if( !m_simulatorFrame->SimFinished() )
+    if( !m_simulatorFrame->SimFinished() && !simulator()->IsRunning())
     {
         aPlotTab->GetOrAddTrace( aVectorName, aTraceType );
         return;
@@ -1721,7 +1721,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
         aDataX = &data_x;
 
     // First, handle the x axis
-    if( aDataX->empty() && !aClearData && m_simulatorFrame->SimFinished() )
+    if( aDataX->empty() && !aClearData )
     {
         wxString xAxisName( simulator()->GetXAxis( simType ) );
 
