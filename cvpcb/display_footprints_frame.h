@@ -53,9 +53,10 @@ public:
     void    UpdateToolbarControlSizes() override;
 
     /**
-     * Refresh the full display for this frame:
-     * Set the title, the status line and redraw the canvas
-     * Must be called after the footprint to display is modified
+     * Refresh the full display for this frame.
+     *
+     * Set the title, the status line and redraw the canvas.
+     * Must be called after the footprint to display is modified.
      */
     void InitDisplay();
 
@@ -76,7 +77,7 @@ public:
 
     MAGNETIC_SETTINGS* GetMagneticItemsSettings() override;
 
-    ///< @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
+    /// @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
     void UpdateMsgPanel() override;
 
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;

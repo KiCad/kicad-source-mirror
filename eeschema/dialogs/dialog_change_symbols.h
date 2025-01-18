@@ -77,7 +77,7 @@ protected:
         checkAll( false );
     }
 
-    ///< Select or deselect all fields in the listbox widget
+    /// Select or deselect all fields in the listbox widget.
     void checkAll( bool aCheck );
 
 private:
@@ -93,7 +93,7 @@ private:
     SCH_SYMBOL* m_symbol;
     MODE        m_mode;
 
-    ///< Set of field names that should have values updated
+    /// Set of field names that should have values updated.
     std::set<wxString> m_updateFields;
 };
 

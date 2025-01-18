@@ -114,7 +114,7 @@ void LIBRARY_LISTBOX::Finish()
 {
     if( m_libraryList.Count() )
     {
-        RefreshItems( 0L, m_libraryList.Count()-1 );
+        RefreshItems( 0L, m_libraryList.Count() - 1 );
         UpdateWidth();
     }
 }

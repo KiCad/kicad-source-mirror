@@ -88,7 +88,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ), aLibEntry ) );
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ),
+                                               aLibEntry ) );
     m_grid->SetAttr( DATASHEET_FIELD, FDC_VALUE, attr );
 
     m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
@@ -124,7 +125,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
                                     m_fpFilterTricks->ProcessEvent( cmdEvent );
                                 } );
 
-    // When the filter tricks modifies something, update outselves
+    // When the filter tricks modifies something, update ourselves
     m_FootprintFilterListBox->Bind( EDA_EVT_LISTBOX_CHANGED,
                                     [&]( wxCommandEvent& aEvent )
                                     {
@@ -802,7 +803,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddFootprintFilter( wxCommandEvent& event )
     filterLine.Replace( wxT( " " ), wxT( "_" ) );
 
     // duplicate filters do no harm, so don't be a nanny.
-
     m_FootprintFilterListBox->Append( filterLine );
     m_FootprintFilterListBox->SetSelection( (int) m_FootprintFilterListBox->GetCount() - 1 );
 

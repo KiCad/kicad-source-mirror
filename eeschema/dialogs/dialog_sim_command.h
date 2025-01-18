@@ -60,10 +60,12 @@ public:
 
     void SetSimOptions( int aOptions )
     {
-        m_fixIncludePaths->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS );
+        m_fixIncludePaths->SetValue( aOptions &
+                                     NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS );
         m_saveAllVoltages->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES );
         m_saveAllCurrents->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS );
-        m_saveAllDissipations->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS );
+        m_saveAllDissipations->SetValue( aOptions &
+                                         NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS );
         m_saveAllEvents->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS );
     }
 
@@ -91,7 +93,7 @@ private:
         LINEAR
     };
 
-    ///< Generate events to update UI state.
+    /// Generate events to update UI state.
     void refreshUIControls()
     {
         wxQueueEvent( m_dcEnable2, new wxCommandEvent( wxEVT_CHECKBOX ) );

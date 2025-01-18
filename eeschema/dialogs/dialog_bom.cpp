@@ -294,7 +294,8 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
     bool status = false;
 
     if( m_parent->ReadyToNetlist( _( "Generating BOM requires a fully annotated schematic." ) ) )
-        status = m_parent->WriteNetListFile( NET_TYPE_BOM, fullfilename, GNL_OPT_BOM|GNL_ALL, &reporter );
+        status = m_parent->WriteNetListFile( NET_TYPE_BOM, fullfilename,
+                                             GNL_OPT_BOM | GNL_ALL, &reporter );
 
     if( !status )
         DisplayErrorMessage( this, _( "Failed to create file." ) );

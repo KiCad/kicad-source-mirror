@@ -224,6 +224,7 @@ public:
                     val = LIB_SYMBOL::LetterSubReference( pin->GetUnit(), 'A' );
                 else
                     val = UNITS_ALL;
+
                 break;
 
             case COL_DEMORGAN:
@@ -250,6 +251,7 @@ public:
             {
                 if( fieldValue.length() )
                     fieldValue += wxT( ", " );
+
                 fieldValue += val;
             }
             else
@@ -329,7 +331,8 @@ public:
                     VECTOR2I pos = last->GetPosition();
 
                     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-                    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+                    SYMBOL_EDITOR_SETTINGS* cfg =
+                            mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
                     if( last->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
                         || last->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
@@ -390,7 +393,8 @@ public:
 
             case COL_ORIENTATION:
                 if( PinOrientationNames().Index( value ) != wxNOT_FOUND )
-                    pin->SetOrientation( PinOrientationCode( PinOrientationNames().Index( value ) ) );
+                    pin->SetOrientation(
+                            PinOrientationCode( PinOrientationNames().Index( value ) ) );
                 break;
 
             case COL_NUMBER_SIZE:
@@ -435,6 +439,7 @@ public:
                         }
                     }
                 }
+
                 break;
 
             case COL_DEMORGAN:
@@ -1011,7 +1016,8 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
     if( curRow < 0 )
         return;
 
-    // move the selection first because wx internally will try to reselect the row we deleted in out of order events
+    // move the selection first because wx internally will try to reselect the row we deleted in
+    // out of order events
     int nextSelRow = std::max( curRow-1, 0 );
     m_grid->GoToCell( nextSelRow, m_grid->GetGridCursorCol() );
     m_grid->SetGridCursor( nextSelRow, m_grid->GetGridCursorCol() );
@@ -1137,7 +1143,6 @@ void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns()
 
     // The Number and Name columns must be at least wide enough to hold their contents, but
     // no less wide than their original widths.
-
     m_grid->AutoSizeColumn( COL_NUMBER );
 
     if( m_grid->GetColSize( COL_NUMBER ) < m_originalColWidths[ COL_NUMBER ] )
@@ -1150,7 +1155,6 @@ void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns()
 
     // If the grid is still wider than the columns, then stretch the Number and Name columns
     // to fit.
-
     for( int i = 0; i < COL_COUNT; ++i )
         width -= m_grid->GetColSize( i );
 

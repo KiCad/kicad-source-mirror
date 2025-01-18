@@ -131,7 +131,8 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         }
         else
         {
-            if( cell->GetFont() != m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) )
+            if( cell->GetFont() != m_fontCtrl->GetFontSelection( cell->IsBold(),
+                                                                 cell->IsItalic() ) )
                 m_fontCtrl->SetSelection( -1 );
 
             if( cell->GetTextWidth() != m_textSize.GetValue() )

@@ -96,7 +96,9 @@ private:
 
     WX_GRID*                    m_cur_grid;     ///< changed based on tab choice
     static size_t               m_pageNdx;      ///< Remember the last notebook page selected
-    wxString                    m_lastProjectLibDir;    //< Transient (unsaved) last browsed folder when adding a project level library
+
+    /// Transient (unsaved) last browsed folder when adding a project level library.
+    wxString                    m_lastProjectLibDir;
 };
 
 

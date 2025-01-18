@@ -64,6 +64,7 @@ PANEL_SETUP_PINMAP::PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* paren
     reBuildMatrixPanel();
 }
 
+
 PANEL_SETUP_PINMAP::~PANEL_SETUP_PINMAP()
 {
 #ifndef __WXMAC__
@@ -96,7 +97,8 @@ void PANEL_SETUP_PINMAP::OnMouseEnter( wxMouseEvent& aEvent )
     wxBitmapButton* btn = static_cast<wxBitmapButton*>( aEvent.GetEventObject() );
     m_btnBackground = btn->GetBackgroundColour();
 
-    btn->SetBackgroundColour( wxSystemSettings::GetColour( wxSystemColour::wxSYS_COLOUR_HIGHLIGHT ) );
+    btn->SetBackgroundColour(
+            wxSystemSettings::GetColour( wxSystemColour::wxSYS_COLOUR_HIGHLIGHT ) );
 }
 
 
@@ -112,7 +114,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     // Try to know the size of bitmap button used in drc matrix
     wxBitmapButton* dummy =
             new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmapBundle( BITMAPS::ercerr ),
-                                                wxDefaultPosition, wxDefaultSize, wxBORDER_NONE );
+                                wxDefaultPosition, wxDefaultSize, wxBORDER_NONE );
     wxSize          bitmapSize = dummy->GetSize();
     delete dummy;
 
@@ -191,13 +193,15 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 #else
             if( m_initialized )
             {
-                m_buttonList[ii][jj]->Unbind(wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
-                m_buttonList[ii][jj]->Unbind(wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+                m_buttonList[ii][jj]->Unbind( wxEVT_ENTER_WINDOW,
+                                              &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+                m_buttonList[ii][jj]->Unbind( wxEVT_LEAVE_WINDOW,
+                                              &PANEL_SETUP_PINMAP::OnMouseLeave, this );
             }
 
             wxBitmapButton* btn =
                     new wxBitmapButton( m_matrixPanel, id, KiBitmapBundle( bitmap_butt ),
-                                                      wxPoint( x, y ), wxDefaultSize, wxBORDER_NONE );
+                                        wxPoint( x, y ), wxDefaultSize, wxBORDER_NONE );
             btn->Bind( wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
             btn->Bind( wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseEnter, this );
 #endif

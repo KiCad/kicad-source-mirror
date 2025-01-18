@@ -441,6 +441,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     wxString       msg;
     wxFileName     sheetFileName( EnsureFileExtension( aNewFilename,
                                                        FILEEXT::KiCadSchematicFileExtension ) );
+
     // Sheet file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.  Screen file names are always absolute.
     SCHEMATIC&     schematic = m_frame->Schematic();
@@ -492,7 +493,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
     if( m_sheet->GetScreen() == nullptr )      // New just created sheet.
     {
-        if( !m_frame->AllowCaseSensitiveFileNameClashes( m_sheet->GetFileName(), newAbsoluteFilename ) )
+        if( !m_frame->AllowCaseSensitiveFileNameClashes( m_sheet->GetFileName(),
+                                                         newAbsoluteFilename ) )
             return false;
 
         if( useScreen || loadFromFile )     // Load from existing file.
@@ -508,7 +510,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
                 return false;
             }
         }
-        // If we are drawing a sheet from a design block/sheet import, we need to copy the sheet to the current directory.
+        // If we are drawing a sheet from a design block/sheet import, we need to copy the
+        // sheet to the current directory.
         else if( m_sourceSheetFilename && !m_sourceSheetFilename->IsEmpty() )
         {
             loadFromFile = true;
@@ -532,7 +535,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     {
         isExistingSheet = true;
 
-        if( !m_frame->AllowCaseSensitiveFileNameClashes( m_sheet->GetFileName(), newAbsoluteFilename ) )
+        if( !m_frame->AllowCaseSensitiveFileNameClashes( m_sheet->GetFileName(),
+                                                         newAbsoluteFilename ) )
             return false;
 
         // We are always using here a case insensitive comparison to avoid issues

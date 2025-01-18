@@ -145,6 +145,7 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataToGrid()
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
         m_grid->SetCellValue( row, 0, m_fields[row].m_Name );
+
         // columns 1 and 2 show a boolean value (in a check box):
         m_grid->SetCellValue( row, 1, m_fields[row].m_Visible ? wxS( "1" ) : wxS( "0" ) );
         m_grid->SetCellValue( row, 2, m_fields[row].m_URL     ? wxS( "1" ) : wxS( "0" ) );

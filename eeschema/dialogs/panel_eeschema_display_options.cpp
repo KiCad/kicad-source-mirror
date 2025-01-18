@@ -97,8 +97,9 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     cfg->m_Appearance.default_font = m_defaultFontCtrl->GetSelection() <= 0
-                                        ? wxString( KICAD_FONT_NAME )   // This is a keyword. Do not translate
-                                        : m_defaultFontCtrl->GetStringSelection();
+                                     // This is a keyword. Do not translate.
+                                     ? wxString( KICAD_FONT_NAME )
+                                     : m_defaultFontCtrl->GetStringSelection();
     cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
     cfg->m_Appearance.show_hidden_fields = m_checkShowHiddenFields->GetValue();
     cfg->m_Appearance.show_erc_warnings = m_checkShowERCWarnings->GetValue();

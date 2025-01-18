@@ -99,5 +99,5 @@ void CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::setTransitions()
 {
     Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::UpdateMenu, ACTIONS::updateMenu.MakeEvent() );
     Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main,
-            CVPCB_ACTIONS::selectionActivate.MakeEvent() );
+        CVPCB_ACTIONS::selectionActivate.MakeEvent() );
 }

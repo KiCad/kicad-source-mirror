@@ -58,7 +58,7 @@
 wxDEFINE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );
 
 
-// wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
+// wxWidgets spends *far* too long calculating column widths (most of it, believe it or
 // not, in repeatedly creating/destroying a wxDC to do the measurement in).
 // Use default column widths instead.
 static int DEFAULT_SINGLE_COL_WIDTH = 660;
@@ -451,6 +451,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
                                                   itemsNotAnnotated ), RPT_SEVERITY_INFO );
 
     if( m_cancelled )
+        // @spellingerror
         m_messages->Report( _( "-------- ERC cancelled by user.<br><br>" ), RPT_SEVERITY_INFO );
     else
         m_messages->Report( _( "Done.<br><br>" ), RPT_SEVERITY_INFO );
@@ -468,6 +469,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     if( !m_cancelled )
     {
         m_sdbSizer1Cancel->SetDefault();
+
         // wxWidgets has a tendency to keep both buttons highlighted without the following:
         m_sdbSizer1OK->Enable( false );
 
@@ -683,7 +685,8 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         menu.Append( ID_SET_SEVERITY_TO_WARNING,
                      wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
                                        rcItem->GetErrorText() ),
-                     _( "Violation severities can also be edited in the Schematic Setup... dialog" ) );
+                     _( "Violation severities can also be edited in the Schematic Setup... "
+                        "dialog" ) );
     }
 
     menu.Append( ID_SET_SEVERITY_TO_IGNORE,

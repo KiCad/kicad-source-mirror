@@ -38,13 +38,13 @@ PANEL_SIMULATOR_PREFERENCES::PANEL_SIMULATOR_PREFERENCES( wxWindow* aParent ) :
 
     static const wxString verticalChoiceItems[] =
     {
-        _("No action"),
-        _("Pan left/right"),
-        _("Pan right/left"),
-        _("Pan up/down"),
-        _("Zoom"),
-        _("Zoom horizontally"),
-        _("Zoom vertically")
+        _( "No action" ),
+        _( "Pan left/right" ),
+        _( "Pan right/left" ),
+        _( "Pan up/down" ),
+        _( "Zoom" ),
+        _( "Zoom horizontally" ),
+        _( "Zoom vertically" )
     };
 
     static constexpr auto ACTION_COUNT = static_cast<unsigned>( SIM_MOUSE_WHEEL_ACTION::COUNT );
@@ -59,9 +59,9 @@ PANEL_SIMULATOR_PREFERENCES::PANEL_SIMULATOR_PREFERENCES( wxWindow* aParent ) :
 
     static const wxString horizontalChoiceItems[] =
     {
-        _("No action"),
-        _("Pan left/right"),
-        _("Zoom horizontally")
+        _( "No action" ),
+        _( "Pan left/right" ),
+        _( "Zoom horizontally" )
     };
 
     m_choiceHScroll->Set( std::extent<decltype(horizontalChoiceItems)>::value,
@@ -136,6 +136,7 @@ PANEL_SIMULATOR_PREFERENCES::horizontalScrollSelectionToAction( int aSelection )
 
     return SIM_MOUSE_WHEEL_ACTION::NONE;
 }
+
 
 int PANEL_SIMULATOR_PREFERENCES::actionToHorizontalScrollSelection( SIM_MOUSE_WHEEL_ACTION a )
 {

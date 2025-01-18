@@ -100,6 +100,7 @@ void PANEL_BOM_PRESETS::OnDeleteBomFmtPreset( wxCommandEvent& event )
         return;
 
     m_bomFmtPresetsGrid->DeleteRows( curRow, 1 );
+
     // Erase the bom preset from the bom presets list.
     m_bomFmtPresets.erase( m_bomFmtPresets.begin() + curRow );
 }

@@ -36,6 +36,7 @@
 void CVPCB_MAINFRAME::doReCreateMenuBar()
 {
     COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
+
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();

@@ -145,7 +145,9 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataToWindow()
             } ) )
     {
         if( dotSize >=0 )
+        {
             m_junctionSize.SetValue( dotSize );
+        }
         else
         {
             // No junction found in selected items: disable m_junctionSize

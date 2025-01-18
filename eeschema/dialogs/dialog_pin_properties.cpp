@@ -123,7 +123,8 @@ public:
 };
 
 
-DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin, bool aFocusPinNumber ) :
+DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin,
+                                              bool aFocusPinNumber ) :
     DIALOG_PIN_PROPERTIES_BASE( parent ),
     m_frame( parent ),
     m_pin( aPin ),
@@ -173,8 +174,10 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
         m_sdbSizerButtonsCancel
     };
 
-    // Default alternates turndown to whether or not alternates exist, or if we've had it open before
-    m_alternatesTurndown->Collapse( m_pin->GetAlternates().size() == 0 && !s_alternatesTurndownOpen);
+    // Default alternates turndown to whether or not alternates exist, or if we've had it open
+    // before
+    m_alternatesTurndown->Collapse( m_pin->GetAlternates().size() == 0
+                                 && !s_alternatesTurndownOpen );
 
     // wxwidgets doesn't call the OnCollapseChange even at init, so we update this value if
     // the alternates pane defaults to open
@@ -268,7 +271,8 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
     m_pinLength.SetValue( m_pin->GetLength() );
     m_checkApplyToAllParts->Enable( m_pin->GetParentSymbol()->IsMulti() );
-    m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMulti() && m_pin->GetUnit() == 0 );
+    m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMulti()
+                                   && m_pin->GetUnit() == 0 );
     m_checkApplyToAllBodyStyles->SetValue( m_pin->GetBodyStyle() == 0 );
     m_checkShow->SetValue( m_pin->IsVisible() );
 
@@ -342,7 +346,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
 
     // Only show the warning if the position has been changed
     if( ( m_origPos != newPos )
-        && (( m_posX.GetValue() % standard_grid ) || ( m_posY.GetValue() % standard_grid ) ) )
+        && ( ( m_posX.GetValue() % standard_grid ) || ( m_posY.GetValue() % standard_grid ) ) )
     {
         wxString msg = wxString::Format( _( "This pin is not on a %d mils grid which will make it "
                                             "difficult to connect to in the schematic.\n"
@@ -375,9 +379,6 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
 }
 
 
-/*
- * Draw (on m_panelShowPin) the pin according to current settings in dialog
- */
 void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 {
     wxPaintDC dc( m_panelShowPin );
@@ -436,6 +437,7 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
 
     m_panelShowPin->Refresh();
 }
+
 
 wxString DIALOG_PIN_PROPERTIES::getSyncPinsMessage()
 {
@@ -538,6 +540,8 @@ void DIALOG_PIN_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusColumn = -1;
     }
 }
+
+
 void DIALOG_PIN_PROPERTIES::OnCollapsiblePaneChange( wxCollapsiblePaneEvent& event )
 {
     if( !event.GetCollapsed() )

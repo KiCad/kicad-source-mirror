@@ -72,7 +72,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITE
         m_fillColorSwatch->SetSwatchBackground( schematicBackground );
 
         if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
-            m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
+            m_infoBar->ShowMessage( _( "Note: individual item colors overridden in "
+                                       "Preferences." ) );
     }
     else
     {
@@ -350,7 +351,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_privateCheckbox->SetValue( m_currentItem->IsPrivate() );
         m_commonToAllUnits->SetValue( symbol->IsMulti() && m_currentItem->GetUnit() == 0 );
         m_commonToAllUnits->Enable( symbol->IsMulti() );
-        m_commonToAllBodyStyles->SetValue( symbol->HasAlternateBodyStyle() && m_currentItem->GetBodyStyle() == 0 );
+        m_commonToAllBodyStyles->SetValue( symbol->HasAlternateBodyStyle()
+                                        && m_currentItem->GetBodyStyle() == 0 );
         m_commonToAllBodyStyles->Enable( symbol->HasAlternateBodyStyle() );
     }
 
@@ -472,7 +474,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
     text.Replace( "\r", "\n" );
 #elif defined( __WINDOWS__ )
-    // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
+    // On Windows, a new line is coded as \r\n.  We use only \n in KiCad files and in
     // drawing routines so strip the \r char.
     text.Replace( "\r", "" );
 #endif
@@ -523,7 +525,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
 
     if( m_currentText->GetTextWidth() != m_textSize.GetValue() )
-        m_currentText->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
+        m_currentText->SetTextSize( VECTOR2I( m_textSize.GetIntValue(),
+                                              m_textSize.GetIntValue() ) );
 
     if( m_fontCtrl->HaveFontSelection() )
     {

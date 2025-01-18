@@ -169,7 +169,8 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
             // Set the default line width (pen width which should be used for
             // items that do not have a pen size defined (like frame ref)
             // the default line width is stored in mils in config
-            m_defaultLineWidth.SetValue( schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
+            m_defaultLineWidth.SetValue(
+                    schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
         }
 
         // Initialize HPGL specific widgets
@@ -445,7 +446,8 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         m_job->m_blackAndWhite = !getModeColor();
         m_job->m_useBackgroundColor = m_plotBackgroundColor->GetValue();
         m_job->m_HPGLPenSize = m_penWidth.GetDoubleValue();
-      //  m_job->m_HPGLPaperSizeSelect = m_HPGLPaperSizeSelect;
+
+        //  m_job->m_HPGLPaperSizeSelect = m_HPGLPaperSizeSelect;
         m_job->m_pageSizeSelect = static_cast<JOB_PAGE_SIZE>( m_pageSizeSelect );
         m_job->m_PDFPropertyPopups = m_plotPDFPropertyPopups->GetValue();
         m_job->m_PDFHierarchicalLinks = m_plotPDFHierarchicalLinks->GetValue();

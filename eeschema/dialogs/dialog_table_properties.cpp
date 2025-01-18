@@ -41,7 +41,8 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( SCH_EDIT_FRAME* aFrame, SCH_TA
         m_frame( aFrame ),
         m_table( aTable ),
         m_borderWidth( aFrame, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
-        m_separatorsWidth( aFrame, m_separatorsWidthLabel, m_separatorsWidthCtrl, m_separatorsWidthUnits )
+        m_separatorsWidth( aFrame, m_separatorsWidthLabel, m_separatorsWidthCtrl,
+                           m_separatorsWidthUnits )
 {
     m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 

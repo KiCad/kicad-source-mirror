@@ -109,7 +109,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
                                   fn.GetFullName() );
 
                 if( ! aErrorMessages->IsEmpty() )
-                    *aErrorMessages << wxT("\n\n");
+                    *aErrorMessages << wxT( "\n\n" );
 
                 *aErrorMessages += error_msg;
             }
@@ -128,7 +128,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
                 error_msg.Printf( _( "Error opening equivalence file '%s'." ), tmp );
 
                 if( ! aErrorMessages->IsEmpty() )
-                    *aErrorMessages << wxT("\n\n");
+                    *aErrorMessages << wxT( "\n\n" );
 
                 *aErrorMessages += error_msg;
             }
@@ -214,7 +214,8 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             if( equivItem.m_ComponentValue.CmpNoCase( component->GetValue() ) != 0 )
                 continue;
 
-            const FOOTPRINT_INFO *fp = m_FootprintsList->GetFootprintInfo( equivItem.m_FootprintFPID );
+            const FOOTPRINT_INFO* fp =
+                    m_FootprintsList->GetFootprintInfo( equivItem.m_FootprintFPID );
 
             bool equ_is_unique = true;
             unsigned next = idx+1;

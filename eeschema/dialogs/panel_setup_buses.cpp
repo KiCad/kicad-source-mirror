@@ -84,11 +84,11 @@ PANEL_SETUP_BUSES::~PANEL_SETUP_BUSES()
     m_membersGrid->PopEventHandler( true );
 
     m_aliasesGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                                wxGridEventHandler( PANEL_SETUP_BUSES::OnAliasesGridCellChanging ),
-                                nullptr, this );
+                               wxGridEventHandler( PANEL_SETUP_BUSES::OnAliasesGridCellChanging ),
+                               nullptr, this );
     m_membersGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                                wxGridEventHandler( PANEL_SETUP_BUSES::OnMemberGridCellChanging ),
-                                nullptr, this );
+                               wxGridEventHandler( PANEL_SETUP_BUSES::OnMemberGridCellChanging ),
+                               nullptr, this );
 }
 
 
@@ -181,8 +181,8 @@ void PANEL_SETUP_BUSES::OnAddAlias( wxCommandEvent& aEvent )
 
     int row = m_aliasesGrid->GetNumberRows();
 
-    // Associate the respective members with the previous alias. This ensures that the association starts
-    // correctly when adding more than one row
+    // Associate the respective members with the previous alias. This ensures that the association
+    // starts correctly when adding more than one row.
     if( row > 0 )
         updateAliasMembers( row - 1 );
 
@@ -237,9 +237,10 @@ void PANEL_SETUP_BUSES::OnAddMember( wxCommandEvent& aEvent )
     /*
      * Check if the clipboard contains text data.
      *
-     * - If `clipboardHasText` is true, select the specified row in the members grid to allow our custom
-     *   conext menu to paste the clipbaord .
-     * - Otherwise, enable and display the cell edit control, allowing the user to manually edit the cell.
+     * - If `clipboardHasText` is true, select the specified row in the members grid to allow
+     *   our custom context menu to paste the clipboard .
+     * - Otherwise, enable and display the cell edit control, allowing the user to manually edit
+     *   the cell.
      */
     bool clipboardHasText = false;
 

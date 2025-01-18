@@ -59,6 +59,9 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    /**
+     * Draw (on m_panelShowPin) the pin according to current settings in dialog.
+     */
     void OnPaintShowPanel( wxPaintEvent& event ) override;
     void OnPropertiesChange( wxCommandEvent& event ) override;
     void OnAddAlternate( wxCommandEvent& event ) override;

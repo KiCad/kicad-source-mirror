@@ -50,7 +50,7 @@ protected:
         checkAll( false );
     }
 
-    ///< Select or deselect all fields in the listbox widget
+    /// Select or deselect all fields in the listbox widget.
     void checkAll( bool aCheck );
 
 private:
@@ -59,7 +59,7 @@ private:
     SYMBOL_EDIT_FRAME* m_editFrame;
     LIB_SYMBOL*        m_symbol;
 
-    ///< Set of field names that should have values updated
+    /// Set of field names that should have values updated.
     std::set<wxString> m_updateFields;
 };
 

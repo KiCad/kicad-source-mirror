@@ -58,13 +58,13 @@ protected:
 
     void doReloadMembersGrid();
 
-    /*
+    /**
      * When rows are created programmatically by pasting values from the clipboard,
-     * the cell change event may not be triggered. This can prevent members from
-     * being automatically added to the corresponding alias.
+     * the cell change event may not be triggered.
      *
-     * To ensure that members are correctly associated with the alias,
-     * we manually update the members for the needed alias.
+     * This can prevent members from being automatically added to the corresponding alias.  To
+     * ensure that members are correctly associated with the alias, manually update the members
+     * for the needed alias.
      */
     void updateAliasMembers( int aAliasIndex );
 

@@ -108,7 +108,8 @@ DIALOG_SHAPE_PROPERTIES::~DIALOG_SHAPE_PROPERTIES()
 {
     m_borderColorSwatch->Unbind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onBorderSwatch,
                                  this );
-    m_customColorSwatch->Unbind( COLOR_SWATCH_CHANGED, &DIALOG_SHAPE_PROPERTIES::onCustomColorSwatch,
+    m_customColorSwatch->Unbind( COLOR_SWATCH_CHANGED,
+                                 &DIALOG_SHAPE_PROPERTIES::onCustomColorSwatch,
                                  this );
 }
 

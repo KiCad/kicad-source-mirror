@@ -60,6 +60,7 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataToWindow()
 bool DIALOG_IMAGE_PROPERTIES::TransferDataFromWindow()
 {
     REFERENCE_IMAGE& refImage = m_bitmap.GetReferenceImage();
+
     if( m_imageEditor->TransferDataFromWindow() )
     {
         SCH_COMMIT commit( m_frame );

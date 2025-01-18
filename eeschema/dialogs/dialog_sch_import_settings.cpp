@@ -35,7 +35,8 @@
 wxString DIALOG_SCH_IMPORT_SETTINGS::m_filePath;     // remember for session
 
 
-DIALOG_SCH_IMPORT_SETTINGS::DIALOG_SCH_IMPORT_SETTINGS( wxWindow* aParent, SCH_EDIT_FRAME* aFrame ) :
+DIALOG_SCH_IMPORT_SETTINGS::DIALOG_SCH_IMPORT_SETTINGS( wxWindow* aParent,
+                                                        SCH_EDIT_FRAME* aFrame ) :
         DIALOG_SCH_IMPORT_SETTINGS_BASE( aParent ),
         m_frame( aFrame )
 {

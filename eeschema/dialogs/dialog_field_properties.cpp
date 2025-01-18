@@ -237,7 +237,8 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
             m_isSheetFilename = true;
             m_fieldId = SHEETFILENAME_V;
             m_note->SetLabel( wxString::Format( m_note->GetLabel(),
-                              _( "Sheet filename can only be modified in Sheet Properties dialog." ) ) );
+                              _( "Sheet filename can only be modified in Sheet Properties "
+                                 "dialog." ) ) );
             m_note->Show( true );
             break;
 
@@ -699,7 +700,7 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
     if( positioningModified && parent )
         parent->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
-    //Update the hierarchy navigator labels if needed
+    // Update the hierarchy navigator labels if needed.
     if( needUpdateHierNav )
         editFrame->UpdateLabelsHierarchyNavigator();
 }

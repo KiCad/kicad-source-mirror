@@ -143,6 +143,7 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
     SetupStandardButtons();
 }
 
+
 bool DIALOG_SIM_COMMAND::TransferDataToWindow()
 {
     /// @todo one day it could interpret the sim command and fill out appropriate fields.
@@ -1008,7 +1009,8 @@ void DIALOG_SIM_COMMAND::OnFilterMouseMoved( wxMouseEvent& aEvent )
 
     if( m_inputSignalsFilter->IsSearchButtonVisible() && pos.x < buttonWidth )
         SetCursor( wxCURSOR_ARROW );
-    else if( m_inputSignalsFilter->IsCancelButtonVisible() && pos.x > ctrlRect.GetWidth() - buttonWidth )
+    else if( m_inputSignalsFilter->IsCancelButtonVisible()
+          && pos.x > ctrlRect.GetWidth() - buttonWidth )
         SetCursor( wxCURSOR_ARROW );
     else
         SetCursor( wxCURSOR_IBEAM );

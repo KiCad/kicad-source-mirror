@@ -56,6 +56,7 @@ bool API_HANDLER_SCH::validateDocumentInternal( const DocumentSpecifier& aDocume
 
     // TODO(JE) need serdes for SCH_SHEET_PATH <> SheetPath
     return true;
+
     //wxString currentPath = m_frame->GetCurrentSheet().PathAsString();
     //return 0 == aDocument.sheet_path().compare( currentPath.ToStdString() );
 }
@@ -67,6 +68,7 @@ HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_SCH::handleGetOpenDocuments
     if( aCtx.Request.type() != DocumentType::DOCTYPE_SCHEMATIC )
     {
         ApiResponseStatus e;
+
         // No message needed for AS_UNHANDLED; this is an internal flag for the API server
         e.set_status( ApiStatusCode::AS_UNHANDLED );
         return tl::unexpected( e );
@@ -108,7 +110,8 @@ HANDLER_RESULT<std::unique_ptr<EDA_ITEM>> API_HANDLER_SCH::createItemForType( KI
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( fmt::format( "Tried to create a symbol in {}, which is not a schematic",
+        e.set_error_message( fmt::format( "Tried to create a symbol in {}, which is not a "
+                                          "schematic",
                                           aContainer->GetFriendlyName().ToStdString() ) );
         return tl::unexpected( e );
     }

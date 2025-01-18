@@ -105,6 +105,7 @@ public:
     const wxString GetPageNetFmtName() { return m_pageNetFmtName; }
 
     NETLIST_TYPE_ID   m_IdNetType;
+
     // opt to reformat passive component values (e.g. 1M -> 1Meg):
     wxCheckBox*       m_CurSheetAsRoot;
     wxCheckBox*       m_SaveAllVoltages;
@@ -139,8 +140,8 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    /*
-     * Browse plugin files, and set m_CommandStringCtrl field
+    /**
+     * Browse plugin files, and set m_CommandStringCtrl field.
      */
     void OnBrowseGenerators( wxCommandEvent& event ) override;
 

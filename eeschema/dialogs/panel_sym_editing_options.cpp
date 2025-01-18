@@ -35,11 +35,16 @@ PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow,
                                                       UNITS_PROVIDER* aUnitsProvider,
                                                       wxWindow* aEventSource ) :
         PANEL_SYM_EDITING_OPTIONS_BASE( aWindow ),
-        m_lineWidth( aUnitsProvider, aEventSource, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
-        m_textSize( aUnitsProvider, aEventSource, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
-        m_pinLength( aUnitsProvider, aEventSource, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits ),
-        m_pinNameSize( aUnitsProvider, aEventSource ,m_pinNameSizeLabel, m_pinNameSizeCtrl, m_pinNameSizeUnits ),
-        m_pinNumberSize( aUnitsProvider, aEventSource, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits ),
+        m_lineWidth( aUnitsProvider, aEventSource, m_lineWidthLabel, m_lineWidthCtrl,
+                     m_lineWidthUnits ),
+        m_textSize( aUnitsProvider, aEventSource, m_textSizeLabel, m_textSizeCtrl,
+                    m_textSizeUnits ),
+        m_pinLength( aUnitsProvider, aEventSource, m_pinLengthLabel, m_pinLengthCtrl,
+                     m_pinLengthUnits ),
+        m_pinNameSize( aUnitsProvider, aEventSource ,m_pinNameSizeLabel, m_pinNameSizeCtrl,
+                       m_pinNameSizeUnits ),
+        m_pinNumberSize( aUnitsProvider, aEventSource, m_pinNumSizeLabel, m_pinNumSizeCtrl,
+                         m_pinNumSizeUnits ),
         m_pinPitch( aUnitsProvider, aEventSource, m_pinPitchLabel, m_pinPitchCtrl, m_pinPitchUnits )
 {
     m_widthHelpText->SetFont( KIUI::GetInfoFont( this ).Italic() );

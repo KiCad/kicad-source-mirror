@@ -54,13 +54,13 @@ static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
     std::vector<wxString> nicks = aTbl->GetLogicalLibs();
 
     // Search each library going through libraries alphabetically.
-    for( unsigned libNdx = 0;  libNdx<nicks.size();  ++libNdx )
+    for( unsigned libNdx = 0; libNdx < nicks.size(); ++libNdx )
     {
         wxArrayString fpnames;
 
         aTbl->FootprintEnumerate( fpnames, nicks[libNdx], true );
 
-        for( unsigned nameNdx = 0;  nameNdx<fpnames.size();   ++nameNdx )
+        for( unsigned nameNdx = 0; nameNdx < fpnames.size(); ++nameNdx )
         {
             if( fpname == fpnames[nameNdx] )
             {
@@ -103,7 +103,7 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
 
     if( m_netlist.AnyFootprintsLinked() )
     {
-        for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
+        for( unsigned i = 0; i < m_netlist.GetCount(); i++ )
         {
             COMPONENT* component = m_netlist.GetComponent( i );
 
@@ -129,7 +129,7 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
 
             try
             {
-                for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
+                for( unsigned i = 0; i < m_netlist.GetCount(); i++ )
                 {
                     COMPONENT* component = m_netlist.GetComponent( i );
 
@@ -263,7 +263,7 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
     int firstUnassigned = wxNOT_FOUND;
 
     // Populates the component list box:
-    for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
+    for( unsigned i = 0; i < m_netlist.GetCount(); i++ )
     {
         COMPONENT* component = m_netlist.GetComponent( i );
 

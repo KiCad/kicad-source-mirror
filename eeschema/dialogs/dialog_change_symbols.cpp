@@ -79,7 +79,8 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
 
         m_newId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
         m_specifiedReference->ChangeValue( m_symbol->GetRef( currentSheet ) );
-        m_specifiedValue->ChangeValue( UnescapeString( m_symbol->GetField( VALUE_FIELD )->GetText() ) );
+        m_specifiedValue->ChangeValue(
+                UnescapeString( m_symbol->GetField( VALUE_FIELD )->GetText() ) );
         m_specifiedId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
     }
     else
@@ -568,7 +569,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
     std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>::iterator it = symbols.begin();
 
     // Remove all symbols that don't have a valid library symbol link or enough units to
-    // satify the library symbol update.
+    // satisfy the library symbol update.
     while( it != symbols.end() )
     {
         SCH_SYMBOL* symbol = it->first;
@@ -619,8 +620,8 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 
         // When we replace the lib symbol below, we free the associated pins if the new symbol has
         // fewer than the original.  This will cause the connection graph to be out of date unless
-        // we replace references in the graph to the old symbol/pins with references to the ones stored
-        // in the undo stack.
+        // we replace references in the graph to the old symbol/pins with references to the ones
+        // stored in the undo stack.
         if( connectionGraph )
             connectionGraph->ExchangeItem( symbol, symbol_copy );
     }

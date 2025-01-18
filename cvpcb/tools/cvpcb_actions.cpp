@@ -79,7 +79,8 @@ TOOL_ACTION CVPCB_ACTIONS::saveAssociationsToFile( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'S' )
         .LegacyHotkeyName( "Save" )
         .FriendlyName( _( "Save to Schematic and File" ) )
-        .Tooltip( _( "Save footprint assignments in 'footprint' fields of schematic symbols and then save schematic files" ) )
+        .Tooltip( _( "Save footprint assignments in 'footprint' fields of schematic symbols and "
+                     "then save schematic files" ) )
         .Icon( BITMAPS::save ) );
 
 // Actions to navigate the display
@@ -144,7 +145,6 @@ TOOL_ACTION CVPCB_ACTIONS::deleteAll( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Delete All Footprint Assignments" ) )
         .Icon( BITMAPS::delete_association ) );
-
 
 // Actions to filter the footprint list
 TOOL_ACTION CVPCB_ACTIONS::FilterFPbyFPFilters( TOOL_ACTION_ARGS()

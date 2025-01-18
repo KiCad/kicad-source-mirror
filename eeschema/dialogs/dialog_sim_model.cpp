@@ -259,7 +259,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
                 idx = m_modelListBoxEntryToLibraryIdx.at( sel );
 
-            auto ibismodel = dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
+            auto ibismodel =
+                    dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
 
             if( ibismodel )
             {
@@ -269,7 +270,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
                 for( const std::pair<std::string, std::string>& strs : ibismodel->GetIbisPins() )
                 {
-                    if( strs.first == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::PIN_FIELD ) )
+                    if( strs.first
+                        == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::PIN_FIELD ) )
                     {
                         auto ibisLibrary = static_cast<const SIM_LIBRARY_IBIS*>( library() );
 
@@ -386,7 +388,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
         if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
             idx = m_modelListBoxEntryToLibraryIdx.at( sel );
 
-        auto* ibismodel = static_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels().at( idx ).get() );
+        auto* ibismodel =
+                static_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels().at( idx ).get() );
 
         if( ibismodel )
         {
@@ -510,7 +513,7 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets( SIM_MODEL* aModel )
                                           SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS } )
             {
                 SIM_MODEL::DEVICE_T deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
-                const std::string&  deviceTypeDesc = SIM_MODEL::DeviceInfo( deviceType ).description;
+                const std::string& deviceTypeDesc = SIM_MODEL::DeviceInfo( deviceType ).description;
 
                 if( deviceType == aModel->GetDeviceType()
                     || deviceTypeDesc == aModel->GetDeviceInfo().description )
@@ -562,7 +565,7 @@ void DIALOG_SIM_MODEL<T>::updateBuiltinModelWidgets( SIM_MODEL* aModel )
                 }
 
                 SIM_MODEL::DEVICE_T deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
-                const std::string&  deviceTypeDesc = SIM_MODEL::DeviceInfo( deviceType ).description;
+                const std::string& deviceTypeDesc = SIM_MODEL::DeviceInfo( deviceType ).description;
 
                 if( deviceType == aModel->GetDeviceType()
                     || deviceTypeDesc == aModel->GetDeviceInfo().description )
@@ -570,7 +573,8 @@ void DIALOG_SIM_MODEL<T>::updateBuiltinModelWidgets( SIM_MODEL* aModel )
                     m_deviceSubtypeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
 
                     if( type == aModel->GetType() )
-                        m_deviceSubtypeChoice->SetSelection( m_deviceSubtypeChoice->GetCount() - 1 );
+                        m_deviceSubtypeChoice->SetSelection( m_deviceSubtypeChoice->GetCount()
+                                                             - 1 );
                 }
             }
         }
@@ -1111,11 +1115,14 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
         wxString sel = m_modelListBox->GetStringSelection();
 
         if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
-            return m_libraryModelsMgr.GetModels().at( m_modelListBoxEntryToLibraryIdx.at( sel ) ).get();
+            return m_libraryModelsMgr.GetModels()
+                    .at( m_modelListBoxEntryToLibraryIdx.at( sel ) )
+                    .get();
     }
     else
     {
-        if( static_cast<int>( m_curModelType ) < static_cast<int>( m_builtinModelsMgr.GetModels().size() ) )
+        if( static_cast<int>( m_curModelType )
+            < static_cast<int>( m_builtinModelsMgr.GetModels().size() ) )
             return m_builtinModelsMgr.GetModels().at( static_cast<int>( m_curModelType ) );
     }
 
@@ -1352,7 +1359,8 @@ void DIALOG_SIM_MODEL<T>::onModelNameChoice( wxCommandEvent& aEvent )
 
     m_rbLibraryModel->SetValue( true );
 
-    if( SIM_MODEL_SPICE_FALLBACK* fallback = dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
+    if( SIM_MODEL_SPICE_FALLBACK* fallback =
+                dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
     {
         wxArrayString lines = wxSplit( fallback->GetSpiceCode(), '\n' );
         wxString code;
@@ -1431,8 +1439,10 @@ void DIALOG_SIM_MODEL<T>::onPinModelCombobox( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onPinModelComboboxTextEnter( wxCommandEvent& aEvent )
 {
-    m_pinModelCombobox->SetSelection( m_pinModelCombobox->FindString( m_pinModelCombobox->GetValue() ) );
+    m_pinModelCombobox->SetSelection(
+            m_pinModelCombobox->FindString( m_pinModelCombobox->GetValue() ) );
 }
+
 
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
@@ -1454,7 +1464,8 @@ void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 
     for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
     {
-        if( SIM_MODEL::DeviceInfo( deviceType ).description == m_deviceChoice->GetStringSelection() )
+        if( SIM_MODEL::DeviceInfo( deviceType ).description
+            == m_deviceChoice->GetStringSelection() )
         {
             m_curModelType = m_curModelTypeOfDeviceType.at( deviceType );
             break;
@@ -1485,13 +1496,15 @@ void DIALOG_SIM_MODEL<T>::onWaveformChoice( wxCommandEvent& aEvent )
             if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
                 idx = m_modelListBoxEntryToLibraryIdx.at( sel );
 
-            auto& baseModel = static_cast<SIM_MODEL_IBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
+            auto& baseModel =
+                    static_cast<SIM_MODEL_IBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
 
             m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_IBIS>( type, baseModel ) );
 
             try
             {
-                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields, m_sortedPartPins );
+                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields,
+                                                                          m_sortedPartPins );
             }
             catch( IO_ERROR& err )
             {
@@ -1708,7 +1721,8 @@ void DIALOG_SIM_MODEL<T>::adjustParamGridColumns( int aWidth, bool aForce )
             if( ii == PARAM_COLUMN::DESCRIPTION )
                 colWidths.push_back( grid->GetState()->GetColumnWidth( ii ) + margin + indent );
             else if( ii == PARAM_COLUMN::VALUE )
-                colWidths.push_back( std::max( 72, grid->GetState()->GetColumnWidth( ii ) ) + margin );
+                colWidths.push_back( std::max( 72,
+                                               grid->GetState()->GetColumnWidth( ii ) ) + margin );
             else
                 colWidths.push_back( 60 + margin );
 
@@ -1731,7 +1745,6 @@ void DIALOG_SIM_MODEL<T>::onSizeParamGrid( wxSizeEvent& event )
 
     event.Skip();
 }
-
 
 
 template class DIALOG_SIM_MODEL<SCH_SYMBOL>;

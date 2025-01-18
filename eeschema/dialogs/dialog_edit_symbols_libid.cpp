@@ -61,7 +61,9 @@ public:
     int GetHeight( wxDC& aDC, wxGrid* aGrid, int aRow, int aCol );
 
     wxGridCellRenderer *Clone() const override
-    { return new GRIDCELL_AUTOWRAP_STRINGRENDERER; }
+    {
+        return new GRIDCELL_AUTOWRAP_STRINGRENDERER;
+    }
 
 private:
     // HELPER ROUTINES UNCHANGED FROM wxWidgets IMPLEMENTATION

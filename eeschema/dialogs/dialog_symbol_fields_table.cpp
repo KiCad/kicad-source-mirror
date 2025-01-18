@@ -113,7 +113,8 @@ protected:
             // pick a footprint using the footprint picker.
             wxString fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD );
 
-            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
+            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true,
+                                                             m_dlg ) )
             {
                 if( frame->ShowModal( &fpid, m_dlg ) )
                     m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD, fpid );
@@ -382,7 +383,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     m_grid->Connect( wxEVT_GRID_COL_MOVE,
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
-    m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
+    m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged,
+                             this );
     m_fieldsCtrl->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,
                         &DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange, this );
 
@@ -476,7 +478,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
     // sync m_grid's column visibilities to Show checkboxes in m_fieldsCtrl
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
     {
-        int col = m_dataModel->GetFieldNameCol( m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN ) );
+        int col = m_dataModel->GetFieldNameCol( m_fieldsCtrl->GetTextValue( i,
+                                                                            FIELD_NAME_COLUMN ) );
 
         if( col == -1 )
             continue;
@@ -617,7 +620,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 
     if( m_job )
     {
-        // and exit, dont even dream of saving changes from the data model
+        // and exit, don't even dream of saving changes from the data model
         return true;
     }
 
@@ -797,8 +800,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
     m_fieldsCtrl->DeleteItem( row );
     m_dataModel->RemoveColumn( col );
 
-    // Make selection and update the state of "Remove field..." button via OnFieldsCtrlSelectionChanged()
-    // Safe to decrement row index because we always have mandatory fields
+    // Make selection and update the state of "Remove field..." button via
+    // OnFieldsCtrlSelectionChanged().
+    // Safe to decrement row index because we always have mandatory fields.
     m_fieldsCtrl->SelectRow( --row );
 
     if( row < MANDATORY_FIELDS )
@@ -901,6 +905,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFieldsCtrlSelectionChanged( wxDataViewEvent& 
         m_renameFieldButton->Enable( false );
     }
 }
+
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 {
@@ -1085,6 +1090,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange( wxDataViewEvent& aEvent )
     m_grid->ForceRefresh();
 }
 
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableValueChanged( wxGridEvent& aEvent )
 {
     m_grid->ForceRefresh();
@@ -1109,10 +1115,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
     m_grid->ForceRefresh();
 }
 
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnScopeChanged( wxCommandEvent& aEvent )
 {
     UpdateScope();
 }
+
 
 void DIALOG_SYMBOL_FIELDS_TABLE::UpdateScope()
 {
@@ -1128,6 +1136,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::UpdateScope()
     m_dataModel->RebuildRows();
 }
 
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 {
     if( m_dataModel->ColIsReference( event.GetCol() ) )
@@ -1142,6 +1151,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
         event.Skip();
     }
 }
+
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
 {
@@ -1401,7 +1411,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
         return;
     }
 
-    out.Close(); // close the file before we tell the user it's done with the info modal :workflow meme:
+    // close the file before we tell the user it's done with the info modal :workflow meme:
+    out.Close();
     msg.Printf( _( "Wrote BOM output to '%s'" ), outputFile.GetFullPath() );
     DisplayInfoMessage( this, msg );
 }
@@ -1675,10 +1686,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
                                 // We should compare preset.name and current.name.
                                 // unfortunately current.name is empty because
                                 // m_dataModel->GetBomSettings() does not store the .name member
-                                // So use sortField member as a (not very efficient) auxiliary filter.
+                                // So use sortField member as a (not very efficient) auxiliary
+                                // filter.
                                 // sortField can be translated in m_bomPresets list,
                                 // so current.sortField needs to be translated
-                                // Probably this not efficient and error prone test should be removed (JPC).
+                                // Probably this not efficient and error prone test should be
+                                // removed (JPC).
                                 if( preset.sortField != wxGetTranslation( current.sortField ) )
                                     return false;
 
@@ -1947,7 +1960,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         if( cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
             m_grid->SetColSize( col, cfg->m_FieldEditorPanel.field_widths.at( fieldNameStr ) );
 
-        // Set shown colums
+        // Set shown columns
         bool show = m_dataModel->GetShowColumn( col );
         m_fieldsCtrl->SetToggleValue( show, i, SHOW_FIELD_COLUMN );
 
@@ -2335,7 +2348,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
         modified = true;
         m_schSettings.m_BomSettings = m_dataModel->GetBomSettings();
     }
-
 
     // Save our BOM Format presets
     std::vector<BOM_FMT_PRESET> fmts;

@@ -172,7 +172,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     {
         SetItemCount( m_footprintList.GetCount() );
         SetSelection( selection, true );
-        RefreshItems( 0L, m_footprintList.GetCount()-1 );
+        RefreshItems( 0L, m_footprintList.GetCount() - 1 );
         UpdateWidth();
     }
 }

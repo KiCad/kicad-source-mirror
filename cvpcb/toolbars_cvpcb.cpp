@@ -70,9 +70,11 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     wxString msg_bold = _( "Footprint Filters:" );
     wxStaticText* text = new wxStaticText( m_mainToolBar, wxID_ANY, msg_bold );
 	text->SetFont( m_mainToolBar->GetFont().Bold() );
+
 #ifdef __WXGTK3__
     text->SetLabelMarkup( "<b>" + msg_bold + "</b>" );
 #endif
+
     m_mainToolBar->AddControl( text );
 
     m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyFPFilters, ACTION_TOOLBAR::TOGGLE );

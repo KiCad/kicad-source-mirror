@@ -41,7 +41,8 @@
 #include <sch_commit.h>
 
 
-DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_LABEL_BASE* aLabel ) :
+DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent,
+                                                  SCH_LABEL_BASE* aLabel ) :
         DIALOG_LABEL_PROPERTIES_BASE( aParent ),
         m_Parent( aParent ),
         m_currentLabel( aLabel ),
@@ -182,7 +183,8 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
         m_formattingGB->Detach( m_fontCtrl );
         m_formattingGB->Detach( m_iconBar );
-        m_formattingGB->Add( m_iconBar, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT, 5 );
+        m_formattingGB->Add( m_iconBar, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ),
+                             wxEXPAND | wxRIGHT, 5 );
     }
     else
     {
@@ -285,7 +287,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                     // Ensure the symbol has the Power (i.e. equivalent to a global label
                     // before adding its value in list
                     if( power->IsSymbolLikePowerGlobalLabel() )
-                        existingLabels.insert( UnescapeString( power->GetField( VALUE_FIELD )->GetText() ) );
+                        existingLabels.insert(
+                                UnescapeString( power->GetField( VALUE_FIELD )->GetText() ) );
                 }
             }
 
@@ -363,9 +366,6 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
 }
 
 
-/*!
- * wxEVT_COMMAND_ENTER event handler for single-line control
- */
 void DIALOG_LABEL_PROPERTIES::OnEnterKey( wxCommandEvent& aEvent )
 {
     wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
@@ -527,15 +527,24 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
     if( m_shapeSizer->AreAnyItemsShown() )
     {
-        if( m_bidirectional->GetValue() )  m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
-        else if( m_input->GetValue() )     m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
-        else if( m_output->GetValue() )    m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
-        else if( m_triState->GetValue() )  m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
-        else if( m_passive->GetValue() )   m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-        else if( m_dot->GetValue() )       m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DOT );
-        else if( m_circle->GetValue() )    m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
-        else if( m_diamond->GetValue() )   m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );
-        else if( m_rectangle->GetValue() ) m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );
+        if( m_bidirectional->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+        else if( m_input->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+        else if( m_output->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
+        else if( m_triState->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
+        else if( m_passive->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+        else if( m_dot->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DOT );
+        else if( m_circle->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
+        else if( m_diamond->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );
+        else if( m_rectangle->GetValue() )
+            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );
     }
 
     if( m_fontCtrl->HaveFontSelection() )
@@ -547,7 +556,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
         static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel )->SetPinLength( m_textSize.GetIntValue() );
     else if( m_currentLabel->GetTextWidth() != m_textSize.GetIntValue() )
-        m_currentLabel->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
+        m_currentLabel->SetTextSize( VECTOR2I( m_textSize.GetIntValue(),
+                                               m_textSize.GetIntValue() ) );
 
     // Must come after SetTextSize()
     m_currentLabel->SetBold( m_bold->IsChecked() );

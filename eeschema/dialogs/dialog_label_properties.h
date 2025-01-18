@@ -41,6 +41,9 @@ public:
     ~DIALOG_LABEL_PROPERTIES();
 
 private:
+    /**
+     * wxEVT_COMMAND_ENTER event handler for single-line control.
+     */
     void OnEnterKey( wxCommandEvent& aEvent ) override;
     void OnValueCharHook( wxKeyEvent& aEvent ) override;
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;

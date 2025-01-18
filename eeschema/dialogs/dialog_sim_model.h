@@ -135,7 +135,7 @@ private:
 
     std::map<wxString, int> m_modelListBoxEntryToLibraryIdx;
 
-    std::vector<SCH_PIN*>                          m_sortedPartPins; //< Pins of the current part.
+    std::vector<SCH_PIN*>                          m_sortedPartPins; ///< Pins of the current part.
     std::map<SIM_MODEL::DEVICE_T, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE                                m_curModelType;
 

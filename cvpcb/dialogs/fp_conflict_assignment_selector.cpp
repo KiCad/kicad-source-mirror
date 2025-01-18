@@ -44,18 +44,20 @@ DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR( 
     m_lineCount = 0;
 }
 
+
 void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::Add( const wxString& aRef, const wxString& aFpSchName,
-          const wxString& aFpCmpName )
+                                                  const wxString& aFpCmpName )
 {
     long idx = m_listFp->InsertItem(m_lineCount, aRef );
 
-    m_listFp->SetItem(idx, COL_FPSCH, aFpSchName );
-    m_listFp->SetItem(idx, COL_SELSCH, wxT("")  );
-    m_listFp->SetItem(idx, COL_SELCMP, wxT("X") );
-    m_listFp->SetItem(idx, COL_FPCMP, aFpCmpName );
+    m_listFp->SetItem( idx, COL_FPSCH, aFpSchName );
+    m_listFp->SetItem( idx, COL_SELSCH, wxT( "" ) );
+    m_listFp->SetItem( idx, COL_SELCMP, wxT( "X" ) );
+    m_listFp->SetItem( idx, COL_FPCMP, aFpCmpName );
 
     m_lineCount ++;
 }
+
 
 int DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::GetSelection( const wxString& aReference )
 {
@@ -64,7 +66,7 @@ int DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::GetSelection( const wxString& aRefer
     {
         if( m_listFp->GetItemText( ii, COL_REF ) == aReference )
         {
-            if( m_listFp->GetItemText( ii, COL_SELSCH ) != wxT("X") )
+            if( m_listFp->GetItemText( ii, COL_SELSCH ) != wxT( "X" ) )
                 return 1;
 
             return 0;
@@ -73,6 +75,7 @@ int DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::GetSelection( const wxString& aRefer
 
     return -1;
 }
+
 
 void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::OnColumnClick( wxListEvent& event )
 {
@@ -101,10 +104,11 @@ void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::OnColumnClick( wxListEvent& event )
 
     for( int i = 0; i < m_listFp->GetItemCount(); i++ )
     {
-        m_listFp->SetItem( i, colclr, wxT("") );
-        m_listFp->SetItem( i, colset, wxT("X") );
+        m_listFp->SetItem( i, colclr, wxT( "" ) );
+        m_listFp->SetItem( i, colset, wxT( "X" ) );
     }
 }
+
 
 void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::OnItemClicked( wxMouseEvent& event )
 {
@@ -140,8 +144,8 @@ void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::OnItemClicked( wxMouseEvent& event 
 
     // Move selection to schematic or cmp file choice
     // according to the column position (COL_SELCMP or COL_SELSCH)
-    m_listFp->SetItem( idx, colclr, wxT("") );
-    m_listFp->SetItem( idx, colset, wxT("X") );
+    m_listFp->SetItem( idx, colclr, wxT( "" ) );
+    m_listFp->SetItem( idx, colset, wxT( "X" ) );
 
     event.Skip();
 }
@@ -180,7 +184,7 @@ void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::recalculateColumns()
     maxRefLength += margin;
     totalLength = maxRefLength + sel_length + sel_length;
 
-    int cwidth = (GetClientSize().x - totalLength) / 2;
+    int cwidth = ( GetClientSize().x - totalLength ) / 2;
 
     m_listFp->SetColumnWidth( COL_REF, maxRefLength );
     m_listFp->SetColumnWidth( COL_FPSCH, cwidth - 2 );

@@ -313,7 +313,8 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
             // Find the same library in the symbol library table using the full path and file name.
             wxString libFileName = lib.GetFullFileName();
 
-            const LIB_TABLE_ROW* row = PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRowByURI( libFileName );
+            const LIB_TABLE_ROW* row =
+                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRowByURI( libFileName );
 
             if( row )
             {
@@ -416,7 +417,8 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
                                                 destFileName.GetFullPath() ),
                               RPT_SEVERITY_INFO );
 
-            if( !destFileName.DirExists() && !destFileName.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+            if( !destFileName.DirExists()
+             && !destFileName.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
             {
                 errorMsg += wxString::Format( _( "Failed to create backup folder '%s'.\n" ),
                                               destFileName.GetPath() );

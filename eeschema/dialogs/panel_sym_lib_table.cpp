@@ -63,10 +63,12 @@
  */
 struct SUPPORTED_FILE_TYPE
 {
-    wxString m_Description;            ///< Description shown in the file picker dialog
-    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true
-    wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files stored inside
-    bool     m_IsFile;                 ///< Whether the library is a folder or a file
+    wxString m_Description;            ///< Description shown in the file picker dialog.
+    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true.
+
+    /// In case of folders it stands for extensions of files stored inside.
+    wxString m_FolderSearchExtension;
+    bool     m_IsFile;                 ///< Whether the library is a folder or a file.
     SCH_IO_MGR::SCH_FILE_T m_Plugin;
 };
 
@@ -353,13 +355,15 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
 
     setupGrid( m_global_grid );
-    m_global_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
+    m_global_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK,
+                         &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
 
     if( m_projectTable )
     {
         m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_projectTable ), true );
         setupGrid( m_project_grid );
-        m_project_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
+        m_project_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK,
+                              &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
     }
     else
     {
@@ -397,12 +401,14 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
     m_global_grid->PopEventHandler( true );
-    m_global_grid->Unbind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
+    m_global_grid->Unbind( wxEVT_GRID_CELL_LEFT_CLICK,
+                           &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
 
     if( m_project_grid )
     {
         m_project_grid->PopEventHandler( true );
-        m_project_grid->Unbind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
+        m_project_grid->Unbind( wxEVT_GRID_CELL_LEFT_CLICK,
+                                &PANEL_SYM_LIB_TABLE::onGridCellLeftClickHandler, this );
     }
 
     m_path_subs_grid->PopEventHandler( true );
@@ -412,7 +418,7 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
 bool PANEL_SYM_LIB_TABLE::allowAutomaticPluginTypeSelection( wxString& aLibraryPath )
 {
     // When the plugin type depends only of the file extension, return true.
-    // if it needs to read the actual file (taht can be not available), return false
+    // if it needs to read the actual file (that can be not available), return false
 
     wxFileName fn( aLibraryPath );
     wxString   ext = fn.GetExt().Lower();
@@ -458,8 +464,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                                             wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
                 badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
                                                   "invalid to be removed from the table." ) );
-                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
-                                           wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
+                badCellDlg.SetYesNoLabels(
+                        wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
+                        wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
 
                 wait.reset();
 
@@ -501,7 +508,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 model->SetValue( r, COL_NICKNAME, nick );
 
                 if( allowAutomaticPluginTypeSelection( uri ) )
+                {
                     model->SetValue( r, COL_URI, uri );
+                }
                 else
                 {
                     wxString ltype  = model->GetValue( r, COL_TYPE );
@@ -520,11 +529,11 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
         if( !model )
             continue;
 
-        for( int r1 = 0; r1 < model->GetNumberRows() - 1;  ++r1 )
+        for( int r1 = 0; r1 < model->GetNumberRows() - 1; ++r1 )
         {
             wxString    nick1 = model->GetValue( r1, COL_NICKNAME );
 
-            for( int r2=r1+1; r2 < model->GetNumberRows();  ++r2 )
+            for( int r2 = r1 + 1; r2 < model->GetNumberRows(); ++r2 )
             {
                 wxString    nick2 = model->GetValue( r2, COL_NICKNAME );
 
@@ -987,9 +996,11 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         }
 
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
-        std::unique_ptr<std::map<std::string, UTF8>> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
+        std::unique_ptr<std::map<std::string, UTF8>> props(
+                LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
-        if( SCH_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
+        if( SCH_IO_MGR::ConvertLibrary( props.get(),
+                                        legacyLib.GetFullPath(), newLib.GetFullPath() ) )
         {
             relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
                                      m_project );

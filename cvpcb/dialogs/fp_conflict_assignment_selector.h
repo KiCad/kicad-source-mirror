@@ -45,10 +45,9 @@ public:
 
     /**
      * @param aReference is the component schematic reference.
-     * @return the selection option:
-     *      0 for fpid text from the netlist
-     *      1 for fpid text from the cmp file
-     *      -1 on error
+     * @retval  0 for fpid text from the netlist.
+     * @retval  1 for fpid text from the cmp file.
+     * @retval -1 on error.
      */
     int GetSelection( const wxString& aReference );
 

@@ -74,6 +74,7 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataToWindow()
     // Typical assignment operator does not work here because of the ordered_map
     auto source = m_designBlock->GetFields();
     m_fields.clear();
+
     for( const auto& field : source )
     {
         m_fields[field.first] = field.second;
