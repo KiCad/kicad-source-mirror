@@ -57,6 +57,10 @@ WX_PT_ENTRY_DIALOG::WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString&
 {
     m_labelX->SetLabel( aLabelX );
     m_labelY->SetLabel( aLabelY );
+
+    m_unit_binder_x.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_unit_binder_y.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
     m_unit_binder_x.SetValue( aDefaultValue.x );
     m_unit_binder_y.SetValue( aDefaultValue.y );
 
