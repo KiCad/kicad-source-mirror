@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-18 16:02+0000\n"
+"PO-Revision-Date: 2025-01-18 19:01+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -38905,16 +38905,14 @@ msgid "Zone Fill Strategy"
 msgstr "Vyöhykkeen täyttöstrategia"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "Salli kaistaleet vyöhykkeen ääriviivan ulkopuolella"
+msgstr "Salli kaistaleet/viisteet vyöhykkeen ääriviivan ulkopuolella"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
 msgstr "Minimi lämmönpoistoanturoiden määrä:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:455
-#, fuzzy
 msgid "Length Tuning"
 msgstr "Pituuden säätö"
 
@@ -39641,16 +39639,16 @@ msgstr "Juotosmaskiasetukset"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Positive clearance means a solder mask opening bigger than the pad (typical "
 "for solder mask clearance)."
 msgstr ""
-"Yleinen välys anturan ja juotospastan välillä.\n"
-"Tämä arvo voidaan korvata jalanjäljen tai anturan paikallisilla arvoilla.\n"
-"Lopullinen välysarvo on tämän arvon ja välysarvon suhteen summa."
+"Yleinen etäisyys anturoiden ja juotosmaskin välillä.\n"
+"Tämä arvo voidaan korvata paikallisilla jalanjäljen tai anturan arvoilla.\n"
+"Positiivinen välys tarkoittaa juotosmaskin aukkoa, joka on suurempi kuin "
+"antura (tyypillinen juotosmaskin välykselle)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
 msgid "Solder mask minimum web width:"
