@@ -290,7 +290,7 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
                     if( !aError.IsEmpty() )
                         wxLogTrace( traceApi, wxString::Format( "Manager: action stderr: %s", aError ) );
                 },
-                &env );
+                &env, true );
 
         break;
     }

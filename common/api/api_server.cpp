@@ -87,11 +87,11 @@ void KICAD_API_SERVER::Start()
         return;
     }
 
-    if( socket.FileExists() )
+    if( socket.Exists() )
     {
-        socket.SetFullName( wxString::Format( wxS( "api-%ul.sock" ), ::wxGetProcessId() ) );
+        socket.SetFullName( wxString::Format( wxS( "api-%lu.sock" ), ::wxGetProcessId() ) );
 
-        if( socket.FileExists() )
+        if( socket.Exists() )
         {
             wxLogTrace( traceApi, wxString::Format( "Server: PID socket path %s already exists!",
                                                     socket.GetFullPath() ) );
@@ -210,6 +210,8 @@ void KICAD_API_SERVER::handleApiEvent( wxCommandEvent& aEvent )
 
         if( ADVANCED_CFG::GetCfg().m_EnableAPILogging )
             log( "Response (ERROR): " + error.Utf8DebugString() );
+
+        return;
     }
 
     API_RESULT result;
