@@ -63,6 +63,9 @@
     LSET removeLayer( PCB_LAYER_ID aLayer) { return self->reset(aLayer); }
     LSET addLayerSet( LSET aLayerSet)    { return *self |= aLayerSet; }
     LSET removeLayerSet( LSET aLayerSet) { return *self &= ~aLayerSet; }
+    std::string FmtHex() { return self->FmtHex(); }
+    std::string FmtBin() { return self->FmtBin(); }
+    int ParseHex( const std::string& aString ) { return self->ParseHex( aString ); }
 
     %pythoncode
     %{
