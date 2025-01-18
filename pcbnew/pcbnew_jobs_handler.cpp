@@ -1389,9 +1389,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         wxString   baseName = fn.GetName();
 
         auto exportPlaceFile =
-                [&]( bool frontSide, bool backSide, const wxString& outPath ) -> bool
+                [&]( bool frontSide, bool backSide, const wxString& curr_outPath ) -> bool
                 {
-                    FILE* file = wxFopen( outPath, wxS( "wt" ) );
+                    FILE* file = wxFopen( curr_outPath, wxS( "wt" ) );
                     wxCHECK( file, false );
 
                     PLACE_FILE_EXPORTER exporter( brd,
@@ -1484,6 +1484,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     {
         PLACEFILE_GERBER_WRITER exporter( brd );
         PCB_LAYER_ID            gbrLayer = F_Cu;
+        wxString outPath_base = outPath;
 
         if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
                 || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
@@ -1509,6 +1510,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
                 || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
         {
             gbrLayer = B_Cu;
+
+            outPath = outPath_base;
 
             if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
                 outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
