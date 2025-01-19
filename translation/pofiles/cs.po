@@ -21,10 +21,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-05 16:29+0000\n"
+"PO-Revision-Date: 2025-01-19 12:11+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -957,9 +957,8 @@ msgid "Configure Paths"
 msgstr "Konfigurace cest"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
-msgstr "Vložit model"
+msgstr "Vložený model"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -2018,9 +2017,10 @@ msgstr ""
 "bloků na řádku %d."
 
 #: common/design_block_lib_table.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "soubory fp-lib-table neobsahují žádnou knihovnu s názvem '%s'."
+msgstr ""
+"soubory design-block-lib-table neobsahují žádnou knihovnu s názvem '%s'."
 
 #: common/design_block_lib_table.cpp:577 common/fp_lib_table.cpp:566
 #: eeschema/symbol_lib_table.cpp:605
@@ -2464,23 +2464,21 @@ msgid "Path"
 msgstr "Cesta"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "Přidat signály na graf"
+msgstr "návrhový blok"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Chyba při vytváření tabulky knihoven symbolů '%s'.\n"
+"Chyba při vytváření tabulky knihovny návrhového bloku '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "Prosím vyberte soubor tabulky knihoven symbolů."
+msgstr "Prosím vyberte soubor tabulky knihovny bloků návrhu."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2491,12 +2489,12 @@ msgid "File '%s' not found."
 msgstr "Soubor '%s' nenalezen."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Chyba načítání tabulky knihoven symbolů '%s'.\n"
+"Chyba čtení tabulky knihovny bloků návrhu '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
@@ -2506,9 +2504,10 @@ msgid "Cannot create global library table '%s'."
 msgstr "Nelze vytvořit globální tabulku knihoven '%s'."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr "Chyba zkopírování globální tabulky knihoven symbolů '%s' do '%s'."
+msgstr ""
+"Chyba při kopírování tabulky globální knihovny bloků návrhu '%s' do '%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -3190,9 +3189,8 @@ msgid "Reference Designators"
 msgstr "Reference schématu"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear net assignments"
-msgstr "Vymazat přiřazení spojů"
+msgstr "Vyčistit přiřazení sítě"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
@@ -3449,9 +3447,8 @@ msgid "Format:"
 msgstr "Formát:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
-#, fuzzy
 msgid "Include:"
-msgstr "Zahrnout &prokovy"
+msgstr "Zahrnout:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -4188,9 +4185,8 @@ msgid "Editing"
 msgstr "Úpravuji"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "Umístit kurzor myši na počátek přesunutého objektu"
+msgstr "Umístit kurzor myši na kotvu přesunutého objektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -4529,9 +4525,8 @@ msgid "Add Anyway"
 msgstr "Přidat každopádně"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1176
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Uložit všechny knihovny"
+msgstr "Knihovny bloků návrhu"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1197
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1234
@@ -4769,18 +4764,16 @@ msgid "Remove embedded file"
 msgstr "Odstranit vložený soubor"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "Vložit fonty"
+msgstr "Vložit písma"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
 msgstr "Uložit kopii všech použitých fontů"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "Export..."
+msgstr "&Export..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
@@ -5159,9 +5152,8 @@ msgid "Check for package updates on startup"
 msgstr "Kontrolovat aktualizace balíčků při spuštění"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
-msgstr "Správa balíčků knihoven"
+msgstr "Manipulace s balíčky knihoven"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
@@ -5393,9 +5385,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Sítě odpovídající '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Třídy spojů:"
+msgstr "Třídy spojů"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:641
@@ -5487,9 +5478,8 @@ msgid "Import colors from schematic"
 msgstr "Importovat barvy ze schématu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Přiřazení třídy spojů:"
+msgstr "Přiřazení třídy spojů"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -5555,7 +5545,7 @@ msgstr "Nelze použít OpenGL"
 
 #: common/draw_panel_gal.cpp:543
 msgid "Error switching GAL backend"
-msgstr ""
+msgstr "Chyba při přepínání podpůrné vrstvy GAL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3403
@@ -5872,14 +5862,12 @@ msgid "Origins & Axes"
 msgstr "Počátky & osy"
 
 #: common/eda_base_frame.cpp:1188
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Nové pouzdro"
+msgstr "Výchozí nastavení pouzder"
 
 #: common/eda_base_frame.cpp:1190
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Vyčištění grafiky"
+msgstr "Výchozí nastavení grafiky"
 
 #: common/eda_base_frame.cpp:1195 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
@@ -7393,27 +7381,24 @@ msgid "Loading file canceled by user."
 msgstr "Otevírání souboru zrušeno uživatelem."
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "Nastavení"
+msgstr "Nastavení úlohy"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 msgid "3D model export"
 msgstr "Export 3D modelu"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Exportovat modul:"
+msgstr "Nastavení exportu úlohy 3D modelu"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
 msgstr "DPS: Export 3D modelu"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "DPS: Exportovat data vrtání"
+msgstr "Exportovat data vrtání"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
 #, fuzzy
@@ -8368,9 +8353,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip archív '%s' vytvořen (%s nekomprimováno, %s komprimováno)."
 
 #: common/project/project_archiver.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "Chyba: %s"
+msgstr "Chyba: '%s'."
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -13882,7 +13867,7 @@ msgstr "Rozlišovat velikost písmen"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "Pouze celá &slova"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
@@ -14803,6 +14788,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Nepodařilo se zpracovat:\n"
+"\n"
+"%s\n"
+"Použití obecného modelu SPICE."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -16358,7 +16347,7 @@ msgstr "Shift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
-msgstr ""
+msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
 #, fuzzy
@@ -16367,7 +16356,7 @@ msgstr "Počet horizontálně:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "Libovolný:"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -19678,7 +19667,7 @@ msgstr "Propojení knihovny"
 #: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:351
 #, c-format
 msgid "%d Column Table"
-msgstr ""
+msgstr "%d sloupec tabulky"
 
 #: eeschema/sch_table.cpp:566 pcbnew/pcb_table.cpp:387
 #, c-format
@@ -23638,7 +23627,7 @@ msgstr "Nedefinován žádný datasheet."
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
 #: pcbnew/tools/pcb_control.cpp:1661
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: eeschema/tools/ee_point_editor.cpp:1129
 #: pcbnew/tools/pcb_point_editor.cpp:2370
@@ -34060,11 +34049,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:276
 msgid "Non-unity scaled models:"
@@ -34159,7 +34148,7 @@ msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
-msgstr ""
+msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 #, fuzzy
@@ -34840,8 +34829,8 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Tato poměr v procentech lokální izolační mezery mezi ploškami a pastou pro "
-"toto pouzdro.\n"
+"Jedná se o poměr lokální izolační mezery v procentech použitý jako procento "
+"šířky a výšky plošky pro toto pouzdro.\n"
 "Hodnota 10 znamená, že hodnota mezera je 10% velikosti plošky\n"
 "Tuto hodnotu lze nahradit lokální hodnotou plošky.\n"
 "Konečná hodnota mezery je součtem této hodnoty a velikosti mezery\n"
@@ -37724,7 +37713,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
 #, fuzzy
