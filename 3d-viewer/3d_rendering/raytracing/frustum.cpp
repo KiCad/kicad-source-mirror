@@ -42,10 +42,15 @@ void FRUSTUM::GenerateFrustum( const RAY& topLeft, const RAY& topRight, const RA
     m_point[2] = bottomLeft.m_Origin;
     m_point[3] = topLeft.m_Origin;
 
-    m_normals[0] = glm::cross( topRight.m_Dir,    topLeft.m_Dir );              // TOP
-    m_normals[1] = glm::cross( bottomRight.m_Dir, topRight.m_Dir );             // RIGHT
-    m_normals[2] = glm::cross( bottomLeft.m_Dir,  bottomRight.m_Dir );          // BOTTOM
-    m_normals[3] = glm::cross( topLeft.m_Dir,     bottomLeft.m_Dir );           // LEFT
+    SFVEC3F tl_tr = topRight.m_Origin - topLeft.m_Origin;
+    SFVEC3F tr_br = bottomRight.m_Origin - topRight.m_Origin;
+    SFVEC3F br_bl = bottomLeft.m_Origin - bottomRight.m_Origin;
+    SFVEC3F bl_tl = topLeft.m_Origin - bottomLeft.m_Origin;
+
+    m_normals[0] = glm::cross( tl_tr, topLeft.m_Dir );     // TOP
+    m_normals[1] = glm::cross( tr_br, topRight.m_Dir );    // RIGHT
+    m_normals[2] = glm::cross( br_bl, bottomRight.m_Dir ); // BOTTOM
+    m_normals[3] = glm::cross( bl_tl, bottomLeft.m_Dir );  // LEFT
 }
 
 
