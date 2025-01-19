@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-19 06:41+0000\n"
+"PO-Revision-Date: 2025-01-19 12:11+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -660,17 +660,14 @@ msgid "User.Eco1"
 msgstr "Felhasználó.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Show user ECO1 layer"
 msgstr "ECO1 réteg megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "User.Eco2"
-msgstr "Felhasználói Eco2 réteg"
+msgstr "Felhasználó.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user ECO2 layer"
 msgstr "ECO2 réteg megjelenítése"
 
@@ -1067,7 +1064,6 @@ msgid "8x"
 msgstr "8x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
-#, fuzzy
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
 "A beállítás alkalmazásához a 3D-nézegetőt be kell zárni, majd újra meg kell "
@@ -1925,11 +1921,11 @@ msgstr "Megerősítés"
 
 #: common/confirm.cpp:273 common/dialog_shim.cpp:769
 msgid "&Yes"
-msgstr "Igen"
+msgstr "&Igen"
 
 #: common/confirm.cpp:273 common/dialog_shim.cpp:770
 msgid "&No"
-msgstr "Nem"
+msgstr "&Nem"
 
 #: common/design_block_info_impl.cpp:116
 #, fuzzy
@@ -1960,36 +1956,37 @@ msgstr "KiCad projekt fájl"
 
 #: common/design_block_io.cpp:172
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3034
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "nem lehet felülírni a(z) \"%s\" könyvtár elérési útvonalat"
+msgstr "Nem lehet felülírni a(z) \"%s\" könyvtár elérési útvonalat."
 
 #: common/design_block_io.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"A(z) \"%s\" mappa nem hozható létre.\n"
+"A(z) \"%s\" könyvtár nem hozható létre.\n"
 "\n"
 "Kérjük, ellenőrizze, van-e írási jogosultsága, majd próbálja meg újra."
 
 #: common/design_block_io.cpp:201 pcbnew/pcb_io/geda/pcb_io_geda.cpp:977
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3059
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "A(z) \"%s\" könyvtár törléséhez írási jogosultságokra van szükség."
 
 #: common/design_block_io.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "a(z) \"%s\" könyvtár mappa nem várt almappákat tartalmaz"
+msgstr "A(z) \"%s\" könyvtár mappa nem várt fájlokat tartalmaz."
 
 #: common/design_block_io.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "váratlan fájl \"%s\" található a(z) \"%s\" mappában"
+msgstr ""
+"Váratlan mappa \"%s\" található a(z) \"%s\" könyvtár elérési útvonalában."
 
 #: common/design_block_io.cpp:245
 #, fuzzy, c-format
@@ -2006,9 +2003,9 @@ msgid "Design block does not have a valid library ID."
 msgstr ""
 
 #: common/design_block_io.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "A(z) \"%s\" kapcsolási rajz fájl már létezik."
+msgstr "A(z) \"%s\" kapcsolási rajz fájl nem létezik."
 
 #: common/design_block_io.cpp:372
 #, fuzzy, c-format
@@ -2089,27 +2086,22 @@ msgstr ""
 "nyomtatott áramköri lapokat tervezhet."
 
 #: common/dialog_about/AboutDialog_main.cpp:124
-#, fuzzy
 msgid "KiCad on the web"
 msgstr "KiCAD az interneten"
 
 #: common/dialog_about/AboutDialog_main.cpp:130
-#, fuzzy
 msgid "The official KiCad website - "
-msgstr "Hivatalos KiCAD weboldal - "
+msgstr "A KiCAD hivatalos weboldala - "
 
 #: common/dialog_about/AboutDialog_main.cpp:134
-#, fuzzy
 msgid "Developer website - "
 msgstr "Fejlesztői weboldal - "
 
 #: common/dialog_about/AboutDialog_main.cpp:139
-#, fuzzy
 msgid "Official KiCad library repositories - "
-msgstr "Hivatalos KiCad könyvtár tárolók  - "
+msgstr "Hivatalos KiCad könyvtár tárolók - "
 
 #: common/dialog_about/AboutDialog_main.cpp:146
-#, fuzzy
 msgid "Bug tracker"
 msgstr "Hibabejelentő"
 
