@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-19 12:11+0000\n"
+"PO-Revision-Date: 2025-01-20 13:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -2191,32 +2191,28 @@ msgid "Package Developers"
 msgstr "Fejlesztők"
 
 #: common/dialog_about/dialog_about.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "About %s"
 msgstr "%s névjegye"
 
 #: common/dialog_about/dialog_about.cpp:134
 #: common/dialog_about/dialog_about_base.h:57
-#, fuzzy
 msgid "About"
 msgstr "Névjegy"
 
 #: common/dialog_about/dialog_about.cpp:139
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:90
-#, fuzzy
 msgid "Version"
 msgstr "Verzió"
 
 #: common/dialog_about/dialog_about.cpp:141
-#, fuzzy
 msgid "Developers"
 msgstr "Fejlesztők"
 
 #: common/dialog_about/dialog_about.cpp:143
-#, fuzzy
 msgid "Doc Writers"
-msgstr "Dokumentumok"
+msgstr "Dokumentáció-készítők"
 
 #: common/dialog_about/dialog_about.cpp:146
 #, fuzzy
@@ -2229,7 +2225,6 @@ msgid "Artists"
 msgstr "Grafikusok"
 
 #: common/dialog_about/dialog_about.cpp:151
-#, fuzzy
 msgid "Translators"
 msgstr "Szövegfordítók"
 
@@ -2239,28 +2234,22 @@ msgid "Packagers"
 msgstr "Forráskód"
 
 #: common/dialog_about/dialog_about.cpp:156
-#, fuzzy
 msgid "License"
-msgstr "GPL Licensz"
+msgstr "Licensz"
 
 #: common/dialog_about/dialog_about.cpp:257
-#, fuzzy
 msgid "Could not open clipboard to write version information."
-msgstr ""
-"Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
+msgstr "Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
 
 #: common/dialog_about/dialog_about.cpp:258
-#, fuzzy
 msgid "Clipboard Error"
 msgstr "Vágólaphiba"
 
 #: common/dialog_about/dialog_about.cpp:267
-#, fuzzy
 msgid "Copied..."
-msgstr "Másolt..."
+msgstr "Másolva..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
-#, fuzzy
 msgid "App Title"
 msgstr "Program címe"
 
@@ -41854,7 +41843,7 @@ msgstr "Új címke"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
-msgstr ""
+msgstr "Merőleges"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
 #, fuzzy
@@ -43095,7 +43084,7 @@ msgstr "Vonalszélesség növelése"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
-msgstr ""
+msgstr "X tengely"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:35
 msgid "Select which the direction on the screen in which the X axis increases."
@@ -43113,7 +43102,7 @@ msgstr "Térköz növelése"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
-msgstr ""
+msgstr "Y tengely"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
 msgid "Select which the direction on the screen in which the Y axis increases."
@@ -43450,7 +43439,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:79
 msgid "How many digits of precision to show"
-msgstr ""
+msgstr "Hány értékes jegyet mutassunk"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:95
 msgid ""
@@ -47110,7 +47099,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:1302
 msgid "The board must be saved before generating IPC2581 file."
-msgstr ""
+msgstr "A panelt el kell menteni az IPC2581 fájl generálása előtt."
 
 #: pcbnew/files.cpp:1318
 #, fuzzy
@@ -47852,7 +47841,7 @@ msgstr "A kijelölt elem(ek) pontos mozgatása"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Fix discontinuities"
-msgstr ""
+msgstr "Szakadások kijavítása"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:174
 msgid ""
@@ -49459,7 +49448,7 @@ msgstr "Nincs kapcsolási rajz megnyitva."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1984
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "Ignoráltuk a %d típusú dimenziót (jelenleg nem támogatott)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2033
 #, fuzzy, c-format
@@ -50407,7 +50396,7 @@ msgstr "Kör eltérő x és y sugárral (x=%d, y=%d)"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "x és y meg kellene, hogy egyezzen, helyette x = %f és y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -50574,7 +50563,7 @@ msgstr "Renderelési beállítások"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1365
 msgid "Generating CAD data"
-msgstr ""
+msgstr "CAD adatok generálása"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2625
 #, fuzzy, c-format
@@ -52700,11 +52689,11 @@ msgstr "Kijelölésre nagyítás"
 
 #: pcbnew/tools/convert_tool.cpp:454
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "A keletkező sokszög üres lenne"
 
 #: pcbnew/tools/convert_tool.cpp:456
 msgid "Objects must form a closed shape"
-msgstr ""
+msgstr "Az objektumoknak zárt alakzatot kell alkotniuk"
 
 #: pcbnew/tools/convert_tool.cpp:458
 #, fuzzy
@@ -52768,7 +52757,7 @@ msgstr "X méretezés kényszerítve."
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:399
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "PANEL TULAJDONSÁGAI"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:414
 msgid "Copper Layer Count: "
@@ -53648,7 +53637,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:466
 msgid "Move Individually"
-msgstr ""
+msgstr "Mozgatás egyénileg"
 
 #: pcbnew/tools/pcb_actions.cpp:467
 #, fuzzy
@@ -53792,7 +53781,7 @@ msgstr "Lap kivezető láb hozzáadása a kijelölt laphoz"
 
 #: pcbnew/tools/pcb_actions.cpp:625
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "Sokszög körvonalának egyszerűsítése, felesleges pontok eltávolítása"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid ""
@@ -53810,7 +53799,7 @@ msgstr "Sokszögek:"
 
 #: pcbnew/tools/pcb_actions.cpp:644
 msgid "Merge selected polygons into a single polygon"
-msgstr ""
+msgstr "A kijelölt sokszögek egyesítése egyetlen sokszöggé"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 #, fuzzy
@@ -53819,7 +53808,7 @@ msgstr "Sokszögek vázlat módban"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Subtract selected polygons from the last one selected"
-msgstr ""
+msgstr "A kijelölt sokszögek kivonása a legutoljára kijelöltből"
 
 #: pcbnew/tools/pcb_actions.cpp:657
 #, fuzzy
@@ -54269,7 +54258,7 @@ msgstr "Jelentés létrehozása az aktuális panelen lévő alkatrészrajzolatok
 
 #: pcbnew/tools/pcb_actions.cpp:1051
 msgid "IPC-2581 File (.xml)..."
-msgstr ""
+msgstr "IPC-2581 fájl (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1052
 #, fuzzy
@@ -54541,7 +54530,7 @@ msgstr "Átfordított nézet (tükrözött)"
 
 #: pcbnew/tools/pcb_actions.cpp:1348
 msgid "View board from the opposite side"
-msgstr ""
+msgstr "A panel megtekintése a szemközti oldal felől"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 #, fuzzy
@@ -54941,7 +54930,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1869
 msgid "Reannotate PCB in geographical order"
-msgstr ""
+msgstr "A NYÁK alkatrészeinek újrajelölése elhelyezkedés szerint"
 
 #: pcbnew/tools/pcb_actions.cpp:1875
 #, fuzzy
