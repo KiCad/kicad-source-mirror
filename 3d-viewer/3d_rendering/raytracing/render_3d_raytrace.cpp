@@ -1592,9 +1592,6 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
 
         light->GetLightParameters( hitPoint, vectorToLight, colorOfLight, distToLight );
 
-        if( m_isPreview )
-            colorOfLight = SFVEC3F( 1.0f );
-
         const float NdotL = glm::dot( aHitInfo.m_HitNormal, vectorToLight );
 
         // Only calc shade if the normal is facing the direction of light,
@@ -1661,10 +1658,6 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
             outColor += objMaterial->Shade( aRay, aHitInfo, NdotL, diffuseColorObj, vectorToLight,
                                             colorOfLight, shadow_att_factor_light );
         }
-
-        // Only use the headlight (or whatever the first light is) for preview
-        if( m_isPreview )
-            break;
     }
 
     // Improvement: this is not taking in account the lightcolor
