@@ -50,6 +50,8 @@ union COLOR_RGB
         g = aG;
         b = aB;
     }
+
+    operator SFVEC3F() const;
 };
 
 

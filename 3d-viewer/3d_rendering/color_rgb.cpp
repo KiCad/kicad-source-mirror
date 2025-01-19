@@ -38,6 +38,12 @@ COLOR_RGB::COLOR_RGB( const SFVEC3F& aColor )
 }
 
 
+COLOR_RGB::operator SFVEC3F() const
+{
+    return SFVEC3F( r / 255.0f, g / 255.0f, b / 255.0f );
+}
+
+
 COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2 )
 {
     const unsigned int r = aC1.r + aC2.r;

@@ -39,6 +39,41 @@
 #include <wx/log.h>
 
 
+#ifdef USE_SRGB_SPACE
+
+/// @todo This should be removed in future when KiCad supports a greater version of glm lib.
+#define SRGB_GAMA 2.4f
+
+
+// This function implements the conversion from linear RGB to sRGB
+// https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L12
+static SFVEC3F convertLinearToSRGB( const SFVEC3F& aRGBcolor )
+{
+    const float gammaCorrection = 1.0f / SRGB_GAMA;
+    const SFVEC3F clampedColor = glm::clamp( aRGBcolor, SFVEC3F( 0.0f ), SFVEC3F( 1.0f ) );
+
+    return glm::mix( glm::pow( clampedColor, SFVEC3F(gammaCorrection) ) * 1.055f - 0.055f,
+                     clampedColor * 12.92f,
+                     glm::lessThan( clampedColor, SFVEC3F(0.0031308f) ) );
+}
+
+
+// This function implements the conversion from sRGB to linear RGB
+// https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L35
+SFVEC3F ConvertSRGBToLinear( const SFVEC3F& aSRGBcolor )
+{
+    const float gammaCorrection = SRGB_GAMA;
+
+    return glm::mix( glm::pow( ( aSRGBcolor + SFVEC3F( 0.055f ) )
+                               * SFVEC3F( 0.94786729857819905213270142180095f ),
+                               SFVEC3F( gammaCorrection ) ),
+                     aSRGBcolor * SFVEC3F( 0.07739938080495356037151702786378f ),
+                     glm::lessThanEqual( aSRGBcolor, SFVEC3F( 0.04045f ) ) );
+}
+
+#endif
+
+
 RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
     RENDER_3D_BASE( aCanvas, aAdapter, aCamera ),
     m_postShaderSsao( aCamera )
@@ -142,6 +177,19 @@ static inline void SetPixel( GLubyte* p, const COLOR_RGB& v )
     p[1] = v.c[1];
     p[2] = v.c[2];
     p[3] = 255;
+}
+
+
+static void SetPixelSRGB( uint8_t* p, const COLOR_RGB& v )
+{
+    SFVEC3F color = v;
+
+#ifdef USE_SRGB_SPACE
+    color = convertLinearToSRGB( color );
+#endif
+
+    COLOR_RGB rgb( color );
+    SetPixel( p, rgb );
 }
 
 
@@ -404,41 +452,6 @@ void RENDER_3D_RAYTRACE::renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReport
             m_renderState = RT_RENDER_STATE_FINISH;
     }
 }
-
-
-#ifdef USE_SRGB_SPACE
-
-/// @todo This should be removed in future when KiCad supports a greater version of glm lib.
-#define SRGB_GAMA 2.4f
-
-
-// This function implements the conversion from linear RGB to sRGB
-// https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L12
-static SFVEC3F convertLinearToSRGB( const SFVEC3F& aRGBcolor )
-{
-    const float gammaCorrection = 1.0f / SRGB_GAMA;
-    const SFVEC3F clampedColor = glm::clamp( aRGBcolor, SFVEC3F( 0.0f ), SFVEC3F( 1.0f ) );
-
-    return glm::mix( glm::pow( clampedColor, SFVEC3F(gammaCorrection) ) * 1.055f - 0.055f,
-                     clampedColor * 12.92f,
-                     glm::lessThan( clampedColor, SFVEC3F(0.0031308f) ) );
-}
-
-
-// This function implements the conversion from sRGB to linear RGB
-// https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L35
-SFVEC3F ConvertSRGBToLinear( const SFVEC3F& aSRGBcolor )
-{
-    const float gammaCorrection = SRGB_GAMA;
-
-    return glm::mix( glm::pow( ( aSRGBcolor + SFVEC3F( 0.055f ) )
-                               * SFVEC3F( 0.94786729857819905213270142180095f ),
-                               SFVEC3F( gammaCorrection ) ),
-                     aSRGBcolor * SFVEC3F( 0.07739938080495356037151702786378f ),
-                     glm::lessThanEqual( aSRGBcolor, SFVEC3F( 0.04045f ) ) );
-}
-
-#endif
 
 
 void RENDER_3D_RAYTRACE::renderFinalColor( GLubyte* ptrPBO, const SFVEC3F& rgbColor,
@@ -946,6 +959,9 @@ void RENDER_3D_RAYTRACE::renderPreview( GLubyte* ptrPBO )
 {
     m_isPreview = true;
 
+    m_backgroundColorTop = ConvertSRGBToLinear( m_boardAdapter.m_BgColorTop );
+    m_backgroundColorBottom = ConvertSRGBToLinear( m_boardAdapter.m_BgColorBot );
+
     std::atomic<size_t> nextBlock( 0 );
     std::atomic<size_t> threadsFinished( 0 );
 
@@ -982,13 +998,16 @@ void RENDER_3D_RAYTRACE::renderPreview( GLubyte* ptrPBO )
                 // Calculate background gradient color
                 SFVEC3F bgColor[RAYPACKET_DIM];
 
+                SFVEC3F bgTopColor = m_backgroundColorTop;
+                SFVEC3F bgBotColor = m_backgroundColorBottom;
+
                 for( unsigned int y = 0; y < RAYPACKET_DIM; ++y )
                 {
                     const float posYfactor =
                             (float) ( windowsPos.y + y * 4.0f ) / (float) m_windowSize.y;
 
-                    bgColor[y] = (SFVEC3F) m_boardAdapter.m_BgColorTop * SFVEC3F( posYfactor )
-                                 + (SFVEC3F) m_boardAdapter.m_BgColorBot
+                    bgColor[y] = (SFVEC3F) bgTopColor * SFVEC3F( posYfactor )
+                                 + (SFVEC3F) bgBotColor
                                            * ( SFVEC3F( 1.0f ) - SFVEC3F( posYfactor ) );
                 }
 
@@ -1499,28 +1518,29 @@ void RENDER_3D_RAYTRACE::renderPreview( GLubyte* ptrPBO )
                                 &ptrPBO[( 4 * x + m_blockPositionsFast[iBlock].x
                                           + m_realBufferSize.x
                                           * ( m_blockPositionsFast[iBlock].y + 4 * y ) ) * 4];
-                        SetPixel( ptr + 0, cLT );
-                        SetPixel( ptr +  4, BlendColor( cLT, cLRT, cLTC ) );
-                        SetPixel( ptr +  8, cLRT );
-                        SetPixel( ptr + 12, BlendColor( cLRT, cRT, cRTC ) );
+
+                        SetPixelSRGB( ptr +  0, cLT );
+                        SetPixelSRGB( ptr +  4, BlendColor( cLT, cLRT, cLTC ) );
+                        SetPixelSRGB( ptr +  8, cLRT );
+                        SetPixelSRGB( ptr + 12, BlendColor( cLRT, cRT, cRTC ) );
 
                         ptr += m_realBufferSize.x * 4;
-                        SetPixel( ptr +  0, BlendColor( cLT , cLTB, cLTC ) );
-                        SetPixel( ptr +  4, BlendColor( cLTC, BlendColor( cLT , cC ) ) );
-                        SetPixel( ptr +  8, BlendColor( cC, BlendColor( cLRT, cLTC, cRTC ) ) );
-                        SetPixel( ptr + 12, BlendColor( cRTC, BlendColor( cRT , cC ) ) );
+                        SetPixelSRGB( ptr +  0, BlendColor( cLT , cLTB, cLTC ) );
+                        SetPixelSRGB( ptr +  4, BlendColor( cLTC, BlendColor( cLT , cC ) ) );
+                        SetPixelSRGB( ptr +  8, BlendColor( cC, BlendColor( cLRT, cLTC, cRTC ) ) );
+                        SetPixelSRGB( ptr + 12, BlendColor( cRTC, BlendColor( cRT , cC ) ) );
 
                         ptr += m_realBufferSize.x * 4;
-                        SetPixel( ptr +  0, cLTB );
-                        SetPixel( ptr +  4, BlendColor( cC, BlendColor( cLTB, cLTC, cLBC ) ) );
-                        SetPixel( ptr +  8, cC );
-                        SetPixel( ptr + 12, BlendColor( cC, BlendColor( cRTB, cRTC, cRBC ) ) );
+                        SetPixelSRGB( ptr +  0, cLTB );
+                        SetPixelSRGB( ptr +  4, BlendColor( cC, BlendColor( cLTB, cLTC, cLBC ) ) );
+                        SetPixelSRGB( ptr +  8, cC );
+                        SetPixelSRGB( ptr + 12, BlendColor( cC, BlendColor( cRTB, cRTC, cRBC ) ) );
 
                         ptr += m_realBufferSize.x * 4;
-                        SetPixel( ptr +  0, BlendColor( cLB , cLTB, cLBC ) );
-                        SetPixel( ptr +  4, BlendColor( cLBC, BlendColor( cLB , cC ) ) );
-                        SetPixel( ptr +  8, BlendColor( cC, BlendColor( cLRB, cLBC, cRBC ) ) );
-                        SetPixel( ptr + 12, BlendColor( cRBC, BlendColor( cRB , cC ) ) );
+                        SetPixelSRGB( ptr +  0, BlendColor( cLB , cLTB, cLBC ) );
+                        SetPixelSRGB( ptr +  4, BlendColor( cLBC, BlendColor( cLB , cC ) ) );
+                        SetPixelSRGB( ptr +  8, BlendColor( cC, BlendColor( cLRB, cLBC, cRBC ) ) );
+                        SetPixelSRGB( ptr + 12, BlendColor( cRBC, BlendColor( cRB , cC ) ) );
                     }
                 }
             }
@@ -1642,7 +1662,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
                                             colorOfLight, shadow_att_factor_light );
         }
 
-        // Only use the headlight for preview
+        // Only use the headlight (or whatever the first light is) for preview
         if( m_isPreview )
             break;
     }
