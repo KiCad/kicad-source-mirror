@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-18 15:30+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2025-01-19 22:57+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -20321,7 +20321,7 @@ msgstr "分配网络类..."
 
 #: eeschema/tools/ee_actions.cpp:708 pcbnew/tools/pcb_actions.cpp:1113
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "为匹配模式的网络分配一个网络类"
+msgstr "为满足匹配规则的网络分配一个网络类"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "De Morgan Conversion"
@@ -29051,7 +29051,7 @@ msgstr "构建更改"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:187
 msgid "Checking zones..."
-msgstr "正在检查域..."
+msgstr "正在检查填充区..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:150
 msgid "Rebuilding connectivity..."
@@ -34186,7 +34186,7 @@ msgstr "走线和过孔尺寸"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
 msgid "Target skew: "
-msgstr "目标偏移: "
+msgstr "目标 skew: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137
@@ -34521,7 +34521,7 @@ msgstr "隐藏的封装库尚未支持。"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:486
 #, c-format
 msgid "folder with %s files"
-msgstr "文件夹中有 %s 文件"
+msgstr "存有 %s 文件的文件夹"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:589
 #, c-format
@@ -36874,7 +36874,7 @@ msgstr "检查 %s 最大未耦合长度: %s。"
 #: pcbnew/drc/drc_engine.cpp:972
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "检查 %s 最大偏移: %s。"
+msgstr "检查 %s 最大 skew: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:978
 #, c-format
@@ -37004,15 +37004,15 @@ msgstr "%s 不是钻孔; 已忽略规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1286
 msgid "Unconditional constraint applied."
-msgstr "无条件应用的约束。"
+msgstr "已应用无条件规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1290 pcbnew/drc/drc_engine.cpp:1590
 msgid "Unconditional rule applied."
-msgstr "无条件应用的规则。"
+msgstr "已应用无条件规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1295
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "无条件应用的规则; 覆盖之前的约束。"
+msgstr "已应用无条件规则; 覆盖之前的约束。"
 
 #: pcbnew/drc/drc_engine.cpp:1309 pcbnew/drc/drc_engine.cpp:1595
 #, c-format
@@ -38959,7 +38959,7 @@ msgstr "编辑调整规则"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2012
 msgid "current skew"
-msgstr "当前偏移"
+msgstr "当前 skew"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2014
 msgid "current length"
@@ -38986,7 +38986,7 @@ msgstr "完整长度"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2127
 #, c-format
 msgid "Target Skew: %s"
-msgstr "目标偏移: %s"
+msgstr "目标 skew: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2128
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2150
@@ -38996,7 +38996,7 @@ msgstr "(来自调整规则属性)"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2136
 #, c-format
 msgid "Skew Constraints: %s"
-msgstr "偏移约束: %s"
+msgstr "skew 约束: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2149
 #, c-format
@@ -39031,7 +39031,7 @@ msgstr "差分对线"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2535
 msgid "Diff pair skew"
-msgstr "差分对偏移"
+msgstr "差分对 skew"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2549
 msgid "Pattern Properties"
@@ -39067,7 +39067,7 @@ msgstr "目标长度"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2627
 msgid "Target Skew"
-msgstr "目标偏移"
+msgstr "目标 skew"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2635
 msgid "Override Custom Rules"
@@ -41436,7 +41436,7 @@ msgstr "期望蚀刻数据在铜层上。在层 '%s' 上找到行"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3238
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "层 %2$s 的多边形中存在无法处理的形状类型 %1$d, seq %3$d %4$d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
@@ -42321,7 +42321,7 @@ msgstr "Python 封装向导代码异常"
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
-msgstr "无法找到互补差分对网络。请确保属于差分对网络的名称以 N/P 或 +/- 结尾。"
+msgstr "无法找到互补差分对网络。请确保该差分对的网络名称以 _N/_P 或 +/- 结尾。"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:513
 msgid ""
@@ -42344,9 +42344,8 @@ msgid ""
 "Unable to find complementary differential pair net for length tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
-msgstr ""
-"无法找到互补差分对网络进行长度调整。请确保属于差分对的名称以 _N/_P 或 +/- 结"
-"束。"
+msgstr "无法找到用于进行长度调整的互补差分对网络。请确保该差分对的网络名称以 _N/_P "
+"或 +/- 结尾。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:662 pcbnew/router/pns_kicad_iface.cpp:784
 #: pcbnew/router/router_tool.cpp:748 pcbnew/router/router_tool.cpp:812
@@ -42393,9 +42392,8 @@ msgid ""
 "Unable to find complementary differential pair net for skew tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
-msgstr ""
-"无法找到互补差分对网络进行长度调整。请确保属于差分对的名称以 _N/_P 或 +/- 结"
-"束。"
+msgstr "无法找到互补差分对网络进行 skew 调整。请确保该差分对的网络名称以 _N/_P 或 +/-"
+" 结尾。"
 
 #: pcbnew/router/pns_router.cpp:213
 msgid "Diff pair gap is less than board minimum clearance."
@@ -45486,7 +45484,7 @@ msgstr "调整差分对走线长度"
 
 #: pcbnew/tools/pcb_actions.cpp:2284
 msgid "Tune Skew of a Differential Pair"
-msgstr "调整差分对走线偏移"
+msgstr "调整差分对走线 skew"
 
 #: pcbnew/tools/pcb_actions.cpp:2285
 msgid "Tune skew of a differential pair"
@@ -46529,7 +46527,7 @@ msgstr "填充模式"
 
 #: pcbnew/zone.cpp:651
 msgid "Filled Area"
-msgstr "填充区"
+msgstr "填充面积"
 
 #: pcbnew/zone.cpp:672
 msgid "Corner Count"
@@ -46645,7 +46643,7 @@ msgstr "正在移除死铜..."
 
 #: pcbnew/zone_filler.cpp:733
 msgid "Zone fills are out-of-date. Refill?"
-msgstr "域填充已过时, 重新填充?"
+msgstr "填充区填充内容已过时, 重新填充?"
 
 #: pcbnew/zone_filler.cpp:735
 msgid "Refill"
