@@ -48,6 +48,12 @@ COLOR_RGBA::COLOR_RGBA( const SFVEC4F& aColor )
 }
 
 
+COLOR_RGBA::operator SFVEC4F() const
+{
+    return SFVEC4F( r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f );
+}
+
+
 COLOR_RGBA BlendColor( const COLOR_RGBA& aC1, const COLOR_RGBA& aC2 )
 {
     const unsigned int r = aC1.r + aC2.r;

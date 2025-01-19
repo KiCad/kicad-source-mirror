@@ -60,6 +60,8 @@ union COLOR_RGBA
         b = aB;
         a = aA;
     }
+
+    operator SFVEC4F() const;
 };
 
 
