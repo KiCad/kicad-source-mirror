@@ -96,7 +96,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow*       aP
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    GetSizer()->Add( m_dimensionsPanel.get(), 0, wxEXPAND | wxALL, 5 );
+    GetSizer()->Add( m_dimensionsPanel.get(), 0, wxEXPAND, 5 );
 
 	Layout();
 	m_mainSizer->Fit( this );

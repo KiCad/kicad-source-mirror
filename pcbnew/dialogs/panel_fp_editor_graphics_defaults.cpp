@@ -85,7 +85,7 @@ PANEL_FP_EDITOR_GRAPHICS_DEFAULTS::PANEL_FP_EDITOR_GRAPHICS_DEFAULTS(
 
     m_graphicsGrid->PushEventHandler( new GRID_TRICKS( m_graphicsGrid ) );
 
-    GetSizer()->Add( m_dimensionsPanel.get(), 0, wxEXPAND | wxALL, 5 );
+    GetSizer()->Add( m_dimensionsPanel.get(), 0, wxEXPAND, 5 );
 }
 
 

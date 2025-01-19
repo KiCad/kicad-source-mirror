@@ -12,18 +12,18 @@
 #include <wx/intl.h>
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/choice.h>
+#include <wx/radiobut.h>
 #include <wx/radiobox.h>
-#include <wx/statbox.h>
-#include <wx/statline.h>
 #include <wx/panel.h>
 #include <wx/spinctrl.h>
 #include <wx/simplebook.h>
@@ -36,8 +36,13 @@
 class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 {
 	private:
+		wxStaticText* stMagneticPtsLabel1;
+		wxStaticText* stRatsnestLabel;
+		wxStaticText* stMiscellaneousLabel;
 
 	protected:
+		wxStaticText* m_staticText31;
+		wxStaticLine* m_staticline3;
 		wxCheckBox* m_cbConstrainHV45Mode;
 		wxStaticText* m_rotationAngleLabel;
 		wxTextCtrl* m_rotationAngleCtrl;
@@ -47,28 +52,37 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxBoxSizer* m_sizerBoardEdit;
 		wxStaticText* m_trackMouseDragLabel;
 		wxChoice* m_trackMouseDragCtrl;
-		wxRadioBox* m_boardItemsFlip;
+		wxStaticText* m_staticText33;
+		wxRadioButton* m_rbFlipLeftRight;
+		wxRadioButton* m_rbFlipTopBottom;
 		wxCheckBox* m_allowFreePads;
 		wxCheckBox* m_overrideLocks;
-		wxStaticBoxSizer* m_mouseCmdsWinLin;
-		wxStaticText* m_staticText181;
+		wxStaticText* m_staticText32;
+		wxStaticLine* m_staticline4;
+		wxBoxSizer* m_mouseCmdsWinLin;
+		wxStaticText* m_stHint1;
 		wxRadioBox* m_rbCtrlClickAction;
-		wxStaticBoxSizer* m_mouseCmdsOSX;
-		wxStaticText* m_staticText1811;
+		wxBoxSizer* m_mouseCmdsOSX;
+		wxStaticText* m_stHint2;
 		wxRadioBox* m_rbCtrlClickActionMac;
 		wxSimplebook* m_optionsBook;
+		wxStaticText* m_staticText34;
+		wxStaticLine* m_staticline5;
 		wxCheckBox* m_magneticPads;
 		wxCheckBox* m_magneticGraphics;
+		wxStaticLine* m_staticline6;
 		wxStaticText* m_staticText2;
 		wxChoice* m_magneticPadChoice;
 		wxStaticText* m_staticText21;
 		wxChoice* m_magneticTrackChoice;
 		wxStaticText* m_staticText211;
 		wxChoice* m_magneticGraphicsChoice;
+		wxStaticLine* m_staticline7;
 		wxCheckBox* m_showSelectedRatsnest;
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;
 		wxStaticText* m_ratsnestThicknessLabel;
 		wxSpinCtrlDouble* m_ratsnestThickness;
+		wxStaticLine* m_staticline8;
 		wxCheckBox* m_escClearsNetHighlight;
 		wxCheckBox* m_showPageLimits;
 		wxCheckBox* m_cbCourtyardCollisions;

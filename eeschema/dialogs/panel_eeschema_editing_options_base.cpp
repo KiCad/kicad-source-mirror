@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -163,7 +163,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	m_leftClickLabel1 = new wxStaticText( m_pageMac, wxID_ANY, _("Left Click Mouse Commands"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_leftClickLabel1->Wrap( -1 );
-	bSizer10->Add( m_leftClickLabel1, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizer10->Add( m_leftClickLabel1, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline7 = new wxStaticLine( m_pageMac, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer10->Add( m_staticline7, 0, wxEXPAND|wxBOTTOM, 5 );

@@ -16,10 +16,10 @@ PANEL_SETUP_DIMENSIONS_BASE::PANEL_SETUP_DIMENSIONS_BASE( wxWindow* parent, wxWi
 
 	m_staticTextDefPropDim = new wxStaticText( this, wxID_ANY, _("Default Properties for New Dimension Objects"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDefPropDim->Wrap( -1 );
-	mainSizer->Add( m_staticTextDefPropDim, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+	mainSizer->Add( m_staticTextDefPropDim, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 5 );
@@ -108,7 +108,7 @@ PANEL_SETUP_DIMENSIONS_BASE::PANEL_SETUP_DIMENSIONS_BASE( wxWindow* parent, wxWi
 	gbSizer1->Add( m_dimensionExtensionOffsetUnits, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 
-	mainSizer->Add( gbSizer1, 1, wxEXPAND|wxTOP, 5 );
+	mainSizer->Add( gbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( mainSizer );

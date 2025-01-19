@@ -43,6 +43,9 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
 
     m_rotationAngle.SetUnits( EDA_UNITS::DEGREES );
 
+    m_stHint1->SetFont( KIUI::GetInfoFont( this ).Italic() );
+    m_stHint2->SetFont( KIUI::GetInfoFont( this ).Italic() );
+
 #ifdef __WXOSX_MAC__
     m_mouseCmdsOSX->Show( true );
     m_mouseCmdsWinLin->Show( false );
@@ -65,7 +68,12 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
     m_arcEditMode->SetSelection( (int) aCfg->m_ArcEditMode );
     m_trackMouseDragCtrl->SetSelection( (int) aCfg->m_TrackDragAction );
-    m_boardItemsFlip->SetSelection( static_cast<int>( aCfg->m_FlipDirection ) );
+
+    if( aCfg->m_FlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+        m_rbFlipLeftRight->SetValue( true );
+    else
+        m_rbFlipTopBottom->SetValue( true );
+
     m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
     m_overrideLocks->SetValue( aCfg->m_LockingOptions.m_sessionSkipPrompts );
     m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
@@ -152,7 +160,10 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
         cfg->m_ArcEditMode = (ARC_EDIT_MODE) m_arcEditMode->GetSelection();
         cfg->m_TrackDragAction = (TRACK_DRAG_ACTION) m_trackMouseDragCtrl->GetSelection();
-        cfg->m_FlipDirection = static_cast<FLIP_DIRECTION>( m_boardItemsFlip->GetSelection() );
+
+        cfg->m_FlipDirection = m_rbFlipLeftRight->GetValue() ? FLIP_DIRECTION::LEFT_RIGHT
+                                                             : FLIP_DIRECTION::TOP_BOTTOM;
+
         cfg->m_AllowFreePads = m_allowFreePads->GetValue();
         cfg->m_LockingOptions.m_sessionSkipPrompts = m_overrideLocks->GetValue();
         cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();

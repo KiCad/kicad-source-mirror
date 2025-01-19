@@ -82,7 +82,7 @@ PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE::PANEL_FP_EDITOR_GRAPHICS_DEFAULTS_BASE( 
 	bSizerMargins->Add( 0, 20, 0, wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bSizerMargins, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerMargins, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
