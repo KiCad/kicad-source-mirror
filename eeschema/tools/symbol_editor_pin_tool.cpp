@@ -162,10 +162,14 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
                     if( !aPin->GetUnit() || other->GetUnit() == aPin->GetUnit() )
                         aPin->GetParent()->RemoveDrawItem( other );
                 }
-                else if( other->GetBodyStyle() == aPin->GetBodyStyle() )
+
+                if( other->GetBodyStyle() == aPin->GetBodyStyle() )
                 {
-                    other->SetPosition( aPin->GetPosition() );
                     other->ChangeLength( aPin->GetLength() );
+
+                    // Must be done after ChangeLenght(), which can alter the position
+                    other->SetPosition( aPin->GetPosition() );
+
                     other->SetShape( aPin->GetShape() );
                 }
 
