@@ -1272,10 +1272,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
         wxString packageName = e.package;
 
         if( e.library_urn )
-        {
-            wxString libOrdinal = *e.library_urn;
-            packageName = e.package + wxS( "_" ) + libOrdinal.AfterLast( ':' );
-        }
+            packageName = e.package + wxS( "_" ) + e.library_urn->assetId;
 
         wxString pkg_key = makeKey( e.library, packageName );
         auto     it = m_templates.find( pkg_key );

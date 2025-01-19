@@ -676,19 +676,10 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
     {
         for( const auto& [name, elibrary] : aSchematic.libraries )
         {
-            wxString libName = elibrary->name;
+            EAGLE_LIBRARY* elib = &m_eagleLibs[elibrary->GetName()];
+            elib->name          = elibrary->GetName();
 
-            if( elibrary->urn )
-            {
-                wxString tmp = *elibrary->urn;
-
-                libName += tmp.AfterLast( '/' );
-            }
-
-            EAGLE_LIBRARY* elib = &m_eagleLibs[libName];
-            elib->name          = libName;
-
-            loadLibrary( elibrary.get(), &m_eagleLibs[libName] );
+            loadLibrary( elibrary.get(), &m_eagleLibs[elibrary->GetName()] );
         }
 
         m_pi->SaveLibrary( getLibFileName().GetFullPath() );
@@ -1740,11 +1731,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 
     // Correctly handle versioned libraries.
     if( epart->libraryUrn )
-    {
-        wxString tmp = *epart->libraryUrn;
-
-        libName += tmp.AfterLast( '/' );
-    }
+        libName += wxS( "_" ) + epart->libraryUrn->assetId;
 
     wxString gatename    = epart->deviceset + wxS( "_" ) + epart->device + wxS( "_" ) +
                            aInstance->gate;
@@ -1766,7 +1753,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 
     if( libIt == m_eagleLibs.end() )
     {
-        Report( wxString::Format( wxS( "Eagle library '%s' not found while looking up symbol for"
+        Report( wxString::Format( wxS( "Eagle library '%s' not found while looking up symbol for "
                                        "deviceset '%s', device '%s', and gate '%s." ),
                                   libName, epart->deviceset, epart->device, aInstance->gate ) );
         return;
@@ -2052,7 +2039,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 if( it == aLibrary->symbols.end() )
                 {
                     Report( wxString::Format( wxS( "Eagle symbol '%s' not found in library '%s'." ),
-                                              egate->symbol, aLibrary->name ) );
+                                              egate->symbol, aLibrary->GetName() ) );
                     continue;
                 }
 

@@ -386,13 +386,15 @@ VECTOR2I ConvertArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double 
 // Pre-declare for typedefs
 struct EROT;
 struct ECOORD;
+struct EURN;
 
 typedef OPTIONAL_XML_ATTRIBUTE<wxString> opt_wxString;
-typedef OPTIONAL_XML_ATTRIBUTE<int>     opt_int;
-typedef OPTIONAL_XML_ATTRIBUTE<double>  opt_double;
-typedef OPTIONAL_XML_ATTRIBUTE<bool>    opt_bool;
-typedef OPTIONAL_XML_ATTRIBUTE<EROT>    opt_erot;
-typedef OPTIONAL_XML_ATTRIBUTE<ECOORD>  opt_ecoord;
+typedef OPTIONAL_XML_ATTRIBUTE<int>      opt_int;
+typedef OPTIONAL_XML_ATTRIBUTE<double>   opt_double;
+typedef OPTIONAL_XML_ATTRIBUTE<bool>     opt_bool;
+typedef OPTIONAL_XML_ATTRIBUTE<EROT>     opt_erot;
+typedef OPTIONAL_XML_ATTRIBUTE<ECOORD>   opt_ecoord;
+typedef OPTIONAL_XML_ATTRIBUTE<EURN>     opt_eurn;
 
 
 struct EAGLE_BASE
@@ -410,6 +412,45 @@ struct EAGLE_BASE
     void Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
 
     void AdvanceProgressPhase();
+};
+
+
+/**
+ * Container that parses Eagle library file "urn" definitions.
+ *
+ * According to the eagle.dtd, the "urn" definition is as follows:
+ *
+ * <!ENTITY % Urn "%String;"> <!-- of the form "urn:adsk.eagle:<ASSET_TYPE>:<ASSET_ID>/<VERSION>"
+ *   - <ASSET_TYPE> is "symbol", "footprint", "package", "component", or "library"
+ *   - <ASSET_ID> is an integer
+ *   - <VERSION> is an integer
+ *
+ *   The "/<VERSION>" is omitted when referencing the asset without specifying a particular version.
+ *   For example, "urn:adsk.eagle:component:60986/2" references version 2 of component 60986 and
+ *   "urn:adsk.eagle:library:60968" references library 60986 without specifying a version.
+ */
+struct EURN : public EAGLE_BASE
+{
+    EURN() {}
+
+    /// Parse an Eagle "urn" string.
+    EURN( const wxString& aUrn );
+
+    void Parse( const wxString& aUrn );
+
+    /**
+     * Check if the string passed to the ctor was a valid Eagle urn.
+     *
+     * @retval true if the urn string is valid.
+     * @retval false if the urn string is not valid.
+     */
+    bool IsValid() const;
+
+    wxString host;         ///< Should always be "urn".
+    wxString path;         ///< Path to the asset type below.
+    wxString assetType;    ///< Must be "symbol", "footprint", "package", "component", or "library".
+    wxString assetId;      ///< The unique asset identifier for the asset type.
+    wxString assetVersion; ///< May be empty depending on the asset type.
 };
 
 
@@ -1282,7 +1323,7 @@ struct EELEMENT : public EAGLE_BASE
 
     wxString     name;
     wxString     library;
-    opt_wxString library_urn;
+    opt_eurn     library_urn;
     wxString     package;
     opt_wxString package3d_urn;
     opt_wxString override_package3d_urn;
@@ -1455,7 +1496,7 @@ struct EPART : public EAGLE_BASE
 
     wxString     name;
     wxString     library;
-    opt_wxString libraryUrn;
+    opt_eurn     libraryUrn;
     wxString     deviceset;
     wxString     device;
     opt_wxString package3d_urn;
@@ -1588,7 +1629,7 @@ struct EDEVICE_SET : public EAGLE_BASE
      */
 
     wxString     name;
-    opt_wxString urn;
+    opt_eurn     urn;
     opt_bool     locally_modified;
     opt_wxString prefix;
     opt_bool     uservalue;
@@ -2005,7 +2046,7 @@ struct EPACKAGE : public EAGLE_BASE
      *                inside boards or schematics -->
      */
     wxString     name;
-    opt_wxString urn;
+    opt_eurn     urn;
     opt_bool     locally_modified;
     opt_int      library_version;
     opt_bool     library_locally_modified;
@@ -2055,7 +2096,7 @@ struct EPACKAGE3D : public EAGLE_BASE
      *                inside boards or schematics -->
      */
     wxString name;
-    wxString urn;
+    EURN     urn;
     wxString type;
     opt_int  library_version;
     opt_bool library_locally_modified;
@@ -2084,7 +2125,7 @@ struct ESYMBOL : public EAGLE_BASE
      */
 
     wxString     name;
-    opt_wxString urn;
+    opt_eurn     urn;
     opt_bool     locally_modified;
     opt_int      library_version;
     opt_bool     library_locally_modified;
@@ -2115,7 +2156,7 @@ struct ELIBRARY : public EAGLE_BASE
      *           <!-- urn: Only in online libraries used inside boards or schematics -->
      */
     wxString     name;
-    opt_wxString urn;
+    opt_eurn     urn;
 
     std::optional<EDESCRIPTION>                      description;
     std::map<wxString, std::unique_ptr<EPACKAGE>>    packages;
@@ -2123,6 +2164,12 @@ struct ELIBRARY : public EAGLE_BASE
     std::map<wxString, std::unique_ptr<ESYMBOL>>     symbols;
     std::map<wxString, std::unique_ptr<EDEVICE_SET>> devicesets;
 
+    /**
+     * Fetch the fully unique library name.
+     *
+     * @return the unique library name.
+     */
+    wxString GetName() const;
     ELIBRARY( wxXmlNode* aLibrary, IO_BASE* aIo = nullptr );
 };
 

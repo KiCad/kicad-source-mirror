@@ -35,6 +35,7 @@
 #include <trace_helpers.h>
 #include <wx/log.h>
 #include <wx/regex.h>
+#include <wx/tokenzr.h>
 
 #include <functional>
 #include <cstdio>
@@ -213,8 +214,6 @@ size_t GetNodeCount( const wxXmlNode* aNode )
 
     return cnt;
 }
-
-
 template<> template<>
 OPTIONAL_XML_ATTRIBUTE<wxString>::OPTIONAL_XML_ATTRIBUTE( wxString aData )
 {
@@ -288,6 +287,55 @@ long long int ECOORD::ConvertToNm( int aValue, enum EAGLE_UNIT aUnit )
         wxLogError( _( "Invalid size %lld: too large" ), aValue );
 
     return ret;
+}
+
+
+EURN::EURN( const wxString& aUrn )
+{
+    Parse( aUrn );
+}
+
+
+void EURN::Parse( const wxString& aUrn )
+{
+    wxStringTokenizer tokens( aUrn, ":" );
+
+    host = tokens.GetNextToken();
+    path = tokens.GetNextToken();
+    assetType = tokens.GetNextToken();
+
+    // Split off the version if there is one.
+    wxString tmp = tokens.GetNextToken();
+
+    assetId = tmp.BeforeFirst( '/' );
+    assetVersion = tmp.AfterLast( '/' );
+}
+
+
+bool EURN::IsValid() const
+{
+    if( host != "urn" )
+        return false;
+
+    if( path.IsEmpty() )
+        return false;
+
+    static std::set<wxString> validAssetTypes =
+    {
+        "component",
+        "footprint",
+        "library",
+        "package",
+        "symbol"
+    };
+
+    if( validAssetTypes.count( assetType ) == 0 )
+        return false;
+
+    if( assetId.IsEmpty() )
+        return false;
+
+    return true;
 }
 
 
@@ -373,6 +421,13 @@ ECOORD Convert<ECOORD>( const wxString& aCoord )
 {
     // Eagle uses millimeters as the default unit
     return ECOORD( aCoord, ECOORD::EAGLE_UNIT::EU_MM );
+}
+
+
+template<>
+EURN Convert<EURN>( const wxString& aUrn )
+{
+    return EURN( aUrn );
 }
 
 
@@ -1406,7 +1461,7 @@ EELEMENT::EELEMENT( wxXmlNode* aElement, IO_BASE* aIo ) :
     y       = parseRequiredAttribute<ECOORD>( aElement, "y" );
 
     // optional
-    library_urn = parseOptionalAttribute<wxString>( aElement, "library_urn" );
+    library_urn = parseOptionalAttribute<EURN>( aElement, "library_urn" );
     locked  = parseOptionalAttribute<bool>( aElement, "locked" );
     smashed = parseOptionalAttribute<bool>( aElement, "smashed" );
     rot     = parseOptionalAttribute<EROT>( aElement, "rot" );
@@ -1471,7 +1526,7 @@ EPART::EPART( wxXmlNode* aPart, IO_BASE* aIo ) :
      */
     name = parseRequiredAttribute<wxString>( aPart, "name" );
     library = parseRequiredAttribute<wxString>( aPart, "library" );
-    libraryUrn = parseOptionalAttribute<wxString>( aPart, "library_urn" );
+    libraryUrn = parseOptionalAttribute<EURN>( aPart, "library_urn" );
     deviceset = parseRequiredAttribute<wxString>( aPart, "deviceset" );
     device = parseRequiredAttribute<wxString>( aPart, "device" );
     package3d_urn = parseOptionalAttribute<wxString>( aPart, "package3d_urn" );
@@ -1717,7 +1772,7 @@ EDEVICE_SET::EDEVICE_SET( wxXmlNode* aDeviceSet, IO_BASE* aIo ) :
      *                inside boards or schematics -->
      */
     name = parseRequiredAttribute<wxString>( aDeviceSet, "name" );
-    urn = parseOptionalAttribute<wxString>( aDeviceSet, "urn" );
+    urn = parseOptionalAttribute<EURN>( aDeviceSet, "urn" );
     locally_modified = parseOptionalAttribute<bool>( aDeviceSet, "locally_modified" );
     prefix = parseOptionalAttribute<wxString>( aDeviceSet, "prefix" );
     uservalue = parseOptionalAttribute<bool>( aDeviceSet, "uservalue" );
@@ -2216,7 +2271,7 @@ EPACKAGE::EPACKAGE( wxXmlNode* aPackage, IO_BASE* aIo ) :
      *                inside boards or schematics -->
      */
     name = parseRequiredAttribute<wxString>( aPackage, "name" );
-    urn = parseOptionalAttribute<wxString>( aPackage, "urn" );
+    urn = parseOptionalAttribute<EURN>( aPackage, "urn" );
     locally_modified = parseOptionalAttribute<bool>( aPackage, "locally_modified" );
     library_version = parseOptionalAttribute<int>( aPackage, "library_version" );
     library_locally_modified = parseOptionalAttribute<bool>( aPackage, "library_locally_modified" );
@@ -2349,7 +2404,7 @@ ESYMBOL::ESYMBOL( wxXmlNode* aSymbol, IO_BASE* aIo ) :
      */
 
     name = parseRequiredAttribute<wxString>( aSymbol, "name" );
-    urn = parseOptionalAttribute<wxString>( aSymbol, "urn" );
+    urn = parseOptionalAttribute<EURN>( aSymbol, "urn" );
     locally_modified = parseOptionalAttribute<bool>( aSymbol, "locally_modified" );
     library_version = parseOptionalAttribute<int>( aSymbol, "library_version" );
     library_locally_modified = parseOptionalAttribute<bool>( aSymbol, "library_locally_modified" );
@@ -2420,7 +2475,7 @@ ELIBRARY::ELIBRARY( wxXmlNode* aLibrary, IO_BASE* aIo ) :
     if( parentNodeName == "libraries" )
     {
         name = parseRequiredAttribute<wxString>( aLibrary, "name" );
-        urn = parseOptionalAttribute<wxString>( aLibrary, "urn" );
+        urn = parseOptionalAttribute<EURN>( aLibrary, "urn" );
     }
 
     for( wxXmlNode* child = aLibrary->GetChildren(); child; child = child->GetNext() )
@@ -2491,6 +2546,24 @@ ELIBRARY::ELIBRARY( wxXmlNode* aLibrary, IO_BASE* aIo ) :
 }
 
 
+wxString ELIBRARY::GetName() const
+{
+    wxString libName = name;
+
+    // Use the name when no library urn exists.
+    if( !urn )
+        return libName;
+
+    // Suffix the library name with the urn library identifier.  Eagle schematics can have
+    // mulitple libraries with the same name.  The urn library identifier is used to prevent
+    // library name clashes.
+    if( urn->IsValid() )
+        libName += wxS( "_" ) + urn->assetId;
+
+    return libName;
+}
+
+
 EAPPROVED::EAPPROVED( wxXmlNode* aApproved, IO_BASE* aIo ) :
     EAGLE_BASE( aIo )
 {
@@ -2533,7 +2606,34 @@ ESCHEMATIC::ESCHEMATIC( wxXmlNode* aSchematic, IO_BASE* aIo ) :
                 if( library->GetName() == "library"  )
                 {
                     std::unique_ptr<ELIBRARY> tmp = std::make_unique<ELIBRARY>( library, aIo );
-                    libraries[ tmp->name ] = std::move( tmp );
+
+                    wxString libName = tmp->GetName();
+
+                    // Prevent duplicate library names.  This should only happen if the Eagle
+                    // file has an invalid format.
+                    if( libraries.find( libName ) != libraries.end() )
+                    {
+                        wxString uniqueName;
+                        std::set<wxString> usedNames;
+
+                        for( const auto& [setName, setLibrary] : libraries )
+                            usedNames.emplace( setName );
+
+                        if( usedNames.find( libName ) != usedNames.end() )
+                        {
+                            int i = 1;
+
+                            do
+                            {
+                                uniqueName.Format( wxS( "%s_%d" ), libName, i );
+                                i += 1;
+                            } while( usedNames.find( uniqueName ) != usedNames.end() );
+                        }
+
+                        libName = uniqueName;
+                    }
+
+                    libraries[ libName ] = std::move( tmp );
                 }
             }
 
