@@ -167,10 +167,14 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( SCH_PIN* aPin, bool aFocusPinNum
                     if( !aPin->GetUnit() || other->GetUnit() == aPin->GetUnit() )
                         parentSymbol->RemoveDrawItem( other );
                 }
-                else if( other->GetBodyStyle() == aPin->GetBodyStyle() )
+
+                if( other->GetBodyStyle() == aPin->GetBodyStyle() )
                 {
-                    other->SetPosition( aPin->GetPosition() );
                     other->ChangeLength( aPin->GetLength() );
+
+                    // Must be done after ChangeLenght(), which can alter the position
+                    other->SetPosition( aPin->GetPosition() );
+
                     other->SetShape( aPin->GetShape() );
                 }
 
