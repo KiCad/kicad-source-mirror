@@ -666,7 +666,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                                 0, maxError, ERROR_INSIDE );
                     }
                     else
-                        item->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu,
+                        item->TransformShapeToPolygon( *platedCopperPolys, layer,
                                                         0, maxError, ERROR_INSIDE );
                 }
             }
