@@ -335,7 +335,7 @@ private:
 
     ///< SPICE expressions need quoted versions of the netnames since KiCad allows '-' and '/'
     ///< in netnames.
-    std::map<wxString, wxString> m_quotedNetnames;
+    std::vector<wxString>        m_netnames;
 
     SPICE_VALUE_FORMAT           m_cursorFormats[3][2];
 

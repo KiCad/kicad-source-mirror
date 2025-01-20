@@ -894,7 +894,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
             if( netname == "GND" || netname == "0" || netname.StartsWith( unconnected ) )
                 continue;
 
-            m_quotedNetnames[ netname ] = wxString::Format( wxS( "\"%s\"" ), netname );
+            m_netnames.emplace_back( netname );
             addSignal( wxString::Format( wxS( "V(%s)" ), netname ) );
         }
     }
@@ -1872,14 +1872,50 @@ void SIMULATOR_FRAME_UI::updateSignalsGrid()
 
 void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
 {
-    auto quoteNetNames =
-            [&]( wxString aExpression ) -> wxString
-            {
-                for( const auto& [netname, quotedNetname] : m_quotedNetnames )
-                    aExpression.Replace( netname, quotedNetname );
+    auto quoteNetNames = [&]( wxString aExpression ) -> wxString
+    {
+        std::vector<bool> mask( aExpression.length(), false );
 
-                return aExpression;
-            };
+        for( const auto& netname : m_netnames )
+        {
+            size_t pos = aExpression.find( netname );
+
+            while( pos != wxString::npos )
+            {
+                for( size_t i = 0; i < netname.length(); ++i )
+                {
+                    mask[pos + i] = true; // Mark the positions of the netname
+                }
+                pos = aExpression.find( netname, pos + 1 ); // Find the next occurrence
+            }
+        }
+
+        wxString quotedNetnames = "";
+        bool     startQuote = true;
+
+        // put quotes around all the positions that were found above
+        for( size_t i = 0; i < aExpression.length(); i++ )
+        {
+            if( mask[i] && startQuote )
+            {
+                quotedNetnames = quotedNetnames + "\"";
+                startQuote = false;
+            }
+            else if( !mask[i] && !startQuote )
+            {
+                quotedNetnames = quotedNetnames + "\"";
+                startQuote = true;
+            }
+            wxString ch = aExpression[i];
+            quotedNetnames = quotedNetnames + ch;
+        }
+
+        if( !startQuote )
+        {
+            quotedNetnames = quotedNetnames + "\"";
+        }
+        return quotedNetnames;
+    };
 
     for( const auto& [ id, signal ] : m_userDefinedSignals )
     {
