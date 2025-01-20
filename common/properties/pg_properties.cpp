@@ -605,8 +605,12 @@ wxValidator* PGPROPERTY_ANGLE::DoGetValidator() const
 
 wxSize PGPROPERTY_COLORENUM::OnMeasureImage( int aItem ) const
 {
-    // TODO(JE) calculate size from window metrics?
-    return wxSize( 16, 12 );
+    wxSize size( 16, -1 );
+
+    if( wxPropertyGrid* pg = GetGrid() )
+        size = pg->FromDIP( size );
+
+    return size;
 }
 
 
