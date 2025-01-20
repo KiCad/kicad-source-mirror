@@ -726,14 +726,12 @@ void EXPORTER_PCB_VRML::ComputeLayer3D_Zpos()
     double half_thickness = m_brd_thickness / 2;
 
     // Compute each layer's Z value, more or less like the 3d view
-    for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
-    {
-        int i = static_cast<int>( layer );
+    int orderFromTop = 0;
 
-        if( i < copper_layers )
-            SetLayerZ( i,  half_thickness - m_brd_thickness * i / (copper_layers - 1) );
-        else
-            SetLayerZ( i, - half_thickness );  // bottom layer
+    for( PCB_LAYER_ID layer : LSET::AllCuMask( copper_layers ).CuStack() )
+    {
+        SetLayerZ( layer, half_thickness - m_brd_thickness * orderFromTop / ( copper_layers - 1 ) );
+        orderFromTop++;
     }
 
     // To avoid rounding interference, we apply an epsilon to each successive layer
