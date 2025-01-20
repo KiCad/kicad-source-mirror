@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-11 17:15+0000\n"
+"PO-Revision-Date: 2025-01-21 07:53+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -12957,9 +12957,9 @@ msgid "Not Connected"
 msgstr "未接続"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "ライブラリに '%s' という名前のモデルがありません。"
+msgstr "'%s' に '%s' という名前のモデルがありません。"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1233
 msgid "Browse Models"
