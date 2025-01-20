@@ -642,12 +642,33 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // add also this shape to the plated copper polygon list if required
             if( cfg.DifferentiatePlatedCopper() )
             {
-                if( layer == F_Cu )
-                    item->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu,
-                                                    0, maxError, ERROR_INSIDE );
-                else if( layer == B_Cu )
-                    item->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu,
-                                                    0, maxError, ERROR_INSIDE );
+                // Note: for TEXT and TEXTBOX, TransformShapeToPolygon returns the bounding
+                // box shape, not the exact text shape. So it is not used for these items
+                if( layer == F_Cu || layer == B_Cu )
+                {
+                    SHAPE_POLY_SET* platedCopperPolys = layer == F_Cu
+                                                            ? m_frontPlatedCopperPolys
+                                                            : m_backPlatedCopperPolys;
+
+                    if( item->Type() == PCB_TEXTBOX_T )
+                    {
+                        PCB_TEXTBOX* text_box = static_cast<PCB_TEXTBOX*>( item );
+                        text_box->TransformTextToPolySet( *platedCopperPolys,
+                                                           0, maxError, ERROR_INSIDE );
+                        // Add box outlines
+                        text_box->PCB_SHAPE::TransformShapeToPolygon( *platedCopperPolys, layer,
+                                                                       0, maxError, ERROR_INSIDE );
+                    }
+                    else if( item->Type() == PCB_TEXT_T )
+                    {
+                        static_cast<PCB_TEXT*>( item )->TransformTextToPolySet(
+                                                                *platedCopperPolys,
+                                                                0, maxError, ERROR_INSIDE );
+                    }
+                    else
+                        item->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu,
+                                                        0, maxError, ERROR_INSIDE );
+                }
             }
         }
     }
