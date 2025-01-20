@@ -65,13 +65,13 @@ public:
         }
     }
 
-    void Suspend()
+    void SuspendForTrueModal()
     {
         if( m_win )
             m_win->Enable();
     }
 
-    void Resume()
+    void ResumeAfterTrueModal()
     {
         if( m_win )
             m_win->Disable();
@@ -575,14 +575,14 @@ int DIALOG_SHIM::ShowQuasiModal()
 void DIALOG_SHIM::PrepareForModalSubDialog()
 {
     if( m_qmodal_parent_disabler )
-        m_qmodal_parent_disabler->Suspend();
+        m_qmodal_parent_disabler->SuspendForTrueModal();
 }
 
 
 void DIALOG_SHIM::CleanupAfterModalSubDialog()
 {
     if( m_qmodal_parent_disabler )
-        m_qmodal_parent_disabler->Resume();
+        m_qmodal_parent_disabler->ResumeAfterTrueModal();
 }
 
 
