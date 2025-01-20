@@ -65,6 +65,7 @@ Coverity:
       -DCMAKE_BUILD_TYPE=RelWithDebInfo
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
       -DKICAD_SCRIPTING_WXPYTHON=ON
+      -DKICAD_USE_CMAKE_FINDPROTOBUF=ON
     - coverity/bin/cov-build --dir cov-int make -j10
     - *coverity_submit
   artifacts:
