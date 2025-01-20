@@ -199,7 +199,7 @@ TOOL_ACTION EE_ACTIONS::newSymbol( TOOL_ACTION_ARGS()
 TOOL_ACTION EE_ACTIONS::deriveFromExistingSymbol( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.deriveFromExistingSymbol" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Derive from Existing Symbol" ) )
+        .FriendlyName( _( "Derive from Existing Symbol..." ) )
         .Tooltip( _( "Create a new symbol, derived from an existing symbol" ) )
         .Icon( BITMAPS::new_component ) );
 
