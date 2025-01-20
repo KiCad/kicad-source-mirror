@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 23:16+0300\n"
-"PO-Revision-Date: 2025-01-18 16:02+0000\n"
-"Last-Translator: Дмитрий Михирев <bizdelnick@gmail.com>\n"
+"PO-Revision-Date: 2025-01-20 22:52+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -977,9 +977,8 @@ msgid "Configure Paths"
 msgstr "Настройка путей"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
-msgstr "Модель встраивания"
+msgstr "Встроить модель"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -3236,9 +3235,8 @@ msgid "Reference Designators"
 msgstr "Обозначение"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear net assignments"
-msgstr "Очистить назначенные цепи"
+msgstr "Очистить назначения цепей"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
@@ -4239,9 +4237,8 @@ msgid "Editing"
 msgstr "Редактирование"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "Сместить курсор к опорной точке объекта при перемещении"
+msgstr "Переместить курсор к опорной точке перемещаемого объекта"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -4822,16 +4819,14 @@ msgid "Remove embedded file"
 msgstr "Удалить встроенный файл"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "Встраивание шрифтов"
+msgstr "Встроить шрифты"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
 msgstr "Сохранить копию всех используемых шрифтов"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
 msgstr "Экспорт..."
 
@@ -5448,9 +5443,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Цепи соответствующие '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Классы цепей:"
+msgstr "Классы цепей"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:641
@@ -5542,9 +5536,8 @@ msgid "Import colors from schematic"
 msgstr "Импорт цветов из схемы"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Назначение классов цепей:"
+msgstr "Назначения классов цепей"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -8375,9 +8368,9 @@ msgid "Failed to create file '%s'."
 msgstr "Не удалось создать файл '%s'."
 
 #: common/project/project_archiver.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "Ошибка удаления каталога '%s': %s"
+msgstr "Ошибка открытия каталога: '%s'."
 
 #: common/project/project_archiver.cpp:392
 #, c-format
@@ -8385,9 +8378,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip архив '%s' создан (%s несжатым, %s сжатым)."
 
 #: common/project/project_archiver.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "Ошибка: %s"
+msgstr "Ошибка: '%s'."
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -8665,9 +8658,8 @@ msgid "Paste Special..."
 msgstr "Вставить как..."
 
 #: common/tool/actions.cpp:270
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "Вставить элементы из буфера с параметрами обозначений"
+msgstr "Вставить элементы из буфера с опциями"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -10761,9 +10753,8 @@ msgid "Unconnected wire endpoint"
 msgstr "Неподключенная оконечная точка провода"
 
 #: eeschema/connection_graph.cpp:3819
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Неподключенная оконечная точка провода"
+msgstr "Неподключенный провод ко вводу шины"
 
 #: eeschema/connection_graph.cpp:4194
 #, c-format
@@ -11424,7 +11415,6 @@ msgid "New library identifier:"
 msgstr "Новый идентификатор библиотеки:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
-#, fuzzy
 msgid "Update/Reset Fields"
 msgstr "Обновить/сбросить поля"
 
@@ -14466,7 +14456,6 @@ msgid "SPICE directives:"
 msgstr "Директивы SPICE:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
-#, fuzzy
 msgid "Load Directives from Schematic"
 msgstr "Загрузить директивы из схемы"
 
@@ -16298,9 +16287,8 @@ msgid "Zoom vertically"
 msgstr "Масштабировать по вертикали"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
-#, fuzzy
 msgid "Vertical Touchpad or Scroll Wheel Movement"
-msgstr "Вертикальная прокрутка с помощью сенсорной панели или колеса мыши:"
+msgstr "Вертикальная прокрутка с помощью сенсорной панели или колеса мыши"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
@@ -16334,9 +16322,8 @@ msgid "Alt:"
 msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal Touchpad Movement"
-msgstr "Горизонтальная прокрутка с помощью сенсорной панели:"
+msgstr "Горизонтальная прокрутка с помощью сенсорной панели"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
@@ -16495,14 +16482,12 @@ msgid "Reset Libraries"
 msgstr "Сбросить библиотеки"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "Шаблоны имён полей проекта:"
+msgstr "Шаблоны имён полей проекта"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "Общие шаблоны имён полей:"
+msgstr "Глобальные шаблоны имён полей"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:208
 #, c-format
@@ -16873,14 +16858,12 @@ msgid "Checking pins..."
 msgstr "Проверка выводов..."
 
 #: eeschema/erc/erc.cpp:1850
-#, fuzzy
 msgid "Checking similar labels..."
-msgstr "Проверка меток..."
+msgstr "Проверка похожих меток..."
 
 #: eeschema/erc/erc.cpp:1858
-#, fuzzy
 msgid "Checking local and global labels..."
-msgstr "Проверка меток..."
+msgstr "Проверка локальных и глобальных меток..."
 
 #: eeschema/erc/erc.cpp:1866
 msgid "Checking for unresolved variables..."
@@ -24378,14 +24361,13 @@ msgid "Do not export"
 msgstr "Не экспортировать"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "Gerger-ов с известными слоями: "
+msgstr "Gerber-ов с известными слоями: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "Назначить класс цепей цепям, соответствующим шаблону"
+msgstr "Назначить соответствующим слоям платы?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
@@ -26068,9 +26050,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:167
 #: kicad/cli/command_pcb_export_svg.cpp:176
-#, fuzzy
 msgid "The new behavior will match --mode-multi"
-msgstr "Новое поведение будет соответствовать --mode-new"
+msgstr "Новое поведение будет соответствовать --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 msgid "Generate Gencad from a list of layers"
@@ -26668,7 +26649,6 @@ msgid "A new version of KiCad is available!"
 msgstr "Доступна новая версия KiCad!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip This Version"
 msgstr "&Пропустить эту версию"
 
@@ -26681,7 +26661,6 @@ msgstr ""
 "версий будут показаны дополнительные уведомления об обновлениях."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
-#, fuzzy
 msgid "&Remind Me Later"
 msgstr "&Напомнить позже"
 
@@ -33315,7 +33294,6 @@ msgid "Choose how many digits of precision to display"
 msgstr "Выберите сколько нужно отображать разрядов дробной части"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "Arrow direction:"
 msgstr "Направление стрелки:"
 
@@ -34021,7 +33999,6 @@ msgid "Compressing output"
 msgstr "Сжатие выходных данных"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:69
-#, fuzzy
 msgid "Compression format:"
 msgstr "Формат сжатия:"
 
@@ -35177,9 +35154,8 @@ msgstr ""
 "и неметал. сквозные отв. в один файл."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:75
-#, fuzzy
 msgid "Use alternate drill mode for oval holes"
-msgstr "Использовать альтернативный режим сверловки"
+msgstr "Использовать альтернативный режим сверловки для овальных отверстий"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -35187,23 +35163,20 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
-msgstr "Создать карту"
+msgstr "Создание карты:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
-#, fuzzy
 msgid "Origin:"
-msgstr "Начало координат"
+msgstr "Начало координат:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:134
 msgid "Absolute"
 msgstr "Абсолютные"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "Нули"
+msgstr "Нули:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -35232,7 +35205,6 @@ msgid "Generators A (%s)"
 msgstr "Генераторы A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild Selected"
 msgstr "Перестроить выбранное"
 
@@ -36025,9 +35997,8 @@ msgid "Bottom/Back layer:"
 msgstr "Нижний/задний слой:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:210
-#, fuzzy
 msgid "Copper Layer Pair Presets"
-msgstr "Предварительные настройки пары медных слоев"
+msgstr "Пресеты пар медных слоев"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:228
 msgid "Enabled"
@@ -36132,9 +36103,8 @@ msgid "Replace existing placement rule areas"
 msgstr "Заменить существующие зоны правил размещения"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:35
-#, fuzzy
 msgid "Group footprints with their placement rule areas"
-msgstr "Группировать компоненты с учетом правил их размещения"
+msgstr "Группировать посад. места с их областями правил размещения"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:50
 msgid "Generate Multichannel Rule Areas"
@@ -36166,19 +36136,16 @@ msgstr ""
 "Копирование текста, фигур, зон и других элементов в области исходных правил"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
-#, fuzzy
 msgid "Include footprints outside the reference rule area"
-msgstr "Включить компоненты за пределами целевой зоны"
+msgstr "Включить компоненты за пределами опорной зоны правил"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:93
-#, fuzzy
 msgid "Group items with their target rule areas"
-msgstr "Группировать компоненты с учетом правил их размещения"
+msgstr "Группировать элементы с их целевыми областями правил"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:96
-#, fuzzy
 msgid "Remove locked items from target rule areas"
-msgstr "Удалить элементы из группы"
+msgstr "Удалить заблокированные элементы из целевых областей правил"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
@@ -37598,7 +37565,6 @@ msgid "View"
 msgstr "Вид"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:119
-#, fuzzy
 msgid "Add floor"
 msgstr "Добавить пол"
 
@@ -37943,9 +37909,8 @@ msgid "Parent footprint description"
 msgstr "Описание родительского посад. места"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
-#, fuzzy
 msgid "Update Thickness According to Text Size"
-msgstr "Обновление толщины в зависимости от размера текста"
+msgstr "Обновить толщину в соответствии с размером текста"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -38459,14 +38424,12 @@ msgid "Internal Layers"
 msgstr "Внутренние слои"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
-#, fuzzy
 msgid "Default Field Properties for New Footprints"
-msgstr "Свойства полей по умолчанию для новых посад. мест:"
+msgstr "Свойства полей по умолчанию для новых посад. мест"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:73
-#, fuzzy
 msgid "Default Text Items for New Footprints"
-msgstr "По умолчанию для надписей новых посад. мест:"
+msgstr "По умолчанию для надписей новых посад. мест"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:210
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:217
@@ -38514,9 +38477,8 @@ msgid "Parameter error"
 msgstr "Ошибка параметра"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:26
-#, fuzzy
 msgid "Default Properties for New Graphic Items"
-msgstr "По умолчанию для новых графических элементов:"
+msgstr "По умолчанию для новых графических элементов"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:309
 msgid "Hidden footprint libraries are not yet supported."
@@ -38768,9 +38730,8 @@ msgstr ""
 "этой областью"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:20
-#, fuzzy
 msgid "No placement"
-msgstr "Размещение"
+msgstr "Без размещения"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
 msgid "Place items from sheet:"
@@ -38968,9 +38929,8 @@ msgid "Minimum text thickness:"
 msgstr "Минимальная толщина текста:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:371
-#, fuzzy
 msgid "Arc/Circle Approximated by Segments"
-msgstr "Дуги/окружности из сегментов"
+msgstr "Аппроксимация дуг/окружностей сегментами"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:384
 msgid "Maximum allowed deviation:"
@@ -39001,9 +38961,8 @@ msgid "Note: zone filling can be slow when < %s."
 msgstr "Примечание: значение < %s замедлит заполнение зон."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:414
-#, fuzzy
 msgid "Zone Fill Strategy"
-msgstr "Метод заполнения зоны"
+msgstr "Метод заполнения зон"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
 msgid "Allow fillets/chamfers outside zone outline"
@@ -39014,9 +38973,8 @@ msgid "Minimum thermal relief spoke count:"
 msgstr "Мин. кол-во мостиков терморазгрузки:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:455
-#, fuzzy
 msgid "Length Tuning"
-msgstr "Настройка длины дорожек"
+msgstr "Настройка длины"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:459
 msgid "Include stackup height in track length calculations"
@@ -39033,9 +38991,8 @@ msgstr ""
 "перех. отв. будет игнорироваться."
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
-#, fuzzy
 msgid "Default Properties for New Dimension Objects"
-msgstr "По умолчанию для новых размерных линий:"
+msgstr "По умолчанию для новых размерных линий"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:37
 msgid ""
@@ -39736,9 +39693,8 @@ msgstr ""
 "Если требования отсутствуют, рекомендуется установить нулевые значения."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
-#, fuzzy
 msgid "Solder Mask Settings"
-msgstr "Параметры паяльной маски:"
+msgstr "Параметры паяльной маски"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
@@ -39787,11 +39743,10 @@ msgstr ""
 "ошибки DRC"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
-"Разрешить объединение апертур паяльной маски между конт. пл. внутри "
-"посадочных мест."
+"Разрешить объединение апертур паяльной маски между конт. пл. внутри посад. "
+"мест"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
 #, fuzzy
@@ -39818,9 +39773,8 @@ msgstr ""
 "Не тентированные перех. отв. не покрываются паяльной маской"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
-#, fuzzy
 msgid "Solder Paste Settings"
-msgstr "Параметры паяльной пасты:"
+msgstr "Параметры паяльной пасты"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:149
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:154
@@ -39884,16 +39838,14 @@ msgid "Design rules cannot be added without a project"
 msgstr "Правила проектирования не могут быть добавлены без проекта"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
-#, fuzzy
 msgid "DRC Rules"
-msgstr "Правила проектирования DRC"
+msgstr "Правила DRC"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
 msgstr "Проверить синтаксис правил"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
-#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
@@ -39902,9 +39854,9 @@ msgid ""
 msgstr ""
 "### Документация\n"
 "\n"
-"\n"
-"Полная документация приведена в [https://docs.kicad.org](https://docs.kicad."
-"org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"Полная документация приведена в [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40504,7 +40456,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
-#, fuzzy
 msgid ""
 "### Properties\n"
 "\n"
@@ -40517,12 +40468,10 @@ msgid ""
 msgstr ""
 "### Свойства\n"
 "\n"
-"\n"
 "Многие свойства объектов доступны для проверки в выражениях пользовательских "
-"правил. See the full documentation at [https://docs.kicad.org](https://docs."
-"kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules) "
-"for the complete list.\n"
-"\n"
+"правил. Смотрите полную документацию на [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) для полного списка.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -41139,18 +41088,16 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Round Shapes"
-msgstr "По умолчанию для округлых форм:"
+msgstr "По умолчанию для округлых фигур"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 msgid "Allow teardrop to span two track segments"
 msgstr "Разрешить охватывать два сегмента дорожек"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:189
-#, fuzzy
 msgid "Default Properties for Rectangular Shapes"
-msgstr "По умолчанию для прямоугольных фигур:"
+msgstr "По умолчанию для прямоугольных фигур"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
@@ -41158,9 +41105,8 @@ msgid "Allow teardrop to span track segments"
 msgstr "Разрешить каплевидным переходам охватывать сегменты дорожек"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:359
-#, fuzzy
 msgid "Properties for Track-to-Track Teardrops"
-msgstr "Свойства для каплевидных переходов между дорожками:"
+msgstr "Свойства каплевидных переходов между дорожками"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:473
 msgid ""
@@ -41175,9 +41121,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr "Для дорожек, схожих по размеру, каплевидные переходы не требуются."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:20
-#, fuzzy
 msgid "Default Properties for New Graphics and Text"
-msgstr "По умолчанию для новых графических элементов и текста:"
+msgstr "По умолчанию для новых графических элементов и текста"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -41201,9 +41146,8 @@ msgid "Hole"
 msgstr "Сверло"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential Pairs"
-msgstr "Дифференциальные пары:"
+msgstr "Дифференциальные пары"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -41214,19 +41158,16 @@ msgid "Via Gap"
 msgstr "Зазор перех. отв."
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Single Track Tuning"
-msgstr "По умолчанию для настройки длины единичных дорожек:"
+msgstr "По умолчанию для настройки длины единичных дорожек"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default Properties for Differential Pairs"
-msgstr "По умолчанию для дифференциальных пар:"
+msgstr "По умолчанию для дифференциальных пар"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
-#, fuzzy
 msgid "Default Properties for Differential Pair Skews"
-msgstr "По умолчанию для перекосов дифференциальных пар:"
+msgstr "По умолчанию для перекосов дифференциальных пар"
 
 #: pcbnew/drc/drc_cache_generator.cpp:124
 msgid "Gathering copper items..."
@@ -46844,9 +46785,8 @@ msgid "Marker (%s)"
 msgstr "Маркер (%s)"
 
 #: pcbnew/pcb_plotter.cpp:65
-#, fuzzy
 msgid "No layers selected for plotting."
-msgstr "Слой не выбран."
+msgstr "Не выбраны слои для черчения."
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -49044,9 +48984,8 @@ msgid "Place the Footprint Anchor"
 msgstr "Разместить точку привязки посад. места"
 
 #: pcbnew/tools/pcb_actions.cpp:349
-#, fuzzy
 msgid "Set the anchor point of the footprint"
-msgstr "Установить начало координат (привязку) для посад. места"
+msgstr "Установить начало координат (привязку) посад. места"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Increase Line Width"
@@ -50485,14 +50424,12 @@ msgid "Performs automatic placement of components outside board area"
 msgstr "Выполнить размещение компонентов, которые не на плате, автоматически"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
-#, fuzzy
 msgid "Generate Placement Rule Areas..."
-msgstr "Создание областей правил размещения"
+msgstr "Создать области правил размещения..."
 
 #: pcbnew/tools/pcb_actions.cpp:2236
-#, fuzzy
 msgid "Repeat Layout..."
-msgstr "Повторить разводку"
+msgstr "Повторить разводку..."
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
@@ -50797,9 +50734,8 @@ msgid "Selected Items"
 msgstr "Выбранные элементы"
 
 #: pcbnew/tools/pcb_control.cpp:1916
-#, fuzzy
 msgid "Selected 2D Length"
-msgstr "Выбрана цепь:"
+msgstr "2D длина выделенного"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
