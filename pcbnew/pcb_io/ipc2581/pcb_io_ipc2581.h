@@ -243,7 +243,7 @@ private:
     wxString genLayerString( PCB_LAYER_ID aLayer, const char* aPrefix ) const;
     wxString genLayersString( PCB_LAYER_ID aTop, PCB_LAYER_ID aBottom, const char* aPrefix ) const;
 
-    wxString floatVal( double aVal );
+    wxString floatVal( double aVal, int aSigFig = -1 ) const;
 
     wxString pinName( const PAD* aPad ) const;
 
