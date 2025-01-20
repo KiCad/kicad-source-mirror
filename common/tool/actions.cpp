@@ -451,7 +451,7 @@ TOOL_ACTION ACTIONS::editTable( TOOL_ACTION_ARGS()
         .Name( "pcbnew.TableEditor.editTable" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + 'E' )
-        .FriendlyName( _( "Edit Table" ) )
+        .FriendlyName( _( "Edit Table..." ) )
         .Icon( BITMAPS::spreadsheet ) );   // JEY TODO: need icon
 
 TOOL_ACTION ACTIONS::activatePointEditor( TOOL_ACTION_ARGS()
