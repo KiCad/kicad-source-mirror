@@ -12,7 +12,7 @@
 # Petri Niemelä <petrinm@gmail.com>, 2022, 2023.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024, 2025.
 # Toni Laiho <apelegeos@gmail.com>, 2022, 2023, 2024, 2025.
-# dsa-t <dudesuchamazing@gmail.com>, 2024.
+# dsa-t <dudesuchamazing@gmail.com>, 2024, 2025.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-21 16:52+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -14746,7 +14746,7 @@ msgstr "Ei Kytketty"
 #: eeschema/dialogs/dialog_sim_model.cpp:869
 #, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "Ei mallia nimeltä '%s' %s':ssa."
+msgstr "Ei mallia nimeltä '%s' kirjastossa '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1253
 msgid "Browse Models"
