@@ -34,6 +34,7 @@
 
 #include <build_version.h>
 #include <locale_io.h>
+#include <macros.h>
 #include <potracelib.h>
 #include <reporter.h>
 #include <fmt/format.h>
@@ -127,6 +128,7 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap, OUTPUT_FM
         break;
 
     case SYMBOL_FMT:
+    case SYMBOL_PASTE_FMT:
         m_ScaleX = SCH_IU_PER_MM * 25.4 / aDpi_X;   // the conversion scale from PPI to eeschema iu
         m_ScaleY = -SCH_IU_PER_MM * 25.4 / aDpi_Y;  // Y axis is bottom to Top for components in libs
         createOutputData();
@@ -192,12 +194,15 @@ void BITMAPCONV_INFO::outputDataHeader( const wxString& aBrdLayerName )
         break;
 
     case SYMBOL_FMT:
+        m_Data += fmt::format( "(kicad_symbol_lib (version 20220914) (generator \"bitmap2component\") (generator_version \"{}\")\n",
+                               GetMajorMinorVersion().ToStdString() );
+        KI_FALLTHROUGH;
+
+    case SYMBOL_PASTE_FMT:
         fieldSize = 1.27;             // fields text size in mm (= 50 mils)
         Ypos /= SCH_IU_PER_MM;
         Ypos += fieldSize / 2;
-        m_Data += fmt::format( "(kicad_symbol_lib (version 20220914) (generator \"bitmap2component\") (generator_version \"{}\")\n"
-                               "  (symbol \"{}\" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)\n",
-                               GetMajorMinorVersion().ToStdString(),
+        m_Data += fmt::format( "  (symbol \"{}\" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)\n",
                                m_CmpName.c_str() );
 
         m_Data += fmt::format( "    (property \"Reference\" \"#G\" (at 0 {:g} 0)\n"
@@ -244,6 +249,11 @@ void BITMAPCONV_INFO::outputDataEnd()
 
     case DRAWING_SHEET_FMT:
         m_Data += "  )\n)\n";
+        break;
+
+    case SYMBOL_PASTE_FMT:
+        m_Data += "    )\n";        // end symbol_0_0
+        m_Data += "  )\n";          // end symbol
         break;
 
     case SYMBOL_FMT:
@@ -336,6 +346,7 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN& aPolygon, const wxStri
         break;
 
     case SYMBOL_FMT:
+    case SYMBOL_PASTE_FMT:
         // The polygon outline thickness is fixed here to 0.01  ( 0.0 is the default thickness)
 #define SCH_LINE_THICKNESS_MM 0.01
         //snprintf( strbuf, sizeof(strbuf), "P %d 0 0 %d", (int) aPolygon.PointCount() + 1, EE_LINE_THICKNESS );

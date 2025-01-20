@@ -84,7 +84,8 @@ void BITMAP2CMP_PANEL::LoadSettings( BITMAP2CMP_SETTINGS* cfg )
     {
     default:
     case FOOTPRINT_FMT:     m_rbFootprint->SetValue( true );  break;
-    case SYMBOL_FMT:        m_rbSymbol->SetValue( true );     break;
+    case SYMBOL_FMT:
+    case SYMBOL_PASTE_FMT:  m_rbSymbol->SetValue( true );     break;
     case POSTSCRIPT_FMT:    m_rbPostscript->SetValue( true ); break;
     case DRAWING_SHEET_FMT: m_rbWorksheet->SetValue( true );  break;
     }
@@ -459,7 +460,8 @@ void BITMAP2CMP_PANEL::OnExportToFile( wxCommandEvent& event )
 {
     switch( getOutputFormat() )
     {
-    case SYMBOL_FMT:        m_parentFrame->ExportEeschemaFormat();     break;
+    case SYMBOL_FMT:
+    case SYMBOL_PASTE_FMT:  m_parentFrame->ExportEeschemaFormat();     break;
     case FOOTPRINT_FMT:     m_parentFrame->ExportPcbnewFormat();       break;
     case POSTSCRIPT_FMT:    m_parentFrame->ExportPostScriptFormat();   break;
     case DRAWING_SHEET_FMT: m_parentFrame->ExportDrawingSheetFormat(); break;
@@ -483,7 +485,8 @@ OUTPUT_FMT_ID BITMAP2CMP_PANEL::getOutputFormat()
 void BITMAP2CMP_PANEL::OnExportToClipboard( wxCommandEvent& event )
 {
     std::string buffer;
-    ExportToBuffer( buffer, getOutputFormat() );
+    OUTPUT_FMT_ID format = getOutputFormat() == SYMBOL_FMT ? SYMBOL_PASTE_FMT : getOutputFormat();
+    ExportToBuffer( buffer, format );
 
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
@@ -540,6 +543,8 @@ void BITMAP2CMP_PANEL::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aForm
         case 7: layer = wxT( "F.Fab" );     break;
         }
     }
+
+
 
     WX_STRING_REPORTER reporter;
     BITMAPCONV_INFO    converter( aOutput, reporter );

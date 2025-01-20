@@ -32,6 +32,7 @@ class REPORTER;
 enum OUTPUT_FMT_ID
 {
     SYMBOL_FMT,
+    SYMBOL_PASTE_FMT, // This does not include the header information
     FOOTPRINT_FMT,
     POSTSCRIPT_FMT,
     DRAWING_SHEET_FMT,
