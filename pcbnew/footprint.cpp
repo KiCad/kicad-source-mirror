@@ -4076,12 +4076,11 @@ static struct FOOTPRINT_DESC
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),
                     groupFields );
 
-        // Used only in DRC engine
+        // Note: Also used by DRC engine
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>(
                                      _HKI( "Component Class" ), NO_SETTER( FOOTPRINT, wxString ),
-                                     &FOOTPRINT::GetComponentClassAsString ) )
-                .SetIsHiddenFromLibraryEditors()
-                .SetIsHiddenFromPropertiesManager();
+                                     &FOOTPRINT::GetComponentClassAsString ), groupFields )
+                .SetIsHiddenFromLibraryEditors();
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
