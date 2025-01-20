@@ -123,9 +123,6 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame, P
         m_separatorsStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
     }
 
-    m_borderStyleCombo->Append( DEFAULT_STYLE );
-    m_separatorsStyleCombo->Append( DEFAULT_STYLE );
-
     SetupStandardButtons();
     Layout();
 
@@ -211,12 +208,10 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
 
     int style = static_cast<int>( m_table->GetBorderStroke().GetLineStyle() );
 
-    if( style == -1 )
-        m_borderStyleCombo->SetStringSelection( DEFAULT_STYLE );
-    else if( style < (int) lineTypeNames.size() )
+    if( style >= 0 && style < (int) lineTypeNames.size() )
         m_borderStyleCombo->SetSelection( style );
     else
-        wxFAIL_MSG( "Line type not found in the type lookup map" );
+        m_borderStyleCombo->SetSelection( 0 );
 
     m_borderWidth.Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
     m_borderStyleLabel->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
@@ -233,12 +228,10 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
 
     style = static_cast<int>( m_table->GetSeparatorsStroke().GetLineStyle() );
 
-    if( style == -1 )
-        m_separatorsStyleCombo->SetStringSelection( DEFAULT_STYLE );
-    else if( style < (int) lineTypeNames.size() )
+    if( style >= 0 && style < (int) lineTypeNames.size() )
         m_separatorsStyleCombo->SetSelection( style );
     else
-        wxFAIL_MSG( "Line type not found in the type lookup map" );
+        m_separatorsStyleCombo->SetSelection( 0 );
 
     m_separatorsWidth.Enable( rows || cols );
     m_separatorsStyleLabel->Enable( rows || cols );
@@ -339,7 +332,7 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
         std::advance( it, m_borderStyleCombo->GetSelection() );
 
         if( it == lineTypeNames.end() )
-            stroke.SetLineStyle( LINE_STYLE::DEFAULT );
+            stroke.SetLineStyle( LINE_STYLE::SOLID );
         else
             stroke.SetLineStyle( it->first );
 
@@ -360,7 +353,7 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
         std::advance( it, m_separatorsStyleCombo->GetSelection() );
 
         if( it == lineTypeNames.end() )
-            stroke.SetLineStyle( LINE_STYLE::DEFAULT );
+            stroke.SetLineStyle( LINE_STYLE::SOLID );
         else
             stroke.SetLineStyle( it->first );
 

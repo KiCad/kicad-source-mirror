@@ -1983,17 +1983,17 @@ void SCH_IO_KICAD_LEGACY::saveLine( SCH_LINE* aLine )
     // Write line style (width, type, color) only for non default values
     if( aLine->IsGraphicLine() )
     {
-        if( aLine->GetLineWidth() != 0 )
-            m_out->Print( 0, " %s %d", T_WIDTH, schIUScale.IUToMils( aLine->GetLineWidth() ) );
+        const STROKE_PARAMS& stroke = aLine->GetStroke();
 
-        m_out->Print( 0, " %s %s", T_STYLE,
-                      TO_UTF8( STROKE_PARAMS::GetLineStyleToken( aLine->GetLineStyle() ) ) );
+        if( stroke.GetWidth() != 0 )
+            m_out->Print( 0, " %s %d", T_WIDTH, schIUScale.IUToMils( stroke.GetWidth() ) );
 
-        if( aLine->GetLineColor() != COLOR4D::UNSPECIFIED )
-        {
-            m_out->Print( 0, " %s",
-                TO_UTF8( aLine->GetLineColor().ToCSSString() ) );
-        }
+        m_out->Print( 0, " %s %s",
+                      T_STYLE,
+                      TO_UTF8( STROKE_PARAMS::GetLineStyleToken( stroke.GetLineStyle() ) ) );
+
+        if( stroke.GetColor() != COLOR4D::UNSPECIFIED )
+            m_out->Print( 0, " %s", TO_UTF8( stroke.GetColor().ToCSSString() ) );
     }
 
     m_out->Print( 0, "\n" );

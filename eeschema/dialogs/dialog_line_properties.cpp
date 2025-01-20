@@ -52,8 +52,6 @@ DIALOG_LINE_PROPERTIES::DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent,
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
         m_typeCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
-    m_typeCombo->Append( DEFAULT_STYLE );
-
     SetupStandardButtons( { { wxID_APPLY, _( "Default" ) } } );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
@@ -99,12 +97,10 @@ bool DIALOG_LINE_PROPERTIES::TransferDataToWindow()
     {
         int style = static_cast<int>( first_stroke_item->GetStroke().GetLineStyle() );
 
-        if( style == -1 )
-            m_typeCombo->SetStringSelection( DEFAULT_STYLE );
-        else if( style < (int) lineTypeNames.size() )
+        if( style >= 0 && style < (int) lineTypeNames.size() )
             m_typeCombo->SetSelection( style );
         else
-            wxFAIL_MSG( wxT( "Line type not found in the type lookup map" ) );
+            m_typeCombo->SetSelection( 0 );
     }
     else
     {

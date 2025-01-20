@@ -2851,7 +2851,7 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     else
     {
         line.SetLineColor( color );
-        line.SetLineStyle( aEntry->GetLineStyle() );
+        line.SetLineStyle( aEntry->GetEffectiveLineStyle() );
 
         draw( &line, aLayer );
     }

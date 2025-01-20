@@ -81,8 +81,14 @@ public:
     virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
-    LINE_STYLE GetLineStyle() const;
     void SetLineStyle( LINE_STYLE aStyle );
+    LINE_STYLE GetEffectiveLineStyle() const;
+
+    // Special Getter/Setters for properties panel.  Required because it uses WIRE_STYLE instead
+    // of LINE_STYLE.  (The two enums are identical, but we expose "default" in the WIRE_STYLE
+    // property while we don't with the LINE_STYLE property.)
+    void SetWireStyle( WIRE_STYLE aStyle ) { SetLineStyle( (LINE_STYLE) aStyle ); }
+    WIRE_STYLE GetWireStyle() const { return (WIRE_STYLE) GetStroke().GetLineStyle(); }
 
     COLOR4D GetBusEntryColor() const;
     void SetBusEntryColor( const COLOR4D& aColor );

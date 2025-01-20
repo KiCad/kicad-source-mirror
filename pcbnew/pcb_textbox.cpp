@@ -788,16 +788,15 @@ static struct PCB_TEXTBOX_DESC
 {
     PCB_TEXTBOX_DESC()
     {
-        ENUM_MAP<LINE_STYLE>& plotDashTypeEnum = ENUM_MAP<LINE_STYLE>::Instance();
+        ENUM_MAP<LINE_STYLE>& lineStyleEnum = ENUM_MAP<LINE_STYLE>::Instance();
 
-        if( plotDashTypeEnum.Choices().GetCount() == 0 )
+        if( lineStyleEnum.Choices().GetCount() == 0 )
         {
-            plotDashTypeEnum.Map( LINE_STYLE::DEFAULT, _HKI( "Default" ) )
-                            .Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
-                            .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
-                            .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
-                            .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
-                            .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            lineStyleEnum.Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
+                         .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
+                         .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
+                         .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                         .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();

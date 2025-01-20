@@ -62,6 +62,20 @@ struct LINE_STYLE_DESC
 };
 
 
+// A cover of LINE_STYLE for the properties manager (so that it can have different
+// strings from the normal LINE_STYLE)
+enum class WIRE_STYLE
+{
+    DEFAULT    = -1,
+    SOLID      = 0,
+    DASH,
+    DOT,
+    DASHDOT,
+    DASHDOTDOT
+};
+
+
+
 /**
  * Conversion map between LINE_STYLE values and style names displayed.
  */

@@ -66,8 +66,6 @@ static wxString   g_netFilter;
 static bool       g_filterSelected;
 
 
-#define DEFAULT_STYLE _( "Default" )
-
 class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
 {
     SCH_EDIT_FRAME*        m_parent;
@@ -115,7 +113,6 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
 {
     m_parent = parent;
 
-    m_lineStyle->Append( DEFAULT_STYLE );
     m_lineStyle->Append( INDETERMINATE_ACTION );
 
     m_textColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
@@ -335,12 +332,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
             stroke.SetWidth( m_lineWidth.GetValue() );
 
         if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
-        {
-            if( m_lineStyle->GetStringSelection() == DEFAULT_STYLE )
-                stroke.SetLineStyle( LINE_STYLE::DEFAULT );
-            else
-                stroke.SetLineStyle( (LINE_STYLE) m_lineStyle->GetSelection() );
-        }
+            stroke.SetLineStyle( (LINE_STYLE) m_lineStyle->GetSelection() );
 
         if( m_setColor->GetValue() )
             stroke.SetColor( m_colorSwatch->GetSwatchColor() );

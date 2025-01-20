@@ -58,8 +58,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_S
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
         m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
-    m_borderStyleCombo->Append( DEFAULT_STYLE );
-
     m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_fillColorSwatch->SetSwatchBackground( schematicBackground );
 
@@ -329,7 +327,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     std::advance( it, m_borderStyleCombo->GetSelection() );
 
     if( it == lineTypeNames.end() )
-        stroke.SetLineStyle( LINE_STYLE::DEFAULT );
+        stroke.SetLineStyle( LINE_STYLE::SOLID );
     else
         stroke.SetLineStyle( it->first );
 

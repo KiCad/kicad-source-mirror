@@ -40,6 +40,7 @@
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
+#include <properties/property.h>
 
 
 SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
@@ -276,25 +277,10 @@ COLOR4D SCH_LINE::GetLineColor() const
 }
 
 
-void SCH_LINE::SetLineStyle( const int aStyleId )
-{
-    SetLineStyle( static_cast<LINE_STYLE>( aStyleId ) );
-}
-
-
 void SCH_LINE::SetLineStyle( const LINE_STYLE aStyle )
 {
     m_stroke.SetLineStyle( aStyle );
-    m_lastResolvedLineStyle = GetLineStyle();
-}
-
-
-LINE_STYLE SCH_LINE::GetLineStyle() const
-{
-    if( m_stroke.GetLineStyle() != LINE_STYLE::DEFAULT )
-        return m_stroke.GetLineStyle();
-
-    return LINE_STYLE::SOLID;
+    m_lastResolvedLineStyle = GetEffectiveLineStyle();
 }
 
 
@@ -936,7 +922,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Line Type" ), msg );
 
-    LINE_STYLE lineStyle = GetLineStyle();
+    LINE_STYLE lineStyle = GetStroke().GetLineStyle();
 
     if( GetEffectiveLineStyle() != lineStyle )
         aList.emplace_back( _( "Line Style" ), _( "from netclass" ) );
@@ -1046,31 +1032,65 @@ static struct SCH_LINE_DESC
 {
     SCH_LINE_DESC()
     {
-        ENUM_MAP<LINE_STYLE>& plotDashTypeEnum = ENUM_MAP<LINE_STYLE>::Instance();
+        ENUM_MAP<LINE_STYLE>& lineStyleEnum = ENUM_MAP<LINE_STYLE>::Instance();
 
-        if( plotDashTypeEnum.Choices().GetCount() == 0 )
+        if( lineStyleEnum.Choices().GetCount() == 0 )
         {
-            plotDashTypeEnum.Map( LINE_STYLE::DEFAULT, _HKI( "Default" ) )
-                            .Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
-                            .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
-                            .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
-                            .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
-                            .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            lineStyleEnum.Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
+                         .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
+                         .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
+                         .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                         .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+        }
+
+        ENUM_MAP<WIRE_STYLE>& wireLineStyleEnum = ENUM_MAP<WIRE_STYLE>::Instance();
+
+        if( wireLineStyleEnum.Choices().GetCount() == 0 )
+        {
+            wireLineStyleEnum.Map( WIRE_STYLE::DEFAULT, _HKI( "Default" ) )
+                             .Map( WIRE_STYLE::SOLID, _HKI( "Solid" ) )
+                             .Map( WIRE_STYLE::DASH, _HKI( "Dashed" ) )
+                             .Map( WIRE_STYLE::DOT, _HKI( "Dotted" ) )
+                             .Map( WIRE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                             .Map( WIRE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_LINE );
         propMgr.InheritsAfter( TYPE_HASH( SCH_LINE ), TYPE_HASH( SCH_ITEM ) );
 
-        void ( SCH_LINE::*lineStyleSetter )( LINE_STYLE ) = &SCH_LINE::SetLineStyle;
+        auto isGraphicLine =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_LINE* line = dynamic_cast<SCH_LINE*>( aItem ) )
+                        return line->IsGraphicLine();
+
+                    return false;
+                };
+
+        auto isWireOrBus =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_LINE* line = dynamic_cast<SCH_LINE*>( aItem ) )
+                        return line->IsWire() || line->IsBus();
+
+                    return false;
+                };
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, LINE_STYLE>( _HKI( "Line Style" ),
-                lineStyleSetter, &SCH_LINE::GetLineStyle ) );
+                    &SCH_LINE::SetLineStyle, &SCH_LINE::GetLineStyle ) )
+                .SetAvailableFunc( isGraphicLine );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, WIRE_STYLE>( _HKI( "Line Style" ),
+                    &SCH_LINE::SetWireStyle, &SCH_LINE::GetWireStyle ) )
+                .SetAvailableFunc( isWireOrBus );
 
         propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Line Width" ),
-                &SCH_LINE::SetLineWidth, &SCH_LINE::GetLineWidth, PROPERTY_DISPLAY::PT_SIZE ) );
+                    &SCH_LINE::SetLineWidth, &SCH_LINE::GetLineWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_LINE, COLOR4D>( _HKI( "Color" ),
-                &SCH_LINE::SetLineColor, &SCH_LINE::GetLineColor ) );
+                    &SCH_LINE::SetLineColor, &SCH_LINE::GetLineColor ) );
     }
 } _SCH_LINE_DESC;
+
+IMPLEMENT_ENUM_TO_WXANY( WIRE_STYLE )

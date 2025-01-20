@@ -130,8 +130,6 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
         m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
-    m_borderStyleCombo->Append( DEFAULT_STYLE );
-
     SetupStandardButtons();
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
@@ -369,7 +367,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     std::advance( it, m_borderStyleCombo->GetSelection() );
 
     if( it == lineTypeNames.end() )
-        stroke.SetLineStyle( LINE_STYLE::DEFAULT );
+        stroke.SetLineStyle( LINE_STYLE::SOLID );
     else
         stroke.SetLineStyle( it->first );
 

@@ -63,10 +63,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITE
         m_borderColorSwatch->SetSwatchBackground( schematicBackground );
 
         for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
-            m_borderStyleCombo->Append( lineStyleDesc.name,
-                                        KiBitmapBundle( lineStyleDesc.bitmap ) );
-
-        m_borderStyleCombo->Append( DEFAULT_STYLE );
+            m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
         m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
         m_fillColorSwatch->SetSwatchBackground( schematicBackground );
@@ -324,12 +321,10 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
         int style = static_cast<int>( textBox->GetStroke().GetLineStyle() );
 
-        if( style == -1 )
-            m_borderStyleCombo->SetStringSelection( DEFAULT_STYLE );
-        else if( style < (int) lineTypeNames.size() )
+        if( style >= 0 && style < (int) lineTypeNames.size() )
             m_borderStyleCombo->SetSelection( style );
         else
-            wxFAIL_MSG( "Line type not found in the type lookup map" );
+            m_borderStyleCombo->SetSelection( 0 );
 
         m_borderWidth.Enable( textBox->GetWidth() >= 0 );
         m_borderColorLabel->Enable( textBox->GetWidth() >= 0 );
@@ -574,7 +569,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         std::advance( it, m_borderStyleCombo->GetSelection() );
 
         if( it == lineTypeNames.end() )
-            stroke.SetLineStyle( LINE_STYLE::DEFAULT );
+            stroke.SetLineStyle( LINE_STYLE::SOLID );
         else
             stroke.SetLineStyle( it->first );
 

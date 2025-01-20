@@ -273,7 +273,7 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
     netProperty->SetChoices( nets );
 
-    // Regnerate font names
+    // Regenerate font names
     std::vector<std::string> fontNames;
     Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
                              aBoard->GetFontFiles() );

@@ -1001,8 +1001,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
         m_lineStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
-    m_lineStyleCombo->Append( DEFAULT_STYLE );
-
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
@@ -1112,12 +1110,10 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
 
     int style = static_cast<int>( m_item->GetStroke().GetLineStyle() );
 
-    if( style == -1 )
-        m_lineStyleCombo->SetStringSelection( DEFAULT_STYLE );
-    else if( style < (int) lineTypeNames.size() )
+    if( style >= 0 && style < (int) lineTypeNames.size() )
         m_lineStyleCombo->SetSelection( style );
     else
-        wxFAIL_MSG( "Line type not found in the type lookup map" );
+        m_lineStyleCombo->SetSelection( 0 );
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 
@@ -1170,7 +1166,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     std::advance( it, m_lineStyleCombo->GetSelection() );
 
     if( it == lineTypeNames.end() )
-        stroke.SetLineStyle( LINE_STYLE::DEFAULT );
+        stroke.SetLineStyle( LINE_STYLE::SOLID );
     else
         stroke.SetLineStyle( it->first );
 

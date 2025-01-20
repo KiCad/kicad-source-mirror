@@ -203,7 +203,7 @@ void SCH_BUS_ENTRY_BASE::SetBusEntryColor( const COLOR4D& aColor )
 }
 
 
-LINE_STYLE SCH_BUS_ENTRY_BASE::GetLineStyle() const
+LINE_STYLE SCH_BUS_ENTRY_BASE::GetEffectiveLineStyle() const
 {
     if( m_stroke.GetLineStyle() != LINE_STYLE::DEFAULT )
         m_lastResolvedLineStyle = m_stroke.GetLineStyle();
@@ -274,7 +274,7 @@ void SCH_BUS_ENTRY_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit,
     VECTOR2I end = GetEnd() + aOffset;
     int      penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
 
-    if( GetLineStyle() <= LINE_STYLE::FIRST_TYPE )
+    if( GetEffectiveLineStyle() <= LINE_STYLE::FIRST_TYPE )
     {
         GRLine( DC, start.x, start.y, end.x, end.y, penWidth, color );
     }
@@ -282,7 +282,7 @@ void SCH_BUS_ENTRY_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit,
     {
         SHAPE_SEGMENT segment( start, end );
 
-        STROKE_PARAMS::Stroke( &segment, GetLineStyle(), penWidth, aSettings,
+        STROKE_PARAMS::Stroke( &segment, GetEffectiveLineStyle(), penWidth, aSettings,
                                [&]( const VECTOR2I& a, const VECTOR2I& b )
                                {
                                    GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
@@ -507,7 +507,7 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PL
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( color );
-    aPlotter->SetDash( penWidth, GetLineStyle() );
+    aPlotter->SetDash( penWidth, GetEffectiveLineStyle() );
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( GetEnd() );
 
@@ -652,31 +652,26 @@ static struct SCH_BUS_ENTRY_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_WIRE_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_BUS_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
 
-        ENUM_MAP<LINE_STYLE>& plotDashTypeEnum = ENUM_MAP<LINE_STYLE>::Instance();
+        ENUM_MAP<WIRE_STYLE>& wireLineStyleEnum = ENUM_MAP<WIRE_STYLE>::Instance();
 
-        if( plotDashTypeEnum.Choices().GetCount() == 0 )
+        if( wireLineStyleEnum.Choices().GetCount() == 0 )
         {
-            plotDashTypeEnum.Map( LINE_STYLE::DEFAULT, _HKI( "Default" ) )
-                            .Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
-                            .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
-                            .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
-                            .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
-                            .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            wireLineStyleEnum.Map( WIRE_STYLE::DEFAULT, _HKI( "Default" ) )
+                             .Map( WIRE_STYLE::SOLID, _HKI( "Solid" ) )
+                             .Map( WIRE_STYLE::DASH, _HKI( "Dashed" ) )
+                             .Map( WIRE_STYLE::DOT, _HKI( "Dotted" ) )
+                             .Map( WIRE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                             .Map( WIRE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
-        // TODO: Maybe SCH_BUS_ENTRY_BASE should inherit from or mix in with SCH_LINE
-        void ( SCH_BUS_ENTRY_BASE::*lineStyleSetter )( LINE_STYLE ) =
-                &SCH_BUS_ENTRY_BASE::SetLineStyle;
-
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_BUS_ENTRY_BASE, LINE_STYLE>(
-                _HKI( "Line Style" ),
-                lineStyleSetter, &SCH_BUS_ENTRY_BASE::GetLineStyle ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_BUS_ENTRY_BASE, WIRE_STYLE>( _HKI( "Line Style" ),
+                    &SCH_BUS_ENTRY_BASE::SetWireStyle, &SCH_BUS_ENTRY_BASE::GetWireStyle ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_BUS_ENTRY_BASE, int>( _HKI( "Line Width" ),
-                &SCH_BUS_ENTRY_BASE::SetPenWidth, &SCH_BUS_ENTRY_BASE::GetPenWidth,
-                PROPERTY_DISPLAY::PT_SIZE ) );
+                    &SCH_BUS_ENTRY_BASE::SetPenWidth, &SCH_BUS_ENTRY_BASE::GetPenWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_BUS_ENTRY_BASE, COLOR4D>( _HKI( "Color" ),
-                &SCH_BUS_ENTRY_BASE::SetBusEntryColor, &SCH_BUS_ENTRY_BASE::GetBusEntryColor ) );
+                    &SCH_BUS_ENTRY_BASE::SetBusEntryColor, &SCH_BUS_ENTRY_BASE::GetBusEntryColor ) );
     }
 } _SCH_BUS_ENTRY_DESC;

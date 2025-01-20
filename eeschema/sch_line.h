@@ -163,12 +163,17 @@ public:
     }
 
     void       SetLineStyle( const LINE_STYLE aStyle );
-    void       SetLineStyle( const int aStyleId );
-    LINE_STYLE GetLineStyle() const;
-
+    LINE_STYLE GetLineStyle() const { return m_stroke.GetLineStyle(); }
     /// @return the style that the line should be drawn in
     /// this might be set on the line or inherited from the line's netclass
     LINE_STYLE GetEffectiveLineStyle() const;
+
+    // Special Getter/Setters for properties panel.  Required because it uses WIRE_STYLE instead
+    // of LINE_STYLE.  (The two enums are identical, but we expose "default" in the WIRE_STYLE
+    // property while we don't with the LINE_STYLE property.)
+    void       SetWireStyle( const WIRE_STYLE aStyle ) { SetLineStyle( (LINE_STYLE) aStyle ); }
+    WIRE_STYLE GetWireStyle() const { return (WIRE_STYLE) GetLineStyle(); }
+
 
     void SetLineColor( const COLOR4D& aColor );
 
@@ -361,6 +366,11 @@ private:
 
     wxString           m_operatingPoint;
 };
+
+
+#ifndef SWIG
+DECLARE_ENUM_TO_WXANY( WIRE_STYLE );
+#endif
 
 
 #endif    // _SCH_LINE_H_
