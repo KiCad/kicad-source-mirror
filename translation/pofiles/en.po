@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 23:16+0300\n"
+"POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -937,14 +937,14 @@ msgstr "Load Source Image"
 msgid "Output Size"
 msgstr "Output Size"
 
-msgid "Lock height / width ratio"
-msgstr "Lock height / width ratio"
-
 msgid "Size:"
 msgstr "Size:"
 
 msgid "300"
 msgstr "300"
+
+msgid "Lock height / width ratio"
+msgstr "Lock height / width ratio"
 
 msgid "Options"
 msgstr "Options"
@@ -962,29 +962,8 @@ msgstr ""
 msgid "Negative"
 msgstr "Negative"
 
-msgid "Pcb Layer for Graphics"
-msgstr "Pcb Layer for Graphics"
-
-msgid "Front silk screen"
-msgstr "Front silk screen"
-
-msgid "Front solder mask"
-msgstr "Front solder mask"
-
-msgid "Front Fab layer"
-msgstr "Front Fab layer"
-
-msgid "User layer drawings"
-msgstr "User layer drawings"
-
-msgid "User layer comments"
-msgstr "User layer comments"
-
-msgid "User layer Eco1"
-msgstr "User layer Eco1"
-
-msgid "User layer Eco2"
-msgstr "User layer Eco2"
+msgid "Output Format"
+msgstr "Output Format"
 
 msgid "Symbol (.kicad_sym file)"
 msgstr "Symbol (.kicad_sym file)"
@@ -992,20 +971,26 @@ msgstr "Symbol (.kicad_sym file)"
 msgid "Footprint (.kicad_mod file)"
 msgstr "Footprint (.kicad_mod file)"
 
+msgid "Layer:"
+msgstr "Layer:"
+
+msgid "F.Fab"
+msgstr "F.Fab"
+
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps file)"
 
 msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Drawing Sheet (.kicad_wks file)"
 
-msgid "Output Format"
-msgstr "Output Format"
-
-msgid "Export to File"
-msgstr "Export to File"
+msgid "Export to File..."
+msgstr "Export to File..."
 
 msgid "Export to Clipboard"
 msgstr "Export to Clipboard"
+
+msgid "No shape in black and white image to convert: no outline created."
+msgstr "No shape in black and white image to convert: no outline created."
 
 msgid "Modification from API"
 msgstr "Modification from API"
@@ -5404,8 +5389,8 @@ msgstr "Unmerge Cells"
 msgid "Turn merged table cells back into separate cells."
 msgstr "Turn merged table cells back into separate cells."
 
-msgid "Edit Table"
-msgstr "Edit Table"
+msgid "Edit Table..."
+msgstr "Edit Table..."
 
 msgid "Cycle Arc Editing Mode"
 msgstr "Cycle Arc Editing Mode"
@@ -9810,6 +9795,9 @@ msgstr "Some of the project files could not be backed up."
 msgid "Remap Symbols"
 msgstr "Remap Symbols"
 
+msgid "Edit Table"
+msgstr "Edit Table"
+
 msgid "Cell contents:"
 msgstr "Cell contents:"
 
@@ -9854,9 +9842,6 @@ msgstr "Background fill:"
 
 msgid "Cell margins:"
 msgstr "Cell margins:"
-
-msgid "Edit Table..."
-msgstr "Edit Table..."
 
 msgid "Edit table properties and cell contents"
 msgstr "Edit table properties and cell contents"
@@ -10663,6 +10648,10 @@ msgid "BOM format preset '%s' not found"
 msgstr "BOM format preset '%s' not found"
 
 #, c-format
+msgid "Wrote bill of materials to '%s'."
+msgstr "Wrote bill of materials to '%s'."
+
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Plotting symbol '%s' unit %d to '%s'\n"
 
@@ -10693,6 +10682,10 @@ msgstr "Found %d violations\n"
 #, c-format
 msgid "Unable to save ERC report to %s\n"
 msgstr "Unable to save ERC report to %s\n"
+
+#, c-format
+msgid "Saved ERC Report to %s\n"
+msgstr "Saved ERC Report to %s\n"
 
 msgid "Net Navigator"
 msgstr "Net Navigator"
@@ -11600,8 +11593,8 @@ msgstr "Could not find library file '%s'"
 msgid "Command error. Return code %d."
 msgstr "Command error. Return code %d."
 
-msgid "Success."
-msgstr "Success."
+msgid "Done."
+msgstr "Done."
 
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Error: duplicate sheet names. Continue?"
@@ -12701,15 +12694,9 @@ msgstr "No sheets to plot."
 msgid "Plotted to '%s'.\n"
 msgstr "Plotted to '%s'.\n"
 
-msgid "Done."
-msgstr "Done."
-
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Plotted to '%s'."
-
-msgid "Done"
-msgstr "Done"
 
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
@@ -22846,9 +22833,6 @@ msgstr "Text frame:"
 msgid "Draw a shape around the leader text"
 msgstr "Draw a shape around the leader text"
 
-msgid "Layer:"
-msgstr "Layer:"
-
 msgid "Dimension Format"
 msgstr "Dimension Format"
 
@@ -24141,9 +24125,6 @@ msgstr "Back (bottom side) placement file: '%s'."
 msgid "Full component count: %d."
 msgstr "Full component count: %d."
 
-msgid "File generation successful."
-msgstr "File generation successful."
-
 msgid "No footprint for automated placement."
 msgstr "No footprint for automated placement."
 
@@ -25121,8 +25102,14 @@ msgstr "Front solder paste"
 msgid "Back solder paste"
 msgstr "Back solder paste"
 
+msgid "Front silk screen"
+msgstr "Front silk screen"
+
 msgid "Back silk screen"
 msgstr "Back silk screen"
+
+msgid "Front solder mask"
+msgstr "Front solder mask"
 
 msgid "Back solder mask"
 msgstr "Back solder mask"
@@ -26416,14 +26403,14 @@ msgstr "Drag (45 degree mode)"
 msgid "Drag (free angle)"
 msgstr "Drag (free angle)"
 
+msgid "Flip board items:"
+msgstr "Flip board items:"
+
 msgid "Left/right"
 msgstr "Left/right"
 
 msgid "Top/bottom"
 msgstr "Top/bottom"
-
-msgid "Board Items Flip"
-msgstr "Board Items Flip"
 
 msgid "Allow free pads"
 msgstr "Allow free pads"
@@ -33102,11 +33089,18 @@ msgstr "Failed to load board\n"
 msgid "Unknown export format"
 msgstr "Unknown export format"
 
+#, c-format
+msgid "Successfully exported VRML to %s"
+msgstr "Successfully exported VRML to %s"
+
 msgid "Error exporting VRML"
 msgstr "Error exporting VRML"
 
 msgid "Invalid image dimensions"
 msgstr "Invalid image dimensions"
+
+msgid "Successfully created 3D render image"
+msgstr "Successfully created 3D render image"
 
 msgid "Error creating 3D render image"
 msgstr "Error creating 3D render image"
@@ -33114,6 +33108,21 @@ msgstr "Error creating 3D render image"
 #, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "Failed to plot to '%s'.\n"
+
+msgid "Successfully created genCAD file\n"
+msgstr "Successfully created genCAD file\n"
+
+#, c-format
+msgid "Wrote front position data to '%s'.\n"
+msgstr "Wrote front position data to '%s'.\n"
+
+#, c-format
+msgid "Wrote back position data to '%s'.\n"
+msgstr "Wrote back position data to '%s'.\n"
+
+#, c-format
+msgid "Wrote position data to '%s'.\n"
+msgstr "Wrote position data to '%s'.\n"
 
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "Footprint library path does not exist or is not accessible\n"
@@ -33154,6 +33163,10 @@ msgstr "Found %d schematic parity issues\n"
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "Unable to save DRC report to %s\n"
+
+#, c-format
+msgid "Saved DRC Report to %s\n"
+msgstr "Saved DRC Report to %s\n"
 
 msgid "Multiple Layers"
 msgstr "Multiple Layers"
@@ -36822,6 +36835,9 @@ msgstr ""
 msgid "KiCad PCB Layout Editor"
 msgstr "KiCad PCB Layout Editor"
 
+msgid "The KiCad Developers"
+msgstr "The KiCad Developers"
+
 msgid "Gerber file"
 msgstr "Gerber file"
 
@@ -36846,6 +36862,39 @@ msgstr "KiCad Schematic Symbol"
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
 
+#~ msgid "Pcb Layer for Graphics"
+#~ msgstr "Pcb Layer for Graphics"
+
+#~ msgid "Front Fab layer"
+#~ msgstr "Front Fab layer"
+
+#~ msgid "User layer drawings"
+#~ msgstr "User layer drawings"
+
+#~ msgid "User layer comments"
+#~ msgstr "User layer comments"
+
+#~ msgid "User layer Eco1"
+#~ msgstr "User layer Eco1"
+
+#~ msgid "User layer Eco2"
+#~ msgstr "User layer Eco2"
+
+#~ msgid "Export to File"
+#~ msgstr "Export to File"
+
+#~ msgid "Success."
+#~ msgstr "Success."
+
+#~ msgid "Done"
+#~ msgstr "Done"
+
+#~ msgid "File generation successful."
+#~ msgstr "File generation successful."
+
+#~ msgid "Board Items Flip"
+#~ msgstr "Board Items Flip"
+
 #~ msgid "You must provide a netlist generator command string"
 #~ msgstr "You must provide a netlist generator command string"
 
@@ -36858,26 +36907,12 @@ msgstr "KiCad Drawing Sheet"
 #~ msgid "Running ERC...\n"
 #~ msgstr "Running ERC...\n"
 
-#, c-format
-#~ msgid "Saved ERC Report to %s\n"
-#~ msgstr "Saved ERC Report to %s\n"
-
 #~ msgid "Loading board\n"
 #~ msgstr "Loading board\n"
 
 #, c-format
-#~ msgid "Successfully exported VRML to %s"
-#~ msgstr "Successfully exported VRML to %s"
-
-#, c-format
 #~ msgid "Actual image size: %dx%d"
 #~ msgstr "Actual image size: %dx%d"
-
-#~ msgid "Successfully created 3D render image"
-#~ msgstr "Successfully created 3D render image"
-
-#~ msgid "Successfully created genCAD file\n"
-#~ msgstr "Successfully created genCAD file\n"
 
 #~ msgid "Loading footprint library\n"
 #~ msgstr "Loading footprint library\n"
@@ -36890,10 +36925,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Failed to find schematic for parity tests.\n"
 #~ msgstr "Failed to find schematic for parity tests.\n"
-
-#, c-format
-#~ msgid "Saved DRC Report to %s\n"
-#~ msgstr "Saved DRC Report to %s\n"
 
 #~ msgid "Paste item(s) from clipboard with annotation options"
 #~ msgstr "Paste item(s) from clipboard with annotation options"
@@ -37175,9 +37206,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Set the coordinate origin point (anchor) of the footprint"
 #~ msgstr "Set the coordinate origin point (anchor) of the footprint"
-
-#~ msgid "The KiCad Developers"
-#~ msgstr "The KiCad Developers"
 
 #~ msgid "Copyright Info"
 #~ msgstr "Copyright Info"
@@ -59155,9 +59183,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "B.Courtyard"
 #~ msgstr "B.Courtyard"
-
-#~ msgid "F.Fab"
-#~ msgstr "F.Fab"
 
 #~ msgid "B.Fab"
 #~ msgstr "B.Fab"
