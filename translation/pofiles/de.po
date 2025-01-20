@@ -24,13 +24,14 @@
 # Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
 # Frank Sonnenberg <frasoberg@web.de>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2024.
+# dsa-t <dudesuchamazing@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-21 16:52+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
