@@ -242,9 +242,9 @@ wxString PCB_IO_IPC2581::componentName( FOOTPRINT* aFootprint )
 }
 
 
-wxString PCB_IO_IPC2581::floatVal( double aVal )
+wxString PCB_IO_IPC2581::floatVal( double aVal, int aSigFig ) const
 {
-    wxString str = wxString::FromCDouble( aVal, m_sigfig );
+    wxString str = wxString::FromCDouble( aVal, aSigFig == -1 ? m_sigfig : aSigFig );
 
     // Remove all but the last trailing zeros from str
     while( str.EndsWith( wxT( "00" ) ) )
@@ -2246,8 +2246,13 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
         {
             wxXmlNode* xformNode = appendNode( componentNode, "Xform" );
 
-            if( fp->GetOrientation() != ANGLE_0 )
-                addAttribute( xformNode,  "rotation", floatVal( fp->GetOrientation().Normalize().AsDegrees() ) );
+            EDA_ANGLE fp_angle = fp->GetOrientation().Normalize();
+
+            if( fp->GetLayer() == B_Cu )
+                fp_angle = ( fp_angle.Invert() - ANGLE_180 ).Normalize();
+
+            if( fp_angle != ANGLE_0 )
+                addAttribute( xformNode, "rotation", floatVal( fp_angle.AsDegrees(), 2 ) );
 
             if( fp->GetLayer() != F_Cu )
                 addAttribute( xformNode,  "mirror", "true" );

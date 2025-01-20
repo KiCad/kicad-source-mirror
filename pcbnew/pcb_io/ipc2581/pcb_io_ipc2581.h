@@ -263,7 +263,7 @@ private:
 
     wxString genString( const wxString& aStr, const char* aPrefix = nullptr ) const;
 
-    wxString floatVal( double aVal );
+    wxString floatVal( double aVal, int aSigFig = -1 ) const;
 
     wxString pinName( const PAD* aPad ) const;
 
