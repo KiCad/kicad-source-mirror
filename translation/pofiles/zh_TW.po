@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 23:16+0300\n"
+"POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-05 16:30+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -67,37 +67,37 @@ msgstr ""
 msgid "Create tracks and vias"
 msgstr "生成走線和貫孔"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:705
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:726
 msgid "Create zones"
 msgstr "建立區域"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:789
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:810
 msgid "Build Tech layers"
 msgstr "建置工藝層"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:821
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:842
 #, c-format
 msgid "Build Tech layer %d"
 msgstr "建置工藝層 %d"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1037
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1058
 msgid "Simplifying copper layer polygons"
 msgstr "簡化銅層上的多邊形"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1042
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Calculating plated copper"
 msgstr "計算鍍銅"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1128
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1149
 #, c-format
 msgid "Simplifying %d copper layers"
 msgstr "簡化 %d 銅層"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1171
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1192
 msgid "Simplify holes contours"
 msgstr "簡化通孔輪廓"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1191
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1212
 msgid "Build BVH for holes and vias"
 msgstr "為通孔和貫孔建置 BVH (盲埋孔)"
 
@@ -179,7 +179,7 @@ msgid "Loading %s..."
 msgstr "正在載入 %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:464
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:174
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:222
 msgid "Loading..."
 msgstr "載入中..."
 
@@ -191,17 +191,17 @@ msgstr "載入光線追蹤: 電路板"
 msgid "Load Raytracing: layers"
 msgstr "載入光線追蹤: 層"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:339
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:387
 #, c-format
 msgid "Rendering time %.3f s"
 msgstr "算繪時間 %.3f s"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:393
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:441
 #, c-format
 msgid "Rendering: %.0f %%"
 msgstr "算繪: %.0f %%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:841
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:854
 msgid "Rendering: Post processing shader"
 msgstr "算繪: 後期處理著色器"
 
@@ -1361,7 +1361,7 @@ msgstr "建立符號庫"
 msgid "Create Footprint Library"
 msgstr "建立封裝庫"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:668
+#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:670
 #: eeschema/dialogs/dialog_field_properties_base.cpp:220
 #: eeschema/dialogs/dialog_field_properties_base.cpp:254
 #: eeschema/dialogs/dialog_field_properties_base.cpp:265
@@ -1845,7 +1845,7 @@ msgstr "資訊"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:202
 #: eeschema/tools/symbol_editor_control.cpp:378
-#: eeschema/tools/symbol_editor_pin_tool.cpp:233 kicad/import_project.cpp:108
+#: eeschema/tools/symbol_editor_pin_tool.cpp:237 kicad/import_project.cpp:108
 #: kicad/tools/kicad_manager_control.cpp:326
 #: pcbnew/dialogs/dialog_export_idf.cpp:174
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
@@ -5017,7 +5017,7 @@ msgstr "找不到文件檔案 '%s'。"
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "文件檔案 '%s' 的 MIME 類型未知"
 
-#: common/eda_draw_frame.cpp:157 common/tool/actions.cpp:715
+#: common/eda_draw_frame.cpp:156 common/tool/actions.cpp:715
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:166
@@ -5032,35 +5032,35 @@ msgstr "文件檔案 '%s' 的 MIME 類型未知"
 msgid "Inches"
 msgstr "英寸 (Inches)"
 
-#: common/eda_draw_frame.cpp:163 pagelayout_editor/pl_editor_frame.cpp:169
+#: common/eda_draw_frame.cpp:162 pagelayout_editor/pl_editor_frame.cpp:169
 #: pcbnew/tools/drawing_tool.cpp:327 pcbnew/tools/edit_tool_move_fct.cpp:323
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Constrain to H, V, 45"
 msgstr "將繪製操作約束為水平方向, 垂直方向或斜 45 度方向"
 
-#: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:702
+#: common/eda_draw_frame.cpp:408 common/tool/actions.cpp:702
 msgid "Edit Grids..."
 msgstr "編輯網格..."
 
-#: common/eda_draw_frame.cpp:562
+#: common/eda_draw_frame.cpp:564
 msgid "Zoom Auto"
 msgstr "自動縮放"
 
-#: common/eda_draw_frame.cpp:571
+#: common/eda_draw_frame.cpp:573
 #, c-format
 msgid "Zoom %.2f"
 msgstr "縮放倍數 %.2f"
 
-#: common/eda_draw_frame.cpp:653
+#: common/eda_draw_frame.cpp:655
 #, c-format
 msgid "grid %s"
 msgstr "網格 %s"
 
-#: common/eda_draw_frame.cpp:666 pagelayout_editor/pl_editor_frame.cpp:766
+#: common/eda_draw_frame.cpp:668 pagelayout_editor/pl_editor_frame.cpp:766
 msgid "inches"
 msgstr "英寸 (inches)"
 
-#: common/eda_draw_frame.cpp:667
+#: common/eda_draw_frame.cpp:669
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:119
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -5079,27 +5079,27 @@ msgstr "英寸 (inches)"
 msgid "mils"
 msgstr "mils"
 
-#: common/eda_draw_frame.cpp:669 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
+#: common/eda_draw_frame.cpp:671 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:426
 #: pcbnew/pcb_dimension.cpp:1479
 msgid "Units"
 msgstr "單位"
 
-#: common/eda_draw_frame.cpp:1094 pcbnew/footprint_libraries_utils.cpp:1420
+#: common/eda_draw_frame.cpp:1096 pcbnew/footprint_libraries_utils.cpp:1420
 msgid "Select Library"
 msgstr "選擇庫"
 
-#: common/eda_draw_frame.cpp:1094
+#: common/eda_draw_frame.cpp:1096
 msgid "New Library"
 msgstr "新建庫"
 
-#: common/eda_draw_frame.cpp:1192 common/widgets/search_pane.cpp:39
+#: common/eda_draw_frame.cpp:1194 common/widgets/search_pane.cpp:39
 #: eeschema/sch_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:322
 msgid "Search"
 msgstr "搜索"
 
-#: common/eda_draw_frame.cpp:1200 eeschema/eeschema_settings.cpp:92
+#: common/eda_draw_frame.cpp:1202 eeschema/eeschema_settings.cpp:92
 #: pagelayout_editor/pl_editor_frame.cpp:193
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:313
 #: pcbnew/pcb_edit_frame.cpp:1575
@@ -20959,6 +20959,7 @@ msgid "Drags the selected item(s)"
 msgstr "拖動所選項目"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1794
+#: eeschema/tools/symbol_editor_move_tool.cpp:426
 msgid "Align Items to Grid"
 msgstr "將項目與網格對齊"
 
@@ -21496,24 +21497,20 @@ msgstr "輸入單元 %s 的顯示名"
 msgid "Set Unit Display Name"
 msgstr "設置單元顯示名"
 
-#: eeschema/tools/symbol_editor_move_tool.cpp:507
-msgid "Align"
-msgstr "對齊"
-
-#: eeschema/tools/symbol_editor_pin_tool.cpp:190
+#: eeschema/tools/symbol_editor_pin_tool.cpp:194
 msgid "Edit Pin Properties"
 msgstr "編輯接腳屬性"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:230
+#: eeschema/tools/symbol_editor_pin_tool.cpp:234
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
 msgstr "這個位置已經被另一個接腳佔用, 在單元 %d 中。"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:234
+#: eeschema/tools/symbol_editor_pin_tool.cpp:238
 msgid "Place Pin Anyway"
 msgstr "任意位置放置接腳"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:448
+#: eeschema/tools/symbol_editor_pin_tool.cpp:452
 #, fuzzy
 msgid "Repeat Pin"
 msgstr "圖紙接腳"
@@ -27626,25 +27623,25 @@ msgstr "mi/h"
 msgid "Create an array"
 msgstr "建立陣列"
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:888
+#: pcbnew/autorouter/ar_autoplacer.cpp:884
 msgid "Autoplacing components..."
 msgstr "自動放置元件..."
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:904
+#: pcbnew/autorouter/ar_autoplacer.cpp:900
 #, c-format
 msgid "Autoplacing %s"
 msgstr "自動放置 %s"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:68
+#: pcbnew/autorouter/autoplace_tool.cpp:71
 #, c-format
 msgid "Board edges must be defined on the %s layer."
 msgstr "必須在 %s 層上定義板邊。"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:89
+#: pcbnew/autorouter/autoplace_tool.cpp:121
 msgid "Autoplace Components"
 msgstr "自動放置元件"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:95
+#: pcbnew/autorouter/autoplace_tool.cpp:127
 msgid "Autoplace components"
 msgstr "自動放置元件"
 
@@ -45748,19 +45745,19 @@ msgstr "移動拐角到指定位置"
 msgid "Move Corner"
 msgstr "移動拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2408
+#: pcbnew/tools/pcb_point_editor.cpp:2407
 msgid "Add Zone Corner"
 msgstr "添加區域轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2428
+#: pcbnew/tools/pcb_point_editor.cpp:2427
 msgid "Split Segment"
 msgstr "分割線段"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2500
+#: pcbnew/tools/pcb_point_editor.cpp:2499
 msgid "Remove Zone Corner"
 msgstr "移除區域轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2502
+#: pcbnew/tools/pcb_point_editor.cpp:2501
 msgid "Remove Polygon Corner"
 msgstr "移除覆銅或多邊形的轉角"
 
@@ -46845,6 +46842,9 @@ msgstr "KiCad 原理圖符號"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad 專案圖編輯器"
+
+#~ msgid "Align"
+#~ msgstr "對齊"
 
 #~ msgid "EDA"
 #~ msgstr "EDA"

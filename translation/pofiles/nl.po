@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 23:16+0300\n"
+"POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-05 16:29+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
@@ -70,37 +70,37 @@ msgstr ""
 msgid "Create tracks and vias"
 msgstr "Sporen en via’s maken"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:705
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:726
 msgid "Create zones"
 msgstr "Zones maken"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:789
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:810
 msgid "Build Tech layers"
 msgstr "Technische lagen bouwen"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:821
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:842
 #, c-format
 msgid "Build Tech layer %d"
 msgstr "Technische laag %d bouwen"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1037
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1058
 msgid "Simplifying copper layer polygons"
 msgstr "Polygonen op koperlagen vereenvoudigen"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1042
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Calculating plated copper"
 msgstr "Koperplatering berekenen"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1128
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1149
 #, c-format
 msgid "Simplifying %d copper layers"
 msgstr "%d koperlagen vereenvoudigen"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1171
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1192
 msgid "Simplify holes contours"
 msgstr "Contouren van boorgaten vereenvoudigen"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1191
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1212
 msgid "Build BVH for holes and vias"
 msgstr "BVH voor gaten en via’s bouwen"
 
@@ -183,7 +183,7 @@ msgid "Loading %s..."
 msgstr "%s laden..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:464
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:174
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:222
 msgid "Loading..."
 msgstr "Laden..."
 
@@ -195,17 +195,17 @@ msgstr "Raytracen laadt: bord"
 msgid "Load Raytracing: layers"
 msgstr "Raytracen laadt: lagen"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:339
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:387
 #, c-format
 msgid "Rendering time %.3f s"
 msgstr "Rendertijd %.3f s"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:393
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:441
 #, c-format
 msgid "Rendering: %.0f %%"
 msgstr "Renderen: %.0f %%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:841
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:854
 msgid "Rendering: Post processing shader"
 msgstr "Rendering: Shader naverwerking"
 
@@ -1381,7 +1381,7 @@ msgstr "Symboolbibliotheek maken"
 msgid "Create Footprint Library"
 msgstr "Footprintbibliotheek maken"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:668
+#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:670
 #: eeschema/dialogs/dialog_field_properties_base.cpp:220
 #: eeschema/dialogs/dialog_field_properties_base.cpp:254
 #: eeschema/dialogs/dialog_field_properties_base.cpp:265
@@ -1873,7 +1873,7 @@ msgstr "Informatie"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:202
 #: eeschema/tools/symbol_editor_control.cpp:378
-#: eeschema/tools/symbol_editor_pin_tool.cpp:233 kicad/import_project.cpp:108
+#: eeschema/tools/symbol_editor_pin_tool.cpp:237 kicad/import_project.cpp:108
 #: kicad/tools/kicad_manager_control.cpp:326
 #: pcbnew/dialogs/dialog_export_idf.cpp:174
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
@@ -5123,7 +5123,7 @@ msgstr "Documentatiebestand '%s' niet gevonden."
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Onbekend MIME-type voor documentatiebestand '%s'"
 
-#: common/eda_draw_frame.cpp:157 common/tool/actions.cpp:715
+#: common/eda_draw_frame.cpp:156 common/tool/actions.cpp:715
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:166
@@ -5138,35 +5138,35 @@ msgstr "Onbekend MIME-type voor documentatiebestand '%s'"
 msgid "Inches"
 msgstr "Inches"
 
-#: common/eda_draw_frame.cpp:163 pagelayout_editor/pl_editor_frame.cpp:169
+#: common/eda_draw_frame.cpp:162 pagelayout_editor/pl_editor_frame.cpp:169
 #: pcbnew/tools/drawing_tool.cpp:327 pcbnew/tools/edit_tool_move_fct.cpp:323
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Constrain to H, V, 45"
 msgstr "Beperken tot H, V, 45"
 
-#: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:702
+#: common/eda_draw_frame.cpp:408 common/tool/actions.cpp:702
 msgid "Edit Grids..."
 msgstr "Rasters bewerken..."
 
-#: common/eda_draw_frame.cpp:562
+#: common/eda_draw_frame.cpp:564
 msgid "Zoom Auto"
 msgstr "Zoom Auto"
 
-#: common/eda_draw_frame.cpp:571
+#: common/eda_draw_frame.cpp:573
 #, c-format
 msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
-#: common/eda_draw_frame.cpp:653
+#: common/eda_draw_frame.cpp:655
 #, c-format
 msgid "grid %s"
 msgstr "raster %s"
 
-#: common/eda_draw_frame.cpp:666 pagelayout_editor/pl_editor_frame.cpp:766
+#: common/eda_draw_frame.cpp:668 pagelayout_editor/pl_editor_frame.cpp:766
 msgid "inches"
 msgstr "inch"
 
-#: common/eda_draw_frame.cpp:667
+#: common/eda_draw_frame.cpp:669
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:119
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -5185,27 +5185,27 @@ msgstr "inch"
 msgid "mils"
 msgstr "mil"
 
-#: common/eda_draw_frame.cpp:669 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
+#: common/eda_draw_frame.cpp:671 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:426
 #: pcbnew/pcb_dimension.cpp:1479
 msgid "Units"
 msgstr "Eenheid"
 
-#: common/eda_draw_frame.cpp:1094 pcbnew/footprint_libraries_utils.cpp:1420
+#: common/eda_draw_frame.cpp:1096 pcbnew/footprint_libraries_utils.cpp:1420
 msgid "Select Library"
 msgstr "Bibliotheek selecteren"
 
-#: common/eda_draw_frame.cpp:1094
+#: common/eda_draw_frame.cpp:1096
 msgid "New Library"
 msgstr "Nieuwe bibliotheek"
 
-#: common/eda_draw_frame.cpp:1192 common/widgets/search_pane.cpp:39
+#: common/eda_draw_frame.cpp:1194 common/widgets/search_pane.cpp:39
 #: eeschema/sch_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:322
 msgid "Search"
 msgstr "Zoek"
 
-#: common/eda_draw_frame.cpp:1200 eeschema/eeschema_settings.cpp:92
+#: common/eda_draw_frame.cpp:1202 eeschema/eeschema_settings.cpp:92
 #: pagelayout_editor/pl_editor_frame.cpp:193
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:313
 #: pcbnew/pcb_edit_frame.cpp:1575
@@ -21412,6 +21412,7 @@ msgid "Drags the selected item(s)"
 msgstr "Sleept geselecteerde item(s)"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1794
+#: eeschema/tools/symbol_editor_move_tool.cpp:426
 msgid "Align Items to Grid"
 msgstr "Items uitlijnen op raster"
 
@@ -21956,24 +21957,20 @@ msgstr "Weergavenaam voor eenheid %s invoeren"
 msgid "Set Unit Display Name"
 msgstr "Weergavenaam eenheid instellen"
 
-#: eeschema/tools/symbol_editor_move_tool.cpp:507
-msgid "Align"
-msgstr "Uitlijnen"
-
-#: eeschema/tools/symbol_editor_pin_tool.cpp:190
+#: eeschema/tools/symbol_editor_pin_tool.cpp:194
 msgid "Edit Pin Properties"
 msgstr "Pineigenschappen bewerken"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:230
+#: eeschema/tools/symbol_editor_pin_tool.cpp:234
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
 msgstr "Deze positie is al bezet door een andere pin, in eenheid %d."
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:234
+#: eeschema/tools/symbol_editor_pin_tool.cpp:238
 msgid "Place Pin Anyway"
 msgstr "Pin toch plaatsen"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:448
+#: eeschema/tools/symbol_editor_pin_tool.cpp:452
 msgid "Repeat Pin"
 msgstr "Herhaal Pin"
 
@@ -28236,25 +28233,25 @@ msgstr "mijl/u"
 msgid "Create an array"
 msgstr "Maak een reeks"
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:888
+#: pcbnew/autorouter/ar_autoplacer.cpp:884
 msgid "Autoplacing components..."
 msgstr "Componenten automatisch plaatsen..."
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:904
+#: pcbnew/autorouter/ar_autoplacer.cpp:900
 #, c-format
 msgid "Autoplacing %s"
 msgstr "Auto-plaatsing %s"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:68
+#: pcbnew/autorouter/autoplace_tool.cpp:71
 #, c-format
 msgid "Board edges must be defined on the %s layer."
 msgstr "Bordranden moeten op laag %s worden gedefinieerd."
 
-#: pcbnew/autorouter/autoplace_tool.cpp:89
+#: pcbnew/autorouter/autoplace_tool.cpp:121
 msgid "Autoplace Components"
 msgstr "Componenten automatisch plaatsen"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:95
+#: pcbnew/autorouter/autoplace_tool.cpp:127
 msgid "Autoplace components"
 msgstr "Componenten automatisch plaatsen"
 
@@ -46836,19 +46833,19 @@ msgstr "Hoek verplaatsen naar locatie"
 msgid "Move Corner"
 msgstr "Hoek verplaatsen"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2408
+#: pcbnew/tools/pcb_point_editor.cpp:2407
 msgid "Add Zone Corner"
 msgstr "Zonehoek toevoegen"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2428
+#: pcbnew/tools/pcb_point_editor.cpp:2427
 msgid "Split Segment"
 msgstr "Segment splitsen"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2500
+#: pcbnew/tools/pcb_point_editor.cpp:2499
 msgid "Remove Zone Corner"
 msgstr "Zonehoek verwijderen"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2502
+#: pcbnew/tools/pcb_point_editor.cpp:2501
 msgid "Remove Polygon Corner"
 msgstr "Polygoonhoek verwijderen"
 
@@ -47948,6 +47945,9 @@ msgstr "KiCad-schemasymbool"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad tekenblad"
+
+#~ msgid "Align"
+#~ msgstr "Uitlijnen"
 
 #~ msgid "EDA"
 #~ msgstr "EDA"

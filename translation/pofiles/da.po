@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 23:16+0300\n"
+"POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-06 10:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/v8/da/>\n"
@@ -53,38 +53,38 @@ msgstr "Print omrids mangler eller er forkert. Kør DRC for en fuld analyse."
 msgid "Create tracks and vias"
 msgstr "Opret baer og via's"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:705
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:726
 msgid "Create zones"
 msgstr "Opret zoner"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:789
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:810
 msgid "Build Tech layers"
 msgstr "Opret tekniske lag"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:821
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:842
 #, fuzzy, c-format
 msgid "Build Tech layer %d"
 msgstr "Opret tekniske lag"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1037
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1058
 #, fuzzy
 msgid "Simplifying copper layer polygons"
 msgstr "Forenkling af kobberlagets polygoner"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1042
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Calculating plated copper"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1128
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1149
 #, fuzzy, c-format
 msgid "Simplifying %d copper layers"
 msgstr "Forenkling af kobberlagets polygoner"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1171
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1192
 msgid "Simplify holes contours"
 msgstr "Forenkle hulkonturer"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1191
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1212
 msgid "Build BVH for holes and vias"
 msgstr "Byg BVH til huller og vias"
 
@@ -169,7 +169,7 @@ msgid "Loading %s..."
 msgstr "Indlæser %s"
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:464
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:174
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:222
 msgid "Loading..."
 msgstr "Indlæser…"
 
@@ -181,17 +181,17 @@ msgstr "Load Raytracing: print"
 msgid "Load Raytracing: layers"
 msgstr "Indlæs Raytracing: lag"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:339
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:387
 #, c-format
 msgid "Rendering time %.3f s"
 msgstr "Gengivelsestid %.3f s"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:393
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:441
 #, c-format
 msgid "Rendering: %.0f %%"
 msgstr "Gengivelse: %.0f %%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:841
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:854
 msgid "Rendering: Post processing shader"
 msgstr "Gengivelse: Efterbehandling skygge"
 
@@ -1460,7 +1460,7 @@ msgstr "Opret symbolbibliotek"
 msgid "Create Footprint Library"
 msgstr "Opret Fodaftryks Bibliotek"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:668
+#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:670
 #: eeschema/dialogs/dialog_field_properties_base.cpp:220
 #: eeschema/dialogs/dialog_field_properties_base.cpp:254
 #: eeschema/dialogs/dialog_field_properties_base.cpp:265
@@ -1969,7 +1969,7 @@ msgstr "Bekræftelse"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:202
 #: eeschema/tools/symbol_editor_control.cpp:378
-#: eeschema/tools/symbol_editor_pin_tool.cpp:233 kicad/import_project.cpp:108
+#: eeschema/tools/symbol_editor_pin_tool.cpp:237 kicad/import_project.cpp:108
 #: kicad/tools/kicad_manager_control.cpp:326
 #: pcbnew/dialogs/dialog_export_idf.cpp:174
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
@@ -5308,7 +5308,7 @@ msgstr "Skematisk fil \"%s\" blev ikke fundet."
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Ukendt MIME-type for doc-fil \"%s\""
 
-#: common/eda_draw_frame.cpp:157 common/tool/actions.cpp:715
+#: common/eda_draw_frame.cpp:156 common/tool/actions.cpp:715
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:166
@@ -5323,37 +5323,37 @@ msgstr "Ukendt MIME-type for doc-fil \"%s\""
 msgid "Inches"
 msgstr "Tommer"
 
-#: common/eda_draw_frame.cpp:163 pagelayout_editor/pl_editor_frame.cpp:169
+#: common/eda_draw_frame.cpp:162 pagelayout_editor/pl_editor_frame.cpp:169
 #: pcbnew/tools/drawing_tool.cpp:327 pcbnew/tools/edit_tool_move_fct.cpp:323
 #: pcbnew/tools/pcb_actions.cpp:1167
 #, fuzzy
 msgid "Constrain to H, V, 45"
 msgstr "Begræns omrids til H, V og 45 grader"
 
-#: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:702
+#: common/eda_draw_frame.cpp:408 common/tool/actions.cpp:702
 #, fuzzy
 msgid "Edit Grids..."
 msgstr "Rediger brugergitter ..."
 
-#: common/eda_draw_frame.cpp:562
+#: common/eda_draw_frame.cpp:564
 msgid "Zoom Auto"
 msgstr "Zoom automatisk"
 
-#: common/eda_draw_frame.cpp:571
+#: common/eda_draw_frame.cpp:573
 #, c-format
 msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
-#: common/eda_draw_frame.cpp:653
+#: common/eda_draw_frame.cpp:655
 #, fuzzy, c-format
 msgid "grid %s"
 msgstr "Gitterakser"
 
-#: common/eda_draw_frame.cpp:666 pagelayout_editor/pl_editor_frame.cpp:766
+#: common/eda_draw_frame.cpp:668 pagelayout_editor/pl_editor_frame.cpp:766
 msgid "inches"
 msgstr "tommer"
 
-#: common/eda_draw_frame.cpp:667
+#: common/eda_draw_frame.cpp:669
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:119
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -5372,28 +5372,28 @@ msgstr "tommer"
 msgid "mils"
 msgstr "mils"
 
-#: common/eda_draw_frame.cpp:669 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
+#: common/eda_draw_frame.cpp:671 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:426
 #: pcbnew/pcb_dimension.cpp:1479
 msgid "Units"
 msgstr "Enheder"
 
-#: common/eda_draw_frame.cpp:1094 pcbnew/footprint_libraries_utils.cpp:1420
+#: common/eda_draw_frame.cpp:1096 pcbnew/footprint_libraries_utils.cpp:1420
 msgid "Select Library"
 msgstr "Vælg Bibliotek"
 
-#: common/eda_draw_frame.cpp:1094
+#: common/eda_draw_frame.cpp:1096
 msgid "New Library"
 msgstr "Nyt bibliotek"
 
-#: common/eda_draw_frame.cpp:1192 common/widgets/search_pane.cpp:39
+#: common/eda_draw_frame.cpp:1194 common/widgets/search_pane.cpp:39
 #: eeschema/sch_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:322
 #, fuzzy
 msgid "Search"
 msgstr "Søgetekst"
 
-#: common/eda_draw_frame.cpp:1200 eeschema/eeschema_settings.cpp:92
+#: common/eda_draw_frame.cpp:1202 eeschema/eeschema_settings.cpp:92
 #: pagelayout_editor/pl_editor_frame.cpp:193
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:313
 #: pcbnew/pcb_edit_frame.cpp:1575
@@ -22299,6 +22299,7 @@ msgid "Drags the selected item(s)"
 msgstr "Trækker det eller de valgte emner"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1794
+#: eeschema/tools/symbol_editor_move_tool.cpp:426
 #, fuzzy
 msgid "Align Items to Grid"
 msgstr "Juster elementer til gitter"
@@ -22896,26 +22897,21 @@ msgstr "Indtast sidenummer for arkstien %s"
 msgid "Set Unit Display Name"
 msgstr ""
 
-#: eeschema/tools/symbol_editor_move_tool.cpp:507
-#, fuzzy
-msgid "Align"
-msgstr "H Juster"
-
-#: eeschema/tools/symbol_editor_pin_tool.cpp:190
+#: eeschema/tools/symbol_editor_pin_tool.cpp:194
 #, fuzzy
 msgid "Edit Pin Properties"
 msgstr "Fastgør egenskaber"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:230
+#: eeschema/tools/symbol_editor_pin_tool.cpp:234
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
 msgstr "Denne position er allerede optaget af en anden pin i enhed %d."
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:234
+#: eeschema/tools/symbol_editor_pin_tool.cpp:238
 msgid "Place Pin Anyway"
 msgstr "Placer pin alligevel"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:448
+#: eeschema/tools/symbol_editor_pin_tool.cpp:452
 #, fuzzy
 msgid "Repeat Pin"
 msgstr "Arknål"
@@ -29389,25 +29385,25 @@ msgstr ""
 msgid "Create an array"
 msgstr "Opret en matrix"
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:888
+#: pcbnew/autorouter/ar_autoplacer.cpp:884
 msgid "Autoplacing components..."
 msgstr "Autoplacering af komponenter ..."
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:904
+#: pcbnew/autorouter/ar_autoplacer.cpp:900
 #, c-format
 msgid "Autoplacing %s"
 msgstr "Autoplacering %s"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:68
+#: pcbnew/autorouter/autoplace_tool.cpp:71
 #, c-format
 msgid "Board edges must be defined on the %s layer."
 msgstr "Board kanter skal defineres på %s laget."
 
-#: pcbnew/autorouter/autoplace_tool.cpp:89
+#: pcbnew/autorouter/autoplace_tool.cpp:121
 msgid "Autoplace Components"
 msgstr "Placer komponenter automatisk"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:95
+#: pcbnew/autorouter/autoplace_tool.cpp:127
 msgid "Autoplace components"
 msgstr "Placer komponenter automatisk"
 
@@ -48265,22 +48261,22 @@ msgstr "fodaftryk placering"
 msgid "Move Corner"
 msgstr "Fjern hjørnet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2408
+#: pcbnew/tools/pcb_point_editor.cpp:2407
 #, fuzzy
 msgid "Add Zone Corner"
 msgstr "Tilføj et zonehjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2428
+#: pcbnew/tools/pcb_point_editor.cpp:2427
 #, fuzzy
 msgid "Split Segment"
 msgstr "Split segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2500
+#: pcbnew/tools/pcb_point_editor.cpp:2499
 #, fuzzy
 msgid "Remove Zone Corner"
 msgstr "Fjern hjørnet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2502
+#: pcbnew/tools/pcb_point_editor.cpp:2501
 #, fuzzy
 msgid "Remove Polygon Corner"
 msgstr "Fjern et zone / polygonhjørne"
@@ -49438,6 +49434,10 @@ msgstr "Rediger skematiske symboler"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Arbejdsark"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "H Juster"
 
 #, fuzzy
 #~ msgid "Circuit board"

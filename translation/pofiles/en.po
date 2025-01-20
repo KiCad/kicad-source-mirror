@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 23:16+0300\n"
+"POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -14848,9 +14848,6 @@ msgstr "Enter display name for unit %s"
 
 msgid "Set Unit Display Name"
 msgstr "Set Unit Display Name"
-
-msgid "Align"
-msgstr "Align"
 
 msgid "Edit Pin Properties"
 msgstr "Edit Pin Properties"
@@ -34119,6 +34116,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Align"
+#~ msgstr "Align"
 
 #~ msgid "EDA"
 #~ msgstr "EDA"

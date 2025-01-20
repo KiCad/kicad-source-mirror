@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 23:16+0300\n"
+"POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-20 22:52+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v8/hu/>\n"
@@ -51,37 +51,37 @@ msgstr ""
 msgid "Create tracks and vias"
 msgstr "Vezetősávok és átvezető furatok létrehozása"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:705
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:726
 msgid "Create zones"
 msgstr "Zónák létrehozása"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:789
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:810
 msgid "Build Tech layers"
 msgstr "Technológiai rétegek felépítése"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:821
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:842
 #, c-format
 msgid "Build Tech layer %d"
 msgstr "%d technológiai réteg felépítése"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1037
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1058
 msgid "Simplifying copper layer polygons"
 msgstr "Vezetőrétegek sokszögeinek egyszerűsítése"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1042
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Calculating plated copper"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1128
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1149
 #, c-format
 msgid "Simplifying %d copper layers"
 msgstr "%d rézréteg egyszerűsítése"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1171
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1192
 msgid "Simplify holes contours"
 msgstr "Furatkontúrok egyszerűsítése"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1191
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1212
 msgid "Build BVH for holes and vias"
 msgstr "BVH építése furatokhoz és viákhoz"
 
@@ -163,7 +163,7 @@ msgid "Loading %s..."
 msgstr "%s betöltése..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:464
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:174
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:222
 msgid "Loading..."
 msgstr "Betöltés..."
 
@@ -175,17 +175,17 @@ msgstr "Sugárkövetés betöltése: panel"
 msgid "Load Raytracing: layers"
 msgstr "Sugárkövetés betöltése: rétegek"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:339
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:387
 #, c-format
 msgid "Rendering time %.3f s"
 msgstr "Renderelési idő: %.3f mp"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:393
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:441
 #, c-format
 msgid "Rendering: %.0f %%"
 msgstr "Renderelés: %.0f%%"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:841
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:854
 msgid "Rendering: Post processing shader"
 msgstr "Renderelés: árnyaló utófeldolgozása"
 
@@ -1370,7 +1370,7 @@ msgstr "Rajzjel könyvtár létrehozása"
 msgid "Create Footprint Library"
 msgstr "Alkatrészrajzolat könyvtár létrehozása"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:668
+#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:670
 #: eeschema/dialogs/dialog_field_properties_base.cpp:220
 #: eeschema/dialogs/dialog_field_properties_base.cpp:254
 #: eeschema/dialogs/dialog_field_properties_base.cpp:265
@@ -1882,7 +1882,7 @@ msgstr "Információ"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:202
 #: eeschema/tools/symbol_editor_control.cpp:378
-#: eeschema/tools/symbol_editor_pin_tool.cpp:233 kicad/import_project.cpp:108
+#: eeschema/tools/symbol_editor_pin_tool.cpp:237 kicad/import_project.cpp:108
 #: kicad/tools/kicad_manager_control.cpp:326
 #: pcbnew/dialogs/dialog_export_idf.cpp:174
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
@@ -2086,7 +2086,8 @@ msgstr "Licensz"
 
 #: common/dialog_about/dialog_about.cpp:486
 msgid "Could not open clipboard to write version information."
-msgstr "Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
+msgstr ""
+"Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
 
 #: common/dialog_about/dialog_about.cpp:487
 msgid "Clipboard Error"
@@ -5492,7 +5493,7 @@ msgstr "A(z) \"%s\" kapcsolási rajz fájl nem található."
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "A(z) \"%s\" dokumentum fájl MIME típusa ismeretlen"
 
-#: common/eda_draw_frame.cpp:157 common/tool/actions.cpp:715
+#: common/eda_draw_frame.cpp:156 common/tool/actions.cpp:715
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:166
@@ -5508,39 +5509,39 @@ msgstr "A(z) \"%s\" dokumentum fájl MIME típusa ismeretlen"
 msgid "Inches"
 msgstr "Hüvelyk"
 
-#: common/eda_draw_frame.cpp:163 pagelayout_editor/pl_editor_frame.cpp:169
+#: common/eda_draw_frame.cpp:162 pagelayout_editor/pl_editor_frame.cpp:169
 #: pcbnew/tools/drawing_tool.cpp:327 pcbnew/tools/edit_tool_move_fct.cpp:323
 #: pcbnew/tools/pcb_actions.cpp:1167
 #, fuzzy
 msgid "Constrain to H, V, 45"
 msgstr "Körvonal csak vízszintes, függőleges és 45°-os vonalakból állhat"
 
-#: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:702
+#: common/eda_draw_frame.cpp:408 common/tool/actions.cpp:702
 #, fuzzy
 msgid "Edit Grids..."
 msgstr "Egyedi rács szerkesztése..."
 
-#: common/eda_draw_frame.cpp:562
+#: common/eda_draw_frame.cpp:564
 #, fuzzy
 msgid "Zoom Auto"
 msgstr "Nagyítás képernyőméretre"
 
-#: common/eda_draw_frame.cpp:571
+#: common/eda_draw_frame.cpp:573
 #, fuzzy, c-format
 msgid "Zoom %.2f"
 msgstr "Nagyítás %.2f"
 
-#: common/eda_draw_frame.cpp:653
+#: common/eda_draw_frame.cpp:655
 #, fuzzy, c-format
 msgid "grid %s"
 msgstr "mező %s"
 
-#: common/eda_draw_frame.cpp:666 pagelayout_editor/pl_editor_frame.cpp:766
+#: common/eda_draw_frame.cpp:668 pagelayout_editor/pl_editor_frame.cpp:766
 #, fuzzy
 msgid "inches"
 msgstr "hüvelyk"
 
-#: common/eda_draw_frame.cpp:667
+#: common/eda_draw_frame.cpp:669
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:119
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -5560,7 +5561,7 @@ msgstr "hüvelyk"
 msgid "mils"
 msgstr "mil"
 
-#: common/eda_draw_frame.cpp:669 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
+#: common/eda_draw_frame.cpp:671 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:426
 #: pcbnew/pcb_dimension.cpp:1479
@@ -5568,23 +5569,23 @@ msgstr "mil"
 msgid "Units"
 msgstr "Mértékegységek"
 
-#: common/eda_draw_frame.cpp:1094 pcbnew/footprint_libraries_utils.cpp:1420
+#: common/eda_draw_frame.cpp:1096 pcbnew/footprint_libraries_utils.cpp:1420
 #, fuzzy
 msgid "Select Library"
 msgstr "Könyvtár kiválasztása"
 
-#: common/eda_draw_frame.cpp:1094
+#: common/eda_draw_frame.cpp:1096
 #, fuzzy
 msgid "New Library"
 msgstr "Új könyvtár"
 
-#: common/eda_draw_frame.cpp:1192 common/widgets/search_pane.cpp:39
+#: common/eda_draw_frame.cpp:1194 common/widgets/search_pane.cpp:39
 #: eeschema/sch_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:322
 #, fuzzy
 msgid "Search"
 msgstr "Keresés"
 
-#: common/eda_draw_frame.cpp:1200 eeschema/eeschema_settings.cpp:92
+#: common/eda_draw_frame.cpp:1202 eeschema/eeschema_settings.cpp:92
 #: pagelayout_editor/pl_editor_frame.cpp:193
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:313
 #: pcbnew/pcb_edit_frame.cpp:1575
@@ -23711,6 +23712,7 @@ msgid "Drags the selected item(s)"
 msgstr "A kijelölt elem(ek) vonszolása"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1794
+#: eeschema/tools/symbol_editor_move_tool.cpp:426
 #, fuzzy
 msgid "Align Items to Grid"
 msgstr "Elemek rácsra igazítása"
@@ -24344,17 +24346,12 @@ msgstr "Adja meg a(z) %s egység megjelenítendő nevét"
 msgid "Set Unit Display Name"
 msgstr "Az egység megjelenített nevének megadása"
 
-#: eeschema/tools/symbol_editor_move_tool.cpp:507
-#, fuzzy
-msgid "Align"
-msgstr "Vízszintes Igazítás"
-
-#: eeschema/tools/symbol_editor_pin_tool.cpp:190
+#: eeschema/tools/symbol_editor_pin_tool.cpp:194
 #, fuzzy
 msgid "Edit Pin Properties"
 msgstr "Láb tulajdonságok"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:230
+#: eeschema/tools/symbol_editor_pin_tool.cpp:234
 #, fuzzy, c-format
 msgid "This position is already occupied by another pin, in unit %d."
 msgstr ""
@@ -24362,12 +24359,12 @@ msgstr ""
 "(Ha két lábat egymás fölé helyez, nem fog tudni\n"
 "megfelelően vezetéket csatlakoztatni hozzá.)"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:234
+#: eeschema/tools/symbol_editor_pin_tool.cpp:238
 #, fuzzy
 msgid "Place Pin Anyway"
 msgstr "Mindenféleképpen létrehozza a lábat"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:448
+#: eeschema/tools/symbol_editor_pin_tool.cpp:452
 #, fuzzy
 msgid "Repeat Pin"
 msgstr "Lap kivezető láb hozzáadása"
@@ -31265,27 +31262,27 @@ msgstr "mi/h"
 msgid "Create an array"
 msgstr "Tömb létrehozása"
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:888
+#: pcbnew/autorouter/ar_autoplacer.cpp:884
 #, fuzzy
 msgid "Autoplacing components..."
 msgstr "Alkatrészek automatikus elhelyezése..."
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:904
+#: pcbnew/autorouter/ar_autoplacer.cpp:900
 #, fuzzy, c-format
 msgid "Autoplacing %s"
 msgstr "%s automatikus elhelyezése"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:68
+#: pcbnew/autorouter/autoplace_tool.cpp:71
 #, c-format
 msgid "Board edges must be defined on the %s layer."
 msgstr ""
 
-#: pcbnew/autorouter/autoplace_tool.cpp:89
+#: pcbnew/autorouter/autoplace_tool.cpp:121
 #, fuzzy
 msgid "Autoplace Components"
 msgstr "Alkatrészek automatikus elhelyezése"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:95
+#: pcbnew/autorouter/autoplace_tool.cpp:127
 #, fuzzy
 msgid "Autoplace components"
 msgstr "Alkatrészek automatikus elhelyezése"
@@ -51582,22 +51579,22 @@ msgstr "Sarok mozgatása"
 msgid "Move Corner"
 msgstr "Sarok mozgatása"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2408
+#: pcbnew/tools/pcb_point_editor.cpp:2407
 #, fuzzy
 msgid "Add Zone Corner"
 msgstr "Zóna sarok hozzáadása"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2428
+#: pcbnew/tools/pcb_point_editor.cpp:2427
 #, fuzzy
 msgid "Split Segment"
 msgstr "Osztott szegmens"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2500
+#: pcbnew/tools/pcb_point_editor.cpp:2499
 #, fuzzy
 msgid "Remove Zone Corner"
 msgstr "Sarok eltávolítása"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2502
+#: pcbnew/tools/pcb_point_editor.cpp:2501
 #, fuzzy
 msgid "Remove Polygon Corner"
 msgstr "Zóna/sokszög sarokpont eltávolítása"
@@ -52867,6 +52864,10 @@ msgstr "Alkatrész rajzjelek szerkesztése"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Lapkeret szerkesztő"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "Vízszintes Igazítás"
 
 #, fuzzy
 #~ msgid "Circuit board"

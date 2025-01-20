@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 23:16+0300\n"
+"POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2024-08-18 13:09+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v8/tr/>\n"
@@ -63,37 +63,37 @@ msgstr "Kart ana hatları eksik veya bozuk. Tam analiz için DRC'yi çalıştır
 msgid "Create tracks and vias"
 msgstr "Yollar ve geçişler oluştur"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:705
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:726
 msgid "Create zones"
 msgstr "Bölgeler oluştur"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:789
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:810
 msgid "Build Tech layers"
 msgstr "Teknik katmanları oluştur"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:821
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:842
 #, c-format
 msgid "Build Tech layer %d"
 msgstr "%d Teknoloji katmanı oluştur"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1037
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1058
 msgid "Simplifying copper layer polygons"
 msgstr "Bakır katman çokgenleri basitleştir"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1042
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Calculating plated copper"
 msgstr "Hesaplanan bakır kaplama"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1128
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1149
 #, c-format
 msgid "Simplifying %d copper layers"
 msgstr "%d bakır katmanını basitleştirme"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1171
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1192
 msgid "Simplify holes contours"
 msgstr "Deliklerin dış hatlarını basitleştir"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1191
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1212
 msgid "Build BVH for holes and vias"
 msgstr "Delikler ve geçişler için BVH oluştur"
 
@@ -175,7 +175,7 @@ msgid "Loading %s..."
 msgstr "%s yükleniyor..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:464
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:174
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:222
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
@@ -187,17 +187,17 @@ msgstr "Işın İzlemeyi Yükle: kart"
 msgid "Load Raytracing: layers"
 msgstr "Işın İzlemeyi Yükle: katmanlar"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:339
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:387
 #, c-format
 msgid "Rendering time %.3f s"
 msgstr "Oluşturma süresi %.3f s"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:393
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:441
 #, c-format
 msgid "Rendering: %.0f %%"
 msgstr "Oluşturuluyor: %% %.0f"
 
-#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:841
+#: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:854
 msgid "Rendering: Post processing shader"
 msgstr "Oluşturuluyor: İşlem sonrası gölgelendirici"
 
@@ -1367,7 +1367,7 @@ msgstr "Sembol Kütüphanesi Oluştur"
 msgid "Create Footprint Library"
 msgstr "İz Düşümü Kütüphanesi Oluştur"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:668
+#: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:670
 #: eeschema/dialogs/dialog_field_properties_base.cpp:220
 #: eeschema/dialogs/dialog_field_properties_base.cpp:254
 #: eeschema/dialogs/dialog_field_properties_base.cpp:265
@@ -1856,7 +1856,7 @@ msgstr "Bilgilendirme"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:202
 #: eeschema/tools/symbol_editor_control.cpp:378
-#: eeschema/tools/symbol_editor_pin_tool.cpp:233 kicad/import_project.cpp:108
+#: eeschema/tools/symbol_editor_pin_tool.cpp:237 kicad/import_project.cpp:108
 #: kicad/tools/kicad_manager_control.cpp:326
 #: pcbnew/dialogs/dialog_export_idf.cpp:174
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
@@ -5082,7 +5082,7 @@ msgstr "Belge dosyası '%s' bulunamadı."
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "'%s' belge dosyası için bilinmeyen MIME türü"
 
-#: common/eda_draw_frame.cpp:157 common/tool/actions.cpp:715
+#: common/eda_draw_frame.cpp:156 common/tool/actions.cpp:715
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:166
@@ -5097,35 +5097,35 @@ msgstr "'%s' belge dosyası için bilinmeyen MIME türü"
 msgid "Inches"
 msgstr "İnç"
 
-#: common/eda_draw_frame.cpp:163 pagelayout_editor/pl_editor_frame.cpp:169
+#: common/eda_draw_frame.cpp:162 pagelayout_editor/pl_editor_frame.cpp:169
 #: pcbnew/tools/drawing_tool.cpp:327 pcbnew/tools/edit_tool_move_fct.cpp:323
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Constrain to H, V, 45"
 msgstr "Y, D, 45 ile sınırla"
 
-#: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:702
+#: common/eda_draw_frame.cpp:408 common/tool/actions.cpp:702
 msgid "Edit Grids..."
 msgstr "Kılavuzları Düzenle..."
 
-#: common/eda_draw_frame.cpp:562
+#: common/eda_draw_frame.cpp:564
 msgid "Zoom Auto"
 msgstr "Otomatik Yakınlaştır"
 
-#: common/eda_draw_frame.cpp:571
+#: common/eda_draw_frame.cpp:573
 #, c-format
 msgid "Zoom %.2f"
 msgstr "%.2f Yakınlaştır"
 
-#: common/eda_draw_frame.cpp:653
+#: common/eda_draw_frame.cpp:655
 #, c-format
 msgid "grid %s"
 msgstr "ızgara %s"
 
-#: common/eda_draw_frame.cpp:666 pagelayout_editor/pl_editor_frame.cpp:766
+#: common/eda_draw_frame.cpp:668 pagelayout_editor/pl_editor_frame.cpp:766
 msgid "inches"
 msgstr "İnç"
 
-#: common/eda_draw_frame.cpp:667
+#: common/eda_draw_frame.cpp:669
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:119
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -5144,27 +5144,27 @@ msgstr "İnç"
 msgid "mils"
 msgstr "mil"
 
-#: common/eda_draw_frame.cpp:669 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
+#: common/eda_draw_frame.cpp:671 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:426
 #: pcbnew/pcb_dimension.cpp:1479
 msgid "Units"
 msgstr "Birim"
 
-#: common/eda_draw_frame.cpp:1094 pcbnew/footprint_libraries_utils.cpp:1420
+#: common/eda_draw_frame.cpp:1096 pcbnew/footprint_libraries_utils.cpp:1420
 msgid "Select Library"
 msgstr "Kütüphane Seçin"
 
-#: common/eda_draw_frame.cpp:1094
+#: common/eda_draw_frame.cpp:1096
 msgid "New Library"
 msgstr "Yeni Kütüphane"
 
-#: common/eda_draw_frame.cpp:1192 common/widgets/search_pane.cpp:39
+#: common/eda_draw_frame.cpp:1194 common/widgets/search_pane.cpp:39
 #: eeschema/sch_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:322
 msgid "Search"
 msgstr "Ara"
 
-#: common/eda_draw_frame.cpp:1200 eeschema/eeschema_settings.cpp:92
+#: common/eda_draw_frame.cpp:1202 eeschema/eeschema_settings.cpp:92
 #: pagelayout_editor/pl_editor_frame.cpp:193
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:313
 #: pcbnew/pcb_edit_frame.cpp:1575
@@ -22057,6 +22057,7 @@ msgid "Drags the selected item(s)"
 msgstr "Seçili öğe(leri) çoğalt"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1794
+#: eeschema/tools/symbol_editor_move_tool.cpp:426
 #, fuzzy
 msgid "Align Items to Grid"
 msgstr "Öğeleri Izgaraya Hizala"
@@ -22659,28 +22660,23 @@ msgstr "'%s' için bir rakama ihtiyacınız var"
 msgid "Set Unit Display Name"
 msgstr "Birim Görünen Adını Ayarla"
 
-#: eeschema/tools/symbol_editor_move_tool.cpp:507
-#, fuzzy
-msgid "Align"
-msgstr "Y Hizala"
-
-#: eeschema/tools/symbol_editor_pin_tool.cpp:190
+#: eeschema/tools/symbol_editor_pin_tool.cpp:194
 #, fuzzy
 msgid "Edit Pin Properties"
 msgstr "Bacak Özellikleri"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:230
+#: eeschema/tools/symbol_editor_pin_tool.cpp:234
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
 msgstr ""
 "Bu konum zaten%d birimindeki başka bir pim tarafından işgal edilmiştir."
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:234
+#: eeschema/tools/symbol_editor_pin_tool.cpp:238
 #, fuzzy
 msgid "Place Pin Anyway"
 msgstr "Yine de Aç"
 
-#: eeschema/tools/symbol_editor_pin_tool.cpp:448
+#: eeschema/tools/symbol_editor_pin_tool.cpp:452
 #, fuzzy
 msgid "Repeat Pin"
 msgstr "Sayfa Bacağı"
@@ -29457,27 +29453,27 @@ msgstr "mi/h"
 msgid "Create an array"
 msgstr "Katmanları oluştur"
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:888
+#: pcbnew/autorouter/ar_autoplacer.cpp:884
 #, fuzzy
 msgid "Autoplacing components..."
 msgstr "Ağlar yükleniyor..."
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:904
+#: pcbnew/autorouter/ar_autoplacer.cpp:900
 #, fuzzy, c-format
 msgid "Autoplacing %s"
 msgstr "Otomatik kaydırma hızı:"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:68
+#: pcbnew/autorouter/autoplace_tool.cpp:71
 #, c-format
 msgid "Board edges must be defined on the %s layer."
 msgstr "Tahta kenarları %s layer'da tanımlanmalıdır."
 
-#: pcbnew/autorouter/autoplace_tool.cpp:89
+#: pcbnew/autorouter/autoplace_tool.cpp:121
 #, fuzzy
 msgid "Autoplace Components"
 msgstr "Elemanlar"
 
-#: pcbnew/autorouter/autoplace_tool.cpp:95
+#: pcbnew/autorouter/autoplace_tool.cpp:127
 #, fuzzy
 msgid "Autoplace components"
 msgstr "otomatik yerleştirilmiş"
@@ -48842,22 +48838,22 @@ msgstr "Ayak İzi Numaralandırılması"
 msgid "Move Corner"
 msgstr "Oluşturucuyu Kaldır"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2408
+#: pcbnew/tools/pcb_point_editor.cpp:2407
 #, fuzzy
 msgid "Add Zone Corner"
 msgstr "Bölge köşesi ekle"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2428
+#: pcbnew/tools/pcb_point_editor.cpp:2427
 #, fuzzy
 msgid "Split Segment"
 msgstr "Parça"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2500
+#: pcbnew/tools/pcb_point_editor.cpp:2499
 #, fuzzy
 msgid "Remove Zone Corner"
 msgstr "Oluşturucuyu Kaldır"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2502
+#: pcbnew/tools/pcb_point_editor.cpp:2501
 #, fuzzy
 msgid "Remove Polygon Corner"
 msgstr "Bir bölge/poligon köşesini kaldır"
@@ -50052,6 +50048,10 @@ msgstr "Şema Düzenleyici"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Çizim Sayfası Düzenleyici"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "Y Hizala"
 
 #~ msgid "EDA"
 #~ msgstr "EDA"
