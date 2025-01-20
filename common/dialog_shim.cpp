@@ -64,6 +64,18 @@ public:
             m_win->Raise(); // let's focus back on the parent window
         }
     }
+
+    void Suspend()
+    {
+        if( m_win )
+            m_win->Enable();
+    }
+
+    void Resume()
+    {
+        if( m_win )
+            m_win->Disable();
+    }
 };
 
 
@@ -557,6 +569,20 @@ int DIALOG_SHIM::ShowQuasiModal()
         parent->SetFocus();
 
     return GetReturnCode();
+}
+
+
+void DIALOG_SHIM::PrepareForModalSubDialog()
+{
+    if( m_qmodal_parent_disabler )
+        m_qmodal_parent_disabler->Suspend();
+}
+
+
+void DIALOG_SHIM::CleanupAfterModalSubDialog()
+{
+    if( m_qmodal_parent_disabler )
+        m_qmodal_parent_disabler->Resume();
 }
 
 

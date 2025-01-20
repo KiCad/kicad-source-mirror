@@ -112,6 +112,14 @@ public:
 
     bool IsQuasiModal() const { return m_qmodal_showing; }
 
+    // A quasi-modal dialog disables its parent window.  Sadly this disabling is more extreme
+    // than wxWidgets' normal modal dialog disabling, and prevents things like hotkey Cut/Copy/
+    // Paste from working in search controls in standard file dialogs.  So when we put up a modal
+    // dialog in front of a quasi-modal, we suspend the quasi-modal dialog parent window
+    // disabling, causing us to fall back to the normal modal dialog parent window disabling.
+    void PrepareForModalSubDialog();
+    void CleanupAfterModalSubDialog();
+
     bool Show( bool show ) override;
 
     bool Enable( bool enable ) override;

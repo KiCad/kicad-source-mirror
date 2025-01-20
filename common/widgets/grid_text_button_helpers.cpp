@@ -360,6 +360,8 @@ protected:
 
     void OnButtonClick() override
     {
+        m_dlg->PrepareForModalSubDialog();
+
         wxString filename = GetValue();
 
         if( filename.IsEmpty() || filename == wxT( "~" ) )
@@ -389,6 +391,8 @@ protected:
         {
             GetAssociatedDocument( m_dlg, GetValue(), &m_dlg->Prj(), m_searchStack, m_files );
         }
+
+        m_dlg->CleanupAfterModalSubDialog();
     }
 
     void OnTextChange(wxCommandEvent& event)
@@ -405,8 +409,9 @@ protected:
             SetButtonBitmaps( KiBitmapBundle( BITMAPS::www ) );
     }
 
-    DIALOG_SHIM* m_dlg;
-    SEARCH_STACK* m_searchStack;
+protected:
+    DIALOG_SHIM*    m_dlg;
+    SEARCH_STACK*   m_searchStack;
     EMBEDDED_FILES* m_files;
 };
 
@@ -419,9 +424,7 @@ void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set
     if ( m_validator )
-    {
         Combo()->SetValidator( *m_validator );
-    }
 #endif
 
     wxGridCellEditor::Create( aParent, aId, aEventHandler );
@@ -479,6 +482,8 @@ protected:
 
     void OnButtonClick() override
     {
+        m_dlg->PrepareForModalSubDialog();
+
         if( m_fileFilterFn )
             m_fileFilter = m_fileFilterFn( m_grid, m_grid->GetGridCursorRow() );
 
@@ -549,8 +554,11 @@ protected:
                 *m_currentDir = relPath;
             }
         }
+
+        m_dlg->CleanupAfterModalSubDialog();
     }
 
+protected:
     DIALOG_SHIM* m_dlg;
     WX_GRID*     m_grid;
     wxString*    m_currentDir;
@@ -566,21 +574,23 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
     if( m_fileFilterFn )
+    {
         m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir,
                                                   m_fileFilterFn, m_normalize,
                                                   m_normalizeBasePath );
+    }
     else
+    {
         m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir,
                                                   m_fileFilter, m_normalize, m_normalizeBasePath );
+    }
 
     WX_GRID::CellEditorSetMargins( Combo() );
 
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set
     if ( m_validator )
-    {
         Combo()->SetValidator( *m_validator );
-    }
 #endif
 
     wxGridCellEditor::Create( aParent, aId, aEventHandler );
