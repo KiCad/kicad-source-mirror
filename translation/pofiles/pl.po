@@ -9,7 +9,7 @@
 # Jan Sobków <sobkow.jan@gmail.com>, 2023.
 # Eryk Michalak <gnu.ewm@protonmail.com>, 2023.
 # Filip Piękoś <filipalcatel@gmail.com>, 2023.
-# dsa-t <dudesuchamazing@gmail.com>, 2024.
+# dsa-t <dudesuchamazing@gmail.com>, 2024, 2025.
 # "j.Kolod" <jmkolod05@gmail.com>, 2024.
 # Marek <fotelpl@gmail.com>, 2024.
 msgid ""
@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-21 16:52+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
