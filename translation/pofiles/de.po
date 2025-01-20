@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-11 10:05+0000\n"
+"PO-Revision-Date: 2025-01-21 07:53+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -13118,9 +13118,9 @@ msgid "Not Connected"
 msgstr "Nicht verbunden"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "Kein Modell namens \"%s\" in der Bibliothek."
+msgstr "Kein Modell namens \"%s\" in \"%s\"."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1233
 msgid "Browse Models"
