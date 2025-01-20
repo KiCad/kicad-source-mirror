@@ -23,7 +23,10 @@
 
 
 #include <board_commit.h>
+#include <dialogs/dialog_locked_items_query.h>
+#include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_progress_reporters.h>
 
@@ -59,7 +62,7 @@ static int refreshCallback( FOOTPRINT* aFootprint )
 }
 
 
-int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints, bool aPlaceOffboard )
+int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints )
 {
     BOX2I bbox = board()->GetBoardEdgesBoundingBox();
 
@@ -71,6 +74,35 @@ int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints, bool aPlace
         frame()->GetInfoBar()->RemoveAllButtons();
         frame()->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_ERROR );
         return 0;
+    }
+
+    int locked_count = std::count_if( aFootprints.begin(), aFootprints.end(),
+                   [](FOOTPRINT* fp) { return fp->IsLocked(); } );
+
+    if( locked_count > 0 )
+    {
+        DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), locked_count );
+
+        switch( dlg.ShowModal() )
+        {
+        case wxID_OK:
+            // Remove locked items from aFootprints
+            aFootprints.erase( std::remove_if( aFootprints.begin(), aFootprints.end(),
+                                               []( FOOTPRINT* fp )
+                                               {
+                                                   return fp->IsLocked();
+                                               } ),
+                               aFootprints.end() );
+            break;
+
+        case wxID_CANCEL:
+            // cancel operation
+            return 0;
+
+        case wxID_APPLY:
+            // Proceed with all items (do nothing)
+            break;
+        }
     }
 
     Activate();
@@ -89,7 +121,7 @@ int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints, bool aPlace
             std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Autoplace Components" ), 1 );
 
     autoplacer.SetProgressReporter( progressReporter.get() );
-    auto result = autoplacer.AutoplaceFootprints( aFootprints, &commit, aPlaceOffboard );
+    auto result = autoplacer.AutoplaceFootprints( aFootprints, &commit, false );
 
     if( result == AR_COMPLETED )
         commit.Push( _( "Autoplace components" ) );
@@ -107,18 +139,30 @@ int AUTOPLACE_TOOL::autoplaceSelected( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection() )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
-            footprints.push_back( static_cast<FOOTPRINT*>( item ) );
+        {
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+            footprints.push_back( footprint );
+        }
     }
 
-    return autoplace( footprints, false );
+    return autoplace( footprints );
 }
 
 
 int AUTOPLACE_TOOL::autoplaceOffboard( const TOOL_EVENT& aEvent )
 {
+    SHAPE_POLY_SET boardShape;
+    board()->GetBoardPolygonOutlines( boardShape );
+
     std::vector<FOOTPRINT*> footprints;
 
-    return autoplace( footprints, true );
+    for( FOOTPRINT* footprint : board()->Footprints() )
+    {
+        if( !boardShape.Contains( footprint->GetPosition() ) )
+            footprints.push_back( footprint );
+    }
+
+    return autoplace( footprints );
 }
 
 
