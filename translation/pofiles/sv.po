@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-21 12:04+0000\n"
+"PO-Revision-Date: 2025-01-21 12:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -42243,7 +42243,7 @@ msgstr "Okänt namn på lödyteform '%s' på lager '%s' på rad %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:800
 #, c-format
 msgid "No user layer to put layer %s"
-msgstr "Det finns inget användarlager tillgängligt att lägga lager %s på."
+msgstr "Det finns inget användarlager tillgängligt att lägga lager %s på"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1013
 #, c-format
