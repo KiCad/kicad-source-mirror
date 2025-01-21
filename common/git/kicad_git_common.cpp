@@ -23,6 +23,8 @@
 
 #include "kicad_git_common.h"
 
+#include <kiplatform/secrets.h>
+
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <map>
@@ -70,7 +72,7 @@ wxString KIGIT_COMMON::GetCurrentBranchName() const
 
     git_reference_free( branch );
 
-    return branchName;
+    return wxString( branchName );
 }
 
 
@@ -384,6 +386,57 @@ bool KIGIT_COMMON::HasPushAndPullRemote() const
 
     // Check if both URLs are valid (i.e., not NULL)
     return fetch_url && push_url;
+}
+
+
+wxString KIGIT_COMMON::GetRemotename() const
+{
+    wxString retval;
+    git_reference* head = nullptr;
+    git_reference* upstream = nullptr;
+
+    if( git_repository_head( &head, m_repo ) != GIT_OK )
+        return retval;
+
+    if( git_branch_upstream( &upstream, head ) == GIT_OK )
+    {
+        git_buf     remote_name = GIT_BUF_INIT_CONST( nullptr, 0 );
+
+        if( git_branch_remote_name( &remote_name, m_repo, git_reference_name( upstream ) ) == GIT_OK )
+        {
+            retval = remote_name.ptr;
+            git_buf_dispose( &remote_name );
+        }
+
+        git_reference_free( upstream );
+    }
+
+    git_reference_free( head );
+
+    return retval;
+}
+
+
+void KIGIT_COMMON::UpdateCurrentBranchInfo()
+{
+    // We want to get the current branch's upstream url as well as the stored password
+    // if one exists given the url and username.
+
+    wxString remote_name = GetRemotename();
+    git_remote* remote = nullptr;
+
+    if( git_remote_lookup( &remote, m_repo, remote_name.ToStdString().c_str() ) == GIT_OK )
+    {
+        const char* url = git_remote_url( remote );
+
+        if( url )
+            m_remote = url;
+
+        git_remote_free( remote );
+    }
+
+    // Find the stored password if it exists
+    KIPLATFORM::SECRETS::GetSecret( m_remote, m_username, m_password );
 }
 
 

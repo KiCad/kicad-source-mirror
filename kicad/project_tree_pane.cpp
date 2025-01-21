@@ -78,6 +78,7 @@
 #include <widgets/kistatusbar.h>
 
 #include <kiplatform/io.h>
+#include <kiplatform/secrets.h>
 
 
 /* Note about the project tree build process:
@@ -637,9 +638,9 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     if( ADVANCED_CFG::GetCfg().m_EnableGit )
     {
         m_TreeProject->SetGitRepo( get_git_repository_for_file( fn.GetPath().c_str() ) );
-        m_TreeProject->GitCommon()->SetPassword( Prj().GetLocalSettings().m_GitRepoPassword );
         m_TreeProject->GitCommon()->SetUsername( Prj().GetLocalSettings().m_GitRepoUsername );
         m_TreeProject->GitCommon()->SetSSHKey( Prj().GetLocalSettings().m_GitSSHKey );
+        m_TreeProject->GitCommon()->UpdateCurrentBranchInfo();
 
         wxString conn_type = Prj().GetLocalSettings().m_GitRepoType;
 
@@ -1706,7 +1707,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     handler.PerformFetch();
 
-    Prj().GetLocalSettings().m_GitRepoPassword = dlg.GetPassword();
+    KIPLATFORM::SECRETS::StoreSecret( dlg.GetRepoURL(), dlg.GetUsername(), dlg.GetPassword() );
     Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
     Prj().GetLocalSettings().m_GitSSHKey = dlg.GetRepoSSHPath();
 

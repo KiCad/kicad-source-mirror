@@ -114,10 +114,16 @@ public:
     // Returns true if the repository has a remote that can be pushed to pulled from
     bool HasPushAndPullRemote() const;
 
+    // Updates the password and remote information for the repository given the current branch
+    void UpdateCurrentBranchInfo();
+
+    wxString GetRemotename() const;
+
 protected:
     git_repository* m_repo;
 
     GIT_CONN_TYPE m_connType;
+    wxString m_remote;
     wxString m_username;
     wxString m_password;
     wxString m_sshKey;

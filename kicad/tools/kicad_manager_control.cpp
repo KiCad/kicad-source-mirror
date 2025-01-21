@@ -27,6 +27,7 @@
 #include <kiway.h>
 #include <kicad_manager_frame.h>
 #include <kiplatform/policy.h>
+#include <kiplatform/secrets.h>
 #include <confirm.h>
 #include <kidialog.h>
 #include <project/project_file.h>
@@ -190,7 +191,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     wxString dest = pro.GetPath() + wxFileName::GetPathSeparator() + projects.front();
     m_frame->LoadProject( dest );
 
-    Prj().GetLocalSettings().m_GitRepoPassword = dlg.GetPassword();
+    KIPLATFORM::SECRETS::StoreSecret( dlg.GetRepoURL(), dlg.GetUsername(), dlg.GetPassword() );
     Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
     Prj().GetLocalSettings().m_GitSSHKey = dlg.GetRepoSSHPath();
 

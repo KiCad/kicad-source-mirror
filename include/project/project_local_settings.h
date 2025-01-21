@@ -150,7 +150,6 @@ public:
 
     // Upstream git repo info
     wxString m_GitRepoUsername;
-    wxString m_GitRepoPassword;
     wxString m_GitRepoType;
     wxString m_GitSSHKey;
 
