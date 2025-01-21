@@ -63,6 +63,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 {
     m_defaultNetClass = std::make_shared<NETCLASS>( NETCLASS::Default, true );
     m_defaultNetClass->SetDescription( _( "This is the default net class." ) );
+    m_defaultNetClass->SetPriority( std::numeric_limits<int>::max() );
 
     auto saveNetclass =
             []( nlohmann::json& json_array, const std::shared_ptr<NETCLASS>& nc )
@@ -670,7 +671,7 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
         if( ii == m_impicitNetClasses.end() )
         {
             std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( netclass, false );
-            nc->SetPriority( std::numeric_limits<int>().max() - 1 ); // Priority > default netclass
+            nc->SetPriority( std::numeric_limits<int>::max() - 1 ); // Priority > default netclass
             m_impicitNetClasses[netclass] = nc;
             return nc;
         }
