@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-17 21:43+0000\n"
+"PO-Revision-Date: 2025-01-21 16:52+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1748,9 +1748,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Grafika układu strony (plik .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Eksportuj do pliku"
+msgstr "Eksportuj do pliku..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -1760,6 +1759,8 @@ msgstr "Eksportuj do schowka"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Brak kształtu na czarno-białym obrazie by go skonwertować: obrysu nie "
+"utworzono."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -15045,7 +15046,7 @@ msgstr "Nie mogę zapisać listy materiałowej '%s'."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1416
 #, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "Zapisz wyjście BOM do '%s'"
+msgstr "Zapisano wyjście BOM do '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1795
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2197
@@ -16637,9 +16638,9 @@ msgstr "Wstępny format BOM '%s' nie został znaleziony"
 
 #: eeschema/eeschema_jobs_handler.cpp:744
 #: eeschema/eeschema_jobs_handler.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Generuj listę materiałową (BOM)"
+msgstr "Zapisano listę materiałową (BOM) do '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:878
 #, c-format
@@ -38418,9 +38419,8 @@ msgid "Drag (free angle)"
 msgstr "Przeciągnij (w trybie dowolnym)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:90
-#, fuzzy
 msgid "Flip board items:"
-msgstr "Odwrotny widok płytki"
+msgstr "Odwróć elementy płytki:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:94
 msgid "Left/right"
@@ -47088,19 +47088,19 @@ msgid "Successfully created genCAD file\n"
 msgstr "Plik genCAD wygenerowany poprawnie\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1424 pcbnew/pcbnew_jobs_handler.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "Eksport danych o pozycjach elementów"
+msgstr "Zapisano dane o pozycjach elementów na stronie górnej do '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Zapisz wyjście BOM do '%s'"
+msgstr "Zapisano dane o pozycjach elementów na stronie dolnej do '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "Eksport danych o pozycjach elementów"
+msgstr "Zapisano dane o pozycjach elementów do '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1572
 msgid "Footprint library path does not exist or is not accessible\n"
