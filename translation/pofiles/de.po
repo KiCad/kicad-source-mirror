@@ -29,10 +29,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-17 21:43+0000\n"
+"PO-Revision-Date: 2025-01-21 16:52+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1782,9 +1782,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Zeichnungsblatt (.kicad_wks-Datei)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Export in Datei"
+msgstr "In Datei exportieren ..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -1794,6 +1793,8 @@ msgstr "Export in Zwischenablage"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Im Bild wurde keine umzuwandelnde schwarz-weiß-Form gefunden: Kein Umriss "
+"erzeugt."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -8694,7 +8695,7 @@ msgstr "Fügt Elemente aus der Zwischenablage ein"
 
 #: common/tool/actions.cpp:256
 msgid "Select all items on screen"
-msgstr "Wählt alle auf dem Bildschirm aus"
+msgstr "Wählt alle Elemente auf Bildschirm aus"
 
 #: common/tool/actions.cpp:262
 msgid "Unselect All"
@@ -8702,7 +8703,7 @@ msgstr "Alles abwählen"
 
 #: common/tool/actions.cpp:263
 msgid "Unselect all items on screen"
-msgstr "Wählt alle auf dem Bildschirm ab"
+msgstr "Wählt alle Elemente auf dem Bildschirm ab"
 
 #: common/tool/actions.cpp:269
 msgid "Paste Special..."
@@ -16722,9 +16723,9 @@ msgstr "BOM-Formatvorlage \"%s\" nicht gefunden"
 
 #: eeschema/eeschema_jobs_handler.cpp:744
 #: eeschema/eeschema_jobs_handler.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Stückliste erzeugen"
+msgstr "Stückliste nach \"%s\" geschrieben."
 
 #: eeschema/eeschema_jobs_handler.cpp:878
 #, c-format
@@ -38608,9 +38609,8 @@ msgid "Drag (free angle)"
 msgstr "Ziehen (freier Winkel)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:90
-#, fuzzy
 msgid "Flip board items:"
-msgstr "Platinenansicht wenden"
+msgstr "Platinenelemente wenden:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:94
 msgid "Left/right"
@@ -47314,19 +47314,19 @@ msgid "Successfully created genCAD file\n"
 msgstr "genCAD-Datei erfolgreich erstellt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1424 pcbnew/pcbnew_jobs_handler.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "Platzierungsdaten exportieren"
+msgstr "Vorderseitige Platzierungsdaten nach \"%s\" geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Stückliste wurde in \"%s\" geschrieben"
+msgstr "Stückliste wurde in \"%s\" geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "Platzierungsdaten exportieren"
+msgstr "Platzierungsdaten nach \"%s\" geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1572
 msgid "Footprint library path does not exist or is not accessible\n"
