@@ -71,9 +71,9 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
 {
     if( !aName.IsEmpty() )
         SetName( aName );
-    else if( aParent->Type() == SCH_SYMBOL_T )
+    else if( aParent && aParent->Type() == SCH_SYMBOL_T )
         SetName( GetDefaultFieldName( aFieldId, DO_TRANSLATE, SCH_SYMBOL_T ) );
-    else if( aParent->Type() == SCH_SHEET_T )
+    else if( aParent && aParent->Type() == SCH_SHEET_T )
         SetName( GetDefaultFieldName( aFieldId, DO_TRANSLATE, SCH_SHEET_T ) );
 
     SetTextPos( aPos );
