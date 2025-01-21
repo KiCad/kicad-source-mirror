@@ -491,8 +491,8 @@ void BACK_ANNOTATE::applyChangelist()
                 SCH_FIELD*      symField = symbol->FindField( fpFieldName );
 
                 // Skip fields that are individually controlled
-                if( fpFieldName == GetCanonicalFieldName( REFERENCE_FIELD, PCB_FOOTPRINT_T )
-                    || fpFieldName == GetCanonicalFieldName( VALUE_FIELD, PCB_FOOTPRINT_T ) )
+                if( fpFieldName == GetCanonicalFieldName( REFERENCE_FIELD )
+                    || fpFieldName == GetCanonicalFieldName( VALUE_FIELD ) )
                 {
                     continue;
                 }

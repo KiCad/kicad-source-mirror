@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
 BOOST_AUTO_TEST_CASE( DefaultDrawings )
 {
     // default drawings exist
-    BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), SYMBOL_MANDATORY_FIELDS );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), MANDATORY_FIELDS );
     BOOST_CHECK_EQUAL( m_part_no_data.GetPins().size(), 0 );
 }
 
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE( DefaultFields )
     BOOST_CHECK_PREDICATE( KI_TEST::AreDefaultFieldsCorrect, ( fields ) );
 
     // but no more (we didn't set them)
-    BOOST_CHECK_EQUAL( fields.size(), SYMBOL_MANDATORY_FIELDS );
+    BOOST_CHECK_EQUAL( fields.size(), MANDATORY_FIELDS );
 
     // also check the default field accessors
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
@@ -138,10 +138,10 @@ BOOST_AUTO_TEST_CASE( AddedFields )
     BOOST_CHECK_PREDICATE( KI_TEST::AreDefaultFieldsCorrect, ( fields ) );
 
     // and our new one
-    BOOST_REQUIRE_EQUAL( fields.size(), SYMBOL_MANDATORY_FIELDS + 1 );
+    BOOST_REQUIRE_EQUAL( fields.size(), MANDATORY_FIELDS + 1 );
 
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
-            ( fields[SYMBOL_MANDATORY_FIELDS] )( newFieldName )( 42 ) );
+            ( fields[MANDATORY_FIELDS] )( newFieldName )( 42 ) );
 
     // Check by-id lookup
 
@@ -628,12 +628,12 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK( *parent == *ref );
 
     ref->SetName( "child" );
-    SCH_FIELD* field = new SCH_FIELD( nullptr, SYMBOL_MANDATORY_FIELDS, "Manufacturer" );
+    SCH_FIELD* field = new SCH_FIELD( nullptr, MANDATORY_FIELDS, "Manufacturer" );
     field->SetText( "KiCad" );
     child->AddField( field );
     field->SetParent( child.get() );
 
-    field = new SCH_FIELD( nullptr, SYMBOL_MANDATORY_FIELDS, "Manufacturer" );
+    field = new SCH_FIELD( nullptr, MANDATORY_FIELDS, "Manufacturer" );
     field->SetText( "KiCad" );
     ref->AddField( field );
     field->SetParent( ref.get() );
@@ -641,12 +641,12 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK( *ref == *child->Flatten() );
 
     ref->SetName( "grandchild" );
-    field = new SCH_FIELD( nullptr, SYMBOL_MANDATORY_FIELDS + 1, "MPN" );
+    field = new SCH_FIELD( nullptr, MANDATORY_FIELDS + 1, "MPN" );
     field->SetText( "123456" );
     grandChild->AddField( field );
     field->SetParent( grandChild.get() );
 
-    field = new SCH_FIELD( nullptr, SYMBOL_MANDATORY_FIELDS + 1, "MPN" );
+    field = new SCH_FIELD( nullptr, MANDATORY_FIELDS + 1, "MPN" );
     field->SetText( "123456" );
     ref->AddField( field );
     field->SetParent( ref.get() );

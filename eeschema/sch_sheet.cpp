@@ -48,6 +48,37 @@
 #include <pgm_base.h>
 #include <wx/log.h>
 
+// N.B. Do not change these values without transitioning the file format
+#define SHEET_NAME_CANONICAL "Sheetname"
+#define SHEET_FILE_CANONICAL "Sheetfile"
+#define USER_FIELD_CANONICAL "Field%d"
+
+static wxString s_CanonicalSheetName( SHEET_NAME_CANONICAL );
+static wxString s_CanonicalSheetFile( SHEET_FILE_CANONICAL );
+
+const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
+{
+    if( !aTranslated )
+    {
+        switch( aFieldNdx )
+        {
+        case  SHEETNAME:     return s_CanonicalSheetName;
+        case  SHEETFILENAME: return s_CanonicalSheetFile;
+        default:             return wxString::Format( wxS( USER_FIELD_CANONICAL ), aFieldNdx );
+        }
+    }
+    else
+    {
+        switch( aFieldNdx )
+        {
+        case  SHEETNAME:     return _( SHEET_NAME_CANONICAL );
+        case  SHEETFILENAME: return _( SHEET_FILE_CANONICAL );
+        default:             return wxString::Format( _( USER_FIELD_CANONICAL ), aFieldNdx );
+        }
+    }
+}
+
+
 SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) :
         SCH_ITEM( aParent, SCH_SHEET_T ),
         m_excludedFromSim( false ),
@@ -65,18 +96,13 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) 
     m_backgroundColor = COLOR4D::UNSPECIFIED;
     m_fieldsAutoplaced = AUTOPLACE_AUTO;
 
-    for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
-    {
-        m_fields.emplace_back( aPos, i, this, GetDefaultFieldName( i, DO_TRANSLATE, SCH_SHEET_T ) );
-        m_fields.back().SetVisible( true );
+    m_fields.emplace_back( aPos, SHEETNAME, this, GetDefaultFieldName( SHEETNAME, DO_TRANSLATE ) );
+    m_fields.back().SetVisible( true );
+    m_fields.back().SetLayer( LAYER_SHEETNAME );
 
-        if( i == SHEETNAME )
-            m_fields.back().SetLayer( LAYER_SHEETNAME );
-        else if( i == SHEETFILENAME )
-            m_fields.back().SetLayer( LAYER_SHEETFILENAME );
-        else
-            m_fields.back().SetLayer( LAYER_SHEETFIELDS );
-    }
+    m_fields.emplace_back( aPos, SHEETFILENAME, this, GetDefaultFieldName( SHEETFILENAME, DO_TRANSLATE ) );
+    m_fields.back().SetVisible( true );
+    m_fields.back().SetLayer( LAYER_SHEETNAME );
 
     AutoplaceFields( nullptr, m_fieldsAutoplaced );
 }

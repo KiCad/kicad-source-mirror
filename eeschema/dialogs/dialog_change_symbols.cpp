@@ -101,9 +101,9 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     m_matchSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
     m_matchSizer->Layout();
 
-    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; ++i )
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        m_fieldsBox->Append( GetDefaultFieldName( i, DO_TRANSLATE, SCH_SYMBOL_T ) );
+        m_fieldsBox->Append( GetDefaultFieldName( i, DO_TRANSLATE ) );
 
         if( i == REFERENCE_FIELD )
             m_fieldsBox->Check( i, g_selectRefDes );
@@ -308,7 +308,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             fields.clear();
             symbol->GetFields( fields, false );
 
-            for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < fields.size(); ++i )
+            for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
             {
                 if( !fields[i]->IsPrivate() )
                     fieldNames.insert( fields[i]->GetName() );
@@ -324,7 +324,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
                     flattenedSymbol->GetFields( libFields );
 
-                    for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < libFields.size(); ++i )
+                    for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
                     {
                         if( !libFields[i]->IsPrivate() )
                             fieldNames.insert( libFields[i]->GetName() );
@@ -353,7 +353,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
                 flattenedSymbol->GetFields( libFields );
 
-                for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < libFields.size(); ++i )
+                for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
                 {
                     if( !libFields[i]->IsPrivate() )
                         fieldNames.insert( libFields[i]->GetName() );
@@ -384,7 +384,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             allChecked = false;
     }
 
-    for( unsigned ii = m_fieldsBox->GetCount() - 1; ii >= SYMBOL_MANDATORY_FIELDS; --ii )
+    for( unsigned ii = m_fieldsBox->GetCount() - 1; ii >= MANDATORY_FIELDS; --ii )
         m_fieldsBox->Delete( ii );
 
     for( const wxString& fieldName : fieldNames )
@@ -424,7 +424,7 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
     {
         if( m_fieldsBox->IsChecked( i ) )
         {
-            if( i < SYMBOL_MANDATORY_FIELDS )
+            if( i < MANDATORY_FIELDS )
             {
                 SCH_FIELD dummy_field( nullptr, i );
                 m_updateFields.insert( dummy_field.GetCanonicalName() );
@@ -673,7 +673,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
             if( !doUpdate )
                 continue;
 
-            if( i < SYMBOL_MANDATORY_FIELDS )
+            if( i < MANDATORY_FIELDS )
                 libField = symbol->GetLibSymbolRef()->GetFieldById( (int) i );
             else
                 libField = symbol->GetLibSymbolRef()->FindField( field.GetName() );
@@ -740,7 +740,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                 if( resetPositions )
                     field.SetTextPos( symbol->GetPosition() + libField->GetTextPos() );
             }
-            else if( i >= SYMBOL_MANDATORY_FIELDS && removeExtras )
+            else if( i >= MANDATORY_FIELDS && removeExtras )
             {
                 symbol->RemoveField( field.GetName() );
                 i--;
@@ -750,7 +750,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         std::vector<SCH_FIELD*> libFields;
         symbol->GetLibSymbolRef()->GetFields( libFields );
 
-        for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < libFields.size(); ++i )
+        for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
         {
             const SCH_FIELD& libField = *libFields[i];
 

@@ -181,18 +181,19 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
     // The rotation/mirror transformation matrix. pos normal
     m_transform = TRANSFORM();
 
-    // construct only the mandatory fields, which are the first 4 only.
-    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; ++i )
-    {
-        m_fields.emplace_back( pos, i, this, GetCanonicalFieldName( i, SCH_SYMBOL_T ) );
+    auto addField =
+            [&]( int id, SCH_LAYER_ID layer )
+            {
+                m_fields.emplace_back( pos, id, this, GetCanonicalFieldName( id ) );
+                m_fields.back().SetLayer( layer );
+            };
 
-        if( i == REFERENCE_FIELD )
-            m_fields.back().SetLayer( LAYER_REFERENCEPART );
-        else if( i == VALUE_FIELD )
-            m_fields.back().SetLayer( LAYER_VALUEPART );
-        else
-            m_fields.back().SetLayer( LAYER_FIELDS );
-    }
+    // construct only the mandatory fields
+    addField( REFERENCE_FIELD, LAYER_REFERENCEPART );
+    addField( VALUE_FIELD, LAYER_VALUEPART );
+    addField( FOOTPRINT_FIELD, LAYER_FIELDS );
+    addField( DATASHEET_FIELD, LAYER_FIELDS );
+    addField( DESCRIPTION_FIELD, LAYER_FIELDS );
 
     m_prefix = wxString( wxT( "U" ) );
     m_isInNetlist = true;
@@ -974,7 +975,7 @@ SCH_FIELD* SCH_SYMBOL::AddField( const SCH_FIELD& aField )
 
 void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 {
-    for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < m_fields.size(); ++i )
+    for( unsigned i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
     {
         if( aFieldName == m_fields[i].GetName( false ) )
         {
@@ -988,7 +989,7 @@ void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 SCH_FIELD* SCH_SYMBOL::FindField( const wxString& aFieldName, bool aIncludeDefaultFields,
                                   bool aCaseInsensitive )
 {
-    unsigned start = aIncludeDefaultFields ? 0 : SYMBOL_MANDATORY_FIELDS;
+    unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;
 
     for( unsigned i = start; i < m_fields.size(); ++i )
     {
@@ -1356,10 +1357,10 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 
 void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
 {
-    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; ++i )
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
         aVars->push_back( m_fields[i].GetCanonicalName().Upper() );
 
-    for( size_t i = SYMBOL_MANDATORY_FIELDS; i < m_fields.size(); ++i )
+    for( size_t i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
         aVars->push_back( m_fields[i].GetName() );
 
     aVars->push_back( wxT( "OP" ) );
@@ -1470,7 +1471,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
     wxString upperToken = token->Upper();
 
-    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; ++i )
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
         wxString field = m_fields[i].GetCanonicalName();
 
@@ -1493,7 +1494,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         }
     }
 
-    for( size_t i = SYMBOL_MANDATORY_FIELDS; i < m_fields.size(); ++i )
+    for( size_t i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
     {
         wxString field = m_fields[ i ].GetName();
 

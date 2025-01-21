@@ -85,38 +85,21 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_fileFormatVersionAtLoad = 0;
     m_embedFonts = false;
 
+    auto addField =
+            [this]( int id, PCB_LAYER_ID layer, bool visible )
+            {
+                PCB_FIELD* field = new PCB_FIELD( this, id );
+                field->SetLayer( layer );
+                field->SetVisible( visible );
+                m_fields.push_back( field );
+            };
+
     // These are the mandatory fields for the editor to work
-    for( int i = 0; i < FP_MANDATORY_FIELDS; i++ )
-    {
-        PCB_FIELD* field;
-
-        if( i == FOOTPRINT_FIELD )
-        {
-            m_fields.push_back( nullptr );
-        }
-        else
-        {
-            field = new PCB_FIELD( this, i );
-            m_fields.push_back( field );
-        }
-
-        switch( i )
-        {
-        case FOOTPRINT_FIELD: break;
-        case REFERENCE_FIELD:
-            field->SetLayer( F_SilkS );
-            field->SetVisible( true );
-            break;
-        case VALUE_FIELD:
-            field->SetLayer( F_Fab );
-            field->SetVisible( true );
-            break;
-        default:
-            field->SetLayer( F_Fab );
-            field->SetVisible( false );
-            break;
-        }
-    }
+    addField( REFERENCE_FIELD, F_SilkS, true );
+    addField( VALUE_FIELD, F_Fab, true );
+    m_fields.push_back( nullptr );  // FOOTPRINT_FIELD
+    addField( DATASHEET_FIELD, F_Fab, false );
+    addField( DESCRIPTION_FIELD, F_Fab, false );
 
     m_3D_Drawings.clear();
 }
@@ -360,7 +343,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         if( !item )
             continue;
 
-        if( item->GetId() < FP_MANDATORY_FIELDS )
+        if( item->GetId() < MANDATORY_FIELDS )
             continue;
 
         google::protobuf::Any* itemMsg = def->add_items();
@@ -516,7 +499,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     // Footprint items
     for( PCB_FIELD* field : m_fields )
     {
-        if( field && field->GetId() >= FP_MANDATORY_FIELDS )
+        if( field && !field->IsMandatoryField() )
             Remove( field );
     }
 
@@ -681,8 +664,11 @@ PCB_FIELD* FOOTPRINT::AddField( const PCB_FIELD& aField )
 
 void FOOTPRINT::RemoveField( const wxString& aFieldName )
 {
-    for( unsigned i = FP_MANDATORY_FIELDS; i < m_fields.size(); ++i )
+    for( unsigned i = 0; i < m_fields.size(); ++i )
     {
+        if( m_fields[i] && m_fields[i]->IsMandatoryField() )
+            continue;
+
         if( aFieldName == m_fields[i]->GetName( false ) )
         {
             m_fields.erase( m_fields.begin() + i );

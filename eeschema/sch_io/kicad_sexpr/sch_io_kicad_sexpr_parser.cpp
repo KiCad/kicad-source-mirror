@@ -314,7 +314,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
     // Make sure the mandatory field IDs are reserved as already read,
     // the field parser will set the field IDs to the correct value if
     // the field name matches a mandatory field name
-    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; i++ )
+    for( int i = 0; i < MANDATORY_FIELDS; i++ )
         m_fieldIDsRead.insert( i );
 
     token = NextTok();
@@ -957,7 +957,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
 
     wxString name;
     wxString value;
-    auto field = std::make_unique<SCH_FIELD>( aSymbol.get(), SYMBOL_MANDATORY_FIELDS );
+    auto field = std::make_unique<SCH_FIELD>( aSymbol.get(), MANDATORY_FIELDS );
 
     // By default, fieds are visible.
     // Invisible fields have the hide style or keyword specified in file
@@ -989,9 +989,9 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
 
     // Correctly set the ID based on canonical (untranslated) field name
     // If ID is stored in the file (old versions), it will overwrite this
-    for( int ii = 0; ii < SYMBOL_MANDATORY_FIELDS; ++ii )
+    for( int ii = 0; ii < MANDATORY_FIELDS; ++ii )
     {
-        if( !name.CmpNoCase( GetCanonicalFieldName( ii, SCH_SYMBOL_T ) ) )
+        if( !name.CmpNoCase( GetCanonicalFieldName( ii ) ) )
         {
             field->SetId( ii );
             break;
@@ -1025,8 +1025,8 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
         {
             int id = parseInt( "field ID" );
 
-            // Only set an ID that isn't a SYMBOL_MANDATORY_FIELDS ID
-            if( id >= SYMBOL_MANDATORY_FIELDS )
+            // Only set an ID that isn't a MANDATORY_FIELDS ID
+            if( id >= MANDATORY_FIELDS )
                 field->SetId( id );
 
             NeedRIGHT();
@@ -1064,7 +1064,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
 
     // Due to an bug when in #LIB_SYMBOL::Flatten, duplicate ids slipped through when writing
     // files.  This section replaces duplicate #SCH_FIELD indices on load.
-    if( field->GetId() >= SYMBOL_MANDATORY_FIELDS && m_fieldIDsRead.count( field->GetId() ) )
+    if( ( field->GetId() >= MANDATORY_FIELDS ) && m_fieldIDsRead.count( field->GetId() ) )
     {
         int nextAvailableId = field->GetId() + 1;
 
@@ -2217,7 +2217,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     int mandatoryFieldCount = 0;
 
     if( aParent->Type() == SCH_SYMBOL_T )
-        mandatoryFieldCount = SYMBOL_MANDATORY_FIELDS;
+        mandatoryFieldCount = MANDATORY_FIELDS;
     else if( aParent->Type() == SCH_SHEET_T )
         mandatoryFieldCount = SHEET_MANDATORY_FIELDS;
 
@@ -2232,9 +2232,9 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     // If ID is stored in the file (old versions), it will overwrite this
     if( aParent->Type() == SCH_SYMBOL_T )
     {
-        for( int ii = 0; ii < SYMBOL_MANDATORY_FIELDS; ++ii )
+        for( int ii = 0; ii < MANDATORY_FIELDS; ++ii )
         {
-            if( name == GetCanonicalFieldName( ii, SCH_SYMBOL_T ) )
+            if( name == GetCanonicalFieldName( ii ) )
             {
                 field->SetId( ii );
                 field->SetPrivate( false );
@@ -2246,7 +2246,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     {
         for( int ii = 0; ii < SHEET_MANDATORY_FIELDS; ++ii )
         {
-            if( name == GetDefaultFieldName( ii,  !DO_TRANSLATE, SCH_SHEET_T ) )
+            if( name == SCH_SHEET::GetDefaultFieldName( ii, !DO_TRANSLATE ) )
             {
                 field->SetId( ii );
                 field->SetPrivate( false );
@@ -2974,7 +2974,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
     // Make sure the mandatory field IDs are reserved as already read,
     // the field parser will set the field IDs to the correct value if
     // the field name matches a mandatory field name
-    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; i++ )
+    for( int i = 0; i < MANDATORY_FIELDS; i++ )
         m_fieldIDsRead.insert( i );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -3258,8 +3258,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                 break;
             }
 
-            if( ( field->GetId() >= SYMBOL_MANDATORY_FIELDS )
-                    && m_fieldIDsRead.count( field->GetId() ) )
+            if( ( field->GetId() >= MANDATORY_FIELDS ) && m_fieldIDsRead.count( field->GetId() ) )
             {
                 int nextAvailableId = field->GetId() + 1;
 

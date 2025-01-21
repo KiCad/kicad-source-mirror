@@ -526,10 +526,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList );
 
     // Mandatory fields + quantity virtual field first
-    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; ++i )
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        dataModel.AddColumn( GetCanonicalFieldName( i, SCH_SYMBOL_T ),
-                             GetDefaultFieldName( i, DO_TRANSLATE, SCH_SYMBOL_T ), false );
+        dataModel.AddColumn( GetCanonicalFieldName( i ), GetDefaultFieldName( i, DO_TRANSLATE ),
+                             false );
     }
 
     // User field names in symbols second
@@ -539,7 +539,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     {
         SCH_SYMBOL* symbol = referenceList[i].GetSymbol();
 
-        for( int j = SYMBOL_MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
+        for( int j = MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
             userFieldNames.insert( symbol->GetFields()[j].GetName() );
     }
 

@@ -642,9 +642,9 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    int       fieldId = (int) m_fields->size();
-    PCB_FIELD newField = PCB_FIELD( m_footprint, m_fields->size(),
-                                    GetDefaultFieldName( fieldId, DO_TRANSLATE, PCB_FOOTPRINT_T ) );
+    int       fieldId = m_fields->at( m_fields->size() - 1 ).GetId() + 1;
+    PCB_FIELD newField( m_footprint, fieldId, GetUserFieldName( m_fields->GetNumberRows(),
+                                                                DO_TRANSLATE ) );
 
     newField.SetVisible( false );
     newField.SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
@@ -684,10 +684,10 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
     for( int row : selectedRows )
     {
 
-        if( row < FP_MANDATORY_FIELDS )
+        if( row < m_fields->GetMandatoryRows() )
         {
             DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  FP_MANDATORY_FIELDS ) );
+                                                  m_fields->GetMandatoryRows() ) );
             return;
         }
     }
@@ -778,7 +778,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
         {
             grid->SetGridCursor( row, col );
 
-            if( !( col == 0 && row < FP_MANDATORY_FIELDS ) )
+            if( !( col == 0 && row < m_fields->GetMandatoryRows() ) )
                 grid->EnableCellEditControl( true );
 
             grid->ShowCellEditControl();

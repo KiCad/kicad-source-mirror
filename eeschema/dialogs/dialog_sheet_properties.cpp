@@ -205,16 +205,19 @@ bool DIALOG_SHEET_PROPERTIES::Validate()
         return false;
 
     // Check for missing field names.
-    for( size_t i = SHEET_MANDATORY_FIELDS;  i < m_fields->size(); ++i )
+    for( size_t i = 0;  i < m_fields->size(); ++i )
     {
         SCH_FIELD& field = m_fields->at( i );
+
+        if( field.IsMandatory() )
+            continue;
 
         if( field.GetName( false ).empty() && !field.GetText().empty() )
         {
             DisplayErrorMessage( this, _( "Fields must have a name." ) );
 
             m_delayedFocusColumn = FDC_NAME;
-            m_delayedFocusRow = i;
+            m_delayedFocusRow = (int) i;
 
             return false;
         }
@@ -244,11 +247,11 @@ static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 
 static bool positioningChanged( FIELDS_GRID_TABLE* a, std::vector<SCH_FIELD>& b )
 {
-    for( size_t i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
-    {
-        if( positioningChanged( a->at( i ), b.at( i ) ) )
-            return true;
-    }
+    if( positioningChanged( a->at( SHEETNAME ), b.at( SHEETNAME ) ) )
+        return true;
+
+    if( positioningChanged( a->at( SHEETFILENAME ), b.at( SHEETFILENAME ) ) )
+        return true;
 
     return false;
 }
@@ -743,7 +746,7 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
 
     int       fieldID = m_fields->size();
     SCH_FIELD newField( VECTOR2I( 0, 0 ), fieldID, m_sheet,
-                        GetDefaultFieldName( fieldID, DO_TRANSLATE, SCH_SHEET_T ) );
+                        SCH_SHEET::GetDefaultFieldName( fieldID, DO_TRANSLATE ) );
 
     newField.SetTextAngle( m_fields->at( SHEETNAME ).GetTextAngle() );
 

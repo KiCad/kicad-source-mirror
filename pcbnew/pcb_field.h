@@ -70,7 +70,7 @@ public:
     bool IsDatasheet() const { return m_id == DATASHEET_FIELD; }
     bool IsComponentClass() const { return GetName() == wxT( "Component Class" ); }
 
-    bool IsMandatoryField() const { return m_id < FP_MANDATORY_FIELDS; }
+    bool IsMandatoryField() const { return m_id < MANDATORY_FIELDS; }
 
     wxString GetTextTypeDescription() const override;
 

@@ -25,7 +25,6 @@
 #pragma once
 
 #include <wx/string.h>
-#include <core/typeinfo.h>
 
 class OUTPUTFORMATTER;
 class TEMPLATE_FIELDNAMES_LEXER;
@@ -46,21 +45,9 @@ enum  MANDATORY_FIELD_T {
     DATASHEET_FIELD,              ///< name of datasheet
     DESCRIPTION_FIELD,            ///< Field Description of part, i.e. "1/4W 1% Metal Film Resistor"
 
-    /// The first 5 are mandatory, and must be instantiated in SCH_COMPONENT
-    /// and LIB_PART constructors
-    SYMBOL_MANDATORY_FIELDS,
-
-    /// The footprint field is not mandatory in footprints
-    FP_MANDATORY_FIELDS = SYMBOL_MANDATORY_FIELDS -1
-};
-
-enum  SHEET_FIELD_TYPE
-{
-    SHEETNAME = 0,
-    SHEETFILENAME,
-
-    /// The first 2 are mandatory, and must be instantiated in SCH_SHEET
-    SHEET_MANDATORY_FIELDS
+    /// The first 5 are mandatory, and must be instantiated in SCH_COMPONENT, LIB_PART, and
+    /// FOOTPRINT constructors
+    MANDATORY_FIELDS
 };
 
 // A helper to call GetDefaultFieldName with or without translation.
@@ -77,21 +64,17 @@ enum  SHEET_FIELD_TYPE
  * @param aTranslateForHI If true, return the translated field name,
  * else get the canonical name (defualt). Translation is intended only for dialogs
  */
-wxString GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI, KICAD_T aType );
+wxString GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI );
+wxString GetUserFieldName( int aFieldNdx, bool aTranslateForHI );
 
 
-inline wxString GetCanonicalFieldName( int idx, KICAD_T aParentType )
+inline wxString GetCanonicalFieldName( int idx )
 {
     // While TEMPLATE_FIELDNAME::GetDefaultFieldName() still works for non-mandatory fields,
     // it's confusing to call it through this function.
-    if( aParentType == SCH_SYMBOL_T )
-        wxASSERT( idx < SYMBOL_MANDATORY_FIELDS );
-    else if( aParentType == PCB_FOOTPRINT_T )
-        wxASSERT( idx < FP_MANDATORY_FIELDS );
-    else if( aParentType == SCH_SHEET_T )
-        wxASSERT( idx < SHEET_MANDATORY_FIELDS );
+    wxASSERT( idx < MANDATORY_FIELDS );
 
-    return GetDefaultFieldName( idx, !DO_TRANSLATE, aParentType );
+    return GetDefaultFieldName( idx, !DO_TRANSLATE );
 }
 
 

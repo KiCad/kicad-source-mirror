@@ -40,6 +40,16 @@ class EDA_DRAW_FRAME;
 #define MIN_SHEET_HEIGHT 150    // Units are mils.
 
 
+enum  SHEET_FIELD_TYPE
+{
+    SHEETNAME = 0,
+    SHEETFILENAME,
+
+    /// The first 2 are mandatory, and must be instantiated in SCH_SHEET
+    SHEET_MANDATORY_FIELDS
+};
+
+
 /**
  * Sheet symbol placed in a schematic, and is the entry point for a sub schematic.
  */
@@ -455,6 +465,8 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
+
+    static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslated );
 
 protected:
     friend SCH_SHEET_PATH;

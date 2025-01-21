@@ -46,9 +46,9 @@ DIALOG_UPDATE_SYMBOL_FIELDS::DIALOG_UPDATE_SYMBOL_FIELDS( SYMBOL_EDIT_FRAME* aPa
 
     m_parentSymbolReadOnly->SetValue( UnescapeString( m_symbol->GetParent().lock()->GetName() ) );
 
-    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; ++i )
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        m_fieldsBox->Append( GetDefaultFieldName( i, DO_TRANSLATE, SCH_SYMBOL_T ) );
+        m_fieldsBox->Append( GetDefaultFieldName( i, DO_TRANSLATE ) );
         m_fieldsBox->Check( i, true );
     }
 
@@ -88,7 +88,7 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::updateFieldsList()
 
     flattenedParent->GetFields( libFields );
 
-    for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < libFields.size(); ++i )
+    for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
         fieldNames.insert( libFields[i]->GetName() );
 
     libFields.clear();  // flattenedPart is about to go out of scope...
@@ -96,19 +96,19 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::updateFieldsList()
     // Load non-mandatory fields from the editor symbol
     m_symbol->GetFields( libFields );
 
-    for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < libFields.size(); ++i )
+    for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
         fieldNames.insert( libFields[i]->GetName() );
 
     libFields.clear();
 
     // Update the listbox widget
-    for( unsigned i = m_fieldsBox->GetCount() - 1; i >= SYMBOL_MANDATORY_FIELDS; --i )
+    for( unsigned i = m_fieldsBox->GetCount() - 1; i >= MANDATORY_FIELDS; --i )
         m_fieldsBox->Delete( i );
 
     for( const wxString& fieldName : fieldNames )
         m_fieldsBox->Append( fieldName );
 
-    for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < m_fieldsBox->GetCount(); ++i )
+    for( unsigned i = MANDATORY_FIELDS; i < m_fieldsBox->GetCount(); ++i )
         m_fieldsBox->Check( i, true );
 }
 

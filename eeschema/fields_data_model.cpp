@@ -296,14 +296,14 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( REFERENCE_FIELD, SCH_SYMBOL_T );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( REFERENCE_FIELD );
 }
 
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( VALUE_FIELD, SCH_SYMBOL_T );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( VALUE_FIELD );
 }
 
 
@@ -417,7 +417,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
                                                 const SCH_REFERENCE& rhRef )
 
 {
-    int  refCol = GetFieldNameCol( GetCanonicalFieldName( REFERENCE_FIELD, SCH_SYMBOL_T ) );
+    int  refCol = GetFieldNameCol( GetCanonicalFieldName( REFERENCE_FIELD ) );
     bool matchFound = false;
 
     if( refCol == -1 )
@@ -830,7 +830,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             }
         }
 
-        for( int ii = symbol.GetFields().size() - 1; ii >= SYMBOL_MANDATORY_FIELDS; ii-- )
+        for( int ii = symbol.GetFields().size() - 1; ii >= MANDATORY_FIELDS; ii-- )
         {
             if( fieldStore.count( symbol.GetFields()[ii].GetName() ) == 0 )
             {
@@ -915,7 +915,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
     int sortCol = GetFieldNameCol( aPreset.sortField );
 
     if( sortCol == -1 )
-        sortCol = GetFieldNameCol( GetCanonicalFieldName( REFERENCE_FIELD, SCH_SYMBOL_T ) );
+        sortCol = GetFieldNameCol( GetCanonicalFieldName( REFERENCE_FIELD ) );
 
     SetSorting( sortCol, aPreset.sortAsc );
 

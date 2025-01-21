@@ -321,10 +321,14 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
     }
 
     // Check for missing field names.
-    for( int ii = SYMBOL_MANDATORY_FIELDS; ii < (int) m_fields->size(); ++ii )
+    for( int ii = 0; ii < (int) m_fields->size(); ++ii )
     {
         SCH_FIELD& field = m_fields->at( ii );
-        wxString   fieldName = field.GetName( false );
+
+        if( field.IsMandatory() )
+            continue;
+
+        wxString fieldName = field.GetName( false );
 
         if( fieldName.IsEmpty() && !field.GetText().IsEmpty() )
         {
@@ -424,9 +428,13 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         m_fields->at( ii ).SetId( ii );
     }
 
-    for( int ii = m_fields->GetNumberRows() - 1; ii >= SYMBOL_MANDATORY_FIELDS; ii-- )
+    for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
     {
-        SCH_FIELD&      field = m_fields->at( ii );
+        SCH_FIELD& field = m_fields->at( ii );
+
+        if( field.IsMandatory() )
+            continue;
+
         const wxString& fieldName = field.GetCanonicalName();
 
         if( field.GetText().IsEmpty() )
@@ -620,10 +628,10 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
     for( int row : selectedRows )
     {
-        if( row < SYMBOL_MANDATORY_FIELDS )
+        if( row < MANDATORY_FIELDS )
         {
             DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  SYMBOL_MANDATORY_FIELDS ) );
+                                                  MANDATORY_FIELDS ) );
             return;
         }
     }
@@ -660,7 +668,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 
     int i = m_grid->GetGridCursorRow();
 
-    if( i > SYMBOL_MANDATORY_FIELDS )
+    if( i > MANDATORY_FIELDS )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
@@ -686,7 +694,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 
     int i = m_grid->GetGridCursorRow();
 
-    if( i >= SYMBOL_MANDATORY_FIELDS && i + 1 < m_fields->GetNumberRows() )
+    if( i >= MANDATORY_FIELDS && i + 1 < m_fields->GetNumberRows() )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );

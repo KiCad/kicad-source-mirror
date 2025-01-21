@@ -62,6 +62,7 @@ public:
 
     int GetNumberRows() override { return (int) size(); }
     int GetNumberCols() override { return PFC_COUNT; }
+    int GetMandatoryRows() { return m_mandatoryRows; }
 
     wxString GetColLabelValue( int aCol ) override;
 
@@ -88,6 +89,7 @@ protected:
 private:
     PCB_BASE_FRAME* m_frame;
     DIALOG_SHIM*    m_dialog;
+    int             m_mandatoryRows;
 
     FIELD_VALIDATOR m_fieldNameValidator;
     FIELD_VALIDATOR m_referenceValidator;

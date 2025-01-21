@@ -1774,7 +1774,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     // Use title caps for mandatory fields.  "Edit Sheet name Field" looks dorky.
     if( parentType == SCH_SYMBOL_T && aField->IsMandatory() )
     {
-        wxString fieldName = GetDefaultFieldName( aField->GetId(), DO_TRANSLATE, SCH_SYMBOL_T );
+        wxString fieldName = GetDefaultFieldName( aField->GetId(), DO_TRANSLATE );
         caption.Printf( _( "Edit %s Field" ), TitleCaps( fieldName ) );
     }
     else if( parentType == SCH_SHEET_T && aField->IsMandatory() )
