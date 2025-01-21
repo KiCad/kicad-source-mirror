@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-21 07:53+0000\n"
+"PO-Revision-Date: 2025-01-21 12:04+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -6719,7 +6719,7 @@ msgstr "ERC-undantag"
 #: common/layer_id.cpp:142 common/layer_id.cpp:182
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Anchors"
-msgstr "Ankare"
+msgstr "Referenspunkter"
 
 #: common/layer_id.cpp:143 common/layer_id.cpp:186
 msgid "Helper items"
@@ -20399,7 +20399,7 @@ msgstr "Rita polygoner"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Move Symbol Anchor"
-msgstr "Flytta symbolankare"
+msgstr "Flytta symbolens referenspunkt"
 
 #: eeschema/tools/ee_actions.cpp:377
 msgid "Specify a new location for the symbol anchor"
@@ -33086,7 +33086,7 @@ msgstr "Välj Kopparskiktpar"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:104
 msgid "Rotate around item anchor"
-msgstr "Rotera runt objektankare"
+msgstr "Rotera runt objekts referenspunkt"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:107
 msgid "Rotate around selection center"
@@ -34399,8 +34399,8 @@ msgid ""
 "Click and select a board item.\n"
 "The anchor position will be the position of the selected item."
 msgstr ""
-"Klicka och välj ett kortobjekt.\n"
-"Ankarpositionen kommer att vara positionen för det valda objektet."
+"Klicka och välj ett mönsterkortsobjekt.\n"
+"Referenspunkten kommer att vara positionen för det valda objektet."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:72
 msgid "Position Relative To Reference Item"
@@ -44430,7 +44430,7 @@ msgstr "Rita dimension"
 
 #: pcbnew/tools/drawing_tool.cpp:1759
 msgid "Move Footprint Anchor"
-msgstr "Flytta fotavtrycksankare"
+msgstr "Flytta fotavtrycks referenspunkt"
 
 #: pcbnew/tools/drawing_tool.cpp:3100
 msgid "Select Net:"
@@ -44956,7 +44956,7 @@ msgstr "Lägg till en zon med samma inställningar som en befintlig zon"
 
 #: pcbnew/tools/pcb_actions.cpp:339
 msgid "Place the Footprint Anchor"
-msgstr "Placera Footprint Anchor"
+msgstr "Placera fotavtrycks referenspunkt"
 
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "Set the coordinate origin point (anchor) of the footprint"
@@ -46952,7 +46952,7 @@ msgstr "DRC-kränkningar som har uteslutits individuellt"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Show footprint and text origins as a cross"
-msgstr "Visa referenspunkt (origo) för fotavtryck och text som ett kors"
+msgstr "Visa referenspunkt för fotavtryck och text som ett kors"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Locked Item Shadow"
