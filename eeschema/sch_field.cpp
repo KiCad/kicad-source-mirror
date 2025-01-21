@@ -69,10 +69,12 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
         m_renderCacheValid( false ),
         m_lastResolvedColor( COLOR4D::UNSPECIFIED )
 {
-    if( aName.IsEmpty() )
-        SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( aFieldId ) );
-    else
+    if( !aName.IsEmpty() )
         SetName( aName );
+    else if( aParent->Type() == SCH_SYMBOL_T )
+        SetName( GetDefaultFieldName( aFieldId, DO_TRANSLATE, SCH_SYMBOL_T ) );
+    else if( aParent->Type() == SCH_SHEET_T )
+        SetName( GetDefaultFieldName( aFieldId, DO_TRANSLATE, SCH_SHEET_T ) );
 
     SetTextPos( aPos );
     SetId( aFieldId );  // will also set the layer
@@ -1229,16 +1231,16 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
     if( m_parent && ( m_parent->Type() == SCH_SYMBOL_T || m_parent->Type() == LIB_SYMBOL_T ) )
     {
         if( IsMandatory() )
-            return GetCanonicalFieldName( m_id );
+            return GetCanonicalFieldName( m_id, SCH_SYMBOL_T );
         else if( m_name.IsEmpty() && aUseDefaultName )
-            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+            return GetDefaultFieldName( m_id, !DO_TRANSLATE, SCH_SYMBOL_T );
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
         if( IsMandatory() )
-            return SCH_SHEET::GetDefaultFieldName( m_id );
+            return GetCanonicalFieldName( m_id, SCH_SHEET_T );
         else if( m_name.IsEmpty() && aUseDefaultName )
-            return SCH_SHEET::GetDefaultFieldName( m_id );
+            return GetDefaultFieldName( m_id, !DO_TRANSLATE, SCH_SHEET_T );
     }
     else if( m_parent && m_parent->IsType( labelTypes ) )
     {
@@ -1254,14 +1256,12 @@ wxString SCH_FIELD::GetCanonicalName() const
     if( m_parent && ( m_parent->Type() == SCH_SYMBOL_T || m_parent->Type() == LIB_SYMBOL_T ) )
     {
         if( IsMandatory() )
-            return GetCanonicalFieldName( m_id );
+            return GetCanonicalFieldName( m_id, SCH_SYMBOL_T );
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
-        if( m_id == SHEETNAME )
-            return wxT( "Sheetname" );
-        else if( m_id == SHEETFILENAME )
-            return wxT( "Sheetfile" );
+        if( IsMandatory() )
+            return GetCanonicalFieldName( m_id, SCH_SHEET_T );
     }
     else if( m_parent && m_parent->IsType( labelTypes ) )
     {
@@ -1509,7 +1509,7 @@ bool SCH_FIELD::IsMandatory() const
     if( m_parent && m_parent->Type() == SCH_SHEET_T )
         return m_id >= 0 && m_id < SHEET_MANDATORY_FIELDS;
     else
-        return m_id >= 0 && m_id < MANDATORY_FIELDS;
+        return m_id >= 0 && m_id < SYMBOL_MANDATORY_FIELDS;
 }
 
 
@@ -1590,7 +1590,7 @@ double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
     if( GetId() != field.GetId() )
     {
         // We don't allow swapping of mandatory fields, so these cannot be the same item
-        if( GetId() < MANDATORY_FIELDS || field.GetId() < MANDATORY_FIELDS )
+        if( GetId() < SYMBOL_MANDATORY_FIELDS || field.GetId() < SYMBOL_MANDATORY_FIELDS )
             return 0.0;
         else
             similarity *= 0.5;

@@ -105,11 +105,11 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
     m_options        = ENTRY_NORMAL;
     m_unitsLocked    = false;
 
-    // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
+    // Add the SYMBOL_MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
-    m_drawings[SCH_FIELD_T].reserve( MANDATORY_FIELDS );
+    m_drawings[SCH_FIELD_T].reserve( SYMBOL_MANDATORY_FIELDS );
 
-    for( int i = 0; i < MANDATORY_FIELDS; i++ )
+    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; i++ )
         m_drawings[SCH_FIELD_T].push_back( new SCH_FIELD( this, i ) );
 
     // Ensure reference and value fields are visible when creating a lib symbol
@@ -351,7 +351,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->SetLibId( m_libId );
 
         // Now add the inherited part mandatory field (this) information.
-        for( int i = 0; i < MANDATORY_FIELDS; i++ )
+        for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; i++ )
         {
             wxString tmp = GetFieldById( i )->GetText();
 
@@ -813,7 +813,7 @@ void LIB_SYMBOL::RemoveDrawItem( SCH_ITEM* aItem )
 {
     wxASSERT( aItem != nullptr );
 
-    // none of the MANDATORY_FIELDS may be removed in RAM, but they may be
+    // none of the SYMBOL_MANDATORY_FIELDS may be removed in RAM, but they may be
     // omitted when saving to disk.
     if( aItem->Type() == SCH_FIELD_T )
     {
@@ -1067,8 +1067,8 @@ void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
 
 void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly )
 {
-    // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
-    for( int id = 0; id < MANDATORY_FIELDS; ++id )
+    // Grab the SYMBOL_MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
+    for( int id = 0; id < SYMBOL_MANDATORY_FIELDS; ++id )
     {
         SCH_FIELD* field = GetFieldById( id );
 
@@ -1100,8 +1100,8 @@ void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly )
 
 void LIB_SYMBOL::CopyFields( std::vector<SCH_FIELD>& aList )
 {
-    // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
-    for( int id = 0; id < MANDATORY_FIELDS; ++id )
+    // Grab the SYMBOL_MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
+    for( int id = 0; id < SYMBOL_MANDATORY_FIELDS; ++id )
         aList.push_back( *GetFieldById( id ) );
 
     // Now grab all the rest of fields.
@@ -1248,7 +1248,7 @@ void LIB_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunctio
 int LIB_SYMBOL::UpdateFieldOrdinals()
 {
     int retv = 0;
-    int lastOrdinal = MANDATORY_FIELDS;
+    int lastOrdinal = SYMBOL_MANDATORY_FIELDS;
 
     for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
@@ -1273,7 +1273,7 @@ int LIB_SYMBOL::UpdateFieldOrdinals()
 
 int LIB_SYMBOL::GetNextAvailableFieldId() const
 {
-    int retv = MANDATORY_FIELDS;
+    int retv = SYMBOL_MANDATORY_FIELDS;
 
     while( GetFieldById( retv ) )
         retv += 1;

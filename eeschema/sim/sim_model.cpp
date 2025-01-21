@@ -474,9 +474,7 @@ void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields ) const
     if( IsStoredInValue() )
         SetFieldValue( aFields, SIM_VALUE_FIELD, m_serializer->GenerateValue(), false );
 
-    // New fields have a ID = -1 (undefined). so replace the undefined ID
-    // by a degined ID
-    int lastFreeId = MANDATORY_FIELDS;
+    int lastFreeId = SYMBOL_MANDATORY_FIELDS;
 
     // Search for the first available value:
     for( auto& fld : aFields )

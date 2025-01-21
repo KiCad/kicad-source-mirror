@@ -25,6 +25,7 @@
 #pragma once
 
 #include <wx/string.h>
+#include <core/typeinfo.h>
 
 class OUTPUTFORMATTER;
 class TEMPLATE_FIELDNAMES_LEXER;
@@ -47,12 +48,52 @@ enum  MANDATORY_FIELD_T {
 
     /// The first 5 are mandatory, and must be instantiated in SCH_COMPONENT
     /// and LIB_PART constructors
-    MANDATORY_FIELDS
+    SYMBOL_MANDATORY_FIELDS,
+
+    /// The footprint field is not mandatory in footprints
+    FP_MANDATORY_FIELDS = SYMBOL_MANDATORY_FIELDS -1
+};
+
+enum  SHEET_FIELD_TYPE
+{
+    SHEETNAME = 0,
+    SHEETFILENAME,
+
+    /// The first 2 are mandatory, and must be instantiated in SCH_SHEET
+    SHEET_MANDATORY_FIELDS
 };
 
 // A helper to call GetDefaultFieldName with or without translation.
 // Translation should be used only to display field names in dialogs
 #define DO_TRANSLATE true
+
+
+/**
+ * Return a default symbol field name for field \a aFieldNdx for all components.
+ *
+ * These field names are not modifiable but template field names are.
+ *
+ * @param aFieldNdx The field number index, > 0.
+ * @param aTranslateForHI If true, return the translated field name,
+ * else get the canonical name (defualt). Translation is intended only for dialogs
+ */
+wxString GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI, KICAD_T aType );
+
+
+inline wxString GetCanonicalFieldName( int idx, KICAD_T aParentType )
+{
+    // While TEMPLATE_FIELDNAME::GetDefaultFieldName() still works for non-mandatory fields,
+    // it's confusing to call it through this function.
+    if( aParentType == SCH_SYMBOL_T )
+        wxASSERT( idx < SYMBOL_MANDATORY_FIELDS );
+    else if( aParentType == PCB_FOOTPRINT_T )
+        wxASSERT( idx < FP_MANDATORY_FIELDS );
+    else if( aParentType == SCH_SHEET_T )
+        wxASSERT( idx < SHEET_MANDATORY_FIELDS );
+
+    return GetDefaultFieldName( idx, !DO_TRANSLATE, aParentType );
+}
+
 
 /**
  * Hold a name of a symbol's field, field value, and default visibility.
@@ -76,9 +117,9 @@ struct TEMPLATE_FIELDNAME
 
     TEMPLATE_FIELDNAME( const TEMPLATE_FIELDNAME& ref )
     {
-            m_Name = ref.m_Name;
-            m_Visible = ref.m_Visible;
-            m_URL = ref.m_URL;
+        m_Name = ref.m_Name;
+        m_Visible = ref.m_Visible;
+        m_URL = ref.m_URL;
     }
 
     /**
@@ -100,33 +141,12 @@ struct TEMPLATE_FIELDNAME
      */
     void Parse( TEMPLATE_FIELDNAMES_LEXER* aSpec );
 
-    /**
-     * Return a default symbol field name for field \a aFieldNdx for all components.
-     *
-     * These field names are not modifiable but template field names are.
-     *
-     * @param aFieldNdx The field number index, > 0.
-     * @param aTranslateForHI If true, return the translated field name,
-     * else get the canonical name (defualt). Translation is intended only for dialogs
-     */
-    static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI = false );
-
     wxString    m_Name;         // The field name
     bool        m_Visible;      // Field defaults to being visible in schematic.
     bool        m_URL;          // If field should have a browse button
 };
 
 typedef std::vector< TEMPLATE_FIELDNAME > TEMPLATE_FIELDNAMES;
-
-
-inline wxString GetCanonicalFieldName( int idx )
-{
-    // While TEMPLATE_FIELDNAME::GetDefaultFieldName() still works for non-mandatory fields,
-    // it's confusing to call it through this function.
-    wxASSERT( idx < MANDATORY_FIELDS );
-
-    return TEMPLATE_FIELDNAME::GetDefaultFieldName( idx );
-}
 
 
 class TEMPLATES

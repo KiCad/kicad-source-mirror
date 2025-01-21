@@ -38,16 +38,47 @@ using namespace TFIELD_T;
 #define DATASHEET_CANONICAL "Datasheet"
 #define DESCRIPTION_CANONICAL "Description"
 
+// N.B. Do not change these values without transitioning the file format
+#define SHEET_NAME_CANONICAL "Sheetname"
+#define SHEET_FILE_CANONICAL "Sheetfile"
+#define USER_FIELD_CANONICAL "Field%d"
+
 static wxString s_CanonicalReference( REFERENCE_CANONICAL );
 static wxString s_CanonicalValue( VALUE_CANONICAL );
 static wxString s_CanonicalFootprint( FOOTPRINT_CANONICAL );
 static wxString s_CanonicalDatasheet( DATASHEET_CANONICAL );
 static wxString s_CanonicalDescription( DESCRIPTION_CANONICAL );
+static wxString s_CanonicalSheetName( SHEET_NAME_CANONICAL );
+static wxString s_CanonicalSheetFile( SHEET_FILE_CANONICAL );
 
-const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI )
+
+wxString GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI, KICAD_T aParentType )
 {
+    int mandatoryCount = 0;
+
+    if( aParentType == SCH_SYMBOL_T )
+        mandatoryCount = SYMBOL_MANDATORY_FIELDS;
+    else if( aParentType == SCH_SHEET_T )
+        mandatoryCount = SHEET_MANDATORY_FIELDS;
+    else if( aParentType == PCB_FOOTPRINT_T )
+        mandatoryCount = FP_MANDATORY_FIELDS;
+    else
+        wxFAIL_MSG( "Unsupported field parentType" );
+
     if( !aTranslateForHI )
     {
+        if( aFieldNdx >= mandatoryCount )
+            return wxString::Format( wxS( USER_FIELD_CANONICAL ), aFieldNdx );
+
+        if( aParentType == SCH_SHEET_T )
+        {
+            switch( aFieldNdx )
+            {
+            case  SHEETNAME:     return s_CanonicalSheetName;
+            case  SHEETFILENAME: return s_CanonicalSheetFile;
+            }
+        }
+
         switch( aFieldNdx )
         {
         case REFERENCE_FIELD:   return s_CanonicalReference;   // The symbol reference, R1, C1, etc.
@@ -55,27 +86,33 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
         case FOOTPRINT_FIELD:   return s_CanonicalFootprint;   // The footprint for use with Pcbnew
         case DATASHEET_FIELD:   return s_CanonicalDatasheet;   // Link to a datasheet for symbol
         case DESCRIPTION_FIELD: return s_CanonicalDescription; // The symbol description
-        default: break;
+        }
+    }
+    else
+    {
+        if( aFieldNdx >= mandatoryCount )
+            return wxString::Format( _( USER_FIELD_CANONICAL ), aFieldNdx );
+
+        if( aParentType == SCH_FIELD_T )
+        {
+            switch( aFieldNdx )
+            {
+            case  SHEETNAME:     return _( SHEET_NAME_CANONICAL );
+            case  SHEETFILENAME: return _( SHEET_FILE_CANONICAL );
+            }
         }
 
-        wxString str( wxS( "Field" ) );
-#if wxUSE_UNICODE_WCHAR
-        str << std::to_wstring( aFieldNdx );
-#else
-        str << std::to_string( aFieldNdx );
-#endif
-        return str;
+        switch( aFieldNdx )
+        {
+        case REFERENCE_FIELD:   return _( REFERENCE_CANONICAL );   // The symbol reference, R1, C1, etc.
+        case VALUE_FIELD:       return _( VALUE_CANONICAL );       // The symbol value
+        case FOOTPRINT_FIELD:   return _( FOOTPRINT_CANONICAL );   // The footprint for use with Pcbnew
+        case DATASHEET_FIELD:   return _( DATASHEET_CANONICAL );   // Link to a datasheet for symbol
+        case DESCRIPTION_FIELD: return _( DESCRIPTION_CANONICAL ); // The symbol description
+        }
     }
 
-    switch( aFieldNdx )
-    {
-    case REFERENCE_FIELD:   return _( REFERENCE_CANONICAL );   // The symbol reference, R1, C1, etc.
-    case VALUE_FIELD:       return _( VALUE_CANONICAL );       // The symbol value
-    case FOOTPRINT_FIELD:   return _( FOOTPRINT_CANONICAL );   // The footprint for use with Pcbnew
-    case DATASHEET_FIELD:   return _( DATASHEET_CANONICAL );   // Link to a datasheet for symbol
-    case DESCRIPTION_FIELD: return _( DESCRIPTION_CANONICAL ); // The symbol description
-    default:                return wxString::Format( _( "Field%d" ), aFieldNdx );
-    }
+    return wxEmptyString;   // Shouldn't be possible to get here....
 }
 
 
@@ -231,9 +268,11 @@ void TEMPLATES::resolveTemplates()
 void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal )
 {
     // Ensure that the template fieldname does not match a fixed fieldname.
-    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    // We use SCH_SYMBOL_T here as it contains a superset of SCH_SYMBOL_T's and PCB_FOOTPRINT_T's
+    // field names.
+    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; ++i )
     {
-        if( GetCanonicalFieldName( i ) == aFieldName.m_Name )
+        if( GetCanonicalFieldName( i, SCH_SYMBOL_T ) == aFieldName.m_Name )
             return;
     }
 

@@ -160,7 +160,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                     description = candidate;
 
                 // All non-mandatory fields
-                for( int ii = MANDATORY_FIELDS; ii < symbol2->GetFieldCount(); ++ii )
+                for( int ii = SYMBOL_MANDATORY_FIELDS; ii < symbol2->GetFieldCount(); ++ii )
                 {
                     const SCH_FIELD& f = symbol2->GetFields()[ ii ];
 
@@ -197,7 +197,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         else
             description = descriptionField->GetText();
 
-        for( int ii = MANDATORY_FIELDS; ii < aSymbol->GetFieldCount(); ++ii )
+        for( int ii = SYMBOL_MANDATORY_FIELDS; ii < aSymbol->GetFieldCount(); ++ii )
         {
             const SCH_FIELD& f = aSymbol->GetFields()[ ii ];
 
@@ -208,9 +208,9 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         }
     }
 
-    fields[GetCanonicalFieldName( FOOTPRINT_FIELD )] = footprint;
-    fields[GetCanonicalFieldName( DATASHEET_FIELD )] = datasheet;
-    fields[GetCanonicalFieldName( DESCRIPTION_FIELD )] = description;
+    fields[GetCanonicalFieldName( FOOTPRINT_FIELD, SCH_SYMBOL_T )] = footprint;
+    fields[GetCanonicalFieldName( DATASHEET_FIELD, SCH_SYMBOL_T )] = datasheet;
+    fields[GetCanonicalFieldName( DESCRIPTION_FIELD, SCH_SYMBOL_T )] = description;
 
     // Do not output field values blank in netlist:
     if( value.size() )
@@ -344,7 +344,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             std::vector<SCH_FIELD>& fields = symbol->GetFields();
 
-            for( size_t jj = MANDATORY_FIELDS; jj < fields.size(); ++jj )
+            for( size_t jj = SYMBOL_MANDATORY_FIELDS; jj < fields.size(); ++jj )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), fields[jj].GetCanonicalName() );

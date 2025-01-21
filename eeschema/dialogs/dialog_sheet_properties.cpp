@@ -743,7 +743,7 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
 
     int       fieldID = m_fields->size();
     SCH_FIELD newField( VECTOR2I( 0, 0 ), fieldID, m_sheet,
-                        SCH_SHEET::GetDefaultFieldName( fieldID ) );
+                        GetDefaultFieldName( fieldID, DO_TRANSLATE, SCH_SHEET_T ) );
 
     newField.SetTextAngle( m_fields->at( SHEETNAME ).GetTextAngle() );
 

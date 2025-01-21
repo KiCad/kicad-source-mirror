@@ -86,7 +86,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_embedFonts = false;
 
     // These are the mandatory fields for the editor to work
-    for( int i = 0; i < MANDATORY_FIELDS; i++ )
+    for( int i = 0; i < FP_MANDATORY_FIELDS; i++ )
     {
         PCB_FIELD* field;
 
@@ -360,7 +360,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         if( !item )
             continue;
 
-        if( item->GetId() < MANDATORY_FIELDS )
+        if( item->GetId() < FP_MANDATORY_FIELDS )
             continue;
 
         google::protobuf::Any* itemMsg = def->add_items();
@@ -516,7 +516,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     // Footprint items
     for( PCB_FIELD* field : m_fields )
     {
-        if( field && field->GetId() >= MANDATORY_FIELDS )
+        if( field && field->GetId() >= FP_MANDATORY_FIELDS )
             Remove( field );
     }
 
@@ -681,7 +681,7 @@ PCB_FIELD* FOOTPRINT::AddField( const PCB_FIELD& aField )
 
 void FOOTPRINT::RemoveField( const wxString& aFieldName )
 {
-    for( unsigned i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
+    for( unsigned i = FP_MANDATORY_FIELDS; i < m_fields.size(); ++i )
     {
         if( aFieldName == m_fields[i]->GetName( false ) )
         {

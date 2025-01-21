@@ -48,34 +48,6 @@
 #include <pgm_base.h>
 #include <wx/log.h>
 
-// N.B. Do not change these values without transitioning the file format
-#define SHEET_NAME_CANONICAL "Sheetname"
-#define SHEET_FILE_CANONICAL "Sheetfile"
-#define USER_FIELD_CANONICAL "Field%d"
-
-
-const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
-{
-    if( !aTranslated )
-    {
-        switch( aFieldNdx )
-        {
-        case  SHEETNAME:     return SHEET_NAME_CANONICAL;
-        case  SHEETFILENAME: return SHEET_FILE_CANONICAL;
-        default:             return wxString::Format( USER_FIELD_CANONICAL, aFieldNdx );
-        }
-    }
-
-    // Fixed values for the mandatory fields
-    switch( aFieldNdx )
-    {
-    case  SHEETNAME:     return _( SHEET_NAME_CANONICAL );
-    case  SHEETFILENAME: return _( SHEET_FILE_CANONICAL );
-    default:             return wxString::Format( _( USER_FIELD_CANONICAL ), aFieldNdx );
-    }
-}
-
-
 SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) :
         SCH_ITEM( aParent, SCH_SHEET_T ),
         m_excludedFromSim( false ),
@@ -95,7 +67,7 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) 
 
     for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
     {
-        m_fields.emplace_back( aPos, i, this, GetDefaultFieldName( i ) );
+        m_fields.emplace_back( aPos, i, this, GetDefaultFieldName( i, DO_TRANSLATE, SCH_SHEET_T ) );
         m_fields.back().SetVisible( true );
 
         if( i == SHEETNAME )

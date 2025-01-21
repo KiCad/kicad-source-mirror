@@ -149,7 +149,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
     else
         aSymbol->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
-    int nextFreeFieldId = MANDATORY_FIELDS;
+    int nextFreeFieldId = SYMBOL_MANDATORY_FIELDS;
     std::vector<SCH_FIELD*> fields;
     std::string name = aFormatter.Quotew( aSymbol->GetLibId().GetLibItemName().wx_str() );
     std::string unitName = aSymbol->GetLibId().GetLibItemName();
@@ -408,8 +408,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
 
     wxString fieldName = aField->GetName();
 
+    // We're in the library cache, which means this can't be a sheet or a label field.
+
     if( aField->IsMandatory() )
-        fieldName = GetCanonicalFieldName( aField->GetId() );
+        fieldName = GetCanonicalFieldName( aField->GetId(), SCH_SYMBOL_T );
 
     aFormatter.Print( "(property %s %s %s (at %s %s %g)",
                       aField->IsPrivate() ? "private" : "",

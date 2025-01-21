@@ -467,9 +467,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
     // Remove the ref/value/footprint fields that are individually handled
     nlohmann::ordered_map<wxString, wxString> compFields = aNetlistComponent->GetFields();
-    compFields.erase( GetCanonicalFieldName( REFERENCE_FIELD ) );
-    compFields.erase( GetCanonicalFieldName( VALUE_FIELD ) );
-    compFields.erase( GetCanonicalFieldName( FOOTPRINT_FIELD ) );
+    compFields.erase( GetCanonicalFieldName( REFERENCE_FIELD, SCH_SYMBOL_T ) );
+    compFields.erase( GetCanonicalFieldName( VALUE_FIELD, SCH_SYMBOL_T ) );
+    compFields.erase( GetCanonicalFieldName( FOOTPRINT_FIELD, SCH_SYMBOL_T ) );
 
     // Remove any component class fields - these are not editable in the pcb editor
     compFields.erase( wxT( "Component Class" ) );

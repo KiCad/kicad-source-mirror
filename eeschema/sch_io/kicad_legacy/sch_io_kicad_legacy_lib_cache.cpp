@@ -499,11 +499,11 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadAliases( std::unique_ptr<LIB_SYMBOL>& aS
             LIB_SYMBOL* newSymbol = new LIB_SYMBOL( newAliasName );
 
             // Inherit the parent mandatory field attributes.
-            for( int id = 0; id < MANDATORY_FIELDS; ++id )
+            for( int id = 0; id < SYMBOL_MANDATORY_FIELDS; ++id )
             {
                 SCH_FIELD* field = newSymbol->GetFieldById( id );
 
-                // the MANDATORY_FIELDS are exactly that in RAM.
+                // the SYMBOL_MANDATORY_FIELDS are exactly that in RAM.
                 wxASSERT( field );
 
                 SCH_FIELD* parentField = aSymbol->GetFieldById( id );
@@ -549,7 +549,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
         field = aSymbol->GetFieldById( id );
 
         // this will fire only if somebody broke a constructor or editor.
-        // MANDATORY_FIELDS are always present in ram resident symbols, no
+        // SYMBOL_MANDATORY_FIELDS are always present in ram resident symbols, no
         // exceptions, and they always have their names set, even fixed fields.
         wxASSERT( field );
     }
@@ -662,12 +662,12 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
     }
 
     // Fields in RAM must always have names.
-    if( id >= 0 && id < MANDATORY_FIELDS )
+    if( id >= 0 && id < SYMBOL_MANDATORY_FIELDS )
     {
         // Fields in RAM must always have names, because we are trying to get
         // less dependent on field ids and more dependent on names.
         // Plus assumptions are made in the field editors.
-        field->SetName( GetCanonicalFieldName( id ) );
+        field->SetName( GetCanonicalFieldName( id, SCH_SYMBOL_T ) );
 
         // Ensure the VALUE field = the symbol name (can be not the case
         // with malformed libraries: edited by hand, or converted from other tools)
@@ -1525,14 +1525,14 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
     // may have their own save policy so there is a separate loop for them.
     // Empty fields are saved, because the user may have set visibility,
     // size and orientation
-    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    for( int i = 0; i < SYMBOL_MANDATORY_FIELDS; ++i )
         saveField( fields[i], aFormatter );
 
     // User defined fields:
     // may have their own save policy so there is a separate loop for them.
-    int fieldId = MANDATORY_FIELDS;     // really wish this would go away.
+    int fieldId = SYMBOL_MANDATORY_FIELDS;     // really wish this would go away.
 
-    for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
+    for( unsigned i = SYMBOL_MANDATORY_FIELDS; i < fields.size(); ++i )
     {
         // There is no need to save empty fields, i.e. no reason to preserve field
         // names now that fields names come in dynamically through the template
@@ -1717,15 +1717,18 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const SCH_FIELD* aField,
                       aField->IsItalic() ? 'I' : 'N',
                       aField->IsBold() ? 'B' : 'N' );
 
-    /* Save field name, if necessary
-     * Field name is saved only if it is not the default name.
-     * Just because default name depends on the language and can change from
-     * a country to another
-     */
-    wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
-
-    if( id >= MANDATORY_FIELDS && !aField->GetName().IsEmpty() && aField->GetName() != defName )
+    // Translated names were stored in legacy files, so it's important not to save the
+    // default names as they weren't yet canonical.
+    //
+    // Legacy files only had symbol fields, so we don't have to worry about sheet or label
+    // fields here.
+    //
+    if( id >= SYMBOL_MANDATORY_FIELDS
+            && !aField->GetName().IsEmpty()
+            && aField->GetName() != GetDefaultFieldName( id, !DO_TRANSLATE, SCH_SYMBOL_T ) )
+    {
         aFormatter.Print( 0, " %s", EscapedUTF8( aField->GetName() ).c_str() );
+    }
 
     aFormatter.Print( 0, "\n" );
 }

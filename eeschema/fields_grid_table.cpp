@@ -135,7 +135,7 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFra
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
-        m_mandatoryFieldCount( MANDATORY_FIELDS ),
+        m_mandatoryFieldCount( SYMBOL_MANDATORY_FIELDS ),
         m_part( aSymbol ),
         m_symbolNetlist( netList( aSymbol ) ),
         m_fieldNameValidator( FIELD_NAME ),
@@ -154,7 +154,7 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
-        m_mandatoryFieldCount( MANDATORY_FIELDS ),
+        m_mandatoryFieldCount( SYMBOL_MANDATORY_FIELDS ),
         m_part( aSymbol->GetLibSymbolRef().get() ),
         m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
         m_fieldNameValidator( FIELD_NAME ),
@@ -673,17 +673,17 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
     case FDC_NAME:
         // Use default field names for mandatory and system fields because they are translated
         // according to the current locale
-        if( m_parentType == SCH_SYMBOL_T )
+        if( m_parentType == SCH_SYMBOL_T || m_parentType == LIB_SYMBOL_T )
         {
             if( aRow < m_mandatoryFieldCount )
-                return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow, DO_TRANSLATE );
+                return GetDefaultFieldName( aRow, DO_TRANSLATE, SCH_SYMBOL_T );
             else
                 return field.GetName( false );
         }
         else if( m_parentType == SCH_SHEET_T )
         {
             if( aRow < m_mandatoryFieldCount )
-                return SCH_SHEET::GetDefaultFieldName( aRow );
+                return GetDefaultFieldName( aRow, DO_TRANSLATE, SCH_SHEET_T );
             else
                 return field.GetName( false );
         }

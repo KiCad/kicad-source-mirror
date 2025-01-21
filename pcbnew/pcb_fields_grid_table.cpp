@@ -219,7 +219,7 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
     switch( aCol )
     {
     case PFC_NAME:
-        if( aRow < MANDATORY_FIELDS )
+        if( aRow < FP_MANDATORY_FIELDS )
         {
             m_readOnlyAttr->IncRef();
             return enhanceAttr( m_readOnlyAttr, aRow, aCol, aKind );

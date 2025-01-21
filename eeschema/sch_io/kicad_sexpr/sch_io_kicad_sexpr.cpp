@@ -92,7 +92,7 @@ void SCH_IO_KICAD_SEXPR::init( SCHEMATIC* aSchematic, const std::map<std::string
     m_schematic       = aSchematic;
     m_cache           = nullptr;
     m_out             = nullptr;
-    m_nextFreeFieldId = 100; // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
+    m_nextFreeFieldId = 100; // number arbitrarily > SYMBOL_MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
 }
 
 
@@ -741,7 +741,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
     KICAD_FORMAT::FormatUuid( m_out, aSymbol->m_Uuid );
 
-    m_nextFreeFieldId = MANDATORY_FIELDS;
+    m_nextFreeFieldId = SYMBOL_MANDATORY_FIELDS;
 
     for( SCH_FIELD& field : aSymbol->GetFields() )
     {

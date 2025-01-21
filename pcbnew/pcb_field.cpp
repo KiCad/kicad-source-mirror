@@ -72,7 +72,7 @@ bool PCB_FIELD::Deserialize( const google::protobuf::Any &aContainer )
         setId( field.id().id() );
 
     // Mandatory fields have a blank Name in the KiCad object
-    if( m_id >= MANDATORY_FIELDS )
+    if( m_id >= FP_MANDATORY_FIELDS )
         SetName( wxString( field.name().c_str(), wxConvUTF8 ) );
 
     if( field.has_text() )
@@ -93,10 +93,10 @@ wxString PCB_FIELD::GetName( bool aUseDefaultName ) const
 {
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
     {
-        if( m_id >= 0 && m_id < MANDATORY_FIELDS )
-            return GetCanonicalFieldName( m_id );
+        if( m_id >= 0 && m_id < FP_MANDATORY_FIELDS )
+            return GetCanonicalFieldName( m_id, PCB_FOOTPRINT_T );
         else if( m_name.IsEmpty() && aUseDefaultName )
-            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+            return GetDefaultFieldName( m_id, !DO_TRANSLATE, PCB_FOOTPRINT_T );
         else
             return m_name;
     }
@@ -112,8 +112,8 @@ wxString PCB_FIELD::GetCanonicalName() const
 {
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
     {
-        if( m_id < MANDATORY_FIELDS )
-            return GetCanonicalFieldName( m_id );
+        if( m_id < FP_MANDATORY_FIELDS )
+            return GetCanonicalFieldName( m_id, PCB_FOOTPRINT_T );
         else
             return m_name;
     }
@@ -132,8 +132,8 @@ wxString PCB_FIELD::GetCanonicalName() const
 
 wxString PCB_FIELD::GetTextTypeDescription() const
 {
-    if( m_id < MANDATORY_FIELDS )
-        return GetCanonicalFieldName( m_id );
+    if( m_id < FP_MANDATORY_FIELDS )
+        return GetCanonicalFieldName( m_id, PCB_FOOTPRINT_T );
     else
         return _( "User Field" );
 }
@@ -233,7 +233,7 @@ double PCB_FIELD::Similarity( const BOARD_ITEM& aOther ) const
 
     const PCB_FIELD& other = static_cast<const PCB_FIELD&>( aOther );
 
-    if( m_id < MANDATORY_FIELDS || other.m_id < MANDATORY_FIELDS )
+    if( m_id < FP_MANDATORY_FIELDS || other.m_id < FP_MANDATORY_FIELDS )
     {
         if( m_id == other.m_id )
             return 1.0;

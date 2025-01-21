@@ -636,7 +636,7 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
         return false;
 
     // Check for missing field names.
-    for( size_t i = MANDATORY_FIELDS;  i < m_fields->size(); ++i )
+    for( size_t i = SYMBOL_MANDATORY_FIELDS;  i < m_fields->size(); ++i )
     {
         SCH_FIELD& field = m_fields->at( i );
         wxString   fieldName = field.GetName( false );
@@ -841,8 +841,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     SCHEMATIC_SETTINGS& settings = m_symbol->Schematic()->Settings();
     int                 fieldID = (int) m_fields->size();
     SCH_FIELD           newField( VECTOR2I( 0, 0 ), fieldID, m_symbol,
-                                  TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID,
-                                                                           DO_TRANSLATE ) );
+                                  GetDefaultFieldName( fieldID, DO_TRANSLATE, SCH_SYMBOL_T ) );
 
     newField.SetTextAngle( m_fields->at( REFERENCE_FIELD ).GetTextAngle() );
     newField.SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
@@ -875,10 +874,10 @@ void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
     for( int row : selectedRows )
     {
-        if( row < MANDATORY_FIELDS )
+        if( row < SYMBOL_MANDATORY_FIELDS )
         {
             DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  MANDATORY_FIELDS ) );
+                                                  SYMBOL_MANDATORY_FIELDS ) );
             return;
         }
     }
@@ -915,7 +914,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 
     int i = m_fieldsGrid->GetGridCursorRow();
 
-    if( i > MANDATORY_FIELDS )
+    if( i > SYMBOL_MANDATORY_FIELDS )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
@@ -942,7 +941,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 
     int i = m_fieldsGrid->GetGridCursorRow();
 
-    if( i >= MANDATORY_FIELDS && i < m_fieldsGrid->GetNumberRows() - 1 )
+    if( i >= SYMBOL_MANDATORY_FIELDS && i < m_fieldsGrid->GetNumberRows() - 1 )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );

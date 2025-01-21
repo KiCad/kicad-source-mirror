@@ -636,7 +636,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 
     int       fieldId = (int) m_fields->size();
     PCB_FIELD newField( m_footprint, m_fields->size(),
-                        TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
+                        GetDefaultFieldName( fieldId, DO_TRANSLATE, PCB_FOOTPRINT_T ) );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
@@ -680,10 +680,10 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
 
     for( int row : selectedRows )
     {
-        if( row < MANDATORY_FIELDS )
+        if( row < FP_MANDATORY_FIELDS )
         {
             DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  MANDATORY_FIELDS ) );
+                                                  FP_MANDATORY_FIELDS ) );
             return;
         }
     }
@@ -884,7 +884,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
         m_delayedFocusGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
 
-        if( !( m_delayedFocusColumn == 0 && m_delayedFocusRow < MANDATORY_FIELDS ) )
+        if( !( m_delayedFocusColumn == 0 && m_delayedFocusRow < FP_MANDATORY_FIELDS ) )
             m_delayedFocusGrid->EnableCellEditControl( true );
 
         m_delayedFocusGrid->ShowCellEditControl();
