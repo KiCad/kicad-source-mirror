@@ -114,10 +114,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-17 21:43+0000\n"
+"PO-Revision-Date: 2025-01-22 21:02+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -895,14 +895,12 @@ msgid "Use board stackup colors"
 msgstr "Usa colori stackup scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use board editor copper colors"
-msgstr "Usa colori stackup scheda"
+msgstr "Usa colori rame dell'editor di schede"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:146
-#, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
-msgstr "Usa colore rame nudo per rame non metallizzato (lento)"
+msgstr "Usa i colori rame dell'editor di schede (solo openGL)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:164
 #, c-format
@@ -1078,9 +1076,8 @@ msgid "Configure Paths"
 msgstr "Configurazione percorsi"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
-msgstr "Modello"
+msgstr "Incorpora modello"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -1850,7 +1847,7 @@ msgstr "Strato:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
-msgstr ""
+msgstr "F.Fab"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:188
 msgid "Postscript (.ps file)"
@@ -1861,9 +1858,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Foglio di disegno (file .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Esporta su file"
+msgstr "Esporta su file..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -1873,11 +1869,12 @@ msgstr "Esporta sugli appunti"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Nessuna forma nell'immagine in bianco e nero da convertire: nessun contorno "
+"creato."
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Forma modifiche"
+msgstr "Modifica dalla API"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
@@ -1935,9 +1932,8 @@ msgid "&Cancel"
 msgstr "Ann&ulla"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
-#, fuzzy
 msgid "&Open Anyway"
-msgstr "Apri comunque"
+msgstr "Apri c&omunque"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
@@ -1952,23 +1948,20 @@ msgid "&Save"
 msgstr "&Salva"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
-#, fuzzy
 msgid "&Discard Changes"
-msgstr "Abbandona i cambiamenti"
+msgstr "Abban&dona i cambiamenti"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
-#, fuzzy
 msgid "&Apply to all"
-msgstr "Applica a tutto"
+msgstr "&Applica a tutto"
 
 #: common/confirm.cpp:123
 msgid "Your current changes will be permanently lost."
 msgstr "I cambiamenti correnti verranno irrecuperabilmente persi."
 
 #: common/confirm.cpp:124
-#, fuzzy
 msgid "&Revert"
-msgstr "Ripristina"
+msgstr "&Ripristina"
 
 #: common/confirm.cpp:150 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:793
@@ -2031,14 +2024,12 @@ msgid "&No"
 msgstr "&No"
 
 #: common/design_block_info_impl.cpp:116
-#, fuzzy
 msgid "Fetching design_block libraries..."
-msgstr "Recupero librerie di impronte..."
+msgstr "Recupero librerie _blocchi progetto..."
 
 #: common/design_block_info_impl.cpp:147
-#, fuzzy
 msgid "Loading design_blocks..."
-msgstr "Caricamento file..."
+msgstr "Caricamento _blocchi progetto..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -2053,9 +2044,8 @@ msgid "UNKNOWN (%d)"
 msgstr "Sconosciuto (%d)"
 
 #: common/design_block_io.cpp:135
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "File di progetto KiCad obsoleti"
+msgstr "Cartelle KiCad blocchi progetto"
 
 #: common/design_block_io.cpp:172
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3034
@@ -2064,13 +2054,13 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "Impossibile sovrascrivere il percorso libreria '%s'."
 
 #: common/design_block_io.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"La cartella \"%s\" non può essere creata.\n"
+"Il percorso libreria \"%s\" non può essere creato.\n"
 "\n"
 "Assicurarsi di avere i permessi di scrittura e riprovare."
 
@@ -2081,72 +2071,73 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Permessi insufficienti per cancellare la cartella '%s'."
 
 #: common/design_block_io.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "La cartella libreria '%s' ha sottocartelle inattese."
+msgstr "La cartella libreria '%s' ha file inattesi."
 
 #: common/design_block_io.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "File inatteso '%s' trovato nel percorso libreria '%s'."
+msgstr "Cartella inattesa '%s' trovata nel percorso libreria '%s'."
 
 #: common/design_block_io.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "La libreria simboli '%s' non può essere cancellata."
+msgstr "La libreria blocchi progetto '%s' non può essere cancellata."
 
 #: common/design_block_io.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Il file '%s' non può essere creato."
+msgstr "Il file metadati blocchi progetto '%s' non può essere letto."
 
 #: common/design_block_io.cpp:353
 msgid "Design block does not have a valid library ID."
-msgstr "Il blocco di progettazione non ha un ID libreria valido."
+msgstr "Il blocco progetto non ha un ID libreria valido."
 
 #: common/design_block_io.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Il file schema \"%s\" esiste già."
+msgstr "Il file schema sorgente '%s' non esiste."
 
 #: common/design_block_io.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Il file '%s' non può essere creato."
+msgstr "La cartella blocco progetto '%s' non può essere creata."
 
 #: common/design_block_io.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "Il file schema \"%s\" esiste già."
+msgstr ""
+"Il file schema \"%s\" non può essere salvato come blocco progetto su '%s'."
 
 #: common/design_block_io.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Il file '%s' non può essere creato."
+msgstr "Il file metadati blocco progetto '%s' non può essere salvato."
 
 #: common/design_block_io.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "La cartella '%s' non esiste"
+msgstr "Il blocco progetto '%s' non esiste"
 
 #: common/design_block_io.cpp:443
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Il file '%s' non può essere creato."
+msgstr "La cartella blocco progetto '%s' non può essere eliminata."
 
 #: common/design_block_lib_table.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
-"Denominatore libreria \"%s\" duplicato nella tabella librerie simboli alla "
-"riga %d"
+"Denominatore libreria '%s' duplicato nella tabella librerie blocco progetto "
+"alla riga %d."
 
 #: common/design_block_lib_table.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "I file fp-lib-table non contengono librerie con denominazione '%s'."
+msgstr "I file design-block-lib-table non contengono librerie di nome '%s'."
 
 #: common/design_block_lib_table.cpp:577 common/fp_lib_table.cpp:566
 #: eeschema/symbol_lib_table.cpp:605
@@ -2241,16 +2232,14 @@ msgid "Additional Contributions By"
 msgstr "Contributi aggiuntivi di"
 
 #: common/dialog_about/AboutDialog_main.cpp:627
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Documentazione"
+msgstr "Squadra documentazione"
 
 #: common/dialog_about/AboutDialog_main.cpp:853
 msgid "Librarian Team"
 msgstr "Gruppo librerie"
 
 #: common/dialog_about/AboutDialog_main.cpp:906
-#, fuzzy
 msgid "3D models"
 msgstr "Modelli 3D"
 
@@ -2274,9 +2263,8 @@ msgid "Footprints"
 msgstr "Impronte"
 
 #: common/dialog_about/AboutDialog_main.cpp:928
-#, fuzzy
 msgid "Icons"
-msgstr "Icona"
+msgstr "Icone"
 
 #: common/dialog_about/AboutDialog_main.cpp:935
 msgid "Package Developers"
@@ -2593,23 +2581,21 @@ msgid "Path"
 msgstr "Percorso"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "Modifica regole di progettazione"
+msgstr "blocco progetto"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Errore creando la tabella librerie di simboli '%s'.\n"
+"Errore creando la tabella librerie blocchi progetto '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "Selezionare il file tabella librerie simboli."
+msgstr "Selezionare un file tabella librerie blocchi progetto."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2620,12 +2606,12 @@ msgid "File '%s' not found."
 msgstr "File '%s' non trovato."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Errore leggendo la tabella librerie di simboli '%s'.\n"
+"Errore leggendo la tabella librerie blocchi progetto '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
@@ -2635,10 +2621,11 @@ msgid "Cannot create global library table '%s'."
 msgstr "Impossibile creare la tabella librerie globale '%s'."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
 msgstr ""
-"Impossibile copiare la tabella librerie di simboli globale '%s' su '%s'."
+"Impossibile copiare la tabella librerie blocchi progetto globale '%s' su "
+"'%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -2928,9 +2915,9 @@ msgstr ""
 "riattivare questa finestra di dialogo nelle preferenze di Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "La selezione contiene %d elementi bloccati."
+msgstr "La selezione contiene %lu elementi bloccati."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3130,11 +3117,13 @@ msgid "Drawing Sheet File"
 msgstr "File foglio di disegno"
 
 #: common/dialogs/dialog_page_settings.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Errore caricando il foglio di disegno '%s'."
+msgstr ""
+"Errore caricando il foglio di disegno '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -3325,9 +3314,8 @@ msgid "Reference Designators"
 msgstr "Riferimenti"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear net assignments"
-msgstr "Assegnamento alternativo"
+msgstr "Cancella assegnamenti collegamenti"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
@@ -3456,27 +3444,26 @@ msgid "Close"
 msgstr "Chiudi"
 
 #: common/dialogs/dialog_print_generic.cpp:156
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Attenzione: numero scala errato"
+msgstr "Attenzione: la scala non è un numero."
 
 #: common/dialogs/dialog_print_generic.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Attenzione: scala impostata ad un valore molto alto.\n"
-" Tagliato a %f"
+"Attenzione: scala impostata a un valore molto grande.\n"
+"Verrà fermata a %f."
 
 #: common/dialogs/dialog_print_generic.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Attenzione: scala impostata ad un valore molto basso.\n"
-" Tagliato a %f"
+"Attenzione: scala impostata a un valore molto piccolo.\n"
+"Verrà fermata a %f."
 
 #: common/dialogs/dialog_print_generic.cpp:244
 #: common/dialogs/dialog_print_generic.cpp:295
@@ -3583,14 +3570,12 @@ msgstr "File d'uscita:"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:23
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:55
 #: pcbnew/dialogs/dialog_render_job_base.cpp:33
-#, fuzzy
 msgid "Format:"
-msgstr "Formato"
+msgstr "Formato:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
-#, fuzzy
 msgid "Include:"
-msgstr "Includi &via"
+msgstr "Includi:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -4145,9 +4130,8 @@ msgid "Text editor:"
 msgstr "Editor di testo:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "Nome file:"
+msgstr "Gestore file:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -4336,9 +4320,8 @@ msgid "Editing"
 msgstr "Modifica"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "Sposta il mouse all'origine dell'oggetto spostato"
+msgstr "Sposta mouse all'appiglio dell'oggetto spostato"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -4629,11 +4612,12 @@ msgid "Library '%s' not found."
 msgstr "Libreria \"%s\" non trovata."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
 msgstr ""
-"La cartella '%s' esiste già. Sovrascrivere qualunque impronta esistente?"
+"La cartella '%s' esiste già. Sovrascrivere qualunque blocco progetto "
+"esistente?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:862
 #: eeschema/dialogs/panel_sym_lib_table.cpp:989
@@ -4642,9 +4626,9 @@ msgid "Migrate Library"
 msgstr "Migra libreria"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:891
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Fallito salvataggio file libreria simboli \"%s\"."
+msgstr "Fallito salvataggio file libreria blocchi progetto '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:930
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:959
@@ -4689,9 +4673,8 @@ msgid "Add Anyway"
 msgstr "Aggiungi comunque"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1176
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Librerie"
+msgstr "Librerie blocchi progetto"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1197
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1245
@@ -4845,29 +4828,26 @@ msgstr ""
 "pertinenti."
 
 #: common/dialogs/panel_embedded_files.cpp:53
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Copia con il riferimento"
+msgstr "Copia riferimento incorporato"
 
 #: common/dialogs/panel_embedded_files.cpp:54
 msgid "Copy the reference for this embedded file"
 msgstr "Copia il riferimento per questo file incorporato"
 
 #: common/dialogs/panel_embedded_files.cpp:260
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Seleziona un parametro da regolare"
+msgstr "Seleziona file da incorporare"
 
 #: common/dialogs/panel_embedded_files.cpp:261
-#, fuzzy
 msgid "All files|*.*"
-msgstr "Tutti i file"
+msgstr "Tutti i file *.*"
 
 #: common/dialogs/panel_embedded_files.cpp:270
 #: common/dialogs/panel_embedded_files.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "Il file %s esiste già."
+msgstr "Il file' %s' esiste già."
 
 #: common/dialogs/panel_embedded_files.cpp:274
 #: common/dialogs/panel_embedded_files.cpp:348
@@ -4888,55 +4868,51 @@ msgid "Overwrite"
 msgstr "Sovrascrivere"
 
 #: common/dialogs/panel_embedded_files.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallita aggiunta del file '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:330
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Seleziona un nome file per l'esportazione GenCAD"
+msgstr "Seleziona una cartella per esportare i file"
 
 #: common/dialogs/panel_embedded_files.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "Libreria di simboli '%s' non scrivibile."
+msgstr "Directory '%s' non scrivibile."
 
 #: common/dialogs/panel_embedded_files.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "Libreria di simboli '%s' non scrivibile."
+msgstr "Cartella '%s' non scrivibile."
 
 #: common/dialogs/panel_embedded_files.cpp:370
 msgid "Retry"
 msgstr "Riprova"
 
 #: common/dialogs/panel_embedded_files.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallita apertura file '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallita scrittura file '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Internal Reference"
-msgstr "Riferimenti inter-foglio"
+msgstr "Riferimento interno"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
 msgstr "Aggiungi file incorporato"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Mantieni i file scaricati"
+msgstr "Rimuovi file incorporato"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
 msgstr "Incorpora caratteri"
 
@@ -4945,9 +4921,8 @@ msgid "Store a copy of all fonts used"
 msgstr "Memorizza una copia di tutti i caratteri usati"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "Esporta..."
+msgstr "&Esporta..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
@@ -5331,7 +5306,6 @@ msgid "Check for package updates on startup"
 msgstr "Controlla aggiornamenti pacchetti all'avvio"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
 msgstr "Gestione pacchetti libreria"
 
@@ -5350,9 +5324,9 @@ msgid "Library nickname prefix:"
 msgstr "Prefisso denominazione libreria:"
 
 #: common/dialogs/panel_plugin_settings.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "Percorso esistente:"
+msgstr "In ascolto su %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:112
 msgid "This installation of KiCad does not have API support enabled."
@@ -5373,18 +5347,17 @@ msgstr ""
 "non saranno disponibili"
 
 #: common/dialogs/panel_plugin_settings.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "File non trovato %s."
+msgstr "Trovato %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:151
 msgid "Not a valid Python 3 interpreter"
 msgstr "Non è un interprete Python 3 valido"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "API KiCad"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
@@ -5415,18 +5388,16 @@ msgid "Path to Python interpreter:"
 msgstr "Percorso per l'interprete Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Elimina l'ultimo punto aggiunto all'elemento corrente"
+msgstr "Selezionare percorso per interprete Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
 msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Annota automaticamente"
+msgstr "Rileva automaticamente"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
@@ -5440,9 +5411,8 @@ msgid "Python interpreter status"
 msgstr "Stato dell'interprete Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Non connesso"
+msgstr "<Non definito>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:2213
 #: common/stroke_params.cpp:40
@@ -5495,9 +5465,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Tratto-punto-punto"
 
 #: common/dialogs/panel_setup_netclasses.cpp:182
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "Imposta il colore a trasparente per usare il colore KiCad predefinito."
+msgstr "Imposta il colore a trasparente per usare il colore strato predefinito."
 
 #: common/dialogs/panel_setup_netclasses.cpp:418
 msgid ""
@@ -5565,9 +5534,8 @@ msgid "Schematic wire line style"
 msgstr "Stile linea filo schema"
 
 #: common/dialogs/panel_setup_netclasses.cpp:656
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Imposta colore netclass"
+msgstr "Colore netclass C.S."
 
 #: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "The default net class is required."
@@ -5579,9 +5547,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Collegamenti corrispondenti a '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Netclass:"
+msgstr "Netclass"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:641
@@ -5622,9 +5589,8 @@ msgid "DP Gap"
 msgstr "Spazio CD"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Colore"
+msgstr "Colore C.S."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -5667,14 +5633,12 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Imposta il colore a trasparente per usare il colore KiCad predefinito."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:111
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Importa schema"
+msgstr "Importa colori dallo schema"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Assegnamento netclass:"
+msgstr "Assegnamento netclass"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -5757,14 +5721,12 @@ msgid "File not found."
 msgstr "File non trovato."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:995
-#, fuzzy
 msgid "File could not be opened."
-msgstr "Il file '%s' non può essere creato."
+msgstr "Il file non può essere aperto."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1009
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "Foglio di disegno '%s' non letto completamente."
+msgstr "Foglio di disegno non letto completamente."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1036
 msgid "Ran out of memory."
@@ -6061,14 +6023,12 @@ msgid "Origins & Axes"
 msgstr "Origini e assi"
 
 #: common/eda_base_frame.cpp:1188
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Nuova impronta"
+msgstr "Predefiniti impronta"
 
 #: common/eda_base_frame.cpp:1190
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "Pulizia grafica"
+msgstr "Predefiniti grafica"
 
 #: common/eda_base_frame.cpp:1195 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
@@ -6078,9 +6038,8 @@ msgid "PCB Editor"
 msgstr "Editor C.S."
 
 #: common/eda_base_frame.cpp:1201 common/eda_base_frame.cpp:1266
-#, fuzzy
 msgid "Plugins"
-msgstr "Plugin (%d)"
+msgstr "Plugin"
 
 #: common/eda_base_frame.cpp:1208
 msgid "Realtime Renderer"
@@ -6293,16 +6252,14 @@ msgstr "Riquadro di testo"
 
 #: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:566
 #: pcbnew/pcb_table.cpp:387
-#, fuzzy
 msgid "Table"
-msgstr "Tabella pin"
+msgstr "Tabella"
 
 #: common/eda_item.cpp:356 common/eda_item.cpp:384
 #: eeschema/sch_tablecell.cpp:116 pcbnew/pcb_tablecell.cpp:100
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "Dimensione cavo"
+msgstr "Cella tabella"
 
 #: common/eda_item.cpp:357 common/eda_item.cpp:358 pcbnew/pcb_track.cpp:1560
 msgid "Track"
@@ -6561,9 +6518,8 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:2250 eeschema/sch_shape.cpp:734
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Proprietà foglio"
+msgstr "Proprietà forma"
 
 #: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:625
 #: eeschema/sch_tablecell.cpp:190 pcbnew/pcb_table.cpp:548
@@ -6889,9 +6845,9 @@ msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr "Una cartella contenente gli script utente installati con KiCad"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Versione deprecata di KICAD_SYMBOL_DIR."
+msgstr "Versione deprecata di %s."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -7040,24 +6996,24 @@ msgid "Error removing directory '%s': %s"
 msgstr "Errore rimozione cartella '%s': %s"
 
 #: common/gestfich.cpp:366 common/gestfich.cpp:420 common/gestfich.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Impossibile creare la cartella '%s'"
+msgstr "Impossibile aprire la cartella sorgente: %s"
 
 #: common/gestfich.cpp:373 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Impossibile creare la cartella '%s'"
+msgstr "Impossibile creare la cartella destinazione: %s"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Impossibile connettersi a '%s' "
+msgstr "Impossibile copiare il file: %s su %s"
 
 #: common/gestfich.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Impossibile leggere il file "
+msgstr "Impossibile leggere il file: %s"
 
 #: common/git/git_clone_handler.cpp:50
 #, c-format
@@ -7075,14 +7031,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Impossibile trovare il remote '%s'"
 
 #: common/git/git_pull_handler.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Impossibile connettersi con il remote '%s'"
+msgstr "Impossibile connettersi al remoto '%s': %s"
 
 #: common/git/git_pull_handler.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Impossibile scaricare dati dal remote '%s'"
+msgstr "Impossibile scaricare dati dal remoto '%s': %s"
 
 #: common/git/git_pull_handler.cpp:95
 msgid "Could not read 'FETCH_HEAD'"
@@ -7142,14 +7098,14 @@ msgid "Could not lookup remote"
 msgstr "Impossibile trovare il remote"
 
 #: common/git/git_push_handler.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "Impossibile connettersi con il remote '%s'"
+msgstr "Impossibile connettersi con il remote: %s"
 
 #: common/git/git_push_handler.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Impossibile fare push su un remote"
+msgstr "Impossibile fare push su remoto: %s"
 
 #: common/git/kicad_git_common.cpp:423
 #, c-format
@@ -7331,19 +7287,16 @@ msgid "Select all cells"
 msgstr "Seleziona tutte le celle"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "annotazione completa."
+msgstr "Accetta autocompletamento"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Annulla strumento corrente"
+msgstr "Annulla autocompletamento"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Commuta blocco"
+msgstr "Commuta spunta"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -7593,39 +7546,32 @@ msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "Impossibile analizzare la riga JSON %d in '%s': %s"
 
 #: common/io/io_base.cpp:139
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "Apertura annullata dall'utente."
+msgstr "Caricamento file annullato dall'utente."
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
-#, fuzzy
 msgid "3D model export"
-msgstr "Non esportare"
+msgstr "Esportazione modello 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Seleziona modello 3D"
+msgstr "Esporta impostazioni lavoro modello 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Seleziona modello 3D"
+msgstr "C.S.: esporta modello 3D"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "C.S.: esporta dati forature"
+msgstr "Esporta dati forature"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Esporta impostazioni lavoro dati di perforazione"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7638,64 +7584,53 @@ msgstr "Esporta DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:162
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Esporta impostazioni lavoro DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "Esporta DXF"
+msgstr "C.S: esporta DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Esporta sulle impostazioni GenCAD"
+msgstr "Esporta impostazioni lavoro GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "C.S.: Esporta i gerber"
+msgstr "Esporta singolo Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Esporta sulle impostazioni GenCAD"
+msgstr "Esporta impostazioni lavoro singolo Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:42
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "C.S.: Esporta i gerber"
+msgstr "Esporta Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:48
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Esporta sulle impostazioni GenCAD"
+msgstr "Esporta impostazioni lavoro Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
 msgstr "C.S.: Esporta i gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
-msgstr "Esporta IPC-2581"
+msgstr "Esporta IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "Esporta file IPC-2581"
+msgstr "Esporta impostazioni lavoro IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC2581"
-msgstr "Esporta IPC-2581"
+msgstr "C.S.: esporta IPC2581"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "Esporta DXF"
+msgstr "Esporta ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 #, fuzzy
@@ -10377,7 +10312,7 @@ msgstr "Percorsi di file di libreria impronte Kicad"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "KiCad design block path"
-msgstr "Percorso del blocco di progettazione KiCad"
+msgstr "Percorso blocchi progetto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:366
 #, fuzzy
@@ -11155,7 +11090,7 @@ msgstr "Selezionare il file tabella librerie simboli."
 
 #: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:394
 msgid "Design blocks with nested sheets are not supported."
-msgstr "I blocchi di progettazione con fogli nidificati non sono supportati."
+msgstr "I blocchi progetto con fogli nidificati non sono supportati."
 
 #: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:427
 #, fuzzy
@@ -11166,7 +11101,7 @@ msgstr ""
 
 #: eeschema/design_block_utils.cpp:378
 msgid "Please select some items to save as a design block."
-msgstr "Selezionare alcuni elementi da salvare come blocco di progettazione."
+msgstr "Selezionare alcuni elementi da salvare come blocco progetto."
 
 #: eeschema/design_block_utils.cpp:464
 #, fuzzy
@@ -11188,8 +11123,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
-"Eliminare la libreria di blocchi di progettazione '%s' dal disco? Questo "
-"eliminerà tutti i blocchi di progettazione all'interno della libreria."
+"Eliminare libreria blocchi progetto '%s' dal disco? Eliminerà tutti i "
+"blocchi progetto nella libreria."
 
 #: eeschema/design_block_utils.cpp:493
 #, fuzzy, c-format
@@ -19109,8 +19044,8 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"L'ID blocco %s (nome blocco: \"%s\") è disegnato sul foglio \"%s\" ma non è "
-"collegato a un altro foglio nel progetto. KiCad richiede che tutti i simboli "
+"L'ID blocco %s (nome blocco: '%s') è disegnato sul foglio '%s' ma non è "
+"collegato ad altro foglio nel progetto. KiCad richiede che tutti i simboli "
 "foglio siano associati a un foglio, quindi il blocco non è stato caricato."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2565
@@ -22718,7 +22653,7 @@ msgstr "Crea un file PNG dalla vista corrente"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr "Salva selezione come blocco di progettazione..."
+msgstr "Salva selezione come blocco progetto..."
 
 #: eeschema/tools/ee_actions.cpp:164
 #, fuzzy
@@ -22987,11 +22922,11 @@ msgstr "Simbolo di potenza"
 
 #: eeschema/tools/ee_actions.cpp:451
 msgid "Place Design Block"
-msgstr "Piazza blocco di progettazione"
+msgstr "Piazza blocco progetto"
 
 #: eeschema/tools/ee_actions.cpp:452
 msgid "Add selected design block to current sheet"
-msgstr "Aggiungi il blocco di progettazione selezionato al foglio corrente"
+msgstr "Aggiungi blocco progetto selezionato al foglio corrente"
 
 #: eeschema/tools/ee_actions.cpp:463
 #, fuzzy
@@ -24678,7 +24613,7 @@ msgstr "Mantieni simbolo selezionato per clic successivi."
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr "Posizionare il blocco di progettazione come un nuovo foglio."
+msgstr "Posiziona blocco progetto come nuovo foglio."
 
 #: eeschema/widgets/design_block_pane.cpp:71
 msgid ""
@@ -42009,6 +41944,154 @@ msgid ""
 "        (severity ignore))\n"
 "\n"
 msgstr ""
+"### Ulteriori esempi\n"
+"\n"
+"    (rule \"rame proibito\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown - cioè limiti specifici per BGA\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # prevenzione serigrafia sui i via tented\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distanza tra via di collegamenti diversi\"\n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
+"\n"
+"    (rule \"Distanza tra piazzole di collegamenti diversi\"\n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
+"\n"
+"\n"
+"    (rule \"Distanza tra foro via e pista\"\n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Distanza tra piazziola e pista\"\n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"distanza-ritaglio-1mm\"\n"
+"        (constraint edge_clearance (min 0.8mm))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Dimensione massima foro meccanico\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"\n"
+"    (rule \"Dimensione massima foro metallizzato\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Specifica spazio ottimale per una particolare coppia bilanciata\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
+"\n"
+"    # Specifica una distanza maggiore attorno a qualsiasi coppia "
+"differenziale\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Non usare supporti termici su piazzole dissipative\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Richiedi che tutti e quattro i raggi dei supporti termici siano "
+"connessi alla zona genitore\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Imposta la dimensione spazi e raggi dei supporti termici per tutte le "
+"zone\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Supera le dimensioni per spazi e raggi dei supporti termici per le "
+"zone GND e PWR\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"    # Previene i riempimenti di rame sotto lo spazio ingombro dei "
+"condensatori\n"
+"    (rule no_copper_under_caps\n"
+"        (constraint physical_clearance (min 0mm))\n"
+"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
+"\n"
+"\n"
+"    # Previene lo scorrimento dello stagno (wicking) dalle piazzole SMD\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Impedisce di superare i vincoli dei margini della maschera di "
+"saldatura\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    #Applica una distanza meccanica tra i componenti e il bordo della "
+"scheda\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    #Consente l'intersezione della serigrafia con il bordo della scheda per "
+"i connettori\n"
+"    (rule silk_board_edge_clearance\n"
+"        (constraint silk_clearance)\n"
+"        (severity ignore)\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Controlla la capacità di trasporto di corrente\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.hasNetclass('Power')\"))\n"
+"\n"
+"\n"
+"    # Limiti di dimensioni separati per punte da trapano e frese\n"
+"    (rule \"Plated through-hole size\"\n"
+"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
+"    (rule \"Plated slot size\"\n"
+"        (constraint hole_size (min 0.5mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
+"\n"
+"\n"
+"    # Consente violazioni da foro a foro di microvia ciechi/sepolti quando\n"
+"    # è noto che la fabbrica perforerà meccanicamente i fori di micro-via\n"
+"    # ciechi/sepolti prima di forare al laser.\n"
+"    (rule hole_to_hole_uvia_exclusion\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
+"        (constraint hole_to_hole)\n"
+"        (severity ignore))\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 #, fuzzy
