@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-18 16:02+0000\n"
+"PO-Revision-Date: 2025-01-22 21:02+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -1761,9 +1761,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Folha do desenho (arquivo .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Exportar para arquivo"
+msgstr "Exportar para arquivo..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -1773,6 +1772,8 @@ msgstr "Exportar para a área de transferência"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Nenhuma forma na imagem em preto e branco a ser convertida: nenhum contorno "
+"foi criado."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -16684,9 +16685,9 @@ msgstr "A predefinição do formato BOM '%s' não foi encontrado"
 
 #: eeschema/eeschema_jobs_handler.cpp:744
 #: eeschema/eeschema_jobs_handler.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Gerar lista de materiais (BOM)"
+msgstr "A lista de materiais (BOM) foi gerado em '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:878
 #, c-format
@@ -38543,9 +38544,8 @@ msgid "Drag (free angle)"
 msgstr "Arrasta (ângulo livre)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:90
-#, fuzzy
 msgid "Flip board items:"
-msgstr "Visualiza a placa invertida"
+msgstr "Itens invertidos da placa:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:94
 msgid "Left/right"
@@ -47217,19 +47217,19 @@ msgid "Successfully created genCAD file\n"
 msgstr "O arquivo genCAD foi criado com sucesso\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1424 pcbnew/pcbnew_jobs_handler.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "Exportar dados de posicionamento"
+msgstr "Gravou dados da posição frontal em '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "O BOM gerado foi salvo em '%s'"
+msgstr "O BOM gerado foi salvo em '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "Exportar dados de posicionamento"
+msgstr "Gravou dados de posição em '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1572
 msgid "Footprint library path does not exist or is not accessible\n"
