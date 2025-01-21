@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-21 12:07+0000\n"
+"PO-Revision-Date: 2025-01-21 16:52+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -7465,7 +7465,7 @@ msgstr "Alles abwählen"
 
 #: common/tool/actions.cpp:240
 msgid "Unselect all items on screen"
-msgstr "Wählt alle auf dem Bildschirm ab"
+msgstr "Wählt alle Elemente auf dem Bildschirm ab"
 
 #: common/tool/actions.cpp:245
 msgid "Paste Special..."
