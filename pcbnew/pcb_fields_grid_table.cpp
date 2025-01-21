@@ -50,7 +50,6 @@ wxArrayString g_menuOrientations;
 PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_mandatoryRows( 0 ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( REFERENCE_FIELD ),
         m_valueValidator( VALUE_FIELD ),
@@ -127,12 +126,6 @@ PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHI
 
     m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
-    for( const PCB_FIELD& field : *this )
-    {
-        if( field.IsMandatoryField() )
-            m_mandatoryRows++;
-    }
-
     m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PCB_FIELDS_GRID_TABLE::onUnitsChanged, this );
 }
 
@@ -148,6 +141,20 @@ PCB_FIELDS_GRID_TABLE::~PCB_FIELDS_GRID_TABLE()
     m_urlAttr->DecRef();
 
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PCB_FIELDS_GRID_TABLE::onUnitsChanged, this );
+}
+
+
+int PCB_FIELDS_GRID_TABLE::GetMandatoryRows()
+{
+    int mandatoryRows = 0;
+
+    for( const PCB_FIELD& field : *this )
+    {
+        if( field.IsMandatoryField() )
+            mandatoryRows++;
+    }
+
+    return mandatoryRows;
 }
 
 

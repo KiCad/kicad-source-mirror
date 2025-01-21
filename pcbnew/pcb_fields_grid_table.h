@@ -62,7 +62,7 @@ public:
 
     int GetNumberRows() override { return (int) size(); }
     int GetNumberCols() override { return PFC_COUNT; }
-    int GetMandatoryRows() { return m_mandatoryRows; }
+    int GetMandatoryRows();
 
     wxString GetColLabelValue( int aCol ) override;
 
