@@ -144,7 +144,7 @@ PCB_FIELDS_GRID_TABLE::~PCB_FIELDS_GRID_TABLE()
 }
 
 
-int PCB_FIELDS_GRID_TABLE::GetMandatoryRows()
+int PCB_FIELDS_GRID_TABLE::GetMandatoryRowCount() const
 {
     int mandatoryRows = 0;
 

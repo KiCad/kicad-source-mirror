@@ -636,10 +636,14 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
         return false;
 
     // Check for missing field names.
-    for( size_t i = MANDATORY_FIELDS;  i < m_fields->size(); ++i )
+    for( size_t i = 0; i < m_fields->size(); ++i )
     {
         SCH_FIELD& field = m_fields->at( i );
-        wxString   fieldName = field.GetName( false );
+
+        if( field.IsMandatory() )
+            continue;
+
+        wxString fieldName = field.GetName( false );
 
         if( fieldName.IsEmpty() )
         {
@@ -873,10 +877,10 @@ void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
     for( int row : selectedRows )
     {
-        if( row < MANDATORY_FIELDS )
+        if( row < m_fields->GetMandatoryRowCount() )
         {
             DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  MANDATORY_FIELDS ) );
+                                                  m_fields->GetMandatoryRowCount() ) );
             return;
         }
     }
@@ -913,7 +917,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 
     int i = m_fieldsGrid->GetGridCursorRow();
 
-    if( i > MANDATORY_FIELDS )
+    if( i > m_fields->GetMandatoryRowCount() )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
@@ -940,7 +944,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 
     int i = m_fieldsGrid->GetGridCursorRow();
 
-    if( i >= MANDATORY_FIELDS && i < m_fieldsGrid->GetNumberRows() - 1 )
+    if( i >= m_fields->GetMandatoryRowCount() && i < m_fieldsGrid->GetNumberRows() - 1 )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );

@@ -684,10 +684,10 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
     for( int row : selectedRows )
     {
 
-        if( row < m_fields->GetMandatoryRows() )
+        if( row < m_fields->GetMandatoryRowCount() )
         {
             DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  m_fields->GetMandatoryRows() ) );
+                                                  m_fields->GetMandatoryRowCount() ) );
             return;
         }
     }
@@ -778,7 +778,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
         {
             grid->SetGridCursor( row, col );
 
-            if( !( col == 0 && row < m_fields->GetMandatoryRows() ) )
+            if( !( col == 0 && row < m_fields->GetMandatoryRowCount() ) )
                 grid->EnableCellEditControl( true );
 
             grid->ShowCellEditControl();

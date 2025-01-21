@@ -135,7 +135,6 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFra
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
-        m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aSymbol ),
         m_symbolNetlist( netList( aSymbol ) ),
         m_fieldNameValidator( FIELD_NAME ),
@@ -154,7 +153,6 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
-        m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aSymbol->GetLibSymbolRef().get() ),
         m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
         m_fieldNameValidator( FIELD_NAME ),
@@ -173,7 +171,6 @@ SCH_SHEET* aSheet ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SHEET_T ),
-        m_mandatoryFieldCount( SHEET_MANDATORY_FIELDS ),
         m_part( nullptr ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( SHEETNAME_V ),
@@ -191,7 +188,6 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_LABEL_LOCATE_ANY_T ),
-        m_mandatoryFieldCount( aLabel->GetMandatoryFieldCount() ),
         m_part( nullptr ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( 0 ),
@@ -201,6 +197,20 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_filepathValidator( 0 )
 {
     initGrid( aGrid );
+}
+
+
+int FIELDS_GRID_TABLE::GetMandatoryRowCount() const
+{
+    int mandatoryRows = 0;
+
+    for( const SCH_FIELD& field : *this )
+    {
+        if( field.IsMandatory() )
+            mandatoryRows++;
+    }
+
+    return mandatoryRows;
 }
 
 
@@ -525,12 +535,15 @@ bool FIELDS_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& aType
 
 wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind  )
 {
-    wxGridCellAttr* tmp;
+    wxCHECK( aRow < GetNumberRows(), nullptr );
+
+    const SCH_FIELD& field = getField( aRow );
+    wxGridCellAttr*  tmp;
 
     switch( aCol )
     {
     case FDC_NAME:
-        if( aRow < m_mandatoryFieldCount )
+        if( field.IsMandatory() )
         {
             tmp = m_fieldNameAttr->Clone();
             tmp->SetReadOnly( true );
@@ -675,14 +688,14 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
         // according to the current locale
         if( m_parentType == SCH_SYMBOL_T || m_parentType == LIB_SYMBOL_T )
         {
-            if( aRow < m_mandatoryFieldCount )
+            if( field.IsMandatory() )
                 return GetDefaultFieldName( aRow, DO_TRANSLATE );
             else
                 return field.GetName( false );
         }
         else if( m_parentType == SCH_SHEET_T )
         {
-            if( aRow < m_mandatoryFieldCount )
+            if( field.IsMandatory() )
                 return SCH_SHEET::GetDefaultFieldName( aRow, DO_TRANSLATE );
             else
                 return field.GetName( false );

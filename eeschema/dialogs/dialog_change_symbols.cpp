@@ -425,14 +425,9 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
         if( m_fieldsBox->IsChecked( i ) )
         {
             if( i < MANDATORY_FIELDS )
-            {
-                SCH_FIELD dummy_field( nullptr, i );
-                m_updateFields.insert( dummy_field.GetCanonicalName() );
-            }
+                m_updateFields.insert( GetCanonicalFieldName( i ) );
             else
-            {
                 m_updateFields.insert( m_fieldsBox->GetString( i ) );
-            }
         }
     }
 

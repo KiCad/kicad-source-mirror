@@ -97,6 +97,8 @@ public:
     int GetNumberRows() override { return getVisibleRowCount(); }
     int GetNumberCols() override { return getColumnCount(); }
 
+    int GetMandatoryRowCount() const;
+
     wxString GetColLabelValue( int aCol ) override;
 
     bool IsEmptyCell( int row, int col ) override
@@ -131,7 +133,6 @@ private:
     SCH_BASE_FRAME*   m_frame;
     DIALOG_SHIM*      m_dialog;
     KICAD_T           m_parentType;
-    int               m_mandatoryFieldCount;
     LIB_SYMBOL*       m_part;
     wxString          m_symbolNetlist;
     wxString          m_curdir;

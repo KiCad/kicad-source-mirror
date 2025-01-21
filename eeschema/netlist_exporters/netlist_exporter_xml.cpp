@@ -160,16 +160,17 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                     description = candidate;
 
                 // All non-mandatory fields
-                for( int ii = MANDATORY_FIELDS; ii < symbol2->GetFieldCount(); ++ii )
+                for( SCH_FIELD& field : symbol2->GetFields() )
                 {
-                    const SCH_FIELD& f = symbol2->GetFields()[ ii ];
+                    if( field.IsMandatory() )
+                        continue;
 
-                    if( unit < minUnit || fields.count( f.GetName() ) == 0 )
+                    if( unit < minUnit || fields.count( field.GetName() ) == 0 )
                     {
                         if( m_resolveTextVars )
-                            fields[f.GetName()] = f.GetShownText( &aSheet, false );
+                            fields[field.GetName()] = field.GetShownText( &aSheet, false );
                         else
-                            fields[f.GetName()] = f.GetText();
+                            fields[field.GetName()] = field.GetText();
                     }
                 }
 
@@ -197,14 +198,15 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         else
             description = descriptionField->GetText();
 
-        for( int ii = MANDATORY_FIELDS; ii < aSymbol->GetFieldCount(); ++ii )
+        for( SCH_FIELD& field : aSymbol->GetFields() )
         {
-            const SCH_FIELD& f = aSymbol->GetFields()[ ii ];
+            if( field.IsMandatory() )
+                continue;
 
             if( m_resolveTextVars )
-                fields[f.GetName()] = f.GetShownText( &aSheet, false );
+                fields[field.GetName()] = field.GetShownText( &aSheet, false );
             else
-                fields[f.GetName()] = f.GetText();
+                fields[field.GetName()] = field.GetText();
         }
     }
 

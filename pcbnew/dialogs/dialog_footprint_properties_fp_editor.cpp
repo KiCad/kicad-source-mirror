@@ -680,10 +680,10 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
 
     for( int row : selectedRows )
     {
-        if( row < m_fields->GetMandatoryRows() )
+        if( row < m_fields->GetMandatoryRowCount() )
         {
             DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  m_fields->GetMandatoryRows() ) );
+                                                  m_fields->GetMandatoryRowCount() ) );
             return;
         }
     }
@@ -884,7 +884,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
         m_delayedFocusGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
 
-        if( !( m_delayedFocusColumn == 0 && m_delayedFocusRow < m_fields->GetMandatoryRows() ) )
+        if( !( m_delayedFocusColumn == 0 && m_delayedFocusRow < m_fields->GetMandatoryRowCount() ) )
             m_delayedFocusGrid->EnableCellEditControl( true );
 
         m_delayedFocusGrid->ShowCellEditControl();

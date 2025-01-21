@@ -216,11 +216,13 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
                     aVars->push_back( aVar );
             };
 
-    for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
-        add( m_fields[i].GetCanonicalName().Upper() );
-
-    for( size_t i = SHEET_MANDATORY_FIELDS; i < m_fields.size(); ++i )
-        add( m_fields[i].GetName() );
+    for( const SCH_FIELD& field : m_fields )
+    {
+        if( field.IsMandatory() )
+            add( field.GetCanonicalName().Upper() );
+        else
+            add( field.GetName() );
+    }
 
     SCH_SHEET_PATH sheetPath = findSelf();
 

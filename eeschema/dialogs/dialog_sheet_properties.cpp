@@ -380,9 +380,13 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     if( positioningChanged( m_fields, m_sheet->GetFields() ) )
         m_sheet->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
-    for( int ii = m_fields->GetNumberRows() - 1; ii >= SHEET_MANDATORY_FIELDS; ii-- )
+    for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
     {
-        SCH_FIELD&      field = m_fields->at( ii );
+        SCH_FIELD& field = m_fields->at( ii );
+
+        if( field.IsMandatory() )
+            continue;
+
         const wxString& fieldName = field.GetCanonicalName();
 
         if( field.IsEmpty() )
@@ -776,10 +780,10 @@ void DIALOG_SHEET_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
     for( int row : selectedRows )
     {
-        if( row < SHEET_MANDATORY_FIELDS )
+        if( row < m_fields->GetMandatoryRowCount() )
         {
             DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  SHEET_MANDATORY_FIELDS ) );
+                                                  m_fields->GetMandatoryRowCount() ) );
             return;
         }
     }
@@ -813,7 +817,7 @@ void DIALOG_SHEET_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 
     int i = m_grid->GetGridCursorRow();
 
-    if( i > SHEET_MANDATORY_FIELDS )
+    if( i > m_fields->GetMandatoryRowCount() )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
@@ -837,7 +841,7 @@ void DIALOG_SHEET_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 
     int i = m_grid->GetGridCursorRow();
 
-    if( i >= SHEET_MANDATORY_FIELDS && i < m_grid->GetNumberRows() - 1 )
+    if( i >= m_fields->GetMandatoryRowCount() && i < m_grid->GetNumberRows() - 1 )
     {
         SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
