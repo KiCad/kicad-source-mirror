@@ -641,15 +641,6 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
         m_TreeProject->GitCommon()->SetUsername( Prj().GetLocalSettings().m_GitRepoUsername );
         m_TreeProject->GitCommon()->SetSSHKey( Prj().GetLocalSettings().m_GitSSHKey );
         m_TreeProject->GitCommon()->UpdateCurrentBranchInfo();
-
-        wxString conn_type = Prj().GetLocalSettings().m_GitRepoType;
-
-        if( conn_type == "https" )
-            m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS );
-        else if( conn_type == "ssh" )
-            m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
-        else
-            m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL );
     }
 
     // We may have opened a legacy project, in which case GetProjectFileName will return the
@@ -1694,12 +1685,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     m_gitLastError = GIT_ERROR_NONE;
 
-    GIT_PULL_HANDLER handler( repo );
-
-    handler.SetConnType( m_TreeProject->GitCommon()->GetConnType() );
-    handler.SetUsername( m_TreeProject->GitCommon()->GetUsername() );
-    handler.SetPassword( m_TreeProject->GitCommon()->GetPassword() );
-    handler.SetSSHKey( m_TreeProject->GitCommon()->GetSSHKey() );
+    GIT_PULL_HANDLER handler( m_TreeProject->GitCommon() );
 
     handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
                                                                          _( "Fetching Remote" ),
@@ -1733,18 +1719,13 @@ void PROJECT_TREE_PANE::onGitPullProject( wxCommandEvent& aEvent )
     if( !repo )
         return;
 
-    GIT_PULL_HANDLER handler( repo );
-
-    handler.SetConnType( m_TreeProject->GitCommon()->GetConnType() );
-    handler.SetUsername( m_TreeProject->GitCommon()->GetUsername() );
-    handler.SetPassword( m_TreeProject->GitCommon()->GetPassword() );
-    handler.SetSSHKey( m_TreeProject->GitCommon()->GetSSHKey() );
+    GIT_PULL_HANDLER handler( m_TreeProject->GitCommon() );
 
     handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
                                                                          _( "Fetching Remote" ),
                                                                          1 ) );
 
-    if( handler.PerformPull() != PullResult::Success )
+    if( handler.PerformPull() < PullResult::Success )
     {
         wxString errorMessage = handler.GetErrorString();
 
@@ -1760,12 +1741,7 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
     if( !repo )
         return;
 
-    GIT_PUSH_HANDLER handler( repo );
-
-    handler.SetConnType( m_TreeProject->GitCommon()->GetConnType() );
-    handler.SetUsername( m_TreeProject->GitCommon()->GetUsername() );
-    handler.SetPassword( m_TreeProject->GitCommon()->GetPassword() );
-    handler.SetSSHKey( m_TreeProject->GitCommon()->GetSSHKey() );
+    GIT_PUSH_HANDLER handler( m_TreeProject->GitCommon() );
 
     handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
                                                                          _( "Fetching Remote" ),
@@ -2410,12 +2386,12 @@ void PROJECT_TREE_PANE::onGitSyncProject( wxCommandEvent& aEvent )
 
 void PROJECT_TREE_PANE::onGitFetch( wxCommandEvent& aEvent )
 {
-    git_repository* repo = m_TreeProject->GetGitRepo();
+    KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
 
-    if( !repo )
+    if( !gitCommon )
         return;
 
-    GIT_PULL_HANDLER handler( repo );
+    GIT_PULL_HANDLER handler( gitCommon );
     handler.PerformFetch();
 }
 

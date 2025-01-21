@@ -42,14 +42,14 @@ struct CommitDetails
     std::string m_date;
 };
 
-// Enum for result codes
-enum class PullResult
+// Enum for result codes, error codes are negative, success codes are positive
+enum class PullResult : int
 {
-    Success,
-    Error,
+    MergeFailed = -2,
+    Error = -1,
+    Success = 0,
     UpToDate,
-    FastForward,
-    MergeFailed
+    FastForward
 };
 
 struct ConflictData
@@ -68,7 +68,7 @@ struct ConflictData
 class GIT_PULL_HANDLER : public KIGIT_COMMON, public GIT_PROGRESS
 {
 public:
-    GIT_PULL_HANDLER( git_repository* aRepo );
+    GIT_PULL_HANDLER( KIGIT_COMMON* aCommon );
     ~GIT_PULL_HANDLER();
 
     PullResult PerformPull();

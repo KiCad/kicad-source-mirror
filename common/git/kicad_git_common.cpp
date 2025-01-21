@@ -27,6 +27,8 @@
 
 #include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/textfile.h>
+#include <wx/utils.h>
 #include <map>
 #include <vector>
 
@@ -416,6 +418,90 @@ wxString KIGIT_COMMON::GetRemotename() const
     return retval;
 }
 
+void KIGIT_COMMON::SetSSHKey( const wxString& aKey )
+{
+    auto it = std::find( m_publicKeys.begin(), m_publicKeys.end(), aKey );
+
+    if( it != m_publicKeys.end() )
+        m_publicKeys.erase( it );
+
+    m_publicKeys.insert( m_publicKeys.begin(), aKey );
+}
+
+
+void KIGIT_COMMON::updatePublicKeys()
+{
+    m_publicKeys.clear();
+
+    wxFileName keyFile( wxGetHomeDir(), wxEmptyString );
+    keyFile.AppendDir( ".ssh" );
+    keyFile.SetFullName( "id_rsa" );
+
+    if( keyFile.FileExists() )
+        m_publicKeys.push_back( keyFile.GetFullPath() );
+
+    keyFile.SetFullName( "id_dsa" );
+
+    if( keyFile.FileExists() )
+        m_publicKeys.push_back( keyFile.GetFullPath() );
+
+    keyFile.SetFullName( "id_ecdsa" );
+
+    if( keyFile.FileExists() )
+        m_publicKeys.push_back( keyFile.GetFullPath() );
+
+    keyFile.SetFullName( "id_ed25519" );
+
+    if( keyFile.FileExists() )
+        m_publicKeys.push_back( keyFile.GetFullPath() );
+
+    // Parse SSH config file for hostname information
+    wxFileName sshConfig( wxGetHomeDir(), wxEmptyString );
+    sshConfig.AppendDir( ".ssh" );
+    sshConfig.SetFullName( "config" );
+
+    if( sshConfig.FileExists() )
+    {
+        wxTextFile configFile( sshConfig.GetFullPath() );
+        configFile.Open();
+
+        wxString lastIdentityFile;
+        bool match = false;
+
+        for( wxString line = configFile.GetFirstLine(); !configFile.Eof(); line = configFile.GetNextLine() )
+        {
+            line.Trim( false ).Trim( true );
+
+            if( line.StartsWith( "Host " ) )
+            {
+                lastIdentityFile.Clear();
+                match = false;
+            }
+
+            // The difference here is that we are matching either "Hostname" or "Host" to get the
+            // match.  This is because in the absence of a "Hostname" line, the "Host" line is used
+            if( line.StartsWith( "Host" ) && line.Contains( m_hostname ) )
+                match = true;
+
+            if( match && line.StartsWith( "IdentityFile" ) )
+            {
+                wxString keyPath = line.AfterFirst( ' ' ).Trim( false ).Trim( true );
+                // Expand ~ to home directory if present
+                if( keyPath.StartsWith( "~" ) )
+                    keyPath.Replace( "~", wxGetHomeDir(), false );
+
+                // Add the public key to the beginning of the list
+                if( wxFileName::FileExists( keyPath ) )
+                {
+                    SetSSHKey( keyPath );
+                }
+            }
+        }
+
+        configFile.Close();
+    }
+}
+
 
 void KIGIT_COMMON::UpdateCurrentBranchInfo()
 {
@@ -437,6 +523,77 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
 
     // Find the stored password if it exists
     KIPLATFORM::SECRETS::GetSecret( m_remote, m_username, m_password );
+
+    updateConnectionType();
+    updatePublicKeys();
+}
+
+void KIGIT_COMMON::updateConnectionType()
+{
+    if( m_remote.StartsWith( "https://" ) || m_remote.StartsWith( "http://" ) )
+        m_connType = GIT_CONN_TYPE::GIT_CONN_HTTPS;
+    else if( m_remote.StartsWith( "ssh://" ) || m_remote.StartsWith( "git@" ) || m_remote.StartsWith( "git+ssh://" ) )
+        m_connType = GIT_CONN_TYPE::GIT_CONN_SSH;
+    else
+        m_connType = GIT_CONN_TYPE::GIT_CONN_LOCAL;
+
+    if( m_connType != GIT_CONN_TYPE::GIT_CONN_LOCAL )
+    {
+        wxString uri = m_remote;
+        size_t atPos = uri.find( '@' );
+
+        if( atPos != wxString::npos )
+        {
+            size_t protoEnd = uri.find( "//" );
+
+            if( protoEnd != wxString::npos )
+            {
+                wxString credentials = uri.Mid( protoEnd + 2, atPos - protoEnd - 2 );
+                size_t colonPos = credentials.find( ':' );
+
+                if( colonPos != wxString::npos )
+                {
+                    m_username = credentials.Left( colonPos );
+                    m_password = credentials.Mid( colonPos + 1, credentials.Length() - colonPos - 1 );
+                }
+                else
+                {
+                    m_username = credentials;
+                }
+            }
+            else
+            {
+                m_username = uri.Left( atPos );
+            }
+        }
+
+        if( m_remote.StartsWith( "git@" ) )
+        {
+            // SSH format: git@hostname:path
+            size_t colonPos = m_remote.find( ':' );
+            if( colonPos != wxString::npos )
+                m_hostname = m_remote.Mid( 4, colonPos - 4 );
+        }
+        else
+        {
+            // other URL format: proto://[user@]hostname/path
+            size_t hostStart = m_remote.find( "://" ) + 2;
+            size_t hostEnd = m_remote.find( '/', hostStart );
+            wxString host;
+
+            if( hostEnd != wxString::npos )
+                host = m_remote.Mid( hostStart, hostEnd - hostStart );
+            else
+                host = m_remote.Mid( hostStart );
+
+            atPos = host.find( '@' );
+
+            if( atPos != wxString::npos )
+                m_hostname = host.Mid( atPos + 1 );
+            else
+                m_hostname = host;
+        }
+    }
 }
 
 
@@ -585,7 +742,14 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                 && !( parent->TestedTypes() & GIT_CREDTYPE_SSH_KEY ) )
     {
         // SSH key authentication
-        wxString sshKey = parent->GetSSHKey();
+        wxString sshKey = parent->GetNextPublicKey();
+
+        if( sshKey.IsEmpty() )
+        {
+            parent->TestedTypes() |= GIT_CREDTYPE_SSH_KEY;
+            return GIT_PASSTHROUGH;
+        }
+
         wxString sshPubKey = sshKey + ".pub";
         wxString username = parent->GetUsername().Trim().Trim( false );
         wxString password = parent->GetPassword().Trim().Trim( false );
@@ -594,7 +758,6 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                               sshPubKey.ToStdString().c_str(),
                               sshKey.ToStdString().c_str(),
                               password.ToStdString().c_str() );
-        parent->TestedTypes() |= GIT_CREDTYPE_SSH_KEY;
     }
     else
     {

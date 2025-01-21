@@ -89,12 +89,11 @@ public:
 
     wxString GetUsername() const { return m_username; }
     wxString GetPassword() const { return m_password; }
-    wxString GetSSHKey() const { return m_sshKey; }
     GIT_CONN_TYPE GetConnType() const { return m_connType; }
 
     void SetUsername( const wxString& aUsername ) { m_username = aUsername; }
     void SetPassword( const wxString& aPassword ) { m_password = aPassword; }
-    void SetSSHKey( const wxString& aSSHKey ) { m_sshKey = aSSHKey; }
+    void SetSSHKey( const wxString& aSSHKey );
 
     void SetConnType( GIT_CONN_TYPE aConnType ) { m_connType = aConnType; }
     void SetConnType( unsigned aConnType )
@@ -119,16 +118,33 @@ public:
 
     wxString GetRemotename() const;
 
+    void ResetNextKey() { m_nextPublicKey = 0; }
+
+    wxString GetNextPublicKey()
+    {
+        if( m_nextPublicKey >= static_cast<int>( m_publicKeys.size() ) )
+            return wxEmptyString;
+
+        return m_publicKeys[m_nextPublicKey++];
+    }
+
 protected:
     git_repository* m_repo;
 
     GIT_CONN_TYPE m_connType;
-    wxString m_remote;
+    wxString m_remote;      // This is the full connection string
+    wxString m_hostname;    // This is just the hostname without the protocol, username, or password
     wxString m_username;
     wxString m_password;
-    wxString m_sshKey;
 
     unsigned m_testedTypes;
+
+private:
+    void updatePublicKeys();
+    void updateConnectionType();
+
+    std::vector<wxString> m_publicKeys;
+    int m_nextPublicKey;
 
 };
 

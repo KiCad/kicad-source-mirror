@@ -63,6 +63,7 @@ bool GIT_CLONE_HANDLER::PerformClone()
     cloneOptions.fetch_opts.callbacks.payload = this;
 
     m_testedTypes = 0;
+    ResetNextKey();
 
     if( git_clone( &m_repo, m_URL.ToStdString().c_str(), m_clonePath.ToStdString().c_str(),
                    &cloneOptions ) != 0 )

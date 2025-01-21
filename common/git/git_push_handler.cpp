@@ -26,7 +26,7 @@
 
 #include <iostream>
 
-GIT_PUSH_HANDLER::GIT_PUSH_HANDLER( git_repository* aRepo ) :  KIGIT_COMMON( aRepo )
+GIT_PUSH_HANDLER::GIT_PUSH_HANDLER( KIGIT_COMMON* aRepo ) :  KIGIT_COMMON( *aRepo )
 {}
 
 

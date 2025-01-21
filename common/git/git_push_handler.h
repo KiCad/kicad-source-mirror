@@ -43,7 +43,7 @@ enum class PushResult
 class GIT_PUSH_HANDLER : public KIGIT_COMMON, public GIT_PROGRESS
 {
 public:
-    GIT_PUSH_HANDLER( git_repository* aRepo );
+    GIT_PUSH_HANDLER( KIGIT_COMMON* aRepo );
     ~GIT_PUSH_HANDLER();
 
     PushResult PerformPush();

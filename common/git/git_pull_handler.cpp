@@ -29,7 +29,7 @@
 #include <iostream>
 #include <time.h>
 
-GIT_PULL_HANDLER::GIT_PULL_HANDLER( git_repository* aRepo ) :  KIGIT_COMMON( aRepo )
+GIT_PULL_HANDLER::GIT_PULL_HANDLER( KIGIT_COMMON* aRepo ) :  KIGIT_COMMON( *aRepo )
 {}
 
 
@@ -54,6 +54,9 @@ bool GIT_PULL_HANDLER::PerformFetch()
     remoteCallbacks.transfer_progress = transfer_progress_cb;
     remoteCallbacks.credentials = credentials_cb;
     remoteCallbacks.payload = this;
+
+    m_testedTypes = 0;
+    ResetNextKey();
 
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, nullptr, nullptr ) )
     {
