@@ -465,7 +465,6 @@ void KIGIT_COMMON::updatePublicKeys()
         wxTextFile configFile( sshConfig.GetFullPath() );
         configFile.Open();
 
-        wxString lastIdentityFile;
         bool match = false;
 
         for( wxString line = configFile.GetFirstLine(); !configFile.Eof(); line = configFile.GetNextLine() )
@@ -473,10 +472,7 @@ void KIGIT_COMMON::updatePublicKeys()
             line.Trim( false ).Trim( true );
 
             if( line.StartsWith( "Host " ) )
-            {
-                lastIdentityFile.Clear();
                 match = false;
-            }
 
             // The difference here is that we are matching either "Hostname" or "Host" to get the
             // match.  This is because in the absence of a "Hostname" line, the "Host" line is used
@@ -486,15 +482,14 @@ void KIGIT_COMMON::updatePublicKeys()
             if( match && line.StartsWith( "IdentityFile" ) )
             {
                 wxString keyPath = line.AfterFirst( ' ' ).Trim( false ).Trim( true );
+
                 // Expand ~ to home directory if present
                 if( keyPath.StartsWith( "~" ) )
                     keyPath.Replace( "~", wxGetHomeDir(), false );
 
                 // Add the public key to the beginning of the list
                 if( wxFileName::FileExists( keyPath ) )
-                {
                     SetSSHKey( keyPath );
-                }
             }
         }
 
