@@ -74,7 +74,20 @@ private:
     HANDLER_RESULT<commands::GetItemsResponse> handleGetItems(
             const HANDLER_CONTEXT<commands::GetItems>& aCtx );
 
-    HANDLER_RESULT<BoardStackupResponse> handleGetStackup( const HANDLER_CONTEXT<GetBoardStackup>& aCtx );
+    HANDLER_RESULT<commands::SelectionResponse> handleGetSelection(
+            const HANDLER_CONTEXT<commands::GetSelection>& aCtx );
+
+    HANDLER_RESULT<Empty> handleClearSelection(
+            const HANDLER_CONTEXT<commands::ClearSelection>& aCtx );
+
+    HANDLER_RESULT<commands::SelectionResponse> handleAddToSelection(
+            const HANDLER_CONTEXT<commands::AddToSelection>& aCtx );
+
+    HANDLER_RESULT<commands::SelectionResponse> handleRemoveFromSelection(
+            const HANDLER_CONTEXT<commands::RemoveFromSelection>& aCtx );
+
+    HANDLER_RESULT<BoardStackupResponse> handleGetStackup(
+            const HANDLER_CONTEXT<GetBoardStackup>& aCtx );
 
     HANDLER_RESULT<GraphicsDefaultsResponse> handleGetGraphicsDefaults(
             const HANDLER_CONTEXT<GetGraphicsDefaults>& aCtx );

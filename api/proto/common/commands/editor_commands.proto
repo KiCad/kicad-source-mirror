@@ -326,6 +326,47 @@ message GetBoundingBoxResponse
   repeated kiapi.common.types.Box2 boxes = 2;
 }
 
+// Retrieves a list of items.  Returns SelectionResponse
+message GetSelection
+{
+  // Specifies which document to query for selected items.
+  kiapi.common.types.ItemHeader header = 1;
+
+  // An optional list of types to filter on.
+  // If none are provided, all selected items will be returned.
+  repeated kiapi.common.types.KiCadObjectType types = 2;
+}
+
+// The set of currently selected items
+message SelectionResponse
+{
+  repeated google.protobuf.Any items = 1;
+}
+
+// Adds the given items to the selection.  Returns SelectionResponse
+message AddToSelection
+{
+  kiapi.common.types.ItemHeader header = 1;
+
+  // The items to select
+  repeated kiapi.common.types.KIID items = 2;
+}
+
+// Removes the given items to the selection.  Returns SelectionResponse
+message RemoveFromSelection
+{
+  kiapi.common.types.ItemHeader header = 1;
+
+  // The items to deselect
+  repeated kiapi.common.types.KIID items = 2;
+}
+
+// Removes all items from selection
+message ClearSelection
+{
+  kiapi.common.types.ItemHeader header = 1;
+}
+
 // Tests if a certain point falls within tolerance of an item's geometry
 message HitTest
 {

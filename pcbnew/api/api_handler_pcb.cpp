@@ -65,6 +65,12 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
 
     registerHandler<GetItems, GetItemsResponse>( &API_HANDLER_PCB::handleGetItems );
 
+    registerHandler<GetSelection, SelectionResponse>( &API_HANDLER_PCB::handleGetSelection );
+    registerHandler<ClearSelection, Empty>( &API_HANDLER_PCB::handleClearSelection );
+    registerHandler<AddToSelection, SelectionResponse>( &API_HANDLER_PCB::handleAddToSelection );
+    registerHandler<RemoveFromSelection, SelectionResponse>(
+            &API_HANDLER_PCB::handleRemoveFromSelection );
+
     registerHandler<GetBoardStackup, BoardStackupResponse>( &API_HANDLER_PCB::handleGetStackup );
     registerHandler<GetGraphicsDefaults, GraphicsDefaultsResponse>(
             &API_HANDLER_PCB::handleGetGraphicsDefaults );
@@ -654,6 +660,141 @@ std::optional<EDA_ITEM*> API_HANDLER_PCB::getItemFromDocument( const DocumentSpe
         return std::nullopt;
 
     return getItemById( aId );
+}
+
+
+HANDLER_RESULT<SelectionResponse> API_HANDLER_PCB::handleGetSelection(
+            const HANDLER_CONTEXT<GetSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    std::set<KICAD_T> filter;
+
+    for( int typeRaw : aCtx.Request.types() )
+    {
+        auto typeMessage = static_cast<types::KiCadObjectType>( typeRaw );
+        KICAD_T type = FromProtoEnum<KICAD_T>( typeMessage );
+
+        if( type == TYPE_NOT_INIT )
+            continue;
+
+        filter.insert( type );
+    }
+
+    TOOL_MANAGER* mgr = frame()->GetToolManager();
+    PCB_SELECTION_TOOL* selectionTool = mgr->GetTool<PCB_SELECTION_TOOL>();
+
+    SelectionResponse response;
+
+    for( EDA_ITEM* item : selectionTool->GetSelection() )
+    {
+        if( filter.empty() || filter.contains( item->Type() ) )
+            item->Serialize( *response.add_items() );
+    }
+
+    return response;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleClearSelection(
+        const HANDLER_CONTEXT<ClearSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    TOOL_MANAGER* mgr = frame()->GetToolManager();
+    mgr->RunAction( PCB_ACTIONS::selectionClear );
+
+    return Empty();
+}
+
+
+HANDLER_RESULT<SelectionResponse> API_HANDLER_PCB::handleAddToSelection(
+        const HANDLER_CONTEXT<AddToSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    TOOL_MANAGER* mgr = frame()->GetToolManager();
+    PCB_SELECTION_TOOL* selectionTool = mgr->GetTool<PCB_SELECTION_TOOL>();
+
+    std::vector<EDA_ITEM*> toAdd;
+
+    for( const types::KIID& id : aCtx.Request.items() )
+    {
+        if( std::optional<BOARD_ITEM*> item = getItemById( KIID( id.value() ) ) )
+            toAdd.emplace_back( *item );
+    }
+
+    selectionTool->AddItemsToSel( &toAdd );
+
+    SelectionResponse response;
+
+    for( EDA_ITEM* item : selectionTool->GetSelection() )
+        item->Serialize( *response.add_items() );
+
+    return response;
+}
+
+
+HANDLER_RESULT<SelectionResponse> API_HANDLER_PCB::handleRemoveFromSelection(
+        const HANDLER_CONTEXT<RemoveFromSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    TOOL_MANAGER* mgr = frame()->GetToolManager();
+    PCB_SELECTION_TOOL* selectionTool = mgr->GetTool<PCB_SELECTION_TOOL>();
+
+    std::vector<EDA_ITEM*> toRemove;
+
+    for( const types::KIID& id : aCtx.Request.items() )
+    {
+        if( std::optional<BOARD_ITEM*> item = getItemById( KIID( id.value() ) ) )
+            toRemove.emplace_back( *item );
+    }
+
+    selectionTool->RemoveItemsFromSel( &toRemove );
+
+    SelectionResponse response;
+
+    for( EDA_ITEM* item : selectionTool->GetSelection() )
+        item->Serialize( *response.add_items() );
+
+    return response;
 }
 
 
