@@ -38,16 +38,18 @@ VERTEX* VERTEX_SET::createList( const SHAPE_LINE_CHAIN& points, VERTEX* aTail, v
         sum += ( ( p2.x - p1.x ) * ( p2.y + p1.y ) );
     }
 
-    VECTOR2I last_pt{ std::numeric_limits<int>::max(), std::numeric_limits<int>::max() };
+    VECTOR2L last_pt;
+    bool first = true;
 
     auto addVertex = [&]( int i )
     {
         const VECTOR2I& pt = points.CPoint( i );
-        VECTOR2I diff = pt - last_pt;
-        if( diff.SquaredEuclideanNorm() > m_simplificationLevel )
+
+        if( first || pt.SquaredDistance( last_pt ) > m_simplificationLevel )
         {
             tail = insertVertex( i, pt, tail, aUserData );
             last_pt = pt;
+            first = false;
         }
     };
 
