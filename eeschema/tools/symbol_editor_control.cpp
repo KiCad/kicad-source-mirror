@@ -502,10 +502,21 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
     }
 
     LIB_SYMBOL* libSymbol = libMgr.GetBufferedSymbol( oldName, libName );
-    bool        isCurrentSymbol = editFrame->IsCurrentSymbol( libId );
 
     if( !libSymbol )
         return 0;
+
+    // Renaming the current symbol
+    const bool isCurrentSymbol = editFrame->IsCurrentSymbol( libId );
+    bool       overwritingCurrentSymbol = false;
+
+    if( libMgr.SymbolExists( newName, libName ) )
+    {
+        // Overwriting the current symbol also need to update the open symbol
+        LIB_SYMBOL* const overwrittenSymbol = libMgr.GetBufferedSymbol( newName, libName );
+        overwritingCurrentSymbol = editFrame->IsCurrentSymbol( overwrittenSymbol->GetLibId() );
+        libMgr.RemoveSymbol( newName, libName );
+    }
 
     libSymbol->SetName( newName );
 
@@ -515,8 +526,15 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
     libMgr.UpdateSymbolAfterRename( libSymbol, newName, libName );
     libMgr.SetSymbolModified( newName, libName );
 
-    if( isCurrentSymbol && editFrame->GetCurSymbol())
+    if( overwritingCurrentSymbol )
     {
+        // We overwrite the old current symbol with the renamed one, so show
+        // the renamed one now
+        editFrame->SetCurSymbol( new LIB_SYMBOL( *libSymbol ), false );
+    }
+    else if( isCurrentSymbol && editFrame->GetCurSymbol() )
+    {
+        // Renamed the current symbol - follow it
         libSymbol = editFrame->GetCurSymbol();
 
         libSymbol->SetName( newName );
