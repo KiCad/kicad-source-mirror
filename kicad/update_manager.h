@@ -25,6 +25,7 @@
 #include <wx/string.h>
 #include <atomic>
 #include <memory>
+#include <future>
 
 class PROGRESS_REPORTER;
 struct BACKGROUND_JOB;
@@ -35,6 +36,7 @@ class UPDATE_MANAGER
 {
 public:
     UPDATE_MANAGER();
+    ~UPDATE_MANAGER();
 
     void CheckForUpdate( wxWindow* aNoticeParent );
     int PostRequest( const wxString& aUrl, std::string aRequestBody, std::ostream* aOutput,
@@ -43,4 +45,5 @@ public:
 private:
     std::atomic<bool>               m_working;
     std::shared_ptr<BACKGROUND_JOB> m_updateBackgroundJob;
+    std::future<void>               m_updateTask;
 };
