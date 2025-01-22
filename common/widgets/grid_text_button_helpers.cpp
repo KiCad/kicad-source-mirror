@@ -171,7 +171,7 @@ class TEXT_BUTTON_SYMBOL_CHOOSER : public wxComboCtrl
 public:
     TEXT_BUTTON_SYMBOL_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
                                 const wxString& aPreselect ) :
-            wxComboCtrl( aParent ),
+            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ) ),
             m_dlg( aParentDlg ),
             m_preselect( aPreselect )
     {
@@ -233,7 +233,7 @@ class TEXT_BUTTON_FP_CHOOSER : public wxComboCtrl
 public:
     TEXT_BUTTON_FP_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
                             const wxString& aSymbolNetlist, const wxString& aPreselect ) :
-            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_preselect( aPreselect ),
@@ -324,7 +324,7 @@ class TEXT_BUTTON_URL : public wxComboCtrl
 {
 public:
     TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg, SEARCH_STACK* aSearchStack ) :
-            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(0, 0),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_searchStack( aSearchStack )
@@ -379,7 +379,7 @@ public:
                               wxString* aCurrentDir, const wxString& aFileFilter = wxEmptyString,
                               bool aNormalize = false,
                               const wxString& aNormalizeBasePath = wxEmptyString ) :
-            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_grid( aGrid ),
@@ -399,7 +399,7 @@ public:
                               std::function<wxString( WX_GRID* grid, int row )> aFileFilterFn,
                               bool aNormalize = false,
                               const wxString& aNormalizeBasePath = wxEmptyString ) :
-            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_grid( aGrid ),

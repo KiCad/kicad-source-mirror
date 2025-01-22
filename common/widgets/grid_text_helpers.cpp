@@ -133,7 +133,7 @@ void GRID_CELL_STC_EDITOR::SetSize( const wxRect& aRect )
 
 void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler )
 {
-    m_control = new wxStyledTextCtrl( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+    m_control = new wxStyledTextCtrl( aParent, wxID_ANY, wxDefaultPosition, wxSize( 0, 0 ),
                                       wxBORDER_NONE );
 
     stc_ctrl()->SetTabIndents( false );
