@@ -266,9 +266,10 @@ void DIALOG_CREATE_ARRAY::OnAxisNumberingChange( wxCommandEvent& aEvent )
 {
     // On an alphabet change, make sure the offset control is valid by default.
 
-    const unsigned newAlphabet = aEvent.GetSelection();
+    const int newAlphabet = aEvent.GetSelection();
 
-    wxCHECK( newAlphabet >= 0 && newAlphabet < numberingTypeData.size(), /* void */ );
+    wxCHECK( newAlphabet >= 0 && newAlphabet < static_cast<int>( numberingTypeData.size() ),
+             /* void */ );
 
     const ARRAY_AXIS::NUMBERING_TYPE numberingType =
             numberingTypeData[newAlphabet].m_numbering_type;
