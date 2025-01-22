@@ -1243,10 +1243,6 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         std::unique_ptr<FOOTPRINT> fp( static_cast<FOOTPRINT*>( fp_it->Clone() ) );
         fp->SetParentGroup( nullptr );
         fp->SetPosition( {0, 0} );
-
-        if( fp->GetLayer() != F_Cu )
-            fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
-
         fp->SetOrientation( ANGLE_0 );
 
         size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
@@ -1800,11 +1796,9 @@ void PCB_IO_IPC2581::addPad( wxXmlNode* aContentNode, const PAD* aPad, PCB_LAYER
     if( aPad->GetOrientation() != ANGLE_0 )
     {
         wxXmlNode* xformNode = appendNode( padNode, "Xform" );
-        xformNode->AddAttribute( "rotation",
-                                 floatVal( aPad->GetOrientation().Normalize().AsDegrees() ) );
+        EDA_ANGLE angle = aPad->GetOrientation().Normalize();
 
-        if( fp && fp->IsFlipped() )
-            addAttribute( xformNode,  "mirror", "true" );
+        xformNode->AddAttribute( "rotation", floatVal( angle.AsDegrees() ) );
     }
 
     addLocationNode( padNode, *aPad, false );
@@ -2133,10 +2127,6 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     std::unique_ptr<FOOTPRINT> fp( static_cast<FOOTPRINT*>( aFp->Clone() ) );
     fp->SetParentGroup( nullptr );
     fp->SetPosition( { 0, 0 } );
-
-    if( fp->GetLayer() != F_Cu )
-        fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
-
     fp->SetOrientation( ANGLE_0 );
 
     size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
@@ -2403,12 +2393,16 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         else
             addAttribute( pinNode,  "type", "SURFACE" );
 
-        if( pad->GetFPRelativeOrientation() != ANGLE_0 )
+        if( pad->GetFPRelativeOrientation() != ANGLE_0 )//|| fp->IsFlipped() )
         {
             wxXmlNode* xformNode = appendNode( pinNode, "Xform" );
-            xformNode->AddAttribute(
-                    "rotation",
-                    floatVal( pad->GetFPRelativeOrientation().Normalize().AsDegrees() ) );
+            EDA_ANGLE pad_angle = pad->GetFPRelativeOrientation().Normalize();
+
+            if( fp->IsFlipped() )
+                pad_angle = ( pad_angle.Invert() - ANGLE_180 ).Normalize();
+
+            if( pad_angle != ANGLE_0 )
+                xformNode->AddAttribute( "rotation", floatVal( pad_angle.AsDegrees() ) );
         }
 
         addLocationNode( pinNode, *pad, true );
@@ -2472,19 +2466,19 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
         else
             addAttribute( componentNode,  "mountType", "OTHER" );
 
-        if( fp->GetOrientation() != ANGLE_0 || fp->GetLayer() != F_Cu )
+        if( fp->GetOrientation() != ANGLE_0 || fp->IsFlipped() )
         {
             wxXmlNode* xformNode = appendNode( componentNode, "Xform" );
 
             EDA_ANGLE fp_angle = fp->GetOrientation().Normalize();
 
-            if( fp->GetLayer() == B_Cu )
+            if( fp->IsFlipped() )
                 fp_angle = ( fp_angle.Invert() - ANGLE_180 ).Normalize();
 
             if( fp_angle != ANGLE_0 )
                 addAttribute( xformNode, "rotation", floatVal( fp_angle.AsDegrees(), 2 ) );
 
-            if( fp->GetLayer() != F_Cu )
+            if( fp->IsFlipped() )
                 addAttribute( xformNode,  "mirror", "true" );
         }
 
