@@ -4,7 +4,7 @@
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024, 2025.
-# Hanna Breisand <weblate.org@breisand.se>, 2022, 2024.
+# Hanna Breisand <weblate.org@breisand.se>, 2022, 2024, 2025.
 # Elias Sjögreen <eliassjogreen1@gmail.com>, 2023.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 msgid ""
@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-21 16:52+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2025-01-22 21:02+0000\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -34361,7 +34361,7 @@ msgstr "Slutförd"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
 msgid "Do you want to cancel the export process?"
-msgstr "Vill du avbryta exportförloppet?"
+msgstr "Vill du avbryta den pågående exporten?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
 msgid "Cancel Export"
