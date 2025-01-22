@@ -1365,7 +1365,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
 
 void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask ) const
 {
-    static const LSET cu_all( LSET::AllCuMask( m_board->GetCopperLayerCount() ) );
+    static const LSET cu_all( LSET::AllCuMask( m_board
+                                                ? m_board->GetCopperLayerCount()
+                                                : MAX_CU_LAYERS ) );
     static const LSET fr_bk(  { B_Cu, F_Cu } );
     static const LSET adhes(  { B_Adhes, F_Adhes } );
     static const LSET paste(  { B_Paste, F_Paste } );
