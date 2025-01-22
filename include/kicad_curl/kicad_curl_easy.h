@@ -39,6 +39,7 @@
 #include <ostream>
 #include <string>
 #include <cstdint>
+#include <shared_mutex>
 
 typedef void CURL;
 struct curl_slist;
@@ -162,10 +163,11 @@ private:
     template <typename T>
     int setOption( int aOption, T aArg );
 
-    CURL*                          m_CURL;
-    curl_slist*                    m_headers;
-    std::string                    m_buffer;
-    std::unique_ptr<CURL_PROGRESS> progress;
+    CURL*                               m_CURL;
+    curl_slist*                         m_headers;
+    std::string                         m_buffer;
+    std::unique_ptr<CURL_PROGRESS>      progress;
+    std::shared_lock<std::shared_mutex> m_curlSharedLock;
 };
 
 
