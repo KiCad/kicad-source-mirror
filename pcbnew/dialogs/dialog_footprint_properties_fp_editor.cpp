@@ -634,9 +634,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
 
-    int       fieldId = m_fields->at( m_fields->size() - 1 ).GetId() + 1;
-    PCB_FIELD newField( m_footprint, fieldId, GetUserFieldName( m_fields->GetNumberRows(),
-                                                                DO_TRANSLATE ) );
+    PCB_FIELD newField( m_footprint, m_footprint->GetNextFieldId(),
+                        GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )

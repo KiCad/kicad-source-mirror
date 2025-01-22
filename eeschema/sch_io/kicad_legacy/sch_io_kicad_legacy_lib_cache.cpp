@@ -215,11 +215,18 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadDocs()
         LIB_SYMBOL_MAP::iterator it = m_symbols.find( aliasName );
 
         if( it == m_symbols.end() )
+        {
             wxLogWarning( "Symbol '%s' not found in library:\n\n"
-                          "'%s'\n\nat line %d offset %d", aliasName, fn.GetFullPath(),
-                          reader.LineNumber(), (int) (line - reader.Line() ) );
+                          "'%s'\n\nat line %d offset %d",
+                          aliasName,
+                          fn.GetFullPath(),
+                          reader.LineNumber(),
+                          (int) (line - reader.Line() ) );
+        }
         else
+        {
             symbol = it->second;
+        }
 
         // Read the current alias associated doc.
         // if the alias does not exist, just skip the description
@@ -499,20 +506,20 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadAliases( std::unique_ptr<LIB_SYMBOL>& aS
             LIB_SYMBOL* newSymbol = new LIB_SYMBOL( newAliasName );
 
             // Inherit the parent mandatory field attributes.
-            for( int id = 0; id < MANDATORY_FIELDS; ++id )
+            for( int fieldId : MANDATORY_FIELDS )
             {
-                SCH_FIELD* field = newSymbol->GetFieldById( id );
+                SCH_FIELD* field = newSymbol->GetFieldById( fieldId );
 
-                // the MANDATORY_FIELDS are exactly that in RAM.
+                // the MANDATORY_FIELD_COUNT are exactly that in RAM.
                 wxASSERT( field );
 
-                SCH_FIELD* parentField = aSymbol->GetFieldById( id );
+                SCH_FIELD* parentField = aSymbol->GetFieldById( fieldId );
 
                 wxASSERT( parentField );
 
                 *field = *parentField;
 
-                if( id == VALUE_FIELD )
+                if( fieldId == VALUE_FIELD )
                     field->SetText( newAliasName );
 
                 field->SetParent( newSymbol );
@@ -662,7 +669,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
     }
 
     // Fields in RAM must always have names.
-    if( id >= 0 && id < MANDATORY_FIELDS )
+    if( field->IsMandatory() )
     {
         // Fields in RAM must always have names, because we are trying to get
         // less dependent on field ids and more dependent on names.
@@ -1525,22 +1532,28 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
     // may have their own save policy so there is a separate loop for them.
     // Empty fields are saved, because the user may have set visibility,
     // size and orientation
-    for( int i = 0; i < MANDATORY_FIELDS; ++i )
-        saveField( fields[i], aFormatter );
+    for( SCH_FIELD* field : fields )
+    {
+        if( field->IsMandatory() )
+            saveField( field, aFormatter );
+    }
 
     // User defined fields:
     // may have their own save policy so there is a separate loop for them.
-    int fieldId = MANDATORY_FIELDS;     // really wish this would go away.
+    int fieldId = MANDATORY_FIELD_COUNT;     // really wish this would go away.
 
-    for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
+    for( SCH_FIELD* field : fields )
     {
+        if( field->IsMandatory() )
+            continue;
+
         // There is no need to save empty fields, i.e. no reason to preserve field
         // names now that fields names come in dynamically through the template
         // fieldnames.
-        if( !fields[i]->GetText().IsEmpty() )
+        if( !field->GetText().IsEmpty() )
         {
-            fields[i]->SetId( fieldId++ );
-            saveField( fields[i], aFormatter );
+            field->SetId( fieldId++ );
+            saveField( field, aFormatter );
         }
     }
 
@@ -1719,7 +1732,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const SCH_FIELD* aField,
 
     // Translated names were stored in legacy files, so it's important not to save the
     // default names as they weren't yet canonical.
-    if( id >= MANDATORY_FIELDS
+    if( !aField->IsMandatory()
             && !aField->GetName().IsEmpty()
             && aField->GetName() != GetUserFieldName( id, !DO_TRANSLATE ) )
     {

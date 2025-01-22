@@ -85,7 +85,7 @@ bool FieldNameIdMatches( const SCH_FIELD& aField, const std::string& aExpectedNa
  */
 bool AreDefaultFieldsCorrect( const std::vector<SCH_FIELD>& aFields )
 {
-    const unsigned expectedCount = MANDATORY_FIELD_T::MANDATORY_FIELDS;
+    const unsigned expectedCount = MANDATORY_FIELD_T::MANDATORY_FIELD_COUNT;
 
     if( aFields.size() < expectedCount )
     {

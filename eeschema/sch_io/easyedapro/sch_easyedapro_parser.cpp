@@ -1295,8 +1295,9 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                         if( !text )
                         {
-                            text = schSym->AddField(
-                                    SCH_FIELD( schSym.get(), schSym->GetFieldCount(), attrKey ) );
+                            text = schSym->AddField( SCH_FIELD( schSym.get(),
+                                                                schSym->GetNextFieldId(),
+                                                                attrKey ) );
                         }
 
                         wxString value = *valOpt;
@@ -1366,8 +1367,8 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                     if( !text )
                     {
-                        text = schSym->AddField(
-                                SCH_FIELD( schSym.get(), schSym->GetFieldCount(), attrKey ) );
+                        text = schSym->AddField( SCH_FIELD( schSym.get(), schSym->GetNextFieldId(),
+                                                            attrKey ) );
                     }
 
                     text->SetPosition( schSym->GetPosition() );

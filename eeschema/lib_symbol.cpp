@@ -107,10 +107,10 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
 
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
-    m_drawings[SCH_FIELD_T].reserve( MANDATORY_FIELDS );
+    m_drawings[SCH_FIELD_T].reserve( MANDATORY_FIELD_COUNT );
 
-    for( int i = 0; i < MANDATORY_FIELDS; i++ )
-        m_drawings[SCH_FIELD_T].push_back( new SCH_FIELD( this, i ) );
+    for( int fieldId : MANDATORY_FIELDS )
+        m_drawings[SCH_FIELD_T].push_back( new SCH_FIELD( this, fieldId ) );
 
     // Ensure reference and value fields are visible when creating a lib symbol
     // whatever the SCH_FIELD Ctor default value is.
@@ -351,15 +351,15 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->SetLibId( m_libId );
 
         // Now add the inherited part mandatory field (this) information.
-        for( int i = 0; i < MANDATORY_FIELDS; i++ )
+        for( int fieldId : MANDATORY_FIELDS )
         {
-            wxString tmp = GetFieldById( i )->GetText();
+            wxString tmp = GetFieldById( fieldId )->GetText();
 
             // If the field isn't defined then inherit the parent field value.
             if( tmp.IsEmpty() )
-                retv->GetFieldById( i )->SetText( retv->GetFieldById( i )->GetText() );
+                retv->GetFieldById( fieldId )->SetText( retv->GetFieldById( fieldId )->GetText() );
             else
-                *retv->GetFieldById( i ) = *GetFieldById( i );
+                *retv->GetFieldById( fieldId ) = *GetFieldById( fieldId );
         }
 
         // Grab all the rest of derived symbol fields.
@@ -1068,9 +1068,9 @@ void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
 void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly )
 {
     // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
-    for( int id = 0; id < MANDATORY_FIELDS; ++id )
+    for( int fieldId : MANDATORY_FIELDS )
     {
-        SCH_FIELD* field = GetFieldById( id );
+        SCH_FIELD* field = GetFieldById( fieldId );
 
         if( aVisibleOnly )
         {
@@ -1101,8 +1101,8 @@ void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly )
 void LIB_SYMBOL::CopyFields( std::vector<SCH_FIELD>& aList )
 {
     // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
-    for( int id = 0; id < MANDATORY_FIELDS; ++id )
-        aList.push_back( *GetFieldById( id ) );
+    for( int fieldId : MANDATORY_FIELDS )
+        aList.push_back( *GetFieldById( fieldId ) );
 
     // Now grab all the rest of fields.
     for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
@@ -1248,7 +1248,7 @@ void LIB_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunctio
 int LIB_SYMBOL::UpdateFieldOrdinals()
 {
     int retv = 0;
-    int lastOrdinal = MANDATORY_FIELDS;
+    int lastOrdinal = MANDATORY_FIELD_COUNT;
 
     for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
@@ -1273,7 +1273,7 @@ int LIB_SYMBOL::UpdateFieldOrdinals()
 
 int LIB_SYMBOL::GetNextAvailableFieldId() const
 {
-    int retv = MANDATORY_FIELDS;
+    int retv = MANDATORY_FIELD_COUNT;
 
     while( GetFieldById( retv ) )
         retv += 1;

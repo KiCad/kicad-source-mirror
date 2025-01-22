@@ -232,7 +232,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
             if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( item ) )
             {
-                if( field->IsMandatoryField() )
+                if( field->IsMandatory() )
                     continue;
             }
 
@@ -284,7 +284,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
                             if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( item ) )
                             {
-                                if( field->IsMandatoryField() )
+                                if( field->IsMandatory() )
                                     can_add = false;
                             }
 
@@ -408,7 +408,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                     // will already have its own mandatory fields.
                     if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( copy ) )
                     {
-                        if( field->IsMandatoryField() )
+                        if( field->IsMandatory() )
                             field->SetId( footprint->GetNextFieldId() );
                     }
 

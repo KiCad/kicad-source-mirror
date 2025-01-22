@@ -46,8 +46,10 @@ enum  SHEET_FIELD_TYPE
     SHEETFILENAME,
 
     /// The first 2 are mandatory, and must be instantiated in SCH_SHEET
-    SHEET_MANDATORY_FIELDS
+    SHEET_MANDATORY_FIELD_COUNT
 };
+
+#define SHEET_MANDATORY_FIELDS { SHEETNAME, SHEETFILENAME }
 
 
 /**

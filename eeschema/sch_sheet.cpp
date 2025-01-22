@@ -265,20 +265,14 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
             return true;
     }
 
-    for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
+    for( const SCH_FIELD& field : m_fields )
     {
-        if( token->IsSameAs( m_fields[i].GetCanonicalName().Upper() ) )
-        {
-            *token = m_fields[i].GetShownText( aPath, false, aDepth + 1 );
-            return true;
-        }
-    }
+        wxString fieldName = field.IsMandatory() ? field.GetCanonicalName().Upper()
+                                                 : field.GetName();
 
-    for( size_t i = SHEET_MANDATORY_FIELDS; i < m_fields.size(); ++i )
-    {
-        if( token->IsSameAs( m_fields[i].GetName() ) )
+        if( token->IsSameAs( fieldName ) )
         {
-            *token = m_fields[i].GetShownText( aPath, false, aDepth + 1 );
+            *token = field.GetShownText( aPath, false, aDepth + 1 );
             return true;
         }
     }
@@ -417,8 +411,11 @@ void SCH_SHEET::SetFields( const std::vector<SCH_FIELD>& aFields )
                } );
 
     // After mandatory fields, the rest should be sequential user fields
-    for( int ii = SHEET_MANDATORY_FIELDS; ii < static_cast<int>( m_fields.size() ); ++ii )
-        m_fields[ii].SetId( ii );
+    for( int ii = 0; ii < static_cast<int>( m_fields.size() ); ++ii )
+    {
+        if( !m_fields[ii].IsMandatory() )
+            m_fields[ii].SetId( ii );
+    }
 
     // Make sure that we get the UNIX variant of the file path
     SetFileName( m_fields[SHEETFILENAME].GetText() );

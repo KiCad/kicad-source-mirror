@@ -101,7 +101,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     m_matchSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
     m_matchSizer->Layout();
 
-    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    for( int i = 0; i < MANDATORY_FIELD_COUNT; ++i )
     {
         m_fieldsBox->Append( GetDefaultFieldName( i, DO_TRANSLATE ) );
 
@@ -308,10 +308,10 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             fields.clear();
             symbol->GetFields( fields, false );
 
-            for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
+            for( SCH_FIELD* field : fields )
             {
-                if( !fields[i]->IsPrivate() )
-                    fieldNames.insert( fields[i]->GetName() );
+                if( !field->IsMandatory() && !field->IsPrivate() )
+                    fieldNames.insert( field->GetName() );
             }
 
             if( m_mode == MODE::UPDATE && symbol->GetLibId().IsValid() )
@@ -324,10 +324,10 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
                     flattenedSymbol->GetFields( libFields );
 
-                    for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
+                    for( SCH_FIELD* libField : libFields )
                     {
-                        if( !libFields[i]->IsPrivate() )
-                            fieldNames.insert( libFields[i]->GetName() );
+                        if( !libField->IsMandatory() && !libField->IsPrivate() )
+                            fieldNames.insert( libField->GetName() );
                     }
 
                     libFields.clear();  // flattenedSymbol is about to go out of scope...
@@ -353,10 +353,10 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
                 flattenedSymbol->GetFields( libFields );
 
-                for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
+                for( SCH_FIELD* libField : libFields )
                 {
-                    if( !libFields[i]->IsPrivate() )
-                        fieldNames.insert( libFields[i]->GetName() );
+                    if( !libField->IsMandatory() && !libField->IsPrivate() )
+                        fieldNames.insert( libField->GetName() );
                 }
 
                 libFields.clear();  // flattenedSymbol is about to go out of scope...
@@ -384,7 +384,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             allChecked = false;
     }
 
-    for( unsigned ii = m_fieldsBox->GetCount() - 1; ii >= MANDATORY_FIELDS; --ii )
+    for( unsigned ii = m_fieldsBox->GetCount() - 1; ii >= MANDATORY_FIELD_COUNT; --ii )
         m_fieldsBox->Delete( ii );
 
     for( const wxString& fieldName : fieldNames )
@@ -424,7 +424,7 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
     {
         if( m_fieldsBox->IsChecked( i ) )
         {
-            if( i < MANDATORY_FIELDS )
+            if( i < MANDATORY_FIELD_COUNT )
                 m_updateFields.insert( GetCanonicalFieldName( i ) );
             else
                 m_updateFields.insert( m_fieldsBox->GetString( i ) );
@@ -668,7 +668,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
             if( !doUpdate )
                 continue;
 
-            if( i < MANDATORY_FIELDS )
+            if( i < MANDATORY_FIELD_COUNT )
                 libField = symbol->GetLibSymbolRef()->GetFieldById( (int) i );
             else
                 libField = symbol->GetLibSymbolRef()->FindField( field.GetName() );
@@ -735,7 +735,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                 if( resetPositions )
                     field.SetTextPos( symbol->GetPosition() + libField->GetTextPos() );
             }
-            else if( i >= MANDATORY_FIELDS && removeExtras )
+            else if( i >= MANDATORY_FIELD_COUNT && removeExtras )
             {
                 symbol->RemoveField( field.GetName() );
                 i--;
@@ -745,25 +745,25 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         std::vector<SCH_FIELD*> libFields;
         symbol->GetLibSymbolRef()->GetFields( libFields );
 
-        for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
+        for( SCH_FIELD* libField : libFields )
         {
-            const SCH_FIELD& libField = *libFields[i];
-
-            if( !alg::contains( m_updateFields, libField.GetCanonicalName() ) )
+            if( libField->IsMandatory() )
                 continue;
 
-            if( !symbol->FindField( libField.GetName(), false ) )
+            if( !alg::contains( m_updateFields, libField->GetCanonicalName() ) )
+                continue;
+
+            if( !symbol->FindField( libField->GetName(), false ) )
             {
-                wxString   fieldName = libField.GetCanonicalName();
-                SCH_FIELD  newField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
-                                     fieldName );
+                SCH_FIELD  newField( VECTOR2I( 0, 0 ), symbol->GetNextFieldId(), symbol,
+                                     libField->GetCanonicalName() );
                 SCH_FIELD* schField = symbol->AddField( newField );
 
                 // Careful: the visible bit and position are also set by SetAttributes()
-                schField->SetAttributes( libField );
-                schField->SetText( libField.GetText() );
-                schField->SetTextPos( symbol->GetPosition() + libField.GetTextPos() );
-                schField->SetPrivate( libField.IsPrivate() );
+                schField->SetAttributes( *libField );
+                schField->SetText( libField->GetText() );
+                schField->SetTextPos( symbol->GetPosition() + libField->GetTextPos() );
+                schField->SetPrivate( libField->IsPrivate() );
             }
 
             if( resetPositions && frame->eeconfig()->m_AutoplaceFields.enable )

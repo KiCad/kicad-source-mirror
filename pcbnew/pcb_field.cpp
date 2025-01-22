@@ -72,7 +72,7 @@ bool PCB_FIELD::Deserialize( const google::protobuf::Any &aContainer )
         setId( field.id().id() );
 
     // Mandatory fields have a blank Name in the KiCad object
-    if( m_id >= MANDATORY_FIELDS )
+    if( !IsMandatory() )
         SetName( wxString( field.name().c_str(), wxConvUTF8 ) );
 
     if( field.has_text() )
@@ -93,7 +93,7 @@ wxString PCB_FIELD::GetName( bool aUseDefaultName ) const
 {
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
     {
-        if( m_id >= 0 && m_id < MANDATORY_FIELDS )
+        if( IsMandatory() )
             return GetCanonicalFieldName( m_id );
         else if( m_name.IsEmpty() && aUseDefaultName )
             return GetUserFieldName( m_id, !DO_TRANSLATE );
@@ -112,7 +112,7 @@ wxString PCB_FIELD::GetCanonicalName() const
 {
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
     {
-        if( m_id < MANDATORY_FIELDS )
+        if( IsMandatory() )
             return GetCanonicalFieldName( m_id );
         else
             return m_name;
@@ -130,9 +130,18 @@ wxString PCB_FIELD::GetCanonicalName() const
 }
 
 
+bool PCB_FIELD::IsMandatory() const
+{
+    return m_id == REFERENCE_FIELD
+        || m_id == VALUE_FIELD
+        || m_id == DATASHEET_FIELD
+        || m_id == DESCRIPTION_FIELD;
+}
+
+
 wxString PCB_FIELD::GetTextTypeDescription() const
 {
-    if( m_id < MANDATORY_FIELDS )
+    if( IsMandatory() )
         return GetCanonicalFieldName( m_id );
     else
         return _( "User Field" );
@@ -233,7 +242,7 @@ double PCB_FIELD::Similarity( const BOARD_ITEM& aOther ) const
 
     const PCB_FIELD& other = static_cast<const PCB_FIELD&>( aOther );
 
-    if( m_id < MANDATORY_FIELDS || other.m_id < MANDATORY_FIELDS )
+    if( IsMandatory() || other.IsMandatory() )
     {
         if( m_id == other.m_id )
             return 1.0;

@@ -340,10 +340,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
     for( const PCB_FIELD* item : m_fields )
     {
-        if( !item )
-            continue;
-
-        if( item->GetId() < MANDATORY_FIELDS )
+        if( !item || item->IsMandatory() )
             continue;
 
         google::protobuf::Any* itemMsg = def->add_items();
@@ -499,7 +496,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     // Footprint items
     for( PCB_FIELD* field : m_fields )
     {
-        if( field && !field->IsMandatoryField() )
+        if( field && !field->IsMandatory() )
             Remove( field );
     }
 
@@ -666,7 +663,7 @@ void FOOTPRINT::RemoveField( const wxString& aFieldName )
 {
     for( unsigned i = 0; i < m_fields.size(); ++i )
     {
-        if( m_fields[i] && m_fields[i]->IsMandatoryField() )
+        if( m_fields[i] && m_fields[ i ]->IsMandatory() )
             continue;
 
         if( aFieldName == m_fields[i]->GetName( false ) )

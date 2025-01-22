@@ -150,7 +150,7 @@ int PCB_FIELDS_GRID_TABLE::GetMandatoryRowCount() const
 
     for( const PCB_FIELD& field : *this )
     {
-        if( field.IsMandatoryField() )
+        if( field.IsMandatory() )
             mandatoryRows++;
     }
 
@@ -233,7 +233,7 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
     switch( aCol )
     {
     case PFC_NAME:
-        if( aRow < MANDATORY_FIELDS - 1 )    // -1 because we don't expose FOOTPRINT_FIELD
+        if( aRow < GetMandatoryRowCount() )
         {
             m_readOnlyAttr->IncRef();
             return enhanceAttr( m_readOnlyAttr, aRow, aCol, aKind );

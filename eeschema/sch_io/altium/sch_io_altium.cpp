@@ -4055,10 +4055,8 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
         }
         else
         {
-            int      fieldIdx = 0;
+            int      fieldIdx = symbol->GetNextFieldId();
             wxString fieldName = elem.name.Upper();
-
-            fieldIdx = symbol->GetFieldCount();
 
             if( fieldName.IsEmpty() )
             {
@@ -4128,7 +4126,7 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
         }
         else
         {
-            int      fieldIdx = libSymbol->GetFieldCount();
+            int      fieldIdx = libSymbol->GetNextAvailableFieldId();
             wxString fieldNameStem = elem.name;
             wxString fieldName = fieldNameStem;
             int disambiguate = 1;

@@ -1302,7 +1302,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
                 // The first MANDATOR_FIELDS _must_ be constructed within the SCH_SYMBOL
                 // constructor.  This assert is simply here to guard against a change in that
                 // constructor.
-                wxASSERT( symbol->GetFieldCount() >= MANDATORY_FIELDS );
+                wxASSERT( symbol->GetFieldCount() >= MANDATORY_FIELD_COUNT );
 
                 // We need to check for an existing field by name that happens to have the same
                 // name and index as any field that was made mandatory after this point, e.g. Description
@@ -1313,9 +1313,9 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
                 if( !existingField )
                 {
                     // Ignore the _supplied_ fieldNdx.  It is not important anymore if within the
-                    // user defined fields region (i.e. >= MANDATORY_FIELDS).
+                    // user defined fields region (i.e. >= MANDATORY_FIELD_COUNT).
                     // We freely renumber the index to fit the next available field slot.
-                    index = symbol->GetFieldCount(); // new has this index after insertion
+                    index = symbol->GetNextFieldId(); // new has this index after insertion
 
                     SCH_FIELD field( VECTOR2I( 0, 0 ), index, symbol.get(), name );
                     symbol->AddField( field );
@@ -1755,16 +1755,22 @@ void SCH_IO_KICAD_LEGACY::saveSymbol( SCH_SYMBOL* aSymbol )
     // Fixed fields:
     // Save mandatory fields even if they are blank,
     // because the visibility, size and orientation are set from library editor.
-    for( unsigned i = 0; i < MANDATORY_FIELDS; ++i )
-        saveField( &aSymbol->GetFields()[i] );
+    for( SCH_FIELD& field : aSymbol->GetFields() )
+    {
+        if( field.IsMandatory() )
+            saveField( &field );
+    }
 
     // User defined fields:
     // The *policy* about which user defined fields are symbol of a symbol is now
     // only in the dialog editors.  No policy should be enforced here, simply
     // save all the user defined fields, they are present because a dialog editor
     // thought they should be.  If you disagree, go fix the dialog editors.
-    for( int i = MANDATORY_FIELDS;  i < aSymbol->GetFieldCount();  ++i )
-        saveField( &aSymbol->GetFields()[i] );
+    for( SCH_FIELD& field : aSymbol->GetFields() )
+    {
+        if( !field.IsMandatory() )
+            saveField( &field );
+    }
 
     // Unit number, position, box ( old standard )
     m_out->Print( 0, "\t%-4d %-4d %-4d\n", aSymbol->GetUnit(),
@@ -1808,7 +1814,7 @@ void SCH_IO_KICAD_LEGACY::saveField( SCH_FIELD* aField )
                   aField->IsBold() ? 'B' : 'N' );
 
     // Save field name, if the name is user definable
-    if( aField->GetId() >= MANDATORY_FIELDS )
+    if( !aField->IsMandatory() )
         m_out->Print( 0, " %s", EscapedUTF8( aField->GetName() ).c_str() );
 
     m_out->Print( 0, "\n" );

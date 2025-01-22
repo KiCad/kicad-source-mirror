@@ -162,7 +162,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 // All non-mandatory fields
                 for( SCH_FIELD& field : symbol2->GetFields() )
                 {
-                    if( field.IsMandatory() )
+                    if( field.IsMandatory() || field.IsPrivate() )
                         continue;
 
                     if( unit < minUnit || fields.count( field.GetName() ) == 0 )
@@ -200,7 +200,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
 
         for( SCH_FIELD& field : aSymbol->GetFields() )
         {
-            if( field.IsMandatory() )
+            if( field.IsMandatory() || field.IsPrivate() )
                 continue;
 
             if( m_resolveTextVars )
@@ -346,15 +346,18 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             std::vector<SCH_FIELD>& fields = symbol->GetFields();
 
-            for( size_t jj = MANDATORY_FIELDS; jj < fields.size(); ++jj )
+            for( SCH_FIELD& field : fields )
             {
+                if( field.IsMandatory() || field.IsPrivate() )
+                    continue;
+
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
-                xproperty->AddAttribute( wxT( "name" ), fields[jj].GetCanonicalName() );
+                xproperty->AddAttribute( wxT( "name" ), field.GetCanonicalName() );
 
                 if( m_resolveTextVars )
-                    xproperty->AddAttribute( wxT( "value" ), fields[jj].GetShownText( &sheet, false ) );
+                    xproperty->AddAttribute( wxT( "value" ), field.GetShownText( &sheet, false ) );
                 else
-                    xproperty->AddAttribute( wxT( "value" ), fields[jj].GetText() );
+                    xproperty->AddAttribute( wxT( "value" ), field.GetText() );
             }
 
             for( const SCH_FIELD& sheetField : sheet.Last()->GetFields() )

@@ -789,9 +789,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                 if( !partField )
                 {
-                    int fieldID = symbol->GetFieldCount();
-                    partField = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldID, symbol,
-                                                             PartNameFieldName ) );
+                    partField = symbol->AddField( SCH_FIELD( VECTOR2I(), symbol->GetNextFieldId(),
+                                                             symbol, PartNameFieldName ) );
                 }
 
                 wxASSERT( partField->GetName() == PartNameFieldName );
@@ -818,9 +817,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                     if( !attrField )
                     {
-                        int fieldID = symbol->GetFieldCount();
-                        attrField = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldID, symbol,
-                                                                 attrName ) );
+                        attrField = symbol->AddField( SCH_FIELD( VECTOR2I(),
+                                                                 symbol->GetNextFieldId(),
+                                                                 symbol, attrName ) );
                     }
 
                     wxASSERT( attrField->GetName() == attrName );
@@ -1600,9 +1599,8 @@ CADSTAR_SCH_ARCHIVE_LOADER::addNewFieldToSymbol( const wxString&              aF
     if( existingField != nullptr )
         return existingField;
 
-    int        newfieldID = aKiCadSymbol->GetFieldCount();
-    SCH_FIELD* newfield = new SCH_FIELD( aKiCadSymbol.get(), newfieldID );
-    newfield->SetName( aFieldName );
+    SCH_FIELD* newfield = new SCH_FIELD( aKiCadSymbol.get(),
+                                         aKiCadSymbol->GetNextAvailableFieldId(), aFieldName );
     newfield->SetVisible( false );
     aKiCadSymbol->AddField( newfield );
     /*

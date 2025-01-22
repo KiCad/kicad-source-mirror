@@ -830,13 +830,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             }
         }
 
-        for( int ii = symbol.GetFields().size() - 1; ii >= MANDATORY_FIELDS; ii-- )
+        for( int ii = symbol.GetFields().size() - 1; ii >= 0; ii-- )
         {
+            if( symbol.GetFields()[ii].IsMandatory() || symbol.GetFields()[ii].IsPrivate() )
+                continue;
+
             if( fieldStore.count( symbol.GetFields()[ii].GetName() ) == 0 )
-            {
-                if( !symbol.GetFields()[ii].IsPrivate() )
-                    symbol.GetFields().erase( symbol.GetFields().begin() + ii );
-            }
+                symbol.GetFields().erase( symbol.GetFields().begin() + ii );
         }
     }
 

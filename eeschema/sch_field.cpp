@@ -1508,9 +1508,18 @@ VECTOR2I SCH_FIELD::GetParentPosition() const
 bool SCH_FIELD::IsMandatory() const
 {
     if( m_parent && m_parent->Type() == SCH_SHEET_T )
-        return m_id >= 0 && m_id < SHEET_MANDATORY_FIELDS;
+    {
+        return m_id == SHEETNAME
+            || m_id == SHEETFILENAME;
+    }
     else
-        return m_id >= 0 && m_id < MANDATORY_FIELDS;
+    {
+        return m_id == REFERENCE_FIELD
+            || m_id == VALUE_FIELD
+            || m_id == FOOTPRINT_FIELD
+            || m_id == DATASHEET_FIELD
+            || m_id == DESCRIPTION_FIELD;
+    }
 }
 
 
@@ -1591,7 +1600,7 @@ double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
     if( GetId() != field.GetId() )
     {
         // We don't allow swapping of mandatory fields, so these cannot be the same item
-        if( GetId() < MANDATORY_FIELDS || field.GetId() < MANDATORY_FIELDS )
+        if( IsMandatory() || field.IsMandatory() )
             return 0.0;
         else
             similarity *= 0.5;

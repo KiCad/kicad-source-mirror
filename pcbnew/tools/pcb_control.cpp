@@ -879,7 +879,7 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
     //
     for( PCB_FIELD* field : aClipFootprint->GetFields() )
     {
-        if( field->IsMandatoryField() )
+        if( field->IsMandatory() )
         {
             if( PCB_GROUP* parentGroup = field->GetParentGroup() )
                 parentGroup->RemoveItem( field );

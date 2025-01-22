@@ -669,7 +669,12 @@ void SCH_LABEL_BASE::GetIntersheetRefs( const SCH_SHEET_PATH* aPath,
 void SCH_LABEL_BASE::GetContextualTextVars( wxArrayString* aVars ) const
 {
     for( const SCH_FIELD& field : m_fields )
-        aVars->push_back( field.GetCanonicalName().Upper() );
+    {
+        if( field.IsMandatory() )
+            aVars->push_back( field.GetCanonicalName().Upper() );
+        else
+            aVars->push_back( field.GetName() );
+    }
 
     aVars->push_back( wxT( "OP" ) );
     aVars->push_back( wxT( "CONNECTION_TYPE" ) );

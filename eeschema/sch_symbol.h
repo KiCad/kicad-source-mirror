@@ -571,7 +571,9 @@ public:
     /**
      * Return the number of fields in this symbol.
      */
-    int GetFieldCount() const { return (int)m_fields.size(); }
+    int GetFieldCount() const { return (int )m_fields.size(); }
+
+    int GetNextFieldId() const { return (int) m_fields.size(); }
 
     /**
      * Automatically orient all the fields in the symbol.

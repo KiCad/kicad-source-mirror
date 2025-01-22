@@ -149,7 +149,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
     else
         aSymbol->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
-    int nextFreeFieldId = MANDATORY_FIELDS;
+    int nextFreeFieldId = MANDATORY_FIELD_COUNT;
     std::vector<SCH_FIELD*> fields;
     std::string name = aFormatter.Quotew( aSymbol->GetLibId().GetLibItemName().wx_str() );
     std::string unitName = aSymbol->GetLibId().GetLibItemName();

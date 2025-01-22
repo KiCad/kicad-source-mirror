@@ -47,8 +47,10 @@ enum  MANDATORY_FIELD_T {
 
     /// The first 5 are mandatory, and must be instantiated in SCH_COMPONENT, LIB_PART, and
     /// FOOTPRINT constructors
-    MANDATORY_FIELDS
+    MANDATORY_FIELD_COUNT
 };
+
+#define MANDATORY_FIELDS { REFERENCE_FIELD, VALUE_FIELD, FOOTPRINT_FIELD, DATASHEET_FIELD, DESCRIPTION_FIELD }
 
 // A helper to call GetDefaultFieldName with or without translation.
 // Translation should be used only to display field names in dialogs
@@ -72,7 +74,7 @@ inline wxString GetCanonicalFieldName( int idx )
 {
     // While TEMPLATE_FIELDNAME::GetDefaultFieldName() still works for non-mandatory fields,
     // it's confusing to call it through this function.
-    wxASSERT( idx < MANDATORY_FIELDS );
+    wxASSERT( idx < MANDATORY_FIELD_COUNT );
 
     return GetDefaultFieldName( idx, !DO_TRANSLATE );
 }

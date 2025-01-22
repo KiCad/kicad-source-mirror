@@ -975,11 +975,14 @@ SCH_FIELD* SCH_SYMBOL::AddField( const SCH_FIELD& aField )
 
 void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 {
-    for( unsigned i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
+    for( unsigned ii = 0; ii < m_fields.size(); ++ii )
     {
-        if( aFieldName == m_fields[i].GetName( false ) )
+        if( m_fields[ii].IsMandatory() )
+            continue;
+
+        if( aFieldName == m_fields[ii].GetName( false ) )
         {
-            m_fields.erase( m_fields.begin() + i );
+            m_fields.erase( m_fields.begin() + ii );
             return;
         }
     }
@@ -989,19 +992,20 @@ void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 SCH_FIELD* SCH_SYMBOL::FindField( const wxString& aFieldName, bool aIncludeDefaultFields,
                                   bool aCaseInsensitive )
 {
-    unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;
-
-    for( unsigned i = start; i < m_fields.size(); ++i )
+    for( SCH_FIELD& field : m_fields )
     {
+        if( field.IsMandatory() && !aIncludeDefaultFields )
+            continue;
+
         if( aCaseInsensitive )
         {
-            if( aFieldName.Upper() == m_fields[i].GetName( false ).Upper() )
-                return &m_fields[i];
+            if( aFieldName.Upper() == field.GetName( false ).Upper() )
+                return &field;
         }
         else
         {
-            if( aFieldName == m_fields[i].GetName( false ) )
-                return &m_fields[i];
+            if( aFieldName == field.GetName( false ) )
+                return &field;
         }
     }
 
@@ -1032,8 +1036,8 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
 
                 if( !schField )
                 {
-                    wxString  fieldName = libField->GetCanonicalName();
-                    SCH_FIELD newField( VECTOR2I( 0, 0 ), GetFieldCount(), this, fieldName );
+                    SCH_FIELD newField( VECTOR2I( 0, 0 ), GetNextFieldId(), this,
+                                        libField->GetCanonicalName() );
                     schField = AddField( newField );
                 }
             }
@@ -1357,11 +1361,16 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 
 void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
 {
-    for( int i = 0; i < MANDATORY_FIELDS; ++i )
-        aVars->push_back( m_fields[i].GetCanonicalName().Upper() );
+    for( const SCH_FIELD& field : m_fields )
+    {
+        if( field.IsPrivate() )
+            continue;
 
-    for( size_t i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
-        aVars->push_back( m_fields[i].GetName() );
+        if( field.IsMandatory() )
+            aVars->push_back( field.GetCanonicalName().Upper() );
+        else
+            aVars->push_back( field.GetName() );
+    }
 
     aVars->push_back( wxT( "OP" ) );
     aVars->push_back( wxT( "FOOTPRINT_LIBRARY" ) );
@@ -1471,43 +1480,26 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
     wxString upperToken = token->Upper();
 
-    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    for( const SCH_FIELD& field : m_fields )
     {
-        wxString field = m_fields[i].GetCanonicalName();
+        wxString fieldName = field.IsMandatory() ? field.GetCanonicalName()
+                                                 : field.GetName();
 
-        wxString textToken = m_fields[i].GetText();
+        wxString textToken = field.GetText();
         textToken.Replace( " ", wxEmptyString );
-        wxString tokenString = "${" + field + "}";
+        wxString tokenString = "${" + fieldName + "}";
 
         // If the field data is just a reference to the field, don't resolve
         if( textToken.IsSameAs( tokenString, false ) )
             return true;
 
-        if( token->IsSameAs( field, false ) )
+        if( token->IsSameAs( fieldName, false ) )
         {
-            if( i == REFERENCE_FIELD )
+            if( field.GetId() == REFERENCE_FIELD )
                 *token = GetRef( aPath, true );
             else
-                *token = m_fields[ i ].GetShownText( aPath, false, aDepth + 1 );
+                *token = field.GetShownText( aPath, false, aDepth + 1 );
 
-            return true;
-        }
-    }
-
-    for( size_t i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
-    {
-        wxString field = m_fields[ i ].GetName();
-
-        wxString textToken = m_fields[i].GetText();
-        textToken.Replace( " ", wxEmptyString );
-        wxString tokenString = "${" + field + "}";
-
-        if( textToken.IsSameAs( tokenString, false ) )
-            return true;
-
-        if( token->IsSameAs( field, false ) )
-        {
-            *token = m_fields[ i ].GetShownText( aPath, false, aDepth + 1 );
             return true;
         }
     }
@@ -2481,9 +2473,12 @@ bool SCH_SYMBOL::operator==( const SCH_SYMBOL& aSymbol ) const
     if( GetFieldCount() !=  aSymbol.GetFieldCount() )
         return false;
 
-    for( int i = VALUE_FIELD; i < GetFieldCount(); i++ )
+    for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        if( GetFields()[i].GetText().Cmp( aSymbol.GetFields()[i].GetText() ) != 0 )
+        if( ii == REFERENCE_FIELD )
+            continue;
+
+        if( GetFields()[ii].GetText().Cmp( aSymbol.GetFields()[ii].GetText() ) != 0 )
             return false;
     }
 

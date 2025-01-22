@@ -498,7 +498,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
             // Remove fields that aren't present in the symbol
             for( PCB_FIELD* field : aPcbFootprint->GetFields() )
             {
-                if( field->IsMandatoryField() )
+                if( field->IsMandatory() )
                     continue;
 
                 if( compFields.count( field->GetName() ) == 0 )
@@ -549,7 +549,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
             for( PCB_FIELD* field : aPcbFootprint->GetFields() )
             {
-                if( field->IsMandatoryField() )
+                if( field->IsMandatory() )
                     continue;
 
                 if( compFields.count( field->GetName() ) == 0 )

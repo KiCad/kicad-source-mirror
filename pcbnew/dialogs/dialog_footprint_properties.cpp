@@ -642,9 +642,8 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    int       fieldId = m_fields->at( m_fields->size() - 1 ).GetId() + 1;
-    PCB_FIELD newField( m_footprint, fieldId, GetUserFieldName( m_fields->GetNumberRows(),
-                                                                DO_TRANSLATE ) );
+    PCB_FIELD newField( m_footprint, m_footprint->GetNextFieldId(),
+                        GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
 
     newField.SetVisible( false );
     newField.SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );

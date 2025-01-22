@@ -1303,7 +1303,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         {
             // We don't need ref, footprint or datasheet in the BOM characteristics.  Just value
             // and any additional fields the user has added.  Ref and footprint are captured above.
-            if( prop->IsMandatoryField() && !prop->IsValue() )
+            if( prop->IsMandatory() && !prop->IsValue() )
                 continue;
 
             ( *bom_iter )->m_props->emplace( prop->GetName(), prop->GetText() );

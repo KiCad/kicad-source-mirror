@@ -660,7 +660,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                     /*if( etransform )
                     {
-                        PCB_FIELD field( footprint, footprint->GetFieldCount(), "3D Transform" );
+                        PCB_FIELD field( footprint, footprint->GetNextFieldId(), "3D Transform" );
                         field.SetLayer( Cmts_User );
                         field.SetVisible( false );
                         field.SetText( *etransform );

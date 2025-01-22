@@ -1879,7 +1879,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         if( lastField )
             newFieldPosition = lastField->GetPosition();
 
-        SCH_FIELD newField( newFieldPosition, symbol->GetFieldCount(), symbol.get() );
+        SCH_FIELD newField( newFieldPosition, symbol->GetNextFieldId(), symbol.get() );
 
         newField.SetName( attrName );
 

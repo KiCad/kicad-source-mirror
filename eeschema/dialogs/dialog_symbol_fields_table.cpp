@@ -680,29 +680,19 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxS
 
 void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
 {
-    // Add mandatory fields first
-    for( int i = 0; i < MANDATORY_FIELDS; ++i )
-    {
-        bool show = false;
-        bool groupBy = false;
+    auto addMandatoryField =
+            [&]( int fieldId, bool show, bool groupBy )
+            {
+                AddField( GetCanonicalFieldName( fieldId ),
+                          GetDefaultFieldName( fieldId, DO_TRANSLATE ), show, groupBy );
+            };
 
-        switch( i )
-        {
-        case REFERENCE_FIELD:
-        case VALUE_FIELD:
-        case FOOTPRINT_FIELD:
-            show = true;
-            groupBy = true;
-            break;
-        case DATASHEET_FIELD:
-            show = true;
-            groupBy = false;
-            break;
-        }
-
-        AddField( GetCanonicalFieldName( i ), GetDefaultFieldName( i, DO_TRANSLATE ), show,
-                  groupBy );
-    }
+    // Add mandatory fields first         show   groupBy
+    addMandatoryField( REFERENCE_FIELD,   true,   true   );
+    addMandatoryField( VALUE_FIELD,       true,   true   );
+    addMandatoryField( FOOTPRINT_FIELD,   true,   true   );
+    addMandatoryField( DATASHEET_FIELD,   true,   false  );
+    addMandatoryField( DESCRIPTION_FIELD, false,  false  );
 
     // Generated fields present only in the fields table
     AddField( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE, _( "Qty" ), true, false );
@@ -715,10 +705,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     {
         SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol();
 
-        for( int j = MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
+        for( const SCH_FIELD& field : symbol->GetFields() )
         {
-            if( !symbol->GetFields()[j].IsPrivate() )
-                userFieldNames.insert( symbol->GetFields()[j].GetName() );
+            if( !field.IsMandatory() && !field.IsPrivate() )
+                userFieldNames.insert( field.GetName() );
         }
     }
 
@@ -780,7 +770,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
    // Should never occur: "Remove Field..." button should be disabled if invalid selection
    // via OnFieldsCtrlSelectionChanged()
     wxCHECK_RET( row != -1, wxS( "Some user defined field must be selected first" ) );
-    wxCHECK_RET( row >= MANDATORY_FIELDS, wxS( "Mandatory fields cannot be removed" ) );
+    wxCHECK_RET( row >= MANDATORY_FIELD_COUNT, wxS( "Mandatory fields cannot be removed" ) );
 
     wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
     wxString displayName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
@@ -805,7 +795,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
     // Safe to decrement row index because we always have mandatory fields.
     m_fieldsCtrl->SelectRow( --row );
 
-    if( row < MANDATORY_FIELDS )
+    if( row < MANDATORY_FIELD_COUNT )
     {
          m_removeFieldButton->Enable( false );
          m_renameFieldButton->Enable( false );
@@ -828,7 +818,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
     // Should never occur: "Rename Field..." button should be disabled if invalid selection
     // via OnFieldsCtrlSelectionChanged()
     wxCHECK_RET( row != -1, wxS( "Some user defined field must be selected first" ) );
-    wxCHECK_RET( row >= MANDATORY_FIELDS, wxS( "Mandatory fields cannot be renamed" ) );
+    wxCHECK_RET( row >= MANDATORY_FIELD_COUNT, wxS( "Mandatory fields cannot be renamed" ) );
     wxCHECK_RET( !fieldName.IsEmpty(), wxS( "Field must have a name" ) );
 
     int col = m_dataModel->GetFieldNameCol( fieldName );
@@ -894,7 +884,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFieldsCtrlSelectionChanged( wxDataViewEvent& 
 {
     int row = m_fieldsCtrl->GetSelectedRow();
 
-    if( row >= MANDATORY_FIELDS )
+    if( row >= MANDATORY_FIELD_COUNT )
     {
         m_removeFieldButton->Enable( true );
         m_renameFieldButton->Enable( true );
