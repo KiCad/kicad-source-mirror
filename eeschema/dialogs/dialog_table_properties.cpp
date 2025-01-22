@@ -148,9 +148,18 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
             SCH_TABLECELL* tableCell = m_table->GetCell( row, col );
 
             if( tableCell->GetColSpan() == 0 || tableCell->GetRowSpan() == 0 )
+            {
                 m_grid->SetCellValue( row, col, coveredColor.GetAsString() );
-            else
-                m_grid->SetCellValue( row, col, tableCell->GetText() );
+                continue;
+            }
+
+            wxString text = tableCell->GetText();
+
+            // show text variable cross-references in a human-readable format
+            if( SCHEMATIC* schematic = tableCell->Schematic() )
+                text = schematic->ConvertKIIDsToRefs( text );
+
+            m_grid->SetCellValue( row, col, text );
         }
     }
 
@@ -316,6 +325,10 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
         {
             SCH_TABLECELL* tableCell = m_table->GetCell( row, col );
             wxString       txt = m_grid->GetCellValue( row, col );
+
+            // convert any text variable cross-references to their UUIDs
+            if( SCHEMATIC* schematic = tableCell->Schematic() )
+                txt = schematic->ConvertRefsToKIIDs( txt );
 
 #ifdef __WXMAC__
             // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.

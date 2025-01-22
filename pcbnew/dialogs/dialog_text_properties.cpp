@@ -284,11 +284,14 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 {
     BOARD*     board = m_frame->GetBoard();
     FOOTPRINT* parentFP = m_item->GetParentFootprint();
-    wxString   msg = board->ConvertKIIDsToCrossReferences( UnescapeString( m_item->GetText() ) );
+    wxString   text = m_item->GetText();
+
+    // show text variable cross-references in a human-readable format
+    text = board->ConvertKIIDsToCrossReferences( UnescapeString( text ) );
 
     if( m_SingleLineText->IsShown() )
     {
-        m_SingleLineText->SetValue( msg );
+        m_SingleLineText->SetValue( text );
 
         if( m_item->Type() == PCB_FIELD_T && static_cast<PCB_FIELD*>( m_item )->IsReference() )
             KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
@@ -297,7 +300,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     }
     else if( m_MultiLineText->IsShown() )
     {
-        m_MultiLineText->SetValue( msg );
+        m_MultiLineText->SetValue( text );
         m_MultiLineText->SetSelection( -1, -1 );
         m_MultiLineText->EmptyUndoBuffer();
     }
@@ -470,6 +473,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     {
         if( !m_SingleLineText->GetValue().IsEmpty() )
         {
+            // convert any text variable cross-references to their UUIDs
             wxString txt = board->ConvertCrossReferencesToKIIDs( m_SingleLineText->GetValue() );
 
             m_item->SetText( txt );
@@ -479,6 +483,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     {
         if( !m_MultiLineText->GetValue().IsEmpty() )
         {
+            // convert any text variable cross-references to their UUIDs
             wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
 
 #ifdef __WXMAC__

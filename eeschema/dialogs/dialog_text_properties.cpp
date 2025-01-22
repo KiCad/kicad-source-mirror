@@ -463,7 +463,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     // convert any text variable cross-references to their UUIDs
     if( SCHEMATIC* schematic = m_currentItem->Schematic() )
-        text = schematic->ConvertRefsToKIIDs( m_textCtrl->GetValue() );
+        text = schematic->ConvertRefsToKIIDs( text );
 
 #ifdef __WXMAC__
     // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting

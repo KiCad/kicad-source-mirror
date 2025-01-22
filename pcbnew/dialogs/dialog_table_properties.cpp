@@ -140,6 +140,8 @@ DIALOG_TABLE_PROPERTIES::~DIALOG_TABLE_PROPERTIES()
 
 bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
 {
+    BOARD* board = m_frame->GetBoard();
+
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
@@ -166,9 +168,17 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
                 tableCell = m_table->GetCell( row, col );
 
             if( tableCell->GetColSpan() == 0 || tableCell->GetRowSpan() == 0 )
+            {
                 m_grid->SetCellValue( row, col, coveredColor.GetAsString() );
-            else
-                m_grid->SetCellValue( row, col, tableCell->GetText() );
+                continue;
+            }
+
+            wxString text = tableCell->GetText();
+
+            // show text variable cross-references in a human-readable format
+            text = board->ConvertKIIDsToCrossReferences( UnescapeString( text ) );
+
+            m_grid->SetCellValue( row, col, text );
         }
     }
 
@@ -276,6 +286,7 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
+    BOARD*       board = m_frame->GetBoard();
     BOARD_COMMIT commit( m_frame );
     commit.Modify( m_table );
 
@@ -300,6 +311,9 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
                 tableCell = m_table->GetCell( row, col );
 
             wxString txt = m_grid->GetCellValue( row, col );
+
+            // convert any text variable cross-references to their UUIDs
+            txt = board->ConvertCrossReferencesToKIIDs( txt );
 
 #ifdef __WXMAC__
             // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
