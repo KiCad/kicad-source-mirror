@@ -86,6 +86,19 @@ UPDATE_MANAGER::UPDATE_MANAGER() : m_working( false )
 }
 
 
+UPDATE_MANAGER::~UPDATE_MANAGER()
+{
+    if( m_updateBackgroundJob )
+    {
+        if( m_updateBackgroundJob->m_reporter )
+            m_updateBackgroundJob->m_reporter->Cancel();
+
+        if( m_updateTask.valid() )
+            m_updateTask.wait();
+    }
+}
+
+
 int UPDATE_MANAGER::PostRequest( const wxString& aUrl, std::string aRequestBody,
                                   std::ostream* aOutput, PROGRESS_REPORTER* aReporter,
                                   const size_t aSizeLimit )
@@ -165,12 +178,14 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
 
     auto update_check = [aNoticeParent, this]() -> void
     {
+        std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter = m_updateBackgroundJob->m_reporter;
+
         std::stringstream update_json_stream;
         std::stringstream request_json_stream;
 
         wxString aUrl = UPDATE_QUERY_ENDPOINT;
-        m_updateBackgroundJob->m_reporter->SetNumPhases( 1 );
-        m_updateBackgroundJob->m_reporter->Report( _( "Requesting update info" ) );
+        reporter->SetNumPhases( 1 );
+        reporter->Report( _( "Requesting update info" ) );
 
         UPDATE_REQUEST requestContent;
 
@@ -209,8 +224,8 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
         nlohmann::json requestJson = nlohmann::json( requestContent );
         request_json_stream << requestJson;
 
-        int responseCode =
-                PostRequest( aUrl, request_json_stream.str(), &update_json_stream, NULL, 20480 );
+        int responseCode = PostRequest( aUrl, request_json_stream.str(), &update_json_stream,
+                                        reporter.get(), 20480 );
 
         // Check that the response is 200 (content provided)
         // We can also return 204 for no update
@@ -262,5 +277,5 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
     };
 
     thread_pool& tp = GetKiCadThreadPool();
-    tp.push_task( update_check );
+    m_updateTask = tp.submit( update_check );
 }

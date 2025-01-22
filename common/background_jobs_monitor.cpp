@@ -266,7 +266,11 @@ void BACKGROUND_JOBS_MONITOR::Remove( std::shared_ptr<BACKGROUND_JOB> aJob )
                                       return job == aJob;
                                   } ) );
 
-    if( m_jobs.size() == 0 )
+    if( m_jobs.size() > 0 )
+    {
+        jobUpdated( m_jobs.front() );
+    }
+    else
     {
         for( KISTATUSBAR* statusBar : m_statusBars )
         {
