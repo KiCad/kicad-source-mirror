@@ -120,7 +120,8 @@ static int progressinfo( void* aProgress, double aDLtotal, double aDLnow, double
 
 
 KICAD_CURL_EASY::KICAD_CURL_EASY() :
-        m_headers( nullptr )
+        m_headers( nullptr ),
+        m_curlSharedLock( KICAD_CURL::Mutex() )
 {
     m_CURL = curl_easy_init();
 
@@ -200,12 +201,6 @@ KICAD_CURL_EASY::~KICAD_CURL_EASY()
 
 int KICAD_CURL_EASY::Perform()
 {
-    std::shared_lock lock( KICAD_CURL::Mutex(), std::try_to_lock );
-
-    // If can't lock, we should be in the process of tearing down.
-    if( !lock )
-        return CURLE_ABORTED_BY_CALLBACK;
-
     if( m_headers )
         curl_easy_setopt( m_CURL, CURLOPT_HTTPHEADER, m_headers );
 
