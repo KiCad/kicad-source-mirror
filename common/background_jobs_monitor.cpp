@@ -182,7 +182,7 @@ BACKGROUND_JOB_REPORTER::BACKGROUND_JOB_REPORTER( BACKGROUND_JOBS_MONITOR* aMoni
 
 bool BACKGROUND_JOB_REPORTER::updateUI()
 {
-    return true;
+    return !m_cancelled;
 }
 
 
