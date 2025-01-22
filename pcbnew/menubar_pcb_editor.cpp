@@ -234,6 +234,10 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     showHidePanels->Add( PCB_ACTIONS::showSearch,                 ACTION_MENU::CHECK );
     showHidePanels->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
     showHidePanels->Add( PCB_ACTIONS::showNetInspector,           ACTION_MENU::CHECK );
+
+    if( ADVANCED_CFG::GetCfg().m_EnableDesignBlocks )
+        showHidePanels->Add( PCB_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK, _( "Design Blocks" ) );
+
     viewMenu->Add( showHidePanels );
 
     viewMenu->AppendSeparator();

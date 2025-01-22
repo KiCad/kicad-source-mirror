@@ -81,6 +81,7 @@
 #include <tools/convert_tool.h>
 #include <tools/drawing_tool.h>
 #include <tools/pcb_control.h>
+#include <tools/pcb_design_block_control.h>
 #include <tools/board_editor_control.h>
 #include <tools/board_inspection_tool.h>
 #include <tools/pcb_editor_conditions.h>
@@ -104,6 +105,7 @@
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
 #include <ratsnest/ratsnest_view_item.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/pcb_design_block_pane.h>
 #include <widgets/pcb_search_pane.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/panel_selection_filter.h>
@@ -208,6 +210,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_inspectConstraintsDlg( nullptr ),
     m_footprintDiffDlg( nullptr ),
     m_boardSetupDlg( nullptr ),
+    m_designBlocksPane( nullptr ),
     m_importProperties( nullptr ),
     m_eventCounterTimer( nullptr )
 {
@@ -293,6 +296,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas() );
     m_searchPane = new PCB_SEARCH_PANE( this );
     m_netInspectorPanel = new PCB_NET_INSPECTOR_PANEL( this, this );
+    m_designBlocksPane = new PCB_DESIGN_BLOCK_PANE( this, nullptr, m_designBlockHistoryList );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -337,6 +341,20 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .FloatingSize( FromDIP( 180 ), -1 )
                       .CloseButton( false ) );
 
+    m_auimgr.AddPane( m_designBlocksPane, EDA_PANE().Name( DesignBlocksPaneName() )
+                        .Right().Layer( 5 )
+                        .Caption( _( "Design Blocks" ) )
+                        .CaptionVisible( true )
+                        .PaneBorder( true )
+                        .TopDockable( false )
+                        .BottomDockable( false )
+                        .CloseButton( true )
+                        .MinSize( FromDIP( wxSize( 240, 60 ) ) )
+                        .BestSize( FromDIP( wxSize( 300, 200 ) ) )
+                        .FloatingSize( FromDIP( wxSize( 800, 600 ) ) )
+                        .FloatingPosition( FromDIP( wxPoint( 50, 200 ) ) )
+                        .Show( true ) );
+
     m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
                       .Left().Layer( 5 )
                       .Caption( _( "Properties" ) ).PaneBorder( false )
@@ -374,6 +392,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.GetPane( PropertiesPaneName() ).Show( GetPcbNewSettings()->m_AuiPanels.show_properties );
     m_auimgr.GetPane( NetInspectorPanelName() ).Show( m_show_net_inspector );
     m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );
+    m_auimgr.GetPane( DesignBlocksPaneName() ).Show( GetPcbNewSettings()->m_AuiPanels.design_blocks_show );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
@@ -413,6 +432,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         }
 
         m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
+
+        if( settings->m_AuiPanels.design_blocks_show )
+        {
+            wxAuiPaneInfo& designBlocksPane = m_auimgr.GetPane( DesignBlocksPaneName() );
+            SetAuiPaneSize( m_auimgr, designBlocksPane,
+                            settings->m_AuiPanels.design_blocks_panel_docked_width, -1 );
+        }
     }
 
     {
@@ -741,6 +767,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new PCB_POINT_EDITOR );
     m_toolManager->RegisterTool( new PCB_CONTROL );
+    m_toolManager->RegisterTool( new PCB_DESIGN_BLOCK_CONTROL );
     m_toolManager->RegisterTool( new BOARD_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new BOARD_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new BOARD_REANNOTATE_TOOL );
@@ -860,6 +887,13 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes, CHECK( cond.BoundingBoxes() ) );
 
+    auto hasElements =
+            [ this ] ( const SELECTION& aSel )
+            {
+                return GetBoard() &&
+                        ( !GetBoard()->IsEmpty() || !SELECTION_CONDITIONS::Idle( aSel ) );
+            };
+
     auto constrainedDrawingModeCond =
             [this]( const SELECTION& )
             {
@@ -894,6 +928,12 @@ void PCB_EDIT_FRAME::setupUIConditions()
             [this] ( const SELECTION& )
             {
                 return m_auimgr.GetPane( SearchPaneName() ).IsShown();
+            };
+
+    auto designBlockCond =
+            [ this ] (const SELECTION& aSel )
+            {
+                return m_auimgr.GetPane( DesignBlocksPaneName() ).IsShown();
             };
 
     auto highContrastCond =
@@ -939,6 +979,10 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::showProperties,       CHECK( propertiesCond ) );
     mgr->SetConditions( PCB_ACTIONS::showNetInspector,     CHECK( netInspectorCond ) );
     mgr->SetConditions( PCB_ACTIONS::showSearch,           CHECK( searchPaneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showDesignBlockPanel, CHECK( designBlockCond ) );
+
+    mgr->SetConditions( PCB_ACTIONS::saveBoardAsDesignBlock,     ENABLE( hasElements ) );
+    mgr->SetConditions( PCB_ACTIONS::saveSelectionAsDesignBlock, ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
 
     auto isArcKeepCenterMode =
             [this]( const SELECTION& )
@@ -1049,6 +1093,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( ACTIONS::embeddedFiles );
     CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeFootprint );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeDesignBlock );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeDiffPair );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::tuneSingleTrack);
@@ -1476,6 +1521,19 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
             cfg->m_AuiPanels.appearance_expand_layer_display = m_appearancePanel->IsLayerOptionsExpanded();
             cfg->m_AuiPanels.appearance_expand_net_display   = m_appearancePanel->IsNetOptionsExpanded();
         }
+
+        wxAuiPaneInfo& designBlocksPane = m_auimgr.GetPane( DesignBlocksPaneName() );
+        cfg->m_AuiPanels.design_blocks_show = designBlocksPane.IsShown();
+
+        if( designBlocksPane.IsDocked() )
+            cfg->m_AuiPanels.design_blocks_panel_docked_width = m_designBlocksPane->GetSize().x;
+        else
+        {
+            cfg->m_AuiPanels.design_blocks_panel_float_height = designBlocksPane.floating_size.y;
+            cfg->m_AuiPanels.design_blocks_panel_float_width = designBlocksPane.floating_size.x;
+        }
+
+        m_designBlocksPane->SaveSettings();
     }
 }
 

@@ -398,6 +398,7 @@ set( PCBNEW_CLASS_SRCS
     tools/item_modification_routine.cpp
     tools/pad_tool.cpp
     tools/pcb_control.cpp
+    tools/pcb_design_block_control.cpp
     tools/pcb_picker_tool.cpp
     tools/pcb_selection.cpp
     tools/pcb_selection_conditions.cpp
@@ -422,6 +423,8 @@ set( PCBNEW_CLASS_SRCS
     widgets/panel_footprint_chooser.cpp
     widgets/panel_selection_filter.cpp
     widgets/panel_selection_filter_base.cpp
+    widgets/pcb_design_block_pane.cpp
+    widgets/pcb_design_block_preview_widget.cpp
     widgets/pcb_properties_panel.cpp
     widgets/pcb_search_pane.cpp
     widgets/search_handlers.cpp

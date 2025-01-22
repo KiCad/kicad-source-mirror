@@ -59,6 +59,7 @@ class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
 class TOOL_ACTION;
 class DIALOG_BOARD_SETUP;
+class PCB_DESIGN_BLOCK_PANE;
 
 #ifdef KICAD_IPC_API
 class KICAD_API_SERVER;
@@ -314,6 +315,8 @@ public:
 
     void ToggleSearch();
 
+    void ToggleLibraryTree() override;
+
     /**
      * Create an ASCII footprint position file.
      *
@@ -460,6 +463,12 @@ public:
      * This is the same as created by CvPcb and can be used if this file is lost.
      */
     void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
+
+    void SaveBoardAsDesignBlock( const wxString& aLibraryName );
+
+    void SaveSelectionAsDesignBlock( const wxString& aLibraryName );
+
+    PCB_DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
 
     /**
      * Save footprints in a library:
@@ -876,6 +885,9 @@ private:
     DIALOG_BOOK_REPORTER* m_inspectConstraintsDlg;
     DIALOG_BOOK_REPORTER* m_footprintDiffDlg;
     DIALOG_BOARD_SETUP*   m_boardSetupDlg;
+
+    std::vector<LIB_ID>    m_designBlockHistoryList;
+    PCB_DESIGN_BLOCK_PANE* m_designBlocksPane;
 
     const std::map<std::string, UTF8>* m_importProperties; // Properties used for non-KiCad import.
 

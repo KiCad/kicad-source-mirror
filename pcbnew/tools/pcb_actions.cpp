@@ -421,6 +421,51 @@ TOOL_ACTION PCB_ACTIONS::runDRC( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show the design rules checker window" ) )
         .Icon( BITMAPS::erc ) );
 
+// PCB_DESIGN_BLOCK_CONTROL
+TOOL_ACTION PCB_ACTIONS::placeDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.placeDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'B' )
+        .FriendlyName( _( "Place Design Block" ) )
+        .Tooltip( _( "Add selected design block to current board" ) )
+        .Icon( BITMAPS::add_component )
+        .Flags( AF_ACTIVATE )
+        .Parameter<DESIGN_BLOCK*>( nullptr ) );
+
+TOOL_ACTION PCB_ACTIONS::showDesignBlockPanel( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PcbDesignBlockControl.showDesignBlockPanel" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Design Blocks" ) )
+        .Tooltip( _( "Show/hide design blocks library" ) )
+        .Icon( BITMAPS::search_tree ) );
+
+TOOL_ACTION PCB_ACTIONS::saveBoardAsDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PcbDesignBlockControl.saveBoardAsDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Save Current Board as Design Block..." ) )
+        .Tooltip( _( "Create a new design block from the current board" ) )
+        .Icon( BITMAPS::new_component ) );
+
+TOOL_ACTION PCB_ACTIONS::saveSelectionAsDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PcbDesignBlockControl.saveSelectionAsDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Save Selection as Design Block..." ) )
+        .Tooltip( _( "Create a new design block from the current selection" ) )
+        .Icon( BITMAPS::new_component ) );
+
+TOOL_ACTION PCB_ACTIONS::deleteDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PcbDesignBlockControl.saveDeleteDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Delete Design Block" ) )
+        .Tooltip( _( "Remove the selected design block from its library" ) )
+        .Icon( BITMAPS::trash ) );
+
+TOOL_ACTION PCB_ACTIONS::editDesignBlockProperties( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PcbDesignBlockControl.editDesignBlockProperties" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Properties..." ) )
+        .Tooltip( _( "Edit properies of design block" ) )
+        .Icon( BITMAPS::edit ) );
 
 // EDIT_TOOL
 //

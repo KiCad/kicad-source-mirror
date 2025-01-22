@@ -82,6 +82,7 @@ public:
     int ToggleNetInspector( const TOOL_EVENT& aEvent );
     int ToggleSearch( const TOOL_EVENT& aEvent );
     int TogglePythonConsole( const TOOL_EVENT& aEvent );
+    int ToggleLibraryTree( const TOOL_EVENT& aEvent );
 
     // Track & via size control
     int TrackWidthInc( const TOOL_EVENT& aEvent );

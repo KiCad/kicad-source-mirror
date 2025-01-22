@@ -39,6 +39,7 @@ enum class ZONE_MODE
     GRAPHIC_POLYGON
 };
 
+class DESIGN_BLOCK;
 
 /**
  * Gather all the actions that are shared by tools.
@@ -455,6 +456,14 @@ public:
     static TOOL_ACTION showNetInspector;
     static TOOL_ACTION showPythonConsole;
     static TOOL_ACTION zonesManager;
+
+    // Design Block management
+    static TOOL_ACTION placeDesignBlock;
+    static TOOL_ACTION showDesignBlockPanel;
+    static TOOL_ACTION saveBoardAsDesignBlock;
+    static TOOL_ACTION saveSelectionAsDesignBlock;
+    static TOOL_ACTION deleteDesignBlock;
+    static TOOL_ACTION editDesignBlockProperties;
 
     // Footprint editor tools
 
