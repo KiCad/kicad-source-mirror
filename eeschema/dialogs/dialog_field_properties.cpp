@@ -689,7 +689,7 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
                     else if( fieldType == FOOTPRINT_FIELD )
                         otherUnit->SetFootprintFieldText( m_text );
                     else
-                        otherUnit->GetField( DATASHEET_FIELD )->SetText( m_text );
+                        otherUnit->GetField( (MANDATORY_FIELD_T) fieldType )->SetText( m_text );
 
                     editFrame->UpdateItem( otherUnit, false, true );
                 }

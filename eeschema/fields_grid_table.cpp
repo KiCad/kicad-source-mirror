@@ -556,17 +556,17 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
         }
 
     case FDC_VALUE:
-        if( m_parentType == SCH_SYMBOL_T && aRow == REFERENCE_FIELD )
+        if( m_parentType == SCH_SYMBOL_T && field.GetId() == REFERENCE_FIELD )
         {
             m_referenceAttr->IncRef();
             return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
-        else if( m_parentType == SCH_SYMBOL_T && aRow == VALUE_FIELD )
+        else if( m_parentType == SCH_SYMBOL_T && field.GetId() == VALUE_FIELD )
         {
             m_valueAttr->IncRef();
             return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
         }
-        else if( m_parentType == SCH_SYMBOL_T && aRow == FOOTPRINT_FIELD )
+        else if( m_parentType == SCH_SYMBOL_T && field.GetId() == FOOTPRINT_FIELD )
         {
             // Power symbols have do not appear in the board, so don't allow
             // a footprint (m_part can be nullptr when loading a old schematic
@@ -582,23 +582,23 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
                 return enhanceAttr( m_footprintAttr, aRow, aCol, aKind );
             }
         }
-        else if( m_parentType == SCH_SYMBOL_T && aRow == DATASHEET_FIELD )
+        else if( m_parentType == SCH_SYMBOL_T && field.GetId() == DATASHEET_FIELD )
         {
             m_urlAttr->IncRef();
             return enhanceAttr( m_urlAttr, aRow, aCol, aKind );
         }
-        else if( m_parentType == SCH_SHEET_T && aRow == SHEETNAME )
+        else if( m_parentType == SCH_SHEET_T && field.GetId() == SHEETNAME )
         {
             m_referenceAttr->IncRef();
             return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
-        else if( m_parentType == SCH_SHEET_T && aRow == SHEETFILENAME )
+        else if( m_parentType == SCH_SHEET_T && field.GetId() == SHEETFILENAME )
         {
             m_filepathAttr->IncRef();
             return enhanceAttr( m_filepathAttr, aRow, aCol, aKind );
         }
         else if( ( m_parentType == SCH_LABEL_LOCATE_ANY_T )
-                && this->at( (size_t) aRow ).GetCanonicalName() == wxT( "Netclass" ) )
+                && field.GetCanonicalName() == wxT( "Netclass" ) )
         {
             m_netclassAttr->IncRef();
             return enhanceAttr( m_netclassAttr, aRow, aCol, aKind );
@@ -696,7 +696,7 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
         else if( m_parentType == SCH_SHEET_T )
         {
             if( field.IsMandatory() )
-                return SCH_SHEET::GetDefaultFieldName( aRow, DO_TRANSLATE );
+                return SCH_SHEET::GetDefaultFieldName( field.GetId(), DO_TRANSLATE );
             else
                 return field.GetName( false );
         }
@@ -841,11 +841,11 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
     case FDC_VALUE:
     {
-        if( m_parentType == SCH_SHEET_T && aRow == SHEETFILENAME )
+        if( m_parentType == SCH_SHEET_T && field.GetId() == SHEETFILENAME )
         {
             value = EnsureFileExtension( value, FILEEXT::KiCadSchematicFileExtension );
         }
-        else if( m_parentType == LIB_SYMBOL_T && aRow == VALUE_FIELD )
+        else if( m_parentType == LIB_SYMBOL_T && field.GetId() == VALUE_FIELD )
         {
             value = EscapeString( value, CTX_LIBID );
         }
@@ -949,8 +949,7 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         if( value == DEFAULT_FONT_NAME )
             field.SetFont( nullptr );
         else if( value == KICAD_FONT_NAME )
-            field.SetFont( KIFONT::FONT::GetFont( wxEmptyString, field.IsBold(),
-                                                  field.IsItalic() ) );
+            field.SetFont( KIFONT::FONT::GetFont( wxEmptyString, field.IsBold(), field.IsItalic() ) );
         else
             field.SetFont( KIFONT::FONT::GetFont( aValue, field.IsBold(), field.IsItalic() ) );
 

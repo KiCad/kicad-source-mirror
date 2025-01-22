@@ -230,10 +230,12 @@ bool PCB_FIELDS_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& a
 wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
                                                 wxGridCellAttr::wxAttrKind aKind  )
 {
+    const PCB_FIELD& field = this->at( (size_t) aRow );
+
     switch( aCol )
     {
     case PFC_NAME:
-        if( aRow < GetMandatoryRowCount() )
+        if( field.IsMandatory() )
         {
             m_readOnlyAttr->IncRef();
             return enhanceAttr( m_readOnlyAttr, aRow, aCol, aKind );
@@ -242,17 +244,17 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
         return enhanceAttr( nullptr, aRow, aCol, aKind );
 
     case PFC_VALUE:
-        if( aRow == REFERENCE_FIELD )
+        if( field.GetId() == REFERENCE_FIELD )
         {
             m_referenceAttr->IncRef();
             return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
-        else if( aRow == VALUE_FIELD )
+        else if( field.GetId() == VALUE_FIELD )
         {
             m_valueAttr->IncRef();
             return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
         }
-        else if( aRow == DATASHEET_FIELD )
+        else if( field.GetId() == DATASHEET_FIELD )
         {
             m_urlAttr->IncRef();
             return enhanceAttr( m_urlAttr, aRow, aCol, aKind );
