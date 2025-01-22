@@ -67,7 +67,8 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
         m_autoAdded( false ),
         m_showInChooser( true ),
         m_renderCacheValid( false ),
-        m_lastResolvedColor( COLOR4D::UNSPECIFIED )
+        m_lastResolvedColor( COLOR4D::UNSPECIFIED ),
+        m_isNamedVariable( false )
 {
     if( !aName.IsEmpty() )
         SetName( aName );
