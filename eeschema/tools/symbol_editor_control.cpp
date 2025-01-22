@@ -483,7 +483,8 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
                     return false;
                 }
 
-                if( libMgr.SymbolExists( newName, libName ) )
+                // If no change, accept it without prompting
+                if( newName != oldName && libMgr.SymbolExists( newName, libName ) )
                 {
                     msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
                                             newName, libName );
@@ -500,6 +501,9 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
     {
         return 0;   // cancelled by user
     }
+
+    if( newName == oldName )
+        return 0;
 
     LIB_SYMBOL* libSymbol = libMgr.GetBufferedSymbol( oldName, libName );
 

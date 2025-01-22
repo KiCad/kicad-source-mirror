@@ -461,7 +461,8 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
                     return false;
                 }
 
-                if( tbl->FootprintExists( libraryName, newName ) )
+                // If no change, accept it without prompting
+                if( oldName != newName && tbl->FootprintExists( libraryName, newName ) )
                 {
                     msg = wxString::Format( _( "Footprint '%s' already exists in library '%s'." ),
                                             newName, libraryName );
@@ -478,6 +479,9 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
     {
         return 0;   // cancelled by user
     }
+
+    if( newName == oldName )
+        return 0;
 
     FOOTPRINT* footprint = nullptr;
 
