@@ -1596,37 +1596,35 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         git_repository_free( repo );
         return;
     }
-    else
-    {
-        // Directory is not a git repository
-        error = git_repository_init( &repo, dir.mb_str(), 0 );
 
-        if( error != 0 )
-        {
-            git_repository_free( repo );
-
-            if( m_gitLastError != git_error_last()->klass )
-            {
-                m_gitLastError = git_error_last()->klass;
-                DisplayErrorMessage( m_parent, _( "Failed to initialize git project." ),
-                                     git_error_last()->message );
-            }
-
-            return;
-        }
-        else
-        {
-            m_TreeProject->SetGitRepo( repo );
-            m_gitLastError = GIT_ERROR_NONE;
-        }
-    }
-
-    DIALOG_GIT_REPOSITORY dlg( wxGetTopLevelParent( this ), repo );
+    DIALOG_GIT_REPOSITORY dlg( wxGetTopLevelParent( this ), nullptr );
 
     dlg.SetTitle( _( "Set default remote" ) );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
+
+   // Directory is not a git repository
+    error = git_repository_init( &repo, dir.mb_str(), 0 );
+
+    if( error != 0 )
+    {
+        git_repository_free( repo );
+
+        if( m_gitLastError != git_error_last()->klass )
+        {
+            m_gitLastError = git_error_last()->klass;
+            DisplayErrorMessage( m_parent, _( "Failed to initialize git project." ),
+                                    git_error_last()->message );
+        }
+
+        return;
+    }
+    else
+    {
+        m_TreeProject->SetGitRepo( repo );
+        m_gitLastError = GIT_ERROR_NONE;
+    }
 
     //Set up the git remote
 
