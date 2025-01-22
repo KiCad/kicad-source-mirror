@@ -344,7 +344,15 @@ void PANEL_SETUP_LAYERS::showLayerTypes()
     for( PCB_LAYER_ID cu_layer : LSET::AllCuMask().Seq() )
     {
         wxChoice* ctl = getChoice( cu_layer );
-        ctl->SetStringSelection( LAYER::ShowType( m_pcb->GetLayerType( cu_layer ) ) );
+
+        switch( m_pcb->GetLayerType( cu_layer ) )
+        {
+        default:
+        case LT_SIGNAL: ctl->SetSelection( 0 ); break;
+        case LT_POWER: ctl->SetSelection( 1 ); break;
+        case LT_MIXED: ctl->SetSelection( 2 ); break;
+        case LT_JUMPER: ctl->SetSelection( 3 ); break;
+        }
     }
 
     for( int ii = User_1; ii <= User_9; ++ii )
