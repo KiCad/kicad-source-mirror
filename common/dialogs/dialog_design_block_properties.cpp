@@ -24,16 +24,16 @@
 
 
 #include <dialogs/dialog_design_block_properties.h>
-#include <sch_edit_frame.h>
 #include <wx/msgdlg.h>
 #include <wx/tooltip.h>
 #include <grid_tricks.h>
 #include <widgets/std_bitmap_button.h>
+#include <bitmaps.h>
 
 #include <design_block.h>
 
-DIALOG_DESIGN_BLOCK_PROPERTIES::DIALOG_DESIGN_BLOCK_PROPERTIES( SCH_EDIT_FRAME* aParent,
-                                                                DESIGN_BLOCK*   aDesignBlock ) :
+DIALOG_DESIGN_BLOCK_PROPERTIES::DIALOG_DESIGN_BLOCK_PROPERTIES( wxWindow*     aParent,
+                                                                DESIGN_BLOCK* aDesignBlock ) :
         DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( aParent ), m_designBlock( aDesignBlock )
 {
     if( !m_textName->IsEmpty() )

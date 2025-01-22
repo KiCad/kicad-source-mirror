@@ -99,8 +99,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_change_symbols_base.cpp
     dialogs/dialog_database_lib_settings_base.cpp
     dialogs/dialog_database_lib_settings.cpp
-    dialogs/dialog_design_block_properties_base.cpp
-    dialogs/dialog_design_block_properties.cpp
     dialogs/dialog_edit_symbols_libid.cpp
     dialogs/dialog_edit_symbols_libid_base.cpp
     dialogs/dialog_eeschema_page_settings.cpp
@@ -278,16 +276,15 @@ set( EESCHEMA_SIM_SRCS
     )
 
 set( EESCHEMA_WIDGETS
-    widgets/design_block_pane.cpp
-    widgets/design_block_preview_widget.cpp
     widgets/hierarchy_pane.cpp
-    widgets/panel_design_block_chooser.cpp
     widgets/panel_sch_selection_filter_base.cpp
     widgets/panel_sch_selection_filter.cpp
     widgets/panel_symbol_chooser.cpp
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp
     widgets/symbol_diff_widget.cpp
+    widgets/sch_design_block_pane.cpp
+    widgets/sch_design_block_preview_widget.cpp
     widgets/sch_properties_panel.cpp
     widgets/sch_search_pane.cpp
     widgets/search_handlers.cpp
@@ -357,8 +354,7 @@ set( EESCHEMA_SRCS
     bus-wire-junction.cpp
     connection_graph.cpp
     cross-probing.cpp
-    design_block_tree_model_adapter.cpp
-    design_block_utils.cpp
+    sch_design_block_utils.cpp
     ee_collectors.cpp
     eeschema_config.cpp
     eeschema_helpers.cpp

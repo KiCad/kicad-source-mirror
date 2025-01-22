@@ -56,8 +56,7 @@ class SCH_FIELD;
 class SCH_JUNCTION;
 class SCHEMATIC;
 class SCH_COMMIT;
-class DESIGN_BLOCK;
-class DESIGN_BLOCK_PANE;
+class SCH_DESIGN_BLOCK_PANE;
 class DIALOG_BOOK_REPORTER;
 class DIALOG_ERC;
 class DIALOG_SYMBOL_FIELDS_TABLE;
@@ -745,52 +744,11 @@ public:
      */
     bool CreateArchiveLibrary( const wxString& aFileName );
 
-    /**
-     * If a library name is given, creates a new design block library in the project folder
-     * with the given name. If no library name is given it prompts user for a library path,
-     * then creates a new design block library at that location.
-     * If library exists, user is warned about that, and is given a chance
-     * to abort the new creation, and in that case existing library is first deleted.
-     *
-     * @param aProposedName is the initial path and filename shown in the file chooser dialog.
-     * @return The newly created library path if library was successfully created, else
-     *         wxEmptyString because user aborted or error.
-     */
-    wxString CreateNewDesignBlockLibrary( const wxString& aLibName = wxEmptyString,
-                                          const wxString& aProposedName = wxEmptyString );
-
-    /**
-     * Add an existing library to either the global or project library table.
-     *
-     * @param aFileName the library to add; a file open dialog will be displayed if empty.
-     * @return true if successfully added.
-     */
-    bool AddDesignBlockLibrary( const wxString& aFilename, DESIGN_BLOCK_LIB_TABLE* aTable );
-
     void SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_SHEET_PATH& aSheetPath );
 
     void SaveSelectionAsDesignBlock( const wxString& aLibraryName );
 
-    bool DeleteDesignBlockLibrary( const wxString& aLibName, bool aConfirm );
-
-    bool DeleteDesignBlockFromLibrary( const LIB_ID& aLibId, bool aConfirm );
-
-    bool EditDesignBlockProperties( const LIB_ID& aLibId );
-
-
-    /**
-     * Load design block from design block library table.
-     *
-     * @param aLibId is the design block library identifier to load.
-     * @param aUseCacheLib set to true to fall back to cache library if design block is not found in
-     *                     design block library table.
-     * @param aShowErrorMessage set to true to show any error messages.
-     * @return The design block found in the library or NULL if the design block was not found.
-     */
-    DESIGN_BLOCK* GetDesignBlock( const LIB_ID& aLibId, bool aUseCacheLib = false,
-                                  bool aShowErrorMsg = false );
-
-    DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
+    SCH_DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
 
     /**
      * Plot or print the current sheet to the clipboard.
@@ -981,20 +939,6 @@ protected:
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 #endif
 
-    /**
-     * Prompts a user to select global or project library tables
-     *
-     * @return Pointer to library table selected or nullptr if none selected/canceled
-     */
-    DESIGN_BLOCK_LIB_TABLE* selectDesignBlockLibTable( bool aOptional = false );
-
-    /**
-     * Create a new library in the given table (presumed to be either the global or project
-     * library table).
-     */
-    wxString createNewDesignBlockLibrary( const wxString& aLibName, const wxString& aProposedName,
-                                          DESIGN_BLOCK_LIB_TABLE* aTable );
-
 private:
     // Called when resizing the Hierarchy Navigator panel
     void OnResizeHierarchyNavigator( wxSizeEvent& aEvent );
@@ -1113,7 +1057,7 @@ private:
 
     std::vector<LIB_ID> m_designBlockHistoryList;
 
-    DESIGN_BLOCK_PANE* m_designBlocksPane;
+    SCH_DESIGN_BLOCK_PANE* m_designBlocksPane;
 
 #ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_SCH> m_apiHandler;

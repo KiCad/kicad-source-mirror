@@ -276,21 +276,6 @@ public:
         bool place_all_units;
     };
 
-    struct PANEL_DESIGN_BLOCK_CHOOSER
-    {
-        int  sash_pos_h;
-        int  sash_pos_v;
-        int  width;
-        int  height;
-        int  sort_mode;
-        bool repeated_placement;
-        bool place_as_sheet;
-        bool keep_annotations;
-
-        // For saving tree columns and widths
-        LIB_TREE tree;
-    };
-
     struct DIALOG_IMPORT_GRAPHICS
     {
         bool     interactive_placement;
@@ -380,8 +365,6 @@ public:
     PANEL_PLOT m_PlotPanel;
 
     PANEL_SYM_CHOOSER m_SymChooserPanel;
-
-    PANEL_DESIGN_BLOCK_CHOOSER m_DesignBlockChooserPanel;
 
     DIALOG_IMPORT_GRAPHICS m_ImportGraphics;
 

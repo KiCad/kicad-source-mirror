@@ -28,6 +28,8 @@
 #include <sch_base_frame.h>
 #include <tools/ee_tool_base.h>
 
+class DESIGN_BLOCK_PANE;
+
 /**
  * Handle schematic design block actions in the schematic editor.
  */
@@ -57,7 +59,7 @@ private:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    DESIGN_BLOCK_PANE* getDesignBlockPane();
+    SCH_DESIGN_BLOCK_PANE* getDesignBlockPane();
     LIB_TREE_NODE*     getCurrentTreeNode();
 
     SCH_EDIT_FRAME*    m_editFrame = nullptr;

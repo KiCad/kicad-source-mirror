@@ -22,7 +22,8 @@
  */
 
 #include <design_block.h>
-#include <widgets/design_block_pane.h>
+#include <widgets/sch_design_block_pane.h>
+#include <widgets/sch_design_block_preview_widget.h>
 #include <widgets/panel_design_block_chooser.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>
@@ -36,6 +37,7 @@
 #include <wildcards_and_files_ext.h>
 #include <ee_actions.h>
 #include <tool/tool_manager.h>
+#include <tools/sch_design_block_control.h>
 
 
 // Do not make these static wxStrings; they need to respond to language changes
@@ -43,10 +45,9 @@
 #define PLACE_AS_SHEET     _( "Place as sheet" )
 #define KEEP_ANNOTATIONS   _( "Keep annotations" )
 
-DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPreselect,
+SCH_DESIGN_BLOCK_PANE::SCH_DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPreselect,
                                       std::vector<LIB_ID>& aHistoryList ) :
-        WX_PANEL( aParent ),
-        m_frame( aParent )
+        DESIGN_BLOCK_PANE( aParent, aPreselect, aHistoryList )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_DESIGN_BLOCK_CHOOSER( aParent, this, aHistoryList,
@@ -54,7 +55,10 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
                                                      {
                                                          aParent->GetToolManager()->RunAction(
                                                                  EE_ACTIONS::placeDesignBlock );
-                                                     } );
+                                                     },
+                                                        aParent->GetToolManager()->GetTool<SCH_DESIGN_BLOCK_CONTROL>()
+                                                     );
+    m_chooserPanel->SetPreviewWidget(new SCH_DESIGN_BLOCK_PREVIEW_WIDGET( m_chooserPanel->GetDetailsPanel(), EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL, true ) );
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
 
     if( aPreselect && aPreselect->IsValid() )
@@ -71,13 +75,13 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
     UpdateCheckboxes();
 
     // Set all checkbox handlers to the same function
-    m_repeatedPlacement->Bind( wxEVT_CHECKBOX, &DESIGN_BLOCK_PANE::OnCheckBox, this );
-    m_placeAsSheet->Bind( wxEVT_CHECKBOX, &DESIGN_BLOCK_PANE::OnCheckBox, this );
-    m_keepAnnotations->Bind( wxEVT_CHECKBOX, &DESIGN_BLOCK_PANE::OnCheckBox, this );
+    m_repeatedPlacement->Bind( wxEVT_CHECKBOX, &SCH_DESIGN_BLOCK_PANE::OnCheckBox, this );
+    m_placeAsSheet->Bind( wxEVT_CHECKBOX, &SCH_DESIGN_BLOCK_PANE::OnCheckBox, this );
+    m_keepAnnotations->Bind( wxEVT_CHECKBOX, &SCH_DESIGN_BLOCK_PANE::OnCheckBox, this );
 
-    cbSizer->Add( m_repeatedPlacement, 0, wxTOP|wxLEFT, 2 );
-    cbSizer->Add( m_placeAsSheet, 0, wxTOP|wxLEFT, 2 );
-    cbSizer->Add( m_keepAnnotations, 0, wxTOP|wxLEFT|wxBOTTOM, 2 );
+    cbSizer->Add( m_repeatedPlacement, 0, wxTOP | wxLEFT, 2 );
+    cbSizer->Add( m_placeAsSheet, 0, wxTOP | wxLEFT, 2 );
+    cbSizer->Add( m_keepAnnotations, 0, wxTOP | wxLEFT | wxBOTTOM, 2 );
 
     sizer->Add( cbSizer, 0, wxEXPAND, 5 );
     SetSizer( sizer );
@@ -90,13 +94,7 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
 }
 
 
-DESIGN_BLOCK_PANE::~DESIGN_BLOCK_PANE()
-{
-    m_frame->Unbind( EDA_LANG_CHANGED, &DESIGN_BLOCK_PANE::OnLanguageChanged, this );
-}
-
-
-void DESIGN_BLOCK_PANE::setLabelsAndTooltips()
+void SCH_DESIGN_BLOCK_PANE::setLabelsAndTooltips()
 {
     if( m_repeatedPlacement )
     {
@@ -121,18 +119,7 @@ void DESIGN_BLOCK_PANE::setLabelsAndTooltips()
 }
 
 
-void DESIGN_BLOCK_PANE::OnLanguageChanged( wxCommandEvent& aEvent )
-{
-    if( m_chooserPanel )
-        m_chooserPanel->ShowChangedLanguage();
-
-    setLabelsAndTooltips();
-
-    aEvent.Skip();
-}
-
-
-void DESIGN_BLOCK_PANE::OnCheckBox( wxCommandEvent& aEvent )
+void SCH_DESIGN_BLOCK_PANE::OnCheckBox( wxCommandEvent& aEvent )
 {
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
@@ -143,7 +130,7 @@ void DESIGN_BLOCK_PANE::OnCheckBox( wxCommandEvent& aEvent )
 }
 
 
-void DESIGN_BLOCK_PANE::UpdateCheckboxes()
+void SCH_DESIGN_BLOCK_PANE::UpdateCheckboxes()
 {
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
@@ -151,30 +138,6 @@ void DESIGN_BLOCK_PANE::UpdateCheckboxes()
         m_placeAsSheet->SetValue( cfg->m_DesignBlockChooserPanel.place_as_sheet );
         m_keepAnnotations->SetValue( cfg->m_DesignBlockChooserPanel.keep_annotations );
     }
-}
-
-
-void DESIGN_BLOCK_PANE::SaveSettings()
-{
-    m_chooserPanel->SaveSettings();
-}
-
-
-LIB_ID DESIGN_BLOCK_PANE::GetSelectedLibId( int* aUnit ) const
-{
-    return m_chooserPanel->GetSelectedLibId( aUnit );
-}
-
-
-void DESIGN_BLOCK_PANE::SelectLibId( const LIB_ID& aLibId )
-{
-    m_chooserPanel->SelectLibId( aLibId );
-}
-
-
-void DESIGN_BLOCK_PANE::RefreshLibs()
-{
-    m_chooserPanel->RefreshLibs();
 }
 
 

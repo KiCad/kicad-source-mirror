@@ -40,7 +40,7 @@
 #include <sch_edit_frame.h>
 #include <pgm_base.h>
 #include <design_block.h>
-#include <design_block_pane.h>
+#include <widgets/sch_design_block_pane.h>
 #include <eeschema_id.h>
 #include <confirm.h>
 #include <view/view_controls.h>
@@ -623,8 +623,8 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     {
         if( m_frame->GetDesignBlockPane()->GetSelectedLibId().IsValid() )
         {
-            designBlock =
-                    m_frame->GetDesignBlock( m_frame->GetDesignBlockPane()->GetSelectedLibId() );
+            designBlock = m_frame->GetDesignBlockPane()->GetDesignBlock(
+                    m_frame->GetDesignBlockPane()->GetSelectedLibId(), true, true );
 
             if( !designBlock )
                 return 0;
@@ -794,7 +794,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
                 sheetFileName = dlg.GetPath();
 
-                m_frame->UpdateDesignBlockOptions();
+                m_frame->GetDesignBlockPane()->UpdateCheckboxes();
             }
 
             if( sheetFileName.IsEmpty() )

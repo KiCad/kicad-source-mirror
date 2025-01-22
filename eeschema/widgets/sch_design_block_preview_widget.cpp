@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "design_block_preview_widget.h"
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_view.h>
@@ -35,13 +34,16 @@
 #include <eeschema_settings.h>
 #include <eeschema_helpers.h>
 #include <settings/settings_manager.h>
+#include <widgets/sch_design_block_preview_widget.h>
 #include <wx/log.h>
 #include <wx/stattext.h>
+#include <wx/panel.h>
 
 
-DESIGN_BLOCK_PREVIEW_WIDGET::DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, bool aIncludeStatus,
-                                              EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) :
-        wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
+SCH_DESIGN_BLOCK_PREVIEW_WIDGET::SCH_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent,
+                                                                 EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType,
+                                                                 bool aIncludeStatus ) :
+        DESIGN_BLOCK_PREVIEW_WIDGET( aParent ),
         m_preview( nullptr ),
         m_status( nullptr ),
         m_statusPanel( nullptr ),
@@ -131,11 +133,11 @@ DESIGN_BLOCK_PREVIEW_WIDGET::DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, boo
     SetSizer( m_outerSizer );
     Layout();
 
-    Connect( wxEVT_SIZE, wxSizeEventHandler( DESIGN_BLOCK_PREVIEW_WIDGET::onSize ), nullptr, this );
+    Connect( wxEVT_SIZE, wxSizeEventHandler( SCH_DESIGN_BLOCK_PREVIEW_WIDGET::onSize ), nullptr, this );
 }
 
 
-DESIGN_BLOCK_PREVIEW_WIDGET::~DESIGN_BLOCK_PREVIEW_WIDGET()
+SCH_DESIGN_BLOCK_PREVIEW_WIDGET::~SCH_DESIGN_BLOCK_PREVIEW_WIDGET()
 {
     if( m_previewItem )
         m_preview->GetView()->Remove( m_previewItem );
@@ -144,7 +146,7 @@ DESIGN_BLOCK_PREVIEW_WIDGET::~DESIGN_BLOCK_PREVIEW_WIDGET()
 }
 
 
-void DESIGN_BLOCK_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
+void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 {
     wxCHECK( m_statusPanel, /* void */ );
 
@@ -155,7 +157,7 @@ void DESIGN_BLOCK_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 }
 
 
-void DESIGN_BLOCK_PREVIEW_WIDGET::onSize( wxSizeEvent& aEvent )
+void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::onSize( wxSizeEvent& aEvent )
 {
     if( m_previewItem )
     {
@@ -167,7 +169,7 @@ void DESIGN_BLOCK_PREVIEW_WIDGET::onSize( wxSizeEvent& aEvent )
 }
 
 
-void DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
+void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
 {
     if( !m_previewItem )
         return;
@@ -191,7 +193,7 @@ void DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
 }
 
 
-void DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignBlock )
+void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignBlock )
 {
     KIGFX::VIEW* view = m_preview->GetView();
 

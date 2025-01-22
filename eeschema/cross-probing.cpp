@@ -38,7 +38,7 @@
 #include <tools/ee_actions.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>
-#include <widgets/design_block_pane.h>
+#include <widgets/sch_design_block_pane.h>
 #include <wx/log.h>
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wxString* aReference,

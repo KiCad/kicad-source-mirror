@@ -17,10 +17,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DESIGN_BLOCK_PREVIEW_WIDGET_H
-#define DESIGN_BLOCK_PREVIEW_WIDGET_H
+#ifndef SCH_DESIGN_BLOCK_PREVIEW_WIDGET_H
+#define SCH_DESIGN_BLOCK_PREVIEW_WIDGET_H
 
 #include <wx/panel.h>
+#include <widgets/design_block_preview_widget.h>
 #include <kiway.h>
 #include <gal_display_options_common.h>
 #include <class_draw_panel_gal.h>
@@ -34,29 +35,27 @@ class wxStaticText;
 class wxSizer;
 
 
-class DESIGN_BLOCK_PREVIEW_WIDGET : public wxPanel
+class SCH_DESIGN_BLOCK_PREVIEW_WIDGET : public DESIGN_BLOCK_PREVIEW_WIDGET
 {
 public:
     /**
-     * Construct a symbol preview widget.
+     * Construct a schematic design block preview widget.
      *
      * @param aParent - parent window
-     * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL or GAL_TYPE_CAIRO only)
      */
-    DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, bool aIncludeStatus,
-                                 EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
+    SCH_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType, bool aIncludeStatus );
 
-    ~DESIGN_BLOCK_PREVIEW_WIDGET() override;
+    ~SCH_DESIGN_BLOCK_PREVIEW_WIDGET() override;
 
     /**
      * Set the contents of the status label and display it.
      */
-    void SetStatusText( const wxString& aText );
+    void SetStatusText( const wxString& aText ) override;
 
     /**
      * Set the currently displayed symbol.
      */
-    void DisplayDesignBlock( DESIGN_BLOCK* aDesignBlock );
+    void DisplayDesignBlock( DESIGN_BLOCK* aDesignBlock ) override;
 
 protected:
     void onSize( wxSizeEvent& aEvent );
@@ -78,4 +77,4 @@ protected:
 };
 
 
-#endif // DESIGN_BLOCK_PREVIEW_WIDGET_H
+#endif

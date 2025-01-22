@@ -27,6 +27,7 @@
 #include <tool/tool_action.h>
 #include <tool/actions.h>
 
+class DESIGN_BLOCK;
 class SCH_SYMBOL;
 class TOOL_EVENT;
 class TOOL_MANAGER;

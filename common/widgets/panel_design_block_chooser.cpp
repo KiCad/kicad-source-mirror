@@ -23,15 +23,18 @@
 
 #include <pgm_base.h>
 #include <design_block.h>
+#include <design_block_pane.h>
 #include <design_block_lib_table.h>
 #include <panel_design_block_chooser.h>
 #include <design_block_preview_widget.h>
 #include <kiface_base.h>
-#include <sch_edit_frame.h>
+#include <kiway_holder.h>
+#include <eda_draw_frame.h>
 #include <widgets/lib_tree.h>
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
 #include <dialogs/html_message_box.h>
+#include <settings/app_settings.h>
 #include <string_utils.h>
 #include <wx/log.h>
 #include <wx/panel.h>
@@ -46,23 +49,24 @@
 wxString PANEL_DESIGN_BLOCK_CHOOSER::g_designBlockSearchString;
 
 
-PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, wxWindow* aParent,
+PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( EDA_DRAW_FRAME* aFrame,
+                                                        DESIGN_BLOCK_PANE* aParent,
                                                         std::vector<LIB_ID>&  aHistoryList,
-                                                        std::function<void()> aSelectHandler ) :
+                                                        std::function<void()> aSelectHandler,
+                                                        TOOL_INTERACTIVE* aContextMenuTool ) :
+
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_dbl_click_timer( nullptr ),
         m_open_libs_timer( nullptr ),
         m_vsplitter( nullptr ),
         m_tree( nullptr ),
         m_preview( nullptr ),
+        m_parent( aParent ),
         m_frame( aFrame ),
         m_selectHandler( std::move( aSelectHandler ) ),
         m_historyList( aHistoryList )
 {
     DESIGN_BLOCK_LIB_TABLE* libs = m_frame->Prj().DesignBlockLibs();
-
-    // Make sure settings are loaded before we start running multi-threaded design block loaders
-    Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
     // Load design block files:
     WX_PROGRESS_REPORTER* progressReporter =
@@ -79,8 +83,7 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
     if( DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetErrorCount() )
         displayErrors( aFrame );
 
-    m_adapter = DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( m_frame, libs,
-        m_frame->eeconfig()->m_DesignBlockChooserPanel.tree );
+    m_adapter = DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( m_frame, libs, m_frame->config()->m_DesignBlockChooserPanel.tree, aContextMenuTool );
 
     // -------------------------------------------------------------------------------------
     // Construct the actual panel
@@ -99,19 +102,16 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
     wxBoxSizer* treeSizer = new wxBoxSizer( wxVERTICAL );
     treePanel->SetSizer( treeSizer );
 
-    wxPanel*    detailsPanel = new wxPanel( m_vsplitter );
-    wxBoxSizer* detailsSizer = new wxBoxSizer( wxVERTICAL );
-    detailsPanel->SetSizer( detailsSizer );
+    m_detailsPanel = new wxPanel( m_vsplitter );
+    m_detailsSizer = new wxBoxSizer( wxVERTICAL );
+    m_detailsPanel->SetSizer( m_detailsSizer );
 
-    m_preview = new DESIGN_BLOCK_PREVIEW_WIDGET( detailsPanel, false,
-                                                 EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-    detailsSizer->Add( m_preview, 1, wxEXPAND, 5 );
-    detailsPanel->Layout();
-    detailsSizer->Fit( detailsPanel );
+    m_detailsPanel->Layout();
+    m_detailsSizer->Fit( m_detailsPanel );
 
     m_vsplitter->SetSashGravity( 0.5 );
     m_vsplitter->SetMinimumPaneSize( 20 );
-    m_vsplitter->SplitHorizontally( treePanel, detailsPanel );
+    m_vsplitter->SplitHorizontally( treePanel, m_detailsPanel );
 
     sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
 
@@ -168,17 +168,14 @@ void PANEL_DESIGN_BLOCK_CHOOSER::SaveSettings()
 {
     g_designBlockSearchString = m_tree->GetSearchString();
 
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    if( APP_SETTINGS_BASE* cfg = m_frame->config() )
     {
         // Save any changes to column widths, etc.
         m_adapter->SaveSettings();
 
         cfg->m_DesignBlockChooserPanel.width = GetParent()->GetSize().x;
         cfg->m_DesignBlockChooserPanel.height = GetParent()->GetSize().y;
-
-        if( m_vsplitter )
-            cfg->m_DesignBlockChooserPanel.sash_pos_v = m_vsplitter->GetSashPosition();
-
+        cfg->m_DesignBlockChooserPanel.sash_pos_v = m_vsplitter->GetSashPosition();
         cfg->m_DesignBlockChooserPanel.sort_mode = m_tree->GetSortMode();
     }
 }
@@ -188,6 +185,14 @@ void PANEL_DESIGN_BLOCK_CHOOSER::ShowChangedLanguage()
 {
     if( m_tree )
         m_tree->ShowChangedLanguage();
+}
+
+
+void PANEL_DESIGN_BLOCK_CHOOSER::SetPreviewWidget( DESIGN_BLOCK_PREVIEW_WIDGET* aPreview )
+{
+    m_preview = aPreview;
+    m_detailsSizer->Add( m_preview, 1, wxEXPAND, 5 );
+    Layout();
 }
 
 
@@ -217,7 +222,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::OnChar( wxKeyEvent& aEvent )
 
 void PANEL_DESIGN_BLOCK_CHOOSER::FinishSetup()
 {
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    if( APP_SETTINGS_BASE* cfg = m_frame->config() )
     {
         auto horizPixelsFromDU =
                 [&]( int x ) -> int
@@ -226,7 +231,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::FinishSetup()
                     return GetParent()->ConvertDialogToPixels( sz ).x;
                 };
 
-        EESCHEMA_SETTINGS::PANEL_DESIGN_BLOCK_CHOOSER& panelCfg = cfg->m_DesignBlockChooserPanel;
+        APP_SETTINGS_BASE::PANEL_DESIGN_BLOCK_CHOOSER& panelCfg = cfg->m_DesignBlockChooserPanel;
 
         int w = panelCfg.width > 40 ? panelCfg.width : horizPixelsFromDU( 440 );
         int h = panelCfg.height > 40 ? panelCfg.height : horizPixelsFromDU( 340 );
@@ -334,7 +339,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
 
 void PANEL_DESIGN_BLOCK_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
 {
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    if( APP_SETTINGS_BASE* cfg = m_frame->config() )
         m_adapter->OpenLibs( cfg->m_LibTree.open_libs );
 
     // Bind this now se we don't spam the event queue with EVT_LIBITEM_SELECTED events during
@@ -346,7 +351,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
 void PANEL_DESIGN_BLOCK_CHOOSER::onDesignBlockSelected( wxCommandEvent& aEvent )
 {
     if( GetSelectedLibId().IsValid() )
-        m_preview->DisplayDesignBlock( m_frame->GetDesignBlock( GetSelectedLibId() ) );
+        m_preview->DisplayDesignBlock( m_parent->GetDesignBlock( GetSelectedLibId(), true, true ) );
 }
 
 

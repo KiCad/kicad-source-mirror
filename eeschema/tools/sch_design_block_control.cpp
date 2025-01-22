@@ -22,8 +22,8 @@
  */
 #include <tool/library_editor_control.h>
 #include <sch_design_block_control.h>
-#include <design_block_pane.h>
-#include <panel_design_block_chooser.h>
+#include <widgets/sch_design_block_pane.h>
+#include <widgets/panel_design_block_chooser.h>
 #include <dialog_design_block_properties.h>
 #include <ee_actions.h>
 
@@ -121,7 +121,8 @@ int SCH_DESIGN_BLOCK_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 
 int SCH_DESIGN_BLOCK_CONTROL::NewLibrary( const TOOL_EVENT& aEvent )
 {
-    m_editFrame->CreateNewDesignBlockLibrary();
+    getDesignBlockPane()->CreateNewDesignBlockLibrary();
+
     return 0;
 }
 
@@ -160,7 +161,7 @@ int SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    m_editFrame->DeleteDesignBlockFromLibrary( current->m_LibId, true );
+    getDesignBlockPane()->DeleteDesignBlockFromLibrary( current->m_LibId, true );
 
     return 0;
 }
@@ -173,7 +174,7 @@ int SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties( const TOOL_EVENT& aEven
     if( !current )
         return -1;
 
-    if( m_editFrame->EditDesignBlockProperties( current->m_LibId ) )
+    if( getDesignBlockPane()->EditDesignBlockProperties( current->m_LibId ) )
         return 0;
 
     return -1;
@@ -205,13 +206,13 @@ void SCH_DESIGN_BLOCK_CONTROL::setTransitions()
 
 LIB_ID SCH_DESIGN_BLOCK_CONTROL::getSelectedLibId()
 {
-    m_editFrame->GetDesignBlockPane()->GetSelectedLibId();
+    getDesignBlockPane()->GetSelectedLibId();
 
     return LIB_ID();
 }
 
 
-DESIGN_BLOCK_PANE* SCH_DESIGN_BLOCK_CONTROL::getDesignBlockPane()
+SCH_DESIGN_BLOCK_PANE* SCH_DESIGN_BLOCK_CONTROL::getDesignBlockPane()
 {
     return m_editFrame->GetDesignBlockPane();
 }

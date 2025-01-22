@@ -25,30 +25,34 @@
 #include <project/project_file.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
+#include <settings/app_settings.h>
 #include <string_utils.h>
 #include <eda_pattern_match.h>
 #include <design_block.h>
 #include <design_block_lib_table.h>
 #include <design_block_info.h>
 #include <design_block_tree_model_adapter.h>
-#include <tools/sch_design_block_control.h>
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
 DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
-                                         APP_SETTINGS_BASE::LIB_TREE& aSettings )
+                                         APP_SETTINGS_BASE::LIB_TREE& aSettings,
+                                         TOOL_INTERACTIVE* aContextMenuTool )
 {
-    auto* adapter = new DESIGN_BLOCK_TREE_MODEL_ADAPTER( aParent, aLibs, aSettings );
-    adapter->m_frame = aParent;
+    auto* adapter = new DESIGN_BLOCK_TREE_MODEL_ADAPTER( aParent, aLibs, aSettings, aContextMenuTool );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 
 DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
-                                                                  LIB_TABLE* aLibs,
-                                                                  APP_SETTINGS_BASE::LIB_TREE& aSettings ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ), aSettings ),
+                                                                  LIB_TABLE*      aLibs,
+                                                                  APP_SETTINGS_BASE::LIB_TREE& aSettings,
+                                                                  TOOL_INTERACTIVE* aContextMenuTool ) :
+        LIB_TREE_MODEL_ADAPTER( aParent,
+                                wxT( "pinned_design_block_libs" ),
+                                Kiface().KifaceSettings()->m_DesignBlockChooserPanel.tree ),
         m_libs( (DESIGN_BLOCK_LIB_TABLE*) aLibs ),
-        m_frame( aParent )
+        m_frame( aParent ),
+        m_contextMenuTool( aContextMenuTool )
 {
 }
 
@@ -206,5 +210,5 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
 
 TOOL_INTERACTIVE* DESIGN_BLOCK_TREE_MODEL_ADAPTER::GetContextMenuTool()
 {
-    return m_frame->GetToolManager()->GetTool<SCH_DESIGN_BLOCK_CONTROL>();
+    return m_contextMenuTool;
 }

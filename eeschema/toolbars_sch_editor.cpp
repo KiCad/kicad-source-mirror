@@ -37,9 +37,9 @@
 #include <tool/action_toolbar.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
-#include <widgets/design_block_pane.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/wx_aui_utils.h>
+#include <widgets/sch_design_block_pane.h>
 #include <widgets/sch_properties_panel.h>
 #include <widgets/sch_search_pane.h>
 

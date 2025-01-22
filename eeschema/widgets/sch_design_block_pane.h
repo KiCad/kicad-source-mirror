@@ -20,9 +20,10 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#ifndef DESIGN_BLOCK_PANE_H
-#define DESIGN_BLOCK_PANE_H
+#ifndef SCH_DESIGN_BLOCK_PANE_H
+#define SCH_DESIGN_BLOCK_PANE_H
 
+#include <widgets/design_block_pane.h>
 #include <design_block_tree_model_adapter.h>
 #include <widgets/html_window.h>
 #include <widgets/wx_panel.h>
@@ -35,40 +36,11 @@ class SCH_EDIT_FRAME;
 class PANEL_DESIGN_BLOCK_CHOOSER;
 
 
-class DESIGN_BLOCK_PANE : public WX_PANEL
+class SCH_DESIGN_BLOCK_PANE : public DESIGN_BLOCK_PANE
 {
 public:
-    /**
-     * Create dialog to choose design_block.
-     *
-     * @param aParent   a SCH_BASE_FRAME parent window.
-     * @param aAllowFieldEdits  if false, all functions that allow the user to edit fields
-     *                          (currently just footprint selection) will not be available.
-     * @param aShowFootprints   if false, all footprint preview and selection features are
-     *                          disabled. This forces aAllowFieldEdits false too.
-     */
-    DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPreselect,
-                       std::vector<LIB_ID>& aHistoryList );
-
-    ~DESIGN_BLOCK_PANE() override;
-
-    void SaveSettings();
-
-    /**
-     * To be called after this dialog returns from ShowModal().
-     *
-     * For multi-unit design_blocks, if the user selects the design_block itself rather than picking
-     * an individual unit, 0 will be returned in aUnit.
-     * Beware that this is an invalid unit number - this should be replaced with whatever
-     * default is desired (usually 1).
-     *
-     * @param aUnit if not NULL, the selected unit is filled in here.
-     * @return the #LIB_ID of the design_block that has been selected.
-     */
-    LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
-    void   SelectLibId( const LIB_ID& aLibId );
-
-    void RefreshLibs();
+    SCH_DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPreselect,
+                           std::vector<LIB_ID>& aHistoryList );
 
     /* Handler for checkbox events */
     void OnCheckBox( wxCommandEvent& aEvent );
@@ -77,24 +49,13 @@ public:
     void OnSaveSheetAsDesignBlock( wxCommandEvent& aEvent );
     void OnSaveSelectionAsDesignBlock( wxCommandEvent& aEvent );
 
-    void OnDeleteLibrary( wxCommandEvent& aEvent );
-    void OnDeleteDesignBlock( wxCommandEvent& aEvent );
-
-    PANEL_DESIGN_BLOCK_CHOOSER* GetDesignBlockPanel() const { return m_chooserPanel; }
+protected:
+    void setLabelsAndTooltips() override;
 
 protected:
-    void setLabelsAndTooltips();
-
-    virtual void OnLanguageChanged( wxCommandEvent& aEvent );
-
-protected:
-    PANEL_DESIGN_BLOCK_CHOOSER* m_chooserPanel;
-
-    wxCheckBox*                 m_repeatedPlacement;
-    wxCheckBox*                 m_placeAsSheet;
-    wxCheckBox*                 m_keepAnnotations;
-
-    SCH_EDIT_FRAME*             m_frame;
+    wxCheckBox* m_repeatedPlacement;
+    wxCheckBox* m_placeAsSheet;
+    wxCheckBox* m_keepAnnotations;
 };
 
 
@@ -105,9 +66,9 @@ class FILEDLG_IMPORT_SHEET_CONTENTS : public wxFileDialogCustomizeHook
 public:
     FILEDLG_IMPORT_SHEET_CONTENTS( EESCHEMA_SETTINGS* aSettings );
 
-    virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override;
+    void AddCustomControls( wxFileDialogCustomize& customizer ) override;
 
-    virtual void TransferDataFromCustomControls() override;
+    void TransferDataFromCustomControls() override;
 
 private:
     EESCHEMA_SETTINGS* m_settings;

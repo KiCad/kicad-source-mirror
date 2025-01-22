@@ -21,6 +21,10 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef DESIGN_BLOCK_H
+#define DESIGN_BLOCK_H
+
 #include <kicommon.h>
 #include <lib_id.h>
 #include <nlohmann/json.hpp>
@@ -61,3 +65,5 @@ private:
 
     nlohmann::ordered_map<wxString, wxString> m_fields;
 };
+
+#endif
