@@ -220,7 +220,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     m_auimgr.AddPane( m_launcher, EDA_PANE().Canvas().Name( "Launcher" ).Center()
                       .Caption( _( "Editors" ) ).PaneBorder( false )
-                      .MinSize( m_launcher->GetBestSize() ) );
+                      .MinSize( m_launcher->GetBestSize() + FromDIP( wxSize( 80, 20 ) ) ) );
 
     m_auimgr.Update();
 
@@ -231,7 +231,11 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Only fit the initial window size the first time KiCad is run.
     if( mainSizer && config()->m_Window.state.size_x == 0 && config()->m_Window.state.size_y == 0 )
+    {
+        Layout();
         mainSizer->Fit( this );
+        Center();
+    }
 
     if( ADVANCED_CFG::GetCfg().m_HideVersionFromTitle )
         SetTitle( wxT( "KiCad" ) );
