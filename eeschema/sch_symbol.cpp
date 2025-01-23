@@ -2190,6 +2190,12 @@ void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 
 bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
+    for( SCH_ITEM& drawItem : GetLibSymbolRef()->GetDrawItems() )
+    {
+        if( drawItem.Matches( aSearchData, aAuxData ) )
+            return true;
+    }
+
     // Symbols are searchable via the child field and pin item text.
     return false;
 }
