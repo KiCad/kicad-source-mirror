@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-21 16:52+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-01-23 09:58+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -20405,7 +20405,7 @@ msgstr "Neues Symbol (Schaltzeichen) erstellen"
 
 #: eeschema/tools/ee_actions.cpp:170
 msgid "Derive from Existing Symbol"
-msgstr "Von bestehendem Symbol ableiten"
+msgstr "Von bestehendem Symbol ableiten…"
 
 #: eeschema/tools/ee_actions.cpp:171
 msgid "Create a new symbol, derived from an existing symbol"
