@@ -777,6 +777,14 @@ void PDF_PLOTTER::ClosePage()
                 VECTOR2D retval = VECTOR2D( aCoord ) * PTsPERMIL / ( m_IUsPerDecimil * 10 );
                 // PDF y=0 is at bottom of page, invert coordinate
                 retval.y = psPaperSize.y - retval.y;
+
+                // The pdf plot can be mirrored (from left to right). So mirror the
+                // x coordinate if m_plotMirror is set
+                if( m_plotMirror )
+                {
+                    retval.x = ( psPaperSize.x - retval.x );
+                }
+
                 return retval;
             };
 
