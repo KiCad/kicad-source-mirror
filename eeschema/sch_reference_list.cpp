@@ -631,6 +631,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             std::vector<int> units = { ref_unit.GetUnit() };
             LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units );
             ref_unit.m_numRef = LastReferenceNumber;
+            ref_unit.m_numRefStr = wxString::Format( "%d", LastReferenceNumber );
             ref_unit.m_isNew = false;
             ref_unit.m_flag = 1;
         }
