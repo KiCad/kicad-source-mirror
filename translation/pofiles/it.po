@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 07:27+0000\n"
+"PO-Revision-Date: 2025-01-23 09:58+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
@@ -2890,7 +2890,7 @@ msgstr "Anteprima carta"
 
 #: common/dialogs/dialog_page_settings.cpp:107
 msgid "Preview Title Block Data"
-msgstr "Dati riquadro iscrizioni anteprima"
+msgstr "Anteprima dati riquadro iscrizioni"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 #: common/dialogs/dialog_page_settings_base.h:146
