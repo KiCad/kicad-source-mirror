@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 10:27+0000\n"
+"PO-Revision-Date: 2025-01-24 02:39+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -14623,9 +14623,8 @@ msgid "Remove White Space"
 msgstr "공백 제거"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
-#, fuzzy
 msgid "Keep White Space"
-msgstr "패드 금지"
+msgstr "공백 유지"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
