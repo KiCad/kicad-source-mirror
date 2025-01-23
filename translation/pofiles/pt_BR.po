@@ -8,13 +8,14 @@
 # Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023, 2024, 2025.
 # pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2024.
 # Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-22 21:02+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -22448,8 +22449,9 @@ msgid "Create a new symbol in an existing library"
 msgstr "Criar um novo símbolo numa biblioteca já existente"
 
 #: eeschema/tools/ee_actions.cpp:202
+#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Derivar de um símbolo já existente"
+msgstr "Derivar de um símbolo já existente…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
