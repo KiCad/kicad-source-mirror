@@ -1,13 +1,14 @@
 # boonchai k. <kicadthai@gmail.com>, 2021, 2022, 2023.
 # "boonchai k." <kicadthai@gmail.com>, 2023, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2024-09-28 08:15+0000\n"
-"Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
 "Language: th\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -22701,7 +22702,7 @@ msgstr "ผันมาจากสัญลักษณ์ที่มีอย
 #: eeschema/tools/ee_actions.cpp:202
 #, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "ผันมาจากสัญลักษณ์ที่มีอยู๋:"
+msgstr "ผันมาจากสัญลักษณ์ที่มีอยู๋…"
 
 #: eeschema/tools/ee_actions.cpp:203
 #, fuzzy
