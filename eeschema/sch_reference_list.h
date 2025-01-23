@@ -191,7 +191,7 @@ public:
         if( GetLibPart() && GetLibPart()->IsPower() )
             ref = wxT( "0" );
 
-        return ref << m_numRef;
+        return ref << m_numRefStr;
     }
 
     int CompareValue( const SCH_REFERENCE& item ) const

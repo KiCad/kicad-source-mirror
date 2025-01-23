@@ -664,7 +664,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         if( m_flatList[ii].m_isNew )    // Not yet annotated
         {
             if( m_flatList[ii].m_numRef >= 0 )
-                tmp << m_flatList[ii].m_numRef;
+                tmp << m_flatList[ii].m_numRefStr;
             else
                 tmp = wxT( "?" );
 
@@ -692,7 +692,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         if( std::max( m_flatList[ii].GetLibPart()->GetUnitCount(), 1 ) < m_flatList[ii].m_unit )
         {
             if( m_flatList[ii].m_numRef >= 0 )
-                tmp << m_flatList[ii].m_numRef;
+                tmp << m_flatList[ii].m_numRefStr;
             else
                 tmp = wxT( "?" );
 
@@ -731,7 +731,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         if( first.m_unit == second.m_unit )
         {
             if( first.m_numRef >= 0 )
-                tmp << first.m_numRef;
+                tmp << first.m_numRefStr;
             else
                 tmp = wxT( "?" );
 
@@ -751,12 +751,12 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         if( first.GetLibPart()->GetUnitCount() != second.GetLibPart()->GetUnitCount() )
         {
             if( first.m_numRef >= 0 )
-                tmp << first.m_numRef;
+                tmp << first.m_numRefStr;
             else
                 tmp = wxT( "?" );
 
             if( second.m_numRef >= 0 )
-                tmp2 << second.m_numRef;
+                tmp2 << second.m_numRefStr;
             else
                 tmp2 = wxT( "?" );
 
