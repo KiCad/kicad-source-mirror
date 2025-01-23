@@ -16,13 +16,14 @@
 # sergio <sergio+it@outerface.net>, 2024.
 # gfbdrgng <hnaofegnp@hldrive.com>, 2024.
 # Дмитрий Михирев <bizdelnick@gmail.com>, 2025.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-22 21:02+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -22273,8 +22274,9 @@ msgid "Create a new symbol in an existing library"
 msgstr "Создание нового символа в существующей библиотеке"
 
 #: eeschema/tools/ee_actions.cpp:202
+#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Наследовать от существующего символа"
+msgstr "Наследовать от существующего символа…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
