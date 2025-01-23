@@ -597,6 +597,9 @@ if( MSVC )
     if( KICAD_WIN32_BUILD_PARALLEL_CL_MP )
         string( APPEND CMAKE_CXX_FLAGS " /MP" )
     endif()
+
+    set( CMAKE_INSTALL_UCRT_LIBRARIES TRUE )
+    include( InstallRequiredSystemLibraries )
 endif()
 
 # KIFACE_SUFFIX is the file extension used for top level program modules which
