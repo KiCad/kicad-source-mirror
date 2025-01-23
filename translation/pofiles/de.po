@@ -23,15 +23,15 @@
 # tct123 <tct1234@protonmail.com>, 2024.
 # Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
 # Frank Sonnenberg <frasoberg@web.de>, 2024.
-# John Beard <john.j.beard@gmail.com>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2024, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-21 16:52+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -22486,8 +22486,9 @@ msgid "Create a new symbol in an existing library"
 msgstr "Neues Symbol in existierender Bibliothek erstellen"
 
 #: eeschema/tools/ee_actions.cpp:202
+#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Von bestehendem Symbol ableiten"
+msgstr "Von bestehendem Symbol ableiten…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
