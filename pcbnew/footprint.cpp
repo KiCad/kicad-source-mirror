@@ -663,7 +663,7 @@ void FOOTPRINT::RemoveField( const wxString& aFieldName )
 {
     for( unsigned i = 0; i < m_fields.size(); ++i )
     {
-        if( m_fields[i] && m_fields[ i ]->IsMandatory() )
+        if( !m_fields[i] || m_fields[ i ]->IsMandatory() )
             continue;
 
         if( aFieldName == m_fields[i]->GetName( false ) )
