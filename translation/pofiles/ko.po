@@ -33,10 +33,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-14 11:37+0000\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -980,7 +980,6 @@ msgid "Configure Paths"
 msgstr "경로 구성"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
 msgstr "모델 포함"
 
@@ -1754,9 +1753,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "도면 시트 (.kicad_wks 파일)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "파일로 내보내기"
+msgstr "파일로 내보내기..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -1765,7 +1763,7 @@ msgstr "클립보드로 내보내기"
 
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
-msgstr ""
+msgstr "변환할 흑백 이미지에 모양이 없음: 윤곽선이 생성되지 않음."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -1824,9 +1822,8 @@ msgid "&Cancel"
 msgstr "취소 (&C)"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
-#, fuzzy
 msgid "&Open Anyway"
-msgstr "무시하고 열기"
+msgstr "무조건 열기(&O)"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
@@ -1841,23 +1838,20 @@ msgid "&Save"
 msgstr "저장 (&S)"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
-#, fuzzy
 msgid "&Discard Changes"
-msgstr "변경 사항 무시"
+msgstr "변경 내용 폐기(&D)"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
-#, fuzzy
 msgid "&Apply to all"
-msgstr "모두에 적용"
+msgstr "모두 적용(&A)"
 
 #: common/confirm.cpp:123
 msgid "Your current changes will be permanently lost."
 msgstr "현재 변경 내용이 영구적으로 손실됩니다."
 
 #: common/confirm.cpp:124
-#, fuzzy
 msgid "&Revert"
-msgstr "안 함"
+msgstr "되돌리기(&R)"
 
 #: common/confirm.cpp:150 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:793
@@ -2006,9 +2000,9 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "회로도 파일 '%s'을(를) 디자인 블록 '%s'에 저장할 수 없습니다."
 
 #: common/design_block_io.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "디자인 블록 메타데이터 파일 '%s'을 읽을 수 없습니다."
+msgstr "디자인 블록 메타데이터 파일 '%s'를 저장할 수 없음."
 
 #: common/design_block_io.cpp:437
 #, c-format
@@ -2471,23 +2465,21 @@ msgid "Path"
 msgstr "경로"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "디자인 블록 추가"
+msgstr "디자인 블록"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"심볼 라이브러리 테이블 생성 오류 ‘%s’.\n"
+"디자인 블록 라이브러리 테이블 '%s' 생성 오류.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "심볼 라이브러리 테이블 파일을 선택하십시오."
+msgstr "디자인 블록 라이브러리 테이블 파일을 선택하세요."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2498,12 +2490,12 @@ msgid "File '%s' not found."
 msgstr "'%s' 파일을 찾을 수 없습니다."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"심볼 라이브러리 테이블 읽기 오류 %s.\n"
+"디자인 블록 라이브러리 테이블 '%s' 읽기 오류.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
@@ -2513,9 +2505,9 @@ msgid "Cannot create global library table '%s'."
 msgstr "전역 라이브러리 테이블 '%s'을 생성할 수 없습니다."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr "전역 심볼 라이브러리 테이블 '%s'을(를) '%s'에 복사할 수 없음."
+msgstr "전역 디자인 블록 라이브러리 테이블 '%s'를 '%s'에 복사중 오류 발생."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -3198,7 +3190,6 @@ msgid "Reference Designators"
 msgstr "참조 지정자"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear net assignments"
 msgstr "네트 할당 지우기"
 
@@ -3457,9 +3448,8 @@ msgid "Format:"
 msgstr "형식:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
-#, fuzzy
 msgid "Include:"
-msgstr "비아 포함 (&v)"
+msgstr "포함:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -4190,9 +4180,8 @@ msgid "Editing"
 msgstr "편집"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "이동한 개체의 원점으로 마우스 이동"
+msgstr "이동한 개체의 앵커로 마우스 이동하기"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -4757,18 +4746,16 @@ msgid "Remove embedded file"
 msgstr "내장된 파일 제거"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "글꼴 삽입"
+msgstr "글꼴 포함"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
 msgstr "사용된 모든 글꼴의 사본 저장"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "내보내기..."
+msgstr "내보내기(&E)..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
@@ -5144,7 +5131,6 @@ msgid "Check for package updates on startup"
 msgstr "시작 시 패키지 업데이트 확인"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
-#, fuzzy
 msgid "Library Package Handling"
 msgstr "라이브러리 패키지 처리"
 
@@ -5378,9 +5364,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b> '%s'와 일치하는 네트:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "네트클래스:"
+msgstr "네트클래스"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:641
@@ -5469,9 +5454,8 @@ msgid "Import colors from schematic"
 msgstr "회로도에서 색상 가져오기"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "네트클래스 할당:"
+msgstr "네트클래스 할당"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -5536,9 +5520,8 @@ msgid "Could not use OpenGL"
 msgstr "OpenGL을 사용할 수 없음"
 
 #: common/draw_panel_gal.cpp:543
-#, fuzzy
 msgid "Error switching GAL backend"
-msgstr "스위치 GAL 백엔드 오류"
+msgstr "GAL 백엔드 전환 오류"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3403
@@ -5855,14 +5838,12 @@ msgid "Origins & Axes"
 msgstr "원점과 축"
 
 #: common/eda_base_frame.cpp:1188
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "새 풋프린트"
+msgstr "풋프린트 기본값"
 
 #: common/eda_base_frame.cpp:1190
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "그래픽 정리"
+msgstr "그래픽 기본값"
 
 #: common/eda_base_frame.cpp:1195 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
@@ -6822,14 +6803,14 @@ msgid "Error removing directory '%s': %s"
 msgstr "'%s' 디렉터리 제거 오류: %s"
 
 #: common/gestfich.cpp:366 common/gestfich.cpp:420 common/gestfich.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "디렉토리 '%s'를 만들 수 없음"
+msgstr "소스 디렉터리를 열 수 없음: %s"
 
 #: common/gestfich.cpp:373 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "디렉토리 '%s'를 만들 수 없음"
+msgstr "대상 디렉터리를 만들 수 없음: %s"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:470
 #, c-format
@@ -6924,9 +6905,9 @@ msgid "Could not lookup remote"
 msgstr "원격을 조회할 수 없음"
 
 #: common/git/git_push_handler.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "원격 '%s'에 연결할 수 없음"
+msgstr "원격에 연결할 수 없음: %s"
 
 #: common/git/git_push_handler.cpp:73
 #, c-format
@@ -7375,34 +7356,28 @@ msgid "Loading file canceled by user."
 msgstr "사용자가 파일 로딩을 취소함."
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "패드 설정"
+msgstr "작업 설정"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
-#, fuzzy
 msgid "3D model export"
-msgstr "내보내지 않기"
+msgstr "3D 모델 내보내기"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "3D 모델 내보내기"
+msgstr "3D 모델 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "3D 모델 내보내기"
+msgstr "PCB: 3D 모델 내보내기"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "PCB: 드릴 데이터 내보내기"
+msgstr "드릴 데이터 내보내기"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "편집 옵션..."
+msgstr "드릴 데이터 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7415,74 +7390,61 @@ msgstr "DXF 내보내기"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:162
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "편집 옵션..."
+msgstr "DXF 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "DXF 내보내기"
+msgstr "PCB: DXF 내보내기"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "GenCAD 설정으로 내보내기"
+msgstr "GenCAD 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "PCB: 거버 내보내기"
+msgstr "단일 거버 내보내기"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "GenCAD 설정으로 내보내기"
+msgstr "단일 거버 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:42
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "PCB: 거버 내보내기"
+msgstr "거버 내보내기"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:48
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "GenCAD 설정으로 내보내기"
+msgstr "거버 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
 msgstr "PCB: 거버 내보내기"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
 msgstr "IPC-2581 내보내기"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "IPC-2581 파일 내보내기"
+msgstr "IPC2581 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC2581"
-msgstr "IPC-2581 내보내기"
+msgstr "PCB: IPC2581 내보내기"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "XAO 내보내기"
+msgstr "ODB++ 내보내기"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "편집 옵션..."
+msgstr "ODB++ 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "XAO 내보내기"
+msgstr "PCB: ODB++ 내보내기"
 
 #: common/jobs/job_export_pcb_pdf.cpp:74
 #: common/jobs/job_export_sch_plot.cpp:137 kicad/kicad_cli.cpp:143
@@ -7491,24 +7453,20 @@ msgstr "PDF 내보내기"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:143
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "편집 옵션..."
+msgstr "PDF 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "PDF 내보내기"
+msgstr "PCB: PDF 내보내기"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export position data"
-msgstr "PCB: 위치 데이터 내보내기"
+msgstr "위치 데이터 내보내기"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "PCB: 위치 데이터 내보내기"
+msgstr "위치 데이터 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
@@ -7521,150 +7479,126 @@ msgstr "SVG 내보내기"
 
 #: common/jobs/job_export_pcb_svg.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:181
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "편집 옵션..."
+msgstr "SVG 작업 설정 내보내기"
 
 #: common/jobs/job_export_pcb_svg.cpp:67
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "SVG 내보내기"
+msgstr "PCB: SVG 내보내기"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "BOM 생성..."
+msgstr "BOM 생성"
 
 #: common/jobs/job_export_sch_bom.cpp:98
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "BOM 생성..."
+msgstr "BOM 작업 설정 생성"
 
 #: common/jobs/job_export_sch_bom.cpp:102
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "BOM 생성..."
+msgstr "회로도: BOM 생성"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "네트리스트 내보내기"
+msgstr "네트리스트 %s 내보내기"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "네트리스트 내보내기"
+msgstr "네트리스트 작업 설정 내보내기"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "네트리스트 내보내기"
+msgstr "회로도: 네트리스트 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:194
-#, fuzzy
 msgid "Export Postscript"
-msgstr "PostScript"
+msgstr "Postscript 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:200
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "편집 옵션..."
+msgstr "Postscript 작업 설정 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:213 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "HPGL 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:219
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "편집 옵션..."
+msgstr "HPGL 작업 설정 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:223
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "회로도 편집기"
+msgstr "회로도: SVG 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:225
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "EESchema HPGL 플로트"
+msgstr "회로도: HPGL 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "네트리스트 내보내기"
+msgstr "회로도: Postscript 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "회로도 편집기"
+msgstr "회로도: DXF 내보내기"
 
 #: common/jobs/job_export_sch_plot.cpp:231
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "회로도 편집기"
+msgstr "회로도: PDF 내보내기"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "회로도 텍스트"
+msgstr "회로도 PythonBOM 내보내기"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "PCB DRC 실행"
+msgstr "DRC 수행"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D 설정"
+msgstr "DRC 작업 설정"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
 msgstr "PCB: DRC 실행"
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "PCB에 다시 주석 처리"
+msgstr "렌더링 %s"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "편집 옵션..."
+msgstr "PCB 작업 설정 렌더링"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
 msgstr "PCB: 렌더링"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "PCB DRC 실행"
+msgstr "ERC 수행"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "네트리스트 내보내기"
+msgstr "회로도 ERC 작업 설정"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "PCB에서 회로도 업데이트"
+msgstr "회로도: ERC 수행"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "특수 도구"
+msgstr "특별 기능: 파일 복사"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
 msgstr "Special: 명령 실행"
 
 #: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:43
-#, fuzzy
 msgid "Archive"
-msgstr "압축 풀기 (&U)"
+msgstr "보관"
 
 #: common/jobs/jobs_output_folder.cpp:85 common/jobs/jobset.cpp:41
 msgid "Folder"
@@ -7803,9 +7737,8 @@ msgid "Symbol body fills"
 msgstr "심볼 본체 채우기"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "시트 파일"
+msgstr "도형 채우기"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8023,14 +7956,12 @@ msgid "DRC errors"
 msgstr "DRC 오류"
 
 #: common/layer_id.cpp:185
-#, fuzzy
 msgid "DRC shape 1"
-msgstr "x 모양"
+msgstr "DRC 형상 1"
 
 #: common/layer_id.cpp:186
-#, fuzzy
 msgid "DRC shape 2"
-msgstr "x 모양"
+msgstr "DRC 형상 2"
 
 #: common/layer_id.cpp:187
 msgid "DRC exclusions"
@@ -8069,9 +8000,9 @@ msgid "Illegal character found in library nickname"
 msgstr "라이브러리 닉네임에서 잘못된 문자 발견"
 
 #: common/lib_table_base.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get writer for %s"
-msgstr "트리 작성 실패: %s"
+msgstr "%s 작성 실패"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -8340,9 +8271,9 @@ msgid "Failed to create file '%s'."
 msgstr "파일 '%s'의 생성에 실패하였습니다."
 
 #: common/project/project_archiver.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "'%s' 디렉터리 제거 오류: %s"
+msgstr "디렉터리를 여는 중 오류: '%s'."
 
 #: common/project/project_archiver.cpp:392
 #, c-format
@@ -8350,9 +8281,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip 보관 '%s'이 생성됨 (%s 비압축, %s 압축)."
 
 #: common/project/project_archiver.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "오류: %s"
+msgstr "오류: %s."
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -8602,14 +8533,12 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "클립보드로 선택한 항목 복사"
 
 #: common/tool/actions.cpp:235
-#, fuzzy
 msgid "Copy as Text"
-msgstr "보드 텍스트"
+msgstr "텍스트로 복사"
 
 #: common/tool/actions.cpp:236
-#, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
-msgstr "클립보드로 선택한 항목 복사"
+msgstr "선택한 항목을 텍스트로 클립보드에 복사하기"
 
 #: common/tool/actions.cpp:246
 msgid "Paste item(s) from clipboard"
@@ -8632,9 +8561,8 @@ msgid "Paste Special..."
 msgstr "특수 붙여넣기..."
 
 #: common/tool/actions.cpp:270
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "클립보드에서 주석 옵션을 사용하여 항목 붙여넣기"
+msgstr "옵션을 사용하여 클립보드에서 항목 붙여넣기"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -8700,45 +8628,40 @@ msgid "Increment"
 msgstr "증가"
 
 #: common/tool/actions.cpp:343
-#, fuzzy
 msgid "Increment the selected item(s)"
-msgstr "선택한 항목 삭제"
+msgstr "선택한 항목 늘림"
 
 #: common/tool/actions.cpp:348
 msgid "Increment Primary"
 msgstr "1차 증가"
 
 #: common/tool/actions.cpp:349
-#, fuzzy
 msgid "Increment the primary field of the selected item(s)"
-msgstr "선택 영역에서 그래픽 선 생성"
+msgstr "선택한 항목의 기본 필드를 늘림"
 
 #: common/tool/actions.cpp:355
 msgid "Decrement Primary"
 msgstr "1차 감소"
 
 #: common/tool/actions.cpp:356
-#, fuzzy
 msgid "Decrement the primary field of the selected item(s)"
-msgstr "선택한 항목 복제"
+msgstr "선택한 항목의 기본 필드를 줄임"
 
 #: common/tool/actions.cpp:362
 msgid "Increment Secondary"
 msgstr "2차 증가"
 
 #: common/tool/actions.cpp:363
-#, fuzzy
 msgid "Increment the secondary field of the selected item(s)"
-msgstr "선택 영역에서 그래픽 선 생성"
+msgstr "선택한 항목의 보조 필드를 늘림"
 
 #: common/tool/actions.cpp:369
 msgid "Decrement Secondary"
 msgstr "2차 감소"
 
 #: common/tool/actions.cpp:370
-#, fuzzy
 msgid "Decrement the secondary field of the selected item(s)"
-msgstr "선택 영역에서 그래픽 선 생성"
+msgstr "선택한 항목의 보조 필드를 줄임"
 
 #: common/tool/actions.cpp:376
 msgid "Select Column(s)"
@@ -8907,9 +8830,8 @@ msgid "Zoom to Objects"
 msgstr "개체 맞춤 확대"
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom to Selected Objects"
-msgstr "개체 맞춤 확대"
+msgstr "선택한 개체 줌"
 
 #: common/tool/actions.cpp:600
 msgid "Zoom In at Cursor"
@@ -8986,9 +8908,8 @@ msgid "Return zoom to level prior to last zoom undo"
 msgstr "마지막 줌 실행을 취소하고 이전으로 돌아가기"
 
 #: common/tool/actions.cpp:698
-#, fuzzy
 msgid "Pan to Center Selected Objects"
-msgstr "선택한 네트 삭제"
+msgstr "선택한 개체를 가운데로 이동"
 
 #: common/tool/actions.cpp:705
 msgid "Cursor Up"
@@ -9056,9 +8977,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "더 이상 목록의 맨 위에 라이브러리를 유지하지 않습니다"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Tree"
-msgstr "라이브러리 트리 표시"
+msgstr "라이브러리 트리"
 
 #: common/tool/actions.cpp:811
 msgid "Hide Library Tree"
@@ -9609,9 +9529,8 @@ msgstr "라이브러리"
 
 #: common/widgets/footprint_diff_widget.cpp:50
 #: eeschema/widgets/symbol_diff_widget.cpp:53
-#, fuzzy
 msgid "Toggle between A and B display"
-msgstr "기판 본체 표시 전환"
+msgstr "A와 B 디스플레이 간 전환"
 
 #: common/widgets/footprint_preview_widget.cpp:126
 msgid "Footprint not found."
@@ -9827,9 +9746,8 @@ msgid "Toggle zooming to selections in the search pane"
 msgstr "검색창에서 선택 항목으로 확대/축소 전환하기"
 
 #: common/widgets/search_pane.cpp:42
-#, fuzzy
 msgid "Pan to Selection"
-msgstr "선택 항목에 추가"
+msgstr "선택 항목으로 이동"
 
 #: common/widgets/search_pane.cpp:42
 msgid "Toggle panning to selections in the search pane"
@@ -10215,9 +10133,8 @@ msgid "Hotkey file"
 msgstr "단축키 파일"
 
 #: common/wildcards_and_files_ext.cpp:568
-#, fuzzy
 msgid "KiCad jobset files"
-msgstr "KiCad 프로젝트 파일"
+msgstr "KiCad 작업 설정 파일"
 
 #: cvpcb/auto_associate.cpp:108
 #, c-format
@@ -10724,9 +10641,8 @@ msgid "Unconnected wire endpoint"
 msgstr "연결되지 않은 와이어 종단점"
 
 #: eeschema/connection_graph.cpp:3819
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "연결되지 않은 와이어 종단점"
+msgstr "전선-버스 입력 미연결"
 
 #: eeschema/connection_graph.cpp:4194
 #, c-format
@@ -10770,14 +10686,13 @@ msgid "Error loading design block %s from library '%s'."
 msgstr "라이브러리 '%s'에서 디자인 블록 %s을 로드 중 오류가 발생했습니다."
 
 #: eeschema/design_block_utils.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "심볼 '%s'은(는) 이미 라이브러리 '%s'에 존재합니다."
+msgstr "디자인 블록 '%s'가 이미 라이브러리 '%s'에 존재함."
 
 #: eeschema/design_block_utils.cpp:50
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "기존 사전 설정에 덮어쓸까요?"
+msgstr "기존 디자인 블록에 덮어쓸까요?"
 
 #: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:287
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -11375,9 +11290,8 @@ msgid "New library identifier:"
 msgstr "새 라이브러리 식별자:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
-#, fuzzy
 msgid "Update/Reset Fields"
-msgstr "필드 업데이트 / 초기화"
+msgstr "필드 업데이트/초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:109
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
@@ -11528,9 +11442,8 @@ msgid "Untitled Field"
 msgstr "제목 없는 필드"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:234
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "자체 교차하는 다각형은 허용되지 않습니다."
+msgstr "중복 필드는 허용되지 않음."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -11854,14 +11767,12 @@ msgid "Electrical Rules Checker"
 msgstr "전기 규칙 검사기 (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "편집 옵션..."
+msgstr "ERC 작업 설정"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
-#, fuzzy
 msgid "Export netlist in KiCad format"
-msgstr "CadStar 형식으로 네트리스트 내보내기"
+msgstr "KiCad 형식으로 네트리스트 내보내기"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:226
 msgid "Export netlist in OrcadPCB2 format"
@@ -12008,9 +11919,8 @@ msgstr "네트리스트 생성기 제목을 제출해야 합니다"
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:46
-#, fuzzy
 msgid "Output path:"
-msgstr "출력:"
+msgstr "출력 경로:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
 msgid "Add Exporter..."
@@ -13627,9 +13537,8 @@ msgid "Open output file with associated application after successful plot"
 msgstr "플롯 성공 후 관련 응용 프로그램과 함께 출력 파일 열기"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도 플롯"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -14405,7 +14314,6 @@ msgid "SPICE directives:"
 msgstr "SPICE 지시문:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
-#, fuzzy
 msgid "Load Directives from Schematic"
 msgstr "회로도에서 지시문 불러오기"
 
@@ -14714,9 +14622,9 @@ msgid "Not Connected"
 msgstr "연결되지 않음"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "라이브러리에 '%s' 모델이 없습니다."
+msgstr "'%s'에 '%s'라는 모델 이름이 없음."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1253
 msgid "Browse Models"
@@ -15461,7 +15369,6 @@ msgstr "이 텍스트 항목을 클릭 가능한 하이퍼링크로 만들기"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:79
 #: pcbnew/dialogs/dialog_update_pcb.cpp:50
-#, fuzzy
 msgid "Changes to Be Applied"
 msgstr "적용할 변경 사항"
 
@@ -15650,9 +15557,8 @@ msgid "Show OP currents"
 msgstr "OP 전류 표시"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
-#, fuzzy
 msgid "Show pin alternate mode indicator icons"
-msgstr "패드의 <네트 없음> 표시기 표시"
+msgstr "핀 대체 모드 표시 아이콘 활성화"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:81
 msgid "Show page limi&ts"
@@ -16228,9 +16134,8 @@ msgid "Zoom vertically"
 msgstr "수직으로 Zoom"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
-#, fuzzy
 msgid "Vertical Touchpad or Scroll Wheel Movement"
-msgstr "수직 터치패드 또는 스크롤 휠 움직임:"
+msgstr "수직 터치패드 또는 스크롤 휠 이동"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
@@ -16264,9 +16169,8 @@ msgid "Alt:"
 msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal Touchpad Movement"
-msgstr "수평 터치패드 이동:"
+msgstr "수평 터치패드 이동"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
@@ -16317,9 +16221,8 @@ msgid "&Pitch of repeated pins:"
 msgstr "반복되는 핀의 피치 (&P):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:140
-#, fuzzy
 msgid "General Editing"
-msgstr "일반 설정"
+msgstr "일반 편집"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:147
 msgid "Keep pins attached when dragging edges"
@@ -16426,14 +16329,12 @@ msgid "Reset Libraries"
 msgstr "라이브러리 재설정"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "프로젝트 필드 이름 템플릿:"
+msgstr "프로젝트 필드 이름 템플릿"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "전역 필드 이름 템플릿:"
+msgstr "전역 필드 이름 템플릿"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
 #, c-format
@@ -16451,14 +16352,12 @@ msgstr ""
 "을 미치지 않습니다."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:221
-#, fuzzy
 msgid "Remove White Space"
-msgstr "3D 형상 제거"
+msgstr "공백 제거"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:222
-#, fuzzy
 msgid "Keep White Space"
-msgstr "패드 금지"
+msgstr "공백 유지"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -16488,9 +16387,8 @@ msgid ""
 msgstr "'%s' 파일은 새 루트 시트 파일로 덮어쓰므로 복사할 수 없습니다."
 
 #: eeschema/eeschema_jobs_handler.cpp:190
-#, fuzzy
 msgid "Failed to load schematic\n"
-msgstr "회로도 파일을 로드하지 못했습니다.\n"
+msgstr "회로도 로드 실패\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:327
 #: eeschema/eeschema_jobs_handler.cpp:468
@@ -16542,9 +16440,9 @@ msgstr "BOM 형식 사전 설정 '%s'를 찾을 수 없음"
 
 #: eeschema/eeschema_jobs_handler.cpp:744
 #: eeschema/eeschema_jobs_handler.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "BOM 생성..."
+msgstr "자재 명세서를 '%s'에 작성함."
 
 #: eeschema/eeschema_jobs_handler.cpp:878
 #, c-format
@@ -16807,14 +16705,12 @@ msgid "Checking pins..."
 msgstr "핀 확인..."
 
 #: eeschema/erc/erc.cpp:1850
-#, fuzzy
 msgid "Checking similar labels..."
-msgstr "라벨 확인..."
+msgstr "유사한 레이블 확인..."
 
 #: eeschema/erc/erc.cpp:1858
-#, fuzzy
 msgid "Checking local and global labels..."
-msgstr "라벨 확인..."
+msgstr "지역 및 전역 레이블 확인..."
 
 #: eeschema/erc/erc.cpp:1866
 msgid "Checking for unresolved variables..."
@@ -16886,7 +16782,6 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "입력 전력 핀이 출력 전력 핀에 의해 구동되지 않음"
 
 #: eeschema/erc/erc_item.cpp:68
-#, fuzzy
 msgid "Multiple pins with the same pin number"
 msgstr "동일한 핀 번호를 가진 여러 핀"
 
@@ -17841,14 +17736,13 @@ msgid "Symbol unit '%s' is already placed (on sheet '%s')"
 msgstr "심볼 장치 '%s'가 이미 배치되어 있음(시트 '%s'에)"
 
 #: eeschema/picksymbol.cpp:129
-#, fuzzy
 msgid "Unit Already Placed"
-msgstr "이미 배치됨"
+msgstr "이미 배치된 유닛"
 
 #: eeschema/picksymbol.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "&Swap '%s' and '%s'"
-msgstr "시트 '%s' 핀 '%s'"
+msgstr "바꿈(&S) '%s' 와 '%s'"
 
 #: eeschema/picksymbol.cpp:132
 #, c-format
@@ -18074,14 +17968,12 @@ msgid "Position Y"
 msgstr "위치 Y"
 
 #: eeschema/sch_bitmap.cpp:326 pcbnew/pcb_reference_image.cpp:354
-#, fuzzy
 msgid "Transform Offset X"
-msgstr "변환 선택"
+msgstr "변환 오프셋 X"
 
 #: eeschema/sch_bitmap.cpp:333 pcbnew/pcb_reference_image.cpp:361
-#, fuzzy
 msgid "Transform Offset Y"
-msgstr "변환 선택"
+msgstr "변환 오프셋 Y"
 
 #: eeschema/sch_bus_entry.cpp:448
 msgid "Bus to Wire Entry"
@@ -20087,9 +19979,8 @@ msgstr ""
 "계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:695
-#, fuzzy
 msgid "Cannot create the schematic image"
-msgstr "회로도로 내보내기"
+msgstr "회로도 이미지를 생성할 수 없음"
 
 #: eeschema/sheet.cpp:772
 #, c-format
@@ -21499,9 +21390,8 @@ msgstr ""
 "다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:949
-#, fuzzy
 msgid "Create an editable copy"
-msgstr "새 디렉토리 만들기"
+msgstr "편집 가능한 복사본 만들기"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:955
 #, c-format
@@ -21513,14 +21403,12 @@ msgid "Select type of item to save"
 msgstr "저장할 항목 유형 선택"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
-#, fuzzy
 msgid "Copy symbol"
-msgstr "심볼 그룹화"
+msgstr "심볼 복사"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:963
-#, fuzzy
 msgid "Copy library"
-msgstr "라이브러리"
+msgstr "라이브러리 복사"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
@@ -21687,14 +21575,12 @@ msgstr ""
 "모든 심볼을 덮어쓰거나 새 심볼의 이름을 바꾸시겠습니까?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
-#, fuzzy
 msgid "Overwrite All"
-msgstr "덮어쓰기"
+msgstr "전체 덮어쓰기"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
-#, fuzzy
 msgid "Rename All"
-msgstr "파일 이름 바꾸기"
+msgstr "모든 이름 변경"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1098
 #, c-format
@@ -22025,9 +21911,9 @@ msgid "false"
 msgstr "거짓"
 
 #: eeschema/tools/backannotate.cpp:390
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s reference designator to '%s'."
-msgstr "'%s' 참조 지정자를 '%s'(으)로 변경합니다."
+msgstr "참조 지정자 %s를 '%s'로 변경함."
 
 #: eeschema/tools/backannotate.cpp:403
 #, c-format
@@ -22136,9 +22022,8 @@ msgid "Select a complete connection"
 msgstr "전체 연결 선택"
 
 #: eeschema/tools/ee_actions.cpp:150
-#, fuzzy
 msgid "Show/hide design blocks library"
-msgstr "KiCad 디자인블록 라이브러리 경로"
+msgstr "디자인 블록 라이브러리 표시/숨김"
 
 #: eeschema/tools/ee_actions.cpp:156
 #, fuzzy
@@ -24274,14 +24159,13 @@ msgid "Do not export"
 msgstr "내보내지 않기"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "기존 레이어의 거버: "
+msgstr "알려진 레이어를 가진 거버: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "패턴과 일치하는 네트에 네트클래스 할당"
+msgstr "일치하는 PCB 레이어에 할당할까요?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 msgid "Automatic Layer Assignment"
@@ -26058,9 +25942,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "주어진 레이어를 단일 거버 파일로 플롯하기"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:169
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "라벨은 두 개 이상의 와이어를 연결함"
+msgstr "하나 이상의 모드 플래그를 사용할 수 없음\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -26163,11 +26046,10 @@ msgid "Render from side. Options: %s"
 msgstr "측면 렌더링. 옵션: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
-msgstr ""
-"이미지 배경. 옵션: 투명, 불투명. 기본값: PNG의 경우 투명, JPEG의 경우 불투명"
+msgstr "이미지 배경. 옵션: %s. 기본값: PNG의 경우 투명, JPEG의 경우 불투명"
 
 #: kicad/cli/command_pcb_render.cpp:251
 #, c-format
@@ -26340,9 +26222,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "사용할 색상 테마(기본값은 회로도 설정임)"
 
 #: kicad/cli/command_sch_export_plot.cpp:82
-#, fuzzy
 msgid "Default font name"
-msgstr "기본 글꼴:"
+msgstr "기본 글꼴 이름"
 
 #: kicad/cli/command_sch_export_plot.cpp:88
 msgid "Do not generate property popups in PDF"
@@ -26437,9 +26318,8 @@ msgid "version info format (plain, commit, about)"
 msgstr "버전 정보 형식 (plain, commit, about)"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
-msgstr "지정"
+msgstr "목적지:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
 #, fuzzy
@@ -26447,9 +26327,8 @@ msgid "Generate error if no files copied"
 msgstr "거버 작업 파일 생성"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
-#, fuzzy
 msgid "Overwrite files in destination"
-msgstr "기존 사전 설정에 덮어쓸까요?"
+msgstr "대상 파일 덮어쓰기"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
 #, fuzzy
@@ -26466,9 +26345,8 @@ msgid "Ignore non-zero exit code"
 msgstr "종료 코드가 0이 아닌 경우 무시"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "편집 옵션..."
+msgstr "명령 작업 설정 실행"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:54
 #: kicad/dialogs/dialog_jobset_output_options_base.h:62
@@ -26501,9 +26379,8 @@ msgid "Description:"
 msgstr "설명:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
-#, fuzzy
 msgid "Include jobs:"
-msgstr "영역 포함 (&z)"
+msgstr "작업 포함:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
@@ -26590,9 +26467,9 @@ msgid "Update Available"
 msgstr "사용 가능한 업데이트"
 
 #: kicad/dialogs/panel_jobset.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
-msgstr "출력:"
+msgstr "출력: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:64
 #, fuzzy
@@ -26624,9 +26501,8 @@ msgid "Running jobs"
 msgstr "조정 모드"
 
 #: kicad/dialogs/panel_jobset.cpp:264
-#, fuzzy
 msgid "Edit Output Options..."
-msgstr "%s 출력 옵션"
+msgstr "출력 옵션 편집..."
 
 #: kicad/dialogs/panel_jobset.cpp:265
 #, fuzzy
@@ -26635,7 +26511,7 @@ msgstr "네트 삭제"
 
 #: kicad/dialogs/panel_jobset.cpp:268
 msgid "View Last Run Results..."
-msgstr ""
+msgstr "최근 실행 결과 보기..."
 
 #: kicad/dialogs/panel_jobset.cpp:358
 #, fuzzy
@@ -26713,7 +26589,7 @@ msgstr "일반 설정"
 
 #: kicad/dialogs/panel_jobset_base.h:133
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "작업 출력 실행 로그"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -32860,7 +32736,7 @@ msgstr "끝 위치"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
-msgstr ""
+msgstr "소스 항목은 그대로 유지"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 #, fuzzy
@@ -33214,12 +33090,12 @@ msgstr "0.00000 / 0.00 / 0.0000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
 #: pcbnew/pcb_dimension.cpp:1744
 msgid "Inward"
-msgstr ""
+msgstr "내부"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
 #: pcbnew/pcb_dimension.cpp:1745
 msgid "Outward"
-msgstr ""
+msgstr "외부"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:188
 msgid ""
@@ -33228,6 +33104,10 @@ msgid ""
 "Inward:    >-----<\n"
 "Outward: <----->"
 msgstr ""
+"치수 화살표 방향 선택\n"
+"자동: 텍스트 위치에 따라 결정됨.\n"
+"내부:    >-----<\n"
+"외부 <----->"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:199
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:94
@@ -33797,7 +33677,7 @@ msgstr "변수 이름은 비워 둘 수 없습니다."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:223
 msgid "The output file name conflicts with the selected compression format."
-msgstr ""
+msgstr "출력 파일 이름이 선택한 압축 형식과 충돌합니다."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:351
 #, fuzzy, c-format
@@ -33858,15 +33738,15 @@ msgstr "압축 형식:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:71
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "출력 ODB++ 파일의 압축 형식을 선택"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:276
 msgid "Non-unity scaled models:"
@@ -33957,7 +33837,7 @@ msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
-msgstr ""
+msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 #, fuzzy
@@ -34124,7 +34004,7 @@ msgstr "오래된 파일 덮어쓰기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:258
 msgid "Don't write P-curves to STEP file"
-msgstr ""
+msgstr "STEP 파일에 P-커브 쓰지 않기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:259
 msgid ""
@@ -34927,7 +34807,7 @@ msgstr "하단 레이어의 풋 프린트에 음수 X 좌표 사용"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
 msgid "Generate single file with both front and back positions"
-msgstr ""
+msgstr "앞면과 뒷면이 모두 포함된 단일 파일 생성"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 msgid "Generate Placement Files"
@@ -34998,9 +34878,8 @@ msgid "Gerber X2"
 msgstr "거버 X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
-msgstr "맵 파일 생성"
+msgstr "맵 파일 생성:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 #, fuzzy
@@ -35012,9 +34891,8 @@ msgid "Absolute"
 msgstr "절대 경로"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "영점"
+msgstr "영점:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -35212,7 +35090,7 @@ msgstr "물방울모양 제거"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:115
 msgid "Remove teardrops according to filtering options"
-msgstr ""
+msgstr "필터링 옵션에 따라 눈물 방울 제거"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:119
 #, fuzzy
@@ -35221,7 +35099,7 @@ msgstr "물방울모양 제거"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Remove all teardrops, regardless of filtering options"
-msgstr ""
+msgstr "필터링 옵션에 관계없이 모든 눈물방울 제거"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -35964,7 +35842,7 @@ msgstr "기타 항목"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
-msgstr ""
+msgstr "소스 규칙 영역 내에서 텍스트, 도형, 영역 및 기타 항목을 복사"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
 #, fuzzy
@@ -37082,7 +36960,8 @@ msgstr "중복 배선 제거"
 msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
-msgstr ""
+msgstr "새 트랙이 이미 존재하는 트랙과 동일한 연결을 가지고 있으면 기존 트랙이 "
+"제거됩니다."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
@@ -37354,7 +37233,7 @@ msgstr "참조 이미지 속성"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "Opaque"
-msgstr ""
+msgstr "불투명"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
 #, fuzzy
@@ -37372,9 +37251,8 @@ msgid "User"
 msgstr "사용자1"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
-#, fuzzy
 msgid "Dimensions:"
-msgstr "치수"
+msgstr "치수:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
@@ -37392,9 +37270,8 @@ msgid "Quality preset:"
 msgstr "프리셋 선택:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
-#, fuzzy
 msgid "Background style:"
-msgstr "배경 시작"
+msgstr "배경 스타일:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:103
 msgid "View"
@@ -37412,7 +37289,7 @@ msgstr "지시문"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
-msgstr ""
+msgstr "직각"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
 #, fuzzy
@@ -37436,23 +37313,21 @@ msgid "Y"
 msgstr "Y"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:156
-#, fuzzy
 msgid "Z"
-msgstr "Z:"
+msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
-#, fuzzy
 msgid "Pivot:"
-msgstr "피벗 설정"
+msgstr "축:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "Pan:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
 #, fuzzy
@@ -37460,9 +37335,8 @@ msgid "Lights intensity"
 msgstr "강도"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
-#, fuzzy
 msgid "Camera:"
-msgstr "카메라 줌"
+msgstr "카메라:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
 #, fuzzy
@@ -37512,11 +37386,11 @@ msgstr "이 규칙 영역에 대해서 DRC 규칙에서 사용될 고유 이름"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
-msgstr ""
+msgstr "이 값을 0으로 초기화."
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:76
 msgid "Reset this value to the original value."
-msgstr ""
+msgstr "이 값을 원래값으로 재설정."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 msgid "Set a new value for this offset:"
@@ -37538,7 +37412,7 @@ msgstr "호 각은 0보다 커야 함"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
-msgstr ""
+msgstr "아크는 3개의 별개의 점이 있음"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:474
 #, c-format
@@ -37632,7 +37506,7 @@ msgstr "모서리와 크기별"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr ""
+msgstr "중심 및 크기기준"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 #, fuzzy
@@ -37651,11 +37525,11 @@ msgstr "시작점"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
-msgstr ""
+msgstr "중심/시작/각도기준"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:149
 msgid "By Start/Mid/End"
-msgstr ""
+msgstr "시작/중간/끝 기준"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
 #, fuzzy
@@ -38149,9 +38023,8 @@ msgid "Drag (free angle)"
 msgstr "드래그 (자유 각도)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:90
-#, fuzzy
 msgid "Flip board items:"
-msgstr "기판 뷰를 반전"
+msgstr "보드 항목 뒤집기:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:94
 #, fuzzy
@@ -38274,14 +38147,12 @@ msgid "Internal Layers"
 msgstr "내부 레이어"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
-#, fuzzy
 msgid "Default Field Properties for New Footprints"
-msgstr "새 풋프린트에 대한 기본 텍스트 항목:"
+msgstr "새 풋프린트의 기본 필드 속성"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:73
-#, fuzzy
 msgid "Default Text Items for New Footprints"
-msgstr "새 풋프린트에 대한 기본 텍스트 항목:"
+msgstr "새 풋프린트의 기본 텍스트 항목"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:210
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:217
@@ -38329,9 +38200,8 @@ msgid "Parameter error"
 msgstr "매개변수 오류"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:26
-#, fuzzy
 msgid "Default Properties for New Graphic Items"
-msgstr "새 그래픽 항목에 대한 기본 속성:"
+msgstr "새 그래픽 항목의 기본 속성"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:309
 msgid "Hidden footprint libraries are not yet supported."
@@ -38838,9 +38708,8 @@ msgstr ""
 "다.  비활성화되면, 비아 스택업 높이는 무시됩니다."
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
-#, fuzzy
 msgid "Default Properties for New Dimension Objects"
-msgstr "새 치수 객체에 대한 기본 속성:"
+msgstr "새 치수 객체의 기본 속성"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:37
 msgid ""
@@ -39536,9 +39405,8 @@ msgid "If none are provided, setting the values to zero is suggested."
 msgstr "아무 값도 제공되지 않았다면, 0으로 설정하는 것을 권장합니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
-#, fuzzy
 msgid "Solder Mask Settings"
-msgstr "솔더 마스크 설정:"
+msgstr "솔더 마스크 설정"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
@@ -39559,13 +39427,12 @@ msgstr "솔더 마스크의 최소 웹 폭:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"솔더 마스크의 개구부 사이의 최소 거리입니다.  패드 개구부의 거리가 이보다 가"
-"까울 경우 하나로 합쳐져 플롯됩니다."
+"솔더 마스크의 개구부 사이의 최소 거리입니다.\n"
+"이 거리보다 가까운 패드 개구부는 단일 개구부로 그려집니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -39573,15 +39440,14 @@ msgstr "솔더 마스크와 동박 간 공간거리:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:92
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
-#, fuzzy
 msgid ""
 "Minimum distance between a solder mask opening and a copper item with a "
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
-"DRC 테스트의 경우:\n"
-"솔더 마스크 개구부와 상위 솔더 마스크 개구부와 다른 네트를 가진 구리 항목 사"
-"이의 최대 거리로 DRC 오류를 생성함"
+"솔더 마스크 개구부와 솔더 마스크 개구부의 상위 개구부와 다른 네트를 가진 "
+"구리 항목.\n"
+"이 최소 거리보다 작으면 DRC 오류가 발생합니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
 #, fuzzy
@@ -39589,14 +39455,11 @@ msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr "풋프린트 내의 패드 사이에 브리지된 솔더 마스크 구멍 허용"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
-#, fuzzy
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
-msgstr ""
-"DRC 테스트의 경우:\n"
-" 동일한 풋프린트의 패드 간 DRC 오류 유형 솔더 마스크 개구부 브리지 비활성화"
-"(네트 연결에 유용)"
+msgstr "동일한 풋프린트에서 패드 간 솔더 마스크 조리개 연결부에 대한 DRC 오류 확인을 "
+"비활성화합니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 msgid "Tent vias:"
@@ -39604,19 +39467,16 @@ msgstr "텐트 비아:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
-#, fuzzy
 msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"텐트형 비아: 솔더마스크 레이어에 플롯되지 않음\n"
-"텐트되지 않음: 비아가 솔더마스크 레이어에 표시됨\n"
-"(솔더 마스크는 네거티브 레이어)"
+"텐트형: 비아가 솔더 마스크로 덮여 있음.\n"
+"비텐트형: 비아가 솔더 마스크로 덮여 있지 않음."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
-#, fuzzy
 msgid "Solder Paste Settings"
-msgstr "솔더 페이스트 설정:"
+msgstr "솔더 페이스트 설정"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:149
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:154
@@ -39691,6 +39551,10 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### 문서\n"
+"\n"
+"전체 문서는 [https://docs.kicad.org](https://go.kicad.org/docs/"
+"GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)을 참조하세요."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -39716,9 +39580,29 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### 최상위 조항\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
+"<br>\n"
+"\n"
+"### 규칙 조항\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"    (severity <severity_name>)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -39901,460 +39785,186 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"### 최상위 규칙\n"
-"\n"
-"    (version 1)\n"
-"\n"
-"    (rule <rule_name> <rule_clause> ...)\n"
-"\n"
-"<br>\n"
-"\n"
-"### 규칙 조항\n"
-"\n"
-"    (constraint <constraint_type> ...)\n"
-"\n"
-"    (condition \"<expression>\")\n"
-"\n"
-"    (layer \"<layer_name>\")\n"
-"\n"
-"    (severity <severity_name>)\n"
-"\n"
-"\n"
-"<br>\n"
-"\n"
 "### 제약 조건\n"
 "\n"
-"| 제약조건 유형           | 인수 유"
-"형                                                                                                         "
-"| 설"
-"명                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+"| Constraint type           | Argument "
+"type                                                                                                         "
+"| "
+"Description                                                                                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                           "
-"| 비아에서 환형 링의 너비를 확인."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
+"| Checks the width of annular rings on "
+"vias.<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
-"| 주어진 표현식을 확인."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                     "
+"| Checks the given "
+"expression.<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                   "
-"| 서로 다른 네트의 구리 개체 사이의 **전기적** 간격을 지정.  (네트와 상관없"
-"이 개체 간 간격을 지정하려면 'physical_clearance'를 참조하십시오.)<br><br>구"
-"리 개체 간 겹침(충돌)을 허용하려면 `min` 값을 0보다 작게(예: `-1`) "
-"`clearance` 제약 조건을 생성합니다."
-"<br>                                                                                                                     "
+"| Specifies the **electrical** clearance between copper objects of different "
+"nets.  (See `physical_clearance` if you wish to specify clearance between "
+"objects regardless of net.)<br><br>To allow copper objects to overlap "
+"(collide), create a `clearance` constraint with the `min` value less than "
+"zero (for example, `-1`)"
+".<br>                                                                                                                     "
 "|\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                   "
-"| 풋프린트 코트야드 사이의 간격을 확인하고 두 코트야드 중 하나라도 'min' 거리"
-"보다 가까우면 오류를 생성합니다.  풋프린트에 코트야드 형상이 없는 경우 이 제"
-"약 조건에서 오류가 발생하지 않습니다."
-"<br>                                                                                                                                                                                                              "
+"| Checks the clearance between footprint courtyards and generates an error "
+"if any two courtyards are closer than the `min` distance.  If a footprint "
+"does not have a courtyard shape, no errors will be generated from this "
+"constraint.<br>                                                                                                                                                                                                              "
+"|\n"
+"| `creepage`                | "
+"min                                                                                                                   "
+"| Specifies the creepage distance between copper objects of different "
+"nets.<br>                                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                           "
-"| 차동 쌍에서 결합된 트랙 간의 간격을 확인합니다.  Coupled tracks are "
-"segments that are parallel to each other.  Differential pair gap is not "
-"tested on uncoupled portions of a differential pair (for example, the fanout "
-"from a component)."
-"<br>                                                                                                                                                                                          "
+"| Checks the gap between coupled tracks in a differential pair.  Coupled "
+"tracks are segments that are parallel to each other.  Differential pair gap "
+"is not tested on uncoupled portions of a differential pair (for example, the "
+"fanout from a component)"
+".<br>                                                                                                                                                                                          "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                   "
-"| 차동 쌍 트랙이 쌍의 다른 극성 트랙에서 분리되지 않고 라우팅되는 거리를 확인"
-"합니다(예: 쌍이 구성 요소에서 멀어지거나 비아와 같은 다른 오브젝트 주변을 통"
-"과하기 위해 분리되는 경우)."
-"<br>                                                                                                                                                                                                        "
+"| Checks the distance that a differential pair track is routed uncoupled "
+"from the other polarity track in the pair (for example, where the pair fans "
+"out from a component, or becomes uncoupled to pass around another object "
+"such as a via)"
+".<br>                                                                                                                                                                                                        "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| 허용하지 않을 개체 유형을 공백으로 구분하여 하나 이상 지정합니다.  예를 들"
-"어, `(제약 조건 트랙 불허)` 또는 `(제약 조건 패드 경유 트랙 불허)`입니다.  "
-"이 유형의 개체가 규칙 조건과 일치하면 DRC 오류가 생성됩니다.<br><br>이 제약 "
-"조건은 본질적으로 킵아웃 규칙 영역과 동일하지만 보다 구체적인 킵아웃 제한을 "
-"만드는 데 사용할 수 있습니다."
-"<br>                                                                  |\n"
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | Specify one or more object types to disallow, separated by spaces.  "
+"For example, `(constraint disallow track)` or `(constraint disallow track "
+"via pad)`.  If an object of this type matches the rule condition, a DRC "
+"error will be created.<br><br>This constraint is essentially the same as a "
+"keepout rule area, but can be used to create more specific keepout "
+"restrictions.<br>                                                                  "
+"|\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                           "
-"| 대상물과 보드 가장자리 사이의 간격을 확인합니다.<br><br>보드 가장자리에는 "
-"`Edge.Cuts` 레이어의 모든 그래픽 항목과 모든 *타원형* 패드 구멍이 포함되므로 "
-"“밀링 공차”라고도 생각할 수 있습니다.  (드릴링 공차는 "
-"`physical_hole_clearance` 참조)."
+"| Checks the clearance between objects and the board edge.<br><br>This can "
+"also be thought of as the \"milling tolerance\" as the board edge will "
+"include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
+"pad holes.  (See `physical_hole_clearance` for the drilling tolerance.)"
 "<br>                                                                                                                                                   "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                               "
-"| 규칙 조건과 일치하는 네트에 대한 총 라우팅 길이를 확인하고 제약 조건의 "
-"'min' 값(지정된 경우) 이하이거나 'max' 값(지정된 경우)보다 큰 각 네트에 대해 "
-"오류를 생성합니다."
-"<br>                                                                                                                                                                                                                              "
+"| Checks the total routed length for the nets that match the rule condition "
+"and generates an error for each net that is below the `min` value (if "
+"specified) or above the `max` value (if specified) of the "
+"constraint.<br>                                                                                                                                                                                                                              "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                               "
-"| 패드 또는 비아에 뚫린 구멍의 크기(직경)를 확인합니다.  타원형 구멍의 경우, "
-"작은(마이너) 직경은 ' min' 값(지정된 경우)과 비교하여 테스트되고 큰(메이저) "
-"직경은 ' max' 값(지정된 경우)과 비교하여 테스트됩니다."
-"<br>                                                                                                                                                                                           "
+"| Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
+"holes, the smaller (minor) diameter will be tested against the `min` value ("
+"if specified) and the larger (major) diameter will be tested against the "
+"`max` value (if specified)"
+".<br>                                                                                                                                                                                           "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                   "
-"| 패드 또는 비아에 뚫린 구멍과 다른 네트의 구리 개체 사이의 간격을 확인합니"
-"다.  간격은 구멍의 중심이 아닌 지름을 기준으로 측정합니다."
-"<br>                                                                                                                                                                                                                                                                       "
+"| Checks the clearance between a drilled hole in a pad or via and copper "
+"objects on a different net.  The clearance is measured from the diameter of "
+"the hole, not its "
+"center.<br>                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                   "
-"| 패드와 비아에 기계식 드릴링 구멍 사이의 간격을 확인합니다.  The 간격은 구멍"
-"의 중심이 아닌 구멍의 직경 간격을 측정합니다..<br><br>이 제한은 드릴 비트를 "
-"보호하기 위한 것입니다.  레이저 드릴**(마이크로비아)과 기타 기계적으로 드릴링"
-"되지 않은 구멍 사이의 간격은 확인되지 않으며, **밀링**(타원형)과 기타 기계적"
-"으로 드릴링되지 않은 구멍 사이의 간격도 확인되지 않습니다.<br> |\n"
+"| Checks the clearance between mechanically-drilled holes in pads and vias.  "
+"The clearance is measured between the diameters of the holes, not between "
+"their centers.<br><br>This constraint is soley for the protection of drill "
+"bits.  The clearance between **laser-drilled** (microvias) and other non-"
+"mechanically-drilled holes is not checked, nor is the clearance between "
+"**milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
 "| `physical_clearance`      | "
 "min                                                                                                                   "
-"| 지정된 레이어(비구리 레이어 포함)에서 두 개체 사이의 간격을 확인합니다."
-"<br><br>'클리어런스`보다 더 많은 범용 검사를 수행할 수 있지만 속도가 훨씬 느"
-"립니다.  가능하면 `클리어런스`를 사용하세요."
-"<br>                                                                                                                                                                                                                           "
+"| Checks the clearance between two objects on a given layer (including non-"
+"copper layers).<br><br>While this can perform more general-purpose checks "
+"than `clearance`, it is much slower.  Use `clearance` where "
+"possible.<br>                                                                                                                                                                                                                           "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                   "
-"| 패드 또는 비아에 뚫린 구멍과 네트에 관계없이 다른 물체 사이의 간격을 확인합"
-"니다. 간격은 구멍의 중심이 아닌 지름을 기준으로 측정합니다.<br><br>이는 **원"
-"형** 구멍만 포함하므로 ''드릴링 공차''라고 생각할 수도 있습니다(밀링 공차는 "
-"`edge_clearance` 참조)."
-"<br>                                                                                                                   "
+"| Checks the clearance between a drilled hole in a pad or via and another "
+"object, regardless of net. The clearance is measured from the diameter of "
+"the hole, not its center.<br><br>This can also be thought of as the "
+"\"drilling tolerance\" as it only includes **round** holes (see "
+"`edge_clearance` for the milling tolerance)"
+".<br>                                                                                                                   "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                           "
-"| 실크스크린 레이어에 있는 개체와 다른 개체 사이의 간격을 확인합니다."
-"<br>                                                                                                                                                                                                                                                                                                                                                                       "
+"| Checks the clearance between objects on silkscreen layers and other "
+"objects.<br>                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                   "
-"| 규칙 조건에 일치하는 네트의 총 스큐, 즉 각 네트의 길이와 규칙에 일치하는 "
-"각 네트의 모든 길이의 평균 간 차이를 확인합니다.  해당 평균과 한 네트의 길이 "
-"차이의 절대값이 제약 조건 'max' 값보다 크면 오류가 발생합니다."
-"<br>                                                                                  "
+"| Checks the total skew for the nets that match the rule condition, that is, "
+"the difference between the length of each net and the average of all the "
+"lengths of each net that is matched by the rule.  If the absolute value of "
+"the difference between that average and the length of any one net is above "
+"the constraint `max` value, an error will be "
+"generated.<br>                                                                                  "
 "|\n"
 "| `thermal_relief_gap`      | "
 "min                                                                                                                   "
-"| 패드와 열 완화 연결이 있는 영역 사이의 간격 너비를 지정합니다."
-"<br>                                                                                                                                                                                                                                                                                                                                                          "
+"| Specifies the width of the gap between a pad and a zone with a thermal-"
+"relief "
+"connection.<br>                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                   "
-"| 패드와 열 완화 연결이 있는 영역 사이의 간격 너비를 지정합니다."
-"<br>                                                                                                                                                                                                                                                                                                                                                     "
+"| Specifies the width of the spokes connecting a pad to a zone with a "
+"thermal-relief "
+"connection.<br>                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                           "
-"| 트랙 및 호 구간의 너비를 확인합니다.  폭이 'min' 값(지정한 경우) 이하이거"
-"나 'max' 값(지정한 경우) 이상인 각 세그먼트에 대해 오류가 생성됩니다."
-"<br>                                                                                                                                                                                                                                                            "
+"| Checks the width of track and arc segments.  An error will be generated "
+"for each segment that has a width below the `min` value (if specified) or "
+"above the `max` value (if specified)"
+".<br>                                                                                                                                                                                                                                                            "
+"|\n"
+"| `track_angle`             | min/opt/"
+"max                                                                                                           "
+"| Checks the angle between two connected track segments.  An error will be "
+"generated for each connected pair with an angle below the `min` value (if "
+"specified) or above the `max` value (if specified)"
+".<br>                                                                                                                                                                                                                                             "
+"|\n"
+"| `track_segment_length`    | min/"
+"max                                                                                                               "
+"| Checks the length of track and arc segments.  An error will be generated "
+"for each segment that has a length below the `min` value (if specified) or "
+"above the `max` value (if specified)"
+".<br>                                                                                                                                                                                                                                                          "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                   "
-"| 규칙 조건과 일치하는 모든 네트의 비아 개수를 계산합니다.  이 숫자가 일치하"
-"는 네트에서 제약 조건 'max' 값을 초과하면 해당 네트에 대해 오류가 생성됩니다."
-"<br>                                                                                                                                                                                                                                                              "
+"| Counts the number of vias on every net matched by the rule condition.  If "
+"that number exceeds the constraint `max` value on any matched net, an error "
+"will be generated for that "
+"net.<br>                                                                                                                                                                                                                                                              "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| 영역과 패드 간에 연결을 지정합니다."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                "
+"| Specifies the connection to be made between a zone and a "
+"pad.<br>                                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "\n"
 "\n"
-"### 아이템\n"
-"\n"
-" * `A` &nbsp;&nbsp; _the first (or only) item under test_\n"
-" * `B` &nbsp;&nbsp; _the second item under test (for binary tests)_\n"
-" * `L` &nbsp;&nbsp; _the layer currently under test_\n"
-"\n"
-"<br>\n"
-"\n"
-"### 심각도 명칭\n"
-"\n"
-" * 경고\n"
-" * 오류\n"
-" * 제외\n"
-" * 무시\n"
-"\n"
-"<br>\n"
-"\n"
-"### 예시\n"
-"\n"
-"    (version 1)\n"
-"\n"
-"    (rule HV\n"
-"       (constraint clearance (min 1.5mm))\n"
-"       (condition \"A.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV\n"
-"       (layer outer)\n"
-"       (constraint clearance (min 1.5mm))\n"
-"       (condition \"A.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV_HV\n"
-"       # wider clearance between HV tracks\n"
-"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
-"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
-"\n"
-"\n"
-"    (rule HV_unshielded\n"
-"       (constraint clearance (min 2mm))\n"
-"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
-"\n"
-"\n"
-"    (rule heavy_thermals\n"
-"       (constraint thermal_spoke_width (min 0.5mm))\n"
-"       (condition \"A.NetClass == 'HV'\"))\n"
-"<br><br>\n"
-"\n"
-"### 참고\n"
-"\n"
-"버전 절은 첫 번째 절이어야 합니다.  파일의 구문 버전을 나타내므로 다음과 같"
-"이 표시합니다. \n"
-"향후 규칙 구문 분석기가 자동 업데이트를 수행할 수 있습니다.  다음과 같아야 합"
-"니다.\n"
-"set to \"1\".\n"
-"\n"
-"규칙은 구체적으로 순서를 정해야 합니다.  나중 규칙이\n"
-"이전 규칙보다 우선하며, 일치하는 규칙이 발견되면\n"
-"더 이상 규칙을 확인하지 않습니다.\n"
-"\n"
-"줄에 설명을 달거나 설명을 취소하려면 Ctrl+/를 사용합니다.\n"
-"<br><br><br>\n"
-"\n"
-"### 표현식 함수\n"
-"\n"
-"모든 함수 매개변수는 간단한 와일드카드를 지원함 (`*` and `?`).\n"
-"<br><br>\n"
-"\n"
-"    A.intersectsCourtyard('<footprint_refdes>')\n"
-"'A'의 일부가 주어진 풋프린트의 주요 코트야드 내에 있으면 참입니다.\n"
-"<br><br>\n"
-"\n"
-"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
-"'A'의 일부가 주어진 풋프린트의 코트야드 안에 있으면 참입니다.\n"
-"<br><br>\n"
-"\n"
-"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
-"'A'의 일부가 주어진 풋프린트의 코트야드 뒤에 있으면 참입니다.\n"
-"<br><br>\n"
-"\n"
-"    A.intersectsArea('<zone_name>')\n"
-"'A'의 일부가 주어진 영역의 경계선 안에 있으면 참입니다.\n"
-"<br><br>\n"
-"\n"
-"    A.enclosedByArea('<zone_name>')\n"
-"'A'가 모두 주어진 영역의 경계선 안에 있으면 참입니다.\n"
-"\n"
-"참고: 이 함수는 `intersectsArea()`보다 호출 비용이 더 많이 들 수 있음.  가능"
-"하면\n"
-"`intersectsArea()`를 사용하세요.\n"
-"<br><br>\n"
-"\n"
-"    A.getField('<field_name>')\n"
-"주어진 필드의 값입니다. 풋프린트에만 필드가 있으므로\n"
-"`A`가 풋프린트인 경우에만 필드가 반환됩니다.\n"
-"<br><br>\n"
-"\n"
-"    A.isPlated()\n"
-"'A'에 도금된 구멍이 있는 경우 참입니다.\n"
-"<br><br>\n"
-"\n"
-"    A.inDiffPair('<net_name>')\n"
-"'A'에 지정된 차동 쌍의 일부인 네트가 있는 경우 참입니다.\n"
-"`<net_name>`은 차동 쌍의 기본 이름입니다.  예를 들어, `inDiffPair('/CLK')`"
-"는\n"
-"`/CLK_P` 및 `/CLK_N` 네트의 항목과 일치합니다.\n"
-"<br><br>\n"
-"\n"
-"    AB.isCoupledDiffPair()\n"
-"True if `A` and `B` are members of the same diff pair.\n"
-"<br><br>\n"
-"\n"
-"    A.memberOfGroup('<group_name>')\n"
-"True if `A` is a member of the given group. The name can contain wildcards.\n"
-"Includes nested membership.\n"
-"<br><br>\n"
-"\n"
-"    A.memberOfFootprint('<footprint_reference>|<footprint_id>')\n"
-"True if `A` is a member of a footprint matching the given reference "
-"designator or footprint\n"
-"ID.  The parameter can contain wildcards.\n"
-"\n"
-"NB: If matching against a footprint ID is desired, the parameter must "
-"contain a ':'.\n"
-"<br><br>\n"
-"\n"
-"    A.memberOfSheet('<sheet_path>')\n"
-"True if `A` is a member of the given schematic sheet. The sheet path can "
-"contain wildcards.\n"
-"<br><br>\n"
-"\n"
-"    A.existsOnLayer('<layer_name>')\n"
-"True if `A` exists on the given layer.  The layer name can be\n"
-"either the name assigned in Board Setup > Board Editor Layers or\n"
-"the canonical name (ie: `F.Cu`).\n"
-"\n"
-"NB: this returns true if `A` is on the given layer, independently\n"
-"of whether or not the rule is being evaluated for that layer.\n"
-"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
-"<br><br>\n"
-"\n"
-"    A.hasNetclass('<netclass_name>')\n"
-"True if `A` has had the given netclass assigned to it, either by an explicit "
-"netclass label \n"
-"or through a pattern match assignment.\n"
-"<br><br>\n"
-"\n"
-"### 추가 예시\n"
-"\n"
-"    (rule \"copper keepout\"\n"
-"       (constraint disallow track via zone)\n"
-"       (condition \"A.intersectsArea('zone3')\"))\n"
-"\n"
-"\n"
-"    (rule \"BGA neckdown\"\n"
-"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
-"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.intersectsCourtyard('U3')\"))\n"
-"\n"
-"\n"
-"    # prevent silk over tented vias\n"
-"    (rule silk_over_via\n"
-"       (constraint silk_clearance (min 0.2mm))\n"
-"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
-"\n"
-"\n"
-"    (rule \"Distance between Vias of Different Nets\"\n"
-"        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
-"\n"
-"    (rule \"Clearance between Pads of Different Nets\"\n"
-"        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
-"\n"
-"\n"
-"    (rule \"Via Hole to Track Clearance\"\n"
-"        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
-"\n"
-"    (rule \"Pad to Track Clearance\"\n"
-"        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
-"\n"
-"\n"
-"    (rule \"clearance-to-1mm-cutout\"\n"
-"        (constraint edge_clearance (min 0.8mm))\n"
-"        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
-"\n"
-"\n"
-"    (rule \"Max Drill Hole Size Mechanical\"\n"
-"        (constraint hole_size (max 6.3mm))\n"
-"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"\n"
-"    (rule \"Max Drill Hole Size PTH\"\n"
-"        (constraint hole_size (max 6.35mm))\n"
-"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
-"\n"
-"\n"
-"    # Specify an optimal gap for a particular diff-pair\n"
-"    (rule \"dp clock gap\"\n"
-"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('/CLK')\"))\n"
-"\n"
-"    # Specify a larger clearance around any diff-pair\n"
-"    (rule \"dp clearance\"\n"
-"        (constraint clearance (min \"1.5mm\"))\n"
-"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
-"\n"
-"\n"
-"    # Don't use thermal reliefs on heatsink pads\n"
-"    (rule heat_sink_pad\n"
-"        (constraint zone_connection solid)\n"
-"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
-"\n"
-"    # Require all four thermal relief spokes to connect to parent zone\n"
-"    (rule fully_spoked_pads\n"
-"        (constraint min_resolved_spokes 4))\n"
-"\n"
-"    # Set thermal relief gap & spoke width for all zones\n"
-"    (rule defined_relief\n"
-"        (constraint thermal_relief_gap (min 10mil))\n"
-"        (constraint thermal_spoke_width (min 12mil)))\n"
-"\n"
-"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
-"    (rule defined_relief_pwr\n"
-"        (constraint thermal_relief_gap (min 10mil))\n"
-"        (constraint thermal_spoke_width (min 12mil))\n"
-"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
-"\n"
-"    # Prevent copper fills under the courtyards of capacitors\n"
-"    (rule no_copper_under_caps\n"
-"        (constraint physical_clearance (min 0mm))\n"
-"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
-"\n"
-"\n"
-"    # Prevent solder wicking from SMD pads\n"
-"    (rule holes_in_pads\n"
-"        (constraint physical_hole_clearance (min 0.2mm))\n"
-"        (condition \"B.Pad_Type == 'SMD'\"))\n"
-"\n"
-"    # Disallow solder mask margin overrides\n"
-"    (rule \"disallow solder mask margin overrides\"\n"
-"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-"        (condition \"A.Type == 'Pad'\"))\n"
-"\n"
-"\n"
-"    # Enforce a mechanical clearance between components and board edge\n"
-"    (rule front_mechanical_board_edge_clearance\n"
-"        (layer \"F.Courtyard\")\n"
-"        (constraint physical_clearance (min 3mm))\n"
-"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
-"\n"
-"\n"
-"    # Check current-carrying capacity\n"
-"    (rule high-current\n"
-"        (constraint track_width (min 1.0mm))\n"
-"        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.NetClass == 'Power'\"))\n"
-"\n"
-"\n"
-"    # Separate drill bit and milling cutter size constraints\n"
-"    (rule \"Plated through-hole size\"\n"
-"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
-"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
-"    (rule \"Plated slot size\"\n"
-"        (constraint hole_size (min 0.5mm))\n"
-"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
-"\n"
-"\n"
-"    # Allow blind/buried to micro-via hole-to-hole violations when it is "
-"known that\n"
-"    # the fab will mechanically drill blind/buried via holes -before- laser "
-"drilling \n"
-"    # micro-vias.\n"
-"    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
-"        (constraint hole_to_hole)\n"
-"        (severity ignore))\n"
-"\n"
-"### 문서\n"
-"\n"
-"전체 문서는 다음을 참조하세요. [https://docs.kicad.org](https://docs.kicad."
-"org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_3items.h:2
 msgid ""
@@ -40367,6 +39977,14 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### 항목\n"
+"\n"
+" * `A` &nbsp;&nbsp; _the first (or only) item under test_\n"
+" * `B` &nbsp;&nbsp; _the second item under test (for binary tests)_\n"
+" * `L` &nbsp;&nbsp; _the layer currently under test_\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_4severity_names.h:2
 msgid ""
@@ -40380,6 +39998,15 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### 심각도 명칭\n"
+"\n"
+" * 경고\n"
+" * 오류\n"
+" * 제외\n"
+" * 무시\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_5examples.h:2
 msgid ""
@@ -40415,6 +40042,37 @@ msgid ""
 "<br><br>\n"
 "\n"
 msgstr ""
+"### 예시\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.hasNetclass('HV') && B.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.hasNetclass('HV') && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"<br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
 msgid ""
@@ -40433,6 +40091,19 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### 참고\n"
+"\n"
+"버전 조항은 첫 번째 조항이어야 합니다.   향후 규칙 구문 분석기가  \n"
+"자동 업데이트를 수행할 수 있도록 파일의 구문 버전을 나타냅니다.\n"
+"“1\"로 설정해야 합니다.\n"
+"\n"
+"규칙은 중요도 순으로 정렬해야 합니다. \n"
+"이후 규칙이 이전 규칙보다 우선합니다; \n"
+"일치하는 규칙이 발견되면 더 이상 규칙을 확인하지 않습니다.\n"
+"\n"
+"줄에 댓글을 달거나 댓글을 달지 않으려면 Ctrl+/를 사용합니다.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -40445,6 +40116,14 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### 속\n"
+"\n"
+"사용자 지정 규칙 표현식에서 개체의 많은 속성을 테스트할 수 있습니다. 전체 "
+"목록은 [https://docs.kicad.org](https://go.kicad.org/docs/"
+"GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules) 에서 "
+"설명서를 참조하세요.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
 msgid ""
@@ -40714,18 +40393,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Round Shapes"
-msgstr "원형 도형의 기본 속성:"
+msgstr "원형 도형의 기본 속성"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 msgid "Allow teardrop to span two track segments"
 msgstr "물방울모양이 두 개의 트랙 세그먼트에 걸쳐 있도록 허용"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:189
-#, fuzzy
 msgid "Default Properties for Rectangular Shapes"
-msgstr "직사각형 도형의 기본 속성:"
+msgstr "사각형 도형의 기본 속성"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
@@ -40733,9 +40410,8 @@ msgid "Allow teardrop to span track segments"
 msgstr "눈물방울 모양으로 트랙 세그먼트를 확장할 수 있음"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:359
-#, fuzzy
 msgid "Properties for Track-to-Track Teardrops"
-msgstr "트랙 간 물방울모양의 속성:"
+msgstr "트랙 간 물방울모양의 속성"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:473
 msgid ""
@@ -40750,9 +40426,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr "크기가 비슷한 트랙은 물방울모양이 필요하지 않습니다."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:20
-#, fuzzy
 msgid "Default Properties for New Graphics and Text"
-msgstr "새 그래픽과 텍스트의 기본 속성:"
+msgstr "새 그래픽과 텍스트의 기본 속성"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -40776,9 +40451,8 @@ msgid "Hole"
 msgstr "홀"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential Pairs"
-msgstr "차동 쌍:"
+msgstr "차동 쌍"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -40789,19 +40463,16 @@ msgid "Via Gap"
 msgstr "비아 간격"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Single Track Tuning"
-msgstr "단일 트랙 튜닝의 기본 속성:"
+msgstr "단일 트랙 튜닝의 기본 속성"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default Properties for Differential Pairs"
-msgstr "차동 쌍의 기본 속성:"
+msgstr "차동 쌍의 기본 속성"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
-#, fuzzy
 msgid "Default Properties for Differential Pair Skews"
-msgstr "차동 쌍 스큐의 기본 속성:"
+msgstr "차동 쌍 왜곡의 기본 속성"
 
 #: pcbnew/drc/drc_cache_generator.cpp:124
 msgid "Gathering copper items..."
@@ -41419,11 +41090,11 @@ msgstr "스루홀 패드에 구멍이 없음"
 
 #: pcbnew/drc/drc_item.cpp:296
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "전면 레이어에 미러링된 텍스트"
 
 #: pcbnew/drc/drc_item.cpp:300
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "후면 레이어에 미러링되지 않은 텍스트"
 
 #: pcbnew/drc/drc_item.cpp:307
 #, fuzzy
@@ -45732,12 +45403,12 @@ msgstr "인식할 수 없는 패드 모양 기본 요소 '%s'이(가) %zu 행에
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "x와 y 반지름이 같지 않은 원(x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "x와 y가 같을 것으로 예상하여 x = %f, y = %f를 얻음 "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -45775,7 +45446,8 @@ msgstr "ID %d와 시퀀스 %d에 대해 중복된 개체가 행 %zu에서 발견
 msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
-msgstr ""
+msgstr "%zu 행에 X, Y 또는 회전 데이터가 refdes %s에서 누락됨. 배치되지 않은 "
+"컴포넌트일 수 있습니다."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2644
 #, c-format
@@ -45803,19 +45475,20 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3268
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "다각형에서 처리되지 않은 도형 유형 %d 레이어 %s, 시퀀스 %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3427
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "유효하지 않은 구멍 %d점이 레이어 %s의 네트 %s 영역에 있음"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3469
 #, c-format
 msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
-msgstr ""
+msgstr "윤곽선이 불연속적으로 보임: 마지막 지점은 %s, 다음 세그먼트의 시작 지점은 "
+"%s임"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3485
 #, c-format
@@ -46662,19 +46335,19 @@ msgid "Successfully created genCAD file\n"
 msgstr "성공적으로 genCAD 파일을 생성함\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1424 pcbnew/pcbnew_jobs_handler.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "PCB: 위치 데이터 내보내기"
+msgstr "전면 위치 데이터를 '%s'에 저장함.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "BOM 출력을 '%s'에 기록함"
+msgstr "위치 데이터를 '%s'에 다시 작성함.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "PCB: 위치 데이터 내보내기"
+msgstr "위치 데이터를 '%s'에 저장함.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1572
 msgid "Footprint library path does not exist or is not accessible\n"
@@ -48156,7 +47829,8 @@ msgstr "이동할 기준점 선택..."
 msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
-msgstr ""
+msgstr "선택한 라이브러리('%s')에 풋프린트를 추가할 수 없음. 이 라이브러리는 읽기 "
+"전용입니다."
 
 #: pcbnew/tools/footprint_editor_control.cpp:405
 msgid "_copy"
@@ -50005,14 +49679,12 @@ msgid "Performs automatic placement of components outside board area"
 msgstr "기판 영역 밖에 있는 부품에 대해 자동 배치를 수행"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
-#, fuzzy
 msgid "Generate Placement Rule Areas..."
-msgstr "부품 배치 파일 생성"
+msgstr "배치 규칙 영역 생성..."
 
 #: pcbnew/tools/pcb_actions.cpp:2236
-#, fuzzy
 msgid "Repeat Layout..."
-msgstr "반복 레이아웃"
+msgstr "반복 배치..."
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
@@ -50314,9 +49986,8 @@ msgid "Selected Items"
 msgstr "선택한 항목"
 
 #: pcbnew/tools/pcb_control.cpp:1916
-#, fuzzy
 msgid "Selected 2D Length"
-msgstr "선택한 네트:"
+msgstr "선택된 2D 길이"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
