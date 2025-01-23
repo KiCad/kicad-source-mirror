@@ -224,11 +224,18 @@ void CONSTRUCTION_MANAGER::ProposeConstructionItems(
         return;
     }
 
-    const std::size_t hash = HashConstructionBatchSources( *aBatch, aIsPersistent );
+    auto pendingBatch = std::make_unique<PENDING_BATCH>( std::move( *aBatch ), aIsPersistent );
 
-    m_activationHelper->ProposeActivation(
-            std::make_unique<PENDING_BATCH>( PENDING_BATCH{ std::move( *aBatch ), aIsPersistent } ),
-            hash );
+    if( aIsPersistent )
+    {
+        // If the batch is persistent, we can accept it immediately
+        acceptConstructionItems( std::move( pendingBatch ) );
+    }
+    else
+    {
+        const std::size_t hash = HashConstructionBatchSources( pendingBatch->Batch, aIsPersistent );
+        m_activationHelper->ProposeActivation( std::move( pendingBatch ), hash );
+    }
 }
 
 
