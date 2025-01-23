@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2024-10-28 18:00+0000\n"
-"Last-Translator: David Chorváth <dadulo33@gmail.com>\n"
+"PO-Revision-Date: 2025-01-23 10:20+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v8/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8.2-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -20779,9 +20779,8 @@ msgid "Create a new symbol"
 msgstr "Vytvorte nový symbol"
 
 #: eeschema/tools/ee_actions.cpp:170
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Odvodiť od existujúceho symbolu:"
+msgstr "Odvodiť od existujúceho symbolu…"
 
 #: eeschema/tools/ee_actions.cpp:171
 #, fuzzy
