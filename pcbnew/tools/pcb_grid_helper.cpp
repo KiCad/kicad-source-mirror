@@ -33,6 +33,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_group.h>
+#include <pcb_reference_image.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -98,6 +99,12 @@ std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem
         const PCB_ARC& arc = static_cast<const PCB_ARC&>( aItem );
 
         return SHAPE_ARC{ arc.GetStart(), arc.GetMid(), arc.GetEnd(), 0 };
+    }
+
+    case PCB_REFERENCE_IMAGE_T:
+    {
+        const PCB_REFERENCE_IMAGE& refImage = static_cast<const PCB_REFERENCE_IMAGE&>( aItem );
+        return refImage.GetBoundingBox();
     }
 
     default: break;
@@ -192,7 +199,9 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
     {
         std::vector<KIGFX::CONSTRUCTION_GEOM::DRAWABLE> constructionDrawables;
 
-        if( item->Type() == PCB_SHAPE_T )
+        switch( item->Type() )
+        {
+        case PCB_SHAPE_T:
         {
             PCB_SHAPE& shape = static_cast<PCB_SHAPE&>( *item );
 
@@ -268,6 +277,30 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
                 // This shape doesn't have any construction geometry to draw
                 break;
             }
+            break;
+        }
+        case PCB_REFERENCE_IMAGE_T:
+        {
+            const PCB_REFERENCE_IMAGE& pcbRefImg = static_cast<PCB_REFERENCE_IMAGE&>( *item );
+            const REFERENCE_IMAGE&     refImg = pcbRefImg.GetReferenceImage();
+
+            constructionDrawables.push_back( refImg.GetPosition() );
+
+            if( refImg.GetTransformOriginOffset() != VECTOR2I( 0, 0 ) )
+            {
+                constructionDrawables.push_back( refImg.GetPosition()
+                                                 + refImg.GetTransformOriginOffset() );
+            }
+
+            for( const SEG& seg : KIGEOM::BoxToSegs( refImg.GetBoundingBox() ) )
+            {
+                constructionDrawables.push_back( seg );
+            }
+            break;
+        }
+        default:
+            // This item doesn't have any construction geometry to draw
+            break;
         }
 
         // At this point, constructionDrawables can be empty, which is fine
@@ -946,7 +979,8 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
         if( computeIntersections || computePointsOnElements )
         {
             std::optional<INTERSECTABLE_GEOM> intersectableGeom;
-            if( !excludeGraphics && item.Type() == PCB_SHAPE_T )
+            if( !excludeGraphics
+                && ( item.Type() == PCB_SHAPE_T || item.Type() == PCB_REFERENCE_IMAGE_T ) )
             {
                 intersectableGeom = GetBoardIntersectable( item );
             }
@@ -1211,7 +1245,31 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         }
     };
 
-    auto handleShape =
+    const auto addRectPoints = [&]( const BOX2I& aBox, EDA_ITEM& aRelatedItem )
+    {
+        const VECTOR2I topRight( aBox.GetRight(), aBox.GetTop() );
+        const VECTOR2I bottomLeft( aBox.GetLeft(), aBox.GetBottom() );
+
+        const SEG first( aBox.GetOrigin(), topRight );
+        const SEG second( topRight, aBox.GetEnd() );
+        const SEG third( aBox.GetEnd(), bottomLeft );
+        const SEG fourth( bottomLeft, aBox.GetOrigin() );
+
+        const int snapFlags = CORNER | SNAPPABLE;
+
+        addAnchor( aBox.GetCenter(), snapFlags, &aRelatedItem, POINT_TYPE::PT_CENTER );
+
+        addAnchor( first.A,         snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
+        addAnchor( first.Center(),  snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
+        addAnchor( second.A,        snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
+        addAnchor( second.Center(), snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
+        addAnchor( third.A,         snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
+        addAnchor( third.Center(),  snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
+        addAnchor( fourth.A,        snapFlags, &aRelatedItem, POINT_TYPE::PT_CORNER );
+        addAnchor( fourth.Center(), snapFlags, &aRelatedItem, POINT_TYPE::PT_MID );
+    };
+
+    const auto handleShape =
             [&]( PCB_SHAPE* shape )
             {
                 VECTOR2I   start = shape->GetStart();
@@ -1249,25 +1307,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
                     case SHAPE_T::RECTANGLE:
                     {
-                        VECTOR2I point2( end.x, start.y );
-                        VECTOR2I point3( start.x, end.y );
-                        SEG first( start, point2 );
-                        SEG second( point2, end );
-                        SEG third( end, point3 );
-                        SEG fourth( point3, start );
-
-                        const int snapFlags = CORNER | SNAPPABLE;
-
-                        addAnchor( shape->GetCenter(), snapFlags, shape, POINT_TYPE::PT_CENTER );
-
-                        addAnchor( first.A,         snapFlags, shape, POINT_TYPE::PT_CORNER );
-                        addAnchor( first.Center(),  snapFlags, shape, POINT_TYPE::PT_MID );
-                        addAnchor( second.A,        snapFlags, shape, POINT_TYPE::PT_CORNER );
-                        addAnchor( second.Center(), snapFlags, shape, POINT_TYPE::PT_MID );
-                        addAnchor( third.A,         snapFlags, shape, POINT_TYPE::PT_CORNER );
-                        addAnchor( third.Center(),  snapFlags, shape, POINT_TYPE::PT_MID );
-                        addAnchor( fourth.A,        snapFlags, shape, POINT_TYPE::PT_CORNER );
-                        addAnchor( fourth.Center(), snapFlags, shape, POINT_TYPE::PT_MID );
+                        addRectPoints( BOX2I::ByCorners( start, end ), *shape );
                         break;
                     }
 
@@ -1569,6 +1609,28 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             {
                 if( checkVisibility( item ) )
                     computeAnchors( item, aRefPos, aFrom, nullptr );
+            }
+
+            break;
+
+        case PCB_REFERENCE_IMAGE_T:
+            if( aFrom && aSelectionFilter && !aSelectionFilter->graphics )
+                break;
+
+            if( checkVisibility( aItem ) )
+            {
+                const PCB_REFERENCE_IMAGE& image =
+                        static_cast<const PCB_REFERENCE_IMAGE&>( *aItem );
+                const REFERENCE_IMAGE& refImg = image.GetReferenceImage();
+                const BOX2I            bbox = refImg.GetBoundingBox();
+
+                addRectPoints( bbox, *aItem );
+
+                if( refImg.GetTransformOriginOffset() != VECTOR2I( 0, 0 ) )
+                {
+                    addAnchor( aItem->GetPosition() + refImg.GetTransformOriginOffset(), ORIGIN,
+                               aItem, POINT_TYPE::PT_CENTER );
+                }
             }
 
             break;
