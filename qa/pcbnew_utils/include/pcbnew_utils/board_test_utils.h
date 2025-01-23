@@ -206,6 +206,15 @@ void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
                            std::function<void( BOARD& )> aBoardTestFunction,
                            std::optional<int> aExpectedBoardVersion = std::nullopt );
 
+/**
+ * Same as LoadAndTestBoardFile, but for footprints
+ */
+void LoadAndTestFootprintFile( const wxString& aLibRelativePath, const wxString& aFpName,
+                               bool                              aRoundtrip,
+                               std::function<void( FOOTPRINT& )> aFootprintTestFunction,
+                               std::optional<int>                aExpectedFootprintVersion );
+
+
 void FillZones( BOARD* m_board );
 
 

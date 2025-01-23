@@ -127,9 +127,48 @@ BOARD_ITEM& RequireBoardItemWithTypeAndId( const BOARD& aBoard, KICAD_T aItemTyp
 }
 
 
+/**
+ * A temporary directory that will be deleted when it goes out of scope.
+ */
+class TEMPORARY_DIRECTORY
+{
+public:
+    /**
+     * Create a temporary directory with a given prefix and suffix. The directory will be
+     * created in the system temporary directory, and will not be pre-existing.
+     */
+    TEMPORARY_DIRECTORY( const std::string& aNamePrefix, const std::string aSuffix )
+    {
+        int i = 0;
+
+        // Find a unique directory name
+        while( true )
+        {
+            m_path = std::filesystem::temp_directory_path()
+                     / ( aNamePrefix + std::to_string( i ) + aSuffix );
+
+            if( !std::filesystem::exists( m_path ) )
+                break;
+
+            i++;
+        }
+
+        wxASSERT( !std::filesystem::exists( m_path ) );
+        std::filesystem::create_directories( m_path );
+    }
+
+    ~TEMPORARY_DIRECTORY() { std::filesystem::remove_all( m_path ); }
+
+    const std::filesystem::path& GetPath() const { return m_path; }
+
+private:
+    std::filesystem::path m_path;
+};
+
+
 void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
                            std::function<void( BOARD& )> aBoardTestFunction,
-                           std::optional<int> aExpectedBoardVersion )
+                           std::optional<int>            aExpectedBoardVersion )
 {
     const std::string absBoardPath =
             KI_TEST::GetPcbnewTestDataDir() + aRelativePath.ToStdString() + ".kicad_pcb";
@@ -152,8 +191,9 @@ void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
 
     if( aRoundtrip )
     {
-        const auto savePath = std::filesystem::temp_directory_path()
-                              / ( aRelativePath.ToStdString() + ".kicad_pcb" );
+        TEMPORARY_DIRECTORY tempLib( "kicad_qa_brd_roundtrip", "" );
+
+        const auto savePath = tempLib.GetPath() / ( aRelativePath.ToStdString() + ".kicad_pcb" );
         KI_TEST::DumpBoardToFile( *board1, savePath.string() );
 
         std::unique_ptr<BOARD> board2 = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
@@ -163,6 +203,60 @@ void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
 
         BOOST_TEST_MESSAGE( "Testing roundtripped (saved/reloaded) file" );
         aBoardTestFunction( *board2 );
+    }
+}
+
+
+void LoadAndTestFootprintFile( const wxString& aLibRelativePath, const wxString& aFpName,
+                               bool                              aRoundtrip,
+                               std::function<void( FOOTPRINT& )> aFootprintTestFunction,
+                               std::optional<int>                aExpectedFootprintVersion )
+{
+    const std::string absFootprintPath = KI_TEST::GetPcbnewTestDataDir()
+                                         + aLibRelativePath.ToStdString() + "/"
+                                         + aFpName.ToStdString() + ".kicad_mod";
+
+    BOOST_TEST_MESSAGE( "Loading footprint to test: " << absFootprintPath );
+    std::unique_ptr<FOOTPRINT> fp1 = KI_TEST::ReadFootprintFromFileOrStream( absFootprintPath );
+
+    // Should load - if it doesn't we're done for
+    BOOST_REQUIRE( fp1 );
+
+    BOOST_TEST_MESSAGE( "Testing loaded footprint (value: " << fp1->GetValue() << ")" );
+    aFootprintTestFunction( *fp1 );
+
+    // If we care about the board version, check it now - but not after a roundtrip
+    // (as the version will be updated to the current version)
+    if( aExpectedFootprintVersion )
+    {
+        BOOST_CHECK_EQUAL( fp1->GetFileFormatVersionAtLoad(), *aExpectedFootprintVersion );
+    }
+
+    if( aRoundtrip )
+    {
+        /**
+         * Use a temporary directory, so that if something goes wrong and the file isn't
+         * written properly, we don't leave a library behind that will cause exceptions
+         * when the cache is set up on future runs.
+         */
+        TEMPORARY_DIRECTORY tempLib( "kicad_qa_fp_roundtrip", ".pretty" );
+        const wxString      fpFilename = fp1->GetFPID().GetLibItemName() + ".kicad_mod";
+
+        BOOST_TEST_MESSAGE( "Resaving footprint: " << fpFilename << " in " << tempLib.GetPath() );
+
+        KI_TEST::DumpFootprintToFile( *fp1, tempLib.GetPath().string() );
+
+        const auto fp2Path = tempLib.GetPath() / fpFilename.ToStdString();
+
+        BOOST_TEST_MESSAGE( "Re-reading footprint: " << fpFilename << " in " << tempLib.GetPath() );
+
+        std::unique_ptr<FOOTPRINT> fp2 = KI_TEST::ReadFootprintFromFileOrStream( fp2Path );
+
+        // Should load again
+        BOOST_REQUIRE( fp2 );
+
+        BOOST_TEST_MESSAGE( "Testing roundtripped (saved/reloaded) file" );
+        aFootprintTestFunction( *fp2 );
     }
 }
 

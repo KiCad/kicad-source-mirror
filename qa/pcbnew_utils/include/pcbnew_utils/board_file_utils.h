@@ -59,6 +59,11 @@ std::string GetPcbnewTestDataDir();
 void DumpBoardToFile( BOARD& aBoard, const std::string& aFilename );
 
 /**
+ * Same as DumpBoardToFile, but for footprints
+ */
+void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::string& aLibraryPath );
+
+/**
  * Utility function to read a #BOARD_ITEM (probably a #FOOTPRINT or a #BOARD)
  * from a file.
  *

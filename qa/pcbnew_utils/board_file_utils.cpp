@@ -146,5 +146,11 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFi
 }
 
 
+void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::string& aLibraryPath )
+{
+    PCB_IO_KICAD_SEXPR io;
+    io.FootprintSave( aLibraryPath, &aFootprint, nullptr );
+}
+
 
 } // namespace KI_TEST

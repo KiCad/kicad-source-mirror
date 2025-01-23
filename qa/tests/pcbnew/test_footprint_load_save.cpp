@@ -32,12 +32,6 @@
 namespace
 {
 
-struct FOOTPRINT_LOAD_TEST_FIXTURE
-{
-    FOOTPRINT_LOAD_TEST_FIXTURE() {}
-};
-
-
 struct FOOTPRINT_LOAD_TEST_CASE
 {
     // Which footprint to look at in the file
@@ -53,12 +47,18 @@ struct FOOTPRINT_LOAD_BOARD_TEST_CASE
     // The board to load
     wxString m_boardFileRelativePath;
     // List of images to check
-    std::vector<FOOTPRINT_LOAD_TEST_CASE> m_imageCases;
+    std::vector<FOOTPRINT_LOAD_TEST_CASE> m_fpCases;
 };
 
 } // namespace
 
-BOOST_FIXTURE_TEST_CASE( FootprintLoadSave, FOOTPRINT_LOAD_TEST_FIXTURE )
+
+/**
+ * Simple tests cases that load a board file and check expected properties of the footprints.
+ * This is not the same as FpLibLoadSave as it loads _board files_, and not footprint
+ * files from a library.
+ */
+BOOST_AUTO_TEST_CASE( FootprintLoadSave )
 {
     const std::vector<FOOTPRINT_LOAD_BOARD_TEST_CASE> testCases{
         {
@@ -83,16 +83,16 @@ BOOST_FIXTURE_TEST_CASE( FootprintLoadSave, FOOTPRINT_LOAD_TEST_FIXTURE )
     {
         const auto doBoardTest = [&]( const BOARD& aBoard )
         {
-            for( const FOOTPRINT_LOAD_TEST_CASE& fooprintTestCase : testCase.m_imageCases )
+            for( const FOOTPRINT_LOAD_TEST_CASE& fooprintTestCase : testCase.m_fpCases )
             {
                 BOOST_TEST_MESSAGE( "Checking for footprint with UUID: "
                                     << fooprintTestCase.m_footprintUuid.AsString() );
 
-                const auto& image = static_cast<FOOTPRINT&>( KI_TEST::RequireBoardItemWithTypeAndId(
+                const auto& fp = static_cast<FOOTPRINT&>( KI_TEST::RequireBoardItemWithTypeAndId(
                         aBoard, PCB_FOOTPRINT_T, fooprintTestCase.m_footprintUuid ) );
 
-                BOOST_CHECK_EQUAL( image.IsLocked(), fooprintTestCase.m_expectedLocked );
-                BOOST_CHECK_EQUAL( image.GetPosition(), fooprintTestCase.m_expectedPos * 1000000 );
+                BOOST_CHECK_EQUAL( fp.IsLocked(), fooprintTestCase.m_expectedLocked );
+                BOOST_CHECK_EQUAL( fp.GetPosition(), fooprintTestCase.m_expectedPos * 1000000 );
             }
         };
 
