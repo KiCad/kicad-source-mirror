@@ -274,4 +274,8 @@ if( MSVC )
     string( APPEND WARN_FLAGS_CXX " /wd5267" )
     # disable "reinterpret_cast used between related classes"
     string( APPEND WARN_FLAGS_CXX " /wd4946" )
+    # disable throw() is interpreted as declspec(nothrow)
+    string( APPEND WARN_FLAGS_CXX " /wd4290" )
+    # disable non-bool is explicitly cast to bool, forcing value of 0 or 1
+    string( APPEND WARN_FLAGS_CXX " /wd4800" )
 endif()

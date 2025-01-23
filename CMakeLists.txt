@@ -526,10 +526,6 @@ if( MSVC )
     add_compile_definitions( NOMINMAX )
     # source and execution charset are UTF-8
     string( APPEND CMAKE_CXX_FLAGS " /utf-8" )
-    # C4290: throw() is interpreted as declspec(nothrow)
-    string( APPEND CMAKE_CXX_FLAGS " /wd4290" )
-    # C4800: non-bool is explicitly cast to bool, forcing value of 0 or 1
-    string( APPEND CMAKE_CXX_FLAGS " /wd4800" )
 
     # cmake 3.25 or higher requried for MSVC, should be fine
     if( USE_CCACHE AND CCACHE_FOUND )
