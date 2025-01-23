@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 03:18+0000\n"
+"PO-Revision-Date: 2025-01-23 07:22+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -41857,12 +41857,12 @@ msgstr "인식할 수 없는 패드 모양 기본 요소 '%s'이(가) %zu 행에
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1163
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "x와 y 반지름이 같지 않은 원(x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1303
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "x와 y가 같을 것으로 예상하여 x = %f, y = %f를 얻음 "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1404
 #, c-format
@@ -41900,7 +41900,8 @@ msgstr "ID %d와 시퀀스 %d에 대해 중복된 개체가 행 %zu에서 발견
 msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
-msgstr ""
+msgstr "%zu 행에 X, Y 또는 회전 데이터가 refdes %s에서 누락됨. 배치되지 않은 "
+"컴포넌트일 수 있습니다."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2627
 #, c-format
@@ -41928,19 +41929,20 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3238
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "다각형에서 처리되지 않은 도형 유형 %d 레이어 %s, 시퀀스 %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3397
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "유효하지 않은 구멍 %d점이 레이어 %s의 네트 %s 영역에 있음"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3438
 #, c-format
 msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
-msgstr ""
+msgstr "윤곽선이 불연속적으로 보임: 마지막 지점은 %s, 다음 세그먼트의 시작 지점은 "
+"%s임"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3454
 #, c-format
