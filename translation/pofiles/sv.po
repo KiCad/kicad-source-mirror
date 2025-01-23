@@ -7,13 +7,14 @@
 # Hanna Breisand <weblate.org@breisand.se>, 2022, 2024, 2025.
 # Elias Sjögreen <eliassjogreen1@gmail.com>, 2023.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-22 21:02+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -22281,8 +22282,9 @@ msgid "Create a new symbol in an existing library"
 msgstr "Skapa en ny symbol i ett befintligt bibliotek"
 
 #: eeschema/tools/ee_actions.cpp:202
+#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Härled från befintlig symbol"
+msgstr "Härled från befintlig symbol…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
