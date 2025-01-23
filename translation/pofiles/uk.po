@@ -4,13 +4,14 @@
 # Andrii Shelestov <streamx3@gmail.com>, 2022.
 # Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-21 16:52+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
 "Language: uk\n"
@@ -22684,7 +22685,7 @@ msgstr "Створити новий символ, похідний від ная
 #: eeschema/tools/ee_actions.cpp:202
 #, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Похідна від наявного символу"
+msgstr "Похідна від наявного символу…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
