@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 10:20+0000\n"
+"PO-Revision-Date: 2025-01-23 10:27+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/>"
 "\n"
@@ -20563,9 +20563,8 @@ msgid "Save the current library to a new file."
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:163
-#, fuzzy
 msgid "New Symbol..."
-msgstr "Biểu tượng Mới"
+msgstr "Biểu tượng Mới…"
 
 #: eeschema/tools/ee_actions.cpp:164
 #, fuzzy
