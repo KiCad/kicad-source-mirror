@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 03:18+0000\n"
+"PO-Revision-Date: 2025-01-23 07:27+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
@@ -344,7 +344,7 @@ msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
-msgstr "Reimposta alle impostazione predefinite"
+msgstr "Reimposta alle impostazioni predefinite"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:308 cvpcb/menubar.cpp:78
@@ -418,7 +418,7 @@ msgstr "Segui l'editor C.S."
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:604
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
-msgstr "Segui le impostazioni tracciatura C.S."
+msgstr "Impostazioni di Segui tracciatura C.S."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:585
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:629
@@ -2363,7 +2363,7 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"Al prossimo avvio di KiCad, verrano onorati tutti i percorsi che siano\n"
+"Al prossimo avvio di KiCad, verranno onorati tutti i percorsi che siano\n"
 "già stati definiti, mentre ogni impostazione definita nella finestra\n"
 "di configurazione percorsi verrà ignorata. Se non si desidera tale\n"
 "comportamento, rinominare ogni voce in conflitto o rimuovere\n"
@@ -2814,11 +2814,11 @@ msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
-msgstr "Inizia con impostazioni predefinite"
+msgstr "Avvia con le impostazioni predefinite"
 
 #: common/dialogs/dialog_migrate_settings_base.h:66
 msgid "Configure KiCad Settings Path"
-msgstr "Configura percorsi impostazioni KiCad"
+msgstr "Configura percorsi impostazioni di KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:59
 msgid "A5 148x210mm"
@@ -2882,11 +2882,11 @@ msgstr "Personalizzato"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Settings"
-msgstr "Impostazioni anteprima"
+msgstr "Anteprima impostazioni"
 
 #: common/dialogs/dialog_page_settings.cpp:106
 msgid "Preview Paper"
-msgstr "Carta anteprima"
+msgstr "Anteprima carta"
 
 #: common/dialogs/dialog_page_settings.cpp:107
 msgid "Preview Title Block Data"
