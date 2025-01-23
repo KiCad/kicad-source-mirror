@@ -777,15 +777,19 @@ void PDF_PLOTTER::ClosePage()
     auto iuToPdfUserSpace =
             [&]( const VECTOR2I& aCoord ) -> VECTOR2D
             {
-                VECTOR2D retval = VECTOR2D( aCoord ) * PTsPERMIL / ( m_IUsPerDecimil * 10 );
+                VECTOR2D pos = VECTOR2D( aCoord ) * PTsPERMIL / ( m_IUsPerDecimil * 10 );
+
                 // PDF y=0 is at bottom of page, invert coordinate
-                retval.y = psPaperSize.y - retval.y;
+                VECTOR2D retval( pos.x, psPaperSize.y - pos.y );
 
                 // The pdf plot can be mirrored (from left to right). So mirror the
                 // x coordinate if m_plotMirror is set
                 if( m_plotMirror )
                 {
-                    retval.x = ( psPaperSize.x - retval.x );
+                    if( m_mirrorIsHorizontal )
+                        retval.x = ( psPaperSize.x - pos.x );
+                    else
+                        retval.y = pos.y;
                 }
 
                 return retval;

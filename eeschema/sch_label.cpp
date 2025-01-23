@@ -1326,17 +1326,19 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
 
             if( connection )
             {
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Net" ),
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Net" ),
                                                            connection->Name() ) );
 
-                properties.emplace_back(
-                        wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
-                                          GetEffectiveNetClass()->GetHumanReadableName() ) );
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Resolved netclass" ),
+                                                           GetEffectiveNetClass()->GetHumanReadableName() ) );
             }
 
             for( const SCH_FIELD& field : GetFields() )
             {
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), field.GetName(),
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           field.GetName(),
                                                            field.GetShownText( false ) ) );
             }
 

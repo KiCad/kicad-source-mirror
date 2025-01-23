@@ -881,9 +881,9 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
                                                            _( "Net" ),
                                                            connection->Name() ) );
 
-                properties.emplace_back(
-                        wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
-                                          GetEffectiveNetClass()->GetHumanReadableName() ) );
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Resolved netclass" ),
+                                                           GetEffectiveNetClass()->GetHumanReadableName() ) );
             }
         }
         else if( GetLayer() == LAYER_BUS )
@@ -893,7 +893,6 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
                 for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
                     properties.emplace_back( wxT( "!" ) + member->Name() );
             }
-
         }
 
         if( !properties.empty() )
