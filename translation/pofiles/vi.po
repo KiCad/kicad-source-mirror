@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2024-09-14 03:09+0000\n"
-"Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/"
-">\n"
+"PO-Revision-Date: 2025-01-23 10:20+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -20573,9 +20573,8 @@ msgid "Create a new symbol"
 msgstr "Tạo biểu tượng làm biểu tượng nguồn"
 
 #: eeschema/tools/ee_actions.cpp:170
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Bắt nguồn từ biểu tượng hiện tại:"
+msgstr "Bắt nguồn từ biểu tượng hiện tại…"
 
 #: eeschema/tools/ee_actions.cpp:171
 #, fuzzy
