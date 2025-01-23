@@ -34,13 +34,14 @@
 # zly20129 <zly20129@icloud.com>, 2024.
 # Wang <wang@plasma.ac.cn>, 2024.
 # HalfSweet <HalfSweet@halfsweet.cn>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-20 13:00+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1751,9 +1752,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "图框 (.kicad_wks file)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "导出到文件"
+msgstr "导出到文件…"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -21852,8 +21852,9 @@ msgid "Create a new symbol in an existing library"
 msgstr "在现有库中创建一个新符号"
 
 #: eeschema/tools/ee_actions.cpp:202
+#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "从现有符号派生"
+msgstr "从现有符号派生…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
@@ -45885,7 +45886,7 @@ msgstr "导出位置数据"
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
 #, fuzzy, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "将 BOM 输出写入 '%s'"
+msgstr "将 BOM 输出写入 '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
 #, fuzzy, c-format
