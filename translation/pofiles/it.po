@@ -7,6 +7,7 @@
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2024.
 # boromyr <davideromeo.g@gmail.com>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2025.
 #
 # db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
 # db: di una frase: negli altri casi può risultare molto inelegante
@@ -115,7 +116,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
 "Language: it\n"
@@ -22632,8 +22633,9 @@ msgid "Create a new symbol in an existing library"
 msgstr "Crea un nuovo simbolo, derivato da un simbolo esistente"
 
 #: eeschema/tools/ee_actions.cpp:202
+#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Deriva da simbolo esistente"
+msgstr "Deriva da simbolo esistente…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
