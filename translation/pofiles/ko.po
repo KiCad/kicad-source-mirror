@@ -28,13 +28,14 @@
 # Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
 # simmon <simmon@nplob.com>, 2024.
 # jeong-sangwon <drone5023@gmail.com>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -22076,8 +22077,9 @@ msgid "Create a new symbol in an existing library"
 msgstr "기존 라이브러리에 새 심볼 만들기"
 
 #: eeschema/tools/ee_actions.cpp:202
+#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "기존 심볼에서 파생"
+msgstr "기존 심볼에서 파생…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
