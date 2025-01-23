@@ -1164,6 +1164,12 @@ void SCH_EDIT_FRAME::doCloseWindow()
 }
 
 
+void SCH_EDIT_FRAME::FocusSearch()
+{
+    m_searchPane->FocusSearch();
+}
+
+
 SEVERITY SCH_EDIT_FRAME::GetSeverity( int aErrorCode ) const
 {
     return Schematic().ErcSettings().GetSeverity( aErrorCode );

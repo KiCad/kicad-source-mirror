@@ -1419,6 +1419,12 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 }
 
 
+void PCB_EDIT_FRAME::FocusSearch()
+{
+    m_searchPane->FocusSearch();
+}
+
+
 void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     PCB_BASE_FRAME::LoadSettings( aCfg );

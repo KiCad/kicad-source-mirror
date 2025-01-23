@@ -62,13 +62,14 @@ protected:
     void OnUpdateReplaceUI( wxUpdateUIEvent& aEvent ) override;
     void OnUpdateReplaceAllUI( wxUpdateUIEvent& aEvent ) override;
     void OnIdle( wxIdleEvent& event ) override;
-    void OnChar( wxKeyEvent& aEvent );
     void OnFind( wxCommandEvent& aEvent ) override;
     void OnReplace( wxCommandEvent& aEvent ) override;
+    void onShowSearchPanel( wxHyperlinkEvent& event ) override;
 
     // Rebuild the search flags from dialog settings
     void updateFlags();
 
+protected:
     SCH_EDIT_FRAME*        m_frame;
     SCH_FIND_REPLACE_TOOL* m_findReplaceTool;
     SCH_SEARCH_DATA*       m_findReplaceData;

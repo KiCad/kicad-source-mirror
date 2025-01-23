@@ -25,6 +25,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statline.h>
+#include <wx/hyperlink.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -53,6 +54,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxButton* m_searchAgain;
 		wxButton* m_closeButton;
 		wxStaticText* m_status;
+		wxHyperlinkCtrl* m_searchPanelLink;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
@@ -61,6 +63,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		virtual void onFindPreviousClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSearchAgainClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCloseButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onShowSearchPanel( wxHyperlinkEvent& event ) { event.Skip(); }
 
 
 	public:

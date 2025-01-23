@@ -42,7 +42,7 @@
 FP_LIB_TABLE GFootprintTable;
 
 
-DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) :
+DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME* aParent ) :
         DIALOG_FIND_BASE( aParent )
 {
     // these members are initialized to avoid warnings about non initialized vars
@@ -65,6 +65,10 @@ void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
 }
 
 void DIALOG_FIND::onTextEnter( wxCommandEvent& event )
+{
+}
+
+void DIALOG_FIND::onShowSearchPanel( wxHyperlinkEvent& event )
 {
 }
 

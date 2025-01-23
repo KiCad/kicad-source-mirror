@@ -314,6 +314,9 @@ public:
 
     void ToggleSearch();
 
+    bool IsSearchPaneShown() { return m_auimgr.GetPane( SearchPaneName() ).IsShown(); }
+    void FocusSearch();
+
     /**
      * Create an ASCII footprint position file.
      *

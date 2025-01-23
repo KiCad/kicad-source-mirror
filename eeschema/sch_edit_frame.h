@@ -930,6 +930,10 @@ public:
      */
     static const wxString SearchPaneName() { return wxT( "Search" ); }
 
+    bool IsSearchPaneShown() { return m_auimgr.GetPane( SearchPaneName() ).IsShown(); }
+
+    void FocusSearch();
+
     /**
      * Add \a aListener to post #EDA_EVT_SCHEMATIC_CHANGED command events to.
      *

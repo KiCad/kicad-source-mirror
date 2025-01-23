@@ -40,7 +40,7 @@ using namespace std;
 class DIALOG_FIND : public DIALOG_FIND_BASE
 {
 public:
-    DIALOG_FIND( PCB_BASE_FRAME* aParent );
+    DIALOG_FIND( PCB_EDIT_FRAME* aParent );
 
     void Preload( const wxString& aFindString );
 
@@ -87,9 +87,12 @@ private:
     void onFindNextClick( wxCommandEvent& event ) override;
     void onFindPreviousClick( wxCommandEvent& event ) override;
     void onSearchAgainClick( wxCommandEvent& event ) override;
+    void onShowSearchPanel( wxHyperlinkEvent& event ) override;
+
     void search( bool direction );
 
-    PCB_BASE_FRAME*                     m_frame;
+private:
+    PCB_EDIT_FRAME*                     m_frame;
     std::deque<BOARD_ITEM*>             m_hitList;
     std::deque<BOARD_ITEM*>::iterator   m_it;
     bool                                m_upToDate;

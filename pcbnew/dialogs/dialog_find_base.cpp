@@ -120,6 +120,12 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	sizerStatus->Add( m_status, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
+	sizerStatus->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_searchPanelLink = new wxHyperlinkCtrl( this, wxID_ANY, _("Show search panel"), wxT("http://www.wxformbuilder.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	sizerStatus->Add( m_searchPanelLink, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
 	bSizer10->Add( sizerStatus, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
@@ -136,6 +142,7 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_findPrevious->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIND_BASE::onFindPreviousClick ), NULL, this );
 	m_searchAgain->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIND_BASE::onSearchAgainClick ), NULL, this );
 	m_closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIND_BASE::OnCloseButtonClick ), NULL, this );
+	m_searchPanelLink->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_FIND_BASE::onShowSearchPanel ), NULL, this );
 }
 
 DIALOG_FIND_BASE::~DIALOG_FIND_BASE()
@@ -147,5 +154,6 @@ DIALOG_FIND_BASE::~DIALOG_FIND_BASE()
 	m_findPrevious->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIND_BASE::onFindPreviousClick ), NULL, this );
 	m_searchAgain->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIND_BASE::onSearchAgainClick ), NULL, this );
 	m_closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIND_BASE::OnCloseButtonClick ), NULL, this );
+	m_searchPanelLink->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_FIND_BASE::onShowSearchPanel ), NULL, this );
 
 }

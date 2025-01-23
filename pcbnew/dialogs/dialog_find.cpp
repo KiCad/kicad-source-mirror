@@ -31,6 +31,7 @@
 #include <zone.h>
 #include <dialog_find.h>
 #include <string_utils.h>
+#include <hotkeys_basic.h>
 #include <string>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -51,10 +52,10 @@ bool FindIncludeMarkers = true;
 bool FindIncludeNets = true;
 
 
-DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME *aFrame ) :
-        DIALOG_FIND_BASE( aFrame, wxID_ANY, _( "Find" ) )
+DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
+        DIALOG_FIND_BASE( aFrame, wxID_ANY, _( "Find" ) ),
+        m_frame( aFrame )
 {
-    m_frame = aFrame;
     GetSizer()->SetSizeHints( this );
 
     m_searchCombo->Append( m_frame->GetFindHistoryList() );
@@ -87,6 +88,12 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME *aFrame ) :
 
     m_hitList.clear();
     m_it = m_hitList.begin();
+
+    if( int hotkey = ACTIONS::showSearch.GetHotKey() )
+    {
+        wxString hotkeyHint = wxString::Format( wxT( " (%s)" ), KeyNameFromKeyCode( hotkey ) );
+        m_searchPanelLink->SetLabel( m_searchPanelLink->GetLabel() + hotkeyHint );
+    }
 
     m_findNext->SetDefault();
     SetInitialFocus( m_searchCombo );
@@ -127,6 +134,26 @@ void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
 {
     m_upToDate = false;
     search( true );
+}
+
+
+void DIALOG_FIND::onShowSearchPanel( wxHyperlinkEvent& event )
+{
+    if( m_frame->IsSearchPaneShown() )
+    {
+        EndModal( wxID_CANCEL );
+
+        CallAfter(
+                []()
+                {
+                    if( wxWindow* frame = wxWindow::FindWindowByName( PCB_EDIT_FRAME_NAME ) )
+                        static_cast<PCB_EDIT_FRAME*>( frame )->FocusSearch();
+                } );
+    }
+    else
+    {
+        m_frame->GetToolManager()->RunAction( ACTIONS::showSearch );
+    }
 }
 
 
