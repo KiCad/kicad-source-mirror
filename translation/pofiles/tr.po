@@ -17,15 +17,16 @@
 # YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>, 2024.
 # Mahsum Aslan <mahsumaslan@yandex.com>, 2024.
 # Bahtiyar Bayram <bahtiyar.bayramov@gmail.com>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-13 15:01+0000\n"
-"Last-Translator: Erkan <erkankarakas@outlook.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22982,7 +22983,7 @@ msgstr "Varolan simgeden türet:"
 #: eeschema/tools/ee_actions.cpp:202
 #, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Varolan simgeden türet:"
+msgstr "Varolan simgeden türet…"
 
 #: eeschema/tools/ee_actions.cpp:203
 #, fuzzy
