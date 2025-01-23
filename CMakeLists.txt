@@ -540,6 +540,8 @@ if( MSVC )
 
     # /Zc:__cplusplus: define this macro according to C++ standard version
     string( APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus" )
+    # /Zc:inline: enforces C++11 requirement that inline functions must have a definition in the same unit
+    string( APPEND CMAKE_CXX_FLAGS " /Zc:inline" )
     # /GF: enable string pooling
     string( APPEND CMAKE_CXX_FLAGS_RELEASE " /GF" )
     string( APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO " /GF" )
