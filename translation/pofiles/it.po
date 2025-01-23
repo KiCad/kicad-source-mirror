@@ -114,7 +114,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-22 21:02+0000\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -348,7 +348,7 @@ msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
-msgstr "Reimposta alle impostazione predefinite"
+msgstr "Reimposta alle impostazioni predefinite"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:79
@@ -424,7 +424,7 @@ msgstr "Segui l'editor C.S."
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 msgid "Follow PCB Plot Settings"
-msgstr "Segui le impostazioni tracciatura C.S."
+msgstr "Impostazioni di Segui tracciatura C.S."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:666
@@ -2497,7 +2497,7 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"Al prossimo avvio di KiCad, verrano onorati tutti i percorsi che siano\n"
+"Al prossimo avvio di KiCad, verranno onorati tutti i percorsi che siano\n"
 "già stati definiti, mentre ogni impostazione definita nella finestra\n"
 "di configurazione percorsi verrà ignorata. Se non si desidera tale\n"
 "comportamento, rinominare ogni voce in conflitto o rimuovere\n"
@@ -3000,11 +3000,11 @@ msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
-msgstr "Inizia con impostazioni predefinite"
+msgstr "Avvia con le impostazioni predefinite"
 
 #: common/dialogs/dialog_migrate_settings_base.h:68
 msgid "Configure KiCad Settings Path"
-msgstr "Configura percorsi impostazioni KiCad"
+msgstr "Configura percorsi impostazioni di KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A5 148x210mm"
@@ -3068,15 +3068,15 @@ msgstr "Personalizzato"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Preview Settings"
-msgstr "Impostazioni anteprima"
+msgstr "Anteprima impostazioni"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Preview Paper"
-msgstr "Carta anteprima"
+msgstr "Anteprima carta"
 
 #: common/dialogs/dialog_page_settings.cpp:113
 msgid "Preview Title Block Data"
-msgstr "Dati riquadro iscrizioni anteprima"
+msgstr "Anteprima dati riquadro iscrizioni"
 
 #: common/dialogs/dialog_page_settings.cpp:117
 #: common/dialogs/dialog_page_settings_base.h:146
@@ -7559,11 +7559,11 @@ msgstr "Esportazione modello 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
 msgid "Export 3D Model Job Settings"
-msgstr "Esporta impostazioni lavoro modello 3D"
+msgstr "Impostazioni lavoro Esporta modelli 3D"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
-msgstr "C.S.: esporta modello 3D"
+msgstr "C.S.: Esporta modello 3D"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
 msgid "Export drill data"
@@ -7571,11 +7571,11 @@ msgstr "Esporta dati forature"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
 msgid "Export Drill Data Job Settings"
-msgstr "Esporta impostazioni lavoro dati di perforazione"
+msgstr "Impostazioni lavoro Esporta dati di perforazione"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
-msgstr "C.S.: esporta dati forature"
+msgstr "C.S.: Esporta dati forature"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:156 kicad/kicad_cli.cpp:141
@@ -7585,7 +7585,7 @@ msgstr "Esporta DXF"
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:162
 msgid "Export DXF Job Settings"
-msgstr "Esporta impostazioni lavoro DXF"
+msgstr "Impostazioni lavoro Esporta DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
@@ -7593,7 +7593,7 @@ msgstr "C.S: esporta DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
 msgid "Export GenCAD Job Settings"
-msgstr "Esporta impostazioni lavoro GenCAD"
+msgstr "Impostazioni lavoro Esporta GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
 msgid "Export single Gerber"
@@ -7601,7 +7601,7 @@ msgstr "Esporta singolo Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
 msgid "Export Single Gerber Job Settings"
-msgstr "Esporta impostazioni lavoro singolo Gerber"
+msgstr "Impostazioni lavoro Esporta singolo Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:42
 msgid "Export Gerbers"
@@ -7609,7 +7609,7 @@ msgstr "Esporta Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:48
 msgid "Export Gerbers Job Settings"
-msgstr "Esporta impostazioni lavoro Gerber"
+msgstr "Impostazioni lavoro Esporta Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
@@ -7621,11 +7621,11 @@ msgstr "Esporta IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
 msgid "Export IPC2581 Job Settings"
-msgstr "Esporta impostazioni lavoro IPC2581"
+msgstr "Impostazioni lavoro Esporta IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
-msgstr "C.S.: esporta IPC2581"
+msgstr "C.S.: Esporta IPC2581"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7633,14 +7633,12 @@ msgid "Export ODB++"
 msgstr "Esporta ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro Esporta ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "Esporta DXF"
+msgstr "C.S.: Esporta ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:74
 #: common/jobs/job_export_sch_plot.cpp:137 kicad/kicad_cli.cpp:143
@@ -7649,28 +7647,24 @@ msgstr "Esporta PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:143
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro Esporta PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "Esporta PDF"
+msgstr "C.S.: Esporta PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export position data"
-msgstr "C.S.: esporta dati posizionali"
+msgstr "Esporta dati posizionali"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "C.S.: esporta dati posizionali"
+msgstr "Impostazioni lavoro Esporta dati posizionali"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr "C.S.: esporta dati posizionali"
+msgstr "C.S.: Esporta dati posizionali"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:175 kicad/kicad_cli.cpp:145
@@ -7679,141 +7673,118 @@ msgstr "Esporta SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:181
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro Esporta SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:67
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Esporta SVG"
+msgstr "C.S.: Esporta SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Genera distinta materiali..."
+msgstr "Genera distinta materiali"
 
 #: common/jobs/job_export_sch_bom.cpp:98
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Genera distinta materiali..."
+msgstr "Impostazioni lavoro Genera distinta materiali"
 
 #: common/jobs/job_export_sch_bom.cpp:102
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Genera distinta materiali..."
+msgstr "Schema: Genera distinta materiali"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Esporta netlist"
+msgstr "Esporta netlist %s"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Esporta netlist"
+msgstr "Impostazioni lavoro Esporta netlist"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Esporta netlist"
+msgstr "Schema: Esporta netlist"
 
 #: common/jobs/job_export_sch_plot.cpp:194
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "Esporta Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:200
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro Esporta Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:213 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "Esporta HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:219
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro Esporta HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:223
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Editor schemi"
+msgstr "Schema: Esporta SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:225
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "Editor schemi"
+msgstr "Schema: Esporta HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Esporta netlist"
+msgstr "Schema: Esporta Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Editor schemi"
+msgstr "Schema: Esporta DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:231
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Editor schemi"
+msgstr "Schema: Esporta PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "Parità schema"
+msgstr "Esporta PythonBOM schema"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Esegui DRC C.S."
+msgstr "Esegui CRP"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro CRP"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr "C.S.: esegui DRC"
+msgstr "C.S.: Esegui CRP"
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Riannota C.S."
+msgstr "Render %s"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni di Render C.S."
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
-msgstr "C.S.: render"
+msgstr "C.S.: Render"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Esegui DRC C.S."
+msgstr "Esegui CRE"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Esporta netlist"
+msgstr "Impostazioni lavoro CRE schema"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Aggiorna lo schema dal C.S."
+msgstr "Schema: Esegui CRE"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "File Specctra DSN"
+msgstr "Speciale: Copia file"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -7824,9 +7795,8 @@ msgid "Archive"
 msgstr "Archivio"
 
 #: common/jobs/jobs_output_folder.cpp:85 common/jobs/jobset.cpp:41
-#, fuzzy
 msgid "Folder"
-msgstr "Cartella:"
+msgstr "Cartella"
 
 #: common/json_schema_validator.cpp:48
 #, c-format
@@ -7950,7 +7920,6 @@ msgid "Net class references"
 msgstr "Riferimenti netclass"
 
 #: common/layer_id.cpp:130
-#, fuzzy
 msgid "Rule areas"
 msgstr "Aree regole"
 
@@ -7963,9 +7932,8 @@ msgid "Symbol body fills"
 msgstr "Riempimenti corpi simboli"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "File immagine"
+msgstr "Riempimenti forme"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8019,9 +7987,8 @@ msgid "DNP markers"
 msgstr "Marcatori DNP"
 
 #: common/layer_id.cpp:146
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "Escluso dalla simulazione"
+msgstr "Marcatori di escluso-dalla-simulazione"
 
 #: common/layer_id.cpp:147
 msgid "ERC warnings"
@@ -8087,9 +8054,8 @@ msgid "Selection highlight"
 msgstr "Evidenziazione selezione"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Evidenziazione selezione"
+msgstr "Colore evidenziazione collegamento"
 
 #: common/layer_id.cpp:161 common/layer_id.cpp:190
 msgid "Drawing sheet"
@@ -8185,14 +8151,12 @@ msgid "DRC errors"
 msgstr "Errori DRC"
 
 #: common/layer_id.cpp:185
-#, fuzzy
 msgid "DRC shape 1"
-msgstr "Forma piazzola"
+msgstr "Forma 1 CRP"
 
 #: common/layer_id.cpp:186
-#, fuzzy
 msgid "DRC shape 2"
-msgstr "Forma piazzola"
+msgstr "Forma 2 CRP"
 
 #: common/layer_id.cpp:187
 msgid "DRC exclusions"
@@ -8215,28 +8179,25 @@ msgid "Courtyard collision shadow"
 msgstr "Ombra collisione ingombri"
 
 #: common/layer_id.cpp:200
-#, fuzzy
 msgid "Track net names"
-msgstr "Cerca nomi net"
+msgstr "Nomi collegamenti piste"
 
 #: common/layer_id.cpp:201
-#, fuzzy
 msgid "Pad net names"
-msgstr "Cerca nomi net"
+msgstr "Nomi collegamenti piazzole"
 
 #: common/layer_id.cpp:202
-#, fuzzy
 msgid "Via net names"
-msgstr "Cerca nomi net"
+msgstr "Nomi collegamenti via"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
 msgstr "Carattere illegale nel denominatore libreria"
 
 #: common/lib_table_base.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get writer for %s"
-msgstr "Fallita scrittura albero: %s"
+msgstr "Fallito ottenimento scrittore per %s"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -8442,9 +8403,8 @@ msgid "Error loading project footprint library table."
 msgstr "Errore durante il caricamento della tabella librerie del progetto."
 
 #: common/project.cpp:451 common/project.cpp:457
-#, fuzzy
 msgid "Error loading project design block library table."
-msgstr "Errore durante il caricamento della tabella librerie del progetto."
+msgstr "Errore nel caricare la tabella librerie blocchi progetto."
 
 #: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
 msgid "This is the default net class."
@@ -8508,9 +8468,9 @@ msgid "Failed to create file '%s'."
 msgstr "Fallita creazione file \"%s\"."
 
 #: common/project/project_archiver.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "Errore rimozione cartella '%s': %s"
+msgstr "Errore nell'apertura cartella: '%s'."
 
 #: common/project/project_archiver.cpp:392
 #, c-format
@@ -8518,9 +8478,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Archivio zip \"%s\" creato (%s non compressi, %s compressi)."
 
 #: common/project/project_archiver.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "Errore: %s"
+msgstr "Errore: '%s'."
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -8554,9 +8514,8 @@ msgid "Line length exceeded"
 msgstr "Lunghezza linea eccedente"
 
 #: common/settings/bom_settings.cpp:126
-#, fuzzy
 msgid "Default Editing"
-msgstr "Unità predefinite:"
+msgstr "Modifica predefiniti"
 
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
@@ -8665,24 +8624,20 @@ msgid "Open existing document"
 msgstr "Apri documento esistente"
 
 #: common/tool/actions.cpp:75
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Modifica in un editor di testo"
+msgstr "Modifica in un editor di testo..."
 
 #: common/tool/actions.cpp:76
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Apri file in un editor di testo"
+msgstr "Apri file libreria in un editor di testo"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Apri cartella nell'esploratore file"
+msgstr "Apri nell'esploratore file..."
 
 #: common/tool/actions.cpp:83
-#, fuzzy
 msgid "Open a library file with system file explorer"
-msgstr "Apri file in un editor di testo"
+msgstr "Apri file di libreria con l'esploratore file di sistema"
 
 #: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:856
 #: eeschema/widgets/tuner_slider_base.cpp:117
@@ -8775,14 +8730,12 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Copia gli elementi selezionati sugli appunti"
 
 #: common/tool/actions.cpp:235
-#, fuzzy
 msgid "Copy as Text"
-msgstr "Piazzamento"
+msgstr "Copia come testo"
 
 #: common/tool/actions.cpp:236
-#, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
-msgstr "Copia gli elementi selezionati sugli appunti"
+msgstr "Copia gli elementi selezionati negli appunti come testo"
 
 #: common/tool/actions.cpp:246
 msgid "Paste item(s) from clipboard"
@@ -8805,9 +8758,8 @@ msgid "Paste Special..."
 msgstr "Incolla speciale..."
 
 #: common/tool/actions.cpp:270
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "Incolla elementi dagli appunti con opzioni di annotazione"
+msgstr "Incolla elementi dagli appunti con opzioni"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -8820,7 +8772,6 @@ msgid "Duplicates the selected item(s)"
 msgstr "Duplica gli elementi selezionati"
 
 #: common/tool/actions.cpp:292
-#, fuzzy
 msgid "Delete selected item(s)"
 msgstr "Elimina gli elementi selezionati"
 
@@ -8834,9 +8785,8 @@ msgstr "Elimina gli elementi con il clic"
 
 #: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2833
 #: pcbnew/tools/edit_tool.cpp:2288
-#, fuzzy
 msgid "Left Justify"
-msgstr "Allineamento X"
+msgstr "Allinea a sx"
 
 #: common/tool/actions.cpp:308
 msgid "Left-justify fields and text items"
@@ -8844,9 +8794,8 @@ msgstr "Giustifica a sinistra campi ed elementi di testo"
 
 #: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2835
 #: pcbnew/tools/edit_tool.cpp:2290
-#, fuzzy
 msgid "Center Justify"
-msgstr "Allineamento X"
+msgstr "Allinea al centro"
 
 #: common/tool/actions.cpp:315
 msgid "Center-justify fields and text items"
@@ -8854,77 +8803,64 @@ msgstr "Giustifica al centro campi ed elementi di testo"
 
 #: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2837
 #: pcbnew/tools/edit_tool.cpp:2292
-#, fuzzy
 msgid "Right Justify"
-msgstr "Allineamento X"
+msgstr "Allinea a dx"
 
 #: common/tool/actions.cpp:322
 msgid "Right-justify fields and text items"
 msgstr "Giustifica a destra campi ed elementi di testo"
 
 #: common/tool/actions.cpp:328
-#, fuzzy
 msgid "Expand All"
-msgstr "Aggiorna tutto"
+msgstr "Espandi tutto"
 
 #: common/tool/actions.cpp:334
-#, fuzzy
 msgid "Collapse All"
-msgstr "Rimpiazza tutto"
+msgstr "Compatta tutto"
 
 #: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3078
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1214
 #: pcbnew/tools/edit_tool.cpp:3080
-#, fuzzy
 msgid "Increment"
-msgstr "Passo incrementale:"
+msgstr "Incrementa"
 
 #: common/tool/actions.cpp:343
-#, fuzzy
 msgid "Increment the selected item(s)"
-msgstr "Elimina gli elementi selezionati"
+msgstr "Incrementa gli elementi selezionati"
 
 #: common/tool/actions.cpp:348
-#, fuzzy
 msgid "Increment Primary"
-msgstr "Passo incrementale:"
+msgstr "Incrementa primario"
 
 #: common/tool/actions.cpp:349
-#, fuzzy
 msgid "Increment the primary field of the selected item(s)"
-msgstr "Crea linee grafiche dalla selezione"
+msgstr "Incrementa il campo primario degli elementi selezionati"
 
 #: common/tool/actions.cpp:355
-#, fuzzy
 msgid "Decrement Primary"
-msgstr "Passo incrementale:"
+msgstr "Decrementa primario"
 
 #: common/tool/actions.cpp:356
-#, fuzzy
 msgid "Decrement the primary field of the selected item(s)"
-msgstr "Duplica gli elementi selezionati"
+msgstr "Decrementa il campo primario degli elementi selezionati"
 
 #: common/tool/actions.cpp:362
-#, fuzzy
 msgid "Increment Secondary"
-msgstr "Passo incrementale:"
+msgstr "Incrementa secondario"
 
 #: common/tool/actions.cpp:363
-#, fuzzy
 msgid "Increment the secondary field of the selected item(s)"
-msgstr "Crea linee grafiche dalla selezione"
+msgstr "Incrementa il campo secondario degli elementi selezionati"
 
 #: common/tool/actions.cpp:369
 msgid "Decrement Secondary"
 msgstr "Decremento secondario"
 
 #: common/tool/actions.cpp:370
-#, fuzzy
 msgid "Decrement the secondary field of the selected item(s)"
-msgstr "Crea linee grafiche dalla selezione"
+msgstr "Decrementa il campo secondario degli elementi selezionati"
 
 #: common/tool/actions.cpp:376
-#, fuzzy
 msgid "Select Column(s)"
 msgstr "Seleziona colonne"
 
@@ -8933,18 +8869,16 @@ msgid "Select complete column(s) containing the current selected cell(s)"
 msgstr "Seleziona le colonne complete contenenti le celle selezionate correnti"
 
 #: common/tool/actions.cpp:383
-#, fuzzy
 msgid "Select Row(s)"
-msgstr "Seleziona elementi"
+msgstr "Seleziona righe"
 
 #: common/tool/actions.cpp:384
 msgid "Select complete row(s) containing the current selected cell(s)"
 msgstr "Seleziona le righe complete contenenti le celle selezionate correnti"
 
 #: common/tool/actions.cpp:390
-#, fuzzy
 msgid "Select Table"
-msgstr "Seleziona tutto"
+msgstr "Seleziona tabella"
 
 #: common/tool/actions.cpp:391
 #, fuzzy
@@ -12143,9 +12077,8 @@ msgid "Electrical Rules Checker"
 msgstr "Controllo Regole Elettriche (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro CRE"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 #, fuzzy
@@ -26192,9 +26125,8 @@ msgstr ""
 "al primo errore di un lavoro"
 
 #: kicad/cli/command_jobset_run.cpp:53
-#, fuzzy
 msgid "Jobset file to be run"
-msgstr "Seleziona un parametro da regolare"
+msgstr "File di lavori da eseguire"
 
 #: kicad/cli/command_jobset_run.cpp:58
 msgid ""
@@ -27147,9 +27079,8 @@ msgid "Overwrite files in destination"
 msgstr "Sovrescrivere preimpostazione esistente?"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
-#, fuzzy
 msgid "Copy Files Job Settings"
-msgstr "Impostazioni filtro"
+msgstr "Impostazioni lavoro Copia file"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
 #, fuzzy
@@ -27161,9 +27092,8 @@ msgid "Ignore non-zero exit code"
 msgstr "Ignora il codice di uscita diverso da zero"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni lavoro Esegui comando"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:54
 #: kicad/dialogs/dialog_jobset_output_options_base.h:62
@@ -27294,9 +27224,8 @@ msgid "No."
 msgstr "No"
 
 #: kicad/dialogs/panel_jobset.cpp:65
-#, fuzzy
 msgid "Job Description"
-msgstr "Descrizione"
+msgstr "Descrizione lavoro"
 
 #: kicad/dialogs/panel_jobset.cpp:130
 #, fuzzy
@@ -27332,14 +27261,12 @@ msgid "View Last Run Results..."
 msgstr "Mostra i risultati dell'ultima esecuzione..."
 
 #: kicad/dialogs/panel_jobset.cpp:358
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Descrizione"
+msgstr "Modifica descrizione lavoro"
 
 #: kicad/dialogs/panel_jobset.cpp:359
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "Modifica opzioni..."
+msgstr "Impostazioni modifica lavoro..."
 
 #: kicad/dialogs/panel_jobset.cpp:364
 #, fuzzy
@@ -27352,14 +27279,12 @@ msgid "Select all jobs"
 msgstr "Seleziona tutto"
 
 #: kicad/dialogs/panel_jobset.cpp:648
-#, fuzzy
 msgid "Job Types"
-msgstr "File di lavoro"
+msgstr "Tipi di lavoro"
 
 #: kicad/dialogs/panel_jobset.cpp:659
-#, fuzzy
 msgid "Add New Job"
-msgstr "Aggiungi testo"
+msgstr "Aggiungi nuovo lavoro"
 
 #: kicad/dialogs/panel_jobset.cpp:660
 #, fuzzy
@@ -27387,9 +27312,8 @@ msgid "No outputs defined"
 msgstr "Non connesso"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "Insieme di lavori"
+msgstr "Lavori"
 
 #: kicad/dialogs/panel_jobset_base.cpp:82
 #, fuzzy
@@ -27397,9 +27321,8 @@ msgid "Outputs"
 msgstr "Uscita"
 
 #: kicad/dialogs/panel_jobset_base.cpp:115
-#, fuzzy
 msgid "Save Jobset"
-msgstr "Insieme di lavori"
+msgstr "Salva insieme di lavori"
 
 #: kicad/dialogs/panel_jobset_base.cpp:121
 #, fuzzy
@@ -27408,7 +27331,7 @@ msgstr "Opzioni generali"
 
 #: kicad/dialogs/panel_jobset_base.h:133
 msgid "Job Output Run Log"
-msgstr "Registro di esecuzione di uscita del lavoro"
+msgstr "Registro risultati esecuzione dei lavori"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -27535,14 +27458,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "Importa file progetto EasyEDA"
 
 #: kicad/jobs_runner.cpp:296
-#, fuzzy
 msgid "Job successful"
-msgstr "Connessione riuscita"
+msgstr "Lavoro eseguito con successo"
 
 #: kicad/jobs_runner.cpp:303
-#, fuzzy
 msgid "Job failed"
-msgstr "File di lavoro"
+msgstr "Lavoro fallito"
 
 #: kicad/kicad.cpp:316
 #, c-format
@@ -28328,9 +28249,8 @@ msgid "Edit in a Text Editor"
 msgstr "Modifica in un editor di testo"
 
 #: kicad/project_tree_pane.cpp:911
-#, fuzzy
 msgid "Run Jobs"
-msgstr "su %s"
+msgstr "Esegui lavori"
 
 #: kicad/project_tree_pane.cpp:919
 msgid "Rename File..."
@@ -28573,9 +28493,8 @@ msgid "Clone Project from Repository..."
 msgstr "Clona progetto da repository..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "Apri file di lavoro Gerber..."
+msgstr "Nuovo file insieme di lavori..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -28586,9 +28505,8 @@ msgid "Open Project..."
 msgstr "Apri progetto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "Apri file di lavoro Gerber..."
+msgstr "Apri file insieme di lavori..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -28674,9 +28592,8 @@ msgid "No project files were found in the repository."
 msgstr "Non sono stati trovati file nel repository."
 
 #: kicad/tools/kicad_manager_control.cpp:211
-#, fuzzy
 msgid "Create New Jobset"
-msgstr "Crea nuovo progetto"
+msgstr "Crea nuovo insieme di lavori"
 
 #: kicad/tools/kicad_manager_control.cpp:241
 msgid "System Templates"
@@ -28717,9 +28634,8 @@ msgid "Open Existing Project"
 msgstr "Apri un progetto esistente"
 
 #: kicad/tools/kicad_manager_control.cpp:428
-#, fuzzy
 msgid "Open Jobset"
-msgstr "Insieme di lavori"
+msgstr "Apri insieme di lavori"
 
 #: kicad/tools/kicad_manager_control.cpp:635
 #, c-format
@@ -38425,9 +38341,8 @@ msgid "Side lights elevation:"
 msgstr "Elevazione luci laterali:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
-#, fuzzy
 msgid "Render PCB Job Options"
-msgstr "Opzioni di disegno"
+msgstr "Opzioni lavoro Render C.S."
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1467
