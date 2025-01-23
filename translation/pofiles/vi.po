@@ -4,21 +4,22 @@
 # Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>, 2023, 2024.
 # Phạm Minh Tấn <masterminhtan@gmail.com>, 2023.
 # Nguyen Van Dien <nvdien@tuta.io>, 2024.
+# John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2024-09-14 01:09+0000\n"
-"Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"PO-Revision-Date: 2025-01-23 15:38+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -22851,9 +22852,8 @@ msgid "Save the current library to a new file"
 msgstr "Vui lòng chọn tệp bảng thư viện ký hiệu."
 
 #: eeschema/tools/ee_actions.cpp:195
-#, fuzzy
 msgid "New Symbol..."
-msgstr "Biểu tượng Mới"
+msgstr "Biểu tượng Mới…"
 
 #: eeschema/tools/ee_actions.cpp:196
 #, fuzzy
@@ -22863,7 +22863,7 @@ msgstr "Bắt nguồn từ biểu tượng hiện tại:"
 #: eeschema/tools/ee_actions.cpp:202
 #, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Bắt nguồn từ biểu tượng hiện tại:"
+msgstr "Bắt nguồn từ biểu tượng hiện tại…"
 
 #: eeschema/tools/ee_actions.cpp:203
 #, fuzzy
