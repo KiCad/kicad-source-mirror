@@ -65,19 +65,19 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_includeValues = new wxCheckBox( this, wxID_ANY, _("Search footprint &values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeValues->SetValue(true);
-	sizerInclude->Add( m_includeValues, 0, wxALL, 5 );
+	sizerInclude->Add( m_includeValues, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_includeTexts = new wxCheckBox( this, wxID_ANY, _("Search &other text items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeTexts->SetValue(true);
-	sizerInclude->Add( m_includeTexts, 0, wxALL, 5 );
+	sizerInclude->Add( m_includeTexts, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_includeMarkers = new wxCheckBox( this, wxID_ANY, _("Search DRC &markers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeMarkers->SetValue(true);
-	sizerInclude->Add( m_includeMarkers, 0, wxALL, 5 );
+	sizerInclude->Add( m_includeMarkers, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_includeNets = new wxCheckBox( this, wxID_ANY, _("Search &net names"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeNets->SetValue(true);
-	sizerInclude->Add( m_includeNets, 0, wxALL, 5 );
+	sizerInclude->Add( m_includeNets, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	leftSizer->Add( sizerInclude, 0, wxEXPAND, 5 );
@@ -106,7 +106,7 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	topSizer->Add( buttonSizer, 0, 0, 5 );
 
 
-	bSizer10->Add( topSizer, 0, wxEXPAND, 5 );
+	bSizer10->Add( topSizer, 0, wxALL|wxEXPAND, 5 );
 
 	wxStaticLine* staticline;
 	staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -120,7 +120,7 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	sizerStatus->Add( m_status, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer10->Add( sizerStatus, 0, wxEXPAND, 5 );
+	bSizer10->Add( sizerStatus, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizer10 );

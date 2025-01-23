@@ -76,8 +76,9 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 
 	wxGridBagSizer* gbSizer2;
 	gbSizer2 = new wxGridBagSizer( 0, 20 );
-	gbSizer2->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizer2->SetFlexibleDirection( wxVERTICAL );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+	gbSizer2->SetEmptyCellSize( wxSize( -1,8 ) );
 
 	m_checkMatchCase = new wxCheckBox( this, wxID_ANY, _("Match &case"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkMatchCase, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -90,24 +91,24 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	gbSizer2->Add( m_checkWildcardMatch, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search pin &names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_checkAllPins, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_checkAllPins, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search &hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_checkAllFields, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_checkAllFields, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current &sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_checkCurrentSheetOnly, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_checkCurrentSheetOnly, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkSelectedOnly = new wxCheckBox( this, wxID_ANY, _("Search the current selection &only"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_checkSelectedOnly, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_checkSelectedOnly, wxGBPosition( 5, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkReplaceReferences = new wxCheckBox( this, wxID_ANY, _("Replace matches in reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkReplaceReferences->Hide();
 
-	gbSizer2->Add( m_checkReplaceReferences, wxGBPosition( 5, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_checkReplaceReferences, wxGBPosition( 6, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	leftSizer->Add( gbSizer2, 1, wxEXPAND, 5 );
+	leftSizer->Add( gbSizer2, 1, wxEXPAND|wxTOP, 5 );
 
 
 	topSizer->Add( leftSizer, 1, wxEXPAND|wxALL, 5 );

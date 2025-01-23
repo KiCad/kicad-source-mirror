@@ -571,15 +571,15 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxEXPAND</property>
+                  <property name="flag">wxEXPAND|wxTOP</property>
                   <property name="proportion">1</property>
                   <object class="wxGridBagSizer" expanded="true">
-                    <property name="empty_cell_size"></property>
-                    <property name="flexible_direction">wxHORIZONTAL</property>
+                    <property name="empty_cell_size">-1,8</property>
+                    <property name="flexible_direction">wxVERTICAL</property>
                     <property name="growablecols"></property>
                     <property name="growablerows"></property>
                     <property name="hgap">20</property>
-                    <property name="minimum_size"></property>
+                    <property name="minimum_size">-1,-1</property>
                     <property name="name">gbSizer2</property>
                     <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_NONE</property>
                     <property name="permission">none</property>
@@ -796,7 +796,7 @@
                       <property name="colspan">3</property>
                       <property name="column">0</property>
                       <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
-                      <property name="row">1</property>
+                      <property name="row">2</property>
                       <property name="rowspan">1</property>
                       <object class="wxCheckBox" expanded="false">
                         <property name="BottomDockable">1</property>
@@ -865,7 +865,7 @@
                       <property name="colspan">3</property>
                       <property name="column">0</property>
                       <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
-                      <property name="row">2</property>
+                      <property name="row">3</property>
                       <property name="rowspan">1</property>
                       <object class="wxCheckBox" expanded="false">
                         <property name="BottomDockable">1</property>
@@ -934,7 +934,7 @@
                       <property name="colspan">3</property>
                       <property name="column">0</property>
                       <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
-                      <property name="row">3</property>
+                      <property name="row">4</property>
                       <property name="rowspan">1</property>
                       <object class="wxCheckBox" expanded="false">
                         <property name="BottomDockable">1</property>
@@ -1000,10 +1000,10 @@
                     </object>
                     <object class="gbsizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="colspan">1</property>
+                      <property name="colspan">3</property>
                       <property name="column">0</property>
                       <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
-                      <property name="row">4</property>
+                      <property name="row">5</property>
                       <property name="rowspan">1</property>
                       <object class="wxCheckBox" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -1072,7 +1072,7 @@
                       <property name="colspan">3</property>
                       <property name="column">0</property>
                       <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
-                      <property name="row">5</property>
+                      <property name="row">6</property>
                       <property name="rowspan">1</property>
                       <object class="wxCheckBox" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -1110,7 +1110,7 @@
                         <property name="maximum_size"></property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size"></property>
+                        <property name="minimum_size">-1,-1</property>
                         <property name="moveable">1</property>
                         <property name="name">m_checkReplaceReferences</property>
                         <property name="pane_border">1</property>
