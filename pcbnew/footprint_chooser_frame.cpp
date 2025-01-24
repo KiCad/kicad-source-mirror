@@ -35,11 +35,21 @@
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include <footprint_chooser_frame.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/common_tools.h>
+#include <tool/zoom_tool.h>
+#include <tools/footprint_chooser_selection_tool.h>
+#include <tools/pcb_actions.h>
+#include <tools/pcb_picker_tool.h>
+#include <tools/pcb_viewer_tools.h>
 #include "wx/display.h"
+#include <footprint_preview_panel.h>
 #include <3d_canvas/eda_3d_canvas.h>
 #include <project_pcb.h>
 #include <widgets/bitmap_button.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
+#include <tools/pcb_editor_conditions.h>
 
 
 static wxArrayString s_FootprintHistoryList;
@@ -117,6 +127,7 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     frameSizer->Add( m_chooserPanel, 1, wxEXPAND );
 
+    SetCanvas( m_chooserPanel->GetViewerPanel()->GetPreviewPanel()->GetCanvas() );
     SetBoard( new BOARD() );
 
     // This board will only be used to hold a footprint for viewing
@@ -175,6 +186,27 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     Layout();
     m_chooserPanel->FinishSetup();
+
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), GetViewerSettingsBase(), this );
+    m_actions = new PCB_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
+
+    m_toolManager->RegisterTool( new COMMON_TOOLS );    // for std context menus (zoom & grid)
+    m_toolManager->RegisterTool( new PCB_PICKER_TOOL ); // for setting grid origin
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
+    m_toolManager->RegisterTool( new FOOTPRINT_CHOOSER_SELECTION_TOOL );
+
+    m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
+    m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetIsDefaultTool( true );
+
+    m_toolManager->InitTools();
+
+    setupUIConditions();
 
     // Connect Events
     m_grButton3DView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
@@ -481,6 +513,12 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 }
 
 
+BOARD_ITEM_CONTAINER* FOOTPRINT_CHOOSER_FRAME::GetModel() const
+{
+    return static_cast<FOOTPRINT_PREVIEW_PANEL*>( m_chooserPanel->GetViewerPanel()->GetPreviewPanel() )->GetCurrentFootprint();
+}
+
+
 bool FOOTPRINT_CHOOSER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent )
 {
     if( aFootprint && !aFootprint->IsEmpty() )
@@ -714,4 +752,34 @@ void FOOTPRINT_CHOOSER_FRAME::updatePanelsVisibility()
 
     updateViews();
 }
+
+
+void FOOTPRINT_CHOOSER_FRAME::setupUIConditions()
+{
+    PCB_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
+    PCB_EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+    // clang-format off
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+
+    mgr->SetConditions( ACTIONS::toggleGrid,           CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,    CHECK( cond.FullscreenCursor() ) );
+
+    mgr->SetConditions( ACTIONS::millimetersUnits,     CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,          CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,            CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+
+    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,   CHECK( cond.PadNumbersDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,   CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,     CHECK( !cond.TextFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines, CHECK( !cond.GraphicsFillDisplay() ) );
+
+#undef CHECK
+    // clang-format on
+}
+
 

@@ -76,19 +76,15 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
 
 FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
 {
+    m_dummyBoard->DetachAllFootprints();
+
     if( m_currentFootprint )
-    {
         GetView()->Remove( m_currentFootprint.get() );
-        GetView()->Clear();
-        m_currentFootprint->SetParent( nullptr );
-    }
 
     if( m_otherFootprint )
-    {
         GetView()->Remove( m_otherFootprint.get() );
-        GetView()->Clear();
-        m_otherFootprint->SetParent( nullptr );
-    }
+
+    GetView()->Clear();
 }
 
 
@@ -112,7 +108,7 @@ const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetForegroundColor() const
 
 void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootprint )
 {
-    aFootprint->SetParent( m_dummyBoard.get() );
+    m_dummyBoard->Add( aFootprint.get() );
 
     INSPECTOR_FUNC inspector =
             [&]( EDA_ITEM* descendant, void* aTestData )
@@ -161,12 +157,12 @@ void FOOTPRINT_PREVIEW_PANEL::fitToCurrentFootprint()
 
 bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 {
+    m_dummyBoard->DetachAllFootprints();
+
     if( m_currentFootprint )
-    {
         GetView()->Remove( m_currentFootprint.get() );
-        GetView()->Clear();
-        m_currentFootprint->SetParent( nullptr );
-    }
+
+    GetView()->Clear();
 
     FP_LIB_TABLE* fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
 
@@ -200,18 +196,15 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 void FOOTPRINT_PREVIEW_PANEL::DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
                                                  std::shared_ptr<FOOTPRINT> aFootprintB )
 {
+    m_dummyBoard->DetachAllFootprints();
+
     if( m_currentFootprint )
-    {
         GetView()->Remove( m_currentFootprint.get() );
-        m_currentFootprint->SetParent( nullptr );
 
-        wxASSERT( m_otherFootprint );
-
+    if( m_otherFootprint )
         GetView()->Remove( m_otherFootprint.get() );
-        m_otherFootprint->SetParent( nullptr );
 
-        GetView()->Clear();
-    }
+    GetView()->Clear();
 
     m_currentFootprint = aFootprintA;
     m_otherFootprint = aFootprintB;
@@ -234,12 +227,6 @@ void FOOTPRINT_PREVIEW_PANEL::RefreshAll()
 {
     GetView()->UpdateAllItems( KIGFX::REPAINT );
     ForceRefresh();
-}
-
-
-wxWindow* FOOTPRINT_PREVIEW_PANEL::GetWindow()
-{
-    return static_cast<wxWindow*>( this );
 }
 
 

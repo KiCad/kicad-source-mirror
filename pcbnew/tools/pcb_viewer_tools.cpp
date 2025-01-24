@@ -30,7 +30,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <kiplatform/ui.h>
 #include <pcb_base_frame.h>
-#include <pcbnew_settings.h>
 #include <preview_items/ruler_item.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -51,14 +50,17 @@ bool PCB_VIEWER_TOOLS::Init()
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     // "Cancel" goes at the top of the context menu when a tool is active
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
-    ctxMenu.AddSeparator( 1 );
+    if( !m_isDefaultTool )
+    {
+        ctxMenu.AddItem( ACTIONS::cancelInteractive,     activeToolCondition, 1 );
+        ctxMenu.AddSeparator( 1 );
+    }
 
-    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, activeToolCondition, 2 );
-    ctxMenu.AddSeparator(                              activeToolCondition, 2 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode,   activeToolCondition, 2 );
+    ctxMenu.AddSeparator(                                activeToolCondition, 2 );
 
-    ctxMenu.AddItem( ACTIONS::copy,     activeToolCondition, 3 );
-    ctxMenu.AddSeparator(               activeToolCondition, 3 );
+    ctxMenu.AddItem( ACTIONS::copy,                      activeToolCondition, 3 );
+    ctxMenu.AddSeparator(                                activeToolCondition, 3 );
 
     frame()->AddStandardSubMenus( *m_menu.get() );
 
@@ -274,6 +276,11 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             if( originSet )
             {
                 cleanup();
+            }
+            else if( m_isDefaultTool )
+            {
+                view.SetVisible( &ruler, false );
+                view.Remove( &ruler );
             }
             else
             {

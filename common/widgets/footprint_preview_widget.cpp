@@ -20,6 +20,7 @@
 
 #include <widgets/footprint_preview_widget.h>
 #include <lib_id.h>
+#include <class_draw_panel_gal.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <kiway.h>
@@ -61,7 +62,7 @@ FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aK
     m_outerSizer = new wxBoxSizer( wxVERTICAL );
 
     if( m_prev_panel )
-        m_outerSizer->Add( m_prev_panel->GetWindow(), 1, wxALL | wxEXPAND, 0 );
+        m_outerSizer->Add( m_prev_panel->GetCanvas(), 1, wxALL | wxEXPAND, 0 );
 
     m_outerSizer->Add( m_statusPanel, 1, wxALL | wxEXPAND, 0 );
 
@@ -77,7 +78,7 @@ void FOOTPRINT_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
     m_statusPanel->Show();
 
     if( m_prev_panel )
-        m_prev_panel->GetWindow()->Hide();
+        m_prev_panel->GetCanvas()->Hide();
 
     Layout();
 }
@@ -89,7 +90,7 @@ void FOOTPRINT_PREVIEW_WIDGET::ClearStatus()
     m_statusPanel->Hide();
 
     if( m_prev_panel )
-        m_prev_panel->GetWindow()->Show();
+        m_prev_panel->GetCanvas()->Show();
 
     Layout();
 }

@@ -67,14 +67,14 @@ public:
     virtual const KIGFX::COLOR4D& GetBackgroundColor() const override;
     virtual const KIGFX::COLOR4D& GetForegroundColor() const override;
 
-    virtual wxWindow* GetWindow() override;
+    virtual EDA_DRAW_PANEL_GAL* GetCanvas() override { return this; };
     BOARD* GetBoard() { return m_dummyBoard.get(); }
 
     virtual void RefreshAll() override;
 
     static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent,
                                          UNITS_PROVIDER* aUnitsProvider );
-    const FOOTPRINT* GetCurrentFootprint() const { return m_currentFootprint.get(); }
+    FOOTPRINT* GetCurrentFootprint() const { return m_currentFootprint.get(); }
 
 private:
     /**
