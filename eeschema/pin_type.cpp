@@ -211,7 +211,8 @@ wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE aType )
 
     auto it = g_pinElectricalTypes.find( aType );
 
-    wxCHECK_MSG( it != g_pinElectricalTypes.end(), wxT( "???" ), wxT( "Pin type not found!" ) );
+    wxCHECK_MSG( it != g_pinElectricalTypes.end(), wxT( "???" ),
+                 wxString::Format( "Pin type not found for type %d!", (int) aType ) );
 
     return it->second.name;
 }
@@ -224,7 +225,8 @@ BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE aType )
 
     auto it = g_pinElectricalTypes.find( aType );
 
-    wxCHECK_MSG( it != g_pinElectricalTypes.end(), BITMAPS::INVALID_BITMAP, wxT( "Pin type not found!" ) );
+    wxCHECK_MSG( it != g_pinElectricalTypes.end(), BITMAPS::INVALID_BITMAP,
+                 wxString::Format( "Pin type not found for type %d!", (int) aType ) );
 
     return it->second.bitmap;
 }
@@ -237,7 +239,8 @@ wxString PinShapeGetText( GRAPHIC_PINSHAPE aShape )
 
     auto it = g_pinShapes.find( aShape );
 
-    wxCHECK_MSG( it != g_pinShapes.end(), wxT( "?" ), wxT( "Pin type not found!" ) );
+    wxCHECK_MSG( it != g_pinShapes.end(), wxT( "?" ),
+                 wxString::Format( "Pin shape not found for type %d!", (int) aShape ) );
 
     return it->second.name;
 }
@@ -250,7 +253,8 @@ BITMAPS PinShapeGetBitmap( GRAPHIC_PINSHAPE aShape )
 
     auto it = g_pinShapes.find( aShape );
 
-    wxCHECK_MSG( it != g_pinShapes.end(), BITMAPS::INVALID_BITMAP, wxT( "Pin type not found!" ) );
+    wxCHECK_MSG( it != g_pinShapes.end(), BITMAPS::INVALID_BITMAP,
+                 wxString::Format( "Pin shape not found for type %d!", (int) aShape ) );
 
     return it->second.bitmap;
 }
@@ -263,7 +267,8 @@ wxString PinOrientationName( PIN_ORIENTATION aOrientation )
 
     auto it = g_pinOrientations.find( aOrientation );
 
-    wxCHECK_MSG( it != g_pinOrientations.end(), wxT( "?" ), wxT( "Pin orientation not found!" ) );
+    wxCHECK_MSG( it != g_pinOrientations.end(), wxT( "?" ),
+                 wxString::Format( "Pin orientation not found for type %d!", (int) aOrientation ) );
 
     return it->second.name;
 }
@@ -276,7 +281,8 @@ BITMAPS PinOrientationGetBitmap( PIN_ORIENTATION aOrientation )
 
     auto it = g_pinOrientations.find( aOrientation );
 
-    wxCHECK_MSG( it != g_pinOrientations.end(), BITMAPS::INVALID_BITMAP, wxT( "Pin orientation not found!" ) );
+    wxCHECK_MSG( it != g_pinOrientations.end(), BITMAPS::INVALID_BITMAP,
+                 wxString::Format( "Pin orientation not found for type %d!", (int) aOrientation ) );
 
     return it->second.bitmap;
 }
