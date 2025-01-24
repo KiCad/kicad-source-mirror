@@ -35,13 +35,14 @@
 # Wang <wang@plasma.ac.cn>, 2024.
 # HalfSweet <HalfSweet@halfsweet.cn>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
+# KK0571 <190506420@qq.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-24 10:56+0000\n"
+"Last-Translator: KK0571 <190506420@qq.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -627,7 +628,7 @@ msgstr "显示 底层 '铜/表面' 处理颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr "Adhesive"
+msgstr "胶"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
@@ -635,7 +636,7 @@ msgstr "显示点胶层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
-msgstr "Solder Paste"
+msgstr "锡膏"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show solder paste"
@@ -644,7 +645,7 @@ msgstr "显示锡膏层"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "顶层丝印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
@@ -652,7 +653,7 @@ msgstr "显示顶层丝印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "底层丝印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
@@ -1762,7 +1763,7 @@ msgstr "导出到剪贴板"
 
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
-msgstr ""
+msgstr "黑白图像中没有可转换的形状：没有创建轮廓。"
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -1773,10 +1774,10 @@ msgid "Background Jobs"
 msgstr "后台作业"
 
 #: common/common.cpp:303
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "环境变量展开失败: '%3$s' 中第 %2$u 处缺少 '%1$c'。"
+msgstr "环境变量展开失败: 在字符串%s的第%u位缺少字符%c"
 
 #: common/common.cpp:385
 #, c-format
@@ -2018,7 +2019,7 @@ msgstr "无法删除设计图块文件夹 '%s'。"
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "在设计图块库表文件的行 %2$d 中出现了重复的库名称 '%1$s'。"
+msgstr "在设计模块库表文件的第 '%d' 行中出现了重复的库别名 '%s'。"
 
 #: common/design_block_lib_table.cpp:342
 #, c-format
