@@ -42,7 +42,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
 "PO-Revision-Date: 2025-01-24 10:56+0000\n"
-"Last-Translator: KK0571 <190506420@qq.com>\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -45885,9 +45885,9 @@ msgid "Wrote front position data to '%s'.\n"
 msgstr "导出位置数据"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "将 BOM 输出写入 '%s'.\n"
+msgstr "\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
 #, fuzzy, c-format
