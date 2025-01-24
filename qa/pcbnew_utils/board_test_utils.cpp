@@ -250,7 +250,7 @@ void LoadAndTestFootprintFile( const wxString& aLibRelativePath, const wxString&
 
         BOOST_TEST_MESSAGE( "Re-reading footprint: " << fpFilename << " in " << tempLib.GetPath() );
 
-        std::unique_ptr<FOOTPRINT> fp2 = KI_TEST::ReadFootprintFromFileOrStream( fp2Path );
+        std::unique_ptr<FOOTPRINT> fp2 = KI_TEST::ReadFootprintFromFileOrStream( fp2Path.string() );
 
         // Should load again
         BOOST_REQUIRE( fp2 );
