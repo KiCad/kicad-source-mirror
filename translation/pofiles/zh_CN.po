@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 09:58+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-24 17:47+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1731,7 +1731,7 @@ msgstr "后台作业"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "环境变量展开失败: '%3$s' 中第 %2$u 处缺少 '%1$c'。"
+msgstr "环境变量展开失败: 字符串 '%3$s' 的位置 %2$u 处缺少字符 '%1$c'。"
 
 #: common/common.cpp:371
 #, c-format
@@ -8548,7 +8548,7 @@ msgstr "报告文件"
 
 #: common/wildcards_and_files_ext.cpp:396
 msgid "Component placement files"
-msgstr "元件布置文件"
+msgstr "元件定位文件"
 
 #: common/wildcards_and_files_ext.cpp:402
 msgid "VRML and X3D files"
@@ -11705,9 +11705,7 @@ msgstr "输出目录:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
-msgstr ""
-"绘制文件的输出目录。可以使用绝对路径, 也可以使用相对于原理图主文件的位置的相"
-"对路径。"
+msgstr "绘制文件的输出目录。可以是原理图主文件位置的绝对路径或相对路径。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
@@ -11946,9 +11944,7 @@ msgstr "导入自:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
-msgstr ""
-"绘制文件的输出目录。可以使用绝对路径, 也可以使用相对于原理图主文件的位置的相"
-"对路径。"
+msgstr "绘制文件的输出目录。可以是电路板文件位置的绝对路径或相对路径。"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:47
@@ -19831,7 +19827,7 @@ msgstr "创建一个新符号"
 
 #: eeschema/tools/ee_actions.cpp:170
 msgid "Derive from Existing Symbol"
-msgstr "从现有符号派生…"
+msgstr "从现有符号派生..."
 
 #: eeschema/tools/ee_actions.cpp:171
 msgid "Create a new symbol, derived from an existing symbol"
@@ -22968,7 +22964,7 @@ msgstr "无效的报告格式\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr "导出组件 (Gerber, 钻孔, 坐标文件等)"
+msgstr "导出组件 (Gerber, 钻孔, 定位文件等)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:66
 msgid "Output file format, options: step, glb (binary glTF)"
@@ -23205,7 +23201,7 @@ msgstr "禁用光圈宏 (Aperture macros)"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:87
 #: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Use drill/place file origin"
-msgstr "使用 钻孔/放置 文件原点"
+msgstr "使用 钻孔/定位 文件原点"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:77
 msgid "Precision of Gerber coordinates, valid options: 5 or 6"
@@ -23279,7 +23275,7 @@ msgstr "对底层封装使用负的 X 坐标 (仅 ascii 或 csv 格式)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:70
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "使用钻孔/放置文件原点 (仅 ascii 或 csv)"
+msgstr "使用 钻孔/定位 文件原点 (仅 ascii 或 csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:74
 msgid "Include only SMD footprints (ascii or csv only)"
@@ -30482,7 +30478,7 @@ msgstr "坐标"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr "钻孔/放置文件原点"
+msgstr "钻孔/定位 文件原点"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:48
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -31053,7 +31049,7 @@ msgstr "不在原理图中"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:554
 msgid "Exclude from position files"
-msgstr "从 pos 文件中移除"
+msgstr "从定位文件中移除"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:210
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
@@ -31507,7 +31503,7 @@ msgstr "为每个封装实例生成一个新形状 (不复用形状)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
-msgstr "使用 钻孔/放置 文件原点作为原点"
+msgstr "使用 钻孔/定位 文件原点作为原点"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
@@ -32443,11 +32439,11 @@ msgstr "选择铜层对"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:104
 msgid "Rotate around item anchor"
-msgstr "围绕锚点选择"
+msgstr "围绕项目锚点旋转"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:107
 msgid "Rotate around selection center"
-msgstr "围绕选择中心旋转"
+msgstr "围绕选区中心旋转"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:110
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
@@ -32457,7 +32453,7 @@ msgstr "围绕局部坐标原点旋转"
 #: pcbnew/dialogs/dialog_move_exact.cpp:113
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around drill/place origin"
-msgstr "围绕钻孔/原点选择"
+msgstr "围绕 钻孔/定位 原点旋转"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:206
 #: pcbnew/dialogs/dialog_position_relative.cpp:159
@@ -32486,7 +32482,7 @@ msgstr "旋转:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
-msgstr "围绕选择中心旋转"
+msgstr "围绕选区中心旋转"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:81
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:106
@@ -33279,7 +33275,7 @@ msgstr "草图"
 #: pcbnew/dialogs/dialog_plot_base.cpp:141
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
-msgstr "使用钻孔/拾放文件原点作为绘制文件的坐标原点"
+msgstr "使用 钻孔/定位 文件原点作为绘制文件的坐标原点"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:145
 msgid "Mirrored plot"
@@ -44601,11 +44597,11 @@ msgstr "生成 Excellon 钻孔文件"
 
 #: pcbnew/tools/pcb_actions.cpp:1039
 msgid "Component Placement (.pos, .gbr)..."
-msgstr "元件布置文件 (.pos, .gbr)..."
+msgstr "元件定位文件 (.pos, .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1040
 msgid "Generate component placement file(s) for pick and place"
-msgstr "生成用于贴装的元件布置文件 (坐标文件)"
+msgstr "生成用于贴装的元件定位文件 (坐标文件)"
 
 #: pcbnew/tools/pcb_actions.cpp:1046
 msgid "Footprint Report (.rpt)..."
@@ -44697,11 +44693,11 @@ msgstr "添加封装"
 
 #: pcbnew/tools/pcb_actions.cpp:1143
 msgid "Drill/Place File Origin"
-msgstr "钻孔/放置文件原点"
+msgstr "钻孔/定位 文件原点"
 
 #: pcbnew/tools/pcb_actions.cpp:1144
 msgid "Place origin point for drill files and component placement files"
-msgstr "放置钻孔文件和元件布置文件的原点"
+msgstr "为钻孔文件和元件定位文件放置原点"
 
 #: pcbnew/tools/pcb_actions.cpp:1152
 msgid "Reset Drill Origin"
