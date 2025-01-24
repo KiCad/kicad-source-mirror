@@ -164,6 +164,8 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
 
 std::vector<int> CONSTRUCTION_GEOM::ViewGetLayers() const
 {
-    std::vector<int> layers{ LAYER_GP_OVERLAY };
+    // Don't use LAYER_GP_OVERLAY, we need the construction geometry to be visible
+    // on top of the axis cross
+    std::vector<int> layers{ LAYER_UI_START };
     return layers;
 }
