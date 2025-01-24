@@ -599,6 +599,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
     newField.SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
                                     schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
+    newField.SetVisible( false );
 
     m_fields->push_back( newField );
 

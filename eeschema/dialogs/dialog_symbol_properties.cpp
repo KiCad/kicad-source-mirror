@@ -848,6 +848,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
     newField.SetTextAngle( m_fields->at( REFERENCE_FIELD ).GetTextAngle() );
     newField.SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+    newField.SetVisible( false );
 
     m_fields->push_back( newField );
 
