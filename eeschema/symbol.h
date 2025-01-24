@@ -208,8 +208,6 @@ public:
     std::vector<int> ViewGetLayers() const override;
 
 protected:
-    virtual bool isUuidImmutable() const override { return true; }
-
     TRANSFORM     m_transform;             ///< The rotation/mirror transformation.
 
     int           m_pinNameOffset;         ///< The offset in mils to draw the pin name.  Set to

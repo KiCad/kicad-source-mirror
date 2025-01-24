@@ -1887,11 +1887,6 @@ wxString SCH_PIN::getItemDescription( ALT* aAlt ) const
 }
 
 
-bool SCH_PIN::isUuidImmutable() const
-{
-    // SCH_SYMBOL pin UUIDs are immutable.  LIB_SYMBOL pins UUIDs are not immutable.
-    return ( static_cast<SCH_SYMBOL*>( GetParent() ) != nullptr );
-}
 
 
 int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const

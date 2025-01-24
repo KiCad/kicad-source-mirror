@@ -442,14 +442,11 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         return 0;
     }
 
-    if( isUuidImmutable() )
-    {
-        if( m_Uuid < aOther.m_Uuid )
-            return -1;
+    if( m_Uuid < aOther.m_Uuid )
+        return -1;
 
-        if( m_Uuid > aOther.m_Uuid )
-            return 1;
-    }
+    if( m_Uuid > aOther.m_Uuid )
+        return 1;
 
     return 0;
 }

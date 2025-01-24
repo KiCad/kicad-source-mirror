@@ -333,9 +333,6 @@ protected:
      */
     void printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPosition,
                                      PIN_ORIENTATION aOrientation, bool aDimmed );
-
-    virtual bool isUuidImmutable() const override;
-
     std::ostream& operator<<( std::ostream& aStream );
 
 private:
