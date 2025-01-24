@@ -470,6 +470,11 @@ public:
     void DeleteAllFootprints();
 
     /**
+     * Remove all footprints without deleting.  Footprint lifecycle MUST be managed elsewhere.
+     */
+    void DetachAllFootprints();
+
+    /**
      * @return null if aID is null. Returns an object of Type() == NOT_USED if the aID is not found.
      */
     BOARD_ITEM* GetItem( const KIID& aID ) const;

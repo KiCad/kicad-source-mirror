@@ -1476,6 +1476,19 @@ void BOARD::DeleteAllFootprints()
 }
 
 
+void BOARD::DetachAllFootprints()
+{
+    for( FOOTPRINT* footprint : m_footprints )
+    {
+        m_itemByIdCache.erase( footprint->m_Uuid );
+        footprint->SetParent( nullptr );
+    }
+
+    m_footprints.clear();
+    IncrementTimeStamp();
+}
+
+
 BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
 {
     if( aID == niluuid )

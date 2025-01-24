@@ -43,6 +43,8 @@
 #include <footprint_info_impl.h>
 #include <project_pcb.h>
 #include <kiface_base.h>
+#include <tool/actions.h>
+#include <tool/tool_manager.h>
 
 // When a new footprint is selected, a custom event is sent, for instance to update
 // 3D viewer. So define a FP_SELECTION_EVENT event
@@ -371,6 +373,8 @@ void PANEL_FOOTPRINT_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
     event.SetEventObject( this );
 
     ProcessWindowEvent( event );
+
+    m_frame->GetToolManager()->RunAction( ACTIONS::measureTool );
 }
 
 

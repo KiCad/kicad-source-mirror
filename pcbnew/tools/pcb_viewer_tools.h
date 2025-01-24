@@ -80,6 +80,11 @@ public:
         m_footprintFrame = aIsFrame;
     }
 
+    void SetIsDefaultTool( bool aIsDefaultTool )
+    {
+        m_isDefaultTool = aIsDefaultTool;
+    }
+
     bool IsFootprintFrame() const
     {
         return m_footprintFrame;
@@ -116,7 +121,9 @@ protected:
         return board()->GetFirstFootprint();
     }
 
+protected:
     bool m_footprintFrame;  ///< Is this tool associated with a footprint frame
+    bool m_isDefaultTool;   ///< Indicates no selection tool is present in the current toolset
 };
 
 #endif

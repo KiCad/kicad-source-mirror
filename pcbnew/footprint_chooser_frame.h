@@ -49,7 +49,7 @@ public:
     ~FOOTPRINT_CHOOSER_FRAME();
 
     ///< @copydoc PCB_BASE_FRAME::GetModel()
-    BOARD_ITEM_CONTAINER* GetModel() const override { return nullptr; }
+    BOARD_ITEM_CONTAINER* GetModel() const override;
 
     /**
      * @param aFootprint an optional FPID string to initialize the viewer with and to
@@ -68,6 +68,10 @@ public:
 
     bool Show( bool show ) override;
 
+    // We don't have a status bar
+    void SetStatusText( const wxString& aText, int aNumber = 0 ) override {}
+    void UpdateStatusBar() override {}
+
 protected:
     FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
@@ -76,6 +80,8 @@ private:
     bool filterByFPFilters();
     bool filterFootprint( LIB_TREE_NODE& aNode );
     void Show3DViewerFrame();
+
+    void setupUIConditions() override;
 
     /// @copydoc PCB_BASE_FRAME::Update3DView
     void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr ) override;

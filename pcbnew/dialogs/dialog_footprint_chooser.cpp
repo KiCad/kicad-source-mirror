@@ -293,13 +293,10 @@ void DIALOG_FOOTPRINT_CHOOSER::TearDownQuasiModal()
         {
             FOOTPRINT_PREVIEW_PANEL_BASE* previewPanel = viewerWidget->GetPreviewPanel();
 
-            FOOTPRINT_PREVIEW_PANEL* fpPreviewPanel =
-                    static_cast<FOOTPRINT_PREVIEW_PANEL*>( previewPanel );
-
-            if( fpPreviewPanel )
+            if( previewPanel )
             {
                 wxLogDebug( wxS( "Stopping footprint preview panel drawing." ) );
-                fpPreviewPanel->StopDrawing();
+                previewPanel->GetCanvas()->StopDrawing();
             }
         }
     }
