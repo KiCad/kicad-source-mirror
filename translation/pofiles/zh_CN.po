@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-24 10:56+0000\n"
+"PO-Revision-Date: 2025-01-24 17:47+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -628,7 +628,7 @@ msgstr "显示 底层 '铜/表面' 处理颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr "胶"
+msgstr "Adhesive"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
@@ -636,7 +636,7 @@ msgstr "显示点胶层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
-msgstr "锡膏"
+msgstr "Solder Paste"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show solder paste"
@@ -645,7 +645,7 @@ msgstr "显示锡膏层"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
-msgstr "顶层丝印"
+msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
@@ -653,7 +653,7 @@ msgstr "显示顶层丝印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "B.Silkscreen"
-msgstr "底层丝印"
+msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
@@ -1754,7 +1754,7 @@ msgstr "图框 (.kicad_wks file)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
-msgstr "导出到文件…"
+msgstr "导出到文件..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -1763,7 +1763,7 @@ msgstr "导出到剪贴板"
 
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
-msgstr "黑白图像中没有可转换的形状：没有创建轮廓。"
+msgstr "黑白图像中没有可转换的形状: 未创建轮廓。"
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -1774,10 +1774,10 @@ msgid "Background Jobs"
 msgstr "后台作业"
 
 #: common/common.cpp:303
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "环境变量展开失败: 在字符串%s的第%u位缺少字符%c"
+msgstr "环境变量展开失败: 字符串 '%3$s' 的位置 %2$u 处缺少字符 '%1$c'。"
 
 #: common/common.cpp:385
 #, c-format
@@ -2019,7 +2019,7 @@ msgstr "无法删除设计图块文件夹 '%s'。"
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "在设计模块库表文件的第 '%d' 行中出现了重复的库别名 '%s'。"
+msgstr "在设计图块库表文件的第 '%2$d' 行中出现了重复的库名称 '%1$s'。"
 
 #: common/design_block_lib_table.cpp:342
 #, c-format
@@ -7420,15 +7420,15 @@ msgstr "PCB: 导出 PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
 msgid "Export position data"
-msgstr "导出位置数据"
+msgstr "导出定位数据"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
 msgid "Export Position Data Job Settings"
-msgstr "导出位置数据作业设置"
+msgstr "导出定位数据作业设置"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr "PCB: 导出位置数据"
+msgstr "PCB: 导出定位数据"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:175 kicad/kicad_cli.cpp:145
@@ -10006,7 +10006,7 @@ msgstr "报告文件"
 
 #: common/wildcards_and_files_ext.cpp:438
 msgid "Component placement files"
-msgstr "元件布置文件"
+msgstr "元件定位文件"
 
 #: common/wildcards_and_files_ext.cpp:444
 msgid "VRML and X3D files"
@@ -13303,9 +13303,7 @@ msgstr "输出目录:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
-msgstr ""
-"绘制文件的输出目录。可以使用绝对路径, 也可以使用相对于原理图主文件的位置的相"
-"对路径。"
+msgstr "绘制文件的输出目录。可以是原理图主文件位置的绝对路径或相对路径。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -13555,9 +13553,7 @@ msgstr "导入自:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
-msgstr ""
-"绘制文件的输出目录。可以使用绝对路径, 也可以使用相对于原理图主文件的位置的相"
-"对路径。"
+msgstr "绘制文件的输出目录。可以是电路板文件位置的绝对路径或相对路径。"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:47
@@ -16324,9 +16320,9 @@ msgstr "找不到 BOM 格式预设 '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:744
 #: eeschema/eeschema_jobs_handler.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "生成物料清单"
+msgstr "写入物料清单到 '%s'。"
 
 #: eeschema/eeschema_jobs_handler.cpp:878
 #, c-format
@@ -21853,9 +21849,8 @@ msgid "Create a new symbol in an existing library"
 msgstr "在现有库中创建一个新符号"
 
 #: eeschema/tools/ee_actions.cpp:202
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "从现有符号派生…"
+msgstr "从现有符号派生..."
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
@@ -25258,7 +25253,7 @@ msgstr "无效的报告格式\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr "导出组件 (Gerber, 钻孔, 坐标文件等)"
+msgstr "导出组件 (Gerber, 钻孔, 定位文件等)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:79
 msgid ""
@@ -25504,7 +25499,7 @@ msgstr "使用轮廓绘制图形项目"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:61
 msgid "Plot using the drill/place file origin"
-msgstr "绘制时使用 钻孔/放置 文件的原点"
+msgstr "绘制时使用 钻孔/定位 文件的原点"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:65
 #: kicad/cli/command_pcb_export_gerber.cpp:53
@@ -25593,7 +25588,7 @@ msgstr "为每个封装实例生成一个新形状 (不复用形状)"
 #: kicad/cli/command_pcb_export_gencad.cpp:61
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Use drill/place file origin as origin"
-msgstr "使用 钻孔/放置 文件原点作为原点"
+msgstr "使用 钻孔/定位 文件原点作为原点"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:66
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
@@ -25625,7 +25620,7 @@ msgstr "禁用光圈宏 (Aperture macros)"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 #: pcbnew/dialogs/dialog_plot_base.cpp:144
 msgid "Use drill/place file origin"
-msgstr "使用 钻孔/放置 文件原点"
+msgstr "使用 钻孔/定位 文件原点"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:78
 msgid "Precision of Gerber coordinates, valid options: 5 or 6"
@@ -25702,7 +25697,7 @@ msgstr "对底层封装使用负的 X 坐标 (仅 ascii 或 csv 格式)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:70
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "使用钻孔/放置文件原点 (仅 ascii 或 csv)"
+msgstr "使用 钻孔/定位 文件原点 (仅 ascii 或 csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:74
 msgid "Include only SMD footprints (ascii or csv only)"
@@ -33544,7 +33539,7 @@ msgstr "坐标"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:134
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr "钻孔/放置文件原点"
+msgstr "钻孔/定位 文件原点"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:171
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -33956,7 +33951,7 @@ msgstr "不在原理图中"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:630
 msgid "Exclude from position files"
-msgstr "从 pos 文件中移除"
+msgstr "从定位文件中移除"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:209
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
@@ -35291,11 +35286,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:105
 msgid "Rotate around item anchor"
-msgstr "围绕锚点选择"
+msgstr "围绕项目锚点旋转"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:108
 msgid "Rotate around selection center"
-msgstr "围绕选择中心旋转"
+msgstr "围绕选区中心旋转"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:111
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
@@ -35305,7 +35300,7 @@ msgstr "围绕局部坐标原点旋转"
 #: pcbnew/dialogs/dialog_move_exact.cpp:114
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around drill/place origin"
-msgstr "围绕钻孔/原点选择"
+msgstr "围绕 钻孔/定位 原点旋转"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:207
 #: pcbnew/dialogs/dialog_position_relative.cpp:160
@@ -35335,7 +35330,7 @@ msgstr "旋转:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
-msgstr "围绕选择中心旋转"
+msgstr "围绕选区中心旋转"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:81
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:109
@@ -36163,7 +36158,7 @@ msgstr "草图"
 #: pcbnew/dialogs/dialog_plot_base.cpp:145
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
-msgstr "使用钻孔/拾放文件原点作为绘制文件的坐标原点"
+msgstr "使用 钻孔/定位 文件原点作为绘制文件的坐标原点"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Mirrored plot"
@@ -37491,9 +37486,8 @@ msgid "Drag (free angle)"
 msgstr "拖动 (自由角度)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:90
-#, fuzzy
 msgid "Flip board items:"
-msgstr "翻转电路板视图"
+msgstr "翻转电路板项目:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:94
 msgid "Left/right"
@@ -45880,19 +45874,19 @@ msgid "Successfully created genCAD file\n"
 msgstr "成功创建 genCAD 文件\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1424 pcbnew/pcbnew_jobs_handler.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "导出位置数据"
+msgstr "写入正面定位数据到 '%s'。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "\n"
+msgstr "写入背面定位数据到 '%s'。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "导出位置数据"
+msgstr "写入定位数据到 '%s'。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1572
 msgid "Footprint library path does not exist or is not accessible\n"
@@ -48338,11 +48332,11 @@ msgstr "生成 Excellon 钻孔文件"
 
 #: pcbnew/tools/pcb_actions.cpp:1037
 msgid "Component Placement (.pos, .gbr)..."
-msgstr "元件布置文件 (.pos, .gbr)..."
+msgstr "元件定位文件 (.pos, .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1038
 msgid "Generate component placement file(s) for pick and place"
-msgstr "生成用于贴装的元件布置文件 (坐标文件)"
+msgstr "生成用于贴装的元件定位文件 (坐标文件)"
 
 #: pcbnew/tools/pcb_actions.cpp:1044
 msgid "Footprint Report (.rpt)..."
@@ -48422,11 +48416,11 @@ msgstr "放置封装"
 
 #: pcbnew/tools/pcb_actions.cpp:1145
 msgid "Drill/Place File Origin"
-msgstr "钻孔/放置文件原点"
+msgstr "钻孔/定位 文件原点"
 
 #: pcbnew/tools/pcb_actions.cpp:1146
 msgid "Place origin point for drill files and component placement files"
-msgstr "放置钻孔文件和元件布置文件的原点"
+msgstr "为钻孔文件和元件定位文件放置原点"
 
 #: pcbnew/tools/pcb_actions.cpp:1154
 msgid "Reset Drill Origin"
