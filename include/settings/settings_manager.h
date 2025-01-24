@@ -128,7 +128,9 @@ public:
 
         if( it != m_settings.end() )
         {
-            ret = dynamic_cast<T*>( it->get() );
+            // Do NOT use dynamic_cast here.  CLang will think it's the wrong class across
+            // compile boundaries and return nullptr.
+            ret = static_cast<T*>( it->get() );
         }
         else
         {
