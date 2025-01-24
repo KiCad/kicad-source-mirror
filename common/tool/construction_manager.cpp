@@ -224,7 +224,8 @@ void CONSTRUCTION_MANAGER::ProposeConstructionItems(
         return;
     }
 
-    auto pendingBatch = std::make_unique<PENDING_BATCH>( std::move( *aBatch ), aIsPersistent );
+    auto pendingBatch = std::make_unique<PENDING_BATCH>( PENDING_BATCH{ std::move( *aBatch ),
+                                                                        aIsPersistent } );
 
     if( aIsPersistent )
     {
