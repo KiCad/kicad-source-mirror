@@ -126,7 +126,7 @@ private:
     void loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
                        const std::map<wxString, std::unique_ptr<EPART>>& aParts );
 
-    SCH_SHEET* loadModuleInstance( const std::unique_ptr<EMODULEINST>& aModuleInstance );
+    void loadModuleInstance( const std::unique_ptr<EMODULEINST>& aModuleInstance );
 
     EAGLE_LIBRARY* loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRARY* aEagleLib );
     void countNets( const ESCHEMATIC& aSchematic );
@@ -252,7 +252,8 @@ private:
     wxFileName  m_filename;
     wxString    m_libName;        ///< Library name to save symbols
     SCHEMATIC*  m_schematic;      ///< Passed to Load(), the schematic object being loaded
-    EMODULE*    m_module;         ///< The current module being loaded or nullptr
+    std::vector<EMODULE*> m_modules; ///< The current module stack being loaded.
+    std::vector<EMODULEINST*> m_moduleInstances;
 
     std::map<wxString, const EPART*>   m_partlist;
     std::map<wxString, long long>      m_timestamps;

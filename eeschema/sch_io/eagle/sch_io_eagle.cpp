@@ -329,7 +329,6 @@ static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int aRe
 SCH_IO_EAGLE::SCH_IO_EAGLE() : SCH_IO( wxS( "EAGLE" ) ),
     m_rootSheet( nullptr ),
     m_schematic( nullptr ),
-    m_module( nullptr ),
     m_sheetIndex( 1 )
 {
     m_reporter = &WXLOG_REPORTER::GetInstance();
@@ -389,6 +388,20 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
                      wxT( "Can't append to a schematic with no root!" ) );
 
         m_rootSheet = &aSchematic->Root();
+
+        // We really should be passing the SCH_SHEET_PATH object to the aAppendToMe attribute
+        // instead of the SCH_SHEET.  The full path is needed to properly generate instance
+        // data.
+        SCH_SHEET_LIST hierarchy( m_rootSheet );
+
+        for( const SCH_SHEET_PATH& sheetPath : hierarchy )
+        {
+            if( sheetPath.Last() == aAppendToMe )
+            {
+                m_sheetPath = sheetPath;
+                break;
+            }
+        }
     }
     else
     {
@@ -405,6 +418,10 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
         // Virtual root sheet UUID must be the same as the schematic file UUID.
         const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
+
+        // There is always at least a root sheet.
+        m_sheetPath.push_back( m_rootSheet );
+        m_sheetPath.SetPageNumber( wxT( "1" ) );
     }
 
     SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
@@ -666,15 +683,15 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
     for( const auto& [name, epart] : aSchematic.parts )
         m_partlist[name.Upper()] = epart.get();
 
-    for( const auto& [modname, emodule] : aSchematic.modules )
+    for( const auto& [modName, emodule] : aSchematic.modules )
     {
-        for( const auto& [name, epart] : emodule->parts )
-            m_partlist[name.Upper()] = epart.get();
+        for( const auto& [partName, epart] : emodule->parts )
+            m_partlist[partName.Upper()] = epart.get();
     }
 
     if( !aSchematic.libraries.empty() )
     {
-        for( const auto& [name, elibrary] : aSchematic.libraries )
+        for( const auto& [libName, elibrary] : aSchematic.libraries )
         {
             EAGLE_LIBRARY* elib = &m_eagleLibs[elibrary->GetName()];
             elib->name          = elibrary->GetName();
@@ -688,10 +705,6 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
     // find all nets and count how many sheets they appear on.
     // local labels will be used for nets found only on that sheet.
     countNets( aSchematic );
-
-    // There is always at least a root sheet.
-    m_sheetPath.push_back( m_rootSheet );
-    m_sheetPath.SetPageNumber( wxT( "1" ) );
 
     size_t sheetCount = aSchematic.sheets.size();
 
@@ -727,6 +740,7 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
 
             wxCHECK2( currentScreen, continue );
 
+            sheet->SetParent( m_sheetPath.Last() );
             currentScreen->Append( sheet.release() );
 
             x += 2;
@@ -805,7 +819,7 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
 
     wxCHECK( sheet && screen, /* void */ );
 
-    if( !m_module )
+    if( m_modules.empty() )
     {
         std::string filename;
         wxFileName  fn = m_filename;
@@ -823,6 +837,9 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
         sheet->SetFileName( fn.GetFullName() );
         screen->SetFileName( fn.GetFullPath() );
     }
+
+    for( const auto& [name, moduleinst] : aSheet->moduleinsts )
+        loadModuleInstance( moduleinst );
 
     sheet->AutoplaceFields( screen, AUTOPLACE_AUTO );
 
@@ -859,19 +876,9 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
         // Holes and splines currently not handled.  Not sure hole has any meaning in scheamtics.
     }
 
-    for( const auto& [name, moduleinst] : aSheet->moduleinsts )
-    {
-        SCH_SHEET* modSheet = loadModuleInstance( moduleinst );
-        screen->Append( modSheet );
-    }
-
     for( const std::unique_ptr<EINSTANCE>& einstance : aSheet->instances )
-    {
-        if( m_module )
-            loadInstance( einstance, m_module->parts );
-        else
-            loadInstance( einstance, m_eagleDoc->drawing->schematic->parts );
-    }
+        loadInstance( einstance, ( m_modules.size() ) ? m_modules.back()->parts
+                                                      : m_eagleDoc->drawing->schematic->parts );
 
     // Loop through all buses
     // From the DTD: "Buses receive names which determine which signals they include.
@@ -956,12 +963,12 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
 }
 
 
-SCH_SHEET* SCH_IO_EAGLE::loadModuleInstance( const std::unique_ptr<EMODULEINST>& aModuleInstance )
+void SCH_IO_EAGLE::loadModuleInstance( const std::unique_ptr<EMODULEINST>& aModuleInstance )
 {
     SCH_SHEET* currentSheet = getCurrentSheet();
     SCH_SCREEN* currentScreen = getCurrentScreen();
 
-    wxCHECK( currentSheet &&currentScreen, nullptr );
+    wxCHECK( currentSheet &&currentScreen, /* void */ );
 
     m_sheetIndex++;
 
@@ -977,9 +984,8 @@ SCH_SHEET* SCH_IO_EAGLE::loadModuleInstance( const std::unique_ptr<EMODULEINST>&
                                           aModuleInstance->name, m_filename.GetFullPath() ) );
     }
 
-
     wxFileName fn = m_filename;
-    fn.SetName( aModuleInstance->name );
+    fn.SetName( aModuleInstance->moduleinst );
     fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
     VECTOR2I portExtWireEndpoint;
@@ -993,14 +999,32 @@ SCH_SHEET* SCH_IO_EAGLE::loadModuleInstance( const std::unique_ptr<EMODULEINST>&
 
     std::unique_ptr<SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( currentSheet, pos, size );
 
-    SCH_SCREEN* newScreen = new SCH_SCREEN( m_schematic );
+    // The Eagle module for this instance (SCH_SCREEN in KiCad) may have already been loaded.
+    SCH_SCREEN* newScreen = nullptr;
+    SCH_SCREENS schFiles( m_rootSheet );
 
-    wxCHECK( newSheet && newScreen, nullptr );
+    for( SCH_SCREEN* schFile = schFiles.GetFirst(); schFile; schFile = schFiles.GetNext() )
+    {
+        if( schFile->GetFileName() == fn.GetFullPath() )
+        {
+            newScreen = schFile;
+            break;
+        }
+    }
+
+    bool isNewSchFile = ( newScreen == nullptr );
+
+    if( !newScreen )
+    {
+        newScreen = new SCH_SCREEN( m_schematic );
+        newScreen->SetFileName( fn.GetFullPath() );
+    }
+
+    wxCHECK( newSheet && newScreen, /* void */ );
 
     newSheet->SetScreen( newScreen );
     newSheet->SetFileName( fn.GetFullName() );
     newSheet->SetName( aModuleInstance->name );
-    newScreen->SetFileName( fn.GetFullPath() );
 
     for( const auto& [portName, port] : it->second->ports )
     {
@@ -1075,67 +1099,53 @@ SCH_SHEET* SCH_IO_EAGLE::loadModuleInstance( const std::unique_ptr<EMODULEINST>&
 
     wxString pageNo = wxString::Format( wxT( "%d" ), m_sheetIndex );
 
+    newSheet->SetParent( currentSheet );
     m_sheetPath.push_back( newSheet.get() );
+    m_sheetPath.SetPageNumber( pageNo );
+    currentScreen->Append( newSheet.release() );
 
-    m_module = it->second.get();
+    m_modules.push_back( it->second.get() );
+    m_moduleInstances.push_back( aModuleInstance.get() );
 
-    // It's not clear if Eagle modules can have more than one sheet so this may not be correct.
-    if( it->second->sheets.size() == 1 )
+    // Do not reload shared modules that are already loaded.
+    if( isNewSchFile )
     {
-        loadSheet( it->second->sheets.at( 0 ) );
+        for( const std::unique_ptr<ESHEET>& esheet : it->second->sheets )
+            loadSheet( esheet );
     }
     else
     {
-        int i = 0;
-        int x = 1;
-        int y = 1;
+        // Add instances for shared schematics.
+        wxString refPrefix;
 
-        for( const std::unique_ptr<ESHEET>& esheet : it->second->sheets )
+        for( const EMODULEINST* emoduleInst : m_moduleInstances )
         {
-            pos = VECTOR2I( x * schIUScale.MilsToIU( 1000 ),
-                            y * schIUScale.MilsToIU( 1000 ) );
+            wxCHECK2( emoduleInst, continue );
 
-            std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>( newSheet.get(), pos );
-            SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
-            sheet->SetScreen( screen );
+            refPrefix += emoduleInst->name + wxS( ":" );
+        }
 
-            wxString newFileName = fn.GetName();
+        SCH_SCREEN* sharedScreen = m_sheetPath.LastScreen();
 
-            newFileName += wxString::Format( wxS( "_%d" ), i + 1 );
-            fn.SetName( newFileName );
-            screen->SetFileName( fn.GetFullPath() );
-            sheet->SetFileName( fn.GetFullName() );
-
-            wxCHECK2( sheet && screen, continue );
-
-            wxString subSheetPageNo = wxString::Format( wxT( "%d" ), m_sheetIndex );
-
-            m_sheetPath.push_back( sheet.get() );
-            loadSheet( esheet );
-
-            m_sheetPath.SetPageNumber( subSheetPageNo );
-            m_sheetPath.pop_back();
-
-            newScreen->Append( sheet.release() );
-
-            x += 2;
-
-            if( x > 10 ) // Start next row of sheets.
+        if( sharedScreen )
+        {
+            for( SCH_ITEM* schItem : sharedScreen->Items().OfType( SCH_SYMBOL_T ) )
             {
-                x = 1;
-                y += 2;
-            }
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
 
-            m_sheetIndex++;
+                wxCHECK2( symbol && !symbol->GetInstances().empty(), continue );
+
+                SCH_SYMBOL_INSTANCE inst = symbol->GetInstances().at( 0 );
+                wxString newReference = refPrefix + inst.m_Reference.AfterLast( ':' );
+
+                symbol->AddHierarchicalReference( m_sheetPath.Path(), newReference, inst.m_Unit );
+            }
         }
     }
 
-    m_sheetPath.SetPageNumber( pageNo );
+    m_moduleInstances.pop_back();
+    m_modules.pop_back();
     m_sheetPath.pop_back();
-
-    m_module = nullptr;
-
-    return newSheet.release();
 }
 
 
@@ -1591,14 +1601,14 @@ SCH_TEXT* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
     VECTOR2I textSize = VECTOR2I( KiROUND( aLabel->size.ToSchUnits() * 0.7 ),
                                   KiROUND( aLabel->size.ToSchUnits() * 0.7 ) );
 
-    if( m_module )
+    if( m_modules.size() )
     {
-        if(  m_module->ports.find( aNetName ) != m_module->ports.end() )
+        if(  m_modules.back()->ports.find( aNetName ) != m_modules.back()->ports.end() )
         {
             label = std::make_unique<SCH_HIERLABEL>();
             label->SetText( escapeName( aNetName ) );
 
-            const auto it = m_module->ports.find( aNetName );
+            const auto it = m_modules.back()->ports.find( aNetName );
 
             LABEL_SHAPE type;
 
@@ -1958,7 +1968,20 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         symbol->GetField( REFERENCE_FIELD )->SetVisible( nameAttributeFound );
     }
 
-    symbol->AddHierarchicalReference( m_sheetPath.Path(), reference, unit );
+    // Eagle has a brain dead module reference scheme where the module names separated by colons
+    // are prefixed to the symbol references.  This will get blown away in KiCad the first time
+    // any annotation is performed.  It is required for the initial synchronization between the
+    // schematic and the board.
+    wxString refPrefix;
+
+    for( const EMODULEINST* emoduleInst : m_moduleInstances )
+    {
+        wxCHECK2( emoduleInst, continue );
+
+        refPrefix += emoduleInst->name + wxS( ":" );
+    }
+
+    symbol->AddHierarchicalReference( m_sheetPath.Path(), refPrefix + reference, unit );
 
     // Save the pin positions
     SYMBOL_LIB_TABLE& schLibTable = *PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
