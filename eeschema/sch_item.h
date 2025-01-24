@@ -666,6 +666,19 @@ protected:
     void getSymbolEditorMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
     /**
+     * Return the status of the #SCH_ITEM objects UUID immutability.
+     *
+     * This method is used by compare() to determine if the object's UUIDs should be compared.
+     * Most #SCH_ITEM object UUIDs are created at run time an therefore should not be compared
+     * so the default returns false.  Override this method for #SCH_ITEM objects that have
+     * immutable UUIDs.
+     *
+     * @retval true if the item's UUID is immutable.
+     * @retval false if the item's UUID is not immutable.
+     */
+    virtual bool isUuidImmutable() const { return false; }
+
+    /**
      * Provide the draw object specific comparison called by the == and < operators.
      *
      * The base object sort order which always proceeds the derived object sort order
