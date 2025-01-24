@@ -1797,6 +1797,9 @@ bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 
 BITMAPS SCH_PIN::GetMenuImage() const
 {
+    if( m_libPin )
+        return m_libPin->GetMenuImage();
+
     return ElectricalPinTypeGetBitmap( m_type );
 }
 
