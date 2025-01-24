@@ -170,6 +170,9 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
             positionRelativeClientSelectionFilter,
             !m_isFootprintEditor /* prompt user regarding locked items */ );
 
+    if( selection.Empty() )
+        return 0;
+
     if( m_isFootprintEditor && !frame()->GetModel() )
         return 0;
 
