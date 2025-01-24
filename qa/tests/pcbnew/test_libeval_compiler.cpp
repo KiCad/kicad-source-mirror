@@ -21,9 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
-
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
+#include <wx/wx.h>
 
 #include <layer_ids.h>
 #include <pcbnew/pcbexpr_evaluator.h>
@@ -38,6 +39,12 @@ struct EXPR_TO_TEST
     wxString       expression;
     bool           expectError;
     LIBEVAL::VALUE expectedResult;
+
+    friend std::ostream& operator<<( std::ostream& os, const EXPR_TO_TEST& expr )
+    {
+        os << expr.expression;
+        return os;
+    }
 };
 
 using VAL = LIBEVAL::VALUE;
@@ -137,12 +144,9 @@ static bool testEvalExpr( const wxString& expr, const LIBEVAL::VALUE& expectedRe
 }
 
 
-BOOST_AUTO_TEST_CASE( SimpleExpressions )
+BOOST_DATA_TEST_CASE( SimpleExpressions, boost::unit_test::data::make( simpleExpressions ), expr )
 {
-    for( const auto& expr : simpleExpressions )
-    {
-        testEvalExpr( expr.expression, expr.expectedResult, expr.expectError );
-    }
+    testEvalExpr( expr.expression, expr.expectedResult, expr.expectError );
 }
 
 

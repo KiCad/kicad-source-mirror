@@ -21,8 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
 #include <pcbnew_utils/board_test_utils.h>
+
 #include <board.h>
 #include <board_design_settings.h>
 #include <pad.h>
@@ -44,64 +47,65 @@ struct DRC_REGRESSION_TEST_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_CASE( DRCCopperSliver, DRC_REGRESSION_TEST_FIXTURE )
+// clang-format off
+static const std::vector<std::pair<wxString, int>> DRCCopperSliver_cases =
+{
+    { "sliver",       1  },
+    { "issue14449",   0  },
+    { "issue14549",   0  },
+    { "issue14549_2", 0  },
+    { "issue14559",   0  }
+};
+// clang-format on
+
+
+BOOST_DATA_TEST_CASE_F( DRC_REGRESSION_TEST_FIXTURE, DRCCopperSliver,
+                        boost::unit_test::data::make( DRCCopperSliver_cases ), test )
 {
     // Check for minimum copper connection errors
 
-    std::vector<std::pair<wxString, int>> tests =
-    {
-        { "sliver",       1  },
-        { "issue14449",   0  },
-        { "issue14549",   0  },
-        { "issue14549_2", 0  },
-        { "issue14559",   0  }
-    };
+    KI_TEST::LoadBoard( m_settingsManager, test.first, m_board );
+    KI_TEST::FillZones( m_board.get() );
 
-    for( const std::pair<wxString, int>& test : tests )
-    {
-        KI_TEST::LoadBoard( m_settingsManager, test.first, m_board );
-        KI_TEST::FillZones( m_board.get() );
+    std::vector<DRC_ITEM>  violations;
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-        std::vector<DRC_ITEM>  violations;
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    // Disable DRC tests not useful or not handled in this testcase
+    for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
+        bds.m_DRCSeverities[ii] = SEVERITY::RPT_SEVERITY_IGNORE;
 
-        // Disable DRC tests not useful or not handled in this testcase
-        for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
-            bds.m_DRCSeverities[ ii ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    // Ensure that our desired error is fired
+    bds.m_DRCSeverities[DRCE_COPPER_SLIVER] = SEVERITY::RPT_SEVERITY_ERROR;
 
-        // Ensure that our desired error is fired
-        bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_ERROR;
-
-        bds.m_DRCEngine->SetViolationHandler(
-                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                     DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
-                {
-                    if( bds.GetSeverity( aItem->GetErrorCode() ) == SEVERITY::RPT_SEVERITY_ERROR )
-                        violations.push_back( *aItem );
-                } );
-
-        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
-
-        if( violations.size() == test.second )
-        {
-            BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-            BOOST_TEST_MESSAGE( wxString::Format( "DRC copper sliver: %s, passed", test.first ) );
-        }
-        else
-        {
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
-
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
-
-            for( const DRC_ITEM& item : violations )
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
+                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
             {
-                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                     itemMap ) );
-            }
+                if( bds.GetSeverity( aItem->GetErrorCode() ) == SEVERITY::RPT_SEVERITY_ERROR )
+                    violations.push_back( *aItem );
+            } );
 
-            BOOST_ERROR( wxString::Format( "DRC copper sliver: %s, failed (violations found %d expected %d)",
-                                            test.first, (int)violations.size(), test.second ) );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+
+    if( violations.size() == test.second )
+    {
+        BOOST_CHECK_EQUAL( 1, 1 ); // quiet "did not check any assertions" warning
+        BOOST_TEST_MESSAGE( wxString::Format( "DRC copper sliver: %s, passed", test.first ) );
+    }
+    else
+    {
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+
+        std::map<KIID, EDA_ITEM*> itemMap;
+        m_board->FillItemMap( itemMap );
+
+        for( const DRC_ITEM& item : violations )
+        {
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
         }
+
+        BOOST_ERROR(
+                wxString::Format( "DRC copper sliver: %s, failed (violations found %d expected %d)",
+                                  test.first, (int) violations.size(), test.second ) );
     }
 }

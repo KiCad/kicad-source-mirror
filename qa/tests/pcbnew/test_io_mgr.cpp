@@ -18,14 +18,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
 
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/pcb_io.h>
 #include <pcbnew/pcb_io/pcb_io_mgr.h>
-
 
 
 BOOST_AUTO_TEST_SUITE( IOMGR )
@@ -36,6 +36,12 @@ struct PCB_IO_PLUGIN_CASE
     std::string            m_case_name;
     std::string            m_file_rel_path;
     PCB_IO_MGR::PCB_FILE_T m_expected_type;
+
+    friend std::ostream& operator<<( std::ostream& os, const PCB_IO_PLUGIN_CASE& aCase )
+    {
+        os << aCase.m_case_name;
+        return os;
+    }
 };
 
 
@@ -246,64 +252,46 @@ static const std::vector<PCB_IO_PLUGIN_CASE> LibraryPluginCases = {
 // clang-format on
 
 
-BOOST_AUTO_TEST_CASE( FindBoardPluginType )
+BOOST_DATA_TEST_CASE( FindBoardPluginType, boost::unit_test::data::make( BoardPluginCases ), c )
 {
-    for( auto& c : BoardPluginCases )
-    {
-        BOOST_TEST_CONTEXT( c.m_case_name )
-        {
-            wxString dataPath =
-                    wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
+    wxString dataPath =
+            wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
 
-            BOOST_CHECK_EQUAL( PCB_IO_MGR::FindPluginTypeFromBoardPath( dataPath ),
-                               c.m_expected_type );
+    BOOST_CHECK_EQUAL( PCB_IO_MGR::FindPluginTypeFromBoardPath( dataPath ),
+                        c.m_expected_type );
 
-            // Todo add tests to check if it still works with upper/lower case ext.
-            // ( FindPluginTypeFromBoardPath should be case insensitive)
-        }
-    }
+    // Todo add tests to check if it still works with upper/lower case ext.
+    // ( FindPluginTypeFromBoardPath should be case insensitive)
 }
 
 
-BOOST_AUTO_TEST_CASE( GuessLibraryPluginType )
+BOOST_DATA_TEST_CASE( GuessLibraryPluginType, boost::unit_test::data::make( LibraryPluginCases ), c )
 {
-    for( auto& c : LibraryPluginCases )
-    {
-        BOOST_TEST_CONTEXT( c.m_case_name )
-        {
-            wxString dataPath =
-                    wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
+    wxString dataPath =
+            wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
 
-            BOOST_CHECK_EQUAL( PCB_IO_MGR::GuessPluginTypeFromLibPath( dataPath ), c.m_expected_type );
+    BOOST_CHECK_EQUAL( PCB_IO_MGR::GuessPluginTypeFromLibPath( dataPath ), c.m_expected_type );
 
-            // Todo add tests to check if it still works with upper/lower case ext.
-            // ( GuessPluginTypeFromLibPath should be case insensitive)
-        }
-    }
+    // Todo add tests to check if it still works with upper/lower case ext.
+    // ( GuessPluginTypeFromLibPath should be case insensitive)
 }
 
 
-BOOST_AUTO_TEST_CASE( CheckCanReadBoard )
+BOOST_DATA_TEST_CASE( CheckCanReadBoard, boost::unit_test::data::make( BoardPluginCases ), c )
 {
-    for( auto& c : BoardPluginCases )
+    wxString dataPath =
+            wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
+
+    auto& pluginEntries = PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
+
+    for( auto& entry : pluginEntries )
     {
-        BOOST_TEST_CONTEXT( c.m_case_name )
+        BOOST_TEST_CONTEXT( entry.m_name )
         {
-            wxString dataPath =
-                    wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
+            auto plugin = IO_RELEASER<PCB_IO>( PCB_IO_MGR::PluginFind( entry.m_type ) );
+            bool expectValidHeader = c.m_expected_type == entry.m_type;
 
-            auto& pluginEntries = PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
-
-            for( auto& entry : pluginEntries )
-            {
-                BOOST_TEST_CONTEXT( entry.m_name )
-                {
-                    auto plugin = IO_RELEASER<PCB_IO>( PCB_IO_MGR::PluginFind( entry.m_type ) );
-                    bool expectValidHeader = c.m_expected_type == entry.m_type;
-
-                    BOOST_CHECK_EQUAL( plugin->CanReadBoard( dataPath ), expectValidHeader );
-                }
-            }
+            BOOST_CHECK_EQUAL( plugin->CanReadBoard( dataPath ), expectValidHeader );
         }
     }
 }

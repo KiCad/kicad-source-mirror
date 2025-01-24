@@ -22,6 +22,8 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_commit.h>
@@ -33,6 +35,8 @@
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 
+namespace
+{
 struct TRACK_CLEANER_TEST_FIXTURE
 {
     TRACK_CLEANER_TEST_FIXTURE() :
@@ -54,175 +58,183 @@ struct TEST_DESCRIPTION
     bool     m_TracksInPads;
     bool     m_DanglingVias;
     int      m_Expected;
+
+    friend std::ostream& operator<<( std::ostream& os, const TEST_DESCRIPTION& aDesc )
+    {
+        os << aDesc.m_File;
+        return os;
+    }
 };
 
-
-BOOST_FIXTURE_TEST_CASE( FailedToCleanRegressionTests, TRACK_CLEANER_TEST_FIXTURE )
+/*
+* This one ensures that certain cleanup items are indeed found and marked for cleanup.
+*/
+std::vector<TEST_DESCRIPTION> FailedToCleanRegressionTests_tests =
 {
-    /*
-     * This one ensures that certain cleanup items are indeed found and marked for cleanup.
-     */
-    std::vector<TEST_DESCRIPTION> tests =
+                    //   short    redundant  redundant  dangling   tracks    dangling
+                    //  circuits    vias      tracks     tracks    in pads     vias    expected
+    { "issue2904",    false,     false,    false,     true,      false,    false,       9    },
+    { "issue5093",    false,     false,    false,     false,     true,     false,     117    },
+    { "issue7004",    false,     true,     false,     false,     false,    true,       25    },
+    { "issue8883",    true,      true,     true,      true,      false,    true,       81    },
+    { "issue10916",   false,     false,    true,      false,     false,    false,       0    },
+    { "issue19574",   false,     false,    true,      false,     false,    false,       2    },
+};
+
+} // namespace
+
+
+BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, FailedToCleanRegressionTests,
+                        boost::unit_test::data::make( FailedToCleanRegressionTests_tests ), entry )
+{
+    KI_TEST::LoadBoard( m_settingsManager, entry.m_File, m_board );
+    KI_TEST::FillZones( m_board.get() );
+    m_board->GetConnectivity()->RecalculateRatsnest();
+    m_board->UpdateRatsnestExclusions();
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    BOARD_COMMIT                                 commit( dummyTool );
+    TRACKS_CLEANER                               cleaner( m_board.get(), commit );
+    std::vector< std::shared_ptr<CLEANUP_ITEM> > dryRunItems;
+    std::vector< std::shared_ptr<CLEANUP_ITEM> > realRunItems;
+
+    cleaner.CleanupBoard( true, &dryRunItems, entry.m_Shorts,
+                                                entry.m_RedundantVias,
+                                                entry.m_RedundantTracks,
+                                                entry.m_DanglingTracks,
+                                                entry.m_TracksInPads,
+                                                entry.m_DanglingVias );
+
+    cleaner.CleanupBoard( true, &realRunItems, entry.m_Shorts,
+                                                entry.m_RedundantVias,
+                                                entry.m_RedundantTracks,
+                                                entry.m_DanglingTracks,
+                                                entry.m_TracksInPads,
+                                                entry.m_DanglingVias );
+
+    if( dryRunItems.size() == entry.m_Expected && realRunItems.size() == entry.m_Expected )
     {
-                     //   short    redundant  redundant  dangling   tracks    dangling
-                     //  circuits    vias      tracks     tracks    in pads     vias    expected
-        { "issue2904",    false,     false,    false,     true,      false,    false,       9    },
-        { "issue5093",    false,     false,    false,     false,     true,     false,     117    },
-        { "issue7004",    false,     true,     false,     false,     false,    true,       25    },
-        { "issue8883",    true,      true,     true,      true,      false,    true,       81    },
-        { "issue10916",   false,     false,    true,      false,     false,    false,       0    },
-        { "issue19574",   false,     false,    true,      false,     false,    false,       2    }
-    };
-
-    for( const TEST_DESCRIPTION& entry : tests )
+        BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
+        BOOST_TEST_MESSAGE( wxString::Format( "Track cleaner regression: %s, passed",
+                                                entry.m_File ) );
+    }
+    else
     {
-        KI_TEST::LoadBoard( m_settingsManager, entry.m_File, m_board );
-        KI_TEST::FillZones( m_board.get() );
-        m_board->GetConnectivity()->RecalculateRatsnest();
-        m_board->UpdateRatsnestExclusions();
+        BOOST_CHECK_EQUAL( dryRunItems.size(), entry.m_Expected );
+        BOOST_CHECK_EQUAL( realRunItems.size(), entry.m_Expected );
 
-        TOOL_MANAGER toolMgr;
-        toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
 
-        KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
-        toolMgr.RegisterTool( dummyTool );
+        std::map<KIID, EDA_ITEM*> itemMap;
+        m_board->FillItemMap( itemMap );
 
-        BOARD_COMMIT                                 commit( dummyTool );
-        TRACKS_CLEANER                               cleaner( m_board.get(), commit );
-        std::vector< std::shared_ptr<CLEANUP_ITEM> > dryRunItems;
-        std::vector< std::shared_ptr<CLEANUP_ITEM> > realRunItems;
-
-        cleaner.CleanupBoard( true, &dryRunItems, entry.m_Shorts,
-                                                  entry.m_RedundantVias,
-                                                  entry.m_RedundantTracks,
-                                                  entry.m_DanglingTracks,
-                                                  entry.m_TracksInPads,
-                                                  entry.m_DanglingVias );
-
-        cleaner.CleanupBoard( true, &realRunItems, entry.m_Shorts,
-                                                   entry.m_RedundantVias,
-                                                   entry.m_RedundantTracks,
-                                                   entry.m_DanglingTracks,
-                                                   entry.m_TracksInPads,
-                                                   entry.m_DanglingVias );
-
-        if( dryRunItems.size() == entry.m_Expected && realRunItems.size() == entry.m_Expected )
+        for( const std::shared_ptr<CLEANUP_ITEM>& item : realRunItems )
         {
-            BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-            BOOST_TEST_MESSAGE( wxString::Format( "Track cleaner regression: %s, passed",
-                                                  entry.m_File ) );
+            BOOST_TEST_MESSAGE( item->ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
+                                                    itemMap ) );
         }
-        else
-        {
-            BOOST_CHECK_EQUAL( dryRunItems.size(), entry.m_Expected );
-            BOOST_CHECK_EQUAL( realRunItems.size(), entry.m_Expected );
 
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
-
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
-
-            for( const std::shared_ptr<CLEANUP_ITEM>& item : realRunItems )
-            {
-                BOOST_TEST_MESSAGE( item->ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                      itemMap ) );
-            }
-
-            BOOST_ERROR( wxString::Format( "Track cleaner regression: %s, failed",
-                                           entry.m_File ) );
-        }
+        BOOST_ERROR( wxString::Format( "Track cleaner regression: %s, failed",
+                                        entry.m_File ) );
     }
 }
 
-
-BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE )
+namespace
 {
-    /*
-     * This one just makes sure that the dry-run counts agree with the "real" counts, and that
-     * the cleaning doesn't produce any connectivity changes.
-     */
-    std::vector<wxString> tests = { //"issue832",
-                                    "issue4257",
-                                    //"issue8909"
-                                  };
 
-    for( const wxString& relPath : tests )
-    {
-        KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
-        KI_TEST::FillZones( m_board.get() );
-        m_board->GetConnectivity()->RecalculateRatsnest();
-        m_board->UpdateRatsnestExclusions();
+std::vector<wxString> TrackCleanerRegressionTests_tests = {
+    //"issue832",
+    "issue4257",
+    //"issue8909"
+};
 
-        TOOL_MANAGER toolMgr;
-        toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+} // namespace
 
-        KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
-        toolMgr.RegisterTool( dummyTool );
+/*
+ * This one just makes sure that the dry-run counts agree with the "real" counts, and that
+ * the cleaning doesn't produce any connectivity changes.
+ */
+BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, TrackCleanerRegressionTests,
+                        boost::unit_test::data::make( TrackCleanerRegressionTests_tests ), relPath )
+{
+    KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
+    KI_TEST::FillZones( m_board.get() );
+    m_board->GetConnectivity()->RecalculateRatsnest();
+    m_board->UpdateRatsnestExclusions();
 
-        BOARD_COMMIT                                 commit( dummyTool );
-        TRACKS_CLEANER                               cleaner( m_board.get(), commit );
-        std::vector< std::shared_ptr<CLEANUP_ITEM> > dryRunItems;
-        std::vector< std::shared_ptr<CLEANUP_ITEM> > realRunItems;
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
 
-        cleaner.CleanupBoard( true, &dryRunItems, true,   // short circuits
-                                                  true,   // redundant vias
-                                                  true,   // redundant tracks
-                                                  true,   // dangling tracks
-                                                  true,   // tracks in pads
-                                                  true ); // dangling vias
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
 
-        cleaner.CleanupBoard( true, &realRunItems, true,   // short circuits
-                                                   true,   // redundant vias
-                                                   true,   // redundant tracks
-                                                   true,   // dangling tracks
-                                                   true,   // tracks in pads
-                                                   true ); // dangling vias
+    BOARD_COMMIT                                 commit( dummyTool );
+    TRACKS_CLEANER                               cleaner( m_board.get(), commit );
+    std::vector< std::shared_ptr<CLEANUP_ITEM> > dryRunItems;
+    std::vector< std::shared_ptr<CLEANUP_ITEM> > realRunItems;
 
-        BOOST_CHECK_EQUAL( dryRunItems.size(), realRunItems.size() );
+    cleaner.CleanupBoard( true, &dryRunItems, true,   // short circuits
+                                                true,   // redundant vias
+                                                true,   // redundant tracks
+                                                true,   // dangling tracks
+                                                true,   // tracks in pads
+                                                true ); // dangling vias
 
-        std::vector<DRC_ITEM>  violations;
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    cleaner.CleanupBoard( true, &realRunItems, true,   // short circuits
+                                                true,   // redundant vias
+                                                true,   // redundant tracks
+                                                true,   // dangling tracks
+                                                true,   // tracks in pads
+                                                true ); // dangling vias
 
-        // Disable some DRC tests not useful in this testcase
-        bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        bds.m_DRCSeverities[ DRCE_STARVED_THERMAL ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        // Also disable this test: for some reason it generate an exception inside this QA
-        // test ans it is useless
-        bds.m_DRCSeverities[ DRCE_SOLDERMASK_BRIDGE ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    BOOST_CHECK_EQUAL( dryRunItems.size(), realRunItems.size() );
 
-        bds.m_DRCEngine->SetViolationHandler(
-                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                     DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
-                {
-                    if( aItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
-                        violations.push_back( *aItem );
-                } );
+    std::vector<DRC_ITEM>  violations;
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    // Disable some DRC tests not useful in this testcase
+    bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[ DRCE_STARVED_THERMAL ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    // Also disable this test: for some reason it generate an exception inside this QA
+    // test ans it is useless
+    bds.m_DRCSeverities[ DRCE_SOLDERMASK_BRIDGE ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
-        if( violations.empty() )
-        {
-            BOOST_TEST_MESSAGE( wxString::Format( "Track cleaner regression: %s, passed",
-                                                  relPath ) );
-        }
-        else
-        {
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
-
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
-
-            for( const DRC_ITEM& item : violations )
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
+                    DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
             {
-                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                     itemMap ) );
-            }
+                if( aItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+                    violations.push_back( *aItem );
+            } );
 
-            BOOST_ERROR( wxString::Format( "Track cleaner regression: %s, failed",
-                                           relPath ) );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+
+    if( violations.empty() )
+    {
+        BOOST_TEST_MESSAGE( wxString::Format( "Track cleaner regression: %s, passed",
+                                                relPath ) );
+    }
+    else
+    {
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+
+        std::map<KIID, EDA_ITEM*> itemMap;
+        m_board->FillItemMap( itemMap );
+
+        for( const DRC_ITEM& item : violations )
+        {
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
+                                                    itemMap ) );
         }
+
+        BOOST_ERROR( wxString::Format( "Track cleaner regression: %s, failed",
+                                        relPath ) );
     }
 }
-

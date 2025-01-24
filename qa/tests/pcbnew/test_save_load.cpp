@@ -24,12 +24,16 @@
 #include <filesystem>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <board.h>
 #include <settings/settings_manager.h>
 
 
+namespace
+{
 struct SAVE_LOAD_TEST_FIXTURE
 {
     SAVE_LOAD_TEST_FIXTURE() :
@@ -40,32 +44,31 @@ struct SAVE_LOAD_TEST_FIXTURE
     std::unique_ptr<BOARD> m_board;
 };
 
+const std::vector<wxString> RegressionSaveLoadTests_tests = {
+    "issue18",
+    "issue832",
+    "issue2568",
+    "issue5313",
+    "issue5854",
+    "issue6260",
+    "issue6945",
+    "issue7267",
+    "padstacks",
+    "padstacks_normal",
+    "padstacks_complex"
+    /* "issue8003", */    // issue8003 is flaky on some platforms
+};
 
-BOOST_FIXTURE_TEST_CASE( RegressionSaveLoadTests, SAVE_LOAD_TEST_FIXTURE )
+}; // namespace
+
+
+BOOST_DATA_TEST_CASE_F( SAVE_LOAD_TEST_FIXTURE, RegressionSaveLoadTests,
+                         boost::unit_test::data::make( RegressionSaveLoadTests_tests ), relPath )
 {
-    std::vector<wxString> tests = { "issue18",
-                                    "issue832",
-                                    "issue2568",
-                                    "issue5313",
-                                    "issue5854",
-                                    "issue6260",
-                                    "issue6945",
-                                    "issue7267",
-                                    "padstacks",
-                                    "padstacks_normal",
-                                    "padstacks_complex"
-                                    /* "issue8003" */ };    // issue8003 is flaky on some platforms
+    const std::filesystem::path savePath = std::filesystem::temp_directory_path() / "group_saveload_tst.kicad_pcb";
 
-    auto savePath = std::filesystem::temp_directory_path() / "group_saveload_tst.kicad_pcb";
+    KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
+    KI_TEST::DumpBoardToFile( *m_board.get(), savePath.string() );
 
-    for( const wxString& relPath : tests )
-    {
-        BOOST_TEST_CONTEXT( relPath )
-
-        KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
-        KI_TEST::DumpBoardToFile( *m_board.get(), savePath.string() );
-
-        std::unique_ptr<BOARD> board2 = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
-    }
+    std::unique_ptr<BOARD> board2 = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
 }
-

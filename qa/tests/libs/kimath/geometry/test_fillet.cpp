@@ -22,6 +22,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/data/test_case.hpp>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <qa_utils/geometry/line_chain_construction.h>
@@ -33,14 +34,8 @@
 
 #include "geom_test_utils.h"
 
-struct FilletFixture
-{
-};
 
-/**
- * Declares the FilletFixture struct as the boost test fixture.
- */
-BOOST_FIXTURE_TEST_SUITE( Fillet, FilletFixture )
+BOOST_AUTO_TEST_SUITE( Fillet )
 
 /*
  * @brief check that a single segment of a fillet complies with the geometric
@@ -174,9 +169,15 @@ struct SquareFilletTestCase
     int squareSize;
     int radius;
     int error;
+
+    friend std::ostream& operator<<( std::ostream& os, const SquareFilletTestCase& testCase )
+    {
+        return os << "Square size: " << testCase.squareSize << ", Radius: " << testCase.radius
+                  << ", Error: " << testCase.error;
+    }
 };
 
-const std::vector<SquareFilletTestCase> squareFilletCases {
+const std::vector<SquareFilletTestCase> squareFilletCases{
     { 1000, 120, 10 },
     { 1000, 10, 1 },
 
@@ -191,20 +192,15 @@ const std::vector<SquareFilletTestCase> squareFilletCases {
  * Tests the SHAPE_POLY_SET::FilletPolygon method against certain geometric
  * constraints.
  */
-BOOST_AUTO_TEST_CASE( SquareFillet )
+BOOST_DATA_TEST_CASE( SquareFillet, boost::unit_test::data::make( squareFilletCases ), testCase )
 {
-    for ( const auto& testCase : squareFilletCases )
-    {
-        TestSquareFillet( testCase.squareSize, testCase.radius, testCase.error );
-    }
+    TestSquareFillet( testCase.squareSize, testCase.radius, testCase.error );
 }
 
-BOOST_AUTO_TEST_CASE( SquareConcaveFillet )
+BOOST_DATA_TEST_CASE( SquareConcaveFillet, boost::unit_test::data::make( squareFilletCases ),
+                      testCase )
 {
-    for ( const auto& testCase : squareFilletCases )
-    {
-        TestConcaveSquareFillet( testCase.squareSize, testCase.radius, testCase.error );
-    }
+    TestConcaveSquareFillet( testCase.squareSize, testCase.radius, testCase.error );
 }
 
 

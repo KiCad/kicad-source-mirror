@@ -21,6 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_arc.h>
 
@@ -28,7 +31,6 @@
 
 #include <qa_utils/geometry/geometry.h>
 #include <qa_utils/numeric.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include "geom_test_utils.h"
 
@@ -165,11 +167,8 @@ struct ARC_CENTRE_PT_ANGLE
 };
 
 
-struct ARC_CPA_CASE
+struct ARC_CPA_CASE : public KI_TEST::NAMED_CASE
 {
-    /// The text context name
-    std::string m_ctx_name;
-
     /// Geom of the arc
     ARC_CENTRE_PT_ANGLE m_geom;
 
@@ -326,20 +325,14 @@ static const std::vector<ARC_CPA_CASE> arc_cases = {
 };
 
 
-BOOST_AUTO_TEST_CASE( BasicCPAGeom )
+BOOST_DATA_TEST_CASE( BasicCPAGeom, boost::unit_test::data::make( arc_cases ), c )
 {
-    for( const auto& c : arc_cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_ctx_name )
-        {
 
-            const auto this_arc = SHAPE_ARC{ c.m_geom.m_center_point, c.m_geom.m_start_point,
-                                             EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ),
-                                             c.m_width };
+    const auto this_arc = SHAPE_ARC{ c.m_geom.m_center_point, c.m_geom.m_start_point,
+                                        EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ),
+                                        c.m_width };
 
-            CheckArc( this_arc, c.m_properties );
-        }
-    }
+    CheckArc( this_arc, c.m_properties );
 }
 
 
@@ -355,11 +348,8 @@ struct ARC_TAN_TAN_RADIUS
 };
 
 
-struct ARC_TTR_CASE
+struct ARC_TTR_CASE : public KI_TEST::NAMED_CASE
 {
-    /// The text context name
-    std::string m_ctx_name;
-
     /// Geom of the arc
     ARC_TAN_TAN_RADIUS m_geom;
 
@@ -434,56 +424,50 @@ static const std::vector<ARC_TTR_CASE> arc_ttr_cases = {
 };
 
 
-BOOST_AUTO_TEST_CASE( BasicTTRGeom )
+BOOST_DATA_TEST_CASE( BasicTTRGeom, boost::unit_test::data::make( arc_ttr_cases ), c )
 {
-    for( const auto& c : arc_ttr_cases )
+    for( int testCase = 0; testCase < 8; ++testCase )
     {
-        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        SEG            seg1  = c.m_geom.m_segment_1;
+        SEG            seg2  = c.m_geom.m_segment_2;
+        ARC_PROPERTIES props = c.m_properties;
+
+        if( testCase > 3 )
         {
-            for( int testCase = 0; testCase < 8; ++testCase )
-            {
-                SEG            seg1  = c.m_geom.m_segment_1;
-                SEG            seg2  = c.m_geom.m_segment_2;
-                ARC_PROPERTIES props = c.m_properties;
+            //Swap input segments.
+            seg1 = c.m_geom.m_segment_2;
+            seg2 = c.m_geom.m_segment_1;
 
-                if( testCase > 3 )
-                {
-                    //Swap input segments.
-                    seg1 = c.m_geom.m_segment_2;
-                    seg2 = c.m_geom.m_segment_1;
-
-                    //The result should swap start and end points and invert the angles:
-                    props.m_end_point    = c.m_properties.m_start_point;
-                    props.m_start_point  = c.m_properties.m_end_point;
-                    props.m_start_angle  = c.m_properties.m_end_angle;
-                    props.m_end_angle    = c.m_properties.m_start_angle;
-                    props.m_center_angle = -c.m_properties.m_center_angle;
-                }
-
-                //Test all combinations of start and end points for the segments
-                if( ( testCase % 4 ) == 1 || ( testCase % 4 ) == 3 )
-                {
-                    //Swap start and end points for seg1
-                    VECTOR2I temp = seg1.A;
-                    seg1.A = seg1.B;
-                    seg1.B = temp;
-                }
-
-                if( ( testCase % 4 ) == 2 || ( testCase % 4 ) == 3 )
-                {
-                    //Swap start and end points for seg2
-                    VECTOR2I temp = seg2.A;
-                    seg2.A        = seg2.B;
-                    seg2.B        = temp;
-                }
-
-                const auto this_arc = SHAPE_ARC{ seg1, seg2,
-                    c.m_geom.m_radius, c.m_width };
-
-                // Error of 4 IU permitted for the center and radius calculation
-                CheckArc( this_arc, props, SHAPE_ARC::MIN_PRECISION_IU );
-            }
+            //The result should swap start and end points and invert the angles:
+            props.m_end_point    = c.m_properties.m_start_point;
+            props.m_start_point  = c.m_properties.m_end_point;
+            props.m_start_angle  = c.m_properties.m_end_angle;
+            props.m_end_angle    = c.m_properties.m_start_angle;
+            props.m_center_angle = -c.m_properties.m_center_angle;
         }
+
+        //Test all combinations of start and end points for the segments
+        if( ( testCase % 4 ) == 1 || ( testCase % 4 ) == 3 )
+        {
+            //Swap start and end points for seg1
+            VECTOR2I temp = seg1.A;
+            seg1.A = seg1.B;
+            seg1.B = temp;
+        }
+
+        if( ( testCase % 4 ) == 2 || ( testCase % 4 ) == 3 )
+        {
+            //Swap start and end points for seg2
+            VECTOR2I temp = seg2.A;
+            seg2.A        = seg2.B;
+            seg2.B        = temp;
+        }
+
+        const auto this_arc = SHAPE_ARC{ seg1, seg2,
+            c.m_geom.m_radius, c.m_width };
+
+        // Error of 4 IU permitted for the center and radius calculation
+        CheckArc( this_arc, props, SHAPE_ARC::MIN_PRECISION_IU );
     }
 }
 
@@ -499,11 +483,8 @@ struct ARC_START_END_CENTER
 };
 
 
-struct ARC_SEC_CASE
+struct ARC_SEC_CASE : public KI_TEST::NAMED_CASE
 {
-    /// The text context name
-    std::string m_ctx_name;
-
     /// Geom of the arc
     ARC_START_END_CENTER m_geom;
 
@@ -526,29 +507,22 @@ static const std::vector<ARC_SEC_CASE> arc_sec_cases = {
 };
 
 
-BOOST_AUTO_TEST_CASE( BasicSECGeom )
+BOOST_DATA_TEST_CASE( BasicSECGeom, boost::unit_test::data::make( arc_sec_cases ), c )
 {
-    for( const auto& c : arc_sec_cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_ctx_name )
-        {
-            VECTOR2I start = c.m_geom.m_start;
-            VECTOR2I end = c.m_geom.m_end;
-            VECTOR2I center = c.m_geom.m_center;
-            bool     cw = c.m_clockwise;
+    VECTOR2I start = c.m_geom.m_start;
+    VECTOR2I end = c.m_geom.m_end;
+    VECTOR2I center = c.m_geom.m_center;
+    bool     cw = c.m_clockwise;
 
-            SHAPE_ARC this_arc;
-            this_arc.ConstructFromStartEndCenter( start, end, center, cw );
+    SHAPE_ARC this_arc;
+    this_arc.ConstructFromStartEndCenter( start, end, center, cw );
 
-            BOOST_CHECK_EQUAL( this_arc.GetArcMid(), c.m_expected_mid );
-        }
-    }
+    BOOST_CHECK_EQUAL( this_arc.GetArcMid(), c.m_expected_mid );
 }
 
 
-struct ARC_PT_COLLIDE_CASE
+struct ARC_PT_COLLIDE_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string         m_ctx_name;
     ARC_CENTRE_PT_ANGLE m_geom;
     int                 m_arc_clearance;
     VECTOR2I            m_point;
@@ -612,47 +586,36 @@ static const std::vector<ARC_PT_COLLIDE_CASE> arc_pt_collide_cases = {
 };
 
 
-BOOST_AUTO_TEST_CASE( CollidePt )
+BOOST_DATA_TEST_CASE( CollidePt, boost::unit_test::data::make( arc_pt_collide_cases ), c )
 {
-    for( const auto& c : arc_pt_collide_cases )
+    SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
+                    EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ) );
+
+    // Test a zero width arc (distance should equal the clearance)
+    BOOST_TEST_CONTEXT( "Test Clearance" )
     {
-        BOOST_TEST_CONTEXT( c.m_ctx_name )
-        {
-            SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
-                           EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ) );
+        int dist = -1;
+        BOOST_CHECK_EQUAL( arc.Collide( c.m_point, c.m_arc_clearance, &dist ),
+                            c.m_exp_result );
+        BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
+    }
 
-            // Test a zero width arc (distance should equal the clearance)
-            BOOST_TEST_CONTEXT( "Test Clearance" )
-            {
-                int dist = -1;
-                BOOST_CHECK_EQUAL( arc.Collide( c.m_point, c.m_arc_clearance, &dist ),
-                                    c.m_exp_result );
-                BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
-            }
+    // Test by changing the width of the arc (distance should equal zero)
+    BOOST_TEST_CONTEXT( "Test Width" )
+    {
+        int dist = -1;
+        arc.SetWidth( c.m_arc_clearance * 2 );
+        BOOST_CHECK_EQUAL( arc.Collide( c.m_point, 0, &dist ), c.m_exp_result );
 
-            // Test by changing the width of the arc (distance should equal zero)
-            BOOST_TEST_CONTEXT( "Test Width" )
-            {
-                int dist = -1;
-                arc.SetWidth( c.m_arc_clearance * 2 );
-                BOOST_CHECK_EQUAL( arc.Collide( c.m_point, 0, &dist ), c.m_exp_result );
-
-                if( c.m_exp_result )
-                    BOOST_CHECK_EQUAL( dist, 0 );
-                else
-                    BOOST_CHECK_EQUAL( dist, -1 );
-            }
-        }
+        if( c.m_exp_result )
+            BOOST_CHECK_EQUAL( dist, 0 );
+        else
+            BOOST_CHECK_EQUAL( dist, -1 );
     }
 }
 
-
-
-
-
-struct ARC_SEG_COLLIDE_CASE
+struct ARC_SEG_COLLIDE_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string         m_ctx_name;
     ARC_CENTRE_PT_ANGLE m_geom;
     int                 m_arc_clearance;
     SEG                 m_seg;
@@ -677,41 +640,33 @@ static const std::vector<ARC_SEG_COLLIDE_CASE> arc_seg_collide_cases = {
 };
 
 
-BOOST_AUTO_TEST_CASE( CollideSeg )
+BOOST_DATA_TEST_CASE( CollideSeg, boost::unit_test::data::make( arc_seg_collide_cases ), c )
 {
-    for( const auto& c : arc_seg_collide_cases )
+    SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
+                    EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ) );
+
+    // Test a zero width arc (distance should equal the clearance)
+    BOOST_TEST_CONTEXT( "Test Clearance" )
     {
-        BOOST_TEST_CONTEXT( c.m_ctx_name )
-        {
-            SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
-                           EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ) );
+        int dist = -1;
+        BOOST_CHECK_EQUAL( arc.Collide( c.m_seg, c.m_arc_clearance, &dist ),
+                            c.m_exp_result );
+        BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
+    }
 
-            // Test a zero width arc (distance should equal the clearance)
-            BOOST_TEST_CONTEXT( "Test Clearance" )
-            {
-                int dist = -1;
-                BOOST_CHECK_EQUAL( arc.Collide( c.m_seg, c.m_arc_clearance, &dist ),
-                                   c.m_exp_result );
-                BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
-            }
+    // Test by changing the width of the arc (distance should equal zero)
+    BOOST_TEST_CONTEXT( "Test Width" )
+    {
+        int dist = -1;
+        arc.SetWidth( c.m_arc_clearance * 2 );
+        BOOST_CHECK_EQUAL( arc.Collide( c.m_seg, 0, &dist ), c.m_exp_result );
 
-            // Test by changing the width of the arc (distance should equal zero)
-            BOOST_TEST_CONTEXT( "Test Width" )
-            {
-                int dist = -1;
-                arc.SetWidth( c.m_arc_clearance * 2 );
-                BOOST_CHECK_EQUAL( arc.Collide( c.m_seg, 0, &dist ), c.m_exp_result );
-
-                if( c.m_exp_result )
-                    BOOST_CHECK_EQUAL( dist, 0 );
-                else
-                    BOOST_CHECK_EQUAL( dist, -1 );
-            }
-        }
+        if( c.m_exp_result )
+            BOOST_CHECK_EQUAL( dist, 0 );
+        else
+            BOOST_CHECK_EQUAL( dist, -1 );
     }
 }
-
-
 
 struct ARC_DATA_MM
 {
@@ -734,9 +689,8 @@ struct ARC_DATA_MM
 };
 
 
-struct ARC_ARC_COLLIDE_CASE
+struct ARC_ARC_COLLIDE_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string         m_ctx_name;
     ARC_DATA_MM         m_arc1;
     ARC_DATA_MM         m_arc2;
     double              m_clearance;
@@ -823,54 +777,48 @@ static const std::vector<ARC_ARC_COLLIDE_CASE> arc_arc_collide_cases = {
 };
 
 
-BOOST_AUTO_TEST_CASE( CollideArc )
+BOOST_DATA_TEST_CASE( CollideArc, boost::unit_test::data::make( arc_arc_collide_cases ), c )
 {
-    for( const auto& c : arc_arc_collide_cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_ctx_name )
-        {
-            SHAPE_ARC arc1( c.m_arc1.GenerateArc() );
-            SHAPE_ARC arc2( c.m_arc2.GenerateArc() );
+    SHAPE_ARC arc1( c.m_arc1.GenerateArc() );
+    SHAPE_ARC arc2( c.m_arc2.GenerateArc() );
 
 
-            SHAPE_LINE_CHAIN arc1_slc( c.m_arc1.GenerateArc() );
-            arc1_slc.SetWidth( 0 );
+    SHAPE_LINE_CHAIN arc1_slc( c.m_arc1.GenerateArc() );
+    arc1_slc.SetWidth( 0 );
 
-            SHAPE_LINE_CHAIN arc2_slc( c.m_arc2.GenerateArc() );
-            arc2_slc.SetWidth( 0 );
+    SHAPE_LINE_CHAIN arc2_slc( c.m_arc2.GenerateArc() );
+    arc2_slc.SetWidth( 0 );
 
-            int      actual = 0;
-            VECTOR2I location;
+    int      actual = 0;
+    VECTOR2I location;
 
-            SHAPE* arc1_sh = &arc1;
-            SHAPE* arc2_sh = &arc2;
-            SHAPE* arc1_slc_sh = &arc1_slc;
-            SHAPE* arc2_slc_sh = &arc2_slc;
+    SHAPE* arc1_sh = &arc1;
+    SHAPE* arc2_sh = &arc2;
+    SHAPE* arc1_slc_sh = &arc1_slc;
+    SHAPE* arc2_slc_sh = &arc2_slc;
 
-            bool result_arc_to_arc = arc1_sh->Collide( arc2_sh, pcbIUScale.mmToIU( c.m_clearance ),
-                                                       &actual, &location );
+    bool result_arc_to_arc = arc1_sh->Collide( arc2_sh, pcbIUScale.mmToIU( c.m_clearance ),
+                                                &actual, &location );
 
-            // For arc to chain collisions, we need to re-calculate the clearances because the
-            // SHAPE_LINE_CHAIN is zero width
-            int clearance = pcbIUScale.mmToIU( c.m_clearance ) + ( arc2.GetWidth() / 2 );
+    // For arc to chain collisions, we need to re-calculate the clearances because the
+    // SHAPE_LINE_CHAIN is zero width
+    int clearance = pcbIUScale.mmToIU( c.m_clearance ) + ( arc2.GetWidth() / 2 );
 
-            bool result_arc_to_chain =
-                    arc1_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
+    bool result_arc_to_chain =
+            arc1_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
 
-            clearance = pcbIUScale.mmToIU( c.m_clearance ) + ( arc1.GetWidth() / 2 );
-            bool result_chain_to_arc =
-                    arc1_slc_sh->Collide( arc2_sh, clearance, &actual, &location );
+    clearance = pcbIUScale.mmToIU( c.m_clearance ) + ( arc1.GetWidth() / 2 );
+    bool result_chain_to_arc =
+            arc1_slc_sh->Collide( arc2_sh, clearance, &actual, &location );
 
-            clearance = ( arc1.GetWidth() / 2 ) + ( arc2.GetWidth() / 2 );
-            bool result_chain_to_chain =
-                    arc1_slc_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
+    clearance = ( arc1.GetWidth() / 2 ) + ( arc2.GetWidth() / 2 );
+    bool result_chain_to_chain =
+            arc1_slc_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
 
-            BOOST_CHECK_EQUAL( result_arc_to_arc, c.m_exp_result );
-            BOOST_CHECK_EQUAL( result_arc_to_chain, c.m_exp_result );
-            BOOST_CHECK_EQUAL( result_chain_to_arc, c.m_exp_result );
-            BOOST_CHECK_EQUAL( result_chain_to_chain, c.m_exp_result );
-        }
-    }
+    BOOST_CHECK_EQUAL( result_arc_to_arc, c.m_exp_result );
+    BOOST_CHECK_EQUAL( result_arc_to_chain, c.m_exp_result );
+    BOOST_CHECK_EQUAL( result_chain_to_arc, c.m_exp_result );
+    BOOST_CHECK_EQUAL( result_chain_to_chain, c.m_exp_result );
 }
 
 
@@ -942,9 +890,8 @@ BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
 }
 
 
-struct ARC_TO_POLYLINE_CASE
+struct ARC_TO_POLYLINE_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string         m_ctx_name;
     ARC_CENTRE_PT_ANGLE m_geom;
 };
 
@@ -996,46 +943,47 @@ bool ArePolylineMidPointsNearCircle( const SHAPE_LINE_CHAIN& aPolyline, const VE
 }
 
 
-BOOST_AUTO_TEST_CASE( ArcToPolyline )
-{
-    const std::vector<ARC_TO_POLYLINE_CASE> cases = {
+const std::vector<ARC_TO_POLYLINE_CASE> ArcToPolyline_cases{
+    {
+        "Zero rad",
         {
-            "Zero rad",
-            {
-                { 0, 0 },
-                { 0, 0 },
-                180,
-            },
+            { 0, 0 },
+            { 0, 0 },
+            180,
         },
+    },
+    {
+        "Semicircle",
         {
-            "Semicircle",
-            {
-                { 0, 0 },
-                { -1000000, 0 },
-                180,
-            },
+            { 0, 0 },
+            { -1000000, 0 },
+            180,
         },
+    },
+    {
+        // check that very small circles don't fall apart and that reverse angles
+        // work too
+        "Extremely small semicircle",
         {
-            // check that very small circles don't fall apart and that reverse angles
-            // work too
-            "Extremely small semicircle",
-            {
-                { 0, 0 },
-                { -1000, 0 },
-                -180,
-            },
+            { 0, 0 },
+            { -1000, 0 },
+            -180,
         },
+    },
+    {
+        // Make sure it doesn't only work for "easy" angles
+        "Non-round geometry",
         {
-            // Make sure it doesn't only work for "easy" angles
-            "Non-round geometry",
-            {
-                { 0, 0 },
-                { 1234567, 0 },
-                42.22,
-            },
+            { 0, 0 },
+            { 1234567, 0 },
+            42.22,
         },
-    };
+    },
+};
 
+
+BOOST_DATA_TEST_CASE( ArcToPolyline, boost::unit_test::data::make( ArcToPolyline_cases ), c )
+{
     const int width = 0;
 
     // Note: do not expect accuracies around 1 to work.  We use integers internally so we're
@@ -1044,33 +992,27 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
     const int accuracy = 100;
     const int epsilon  = 1;
 
-    for( const auto& c : cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_ctx_name )
-        {
-            const SHAPE_ARC this_arc{ c.m_geom.m_center_point, c.m_geom.m_start_point,
-                                      EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ), width };
+    const SHAPE_ARC this_arc{ c.m_geom.m_center_point, c.m_geom.m_start_point,
+                                EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ), width };
 
-            const SHAPE_LINE_CHAIN chain = this_arc.ConvertToPolyline( accuracy );
+    const SHAPE_LINE_CHAIN chain = this_arc.ConvertToPolyline( accuracy );
 
-            BOOST_TEST_MESSAGE( "Polyline has " << chain.PointCount() << " points" );
+    BOOST_TEST_MESSAGE( "Polyline has " << chain.PointCount() << " points" );
 
-            // Start point (exactly) where expected
-            BOOST_CHECK_EQUAL( chain.CPoint( 0 ), c.m_geom.m_start_point );
+    // Start point (exactly) where expected
+    BOOST_CHECK_EQUAL( chain.CPoint( 0 ), c.m_geom.m_start_point );
 
-            // End point (exactly) where expected
-            BOOST_CHECK_EQUAL( chain.CPoint( -1 ), this_arc.GetP1() );
+    // End point (exactly) where expected
+    BOOST_CHECK_EQUAL( chain.CPoint( -1 ), this_arc.GetP1() );
 
-            int radius = ( c.m_geom.m_center_point - c.m_geom.m_start_point ).EuclideanNorm();
+    int radius = ( c.m_geom.m_center_point - c.m_geom.m_start_point ).EuclideanNorm();
 
-            // Other points within accuracy + epsilon (for rounding) of where they should be
-            BOOST_CHECK_PREDICATE( ArePolylineEndPointsNearCircle,
-                    ( chain )( c.m_geom.m_center_point )( radius )( accuracy + epsilon ) );
+    // Other points within accuracy + epsilon (for rounding) of where they should be
+    BOOST_CHECK_PREDICATE( ArePolylineEndPointsNearCircle,
+            ( chain )( c.m_geom.m_center_point )( radius )( accuracy + epsilon ) );
 
-            BOOST_CHECK_PREDICATE( ArePolylineMidPointsNearCircle,
-                    ( chain )( c.m_geom.m_center_point )( radius )( accuracy + epsilon ) );
-        }
-    }
+    BOOST_CHECK_PREDICATE( ArePolylineMidPointsNearCircle,
+            ( chain )( c.m_geom.m_center_point )( radius )( accuracy + epsilon ) );
 }
 
 

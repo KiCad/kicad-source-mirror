@@ -21,23 +21,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <board.h>
 #include <kiid.h>
 #include <pcb_group.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
 #include <settings/settings_manager.h>
 
 namespace
 {
-
-struct GROUP_LOAD_TEST_FIXTURE
-{
-    GROUP_LOAD_TEST_FIXTURE() {}
-};
-
-
 struct GROUP_LOAD_TEST_CASE
 {
     // Which one to look at in the file?
@@ -49,17 +44,42 @@ struct GROUP_LOAD_TEST_CASE
 };
 
 
-struct GROUP_LOAD_BOARD_TEST_CASE
+struct GROUP_LOAD_BOARD_TEST_CASE: public KI_TEST::BOARD_LOAD_TEST_CASE
 {
-    // The board to load
-    wxString m_boardFileRelativePath;
-
-    // These tests may well test specific versions of the board file format,
-    // so don't let it change accidentally!
-    int m_expectedBoardVersion;
-
     // List of items to check on this board
     std::vector<GROUP_LOAD_TEST_CASE> m_groupCases;
+};
+
+
+const std::vector<GROUP_LOAD_BOARD_TEST_CASE> GroupsLoadSave_testCases{
+    {
+            "groups_load_save",
+            20231231,
+            {
+                    // From top to bottom in the board file
+                    {
+                            "a78cc65c-451e-451e-9147-4460cc669685",
+                            true,
+                            "GroupName",
+                            2,
+                    },
+            },
+    },
+    {
+            // Before 20231231, 'id' was used in group s-exprs
+            // and we need to continue to load it for compatibility
+            "groups_load_save_v20231212",
+            20231212,
+            {
+                    // From top to bottom in the board file
+                    {
+                            "a78cc65c-451e-451e-9147-4460cc669685",
+                            true,
+                            "GroupName",
+                            2,
+                    },
+            },
+    },
 };
 
 } // namespace
@@ -74,61 +94,26 @@ struct GROUP_LOAD_BOARD_TEST_CASE
  *
  * But it's less good at programmatic generation of interesting groups in the first place.
  */
-BOOST_FIXTURE_TEST_CASE( GroupsLoadSave, GROUP_LOAD_TEST_FIXTURE )
+BOOST_DATA_TEST_CASE( GroupsLoadSave, boost::unit_test::data::make( GroupsLoadSave_testCases ),
+                      testCase )
 {
-    const std::vector<GROUP_LOAD_BOARD_TEST_CASE> groupTestCases{
+    const auto doBoardTest = [&]( const BOARD& aBoard )
+    {
+        for( const GROUP_LOAD_TEST_CASE& groupTestCase : testCase.m_groupCases )
         {
-                "groups_load_save",
-                20231231,
-                {
-                        // From top to bottom in the board file
-                        {
-                                "a78cc65c-451e-451e-9147-4460cc669685",
-                                true,
-                                "GroupName",
-                                2,
-                        },
-                },
-        },
-        {
-                // Before 20231231, 'id' was used in group s-exprs
-                // and we need to continue to load it for compatibility
-                "groups_load_save_v20231212",
-                20231212,
-                {
-                        // From top to bottom in the board file
-                        {
-                                "a78cc65c-451e-451e-9147-4460cc669685",
-                                true,
-                                "GroupName",
-                                2,
-                        },
-                },
-        },
+            BOOST_TEST_MESSAGE( "Checking for group with UUID: "
+                                << groupTestCase.m_searchUuid.AsString()
+                                << " and name: " << groupTestCase.m_expectedName );
+
+            const auto& group = static_cast<PCB_GROUP&>( KI_TEST::RequireBoardItemWithTypeAndId(
+                    aBoard, PCB_GROUP_T, groupTestCase.m_searchUuid ) );
+
+            BOOST_CHECK_EQUAL( group.IsLocked(), groupTestCase.m_expectedLocked );
+            BOOST_CHECK_EQUAL( group.GetName(), groupTestCase.m_expectedName );
+            BOOST_CHECK_EQUAL( group.GetItems().size(), groupTestCase.m_expectedMemberCount );
+        }
     };
 
-    for( const GROUP_LOAD_BOARD_TEST_CASE& testCase : groupTestCases )
-    {
-        BOOST_TEST_MESSAGE( "Test case on file: " << testCase.m_boardFileRelativePath );
-
-        const auto doBoardTest = [&]( const BOARD& aBoard )
-        {
-            for( const GROUP_LOAD_TEST_CASE& groupTestCase : testCase.m_groupCases )
-            {
-                BOOST_TEST_MESSAGE( "Checking for group with UUID: "
-                                    << groupTestCase.m_searchUuid.AsString()
-                                    << " and name: " << groupTestCase.m_expectedName );
-
-                const auto& group = static_cast<PCB_GROUP&>( KI_TEST::RequireBoardItemWithTypeAndId(
-                        aBoard, PCB_GROUP_T, groupTestCase.m_searchUuid ) );
-
-                BOOST_CHECK_EQUAL( group.IsLocked(), groupTestCase.m_expectedLocked );
-                BOOST_CHECK_EQUAL( group.GetName(), groupTestCase.m_expectedName );
-                BOOST_CHECK_EQUAL( group.GetItems().size(), groupTestCase.m_expectedMemberCount );
-            }
-        };
-
-        KI_TEST::LoadAndTestBoardFile( testCase.m_boardFileRelativePath, true, doBoardTest,
-                                       testCase.m_expectedBoardVersion );
-    }
+    KI_TEST::LoadAndTestBoardFile( testCase.m_BoardFileRelativePath, true, doBoardTest,
+                                   testCase.m_ExpectedBoardVersion );
 }

@@ -259,6 +259,24 @@ bool CollectionHasNoDuplicates( const T& aCollection )
 
 
 /**
+ * A named data-driven test case.
+ *
+ * Inherit from this class to provide a printable name for a data-driven test case.
+ * (you can also not use this class and provide you own name printer).
+ */
+struct NAMED_CASE
+{
+    std::string m_CaseName;
+
+    friend std::ostream& operator<<( std::ostream& os, const NAMED_CASE& aCase )
+    {
+        os << aCase.m_CaseName;
+        return os;
+    }
+};
+
+
+/**
  * A test macro to check a wxASSERT is thrown.
  *
  * This only happens in DEBUG builds, so prevent test failures in Release builds

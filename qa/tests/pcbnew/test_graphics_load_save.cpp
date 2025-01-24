@@ -21,12 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <board.h>
 #include <kiid.h>
 #include <pcb_shape.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
 #include <settings/settings_manager.h>
 
 namespace
@@ -41,72 +43,63 @@ struct GRAPHICS_LOAD_TEST_CASE
 };
 
 
-struct GRAPHICS_LOAD_BOARD_TEST_CASE
+struct GRAPHICS_LOAD_BOARD_TEST_CASE: public KI_TEST::BOARD_LOAD_TEST_CASE
 {
-    // The board to load
-    wxString m_boardFileRelativePath;
-
-    // These tests may well test specific versions of the board file format,
-    // so don't let it change accidentally!
-    int m_expectedBoardVersion;
-
     // List of images to check
     std::vector<GRAPHICS_LOAD_TEST_CASE> m_generatorCases;
 };
 
+const std::vector<GRAPHICS_LOAD_BOARD_TEST_CASE> GraphicsLoad_testCases{
+    {
+            // Before 20241129, 'fill' would be solid or none
+            // in PCB shapes
+            "graphics_load_save_v20240108",
+            20240108,
+            {
+                    // Filled poly
+                    {
+                            "65596b4f-7b03-48e9-8be7-5824316ea7fd",
+                            true,
+                    },
+                    // Unfilled poly
+                    {
+                            "cf265305-49c9-43d8-bb2a-ad34997b22d6",
+                            false,
+                    },
+                    // Filled rect
+                    {
+                            "d0669ae2-442f-427f-af0f-bc3008af779a",
+                            true,
+                    },
+                    // Unfilled rect
+                    {
+                            "fd1649a3-9a92-4dd3-96b4-88469cb257ba",
+                            false,
+                    },
+            },
+    },
+};
+
 } // namespace
 
-BOOST_AUTO_TEST_CASE( GraphicsLoad )
+BOOST_DATA_TEST_CASE( GraphicsLoad, boost::unit_test::data::make( GraphicsLoad_testCases ),
+                      testCase )
 {
-    const std::vector<GRAPHICS_LOAD_BOARD_TEST_CASE> testCases{
-        {
-                // Before 20241129, 'fill' would be solid or none
-                // in PCB shapes
-                "graphics_load_save_v20240108",
-                20240108,
-                {
-                        // Filled poly
-                        {
-                                "65596b4f-7b03-48e9-8be7-5824316ea7fd",
-                                true,
-                        },
-                        // Unfilled poly
-                        {
-                                "cf265305-49c9-43d8-bb2a-ad34997b22d6",
-                                false,
-                        },
-                        // Filled rect
-                        {
-                                "d0669ae2-442f-427f-af0f-bc3008af779a",
-                                true,
-                        },
-                        // Unfilled rect
-                        {
-                                "fd1649a3-9a92-4dd3-96b4-88469cb257ba",
-                                false,
-                        },
-                },
-        },
-    };
-
-    for( const GRAPHICS_LOAD_BOARD_TEST_CASE& testCase : testCases )
+    const auto doBoardTest = [&]( const BOARD& aBoard )
     {
-        const auto doBoardTest = [&]( const BOARD& aBoard )
-        {
             for( const GRAPHICS_LOAD_TEST_CASE& testCase : testCase.m_generatorCases )
             {
-                BOOST_TEST_MESSAGE(
-                        "Checking for graphic with UUID: " << testCase.m_searchUuid.AsString() );
+            BOOST_TEST_MESSAGE(
+                    "Checking for graphic with UUID: " << testCase.m_searchUuid.AsString() );
 
-                const auto& graphic =
-                        static_cast<PCB_SHAPE&>( KI_TEST::RequireBoardItemWithTypeAndId(
-                                aBoard, PCB_SHAPE_T, testCase.m_searchUuid ) );
+            const auto& graphic =
+                    static_cast<PCB_SHAPE&>( KI_TEST::RequireBoardItemWithTypeAndId(
+                            aBoard, PCB_SHAPE_T, testCase.m_searchUuid ) );
 
-                BOOST_CHECK_EQUAL( graphic.IsFilled(), testCase.m_expectedFilled );
+            BOOST_CHECK_EQUAL( graphic.IsFilled(), testCase.m_expectedFilled );
             }
-        };
+    };
 
-        KI_TEST::LoadAndTestBoardFile( testCase.m_boardFileRelativePath, true, doBoardTest,
-                                       testCase.m_expectedBoardVersion );
-    }
+    KI_TEST::LoadAndTestBoardFile( testCase.m_BoardFileRelativePath, true, doBoardTest,
+                                   testCase.m_ExpectedBoardVersion );
 }

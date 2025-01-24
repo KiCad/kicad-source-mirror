@@ -22,6 +22,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
 
 #include <geometry/half_line.h>
 #include <geometry/shape_utils.h>
@@ -29,162 +30,142 @@
 #include "geom_test_utils.h"
 
 
-struct HalfLineFixture
-{
-};
+BOOST_AUTO_TEST_SUITE( HalfLine )
 
-struct HalfLineBoxClipCase
+struct HalfLineBoxClipCase : public KI_TEST::NAMED_CASE
 {
-    std::string        Description;
     HALF_LINE          Hl;
     BOX2I              Box;
     std::optional<SEG> ExpectedClippedSeg;
 };
 
-struct HalfLineHalfLineIntersectionCase
+struct HalfLineHalfLineIntersectionCase : public KI_TEST::NAMED_CASE
 {
-    std::string             Description;
     HALF_LINE               HlA;
     HALF_LINE               HlB;
     std::optional<VECTOR2I> ExpectedIntersection;
 };
 
-struct HalfLineContainsPointCase
+struct HalfLineContainsPointCase : public KI_TEST::NAMED_CASE
 {
-    std::string Description;
     HALF_LINE   Hl;
     VECTOR2I    Point;
     bool        ExpectedContains;
 };
 
-BOOST_FIXTURE_TEST_SUITE( HalfLine, HalfLineFixture )
-
-
-BOOST_AUTO_TEST_CASE( Contains )
-{
-    const std::vector<HalfLineContainsPointCase> cases{
-        {
-                "Point on the ray",
-                HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
-                VECTOR2I( 50, 50 ),
-                true,
-        },
-        {
-                "Point on the ray start",
-                HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
-                VECTOR2I( 0, 0 ),
-                true,
-        },
-        {
-                "Point on the ray end",
-                HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
-                VECTOR2I( 100, 100 ),
-                true,
-        },
-        {
-                "Point on the ray, past the end",
-                HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
-                VECTOR2I( 150, 150 ),
-                true,
-        },
-        {
-                "Point on the infinite line, but on the wrong side",
-                HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
-                VECTOR2I( -50, -50 ),
-                false,
-        },
-        {
-                "Point to one side",
-                HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
-                VECTOR2I( 50, 0 ),
-                false,
-        }
-    };
-
-    for( const auto& c : cases )
+const std::vector<HalfLineContainsPointCase> Contains_cases{
     {
-        BOOST_TEST_INFO( c.Description );
-
-        const bool contains = c.Hl.Contains( c.Point );
-
-        BOOST_TEST( contains == c.ExpectedContains );
+            "Point on the ray",
+            HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
+            VECTOR2I( 50, 50 ),
+            true,
+    },
+    {
+            "Point on the ray start",
+            HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
+            VECTOR2I( 0, 0 ),
+            true,
+    },
+    {
+            "Point on the ray end",
+            HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
+            VECTOR2I( 100, 100 ),
+            true,
+    },
+    {
+            "Point on the ray, past the end",
+            HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
+            VECTOR2I( 150, 150 ),
+            true,
+    },
+    {
+            "Point on the infinite line, but on the wrong side",
+            HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
+            VECTOR2I( -50, -50 ),
+            false,
+    },
+    {
+            "Point to one side",
+            HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
+            VECTOR2I( 50, 0 ),
+            false,
     }
+};
+
+
+BOOST_DATA_TEST_CASE( Contains, boost::unit_test::data::make( Contains_cases ), c )
+{
+    const bool contains = c.Hl.Contains( c.Point );
+
+    BOOST_TEST( contains == c.ExpectedContains );
 }
 
 
-BOOST_AUTO_TEST_CASE( Intersect )
-{
-    const std::vector<HalfLineHalfLineIntersectionCase> cases{
-        {
-                "Simple cross",
-                HALF_LINE( SEG( VECTOR2I( -100, -100 ), VECTOR2I( 0, 0 ) ) ),
-                HALF_LINE( SEG( VECTOR2I( 100, -100 ), VECTOR2I( 0, 0 ) ) ),
-                VECTOR2I( 0, 0 ),
-        },
-        {
-                "Parallel, no intersection",
-                HALF_LINE( SEG( VECTOR2I( -100, 0 ), VECTOR2I( -100, 100 ) ) ),
-                HALF_LINE( SEG( VECTOR2I( 100, 0 ), VECTOR2I( 100, 100 ) ) ),
-                std::nullopt,
-        }
-    };
-
-    for( const auto& c : cases )
+const std::vector<HalfLineHalfLineIntersectionCase> Intersect_cases{
     {
-        BOOST_TEST_INFO( c.Description );
+            "Simple cross",
+            HALF_LINE( SEG( VECTOR2I( -100, -100 ), VECTOR2I( 0, 0 ) ) ),
+            HALF_LINE( SEG( VECTOR2I( 100, -100 ), VECTOR2I( 0, 0 ) ) ),
+            VECTOR2I( 0, 0 ),
+    },
+    {
+            "Parallel, no intersection",
+            HALF_LINE( SEG( VECTOR2I( -100, 0 ), VECTOR2I( -100, 100 ) ) ),
+            HALF_LINE( SEG( VECTOR2I( 100, 0 ), VECTOR2I( 100, 100 ) ) ),
+            std::nullopt,
+    }
+};
 
-        std::optional<VECTOR2I> intersection = c.HlA.Intersect( c.HlB );
 
-        BOOST_REQUIRE( intersection.has_value() == c.ExpectedIntersection.has_value() );
+BOOST_DATA_TEST_CASE( Intersect, boost::unit_test::data::make( Intersect_cases ), c )
+{
+    std::optional<VECTOR2I> intersection = c.HlA.Intersect( c.HlB );
 
-        if( !intersection )
-            continue;
+    BOOST_REQUIRE( intersection.has_value() == c.ExpectedIntersection.has_value() );
 
+    if( intersection )
+    {
         BOOST_TEST( *intersection == *c.ExpectedIntersection );
     }
 }
 
 
-BOOST_AUTO_TEST_CASE( ClipToBox )
-{
-    const std::vector<HalfLineBoxClipCase> cases{
-        {
-                "Center to right edge",
-                HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 0 ) ) ),
-                BOX2I{ VECTOR2{ -1000, -1000 }, VECTOR2{ 2000, 2000 } },
-                SEG( VECTOR2I( 0, 0 ), VECTOR2I( 1000, 0 ) ),
-        },
-        {
-                "Centre to corner",
-                HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
-                BOX2I{ VECTOR2{ -1000, -1000 }, VECTOR2{ 2000, 2000 } },
-                SEG( VECTOR2I( 0, 0 ), VECTOR2I( 1000, 1000 ) ),
-        },
-        {
-                "Ray not in the box",
-                HALF_LINE( SEG( VECTOR2I( 1500, 0 ), VECTOR2I( 1600, 0 ) ) ),
-                BOX2I{ VECTOR2{ -1000, -1000 }, VECTOR2{ 2000, 2000 } },
-                std::nullopt,
-        },
-        {
-                "Ray starts outside but crosses box",
-                HALF_LINE( SEG( VECTOR2I( -1500, 0 ), VECTOR2I( 0, 0 ) ) ),
-                BOX2I{ VECTOR2{ -1000, -1000 }, VECTOR2{ 2000, 2000 } },
-                SEG( VECTOR2I( -1000, 0 ), VECTOR2I( 1000, 0 ) ),
-        },
-    };
-
-    for( const auto& c : cases )
+const std::vector<HalfLineBoxClipCase> ClipToBox_cases{
     {
-        BOOST_TEST_INFO( c.Description );
+            "Center to right edge",
+            HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 0 ) ) ),
+            BOX2I{ VECTOR2{ -1000, -1000 }, VECTOR2{ 2000, 2000 } },
+            SEG( VECTOR2I( 0, 0 ), VECTOR2I( 1000, 0 ) ),
+    },
+    {
+            "Centre to corner",
+            HALF_LINE( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) ),
+            BOX2I{ VECTOR2{ -1000, -1000 }, VECTOR2{ 2000, 2000 } },
+            SEG( VECTOR2I( 0, 0 ), VECTOR2I( 1000, 1000 ) ),
+    },
+    {
+            "Ray not in the box",
+            HALF_LINE( SEG( VECTOR2I( 1500, 0 ), VECTOR2I( 1600, 0 ) ) ),
+            BOX2I{ VECTOR2{ -1000, -1000 }, VECTOR2{ 2000, 2000 } },
+            std::nullopt,
+    },
+    {
+            "Ray starts outside but crosses box",
+            HALF_LINE( SEG( VECTOR2I( -1500, 0 ), VECTOR2I( 0, 0 ) ) ),
+            BOX2I{ VECTOR2{ -1000, -1000 }, VECTOR2{ 2000, 2000 } },
+            SEG( VECTOR2I( -1000, 0 ), VECTOR2I( 1000, 0 ) ),
+    },
+};
 
-        std::optional<SEG> clipped = KIGEOM::ClipHalfLineToBox( c.Hl, c.Box );
 
-        BOOST_REQUIRE( clipped.has_value() == c.ExpectedClippedSeg.has_value() );
+BOOST_DATA_TEST_CASE( ClipToBox, boost::unit_test::data::make( ClipToBox_cases ), c )
+{
+    std::optional<SEG> clipped = KIGEOM::ClipHalfLineToBox( c.Hl, c.Box );
 
-        if( !clipped )
-            continue;
+    BOOST_REQUIRE( clipped.has_value() == c.ExpectedClippedSeg.has_value() );
 
+    if( clipped )
+    {
         BOOST_CHECK_PREDICATE( GEOM_TEST::SegmentsHaveSameEndPoints,
                                ( *clipped )( *c.ExpectedClippedSeg ) );
     }

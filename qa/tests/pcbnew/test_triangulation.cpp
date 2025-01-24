@@ -22,6 +22,8 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -33,6 +35,8 @@
 #include <settings/settings_manager.h>
 
 
+namespace {
+
 struct TRIANGULATE_TEST_FIXTURE
 {
     TRIANGULATE_TEST_FIXTURE() :
@@ -43,70 +47,68 @@ struct TRIANGULATE_TEST_FIXTURE
     std::unique_ptr<BOARD> m_board;
 };
 
+const std::vector<wxString> RegressionTriangulationTests_tests = {
+        "issue2568",
+        "issue5313",
+        "issue5320",
+        "issue5567",
+        "issue5830",
+        "issue6039",
+        "issue6260",
+        "issue7086",
+        "issue14294",
+        "issue17559",
+        "bad_triangulation_case"
+};
 
-BOOST_FIXTURE_TEST_CASE( RegressionTriangulationTests, TRIANGULATE_TEST_FIXTURE )
+}; // namespace
+
+
+BOOST_DATA_TEST_CASE_F( TRIANGULATE_TEST_FIXTURE, RegressionTriangulationTests,
+                        boost::unit_test::data::make( RegressionTriangulationTests_tests ), relPath )
 {
-    std::vector<wxString> tests = {
-                                    "issue2568",
-                                    "issue5313",
-                                    "issue5320",
-                                    "issue5567",
-                                    "issue5830",
-                                    "issue6039",
-                                    "issue6260",
-                                    "issue7086",
-                                    "issue14294",
-                                    "issue17559",
-                                    "bad_triangulation_case"
-                                };
+    KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
 
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    for( const wxString& relPath : tests )
+    for( ZONE* zone : m_board->Zones() )
     {
-        KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
+        if( zone->GetIsRuleArea() )
+            continue;
 
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
-        for( ZONE* zone : m_board->Zones() )
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq())
         {
-            if( zone->GetIsRuleArea() )
+            auto poly = zone->GetFilledPolysList( layer );
+
+            if( poly->OutlineCount() == 0 )
                 continue;
 
-            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq())
+            BOOST_CHECK_MESSAGE(
+                    poly->IsTriangulationUpToDate(),
+                    "Triangulation invalid for " + relPath + " layer " + LayerName( layer )
+                            + " zone " + zone->GetFriendlyName() + " net '" + zone->GetNetname()
+                            + "' with " + std::to_string( poly->OutlineCount() )
+                            + " polygons at position " + std::to_string( poly->BBox().Centre().x )
+                            + ", " + std::to_string( poly->BBox().Centre().y ) );
+
+            double area = poly->Area();
+            double tri_area = 0.0;
+
+            for( int ii = 0; ii < poly->TriangulatedPolyCount(); ii++ )
             {
-                auto poly = zone->GetFilledPolysList( layer );
+                const auto tri_poly = poly->TriangulatedPolygon( ii );
 
-                if( poly->OutlineCount() == 0 )
-                    continue;
-
-                BOOST_CHECK_MESSAGE(
-                        poly->IsTriangulationUpToDate(),
-                        "Triangulation invalid for " + relPath + " layer " + LayerName( layer )
-                                + " zone " + zone->GetFriendlyName() + " net '" + zone->GetNetname()
-                                + "' with " + std::to_string( poly->OutlineCount() )
-                                + " polygons at position " + std::to_string( poly->BBox().Centre().x )
-                                + ", " + std::to_string( poly->BBox().Centre().y ) );
-
-                double area = poly->Area();
-                double tri_area = 0.0;
-
-                for( int ii = 0; ii < poly->TriangulatedPolyCount(); ii++ )
-                {
-                    const auto tri_poly = poly->TriangulatedPolygon( ii );
-
-                    for( const auto& tri : tri_poly->Triangles() )
-                        tri_area += tri.Area();
-                }
-
-                double diff = std::abs( area - tri_area );
-
-                // The difference should be less than 1e-3 square mm
-                BOOST_CHECK_MESSAGE( diff < 1e9,
-                                     "Triangulation area mismatch in " + relPath + " layer "
-                                             + LayerName( layer )
-                                             + " difference: " + std::to_string( diff ) );
+                for( const auto& tri : tri_poly->Triangles() )
+                    tri_area += tri.Area();
             }
+
+            double diff = std::abs( area - tri_area );
+
+            // The difference should be less than 1e-3 square mm
+            BOOST_CHECK_MESSAGE( diff < 1e9,
+                                    "Triangulation area mismatch in " + relPath + " layer "
+                                            + LayerName( layer )
+                                            + " difference: " + std::to_string( diff ) );
         }
     }
 }
-

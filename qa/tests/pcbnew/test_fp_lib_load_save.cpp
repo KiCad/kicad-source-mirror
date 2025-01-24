@@ -21,12 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <board.h>
 #include <kiid.h>
 #include <footprint.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
 #include <settings/settings_manager.h>
 
 namespace
@@ -42,6 +44,24 @@ struct FPLIB_LOAD_FP_TEST_CASE
 
     // If set, the expected number of pads in the footprint
     std::optional<unsigned> m_expectedPadCount;
+
+    // For printing the test name
+    friend std::ostream& operator<<( std::ostream& os, const FPLIB_LOAD_FP_TEST_CASE& aTestCase )
+    {
+        os << aTestCase.m_fpName;
+        return os;
+    }
+};
+
+
+const std::vector<FPLIB_LOAD_FP_TEST_CASE> FpLibLoadSave_testCases{
+    {
+            "plugins/kicad_sexpr/fp.pretty",
+            "R_0201_0603Metric",
+            20240108U,
+            // 2 SMD pads, 2 paste pads
+            4U,
+    },
 };
 
 } // namespace
@@ -53,29 +73,17 @@ struct FPLIB_LOAD_FP_TEST_CASE
  * _board files_ that contain footprints. This tests loading and saving of _footprint
  * files_, and includes at least some of the library IO code.
  */
-BOOST_AUTO_TEST_CASE( FpLibLoadSave )
+BOOST_DATA_TEST_CASE( FpLibLoadSave, boost::unit_test::data::make( FpLibLoadSave_testCases ),
+                      testCase )
 {
-    const std::vector<FPLIB_LOAD_FP_TEST_CASE> testCases{
+    const auto doFootprintTest = [&]( const FOOTPRINT& aBoard )
+    {
+        if( testCase.m_expectedPadCount )
         {
-                "plugins/kicad_sexpr/fp.pretty",
-                "R_0201_0603Metric",
-                20240108U,
-                // 2 SMD pads, 2 paste pads
-                4U,
-        },
+            BOOST_CHECK_EQUAL( aBoard.Pads().size(), *testCase.m_expectedPadCount );
+        }
     };
 
-    for( const FPLIB_LOAD_FP_TEST_CASE& testCase : testCases )
-    {
-        const auto doFootprintTest = [&]( const FOOTPRINT& aBoard )
-        {
-            if( testCase.m_expectedPadCount )
-            {
-                BOOST_CHECK_EQUAL( aBoard.Pads().size(), *testCase.m_expectedPadCount );
-            }
-        };
-
-        KI_TEST::LoadAndTestFootprintFile( testCase.m_libraryPath, testCase.m_fpName, true,
-                                           doFootprintTest, testCase.m_expectedFootprintVersion );
-    }
+    KI_TEST::LoadAndTestFootprintFile( testCase.m_libraryPath, testCase.m_fpName, true,
+                                        doFootprintTest, testCase.m_expectedFootprintVersion );
 }

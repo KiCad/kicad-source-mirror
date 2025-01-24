@@ -175,6 +175,23 @@ private:
 };
 
 
+struct BOARD_LOAD_TEST_CASE
+{
+    wxString m_BoardFileRelativePath;
+
+    // These tests may well test specific versions of the board file format,
+    // so don't let it change accidentally in the files (e.g. by resaving in newer KiCad)!
+    std::optional<int> m_ExpectedBoardVersion;
+
+    // Be default, printing the board file is sufficent to identify the test case
+    friend std::ostream& operator<<( std::ostream& os, const BOARD_LOAD_TEST_CASE& aTestCase )
+    {
+        os << aTestCase.m_BoardFileRelativePath;
+        return os;
+    }
+};
+
+
 void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
                 std::unique_ptr<BOARD>& aBoard );
 

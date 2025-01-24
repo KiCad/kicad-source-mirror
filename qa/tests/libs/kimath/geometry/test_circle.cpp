@@ -19,6 +19,8 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <geometry/circle.h>
 #include <geometry/seg.h>    // for SEG
 #include <geometry/shape.h>  // for MIN_PRECISION_IU
@@ -76,9 +78,8 @@ BOOST_AUTO_TEST_CASE( ParameterCtorMod )
 /**
  * Struct to hold test cases for a given circle, a point and an expected return boolean
  */
-struct CIR_PT_BOOL_CASE
+struct CIR_PT_BOOL_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string m_case_name;
     CIRCLE      m_circle;
     VECTOR2I    m_point;
     bool        m_exp_result;
@@ -165,26 +166,18 @@ static const std::vector<CIR_PT_BOOL_CASE> contains_cases = {
 // clang-format on
 
 
-BOOST_AUTO_TEST_CASE( Contains )
+BOOST_DATA_TEST_CASE( Contains, boost::unit_test::data::make( contains_cases ), c )
 {
-    for( const auto& c : contains_cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_case_name )
-        {
-            bool ret = c.m_circle.Contains( c.m_point );
-            BOOST_CHECK_EQUAL( ret, c.m_exp_result );
-        }
-    }
+    bool ret = c.m_circle.Contains( c.m_point );
+    BOOST_CHECK_EQUAL( ret, c.m_exp_result );
 }
-
 
 
 /**
  * Struct to hold test cases for a given circle, a point and an expected return point
  */
-struct CIR_PT_PT_CASE
+struct CIR_PT_PT_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string m_case_name;
     CIRCLE      m_circle;
     VECTOR2I    m_point;
     VECTOR2I    m_exp_result;
@@ -223,25 +216,18 @@ static const std::vector<CIR_PT_PT_CASE> nearest_point_cases = {
 // clang-format on
 
 
-BOOST_AUTO_TEST_CASE( NearestPoint )
+BOOST_DATA_TEST_CASE( NearestPoint, boost::unit_test::data::make( nearest_point_cases ), c )
 {
-    for( const auto& c : nearest_point_cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_case_name )
-        {
-            VECTOR2I ret = c.m_circle.NearestPoint( c.m_point );
-            BOOST_CHECK_EQUAL( ret, c.m_exp_result );
-        }
-    }
+    VECTOR2I ret = c.m_circle.NearestPoint( c.m_point );
+    BOOST_CHECK_EQUAL( ret, c.m_exp_result );
 }
 
 
 /**
  * Struct to hold test cases for two circles, and an vector of points
  */
-struct CIR_CIR_VECPT_CASE
+struct CIR_CIR_VECPT_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string           m_case_name;
     CIRCLE                m_circle1;
     CIRCLE                m_circle2;
     std::vector<VECTOR2I> m_exp_result;
@@ -338,24 +324,21 @@ static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
 // clang-format on
 
 
-BOOST_AUTO_TEST_CASE( IntersectCircle )
+BOOST_DATA_TEST_CASE( IntersectCircle, boost::unit_test::data::make( intersect_circle_cases ), c )
 {
-    for( const auto& c : intersect_circle_cases )
+    BOOST_TEST_CONTEXT( c.m_CaseName + " Case 1" )
     {
-        BOOST_TEST_CONTEXT( c.m_case_name + " Case 1" )
-        {
-            std::vector<VECTOR2I> ret1 = c.m_circle1.Intersect( c.m_circle2 );
-            BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret1.size() );
-            KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret1, CompareVector2I );
-        }
+        std::vector<VECTOR2I> ret1 = c.m_circle1.Intersect( c.m_circle2 );
+        BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret1.size() );
+        KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret1, CompareVector2I );
+    }
 
-        BOOST_TEST_CONTEXT( c.m_case_name + " Case 2" )
-        {
-            // Test the other direction
-            std::vector<VECTOR2I> ret2 = c.m_circle2.Intersect( c.m_circle1 );
-            BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret2.size() );
-            KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret2, CompareVector2I );
-        }
+    BOOST_TEST_CONTEXT( c.m_CaseName + " Case 2" )
+    {
+        // Test the other direction
+        std::vector<VECTOR2I> ret2 = c.m_circle2.Intersect( c.m_circle1 );
+        BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret2.size() );
+        KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret2, CompareVector2I );
     }
 }
 
@@ -363,9 +346,8 @@ BOOST_AUTO_TEST_CASE( IntersectCircle )
 /**
  * Struct to hold test cases for a circle, a line and an expected vector of points
  */
-struct SEG_SEG_VECPT_CASE
+struct SEG_SEG_VECPT_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string           m_case_name;
     CIRCLE                m_circle;
     SEG                   m_seg;
     std::vector<VECTOR2I> m_exp_result;
@@ -422,17 +404,11 @@ static const std::vector<SEG_SEG_VECPT_CASE> intersect_seg_cases = {
 // clang-format on
 
 
-BOOST_AUTO_TEST_CASE( Intersect )
+BOOST_DATA_TEST_CASE( Intersect, boost::unit_test::data::make( intersect_seg_cases ), c )
 {
-    for( const auto& c : intersect_seg_cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_case_name )
-        {
-            std::vector<VECTOR2I> ret = c.m_circle.Intersect( c.m_seg );
-            BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret.size() );
-            KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret, CompareVector2I );
-        }
-    }
+    std::vector<VECTOR2I> ret = c.m_circle.Intersect( c.m_seg );
+    BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret.size() );
+    KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret, CompareVector2I );
 }
 
 
@@ -488,17 +464,11 @@ static const std::vector<SEG_SEG_VECPT_CASE> intersect_line_cases = {
 // clang-format on
 
 
-BOOST_AUTO_TEST_CASE( IntersectLine )
+BOOST_DATA_TEST_CASE( IntersectLine, boost::unit_test::data::make( intersect_line_cases ), c )
 {
-    for( const auto& c : intersect_line_cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_case_name )
-        {
-            std::vector<VECTOR2I> ret = c.m_circle.IntersectLine( c.m_seg );
-            BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret.size() );
-            KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret, CompareVector2I );
-        }
-    }
+    std::vector<VECTOR2I> ret = c.m_circle.IntersectLine( c.m_seg );
+    BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret.size() );
+    KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret, CompareVector2I );
 }
 
 
@@ -506,9 +476,8 @@ BOOST_AUTO_TEST_CASE( IntersectLine )
 /**
  * Struct to hold test cases for two lines, a point and an expected returned circle
  */
-struct CIR_SEG_VECPT_CASE
+struct CIR_SEG_VECPT_CASE : public KI_TEST::NAMED_CASE
 {
-    std::string m_case_name;
     SEG         m_segA;
     SEG         m_segB;
     VECTOR2I    m_pt;
@@ -575,25 +544,19 @@ static const std::vector<CIR_SEG_VECPT_CASE> construct_tan_tan_pt_cases = {
 // clang-format on
 
 
-BOOST_AUTO_TEST_CASE( ConstructFromTanTanPt )
+BOOST_DATA_TEST_CASE( ConstructFromTanTanPt,
+                      boost::unit_test::data::make( construct_tan_tan_pt_cases ), c )
 {
-    for( const auto& c : construct_tan_tan_pt_cases )
-    {
-        BOOST_TEST_CONTEXT( c.m_case_name )
-        {
-            CIRCLE circle;
-            circle.ConstructFromTanTanPt( c.m_segA, c.m_segB, c.m_pt );
-            BOOST_CHECK_MESSAGE( CompareVector2I( c.m_exp_result.Center, circle.Center ),
-                                            "\nCenter point mismatch: "
-                                         << "\n    Got: " << circle.Center
-                                         << "\n    Expected: " << c.m_exp_result.Center );
+    CIRCLE circle;
+    circle.ConstructFromTanTanPt( c.m_segA, c.m_segB, c.m_pt );
+    BOOST_CHECK_MESSAGE( CompareVector2I( c.m_exp_result.Center, circle.Center ),
+                         "\nCenter point mismatch: " << "\n    Got: " << circle.Center
+                                                     << "\n    Expected: "
+                                                     << c.m_exp_result.Center );
 
-            BOOST_CHECK_MESSAGE( CompareLength( c.m_exp_result.Radius, circle.Radius ),
-                                            "\nRadius mismatch: "
-                                         << "\n    Got: " << circle.Radius
-                                         << "\n    Expected: " << c.m_exp_result.Radius );
-        }
-    }
+    BOOST_CHECK_MESSAGE( CompareLength( c.m_exp_result.Radius, circle.Radius ),
+                         "\nRadius mismatch: " << "\n    Got: " << circle.Radius
+                                               << "\n    Expected: " << c.m_exp_result.Radius );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

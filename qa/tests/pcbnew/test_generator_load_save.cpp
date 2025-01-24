@@ -21,23 +21,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
 #include <board.h>
 #include <kiid.h>
 #include <pcb_generator.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
 #include <settings/settings_manager.h>
 
 namespace
 {
-
-struct GENERATOR_LOAD_TEST_FIXTURE
-{
-    GENERATOR_LOAD_TEST_FIXTURE() {}
-};
-
-
 struct GENERATOR_LOAD_TEST_CASE
 {
     // Which one to look at in the file?
@@ -49,74 +44,65 @@ struct GENERATOR_LOAD_TEST_CASE
 };
 
 
-struct GENERATOR_LOAD_BOARD_TEST_CASE
+struct GENERATOR_LOAD_BOARD_TEST_CASE: public KI_TEST::BOARD_LOAD_TEST_CASE
 {
-    // The board to load
-    wxString m_boardFileRelativePath;
-
-    // These tests may well test specific versions of the board file format,
-    // so don't let it change accidentally!
-    int m_expectedBoardVersion;
-
     // List of images to check
     std::vector<GENERATOR_LOAD_TEST_CASE> m_generatorCases;
 };
 
+const std::vector<GENERATOR_LOAD_BOARD_TEST_CASE> GeneratorLoading_testCases{
+    {
+            "tuning_generators_load_save",
+            20231231,
+            {
+                    // From top to bottom in the board file
+                    {
+                            "4f22a815-3048-42b3-86fa-eb71720d35ae",
+                            false,
+                            "Tuning Pattern",
+                            47,
+                    },
+            },
+    },
+    {
+            // Before 20231231, 'id' was used in generator s-exprs
+            // and we need to continue to load it for compatibility
+            "tuning_generators_load_save_v20231212",
+            20231212,
+            {
+                    // From top to bottom in the board file
+                    {
+                            "4f22a815-3048-42b3-86fa-eb71720d35ae",
+                            false,
+                            "Tuning Pattern",
+                            47,
+                    },
+            },
+    },
+};
+
 } // namespace
 
-BOOST_FIXTURE_TEST_CASE( GeneratorLoading, GENERATOR_LOAD_TEST_FIXTURE )
+BOOST_DATA_TEST_CASE( GeneratorLoading, boost::unit_test::data::make( GeneratorLoading_testCases ),
+                      testCase )
 {
-    const std::vector<GENERATOR_LOAD_BOARD_TEST_CASE> testCases{
+    const auto doBoardTest = [&]( const BOARD& aBoard )
+    {
+        for( const GENERATOR_LOAD_TEST_CASE& testCase : testCase.m_generatorCases )
         {
-                "tuning_generators_load_save",
-                20231231,
-                {
-                        // From top to bottom in the board file
-                        {
-                                "4f22a815-3048-42b3-86fa-eb71720d35ae",
-                                false,
-                                "Tuning Pattern",
-                                47,
-                        },
-                },
-        },
-        {
-                // Before 20231231, 'id' was used in generator s-exprs
-                // and we need to continue to load it for compatibility
-                "tuning_generators_load_save_v20231212",
-                20231212,
-                {
-                        // From top to bottom in the board file
-                        {
-                                "4f22a815-3048-42b3-86fa-eb71720d35ae",
-                                false,
-                                "Tuning Pattern",
-                                47,
-                        },
-                },
-        },
+            BOOST_TEST_MESSAGE(
+                    "Checking for generator with UUID: " << testCase.m_searchUuid.AsString() );
+
+            const auto& generator =
+                    static_cast<PCB_GENERATOR&>( KI_TEST::RequireBoardItemWithTypeAndId(
+                            aBoard, PCB_GENERATOR_T, testCase.m_searchUuid ) );
+
+            BOOST_CHECK_EQUAL( generator.IsLocked(), testCase.m_expectedLocked );
+            BOOST_CHECK_EQUAL( generator.GetName(), testCase.m_expectedName );
+            BOOST_CHECK_EQUAL( generator.GetItems().size(), testCase.m_expectedMemberCount );
+        }
     };
 
-    for( const GENERATOR_LOAD_BOARD_TEST_CASE& testCase : testCases )
-    {
-        const auto doBoardTest = [&]( const BOARD& aBoard )
-        {
-            for( const GENERATOR_LOAD_TEST_CASE& testCase : testCase.m_generatorCases )
-            {
-                BOOST_TEST_MESSAGE(
-                        "Checking for generator with UUID: " << testCase.m_searchUuid.AsString() );
-
-                const auto& generator =
-                        static_cast<PCB_GENERATOR&>( KI_TEST::RequireBoardItemWithTypeAndId(
-                                aBoard, PCB_GENERATOR_T, testCase.m_searchUuid ) );
-
-                BOOST_CHECK_EQUAL( generator.IsLocked(), testCase.m_expectedLocked );
-                BOOST_CHECK_EQUAL( generator.GetName(), testCase.m_expectedName );
-                BOOST_CHECK_EQUAL( generator.GetItems().size(), testCase.m_expectedMemberCount );
-            }
-        };
-
-        KI_TEST::LoadAndTestBoardFile( testCase.m_boardFileRelativePath, true, doBoardTest,
-                                       testCase.m_expectedBoardVersion );
-    }
+    KI_TEST::LoadAndTestBoardFile( testCase.m_BoardFileRelativePath, true, doBoardTest,
+                                    testCase.m_ExpectedBoardVersion );
 }
