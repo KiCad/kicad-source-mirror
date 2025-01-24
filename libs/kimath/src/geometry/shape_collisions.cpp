@@ -471,7 +471,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aB, int a
 
     bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
-    if( aActual )
+    if( rv && aActual )
         *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
     return rv;
@@ -487,7 +487,7 @@ static inline bool Collide( const SHAPE_SEGMENT& aA, const SHAPE_SEGMENT& aB, in
 
     bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
-    if( aActual )
+    if( rv && aActual )
         *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
     return rv;
@@ -503,7 +503,7 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_SEGMENT
 
     bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
-    if( aActual )
+    if( rv && aActual )
         *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
     return rv;
