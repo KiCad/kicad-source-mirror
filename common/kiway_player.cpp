@@ -32,6 +32,7 @@
 #include <wx/utils.h>
 #include <wx/evtloop.h>
 #include <wx/socket.h>
+#include <core/raii.h>
 
 
 BEGIN_EVENT_TABLE( KIWAY_PLAYER, EDA_BASE_FRAME )
@@ -103,16 +104,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
         vtable and therefore cross-module capable.
     */
 
-    // This is an exception safe way to zero a pointer before returning.
-    // Yes, even though DismissModal() clears this first normally, this is
-    // here in case there's an exception before the dialog is dismissed.
-    struct NULLER
-    {
-        void*&  m_what;
-        NULLER( void*& aPtr ) : m_what( aPtr ) {}
-        ~NULLER() { m_what = nullptr; }   // indeed, set it to NULL on destruction
-    } clear_this( (void*&) m_modal_loop );
-
+    NULLER raii_nuller( (void*&) m_modal_loop );
 
     m_modal_resultant_parent = aResultantFocusWindow;
 
@@ -122,34 +114,21 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
     SetFocus();
 
     {
-        // We have to disable all frames but the modal one.
-        // wxWindowDisabler does that, but it also disables all top level windows
-        // We do not want to disable top level windows which are child of the modal one,
-        // if they are enabled.
-        // An example is an aui toolbar which was moved
-        // or a dialog or another frame or miniframe opened by the modal one.
-        wxWindowList wlist = GetChildren();
-        std::vector<wxWindow*> enabledTopLevelWindows;
+        // Using wxWindowDisabler() has two issues: it will disable top-level windows that are
+        // our *children* (such as sub-frames), and it will disable all context menus we try to
+        // put up.  Fortunatly we already had to cross this Rubicon for QuasiModal dialogs, so
+        // we re-use that strategy.
+        wxWindow* parent = GetParent();
 
-        for( unsigned ii = 0; ii < wlist.size(); ii++ )
-        {
-            if( wlist[ii]->IsTopLevel() && wlist[ii]->IsEnabled() )
-                enabledTopLevelWindows.push_back( wlist[ii] );
-        }
+        while( parent && !parent->IsTopLevel() )
+            parent = parent->GetParent();
 
-        // exception safe way to disable all top level windows except the modal one,
-        // re-enables only those that were disabled on exit
-        wxWindowDisabler toggle( this );
-
-        for( unsigned ii = 0; ii < enabledTopLevelWindows.size(); ii++ )
-            enabledTopLevelWindows[ii]->Enable( true );
+        WINDOW_DISABLER raii_parent_disabler( parent );
 
         wxGUIEventLoop event_loop;
         m_modal_loop = &event_loop;
         event_loop.Run();
-
-    }   // End of scope for some variables.
-        // End nesting before setting focus below.
+    }
 
     if( aResult )
         *aResult = m_modal_string;

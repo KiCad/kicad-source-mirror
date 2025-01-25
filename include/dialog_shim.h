@@ -30,49 +30,13 @@
 #include <kiway_holder.h>
 #include <wx/dialog.h>
 #include <map>
+#include <core/raii.h>
 
 class EDA_BASE_FRAME;
 
 class wxGridEvent;
 class wxGUIEventLoop;
 
-
-struct WINDOW_THAWER
-{
-    WINDOW_THAWER( wxWindow* aWindow )
-    {
-        m_window = aWindow;
-        m_freezeCount = 0;
-
-        while( m_window->IsFrozen() )
-        {
-            m_window->Thaw();
-            m_freezeCount++;
-        }
-    }
-
-    ~WINDOW_THAWER()
-    {
-        while( m_freezeCount > 0 )
-        {
-            m_window->Freeze();
-            m_freezeCount--;
-        }
-    }
-
-protected:
-    wxWindow* m_window;
-    int       m_freezeCount;
-};
-
-
-class WDO_ENABLE_DISABLE;
-
-// These macros are for DIALOG_SHIM only, NOT for KIWAY_PLAYER.  KIWAY_PLAYER
-// has its own support for quasi modal and its platform specific issues are different
-// than for a wxDialog.
- #define SHOWQUASIMODAL     ShowQuasiModal
- #define ENDQUASIMODAL      EndQuasiModal
 
 /**
  * Dialog helper object to sit in the inheritance tree between wxDialog and any class written
@@ -243,7 +207,7 @@ protected:
     wxGUIEventLoop*        m_qmodal_loop;  // points to nested event_loop, NULL means not qmodal
                                            // and dismissed
     bool                   m_qmodal_showing;
-    WDO_ENABLE_DISABLE*    m_qmodal_parent_disabler;
+    WINDOW_DISABLER*       m_qmodal_parent_disabler;
 
     EDA_BASE_FRAME*        m_parentFrame;
 

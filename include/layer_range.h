@@ -82,8 +82,6 @@ private:
             if( start & 1 || stop & 1 )
                 throw std::invalid_argument( "Only works for copper layers" );
 
-            m_layer_count = m_layer_count;
-
             if( stop == B_Cu || m_stop >= m_current )
                 m_reverse = false;
             else
