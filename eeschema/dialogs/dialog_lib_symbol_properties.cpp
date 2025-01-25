@@ -132,17 +132,17 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
         if( ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::ALIAS
               && aLibEntry->IsRoot() )
             || ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::PARENT
-                 && aLibEntry->IsAlias() ) )
+                 && aLibEntry->IsDerived() ) )
         {
             resetSize();
         }
     }
 
-    m_lastLayout = ( aLibEntry->IsAlias() ) ? DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::ALIAS
-                                            : DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::PARENT;
+    m_lastLayout = ( aLibEntry->IsDerived() ) ? DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::ALIAS
+                                              : DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::PARENT;
 
     m_grid->GetParent()->Layout();
-    syncControlStates( m_libEntry->IsAlias() );
+    syncControlStates( m_libEntry->IsDerived() );
     Layout();
 
     finishDialogSettings();
@@ -251,7 +251,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_FootprintFilterListBox->Append( tmp );
 
     // Populate the list of root parts for inherited objects.
-    if( m_libEntry->IsAlias() )
+    if( m_libEntry->IsDerived() )
     {
         wxArrayString symbolNames;
         wxString libName = m_Parent->GetCurLib();
@@ -341,7 +341,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
     }
 
     // Verify that the parent name is set if the symbol is inherited
-    if( m_libEntry->IsAlias() )
+    if( m_libEntry->IsDerived() )
     {
         wxString parentName = m_inheritanceSelectCombo->GetValue();
 
@@ -445,7 +445,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_libEntry->SetFields( *m_fields );
 
     // Update the parent for inherited symbols
-    if( m_libEntry->IsAlias() )
+    if( m_libEntry->IsDerived() )
     {
         wxString parentName = EscapeString( m_inheritanceSelectCombo->GetValue(), CTX_LIBID );
 
@@ -453,7 +453,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         wxString libName = m_Parent->GetCurLib();
 
         // Get the parent from the libManager based on the name set in the inheritance combo box.
-        LIB_SYMBOL* newParent = m_Parent->GetLibManager().GetAlias( parentName, libName );
+        LIB_SYMBOL* newParent = m_Parent->GetLibManager().GetSymbol( parentName, libName );
 
         // Verify that the requested parent exists
         wxCHECK( newParent, false );

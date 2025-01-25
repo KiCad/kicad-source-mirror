@@ -168,7 +168,7 @@ public:
     ///< Gets the Description field text value */
     wxString GetDescription() const override
     {
-        if( GetDescriptionField().GetText().IsEmpty() && IsAlias() )
+        if( GetDescriptionField().GetText().IsEmpty() && IsDerived() )
         {
             if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
                 return parent->GetDescription();
@@ -181,7 +181,7 @@ public:
 
     wxString GetKeyWords() const override
     {
-        if( m_keyWords.IsEmpty() && IsAlias() )
+        if( m_keyWords.IsEmpty() && IsDerived() )
         {
             if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
                 return parent->GetKeyWords();
@@ -203,7 +203,7 @@ public:
      * For symbols derived from other symbols, IsRoot() indicates no derivation.
      */
     bool IsRoot() const override { return m_parent.use_count() == 0; }
-    bool IsAlias() const { return !m_parent.expired() && m_parent.use_count() > 0; }
+    bool IsDerived() const { return !m_parent.expired() && m_parent.use_count() > 0; }
 
     const wxString GetLibraryName() const;
 
@@ -216,7 +216,7 @@ public:
 
     wxArrayString GetFPFilters() const
     {
-        if( m_fpFilters.IsEmpty() && IsAlias() )
+        if( m_fpFilters.IsEmpty() && IsDerived() )
         {
             if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
                 return parent->GetFPFilters();

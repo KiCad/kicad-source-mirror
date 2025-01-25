@@ -339,7 +339,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
 {
     std::unique_ptr< LIB_SYMBOL > retv;
 
-    if( IsAlias() )
+    if( IsDerived() )
     {
         LIB_SYMBOL_SPTR parent = m_parent.lock();
 
@@ -347,7 +347,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
                      wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
 
         // Copy the parent.
-        if( parent->IsAlias() )
+        if( parent->IsDerived() )
             retv = parent->Flatten();
         else
             retv = std::make_unique<LIB_SYMBOL>( *parent.get() );

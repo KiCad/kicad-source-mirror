@@ -1162,7 +1162,7 @@ LIB_SYMBOL* SYMBOL_EDIT_FRAME::getTargetSymbol() const
         LIB_ID libId = GetTreeLIBID();
 
         if( libId.IsValid() )
-            return m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
+            return m_libMgr->GetSymbol( libId.GetLibItemName(), libId.GetLibNickname() );
     }
 
     return m_symbol;

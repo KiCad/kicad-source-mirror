@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
 
     // only get the root
     BOOST_CHECK_EQUAL( m_part_no_data.IsRoot(), true );
-    BOOST_CHECK_EQUAL( m_part_no_data.IsAlias(), false );
+    BOOST_CHECK_EQUAL( m_part_no_data.IsDerived(), false );
     BOOST_CHECK_EQUAL( m_part_no_data.SharedPtr().use_count(), 2 );
 
     // no sub units
@@ -595,12 +595,12 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     std::unique_ptr<LIB_SYMBOL> ref = std::make_unique<LIB_SYMBOL>( *parent );
 
     std::unique_ptr<LIB_SYMBOL> child = std::make_unique<LIB_SYMBOL>( "child", parent.get() );
-    BOOST_CHECK( child->IsAlias() );
+    BOOST_CHECK( child->IsDerived() );
     BOOST_CHECK_EQUAL( child->GetInheritanceDepth(), 1 );
 
     std::unique_ptr<LIB_SYMBOL> grandChild = std::make_unique<LIB_SYMBOL>( "grandchild",
                                                                            child.get() );
-    BOOST_CHECK( grandChild->IsAlias() );
+    BOOST_CHECK( grandChild->IsDerived() );
     BOOST_CHECK_EQUAL( grandChild->GetInheritanceDepth(), 2 );
 
     BOOST_CHECK( parent->GetRootSymbol().get() == parent.get() );

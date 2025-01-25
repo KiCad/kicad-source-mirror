@@ -551,7 +551,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::DeleteSymbol( const wxString& aSymbolName )
 
         while( it1 != m_symbols.end() )
         {
-            if( it1->second->IsAlias()
+            if( it1->second->IsDerived()
               && it1->second->GetParent().lock() == rootSymbol->SharedPtr() )
             {
                 delete it1->second;

@@ -221,27 +221,27 @@ void SYMBOL_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
 }
 
 
-bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, int aUnit,
+bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, int aUnit,
                                                   int aBodyStyle )
 {
-    LIB_SYMBOL* alias = nullptr;
+    LIB_SYMBOL* symbol = nullptr;
 
     try
     {
-        alias = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( GetCurLib(), aAliasName );
+        symbol = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( GetCurLib(), aSymbolName );
     }
     catch( const IO_ERROR& ioe )
     {
         wxString msg;
 
         msg.Printf( _( "Error loading symbol %s from library '%s'." ),
-                    aAliasName,
+                    aSymbolName,
                     GetCurLib() );
         DisplayErrorMessage( this, msg, ioe.What() );
         return false;
     }
 
-    if( !alias || !LoadOneLibrarySymbolAux( alias, GetCurLib(), aUnit, aBodyStyle ) )
+    if( !symbol || !LoadOneLibrarySymbolAux( symbol, GetCurLib(), aUnit, aBodyStyle ) )
         return false;
 
     // Enable synchronized pin edit mode for symbols with interchangeable units
@@ -434,7 +434,7 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
     }
     else
     {
-        LIB_SYMBOL* parent = m_libMgr->GetAlias( parentSymbolName, lib );
+        LIB_SYMBOL* parent = m_libMgr->GetSymbol( parentSymbolName, lib );
         wxCHECK( parent, /* void */ );
         new_symbol.SetParent( parent );
 
@@ -552,7 +552,7 @@ static std::vector<LIB_SYMBOL_SPTR> GetParentChain( const LIB_SYMBOL& aSymbol )
 {
     std::vector<LIB_SYMBOL_SPTR> chain( { aSymbol.SharedPtr() } );
 
-    while( chain.back()->IsAlias() )
+    while( chain.back()->IsDerived() )
     {
         LIB_SYMBOL_SPTR parent = chain.back()->GetParent().lock();
         chain.push_back( parent );
@@ -605,7 +605,7 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
     }
 
     {
-        LIB_SYMBOL* targetSymbol = aLibMgr.GetAlias( aNewSymbolName, aNewLibraryName );
+        LIB_SYMBOL* targetSymbol = aLibMgr.GetSymbol( aNewSymbolName, aNewLibraryName );
         const std::vector<LIB_SYMBOL_SPTR> parentChainFromTarget = GetParentChain( *targetSymbol );
         const wxString                     oldSymbolName = aSymbol.GetName();
 
@@ -744,7 +744,7 @@ public:
             else
             {
                 // Get the buffered new copy in the new library (with the name we gave it)
-                LIB_SYMBOL* newParent = m_libMgr.GetAlias( newNames.back(), aNewLibName );
+                LIB_SYMBOL* newParent = m_libMgr.GetSymbol( newNames.back(), aNewLibName );
 
                 // We should have stored this already, why didn't we get it back?
                 wxASSERT( newParent );
@@ -1239,7 +1239,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
         newSymbols.emplace_back( new LIB_SYMBOL( *srcSymbol ) );
 
         // Derive from same parent.
-        if( srcSymbol->IsAlias() )
+        if( srcSymbol->IsDerived() )
         {
             if( std::shared_ptr<LIB_SYMBOL> srcParent = srcSymbol->GetParent().lock() )
                 newSymbols.back()->SetParent( srcParent.get() );
@@ -1598,7 +1598,7 @@ void SYMBOL_EDIT_FRAME::UpdateSymbolMsgPanelInfo()
 
     AppendMsgPanel( _( "Name" ), UnescapeString( msg ), 8 );
 
-    if( m_symbol->IsAlias() )
+    if( m_symbol->IsDerived() )
     {
         LIB_SYMBOL_SPTR parent = m_symbol->GetParent().lock();
 

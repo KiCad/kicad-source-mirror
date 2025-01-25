@@ -683,7 +683,7 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
     std::unique_ptr< LIB_SYMBOL > tmpSymbol;
     const LIB_SYMBOL* drawnSymbol = aSymbol;
 
-    if( aSymbol->IsAlias() )
+    if( aSymbol->IsDerived() )
     {
         tmpSymbol = aSymbol->Flatten();
         drawnSymbol = tmpSymbol.get();

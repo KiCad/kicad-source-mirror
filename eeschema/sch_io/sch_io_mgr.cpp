@@ -206,10 +206,10 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
     {
         oldFilePI->EnumerateSymbolLib( symbols, aOldFilePath, aOldFileProps );
 
-        // Copy non-aliases first, so we can build a map from symbols to newSymbols
+        // Copy non-derived symbols first, so we can build a map from symbols to newSymbols
         for( LIB_SYMBOL* symbol : symbols )
         {
-            if( symbol->IsAlias() )
+            if( symbol->IsDerived() )
                 continue;
 
             symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
@@ -218,10 +218,10 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
             symbolMap[symbol] = newSymbols.back();
         }
 
-        // Now do the aliases using the map to hook them up to their newSymbol parents
+        // Now do the derived symbols using the map to hook them up to their newSymbol parents
         for( LIB_SYMBOL* symbol : symbols )
         {
-            if( !symbol->IsAlias() )
+            if( !symbol->IsDerived() )
                 continue;
 
             symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );

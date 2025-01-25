@@ -428,8 +428,8 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
             LIB_SYMBOL_SPTR lib_match_parent;
 
-            // If it's a derive symbol, use the parent symbol to perform the pin test.
-            if( lib_match && lib_match->IsAlias() )
+            // If it's a derived symbol, use the parent symbol to perform the pin test.
+            if( lib_match && lib_match->IsDerived() )
             {
                 lib_match_parent = lib_match->GetRootSymbol();
 

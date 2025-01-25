@@ -853,16 +853,12 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
     LIB_SYMBOL* symbolToPlot = symbol;
 
     // if the symbol is an alias, then the draw items are stored in the root symbol
-    if( symbol->IsAlias() )
+    if( symbol->IsDerived() )
     {
         if(  LIB_SYMBOL_SPTR parent = symbol->GetRootSymbol() )
-        {
             symbolToPlot = parent.get();
-        }
         else
-        {
             wxCHECK( false, CLI::EXIT_CODES::ERR_UNKNOWN );
-        }
     }
 
     // iterate from unit 1, unit 0 would be "all units" which we don't want

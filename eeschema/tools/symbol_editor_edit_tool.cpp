@@ -791,7 +791,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    if( !symbol->IsAlias() )
+    if( !symbol->IsDerived() )
     {
         m_frame->ShowInfoBarError( _( "Symbol is not derived from another symbol." ) );
     }
@@ -952,7 +952,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     LIB_SYMBOL* symbol  = m_frame->GetCurSymbol();
     LIB_SYMBOL* newPart = nullptr;
 
-    if( !symbol || symbol->IsAlias() )
+    if( !symbol || symbol->IsDerived() )
         return 0;
 
     std::string clipboardData = GetClipboardUTF8();

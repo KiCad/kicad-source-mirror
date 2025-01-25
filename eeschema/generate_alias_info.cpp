@@ -224,11 +224,11 @@ protected:
         for( const SCH_FIELD* field: fields )
             fieldtable += GetHtmlFieldRow( *field );
 
-        if( m_symbol->IsAlias() )
+        if( m_symbol->IsDerived() )
         {
             std::shared_ptr<LIB_SYMBOL> parent = m_symbol->GetParent().lock();
 
-            // Append all of the unique parent fields if this is an alias.
+            // Append all of the unique parent fields if this is a derived symbol.
             if( parent )
             {
                 std::vector<SCH_FIELD*> parentFields;

@@ -216,7 +216,7 @@ public:
      */
     SYMBOL_LIB_TABLE_ROW* GetLibrary( const wxString& aLibrary ) const;
 
-    std::list<LIB_SYMBOL*> GetAliases( const wxString& aLibrary ) const;
+    std::list<LIB_SYMBOL*> EnumerateSymbols( const wxString& aLibrary ) const;
 
     /**
      * Create an empty library and adds it to the library table.
@@ -252,7 +252,7 @@ public:
      *
      * The old library buffer will be deleted and a new one created with the new name.
      */
-    bool UpdateSymbolAfterRename( LIB_SYMBOL* aSymbol, const wxString& oldAlias,
+    bool UpdateSymbolAfterRename( LIB_SYMBOL* aSymbol, const wxString& aOldSymbolName,
                                   const wxString& aLibrary );
 
     /**
@@ -265,13 +265,13 @@ public:
      *
      * It is required to save the library to have the symbol removed in the schematic editor.
      */
-    bool RemoveSymbol( const wxString& aName, const wxString& aLibrary );
+    bool RemoveSymbol( const wxString& aSymbolName, const wxString& aLibrary );
 
     /**
      * Return either an alias of a working LIB_SYMBOL copy, or alias of the original symbol if there
      * is no working copy.
      */
-    LIB_SYMBOL* GetAlias( const wxString& aAlias, const wxString& aLibrary ) const;
+    LIB_SYMBOL* GetSymbol( const wxString& aSymbolName, const wxString& aLibrary ) const;
 
     /**
      * Return the symbol copy from the buffer.
@@ -279,19 +279,19 @@ public:
      * In case it does not exist yet, the copy is created.  #SYMBOL_LIBRARY_MANAGER retains
      * the ownership.
      */
-    LIB_SYMBOL* GetBufferedSymbol( const wxString& aAlias, const wxString& aLibrary );
+    LIB_SYMBOL* GetBufferedSymbol( const wxString& aSymbolName, const wxString& aLibrary );
 
     /**
      * Return the screen used to edit a specific symbol. #SYMBOL_LIBRARY_MANAGER retains the
      * ownership.
      */
-    SCH_SCREEN* GetScreen( const wxString& aAlias, const wxString& aLibrary );
+    SCH_SCREEN* GetScreen( const wxString& aSymbolName, const wxString& aLibrary );
 
     /**
      * Return true if symbol with a specific alias exists in library (either original one or
      * buffered).
      */
-    bool SymbolExists( const wxString& aAlias, const wxString& aLibrary ) const;
+    bool SymbolExists( const wxString& aSymbolName, const wxString& aLibrary ) const;
 
     /**
      * Return true if the symbol name is already in use in the specified library.
@@ -318,9 +318,9 @@ public:
     /**
      * Return true if symbol has unsaved modifications.
      */
-    bool IsSymbolModified( const wxString& aAlias, const wxString& aLibrary ) const;
+    bool IsSymbolModified( const wxString& aSymbolName, const wxString& aLibrary ) const;
 
-    void SetSymbolModified( const wxString& aAlias, const wxString& aLibrary );
+    void SetSymbolModified( const wxString& aSymbolName, const wxString& aLibrary );
 
     /**
      * Clear the modified flag for all symbols in a library.
@@ -330,7 +330,7 @@ public:
     /**
      * Clear the modified flag for a symbol.
      */
-    bool ClearSymbolModified( const wxString& aAlias, const wxString& aLibrary ) const;
+    bool ClearSymbolModified( const wxString& aSymbolName, const wxString& aLibrary ) const;
 
     /**
      * Return true if the library is stored in a read-only file.
@@ -355,7 +355,7 @@ public:
      * @return The LIB_ID of the reverted symbol (which may be different in the case
      * of a rename)
      */
-    LIB_ID RevertSymbol( const wxString& aAlias, const wxString& aLibrary );
+    LIB_ID RevertSymbol( const wxString& aSymbolName, const wxString& aLibrary );
 
     /**
      * Revert unsaved changes for a symbol library.

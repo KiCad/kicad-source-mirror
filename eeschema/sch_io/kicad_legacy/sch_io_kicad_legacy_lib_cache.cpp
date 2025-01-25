@@ -1498,7 +1498,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
         {
             LIB_SYMBOL* symbol = entry.second;
 
-            if( symbol->IsAlias() && symbol->GetParent().lock() == aSymbol->SharedPtr() )
+            if( symbol->IsDerived() && symbol->GetParent().lock() == aSymbol->SharedPtr() )
                 aliasNames.Add( symbol->GetName() );
         }
     }
@@ -1976,7 +1976,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::DeleteSymbol( const wxString& aSymbolName )
 
         while( it1 != m_symbols.end() )
         {
-            if( it1->second->IsAlias()
+            if( it1->second->IsDerived()
               && it1->second->GetParent().lock() == rootSymbol->SharedPtr() )
             {
                 delete it1->second;

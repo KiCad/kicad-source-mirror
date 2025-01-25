@@ -107,13 +107,13 @@ LIB_SYMBOL* SCH_IO_LIB_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
                  "Pointer mismatch while attempting to remove alias entry <" + aSymbol->GetName() +
                  "> from library cache <" + m_libFileName.GetName() + ">." );
 
-    // If the symbol is a root symbol used by other symbols find the first alias that uses
+    // If the symbol is a root symbol used by other symbols find the first derived symbol that uses
     // the root symbol and make it the new root.
     if( aSymbol->IsRoot() )
     {
         for( const std::pair<const wxString, LIB_SYMBOL*>& entry : m_symbols )
         {
-            if( entry.second->IsAlias()
+            if( entry.second->IsDerived()
               && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
             {
                 firstChild = entry.second;
@@ -138,10 +138,10 @@ LIB_SYMBOL* SCH_IO_LIB_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
                 firstChild->AddDrawItem( newItem );
             }
 
-            // Reparent the remaining aliases.
+            // Reparent the remaining derived symbols.
             for( const std::pair<const wxString, LIB_SYMBOL*>& entry : m_symbols )
             {
-                if( entry.second->IsAlias()
+                if( entry.second->IsDerived()
                       && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
                 {
                     entry.second->SetParent( firstChild );

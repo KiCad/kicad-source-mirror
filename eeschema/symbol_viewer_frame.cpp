@@ -957,8 +957,8 @@ const BOX2I SYMBOL_VIEWER_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) c
     }
     else
     {
-        std::shared_ptr<LIB_SYMBOL> tmp = symbol->IsAlias() ? symbol->GetParent().lock()
-                                                            : symbol->SharedPtr();
+        std::shared_ptr<LIB_SYMBOL> tmp = symbol->IsDerived() ? symbol->GetParent().lock()
+                                                              : symbol->SharedPtr();
 
         wxCHECK( tmp, BOX2I( VECTOR2I( -200, -200 ), VECTOR2I( 400, 400 ) ) );
 

@@ -447,12 +447,12 @@ private:
      * Load a symbol from the current active library, optionally setting the selected unit
      * and convert.
      *
-     * @param aAliasName The symbol alias name to load from the current library.
+     * @param aSymbolName The symbol alias name to load from the current library.
      * @param aUnit Unit to be selected
      * @param aBodyStyle Convert to be selected
      * @return true if the symbol loaded correctly.
      */
-    bool LoadSymbolFromCurrentLib( const wxString& aAliasName, int aUnit = 0, int aBodyStyle = 0 );
+    bool LoadSymbolFromCurrentLib( const wxString& aSymbolName, int aUnit = 0, int aBodyStyle = 0 );
 
     /**
      * Create a copy of \a aLibEntry into memory.
