@@ -79,6 +79,8 @@ LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wx
                     SCH_IO* plugin = SCH_IO_MGR::FindPlugin( type );
                     wxCHECK( plugin, tl::unexpected( LIBRARY_ERROR( _( "Internal error" ) ) ) );
 
+                    plugin->SetLibraryManagerAdapter( this );
+
                     std::lock_guard lock( aMutex );
 
                     aTarget[ row->Nickname() ].row = row;
@@ -90,8 +92,6 @@ LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wx
                     return &aTarget.at( aNickname );
                 }
 
-                wxLogTrace( traceLibraries, "Library %s not found in library table (%s)",
-                            aNickname, magic_enum::enum_name( aScope ) );
                 return nullptr;
             }
 
@@ -388,4 +388,21 @@ std::vector<std::pair<wxString, LIB_STATUS>> SYMBOL_LIBRARY_MANAGER_ADAPTER::Get
     }
 
     return ret;
+}
+
+
+int SYMBOL_LIBRARY_MANAGER_ADAPTER::GetModifyHash() const
+{
+    int hash = 0;
+
+    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
+    {
+        if( std::optional<const LIB_DATA*> result = fetchIfLoaded( row->Nickname() );
+            const LIB_DATA* rowData = *result )
+        {
+            hash += rowData->plugin->GetModifyHash();
+        }
+    }
+
+    return hash;
 }

@@ -98,6 +98,8 @@ public:
 
     ~LIBRARY_MANAGER_ADAPTER() override = default;
 
+    virtual int GetModifyHash() const { return 0; };
+
 protected:
 
     virtual void doPreload() = 0;

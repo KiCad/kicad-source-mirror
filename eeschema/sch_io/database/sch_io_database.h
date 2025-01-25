@@ -28,6 +28,7 @@
 #include <optional>
 
 
+class LIBRARY_MANAGER_ADAPTER;
 class DATABASE_LIB_SETTINGS;
 struct DATABASE_LIB_TABLE;
 
@@ -76,9 +77,9 @@ public:
     // Database libraries can never be written using the symbol editing API
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
-    void SetLibTable( SYMBOL_LIB_TABLE* aTable ) override
+    void SetLibraryManagerAdapter( SYMBOL_LIBRARY_MANAGER_ADAPTER* aAdapter ) override
     {
-        m_libTable = aTable;
+        m_adapter = aAdapter;
     }
 
     DATABASE_LIB_SETTINGS* Settings() const { return m_settings.get(); }
@@ -100,7 +101,7 @@ private:
 
     static std::optional<bool> boolFromAny( const std::any& aVal );
 
-    SYMBOL_LIB_TABLE* m_libTable;
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* m_adapter;
 
     std::unique_ptr<DATABASE_LIB_SETTINGS> m_settings;
 

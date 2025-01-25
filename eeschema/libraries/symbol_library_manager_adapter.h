@@ -161,6 +161,8 @@ public:
 
     static std::optional<SCH_IO_MGR::SCH_FILE_T> ParseLibType( const wxString& aType );
 
+    int GetModifyHash() const override;
+
 protected:
 
     void doPreload() override {}

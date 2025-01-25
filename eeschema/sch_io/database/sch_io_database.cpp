@@ -26,9 +26,11 @@
 
 #include <boost/algorithm/string.hpp>
 
+#include <libraries/symbol_library_manager_adapter.h>
 #include <database/database_connection.h>
 #include <database/database_lib_settings.h>
 #include <fmt.h>
+#include <ki_exception.h>
 #include <lib_symbol.h>
 #include <lib_id.h>
 #include <symbol_lib_table.h>
@@ -36,8 +38,11 @@
 #include "sch_io_database.h"
 
 
-SCH_IO_DATABASE::SCH_IO_DATABASE() : SCH_IO( wxS( "Database library" ) ),
-        m_libTable( nullptr ),
+
+
+SCH_IO_DATABASE::SCH_IO_DATABASE() :
+        SCH_IO( wxS( "Database library" ) ),
+        m_adapter( nullptr ),
         m_settings(),
         m_conn()
 {
@@ -67,7 +72,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                           const wxString&           aLibraryPath,
                                           const std::map<std::string, UTF8>*         aProperties )
 {
-    wxCHECK_RET( m_libTable, "Database plugin missing library table handle!" );
+    wxCHECK_RET( m_adapter, "Database plugin missing library manager adapter handle!" );
     ensureSettings( aLibraryPath );
     ensureConnection();
     cacheLib();
@@ -91,7 +96,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
                                          const wxString&   aAliasName,
                                          const std::map<std::string, UTF8>* aProperties )
 {
-    wxCHECK( m_libTable, nullptr );
+    wxCHECK_MSG( m_adapter, nullptr, "Database plugin missing library manager adapter handle!" );
     ensureSettings( aLibraryPath );
     ensureConnection();
 
@@ -219,7 +224,7 @@ void SCH_IO_DATABASE::cacheLib()
 {
     long long currentTimestampSeconds = wxDateTime::Now().GetValue().GetValue() / 1000;
 
-    if( m_libTable->GetModifyHash() == m_cacheModifyHash
+    if( m_adapter->GetModifyHash() == m_cacheModifyHash
         && ( currentTimestampSeconds - m_cacheTimestamp ) < m_settings->m_Cache.max_age )
     {
         return;
@@ -269,7 +274,7 @@ void SCH_IO_DATABASE::cacheLib()
     m_sanitizedNameMap = std::move( newSanitizedNameMap );
 
     m_cacheTimestamp = currentTimestampSeconds;
-    m_cacheModifyHash = m_libTable->GetModifyHash();
+    m_cacheModifyHash = m_adapter->GetModifyHash();
 }
 
 void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
@@ -455,7 +460,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         symbolId.Parse( std::any_cast<std::string>( aRow.at( aTable.symbols_col ) ) );
 
         if( symbolId.IsValid() )
-            originalSymbol = m_libTable->LoadSymbol( symbolId );
+            originalSymbol = m_adapter->LoadSymbol( symbolId );
 
         if( originalSymbol )
         {

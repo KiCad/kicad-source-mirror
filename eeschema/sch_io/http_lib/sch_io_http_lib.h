@@ -27,6 +27,8 @@
 #include <sch_io/sch_io_mgr.h>
 #include <wildcards_and_files_ext.h>
 
+class LIBRARY_MANAGER_ADAPTER;
+
 /**
  * A KiCad HTTP library provides both symbol and footprint metadata, so there are "shim" plugins
  * on both the symbol and footprint side of things that expose the database contents to the
@@ -68,7 +70,10 @@ public:
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
-    void SetLibTable( SYMBOL_LIB_TABLE* aTable ) override { m_libTable = aTable; }
+    void SetLibraryManagerAdapter( SYMBOL_LIBRARY_MANAGER_ADAPTER* aAdapter ) override
+    {
+        m_adapter = aAdapter;
+    }
 
     HTTP_LIB_SETTINGS* Settings() const { return m_settings.get(); }
 
@@ -92,7 +97,7 @@ private:
                                     const HTTP_LIB_PART& aPart );
 
 private:
-    SYMBOL_LIB_TABLE*                    m_libTable;
+    SYMBOL_LIBRARY_MANAGER_ADAPTER*      m_adapter;
 
     /// Generally will be null if no valid connection is established
     std::unique_ptr<HTTP_LIB_CONNECTION> m_conn;

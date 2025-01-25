@@ -32,6 +32,8 @@
 #include <i18n_utility.h>
 #include <wx/arrstr.h>
 
+class SYMBOL_LIBRARY_MANAGER_ADAPTER;
+
 /**
  * Base class that schematic file and library loading and saving plugins should derive from.
  * Implementations can provide either LoadSchematicFile() or SaveSchematicFile() functions,
@@ -351,10 +353,10 @@ public:
     virtual const wxString& GetError() const;
 
     /**
-     * Some library plugins need to have access to their parent library table.
-     * @param aTable is the table this plugin is registered within.
+     * Some library plugins need to interface with other loaded libraries.
+     * To do this, they receive a reference to the project-specific manager adapter.
      */
-    virtual void SetLibTable( SYMBOL_LIB_TABLE* aTable ) {}
+    virtual void SetLibraryManagerAdapter( SYMBOL_LIBRARY_MANAGER_ADAPTER* aAdapter ) {}
 
     //-----</PUBLIC SCH_IO API>------------------------------------------------
 

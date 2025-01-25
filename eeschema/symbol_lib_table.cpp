@@ -81,7 +81,6 @@ bool SYMBOL_LIB_TABLE_ROW::Refresh()
 
         plugin.reset( SCH_IO_MGR::FindPlugin( type ) );
         SetLoaded( false );
-        plugin->SetLibTable( static_cast<SYMBOL_LIB_TABLE*>( GetParent() ) );
         plugin->EnumerateSymbolLib( dummyList, GetFullURI( true ), GetProperties() );
         SetLoaded( true );
         return true;
@@ -366,8 +365,6 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname, bool
     if( !row->plugin )
         row->setPlugin( SCH_IO_MGR::FindPlugin( row->type ) );
 
-    row->plugin->SetLibTable( this );
-
     return row;
 }
 
@@ -388,7 +385,6 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
         row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
 
     row->SetLoaded( false );
-    row->plugin->SetLibTable( this );
     row->plugin->EnumerateSymbolLib( aSymbolList, row->GetFullURI( true ), row->GetProperties() );
     row->SetLoaded( true );
 
