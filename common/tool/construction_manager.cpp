@@ -67,7 +67,7 @@ public:
         }
     }
 
-    void ProposeActivation( T&& aProposal, std::size_t aProposalTag )
+    void ProposeActivation( T&& aProposal, std::size_t aProposalTag, bool aAcceptImmediately )
     {
         std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -86,7 +86,11 @@ public:
 
         m_pendingProposalTag = aProposalTag;
         m_lastProposal = std::move( aProposal );
-        m_proposalDeadline = std::chrono::steady_clock::now() + m_timeout;
+        m_proposalDeadline = std::chrono::steady_clock::now();
+
+        if( !aAcceptImmediately )
+            m_proposalDeadline += m_timeout;
+
         m_cv.notify_all();
     }
 
@@ -224,25 +228,42 @@ void CONSTRUCTION_MANAGER::ProposeConstructionItems(
         return;
     }
 
-    auto pendingBatch = std::make_unique<PENDING_BATCH>( PENDING_BATCH{ std::move( *aBatch ),
-                                                                        aIsPersistent } );
+    bool acceptImmediately = false;
 
-    if( aIsPersistent )
     {
-        // If the batch is persistent, we can accept it immediately
-        acceptConstructionItems( std::move( pendingBatch ) );
+        std::lock_guard<std::mutex> lock( m_batchesMutex );
+
+        if( aIsPersistent )
+        {
+            acceptImmediately = true;
+        }
+        else
+        {
+            // If the batch is temporary, we can accept it immediately if there's room
+            acceptImmediately = m_temporaryConstructionBatches.size() < getMaxTemporaryBatches();
+        }
     }
-    else
-    {
-        const std::size_t hash = HashConstructionBatchSources( pendingBatch->Batch, aIsPersistent );
-        m_activationHelper->ProposeActivation( std::move( pendingBatch ), hash );
-    }
+
+    auto pendingBatch =
+            std::make_unique<PENDING_BATCH>( PENDING_BATCH{ std::move( *aBatch ), aIsPersistent } );
+    const std::size_t hash = HashConstructionBatchSources( pendingBatch->Batch, aIsPersistent );
+
+    // Immediate or not, propose the batch via the activation helper as this handles duplicates
+    m_activationHelper->ProposeActivation( std::move( pendingBatch ), hash, acceptImmediately );
 }
 
 
 void CONSTRUCTION_MANAGER::CancelProposal()
 {
     m_activationHelper->CancelProposal();
+}
+
+
+unsigned CONSTRUCTION_MANAGER::getMaxTemporaryBatches() const
+{
+    // We only keep up to one previous temporary batch and the current one
+    // we could make this a setting if we want to keep more, but it gets cluttered
+    return 2;
 }
 
 
@@ -289,11 +310,7 @@ void CONSTRUCTION_MANAGER::acceptConstructionItems( std::unique_ptr<PENDING_BATC
                 return;
             }
 
-            // We only keep up to one previous temporary batch and the current one
-            // we could make this a setting if we want to keep more, but it gets cluttered
-            const int maxTempItems = 2;
-
-            while( m_temporaryConstructionBatches.size() >= maxTempItems )
+            while( m_temporaryConstructionBatches.size() >= getMaxTemporaryBatches() )
             {
                 m_temporaryConstructionBatches.pop_front();
             }

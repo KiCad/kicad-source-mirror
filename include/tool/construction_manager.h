@@ -201,6 +201,13 @@ private:
 
     void acceptConstructionItems( std::unique_ptr<PENDING_BATCH> aAcceptedBatchHash );
 
+    /**
+     * How many batches of temporary construction items can be active at once.
+     *
+     * This is to prevent too much clutter.
+     */
+    unsigned getMaxTemporaryBatches() const;
+
     CONSTRUCTION_VIEW_HANDLER& m_viewHandler;
 
     /// Within one "operation", there is one set of construction items that are
