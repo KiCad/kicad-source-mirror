@@ -903,9 +903,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     // Only vias on a external copper layer can have a solder mask
                     PCB_LAYER_ID copper_layer = layer == F_Mask ? F_Cu : B_Cu;
 
-                    if( track->Type() == PCB_VIA_T
-                            && !static_cast<const PCB_VIA*>( track )->FlashLayer( copper_layer ) )
-                        continue;
+                    if( track->Type() == PCB_VIA_T )
+                    {
+                        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+
+                        if( !via->FlashLayer( copper_layer ) )
+                            continue;
+                    }
 
                     int maskExpansion = track->GetSolderMaskExpansion();
                     createTrackWithMargin( track, layerContainer, layer, maskExpansion );
