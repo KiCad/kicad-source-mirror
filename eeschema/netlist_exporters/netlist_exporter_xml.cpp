@@ -29,7 +29,6 @@
 #include <common.h>     // for ExpandTextVars
 #include <sch_base_frame.h>
 #include <sch_group.h>
-#include <symbol_library.h>
 #include <string_utils.h>
 #include <connection_graph.h>
 #include <core/kicad_algo.h>

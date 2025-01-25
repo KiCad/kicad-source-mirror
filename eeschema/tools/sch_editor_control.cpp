@@ -62,7 +62,6 @@
 #include <sch_commit.h>
 #include <sim/simulator_frame.h>
 #include <symbol_lib_table.h>
-#include <symbol_library.h>
 #include <symbol_library_manager.h>
 #include <symbol_viewer_frame.h>
 #include <tool/picker_tool.h>

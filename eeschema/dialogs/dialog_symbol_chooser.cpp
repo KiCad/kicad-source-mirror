@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <symbol_library.h>
 #include <dialog_symbol_chooser.h>
 #include <widgets/panel_symbol_chooser.h>
 #include <eeschema_settings.h>

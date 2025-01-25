@@ -32,7 +32,6 @@
 #include <sch_validators.h>
 #include <validators.h>
 #include <sch_edit_frame.h>
-#include <symbol_library.h>
 #include <schematic.h>
 #include <template_fieldnames.h>
 #include <widgets/grid_text_button_helpers.h>

@@ -32,7 +32,7 @@
 #include <wx_filename.h>
 #include "widgets/wx_html_report_panel.h"
 
-#include <symbol_library.h>
+#include <libraries/legacy_symbol_library.h>
 #include <core/kicad_algo.h>
 #include <symbol_viewer_frame.h>
 #include <project_rescue.h>
@@ -138,20 +138,20 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     wxString paths;
     wxArrayString libNames;
 
-    SYMBOL_LIBS::SetLibNamesAndPaths( &Prj(), paths, libNames );
+    LEGACY_SYMBOL_LIBS::SetLibNamesAndPaths( &Prj(), paths, libNames );
 
     // Reload the cache symbol library.
     Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
-    PROJECT_SCH::SchLibs( &Prj() );
+    PROJECT_SCH::LegacySchLibs( &Prj() );
 
     Raise();
     m_remapped = true;
 }
 
 
-size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< SYMBOL_LIB* >& aLibs )
+size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< LEGACY_SYMBOL_LIB* >& aLibs )
 {
-    for( SYMBOL_LIB& lib : *PROJECT_SCH::SchLibs( &Prj() ) )
+    for( LEGACY_SYMBOL_LIB& lib : *PROJECT_SCH::LegacySchLibs( &Prj() ) )
     {
         // Ignore the cache library.
         if( lib.IsCache() )
@@ -170,7 +170,7 @@ size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< SYMBO
 
 void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 {
-    std::vector<SYMBOL_LIB*> libs;
+    std::vector<LEGACY_SYMBOL_LIB*> libs;
 
     if( getLibsNotInGlobalSymbolLibTable( libs ) )
     {
@@ -178,7 +178,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
         SYMBOL_LIB_TABLE      libTable;
         std::vector<wxString> libNames = SYMBOL_LIB_TABLE::GetGlobalLibTable().GetLogicalLibs();
 
-        for( SYMBOL_LIB* lib : libs )
+        for( LEGACY_SYMBOL_LIB* lib : libs )
         {
             wxString libName = lib->GetName();
             int libNameInc = 1;
@@ -297,7 +297,7 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
     wxCHECK_MSG( !aSymbol->GetLibId().GetLibItemName().empty(), false,
                  "The symbol LIB_ID name is empty." );
 
-    for( SYMBOL_LIB& lib : *PROJECT_SCH::SchLibs( &Prj() ) )
+    for( LEGACY_SYMBOL_LIB& lib : *PROJECT_SCH::LegacySchLibs( &Prj() ) )
     {
         // Ignore the cache library.
         if( lib.IsCache() )

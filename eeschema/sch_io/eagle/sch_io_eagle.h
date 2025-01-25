@@ -48,7 +48,7 @@ class SCH_GLOBALLABEL;
 class SCH_SYMBOL;
 class SCH_FIELD;
 class LIB_SYMBOL;
-class SYMBOL_LIB;
+class LEGACY_SYMBOL_LIB;
 class SCH_PIN;
 class wxXmlNode;
 

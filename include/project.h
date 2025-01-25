@@ -44,7 +44,7 @@
 
 class DESIGN_BLOCK_LIB_TABLE;
 class FP_LIB_TABLE;
-class SYMBOL_LIBS;
+class LEGACY_SYMBOL_LIBS;
 class SEARCH_STACK;
 class S3D_CACHE;
 class KIWAY;

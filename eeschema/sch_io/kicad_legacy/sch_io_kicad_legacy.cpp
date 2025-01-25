@@ -60,7 +60,7 @@
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.h>
 #include <sch_screen.h>
 #include <schematic.h>
-#include <symbol_library.h>
+#include <libraries/legacy_symbol_library.h>
 #include <symbol_lib_table.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <tool/selection.h>

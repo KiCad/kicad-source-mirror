@@ -23,7 +23,7 @@
  */
 
 #include <sch_draw_panel.h>
-#include <symbol_library.h>
+#include <libraries/legacy_symbol_library.h>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <invoke_sch_dialog.h>
@@ -83,11 +83,11 @@ static void getSymbols( SCHEMATIC* aSchematic, std::vector<SCH_SYMBOL*>& aSymbol
  * @param aLibs - the loaded SYMBOL_LIBS
  * @param aCached - whether we are looking for the cached symbol
  */
-static LIB_SYMBOL* findSymbol( const wxString& aName, SYMBOL_LIBS* aLibs, bool aCached )
+static LIB_SYMBOL* findSymbol( const wxString& aName, LEGACY_SYMBOL_LIBS* aLibs, bool aCached )
 {
     LIB_SYMBOL *symbol = nullptr;
 
-    for( SYMBOL_LIB& each_lib : *aLibs )
+    for( LEGACY_SYMBOL_LIB& each_lib : *aLibs )
     {
         if( aCached && !each_lib.IsCache() )
             continue;
@@ -145,13 +145,13 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer, boost::ptr_vector<RE
 
             LIB_ID id( wxEmptyString, symbol_name );
 
-            case_sensitive_match = PROJECT_SCH::SchLibs( aRescuer.GetPrj() )->FindLibSymbol( id );
+            case_sensitive_match = PROJECT_SCH::LegacySchLibs( aRescuer.GetPrj() )->FindLibSymbol( id );
 
             if( case_sensitive_match )
                 continue;
 
             // If the case sensitive match failed, try a case insensitive match.
-            PROJECT_SCH::SchLibs( aRescuer.GetPrj() )
+            PROJECT_SCH::LegacySchLibs( aRescuer.GetPrj() )
                             ->FindLibraryNearEntries( case_insensitive_matches, symbol_name );
 
             // If there are not case insensitive matches either, the symbol cannot be rescued.
@@ -225,8 +225,8 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer, boost::ptr_vector<R
             // A new symbol name is found (a new group starts here).
             // Search the symbol names candidates only once for this group:
             old_symbol_name = symbol_name;
-            cache_match = findSymbol( symbol_name, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), true );
-            lib_match = findSymbol( symbol_name, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), false );
+            cache_match = findSymbol( symbol_name, PROJECT_SCH::LegacySchLibs( aRescuer.GetPrj() ), true );
+            lib_match = findSymbol( symbol_name, PROJECT_SCH::LegacySchLibs( aRescuer.GetPrj() ), false );
 
             // At some point during V5 development, the LIB_ID delimiter character ':' was
             // replaced by '_' when writing the symbol cache library so we have to test for
@@ -236,7 +236,8 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer, boost::ptr_vector<R
                 wxString tmp = wxString::Format( wxT( "%s-%s" ),
                                                  eachSymbol->GetLibId().GetLibNickname().wx_str(),
                                                  eachSymbol->GetLibId().GetLibItemName().wx_str() );
-                cache_match = findSymbol( tmp, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), true );
+                cache_match = findSymbol( tmp, PROJECT_SCH::LegacySchLibs( aRescuer.GetPrj() ),
+                                          true );
             }
 
             // Test whether there is a conflict or if the symbol can only be found in the cache
@@ -366,7 +367,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
             // Get the library symbol from the cache library.  It will be a flattened
             // symbol by default (no inheritance).
-            cache_match = findSymbol( symbolName, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), true );
+            cache_match = findSymbol( symbolName, PROJECT_SCH::LegacySchLibs( aRescuer.GetPrj() ), true );
 
             // At some point during V5 development, the LIB_ID delimiter character ':' was
             // replaced by '_' when writing the symbol cache library so we have to test for
@@ -376,7 +377,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
                 symbolName.Printf( wxT( "%s-%s" ),
                                    symbol_id.GetLibNickname().wx_str(),
                                    symbol_id.GetLibItemName().wx_str() );
-                cache_match = findSymbol( symbolName, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), true );
+                cache_match = findSymbol( symbolName, PROJECT_SCH::LegacySchLibs( aRescuer.GetPrj() ), true );
             }
 
             // Get the library symbol from the symbol library table.
@@ -634,15 +635,15 @@ void LEGACY_RESCUER::OpenRescueLibrary()
 {
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
-    std::unique_ptr<SYMBOL_LIB> rescue_lib =
-            std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA, fn.GetFullPath() );
+    std::unique_ptr<LEGACY_SYMBOL_LIB> rescue_lib =
+            std::make_unique<LEGACY_SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA, fn.GetFullPath() );
 
     m_rescue_lib = std::move( rescue_lib );
     m_rescue_lib->EnableBuffering();
 
     // If a rescue library already exists copy the contents of that library so we do not
     // lose any previous rescues.
-    SYMBOL_LIB* rescueLib = PROJECT_SCH::SchLibs( m_prj )->FindLibrary( fn.GetName() );
+    LEGACY_SYMBOL_LIB* rescueLib = PROJECT_SCH::LegacySchLibs( m_prj )->FindLibrary( fn.GetName() );
 
     if( rescueLib )
     {
@@ -677,17 +678,17 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     wxString libPaths;
 
     wxString libName = m_rescue_lib->GetName();
-    SYMBOL_LIBS* libs = dynamic_cast<SYMBOL_LIBS*>( m_prj->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS ) );
+    LEGACY_SYMBOL_LIBS* libs = dynamic_cast<LEGACY_SYMBOL_LIBS*>( m_prj->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS ) );
 
     if( !libs )
     {
-        libs = new SYMBOL_LIBS();
+        libs = new LEGACY_SYMBOL_LIBS();
         m_prj->SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, libs );
     }
 
     try
     {
-        SYMBOL_LIBS::GetLibNamesAndPaths( m_prj, &libPaths, &libNames );
+        LEGACY_SYMBOL_LIBS::GetLibNamesAndPaths( m_prj, &libPaths, &libNames );
 
         // Make sure the library is not already in the list
         while( libNames.Index( libName ) != wxNOT_FOUND )
@@ -695,7 +696,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
         // Add the library to the top of the list and save.
         libNames.Insert( libName, 0 );
-        SYMBOL_LIBS::SetLibNamesAndPaths( m_prj, libPaths, libNames );
+        LEGACY_SYMBOL_LIBS::SetLibNamesAndPaths( m_prj, libPaths, libNames );
     }
     catch( const IO_ERROR& )
     {
@@ -705,12 +706,12 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
     // Save the old libraries in case there is a problem after clear(). We'll
     // put them back in.
-    boost::ptr_vector<SYMBOL_LIB> libsSave;
+    boost::ptr_vector<LEGACY_SYMBOL_LIB> libsSave;
     libsSave.transfer( libsSave.end(), libs->begin(), libs->end(), *libs );
 
     m_prj->SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
 
-    libs = new SYMBOL_LIBS();
+    libs = new LEGACY_SYMBOL_LIBS();
 
     try
     {

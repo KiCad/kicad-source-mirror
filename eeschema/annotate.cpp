@@ -31,7 +31,6 @@
 #include <sch_commit.h>
 #include <erc/erc_settings.h>
 #include <sch_reference_list.h>
-#include <symbol_library.h>
 #include <tools/sch_selection.h>
 #include <tools/sch_selection_tool.h>
 #include <tool/tool_manager.h>

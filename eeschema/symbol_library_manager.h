@@ -37,7 +37,7 @@
 #include <sch_screen.h>
 
 class LIB_SYMBOL;
-class SYMBOL_LIB;
+class LEGACY_SYMBOL_LIB;
 class PROGRESS_REPORTER;
 class SCH_IO;
 class SCH_BASE_FRAME;

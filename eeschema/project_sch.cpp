@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <symbol_library.h>
 #include <confirm.h>
 #include <dialogs/html_message_box.h>
 #include <kiface_base.h>
@@ -26,6 +25,7 @@
 #include <core/utf8.h>
 #include <symbol_lib_table.h>
 #include <project_sch.h>
+#include <libraries/legacy_symbol_library.h>
 #include <libraries/symbol_library_manager_adapter.h>
 
 static std::mutex s_symbolTableMutex;
@@ -60,7 +60,7 @@ SEARCH_STACK* PROJECT_SCH::SchSearchS( PROJECT* aProject )
 
         try
         {
-            SYMBOL_LIBS::GetLibNamesAndPaths( aProject, &libDir );
+            LEGACY_SYMBOL_LIBS::GetLibNamesAndPaths( aProject, &libDir );
         }
         catch( const IO_ERROR& )
         {
@@ -88,15 +88,15 @@ SEARCH_STACK* PROJECT_SCH::SchSearchS( PROJECT* aProject )
 }
 
 
-SYMBOL_LIBS* PROJECT_SCH::SchLibs( PROJECT* aProject )
+LEGACY_SYMBOL_LIBS* PROJECT_SCH::LegacySchLibs( PROJECT* aProject )
 {
-    SYMBOL_LIBS* libs = (SYMBOL_LIBS*) aProject->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS );
+    LEGACY_SYMBOL_LIBS* libs = (LEGACY_SYMBOL_LIBS*) aProject->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS );
 
     wxASSERT( !libs || libs->ProjectElementType() == PROJECT::ELEM::SCH_SYMBOL_LIBS );
 
     if( !libs )
     {
-        libs = new SYMBOL_LIBS();
+        libs = new LEGACY_SYMBOL_LIBS();
 
         // Make PROJECT the new SYMBOL_LIBS owner.
         aProject->SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, libs );

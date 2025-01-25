@@ -369,7 +369,6 @@ set( EESCHEMA_SRCS
     junction_helpers.cpp
     lib_fields_data_model.cpp
     lib_symbol.cpp
-    libarch.cpp
     menubar.cpp
     net_navigator.cpp
     picksymbol.cpp
@@ -423,7 +422,7 @@ set( EESCHEMA_SRCS
     symbol_checker.cpp
     symbol_chooser_frame.cpp
     symbol_lib_table.cpp
-    symbol_library.cpp
+
     symbol_library_manager.cpp
     symbol_tree_model_adapter.cpp
     symbol_tree_synchronizing_adapter.cpp
@@ -434,6 +433,7 @@ set( EESCHEMA_SRCS
 
     api/api_sch_utils.cpp
 
+    libraries/legacy_symbol_library.cpp
     libraries/symbol_library_manager_adapter.cpp
 
     netlist_exporters/netlist_exporter_allegro.cpp

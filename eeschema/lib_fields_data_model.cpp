@@ -25,7 +25,6 @@
 #include <widgets/wx_grid.h>
 #include <sch_reference_list.h>
 #include <schematic_settings.h>
-#include <symbol_library.h>
 #include "string_utils.h"
 #include <trace_helpers.h>
 

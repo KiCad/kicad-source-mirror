@@ -24,7 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <symbol_library.h>
 #include <confirm.h>
 #include <common.h>
 #include <connection_graph.h>
@@ -35,6 +34,7 @@
 #include <id.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
+#include <libraries/legacy_symbol_library.h>
 #include <lockfile.h>
 #include <pgm_base.h>
 #include <core/profile.h>
@@ -203,7 +203,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // And when a schematic file is loaded, we need these libs to initialize
             // some parameters (links to PART LIB, dangling ends ...)
             Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
-            PROJECT_SCH::SchLibs( &Prj() );
+            PROJECT_SCH::LegacySchLibs( &Prj() );
         }
     }
     else
@@ -482,7 +482,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 wxString paths;
                 wxArrayString libNames;
 
-                SYMBOL_LIBS::GetLibNamesAndPaths( &Prj(), &paths, &libNames );
+                LEGACY_SYMBOL_LIBS::GetLibNamesAndPaths( &Prj(), &paths, &libNames );
 
                 if( !libNames.IsEmpty() )
                 {
@@ -506,7 +506,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
                     libNames.Clear();
                     paths.Clear();
-                    SYMBOL_LIBS::SetLibNamesAndPaths( &Prj(), paths, libNames );
+                    LEGACY_SYMBOL_LIBS::SetLibNamesAndPaths( &Prj(), paths, libNames );
                 }
 
                 if( !cfg || !cfg->m_RescueNeverShow )
@@ -517,7 +517,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
 
             // Ensure there is only one legacy library loaded and that it is the cache library.
-            SYMBOL_LIBS* legacyLibs = PROJECT_SCH::SchLibs( &Schematic().Project() );
+            LEGACY_SYMBOL_LIBS* legacyLibs = PROJECT_SCH::LegacySchLibs( &Schematic().Project() );
 
             if( legacyLibs->GetLibraryCount() == 0 )
             {

@@ -29,7 +29,6 @@
 #include <io/eagle/eagle_parser.h>
 #include <symbol_lib_table.h>
 #include <symbol_edit_frame.h>
-#include <symbol_library.h>
 #include <wildcards_and_files_ext.h>
 #include <lib_symbol_library_manager.h>
 #include <wx/filename.h>

@@ -38,7 +38,6 @@
 #include <widgets/std_bitmap_button.h>
 #include <settings/settings_manager.h>
 #include <sch_collectors.h>
-#include <symbol_library.h>
 #include <fields_grid_table.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>

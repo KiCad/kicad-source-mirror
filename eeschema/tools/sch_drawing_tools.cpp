@@ -61,7 +61,7 @@
 #include <schematic.h>
 #include <sch_commit.h>
 #include <scoped_set_reset.h>
-#include <symbol_library.h>
+#include <libraries/legacy_symbol_library.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_label_properties.h>
 #include <dialogs/dialog_text_properties.h>
@@ -345,7 +345,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
-                SYMBOL_LIB*       cache = PROJECT_SCH::SchLibs( &m_frame->Prj() )->GetCacheLibrary();
+                LEGACY_SYMBOL_LIB*       cache = PROJECT_SCH::LegacySchLibs( &m_frame->Prj() )->GetCacheLibrary();
 
                 std::set<UTF8>             unique_libid;
                 std::vector<PICKED_SYMBOL> alreadyPlaced;

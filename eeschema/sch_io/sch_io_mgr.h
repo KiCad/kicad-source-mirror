@@ -40,7 +40,7 @@ class SCHEMATIC;
 class SYMBOL_LIB_TABLE;
 class KIWAY;
 class LIB_SYMBOL;
-class SYMBOL_LIB;
+class LEGACY_SYMBOL_LIB;
 class PROGRESS_REPORTER;
 
 

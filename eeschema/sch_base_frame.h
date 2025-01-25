@@ -49,7 +49,7 @@ class TITLE_BLOCK;
 class SYMBOL_VIEWER_FRAME;
 class SYMBOL_EDIT_FRAME;
 class LIB_SYMBOL;
-class SYMBOL_LIB;
+class LEGACY_SYMBOL_LIB;
 class SYMBOL_LIBRARY_FILTER;
 class LIB_ID;
 class SYMBOL_LIB_TABLE;
@@ -96,7 +96,7 @@ class wxFileSystemWatcherEvent;
  * @return The symbol found in the library or NULL if the symbol was not found.
  */
 LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
-                             SYMBOL_LIB* aCacheLib = nullptr, wxWindow* aParent = nullptr,
+                             LEGACY_SYMBOL_LIB* aCacheLib = nullptr, wxWindow* aParent = nullptr,
                              bool aShowErrorMsg = false );
 
 /**

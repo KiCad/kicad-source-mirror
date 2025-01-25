@@ -30,11 +30,13 @@
 #include <sch_screen.h>
 #include <template_fieldnames.h>
 #include <transform.h>
-#include <symbol_library.h>
 #include <settings/color_settings.h>
 #include <sch_pin.h>
 #include <sch_shape.h>
 #include <trace_helpers.h>
+
+// TODO(JE) remove m_library; shouldn't be needed with legacy remapping
+#include <libraries/legacy_symbol_library.h>
 
 #include <algorithm>
 #include <memory>
@@ -93,7 +95,7 @@ struct null_deleter
 };
 
 
-LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* aLibrary ) :
+LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, LEGACY_SYMBOL_LIB* aLibrary ) :
         SYMBOL( LIB_SYMBOL_T ),
         m_me( this, null_deleter() )
 {
@@ -129,7 +131,7 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
 }
 
 
-LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
+LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary ) :
         SYMBOL( aSymbol ),
         EMBEDDED_FILES( aSymbol ),
         m_me( this, null_deleter() )

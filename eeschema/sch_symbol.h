@@ -53,8 +53,8 @@ class KIID_PATH;
 class SCH_SCREEN;
 class LIB_SYMBOL;
 class MSG_PANEL_ITEM;
-class SYMBOL_LIB;
-class SYMBOL_LIBS;
+class LEGACY_SYMBOL_LIB;
+class LEGACY_SYMBOL_LIBS;
 class SCH_SCREEN;
 class SCH_COMMIT;
 

@@ -31,7 +31,6 @@
 #include <widgets/wx_infobar.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <symbol_edit_frame.h>
-#include <symbol_library.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>

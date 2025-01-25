@@ -24,7 +24,6 @@
  */
 
 #include <pgm_base.h>
-#include <symbol_library.h>
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
 #include <symbol_library_common.h>

@@ -32,8 +32,6 @@
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <string_utils.h>
-#include <symbol_library.h>
-#include <symbol_lib_table.h>
 
 #include <netlist.h>
 #include "netlist_exporter_orcadpcb2.h"

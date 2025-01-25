@@ -36,15 +36,15 @@
 #include <project_sch.h>
 #include <widgets/app_progress_dialog.h>
 
-#include <symbol_library.h>
+#include <libraries/legacy_symbol_library.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 
 #include <wx/log.h>
 #include <wx/progdlg.h>
 #include <wx/tokenzr.h>
-#include "sim/sim_model.h"
+#include <sim/sim_model.h>
 
-SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
+LEGACY_SYMBOL_LIB::LEGACY_SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
                         SCH_IO_MGR::SCH_FILE_T aPluginType ) :
     m_pluginType( aPluginType )
 {
@@ -66,12 +66,12 @@ SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
 }
 
 
-SYMBOL_LIB::~SYMBOL_LIB()
+LEGACY_SYMBOL_LIB::~LEGACY_SYMBOL_LIB()
 {
 }
 
 
-void SYMBOL_LIB::Save( bool aSaveDocFile )
+void LEGACY_SYMBOL_LIB::Save( bool aSaveDocFile )
 {
     wxCHECK_RET( m_plugin != nullptr,
                  wxString::Format( wxT( "no plugin defined for library `%s`." ),
@@ -87,7 +87,7 @@ void SYMBOL_LIB::Save( bool aSaveDocFile )
 }
 
 
-void SYMBOL_LIB::Create( const wxString& aFileName )
+void LEGACY_SYMBOL_LIB::Create( const wxString& aFileName )
 {
     wxString tmpFileName = fileName.GetFullPath();
 
@@ -98,7 +98,7 @@ void SYMBOL_LIB::Create( const wxString& aFileName )
 }
 
 
-void SYMBOL_LIB::SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType )
+void LEGACY_SYMBOL_LIB::SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType )
 {
     if( m_pluginType != aPluginType )
     {
@@ -108,25 +108,25 @@ void SYMBOL_LIB::SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType )
 }
 
 
-bool SYMBOL_LIB::IsCache() const
+bool LEGACY_SYMBOL_LIB::IsCache() const
 {
     return m_properties->contains( SCH_IO_KICAD_LEGACY::PropNoDocFile );
 }
 
 
-void SYMBOL_LIB::SetCache()
+void LEGACY_SYMBOL_LIB::SetCache()
 {
     (*m_properties)[ SCH_IO_KICAD_LEGACY::PropNoDocFile ] = "";
 }
 
 
-bool SYMBOL_LIB::IsBuffering() const
+bool LEGACY_SYMBOL_LIB::IsBuffering() const
 {
     return m_properties->contains( SCH_IO_KICAD_LEGACY::PropBuffering );
 }
 
 
-void SYMBOL_LIB::EnableBuffering( bool aEnable )
+void LEGACY_SYMBOL_LIB::EnableBuffering( bool aEnable )
 {
     if( aEnable )
         (*m_properties)[ SCH_IO_KICAD_LEGACY::PropBuffering ] = "";
@@ -135,7 +135,7 @@ void SYMBOL_LIB::EnableBuffering( bool aEnable )
 }
 
 
-void SYMBOL_LIB::GetSymbolNames( wxArrayString& aNames ) const
+void LEGACY_SYMBOL_LIB::GetSymbolNames( wxArrayString& aNames ) const
 {
     m_plugin->EnumerateSymbolLib( aNames, fileName.GetFullPath(), m_properties.get() );
 
@@ -143,7 +143,7 @@ void SYMBOL_LIB::GetSymbolNames( wxArrayString& aNames ) const
 }
 
 
-void SYMBOL_LIB::GetSymbols( std::vector<LIB_SYMBOL*>& aSymbols ) const
+void LEGACY_SYMBOL_LIB::GetSymbols( std::vector<LIB_SYMBOL*>& aSymbols ) const
 {
     m_plugin->EnumerateSymbolLib( aSymbols, fileName.GetFullPath(), m_properties.get() );
 
@@ -155,7 +155,7 @@ void SYMBOL_LIB::GetSymbols( std::vector<LIB_SYMBOL*>& aSymbols ) const
 }
 
 
-LIB_SYMBOL* SYMBOL_LIB::FindSymbol( const wxString& aName ) const
+LIB_SYMBOL* LEGACY_SYMBOL_LIB::FindSymbol( const wxString& aName ) const
 {
     LIB_SYMBOL* symbol = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
 
@@ -165,7 +165,7 @@ LIB_SYMBOL* SYMBOL_LIB::FindSymbol( const wxString& aName ) const
         // symbols.  This allows the symbol library table conversion tool to determine the
         // correct library where the symbol was found.
         if( !symbol->GetLib() )
-            symbol->SetLib( const_cast<SYMBOL_LIB*>( this ) );
+            symbol->SetLib( const_cast<LEGACY_SYMBOL_LIB*>( this ) );
 
         SIM_MODEL::MigrateSimModel<LIB_SYMBOL>( *symbol, nullptr );
     }
@@ -174,13 +174,13 @@ LIB_SYMBOL* SYMBOL_LIB::FindSymbol( const wxString& aName ) const
 }
 
 
-LIB_SYMBOL* SYMBOL_LIB::FindSymbol( const LIB_ID& aLibId ) const
+LIB_SYMBOL* LEGACY_SYMBOL_LIB::FindSymbol( const LIB_ID& aLibId ) const
 {
     return FindSymbol( aLibId.Format().wx_str() );
 }
 
 
-void SYMBOL_LIB::AddSymbol( LIB_SYMBOL* aSymbol )
+void LEGACY_SYMBOL_LIB::AddSymbol( LIB_SYMBOL* aSymbol )
 {
     // add a clone, not the caller's copy, the plugin take ownership of the new symbol.
     m_plugin->SaveSymbol( fileName.GetFullPath(),
@@ -196,7 +196,7 @@ void SYMBOL_LIB::AddSymbol( LIB_SYMBOL* aSymbol )
 }
 
 
-LIB_SYMBOL* SYMBOL_LIB::RemoveSymbol( LIB_SYMBOL* aEntry )
+LIB_SYMBOL* LEGACY_SYMBOL_LIB::RemoveSymbol( LIB_SYMBOL* aEntry )
 {
     wxCHECK_MSG( aEntry != nullptr, nullptr, "NULL pointer cannot be removed from library." );
 
@@ -212,7 +212,7 @@ LIB_SYMBOL* SYMBOL_LIB::RemoveSymbol( LIB_SYMBOL* aEntry )
 }
 
 
-LIB_SYMBOL* SYMBOL_LIB::ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewSymbol )
+LIB_SYMBOL* LEGACY_SYMBOL_LIB::ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewSymbol )
 {
     wxASSERT( aOldSymbol != nullptr );
     wxASSERT( aNewSymbol != nullptr );
@@ -233,9 +233,9 @@ LIB_SYMBOL* SYMBOL_LIB::ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewS
 }
 
 
-SYMBOL_LIB* SYMBOL_LIB::LoadSymbolLibrary( const wxString& aFileName )
+LEGACY_SYMBOL_LIB* LEGACY_SYMBOL_LIB::LoadSymbolLibrary( const wxString& aFileName )
 {
-    std::unique_ptr<SYMBOL_LIB> lib = std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
+    std::unique_ptr<LEGACY_SYMBOL_LIB> lib = std::make_unique<LEGACY_SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
                                                                     aFileName );
 
     std::vector<LIB_SYMBOL*> parts;
@@ -252,14 +252,14 @@ SYMBOL_LIB* SYMBOL_LIB::LoadSymbolLibrary( const wxString& aFileName )
         part->SetLib( lib.get() );
     }
 
-    SYMBOL_LIB* ret = lib.release();
+    LEGACY_SYMBOL_LIB* ret = lib.release();
     return ret;
 }
 
 
-SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName )
+LEGACY_SYMBOL_LIB* LEGACY_SYMBOL_LIBS::AddLibrary( const wxString& aFileName )
 {
-    SYMBOL_LIB* lib;
+    LEGACY_SYMBOL_LIB* lib;
 
     wxFileName fn = aFileName;
     // Don't reload the library if it is already loaded.
@@ -270,7 +270,7 @@ SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName )
 
     try
     {
-        lib = SYMBOL_LIB::LoadSymbolLibrary( aFileName );
+        lib = LEGACY_SYMBOL_LIB::LoadSymbolLibrary( aFileName );
         push_back( lib );
 
         return lib;
@@ -282,18 +282,18 @@ SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName )
 }
 
 
-SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName, SYMBOL_LIBS::iterator& aIterator )
+LEGACY_SYMBOL_LIB* LEGACY_SYMBOL_LIBS::AddLibrary( const wxString& aFileName, LEGACY_SYMBOL_LIBS::iterator& aIterator )
 {
     // Don't reload the library if it is already loaded.
     wxFileName fn( aFileName );
-    SYMBOL_LIB* lib = FindLibrary( fn.GetName() );
+    LEGACY_SYMBOL_LIB* lib = FindLibrary( fn.GetName() );
 
     if( lib )
         return lib;
 
     try
     {
-        lib = SYMBOL_LIB::LoadSymbolLibrary( aFileName );
+        lib = LEGACY_SYMBOL_LIB::LoadSymbolLibrary( aFileName );
 
         if( aIterator >= begin() && aIterator < end() )
             insert( aIterator, lib );
@@ -309,17 +309,17 @@ SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName, SYMBOL_LIBS::ite
 }
 
 
-bool SYMBOL_LIBS::ReloadLibrary( const wxString &aFileName )
+bool LEGACY_SYMBOL_LIBS::ReloadLibrary( const wxString &aFileName )
 {
     wxFileName  fn = aFileName;
-    SYMBOL_LIB* lib = FindLibrary( fn.GetName() );
+    LEGACY_SYMBOL_LIB* lib = FindLibrary( fn.GetName() );
 
     // Check if the library already exists.
     if( !lib )
         return false;
 
     // Create a clone of the library pointer in case we need to re-add it
-    SYMBOL_LIB *cloneLib = lib;
+    LEGACY_SYMBOL_LIB *cloneLib = lib;
 
     // Try to find the iterator of the library
     for( auto it = begin(); it != end(); ++it )
@@ -336,7 +336,7 @@ bool SYMBOL_LIBS::ReloadLibrary( const wxString &aFileName )
     // Try to reload the library
     try
     {
-        lib = SYMBOL_LIB::LoadSymbolLibrary( aFileName );
+        lib = LEGACY_SYMBOL_LIB::LoadSymbolLibrary( aFileName );
 
         // If the library is successfully reloaded, add it back to the set.
         push_back( lib );
@@ -352,9 +352,9 @@ bool SYMBOL_LIBS::ReloadLibrary( const wxString &aFileName )
 }
 
 
-SYMBOL_LIB* SYMBOL_LIBS::FindLibrary( const wxString& aName )
+LEGACY_SYMBOL_LIB* LEGACY_SYMBOL_LIBS::FindLibrary( const wxString& aName )
 {
-    for( SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
+    for( LEGACY_SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
     {
         if( it->GetName() == aName )
             return &*it;
@@ -364,9 +364,9 @@ SYMBOL_LIB* SYMBOL_LIBS::FindLibrary( const wxString& aName )
 }
 
 
-SYMBOL_LIB* SYMBOL_LIBS::GetCacheLibrary()
+LEGACY_SYMBOL_LIB* LEGACY_SYMBOL_LIBS::GetCacheLibrary()
 {
-    for( SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
+    for( LEGACY_SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
     {
         if( it->IsCache() )
             return &*it;
@@ -376,9 +376,9 @@ SYMBOL_LIB* SYMBOL_LIBS::GetCacheLibrary()
 }
 
 
-SYMBOL_LIB* SYMBOL_LIBS::FindLibraryByFullFileName( const wxString& aFullFileName )
+LEGACY_SYMBOL_LIB* LEGACY_SYMBOL_LIBS::FindLibraryByFullFileName( const wxString& aFullFileName )
 {
-    for( SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
+    for( LEGACY_SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )
     {
         if( it->GetFullFileName() == aFullFileName )
             return &*it;
@@ -388,12 +388,12 @@ SYMBOL_LIB* SYMBOL_LIBS::FindLibraryByFullFileName( const wxString& aFullFileNam
 }
 
 
-wxArrayString SYMBOL_LIBS::GetLibraryNames( bool aSorted )
+wxArrayString LEGACY_SYMBOL_LIBS::GetLibraryNames( bool aSorted )
 {
     wxArrayString cacheNames;
     wxArrayString names;
 
-    for( SYMBOL_LIB& lib : *this )
+    for( LEGACY_SYMBOL_LIB& lib : *this )
     {
         if( lib.IsCache() && aSorted )
             cacheNames.Add( lib.GetName() );
@@ -412,11 +412,11 @@ wxArrayString SYMBOL_LIBS::GetLibraryNames( bool aSorted )
 }
 
 
-LIB_SYMBOL* SYMBOL_LIBS::FindLibSymbol( const LIB_ID& aLibId, const wxString& aLibraryName )
+LIB_SYMBOL* LEGACY_SYMBOL_LIBS::FindLibSymbol( const LIB_ID& aLibId, const wxString& aLibraryName )
 {
     LIB_SYMBOL* part = nullptr;
 
-    for( SYMBOL_LIB& lib : *this )
+    for( LEGACY_SYMBOL_LIB& lib : *this )
     {
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
@@ -431,11 +431,11 @@ LIB_SYMBOL* SYMBOL_LIBS::FindLibSymbol( const LIB_ID& aLibId, const wxString& aL
 }
 
 
-void SYMBOL_LIBS::FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates,
+void LEGACY_SYMBOL_LIBS::FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates,
                                           const wxString& aEntryName,
                                           const wxString& aLibraryName )
 {
-    for( SYMBOL_LIB& lib : *this )
+    for( LEGACY_SYMBOL_LIB& lib : *this )
     {
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
@@ -456,7 +456,7 @@ void SYMBOL_LIBS::FindLibraryNearEntries( std::vector<LIB_SYMBOL*>& aCandidates,
 }
 
 
-void SYMBOL_LIBS::GetLibNamesAndPaths( PROJECT* aProject, wxString* aPaths, wxArrayString* aNames )
+void LEGACY_SYMBOL_LIBS::GetLibNamesAndPaths( PROJECT* aProject, wxString* aPaths, wxArrayString* aNames )
 {
     wxCHECK_RET( aProject, "Null PROJECT in GetLibNamesAndPaths" );
 
@@ -470,7 +470,7 @@ void SYMBOL_LIBS::GetLibNamesAndPaths( PROJECT* aProject, wxString* aPaths, wxAr
 }
 
 
-void SYMBOL_LIBS::SetLibNamesAndPaths( PROJECT* aProject, const wxString& aPaths,
+void LEGACY_SYMBOL_LIBS::SetLibNamesAndPaths( PROJECT* aProject, const wxString& aPaths,
                                        const wxArrayString& aNames )
 {
     wxCHECK_RET( aProject, "Null PROJECT in SetLibNamesAndPaths" );
@@ -482,7 +482,7 @@ void SYMBOL_LIBS::SetLibNamesAndPaths( PROJECT* aProject, const wxString& aPaths
 }
 
 
-const wxString SYMBOL_LIBS::CacheName( const wxString& aFullProjectFilename )
+const wxString LEGACY_SYMBOL_LIBS::CacheName( const wxString& aFullProjectFilename )
 {
     wxFileName filename( aFullProjectFilename );
     wxString   name = filename.GetName();
@@ -503,7 +503,7 @@ const wxString SYMBOL_LIBS::CacheName( const wxString& aFullProjectFilename )
 }
 
 
-void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
+void LEGACY_SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 {
     wxString        filename;
     wxString        libs_not_found;
@@ -589,7 +589,7 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 
     // add the special cache library.
     wxString cache_name = CacheName( aProject->GetProjectFullName() );
-    SYMBOL_LIB* cache_lib;
+    LEGACY_SYMBOL_LIB* cache_lib;
 
     if( !aProject->IsNullProject() && !cache_name.IsEmpty() )
     {

@@ -36,7 +36,7 @@
 #include <project/project_file.h>
 #include <eeschema_settings.h>
 #include <symbol_editor_settings.h>
-#include <symbol_library.h>         // For SYMBOL_LIBRARY_FILTER
+#include <symbol_library_common.h>         // For SYMBOL_LIBRARY_FILTER
 #include <symbol_lib_table.h>
 #include <algorithm>
 #include <wx/button.h>

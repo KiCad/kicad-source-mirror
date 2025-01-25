@@ -27,7 +27,6 @@
 #include <api/api_server.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <symbol_library.h>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <dialogs/dialog_erc.h>

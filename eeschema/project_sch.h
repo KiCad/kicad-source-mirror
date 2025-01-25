@@ -26,14 +26,17 @@
 class SYMBOL_LIB_TABLE;
 class PROJECT;
 class SEARCH_STACK;
-class SYMBOL_LIBS;
+class LEGACY_SYMBOL_LIBS;
 class SYMBOL_LIBRARY_MANAGER_ADAPTER;
 
 class PROJECT_SCH
 {
 public:
-    /// These are all prefaced with "Sch".
-    static SYMBOL_LIBS* SchLibs( PROJECT* aProject );
+    /**
+     * Returns the list of symbol libraries from a legacy (pre-5.x) design
+     * This is only used from the remapping dialog at this point.
+     */
+    static LEGACY_SYMBOL_LIBS* LegacySchLibs( PROJECT* aProject );
 
     /// Accessor for Eeschema search stack.
     static SEARCH_STACK* SchSearchS( PROJECT* aProject );

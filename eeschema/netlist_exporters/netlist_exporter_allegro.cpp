@@ -28,8 +28,6 @@
 #include <string_utils.h>
 #include <connection_graph.h>
 #include <core/kicad_algo.h>
-#include <symbol_library.h>
-#include <symbol_lib_table.h>
 #include <netlist.h>
 #include "netlist_exporter_allegro.h"
 #include "netlist_exporter_xml.h"

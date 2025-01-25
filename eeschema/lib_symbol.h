@@ -40,7 +40,7 @@
 class LINE_READER;
 class OUTPUTFORMATTER;
 class REPORTER;
-class SYMBOL_LIB;
+class LEGACY_SYMBOL_LIB;
 class LIB_SYMBOL;
 class OUTLINE_FONT;
 class TEST_LIB_SYMBOL_FIXTURE;
@@ -87,9 +87,9 @@ class LIB_SYMBOL : public SYMBOL, public LIB_TREE_ITEM, public EMBEDDED_FILES
 {
 public:
     LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr,
-                SYMBOL_LIB* aLibrary = nullptr );
+                LEGACY_SYMBOL_LIB* aLibrary = nullptr );
 
-    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary = nullptr );
+    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary = nullptr );
 
     virtual ~LIB_SYMBOL() = default;
 
@@ -209,8 +209,8 @@ public:
 
     const wxString GetLibraryName() const;
 
-    SYMBOL_LIB* GetLib() const          { return m_library; }
-    void SetLib( SYMBOL_LIB* aLibrary ) { m_library = aLibrary; }
+    LEGACY_SYMBOL_LIB* GetLib() const          { return m_library; }
+    void SetLib( LEGACY_SYMBOL_LIB* aLibrary ) { m_library = aLibrary; }
 
     timestamp_t GetLastModDate() const { return m_lastModDate; }
 
@@ -865,7 +865,7 @@ private:
 
     LIB_ITEMS_CONTAINER m_drawings;
 
-    SYMBOL_LIB*         m_library;
+    LEGACY_SYMBOL_LIB*         m_library;
     wxString            m_name;
     wxString            m_keyWords;         ///< Search keywords
     wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the symbol (wild card

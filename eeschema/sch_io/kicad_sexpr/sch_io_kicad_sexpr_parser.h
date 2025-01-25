@@ -31,7 +31,8 @@
 #ifndef SCH_IO_KICAD_SEXPR_PARSER_H_
 #define SCH_IO_KICAD_SEXPR_PARSER_H_
 
-#include <symbol_library.h>
+#include <symbol_library_common.h>
+#include <progress_reporter.h>
 #include <schematic_lexer.h>
 #include <sch_file_versions.h>
 #include <default_values.h>    // For some default values

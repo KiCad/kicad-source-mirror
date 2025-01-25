@@ -38,7 +38,6 @@
 #include <sch_collectors.h>
 #include <sch_symbol.h>
 #include <template_fieldnames.h>
-#include <symbol_library.h>
 #include <sch_validators.h>
 #include <schematic.h>
 #include <sch_commit.h>

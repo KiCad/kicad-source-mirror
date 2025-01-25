@@ -20,7 +20,6 @@
 #include <mutex>
 #include <wx/ffile.h>
 
-#include <symbol_library.h>
 #include <confirm.h>
 #include <dialogs/dialog_schematic_setup.h>
 #include <kiway.h>

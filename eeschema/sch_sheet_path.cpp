@@ -29,7 +29,6 @@
 #include <sch_marker.h>
 #include <sch_label.h>
 #include <sch_shape.h>
-#include <symbol_library.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>

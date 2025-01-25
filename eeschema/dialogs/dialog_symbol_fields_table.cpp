@@ -26,7 +26,6 @@
 #include <common.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <symbol_library.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <wildcards_and_files_ext.h>

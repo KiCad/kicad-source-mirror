@@ -22,7 +22,6 @@
 
 #include <bitmaps.h>
 #include <macros.h>
-#include <symbol_library.h>
 #include <eeschema_id.h>
 #include <symbol_viewer_frame.h>
 #include <sch_painter.h>

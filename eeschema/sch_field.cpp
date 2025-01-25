@@ -32,7 +32,6 @@
 #include <plotters/plotter.h>
 #include <bitmaps.h>
 #include <kiway.h>
-#include <symbol_library.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
 #include <geometry/geometry_utils.h>

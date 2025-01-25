@@ -40,6 +40,7 @@
 #include <wx/string.h>
 
 #include <lib_symbol.h>
+#include <libraries/legacy_symbol_library.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <class_draw_panel_gal.h>
 
@@ -362,7 +363,7 @@ public:
     virtual void AddSymbol( LIB_SYMBOL* aNewSymbol ) override;
 
 private:
-    std::unique_ptr<SYMBOL_LIB> m_rescue_lib;
+    std::unique_ptr<LEGACY_SYMBOL_LIB> m_rescue_lib;
 };
 
 

@@ -45,11 +45,7 @@ class LIB_ID;
 class LINE_READER;
 class OUTPUTFORMATTER;
 class SCH_IO;
-class SYMBOL_LIB;
-
-
-/* Helpers for creating a list of symbol libraries. */
-typedef boost::ptr_vector< SYMBOL_LIB >                     SYMBOL_LIBS_BASE;
+class LEGACY_SYMBOL_LIB;
 
 
 /**
@@ -58,12 +54,12 @@ typedef boost::ptr_vector< SYMBOL_LIB >                     SYMBOL_LIBS_BASE;
  * It extends from PROJECT::_ELEM so it can be hung in the PROJECT.  It does not use any
  * UI calls, but rather simply throws an IO_ERROR when there is a problem.
  */
-class SYMBOL_LIBS : public SYMBOL_LIBS_BASE, public PROJECT::_ELEM
+class LEGACY_SYMBOL_LIBS : public boost::ptr_vector<LEGACY_SYMBOL_LIB>, public PROJECT::_ELEM
 {
 public:
     PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::SCH_SYMBOL_LIBS; }
 
-    SYMBOL_LIBS() {}
+    LEGACY_SYMBOL_LIBS() {}
 
     /**
      * Allocate and adds a symbol library to the library list.
@@ -71,7 +67,7 @@ public:
      * @param aFileName is the file name object of symbol library.
      * @throw IO_ERROR if there's any problem loading.
      */
-    SYMBOL_LIB* AddLibrary( const wxString& aFileName );
+    LEGACY_SYMBOL_LIB* AddLibrary( const wxString& aFileName );
 
     /**
      * Insert a symbol library into the library list.
@@ -81,7 +77,7 @@ public:
      * @return the new SYMBOL_LIB, which remains owned by this SYMBOL_LIBS container.
      * @throw IO_ERROR if there's any problem loading.
      */
-    SYMBOL_LIB* AddLibrary( const wxString& aFileName, SYMBOL_LIBS::iterator& aIterator );
+    LEGACY_SYMBOL_LIB* AddLibrary( const wxString& aFileName, LEGACY_SYMBOL_LIBS::iterator& aIterator );
 
     /**
      * Refreshes the library from the (possibly updated) contents on disk
@@ -120,11 +116,11 @@ public:
      * @param aName is the library file name without path or extension to find.
      * @return the symbol library if found, otherwise NULL.
      */
-    SYMBOL_LIB* FindLibrary( const wxString& aName );
+    LEGACY_SYMBOL_LIB* FindLibrary( const wxString& aName );
 
-    SYMBOL_LIB* FindLibraryByFullFileName( const wxString& aFullFileName );
+    LEGACY_SYMBOL_LIB* FindLibraryByFullFileName( const wxString& aFullFileName );
 
-    SYMBOL_LIB* GetCacheLibrary();
+    LEGACY_SYMBOL_LIB* GetCacheLibrary();
 
     /**
      * Return the list of symbol library file names without path and extension.
@@ -172,12 +168,12 @@ public:
  * @warning This code is obsolete with the exception of the cache library.  All other
  *          symbol library I/O is managed by the #SCH_IO_MGR object.
  */
-class SYMBOL_LIB
+class LEGACY_SYMBOL_LIB
 {
 public:
-    SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
-                SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
-    ~SYMBOL_LIB();
+    LEGACY_SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
+                       SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
+    ~LEGACY_SYMBOL_LIB();
 
     /**
      * @return a magic number that changes if the library has changed
@@ -309,7 +305,7 @@ public:
      * @return SYMBOL_LIB* is the allocated and loaded SYMBOL_LIB, which is owned by the caller.
      * @throw IO_ERROR if there's any problem loading the library.
      */
-    static SYMBOL_LIB* LoadSymbolLibrary( const wxString& aFileName );
+    static LEGACY_SYMBOL_LIB* LoadSymbolLibrary( const wxString& aFileName );
 
 private:
     SCH_LIB_TYPE    type;           ///< Library type indicator.
@@ -330,7 +326,7 @@ private:
 /**
  * Case insensitive library name comparison.
  */
-bool operator==( const SYMBOL_LIB& aLibrary, const wxString& aName );
-bool operator!=( const SYMBOL_LIB& aLibrary, const wxString& aName );
+bool operator==( const LEGACY_SYMBOL_LIB& aLibrary, const wxString& aName );
+bool operator!=( const LEGACY_SYMBOL_LIB& aLibrary, const wxString& aName );
 
 #endif  //  SYMBOL_LIBRARY_H

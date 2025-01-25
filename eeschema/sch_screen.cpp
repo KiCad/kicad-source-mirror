@@ -41,7 +41,7 @@
 #include <sch_edit_frame.h>
 #include <sch_item.h>
 
-#include <symbol_library.h>
+#include <libraries/legacy_symbol_library.h>
 #include <connection_graph.h>
 #include <junction_helpers.h>
 #include <sch_pin.h>
@@ -671,7 +671,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &Schematic()->Project() );
 
     // This will be a nullptr if an s-expression schematic is loaded.
-    SYMBOL_LIBS* legacyLibs = PROJECT_SCH::SchLibs( &Schematic()->Project() );
+    LEGACY_SYMBOL_LIBS* legacyLibs = PROJECT_SCH::LegacySchLibs( &Schematic()->Project() );
 
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
         symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
@@ -754,7 +754,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
         if( !tmp && legacyLibs && legacyLibs->GetLibraryCount() )
         {
-            SYMBOL_LIB& legacyCacheLib = legacyLibs->back();
+            LEGACY_SYMBOL_LIB& legacyCacheLib = legacyLibs->back();
 
             // It better be the cache library.
             wxCHECK2( legacyCacheLib.IsCache(), continue );

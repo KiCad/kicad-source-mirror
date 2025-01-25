@@ -25,7 +25,6 @@
 
 #include "symbol_library_manager.h"
 
-#include <symbol_library.h>
 #include <dialogs/html_message_box.h>
 #include <symbol_edit_frame.h>
 #include <symbol_lib_table.h>
