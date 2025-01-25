@@ -338,6 +338,8 @@ ALTIUM_BINARY_PARSER::ALTIUM_BINARY_PARSER( std::unique_ptr<char[]>& aContent, s
 std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
         std::function<std::map<wxString, wxString>( const std::string& )> handleBinaryData )
 {
+    // TSAN reports calling this wx macro is not thread-safe
+    static wxCSConv convISO8859_1 = wxConvISO8859_1;
 
     std::map<wxString, wxString> kv;
 
@@ -412,7 +414,7 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
 
         // convert the strings to wxStrings, since we use them everywhere
         // value can have non-ASCII characters, so we convert them from LATIN1/ISO8859-1
-        wxString key( keyS.c_str(), wxConvISO8859_1 );
+        wxString key( keyS.c_str(), convISO8859_1 );
 
         // Altium stores keys either in Upper, or in CamelCase. Lets unify it.
         wxString canonicalKey = key.Trim( false ).Trim( true ).MakeUpper();
@@ -423,7 +425,7 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
         if( canonicalKey.StartsWith( "%UTF8%" ) )
             value = wxString( valueS.c_str(), wxConvUTF8 );
         else
-            value = wxString( valueS.c_str(), wxConvISO8859_1 );
+            value = wxString( valueS.c_str(), convISO8859_1 );
 
         if( canonicalKey != wxS( "PATTERN" ) && canonicalKey != wxS( "SOURCEFOOTPRINTLIBRARY" ) )
         {

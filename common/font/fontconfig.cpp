@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include <mutex>
 #include <font/fontconfig.h>
 #include <wx/log.h>
 #include <trace_helpers.h>
@@ -40,6 +40,7 @@ static FONTCONFIG* g_config = nullptr;
 static bool        g_fcInitSuccess = false;
 
 REPORTER* FONTCONFIG::s_reporter = nullptr;
+static std::mutex g_fontConfigMutex;
 
 /**
  * A simple wrapper to avoid exporting fontconfig in the header
@@ -63,6 +64,7 @@ FONTCONFIG::FONTCONFIG()
 
 void fontconfig::FONTCONFIG::SetReporter( REPORTER* aReporter )
 {
+    std::lock_guard lock( g_fontConfigMutex );
     s_reporter = aReporter;
 }
 

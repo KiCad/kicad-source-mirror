@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <mutex>
 #include <macros.h>
 #include <reporter.h>
 #include <string_utils.h>
@@ -41,6 +42,8 @@
  * @ingroup trace_env_vars
  */
 static const wxChar traceReporter[] = wxT( "KICAD_REPORTER" );
+
+static std::mutex g_logReporterMutex;
 
 
 REPORTER& REPORTER::Report( const char* aText, SEVERITY aSeverity )
@@ -199,6 +202,7 @@ REPORTER& WXLOG_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 REPORTER& WXLOG_REPORTER::GetInstance()
 {
     static REPORTER* s_wxLogReporter = nullptr;
+    std::lock_guard lock( g_logReporterMutex );
 
     if( !s_wxLogReporter )
         s_wxLogReporter = new WXLOG_REPORTER();

@@ -103,6 +103,8 @@ public:
     template<typename T>
     T* GetAppSettings( const wxString& aFilename )
     {
+        std::lock_guard lock( m_app_settings_mutex );
+
         T*     ret      = nullptr;
         size_t typeHash = typeid( T ).hash_code();
 
@@ -456,6 +458,7 @@ private:
 
     /// Cache for app settings
     std::unordered_map<size_t, JSON_SETTINGS*> m_app_settings_cache;
+    std::mutex m_app_settings_mutex;
 
     // Convenience shortcut
     COMMON_SETTINGS* m_common_settings;

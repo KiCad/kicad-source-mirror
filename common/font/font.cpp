@@ -127,6 +127,7 @@ private:
 
 static MARKUP_CACHE s_markupCache( 1024 );
 static std::mutex s_markupCacheMutex;
+static std::mutex s_defaultFontMutex;;
 
 
 FONT::FONT()
@@ -136,6 +137,8 @@ FONT::FONT()
 
 FONT* FONT::getDefaultFont()
 {
+    std::lock_guard lock( s_defaultFontMutex );
+
     if( !s_defaultFont )
         s_defaultFont = STROKE_FONT::LoadFont( wxEmptyString );
 
