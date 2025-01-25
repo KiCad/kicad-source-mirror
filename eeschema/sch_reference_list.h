@@ -181,17 +181,10 @@ public:
 
     wxString GetRefNumber() const
     {
-        wxString ref;
-
         if( m_numRef < 0 )
             return wxT( "?" );
-
-        // To avoid a risk of duplicate, for power symbols the ref number is 0nnn instead of nnn.
-        // Just because sometimes only power symbols are annotated
-        if( GetSymbol() && GetLibPart() && GetLibPart()->IsPower() )
-            ref = wxT( "0" );
-
-        return ref << m_numRefStr;
+        else
+            return m_numRefStr;
     }
 
     int CompareValue( const SCH_REFERENCE& item ) const
@@ -230,6 +223,9 @@ public:
         else
             return true; // Assume units locked when we don't have a library
     }
+
+private:
+    wxString formatRefStr( int aNumber ) const;
 
 private:
     friend class SCH_REFERENCE_LIST;

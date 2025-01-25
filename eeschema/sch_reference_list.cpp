@@ -557,7 +557,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 GetRefsInUse( first, idList, minRefId );
                 LastReferenceNumber = createFirstFreeRefId( idList, minRefId );
                 ref_unit.m_numRef = LastReferenceNumber;
-                ref_unit.m_numRefStr = wxString::Format( "%d", LastReferenceNumber );
+                ref_unit.m_numRefStr = ref_unit.formatRefStr( LastReferenceNumber );
             }
 
             ref_unit.m_flag  = 1;
@@ -576,7 +576,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             {
                 LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units );
                 ref_unit.m_numRef = LastReferenceNumber;
-                ref_unit.m_numRefStr = wxString::Format( "%d", LastReferenceNumber );
+                ref_unit.m_numRefStr = ref_unit.formatRefStr( LastReferenceNumber );
                 ref_unit.m_isNew = false;
                 ref_unit.m_flag = 1;
             }
@@ -633,7 +633,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             std::vector<int> units = { ref_unit.GetUnit() };
             LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units );
             ref_unit.m_numRef = LastReferenceNumber;
-            ref_unit.m_numRefStr = wxString::Format( "%d", LastReferenceNumber );
+            ref_unit.m_numRefStr = ref_unit.formatRefStr( LastReferenceNumber );
             ref_unit.m_isNew = false;
             ref_unit.m_flag = 1;
         }
@@ -958,6 +958,16 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList,
     return retVal;
 }
 
+
+wxString SCH_REFERENCE::formatRefStr( int aNumber ) const
+{
+    // To avoid a risk of duplicate, for power symbols the ref number is 0nnn instead of nnn.
+    // Just because sometimes only power symbols are annotated
+    if( GetSymbol() && GetLibPart() && GetLibPart()->IsPower() )
+        return wxString::Format( "0%d", aNumber );
+
+    return wxString::Format( "%d", aNumber );
+}
 
 #if defined( DEBUG )
 void SCH_REFERENCE_LIST::Show( const char* aPrefix )
