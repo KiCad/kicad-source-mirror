@@ -484,13 +484,15 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
                 }
 
                 // If no change, accept it without prompting
-                if( newName != oldName && libMgr.SymbolExists( newName, libName ) )
+                if( newName != oldName && libMgr.SymbolNameInUse( newName, libName ) )
                 {
-                    msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
-                                            newName, libName );
+                    msg.Printf( _( "Symbol '%s' already exists in library '%s'." ),
+                                UnescapeString( newName ),
+                                libName );
 
                     KIDIALOG errorDlg( m_frame, msg, _( "Confirmation" ),
                                        wxOK | wxCANCEL | wxICON_WARNING );
+
                     errorDlg.SetOKLabel( _( "Overwrite" ) );
 
                     return errorDlg.ShowModal() == wxID_OK;

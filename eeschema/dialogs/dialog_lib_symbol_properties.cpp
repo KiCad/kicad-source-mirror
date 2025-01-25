@@ -390,11 +390,13 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
+    UNDO_REDO opType = UNDO_REDO::LIBEDIT;
+
     if( oldName != newName )
     {
         wxString libName = m_Parent->GetCurLib();
 
-        if( m_Parent->GetLibManager().SymbolExists( newName, libName ) )
+        if( m_Parent->GetLibManager().SymbolNameInUse( newName, libName ) )
         {
             wxString msg;
 
@@ -405,13 +407,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
             return false;
         }
 
-        m_Parent->SaveCopyInUndoList( _( "Edit Symbol Properties" ), m_libEntry,
-                                      UNDO_REDO::LIB_RENAME );
+        opType = UNDO_REDO::LIB_RENAME;
     }
-    else
-    {
-        m_Parent->SaveCopyInUndoList( _( "Edit Symbol Properties" ), m_libEntry );
-    }
+
+    m_Parent->SaveCopyInUndoList( _( "Edit Symbol Properties" ), m_libEntry, opType );
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign when writing back to the library

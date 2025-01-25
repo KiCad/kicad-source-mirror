@@ -294,6 +294,11 @@ public:
     bool SymbolExists( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
+     * Return true if the symbol name is already in use in the specified library.
+     */
+    bool SymbolNameInUse( const wxString& aName, const wxString& aLibrary );
+
+    /**
      * Return true if library exists.
      *
      * If \a aCheckEnabled is set, then the library must also be enabled in the library table.

@@ -668,6 +668,22 @@ bool SYMBOL_LIBRARY_MANAGER::SymbolExists( const wxString& aAlias, const wxStrin
 }
 
 
+bool SYMBOL_LIBRARY_MANAGER::SymbolNameInUse( const wxString& aName, const wxString& aLibrary )
+{
+    wxArrayString existing;
+
+    GetSymbolNames( aLibrary, existing );
+
+    for( wxString& candidate : existing )
+    {
+        if( candidate.CmpNoCase( aName ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool SYMBOL_LIBRARY_MANAGER::LibraryExists( const wxString& aLibrary, bool aCheckEnabled ) const
 {
     if( aLibrary.IsEmpty() )

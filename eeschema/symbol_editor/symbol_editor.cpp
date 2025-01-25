@@ -356,7 +356,8 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
             return;
     }
 
-    const auto validator = [&]( wxString newName ) -> bool
+    const auto validator =
+            [&]( wxString newName ) -> bool
             {
                 if( newName.IsEmpty() )
                 {
@@ -364,12 +365,17 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
                     return false;
                 }
 
-                if( !lib.empty() && m_libMgr->SymbolExists( newName, lib ) )
+                if( !lib.empty() && m_libMgr->SymbolNameInUse( newName, lib ) )
                 {
-                    wxString msg = wxString::Format(
-                            _( "Symbol '%s' already exists in library '%s'." ), newName, lib );
+                    wxString msg;
 
-                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+                    msg.Printf( _( "Symbol '%s' already exists in library '%s'." ),
+                                UnescapeString( newName ),
+                                lib );
+
+                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
+                                       wxOK | wxCANCEL | wxICON_WARNING );
+
                     errorDlg.SetOKLabel( _( "Overwrite" ) );
 
                     return errorDlg.ShowModal() == wxID_OK;
@@ -577,7 +583,7 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
         return { false, false };
 
     // Or if the target symbol doesn't exist
-    if( !aLibMgr.SymbolExists( aNewSymbolName, aNewLibraryName ) )
+    if( !aLibMgr.SymbolNameInUse( aNewSymbolName, aNewLibraryName ) )
         return { false, false };
 
     bool inAncestry = false;
@@ -637,10 +643,8 @@ static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_
     if( newLibraryName == oldLibraryName )
     {
         // Saving into the same library - the only conflict could be the symbol itself
-        if( aLibMgr.SymbolExists( newSymbolName, newLibraryName ) )
-        {
+        if( aLibMgr.SymbolNameInUse( newSymbolName, newLibraryName ) )
             conflicts.push_back( newSymbolName );
-        }
     }
     else
     {
@@ -652,18 +656,15 @@ static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_
             if( i == 0 )
             {
                 // This is the leaf symbol which the user actually named
-                if( aLibMgr.SymbolExists( newSymbolName, newLibraryName ) )
-                {
+                if( aLibMgr.SymbolNameInUse( newSymbolName, newLibraryName ) )
                     conflicts.push_back( newSymbolName );
-                }
             }
             else
             {
                 LIB_SYMBOL_SPTR chainSymbol = parentChain[i];
-                if( aLibMgr.SymbolExists( chainSymbol->GetName(), newLibraryName ) )
-                {
+
+                if( aLibMgr.SymbolNameInUse( chainSymbol->GetName(), newLibraryName ) )
                     conflicts.push_back( chainSymbol->GetName() );
-                }
             }
         }
     }
@@ -776,7 +777,7 @@ private:
             {
                 wxString newName = wxString::Format( "%s_%d", proposed, suffix );
 
-                if( !m_libMgr.SymbolExists( newName, aNewLibName ) )
+                if( !m_libMgr.SymbolNameInUse( newName, aNewLibName ) )
                     return newName;
 
                 ++suffix;
@@ -1093,7 +1094,7 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
     if( !lib.IsEmpty() && aOldName && *aOldName != m_symbol->GetName() )
     {
         // Test the current library for name conflicts
-        if( m_libMgr->SymbolExists( m_symbol->GetName(), lib ) )
+        if( m_libMgr->SymbolNameInUse( m_symbol->GetName(), lib ) )
         {
             wxString msg = wxString::Format( _( "Symbol name '%s' already in use." ),
                                              UnescapeString( m_symbol->GetName() ) );
@@ -1272,7 +1273,7 @@ void SYMBOL_EDIT_FRAME::ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& a
         wxString newName = aSymbol->GetName();
 
         // Append a number to the name until the name is unique in the library.
-        while( m_libMgr->SymbolExists( newName, aLibrary ) )
+        while( m_libMgr->SymbolNameInUse( newName, aLibrary ) )
             newName.Printf( "%s_%d", aSymbol->GetName(), i++ );
 
         aSymbol->SetName( newName );
