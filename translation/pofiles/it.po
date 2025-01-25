@@ -115,7 +115,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-25 14:38+0000\n"
+"PO-Revision-Date: 2025-01-26 05:34+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -8882,33 +8882,28 @@ msgid "Select Table"
 msgstr "Seleziona tabella"
 
 #: common/tool/actions.cpp:391
-#, fuzzy
 msgid "Select parent table of selected cell(s)"
-msgstr "Cancella i contenuti delle celle selezionate"
+msgstr "Seleziona la tabella genitore delle celle selezionate"
 
 #: common/tool/actions.cpp:397 include/tool/edit_table_tool_base.h:168
-#, fuzzy
 msgid "Add Row Above"
-msgstr "Aggiungi potenza"
+msgstr "Aggiungi riga sopra"
 
 #: common/tool/actions.cpp:398
-#, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "Impossibile stondare le linee selezionate."
+msgstr "Inserisci una nuova riga sopra le celle selezionate"
 
 #: common/tool/actions.cpp:404 include/tool/edit_table_tool_base.h:220
-#, fuzzy
 msgid "Add Row Below"
-msgstr "Aggiungi potenza"
+msgstr "Aggiungi riga sotto"
 
 #: common/tool/actions.cpp:405
 msgid "Insert a new table row below the selected cell(s)"
 msgstr "Inserisci una nuova riga della tabella sotto le celle selezionate"
 
 #: common/tool/actions.cpp:411 include/tool/edit_table_tool_base.h:271
-#, fuzzy
 msgid "Add Column Before"
-msgstr "Aggiungi angolo"
+msgstr "Aggiungi colonna prima"
 
 #: common/tool/actions.cpp:412
 msgid "Insert a new table column before the selected cell(s)"
@@ -8916,24 +8911,20 @@ msgstr ""
 "Inserisci una nuova colonna della tabella prima delle celle selezionate"
 
 #: common/tool/actions.cpp:418 include/tool/edit_table_tool_base.h:322
-#, fuzzy
 msgid "Add Column After"
-msgstr "Aggiungi angolo"
+msgstr "Aggiungi colonna dopo"
 
 #: common/tool/actions.cpp:419
-#, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Impossibile stondare le linee selezionate."
+msgstr "Inserisci una nuova colonna dopo le celle selezionate"
 
 #: common/tool/actions.cpp:425
-#, fuzzy
 msgid "Delete Row(s)"
-msgstr "Cancella elementi"
+msgstr "Cancella righe"
 
 #: common/tool/actions.cpp:426
-#, fuzzy
 msgid "Delete rows containing the currently selected cell(s)"
-msgstr "Cancella i contenuti delle celle selezionate"
+msgstr "Cancella le righe contenenti le celle selezionate"
 
 #: common/tool/actions.cpp:432
 msgid "Delete Column(s)"
@@ -9319,14 +9310,12 @@ msgid "Reset Local Coordinates"
 msgstr "Azzera coordinate locali"
 
 #: common/tool/actions.cpp:1002
-#, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "Mostra sempre il crocino"
 
 #: common/tool/actions.cpp:1003
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Mostra il crocino anche nello strumento di selezione"
+msgstr "Mostra il crocino anche quando non vengono disegnati oggetti"
 
 #: common/tool/actions.cpp:1009
 msgid "Full-Window Crosshairs"
@@ -9387,9 +9376,8 @@ msgid "Symbol Library Browser"
 msgstr "Esploratore librerie di simboli"
 
 #: common/tool/actions.cpp:1090 kicad/tools/kicad_manager_actions.cpp:126
-#, fuzzy
 msgid "Create, delete and edit schematic symbols"
-msgstr "Crea, cancella e modifica i simboli"
+msgstr "Crea, cancella e modifica simboli dello schema"
 
 #: common/tool/actions.cpp:1098 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1034
@@ -9397,9 +9385,8 @@ msgid "Footprint Library Browser"
 msgstr "Esploratore librerie di impronte"
 
 #: common/tool/actions.cpp:1107
-#, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Crea, cancella e modifica le impronte"
+msgstr "Crea, cancella e modifica impronte di C.S."
 
 #: common/tool/actions.cpp:1116
 msgid "Show/hide the properties manager"
@@ -9412,7 +9399,6 @@ msgid "Show Datasheet"
 msgstr "Mostra datasheet"
 
 #: common/tool/actions.cpp:1125
-#, fuzzy
 msgid "Open the datasheet in a browser"
 msgstr "Apre il datasheet in un browser"
 
@@ -9466,14 +9452,12 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Modifica gli elenchi librerie di impronte globale e del progetto"
 
 #: common/tool/actions.cpp:1177
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Gestione librerie simboli..."
+msgstr "Gestione librerie blocchi progetto..."
 
 #: common/tool/actions.cpp:1178
-#, fuzzy
 msgid "Edit the global and project design block library lists"
-msgstr "Modifica gli elenchi librerie di simboli globale e del progetto"
+msgstr "Modifica gli elenchi librerie blocchi progetto globale e del progetto"
 
 #: common/tool/actions.cpp:1184
 msgid "Getting Started with KiCad"
@@ -9536,34 +9520,28 @@ msgstr "Ricarica tutti i plugin python e aggiorna i corrispontenti menu"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:136
 #: pcbnew/dialogs/dialog_board_setup.cpp:210
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:79
-#, fuzzy
 msgid "Embedded Files"
-msgstr "File immagine"
+msgstr "File incorporati"
 
 #: common/tool/actions.cpp:1250
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "Rinomina i file"
+msgstr "Gestione file incorporati"
 
 #: common/tool/actions.cpp:1255
-#, fuzzy
 msgid "Remove File"
-msgstr "Rinomina file"
+msgstr "Rimuovi file"
 
 #: common/tool/actions.cpp:1256
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "Rimuovi tutti gli strati corrispondenti."
+msgstr "Rimuovi un file incorporato"
 
 #: common/tool/actions.cpp:1261
-#, fuzzy
 msgid "Extract File"
-msgstr "Esporta su file"
+msgstr "Estrai file"
 
 #: common/tool/actions.cpp:1262
-#, fuzzy
 msgid "Extract an embedded file"
-msgstr "File eseguibile"
+msgstr "Estrae un file incorporato"
 
 #: common/tool/common_control.cpp:203
 msgid "Can not switch to project manager in stand-alone mode."
@@ -9753,9 +9731,8 @@ msgstr "Libreria"
 
 #: common/widgets/footprint_diff_widget.cpp:50
 #: eeschema/widgets/symbol_diff_widget.cpp:53
-#, fuzzy
 msgid "Toggle between A and B display"
-msgstr "Commuta il magnetismo tra strati attivi e tutti"
+msgstr "Commuta tra gli schermi A e B"
 
 #: common/widgets/footprint_preview_widget.cpp:126
 msgid "Footprint not found."
@@ -9872,9 +9849,8 @@ msgid "Always show crosshairs"
 msgstr "Mostra sempre il crocino"
 
 #: common/widgets/grid_text_button_helpers.cpp:370
-#, fuzzy
 msgid "Open file"
-msgstr "File Jpeg"
+msgstr "Apri file"
 
 #: common/widgets/grid_text_button_helpers.cpp:499
 msgid "Select a File"
@@ -9973,9 +9949,8 @@ msgid "Toggle zooming to selections in the search pane"
 msgstr "Attiva/disattiva lo zoom sulle selezioni nel pannello cerca"
 
 #: common/widgets/search_pane.cpp:42
-#, fuzzy
 msgid "Pan to Selection"
-msgstr "Aggiungi alla selezione"
+msgstr "Pan alla selezione"
 
 #: common/widgets/search_pane.cpp:42
 msgid "Toggle panning to selections in the search pane"
@@ -10200,9 +10175,8 @@ msgid "Allegro netlist files"
 msgstr "File di netlist Allegro"
 
 #: common/wildcards_and_files_ext.cpp:321
-#, fuzzy
 msgid "PADS netlist files"
-msgstr "File netlist SPICE"
+msgstr "File netlist PADS"
 
 #: common/wildcards_and_files_ext.cpp:327
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -10234,9 +10208,8 @@ msgid "KiCad design block path"
 msgstr "Percorso blocchi progetto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:366
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "Percorsi di file di libreria impronte Kicad"
+msgstr "Percorsi di libreria blocchi progetto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:373
 msgid "Drawing sheet files"
@@ -10303,9 +10276,8 @@ msgid "Electrical rule check file"
 msgstr "File controllo regole elettriche"
 
 #: common/wildcards_and_files_ext.cpp:474
-#, fuzzy
 msgid "SPICE library file"
-msgstr "File di libreria Spice"
+msgstr "File di libreria SPICE"
 
 #: common/wildcards_and_files_ext.cpp:480
 msgid "SPICE netlist file"
@@ -10619,9 +10591,8 @@ msgid "Footprint '%s' not found."
 msgstr "Impronta \"%s\" non trovata."
 
 #: cvpcb/display_footprints_frame.cpp:445
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Errore nel caricamento font '%s'."
+msgstr "Errore nel caricare un'impronta"
 
 #: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1701
 #, c-format
@@ -10693,7 +10664,6 @@ msgid "Footprint Filters:"
 msgstr "Filtri impronte:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
 msgstr "Mostra impronta selezionata"
 
@@ -10735,30 +10705,26 @@ msgstr ""
 "sui file schema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
-msgstr "Successivo simbolo non associato"
+msgstr "Seleziona il successivo simbolo non associato"
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
 msgid "Select next symbol with no footprint assignment"
 msgstr "Seleziona il successivo simbolo senza impronte assegnate"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
-msgstr "Precedente simbolo non associato"
+msgstr "Seleziona il precedente simbolo non associato"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Select previous symbol with no footprint assignment"
 msgstr "Seleziona il precedente simbolo senza impronte assegnate"
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
-#, fuzzy
 msgid "Assign Footprint"
-msgstr "Assegna impronte"
+msgstr "Assegna impronta"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
-#, fuzzy
 msgid "Automatically Assign Footprints"
 msgstr "Assegna impronte automaticamente"
 
@@ -10768,14 +10734,12 @@ msgid "Assign footprints automatically using a footprint association file"
 msgstr "Seleziona impronta per rapporto associazione impronte."
 
 #: cvpcb/tools/cvpcb_actions.cpp:140
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Assegnamenti impronte"
+msgstr "Cancella assegnamenti impronte"
 
 #: cvpcb/tools/cvpcb_actions.cpp:146
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "Simbolo: assegnamenti impronte"
+msgstr "Cancella tutti gli assegnamenti impronte"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
@@ -10806,14 +10770,14 @@ msgid "Delete all associations?"
 msgstr "Cancellare tutte le associazioni?"
 
 #: eeschema/annotate.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "Annotato %s (unità %s) come %s."
+msgstr "Annotazione cancellata per %s (unità %s)"
 
 #: eeschema/annotate.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s."
-msgstr "Cancella annotazione"
+msgstr "Annotazione cancellata per %s."
 
 #: eeschema/annotate.cpp:174
 msgid "Delete Annotation"
@@ -10853,9 +10817,8 @@ msgid "Added items via API"
 msgstr "Elementi aggiunti tramite API"
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:482
-#, fuzzy
 msgid "Created items via API"
-msgstr "Crea linee"
+msgstr "Creati elementi tramite API"
 
 #: eeschema/bom_plugins.cpp:47
 #, c-format
@@ -10885,14 +10848,12 @@ msgstr ""
 "bus"
 
 #: eeschema/connection_graph.cpp:3795 eeschema/erc/erc_item.cpp:232
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "Non connesso"
+msgstr "Capo filo non connesso"
 
 #: eeschema/connection_graph.cpp:3819
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Non connesso"
+msgstr "Voce da filo a bus non connessa"
 
 #: eeschema/connection_graph.cpp:4194
 #, c-format
