@@ -1824,7 +1824,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
         if( netlist_str == annotateMsg )
         {
-            m_reporter->Report( netlist_str + wxT( "\n" ), RPT_SEVERITY_ERROR );
+            m_reporter->Report( wxString( netlist_str ) + wxT( "\n" ), RPT_SEVERITY_ERROR );
             checkParity = false;
         }
     }

@@ -240,7 +240,7 @@ void LoadAndTestFootprintFile( const wxString& aLibRelativePath, const wxString&
          * when the cache is set up on future runs.
          */
         TEMPORARY_DIRECTORY tempLib( "kicad_qa_fp_roundtrip", ".pretty" );
-        const wxString      fpFilename = fp1->GetFPID().GetLibItemName() + ".kicad_mod";
+        const wxString      fpFilename = fp1->GetFPID().GetLibItemName() + wxString( ".kicad_mod" );
 
         BOOST_TEST_MESSAGE( "Resaving footprint: " << fpFilename << " in " << tempLib.GetPath() );
 
