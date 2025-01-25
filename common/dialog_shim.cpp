@@ -42,43 +42,6 @@
 
 #include <algorithm>
 
-/// Toggle a window's "enable" status to disabled, then enabled on destruction.
-class WDO_ENABLE_DISABLE
-{
-    wxWindow* m_win;
-
-public:
-
-    WDO_ENABLE_DISABLE( wxWindow* aWindow ) :
-        m_win( aWindow )
-    {
-        if( m_win )
-            m_win->Disable();
-    }
-
-    ~WDO_ENABLE_DISABLE()
-    {
-        if( m_win )
-        {
-            m_win->Enable();
-            m_win->Raise(); // let's focus back on the parent window
-        }
-    }
-
-    void SuspendForTrueModal()
-    {
-        if( m_win )
-            m_win->Enable();
-    }
-
-    void ResumeAfterTrueModal()
-    {
-        if( m_win )
-            m_win->Disable();
-    }
-};
-
-
 BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
     EVT_CHAR_HOOK( DIALOG_SHIM::OnCharHook )
 END_EVENT_TABLE()
@@ -521,15 +484,7 @@ int DIALOG_SHIM::ShowModal()
 
 int DIALOG_SHIM::ShowQuasiModal()
 {
-    // This is an exception safe way to zero a pointer before returning.
-    // Yes, even though DismissModal() clears this first normally, this is
-    // here in case there's an exception before the dialog is dismissed.
-    struct NULLER
-    {
-        void*&  m_what;
-        NULLER( void*& aPtr ) : m_what( aPtr ) {}
-        ~NULLER() { m_what = nullptr; }   // indeed, set it to NULL on destruction
-    } clear_this( (void*&) m_qmodal_loop );
+    NULLER raii_nuller( (void*&) m_qmodal_loop );
 
     // release the mouse if it's currently captured as the window having it
     // will be disabled when this dialog is shown -- but will still keep the
@@ -545,7 +500,7 @@ int DIALOG_SHIM::ShowQuasiModal()
                                                   "window?" ) );
 
     // quasi-modal: disable only my "optimal" parent
-    m_qmodal_parent_disabler = new WDO_ENABLE_DISABLE( parent );
+    m_qmodal_parent_disabler = new WINDOW_DISABLER( parent );
 
     // Apple in its infinite wisdom will raise a disabled window before even passing
     // us the event, so we have no way to stop it.  Instead, we must set an order on
