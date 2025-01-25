@@ -211,6 +211,15 @@ void BACKGROUND_JOB_REPORTER::AdvancePhase()
 }
 
 
+void BACKGROUND_JOB_REPORTER::SetCurrentProgress( double aProgress )
+{
+    PROGRESS_REPORTER_BASE::SetCurrentProgress( aProgress );
+    m_job->m_maxProgress = 1000;
+    m_job->m_currentProgress = ( 1000 * aProgress );
+    m_monitor->jobUpdated( m_job );
+}
+
+
 BACKGROUND_JOBS_MONITOR::BACKGROUND_JOBS_MONITOR()
 {
 
@@ -341,8 +350,8 @@ void BACKGROUND_JOBS_MONITOR::jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob )
                         [=]()
                         {
                             statusBar->ShowBackgroundProgressBar();
-                            statusBar->SetBackgroundProgress( aJob->m_currentProgress );
                             statusBar->SetBackgroundProgressMax( aJob->m_maxProgress );
+                            statusBar->SetBackgroundProgress( aJob->m_currentProgress );
                             statusBar->SetBackgroundStatusText( aJob->m_status );
                         } );
             }

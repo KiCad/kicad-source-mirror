@@ -26,6 +26,7 @@
 #define KISTATUSBAR_H
 
 #include <kicommon.h>
+#include <optional>
 
 class wxGauge;
 class wxButton;
@@ -44,7 +45,18 @@ class BITMAP_BUTTON;
 class KICOMMON_API KISTATUSBAR : public wxStatusBar
 {
 public:
-    KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id );
+    enum STYLE_FLAGS : int
+    {
+        NONE              = 0x00,
+        NOTIFICATION_ICON = 0x01,
+        CANCEL_BUTTON     = 0x02,
+    };
+
+    static constexpr auto DEFAULT_STYLE =
+            static_cast<STYLE_FLAGS>( NOTIFICATION_ICON | CANCEL_BUTTON );
+
+    KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id,
+                 STYLE_FLAGS aFlags = DEFAULT_STYLE );
 
     ~KISTATUSBAR();
 
@@ -93,12 +105,23 @@ private:
     void onBackgroundProgressClick( wxMouseEvent& aEvent );
     void onNotificationsIconClick( wxCommandEvent& aEvent );
 
+    enum class FIELD
+    {
+        BGJOB_LABEL,
+        BGJOB_GAUGE,
+        BGJOB_CANCEL,
+        NOTIFICATION
+    };
+
+    std::optional<int> fieldIndex( FIELD aField ) const;
+
 private:
     wxGauge*       m_backgroundProgressBar;
     wxButton*      m_backgroundStopButton;
     wxStaticText*  m_backgroundTxt;
     BITMAP_BUTTON* m_notificationsButton;
     int            m_normalFieldsCount;
+    STYLE_FLAGS    m_styleFlags;
 };
 
 #endif

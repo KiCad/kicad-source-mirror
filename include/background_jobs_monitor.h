@@ -60,6 +60,8 @@ public:
 
     void SetNumPhases( int aNumPhases ) override;
 
+    void SetCurrentProgress( double aProgress ) override;
+
 private:
     bool updateUI() override;
 

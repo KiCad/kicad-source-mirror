@@ -349,6 +349,13 @@ public:
      */
     virtual void OnPageSettingsChange() {}
 
+    /** Create the status line (like a wxStatusBar). This is actually a KISTATUSBAR status bar.
+     * the specified number of fields is the extra number of fields, not the full field count.
+     * @return a KISTATUSBAR (derived from wxStatusBar)
+     */
+    wxStatusBar* OnCreateStatusBar( int number, long style, wxWindowID id,
+                                    const wxString& name ) override;
+
     /**
      * Update the status bar information.
      *

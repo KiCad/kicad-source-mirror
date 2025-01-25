@@ -520,6 +520,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
         m_plugin_manager->ReloadPlugins();
 #endif
 
+    m_library_manager->LoadGlobalTables();
+
     // This sets the maximum tooltip display duration to 10s (up from 5) but only affects
     // Windows as other platforms display tooltips while the mouse is not moving
     if( !aHeadless )

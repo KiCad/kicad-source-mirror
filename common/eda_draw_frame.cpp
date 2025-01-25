@@ -63,6 +63,7 @@
 #include <view/view.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <view/view_controls.h>
+#include <widgets/kistatusbar.h>
 #include <widgets/msgpanel.h>
 #include <widgets/properties_panel.h>
 #include <widgets/net_inspector_panel.h>
@@ -724,10 +725,15 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void EDA_DRAW_FRAME::updateStatusBarWidths()
 {
-    wxWindow* stsbar = GetStatusBar();
-    int       spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
+    constexpr int numLocalFields = 8;
 
-    int dims[] = {
+    wxStatusBar* stsbar = GetStatusBar();
+    int spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
+
+    // Note this is a KISTATUSBAR and there are fields to the right of the ones we know about
+    int totalFields = stsbar->GetFieldsCount();
+
+    std::vector<int> dims = {
         // remainder of status bar on far left is set to a default or whatever is left over.
         -1,
 
@@ -756,10 +762,20 @@ void EDA_DRAW_FRAME::updateStatusBarWidths()
         KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x
     };
 
-    for( size_t ii = 1; ii < arrayDim( dims ); ii++ )
-        dims[ii] += spacer;
+    for( int& dim : dims )
+        dim += spacer;
 
-    SetStatusWidths( arrayDim( dims ), dims );
+    for( int idx = numLocalFields; idx < totalFields; ++idx )
+        dims.emplace_back( stsbar->GetStatusWidth( idx ) );
+
+    SetStatusWidths( dims.size(), dims.data() );
+}
+
+
+wxStatusBar* EDA_DRAW_FRAME::OnCreateStatusBar( int number, long style, wxWindowID id,
+                                                const wxString& name )
+{
+    return new KISTATUSBAR( number, this, id, KISTATUSBAR::STYLE_FLAGS::NONE );
 }
 
 

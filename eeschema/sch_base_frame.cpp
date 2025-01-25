@@ -24,6 +24,7 @@
 
 #include <advanced_config.h>
 #include <base_units.h>
+#include <background_jobs_monitor.h>
 #include <kiway.h>
 #include <lib_tree_model_adapter.h>
 #include <pgm_base.h>
@@ -45,11 +46,13 @@
 #include <preview_items/selection_area.h>
 #include <project_sch.h>
 #include <libraries/legacy_symbol_library.h>
+#include <libraries/symbol_library_manager_adapter.h>
 #include <symbol_lib_table.h>
 #include <sch_base_frame.h>
 #include <dialogs/dialog_sch_find.h>
 #include <design_block.h>
 #include <design_block_lib_table.h>
+#include <thread_pool.h>
 #include <tool/actions.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
@@ -113,7 +116,8 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
         m_selectionFilterPanel( nullptr ),
         m_findReplaceDialog( nullptr ),
         m_base_frame_defaults( nullptr, "base_Frame_defaults" ),
-        m_inSymChangeTimerEvent( false )
+        m_inSymChangeTimerEvent( false ),
+        m_libraryPreloadInProgress( false )
 {
     m_findReplaceData = std::make_unique<SCH_SEARCH_DATA>();
 
@@ -133,6 +137,8 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                       selTool->OnIdle( aEvent );
               }
           } );
+
+    Pgm().GetBackgroundJobMonitor().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
 
     m_watcherDebounceTimer.Bind( wxEVT_TIMER, &SCH_BASE_FRAME::OnSymChangeDebounceTimer, this );
 }
@@ -260,6 +266,61 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     DisplayGridMsg();
     DisplayUnitsMsg();
+}
+
+
+void SCH_BASE_FRAME::PreloadLibraries()
+{
+    if( m_libraryPreloadInProgress )
+        return;
+
+    m_libraryPreloadBackgroundJob =
+            Pgm().GetBackgroundJobMonitor().Create( _( "Loading Symbol Libraries" ) );
+
+    auto preload =
+        [this]() -> void
+        {
+            std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter =
+                    m_libraryPreloadBackgroundJob->m_reporter;
+
+            SYMBOL_LIBRARY_MANAGER_ADAPTER adapter( Pgm().GetLibraryManager(), Prj() );
+
+            constexpr static int interval = 250;
+            constexpr static int timeLimit = 20000;
+            int elapsed = 0;
+
+            reporter->Report( _( "Loading Symbol Libraries" ) );
+            adapter.AsyncLoad();
+
+            while( true )
+            {
+                std::this_thread::sleep_for( std::chrono::milliseconds( interval ) );
+
+                if( std::optional<float> loadStatus = adapter.AsyncLoadProgress();
+                    loadStatus.has_value() )
+                {
+                    reporter->SetCurrentProgress( *loadStatus );
+
+                    if( loadStatus >= 1 )
+                        break;
+                }
+
+                elapsed += interval;
+
+                if( elapsed > timeLimit )
+                    break;
+            }
+
+            adapter.BlockUntilLoaded();
+
+            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+            m_libraryPreloadBackgroundJob.reset();
+            m_libraryPreloadInProgress = false;
+        };
+
+    thread_pool& tp = GetKiCadThreadPool();
+    m_libraryPreloadInProgress = true;
+    m_libraryPreloadReturn = tp.submit( preload );
 }
 
 

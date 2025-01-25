@@ -28,6 +28,7 @@
 #define PROGRESS_REPORTER_H
 
 #include <kicommon.h>
+#include <wx/wx.h>
 
 /**
  * A progress reporter interface for use in multi-threaded environments.  The various advancement

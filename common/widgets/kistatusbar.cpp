@@ -36,51 +36,65 @@
 #include <bitmaps.h>
 #include <wx/dcclient.h>
 
-#define FIELD_OFFSET_BGJOB_TEXT 0
-#define FIELD_OFFSET_BGJOB_GAUGE 1
-#define FIELD_OFFSET_BGJOB_CANCEL 2
-#define FIELD_OFFSET_NOTIFICATION_BUTTON 3
 
-
-KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
+KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id, STYLE_FLAGS aFlags ) :
         wxStatusBar( parent, id ),
-        m_normalFieldsCount( aNumberFields )
+        m_backgroundStopButton( nullptr ),
+        m_notificationsButton( nullptr ),
+        m_normalFieldsCount( aNumberFields ),
+        m_styleFlags( aFlags )
 {
 #ifdef __WXOSX__
     // we need +1 extra field on OSX to offset from the rounded corner on the right
     // OSX doesn't use resize grippers like the other platforms and the statusbar field
     // includes the rounded part
-    const int ExtraFields = 5;
+    int extraFields = 4;
 #else
-    const int ExtraFields = 4;
+    int extraFields = 3;
 #endif
-    SetFieldsCount( aNumberFields + ExtraFields );
 
-    int* widths = new int[aNumberFields + ExtraFields];
+    bool showNotification = ( m_styleFlags & NOTIFICATION_ICON );
+    bool showCancel = ( m_styleFlags & CANCEL_BUTTON );
+
+    if( showCancel )
+        extraFields++;
+
+    if( showNotification )
+        extraFields++;
+
+    SetFieldsCount( aNumberFields + extraFields );
+
+    int* widths = new int[aNumberFields + extraFields];
 
     for( int i = 0; i < aNumberFields; i++ )
         widths[i] = -1;
 
-    widths[aNumberFields + FIELD_OFFSET_BGJOB_TEXT] = -1;       // background status text field
-                                                                // (variable size)
-    widths[aNumberFields + FIELD_OFFSET_BGJOB_GAUGE] = 75;      // background progress button
-    widths[aNumberFields + FIELD_OFFSET_BGJOB_CANCEL] = 20;     // background stop button
-    widths[aNumberFields + FIELD_OFFSET_NOTIFICATION_BUTTON] = 20;  // notifications button
+    if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_LABEL ) )
+        widths[aNumberFields + *idx] = -1;  // background status text field (variable size)
+
+    if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_GAUGE ) )
+        widths[aNumberFields + *idx] = 75;      // background progress button
+
+    if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_CANCEL ) )
+        widths[aNumberFields + *idx] = 20;     // background stop button
+
+    if( std::optional<int> idx = fieldIndex( FIELD::NOTIFICATION ) )
+        widths[aNumberFields + *idx] = 20;  // notifications button
+
 #ifdef __WXOSX__
     // offset from the right edge
-    widths[aNumberFields + ExtraFields - 1] = 10;
+    widths[aNumberFields + extraFields - 1] = 10;
 #endif
 
-    SetStatusWidths( aNumberFields + ExtraFields, widths );
+    SetStatusWidths( aNumberFields + extraFields, widths );
     delete[] widths;
 
+    int* styles = new int[aNumberFields + extraFields];
 
-    int* styles = new int[aNumberFields + ExtraFields];
-
-    for( int i = 0; i < aNumberFields + ExtraFields; i++ )
+    for( int i = 0; i < aNumberFields + extraFields; i++ )
         styles[i] = wxSB_FLAT;
 
-    SetStatusStyles( aNumberFields + ExtraFields, styles );
+    SetStatusStyles( aNumberFields + extraFields, styles );
     delete[] styles;
 
     m_backgroundTxt = new wxStaticText( this, wxID_ANY, wxT( "" ) );
@@ -88,18 +102,24 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
     m_backgroundProgressBar = new wxGauge( this, wxID_ANY, 100, wxDefaultPosition, wxDefaultSize,
                                            wxGA_HORIZONTAL | wxGA_SMOOTH );
 
-    m_backgroundStopButton = new wxButton( this, wxID_ANY, "X", wxDefaultPosition, wxDefaultSize,
-                                           wxBU_EXACTFIT );
-
-    m_notificationsButton = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
+    if( showCancel )
+    {
+        m_backgroundStopButton = new wxButton( this, wxID_ANY, "X", wxDefaultPosition,
                                                wxDefaultSize, wxBU_EXACTFIT );
+    }
 
-    m_notificationsButton->SetPadding( 0 );
-    m_notificationsButton->SetBitmap( KiBitmapBundle( BITMAPS::notifications ) );
-    m_notificationsButton->SetShowBadge( true );
-    m_notificationsButton->SetBitmapCentered( true );
+    if( showNotification )
+    {
+        m_notificationsButton = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
+                                                   wxDefaultSize, wxBU_EXACTFIT );
 
-    m_notificationsButton->Bind( wxEVT_BUTTON, &KISTATUSBAR::onNotificationsIconClick, this );
+        m_notificationsButton->SetPadding( 0 );
+        m_notificationsButton->SetBitmap( KiBitmapBundle( BITMAPS::notifications ) );
+        m_notificationsButton->SetShowBadge( true );
+        m_notificationsButton->SetBitmapCentered( true );
+
+        m_notificationsButton->Bind( wxEVT_BUTTON, &KISTATUSBAR::onNotificationsIconClick, this );
+    }
 
     Bind( wxEVT_SIZE, &KISTATUSBAR::onSize, this );
     m_backgroundProgressBar->Bind( wxEVT_LEFT_DOWN, &KISTATUSBAR::onBackgroundProgressClick, this );
@@ -111,7 +131,9 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
 
 KISTATUSBAR::~KISTATUSBAR()
 {
-    m_notificationsButton->Unbind( wxEVT_BUTTON, &KISTATUSBAR::onNotificationsIconClick, this );
+    if( m_notificationsButton )
+        m_notificationsButton->Unbind( wxEVT_BUTTON, &KISTATUSBAR::onNotificationsIconClick, this );
+
     Unbind( wxEVT_SIZE, &KISTATUSBAR::onSize, this );
     m_backgroundProgressBar->Unbind( wxEVT_LEFT_DOWN, &KISTATUSBAR::onBackgroundProgressClick,
                                      this );
@@ -120,6 +142,7 @@ KISTATUSBAR::~KISTATUSBAR()
 
 void KISTATUSBAR::onNotificationsIconClick( wxCommandEvent& aEvent )
 {
+    wxCHECK( m_notificationsButton, /* void */ );
     wxPoint pos = m_notificationsButton->GetScreenPosition();
 
     wxRect r;
@@ -141,36 +164,44 @@ void KISTATUSBAR::onBackgroundProgressClick( wxMouseEvent& aEvent )
     Pgm().GetBackgroundJobMonitor().ShowList( this, pos );
 }
 
+
 void KISTATUSBAR::onSize( wxSizeEvent& aEvent )
 {
     wxRect r;
-    GetFieldRect( m_normalFieldsCount + FIELD_OFFSET_BGJOB_TEXT, r );
+    GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_LABEL ), r );
     int x = r.GetLeft();
     int y = r.GetTop();
 
     m_backgroundTxt->SetPosition( { x, y } );
 
-    GetFieldRect( m_normalFieldsCount + FIELD_OFFSET_BGJOB_GAUGE, r );
+    GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_GAUGE ), r );
     x = r.GetLeft();
     y = r.GetTop();
     int           w = r.GetWidth();
     int           h = r.GetHeight();
     constexpr int b = 5;
+    wxSize buttonSize( 0, 0 );
 
-    auto buttonSize = m_backgroundStopButton->GetEffectiveMinSize();
-    m_backgroundStopButton->SetPosition( { x + w - buttonSize.GetWidth(), y } );
-    m_backgroundStopButton->SetSize( buttonSize.GetWidth(), h );
+    if( m_backgroundStopButton )
+    {
+        buttonSize = m_backgroundStopButton->GetEffectiveMinSize();
+        m_backgroundStopButton->SetPosition( { x + w - buttonSize.GetWidth(), y } );
+        m_backgroundStopButton->SetSize( buttonSize.GetWidth(), h );
+    }
 
     m_backgroundProgressBar->SetPosition( { x, y } );
     m_backgroundProgressBar->SetSize( w - buttonSize.GetWidth() - b, h );
 
-    GetFieldRect( m_normalFieldsCount + FIELD_OFFSET_NOTIFICATION_BUTTON, r );
-    x = r.GetLeft();
-    y = r.GetTop();
-    h = r.GetHeight();
-    buttonSize = m_notificationsButton->GetEffectiveMinSize();
-    m_notificationsButton->SetPosition( { x, y } );
-    m_notificationsButton->SetSize( buttonSize.GetWidth() + 6, h );
+    if( m_notificationsButton )
+    {
+        GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::NOTIFICATION ), r );
+        x = r.GetLeft();
+        y = r.GetTop();
+        h = r.GetHeight();
+        buttonSize = m_notificationsButton->GetEffectiveMinSize();
+        m_notificationsButton->SetPosition( { x, y } );
+        m_notificationsButton->SetSize( buttonSize.GetWidth() + 6, h );
+    }
 }
 
 
@@ -178,17 +209,17 @@ void KISTATUSBAR::ShowBackgroundProgressBar( bool aCancellable )
 {
     m_backgroundProgressBar->Show();
 
-    if( aCancellable )
-        m_backgroundStopButton->Show();
-    else
-        m_backgroundStopButton->Hide();
+    if( m_backgroundStopButton )
+        m_backgroundStopButton->Show( aCancellable );
 }
 
 
 void KISTATUSBAR::HideBackgroundProgressBar()
 {
     m_backgroundProgressBar->Hide();
-    m_backgroundStopButton->Hide();
+
+    if( m_backgroundStopButton )
+        m_backgroundStopButton->Hide();
 }
 
 
@@ -210,8 +241,9 @@ void KISTATUSBAR::SetBackgroundStatusText( const wxString& aTxt )
 }
 
 
-void KISTATUSBAR::SetNotificationCount(int aCount)
+void KISTATUSBAR::SetNotificationCount( int aCount )
 {
+    wxCHECK( m_notificationsButton, /* void */ );
     wxString cnt = "";
 
     if( aCount > 0 )
@@ -245,4 +277,30 @@ void KISTATUSBAR::SetEllipsedTextField( const wxString& aText, int aFieldId )
     }
 
     SetStatusText( etext, aFieldId );
+}
+
+
+std::optional<int> KISTATUSBAR::fieldIndex( FIELD aField ) const
+{
+    switch( aField )
+    {
+    case FIELD::BGJOB_LABEL:  return 0;
+    case FIELD::BGJOB_GAUGE:  return 1;
+    case FIELD::BGJOB_CANCEL:
+    {
+        if( m_styleFlags & CANCEL_BUTTON )
+            return 2;
+
+        break;
+    }
+    case FIELD::NOTIFICATION:
+    {
+        if( m_styleFlags & ( CANCEL_BUTTON | NOTIFICATION_ICON ) )
+            return 3;
+        else if( m_styleFlags & NOTIFICATION_ICON )
+            return 2;
+    }
+    }
+
+    return std::nullopt;
 }

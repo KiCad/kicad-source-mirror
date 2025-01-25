@@ -287,6 +287,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
                     {
                         lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ),
                                                          lib->row->OptionsMap().get() );
+                        //std::this_thread::sleep_for( std::chrono::milliseconds( 1000 ) );
                         lib->status.load_status = LOAD_STATUS::LOADED;
                     }
                     catch( IO_ERROR& e )

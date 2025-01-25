@@ -33,6 +33,7 @@
 
 #include <stddef.h>
 #include <utility>
+#include <future>
 #include <vector>
 #include <wx/event.h>
 #include <wx/datetime.h>
@@ -65,6 +66,7 @@ class SPNAV_2D_PLUGIN;
 
 class PANEL_SCH_SELECTION_FILTER;
 class DIALOG_SCH_FIND;
+struct BACKGROUND_JOB;
 
 #ifdef wxHAS_INOTIFY
 #define wxFileSystemWatcher wxInotifyFileSystemWatcher
@@ -156,6 +158,7 @@ public:
 
     void UpdateStatusBar() override;
 
+    void PreloadLibraries();
 
     /**
      * Call the library viewer to select symbol to import into schematic.
@@ -341,6 +344,10 @@ private:
 #else
     std::unique_ptr<SPNAV_2D_PLUGIN>        m_spaceMouse;
 #endif
+
+    std::shared_ptr<BACKGROUND_JOB>         m_libraryPreloadBackgroundJob;
+    std::future<void>                       m_libraryPreloadReturn;
+    bool                                    m_libraryPreloadInProgress;
 };
 
 #endif // SCH_BASE_FRAME_H_
