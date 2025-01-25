@@ -114,6 +114,8 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_frontCopperThickness3DU      = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
     m_backCopperThickness3DU       = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
     m_nonCopperLayerThickness3DU   = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
+    m_frontMaskThickness3DU        = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
+    m_backMaskThickness3DU         = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
     m_solderPasteLayerThickness3DU = SOLDERPASTE_LAYER_THICKNESS  * m_biuTo3Dunits;
 
     m_trackCount = 0;
@@ -372,6 +374,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     m_frontCopperThickness3DU      = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
     m_backCopperThickness3DU       = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
     m_nonCopperLayerThickness3DU   = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
+    m_frontMaskThickness3DU        = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
+    m_backMaskThickness3DU         = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
     m_solderPasteLayerThickness3DU = SOLDERPASTE_LAYER_THICKNESS  * m_biuTo3Dunits;
 
     g_BevelThickness3DU = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_3DRT_BevelHeight_um / 1000.0 )
@@ -383,7 +387,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
         if( bds.GetStackupDescriptor().GetCount() )
         {
-            int thickness = 0;
+            int body_thickness = 0;
 
             for( BOARD_STACKUP_ITEM* item : bds.GetStackupDescriptor().GetList() )
             {
@@ -391,7 +395,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                 {
                 case BS_ITEM_TYPE_DIELECTRIC:
                     for( int sublayer = 0; sublayer < item->GetSublayersCount(); sublayer++ )
-                        thickness += item->GetThickness( sublayer );
+                        body_thickness += item->GetThickness( sublayer );
+
                     break;
 
                 case BS_ITEM_TYPE_COPPER:
@@ -406,16 +411,30 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                     else if( item->GetBrdLayerId() == B_Cu )
                         m_backCopperThickness3DU = copper_thickness * m_biuTo3Dunits;
                     else if( item->IsEnabled() )
-                        thickness += copper_thickness;
-                }
+                        body_thickness += copper_thickness;
+
                     break;
+                }
+
+                case BS_ITEM_TYPE_SOLDERMASK:
+                {
+                    // The mask thickness must be > 0 to avoid draw issues (divide by 0 for
+                    // instance).   We use a minimal arbitrary value = 1 micrometer here:
+                    int mask_thickness = std::max( item->GetThickness(),
+                                                   pcbIUScale.mmToIU( 0.001 ) );
+
+                    if( item->GetBrdLayerId() == F_Mask )
+                        m_frontMaskThickness3DU = mask_thickness * m_biuTo3Dunits;
+                    else if( item->GetBrdLayerId() == B_Mask )
+                        m_backMaskThickness3DU = mask_thickness * m_biuTo3Dunits;
+                }
 
                 default:
                     break;
                 }
             }
 
-            m_boardBodyThickness3DU = thickness * m_biuTo3Dunits;
+            m_boardBodyThickness3DU = body_thickness * m_biuTo3Dunits;
         }
     }
 

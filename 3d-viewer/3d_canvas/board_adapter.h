@@ -515,6 +515,8 @@ private:
     float             m_backCopperThickness3DU;
     float             m_boardBodyThickness3DU;
     float             m_nonCopperLayerThickness3DU;
+    float             m_frontMaskThickness3DU;
+    float             m_backMaskThickness3DU;
     float             m_solderPasteLayerThickness3DU;
 
     unsigned int      m_trackCount;
