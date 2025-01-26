@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:40+0000\n"
+"PO-Revision-Date: 2025-01-26 06:41+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -23865,9 +23865,8 @@ msgid "Place Pin Anyway"
 msgstr "任意位置放置接腳"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:459
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "圖紙接腳"
+msgstr "重複引腳"
 
 #: eeschema/widgets/design_block_pane.cpp:41
 #, fuzzy
