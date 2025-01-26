@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:38+0000\n"
+"PO-Revision-Date: 2025-01-26 06:39+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -16369,9 +16369,8 @@ msgid "Remove White Space"
 msgstr "移除空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:222
-#, fuzzy
 msgid "Keep White Space"
-msgstr "禁止放置焊盤"
+msgstr "保留空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
