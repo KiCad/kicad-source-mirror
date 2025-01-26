@@ -17033,6 +17033,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' 不是一個 KiCad 原理圖檔。\n"
+"請使用 \"檔案 -> 匯入\" 功能匯入非KiCad原理圖檔。"
 
 #: eeschema/files-io.cpp:287
 msgid ""
