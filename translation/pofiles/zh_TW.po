@@ -7244,7 +7244,7 @@ msgstr "“%s”中缺少節點“%s”"
 #: common/io/cadstar/cadstar_archive_parser.h:46
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "在 '%2$s' 出現未知節點 '%1$s'"
+msgstr "“%s”中的未知節點“%s”"
 
 #: common/io/cadstar/cadstar_archive_parser.h:49
 #, c-format
