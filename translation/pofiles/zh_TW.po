@@ -7259,7 +7259,7 @@ msgstr "“%s”中存在未知參數“%s”"
 #: common/io/cadstar/cadstar_archive_parser.h:55
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "無法解析 '%2$s' 中的 '%1$s'"
+msgstr "無法解析“%s”中的“%s”"
 
 #: common/io/eagle/eagle_parser.cpp:287
 #, c-format
