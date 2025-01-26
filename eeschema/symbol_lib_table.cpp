@@ -81,7 +81,7 @@ bool SYMBOL_LIB_TABLE_ROW::Refresh()
 
         plugin.reset( SCH_IO_MGR::FindPlugin( type ) );
         SetLoaded( false );
-        plugin->EnumerateSymbolLib( dummyList, GetFullURI( true ), GetProperties() );
+        plugin->EnumerateSymbolLib( dummyList, GetFullURI( true ), &GetProperties() );
         SetLoaded( true );
         return true;
     }
@@ -343,7 +343,7 @@ void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayStr
         row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
 
     row->SetLoaded( false );
-    row->plugin->EnumerateSymbolLib( aAliasNames, row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->EnumerateSymbolLib( aAliasNames, row->GetFullURI( true ), &row->GetProperties() );
     row->SetLoaded( true );
 
     if( aPowerSymbolsOnly )
@@ -385,7 +385,7 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
         row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
 
     row->SetLoaded( false );
-    row->plugin->EnumerateSymbolLib( aSymbolList, row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->EnumerateSymbolLib( aSymbolList, row->GetFullURI( true ), &row->GetProperties() );
     row->SetLoaded( true );
 
     if( aPowerSymbolsOnly )
@@ -419,7 +419,7 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStr
         return nullptr;
 
     LIB_SYMBOL* symbol = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,
-                                                  row->GetProperties() );
+                                                  &row->GetProperties() );
 
     if( symbol )
     {
@@ -456,7 +456,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
         wxString name = aSymbol->GetLibId().GetLibItemName();
 
         std::unique_ptr<LIB_SYMBOL> symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
-                                                                     name, row->GetProperties() ) );
+                                                                     name, &row->GetProperties() ) );
 
         if( symbol.get() )
             return SAVE_SKIPPED;
@@ -464,7 +464,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
 
     try
     {
-        row->plugin->SaveSymbol( row->GetFullURI( true ), aSymbol, row->GetProperties() );
+        row->plugin->SaveSymbol( row->GetFullURI( true ), aSymbol, &row->GetProperties() );
     }
     catch( const IO_ERROR& )
     {
@@ -479,7 +479,7 @@ void SYMBOL_LIB_TABLE::DeleteSymbol( const wxString& aNickname, const wxString& 
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
-    return row->plugin->DeleteSymbol( row->GetFullURI( true ), aSymbolName, row->GetProperties() );
+    return row->plugin->DeleteSymbol( row->GetFullURI( true ), aSymbolName, &row->GetProperties() );
 }
 
 
@@ -502,7 +502,7 @@ void SYMBOL_LIB_TABLE::DeleteSymbolLib( const wxString& aNickname )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
-    row->plugin->DeleteLibrary( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->DeleteLibrary( row->GetFullURI( true ), &row->GetProperties() );
 }
 
 
@@ -510,7 +510,7 @@ void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
-    row->plugin->CreateLibrary( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->CreateLibrary( row->GetFullURI( true ), &row->GetProperties() );
 }
 
 

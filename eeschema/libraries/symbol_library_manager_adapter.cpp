@@ -145,11 +145,12 @@ std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbols( const wxStr
         return symbols;
 
     const LIB_DATA* lib = *maybeLib;
+    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
     try
     {
         lib->plugin->EnumerateSymbolLib( symbols, getUri( lib->row ),
-                                         lib->row->OptionsMap().get() );
+                                         &options );
     }
     catch( IO_ERROR& e )
     {
@@ -283,10 +284,12 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
                     std::lock_guard lock ( lib->mutex );
                     lib->status.load_status = LOAD_STATUS::LOADING;
 
+                    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+
                     try
                     {
                         lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ),
-                                                         lib->row->OptionsMap().get() );
+                                                         &options );
                         //std::this_thread::sleep_for( std::chrono::milliseconds( 1000 ) );
                         lib->status.load_status = LOAD_STATUS::LOADED;
                     }

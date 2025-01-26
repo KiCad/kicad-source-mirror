@@ -233,7 +233,8 @@ public:
     /**
      * Convert a schematic symbol library to the latest KiCad format
      */
-    static bool ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, const wxString& aOldFilePath,
+    static bool ConvertLibrary( const std::map<std::string, UTF8>& aOldFileProps,
+                                const wxString& aOldFilePath,
                                 const wxString& aNewFilePath, REPORTER* aReporter );
 };
 

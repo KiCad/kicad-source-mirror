@@ -99,9 +99,9 @@ LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow )
 }
 
 
-void LIB_TABLE_ROW::setProperties( std::map<std::string, UTF8>* aProperties )
+void LIB_TABLE_ROW::setProperties( const std::map<std::string, UTF8>& aProperties )
 {
-    properties.reset( aProperties );
+    properties = aProperties;
 }
 
 
@@ -548,14 +548,15 @@ void LIB_TABLE::Save( const wxString& aFileName ) const
 }
 
 
-std::map<std::string, UTF8>* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
+std::map<std::string, UTF8> LIB_TABLE::ParseOptions( const std::string& aOptionsList )
 {
+    std::map<std::string, UTF8> props;
+
     if( aOptionsList.size() )
     {
         const char* cp  = &aOptionsList[0];
         const char* end = cp + aOptionsList.size();
 
-        std::map<std::string, UTF8> props;
         std::string pair;
 
         // Parse all name=value pairs
@@ -604,12 +605,9 @@ std::map<std::string, UTF8>* LIB_TABLE::ParseOptions( const std::string& aOption
                 }
             }
         }
-
-        if( props.size() )
-            return new std::map<std::string, UTF8>( props );
     }
 
-    return nullptr;
+    return props;
 }
 
 

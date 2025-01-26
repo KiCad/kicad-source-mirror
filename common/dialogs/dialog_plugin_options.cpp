@@ -98,22 +98,20 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataToWindow()
     // Fill the grid with existing aOptions
     std::string options = TO_UTF8( m_callers_options );
 
-    std::map<std::string, UTF8>* props = LIB_TABLE::ParseOptions( options );
+    std::map<std::string, UTF8> props = LIB_TABLE::ParseOptions( options );
 
-    if( props )
+    if( !props.empty() )
     {
-        if( (int) props->size() > m_grid->GetNumberRows() )
-            m_grid->AppendRows( props->size() - m_grid->GetNumberRows() );
+        if( props.size() > static_cast<size_t>( m_grid->GetNumberRows() ) )
+            m_grid->AppendRows( props.size() - m_grid->GetNumberRows() );
 
         int row = 0;
 
-        for( std::map<std::string, UTF8>::const_iterator it = props->begin(); it != props->end(); ++it, ++row )
+        for( const auto& [key, value] : props )
         {
-            m_grid->SetCellValue( row, 0, From_UTF8( it->first.c_str() ) );
-            m_grid->SetCellValue( row, 1, it->second );
+            m_grid->SetCellValue( row, 0, From_UTF8( key.c_str() ) );
+            m_grid->SetCellValue( row, 1, value );
         }
-
-        delete props;
     }
 
     return true;

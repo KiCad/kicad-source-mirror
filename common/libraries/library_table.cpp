@@ -30,13 +30,9 @@
 #include <wx_filename.h>
 
 
-std::unique_ptr<std::map<std::string, UTF8>> LIBRARY_TABLE_ROW::OptionsMap() const
+std::map<std::string, UTF8> LIBRARY_TABLE_ROW::GetOptionsMap() const
 {
-    // TODO(JE) why does this return a pointer?
-    std::unique_ptr<std::map<std::string, UTF8>> mapPtr(
-            LIB_TABLE::ParseOptions( TO_UTF8( m_options ) ) );
-
-    return mapPtr;
+    return LIB_TABLE::ParseOptions( TO_UTF8( m_options ) );
 }
 
 

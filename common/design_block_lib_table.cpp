@@ -81,7 +81,7 @@ bool DESIGN_BLOCK_LIB_TABLE_ROW::Refresh()
 
         plugin.reset( DESIGN_BLOCK_IO_MGR::FindPlugin( type ) );
         SetLoaded( false );
-        plugin->DesignBlockEnumerate( dummyList, GetFullURI( true ), true, GetProperties() );
+        plugin->DesignBlockEnumerate( dummyList, GetFullURI( true ), true, &GetProperties() );
         SetLoaded( true );
         return true;
     }
@@ -339,7 +339,7 @@ void DESIGN_BLOCK_LIB_TABLE::DesignBlockEnumerate( wxArrayString&  aDesignBlockN
     wxASSERT( row->plugin );
 
     row->plugin->DesignBlockEnumerate( aDesignBlockNames, row->GetFullURI( true ), aBestEfforts,
-                                        row->GetProperties() );
+                                        &row->GetProperties() );
 }
 
 
@@ -396,7 +396,7 @@ DESIGN_BLOCK_LIB_TABLE::GetEnumeratedDesignBlock( const wxString& aNickname,
     wxASSERT( row->plugin );
 
     return row->plugin->GetEnumeratedDesignBlock( row->GetFullURI( true ), aDesignBlockName,
-                                                    row->GetProperties() );
+                                                  &row->GetProperties() );
 }
 
 
@@ -409,7 +409,7 @@ bool DESIGN_BLOCK_LIB_TABLE::DesignBlockExists( const wxString& aNickname,
         wxASSERT( row->plugin );
 
         return row->plugin->DesignBlockExists( row->GetFullURI( true ), aDesignBlockName,
-                                               row->GetProperties() );
+                                               &row->GetProperties() );
     }
     catch( ... )
     {
@@ -426,7 +426,7 @@ DESIGN_BLOCK* DESIGN_BLOCK_LIB_TABLE::DesignBlockLoad( const wxString& aNickname
     wxASSERT( row->plugin );
 
     DESIGN_BLOCK* ret = row->plugin->DesignBlockLoad( row->GetFullURI( true ), aDesignBlockName,
-                                                      aKeepUUID, row->GetProperties() );
+                                                      aKeepUUID, &row->GetProperties() );
 
     setLibNickname( ret, row->GetNickName(), aDesignBlockName );
 
@@ -449,13 +449,13 @@ DESIGN_BLOCK_LIB_TABLE::DesignBlockSave( const wxString&     aNickname,
         wxString DesignBlockname = aDesignBlock->GetLibId().GetLibItemName();
 
         std::unique_ptr<DESIGN_BLOCK> design_block( row->plugin->DesignBlockLoad(
-                row->GetFullURI( true ), DesignBlockname, row->GetProperties() ) );
+                row->GetFullURI( true ), DesignBlockname, true, &row->GetProperties() ) );
 
         if( design_block )
             return SAVE_SKIPPED;
     }
 
-    row->plugin->DesignBlockSave( row->GetFullURI( true ), aDesignBlock, row->GetProperties() );
+    row->plugin->DesignBlockSave( row->GetFullURI( true ), aDesignBlock, &row->GetProperties() );
 
     return SAVE_OK;
 }
@@ -468,7 +468,7 @@ void DESIGN_BLOCK_LIB_TABLE::DesignBlockDelete( const wxString& aNickname,
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
     return row->plugin->DesignBlockDelete( row->GetFullURI( true ), aDesignBlockName,
-                                           row->GetProperties() );
+                                           &row->GetProperties() );
 }
 
 
@@ -484,7 +484,7 @@ void DESIGN_BLOCK_LIB_TABLE::DesignBlockLibDelete( const wxString& aNickname )
 {
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
-    row->plugin->DeleteLibrary( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->DeleteLibrary( row->GetFullURI( true ), &row->GetProperties() );
 }
 
 
@@ -492,7 +492,7 @@ void DESIGN_BLOCK_LIB_TABLE::DesignBlockLibCreate( const wxString& aNickname )
 {
     const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
-    row->plugin->CreateLibrary( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->CreateLibrary( row->GetFullURI( true ), &row->GetProperties() );
 }
 
 

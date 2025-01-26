@@ -966,10 +966,9 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         }
 
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
-        std::unique_ptr<std::map<std::string, UTF8>> props(
-                LIB_TABLE::ParseOptions( options.ToStdString() ) );
+        std::map<std::string, UTF8> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
-        if( SCH_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
+        if( SCH_IO_MGR::ConvertLibrary( &props, legacyLib.GetFullPath(), newLib.GetFullPath() ) )
         {
             relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(), m_project );
 

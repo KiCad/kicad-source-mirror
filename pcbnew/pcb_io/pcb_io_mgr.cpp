@@ -187,8 +187,9 @@ void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* a
 }
 
 
-bool PCB_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, const wxString& aOldFilePath,
-                                 const wxString& aNewFilePath, REPORTER* aReporter )
+bool PCB_IO_MGR::ConvertLibrary( const std::map<std::string, UTF8>& aOldFileProps,
+                                 const wxString& aOldFilePath, const wxString& aNewFilePath,
+                                 REPORTER* aReporter )
 {
     PCB_IO_MGR::PCB_FILE_T oldFileType = PCB_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
 
@@ -214,13 +215,13 @@ bool PCB_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
     try
     {
         bool bestEfforts = false; // throw on first error
-        oldFilePI->FootprintEnumerate( fpNames, aOldFilePath, bestEfforts, aOldFileProps );
+        oldFilePI->FootprintEnumerate( fpNames, aOldFilePath, bestEfforts, &aOldFileProps );
         std::map<std::string, UTF8> props { { "skip_cache_validation", "" } };
 
         for ( const wxString& fpName : fpNames )
         {
             std::unique_ptr<const FOOTPRINT> fp( oldFilePI->GetEnumeratedFootprint( aOldFilePath, fpName,
-                                                                                    aOldFileProps ) );
+                                                                                    &aOldFileProps ) );
 
             try
             {

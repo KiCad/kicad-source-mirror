@@ -318,7 +318,7 @@ void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
     wxASSERT( row->plugin );
 
     row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ), aBestEfforts,
-                                        row->GetProperties() );
+                                     &row->GetProperties() );
 }
 
 
@@ -374,7 +374,7 @@ const FOOTPRINT* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname
     wxASSERT( row->plugin );
 
     return row->plugin->GetEnumeratedFootprint( row->GetFullURI( true ), aFootprintName,
-                                                row->GetProperties() );
+                                                &row->GetProperties() );
 }
 
 
@@ -386,7 +386,7 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
         wxASSERT( row->plugin );
 
         return row->plugin->FootprintExists( row->GetFullURI( true ), aFootprintName,
-                                             row->GetProperties() );
+                                             &row->GetProperties() );
     }
     catch( ... )
     {
@@ -402,7 +402,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname,
     wxASSERT( row->plugin );
 
     FOOTPRINT* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName,
-                                                 aKeepUUID, row->GetProperties() );
+                                                 aKeepUUID, &row->GetProperties() );
 
     setLibNickname( ret, row->GetNickName(), aFootprintName );
 
@@ -424,14 +424,14 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
         wxString fpname = aFootprint->GetFPID().GetLibItemName();
 
         std::unique_ptr<FOOTPRINT> footprint( row->plugin->FootprintLoad( row->GetFullURI( true ),
-                                                                          fpname,
-                                                                          row->GetProperties() ) );
+                                                                          fpname, true,
+                                                                          &row->GetProperties() ) );
 
         if( footprint.get() )
             return SAVE_SKIPPED;
     }
 
-    row->plugin->FootprintSave( row->GetFullURI( true ), aFootprint, row->GetProperties() );
+    row->plugin->FootprintSave( row->GetFullURI( true ), aFootprint, &row->GetProperties() );
 
     return SAVE_OK;
 }
@@ -442,7 +442,7 @@ void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& a
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
     return row->plugin->FootprintDelete( row->GetFullURI( true ), aFootprintName,
-                                         row->GetProperties() );
+                                         &row->GetProperties() );
 }
 
 
@@ -470,7 +470,7 @@ void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
-    row->plugin->DeleteLibrary( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->DeleteLibrary( row->GetFullURI( true ), &row->GetProperties() );
 }
 
 
@@ -478,7 +478,7 @@ void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( row->plugin );
-    row->plugin->CreateLibrary( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->CreateLibrary( row->GetFullURI( true ), &row->GetProperties() );
 }
 
 

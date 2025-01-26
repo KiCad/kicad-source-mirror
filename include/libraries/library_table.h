@@ -63,7 +63,7 @@ public:
     const wxString& Description() const { return m_description; }
     LIBRARY_TABLE_SCOPE Scope() const { return m_scope; }
 
-    std::unique_ptr<std::map<std::string, UTF8>> OptionsMap() const;
+    std::map<std::string, UTF8> GetOptionsMap() const;
 
     bool IsOk() const { return m_ok; }
     const wxString& ErrorDescription() const { return m_errorDescription; }

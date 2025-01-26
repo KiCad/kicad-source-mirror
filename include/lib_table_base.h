@@ -145,7 +145,6 @@ public:
         m_loaded( false ),
         m_parent( aParent )
     {
-        properties.reset();
         SetOptions( aOptions );
         SetFullURI( aURI );
     }
@@ -251,7 +250,7 @@ public:
      * Return the constant #PROPERTIES for this library (#LIB_TABLE_ROW).  These are
      * the "options" in a table.
      */
-    const std::map<std::string, UTF8>* GetProperties() const     { return properties.get(); }
+    const std::map<std::string, UTF8>& GetProperties() const     { return properties; }
 
     /**
      * Serialize this object as utf8 text to an #OUTPUTFORMATTER, and tries to
@@ -277,12 +276,9 @@ protected:
         enabled( aRow.enabled ),
         visible( aRow.visible ),
         m_loaded( aRow.m_loaded ),
-        m_parent( aRow.m_parent )
+        m_parent( aRow.m_parent ),
+        properties( aRow.properties )
     {
-        if( aRow.properties )
-            properties = std::make_unique<std::map<std::string, UTF8>>( *aRow.properties.get() );
-        else
-            properties.reset();
     }
 
     void operator=( const LIB_TABLE_ROW& aRow );
@@ -290,7 +286,7 @@ protected:
 private:
     virtual LIB_TABLE_ROW* do_clone() const = 0;
 
-    void setProperties( std::map<std::string, UTF8>* aProperties );
+    void setProperties( const std::map<std::string, UTF8>& aProperties );
 
 private:
     wxString          nickName;
@@ -303,7 +299,7 @@ private:
     bool              m_loaded = false;   ///< Whether the LIB_TABLE_ROW is loaded
     LIB_TABLE*        m_parent;           ///< Pointer to the table this row lives in (maybe null)
 
-    std::unique_ptr<std::map<std::string, UTF8>> properties;
+    std::map<std::string, UTF8> properties;
 
     std::mutex        m_loadMutex;
 };
@@ -566,7 +562,7 @@ public:
      * a library table, this formatting is handled for you.
      * </p>
      */
-    static std::map<std::string, UTF8>* ParseOptions( const std::string& aOptionsList );
+    static std::map<std::string, UTF8> ParseOptions( const std::string& aOptionsList );
 
     /**
      * Returns a list of options from the aProperties parameter.

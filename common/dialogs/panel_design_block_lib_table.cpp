@@ -794,9 +794,9 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         }
 
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
-        std::unique_ptr<std::map<std::string, UTF8>> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
+        std::map<std::string, UTF8> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
-        if( DESIGN_BLOCK_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(),
+        if( DESIGN_BLOCK_IO_MGR::ConvertLibrary( &props, legacyLib.GetFullPath(),
                                                  newLib.GetFullPath() ) )
         {
             relPath =
