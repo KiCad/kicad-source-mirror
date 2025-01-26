@@ -20774,9 +20774,9 @@ msgid "Another simulation is already running."
 msgstr "另一個模擬已經在運行。"
 
 #: eeschema/sim/simulator_frame.cpp:564
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "無法載入檔案 %s"
+msgstr "無法載入或解析檔案 %s"
 
 #: eeschema/sim/simulator_frame.cpp:635
 msgid "Save changes to workbook?"
