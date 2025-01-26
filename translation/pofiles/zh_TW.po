@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:12+0000\n"
+"PO-Revision-Date: 2025-01-26 06:13+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -7239,7 +7239,7 @@ msgstr "在 '%s' 中發現了非預期數量的點數。實際找到 %d 個, 但
 #: common/io/cadstar/cadstar_archive_parser.h:43
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr "在 '%2$s' 中缺少節點 '%1$s'"
+msgstr "“%s”中缺少節點“%s”"
 
 #: common/io/cadstar/cadstar_archive_parser.h:46
 #, c-format
