@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 05:34+0000\n"
+"PO-Revision-Date: 2025-01-26 06:10+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -1759,7 +1759,7 @@ msgstr "背景任務"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "環境變數展開失敗: 字串 '%3$s' 的位置 %2$u 處缺少字元 '%1$c'。"
+msgstr "環境變數擴展失敗：遺失 '%c'在位置 %u在 '%s'。"
 
 #: common/common.cpp:385
 #, c-format
@@ -1977,9 +1977,9 @@ msgid "Design block folder '%s' could not be created."
 msgstr "無法建立檔案 '%s'。"
 
 #: common/design_block_io.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "原理圖檔案 '%s' 已存在。"
+msgstr "無法將原理圖檔案 '%s' 作為設計圖塊儲存到 '%s'。"
 
 #: common/design_block_io.cpp:423
 #, fuzzy, c-format
@@ -1987,9 +1987,9 @@ msgid "Design block metadata file '%s' could not be saved."
 msgstr "無法建立檔案 '%s'。"
 
 #: common/design_block_io.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "目錄 '%s' 不存在"
+msgstr "設計圖塊 '%s' 不存在。"
 
 #: common/design_block_io.cpp:443
 #, fuzzy, c-format
@@ -1997,11 +1997,11 @@ msgid "Design block folder '%s' could not be deleted."
 msgstr "無法建立檔案 '%s'。"
 
 #: common/design_block_lib_table.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "找到重複的庫名稱 '%s' 在符號庫表檔案行 %d 中"
+msgstr "發現重複的庫稱“%s”在設計模組庫表檔案第 %d 行中。"
 
 #: common/design_block_lib_table.cpp:342
 #, fuzzy, c-format
@@ -2361,10 +2361,11 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"下次啟動KiCad時, 任何已經定義好的路徑都會被遵守, \n"
-"而在路徑配置對話框中定義的任何設置都會被忽略。\n"
-"如果你不打算使用這種行為, 請重命名任何衝突的條目\n"
-"或從你的系統中移除外部環境變數。"
+"下次啟動 KiCad 時，任何已經存在的路徑\n"
+"已定義的內容將被尊重，並且在路徑中定義的任何設置\n"
+"配置對話框將被忽略。 如果你不打算\n"
+"對於此行為，請重新命名任何衝突的條目或刪除\n"
+"系統的外部環境變數。"
 
 #: common/dialogs/dialog_configure_paths.cpp:305
 #, c-format
@@ -2501,9 +2502,11 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"首次運行 KiCad 時使用了新的%s庫表來訪問庫。\n"
-"為了使 KiCad 能夠儲存%s庫資訊以供下次訪問, 您必須配置全域%s庫表。\n"
-"請從以下選項中選擇一個, 如果您不確定要選擇哪個選項, 請使用預設選項。"
+"KiCad 已使用新的 %s 庫表首次運行\n"
+"訪問圖書館。 為了讓 KiCad 存取 %s 庫，\n"
+"您必須配置全域 %s 庫表。 請選擇一項\n"
+"以下選項中。 如果您不確定要選擇哪個選項，請\n"
+"使用預設選擇。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -2760,9 +2763,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "選中部分含 %d 個鎖定項目。"
+msgstr "此選擇包含 %lu 個鎖定項目。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3282,27 +3285,26 @@ msgid "Close"
 msgstr "關閉"
 
 #: common/dialogs/dialog_print_generic.cpp:156
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "警告: 縮放比例錯誤"
+msgstr "警告: 縮放比例錯誤。"
 
 #: common/dialogs/dialog_print_generic.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
 "警告: 縮放比例過大。\n"
-" 已限制到 %f"
+" 已限制到 %f。"
 
 #: common/dialogs/dialog_print_generic.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
 "警告: 縮放比例過小。\n"
-" 已限制到 %f"
+" 已限制到 %f。"
 
 #: common/dialogs/dialog_print_generic.cpp:244
 #: common/dialogs/dialog_print_generic.cpp:295
@@ -4290,15 +4292,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允許 KiCad 匿名地向開發人員報告崩潰和特殊事件數據, 以幫助更有效地識別用戶群體"
-"中的關鍵 bug, 並幫助繪製功能畫像來指導改進。\n"
+"KiCad "
+"可以向開發人員匿名報告崩潰和特殊事件數據，以幫助更有效地識別整個用戶群中的關"
+"鍵錯誤，並幫助分析功能以指導改進。\n"
 "\n"
-"要鏈接來自相同 KiCad 安裝的自動報告, 將生成一個完全隨機的唯一標識符, 它僅用於"
-"崩潰報告的目的。沒有個人身份資訊(PII), 包括IP地址被存儲或連接到該標識符。\n"
-"您可以在任何時候通過提供的按鈕重置此 id。\n"
+"要連結來自同一 KiCad "
+"安裝的自動報告，會產生一個完全隨機的唯一標識符，並且僅用於崩潰報告的目的。"
+"包括 IP 位址在內的個人識別資訊 (PII) 不會被儲存或連接到此識別碼。"
+"您可以隨時使用提供的按鈕重設此 ID。\n"
 "\n"
-"如果您選擇自願參與, 那麼發生崩潰或事件時, KiCad 將自動處理發送上述報告。\n"
-"您的設計檔案(如原理圖或PCB) 在此過程中絕對不會被共享。"
+"如果您選擇自願參與，KiCad "
+"將在發生崩潰或事件時自動處理發送所述報告。在此過程中絕不會分享您的設計文件（"
+"例如原理圖或 PCB）。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -7334,9 +7339,8 @@ msgid "Export drill data"
 msgstr "匯出錫膏"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "編輯選項..."
+msgstr "匯出鑽孔資料作業設置"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7349,9 +7353,8 @@ msgstr "匯出 DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:162
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "編輯選項..."
+msgstr "匯出 DXF 作業設定"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 #, fuzzy
@@ -7409,9 +7412,8 @@ msgid "Export ODB++"
 msgstr "匯出 DXF"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "編輯選項..."
+msgstr "匯出 ODB++ 作業設定"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 #, fuzzy
@@ -7425,9 +7427,8 @@ msgstr "匯出 PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:143
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "編輯選項..."
+msgstr "匯出 PDF 作業設定"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
 #, fuzzy
@@ -7455,9 +7456,8 @@ msgstr "匯出 SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:181
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "編輯選項..."
+msgstr "匯出 SVG 作業設定"
 
 #: common/jobs/job_export_pcb_svg.cpp:67
 #, fuzzy
@@ -7465,19 +7465,16 @@ msgid "PCB: Export SVG"
 msgstr "匯出 SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "生成物料清單..."
+msgstr "生成物料清單"
 
 #: common/jobs/job_export_sch_bom.cpp:98
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "生成物料清單..."
+msgstr "生成物料清單作業設定"
 
 #: common/jobs/job_export_sch_bom.cpp:102
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "生成物料清單..."
+msgstr "示意圖：生成物料清單"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
 #, fuzzy, c-format
@@ -7500,18 +7497,16 @@ msgid "Export Postscript"
 msgstr "Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:200
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "編輯選項..."
+msgstr "匯出 Postscript 作業設置"
 
 #: common/jobs/job_export_sch_plot.cpp:213 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "匯出 HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:219
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "編輯選項..."
+msgstr "匯出 HPGL 作業設定"
 
 #: common/jobs/job_export_sch_plot.cpp:223
 #, fuzzy
@@ -7563,9 +7558,8 @@ msgid "Render %s"
 msgstr "重新批註 PCB"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "編輯選項..."
+msgstr "渲染 PCB 作業設置"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
@@ -10794,11 +10788,8 @@ msgid "Design blocks with nested sheets are not supported."
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:427
-#, fuzzy
 msgid "Error saving temporary schematic file to create design block."
-msgstr ""
-"儲存原理圖檔案 '%s' 出錯。\n"
-"%s"
+msgstr "在儲存臨時原理圖檔案以建立設計圖塊時出錯。"
 
 #: eeschema/design_block_utils.cpp:378
 msgid "Please select some items to save as a design block."
@@ -12812,7 +12803,9 @@ msgstr "單元之間可以互換"
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
-msgstr "除接腳編號不同之外, 所有的符號單元都相同時, 請勾選此選項。"
+msgstr ""
+"當所有符號單位都相同時，請選取此選項，除了\n"
+"對於引腳編號。"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 msgid "Create symbol with alternate body style (De Morgan)"
@@ -12944,9 +12937,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
-"選擇符號的衍生源或設置為 <無> 使此符號作為根符號。\n"
+"選擇從中衍生這個符號的符號或選擇\n"
+"<無> 表示根符號。\n"
 "\n"
-"所有的符號要麼是從另一個符號中衍生出來的, 要麼就是作為根符號獨立存在。"
+"衍生符號以前稱為別名。\n"
+"現在情況不再是這樣，所有符號都不是\n"
+"從另一個符號衍生或它們獨立為\n"
+"根符號。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
 msgid "Number of units:"
@@ -12991,10 +12988,10 @@ msgid ""
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"勾選此選項, 會使該符號出現在 \"添加電源符號\" 視窗中, 作為一個電源符號使"
-"用。\n"
-"電源符號的數值文字會被鎖定, 以防其在原理圖中被不慎編輯。\n"
-"電源符號不會在 BOM 中出現, 也不能對電源符號分配封裝。"
+"設定此選項會使相關符號出現在\n"
+"“新增電源符號”對話框。 它將鎖定值文字以保護它\n"
+"從原理圖中編輯。 該符號將不包含在\n"
+"BOM 且無法指派封裝。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
@@ -13075,14 +13072,8 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"可以在封裝篩選規則列表中, 為符號預先分配一個可選封裝列表。在繪製原理圖添加符"
-"號時,\n"
-"會根據符號的封裝篩選規則, 在所有封裝庫中搜索並顯示與其規則匹配的封裝, 你可以"
-"從中\n"
-"選擇一個合適的封裝。\n"
-"篩選欄位可以包含萬用字元, 如 sm*, 可以匹配所有以 sm 開頭的封裝名稱, 意味著該"
-"符號\n"
-"預設可選所有以 sm 開頭的封裝。"
+"可用於該符號的封裝名稱清單。\n"
+"封裝名稱可以使用 sm* 等通配符，以允許所有以 sm 開頭的封裝名稱。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:316
 msgid "Add footprint filter"
@@ -13323,7 +13314,9 @@ msgstr "選擇輸出目錄"
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
-msgstr "是否要使用'%s'的相對路徑?"
+msgstr ""
+"你想使用相對的路徑嗎\n"
+"“%s”？"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:273
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:247
@@ -14055,8 +14048,8 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"這對於添加一些不想出現在物料清單中的電路板封裝 (如基準定位點) 和 logo 標誌等"
-"符號很有用"
+"這對於添加電路板封裝符號（例如基準點）非常有用\n"
+"以及你不希望出現在匯出的物料清單中的徽標"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
@@ -14065,8 +14058,8 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
-"這對於添加一些只匯出到物料清單但不需要在電路板中佈局的符號很有用, 例如機械固"
-"定件和外殼"
+"這對於添加僅導出到物料清單的符號很有用，但\n"
+"不需要佈局電路板，例如機械緊固件和外殼"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:162
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:217
@@ -15531,8 +15524,9 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
-"部分項目的顏色與背景色相同, 在屏幕上將不可見。\n"
-"確定要使用這些顏色嗎?"
+"有些項目的顏色與背景相同\n"
+"並且它們不會在螢幕上看到。 你是否\n"
+"確定要使用這些顏色嗎？"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:210
 msgid "(symbol editor only)"
@@ -19964,10 +19958,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"檔案名 '%s' 可能會與原理圖中已定義的現有檔案名發生衝突, 如果您的作業系統支援"
-"不區分大小寫的檔案名, 抑或是您將此專案複製到這類作業系統中, 則可能會出現問"
-"題。\n"
-"是否繼續?"
+"檔案名稱“%s”可能會導致現有檔案名稱出現問題\n"
+"已在支援案例的系統原理圖中定義\n"
+"不敏感的檔名。 如果你複製此內容，將會導致問題\n"
+"項目到支援不區分大小寫檔案的作業系統\n"
+"名稱。\n"
+"\n"
+"你想繼續嗎？"
 
 #: eeschema/sheet.cpp:781
 msgid "Do not show this message again."
@@ -28791,16 +28788,16 @@ msgid ""
 "OVC IV: Equipment at the origin of the installation (eg: electricity meters, "
 "primary overcurrent protection devices)"
 msgstr ""
-"OVC I: 不與市電直接連接的設備 (如: 由充電器供電的筆記本電腦和手機)\n"
+"OVC I：不直接連接主電源的設備\n"
 "\n"
-"OVC II: 需要依靠固定安裝設施供電的耗能設備 (如:家用電器, 便攜式工具, 家庭負"
-"載)。\n"
-"如果有可靠性和可用性要求, 則適用於 OVC III\n"
+"OVC II：由固定裝置供電的耗能設備。 "
+"（例如：電器、可攜式工具、家用負載）。如果有可靠性和可用性要求，則適用 "
+"OVCIII\n"
 "\n"
-"OVC III: 採用固定安裝方式的具有可靠性和可用性要求設備 (例如:電氣開關, 工業用"
-"設備)。\n"
+"OVC III：具有可靠性和可用性要求的固定安裝設備。 "
+"（例如：電氣開關、工業用設備）\n"
 "\n"
-"OVC IV: 安裝於供電進線處的設備 (如:電錶, 一次過流保護裝置)"
+"OVC IV：安裝來源設備（例如：電錶、初級過電流保護裝置）"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
@@ -30103,13 +30100,13 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"該表顯示了各種金屬和合金之間的電化學電位差異。正數表示行為陽極, 列為陰極。"
-"<br>\n"
-" 電偶腐蝕會在特定條件下影響接觸的不同金屬。<br>\n"
-" 電化學對的陽極被氧化並被腐蝕掉, 而陰極則被溶解的金屬鍍在上面, 但仍受到保護。"
-"<br>\n"
-" EN 50310 暗示電壓差低於 300mV。已知的做法在主要金屬或合金對之間使用第三接觸"
-"金屬 (即化學金表面光潔度)。<br>\n"
+"表格顯示了各種金屬和合金之間電化學電位的差異。電偶腐蝕會在一定條件下影響接觸"
+"的不同金屬。\n"
+"電化學對的陽極被氧化並被腐蝕，而陰極被溶解的金屬鍍在其上，但仍受到保護。\n"
+"正數表示該行是陽極（-），該列是陰極（+），冷暖色調也表示行的電位。\n"
+"EN 50310 建議電壓差低於 300mV。已知的做法是在主對之間使用第三種界面金屬（即 "
+"ENIG 表面處理）。\n"
+"表格重新填入後，所選儲存格將顯示為預設系統的顏色選擇。\n"
 
 #: pcb_calculator/iec60664_help.h:2
 msgid ""
@@ -30127,15 +30124,14 @@ msgid ""
 "- Insulations trough liquids, compressed air or gases other than air are not "
 "in the scope of IEC60664"
 msgstr ""
-"IEC60664-1 旨在為連接主電源的產品提供絕緣設計指導。\n"
+"IEC60664-1 的目標是為連接主電源的產品的絕緣設計提供指導。\n"
 "\n"
-"但是, 本計算器不涵蓋以下情況:\n"
+"然而，該計算器不包括某些情況：\n"
 "\n"
-"- 對於高於30kHz的頻率, 介電性能會降低。IEC60664-4 涵蓋了這些情況\n"
-"- 為了防止汙染, 使用浸漬處理或進行灌封時, 如果滿足了 IEC60664-3 規定的所有條"
-"件,可以適當減小電氣間隙和爬電距離。\n"
-"一般不將焊盤視為浸漬。\n"
-"- 通過液體、壓縮空氣或除空氣以外的氣體的絕緣不在 IEC60664 的範圍內"
+"- 對於高於 30kHz 的頻率，介電性能會下降。 IEC60664-4 涵蓋了這些情況\n"
+"- 當使用保形塗層或灌封以防止污染時，如果滿足 IEC60664-3 "
+"規定的所有條件，則可以減少電氣間隙和爬電距離。阻焊層通常不被視為保形塗層。\n"
+"- 透過液體、壓縮空氣或空氣以外的氣體進行的絕緣不在 IEC60664 的範圍內"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
 msgid "KiCad Calculator Tools"
@@ -34798,9 +34794,8 @@ msgid "Absolute"
 msgstr "絕對"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "零點"
+msgstr "零點："
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -35614,9 +35609,8 @@ msgid "Bottom/Back layer:"
 msgstr "底層:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:210
-#, fuzzy
 msgid "Copper Layer Pair Presets"
-msgstr "銅層:"
+msgstr "銅層對預設"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:228
 #, fuzzy
@@ -35825,9 +35819,8 @@ msgid "0.01"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
-#, fuzzy
 msgid "Copy item layers"
-msgstr "銅層:"
+msgstr "複製項目層"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:70
 #, fuzzy
