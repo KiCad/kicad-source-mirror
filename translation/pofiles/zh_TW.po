@@ -2349,7 +2349,9 @@ msgstr "3D 搜索路徑不能為空。"
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
-msgstr "此路徑是在運行行程外部定義的, 只會被暫時覆蓋。"
+msgstr ""
+"該路徑是在運行進程外部定義的，並且\n"
+"只會被暫時覆蓋。"
 
 #: common/dialogs/dialog_configure_paths.cpp:287
 msgid ""
