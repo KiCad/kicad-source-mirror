@@ -23,7 +23,7 @@
 #include <mock_pgm_base.h>
 #include <pgm_base.h>
 #include <qa_utils/wx_utils/wx_assert.h>
-
+#include <locale_io.h>
 
 bool init_unit_test()
 {
@@ -32,6 +32,9 @@ bool init_unit_test()
     boost::unit_test::framework::master_test_suite().p_name.value = "IPC API tests";
 
     wxApp::SetInstance( new wxAppConsole );
+
+    // Ensure the "C" locale is used
+    LOCALE_IO dummy;
 
     bool ok = wxInitialize( boost::unit_test::framework::master_test_suite().argc,
                             boost::unit_test::framework::master_test_suite().argv );
