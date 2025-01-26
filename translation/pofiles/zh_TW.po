@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:10+0000\n"
+"PO-Revision-Date: 2025-01-26 06:11+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -7198,7 +7198,7 @@ msgstr "導入的圖形太大。最大比例為 %f"
 #: common/import_gfx/graphics_importer_buffer.cpp:186
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr ""
+msgstr "導入偏移調整為 (%f, %f) 以適應數位限制"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:123
 #, c-format
