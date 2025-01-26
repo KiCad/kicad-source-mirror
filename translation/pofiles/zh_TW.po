@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:36+0000\n"
+"PO-Revision-Date: 2025-01-26 06:37+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -17634,7 +17634,7 @@ msgstr "頁面 '%s' 的接腳 '%s'"
 #: eeschema/net_navigator.cpp:113
 #, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "%2$s, %3$s 處的標籤 '%1$s'"
+msgstr "標籤“%s”位於 %s，%s"
 
 #: eeschema/net_navigator.cpp:123
 #, c-format
